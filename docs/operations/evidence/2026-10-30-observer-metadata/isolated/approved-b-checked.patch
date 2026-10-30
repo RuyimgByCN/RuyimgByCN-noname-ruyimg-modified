@@ -1,0 +1,1583 @@
+diff --git a/Cargo.lock b/Cargo.lock
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1170,6 +1170,7 @@
+  "content-compiler",
+  "content-native-loader",
+  "content-schema",
++ "engine-api",
+  "engine-native",
+  "rule-vm",
+  "serde_json",
+diff --git a/apps/desktop-client/src/native_envelope.rs b/apps/desktop-client/src/native_envelope.rs
+--- a/apps/desktop-client/src/native_envelope.rs
++++ b/apps/desktop-client/src/native_envelope.rs
+@@ -12,7 +12,7 @@
+         "owner": owner, "zone": zone, "kind": face["kind"].as_str().unwrap_or("Other")})
+ }
+ 
+-fn snapshot(view: &Value, revision: u64) -> Value {
++fn snapshot(view: &Value, revision: u64) -> Result<Value, String> {
+     let mut cards = Vec::new();
+     let mut seats = Vec::new();
+     for player in view["players"].as_array().into_iter().flatten() {
+@@ -21,8 +21,10 @@
+                 cards.push(card(view, id, player["seat"].clone(), zone));
+             }
+         }
++        let generals: [Option<engine_api::GeneralSlotView>; 2] = player.get("generals").map(|value| serde_json::from_value(value.clone())).transpose().map_err(|error| format!("generals: {error}"))?.unwrap_or_default();
+         seats.push(json!({
+             "player": player["seat"], "character_def": player["characterDef"].as_u64().unwrap_or(0),
++            "generals": generals,
+             "seat": player["seat"], "hp": player["hp"], "max_hp": player["maxHp"],
+             "alive": player["alive"], "turned_over": player["turnedOver"],
+             "hand_count": player["handCount"], "identity": player["identity"],
+@@ -55,9 +57,9 @@
+         Some("end") => "End",
+         _ => "Idle",
+     };
+-    json!({"revision": revision, "state_hash": "", "observer": view["seat"],
++    Ok(json!({"revision": revision, "state_hash": "", "observer": view["seat"],
+         "round": view["round"], "current_player": view["turn"], "phase": phase,
+-        "seats": seats, "known_cards": own, "outcome": view["outcome"]})
++        "seats": seats, "known_cards": own, "outcome": view["outcome"]}))
+ }
+ 
+ fn option_label(option: &Value) -> String {
+@@ -77,14 +79,21 @@
+ 
+ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
+     let raw = parse(session.open_choice_json(observer)?)?;
+-    if raw.is_null() {
++    if raw.is_null() || raw["hidden"] == true {
+         return Ok(Value::Null);
+     }
+-    let mut result = json!({"choice_id": raw["id"], "observer": observer, "kind": raw["kind"].as_str().unwrap_or("Custom"),
++    let native_kind = raw.get("native_kind").filter(|value| !value.is_null()).map(|value| {
++        value.as_str().and_then(engine_api::choice_kind_from_native).ok_or("invalid native_kind")
++    }).transpose()?;
++    let kind = native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom")));
++    if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
++    let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,
+         "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
+             json!({"token": index, "label_key": option_label(option)})
+         }).collect::<Vec<_>>()});
+     for (source, target) in [
++        ("prompt", "prompt"),
++        ("native_kind", "native_kind"),
+         ("min", "min_count"),
+         ("max", "max_count"),
+         ("allowCancel", "allow_cancel"),
+@@ -135,6 +144,6 @@
+         *cursor = end;
+     }
+     Ok(json!({"result": result, "events": events, "choice": choice,
+-        "view": snapshot(&view, session.revision()), "legal_actions": legal["actions"],
++        "view": snapshot(&view, session.revision())?, "legal_actions": legal["actions"],
+         "hash_hex": session.state_hash_hex(), "revision": session.revision(), "finished": session.is_finished()}))
+ }
+diff --git a/apps/game-server/examples/emit_approved_b_metadata.rs b/apps/game-server/examples/emit_approved_b_metadata.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/examples/emit_approved_b_metadata.rs
+@@ -0,0 +1,87 @@
++//! Actual archives and authorized server expectations for approved B cross-entry acceptance.
++#[path = "../src/native_view.rs"]
++mod native_view;
++#[path = "../../../crates/engine-native/tests/support/nc09_machine_windows.rs"]
++mod windows;
++use engine_api::PlayerId;
++use engine_native::{Engine, GameAction, Phase};
++use native_view::{choice_for, observer_snapshot_for, RoomRole};
++use serde_json::{json, Value};
++
++fn submit(engine: &mut Engine, action: GameAction) {
++    windows::submit(engine, action);
++}
++
++fn main() -> Result<(), Box<dyn std::error::Error>> {
++    let output = std::env::args().nth(1).ok_or("output JSON required")?;
++    let mut cases: Vec<(String, Engine, String)> = Vec::new();
++    let engine = Engine::new_identity(1515, 4);
++    let mut snapshot = engine.save();
++    for player in &mut snapshot.core.players[..2] {
++        player.general_slots = [Some(0), Some(1)];
++        player.revealed_generals = [false, false];
++    }
++    cases.push(("ordinary-dual-def-zero".into(), Engine::restore(&snapshot).unwrap(), "[]".into()));
++    snapshot.core.mode = engine_native::GameMode::Kingdoms;
++    for (name, revealed) in [("kingdoms-dark", [false,false]), ("kingdoms-primary-revealed", [true,false]), ("kingdoms-both-revealed", [true,true])] {
++        for player in &mut snapshot.core.players[..2] { player.revealed_generals = revealed; }
++        cases.push((name.into(), Engine::restore(&snapshot).unwrap(), "[]".into()));
++    }
++    let mut engine = Engine::new(804, 3);
++    engine.debug_grant(1, "突袭");
++    engine.debug_set_turn(1, Phase::Judge, 1);
++    submit(&mut engine, GameAction::NextPhase);
++    cases.push(("confirm".into(), Engine::restore(&engine.save()).unwrap(), "[]".into()));
++    let choice_id = engine.open_choice().unwrap().id;
++    submit(&mut engine, GameAction::Answer { choice_id, selection: vec![engine_native::ChoiceOption::Confirm] });
++    cases.push(("select_players".into(), engine, "[]".into()));
++    let mut engine = Engine::new(1515, 4);
++    engine.debug_set_turn(1, Phase::Play, 1);
++    engine.debug_set_hp(1, 1);
++    submit(&mut engine, GameAction::NextPhase);
++    cases.push(("select_cards".into(), engine, "[]".into()));
++    let mut engine = Engine::new(2, 2);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    let card = engine.debug_place(0, "sha");
++    engine.debug_place(1, "shan");
++    submit(&mut engine, GameAction::PlayCard { card, targets: vec![1] });
++    cases.push(("respond_card".into(), engine, "[]".into()));
++    let mut engine = Engine::new(42, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    engine.debug_grant(0, "反间");
++    let skill = engine.catalog().skill_by_name("反间").unwrap();
++    submit(&mut engine, GameAction::ActivateSkill { skill });
++    let choice_id = engine.open_choice().unwrap().id;
++    submit(&mut engine, GameAction::Answer { choice_id, selection: vec![engine_native::ChoiceOption::Player(1)] });
++    cases.push(("pick_tag-fanjian".into(), engine, "[]".into()));
++    for window in [windows::Window::XunXun, windows::Window::JiJie, windows::Window::GaiMing, windows::Window::HaoTianTa, windows::Window::Liaoyuan] {
++        let fixture = windows::fixture(window);
++        let directory = match window {
++            windows::Window::GaiMing => Some("boss-zhugeliang-upstream-liuli"),
++            windows::Window::HaoTianTa | windows::Window::Liaoyuan => Some("shahai-swd-upstream-noname"),
++            _ => None,
++        };
++        let packs: Vec<Value> = directory.map(|directory| {
++            let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions").join(directory).join("assets/cards.json");
++            serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap()
++        }).into_iter().collect();
++        cases.push((format!("machine-{window:?}"), fixture.engine, serde_json::to_string(&packs)?));
++    }
++    let mut result = Vec::new();
++    for (name, engine, packs_json) in cases {
++        let before = engine.save();
++        let bytes = engine_native::archive::encode_archive(&before);
++        let hex: String = bytes.iter().map(|byte| format!("{byte:02x}")).collect();
++        let seats: Vec<_> = (0..engine.state_core().players.len()).map(|seat| {
++            let id = Some(PlayerId::new(seat as u32 + 1));
++            json!({"view": observer_snapshot_for(&engine, RoomRole::Player, id), "choice": choice_for(&engine, RoomRole::Player, id)})
++        }).collect();
++        result.push(json!({"name":name,"archiveHex":hex,"packsJson":packs_json,"seats":seats,
++            "referee": {"view": observer_snapshot_for(&engine, RoomRole::Referee, None), "choice": choice_for(&engine, RoomRole::Referee, None)},
++            "spectator": {"view": observer_snapshot_for(&engine, RoomRole::Spectator, Some(PlayerId::new(1))), "choice": choice_for(&engine, RoomRole::Spectator, Some(PlayerId::new(1)))}}));
++        assert_eq!(engine.save(), before);
++    }
++    std::fs::write(output, serde_json::to_vec_pretty(&result)?)?;
++    println!("emitted {} actual same-archive B cases", result.len());
++    Ok(())
++}
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -135,6 +135,12 @@
+             player: ApiPlayerId::new(cell.seat as u32 + 1),
+             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+             character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
++            generals: std::array::from_fn(|slot| cell.generals[slot].as_ref().map(|general| engine_api::GeneralSlotView {
++                def: general.def as u32,
++                name: general.name.to_owned(),
++                faction: format!("{:?}", general.faction).to_lowercase(),
++                revealed: cell.revealed_generals[slot],
++            })),
+             seat: engine_api::SeatIndex::new(cell.seat),
+             hp: cell.hp,
+             max_hp: cell.max_hp,
+@@ -260,7 +266,7 @@
+         min,
+         max,
+         allow_cancel,
+-        ..
++        prompt,
+     } = view
+     else {
+         return None;
+@@ -289,14 +295,9 @@
+         observer,
+         options,
+         continuation_id: id,
+-        kind: match kind {
+-            engine_native::ChoiceKind::Confirm => engine_api::ChoiceKind::Confirm,
+-            engine_native::ChoiceKind::SelectCards => engine_api::ChoiceKind::SelectCards,
+-            engine_native::ChoiceKind::SelectPlayers => engine_api::ChoiceKind::SelectTargets,
+-            engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => {
+-                engine_api::ChoiceKind::Custom
+-            }
+-        },
++        kind: engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
++        native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
++        prompt: Some(prompt.to_owned()),
+         min_count: min as u8,
+         max_count: max as u8,
+         allow_cancel,
+diff --git a/apps/game-server/src/native_ws_e2e/referee.rs b/apps/game-server/src/native_ws_e2e/referee.rs
+--- a/apps/game-server/src/native_ws_e2e/referee.rs
++++ b/apps/game-server/src/native_ws_e2e/referee.rs
+@@ -22,6 +22,7 @@
+     assert_eq!(engine.open_choice().unwrap().observer, 0);
+     let mut snapshot = engine.save();
+     snapshot.core.mode = engine_native::GameMode::Kingdoms;
++    snapshot.core.player_mut(1).general_slots[1] = Some(0);
+     snapshot.core.player_mut(1).revealed_generals = [false, false];
+     let removed = snapshot.core.deck.pop().unwrap();
+     snapshot.core.player_mut(1).off_court.push(removed);
+@@ -135,6 +136,13 @@
+         .known_cards
+         .iter()
+         .any(|card| card.zone == engine_api::CardZoneTag::Expansion));
++    let slots = &state.view.seats[1].generals;
++    assert!(slots.iter().all(|slot| slot.as_ref().is_some_and(|general| !general.name.is_empty() && !general.faction.is_empty() && !general.revealed)));
++    assert_eq!(slots[1].as_ref().unwrap().def, 0);
++    if let Some(choice) = &state.choice {
++        assert!(choice.prompt.as_ref().is_some_and(|prompt| !prompt.is_empty()));
++        assert!(choice.native_kind.as_deref().and_then(engine_api::choice_kind_from_native).is_some());
++    }
+     assert_ne!(
+         state.view.seats[1].character_def, 0,
+         "dark general remains authorized"
+@@ -191,7 +199,9 @@
+         let mut spectator = Peer::connect(&server).await;
+         reconnect_spectator_with_stored_seat(&mut spectator, room, &tokens[3]).await;
+         spectator.snapshot().await.assert_spectator();
+-        assert!(spectator.snapshot().await.view.seats[1].character_def == 0);
++        let public = spectator.snapshot().await;
++        assert_eq!(public.view.seats[1].character_def, 0);
++        assert_eq!(public.view.seats[1].generals, [None, None]);
+         let mut newcomer = Peer::connect(&server).await;
+         newcomer.spectate(room).await.assert_spectator();
+         // A rejected player intent still fans out the unchanged pending private choice.
+diff --git a/apps/game-server/tests/approved_b_metadata.rs b/apps/game-server/tests/approved_b_metadata.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/tests/approved_b_metadata.rs
+@@ -0,0 +1,159 @@
++//! Approved B: metadata must survive the real authorized bridge and archive restore.
++#[path = "../src/native_view.rs"]
++mod native_view;
++use engine_api::PlayerId;
++use engine_native::{Engine, GameAction, Phase};
++use native_view::{choice_for, observer_snapshot_for, RoomRole};
++use serde_json::{json, Value};
++
++fn value(engine: &Engine, role: RoomRole, seat: u32) -> Value {
++    serde_json::to_value(observer_snapshot_for(engine, role, Some(PlayerId::new(seat)))).unwrap()
++}
++
++#[test]
++fn both_slots_include_def_zero_only_when_authorized() {
++    let engine = Engine::new_identity(1515, 4);
++    let mut archive = engine.save();
++    archive.core.players[1].general_slots = [Some(0), Some(1)];
++    archive.core.players[1].revealed_generals = [false, false];
++    let ordinary_mode = archive.core.mode.clone();
++    for kingdoms in [false, true] {
++        archive.core.mode = if kingdoms { engine_native::GameMode::Kingdoms } else { ordinary_mode.clone() };
++        let bytes = engine_native::archive::encode_archive(&archive);
++        let engine = Engine::restore(&engine_native::archive::decode_archive(&bytes).unwrap()).unwrap();
++        let before = engine.save();
++        for (role, seat, visible) in [(RoomRole::Player, 2, true), (RoomRole::Player, 1, !kingdoms), (RoomRole::Referee, 0, true), (RoomRole::Spectator, 2, !kingdoms)] {
++            let view = value(&engine, role, seat);
++            let slots = &view["seats"][1]["generals"];
++            assert!(slots.is_array(), "two slots missing: {slots}");
++            assert_eq!(slots.as_array().unwrap().len(), 2);
++            for slot in 0..2 {
++                if visible {
++                    let meta = engine.catalog().general_meta(slot as u16).unwrap();
++                    assert_eq!(slots[slot], json!({"def": slot, "name": meta.0, "faction": format!("{:?}", meta.1).to_lowercase(), "revealed": false}));
++                } else { assert_eq!(slots[slot], Value::Null); }
++            }
++        }
++        assert_eq!(engine.save(), before);
++    }
++}
++
++fn check_choice(engine: &Engine, native: &str, legacy: &str) {
++    let open = engine.open_choice().unwrap();
++    let expected = serde_json::to_value(choice_for(engine, RoomRole::Referee, None).unwrap()).unwrap();
++    assert_eq!(expected["native_kind"], native);
++    assert_eq!(expected["kind"], legacy);
++    assert_eq!(expected["prompt"], open.spec.prompt);
++    for seat in [0, 1, 257, u32::MAX] {
++        assert!(choice_for(engine, RoomRole::Spectator, Some(PlayerId::new(seat))).is_none());
++    }
++    assert_eq!(serde_json::to_value(choice_for(engine, RoomRole::Player, Some(PlayerId::new(open.observer as u32 + 1))).unwrap()).unwrap(), expected);
++    let mut session = engine_native_wasm::NativeSession::new(1, 0).unwrap();
++    let bytes = engine_native::archive::encode_archive(&engine.save());
++    let hex: String = bytes.iter().map(|b| format!("{b:02x}")).collect();
++    session.restore_hex(&hex).unwrap_or_else(|error| panic!("{}: {error}", open.spec.prompt));
++    let restored_hex = session.save_hex();
++    let local: Value = serde_json::from_str(&session.open_choice_json(open.observer).unwrap()).unwrap();
++    assert_eq!(local["native_kind"], native);
++    assert_eq!(local["kind"], legacy);
++    assert_eq!(local["prompt"], expected["prompt"]);
++    assert_eq!(session.save_hex(), restored_hex, "metadata projection must not change archive bytes");
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    let mut restored = Engine::restore(&decoded).unwrap();
++    let mut direct = Engine::restore(&engine.save()).unwrap();
++    let selection = open.spec.options.iter().take(open.spec.min).copied().collect::<Vec<_>>();
++    for candidate in [&mut restored, &mut direct] { submit(candidate, GameAction::Answer { choice_id: open.id, selection: selection.clone() }); }
++    assert_eq!(restored.save(), direct.save());
++    assert_eq!(restored.log(), direct.log());
++    let mut unknown = engine.save();
++    unknown.resolution.open_choice.as_mut().unwrap().spec.prompt = "unknown_extension_prompt";
++    assert!(engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&unknown)).is_err());
++}
++
++#[test]
++fn real_choices_keep_precise_kind_and_prompt_through_archive() {
++    let mut engine = Engine::new(804, 3);
++    engine.debug_grant(0, "突袭");
++    engine.state_core_mut().turn.phase = Phase::Judge;
++    submit(&mut engine, GameAction::NextPhase);
++    check_choice(&engine, "confirm", "Confirm");
++    let id = engine.open_choice().unwrap().id;
++    submit(&mut engine, GameAction::Answer { choice_id: id, selection: vec![engine_native::ChoiceOption::Confirm] });
++    check_choice(&engine, "select_players", "SelectTargets");
++    let mut discard = Engine::new(1515, 4);
++    for _ in 0..3 { submit(&mut discard, GameAction::NextPhase); }
++    check_choice(&discard, "select_cards", "SelectCards");
++    let mut response = Engine::new(2, 2);
++    response.debug_set_turn(0, Phase::Play, 1);
++    let sha = response.debug_place(0, "sha");
++    response.debug_place(1, "shan");
++    submit(&mut response, GameAction::PlayCard { card: sha, targets: vec![1] });
++    check_choice(&response, "respond_card", "Custom");
++    let mut pick = Engine::new(42, 3);
++    pick.debug_set_turn(0, Phase::Play, 1);
++    pick.debug_grant(0, "反间");
++    let skill = pick.catalog().skill_by_name("反间").unwrap();
++    submit(&mut pick, GameAction::ActivateSkill { skill });
++    let id = pick.open_choice().unwrap().id;
++    submit(&mut pick, GameAction::Answer { choice_id: id, selection: vec![engine_native::ChoiceOption::Player(1)] });
++    check_choice(&pick, "pick_tag", "Custom");
++}
++
++fn submit(engine: &mut Engine, action: GameAction) {
++    let result = engine.submit(engine_native::GameCommand { actor: engine.open_choice().map_or(engine.turn().current, |c| c.observer), expected_revision: engine.revision(), dedup_id: engine.revision() + 1, action });
++    assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
++}
++
++#[path = "support/ws5_metadata_readers.rs"]
++mod old;
++#[test]
++fn ws5_old_and_new_rust_readers_accept_both_payload_generations() {
++    let engine = Engine::new(1, 3);
++    let mut payload = value(&engine, RoomRole::Player, 1)["seats"][0].clone();
++    let old: old::OldSeatView = serde_json::from_value(payload.clone()).unwrap();
++    let mut previous = payload.clone(); previous.as_object_mut().unwrap().remove("generals");
++    let current: engine_api::SeatView = serde_json::from_value(previous).unwrap();
++    assert_eq!(serde_json::to_value(&current).unwrap()["generals"], json!([null,null]));
++    payload["generals"] = json!([{ "def":0,"name":"extension","faction":"unknown","revealed":false },null]);
++    assert_eq!(serde_json::from_value::<old::OldSeatView>(payload.clone()).unwrap(), old);
++    for invalid in [json!(null),json!([]),json!([null]),json!([{"def":"0","name":"x","faction":"wei","revealed":false},null])] {
++        payload["generals"] = invalid;
++        assert!(serde_json::from_value::<engine_api::SeatView>(payload.clone()).is_err());
++    }
++    let previous = json!({"choice_id":1,"observer":1,"options":[],"min_count":0,"max_count":1,"allow_cancel":true,"timeout_policy":"None","revision":7,"continuation_id":1,"kind":"Custom"});
++    let current: engine_api::ChoiceRequest = serde_json::from_value(previous.clone()).unwrap();
++    assert_eq!(serde_json::to_value(current).unwrap(), previous);
++    let mut payload = previous.clone(); payload["prompt"]=json!("extension.key"); payload["native_kind"]=json!("pick_tag");
++    assert_eq!(serde_json::from_value::<old::OldChoiceRequest>(previous).unwrap(), serde_json::from_value::<old::OldChoiceRequest>(payload.clone()).unwrap());
++    for (field,invalid) in [("prompt",json!(3)),("native_kind",json!("made_up")),("native_kind",json!(3))] {
++        let mut bad=payload.clone();bad[field]=invalid;
++        assert!(serde_json::from_value::<engine_api::ChoiceRequest>(bad).is_err());
++    }
++}
++
++#[test]
++fn actual_ws5_snapshot_bytes_round_trip_old_and_new_rust_readers() {
++    let mut engine = Engine::new(42, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    engine.debug_grant(0, "反间");
++    let skill = engine.catalog().skill_by_name("反间").unwrap();
++    submit(&mut engine, GameAction::ActivateSkill { skill });
++    let id = engine.open_choice().unwrap().id;
++    submit(&mut engine, GameAction::Answer { choice_id: id, selection: vec![engine_native::ChoiceOption::Player(1)] });
++    let message = engine_protocol::ServerMessage::Snapshot {
++        header: engine_protocol::MessageHeader::new(909, 1, engine.revision()),
++        view: observer_snapshot_for(&engine, RoomRole::Referee, None),
++        legal_actions: vec![],
++        choice: choice_for(&engine, RoomRole::Referee, None),
++    };
++    let wire = engine_protocol::encode_s2c(&message).unwrap();
++    let old: old::OldServerMessage = serde_json::from_str(&wire).unwrap();
++    let old::OldServerMessage::Snapshot { header, choice, .. } = &old;
++    assert_eq!(header.protocol_version, 5);
++    assert_eq!(choice.as_ref().unwrap().kind, engine_api::ChoiceKind::Custom);
++    let old_wire = serde_json::to_string(&old).unwrap();
++    let engine_protocol::ServerMessage::Snapshot { view, choice, .. } = engine_protocol::decode_s2c(&old_wire).unwrap() else { panic!("snapshot") };
++    assert!(view.seats.iter().all(|seat| seat.generals == [None,None]));
++    let choice = choice.unwrap();
++    assert!(choice.prompt.is_none() && choice.native_kind.is_none());
++}
+diff --git a/apps/game-server/tests/nc09_projection_parity.rs b/apps/game-server/tests/nc09_projection_parity.rs
+--- a/apps/game-server/tests/nc09_projection_parity.rs
++++ b/apps/game-server/tests/nc09_projection_parity.rs
+@@ -96,6 +96,7 @@
+                 local["identity"]
+             );
+             assert_eq!(Value::from(server.character_def), local["characterDef"]);
++            assert_eq!(serde_json::to_value(&server.generals).unwrap(), local["generals"]);
+         }
+         let hidden: BTreeSet<_> = engine
+             .state_core()
+diff --git a/apps/game-server/tests/support/ws5_metadata_readers.rs b/apps/game-server/tests/support/ws5_metadata_readers.rs
+new file mode 100644
+--- /dev/null
++++ b/apps/game-server/tests/support/ws5_metadata_readers.rs
+@@ -0,0 +1,77 @@
++//! Frozen WS5 reader fields from HEAD 100489f5, before approved B.
++use engine_api::*;
++use serde::{Serialize, Deserialize};
++#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
++pub struct OldSeatView {
++    /// Player id.
++    pub player: PlayerId,
++    /// Stable character definition id.
++    #[serde(default)]
++    pub character_def: u32,
++    /// Seat index.
++    pub seat: SeatIndex,
++    /// Current HP (public in standard rules).
++    pub hp: i32,
++    /// Max HP.
++    pub max_hp: u32,
++    /// Alive flag.
++    pub alive: bool,
++    /// Whether the character card is currently face-down.
++    #[serde(default)]
++    pub turned_over: bool,
++    /// Hand count (not hand contents unless authorized).
++    pub hand_count: u32,
++    /// Known identity if revealed / authorized; otherwise unknown.
++    pub identity: Option<IdentityTag>,
++    /// Public skill instances owned by this player.
++    pub skills: Vec<SkillView>,
++}
++#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
++pub struct OldChoiceRequest {
++    /// Unique choice id for this match.
++    pub choice_id: ChoiceId,
++    /// Observer who must answer (usually a player).
++    pub observer: PlayerId,
++    /// Options the player may select (or empty if constraint-only).
++    pub options: Vec<ChoiceOption>,
++    /// Minimum number of selections.
++    pub min_count: u8,
++    /// Maximum number of selections.
++    pub max_count: u8,
++    /// Whether cancel is allowed.
++    pub allow_cancel: bool,
++    /// Timeout policy identifier (ruleset-defined).
++    pub timeout_policy: TimeoutPolicy,
++    /// Associated state revision when the choice was published.
++    pub revision: u64,
++    /// VM / effect continuation handle (opaque to clients).
++    pub continuation_id: u64,
++    /// Human-oriented choice kind for UI (not hashed into rules).
++    pub kind: ChoiceKind,
++}
++#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
++pub struct OldObserverSnapshot {
++    /// Revision of the authority state this view is derived from.
++    pub revision: u64,
++    /// Canonical hash of authority state (not of the view).
++    pub state_hash: [u8; 32],
++    /// Observer role.
++    pub observer: ObserverKind,
++    /// Current round number (public turn state).
++    pub round: u32,
++    /// Current turn player, or `PlayerId::NONE` between turns.
++    pub current_player: PlayerId,
++    /// Current public phase.
++    pub phase: engine_api::TurnPhaseTag,
++    /// Seat order (public).
++    pub seats: Vec<OldSeatView>,
++    /// Public / authorized cards known to this observer.
++    pub known_cards: Vec<CardView>,
++    /// Match outcome if finished.
++    pub outcome: MatchOutcome,
++}
++#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "type", content = "payload")]
++pub enum OldServerMessage {
++    Snapshot { header: engine_protocol::MessageHeader, view: OldObserverSnapshot, legal_actions: Vec<LegalAction>, choice: Option<OldChoiceRequest> },
++}
+diff --git a/apps/web-client/scripts/approved-b-metadata.test.mjs b/apps/web-client/scripts/approved-b-metadata.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/approved-b-metadata.test.mjs
+@@ -0,0 +1,50 @@
++import assert from 'node:assert/strict';
++import { test } from 'node:test';
++import { nativeEnvelope, nativeObserverToSnapshot } from '../src/worker/nativeBackend.ts';
++const general = { def: 0, name: '曹操', faction: 'wei', revealed: false };
++const view = { seat: 0, players: [{ seat: 0, characterDef: 0, generals: [general, null], hp: 4, maxHp: 4, alive: true, hand: { own: [] }, handCount: 0, equips: [], judge: [], skills: [] }], discard: [], table: [], phase: 'play', turn: 0, round: 1 };
++function envelope(choice) {
++ return nativeEnvelope({ observer: 0, engine: { view_json: () => JSON.stringify(view), open_choice_json: () => JSON.stringify(choice), revision: () => 7, is_finished: () => false, legal_actions_json: () => JSON.stringify({seat: 0, revision: 7, actions: []}), activate_skill() {} } });
++}
++test('two slots preserve def zero and defaults accept old payloads', () => {
++ assert.deepEqual(nativeObserverToSnapshot(view).seats[0].generals, [general, null]);
++ const old = structuredClone(view); delete old.players[0].generals;
++ assert.equal(nativeObserverToSnapshot(old).seats[0].generals, undefined);
++ assert.equal(nativeObserverToSnapshot(old).seats[0].character_def, 0);
++});
++test('canonical kinds and prompts reach real envelope conversion', () => {
++ for (const [native_kind, kind] of [['confirm','Confirm'], ['select_cards','SelectCards'], ['select_players','SelectTargets'], ['respond_card','Custom'], ['pick_tag','Custom']]) {
++  const result = envelope({id: 9, min: 1, max: 1, allowCancel: true, native_kind, kind, prompt: 'respond_shan', options: [{card:42}]});
++  assert.equal(result.choice.native_kind, native_kind); assert.equal(result.choice.kind, kind); assert.equal(result.choice.prompt, 'respond_shan');
++  assert.deepEqual(result.choice.options, [{token:0,label_key:'card:42'}]);
++ }
++ assert.equal(envelope({id:9, hidden:true}).choice, null);
++ assert.equal(envelope({id:9, options:[]}).choice.kind, 'Custom');
++});
++test('metadata wrong types refuse explicitly at local JSON boundary', () => {
++ for (const generals of [null, [], [general], [general,null,null], [{...general,def:-1},null], [{...general,def:'0'},null], [{...general,name:0},null], [{...general,revealed:0},null]]) {
++  assert.throws(() => nativeObserverToSnapshot({...view,players:[{...view.players[0],generals}]}), /generals/);
++ }
++ for (const metadata of [{prompt:3},{native_kind:'extension_new_kind'},{native_kind:3}]) assert.throws(() => envelope({id:9,options:[],...metadata}), /prompt|native_kind/);
++});
++
++test('old functional TypeScript reader ignores extra metadata', async () => {
++ const {nativeObserverToSnapshot: oldReader} = await import('./approved-b-old-reader.ts');
++ const previous=structuredClone(view);delete previous.players[0].generals;
++ assert.deepEqual(oldReader(view),oldReader(previous));
++});
++
++test('production prompt literals and extension keys have readable presentation without internal keys', async () => {
++ const {readFileSync,readdirSync} = await import('node:fs');
++ const {join} = await import('node:path');
++ const {fileURLToPath} = await import('node:url');
++ const {choicePromptLabel} = await import('../src/engine/observerMetadata.ts');
++ const source=readFileSync(new URL('../../../crates/engine-native-kernel/src/archive/resolution.rs',import.meta.url),'utf8');
++ const prompts=[...source.split('KNOWN_PROMPTS:')[1].split('];')[0].matchAll(/^    "([^"]+)",/gm)].map(match=>match[1]);
++ // Literal inventory is a presentation guard, not a reachability/restore proof.
++ const visit=directory=>readdirSync(directory,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?visit(join(directory,entry.name)):entry.name.endsWith('.rs')?[join(directory,entry.name)]:[]);
++ const files=['engine-native-kernel','engine-native-content','engine-native'].flatMap(crate=>visit(fileURLToPath(new URL(`../../../crates/${crate}/src`,import.meta.url))));
++ for(const file of files)for(const match of readFileSync(file,'utf8').matchAll(/prompt:\s*"([^"]+)"/g))prompts.push(match[1]);
++ for(const prompt of new Set(prompts))assert(!choicePromptLabel({prompt,native_kind:'select_cards'}).includes(prompt),prompt);
++ for(const key of ['<img src=x onerror=alert(1)>extension','__proto__','constructor','toString']) assert.equal(choicePromptLabel({prompt:key,native_kind:'respond_card'}),'响应出牌');
++});
+diff --git a/apps/web-client/scripts/approved-b-old-reader.ts b/apps/web-client/scripts/approved-b-old-reader.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/approved-b-old-reader.ts
+@@ -0,0 +1,113 @@
++// Frozen functional pre-B TS reader, HEAD100489f5 plus reviewed PA09 overlay.
++import { normalizeNativeOutcome } from "../src/engine/nativeOutcome";
++import type { CardView, ObserverSnapshot } from "../src/types/engine";
++interface NativeView {
++  seat: number;
++  players: Array<{
++    seat: number;
++    characterDef?: number;
++    alive: boolean;
++    hp: number;
++    maxHp: number;
++    hand: { own?: number[]; hidden?: boolean };
++    handCount: number;
++    equips: number[];
++    judge: number[];
++    turnedOver: boolean;
++    skills: string[];
++    revealedGenerals: boolean[];
++    // NC03/NC09 裁决⑥：观察者过滤后的身份（本人/主公/已死亡可见，其余 null）。
++    identity?: "Lord" | "Loyalist" | "Rebel" | "Renegade" | null;
++  }>;
++  deckCount: number;
++  discard: number[];
++  table: number[];
++  // 裁决⑦：观察者可见牌的真实牌面（id → def/suit/rank/kind）；仅含
++  // 本人手牌与全场装备/判定/弃牌/处理区——他人手牌与牌堆不在其中。
++  cards?: Record<string, { def: number; suit: string | null; rank: number | null; kind: string }>;
++  turn: number;
++  phase: string;
++  round: number;
++  outcome: unknown;
++  rulesetVersion?: number;
++  ruleset_version?: number;
++}
++
++const PHASE_MAP: Record<string, ObserverSnapshot["phase"]> = {
++  judge: "Judge",
++  draw: "Draw",
++  play: "Play",
++  discard: "Discard",
++  end: "End",
++};
++
++type FaceJson = { def: number; suit: string | null; rank: number | null; kind: string };
++
++/** 可见牌 → CardView（复用已有字段：face 缺失时不虚构牌面，def 置 null 由
++ * 渲染门挡住——正常路径 WASM 对全部可见 id 都提供牌面）。 */
++function faceToCardView(
++  view: NativeView,
++  id: number,
++  owner: number | null,
++  zone: CardView["zone"],
++): CardView {
++  const face: FaceJson | undefined = view.cards?.[String(id)];
++  return {
++    id,
++    def: face?.def ?? null,
++    suit: (face?.suit as CardView["suit"]) ?? null,
++    rank: face?.rank ?? null,
++    owner,
++    zone,
++    kind: (face?.kind as CardView["kind"]) ?? "Other",
++  };
++}
++
++/** observer schema 适配：view_json → ObserverSnapshot。 */
++export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
++  const self = view.players.find((p) => p.seat === view.seat);
++  const ownHand = self?.hand?.own ?? [];
++  // 裁决⑦：可见牌面覆盖——本人手牌 + 全场装备/判定（公开）+ 弃牌堆 +
++  // 处理区；他人手牌 id 不进入 known_cards（WASM 侧本就不下发）。
++  const known_cards = [
++    ...ownHand.map((id) => faceToCardView(view, id, view.seat, "Hand")),
++    ...view.players.flatMap((p) => [
++      ...p.equips.map((id) => faceToCardView(view, id, p.seat, "Equip")),
++      ...p.judge.map((id) => faceToCardView(view, id, p.seat, "Judge")),
++    ]),
++    ...view.discard.map((id) => faceToCardView(view, id, null, "DiscardPile")),
++    ...view.table.map((id) => faceToCardView(view, id, null, "Processing")),
++  ];
++  return {
++    revision: view.rulesetVersion ?? view.ruleset_version ?? 0,
++    state_hash: "",
++    observer: view.seat,
++    round: view.round,
++    current_player: view.turn,
++    phase: PHASE_MAP[view.phase] ?? "Idle",
++    seats: view.players.map((p) => ({
++      player: p.seat,
++      character_def: p.characterDef ?? 0,
++      seat: p.seat,
++      hp: p.hp,
++      max_hp: p.maxHp,
++      alive: p.alive,
++      turned_over: !!p.turnedOver,
++      hand_count: p.handCount,
++      // 裁决⑥：复用 SeatView.identity——不再恒置 null。
++      identity: p.identity ?? null,
++      skills: (p.skills ?? []).map((name) => ({
++        id: 0,
++        def: 0,
++        enabled: true,
++        use_count: 0,
++        active: false,
++        view_as: false,
++        locked: false,
++        name,
++      })),
++    })),
++    known_cards,
++    outcome: normalizeNativeOutcome(view.outcome ?? null),
++  };
++}
+diff --git a/apps/web-client/scripts/approved-b-parity.mjs b/apps/web-client/scripts/approved-b-parity.mjs
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/approved-b-parity.mjs
+@@ -0,0 +1,57 @@
++// Actual generated WASM32/Worker converter, server expectations and native IPC host: same archives.
++import assert from 'node:assert/strict';
++import {readFileSync} from 'node:fs';
++import {spawn} from 'node:child_process';
++import {createInterface} from 'node:readline';
++import init, {NativeEngine} from '../src/worker/native-pkg/engine_native_wasm.js';
++import {nativeObserverToSnapshot, nativeEnvelope} from '../src/worker/nativeBackend.ts';
++import {nativeObserverToSnapshot as oldReader} from './approved-b-old-reader.ts';
++const [path,binary] = process.argv.slice(2);
++assert(path && binary,'fixture JSON and actual pa09_native_bridge binary required');
++const fixtures=JSON.parse(readFileSync(path,'utf8'));
++await init({module_or_path:readFileSync(new URL('../src/worker/native-pkg/engine_native_wasm_bg.wasm',import.meta.url))});
++const host=spawn(binary,[],{stdio:['pipe','pipe','inherit']});
++const lines=createInterface({input:host.stdout});const pending=[];let id=0;
++lines.on('line',line=>{const waiter=pending.shift();if(waiter) waiter(JSON.parse(line));});
++async function request(body){const response=await new Promise(resolve=>{pending.push(resolve);host.stdin.write(JSON.stringify({id:++id,...body})+'\n');});assert.equal(response.ok,true,JSON.stringify(response));return response.data;}
++const seatFields=env=>env.view.seats.map(({generals,character_def})=>({generals,character_def}));
++const choiceFields=(choice,server=false)=>choice===null?null:({choice_id:choice.choice_id,observer:choice.observer-(server?1:0),kind:choice.kind,prompt:choice.prompt,native_kind:choice.native_kind,min_count:choice.min_count,max_count:choice.max_count,allow_cancel:choice.allow_cancel,revision:choice.revision,options:choice.options.map(option=>({...option,label_key:server&&option.label_key.startsWith('player:')?`player:${Number(option.label_key.slice(7))-1}`:option.label_key}))});
++const kinds=new Set();const prompts=new Set();let comparisons=0;
++try{
++ await request({type:'init'});
++ for(const fixture of fixtures){
++  const engine=new NativeEngine(fixture.seats.length,0n);
++  try{
++   for(let seat=0;seat<fixture.seats.length;seat++){
++    await request({type:'start',players:fixture.seats.length,seed:0,observer:seat,packsJson:fixture.packsJson});
++    for(let restore=0;restore<2;restore++){
++     engine.restore_hex_with_packs_json(fixture.archiveHex,fixture.packsJson);
++     const restoredHex=engine.save_hex();
++     const ipc=await request({type:'restore',hex:fixture.archiveHex,packsJson:fixture.packsJson});
++     const raw=JSON.parse(engine.view_json(seat));
++     const current=nativeObserverToSnapshot(raw);const legacy=oldReader(raw);
++     const withoutMetadata={...current,seats:current.seats.map(({generals,...seat})=>seat)};
++     assert.deepEqual(legacy,withoutMetadata,`${fixture.name}/${seat}: functional old TS reader accepts actual new WASM payload`);
++     const worker=nativeEnvelope({engine,observer:seat,eventCursor:0});
++     const server=fixture.seats[seat];
++     assert.deepEqual(seatFields(worker),seatFields(server),`${fixture.name}/${seat}: server/Worker both slots`);
++     assert.deepEqual(seatFields(ipc),seatFields(worker),`${fixture.name}/${seat}: IPC/Worker both slots`);
++     assert.deepEqual(choiceFields(worker.choice),choiceFields(server.choice,true),`${fixture.name}/${seat}: server/Worker all choice fields`);
++     assert.deepEqual(choiceFields(ipc.choice),choiceFields(worker.choice),`${fixture.name}/${seat}: IPC/Worker all choice fields`);
++     assert.equal(engine.save_hex(),restoredHex,'WASM metadata read changed archive bytes');
++     assert.equal((await request({type:'save'})).hex,restoredHex,'IPC/Worker restored archives differ (both rotate auth generation once)');
++     if(worker.choice){kinds.add(worker.choice.native_kind);prompts.add(worker.choice.prompt);}
++     comparisons++;
++    }
++   }
++   assert.equal(fixture.spectator.choice,null);
++   for(const [index,publicSeat] of fixture.spectator.view.seats.entries())for(let slot=0;slot<2;slot++){
++    const general=publicSeat.generals[slot];
++    if(general)assert.deepEqual(general,fixture.referee.view.seats[index].generals[slot]);
++   }
++   console.log(`PASS ${fixture.name}: ${fixture.seats.length} seats, two restores, both slots/all choice fields, identical archive bytes`);
++  }finally{engine.free();}
++ }
++ assert.deepEqual([...kinds].sort(),['confirm','pick_tag','respond_card','select_cards','select_players']);
++ console.log(JSON.stringify({passed:true,fixtures:fixtures.length,comparisons,kinds:[...kinds].sort(),prompts:[...prompts].sort(),failed:0}));
++}finally{host.stdin.end();host.kill('SIGTERM');}
+diff --git a/apps/web-client/scripts/approved-b-ui.ts b/apps/web-client/scripts/approved-b-ui.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/approved-b-ui.ts
+@@ -0,0 +1,93 @@
++// Actual BattleView + SeatCard with real Worker/IPC archive restoration; no engine substitute.
++import {createApp, nextTick} from "vue";
++import {createRouter, createMemoryHistory} from "vue-router";
++import BattleView from "../src/views/BattleView.vue";
++import SeatCard from "../src/components/battle/SeatCard.vue";
++import {isTauriShell} from "../src/engine/desktopHost";
++import {EngineClient} from "../src/engine/client";
++import {choicePromptLabel, choiceKindLabel} from "../src/engine/observerMetadata";
++import type {EngineEnvelope, SeatView} from "../src/types/engine";
++
++type Fixture = {name:string;archiveHex:string;packsJson:string;seats:Array<{view:EngineEnvelope["view"];choice:EngineEnvelope["choice"]}>; legacy?:boolean; extensionPrompt?:string};
++function check(value:unknown, message:string):asserts value {if(!value)throw new Error(message);}
++const originalStart=EngineClient.prototype.start;
++let selected:Fixture;
++let ready:()=>void;
++let actual:EngineEnvelope;
++let observer=1;
++const clients:EngineClient[]=[];
++// Fixture injection uses the production start and restore requests and the real selected transport.
++EngineClient.prototype.start=async function(){
++ clients.push(this);
++ await originalStart.call(this,selected.seats.length,0,observer,selected.packsJson);
++ actual=await this.restoreHex(selected.archiveHex,selected.packsJson);
++ if(selected.legacy){
++  actual={...actual,view:{...actual.view,seats:actual.view.seats.map(({generals,...seat})=>seat)},choice:actual.choice?((({prompt,native_kind,...choice})=>choice)(actual.choice)):null};
++ }
++ if(selected.extensionPrompt&&actual.choice)actual={...actual,choice:{...actual.choice,prompt:selected.extensionPrompt}};
++ ready();
++ return actual;
++};
++const wait=async (test:()=>boolean)=>{for(let i=0;i<300;i++){if(test())return;await new Promise(resolve=>setTimeout(resolve,20));}throw new Error("UI did not render expected state");};
++
++async function run(){
++ history.replaceState(null,"",isTauriShell()?"/?engineTransport=native":"/?engineTransport=wasm");
++ localStorage.setItem("noname-next-skip-anims","1");
++ const fixtures:Fixture[]=await fetch("/metadata-fixtures.json").then(response=>response.json());
++ const response=fixtures.find(fixture=>fixture.name==="respond_card")!;
++ fixtures.push({...response,name:"legacy-choice-flow",legacy:true},{...response,name:"extension-prompt-flow",extensionPrompt:"<img src=x onerror=alert(1)>constructor"});
++ const kinds=new Set<string>();const cases=[];
++ for(const fixture of fixtures){
++  selected=fixture;
++  observer=fixture.seats.findIndex(seat=>seat.choice!==null);
++  if(observer<0)observer=1;
++  const mounted=new Promise<void>(resolve=>{ready=resolve;});
++  const root=document.createElement("div");document.body.append(root);
++  const router=createRouter({history:createMemoryHistory(),routes:[{path:"/",component:BattleView}]});
++  await router.push("/");await router.isReady();
++  const app=createApp(BattleView);app.use(router);app.mount(root);
++  try{
++   await mounted;
++   const expected=actual.view.seats.flatMap(seat=>seat.generals??[null,null]);
++   await wait(()=>root.querySelectorAll(".general-slot").length===expected.length);
++   const slots=[...root.querySelectorAll(".general-slot")];
++   for(const [index,general] of expected.entries()){
++    const text=slots[index].textContent??"";
++    if(general){check(text.includes(general.name),`${fixture.name}: visible general missing`);check(text.includes(general.revealed?"明置":"暗置"),`${fixture.name}: reveal flag missing`);}
++    else check(text.includes(actual.view.seats[Math.floor(index/2)].generals===undefined&&index%2===0?"#":"暗将／未配置"),`${fixture.name}: hidden slot was disclosed`);
++   }
++   if(actual.choice){
++    const choice=actual.choice;if(choice.native_kind)kinds.add(choice.native_kind);
++    await wait(()=>Boolean(root.querySelector(".choice h2")?.textContent?.includes(choicePromptLabel(choice))));
++    check(root.querySelector(".choice")?.textContent?.includes(choiceKindLabel(choice)),`${fixture.name}: readable kind missing`);
++    if(choice.prompt)check(!root.querySelector(".choice")?.textContent?.includes(choice.prompt),`${fixture.name}: internal prompt displayed`);
++    check(root.querySelector(".choice img[onerror]")===null,`${fixture.name}: extension prompt executed as markup`);
++    if(observer===1 && ["confirm","select_players","select_cards","respond_card","pick_tag-fanjian"].includes(fixture.name)){
++     const button=root.querySelector<HTMLButtonElement>(".choice button");check(button&&!button.disabled,`${fixture.name}: no real answer control`);
++     button.click();
++     await wait(()=>!root.querySelector(".choice h2")?.textContent?.includes(choicePromptLabel(choice)) || root.textContent?.includes("rev "+(actual.revision+1))===true);
++     check(!root.textContent?.includes("WrongPlayer"),`${fixture.name}: UI answered as wrong seat`);
++    }
++   }
++   const client=clients.at(-1)!;
++   const hex=await client.saveHex();const restored=await client.restoreHex(hex,fixture.packsJson);
++   check(JSON.stringify(restored.view.seats.map(seat=>seat.generals))===JSON.stringify((await client.observer()).seats.map(seat=>seat.generals)),`${fixture.name}: restored metadata differs`);
++   cases.push({name:fixture.name,slots:slots.length,prompt:actual.choice?.prompt??null,transport:client.getTransportKind(),restored:true});
++  }finally{app.unmount();root.remove();}
++ }
++ check(kinds.size===5,"not all five real choice kinds reached BattleView");
++ // Old network/service payload remains renderable, and extension text never becomes markup/paths.
++ for(const [name,seat] of [["old-payload",{character_def:17}],["unknown-extension",{character_def:0,generals:[{def:0,name:"<img src=x onerror=alert(1)>",faction:"unknown",revealed:false},null]}]] as const){
++  const root=document.createElement("div");document.body.append(root);
++  const props={seat:{player:0,seat:0,hp:4,max_hp:4,alive:true,turned_over:false,hand_count:0,identity:null,skills:[],...seat} as SeatView,self:true,identityLabel:"未知",isTargetMode:false,isSelectableTarget:false,isDropTarget:false,equipCards:[]};
++  const app=createApp(SeatCard,props);app.mount(root);await nextTick();
++  check(root.textContent?.includes(name==="old-payload"?"#17":"<img src=x onerror=alert(1)>"),`${name}: fallback missing`);
++  check(root.querySelector("img[onerror]")===null,`${name}: untrusted markup`);
++  check([...root.querySelectorAll("img")].every(image=>!image.src.includes("onerror")),`${name}: untrusted path`);
++  app.unmount();root.remove();
++ }
++ return {passed:true,cases,kinds:[...kinds].sort(),oldPayloadFallback:true,extensionEscaped:true};
++}
++try{const result=await run();await fetch("/report",{method:"POST",body:JSON.stringify(result)});document.body.textContent=JSON.stringify(result);}
++catch(error){const result={passed:false,error:String(error),stack:error instanceof Error?error.stack:null};await fetch("/report",{method:"POST",body:JSON.stringify(result)});document.body.textContent=JSON.stringify(result);}
++finally{EngineClient.prototype.start=originalStart;for(const client of clients)client.dispose();}
+diff --git a/apps/web-client/scripts/network-client.test.mjs b/apps/web-client/scripts/network-client.test.mjs
+--- a/apps/web-client/scripts/network-client.test.mjs
++++ b/apps/web-client/scripts/network-client.test.mjs
+@@ -518,3 +518,19 @@
+     assert.match(f.status.value, /终局 · 单挑胜者 P1 · rev 4/);
+   }
+ });
++
++test("B metadata is preserved on real network consumer messages and malformed metadata refuses join", async (t) => {
++  const { client, connect } = fixture(t);
++  const socket = await connect();
++  const metadata = { def: 0, name: "曹操", faction: "wei", revealed: false };
++  const pending = client.joinRoom(7);
++  const snapshot = { ...view(), seats: [{ player: 1, character_def: 0, generals: [metadata, null] }] };
++  const choice = { choice_id: 1, observer: 1, native_kind: "respond_card", prompt: "respond_shan", kind: "Custom" };
++  socket.receive("JoinOk", { room_id: 7, player_id: 1, seat: 0, role: "Player", view: snapshot, choice, legal_actions: [] });
++  const joined = await pending;
++  assert.deepEqual(joined.envelope.view.seats[0].generals, [metadata, null]);
++  assert.deepEqual(joined.envelope.choice, choice);
++  const rejected = client.joinRoom(7);
++  socket.receive("JoinOk", { view: snapshot, choice: { ...choice, native_kind: "invented_kind" } });
++  await assert.rejects(rejected, /元数据无效/);
++});
+diff --git a/apps/web-client/scripts/pa09-desktop-transport.test.mjs b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+--- a/apps/web-client/scripts/pa09-desktop-transport.test.mjs
++++ b/apps/web-client/scripts/pa09-desktop-transport.test.mjs
+@@ -136,3 +136,17 @@
+     transport.terminate();
+   }
+ });
++
++test("IPC refuses malformed B metadata before delivering a view envelope", async () => {
++  const transport = new DesktopEngineTransport(async (command, args) => {
++    if (command === "native_engine_open") return 27;
++    if (command === "native_engine_close") return;
++    return { id: args.request.id, ok: true, data: { view: { seats: [{ generals: [{ def: "0", name: "x", faction: "wei", revealed: false }, null] }] }, choice: null } };
++  });
++  const reply = new Promise((resolve) => { transport.onmessage = (event) => resolve(event.data); });
++  transport.postMessage({ id: 1, type: "observer" });
++  const response = await reply;
++  assert.equal(response.ok, false);
++  assert.match(response.error, /generals metadata invalid/);
++  transport.terminate();
++});
+diff --git a/apps/web-client/src/components/battle/GeneralPortrait.vue b/apps/web-client/src/components/battle/GeneralPortrait.vue
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/src/components/battle/GeneralPortrait.vue
+@@ -0,0 +1,103 @@
++<script setup lang="ts">
++import { computed, ref, watch } from "vue";
++import {
++  characterDisplayName,
++  characterImageUrl,
++  characterPortraitUrl,
++  ensureAppearanceCharacter,
++  fallbackPortraitUrl,
++  selectedSkinId,
++  selectSkin,
++  skinDisplayName,
++  skinsForCharacter,
++  substituteImageUrl,
++} from "../../engine/appearanceStore";
++import type { GeneralSlotView } from "../../types/engine";
++
++const props = defineProps<{ general: GeneralSlotView | null; legacyDef?: number; alive: boolean; slot: number }>();
++const characterDef = computed(() => props.general?.def ?? props.legacyDef ?? 0);
++const visible = computed(() => props.general !== null || props.legacyDef !== undefined);
++const displayName = computed(() => visible.value
++  ? props.general?.name || characterDisplayName(characterDef.value) || `#${characterDef.value}`
++  : "暗将／未配置");
++const factions: Record<string, string> = { wei: "魏", shu: "蜀", wu: "吴", qun: "群" };
++const faction = computed(() => {
++  const key = props.general?.faction ?? "";
++  return Object.hasOwn(factions, key) ? factions[key] : "未知势力";
++});
++const skins = computed(() => skinsForCharacter(characterDef.value));
++const selectedSkin = computed(() => selectedSkinId(characterDef.value));
++const selectedPortrait = computed(() =>
++  characterImageUrl(characterDef.value)
++);
++const basePortrait = computed(() =>
++  characterPortraitUrl(characterDef.value)
++);
++const originalPortrait = computed(() =>
++  fallbackPortraitUrl(characterDef.value)
++);
++const portraitCandidates = computed(() =>
++  Array.from(
++    new Set([
++      ...(props.alive
++        ? []
++        : [substituteImageUrl(characterDef.value, "dead")]),
++      selectedPortrait.value,
++      basePortrait.value,
++      originalPortrait.value,
++    ])
++  ).filter((url): url is string => !!url)
++);
++const failedAssets = ref<string[]>([]);
++const portraitSrc = computed(
++  () =>
++    portraitCandidates.value.find(
++      (url) => !failedAssets.value.includes(url)
++    ) ?? ""
++);
++
++watch(
++  [characterDef, visible],
++  ([characterId, isVisible]) => {
++    if (isVisible) void ensureAppearanceCharacter(characterId).catch(() => undefined);
++  },
++  { immediate: true }
++);
++
++watch(portraitCandidates, () => {
++  failedAssets.value = [];
++});
++
++function onPortraitError(): void {
++  if (portraitSrc.value) {
++    failedAssets.value = [...failedAssets.value, portraitSrc.value];
++  }
++}
++
++function onSkinChange(event: Event): void {
++  const value = (event.target as HTMLSelectElement).value;
++  selectSkin(characterDef.value, value === "" ? null : Number(value));
++}
++
++</script>
++
++<template>
++  <div class="general-slot" :data-slot="slot" :aria-label="`${slot === 0 ? '主将' : '副将'} ${displayName}`">
++    <img v-if="visible && portraitSrc" class="portrait" :src="portraitSrc" :alt="`${displayName}武将头像`" @error="onPortraitError" />
++    <div v-else class="portrait no-image" role="img" :aria-label="`${displayName}暂无头像`">{{ visible ? "无图" : "未知" }}</div>
++    <span class="name">{{ displayName }}</span>
++    <span v-if="general" class="muted">{{ faction }} · {{ general.revealed ? "明置" : "暗置" }}</span>
++    <select v-if="visible && skins.length" class="skin-select" :value="selectedSkin ?? ''" :aria-label="`${displayName}皮肤`" @click.stop @keydown.stop @change="onSkinChange">
++      <option value="">默认皮肤</option>
++      <option v-for="skin in skins" :key="skin.id" :value="skin.id">{{ skinDisplayName(skin) }}{{ skin.presentation.kind === "spine" ? "（静态回退）" : "" }}</option>
++    </select>
++  </div>
++</template>
++
++<style scoped>
++.general-slot { display: grid; gap: 0.15rem; min-width: 0; font-size: 0.8rem; }
++.portrait { width: 100%; height: 5rem; object-fit: cover; object-position: top center; border-radius: 5px; }
++.no-image { display: grid; place-items: center; background: var(--bg-elevated); color: var(--muted); }
++.name { font-weight: 650; overflow-wrap: anywhere; }
++.skin-select { width: 100%; color: var(--muted); background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 4px; }
++</style>
+diff --git a/apps/web-client/src/components/battle/SeatCard.vue b/apps/web-client/src/components/battle/SeatCard.vue
+--- a/apps/web-client/src/components/battle/SeatCard.vue
++++ b/apps/web-client/src/components/battle/SeatCard.vue
+@@ -1,17 +1,6 @@
+ <script setup lang="ts">
+-import { computed, ref, watch } from "vue";
+-import {
+-  characterDisplayName,
+-  characterImageUrl,
+-  characterPortraitUrl,
+-  ensureAppearanceCharacter,
+-  fallbackPortraitUrl,
+-  selectedSkinId,
+-  selectSkin,
+-  skinDisplayName,
+-  skinsForCharacter,
+-  substituteImageUrl,
+-} from "../../engine/appearanceStore";
++import { computed } from "vue";
++import GeneralPortrait from "./GeneralPortrait.vue";
+ import type { CardView, SeatView } from "../../types/engine";
+ 
+ const props = defineProps<{
+@@ -28,64 +17,10 @@
+   select: [playerId: number];
+ }>();
+ 
+-const displayName = computed(
+-  () =>
+-    characterDisplayName(props.seat.character_def) ??
+-    `#${props.seat.character_def}`
+-);
+-const skins = computed(() => skinsForCharacter(props.seat.character_def));
+-const selectedSkin = computed(() => selectedSkinId(props.seat.character_def));
+-const selectedPortrait = computed(() =>
+-  characterImageUrl(props.seat.character_def)
+-);
+-const basePortrait = computed(() =>
+-  characterPortraitUrl(props.seat.character_def)
+-);
+-const originalPortrait = computed(() =>
+-  fallbackPortraitUrl(props.seat.character_def)
+-);
+-const portraitCandidates = computed(() =>
+-  Array.from(
+-    new Set([
+-      ...(props.seat.alive
+-        ? []
+-        : [substituteImageUrl(props.seat.character_def, "dead")]),
+-      selectedPortrait.value,
+-      basePortrait.value,
+-      originalPortrait.value,
+-    ])
+-  ).filter((url): url is string => !!url)
+-);
+-const failedAssets = ref<string[]>([]);
+-const portraitSrc = computed(
+-  () =>
+-    portraitCandidates.value.find(
+-      (url) => !failedAssets.value.includes(url)
+-    ) ?? ""
+-);
+-
+-watch(
+-  () => props.seat.character_def,
+-  (characterId) => {
+-    void ensureAppearanceCharacter(characterId).catch(() => undefined);
+-  },
+-  { immediate: true }
+-);
+-
+-watch(portraitCandidates, () => {
+-  failedAssets.value = [];
+-});
+-
+-function onPortraitError(): void {
+-  if (portraitSrc.value) {
+-    failedAssets.value = [...failedAssets.value, portraitSrc.value];
+-  }
+-}
+-
+-function onSkinChange(event: Event): void {
+-  const value = (event.target as HTMLSelectElement).value;
+-  selectSkin(props.seat.character_def, value === "" ? null : Number(value));
+-}
++const slots = computed(() => props.seat.generals ?? [null, null]);
++const legacyDef = computed(() => !props.seat.generals || (slots.value.every((slot) => slot === null) && props.seat.character_def !== 0)
++  ? props.seat.character_def : undefined);
++const displayName = computed(() => slots.value.map((slot, index) => slot?.name || (index === 0 && legacyDef.value !== undefined ? `#${legacyDef.value}` : "暗将／未配置")).join(" / "));
+ 
+ function hpIcon(hp: number, maxHp: number, alive: boolean): string {
+   if (!alive) return "✗";
+@@ -118,21 +53,13 @@
+     @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
+     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
+   >
+-    <img
+-      v-if="portraitSrc"
+-      class="portrait"
+-      :src="portraitSrc"
+-      :alt="`${displayName}武将头像`"
+-      @error="onPortraitError"
+-    />
+-    <div v-else class="portrait no-image" role="img" :aria-label="`${displayName}暂无头像`">
+-      无图
+-    </div>
+     <header>
+-      <span class="name">{{ displayName }}</span>
+       <span v-if="self" class="tag">你</span>
+       <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
+     </header>
++    <div class="generals" aria-label="双将">
++      <GeneralPortrait v-for="(general, index) in slots" :key="index" :general="general" :slot="index" :legacy-def="index === 0 ? legacyDef : undefined" :alive="seat.alive" />
++    </div>
+     <div class="hp-row">
+       <span
+         class="state-icon"
+@@ -157,20 +84,6 @@
+       <span>手牌 {{ seat.hand_count }}</span>
+       <span>{{ identityLabel }}</span>
+     </div>
+-    <select
+-      v-if="skins.length > 0"
+-      class="skin-select"
+-      :value="selectedSkin ?? ''"
+-      :aria-label="`${displayName}皮肤`"
+-      @click.stop
+-      @keydown.stop
+-      @change="onSkinChange"
+-    >
+-      <option value="">默认皮肤</option>
+-      <option v-for="skin in skins" :key="skin.id" :value="skin.id">
+-        {{ skinDisplayName(skin) }}{{ skin.presentation.kind === "spine" ? "（静态回退）" : "" }}
+-      </option>
+-    </select>
+     <div v-if="equipCards.length > 0" class="equip-zone" aria-label="装备区">
+       <div
+         v-for="card in equipCards"
+@@ -205,37 +118,7 @@
+   min-height: 96px;
+   transition: border-color 0.15s, box-shadow 0.15s;
+ }
+-.seat.has-portrait {
+-  min-height: 112px;
+-  padding-left: 5.4rem;
+-}
+-.portrait {
+-  position: absolute;
+-  inset: 0 auto 0 0;
+-  width: 4.8rem;
+-  height: 100%;
+-  object-fit: cover;
+-  object-position: top center;
+-  border-radius: 9px 0 0 9px;
+-  border-right: 1px solid var(--border);
+-}
+-.no-image {
+-  display: grid;
+-  place-items: center;
+-  background: var(--bg-elevated);
+-  color: var(--muted);
+-  font-size: 0.75rem;
+-}
+-.skin-select {
+-  width: 100%;
+-  margin-top: 0.35rem;
+-  padding: 0.12rem 0.25rem;
+-  color: var(--muted);
+-  background: var(--bg-elevated);
+-  border: 1px solid var(--border);
+-  border-radius: 4px;
+-  font-size: 0.7rem;
+-}
++.generals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; margin-bottom: 0.5rem; }
+ .seat.self {
+   border-color: var(--accent);
+   box-shadow: 0 0 0 1px rgba(232, 165, 75, 0.25);
+diff --git a/apps/web-client/src/engine/desktopEngineTransport.ts b/apps/web-client/src/engine/desktopEngineTransport.ts
+--- a/apps/web-client/src/engine/desktopEngineTransport.ts
++++ b/apps/web-client/src/engine/desktopEngineTransport.ts
+@@ -1,5 +1,6 @@
+ import { invoke } from "@tauri-apps/api/core";
+ import { urlParam } from "./autoDrive";
++import { validateObserverMetadata } from "./observerMetadata";
+ import { normalizeNativeOutcome } from "./nativeOutcome";
+ import type { ChooseGeneralPayload, EngineEnvelope, WorkerRequest, WorkerResponse } from "../types/engine";
+ 
+@@ -25,6 +26,7 @@
+ }
+ 
+ function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {
++  validateObserverMetadata(envelope.view, envelope.choice);
+   return { ...envelope, view: { ...envelope.view, outcome: normalizeNativeOutcome(envelope.view.outcome) } };
+ }
+ 
+@@ -61,13 +63,14 @@
+         const resourceId = await this.resource;
+         if (this.closed) return;
+         response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
++        response = normalizeResponse(response, request);
+         if (response.id !== request.id || typeof response.ok !== "boolean") {
+           throw new Error("invalid IPC response");
+         }
+       } catch (error) {
+         response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
+       }
+-      if (!this.closed) this.onmessage?.({ data: normalizeResponse(response, request) } as MessageEvent<WorkerResponse>);
++      if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
+     });
+   }
+ 
+diff --git a/apps/web-client/src/engine/networkClient.ts b/apps/web-client/src/engine/networkClient.ts
+--- a/apps/web-client/src/engine/networkClient.ts
++++ b/apps/web-client/src/engine/networkClient.ts
+@@ -1,3 +1,4 @@
++import { validateObserverMetadata } from "./observerMetadata";
+ import { publicEventLabel } from "./publicEvents";
+ import type {
+   ChoiceRequest,
+@@ -502,6 +503,10 @@
+       return;
+     }
+     const payload = message.payload ?? {};
++    if (payload.view) {
++      try { validateObserverMetadata(payload.view as ObserverSnapshot, (payload.choice as ChoiceRequest | null) ?? null); }
++      catch (error) { this.rejectOutstanding(new Error(`服务端元数据无效：${String(error)}`)); return; }
++    }
+ 
+     switch (message.type) {
+       case "Welcome":
+diff --git a/apps/web-client/src/engine/observerMetadata.ts b/apps/web-client/src/engine/observerMetadata.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/src/engine/observerMetadata.ts
+@@ -0,0 +1,53 @@
++import type { ChoiceRequest, GeneralSlotView, NativeChoiceKind, ObserverSnapshot } from "../types/engine";
++
++const CHOICE_KINDS: Record<NativeChoiceKind, string> = {
++  confirm: "Confirm", select_cards: "SelectCards", select_players: "SelectTargets",
++  respond_card: "Custom", pick_tag: "Custom",
++};
++
++/** JSON metadata is optional for old producers; malformed present values are errors. */
++export function generalSlots(value: unknown): [GeneralSlotView | null, GeneralSlotView | null] {
++  if (value === undefined) return [null, null];
++  if (!Array.isArray(value) || value.length !== 2 || !value.every((slot) => slot === null || (
++    typeof slot === "object" && !Array.isArray(slot) && Number.isInteger(slot.def) && slot.def >= 0 && slot.def <= 0xffffffff &&
++    typeof slot.name === "string" && typeof slot.faction === "string" && typeof slot.revealed === "boolean"
++  ))) throw new Error("native: generals metadata invalid");
++  return value as [GeneralSlotView | null, GeneralSlotView | null];
++}
++
++export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown; kind?: string }): Pick<ChoiceRequest, "prompt" | "native_kind" | "kind"> {
++  if (value.prompt != null && typeof value.prompt !== "string") throw new Error("native: prompt metadata invalid");
++  if (value.native_kind != null && (typeof value.native_kind !== "string" || !Object.hasOwn(CHOICE_KINDS, value.native_kind))) throw new Error("native: native_kind metadata invalid");
++  const native_kind = value.native_kind as NativeChoiceKind | undefined;
++  return { ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
++}
++
++const KIND_LABELS: Record<string, string> = {
++  confirm: "确认", select_cards: "选择卡牌", select_players: "选择角色", respond_card: "响应出牌", pick_tag: "选择选项",
++  Confirm: "确认", SelectCards: "选择卡牌", SelectTargets: "选择角色", Custom: "选择选项", OrderTriggers: "排列技能", DiscardToLimit: "弃牌至手牌上限",
++};
++const PROMPTS: Record<string, string> = {
++  trigger_confirm: "是否发动技能？", respond_shan: "请打出闪", respond_sha: "请打出杀", aoe_response: "请响应群体锦囊",
++  dying_save: "请选择救援牌", discard_to_limit: "请弃牌至手牌上限",
++  tuxi_target: "突袭：选择获得手牌的角色", guanxing_arrange: "观星：排列牌堆顶的卡牌",
++  xunxun_arrange: "恂恂：选择获得的卡牌",
++  jijie_give_target: "机捷：选择获得此牌的角色",
++  gaiming_pick: "改命：选择判定牌", haotianta_pick: "昊天塔：选择判定牌", liaoyuan_discard: "燎原：选择弃置的卡牌",
++  fanjian_target: "反间：选择目标角色", fanjian_suit: "反间：选择花色", fanjian_pick: "反间：选择获得的手牌",
++};
++
++export function choiceKindLabel(choice: ChoiceRequest): string {
++  const kind = choice.native_kind ?? choice.kind ?? "Custom";
++  return Object.hasOwn(KIND_LABELS, kind) ? KIND_LABELS[kind] : "选择选项";
++}
++
++export function choicePromptLabel(choice: ChoiceRequest): string {
++  if (!choice.prompt) return choiceKindLabel(choice);
++  return Object.hasOwn(PROMPTS, choice.prompt) ? PROMPTS[choice.prompt] : choiceKindLabel(choice);
++}
++
++/** Check optional metadata before an IPC/network payload enters the view store. */
++export function validateObserverMetadata(view: ObserverSnapshot, choice: ChoiceRequest | null): void {
++  for (const seat of view.seats ?? []) generalSlots(seat.generals);
++  if (choice) choiceMetadata(choice);
++}
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -14,6 +14,15 @@
+   view_as: boolean;
+   locked: boolean;
+ }
++
++export interface GeneralSlotView {
++  def: number;
++  name: string;
++  faction: string;
++  revealed: boolean;
++}
++
++export type NativeChoiceKind = "confirm" | "select_cards" | "select_players" | "respond_card" | "pick_tag";
+ 
+ export interface SeatView {
+   player: number;
+@@ -26,6 +35,7 @@
+   hand_count: number;
+   identity: "Lord" | "Loyalist" | "Rebel" | "Renegade" | null;
+   skills: SkillView[];
++  generals?: [GeneralSlotView | null, GeneralSlotView | null];
+ }
+ 
+ export interface CardView {
+@@ -85,6 +95,8 @@
+   allow_cancel?: boolean;
+   revision?: number;
+   kind?: string;
++  prompt?: string;
++  native_kind?: NativeChoiceKind;
+ }
+ 
+ export interface EngineEnvelope {
+diff --git a/apps/web-client/src/views/BattleView.vue b/apps/web-client/src/views/BattleView.vue
+--- a/apps/web-client/src/views/BattleView.vue
++++ b/apps/web-client/src/views/BattleView.vue
+@@ -1,6 +1,7 @@
+ <script setup lang="ts">
+ import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+ import { useRoute, useRouter } from "vue-router";
++import { choiceKindLabel, choicePromptLabel } from "../engine/observerMetadata";
+ import { EngineClient } from "../engine/client";
+ import {
+   configureLocalAppearanceCatalog,
+@@ -774,10 +775,10 @@
+     </section>
+ 
+     <section v-if="store.choice" class="panel choice" aria-label="待选择">
+-      <h2>选择屏障</h2>
++      <h2>{{ choicePromptLabel(store.choice) }}</h2>
+       <p class="muted">
+         choice #{{ store.choice.choice_id }} · 玩家
+-        {{ store.choice.observer }} · {{ store.choice.kind ?? "Custom" }}
++        {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
+       </p>
+       <div v-if="choiceActions.length" class="row">
+         <button
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -17,6 +17,7 @@
+  * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
+  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
+  */
++import { generalSlots, choiceMetadata } from "../engine/observerMetadata";
+ import { publicEventLabel } from "../engine/publicEvents";
+ import { normalizeNativeOutcome } from "../engine/nativeOutcome";
+ import type {
+@@ -176,6 +177,7 @@
+   players: Array<{
+     seat: number;
+     characterDef?: number;
++    generals?: unknown;
+     alive: boolean;
+     hp: number;
+     maxHp: number;
+@@ -258,6 +260,7 @@
+     seats: view.players.map((p) => ({
+       player: p.seat,
+       character_def: p.characterDef ?? 0,
++      generals: p.generals === undefined ? undefined : generalSlots(p.generals),
+       seat: p.seat,
+       hp: p.hp,
+       max_hp: p.maxHp,
+@@ -306,6 +309,7 @@
+   allowCancel?: boolean;
+   hidden?: boolean;
+   kind?: string;
++  native_kind?: unknown;
+ }
+ 
+ /** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */
+@@ -351,8 +355,8 @@
+   try {
+     const raw = handle.engine.open_choice_json(seat);
+     return (JSON.parse(raw) as NativeChoiceJson | null) ?? null;
+-  } catch {
+-    return null;
++  } catch (error) {
++    throw new Error(`native: choice JSON invalid: ${errorText(error)}`);
+   }
+ }
+ 
+@@ -782,7 +786,7 @@
+ 
+ function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
+   const choice = readChoiceJson(handle);
+-  if (!choice) return null;
++  if (!choice || choice.hidden) return null;
+   const options = choice.options ?? [];
+   return {
+     choice_id: Number(choice.id),
+@@ -790,7 +794,8 @@
+     min_count: choice.min,
+     max_count: choice.max,
+     allow_cancel: choice.allowCancel,
+-    kind: choice.kind ?? "Custom",
++    ...choiceMetadata(choice),
++    revision: Number(handle.engine.revision()),
+     // token = 候选下标（回传即 `answer()` 的索引）；候选值只进 label_key。
+     options: options.map((o, index) => ({
+       token: index,
+diff --git a/crates/engine-api/src/choice.rs b/crates/engine-api/src/choice.rs
+--- a/crates/engine-api/src/choice.rs
++++ b/crates/engine-api/src/choice.rs
+@@ -26,6 +26,31 @@
+     pub continuation_id: u64,
+     /// Human-oriented choice kind for UI (not hashed into rules).
+     pub kind: ChoiceKind,
++    /// Static prompt key for presentation; absent in older payloads.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub prompt: Option<String>,
++    /// Precise native choice kind, restricted to the five canonical names.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_native_kind")]
++    pub native_kind: Option<String>,
++}
++
++/// Preserve the existing wire enum while retaining precise native choice metadata.
++pub fn choice_kind_from_native(kind: &str) -> Option<ChoiceKind> {
++    Some(match kind {
++        "confirm" => ChoiceKind::Confirm,
++        "select_cards" => ChoiceKind::SelectCards,
++        "select_players" => ChoiceKind::SelectTargets,
++        "respond_card" | "pick_tag" => ChoiceKind::Custom,
++        _ => return None,
++    })
++}
++
++fn deserialize_native_kind<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {
++    let value = Option::<String>::deserialize(deserializer)?;
++    if value.as_deref().is_some_and(|kind| choice_kind_from_native(kind).is_none()) {
++        return Err(serde::de::Error::custom("invalid native_kind"));
++    }
++    Ok(value)
+ }
+ 
+ /// Single selectable option.
+diff --git a/crates/engine-api/src/view.rs b/crates/engine-api/src/view.rs
+--- a/crates/engine-api/src/view.rs
++++ b/crates/engine-api/src/view.rs
+@@ -79,6 +79,22 @@
+     pub identity: Option<IdentityTag>,
+     /// Public skill instances owned by this player.
+     pub skills: Vec<SkillView>,
++    /// Authorized primary and secondary general slots; hidden/unconfigured slots are absent.
++    #[serde(default)]
++    pub generals: [Option<GeneralSlotView>; 2],
++}
++
++/// Observer-filtered general metadata; definition zero is a valid definition.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++pub struct GeneralSlotView {
++    /// Stable general definition id.
++    pub def: u32,
++    /// Public general name or localization key.
++    pub name: String,
++    /// Public faction name.
++    pub faction: String,
++    /// Whether this slot has been revealed.
++    pub revealed: bool,
+ }
+ 
+ /// Public skill metadata required for client-side activation controls.
+diff --git a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+--- a/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
++++ b/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+@@ -277,6 +277,8 @@
+         revision: tx.state().revision,
+         continuation_id,
+         kind,
++        prompt: None,
++        native_kind: None,
+     };
+     tx.set_choice(choice);
+     Ok(vec![DomainEvent::ChoiceRequested {
+diff --git a/crates/engine-core/src/projection.rs b/crates/engine-core/src/projection.rs
+--- a/crates/engine-core/src/projection.rs
++++ b/crates/engine-core/src/projection.rs
+@@ -55,6 +55,7 @@
+             SeatView {
+                 player: p.id,
+                 character_def: p.character_def,
++                generals: [None, None],
+                 seat: p.seat,
+                 hp: p.hp,
+                 max_hp: p.max_hp,
+diff --git a/crates/engine-core/src/snapshot.rs b/crates/engine-core/src/snapshot.rs
+--- a/crates/engine-core/src/snapshot.rs
++++ b/crates/engine-core/src/snapshot.rs
+@@ -285,6 +285,8 @@
+             revision: 11,
+             continuation_id: 19,
+             kind: engine_api::ChoiceKind::SelectCards,
++            prompt: None,
++            native_kind: None,
+         };
+         let mut snapshot = Snapshot::capture(&state);
+         snapshot.pending_choice = Some(choice.clone());
+diff --git a/crates/engine-native-kernel/src/archive/resolution.rs b/crates/engine-native-kernel/src/archive/resolution.rs
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -126,14 +126,15 @@
+     "d3_moyan_gain",
+     // J1（ADR 0786 §A.3，规则 v328）：VM 提交期选择窗挂起的受限 prompt 键
+     // （ADR 预期的「rvm_effect_pick 类受限 prompt」；复用既有 ChoiceKind::
+-    // SelectCards 与 Answer 通道，无新增变体/载荷）。**表尾追加**——索引即
+-    // 线上 tag，既有编码不移位。
++    // SelectCards 与 Answer 通道，无新增变体/载荷）。
++    // 静态解码白名单；提示按字符串编码，尾追加保留历史登记。
+     "rvm_discard_pick",
+     "xunxun_arrange",
+     "jijie_give_target",
+     "gaiming_pick",
+     "haotianta_pick",
+     "liaoyuan_discard",
++    "fanjian_suit",
+ ];
+ 
+ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
+diff --git a/crates/engine-native-wasm/Cargo.toml b/crates/engine-native-wasm/Cargo.toml
+--- a/crates/engine-native-wasm/Cargo.toml
++++ b/crates/engine-native-wasm/Cargo.toml
+@@ -8,6 +8,7 @@
+ crate-type = ["cdylib", "rlib"]
+ 
+ [dependencies]
++engine-api = { workspace = true }
+ engine-native = { path = "../engine-native" }
+ content-native-loader = { path = "../content-native-loader" }
+ content-schema = { workspace = true }
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -321,6 +321,12 @@
+         "seat": v.seat,
+         "players": v.players.iter().map(|p| serde_json::json!({
+             "seat": p.seat,
++            "generals": std::array::from_fn::<_, 2, _>(|slot| p.generals[slot].as_ref().map(|general| serde_json::json!({
++                "def": general.def,
++                "name": general.name,
++                "faction": format!("{:?}", general.faction).to_lowercase(),
++                "revealed": p.revealed_generals[slot],
++            }))),
+             "characterDef": p.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+             "alive": p.alive,
+             "hp": p.hp,
+@@ -409,6 +415,7 @@
+         Ok(match self.inner.choice_view_for(Some(seat)) {
+             Some(ChoiceView::Own {
+                 id,
++                kind,
+                 prompt,
+                 options,
+                 min,
+@@ -419,6 +426,8 @@
+                 "id": id,
+                 "observer": seat,
+                 "prompt": prompt,
++                "native_kind": engine_native::view::choice_kind_name(kind),
++                "kind": engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
+                 "min": min,
+                 "max": max,
+                 "allowCancel": allow_cancel,
+diff --git a/crates/engine-native/src/view.rs b/crates/engine-native/src/view.rs
+--- a/crates/engine-native/src/view.rs
++++ b/crates/engine-native/src/view.rs
+@@ -214,3 +214,14 @@
+         _ => None,
+     }
+ }
++
++/// Canonical presentation name shared by server, WASM and native session adapters.
++pub fn choice_kind_name(kind: crate::ChoiceKind) -> &'static str {
++    match kind {
++        crate::ChoiceKind::Confirm => "confirm",
++        crate::ChoiceKind::SelectCards => "select_cards",
++        crate::ChoiceKind::SelectPlayers => "select_players",
++        crate::ChoiceKind::RespondCard => "respond_card",
++        crate::ChoiceKind::PickTag => "pick_tag",
++    }
++}

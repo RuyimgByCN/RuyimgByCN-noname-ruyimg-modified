@@ -655,6 +655,11 @@ pub enum MachineSnapshot {
         /// J1：开窗参数（开窗座位, 弃置张数）；与 `paused` 互斥（VM 执行期
         /// 挂起）——同一时刻至多一种挂起。
         commit_pick: Option<(PlayerId, u32)>,
+        /// Remaining handlers of the same logical skill, in package order.
+        following: Vec<MachineSnapshot>,
+        /// Content callback continuation, encoded at the Rvm tail.
+        commit_state: Vec<u32>,
+        committing: bool,
     },
     /// 星夏（Boss 祝融，规则 v242）：主动技机。stage：0=损焰灵（2 火
     /// 已结算）、1=询问敌方挂起、2=敌方已选、3=弃牌已答待结算（弃红询
@@ -764,6 +769,8 @@ pub enum SnapshotError {
 /// 恢复边界：目录尺寸 + 座位数 + 规则版本的恢复期视图。
 #[derive(Debug, Clone, Copy)]
 pub struct RestoreBounds {
+    pub vm_validate:
+        fn(&rule_api::EffectRequest, &[u32], &crate::state::GameStateCore, usize) -> bool,
     pub seats: usize,
     pub cards: usize,
     pub skills: usize,

@@ -5,6 +5,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     //（上游 `skip('phaseDiscard')` 同口径；一次性，用后清零）
     if ctx.core.player(player).skip_discard_phase {
         ctx.core.player_mut(player).skip_discard_phase = false;
+        ctx.record_phase_skipped(player);
         ctx.core.turn.discard_phase_discarded = 0;
         return;
     }
@@ -30,6 +31,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     {
         if ctx.core.has_skill(player, def) {
             ctx.core.turn.discard_phase_discarded = 0;
+            ctx.record_phase_skipped(player);
             return;
         }
     }
@@ -42,6 +44,7 @@ pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
     {
         if ctx.core.has_skill(player, def) {
             ctx.core.turn.discard_phase_discarded = 0;
+            ctx.record_phase_skipped(player);
             return;
         }
     }

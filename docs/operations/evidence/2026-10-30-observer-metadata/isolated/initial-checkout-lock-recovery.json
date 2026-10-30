@@ -1,0 +1,7 @@
+{
+  "lock": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/worktrees/worktree10/index.lock",
+  "reason": "Stale lock from the parent interrupted new-worktree initial checkout; no process holds the lock and no matching git process exists",
+  "bytes": 0,
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "action": "Preserve the stale initial-checkout index lock outside git metadata, then initialize new lane normally"
+}

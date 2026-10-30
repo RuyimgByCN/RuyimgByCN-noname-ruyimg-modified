@@ -251,7 +251,55 @@ impl MachineSnapshot {
                 count_hits,
                 commit_pending,
                 commit_pick,
+                following,
+                commit_state,
+                committing,
             } => {
+                let def = catalog
+                    .skill_by_name(skill_name)
+                    .ok_or(SnapshotError::UnknownMachine)?;
+                if !catalog.skills[def as usize]
+                    .behavior
+                    .vm_module_is_authorized(module)
+                {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+                for next in following {
+                    match next {
+                        MachineSnapshot::Rvm {
+                            owner: next_owner,
+                            module: next_module,
+                            event: next_event,
+                            skill_name: next_name,
+                            paused: None,
+                            committing: false,
+                            following: nested,
+                            ..
+                        } if next_owner == owner
+                            && next_name == skill_name
+                            && nested.is_empty()
+                            && catalog.skills[def as usize]
+                                .behavior
+                                .vm_trigger_module_is_authorized(next_module, next_event) =>
+                        {
+                            next.restore(catalog)?;
+                        }
+                        _ => return Err(SnapshotError::UnknownMachine),
+                    }
+                }
+                if *committing {
+                    for effect in crate::rvm_ops::dec_effects(commit_pending)
+                        .ok_or(SnapshotError::UnknownMachine)?
+                    {
+                        match effect {
+                            rule_api::EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
+                            | rule_api::EffectRequest::ResolveOlJieDanshou { player, skill }
+                            | rule_api::EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player, skill, .. }
+                                if player.raw() != *owner as u32 + 1 || skill.raw() != def as u32 => return Err(SnapshotError::UnknownMachine),
+                            _ => {}
+                        }
+                    }
+                }
                 let m = rule_vm::BytecodeModule::from_bytes(module)
                     .map_err(|_| SnapshotError::UnknownMachine)?;
                 let machine = if let Some((player, count)) = commit_pick {
@@ -297,7 +345,12 @@ impl MachineSnapshot {
                     )
                     .map_err(|_| SnapshotError::UnknownMachine)?
                 };
-                Ok(Box::new(machine))
+                Ok(Box::new(
+                    machine
+                        .with_following(following.clone())
+                        .with_commit_state(commit_pending, commit_state.clone(), *committing)
+                        .map_err(|_| SnapshotError::UnknownMachine)?,
+                ))
             }
             MachineSnapshot::OptionalGate {
                 owner,

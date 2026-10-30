@@ -1,0 +1,13 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.91s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-fb18dbc55758dba6)
+
+running 1 test
+NC10_J2_PRIVATE budget=0 black=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } red=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+NC10_J2_PRIVATE budget=48 black=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } red=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+test nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 147 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_j2_vm_privacy::", "--", "--nocapture"], "exit": 0, "locked_seconds": 3.9589696249749977, "disk_free_bytes": 173371158528}

@@ -1,0 +1,12 @@
+{
+  "artifact": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/6fc030b1-f1b2-42c0-8a07-2a860def8528/implementation/approved-b-observer-metadata.md",
+  "artifact_sha256": "97a0c9585c001cddfd7a832d29d70751e25aadd5d66bdf3232d0e9cc82949e8a",
+  "patch_sha256": "8b2a0c80e0ffe0eb4180ac10387cd3fb8c8f0e1dfab9607f74b185594b943ff4",
+  "source_files_checked": 31,
+  "no_staged_files": true,
+  "pi_lens_config_unchanged": true,
+  "temporary_links_removed": true,
+  "own_observer_target_absent": true,
+  "free_bytes": 172873760768,
+  "required_parent_review_pending": true
+}

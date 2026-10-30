@@ -1,3 +1,4 @@
+import { validateObserverMetadata } from "./observerMetadata";
 import { publicEventLabel } from "./publicEvents";
 import type {
   ChoiceRequest,
@@ -502,6 +503,10 @@ export class NetworkEngineClient {
       return;
     }
     const payload = message.payload ?? {};
+    if (payload.view) {
+      try { validateObserverMetadata(payload.view as ObserverSnapshot, (payload.choice as ChoiceRequest | null) ?? null); }
+      catch (error) { this.rejectOutstanding(new Error(`服务端元数据无效：${String(error)}`)); return; }
+    }
 
     switch (message.type) {
       case "Welcome":

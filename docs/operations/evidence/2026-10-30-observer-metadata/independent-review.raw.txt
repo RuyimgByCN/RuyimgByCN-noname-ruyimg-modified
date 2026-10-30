@@ -1,0 +1,71 @@
+## Review
+
+**Merge verdict: OK with notes for the complete approved B observer-metadata field scope.** I found no actionable P1/P2 defect in the 31-file candidate.
+
+No issues found.
+
+This review covers the full handoff, pure patch, all 31 changed paths, connected projection and consumer code, compatibility fixtures, field matrix, supervisor decisions and relevant raw logs. The reviewed baseline is `100489f554fe89d3389e35196947d9070673c2a1` plus the frozen 52-file PA09/Referee prerequisite overlay. This is not a review of the parent’s current combined main tree.
+
+- **Correct — The API additions match decision 21 and preserve existing fields.**  
+  [view.rs:84](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-api/src/view.rs:84) adds two ordered, nullable general slots with a serde default. A populated slot preserves definition zero as a valid value. [choice.rs:29](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-api/src/choice.rs:29) adds optional prompt/native-kind fields, skips absent values during serialization and rejects unknown native-kind strings during deserialization. Existing `character_def`, `kind` and ChoiceKind variants remain.
+
+- **Correct — Metadata comes from authorized projections.**  
+  The native session copies both slots from filtered `PlayerView` at [session.rs:324](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native-wasm/src/session.rs:324). The server follows the same filtered general slots. Its [choice_for implementation](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/game-server/src/native_view.rs:252) returns no private choice for Spectator, validates player-seat conversion before narrowing, and uses the shared referee projection only for trusted Referee membership. The production room caller selects visibility from stored membership and gives legal actions only to Player members.
+
+  Coverage includes both dark slots, primary/both revealed states, ordinary public generals, own visibility, definition zero in both slot positions, forged spectator seats and actual referee reconnect/stale-connection/restart behavior. The real WS test retains refusal of referee answer and replay attempts.
+
+- **Correct — Worker and IPC retain metadata without changing command tokens.**  
+  The canonical five-kind mapping is shared by the native session and server. Worker and desktop envelopes preserve prompt, exact kind, bounds, cancellation and revision. Option tokens remain enumeration indices; entity values remain display labels. Hidden native choice objects become `null`, rather than empty actionable choices. No new authority or command path is introduced.
+
+- **Correct — Malformed present metadata is rejected at the relevant JSON boundaries.**  
+  [observerMetadata.ts:9](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/engine/observerMetadata.ts:9) checks tuple length, nullable slots, unsigned definition IDs and field types. Choice metadata accepts only the finite canonical kind names. Worker conversion validates before returning a snapshot; network validation precedes message application; desktop validation failures become controlled IPC errors. Missing fields remain compatible with old producers. Unknown but well-typed faction/name/prompt strings use escaped text or readable fallback.
+
+- **Correct — UI rendering preserves nullable-slot semantics and legacy fallback.**  
+  SeatCard renders both slots and retains the old character-definition fallback. [GeneralPortrait.vue:17](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/components/battle/GeneralPortrait.vue:17) uses numeric definition IDs and existing appearance/resource helpers; it does not construct portrait paths from names. Hidden slots do not render portrait images or skin selectors. Names are Vue-escaped, unknown factions have readable fallback, and reactive props/watchers cover definition and visibility changes.
+
+  BattleView uses confirmed contextual prompt labels where registered and canonical readable kind labels otherwise. `Object.hasOwn` prevents prototype-property names from becoming labels. Raw unknown prompt keys are not inserted into product text.
+
+- **Correct — The WS5 compatibility evidence exercises real readers and payloads.**  
+  The frozen old Rust seat/choice fields match the supplied pre-B originals and retain unknown-field tolerance. [approved_b_metadata.rs:138](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/game-server/tests/approved_b_metadata.rs:138) encodes a current WS5 Snapshot, decodes it with the old reader, serializes that old representation and decodes it with the current protocol. Separate assertions cover populated metadata, default absence and malformed values.
+
+  The frozen TS fixture is a functional pre-B native-view converter. [approved-b-parity.mjs:29](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/scripts/approved-b-parity.mjs:29) executes it against actual generated-WASM projections and compares its output with the current conversion after removing the added field. The recorded 98 comparisons therefore exercise behavior, not just TypeScript declarations. New-consumer field absence and actual rendered legacy fallback are also tested. This supports retaining WS5 for these additive fields without adding enum variants or mandatory fields.
+
+- **Correct — The archive exception stays within its explicit approval.**  
+  [archive/resolution.rs:126](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native-kernel/src/archive/resolution.rs:126) appends only the existing `fanjian_suit` prompt and corrects the inaccurate index/tag comment. The encoder still writes the prompt string; existing entries/order and unknown-key rejection remain. The actual `BadTag("prompt_unknown", 0)` failure is preserved.
+
+  The auth-generation explanation is accurate: `Engine::restore` deliberately increments the generation once. Comparing archive bytes after restore isolates projection immutability without weakening that behavior. Continuation tests additionally compare complete resulting snapshots and event logs. I found no golden replacement, ignored regression or expectation change concealing a rule failure.
+
+- **Fixed:** No reviewer edits were applied.
+
+**Validation evidence**
+
+The supplied raw logs support these results; I did not rerun them:
+
+| Check | Recorded result |
+|---|---|
+| Full native kernel/content/facade rerun | **1665 passed / 0 failed / 73 ignored** |
+| Full affected API/WASM/server/desktop tests | **483 passed / 0 failed / 1 ignored**, including the real referee WS test |
+| Final metadata/WS5/continuation tests | **4 passed / 0 failed** |
+| Final frontend tests | **153 passed / 0 failed / 0 skipped** |
+| Same-archive server/generated-WASM/IPC comparison | **14 archives / 98 comparisons**, all five kinds and ten actual prompt keys |
+| Actual Chrome Worker UI | **16 flows passed** |
+| Actual Tauri WKWebView/native IPC UI | **16 flows passed** |
+| Workspace check, native strict check, frontend build/typecheck | Passed |
+| Source/layering gates | **8954 files within caps; 9 layering tests; zero upward references** |
+
+The initial missing-fixture native run remains a failed **822/6/1** attempt. The later **1665/0/73** result is a separate full rerun. The command index also retains setup, auth-generation assertion and harness failures rather than relabeling them as passes.
+
+**Scope and integration notes**
+
+This approval covers B’s approved fields and their implemented privacy, compatibility and presentation paths. It does not close all NC03/NC09 work, all Referee boundaries, 37-source acceptance, PA09 performance gates or the parent’s combined workspace/conformance/preflight acceptance.
+
+The **69 registered prompts + 252 literal names = 282 distinct names** check is correctly described as a presentation guard. It does not prove live reachability, factory coverage or restore completeness. Those broader NC07 tasks should remain separate. When integrating adjacent J2 work, preserve its independently added prompt entries alongside this single tail addition.
+
+Rules **328**, archive **105**, native ABI **753** and WS **5** remain unchanged in this delta. The patch does not modify the 25 root WASM binding methods or native outcome helper; the supplied unchanged-source records corroborate that.
+
+The recorded pure-patch SHA-256 is `8b2a0c80e0ffe0eb4180ac10387cd3fb8c8f0e1dfab9607f74b185594b943ff4`; the prerequisite-overlay fingerprint is `d6b970c9913cf5aca846e66754756c70540f0a0b45a64e75cda6ae1e81d28875`. These are **supplied fingerprints**, not independently computed reviewer hashes.
+
+I incorporated the target-retirement update and inspected its record. Preserving the executables/WASM and retiring the completed private target does not invalidate the recorded results or require a rebuild for this review.
+
+Skipped: writes, builds, runtime tests, staging, commits, binary execution and independent hash computation.  
+Risk: B still needs the parent’s combined integration acceptance; broader prompt/factory/restore and NC09 completion claims remain outside this approval.

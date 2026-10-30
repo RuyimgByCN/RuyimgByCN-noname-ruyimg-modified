@@ -51,6 +51,7 @@ pub fn run_query(
     core: &GameStateCore,
     catalog: &Catalog,
     seats: u8,
+    owner: PlayerId,
     req: QueryRequest,
 ) -> Result<QueryResponse, HostTrap> {
     let seat = |p: rule_api::PlayerId, what: &str| -> Result<PlayerId, HostTrap> {
@@ -105,11 +106,14 @@ pub fn run_query(
             QueryResponse::Int(left.unwrap_or(0))
         }
         QueryRequest::CardAttribute { card, attr } => {
-            let v = catalog.cards.get(card.raw() as usize).map(|def| match attr {
-                1 => suit_tag(def.suit) as i32,
-                2 => def.rank as i32,
-                _ => kind_tag(def.kind) as i32,
-            });
+            let v = catalog
+                .cards
+                .get(card.raw() as usize)
+                .map(|def| match attr {
+                    1 => suit_tag(def.suit) as i32,
+                    2 => def.rank as i32,
+                    _ => kind_tag(def.kind) as i32,
+                });
             QueryResponse::Int(v.unwrap_or(0))
         }
         QueryRequest::Relation { a, b } => {
@@ -118,7 +122,10 @@ pub fn run_query(
             let tag = if a == b {
                 RelationTag::Self_
             } else {
-                match (core.effective_faction(catalog, a), core.effective_faction(catalog, b)) {
+                match (
+                    core.effective_faction(catalog, a),
+                    core.effective_faction(catalog, b),
+                ) {
                     (Some(x), Some(y)) if x == y => RelationTag::Ally,
                     (Some(_), Some(_)) => RelationTag::Enemy,
                     _ => RelationTag::Unknown,
@@ -126,9 +133,7 @@ pub fn run_query(
             };
             QueryResponse::Relation(tag)
         }
-        QueryRequest::Hp { player } => {
-            QueryResponse::Int(core.player(seat(player, "Hp")?).hp)
-        }
+        QueryRequest::Hp { player } => QueryResponse::Int(core.player(seat(player, "Hp")?).hp),
         QueryRequest::HandCount { player } => {
             QueryResponse::Int(core.player(seat(player, "HandCount")?).hand.len() as i32)
         }
@@ -189,17 +194,21 @@ pub fn run_query(
             let p = seat(player, "UniqueMax")?;
             let me = core.player(p).hp;
             let unique = core.player(p).alive
-                && core.players.iter().enumerate().all(|(i, o)| {
-                    i as u8 == p || !o.alive || o.hp < me
-                });
+                && core
+                    .players
+                    .iter()
+                    .enumerate()
+                    .all(|(i, o)| i as u8 == p || !o.alive || o.hp < me);
             QueryResponse::Bool(unique)
         }
         QueryRequest::UniqueMaxCurrentHpAt { player, value } => {
             let p = seat(player, "UniqueMaxAt")?;
             let unique = core.player(p).alive
-                && core.players.iter().enumerate().all(|(i, o)| {
-                    i as u8 == p || !o.alive || o.hp < value
-                });
+                && core
+                    .players
+                    .iter()
+                    .enumerate()
+                    .all(|(i, o)| i as u8 == p || !o.alive || o.hp < value);
             QueryResponse::Bool(unique)
         }
         QueryRequest::LifetimeDamageDealt { player } => {
@@ -267,9 +276,7 @@ pub fn run_query(
             cards.extend(pl.equips.iter().copied());
             QueryResponse::Int(count_suit(&cards, catalog, suit))
         }
-        QueryRequest::CurrentPhasePlayer => {
-            QueryResponse::Int(core.turn.current as i32 + 1)
-        }
+        QueryRequest::CurrentPhasePlayer => QueryResponse::Int(core.turn.current as i32 + 1),
         QueryRequest::HandSuitCount { player, suit } => {
             let p = seat(player, "HandSuit")?;
             QueryResponse::Int(count_suit(&core.player(p).hand, catalog, suit))
@@ -289,7 +296,11 @@ pub fn run_query(
                 .count();
             QueryResponse::Int(n as i32)
         }
-        QueryRequest::SkillContentFlag { player, skill_def, bit } => {
+        QueryRequest::SkillContentFlag {
+            player,
+            skill_def,
+            bit,
+        } => {
             let p = seat(player, "SkillFlag")?;
             let name = skill_label(catalog, skill_def.raw()).unwrap_or_default();
             let bits = core.vm_aux.flags.get(&(p, name)).copied().unwrap_or(0);
@@ -331,32 +342,32 @@ pub fn run_query(
         QueryRequest::InPlayPhase => QueryResponse::Bool(core.turn.phase == Phase::Play),
         QueryRequest::CardHasTag { card, tag } => {
             let name = skill_label(catalog, tag).unwrap_or_default();
-            let hit = core.vm_aux.piles.iter().any(|((_, pile), cards)| {
-                pile == &name && cards.contains(&card.raw())
-            });
+            let hit = core
+                .vm_aux
+                .piles
+                .iter()
+                .any(|((_, pile), cards)| pile == &name && cards.contains(&card.raw()));
             QueryResponse::Bool(hit)
         }
         QueryRequest::StorageGet { skill, key } => {
-            let needle = format!("{}:{key}", skill.raw());
-            let from_flag = core
-                .vm_aux
-                .flags
-                .iter()
-                .find(|((_, name), _)| name == &needle)
-                .map(|(_, v)| *v as i32);
-            let from_mark = core
-                .vm_aux
-                .marks
-                .iter()
-                .find(|((_, m), _)| *m == key)
-                .map(|(_, v)| *v);
-            QueryResponse::Int(from_flag.or(from_mark).unwrap_or(0))
+            let name =
+                skill_label(catalog, skill.raw()).ok_or_else(|| reject("StorageGet.skill"))?;
+            QueryResponse::Int(
+                core.vm_aux
+                    .flags
+                    .get(&(owner, storage_key(&name, key)))
+                    .copied()
+                    .unwrap_or(0) as i32,
+            )
         }
         QueryRequest::StorageHas { skill, key } => {
-            let needle = format!("{}:{key}", skill.raw());
-            let has = core.vm_aux.flags.keys().any(|(_, name)| name == &needle)
-                || core.vm_aux.marks.keys().any(|(_, m)| *m == key);
-            QueryResponse::Bool(has)
+            let name =
+                skill_label(catalog, skill.raw()).ok_or_else(|| reject("StorageHas.skill"))?;
+            QueryResponse::Bool(
+                core.vm_aux
+                    .flags
+                    .contains_key(&(owner, storage_key(&name, key))),
+            )
         }
         QueryRequest::CardsUsedThisRound { player } => {
             let _ = seat(player, "UsedRound")?;

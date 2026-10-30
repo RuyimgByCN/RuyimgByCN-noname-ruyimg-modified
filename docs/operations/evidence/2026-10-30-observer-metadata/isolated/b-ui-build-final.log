@@ -1,0 +1,13 @@
+vite v6.4.3 building for production...
+transforming...
+✓ 93 modules transformed.
+rendering chunks...
+computing gzip size...
+../../../evidence/approved-b-ui-dist-final/assets/engine.worker-CvPf1BbQ.js                 9.01 kB
+../../../evidence/approved-b-ui-dist-final/assets/engine.native.worker-BZvqnzJk.js         22.06 kB
+../../../evidence/approved-b-ui-dist-final/assets/engine_native_wasm_bg-DOxgEz1u.wasm   3,411.73 kB │ gzip:   988.14 kB
+../../../evidence/approved-b-ui-dist-final/assets/engine_wasm_bg-BLWgi6bp.wasm         15,373.76 kB │ gzip: 3,402.72 kB
+../../../evidence/approved-b-ui-dist-final/assets/approved-b-ui-B4VqOV54.css               16.88 kB │ gzip:     3.50 kB
+../../../evidence/approved-b-ui-dist-final/assets/approved-b-ui-Dcb0BhqL.js               287.25 kB │ gzip:    76.75 kB
+✓ built in 1.05s
+{"command": ["node", "../evidence/build-b-ui.mjs"], "exit": 0, "locked_seconds": 1.2468965000007302}

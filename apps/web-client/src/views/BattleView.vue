@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { choiceKindLabel, choicePromptLabel } from "../engine/observerMetadata";
 import { EngineClient } from "../engine/client";
 import {
   configureLocalAppearanceCatalog,
@@ -774,10 +775,10 @@ const turnInfo = computed(() => {
     </section>
 
     <section v-if="store.choice" class="panel choice" aria-label="待选择">
-      <h2>选择屏障</h2>
+      <h2>{{ choicePromptLabel(store.choice) }}</h2>
       <p class="muted">
         choice #{{ store.choice.choice_id }} · 玩家
-        {{ store.choice.observer }} · {{ store.choice.kind ?? "Custom" }}
+        {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
       </p>
       <div v-if="choiceActions.length" class="row">
         <button

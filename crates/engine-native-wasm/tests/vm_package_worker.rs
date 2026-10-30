@@ -144,7 +144,7 @@ fn onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore()
     let old_archive = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/native-v322.ngsa");
     for (bytes, expected) in [
         (old.as_slice(), "ambiguous effect 656"),
-        (new.as_slice(), "rule_vm_abi host=753 package=758"),
+        (new.as_slice(), "phase_prepare"),
     ] {
         let mut package = content_schema::ContentPackage::from_json_bytes(bytes).unwrap();
         // Isolate the package check from unrelated dependency installation.

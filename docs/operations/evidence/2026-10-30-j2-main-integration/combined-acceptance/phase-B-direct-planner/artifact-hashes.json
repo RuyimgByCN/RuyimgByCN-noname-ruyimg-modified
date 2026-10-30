@@ -1,0 +1,39 @@
+{
+  "files": {
+    "j2_direct_planner_matrix_bg.wasm.d.ts": {
+      "sha256": "f0cda1e143d742577b51b42877a22df00061373deb7215c4f56cc9ec2cc36b6f",
+      "bytes": 3079
+    },
+    "j2_direct_planner_matrix.d.ts": {
+      "sha256": "0571a42e7ff39ec3e0de3a2485d202db72493243a9b65be4fea65f65aa4eabd3",
+      "bytes": 5989
+    },
+    "j2_direct_planner_matrix_bg.wasm": {
+      "sha256": "04acc9114f8708357fc4d8a252cfae4846ca2106aefc64fa9b929811554b0224",
+      "bytes": 5808920
+    },
+    ".gitignore": {
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1
+    },
+    "package.json": {
+      "sha256": "4e1e6e2e5644a109377bca90e0338634fa79ca7045888a74c6c76edcd551e8c9",
+      "bytes": 340
+    },
+    "j2_direct_planner_matrix.js": {
+      "sha256": "64cf321ece5950cfa3f4d937be8895d3f176b0ff4a491f21aa699c9fd623a4e3",
+      "bytes": 21543
+    }
+  },
+  "native": {
+    "sha256": "3889381ed5bad24755e3e05e36ef84a9d5d4fa63c120af34bffed1ace800f5be",
+    "bytes": 20337880
+  },
+  "archive": {
+    "sha256": "db31f4aedb2a5f32f7b7b0cbe4be44e3619dbd31a42f5977f6f0b4635d5210e0",
+    "bytes": 1158354
+  },
+  "unused_private_pkg_retired": "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner-web",
+  "free_bytes": 170162438144,
+  "at_utc": "2026-10-30T05:31:41.166950+00:00"
+}

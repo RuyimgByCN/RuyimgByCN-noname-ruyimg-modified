@@ -1,7 +1,11 @@
 use super::*;
 
 /// 机器快照树内全部 ID 的边界校验（含嵌套机器与判定进行态关系）。
-pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<(), SnapshotError> {
+pub(super) fn check_machine(
+    m: &MachineSnapshot,
+    b: &RestoreBounds,
+    core: &GameStateCore,
+) -> Result<(), SnapshotError> {
     match m {
         MachineSnapshot::Sha {
             card,
@@ -65,7 +69,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_pid(*source, b)?;
             check_pids(queue, b)?;
             if let Some(e) = effect {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::JudgePhase {
@@ -103,7 +107,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_pid(*source, b)?;
             check_pids(targets, b)?;
             if let Some(e) = inner {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::AoeTarget {
@@ -127,7 +131,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_pid(*source, b)?;
             check_pids(targets, b)?;
             if let Some(e) = inner {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::DiscardToLimit { player, .. } => check_pid(*player, b)?,
@@ -146,7 +150,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_def(*def, b)?;
             check_event_data(event, b)?;
             if let Some(e) = inner {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::SanCai { owner, target, .. } => {
@@ -292,7 +296,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_opt_pid(*helper, b)?;
             check_opt_card(*sha, b)?;
             if let Some(e) = inner {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::Snatch {
@@ -378,6 +382,9 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             consume,
             commit_pending,
             commit_pick,
+            following,
+            commit_state,
+            committing,
             ..
         } => {
             check_pid(*owner, b)?;
@@ -390,7 +397,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
                 return Err(SnapshotError::UnknownMachine);
             }
             for (_key, scope) in consume {
-                if *scope > 3 {
+                if *scope > 4 {
                     return Err(SnapshotError::UnknownMachine);
                 }
             }
@@ -416,10 +423,32 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
                     }
                 }
                 None => {
-                    if !commit_pending.is_empty() {
+                    if !commit_pending.is_empty() && !committing {
                         return Err(SnapshotError::UnknownMachine);
                     }
                 }
+            }
+            if *committing && crate::rvm_ops::dec_effects(commit_pending).is_none() {
+                return Err(SnapshotError::UnknownMachine);
+            }
+            if !commit_state.is_empty() {
+                if !committing {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+                let effects = crate::rvm_ops::dec_effects(commit_pending)
+                    .ok_or(SnapshotError::UnknownMachine)?;
+                let head = effects.first().ok_or(SnapshotError::UnknownMachine)?;
+                if !(b.vm_validate)(head, commit_state, core, b.cards) {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+            }
+            if let Some(p) = paused {
+                if *committing || p.fuel_remaining > rule_vm::DEFAULT_FUEL {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+            }
+            for next in following {
+                check_machine(next, b, core)?;
             }
             if paused.is_some() && commit_pick.is_some() {
                 return Err(SnapshotError::UnknownMachine);
@@ -444,7 +473,7 @@ pub(super) fn check_machine(m: &MachineSnapshot, b: &RestoreBounds) -> Result<()
             check_pid(*owner, b)?;
             check_opt_card(*card, b)?;
             if let Some(e) = inner {
-                check_machine(e, b)?;
+                check_machine(e, b, core)?;
             }
         }
         MachineSnapshot::Host {

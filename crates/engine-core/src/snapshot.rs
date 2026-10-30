@@ -285,6 +285,8 @@ mod tests {
             revision: 11,
             continuation_id: 19,
             kind: engine_api::ChoiceKind::SelectCards,
+            prompt: None,
+            native_kind: None,
         };
         let mut snapshot = Snapshot::capture(&state);
         snapshot.pending_choice = Some(choice.clone());

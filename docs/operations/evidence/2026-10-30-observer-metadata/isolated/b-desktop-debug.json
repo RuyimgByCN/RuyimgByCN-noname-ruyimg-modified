@@ -1,0 +1,25 @@
+{
+  "name": "b-desktop-debug",
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "-p",
+    "desktop-client",
+    "--features",
+    "tauri-shell",
+    "--bin",
+    "noname-next-desktop"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 10072670208,
+  "start": 1793329623.6287081,
+  "exit": 0,
+  "end": 1793329717.190065,
+  "free_after": 8557047808
+}

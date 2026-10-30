@@ -1,0 +1,23 @@
+{
+  "authorization": "2026-10-30 parent relay of user compilation cleanup; CARGO_INCREMENTAL=0; completed builds only",
+  "before_free": 104728616960,
+  "removed": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/incremental",
+      "files": 0
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/release/incremental",
+      "files": 0
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/wasm32-unknown-unknown/release/incremental",
+      "files": 0
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/tmp",
+      "files": 0
+    }
+  ],
+  "after_free": 104729288704
+}

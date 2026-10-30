@@ -1,0 +1,15 @@
+{"command": ["node", "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker.mjs"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "node", "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker.mjs"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 170138193920}
+1:43:54 PM [vite] (client) Re-optimizing dependencies because vite config has changed
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:25119
+          reject(new Error(`Port ${port} is already in use`));
+                 ^
+
+Error: Port 4186 is already in use
+    at Server.onError (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/chunks/dep-Dm0c1Wj2.js:25119:18)
+    at Server.emit (node:events:509:20)
+    at emitErrorNT (node:net:2203:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+
+Node.js v26.4.0
+{"command": ["node", "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker.mjs"], "exit": 1, "locked_seconds": 0.2622937499836553, "disk_free_bytes": 170153267200}
+{"runner_exit": 1, "stop_reason": null}

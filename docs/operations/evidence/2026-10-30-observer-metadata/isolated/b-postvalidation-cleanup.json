@@ -1,0 +1,23 @@
+{
+  "tracked_generated_dist_restored_to_exact_initial_bytes": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css",
+    "apps/web-client/dist/index.html"
+  ],
+  "removed_own_lookup_links": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/node_modules",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/../archive",
+      "target": "/Users/ruyimg/Documents/Claude/sanguosha/archive"
+    }
+  ],
+  "removed_unused_private_cache_dirs": [],
+  "own_observer_target_absent": true,
+  "private_target_preserved_for_parent_retirement_after_binary_fingerprints": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+  "free_bytes": 172888301568
+}

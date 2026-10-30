@@ -1,0 +1,105 @@
+{
+  "at_utc": "2026-10-30T05:18:13.294956+00:00",
+  "status": "BLOCKED_REAL_P1_AWAIT_PARENT_FIX",
+  "first_attempt": {
+    "seed": 99107868,
+    "hp": 4,
+    "hand_reverse": false,
+    "budgets": [
+      {
+        "actions": [
+          "Answer { choice_id: 4, selection: [Card(52)] }",
+          "Answer { choice_id: 4, selection: [Card(52)] }"
+        ],
+        "budget": 0,
+        "different": false,
+        "full_plans": [
+          "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: true, timed_out: false, cancelled: false, sim_faults: 0 }",
+          "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: true, timed_out: false, cancelled: false, sim_faults: 0 }"
+        ],
+        "nodes": [
+          0,
+          0
+        ],
+        "restored_apply": [
+          "Accepted { state_hash: [1, 167, 46, 103, 150, 55, 56, 141, 191, 156, 43, 249, 131, 117, 67, 234, 87, 85, 66, 175, 83, 153, 187, 253, 85, 243, 187, 194, 63, 159, 126, 58] }",
+          "Pending { choice: OpenChoice { id: 5, observer: 1, spec: ChoiceSpec { kind: RespondCard, prompt: \"dying_save\", options: [Pass, Card(47)], min: 1, max: 1, allow_cancel: false } } }"
+        ],
+        "sim_faults": [
+          0,
+          0
+        ]
+      },
+      {
+        "actions": [
+          "Answer { choice_id: 4, selection: [Card(52)] }",
+          "Answer { choice_id: 4, selection: [Card(44)] }"
+        ],
+        "budget": 48,
+        "different": true,
+        "full_plans": [
+          "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }",
+          "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(44)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }"
+        ],
+        "nodes": [
+          3,
+          3
+        ],
+        "restored_apply": [
+          "Accepted { state_hash: [1, 167, 46, 103, 150, 55, 56, 141, 191, 156, 43, 249, 131, 117, 67, 234, 87, 85, 66, 175, 83, 153, 187, 253, 85, 243, 187, 194, 63, 159, 126, 58] }",
+          "Pending { choice: OpenChoice { id: 5, observer: 0, spec: ChoiceSpec { kind: RespondCard, prompt: \"dying_save\", options: [Pass, Card(52)], min: 1, max: 1, allow_cancel: false } } }"
+        ],
+        "sim_faults": [
+          0,
+          0
+        ]
+      }
+    ],
+    "queued": [
+      [
+        {
+          "commit_pick": "None",
+          "commit_state": [
+            5,
+            1,
+            0
+          ],
+          "committing": true,
+          "damage": [
+            1
+          ],
+          "effects": "[ResolveOlJieDanshou { player: PlayerId(1), skill: SkillId(215) }, DealDamage { source: PlayerId(1), target: PlayerId(1), amount: 1, is_lose_hp: false, nature: 0 }]",
+          "following": "[]",
+          "paused": false
+        }
+      ],
+      [
+        {
+          "commit_pick": "None",
+          "commit_state": [
+            5,
+            1,
+            0
+          ],
+          "committing": true,
+          "damage": [
+            5
+          ],
+          "effects": "[ResolveOlJieDanshou { player: PlayerId(1), skill: SkillId(215) }, DealDamage { source: PlayerId(1), target: PlayerId(1), amount: 5, is_lose_hp: false, nature: 0 }]",
+          "following": "[]",
+          "paused": false
+        }
+      ]
+    ],
+    "source_immutable": true
+  },
+  "red_binary": {
+    "path": "docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/artifacts/nc10-j2-plan-repro-red",
+    "bytes": 19019072,
+    "sha256": "a27429da307cbcb81003bd5aac56b7a32589631fd5770a2503ff6bde4b74c3c8"
+  },
+  "all_queues_paused": true,
+  "parent_fix_pending": true,
+  "worker_source_edits": false,
+  "pre_fix_counts_do_not_establish_combined_acceptance": true
+}

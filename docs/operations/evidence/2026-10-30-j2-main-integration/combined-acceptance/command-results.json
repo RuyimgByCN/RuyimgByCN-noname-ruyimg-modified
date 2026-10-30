@@ -1,0 +1,2146 @@
+[
+  {
+    "name": "j2-targeted",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "adr0786_j2_",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "adr0786_j2_",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "j2-targeted.log",
+    "elapsed_including_wait": 24.11181937501533,
+    "locked_seconds": 23.42492437499459,
+    "rust_counts": [
+      26,
+      0,
+      0
+    ],
+    "free_before": 187107860480,
+    "free_after": 186960596992,
+    "stop_reason": null
+  },
+  {
+    "name": "j2-native-matrix",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "adr0786_j2_cross_target",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "adr0786_j2_cross_target",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "j2-native-matrix.log",
+    "elapsed_including_wait": 22.11043379199691,
+    "locked_seconds": 20.732123833993683,
+    "rust_counts": [
+      1,
+      0,
+      0
+    ],
+    "free_before": 186960580608,
+    "free_after": 186857906176,
+    "stop_reason": null
+  },
+  {
+    "name": "b-metadata-server",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "approved_b_metadata",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "approved_b_metadata",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-metadata-server.log",
+    "elapsed_including_wait": 44.197167834005086,
+    "locked_seconds": 42.21612283401191,
+    "rust_counts": [
+      4,
+      0,
+      0
+    ],
+    "free_before": 186857902080,
+    "free_after": 186651254784,
+    "stop_reason": null
+  },
+  {
+    "name": "b-api",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-api.log",
+    "elapsed_including_wait": 2.0220598340092693,
+    "locked_seconds": 1.2650259160145652,
+    "rust_counts": [
+      4,
+      0,
+      0
+    ],
+    "free_before": 186651246592,
+    "free_after": 186649366528,
+    "stop_reason": null
+  },
+  {
+    "name": "b-legacy-snapshot-readers",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "snapshot::tests"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "snapshot::tests"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-legacy-snapshot-readers.log",
+    "elapsed_including_wait": 54.25458837498445,
+    "locked_seconds": 52.33944429201074,
+    "rust_counts": [
+      6,
+      0,
+      0
+    ],
+    "free_before": 186649358336,
+    "free_after": 185342742528,
+    "stop_reason": null
+  },
+  {
+    "name": "b-referee-real-ws",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "native_ws_e2e::referee::",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "native_ws_e2e::referee::",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-referee-real-ws.log",
+    "elapsed_including_wait": 18.087451625004178,
+    "locked_seconds": 16.696384416980436,
+    "rust_counts": [
+      1,
+      0,
+      0
+    ],
+    "free_before": 185342734336,
+    "free_after": 184124030976,
+    "stop_reason": null
+  },
+  {
+    "name": "j2-author-server-lifecycle",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "adr0786_j2_author_lifecycle"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "game-server",
+      "--test",
+      "adr0786_j2_author_lifecycle"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "j2-author-server-lifecycle.log",
+    "elapsed_including_wait": 2.013759541005129,
+    "locked_seconds": 0.36816720801289193,
+    "rust_counts": [
+      1,
+      0,
+      0
+    ],
+    "free_before": 184124014592,
+    "free_after": 184123568128,
+    "stop_reason": null
+  },
+  {
+    "name": "machine-native-fixtures",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "machine-native-fixtures.log",
+    "elapsed_including_wait": 2.017024542001309,
+    "locked_seconds": 0.18049645799328573,
+    "rust_counts": [
+      18,
+      0,
+      0
+    ],
+    "free_before": 184123568128,
+    "free_after": 184123994112,
+    "stop_reason": null
+  },
+  {
+    "name": "native3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "native3.log",
+    "elapsed_including_wait": 34.13028579100501,
+    "locked_seconds": 33.80615608399967,
+    "rust_counts": [
+      1705,
+      0,
+      75
+    ],
+    "free_before": 184123981824,
+    "free_after": 183683723264,
+    "stop_reason": null
+  },
+  {
+    "name": "affected-six",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api",
+      "-p",
+      "engine-core",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "--features",
+      "desktop-client/tauri-shell",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api",
+      "-p",
+      "engine-core",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "--features",
+      "desktop-client/tauri-shell",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "affected-six.log",
+    "elapsed_including_wait": 265.05427187500754,
+    "locked_seconds": 264.12759466600255,
+    "rust_counts": [
+      6034,
+      0,
+      77
+    ],
+    "free_before": 183683715072,
+    "free_after": 178708201472,
+    "stop_reason": null
+  },
+  {
+    "name": "nc10-j2-helper-repro",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/nc10-j2-helper-repro/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/nc10-j2-helper-result.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/nc10-j2-helper-repro/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/nc10-j2-helper-result.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "nc10-j2-helper-repro.log",
+    "elapsed_including_wait": 176.56192300000112,
+    "locked_seconds": 19.75305749999825,
+    "rust_counts": null,
+    "free_before": 179365928960,
+    "free_after": 178509234176,
+    "stop_reason": null
+  },
+  {
+    "name": "workspace",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "workspace.log",
+    "elapsed_including_wait": 313.25252500001807,
+    "locked_seconds": 292.8075822920073,
+    "rust_counts": [
+      6828,
+      0,
+      77
+    ],
+    "free_before": 178708189184,
+    "free_after": 176152723456,
+    "stop_reason": null
+  },
+  {
+    "name": "workspace-all-targets",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "--workspace",
+      "--all-targets"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "--workspace",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "workspace-all-targets.log",
+    "elapsed_including_wait": 76.36233033399913,
+    "locked_seconds": 75.01669616700383,
+    "rust_counts": null,
+    "free_before": 176152711168,
+    "free_after": 175674777600,
+    "stop_reason": null
+  },
+  {
+    "name": "strict-native3",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "strict-native3.log",
+    "elapsed_including_wait": 18.083988708007382,
+    "locked_seconds": 17.858857083017938,
+    "rust_counts": null,
+    "free_before": 175674769408,
+    "free_after": 175669157888,
+    "stop_reason": null
+  },
+  {
+    "name": "source-line-units",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "source-line-units.log",
+    "elapsed_including_wait": 2.0190957080048975,
+    "locked_seconds": 0.08769637500518002,
+    "rust_counts": null,
+    "free_before": 175669149696,
+    "free_after": 175669362688,
+    "stop_reason": null
+  },
+  {
+    "name": "layering-units",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_native_layering.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_native_layering.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "layering-units.log",
+    "elapsed_including_wait": 2.0247178330027964,
+    "locked_seconds": 0.14240820801933296,
+    "rust_counts": null,
+    "free_before": 175669346304,
+    "free_after": 175667265536,
+    "stop_reason": null
+  },
+  {
+    "name": "source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "source-lines.log",
+    "elapsed_including_wait": 6.0285857080016285,
+    "locked_seconds": 4.552281125012087,
+    "rust_counts": null,
+    "free_before": 175667257344,
+    "free_after": 175667142656,
+    "stop_reason": null
+  },
+  {
+    "name": "layering",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "layering.log",
+    "elapsed_including_wait": 2.010304959025234,
+    "locked_seconds": 0.13960662498720922,
+    "rust_counts": null,
+    "free_before": 175667134464,
+    "free_after": 175666970624,
+    "stop_reason": null
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "conformance.log",
+    "elapsed_including_wait": 4.015315208001994,
+    "locked_seconds": 1.967534416995477,
+    "rust_counts": null,
+    "free_before": 175666966528,
+    "free_after": 175668420608,
+    "stop_reason": null
+  },
+  {
+    "name": "native-wasm-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "native-wasm-build.log",
+    "locked_seconds": 47.89176616698387,
+    "rust_counts": null,
+    "free_before": 175668420608,
+    "free_after": 175636041728,
+    "recorded_after_safe_controller_pause": true,
+    "evidence": "Actual complete serialized-wrapper exit0 sentinel, not inferred from partial output."
+  },
+  {
+    "name": "nc10-j2-paired-plan-red",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/nc10-j2-plan-repro/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/nc10-j2-paired-plan-result.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/nc10-j2-plan-repro/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/nc10-j2-paired-plan-result.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 101,
+    "log": "nc10-j2-paired-plan-red.log",
+    "elapsed_including_wait": 24.10433762500179,
+    "locked_seconds": 22.935398291010642,
+    "rust_counts": null,
+    "free_before": 174586220544,
+    "free_after": 173371846656,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-real-DSL-export",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-package-export/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/author-packs.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-package-export/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/author-packs.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-real-DSL-export.log",
+    "elapsed_including_wait": 4.023508499987656,
+    "locked_seconds": 3.2037934589898214,
+    "rust_counts": null,
+    "free_before": 173359456256,
+    "free_after": 173351096320,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-direct-planner-native",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/native-output.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/native-output.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-direct-planner-native.log",
+    "elapsed_including_wait": 6.02504391700495,
+    "locked_seconds": 4.1062124999880325,
+    "rust_counts": null,
+    "free_before": 173229146112,
+    "free_after": 173193347072,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-direct-planner-wasm-build",
+    "command": [
+      "wasm-pack",
+      "build",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner-web"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "wasm-pack",
+      "build",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner-web"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-direct-planner-wasm-build.log",
+    "elapsed_including_wait": 48.175623124989215,
+    "locked_seconds": 47.82778349998989,
+    "rust_counts": null,
+    "free_before": 173199577088,
+    "free_after": 173061959680,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-direct-planner-actual-wasm",
+    "command": [
+      "node",
+      "/tmp/b-j2-direct-planner-verify.mjs",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner-web",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/native-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/wasm-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/actual-wasm-report.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/b-j2-direct-planner-verify.mjs",
+      "/tmp/noname-b-j2-main-2zzoa42o/phase-B-direct-planner-web",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/native-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/wasm-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-direct-planner/actual-wasm-report.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-direct-planner-actual-wasm.log",
+    "elapsed_including_wait": 2.01028779198532,
+    "locked_seconds": 0.120888167002704,
+    "rust_counts": null,
+    "free_before": 173067264000,
+    "free_after": 173068361728,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-normal-native-wasm-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-normal-native-wasm-build.log",
+    "elapsed_including_wait": 18.07039941698895,
+    "locked_seconds": 16.479388375009876,
+    "rust_counts": null,
+    "free_before": 170161827840,
+    "free_after": 170170302464,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-worker",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "smoke:native"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "smoke:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-worker.log",
+    "elapsed_including_wait": 2.013762874994427,
+    "locked_seconds": 0.46861149999313056,
+    "rust_counts": null,
+    "free_before": 170168856576,
+    "free_after": 170170023936,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-j2-actual-wasm-matrix",
+    "command": [
+      "node",
+      "apps/web-client/scripts/adr0786-j2-cross-target.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-j2-wasm-result.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "apps/web-client/scripts/adr0786-j2-cross-target.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-j2-wasm-result.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-j2-actual-wasm-matrix.log",
+    "elapsed_including_wait": 2.011424458003603,
+    "locked_seconds": 0.2886690840241499,
+    "rust_counts": null,
+    "free_before": 170170015744,
+    "free_after": 170179981312,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-nc10-targeted",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-nc10-targeted.log",
+    "elapsed_including_wait": 2.0178103749931324,
+    "locked_seconds": 1.515405959013151,
+    "rust_counts": [
+      54,
+      0,
+      4
+    ],
+    "free_before": 170178920448,
+    "free_after": 170181124096,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-machine-native-fixtures",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "nc09_machine_ownership::",
+      "--",
+      "--nocapture"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-machine-native-fixtures.log",
+    "elapsed_including_wait": 4.017114999995101,
+    "locked_seconds": 2.9451455420057755,
+    "rust_counts": [
+      18,
+      0,
+      0
+    ],
+    "free_before": 170175975424,
+    "free_after": 170174156800,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-machine-actual-wasm",
+    "command": [
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-phase-B"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-desktop-native/validation-wasm-machine-windows.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-phase-B"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-machine-actual-wasm.log",
+    "elapsed_including_wait": 2.015912750008283,
+    "locked_seconds": 0.11722200000076555,
+    "rust_counts": null,
+    "free_before": 170174144512,
+    "free_after": 170173812736,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-j2-theft-sdk",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/adr0786-j2-theft-sdk-smoke.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/adr0786-j2-theft-sdk-smoke.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "log": "phase-B-j2-theft-sdk.log",
+    "elapsed_including_wait": 2.014162582985591,
+    "locked_seconds": 0.2734662080183625,
+    "rust_counts": null,
+    "free_before": 170175799296,
+    "free_after": 170175864832,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-j2-author-sdk",
+    "command": [
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/adr0786-j2-active-smoke.mjs",
+      "/tmp/noname-b-j2-main-2zzoa42o/author-pack"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./scripts/ts-register.mjs",
+      "scripts/adr0786-j2-active-smoke.mjs",
+      "/tmp/noname-b-j2-main-2zzoa42o/author-pack"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "log": "phase-B-j2-author-sdk.log",
+    "elapsed_including_wait": 2.0124689170042984,
+    "locked_seconds": 0.2692891249898821,
+    "rust_counts": null,
+    "free_before": 170175852544,
+    "free_after": 170175889408,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-native3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-native3.log",
+    "elapsed_including_wait": 34.12074116698932,
+    "locked_seconds": 33.01200650000828,
+    "rust_counts": [
+      1706,
+      0,
+      75
+    ],
+    "free_before": 170171281408,
+    "free_after": 170165342208,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-affected-six",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api",
+      "-p",
+      "engine-core",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "--features",
+      "desktop-client/tauri-shell",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-api",
+      "-p",
+      "engine-core",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "--features",
+      "desktop-client/tauri-shell",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-affected-six.log",
+    "elapsed_including_wait": 174.67255620801006,
+    "locked_seconds": 174.11397174999001,
+    "rust_counts": [
+      6035,
+      0,
+      77
+    ],
+    "free_before": 170165334016,
+    "free_after": 170153263104,
+    "stop_reason": null
+  },
+  {
+    "name": "j2-real-chrome-worker",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker.mjs"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "log": "j2-real-chrome-worker.log",
+    "elapsed_including_wait": 144.56389008299448,
+    "locked_seconds": 0.2622937499836553,
+    "rust_counts": null,
+    "free_before": 170138193920,
+    "free_after": 170174631936,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-workspace",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-workspace.log",
+    "elapsed_including_wait": 236.88384487500298,
+    "locked_seconds": 235.96886666701175,
+    "rust_counts": [
+      6829,
+      0,
+      77
+    ],
+    "free_before": 170153254912,
+    "free_after": 170118483968,
+    "stop_reason": null
+  },
+  {
+    "name": "hujia-current-native",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/hujia-current/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/vector.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-b-j2-main-2zzoa42o/hujia-current/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/vector.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "hujia-current-native.log",
+    "elapsed_including_wait": 188.64389116698294,
+    "locked_seconds": 0.8798927080060821,
+    "rust_counts": null,
+    "free_before": 170120777728,
+    "free_after": 170115141632,
+    "stop_reason": null
+  },
+  {
+    "name": "j2-real-chrome-worker-private-port",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker-private-port.mjs"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/launch-theft-worker-private-port.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "j2-real-chrome-worker-private-port.log",
+    "elapsed_including_wait": 60.19118429199443,
+    "locked_seconds": 1.8286269169766456,
+    "rust_counts": null,
+    "free_before": 170128719872,
+    "free_after": 170104496128,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-workspace-all-targets",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "--workspace",
+      "--all-targets"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "--workspace",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-workspace-all-targets.log",
+    "elapsed_including_wait": 14.08131408301415,
+    "locked_seconds": 11.295291208982235,
+    "rust_counts": null,
+    "free_before": 170118455296,
+    "free_after": 170100445184,
+    "stop_reason": null
+  },
+  {
+    "name": "hujia-current-actual-wasm",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/hujia-current/verify.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/vector.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/actual-wasm-report.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/hujia-current/verify.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/vector.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/hujia-current/actual-wasm-report.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "hujia-current-actual-wasm.log",
+    "elapsed_including_wait": 14.043485917005455,
+    "locked_seconds": 0.06174829098745249,
+    "rust_counts": null,
+    "free_before": 170115117056,
+    "free_after": 170100965376,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-strict-native3",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-strict-native3.log",
+    "elapsed_including_wait": 6.042345875001047,
+    "locked_seconds": 4.845359625003766,
+    "rust_counts": null,
+    "free_before": 170100436992,
+    "free_after": 170100162560,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-source-lines.log",
+    "elapsed_including_wait": 6.03982791598537,
+    "locked_seconds": 4.2746260419953614,
+    "rust_counts": null,
+    "free_before": 170100154368,
+    "free_after": 170100649984,
+    "stop_reason": null
+  },
+  {
+    "name": "phase-B-layering",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "phase-B-layering.log",
+    "elapsed_including_wait": 2.014258749986766,
+    "locked_seconds": 0.12838945901603438,
+    "rust_counts": null,
+    "free_before": 170100649984,
+    "free_after": 170100625408,
+    "stop_reason": null
+  },
+  {
+    "name": "legacy-crosshash",
+    "command": [
+      "bash",
+      "scripts/cross-target-hash.sh"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "bash",
+      "scripts/cross-target-hash.sh"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "legacy-crosshash.log",
+    "elapsed_including_wait": 114.49289687498822,
+    "locked_seconds": 114.28828974999487,
+    "rust_counts": null,
+    "free_before": 170100621312,
+    "free_after": 169825882112,
+    "stop_reason": null
+  },
+  {
+    "name": "old328-explicit-rejection",
+    "command": [
+      "node",
+      "/tmp/b-j2-old328-rejection.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/old328-rejection-report.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/b-j2-old328-rejection.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/old328-rejection-report.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "old328-explicit-rejection.log",
+    "elapsed_including_wait": 50.205670750001445,
+    "locked_seconds": 0.05560108399367891,
+    "rust_counts": null,
+    "free_before": 169945145344,
+    "free_after": 169825681408,
+    "stop_reason": null
+  },
+  {
+    "name": "frontend",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "test"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "frontend.log",
+    "elapsed_including_wait": 2.014319291978609,
+    "locked_seconds": 0.9607935829844791,
+    "rust_counts": null,
+    "free_before": 169825873920,
+    "free_after": 169826271232,
+    "stop_reason": null
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "typecheck.log",
+    "elapsed_including_wait": 2.01205341698369,
+    "locked_seconds": 1.4173733750067186,
+    "rust_counts": null,
+    "free_before": 169826258944,
+    "free_after": 169827315712,
+    "stop_reason": null
+  },
+  {
+    "name": "frontend-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "frontend-build.log",
+    "elapsed_including_wait": 4.022742125001969,
+    "locked_seconds": 2.6206984170130454,
+    "rust_counts": null,
+    "free_before": 169827307520,
+    "free_after": 169834201088,
+    "stop_reason": null
+  },
+  {
+    "name": "native-wasm-formal-trajectory",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "native-wasm-formal-trajectory.log",
+    "elapsed_including_wait": 4.022494709002785,
+    "locked_seconds": 3.706011916976422,
+    "rust_counts": [
+      2,
+      0,
+      0
+    ],
+    "free_before": 169834192896,
+    "free_after": 169812299776,
+    "stop_reason": null
+  },
+  {
+    "name": "ordinary-native-fixture",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_projection_fixture",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/ordinary-projection.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_projection_fixture",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/ordinary-projection.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "ordinary-native-fixture.log",
+    "elapsed_including_wait": 2.01921937498264,
+    "locked_seconds": 1.355129500007024,
+    "rust_counts": null,
+    "free_before": 169812291584,
+    "free_after": 169795768320,
+    "stop_reason": null
+  },
+  {
+    "name": "ordinary-actual-wasm",
+    "command": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/native-server-projection-parity.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/ordinary-projection.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/native-server-projection-parity.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/ordinary-projection.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "ordinary-actual-wasm.log",
+    "elapsed_including_wait": 2.015711749991169,
+    "locked_seconds": 0.22829124997952022,
+    "rust_counts": null,
+    "free_before": 169795768320,
+    "free_after": 169796317184,
+    "stop_reason": null
+  },
+  {
+    "name": "b-native-fixtures",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_approved_b_metadata",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "game-server",
+      "--example",
+      "emit_approved_b_metadata",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-native-fixtures.log",
+    "elapsed_including_wait": 2.0204669589875266,
+    "locked_seconds": 0.5460753750230651,
+    "rust_counts": null,
+    "free_before": 169796300800,
+    "free_after": 169778507776,
+    "stop_reason": null
+  },
+  {
+    "name": "ipc-host-build",
+    "command": [
+      "cargo",
+      "build",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "--example",
+      "pa09_native_bridge"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "build",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "--example",
+      "pa09_native_bridge"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "ipc-host-build.log",
+    "elapsed_including_wait": 28.116023957991274,
+    "locked_seconds": 27.702017083007377,
+    "rust_counts": null,
+    "free_before": 169778503680,
+    "free_after": 169280131072,
+    "stop_reason": null
+  },
+  {
+    "name": "b-server-wasm-ipc-parity",
+    "command": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/approved-b-parity.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/approved-b-parity.mjs",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-server-wasm-ipc-parity.log",
+    "elapsed_including_wait": 6.014290959021309,
+    "locked_seconds": 0.7482956660096534,
+    "rust_counts": null,
+    "free_before": 169280122880,
+    "free_after": 169271390208,
+    "stop_reason": null
+  },
+  {
+    "name": "desktop-debug-build",
+    "command": [
+      "cargo",
+      "build",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "--features",
+      "tauri-shell",
+      "--bin",
+      "noname-next-desktop"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "build",
+      "--offline",
+      "-p",
+      "desktop-client",
+      "--features",
+      "tauri-shell",
+      "--bin",
+      "noname-next-desktop"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "desktop-debug-build.log",
+    "elapsed_including_wait": 24.10919829100021,
+    "locked_seconds": 23.428040416998556,
+    "rust_counts": null,
+    "free_before": 169271377920,
+    "free_after": 169111265280,
+    "stop_reason": null
+  },
+  {
+    "name": "b-ui-bundle",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/build-b-ui.mjs"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/build-b-ui.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-ui-bundle.log",
+    "elapsed_including_wait": 2.0083567080146167,
+    "locked_seconds": 1.3361954999854788,
+    "rust_counts": null,
+    "free_before": 169116995584,
+    "free_after": 169074462720,
+    "stop_reason": null
+  },
+  {
+    "name": "b-ui-real-chrome",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs",
+      "chrome",
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "current329"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs",
+      "chrome",
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      "current329"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-ui-real-chrome.log",
+    "elapsed_including_wait": 4.023607541981619,
+    "locked_seconds": 2.192269250022946,
+    "rust_counts": null,
+    "free_before": 169074454528,
+    "free_after": 169080033280,
+    "stop_reason": null
+  },
+  {
+    "name": "b-ui-real-wkwebview",
+    "command": [
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs",
+      "wkwebview",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop",
+      "current329"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs",
+      "wkwebview",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop",
+      "current329"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "b-ui-real-wkwebview.log",
+    "elapsed_including_wait": 2.0111313330125995,
+    "locked_seconds": 1.3922915830044076,
+    "rust_counts": null,
+    "free_before": 169080029184,
+    "free_after": 169077948416,
+    "stop_reason": null
+  },
+  {
+    "name": "final-preflight",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "log": "final-preflight.log",
+    "elapsed_including_wait": 323.1784639999969,
+    "locked_seconds": 320.8437062909943,
+    "rust_counts": null,
+    "free_before": 169006235648,
+    "free_after": 168998785024,
+    "stop_reason": null
+  },
+  {
+    "name": "final-link-diagnosis",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "log": "final-link-diagnosis.log",
+    "elapsed_including_wait": 2.0084269999933895,
+    "locked_seconds": 0.11147491598967463,
+    "rust_counts": null,
+    "free_before": 168999002112,
+    "free_after": 168998531072,
+    "stop_reason": null
+  },
+  {
+    "name": "final-local-links-core-repaired",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "final-local-links-core-repaired.log",
+    "elapsed_including_wait": 2.0085264170193113,
+    "locked_seconds": 0.10499595798319206,
+    "rust_counts": null,
+    "free_before": 168901812224,
+    "free_after": 168906723328,
+    "stop_reason": null
+  },
+  {
+    "name": "final-local-links-all-repaired",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "final-local-links-all-repaired.log",
+    "elapsed_including_wait": 2.011266749992501,
+    "locked_seconds": 0.7621385829988867,
+    "rust_counts": null,
+    "free_before": 168906715136,
+    "free_after": 168906678272,
+    "stop_reason": null
+  },
+  {
+    "name": "parent-line-self-tests",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "parent-line-self-tests.log",
+    "elapsed_including_wait": 2.014439457998378,
+    "locked_seconds": 0.06714787500095554,
+    "rust_counts": null,
+    "free_before": 168431468544,
+    "free_after": 168431267840,
+    "stop_reason": null
+  },
+  {
+    "name": "parent-source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "parent-source-lines.log",
+    "elapsed_including_wait": 4.015228333999403,
+    "locked_seconds": 3.4497552500106394,
+    "rust_counts": null,
+    "free_before": 168431255552,
+    "free_after": 168431439872,
+    "stop_reason": null
+  },
+  {
+    "name": "parent-final-preflight",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "launcher": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "log": "parent-final-preflight.log",
+    "elapsed_including_wait": 319.30274058299256,
+    "locked_seconds": 317.65414558298653,
+    "rust_counts": null,
+    "free_before": 168431431680,
+    "free_after": 168438493184,
+    "stop_reason": null
+  }
+]

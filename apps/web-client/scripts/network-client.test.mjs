@@ -518,3 +518,19 @@ test("finished status shares the banner's view and MatchEnded fallback wording",
     assert.match(f.status.value, /终局 · 单挑胜者 P1 · rev 4/);
   }
 });
+
+test("B metadata is preserved on real network consumer messages and malformed metadata refuses join", async (t) => {
+  const { client, connect } = fixture(t);
+  const socket = await connect();
+  const metadata = { def: 0, name: "曹操", faction: "wei", revealed: false };
+  const pending = client.joinRoom(7);
+  const snapshot = { ...view(), seats: [{ player: 1, character_def: 0, generals: [metadata, null] }] };
+  const choice = { choice_id: 1, observer: 1, native_kind: "respond_card", prompt: "respond_shan", kind: "Custom" };
+  socket.receive("JoinOk", { room_id: 7, player_id: 1, seat: 0, role: "Player", view: snapshot, choice, legal_actions: [] });
+  const joined = await pending;
+  assert.deepEqual(joined.envelope.view.seats[0].generals, [metadata, null]);
+  assert.deepEqual(joined.envelope.choice, choice);
+  const rejected = client.joinRoom(7);
+  socket.receive("JoinOk", { view: snapshot, choice: { ...choice, native_kind: "invented_kind" } });
+  await assert.rejects(rejected, /元数据无效/);
+});

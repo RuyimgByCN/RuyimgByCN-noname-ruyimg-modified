@@ -1,0 +1,24 @@
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.26s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-fb18dbc55758dba6)
+
+running 1 test
+NC10_J2_PRIVATE budget=0 black=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: true, timed_out: false, cancelled: false, sim_faults: 0 } red=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 0, budget_exhausted: true, timed_out: false, cancelled: false, sim_faults: 0 }
+NC10_J2_PRIVATE budget=48 black=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 } red=Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(44)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }
+
+thread 'nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan' (10176571) panicked at crates/engine-native/tests/groups/../nc10_j2_vm_privacy.rs:100:9:
+assertion `left == right` failed: cached private damage must not select the discard
+  left: "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(52)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }"
+ right: "Plan { seat: 0, revision: 4, action: Answer { choice_id: 4, selection: [Card(44)] }, nodes_used: 3, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan ... FAILED
+
+failures:
+
+failures:
+    nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 147 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_j2_vm_privacy::", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.382443874987075, "disk_free_bytes": 173371736064}

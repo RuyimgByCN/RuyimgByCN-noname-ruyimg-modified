@@ -136,3 +136,17 @@ test("IPC and Worker convert native SingleWin seats exactly once without modifyi
     transport.terminate();
   }
 });
+
+test("IPC refuses malformed B metadata before delivering a view envelope", async () => {
+  const transport = new DesktopEngineTransport(async (command, args) => {
+    if (command === "native_engine_open") return 27;
+    if (command === "native_engine_close") return;
+    return { id: args.request.id, ok: true, data: { view: { seats: [{ generals: [{ def: "0", name: "x", faction: "wei", revealed: false }, null] }] }, choice: null } };
+  });
+  const reply = new Promise((resolve) => { transport.onmessage = (event) => resolve(event.data); });
+  transport.postMessage({ id: 1, type: "observer" });
+  const response = await reply;
+  assert.equal(response.ok, false);
+  assert.match(response.error, /generals metadata invalid/);
+  transport.terminate();
+});

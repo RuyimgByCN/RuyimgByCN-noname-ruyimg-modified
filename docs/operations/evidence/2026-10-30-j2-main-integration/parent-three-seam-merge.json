@@ -1,0 +1,29 @@
+{
+  "baseline_main": "44982f45edfb1a365163ecdacc08fa972219684e",
+  "B31_applied_before_J2": true,
+  "candidate_patch_sha256": "96f8ec3be3a3a37903a1623956bbae0c3b5bbe4386b0eee2a09fafd80070e8f9",
+  "seams": [
+    {
+      "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+      "ours_sha256": "369cb81df66463c6d6ca23210d72a5b21b6d3d234ec7e7de1f2d7de017625392",
+      "candidate_sha256": "e11c861aa7495d054f755d2f29190974f4be82394266346ced8713677d2ca788",
+      "merged_sha256": "51ad02256a57e6c0a0461a5a41da85db0f7d3982252416255be1481b0d998ee2",
+      "resolution": "Preserve both prompt/module sets; preserve9argumentreadonlyHostAsk and addJ2VMhooks"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "ours_sha256": "45d9690b22918c7393dda652da13adfee01051045d059e4ff002a0eb9c60462a",
+      "candidate_sha256": "a99f5ddfcf12929e5b2b4dc6b464fca7bc3a841d70f28f22d49987a7258f6914",
+      "merged_sha256": "c9717b9aaf4b6c7fcadf048360efc44e919f7065714d4988ec853b8d33bac243",
+      "resolution": "Preserve both prompt/module sets; preserve9argumentreadonlyHostAsk and addJ2VMhooks"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/misc.rs",
+      "ours_sha256": "81a46e377838c38a9e32a2b13be83e4667a86143b3ebb001af3099ede32419df",
+      "candidate_sha256": "f851b65875b005e9915afebcb74f8520ea9fae2e3fb028c9196c4fc2fd917020",
+      "merged_sha256": "e907409a21f463d040e50693085ad55b662309c92faf329cfc501f5fabb3c149",
+      "resolution": "Preserve both prompt/module sets; preserve9argumentreadonlyHostAsk and addJ2VMhooks"
+    }
+  ],
+  "semantics": "J2approved329/758/105; preserveBfanjianprompt/metadata andPA09RefereeHostAsks; no330/331/332 changes"
+}

@@ -1,0 +1,8 @@
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 175669149696}
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.012s
+
+OK
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "exit": 0, "locked_seconds": 0.08769637500518002, "disk_free_bytes": 175669125120}
+{"runner_exit": 0, "stop_reason": null}

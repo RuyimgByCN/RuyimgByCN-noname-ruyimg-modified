@@ -1,0 +1,8 @@
+{
+  "all_dependency_versions_and_sources_match_main_lock": true,
+  "main_lock_sha256": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+  "new_root_only": "nc10-j2-helper-repro",
+  "packages": 43,
+  "profile_dev_debug": "line-tables-only",
+  "source_edits": "evidence/TMP only"
+}

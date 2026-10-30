@@ -1,0 +1,14 @@
+{
+  "frozen_source_paths_verified": 72,
+  "no_staged_files": true,
+  "owned_processes_stopped": [
+    23899,
+    64391
+  ],
+  "private_vite_cache_removed_bytes": 1387906,
+  "temporary_dependency_links_removed": true,
+  "temporary_pi_lens_config_removed": true,
+  "preexisting_probe_home_preserved": true,
+  "free_bytes": 172874092544,
+  "whole_targets_not_deleted": "Parent owns retirement; target-nc09 and target-gate ready after verifying retained native/WASM artifact hashes."
+}

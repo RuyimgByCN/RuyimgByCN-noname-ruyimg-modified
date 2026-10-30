@@ -769,7 +769,11 @@ pub enum GameMode {
     /// KOF 引擎层（P2/N08 模式入口批四，规则 v83）：单败会话状态入
     /// 引擎——双方将池（GENERAL 下标）、比分、局数；单局终局时推进
     /// 会话（败者队首淘汰、胜者队首轮转、比分/局数 +1）。
-    Kof { pools: [Vec<u16>; 2], wins: [u32; 2], games: u32 },
+    Kof {
+        pools: [Vec<u16>; 2],
+        wins: [u32; 2],
+        games: u32,
+    },
 }
 
 /// 核心（无执行位置）的对局状态字段。
@@ -853,6 +857,8 @@ impl VmAux {
         self.hits.clear();
         self.drawn.clear();
         self.once.retain(|(_, _, scope)| *scope != 1);
+        self.flags
+            .retain(|(_, key), _| key != "vm_skipped_phase_count");
     }
 
     /// 轮次推进：丢掉轮范围的 once。

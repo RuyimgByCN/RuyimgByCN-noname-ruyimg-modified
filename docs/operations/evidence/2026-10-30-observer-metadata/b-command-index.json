@@ -1,0 +1,1603 @@
+{
+  "generated_at": "2026-10-30T11:46:26.953884",
+  "serialized_and_targeted_commands": [
+    {
+      "name": "b-readable-targeted",
+      "command": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "--test",
+        "apps/web-client/scripts/approved-b-metadata.test.mjs"
+      ],
+      "exit": 0,
+      "scope": "lightweight five-test targeted TS validation; not a heavy build",
+      "command_shell_display": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-targeted.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-targeted.log",
+      "node_test_totals": {
+        "tests": 5,
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-red",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 18454147072,
+      "start": 1793328892.872021,
+      "exit": 101,
+      "end": 1793329075.970777,
+      "free_after": 15282823168,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red.log"
+    },
+    {
+      "name": "b-red-ts",
+      "command": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "--test",
+        "apps/web-client/scripts/approved-b-metadata.test.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 18369146880,
+      "start": 1793328906.788447,
+      "exit": 1,
+      "end": 1793329076.211358,
+      "free_after": 15282757632,
+      "command_shell_display": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-ts.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-ts.log",
+      "node_test_totals": {
+        "tests": 4,
+        "passed": 1,
+        "failed": 3,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-red-rust-corrected",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 15150198784,
+      "start": 1793329101.007412,
+      "exit": 101,
+      "end": 1793329154.916251,
+      "free_after": 14432567296,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-rust-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-rust-corrected.log",
+      "rust_test_totals": {
+        "passed": 0,
+        "failed": 3,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-check-workspace",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--workspace",
+        "--all-targets"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 14378778624,
+      "start": 1793329185.630792,
+      "exit": 0,
+      "end": 1793329333.0214999,
+      "free_after": 13202399232,
+      "command_shell_display": "cargo check --offline --workspace --all-targets",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-check-workspace.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-check-workspace.log"
+    },
+    {
+      "name": "b-green-rust-first",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 14378778624,
+      "start": 1793329185.632249,
+      "exit": 101,
+      "end": 1793329238.5734022,
+      "free_after": 13991010304,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-first.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-first.log",
+      "rust_test_totals": {
+        "passed": 2,
+        "failed": 1,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-wasm-pack",
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-native-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "../../apps/web-client/src/worker/native-pkg"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 13844512768,
+      "start": 1793329245.104456,
+      "exit": 0,
+      "end": 1793329394.627761,
+      "free_after": 13184651264,
+      "command_shell_display": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-wasm-pack.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-wasm-pack.log"
+    },
+    {
+      "name": "b-frontend-typecheck",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 13844500480,
+      "start": 1793329245.11316,
+      "exit": 2,
+      "end": 1793329395.791779,
+      "free_after": 13184573440,
+      "command_shell_display": "npm --prefix apps/web-client run typecheck",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-typecheck.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-typecheck.log"
+    },
+    {
+      "name": "b-green-rust-prompt-fix",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 13005275136,
+      "start": 1793329415.73037,
+      "exit": 0,
+      "end": 1793329454.118429,
+      "free_after": 12310757376,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-prompt-fix.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-prompt-fix.log",
+      "rust_test_totals": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-green-rust-continuation",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 12271939584,
+      "start": 1793329461.707354,
+      "exit": 101,
+      "end": 1793329488.3039958,
+      "free_after": 12180021248,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-continuation.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-continuation.log",
+      "rust_test_totals": {
+        "passed": 2,
+        "failed": 1,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-frontend-typecheck-with-legacy",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "typecheck"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 12271808512,
+      "start": 1793329461.710439,
+      "exit": 0,
+      "end": 1793329487.717924,
+      "free_after": 12187766784,
+      "command_shell_display": "npm --prefix apps/web-client run typecheck",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-typecheck-with-legacy.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-typecheck-with-legacy.log"
+    },
+    {
+      "name": "b-build-ipc-host",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "-p",
+        "desktop-client",
+        "--example",
+        "pa09_native_bridge"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 11870396416,
+      "start": 1793329516.4522948,
+      "exit": 0,
+      "end": 1793329590.067852,
+      "free_after": 10172395520,
+      "command_shell_display": "cargo build --offline -p desktop-client --example pa09_native_bridge",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-build-ipc-host.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-build-ipc-host.log"
+    },
+    {
+      "name": "b-emit-fixtures",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "game-server",
+        "--example",
+        "emit_approved_b_metadata",
+        "--",
+        "../evidence/b-metadata-fixtures.json"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 11870396416,
+      "start": 1793329516.452357,
+      "exit": 101,
+      "end": 1793329557.305374,
+      "free_after": 11049967616,
+      "command_shell_display": "cargo run --offline -p game-server --example emit_approved_b_metadata -- ../evidence/b-metadata-fixtures.json",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-emit-fixtures.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-emit-fixtures.log"
+    },
+    {
+      "name": "b-wasm-pack-prompt-fix",
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-native-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "../../apps/web-client/src/worker/native-pkg"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 11870396416,
+      "start": 1793329516.452638,
+      "exit": 0,
+      "end": 1793329617.420117,
+      "free_after": 10189721600,
+      "command_shell_display": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-wasm-pack-prompt-fix.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-wasm-pack-prompt-fix.log"
+    },
+    {
+      "name": "b-green-rust-continuation-corrected",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 10948636672,
+      "start": 1793329559.115991,
+      "exit": 0,
+      "end": 1793329650.526494,
+      "free_after": 9684979712,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-continuation-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-green-rust-continuation-corrected.log",
+      "rust_test_totals": {
+        "passed": 3,
+        "failed": 0,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-desktop-debug",
+      "command": [
+        "cargo",
+        "build",
+        "--offline",
+        "-p",
+        "desktop-client",
+        "--features",
+        "tauri-shell",
+        "--bin",
+        "noname-next-desktop"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 10072670208,
+      "start": 1793329623.6287081,
+      "exit": 0,
+      "end": 1793329717.190065,
+      "free_after": 8557047808,
+      "command_shell_display": "cargo build --offline -p desktop-client --features tauri-shell --bin noname-next-desktop",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-desktop-debug.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-desktop-debug.log"
+    },
+    {
+      "name": "b-emit-fixtures-corrected",
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "game-server",
+        "--example",
+        "emit_approved_b_metadata",
+        "--",
+        "../evidence/b-metadata-fixtures.json"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 10072666112,
+      "start": 1793329623.634588,
+      "exit": 0,
+      "end": 1793329718.3819158,
+      "free_after": 8540114944,
+      "command_shell_display": "cargo run --offline -p game-server --example emit_approved_b_metadata -- ../evidence/b-metadata-fixtures.json",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-emit-fixtures-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-emit-fixtures-corrected.log"
+    },
+    {
+      "name": "b-ui-build",
+      "command": [
+        "node",
+        "../evidence/build-b-ui.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8412131328,
+      "start": 1793329754.9097521,
+      "exit": 0,
+      "end": 1793329838.6138291,
+      "free_after": 7793586176,
+      "command_shell_display": "node ../evidence/build-b-ui.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build.log"
+    },
+    {
+      "name": "b-node-tests",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8412131328,
+      "start": 1793329754.9098089,
+      "exit": 0,
+      "end": 1793329841.795178,
+      "free_after": 7781990400,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests.log",
+      "node_test_totals": {
+        "tests": 151,
+        "passed": 151,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-frontend-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8412123136,
+      "start": 1793329754.9119182,
+      "exit": 0,
+      "end": 1793329840.9781618,
+      "free_after": 7782121472,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build.log"
+    },
+    {
+      "name": "b-affected-full",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-api",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "game-server",
+        "-p",
+        "desktop-client"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8408920064,
+      "start": 1793329773.2246559,
+      "exit": 0,
+      "end": 1793330075.6577091,
+      "free_after": 53475221504,
+      "command_shell_display": "cargo test --offline -p engine-api -p engine-native-wasm -p game-server -p desktop-client",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-affected-full.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-affected-full.log",
+      "rust_test_totals": {
+        "passed": 483,
+        "failed": 0,
+        "ignored": 1,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-native-three-full",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8408920064,
+      "start": 1793329773.224677,
+      "exit": 101,
+      "end": 1793329887.866087,
+      "free_after": 6944268288,
+      "command_shell_display": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full.log",
+      "rust_test_totals": {
+        "passed": 822,
+        "failed": 6,
+        "ignored": 1,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-strict-three",
+      "command": [
+        "env",
+        "RUSTFLAGS=-Dwarnings",
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8408920064,
+      "start": 1793329773.22469,
+      "exit": 0,
+      "end": 1793329913.922934,
+      "free_after": 6864150528,
+      "command_shell_display": "env RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-strict-three.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-strict-three.log"
+    },
+    {
+      "name": "b-cross-entry-parity",
+      "command": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/approved-b-parity.mjs",
+        "../evidence/b-metadata-fixtures.json",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 8408915968,
+      "start": 1793329773.224839,
+      "exit": 0,
+      "end": 1793329914.7730439,
+      "free_after": 7515422720,
+      "command_shell_display": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/approved-b-parity.mjs ../evidence/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-parity.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-parity.log"
+    },
+    {
+      "name": "b-native-three-full-fixtures",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 104777256960,
+      "start": 1793330121.436003,
+      "exit": 0,
+      "end": 1793330151.682858,
+      "free_after": 140148097024,
+      "command_shell_display": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full-fixtures.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full-fixtures.log",
+      "rust_test_totals": {
+        "passed": 1665,
+        "failed": 0,
+        "ignored": 73,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-ui-chrome",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "chrome",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 104777269248,
+      "start": 1793330121.4361432,
+      "exit": 1,
+      "end": 1793330122.3550751,
+      "free_after": 105631969280,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome.log"
+    },
+    {
+      "name": "b-ui-wkwebview",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "wkwebview",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 104777412608,
+      "start": 1793330121.436509,
+      "exit": 1,
+      "end": 1793330122.189335,
+      "free_after": 105443332096,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview.log"
+    },
+    {
+      "name": "b-ws5-compat-final",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 174051852288,
+      "start": 1793330170.639597,
+      "exit": 101,
+      "end": 1793330204.805037,
+      "free_after": 183621783552,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ws5-compat-final.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ws5-compat-final.log"
+    },
+    {
+      "name": "b-cross-entry-parity-with-old-ts",
+      "command": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/approved-b-parity.mjs",
+        "../evidence/b-metadata-fixtures.json",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 174051852288,
+      "start": 1793330170.6396291,
+      "exit": 0,
+      "end": 1793330205.5419369,
+      "free_after": 183620935680,
+      "command_shell_display": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/approved-b-parity.mjs ../evidence/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-parity-with-old-ts.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-parity-with-old-ts.log"
+    },
+    {
+      "name": "b-ui-build-final",
+      "command": [
+        "node",
+        "../evidence/build-b-ui.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 183632543744,
+      "start": 1793330207.7424982,
+      "exit": 0,
+      "end": 1793330267.814763,
+      "free_after": 181991661568,
+      "command_shell_display": "node ../evidence/build-b-ui.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-final.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-final.log"
+    },
+    {
+      "name": "b-frontend-build-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 183632543744,
+      "start": 1793330207.742503,
+      "exit": 0,
+      "end": 1793330266.56756,
+      "free_after": 181880578048,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-final.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-final.log"
+    },
+    {
+      "name": "b-ws5-compat-packet-corrected",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 183411376128,
+      "start": 1793330240.691962,
+      "exit": 0,
+      "end": 1793330270.4078012,
+      "free_after": 182831616000,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ws5-compat-packet-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ws5-compat-packet-corrected.log",
+      "rust_test_totals": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-ui-chrome-corrected",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "chrome",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "corrected"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 183411376128,
+      "start": 1793330240.7050838,
+      "exit": 0,
+      "end": 1793330272.00822,
+      "free_after": 182825041920,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' corrected",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-corrected.log"
+    },
+    {
+      "name": "b-ui-wkwebview-corrected",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "wkwebview",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+        "corrected"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 183410929664,
+      "start": 1793330240.7122319,
+      "exit": 0,
+      "end": 1793330269.097367,
+      "free_after": 181991882752,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop corrected",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-corrected.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-corrected.log"
+    },
+    {
+      "name": "b-frontend-build-prototype-guard",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 181796929536,
+      "start": 1793330329.868339,
+      "exit": 0,
+      "end": 1793330342.062322,
+      "free_after": 181625126912,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-prototype-guard.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-prototype-guard.log"
+    },
+    {
+      "name": "b-node-tests-final",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 181796929536,
+      "start": 1793330329.8683898,
+      "exit": 0,
+      "end": 1793330343.076882,
+      "free_after": 181624954880,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-final.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-final.log",
+      "node_test_totals": {
+        "tests": 153,
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-ui-build-accepted",
+      "command": [
+        "node",
+        "../evidence/build-b-ui.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 181796917248,
+      "start": 1793330329.888447,
+      "exit": 0,
+      "end": 1793330344.3878698,
+      "free_after": 181599420416,
+      "command_shell_display": "node ../evidence/build-b-ui.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-accepted.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-accepted.log"
+    },
+    {
+      "name": "b-node-tests-legacy-flow",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178834284544,
+      "start": 1793330391.215391,
+      "exit": 0,
+      "end": 1793330404.580509,
+      "free_after": 178832842752,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-legacy-flow.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-legacy-flow.log",
+      "node_test_totals": {
+        "tests": 153,
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-ui-build-final-flow",
+      "command": [
+        "node",
+        "../evidence/build-b-ui.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178714689536,
+      "start": 1793330428.688639,
+      "exit": 0,
+      "end": 1793330482.2692869,
+      "free_after": 178385883136,
+      "command_shell_display": "node ../evidence/build-b-ui.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-final-flow.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-final-flow.log"
+    },
+    {
+      "name": "b-frontend-build-final-flow",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178714689536,
+      "start": 1793330428.699968,
+      "exit": 0,
+      "end": 1793330484.487255,
+      "free_after": 178385776640,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-final-flow.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-final-flow.log"
+    },
+    {
+      "name": "b-final-workspace-check",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--workspace",
+        "--all-targets"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178429272064,
+      "start": 1793330469.1768699,
+      "exit": 0,
+      "end": 1793330501.3707142,
+      "free_after": 178383138816,
+      "command_shell_display": "cargo check --offline --workspace --all-targets",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-final-workspace-check.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-final-workspace-check.log"
+    },
+    {
+      "name": "b-ui-chrome-final-flow",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "chrome",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "final-flow"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178429272064,
+      "start": 1793330469.1768699,
+      "exit": 0,
+      "end": 1793330556.639265,
+      "free_after": 176778203136,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' final-flow",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-final-flow.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-final-flow.log"
+    },
+    {
+      "name": "b-legacy-core-constructors",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "snapshot::tests"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178429272064,
+      "start": 1793330469.176932,
+      "exit": 0,
+      "end": 1793330555.108437,
+      "free_after": 176786202624,
+      "command_shell_display": "cargo test --offline -p engine-core snapshot::tests",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-legacy-core-constructors.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-legacy-core-constructors.log",
+      "rust_test_totals": {
+        "passed": 6,
+        "failed": 0,
+        "ignored": 0,
+        "filtered_out": 3843
+      }
+    },
+    {
+      "name": "b-ui-wkwebview-final-flow",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "wkwebview",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+        "final-flow"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178429272064,
+      "start": 1793330469.176994,
+      "exit": 0,
+      "end": 1793330557.952169,
+      "free_after": 176778301440,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop final-flow",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-final-flow.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-final-flow.log"
+    },
+    {
+      "name": "b-cross-entry-final",
+      "command": [
+        "node",
+        "--import",
+        "./apps/web-client/scripts/ts-register.mjs",
+        "apps/web-client/scripts/approved-b-parity.mjs",
+        "../evidence/b-metadata-fixtures.json",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 178429272064,
+      "start": 1793330469.177078,
+      "exit": 0,
+      "end": 1793330485.288059,
+      "free_after": 178385674240,
+      "command_shell_display": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/approved-b-parity.mjs ../evidence/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-final.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-final.log"
+    },
+    {
+      "name": "b-metadata-final-events",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "game-server",
+        "--test",
+        "approved_b_metadata"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 175627857920,
+      "start": 1793330613.9375381,
+      "exit": 0,
+      "end": 1793331099.266865,
+      "free_after": 170175148032,
+      "command_shell_display": "cargo test --offline -p game-server --test approved_b_metadata",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-metadata-final-events.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-metadata-final-events.log",
+      "rust_test_totals": {
+        "passed": 4,
+        "failed": 0,
+        "ignored": 0,
+        "filtered_out": 0
+      }
+    },
+    {
+      "name": "b-frontend-build-handoff",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 170633064448,
+      "start": 1793330951.176667,
+      "exit": 0,
+      "end": 1793331125.465495,
+      "free_after": 169814765568,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-handoff.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-frontend-build-handoff.log"
+    },
+    {
+      "name": "b-node-tests-handoff",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 170633064448,
+      "start": 1793330951.180765,
+      "exit": 0,
+      "end": 1793331123.138866,
+      "free_after": 169807286272,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-handoff.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-node-tests-handoff.log",
+      "node_test_totals": {
+        "tests": 153,
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-ui-build-handoff",
+      "command": [
+        "node",
+        "../evidence/build-b-ui.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 170633064448,
+      "start": 1793330951.1827369,
+      "exit": 0,
+      "end": 1793331126.661539,
+      "free_after": 169789124608,
+      "command_shell_display": "node ../evidence/build-b-ui.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-handoff.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-build-handoff.log"
+    },
+    {
+      "name": "b-ui-chrome-handoff",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "chrome",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "handoff"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 173415370752,
+      "start": 1793331145.7506151,
+      "exit": 0,
+      "end": 1793331756.592499,
+      "free_after": 173273014272,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' handoff",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-handoff.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-chrome-handoff.log"
+    },
+    {
+      "name": "b-ui-wkwebview-handoff",
+      "command": [
+        "node",
+        "../evidence/run-b-ui.mjs",
+        "wkwebview",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+        "handoff"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 173415370752,
+      "start": 1793331145.762094,
+      "exit": 0,
+      "end": 1793331754.990268,
+      "free_after": 173314412544,
+      "command_shell_display": "node ../evidence/run-b-ui.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop handoff",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-handoff.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-ui-wkwebview-handoff.log"
+    },
+    {
+      "name": "b-readable-ui-build",
+      "command": [
+        "node",
+        "../evidence/build-b-ui-readable.mjs"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 173392248832,
+      "start": 1793331643.19003,
+      "exit": 0,
+      "end": 1793331761.324945,
+      "free_after": 173235617792,
+      "command_shell_display": "node ../evidence/build-b-ui-readable.mjs",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-build.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-build.log"
+    },
+    {
+      "name": "b-readable-node-tests",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 173392248832,
+      "start": 1793331643.2012649,
+      "exit": 0,
+      "end": 1793331760.0805,
+      "free_after": 173268643840,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-node-tests.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-node-tests.log",
+      "node_test_totals": {
+        "tests": 153,
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-readable-frontend-build",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 173392248832,
+      "start": 1793331643.205482,
+      "exit": 0,
+      "end": 1793331759.100405,
+      "free_after": 173272952832,
+      "command_shell_display": "npm --prefix apps/web-client run build",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-frontend-build.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-frontend-build.log"
+    },
+    {
+      "name": "b-readable-final-node-tests",
+      "command": [
+        "npm",
+        "--prefix",
+        "apps/web-client",
+        "test"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 172948795392,
+      "start": 1793331794.5960221,
+      "exit": 0,
+      "end": 1793331798.3179488,
+      "free_after": 172950106112,
+      "command_shell_display": "npm --prefix apps/web-client test",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-final-node-tests.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-final-node-tests.log",
+      "node_test_totals": {
+        "tests": 153,
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "name": "b-readable-ui-wkwebview",
+      "command": [
+        "node",
+        "../evidence/run-b-ui-readable.mjs",
+        "wkwebview",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+        "readable"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 172948795392,
+      "start": 1793331794.598022,
+      "exit": 0,
+      "end": 1793331797.433465,
+      "free_after": 172940042240,
+      "command_shell_display": "node ../evidence/run-b-ui-readable.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop readable",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-wkwebview.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-wkwebview.log"
+    },
+    {
+      "name": "b-readable-ui-chrome",
+      "command": [
+        "node",
+        "../evidence/run-b-ui-readable.mjs",
+        "chrome",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "readable"
+      ],
+      "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+      "env": {
+        "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2"
+      },
+      "free_before": 172948795392,
+      "start": 1793331794.598115,
+      "exit": 0,
+      "end": 1793331796.1910431,
+      "free_after": 172940087296,
+      "command_shell_display": "node ../evidence/run-b-ui-readable.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' readable",
+      "record_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-chrome.json",
+      "log_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-chrome.log"
+    }
+  ],
+  "manual_lightweight_and_artifact_commands": [
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "exit": 1,
+      "log": "b-red-ts-direct.log",
+      "summary": "Initial generated native package was absent; copied existing pre-B generated package for meaningful red tests, then rebuilt current B WASM later."
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "exit": 1,
+      "log": "b-red-ts-bootstrap.log",
+      "summary": "Meaningful pre-implementation TS red: 1 passed, 3 failed."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "exit": 0,
+      "log": "b-source-line-tests-final.log",
+      "summary": "2 passed."
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_native_layering.py",
+      "exit": 0,
+      "log": "b-layering-tests-final.log",
+      "summary": "9 passed."
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "exit": 0,
+      "log": "b-source-lines-checked.log",
+      "summary": "8954 maintained files under caps."
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "exit": 0,
+      "log": "b-layering-checked.log",
+      "summary": "0 upward references."
+    },
+    {
+      "command": "git diff --check",
+      "exit": 0,
+      "log": "b-diff-check-final.log"
+    },
+    {
+      "command": "git diff --cached --name-only",
+      "exit": 0,
+      "log": "b-no-staged-final.log",
+      "summary": "Empty; no staged files."
+    },
+    {
+      "command": "git apply --check approved-b-checked.patch (cwd isolated evidence baseline snapshot)",
+      "exit": 0,
+      "log": "b-checked-patch-check.log"
+    },
+    {
+      "command": "git apply --reverse --check ../evidence/approved-b-checked.patch",
+      "exit": 0,
+      "log": "b-checked-reverse-check.log"
+    },
+    {
+      "command": "python3 ../evidence/freeze-b.py (initial attempt)",
+      "exit": 1,
+      "log": "b-freeze-first-failure.txt",
+      "summary": "Cargo.lock original snapshot omitted by initial extension filter; reconstructed exact bytes from HEAD plus frozen prerequisite, verified SHA256."
+    },
+    {
+      "command": "python3 ../evidence/freeze-b.py (second attempt)",
+      "exit": 1,
+      "log": "b-freeze-final.log",
+      "summary": "Detected four tracked generated dist files removed by Vite; restored exact initial bytes before final pure patch."
+    },
+    {
+      "command": "python3 ../evidence/cleanup-b-unused.py (initial guard)",
+      "exit": 1,
+      "log": "b-unused-cache-cleanup-final.log",
+      "summary": "Over-broad process guard matched shell command text; no deletion happened. Corrected guard to exact executable names."
+    },
+    {
+      "command": "python3 ../evidence/cleanup-b-unused.py (corrected guard)",
+      "exit": 0,
+      "log": "b-unused-cache-cleanup-corrected.log",
+      "summary": "Removed unused own observer-created target and private incremental/tmp only; retained binary fingerprints and needed private target pending parent retirement."
+    }
+  ],
+  "heavy_command_policy": "Every explicit heavy command used /tmp/noname-run-serialized.py. All explicit Rust/WASM builds used exclusive Referee target and CARGO_INCREMENTAL=0; no profile/ABI changes or performance claim.",
+  "all_initial_failures_retained": true
+}

@@ -725,6 +725,23 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 }
                 _ => return Err(ArchiveError::BadTag("Rvm.commit_pick", 255)),
             };
+            let n_following = r.u32()? as usize;
+            if n_following > 256 {
+                return Err(ArchiveError::BadTag("Rvm.following", 255));
+            }
+            let mut following = Vec::new();
+            for _ in 0..n_following {
+                following.push(dec_machine(r)?);
+            }
+            let n_state = r.u32()? as usize;
+            if n_state > 128 {
+                return Err(ArchiveError::BadTag("Rvm.commit_state", 255));
+            }
+            let mut commit_state = Vec::new();
+            for _ in 0..n_state {
+                commit_state.push(r.u32()?);
+            }
+            let committing = r.boolean()?;
             MachineSnapshot::Rvm {
                 owner,
                 module,
@@ -735,6 +752,9 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 count_hits,
                 commit_pending,
                 commit_pick,
+                following,
+                commit_state,
+                committing,
             }
         }
         64 => {

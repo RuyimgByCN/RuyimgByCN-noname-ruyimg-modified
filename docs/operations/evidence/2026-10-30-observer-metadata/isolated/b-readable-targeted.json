@@ -1,0 +1,12 @@
+{
+  "name": "b-readable-targeted",
+  "command": [
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "--test",
+    "apps/web-client/scripts/approved-b-metadata.test.mjs"
+  ],
+  "exit": 0,
+  "scope": "lightweight five-test targeted TS validation; not a heavy build"
+}

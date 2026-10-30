@@ -1,0 +1,14 @@
+{
+  "lifecycle": "install/enable/start/activate/answer/checkpoint/upgrade/frozen-restore/rollback/disable/uninstall",
+  "v1": {
+    "delta": 1,
+    "hash": "89950d3d63593bc6f3601f7cc98675169eaba6a10b540eb52fb6428fbfb37ab9",
+    "choices": 3
+  },
+  "v2": {
+    "delta": 2,
+    "hash": "247651b6196aa2881fd626d9019e70767076fd7b2124fdfc2f7ffeae86b6edc5",
+    "choices": 3
+  },
+  "wasm": "fresh web target"
+}

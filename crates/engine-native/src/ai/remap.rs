@@ -140,13 +140,11 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
 pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool {
     use MachineSnapshot::*;
     match machine {
-        Rvm {
-            paused: Some(_), ..
+        Rvm { paused, commit_pick, committing, commit_state, following, .. } => {
+            paused.is_some() || commit_pick.is_some() || *committing
+                || !commit_state.is_empty() || !following.is_empty()
         }
-        | Rvm {
-            commit_pick: Some(_), ..
-        } => true,
-        // Their physical ownership/ask restoration is being fixed in the shared kernel.
+        // Preserve these pending owners until their sampling semantics are audited.
         XunXun { .. } | JiJie { .. } => true,
         JudgePhase {
             current: Some(current),

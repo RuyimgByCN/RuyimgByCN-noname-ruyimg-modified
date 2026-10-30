@@ -1,0 +1,1939 @@
+{
+  "source_phase": "B: parent fixed P1 and five-window consumer; same frozen maintained source",
+  "totals_by_crate": {
+    "desktop_client": [
+      12,
+      0,
+      0
+    ],
+    "noname_next_desktop": [
+      7,
+      0,
+      1
+    ],
+    "engine_api": [
+      4,
+      0,
+      0
+    ],
+    "engine_core": [
+      3848,
+      0,
+      1
+    ],
+    "engine_native": [
+      1699,
+      0,
+      75
+    ],
+    "engine_native_wasm": [
+      77,
+      0,
+      0
+    ],
+    "game_server": [
+      388,
+      0,
+      0
+    ]
+  },
+  "targets": [
+    {
+      "crate": "desktop_client",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/desktop_client-a37fefe35f6c2c3d)",
+      "counts": [
+        12,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "noname_next_desktop",
+      "target": "Running unittests src/main.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/noname_next_desktop-972b1fb75cbce321)",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "noname_next_desktop",
+      "target": "Running tests/native_engine_host.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_engine_host-f66457e334244ae7)",
+      "counts": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "noname_next_desktop",
+      "target": "Running tests/native_planner_measurement.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_planner_measurement-cfc10dfd5b72af3b)",
+      "counts": [
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "crate": "engine_api",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_api-a23551af2319a57f)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_core-41bb467e7a8adb89)",
+      "counts": [
+        90,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-76e140f84b19f8c4)",
+      "counts": [
+        113,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_key.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_key-5108b4ec7fbcf41e)",
+      "counts": [
+        450,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_misc-203a7c0132f44bab)",
+      "counts": [
+        321,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_mobile.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_mobile-770b348a790e8ce8)",
+      "counts": [
+        490,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_offline.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_offline-180683d79222e5a4)",
+      "counts": [
+        366,
+        0,
+        1
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_ol.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_ol-16379fdbfd8bdc1f)",
+      "counts": [
+        367,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_shenhua.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_shenhua-abb5d8a0605144ac)",
+      "counts": [
+        458,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_sp.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_sp-d5aea46a5e836a61)",
+      "counts": [
+        602,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_yijiang.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_yijiang-e0f4bd70f18b6d79)",
+      "counts": [
+        430,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/phase.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/phase-3702f0382d5d2197)",
+      "counts": [
+        160,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/test_registry-0863ff39fc0cc7b4)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native-61430257e3bca6cc)",
+      "counts": [
+        11,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1-202306239cf16be6)",
+      "counts": [
+        166,
+        0,
+        1
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/g1_shahai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1_shahai-95b16df79ba4054f)",
+      "counts": [
+        174,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/kernel-ca59c4cdd7af7f82)",
+      "counts": [
+        435,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/l_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/l_rounds-e7f32778b8ec741c)",
+      "counts": [
+        43,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-719e2cc1b516190e)",
+      "counts": [
+        220,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "counts": [
+        45,
+        0,
+        50
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "counts": [
+        130,
+        0,
+        9
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "counts": [
+        199,
+        0,
+        8
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "counts": [
+        141,
+        0,
+        7
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/swd-d368774c4002d691)",
+      "counts": [
+        134,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/test_registry-c4ef9cd5c6daa4e5)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_wasm-f9b39cc0e22bbdfb)",
+      "counts": [
+        27,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/adr0786_j2_cross_target.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/adr0786_j2_cross_target-b797cf2c82adc329)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/cross_target_multiseat.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/cross_target_multiseat-aa652becf5ccbdc6)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/cross_target_package.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/cross_target_package-2c120993b3fa7e64)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/events_hash_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/events_hash_export-b8d4570c5c8427ed)",
+      "counts": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/gt014_import_validation_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/gt014_import_validation_parity-13efe8388aaab098)",
+      "counts": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/installed_package_payload.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/installed_package_payload-b04a5e0669c0dfa2)",
+      "counts": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc03_actor_authorization.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_actor_authorization-fcc19e4e85e05fd4)",
+      "counts": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc03_legal_actions_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_legal_actions_export-b83f68385d011260)",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc03_view_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc03_view_projection-878e651299b8dd49)",
+      "counts": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc04_vm_control_flow.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc04_vm_control_flow-9705d429a7429f5e)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc05_general_select_export.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_general_select_export-9b7bf917a44dfe63)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc06_skill_pile_restore.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc06_skill_pile_restore-1cd1da0416646b3e)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/nc08_cross_target.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_cross_target-f3ab561fcf9aecd5)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/pa09_native_session.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/pa09_native_session-33e0d0d2e2f9716d)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/restore_boundary_handle.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/restore_boundary_handle-da65ec0a96f3bdd7)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/vm_module_hash.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_module_hash-d262e9bff48bf10e)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/vm_package_integrity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_package_integrity-89a37ae099a89643)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Running tests/vm_package_worker.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/vm_package_worker-ace124346e991682)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running unittests src/main.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/game_server-52ae62d80e007789)",
+      "counts": [
+        76,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/adr0786_j2_author_lifecycle.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/adr0786_j2_author_lifecycle-8336a69addbcb623)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/approved_b_metadata.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/approved_b_metadata-07aff2d783d2348d)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/fault_injection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/fault_injection-421922756c89a1a2)",
+      "counts": [
+        11,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/gt014_vm_import_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/gt014_vm_import_parity-d74e28895bfbcdac)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/long_run_bot.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_bot-9db88d01896747f9)",
+      "counts": [
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/long_run_memory.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_memory-4d22949c161f9329)",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/long_run_soak.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/long_run_soak-7a828aba9a58b3f9)",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/m8_rolling_upgrade.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/m8_rolling_upgrade-aaf19e9d1aa247e6)",
+      "counts": [
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/multi_room_stress.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/multi_room_stress-7395256e1901c071)",
+      "counts": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/native_frozen_packages.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_frozen_packages-5921bcb462b56116)",
+      "counts": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/native_onlyol_general.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_onlyol_general-b721362c836794cb)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/native_product_path.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_product_path-07fe1829858949e1)",
+      "counts": [
+        10,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/native_upgrade_rollback.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_upgrade_rollback-88e3a2d1f0c80e6b)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc02_install_identity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc02_install_identity-3f0c18c56ce87d3c)",
+      "counts": [
+        7,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc05_campaign_profile.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_campaign_profile-fdff00a37797c523)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc05_lifecycle_heavy.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_lifecycle_heavy-c6f84cd65563f05d)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc05_skin_ui.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc05_skin_ui-2163ee8192c27482)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc08_command_by_command.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_command_by_command-046a62a7fa3042f2)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc08_cross_line.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_cross_line-afb81776f7458eb7)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc08_install_matrix.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_install_matrix-aefc6ade3e280210)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_dual_backend.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_dual_backend-0fcf257660d953e8)",
+      "counts": [
+        45,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_machine_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_machine_projection-a070d8ac6d4ac0b9)",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_native_actor.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_actor-3724238261a4c75e)",
+      "counts": [
+        44,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_native_durability.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_durability-89025719f9833688)",
+      "counts": [
+        45,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_native_room_session.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_room_session-7e88d7af3dbae4e2)",
+      "counts": [
+        56,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_native_view_bridge.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_native_view_bridge-b67cfc05c2d7c1e9)",
+      "counts": [
+        5,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_projection_parity.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_projection_parity-690c7da224104395)",
+      "counts": [
+        8,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/nc09_referee_projection.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc09_referee_projection-6b9c3f87903da343)",
+      "counts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/room_flow.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/room_flow-e74a444f9d3d5043)",
+      "counts": [
+        6,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "game_server",
+      "target": "Running tests/tournament_wal_signing.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/tournament_wal_signing-fc3a7667f2f62e04)",
+      "counts": [
+        10,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "desktop_client",
+      "target": "Doc-tests desktop_client",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_api",
+      "target": "Doc-tests engine_api",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_core",
+      "target": "Doc-tests engine_core",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native",
+      "target": "Doc-tests engine_native",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate": "engine_native_wasm",
+      "target": "Doc-tests engine_native_wasm",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "ignored": [
+    {
+      "crate": "noname_next_desktop",
+      "target": "Running tests/native_planner_measurement.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/native_planner_measurement-cfc10dfd5b72af3b)",
+      "test": "test actual_single_seat_planning_compares_existing_pools_and_native_clock ... ignored, native wall-clock measurement; run explicitly with --ignored --nocapture"
+    },
+    {
+      "crate": "engine_core",
+      "target": "Running tests/groups/original_offline.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/original_offline-180683d79222e5a4)",
+      "test": "test original_merged_extra::original_extra_relonghun::two_hearts_can_save_a_dying_player_for_two_hp ... ignored"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1-202306239cf16be6)",
+      "test": "test g1_huanle::xly::xly_state_growth_probe ... ignored, \u8bca\u65ad\u63a2\u9488\uff1a\u624b\u52a8\u8fd0\u884c\u89c2\u5bdf\u89c4\u6a21\u66f2\u7ebf"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u51ed\u7a7a\u65b0\u589e\u89e6\u53d1\uff09\uff1abaiyi \u4e0a\u6e38\u4e3a phaseUse \u4e3b\u52a8\u6280\u3001\u65e0 trigger\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_card_targeted ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_damage_begin_second ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_death_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_game_start ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_judge_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_sha_after ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_sha_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::cap_sha_begin ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_rexue \u4e0a\u6e38 global\uff0c\u539f\u751f\u8fc7\u6ee4\u542b actor != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_tiebi \u4e0a\u6e38 global\uff0c\u539f\u751f\u76ee\u6807\u7b5b\u9009\u542b t != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_zhuhai \u4e0a\u6e38 global phaseEnd\uff0c\u539f\u751f\u8fc7\u6ee4\u542b t != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g20_jiuwei_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g20_liyutang_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g20_paotai2_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g20_zhucheng_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g20_ziyu_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_binxin_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_donghuangzhong_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_guangshu_spade_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_huanling_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_jidong_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_lingxin_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_lingyu_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_lqingcheng_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_menshen_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::g23_xuanyuan_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_chengxin_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_cigu_pre_draw ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_fenglue_before ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_fuchou2_before ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_gaiming_judge_before ... ignored, \u8865 `judgeBefore` \u5e55\u5e76\u6302\u4e0a\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_hutian_pin_end ... ignored, \u628a\u8fc7\u6ee4\u81c2\u9489\u5230\u8be5\u9636\u6bb5\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted ... ignored, \u8865 `CardTargeted` \u540e\u8f6c\u7eff\uff08\u4e0e cap_card_targeted \u540c\u4e00\u80fd\u529b\uff0c\u6309\u884c\u4e3a\u5206\u522b\u8bb0\u5f55\uff09"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_mb_phase_before_enter_game ... ignored, \u8865 phaseBefore / enterGame \u5e55\u6216\u6539\u7528 Dedicated \u4e8b\u4ef6\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_mopaifanbei_second_draw ... ignored, \u8865\u300c\u7b2c 2 \u6b21\u300d\u6863\u6216\u6478\u724c\u524d\u5e55\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_mufeng_pin_end ... ignored, \u628a\u8fc7\u6ee4\u81c2\u9489\u5230\u8be5\u9636\u6bb5\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_niepan_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_prepare_phase_exists ... ignored, \u8865 `Phase::Prepare` \u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_rangjie_branch1_draws ... ignored, \u8865 `draw_cards` \u540e\u8f6c\u7eff\uff08\u5206\u652f 1 \u5e94\u6478\u724c\uff09"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_shouyin_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_shuiyun5_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_xiangxing_lose_hp_end ... ignored, \u8865 LoseHpEnd \u5e55\u5e76\u6302\u4e0a\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_yueyin_fourth_damage ... ignored, \u8865\u300c\u7b2c 4 \u6b21\u300d\u6863\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase ... ignored, \u8865 dieBegin \u5e55 / \u6539\u4e8b\u4ef6\u79cd\u7c7b\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u81ea\u52a0\u5206\u652f\uff09\uff1ahuajin2 \u4e0a\u6e38\u4ec5 damageBegin\uff0c\u539f\u751f OR \u4e86\u5224\u5b9a\u9636\u6bb5\u5206\u652f\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage ... ignored, \u767b\u8bb0\u7f3a\u9677 G23b\uff1aSwdJiguanyuanGain \u4e0a\u6e38 damageEnd+damageSource\uff0c\u539f\u751f\u6302 PhaseEnd\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/metadata/swd.rs \u4e0e filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::lexue_any_phase_of_owner_only ... ignored, \u767b\u8bb0\u7f3a\u9677 G14\uff1alexue1 \u4e0a\u6e38 player phaseBegin\uff08\u4efb\u610f\u9636\u6bb5\u3001\u81ea\u5df1\uff09\uff0c\u539f\u751f\u9489\u6b7b Judge \u4e14\u7f3a owner \u6821\u9a8c\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker ... ignored, \u767b\u8bb0\u7f3a\u9677 5b\uff1areguhuo \u6bcf\u56de\u5408\u4e00\u6b21\u672a\u5b9e\u73b0\uff08EPIC_REGUHUO_KEY \u5b9a\u4e49\u672a\u63a5\u7ebf\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/step/skills_cards.rs \u4e0e constants.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-eef2483acf2710fa)",
+      "test": "test nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u9489\u6b7b\u9519\u5411\uff09\uff1aziyangdan \u4e0a\u6e38 phaseBegin\uff08\u4efb\u610f\u9636\u6bb5\uff09\uff0c\u539f\u751f\u9489\u6b7b End\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_dinvxuanshuang::upstream_dinvxuanshuang_recovers ... ignored, \u5e1d\u5973\u7384\u971c\uff1aselectTarget -1 \u5e94\u4ee4\u5168\u90e8\u89d2\u8272\u5404\u56de\u590d 1\u2014\u2014\u539f\u751f\u53ea\u56de\u590d\u4f7f\u7528\u8005\uff0c\u89c1\u7b2c 39 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_liyutang::upstream_liyutang_target_gains_the_card ... ignored, \u9ca4\u9c7c\u6c64\uff1a\u76ee\u6807\u5e94\u83b7\u5f97\u6b64\u724c\uff08\u4e0a\u6e38 $gain2 + storage + addSkill\uff09\u2014\u2014\u539f\u751f\u6548\u679c\u4e3a\u7a7a\uff0c\u89c1\u7b2c 37 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_longxugou::upstream_longxugou_steals_and_equips ... ignored, \u9f99\u987b\u94a9\uff1a\u83b7\u5f97\u540e\u5e94\u81ea\u5df1\u88c5\u5907\uff08\u4e0a\u6e38 player.equip\uff09\u2014\u2014\u539f\u751f\u4ec5\u5165\u624b\uff0c\u89c1\u7b2c 36 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_mapodoufu::upstream_mapodoufu_target_gains_the_card ... ignored, \u9ebb\u5a46\u8c46\u8150\uff1a\u76ee\u6807\u5e94\u83b7\u5f97\u6b64\u724c\uff08\u4e0a\u6e38 $gain2 + storage + addSkill\uff09\u2014\u2014\u4e0e\u9ca4\u9c7c\u6c64\u540c\u73b0\u8c61\uff0c\u89c1\u7b2c 37 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_mizhilianou::upstream_mizhilianou_heart_as_tao ... ignored, \u871c\u6c41\u85d5\uff1a\u7ea2\u6843\u724c\u5e94\u53ef\u5f53\u3010\u6843\u3011\u4f7f\u7528\uff08\u4e0a\u6e38 viewAs tao\uff09\u2014\u2014\u5b9e\u6d4b Rejected\uff0c\u89c1\u7b2c 41 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_target_needs_he_cards ... ignored, \u4e7e\u5764\u9556\u76ee\u6807 he \u65e0\u724c\u65f6\u5e94\u88ab\u62d2\uff08\u4e0a\u6e38 filterTarget\uff09\u2014\u2014\u539f\u751f\u66f4\u5bbd\u677e\uff0c\u89c1\u7b2c 35 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_gujian_shihuifen::upstream_shihuifen_blocks_cards_on_others ... ignored, \u77f3\u7070\u7c89\uff1a\u672a\u51fa\u95ea\u540e\u5e94\u9650\u5236\u5bf9\u5176\u4ed6\u89d2\u8272\u7528\u724c\u2014\u2014\u5b9e\u6d4b\u65e0\u8be2\u95ee\u4e14\u9650\u5236\u672a\u751f\u6548\uff0c\u89c1\u7b2c 38 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_hearth_shenenshu::upstream_shenenshu_replaces_hand_with_basics ... ignored, \u795e\u6069\u672f\uff1a\u6548\u679c\u672a\u5b9e\u73b0\uff08\u539f\u751f\u6ce8\u91ca\u81ea\u8ff0\u300eshenenshu \u7b49\u590d\u6742\u724c\u6682\u7f13\u300f\uff09\u2014\u2014\u89c1\u7b2c 44 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-e480e4de6cd064ca)",
+      "test": "test nc08_upstream_jijiang::upstream_jijiang_shu_ally_plays_sha_for_lord ... ignored, \u6fc0\u5c06\u4ee3\u6253\u884c\u4e3a\u9762\uff1a\u51b3\u6597\u573a\u666f\u4e0b\u8be2\u95ee\u4e3a\u7a7a\uff0c\u4ee3\u6253\u94fe\u8def\u672a\u5bf9\u4e0a\u2014\u2014\u6839\u56e0\u5f85\u67e5\uff0c\u672a\u6784\u6210\u9a8c\u6536"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_rangjie::upstream_rangjie_move_branch_must_draw_one ... ignored, \u767b\u8bb0\u7f3a\u9677\uff1a\u539f\u751f rangjie \u5206\u652f 1\uff08\u79fb\u52a8\u724c\uff09\u672a\u6478\u724c\uff0c\u8fdd\u53cd\u4e0a\u6e38 player.draw() \u5728\u5206\u652f\u524d\u65e0\u6761\u4ef6\u6267\u884c\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/step/skills_cards.rs\uff0c\u5f85 host \u62c6\u5206\u843d\u5b9a"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_swd_baishouzhihu::upstream_baishouzhihu_opens_target_window ... ignored, \u7b2c 57 \u9879\uff1aTriggerMeta \u6ce8\u518c PhaseEnd \u800c filter \u8981\u6c42 begin==true\uff08\u5f15\u64ce Phase \u4e8b\u4ef6\u53ea\u6709 begin:true\uff09\u21d2 \u6c38\u4e0d\u5165\u961f\uff1b\u4fee\u6cd5\u5728\u672a\u8ddf\u8e2a\u7684 content/host/metadata/swd.rs"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_target_discards ... ignored, \u82cd\u87ad\u4e4b\u74a7\u5c5e\u8f6c\u6362\u7f3a\u53e3\uff08\u672a\u4ea4\u4ed8\uff09\u2014\u2014\u8f6c\u6362\u540e\u542f\u7528\u672c\u7528\u4f8b\uff0c\u89c1\u53f0\u8d26\u7b2c 117 \u884c"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_swd_hufu::upstream_swd_hufu_dying_only ... ignored, \u864e\u7b26\u6fd2\u6b7b\u652f\u672a\u590d\u73b0\uff08\u6551\u63f4\u7a97\u53e3\u672a\u6253\u5f00\uff09\u2014\u2014\u672a\u6fd2\u6b7b\u652f\u5df2\u9a8c\u4e3a Rejected\uff0c\u89c1\u7b2c 52 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_wuxing_shengke_branches::upstream_wuxing_shengke_three_branches ... ignored, \u4e94\u884c\u751f\u514b\u4e24\u652f\u672a\u80fd\u5728\u884c\u4e3a\u9762\u590d\u73b0\uff08\u4e09\u6b21\u5747 \u22121\uff09\u2014\u2014\u89c1\u7b2c 51 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_after_damage ... ignored, \u8d81\u706b\u6253\u52ab damageEnd \u7a97\u53e3\u672a\u51fa\u73b0\uff08\u4f24\u5bb3\u5df2\u786e\u8ba4\u53d1\u751f\uff09\u2014\u2014\u89c1\u7b2c 53 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_chain_kill_fires_on_first_target ... ignored, \u94fe\u6740\uff1a\u786e\u8ba4\u8be2\u95ee\u5df2\u51fa\u73b0\uff08trigger_confirm\uff09\uff0c\u4f46\u865a\u62df\u6740\u672a\u4ea7\u751f\u54cd\u5e94\u8be2\u95ee\u2014\u2014\u5d4c\u5957\u7ed3\u7b97\u5f85\u67e5"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-949e9316618c227b)",
+      "test": "test nc08_upstream_yunchou_zonghuo::upstream_zonghuo_discards_one_without_asking ... ignored, \u7eb5\u706b\uff1a\u786e\u8ba4\u540e\u672a\u5f03\u724c\uff08\u6807\u8bb0\u724c\u4ecd\u5728\u624b\uff1b\u4e24\u79cd\u4f24\u5bb3\u8def\u5f84\u5747\u590d\u73b0\uff09\u2014\u2014\u6839\u56e0\u5f85\u67e5\uff0c\u89c1\u7b2c 33/34 \u9879"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc04_vm_fault::nc04_pause_and_resume ... ignored, NC04 \u5f85\u529e\uff1aDSL \u9009\u62e9\u8bed\u53e5\u5173\u952e\u5b57\u5f85\u786e\u8ba4\u540e\u8865\u6302\u8d77\u2192\u7eed\u8dd1\u2192\u6545\u969c\u8986\u76d6"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, \u767b\u8bb0\u7f3a\u9677\u5b88\u62a4\uff1a\u547d\u4e2d\u5185\u6838\u60ac\u7a7a\u5f15\u7528\u6545\u969c\u5373\u5931\u8d25\uff08\u5f53\u524d seed 44170 \u547d\u4e2d\uff09\uff1b\u4fee\u590d\u540e\u5e94\u8f6c\u4e3a\u901a\u8fc7"
+    },
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-2256f5a3819588ae)",
+      "test": "test nc12_dangling_reference_repro::nc12_repro_seed_44170_step_10 ... ignored, \u767b\u8bb0\u7f3a\u9677\u5b88\u62a4\uff1aseed 44170 \u7b2c 10 \u6b65\u590d\u73b0\u5185\u6838\u60ac\u7a7a\u5f15\u7528\uff1b\u4fee\u590d\u540e\u5e94\u8f6c\u4e3a\u901a\u8fc7"
+    }
+  ],
+  "warning_headers": [
+    "warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`",
+    "warning: unused import: `primitives::enable_equip_slot`",
+    "warning: unused import: `primitives::resolve_xinfu_qiai`",
+    "warning: unused import: `primitives::resolve_twxiongjun`",
+    "warning: unused import: `primitives::resolve_yixiang`",
+    "warning: unused import: `primitives::resolve_qiangyong`",
+    "warning: unused import: `primitives::resolve_duoduan`",
+    "warning: unused import: `primitives::resolve_reliangyin`",
+    "warning: unused import: `commit_hand_compare`",
+    "warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`",
+    "warning: unused import: `Serialize`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `target`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `pile_zone`",
+    "warning: unused variable: `phase`",
+    "warning: unused variable: `skill`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `count`",
+    "warning: unused variable: `draw`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `target`",
+    "warning: unused variable: `target`",
+    "warning: unused variable: `kind`",
+    "warning: unused variable: `mode`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `actor`",
+    "warning: unreachable pattern",
+    "warning: unused variable: `player`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `count`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `dodger`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `player`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `card`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `view`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `target`",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `target`",
+    "warning: unused variable: `target`",
+    "warning: unused variable: `targets`",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `value`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `kongsheng_def`",
+    "warning: unused variable: `source`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `action`",
+    "warning: unused variable: `card`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `skill`",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unreachable pattern",
+    "warning: unused variable: `flipped`",
+    "warning: function `validate_sha_target` is never used",
+    "warning: function `wuxie_tokens` is never used",
+    "warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used",
+    "warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used",
+    "warning: constant `RESOLVE_DCNIJI_MAGIC` is never used",
+    "warning: constant `RESOLVE_QINMIAN_MAGIC` is never used",
+    "warning: function `suit_from_tag` is never used",
+    "warning: function `mingren_color_mask` is never used",
+    "warning: function `kongsheng_pile_cards_by_def` is never used",
+    "warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used",
+    "warning: function `resolve_rechuhai_choice` is never used",
+    "warning: unused `Result` that must be used",
+    "warning: `engine-core` (lib) generated 107 warnings (run `cargo fix --lib -p engine-core` to apply 83 suggestions)",
+    "warning: unused variable: `c`",
+    "warning: struct `ForkMeta` is never constructed",
+    "warning: function `assert_no_foreign_hand_faces` is never used",
+    "warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)",
+    "warning: unused imports: `CardDefId`, `CardId`, and `Suit`",
+    "warning: unused imports: `CardKind`, `Card`, and `ZoneKind`",
+    "warning: unused imports: `CardId` and `DomainEvent`",
+    "warning: unused import: `engine_core::state::ZoneKind`",
+    "warning: duplicated attribute",
+    "warning: unused import: `engine_core::trigger::TriggerFireRecord`",
+    "warning: unused import: `engine_core::state::CardKind`",
+    "warning: unused import: `CardId`",
+    "warning: unused imports: `ChoiceKind`, `CommandResult`, and `TurnPhaseTag`",
+    "warning: unused import: `CardId`",
+    "warning: unused import: `TurnPhaseTag`",
+    "warning: unused import: `Zone`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ChoiceId`",
+    "warning: unused import: `CommandResult`",
+    "warning: unused imports: `CardDefId` and `Suit`",
+    "warning: unused imports: `CardKind` and `Card`",
+    "warning: unused import: `CardId`",
+    "warning: unused import: `engine_core::trigger::TriggerFireRecord`",
+    "warning: unused imports: `QueryRequest` and `QueryResponse`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused imports: `CardDefId` and `Suit`",
+    "warning: unused import: `PipelineResult`",
+    "warning: unused imports: `Card`, `Phase`, and `ZoneKind`",
+    "warning: unused imports: `CardDefId` and `Suit`",
+    "warning: unused imports: `CardKind` and `Card`",
+    "warning: unused import: `CardId`",
+    "warning: unused import: `engine_core::trigger::TriggerFireRecord`",
+    "warning: unused import: `CardId`",
+    "warning: unused import: `ZoneKind`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `card`",
+    "warning: unused variable: `state`",
+    "warning: unused variable: `other`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `pile_def`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: function `inject_hand_card` is never used",
+    "warning: function `resolve` is never used",
+    "warning: constant `REXIANZHEN_LOSE` is never used",
+    "warning: function `add_bound_skill` is never used",
+    "warning: constant `MOUKUI` is never used",
+    "warning: constant `MOUKUI_SRC` is never used",
+    "warning: function `setup` is never used",
+    "warning: function `sha_card` is never used",
+    "warning: function `hand_of` is never used",
+    "warning: function `resolve` is never used",
+    "warning: function `fire_sha` is never used",
+    "warning: function `inject_hand_card` is never used",
+    "warning: function `hand_of` is never used",
+    "warning: function `inject_hand_card` is never used",
+    "warning: constant `MOBILE` is never used",
+    "warning: function `resolve` is never used",
+    "warning: constant `TUIFENG2_SRC` is never used",
+    "warning: constant `NSDIEMOU_SRC` is never used",
+    "warning: function `has_skill_state` is never used",
+    "warning: function `dispatch` is never used",
+    "warning: constant `REFRESH` is never used",
+    "warning: function `hand_of` is never used",
+    "warning: function `rank_of` is never used",
+    "warning: variable `onlyOL` should have a snake case name",
+    "warning: `engine-core` (test \"original_misc\") generated 69 warnings (run `cargo fix --test \"original_misc\" -p engine-core` to apply 44 suggestions)",
+    "warning: unused imports: `CardDefId`, `CardId`, and `Suit`",
+    "warning: unused imports: `CardKind`, `Card`, and `ZoneKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused imports: `CardId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, `PlayerId`, and `SkillDefId`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused imports: `EffectError`, `bootstrap_match`, and `run_effects`",
+    "warning: unused imports: `Card`, `GameState`, and `ZoneKind`",
+    "warning: unused import: `engine_core::transaction::Transaction`",
+    "warning: unused import: `rule_api::EffectRequest`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `other`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `skill`",
+    "warning: unused variable: `target`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `holder`",
+    "warning: unused variable: `cur`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `state`",
+    "warning: variable does not need to be mutable",
+    "warning: function `inject_hand` is never used",
+    "warning: constant `SOURCES_DIR` is never used",
+    "warning: function `sources` is never used",
+    "warning: variable `CLANSHIZE` should have a snake case name",
+    "warning: variable `CLANMUYIN` should have a snake case name",
+    "warning: variable `CLANFENSHI` should have a snake case name",
+    "warning: unused `Result` that must be used",
+    "warning: `engine-core` (test \"original_ol\") generated 53 warnings (run `cargo fix --test \"original_ol\" -p engine-core` to apply 46 suggestions)",
+    "warning: value assigned to `key` is never read",
+    "warning: unused variable: `seed`",
+    "warning: function `module` is never used",
+    "warning: `engine-core` (test \"misc\") generated 3 warnings (run `cargo fix --test \"misc\" -p engine-core` to apply 1 suggestion)",
+    "warning: unused imports: `ChoiceKind` and `CommandResult`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused import: `engine_core::state::ZoneKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused imports: `CommandKind`, `Command`, `ExpectedRevision`, and `IdempotencyKey`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `turn_flag`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `owner`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `top1`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `give_cards`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `h1`",
+    "warning: unused variable: `h2`",
+    "warning: unused variable: `h2`",
+    "warning: unused variable: `diamond`",
+    "warning: unused variable: `sha`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `state`",
+    "warning: unused variable: `owner`",
+    "warning: unused variable: `h1`",
+    "warning: unused variable: `h2`",
+    "warning: variable does not need to be mutable",
+    "warning: constant `GONGSUNZAN` is never used",
+    "warning: function `end_event` is never used",
+    "warning: field `far` is never read",
+    "warning: function `option_tokens` is never used",
+    "warning: function `alloc_card` is never used",
+    "warning: field `challenger` is never read",
+    "warning: function `option_tokens` is never used",
+    "warning: function `fire_used` is never used",
+    "warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing",
+    "warning: unused `Result` that must be used",
+    "warning: calls to `std::mem::drop` with a reference instead of an owned value does nothing",
+    "warning: `engine-core` (test \"original_shenhua\") generated 77 warnings (run `cargo fix --test \"original_shenhua\" -p engine-core` to apply 66 suggestions)",
+    "warning: unused imports: `GameState` and `Phase`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `DomainEvent`",
+    "warning: unused imports: `Card` and `ZoneKind`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `Phase`",
+    "warning: unused imports: `DomainEvent` and `TurnPhaseTag`",
+    "warning: unused import: `EffectError`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `TurnPhaseTag`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused imports: `Card` and `ZoneKind`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `MarkDefId`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused import: `engine_core::state::GameState`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused imports: `CardDefId`, `CardId`, and `Suit`",
+    "warning: unused imports: `CardKind` and `Card`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `ChoiceId`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused import: `Phase`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `MarkDefId`",
+    "warning: unused imports: `ChoiceKind` and `ZoneId`",
+    "warning: unused imports: `CardDefId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, `IdempotencyKey`, and `Suit`",
+    "warning: unused imports: `Card` and `ZoneKind`",
+    "warning: unused import: `engine_core::Engine`",
+    "warning: unused imports: `CardDefId` and `Suit`",
+    "warning: unused import: `Card`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `PipelineResult`",
+    "warning: unused imports: `ChoiceKind` and `ZoneId`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events as dfx`",
+    "warning: unused variable: `player`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `state`",
+    "warning: unused variable: `hand`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `player`",
+    "warning: unused variable: `state`",
+    "warning: unused variable: `draw`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `state`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `other`",
+    "warning: unused variable: `other`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: function `inject_hand` is never used",
+    "warning: function `inject_hand` is never used",
+    "warning: function `inject_hand` is never used",
+    "warning: constant `FALU_CLUB` is never used",
+    "warning: constant `FALU_DIAMOND` is never used",
+    "warning: comparison is useless due to type limits",
+    "warning: `engine-core` (test \"original_sp\") generated 81 warnings (run `cargo fix --test \"original_sp\" -p engine-core` to apply 75 suggestions)",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: `engine-core` (lib test) generated 109 warnings (107 duplicates) (run `cargo fix --lib -p engine-core --tests` to apply 2 suggestions)",
+    "warning: unused import: `DomainEvent`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `SkillId`",
+    "warning: unused import: `EffectError`",
+    "warning: unused imports: `CardDefId` and `CardId`",
+    "warning: unused imports: `CardDefId` and `CardId`",
+    "warning: unused imports: `CardDefId` and `CardId`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `DomainEvent`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused imports: `CommandKind`, `CommandResult`, `Command`, and `DomainEvent`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `ContinuationKind`",
+    "warning: unused import: `CommandResult`",
+    "warning: unused imports: `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused import: `EffectError`",
+    "warning: unreachable expression",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `armor`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `state`",
+    "warning: function `resolve` is never used",
+    "warning: function `resolve` is never used",
+    "warning: function `resolve` is never used",
+    "warning: function `resolve` is never used",
+    "warning: function `resolve` is never used",
+    "warning: `engine-core` (test \"original_yijiang\") generated 38 warnings (run `cargo fix --test \"original_yijiang\" -p engine-core` to apply 32 suggestions)",
+    "warning: unused import: `EffectError`",
+    "warning: unused imports: `DomainEvent` and `TurnPhaseTag`",
+    "warning: unused import: `Phase`",
+    "warning: unused imports: `TriggerFireRecord` and `dispatch_for_events`",
+    "warning: unused import: `GameState`",
+    "warning: unused import: `ChoiceKind`",
+    "warning: unused import: `Phase`",
+    "warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`",
+    "warning: unused imports: `PipelineResult` and `apply_command`",
+    "warning: unused import: `EffectError`",
+    "warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused import: `EffectError`",
+    "warning: unused variable: `third`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `tx`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `owner`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `owner`",
+    "warning: function `resolve_choice` is never used",
+    "warning: function `inject_hand` is never used",
+    "warning: function `inject_hand` is never used",
+    "warning: function `confirm` is never used",
+    "warning: function `resolve_choice` is never used",
+    "warning: unused `Result` that must be used",
+    "warning: unused `Result` that must be used",
+    "warning: `engine-core` (test \"original_mobile\") generated 40 warnings (run `cargo fix --test \"original_mobile\" -p engine-core` to apply 33 suggestions)",
+    "warning: unused imports: `ChoiceKind` and `ZoneId`",
+    "warning: unused imports: `ChoiceId`, `CommandKind`, `CommandResult`, `Command`, `ExpectedRevision`, and `IdempotencyKey`",
+    "warning: unused import: `engine_core::command::apply_command`",
+    "warning: unused imports: `ChoiceKind` and `ZoneId`",
+    "warning: unused import: `DomainEvent`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `Card`",
+    "warning: unused imports: `CardDefId`, `CardId`, and `Suit`",
+    "warning: unused imports: `CardKind`, `Card`, and `ZoneKind`",
+    "warning: unused import: `engine_core::state::ContinuationKind`",
+    "warning: unused variable: `target`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `sid2`",
+    "warning: unused variable: `sha`",
+    "warning: unused variable: `owner`",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `holder`",
+    "warning: constant `SOURCE` is never used",
+    "warning: function `drive_use_card` is never used",
+    "warning: function `equip_count` is never used",
+    "warning: `engine-core` (test \"original_key\") generated 22 warnings (run `cargo fix --test \"original_key\" -p engine-core` to apply 19 suggestions)",
+    "warning: unused import: `CardId`",
+    "warning: unused import: `EffectError`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused import: `CardId`",
+    "warning: unused imports: `CardKind` and `Card`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused import: `RULE_VM_ABI_VERSION`",
+    "warning: unused variable: `owner_hand_before`",
+    "warning: unused variable: `first_hand_before`",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: variable does not need to be mutable",
+    "warning: unused variable: `saw_lose`",
+    "warning: unused variable: `sid`",
+    "warning: constant `PLAY_MASK` is never used",
+    "warning: constant `TWJIEQIU` is never used",
+    "warning: function `discard_move` is never used",
+    "warning: `engine-core` (test \"original_offline\") generated 19 warnings (run `cargo fix --test \"original_offline\" -p engine-core` to apply 16 suggestions)",
+    "warning: function `err` is never used",
+    "warning: function `omnisearch_query` is never used",
+    "warning: function `desktop_adapt_apply` is never used",
+    "warning: function `desktop_adapt_export` is never used",
+    "warning: function `cardpile_scale` is never used",
+    "warning: function `desktop_adapt_invoke` is never used",
+    "warning: function `coin_apply` is never used",
+    "warning: function `elo_apply` is never used",
+    "warning: function `sj_apply` is never used",
+    "warning: function `shousha_apply` is never used",
+    "warning: function `shousha_mvp_apply` is never used",
+    "warning: function `douzhuan_apply` is never used",
+    "warning: function `update_guard_apply` is never used",
+    "warning: function `drag_read_apply` is never used",
+    "warning: function `boss_play_apply` is never used",
+    "warning: function `fool_apply` is never used",
+    "warning: function `martial_apply` is never used",
+    "warning: function `omnisearch_debug` is never used",
+    "warning: `engine-native-wasm` (lib) generated 18 warnings",
+    "warning: unused import: `lock::StoreWriterLock`",
+    "warning: unused variable: `skip_state_file_sync`",
+    "warning: unused variable: `skip_state_dir_sync`",
+    "warning: multiple methods are never used",
+    "warning: fields `package_id`, `deferred`, and `frozen` are never read",
+    "warning: struct `NativeGameRequest` is never constructed",
+    "warning: function `default_planner_nodes` is never used",
+    "warning: function `default_planner_lookahead` is never used",
+    "warning: function `default_max_steps` is never used",
+    "warning: struct `NativeGameSummary` is never constructed",
+    "warning: function `create_native_game` is never used",
+    "warning: function `load_refs` is never used",
+    "warning: struct `NativeMatchArchive` is never constructed",
+    "warning: struct `NativeRestoreRequest` is never constructed",
+    "warning: struct `NativeRestoreSummary` is never constructed",
+    "warning: function `hex_encode` is never used",
+    "warning: function `hex_decode` is never used",
+    "warning: function `save_fresh_match` is never used",
+    "warning: function `restore_match` is never used",
+    "warning: function `open_native_match` is never used",
+    "warning: function `restore_native_match` is never used",
+    "warning: function `reference_binding` is never used",
+    "warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used",
+    "warning: field `room_id` is never read",
+    "warning: method `dir` is never used",
+    "warning: constant `WAL_BLOCK_DOMAIN` is never used",
+    "warning: method `compute_hash` is never used",
+    "warning: fields `blocks`, `block_signatures`, and `result_record` are never read",
+    "warning: constant `DEFAULT_BLOCK_SIZE` is never used",
+    "warning: multiple associated items are never used",
+    "warning: function `sign_block_hash` is never used",
+    "warning: function `key_bytes` is never used",
+    "warning: variants `ChooseGeneral` and `Disconnect` are never constructed",
+    "warning: fields `player_id`, `view`, and `choice` are never read",
+    "warning: struct `Member` is never constructed",
+    "warning: field `id` is never read",
+    "warning: function `spawn_room` is never used",
+    "warning: function `spawn_room_with_engine` is never used",
+    "warning: function `room_loop` is never used",
+    "warning: function `project_for` is never used",
+    "warning: function `legal_for` is never used",
+    "warning: function `choice_for` is never used",
+    "warning: function `public_codes` is never used",
+    "warning: function `fanout_after_command` is never used",
+    "warning: function `broadcast_roster` is never used",
+    "warning: function `hex_manifest` is never used",
+    "warning: method `set_frozen_packages` is never used",
+    "warning: function `set_seat_timeout_secs` is never used",
+    "warning: function `restore_room_from_disk` is never used",
+    "warning: function `spawn_native_room_if_configured` is never used",
+    "warning: function `join_reply_channel` is never used",
+    "warning: function `submit_reply_channel` is never used",
+    "warning: function `idem` is never used",
+    "warning: function `expected` is never used",
+    "warning: methods `slow_marker` and `send` are never used",
+    "warning: struct `Session` is never constructed",
+    "warning: struct `HandlerError` is never constructed",
+    "warning: associated function `new` is never used",
+    "warning: `game-server` (test \"nc09_dual_backend\") generated 58 warnings (run `cargo fix --test \"nc09_dual_backend\" -p game-server` to apply 3 suggestions)",
+    "warning: struct `ServerConfig` is never constructed",
+    "warning: associated function `from_env` is never used",
+    "warning: field `replay` is never read",
+    "warning: variants `Spectate`, `ChooseGeneral`, and `Disconnect` are never constructed",
+    "warning: fields `seat`, `role`, `reconnect_token`, `view`, `choice`, and `legal_actions` are never read",
+    "warning: associated function `new` is never used",
+    "warning: method `slow_marker` is never used",
+    "warning: function `choice_for` is never used",
+    "warning: `game-server` (test \"nc09_native_view_bridge\") generated 21 warnings (20 duplicates)",
+    "warning: `game-server` (test \"long_run_soak\") generated 18 warnings (11 duplicates)",
+    "warning: variants `Submit`, `Snapshot`, and `Disconnect` are never constructed",
+    "warning: fields `player_id`, `reconnect_token`, `view`, and `legal_actions` are never read",
+    "warning: `game-server` (test \"multi_room_stress\") generated 18 warnings (18 duplicates)",
+    "warning: multiple methods are never used",
+    "warning: struct `LoadedPack` is never constructed",
+    "warning: struct `FrozenNativePackage` is never constructed",
+    "warning: methods `parsed_package`, `package`, and `text_asset` are never used",
+    "warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used",
+    "warning: `game-server` (test \"nc08_install_matrix\") generated 22 warnings (17 duplicates)",
+    "warning: struct `NativePackageInfo` is never constructed",
+    "warning: struct `NativeContent` is never constructed",
+    "warning: multiple associated items are never used",
+    "warning: `game-server` (test \"nc08_cross_line\") generated 24 warnings (21 duplicates)",
+    "warning: `game-server` (test \"nc09_native_room_session\") generated 43 warnings (41 duplicates)",
+    "warning: function `choice_for` is never used",
+    "warning: function `legal_actions_for` is never used",
+    "warning: `game-server` (example \"emit_projection_fixture\") generated 2 warnings",
+    "warning: constant `WAL_BLOCK_DOMAIN` is never used",
+    "warning: constant `DEFAULT_BLOCK_SIZE` is never used",
+    "warning: method `result_record` is never used",
+    "warning: `game-server` (test \"fault_injection\") generated 7 warnings (6 duplicates)",
+    "warning: `game-server` (test \"tournament_wal_signing\") generated 2 warnings",
+    "warning: function `legal_actions_for` is never used",
+    "warning: `game-server` (test \"nc09_referee_projection\") generated 1 warning",
+    "warning: methods `activate_version`, `disable_package`, `enable_package`, `revoke_package`, and `installed` are never used",
+    "warning: fields `package_id` and `deferred` are never read",
+    "warning: `game-server` (test \"native_frozen_packages\") generated 18 warnings (16 duplicates)",
+    "warning: variants `Spectate`, `Snapshot`, `ChooseGeneral`, and `Disconnect` are never constructed",
+    "warning: fields `reconnect_token`, `choice`, and `legal_actions` are never read",
+    "warning: multiple methods are never used",
+    "warning: method `load_room_packages` is never used",
+    "warning: fields `role`, `choice`, and `legal_actions` are never read",
+    "warning: `game-server` (test \"room_flow\") generated 18 warnings (16 duplicates)",
+    "warning: `game-server` (test \"nc09_native_actor\") generated 52 warnings (49 duplicates)",
+    "warning: unused import: `StreamExt`",
+    "warning: unused imports: `CommandKind`, `Command`, and `ExpectedRevision`",
+    "warning: method `load_reference` is never used",
+    "warning: `game-server` (test \"native_upgrade_rollback\") generated 17 warnings (16 duplicates)",
+    "warning: struct `NativePackageInfo` is never constructed",
+    "warning: struct `NativeContent` is never constructed",
+    "warning: multiple associated items are never used",
+    "warning: struct `LoadedPack` is never constructed",
+    "warning: struct `NativeGameRequest` is never constructed",
+    "warning: function `default_planner_nodes` is never used",
+    "warning: function `default_planner_lookahead` is never used",
+    "warning: function `default_max_steps` is never used",
+    "warning: struct `NativeGameSummary` is never constructed",
+    "warning: function `create_native_game` is never used",
+    "warning: function `load_refs` is never used",
+    "warning: struct `NativeMatchArchive` is never constructed",
+    "warning: struct `NativeRestoreRequest` is never constructed",
+    "warning: struct `NativeRestoreSummary` is never constructed",
+    "warning: function `hex_encode` is never used",
+    "warning: function `hex_decode` is never used",
+    "warning: function `save_fresh_match` is never used",
+    "warning: function `restore_match` is never used",
+    "warning: function `open_native_match` is never used",
+    "warning: function `restore_native_match` is never used",
+    "warning: struct `FrozenNativePackage` is never constructed",
+    "warning: function `reference_binding` is never used",
+    "warning: methods `parsed_package`, `package`, and `text_asset` are never used",
+    "warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used",
+    "warning: `game-server` (example \"policy_head2head\") generated 24 warnings",
+    "warning: unused import: `StreamExt`",
+    "warning: unused variable: `skip_state_file_sync`",
+    "warning: unused variable: `skip_state_dir_sync`",
+    "warning: value assigned to `rev` is never read",
+    "warning: value assigned to `legal` is never read",
+    "warning: `game-server` (test \"nc05_campaign_profile\") generated 20 warnings (20 duplicates)",
+    "warning: method `dir` is never used",
+    "warning: methods `enable_package`, `revoke_package`, `rollback`, and `load_reference` are never used",
+    "warning: function `set_seat_timeout_secs` is never used",
+    "warning: function `spawn_room_native` is never used",
+    "warning: function `spawn_room_native_with_password` is never used",
+    "warning: function `restore_room_from_disk` is never used",
+    "warning: function `join_reply_channel` is never used",
+    "warning: function `submit_reply_channel` is never used",
+    "warning: function `idem` is never used",
+    "warning: function `expected` is never used",
+    "warning: method `retry_failed` is never used",
+    "warning: constant `WAL_BLOCK_DOMAIN` is never used",
+    "warning: method `compute_hash` is never used",
+    "warning: fields `blocks`, `block_signatures`, and `result_record` are never read",
+    "warning: constant `DEFAULT_BLOCK_SIZE` is never used",
+    "warning: multiple associated items are never used",
+    "warning: function `sign_block_hash` is never used",
+    "warning: function `key_bytes` is never used",
+    "warning: field `id` is never read",
+    "warning: function `spawn_room` is never used",
+    "warning: function `legal_actions_for` is never used",
+    "warning: fields `packs`, `physical_ids`, `held`, and `selection` are never read",
+    "warning: method `restore` is never used",
+    "warning: `game-server` (example \"emit_approved_b_metadata\") generated 3 warnings",
+    "warning: methods `activate_version`, `disable_package`, `enable_package`, `uninstall_package`, `revoke_package`, and `rollback` are never used",
+    "warning: field `frozen` is never read",
+    "warning: `game-server` (test \"native_product_path\") generated 10 warnings (8 duplicates)",
+    "warning: `game-server` (test \"long_run_memory\") generated 18 warnings (18 duplicates)",
+    "warning: field `root` is never read",
+    "warning: multiple associated items are never used",
+    "warning: fields `player_id`, `choice`, and `legal_actions` are never read",
+    "warning: function `spawn_room_native` is never used",
+    "warning: function `spawn_room_native_with_password` is never used",
+    "warning: `game-server` (bin \"game-server\" test) generated 27 warnings (run `cargo fix --bin \"game-server\" -p game-server --tests` to apply 4 suggestions)",
+    "warning: `game-server` (test \"nc09_native_durability\") generated 57 warnings (52 duplicates)",
+    "warning: constant `PACK` is never used",
+    "warning: multiple methods are never used",
+    "warning: `game-server` (test \"nc05_lifecycle_heavy\") generated 12 warnings (10 duplicates)",
+    "warning: multiple methods are never used",
+    "warning: field `frozen` is never read",
+    "warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used",
+    "warning: `game-server` (test \"approved_b_metadata\") generated 1 warning (1 duplicate)",
+    "warning: `game-server` (example \"policy_eval\") generated 14 warnings (11 duplicates)",
+    "warning: multiple methods are never used",
+    "warning: fields `deferred` and `frozen` are never read",
+    "warning: `game-server` (test \"nc02_install_identity\") generated 20 warnings (18 duplicates)",
+    "warning: field `selection` is never read",
+    "warning: `game-server` (test \"nc09_machine_projection\") generated 2 warnings (1 duplicate)",
+    "warning: fields `package_id`, `pack`, `deferred`, and `frozen` are never read",
+    "warning: `game-server` (test \"native_onlyol_general\") generated 20 warnings (19 duplicates)",
+    "warning: `game-server` (test \"nc05_skin_ui\") generated 20 warnings (20 duplicates)",
+    "warning: unused import: `ClientRole`",
+    "warning: `game-server` (test \"long_run_bot\") generated 18 warnings (18 duplicates)",
+    "warning: `game-server` (test \"m8_rolling_upgrade\") generated 20 warnings (19 duplicates) (run `cargo fix --test \"m8_rolling_upgrade\" -p game-server` to apply 1 suggestion)",
+    "warning: function `bootstrap` is never used",
+    "warning: field `max_cmds_per_sec` is never read",
+    "warning: methods `dir`, `load_all`, and `by_id` are never used",
+    "warning: field `path` is never read",
+    "warning: method `path` is never used",
+    "warning: associated function `new` is never used",
+    "warning: struct `OutboxMessage` is never constructed",
+    "warning: enum `OutboxKind` is never used",
+    "warning: struct `DurableOutbox` is never constructed",
+    "warning: multiple associated items are never used",
+    "warning: function `recover_engine` is never used",
+    "warning: variant `ChooseGeneral` is never constructed",
+    "warning: `game-server` (bin \"game-server\") generated 30 warnings (18 duplicates)",
+    "warning: duplicated attribute",
+    "warning: `engine-native-wasm` (lib test) generated 2 warnings (1 duplicate)"
+  ]
+}

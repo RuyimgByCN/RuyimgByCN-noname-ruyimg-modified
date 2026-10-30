@@ -55,6 +55,7 @@ pub fn project_observer(state: &GameState, observer: ObserverKind) -> ObserverSn
             SeatView {
                 player: p.id,
                 character_def: p.character_def,
+                generals: [None, None],
                 seat: p.seat,
                 hp: p.hp,
                 max_hp: p.max_hp,

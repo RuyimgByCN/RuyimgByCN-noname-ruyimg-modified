@@ -8,6 +8,7 @@ description = "engine-native 的 wasm_bindgen 窄壳（T13 客户端产品面）
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
+engine-api = { workspace = true }
 engine-native = { path = "../engine-native" }
 content-native-loader = { path = "../content-native-loader" }
 content-schema = { workspace = true }

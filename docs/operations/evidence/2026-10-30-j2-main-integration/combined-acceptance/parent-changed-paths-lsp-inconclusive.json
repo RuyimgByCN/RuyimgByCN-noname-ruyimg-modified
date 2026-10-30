@@ -1,0 +1,8 @@
+{
+  "requested_source": "lsp",
+  "paths_checked": 5,
+  "diagnostics": 0,
+  "confirmed_clean": 0,
+  "inconclusive": 5,
+  "interpretation": "No language-server answer within1000ms, not a clean diagnostic result; actual Rust compiler red/green and forthcoming strict/full checks are separate evidence"
+}

@@ -1,0 +1,13 @@
+✔ two slots preserve def zero and defaults accept old payloads (0.759292ms)
+✔ canonical kinds and prompts reach real envelope conversion (0.490625ms)
+✔ metadata wrong types refuse explicitly at local JSON boundary (0.3395ms)
+✔ old functional TypeScript reader ignores extra metadata (2.833625ms)
+✔ production prompt literals and extension keys have readable presentation without internal keys (25.791375ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 239.721708

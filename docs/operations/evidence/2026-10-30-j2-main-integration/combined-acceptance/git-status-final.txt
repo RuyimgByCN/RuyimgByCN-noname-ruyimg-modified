@@ -1,0 +1,118 @@
+ M Cargo.lock
+ M apps/desktop-client/src/native_envelope.rs
+ M apps/game-server/src/native_view.rs
+ M apps/game-server/src/native_ws_e2e/referee.rs
+ M apps/game-server/tests/native_onlyol_general.rs
+ M apps/game-server/tests/nc09_projection_parity.rs
+ M apps/web-client/scripts/native-worker-smoke.mjs
+ M apps/web-client/scripts/network-client.test.mjs
+ M apps/web-client/scripts/pa09-desktop-transport.test.mjs
+ M apps/web-client/src/components/battle/SeatCard.vue
+ M apps/web-client/src/engine/desktopEngineTransport.ts
+ M apps/web-client/src/engine/networkClient.ts
+ M apps/web-client/src/types/engine.ts
+ M apps/web-client/src/views/BattleView.vue
+ M apps/web-client/src/worker/nativeBackend.ts
+ M content/original/ported/onlyOL/ol_pingkou.skill
+ M content/original/ported/shiji/README.md
+ M content/original/ported/shiji/archive/README.md
+ M content/original/ported/shiji/metadata.json
+ M content/original/ported/shiji/pinghe.skill
+ M content/original/ported/shiji/shiji.npack.json
+ M crates/content-native-loader/src/lib.rs
+ M crates/content-runtime/examples/gen_cardpile_packages.rs
+ M crates/engine-api/src/choice.rs
+ M crates/engine-api/src/version.rs
+ M crates/engine-api/src/view.rs
+ M crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs
+ M crates/engine-core/src/projection.rs
+ M crates/engine-core/src/snapshot.rs
+ M crates/engine-native-content/Cargo.toml
+ M crates/engine-native-content/src/content/hooks.rs
+ M crates/engine-native-content/src/content/mod.rs
+ M crates/engine-native-content/src/content/standard.rs
+ M crates/engine-native-kernel/src/archive/machine_decode.rs
+ M crates/engine-native-kernel/src/archive/machine_encode.rs
+ M crates/engine-native-kernel/src/archive/resolution.rs
+ M crates/engine-native-kernel/src/catalog.rs
+ M crates/engine-native-kernel/src/kernel/damage.rs
+ M crates/engine-native-kernel/src/kernel/phase.rs
+ M crates/engine-native-kernel/src/kernel/phase/discard.rs
+ M crates/engine-native-kernel/src/kernel/phase/draw.rs
+ M crates/engine-native-kernel/src/kernel/phase/play.rs
+ M crates/engine-native-kernel/src/machine.rs
+ M crates/engine-native-kernel/src/resolution.rs
+ M crates/engine-native-kernel/src/rvm_bridge.rs
+ M crates/engine-native-kernel/src/rvm_bridge/machine.rs
+ M crates/engine-native-kernel/src/rvm_ops.rs
+ M crates/engine-native-kernel/src/rvm_ops/codec.rs
+ M crates/engine-native-kernel/src/rvm_ops/query.rs
+ M crates/engine-native-kernel/src/snap/asks.rs
+ M crates/engine-native-kernel/src/snap/machine_validation.rs
+ M crates/engine-native-kernel/src/snap/restore.rs
+ M crates/engine-native-kernel/src/snap/types.rs
+ M crates/engine-native-kernel/src/snap/validation.rs
+ M crates/engine-native-kernel/src/state.rs
+ M crates/engine-native-kernel/src/state/core_ops.rs
+ M crates/engine-native-wasm/Cargo.toml
+ M crates/engine-native-wasm/src/session.rs
+ M crates/engine-native-wasm/tests/gt014_import_validation_parity.rs
+ M crates/engine-native-wasm/tests/vm_package_worker.rs
+ M crates/engine-native/src/ai.rs
+ M crates/engine-native/src/ai/remap.rs
+ M crates/engine-native/src/engine/hash/machine.rs
+ M crates/engine-native/src/engine/snapshot.rs
+ M crates/engine-native/src/view.rs
+ M crates/engine-native/tests/a0_tag_registry.rs
+ M crates/engine-native/tests/g1_cardpile.rs
+ M crates/engine-native/tests/groups/misc.rs
+ M crates/engine-native/tests/groups/nc_rounds.rs
+ M crates/engine-native/tests/nc04_cards_given_event.rs
+ M crates/engine-native/tests/nc04_vm_resume.rs
+ M crates/engine-native/tests/nc07_archive_hash_fields.rs
+ M crates/engine-native/tests/nc07_lianyaohu_hash.rs
+ M crates/engine-native/tests/nc09_machine_ownership.rs
+ M crates/engine-native/tests/pa12_batch4_1_host_primitives.rs
+ M crates/engine-native/tests/pa12_tag656_version.rs
+ M crates/engine-native/tests/replay_scenarios.rs
+ M crates/engine-native/tests/t8_rvm_bridge.rs
+ M docs/architecture/native-progress.md
+ M docs/architecture/native-remaining-ledger.md
+ M docs/architecture/native-rules-baseline.md
+ M docs/native-coverage-manifest.md
+?? .pi-lens.json
+?? apps/game-server/examples/emit_approved_b_metadata.rs
+?? apps/game-server/tests/adr0786_j2_author_lifecycle.rs
+?? apps/game-server/tests/approved_b_metadata.rs
+?? apps/game-server/tests/support/ws5_metadata_readers.rs
+?? apps/web-client/scripts/adr0786-j2-active-smoke.mjs
+?? apps/web-client/scripts/adr0786-j2-cross-target.mjs
+?? apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs
+?? apps/web-client/scripts/approved-b-metadata.test.mjs
+?? apps/web-client/scripts/approved-b-old-reader.ts
+?? apps/web-client/scripts/approved-b-parity.mjs
+?? apps/web-client/scripts/approved-b-ui.ts
+?? apps/web-client/src/components/battle/GeneralPortrait.vue
+?? apps/web-client/src/engine/observerMetadata.ts
+?? content/original/ported/shiji/archive/shiji-0.1.0.npack.json
+?? content/original/ported/shiji/archive/shiji-0.2.4.npack.json
+?? crates/content-native-loader/src/vm_active.rs
+?? crates/engine-native-content/src/content/vm_effects.rs
+?? crates/engine-native-content/src/content/vm_effects/
+?? crates/engine-native-kernel/src/rvm_bridge/handlers.rs
+?? crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs
+?? crates/engine-native-wasm/tests/adr0786_j2_cross_target/
+?? crates/engine-native/tests/adr0786_j2_active_bridge.rs
+?? crates/engine-native/tests/adr0786_j2_effect_choices.rs
+?? crates/engine-native/tests/adr0786_j2_package_versions.rs
+?? crates/engine-native/tests/adr0786_j2_review_regressions.rs
+?? crates/engine-native/tests/nc10_j2_vm_privacy.rs
+?? docs/operations/evidence/2026-10-30-j2-main-integration/
+?? docs/operations/evidence/2026-10-30-nc10-continuations/isolated/liaoyuan-restore-repro.archive
+?? docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/
+?? docs/operations/evidence/2026-10-30-observer-metadata/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/github-related-repositories-readonly.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/physical-devices-recheck.json
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine/archives/
+?? docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-production-frontend.tar.gz

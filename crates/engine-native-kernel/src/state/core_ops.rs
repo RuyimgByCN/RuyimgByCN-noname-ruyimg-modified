@@ -27,7 +27,12 @@ impl GameStateCore {
     pub fn identity_roles(&self) -> Option<&[Role]> {
         match &self.mode {
             GameMode::Identity { roles } => Some(roles),
-            GameMode::Prototype | GameMode::Kingdoms | GameMode::Versus { .. } | GameMode::Doudizhu { .. } | GameMode::Boss { .. } | GameMode::Kof { .. } => None,
+            GameMode::Prototype
+            | GameMode::Kingdoms
+            | GameMode::Versus { .. }
+            | GameMode::Doudizhu { .. }
+            | GameMode::Boss { .. }
+            | GameMode::Kof { .. } => None,
         }
     }
 
@@ -42,7 +47,9 @@ impl GameStateCore {
     /// Boss 模式参数：boss 座位与重整阈值（非 Boss 为 None）。
     pub fn boss_mode(&self) -> Option<(PlayerId, u8)> {
         match &self.mode {
-            GameMode::Boss { boss, chongzheng, .. } => Some((*boss, *chongzheng)),
+            GameMode::Boss {
+                boss, chongzheng, ..
+            } => Some((*boss, *chongzheng)),
             _ => None,
         }
     }
@@ -133,7 +140,12 @@ impl GameStateCore {
                 let v: Vec<PlayerId> = others
                     .iter()
                     .copied()
-                    .filter(|t| self.player(*t).equips.iter().any(|c| catalog.card_slot_of(self, *c) == Some(crate::catalog::EquipSlot::Weapon)))
+                    .filter(|t| {
+                        self.player(*t).equips.iter().any(|c| {
+                            catalog.card_slot_of(self, *c)
+                                == Some(crate::catalog::EquipSlot::Weapon)
+                        })
+                    })
                     .collect();
                 (1, 1, v)
             }
@@ -213,9 +225,13 @@ impl GameStateCore {
     ) -> Option<crate::catalog::Faction> {
         let pl = self.player(p);
         if pl.revealed_generals[0] {
-            catalog.general_meta(pl.general_slots[0]?).map(|(_, f, ..)| f)
+            catalog
+                .general_meta(pl.general_slots[0]?)
+                .map(|(_, f, ..)| f)
         } else if pl.revealed_generals[1] {
-            catalog.general_meta(pl.general_slots[1]?).map(|(_, f, ..)| f)
+            catalog
+                .general_meta(pl.general_slots[1]?)
+                .map(|(_, f, ..)| f)
         } else {
             None
         }
@@ -233,8 +249,7 @@ impl GameStateCore {
             GameMode::Kingdoms => self.declared_faction(catalog, p),
             _ => {
                 let pl = self.player(p);
-                pl.general_slots[0]
-                    .and_then(|g| catalog.general_meta(g).map(|(_, f, ..)| f))
+                pl.general_slots[0].and_then(|g| catalog.general_meta(g).map(|(_, f, ..)| f))
             }
         }
     }
@@ -243,11 +258,7 @@ impl GameStateCore {
     /// 口径简化）：effective_faction 非空者按势力统计存活数，人数最大
     /// 的势力（并列同算）为大势力；未明置/无主将者不属大势力。上游
     /// forceMajor 技能标特例未建模（登记）。
-    pub fn is_major_faction(
-        &self,
-        catalog: &crate::catalog::Catalog,
-        p: PlayerId,
-    ) -> bool {
+    pub fn is_major_faction(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> bool {
         let mut counts: std::collections::BTreeMap<u8, u32> = Default::default();
         for q in self.alive_players() {
             if let Some(f) = self.effective_faction(catalog, q) {
@@ -315,7 +326,10 @@ impl GameStateCore {
     /// p 在座位环中的位置（环长度与玩家数不符时退回恒等位）。
     pub fn ring_pos(&self, p: PlayerId) -> usize {
         if self.seat_ring.len() == self.players.len() {
-            self.seat_ring.iter().position(|x| *x == p).unwrap_or(p as usize)
+            self.seat_ring
+                .iter()
+                .position(|x| *x == p)
+                .unwrap_or(p as usize)
         } else {
             p as usize
         }
@@ -325,7 +339,10 @@ impl GameStateCore {
     pub fn ring_next(&self, p: PlayerId) -> PlayerId {
         let n = self.players.len() as PlayerId;
         let pos = self.ring_pos(p);
-        self.seat_ring.get((pos + 1) % (n as usize)).copied().unwrap_or((p + 1) % n)
+        self.seat_ring
+            .get((pos + 1) % (n as usize))
+            .copied()
+            .unwrap_or((p + 1) % n)
     }
 
     /// 座位环中 p 的上一位（不计存活）。
@@ -335,7 +352,10 @@ impl GameStateCore {
         if pos == 0 {
             *self.seat_ring.last().unwrap_or(&(n - 1))
         } else {
-            self.seat_ring.get(pos - 1).copied().unwrap_or((p + n - 1) % n)
+            self.seat_ring
+                .get(pos - 1)
+                .copied()
+                .unwrap_or((p + n - 1) % n)
         }
     }
 
@@ -489,18 +509,14 @@ impl GameStateCore {
             })
             .unwrap_or(false);
         if pingxu {
-            let a_no_weapon = !self
-                .player(a)
-                .equips
-                .iter()
-                .any(|c| catalog.cards[*c as usize].kind.equip_slot()
-                    == Some(crate::catalog::EquipSlot::Weapon));
-            let b_no_armor = !self
-                .player(b)
-                .equips
-                .iter()
-                .any(|c| catalog.cards[*c as usize].kind.equip_slot()
-                    == Some(crate::catalog::EquipSlot::Armor));
+            let a_no_weapon = !self.player(a).equips.iter().any(|c| {
+                catalog.cards[*c as usize].kind.equip_slot()
+                    == Some(crate::catalog::EquipSlot::Weapon)
+            });
+            let b_no_armor = !self.player(b).equips.iter().any(|c| {
+                catalog.cards[*c as usize].kind.equip_slot()
+                    == Some(crate::catalog::EquipSlot::Armor)
+            });
             minus += u32::from(a_no_weapon);
             plus += u32::from(b_no_armor);
         }
@@ -520,10 +536,7 @@ impl GameStateCore {
                 .get(&(a, def))
                 .map(|i| i.enabled)
                 .unwrap_or(false);
-            if tuji
-                && self.turn.current == a
-                && self.turn.cards_used_play_phase > 0
-            {
+            if tuji && self.turn.current == a && self.turn.cards_used_play_phase > 0 {
                 minus += self.turn.cards_used_play_phase;
             }
         }
@@ -618,13 +631,7 @@ impl GameStateCore {
                 .get(&(a, def))
                 .map(|i| i.enabled)
                 .unwrap_or(false);
-            if enabled
-                && self
-                    .vm_aux
-                    .marks
-                    .get(&(a, u32::from(def)))
-                    .copied()
-                    == Some(i32::from(b))
+            if enabled && self.vm_aux.marks.get(&(a, u32::from(def))).copied() == Some(i32::from(b))
             {
                 return 1;
             }
@@ -640,8 +647,7 @@ impl GameStateCore {
             (0..self.players.len() as u8)
                 .filter(|p| {
                     self.player(*p).alive
-                        && self.effective_gender(*p)
-                            == crate::vocabulary::generals::Gender::Female
+                        && self.effective_gender(*p) == crate::vocabulary::generals::Gender::Female
                 })
                 .count() as u32
         } else {
@@ -684,10 +690,7 @@ impl GameStateCore {
 
     /// 有效性别（批③-b 第八把 雌雄）：主将槽有武将时取武将性别，
     /// 无武将默认男性（「性别有槽时筛选、无槽默认」惯例）。
-    pub fn effective_gender(
-        &self,
-        p: PlayerId,
-    ) -> crate::vocabulary::generals::Gender {
+    pub fn effective_gender(&self, p: PlayerId) -> crate::vocabulary::generals::Gender {
         self.player(p).general_slots[0]
             .and_then(crate::vocabulary::generals::general_gender)
             .unwrap_or(crate::vocabulary::generals::Gender::Male)
@@ -698,7 +701,12 @@ impl GameStateCore {
 
     /// 国战友方判定（上游 isFriendOf 简化）：双方明置势力已知且相同；
     /// 同一角色恒真。
-    pub fn is_friend_of(&self, catalog: &crate::catalog::Catalog, a: PlayerId, b: PlayerId) -> bool {
+    pub fn is_friend_of(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> bool {
         if a == b {
             return true;
         }
@@ -725,14 +733,22 @@ impl GameStateCore {
             next = self.ring_next(next);
             guard += 1;
         }
-        let next = if next == p || !alive(next) { None } else { Some(next) };
+        let next = if next == p || !alive(next) {
+            None
+        } else {
+            Some(next)
+        };
         let mut prev = self.ring_prev(p);
         guard = 0;
         while prev != p && !alive(prev) && guard < n {
             prev = self.ring_prev(prev);
             guard += 1;
         }
-        let prev = if prev == p || !alive(prev) { None } else { Some(prev) };
+        let prev = if prev == p || !alive(prev) {
+            None
+        } else {
+            Some(prev)
+        };
         (next, prev)
     }
 
@@ -788,7 +804,9 @@ impl GameStateCore {
         let mut cur = p;
         loop {
             let nxt = self.ring_next(cur);
-            if nxt == p || nxt == cur || !self.player(nxt).alive
+            if nxt == p
+                || nxt == cur
+                || !self.player(nxt).alive
                 || !self.is_friend_of(catalog, p, nxt)
             {
                 break;
@@ -801,7 +819,9 @@ impl GameStateCore {
         let mut cur = p;
         loop {
             let prv = self.ring_prev(cur);
-            if prv == p || prv == cur || !self.player(prv).alive
+            if prv == p
+                || prv == cur
+                || !self.player(prv).alive
                 || !self.is_friend_of(catalog, p, prv)
             {
                 break;
@@ -828,6 +848,16 @@ impl GameStateCore {
             self.player(p).hp.max(0) as usize
         };
         // 星体改造（U05 swd 灵剑，规则 v198）：手牌上限 -N 累加
+        let base = self
+            .skills
+            .iter()
+            .filter(|((owner, _), inst)| *owner == p && inst.enabled)
+            .find_map(|((_, def), _)| {
+                catalog.skills[*def as usize]
+                    .behavior
+                    .hand_limit_base(self, p)
+            })
+            .unwrap_or(base);
         let mut limit = base.saturating_sub(self.player(p).xingtigaizao_count as usize);
         // 无脏（Boss 混沌，规则 v209）：手牌上限基数 0——体力贡献清零
         // （上游 boss_wuzang mod maxHandcard `num - player.hp` 同口径：

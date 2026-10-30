@@ -1,0 +1,1069 @@
+docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/affected-six.log:11795: trailing whitespace.
++test lobby::tests::finished_saved_room_is_not_published_and_its_id_remains_reserved ... 
+docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-worker.log:66: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-worker.log:78: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-worker.log:82: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/independent-final-review.raw.txt:39: trailing whitespace.
++Skipped: reviewer writes, builds, tests, commits, and independent SHA calculation.  
+docs/operations/evidence/2026-10-30-j2-main-integration/independent-integration-block.raw.txt:59: trailing whitespace.
++Skipped: writes, builds, tests, staging, commits, and unfinished validation logs.  
+docs/operations/evidence/2026-10-30-j2-main-integration/independent-integration-correction.raw.txt:19: trailing whitespace.
++Skipped: no writes, builds, test reruns, independent hash computation, or repeat review of all 101 integration paths.  
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/16-final-worker-smoke.log:62: trailing whitespace.
++PASS worker_vm_same_package_restore_and_replay | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/16-final-worker-smoke.log:74: trailing whitespace.
++PASS worker_vm_old_save_keeps_frozen_old_version_after_upgrade | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/16-final-worker-smoke.log:78: trailing whitespace.
++PASS worker_vm_uninstalled_old_save_restores_from_frozen_copy | restored=true replayed=true  
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:6: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:50: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:60: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:83: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:256: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:264: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:335: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:573: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:762: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:784: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:793: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:819: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:832: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:837: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:919: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:932: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:974: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:990: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1016: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1042: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1069: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1079: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1161: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1295: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1329: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1450: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1505: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1545: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:1628: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2262: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2278: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2283: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2292: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2304: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2369: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2376: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2392: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2407: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2471: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2597: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2606: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2659: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2777: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2812: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2894: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2932: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2954: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2964: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:2980: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3003: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3066: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3155: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3163: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3174: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3185: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3190: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3199: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3204: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3213: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3224: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3229: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3240: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3286: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3320: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3329: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3422: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3432: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3442: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3446: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3463: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3475: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3486: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3489: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3499: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3502: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3512: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3531: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3546: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3684: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3710: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3755: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3782: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3886: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3899: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3902: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3921: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3972: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:3991: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4002: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4020: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4156: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4182: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4218: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4221: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4232: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4266: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4572: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4580: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4585: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4740: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:4959: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5046: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5059: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5125: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5137: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5174: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5231: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch:5241: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:37: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:39: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:82: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:300: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:381: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:406: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:441: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:462: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:467: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:480: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:497: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:514: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:519: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:531: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:548: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:691: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:699: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:735: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:758: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:786: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:797: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:839: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:882: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:891: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:910: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1073: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1083: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1093: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1098: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1138: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1141: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1151: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1154: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1164: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1183: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1198: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1311: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1316: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1328: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1336: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1355: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1619: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1675: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1708: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1752: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1770: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1803: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1813: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1847: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1963: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1971: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:1976: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2018: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2432: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2694: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2703: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2809: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2822: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2888: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2900: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2937: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2989: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:2993: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3118: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3176: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3223: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3231: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3354: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3373: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch:3382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-incremental-vs-71.patch:291: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-incremental-vs-71.patch:433: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-incremental-vs-71.patch:433: new blank line at EOF.
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:37: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:39: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:82: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:300: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:381: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:406: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:441: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:462: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:467: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:480: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:497: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:514: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:519: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:531: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:548: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:691: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:699: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:735: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:758: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:786: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:797: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:839: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:882: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:891: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:910: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1073: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1083: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1093: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1098: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1138: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1141: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1151: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1154: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1164: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1183: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1198: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1311: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1316: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1328: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1336: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1355: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1619: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1675: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1708: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1752: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1770: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1803: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1813: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1847: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1963: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1971: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:1976: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2018: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2432: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2694: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2703: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2809: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2822: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2888: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2900: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2937: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2989: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:2993: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3118: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3176: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3223: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3231: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3354: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3373: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch:3382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:12: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:37: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:39: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:63: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:82: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:90: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:300: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:381: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:406: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:441: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:462: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:467: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:480: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:497: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:514: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:519: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:531: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:548: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:691: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:699: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:735: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:758: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:786: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:797: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:839: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:882: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:891: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:910: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1073: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1083: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1093: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1098: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1138: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1141: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1151: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1154: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1164: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1183: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1198: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1311: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1316: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1328: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1336: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1355: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1415: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1619: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1675: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1708: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1717: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1752: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1770: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1803: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1813: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1847: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1963: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1971: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:1976: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2018: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2432: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2694: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2703: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2722: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2809: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2822: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2888: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2900: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2937: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2989: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:2993: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3118: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3176: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3223: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3231: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3354: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3373: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch:3382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:15: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:21: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:39: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:57: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:102: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:106: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:117: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:159: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:202: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:211: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch:227: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:48: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1013: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1018: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1081: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1178: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1181: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1186: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1202: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1219: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1296: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1305: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1314: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1329: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1373: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1385: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1387: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1438: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1464: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1520: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch:1527: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:9: trailing whitespace.
++- **Correct — The API additions match decision 21 and preserve existing fields.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:12: trailing whitespace.
++- **Correct — Metadata comes from authorized projections.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:17: trailing whitespace.
++- **Correct — Worker and IPC retain metadata without changing command tokens.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:20: trailing whitespace.
++- **Correct — Malformed present metadata is rejected at the relevant JSON boundaries.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:23: trailing whitespace.
++- **Correct — UI rendering preserves nullable-slot semantics and legacy fallback.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:28: trailing whitespace.
++- **Correct — The WS5 compatibility evidence exercises real readers and payloads.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:33: trailing whitespace.
++- **Correct — The archive exception stays within its explicit approval.**  
+docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt:70: trailing whitespace.
++Skipped: writes, builds, runtime tests, staging, commits, binary execution and independent hash computation.  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:48: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1013: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1018: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1081: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1178: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1181: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1186: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1202: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1219: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1296: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1305: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1314: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1329: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1373: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1385: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1387: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1438: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1464: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1520: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch:1527: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:48: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1007: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1012: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1075: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1172: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1175: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1180: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1196: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1213: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1305: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1314: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1323: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1338: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1394: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1396: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1447: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1473: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1529: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch:1536: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:18: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:48: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1007: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1012: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1075: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1172: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1175: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1180: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1196: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1213: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1305: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1314: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1323: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1338: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1382: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1394: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1396: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1447: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1473: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1529: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch:1536: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts-bootstrap.log:20: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts-bootstrap.log:31: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts-bootstrap.log:49: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts-bootstrap.log:52: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts.log:20: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts.log:31: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts.log:49: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts.log:52: trailing whitespace.
++  
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:20: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:32: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:45: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:47: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:71: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:75: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:160: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:169: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:248: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:337: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:356: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:420: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:589: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:593: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:616: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:785: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:787: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:791: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:806: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:842: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:915: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:924: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:951: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1044: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1145: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1152: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1196: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1202: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1287: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1443: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1537: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1552: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1559: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1563: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1568: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1574: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1580: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1590: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1695: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1826: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1832: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1838: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1845: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1851: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1861: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1885: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1902: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1920: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1933: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1940: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:1996: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2066: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2072: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2171: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2177: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2186: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2238: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2271: trailing whitespace.
++ 
+docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch:2277: trailing whitespace.
++ 

@@ -1,0 +1,10 @@
+父控制的最终门禁已完成，预制脚本 `python3 -B /tmp/noname-b-j2-parent-final.py` 成功返回。
+行数门禁自测：exit0；源码行数门禁：exit0。
+本次独立完整 preflight：**exit0，21/21 gates通过**；锁内实际执行317.65秒。
+20,752个维护源文件与原final manifest一致，无源码漂移。
+版本保持 rules329 / archive105 / ABI758 / WS5，WASM默认不变。
+此前19pass/2linkfail的完整preflight及其余旧失败均保留，未改写历史结果。
+本轮未重跑runtime矩阵；原native3的75 ignored、workspace的77 ignored及已记录警告不变。
+未修改源码、期望、guard、文档或generated dist，未清理target；后续guard/stage/commit及target责任由父接管。
+汇总：[parent-final-gates.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/parent-final-gates.json)。
+实际日志：[parent-final-preflight.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/parent-final-preflight.log)。

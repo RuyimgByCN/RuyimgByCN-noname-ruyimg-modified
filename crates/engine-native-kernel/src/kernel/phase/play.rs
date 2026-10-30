@@ -82,6 +82,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.player_mut(player).jilve_used = 0;
     // 突击计数（U07 ow，规则 v118）：出牌阶段开始清零
     ctx.core.turn.cards_used_play_phase = 0;
+    ctx.core.vm_aux.once.retain(|(_, _, scope)| *scope != 4);
     // 三类计数同步清零（T8 增量 14）
     ctx.core.turn.bte_used_play_phase = 0;
     // 猛态：出牌阶段已发生（跳过路径不清位——上游

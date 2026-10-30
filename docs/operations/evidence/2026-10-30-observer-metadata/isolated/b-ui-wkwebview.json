@@ -1,0 +1,20 @@
+{
+  "name": "b-ui-wkwebview",
+  "command": [
+    "node",
+    "../evidence/run-b-ui.mjs",
+    "wkwebview",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 104777412608,
+  "start": 1793330121.436509,
+  "exit": 1,
+  "end": 1793330122.189335,
+  "free_after": 105443332096
+}

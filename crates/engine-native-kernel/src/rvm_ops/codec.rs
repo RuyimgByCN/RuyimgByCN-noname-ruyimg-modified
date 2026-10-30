@@ -14,7 +14,40 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
     push_u32(w, effects.len() as u32);
     for e in effects {
         match e {
-            EffectRequest::RecoverHp { source, player, amount } => {
+            EffectRequest::ChooseGiveOrRecastOneHand {
+                player,
+                skill,
+                require_skill_def,
+                grant_skill_def,
+                grant_mark_def,
+            } => {
+                w.push(31);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+                push_u32(w, *require_skill_def);
+                push_u32(w, *grant_skill_def);
+                push_u32(w, *grant_mark_def);
+            }
+            EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player,
+                amount,
+                skill,
+            } => {
+                w.push(32);
+                push_u32(w, player.raw());
+                push_u32(w, *amount);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::ResolveOlJieDanshou { player, skill } => {
+                w.push(30);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::RecoverHp {
+                source,
+                player,
+                amount,
+            } => {
                 w.push(1);
                 push_u32(w, source.raw());
                 push_u32(w, player.raw());
@@ -44,13 +77,21 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, player.raw());
                 push_i32(w, *delta);
             }
-            EffectRequest::AddMark { player, mark, delta } => {
+            EffectRequest::AddMark {
+                player,
+                mark,
+                delta,
+            } => {
                 w.push(5);
                 push_u32(w, player.raw());
                 push_u32(w, mark.raw());
                 push_i32(w, *delta);
             }
-            EffectRequest::RemoveMark { player, mark, amount } => {
+            EffectRequest::RemoveMark {
+                player,
+                mark,
+                amount,
+            } => {
                 w.push(6);
                 push_u32(w, player.raw());
                 push_u32(w, mark.raw());
@@ -110,7 +151,11 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, skill.raw());
                 push_u32(w, *pile_def);
             }
-            EffectRequest::StoreEventCardInSkillPile { player, card, skill } => {
+            EffectRequest::StoreEventCardInSkillPile {
+                player,
+                card,
+                skill,
+            } => {
                 w.push(16);
                 push_u32(w, player.raw());
                 push_u32(w, card.raw());
@@ -192,7 +237,11 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
             }
             // J1（规则 v328）：提交期挂起需要把开窗效果编码入档（此前该
             // 变体从未在挂起队列中出现，编码面未覆盖）。
-            EffectRequest::DiscardHandEquipCount { player, count, skill } => {
+            EffectRequest::DiscardHandEquipCount {
+                player,
+                count,
+                skill,
+            } => {
                 w.push(26);
                 push_u32(w, player.raw());
                 push_u32(w, *count);
@@ -233,6 +282,22 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
     for _ in 0..n {
         let tag = rd.u8()?;
         let e = match tag {
+            31 => EffectRequest::ChooseGiveOrRecastOneHand {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+                require_skill_def: rd.u32()?,
+                grant_skill_def: rd.u32()?,
+                grant_mark_def: rd.u32()?,
+            },
+            32 => EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                amount: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            30 => EffectRequest::ResolveOlJieDanshou {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
             1 => EffectRequest::RecoverHp {
                 source: rule_api::PlayerId::new(rd.u32()?),
                 player: rule_api::PlayerId::new(rd.u32()?),

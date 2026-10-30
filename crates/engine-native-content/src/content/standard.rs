@@ -10,8 +10,8 @@
 //! | 授艺 | 失去体力后动态获得临时技能（回合结束到期）|
 
 use crate::catalog::{
-    CardDef, CardKind, Catalog, QueryCtx, SkillBehavior, SkillDef, SkillLimits,
-    SkillMachine, Suit, TriggerMeta,
+    CardDef, CardKind, Catalog, QueryCtx, SkillBehavior, SkillDef, SkillLimits, SkillMachine, Suit,
+    TriggerMeta,
 };
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::{EventData, EventKind, Phase, Timing};
@@ -157,10 +157,12 @@ use crate::snap::{
 /// 不新增 DSL 原语、`RULE_VM_ABI_VERSION` 不变、N=0 首发拒绝照旧。v327 及
 /// 更早存档按版本策略拒绝；存档格式 v105、全局原生 ABI 753、Worker／WS
 /// 协议不变。
-pub const STANDARD_RULESET_VERSION: u64 = 328;
+/// v329: ADR0786 J2 active bridge and content-owned effect choices (ABI758); v328 archives reject.
+/// Archive v105 keeps the existing Rvm tail mechanism and command/choice variants.
+pub const STANDARD_RULESET_VERSION: u64 = 329;
 
-pub use crate::vocabulary::names::*;
 pub use crate::vocabulary::generals::*;
+pub use crate::vocabulary::names::*;
 mod skills;
 use skills::*;
 pub(crate) use skills::{LeizhuMachine, RenaoMachine};
@@ -504,13 +506,11 @@ pub fn standard_catalog_with_extensions(
             }
             // PA06：装载期校验一次——畸形 VM 模块在建目录时拒绝（原为
             // 首次触发时执行期校验）。
-            let program = crate::rvm_bridge::VmSkillProgram::new(
-                decl.module.clone(),
-                decl.name.clone(),
-            )
-            .map_err(|_| ExtensionError::InvalidVmModule {
-                name: decl.name.clone(),
-            })?;
+            let program =
+                crate::rvm_bridge::VmSkillProgram::new(decl.module.clone(), decl.name.clone())
+                    .map_err(|_| ExtensionError::InvalidVmModule {
+                        name: decl.name.clone(),
+                    })?;
             ext_skills.push(crate::catalog::SkillDef {
                 name,
                 trigger: Some(decl.trigger.clone()),
@@ -532,15 +532,23 @@ pub fn standard_catalog_with_extensions(
         .filter(|p| p.enabled)
         .flat_map(|p| p.generals.iter().cloned())
         .collect();
-    catalog.extension_global_skills = catalog.skills.iter().enumerate().filter_map(|(id, def)| {
-        let behavior = def.behavior.as_host_behavior()?;
-        packs.iter().any(|p| p.enabled && (
-            p.init_hook.grants_global_skill(behavior) || (
-                behavior == crate::content::host::HostBehavior::JinlianzhuCancel
-                && p.host_skills.iter().any(|d| d.behavior == behavior)
-            )
-        )).then_some(id as crate::ids::SkillDefId)
-    }).collect();
+    catalog.extension_global_skills = catalog
+        .skills
+        .iter()
+        .enumerate()
+        .filter_map(|(id, def)| {
+            let behavior = def.behavior.as_host_behavior()?;
+            packs
+                .iter()
+                .any(|p| {
+                    p.enabled
+                        && (p.init_hook.grants_global_skill(behavior)
+                            || (behavior == crate::content::host::HostBehavior::JinlianzhuCancel
+                                && p.host_skills.iter().any(|d| d.behavior == behavior)))
+                })
+                .then_some(id as crate::ids::SkillDefId)
+        })
+        .collect();
     let lock = content_lock_id(packs);
     catalog.ruleset_version = if lock == 0 {
         STANDARD_RULESET_VERSION

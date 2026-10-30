@@ -1,0 +1,241 @@
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -135,6 +135,13 @@
+     "haotianta_pick",
+     "liaoyuan_discard",
+     "fanjian_suit",
++    "rvm_danshou_option",
++    "rvm_danshou_target",
++    "rvm_danshou_card",
++    "rvm_danshou_discard",
++    "rvm_fenghe_card",
++    "rvm_fenghe_destination",
++    "rvm_pingkou_targets",
+ ];
+ 
+ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
+--- a/crates/engine-native-kernel/src/catalog.rs
++++ b/crates/engine-native-kernel/src/catalog.rs
+@@ -632,7 +632,7 @@
+ }
+ 
+ /// 技能触发元数据（目录静态部分）。
+-#[derive(Debug, Clone)]
++#[derive(Debug, Clone, PartialEq, Eq)]
+ pub struct TriggerMeta {
+     pub event: EventKind,
+     pub timing: Timing,
+@@ -677,15 +677,72 @@
+ /// 运行前重查使「结算中途被禁用」的技能不再生效。
+ pub trait SkillBehavior: Send + Sync {
+     /// 该技能所有者是否在给定事件上触发（只读查询）。
+-    fn filter(&self, ctx: &QueryCtx<'_>, owner: crate::ids::PlayerId, event: &crate::event::EventData) -> bool;
++    fn filter(
++        &self,
++        ctx: &QueryCtx<'_>,
++        owner: crate::ids::PlayerId,
++        event: &crate::event::EventData,
++    ) -> bool;
+ 
+     /// 触发确认后启动的续执行机器。
+-    fn start(&self, owner: crate::ids::PlayerId, event: &crate::event::EventData) -> Box<dyn SkillMachine>;
++    fn start(
++        &self,
++        owner: crate::ids::PlayerId,
++        event: &crate::event::EventData,
++    ) -> Box<dyn SkillMachine>;
++
++    /// Start with the same authoritative query context used to select handlers.
++    fn start_in_context(
++        &self,
++        _ctx: &QueryCtx<'_>,
++        owner: crate::ids::PlayerId,
++        event: &crate::event::EventData,
++    ) -> Box<dyn SkillMachine> {
++        self.start(owner, event)
++    }
+ 
+     /// 主动技（N11）：经 GameAction::ActivateSkill 发动时由引擎调用；
+     /// 默认无主动形态（返回 None）。
+-    fn activate(&self, _ctx: &QueryCtx<'_>, _owner: crate::ids::PlayerId) -> Option<Box<dyn SkillMachine>> {
++    fn activate(
++        &self,
++        _ctx: &QueryCtx<'_>,
++        _owner: crate::ids::PlayerId,
++    ) -> Option<Box<dyn SkillMachine>> {
+         None
++    }
++
++    fn package_skill_id(&self) -> Option<u32> {
++        None
++    }
++
++    fn hand_limit_base(
++        &self,
++        _core: &crate::state::GameStateCore,
++        _owner: crate::ids::PlayerId,
++    ) -> Option<usize> {
++        None
++    }
++
++    fn vm_module_is_authorized(&self, _bytes: &[u8]) -> bool {
++        false
++    }
++
++    fn vm_trigger_module_is_authorized(
++        &self,
++        _bytes: &[u8],
++        _event: &crate::event::EventData,
++    ) -> bool {
++        false
++    }
++
++    fn vm_trigger_still_matches(
++        &self,
++        _bytes: &[u8],
++        _ctx: &QueryCtx<'_>,
++        _owner: crate::ids::PlayerId,
++        _event: &crate::event::EventData,
++    ) -> bool {
++        false
+     }
+ 
+     /// PA12 批⑤-2（§2 K）：VM 桥技能探针——PhaseBegin 前置窗只前移 VM 技能
+@@ -773,10 +830,11 @@
+ ) -> Option<crate::snap::ExpectedAsk>;
+ 
+ /// 内容机器的快照重建：`None` = 不是内容机器（内核继续分派）。
+-pub type RestoreMachineHook = fn(
+-    &crate::snap::MachineSnapshot,
+-    &Catalog,
+-) -> Option<Result<Box<dyn SkillMachine>, crate::snap::SnapshotError>>;
++pub type RestoreMachineHook =
++    fn(
++        &crate::snap::MachineSnapshot,
++        &Catalog,
++    ) -> Option<Result<Box<dyn SkillMachine>, crate::snap::SnapshotError>>;
+ 
+ /// 内容层回调：内核在帧固有流程、询问派生与机器恢复处经此调用内容层，
+ /// 不直接引用 `crate::content`（拆 crate 第 2 步）。内容目录构建时装入
+@@ -784,15 +842,47 @@
+ #[derive(Clone, Copy)]
+ pub struct ContentHooks {
+     pub card_intrinsic: CardIntrinsicHook,
++    pub vm_active: fn(
++        &rule_vm::BytecodeModule,
++        &str,
++        crate::ids::PlayerId,
++        &crate::state::GameStateCore,
++    ) -> bool,
++    pub vm_validate:
++        fn(&rule_api::EffectRequest, &[u32], &crate::state::GameStateCore, usize) -> bool,
++    pub vm_commit: fn(
++        &mut crate::machine::Ctx<'_>,
++        &str,
++        &rule_api::EffectRequest,
++        &mut Vec<u32>,
++    ) -> Option<crate::machine::Flow>,
++    pub vm_ask: fn(
++        &rule_api::EffectRequest,
++        &[u32],
++        &crate::state::GameStateCore,
++        &Catalog,
++    ) -> Option<crate::snap::ExpectedAsk>,
+     pub host_ask: HostAskHook,
+     pub restore_machine: RestoreMachineHook,
+-    pub borrow_options: fn(&crate::machine::Ctx<'_>, crate::ids::PlayerId, bool) -> Vec<crate::choice::ChoiceOption>,
+-    pub borrowed_owner: fn(&crate::machine::Ctx<'_>, crate::ids::PlayerId, crate::ids::CardId) -> Option<crate::ids::PlayerId>,
++    pub borrow_options: fn(
++        &crate::machine::Ctx<'_>,
++        crate::ids::PlayerId,
++        bool,
++    ) -> Vec<crate::choice::ChoiceOption>,
++    pub borrowed_owner: fn(
++        &crate::machine::Ctx<'_>,
++        crate::ids::PlayerId,
++        crate::ids::CardId,
++    ) -> Option<crate::ids::PlayerId>,
+ }
+ 
+ impl ContentHooks {
+     pub const NONE: ContentHooks = ContentHooks {
+         card_intrinsic: |_, _, _| None,
++        vm_commit: |_, _, _, _| None,
++        vm_validate: |_, state, _, _| state.is_empty(),
++        vm_active: |_, _, _, _| true,
++        vm_ask: |_, _, _, _| None,
+         host_ask: |_, _, _, _, _, _, _, _, _| None,
+         restore_machine: |_, _| None,
+         borrow_options: |_, _, _| Vec::new(),
+@@ -910,8 +1000,13 @@
+     pub fn general_meta(
+         &self,
+         g: u16,
+-    ) -> Option<(&'static str, Faction, Vec<&'static str>, u32, crate::vocabulary::generals::Gender)>
+-    {
++    ) -> Option<(
++        &'static str,
++        Faction,
++        Vec<&'static str>,
++        u32,
++        crate::vocabulary::generals::Gender,
++    )> {
+         let base = crate::vocabulary::generals::STANDARD_GENERALS;
+         if (g as usize) < base.len() {
+             let (name, faction, skills, hp, gender) = base[g as usize];
+@@ -921,7 +1016,13 @@
+         // 消费面 ABI）
+         let ext = self.extension_generals.get(g as usize - base.len());
+         if let Some(ext) = ext {
+-            return Some((ext.name, ext.faction, ext.skills.to_vec(), ext.max_hp, ext.gender));
++            return Some((
++                ext.name,
++                ext.faction,
++                ext.skills.to_vec(),
++                ext.max_hp,
++                ext.gender,
++            ));
+         }
+         // Boss 内置武将段（v208）：动态尾段（在全部启用扩展之后——扩展
+         // 将 def 约定不受扰动；boss 将 def=base+ext_n+i 随启用集浮动）
+@@ -945,7 +1046,10 @@
+ 
+     /// 按名字查牌编号（测试布阵用）。
+     pub fn card_by_name(&self, name: &str) -> Option<CardId> {
+-        self.cards.iter().position(|c| c.name == name).map(|i| i as CardId)
++        self.cards
++            .iter()
++            .position(|c| c.name == name)
++            .map(|i| i as CardId)
+     }
+ 
+     pub fn card_kind(&self, card: CardId) -> CardKind {
+@@ -999,7 +1103,9 @@
+                 core.skills.iter().any(|((o, def), inst)| {
+                     *o == p
+                         && inst.enabled
+-                        && self.skills[*def as usize].behavior.blocks_delayed_trick_target()
++                        && self.skills[*def as usize]
++                            .behavior
++                            .blocks_delayed_trick_target()
+                 })
+             })
+             .unwrap_or(false)
+--- a/crates/engine-native/tests/groups/misc.rs
++++ b/crates/engine-native/tests/groups/misc.rs
+@@ -99,3 +99,15 @@
+ 
+ #[path = "../nc09_machine_ownership.rs"]
+ mod nc09_machine_ownership;
++
++#[path = "../adr0786_j2_active_bridge.rs"]
++mod adr0786_j2_active_bridge;
++
++#[path = "../adr0786_j2_effect_choices.rs"]
++mod adr0786_j2_effect_choices;
++
++#[path = "../adr0786_j2_package_versions.rs"]
++mod adr0786_j2_package_versions;
++
++#[path = "../adr0786_j2_review_regressions.rs"]
++mod adr0786_j2_review_regressions;

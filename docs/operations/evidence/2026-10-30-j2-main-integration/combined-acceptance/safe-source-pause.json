@@ -1,0 +1,16 @@
+{
+  "at_utc": "2026-10-30T05:08:35.923987+00:00",
+  "safe_for_parent_trace_frame_edit": true,
+  "active_owned_compilation": false,
+  "controller_retired_before_next_command": true,
+  "completed_commands": 20,
+  "next_unstarted_command": "legacy-crosshash",
+  "source_test_path": "crates/engine-native/tests/nc09_machine_ownership.rs",
+  "old_source_sha256": "05cc0ac837754574e2a5e6f6aa926cfb4a799d637a801e3ba802cd7c8971633a",
+  "precheck": "trace_frame choice lacks B kind/native_kind; whole-choice actual WASM comparator would see extra fields. No field dropped or expected value edited by worker.",
+  "old_fresh329_traces_preserved": "docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-before-B-choice-adaptation",
+  "qualified_helper_repro": "114 controls/114 redacted restore+answer valid,0regressions; not full privacy acceptance",
+  "free_bytes": 175634903040,
+  "new_incremental_entries": 0,
+  "package_tmp_exists": false
+}

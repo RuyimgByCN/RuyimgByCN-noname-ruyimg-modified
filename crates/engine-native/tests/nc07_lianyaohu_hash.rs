@@ -135,7 +135,7 @@ fn v324_and_earlier_archives_are_rejected_by_rule_version() {
         assert!(matches!(
             Engine::restore(&snap),
             Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
-                if snapshot == version && catalog == 328
+                if snapshot == version && catalog == 329
         ));
     }
     // 壶仓档：目录版本 = 标准版本 ^（内容锁 | 高位）。v324 壶仓档正是
@@ -147,7 +147,7 @@ fn v324_and_earlier_archives_are_rejected_by_rule_version() {
     for (name, version) in [("lianyaohu-v323.ngsa", 323u64), ("lianyaohu-v324.ngsa", 324u64)] {
         let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
         // 壶仓档与当前目录的差异只来自标准版本位（内容锁互相抵消）。
-        assert_eq!(snap.ruleset_version ^ catalog_version, version ^ 328);
+        assert_eq!(snap.ruleset_version ^ catalog_version, version ^ 329);
         assert!(matches!(
             Engine::restore_with_extensions(&snap, &[&pack]),
             Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })

@@ -1,0 +1,21 @@
+{
+  "reason": "Vite emptyOutDir removed tracked sparse/skip-worktree generated outputs; restore exact initial HEAD bytes after preserving current generated build evidence. Source patch excludes generated assets.",
+  "restored": [
+    {
+      "path": "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+      "sha256": "ac961c47d1fb830149ad6b423783ac21091ddf5faaf7480b015124ab69114d68"
+    },
+    {
+      "path": "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+      "sha256": "2ebce8cc8ba372250450a93776c47e3a01298f9f08e9f94f5f1c42833179017c"
+    },
+    {
+      "path": "apps/web-client/dist/assets/index-CsFu7D1w.js",
+      "sha256": "acf5f1115d2f2e50966e14a33c6ec5204222455617f10e9401798063973360a2"
+    },
+    {
+      "path": "apps/web-client/dist/assets/index-DHWyqN42.css",
+      "sha256": "0e8b4bc9ba969c80e0f1f4f4b07e6a344a7a6fca849ade3daa1912be756d6aa7"
+    }
+  ]
+}

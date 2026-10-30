@@ -1,0 +1,17 @@
+{
+  "current-native-web-package.tar.gz": {
+    "payload_sha256": "01fcd113f5c812d263b564ed768a4d9fa14de80d1186b7eceb30b16115747169",
+    "payload_bytes": 3561387,
+    "matching_frontend_assets": [
+      "assets/engine_native_wasm_bg-CsS8HJ_i.wasm"
+    ]
+  },
+  "current-legacy-web-package.tar.gz": {
+    "payload_sha256": "2905028b85234b9535184418f39838b30b5e79be2f8b0e82baebc78ccbc3425b",
+    "payload_bytes": 15375333,
+    "matching_frontend_assets": [
+      "assets/engine_wasm_bg-DSvRYqT8.wasm",
+      "pkg/engine_wasm_bg.wasm"
+    ]
+  }
+}

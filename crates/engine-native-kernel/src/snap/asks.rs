@@ -655,6 +655,10 @@ pub fn active_ask(
             // 望乡：直写一步机，恢复无询问
             None
         }
+        MachineSnapshot::Rvm { commit_pending, commit_state, .. } if !commit_state.is_empty() => {
+            let effects = crate::rvm_ops::dec_effects(commit_pending)?;
+            (catalog.hooks.vm_ask)(effects.first()?, commit_state, core, catalog)
+        }
         MachineSnapshot::Rvm {
             owner: _,
             commit_pick: Some((player, count)),

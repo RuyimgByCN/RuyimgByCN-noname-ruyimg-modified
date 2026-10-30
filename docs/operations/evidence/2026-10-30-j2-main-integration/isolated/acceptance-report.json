@@ -1,0 +1,98 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "New theft-as-gift P1 corrected by exactly2 production lines deleted, using existing take_owned_card+CardsMoved for both zones. Real DSL red11/1\u2192final12/0 with loss/revoke/byte checkpoints, failed-retry atomicity and genuine Fenghe gift positive control. No reserved file changes."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Final workspace6757/0/74, native3 1670/0/73, actual wasm36/189/114 full-byte matrix, SDK+realWorker controls, fresh preflight21/21 and independently applicable total72-path/pure5-path patches with SHA manifests."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs",
+    "crates/engine-native-content/src/content/vm_effects/danshou.rs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs",
+    "crates/engine-native/tests/adr0786_j2_review_regressions.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs",
+    "crates/engine-native/tests/adr0786_j2_review_regressions.rs"
+  ],
+  "commandsRun": [
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6757 passed/0 failed/74 ignored. Serialized, space-guarded.17-final-workspace.log."
+    },
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "result": "passed",
+      "summary": "1670/0/73; all12 review regressions pass.10-final-native-three.log."
+    },
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Independent target-gate warnings-denied check.11-final-strict.log."
+    },
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg",
+      "result": "passed",
+      "summary": "Fresh actual wasm32.12-final-wasm-build.log."
+    },
+    {
+      "command": "node apps/web-client/scripts/adr0786-j2-cross-target.mjs <native-matrix.json> <wasm-pkg> <result.json>",
+      "result": "passed",
+      "summary": "36 scenarios/189 checkpoints/114 retries; exact native/WASM archives, RNG, choices, events and continuation.13-final-actual-wasm-matrix.log."
+    },
+    {
+      "command": "node --import ./scripts/ts-register.mjs scripts/adr0786-j2-theft-sdk-smoke.mjs <native-matrix.json>",
+      "result": "passed",
+      "summary": "All3 theft/equipment/gift controls through SDK, frozen restore after uninstall and failed-retry atomicity.14-final-theft-sdk.log."
+    },
+    {
+      "command": "node ../evidence/theft-correction/headless-theft.mjs",
+      "result": "passed",
+      "summary": "Real Chrome Worker+SDK3 cases, native hashes, before-each-command byte restore, events and retry atomicity.22-real-worker.log."
+    },
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 cargo run --offline -p conformance",
+      "result": "passed",
+      "summary": "ALL PASS.18-final-conformance.log."
+    },
+    {
+      "command": "env CARGO_INCREMENTAL=0 CARGO_BUILD_JOBS=2 python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "Fresh all21 gates passed.19-final-preflight.log."
+    },
+    {
+      "command": "python3 -B ../evidence/theft-correction/build-artifacts.py",
+      "result": "passed",
+      "summary": "Both total/pure incremental patches independently applied; all72 fingerprints match; index empty."
+    }
+  ],
+  "validationOutput": [
+    "Prior33 scenarios/175 actions retained with identical packages, initial archives and commands;3 new cases add14 steps.",
+    "Only original option2/reset oracles differ after theft; no golden expected values edited.",
+    "Affected six2137/0/73; frontend127/0; Worker81/0; typecheck clean; old SDK lifecycle passes.",
+    "Necessary native/WASM executables and SHA copies retained; task private optimizer cache removed; no new incremental cache under CARGO_INCREMENTAL=0.",
+    "Targets NC09/Gate ready for parent-managed retirement; no whole-target deletion by worker."
+  ],
+  "residualRisks": [
+    "Independent re-review and combined-tree validation remain pending;329/758/105 is unmerged.",
+    "Old-base total patch must preserve parent integrated Referee/Session/IPC/Hujia and later NC09 changes; pure incremental avoids protected files.",
+    "Full onlyOL/shiji/R03, CardsDrawn context and separate GaiMing cancel issue remain outside this correction."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Five-path correction vs prior71; two-line production deletion distinguishes theft from gift, plus native/actualWASM/SDK semantic regression evidence. Total candidate72 paths.",
+  "reviewFindings": [
+    "Review8ef independently closed original5 findings. Its new theft P1 is corrected and covered by genuine red/green plus actual runtime controls.",
+    "Required fresh re-review not replaced by this self-check."
+  ],
+  "manualNotes": "Authoritative handoff: /Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/c6438699-7ffb-4f5a-8b6c-e9cb96380560/implementation/j2-theft-event-correction-after-disk-recovery.md. Skipped: controlled performance measurements and whole-package/upstream equivalence. Risk: matched integration and review gates remain required."
+}

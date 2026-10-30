@@ -1,0 +1,6 @@
+{
+  "runtime_script": "runners/headless-theft.mjs",
+  "matrix": "j2-native-matrix.json",
+  "provenance": "Actual rules329 native36 exporter retained from phaseA; manual command/archive semantics unaffected by AI-only phaseB correction. Already replayed against phaseB productionWASM36/189/114.",
+  "change": "Runner path only, no dropped fields or product semantics changes"
+}

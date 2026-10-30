@@ -321,6 +321,12 @@ fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
         "seat": v.seat,
         "players": v.players.iter().map(|p| serde_json::json!({
             "seat": p.seat,
+            "generals": std::array::from_fn::<_, 2, _>(|slot| p.generals[slot].as_ref().map(|general| serde_json::json!({
+                "def": general.def,
+                "name": general.name,
+                "faction": format!("{:?}", general.faction).to_lowercase(),
+                "revealed": p.revealed_generals[slot],
+            }))),
             "characterDef": p.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
             "alive": p.alive,
             "hp": p.hp,
@@ -409,6 +415,7 @@ impl NativeSession {
         Ok(match self.inner.choice_view_for(Some(seat)) {
             Some(ChoiceView::Own {
                 id,
+                kind,
                 prompt,
                 options,
                 min,
@@ -419,6 +426,8 @@ impl NativeSession {
                 "id": id,
                 "observer": seat,
                 "prompt": prompt,
+                "native_kind": engine_native::view::choice_kind_name(kind),
+                "kind": engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
                 "min": min,
                 "max": max,
                 "allowCancel": allow_cancel,

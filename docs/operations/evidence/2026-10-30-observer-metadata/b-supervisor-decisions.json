@@ -1,0 +1,32 @@
+{
+  "kernel_restore_exception": {
+    "approved_by": "parent supervisor relaying user scope",
+    "change": "Tail-append only the existing real fanjian_suit prompt to archive/resolution.rs KNOWN_PROMPTS; preserve all existing keys/order and unknown-key refusal.",
+    "reason": "Actual standard FanJian PickTag archive failed with BadTag(prompt_unknown, 0).",
+    "constraints": "No new gameplay prompt, ChoiceKind, VM contract, rule/archive/ABI version; unchanged string encoder; compare decode/restore/continuation and metadata.",
+    "evidence": [
+      "b-green-rust-first.log",
+      "b-codec-invariance.json",
+      "b-metadata-final-events.log"
+    ]
+  },
+  "upstream_fixture_link": {
+    "approved_by": "parent supervisor",
+    "link": "../archive",
+    "target": "/Users/ruyimg/Documents/Claude/sanguosha/archive",
+    "reason": "Six full native tests resolve immutable upstream fixtures outside checkout; first full failure retained.",
+    "constraints": "Create only if absent, never replace/write archive contents; remove only own link after all uses."
+  },
+  "cache_cleanup": {
+    "approved_by": "parent supervisor relaying new explicit user request",
+    "direction": "After compilation check space and remove unused incremental/tmp; CARGO_INCREMENTAL=0; preserve needed deps/executables until subsequent acceptance completes. Preserve WASM/binary fingerprints, then notify parent to retire private target. Never touch other active/shared targets, source, logs, packages or frozen archives."
+  },
+  "systemic_prompt_scope": {
+    "direction": "Do not turn literal inventory into reachability proof or bulk-add 214 unexercised prompt keys; systematic ExpectedAsk/factory/restore coverage remains parent's later NC07 acceptance. Correct the old index/tag comment because enc_open_choice writes prompt strings."
+  },
+  "readable_prompt_presentation": {
+    "approved_by": "parent supervisor, final B UI scope clarification",
+    "direction": "Use confirmed contextual presentation strings where semantics are known; all other built-in and extension keys use canonical kind readable fallback, without raw program keys in product text. Do not add 214 decoder keys or claim literal inventory is live reachability. No duplicated per-key generic strings or runtime framework.",
+    "implementation": "Small contextual string map plus choiceKindLabel fallback for every other key; literal-source presentation guard and malicious input tests."
+  }
+}

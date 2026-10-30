@@ -1,0 +1,21 @@
+{
+  "name": "b-red-ts",
+  "command": [
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "--test",
+    "apps/web-client/scripts/approved-b-metadata.test.mjs"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 18369146880,
+  "start": 1793328906.788447,
+  "exit": 1,
+  "end": 1793329076.211358,
+  "free_after": 15282757632
+}

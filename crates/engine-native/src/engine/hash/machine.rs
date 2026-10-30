@@ -233,6 +233,9 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
             count_hits,
             commit_pending,
             commit_pick,
+            following,
+            commit_state,
+            committing,
         } => {
             push_u8(h, 82);
             push_u8(h, *owner);
@@ -280,6 +283,15 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
                     push_u32(h, *count);
                 }
             }
+            push_u32(h, following.len() as u32);
+            for next in following {
+                push_machine(h, next);
+            }
+            push_u32(h, commit_state.len() as u32);
+            for value in commit_state {
+                push_u32(h, *value);
+            }
+            push_u8(h, *committing as u8);
         }
         M::BossBuchun {
             owner,

@@ -17,19 +17,22 @@
 use std::sync::Arc;
 
 use rule_api::{CapabilitySet, EffectRequest, HostTrap, QueryRequest, QueryResponse};
-use rule_vm::{BytecodeModule, Continuation, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUEL};
+pub use rule_vm::BytecodeModule;
+use rule_vm::{Continuation, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUEL};
 
+use crate::catalog::QueryCtx;
 use crate::catalog::{SkillBehavior, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::EventData;
 use crate::ids::{CardId, PlayerId};
-use crate::catalog::QueryCtx;
 use crate::machine::{Ctx, Flow};
 use crate::snap::MachineSnapshot;
+mod handlers;
 mod machine;
+pub use handlers::{VmActiveLimits, VmHandlerSet, VmTriggerProgram};
 
 /// 数据驱动的 VM 技能程序（扩展包声明携带；目录 def 的 behavior 持有）。
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct VmSkillProgram {
     /// 已验证字节码模块（装载/编译产物；`logic_hash` 为内容锁锚）。
     /// PA06：类型即「装载期已校验」——只能经 [`VmSkillProgram::new`]
@@ -41,10 +44,7 @@ pub struct VmSkillProgram {
 
 impl VmSkillProgram {
     /// PA06：装载期校验一次——畸形模块构造即拒。
-    pub fn new(
-        module: BytecodeModule,
-        skill_name: String,
-    ) -> Result<Self, rule_vm::VmError> {
+    pub fn new(module: BytecodeModule, skill_name: String) -> Result<Self, rule_vm::VmError> {
         Ok(Self {
             module: rule_vm::VerifiedModule::verify(module)?,
             skill_name,
@@ -93,8 +93,7 @@ fn kind_is_ordinary_trick(kind: crate::catalog::CardKind) -> bool {
     if kind.is_basic_kind() || kind.equip_slot().is_some() {
         return false;
     }
-    !matches!(kind, K::Le | K::Bing | K::ShanDian | K::HongShui)
-        && kind.is_basic_trick_or_equip()
+    !matches!(kind, K::Le | K::Bing | K::ShanDian | K::HongShui) && kind.is_basic_trick_or_equip()
 }
 
 fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
@@ -121,7 +120,11 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             ..VmTriggerCtx::default()
         },
         // 杀被闪避（PA12 批②）：来源=杀的使用者、事件主玩家=闪避的目标。
-        EventData::ShaDodged { card, source, target } => VmTriggerCtx {
+        EventData::ShaDodged {
+            card,
+            source,
+            target,
+        } => VmTriggerCtx {
             event_player: Some(*target),
             event_source: Some(*source),
             event_card: Some(*card),
@@ -213,6 +216,13 @@ fn filter_view(t: &VmTriggerCtx) -> crate::rvm_named::FilterView {
 /// 组合 filter 由装载器跳过登记（deferred）。
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum VmFilterPolicy {
+    /// Active and trigger modules of one package skill share a catalog identity.
+    Handlers(Arc<VmHandlerSet>),
+    Declared {
+        skill_def_id: u32,
+        hand_limit_base_max_hp: bool,
+        inner: Box<VmFilterPolicy>,
+    },
     /// DSL `owner_is_target`：事件主玩家=持有者。
     #[default]
     OwnerIsTarget,
@@ -241,6 +251,7 @@ pub enum VmFilterPolicy {
     /// DSL `owner_is_target_no_turn_damage`：事件主玩家=持有者，且持有者
     /// 本回合未造成伤害。
     OwnerNoTurnDamage,
+    OwnerSkippedPhasePositive,
     /// DSL `owner_is_target_turn_damage`：事件主玩家=持有者，且持有者本
     /// 回合已造成伤害。
     OwnerTurnDamage,
@@ -359,6 +370,9 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         "owner_is_source_or_target" => Some(VmFilterPolicy::OwnerSourceOrTarget),
         "owner_is_target_other_source_alive" => Some(VmFilterPolicy::OwnerTargetOtherSourceAlive),
         "always" => Some(VmFilterPolicy::Always),
+        "owner_is_target_skipped_phase_count_positive" => {
+            Some(VmFilterPolicy::OwnerSkippedPhasePositive)
+        }
         "owner_is_target_wounded" => Some(VmFilterPolicy::OwnerWounded),
         "owner_is_target_linked" => Some(VmFilterPolicy::OwnerLinked),
         "owner_is_target_hand_nonempty" => Some(VmFilterPolicy::OwnerHandNonempty),
@@ -390,7 +404,9 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         }
         "owner_is_target_tied_max_hand" => Some(VmFilterPolicy::OwnerTiedMaxHand),
         "owner_is_target_tied_max_hp" => Some(VmFilterPolicy::OwnerTiedMaxHp),
-        "owner_is_target_tied_max_equip_nonempty" => Some(VmFilterPolicy::OwnerTiedMaxEquipNonempty),
+        "owner_is_target_tied_max_equip_nonempty" => {
+            Some(VmFilterPolicy::OwnerTiedMaxEquipNonempty)
+        }
         "owner_is_target_not_unique_max_current_hp" => Some(VmFilterPolicy::OwnerNotUniqueMaxHp),
         "owner_targeted_by_other_sha" => Some(VmFilterPolicy::OwnerTargetedByOtherSha),
         _ => None,
@@ -431,6 +447,68 @@ pub struct VmSkillBehavior {
 }
 
 impl SkillBehavior for VmSkillBehavior {
+    fn vm_module_is_authorized(&self, bytes: &[u8]) -> bool {
+        if self.program.module.to_bytes() == bytes {
+            return true;
+        }
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => {
+                set.active.module.to_bytes() == bytes
+                    || set
+                        .triggers
+                        .iter()
+                        .any(|t| t.program.module.to_bytes() == bytes)
+            }
+            _ => false,
+        }
+    }
+
+    fn vm_trigger_module_is_authorized(&self, bytes: &[u8], event: &EventData) -> bool {
+        let VmFilterPolicy::Handlers(set) = &self.filter else {
+            return false;
+        };
+        set.triggers.iter().any(|entry| {
+            entry.meta.event == event.kind() && entry.program.module.to_bytes() == bytes
+        })
+    }
+
+    fn vm_trigger_still_matches(
+        &self,
+        bytes: &[u8],
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+    ) -> bool {
+        let VmFilterPolicy::Handlers(set) = &self.filter else {
+            return false;
+        };
+        set.matching(ctx, owner, event)
+            .iter()
+            .any(|entry| entry.program.module.to_bytes() == bytes)
+    }
+
+    fn hand_limit_base(
+        &self,
+        core: &crate::state::GameStateCore,
+        owner: PlayerId,
+    ) -> Option<usize> {
+        match &self.filter {
+            VmFilterPolicy::Declared {
+                hand_limit_base_max_hp: true,
+                ..
+            } => Some(core.player(owner).max_hp as usize),
+            _ => None,
+        }
+    }
+
+    fn package_skill_id(&self) -> Option<u32> {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => Some(set.skill_def_id),
+            VmFilterPolicy::Declared { skill_def_id, .. } => Some(*skill_def_id),
+            _ => None,
+        }
+    }
+
     fn is_vm_skill(&self) -> bool {
         true
     }
@@ -442,6 +520,13 @@ impl SkillBehavior for VmSkillBehavior {
         // 唯一的持有者域闸（plan_triggers 只按 EventKind 找候选），漏掉
         // 合取段会让他人事件过闸（炙焚 holder 门同类缺陷）。turn_damage
         // 为本回合「造成」伤害计数（kernel 记在来源侧），与 lsp 一致。
+        if let VmFilterPolicy::Declared { inner, .. } = &self.filter {
+            return VmSkillBehavior {
+                program: self.program.clone(),
+                filter: (**inner).clone(),
+            }
+            .filter(ctx, owner, event);
+        }
         let trig = trigger_ctx_of(event);
         if let VmFilterPolicy::AtPhase { phase, inner } = &self.filter {
             if trig.phase != Some(*phase) {
@@ -456,6 +541,7 @@ impl SkillBehavior for VmSkillBehavior {
         let is_event_player = trig.event_player == Some(owner);
         let holder_state = |s: u8| ctx.state.player(s);
         match self.filter.clone() {
+            VmFilterPolicy::Handlers(set) => !set.matching(ctx, owner, event).is_empty(),
             VmFilterPolicy::OwnerIsTarget => is_event_player,
             VmFilterPolicy::OwnerAlive => ctx.state.player(owner).alive,
             VmFilterPolicy::OwnerSourceSha => {
@@ -529,20 +615,28 @@ impl SkillBehavior for VmSkillBehavior {
             }
             VmFilterPolicy::Always => true,
             VmFilterPolicy::OwnerWounded => {
-                is_event_player
-                    && {
-                        let p = holder_state(owner);
-                        p.hp > 0 && p.hp < p.max_hp as i32
-                    }
+                is_event_player && {
+                    let p = holder_state(owner);
+                    p.hp > 0 && p.hp < p.max_hp as i32
+                }
             }
-            VmFilterPolicy::OwnerLinked => {
-                is_event_player && holder_state(owner).linked
-            }
+            VmFilterPolicy::OwnerLinked => is_event_player && holder_state(owner).linked,
             VmFilterPolicy::OwnerHandNonempty => {
                 is_event_player && !holder_state(owner).hand.is_empty()
             }
             VmFilterPolicy::OwnerHandEmpty => {
                 is_event_player && holder_state(owner).hand.is_empty()
+            }
+            VmFilterPolicy::OwnerSkippedPhasePositive => {
+                is_event_player
+                    && ctx
+                        .state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "vm_skipped_phase_count".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
             }
             VmFilterPolicy::OwnerNoTurnDamage => {
                 is_event_player && holder_state(owner).turn_damage == 0
@@ -580,18 +674,18 @@ impl SkillBehavior for VmSkillBehavior {
                 is_event_player && holder_state(owner).turn_damage >= 3
             }
             VmFilterPolicy::OwnerHandAtLeastHpOtherAlive => {
-                is_event_player && {
-                    let p = holder_state(owner);
-                    p.hand.len() >= p.hp as usize
-                } && (0..ctx.state.players.len()).any(|i| {
-                    i as u8 != owner && ctx.state.players[i].alive
-                })
+                is_event_player
+                    && {
+                        let p = holder_state(owner);
+                        p.hand.len() >= p.hp as usize
+                    }
+                    && (0..ctx.state.players.len())
+                        .any(|i| i as u8 != owner && ctx.state.players[i].alive)
             }
             // 出牌阶段结束 && 本阶段三类牌已用 ≥1（计数随 Play 开始清
             // 零，事件时点值即本阶段值；ABI 293 的持有者归因由「仅当前
             // 回合玩家可用牌」化归为事件主玩家合取）。
-            VmFilterPolicy::OwnerPlayPhaseBteUsed
-            | VmFilterPolicy::OwnerAlivePlayPhaseBteUsed => {
+            VmFilterPolicy::OwnerPlayPhaseBteUsed | VmFilterPolicy::OwnerAlivePlayPhaseBteUsed => {
                 is_event_player
                     && trig.phase == Some(crate::event::Phase::Play)
                     && ctx.state.turn.bte_used_play_phase > 0
@@ -609,13 +703,11 @@ impl SkillBehavior for VmSkillBehavior {
             }
             VmFilterPolicy::OwnerPlayCountEqHp => {
                 let p = holder_state(owner);
-                is_event_player
-                    && ctx.state.turn.cards_used_play_phase == p.hp as u32
+                is_event_player && ctx.state.turn.cards_used_play_phase == p.hp as u32
             }
             VmFilterPolicy::OwnerCardUsedAtLeastHp => {
                 let p = holder_state(owner);
-                is_event_player
-                    && ctx.state.turn.cards_used_play_phase >= p.hp as u32
+                is_event_player && ctx.state.turn.cards_used_play_phase >= p.hp as u32
             }
             // 伤害前置窗：手牌空 ∧（元素性 ∨ 事件卡=普通锦囊）。非伤害
             // 载荷帧（before 窗对全帧型开放）nature/card 双 None → 恒否。
@@ -629,9 +721,7 @@ impl SkillBehavior for VmSkillBehavior {
                     .event_card
                     .map(|c| kind_is_ordinary_trick(ctx.catalog.card_kind(c)))
                     .unwrap_or(false);
-                is_event_player
-                    && elemental | ordinary_trick
-                    && holder_state(owner).hand.is_empty()
+                is_event_player && elemental | ordinary_trick && holder_state(owner).hand.is_empty()
             }
             // 并列最大查询族（ABI 55）：存活玩家集合上的最大值并列。
             VmFilterPolicy::OwnerTiedMaxHand => {
@@ -687,7 +777,9 @@ impl SkillBehavior for VmSkillBehavior {
             // 伤害事件：来源存活 ∧ 任意其他存活角色场上有可移至来源的
             // 装备（来源同栏空）或判定区延时（来源判定区无同名种）。
             VmFilterPolicy::OwnerSourceMovableFieldCard => {
-                let Some(src) = trig.event_source else { return false };
+                let Some(src) = trig.event_source else {
+                    return false;
+                };
                 if !ctx.state.players[src as usize].alive || !is_event_player {
                     return false;
                 }
@@ -716,7 +808,7 @@ impl SkillBehavior for VmSkillBehavior {
                 })
             }
             // 阶段门已在函数头处理（递归评估 inner）；此处不可达，保守返回 false。
-            VmFilterPolicy::AtPhase { .. } => false,
+            VmFilterPolicy::AtPhase { .. } | VmFilterPolicy::Declared { .. } => false,
             VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
                 &prog,
                 ctx,
@@ -727,35 +819,69 @@ impl SkillBehavior for VmSkillBehavior {
         }
     }
 
+    fn start_in_context(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+    ) -> Box<dyn SkillMachine> {
+        let VmFilterPolicy::Handlers(set) = &self.filter else {
+            return self.start(owner, event);
+        };
+        let mut matching = set.matching(ctx, owner, event).into_iter();
+        let Some(first) = matching.next() else {
+            return self.start(owner, event);
+        };
+        let mut machine = handlers::machine(first.program.clone(), &first.filter, owner, event);
+        machine.following = matching
+            .map(|entry| {
+                handlers::machine(entry.program.clone(), &entry.filter, owner, event).snapshot()
+            })
+            .collect();
+        Box::new(machine)
+    }
+
+    fn activate(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> Option<Box<dyn SkillMachine>> {
+        let VmFilterPolicy::Handlers(set) = &self.filter else {
+            return None;
+        };
+        if !set.available(ctx, owner)
+            || !(ctx.catalog.hooks.vm_active)(
+                &set.active.module,
+                &set.active.skill_name,
+                owner,
+                ctx.state,
+            )
+        {
+            return None;
+        }
+        let event = EventData::Phase {
+            player: owner,
+            phase: crate::event::Phase::Play,
+            begin: true,
+        };
+        let mut machine =
+            handlers::machine(set.active.clone(), &VmFilterPolicy::Always, owner, &event);
+        if set.limits.once_per_turn {
+            machine.consume.push((String::new(), 1));
+        }
+        if set.limits.once_per_play_phase {
+            machine.consume.push((String::new(), 4));
+        }
+        Some(Box::new(machine))
+    }
+
     fn needs_vm_card_history(&self) -> bool {
         true
     }
 
     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
-        // 阶段门（PA12 批②）包裹的内层 Named 元数据须透传：批③b 实证
-        // `phase_begin owner_alive_once_per_round`（AtPhase(Named)）的 once
-        // consume 在此被 `_ =>` 吞掉——限次滤名每回合重复开闸。
-        fn named_meta(f: &VmFilterPolicy) -> (Vec<(String, u8)>, bool) {
-            match f {
-                VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
-                VmFilterPolicy::AtPhase { inner, .. } => named_meta(inner),
-                _ => (Vec::new(), false),
-            }
-        }
-        let (consume, count_hits) = named_meta(&self.filter);
-        Box::new(VmMachine {
+        Box::new(handlers::machine(
+            self.program.clone(),
+            &self.filter,
             owner,
-            program: self.program.clone(),
-            trig: trigger_ctx_of(event),
-            event: event.clone(),
-            pending_effects: Vec::new(),
-            paused: None,
-            asked: false,
-            settled: false,
-            consume,
-            count_hits,
-            commit_pause: None,
-        })
+            event,
+        ))
     }
 }
 
@@ -803,6 +929,9 @@ pub struct VmMachine {
     count_hits: bool,
     /// J1：提交期挂起（开窗参数；剩余队列在 `pending_effects`）。
     commit_pause: Option<VmCommitPause>,
+    following: Vec<MachineSnapshot>,
+    commit_state: Vec<u32>,
+    committing: bool,
 }
 
 /// 内核座位 ↔ rule-api id（1 基，NONE=0）。
@@ -837,13 +966,42 @@ impl VmHost for EngineVmHost<'_> {
         &self.targets
     }
 
-    fn emit_effect(&mut self, req: EffectRequest) -> Result<(), HostTrap> {
+    fn emit_effect(&mut self, mut req: EffectRequest) -> Result<(), HostTrap> {
+        match &mut req {
+            EffectRequest::ChooseGiveOrRecastOneHand { skill, .. }
+            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { skill, .. }
+                if !skill.is_some() =>
+            {
+                *skill = rule_api::SkillId::new(self.ctx.skill_id);
+            }
+            _ => {}
+        }
+        match &req {
+            EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
+            | EffectRequest::ResolveOlJieDanshou { player, skill }
+            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player,
+                skill,
+                ..
+            } if player.raw() != self.ctx.self_id || skill.raw() != self.ctx.skill_id => {
+                return Err(HostTrap::InvalidRequest {
+                    message: "VM composite effect owner/skill mismatch".to_string(),
+                });
+            }
+            _ => {}
+        }
         crate::rvm_ops::accept_effect(&req, self.seats)?;
         self.pending.push(req);
         Ok(())
     }
 
     fn run_query(&mut self, req: QueryRequest) -> Result<QueryResponse, HostTrap> {
-        crate::rvm_ops::run_query(self.core, self.catalog, self.seats, req)
+        crate::rvm_ops::run_query(
+            self.core,
+            self.catalog,
+            self.seats,
+            (self.ctx.self_id - 1) as u8,
+            req,
+        )
     }
 }

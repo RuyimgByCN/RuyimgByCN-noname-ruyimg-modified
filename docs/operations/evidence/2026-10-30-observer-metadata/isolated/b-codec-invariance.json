@@ -1,0 +1,11 @@
+{
+  "enc_open_choice_source_unchanged": true,
+  "encoder_sha256": "cfd975d0af7a93d6ece53c53a5798d347013be23860191a9fc99b08bc993c695",
+  "baseline_prompt_count": 68,
+  "final_prompt_count": 69,
+  "tail_appended": [
+    "fanjian_suit"
+  ],
+  "all_previous_prompts_preserved_in_order": true,
+  "restore_auth_generation": "Engine::restore deliberately adds one, so read-only archive invariance compares post-restore snapshots; unchanged encoder verified separately"
+}

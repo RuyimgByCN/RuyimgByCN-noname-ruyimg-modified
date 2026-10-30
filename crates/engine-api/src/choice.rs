@@ -26,6 +26,31 @@ pub struct ChoiceRequest {
     pub continuation_id: u64,
     /// Human-oriented choice kind for UI (not hashed into rules).
     pub kind: ChoiceKind,
+    /// Static prompt key for presentation; absent in older payloads.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub prompt: Option<String>,
+    /// Precise native choice kind, restricted to the five canonical names.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_native_kind")]
+    pub native_kind: Option<String>,
+}
+
+/// Preserve the existing wire enum while retaining precise native choice metadata.
+pub fn choice_kind_from_native(kind: &str) -> Option<ChoiceKind> {
+    Some(match kind {
+        "confirm" => ChoiceKind::Confirm,
+        "select_cards" => ChoiceKind::SelectCards,
+        "select_players" => ChoiceKind::SelectTargets,
+        "respond_card" | "pick_tag" => ChoiceKind::Custom,
+        _ => return None,
+    })
+}
+
+fn deserialize_native_kind<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {
+    let value = Option::<String>::deserialize(deserializer)?;
+    if value.as_deref().is_some_and(|kind| choice_kind_from_native(kind).is_none()) {
+        return Err(serde::de::Error::custom("invalid native_kind"));
+    }
+    Ok(value)
 }
 
 /// Single selectable option.

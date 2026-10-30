@@ -1,0 +1,59 @@
+{
+  "original_scenarios_retained": 33,
+  "original_command_steps_retained": 175,
+  "original_packages_initial_archives_commands_unchanged": true,
+  "new_scenarios": 3,
+  "new_steps": 14,
+  "all_scenarios": 36,
+  "all_steps": 189,
+  "changed_original_oracles": [
+    {
+      "scenario": "danshou-option-2",
+      "changed_step_indices": [
+        3,
+        4,
+        5,
+        6
+      ]
+    },
+    {
+      "scenario": "danshou-four-options-and-reset",
+      "changed_step_indices": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ]
+    }
+  ],
+  "reason": "Removal of the spurious gift frame changes subsequent event IDs/budget/hash/archive in option2 theft paths; no golden expectations were rewritten."
+}

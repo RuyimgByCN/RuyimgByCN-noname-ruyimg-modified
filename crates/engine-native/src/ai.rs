@@ -516,7 +516,18 @@ fn vm_choice_leaf(choice: &ChoiceView) -> bool {
     let prompt = match choice {
         ChoiceView::Own { prompt, .. } | ChoiceView::Other { prompt, .. } => prompt,
     };
-    matches!(*prompt, "rvm_choice" | "rvm_discard_pick")
+    matches!(
+        *prompt,
+        "rvm_choice"
+            | "rvm_discard_pick"
+            | "rvm_danshou_option"
+            | "rvm_danshou_target"
+            | "rvm_danshou_card"
+            | "rvm_danshou_discard"
+            | "rvm_fenghe_card"
+            | "rvm_fenghe_destination"
+            | "rvm_pingkou_targets"
+    )
 }
 
 fn projected_choice_action(choice: ChoiceView) -> GameAction {

@@ -1,0 +1,17 @@
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-active-smoke.mjs", "/tmp/noname-b-j2-main-2zzoa42o/author-pack"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-active-smoke.mjs", "/tmp/noname-b-j2-main-2zzoa42o/author-pack"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 170175852544}
+{
+  "lifecycle": "install/enable/start/activate/answer/checkpoint/upgrade/frozen-restore/rollback/disable/uninstall",
+  "v1": {
+    "delta": 1,
+    "hash": "89950d3d63593bc6f3601f7cc98675169eaba6a10b540eb52fb6428fbfb37ab9",
+    "choices": 3
+  },
+  "v2": {
+    "delta": 2,
+    "hash": "247651b6196aa2881fd626d9019e70767076fd7b2124fdfc2f7ffeae86b6edc5",
+    "choices": 3
+  },
+  "wasm": "fresh web target"
+}
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-active-smoke.mjs", "/tmp/noname-b-j2-main-2zzoa42o/author-pack"], "exit": 0, "locked_seconds": 0.2692891249898821, "disk_free_bytes": 170175528960}
+{"runner_exit": 0, "stop_reason": null}

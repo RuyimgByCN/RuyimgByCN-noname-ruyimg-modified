@@ -1,5 +1,10 @@
 # 始计确定性移植
 
+当前内容版本 `0.2.5`（最低 VM ABI756）：ADR0786 J2 修正冯河的其他存活伤害来源滤镜，
+原生完整单技能覆盖手牌上限基数、给牌/重铸与暂停恢复。完整 shiji 仍因准备阶段等其他声明
+明确拒绝原生装载，不能据单技能或旧线测试视为整包完成。已发布 `0.2.4` 和更早 `0.1.0`
+原件保存在 `archive/`；`0.2.1`–`0.2.3` 只是原元数据中登记的中间试作版，未作为交付。
+
 `zjjuxiang`（拒降）：其他角色被救离濒死后可发动一次，依次消耗限定技、造成 1 点伤害，
 并按目标体力上限摸牌。周姬其余技能尚未完成，因此本包暂不发布武将定义。
 
@@ -87,5 +92,5 @@ cargo run -q -p content-cli -- pack \
   --characters content/original/ported/shiji/characters.json \
   --metadata content/original/ported/shiji/metadata.json \
   --out content/original/ported/shiji/shiji.npack.json \
-  --package-id shiji
+  --package-id shiji --namespace official --version 0.2.5
 ```

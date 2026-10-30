@@ -1,0 +1,46 @@
+{
+  "artifacts/current-b-ui-bundle.tar.gz": {
+    "bytes": 13461563,
+    "sha256": "b72d57d542c1f5d6234997734f7ded7a05f0c02ade619c9d3dca9e85b99f36a3"
+  },
+  "artifacts/nc10-j2-plan-repro-red": {
+    "bytes": 19019072,
+    "sha256": "a27429da307cbcb81003bd5aac56b7a32589631fd5770a2503ff6bde4b74c3c8"
+  },
+  "artifacts/current-production-frontend.tar.gz": {
+    "bytes": 13494356,
+    "sha256": "b41e826c2c51e3cc107353778cd3a4a900cb81043bcfca9cbdf81245848dbd9f"
+  },
+  "artifacts/generated-dist-before-combined.tar.gz": {
+    "bytes": 7745288,
+    "sha256": "3e111db9d92719aad4750f6798b719ac82501c37c882c12b49880580b53ff6a3"
+  },
+  "artifacts/current-legacy-web-package.tar.gz": {
+    "bytes": 3391301,
+    "sha256": "80bcb947e9bafb1175067272c4fef596f227ac57e5c01ed2bc91bd186dc49f7e"
+  },
+  "artifacts/current-pa09-native-bridge": {
+    "bytes": 19575520,
+    "sha256": "f0ace1b6167be47faf34791532614bc1076f90e3b4f3fecea58bb0225837ef43"
+  },
+  "artifacts/phase-A-native-web-package.tar.gz": {
+    "bytes": 1024607,
+    "sha256": "f90a240869e5b966d54d60be25d9bbe2aa0e30545a9400307bb6047ace770ac7"
+  },
+  "artifacts/current-native-web-package.tar.gz": {
+    "bytes": 1025001,
+    "sha256": "eca3f977ceea836650c768596084e9496a8cdcdb08cfc3fef88896571dfb0026"
+  },
+  "artifacts/current-debug-noname-next-desktop": {
+    "bytes": 44062200,
+    "sha256": "52dd9c8ddc93e9ca4cea6d3a1b113a64c3c0d4c02feb443f8f35eb91d4ebef02"
+  },
+  "artifacts/phase-B-direct-planner-web.tar.gz": {
+    "bytes": 1158354,
+    "sha256": "db31f4aedb2a5f32f7b7b0cbe4be44e3619dbd31a42f5977f6f0b4635d5210e0"
+  },
+  "artifacts/phase-B-direct-planner-native": {
+    "bytes": 20337880,
+    "sha256": "3889381ed5bad24755e3e05e36ef84a9d5d4fa63c120af34bffed1ace800f5be"
+  }
+}

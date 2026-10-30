@@ -1,0 +1,7 @@
+{
+  "removed_only_owned_untracked_guard": ".pi-lens.json",
+  "sha256": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1",
+  "runtime_source_files_unchanged": 20751,
+  "runtime_compiler_flags_unchanged": true,
+  "reason": "Validation complete; control guard is not product source and must not be committed"
+}

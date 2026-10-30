@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-10-30T11:53:45.785931+08:00",
+  "authorization": "User per-compilation disk cleanup; completed B worker explicitly relinquished this exclusive Referee target",
+  "retired_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+  "retired_kib": 12842436,
+  "lsof_exit": 1,
+  "active_users": [],
+  "retained_build_products": [
+    {
+      "original": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+      "retained": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/retained-build-products/engine_native_wasm_bg.wasm",
+      "sha256": "1bab4d0f0b38b858dba627b74a467ee2e9bf511075533553da7259b68b51a019",
+      "bytes": 3411727
+    },
+    {
+      "original": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge",
+      "retained": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/retained-build-products/pa09_native_bridge",
+      "sha256": "db064dd29353c25d2560bc6363e97fb01b7cd5a020a51c0f5ab7ab72210fe2ce",
+      "bytes": 20120128
+    },
+    {
+      "original": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop",
+      "retained": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/retained-build-products/noname-next-desktop",
+      "sha256": "1c7c071176b5fa85c8dbd2f3afb729736b2d5f215e77f850bd0b56021983ffb5",
+      "bytes": 43592600
+    }
+  ],
+  "preserved": "All source, originals, pure patch, manifests, raw logs, formal fixtures, binaries and actual WASM copied before cleanup; main active stage3/J2/shared targets untouched",
+  "free_gib_after": 172.76
+}

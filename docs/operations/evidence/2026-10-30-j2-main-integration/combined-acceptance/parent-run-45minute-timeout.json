@@ -1,0 +1,6 @@
+{
+  "at": "2026-10-30T13:37:44.345660+08:00",
+  "run": "5de65e1b-51c2-421d-b414-2b4e2476a63f",
+  "result": "Subagent timed out after2700000ms",
+  "policy": "Preserve completed-command exits and raw failures; unfinished checks not passed. Inspect retained state then resume same retained worker, no alternative CLI or source reset"
+}

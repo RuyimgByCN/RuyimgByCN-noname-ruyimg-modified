@@ -129,13 +129,26 @@ pub enum LogEvent {
         player: PlayerId,
     },
     /// 判定：翻开一张判定牌。
-    Judged { player: PlayerId, card: CardId },
+    Judged {
+        player: PlayerId,
+        card: CardId,
+    },
     /// 鬼道改判：`player` 打出 `card` 代替判定牌，被替换的 `replaced` 归其所有。
-    JudgementRewritten { player: PlayerId, card: CardId, replaced: CardId },
+    JudgementRewritten {
+        player: PlayerId,
+        card: CardId,
+        replaced: CardId,
+    },
     /// 判定牌确定（改判询问全部结束后、效果生效前）。
-    JudgementFinalized { player: PlayerId, card: CardId },
+    JudgementFinalized {
+        player: PlayerId,
+        card: CardId,
+    },
     /// 天妒：`player` 将最终判定牌 `card` 收入手牌。
-    JudgementGained { player: PlayerId, card: CardId },
+    JudgementGained {
+        player: PlayerId,
+        card: CardId,
+    },
     /// 八卦阵防具判定：success=红桃（视为已出闪，伤害免除）。
     ArmorJudged {
         player: PlayerId,
@@ -217,13 +230,20 @@ impl<'a> Ctx<'a> {
 
     /// 裸栈顶帧号（含失去牌子帧）。
     pub fn top_frame_id(&self) -> crate::ids::EventId {
-        self.res.stack.last().expect("machine runs with a frame on stack").id
+        self.res
+            .stack
+            .last()
+            .expect("machine runs with a frame on stack")
+            .id
     }
 
     /// 当前帧的 CardUsed 载荷只读访问（同疾读目标等）。
     pub fn current_card_use(&self) -> Result<&CardUseData, ()> {
         let id = self.current_frame_id();
-        self.res.frame(id).ok_or(()).and_then(|f| f.card_use().ok_or(()))
+        self.res
+            .frame(id)
+            .ok_or(())
+            .and_then(|f| f.card_use().ok_or(()))
     }
 
     /// 当前帧的 CardUsed 载荷可变访问（猴子偷桃等使用前取消写回）。
@@ -268,6 +288,32 @@ impl<'a> Ctx<'a> {
             .frame_mut(id)
             .expect("current frame exists")
             .damage_mut()
+    }
+
+    /// Request a durable result for one emitted damage frame; nested damage has a different id.
+    pub fn damage_with_receipt(
+        &mut self,
+        observer: PlayerId,
+        damage: DamageData,
+    ) -> crate::ids::EventId {
+        let id = self.res.next_event_id;
+        self.core
+            .vm_aux
+            .flags
+            .insert((observer, format!("vm_damage_receipt:{id}")), 0);
+        self.emit(EventData::Damage(damage));
+        id
+    }
+
+    pub fn record_phase_skipped(&mut self, player: PlayerId) {
+        if self.catalog.vm_card_history {
+            *self
+                .core
+                .vm_aux
+                .flags
+                .entry((player, "vm_skipped_phase_count".to_string()))
+                .or_default() += 1;
+        }
     }
 
     /// 压入子事件帧；调用方随后应返回 `Flow::Yield`。
@@ -357,7 +403,10 @@ impl<'a> Ctx<'a> {
             self.core.deck = cards;
             self.out.push(LogEvent::DeckReshuffled);
         }
-        self.core.deck.pop().expect("judge draw: deck or discard non-empty")
+        self.core
+            .deck
+            .pop()
+            .expect("judge draw: deck or discard non-empty")
     }
 
     /// 从手牌或装备区移除一张（鬼道改判用：装备区黑牌可打出）。
@@ -461,7 +510,10 @@ impl<'a> Ctx<'a> {
 
     /// 离场区牌弃置（消费技用）：出区入弃堆。
     pub fn off_court_discard(&mut self, player: PlayerId, card: CardId) {
-        self.core.player_mut(player).off_court.retain(|x| *x != card);
+        self.core
+            .player_mut(player)
+            .off_court
+            .retain(|x| *x != card);
         self.to_discard(card);
     }
 
@@ -715,11 +767,7 @@ impl<'a> Ctx<'a> {
 }
 
 /// 便捷构造：普通伤害载荷。
-pub fn damage_data(
-    source: Option<PlayerId>,
-    target: PlayerId,
-    amount: u32,
-) -> DamageData {
+pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> DamageData {
     damage_data_with(source, target, amount, DamageNature::Normal, None)
 }
 

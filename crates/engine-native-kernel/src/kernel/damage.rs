@@ -1,7 +1,7 @@
 use super::*;
 
 /// 伤害提交：读最终帧载荷（转移/防止已生效），扣血并内联濒死检查。
-pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::event::DamageData) {
+pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::event::DamageData) {
     if d.prevented {
         ctx.log(LogEvent::DamagePrevented { target: d.target });
         return;
@@ -372,6 +372,12 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, _frame_id: EventId, d: crate::eve
             if cap < amount as i32 {
                 amount = cap.max(0) as u32;
             }
+        }
+    }
+    let receipt = format!("vm_damage_receipt:{frame_id}");
+    for ((_, key), value) in &mut ctx.core.vm_aux.flags {
+        if key == &receipt {
+            *value = if amount > 0 { d.target as u32 + 1 } else { 0 };
         }
     }
     let p = ctx.core.player_mut(d.target);

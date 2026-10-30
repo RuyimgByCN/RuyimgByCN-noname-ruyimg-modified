@@ -1,0 +1,85 @@
+✖ two slots preserve def zero and defaults accept old payloads (1.067584ms)
+✖ canonical kinds and prompts reach real envelope conversion (0.404ms)
+✖ metadata wrong types refuse explicitly at local JSON boundary (0.139042ms)
+✔ old functional TypeScript reader ignores extra metadata (3.162167ms)
+ℹ tests 4
+ℹ suites 0
+ℹ pass 1
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 205.322375
+
+✖ failing tests:
+
+test at apps/web-client/scripts/approved-b-metadata.test.mjs:9:1
+✖ two slots preserve def zero and defaults accept old payloads (1.067584ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+  + undefined
+  - [
+  -   {
+  -     def: 0,
+  -     faction: 'wei',
+  -     name: '曹操',
+  -     revealed: false
+  -   },
+  -   null
+  - ]
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/scripts/approved-b-metadata.test.mjs:10:9)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: [ { def: 0, name: '曹操', faction: 'wei', revealed: false }, null ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/approved-b-metadata.test.mjs:14:1
+✖ canonical kinds and prompts reach real envelope conversion (0.404ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + undefined
+  - 'confirm'
+  
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/scripts/approved-b-metadata.test.mjs:17:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: 'confirm',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/approved-b-metadata.test.mjs:23:1
+✖ metadata wrong types refuse explicitly at local JSON boundary (0.139042ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/scripts/approved-b-metadata.test.mjs:25:10)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /generals/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "--test", "apps/web-client/scripts/approved-b-metadata.test.mjs"], "exit": 1, "locked_seconds": 0.2403630409971811}

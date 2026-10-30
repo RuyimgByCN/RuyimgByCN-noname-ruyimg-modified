@@ -1,0 +1,13 @@
+{
+  "total_paths": 72,
+  "delta_paths": [
+    "apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs",
+    "crates/engine-native-content/src/content/vm_effects/danshou.rs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs",
+    "crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs",
+    "crates/engine-native/tests/adr0786_j2_review_regressions.rs"
+  ],
+  "protected_files_unchanged": true,
+  "both_patches_apply_and_match": true,
+  "no_staged_files": true
+}

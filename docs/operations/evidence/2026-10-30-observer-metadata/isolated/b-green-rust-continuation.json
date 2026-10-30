@@ -1,0 +1,23 @@
+{
+  "name": "b-green-rust-continuation",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--test",
+    "approved_b_metadata"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 12271939584,
+  "start": 1793329461.707354,
+  "exit": 101,
+  "end": 1793329488.3039958,
+  "free_after": 12180021248
+}

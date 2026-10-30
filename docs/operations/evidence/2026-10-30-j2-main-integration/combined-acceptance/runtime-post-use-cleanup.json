@@ -1,0 +1,15 @@
+{
+  "at_utc": "2026-10-30T05:56:43.218377+00:00",
+  "retired_private_dirs": [
+    "/tmp/noname-b-j2-main-2zzoa42o/b-ui-dist",
+    "/tmp/noname-b-j2-main-2zzoa42o/dist-before",
+    "/tmp/noname-b-j2-main-2zzoa42o/j2-chrome-profile-privateport",
+    "/tmp/noname-b-j2-main-2zzoa42o/b-ui-chrome-profile"
+  ],
+  "retained": {},
+  "tracked_dist_files_restored_to_exact_HEAD": 37,
+  "main_normal_WASM_packages": "Shared normal current runtime assets; not cleanup-owned",
+  "private_target_deps": "Retained through final preflight/handoff, then parent-coordinated retirement or explicit subsequent integration reuse",
+  "free_bytes": 169013653504,
+  "no_HID_or_performance_measurement": true
+}

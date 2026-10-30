@@ -1150,6 +1150,7 @@ name = "engine-native-content"
 version = "0.1.0"
 dependencies = [
  "engine-native-kernel",
+ "rule-api",
  "rule-vm",
 ]
 
@@ -1170,6 +1171,7 @@ dependencies = [
  "content-compiler",
  "content-native-loader",
  "content-schema",
+ "engine-api",
  "engine-native",
  "rule-vm",
  "serde_json",

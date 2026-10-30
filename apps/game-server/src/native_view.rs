@@ -135,6 +135,12 @@ pub fn observer_snapshot_for(
             player: ApiPlayerId::new(cell.seat as u32 + 1),
             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
             character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+            generals: std::array::from_fn(|slot| cell.generals[slot].as_ref().map(|general| engine_api::GeneralSlotView {
+                def: general.def as u32,
+                name: general.name.to_owned(),
+                faction: format!("{:?}", general.faction).to_lowercase(),
+                revealed: cell.revealed_generals[slot],
+            })),
             seat: engine_api::SeatIndex::new(cell.seat),
             hp: cell.hp,
             max_hp: cell.max_hp,
@@ -260,7 +266,7 @@ pub fn choice_for(
         min,
         max,
         allow_cancel,
-        ..
+        prompt,
     } = view
     else {
         return None;
@@ -289,14 +295,9 @@ pub fn choice_for(
         observer,
         options,
         continuation_id: id,
-        kind: match kind {
-            engine_native::ChoiceKind::Confirm => engine_api::ChoiceKind::Confirm,
-            engine_native::ChoiceKind::SelectCards => engine_api::ChoiceKind::SelectCards,
-            engine_native::ChoiceKind::SelectPlayers => engine_api::ChoiceKind::SelectTargets,
-            engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => {
-                engine_api::ChoiceKind::Custom
-            }
-        },
+        kind: engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
+        native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
+        prompt: Some(prompt.to_owned()),
         min_count: min as u8,
         max_count: max as u8,
         allow_cancel,

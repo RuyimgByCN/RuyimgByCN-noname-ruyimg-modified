@@ -4,10 +4,12 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
     if ctx.core.turn.skip_draw_phase {
         // 兵粮寸断：跳过摸牌
         ctx.core.turn.skip_draw_phase = false;
+        ctx.record_phase_skipped(player);
     } else if ctx.core.player(player).skip_next_draw {
         // 归烬牌（U05 xianjian 明绣，规则 v160）：跳过本次摸
         // 牌阶段（上游 skip("phaseDraw") 同口径）
         ctx.core.player_mut(player).skip_next_draw = false;
+        ctx.record_phase_skipped(player);
     } else if ctx
         .catalog
         .skill_by_name(crate::vocabulary::names::BOSS_JIUSHOU)
@@ -16,6 +18,7 @@ pub(super) fn begin_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
     {
         // 兽九（Boss 相柳，规则 v222）：跳过摸牌阶段（上游
         // boss_jiushou phaseDraw trigger.cancel 同口径）
+        ctx.record_phase_skipped(player);
     } else {
         // 猛态：摸牌阶段已发生（跳摸路径不清位——上游
         // phaseDrawBegin 未触发同口径）

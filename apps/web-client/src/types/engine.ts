@@ -15,6 +15,15 @@ export interface SkillView {
   locked: boolean;
 }
 
+export interface GeneralSlotView {
+  def: number;
+  name: string;
+  faction: string;
+  revealed: boolean;
+}
+
+export type NativeChoiceKind = "confirm" | "select_cards" | "select_players" | "respond_card" | "pick_tag";
+
 export interface SeatView {
   player: number;
   character_def: number;
@@ -26,6 +35,7 @@ export interface SeatView {
   hand_count: number;
   identity: "Lord" | "Loyalist" | "Rebel" | "Renegade" | null;
   skills: SkillView[];
+  generals?: [GeneralSlotView | null, GeneralSlotView | null];
 }
 
 export interface CardView {
@@ -85,6 +95,8 @@ export interface ChoiceRequest {
   allow_cancel?: boolean;
   revision?: number;
   kind?: string;
+  prompt?: string;
+  native_kind?: NativeChoiceKind;
 }
 
 export interface EngineEnvelope {

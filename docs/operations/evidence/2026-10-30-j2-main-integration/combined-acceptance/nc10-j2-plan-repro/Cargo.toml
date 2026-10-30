@@ -1,0 +1,13 @@
+[package]
+name = "nc10-j2-plan-repro"
+version = "0.1.0"
+edition = "2021"
+[workspace]
+[dependencies]
+engine-native = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native" }
+content-compiler = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler" }
+content-native-loader = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader" }
+rule-api = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api" }
+serde_json = "1"
+[profile.dev]
+debug = "line-tables-only"

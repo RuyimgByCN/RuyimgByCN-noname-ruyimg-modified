@@ -1,0 +1,15 @@
+node:_http_server:411
+    throw new ERR_HTTP_HEADERS_SENT('write');
+    ^
+
+Error [ERR_HTTP_HEADERS_SENT]: Cannot write headers after they are sent to the client
+    at ServerResponse.writeHead (node:_http_server:411:11)
+    at Server.<anonymous> (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/run-b-ui.mjs:11:254)
+    at Server.emit (node:events:509:20)
+    at parserOnIncoming (node:_http_server:1383:12)
+    at HTTPParser.parserOnHeadersComplete (node:_http_common:125:17) {
+  code: 'ERR_HTTP_HEADERS_SENT'
+}
+
+Node.js v26.4.0
+{"command": ["node", "../evidence/run-b-ui.mjs", "chrome", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"], "exit": 1, "locked_seconds": 0.1696717080194503}

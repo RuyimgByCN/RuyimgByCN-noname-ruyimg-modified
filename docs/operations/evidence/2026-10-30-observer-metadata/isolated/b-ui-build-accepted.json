@@ -1,0 +1,18 @@
+{
+  "name": "b-ui-build-accepted",
+  "command": [
+    "node",
+    "../evidence/build-b-ui.mjs"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 181796917248,
+  "start": 1793330329.888447,
+  "exit": 0,
+  "end": 1793330344.3878698,
+  "free_after": 181599420416
+}

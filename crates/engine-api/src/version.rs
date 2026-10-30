@@ -14,7 +14,7 @@ pub const PACKAGE_FORMAT_VERSION: u32 = 1;
 /// `ABI-COORDINATION.md` (repo root). Bumping this constant requires first
 /// claiming the number there — the `abort_bump_without_claim` test below
 /// enforces that invariant.
-pub const RULE_VM_ABI_VERSION: u32 = 753;
+pub const RULE_VM_ABI_VERSION: u32 = 758;
 
 /// Bundle of version identifiers recorded in replays and packages.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]

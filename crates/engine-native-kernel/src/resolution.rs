@@ -202,7 +202,13 @@ impl OptionalGate {
         asked: bool,
         inner: Option<Box<dyn SkillMachine>>,
     ) -> Self {
-        Self { owner, def, event, asked, inner }
+        Self {
+            owner,
+            def,
+            event,
+            asked,
+            inner,
+        }
     }
 }
 
@@ -261,7 +267,10 @@ impl SkillMachine for OptionalGate {
                 skill: def.name,
                 owner: self.owner,
             });
-            self.inner = Some(def.behavior.start(self.owner, &self.event));
+            self.inner = Some(
+                def.behavior
+                    .start_in_context(&ctx.query(), self.owner, &self.event),
+            );
         }
         let flow = self.inner.as_mut().expect("inner started").step(ctx);
         if matches!(flow, Flow::Done) {
@@ -274,7 +283,13 @@ impl SkillMachine for OptionalGate {
 }
 
 /// 收集当前阶段的触发队列。
-fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate::catalog::Catalog, frame_id: EventId, before: bool) {
+fn plan_triggers(
+    core: &mut GameStateCore,
+    res: &mut Resolution,
+    catalog: &crate::catalog::Catalog,
+    frame_id: EventId,
+    before: bool,
+) {
     let (event, kind) = {
         let f = res.frame(frame_id).expect("frame");
         // before 阶段：伤害帧查 DamageBefore（伤害前置窗口）；翻面帧查
@@ -318,11 +333,16 @@ fn plan_triggers(core: &mut GameStateCore, res: &mut Resolution, catalog: &crate
             continue;
         }
         let def = &catalog.skills[*def_id as usize];
-        let Some(meta) = def.trigger.as_ref() else { continue };
+        let Some(meta) = def.trigger.as_ref() else {
+            continue;
+        };
         if meta.event != kind && !meta.extra_events.contains(&kind) {
             continue;
         }
-        let qctx = QueryCtx { state: core, catalog };
+        let qctx = QueryCtx {
+            state: core,
+            catalog,
+        };
         // PA12 批⑤-2：PhaseBegin 前置窗只前移 VM 技能——宿主技保持在
         // 入场行为之后的原执行点（61 个宿主 PhaseBegin 技能与 golden 的
         // 行为不变；全量回归实测：不过滤时 16 个宿主技能/golden 失败）。
@@ -397,7 +417,12 @@ pub fn run(
             {
                 let mut park = res.parks.remove(idx);
                 let flow = {
-                    let mut ctx = Ctx { core, res, catalog, out };
+                    let mut ctx = Ctx {
+                        core,
+                        res,
+                        catalog,
+                        out,
+                    };
                     park.machine.step(&mut ctx)
                 };
                 res.answer = None; // 应答只消费一次
@@ -456,7 +481,12 @@ pub fn run(
             }
             Stage::Commit => {
                 {
-                    let mut ctx = Ctx { core, res, catalog, out };
+                    let mut ctx = Ctx {
+                        core,
+                        res,
+                        catalog,
+                        out,
+                    };
                     kernel::commit_frame(&mut ctx, top);
                 }
                 let kind = res.frame(top).expect("frame").kind;
@@ -473,7 +503,12 @@ pub fn run(
                     continue;
                 }
                 let machine = {
-                    let mut ctx = Ctx { core, res, catalog, out };
+                    let mut ctx = Ctx {
+                        core,
+                        res,
+                        catalog,
+                        out,
+                    };
                     kernel::intrinsic_machine(&mut ctx, top)
                 };
                 match machine {
@@ -514,9 +549,14 @@ fn run_queued_trigger(
         return; // 结算中途被禁用/死亡的技能不再生效
     }
     let def = &catalog.skills[qt.def as usize];
-    let Some(meta) = def.trigger.as_ref() else { return };
+    let Some(meta) = def.trigger.as_ref() else {
+        return;
+    };
     let event = res.frame(frame_id).expect("frame").data.clone();
-    let qctx = QueryCtx { state: core, catalog };
+    let qctx = QueryCtx {
+        state: core,
+        catalog,
+    };
     if !def.behavior.filter(&qctx, qt.owner, &event) {
         return;
     }
@@ -540,7 +580,14 @@ fn run_queued_trigger(
             skill: def.name,
             owner: qt.owner,
         });
-        def.behavior.start(qt.owner, &event)
+        def.behavior.start_in_context(
+            &QueryCtx {
+                state: core,
+                catalog,
+            },
+            qt.owner,
+            &event,
+        )
     };
     res.parks.push(Park {
         resume_depth: res.stack.len(),

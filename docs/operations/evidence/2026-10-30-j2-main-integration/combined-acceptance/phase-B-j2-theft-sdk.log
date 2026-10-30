@@ -1,0 +1,26 @@
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-theft-sdk-smoke.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-theft-sdk-smoke.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 170175799296}
+{
+  "sdk": true,
+  "actualWasm": true,
+  "failedRetryAtomicity": true,
+  "frozenRestoreAfterUninstall": true,
+  "results": [
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "hash": "a44862dc96d316f3fdb75e17263b070eeafc7c8157d907e755010d88328a595d"
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "hash": "ed9f78be3a2f03e0f5e6d27aa70e4f260167c3c6d9cc421a9d6ba8d50baf0764"
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "hash": "7551dfdaa83a8e29683a2e3ffb9e8f40f1f19ba495d0747cf8086b9bb3be1031"
+    }
+  ]
+}
+{"command": ["node", "--import", "./scripts/ts-register.mjs", "scripts/adr0786-j2-theft-sdk-smoke.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/j2-native-matrix.json"], "exit": 0, "locked_seconds": 0.2734662080183625, "disk_free_bytes": 170175778816}
+{"runner_exit": 0, "stop_reason": null}

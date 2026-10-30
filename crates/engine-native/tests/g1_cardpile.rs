@@ -109,6 +109,8 @@ fn build_package(namespace: &str, source: &str, upstream_path: &str, upstream_co
     package
         .asset_paths
         .insert("cardpile:pile".into(), "assets/pile.json".into());
+    // Keep the published data-only package fingerprint independent of host ABI additions.
+    package.manifest.rule_vm_abi_version = 753;
     package.manifest.logic_hash = package.compute_logic_hash();
     package.manifest.asset_hash = package.compute_asset_hash();
     package

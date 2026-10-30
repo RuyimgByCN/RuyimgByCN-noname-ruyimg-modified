@@ -1,0 +1,46 @@
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_", "--", "--nocapture"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_", "--", "--nocapture"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 187107860480}
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 22.03s
+     Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-6bce960f507446bf)
+
+running 26 tests
+test adr0786_j2_active_bridge::author_active_index_is_available_after_formal_bridge ... ok
+test adr0786_j2_active_bridge::unsupported_active_contracts_and_entry_pc_reject_explicitly ... ok
+test adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration ... ok
+test adr0786_j2_active_bridge::active_skill_retains_every_trigger_handler ... ok
+test adr0786_j2_active_bridge::author_active_and_trigger_share_skill_identity_and_storage ... ok
+test adr0786_j2_effect_choices::content_callbacks_and_effect_codec_work_before_host_abi_is_advertised ... ok
+test adr0786_j2_review_regressions::active_body_with_preceding_draw_or_unreachable_danshou_is_not_pre_rejected ... ok
+test adr0786_j2_effect_choices::pingkou_counts_real_skips_and_settles_each_damage_before_drawing ... ok
+test adr0786_j2_effect_choices::actual_pinghe_source_keeps_max_hp_hand_limit_and_prevention_timing ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_can_kill_target_before_its_draw_is_started ... ok
+test adr0786_j2_review_regressions::grouped_following_handler_rechecks_owner_and_instance_after_first_handler ... ok
+test adr0786_j2_review_regressions::fenghe_genuine_gift_keeps_cards_given_and_giver_benefit ... ok
+test adr0786_j2_review_regressions::fenghe_forged_deck_reference_rejects_byte_restore_without_double_ownership ... ok
+test adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore ... ok
+test adr0786_j2_effect_choices::danshou_insufficient_discard_cancel_and_next_play_phase_reset ... ok
+test adr0786_j2_effect_choices::fenghe_actual_give_and_filtered_recast_keep_damage_prevented_across_checkpoints ... ok
+test adr0786_j2_review_regressions::grouped_following_waits_for_last_discard_subtree_before_rechecking_owner ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_subtree_finishes_before_target_draw_and_ordinal_discard ... ok
+test adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped ... ok
+test adr0786_j2_review_regressions::danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills ... ok
+test adr0786_j2_effect_choices::pingkou_prevention_and_nested_dying_save_or_death_resume_without_duplicate_draw ... ok
+test adr0786_j2_effect_choices::fenghe_rewards_only_actual_give_with_owned_yingba_and_living_damage_source ... ok
+test adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate ... ok
+test adr0786_j2_effect_choices::danshou_all_four_options_settle_then_discard_ordinal_with_every_choice_checkpoint ... ok
+test adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted ... ok
+test adr0786_j2_package_versions::shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_native_declarations ... ok
+
+test result: ok. 26 passed; 0 failed; 0 ignored; 0 measured; 194 filtered out; finished in 1.34s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_", "--", "--nocapture"], "exit": 0, "locked_seconds": 23.42492437499459, "disk_free_bytes": 186960601088}
+{"runner_exit": 0, "stop_reason": null}

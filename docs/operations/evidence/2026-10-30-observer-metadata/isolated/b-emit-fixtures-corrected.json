@@ -1,0 +1,25 @@
+{
+  "name": "b-emit-fixtures-corrected",
+  "command": [
+    "cargo",
+    "run",
+    "--offline",
+    "-p",
+    "game-server",
+    "--example",
+    "emit_approved_b_metadata",
+    "--",
+    "../evidence/b-metadata-fixtures.json"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 10072666112,
+  "start": 1793329623.634588,
+  "exit": 0,
+  "end": 1793329718.3819158,
+  "free_after": 8540114944
+}

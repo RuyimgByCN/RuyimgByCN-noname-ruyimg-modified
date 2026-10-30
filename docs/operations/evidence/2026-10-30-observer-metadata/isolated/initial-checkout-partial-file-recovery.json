@@ -1,0 +1,8 @@
+{
+  "path": "extensions/yijiang/assets/character/xin_xushu.jpg",
+  "reason": "Only differing file after interrupted initial checkout in brand new parent-created lane; truncated bytes preserved, exact HEAD bytes populated",
+  "before_bytes": 114688,
+  "after_bytes": 195057,
+  "before_sha256": "c9d3b715d818f3c6ad82df2c11b56be4aab6128d9bb71593540cf4ef9e99909e",
+  "after_sha256": "ec6c9abf1db4831537446ac5430c9f2d102fdde995a3dbc42632ce371320ff8e"
+}

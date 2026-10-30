@@ -2,7 +2,13 @@
 
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
-> ## ⚠ **当前版本（2026-10-29 ADR 0786 J1：VM 提交期选择窗挂起，规则 v328，工作树未提交；上一版 2026-10-29 NC07 字段批 v327，亦未提交）**
+> ## 当前源码（2026-10-30；`44982f4` + 已复审B/J2合并，功能及最终门禁通过）
+>
+> `STANDARD_RULESET_VERSION = 329`（[内容目录](../../crates/engine-native-content/src/content/standard.rs#L162)）、存档格式105、全局原生宿主ABI758、WS5。J2的329/758升号由[裁决17](../operations/evidence/2026-10-28-user-decisions/README.md)授权：active_index→既有ActivateSkill、同逻辑技能共享身份/存储/限次，756冯河交牌/重铸、757胆守、758平寇经内容回调与可恢复效果级选择落地。Rvm尾部following/commit_state/committing参与恢复与摘要，静态prompt继续按字符串编码，白名单尾加本批键；v328及更早原生规则档按门禁拒绝，原包/旧档/冻结锁保留，不伪造迁移。当前源码的14个golden来自已独立审查的J2候选；版本/语义归因和直接/恢复原生-WASM36场景证据见[J2合并证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)，主树修复后的原生三包1706/0/75、workspace6829/0/77及实际矩阵通过；父修正坏链后独立完整preflight重跑21/21、exit0，原19过2失败不改写。隔离6757/0/74与主树结果分别归属，不以补跑冒充原全量通过。
+>
+> B元数据字段已证明WS5旧/新读者兼容，不升WS版本；仅追加现存fanjian_suit解码键修已有恢复故障，不改变编码布局。主树保留Referee九参数只读HostAsk及原所有权/factory/询问修复。J2不表示onlyOL/shiji整包或R03全技能集完成；shiji真实旧副本0.2.4与0.1.0保留，新包0.2.5，准备阶段/开局等缺口仍在。后续330/WS6、331及332均已分别批准，须依次实际验收后接入，当前没有提前实施。
+>
+> ## 历史版本登记（2026-10-29 ADR0786 J1规则328；以下未提交用语属于当时记录）
 >
 > 英逝与平寇的 VM 效果标签冲突修复：英逝保留 656，平寇改为 772（最低 ABI 758）；用户授权原生规则 **v322→v323**，存档格式保持 **v105**，全局原生 ABI 保持 **753**。v322 原生旧档按规则版本拒绝；旧线没有 ABI 记录且含 656 的快照拒绝恢复，新建英逝快照可恢复。标准 14 场不含该技能，v322 回退探针确认原 golden 全通过，v323 重录只反映版本入摘要。完整边界见[B6 证据](../operations/evidence/2026-10-27-pa12-tag656-fix/README.md)。
 > **B7（2026-10-28）VM 挂起恢复语义修正**：rule-vm 挂起机快照补齐声明技能名、触发事件原文、限次清单与命中计数旗标并纳入规范摘要——此前恢复从模块名重建技能名、触发语境/限次/命中重置为默认，续行的 STORAGE_SET/once/hits 键与故障身份偏离未中断执行。用户授权原生规则 **v323→v324**（裁决⑧，先于 NC07 炼妖壶批占用 v324），存档格式保持 **v105**、全局原生 ABI 保持 **753**。旧（v323 及更早）存档拒绝：普通档 `RuleVersionMismatch`；含旧格式 Rvm 机的档在解码期失败。标准 14 场无 VM 技能，版本回退探针 14 场全绿，v324 重录只反映版本入摘要。完整边界见[B7 证据](../operations/evidence/2026-10-28-b7-vm-suspend-restore/README.md)。
@@ -10,12 +16,12 @@
 > **2026-10-27 PA12 批⑤-2 调度登记**：PhaseBegin 帧新增 BeforeTriggers 起步阶段（前置窗只前移 VM 桥技能；宿主 PhaseBegin 技能保持入场行为之后的原执行点）。规则语义不变（规则 v322/存档 v105 未动）；engine-native `replay_scenarios` golden 3 处（shouyi_dynamic_skill/discard_to_limit/judge_phase_delayed_tricks）因**状态哈希域含帧栈 stage/planned**（engine/hash.rs:601-608）随调度结构重录——无 VM 场景行为等价（全量其余 1581 项全绿），变更注记同步写入测试。
 > **NC04（2026-10-29）`cards_given` 给牌帧改为每次动作一帧（v326）**：`d7b46ea6` 接入的给牌触发帧按张发射（`give_hand_card` 单牌原语被仁德／蝶舞按张循环），一次给出 N 张时监听 `cards_given` 的技能触发 N 次，旧线 `give_cards` 只发一个批量事件（事件 `cards.len()` 即 amount）；同时该批新帧使事件 id 计数进入摘要域却未升号。用户授权原生规则 **v325→v326**（裁决登记第 10 项）：新增 `give_hand_cards(from,to,&[cards])` 批量原语，一次给牌动作只发一个 `CardsGiven` 帧并携带全部牌（事件主玩家=recipient、来源=giver、amount=张数，与旧线同口径）；仁德与蝶舞改调批量原语，其余 7 处单张调用方不变；**`CardsLost`／`CardsMoved` 仍逐张**（连营等失去牌监听口径不变）。存档格式保持 **v105**、全局原生 ABI 保持 **753**，Worker／WS 协议不变。**v325 及更早原生存档一律 `RuleVersionMismatch` 拒绝**（含 v325 逐张口径下挂起在确认窗、栈上有两个单张 `CardsGiven` 帧的档），不提供迁移。反例先红后绿：仁德一次给 2 张，探针由触发 2 次（+4）变 1 次（+3）；确认窗栈上恰一个含两张的 `CardsGiven` 帧、`CardsLost`／`CardsMoved` 各 2 帧，含该帧存档往返一致。三步探针：修复+v326 14 场全位移（重录值）；**回退 v325 保留修复 14 场全绿**——批量帧对标准 14 场零足迹（无一次给多张的动作），位移唯一来源是版本号。此前 event.rs 登记的「多张给牌触发次数不同」差异随本批撤销。完整边界见[v326 证据](../operations/evidence/2026-10-29-nc04-cards-given-v326/README.md)。
 > **NC07（2026-10-29）字段批：10 个「入档未入摘要」字段全部入摘要（v327）**：[字段审计](../operations/evidence/2026-10-28-nc07-lianyaohu-hash/archive-vs-hash-field-audit.log)所列 PlayerState 9 字段（`jiguanyuan_cards`／`jileng_active`／`chaofeng_active`／`xingtigaizao_count`／`yinmi_active`／`xuehuang_used`／`xuejibingbao`／`nigong_lv`／`card_mods`，编码序与 `state_encode.rs` 一致）与 TurnState 1 字段（`minwan_targets`）进入 `canonical_hash`——此前只改这些语义字段的两份存档摘要相同（GT-012 逐字段反例：同一快照仅在恢复前改该字段，修复前摘要相同、修复后不同）。十个字段全部在规则路径被读取（目标合法性、摸牌数、手牌上限、装备改造、伤害重定向），**排除名单为空**；新增结构守卫 `nc07_archive_hash_guard`——入档字段要么入摘要、要么登记排除理由，防止同类遗漏再次积累。用户授权原生规则 **v326→v327**（裁决登记第 11 项，全部字段共用一个版本号）。存档格式保持 **v105**、全局原生 ABI 保持 **753**；**v326 及更早存档一律 `RuleVersionMismatch` 拒绝**（v326 夹具回归；v322–v325 夹具随既有版本断言继续拒绝）。三步探针：修复+v327 14 场全位移（重录值）；回退 v326 保留修复仍全位移——新增哈希写入**无条件**（默认值也入摘要域，与 v325 壶仓空长度字节同理）；回退 hash.rs 修复（版本 326）14 场全绿——金面只受 hash.rs 与版本号影响，无行为变化。完整边界见[v327 证据](../operations/evidence/2026-10-29-nc07-archive-hash-fields/README.md)。
-> **ADR 0786 J1（2026-10-29）VM 提交期选择窗挂起（v328）**：`discard_hand_equip_count(N>0)` 自批④-2 起在 Halted 落账时被内联为「确定性首 N」近似（不开窗、玩家无权选择），旧线语义为「开窗选恰好 N 张并弃置」。用户授权 **v327→v328**（裁决登记第 13 项，方案①：不新增 DSL 原语、`RULE_VM_ABI_VERSION` 不变、存档 v105）：`VmMachine` 新增**提交期挂起**（`pump_commit` 提交泵遇开窗效果转 `Flow::WaitChoice`，`ChoiceKind::SelectCards` 恰好 N、手牌+装备、不可取消；应答复用既有 Answer 通道）；`MachineSnapshot::Rvm` 尾追 `commit_pending`/`commit_pick`（归档与规范摘要同步扩展）；`KNOWN_PROMPTS` 表尾追加 `"rvm_discard_pick"`（N11-b 零分配注册表，ADR §A.3 预期的「rvm_effect_pick 类受限 prompt」；表尾追加不移位既有线上 tag）。反例红→绿：真实开窗、选**非前 N** 两张只弃所选、队列继续落账；不足封顶、无牌空过；开窗挂起存读档恢复哈希一致（GT-011 口径）；N=0 在 DSL 编译期拒绝（accept 期拒绝为手写字节码防御层）。版本回退探针：保留修复、版本改回 327 → 14 golden 全绿（标准场无 VM 包，修复零足迹），重录仅反映版本入摘要。v327 及更早旧档一律 `RuleVersionMismatch` 拒绝；存档 v105、ABI 753、Worker／WS 协议不变。完整边界见[J1 证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)。
+> **ADR 0786 J1（2026-10-29）VM 提交期选择窗挂起（v328）**：`discard_hand_equip_count(N>0)` 自批④-2 起在 Halted 落账时被内联为「确定性首 N」近似（不开窗、玩家无权选择），旧线语义为「开窗选恰好 N 张并弃置」。用户授权 **v327→v328**（裁决登记第 13 项，方案①：不新增 DSL 原语、`RULE_VM_ABI_VERSION` 不变、存档 v105）：`VmMachine` 新增**提交期挂起**（`pump_commit` 提交泵遇开窗效果转 `Flow::WaitChoice`，`ChoiceKind::SelectCards` 恰好 N、手牌+装备、不可取消；应答复用既有 Answer 通道）；`MachineSnapshot::Rvm` 尾追 `commit_pending`/`commit_pick`（归档与规范摘要同步扩展）；`KNOWN_PROMPTS` 表尾追加 `"rvm_discard_pick"`（N11-b 零分配注册表，ADR §A.3 预期的「rvm_effect_pick 类受限 prompt」；按字符串编码，解码白名单尾追加保留历史登记，白名单索引不是线上tag）。反例红→绿：真实开窗、选**非前 N** 两张只弃所选、队列继续落账；不足封顶、无牌空过；开窗挂起存读档恢复哈希一致（GT-011 口径）；N=0 在 DSL 编译期拒绝（accept 期拒绝为手写字节码防御层）。版本回退探针：保留修复、版本改回 327 → 14 golden 全绿（标准场无 VM 包，修复零足迹），重录仅反映版本入摘要。v327 及更早旧档一律 `RuleVersionMismatch` 拒绝；存档 v105、ABI 753、Worker／WS 协议不变。完整边界见[J1 证据](../operations/evidence/2026-10-29-adr0786-j1/README.md)。
 > `STANDARD_RULESET_VERSION = 328`（`crates/engine-native-content/src/content/standard.rs:160`；ADR 0786 J1 批起为 328（工作树），NC07 字段批 327（工作树），NC04 v326 批（工作树），NC07 提交 `5eec1e9e` 为 325，B7 提交 `cfacaf1c` 为 324，此前 `ec672a1d` 为 323）、
 > `ARCHIVE_FORMAT_VERSION = 105`（`crates/engine-native-kernel/src/archive.rs:113`）。
 > 下面「2026-10-10 复核」为**历史语境**；本次只审查上游差异，未升级规则或存档。
 
-状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native-content/src/content/standard.rs:126`、`crates/engine-native-kernel/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61 起逐版本条目按批次写在其后各节，**v325 为最新**。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
+状态：活文档，2026-10-10 复核（源码当时为 `STANDARD_RULESET_VERSION = 192`、`ARCHIVE_FORMAT_VERSION = 41`；**2026-10-18 NC11 勘正：当时 HEAD 为 v321 / 存档 v105，工作树为 v322 / 存档 v105**——`crates/engine-native-content/src/content/standard.rs:126`、`crates/engine-native-kernel/src/archive.rs:113`；本行原写「现源码为 v291 / 存档 v79」为 2026-10-16 时点）。v1–v60 见下表，v61起逐版本条目按批次写在其后各节；下列旧轮次保留当时语境，当前源码版本及未验收边界以上方2026-10-30段为准。本页只记录规则与兼容取舍，当前测试结果统一见[进度主稿](native-progress.md#delivery-2026-10-24)。存档未知牌种与载荷读尽已于 10-07 加固（负例随测试运行），10-06 的[诊断探针](../operations/evidence/2026-10-06-native-progress-audit/archive-probes.log)只描述当时源码。截断事故两次：snap.rs 于第 43 轮重建（见第 43 轮证据），host.rs 于 2026-10-10 v192 批重建（见 [v192 恢复证据](../operations/evidence/2026-10-10-replay-golden-v192-recovery/README.md)）。
 本文记录内部预期与未决项；本地上游/旧线参考、实现符合声明、官方版本等价分别举证。
 当前结果与反例以 [进度主稿](native-progress.md) 为准。
 
@@ -6124,12 +6130,12 @@ event.trigger('phaseAfter');
 **抽样 8 条，代码注释全部自述「无触发面」或「出牌主动技」**：
 
 | 行为 | 注释 |
-|---|---|
-| `SwdHuanxia` | 还侠：**无触发面**（PlayCard 转化臂 + kernel 跟踪钩承载）|
-| `SwdPoyue` | 破月：**无触发面**（PlayCard 臂 + kernel 计数/闪询问钩承载）|
-| `SwdJiyingHeld` | 疾影：**锁定 mod 无触发面**（`sha_range_free` 链查询）|
+| --- | --- |
+| `SwdHuanxia` | 还侠：**无触发面**（PlayCard 转化臂 + kernel 跟踪钩承载） |
+| `SwdPoyue` | 破月：**无触发面**（PlayCard 臂 + kernel 计数/闪询问钩承载） |
+| `SwdJiyingHeld` | 疾影：**锁定 mod 无触发面**（`sha_range_free` 链查询） |
 | `SwdYudun` | 愚钝·福面：**锁定 marker**（PlayCard 禁锦囊臂 + 双卡 `viewAs` 臂查询），**无触发面** |
-| 其余 4 条 | 「出牌主动技（ActivateSkill 通道，`usable:1` 走 limits）」|
+| 其余 4 条 | 「出牌主动技（ActivateSkill 通道，`usable:1` 走 limits）」 |
 
 ⇒ **「没有 `TriggerMeta`」≠「技能不触发」** —— **这是本会话第 5 次相关教训** ✅
 ⇒ **工具侧**：`metadata_classes()` 现在给出三态（字面 / 无触发面），**不再把 helper 形态误记成「缺 meta」** ✓

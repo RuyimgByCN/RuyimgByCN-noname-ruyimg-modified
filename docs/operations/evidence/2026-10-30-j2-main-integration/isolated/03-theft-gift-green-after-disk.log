@@ -1,0 +1,34 @@
+{"free_bytes_before_heavy_command": 17317744640, "minimum_free_bytes": 3221225472, "actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_review_regressions", "--", "--nocapture"]}
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-compiler)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 23.57s
+     Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/misc-dc3c06551063a5f7)
+
+running 12 tests
+test adr0786_j2_review_regressions::grouped_following_handler_rechecks_owner_and_instance_after_first_handler ... ok
+test adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped ... ok
+test adr0786_j2_review_regressions::active_body_with_preceding_draw_or_unreachable_danshou_is_not_pre_rejected ... ok
+test adr0786_j2_review_regressions::grouped_following_waits_for_last_discard_subtree_before_rechecking_owner ... ok
+test adr0786_j2_review_regressions::fenghe_genuine_gift_keeps_cards_given_and_giver_benefit ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_can_kill_target_before_its_draw_is_started ... ok
+test adr0786_j2_review_regressions::fenghe_forged_deck_reference_rejects_byte_restore_without_double_ownership ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_subtree_finishes_before_target_draw_and_ordinal_discard ... ok
+test adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore ... ok
+test adr0786_j2_review_regressions::danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills ... ok
+test adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate ... ok
+test adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 187 filtered out; finished in 0.02s
+
+{"actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_review_regressions", "--", "--nocapture"], "exit": 0}
+{"command": ["python3", "-B", "../evidence/theft-correction/space-guard.py", "env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_review_regressions", "--", "--nocapture"], "exit": 0, "locked_seconds": 23.65249212499475}

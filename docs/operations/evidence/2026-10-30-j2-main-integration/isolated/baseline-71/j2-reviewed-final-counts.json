@@ -1,0 +1,91 @@
+{
+  "workspace": [
+    6754,
+    0,
+    74
+  ],
+  "affected_six_crates": {
+    "content_native_loader": [
+      32,
+      0,
+      0
+    ],
+    "engine_native": [
+      1660,
+      0,
+      73
+    ],
+    "engine_native_content": [
+      4,
+      0,
+      0
+    ],
+    "engine_native_kernel": [
+      3,
+      0,
+      0
+    ],
+    "engine_native_wasm": [
+      72,
+      0,
+      0
+    ],
+    "game_server": [
+      363,
+      0,
+      0
+    ]
+  },
+  "affected_six_total": [
+    2134,
+    0,
+    73
+  ],
+  "mandatory_native_three": [
+    1667,
+    0,
+    73
+  ],
+  "focused_review": [
+    9,
+    0,
+    0
+  ],
+  "original_mobile": [
+    490,
+    0,
+    0
+  ],
+  "frontend": [
+    127,
+    0,
+    0
+  ],
+  "worker_smoke": [
+    81,
+    0,
+    0
+  ],
+  "actual_wasm_matrix": {
+    "scenarios": 33,
+    "checkpoints": 175,
+    "retries": 103,
+    "full_archive_equality": true,
+    "native_wasm_events_choices_hashes_match": true
+  },
+  "prior_workspace54_failed": [
+    6742,
+    1,
+    74
+  ],
+  "prior_original_mobile": [
+    489,
+    1,
+    0
+  ],
+  "focused_review_on_final_source": [
+    9,
+    0,
+    0
+  ]
+}

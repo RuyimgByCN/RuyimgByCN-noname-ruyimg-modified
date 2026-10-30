@@ -1,0 +1,23 @@
+{
+  "sdk": true,
+  "actualWasm": true,
+  "failedRetryAtomicity": true,
+  "frozenRestoreAfterUninstall": true,
+  "results": [
+    {
+      "name": "danshou-hand-theft-not-gift",
+      "steps": 5,
+      "hash": "a44862dc96d316f3fdb75e17263b070eeafc7c8157d907e755010d88328a595d"
+    },
+    {
+      "name": "danshou-equipment-theft-not-gift",
+      "steps": 5,
+      "hash": "ed9f78be3a2f03e0f5e6d27aa70e4f260167c3c6d9cc421a9d6ba8d50baf0764"
+    },
+    {
+      "name": "fenghe-genuine-gift-benefit",
+      "steps": 4,
+      "hash": "7551dfdaa83a8e29683a2e3ffb9e8f40f1f19ba495d0747cf8086b9bb3be1031"
+    }
+  ]
+}

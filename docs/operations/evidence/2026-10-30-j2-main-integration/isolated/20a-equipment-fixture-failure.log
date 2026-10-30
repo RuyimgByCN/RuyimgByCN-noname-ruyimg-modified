@@ -1,0 +1,173 @@
+{"free_bytes_before_heavy_command": 140148076544, "minimum_free_bytes": 3221225472, "actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "J2_CROSS_NATIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-matrix.json", "cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "adr0786_j2_cross_target", "--", "--nocapture"]}
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling cc v1.2.66
+   Compiling syn v2.0.118
+   Compiling serde v1.0.228
+   Compiling blake3 v1.8.5
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling thiserror v2.0.18
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-api)
+   Compiling itoa v1.0.18
+   Compiling wasm-bindgen-shared v0.2.126
+   Compiling rustversion v1.0.23
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/rule-api)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/resource-schema)
+   Compiling bumpalo v3.20.3
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling wasm-bindgen v0.2.126
+   Compiling wasm-bindgen-macro v0.2.126
+   Compiling once_cell v1.21.4
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/content-compiler)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-wasm)
+warning: function `err` is never used
+   --> crates/engine-native-wasm/src/lib.rs:189:4
+    |
+189 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+    |    ^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:797:4
+    |
+797 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:858:4
+    |
+858 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:920:4
+    |
+920 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:929:4
+    |
+929 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:955:4
+    |
+955 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:964:4
+    |
+964 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1003:4
+     |
+1003 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+     |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1012:4
+     |
+1012 | fn sj_apply(config_json: &str, commands: &str) -> String {
+     |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1020:4
+     |
+1020 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1028:4
+     |
+1028 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1036:4
+     |
+1036 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1044:4
+     |
+1044 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1052:4
+     |
+1052 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1060:4
+     |
+1060 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1068:4
+     |
+1068 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1076:4
+     |
+1076 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+     |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+    --> crates/engine-native-wasm/src/lib.rs:1084:4
+     |
+1084 | fn omnisearch_debug(source: &str) -> String {
+     |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.54s
+     Running tests/adr0786_j2_cross_target.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/adr0786_j2_cross_target-09bd3348dcbf7b35)
+
+running 1 test
+
+thread 'j2_author_primitives_native_and_every_checkpoint_replay_vectors' (9616111) panicked at crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs:592:13:
+assertion failed: t.engine.state_core().has_skill(1, def)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test j2_author_primitives_native_and_every_checkpoint_replay_vectors ... FAILED
+
+failures:
+
+failures:
+    j2_author_primitives_native_and_every_checkpoint_replay_vectors
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.45s
+
+error: test failed, to rerun pass `-p engine-native-wasm --test adr0786_j2_cross_target`
+{"actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "J2_CROSS_NATIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-matrix.json", "cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "adr0786_j2_cross_target", "--", "--nocapture"], "exit": 101}
+{"command": ["python3", "-B", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/space-guard.py", "env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "J2_CROSS_NATIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-matrix.json", "cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "adr0786_j2_cross_target", "--", "--nocapture"], "exit": 101, "locked_seconds": 26.053211459016893}

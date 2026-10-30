@@ -3,6 +3,7 @@ use super::*;
 /// 由目录与座位数导出恢复边界。
 pub fn bounds_from(catalog: &Catalog, seats: usize) -> RestoreBounds {
     RestoreBounds {
+        vm_validate: catalog.hooks.vm_validate,
         seats,
         cards: catalog.cards.len(),
         skills: catalog.skills.len(),
@@ -430,6 +431,7 @@ pub fn validate_card_ownership(
 pub fn validate_resolution(
     resolution: &ResolutionSnapshot,
     b: &RestoreBounds,
+    core: &GameStateCore,
 ) -> Result<(), SnapshotError> {
     // 栈帧：唯一性、水位、父子链（父必须存在且是更早的帧）
     let mut ids: std::collections::BTreeMap<u32, usize> = Default::default();
@@ -465,7 +467,7 @@ pub fn validate_resolution(
         if frame != NO_FRAME && !ids.contains_key(&frame) {
             return Err(oob("park_frame", frame as u64));
         }
-        check_machine(&p.machine, b)?;
+        check_machine(&p.machine, b, core)?;
     }
     // 应答选项 ID 界
     if let Some(ans) = &resolution.answer {

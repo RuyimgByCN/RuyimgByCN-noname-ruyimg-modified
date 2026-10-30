@@ -1,0 +1,23 @@
+{
+  "source_phase": "pre-P1-fix; before parent five-window test-only adaptation for original20 gates",
+  "totals_by_crate": {
+    "engine_native": [
+      26,
+      0,
+      0
+    ]
+  },
+  "targets": [
+    {
+      "crate": "engine_native",
+      "target": "Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-6bce960f507446bf)",
+      "counts": [
+        26,
+        0,
+        0
+      ]
+    }
+  ],
+  "ignored": [],
+  "warning_headers": []
+}

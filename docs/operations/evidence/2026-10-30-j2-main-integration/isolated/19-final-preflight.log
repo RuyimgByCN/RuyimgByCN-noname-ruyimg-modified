@@ -1,0 +1,26 @@
+{"free_bytes_before_heavy_command": 173397340160, "minimum_free_bytes": 3221225472, "actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "python3", "-B", "scripts/preflight.py"]}
+✅ 本地链接（核心）
+✅ 本地链接（全部）
+✅ 旧值扫描
+✅ 近 20 轮索引新鲜
+✅ 包→来源映射
+✅ 规则登记表
+✅ 过滤臂↔元数据一致
+✅ 牌名 vs 牌种比较
+✅ 台账账目（移出必留痕）
+✅ 相位枚举（REVIEW=0）
+✅ 来源覆盖三分
+✅ host 键普查（U05=314）
+✅ 卡面覆盖（201/128）
+✅ 台账↔枚举一致
+✅ 已登记差异口径（20/54）
+✅ 守卫引用名存在
+✅ 注释计数=台账
+✅ 脚本单测
+✅ 文档 file:line 引用
+✅ 行数门禁
+✅ 原生分层棘轮
+
+preflight 全部通过 ✅
+{"actual_command": ["env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "python3", "-B", "scripts/preflight.py"], "exit": 0, "free_bytes_after_command": 173314838528, "new_private_incremental_or_empty_tmp_removed": [], "temporary_test_outputs_retained_for_same_batch": [], "retention_reason": "deps, build outputs, test executables and nonempty test fixtures are needed by remaining native/workspace/WASM checks; CARGO_INCREMENTAL=0 generates no reusable incremental cache. Parent will retire whole targets after the batch."}
+{"command": ["python3", "-B", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/space-guard.py", "env", "CARGO_INCREMENTAL=0", "CARGO_BUILD_JOBS=2", "python3", "-B", "scripts/preflight.py"], "exit": 0, "locked_seconds": 313.8135106670088}

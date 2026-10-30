@@ -12,7 +12,7 @@ fn card(view: &Value, id: &Value, owner: Value, zone: &str) -> Value {
         "owner": owner, "zone": zone, "kind": face["kind"].as_str().unwrap_or("Other")})
 }
 
-fn snapshot(view: &Value, revision: u64) -> Value {
+fn snapshot(view: &Value, revision: u64) -> Result<Value, String> {
     let mut cards = Vec::new();
     let mut seats = Vec::new();
     for player in view["players"].as_array().into_iter().flatten() {
@@ -21,8 +21,10 @@ fn snapshot(view: &Value, revision: u64) -> Value {
                 cards.push(card(view, id, player["seat"].clone(), zone));
             }
         }
+        let generals: [Option<engine_api::GeneralSlotView>; 2] = player.get("generals").map(|value| serde_json::from_value(value.clone())).transpose().map_err(|error| format!("generals: {error}"))?.unwrap_or_default();
         seats.push(json!({
             "player": player["seat"], "character_def": player["characterDef"].as_u64().unwrap_or(0),
+            "generals": generals,
             "seat": player["seat"], "hp": player["hp"], "max_hp": player["maxHp"],
             "alive": player["alive"], "turned_over": player["turnedOver"],
             "hand_count": player["handCount"], "identity": player["identity"],
@@ -55,9 +57,9 @@ fn snapshot(view: &Value, revision: u64) -> Value {
         Some("end") => "End",
         _ => "Idle",
     };
-    json!({"revision": revision, "state_hash": "", "observer": view["seat"],
+    Ok(json!({"revision": revision, "state_hash": "", "observer": view["seat"],
         "round": view["round"], "current_player": view["turn"], "phase": phase,
-        "seats": seats, "known_cards": own, "outcome": view["outcome"]})
+        "seats": seats, "known_cards": own, "outcome": view["outcome"]}))
 }
 
 fn option_label(option: &Value) -> String {
@@ -77,14 +79,21 @@ fn option_label(option: &Value) -> String {
 
 fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
     let raw = parse(session.open_choice_json(observer)?)?;
-    if raw.is_null() {
+    if raw.is_null() || raw["hidden"] == true {
         return Ok(Value::Null);
     }
-    let mut result = json!({"choice_id": raw["id"], "observer": observer, "kind": raw["kind"].as_str().unwrap_or("Custom"),
+    let native_kind = raw.get("native_kind").filter(|value| !value.is_null()).map(|value| {
+        value.as_str().and_then(engine_api::choice_kind_from_native).ok_or("invalid native_kind")
+    }).transpose()?;
+    let kind = native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom")));
+    if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
+    let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,
         "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
             json!({"token": index, "label_key": option_label(option)})
         }).collect::<Vec<_>>()});
     for (source, target) in [
+        ("prompt", "prompt"),
+        ("native_kind", "native_kind"),
         ("min", "min_count"),
         ("max", "max_count"),
         ("allowCancel", "allow_cancel"),
@@ -135,6 +144,6 @@ pub(super) fn envelope(
         *cursor = end;
     }
     Ok(json!({"result": result, "events": events, "choice": choice,
-        "view": snapshot(&view, session.revision()), "legal_actions": legal["actions"],
+        "view": snapshot(&view, session.revision())?, "legal_actions": legal["actions"],
         "hash_hex": session.state_hash_hex(), "revision": session.revision(), "finished": session.is_finished()}))
 }

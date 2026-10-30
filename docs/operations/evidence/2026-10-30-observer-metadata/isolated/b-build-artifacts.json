@@ -1,0 +1,14 @@
+{
+  "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": {
+    "sha256": "1bab4d0f0b38b858dba627b74a467ee2e9bf511075533553da7259b68b51a019",
+    "bytes": 3411727
+  },
+  "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge": {
+    "sha256": "db064dd29353c25d2560bc6363e97fb01b7cd5a020a51c0f5ab7ab72210fe2ce",
+    "bytes": 20120128
+  },
+  "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop": {
+    "sha256": "1c7c071176b5fa85c8dbd2f3afb729736b2d5f215e77f850bd0b56021983ffb5",
+    "bytes": 43592600
+  }
+}

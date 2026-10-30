@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "actualWasm": true,
+  "oldRules": 328,
+  "currentRules": 329,
+  "error": "RuleVersionMismatch { snapshot: 328, catalog: 329 }",
+  "currentArchiveUnchanged": true,
+  "fixtureFallbackUsed": false
+}

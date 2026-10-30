@@ -1,0 +1,19 @@
+[
+  {
+    "log": "23-final-frontend.log",
+    "command": [
+      "npm",
+      "test"
+    ],
+    "exit": 0
+  },
+  {
+    "log": "24-final-typecheck.log",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0
+  }
+]

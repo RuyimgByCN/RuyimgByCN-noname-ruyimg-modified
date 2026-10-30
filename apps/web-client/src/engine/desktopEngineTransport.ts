@@ -1,5 +1,6 @@
 import { invoke } from "@tauri-apps/api/core";
 import { urlParam } from "./autoDrive";
+import { validateObserverMetadata } from "./observerMetadata";
 import { normalizeNativeOutcome } from "./nativeOutcome";
 import type { ChooseGeneralPayload, EngineEnvelope, WorkerRequest, WorkerResponse } from "../types/engine";
 
@@ -25,6 +26,7 @@ export function desktopEngineChoice(): DesktopEngineChoice {
 }
 
 function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {
+  validateObserverMetadata(envelope.view, envelope.choice);
   return { ...envelope, view: { ...envelope.view, outcome: normalizeNativeOutcome(envelope.view.outcome) } };
 }
 
@@ -61,13 +63,14 @@ export class DesktopEngineTransport implements EngineTransport {
         const resourceId = await this.resource;
         if (this.closed) return;
         response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
+        response = normalizeResponse(response, request);
         if (response.id !== request.id || typeof response.ok !== "boolean") {
           throw new Error("invalid IPC response");
         }
       } catch (error) {
         response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
       }
-      if (!this.closed) this.onmessage?.({ data: normalizeResponse(response, request) } as MessageEvent<WorkerResponse>);
+      if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
     });
   }
 

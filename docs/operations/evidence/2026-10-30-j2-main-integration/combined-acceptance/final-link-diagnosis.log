@@ -1,0 +1,5 @@
+{"command": ["python3", "-B", "scripts/check_local_links.py"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "python3", "-B", "scripts/check_local_links.py"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 168999002112}
+坏链: docs/architecture/native-rules-baseline.md -> ../../crates/engine-native-content/src/content/standard.rs:162
+检查 7 个文件，坏链 1
+{"command": ["python3", "-B", "scripts/check_local_links.py"], "exit": 1, "locked_seconds": 0.11147491598967463, "disk_free_bytes": 168998985728}
+{"runner_exit": 1, "stop_reason": null}

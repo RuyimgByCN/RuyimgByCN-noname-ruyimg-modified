@@ -1,0 +1,33 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.79s
+     Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/misc-26f30d5f1ea3d43f)
+
+running 12 tests
+test adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped ... ok
+test adr0786_j2_review_regressions::grouped_following_handler_rechecks_owner_and_instance_after_first_handler ... ok
+test adr0786_j2_review_regressions::active_body_with_preceding_draw_or_unreachable_danshou_is_not_pre_rejected ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_can_kill_target_before_its_draw_is_started ... ok
+
+thread 'adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore' (9234883) panicked at crates/engine-native/tests/groups/../adr0786_j2_review_regressions.rs:527:5:
+assertion `left == right` failed: the robbed player must not receive a giver-benefit draw
+  left: 2
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore ... FAILED
+test adr0786_j2_review_regressions::danshou_owner_draw_subtree_finishes_before_target_draw_and_ordinal_discard ... ok
+test adr0786_j2_review_regressions::grouped_following_waits_for_last_discard_subtree_before_rechecking_owner ... ok
+test adr0786_j2_review_regressions::fenghe_genuine_gift_keeps_cards_given_and_giver_benefit ... ok
+test adr0786_j2_review_regressions::fenghe_forged_deck_reference_rejects_byte_restore_without_double_ownership ... ok
+test adr0786_j2_review_regressions::danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills ... ok
+test adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate ... ok
+test adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted ... ok
+
+failures:
+
+failures:
+    adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore
+
+test result: FAILED. 11 passed; 1 failed; 0 ignored; 0 measured; 187 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p engine-native --test misc`
+{"command": ["env", "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09", "cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "adr0786_j2_review_regressions", "--", "--nocapture"], "exit": 101, "locked_seconds": 6.872220791003201}

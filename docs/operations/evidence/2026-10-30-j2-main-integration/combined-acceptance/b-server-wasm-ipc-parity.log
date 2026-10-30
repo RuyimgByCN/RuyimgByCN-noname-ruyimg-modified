@@ -1,0 +1,18 @@
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/approved-b-parity.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/approved-b-parity.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 169280122880}
+PASS ordinary-dual-def-zero: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-dark: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-primary-revealed: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-both-revealed: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS confirm: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS select_players: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS select_cards: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS respond_card: 2 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS pick_tag-fanjian: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-XunXun: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-JiJie: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-GaiMing: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-HaoTianTa: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-Liaoyuan: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+{"passed":true,"fixtures":14,"comparisons":98,"kinds":["confirm","pick_tag","respond_card","select_cards","select_players"],"prompts":["discard_to_limit","fanjian_suit","gaiming_pick","haotianta_pick","jijie_give_target","liaoyuan_discard","respond_shan","trigger_confirm","tuxi_target","xunxun_arrange"],"failed":0}
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/approved-b-parity.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/b-metadata-fixtures.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/examples/pa09_native_bridge"], "exit": 0, "locked_seconds": 0.7482956660096534, "disk_free_bytes": 169271406592}
+{"runner_exit": 0, "stop_reason": null}

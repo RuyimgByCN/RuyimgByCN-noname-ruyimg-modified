@@ -1,0 +1,16 @@
+PASS ordinary-dual-def-zero: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-dark: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-primary-revealed: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS kingdoms-both-revealed: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS confirm: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS select_players: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS select_cards: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS respond_card: 2 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS pick_tag-fanjian: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-XunXun: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-JiJie: 3 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-GaiMing: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-HaoTianTa: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+PASS machine-Liaoyuan: 4 seats, two restores, both slots/all choice fields, identical archive bytes
+{"passed":true,"fixtures":14,"comparisons":98,"kinds":["confirm","pick_tag","respond_card","select_cards","select_players"],"prompts":["discard_to_limit","fanjian_suit","gaiming_pick","haotianta_pick","jijie_give_target","liaoyuan_discard","respond_shan","trigger_confirm","tuxi_target","xunxun_arrange"],"failed":0}
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/approved-b-parity.mjs", "../evidence/b-metadata-fixtures.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge"], "exit": 0, "locked_seconds": 0.7364165839971974}

@@ -12,6 +12,12 @@
     "trademark_notes": "本包不授予“三国杀”及相关名称、标识的商标权；相关权利归其权利人所有。",
     "changelog": [
       {
+        "version": "0.2.5",
+        "date": "2026-10-30",
+        "author": "noname-next",
+        "description": "ADR0786 J2：冯河使用现有其他存活伤害来源滤镜；原生宿主接通完整冯河选择、上限基数与恢复。其余整包原生缺口仍明确拒绝。"
+      },
+      {
         "version": "0.2.4",
         "date": "2026-10-24",
         "author": "noname-next",

@@ -37,10 +37,7 @@ pub(crate) fn seat_of(p: rule_api::PlayerId, seats: u8) -> Option<PlayerId> {
 }
 
 fn kind_tag(kind: CardKind) -> u8 {
-    CardKind::ALL
-        .iter()
-        .position(|k| *k == kind)
-        .unwrap_or(255) as u8
+    CardKind::ALL.iter().position(|k| *k == kind).unwrap_or(255) as u8
 }
 
 fn skill_label(catalog: &Catalog, def: u32) -> Option<String> {
@@ -50,6 +47,11 @@ fn skill_label(catalog: &Catalog, def: u32) -> Option<String> {
 
 fn pile_name(catalog: &Catalog, executing: &str, pile_def: u32) -> String {
     skill_label(catalog, pile_def).unwrap_or_else(|| executing.to_string())
+}
+
+/// The private storage namespace is shared by host writes and VM queries.
+pub fn storage_key(skill_name: &str, key: u32) -> String {
+    format!("storage:{skill_name}#{key}")
 }
 
 /// 入队前校验。通过的变体必须能编码、能落账。
@@ -70,7 +72,12 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
                 return Err(reject("DrawCards 零量"));
             }
         }
-        EffectRequest::DealDamage { target, amount, nature, .. } => {
+        EffectRequest::DealDamage {
+            target,
+            amount,
+            nature,
+            ..
+        } => {
             ok_player(*target, "DealDamage")?;
             if *amount == 0 || *nature > 2 {
                 return Err(reject("DealDamage 越界"));
@@ -107,6 +114,16 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         // PA12 批⑤-3：DSL `storage_set(self_skill, key, value)`——技能实例
         // 私有存储（上游 player.storage.<skill>[key]）。
         EffectRequest::StorageSet { .. } => {}
+        EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
+        | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+            player, skill, ..
+        }
+        | EffectRequest::ResolveOlJieDanshou { player, skill } => {
+            ok_player(*player, "ResolveOlJieDanshou")?;
+            if !skill.is_some() {
+                return Err(reject("ResolveOlJieDanshou skill"));
+            }
+        }
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
         // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
         // 拒绝。
@@ -251,7 +268,7 @@ fn push_pile(ctx: &mut Ctx<'_>, seat: PlayerId, name: &str, card: CardId) {
 }
 
 /// Halted 后落账。`executing` 是正在结算的技能名（牌堆键）。
-pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
+pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: EffectRequest) {
     let seats = ctx.core.players.len() as u8;
     match e {
         EffectRequest::RecoverHp { player, amount, .. } => {
@@ -314,7 +331,11 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 });
             }
         }
-        EffectRequest::AddMark { player, mark, delta } => {
+        EffectRequest::AddMark {
+            player,
+            mark,
+            delta,
+        } => {
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
@@ -324,7 +345,11 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 ctx.core.vm_aux.marks.remove(&(p, mark.raw()));
             }
         }
-        EffectRequest::RemoveMark { player, mark, amount } => {
+        EffectRequest::RemoveMark {
+            player,
+            mark,
+            amount,
+        } => {
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
@@ -402,7 +427,12 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 push_pile(ctx, p, executing, card);
             }
         }
-        EffectRequest::PlaceTopDeckToExpansion { player, pile_def, count, .. } => {
+        EffectRequest::PlaceTopDeckToExpansion {
+            player,
+            pile_def,
+            count,
+            ..
+        } => {
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
@@ -412,7 +442,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 push_pile(ctx, p, &name, card);
             }
         }
-        EffectRequest::GainWholeSkillPile { player, pile_def, .. } => {
+        EffectRequest::GainWholeSkillPile {
+            player, pile_def, ..
+        } => {
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
@@ -477,7 +509,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 to: p,
             });
         }
-        EffectRequest::DiscardSkillPile { player, pile_def, .. } => {
+        EffectRequest::DiscardSkillPile {
+            player, pile_def, ..
+        } => {
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
@@ -512,6 +546,12 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             key,
             value,
         } => {
+            let scoped = (owner, storage_key(executing, key));
+            if value == 0 {
+                ctx.core.vm_aux.flags.remove(&scoped);
+            } else {
+                ctx.core.vm_aux.flags.insert(scoped, value);
+            }
             let k = format!("{executing}#{key}");
             if value == 0 {
                 ctx.core.vm_aux.storage.remove(&k);
@@ -550,7 +590,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
                 }
             }
         }
-        EffectRequest::ModifyCurrentDamage { player: _, delta, .. } => {
+        EffectRequest::ModifyCurrentDamage {
+            player: _, delta, ..
+        } => {
             if let Ok(d) = ctx.current_damage() {
                 if d.amount > 0 && delta != 0 {
                     let next = (d.amount as i32).saturating_add(delta).max(0) as u32;
@@ -678,10 +720,17 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, e: EffectRequest) {
             }
         }
         EffectRequest::RevealCards { cards, to } => {
-            let shown: Vec<_> = cards.into_iter().map(|c| c.raw()).filter(|c| *c != 0).collect();
+            let shown: Vec<_> = cards
+                .into_iter()
+                .map(|c| c.raw())
+                .filter(|c| *c != 0)
+                .collect();
             let who: Vec<_> = to.into_iter().filter_map(|p| seat_of(p, seats)).collect();
             if !shown.is_empty() {
-                ctx.out.push(LogEvent::CardsRevealed { cards: shown, to: who });
+                ctx.out.push(LogEvent::CardsRevealed {
+                    cards: shown,
+                    to: who,
+                });
             }
         }
         EffectRequest::SetTurnState { current, phase } => {

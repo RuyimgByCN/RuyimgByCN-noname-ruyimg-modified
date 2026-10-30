@@ -1,0 +1,110 @@
+{
+  "at_utc": "2026-10-30T05:58:18.604931+00:00",
+  "runtime_acceptance_complete": true,
+  "final_preflight": "pending; run once after runtime/artifact cleanup",
+  "phaseA_pre_fix_counts": {
+    "native3": [
+      1705,
+      0,
+      75
+    ],
+    "affected_six": [
+      6034,
+      0,
+      77
+    ],
+    "workspace": [
+      6828,
+      0,
+      77
+    ]
+  },
+  "phaseB_post_fix_counts": {
+    "nc10_targeted": [
+      54,
+      0,
+      4
+    ],
+    "native3": [
+      1706,
+      0,
+      75
+    ],
+    "affected_six": [
+      6035,
+      0,
+      77
+    ],
+    "workspace": [
+      6829,
+      0,
+      77
+    ],
+    "frontend": [
+      153,
+      0,
+      0
+    ],
+    "worker": [
+      82,
+      0
+    ]
+  },
+  "J2_actual_WASM": [
+    36,
+    189,
+    114
+  ],
+  "five_window_actual_WASM": {
+    "windows": 5,
+    "states": 75,
+    "seats": 270,
+    "commands": 35,
+    "restarts": 40
+  },
+  "ordinary_projection": {
+    "cases": 5,
+    "comparisons": 40,
+    "privacy": 32
+  },
+  "B_actual_parity": {
+    "fixtures": 14,
+    "comparisons": 98,
+    "native_kinds": 5
+  },
+  "real_UI": {
+    "chrome_flows": 16,
+    "wkwebview_flows": 16
+  },
+  "actual_J2_ChromeWorker": {
+    "cases": 3
+  },
+  "direct_planner_actual_WASM": {
+    "paired_calls_per_target": 4,
+    "real7prompt_calls_per_target": 14,
+    "private_queued_damage": [
+      1,
+      5
+    ],
+    "budgets": [
+      0,
+      48
+    ],
+    "nodes": 0,
+    "faults": 0
+  },
+  "failed_commands_retained": [
+    {
+      "name": "nc10-j2-paired-plan-red",
+      "exit": 101,
+      "log": "nc10-j2-paired-plan-red.log"
+    },
+    {
+      "name": "j2-real-chrome-worker",
+      "exit": 1,
+      "log": "j2-real-chrome-worker.log"
+    }
+  ],
+  "new_source_defects_after_fix": [],
+  "scope": "B metadata and J2 primitives/active bridge plus focused NC10/J2 repair; not full NC10/N01/shiji/37source/platform/default acceptance"
+}

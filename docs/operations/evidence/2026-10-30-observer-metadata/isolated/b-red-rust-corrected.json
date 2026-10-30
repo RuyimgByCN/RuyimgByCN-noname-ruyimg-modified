@@ -1,0 +1,23 @@
+{
+  "name": "b-red-rust-corrected",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "game-server",
+    "--test",
+    "approved_b_metadata"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 15150198784,
+  "start": 1793329101.007412,
+  "exit": 101,
+  "end": 1793329154.916251,
+  "free_after": 14432567296
+}

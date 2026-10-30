@@ -1,0 +1,13 @@
+{
+  "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/author-pack",
+  "frozen_author_payload_copied_unchanged": true,
+  "package_declared_abi": 757,
+  "current_host_abi": 758,
+  "current_runtime_archives_generated_by_SDK": true,
+  "files": {
+    "0.1.0/package.npack.json": "e9a0c876c5f9ec8b00379fcee740e047023a44e0ba4d83f829ebb3c4ff9b28d0",
+    "0.1.0/character.json": "423e252572199d2ef37a15d1eb367d930253bec5c84397efd101d19f8d652e44",
+    "0.1.1/package.npack.json": "765f986276f4b45d26142406b7edab72721f17efe8aace42fb84058ec802f7d0",
+    "0.1.1/character.json": "423e252572199d2ef37a15d1eb367d930253bec5c84397efd101d19f8d652e44"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "restored": [
+    "apps/web-client/dist/assets/engine.worker-6iNxSyL2.js",
+    "apps/web-client/dist/assets/engine_wasm_bg-BumAzGma.wasm",
+    "apps/web-client/dist/assets/index-CsFu7D1w.js",
+    "apps/web-client/dist/assets/index-DHWyqN42.css",
+    "apps/web-client/dist/index.html"
+  ],
+  "reason": "Generated production build outputs excluded from pure source delta; exact initial bytes restored after preserving final generated index."
+}

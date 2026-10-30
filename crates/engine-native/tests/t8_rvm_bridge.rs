@@ -1100,7 +1100,7 @@ fn t8_loader_maps_all_carried_named_filters() {
             .iter()
             .find(|d| d.name.contains(&format!("hnl_ld_{tag}")))
             .unwrap_or_else(|| panic!("hnl_ld_{tag} 声明缺失"));
-        assert_eq!(decl.filter, *want, "hnl_ld_{tag} 策略映射");
+        assert_eq!(match &decl.filter { engine_native::rvm_bridge::VmFilterPolicy::Declared { inner, .. } => &**inner, other => other }, want, "hnl_ld_{tag} 策略映射");
     }
 }
 
@@ -1437,7 +1437,7 @@ skill hnl_pz_d(990016) {
             .iter()
             .find(|d| d.name.contains(tag))
             .unwrap_or_else(|| panic!("{tag} 声明缺失"));
-        assert_eq!(decl.filter, policy, "{tag} 策略映射");
+        assert_eq!(match &decl.filter { engine_native::rvm_bridge::VmFilterPolicy::Declared { inner, .. } => &**inner, other => other }, &policy, "{tag} 策略映射");
     }
 }
 

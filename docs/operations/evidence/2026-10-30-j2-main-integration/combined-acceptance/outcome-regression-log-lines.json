@@ -1,0 +1,8 @@
+[
+  "✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.061375ms)",
+  "✔ native other outcome shapes and unknown detail pass through unchanged (0.124834ms)",
+  "✔ view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation (0.18275ms)",
+  "✔ MatchEnded timeline uses shared outcome wording (0.266167ms)",
+  "✔ 身份局胜负类型映射 (0.41925ms)",
+  "✔ malformed and unmodeled outcome detail stays visible without inventing a winner (0.079917ms)"
+]

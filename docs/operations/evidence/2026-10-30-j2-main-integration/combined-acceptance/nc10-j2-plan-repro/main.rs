@@ -1,0 +1,27 @@
+mod pack;
+use engine_native::{Engine, Phase, GameAction, GameCommand, ChoiceOption as O, CommandOutcome, MachineSnapshot};
+use engine_native::ai::BoundedPlanner;
+use engine_native::content::extension::ExtensionPack;
+use serde_json::{json,Value};
+const DSL:&str="skill nc10_j2_cached(99107899) { active play_phase targets 0 0 { let reds = hand_color_count(2, red); effect resolve_ol_jie_danshou(self); effect deal_damage(self,self,reds+1); } }";
+fn hex(bytes:&[u8])->String{bytes.iter().map(|b|format!("{b:02x}")).collect()}
+fn submit(e:&mut Engine,action:GameAction){let out=e.submit(GameCommand{actor:0,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action});assert!(!matches!(out,CommandOutcome::Rejected(_)),"{out:?}");}
+fn answer(e:&mut Engine,selection:Vec<O>){let id=e.open_choice().unwrap().id;submit(e,GameAction::Answer{choice_id:id,selection});}
+fn fixture(pack:&ExtensionPack,seed:u64,hp:i32,red:bool,reverse:bool)->Engine{
+ let mut e=Engine::new_with_extensions(seed,4,&[pack]).unwrap();e.assign_general_named(0,"author").unwrap();e.debug_set_turn(0,Phase::Play,1);e.debug_set_hp(0,hp);e.debug_clear_hand(0);
+ let spare=e.debug_place(0,"sha");let tao=e.debug_place(0,"tao");let shan=e.debug_place(0,"shan");
+ if reverse {e.state_core_mut().players[0].hand=vec![spare,shan,tao];}
+ assert_eq!(e.state_core().players[1].hand.len(),4);
+ for index in 0..4{let deck_index=e.state_core().deck.iter().position(|id|matches!(e.catalog().cards[*id as usize].suit,engine_native::catalog::Suit::Heart|engine_native::catalog::Suit::Diamond)==red).unwrap();let core=e.state_core_mut();std::mem::swap(&mut core.players[1].hand[index],&mut core.deck[deck_index]);}
+ let skill=e.catalog().skill_by_name("nc10_j2_cached").unwrap();submit(&mut e,GameAction::ActivateSkill{skill});assert_eq!(e.open_choice().unwrap().spec.prompt,"rvm_danshou_option");answer(&mut e,vec![O::Tag(1)]);assert_eq!(e.open_choice().unwrap().spec.prompt,"rvm_danshou_target");answer(&mut e,vec![O::Player(0)]);assert_eq!(e.open_choice().unwrap().spec.prompt,"rvm_danshou_card");answer(&mut e,vec![O::Card(spare)]);assert_eq!(e.open_choice().unwrap().spec.prompt,"rvm_danshou_discard");assert_eq!(e.open_choice().unwrap().spec.min,1);assert_eq!(e.open_choice().unwrap().spec.options.len(),2);
+ Engine::restore_with_extensions(&e.save(),&[pack]).unwrap();e
+}
+fn public(e:&Engine)->Value{json!({"input":format!("{:?}",e.ai_session(0).input()),"choice":format!("{:?}",e.ai_session(0).choice()),"events":format!("{:?}",e.ai_session(0).events())})}
+fn queued(e:&Engine)->Value{let s=e.save();let mut states=vec![];for p in &s.resolution.parks{if let MachineSnapshot::Rvm{commit_pending,commit_state,committing,following,paused,commit_pick,..}=&p.machine{let effects=engine_native::rvm_ops::dec_effects(commit_pending).unwrap();let damage=effects.iter().filter_map(|e|if let rule_api::EffectRequest::DealDamage{amount,..}=e{Some(*amount)}else{None}).collect::<Vec<_>>();states.push(json!({"damage":damage,"effects":format!("{effects:?}"),"commit_state":commit_state,"committing":committing,"following":format!("{following:?}"),"paused":paused.is_some(),"commit_pick":format!("{commit_pick:?}")}));}}json!(states)}
+fn main(){let output=std::env::args().nth(1).unwrap();let pack=pack::pack(DSL);let mut attempts=vec![];let mut red=false;
+ 'search:for hp in [4,3,2]{for seed in 99107868..99107880{for reverse in [false,true]{let pair=[fixture(&pack,seed,hp,false,reverse),fixture(&pack,seed,hp,true,reverse)];let pub0=public(&pair[0]);assert_eq!(pub0,public(&pair[1]),"counterfactual public input/choice/events differ");let original=[pair[0].save(),pair[1].save()];let mut budgets=vec![];
+ for budget in [0,48]{let planner=BoundedPlanner::new(budget).with_policy_variant(1).with_lookahead(2);let plans=[pair[0].plan_action(0,&planner),pair[1].plan_action(0,&planner)];let different=format!("{:?}",plans[0])!=format!("{:?}",plans[1]);red|=different;let mut applied=vec![];
+ for (engine,plan) in pair.iter().zip(plans.iter()){let mut restored=Engine::restore_with_extensions(&engine.save(),&[&pack]).unwrap();let result=restored.apply_plan(plan).unwrap();assert!(!matches!(result,CommandOutcome::Rejected(_)));applied.push(format!("{result:?}"));}
+ budgets.push(json!({"budget":budget,"full_plans":plans.iter().map(|p|format!("{p:?}")).collect::<Vec<_>>(),"actions":plans.iter().map(|p|format!("{:?}",p.action)).collect::<Vec<_>>(),"nodes":plans.iter().map(|p|p.nodes_used).collect::<Vec<_>>(),"sim_faults":plans.iter().map(|p|p.sim_faults).collect::<Vec<_>>(),"different":different,"restored_apply":applied}));}
+ assert_eq!([pair[0].save(),pair[1].save()],original,"planning mutated authority");let record=json!({"seed":seed,"hp":hp,"reverse_hand":reverse,"public":pub0,"queued":[queued(&pair[0]),queued(&pair[1])],"source_archive_hex":original.iter().map(|s|hex(&engine_native::archive::encode_archive(s))).collect::<Vec<_>>(),"budgets":budgets,"source_immutable":true});println!("{}",json!({"seed":seed,"hp":hp,"reverse_hand":reverse,"red":red,"budgets":record["budgets"],"queued":record["queued"]}));attempts.push(record);if red{break 'search;}}}}
+ let result=json!({"dsl":DSL,"real_reachable_paired_states":true,"attempts":attempts,"plan_divergence_found":red,"invariant":"identical public input/choice/events must yield identical complete Plans"});std::fs::write(output,serde_json::to_vec_pretty(&result).unwrap()).unwrap();assert!(!red,"NC10/J2 cached private scalar enters planner output");}

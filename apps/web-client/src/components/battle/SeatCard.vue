@@ -1,17 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
-import {
-  characterDisplayName,
-  characterImageUrl,
-  characterPortraitUrl,
-  ensureAppearanceCharacter,
-  fallbackPortraitUrl,
-  selectedSkinId,
-  selectSkin,
-  skinDisplayName,
-  skinsForCharacter,
-  substituteImageUrl,
-} from "../../engine/appearanceStore";
+import { computed } from "vue";
+import GeneralPortrait from "./GeneralPortrait.vue";
 import type { CardView, SeatView } from "../../types/engine";
 
 const props = defineProps<{
@@ -28,64 +17,10 @@ const emit = defineEmits<{
   select: [playerId: number];
 }>();
 
-const displayName = computed(
-  () =>
-    characterDisplayName(props.seat.character_def) ??
-    `#${props.seat.character_def}`
-);
-const skins = computed(() => skinsForCharacter(props.seat.character_def));
-const selectedSkin = computed(() => selectedSkinId(props.seat.character_def));
-const selectedPortrait = computed(() =>
-  characterImageUrl(props.seat.character_def)
-);
-const basePortrait = computed(() =>
-  characterPortraitUrl(props.seat.character_def)
-);
-const originalPortrait = computed(() =>
-  fallbackPortraitUrl(props.seat.character_def)
-);
-const portraitCandidates = computed(() =>
-  Array.from(
-    new Set([
-      ...(props.seat.alive
-        ? []
-        : [substituteImageUrl(props.seat.character_def, "dead")]),
-      selectedPortrait.value,
-      basePortrait.value,
-      originalPortrait.value,
-    ])
-  ).filter((url): url is string => !!url)
-);
-const failedAssets = ref<string[]>([]);
-const portraitSrc = computed(
-  () =>
-    portraitCandidates.value.find(
-      (url) => !failedAssets.value.includes(url)
-    ) ?? ""
-);
-
-watch(
-  () => props.seat.character_def,
-  (characterId) => {
-    void ensureAppearanceCharacter(characterId).catch(() => undefined);
-  },
-  { immediate: true }
-);
-
-watch(portraitCandidates, () => {
-  failedAssets.value = [];
-});
-
-function onPortraitError(): void {
-  if (portraitSrc.value) {
-    failedAssets.value = [...failedAssets.value, portraitSrc.value];
-  }
-}
-
-function onSkinChange(event: Event): void {
-  const value = (event.target as HTMLSelectElement).value;
-  selectSkin(props.seat.character_def, value === "" ? null : Number(value));
-}
+const slots = computed(() => props.seat.generals ?? [null, null]);
+const legacyDef = computed(() => !props.seat.generals || (slots.value.every((slot) => slot === null) && props.seat.character_def !== 0)
+  ? props.seat.character_def : undefined);
+const displayName = computed(() => slots.value.map((slot, index) => slot?.name || (index === 0 && legacyDef.value !== undefined ? `#${legacyDef.value}` : "暗将／未配置")).join(" / "));
 
 function hpIcon(hp: number, maxHp: number, alive: boolean): string {
   if (!alive) return "✗";
@@ -118,21 +53,13 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
     @click="isTargetMode && isSelectableTarget && emit('select', seat.player)"
     @keydown.enter="isTargetMode && isSelectableTarget && emit('select', seat.player)"
   >
-    <img
-      v-if="portraitSrc"
-      class="portrait"
-      :src="portraitSrc"
-      :alt="`${displayName}武将头像`"
-      @error="onPortraitError"
-    />
-    <div v-else class="portrait no-image" role="img" :aria-label="`${displayName}暂无头像`">
-      无图
-    </div>
     <header>
-      <span class="name">{{ displayName }}</span>
       <span v-if="self" class="tag">你</span>
       <span v-if="seat.turned_over" class="tag" aria-label="武将牌背面">翻面</span>
     </header>
+    <div class="generals" aria-label="双将">
+      <GeneralPortrait v-for="(general, index) in slots" :key="index" :general="general" :slot="index" :legacy-def="index === 0 ? legacyDef : undefined" :alive="seat.alive" />
+    </div>
     <div class="hp-row">
       <span
         class="state-icon"
@@ -157,20 +84,6 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
       <span>手牌 {{ seat.hand_count }}</span>
       <span>{{ identityLabel }}</span>
     </div>
-    <select
-      v-if="skins.length > 0"
-      class="skin-select"
-      :value="selectedSkin ?? ''"
-      :aria-label="`${displayName}皮肤`"
-      @click.stop
-      @keydown.stop
-      @change="onSkinChange"
-    >
-      <option value="">默认皮肤</option>
-      <option v-for="skin in skins" :key="skin.id" :value="skin.id">
-        {{ skinDisplayName(skin) }}{{ skin.presentation.kind === "spine" ? "（静态回退）" : "" }}
-      </option>
-    </select>
     <div v-if="equipCards.length > 0" class="equip-zone" aria-label="装备区">
       <div
         v-for="card in equipCards"
@@ -205,37 +118,7 @@ function hpColor(hp: number, maxHp: number, alive: boolean): string {
   min-height: 96px;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-.seat.has-portrait {
-  min-height: 112px;
-  padding-left: 5.4rem;
-}
-.portrait {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 4.8rem;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
-  border-radius: 9px 0 0 9px;
-  border-right: 1px solid var(--border);
-}
-.no-image {
-  display: grid;
-  place-items: center;
-  background: var(--bg-elevated);
-  color: var(--muted);
-  font-size: 0.75rem;
-}
-.skin-select {
-  width: 100%;
-  margin-top: 0.35rem;
-  padding: 0.12rem 0.25rem;
-  color: var(--muted);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-size: 0.7rem;
-}
+.generals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; margin-bottom: 0.5rem; }
 .seat.self {
   border-color: var(--accent);
   box-shadow: 0 0 0 1px rgba(232, 165, 75, 0.25);

@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import { resolve } from 'node:path';
+const [pkg,nativePath,wasmPath,reportPath]=process.argv.slice(2);
+const {default:init,run_matrix}=await import(pathToFileURL(resolve(pkg,'j2_direct_planner_matrix.js')));
+await init({module_or_path:readFileSync(resolve(pkg,'j2_direct_planner_matrix_bg.wasm'))});
+const actual=JSON.parse(run_matrix());
+writeFileSync(wasmPath,JSON.stringify(actual,null,2)+'\n');
+assert.deepEqual(actual,JSON.parse(readFileSync(nativePath,'utf8')),'entire shared direct-planner output, archives, public inputs, full Plans and restored outcomes');
+assert.deepEqual(actual.paired.queuedDamage,[[1],[5]]);
+assert.equal(actual.paired.plannerCalls,4);
+assert.deepEqual(actual.paired.budgets.map(row=>row.budget),[0,48]);
+assert.equal(actual.realSevenPrompts.length,7);
+const report={passed:true,actualWasm:true,entrypoint:actual.entrypoint,pairedCallsPerTarget:4,sevenRealPromptCallsPerTarget:14,queuedDamage:[1,5],budgets:[0,48],policyVariant:1,depth:2,fullNativeWasmOutputEqual:true,allSourceArchivesImmutable:true,allRestoredAppliesValid:true,nodes:0,simFaults:0,prompts:actual.realSevenPrompts.map(row=>({prompt:row.prompt,scenario:row.scenario,checkpoint:row.checkpoint})),scope:'Current J2 cached scalar paired case and seven real J2 public prompt leaves; not full NC10/no-choice/Host privacy'};
+writeFileSync(reportPath,JSON.stringify(report,null,2)+'\n');
+console.log(JSON.stringify(report));

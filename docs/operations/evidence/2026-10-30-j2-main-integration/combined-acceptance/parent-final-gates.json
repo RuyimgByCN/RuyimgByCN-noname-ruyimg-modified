@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "parent-line-self-tests",
+      "exit": 0
+    },
+    {
+      "name": "parent-source-lines",
+      "exit": 0
+    },
+    {
+      "name": "parent-final-preflight",
+      "exit": 0
+    }
+  ],
+  "maintained_files_unchanged": 20752,
+  "prior_failed_full_preflight_preserved": true,
+  "source_versions": {
+    "rules": 329,
+    "archive": 105,
+    "abi": 758,
+    "ws": 5
+  },
+  "cache_retention_reason": "Private stage3 dependencies needed immediately by these final checks; no incremental compilation."
+}

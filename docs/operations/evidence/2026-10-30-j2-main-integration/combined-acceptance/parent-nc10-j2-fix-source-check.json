@@ -1,0 +1,35 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc10_j2_vm_privacy::",
+    "--",
+    "--nocapture"
+  ],
+  "exit": 0,
+  "seconds_including_lock": 3.985067917004926,
+  "CARGO_INCREMENTAL": "0",
+  "private_cache_retained_for_immediate_combined_revalidation": true,
+  "free_gib_after": 161.46,
+  "changed_paths": {
+    "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+    "crates/engine-native/src/ai/remap.rs": "07fbbd6f6664b1f11f5b603837478df988088564720027a74136176fa55956c9",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "ed57a11018583abc19f62e39732263beb61b021517f0c7a5b471ff0d143d10f6",
+    "crates/engine-native/tests/nc10_j2_vm_privacy.rs": "5e8466535c1f515cee7ff665a0362e613a89812b8c97a9c0245cebd960e6ee12",
+    "crates/engine-native/tests/nc09_machine_ownership.rs": "e33ac5a3960fc7c136e6b938ac8b0955556a8355a2a2f8536857d2a1450e10e0"
+  },
+  "runtime_versions": [
+    329,
+    105,
+    758,
+    5
+  ],
+  "rule_archive_abi_protocol_not_changed_by_AI_fix": true
+}

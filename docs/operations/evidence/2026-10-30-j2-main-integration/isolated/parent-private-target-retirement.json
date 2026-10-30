@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-30T12:39:38.099437+08:00",
+  "authorization": "User per-compilation cleanup; completed J2 worker relinquished both exact private targets",
+  "targets": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09",
+      "retired_kib": 7718560,
+      "lsof_exit": 1,
+      "active_users": []
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-gate",
+      "retired_kib": 75364,
+      "lsof_exit": 1,
+      "active_users": []
+    }
+  ],
+  "native_binary_copies_verified": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-test-artifacts/native-misc-tests",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-test-artifacts/native-matrix-tests"
+  ],
+  "all_wasm_copies_hashes_verified": true,
+  "preserved": "Source, patches, manifests, raw failures/passes, frozen packages, all retained native/WASM artifacts; main ongoing stage3cache and shared target untouched",
+  "free_gib_after": 174.59
+}

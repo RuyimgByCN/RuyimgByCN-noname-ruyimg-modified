@@ -1,0 +1,21 @@
+{
+  "name": "b-ui-chrome-corrected",
+  "command": [
+    "node",
+    "../evidence/run-b-ui.mjs",
+    "chrome",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "corrected"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 183411376128,
+  "start": 1793330240.7050838,
+  "exit": 0,
+  "end": 1793330272.00822,
+  "free_after": 182825041920
+}

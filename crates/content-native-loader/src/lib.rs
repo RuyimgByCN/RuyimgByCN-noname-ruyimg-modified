@@ -30,15 +30,16 @@ use engine_native::content::standard::Gender;
 use serde_json::Value;
 
 mod ai_tuning;
-mod coin;
 mod boss_playpack;
+mod coin;
 mod desktop_adapt;
 mod doomsday;
 mod douzhuan;
 mod drag_read;
-mod epic_cards;
 mod elo;
+mod epic_cards;
 mod fool;
+mod longxue;
 mod martial;
 mod omnisearch;
 mod qhly;
@@ -48,23 +49,19 @@ mod shousha_mvp;
 mod sj_settings;
 mod skin_switch;
 mod thunder;
-mod longxue;
 mod update_guard;
 pub use ai_tuning::*;
+pub use boss_playpack::{
+    apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
+    normalize_boss_hp, normalize_jiange_hp, parse_boss_play_config, parse_storage, BossPlayConfig,
+    Entry, HpKind, InitOutcome, PlayError, PlayStorage,
+};
 pub use coin::{
     apply_coin_commands, buy_item, change_coin, mark_phase_started, open_coin_session,
     parse_coin_config, persist_config, place_bet, restore_coin, settle_for, snapshot_coin,
     start_item, stop_item, toggle_snow_fall, toggle_snow_size, CoinConfig, CoinDisplay, CoinError,
     CoinGate, CoinMode, CoinSession, IdentityRole, SettleOutcome, SettleRequest, ShopItem,
     SnowSize,
-};
-pub use longxue::{
-    longxue_unlock_report, parse_longxue_config, LongxueConfig, LongxueError, LONGXUE_THRESHOLDS,
-};
-pub use boss_playpack::{
-    apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
-    normalize_boss_hp, normalize_jiange_hp, parse_boss_play_config, parse_storage, BossPlayConfig,
-    Entry, HpKind, InitOutcome, PlayError, PlayStorage,
 };
 pub use desktop_adapt::{
     apply as apply_desktop_adapt, classify_pointer, export_download, invoke_emoji,
@@ -80,7 +77,6 @@ pub use douzhuan::{
     DouzhuanConfig, DouzhuanError, DouzhuanReport, DouzhuanRequest, PackView, PickIn,
     SkillIn as DouzhuanSkillIn, SkillOut as DouzhuanSkillOut,
 };
-pub use epic_cards::*;
 pub use drag_read::{
     apply_drag_read_line, complete_package_tree, default_extension_name, detect_drop,
     dir_entry_visible, list_dir, parse_drag_config, plan_archive_import, plan_single_extension_js,
@@ -92,6 +88,7 @@ pub use elo::{
     resolve_difficulty, restore_pile, restrict_pool, snapshot_pile, think_delay, wash, EloCard,
     EloConfig, EloError, EloLevel, EloQuery, EloViewer, Think,
 };
+pub use epic_cards::*;
 pub use fool::{
     apply_fool_line, choose_card_runs, choose_voice, custom_choose_file_runs, derivation_sample,
     fangtong_allows, fangtong_select_len, fix_peiyin, is_phone, landing_offset, minsi_allows,
@@ -100,6 +97,9 @@ pub use fool::{
     DerivSkill, FangCard, FoolConfig, FoolError, HintQuery, LiegongSave, SkillAudio, ThrowOut,
     VoiceClip, VoiceOut,
 };
+pub use longxue::{
+    longxue_unlock_report, parse_longxue_config, LongxueConfig, LongxueError, LONGXUE_THRESHOLDS,
+};
 pub use martial::{
     ai_order, apply_martial_line, ask_join, assign_seats, attitude, battle_lists, check_result,
     connect_enabled, consider_mighty, double_hp_visible, draft, enemy_battle, filter_pool,
@@ -107,25 +107,22 @@ pub use martial::{
     online_choose_runs, opening_draw, parse_martial_config, playback_runs, redraw_pool,
     replacement_draw, reselect_pool, take_unique, video_name, DeathQuery, DraftInput, DraftOutput,
     FreeOut, JoinOut, Layout as MartialLayout, MartialConfig, MartialError, MightyOut, MightyPair,
-    OverOut,
-    RecordBook, ReplaceOut, Seats,
+    OverOut, RecordBook, ReplaceOut, Seats,
 };
-pub use qhly::*;
-pub use rzsh::*;
 pub use omnisearch::{
     debug_execute, debug_inspect, parse_config, EntryKind, PublicEntry, PublicIndex, SearchConfig,
     SearchError,
 };
-pub use shousha_mvp::{
-    apply_mvp_line, parse_mvp_config, parse_mvp_request, MvpConfig, MvpError, MvpFact,
-    MvpPlayer, MvpScore, MvpSession, MvpSettlement, MvpStats,
-};
+pub use qhly::*;
+pub use rzsh::*;
 pub use shousha::{
     apply_shousha, apply_shousha_line, format_report, parse_shousha_config, CharacterIn,
     CharacterOut, ShoushaConfig, ShoushaError, ShoushaReport, ShoushaRequest, SkillIn, SkillOut,
 };
-pub use thunder::*;
-pub use skin_switch::*;
+pub use shousha_mvp::{
+    apply_mvp_line, parse_mvp_config, parse_mvp_request, MvpConfig, MvpError, MvpFact, MvpPlayer,
+    MvpScore, MvpSession, MvpSettlement, MvpStats,
+};
 pub use sj_settings::{
     apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
     compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,
@@ -135,6 +132,8 @@ pub use sj_settings::{
     FormattedError, Frame, GameEvent, HttpCode, ImportInput, ImportOutput, InstalledPack,
     SelectInput, SjConfig, SjError, TransferFault, VersionOrder, WindowError,
 };
+pub use skin_switch::*;
+pub use thunder::*;
 pub use update_guard::{
     apply_update_guard_line, boot_link, can_update, classify_body, compare_update, dedup_broken,
     extension_urls, forced_enables, format_catch, join_changelog, next_error_count, on_remove_link,
@@ -200,7 +199,11 @@ impl std::fmt::Display for BridgeError {
                 "包声明的引擎 API 版本 {declared} 与运行时 {current} 不符"
             ),
             BridgeError::UnsupportedVmFilters { filters } => {
-                write!(f, "VM 技能滤镜原生不承载（整包拒装）: {}", filters.join(", "))
+                write!(
+                    f,
+                    "VM 技能滤镜原生不承载（整包拒装）: {}",
+                    filters.join(", ")
+                )
             }
             BridgeError::SymbolTableLimit { limit } => {
                 write!(f, "名称符号表已达总量上限 {limit}，拒绝装载（ADR 0779）")
@@ -252,14 +255,17 @@ pub struct VmBridgeOutcome {
     pub decls: Vec<engine_native::content::extension::VmSkillDecl>,
 }
 
+mod vm_active;
+
 pub fn bridge_vm_skill_decls(
     pkg: &content_schema::ContentPackage,
 ) -> Result<VmBridgeOutcome, BridgeError> {
     use engine_native::event::{EventKind, Timing};
-    pkg.validate_vm_effect_abi().map_err(|reason| BridgeError::InvalidField {
-        field: "manifest.rule_vm_abi_version",
-        reason,
-    })?;
+    pkg.validate_vm_effect_abi()
+        .map_err(|reason| BridgeError::InvalidField {
+            field: "manifest.rule_vm_abi_version",
+            reason,
+        })?;
     pkg.modules
         .iter()
         .try_for_each(content_schema::validate_vm_module_hash)
@@ -284,6 +290,13 @@ pub fn bridge_vm_skill_decls(
                 field: "trigger_index.module",
                 reason: format!("模块 {} 不在 npack modules 内", t.module),
             })?;
+        vm_active::validate_entry(module, t.entry_pc, "trigger_index.entry_pc")?;
+        if !t.choice_actor.is_owner() {
+            return Err(invalid(
+                "trigger_index.choice_actor",
+                "non-owner confirmation is unsupported",
+            ));
+        }
         // 阶段事件（PA12④ 对齐旧线语义）：旧线 `phase_X` = TurnStateChanged
         // 进入 X 阶段（`phase_end` = 进入结束阶段），`phase_X_end` =
         // PhaseEnded 离开 X 阶段；原生阶段帧按阶段逐一发 begin/end，故
@@ -381,7 +394,13 @@ pub fn bridge_vm_skill_decls(
                 optional: t.optional,
                 extra_events: Vec::new(),
             },
-            filter,
+            filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
+                skill_def_id: t.skill_def_id,
+                hand_limit_base_max_hp: pkg.modifier_index.iter().any(|m| {
+                    m.skill_def_id == t.skill_def_id && m.target == "hand_limit_base_max_hp"
+                }),
+                inner: Box::new(filter),
+            },
         });
     }
     if !unsupported.is_empty() {
@@ -389,6 +408,33 @@ pub fn bridge_vm_skill_decls(
         return Err(BridgeError::UnsupportedVmFilters {
             filters: unsupported,
         });
+    }
+    vm_active::bridge_active_entries(pkg, &mut out)?;
+    if !pkg.view_as_index.is_empty() {
+        return Err(invalid(
+            "view_as_index",
+            "native VM view-as declarations are unsupported",
+        ));
+    }
+    if pkg.modifier_index.iter().any(|m| {
+        m.target != "hand_limit_base_max_hp"
+            || m.mode != "override"
+            || m.selector.is_some()
+            || m.value_source.is_some()
+            || m.value != 1
+            || pkg
+                .active_index
+                .iter()
+                .any(|a| a.skill_def_id == m.skill_def_id)
+            || !pkg
+                .trigger_index
+                .iter()
+                .any(|t| t.skill_def_id == m.skill_def_id)
+    }) {
+        return Err(invalid(
+            "modifier_index",
+            "native VM modifier declarations are unsupported",
+        ));
     }
     Ok(VmBridgeOutcome { decls: out })
 }
@@ -659,12 +705,11 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         // 说明：本字段只负责**声明**（并入 `pack.host_skills`，由目录注册）；**授予**
         // 由内核侧的授予清单决定，不在装载器范围（见台账第 53 项）。
         for s in opt_array(c, "skills", "cards[].skills")? {
-            let s = s.as_str().ok_or_else(|| {
-                invalid("cards[].skills", format!("元素须为字符串，实为 {s}"))
-            })?;
-            let behavior = HostBehavior::from_key(s).ok_or_else(|| {
-                invalid("cards[].skills", format!("未知宿主技能键 {s}"))
-            })?;
+            let s = s
+                .as_str()
+                .ok_or_else(|| invalid("cards[].skills", format!("元素须为字符串，实为 {s}")))?;
+            let behavior = HostBehavior::from_key(s)
+                .ok_or_else(|| invalid("cards[].skills", format!("未知宿主技能键 {s}")))?;
             let name = names::intern(s.to_string());
             if !host_skills.iter().any(|d| d.name == name) {
                 host_skills.push(HostSkillDecl { name, behavior });

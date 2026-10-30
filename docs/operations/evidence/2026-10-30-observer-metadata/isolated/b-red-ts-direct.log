@@ -1,0 +1,35 @@
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ apps/web-client/scripts/approved-b-metadata.test.mjs (201.151083ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 204.973792
+
+✖ failing tests:
+
+test at apps/web-client/scripts/approved-b-metadata.test.mjs:1:1
+✖ apps/web-client/scripts/approved-b-metadata.test.mjs (201.151083ms)
+  'test failed'

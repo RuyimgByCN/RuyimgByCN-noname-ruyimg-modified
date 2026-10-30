@@ -1,0 +1,203 @@
+   Compiling serde_core v1.0.228
+   Compiling zerofrom v0.1.8
+   Compiling yoke v0.8.3
+   Compiling zerovec v0.11.6
+   Compiling libc v0.2.186
+   Compiling serde v1.0.228
+   Compiling tinystr v0.8.3
+   Compiling zerotrie v0.2.4
+   Compiling icu_locale_core v2.2.0
+   Compiling potential_utf v0.1.5
+   Compiling icu_normalizer_data v2.2.0
+   Compiling icu_properties_data v2.2.0
+   Compiling icu_collections v2.2.0
+   Compiling icu_provider v2.2.0
+   Compiling parking_lot_core v0.9.12
+   Compiling serde_json v1.0.150
+   Compiling phf_macros v0.13.1
+   Compiling phf v0.13.1
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-api)
+   Compiling string_cache_codegen v0.6.1
+   Compiling web_atoms v0.2.5
+   Compiling icu_properties v2.2.0
+   Compiling icu_normalizer v2.2.0
+   Compiling parking_lot v0.12.5
+   Compiling serde_spanned v1.1.1
+   Compiling darling_core v0.23.0
+   Compiling string_cache v0.9.0
+   Compiling idna_adapter v1.2.2
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/rule-api)
+   Compiling semver v1.0.28
+   Compiling darling_macro v0.23.0
+   Compiling idna v1.1.0
+   Compiling uuid v1.23.4
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling derive_more-impl v2.1.1
+   Compiling cssparser-macros v0.6.1
+   Compiling cssparser v0.36.0
+   Compiling derive_more v2.1.1
+   Compiling toml v1.1.2+spec-1.1.0
+   Compiling markup5ever v0.38.0
+   Compiling url v2.5.8
+   Compiling darling v0.23.0
+   Compiling swift-rs v1.0.7
+   Compiling serde_derive_internals v0.29.1
+   Compiling thiserror-impl v1.0.69
+   Compiling cfb v0.7.3
+   Compiling selectors v0.36.1
+   Compiling indexmap v1.9.3
+   Compiling thiserror v1.0.69
+   Compiling schemars_derive v0.8.22
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/rule-vm)
+   Compiling erased-serde v0.4.10
+   Compiling serde_with_macros v3.21.0
+   Compiling html5ever v0.38.0
+   Compiling camino v1.2.4
+   Compiling rustc_version v0.4.1
+   Compiling jsonptr v0.6.3
+   Compiling cargo-platform v0.1.9
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling http v1.4.2
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling dom_query v0.27.0
+   Compiling plist v1.10.0
+   Compiling dirs-sys v0.5.0
+   Compiling schemars v0.8.22
+   Compiling json-patch v3.0.1
+   Compiling cargo_metadata v0.19.2
+   Compiling embed-resource v3.0.11
+   Compiling urlpattern v0.3.0
+   Compiling serde_with v3.21.0
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native-kernel)
+   Compiling serde-untagged v0.1.9
+   Compiling infer v0.19.0
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/licensing-schema)
+   Compiling tauri-utils v2.9.3
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native-content)
+   Compiling tauri-winres v0.3.6
+   Compiling dirs v6.0.0
+   Compiling cargo_toml v0.22.3
+   Compiling tauri-build v2.6.3
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native)
+   Compiling wasm-bindgen v0.2.126
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/content-native-loader)
+   Compiling desktop-client v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/apps/desktop-client)
+   Compiling tokio v1.52.3
+   Compiling diagnostics v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/diagnostics)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/crates/engine-native-wasm)
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:236:4
+    |
+236 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:297:4
+    |
+297 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:359:4
+    |
+359 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:368:4
+    |
+368 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:394:4
+    |
+394 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:403:4
+    |
+403 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:442:4
+    |
+442 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:451:4
+    |
+451 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:459:4
+    |
+459 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:467:4
+    |
+467 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:475:4
+    |
+475 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:483:4
+    |
+483 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:491:4
+    |
+491 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:499:4
+    |
+499 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:507:4
+    |
+507 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:515:4
+    |
+515 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:523:4
+    |
+523 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 32.73s
+{"command": ["cargo", "build", "--offline", "-p", "desktop-client", "--example", "pa09_native_bridge"], "exit": 0, "locked_seconds": 32.76232841599267}

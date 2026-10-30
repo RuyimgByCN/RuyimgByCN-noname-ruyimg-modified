@@ -1,0 +1,151 @@
+{"command": ["python3", "-B", "scripts/check-native-wasm-cross-target.py"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "python3", "-B", "scripts/check-native-wasm-cross-target.py"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 169834192896}
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.09s
+     Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-367a7dcb703d082a)
+
+running 1 test
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 94 filtered out; finished in 0.02s
+
+{"steps":40,"final_hash":"ce28acb849be307f65b808e250927f1cb8e73ebe5fc527e48bb604914e8f084c","wasm":"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"}
+{
+  "direct_steps": 40,
+  "restore_before_steps": 20,
+  "restore_after_steps": 20,
+  "final_revision": 40,
+  "final_hash": "ce28acb849be307f65b808e250927f1cb8e73ebe5fc527e48bb604914e8f084c",
+  "native_wasm_match": true
+}
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:236:4
+    |
+236 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:297:4
+    |
+297 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:359:4
+    |
+359 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:368:4
+    |
+368 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:394:4
+    |
+394 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:403:4
+    |
+403 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:442:4
+    |
+442 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:451:4
+    |
+451 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:459:4
+    |
+459 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:467:4
+    |
+467 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:475:4
+    |
+475 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:483:4
+    |
+483 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:491:4
+    |
+491 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:499:4
+    |
+499 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:507:4
+    |
+507 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:515:4
+    |
+515 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:523:4
+    |
+523 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.32s
+     Running tests/cross_target_package.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/cross_target_package-5cf474b37776b34c)
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+{"steps":20,"final_hash":"9ad6c4347f7b84082fb5747b6333dafad5905821e3d36c3f15cf5752e6d85bf3"}
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "9ad6c4347f7b84082fb5747b6333dafad5905821e3d36c3f15cf5752e6d85bf3",
+  "native_wasm_match": true
+}
+{"command": ["python3", "-B", "scripts/check-native-wasm-cross-target.py"], "exit": 0, "locked_seconds": 3.706011916976422, "disk_free_bytes": 169812299776}
+{"runner_exit": 0, "stop_reason": null}

@@ -96,6 +96,7 @@ fn assert_parity(engine: &Engine) {
                 local["identity"]
             );
             assert_eq!(Value::from(server.character_def), local["characterDef"]);
+            assert_eq!(serde_json::to_value(&server.generals).unwrap(), local["generals"]);
         }
         let hidden: BTreeSet<_> = engine
             .state_core()

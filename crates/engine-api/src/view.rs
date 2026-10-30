@@ -79,6 +79,22 @@ pub struct SeatView {
     pub identity: Option<IdentityTag>,
     /// Public skill instances owned by this player.
     pub skills: Vec<SkillView>,
+    /// Authorized primary and secondary general slots; hidden/unconfigured slots are absent.
+    #[serde(default)]
+    pub generals: [Option<GeneralSlotView>; 2],
+}
+
+/// Observer-filtered general metadata; definition zero is a valid definition.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct GeneralSlotView {
+    /// Stable general definition id.
+    pub def: u32,
+    /// Public general name or localization key.
+    pub name: String,
+    /// Public faction name.
+    pub faction: String,
+    /// Whether this slot has been revealed.
+    pub revealed: bool,
 }
 
 /// Public skill metadata required for client-side activation controls.

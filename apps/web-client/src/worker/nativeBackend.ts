@@ -17,6 +17,7 @@
  * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
+import { generalSlots, choiceMetadata } from "../engine/observerMetadata";
 import { publicEventLabel } from "../engine/publicEvents";
 import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
@@ -176,6 +177,7 @@ interface NativeView {
   players: Array<{
     seat: number;
     characterDef?: number;
+    generals?: unknown;
     alive: boolean;
     hp: number;
     maxHp: number;
@@ -258,6 +260,7 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
     seats: view.players.map((p) => ({
       player: p.seat,
       character_def: p.characterDef ?? 0,
+      generals: p.generals === undefined ? undefined : generalSlots(p.generals),
       seat: p.seat,
       hp: p.hp,
       max_hp: p.maxHp,
@@ -306,6 +309,7 @@ interface NativeChoiceJson {
   allowCancel?: boolean;
   hidden?: boolean;
   kind?: string;
+  native_kind?: unknown;
 }
 
 /** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */
@@ -351,8 +355,8 @@ function readChoiceJson(
   try {
     const raw = handle.engine.open_choice_json(seat);
     return (JSON.parse(raw) as NativeChoiceJson | null) ?? null;
-  } catch {
-    return null;
+  } catch (error) {
+    throw new Error(`native: choice JSON invalid: ${errorText(error)}`);
   }
 }
 
@@ -782,7 +786,7 @@ export function invalidateSeatCaches(handle: NativeHandle, seat: number): void {
 
 function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
   const choice = readChoiceJson(handle);
-  if (!choice) return null;
+  if (!choice || choice.hidden) return null;
   const options = choice.options ?? [];
   return {
     choice_id: Number(choice.id),
@@ -790,7 +794,8 @@ function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
     min_count: choice.min,
     max_count: choice.max,
     allow_cancel: choice.allowCancel,
-    kind: choice.kind ?? "Custom",
+    ...choiceMetadata(choice),
+    revision: Number(handle.engine.revision()),
     // token = 候选下标（回传即 `answer()` 的索引）；候选值只进 label_key。
     options: options.map((o, index) => ({
       token: index,

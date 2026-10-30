@@ -1,0 +1,25 @@
+{
+  "name": "b-wasm-pack",
+  "command": [
+    "wasm-pack",
+    "build",
+    "crates/engine-native-wasm",
+    "--target",
+    "web",
+    "--release",
+    "--no-opt",
+    "--out-dir",
+    "../../apps/web-client/src/worker/native-pkg"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 13844512768,
+  "start": 1793329245.104456,
+  "exit": 0,
+  "end": 1793329394.627761,
+  "free_after": 13184651264
+}

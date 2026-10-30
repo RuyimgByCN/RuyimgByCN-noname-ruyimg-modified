@@ -99,3 +99,15 @@ mod nc09_referee_projection;
 
 #[path = "../nc09_machine_ownership.rs"]
 mod nc09_machine_ownership;
+
+#[path = "../adr0786_j2_active_bridge.rs"]
+mod adr0786_j2_active_bridge;
+
+#[path = "../adr0786_j2_effect_choices.rs"]
+mod adr0786_j2_effect_choices;
+
+#[path = "../adr0786_j2_package_versions.rs"]
+mod adr0786_j2_package_versions;
+
+#[path = "../adr0786_j2_review_regressions.rs"]
+mod adr0786_j2_review_regressions;

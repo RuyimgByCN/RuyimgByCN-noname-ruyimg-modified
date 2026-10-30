@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree/../evidence/cleanup-b-unused.py", line 12, in <module>
+    assert not active,active
+AssertionError: ['68546']

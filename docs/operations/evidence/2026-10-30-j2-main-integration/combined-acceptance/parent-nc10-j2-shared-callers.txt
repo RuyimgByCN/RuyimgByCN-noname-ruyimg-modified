@@ -1,0 +1,7 @@
+crates/engine-native/src/ai/remap.rs:140:pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool {
+crates/engine-native/src/ai/remap.rs:161:            .is_some_and(requires_conservative_redaction),
+crates/engine-native/src/ai/remap.rs:282:            assert!(requires_conservative_redaction(&machine));
+crates/engine-native/src/ai/redact.rs:26:            !super::remap::requires_conservative_redaction(&p.machine.snapshot())
+crates/engine-native/src/ai.rs:515:fn vm_choice_leaf(choice: &ChoiceView) -> bool {
+crates/engine-native/src/ai.rs:553:        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
+crates/engine-native/src/ai.rs:706:                && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "native-misc-tests",
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/misc-dc3c06551063a5f7",
+    "sha256": "6ff9b8980056a3ab4139129a2768870d20df07305f3c9a4b2d9f5f40fb60f363",
+    "bytes": 27122984
+  },
+  {
+    "name": "native-matrix-tests",
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/adr0786_j2_cross_target-09bd3348dcbf7b35",
+    "sha256": "d691234b14218bc1a009b8915e1ccce9c69cb247b1d2cce94cffade85619ca6a",
+    "bytes": 21717736
+  }
+]

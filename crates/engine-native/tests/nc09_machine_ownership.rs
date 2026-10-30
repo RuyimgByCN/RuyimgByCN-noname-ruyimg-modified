@@ -50,6 +50,13 @@ fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
     let choice = engine.open_choice().map(|open| {
         serde_json::json!({
             "id": open.id, "observer": open.observer, "prompt": open.spec.prompt,
+            "native_kind": engine_native::view::choice_kind_name(open.spec.kind),
+            "kind": match open.spec.kind {
+                engine_native::ChoiceKind::Confirm => "Confirm",
+                engine_native::ChoiceKind::SelectCards => "SelectCards",
+                engine_native::ChoiceKind::SelectPlayers => "SelectTargets",
+                engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
+            },
             "min": open.spec.min, "max": open.spec.max, "allowCancel": open.spec.allow_cancel,
             "options": open.spec.options.iter().map(|option| match option {
                 engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),

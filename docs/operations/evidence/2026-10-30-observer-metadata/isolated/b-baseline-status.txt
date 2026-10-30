@@ -1,0 +1,52 @@
+ M Cargo.lock
+ M apps/desktop-client/Cargo.toml
+ M apps/desktop-client/src/lib.rs
+ M apps/desktop-client/src/main.rs
+ M apps/game-server/src/native_view.rs
+ M apps/game-server/src/native_ws_e2e.rs
+ M apps/game-server/src/native_ws_e2e/authority.rs
+ M apps/game-server/src/native_ws_e2e/double_failure.rs
+ M apps/game-server/src/room_native_actor.rs
+ M apps/game-server/tests/nc09_native_room_session.rs
+ M apps/game-server/tests/nc09_projection_parity.rs
+ M apps/web-client/scripts/nc04-worker-failure.test.mjs
+ M apps/web-client/scripts/web-frame-external.mjs
+ M apps/web-client/src/engine/autoDrive.ts
+ M apps/web-client/src/engine/client.ts
+ M apps/web-client/src/types/engine.ts
+ M apps/web-client/src/views/ExtensionsView.vue
+ M apps/web-client/src/views/SettingsView.vue
+ M apps/web-client/src/worker/nativeBackend.ts
+ M crates/engine-native-content/src/content/host/asks.rs
+ M crates/engine-native-content/src/content/standard.rs
+ M crates/engine-native-kernel/src/archive/resolution.rs
+ M crates/engine-native-kernel/src/catalog.rs
+ M crates/engine-native-kernel/src/snap.rs
+ M crates/engine-native-kernel/src/snap/asks.rs
+ M crates/engine-native-kernel/src/snap/validation.rs
+ M crates/engine-native-wasm/src/lib.rs
+ M crates/engine-native/src/engine/views.rs
+ M crates/engine-native/src/view.rs
+ M crates/engine-native/tests/groups/misc.rs
+?? .pi-lens-probe-home/
+?? .pi-lens.json
+?? apps/desktop-client/examples/
+?? apps/desktop-client/src/native_engine_host.rs
+?? apps/desktop-client/src/native_engine_resource.rs
+?? apps/desktop-client/src/native_envelope.rs
+?? apps/desktop-client/tests/
+?? apps/game-server/src/native_ws_e2e/referee.rs
+?? apps/game-server/tests/nc09_machine_projection.rs
+?? apps/game-server/tests/nc09_referee_projection.rs
+?? apps/web-client/scripts/pa09-desktop-transport.test.mjs
+?? apps/web-client/scripts/pa09-desktop-webview.ts
+?? apps/web-client/scripts/pa09-document-reload.ts
+?? apps/web-client/scripts/pa09-native-host-smoke.mjs
+?? apps/web-client/src/engine/desktopEngineTransport.ts
+?? apps/web-client/src/engine/nativeOutcome.ts
+?? crates/engine-native-kernel/src/snap/ownership.rs
+?? crates/engine-native-wasm/src/session.rs
+?? crates/engine-native-wasm/tests/pa09_native_session.rs
+?? crates/engine-native/tests/nc09_machine_ownership.rs
+?? crates/engine-native/tests/nc09_referee_projection.rs
+?? crates/engine-native/tests/support/

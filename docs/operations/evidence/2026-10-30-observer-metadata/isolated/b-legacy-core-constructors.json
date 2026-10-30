@@ -1,0 +1,22 @@
+{
+  "name": "b-legacy-core-constructors",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-core",
+    "snapshot::tests"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 178429272064,
+  "start": 1793330469.176932,
+  "exit": 0,
+  "end": 1793330555.108437,
+  "free_after": 176786202624
+}

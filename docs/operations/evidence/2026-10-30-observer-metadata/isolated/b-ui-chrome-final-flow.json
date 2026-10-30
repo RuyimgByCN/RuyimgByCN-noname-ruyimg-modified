@@ -1,0 +1,21 @@
+{
+  "name": "b-ui-chrome-final-flow",
+  "command": [
+    "node",
+    "../evidence/run-b-ui.mjs",
+    "chrome",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "final-flow"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 178429272064,
+  "start": 1793330469.1768699,
+  "exit": 0,
+  "end": 1793330556.639265,
+  "free_after": 176778203136
+}

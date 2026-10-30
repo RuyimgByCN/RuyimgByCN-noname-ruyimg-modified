@@ -1,0 +1,37 @@
+{
+  "at_utc": "2026-10-30T06:14:53.869458+00:00",
+  "targets": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "lsof_stderr": "",
+      "no_open_files_observed": true,
+      "du": "23430144\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "worker_downstream_use_complete": true,
+      "parent_can_retire_after_fresh_ownership_check": true
+    },
+    {
+      "path": "/tmp/noname-pa09-parent-gate-9e6c6232",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "lsof_stderr": "",
+      "no_open_files_observed": true,
+      "du": "83168\t/tmp/noname-pa09-parent-gate-9e6c6232",
+      "worker_downstream_use_complete": true,
+      "parent_can_retire_after_fresh_ownership_check": true
+    }
+  ],
+  "incremental_entries": {
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental": 0,
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/incremental": 0,
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/debug/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/release/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/wasm32-unknown-unknown/release/incremental": 0
+  },
+  "full_targets_deleted_by_worker": [],
+  "reuse_reason": "No remaining worker use. Parent may retire now or explicitly adopt for immediate next integration; do not retain on a hypothetical future need.",
+  "evidence_copies_secured": true,
+  "free_bytes": 168900182016
+}

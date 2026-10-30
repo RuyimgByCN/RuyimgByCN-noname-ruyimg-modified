@@ -90,6 +90,17 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         p.pingzhang_self_used = false;
         p.pingzhang_other_used = false;
     }
+    if begin && phase == Phase::Play && ctx.core.turn.skip_play_phase {
+        ctx.core.turn.skip_play_phase = false;
+        ctx.record_phase_skipped(player);
+        ctx.core.turn.phase = Phase::Discard;
+        ctx.emit(EventData::Phase {
+            player,
+            phase: Phase::Discard,
+            begin: true,
+        });
+        return;
+    }
     ctx.log(LogEvent::PhaseChanged {
         player,
         phase,
@@ -209,7 +220,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 颂词组技 songci_draw（swd 批 129，规则 v313）：弃牌阶段**收束**时若
     // 全部角色均已记录（无未记录者）→ 摸 1（上游 phaseDiscardEnd forced）
     if !begin && phase == Phase::Discard {
-        if let Some(def) = ctx.catalog.skill_by_name(crate::vocabulary::host::SONGCI_KEY) {
+        if let Some(def) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::SONGCI_KEY)
+        {
             if ctx.core.has_skill(player, def) {
                 // 上游 `game.hasPlayer(!storage.songci.contains(current))`：
                 // 计**全部角色**（含已阵亡者）——阵亡未记录即不触发
@@ -231,6 +245,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 直接进入弃牌阶段（跳过 Play 的 End/Begin 事件对——挂账见清单）。
     if phase == Phase::Draw && ctx.core.turn.skip_play_phase {
         ctx.core.turn.skip_play_phase = false;
+        ctx.record_phase_skipped(player);
         ctx.core.turn.phase = Phase::Discard;
         ctx.emit(EventData::Phase {
             player,

@@ -1,0 +1,60 @@
+## Review
+
+**Merge verdict: BLOCK on one NC10/J2 interaction.** The inspected manual merges preserve the reviewed Referee and B behavior. J2’s new effect-choice prompts, however, bypass NC10’s existing boundary for opaque VM continuations.
+
+This review used the actual main checkout at `/Users/ruyimg/Documents/Claude/sanguosha/noname-next`, the three supplied integration artifacts, and the relevant current callers. I made no writes and ran no builds or tests. I have not assessed the running combined acceptance result.
+
+### Finding — P1: J2 effect choices enter AI search with cached private VM effects
+
+**Locations:**
+
+- [ai.rs:515](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/ai.rs:515): `vm_choice_leaf` recognizes only `rvm_choice` and `rvm_discard_pick`.
+- [ai.rs:542](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/ai.rs:542): other prompts proceed into simulation.
+- [ai/remap.rs:140](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/ai/remap.rs:140): the conservative VM guard recognizes `paused: Some(_)` and `commit_pick: Some(_)`, but omits J2’s committing/content-continuation states.
+- [ai/remap.rs:124](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/ai/remap.rs:124): remapping does not inspect `commit_state` or `following`.
+
+J2 opens seven new prompts with VM execution already halted. Such a machine can have `committing = true`, nonempty `commit_state` and queued effects, while both `paused` and `commit_pick` are `None`. At an own-seat J2 choice, neither existing NC10 gate catches this state.
+
+The consequence follows from the current execution path: queries execute while the VM builds its effect queue; later hand sampling changes physical cards but cannot undo a private query result already encoded in an effect’s scalar amount. `plan_action` then submits candidate answers and scores those retained effects.
+
+**Concrete supported-DSL counterexample for validation:**
+
+```text
+active play_phase targets 0 0 {
+  let reds = hand_color_count(2, red);
+  effect resolve_ol_jie_danshou(self);
+  effect deal_damage(self, self, reds + 1);
+}
+```
+
+Formally compile and assign this skill. Give seat 0 four HP and hand `[spare Sha, Tao, Shan]`. Use Danshou option 1 on self and discard the spare Sha. The resulting `rvm_danshou_discard` window offers `[Tao, Shan]`, with exactly one card required.
+
+Compare two states differing only in seat 1’s four hidden cards: all red versus all black. Their cached queued self-damage is five versus one. Their visible choice remains the same. Current code:
+
+1. Misses the new prompt in `vm_choice_leaf`.
+2. Allows sampling because neither old VM pause field is present.
+3. Retains the privately derived damage amount.
+4. Simulates discarding Tao or Shan and scores the resulting damage/rescue paths.
+
+This exposes precisely the cached-private-effect dependency that the existing NC10 regression prevents for `rvm_discard_pick`; see [nc10_opaque_vm_privacy.rs:205](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/nc10_opaque_vm_privacy.rs:205). I did not execute this new counterexample, so I am not claiming a measured plan divergence or panic.
+
+**Smallest correction:** Extend the public-prompt search leaf to all seven J2 effect prompts, including the lookahead boundary. Extend conservative helper classification to cover J2 committing states and retained content/following continuations until their semantics are supported by remapping. Do not generically reinterpret every `commit_state` integer as a card ID: those fields also contain stages, seats, counters, and receipt IDs.
+
+Add the formal J2 paired-hidden-state regression, checking identical complete plans for identical projected inputs, plus helper byte-restore/continuation checks. This is an integration repair within the existing conservative NC10 approach; it needs no new rule version, ABI, archive format, or protocol.
+
+### Correct seams
+
+- **HostAsk and VM hooks:** [catalog.rs:820](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/catalog.rs:820) preserves the nine-argument HostAsk signature, including `Option<u32>`. All four J2 VM hooks and their `NONE` implementations are present. The content callback and snapshot caller retain the matching arguments.
+- **Prompts and encoding:** [archive/resolution.rs:129](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/archive/resolution.rs:129) retains the Referee keys, `fanjian_suit`, and seven J2 additions once each. `enc_open_choice` still writes `w.str(spec.prompt)`; the whitelist does not replace string encoding with positional tags.
+- **Referee restoration:** The XunXun/JiJie factory arms remain in [standard.rs:337](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard.rs:337). The physical-card collector retains the reviewed windows and distinguishes held cards from historical references in [snap/validation.rs:343](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/validation.rs:343).
+- **Test registration:** [groups/misc.rs:95](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/tests/groups/misc.rs:95) retains both Referee modules and all four J2 modules.
+- **Strict choice parity:** The native matrix now includes both B’s `kind` and `native_kind`, using the same mapping as the WASM session. The consumer retains whole-choice deep equality and complete archive comparisons; fields and assertions were not dropped. See [adr0786_j2_cross_target.rs:105](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs:105).
+- **Dependencies and product checks:** Cargo metadata retains B’s WASM `engine-api` dependency and J2’s content `rule-api` dependency. The worker’s character-definition assertion remains at [native-worker-smoke.mjs:557](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/native-worker-smoke.mjs:557).
+- **Newer source:** The NativeSession extraction, B metadata constructors, outcome projection, and NC10 source remain present. The source-admission record reports B matches except for the expected lockfile and combined prompt file. Runtime constants remain 329/105/758 with protocol 5.
+
+No corrective edit was applied by this reviewer. The source-line evidence records 8,980 maintained files passing the caps; that result is separate from the still-running combined runtime acceptance.
+
+The supplied source-admission fingerprints support the preservation audit, but I did not independently recompute hashes. The existing isolated B/J2 approvals remain valid within their scopes; they do not cover this newly reachable NC10 interaction.
+
+Skipped: writes, builds, tests, staging, commits, and unfinished validation logs.  
+Risk: new J2 prompts currently bypass NC10’s opaque-continuation boundary; combined acceptance remains unassessed.

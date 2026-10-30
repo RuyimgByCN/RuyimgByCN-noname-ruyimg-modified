@@ -1,0 +1,433 @@
+diff --git a/apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs b/apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs
+new file mode 100644
+index 0000000..1fa3d15
+--- /dev/null
++++ b/apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs
+@@ -0,0 +1,66 @@
++// Replay theft/gift author packages through the real SDK store and actual web WASM.
++// Usage: node --import ./scripts/ts-register.mjs scripts/adr0786-j2-theft-sdk-smoke.mjs <matrix.json>
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import init, { NativeEngine, validate_pack_json } from "../src/worker/native-pkg/engine_native_wasm.js";
++import { activateExtension, deactivateExtension, importExtensionPackageValidated, uninstallExtension } from "../src/engine/extensionStore.ts";
++import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
++
++const memory = new Map();
++globalThis.localStorage = { getItem:key => memory.get(key) ?? null, setItem:(key,value) => memory.set(key,String(value)), removeItem:key => memory.delete(key) };
++await init({ module_or_path:readFileSync(new URL("../src/worker/native-pkg/engine_native_wasm_bg.wasm",import.meta.url)) });
++const matrix = JSON.parse(readFileSync(process.argv[2],"utf8"));
++const names = ["danshou-hand-theft-not-gift","danshou-equipment-theft-not-gift","fenghe-genuine-gift-benefit"];
++function apply(engine,command) {
++  switch (command.type) {
++    case "activateSkill": return JSON.parse(engine.activate_skill(command.actor,command.skill));
++    case "playCard": return JSON.parse(engine.play_card(command.actor,command.card,new Uint32Array(command.targets)));
++    case "answer": return JSON.parse(engine.answer(command.actor,BigInt(command.choice_id),new Uint32Array(command.selections)));
++    default: throw Error(`Unexpected command ${command.type}`);
++  }
++}
++function replay(scenario,content) {
++  const engine = new NativeEngine(4,0n);
++  engine.restore_hex_with_packs_json(scenario.initial,content.packsJson);
++  for (const step of scenario.steps) {
++    const saved = engine.save_hex();
++    const restored = new NativeEngine(4,0n);
++    restored.restore_hex_with_packs_json(saved,content.packsJson);
++    if (step.command.type === "answer") {
++      for (const game of [engine,restored]) {
++        const before = game.save_hex();
++        let rejected = false;
++        try { rejected = JSON.parse(game.answer(step.command.actor,BigInt(step.command.choice_id),new Uint32Array([999]))).outcome === "rejected"; }
++        catch { rejected = true; }
++        assert.ok(rejected);
++        assert.equal(game.save_hex(),before,"failed retry preserves the frozen game");
++      }
++    }
++    assert.equal(apply(engine,step.command).outcome,step.outcome);
++    assert.equal(apply(restored,step.command).outcome,step.outcome);
++    assert.equal(engine.save_hex(),step.archive,"SDK package path matches complete native archive");
++    assert.equal(restored.save_hex(),step.resumed_archive,"SDK byte checkpoint matches native continuation");
++    assert.equal(engine.state_hash_hex(),step.hash);
++    restored.free();
++  }
++  const result={ name:scenario.name,steps:scenario.steps.length,hash:engine.state_hash_hex() };
++  engine.free();
++  return result;
++}
++const results=[];
++for (const name of names) {
++  const scenario=matrix.scenarios.find(s=>s.name===name);
++  assert.ok(scenario,`missing ${name}`);
++  const payload=JSON.parse(scenario.packs_json)[0];
++  await importExtensionPackageValidated(JSON.stringify(payload),async json=>validate_pack_json(json));
++  const key=`${payload.manifest.namespace}/${payload.manifest.package_id}`;
++  activateExtension(key);
++  const frozen=prepareNativeMatchContent();
++  const direct=replay(scenario,frozen);
++  deactivateExtension(key);
++  uninstallExtension(key);
++  assert.equal(prepareNativeMatchContent().contentLock.length,0);
++  assert.deepEqual(replay(scenario,restoreNativeMatchContent(frozen)),direct,"frozen theft/gift game survives uninstall");
++  results.push(direct);
++}
++console.log(JSON.stringify({ sdk:true,actualWasm:true,failedRetryAtomicity:true,frozenRestoreAfterUninstall:true,results },null,2));
+diff --git a/crates/engine-native/tests/adr0786_j2_review_regressions.rs b/crates/engine-native/tests/adr0786_j2_review_regressions.rs
+index 3fe6b28..9944531 100644
+--- a/crates/engine-native/tests/adr0786_j2_review_regressions.rs
++++ b/crates/engine-native/tests/adr0786_j2_review_regressions.rs
+@@ -54,6 +54,24 @@ fn answer(e: &mut Engine, pack: &ExtensionPack, selected: Vec<O>) {
+     let dedup = nc08_common::next_dedup();
+     let cursor = e.log().len();
+     for g in [&mut *e, &mut other] {
++        let before = g.save();
++        let log = g.log().to_vec();
++        let bad = g.submit(GameCommand {
++            actor: c.observer,
++            expected_revision: g.revision(),
++            dedup_id: dedup,
++            action: GameAction::Answer {
++                choice_id: c.id,
++                selection: vec![O::Tag(255)],
++            },
++        });
++        assert!(matches!(bad, CommandOutcome::Rejected(_)));
++        assert_eq!(
++            g.save(),
++            before,
++            "failed retry preserves complete archive and dedup key"
++        );
++        assert_eq!(g.log(), log);
+         let out = g.submit(GameCommand {
+             actor: c.observer,
+             expected_revision: g.revision(),
+@@ -458,3 +476,168 @@ fn grouped_following_waits_for_last_discard_subtree_before_rechecking_owner() {
+     assert!(!e.log()[cursor..].iter().any(|event|matches!(event,engine_native::LogEvent::CardsDrawn {player:0,cards} if cards.len()==2)), "following draw must not run after the first handler's discard subtree kills its owner");
+     assert!(e.state_core().player(0).hand.is_empty(),"following handler cannot be selected before the first handler's final child subtree settles");
+ }
++
++fn theft_with_gift_watcher(equipped: bool) {
++    let source=format!("{}\nskill j2_watcher_gift(99107880) locked {{ trigger cards_given owner_alive_gave_cards_to_other_alive {{ effect draw_cards(self,1); }} }}\nskill j2_watcher_move(99107881) locked {{ trigger cards_moved owner_alive {{ effect storage_set(self_skill,1,1); }} }}\nskill j2_gear(99107882) locked {{ trigger phase_end owner_alive {{ effect storage_set(self_skill,1,1); }} }}",include_str!("../../../content/original/ported/onlyOL/ol_jie_danshou.skill"));
++    let mut p = pack(&source);
++    if equipped {
++        p.cards.push(
++            engine_native::catalog::CardDef::weapon("j2-theft-gear", 2)
++                .with_equip_skills(&["j2_gear_phase_end"]),
++        );
++    }
++    let mut e = start(&p);
++    e.assign_general_named(1, "watcher").unwrap();
++    let gear = if equipped {
++        nc08_common::advance_to_play(&mut e, 1);
++        let card = e.debug_move_named_card_to_hand(1, "j2-theft-gear");
++        assert!(matches!(
++            submit(
++                &mut e,
++                1,
++                GameAction::PlayCard {
++                    card,
++                    targets: vec![]
++                }
++            ),
++            CommandOutcome::Accepted { .. }
++        ));
++        let def = e.catalog().skill_by_name("j2_gear_phase_end").unwrap();
++        assert!(e.state_core().has_skill(1, def));
++        Some((card, def))
++    } else {
++        None
++    };
++    nc08_common::advance_to_play(&mut e, 0);
++    e.debug_clear_hand(0);
++    for _ in 0..6 {
++        e.debug_place(0, "shan");
++    }
++    e.debug_clear_hand(1);
++    let hand = e.debug_place(1, "shan");
++    e.debug_place(1, "shan");
++    let card = gear.map(|(card, _)| card).unwrap_or(hand);
++    activate(&mut e, "ol_jie_danshou");
++    answer(&mut e, &p, vec![O::Tag(2)]);
++    answer(&mut e, &p, vec![O::Player(1)]);
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "rvm_danshou_card");
++    let before = e.save();
++    let cursor = e.log().len();
++    answer(&mut e, &p, vec![O::Card(card)]);
++    assert_eq!(
++        e.state_core().player(1).hand.len(),
++        if equipped { 2 } else { 1 },
++        "the robbed player must not receive a giver-benefit draw"
++    );
++    assert!(
++        !e.log()[cursor..]
++            .iter()
++            .any(|event| matches!(event, engine_native::LogEvent::CardsGiven { .. })),
++        "theft is movement, not a gift"
++    );
++    assert!(e.state_core().player(0).hand.contains(&card));
++    assert!(
++        e.state_core()
++            .vm_aux
++            .flags
++            .iter()
++            .any(|((owner, key), value)| *owner == 1
++                && key.starts_with("storage:j2_watcher_move")
++                && *value == 1),
++        "the ordinary movement notification still fires"
++    );
++    if let Some((_, def)) = gear {
++        assert!(!e.state_core().player(1).equips.contains(&card));
++        assert!(
++            !e.state_core().has_skill(1, def),
++            "equipment-only skill is revoked"
++        );
++    }
++    let mut sliced = Engine::restore_with_extensions(&before, &[&p]).unwrap();
++    sliced.set_time_slice(Some(1));
++    let choice = sliced.open_choice().unwrap().id;
++    assert!(matches!(
++        submit(
++            &mut sliced,
++            0,
++            GameAction::Answer {
++                choice_id: choice,
++                selection: vec![O::Card(card)]
++            }
++        ),
++        CommandOutcome::Suspended
++    ));
++    let snapshot = sliced.save();
++    let origin = if equipped {
++        engine_native::event::LostOrigin::Equip
++    } else {
++        engine_native::event::LostOrigin::Hand
++    };
++    assert!(snapshot.resolution.stack.iter().any(|frame|matches!(&frame.data,engine_native::event::EventData::CardsLost {player:1,cards,origins} if cards==&vec![card] && origins==&vec![origin])),"loss notification preserves the source zone");
++    assert!(snapshot.resolution.stack.iter().any(|frame|matches!(&frame.data,engine_native::event::EventData::CardsMoved {from:1,to:0,cards} if cards==&vec![card])));
++    let mut events = sliced.log().to_vec();
++    let decoded =
++        engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&snapshot))
++            .unwrap();
++    sliced = Engine::restore_with_extensions(&decoded, &[&p]).unwrap();
++    assert!(matches!(sliced.resume(), CommandOutcome::Pending { .. }));
++    events.extend_from_slice(sliced.log());
++    assert_eq!(sliced.save().core, e.save().core);
++    assert_eq!(sliced.save().resolution, e.save().resolution);
++    assert_eq!(events, &e.log()[cursor..]);
++    let selection = e
++        .open_choice()
++        .unwrap()
++        .spec
++        .options
++        .iter()
++        .filter(|option| **option != O::Card(card))
++        .take(2)
++        .copied()
++        .collect();
++    answer(&mut e, &p, selection);
++    assert!(e.state_core().player(0).hand.contains(&card));
++}
++
++#[test]
++fn danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore() {
++    theft_with_gift_watcher(false);
++}
++
++#[test]
++fn danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills() {
++    theft_with_gift_watcher(true);
++}
++
++#[test]
++fn fenghe_genuine_gift_keeps_cards_given_and_giver_benefit() {
++    let source=format!("{}\nskill j2_giver_gift(99107883) locked {{ trigger cards_given owner_alive_gave_cards_to_other_alive {{ effect draw_cards(self,1); }} }}",include_str!("../../../content/original/ported/shiji/pinghe.skill"));
++    let p = pack(&source);
++    let mut e = start(&p);
++    nc08_common::advance_to_play(&mut e, 1);
++    e.debug_clear_hand(0);
++    let hand = e.debug_place(0, "shan");
++    e.debug_clear_hand(1);
++    let sha = e.debug_place(1, "sha");
++    let cursor = e.log().len();
++    submit(
++        &mut e,
++        1,
++        GameAction::PlayCard {
++            card: sha,
++            targets: vec![0],
++        },
++    );
++    if e.open_choice().unwrap().spec.prompt == "respond_shan" {
++        answer(&mut e, &p, vec![O::Pass]);
++    }
++    answer(&mut e, &p, vec![O::Card(hand)]);
++    answer(&mut e, &p, vec![O::Player(2)]);
++    assert_eq!(
++        e.state_core().player(0).hand.len(),
++        1,
++        "a genuine gift still grants the giver-benefit draw"
++    );
++    assert!(e.state_core().player(2).hand.contains(&hand));
++    assert!(e.log()[cursor..].iter().any(|event|matches!(event,engine_native::LogEvent::CardsGiven {from:0,to:2,cards} if cards==&vec![hand])));
++}
+diff --git a/crates/engine-native-content/src/content/vm_effects/danshou.rs b/crates/engine-native-content/src/content/vm_effects/danshou.rs
+index e85e2c0..d43c9ab 100644
+--- a/crates/engine-native-content/src/content/vm_effects/danshou.rs
++++ b/crates/engine-native-content/src/content/vm_effects/danshou.rs
+@@ -148,8 +148,6 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
+             let target = state[2] as u8;
+             if state[1] == 1 {
+                 discard(ctx, target, &[card]);
+-            } else if ctx.core.player(target).hand.contains(&card) {
+-                ctx.give_hand_card(target, owner, card);
+             } else {
+                 ctx.take_owned_card(target, card);
+                 ctx.core.player_mut(owner).hand.push(card);
+diff --git a/crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs b/crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs
+index 7bcec92..19e7934 100644
+--- a/crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs
++++ b/crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs
+@@ -572,11 +572,111 @@ fn reviewed_boundaries(output: &mut Vec<Value>) {
+     }
+ }
+ 
++fn theft_and_gift_events(output: &mut Vec<Value>) {
++    let watcher="skill j2_watcher_gift(99107880) locked { trigger cards_given owner_alive_gave_cards_to_other_alive { effect draw_cards(self,1); } } skill j2_watcher_move(99107881) locked { trigger cards_moved owner_alive { effect storage_set(self_skill,1,1); } } skill j2_gear(99107882) locked { trigger phase_end owner_alive { effect storage_set(self_skill,1,1); } }";
++    for equipped in [false, true] {
++        let name = if equipped {
++            "danshou-equipment-theft-not-gift"
++        } else {
++            "danshou-hand-theft-not-gift"
++        };
++        let mut t = Trace::start(&format!("{DAN}\n{watcher}"), name);
++        t.engine
++            .assign_general_named(1, "j2-cross-watcher")
++            .unwrap();
++        let gear = if equipped {
++            t.advance_to_play(1);
++            let card = t.engine.debug_move_named_card_to_hand(1, "j2-theft-gear_0");
++            t.step(json!({"type":"playCard","actor":1,"card":card,"targets":[]}));
++            let def = t.engine.catalog().skill_by_name("j2_theft_gear").unwrap();
++            assert!(t.engine.state_core().has_skill(1, def));
++            Some((card, def))
++        } else {
++            None
++        };
++        t.advance_to_play(0);
++        fill(&mut t, 0, 6);
++        fill(&mut t, 1, 2);
++        let card = gear
++            .map(|(card, _)| card)
++            .unwrap_or(t.engine.state_core().player(1).hand[0]);
++        t.begin();
++        t.activate("ol_jie_danshou");
++        t.answer(vec![O::Tag(2)]);
++        t.answer(vec![O::Player(1)]);
++        assert_eq!(
++            t.engine.open_choice().unwrap().spec.prompt,
++            "rvm_danshou_card"
++        );
++        let cursor = t.engine.log().len();
++        t.answer(vec![O::Card(card)]);
++        assert_eq!(
++            t.engine.state_core().player(1).hand.len(),
++            if equipped { 2 } else { 1 },
++            "theft must not trigger giver benefits"
++        );
++        assert!(!t.engine.log()[cursor..]
++            .iter()
++            .any(|event| matches!(event, engine_native::LogEvent::CardsGiven { .. })));
++        assert!(t
++            .engine
++            .state_core()
++            .vm_aux
++            .flags
++            .iter()
++            .any(|((owner, key), value)| *owner == 1
++                && key.starts_with("storage:j2_watcher_move")
++                && *value == 1));
++        if let Some((_, def)) = gear {
++            assert!(!t.engine.state_core().player(1).equips.contains(&card));
++            assert!(!t.engine.state_core().has_skill(1, def));
++        }
++        let selection = t
++            .engine
++            .open_choice()
++            .unwrap()
++            .spec
++            .options
++            .iter()
++            .filter(|o| **o != O::Card(card))
++            .take(2)
++            .copied()
++            .collect();
++        t.answer(selection);
++        assert!(t.engine.state_core().player(0).hand.contains(&card));
++        output.push(t.finish(name));
++    }
++    let name = "fenghe-genuine-gift-benefit";
++    let source=format!("{FENG}\nskill j2_giver_gift(99107883) locked {{ trigger cards_given owner_alive_gave_cards_to_other_alive {{ effect draw_cards(self,1); }} }}");
++    let mut t = Trace::start(&source, name);
++    t.advance_to_play(1);
++    fill(&mut t, 0, 0);
++    let card = t.engine.debug_place(0, "shan");
++    fill(&mut t, 1, 0);
++    let sha = t.engine.debug_place(1, "sha");
++    t.begin();
++    let cursor = t.engine.log().len();
++    t.step(json!({"type":"playCard","actor":1,"card":sha,"targets":[0]}));
++    if t.engine
++        .open_choice()
++        .is_some_and(|c| c.spec.prompt == "respond_shan")
++    {
++        t.answer(vec![O::Pass]);
++    }
++    t.answer(vec![O::Card(card)]);
++    t.answer(vec![O::Player(2)]);
++    assert_eq!(t.engine.state_core().player(0).hand.len(), 1);
++    assert!(t.engine.state_core().player(2).hand.contains(&card));
++    assert!(t.engine.log()[cursor..].iter().any(|event|matches!(event,engine_native::LogEvent::CardsGiven {from:0,to:2,cards} if cards==&vec![card])));
++    output.push(t.finish(name));
++}
++
+ pub(super) fn scenarios() -> Vec<Value> {
+     let mut output = vec![];
+     danshou(&mut output);
+     fenghe(&mut output);
+     pingkou(&mut output);
+     reviewed_boundaries(&mut output);
++    theft_and_gift_events(&mut output);
+     output
+ }
+diff --git a/crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs b/crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs
+index 46ccf9b..eb8973d 100644
+--- a/crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs
++++ b/crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs
+@@ -11,15 +11,28 @@ fn package(source: &str, name: &str) -> String {
+     let generals = [("j2-cross-author",false),("j2-cross-watcher",true)].iter().map(|(name, watcher)| json!({"name":name,"hp":4,"gender":"male","faction":"qun","skills":declarations.decls.iter().filter(|d|d.name.starts_with("j2_watcher")==*watcher).map(|d|json!({"name":d.name})).collect::<Vec<_>>()})).collect::<Vec<_>>();
+     let characters = json!({"pack":{"name":name,"version":1},"generals":generals});
+     let character_bytes = serde_json::to_vec(&characters).unwrap();
+-    package.asset_manifest = Some(serde_json::from_value(json!({"schema_version":1,"package_id":name,"total_compressed_size":0,"total_decoded_size":0,"entries":[{"asset_id":"j2:characters","source_hash":blake3::hash(&character_bytes).as_bytes(),"kind":"Data","image_variants":[],"audio_variants":[],"priority":"Lazy","depends_on":[],"platforms":[]}]})).unwrap());
++    let cards=(name=="danshou-equipment-theft-not-gift").then(||json!({"pack":{"name":name,"version":1,"description":"J2 theft equipment","card_prefix":"j2-theft-"},"cards":[{"name":"gear","kind":"weapon","range":2,"suit":"spade","rank":7,"equip_skills":["j2_theft_gear"]}],"skills":[{"name":"j2_theft_gear","mapping":"host:sha_damage_force_discard"}]}));
++    let mut entries = vec![
++        json!({"asset_id":"j2:characters","source_hash":blake3::hash(&character_bytes).as_bytes(),"kind":"Data","image_variants":[],"audio_variants":[],"priority":"Lazy","depends_on":[],"platforms":[]}),
++    ];
+     package
+         .asset_paths
+         .insert("j2:characters".into(), "assets/character.json".into());
++    if let Some(cards) = &cards {
++        entries.push(json!({"asset_id":"j2:cards","source_hash":blake3::hash(&serde_json::to_vec(cards).unwrap()).as_bytes(),"kind":"Data","image_variants":[],"audio_variants":[],"priority":"Lazy","depends_on":[],"platforms":[]}));
++        package
++            .asset_paths
++            .insert("j2:cards".into(), "assets/cards.json".into());
++    }
++    package.asset_manifest=Some(serde_json::from_value(json!({"schema_version":1,"package_id":name,"total_compressed_size":0,"total_decoded_size":0,"entries":entries})).unwrap());
+     package.manifest.asset_hash = package.compute_asset_hash();
+     package.manifest.logic_hash = package.compute_logic_hash();
+     package.validate().unwrap();
+     let mut payload = serde_json::to_value(package).unwrap();
+     payload["characters"] = characters;
++    if let Some(cards) = cards {
++        payload["cards"] = cards;
++    }
+     json!([payload]).to_string()
+ }
+ 

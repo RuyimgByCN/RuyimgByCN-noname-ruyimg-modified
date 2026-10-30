@@ -1,0 +1,178 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "31-file pure B delta implements all approved fields across API/native session/current WASM/Worker/IPC/server/actual UI; only extra kernel hunk is parent-approved existing fanjian_suit restore fix. All52 prerequisite hashes match; rule328/archive105/nativeABI753/WS5 and25 root bindings unchanged."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "57 indexed command records including original failures, raw logs, full affected/native suites, actual14-archive/98-comparison matrix, current Chrome+WKWebView16 flows each, old/new Rust/TS compatibility, per-file original/final hashes and dry-applicable pure patch. Required independent parent reviewer gate remains pending."
+    }
+  ],
+  "changedFiles": [
+    "Cargo.lock",
+    "apps/desktop-client/src/native_envelope.rs",
+    "apps/game-server/examples/emit_approved_b_metadata.rs",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e/referee.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/support/ws5_metadata_readers.rs",
+    "apps/web-client/scripts/approved-b-metadata.test.mjs",
+    "apps/web-client/scripts/approved-b-old-reader.ts",
+    "apps/web-client/scripts/approved-b-parity.mjs",
+    "apps/web-client/scripts/approved-b-ui.ts",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+    "apps/web-client/src/components/battle/GeneralPortrait.vue",
+    "apps/web-client/src/components/battle/SeatCard.vue",
+    "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/engine/observerMetadata.ts",
+    "apps/web-client/src/types/engine.ts",
+    "apps/web-client/src/views/BattleView.vue",
+    "apps/web-client/src/worker/nativeBackend.ts",
+    "crates/engine-api/src/choice.rs",
+    "crates/engine-api/src/view.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "crates/engine-core/src/projection.rs",
+    "crates/engine-core/src/snapshot.rs",
+    "crates/engine-native-kernel/src/archive/resolution.rs",
+    "crates/engine-native-wasm/Cargo.toml",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native/src/view.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "apps/game-server/examples/emit_approved_b_metadata.rs",
+    "apps/game-server/src/native_ws_e2e/referee.rs",
+    "apps/game-server/tests/approved_b_metadata.rs",
+    "apps/game-server/tests/nc09_projection_parity.rs",
+    "apps/game-server/tests/support/ws5_metadata_readers.rs",
+    "apps/web-client/scripts/approved-b-metadata.test.mjs",
+    "apps/web-client/scripts/approved-b-old-reader.ts",
+    "apps/web-client/scripts/approved-b-parity.mjs",
+    "apps/web-client/scripts/approved-b-ui.ts",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/scripts/pa09-desktop-transport.test.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p game-server --test approved_b_metadata",
+      "result": "failed",
+      "summary": "Expected red: 0 passed/3 failed before implementation. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-rust-corrected.log"
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs --test apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "result": "failed",
+      "summary": "Expected red: 1 passed/3 failed before implementation. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-red-ts.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "result": "failed",
+      "summary": "Initial full run: 822 passed/6 missing-fixture failures/1 ignored; retained. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "result": "passed",
+      "summary": "Full native3 rerun: 1665 passed/0 failed/73 ignored. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-native-three-full-fixtures.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-api -p engine-native-wasm -p game-server -p desktop-client",
+      "result": "passed",
+      "summary": "Affected API/WASM/server/desktop full tests: 483 passed/0 failed/1 ignored. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-affected-full.log"
+    },
+    {
+      "command": "cargo test --offline -p game-server --test approved_b_metadata",
+      "result": "passed",
+      "summary": "4 passed; precise metadata/defaults/actual old/new WS5 packets/restore continuation and event equality. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-metadata-final-events.log"
+    },
+    {
+      "command": "cargo check --offline --workspace --all-targets",
+      "result": "passed",
+      "summary": "Workspace all-targets check passed. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-final-workspace-check.log"
+    },
+    {
+      "command": "env RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Native3 all-targets warnings denied passed. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-strict-three.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-core snapshot::tests",
+      "result": "passed",
+      "summary": "Legacy snapshot tests: 6 passed, 0 failed, 3843 filtered. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-legacy-core-constructors.log"
+    },
+    {
+      "command": "wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir ../../apps/web-client/src/worker/native-pkg",
+      "result": "passed",
+      "summary": "Current WASM32 rebuilt with exact original web/release/no-opt flags and private cache. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-wasm-pack-prompt-fix.log"
+    },
+    {
+      "command": "cargo build --offline -p desktop-client --features tauri-shell --bin noname-next-desktop",
+      "result": "passed",
+      "summary": "Current actual Tauri/WKWebView binary built. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-desktop-debug.log"
+    },
+    {
+      "command": "node --import ./apps/web-client/scripts/ts-register.mjs apps/web-client/scripts/approved-b-parity.mjs ../evidence/b-metadata-fixtures.json /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge",
+      "result": "passed",
+      "summary": "14 actual archives, 98 server/generated-WASM/IPC comparisons; frozen old TS reader included. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-cross-entry-final.log"
+    },
+    {
+      "command": "npm --prefix apps/web-client test",
+      "result": "passed",
+      "summary": "Final frontend: 153 passed/0 failed/0 skipped. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-final-node-tests.log"
+    },
+    {
+      "command": "npm --prefix apps/web-client run build",
+      "result": "passed",
+      "summary": "Final production build includes vue-tsc --noEmit; passed. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-frontend-build.log"
+    },
+    {
+      "command": "node ../evidence/run-b-ui-readable.mjs chrome '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' readable",
+      "result": "passed",
+      "summary": "16 final actual Chrome/Worker UI flows passed. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-chrome.log"
+    },
+    {
+      "command": "node ../evidence/run-b-ui-readable.mjs wkwebview /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/noname-next-desktop readable",
+      "result": "passed",
+      "summary": "16 final actual WKWebView/IPC UI flows passed. Evidence: /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-readable-ui-wkwebview.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py; source-line unittest; native-layering script and unittest",
+      "result": "passed",
+      "summary": "8954 files under 2000 lines; Rust non-test under1000 effective lines; 2 cap tests and9 layering tests; zero upward references."
+    },
+    {
+      "command": "git apply --check approved-b-checked.patch against exact isolated overlay baseline; git apply --reverse --check; git diff --check; git diff --cached --name-only",
+      "result": "passed",
+      "summary": "Pure patch applies; reverse check and whitespace check pass; index empty."
+    },
+    {
+      "command": "Parent combined full workspace tests / conformance / preflight / independent reviewer gate",
+      "result": "not-run",
+      "summary": "Explicitly parent-owned combined integration acceptance; not claimed by this worker."
+    }
+  ],
+  "validationOutput": [
+    "Native3 full rerun:1665 passed,0 failed,73 ignored.",
+    "Affected API/WASM/server/desktop:483 passed,0 failed,1 ignored.",
+    "Final metadata/WS5/continuation:4 passed.",
+    "Final frontend:153 passed,0 failed,0 skipped; production build/typecheck passed.",
+    "Actual server/generatedWASM/IPC:14 archives,98 comparisons,5 canonical kinds,10 actual prompt keys,2 restores per seat.",
+    "Final actual Chrome Worker and WKWebView IPC:16 UI flows each, passed.",
+    "Presentation guard:69 registered archive keys and252 native production-source prompt literals,282 distinct names; universal readable kind fallback without raw program keys. Literal inventory is not reachability/restore proof.",
+    "Source caps8954 files,2 cap tests,9 layering tests,0 upward references; all25 root WASM bindings and native outcome helper unchanged."
+  ],
+  "residualRisks": [
+    "Required independent reviewer gate and parent combined workspace/conformance/preflight acceptance still pending integration.",
+    "Systematic missing prompt/factory/ExpectedAsk restore coverage beyond exercised cases remains parent NC07 follow-up; no full NC03/NC09/37-source or PA09 six-gate/performance completion claim.",
+    "Parent must merge the single archive prompt tail/comment hunk with any independently added J2 keys while preserving all entries; no version bump is included in B."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "31 files against HEAD100489f5 plus exact52-file PA09/Referee overlay: optional observer metadata, precise shared choice mapping, validated adapters, dual-general/readable-choice UI, compatibility/real-entry regressions, and one authorized existing prompt decoder whitelist fix.",
+  "reviewFindings": [
+    "No implementation blockers found in source review and listed checks; required independent acceptance review has not yet run."
+  ],
+  "manualNotes": "Patch:/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/approved-b-checked.patch; manifest:/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-checked-manifest.json; field matrix:/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-all-field-matrix.json; command index:/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-command-index.json. Temporary node_modules/upstream links removed; own observer target and unused incremental/tmp cleaned under updated user direction. Parent may now retire exclusive Referee target after preserving recorded binary/WASM fingerprints."
+}

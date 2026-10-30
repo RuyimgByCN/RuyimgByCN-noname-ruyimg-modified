@@ -252,6 +252,9 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             count_hits,
             commit_pending,
             commit_pick,
+            following,
+            commit_state,
+            committing,
         } => {
             w.u8(82);
             enc_pid(w, owner);
@@ -292,6 +295,15 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                     w.u32(*count);
                 }
             }
+            w.u32(following.len() as u32);
+            for next in following {
+                enc_machine(w, next);
+            }
+            w.u32(commit_state.len() as u32);
+            for value in commit_state {
+                w.u32(*value);
+            }
+            w.boolean(*committing);
         }
         MachineSnapshot::Shedu { owner } => {
             w.u8(64);

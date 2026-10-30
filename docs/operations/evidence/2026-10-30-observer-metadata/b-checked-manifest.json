@@ -1,0 +1,277 @@
+{
+  "head": "100489f554fe89d3389e35196947d9070673c2a1",
+  "base": "HEAD 100489f5 + exact 52-file parent reviewed PA09/Referee overlay",
+  "prerequisite_patch_sha256": "d6b970c9913cf5aca846e66754756c70540f0a0b45a64e75cda6ae1e81d28875",
+  "all_52_initial_hashes_match": true,
+  "patch_sha256": "8b2a0c80e0ffe0eb4180ac10387cd3fb8c8f0e1dfab9607f74b185594b943ff4",
+  "changed_files": [
+    {
+      "path": "Cargo.lock",
+      "status": "modified",
+      "baseline_sha256": "1e0b5311312e2ee603740696d29d6b1ddef40c9450b3dda98219ed2764aa9ca1",
+      "final_sha256": "89e68652eb7fdfb7c212e204306b34d297aa655756635c4d64c06e92fba97460",
+      "bytes": 129423,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/Cargo.lock"
+    },
+    {
+      "path": "apps/desktop-client/src/native_envelope.rs",
+      "status": "modified",
+      "baseline_sha256": "bedb039a854c2b30a02ace2bcf0e1c046b01ec7b08ab0bc02c8af554c8a070a5",
+      "final_sha256": "2a687e605d8514791d1671282f2d07d6d3e0a2f16c85dad01c4299c01739efe4",
+      "bytes": 6234,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/desktop-client/src/native_envelope.rs"
+    },
+    {
+      "path": "apps/game-server/examples/emit_approved_b_metadata.rs",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "243f08807e289be8f48e30ebda997be959ef2cb01d34b57ed8c7f3f4d8bf9aa2",
+      "bytes": 5041,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/game-server/src/native_view.rs",
+      "status": "modified",
+      "baseline_sha256": "a058d42ed772c1b60e658c2010b173dec02737166932d81d051d7f9430debcf8",
+      "final_sha256": "7a128ef274e5987707b60c9e66c47e4683294e4040e847b404a7d47d3aa6b6f1",
+      "bytes": 15884,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/game-server/src/native_view.rs"
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/referee.rs",
+      "status": "modified",
+      "baseline_sha256": "3f7decd02f4edafcff64437de8ecd71f14521db8db70b44fdf111a5b1f67b39f",
+      "final_sha256": "4597e47af567050b7beda744ca89ad904b0105361c136aec7b850e9ae551f72f",
+      "bytes": 11582,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/game-server/src/native_ws_e2e/referee.rs"
+    },
+    {
+      "path": "apps/game-server/tests/approved_b_metadata.rs",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "4c4f27ef7298ec2a209c776476f697ec430c604e06b43ee7e7018d21ef30c26f",
+      "bytes": 9442,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/game-server/tests/nc09_projection_parity.rs",
+      "status": "modified",
+      "baseline_sha256": "ee804ceec998fe7aab19f814273d9179f71111a5c0e7ce42f056b441b67b8574",
+      "final_sha256": "dea82cdab8bf7165af5c1c6a01aa35f42c36742814401826fbf20f35580b411e",
+      "bytes": 10530,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/game-server/tests/nc09_projection_parity.rs"
+    },
+    {
+      "path": "apps/game-server/tests/support/ws5_metadata_readers.rs",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "c5c8d115486a6dbb45b2e5d058f5b1c9d0831c6ba34ec4afc5aed69540797016",
+      "bytes": 2874,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/scripts/approved-b-metadata.test.mjs",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "59ffe5718e82be7b688538ffc12ab725452b5e6b1ed9541096b4d4b748847711",
+      "bytes": 4297,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/scripts/approved-b-old-reader.ts",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "b84da7fb4a4957113049cb50e100c2bdb338470979d2b3d8da131847c7b8dc2f",
+      "bytes": 3832,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/scripts/approved-b-parity.mjs",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "bd824b248595c67739a8042dd58a88c036822f8f1e812782945a08eb5c094651",
+      "bytes": 4592,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/scripts/approved-b-ui.ts",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "3d43f44a1472659b5912f37e9a7522f30b1ce4061e776c0fb8758f5f89ac6aa0",
+      "bytes": 7064,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/scripts/network-client.test.mjs",
+      "status": "modified",
+      "baseline_sha256": "3dc7264cccf73b6354163ab874ea4786fff061ece9f8b99ab1729cdf470b72a5",
+      "final_sha256": "09d6b8a5ab771451aad70a686411120993829f60515ee1343de66e79f122604c",
+      "bytes": 20929,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/scripts/network-client.test.mjs"
+    },
+    {
+      "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+      "status": "modified",
+      "baseline_sha256": "081db1554a4a9c144d434dd3827a6b1d5f030be0e8d768dd82bd6362c3237406",
+      "final_sha256": "6100d01c01f25b1c2e75f2c9fb0ce27f85c34b77c463b0e03a37bb63c7b90494",
+      "bytes": 7706,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/scripts/pa09-desktop-transport.test.mjs"
+    },
+    {
+      "path": "apps/web-client/src/components/battle/GeneralPortrait.vue",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "dfaf2dd1164df0ad7fec2585187e41cdf609bf0e24371396b504885f75d8e2cf",
+      "bytes": 4042,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/src/components/battle/SeatCard.vue",
+      "status": "modified",
+      "baseline_sha256": "b551ff5689e230218dda17117ce44a3f60b6c783563d707f5277df7bcf940c86",
+      "final_sha256": "bd8f23ffb28614c36beb50840067c2fb440f55b235111f1853643852b6c9748f",
+      "bytes": 7259,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/components/battle/SeatCard.vue"
+    },
+    {
+      "path": "apps/web-client/src/engine/desktopEngineTransport.ts",
+      "status": "modified",
+      "baseline_sha256": "ef301484146505eb5c3d317d2559772134609b81ca54940d33cd35b0b43ac419",
+      "final_sha256": "db08f8205c5aeade1268915f8398cf6311a02c98987080a587db05df58668add",
+      "bytes": 4029,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/engine/desktopEngineTransport.ts"
+    },
+    {
+      "path": "apps/web-client/src/engine/networkClient.ts",
+      "status": "modified",
+      "baseline_sha256": "c265db91bf9a668c7ea7f1a7b166c41d0cd6b6f86c1cf2cac9813b0dc1efed92",
+      "final_sha256": "c4eb7aee6e4d02407aa260a47259cd5923e4b9f8df77853a93bd11af7662d875",
+      "bytes": 24989,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/engine/networkClient.ts"
+    },
+    {
+      "path": "apps/web-client/src/engine/observerMetadata.ts",
+      "status": "added",
+      "baseline_sha256": null,
+      "final_sha256": "4a35e34920ebd84ec74c965cc572760ddf27e51b15387ed539b128c73c550807",
+      "bytes": 3592,
+      "original_snapshot": null
+    },
+    {
+      "path": "apps/web-client/src/types/engine.ts",
+      "status": "modified",
+      "baseline_sha256": "79bdef0c80d73987a821c5ab7265bd41bb58a988a973be34ca3d9e8ce9878e76",
+      "final_sha256": "484c665651a194e8782998a0a5b21b2b48c542485f1414b016ead31d1357e757",
+      "bytes": 8629,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/types/engine.ts"
+    },
+    {
+      "path": "apps/web-client/src/views/BattleView.vue",
+      "status": "modified",
+      "baseline_sha256": "ccad819ab4cfbdf41df39643860898c85fdfb73d9400c94cccb6d4ac36bf4fc3",
+      "final_sha256": "4876c5cf2c3934781f23234ee2541432589906fc3c29cb6ebb244843b2d84e42",
+      "bytes": 42262,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/views/BattleView.vue"
+    },
+    {
+      "path": "apps/web-client/src/worker/nativeBackend.ts",
+      "status": "modified",
+      "baseline_sha256": "e0a794445fbaba7b0708c00573134ba1691f96151dcd57ea089a4bd41e9136cf",
+      "final_sha256": "e380fe1b34e8e90d0164b6367b7e251427d02c560bb820c792f4cc0581600573",
+      "bytes": 35369,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/apps/web-client/src/worker/nativeBackend.ts"
+    },
+    {
+      "path": "crates/engine-api/src/choice.rs",
+      "status": "modified",
+      "baseline_sha256": "fc3572fbd9210a8af2fca86aeeb24591b27209b93f686cfe8191a7aa4a0dc472",
+      "final_sha256": "6cd721b056d3548911f7bfd932124f0dfd9d9fdcd6e97be3fd43185fef9d9627",
+      "bytes": 3453,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-api/src/choice.rs"
+    },
+    {
+      "path": "crates/engine-api/src/view.rs",
+      "status": "modified",
+      "baseline_sha256": "5dbc8fb99497c47740a00dcc8d17511a67816c2e4d0edb686a0a045ab5a88eda",
+      "final_sha256": "7c2a5faab4b05ffc933c4a7939241fe8d8c4397226ffd55c13ee44927aa3b1c9",
+      "bytes": 8464,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-api/src/view.rs"
+    },
+    {
+      "path": "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+      "status": "modified",
+      "baseline_sha256": "d56283f9160f519d8a92180083e03bb1327effbf5c625b0e10b9d3bc65704de3",
+      "final_sha256": "789c368244c4b570e94d59737db8456c9190d0eb95a2a32ddef6d97824f55578",
+      "bytes": 23448,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs"
+    },
+    {
+      "path": "crates/engine-core/src/projection.rs",
+      "status": "modified",
+      "baseline_sha256": "94382e549430501a60b96bb824cf4efa6ff3b371fe59ecdcb690d71abf3b107c",
+      "final_sha256": "0b417bada001ba1691382270efd9cd2d15b2f5b0c58f70b3ac17f18cf96aa9cc",
+      "bytes": 13409,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-core/src/projection.rs"
+    },
+    {
+      "path": "crates/engine-core/src/snapshot.rs",
+      "status": "modified",
+      "baseline_sha256": "a683a059e8d59fbc4bdc56300f1ce673807d37e1053aed5354da13885e080fb8",
+      "final_sha256": "b901b8712eb33777388e528f601b5587757f41f5db39e99376a59b29487ee3ba",
+      "bytes": 11960,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-core/src/snapshot.rs"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+      "status": "modified",
+      "baseline_sha256": "618976eedbb8e31c6e244ead240ad4e0f11373ba5ebd3aa64cb440c07232bbb7",
+      "final_sha256": "369cb81df66463c6d6ca23210d72a5b21b6d3d234ec7e7de1f2d7de017625392",
+      "bytes": 9481,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-native-kernel/src/archive/resolution.rs"
+    },
+    {
+      "path": "crates/engine-native-wasm/Cargo.toml",
+      "status": "modified",
+      "baseline_sha256": "d1106fd83a7c722e6a1ad308f72f05f7dd9b60d19c8008590d1ec90a216293fa",
+      "final_sha256": "5062b194e8e15a90f7263ea1383229f742fbf177788ac5d91b93c1f95a93966d",
+      "bytes": 691,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-native-wasm/Cargo.toml"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "status": "modified",
+      "baseline_sha256": "09c5342f8b4bc215d481309e59e77ffd3af843a14f7e0b6c59a3c7df56350803",
+      "final_sha256": "0128324ab17c11adc918ffaa34753f7cde3e62305d7e39cb0538288b6282a997",
+      "bytes": 28869,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-native-wasm/src/session.rs"
+    },
+    {
+      "path": "crates/engine-native/src/view.rs",
+      "status": "modified",
+      "baseline_sha256": "e08929ee2d5c4e0358a3a2917b61d36cc076c6f19dd7ccec7309aa98594a94ef",
+      "final_sha256": "4b1dcd2d1e2c7c0e557d37cdd1348ba01b04cc7804249f1e01215102906242fe",
+      "bytes": 9071,
+      "original_snapshot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/evidence/b-originals/crates/engine-native/src/view.rs"
+    }
+  ],
+  "excluded_automatic_observer_logs": [
+    ".pi-lens-probe-home/bus-events.log",
+    ".pi-lens-probe-home/cascade.log",
+    ".pi-lens-probe-home/extension.log",
+    ".pi-lens-probe-home/latency.log",
+    ".pi-lens-probe-home/logs/2026-10-30.jsonl",
+    ".pi-lens-probe-home/read-guard.log",
+    ".pi-lens-probe-home/review-graph.log",
+    ".pi-lens-probe-home/sessionstart.log",
+    ".pi-lens-probe-home/tree-sitter.log"
+  ],
+  "deleted_files": [],
+  "source_versions": {
+    "rules": 328,
+    "archive": 105,
+    "native_abi": 753,
+    "ws": 5
+  },
+  "pi_lens_config_unchanged": true,
+  "no_staged_files": true
+}

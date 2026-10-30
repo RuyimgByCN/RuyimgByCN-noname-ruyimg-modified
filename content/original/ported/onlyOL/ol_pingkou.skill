@@ -1,6 +1,5 @@
 // OL界朱桓「平寇」：结束阶段对至多 X 名其他角色各造成 1 点伤害（X=本回合跳过阶段数）。
-// 上游还要求「每以此法造成 1 次伤害摸 1 张（每名角色限一次）」；当前原语只伤害不摸牌，
-// 这是已登记的部分实现，不能当上游等价。
+// 每以此法实际造成一次伤害后摸一张（每名实际受伤角色限一次）；防止的伤害不摸牌。
 skill ol_pingkou(2376678765) {
   trigger phase_end owner_is_target_skipped_phase_count_positive optional {
     effect choose_other_targets_by_skipped_phase_count_damage_draw(self, 1);

@@ -402,14 +402,13 @@ fn pa12_batch5_4_dichou_predicates() {
         .trigger_index
         .retain(|t| t.module.starts_with("dcdichou_card_targeted"));
     assert_eq!(filtered.trigger_index.len(), 2, "两个 card_targeted 段");
+    // This fixture exercises predicates only; the native VM does not implement these modifiers.
+    filtered.modifier_index.clear();
     let out = content_native_loader::bridge_vm_skill_decls(&filtered).expect("桥接");
     assert_eq!(out.decls.len(), 2, "两个谓词触发段全部可承载");
 
-    // 整包桥接可过（装载器只核事件/滤镜；四段滤镜本批全部可承载）——
-    // resolve_dcdichou（效果层）在运行期由 accept_effect 拒绝（VmFault 回滚），
-    // 属 §2 J 选择链登记项，不在装载面。
-    let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect("整包桥接（滤镜全承载）");
-    assert_eq!(full.decls.len(), 4, "四触发段全部装载");
+    let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect_err("unsupported modifiers must reject the full package");
+    assert!(matches!(full, content_native_loader::BridgeError::InvalidField { field: "modifier_index", .. }));
 
     // 整局（两段包）：1 号持技
     let pack = ExtensionPack {

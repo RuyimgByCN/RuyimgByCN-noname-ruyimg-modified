@@ -1,0 +1,127 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "ordinary-dual-def-zero",
+      "slots": 8,
+      "prompt": null,
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-dark",
+      "slots": 8,
+      "prompt": null,
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-primary-revealed",
+      "slots": 8,
+      "prompt": null,
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-both-revealed",
+      "slots": 8,
+      "prompt": null,
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "confirm",
+      "slots": 6,
+      "prompt": "trigger_confirm",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "select_players",
+      "slots": 6,
+      "prompt": "tuxi_target",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "select_cards",
+      "slots": 8,
+      "prompt": "discard_to_limit",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "respond_card",
+      "slots": 4,
+      "prompt": "respond_shan",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "pick_tag-fanjian",
+      "slots": 6,
+      "prompt": "fanjian_suit",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "machine-XunXun",
+      "slots": 6,
+      "prompt": "xunxun_arrange",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "machine-JiJie",
+      "slots": 6,
+      "prompt": "jijie_give_target",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "machine-GaiMing",
+      "slots": 8,
+      "prompt": "gaiming_pick",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "machine-HaoTianTa",
+      "slots": 8,
+      "prompt": "haotianta_pick",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "machine-Liaoyuan",
+      "slots": 8,
+      "prompt": "liaoyuan_discard",
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "legacy-choice-flow",
+      "slots": 4,
+      "prompt": null,
+      "transport": "wasm-worker",
+      "restored": true
+    },
+    {
+      "name": "extension-prompt-flow",
+      "slots": 4,
+      "prompt": "<img src=x onerror=alert(1)>constructor",
+      "transport": "wasm-worker",
+      "restored": true
+    }
+  ],
+  "kinds": [
+    "confirm",
+    "pick_tag",
+    "respond_card",
+    "select_cards",
+    "select_players"
+  ],
+  "oldPayloadFallback": true,
+  "extensionEscaped": true
+}
+{"command": ["node", "../evidence/run-b-ui.mjs", "chrome", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "handoff"], "exit": 0, "locked_seconds": 1.6017937500146218}

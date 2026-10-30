@@ -68,7 +68,7 @@ impl Engine {
         // N04-f：牌归属多重集——每张牌恰在一个牌区，机器持牌登记在界
         crate::snap::validate_card_ownership(&snapshot.core, &snapshot.resolution, &bounds)?;
         // 栈帧父子/帧号水位、挂起深度与槽位帧引用、选择/应答 ID 与机器树全部校验。
-        validate_resolution(&snapshot.resolution, &bounds)?;
+        validate_resolution(&snapshot.resolution, &bounds, &snapshot.core)?;
         // 段开放必须携带检查点（N04）：无检查点的开放段快照恢复后
         // 无法中止，属非法状态而非「恢复后再报错」。
         if snapshot.segment_open && snapshot.segment_checkpoint.is_none() {
@@ -126,7 +126,7 @@ impl Engine {
                 });
             }
             validate_core(&ckpt.core, &bounds)?;
-            validate_resolution(&ckpt.resolution, &bounds)?;
+            validate_resolution(&ckpt.resolution, &bounds, &ckpt.core)?;
         }
         // 选择承接关系（N04-e）：开放选择必须恰好与某个续行机器的
         // 待答询问一致（观察者/提示/种类/选项含顺序/数量/放弃许可）；
@@ -527,7 +527,7 @@ impl Engine {
                     open_choice: snapshot.resolution.open_choice.clone(),
                     answer: snapshot.resolution.answer.clone(),
                     fault: None,
-                budget: snapshot.resolution.budget,
+                    budget: snapshot.resolution.budget,
                 },
             },
             log: Vec::new(),

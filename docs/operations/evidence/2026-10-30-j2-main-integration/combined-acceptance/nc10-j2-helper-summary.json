@@ -1,0 +1,28 @@
+{
+  "checked_pending_checkpoints": 114,
+  "valid_original_controls": 114,
+  "helper_restore_and_valid_answer_passed": 114,
+  "regressions": 0,
+  "all_sources_unchanged": true,
+  "prompt_counts": {
+    "rvm_danshou_option": 23,
+    "rvm_danshou_target": 16,
+    "rvm_danshou_card": 6,
+    "rvm_danshou_discard": 16,
+    "dying_save": 2,
+    "discard_to_limit": 6,
+    "respond_shan": 5,
+    "rvm_fenghe_card": 5,
+    "rvm_fenghe_destination": 5,
+    "trigger_confirm": 20,
+    "rvm_pingkou_targets": 5,
+    "rvm_discard_pick": 5
+  },
+  "rvm_frames_observed": 88,
+  "committing_frames": 85,
+  "nonempty_commit_state_frames": 80,
+  "following_frames": 3,
+  "commit_pick_frames": 5,
+  "paused_frames": 0,
+  "claim": "Qualified none for physical helper invalidity across all114 pending current36scenario checkpoints at own observer and one legal minimum answer each. Does not establish hidden cached-state privacy or all reachable J2 continuations."
+}

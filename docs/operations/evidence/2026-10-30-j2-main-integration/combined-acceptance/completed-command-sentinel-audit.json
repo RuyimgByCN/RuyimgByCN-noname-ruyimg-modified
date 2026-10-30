@@ -1,0 +1,28 @@
+{
+  "commands": 63,
+  "completed_exit_matches": true,
+  "issues": [],
+  "missing_index_entries": [],
+  "failed_commands": [
+    {
+      "name": "nc10-j2-paired-plan-red",
+      "exit": 101,
+      "log": "nc10-j2-paired-plan-red.log"
+    },
+    {
+      "name": "j2-real-chrome-worker",
+      "exit": 1,
+      "log": "j2-real-chrome-worker.log"
+    },
+    {
+      "name": "final-preflight",
+      "exit": 1,
+      "log": "final-preflight.log"
+    },
+    {
+      "name": "final-link-diagnosis",
+      "exit": 1,
+      "log": "final-link-diagnosis.log"
+    }
+  ]
+}

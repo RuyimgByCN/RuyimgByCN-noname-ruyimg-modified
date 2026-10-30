@@ -17,16 +17,17 @@
 //! （T15① 实证）。**
 
 use blake3::hash;
-use content_schema::{
-    ContentPackage, PackageManifest,
-};
+use content_schema::{ContentPackage, PackageManifest};
 use resource_schema::{AssetEntry, AssetKind, AssetManifest, PreloadPriority};
 use std::collections::BTreeMap;
 use std::path::PathBuf;
 
 /// 上游 cardpile 比例表（两仓一致；牌名 = 上游 data 键）。
 const ENTRIES: &[(&str, &[(&str, u32)])] = &[
-    ("sha", &[("diamond", 6), ("club", 14), ("heart", 3), ("spade", 7)]),
+    (
+        "sha",
+        &[("diamond", 6), ("club", 14), ("heart", 3), ("spade", 7)],
+    ),
     ("huosha", &[("diamond", 2), ("heart", 3)]),
     ("leisha", &[("spade", 5), ("club", 4)]),
     ("shan", &[("heart", 6), ("diamond", 18)]),
@@ -36,7 +37,10 @@ const ENTRIES: &[(&str, &[(&str, u32)])] = &[
     ("nanman", &[("spade", 2), ("club", 1)]),
     ("guohe", &[("spade", 3), ("club", 2), ("heart", 1)]),
     ("shunshou", &[("spade", 3), ("diamond", 2)]),
-    ("wuxie", &[("heart", 2), ("diamond", 1), ("spade", 2), ("club", 2)]),
+    (
+        "wuxie",
+        &[("heart", 2), ("diamond", 1), ("spade", 2), ("club", 2)],
+    ),
     ("tiesuo", &[("spade", 2), ("club", 4)]),
 ];
 const TOTAL: u32 = 160;
@@ -69,7 +73,12 @@ fn pile_json(source: &str, upstream_path: &str, upstream_commit: &str) -> String
     out
 }
 
-fn build_package(namespace: &str, source: &str, upstream_path: &str, upstream_commit: &str) -> ContentPackage {
+fn build_package(
+    namespace: &str,
+    source: &str,
+    upstream_path: &str,
+    upstream_commit: &str,
+) -> ContentPackage {
     let mut package = ContentPackage {
         manifest: PackageManifest::new(namespace, "cardpile", "1.0.0"),
         modules: vec![],
@@ -110,14 +119,15 @@ fn build_package(namespace: &str, source: &str, upstream_path: &str, upstream_co
     package
         .asset_paths
         .insert("cardpile:pile".into(), "assets/pile.json".into());
+    // Keep the published data-only package fingerprint independent of host ABI additions.
+    package.manifest.rule_vm_abi_version = 753;
     package.manifest.logic_hash = package.compute_logic_hash();
     package.manifest.asset_hash = package.compute_asset_hash();
     package
 }
 
 fn main() {
-    let out_root = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../packages/extensions");
+    let out_root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
 
     let sources: &[(&str, &str, &str, &str)] = &[
         (

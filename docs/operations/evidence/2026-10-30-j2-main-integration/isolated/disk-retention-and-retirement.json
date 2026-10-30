@@ -1,0 +1,56 @@
+{
+  "CARGO_INCREMENTAL": "0",
+  "source_or_shared_cache_deleted": false,
+  "private_targets_ready_for_parent_retirement_after_batch": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-gate"
+  ],
+  "retention_until_end_reason": "deps and test executables reused by native, workspace, strict and WASM checks; completed batch can retire targets after saved native/WASM artifacts and SHA logs are verified. Parent owns whole-target deletion.",
+  "native_artifacts_saved": [
+    {
+      "name": "native-misc-tests",
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/misc-dc3c06551063a5f7",
+      "sha256": "6ff9b8980056a3ab4139129a2768870d20df07305f3c9a4b2d9f5f40fb60f363",
+      "bytes": 27122984
+    },
+    {
+      "name": "native-matrix-tests",
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09/debug/deps/adr0786_j2_cross_target-09bd3348dcbf7b35",
+      "sha256": "d691234b14218bc1a009b8915e1ccce9c69cb247b1d2cce94cffade85619ca6a",
+      "bytes": 21717736
+    }
+  ],
+  "wasm_artifacts_saved": [
+    {
+      "path": "wasm-pkg/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1
+    },
+    {
+      "path": "wasm-pkg/engine_native_wasm.d.ts",
+      "sha256": "fca9012ba34cb891ad3512a743dcba5b1dc9760a836bce10dc137828502fb833",
+      "bytes": 9481
+    },
+    {
+      "path": "wasm-pkg/engine_native_wasm.js",
+      "sha256": "b52cd15a839fcbeaf8964d54de4ca1de175bd40adde0ecdd184c8f0d7df3230a",
+      "bytes": 24391
+    },
+    {
+      "path": "wasm-pkg/engine_native_wasm_bg.wasm",
+      "sha256": "dd93503aae4d5b554750c5e349aa61489da1070b5937eab039721a375db58d68",
+      "bytes": 3530838
+    },
+    {
+      "path": "wasm-pkg/engine_native_wasm_bg.wasm.d.ts",
+      "sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "bytes": 3030
+    },
+    {
+      "path": "wasm-pkg/package.json",
+      "sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+      "bytes": 488
+    }
+  ],
+  "free_bytes_at_index": 172901105664
+}

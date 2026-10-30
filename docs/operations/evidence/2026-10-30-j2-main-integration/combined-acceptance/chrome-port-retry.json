@@ -1,0 +1,7 @@
+{
+  "original_failed_command": "j2-real-chrome-worker",
+  "reason": "Port4186 already occupied before Chrome launch; no product execution or result inferred",
+  "original_runner_source_preserved": true,
+  "retry_port": 4187,
+  "changed_only": "Evidence runner port/profile/script paths; reviewed browser SDK/Worker expression unchanged"
+}

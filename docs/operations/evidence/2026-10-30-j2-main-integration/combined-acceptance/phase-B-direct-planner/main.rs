@@ -1,0 +1,1 @@
+fn main(){let path=std::env::args().nth(1).unwrap();let value=j2_direct_planner_matrix::run_matrix();std::fs::write(path,&value).unwrap();println!("native direct matrix passed: paired4 + real7prompts14 calls");}

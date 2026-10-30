@@ -1,0 +1,18 @@
+// 冯河（神孙策）：受到存活的其他角色造成的伤害前，防止伤害并失去一点体力上限。
+// 手牌上限基数为体力上限；选择一张手牌交给其他角色，或重铸可重铸的手牌。
+// 实际交牌后，若仍拥有英霸（含暂时失效），对仍存活的原伤害来源授平定标记与衍生技。
+// 重铸不授标；正式整包版本与保留旧包的生成仍须随 J2 内容交付核验。
+skill pinghe(2176317369) locked {
+  // 上游 maxHandcardBase = maxHp；用既有 owner_max_hp 动态值源。
+  modifier hand_limit_base_max_hp override 1;
+  trigger damage_before owner_is_target_other_source_alive {
+    if 1 < max_hp(self) {
+      if 0 < hand_count(self) {
+        effect prevent_current_damage();
+        effect change_max_hp(self, -1);
+        // 效果内部只在“实际交给存活目标”且自己仍拥有英霸时授予；重铸不授标。
+        effect choose_give_or_recast_one_hand(self, 2187983153, 3219705664, 3219705664);
+      }
+    }
+  }
+}

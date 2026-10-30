@@ -5,6 +5,25 @@ use super::*;
 /// 效果提交（`accept_effect` 已验证映射面；此处只落账）。
 
 impl VmMachine {
+    pub(crate) fn with_commit_state(
+        mut self,
+        pending: &[u8],
+        state: Vec<u32>,
+        committing: bool,
+    ) -> Result<Self, ()> {
+        if committing {
+            self.pending_effects = dec_effects(pending).ok_or(())?;
+        }
+        self.committing = committing;
+        self.commit_state = state;
+        Ok(self)
+    }
+
+    pub(crate) fn with_following(mut self, following: Vec<MachineSnapshot>) -> Self {
+        self.following = following;
+        self
+    }
+
     /// 存档重建（非挂起态）：从模块载体字节还原（快照点不会停在
     /// start→step 中段——此态重建后即待触发执行）。PA06：装载期
     /// 校验——恢复载体畸形即拒（等价于原执行期校验的前移）。
@@ -34,6 +53,9 @@ impl VmMachine {
             consume,
             count_hits,
             commit_pause: None,
+            following: Vec::new(),
+            commit_state: Vec::new(),
+            committing: false,
         })
     }
 
@@ -89,6 +111,9 @@ impl VmMachine {
             consume,
             count_hits,
             commit_pause: None,
+            following: Vec::new(),
+            commit_state: Vec::new(),
+            committing: false,
         })
     }
 
@@ -127,6 +152,9 @@ impl VmMachine {
             consume,
             count_hits,
             commit_pause: Some(VmCommitPause { player, count }),
+            following: Vec::new(),
+            commit_state: Vec::new(),
+            committing: false,
         })
     }
 }
@@ -167,7 +195,7 @@ impl SkillMachine for VmMachine {
             count_hits: self.count_hits,
             // J1：提交期挂起——剩余队列与开窗参数（未挂起为空/None）。
             commit_pending: {
-                if self.commit_pause.is_some() {
+                if self.committing {
                     let mut b = Vec::new();
                     enc_effects(&mut b, &self.pending_effects);
                     b
@@ -175,10 +203,10 @@ impl SkillMachine for VmMachine {
                     Vec::new()
                 }
             },
-            commit_pick: self
-                .commit_pause
-                .as_ref()
-                .map(|cp| (cp.player, cp.count)),
+            following: self.following.clone(),
+            commit_state: self.commit_state.clone(),
+            committing: self.committing,
+            commit_pick: self.commit_pause.as_ref().map(|cp| (cp.player, cp.count)),
         }
     }
 
@@ -228,14 +256,21 @@ impl SkillMachine for VmMachine {
                 // 不可达）——整段回滚，半次效果不落账。
                 return self.trap_done();
             }
+            // Settle discard children before advancing queued effects or following handlers.
+            return Flow::Yield;
+        }
+        if self.committing {
             return self.pump_commit(ctx);
         }
         // 挂起态：先问（WaitChoice），已答则续跑
         if let Some(p) = self.paused.clone() {
             if !self.asked {
                 self.asked = true;
-                let options: Vec<ChoiceOption> =
-                    p.options.iter().map(|t| ChoiceOption::Tag(*t as u8)).collect();
+                let options: Vec<ChoiceOption> = p
+                    .options
+                    .iter()
+                    .map(|t| ChoiceOption::Tag(*t as u8))
+                    .collect();
                 return Flow::WaitChoice {
                     observer: self.owner,
                     spec: ChoiceSpec {
@@ -321,6 +356,7 @@ impl VmMachine {
         };
         match outcome {
             Ok(ExecResult::Halted { .. }) => {
+                self.committing = true;
                 for (key, scope) in &self.consume {
                     let k = if key.is_empty() {
                         self.program.skill_name.clone()
@@ -407,7 +443,21 @@ impl VmMachine {
     /// once/命中计数已在 Halted 尾写入（幂等或一次性，恢复续跑不重记）。
     fn pump_commit(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         let seats = ctx.core.players.len() as u8;
-        while !self.pending_effects.is_empty() {
+        if !self.pending_effects.is_empty() {
+            let hook = ctx.catalog.hooks.vm_commit;
+            if let Some(flow) = hook(
+                ctx,
+                &self.program.skill_name,
+                &self.pending_effects[0],
+                &mut self.commit_state,
+            ) {
+                if matches!(flow, Flow::Done) {
+                    self.pending_effects.remove(0);
+                    self.commit_state.clear();
+                    return Flow::Yield;
+                }
+                return flow;
+            }
             let window = match &self.pending_effects[0] {
                 EffectRequest::DiscardHandEquipCount { player, count, .. } if *count > 0 => {
                     match crate::rvm_ops::seat_of(*player, seats) {
@@ -424,7 +474,52 @@ impl VmMachine {
             }
             let e = self.pending_effects.remove(0);
             let skill = self.program.skill_name.clone();
-            crate::rvm_ops::commit_effect(ctx, &skill, e);
+            crate::rvm_ops::commit_effect(ctx, &skill, self.owner, e);
+            return Flow::Yield;
+        }
+        if !self.following.is_empty() {
+            let next = self.following.remove(0);
+            let MachineSnapshot::Rvm {
+                owner,
+                module,
+                skill_name,
+                event,
+                consume,
+                count_hits,
+                ..
+            } = next
+            else {
+                return self.trap_done();
+            };
+            let Some(def) = ctx.catalog.skill_by_name(&skill_name) else {
+                return self.trap_done();
+            };
+            let instance_ok = ctx.core.player(owner).alive
+                && ctx
+                    .core
+                    .skills
+                    .get(&(owner, def))
+                    .is_some_and(|instance| instance.enabled && instance.owner == owner);
+            if !instance_ok {
+                return self.pump_commit(ctx);
+            }
+            if !ctx.catalog.skills[def as usize]
+                .behavior
+                .vm_trigger_still_matches(&module, &ctx.query(), owner, &event)
+            {
+                return self.pump_commit(ctx);
+            }
+            let Ok(module) = BytecodeModule::from_bytes(&module) else {
+                return self.trap_done();
+            };
+            let Ok(mut next) =
+                Self::from_module(owner, module, skill_name, event, consume, count_hits)
+            else {
+                return self.trap_done();
+            };
+            next.following = std::mem::take(&mut self.following);
+            *self = next;
+            return Flow::Yield;
         }
         self.settled = true;
         Flow::Done

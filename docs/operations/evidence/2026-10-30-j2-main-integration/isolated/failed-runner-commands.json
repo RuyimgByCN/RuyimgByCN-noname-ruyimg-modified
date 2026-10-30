@@ -1,0 +1,29 @@
+[
+  {
+    "log": "20-final-native-matrix.log",
+    "command": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/space-guard.py",
+      "env",
+      "CARGO_INCREMENTAL=0",
+      "CARGO_BUILD_JOBS=2",
+      "CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09",
+      "J2_CROSS_NATIVE_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/native-matrix.json",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "adr0786_j2_cross_target",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 101,
+    "elapsed_seconds_including_wait": 38.305
+  }
+]

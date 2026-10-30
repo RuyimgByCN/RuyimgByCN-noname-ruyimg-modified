@@ -1,0 +1,13 @@
+failed to load config from /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/vite-config.mjs
+error when starting dev server:
+ReferenceError: exports is not defined
+    at eval (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite-plugin-wasm@3.6.0_vite@6.4.3/node_modules/vite-plugin-wasm/dist/index.js:37:23)
+    at ESModulesEvaluator.runInlinedModule (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1070:6)
+    at ModuleRunner.directRequest (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1284:82)
+    at ModuleRunner.cachedRequest (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1179:28)
+    at request (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1228:79)
+    at async eval (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction/vite-config.mjs:6:31)
+    at async ESModulesEvaluator.runInlinedModule (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1062:5)
+    at async ModuleRunner.directRequest (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1284:61)
+    at async ModuleRunner.cachedRequest (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1180:76)
+    at async ModuleRunner.import (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vite@6.4.3/node_modules/vite/dist/node/module-runner.js:1117:12)

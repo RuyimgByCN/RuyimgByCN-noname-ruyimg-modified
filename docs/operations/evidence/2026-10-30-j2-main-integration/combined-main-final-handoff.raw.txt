@@ -1,0 +1,59 @@
+# B/J2 combined main：最终 worker 交接
+
+**Runtime 验证已完成；父的最终完整 preflight 尚待独立完成。** 本次仅依据已保存证据收口，未新增构建、测试、矩阵、清理或主树修改。
+
+证据根目录：[combined-acceptance](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance)。以下简称 E。
+
+| 源码阶段 | native3：通过/失败/忽略 | 六受影响包 | workspace |
+|---|---:|---:|---:|
+| Phase A，P1 修复前，仅历史结果 | 1705/0/75 | 6034/0/77 | 6828/0/77 |
+| Phase B，父修复后 | **1706/0/75** | **6035/0/77** | **6829/0/77** |
+
+六包为 engine-api、engine-core、engine-native、engine-native-wasm、game-server、desktop-client，启用 desktop-client/tauri-shell；下层 kernel/content 另由 native3 覆盖。Phase B native facade1699、content4、kernel3；workspace 的77忽略项为 native75、desktop1、legacy core1。逐项名称、原因、目标和警告保留在 E/phase-B-*-detailed.json，不以旧绿替代新源码。
+
+Phase B 其余已完成：NC10 定向54/0/4；workspace all-targets compile、native3 全 targets 的 -Dwarnings 严格检查通过；分层上行引用0；8981文件满足2000行及 Rust非测试1000有效行门禁。前端153/0、typecheck/build、当前生产 WASM Worker82/0；conformance/legacy crosshash、native/WASM正式包轨迹通过。
+
+## 真实 runtime 证据
+
+- B：当前329重新生成 **14 archives / 98 server–WASM–IPC比较 / 五种native choice kind**，双将槽、完整choice字段与完整archive字节一致；旧/新reader真实WS5字节、可信只读referee重连覆盖保留，修复后全量套件亦执行。
+- 实际组件：Chrome **16/16**，全部真实 wasm-worker；WKWebView **16/16**，全部真实 native IPC。含恢复、五种kind、旧payload回退及扩展文本转义。
+- J2：实际WASM **36 scenarios / 189 checkpoints / 114 retries**；完整archive、choice、事件、hash一致。作者SDK生命周期、theft SDK及真实Chrome Worker三例通过。
+- 五窗口：原生18/0/0；实际WASM **75状态 / 270座位检查 / 35命令 / 40恢复**。父更新trace_frame加入B字段后重新导出，保持whole-choice比较。
+- 普通投影：5状态、40比较、32隐私检查通过。生产NativeEngine仍25公开方法；当前329 Hujia空选项实际WASM精确匹配原生手动空答；前端outcome回归通过。
+- 旧328档作为独立负控明确报 `RuleVersionMismatch { snapshot: 328, catalog: 329 }`，当前archive不变；没有使用旧档fallback。
+
+## P1：真正的 red → 父修复 → 实际WASM
+
+114/114 helper恢复有效只证明物理/恢复有效，未被当作隐私证明。真实DSL配对在seed99107868、HP4、相同完整PolicyInput/choice/events下，缓存自身伤害 **1 vs 5**；budget48真实选择 **Card52 vs Card44**，nodes3/3、faults0，源archive不变，产生assert exit101。
+
+父独占修改公开七个J2 prompt叶、保守RVM guard及注册回归，无规则/ABI/格式升号。独立511f0caf审查关闭该P1。随后共享Rust函数直接调用 **Engine::plan_action**：budget0/48、policy1、depth2，黑红各一，共 **4次配对规划/target**；另由真实挂起档覆盖七prompt，共 **14次/target**。原生与实际WASM完整输出一致；缓存伤害仍真实1/5，完整Plan相等、nodes/faults0、源archive不变、恢复apply有效。未用NativeSession.auto_step冒充规划。
+
+完整证明：E/phase-B-direct-planner/{export-main.rs,author-packs.json,lib.rs,native-output.json,wasm-output.json,actual-wasm-report.json,artifact-hashes.json}。原red的DSL、输入、完整byte archives、Plan与二进制保留于 E/nc10-j2-plan-repro/、nc10-j2-paired-plan-result.json、nc10-j2-paired-plan-red.log。
+
+## 失败与 preflight：不改写历史
+
+63个indexed commands均有完整exit证据，**59 exit0，4非零**：真实P1 red101；首次Chrome Worker启动exit1（4186被占用、浏览器尚未启动）；full preflight exit1；同一坏链诊断exit1。Chrome evidence runner仅换私有端口4187/profile路径后，真实三例复跑exit0；未杀其他任务进程。
+
+完整preflight实际运行320.84s，**19 pass / 2 link fail，exit1**。唯一坏链是父文档的 `standard.rs:162`；父改为 `standard.rs#L162` 后，两项cheap gate均exit0：core7、all1900文件零坏链。**没有新的全量21/21或exit0；父将最终完整重跑。** 原45/60分钟工具timeout属于run终止，非源码失败，已完成exit逐项保留。
+
+## 最终源码与责任边界
+
+审计时间 **2026-10-30T06:14:52.675599Z**：HEAD44982f4加接入内容，版本 **329/105/758/WS5**，WASM桌面默认不变。B31+J272为 **103个候选路径条目，去重101**；父另行纠正5个路径，合计 **106唯一接入/纠正路径**。候选与纠正边界不混计。
+
+32,630文件的Phase B前后完整manifest中，仅父的三个Markdown文档变化；无Rust/TS/DSL/config等非Markdown漂移。20,752维护文件聚合SHA前后相同：
+`e671b4d6418c9f0c12606320405990d02fcb57c65b546f952015845b20cbab3e`。
+
+101接入hash及父5纠正hash均匹配；父的.pi-lens禁自动修复/格式化guard未变。worker无维护源码/期望/golden自动修改、未stage/commit/push。37个tracked dist文件在保存实际构建副本后恢复精确HEAD字节，无generated tracked差异。审计与manifest：E/final-source-audit.json、maintained-source-hashes-final.json、generated-dist-restored-exact-head.json、git-status-final.txt。
+
+## 父接管入口与产物
+
+父完整preflight可复用记录器 `/tmp/b-j2-main-run.py`（新唯一log名，保留既有index）；其调用 `/tmp/noname-run-serialized.py` 持全局锁。必要非敏感环境为：
+- `CARGO_TARGET_DIR=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target`
+- `CARGO_INCREMENTAL=0`，`CARGO_BUILD_JOBS=2`，`CARGO_NET_OFFLINE=true`。
+- 完整preflight不需NODE_OPTIONS。仅WASM脚本使用 `NODE_OPTIONS=--require=/tmp/b-j2-main-target.cjs`，只重定向硬编码target，原flags/profile/codegen不变。对应保存副本为 E/b-j2-main-run.py、build-target.cjs；实际argv/cwd/env见 E/command-results.json、各log首行。
+
+当前debug app、IPC bridge、正常native/legacy WASM、生产frontend/UI bundle、red/修复后direct-planner产物均已复制。SHA位置：E/artifact-hashes.json、current-build-payload-hashes.json、production-frontend-wasm-match.json、phase-B-direct-planner/artifact-hashes.json；副本在 E/artifacts/。本批未构建新的desktop release。
+
+worker已放弃后续源码/target使用。历史06:14审计：stage3 **23,430,144KiB**，strict `/tmp/noname-pa09-parent-gate-9e6c6232` **83,168KiB**；均无打开文件、新incremental条目0。私有已完成bundle/profile/package已退役，完整target未由worker删除。**父现立即需要完整preflight并已接管；由父重新核owner后保留/处理**，不依据旧审计直接删除。见 E/final-target-retirement.json、runtime-post-use-cleanup.json。
+
+最终责任：runtime/source验证完成，父拥有源码解冻及最终完整preflight/文档收口。该批不关闭完整NC10隐私/质量、N01、onlyOL/shiji、37来源、上游等价、Windows/Linux、HID/perf、CI或默认切换条件。

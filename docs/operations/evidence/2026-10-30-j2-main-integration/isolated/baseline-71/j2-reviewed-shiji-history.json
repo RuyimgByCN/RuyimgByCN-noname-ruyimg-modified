@@ -1,0 +1,20 @@
+{
+  "retained_git_lineage": [
+    {
+      "commit": "da8c7ff0792046dceb1a164a3f2d01a45e107b76",
+      "version": "0.2.4",
+      "abi": 756,
+      "sha256": "2a1907b49f908c54b1c5f2e3ff76ff8c5e615ee972a6bd025f16af17c48623c4",
+      "bytes": 300974
+    },
+    {
+      "commit": "72583b2ba178ade1faf584c1c29344813c073bd8",
+      "version": "0.1.0",
+      "abi": 502,
+      "sha256": "7468cd60d233b7da8c77b6dd0d98ca85a72e7abd102c95e0329193eaef5550ce",
+      "bytes": 299405
+    }
+  ],
+  "found_version_0_2_1": false,
+  "note": "Metadata records0.2.1\u20130.2.3 but no such package bytes exist in the retained package lineage; actual predecessor0.2.4 and oldest0.1.0 are preserved byte-for-byte."
+}

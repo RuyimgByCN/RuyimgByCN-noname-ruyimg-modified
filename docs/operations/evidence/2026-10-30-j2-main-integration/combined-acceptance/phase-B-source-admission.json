@@ -1,0 +1,36 @@
+{
+  "at_utc": "2026-10-30T05:25:58.177036+00:00",
+  "parent5_hashes_exact": {
+    "crates/engine-native/src/ai.rs": true,
+    "crates/engine-native/src/ai/remap.rs": true,
+    "crates/engine-native/tests/groups/nc_rounds.rs": true,
+    "crates/engine-native/tests/nc10_j2_vm_privacy.rs": true,
+    "crates/engine-native/tests/nc09_machine_ownership.rs": true
+  },
+  "changed_since_initial": [
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native/src/ai/remap.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc09_machine_ownership.rs",
+    "crates/engine-native/tests/nc10_j2_vm_privacy.rs",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/native-coverage-manifest.md"
+  ],
+  "approved_non_markdown_changes": [
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native/src/ai/remap.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc09_machine_ownership.rs",
+    "crates/engine-native/tests/nc10_j2_vm_privacy.rs"
+  ],
+  "baseline_source_phase": "post parent P1 AI fix + registered regression + Bfivewindow metadata consumer",
+  "old20_checks": "retained pre-fix; no claim same source",
+  "versions": [
+    329,
+    105,
+    758,
+    5
+  ]
+}

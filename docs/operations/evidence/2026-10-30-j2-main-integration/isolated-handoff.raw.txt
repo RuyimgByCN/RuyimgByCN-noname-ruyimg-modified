@@ -1,0 +1,121 @@
+# J2 theft event correction after disk recovery
+
+**Implementation and requested verification complete; independent re-review/integration remain pending.** Final candidate stays **rules329 / native ABI758 / archive105**, isolated source HEAD `2b3348eff0a6a7f07d6f2ba3520e4ca243e344a6`. Verified2026-10-30. No main source/shared-document edits, commits, staging, pushes, profile changes, new events/state/protocols or downstream330/331/WS6 work.
+
+The full81-line review8ef was read. It independently closes the original five findings; this correction addresses only its new P1. Total remains **72 changed paths versus base**; the pure delta against the preserved71-file candidate is **five paths**, with **exactly two production lines deleted**.
+
+## Semantic correction and genuine red/green
+
+Danshou option2 previously called `give_hand_card(target,owner,card)` for a hand card, emitting `CardsGiven` and incorrectly activating the robbed player's gift-benefit skills. Equipment already followed ordinary movement. Both now use the existing shared path:
+
+`take_owned_card(target,card)` → append to owner's hand → `CardsMoved`.
+
+`take_owned_card` retains loss notification/history and equipment-skill revocation. The genuine Fenghe gift still uses `give_hand_card` and emits `CardsGiven`. No helper was globally weakened and no watcher was disabled.
+
+Evidence root:
+`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/evidence/theft-correction`.
+
+- **Real pre-fix red:** `01-theft-gift-red.log`,11 passed /1 failed. Actual untrimmed `ol_jie_danshou.skill` plus accepted DSL `cards_given owner_alive_gave_cards_to_other_alive { draw_cards(self,1) }` makes the robbed player keep2 hand cards instead of1. Equipment and genuine Fenghe gift controls already pass.
+- **Disk failure is not a pass:** `02-theft-gift-green.log` is empty after the reported ENOSPC interruption. No successful execution is inferred.
+- **Post-recovery green:** `03-theft-gift-green-after-disk.log` is12/0. Final source also passes all12 regressions inside `10-final-native-three.log` and the complete workspace.
+- New native tests restore a byte archive immediately before selecting the stolen card, reject an illegal answer without changing complete snapshot/log/dedup state, then replay the valid answer. They check no `CardsGiven`, no giver draw, ordinary movement listener execution and actual `CardsLost`/`CardsMoved` frames.
+- A one-step slice captures both loss origins (`Hand` or `Equip`), byte-restores the pending event subtree and compares full core/RNG/resolution/event trajectory with uninterrupted execution. Equipment is placed with the existing exact-name helper, played through a real command, and its attached skill is proved present before theft and absent afterward.
+- Positive control compiles the actual complete `pinghe.skill` and a giver-benefit watcher: genuine gift logs `CardsGiven`, transfers the card and draws exactly one benefit card.
+
+Changed paths since71:
+
+1. `crates/engine-native-content/src/content/vm_effects/danshou.rs` — delete hand-specific gift branch; common movement path handles both zones.
+2. `crates/engine-native/tests/adr0786_j2_review_regressions.rs` — three semantic regressions, loss/revoke checkpoints, failed-retry assertions.
+3. `crates/engine-native-wasm/tests/adr0786_j2_cross_target.rs` — formal card asset for equipment lifecycle control.
+4. `crates/engine-native-wasm/tests/adr0786_j2_cross_target/cases.rs` — three new theft/equipment/genuine-gift cases.
+5. `apps/web-client/scripts/adr0786-j2-theft-sdk-smoke.mjs` — real SDK store, actual WASM, byte replay and frozen restore after uninstall.
+
+All reserved files, including the entire catalog, are byte-identical to the prior71 snapshot: `catalog.rs`, `content/standard.rs`, `snap/validation.rs`, `snap/asks.rs`, `archive/resolution.rs`. This correction does not overwrite parent's HostAsk/factory/window/prompt changes.
+
+## Matrix and hash attribution
+
+Final formal native/actual wasm32 matrix: **36 scenarios /189 command checkpoints /114 stale-choice retries**, with full direct/restored archive equality, native/WASM hashes, choices, outcomes, public events, RNG, continuations and failed-input atomicity.
+
+`matrix-attribution.json` independently compares preserved old vectors with final vectors:
+
+- All original **33 scenarios /175 commands** remain, in the same order, with **identical packages, initial archives and command streams**.
+- Three cases add14 commands: hand theft, equipment theft with attached-skill revocation, genuine Fenghe gift benefit.
+- Only two original oracles change: `danshou-option-2`, and `danshou-four-options-and-reset`, starting at theft and propagating the removed gift frame's event-ID/budget/hash/archive change. All other31 original scenario records remain exact.
+- No golden expected values were edited or blindly re-recorded. Original five corrections, genuine reds60/90 and their green proofs remain intact.
+
+Native matrix: `20-final-native-matrix.log`, `native-matrix.json`.
+Actual wasm replay: `13-final-actual-wasm-matrix.log`, `wasm-matrix-result.json`.
+
+Fresh final WASM SHA256:
+`dd93503aae4d5b554750c5e349aa61489da1070b5937eab039721a375db58d68`.
+
+## Final verification on corrected source
+
+| Check | Result | Evidence |
+|---|---:|---|
+| Full workspace | **6757 passed /0 failed /74 ignored**, exit0 | `17-final-workspace.log` |
+| Mandatory native kernel/content/facade | **1670 /0 /73 ignored**, exit0 | `10-final-native-three.log` |
+| Independent native-three all targets, `RUSTFLAGS=-Dwarnings` | pass, exit0 | `11-final-strict.log` |
+| Fresh actual wasm32 web release | pass, exit0 | `12-final-wasm-build.log` |
+| Native/WASM complete matrix | **36 /189 /114**, exact full archives | `20`, `13`, vector/result JSON |
+| New SDK semantic flow | all three cases pass; full native/archive parity, failed retries and frozen restore after uninstall | `14-final-theft-sdk.log` |
+| Existing author SDK lifecycle | install/enable/start/activate/answer/checkpoint/upgrade/frozen restore/rollback/disable/uninstall pass | `15-final-author-sdk-lifecycle.log` |
+| Worker smoke | **81 /0**, current rebuilt WASM | `16-final-worker-smoke.log` |
+| Real Chrome Worker + SDK store | all three new cases pass; before-every-command restore, native hashes, restored events, invalid/stale retry atomicity | `22-real-worker.log`, `real-worker-result.json` |
+| Frontend tests | **127 /0**, exit0 | `23-final-frontend.log`, `frontend-commands.json` |
+| Frontend typecheck | pass, exit0 | `24-final-typecheck.log` |
+| Conformance | **ALL PASS**, exit0 | `18-final-conformance.log` |
+| Fresh complete preflight | **all21 gates pass**, exit0 | `19-final-preflight.log` |
+| Both patch applications / source SHA / empty index | pass | `21-patch-verification.log`, `cleanup-final.json` |
+
+Affected six crates total **2137 /0 /73 ignored**: loader32, native1663, content4, kernel3, wasm72, server363. `final-counts.json` derives counts from this isolated final workspace. Parent's main-tree2143 count belongs to a different source tree and is not substituted for these results.
+
+`final-commands.json`, `commands-run.json`, `frontend-commands.json` retain commands and exits. `ignored-tests.txt` retains ignored names/reasons. No ignored test was promoted to passed.
+
+## Disk recovery, cleanup and retained artifacts
+
+Parent reported ENOSPC and reclaimed only ended-task regenerable incremental caches. Inspection confirmed the source correction and tests survived; no reset, source loss or successful green was assumed.
+
+Every post-recovery Cargo/WASM command explicitly uses **`CARGO_INCREMENTAL=0`**, `CARGO_BUILD_JOBS=2`, the global serialized lock and the authorized NC09/Gate targets. `space-guard.py` runs after lock acquisition and stops before a heavy command if free space is below3GiB. The updated guard records post-command space and removes only newly created private incremental/empty tmp entries; no such entries were produced. Deps/build outputs/test executables were retained while the same batch needed them. No code profile or performance comparison was changed/claimed.
+
+At completion:
+
+- Necessary final WASM/glue files are copied to `wasm-pkg/` with SHA manifest.
+- Standalone native misc and matrix test executables are copied to `native-test-artifacts/`, with paths/sizes/SHA in `native-test-artifacts.json`.
+- Owned Chrome/Vite processes stopped; temporary dependency links and `.pi-lens.json` removed; preexisting `.pi-lens-probe-home/` preserved.
+- Only this task's generated Vite optimizer cache was removed (~1.39MB). No source, patch, log, frozen package, shared or active cache was removed.
+- Final free space is about161GiB, recorded exactly in `cleanup-final.json`.
+
+**Parent may retire both private targets after confirming no other active use:**
+`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc09-pe1axnwg/target-nc09`
+and sibling `target-gate`. This worker did not delete whole targets. `disk-retention-and-retirement.json` records retained artifact hashes and retirement boundaries.
+
+## Reviewable artifacts
+
+All below are under the evidence root above:
+
+| Artifact | SHA256 |
+|---|---|
+|`j2-theft-total-vs-2b3348ef.patch` — total72 paths|`96f8ec3be3a3a37903a1623956bbae0c3b5bbe4386b0eee2a09fafd80070e8f9`|
+|`j2-theft-incremental-vs-71.patch` — pure five-path correction|`8881c9752b2665f23c3f0af2c9ceb321c376a8760614d24db56a0e8ea2512458`|
+|`j2-theft-before-after-sha256.json` — base/prior71/final fingerprints|`ec0cf1f40690c31fbd36a662a20987c262498914ef1571ba4c028490f17df0e2`|
+
+Both patches were applied independently in temporary trees and every resulting file hash matched final source. Lists: `j2-theft-changed-files.txt`, `j2-theft-delta-files.txt`; complete artifact hashes: `j2-theft-artifact-sha256.json`. `build-artifacts.py` and `index-evidence.py` are retained evidence helpers.
+
+`baseline-71/` preserves all previous71 source files, fingerprints, patches, count/command/acceptance records and original vectors; prior total patch remains SHA `d85a8b022dc9bc583101f8e4859ed1f54b91c00e50910940de14cfaea42d576b`.
+
+Retained setup failures04–09/20a concern fixture metadata/registration, exact catalog naming and choosing a same-Kind rather than exact equipment entity; they are not counted as semantic reds. The equipment fixture uses an existing supported host mapping; no loader capability was expanded. Two temporary Vite config attempts failed before the working isolated-cache configuration; their logs remain retained.
+
+## Scope and integration limits
+
+- Required independent re-review remains pending. No merge approval is claimed.
+- Parent main already contains Referee/PA09/Session/IPC and separate Hujia fixes absent from this old-base total patch. Preserve those changes and parent HostAsk u32/factory/window/prompt work by matched-hunk integration. The pure five-path delta avoids every reserved file.
+- Original five findings are independently closed by review8ef; they were not reimplemented or widened here. The known CardsDrawn event-player gap and separate GaiMing cancel issue remain outside this correction.
+- Full onlyOL0.1.5/shiji0.2.5 packages and R03 remain unaccepted. Complete shiji still explicitly rejects `phase_prepare`; previously registered whole-package gaps also include `game_started`, `hand_compare_finished` and other unsupported filters/effects. None is claimed closed by this theft fix. Current complete shiji0.2.5 and exact predecessor0.2.4/older0.1.0 bytes remain unchanged. No fabricated0.2.1 archive.
+- Earlier failed reds58/60/90, workspace54 **6742 /1 /74** (original_mobile489/1), timed-out sessions and ENOSPC interruption remain historical failures. Current original_mobile490/0 and workspace6757/0 do not rewrite them.
+- No downstream330/331/WS6 work, full37-source equivalence or controlled performance measurements.
+
+Recommended next step: fresh independent review of the five-path incremental patch and semantic evidence, then careful integration with current parent source and combined-tree validation before accepting329.
+
+Skipped: controlled performance measurement and whole-package/upstream equivalence.
+Risk: independent re-review and combined-tree gates remain required; do not replace parent's newer source with old-base whole files.

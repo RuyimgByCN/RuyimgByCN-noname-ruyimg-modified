@@ -4,7 +4,7 @@
 //! 同一变异集**逐条执行：合法夹具通过；六类变异全部在导入期被拒——其中
 //! `local_count+1` 与篡改触发事件名两类此前只在开局被拒（GT-014 证据 §4
 //! 登记差异），现在提前到导入期，与服务端导入一致。另验 ABI 窗口：要求
-//! 宿主 ABI 高于 753 的真实包在导入期即拒。
+//! 不支持的真实整包声明在导入期明确拒绝。
 use serde_json::Value;
 use std::path::Path;
 
@@ -78,17 +78,17 @@ fn same_mutations_as_server_import_are_rejected_at_import_time() {
     }
 }
 
-/// ABI 窗口：要求高于宿主 ABI 753 的真实包（onlyOL 0.1.5 要求 758）在导入期即拒。
+/// J2 supports ABI758; the full onlyOL package still requires phase_prepare and other missing declarations.
 #[test]
 fn package_requiring_newer_host_abi_is_rejected_at_import_time() {
     let path = Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../../content/original/ported/onlyOL/onlyOL.npack.json");
     let json = std::fs::read_to_string(&path).expect("onlyOL npack present");
     let err = engine_native_wasm::validate_pack_json(&json)
-        .expect_err("onlyOL requires ABI 758 > host 753");
+        .expect_err("full onlyOL still needs unsupported phase_prepare");
     eprintln!("GT014_WASM_REJECT abi_window: {err}");
     assert!(
-        err.to_lowercase().contains("abi"),
-        "expected ABI window error, got: {err}"
+        err.contains("phase_prepare"),
+        "expected unsupported declaration error, got: {err}"
     );
 }

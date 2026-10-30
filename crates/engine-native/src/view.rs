@@ -214,3 +214,14 @@ pub fn public_event_code(event: &LogEvent) -> Option<u16> {
         _ => None,
     }
 }
+
+/// Canonical presentation name shared by server, WASM and native session adapters.
+pub fn choice_kind_name(kind: crate::ChoiceKind) -> &'static str {
+    match kind {
+        crate::ChoiceKind::Confirm => "confirm",
+        crate::ChoiceKind::SelectCards => "select_cards",
+        crate::ChoiceKind::SelectPlayers => "select_players",
+        crate::ChoiceKind::RespondCard => "respond_card",
+        crate::ChoiceKind::PickTag => "pick_tag",
+    }
+}

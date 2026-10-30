@@ -1,0 +1,3 @@
+Command: python3 ../evidence/freeze-b.py
+Exit: 1
+FileNotFoundError: b-originals/Cargo.lock: initial extension-based source snapshot omitted .lock files; the initial all-file SHA256 baseline includes Cargo.lock. Reconstructed exact baseline bytes from HEAD plus frozen prerequisite patch; SHA256 matches initial baseline and parent manifest. No working source content changed during reconstruction.

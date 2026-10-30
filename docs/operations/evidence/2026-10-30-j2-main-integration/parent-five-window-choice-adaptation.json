@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-10-30T13:10:19.010555+08:00",
+  "path": "crates/engine-native/tests/nc09_machine_ownership.rs",
+  "before_sha256": "05cc0ac837754574e2a5e6f6aa926cfb4a799d637a801e3ba802cd7c8971633a",
+  "after_sha256": "e33ac5a3960fc7c136e6b938ac8b0955556a8355a2a2f8536857d2a1450e10e0",
+  "scope": "Only test trace_frame adds Bnative_kind via existing native helper and expected wirekind via exhaustive test match; no runtime/cargo/dependency/golden changes",
+  "safe_checkpoint": "Worker declared no active owned compiler/matrix/queued launcher before edit",
+  "existing_oracles": "All prior choice fields/hash/revision/visible/deckCount retained; whole-choice comparison unchanged"
+}

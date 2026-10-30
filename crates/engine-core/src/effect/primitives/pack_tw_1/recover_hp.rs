@@ -277,6 +277,8 @@ pub(crate) fn request_choice(
         revision: tx.state().revision,
         continuation_id,
         kind,
+        prompt: None,
+        native_kind: None,
     };
     tx.set_choice(choice);
     Ok(vec![DomainEvent::ChoiceRequested {

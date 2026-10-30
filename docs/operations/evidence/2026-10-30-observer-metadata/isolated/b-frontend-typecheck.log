@@ -1,0 +1,4 @@
+npm notice run noname-next-web-client@0.1.0 typecheck
+npm notice run vue-tsc --noEmit
+src/worker/engine.worker.ts(7,34): error TS2307: Cannot find module '../wasm-pkg/engine_wasm.js' or its corresponding type declarations.
+{"command": ["npm", "--prefix", "apps/web-client", "run", "typecheck"], "exit": 2, "locked_seconds": 1.1637732080125716}

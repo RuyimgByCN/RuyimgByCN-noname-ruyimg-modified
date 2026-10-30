@@ -1,0 +1,12 @@
+[package]
+name = "engine-native-content"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+description = "Built-in native content and resolution machines"
+
+[dependencies]
+engine-native-kernel = { path = "../engine-native-kernel" }
+rule-vm = { workspace = true }
+rule-api = { workspace = true }

@@ -1,0 +1,129 @@
+{"command": ["node", "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs", "wkwebview", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop", "current329"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "node", "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs", "wkwebview", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop", "current329"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 169080029184}
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "ordinary-dual-def-zero",
+      "slots": 8,
+      "prompt": null,
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-dark",
+      "slots": 8,
+      "prompt": null,
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-primary-revealed",
+      "slots": 8,
+      "prompt": null,
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "kingdoms-both-revealed",
+      "slots": 8,
+      "prompt": null,
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "confirm",
+      "slots": 6,
+      "prompt": "trigger_confirm",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "select_players",
+      "slots": 6,
+      "prompt": "tuxi_target",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "select_cards",
+      "slots": 8,
+      "prompt": "discard_to_limit",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "respond_card",
+      "slots": 4,
+      "prompt": "respond_shan",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "pick_tag-fanjian",
+      "slots": 6,
+      "prompt": "fanjian_suit",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "machine-XunXun",
+      "slots": 6,
+      "prompt": "xunxun_arrange",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "machine-JiJie",
+      "slots": 6,
+      "prompt": "jijie_give_target",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "machine-GaiMing",
+      "slots": 8,
+      "prompt": "gaiming_pick",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "machine-HaoTianTa",
+      "slots": 8,
+      "prompt": "haotianta_pick",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "machine-Liaoyuan",
+      "slots": 8,
+      "prompt": "liaoyuan_discard",
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "legacy-choice-flow",
+      "slots": 4,
+      "prompt": null,
+      "transport": "desktop-native",
+      "restored": true
+    },
+    {
+      "name": "extension-prompt-flow",
+      "slots": 4,
+      "prompt": "<img src=x onerror=alert(1)>constructor",
+      "transport": "desktop-native",
+      "restored": true
+    }
+  ],
+  "kinds": [
+    "confirm",
+    "pick_tag",
+    "respond_card",
+    "select_cards",
+    "select_players"
+  ],
+  "oldPayloadFallback": true,
+  "extensionEscaped": true
+}
+{"command": ["node", "/tmp/noname-b-j2-main-2zzoa42o/runners/run-b-ui.mjs", "wkwebview", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/noname-next-desktop", "current329"], "exit": 0, "locked_seconds": 1.3922915830044076, "disk_free_bytes": 169078120448}
+{"runner_exit": 0, "stop_reason": null}

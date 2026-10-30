@@ -1,0 +1,31 @@
+{
+  "maintained_whitespace_exit": 0,
+  "all_local_links_exit": 0,
+  "all_local_links_output": "检查 1900 个文件，坏链 0\n",
+  "raw_whitespace_exit": 2,
+  "raw_warning_count": 535,
+  "raw_paths": [
+    "docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/affected-six.log",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/phase-B-worker.log",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/independent-final-review.raw.txt",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/independent-integration-block.raw.txt",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/independent-integration-correction.raw.txt",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/isolated/16-final-worker-smoke.log",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-incremental-vs-first-handoff.patch",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/isolated/baseline-71/j2-reviewed-total-vs-2b3348ef.patch",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-incremental-vs-71.patch",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/isolated/j2-theft-total-vs-2b3348ef.patch",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/j2-reviewed-total.patch",
+    "docs/operations/evidence/2026-10-30-j2-main-integration/parent-three-seam-merge.patch",
+    "docs/operations/evidence/2026-10-30-observer-metadata/approved-b-checked.patch",
+    "docs/operations/evidence/2026-10-30-observer-metadata/independent-review.raw.txt",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-checked.patch",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure-handoff.patch",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/approved-b-pure.patch",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts-bootstrap.log",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/b-red-ts.log",
+    "docs/operations/evidence/2026-10-30-observer-metadata/isolated/parent-integration-prerequisite.patch"
+  ],
+  "raw_bytes_preserved_not_reformatted": true,
+  "remaining_tracked_unstaged": []
+}

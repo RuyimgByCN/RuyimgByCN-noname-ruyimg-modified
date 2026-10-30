@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc10_j2_vm_privacy::",
+    "--",
+    "--nocapture"
+  ],
+  "exit": 101,
+  "seconds_including_lock": 2.45976066600997,
+  "free_gib_after": 161.47,
+  "CARGO_INCREMENTAL": "0",
+  "incremental_cleanup": "Disabled, existing stage3 target retained for immediate green/revalidation; raw logs preserved"
+}

@@ -22,6 +22,7 @@ fn stored_pending(cfg: &ServerConfig) -> (u64, [String; 4], State) {
     assert_eq!(engine.open_choice().unwrap().observer, 0);
     let mut snapshot = engine.save();
     snapshot.core.mode = engine_native::GameMode::Kingdoms;
+    snapshot.core.player_mut(1).general_slots[1] = Some(0);
     snapshot.core.player_mut(1).revealed_generals = [false, false];
     let removed = snapshot.core.deck.pop().unwrap();
     snapshot.core.player_mut(1).off_court.push(removed);
@@ -135,6 +136,13 @@ fn assert_referee(state: &State) {
         .known_cards
         .iter()
         .any(|card| card.zone == engine_api::CardZoneTag::Expansion));
+    let slots = &state.view.seats[1].generals;
+    assert!(slots.iter().all(|slot| slot.as_ref().is_some_and(|general| !general.name.is_empty() && !general.faction.is_empty() && !general.revealed)));
+    assert_eq!(slots[1].as_ref().unwrap().def, 0);
+    if let Some(choice) = &state.choice {
+        assert!(choice.prompt.as_ref().is_some_and(|prompt| !prompt.is_empty()));
+        assert!(choice.native_kind.as_deref().and_then(engine_api::choice_kind_from_native).is_some());
+    }
     assert_ne!(
         state.view.seats[1].character_def, 0,
         "dark general remains authorized"
@@ -191,7 +199,9 @@ fn native_ws_referee_restore_reconnect_choice_fanout_and_restart() {
         let mut spectator = Peer::connect(&server).await;
         reconnect_spectator_with_stored_seat(&mut spectator, room, &tokens[3]).await;
         spectator.snapshot().await.assert_spectator();
-        assert!(spectator.snapshot().await.view.seats[1].character_def == 0);
+        let public = spectator.snapshot().await;
+        assert_eq!(public.view.seats[1].character_def, 0);
+        assert_eq!(public.view.seats[1].generals, [None, None]);
         let mut newcomer = Peer::connect(&server).await;
         newcomer.spectate(room).await.assert_spectator();
         // A rejected player intent still fans out the unchanged pending private choice.

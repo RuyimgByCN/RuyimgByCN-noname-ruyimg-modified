@@ -1,0 +1,40 @@
+## Review
+
+**Merge verdict: OK for the isolated J2 candidate at rules 329 / ABI 758 / archive 105.**
+
+No issues found.
+
+The theft-as-gift P1 is closed. The original four P1 findings and P2 finding remain closed. This verdict covers the reviewed J2 candidate; integration with the parent’s newer tree remains parent-owned.
+
+- **Fixed — Danshou option 2 event semantics:** Both hand and equipment acquisition now use `take_owned_card` → append to the owner’s hand → `CardsMoved`. The hand-specific gift call is removed at [danshou.rs:143](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-content/src/content/vm_effects/danshou.rs:143). This is the smallest correction: two production lines deleted, with no change to the shared gift helper.
+
+- **Correct — Loss notifications and equipment lifecycle:** [machine.rs:414](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-kernel/src/machine.rs:414) removes cards from either zone, records loss, emits `CardsLost` with the appropriate `Hand`/`Equip` origin, and revokes equipment-attached skills. Danshou then emits ordinary movement. The new regression checks both origins in the pending event subtree, byte-restores it, and compares resumed core/RNG/resolution/events with uninterrupted execution.
+
+- **Correct — Genuine gifts retain their behavior:** FengHe still calls `give_hand_card` at [fenghe.rs:103](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native-content/src/content/vm_effects/fenghe.rs:103). Its positive control verifies the transfer, `CardsGiven`, and exactly one giver-benefit draw. The correction neither weakens that helper nor disables gift watchers.
+
+- **Correct — Regression quality:** The native tests use the actual untrimmed Danshou/FengHe sources with accepted DSL watchers. They check the robbed player’s hand count, absence of gift logs, ordinary movement-listener execution, equipment-skill removal, rejected-answer atomicity, and byte-restored continuation. See [adr0786_j2_review_regressions.rs:480](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-j2-llgkp_le/worktree/crates/engine-native/tests/adr0786_j2_review_regressions.rs:480).
+
+The raw red log shows **11 passed / 1 failed**, with the robbed player incorrectly retaining two cards instead of one. The post-recovery green shows **12 passed / 0 failed**; those tests also pass in the final native-three run. The empty ENOSPC-interrupted green log supplies no passing evidence, and the retained fixture/setup failures are not counted as semantic reds.
+
+The five-path incremental patch contains only the Danshou correction, regression/matrix additions, and SDK smoke script. It does not touch the reserved catalog, factory, snapshot, or prompt files. The supplied fingerprints and patch-application report agree with that boundary. I also reread the original correction points: FengHe ownership validation, Danshou stage 7, owner-scoped storage queries, exact single-resolver eligibility, and the effect-yield/following-handler gates remain intact.
+
+The recorded final checks are sufficient for this isolated candidate:
+
+| Check | Recorded result |
+|---|---:|
+| Full workspace | **6,757 passed / 0 failed / 74 ignored** |
+| Mandatory native three crates | **1,670 passed / 0 failed / 73 ignored** |
+| Native-three all-target warnings-denied check | Pass |
+| Native/actual-WASM matrix | **36 scenarios / 189 checkpoints / 114 retries** |
+| Conformance | **ALL PASS** |
+| Fresh full preflight | **21/21 passed** |
+| Real Chrome Worker/SDK | All three new theft/equipment/gift cases pass |
+
+I inspected the raw completion records, matrix assertions, SDK replay script, and real-Worker result. The matrix compares complete direct/restored archives as well as outcomes, choices, hashes, and events. Its attribution record retains all original 33 scenarios’ packages, initial archives, and command streams; only the two original scenarios containing theft change their later oracles. Removing the spurious gift frame explains the resulting event-ID, budget, hash, and archive displacement.
+
+The reviewed artifact is the total patch with **recorded** SHA-256 `96f8ec3be3a3a37903a1623956bbae0c3b5bbe4386b0eee2a09fafd80070e8f9`; the incremental patch’s recorded SHA-256 is `8881c9752b2665f23c3f0af2c9ceb321c376a8760614d24db56a0e8ea2512458`. I did not independently recompute these hashes.
+
+Combined-tree integration must preserve the parent’s newer Referee, Session, NC09/NC03, and other accepted changes, then validate that combined source. This J2 approval does not close full onlyOL/shiji acceptance, R03, or the 37-source program, and includes no downstream version/protocol work.
+
+Skipped: reviewer writes, builds, tests, commits, and independent SHA calculation.  
+Risk: isolated-candidate approval does not establish correctness of the eventual combined integration.

@@ -8,6 +8,10 @@ use crate::snap::{MachineSnapshot, SnapshotError};
 
 /// 标准内容目录（含扩展合并目录）装入的回调。
 pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
+    vm_active: super::vm_effects::active_eligible,
+    vm_validate: super::vm_effects::validate,
+    vm_commit: super::vm_effects::step,
+    vm_ask: super::vm_effects::active_ask,
     card_intrinsic: crate::content::host::card_intrinsic,
     host_ask: crate::content::host::active_ask_host,
     restore_machine,

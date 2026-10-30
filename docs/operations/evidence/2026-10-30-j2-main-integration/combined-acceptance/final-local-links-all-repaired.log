@@ -1,0 +1,4 @@
+{"command": ["python3", "-B", "scripts/check_local_links.py", "--all"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "python3", "-B", "scripts/check_local_links.py", "--all"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 168906715136}
+检查 1900 个文件，坏链 0
+{"command": ["python3", "-B", "scripts/check_local_links.py", "--all"], "exit": 0, "locked_seconds": 0.7621385829988867, "disk_free_bytes": 168906690560}
+{"runner_exit": 0, "stop_reason": null}

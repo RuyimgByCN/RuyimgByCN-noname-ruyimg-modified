@@ -1,0 +1,22 @@
+{
+  "name": "b-cross-entry-final",
+  "command": [
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "apps/web-client/scripts/approved-b-parity.mjs",
+    "../evidence/b-metadata-fixtures.json",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target/debug/examples/pa09_native_bridge"
+  ],
+  "cwd": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-observer-metadata-jvaaceks/worktree",
+  "env": {
+    "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-referee-pbhzrko1/target",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2"
+  },
+  "free_before": 178429272064,
+  "start": 1793330469.177078,
+  "exit": 0,
+  "end": 1793330485.288059,
+  "free_after": 178385674240
+}

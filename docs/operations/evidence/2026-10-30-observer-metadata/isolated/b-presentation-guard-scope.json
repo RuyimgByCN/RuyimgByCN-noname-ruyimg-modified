@@ -1,0 +1,7 @@
+{
+  "registered_archive_keys": 69,
+  "literal_prompt_names_in_content_src": 222,
+  "distinct_names_checked": 264,
+  "scope": "Literal presentation guard only. Source may include cfg-test literals and helper-generated prompts are not exhaustively inventoried; runtime fallback handles every string independent of this inventory. Not a live reachability, factory or restore-completeness proof.",
+  "unknown_extension_behavior": "Readable canonical choice-kind fallback; no raw prompt key in product text."
+}

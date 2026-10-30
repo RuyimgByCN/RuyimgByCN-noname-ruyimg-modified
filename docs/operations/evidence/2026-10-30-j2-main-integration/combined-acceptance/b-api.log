@@ -1,0 +1,21 @@
+{"command": ["cargo", "test", "--offline", "-p", "engine-api"], "launcher": ["python3", "-B", "/tmp/noname-run-serialized.py", "cargo", "test", "--offline", "-p", "engine-api"], "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next", "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_before": 186651246592}
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.03s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_api-7e058f95e9ef088f)
+
+running 4 tests
+test version::abi_coordination_tests::abort_bump_without_claim ... ok
+test manifest::tests::manifest_hash_is_stable_and_nonzero ... ok
+test manifest::tests::different_seed_changes_hash ... ok
+test version::abi_coordination_tests::claims_are_unique ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_api
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-api"], "exit": 0, "locked_seconds": 1.2650259160145652, "disk_free_bytes": 186649366528}
+{"runner_exit": 0, "stop_reason": null}
