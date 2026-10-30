@@ -1,0 +1,41 @@
+[
+  {
+    "name": "parent-preflight-complete",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/preflight.py"
+    ],
+    "exit": 0,
+    "seconds": 320.4683626659971,
+    "log": "parent-preflight-complete.log"
+  },
+  {
+    "name": "parent-source-line-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.07085033398470841,
+    "log": "parent-source-line-tests.log"
+  },
+  {
+    "name": "parent-source-lines",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 3.3853548750048503,
+    "log": "parent-source-lines.log"
+  }
+]

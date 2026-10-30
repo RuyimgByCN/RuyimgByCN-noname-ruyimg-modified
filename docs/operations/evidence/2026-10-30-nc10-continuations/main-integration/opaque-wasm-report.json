@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "runtime": "actual generated wasm32 web-target package initialized by Node",
+  "entrypoint": "Engine::plan_action",
+  "cases": 1,
+  "prompt": "rvm_choice",
+  "privateLocals": [
+    0,
+    4
+  ],
+  "budgets": [
+    0,
+    48
+  ],
+  "policyVariant": 1,
+  "lookaheadDepth": 2,
+  "nativePlannerCalls": 4,
+  "wasmPlannerCalls": 4,
+  "fullOutputEqual": true,
+  "allSourceArchivesImmutable": true,
+  "restoredApplyChecksPerTarget": 4,
+  "nodesUsed": 0,
+  "simFaults": 0,
+  "scope": "First actual opaque rvm_choice planner counterfactual matrix; no author-DSL rvm_discard_pick, generic Host, no-choice storage privacy, or overall NC10 acceptance claim"
+}

@@ -1,0 +1,53 @@
+{
+  "recorded_at_utc": "2026-10-30T04:07:13.025783+00:00",
+  "commands_complete": 16,
+  "commands_exit0": 16,
+  "failures": [],
+  "targeted": [
+    53,
+    0,
+    4
+  ],
+  "native3": [
+    1679,
+    0,
+    75
+  ],
+  "workspace": [
+    6796,
+    0,
+    77
+  ],
+  "worker": [
+    82,
+    0
+  ],
+  "frontend": [
+    146,
+    0,
+    0
+  ],
+  "source_caps": 8955,
+  "layer_upward_references": 0,
+  "opaque_matrix": {
+    "cases": 1,
+    "prompt": "rvm_choice",
+    "private_locals": [
+      0,
+      4
+    ],
+    "budgets": [
+      0,
+      48
+    ],
+    "policy_variant": 1,
+    "depth": 2,
+    "planner_calls_per_target": 4,
+    "nodes": 0,
+    "sim_faults": 0,
+    "native_wasm_full_output_equal": true
+  },
+  "preflight": "Parent after documentation updates, not rerun in worker contract",
+  "WKWebView": "Not repeated for AI-only delta by explicit task contract",
+  "full_NC10": "Not accepted; partial increment only"
+}

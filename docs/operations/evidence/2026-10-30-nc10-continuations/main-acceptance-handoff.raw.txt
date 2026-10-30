@@ -1,0 +1,213 @@
+NC10 main integration acceptance — 2026-10-30T04:09:46.873789+00:00
+
+**Result: all16 requested/executed acceptance commands completed exit0.** This validates the reviewed partial NC10 increment integrated over main `5ec62ae49a7b0b731a2ff53f1de9318ef81e861c`, not complete NC10 privacy or quality. The worker made no maintained source/API/binding/configuration/profile/expected-value change and did not commit or stage. Main remains rules328/archive105/ABI753/WS5, desktop WASM default.
+
+Source admission independently verified all12 applied final hashes against `corrected-source-manifest.json` and all8 separately integrated borrowed prerequisites against `borrowed-prerequisites.json`. Both were checked again at completion. [start.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/start.json); [source-final-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/source-final-audit.json). The candidate README still described an earlier isolated state when first read; the actual source/hash checks and this run establish current integration results.
+
+Completed checks:
+
+| Check | Actual result | Raw log |
+|---|---|---|
+| nc10-targeted | 53 passed / 0 failed / 4 ignored; current nc_rounds nc10_ tests | [recovery-nc10-targeted.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-nc10-targeted.log) |
+| native3 | 1679 passed / 0 failed / 75 ignored; native1672 + content4 + kernel3 | [recovery-native3.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-native3.log) |
+| workspace | 6796 passed / 0 failed / 77 ignored; complete --workspace --no-fail-fast | [recovery-workspace.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-workspace.log) |
+| strict-native3 | Independent target, native3/alltargets, RUSTFLAGS=-Dwarnings; exit0 | [recovery-strict-native3.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-strict-native3.log) |
+| source-line-units | 2 tests passed | [recovery-source-line-units.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-source-line-units.log) |
+| source-lines | 8955 files <=2000 lines; Rust non-test <=1000 effective lines | [recovery-source-lines.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-source-lines.log) |
+| layering | 0 upward references <= BASELINE0 | [recovery-layering.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-layering.log) |
+| conformance | ALL PASS; current complete conformance command | [recovery-conformance.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-conformance.log) |
+| native-wasm-build | Fresh actual production web-target nativeWASM release rebuild, original --no-opt arguments | [recovery-native-wasm-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-native-wasm-build.log) |
+| worker | 82 checks / 0 failed, fresh generated package | [recovery-worker.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-worker.log) |
+| frontend | 146 passed / 0 failed / 0 skipped | [recovery-frontend.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-frontend.log) |
+| typecheck | vue-tsc --noEmit exit0 | [recovery-typecheck.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-typecheck.log) |
+| native-wasm-trajectory | Native vs actual WASM standard/formal-package trajectories and save/restore compare;2 Rust tests,0 failures | [recovery-native-wasm-trajectory.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-native-wasm-trajectory.log) |
+| opaque-native | Shared direct Engine::plan_action matrix; one case, locals0/4, budgets0/48,4 calls and4 restored applies | [recovery-opaque-native.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-opaque-native.log) |
+| opaque-wasm-build | Actual evidence-only web-target wasm32 release package compiled from same shared harness function | [recovery-opaque-wasm-build.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-opaque-wasm-build.log) |
+| opaque-wasm-compare | Actual generated wasm32 initialized in Node; full shared native/WASM matrix output equal; zero nodes/faults | [recovery-opaque-wasm-compare.log](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-opaque-wasm-compare.log) |
+
+The full native three-package count is **1679/0/75**: engine-native1672/0/75, content4/0/0, kernel3/0/0. Workspace **6796/0/77** contains native75, desktop1 and legacy engine-core1 ignored tests. Relative to prior completed main results1665/0/73 and6782/0/75, the actual delta is **+14 passed and+2 ignored**. Newly ignored: `nc12_ai_strength_baseline::nc10_quality_matrix` and `nc12_ai_strength_baseline::nc10_quality_matrix_production`, both explicitly manual quality/latency runs. Exact test names, ignored reasons, per-crate/per-target totals and warning headers are retained in [nc10-targeted-detailed-results.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/nc10-targeted-detailed-results.json), [native3-detailed-results.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/native3-detailed-results.json), [workspace-detailed-results.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/workspace-detailed-results.json) and [new-ignored-relative-pa09.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/new-ignored-relative-pa09.json). Full raw warnings, including existing shell helper/duplicated-attribute warnings, were not suppressed. There are no new failing command logs in this run; historical candidate failures remain under the original isolated/review-fix evidence.
+
+The added actual opaque-planner WASM proof:
+
+- **Exactly one case**, the reachable query→STORE→HOST_CHOICE `rvm_choice` fixture copied from current `nc10_opaque_vm_privacy.rs`. Only local `pack`/`fixture` function visibility was changed in the evidence module; bytecode and fixture bodies remain exact. [opaque-harness/fixture-copy-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/fixture-copy-audit.json).
+- The two private locals are genuinely produced by `HAND_COLOR_COUNT` from the counterfactual physical hands: **0 and4**, owner0. No synthetic `opaque#private` field was inserted. Both accepted source snapshots restore with the current extension pack. Paused frames/PCs and complete source archives are preserved in the outputs.
+- The **same shared exported harness function** runs on native and actual wasm32. It calls public **`Engine::plan_action` directly**, with budgets **0 and48**, policy variant1 and lookahead depth2. `NativeSession.auto_step` is not used and cannot stand in for this planner proof.
+- For each budget, complete projected PolicyInput, choice and events are equal across private variants; complete Debug Plans are equal. All4 calls per target use nodes0/sim_faults0, leave the source archive byte-for-byte immutable and apply successfully after actual encode/decode/restore; the resulting archives restore again. Both targets execute4 restored-apply checks.
+- Generated **web-target wasm32** is initialized from its actual bytes by Node. The comparator deep-compares the entire returned matrix with native, including inputs, events, full Plans, local frames, original/after archive bytes, hashes and application outcomes. All matched. This closes the previously missing actual-WASM proof for this **single public `rvm_choice` leaf**; the author-DSL `rvm_discard_pick` case was optional and was not exported/tested here.
+
+The common Plan was `Plan { seat: 0, revision: 1, action: Answer { choice_id: 1, selection: [Tag(0)] }, nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: false, sim_faults: 0 }`. This is public conservative choice behavior; it is not evidence of hidden-continuation simulation or optimal private-information quality.
+
+Proof artifacts: [opaque-harness/lib.rs](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/lib.rs), [opaque-harness/fixture.rs](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/fixture.rs), [opaque-harness/verify.mjs](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/verify.mjs), [opaque-native-output.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json), [opaque-wasm-output.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-output.json), [opaque-wasm-report.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-report.json). Harness dependency versions/sources match current main Cargo.lock; content-compiler was not built into the evidence WASM crate. [opaque-harness/dependency-lock-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/dependency-lock-audit.json).
+
+Source fingerprint and generated outputs:
+
+- HEAD `5ec62ae49a7b0b731a2ff53f1de9318ef81e861c`, reviewed patchSHA `de121a0f23019a9226627a46d88f54ac9906673373cf05fbac4796b81303bd05`; all12 final and8 borrowed hashes remain exact.
+- Full before/after manifests contain **32601 / 32602 files**: [source-hashes-before.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/source-hashes-before.json) and [source-hashes-after.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/source-hashes-after.json). No Rust/TS/DSL changes occurred during validation. The parent’s two progress Markdown files changed, as permitted.
+- The full audit also detected **new untracked `.pi-lens.json`**, absent at baseline, SHA `b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1`. It disables autofix, formatting and actionable-warning autofix. The worker did not edit/remove it or attribute its writer. This exception is preserved explicitly rather than being omitted from the full fingerprint.
+- Production maintained files excluding that tool guard: **20723**, identical before/after aggregate SHA256 `65e063ee520c1ac6f2a689ac15a747120683b22cfdd8956e283c763c126df2d1`. Full maintained manifest including the guard has20724 files and SHA `476c167950b8baa028ac92d2198edf995b278848d6e462ce313d7a50cf5d4cb2`. [maintained-source-hashes-final.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/maintained-source-hashes-final.json); [source-final-audit.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/source-final-audit.json).
+- **No generated tracked changes remain and no files are staged.** This run rebuilt only the normal nativeWASM package and did not rebuild normal production dist, so no tracked-dist restoration was needed. [git-status-final.txt](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/git-status-final.txt).
+
+Build/evidence copies:
+
+| Artifact | Payload/copy SHA256 |
+|---|---|
+| Fresh normal native web WASM,3429798 bytes | `6a5e7c12113502485598f59b0a4b486eba10c28f2d7f120a98cc14c150f49415` |
+| Actual opaque planner web WASM,2749304 bytes | `1fb530afa944a5587671ba39cb2bbb09bda070726e467f846241450787076b15` |
+| Native opaque planner harness executable,14611776 bytes | `c7aab5bfb500ec8a914f9eafc3d202b80bc226ed93f9152a0c16089c69162c17` |
+
+Both complete generated packages are archived with per-file SHA256, and the native harness executable is copied under `artifacts/`. [wasm-artifact-hashes.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/wasm-artifact-hashes.json); [artifact-hashes.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifact-hashes.json). No new desktop debug/release app or WebView reload/performance run is claimed for this AI-only task.
+
+Disk/cleanup handoff:
+
+- Every compilation and script spawn uses **CARGO_INCREMENTAL=0/jobs2**. Heavy commands use the same global serialized lock and an active free-space guard; the build script preload changes only its hardcoded `CARGO_TARGET_DIR`. Original codegen/release/profile/WASM arguments remain unchanged. [build-child-argv.jsonl](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/build-child-argv.jsonl). Durations are functional-check log times, not performance or cold-build comparisons.
+- Post-command free-space and retention audits show **zero incremental entries**. The normal WASM build removes its temporary package in finally. The private generated opaque package was retained only for the immediate comparator, then archived/hashed and retired: `/tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg`. [post-command-cleanup.jsonl](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/post-command-cleanup.jsonl), [post-command-cleanup-clarifications.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/post-command-cleanup-clarifications.json), [opaque-post-use-cleanup.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-post-use-cleanup.json). Small evidence source/runner copies remain for reproduction; no maintained source, patch, log, frozen package or full target was deleted.
+- Stage3 `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target`: **10585932KiB**. No further worker use; retained specifically because the parent explicitly may reuse it for subsequent approved **B/J2 integration**, rather than creating another full cache.
+- Strict check target `/tmp/noname-pa09-parent-gate-9e6c6232`: **77516KiB**. No remaining worker need; parent may retire it.
+- Both targets returned `lsof +D` exit1 with empty output/stderr at 2026-10-30T04:06:19.945439+00:00. Parent should recheck current ownership before coordinated deletion/reuse. Observed free space **166.70GiB**. [target-cleanup-handoff.json](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/target-cleanup-handoff.json).
+
+Remaining boundaries:
+
+- This is the reviewed **partial NC10** increment. Conservative helpers still retain private data in unsupported states. Generic Host slot meaning, no-choice VM storage/flags/cached-scalar provenance, the existing storage-dependent trap branch, public memory/known-card policy, pile shape/count, full typed-continuation equivalence and J2 remain open. No privateHost/provenance rewrite was implemented.
+- The actual-WASM opaque proof covers one `rvm_choice` query/STORE/HOST_CHOICE case only; it does not cover the author-DSL commit case on WASM or establish overall NC10 privacy.
+- Full final repository preflight is intentionally left to the **parent after its documentation update**, as authorized. The full workspace, native3, strict gates, source caps, layering, conformance, Worker/frontend and both requested native/WASM comparisons ran on current main. Whole WKWebView reload/performance was not repeated for this AI-only delta. Windows/Linux, CI and physical HID/performance were not run. WASM remains the desktop default.
+
+Worker source/build use is complete as of `2026-10-30T04:05:38.468660+00:00`; parent may thaw after this handoff. New main-source changes need their own appropriate validation. Recommended next step: independent review, parent documentation/preflight completion, then coordinated cache reuse/retirement and further approved integration.
+
+Skipped: optional author-DSL opaque-WASM case, unchanged WebView/performance suites, and parent-owned final documentation preflight. Risk: the documented NC10 privacy gaps and tool-guard addition remain explicit.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Validation-only on the exact reviewed main12-path delta and8 borrowed prerequisites. No maintained source/API/binding/profile/expected-value edits; evidence-only direct planner harness added."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "16 complete exit0 command logs/index with ignored tests/warnings, native and real-WASM full matrix outputs, source fingerprints including tool-config exception, artifact hashes and cache-retirement audit."
+    }
+  ],
+  "changedFiles": [
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/151d4082-7ee4-4663-82a6-4e12ac475365/verification/nc10-main-integration-acceptance.md",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/recovery-command-results.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/source-final-audit.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/maintained-source-hashes-final.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-output.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-report.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/target-cleanup-handoff.json",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifact-hashes.json"
+  ],
+  "testsAddedOrUpdated": [
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/fixture.rs",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/lib.rs",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-harness/verify.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds nc10_ -- --nocapture",
+      "result": "passed",
+      "summary": "53 passed / 0 failed / 4 ignored; current nc_rounds nc10_ tests; raw recovery-nc10-targeted.log"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "result": "passed",
+      "summary": "1679 passed / 0 failed / 75 ignored; native1672 + content4 + kernel3; raw recovery-native3.log"
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "6796 passed / 0 failed / 77 ignored; complete --workspace --no-fail-fast; raw recovery-workspace.log"
+    },
+    {
+      "command": "cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Independent target, native3/alltargets, RUSTFLAGS=-Dwarnings; exit0; raw recovery-strict-native3.log"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "result": "passed",
+      "summary": "2 tests passed; raw recovery-source-line-units.log"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "8955 files <=2000 lines; Rust non-test <=1000 effective lines; raw recovery-source-lines.log"
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "result": "passed",
+      "summary": "0 upward references <= BASELINE0; raw recovery-layering.log"
+    },
+    {
+      "command": "cargo run --offline -p conformance",
+      "result": "passed",
+      "summary": "ALL PASS; current complete conformance command; raw recovery-conformance.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client build:native",
+      "result": "passed",
+      "summary": "Fresh actual production web-target nativeWASM release rebuild, original --no-opt arguments; raw recovery-native-wasm-build.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client smoke:native",
+      "result": "passed",
+      "summary": "82 checks / 0 failed, fresh generated package; raw recovery-worker.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client test",
+      "result": "passed",
+      "summary": "146 passed / 0 failed / 0 skipped; raw recovery-frontend.log"
+    },
+    {
+      "command": "pnpm --dir apps/web-client typecheck",
+      "result": "passed",
+      "summary": "vue-tsc --noEmit exit0; raw recovery-typecheck.log"
+    },
+    {
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "result": "passed",
+      "summary": "Native vs actual WASM standard/formal-package trajectories and save/restore compare;2 Rust tests,0 failures; raw recovery-native-wasm-trajectory.log"
+    },
+    {
+      "command": "cargo run --offline --manifest-path /tmp/noname-nc10-main-evidence-2nvqctry/opaque-planner/Cargo.toml -- /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json",
+      "result": "passed",
+      "summary": "Shared direct Engine::plan_action matrix; one case, locals0/4, budgets0/48,4 calls and4 restored applies; raw recovery-opaque-native.log"
+    },
+    {
+      "command": "wasm-pack build /tmp/noname-nc10-main-evidence-2nvqctry/opaque-planner --target web --release --no-opt --out-dir /tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg",
+      "result": "passed",
+      "summary": "Actual evidence-only web-target wasm32 release package compiled from same shared harness function; raw recovery-opaque-wasm-build.log"
+    },
+    {
+      "command": "node /tmp/nc10-main-opaque-verify.mjs /tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-output.json /Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-report.json",
+      "result": "passed",
+      "summary": "Actual generated wasm32 initialized in Node; full shared native/WASM matrix output equal; zero nodes/faults; raw recovery-opaque-wasm-compare.log"
+    }
+  ],
+  "validationOutput": [
+    "Targeted53/0/4; native3 1679/0/75; workspace6796/0/77; actual +14passes/+2manualignored over prior main.",
+    "Strictnative3/caps8955/layer0/conformance all exit0; freshWASM Worker82/0, frontend146/0, typecheck and formal native/WASM trajectories passed.",
+    "One reachable rvm_choice counterfactual: locals0/4, budgets0/48, policy1,depth2;4 native+4 actualWASM directplanner calls. Entire output matched, pair public input/events/fullPlan equal; archives immutable; restoredapply valid; nodes0/simfaults0.",
+    "Pure12 and borrowed8 hashes still exact. Production maintained aggregate before=after65e063ee520c1ac6f2a689ac15a747120683b22cfdd8956e283c763c126df2d1.",
+    "Generated tracked differences none; no staged files. Added tool guard .pi-lens.json explicitly recorded separately."
+  ],
+  "residualRisks": [
+    "Partial NC10 increment only; conservative helpers retain private information. Generic Host/private-slot semantics, no-choice storage/flags/cached-scalar provenance, storage-dependent trap handling, public memory/known cards, pile shape/count, full typed continuation equivalence and J2 remain outside acceptance.",
+    "Actual opaque planner WASM matrix covers one rvm_choice query/STORE/HOST_CHOICE case only. Author-DSL rvm_discard_pick actual-WASM case was optional and not included.",
+    "Full final repository preflight is deferred to parent after documentation updates by explicit task contract. No repeated WKWebView reload/performance checks; no Windows/Linux or CI run.",
+    "Workspace77 ignored tests and compiler warnings remain. Two newly ignored tests are explicit manual fixed-seed quality/latency and production-budget quality/latency matrices; no performance or cold-build claim.",
+    "Full source audit records new untracked .pi-lens.json disabling autofix/formatting, absent at baseline. Worker did not edit it or attribute its writer; production maintained sources and all12/borrowed8 hashes are unchanged.",
+    "Independent acceptance review remains required."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Evidence-only integration verification and shared native/wasm planner harness. No maintained source changes by worker; no whole WebView/performance rerun.",
+  "reviewFindings": [
+    "No genuine source defect or acceptance command failure found in this run.",
+    "Full NC10/privacy/default-switch acceptance is not claimed; tool-config addition and deferred parent preflight remain explicit."
+  ],
+  "manualNotes": "All compilation/script spawns used CARGO_INCREMENTAL=0/jobs2, approved target redirection, global serialized lock and disk guard. No new incremental payload; private generated harness WASM package archived+hashed then retired. Main package remains a normal shared asset. Stage3 retained specifically for parent-authorized upcoming B/J2 reuse; strict target has no remaining worker need. Both private targets had lsof+D exit1 with no open files; parent rechecks before retirement. Source/build use is finished; parent may thaw after handoff."
+}
+```

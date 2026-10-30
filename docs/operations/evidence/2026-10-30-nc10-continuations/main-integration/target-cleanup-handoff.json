@@ -1,0 +1,40 @@
+{
+  "at_utc": "2026-10-30T04:06:19.945439+00:00",
+  "targets": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "lsof_stderr": "",
+      "no_open_files_observed": true,
+      "du": "10585932\t/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "worker_downstream_use_complete": true,
+      "safe_for_parent_to_retire_after_fresh_check": true,
+      "retention_reason": "Parent explicitly may reuse owned stage3 deps for subsequent approved B/J2 integration; worker needs no more builds."
+    },
+    {
+      "path": "/tmp/noname-pa09-parent-gate-9e6c6232",
+      "lsof_exit": 1,
+      "lsof_stdout": "",
+      "lsof_stderr": "",
+      "no_open_files_observed": true,
+      "du": "77516\t/tmp/noname-pa09-parent-gate-9e6c6232",
+      "worker_downstream_use_complete": true,
+      "safe_for_parent_to_retire_after_fresh_check": true,
+      "retention_reason": "No remaining worker need; parent can retire this independent strict check target."
+    }
+  ],
+  "incremental_entries": {
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/incremental": 0,
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/release/incremental": 0,
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/wasm32-unknown-unknown/release/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/debug/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/release/incremental": 0,
+    "/tmp/noname-pa09-parent-gate-9e6c6232/wasm32-unknown-unknown/release/incremental": 0
+  },
+  "free_bytes": 178991882240,
+  "removed_private_generated_package": "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg",
+  "main_shared_generated_package": "Retained as normal current main runtime asset; not private cache cleanup-owned. Exact evidence copy and SHA preserved.",
+  "small_temporary_harness_sources": "Preserved with evidence copies for reproduction; no maintained source/patch/log/frozen package deleted.",
+  "full_targets_deleted_by_worker": []
+}

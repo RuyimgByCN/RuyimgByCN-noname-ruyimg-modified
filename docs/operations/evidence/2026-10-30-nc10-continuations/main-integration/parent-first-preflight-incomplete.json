@@ -1,0 +1,11 @@
+{
+  "result": "incomplete",
+  "reason": "Parent bash tool timed out after60s; no complete command result or exit sentinel, no pass inferred",
+  "commands_requested": [
+    "python3 -B scripts/preflight.py",
+    "source-line unit tests",
+    "source-line check"
+  ],
+  "raw_log": "Tool returned timeout before captured subprocess output was written; no raw output available",
+  "active_child_check": "The initial process filter used truncated macOS comm paths and cannot establish child liveness; recovery records its own complete exit separately"
+}

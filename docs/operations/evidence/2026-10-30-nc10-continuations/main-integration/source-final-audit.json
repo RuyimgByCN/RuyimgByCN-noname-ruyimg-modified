@@ -1,0 +1,61 @@
+{
+  "at_utc": "2026-10-30T04:05:38.468660+00:00",
+  "head": "5ec62ae49a7b0b731a2ff53f1de9318ef81e861c",
+  "before_files": 32601,
+  "after_files": 32602,
+  "changed": [
+    ".pi-lens.json",
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md"
+  ],
+  "non_markdown_changes": [
+    ".pi-lens.json"
+  ],
+  "tool_config_exception": {
+    "path": ".pi-lens.json",
+    "before": "absent",
+    "after_sha256": "b9d9736087abcefc1c569f7551e3eb1e425a8eeeef985dfb35ebb1da0c63a7d1",
+    "contents": "{\"autofix\":{\"enabled\":false},\"format\":{\"enabled\":false},\"actionableWarnings\":{\"autoFix\":{\"enabled\":false}}}\n",
+    "worker_action": "No edits; preserve and report untracked guard addition separately. Writer not attributed."
+  },
+  "maintained_files": 20724,
+  "maintained_aggregate_sha256": "476c167950b8baa028ac92d2198edf995b278848d6e462ce313d7a50cf5d4cb2",
+  "production_maintained_files_excluding_tool_guard": 20723,
+  "production_maintained_aggregate_before": "65e063ee520c1ac6f2a689ac15a747120683b22cfdd8956e283c763c126df2d1",
+  "production_maintained_aggregate_after": "65e063ee520c1ac6f2a689ac15a747120683b22cfdd8956e283c763c126df2d1",
+  "rust_ts_changes": [],
+  "pure12_match": {
+    "crates/engine-native/Cargo.toml": true,
+    "crates/engine-native/src/ai.rs": true,
+    "crates/engine-native/src/ai/redact.rs": true,
+    "crates/engine-native/src/engine/accessors.rs": true,
+    "crates/engine-native/tests/groups/nc_rounds.rs": true,
+    "crates/engine-native/tests/nc10_duel_nullify_privacy.rs": true,
+    "crates/engine-native/tests/nc10_pending_duel_privacy.rs": true,
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs": true,
+    "crates/engine-native/src/ai/remap.rs": true,
+    "crates/engine-native/tests/nc10_live_hidden_cards.rs": true,
+    "crates/engine-native/tests/nc10_opaque_vm_privacy.rs": true,
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs": true
+  },
+  "borrowed8_match": {
+    "crates/engine-native-kernel/src/snap.rs": true,
+    "crates/engine-native-kernel/src/snap/ownership.rs": true,
+    "crates/engine-native-kernel/src/snap/validation.rs": true,
+    "crates/engine-native-kernel/src/snap/asks.rs": true,
+    "crates/engine-native-kernel/src/archive/resolution.rs": true,
+    "crates/engine-native-content/src/content/standard.rs": true,
+    "crates/engine-native-kernel/src/catalog.rs": true,
+    "crates/engine-native-content/src/content/host/asks.rs": true
+  },
+  "generated_tracked_changes_remaining": [],
+  "staged_files": [],
+  "rules_archive_abi_ws": [
+    328,
+    105,
+    753,
+    5
+  ],
+  "no_more_worker_source_or_build_use": true,
+  "free_bytes": 178992058368
+}

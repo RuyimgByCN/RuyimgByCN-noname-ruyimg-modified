@@ -1,0 +1,11 @@
+{
+  "all_dependency_versions_and_sources_match_main": true,
+  "harness_packages": 37,
+  "new_root_only": "nc10-opaque-planner-evidence",
+  "profile_dev_debug": "line-tables-only",
+  "profile_release": {
+    "lto": true,
+    "codegen-units": 1
+  },
+  "main_profiles_unmodified": true
+}

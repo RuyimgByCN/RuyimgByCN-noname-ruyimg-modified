@@ -1,0 +1,8 @@
+{
+  "recorded_at": "2026-10-30T12:32:02.124744+08:00",
+  "decision": 24,
+  "question": "是否批准按具体提案，单独以规则331→332修复改命取消导致的重复牌和存档无法恢复？",
+  "answer": "批准改命修复 v332 (Recommended)",
+  "proposal_after_approval_status_amendment_sha256": "fcf37b196117380544095b838a43e9acbcb0b07cc3aa35eabf1998d3d1a151bd",
+  "scope": "After accepted329→330→331; dedicated332GaiMingcancelsharedfix, existingarchive105/thenABI758/WS6; no premature source/version change"
+}

@@ -175,14 +175,14 @@ fn both_answers_can_resume_redacted_window_after_restore() {
 }
 
 #[test]
-fn special_zones_remain_conservative() {
+fn public_special_zones_allow_safe_redaction() {
     let mut e = fixture();
     let card = e.state_core_mut().deck.pop().unwrap();
     e.state_core_mut().players[1].zhucheng.push(card);
     let before = e.state_core().players[0].hand.clone();
     let machine = e.resolution().parks[0].machine.snapshot();
     engine_native::ai::redact_opponent_hands(&mut e, 2);
-    assert_eq!(e.state_core().players[0].hand, before);
+    assert_ne!(e.state_core().players[0].hand, before);
     assert_eq!(e.state_core().players[1].zhucheng, vec![card]);
     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
 }

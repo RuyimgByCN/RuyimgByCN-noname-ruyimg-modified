@@ -1,0 +1,11 @@
+{
+  "source": "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+  "source_sha256": "ba5868087dcac0f17f836b83a3cf7adf2db95a41b634da4b14bf2f4a12e747da",
+  "copied_prefix_sha256_before_visibility_changes": "c19c2a859844a4863419255cb2e683832de7005be028f4cac750b20f357ccca3",
+  "changes": [
+    "fn pack -> pub fn pack",
+    "fn fixture -> pub fn fixture"
+  ],
+  "bytecode_and_fixture_body_unchanged": true,
+  "counterfactuals": "fixture(false)/fixture(true), without adding synthetic opaque#private storage"
+}

@@ -1,0 +1,6 @@
+{
+  "removed_private_generated_package": "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg",
+  "evidence_archives_and_hashes_preserved": true,
+  "free_bytes": 179016986624,
+  "retained": "Main normal package remains usable by parent; private target deps retained pending source-audit/handoff, and parent may reuse stage3 for next integration."
+}

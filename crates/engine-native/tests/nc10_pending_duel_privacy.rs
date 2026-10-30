@@ -222,7 +222,7 @@ fn redaction_preserves_duel_machine_and_referenced_cards() {
 }
 
 #[test]
-fn uninspected_special_zones_are_not_reassigned() {
+fn public_special_zones_are_preserved_during_redaction() {
     let pack = pack();
     let mut e = fixture(&pack);
     let card = e.state_core_mut().deck.pop().unwrap();
@@ -230,7 +230,7 @@ fn uninspected_special_zones_are_not_reassigned() {
     let original = e.state_core().players[1].hand.clone();
     let machine = e.resolution().parks[0].machine.snapshot();
     engine_native::ai::redact_opponent_hands(&mut e, 0);
-    assert_eq!(e.state_core().players[1].hand, original);
+    assert_ne!(e.state_core().players[1].hand, original);
     assert_eq!(e.state_core().players[2].zhucheng, vec![card]);
     assert_eq!(e.resolution().parks[0].machine.snapshot(), machine);
 }

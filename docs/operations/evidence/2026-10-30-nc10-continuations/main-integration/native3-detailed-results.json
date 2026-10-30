@@ -1,0 +1,552 @@
+{
+  "counts_by_crate_or_binary": {
+    "engine_native": [
+      1672,
+      0,
+      75
+    ],
+    "engine_native_content": [
+      4,
+      0,
+      0
+    ],
+    "engine_native_kernel": [
+      3,
+      0,
+      0
+    ]
+  },
+  "ignored_tests": [
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1-3b65073a010e6994)",
+      "test": "test g1_huanle::xly::xly_state_growth_probe ... ignored, \u8bca\u65ad\u63a2\u9488\uff1a\u624b\u52a8\u8fd0\u884c\u89c2\u5bdf\u89c4\u6a21\u66f2\u7ebf"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u51ed\u7a7a\u65b0\u589e\u89e6\u53d1\uff09\uff1abaiyi \u4e0a\u6e38\u4e3a phaseUse \u4e3b\u52a8\u6280\u3001\u65e0 trigger\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_card_targeted ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_damage_begin_second ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_death_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_game_start ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_judge_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_sha_after ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_sha_before ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::cap_sha_begin ... ignored, \u7f3a\u5931\u80fd\u529b\uff1a\u8865\u4e0a\u679a\u4e3e\u69fd\u4f4d\u540e\u672c\u5b88\u536b\u8f6c\u7eff\uff1b\u89e3\u9501\u7684\u7f3a\u9677\u65cf\u89c1\u51fd\u6570\u6587\u6863"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_rexue \u4e0a\u6e38 global\uff0c\u539f\u751f\u8fc7\u6ee4\u542b actor != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_tiebi \u4e0a\u6e38 global\uff0c\u539f\u751f\u76ee\u6807\u7b5b\u9009\u542b t != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner ... ignored, \u767b\u8bb0\u7f3a\u9677 G19\uff1aswd_zhuhai \u4e0a\u6e38 global phaseEnd\uff0c\u539f\u751f\u8fc7\u6ee4\u542b t != owner\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g20_jiuwei_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g20_liyutang_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g20_paotai2_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g20_zhucheng_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g20_ziyu_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G20\uff1a\u4e0a\u6e38 phaseEnd\uff08\u5168\u90e8\u9636\u6bb5\u540e\uff09\uff0c\u539f\u751f End,begin:true\uff08\u7ed3\u675f\u9636\u6bb5\u5f00\u59cb\uff09\u65e9\u4e00\u6b65\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_binxin_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_donghuangzhong_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_guangshu_spade_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_huanling_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_jidong_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_lingxin_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_lingyu_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_lqingcheng_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_menshen_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::g23_xuanyuan_turn_end ... ignored, \u767b\u8bb0\u7f3a\u9677 G23\uff1a\u4e0a\u6e38 phaseEnd \u6bcf\u56de\u5408\u4e00\u6b21\uff0c\u539f\u751f\u672a\u9489\u9636\u6bb5 \u21d2 \u6bcf\u9636\u6bb5\u7ed3\u675f\u90fd\u89e6\u53d1\uff085\u00d7\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/{common,swd}.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_chengxin_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_cigu_pre_draw ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_fenglue_before ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_fuchou2_before ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_gaiming_judge_before ... ignored, \u8865 `judgeBefore` \u5e55\u5e76\u6302\u4e0a\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_hutian_pin_end ... ignored, \u628a\u8fc7\u6ee4\u81c2\u9489\u5230\u8be5\u9636\u6bb5\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted ... ignored, \u8865 `CardTargeted` \u540e\u8f6c\u7eff\uff08\u4e0e cap_card_targeted \u540c\u4e00\u80fd\u529b\uff0c\u6309\u884c\u4e3a\u5206\u522b\u8bb0\u5f55\uff09"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_mb_phase_before_enter_game ... ignored, \u8865 phaseBefore / enterGame \u5e55\u6216\u6539\u7528 Dedicated \u4e8b\u4ef6\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_mopaifanbei_second_draw ... ignored, \u8865\u300c\u7b2c 2 \u6b21\u300d\u6863\u6216\u6478\u724c\u524d\u5e55\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_mufeng_pin_end ... ignored, \u628a\u8fc7\u6ee4\u81c2\u9489\u5230\u8be5\u9636\u6bb5\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_niepan_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_prepare_phase_exists ... ignored, \u8865 `Phase::Prepare` \u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_rangjie_branch1_draws ... ignored, \u8865 `draw_cards` \u540e\u8f6c\u7eff\uff08\u5206\u652f 1 \u5e94\u6478\u724c\uff09"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_shouyin_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_shuiyun5_dying ... ignored, \u628a TriggerMeta \u4e8b\u4ef6\u6539\u5bf9\u540e\u672c\u5b88\u536b\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_xiangxing_lose_hp_end ... ignored, \u8865 LoseHpEnd \u5e55\u5e76\u6302\u4e0a\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_yueyin_fourth_damage ... ignored, \u8865\u300c\u7b2c 4 \u6b21\u300d\u6863\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase ... ignored, \u8865 dieBegin \u5e55 / \u6539\u4e8b\u4ef6\u79cd\u7c7b\u540e\u8f6c\u7eff"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u81ea\u52a0\u5206\u652f\uff09\uff1ahuajin2 \u4e0a\u6e38\u4ec5 damageBegin\uff0c\u539f\u751f OR \u4e86\u5224\u5b9a\u9636\u6bb5\u5206\u652f\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage ... ignored, \u767b\u8bb0\u7f3a\u9677 G23b\uff1aSwdJiguanyuanGain \u4e0a\u6e38 damageEnd+damageSource\uff0c\u539f\u751f\u6302 PhaseEnd\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/metadata/swd.rs \u4e0e filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::lexue_any_phase_of_owner_only ... ignored, \u767b\u8bb0\u7f3a\u9677 G14\uff1alexue1 \u4e0a\u6e38 player phaseBegin\uff08\u4efb\u610f\u9636\u6bb5\u3001\u81ea\u5df1\uff09\uff0c\u539f\u751f\u9489\u6b7b Judge \u4e14\u7f3a owner \u6821\u9a8c\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker ... ignored, \u767b\u8bb0\u7f3a\u9677 5b\uff1areguhuo \u6bcf\u56de\u5408\u4e00\u6b21\u672a\u5b9e\u73b0\uff08EPIC_REGUHUO_KEY \u5b9a\u4e49\u672a\u63a5\u7ebf\uff09\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/step/skills_cards.rs \u4e0e constants.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "test": "test nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase ... ignored, \u767b\u8bb0\u7f3a\u9677\uff08\u9489\u6b7b\u9519\u5411\uff09\uff1aziyangdan \u4e0a\u6e38 phaseBegin\uff08\u4efb\u610f\u9636\u6bb5\uff09\uff0c\u539f\u751f\u9489\u6b7b End\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/filtering/common.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_dinvxuanshuang::upstream_dinvxuanshuang_recovers ... ignored, \u5e1d\u5973\u7384\u971c\uff1aselectTarget -1 \u5e94\u4ee4\u5168\u90e8\u89d2\u8272\u5404\u56de\u590d 1\u2014\u2014\u539f\u751f\u53ea\u56de\u590d\u4f7f\u7528\u8005\uff0c\u89c1\u7b2c 39 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_liyutang::upstream_liyutang_target_gains_the_card ... ignored, \u9ca4\u9c7c\u6c64\uff1a\u76ee\u6807\u5e94\u83b7\u5f97\u6b64\u724c\uff08\u4e0a\u6e38 $gain2 + storage + addSkill\uff09\u2014\u2014\u539f\u751f\u6548\u679c\u4e3a\u7a7a\uff0c\u89c1\u7b2c 37 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_longxugou::upstream_longxugou_steals_and_equips ... ignored, \u9f99\u987b\u94a9\uff1a\u83b7\u5f97\u540e\u5e94\u81ea\u5df1\u88c5\u5907\uff08\u4e0a\u6e38 player.equip\uff09\u2014\u2014\u539f\u751f\u4ec5\u5165\u624b\uff0c\u89c1\u7b2c 36 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_mapodoufu::upstream_mapodoufu_target_gains_the_card ... ignored, \u9ebb\u5a46\u8c46\u8150\uff1a\u76ee\u6807\u5e94\u83b7\u5f97\u6b64\u724c\uff08\u4e0a\u6e38 $gain2 + storage + addSkill\uff09\u2014\u2014\u4e0e\u9ca4\u9c7c\u6c64\u540c\u73b0\u8c61\uff0c\u89c1\u7b2c 37 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_mizhilianou::upstream_mizhilianou_heart_as_tao ... ignored, \u871c\u6c41\u85d5\uff1a\u7ea2\u6843\u724c\u5e94\u53ef\u5f53\u3010\u6843\u3011\u4f7f\u7528\uff08\u4e0a\u6e38 viewAs tao\uff09\u2014\u2014\u5b9e\u6d4b Rejected\uff0c\u89c1\u7b2c 41 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_target_needs_he_cards ... ignored, \u4e7e\u5764\u9556\u76ee\u6807 he \u65e0\u724c\u65f6\u5e94\u88ab\u62d2\uff08\u4e0a\u6e38 filterTarget\uff09\u2014\u2014\u539f\u751f\u66f4\u5bbd\u677e\uff0c\u89c1\u7b2c 35 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_gujian_shihuifen::upstream_shihuifen_blocks_cards_on_others ... ignored, \u77f3\u7070\u7c89\uff1a\u672a\u51fa\u95ea\u540e\u5e94\u9650\u5236\u5bf9\u5176\u4ed6\u89d2\u8272\u7528\u724c\u2014\u2014\u5b9e\u6d4b\u65e0\u8be2\u95ee\u4e14\u9650\u5236\u672a\u751f\u6548\uff0c\u89c1\u7b2c 38 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_hearth_shenenshu::upstream_shenenshu_replaces_hand_with_basics ... ignored, \u795e\u6069\u672f\uff1a\u6548\u679c\u672a\u5b9e\u73b0\uff08\u539f\u751f\u6ce8\u91ca\u81ea\u8ff0\u300eshenenshu \u7b49\u590d\u6742\u724c\u6682\u7f13\u300f\uff09\u2014\u2014\u89c1\u7b2c 44 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "test": "test nc08_upstream_jijiang::upstream_jijiang_shu_ally_plays_sha_for_lord ... ignored, \u6fc0\u5c06\u4ee3\u6253\u884c\u4e3a\u9762\uff1a\u51b3\u6597\u573a\u666f\u4e0b\u8be2\u95ee\u4e3a\u7a7a\uff0c\u4ee3\u6253\u94fe\u8def\u672a\u5bf9\u4e0a\u2014\u2014\u6839\u56e0\u5f85\u67e5\uff0c\u672a\u6784\u6210\u9a8c\u6536"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_rangjie::upstream_rangjie_move_branch_must_draw_one ... ignored, \u767b\u8bb0\u7f3a\u9677\uff1a\u539f\u751f rangjie \u5206\u652f 1\uff08\u79fb\u52a8\u724c\uff09\u672a\u6478\u724c\uff0c\u8fdd\u53cd\u4e0a\u6e38 player.draw() \u5728\u5206\u652f\u524d\u65e0\u6761\u4ef6\u6267\u884c\uff1b\u4fee\u590d\u9700\u6539\u672a\u8ddf\u8e2a\u7684 content/host/step/skills_cards.rs\uff0c\u5f85 host \u62c6\u5206\u843d\u5b9a"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_swd_baishouzhihu::upstream_baishouzhihu_opens_target_window ... ignored, \u7b2c 57 \u9879\uff1aTriggerMeta \u6ce8\u518c PhaseEnd \u800c filter \u8981\u6c42 begin==true\uff08\u5f15\u64ce Phase \u4e8b\u4ef6\u53ea\u6709 begin:true\uff09\u21d2 \u6c38\u4e0d\u5165\u961f\uff1b\u4fee\u6cd5\u5728\u672a\u8ddf\u8e2a\u7684 content/host/metadata/swd.rs"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_target_discards ... ignored, \u82cd\u87ad\u4e4b\u74a7\u5c5e\u8f6c\u6362\u7f3a\u53e3\uff08\u672a\u4ea4\u4ed8\uff09\u2014\u2014\u8f6c\u6362\u540e\u542f\u7528\u672c\u7528\u4f8b\uff0c\u89c1\u53f0\u8d26\u7b2c 117 \u884c"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_swd_hufu::upstream_swd_hufu_dying_only ... ignored, \u864e\u7b26\u6fd2\u6b7b\u652f\u672a\u590d\u73b0\uff08\u6551\u63f4\u7a97\u53e3\u672a\u6253\u5f00\uff09\u2014\u2014\u672a\u6fd2\u6b7b\u652f\u5df2\u9a8c\u4e3a Rejected\uff0c\u89c1\u7b2c 52 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_wuxing_shengke_branches::upstream_wuxing_shengke_three_branches ... ignored, \u4e94\u884c\u751f\u514b\u4e24\u652f\u672a\u80fd\u5728\u884c\u4e3a\u9762\u590d\u73b0\uff08\u4e09\u6b21\u5747 \u22121\uff09\u2014\u2014\u89c1\u7b2c 51 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_after_damage ... ignored, \u8d81\u706b\u6253\u52ab damageEnd \u7a97\u53e3\u672a\u51fa\u73b0\uff08\u4f24\u5bb3\u5df2\u786e\u8ba4\u53d1\u751f\uff09\u2014\u2014\u89c1\u7b2c 53 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_chain_kill_fires_on_first_target ... ignored, \u94fe\u6740\uff1a\u786e\u8ba4\u8be2\u95ee\u5df2\u51fa\u73b0\uff08trigger_confirm\uff09\uff0c\u4f46\u865a\u62df\u6740\u672a\u4ea7\u751f\u54cd\u5e94\u8be2\u95ee\u2014\u2014\u5d4c\u5957\u7ed3\u7b97\u5f85\u67e5"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "test": "test nc08_upstream_yunchou_zonghuo::upstream_zonghuo_discards_one_without_asking ... ignored, \u7eb5\u706b\uff1a\u786e\u8ba4\u540e\u672a\u5f03\u724c\uff08\u6807\u8bb0\u724c\u4ecd\u5728\u624b\uff1b\u4e24\u79cd\u4f24\u5bb3\u8def\u5f84\u5747\u590d\u73b0\uff09\u2014\u2014\u6839\u56e0\u5f85\u67e5\uff0c\u89c1\u7b2c 33/34 \u9879"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc04_vm_fault::nc04_pause_and_resume ... ignored, NC04 \u5f85\u529e\uff1aDSL \u9009\u62e9\u8bed\u53e5\u5173\u952e\u5b57\u5f85\u786e\u8ba4\u540e\u8865\u6302\u8d77\u2192\u7eed\u8dd1\u2192\u6545\u969c\u8986\u76d6"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, \u767b\u8bb0\u7f3a\u9677\u5b88\u62a4\uff1a\u547d\u4e2d\u5185\u6838\u60ac\u7a7a\u5f15\u7528\u6545\u969c\u5373\u5931\u8d25\uff08\u5f53\u524d seed 44170 \u547d\u4e2d\uff09\uff1b\u4fee\u590d\u540e\u5e94\u8f6c\u4e3a\u901a\u8fc7"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_dangling_reference_repro::nc12_repro_seed_44170_step_10 ... ignored, \u767b\u8bb0\u7f3a\u9677\u5b88\u62a4\uff1aseed 44170 \u7b2c 10 \u6b65\u590d\u73b0\u5185\u6838\u60ac\u7a7a\u5f15\u7528\uff1b\u4fee\u590d\u540e\u5e94\u8f6c\u4e3a\u901a\u8fc7"
+    }
+  ],
+  "targets": [
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native-93ff46b733d632dd)",
+      "counts": [
+        11,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/g1.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1-3b65073a010e6994)",
+      "counts": [
+        166,
+        0,
+        1
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/g1_shahai.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/g1_shahai-8a1963244b113ff3)",
+      "counts": [
+        174,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/kernel-c8db19856b9de99c)",
+      "counts": [
+        435,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/l_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/l_rounds-42dae96f224d693f)",
+      "counts": [
+        43,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/misc.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/misc-3eb46395e53d52b2)",
+      "counts": [
+        194,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08-1a08cc617c9fe135)",
+      "counts": [
+        45,
+        0,
+        50
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_a_k-5fc222981ba3e3d3)",
+      "counts": [
+        130,
+        0,
+        9
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc08_upstream_l_z-0cf51b17d49407c5)",
+      "counts": [
+        199,
+        0,
+        8
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "counts": [
+        140,
+        0,
+        7
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/swd.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/swd-242e65b299021c1e)",
+      "counts": [
+        134,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/test_registry.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/test_registry-54852cb76b051105)",
+      "counts": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native_content",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_content-ed4f563e86e97ef7)",
+      "counts": [
+        4,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native_kernel",
+      "target": "Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/engine_native_kernel-d8af084864bb7b24)",
+      "counts": [
+        3,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Doc-tests engine_native",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native_content",
+      "target": "Doc-tests engine_native_content",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "crate_or_binary": "engine_native_kernel",
+      "target": "Doc-tests engine_native_kernel",
+      "counts": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "warning_headers": []
+}

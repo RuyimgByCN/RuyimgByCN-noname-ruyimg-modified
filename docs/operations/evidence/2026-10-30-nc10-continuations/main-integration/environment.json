@@ -1,0 +1,10 @@
+{
+  "platform": "macOS-27.2-arm64-arm-64bit",
+  "machine": "arm64",
+  "node": "v26.4.0",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)",
+  "cargo_incremental": "0",
+  "jobs": "2",
+  "final_preflight": "Deferred to parent after documentation updates by explicit task contract",
+  "WKWebView_reload_perf": "Not repeated by explicit task contract for AI-only delta"
+}

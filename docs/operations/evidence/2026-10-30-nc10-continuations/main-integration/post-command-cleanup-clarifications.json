@@ -1,0 +1,7 @@
+{
+  "generic_log_template_note": "The template mentions package-finally cleanup; this applies to main build:native only. Direct evidence wasm-pack output was retained immediately after compilation because the next comparator required it, then archived+hashed and retired immediately after comparison.",
+  "opaque_native_build_retention": "Native harness executable needed to export native vector; copied to evidence artifacts after successful matrix; remaining deps belong to reusable parent stage3 target.",
+  "opaque_wasm_build_retention": "Private generated WASM package required by immediate actual-WASM comparison; no new incremental cache; package retired after evidence copy.",
+  "post_use_proof": "opaque-post-use-cleanup.json",
+  "no_incremental_entries": true
+}

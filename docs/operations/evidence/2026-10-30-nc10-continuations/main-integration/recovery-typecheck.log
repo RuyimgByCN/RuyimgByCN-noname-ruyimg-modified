@@ -1,0 +1,6 @@
+{"command": ["pnpm", "--dir", "apps/web-client", "typecheck"], "env": {"CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target", "CARGO_INCREMENTAL": "0", "CARGO_BUILD_JOBS": "2", "RUSTFLAGS": null, "NODE_OPTIONS": null}, "free_bytes_before": 179704655872}
+
+> noname-next-web-client@0.1.0 typecheck /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> vue-tsc --noEmit
+
+{"command": ["pnpm", "--dir", "apps/web-client", "typecheck"], "exit": 0, "locked_seconds": 2.012973750010133, "stop_reason": null}

@@ -87,3 +87,12 @@ mod nc12_dangling_reference_repro;
 
 #[path = "../nc12_swd_authoritative_stability.rs"]
 mod nc12_swd_authoritative_stability;
+
+#[path = "../nc10_live_hidden_cards.rs"]
+mod nc10_live_hidden_cards;
+
+#[path = "../nc10_opaque_vm_privacy.rs"]
+mod nc10_opaque_vm_privacy;
+
+#[path = "../nc10_redaction_helper_contract.rs"]
+mod nc10_redaction_helper_contract;

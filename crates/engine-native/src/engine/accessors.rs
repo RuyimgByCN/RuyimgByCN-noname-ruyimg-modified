@@ -68,6 +68,10 @@ impl Engine {
 }
 
 impl Engine {
+    pub(crate) fn resolution_mut(&mut self) -> &mut crate::resolution::Resolution {
+        &mut self.state.resolution
+    }
+
     /// 执行位置只读视图（含 NC04 瞬态故障槽，供宿主诊断）。
     pub fn resolution(&self) -> &crate::resolution::Resolution {
         &self.state.resolution

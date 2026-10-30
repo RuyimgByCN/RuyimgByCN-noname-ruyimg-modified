@@ -1,0 +1,43 @@
+{
+  "counts_by_crate_or_binary": {
+    "engine_native": [
+      53,
+      0,
+      4
+    ]
+  },
+  "ignored_tests": [
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix"
+    },
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "test": "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix"
+    }
+  ],
+  "targets": [
+    {
+      "crate_or_binary": "engine_native",
+      "target": "Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target/debug/deps/nc_rounds-31f0c6eb82380dc8)",
+      "counts": [
+        53,
+        0,
+        4
+      ]
+    }
+  ],
+  "warning_headers": []
+}

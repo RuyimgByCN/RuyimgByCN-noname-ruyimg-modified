@@ -1,0 +1,418 @@
+[
+  {
+    "name": "nc10-targeted",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "log": "recovery-nc10-targeted.log",
+    "locked_seconds": 6.033653791993856,
+    "elapsed_including_lock_seconds": 6.035687750001671,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 185439653888,
+    "rust_counts": [
+      53,
+      0,
+      4
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "native3",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "log": "recovery-native3.log",
+    "locked_seconds": 34.11811945901718,
+    "elapsed_including_lock_seconds": 34.11899837499368,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 184996204544,
+    "rust_counts": [
+      1679,
+      0,
+      75
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "workspace",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "exit": 0,
+    "log": "recovery-workspace.log",
+    "locked_seconds": 309.2165724170045,
+    "elapsed_including_lock_seconds": 309.2218847089971,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 180365701120,
+    "rust_counts": [
+      6796,
+      0,
+      77
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "strict-native3",
+    "command": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "log": "recovery-strict-native3.log",
+    "locked_seconds": 6.033101041975897,
+    "elapsed_including_lock_seconds": 6.03426462499192,
+    "env": {
+      "CARGO_TARGET_DIR": "/tmp/noname-pa09-parent-gate-9e6c6232",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": "-Dwarnings",
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 180363128832,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "source-line-units",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "log": "recovery-source-line-units.log",
+    "locked_seconds": 2.0114317499974277,
+    "elapsed_including_lock_seconds": 2.012502665980719,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 180363063296,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "source-lines",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "log": "recovery-source-lines.log",
+    "locked_seconds": 4.014556666981662,
+    "elapsed_including_lock_seconds": 4.015172582992818,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 180362842112,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "layering",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "log": "recovery-layering.log",
+    "locked_seconds": 2.012758708006004,
+    "elapsed_including_lock_seconds": 2.013686582999071,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 180362833920,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "conformance",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "exit": 0,
+    "log": "recovery-conformance.log",
+    "locked_seconds": 24.107017707981868,
+    "elapsed_including_lock_seconds": 24.10857387498254,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179995348992,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "native-wasm-build",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "build:native"
+    ],
+    "exit": 0,
+    "log": "recovery-native-wasm-build.log",
+    "locked_seconds": 50.20167695800774,
+    "elapsed_including_lock_seconds": 50.20208454201929,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": "--require=/tmp/nc10-main-target.cjs"
+    },
+    "free_bytes_after": 179704729600,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "worker",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "smoke:native"
+    ],
+    "exit": 0,
+    "log": "recovery-worker.log",
+    "locked_seconds": 2.012262542004464,
+    "elapsed_including_lock_seconds": 2.0134724999952596,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179704807424,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "frontend",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "test"
+    ],
+    "exit": 0,
+    "log": "recovery-frontend.log",
+    "locked_seconds": 2.0149066660087556,
+    "elapsed_including_lock_seconds": 2.016177375015104,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179704655872,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "typecheck",
+    "command": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "exit": 0,
+    "log": "recovery-typecheck.log",
+    "locked_seconds": 2.012973750010133,
+    "elapsed_including_lock_seconds": 2.0139511660090648,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179704631296,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "native-wasm-trajectory",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "exit": 0,
+    "log": "recovery-native-wasm-trajectory.log",
+    "locked_seconds": 24.06173591699917,
+    "elapsed_including_lock_seconds": 24.063321458001155,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179335888896,
+    "rust_counts": [
+      2,
+      0,
+      0
+    ],
+    "stop_reason": null
+  },
+  {
+    "name": "opaque-native",
+    "command": [
+      "cargo",
+      "run",
+      "--offline",
+      "--manifest-path",
+      "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-planner/Cargo.toml",
+      "--",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json"
+    ],
+    "exit": 0,
+    "log": "recovery-opaque-native.log",
+    "locked_seconds": 14.052825499995379,
+    "elapsed_including_lock_seconds": 14.054261665995,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179146960896,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "opaque-wasm-build",
+    "command": [
+      "wasm-pack",
+      "build",
+      "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-planner",
+      "--target",
+      "web",
+      "--release",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg"
+    ],
+    "exit": 0,
+    "log": "recovery-opaque-wasm-build.log",
+    "locked_seconds": 26.113812333001988,
+    "elapsed_including_lock_seconds": 26.11464558399166,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179016073216,
+    "rust_counts": null,
+    "stop_reason": null
+  },
+  {
+    "name": "opaque-wasm-compare",
+    "command": [
+      "node",
+      "/tmp/nc10-main-opaque-verify.mjs",
+      "/tmp/noname-nc10-main-evidence-2nvqctry/opaque-web-pkg",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-native-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-output.json",
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/opaque-wasm-report.json"
+    ],
+    "exit": 0,
+    "log": "recovery-opaque-wasm-compare.log",
+    "locked_seconds": 2.0081889590073843,
+    "elapsed_including_lock_seconds": 2.0094169579970185,
+    "env": {
+      "CARGO_TARGET_DIR": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-f7-stage3.czy5e9gq/target",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "RUSTFLAGS": null,
+      "NODE_OPTIONS": null
+    },
+    "free_bytes_after": 179015958528,
+    "rust_counts": null,
+    "stop_reason": null
+  }
+]

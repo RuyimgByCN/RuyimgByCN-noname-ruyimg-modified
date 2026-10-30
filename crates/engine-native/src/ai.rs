@@ -9,6 +9,7 @@ use crate::{CardKind, ChoiceOption, ChoiceView, CommandOutcome, GameAction, Game
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::{Duration, Instant};
 mod redact;
+mod remap;
 pub use redact::*;
 
 /// 单选候选枚举上限（防超大选项集撑爆候选向量；真实询问的选项数
@@ -352,13 +353,16 @@ fn enumerate_candidates_variant(sim: &Engine, seat: u8, variant: u8) -> Vec<Game
                     selection: options.iter().take(8).copied().collect(),
                 });
             }
-        } else if min == 0 && allow_cancel && !options.is_empty() {
+        }
+        if min == 0 || allow_cancel {
             candidates.push(GameAction::Answer {
                 choice_id: id,
                 selection: vec![],
             });
         }
-    } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play {
+    } else if input.view.turn == seat && input.view.phase == crate::event::Phase::Play
+        && input.view.players[seat as usize].alive
+    {
         let others: Vec<u8> = input
             .view
             .players
@@ -506,12 +510,42 @@ fn policy_score(
     score
 }
 
+// VM choices may retain private query results in locals or already queued effects.
+// Use the public prompt as the boundary so private continuation branches cannot select a policy.
+fn vm_choice_leaf(choice: &ChoiceView) -> bool {
+    let prompt = match choice {
+        ChoiceView::Own { prompt, .. } | ChoiceView::Other { prompt, .. } => prompt,
+    };
+    matches!(*prompt, "rvm_choice" | "rvm_discard_pick")
+}
+
+fn projected_choice_action(choice: ChoiceView) -> GameAction {
+    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
+        return GameAction::NextPhase;
+    };
+    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
+        vec![ChoiceOption::Pass]
+    } else if min == 0 && allow_cancel {
+        Vec::new()
+    } else {
+        options.into_iter().take(min).collect()
+    };
+    GameAction::Answer { choice_id: id, selection }
+}
+
 impl Engine {
     /// 有界规划：在克隆引擎上模拟候选动作（计算与规则推进隔离），
     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
         let submitted_revision = self.revision();
+        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
+            return Plan {
+                seat, revision: submitted_revision, action: projected_choice_action(choice),
+                nodes_used: 0, budget_exhausted: false, timed_out: false,
+                cancelled: planner.cancelled(), sim_faults: 0,
+            };
+        }
         // wasm 目标无 wall-clock 时间源（Instant::now panic）：deadline
         // 静默失效=纯节点预算面（engine-native-wasm 壳契约，登记证据）；
         // 原生目标语义不变。
@@ -657,7 +691,9 @@ impl Engine {
             );
             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
-            if planner.lookahead_depth >= 2 && trial.outcome().is_none() {
+            if planner.lookahead_depth >= 2 && trial.outcome().is_none()
+                && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)
+            {
                 let opp = match trial.open_choice() {
                     Some(open) => open.observer,
                     None => trial.turn().current,
@@ -715,14 +751,13 @@ impl Engine {
         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
-            let fallback = if can_redact_suspended_duel(self, seat)
-                || can_redact_hidden_traps(self, seat)
-            {
-                &sim
-            } else {
-                self
-            };
-            fallback.legal_actions(seat)
+            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
+                return projected_choice_action(choice);
+            }
+            if !sim.ai_session(seat).view().players[seat as usize].alive {
+                return GameAction::NextPhase;
+            }
+            sim.legal_actions(seat)
                 .into_iter()
                 .next()
                 .unwrap_or(GameAction::NextPhase)

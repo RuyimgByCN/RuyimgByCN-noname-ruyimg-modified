@@ -1,0 +1,14 @@
+{
+  "artifacts/native-engine-web.tar.gz": {
+    "sha256": "6f367e6e64e84b2c3b9c76a7ac23934d4d1ea231b083d6502fd2586b50b0db17",
+    "bytes": 986871
+  },
+  "artifacts/opaque-planner-web.tar.gz": {
+    "sha256": "cefd8a352713f3f6e7c1907d8ddae0f4ed71fdeecb52d6782cc3f29f64724845",
+    "bytes": 748137
+  },
+  "artifacts/native-opaque-planner-evidence": {
+    "sha256": "c7aab5bfb500ec8a914f9eafc3d202b80bc226ed93f9152a0c16089c69162c17",
+    "bytes": 14611776
+  }
+}

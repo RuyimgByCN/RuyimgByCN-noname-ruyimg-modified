@@ -1,0 +1,25 @@
+{
+  "not_staged_binary_or_compressed_artifacts": [
+    {
+      "path": "docs/operations/evidence/2026-10-30-nc10-continuations/isolated/liaoyuan-restore-repro.archive",
+      "sha256": "3e787d701573b41cd326403da525caff474fcb0c7c2599a42b99fff2225d4880",
+      "bytes": 2732
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/native-engine-web.tar.gz",
+      "sha256": "6f367e6e64e84b2c3b9c76a7ac23934d4d1ea231b083d6502fd2586b50b0db17",
+      "bytes": 986871
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/native-opaque-planner-evidence",
+      "sha256": "c7aab5bfb500ec8a914f9eafc3d202b80bc226ed93f9152a0c16089c69162c17",
+      "bytes": 14611776
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/opaque-planner-web.tar.gz",
+      "sha256": "cefd8a352713f3f6e7c1907d8ddae0f4ed71fdeecb52d6782cc3f29f64724845",
+      "bytes": 748137
+    }
+  ],
+  "all_copies_preserved": true
+}

@@ -12,9 +12,9 @@ autotests = false
 blake3 = { workspace = true }
 engine-native-kernel = { path = "../engine-native-kernel" }
 engine-native-content = { path = "../engine-native-content" }
+rule-api = { workspace = true }
 
 [dev-dependencies]
-rule-api = { workspace = true }
 rule-vm = { workspace = true }
 blake3 = { workspace = true }
 serde = { workspace = true }

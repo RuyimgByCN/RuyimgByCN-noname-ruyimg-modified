@@ -19,167 +19,17 @@ pub fn redact_last_state() -> (bool, u64, u64, bool) {
     )
 }
 
-// shortcut: 只覆盖引用可完整核对的单帧决斗及其无懈窗口；其他机器需先完成引用自省。
-pub(super) fn can_redact_suspended_duel(e: &Engine, seat: u8) -> bool {
-    use crate::choice::{ChoiceKind, ChoiceOption};
-    use crate::event::{EventData, Stage};
-    use crate::resolution::Slot;
-    use crate::snap::MachineSnapshot;
-
-    let core = e.state_core();
-    let Some(player) = core.players.get(seat as usize) else {
-        return false;
-    };
-    let res = e.resolution();
-    let ([frame], [park], Some(choice)) = (
-        res.stack.as_slice(),
-        res.parks.as_slice(),
-        res.open_choice.as_ref(),
-    ) else {
-        return false;
-    };
-    let EventData::CardUsed(used) = &frame.data else {
-        return false;
-    };
-    if frame.stage != Stage::Intrinsic
-        || !frame.queue.is_empty()
-        || park.slot != (Slot::Intrinsic { frame: frame.id })
-        || park.resume_depth != 1
-        || res.answer.is_some()
-        || choice.observer != seat
-        || choice.spec.min != 1
-        || choice.spec.max != 1
-        || choice.spec.allow_cancel
-        || !core.table.contains(&used.card)
-        || !choice.spec.options.iter().all(|option| match option {
-            ChoiceOption::Pass => true,
-            ChoiceOption::Card(card) => player.hand.contains(card),
-            _ => false,
+// Host payload schemas and pending ownership repairs still limit full continuation remapping.
+pub(super) fn can_redact_continuation(e: &Engine, seat: u8) -> bool {
+    e.open_choice().is_none_or(|choice| choice.observer == seat)
+        && e.resolution().parks.iter().all(|p| {
+            !super::remap::requires_conservative_redaction(&p.machine.snapshot())
         })
-    {
-        return false;
-    }
-    let MachineSnapshot::NullifyWindow {
-        card,
-        source,
-        nullified,
-        queue,
-        asked,
-        window_open,
-        owns_disposal,
-        effect: Some(effect),
-    } = park.machine.snapshot()
-    else {
-        return false;
-    };
-    let MachineSnapshot::Duel {
-        card: duel_card,
-        source: duel_source,
-        target,
-        on_target,
-        asked: duel_asked,
-        second_pending,
-    } = *effect
-    else {
-        return false;
-    };
-    if card != used.card
-        || source != used.player
-        || duel_card != card
-        || duel_source != source
-        || used.targets.as_slice() != [target]
-    {
-        return false;
-    }
-    let duel_response = choice.spec.kind == ChoiceKind::RespondCard
-        && choice.spec.prompt == "duel_sha"
-        && !nullified
-        && queue.is_empty()
-        && !asked
-        && !window_open
-        && duel_asked
-        && seat == if on_target { target } else { source };
-    let duel_nullify = choice.spec.kind == ChoiceKind::Confirm
-        && choice.spec.prompt == "nullify_window"
-        && !nullified
-        && owns_disposal
-        && queue.first() == Some(&seat)
-        && asked
-        && window_open
-        && on_target
-        && !duel_asked
-        && !second_pending
-        && choice.spec.options.iter().any(|option| matches!(option, ChoiceOption::Card(_)))
-        && choice.spec.options.iter().all(|option| match option {
-            ChoiceOption::Pass => true,
-            ChoiceOption::Card(card) => e.catalog().card_kind(*card) == CardKind::Nullify,
-            _ => false,
-        });
-    if !duel_response && !duel_nullify {
-        return false;
-    }
-
-    // 这些状态可引用或持有手牌外的实体；未完成通用自省时保留原有处理。
-    if !core.vm_aux.is_empty()
-        || !core.turn.huanxia_track.is_empty()
-        || !core.turn.kunlunjing_snapshot.is_empty()
-        || core.turn.luanjian_card.is_some()
-        || core.turn.qizuo_copy.is_some()
-        || core.players.iter().any(|p| {
-            !p.zhucheng.is_empty()
-                || !p.lianyaohu_store.is_empty()
-                || !p.sxianjing_traps.is_empty()
-                || p.ctianfu_card.is_some()
-                || !p.jiguanyuan_cards.is_empty()
-                || !p.yishan_lost.is_empty()
-                || !p.hutian_hold.is_empty()
-                || !p.card_mods.is_empty()
-        })
-    {
-        return false;
-    }
-    // 元数据所引用的牌也必须已在不会重写的区域。
-    let fixed = |card: &u32| {
-        core.discard.contains(card)
-            || core.table.contains(card)
-            || player.hand.contains(card)
-            || core.players.iter().any(|p| {
-                p.equips.contains(card) || p.judge.contains(card) || p.off_court.contains(card)
-            })
-    };
-    core.declared_kinds
-        .keys()
-        .chain(core.declared_slots.keys())
-        .chain(core.card_natures.keys())
-        .all(fixed)
-}
-
-// shortcut: 仅无 VM 的静止态陷阱；其他情形需先完成通用自省。
-pub(super) fn can_redact_hidden_traps(e: &Engine, seat: u8) -> bool {
-    let core = e.state_core();
-    let res = e.resolution();
-    !e.is_suspended()
-        && res.stack.is_empty()
-        && res.parks.is_empty()
-        && res.open_choice.is_none()
-        && res.answer.is_none()
-        && core.vm_aux.piles.values().all(|pile| pile.is_empty())
-        && core.players.iter().enumerate().any(|(owner, player)| {
-            owner != seat as usize && !player.sxianjing_traps.is_empty()
-        })
-        && !e.catalog()
-            .skills
-            .iter()
-            .any(|skill| skill.behavior.is_vm_skill())
 }
 
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
-    // NC10 修正（NC12 §5.2 根因）：重分配会改写对手手牌里的**实体牌 id**，
-    // 而挂起机器/开放选择/在飞帧记录着这些 id——非静止态下重分配会让它们指向
-    // 其它区域，随后 `take_hand_card` panic（machine.rs「card 90 not in hand of 0」、
-    // monkey.rs「被拦截的桃应在使用者手牌」）。静止态可重分配；非静止态
-    // 仅对已核对所有引用的决斗及其无懈窗口重分配，其余泄漏面仍登记为 NC10 待办。
+    // Unknown physical owners and every typed continuation reference share one mapping.
     let quiescent = {
         let res = e.resolution();
         res.stack.is_empty() && res.parks.is_empty() && res.open_choice.is_none()
@@ -198,11 +48,9 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             std::sync::atomic::Ordering::Relaxed,
         );
     }
-    if !quiescent && !can_redact_suspended_duel(e, seat) {
-        // NC10：非静止态**仍可安全遮蔽牌库顺序**——牌库内容不变、区域不变，只是顺序
-        // 打乱；挂起机器/在飞帧只记录实体牌 id，不记录牌库位置，故不会失效。
-        // 对手手牌的身份遮蔽在未核对引用的窗口仍不可做（会改写被引用的实体牌 id → panic），
-        // 登记为待办（需机器自省保引用重分配）。
+    if !can_redact_continuation(e, seat) {
+        // shortcut: uninspected payloads, VM commit sentinels and other seats' filtered choices
+        // retain hidden hands until semantic remapping exists. Public VM choices use a planner leaf.
         let n = e.state_core().deck.len();
         if n >= 2 {
             let mut rng_state: u64 = 0xD1CE_5EED_0000
@@ -224,7 +72,8 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
-    let redact_traps = can_redact_hidden_traps(e, seat);
+    let redact_traps = e.state_core().vm_aux.storage.is_empty()
+        || !e.catalog().skills.iter().any(|skill| skill.behavior.is_vm_skill());
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
@@ -251,29 +100,22 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             for pile in [&p.zhucheng, &p.lianyaohu_store, &p.hutian_hold] {
                 visible.extend(pile.iter().copied());
             }
-            if owner == seat as usize {
+            if owner == seat as usize || !redact_traps {
                 visible.extend(p.sxianjing_traps.iter().copied());
             }
         }
-        // shortcut: VM 牌堆与非静止态陷阱尚未保护，完成可见性和引用自省后重分配。
+        // The observer retains their private VM piles.
         for ((owner, _), pile) in &core.vm_aux.piles {
             if *owner == seat {
                 visible.extend(pile.iter().copied());
             }
         }
         visible.extend(core.table.iter().copied());
-        // 回合级状态里被引用的实体牌（登记式列举：新增持有牌字段需同步）。
-        // 这些字段被机器在后续步骤中直接 `take_hand_card`/移动，重分配会让其失效。
-        if !redact_traps {
-            for (c, _) in core.turn.huanxia_track.iter() {
-                visible.insert(*c);
-            }
-            for (_, a, b, c) in core.turn.kunlunjing_snapshot.iter() {
-                visible.extend(a.iter().copied());
-                visible.extend(b.iter().copied());
-                visible.extend(c.iter().copied());
-            }
+        let mut held = Vec::new();
+        for park in &e.resolution().parks {
+            super::remap::held_cards(&park.machine.snapshot(), &mut held);
         }
+        visible.extend(held);
     }
     // 填充池：目录全部牌 id 去掉保留牌（保持确定性顺序）
     let mut pool: Vec<CardId> = (0..e.catalog().cards.len() as CardId)
@@ -311,7 +153,10 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         .iter()
         .map(|i| e.state_core().players[*i].sxianjing_traps.len())
         .sum();
-    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count;
+    let vm_piles: Vec<_> = e.state_core().vm_aux.piles.keys()
+        .filter(|(owner, _)| *owner != seat).cloned().collect();
+    let vm_count: usize = vm_piles.iter().map(|key| e.state_core().vm_aux.piles[key].len()).sum();
+    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count + vm_count;
     assert!(
         pool.len() >= need,
         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
@@ -346,7 +191,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         }
     }
     // 牌引用按同一个重分配映射更新，避免指向错误的实体。
-    let remap: Vec<CardId> = if redact_traps {
+    let remap: Vec<CardId> = {
         let mut remap: Vec<CardId> = (0..e.catalog().cards.len() as CardId).collect();
         let old = trap_owners
             .iter()
@@ -356,13 +201,12 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
                     .iter()
                     .flat_map(|i| e.state_core().players[*i].hand.iter().copied()),
             )
-            .chain(e.state_core().deck.iter().copied());
+            .chain(e.state_core().deck.iter().copied())
+            .chain(vm_piles.iter().flat_map(|key| e.state_core().vm_aux.piles[key].iter().copied()));
         for (before, after) in old.zip(pool.iter().copied()) {
             remap[before as usize] = after;
         }
         remap
-    } else {
-        Default::default()
     };
     let core = e.core_mut();
     let mut cursor = 0usize;
@@ -379,6 +223,13 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         cursor += len;
     }
     core.deck = pool[cursor..cursor + deck_len].to_vec();
+    cursor += deck_len;
+    for key in &vm_piles {
+        let pile = core.vm_aux.piles.get_mut(key).expect("existing pile");
+        let len = pile.len();
+        pile.copy_from_slice(&pool[cursor..cursor + len]);
+        cursor += len;
+    }
     if !remap.is_empty() {
         let replace = |card: &mut CardId| {
             if let Some(replacement) = remap.get(*card as usize) {
@@ -444,6 +295,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             })
             .collect();
     }
+    super::remap::remap_resolution(e, &remap);
 }
 
 #[cfg(test)]
