@@ -150,6 +150,8 @@
 - [0781 可变座位环原语（swapSeat）](0781-mutable-seat-ring.md) —— GameStateCore.seat_ring 显式座位环，座位语义全经环访问器；存档 v46；长蛇阵换座/破阵诀随机重排落地
 - [0782 扩展执行后端与旧 JS 兼容范围（D2/T8 定案）](0782-extension-backend-and-legacy-js-scope.md) —— 旧 JS 不承诺零改动运行；内置 HostBehavior + 扩展包 rule-vm 分层；QuickJS 兼容层不立项、WASM 暂缓；草稿未证明项转 T8 集成验收
 - [0783 Boss 关卡流程子系统（D4）](0783-boss-stage-flow-subsystem.md) —— 十殿还人/隐藏链八技/翼轮次/bianshen 换 Boss 进原生流程面；与 D5 龙血·ylyg*、映种、庞统外部技划界；实现分 B0–B4
-- [0784 桌面端原生执行引擎原型（PA09 草案）](0784-desktop-native-engine-prototype.md) —— 草案：引擎在 Tauri Rust 进程原生运行、沿用 Worker 协议语义，以 PA08 数据为对照组；原型未落地，是否切换默认由用户拍板。
+- [0784 桌面端原生执行引擎原型（PA09）](0784-desktop-native-engine-prototype.md) —— Tauri原生宿主、Worker协议语义复用及六项默认切换门槛；当前交付见进度主稿。
 - [0785 原生 GPU 牌桌原型（PA11 草案）](0785-wgpu-table-prototype.md) —— 草案：PA08 实测 DOM 余量充足、性能动机不成立，原型若做只做单场景 wgpu 对照；投入由用户拍板，拍板前不立项。
-- [0786 VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥ 草案）](0786-vm-effect-choice-window-and-active-bridge.md) —— J1 已采纳（2026-10-28，未实施），J2 仍为草案：提交期挂起（commit_effect 开窗 + MachineSnapshot::Rvm 追加提交期字段 + 复用 Answer 通道）与 active_index→ActivateSkill 桥；J1/J2 分批建议。VM 提交协议、选择/命令协议与任何升号实施前须分别请示（裁决⑤）。
+- [0786 VM 效果级选择窗挂起与主动技桥（PA12 §2 J + 批⑥）](0786-vm-effect-choice-window-and-active-bridge.md) —— J1/J2的设计、分批授权和VM续行边界；具体实施证据及裁决见正文，当前结果见进度主稿。
+- [0787 原生房间选择超时、托管与耐久动作记录](0787-native-choice-timeout-durable-control.md) —— 裁决20采纳的显式选值、房间事务与WS6契约；条件式规则330，前置及验收见正文。
+- [0788 原生同窗触发由玩家选择下一个技能](0788-native-player-trigger-order.md) —— 裁决22采纳的玩家桶/有效优先级调度、类型化Skill选项与元数据；条件式规则331，前置及验收见正文。

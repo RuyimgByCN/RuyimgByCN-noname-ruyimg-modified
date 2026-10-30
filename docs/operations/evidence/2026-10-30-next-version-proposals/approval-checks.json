@@ -1,0 +1,80 @@
+{
+  "source_head": "e5221af0b1462ee4a1642321790e08ad250808d0",
+  "kind": "Explicit user decisions20-22 and ADR0787/0788 documentation; implementation gates not run",
+  "checks": [
+    {
+      "name": "approval-adr-index",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-adr-index.py"
+      ],
+      "exit": 0,
+      "seconds": 0.134,
+      "log": "approval-adr-index.log"
+    },
+    {
+      "name": "approval-local-links",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "seconds": 0.649,
+      "log": "approval-local-links.log"
+    },
+    {
+      "name": "approval-doc-line-refs",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "seconds": 23.697,
+      "log": "approval-doc-line-refs.log"
+    },
+    {
+      "name": "approval-source-line-units",
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.057,
+      "log": "approval-source-line-units.log"
+    },
+    {
+      "name": "approval-source-lines",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.189,
+      "log": "approval-source-lines.log"
+    },
+    {
+      "name": "approval-stale-numbers",
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check_stale_numbers.py"
+      ],
+      "exit": 0,
+      "seconds": 0.049,
+      "log": "approval-stale-numbers.log"
+    }
+  ]
+}

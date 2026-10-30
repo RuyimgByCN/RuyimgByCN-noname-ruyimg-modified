@@ -1,0 +1,24 @@
+{
+  "registered_at": "2026-10-30T09:12:40.776731+08:00",
+  "source": "Explicit ask_user_question answers in the parent session; not inferred from the global goal",
+  "approved_proposal_commit": "e5221af0b1462ee4a1642321790e08ad250808d0",
+  "approved_proposal_sha256": "1b5abe7785b7487cefe8244982a63de5d278fd899ec5574ad9667c05b96c9a92",
+  "answers": [
+    {
+      "question": "A: timeout rule330/WS6 after accepted J2",
+      "answer": "批准A (Recommended)",
+      "decision": 20
+    },
+    {
+      "question": "B: authorized optional general/choice metadata and compatibility",
+      "answer": "批准B (Recommended)",
+      "decision": 21
+    },
+    {
+      "question": "C: trigger ordering rule331 after accepted330",
+      "answer": "批准C (Recommended)",
+      "decision": 22
+    }
+  ],
+  "authorization_is_not_implementation_or_acceptance": true
+}

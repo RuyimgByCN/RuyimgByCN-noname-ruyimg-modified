@@ -47,6 +47,14 @@
 18. **本目标持续本地提交许可**：用户在本轮提交问题中选择“允许本轮及后续验收批次提交（推荐）”。先将九批之外、已验证的 B9、测试夹具/文档门禁、F7 第 3 步整合及对应证据形成独立本地集成提交；后续在本目标已授权范围内按实际验收批次本地提交，无需重复询问本地提交许可。不 push、不新增 remote；新 ADR、协议和版本超出已有裁决时仍单独确认。本项不降低验证、干净窗口、保护现有改动和逐批记录的要求。
 19. **真机准备**：用户选择“两类真机均可接入”，表示可以准备中低端 Android 和 iOS 实机供后续整局及至少 30 分钟功耗/温度/降频验收。此前实际探测仍是 ADB 无设备、实体 iPhone unavailable；须在执行前重新探测并取得真实测量，不把“可接入”登记为已接入或平台已验收。
 
+## 补充裁决（2026-10-30，A／B／C具体方案）
+
+用户对[具体审批稿](../2026-10-30-next-version-proposals/README.md)的三个独立问题明确选择“批准A (Recommended)”“批准B (Recommended)”“批准C (Recommended)”。本条只登记授权，不把隔离候选、后续版本或测试要求记成当前实现。
+
+20. **NC09超时规则330与WS6（方案A）**：采纳[ADR 0787](../../../adr/0787-native-choice-timeout-durable-control.md)。J2实际验收并以规则329/ABI758/存档105接入后，本批独占规则 **329→330**；内部 `TimeoutAction { choice_id: u64, selection: Vec<ChoiceOption> }`记录实际选值，复用Answer校验，恢复不重算AI；仅房间actor可用，客户端、Worker、旁观和裁判无此特权。配置、托管、选择截止与实际动作WAL同现有房间事务持久化。停机计时、重连不延长当前选择，本人新合法操作成功或有效重连清托管；进程内单调计时、跨重启用服务端Unix截止。**WS5→WS6**，新增CreateRoom/RoomRoster的choice_timeout_secs、SeatPresence.managed、授权ChoiceRequest.deadline_unix_ms，严格拒旧握手/未握手/0版本绕过。预计维持存档105/ABI758；旧规则档明确拒绝且原字节/冻结副本/旧锁保留，不伪造迁移。前提或版本占用改变须再确认，不自动顺延编号。
+21. **完整观察者元数据（方案B）**：批准SeatView.generals两槽可选元数据（def/name/faction/revealed）及ChoiceRequest可选prompt/native_kind，同步实际WASM、Worker、IPC、服务端与UI，只从共享授权投影取值，保留旧character_def/kind回退和裁判无命令权限。先证明WS5旧/新读者兼容，再随第20项整体发布WS6，不另占WS7。若先行兼容证明失败，将字段并入第20项WS6拒旧路径，不擅增版本/ChoiceKind或必填字段。字段、隐私和兼容矩阵详见[方案B](../2026-10-30-next-version-proposals/README.md#b-完整裁判与普通观察者元数据兼容的可选字段)。本项不升规则/存档/ABI，不代表当前Referee全部边界已验收。
+22. **NC08玩家选序规则331（方案C）**：采纳[ADR 0788](../../../adr/0788-native-player-trigger-order.md)。第20项实际330验收接入后，本批独占规则 **330→331**。以当前noname arrangeTrigger为主基准：普通触发按玩家顺座桶→有效优先级、去掉强制/可选调度优先级、每次执行前重验filter；同人并列强制/可选都可选下一个，First/Last及silent/无译名自动。复用Answer/ResolveChoice与PickTag，新增类型化Skill(SkillDefId)选项、静态trigger_order键、可恢复机器和必要包触发元数据/hash校验；已有wire OrderTriggers可复用，不新建命令。预计保留存档105/ABI758和届时WS6；若需archive106、ABI759、新schema或版本已占用则另报。liuli差异、57组真实逐场景及forceDie/out/indexed/隐藏技等未完成项继续验收，不以批准本稿豁免缺失功能。旧规则档明确拒绝并保留原件。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。
