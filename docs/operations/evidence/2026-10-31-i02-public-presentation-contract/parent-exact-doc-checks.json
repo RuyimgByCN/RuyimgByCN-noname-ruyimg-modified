@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-31T10:44:37.961161+00:00",
+  "exact_changed_doc_links": {
+    "docs/architecture/native-progress.md": [],
+    "docs/architecture/native-rules-baseline.md": [],
+    "docs/operations/evidence/2026-10-31-c331-runtime-contract/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-phase7-main-integration/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-phase8-schema5-datachain/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/README.md": [],
+    "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/README.md": [],
+    "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/approval-request.md": []
+  },
+  "status": "PASS",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "staging_empty": true,
+  "git_status_sha256": "2534d1af55e821f266951d4eb749bd135b00481c78c363e00963d98d9e82b9b7",
+  "approval_page_sha256": "301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d",
+  "qualification": "8 exact maintainedchangedDocs local links checked, all0; default7linkchecker andstrict1065/source9003 retained separately. Product remainsaccepted5fc; currentdocs/evidenceuncommitted."
+}

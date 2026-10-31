@@ -1,0 +1,28 @@
+{
+  "seeds": [
+    46000,
+    46031
+  ],
+  "seats": 4,
+  "challengers": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "arms": [
+    "baseline",
+    "candidate"
+  ],
+  "games": 256,
+  "node_budget": 8,
+  "deadline_ms": 50,
+  "lookahead": 1,
+  "variant": 0,
+  "mode": "Prototype+swd/no assigned generals",
+  "max_steps": 1200,
+  "reference": "same instrumented binary, exact5fc old body for every baseline actor and every nonchallenger; bypass=false only for candidate challenger",
+  "stop": "First formal rejection, planner/submit panic or observedsimfault stops experiment; no retry",
+  "independence": "baseline4 challenger labels repeat same-seed trajectory, correlated/nonindependent",
+  "registered_utc": "2026-10-31T10:37:24.920928+00:00"
+}

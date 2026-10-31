@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-31T12:14:37.732984+00:00",
+  "status": "PASS exact Main-lock native probe and canonical7 comparisons",
+  "bindingAfter": {
+    "source6": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+    },
+    "MainCargoLock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+    "probeSource": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+    "privateLock": "25fe9cceb1eb8581bb738debfa31d6f75174d04589ce110304db4c61f5ecb91c"
+  },
+  "lockVerificationSha256": "b8ecf15ebc30c78c69a98256f7f7062749398466f300ba7cc581454264a21bd0",
+  "comparisonSha256": "e3daf33083dd9387756110acbf12afa4fec596eb6f061bcaefc5916595a15a8e",
+  "commandsSha256": "ae8c3ca24c65478c3ecd04d9b31187c25d080e44d2102740039e1e2961c4f7ae",
+  "probeSourceSha256": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+  "probeManifestSha256": "be234793129cdcbcedc4618826136c9454f6cde43f12e99707a85acda54538f7",
+  "driverSourceSha256": "235f7b5077883deb6f045585380833c9010d27ea5788ebbe5cd8ccedf5de2618",
+  "actualExecutedBinary": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe",
+  "binarySha256": "f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144",
+  "source6BeforeAfterExact": true,
+  "MainLockBeforeAfterExact": true,
+  "oldEvidenceUnchanged": true,
+  "originalLimitationRetained": "Original21 external-version drift + sidecheck/index-update provenance is preserved. Old probe is cross-dependency compatibility evidence; this rerun supplies Main-lock consumer proof.",
+  "noMainOrIndexWrites": true,
+  "noStagedFilesAtOriginalSeal": true,
+  "sealedUtc": "2026-10-31T12:16:36.810294+00:00",
+  "reportPath": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/ba244d6f-4544-490a-987a-9f50c0845230/verification/nc10-main-lock-aligned-probe.md",
+  "reportSha256": "7b7b02cea865e6a1220e55706be2f51e34ba20a54d75a1f62622e9e0e8934e5f",
+  "originalDriftDispositionSha256": "0525835b518d76dc7b34d9fdd33d17f042182632d143013119351880fee233a0",
+  "commandSourceBindingsSha256": "598a0ac5912cd30e5bf45072e308ad58b3956e10e4789e8d15765454843d2730",
+  "noNewAutomaticPrivateTarget": true,
+  "newCommandsAllExit0": true,
+  "selectedExternalCount": 30,
+  "selectedExternalExactMainMembership": true,
+  "originalMainLockedTestsNotRepeated": true,
+  "finalRequiredAcceptance": "Exact Main-lock native probe outputs directly match preserved real WASM outputs7; parent independent review remains separate."
+}

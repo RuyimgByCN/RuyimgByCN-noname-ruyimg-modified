@@ -1,0 +1,35 @@
+{
+  "utc": "2026-10-31T08:15:41.229567+00:00",
+  "raw_private_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-ready-5fc-kbz33ux6",
+  "commands": {
+    "android": {
+      "argv": [
+        "/Users/ruyimg/Library/Android/sdk/platform-tools/adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "stdout_bytes": 26,
+      "stderr_bytes": 0
+    },
+    "apple": {
+      "argv": [
+        "xcrun",
+        "xcdevice",
+        "list",
+        "--timeout",
+        "15"
+      ],
+      "exit": 0,
+      "timed_out": false,
+      "stdout_bytes": 7204,
+      "stderr_bytes": 0
+    }
+  },
+  "physical_qualification": "Readiness only; no install/signing/device app/GUI/TCC/input/settings changes",
+  "android_authorized": 0,
+  "apple_physical_entries": 1,
+  "apple_available": 0,
+  "apple_current_status": "no available physical iPhone in successful xcdevice result"
+}

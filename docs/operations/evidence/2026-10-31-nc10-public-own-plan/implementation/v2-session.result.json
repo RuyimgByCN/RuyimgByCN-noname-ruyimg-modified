@@ -1,0 +1,40 @@
+{
+  "name": "v2-session",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-wasm",
+    "--test",
+    "nc10_public_own_session",
+    "--test",
+    "pa09_native_session"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-wasm",
+    "--test",
+    "nc10_public_own_session",
+    "--test",
+    "pa09_native_session"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 5.560507291986141,
+  "minimum_free_bytes": 34927144960,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "9af491a321fded063368f5d93954d8fece2e01a8f55b47f2c0e1eac8e257eaa6",
+  "stderr_sha256": "9a8dbbd83cdf25e65ee85e19bdf0377a2c11dfe2b4ccf90da7450354e7a7d8e8"
+}

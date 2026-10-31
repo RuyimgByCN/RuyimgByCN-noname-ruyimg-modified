@@ -1,0 +1,64 @@
+{
+  "qualification": "Hashes of retained command sources. Main input sources match protected baseline/freeze. Original failed probe source retained as probe-attempt1.rs; intermediate attempt2 superseded by expanded final probe. Gate and product command scripts are retained; no source mutation under final freeze.",
+  "sources": {
+    "browser": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/browser.mjs": "cf07d1f54c21cffdfccf404596811009d3b99887261deb807055072200998b2a"
+    },
+    "canonical-snapshots": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml": "5c61b076cdef9bb20a5a27ed09ae8c0ed031551a5c28f13510be0b13440991cc",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/src/main.rs": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.lock": "7a7cb132258c1e557086dd852f471426e7f67b9750c0104155895a246fe0c367"
+    },
+    "conformance": {},
+    "formal-trajectories": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectories.py": "8b0a97ba5c367e11bc4d62df665a887aa596a5b849ee8f6cf3a179dd0d96be36"
+    },
+    "frontend-tests": {},
+    "frontend-type": {},
+    "gate1b": {},
+    "layering-gate": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-native-layering.py": "b38cfd91f819be0b6113f8107e377a9388a0833ac4ae6f504b2c23bb2638f082"
+    },
+    "layering-unit": {},
+    "legacy-crosshash": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/legacy-crosshash.py": "a3f389e09c9ba98cf622936ae97f6fa09350f9fb26e7b65b3aa37365e3936bc3"
+    },
+    "line-unit": {},
+    "native-probe-attempt2": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml": "5c61b076cdef9bb20a5a27ed09ae8c0ed031551a5c28f13510be0b13440991cc"
+    },
+    "native-probe-final": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml": "5c61b076cdef9bb20a5a27ed09ae8c0ed031551a5c28f13510be0b13440991cc",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/src/main.rs": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.lock": "7a7cb132258c1e557086dd852f471426e7f67b9750c0104155895a246fe0c367"
+    },
+    "native-probe": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml": "5c61b076cdef9bb20a5a27ed09ae8c0ed031551a5c28f13510be0b13440991cc"
+    },
+    "native-wasm-build": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/build-native.mjs": "dca82af3c5a31df9edc594a2a152ac978047d4334d9d90c7b28333c0fd518d19"
+    },
+    "native3": {},
+    "own-controls": {},
+    "preflight": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/preflight.py": "5412c73f9b2e88fbd48918b5f24977a417e628099b9e6b59c743a4f6ccebae92"
+    },
+    "semantic-seed": {},
+    "shan-control": {},
+    "source-caps": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check-source-lines.py": "e9a0e10d02f76ad526898323de9e5b5a4ab5ad3682a3adfd3c605c4ea1be426a"
+    },
+    "strict-doc-lines": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check_doc_line_refs.py": "4dc340f5d6646a18705c8d171a276134c4af4a0892d5292939217cdaecdcecfe"
+    },
+    "vite-bundle": {
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/vite-build.mjs": "38029104d514d071fe0bada90e88b778a65430fc6001d924aae62a59d78b04f4"
+    },
+    "wasm-current": {
+      "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs": "e612e75837dfcf9c55fc7cc65cfae7e41377a24402840e8bdcb6db8ef81c37fe",
+      "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/wasm-current.mjs": "4e41c39945de21bdfff668443e219e27793aa17c8bd56c0e5683996d12c26cf1"
+    },
+    "worker-smoke": {},
+    "workspace": {}
+  }
+}

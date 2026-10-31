@@ -1,0 +1,47 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.22s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 25 tests
+test c331_source33_integration::phase7_genuine105_is_rejected_without_migration ... ok
+test nc07_state_same_source::nc07_boss_stage_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_marks_is_same_sourced ... ok
+test nc07_state_same_source::nc07_counters_are_same_sourced ... ok
+test nc07_state_same_source::nc07_face_down_is_same_sourced ... ok
+test nc07_state_same_source::nc07_equip_zone_is_same_sourced ... ok
+test c331_source33_integration::phase7_private106_header_and_full_state_roundtrip ... ok
+test nc07_state_same_source::nc07_identity_roles_are_same_sourced ... ok
+test nc07_state_same_source::nc07_hp_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_flags_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_hits_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_piles_is_same_sourced ... ok
+test nc07_state_same_source::nc07_max_hp_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_once_is_same_sourced ... ok
+test nc10_source_provenance::native_optional_confirm_publishes_own_source_only ... ok
+test nc07_state_same_source::nc07_judge_zone_is_same_sourced ... ok
+test nc07_state_same_source::nc07_seat_ring_is_same_sourced ... ok
+test nc07_state_same_source::nc07_turn_state_is_same_sourced ... ok
+test c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source ... ok
+test nc07_state_same_source::nc07_skill_instances_are_same_sourced ... ok
+test nc10_source_provenance::native_known_optional_families_publish_their_exact_names ... ok
+test nc07_state_same_source::nc07_restore_rejects_out_of_range_references ... ok
+test nc10_source_provenance::native_source_is_stable_across_private_deck_rng_and_counters ... ok
+test nc10_source_provenance::source_initial_binding_does_not_certify_the_next_pending_prompt ... ok
+test nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown ... FAILED
+
+failures:
+
+---- nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown stdout ----
+
+thread 'nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown' (17641865) panicked at crates/engine-native/tests/groups/../nc10_source_provenance.rs:159:70:
+called `Result::unwrap()` on an `Err` value: BadTag("trigger_order_binding", 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown
+
+test result: FAILED. 24 passed; 1 failed; 0 ignored; 0 measured; 131 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "source"], "exit": 101, "locked_seconds": 1.2644876249833032, "disk_free_bytes": 39067398144}

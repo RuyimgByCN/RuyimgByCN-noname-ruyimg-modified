@@ -1,0 +1,7 @@
+{
+  "original_failure": "comparison against Main working-file snapshot also included non-source historical HTTP log bytes differing from gitHEAD",
+  "Main_before_sha256": "6a4228494a896edca6bb5b9179a9547da0177b540305b161c4f35e72373f824b",
+  "git5fc_sha256": "6fa763a1576cf3c6f2bdb88d3531d301debf424e0258563fa662e97455cd7ef6",
+  "private_actual_sha256": "6fa763a1576cf3c6f2bdb88d3531d301debf424e0258563fa662e97455cd7ef6",
+  "correction": "Private historical log already equalled5fc; copying saved Git bytes was a no-op, not a test-output repair. Compare private unchanged files to their git blob OIDs; keep Main before/after working-file protection separate. Previous assumption record retained."
+}

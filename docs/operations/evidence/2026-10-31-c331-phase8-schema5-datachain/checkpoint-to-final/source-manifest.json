@@ -1,0 +1,47 @@
+{
+  "checkpoint_manifest_sha256": "cb059772ce68a224cabb5d797512167145a6c38b2bd2042af84157b26a77d204",
+  "final_manifest_sha256": "852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494",
+  "changed": [
+    {
+      "path": "crates/content-compiler/src/lsp/hover_docs/skill.rs",
+      "checkpoint_sha256": null,
+      "final_sha256": "c8672c123b36860fc6d6879b4582630c1ca7145fd92d0deff93bc2b62a3bb4b6"
+    },
+    {
+      "path": "crates/content-native-loader/src/mechanisms.rs",
+      "checkpoint_sha256": "00772a2a8bf7850ec5d91b361b1430a56eaa9465ff3f70f2d6e7dcac861c9847",
+      "final_sha256": "6e5fc8bb214dda29b4ef1d4ecdd33cb65b10a34a25a84c7a47d8149cee18c835"
+    },
+    {
+      "path": "crates/content-schema/src/package/mechanisms.rs",
+      "checkpoint_sha256": "fd3c7318209c067c7983b31c71690ea20c434066002bb42cf6fd1b694948b5a9",
+      "final_sha256": "b1bffac51cb8b2765f94366b39624fecbd1ca1809973611130fbe3148e8546ac"
+    },
+    {
+      "path": "crates/engine-core/src/content/registry/load_package_checks.rs",
+      "checkpoint_sha256": null,
+      "final_sha256": "bcb01649420ed097424a1c9072ebfc220437ee075f81b0ca255997be1c7c5d12"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_schema5_datachain.rs",
+      "checkpoint_sha256": "8f34bccdba4a7117e355f86667632b4d36d565756a952d6f862ca7858f9b3ac4",
+      "final_sha256": "1b12505354353f9d08aab139bb6f3cabad17c478eafad73cfc6d50f61963a0d2"
+    },
+    {
+      "path": "crates/engine-native/tests/t8_rvm_bridge.rs",
+      "checkpoint_sha256": "b5ecccb616311bfd76461c56fadefd220d750c8fd44cb65b06d61c4b7808eabf",
+      "final_sha256": "00318d7bb40112386aadf725efe07c915f755f97a168cc344e2aff58de6c1659"
+    },
+    {
+      "path": "crates/engine-native/tests/t8_rvm_bridge/state_effects.rs",
+      "checkpoint_sha256": null,
+      "final_sha256": "cbcd4a78357efa454d351f83bf21a42e4484bc3335a20c3c3ac3329e94381371"
+    },
+    {
+      "path": "crates/engine-native/tests/t8_vm_state_effects.rs",
+      "checkpoint_sha256": "3f8eba88ab09a809c7ae70cdd6c33c95d73559b1fbfbbb9360262e68b866f759",
+      "final_sha256": null
+    }
+  ],
+  "qualification": "After checkpoint: formatting four new files, legacy5 admission assertion/editor hover, more native controls, registration repair moves t8 child under registered parent. No new runtime mechanism."
+}

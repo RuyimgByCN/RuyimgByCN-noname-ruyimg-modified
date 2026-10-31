@@ -576,29 +576,15 @@ impl NativeSession {
             return Ok(serde_json::json!({ "done": true }).to_string());
         }
         if let Some(c) = self.inner.open_choice() {
-            let take = c.spec.min.max(1).min(c.spec.max).min(c.spec.options.len());
-            let sel: Vec<_> = c
-                .spec
-                .options
-                .iter()
-                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
-                .take(take)
-                .cloned()
-                .collect();
-            let sel = if sel.len() == take {
-                sel
-            } else {
-                c.spec.options.iter().take(take).cloned().collect()
-            };
-            let (cid, obs) = (c.id, c.observer);
+            let obs = c.observer;
+            let action = engine_native::ai::projected_choice_action(
+                self.inner.ai_session(obs).choice().expect("open observer choice"),
+            ).expect("observer owns the choice");
             let out = self.inner.submit(engine_native::GameCommand {
                 actor: obs,
                 expected_revision: self.inner.revision(),
                 dedup_id: self.inner.revision().wrapping_mul(2).max(1),
-                action: GameAction::Answer {
-                    choice_id: cid,
-                    selection: sel,
-                },
+                action,
             });
             return Ok(serde_json::json!({
                 "kind": "answer",

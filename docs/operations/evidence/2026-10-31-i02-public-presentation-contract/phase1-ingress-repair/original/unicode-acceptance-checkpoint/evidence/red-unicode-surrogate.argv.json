@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "--test",
+    "--test-name-pattern=raw escaped surrogate",
+    "apps/web-client/scripts/presentation-metadata.test.mjs"
+  ],
+  "cwd": "/tmp/i02-phase1-ab167599/source",
+  "env": {
+    "CARGO_TARGET_DIR": "/tmp/i02-phase1-ab167599/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "started": 1793447189.582956,
+  "free_disk_bytes_before": 32772890624,
+  "memory_limiter": false,
+  "profiles": "unchanged"
+}

@@ -1,0 +1,654 @@
+{
+  "utc": "2026-10-31T11:27:11.867581+00:00",
+  "copies": [
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/full.patch",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/full.patch",
+      "sha256": "f199cbf6e7908620950b980bb79363f1ea784045ae4fa949bfdf7d3ae09003b5",
+      "bytes": 142949
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/manifest.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/manifest.json",
+      "sha256": "5183e1740b4ccdf7e644ad2b6ec0a7f9ea3ebe58bd222904693127b972569dee",
+      "bytes": 3898
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/base.txt",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/base.txt",
+      "sha256": "30db36e57f02430df8a3922acc1c554c7b452a6b4b41a23ebb472e47a263fb5d",
+      "bytes": 41
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/before.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/before.json",
+      "sha256": "1683e4c27167e2b0fd6f8e494bb99a9ed55a9f8b2f40b9a027ba776291d95720",
+      "bytes": 3304
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full.memory.json",
+      "sha256": "4264ef76e37829609e2f4d6a4bd7d4551e530f4e60b318c18aa0817d923ba10d",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-2.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-2.argv.json",
+      "sha256": "a8b03ebb54f60ddbede7648944d6993d71c7e0892c62b21704507f7cf5f6ac96",
+      "bytes": 372
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-final-ingress.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-final-ingress.log",
+      "sha256": "05ace7360a5edb26b0d824e9e5f3e3b504012cc6902470ee6675af80cc130b45",
+      "bytes": 17838
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests.result.json",
+      "sha256": "0716b9ad13b9b7dce18d938e75923a1338fbcd9a3289ef9bf4c496136bb9c149",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-guard-fixed.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-guard-fixed.log",
+      "sha256": "e949744f44d138ddf039e228ded602f16ee319ca285b2474b066c7aa59dcfef3",
+      "bytes": 30833
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-guard-fixed.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-guard-fixed.argv.json",
+      "sha256": "8f5fa25d18cdaf9069bcfb3545a898aa6319b92e449a2979c23651e73691dbeb",
+      "bytes": 371
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-3.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-3.argv.json",
+      "sha256": "d4e1623b1221099be720576b78e05aa70326a32bb5fa4d02efa64fd05d0f59a8",
+      "bytes": 412
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck-final.log",
+      "sha256": "3dab6d96a432d4a30d055ab4f980d3d1cf1a055f887c64362199d5a23c7cc15a",
+      "bytes": 86
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck-2.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck-2.log",
+      "sha256": "3dab6d96a432d4a30d055ab4f980d3d1cf1a055f887c64362199d5a23c7cc15a",
+      "bytes": 86
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/validation-index.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/validation-index.json",
+      "sha256": "30aaf64db8922a5634c5f4722765ae8c9a158139b4a3f105df25c0f04a5ff673",
+      "bytes": 865
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-3.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-3.result.json",
+      "sha256": "6a4802da1dd62cb3137cfd007bda15debbc9a37c4f36e941f303e479cf2a51db",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/callers-check.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/callers-check.log",
+      "sha256": "84f8e18f0929f058301503ccbd79f9d9a05efc88ecc71bf5258ebc123e286687",
+      "bytes": 100278
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/line-gate-seal.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/line-gate-seal.log",
+      "sha256": "158d60af126b5520c1597023b3ae4c1f9662bc5342aff64ab507c1f326105997",
+      "bytes": 96
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests.log",
+      "sha256": "bd9bacafd3dd2d860b735fa6b27c6e8129d4f00c85dbbd012e15f77428a5bde2",
+      "bytes": 2215
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-presentation.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-presentation.log",
+      "sha256": "cd73aa1aeca50fa5649c9f1f79d43f6b99ead4ea164142e2f62ad732d813da99",
+      "bytes": 17742
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol.log",
+      "sha256": "ee6139cb60bfbd3be503d97b6266a1aadf44371d2a60fe5eb63a80b88d2e89a2",
+      "bytes": 4647
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-3.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-3.memory.json",
+      "sha256": "52abeee8267c79ef992d99616a91e2d691a9dfd1eb32a3b427da030c5b023c27",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-3.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-3.argv.json",
+      "sha256": "ab570c1893cbad824252b8081c94d636dbc304936eb760807b1ee67ee9c3c925",
+      "bytes": 370
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/line-selftest-seal.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/line-selftest-seal.log",
+      "sha256": "30b7db73967acdb055ef826f6af2556d423ce2ebb08c1494e1a654e3b2b89a3a",
+      "bytes": 100
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-presentation-2.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-presentation-2.log",
+      "sha256": "343b94039546376a59c42aa11b49a89f1ce6bbf910e5dcbeb1cc473d0b3c7c5c",
+      "bytes": 14128
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests-final.log",
+      "sha256": "bff5cee574b593f0ac9fda86bb10c2dbd079d24763e5662c6bbcb5b2f4ecc3ac",
+      "bytes": 2306
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-bounded-final.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-bounded-final.argv.json",
+      "sha256": "03924e7cae80164161696c7903bf4530e80e2d6a4b3859b4ff23c3673726fbab",
+      "bytes": 371
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck-declaration-inputs.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck-declaration-inputs.json",
+      "sha256": "cdae5ba0b93427a597fe4b106f66d59a7e5648295ddeaff8fb75959cc965f63b",
+      "bytes": 526
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck.log",
+      "sha256": "e36103b65d8c2e8b84c9f36bd6ebea1d211e8ced9c2f7d9286a16a9943a7de50",
+      "bytes": 369
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol.pid",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol.pid",
+      "sha256": "08bc14aa3d420b0dac6264501b4d8e3a858690954b40dafa3bbf32f06403aad8",
+      "bytes": 5
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-2.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-2.argv.json",
+      "sha256": "54a74c9818a6f677b0c24d4301d23fedc1093cbf76787ce3e9d6e84e5bf369ac",
+      "bytes": 413
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests.memory.json",
+      "sha256": "3152272963e1443d5582e9f1169e6938342bbbd89b1efb5b58ae03b96b54922b",
+      "bytes": 63
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full.result.json",
+      "sha256": "ca6e16ca17dfca8384b24834006ac5ea0a8c93a2fe3d9c84946402b4aa9ceb31",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-2.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/main5fc-native-fixture.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/main5fc-native-fixture.json",
+      "sha256": "496b4085e271a6ca47df012cd587ab21f6e5c03980ba339c2d3bf3b171a86b61",
+      "bytes": 1852
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-2.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-2.log",
+      "sha256": "b8445c9973566a5e5b10c394edbfc496fa4cdb25915c536a35ed4596e76c93c2",
+      "bytes": 34466
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-2.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-2.result.json",
+      "sha256": "a8a71ef21953a99aa4bef158eb61e210238173c99c9804d0bddba92c5c8bef95",
+      "bytes": 49
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-3.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-3.log",
+      "sha256": "a1e667b62040b2b648f7bb5b8ef320d0ad28308539829c016873e43ccf5ebd8b",
+      "bytes": 28547
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck-sealed.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck-sealed.log",
+      "sha256": "3dab6d96a432d4a30d055ab4f980d3d1cf1a055f887c64362199d5a23c7cc15a",
+      "bytes": 86
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/final-api-protocol.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/final-api-protocol.argv.json",
+      "sha256": "b66d48eda8a695a5ffce6d2bf1c27212469e849a6da244b9da8aa424338ae651",
+      "bytes": 411
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-3.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-3.log",
+      "sha256": "8a650a856beae81e0e8a92c857d12452295d4035603df873eb9aa0b97849b77f",
+      "bytes": 1453
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/acceptance-patch-check.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/acceptance-patch-check.json",
+      "sha256": "de8de4c5d4a105d23b06f55ae209eaf624ab98906508d68dbd16614fed1d1d1d",
+      "bytes": 184
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests.argv.json",
+      "sha256": "d2fb906d22703d560409ab1d3b13273f194edbdb0122183cd60255af257cc2aa",
+      "bytes": 413
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-bounded-final.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-bounded-final.result.json",
+      "sha256": "7491976d80102aa8b5055b303f10031e1ecbbeb6d3fd3490ca221c759e0d2e9f",
+      "bytes": 49
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/line-gate-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/line-gate-final.log",
+      "sha256": "158d60af126b5520c1597023b3ae4c1f9662bc5342aff64ab507c1f326105997",
+      "bytes": 96
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/final-api-protocol.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/final-api-protocol.result.json",
+      "sha256": "76bbc0d77c70780c95010ff268f9e426b3a15c753aeb1dbd967fbe257c4ee529",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-guard-fixed.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-guard-fixed.result.json",
+      "sha256": "7f3095348fff9bc4ea75b527a977ee810d8e85aea619688168a50ee21a960b5a",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-final.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-final.memory.json",
+      "sha256": "7230ed850d01621650ac436d500bdbe8a4cbcb9cc86f4a48d5687acfb5a8d090",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol.argv.json",
+      "sha256": "9d0c3248388a2d42bdac9831e187e2be0e12150239de9d127d97e96bdd10e539",
+      "bytes": 338
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/callers-check.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/callers-check.memory.json",
+      "sha256": "0a862358ddab2ef4876c9398661c3eaf998e4fd541a7fbe2ea0d972f588f4889",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests-final.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests-final.argv.json",
+      "sha256": "e012e3645ee7c989c03c00778e53231ec31e04cb10765a547bc9a21a6e2b4436",
+      "bytes": 412
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/final-diff-check.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/final-diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/line-gate.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/line-gate.log",
+      "sha256": "ec4e6b1ef0c3c51639478c3ca28fe86179885add9103523592dd4ac73540b42b",
+      "bytes": 96
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-final.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-final.argv.json",
+      "sha256": "a8cf5e89c11e9ee412530101039effa0714c6bb5589e0ca02759535f3f03fafa",
+      "bytes": 371
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/line-selftest.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/line-selftest.log",
+      "sha256": "279538fe812d165bb22f5a84ab94b40efa9072957816601b6c80f1ba281fa35e",
+      "bytes": 100
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests-final.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests-final.memory.json",
+      "sha256": "1a44c07f518ad636a30442ba9e63e4a7a3185d812807ef964a338c596e8e7463",
+      "bytes": 63
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-3.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-3.memory.json",
+      "sha256": "524b3b611ab8af7b9ae3aaa844da9f8df1870a581cddd490dbd6ecdbb281839c",
+      "bytes": 63
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/callers-launch.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/callers-launch.log",
+      "sha256": "c297ef59f749d1964229284361ec12d3f0d0e926210c6776cd4cea609908ee3d",
+      "bytes": 16
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/full-patch-reverse-check.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/full-patch-reverse-check.json",
+      "sha256": "6063b94bb62a9fb41626fa21cd64450c554f83808095350dc703fb6c9a0e0e05",
+      "bytes": 264
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-initial.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-initial.log",
+      "sha256": "6102473e7617496881165902dd5bdd3c325ac0042df4fbcb40a3fc9181da822a",
+      "bytes": 3198
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full.argv.json",
+      "sha256": "ca0de8f889339cb2443ade9d0584cb0bcac7124709372b891bda59dc89b3b0eb",
+      "bytes": 371
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/final-api-protocol.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/final-api-protocol.log",
+      "sha256": "f0a52f2cdebda9f43d9208b8614591d9e6f61ccde7f3418d56f81ccd01707ed5",
+      "bytes": 2306
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-final.log",
+      "sha256": "bd4316afa899a6edddbdeee4a15ea87ab6248a66c649fc3388c0677e4296946a",
+      "bytes": 30634
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-api-protocol-3.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-api-protocol-3.result.json",
+      "sha256": "d665d8a252c71692c615d4db4025b2b37b5996b8cc300da3a6c7512a3905643b",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/callers-check.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/callers-check.result.json",
+      "sha256": "c883d96b1cbd529d98c4f8061ef4416e4a3a3c56b1eb0d1539f7b4bef4be7004",
+      "bytes": 49
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/cargo-presentation-tests-final.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/cargo-presentation-tests-final.result.json",
+      "sha256": "d1890bc3373ccc823719c0ff765f1083be718bff435bad92b61cb5f4e43e4126",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-glue-input.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-glue-input.json",
+      "sha256": "c6e4a634002238a224a1c70681a5c31e93bb972f94cc35974aa549b9dfbb5f7d",
+      "bytes": 295
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-bounded-final.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-bounded-final.memory.json",
+      "sha256": "9fe01a635637a61725b9bad87f794bbbd79db6dc156b3d0c1758e9bd502740af",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-guard-fixed.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-guard-fixed.memory.json",
+      "sha256": "991b5685e47b3b0e90b9274fef2db412323472f71b6b7c7c99fc9eddd43a5ee8",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-final.result.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-final.result.json",
+      "sha256": "6e0b0c5469ac7986e339defec6b888561e28764d7788a2454759f90280ee7678",
+      "bytes": 48
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/final-api-protocol.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/final-api-protocol.memory.json",
+      "sha256": "849f907adc6c5c5445a44ed4f5bd67d9fce7ff2234249c54ad5ef11ab8813839",
+      "bytes": 63
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/typecheck-guard-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/typecheck-guard-final.log",
+      "sha256": "3dab6d96a432d4a30d055ab4f980d3d1cf1a055f887c64362199d5a23c7cc15a",
+      "bytes": 86
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full.log",
+      "sha256": "8c49aad2b6a247f11657459d423c35d639929427572f9b7f661b96052049c328",
+      "bytes": 37002
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-bounded-final.log",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-bounded-final.log",
+      "sha256": "c8bca8a80cdb7ccc58c39d86a99e0040f53593047410f1ed82059fcde732d7c0",
+      "bytes": 34700
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/callers-check.argv.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/callers-check.argv.json",
+      "sha256": "2a84acadb79e40d0437d1435723df52c92a9a60f6437da6d2d89bf7bfade07ca",
+      "bytes": 428
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/sealed-patch-check.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/sealed-patch-check.json",
+      "sha256": "cf9e59ae614c461132acba0468c9586114515d26698cbbe269ece41cba2fc9a3",
+      "bytes": 362
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/protection-after.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/protection-after.json",
+      "sha256": "bf0882d0391f4591c2090c4f753a42ce5686cf5660660cdcb4eb6fba2722eacf",
+      "bytes": 7451
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frozen-reader-proof.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frozen-reader-proof.json",
+      "sha256": "2822c4fc058fc2f5f47713b5b2e8f2739133442dc82c508517286cb017bc955a",
+      "bytes": 874
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/evidence/frontend-full-2.memory.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/evidence/frontend-full-2.memory.json",
+      "sha256": "74ab8907877ff4815879ee512110084bc0d65d239f208084007605eeede12034",
+      "bytes": 64
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-api/src/lib.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-api/src/lib.rs",
+      "sha256": "888a65c6556e4bfe2dbf251759d17351506fb44195ed8ec287591eb8a68e5108",
+      "bytes": 805
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-api/src/presentation.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-api/src/presentation.rs",
+      "sha256": "78d99991f19c038dc0ad571b1d5d5483283cfe94c1b460a8973bb4786b321017",
+      "bytes": 12554
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-api/src/presentation/validation.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-api/src/presentation/validation.rs",
+      "sha256": "bf0bcf45c66120cde953a25fbe8d3885cce7a135671ab8770ee1736d14939475",
+      "bytes": 10732
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/presentation.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/presentation.rs",
+      "sha256": "be494780d6eedaf488a4c146852adbbc72ba59043e8deeb4ef76fbe1bf247586",
+      "bytes": 4262
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/presentation_main5fc_reader.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/presentation_main5fc_reader.rs",
+      "sha256": "bbe4a36bcca338ee76d760ff8842959ff31228eb0c668c682304266f9c70f63b",
+      "bytes": 1554
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/fixtures/i02-presentation.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/fixtures/i02-presentation.json",
+      "sha256": "8991f6c39f9d065dde0570dfb98183dbe1fcd2c6707fde3900f70b92c277d0ee",
+      "bytes": 6711
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json",
+      "sha256": "5e433dcc145e8c63d029c85a7fc37a96e15e276d19eaa5fa982dc8b51b1652f3",
+      "bytes": 8452
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs",
+      "sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "bytes": 7884
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs",
+      "sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "bytes": 1950
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/src/lib.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/src/lib.rs",
+      "sha256": "260432c6409ed6fcb40878e60544364ed94d1b31bd6fa2364554dabc301be672",
+      "bytes": 761
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/src/messages.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/src/messages.rs",
+      "sha256": "e64744086c7d2987815fafec0e2e851089b07dbf85a92ded45ecc7e81ebb77fe",
+      "bytes": 8157
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/src/presentation.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/src/presentation.rs",
+      "sha256": "3b74feecdc7bdf1a0fc2c4e598a5d6d6eb9158db3a076303994b42ba41ca7bb3",
+      "bytes": 1378
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/crates/engine-protocol/src/wire.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/crates/engine-protocol/src/wire.rs",
+      "sha256": "0c2ba270a92a40efbb5a25713ea802ab32e66e9542d8c500af94665b955e2d05",
+      "bytes": 2069
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/nc04-worker-failure.test.mjs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/nc04-worker-failure.test.mjs",
+      "sha256": "af91dd56531a52baa77b86dec9a58e222be3d56f38a485bc891f9695523a131a",
+      "bytes": 18233
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/presentation-metadata.test.mjs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/presentation-metadata.test.mjs",
+      "sha256": "9af48b9dfddc9fb740d4b21b7333d3ccffa9c32efed903533f1fa1190c860b2b",
+      "bytes": 9213
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/presentation-fixtures.mjs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/presentation-fixtures.mjs",
+      "sha256": "e5211b7f9ad62229a19aef02b918c2497a5e5ee982e46b1b4dcf225ee21ae4ca",
+      "bytes": 1375
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/nc03-worker-clone.test.mjs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/nc03-worker-clone.test.mjs",
+      "sha256": "cc5141727a5658f8350d81a4af06e362ab145f7cd6ac2e35f41f39594e522af9",
+      "bytes": 5271
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts",
+      "sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "bytes": 27411
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts",
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "bytes": 4572
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/types/engine.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/types/engine.ts",
+      "sha256": "960c71289b820b5e3d7122c0cea199ffeae2ef9b261b1b8aa7a89b3253b10a92",
+      "bytes": 8795
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/types/presentation.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/types/presentation.ts",
+      "sha256": "cab127e67b0b68ccdba338fbf33a835ba3c747ac326bc0f5a73de419fcddc1f6",
+      "bytes": 2526
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/engine/networkClient.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/engine/networkClient.ts",
+      "sha256": "1fd6e3d3cb851b2b6336f809b2ab679411b4b34e6f3a39957be231d24948ea9a",
+      "bytes": 28742
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/engine/client.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/engine/client.ts",
+      "sha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+      "bytes": 17835
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/engine/presentationMetadata.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/engine/presentationMetadata.ts",
+      "sha256": "39c3789711bb6386702c91bcc961151cec6fe7a8d75d869d1f83ebc66e3ee55c",
+      "bytes": 10168
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/engine/desktopEngineTransport.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/engine/desktopEngineTransport.ts",
+      "sha256": "eff44aac4b50419dbe13710d1a2206bf232ba4d0881c48d65ecda251c8180ca3",
+      "bytes": 4577
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/web-client/src/engine/viewStore.ts",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/web-client/src/engine/viewStore.ts",
+      "sha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+      "bytes": 6379
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/game-server/src/room.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/game-server/src/room.rs",
+      "sha256": "8c345d961cfc68caaf4f78bb9ab9fb4b35a8d3f613c1f8470975391a72aeb88a",
+      "bytes": 24070
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/game-server/src/room_native_actor.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/game-server/src/room_native_actor.rs",
+      "sha256": "984f16e59ef74dbc54746bde0f514028f78cac60d440e51cf939b2e1fa87470c",
+      "bytes": 37980
+    },
+    {
+      "source": "/tmp/i02-phase1-ab167599/acceptance-checkpoint/source/apps/game-server/src/room_native_actor/timeout.rs",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/source/apps/game-server/src/room_native_actor/timeout.rs",
+      "sha256": "f6543bc4ef44447817867d2a212b47c3f731f55b4e577095d882f5dbdd138e53",
+      "bytes": 6356
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/ab167599-c75e-47c4-b8c8-8257569e6527/implementation/i02-phase1-typed-wire-foundation.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/implementation.raw.txt",
+      "sha256": "8b3326d6951c518964fbbb9d722e12d87e2b5b49b3e60a8cba5db1464ad488ac",
+      "bytes": 12462
+    }
+  ],
+  "qualification": "Immutableprivate finalNC6+I02phase1snapshot29/rawlogs copied andsource29SHA checked. NC6Mainintegrationfunctionalpending;I02privatereviewpending, noproductionI02emitter. No binaries/generated copied."
+}

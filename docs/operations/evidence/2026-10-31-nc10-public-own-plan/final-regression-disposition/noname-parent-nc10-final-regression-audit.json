@@ -1,0 +1,192 @@
+{
+  "utc": "2026-10-31T11:21:14.337743+00:00",
+  "status": "PASS",
+  "source6_exact": true,
+  "v2_five_unchanged": true,
+  "commands": [
+    {
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null,
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ]
+    },
+    {
+      "name": "layering-gate",
+      "exit": 0,
+      "counts": null,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ]
+    },
+    {
+      "name": "layering-unit",
+      "exit": 0,
+      "counts": null,
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_native_layering.py"
+      ]
+    },
+    {
+      "name": "line-gate",
+      "exit": 0,
+      "counts": null,
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ]
+    },
+    {
+      "name": "line-unit",
+      "exit": 0,
+      "counts": null,
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ]
+    },
+    {
+      "name": "native-final",
+      "exit": 0,
+      "counts": [
+        1719,
+        0,
+        75
+      ],
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast",
+        "--",
+        "--test-threads=1"
+      ]
+    },
+    {
+      "name": "own-controls",
+      "exit": 0,
+      "counts": [
+        4,
+        0,
+        0
+      ],
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_public_own_plan",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ]
+    },
+    {
+      "name": "seed8211",
+      "exit": 0,
+      "counts": [
+        1,
+        0,
+        0
+      ],
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "misc",
+        "policy_v2_drives_all_seats_without_answer_routing_panic",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ]
+    },
+    {
+      "name": "sessions",
+      "exit": 0,
+      "counts": [
+        6,
+        0,
+        0
+      ],
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "--test",
+        "nc10_public_own_session",
+        "--test",
+        "pa09_native_session",
+        "--",
+        "--test-threads=1"
+      ]
+    },
+    {
+      "name": "shan-control",
+      "exit": 0,
+      "counts": [
+        1,
+        0,
+        0
+      ],
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "misc",
+        "plan_enumerates_single_choice_fallbacks",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ]
+    }
+  ],
+  "overlay6_verified": true,
+  "raw_original484_baseline_and119_failure_preserved": true,
+  "seed8211_semantic_actual": "119success/0suspend/0simfault/0newprobe/fullrestore; P3checkedbytest; 119notexpectedpin",
+  "session_count_correction": 6,
+  "private_index_empty": true,
+  "manifest_sha256": "9b6a9c446d43a4da854ba2c8f67a79fddb7c0f0d78169ea0a7c268545a641d28",
+  "composed_patch_sha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110",
+  "qualification": "Retained finalprivate source/command/result parse, no test rerun/WASM rebuild/Main source import; notcompleteNC10strength/upstream."
+}

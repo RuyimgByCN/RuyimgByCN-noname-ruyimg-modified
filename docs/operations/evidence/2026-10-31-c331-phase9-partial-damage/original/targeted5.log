@@ -1,0 +1,15 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.81s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 6 tests
+test c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying ... ok
+test c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage ... ok
+test c331_canonical_damage::c9_target_damage_runs_before_dying_subtree ... ok
+test c331_canonical_damage::c9_changed_root_amount_matches_damage_log_and_later_vm_context ... ok
+test c331_canonical_damage::c9_full_armor_retains_source_quantity_positive_receipt_and_zero_hp_loss ... ok
+test c331_canonical_damage::c9_real_vm_source_window_uses_qualified_root_and_byte_restore ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 168 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9_"], "exit": 0, "locked_seconds": 2.902757208037656, "disk_free_bytes": 33624227840}

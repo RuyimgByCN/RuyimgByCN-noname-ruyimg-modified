@@ -1,0 +1,7 @@
+
+running 1 test
+test ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 219 filtered out; finished in 0.03s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "policy_v2_drives_all_seats_without_answer_routing_panic", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 5.535418541985564, "disk_free_bytes": 46664892416}

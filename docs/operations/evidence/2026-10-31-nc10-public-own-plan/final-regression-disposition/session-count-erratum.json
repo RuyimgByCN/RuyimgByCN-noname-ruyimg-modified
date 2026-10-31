@@ -1,0 +1,16 @@
+{
+  "finding": "Earlier worker statements described7 session tests; both archivedv2 and current requested two-target logs actually show1 new+5 pa09=6 passed. No test was dropped, skipped or modified in this step.",
+  "old_log": "/tmp/nc10-own-36992565/evidence/v2-session.stdout.log",
+  "old_sha256": "9af491a321fded063368f5d93954d8fece2e01a8f55b47f2c0e1eac8e257eaa6",
+  "old_counts": [
+    "1",
+    "5"
+  ],
+  "current_log": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/sessions.stdout.log",
+  "current_sha256": "1f5f4235a4dd9d19f1619472fefc0eac93348e2edad3866d92067e5e16060fb7",
+  "current_counts": [
+    "1",
+    "5"
+  ],
+  "old_sealed_reports_not_rewritten": true
+}

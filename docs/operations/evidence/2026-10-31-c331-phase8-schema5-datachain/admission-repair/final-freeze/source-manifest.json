@@ -1,0 +1,45 @@
+{
+  "utc": "2026-10-31T10:57:59.141495+00:00",
+  "base_c8_manifest_sha256": "b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1",
+  "files": [
+    {
+      "path": "apps/web-client/scripts/c331-admission-repair-smoke.mjs",
+      "baseline_c8_sha256": null,
+      "sha256": "ccf50ff83bd2dc9493ec93762bbf4e8cd7cd7b9f77b6dafa10c7f50c231bde94"
+    },
+    {
+      "path": "apps/web-client/scripts/native-vm-install.test.mjs",
+      "baseline_c8_sha256": "9bd10249225d62e4237dd19dfbcac781c8c5fb71a3f4ae83b3e5dbc8eccd85ed",
+      "sha256": "71aacde6389c91ed2ff1f5801c1750072ce90d4b44bab22501a7ba173578cea3"
+    },
+    {
+      "path": "apps/web-client/src/engine/bundledNativePackages.ts",
+      "baseline_c8_sha256": "84511bb5f57caf3d631572ecb47a439fff08434580f11d3f8ff5d757fb41cc69",
+      "sha256": "89b7e82ac3953dc6b3288783564a3f5449422badcba5eb0d69cad1d7ff957602"
+    },
+    {
+      "path": "apps/web-client/src/engine/extensionStore.ts",
+      "baseline_c8_sha256": "da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f",
+      "sha256": "724a9862a39ead29d59a3a8292fdbab1e6b7d1d83c9a0ae289d0701031eecf44"
+    },
+    {
+      "path": "crates/engine-native-wasm/Cargo.toml",
+      "baseline_c8_sha256": "5062b194e8e15a90f7263ea1383229f742fbf177788ac5d91b93c1f95a93966d",
+      "sha256": "6d0f597b09cc118b599f70134303c8ffafa01e2ecbbe6dbcc588dd1d30273090"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/installed_packs.rs",
+      "baseline_c8_sha256": "fd42b4810ebcd78808ac447d7a5eea487ec01230b76850e9033fe5285abb8462",
+      "sha256": "b07de0e3a8edf8eccfad88e3274b0e8be0ce42185fae0324123e8b4922b317b3"
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/c331_admission_repair.rs",
+      "baseline_c8_sha256": null,
+      "sha256": "bc8b5ebfbb99eeef5beb9928621685f34d40ca489a43123aa69ea8bfa2816804"
+    }
+  ],
+  "scope": "C8 admission repair: original raw text, omitted-module guards, active executor shape; no new semantics",
+  "whole_c331": "BLOCK",
+  "source_proof": "262/290,remaining28,+0",
+  "no_staged_files": true
+}

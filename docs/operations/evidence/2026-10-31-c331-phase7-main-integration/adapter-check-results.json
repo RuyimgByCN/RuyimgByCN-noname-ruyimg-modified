@@ -1,0 +1,18 @@
+[
+  {
+    "name": "native-adapters-check",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "desktop-client",
+      "-p",
+      "game-server"
+    ],
+    "exit": 0,
+    "seconds": 23.982957124710083
+  }
+]

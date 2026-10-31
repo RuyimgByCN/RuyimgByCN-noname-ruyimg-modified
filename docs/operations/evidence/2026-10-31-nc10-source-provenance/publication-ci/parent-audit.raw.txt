@@ -1,0 +1,14 @@
+{
+  "result": "PASS",
+  "out": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41183155464-audit-b69ztwpn",
+  "run": 41183155464,
+  "jobs": 10,
+  "steps": {
+    "total": 130,
+    "success": 128,
+    "skipped": 2,
+    "failure": 0,
+    "null": 0
+  },
+  "artifacts": 3
+}

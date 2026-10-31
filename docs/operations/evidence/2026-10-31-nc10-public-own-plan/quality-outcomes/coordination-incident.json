@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-31T10:15:43.766628+00:00",
+  "parent_report": "C8 observed shared helper and lock missing; parent paused new heavy work to inspect/recover coordination",
+  "our_jobs": {
+    "baseline": {
+      "wrapper_pid": 6267,
+      "completed_exit": 0,
+      "current_ps": "absent"
+    },
+    "candidate": {
+      "wrapper_pid": 7712,
+      "completed_exit": 0,
+      "current_ps": "absent"
+    }
+  },
+  "configured_helper": "/tmp/noname-run-serialized.py",
+  "configured_lock": "/tmp/noname-phase4-heavy-command.lock",
+  "observed_after_completion": {
+    "helper_exists": true,
+    "lock_exists": true
+  },
+  "historical_unlinked_inode": "unknown; exited processes cannot establish their historical held inode",
+  "action": "no new heavy submissions, no recreation/replacement/alternate lock, no signals; recorded as execution-environment coordination incident, test exits unchanged"
+}

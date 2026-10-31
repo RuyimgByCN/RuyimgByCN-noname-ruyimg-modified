@@ -1,0 +1,41 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.45s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 3 tests
+test c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage ... FAILED
+test c331_canonical_damage::c9_target_damage_runs_before_dying_subtree ... FAILED
+test c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying ... FAILED
+
+failures:
+
+---- c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage stdout ----
+
+thread 'c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage' (19286985) panicked at crates/engine-native/tests/groups/../c331_canonical_damage.rs:12:218:
+assertion `left == right` failed: cancelled damage has no target damage window
+  left: 5
+ right: 4
+
+---- c331_canonical_damage::c9_target_damage_runs_before_dying_subtree stdout ----
+
+thread 'c331_canonical_damage::c9_target_damage_runs_before_dying_subtree' (19286987) panicked at crates/engine-native/tests/groups/../c331_canonical_damage.rs:16:141:
+assertion `left == right` failed: target damage skill recovers before dying collection
+  left: 0
+ right: 1
+
+---- c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying stdout ----
+
+thread 'c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying' (19286986) panicked at crates/engine-native/tests/groups/../c331_canonical_damage.rs:20:232:
+parent rescue is pending
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage
+    c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying
+    c331_canonical_damage::c9_target_damage_runs_before_dying_subtree
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 168 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9_"], "exit": 101, "locked_seconds": 2.5592860829783604, "disk_free_bytes": 43561201664}

@@ -1,0 +1,2 @@
+full canonical snapshots equal=7; no ignored fields
+{"command": ["cargo", "run", "--offline", "--locked", "--manifest-path", "/tmp/nc10-main-lock-repair-0425dc78/probe/Cargo.toml", "--", "/tmp/nc10-main-lock-repair-0425dc78", "compare"], "exit": 0, "locked_seconds": 0.18333754094783217, "disk_free_bytes": 30770348032}

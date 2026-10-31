@@ -1,0 +1,35 @@
+{
+  "qualification": "Current repair owned wasm-pack nodejs release no-opt build; no Main/generated writes",
+  "files": [
+    {
+      "path": "node-wasm/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1
+    },
+    {
+      "path": "node-wasm/engine_native_wasm.d.ts",
+      "sha256": "8d5c0c43558f8b0af5bbffd2b4587f7c032e0292ddc4721b4bcce548d000a14f",
+      "bytes": 1928
+    },
+    {
+      "path": "node-wasm/engine_native_wasm.js",
+      "sha256": "5136ee0cdf43eec43016e05169b9f10f0eae0fa5d00efdf9251305ca856ca4e5",
+      "bytes": 18040
+    },
+    {
+      "path": "node-wasm/engine_native_wasm_bg.wasm",
+      "sha256": "db64d471c60afec3e003d61dcb1539b801054ea1f0ba029cfbab2d27bdc92fdd",
+      "bytes": 4068567
+    },
+    {
+      "path": "node-wasm/engine_native_wasm_bg.wasm.d.ts",
+      "sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "bytes": 3030
+    },
+    {
+      "path": "node-wasm/package.json",
+      "sha256": "c806053281216328a22794adcc81ccfa3ab359b14173f57047cb2660031c89af",
+      "bytes": 425
+    }
+  ]
+}

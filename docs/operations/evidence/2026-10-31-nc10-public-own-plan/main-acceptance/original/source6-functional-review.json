@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-31T11:46:22.543266+00:00",
+  "source6WholeFilesRead": true,
+  "source6Exact": true,
+  "integrationReceiptUtc": "2026-10-31T11:22:46.649203+00:00",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "scope": [
+    "ai.rs public selector shared with session.rs auto_step",
+    "four regression/registration test files only"
+  ],
+  "findings": [
+    "Public Own early return constructs complete Plan before Instant/clone_for_simulation/redaction/search; zero nodes/faults and planner cancellation retained.",
+    "Shared selector uses public ordered options, deduplicates, prefers cards, respects bounds/cancel fallback; Other returns None. It does not certify future continuation.",
+    "Native auto_step submits shared public answer once through formal Engine submit. Formal root/VM/fuel/arithmetic/restore/version gates untouched.",
+    "Semantic seed8211 logs119 successful/0suspended/0simfault/0newprobefaults, full restore and winnerP3; no119 step pin.",
+    "Native full Plan budgets0/1/2/4/8/48/64 equal on unchanged public P/Q input/events; both genuine Pending after restore; continuation differences retained.",
+    "Actual Shan choice [Pass,Card30],min1,max1,allow_cancelfalse; empty selection rejects InvalidChoice without revision/hash/save/log mutation; explicitPass and Card positive branches separated.",
+    "No product code review blocker found in this verifier scope; parent required independent review remains separate."
+  ],
+  "limits": [
+    "Full Plan is not exported by current web WASM; only native Rust full Plan proof is claimed.",
+    "Other/no-choice/VM-closure/strength/all37/upstream/overallGoal acceptance excluded.",
+    "Original484red and accepted119semantic preserved by parent/source reviews; no campaign rerun or golden rewrite."
+  ]
+}

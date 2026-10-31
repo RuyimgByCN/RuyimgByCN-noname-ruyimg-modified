@@ -1,0 +1,31 @@
+[
+  {
+    "name": "legacy-c6-admission",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "c331_schema_tests"
+    ],
+    "exit": 0,
+    "seconds": 65.18055009841919
+  },
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "exit": 101,
+    "seconds": 18.714344263076782
+  }
+]

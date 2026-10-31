@@ -1,0 +1,13 @@
+{
+  "class": "None",
+  "deadline_ms": 0,
+  "depth": 1,
+  "index": 0,
+  "input": "PolicyInput { view: PlayerView { seat: 0, players: [PlayerCellView { seat: 0, alive: true, hp: 4, max_hp: 4, hand: Own([44, 11, 41, 109]), hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 1, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 2, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 3, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }], cards: [PhysicalCard { id: 44, owner: Some(0), zone: Hand }, PhysicalCard { id: 11, owner: Some(0), zone: Hand }, PhysicalCard { id: 41, owner: Some(0), zone: Hand }, PhysicalCard { id: 109, owner: Some(0), zone: Hand }], deck_count: 108, discard: [], table: [], turn: 0, phase: Judge, round: 1, outcome: None, ruleset_version: 330 }, choice: None, revision: 0, quota_remaining: None, own_hand_kinds: [(44, Shan), (11, Sha), (41, Shan), (109, Wugu)] }",
+  "nodes": 9223372036854775807,
+  "note": "Current330 public domain sample; not an exact historical private NoCert location or a privacy proof",
+  "pre_events": "[]",
+  "seat": 0,
+  "test": "nc10_ai_bounds::zero_deadline_returns_timed_out_plan_without_blocking",
+  "variant": 0
+}

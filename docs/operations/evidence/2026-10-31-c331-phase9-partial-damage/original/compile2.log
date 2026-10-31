@@ -1,0 +1,157 @@
+    Checking engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+    Checking content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-compiler)
+    Checking engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/hearth.rs:140:33
+    |
+137 | ...                   ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+    |                                                  -------------------------------- arguments to this function are incorrect
+...
+140 | ...                       dmg,
+    |                           ^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:789:8
+    |
+789 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+140 |                                 dmg.try_into().unwrap(),
+    |                                    ++++++++++++++++++++
+
+error[E0308]: mismatched types
+  --> crates/engine-native-content/src/content/host/step/skills_damage.rs:89:34
+   |
+89 |                     .or_else(|_| ctx.current_lose_hp())
+   |                                  ^^^^^^^^^^^^^^^^^^^^^ expected `Result<i32, _>`, found `Result<u32, ()>`
+   |
+   = note: expected enum `Result<i32, _>`
+              found enum `Result<u32, ()>`
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/skills_damage.rs:160:25
+    |
+157 |                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+    |                                                -------------------------------- arguments to this function are incorrect
+...
+160 |                         num,
+    |                         ^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:789:8
+    |
+789 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+160 |                         num.try_into().unwrap(),
+    |                            ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/skills_status.rs:218:60
+    |
+218 |                         Ok(d) if d.target == self.owner => d.amount.saturating_mul(10),
+    |                                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u32`, found `i32`
+    |
+help: you can convert an `i32` to a `u32` and panic if the converted value doesn't fit
+    |
+218 |                         Ok(d) if d.target == self.owner => d.amount.saturating_mul(10).try_into().unwrap(),
+    |                                                                                       ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:178:25
+    |
+175 |                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+    |                                                -------------------------------- arguments to this function are incorrect
+...
+178 |                         n,
+    |                         ^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:789:8
+    |
+789 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+178 |                         n.try_into().unwrap(),
+    |                          ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/swd_equipment.rs:502:49
+    |
+502 |                         ctx.recover(self.owner, d.amount, None);
+    |                             -------             ^^^^^^^^ expected `u32`, found `i32`
+    |                             |
+    |                             arguments to this method are incorrect
+    |
+note: method defined here
+   --> crates/engine-native-kernel/src/machine.rs:639:12
+    |
+639 |     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
+    |            ^^^^^^^
+help: you can convert an `i32` to a `u32` and panic if the converted value doesn't fit
+    |
+502 |                         ctx.recover(self.owner, d.amount.try_into().unwrap(), None);
+    |                                                         ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/swd_equipment.rs:592:29
+    |
+589 |                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+    |                                                    -------------------------------- arguments to this function are incorrect
+...
+592 |                             dmg as u32,
+    |                             ^^^^^^^^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:789:8
+    |
+789 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+592 |                             (dmg as u32).try_into().unwrap(),
+    |                             +          +++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/host/step/wudian_recovery.rs:282:43
+    |
+282 |                         ctx.recover(hurt, num, None);
+    |                             -------       ^^^ expected `u32`, found `i32`
+    |                             |
+    |                             arguments to this method are incorrect
+    |
+note: method defined here
+   --> crates/engine-native-kernel/src/machine.rs:639:12
+    |
+639 |     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
+    |            ^^^^^^^
+help: you can convert an `i32` to a `u32` and panic if the converted value doesn't fit
+    |
+282 |                         ctx.recover(hurt, num.try_into().unwrap(), None);
+    |                                              ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-content/src/content/vm_effects/pingkou.rs:74:70
+    |
+ 74 |                     crate::machine::damage_data(Some(owner), target, amount),
+    |                     ---------------------------                      ^^^^^^ expected `i32`, found `u32`
+    |                     |
+    |                     arguments to this function are incorrect
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:784:8
+    |
+784 | pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+    |        ^^^^^^^^^^^
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+ 74 |                     crate::machine::damage_data(Some(owner), target, amount.try_into().unwrap()),
+    |                                                                            ++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `engine-native-content` (lib) due to 9 previous errors
+{"command": ["cargo", "check", "--offline", "-p", "engine-native", "--all-targets"], "exit": 101, "locked_seconds": 2.7142756250104867, "disk_free_bytes": 40228577280}

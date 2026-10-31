@@ -1,0 +1,276 @@
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+index 47db3e0d..98c50e80 100644
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -576,29 +576,15 @@ impl NativeSession {
+             return Ok(serde_json::json!({ "done": true }).to_string());
+         }
+         if let Some(c) = self.inner.open_choice() {
+-            let take = c.spec.min.max(1).min(c.spec.max).min(c.spec.options.len());
+-            let sel: Vec<_> = c
+-                .spec
+-                .options
+-                .iter()
+-                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
+-                .take(take)
+-                .cloned()
+-                .collect();
+-            let sel = if sel.len() == take {
+-                sel
+-            } else {
+-                c.spec.options.iter().take(take).cloned().collect()
+-            };
+-            let (cid, obs) = (c.id, c.observer);
++            let obs = c.observer;
++            let action = engine_native::ai::projected_choice_action(
++                self.inner.ai_session(obs).choice().expect("open observer choice"),
++            ).expect("observer owns the choice");
+             let out = self.inner.submit(engine_native::GameCommand {
+                 actor: obs,
+                 expected_revision: self.inner.revision(),
+                 dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-                action: GameAction::Answer {
+-                    choice_id: cid,
+-                    selection: sel,
+-                },
++                action,
+             });
+             return Ok(serde_json::json!({
+                 "kind": "answer",
+diff --git a/crates/engine-native/src/ai.rs b/crates/engine-native/src/ai.rs
+index 85058c4f..3b6ff1e2 100644
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -530,18 +530,26 @@ fn vm_choice_leaf(choice: &ChoiceView) -> bool {
+     )
+ }
+ 
+-fn projected_choice_action(choice: ChoiceView) -> GameAction {
+-    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
+-        return GameAction::NextPhase;
++/// Public command advice; selecting an option does not certify its continuation.
++pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
++    let ChoiceView::Own { id, options, min, max, .. } = choice else {
++        return None;
+     };
+-    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
+-        vec![ChoiceOption::Pass]
+-    } else if min == 0 && allow_cancel {
+-        Vec::new()
++    let mut distinct = Vec::new();
++    for option in options {
++        if !distinct.contains(&option) {
++            distinct.push(option);
++        }
++    }
++    let take = min.max(1).min(max).min(distinct.len());
++    let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
++        .take(take).copied().collect();
++    let selection = if cards.len() == take {
++        cards
+     } else {
+-        options.into_iter().take(min).collect()
++        distinct.into_iter().take(take).collect()
+     };
+-    GameAction::Answer { choice_id: id, selection }
++    Some(GameAction::Answer { choice_id: id, selection })
+ }
+ 
+ impl Engine {
+@@ -550,9 +558,15 @@ impl Engine {
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
+         let submitted_revision = self.revision();
+-        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
++        let public_action = match self.ai_session(seat).choice() {
++            Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
++            // Preserve the existing non-owner VM leaf without treating it as an answer.
++            Some(choice @ ChoiceView::Other { .. }) if vm_choice_leaf(&choice) => Some(GameAction::NextPhase),
++            _ => None,
++        };
++        if let Some(action) = public_action {
+             return Plan {
+-                seat, revision: submitted_revision, action: projected_choice_action(choice),
++                seat, revision: submitted_revision, action,
+                 nodes_used: 0, budget_exhausted: false, timed_out: false,
+                 cancelled: planner.cancelled(), sim_faults: 0,
+             };
+@@ -762,8 +776,8 @@ impl Engine {
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
+-                return projected_choice_action(choice);
++            if let Some(action) = sim.ai_session(seat).choice().and_then(projected_choice_action) {
++                return action;
+             }
+             if !sim.ai_session(seat).view().players[seat as usize].alive {
+                 return GameAction::NextPhase;
+diff --git a/crates/engine-native/tests/ai_planner.rs b/crates/engine-native/tests/ai_planner.rs
+index 35c00303..87e2a831 100644
+--- a/crates/engine-native/tests/ai_planner.rs
++++ b/crates/engine-native/tests/ai_planner.rs
+@@ -354,7 +354,9 @@ fn plan_enumerates_confirm_and_cancel_fallbacks() {
+ fn two_ply_lookahead_deterministic_and_bounded() {
+     let mut e = play_ready_with_sha(9301, 4);
+     let deep = engine_native::ai::BoundedPlanner::new(128).with_lookahead(2);
++    crate::nc10_domain_capture::record(&e, 0, &deep);
+     let p1 = e.plan_action(0, &deep);
++    crate::nc10_domain_capture::record(&e, 0, &deep);
+     let p2 = e.plan_action(0, &deep);
+     assert_eq!(format!("{:?}", p1.action), format!("{:?}", p2.action), "两层搜索应确定性");
+     assert!(p1.nodes_used <= 128, "节点预算受约束（used={}）", p1.nodes_used);
+@@ -367,7 +369,9 @@ fn two_ply_lookahead_deterministic_and_bounded() {
+     // 默认深度 1：不改变既有单层行为（确定性 + 可应用）。
+     let shallow = engine_native::ai::BoundedPlanner::new(128);
+     let mut e2 = play_ready_with_sha(9301, 4);
++    crate::nc10_domain_capture::record(&e2, 0, &shallow);
+     let s1 = e2.plan_action(0, &shallow);
++    crate::nc10_domain_capture::record(&e2, 0, &shallow);
+     let s2 = e2.plan_action(0, &shallow);
+     assert_eq!(format!("{:?}", s1.action), format!("{:?}", s2.action), "单层搜索应确定性");
+     let out = e2.apply_plan(&s1).expect("apply");
+@@ -388,13 +392,16 @@ fn policy_v2_plays_value_card_and_is_deterministic() {
+     let baseline = engine_native::ai::BoundedPlanner::new(64);
+     let strong = engine_native::ai::BoundedPlanner::new(64).with_policy_variant(1);
+ 
++    crate::nc10_domain_capture::record(&e, 0, &baseline);
+     let p0 = e.plan_action(0, &baseline);
+     assert_eq!(
+         format!("{:?}", p0.action),
+         format!("{:?}", GameAction::NextPhase),
+         "变体 0：非杀牌不进入候选"
+     );
++    crate::nc10_domain_capture::record(&e, 0, &strong);
+     let p1 = e.plan_action(0, &strong);
++    crate::nc10_domain_capture::record(&e, 0, &strong);
+     let p2 = e.plan_action(0, &strong);
+     assert_eq!(format!("{:?}", p1.action), format!("{:?}", p2.action), "变体 1 确定性");
+     match &p1.action {
+@@ -427,6 +434,7 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
+             Some(open) => open.observer,
+             None => e.turn().current,
+         };
++        crate::nc10_domain_capture::record(&e, seat, &strong);
+         let plan = e.plan_action(seat, &strong);
+         match e.apply_plan(&plan) {
+             Ok(CommandOutcome::Accepted { .. })
+@@ -451,6 +459,7 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
+     // 判定区/离场区、`table`、回合级持牌字段）后，填充内容变化 → 本用例步数
+     // 179 → **484**（对局变长：AI 强度随填充池收窄而变化；胜方见下）。
+     // 该变化是**策略面**的，不是规则面：语义（不 panic、能终局、胜方）保持不变。
++    eprintln!("OWN_QUALITY_TRAJECTORY steps={} outcome={:?}", steps, e.outcome());
+     assert_eq!(steps, 484, "步数冻结（策略变更须同步证据）");
+     assert!(
+         matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
+diff --git a/crates/engine-native/tests/groups/misc.rs b/crates/engine-native/tests/groups/misc.rs
+index 60eba3e9..343d45c0 100644
+--- a/crates/engine-native/tests/groups/misc.rs
++++ b/crates/engine-native/tests/groups/misc.rs
+@@ -111,3 +111,6 @@ mod adr0786_j2_package_versions;
+ 
+ #[path = "../adr0786_j2_review_regressions.rs"]
+ mod adr0786_j2_review_regressions;
++
++#[path = "/tmp/nc10-own-36992565/evidence/domain-capture.rs"]
++mod nc10_domain_capture;
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index 09e7c9bc..25e194a2 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -100,5 +100,11 @@ mod nc10_redaction_helper_contract;
+ #[path = "../nc10_j2_vm_privacy.rs"]
+ mod nc10_j2_vm_privacy;
+ 
++#[path = "../nc10_public_own_plan.rs"]
++mod nc10_public_own_plan;
++
+ #[path = "../nc10_source_provenance.rs"]
+ mod nc10_source_provenance;
++
++#[path = "/tmp/nc10-own-36992565/evidence/domain-capture.rs"]
++mod nc10_domain_capture;
+diff --git a/crates/engine-native/tests/nc07_discard_duplicate_probe.rs b/crates/engine-native/tests/nc07_discard_duplicate_probe.rs
+index 6fd82348..bcfef5c0 100644
+--- a/crates/engine-native/tests/nc07_discard_duplicate_probe.rs
++++ b/crates/engine-native/tests/nc07_discard_duplicate_probe.rs
+@@ -72,6 +72,7 @@ fn swd_discard_has_no_duplicates_and_restores() {
+             break;
+         }
+         let seat = e.turn().current;
++        crate::nc10_domain_capture::record(&e, seat, &planner);
+         let plan = e.plan_action(seat, &planner);
+         let discard_before = e.state_core().discard.clone();
+         let out = e.submit(GameCommand {
+diff --git a/crates/engine-native/tests/nc10_ai_bounds.rs b/crates/engine-native/tests/nc10_ai_bounds.rs
+index 8d4d0f1e..3d62d8fe 100644
+--- a/crates/engine-native/tests/nc10_ai_bounds.rs
++++ b/crates/engine-native/tests/nc10_ai_bounds.rs
+@@ -57,6 +57,7 @@ fn drive(e: &mut Engine, steps: usize) {
+             continue;
+         }
+         let seat = e.turn().current;
++        crate::nc10_domain_capture::record(&e, seat, &p);
+         let plan = e.plan_action(seat, &p);
+         let _ = e.submit(GameCommand {
+             actor: seat,
+@@ -171,6 +172,7 @@ fn nc10_tiny_budget_still_legal() {
+         drive(&mut e, 6);
+         let seat = e.turn().current;
+         let p = BoundedPlanner::new(budget).with_deadline_ms(20);
++        crate::nc10_domain_capture::record(&e, seat, &p);
+         let plan = e.plan_action(seat, &p);
+         // 判据：**只要该座位存在合法动作**，规划结果就必须合法；若该座位此刻无
+         // 合法动作（非本人回合/等待他人选择），允许返回占位动作（提交侧会拒绝）。
+@@ -301,6 +303,7 @@ fn zero_deadline_returns_timed_out_plan_without_blocking() {
+     let engine = Engine::new(20_261_024, 4);
+     let planner = BoundedPlanner::new(usize::MAX / 2).with_deadline_ms(0);
+     let started = std::time::Instant::now();
++    crate::nc10_domain_capture::record(&engine, 0, &planner);
+     let plan = engine.plan_action(0, &planner);
+     assert!(
+         started.elapsed() < std::time::Duration::from_secs(2),
+diff --git a/crates/engine-native/tests/nc10_ai_information_boundary.rs b/crates/engine-native/tests/nc10_ai_information_boundary.rs
+index a79e620e..7b7b9994 100644
+--- a/crates/engine-native/tests/nc10_ai_information_boundary.rs
++++ b/crates/engine-native/tests/nc10_ai_information_boundary.rs
+@@ -84,6 +84,7 @@ fn drive(e: &mut Engine, steps: usize) {
+             break;
+         }
+         let seat = e.turn().current;
++        crate::nc10_domain_capture::record(&e, seat, &p);
+         let plan = e.plan_action(seat, &p);
+         let _ = e.submit(GameCommand {
+             actor: seat,
+diff --git a/crates/engine-native/tests/nc12_ai_strength_baseline.rs b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+index d30176fe..1b7e6700 100644
+--- a/crates/engine-native/tests/nc12_ai_strength_baseline.rs
++++ b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+@@ -48,6 +48,7 @@ fn nc12_ai_strength_baseline_statistics() {
+                 Some(open) => open.observer,
+                 None => e.turn().current,
+             };
++            crate::nc10_domain_capture::record(&e, seat, &planner);
+             let plan = e.plan_action(seat, &planner);
+             faults += plan.sim_faults as u64;
+             if plan.sim_faults > 0 {
+diff --git a/crates/engine-native/tests/nc12_swd_authoritative_stability.rs b/crates/engine-native/tests/nc12_swd_authoritative_stability.rs
+index 1fbf4843..9e39b73d 100644
+--- a/crates/engine-native/tests/nc12_swd_authoritative_stability.rs
++++ b/crates/engine-native/tests/nc12_swd_authoritative_stability.rs
+@@ -79,6 +79,7 @@ fn combo_tier_variant1_is_panic_free() {
+                 break;
+             }
+             let seat = e.turn().current;
++            crate::nc10_domain_capture::record(&e, seat, &planner);
+             let plan = e.plan_action(seat, &planner);
+             let out = e.submit(GameCommand {
+                 actor: seat,
+@@ -112,6 +113,7 @@ fn swd_authoritative_path_is_panic_free() {
+                 break;
+             }
+             let seat = e.turn().current;
++            crate::nc10_domain_capture::record(&e, seat, &planner);
+             let plan = e.plan_action(seat, &planner);
+             last = Some((step, seat, format!("{:?}", plan.action)));
+             let out = e.submit(GameCommand {

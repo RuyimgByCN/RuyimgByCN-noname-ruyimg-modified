@@ -1,0 +1,15 @@
+{
+  "executedCommandDriver": {
+    "path": "/tmp/nc10-main-lock-repair-0425dc78/driver-command-version.py",
+    "sha256": "8579f51f1c7be53e484872df693e563314c54499a88f5add2bfcd49713b93a13",
+    "qualification": "Preserved exact driver source used for metadata + both Cargo run commands; later driver.py only adds direct-WASM-row seal assertions."
+  },
+  "finalSealingDriver": {
+    "path": "/tmp/nc10-main-lock-repair-0425dc78/driver.py",
+    "sha256": "235f7b5077883deb6f045585380833c9010d27ea5788ebbe5cd8ccedf5de2618"
+  },
+  "unchangedProbeSourceSha256": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+  "newManifestSha256": "be234793129cdcbcedc4618826136c9454f6cde43f12e99707a85acda54538f7",
+  "MainLockBeforeAfterSha256": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+  "privateVerifiedAndAfterSha256": "25fe9cceb1eb8581bb738debfa31d6f75174d04589ce110304db4c61f5ecb91c"
+}

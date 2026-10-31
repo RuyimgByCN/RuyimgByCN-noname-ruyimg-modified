@@ -1,0 +1,10 @@
+{
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase8-kc0cu91p",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase8-kc0cu91p/snapshot",
+  "composed_files": 166,
+  "increment_files": 35,
+  "full_manifest_sha256": "b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1",
+  "increment_manifest_sha256": "852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494",
+  "tar_sha256": "337d8defb8ebcab8d630ac30d590fbbc280c49d04f73ebe78b360a1971f977c7",
+  "qualification": "Fresh safe materialization166SHA and35incrementbytes; source review input only, no Main import/testrerun."
+}

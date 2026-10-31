@@ -1,0 +1,10 @@
+{
+  "command": [
+    "git",
+    "apply",
+    "--check",
+    "/tmp/nc10-own-36992565/evidence/final-v2/candidate.patch"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/evidence/patch-apply-check",
+  "exit": 0
+}

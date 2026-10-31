@@ -1,0 +1,16 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+error[E0559]: variant `GameAction::Answer` has no field named `selections`
+   --> crates/engine-native/tests/groups/../c331_canonical_damage.rs:234:17
+    |
+234 |                 selections: vec![engine_native::ChoiceOption::Confirm],
+    |                 ^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+234 -                 selections: vec![engine_native::ChoiceOption::Confirm],
+234 +                 selection: vec![engine_native::ChoiceOption::Confirm],
+    |
+
+For more information about this error, try `rustc --explain E0559`.
+error: could not compile `engine-native` (test "nc_rounds") due to 1 previous error
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9_"], "exit": 101, "locked_seconds": 1.07587295898702, "disk_free_bytes": 34397802496}

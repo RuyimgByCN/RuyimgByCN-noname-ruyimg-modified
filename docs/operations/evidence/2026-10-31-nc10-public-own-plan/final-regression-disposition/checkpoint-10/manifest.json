@@ -1,0 +1,7 @@
+{
+  "before": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/before.json",
+  "original_source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/before-source/crates/engine-native/tests/ai_planner.rs",
+  "original_failures": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure",
+  "erratum": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/calibration-erratum.json",
+  "state": "original source/failure sealed; no edit yet"
+}

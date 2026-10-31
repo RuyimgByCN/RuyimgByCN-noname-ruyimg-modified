@@ -1,0 +1,21 @@
+# NC10 Main-lock-aligned native consumer probe
+
+**PASS, 2026-10-31.** This corrective run supplies exact Main-lock native consumer evidence; original reports,714 artifacts and the21-dependency-drift/sidecheck limitation remain unchanged.
+Evidence root: `/tmp/nc10-main-lock-repair-0425dc78` (**E**).
+Main `Cargo.lock` was copied before exposing the new private manifest; setup used one Bash/Python copy operation, no Rust write-tool/LSP trigger, and no target was copied.
+The retained Rust source is byte-identical: SHA256 `36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f`.
+Only private package/bin name changed to `nc10-main-lock-acceptance-probe`; the retained profile and all assertions stayed unchanged.
+Offline serialized metadata succeeded; **all30 selected external(name/version/source/checksum) entries are exact members of MainCargo.lock**, checked before compilation (`lock-verification.json`).
+Main lock stayed SHA256 `a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50`; private resolved lock is `25fe9cceb1eb8581bb738debfa31d6f75174d04589ce110304db4c61f5ecb91c`.
+The private lock adds the renamed root and prunes unused packages; it changes no production dependency. Subsequent Cargo runs used `--offline --locked`.
+Generation passed(exit0,27.14s); canonical comparison passed(exit0,0.30s), through the original serializer, jobs2/incremental0/netoffline and exclusively owned `/tmp/nc27-main-functional-458ed333/cargo-target`.
+Actual execution: `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe`; binary SHA256 `f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144`, copied into `E/binary/`. Original probe binary was not overwritten and its SHA is preserved in `entry.json`.
+All7 new native full archives equal the preserved actual current-WASM7 archives **byte for byte**, and equal old native7 outputs; all native JSON outputs equal old outputs.
+Direct comparisons with preserved WASM rows also match full replies, revision, state hash and event codes. No output normalization was applied.
+Unchanged assertions verify Shan Card and explicit Pass success; empty Shan returns InvalidChoice with revision/hash/full save/log unchanged; direct Card and auto produce identical full archives.
+They also verify successful Own Yiji cancellation/no remaining ask, genuine restored P/Q Pending, and restore changing only the documented `auth_generation + 1` against the restored baseline.
+Current accepted Main web WASM remains SHA256 `30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd`; no WASM/browser/frontend/full-native rerun was needed or performed.
+Source6 and Main lock before/after are exact. Old714 artifact index and old final report hashes match; no Main, index, version, gate or old-evidence edits occurred. No extra `E/probe/target` appeared. Native-host wrapper warnings remain in raw build stderr.
+Retained command stdout/stderr, original exits, environment and source/lock bindings: `E/commands.json`; comparisons: `E/comparison.json`; original21-drift disposition: `E/original-drift-disposition.json`.
+Sealed identities and complete hashes: `E/manifest.json`, `E/artifact-sha256.json`; command driver versions, unchanged Rust source, both lock snapshots and executed binary are retained.
+Skipped full-suite/browser/hardware repeats and cleanup. Original unrecorded sidecheck/network-attempt provenance is preserved as a historical limitation; this bounded rerun remediates its exact-lock consumer-proof gap.

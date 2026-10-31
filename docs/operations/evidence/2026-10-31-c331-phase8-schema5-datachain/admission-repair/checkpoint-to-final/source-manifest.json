@@ -1,0 +1,13 @@
+{
+  "checkpoint_manifest_sha256": "2cd0f66877addd39fe59f15676aa0dad96eb73ac49544ba0d4275381f49e0244",
+  "final_manifest_sha256": "969a7cee6849c7880b853d94e09f166bf4842b68f93f26d59989518e1ba72345",
+  "changed": [
+    {
+      "path": "apps/web-client/scripts/c331-admission-repair-smoke.mjs",
+      "baseline_c8_sha256": null,
+      "sha256": "ccf50ff83bd2dc9493ec93762bbf4e8cd7cd7b9f77b6dafa10c7f50c231bde94"
+    }
+  ],
+  "production_changes": [],
+  "qualification": "Only standalone smoke harness extended with old3/4 and unknown asset keys positives; legitimate restore auth_generation semantics corrected after complete typed decoder proof"
+}

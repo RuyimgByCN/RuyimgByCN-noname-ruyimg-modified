@@ -1,0 +1,4162 @@
+{
+  "run_id": 41183155464,
+  "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "run_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+  "started_utc": "2026-10-31T08:08:36.603101+00:00",
+  "commands": [
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464"
+      ],
+      "name": "run-initial",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/jobs?per_page=100"
+      ],
+      "name": "jobs-initial",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "run",
+        "watch",
+        "41183155464",
+        "--repo",
+        "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+        "--exit-status",
+        "--interval",
+        "10",
+        "--compact"
+      ],
+      "name": "watch",
+      "http1": false,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464"
+      ],
+      "name": "checkpoint-run",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/jobs?per_page=100"
+      ],
+      "name": "checkpoint-jobs",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/artifacts?per_page=100"
+      ],
+      "name": "checkpoint-artifacts",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464"
+      ],
+      "name": "run-final",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/jobs?per_page=100"
+      ],
+      "name": "jobs-final",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/artifacts?per_page=100"
+      ],
+      "name": "artifacts-final",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538576"
+      ],
+      "name": "job-124484538576-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538576/logs"
+      ],
+      "name": "job-124484538576-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538673"
+      ],
+      "name": "job-124484538673-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538673/logs"
+      ],
+      "name": "job-124484538673-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538689"
+      ],
+      "name": "job-124484538689-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538689/logs"
+      ],
+      "name": "job-124484538689-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538706"
+      ],
+      "name": "job-124484538706-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538706/logs"
+      ],
+      "name": "job-124484538706-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538718"
+      ],
+      "name": "job-124484538718-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538718/logs"
+      ],
+      "name": "job-124484538718-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538729"
+      ],
+      "name": "job-124484538729-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538729/logs"
+      ],
+      "name": "job-124484538729-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538732"
+      ],
+      "name": "job-124484538732-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538732/logs"
+      ],
+      "name": "job-124484538732-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538737"
+      ],
+      "name": "job-124484538737-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538737/logs"
+      ],
+      "name": "job-124484538737-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538745"
+      ],
+      "name": "job-124484538745-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538745/logs"
+      ],
+      "name": "job-124484538745-raw-log",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538767"
+      ],
+      "name": "job-124484538767-detail",
+      "http1": true,
+      "exit": 0
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538767/logs"
+      ],
+      "name": "job-124484538767-raw-log",
+      "http1": true,
+      "exit": 0
+    }
+  ],
+  "cleanup": "watch process exited/reaped; no local compiled products or background child remaining",
+  "deadline_basis": "15-minute CI observation checkpoint; watch stop scope+49min, harvest stop scope+53min, report before60min task boundary",
+  "checkpoint_at_utc": "2026-10-31T08:16:43.182700+00:00",
+  "watch_stop_at_utc": "2026-10-31T08:51:43.182700+00:00",
+  "elapsed_seconds": 1259.0534563330002,
+  "initial_jobs": [
+    {
+      "id": 124484538576,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538673,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538689,
+      "name": "desktop-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538706,
+      "name": "perf-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538718,
+      "name": "build-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538729,
+      "name": "build-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538732,
+      "name": "build-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538737,
+      "name": "perf-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538745,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124484538767,
+      "name": "native-web",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "watch_pid": 12776,
+  "checkpoint_15min": {
+    "at_utc": "2026-10-31T08:17:08.589963+00:00",
+    "pending_jobs": [
+      {
+        "id": 124484538576,
+        "name": "gates-ubuntu",
+        "status": "in_progress"
+      },
+      {
+        "id": 124484538673,
+        "name": "desktop-windows-latest",
+        "status": "in_progress"
+      },
+      {
+        "id": 124484538745,
+        "name": "desktop-macos-latest",
+        "status": "in_progress"
+      }
+    ]
+  },
+  "run_status": "completed",
+  "run_conclusion": "success",
+  "jobs": [
+    {
+      "id": 124484538576,
+      "name": "gates-ubuntu",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538576",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:24Z",
+      "completed_at": "2026-10-31T08:28:21Z",
+      "runner_name": "GitHub Actions 1000000573",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "detail": {
+        "id": 124484538576,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tQ0A",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538576",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538576",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:24Z",
+        "completed_at": "2026-10-31T08:28:21Z",
+        "name": "gates-ubuntu",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:06:00Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:00Z",
+            "completed_at": "2026-10-31T08:06:06Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:06Z",
+            "completed_at": "2026-10-31T08:06:16Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:16Z",
+            "completed_at": "2026-10-31T08:06:20Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:06:20Z",
+            "completed_at": "2026-10-31T08:07:33Z"
+          },
+          {
+            "name": "Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-31T08:07:33Z",
+            "completed_at": "2026-10-31T08:07:39Z"
+          },
+          {
+            "name": "engine-native kernel layer does not grow content/engine references",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-31T08:07:39Z",
+            "completed_at": "2026-10-31T08:07:39Z"
+          },
+          {
+            "name": "Gate 1 \u2014 cargo test --workspace",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-31T08:07:39Z",
+            "completed_at": "2026-10-31T08:22:14Z"
+          },
+          {
+            "name": "Gate 1b \u2014 engine-native all targets warnings denied",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-31T08:22:14Z",
+            "completed_at": "2026-10-31T08:22:48Z"
+          },
+          {
+            "name": "Gate 2 \u2014 conformance",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:22:48Z",
+            "completed_at": "2026-10-31T08:23:54Z"
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:23:54Z",
+            "completed_at": "2026-10-31T08:23:54Z"
+          },
+          {
+            "name": "Gate 3 \u2014 cross-target hash (Native vs WASM)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:23:54Z",
+            "completed_at": "2026-10-31T08:27:27Z"
+          },
+          {
+            "name": "Gate 4 \u2014 original content sync verify",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 14,
+            "started_at": "2026-10-31T08:27:27Z",
+            "completed_at": "2026-10-31T08:28:18Z"
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-10-31T08:28:18Z",
+            "completed_at": "2026-10-31T08:28:19Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-31T08:28:19Z",
+            "completed_at": "2026-10-31T08:28:19Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-31T08:28:19Z",
+            "completed_at": "2026-10-31T08:28:19Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 28,
+            "started_at": "2026-10-31T08:28:19Z",
+            "completed_at": "2026-10-31T08:28:19Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 29,
+            "started_at": "2026-10-31T08:28:19Z",
+            "completed_at": "2026-10-31T08:28:19Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538576",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000573,
+        "runner_name": "GitHub Actions 1000000573",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:06Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:06Z",
+          "completed_at": "2026-10-31T08:06:16Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:16Z",
+          "completed_at": "2026-10-31T08:06:20Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:20Z",
+          "completed_at": "2026-10-31T08:07:33Z"
+        },
+        {
+          "name": "Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:33Z",
+          "completed_at": "2026-10-31T08:07:39Z"
+        },
+        {
+          "name": "engine-native kernel layer does not grow content/engine references",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:07:39Z",
+          "completed_at": "2026-10-31T08:07:39Z"
+        },
+        {
+          "name": "Gate 1 \u2014 cargo test --workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:07:39Z",
+          "completed_at": "2026-10-31T08:22:14Z"
+        },
+        {
+          "name": "Gate 1b \u2014 engine-native all targets warnings denied",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:22:14Z",
+          "completed_at": "2026-10-31T08:22:48Z"
+        },
+        {
+          "name": "Gate 2 \u2014 conformance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:22:48Z",
+          "completed_at": "2026-10-31T08:23:54Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:23:54Z",
+          "completed_at": "2026-10-31T08:23:54Z"
+        },
+        {
+          "name": "Gate 3 \u2014 cross-target hash (Native vs WASM)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:23:54Z",
+          "completed_at": "2026-10-31T08:27:27Z"
+        },
+        {
+          "name": "Gate 4 \u2014 original content sync verify",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T08:27:27Z",
+          "completed_at": "2026-10-31T08:28:18Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-31T08:28:18Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:06Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:06Z",
+          "completed_at": "2026-10-31T08:06:16Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:16Z",
+          "completed_at": "2026-10-31T08:06:20Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:20Z",
+          "completed_at": "2026-10-31T08:07:33Z"
+        },
+        {
+          "name": "Source files stay within 2,000 lines (Rust non-test code within 1,000 effective lines)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:33Z",
+          "completed_at": "2026-10-31T08:07:39Z"
+        },
+        {
+          "name": "engine-native kernel layer does not grow content/engine references",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:07:39Z",
+          "completed_at": "2026-10-31T08:07:39Z"
+        },
+        {
+          "name": "Gate 1 \u2014 cargo test --workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:07:39Z",
+          "completed_at": "2026-10-31T08:22:14Z"
+        },
+        {
+          "name": "Gate 1b \u2014 engine-native all targets warnings denied",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:22:14Z",
+          "completed_at": "2026-10-31T08:22:48Z"
+        },
+        {
+          "name": "Gate 2 \u2014 conformance",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:22:48Z",
+          "completed_at": "2026-10-31T08:23:54Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:23:54Z",
+          "completed_at": "2026-10-31T08:23:54Z"
+        },
+        {
+          "name": "Gate 3 \u2014 cross-target hash (Native vs WASM)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:23:54Z",
+          "completed_at": "2026-10-31T08:27:27Z"
+        },
+        {
+          "name": "Gate 4 \u2014 original content sync verify",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-10-31T08:27:27Z",
+          "completed_at": "2026-10-31T08:28:18Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-31T08:28:18Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 28,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 29,
+          "started_at": "2026-10-31T08:28:19Z",
+          "completed_at": "2026-10-31T08:28:19Z"
+        }
+      ],
+      "raw_log": "job-124484538576-raw-log.stdout.gz",
+      "log_sha256": "162c5783fade0e21d280e8f9a7add60e680801b368577de40ea0aa0507b9e4f5",
+      "log_crc32": "c273cf6b",
+      "log_bytes": 2160216,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538673,
+      "name": "desktop-windows-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538673",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:17:47Z",
+      "runner_name": "GitHub Actions 1000000574",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "windows-latest"
+      ],
+      "detail": {
+        "id": 124484538673,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRMQ",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538673",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538673",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:17:47Z",
+        "name": "desktop-windows-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:26Z",
+            "completed_at": "2026-10-31T08:06:09Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:09Z",
+            "completed_at": "2026-10-31T08:06:18Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:18Z",
+            "completed_at": "2026-10-31T08:06:41Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:41Z",
+            "completed_at": "2026-10-31T08:06:47Z"
+          },
+          {
+            "name": "Install Linux Tauri dependencies",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-31T08:06:47Z",
+            "completed_at": "2026-10-31T08:06:47Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-31T08:06:47Z",
+            "completed_at": "2026-10-31T08:08:12Z"
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-31T08:08:12Z",
+            "completed_at": "2026-10-31T08:08:14Z"
+          },
+          {
+            "name": "Install Tauri CLI",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-31T08:08:14Z",
+            "completed_at": "2026-10-31T08:08:15Z"
+          },
+          {
+            "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-31T08:08:15Z",
+            "completed_at": "2026-10-31T08:17:38Z"
+          },
+          {
+            "name": "Upload installer artifact",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:17:38Z",
+            "completed_at": "2026-10-31T08:17:41Z"
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-31T08:17:41Z",
+            "completed_at": "2026-10-31T08:17:43Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-31T08:17:43Z",
+            "completed_at": "2026-10-31T08:17:43Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-31T08:17:43Z",
+            "completed_at": "2026-10-31T08:17:43Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-31T08:17:43Z",
+            "completed_at": "2026-10-31T08:17:45Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-31T08:17:45Z",
+            "completed_at": "2026-10-31T08:17:45Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538673",
+        "labels": [
+          "windows-latest"
+        ],
+        "runner_id": 1000000574,
+        "runner_name": "GitHub Actions 1000000574",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:09Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:09Z",
+          "completed_at": "2026-10-31T08:06:18Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:18Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:06:47Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:47Z",
+          "completed_at": "2026-10-31T08:06:47Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:06:47Z",
+          "completed_at": "2026-10-31T08:08:12Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:08:12Z",
+          "completed_at": "2026-10-31T08:08:14Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:14Z",
+          "completed_at": "2026-10-31T08:08:15Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:08:15Z",
+          "completed_at": "2026-10-31T08:17:38Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:17:38Z",
+          "completed_at": "2026-10-31T08:17:41Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:17:41Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:17:45Z",
+          "completed_at": "2026-10-31T08:17:45Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:47Z",
+          "completed_at": "2026-10-31T08:06:47Z"
+        }
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:09Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:09Z",
+          "completed_at": "2026-10-31T08:06:18Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:18Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:06:47Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:47Z",
+          "completed_at": "2026-10-31T08:06:47Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:06:47Z",
+          "completed_at": "2026-10-31T08:08:12Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:08:12Z",
+          "completed_at": "2026-10-31T08:08:14Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:14Z",
+          "completed_at": "2026-10-31T08:08:15Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:08:15Z",
+          "completed_at": "2026-10-31T08:17:38Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:17:38Z",
+          "completed_at": "2026-10-31T08:17:41Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:17:41Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:43Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:17:43Z",
+          "completed_at": "2026-10-31T08:17:45Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:17:45Z",
+          "completed_at": "2026-10-31T08:17:45Z"
+        }
+      ],
+      "raw_log": "job-124484538673-raw-log.stdout.gz",
+      "log_sha256": "22b4f1a5f0cfc8705d3418f68f92e4dd3ae4677b53bdfb07a542fd2661124a0a",
+      "log_crc32": "02ab59e6",
+      "log_bytes": 168339,
+      "log_crlf_count": 2208
+    },
+    {
+      "id": 124484538689,
+      "name": "desktop-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538689",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:16:04Z",
+      "runner_name": "GitHub Actions 1000000576",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "detail": {
+        "id": 124484538689,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRQQ",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538689",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538689",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:16:04Z",
+        "name": "desktop-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:26Z",
+            "completed_at": "2026-10-31T08:05:58Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:05:58Z",
+            "completed_at": "2026-10-31T08:06:04Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:04Z",
+            "completed_at": "2026-10-31T08:06:12Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:12Z",
+            "completed_at": "2026-10-31T08:06:15Z"
+          },
+          {
+            "name": "Install Linux Tauri dependencies",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:06:15Z",
+            "completed_at": "2026-10-31T08:07:52Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-31T08:07:52Z",
+            "completed_at": "2026-10-31T08:08:45Z"
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-31T08:08:45Z",
+            "completed_at": "2026-10-31T08:08:45Z"
+          },
+          {
+            "name": "Install Tauri CLI",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-31T08:08:45Z",
+            "completed_at": "2026-10-31T08:08:45Z"
+          },
+          {
+            "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-31T08:08:45Z",
+            "completed_at": "2026-10-31T08:15:49Z"
+          },
+          {
+            "name": "Upload installer artifact",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:15:49Z",
+            "completed_at": "2026-10-31T08:16:02Z"
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-31T08:16:02Z",
+            "completed_at": "2026-10-31T08:16:02Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-31T08:16:02Z",
+            "completed_at": "2026-10-31T08:16:02Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-31T08:16:02Z",
+            "completed_at": "2026-10-31T08:16:03Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-31T08:16:03Z",
+            "completed_at": "2026-10-31T08:16:03Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-31T08:16:03Z",
+            "completed_at": "2026-10-31T08:16:03Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538689",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000576,
+        "runner_name": "GitHub Actions 1000000576",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:05:58Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:05:58Z",
+          "completed_at": "2026-10-31T08:06:04Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:04Z",
+          "completed_at": "2026-10-31T08:06:12Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:12Z",
+          "completed_at": "2026-10-31T08:06:15Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:15Z",
+          "completed_at": "2026-10-31T08:07:52Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:52Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:15:49Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:15:49Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:16:03Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:16:03Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:05:58Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:05:58Z",
+          "completed_at": "2026-10-31T08:06:04Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:04Z",
+          "completed_at": "2026-10-31T08:06:12Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:12Z",
+          "completed_at": "2026-10-31T08:06:15Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:15Z",
+          "completed_at": "2026-10-31T08:07:52Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:52Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:08:45Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:08:45Z",
+          "completed_at": "2026-10-31T08:15:49Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:15:49Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:02Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:16:02Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:16:03Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:16:03Z",
+          "completed_at": "2026-10-31T08:16:03Z"
+        }
+      ],
+      "raw_log": "job-124484538689-raw-log.stdout.gz",
+      "log_sha256": "b770e175fccb90d12a988cb8dc557b885bb8b1919386df850a8278d761992bec",
+      "log_crc32": "a52ca816",
+      "log_bytes": 290768,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538706,
+      "name": "perf-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538706",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:10:08Z",
+      "runner_name": "GitHub Actions 1000000578",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "detail": {
+        "id": 124484538706,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRUg",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538706",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538706",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:10:08Z",
+        "name": "perf-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:06:00Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:00Z",
+            "completed_at": "2026-10-31T08:06:03Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:03Z",
+            "completed_at": "2026-10-31T08:06:08Z"
+          },
+          {
+            "name": "Tier list",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:08Z",
+            "completed_at": "2026-10-31T08:10:06Z"
+          },
+          {
+            "name": "Tier report (server-baseline budget)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:10:06Z",
+            "completed_at": "2026-10-31T08:10:07Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:10:07Z",
+            "completed_at": "2026-10-31T08:10:07Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:10:07Z",
+            "completed_at": "2026-10-31T08:10:07Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:10:07Z",
+            "completed_at": "2026-10-31T08:10:07Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538706",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000578,
+        "runner_name": "GitHub Actions 1000000578",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:03Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:03Z",
+          "completed_at": "2026-10-31T08:06:08Z"
+        },
+        {
+          "name": "Tier list",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:08Z",
+          "completed_at": "2026-10-31T08:10:06Z"
+        },
+        {
+          "name": "Tier report (server-baseline budget)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:10:06Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:03Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:03Z",
+          "completed_at": "2026-10-31T08:06:08Z"
+        },
+        {
+          "name": "Tier list",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:08Z",
+          "completed_at": "2026-10-31T08:10:06Z"
+        },
+        {
+          "name": "Tier report (server-baseline budget)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:10:06Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:07Z",
+          "completed_at": "2026-10-31T08:10:07Z"
+        }
+      ],
+      "raw_log": "job-124484538706-raw-log.stdout.gz",
+      "log_sha256": "c8622457294c4021457571238e515234be8dbc18ab4221c3eeb7b90f1ceb9e1e",
+      "log_crc32": "a0a214d5",
+      "log_bytes": 190119,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538718,
+      "name": "build-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538718",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:24Z",
+      "completed_at": "2026-10-31T08:10:44Z",
+      "runner_name": "GitHub Actions 1000000582",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "macos-latest"
+      ],
+      "detail": {
+        "id": 124484538718,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRXg",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538718",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538718",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:24Z",
+        "completed_at": "2026-10-31T08:10:44Z",
+        "name": "build-macos-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:05:27Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:27Z",
+            "completed_at": "2026-10-31T08:06:23Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:23Z",
+            "completed_at": "2026-10-31T08:06:40Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:40Z",
+            "completed_at": "2026-10-31T08:06:55Z"
+          },
+          {
+            "name": "Build workspace",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:55Z",
+            "completed_at": "2026-10-31T08:08:56Z"
+          },
+          {
+            "name": "Unit tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:08:56Z",
+            "completed_at": "2026-10-31T08:10:36Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:10:36Z",
+            "completed_at": "2026-10-31T08:10:36Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:10:36Z",
+            "completed_at": "2026-10-31T08:10:37Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:10:37Z",
+            "completed_at": "2026-10-31T08:10:42Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538718",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": 1000000582,
+        "runner_name": "GitHub Actions 1000000582",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:05:27Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:27Z",
+          "completed_at": "2026-10-31T08:06:23Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:23Z",
+          "completed_at": "2026-10-31T08:06:40Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:40Z",
+          "completed_at": "2026-10-31T08:06:55Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:55Z",
+          "completed_at": "2026-10-31T08:08:56Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:08:56Z",
+          "completed_at": "2026-10-31T08:10:36Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:36Z",
+          "completed_at": "2026-10-31T08:10:36Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:36Z",
+          "completed_at": "2026-10-31T08:10:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:37Z",
+          "completed_at": "2026-10-31T08:10:42Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:05:27Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:27Z",
+          "completed_at": "2026-10-31T08:06:23Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:23Z",
+          "completed_at": "2026-10-31T08:06:40Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:40Z",
+          "completed_at": "2026-10-31T08:06:55Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:55Z",
+          "completed_at": "2026-10-31T08:08:56Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:08:56Z",
+          "completed_at": "2026-10-31T08:10:36Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:36Z",
+          "completed_at": "2026-10-31T08:10:36Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:36Z",
+          "completed_at": "2026-10-31T08:10:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:37Z",
+          "completed_at": "2026-10-31T08:10:42Z"
+        }
+      ],
+      "raw_log": "job-124484538718-raw-log.stdout.gz",
+      "log_sha256": "c266ef67d78961ac3506cf387e6c56bd4978b425d8480d20be9c994ce2b775fb",
+      "log_crc32": "151d5980",
+      "log_bytes": 362529,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538729,
+      "name": "build-ubuntu-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538729",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:24Z",
+      "completed_at": "2026-10-31T08:09:00Z",
+      "runner_name": "GitHub Actions 1000000577",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "detail": {
+        "id": 124484538729,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRaQ",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538729",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538729",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:24Z",
+        "completed_at": "2026-10-31T08:09:00Z",
+        "name": "build-ubuntu-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:05:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:26Z",
+            "completed_at": "2026-10-31T08:06:08Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:08Z",
+            "completed_at": "2026-10-31T08:06:13Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:13Z",
+            "completed_at": "2026-10-31T08:06:24Z"
+          },
+          {
+            "name": "Build workspace",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:24Z",
+            "completed_at": "2026-10-31T08:07:54Z"
+          },
+          {
+            "name": "Unit tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:07:54Z",
+            "completed_at": "2026-10-31T08:08:57Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:08:57Z",
+            "completed_at": "2026-10-31T08:08:57Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:08:57Z",
+            "completed_at": "2026-10-31T08:08:58Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:08:58Z",
+            "completed_at": "2026-10-31T08:08:58Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538729",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000577,
+        "runner_name": "GitHub Actions 1000000577",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:08Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:08Z",
+          "completed_at": "2026-10-31T08:06:13Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:13Z",
+          "completed_at": "2026-10-31T08:06:24Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:24Z",
+          "completed_at": "2026-10-31T08:07:54Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:07:54Z",
+          "completed_at": "2026-10-31T08:08:57Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:08:57Z",
+          "completed_at": "2026-10-31T08:08:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:08:57Z",
+          "completed_at": "2026-10-31T08:08:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:08:58Z",
+          "completed_at": "2026-10-31T08:08:58Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:08Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:08Z",
+          "completed_at": "2026-10-31T08:06:13Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:13Z",
+          "completed_at": "2026-10-31T08:06:24Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:24Z",
+          "completed_at": "2026-10-31T08:07:54Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:07:54Z",
+          "completed_at": "2026-10-31T08:08:57Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:08:57Z",
+          "completed_at": "2026-10-31T08:08:57Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:08:57Z",
+          "completed_at": "2026-10-31T08:08:58Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:08:58Z",
+          "completed_at": "2026-10-31T08:08:58Z"
+        }
+      ],
+      "raw_log": "job-124484538729-raw-log.stdout.gz",
+      "log_sha256": "0073f8c2e8d72279afada9757dee261dcbd9bbcab48f913045a35fd2b22fe562",
+      "log_crc32": "0afafe63",
+      "log_bytes": 360500,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538732,
+      "name": "build-windows-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538732",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:10:16Z",
+      "runner_name": "GitHub Actions 1000000575",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "windows-latest"
+      ],
+      "detail": {
+        "id": 124484538732,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRbA",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538732",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538732",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:10:16Z",
+        "name": "build-windows-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:06:19Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:19Z",
+            "completed_at": "2026-10-31T08:06:41Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:41Z",
+            "completed_at": "2026-10-31T08:07:06Z"
+          },
+          {
+            "name": "Build workspace",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:07:06Z",
+            "completed_at": "2026-10-31T08:09:02Z"
+          },
+          {
+            "name": "Unit tests",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:09:02Z",
+            "completed_at": "2026-10-31T08:10:12Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:10:12Z",
+            "completed_at": "2026-10-31T08:10:12Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:10:12Z",
+            "completed_at": "2026-10-31T08:10:14Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:10:14Z",
+            "completed_at": "2026-10-31T08:10:14Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538732",
+        "labels": [
+          "windows-latest"
+        ],
+        "runner_id": 1000000575,
+        "runner_name": "GitHub Actions 1000000575",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:19Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:19Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:07:06Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:07:06Z",
+          "completed_at": "2026-10-31T08:09:02Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:09:02Z",
+          "completed_at": "2026-10-31T08:10:12Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:12Z",
+          "completed_at": "2026-10-31T08:10:12Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:12Z",
+          "completed_at": "2026-10-31T08:10:14Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:14Z",
+          "completed_at": "2026-10-31T08:10:14Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:19Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:19Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:07:06Z"
+        },
+        {
+          "name": "Build workspace",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:07:06Z",
+          "completed_at": "2026-10-31T08:09:02Z"
+        },
+        {
+          "name": "Unit tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:09:02Z",
+          "completed_at": "2026-10-31T08:10:12Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:10:12Z",
+          "completed_at": "2026-10-31T08:10:12Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:10:12Z",
+          "completed_at": "2026-10-31T08:10:14Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:10:14Z",
+          "completed_at": "2026-10-31T08:10:14Z"
+        }
+      ],
+      "raw_log": "job-124484538732-raw-log.stdout.gz",
+      "log_sha256": "5e8ad93a4ca960a4192e0c861a4307819c64f30daedcbc9f8e495db45ef4af8e",
+      "log_crc32": "114fabe9",
+      "log_bytes": 367850,
+      "log_crlf_count": 3837
+    },
+    {
+      "id": 124484538737,
+      "name": "perf-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538737",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:33Z",
+      "completed_at": "2026-10-31T08:12:53Z",
+      "runner_name": "GitHub Actions 1000000580",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "macos-latest"
+      ],
+      "detail": {
+        "id": 124484538737,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRcQ",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538737",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538737",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:33Z",
+        "completed_at": "2026-10-31T08:12:53Z",
+        "name": "perf-macos-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:33Z",
+            "completed_at": "2026-10-31T08:05:36Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:36Z",
+            "completed_at": "2026-10-31T08:06:28Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:28Z",
+            "completed_at": "2026-10-31T08:06:29Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:29Z",
+            "completed_at": "2026-10-31T08:06:35Z"
+          },
+          {
+            "name": "Tier list",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:35Z",
+            "completed_at": "2026-10-31T08:12:48Z"
+          },
+          {
+            "name": "Tier report (server-baseline budget)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:12:48Z",
+            "completed_at": "2026-10-31T08:12:49Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:12:49Z",
+            "completed_at": "2026-10-31T08:12:49Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:12:49Z",
+            "completed_at": "2026-10-31T08:12:50Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:12:50Z",
+            "completed_at": "2026-10-31T08:12:51Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538737",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": 1000000580,
+        "runner_name": "GitHub Actions 1000000580",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:33Z",
+          "completed_at": "2026-10-31T08:05:36Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:36Z",
+          "completed_at": "2026-10-31T08:06:28Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:28Z",
+          "completed_at": "2026-10-31T08:06:29Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:29Z",
+          "completed_at": "2026-10-31T08:06:35Z"
+        },
+        {
+          "name": "Tier list",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:35Z",
+          "completed_at": "2026-10-31T08:12:48Z"
+        },
+        {
+          "name": "Tier report (server-baseline budget)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:12:48Z",
+          "completed_at": "2026-10-31T08:12:49Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:12:49Z",
+          "completed_at": "2026-10-31T08:12:49Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:12:49Z",
+          "completed_at": "2026-10-31T08:12:50Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:12:50Z",
+          "completed_at": "2026-10-31T08:12:51Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:33Z",
+          "completed_at": "2026-10-31T08:05:36Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:36Z",
+          "completed_at": "2026-10-31T08:06:28Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:28Z",
+          "completed_at": "2026-10-31T08:06:29Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:29Z",
+          "completed_at": "2026-10-31T08:06:35Z"
+        },
+        {
+          "name": "Tier list",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:35Z",
+          "completed_at": "2026-10-31T08:12:48Z"
+        },
+        {
+          "name": "Tier report (server-baseline budget)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:12:48Z",
+          "completed_at": "2026-10-31T08:12:49Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:12:49Z",
+          "completed_at": "2026-10-31T08:12:49Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:12:49Z",
+          "completed_at": "2026-10-31T08:12:50Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:12:50Z",
+          "completed_at": "2026-10-31T08:12:51Z"
+        }
+      ],
+      "raw_log": "job-124484538737-raw-log.stdout.gz",
+      "log_sha256": "3ae25da3f0c4c4d6de2d52c36d0e2a351298bca29558f4584d1f4d16c2c7ebb5",
+      "log_crc32": "10e7e5c0",
+      "log_bytes": 191972,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538745,
+      "name": "desktop-macos-latest",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538745",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:22:28Z",
+      "runner_name": "GitHub Actions 1000000581",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "macos-latest"
+      ],
+      "detail": {
+        "id": 124484538745,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tReQ",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538745",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538745",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:22:28Z",
+        "name": "desktop-macos-latest",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:23Z",
+            "completed_at": "2026-10-31T08:05:26Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:26Z",
+            "completed_at": "2026-10-31T08:06:38Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:38Z",
+            "completed_at": "2026-10-31T08:06:41Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:41Z",
+            "completed_at": "2026-10-31T08:06:52Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:52Z",
+            "completed_at": "2026-10-31T08:07:00Z"
+          },
+          {
+            "name": "Install Linux Tauri dependencies",
+            "status": "completed",
+            "conclusion": "skipped",
+            "number": 6,
+            "started_at": "2026-10-31T08:07:00Z",
+            "completed_at": "2026-10-31T08:07:00Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-31T08:07:00Z",
+            "completed_at": "2026-10-31T08:09:22Z"
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-31T08:09:22Z",
+            "completed_at": "2026-10-31T08:09:23Z"
+          },
+          {
+            "name": "Install Tauri CLI",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-31T08:09:23Z",
+            "completed_at": "2026-10-31T08:09:24Z"
+          },
+          {
+            "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-31T08:09:24Z",
+            "completed_at": "2026-10-31T08:22:18Z"
+          },
+          {
+            "name": "Upload installer artifact",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:22:18Z",
+            "completed_at": "2026-10-31T08:22:21Z"
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 19,
+            "started_at": "2026-10-31T08:22:21Z",
+            "completed_at": "2026-10-31T08:22:22Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 20,
+            "started_at": "2026-10-31T08:22:22Z",
+            "completed_at": "2026-10-31T08:22:22Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 21,
+            "started_at": "2026-10-31T08:22:22Z",
+            "completed_at": "2026-10-31T08:22:23Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 22,
+            "started_at": "2026-10-31T08:22:23Z",
+            "completed_at": "2026-10-31T08:22:24Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-31T08:22:24Z",
+            "completed_at": "2026-10-31T08:22:25Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538745",
+        "labels": [
+          "macos-latest"
+        ],
+        "runner_id": 1000000581,
+        "runner_name": "GitHub Actions 1000000581",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:23Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:38Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:38Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:06:52Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:52Z",
+          "completed_at": "2026-10-31T08:07:00Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:07:00Z",
+          "completed_at": "2026-10-31T08:07:00Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:00Z",
+          "completed_at": "2026-10-31T08:09:22Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:09:22Z",
+          "completed_at": "2026-10-31T08:09:23Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:09:23Z",
+          "completed_at": "2026-10-31T08:09:24Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:09:24Z",
+          "completed_at": "2026-10-31T08:22:18Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:22:18Z",
+          "completed_at": "2026-10-31T08:22:21Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:22:21Z",
+          "completed_at": "2026-10-31T08:22:22Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:22:22Z",
+          "completed_at": "2026-10-31T08:22:22Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:22:22Z",
+          "completed_at": "2026-10-31T08:22:23Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:22:23Z",
+          "completed_at": "2026-10-31T08:22:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:22:24Z",
+          "completed_at": "2026-10-31T08:22:25Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:07:00Z",
+          "completed_at": "2026-10-31T08:07:00Z"
+        }
+      ],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:23Z",
+          "completed_at": "2026-10-31T08:05:26Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:26Z",
+          "completed_at": "2026-10-31T08:06:38Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:38Z",
+          "completed_at": "2026-10-31T08:06:41Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:41Z",
+          "completed_at": "2026-10-31T08:06:52Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:52Z",
+          "completed_at": "2026-10-31T08:07:00Z"
+        },
+        {
+          "name": "Install Linux Tauri dependencies",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 6,
+          "started_at": "2026-10-31T08:07:00Z",
+          "completed_at": "2026-10-31T08:07:00Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:00Z",
+          "completed_at": "2026-10-31T08:09:22Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:09:22Z",
+          "completed_at": "2026-10-31T08:09:23Z"
+        },
+        {
+          "name": "Install Tauri CLI",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:09:23Z",
+          "completed_at": "2026-10-31T08:09:24Z"
+        },
+        {
+          "name": "Produce installer (tauri beforeBuildCommand builds the web client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:09:24Z",
+          "completed_at": "2026-10-31T08:22:18Z"
+        },
+        {
+          "name": "Upload installer artifact",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:22:18Z",
+          "completed_at": "2026-10-31T08:22:21Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-10-31T08:22:21Z",
+          "completed_at": "2026-10-31T08:22:22Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20,
+          "started_at": "2026-10-31T08:22:22Z",
+          "completed_at": "2026-10-31T08:22:22Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21,
+          "started_at": "2026-10-31T08:22:22Z",
+          "completed_at": "2026-10-31T08:22:23Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22,
+          "started_at": "2026-10-31T08:22:23Z",
+          "completed_at": "2026-10-31T08:22:24Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:22:24Z",
+          "completed_at": "2026-10-31T08:22:25Z"
+        }
+      ],
+      "raw_log": "job-124484538745-raw-log.stdout.gz",
+      "log_sha256": "9daeaee8cc1a729ffb951068fc6715070ed0508e301561748b3b30468a6f7406",
+      "log_crc32": "a5a1e902",
+      "log_bytes": 183194,
+      "log_crlf_count": 0
+    },
+    {
+      "id": 124484538767,
+      "name": "native-web",
+      "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538767",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T08:05:23Z",
+      "completed_at": "2026-10-31T08:12:38Z",
+      "runner_name": "GitHub Actions 1000000579",
+      "runner_group_name": "GitHub Actions",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "detail": {
+        "id": 124484538767,
+        "run_id": 41183155464,
+        "workflow_name": "ci",
+        "head_branch": "native-convergence",
+        "run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464",
+        "run_attempt": 1,
+        "node_id": "CR_kwDOS6pZOs8AAAAc-9tRjw",
+        "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124484538767",
+        "html_url": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/job/124484538767",
+        "status": "completed",
+        "conclusion": "success",
+        "created_at": "2026-10-31T08:05:21Z",
+        "started_at": "2026-10-31T08:05:23Z",
+        "completed_at": "2026-10-31T08:12:38Z",
+        "name": "native-web",
+        "steps": [
+          {
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 1,
+            "started_at": "2026-10-31T08:05:24Z",
+            "completed_at": "2026-10-31T08:05:25Z"
+          },
+          {
+            "name": "Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 2,
+            "started_at": "2026-10-31T08:05:25Z",
+            "completed_at": "2026-10-31T08:06:00Z"
+          },
+          {
+            "name": "Run dtolnay/rust-toolchain@stable",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 3,
+            "started_at": "2026-10-31T08:06:00Z",
+            "completed_at": "2026-10-31T08:06:04Z"
+          },
+          {
+            "name": "Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 4,
+            "started_at": "2026-10-31T08:06:04Z",
+            "completed_at": "2026-10-31T08:06:10Z"
+          },
+          {
+            "name": "Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 5,
+            "started_at": "2026-10-31T08:06:10Z",
+            "completed_at": "2026-10-31T08:06:16Z"
+          },
+          {
+            "name": "Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 6,
+            "started_at": "2026-10-31T08:06:16Z",
+            "completed_at": "2026-10-31T08:07:21Z"
+          },
+          {
+            "name": "Install wasm-pack",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 7,
+            "started_at": "2026-10-31T08:07:21Z",
+            "completed_at": "2026-10-31T08:07:22Z"
+          },
+          {
+            "name": "Rebuild native WASM from current source",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 8,
+            "started_at": "2026-10-31T08:07:22Z",
+            "completed_at": "2026-10-31T08:08:19Z"
+          },
+          {
+            "name": "Rebuild legacy WASM (still imported by the client)",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 9,
+            "started_at": "2026-10-31T08:08:19Z",
+            "completed_at": "2026-10-31T08:10:35Z"
+          },
+          {
+            "name": "Native kernel and package loader regressions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 10,
+            "started_at": "2026-10-31T08:10:35Z",
+            "completed_at": "2026-10-31T08:12:14Z"
+          },
+          {
+            "name": "Real native Worker smoke",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 11,
+            "started_at": "2026-10-31T08:12:14Z",
+            "completed_at": "2026-10-31T08:12:16Z"
+          },
+          {
+            "name": "Frontend regressions",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 12,
+            "started_at": "2026-10-31T08:12:16Z",
+            "completed_at": "2026-10-31T08:12:29Z"
+          },
+          {
+            "name": "Frontend typecheck and production build",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 13,
+            "started_at": "2026-10-31T08:12:29Z",
+            "completed_at": "2026-10-31T08:12:35Z"
+          },
+          {
+            "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 23,
+            "started_at": "2026-10-31T08:12:35Z",
+            "completed_at": "2026-10-31T08:12:35Z"
+          },
+          {
+            "name": "Post Run actions/setup-node@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 24,
+            "started_at": "2026-10-31T08:12:35Z",
+            "completed_at": "2026-10-31T08:12:35Z"
+          },
+          {
+            "name": "Post Run Swatinem/rust-cache@v2",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 25,
+            "started_at": "2026-10-31T08:12:35Z",
+            "completed_at": "2026-10-31T08:12:35Z"
+          },
+          {
+            "name": "Post Run actions/checkout@v4",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 26,
+            "started_at": "2026-10-31T08:12:35Z",
+            "completed_at": "2026-10-31T08:12:36Z"
+          },
+          {
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success",
+            "number": 27,
+            "started_at": "2026-10-31T08:12:36Z",
+            "completed_at": "2026-10-31T08:12:36Z"
+          }
+        ],
+        "check_run_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/check-runs/124484538767",
+        "labels": [
+          "ubuntu-latest"
+        ],
+        "runner_id": 1000000579,
+        "runner_name": "GitHub Actions 1000000579",
+        "runner_group_id": 0,
+        "runner_group_name": "GitHub Actions"
+      },
+      "listed_steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:04Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:04Z",
+          "completed_at": "2026-10-31T08:06:10Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:10Z",
+          "completed_at": "2026-10-31T08:06:16Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:16Z",
+          "completed_at": "2026-10-31T08:07:21Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:21Z",
+          "completed_at": "2026-10-31T08:07:22Z"
+        },
+        {
+          "name": "Rebuild native WASM from current source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:07:22Z",
+          "completed_at": "2026-10-31T08:08:19Z"
+        },
+        {
+          "name": "Rebuild legacy WASM (still imported by the client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:19Z",
+          "completed_at": "2026-10-31T08:10:35Z"
+        },
+        {
+          "name": "Native kernel and package loader regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:10:35Z",
+          "completed_at": "2026-10-31T08:12:14Z"
+        },
+        {
+          "name": "Real native Worker smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:12:14Z",
+          "completed_at": "2026-10-31T08:12:16Z"
+        },
+        {
+          "name": "Frontend regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:12:16Z",
+          "completed_at": "2026-10-31T08:12:29Z"
+        },
+        {
+          "name": "Frontend typecheck and production build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:12:29Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-31T08:12:36Z",
+          "completed_at": "2026-10-31T08:12:36Z"
+        }
+      ],
+      "failed_steps": [],
+      "skipped_steps": [],
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-10-31T08:05:24Z",
+          "completed_at": "2026-10-31T08:05:25Z"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T08:05:25Z",
+          "completed_at": "2026-10-31T08:06:00Z"
+        },
+        {
+          "name": "Run dtolnay/rust-toolchain@stable",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-10-31T08:06:00Z",
+          "completed_at": "2026-10-31T08:06:04Z"
+        },
+        {
+          "name": "Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-10-31T08:06:04Z",
+          "completed_at": "2026-10-31T08:06:10Z"
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-10-31T08:06:10Z",
+          "completed_at": "2026-10-31T08:06:16Z"
+        },
+        {
+          "name": "Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-10-31T08:06:16Z",
+          "completed_at": "2026-10-31T08:07:21Z"
+        },
+        {
+          "name": "Install wasm-pack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-10-31T08:07:21Z",
+          "completed_at": "2026-10-31T08:07:22Z"
+        },
+        {
+          "name": "Rebuild native WASM from current source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8,
+          "started_at": "2026-10-31T08:07:22Z",
+          "completed_at": "2026-10-31T08:08:19Z"
+        },
+        {
+          "name": "Rebuild legacy WASM (still imported by the client)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-10-31T08:08:19Z",
+          "completed_at": "2026-10-31T08:10:35Z"
+        },
+        {
+          "name": "Native kernel and package loader regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-10-31T08:10:35Z",
+          "completed_at": "2026-10-31T08:12:14Z"
+        },
+        {
+          "name": "Real native Worker smoke",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-10-31T08:12:14Z",
+          "completed_at": "2026-10-31T08:12:16Z"
+        },
+        {
+          "name": "Frontend regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T08:12:16Z",
+          "completed_at": "2026-10-31T08:12:29Z"
+        },
+        {
+          "name": "Frontend typecheck and production build",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13,
+          "started_at": "2026-10-31T08:12:29Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run ./noname-next/.github/actions/prepare-original-content",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run Swatinem/rust-cache@v2",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:35Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 26,
+          "started_at": "2026-10-31T08:12:35Z",
+          "completed_at": "2026-10-31T08:12:36Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 27,
+          "started_at": "2026-10-31T08:12:36Z",
+          "completed_at": "2026-10-31T08:12:36Z"
+        }
+      ],
+      "raw_log": "job-124484538767-raw-log.stdout.gz",
+      "log_sha256": "73a4f52f2a35ce548e6b9eb8d7a567d661cb5fac77f7107c38e77adc63374c66",
+      "log_crc32": "04cb8f10",
+      "log_bytes": 479488,
+      "log_crlf_count": 0
+    }
+  ],
+  "artifacts": {
+    "total_count": 3,
+    "artifacts": [
+      {
+        "id": 13036700549,
+        "node_id": "MDg6QXJ0aWZhY3QxMzAzNjcwMDU0OQ==",
+        "name": "installer-windows-latest",
+        "size_in_bytes": 26279296,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13036700549",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13036700549/zip",
+        "expired": false,
+        "digest": "sha256:916c4115894e7df3c8e9d2fa321aa86b0d8f31aa98a1695faa6344f6c5164aa8",
+        "created_at": "2026-10-31T08:17:41Z",
+        "updated_at": "2026-10-31T08:17:41Z",
+        "expires_at": "2027-01-29T08:05:21Z",
+        "workflow_run": {
+          "id": 41183155464,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b"
+        }
+      },
+      {
+        "id": 13036341819,
+        "node_id": "MDg6QXJ0aWZhY3QxMzAzNjM0MTgxOQ==",
+        "name": "installer-macos-latest",
+        "size_in_bytes": 32810622,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13036341819",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13036341819/zip",
+        "expired": false,
+        "digest": "sha256:a5f613641aea13c6e2dcfe4b456714610f6f8c54abeab8d9347c9a06c82b91c1",
+        "created_at": "2026-10-31T08:22:21Z",
+        "updated_at": "2026-10-31T08:22:21Z",
+        "expires_at": "2027-01-29T08:05:21Z",
+        "workflow_run": {
+          "id": 41183155464,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b"
+        }
+      },
+      {
+        "id": 13035886166,
+        "node_id": "MDg6QXJ0aWZhY3QxMzAzNTg4NjE2Ng==",
+        "name": "installer-ubuntu-latest",
+        "size_in_bytes": 266359404,
+        "url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13035886166",
+        "archive_download_url": "https://api.github.com/repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/artifacts/13035886166/zip",
+        "expired": false,
+        "digest": "sha256:50b99b5787536636c3020c9bffd52d407f3dc87cc9b2a22cbb11be5156bf1ad8",
+        "created_at": "2026-10-31T08:16:01Z",
+        "updated_at": "2026-10-31T08:16:01Z",
+        "expires_at": "2027-01-29T08:05:21Z",
+        "workflow_run": {
+          "id": 41183155464,
+          "repository_id": 1269455162,
+          "head_repository_id": 1269455162,
+          "head_branch": "native-convergence",
+          "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b"
+        }
+      }
+    ]
+  },
+  "pending_jobs": [],
+  "job_count": 10,
+  "completed": true,
+  "finished_utc": "2026-10-31T08:29:35.661930+00:00"
+}

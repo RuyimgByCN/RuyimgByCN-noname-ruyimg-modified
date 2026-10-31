@@ -1,0 +1,1 @@
+PASS: Main lock-aligned probe; private I02 ingress repair; C9 failure checkpoint integrity only

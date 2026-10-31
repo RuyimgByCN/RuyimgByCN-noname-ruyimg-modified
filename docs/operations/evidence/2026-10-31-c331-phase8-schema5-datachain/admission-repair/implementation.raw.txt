@@ -1,0 +1,53 @@
+# C331 phase8 admission repair：两P1与P2实际入口修复（2026-10-31）
+
+原C8是SOURCE review **BLOCK**，不能凭旧数据层绿测试称完整SDK入场通过。本轮针对 omitted-modules/duplicate-normalization 两P1及active-executor P2给出真实红→绿与当前WASM证据；**仍待父独立复核，不进入C9，不合Main，整C331仍BLOCK**。来源262/290、余28、+0不变。
+
+- 开始10:38:51 UTC；checkpoint于10:49:15（10m24s）实体生成并立即通知，未等全量。仅在原owned树`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree`写7文件。
+- E=`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/admission-repair`；原C8 130件证据/index/report、166源manifest/tar及原C7/C6权威材料未改。Main只有父Docs变化；未暂存/提交/推送、未写上游/包canonical/Main生成物或UI。
+
+实际修复及兼容边界：
+
+- SDK `validateNativeMechanismFields`移到模块分派之前，独立modules检查presence。含skill/trigger/active/modifier/view_as声明但无modules的partial载荷受控拒绝（含空声明表）；schema3/4 false/null及schema5 unsupported traits不再被asset fallback忽略。普通原manifest+assets正控继续通过。
+- `importExtensionPackageValidated`用原有GT014 callback发送**原始输入字符串**给native typed reader；原文通过后才提交既有canonical存储。没有新wire字段/请求/协议，没有JS通用parser/regex duplicate扫描。结构性同步helper仍按其既有文档仅做结构校验；产品`ExtensionsView.vue:80`走validated入口。
+- WASM single validate、new/admission、restore共同调用原文解析守卫：完整npack复用`ContentPackage::from_json_bytes`，不能把Value/stringify结果当原文；数组用现有serde_json `RawValue`保留每个元素原文，随后仍走既有installed_pack/finite factory。
+- Rust asset fallback也拒绝declaration-bearing partial payload；无modules资产包只接受原有3/4或未声明schema，schema5须是可验证完整声明包。未把异常声明吞成空VM列表。
+- SDK trigger/active共用同一executor形状循环，校验host_key/module/entry_pc互斥及module/skill引用，保留原trigger诊断；active conflict与Rust一致拒绝。
+- 只为现有serde_json依赖启用`raw_value` feature；无新依赖版本、无JSON框架或R05 raw-pack factory。C331/私有106/ABI758/WS6、format1/API1、schema3/4/5与全部Core未实现机制边界不变；Source33/legacy13/445未改。
+
+真实初红与首次失败（全部保留）：
+
+- `rust-red.log`真实导出路径1绿2红：omitted-modules schema5未经拒绝、valid default5的charlotte true,false duplicate被Value归一后错误接受。
+- `frontend-red.log`183绿3红：partial metadata误接受、原文被canonical替换、active双executor误接受。修后`rust-green-first.log`3/0，`frontend-green2.log`186/0。
+- `frontend-green-first.log`185/1：新partial诊断没保留旧缺少载荷的“缺少”字样；保留原期望，修诊断后通过。测试fixture exporter编辑首次因rustfmt后文本匹配失败，见setup-errors.log，不冒充产品失败。
+- `actual-sdk-wasm-first.log`首个完整真实WASM smoke通过11坏输入。追加旧3/4正控时`actual-sdk-wasm2.log`错误要求**合法restore前后archive字节相等**，原红保留；随后明确只读定位而非改Core/盲改hash。
+- 实际两份NGSA用本树decoder解码：均1648字节，**唯一typed变化auth_generation 0→1**；归一该字段后完整StateSnapshot相等，core/RNG/resolution/规则状态全同，实际WASM state_hash/view同。字节仅offset1573代次与1616..1647的32字节checksum变；源`engine/snapshot.rs:544`明确+1，`archive.rs:156`是payload BLAKE3。
+- 定位实体`restore-probe-archives.json`、两before/after.debug、typed.diff、`restore-generation-diff.json`及1/0 decoder probe日志保留。临时probe源用trap finally删除，未改session/Core/hash。
+- 正控改为既有合法代际语义下规则state/view相同，并在restore后新固定baseline核坏入场原子性。`actual-sdk-wasm3.log`随后暴露harness在同版本原副本上添加unknown表现键的内容冲突，改为独立空local store测试，不改产品冲突规则；最终`actual-sdk-wasm4.log`通过。
+
+当前实际WASM/SDK证据：
+
+- 当前owned `wasm-pack build crates/engine-native-wasm --target nodejs --release --no-opt --out-dir E/node-wasm -- --offline`，exit0，66.91s；只在私有目录生成。wasm SHA **`db64d471c60afec3e003d61dcb1539b801054ea1f0ba029cfbab2d27bdc92fdd`**（4068567字节），JS SHA `5136ee0cdf43eec43016e05169b9f10f0eae0fa5d00efdf9251305ca856ca4e5`，完整6文件在wasm-identity.json。
+- `node --import ./scripts/ts-register.mjs scripts/c331-admission-repair-smoke.mjs E`运行真实SDK local-store入口+实际当前WASM；无deep-validator mock。
+- 11坏输入覆盖普通/escaped-key duplicate（last-key false、原logic_hash不变）、5true/3/4false/null omitted modules、3/4/5 empty active partial、**正确重新计算logic_hash**的active双executor。
+- 每条在validated import、direct WASM validate、new/admit和原handle.restore均拒绝；duplicate保留具体serde duplicate field charlotte错误。原local store、原句柄state hash、catalog规则版本/view及archive逐字不变。
+- 真实default5与原asset-only正控通过。旧3原1483字节 SHA **`4c4c0408a2244b50c876c3864eab9f25f0f0763e3068546dc4c277c731197e10`**；旧4原1546字节 SHA **`90e7b10a86ad2e12818254f98fab2df135fc181e57db4c7064242bfb460b5145`**，原bytes/hash未改，实际validate/import/admit与合法代际restore正控通过。
+- unknown asset manifest表现键重复正控仍接受，证明未以通用duplicate-key禁令改变旧资产接受域；null/unknown/非法metadata仍走既有具体错误，不压成统一成功/泛化错误。
+
+其余实际检查（全局原helper SHA d7f246…/lock inode620205209，offline/jobs2/incremental0、始终>3GiB）：
+
+- 相关WASM3targets `c331_admission_repair`、`gt014_import_validation_parity`、`installed_package_payload`：**13/0/0**，不与全量重复相加。
+- `cargo test --offline -p content-schema -p content-compiler -p content-runtime -p content-native-loader`：609/0/0，89.85s。
+- `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native`：**1773/0/75**，36.11s，含原3/4包hash及default5真实draw回归；本轮仅一次最终全量。
+- 独立owned target-strict，`RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets` exit0（warm0.26s）；`pnpm --dir apps/web-client typecheck`exit0；前端186/0。
+- source-cap unit2/0、source caps9021/Rust effective限额通过、F7向上引用0。已绿检查不重复；最后仅78行独立smoke补正控，原生/TS生产字节及编译入口均与已验源相同，最终smoke另实跑通过。未声称LSP clean。
+
+冻结与复核入口（相对E）：
+
+- `checkpoint15/source-manifest.json` **`2cd0f66877addd39fe59f15676aa0dad96eb73ac49544ba0d4275381f49e0244`**，7文件；原实体/commands保留。
+- **最终原C8 v2→repair增量** `final-freeze/source-manifest.json` **`969a7cee6849c7880b853d94e09f166bf4842b68f93f26d59989518e1ba72345`**；tar **`f8cb8c2207e290350a961b584c39090219aa7913cdddb5235ee7bf1cdba896bf`**；`vs-c8.patch` **`c86bb02c268d596f290cfc61deafa5a55f0e37aea553d4fd6b53e91bc82262cf`**。
+- **完整170源组合** `full-source/source-manifest.json` **`f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e`**；tar **`b3b9efa9e0ef185347c2564b4e13bb70c80748d484616ad0cd22220e841efe8b`**；Main5fc patch `6b0b2da6dd33911a15f22464d89ec5fa242fb00f7014ac2aeb10b4e03d68cbdf`。
+- checkpoint→final仅独立smoke一文件，`checkpoint-to-final/source-manifest.json` **`73f99fdd3d62e9ff0c9d86cb18bbb3d1029450bf4f51ad65db68460805443918`**。三份补丁reverse-check通过；results-bound.json、check-results.json、wasm-identity.json、protected-after.json及artifact索引绑定actual commands/raw SHA/counts/warnings。
+
+11:00:09 fresh保护：Main31867源/生产包/资产、18生成、37默认dist、hooks零差异；C6原140零差异；原C8 130文件及原index/report/166 manifest不改。Main仅父Docs，Main/private暂存均空；Main index当前SHA `95071120faf57e6be9ff569b61377841d7d2b221e66bc72d7aaf8e700d805ae5`（父Docs期间缓存元数据可变化，不冒称与旧ed845字节相等），无本worker Main写入。无临时runtime instrumentation遗留。
+
+跳过GUI、网络playback、CI/全workspace/37来源盲重跑；未实现或接受新Core机制、native显式绑定/cleanup SDK parity，未改变C29版本/来源结论。风险与后续：原C8旧结论仍BLOCK，本轮三项修复待父独立审，之后才讨论C9；Main与整C331不因本轮绿测试而验收。

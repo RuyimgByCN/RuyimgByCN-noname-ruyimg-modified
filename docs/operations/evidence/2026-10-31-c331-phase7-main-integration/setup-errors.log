@@ -1,0 +1,1 @@
+run-targeted2 first launch: output redirection path typo (xhcsk vs xhcjsk); no test process started; exit from shell before Python execution.

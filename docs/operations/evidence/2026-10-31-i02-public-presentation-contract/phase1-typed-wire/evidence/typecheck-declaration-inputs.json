@@ -1,0 +1,6 @@
+{
+  "apps/web-client/src/wasm-pkg/engine_wasm.d.ts": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+  "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+  "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+  "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8"
+}

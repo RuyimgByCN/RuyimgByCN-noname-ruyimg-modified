@@ -1,0 +1,147 @@
+{
+  "final_source_stage": "Four original repairs plus Unicode addendum; no source edit after unicode-final group submitted",
+  "red": [
+    "red-frontend-2: compound IPC and network bound/recovery repro failures",
+    "red-rust: repository_bom accepted by Rust",
+    "red-request-snapshot-2: old SnapshotRequest fails newly added positive control"
+  ],
+  "green": {
+    "targeted_frontend": 277,
+    "full_frontend": 422,
+    "api_protocol_tests": 11,
+    "typecheck": "passed",
+    "affected_callers": "game-server+desktop-client --tests cargo check passed",
+    "line_gate": "9009 files passed",
+    "line_checker_selftests": "2/2"
+  },
+  "shared_invalid_corpus": 74,
+  "prior_invalid_corpus_preserved": 47,
+  "new_unicode_cases": 27,
+  "capacity_policy": "same fixed8 before intent/key allocation/map/storage/send; replay missing persisted placeholder admitted only below8; original same-key replay preserved",
+  "source27_policy": "raw success only if presentation parser rejects; absent/valid presentation retains original observer normalization diagnostics/cleanup",
+  "memory_limit": "none; prior attempt was mistaken RSS interpretation and preserved in old evidence",
+  "free_disk_floor_bytes": 3221225472,
+  "compiler_env": {},
+  "commands": {
+    "affected-callers-check": {
+      "argv_record": "affected-callers-check.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793446900.640338,
+        "free_disk_bytes_after": 34416349184
+      }
+    },
+    "final-full-frontend": {
+      "argv_record": "final-full-frontend.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793446861.532939,
+        "free_disk_bytes_after": 35256266752
+      }
+    },
+    "final-typecheck": {
+      "argv_record": "final-typecheck.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793446863.0665312,
+        "free_disk_bytes_after": 35221319680
+      }
+    },
+    "green-api-protocol": {
+      "argv_record": "green-api-protocol.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793446793.983105,
+        "free_disk_bytes_after": 36434698240
+      }
+    },
+    "green-targeted": {
+      "argv_record": "green-targeted.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793446796.921988,
+        "free_disk_bytes_after": 35913682944
+      }
+    },
+    "red-frontend-2": {
+      "argv_record": "red-frontend-2.argv.json",
+      "result": {
+        "exit": 1,
+        "finished": 1793446625.358888,
+        "free_disk_bytes_after": 38055653376
+      }
+    },
+    "red-frontend": {
+      "argv_record": "red-frontend.argv.json",
+      "result": {
+        "status": "tool-timeout while queued; no test execution/result claimed"
+      }
+    },
+    "red-request-snapshot-2": {
+      "argv_record": "red-request-snapshot-2.argv.json",
+      "result": {
+        "exit": 101,
+        "finished": 1793446718.448585,
+        "free_disk_bytes_after": 36762451968
+      }
+    },
+    "red-request-snapshot": {
+      "argv_record": "red-request-snapshot.argv.json",
+      "result": {
+        "status": "tool-timeout while queued; no test execution/result claimed"
+      }
+    },
+    "red-rust": {
+      "argv_record": "red-rust.argv.json",
+      "result": {
+        "exit": 101,
+        "finished": 1793446623.9889002,
+        "free_disk_bytes_after": 38058676224
+      }
+    },
+    "unicode-final-api-protocol": {
+      "argv_record": "unicode-final-api-protocol.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793447493.455596,
+        "free_disk_bytes_after": 30503809024
+      }
+    },
+    "unicode-final-full-frontend": {
+      "argv_record": "unicode-final-full-frontend.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793447492.02102,
+        "free_disk_bytes_after": 30578610176
+      }
+    },
+    "unicode-final-typecheck": {
+      "argv_record": "unicode-final-typecheck.argv.json",
+      "result": {
+        "exit": 0,
+        "finished": 1793447496.496306,
+        "free_disk_bytes_after": 30479421440
+      }
+    }
+  },
+  "source_main_no_overlap": "Only own29 paths compared to5fc/absent; provided parentOwn6 receipt copied separately; no Main generated reads",
+  "unaccepted": [
+    "private repaired candidate pending independent review",
+    "original29/phase1 historical BLOCK unchanged",
+    "producer/committed span/qualified factory/R05/C29/VMdeath/all37/audio remainpending"
+  ],
+  "new_unicode_surrogate_cases": 6,
+  "all_invalid_cases": 80,
+  "previous422_snapshot": "acceptance-checkpoint remains immutable; superseded by unicode-acceptance-checkpoint",
+  "previous422_full_patch_sha256": "6d2063d62ada8a8fe3d539535f54669427ebc39fdf3af5da15be724a70c5c710",
+  "final_green": {
+    "full_frontend": 441,
+    "api_protocol_tests": 12,
+    "typecheck": "unicode-final-typecheck passed",
+    "line_gate": "unicode-final-source-lines passed9009",
+    "line_selftests": "2/2",
+    "affected_callers": "existing repaired-source check passed; Unicode addendum changes only TS and test/fixture inputs, not Rust production code"
+  },
+  "unicode_red": "red-unicode-surrogate-2.log: Missing expected exception repository_lone_high",
+  "Unicode_policy": "TS unicode-mode surrogate regex rejects only lone code units; Rust raw JSON decode rejects invalid escapes before UTF8String/Value. Positive astral repo/token/path accepted by both."
+}

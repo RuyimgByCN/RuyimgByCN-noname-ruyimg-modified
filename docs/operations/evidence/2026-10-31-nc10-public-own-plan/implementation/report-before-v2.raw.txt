@@ -1,0 +1,54 @@
+# NC10 private public-Own leaf — implemented, acceptance BLOCK (2026-10-31)
+Implemented the bounded candidate at exact `5fc0f77403d90fa4555156bf01722450cbe7bf3b`; rules330/NGSA105/ABI758/WS6 unchanged. Main was not edited by this worker. The frozen seed8211 trajectory assertion still fails; no NC10/old19/all37/whole-Goal closure is claimed.
+
+Authorization: parent explicitly applied the user's existing whole-Goal NC10 information-boundary/quality bugfix authorization. “Separate policy approval” in v1/v2/review was advisory inference, not a new user restriction; there is no Decision30. Decision27's excluded root certificates/gates, Confirm/Cancel certification, VM continuation release, formal rules/restore/fuel/arithmetic, versions and default switch remain untouched. V1/v2/review are immutable; hashes are sealed.
+
+Private worktree: `/tmp/nc10-own-36992565/worktree`; evidence E: `/tmp/nc10-own-36992565/evidence`.
+The actual 20-minute checkpoint is [checkpoint-20](/tmp/nc10-own-36992565/evidence/checkpoint-20/manifest.json), with source/, candidate.patch and commands.json; it was reported through progress_update. Final review inputs:
+- [Final manifest](/tmp/nc10-own-36992565/evidence/final/manifest.json), [five-file patch](/tmp/nc10-own-36992565/evidence/final/candidate.patch), [source overlay](/tmp/nc10-own-36992565/evidence/final/source-overlay.tar.gz), [complete worktree SHA manifest](/tmp/nc10-own-36992565/evidence/final/full-worktree-manifest.json).
+- Patch SHA256 `cbfebd8a78045e87dc4539169c5b1cd6099caca6d8118081f7ec0ac65cf14b50`; clean-fixture `git apply --check` exit0. Final patch equals checkpoint20's patch.
+- [23 command records](/tmp/nc10-own-36992565/evidence/final/commands.json) contain exact argv/cwd/environment/exits, raw stdout/stderr SHA, result SHA and baseline/candidate production-source SHA. Raw files remain in E; [counts](/tmp/nc10-own-36992565/evidence/final/counts.json) retain all failures/ignored tests.
+
+Changed production: `crates/engine-native/src/ai.rs` and `crates/engine-native-wasm/src/session.rs` only. Tests: new `tests/nc10_public_own_plan.rs`, registered in native `tests/groups/nc_rounds.rs`, and new WASM-crate `tests/nc10_public_own_session.rs` (automatic discovery).
+- The seat-qualified `Some(ChoiceView::Own)` path returns before cloning/redaction/probes/search. Existing `projected_choice_action` is shared with NativeSession: stable distinct options, existing card-first/count policy, exact choice id; Other helper input returns None, never an implicit NextPhase. The pre-existing Other VM leaf is explicitly preserved; ordinary None/Other search and descendant gates are unchanged.
+- Entire Own Plan: public seat/revision/action; nodes/faults0, exhausted/timed_out false, request cancellation flag. Source/prompt/catalog/private PC/fuel/NoCert never select this Own route. Public advice is not execution, a root certificate or a finite-prefix guarantee.
+- NativeSession retains its answer envelope and existing single formal submit/dedup/authority/lifecycle. No new Plan Result/serialized bits/protocol operation/options/dependency, timeout policy, TS shape or formal transition was introduced.
+
+Actual Main330 red → green
+- Fresh current-version P/Q byte restores have equal complete PolicyInput, empty pre-events and source=遗计. The later Q park is not public input; natural reachability of this debug/archive-domain pair is not asserted. No old329 archive was replayed as330.
+- [Privacy-specific baseline red](/tmp/nc10-own-36992565/evidence/red-privacy.stderr.log), exit101: the complete-Plan equality assertion fails with nodes4 versus11 at budget48. Retained earlier matrices also show budget4 exhaustion false/true and budget64 nodes4/11. Original production files are sealed with the baseline test.
+- Candidate whole Plans are equal with neutral simulation fields at budgets48/64/0/1/2/4/8. Each restored positive side receives one real apply and returns Pending; revision advances once, authority remains unchanged while planning. Complete inputs/plans, before/after NGSA bytes and actual outcomes are under `E/final-frozen-cases/`.
+- Original `source_initial_binding_does_not_certify_the_next_pending_prompt` remains unchanged and passes: P→jiji_target/owner1, P+Q→jijie_give_target/owner0. Equal advice never certifies equal subsequent authority.
+- All seven original known-Own positive test names pass on Main330. Temporary test-only outcome capture preserved their assertions/effects and was restored byte-for-byte: [actual positive applies](/tmp/nc10-own-36992565/evidence/actual-positive-applies.jsonl) records actual Accepted/Pending for J2 cached damage, VM commit, opaque locals/queued effects and both pending nonzero-card effect cases; the Yiji pair supplies native Confirm application. No Error==Error substitution.
+
+Validation (all deliberate heavy commands globally serialized, offline, jobs2, incremental0, private targets, disk floor3GiB)
+| Check | Actual result |
+| --- | --- |
+| Dedicated public-Own regression/selector suite | 4/0; full privacy, cancellation, ordered dedup/card preference and bounds; mutated advice formally InvalidChoice with state unchanged |
+| Full native kernel/content/facade, final source | **1718 passed / 1 failed / 75 ignored**, exit101; only seed8211 frozen-step assertion fails |
+| Original-strategy seed8211 baseline | exit0: frozen484 steps/P3 remains valid under original5fc policy |
+| Candidate seed8211 | completes119 steps/P3 (<900), but expected484 remains unmodified/red; diagnostic source/output retained |
+| Existing 200-seed NC12 guard, same test/config | baseline and candidate both200/200 finish, faults0; steps p50/p90/max **321/413/464 → 366/479/577** |
+| Entire engine-native-wasm crate | **79/0/0**, including new actual NativeSession card-choice/one-submit test; existing18 warnings retained |
+| Fresh current web WASM build | exit0, dev profile/no-opt/no-install/offline; [frozen products/SHA](/tmp/nc10-own-36992565/evidence/final/products.json) |
+| Actual current-WASM Worker suite | **82/0**, exit0 |
+| Additional actual WASM binding + Worker adapter P/Q | **4 independent restored cases**, each exactly one revision advance; source retained and next Pending differs as above; [full results](/tmp/nc10-own-36992565/evidence/wasm-own-results.json) |
+| Independent Gate1b | exit0: `RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`, separate `/tmp/nc10-own-36992565/gate1b-target` |
+| Required source-line unit/gate | unit2/0 and full physical/effective-line gate exit0 |
+
+The 200-seed step distribution worsens while seed8211 shortens; neither proves stronger AI. The causal production change is public card-first Own advice replacing continuation-based scoring. No frozen expectation, golden or assertion was changed to make that deviation green. Opponent/role/platform quality acceptance remains open.
+
+Original19 and residual scope
+- Original private NoCert/root-certificate source/tests/raw failures remain frozen and BLOCK; new Main advice evidence does not make that different API pass. The 7 Own / 3 no-choice-warmup / 9 mixed classification is retained.
+- [349 current public-domain samples](/tmp/nc10-own-36992565/evidence/domain-summary.json), with complete input/pre-events/configuration and330 archives, cover all12 no-choice/mixed test identities plus2 adjacent guards (cap32 per test). The3 warmup identities have None-only captured planner calls; other drivers include None/Other/Own. These are current positive-domain samples, not identification or release of the historical private rejecting guard. Instrumented test sources and exact restoration hashes are retained.
+- No-choice roots, Other simulations, descendant VM/private scalar/filter/implicit effects, old fuel/overflow/Host fault counterexamples, finite Confirm/Cancel tails, unsupported37-source behaviors and whole Goal remain unclosed. Ordinary normal-root checks were preserved, not declared universally safe.
+
+Preservation and setup history
+- [Main protection audit](/tmp/nc10-own-36992565/evidence/final/Main-protection.json): no non-document tracked changes; Source27 source33/generated18/defaultdist37/packages/hooks and index bytes/entries unchanged; staging empty. Six parent-owned document edits are listed separately. Private baseline has44303 unchanged tracked Git blobs and exactly3 tracked +2 new candidate files.
+- Canonical old archives/manifests unchanged; fresh [frozen63 audit](/tmp/nc10-own-36992565/evidence/final/old-frozen63.json) matches63/63 historical source SHA. Source27 qualification, legacy remote13/error445 code, versions and defaults are unchanged;445 was not rerun or claimed as new-algorithm proof.
+- First full run retained75 missing-upstream-fixture failures plus the policy failure (1643/76/75). A private link to existing upstream fixtures fixed only setup; later full runs remain1718/1/75. Initial malformed native archive test hit existing OpenChoiceMismatch; the corrected test preserves that restore rejection and separately checks invalid public-option advice. All earlier exits remain raw.
+- One tool-triggered rust-analyzer workspace check briefly ran outside the controlled runner in its separate private worktree target; recorded, suspended and finally terminated only this session's analyzer. It is not counted as acceptance evidence. No Main/C target was used by deliberate commands.
+- First seal compared private Git checkout bytes against Main's historical HTTP-log working bytes and falsely flagged that document. The private log already equalled5fc; the audit was corrected to compare Git blob OIDs. Original assumption/correction records remain in E; no actual historical-log/source change was needed.
+
+Recommended next step: independent implementation review, then adjudicate the preserved policy-trajectory/quality deviation before any Main integration. This candidate is not staged/committed/pushed and does not authorize a formal/VM/root change.
+Skipped real desktop IPC/GUI/platform and full opponent-quality matrices; actual WASM evidence exercises the shared selector/session, while complete Plan equality is tested natively. Risk: ordinary-root/private-effect privacy and broader AI quality remain BLOCK despite this genuine pending-choice fix.

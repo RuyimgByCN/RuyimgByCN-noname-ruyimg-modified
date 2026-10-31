@@ -1,0 +1,9 @@
+{
+  "frozen_phase1": true,
+  "valid_positive": true,
+  "changed": true,
+  "accepted": true,
+  "error": null,
+  "probe": "isolated high-surrogate repository; no state or source mutation",
+  "first_probe_correction": "Initially treated standalonebatchfixture asenvelope; setupTypeError beforetest, correctedfixtureRoot."
+}

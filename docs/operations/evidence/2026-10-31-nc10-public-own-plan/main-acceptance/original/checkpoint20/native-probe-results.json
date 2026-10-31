@@ -1,0 +1,90 @@
+{
+  "auto": {
+    "codes": [
+      10
+    ],
+    "hash": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+    "reply": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":2}"
+    },
+    "revision": 2
+  },
+  "cancel": {
+    "codes": [],
+    "hash": "c71e913702b9d82b60d5239396732e0bb7c776569ebe7b6fe17ae62bb4c129f2",
+    "reply": {
+      "finished": false,
+      "outcome": "rejected",
+      "reason": "InvalidChoice",
+      "revision": 1
+    },
+    "revision": 1
+  },
+  "direct": {
+    "codes": [
+      10
+    ],
+    "hash": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+    "reply": {
+      "finished": false,
+      "outcome": "accepted",
+      "reason": null,
+      "revision": 2
+    },
+    "revision": 2
+  },
+  "own-cancel": {
+    "codes": [
+      10
+    ],
+    "hash": "a87aba219bb41e7c6eb68741824612308ec369954a08ecc25a182f9f63726ef6",
+    "reply": {
+      "finished": false,
+      "outcome": "accepted",
+      "reason": null,
+      "revision": 2
+    },
+    "revision": 2
+  },
+  "park-0": {
+    "codes": [
+      10,
+      2,
+      10
+    ],
+    "hash": "8453394783299c92f9fca2bf0ebdd9dd865bb2828727a754d5723f21137bb5bc",
+    "reply": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "revision": 2
+  },
+  "park-1": {
+    "codes": [
+      10,
+      2,
+      10
+    ],
+    "hash": "dfbd294ef2ecf9d19d85322dc11fdf6fae2557ded3dce3cc1ab6c8fd2acc65d3",
+    "reply": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "revision": 2
+  },
+  "pass": {
+    "codes": [
+      10,
+      4
+    ],
+    "hash": "3db2ec3986dfe95b34c6086f3e7bf2edff0bfdaf4807fbc67e96d533e905aefb",
+    "reply": {
+      "finished": false,
+      "outcome": "accepted",
+      "reason": null,
+      "revision": 2
+    },
+    "revision": 2
+  }
+}

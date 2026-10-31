@@ -1,0 +1,10 @@
+{
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-admission-repair-g4mlkco8",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-admission-repair-g4mlkco8/snapshot",
+  "source_files": 170,
+  "increment_files": 7,
+  "full_manifest_sha256": "f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e",
+  "increment_manifest_sha256": "969a7cee6849c7880b853d94e09f166bf4842b68f93f26d59989518e1ba72345",
+  "tar_sha256": "b3b9efa9e0ef185347c2564b4e13bb70c80748d484616ad0cd22220e841efe8b",
+  "qualification": "FreshsafeSHA materialized finalsource only, pendingreview/results/protection; nottestexecution."
+}

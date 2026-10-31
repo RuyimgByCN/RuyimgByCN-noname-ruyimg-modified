@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-31T10:37:40.282210+00:00",
+  "copies": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/bb80a67f-eeb7-4003-8d51-346ff8ae0c5b/proposals/i02-public-battle-audio-seam.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/initial-seam.raw.txt",
+      "sha256": "aed12bf9b11f3c0c3e535600bb60937b50b49c7e73d2d39efeb80cb77decb7af",
+      "bytes": 17680
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/e01ae443-cf72-45c6-b82b-b0cba08682f8/proposals/i02-public-presentation-events-contract.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/proposal-v1.raw.txt",
+      "sha256": "f008807e7e1595d9d81611c70b246eaab1ecfce34b3d0d67ceedb6e9fc4a3cc6",
+      "bytes": 30097
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/c2720b54-8d5a-4e8b-8458-02c6bc7a0307/proposals/i02-public-presentation-events-contract-v2.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/proposal-v2.raw.txt",
+      "sha256": "a26a08cf133f72ae4eaf50e777a1dfed9a719b53bbd43f5b0398c70fdec81193",
+      "bytes": 30605
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/a7a86b2e-9c71-44f6-8207-ee6ab108e4db/proposals/i02-public-presentation-events-contract-v3.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/proposal-v3.raw.txt",
+      "sha256": "eca931b2c444502a09a1cce1cd587218729a9b8eb785d353d3e1a2406dbce866",
+      "bytes": 33526
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/cb97b8a1-0109-4595-ac48-4db1f7309b3d/reviews/i02-public-presentation-events-contract-v1.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/review-v1.raw.txt",
+      "sha256": "91ec119e74f039d264bf1ec00b2334685bc6eceeb887703920775e7b792b5cf4",
+      "bytes": 8041
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/4319e0a7-eaef-4df6-b95d-387da5b7e17b/reviews/i02-public-presentation-events-contract-v2.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/review-v2.raw.txt",
+      "sha256": "925ba277134b0df8d5ef5e28864dbb100acd9eb371e333758bf52f609cc0277f",
+      "bytes": 6490
+    }
+  ],
+  "qualification": "Bounded raw evidence archive, no product/source Main import. Big NC products and benchmark binaries retained privately with manifest identity; 861MB submit lines losslessly gzip archived and rehashed. Original timeouts/errors retained; current reviews/pilots pending."
+}

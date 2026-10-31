@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--all-targets"
+  ],
+  "exit": 0,
+  "seconds": 1.274662733078003,
+  "independent_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+  "RUSTFLAGS": "-Dwarnings",
+  "incremental": 0,
+  "jobs": 2
+}

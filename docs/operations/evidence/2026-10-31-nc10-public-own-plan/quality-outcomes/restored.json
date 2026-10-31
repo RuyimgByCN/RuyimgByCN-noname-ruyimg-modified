@@ -1,0 +1,6 @@
+{
+  "crates/engine-native/src/ai.rs": true,
+  "crates/engine-native-wasm/src/session.rs": true,
+  "crates/engine-native/tests/groups/nc_rounds.rs": true,
+  "crates/engine-native/tests/nc12_ai_strength_baseline.rs": true
+}

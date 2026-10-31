@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-31T12:34:07.517087+00:00",
+  "reason": "Raw historical reports contain ephemeral absolute Markdown links; publish byte-identical raw text so clone-side link checks do not depend on author machine. Original untracked files preserved locally and explicitly excluded from staging. Primary reports/reviews and their SHA unchanged.",
+  "aliases": [
+    {
+      "original_local_path": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/original/pre-unicode-repair-report.md",
+      "published_path": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/original/pre-unicode-repair-report.raw.txt",
+      "sha256": "f12e9cff28d2dee11af35bb22a8b1baa4f75610e43ab6c5b4141ce039dcad9b4",
+      "original_local_md_retained_untracked": true
+    },
+    {
+      "original_local_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/orchestration/36992565-9a6d-49bd-9192-6377f3f0251d_worker_output.md",
+      "published_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/orchestration/36992565-9a6d-49bd-9192-6377f3f0251d_worker_output.raw.txt",
+      "sha256": "8920d14a15727b77f7a63a2c09fa1fda5c2a83fbaea6e63346ab605f039fc604",
+      "original_local_md_retained_untracked": true
+    },
+    {
+      "original_local_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/report-before-v2.md",
+      "published_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/report-before-v2.raw.txt",
+      "sha256": "060f0e3db87db3a7c35bfe07bf4bdf98dd25500c8f24771330fc8470184e1f6d",
+      "original_local_md_retained_untracked": true
+    }
+  ]
+}

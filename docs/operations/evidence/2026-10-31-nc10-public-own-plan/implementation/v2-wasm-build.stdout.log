@@ -1,0 +1,1 @@
+{"command": ["wasm-pack", "build", "crates/engine-native-wasm", "--target", "web", "--dev", "--mode", "no-install", "--no-opt", "--out-dir", "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg", "--", "--offline"], "exit": 0, "locked_seconds": 3.905453374958597, "disk_free_bytes": 34914738176}

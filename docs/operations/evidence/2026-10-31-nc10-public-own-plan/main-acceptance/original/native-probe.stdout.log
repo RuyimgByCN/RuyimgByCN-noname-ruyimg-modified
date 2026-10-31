@@ -1,0 +1,1 @@
+{"command": ["cargo", "run", "--offline", "--manifest-path", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml", "--", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"], "exit": 101, "locked_seconds": 28.573681083973497, "disk_free_bytes": 36798750720}

@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T09:21:50.719856+00:00",
+  "status": "PASS",
+  "allowlist_absent": [
+    "/tmp/pa09-candidate-f82ecf3c/target",
+    "/tmp/pa09-candidate-f82ecf3c/baseline-target"
+  ],
+  "allocated_bytes_removed": 5200220160,
+  "logical_bytes_removed": 5170059038,
+  "retained_binary_fresh_sha_mode_mtime": true,
+  "before_after_manifest_sha256": "87b712a87b4b762cd7b0890bd4aad94b378eee186fc9a37f4a47ef8ffa2c41b6",
+  "manifest_record_count": 89944,
+  "qualification": "Parent read-only bounded absence/twoBINidentity/manifestdigest/accounting audit; no new deletion/producer/experiment, no fresh89944-file rescan. Original release-binary paths retired, relocation manifest authoritative. Global free space delta not equal DU accounting."
+}

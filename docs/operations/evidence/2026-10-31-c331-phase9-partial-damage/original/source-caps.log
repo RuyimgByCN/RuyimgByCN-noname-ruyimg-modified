@@ -1,0 +1,2 @@
+Source line limit passed: 9025 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+{"command": ["python3", "-B", "scripts/check-source-lines.py"], "exit": 0, "locked_seconds": 5.1863079169997945, "disk_free_bytes": 30769659904}

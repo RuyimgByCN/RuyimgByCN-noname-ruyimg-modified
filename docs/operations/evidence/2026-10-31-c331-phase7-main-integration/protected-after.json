@@ -1,0 +1,99 @@
+{
+  "utc": "2026-10-31T09:31:47.073382+00:00",
+  "main_head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "main_protected_file_count": 31867,
+  "main_source_packages_dist_mismatches": [],
+  "original_c140_mismatches": [],
+  "hooks_mismatches": [],
+  "generated18_mismatches": [],
+  "main_index": {
+    "before_sha256": "ed845aec2067f273b7e11c545407d1831f7fed26f43597839dc2ee9ac375dbfa",
+    "after_sha256": "ed845aec2067f273b7e11c545407d1831f7fed26f43597839dc2ee9ac375dbfa",
+    "cached_diff_empty": true
+  },
+  "private_cached_diff_empty": true,
+  "parent_owned_docs_changes_allowed": [
+    "docs/architecture/native-progress.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-source-provenance/README.md",
+    "docs/operations/evidence/2026-10-31-pa09-product-pool/scope.json",
+    "docs/operations/evidence/2026-10-31-r05-runtime-contract/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "current_source_matches_passed_full_native_and_strict": true,
+  "defaultdist_files": 37,
+  "generated18": [
+    {
+      "path": "apps/web-client/public/pkg/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "path": "apps/web-client/public/pkg/engine_wasm.d.ts",
+      "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604"
+    },
+    {
+      "path": "apps/web-client/public/pkg/engine_wasm.js",
+      "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+    },
+    {
+      "path": "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+      "sha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164"
+    },
+    {
+      "path": "apps/web-client/public/pkg/engine_wasm_bg.wasm.d.ts",
+      "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a"
+    },
+    {
+      "path": "apps/web-client/public/pkg/package.json",
+      "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/engine_wasm.d.ts",
+      "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/engine_wasm.js",
+      "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+      "sha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts",
+      "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a"
+    },
+    {
+      "path": "apps/web-client/src/wasm-pkg/package.json",
+      "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/.gitignore",
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts",
+      "sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+      "sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+      "sha256": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts",
+      "sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8"
+    },
+    {
+      "path": "apps/web-client/src/worker/native-pkg/package.json",
+      "sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+    }
+  ]
+}

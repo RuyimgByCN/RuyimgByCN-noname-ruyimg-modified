@@ -1,0 +1,12 @@
+[package]
+name = "nc10-main-acceptance-probe"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[dependencies]
+engine-native = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native" }
+engine-native-wasm = { path = "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm" }
+serde_json = "1"
+
+[profile.dev]
+debug = "line-tables-only"

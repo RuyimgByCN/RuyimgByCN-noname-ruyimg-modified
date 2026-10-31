@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-protocol",
+    "--test",
+    "presentation_main5fc_reader"
+  ],
+  "cwd": "/tmp/i02-phase1-ab167599/source",
+  "env": {
+    "CARGO_TARGET_DIR": "/tmp/i02-phase1-ab167599/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "started": 1793446713.315318,
+  "free_disk_bytes_before": 36903776256,
+  "memory_limiter": false,
+  "profiles": "unchanged"
+}

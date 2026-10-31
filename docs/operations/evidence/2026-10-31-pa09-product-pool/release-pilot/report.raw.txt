@@ -1,0 +1,68 @@
+The release comparison is negative: the candidate has no consistent whole-route gain, and its p95 is higher in both ABBA comparisons. The matched pool-bearing subset is also slower in both runs. No admission threshold, framework, production change, Main integration or PA09/default-switch acceptance follows from this experiment.
+
+This one bounded experiment began 2026-10-31 07:35:16Z. Both builds and all four independent measurement processes completed by07:44:25Z; [checkpoint15](/tmp/pa09-release-fe278227/evidence/checkpoint15/identity.json) sealed at07:44:54Z, before15 minutes. Only the existing measurement test file in each owned private tree changed. The original nine frozen source copies, patch692e…, reports and logs were independently rehashed and remain untouched. No Main/source27/C/root/privacy-gate/version/protocol/option/AI-policy files were written.
+
+The full trajectory and request evidence was verified before choosing a subset. Each run contains1687 ordered request rows:1 init,6 starts,1680 autoStep rows across six completed280-step games. Game0 is the retained whole-game warmup; games1–5 supply all1400 measured autoStep rows and five completed games. All four runs have identical request IDs, game/step coordinates and state hashes, and the identical complete measured-envelope trajectory digest `803da246ffb0b09b764b24dd81f5a37734f1a33aeb2245ff96fb177307c1685c`. Candidate runs each accepted625 candidate jobs on135 measured steps; serial control records0, consistent with its frozen direct-planner route. That zero is not an added production counter.
+
+Raw rows remain in collection order, never sorted by duration: [candidate A0](/tmp/pa09-release-fe278227/evidence/abba-0-candidate.raw.ndjson), [serial B1](/tmp/pa09-release-fe278227/evidence/abba-1-serial.raw.ndjson), [serial B2](/tmp/pa09-release-fe278227/evidence/abba-2-serial.raw.ndjson), [candidate A3](/tmp/pa09-release-fe278227/evidence/abba-3-candidate.raw.ndjson). Each row binds variant, ABBA run, game, step, request ID/type, accepted-job delta, roundtrip/owner nanoseconds, hash, warmup status, release profile, source identity and binary SHA256. Separate metadata/summary records retain full source/binary/profile information and close/retirement observations. [Derived analysis](/tmp/pa09-release-fe278227/evidence/analysis.json) and [analysis code](/tmp/pa09-release-fe278227/analyze.py) calculate nearest-rank percentiles on copied timing lists, leaving raw rows unchanged.
+
+The TOTAL below is all1400 measured autoStep requests per run, including each measured game's first step. Times are microseconds; owner time includes dispatch/session/envelope, and roundtrip includes the Rust owner queue/reply path.
+
+| ABBA run | Jobs / pool-bearing steps | Roundtrip p50 / p95 | Roundtrip mean | Owner p50 / p95 |
+|---|---:|---:|---:|---:|
+| Candidate A0 | 625 / 135 | 169.125 / 279.875 | 171.589 | 143.584 / 241.417 |
+| Main serial B1 | 0 / 0 | 169.708 / 268.417 | 168.513 | 144.208 / 230.583 |
+| Main serial B2 | 0 / 0 | 161.416 / 262.250 | 163.109 | 137.542 / 224.916 |
+| Candidate A3 | 625 / 135 | 174.166 / 269.500 | 169.069 | 147.042 / 233.042 |
+
+Candidate p95 roundtrip is11.458µs higher in A0/B1 and7.250µs higher in A3/B2; owner p95 and roundtrip mean are also higher in both. The first pair's tiny median improvement does not establish an overall gain.
+
+Only after complete hash matching, candidate rows with `accepted_jobs_delta > 0` were paired to serial rows by the same game/step; request IDs and hashes also match. This subset is reported alongside TOTAL, not as a substitute.
+
+| Matched pool-bearing subset | Rows | Roundtrip p50 / p95, µs | Owner p50 / p95, µs |
+|---|---:|---:|---:|
+| Candidate A0 | 135 | 230.875 / 347.458 | 202.500 / 305.917 |
+| Serial B1, same coordinates | 135 | 194.916 / 302.292 | 167.792 / 263.292 |
+| Candidate A3 | 135 | 232.916 / 346.041 | 205.000 / 306.208 |
+| Serial B2, same coordinates | 135 | 187.042 / 306.542 | 160.916 / 265.375 |
+
+The root-eligible cost distribution contains only3-,4- and7-job steps on this load. These are whole owner costs, not isolated candidate evaluation times; they include the same envelope work.
+
+| Pair | Accepted jobs per eligible step | Rows | Candidate owner p50 / p95, µs | Matched serial owner p50 / p95, µs |
+|---|---:|---:|---:|---:|
+| A0/B1 | 3 | 20 | 272.958 / 307.375 | 237.750 / 269.833 |
+| A0/B1 | 4 | 80 | 169.334 / 252.875 | 143.000 / 224.167 |
+| A0/B1 | 7 | 35 | 236.791 / 341.958 | 190.000 / 276.834 |
+| A3/B2 | 3 | 20 | 262.959 / 300.250 | 239.833 / 284.041 |
+| A3/B2 | 4 | 80 | 180.750 / 266.083 | 133.208 / 215.875 |
+| A3/B2 | 7 | 35 | 223.792 / 323.916 | 181.333 / 311.334 |
+
+All observed eligible bins have higher candidate owner p50/p95 in both comparisons. The remaining1265 matched steps have zero accepted jobs, with their complete distributions retained in the analysis. They are not assumed to have zero pool costs: by the reviewed source, default nodes>1 creates the native pool before discovering a one-candidate state.
+
+Cold creation/retirement was retained rather than inferred from counters. Every first autoStep in all six games has0 accepted jobs in both variants. The candidate can nevertheless create its pool there. Each start replaces the session/pool, so a warmed process does not make every new game pool warm. All measured first autoSteps are already included in TOTAL; init/start and final close observations are additional lifecycle data.
+
+| Run | Init roundtrip, µs | Warmup first autoStep, µs | Measured games' first autoStep min / median / max, µs | Replacement start median, µs | Close call / close-plus-owner-retirement, µs |
+|---|---:|---:|---:|---:|---:|
+| A0 candidate | 4881.333 | 300.625 | 113.875 / 123.292 / 152.459 | 191.458 | 0.959 / 130.625 |
+| B1 serial | 280.375 | 148.416 | 60.417 / 73.750 / 153.583 | 104.333 | 1.375 / 88.709 |
+| B2 serial | 81.500 | 110.667 | 59.292 / 70.583 / 82.292 | 103.084 | 1.250 / 82.125 |
+| A3 candidate | 68.125 | 170.917 | 112.333 / 126.041 / 134.625 | 179.916 | 1.541 / 120.083 |
+
+The large first-process init observation remains raw; it is in the declared warmup, not among the1400 measured autoSteps. Final retirement is one observation per process, not a latency percentile or preemption guarantee. All start rows, first-step owner times and replacement-start ranges are available in the raw rows/analysis.
+
+Both controls used the existing workspace release profile, `lto=true`, `codegen-units=1`, with no target-cpu/optimization/compiler-flag overrides. Production settings remained 4-seat identity seed42,64 nodes/50ms. The [actual command matrix](/tmp/pa09-release-fe278227/evidence/command-matrix.json) records both `cargo test --offline --release -p desktop-client --lib --no-run` builds and all four `cargo test --offline --release -p desktop-client --lib actual_default_auto_step_owner_queue_measurement -- --ignored --nocapture` executions, cwd, owned target, environment, timestamps, exit and raw log SHA256. The experiment held the existing global heavy lock, used jobs2 / `CARGO_INCREMENTAL=0`, reused only its owned target directories, and monitored a3GiB disk stop. [Driver record](/tmp/pa09-release-fe278227/evidence/driver-result.json), [toolchain](/tmp/pa09-release-fe278227/evidence/candidate-rustc-version.txt), [release build inputs](/tmp/pa09-release-fe278227/evidence/build-inputs.json).
+
+Production identity stayed fixed: candidate production equals the reviewed `692e2a3bffd5610d7b1bccb7775409375f79b9492cc1e4c0d8dbfffc964fc498` patch; serial production engine/planner/session remain exact4dd. Rule330 / NGSA105 / ABI758 / WS6 and WASM default sources remain unchanged. The only overlay in each tree is `apps/desktop-client/src/native_engine_host/pool_tests.rs`; both measurement/row-assertion blocks are byte-identical. Existing counter-observation differences in their owner helpers are retained. No new production getter was added.
+
+| Variant | Source identity bound into every row | Release test binary SHA256 |
+|---|---|---|
+| Candidate | `e74664af408d57ff09b326971a770ef6053b975f57abbce3f28b325a1d1ffd57` | `de03f09a3303980c112af8f58d0016e5a607a1e15ef2127c5128ed0cb21f904b` |
+| Serial | `e9b53178da0d5389c088aa29d9985a4eafbb40700fa8c9923a658691f1163619` | `4955e512af14093285a6756bed8b268ef9738ca38cbb4726040872e35d51f36e` |
+
+[Overlay manifest](/tmp/pa09-release-fe278227/evidence/test-overlay-manifest.json), [candidate test-only patch](/tmp/pa09-release-fe278227/evidence/candidate-test-overlay.patch), [serial test-only patch](/tmp/pa09-release-fe278227/evidence/serial-test-overlay.patch), [isolated overlay application/production identity check](/tmp/pa09-release-fe278227/evidence/overlay-apply-check.json), [trace equivalence](/tmp/pa09-release-fe278227/evidence/tracing-equivalence.json). The manifest binds each original fixture SHA, resulting SHA and exact one-file patch. Test files are292 and176 lines. Original source/evidence preservation and empty private staged-file lists are checked in the seal.
+
+Actual validation is two successful optimized release builds plus four successful independently launched measurement tests. Each test asserts all request/game/step counts and IDs, valid hashes, table/counter consistency, positive candidate jobs or serial0 and all five game completions. Independent analysis additionally checks every cross-run request/hash coordinate and full trajectory before subset pairing. Trace rows are collected in request order and printed after timing; no percentile sorting occurs in the fixture. There were no failed setups in this experiment; the existing18 narrow-shell dead-code warnings were retained in build/run logs. No native/full affected/WASM suite was rerun because production source is unchanged, as instructed.
+
+Accepted counts establish submission only. The earlier frozen two-worker/root-index proof remains separate; these release runs introduce no delay hooks and make no new execution-overlap claim from counts. Two processes per variant on one fixed seed/load are a bounded pilot, not a confidence interval or AI-quality assessment. The route is Rust `NativeEngineHost::request` → owner queue → dispatch → NativeSession → envelope; it excludes real Tauri ResourceTable, GUI, IPC, HID, painting and platform/power acceptance. Native-versus-WASM speed, default switching and full PA09 acceptance are not established.
+
+The smallest next option is to keep this candidate private and, only in a separately authorized experiment, split planning/coordination cost from envelope cost on these same135 matched steps before proposing any admission-policy change. The observed3/4/7-job groups provide no profitable threshold. No adaptive framework or threshold optimization was introduced here. Skipped: new production edits, native/affected/WASM reruns, GUI/IPC/HID and additional experiments. Risk: whole-route release benefit remains absent on this load despite genuine candidate submissions.

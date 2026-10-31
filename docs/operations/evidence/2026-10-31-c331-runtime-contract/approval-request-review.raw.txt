@@ -1,0 +1,15 @@
+## Review
+
+No issues found.
+
+- **Correct — Approval scope is faithful.** The [approval page](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-runtime-contract/approval-request.md:7) incorporates the reviewed v1/v2/v3 contract: C-local damage infrastructure, shared phase dispatch, provider lifetime/death cleanup, reveal/out boundaries, rescue/LossEnd, exact skill admission, Weitong/Rangjie corrections, and schema5/hash/restore changes. It does not present these as already authorized or implemented.
+
+- **Correct — Paragraph 7 resolves the integration mismatch without broadening source authority.** The retained Main helper selects the first same-depth park, while frozen C6 dispatch prefers a non-TriggerOrder consumer. [Paragraph 7](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-runtime-contract/approval-request.md:15) requires a shared read-only selector while preserving C dispatch behavior, whole-ask uniqueness and shape checks, ownership and genuine-inner restrictions. It authorizes no new gate, framework, root certificate, Confirm/Cancel privilege or VM execution permission.
+
+- **Correct — Version approval is bounded.** The [candidate table](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-runtime-contract/approval-request.md:21) proposes C331/106 → GaiMing332/106 → R05-333/107. Only archive placement requires reapproval; R05 ABI759/WS7 remain under Decision28. C ABI758/WS6 remain conditional on unchanged VM meaning and verified additive-view compatibility.
+
+- **Correct — Preservation and completion limits remain explicit.** [Line 25](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-runtime-contract/approval-request.md:25) requires strict105 rejection and preservation of original bytes, hashes, locks and readers, without approving migration. The page preserves accepted NC27/Source33 and legacy DTO compatibility, retains frozen C140 as C evidence authority, and makes no completion claim for the 28 remaining entries, 16 unknown translations, source bodies or all37-source acceptance.
+
+**Merge verdict: OK with notes — ready to present for the specific user decision.** No numbers are allocated by this review. Implementation, integration and runtime acceptance remain subsequent work; whole C331/UP37 remains BLOCK.
+
+Skipped implementation, builds, tests, network and JavaScript execution; no Main/source/index writes. The consumer-selector correction is statically justified and still requires the stipulated integration and regression evidence.

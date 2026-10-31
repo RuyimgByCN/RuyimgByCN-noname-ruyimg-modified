@@ -1,0 +1,33 @@
+{
+  "utc": "2026-10-31T10:58:01.175746+00:00",
+  "qualification": "Additional bounded canonical source read-only audit; no rule or AI code changes or new execution. Original audit/counterexample retained unchanged.",
+  "findings": [
+    "Both adopted refresh sources explicitly declare decadechunlao.ai.jiuOther=true; generic Jiu.savable consults actual hasSkillTag, not any arbitrary same-name string. Source skill has genuine chooseToUse, viewAs Jiu and precontent link cost; cannot grant every player wine-other rescue or treat tag alone as full skill implementation.",
+    "Liuli swd.tianxianjiu savable is dying==player with no jiuOther alternative; a future shared rescue predicate must distinguish Jiu and Tianxianjiu/Hufu rather than apply one wine shortcut.",
+    "Bounded native kernel/content/loader source search found no decadechunlao/醇醪 registration; this is not proof of global package absence. Existing view_as_index native loader is unsupported. Any future capability integration must derive exact actual admitted skill/mod semantics, preserve provider/enable/lifetime and tests; no prefix/name-only authority."
+  ],
+  "sources": [
+    {
+      "path": "archive/upstream/noname/apps/core/character/refresh/skill.js",
+      "sha256": "a0d9ffee9709b51b73c7b8075420ba6c932d4717030e4bad17d2b59feaee6544",
+      "line_start": 9559,
+      "line_end": 9580,
+      "excerpt": "\t},\n\tdecadechunlao: {\n\t\taudio: \"chunlao\",\n\t\taudioname: [\"re_chengpu\"],\n\t\tenable: \"chooseToUse\",\n\t\tviewAs: { name: \"jiu\", isCard: true },\n\t\tviewAsFilter(player) {\n\t\t\treturn !player.isLinked();\n\t\t},\n\t\tfilter(event, player) {\n\t\t\treturn !player.isLinked();\n\t\t},\n\t\tfilterCard: () => false,\n\t\tselectCard: -1,\n\t\tlog: false,\n\t\tasync precontent(event, trigger, player) {\n\t\t\tplayer.logSkill(\"decadechunlao\");\n\t\t\tawait player.link();\n\t\t},\n\t\tgroup: [\"decadechunlao2\", \"decadechunlaox\"],\n\t\tai: { jiuOther: true },\n\t},"
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/character/refresh.js",
+      "sha256": "f9829f4567fa975ec7116360d9da78c1eb047dc5da9dd350bf49ec23ea38349a",
+      "line_start": 7655,
+      "line_end": 7677,
+      "excerpt": "\t\t\tdecadechunlao:{\n\t\t\t\taudio:'chunlao',\n\t\t\t\taudioname:['re_chengpu'],\n\t\t\t\tenable:'chooseToUse',\n\t\t\t\tviewAs:{name:'jiu',isCard:true},\n\t\t\t\tviewAsFilter:function(player){\n\t\t\t\t\treturn !player.isLinked();\n\t\t\t\t},\n\t\t\t\tfilter:function(event,player){\n\t\t\t\t\treturn !player.isLinked();\n\t\t\t\t},\n\t\t\t\tfilterCard:function(){return false},\n\t\t\t\tselectCard:-1,\n\t\t\t\tprecontent:function(){\n\t\t\t\t\tplayer.logSkill('decadechunlao');\n\t\t\t\t\tplayer.link();\n\t\t\t\t\tdelete event.result.skill;\n\t\t\t\t},\n\t\t\t\tgroup:['decadechunlao2','decadechunlaox'],\n\t\t\t\tai:{\n\t\t\t\t\tjiuOther:true,\n\t\t\t\t},\n\t\t\t},"
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/card/swd.js",
+      "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "line_start": 1757,
+      "line_end": 1774,
+      "excerpt": "\t\t\ttianxianjiu:{\n\t\t\t\tfullskin:true,\n\t\t\t\ttype:'basic',\n\t\t\t\ttoself:true,\n\t\t\t\tenable:function(event,player){\n\t\t\t\t\treturn !player.hasSkill('tianxianjiu');\n\t\t\t\t},\n\t\t\t\tsavable:function(card,player,dying){\n\t\t\t\t\treturn dying==player;\n\t\t\t\t},\n\t\t\t\tusable:1,\n\t\t\t\tselectTarget:-1,\n\t\t\t\tlogv:false,\n\t\t\t\tmodTarget:true,\n\t\t\t\tfilterTarget:function(card,player,target){\n\t\t\t\t\treturn target==player;\n\t\t\t\t},\n\t\t\t\tcontent:function(){"
+    }
+  ],
+  "followup": "C29 actualrescue/shared live+restore consumer phase; preserve no-skill otherJiu negative, genuine selfJiu positive, strictselfTianxianjiu and actuallysupportedjiuOther positive. All additional Jijiu/Futai/variant live-vs-restore differences remain sourceaudit gaps until realtests."
+}

@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "game-server",
+    "-p",
+    "desktop-client",
+    "--tests"
+  ],
+  "cwd": "/tmp/i02-phase1-ab167599/source",
+  "memory_bytes": 3221225472,
+  "env": {
+    "CARGO_TARGET_DIR": "/tmp/i02-phase1-ab167599/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "started": 1793444452.691744
+}

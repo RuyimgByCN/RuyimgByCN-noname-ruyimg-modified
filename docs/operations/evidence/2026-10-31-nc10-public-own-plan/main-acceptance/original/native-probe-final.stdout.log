@@ -1,0 +1,2 @@
+native Shan card-first/direct/cancel and both park formal Pending generated
+{"command": ["cargo", "run", "--offline", "--manifest-path", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml", "--", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"], "exit": 0, "locked_seconds": 0.9953131250222214, "disk_free_bytes": 36520022016}

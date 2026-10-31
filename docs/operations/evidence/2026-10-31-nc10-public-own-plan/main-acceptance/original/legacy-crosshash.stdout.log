@@ -1,0 +1,16 @@
+[
+  {
+    "players": 4,
+    "seed": 42,
+    "native": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff",
+    "wasm": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff"
+  },
+  {
+    "players": 2,
+    "seed": 1,
+    "native": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8",
+    "wasm": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8"
+  }
+]
+ALL CURRENT-SOURCE CROSS-TARGET CHECKS PASSED
+{"command": ["python3", "-B", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/legacy-crosshash.py"], "exit": 0, "locked_seconds": 0.8818398750154302, "disk_free_bytes": 35773837312}

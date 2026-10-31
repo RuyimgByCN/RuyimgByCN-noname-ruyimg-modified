@@ -1,0 +1,1 @@
+{"pid": 85150, "argv": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "complete_own_plan_cannot_depend", "--", "--nocapture", "--test-threads=1"], "started": "2026-10-31T09:17:38.437081+00:00"}

@@ -1,0 +1,60 @@
+{
+  "note": "Current330 positive driver/warmup samples, up to32 per test; not identification or release of a historical private NoCert gate",
+  "rows": 349,
+  "tests": {
+    "nc10_ai_bounds::nc10_planner_is_deterministic": {
+      "None": 9
+    },
+    "nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores": {
+      "Own": 3,
+      "None": 21,
+      "Other": 8
+    },
+    "nc10_ai_information_boundary::planner_detects_own_hand_change": {
+      "None": 29,
+      "Own": 3
+    },
+    "nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order": {
+      "None": 32
+    },
+    "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic": {
+      "None": 29,
+      "Own": 3
+    },
+    "nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free": {
+      "Other": 27,
+      "None": 3,
+      "Own": 2
+    },
+    "nc10_ai_information_boundary::planner_is_invariant_under_hidden_information": {
+      "None": 29,
+      "Own": 3
+    },
+    "nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free": {
+      "Other": 13,
+      "None": 18,
+      "Own": 1
+    },
+    "nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics": {
+      "None": 27,
+      "Own": 5
+    },
+    "nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information": {
+      "None": 14,
+      "Other": 8
+    },
+    "nc10_ai_bounds::nc10_tiny_budget_still_legal": {
+      "None": 23,
+      "Other": 1
+    },
+    "nc10_ai_bounds::nc10_leak_surface_quantified": {
+      "None": 32
+    },
+    "nc10_ai_bounds::zero_deadline_returns_timed_out_plan_without_blocking": {
+      "None": 1
+    },
+    "nc10_ai_bounds::nc10_stale_plan_is_rejected": {
+      "None": 5
+    }
+  }
+}

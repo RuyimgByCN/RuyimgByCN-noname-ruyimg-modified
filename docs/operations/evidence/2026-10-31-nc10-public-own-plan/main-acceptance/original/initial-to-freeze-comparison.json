@@ -1,0 +1,15 @@
+{
+  "trackedChangesSinceInitialSnapshot": [
+    "docs/architecture/native-progress.md"
+  ],
+  "allChangesParentDocs": true,
+  "source33Unchanged": true,
+  "protected99Unchanged": true,
+  "defaultDist37Unchanged": true,
+  "indexShaUnchanged": false,
+  "headUnchanged": true,
+  "treeUnchanged": true,
+  "hooksUnchanged": true,
+  "initialTrackedFiles": 44306,
+  "freezeMaintainedInputs": 14920
+}

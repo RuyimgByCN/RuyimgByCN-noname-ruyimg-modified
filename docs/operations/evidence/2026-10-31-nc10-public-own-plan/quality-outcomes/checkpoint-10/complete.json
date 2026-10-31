@@ -1,0 +1,9 @@
+{
+  "summary": "/tmp/nc10-own-quality-8ed2ce6f/evidence/summary.json",
+  "preservation": "/tmp/nc10-own-quality-8ed2ce6f/evidence/preservation.json",
+  "source_context": "/tmp/nc10-own-quality-8ed2ce6f/evidence/public-divergence-and-rule-context.json",
+  "both200_done": true,
+  "baseline_exit": 0,
+  "candidate_exit": 0,
+  "STOP": false
+}

@@ -1,0 +1,17 @@
+{
+  "fields": {
+    "head": true,
+    "tree": true,
+    "source6": true,
+    "index_sha256": true,
+    "index_entries": true,
+    "staged": true,
+    "status": true,
+    "tracked_hashes": true,
+    "hooks": true,
+    "protected": true,
+    "maintained_and_markdown": true
+  },
+  "failures": [],
+  "equal": true
+}

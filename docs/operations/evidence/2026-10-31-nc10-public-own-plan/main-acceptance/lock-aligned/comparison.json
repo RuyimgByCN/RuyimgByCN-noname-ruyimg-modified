@@ -1,0 +1,67 @@
+{
+  "cases": [
+    {
+      "case": "park-0",
+      "newNativeSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "preservedActualWasmSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "oldCrossDependencyNativeSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "allBytesEqual": true
+    },
+    {
+      "case": "park-1",
+      "newNativeSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "preservedActualWasmSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "oldCrossDependencyNativeSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "allBytesEqual": true
+    },
+    {
+      "case": "own-cancel",
+      "newNativeSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "preservedActualWasmSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "oldCrossDependencyNativeSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "allBytesEqual": true
+    },
+    {
+      "case": "shan-auto",
+      "newNativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "preservedActualWasmSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "oldCrossDependencyNativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "allBytesEqual": true
+    },
+    {
+      "case": "shan-direct",
+      "newNativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "preservedActualWasmSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "oldCrossDependencyNativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "allBytesEqual": true
+    },
+    {
+      "case": "shan-cancel",
+      "newNativeSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "preservedActualWasmSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "oldCrossDependencyNativeSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "allBytesEqual": true
+    },
+    {
+      "case": "shan-pass",
+      "newNativeSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "preservedActualWasmSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "oldCrossDependencyNativeSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "allBytesEqual": true
+    }
+  ],
+  "fullNativeReplyStateHashEventJsonEqualOld": true,
+  "fullRepliesHashesRevisionsEventCodesDirectlyEqualActualWasmRows7": true,
+  "directAutoShanFullArchiveEqual": true,
+  "sourceHarnessUnchanged": true,
+  "normalization": "None for native/WASM/old output equality; unchanged source explicitly validates restore auth_generation+1 only.",
+  "actualExecutedBinary": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe",
+  "actualRunningLines": [
+    "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe /tmp/nc10-main-lock-repair-0425dc78`",
+    "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe /tmp/nc10-main-lock-repair-0425dc78 compare`"
+  ],
+  "binarySha256": "f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144",
+  "binaryCopySha256": "f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144",
+  "oldBinaryUnchanged": true,
+  "old714AndReportUnchanged": true
+}

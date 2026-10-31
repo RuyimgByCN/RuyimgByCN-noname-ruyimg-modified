@@ -1,0 +1,198 @@
+{
+  "utc": "2026-10-31T10:35:40.387396+00:00",
+  "status": "PASS",
+  "materialized_snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase8-kc0cu91p/snapshot",
+  "full_current_source": 166,
+  "final_increment_files": 35,
+  "pre_full_and_final_source_sha_equal": true,
+  "log_count": 18,
+  "logs": [
+    {
+      "path": "initial-red.log",
+      "counts": [
+        0,
+        3,
+        0
+      ],
+      "results": 1,
+      "exits": [
+        101
+      ]
+    },
+    {
+      "path": "first-green-attempt.log",
+      "counts": [
+        3,
+        0,
+        0
+      ],
+      "results": 1,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "green-attempt2.log",
+      "counts": [
+        3,
+        0,
+        0
+      ],
+      "results": 1,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "matrix-first.log",
+      "counts": null,
+      "results": 0,
+      "exits": [
+        101
+      ]
+    },
+    {
+      "path": "matrix-attempt2.log",
+      "counts": [
+        10,
+        0,
+        0
+      ],
+      "results": 1,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "targeted-packages-first.log",
+      "counts": [
+        609,
+        0,
+        0
+      ],
+      "results": 29,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "frontend-tests-first.log",
+      "counts": null,
+      "results": 0,
+      "exits": []
+    },
+    {
+      "path": "frontend-tests2.log",
+      "counts": null,
+      "results": 0,
+      "exits": []
+    },
+    {
+      "path": "frontend-type-first.log",
+      "counts": null,
+      "results": 0,
+      "exits": []
+    },
+    {
+      "path": "frontend-type2.log",
+      "counts": null,
+      "results": 0,
+      "exits": []
+    },
+    {
+      "path": "full-native-first.log",
+      "counts": null,
+      "results": 0,
+      "exits": []
+    },
+    {
+      "path": "full-native2.log",
+      "counts": [
+        1764,
+        1,
+        75
+      ],
+      "results": 12,
+      "exits": [
+        101
+      ]
+    },
+    {
+      "path": "full-native3.log",
+      "counts": [
+        1773,
+        0,
+        75
+      ],
+      "results": 17,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "legacy-admission.log",
+      "counts": [
+        2,
+        0,
+        0
+      ],
+      "results": 12,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "gate1b-strict.log",
+      "counts": null,
+      "results": 0,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "source-cap-unit.log",
+      "counts": null,
+      "results": 0,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "source-caps.log",
+      "counts": null,
+      "results": 0,
+      "exits": [
+        0
+      ]
+    },
+    {
+      "path": "layering.log",
+      "counts": null,
+      "results": 0,
+      "exits": [
+        0
+      ]
+    }
+  ],
+  "gate1b": {
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 36.90819978713989,
+    "independent_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings",
+    "incremental": 0,
+    "jobs": 2,
+    "lock_device": 16777231,
+    "lock_inode": 620205209
+  },
+  "C29_six_frozen_contract_sha": true,
+  "Main_private_staging_empty": true,
+  "qualification": "Fresh source/hash/raw-result parser, not new test execution. Worker protection assertions retained separately; not another31867fullscan. Private C8 datafoundation only; runtime consumers/fullC331 and Main integration blocked."
+}

@@ -1,0 +1,7 @@
+
+running 1 test
+test ai_planner::plan_enumerates_single_choice_fallbacks ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 219 filtered out; finished in 0.02s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "misc", "plan_enumerates_single_choice_fallbacks", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 0.13877995900111273, "disk_free_bytes": 45572902912}

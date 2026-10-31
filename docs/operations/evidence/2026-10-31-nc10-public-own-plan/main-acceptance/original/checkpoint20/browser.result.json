@@ -1,0 +1,48 @@
+{
+  "name": "browser",
+  "argv": [
+    "node",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/browser.mjs",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/frontend-dist",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"
+  ],
+  "actual_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "node",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/browser.mjs",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/frontend-dist",
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 2.388041083002463,
+  "source6_pre": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+    "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+  },
+  "source6_post": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+    "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "disk_free_after": 36060450816,
+  "stdout_sha256": "2898732136b40b2d8854beb6ee66966a2860e6b85301ab7ac1093aea48b33b89",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

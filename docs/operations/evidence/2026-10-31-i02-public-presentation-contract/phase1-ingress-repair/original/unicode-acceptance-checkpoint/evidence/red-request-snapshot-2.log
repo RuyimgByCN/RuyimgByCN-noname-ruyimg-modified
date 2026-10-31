@@ -1,0 +1,26 @@
+   Compiling engine-api v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-api)
+   Compiling engine-protocol v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.10s
+     Running tests/presentation_main5fc_reader.rs (/tmp/i02-phase1-ab167599/target/debug/deps/presentation_main5fc_reader-46eb3cbf3315b49e)
+
+running 3 tests
+test wire::tests::roundtrip_hello ... ok
+test old_and_new_client_request_contract_remains_strict_and_unchanged ... FAILED
+test actual_old_reader_ignores_optional_new_response_field ... ok
+
+failures:
+
+---- old_and_new_client_request_contract_remains_strict_and_unchanged stdout ----
+
+thread 'old_and_new_client_request_contract_remains_strict_and_unchanged' (19948413) panicked at crates/engine-protocol/tests/presentation_main5fc_reader.rs:27:5:
+assertion failed: wire::decode_c2s(&input.to_string()).is_ok()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    old_and_new_client_request_contract_remains_strict_and_unchanged
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-protocol --test presentation_main5fc_reader`
+{"command": ["cargo", "test", "--offline", "-p", "engine-protocol", "--test", "presentation_main5fc_reader"], "exit": 101, "locked_seconds": 3.132678832975216, "disk_free_bytes": 36762451968}

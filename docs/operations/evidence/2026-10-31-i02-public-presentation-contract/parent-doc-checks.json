@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-31T10:43:57.402366+00:00",
+  "approval_page_sha256": "301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d",
+  "review_historical_P2_corrected": true,
+  "checks": {
+    "links": {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py"
+      ],
+      "exit": 0,
+      "stdout_sha256": "1ec0ef8a4042dad0f17b59af28bab0ba507bcc6b1e2e83a7a77ce0499ba889f2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": "检查 7 个文件，坏链 0\n",
+      "err_tail": ""
+    },
+    "strict": {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+      "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b",
+      "tail": "检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n",
+      "err_tail": "\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n"
+    },
+    "source-caps": {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "stdout_sha256": "ec374bf19b44656b26db20fc1cf1e8451b5dafc6602efe809a7086b409268388",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "tail": "Source line limit passed: 9003 files <= 2000 lines; Rust non-test files <= 1000 effective lines\n",
+      "err_tail": ""
+    }
+  }
+}

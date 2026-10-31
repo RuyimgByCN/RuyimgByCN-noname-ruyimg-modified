@@ -1,0 +1,19 @@
+{
+  "head": true,
+  "tree": true,
+  "index_sha256": false,
+  "staged": true,
+  "hooks": true,
+  "source6": true,
+  "protected": {
+    "admission31": true,
+    "protected": true,
+    "modules": false,
+    "dist": true,
+    "root_gates": true
+  },
+  "tracked_changes": [
+    "docs/architecture/native-progress.md"
+  ],
+  "only_parent_docs_changed": true
+}

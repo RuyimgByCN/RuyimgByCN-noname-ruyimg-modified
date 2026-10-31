@@ -1,0 +1,9 @@
+{
+  "stage": "first final seal",
+  "failure": "extra private tracked test-generated historical HTTP log detected; not a production/source change",
+  "path": "docs/operations/evidence/2026-10-17-t13-product-path/http-product.log",
+  "generated_sha256": "6fa763a1576cf3c6f2bdb88d3531d301debf424e0258563fa662e97455cd7ef6",
+  "baseline_sha256": "6fa763a1576cf3c6f2bdb88d3531d301debf424e0258563fa662e97455cd7ef6",
+  "preserved": "/tmp/nc10-own-36992565/evidence/test-generated-http-product.log",
+  "repair": "restored exact5fc bytes only in private worktree after preserving generated log"
+}

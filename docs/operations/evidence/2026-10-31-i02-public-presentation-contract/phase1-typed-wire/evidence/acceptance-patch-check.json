@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "git",
+    "apply",
+    "--reverse",
+    "--check",
+    "/tmp/i02-phase1-ab167599/acceptance-checkpoint/full.patch"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": ""
+}

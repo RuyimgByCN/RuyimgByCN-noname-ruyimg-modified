@@ -1,0 +1,35 @@
+{
+  "name": "gate1b",
+  "argv": [
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--all-targets"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "check",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--all-targets"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 22.79004333302146,
+  "minimum_free_bytes": 38813278208,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/gate1b-target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "RUSTFLAGS": "-Dwarnings"
+  },
+  "stdout_sha256": "bdd8e0940f67e24c124b273a1f4ecc5ea5281b29e7e1993a75e884c58bbbfd43",
+  "stderr_sha256": "2f30693d87466185fee4fb3c083985e576e9810c9189b2fd29ddbe97e3f67c1f"
+}

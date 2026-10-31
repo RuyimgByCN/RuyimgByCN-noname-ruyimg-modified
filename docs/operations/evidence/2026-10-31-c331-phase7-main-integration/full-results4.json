@@ -1,0 +1,54 @@
+[
+  {
+    "name": "full-native4",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "exit": 0,
+    "seconds": 31.042680978775024
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.10240888595581055
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 4.232603073120117
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "seconds": 0.1531519889831543
+  }
+]

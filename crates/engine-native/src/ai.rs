@@ -530,18 +530,29 @@ fn vm_choice_leaf(choice: &ChoiceView) -> bool {
     )
 }
 
-fn projected_choice_action(choice: ChoiceView) -> GameAction {
+/// Public command advice; selecting an option does not certify its continuation.
+pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
     let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
-        return GameAction::NextPhase;
+        return None;
     };
-    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
-        vec![ChoiceOption::Pass]
-    } else if min == 0 && allow_cancel {
-        Vec::new()
+    let mut distinct = Vec::new();
+    for option in options {
+        if !distinct.contains(&option) {
+            distinct.push(option);
+        }
+    }
+    let take = min.max(1).min(max).min(distinct.len());
+    let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
+        .take(take).copied().collect();
+    let mut selection = if cards.len() == take {
+        cards
     } else {
-        options.into_iter().take(min).collect()
+        distinct.into_iter().take(take).collect()
     };
-    GameAction::Answer { choice_id: id, selection }
+    if allow_cancel && (selection.len() < min || selection.len() > max) {
+        selection.clear();
+    }
+    Some(GameAction::Answer { choice_id: id, selection })
 }
 
 impl Engine {
@@ -550,9 +561,15 @@ impl Engine {
     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
         let submitted_revision = self.revision();
-        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
+        let public_action = match self.ai_session(seat).choice() {
+            Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
+            // Preserve the existing non-owner VM leaf without treating it as an answer.
+            Some(choice @ ChoiceView::Other { .. }) if vm_choice_leaf(&choice) => Some(GameAction::NextPhase),
+            _ => None,
+        };
+        if let Some(action) = public_action {
             return Plan {
-                seat, revision: submitted_revision, action: projected_choice_action(choice),
+                seat, revision: submitted_revision, action,
                 nodes_used: 0, budget_exhausted: false, timed_out: false,
                 cancelled: planner.cancelled(), sim_faults: 0,
             };
@@ -762,8 +779,8 @@ impl Engine {
         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
-            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
-                return projected_choice_action(choice);
+            if let Some(action) = sim.ai_session(seat).choice().and_then(projected_choice_action) {
+                return action;
             }
             if !sim.ai_session(seat).view().players[seat as usize].alive {
                 return GameAction::NextPhase;

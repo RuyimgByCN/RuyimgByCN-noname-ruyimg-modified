@@ -1,0 +1,51 @@
+## Review
+
+- **Correct：可登记本次 CI 成功；OK with notes 仅适用于证据登记。** 对象为 [run41183155464](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464)、attempt **1**、exact head **`5fc0f77403d90fa4555156bf01722450cbe7bf3b`**，tree **`9ba4253837da66457669bd19c5120a9163b2a05b`**、parent/expectedold4dd。最终 run API 为 `completed/success`，更新时间 **2026-10-31T08:28:21Z**。
+- 已读 producer 全部人类正文、checker、完整 manifest、seal、父 fresh parser 及完整结果；另定向核对原 API、具名测试日志与父新采集的五份 live API。未读巨大 machine JSON 尾部，未执行脚本或重算哈希。
+- 父 [fresh parser](/tmp/noname-parent-ci41183155464-audit.py:1) / [PASS结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41183155464-audit-b69ztwpn/independent-results.json:1) 已核 **92项 bytes/SHA256/CRC32、manifest SHA、十份 detail/API steps 对照、十日志全解压身份与 Rust 汇总**，并有 negative digest selfcheck。**这些是父独立重算，本 reviewer 未重复计算。**
+- **补充 live 证据：**已读父 [commands](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41183155464-audit-b69ztwpn/live-parent/commands.json:1)、[result](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41183155464-audit-b69ztwpn/live-parent/result.json:1)及 run/jobs/artifacts/branch/main 原响应：**09:00:22–09:00:24Z 五次 gh API 均 exit0**，仍为 exact5fc/attempt1、10 success、130 steps、3 artifacts；native-convergence=5fc，remote main=**`47347c6608d651660ae9459e59eb529b3cef277f`**。这些请求由父执行，本 reviewer 未联网。
+
+[原 jobs API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in/ci-stage/jobs-final.stdout:1)及父 live jobs 一致，**10/10 success**：
+
+| Job | ID |
+| --- | ---: |
+| gates-ubuntu | 124484538576 |
+| desktop-windows-latest | 124484538673 |
+| desktop-ubuntu-latest | 124484538689 |
+| perf-ubuntu-latest | 124484538706 |
+| build-macos-latest | 124484538718 |
+| build-ubuntu-latest | 124484538729 |
+| build-windows-latest | 124484538732 |
+| perf-macos-latest | 124484538737 |
+| desktop-macos-latest | 124484538745 |
+| native-web | 124484538767 |
+
+- **Step API 单独成立：130 = 128 success / 2 skipped / 0 failure / 0 null**。两处 skipped 为 macOS/Windows Linux Tauri dependencies，未以 job green 推填 step。
+- **Rust数量引用父 raw regex：**workspace **6917 passed / 0 failed / 77 ignored，164 summaries**；native regressions **1825/0/75**；三 OS library 各 **853/0/0**。范围重叠，不能相加为 unique tests。
+- **独立核原日志：**[native-web](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in/private-raw-downloads/job-124484538767-raw-log.stdout:4549) 为 Worker **82/0**；5472行起 frontend **179 passed / 0 failed / 0 skipped**。API明确 native/legacy WASM rebuild、typecheck/build success。
+- **独立核 source 用例：**gates/native 两日志各有五项 `nc10_source_provenance`、四项 `engine::choice_source` 的 `ok`，涉及实际 consumer、歧义/非拥有/VM未知及初始绑定不认证下一 prompt；只证明这些具名用例通过。
+- [gates日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in/private-raw-downloads/job-124484538576-raw-log.stdout:7781)另有 desktop owner、session binding、native WS roles/reconnect/deadline、typed-restore legacy sink、`legacy_choice_errors_match_4dd_oracle` 通过；**445输入数量引用 producer，原日志该行只显示测试名与 ok**。
+- frontend5182、5187、5192、5317行记录 source strict/optional、desktop envelope、旧/新WS6 reader、JoinOk/outcome/snapshot 用例通过；不扩展为 privacy、Root 或完整NC10等价证明。
+- **独立核日志：**conformance **19 / ALL PASS**、`ALL CROSS-TARGET CHECKS PASSED`、资源测试 **17/17**；[full verify](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in/private-raw-downloads/job-124484538576-raw-log.stdout:21761)含 legacy **366**、portraits **2707**、audio **9652**、audio-compat **5**。
+- **独立核性能日志：**按 start-hash-p50 / distance-query-p95 / snapshot-restore / observer-projection，Ubuntu **78/0/68/31 μs**、macOS **66/0/59/28 μs**，预算 **100/300/200/100 μs**，均PASS；这是 hosted legacy release server-baseline，不证明native收益、非劣性或同设备改善。
+
+原及父live [artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41183155464-audit-b69ztwpn/live-parent/artifacts.stdout:1)一致，三者采集时未过期，均绑定 exact run/head：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| Windows | 13036700549 / 26279296 | `916c4115894e7df3c8e9d2fa321aa86b0d8f31aa98a1695faa6344f6c5164aa8` |
+| macOS | 13036341819 / 32810622 | `a5f613641aea13c6e2dcfe4b456714610f6f8c54abeab8d9347c9a06c82b91c1` |
+| Ubuntu | 13035886166 / 266359404 | `50b99b5787536636c3020c9bffd52d407f3dc87cc9b2a22cbb11be5156bf1ad8` |
+
+- Windows prepare7/installer10/upload11 均实际success；日志2164–2167行上传digest、ID、bytes与API一致。仅证明本次产出/上传，未download/install/signing/device验证。
+- **发布绑定：**单次普通URL push exit0；父核验477路径快照前后相同、guard **`ba0dbbd4…`** 八项selfchecks、原hook **`e349af…`** 不变及persistent hooksPath unset。完整tree/history保留、source33、477paths/**81,550,091B**、tree44306/dist37、maxblob22955412B及无新增compiled binary引用producer checker/审计；未重扫当前Main。
+- push完成 **08:05:21Z**、lease释放 **08:07:48Z**；producer观察 **08:08:36–08:29:35Z**。唯一default watch exit0、29次producer API exit0，无HTTP失败/fallback/rerun；与父后续五次live读取分列。wall93.389796s/locked93.348201s差值含startup/queue；23.42MiB是舍入进度，非exact wire bytes。
+- **归档：**[manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in/copy-manifest.json:1) SHA **`8f7eec2708f01641d7cc35dfda78dbc24222bcf858b09675bac74009c2af7b38`**；summary SHA **`a638daebf7e93c123d723b1fbe3497db882e991539ed35cfef1a2883bdf80f44`**。92项加manifest和独立seal共 **94 primary**；十份private originals排除。父live补充证据位于独立audit root，不混入这94份。
+- 父核得十日志解压 **4,754,975B**、Windows build/desktop CRLF **3837/2208**；归档用gzip。checkpoint live-stream index保留历史语境，当前复制使用最终manifest+seal。
+- **3628 warning loglines** 含重复，非unique warnings；ignored与skips保留。旧4dd成功、7779/1及更早失败/502不被替换。
+- 发布契约仍为 **330/105/758/WS6、desktop WASM default**。父说明后续Decision29批准记录时间为 **08:53:26Z**、私有phase7已启动；它们及未跟踪Root记录不属于5fc，本登记未审新C/PA实现，也未重验父后续Main。
+- **Fixed：**无修改。No issues found.
+- **Merge verdict：OK with notes，仅指exact5fc发布/CI登记。** 整体Goal/runtime既有BLOCK不解除，不产生Root、Confirm-prefix/Cancel-tail、NoCert、privacy、fuel/arithmetic/scheduler或上游等价证书。
+
+未执行network/watch/tests/build、producer脚本、下载/安装或source/Main/index写入；未审当前Main及后续私有实现。
+风险：保存完整94份primary及父audit/live补充证据；CI通过不等于物理安装、签名、native收益、默认切换或whole-goal完成。

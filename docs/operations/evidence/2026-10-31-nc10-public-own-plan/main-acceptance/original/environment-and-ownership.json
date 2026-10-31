@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T11:47:38.320419+00:00",
+  "helperSha256": "d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34",
+  "lockDevice": 16777231,
+  "lockInode": 620205209,
+  "jobs": 2,
+  "incremental": 0,
+  "offline": true,
+  "diskFloorBytes": 3221225472,
+  "noRssLimitIntroduced": true,
+  "target": "/tmp/nc27-main-functional-458ed333/cargo-target",
+  "strictTarget": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/strict-target",
+  "MainMutationByVerifier": "One ignored generated native WASM file via original release build; no source/docs/config/package/lock edits; unrelated Main untracked files not written."
+}

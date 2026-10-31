@@ -1,0 +1,33 @@
+   Compiling engine-api v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-api)
+   Compiling engine-protocol v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.11s
+     Running unittests src/lib.rs (/tmp/i02-phase1-ab167599/target/debug/deps/engine_api-7e058f95e9ef088f)
+
+running 4 tests
+test version::abi_coordination_tests::abort_bump_without_claim ... ok
+test manifest::tests::manifest_hash_is_stable_and_nonzero ... ok
+test manifest::tests::different_seed_changes_hash ... ok
+test version::abi_coordination_tests::claims_are_unique ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/tmp/i02-phase1-ab167599/target/debug/deps/engine_protocol-87a5bab53374f018)
+
+running 1 test
+test wire::tests::roundtrip_hello ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_api
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_protocol
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-api", "-p", "engine-protocol"], "exit": 0, "locked_seconds": 4.499529082968365, "disk_free_bytes": 48858312704}

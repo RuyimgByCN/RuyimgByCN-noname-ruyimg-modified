@@ -1,0 +1,47 @@
+{
+  "decision": 29,
+  "recorded_utc": "2026-10-31T08:53:26.801749+00:00",
+  "source": "Explicit ask_user_question answer in current session; recording time is not a separately observed click timestamp",
+  "question": "是否批准裁决页所列的C331具体合同，并将存档排布调整为C331/NGSA106→改命332/NGSA106→R05规则333/NGSA107（R05 ABI759／WS7保持不变）？",
+  "answer": "批准限定合同与档号（推荐）",
+  "approved_contracts": {
+    "approval-request.md": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+    "approval-request-review.raw.txt": "9500b545421e5b15db2efd916ca9aaf4e5ca7cb79c0c9f9b44907031343e170f",
+    "proposal-v1.raw.txt": "6499a28149f499fe3b51fecf573b22b705173dc9a20c9bd2a7d16c108d8d55b2",
+    "proposal-v2.raw.txt": "996e77443fdefbfaacfd51c710bad8d270f074d3f2b9cb78528022e1316b08e1",
+    "proposal-v3.raw.txt": "1fae43770e5d147c08602744473be625a1b930b67022a9638bef81571b3011da",
+    "review-v3.raw.txt": "e910f00253d5246f2c9d2df81444c6af0e323ccd8a7bda16b877e1e228908f01"
+  },
+  "version_sequence": [
+    {
+      "batch": "C",
+      "rules": 331,
+      "archive": 106,
+      "abi": 758,
+      "ws": 6
+    },
+    {
+      "batch": "GaiMing cancel",
+      "rules": 332,
+      "archive": 106,
+      "abi": 758,
+      "ws": 6
+    },
+    {
+      "batch": "R05",
+      "rules": 333,
+      "archive": 107,
+      "abi": 759,
+      "ws": 7
+    }
+  ],
+  "conditions": [
+    "C ABI758/WS6 only under unchanged VM instruction/context meaning and verified additive-view compatibility; otherwise stop for exact boundary decision",
+    "schema5 and reviewed Core/parser/hash/restore/phase/damage/grant/reveal/lifetime/Rangjie work authorized",
+    "strict reject old105 by newreader, preserve original105 bytes/hash/locks/readers; no migration authorized",
+    "actual331 acceptance before332, actual332 beforeR05; no automatic acceptance/default switch",
+    "all37/262of290+remaining28/16unknown/body-platform differences remain; Source27 metadata never root/execution/answer certificate; no root/Confirm/Cancel/VM/fuel/arithmetic gate release"
+  ],
+  "effect": "Supersedes Decision28 archive reservation106 forR05 only: R05now107; previouslyapprovedR05 ABI759/WS7 unchanged",
+  "implementation_status": "not yet implemented/accepted; Main5fc remains330/105/758/WS6"
+}

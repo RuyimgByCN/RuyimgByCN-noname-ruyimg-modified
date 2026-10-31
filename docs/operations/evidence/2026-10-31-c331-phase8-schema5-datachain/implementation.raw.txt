@@ -1,0 +1,51 @@
+# C331 phase8：Schema5 声明与 admission 数据基础（2026-10-31）
+
+本轮在已接受的C7私有基础上实现下述数据链，定向/原生/Gate1b检查通过，**待父独立复核后才进入Core phase9**。不是Main合入、整C331或全部schema5语义完成；来源仍262/290、余28、+0，37来源及16未知翻译行不改状态。
+
+- 开始09:49:37 UTC；17分32秒（10:07:09）实体checkpoint已封并立即发父。重命令在约32分钟前已结束；随后仅保护/补丁/证据封存，未提交/暂存/推送/装依赖或改Main、上游、包资源、audio/UI。
+- 工作树：`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree`，仍detached `5fc0f77403d90fa4555156bf01722450cbe7bf3b`；E=`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8`。
+- C7接受的148冻结/旧checkpoint/raw均未改；C8改35文件（含机械constructor、测试拆分），最终C7→C8增量及166文件完整组合源同时封存。
+
+实际数据实现与边界：
+
+- 按已批v1-v3直接扩展PackageSkillEntry/TriggerEntry/ActiveEntry：host_key与module互斥；force_die/out、repeat、hidden、event_skill；charlotte/persevere/forever、group_children、temporary；经父明确的reveal类型和未发布中间`onremove:Option<String>`。没有新嵌套框架、第二catalog/registry/package manager。
+- 新字段使用Option保留**显式false/空Vec/显式RevealBinding::None**；未知字段/枚举/非字面flag拒绝。缺省None不序列化；显式JSON null拒绝，避免丢presence。共享JSON入口先查schema/presence再直接serde原bytes，保留重复字段拒绝；直接serde SDK也保留presence/null守卫。
+- schema3仅默认、4仅非默认tuple；任一新执行字段present即需要5，包括false/空/None。5无任何新字段仍拒绝。schema0/未知版本拒绝；原3/4真实字节及logic hash正控保持。
+- existing `package/hashing.rs`域`npack-native-mechanisms/1`绑定声明presence、真实logical identity、handler位置、executor/key、tuple/window/event_skill、traits/policy、edges/reveal/cleanup；旧3/4分支hash中性。native Extension的已验证schema5声明identity经`native-extension-mechanisms/1`进入原content lock；不是执行权限或第二持久R05 hash。
+- genuine数值引用经**现有PackageStore锁定依赖图**解析，检查依赖身份/版本/hash、歧义、真实handler、重复/悬空/group环；不以名字前缀伪造child或拆一次计数身份。原ContentLock、冻结包bytes/identity不重写。
+- 编译器真实DSL/AST/IR支持4个trait标记并据metadata选3/4/5；editor hover说明其数据性质。完整声明仍经原JSON/serde SDK与发布rehash路径；机械更新全部实际Rust entry/VmSkillDecl构造器及生成器。未发明未审DSL策略语法。
+- 原SDK导入校验新增presence/literal与executor互斥；不在JS复刻canonical hash或给host额外权限。普通第三方用相同有限factory/VM验证；无official-author/repo/path/namespace特权。
+- **运行时未实现的字段不进入Engine当no-op**：共享native loader对非默认traits/temp/group/reveal、forceDie/out/indexed/named windows、dying actions及显式native声明/window/filter binding给出具体unsupported错误。native key只通过原HostBehavior::from_key有限解析，未知key另报错；已知普通body key不具有cleanup角色权限。
+- schema5全默认元数据且原VM语义实际支持时可执行：真实Engine伤害后draw样本通过；声明身份变化会改变原Extension lock。Native/RVM同名asset/declaration冲突在现有constructor拒绝，未挑一个当权威。
+- **未实现**新的SkillDef policy/traits消费者、HostSkillDecl per-window绑定、provider/grant/lifetime/death/out、named/shared windows、indexed/reveal/rescue/cleanup等Core执行。`onremove:String`不能表达VM cleanup binding，故不宣称完整onremove或SDK能力对等已闭环；后续在同表示上复审/落实consumer。
+- 版本：C331/私有NGSA106/ABI758/WS6，format1/API1不变；schema解析上限5，包缺省仍3、tuple扩展4。legacy仍只执行3default并受控拒绝4/5；R05未来333/107/759/7、GaiMing332/106不提前实施。Source33 genuine producer/consumer及legacy13/445/T/J/W未新增语义。
+
+真实初失败/修复（完整raw保留，未混计）：
+
+- `initial-red.log`0/3：原parser拒charlotte、schema选择把新默认元数据丢成3、原3误接新字段。`first-green-attempt.log`及`green-attempt2.log`同3项全绿；后者加入null/重复key守卫。
+- `matrix-first.log`测试fixture误把Engine::new当Result导致编译失败；修fixture后`matrix-attempt2.log`10/0。最终全量还含真实默认VM执行/坏安装原子性、真实两child环、dying窗口与非法policy负控，共12个schema5测试。
+- `frontend-tests-first.log`旧触发索引坏shape的诊断被新前置校验换了字串；恢复原诊断，不改旧期望。`frontend-tests2.log`183/0，类型检查两次通过；没有继续重复已绿前端。
+- 四包`targeted-packages-first.log`609/0/0，77.93s。新增逻辑完成后首次fullnative仅setup失败：helper/lock外部消失，**命令未执行，非测试红**；立即停重命令，未自建锁/改PID。
+- 父ps/lsof旧FD确认、原helper逐字恢复及同锁互斥实测后明确GO；记录`/T/noname-parent-serialization-recovery-a7ow63dx`，helper SHA `d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34`，global lock dev16777231/inode620205209。
+- `full-native2.log`首次实际全量仅test_registry发现t8拆分文件未顶层登记；将职责子模块放到已登记父t8模块目录，所有测试仍递归编译/行数检查，保留此红；修后`full-native3.log`同最终源全绿。
+- 首个补丁artifact的difflib丢失无末尾换行标记导致reverse-check失败，保留`final-freeze8`与失败log；**权威改为final-freeze8-v2**，git binary/no-index生成，源码未因此更改，三套补丁reverse-check均通过。
+
+最终实际验证（offline、jobs2/incremental0、父恢复的原全局串行helper/lock，始终>3GiB）：
+
+- `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native`：**1773/0/75**，exit0，34.72s；`full-native3.log`17个result汇总，未与609/定向重复相加。
+- 独立owned `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict`，`RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`：exit0，持锁18.11s（含等锁36.91s），`gate1b-result.json`。
+- `cargo test --offline -p engine-core c331_schema_tests`真实lib2/0，含新增正确hash/schema5受控拒绝；其余targets仅filtered。未新增旧线功能/完整legacy回归。
+- `cargo test --offline -p content-schema -p content-compiler -p content-runtime -p content-native-loader`609/0/0；真实旧3/4字节/hash正控、当前3/4 host兼容拒5及重hash downgrade守卫通过。**不声称历史不可变旧binary对伪装降级包的既有缺陷被逆向修好。**
+- `pnpm --dir apps/web-client typecheck`exit0；`pnpm --dir apps/web-client test`183/0；`python3 -B -m unittest discover -s scripts -p test_check_source_lines.py`2/0；source line cap9019、Rust effective限额通过，F7向上引用0。未声称LSP clean。
+
+实体与精确绑定（相对E）：
+
+- `checkpoint20/source-manifest.json` SHA `cb059772ce68a224cabb5d797512167145a6c38b2bd2042af84157b26a77d204`，33文件；原tar/patch/records保留。
+- **最终35文件** `final-freeze8-v2/source-manifest.json` SHA **`852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494`**；`changed-source.tar.gz` **`dc5f5b4a3f891309611b2ea9226b079b3df5d57c2a0ee21b0570036c6d140a69`**；`vs-c7.patch` **`834928c451ef29f779464f214b84422b060be519f018af2723dddf17d905a3a0`**。
+- **完整166文件组合** `full-source/source-manifest.json` **`b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1`**；tar **`337d8defb8ebcab8d630ac30d590fbbc280c49d04f73ebe78b360a1971f977c7`**；Main5fc patch `0b8a2bfc068c7eaeb1282c9514c5f9530967b9a173cfa6c6c879e15d8c722407`。
+- checkpoint→final8路径精确增量：`checkpoint-to-final/source-manifest.json` **`0e05439129949816d60a253e4ba2cf8c93a2b26a3d98834e8f2df6d5f8de6180`**；patch `1671912af7494ab11dc58b7b3225a5c8e9b0dd212afad631f37a8776be7b310a`，含移走root t8子文件的删除项。之前review不能覆盖新字节。
+- 最终35增量内容与`pre-full2`逐项相同，fullnative/Gate1b同源；`results-bound.json`记录全部命令/raw SHA/warnings/ignored，`protected-after.json`及最终artifact索引绑定证据。
+
+10:24:50前后fresh保护：Main31867源/生产包/资产、18生成、37默认dist、hooks零差异，Main仅父Docs写入；原C6 140零差异，C7接受manifest/tar/artifact-index不变。Main/private index均空，Main index SHA仍`ed845aec2067f273b7e11c545407d1831f7fed26f43597839dc2ee9ac375dbfa`。canonical包/原ContentLock/旧reader未写；Decision29批准raw SHA全部匹配。
+
+跳过WASM/GUI/WS/WAL及massive workspace重跑，未宣称新Core语义/全SDK cleanup/native绑定可用。风险仍是私有中间schema5/106与尚未实现consumer；父独立复核本轮数据基础和明确失败边界后，再决定Core phase9，Main不合C、整C331仍BLOCK。

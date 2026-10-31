@@ -1,0 +1,13 @@
+{
+  "baseline_ai_sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+  "candidate_ai_sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+  "instrumented_ai_sha256": "39649adbefee68b9352d84155cf089dee4ea1fd97e3a4ff2856589149a24adce",
+  "normalized_whole_ai_equals5fc": true,
+  "allowed_normalization": [
+    "remove exact candidate selector and measurement switch",
+    "remove candidate-only Own early-return prefix",
+    "reverse private old helper rename"
+  ],
+  "candidate_helper_exact_v2": true,
+  "reference_hash": "SHA256 of complete baseline5fc ai.rs; same old path in one binary for all reference calls"
+}

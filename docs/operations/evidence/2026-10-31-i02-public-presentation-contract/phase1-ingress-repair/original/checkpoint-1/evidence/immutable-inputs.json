@@ -1,0 +1,14 @@
+{
+  "prior_manifest_sha256": "5183e1740b4ccdf7e644ad2b6ec0a7f9ea3ebe58bd222904693127b972569dee",
+  "prior_full_patch_sha256": "f199cbf6e7908620950b980bb79363f1ea784045ae4fa949bfdf7d3ae09003b5",
+  "prior_report_sha256": "8b3326d6951c518964fbbb9d722e12d87e2b5b49b3e60a8cba5db1464ad488ac",
+  "prior_product_fixture_proof_sha256": "496b4085e271a6ca47df012cd587ab21f6e5c03980ba339c2d3bf3b171a86b61",
+  "product_fixture_files": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1",
+    "apps/web-client/src/worker/native-pkg/.gitignore": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+    "apps/web-client/src/worker/native-pkg/package.json": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6"
+  }
+}

@@ -26,11 +26,12 @@
     "defaults": "Desktop WASM retained"
   },
   "implementation_status": "Nine-file PRIVATE candidate implemented and independent source review No issues/OKwithnotes; NOT Mainintegrated/PA09accepted",
-  "measurement_followup": "Same-load release experiment privately running; no claimed result/no Mainchange",
+  "measurement_followup": "Release four-process ABBA completed NEGATIVE; parentfresh92artifact/twoBinary/1687rowsEach/fullhash/1400measuredRows/subset135 verified. No Mainintegration/threshold/defaultswitch acceptance.",
   "review": {
     "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/e3edeaff-4837-4474-bc58-288aaa1b81b0/reviews/pa09-single-seat-pool-candidate.md",
     "stored": "candidate-independent-review.raw.txt",
     "bytes": 7157,
     "sha256": "e447f7313b6fbe8b6d3e80d4cdd890f31ca8065c4fa853ec4a5c4d7cb66a605e"
-  }
+  },
+  "release_evidence": "release-pilot/README.md"
 }

@@ -1,0 +1,162 @@
+{
+  "created": 1793445533.839277,
+  "files": [
+    "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts",
+    "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts",
+    "apps/web-client/scripts/presentation-fixtures.mjs",
+    "apps/web-client/scripts/presentation-metadata.test.mjs",
+    "apps/web-client/src/engine/presentationMetadata.ts",
+    "apps/web-client/src/types/presentation.ts",
+    "crates/engine-api/src/presentation.rs",
+    "crates/engine-api/src/presentation/validation.rs",
+    "crates/engine-protocol/src/presentation.rs",
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs",
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs",
+    "crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json",
+    "crates/engine-protocol/tests/fixtures/i02-presentation.json",
+    "crates/engine-protocol/tests/presentation.rs",
+    "crates/engine-protocol/tests/presentation_main5fc_reader.rs",
+    "apps/game-server/src/room.rs",
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/web-client/scripts/nc03-worker-clone.test.mjs",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs",
+    "apps/web-client/src/engine/client.ts",
+    "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/engine/viewStore.ts",
+    "apps/web-client/src/types/engine.ts",
+    "crates/engine-api/src/lib.rs",
+    "crates/engine-protocol/src/lib.rs",
+    "crates/engine-protocol/src/messages.rs",
+    "crates/engine-protocol/src/wire.rs"
+  ],
+  "main_scope_protection": {
+    "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts": {
+      "main_path_absent": true
+    },
+    "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts": {
+      "main_path_absent": true
+    },
+    "apps/web-client/scripts/presentation-fixtures.mjs": {
+      "main_path_absent": true
+    },
+    "apps/web-client/scripts/presentation-metadata.test.mjs": {
+      "main_path_absent": true
+    },
+    "apps/web-client/src/engine/presentationMetadata.ts": {
+      "main_path_absent": true
+    },
+    "apps/web-client/src/types/presentation.ts": {
+      "main_path_absent": true
+    },
+    "crates/engine-api/src/presentation.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-api/src/presentation/validation.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/src/presentation.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/fixtures/i02-presentation.json": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/presentation.rs": {
+      "main_path_absent": true
+    },
+    "crates/engine-protocol/tests/presentation_main5fc_reader.rs": {
+      "main_path_absent": true
+    },
+    "apps/game-server/src/room.rs": {
+      "base_sha256": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+      "main_after_sha256": "5fd015c521912c40b4abdab1a19a764f26695538dccfecd75e8aa4ae6b8b929c",
+      "main_matches_base": true
+    },
+    "apps/game-server/src/room_native_actor.rs": {
+      "base_sha256": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+      "main_after_sha256": "483ff4d11d8943f2ee578f8b9f570df217d75e380b9322776786e45b581a0caa",
+      "main_matches_base": true
+    },
+    "apps/game-server/src/room_native_actor/timeout.rs": {
+      "base_sha256": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+      "main_after_sha256": "de54b7961c468f1bd05511588801fb9f85f2d3a2eef4ec16a96f82a993b494bb",
+      "main_matches_base": true
+    },
+    "apps/web-client/scripts/nc03-worker-clone.test.mjs": {
+      "base_sha256": "fa9771d875d40373e8d5bce52528d43142525408e13847bc321c2811dd877749",
+      "main_after_sha256": "fa9771d875d40373e8d5bce52528d43142525408e13847bc321c2811dd877749",
+      "main_matches_base": true
+    },
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": {
+      "base_sha256": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0",
+      "main_after_sha256": "6bf2ea025fcac314c8dbbea62cb9f5b2fc8692732ac6a4fe5c67d1304ef8f0a0",
+      "main_matches_base": true
+    },
+    "apps/web-client/src/engine/client.ts": {
+      "base_sha256": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+      "main_after_sha256": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+      "main_matches_base": true
+    },
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "base_sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "main_after_sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "main_matches_base": true
+    },
+    "apps/web-client/src/engine/networkClient.ts": {
+      "base_sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "main_after_sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "main_matches_base": true
+    },
+    "apps/web-client/src/engine/viewStore.ts": {
+      "base_sha256": "264f9c7fc74d539b015887cdb285fa8b3c3b19d24917cfb858ec9f83c2a4f385",
+      "main_after_sha256": "264f9c7fc74d539b015887cdb285fa8b3c3b19d24917cfb858ec9f83c2a4f385",
+      "main_matches_base": true
+    },
+    "apps/web-client/src/types/engine.ts": {
+      "base_sha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358",
+      "main_after_sha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358",
+      "main_matches_base": true
+    },
+    "crates/engine-api/src/lib.rs": {
+      "base_sha256": "3bef8070403118dde4a6f72f22fe2c1cfb270379be4c971da70ede2424e798fa",
+      "main_after_sha256": "3bef8070403118dde4a6f72f22fe2c1cfb270379be4c971da70ede2424e798fa",
+      "main_matches_base": true
+    },
+    "crates/engine-protocol/src/lib.rs": {
+      "base_sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "main_after_sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "main_matches_base": true
+    },
+    "crates/engine-protocol/src/messages.rs": {
+      "base_sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "main_after_sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "main_matches_base": true
+    },
+    "crates/engine-protocol/src/wire.rs": {
+      "base_sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "main_after_sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "main_matches_base": true
+    }
+  },
+  "main_head_after": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "main_index_empty": true,
+  "private_index_empty": true,
+  "wrapper_sha256_after": "d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34",
+  "lock_dev_after": 16777231,
+  "lock_inode_after": 620205209,
+  "environment_inputs_excluded": [
+    "apps/web-client/node_modules",
+    "apps/web-client/src/wasm-pkg/",
+    "apps/web-client/src/worker/native-pkg/"
+  ]
+}

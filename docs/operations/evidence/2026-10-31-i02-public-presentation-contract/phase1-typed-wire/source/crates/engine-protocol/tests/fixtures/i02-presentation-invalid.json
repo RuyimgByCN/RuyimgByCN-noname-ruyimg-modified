@@ -1,0 +1,469 @@
+[
+  {
+    "name": "batch_unknown",
+    "changes": [
+      {
+        "pointer": "/private_snapshot",
+        "value": {}
+      }
+    ]
+  },
+  {
+    "name": "null_revision",
+    "changes": [
+      {
+        "pointer": "/revision",
+        "value": null
+      }
+    ]
+  },
+  {
+    "name": "unsafe_revision",
+    "changes": [
+      {
+        "pointer": "/revision",
+        "value": 9007199254740992
+      }
+    ]
+  },
+  {
+    "name": "mixed_revision",
+    "changes": [
+      {
+        "pointer": "/revision",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "string_revision",
+    "changes": [
+      {
+        "pointer": "/revision",
+        "value": "2"
+      }
+    ]
+  },
+  {
+    "name": "bad_status",
+    "changes": [
+      {
+        "pointer": "/status",
+        "value": "secret"
+      }
+    ]
+  },
+  {
+    "name": "overflow_nonempty",
+    "changes": [
+      {
+        "pointer": "/status",
+        "value": "overflow"
+      }
+    ]
+  },
+  {
+    "name": "invalid_domain",
+    "changes": [
+      {
+        "pointer": "/unavailable",
+        "value": [
+          {
+            "domain": "secret",
+            "reason": "verified_binding_missing"
+          }
+        ]
+      },
+      {
+        "pointer": "/status",
+        "value": "incomplete"
+      }
+    ]
+  },
+  {
+    "name": "invalid_reason",
+    "changes": [
+      {
+        "pointer": "/unavailable",
+        "value": [
+          {
+            "domain": "death",
+            "reason": "secret"
+          }
+        ]
+      },
+      {
+        "pointer": "/status",
+        "value": "incomplete"
+      }
+    ]
+  },
+  {
+    "name": "scope_unknown",
+    "changes": [
+      {
+        "pointer": "/unavailable",
+        "value": [
+          {
+            "domain": "death",
+            "reason": "verified_binding_missing",
+            "owner": 1
+          }
+        ]
+      },
+      {
+        "pointer": "/status",
+        "value": "incomplete"
+      }
+    ]
+  },
+  {
+    "name": "duplicate_scope",
+    "changes": [
+      {
+        "pointer": "/unavailable",
+        "value": [
+          {
+            "domain": "death",
+            "reason": "verified_binding_missing"
+          },
+          {
+            "domain": "death",
+            "reason": "verified_binding_missing"
+          }
+        ]
+      },
+      {
+        "pointer": "/status",
+        "value": "incomplete"
+      }
+    ]
+  },
+  {
+    "name": "duplicate_ordinal",
+    "changes": [
+      {
+        "pointer": "/occurrences/1/ordinal",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "unknown_event",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/kind",
+        "value": "CardPlayed"
+      }
+    ]
+  },
+  {
+    "name": "event_unknown",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/source_skill",
+        "value": "rende"
+      }
+    ]
+  },
+  {
+    "name": "actor_zero",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "actor_negative",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": -1
+      }
+    ]
+  },
+  {
+    "name": "actor_fraction",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": 1.5
+      }
+    ]
+  },
+  {
+    "name": "actor_string",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": "1"
+      }
+    ]
+  },
+  {
+    "name": "actor_out_of_view",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": 3
+      }
+    ]
+  },
+  {
+    "name": "actor_u32_over",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": 4294967296
+      }
+    ]
+  },
+  {
+    "name": "actor_null",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/actor",
+        "value": null
+      }
+    ]
+  },
+  {
+    "name": "duplicate_target",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/targets",
+        "value": [
+          2,
+          2
+        ]
+      }
+    ]
+  },
+  {
+    "name": "missing_nullable_voice",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice",
+        "remove": true
+      }
+    ]
+  },
+  {
+    "name": "amount_zero",
+    "changes": [
+      {
+        "pointer": "/occurrences/3/event/amount",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "bad_nature",
+    "changes": [
+      {
+        "pointer": "/occurrences/3/event/nature",
+        "value": "ice"
+      }
+    ]
+  },
+  {
+    "name": "bad_effective_kind",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/effective/kind",
+        "value": "invented"
+      }
+    ]
+  },
+  {
+    "name": "token_traversal",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/effective/key",
+        "value": "../sha"
+      }
+    ]
+  },
+  {
+    "name": "token_controls",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/effective/key",
+        "value": "sha"
+      }
+    ]
+  },
+  {
+    "name": "role_local_id_wrong",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/local_id",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "name": "role_kind_wrong",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/kind",
+        "value": "skill"
+      }
+    ]
+  },
+  {
+    "name": "owner_unknown",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/owner/opaque",
+        "value": "untrusted"
+      }
+    ]
+  },
+  {
+    "name": "digest_upper",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/digest",
+        "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    ]
+  },
+  {
+    "name": "digest_algorithm",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/digest_algorithm",
+        "value": "blake3"
+      }
+    ]
+  },
+  {
+    "name": "size_zero",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/size",
+        "value": 0
+      }
+    ]
+  },
+  {
+    "name": "source_kind",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/source/kind",
+        "value": "builtin"
+      }
+    ]
+  },
+  {
+    "name": "reference_private",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/reference/player",
+        "value": 1
+      }
+    ]
+  },
+  {
+    "name": "path_escape",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+        "value": "audio/../bad.mp3"
+      }
+    ]
+  },
+  {
+    "name": "invalid_category",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/reference/source_category",
+        "value": "private"
+      }
+    ]
+  },
+  {
+    "name": "empty_assets",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets",
+        "value": []
+      }
+    ]
+  },
+  {
+    "name": "form_token",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/form",
+        "value": "hidden/other"
+      }
+    ]
+  },
+  {
+    "name": "owner_tag",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/owner/kind",
+        "value": "builtin"
+      }
+    ]
+  },
+  {
+    "name": "asset_unknown",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/assets/0/private_snapshot",
+        "value": {}
+      }
+    ]
+  },
+  {
+    "name": "role_unknown",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/def",
+        "value": 8
+      }
+    ]
+  },
+  {
+    "name": "id_token_escape",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/voice/role/local_id/raw_symbol",
+        "value": "liubei%2Fother"
+      }
+    ]
+  },
+  {
+    "name": "oversized_utf8",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/effective/key",
+        "value": "刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘"
+      }
+    ]
+  },
+  {
+    "name": "null_targets_bad",
+    "changes": [
+      {
+        "pointer": "/occurrences/0/event/targets",
+        "value": {}
+      }
+    ]
+  },
+  {
+    "name": "missing_source",
+    "changes": [
+      {
+        "pointer": "/occurrences/3/event/source",
+        "remove": true
+      }
+    ]
+  }
+]

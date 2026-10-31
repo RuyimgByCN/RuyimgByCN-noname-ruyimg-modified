@@ -1,0 +1,62 @@
+{
+  "label": "candidate",
+  "exit": 0,
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc12_ai_strength_baseline_statistics",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc12_ai_strength_baseline_statistics",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "source": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "766fe77399aef538575efbce138de15c31107b67614aea60126e4d5d8f6ca190",
+    "Cargo.lock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+    "swd_cards": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+  },
+  "source_after": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "766fe77399aef538575efbce138de15c31107b67614aea60126e4d5d8f6ca190"
+  },
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true",
+    "NC10_QUALITY_OUT": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate"
+  },
+  "profile": "Cargo test default dev/test; existing node8/deadline50/depth1/variant0;200 seeds45000..45199;4-seat plain Engine::new with swd cards",
+  "wall_seconds": 31.77582074998645,
+  "minimum_free_bytes": 31730970624,
+  "stdout_sha256": "971a640f790678fdf45966f5ffe9986e3b4b22226185dcedc202a4f38279ec11",
+  "stderr_sha256": "8d831533c764c594c7086d1b53e7d12b5b42e0f507befe2f43c397e86af02eb8",
+  "benchmark_binary_sha256": "45a93dad86785f2e50ca8e76156b34761b61ad1896b81c7fd060ec346c8d68f6",
+  "rustc": "rustc 1.95.0 (59807616e 2026-04-14)\nbinary: rustc\ncommit-hash: 59807616e1fa2540724bfbac14d7976d7e4a3860\ncommit-date: 2026-04-14\nhost: aarch64-apple-darwin\nrelease: 1.95.0\nLLVM version: 22.1.2\n"
+}

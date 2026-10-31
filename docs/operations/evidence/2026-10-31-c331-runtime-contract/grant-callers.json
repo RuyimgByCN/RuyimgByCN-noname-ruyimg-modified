@@ -1,0 +1,1189 @@
+{
+  "scope": "Exact frozen140 precedence over immutable38ab production src in native/kernel/content; static lexical caller inventory, not execution proof",
+  "files_scanned": 253,
+  "matches": [
+    {
+      "path": "crates/engine-native-content/src/content/host/boss.rs",
+      "line": 71,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "ff31ebda671458963b40a272d4205210b03d0710094068c0ff46baad631f406c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/boss.rs",
+      "line": 77,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "ff31ebda671458963b40a272d4205210b03d0710094068c0ff46baad631f406c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/boss.rs",
+      "line": 443,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "ff31ebda671458963b40a272d4205210b03d0710094068c0ff46baad631f406c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering.rs",
+      "line": 335,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/swd.rs",
+      "line": 666,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "b93b77dfc3231a78bb7f1e25ae99a905471dc5097c97e25e818ed5d7ff9f8eac"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step.rs",
+      "line": 276,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gujian.rs",
+      "line": 228,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "f551778b0c86f322c1208800d5e7af72dec8e2ba97b59cbb30084f5074e3cb76"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gujian.rs",
+      "line": 234,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "f551778b0c86f322c1208800d5e7af72dec8e2ba97b59cbb30084f5074e3cb76"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 212,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 218,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 244,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 250,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 335,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 390,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 415,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "line": 421,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "line": 22,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "line": 28,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "line": 426,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "line": 432,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+      "line": 73,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "41f87f863f5367867e23a2759038cbd94bd7f5e887f01f1b849cbd6335299300"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+      "line": 87,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "41f87f863f5367867e23a2759038cbd94bd7f5e887f01f1b849cbd6335299300"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_recovery.rs",
+      "line": 93,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "41f87f863f5367867e23a2759038cbd94bd7f5e887f01f1b849cbd6335299300"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 66,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 560,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 609,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 615,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 628,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 634,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "line": 647,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 41,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 47,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 160,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 189,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 195,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_targets.rs",
+      "line": 298,
+      "match": "add_skill_until_turn_end(",
+      "origin": "frozen140-C6",
+      "sha256": "9c5451bc79a595e120580ede1232df20f483ad926238ecd609267e1da3424dca"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "line": 167,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "line": 173,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "line": 182,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "line": 188,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+      "line": 99,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "141bc381e36bff2b0f2f4bf5b59d10c4d0ee401a6e3d9dc38b09160d509b78b8"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+      "line": 105,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "141bc381e36bff2b0f2f4bf5b59d10c4d0ee401a6e3d9dc38b09160d509b78b8"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+      "line": 205,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "141bc381e36bff2b0f2f4bf5b59d10c4d0ee401a6e3d9dc38b09160d509b78b8"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_attach.rs",
+      "line": 211,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "141bc381e36bff2b0f2f4bf5b59d10c4d0ee401a6e3d9dc38b09160d509b78b8"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+      "line": 254,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "fb0523e537c3e1925782d73cb3cf3ade814ff283c677fdf085ffac99970600e0"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_contests.rs",
+      "line": 260,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "fb0523e537c3e1925782d73cb3cf3ade814ff283c677fdf085ffac99970600e0"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+      "line": 629,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "5cd833f111133aa38b6e722bb9c4055207a185ad5a404ca3c710c3786f65281e"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_effects.rs",
+      "line": 635,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "5cd833f111133aa38b6e722bb9c4055207a185ad5a404ca3c710c3786f65281e"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 100,
+      "match": "ensure_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 105,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 308,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 314,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 322,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_card_targets.rs",
+      "line": 328,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "ec945efa8fd3c66e5f9480a5804420990b2e0c4379780565f74f06f507ac308d"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "line": 131,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "line": 137,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "line": 199,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "line": 267,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "line": 633,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+      "line": 255,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "9408c223e97e1f34bbe71cfe5bb5c814ee19ce582393584cc76cee9d5c4edc8c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+      "line": 261,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "9408c223e97e1f34bbe71cfe5bb5c814ee19ce582393584cc76cee9d5c4edc8c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+      "line": 363,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "9408c223e97e1f34bbe71cfe5bb5c814ee19ce582393584cc76cee9d5c4edc8c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs",
+      "line": 369,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "9408c223e97e1f34bbe71cfe5bb5c814ee19ce582393584cc76cee9d5c4edc8c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "line": 378,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "line": 507,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "line": 517,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 144,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 162,
+      "match": "add_skill_until_turn_end(",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 261,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 265,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 661,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 702,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 716,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "line": 740,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "line": 443,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "line": 449,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "line": 562,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "line": 568,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs",
+      "line": 189,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "01b70c2f3c46515a893ff24cb3345991802f49fca8bc0714fda9b5f44b052019"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs",
+      "line": 195,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "01b70c2f3c46515a893ff24cb3345991802f49fca8bc0714fda9b5f44b052019"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "line": 11,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "line": 180,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "line": 191,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+      "line": 341,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "85c756b2bdc56dc68a5187e89ba6e0631a246075f73c2788aecd32df9940b573"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+      "line": 347,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "85c756b2bdc56dc68a5187e89ba6e0631a246075f73c2788aecd32df9940b573"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+      "line": 856,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "85c756b2bdc56dc68a5187e89ba6e0631a246075f73c2788aecd32df9940b573"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_cards.rs",
+      "line": 862,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "85c756b2bdc56dc68a5187e89ba6e0631a246075f73c2788aecd32df9940b573"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "line": 467,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "061d91c6d3ffcd08cd9794464fb71393d8bb73c3155870113fd1256205ac5bda"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_recovery.rs",
+      "line": 312,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "b2530eba3ec7f2a3b1c70985a798cfbd11ab25b0e4e1ac0495330fc081269f20"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_recovery.rs",
+      "line": 318,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "b2530eba3ec7f2a3b1c70985a798cfbd11ab25b0e4e1ac0495330fc081269f20"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_recovery.rs",
+      "line": 462,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "b2530eba3ec7f2a3b1c70985a798cfbd11ab25b0e4e1ac0495330fc081269f20"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "line": 293,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "line": 365,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "line": 371,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "line": 485,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+      "line": 81,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "24861847d90f1aea9e12591e888c87335d34896701e86792d712dc0c4e3942fc"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+      "line": 87,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "24861847d90f1aea9e12591e888c87335d34896701e86792d712dc0c4e3942fc"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+      "line": 243,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "24861847d90f1aea9e12591e888c87335d34896701e86792d712dc0c4e3942fc"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/xianjian_targets.rs",
+      "line": 249,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "24861847d90f1aea9e12591e888c87335d34896701e86792d712dc0c4e3942fc"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 387,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 393,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 434,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 440,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 450,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 955,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 961,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 975,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 978,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 984,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 995,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 1012,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 1013,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 1033,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 1039,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/support.rs",
+      "line": 1045,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "0197acb688ef126a16c1398b74d53a744bbeab1193db3d4b9163de72e2877817"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "line": 434,
+      "match": "skills.insert",
+      "origin": "frozen140-C6",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/skills/shou_yi.rs",
+      "line": 37,
+      "match": "add_skill_until_turn_end(",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "9b0f02ff3d4fbba5f64d92aabf9dc2168a560fe77654b59b1ba0db3e676741f7"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/skills/wang_zun.rs",
+      "line": 49,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "14c33759cebfb1ae0e24867562164e8efd42e4348b1d05ba87c85503b9600b66"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/skills/wang_zun.rs",
+      "line": 55,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "14c33759cebfb1ae0e24867562164e8efd42e4348b1d05ba87c85503b9600b66"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/vm_effects/fenghe.rs",
+      "line": 133,
+      "match": "ensure_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "94caf5045e92758e32599cdeada0a241eeb72b97c66c83f68cbdbdcfc4e46aa0"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/vm_effects/fenghe.rs",
+      "line": 138,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "94caf5045e92758e32599cdeada0a241eeb72b97c66c83f68cbdbdcfc4e46aa0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_decode.rs",
+      "line": 428,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_decode.rs",
+      "line": 430,
+      "match": "skills.insert",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_decode.rs",
+      "line": 436,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "bdc08d04a808897084931251fc3dad17b3d51b0fd1a9859b28cf6d5cb89cd6cb"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/state_encode.rs",
+      "line": 481,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "4c41245269c625d4dcf22aeeb670157db487fa13b4a2231c0ac5b04ae48a9a0e"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "line": 219,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "line": 798,
+      "match": "skills.insert",
+      "origin": "retained-immutable38ab",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "line": 822,
+      "match": "skills.insert",
+      "origin": "retained-immutable38ab",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "line": 828,
+      "match": "expires_end_of_turn",
+      "origin": "retained-immutable38ab",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/death.rs",
+      "line": 46,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/death.rs",
+      "line": 98,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/death.rs",
+      "line": 147,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/death.rs",
+      "line": 205,
+      "match": "skills.insert",
+      "origin": "retained-immutable38ab",
+      "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/death.rs",
+      "line": 211,
+      "match": "expires_end_of_turn",
+      "origin": "retained-immutable38ab",
+      "sha256": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+      "line": 11,
+      "match": "skills                 .entry",
+      "origin": "retained-immutable38ab",
+      "sha256": "55fb8b94c6ea92e39345c98a459b76c1cd66941ea681853f06ee27c7390de2d2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+      "line": 17,
+      "match": "expires_end_of_turn",
+      "origin": "retained-immutable38ab",
+      "sha256": "55fb8b94c6ea92e39345c98a459b76c1cd66941ea681853f06ee27c7390de2d2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/equipment.rs",
+      "line": 43,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "55fb8b94c6ea92e39345c98a459b76c1cd66941ea681853f06ee27c7390de2d2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events.rs",
+      "line": 671,
+      "match": "expire_temporary_skills(",
+      "origin": "retained-immutable38ab",
+      "sha256": "3fcb028e0712c05ede1a6f662ab038c6d9885265d002dc83932a0a69b8d46707"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/phase.rs",
+      "line": 187,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "2290609f8754472555f475f519216275958f5873567d8e44a552d7ed475708b2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/phase.rs",
+      "line": 205,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "2290609f8754472555f475f519216275958f5873567d8e44a552d7ed475708b2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+      "line": 219,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "fed735ba1a0fa722980aa4cdb53d93b47158611148b19952f0c99e2b609012d8"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+      "line": 734,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "fed735ba1a0fa722980aa4cdb53d93b47158611148b19952f0c99e2b609012d8"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 668,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 669,
+      "match": "skills.insert",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 675,
+      "match": "ensure_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 676,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 705,
+      "match": "add_skill_until_turn_end(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 709,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 711,
+      "match": "insert_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 717,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 737,
+      "match": "expire_temporary_skills(",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 742,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "line": 748,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_ops.rs",
+      "line": 405,
+      "match": "ensure_skill(",
+      "origin": "frozen140-C6",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_ops.rs",
+      "line": 409,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/rvm_ops.rs",
+      "line": 419,
+      "match": "skills.retain",
+      "origin": "frozen140-C6",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state.rs",
+      "line": 445,
+      "match": "expires_end_of_turn",
+      "origin": "retained-immutable38ab",
+      "sha256": "8a54eef1a239f93ab3fdac77e10be1c3a70382c6d806176dcbdb2279ed5f2177"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state/general_assembly.rs",
+      "line": 49,
+      "match": "skills.insert",
+      "origin": "retained-immutable38ab",
+      "sha256": "fb5e097ec74895f92ab7526dd9c94f7b74bbb70859e1b43bf8b9ba7da777c174"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state/general_assembly.rs",
+      "line": 55,
+      "match": "expires_end_of_turn",
+      "origin": "retained-immutable38ab",
+      "sha256": "fb5e097ec74895f92ab7526dd9c94f7b74bbb70859e1b43bf8b9ba7da777c174"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/behavior.rs",
+      "line": 168,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "44f17a6f88b2f2bed799d1c89cd7e0a505e4d4c16dc7775a8fbc12cb3a083720"
+    },
+    {
+      "path": "crates/engine-native/src/engine/construction.rs",
+      "line": 150,
+      "match": "skills.remove",
+      "origin": "frozen140-C6",
+      "sha256": "01e71922ae73a7fa0cb921d4c2f412100fbe7291ebad4ac095f394ffd5335d7f"
+    },
+    {
+      "path": "crates/engine-native/src/engine/construction.rs",
+      "line": 468,
+      "match": "skills.insert",
+      "origin": "frozen140-C6",
+      "sha256": "01e71922ae73a7fa0cb921d4c2f412100fbe7291ebad4ac095f394ffd5335d7f"
+    },
+    {
+      "path": "crates/engine-native/src/engine/construction.rs",
+      "line": 474,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "01e71922ae73a7fa0cb921d4c2f412100fbe7291ebad4ac095f394ffd5335d7f"
+    },
+    {
+      "path": "crates/engine-native/src/engine/debug.rs",
+      "line": 363,
+      "match": "skills.insert",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83"
+    },
+    {
+      "path": "crates/engine-native/src/engine/debug.rs",
+      "line": 369,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83"
+    },
+    {
+      "path": "crates/engine-native/src/engine/debug.rs",
+      "line": 481,
+      "match": "skills.remove",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83"
+    },
+    {
+      "path": "crates/engine-native/src/engine/general_select.rs",
+      "line": 62,
+      "match": "skills.remove",
+      "origin": "retained-immutable38ab",
+      "sha256": "ff90869468ff0a62069323eb5c8775b8e60f85d113dca6f20f3b141c5a1c686e"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash.rs",
+      "line": 570,
+      "match": "expires_end_of_turn",
+      "origin": "frozen140-C6",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0"
+    },
+    {
+      "path": "crates/engine-native/src/engine/play_rules.rs",
+      "line": 397,
+      "match": "expires_end_of_turn",
+      "origin": "immutable38ab-Git-blob",
+      "sha256": "f506ce6516545f22233cdd0c704591bc89cd9db6a4a329f91ff3d8fea5aab3b7"
+    }
+  ]
+}

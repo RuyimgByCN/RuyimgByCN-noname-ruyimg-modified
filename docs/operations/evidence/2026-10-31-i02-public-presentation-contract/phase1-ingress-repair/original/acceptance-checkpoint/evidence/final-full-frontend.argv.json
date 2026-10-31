@@ -1,0 +1,20 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "npm",
+    "--prefix",
+    "apps/web-client",
+    "test"
+  ],
+  "cwd": "/tmp/i02-phase1-ab167599/source",
+  "env": {
+    "CARGO_TARGET_DIR": "/tmp/i02-phase1-ab167599/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0"
+  },
+  "started": 1793446856.892788,
+  "free_disk_bytes_before": 35524653056,
+  "memory_limiter": false,
+  "profiles": "unchanged"
+}

@@ -1,0 +1,19 @@
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/content-native-loader)
+warning: static `DEDUP` is never used
+  --> crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:15:8
+   |
+15 | static DEDUP: AtomicU64 = AtomicU64::new(1);
+   |        ^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `next_dedup` is never used
+  --> crates/engine-native/tests/groups/../nc12_ai_strength_baseline.rs:17:4
+   |
+17 | fn next_dedup() -> u64 {
+   |    ^^^^^^^^^^
+
+warning: `engine-native` (test "nc_rounds") generated 2 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.25s
+     Running tests/groups/nc_rounds.rs (/tmp/nc10-own-36992565/target/debug/deps/nc_rounds-fb18dbc55758dba6)

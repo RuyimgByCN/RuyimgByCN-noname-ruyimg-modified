@@ -1,0 +1,106 @@
+{
+  "utc": "2026-10-31T10:52:19.986469+00:00",
+  "status": "PASS",
+  "fresh_evidence_hashes": 297,
+  "manifest_sha256": "7dab74777d4f1ea7c4b7cfc593755b038143303424a032938d1b9237247ec87a",
+  "normalized_reference_full5fc_equal": true,
+  "candidate_helper_exact_v2": true,
+  "calibration_rows": 24,
+  "calibration_actual_Own_calls": 4,
+  "raw_submit_rows": 84344,
+  "results": {
+    "baseline": {
+      "games": 128,
+      "wins": 32,
+      "counts": {
+        "Accepted": 34424,
+        "Pending": 7068
+      },
+      "reference_calls": 41492,
+      "candidate_calls": 0,
+      "per_seat": {
+        "0": {
+          "games": 32,
+          "wins": 1,
+          "finished": 32,
+          "steps": 10373
+        },
+        "1": {
+          "games": 32,
+          "wins": 1,
+          "finished": 32,
+          "steps": 10373
+        },
+        "2": {
+          "games": 32,
+          "wins": 12,
+          "finished": 32,
+          "steps": 10373
+        },
+        "3": {
+          "games": 32,
+          "wins": 18,
+          "finished": 32,
+          "steps": 10373
+        }
+      },
+      "steps_p50_p90_max": [
+        323,
+        404,
+        425
+      ]
+    },
+    "candidate": {
+      "games": 128,
+      "wins": 31,
+      "counts": {
+        "Accepted": 35593,
+        "Pending": 7259
+      },
+      "reference_calls": 32193,
+      "candidate_calls": 10659,
+      "per_seat": {
+        "0": {
+          "games": 32,
+          "wins": 0,
+          "finished": 32,
+          "steps": 10561
+        },
+        "1": {
+          "games": 32,
+          "wins": 1,
+          "finished": 32,
+          "steps": 10522
+        },
+        "2": {
+          "games": 32,
+          "wins": 12,
+          "finished": 32,
+          "steps": 10536
+        },
+        "3": {
+          "games": 32,
+          "wins": 18,
+          "finished": 32,
+          "steps": 11233
+        }
+      },
+      "steps_p50_p90_max": [
+        327,
+        422,
+        489
+      ]
+    }
+  },
+  "paired_wins": {
+    "neither": 91,
+    "both": 26,
+    "baseline_only": 6,
+    "candidate_only": 5
+  },
+  "final_archive_hashes": 256,
+  "correlated_baseline_seed_groups": 32,
+  "restored_frozen5_qualitytest_and_index_empty": true,
+  "report_correction": "report says3 Own calibration choices; rawactual and parentcountare4. Minimumassert>=3doesnotmeanactual3. Raw/reportoriginalspreserved.",
+  "qualification": "Raw evidence parser, no producer/restore rerun; baseline exactwholeai source normalization and helper equality verified. Candidate reference measurement differs structurally from v2 outside Own earlyreturn; allactualactorinputs Own/None, no Other; boundedrouting source review stillneeded, no broadstrength/NC10acceptance."
+}

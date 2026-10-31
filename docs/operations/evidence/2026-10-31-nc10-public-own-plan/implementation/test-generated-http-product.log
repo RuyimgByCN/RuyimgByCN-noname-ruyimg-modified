@@ -1,0 +1,57 @@
+=== start server1 ===
+health ok after 24s pid=55259
+=== GET /native/packages ===
+[{"package_id":"cardpile","version":"1.0.0"},{"package_id":"wuxing","version":"1.0.0"},{"package_id":"cardpile","version":"1.0.0"},{"package_id":"d3-select","version":"1.0.0"},{"package_id":"huanle-cards","version":"1.0.0"},{"package_id":"shaai-ow","version":"1.0.0"},{"package_id":"shaai-xianjian","version":"1.0.0"},{"package_id":"shahai-gujian","version":"1.0.0"},{"package_id":"shahai-gwent","version":"1.0.0"},{"package_id":"shahai-hearth","version":"1.0.0"},{"package_id":"shahai-mtg","version":"1.0.0"},{"package_id":"shahai-swd","version":"1.0.0"},{"package_id":"shahai-yunchou","version":"1.0.0"},{"package_id":"shahai-zhenfa","version":"1.0.0"},{"package_id":"wudian","version":"1.0.0"}]
+package_count 15
+has_huanle True
+ids cardpile,cardpile,d3-select,huanle-cards,shaai-ow,shaai-xianjian,shahai-gujian,shahai-gwent,shahai-hearth,shahai-mtg,shahai-swd,shahai-yunchou,shahai-zhenfa,wudian,wuxing
+=== POST /native/matches standard ===
+HTTP/1.1 200 OK
+content-type: application/json
+vary: origin, access-control-request-method, access-control-request-headers
+access-control-allow-origin: *
+access-control-expose-headers: *
+content-length: 3194
+date: Fri, 16 Oct 2026 18:08:13 GMT
+
+standard_cards 124 packages []
+=== POST /native/matches huanle ===
+HTTP/1.1 200 OK
+huanle_cards 131 delta 7 packages ['huanle-cards'] hex_len 3198
+=== same-process restore ===
+HTTP/1.1 200 OK
+{"catalog_cards":131}
+=== missing pack ===
+HTTP/1.1 400 Bad Request
+恢复失败: RuleVersionMismatch { snapshot: 11753449270702291392, catalog: 295 }
+=== other installed pack ===
+HTTP/1.1 400 Bad Request
+包未安装: cardpile-upstream-noname
+=== unknown pack ===
+HTTP/1.1 400 Bad Request
+包未安装: not-installed
+stopped server1
+=== cross-process: second server, same store ===
+=== start server2 ===
+health ok after 25s pid=55507
+HTTP/1.1 200 OK
+{"catalog_cards":131}
+=== wrong version: edit installed cards.json then restore ===
+cards.json=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/grok-goal-229571d891b3/implementer/t13-native-store/packages/upstream-noname__huanle-cards/1.0.0/assets/cards.json
+HTTP/1.1 200 OK
+{"catalog_cards":131}
+HTTP/1.1 200 OK
+{"catalog_cards":131}
+stopped server2
+=== done ===
+=== probe2 start ===
+probe2 health ok after 30s
+=== other installed pack wuxing ===
+HTTP/1.1 400 Bad Request
+恢复失败: RuleVersionMismatch { snapshot: 11753449270702291392, catalog: 11033363076287152034 }
+=== wrong version on drop-in cards.json ===
+HTTP/1.1 400 Bad Request
+恢复失败: RuleVersionMismatch { snapshot: 11753449270702291392, catalog: 11737545934517934815 }
+HTTP/1.1 200 OK
+{"catalog_cards":131}
+=== probe2 done ===

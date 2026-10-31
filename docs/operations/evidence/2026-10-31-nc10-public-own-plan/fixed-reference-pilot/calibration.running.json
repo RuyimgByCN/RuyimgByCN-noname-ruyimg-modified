@@ -1,0 +1,1 @@
+{"pid": 66022, "argv": ["python3", "-B", "/tmp/noname-run-serialized.py", "cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_fixed_reference_calibration", "--", "--nocapture", "--test-threads=1"], "utc": "2026-10-31T10:37:24.924053+00:00"}

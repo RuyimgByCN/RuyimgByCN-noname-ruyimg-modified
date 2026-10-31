@@ -1,0 +1,17 @@
+[
+  {
+    "name": "source-and-c",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "source"
+    ],
+    "exit": 101,
+    "seconds": 1.3009848594665527
+  }
+]

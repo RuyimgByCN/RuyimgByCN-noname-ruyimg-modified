@@ -1,0 +1,42 @@
+# NC10 public Own — Main functional and product acceptance
+
+Verified 2026-10-31. **Functional/product checks and frozen final gates PASS; parent independent review remains pending.** No product code edits, staging, commits, pushes, or golden rewrites were performed by this verifier.
+
+Evidence root: `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8` (abbreviated **E** below). Parent integration receipt UTC `2026-10-31T11:22:46.649203+00:00`; Main HEAD `5fc0f77403d90fa4555156bf01722450cbe7bf3b`, tree `9ba4253837da66457669bd19c5120a9163b2a05b`.
+
+The six whole files were read and SHA-256 checked against `/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/manifest.json`; composed patch SHA `c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110`. Every recorded command binds all six hashes before and after. The parent private audit was read; its test results were not substituted for Main execution.
+
+| Fresh Main check | Result | Evidence in E |
+|---|---|---|
+| Full native kernel/content/engine | 1,719 passed / 0 failed / 75 ignored | `native3.*` |
+| Full workspace, offline, all affected targets | 6,922 passed / 0 failed / 77 ignored | `workspace.*` |
+| Independent Gate1b, `-Dwarnings`, all engine-native targets | exit 0; new `strict-target` | `gate1b.*` |
+| Frontend typecheck + full tests | exit 0; 179 passed / 0 failed / 0 skipped | `frontend-type.*`, `frontend-tests.*` |
+| Original Main native WASM release build + Worker smoke | exits 0 | `native-wasm-build.*`, `worker-smoke.*`, `build-child-argv.jsonl` |
+| Original Vite config, private production outDir | exit 0 | `vite-bundle.*`, `bundle-module-table.json`, `frontend-dist/` |
+| Native full Plan P/Q controls | 4 tests passed; budgets 0/1/2/4/8/48/64 | `own-controls.*`, `main-own-cases/` |
+| Seed 8211 semantic regression + Shan control | 119 successful / 0 suspended / 0 sim faults / 0 new probe faults; P3; full restore | `semantic-seed.*`, `shan-control.*` |
+| Current WASM binding + Worker adapter | 7 cases; full replies, hashes, events, archive bytes equal native | `wasm-current-results.json`, `canonical-snapshots.*` |
+| Actual production UI + real dedicated Worker in private Chrome | 12 cases; 0 browser exceptions/errors | `browser-results.json`, `own-optional.png`, `product.png` |
+| Native/WASM standard + installed-package trajectories | 40 + 20 steps; restore/revision/hash/event equality | `formal-trajectories.*`, `trajectory*.json` |
+| Existing legacy conformance + current cross-hash | 19 conformance cases; both hash pairs equal | `conformance.*`, `cross-target-current-values.json` |
+| Cheap line units/caps, layering units/gate, strict doc references | all exits 0 | `line-unit.*`, `source-caps.*`, `layering-*.{json,log}`, `strict-doc-lines.*` |
+| Frozen full preflight | exit 0; all 21 gates passed, single run | `preflight.*`, `freeze-comparison.json` |
+
+The newly built Main web WASM is SHA `30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd`, replacing old `225f8627…`. The production app references the tested Worker chunk, and the browser fetched that exact new WASM SHA. `product-binding.json` records these identities and original build-script hashes. Only child `CARGO_TARGET_DIR` was redirected; original release/profile/codegen/`--no-opt` arguments were preserved.
+
+P/Q starts from actual restored native archives with identical public input/events. Complete native Plans match with zero nodes/faults and genuine formal Pending on both sides; later `jiji_target` versus `jijie_give_target` remains visible as different continuations. NativeSession, current web WASM, adapter, and real Worker match full resulting archives, including RNG/resolution state. Restore comparisons use the restored baseline; the native probe explicitly checks that restore changes only the documented `auth_generation + 1`. No unknown-state normalization was used. Current WASM exposes an auto-step summary, **not** a full Plan.
+
+Real UI checks cover optional Own source/prompt/confirm, successful empty-selection Yiji cancel with no remaining ask, Shan Card selection, one auto-step revision, and hidden Other state. Actual Shan spec is ordered `[Pass, Card(30)]`, min/max 1, `allow_cancel=false`. Empty selection returns `InvalidChoice` and leaves revision/hash/full save/log unchanged; explicit Pass and Card are separate successful formal branches. Direct Card and auto-step have equal full archives. The Yiji cancel positive control also matches native and WASM/Worker state.
+
+All 18 old generated files were backed up with hashes in `old-generated18/`; only the native WASM bytes changed. Legacy generated 12 stayed identical and current legacy code/content/package inputs remained unchanged; no legacy rebuild was needed. Default dist37, protected99, source33, packages/locks, hooks, unrelated untracked files and index are covered by the protection snapshots. Main rule backend remains native; desktop transport still defaults to WASM. Versions remain rules330 / NGSA105 / ABI758 / WS6 / API1 / package format1.
+
+The 20-minute deadline checkpoint was sealed early at `2026-10-31T11:41:05.044968+00:00`: `checkpoint20/manifest.json`, SHA `7dcebb2ffdc16dbeaf7de71a7a504184036313d725893f3587bc29a2d0e28f80`. Parent DOC FREEZE precedes final gates; `freeze-entry.json` includes all 44,306 tracked hashes, 14,920 Markdown/maintained inputs, protected sets, raw index SHA/copy and logical entries. Freeze entry/exit match exactly for HEAD/tree, source6, all tracked and maintained hashes, status, hooks, protected sets, raw index SHA and logical entries (`freeze-comparison.json`: all 11 fields true).
+
+Retained non-product failures: initial path probes, a target-activity detector that matched its own shell, and first private probe exit101 from wrongly assuming Shan allowed empty cancellation. `probe-attempt1.rs` and original raw failure logs are retained; the supervisor approved the corrected negative control plus explicit Pass and real optional-cancel positives. No product change or test deletion was used to resolve it. Workspace legacy unused/dead-code warnings, duplicate `rehash_npack` example-output warnings, native-host WASM-wrapper warnings, wasm-pack optional manifest/update notices and all ignored-test reasons remain in raw logs. Final required checks have no unresolved functional failure.
+
+**Index provenance limitation:** initial snapshot raw index SHA `e1184e55…` (11:26:08Z) changed to `07839f82…` before freeze (original index mtime 11:31:34Z). The cause is unknown; the initial snapshot omitted raw copy/logical entries. Parent integration git-status activity was earlier and does not explain it; no cache/LSP cause is assumed. No staging/reset/index repair was performed. Frozen entry/exit raw bytes and logical entries match exactly, all 44,306 stage-0 entries equal HEAD, and staging is empty. Both full SHAs and parent disposition are in `index-provenance.json`; whole-session raw index equality is **not** claimed. Parent independent read-only audit at 11:51:29Z corroborates the exact freeze SHA and HEAD-equivalent logical entries (`parent-logical-index-audit.json`), without explaining the earlier change.
+
+Final command/status/hash manifests are `commands.json`, `manifest.json`, `comparison.json`, `freeze-comparison.json`, `artifact-sha256.json` and `command-source-hashes.json`. Raw stdout/stderr and original exits/counts remain separate. The unchanged global serializer SHA/inode and two-job/offline/incremental0 settings are retained; observed free disk stayed above 28 GiB, exceeding the 3 GiB floor, with no RAM cap introduced.
+
+Skipped: new strength campaigns, desktop GUI/WK rebuild, hardware/media/TCC/HID, Other/no-choice or VM closure, upstream equivalence, all37 and overall Goal acceptance. Existing Jiu/Other330 rule gap stays registered; parent independent review and any later publication remain separate.

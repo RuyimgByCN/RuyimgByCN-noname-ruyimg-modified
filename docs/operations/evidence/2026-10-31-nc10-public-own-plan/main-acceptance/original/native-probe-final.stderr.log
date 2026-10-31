@@ -1,0 +1,114 @@
+warning: function `err` is never used
+  --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:236:4
+    |
+236 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:297:4
+    |
+297 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:359:4
+    |
+359 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:368:4
+    |
+368 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:394:4
+    |
+394 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:403:4
+    |
+403 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:442:4
+    |
+442 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:451:4
+    |
+451 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:459:4
+    |
+459 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:467:4
+    |
+467 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:475:4
+    |
+475 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:483:4
+    |
+483 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:491:4
+    |
+491 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:499:4
+    |
+499 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:507:4
+    |
+507 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:515:4
+    |
+515 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm/src/lib.rs:523:4
+    |
+523 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+   Compiling nc10-main-acceptance-probe v0.0.0 (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.91s
+     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`

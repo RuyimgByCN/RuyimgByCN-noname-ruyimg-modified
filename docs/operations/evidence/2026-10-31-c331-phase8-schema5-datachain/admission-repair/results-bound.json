@@ -1,0 +1,954 @@
+{
+  "utc": "2026-10-31T11:00:10.532104+00:00",
+  "final_increment_sha256": "969a7cee6849c7880b853d94e09f166bf4842b68f93f26d59989518e1ba72345",
+  "full_manifest_sha256": "f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e",
+  "logs": [
+    {
+      "log": "rust-red.log",
+      "sha256": "4e9457d2c7230d6feee1839c3b1caff41b4aab65c176e49de09f14303a475923",
+      "test_counts": [
+        1,
+        2,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_admission_repair"
+          ],
+          "exit": 101,
+          "locked_seconds": 28.5365538749611,
+          "disk_free_bytes": 70674653184
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 19
+    },
+    {
+      "log": "frontend-red.log",
+      "sha256": "89d49a32e41bfd75bf9a0b23c0d5daf1c21c9fa812d8d578acadbcced54b5afb",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [
+        "\u2139 tests 186",
+        "\u2139 pass 183",
+        "\u2139 fail 3"
+      ],
+      "warnings": 0
+    },
+    {
+      "log": "rust-green-first.log",
+      "sha256": "166bcaa07bdeb6647356238605e7c17ab48906000da0cd1f42cb98aca7be7fde",
+      "test_counts": [
+        3,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_admission_repair"
+          ],
+          "exit": 0,
+          "locked_seconds": 14.797495458042249,
+          "disk_free_bytes": 68764418048
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 19
+    },
+    {
+      "log": "frontend-green-first.log",
+      "sha256": "91a91b6b3f3801e6f0a3be72ff601d5fc09e15a171325ff3e5b7b71104a51e06",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [
+        "\u2139 tests 186",
+        "\u2139 pass 185",
+        "\u2139 fail 1"
+      ],
+      "warnings": 0
+    },
+    {
+      "log": "frontend-green2.log",
+      "sha256": "26475cf3b5434754eea9023f3faf2704b4b4435dede96b6bb68087039bf60aab",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [
+        "\u2139 tests 186",
+        "\u2139 pass 186",
+        "\u2139 fail 0"
+      ],
+      "warnings": 0
+    },
+    {
+      "log": "frontend-type-first.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "current-wasm-build.log",
+      "sha256": "30bf704cd02c443a4f18518f0a97c5dc5e1388051fecd077d270f964e6c8c27d",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "wasm-pack",
+            "build",
+            "crates/engine-native-wasm",
+            "--target",
+            "nodejs",
+            "--release",
+            "--no-opt",
+            "--out-dir",
+            "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/admission-repair/node-wasm",
+            "--",
+            "--offline"
+          ],
+          "exit": 0,
+          "locked_seconds": 66.91454250004608,
+          "disk_free_bytes": 65370963968
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 18
+    },
+    {
+      "log": "rust-targeted2.log",
+      "sha256": "cb5faec7fe1e431b692d5a803160173433890e0bc1001f5fbdb18a5a7b032fc3",
+      "test_counts": [
+        13,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_admission_repair",
+            "--test",
+            "gt014_import_validation_parity",
+            "--test",
+            "installed_package_payload"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.9656798749929294,
+          "disk_free_bytes": 63083544576
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 19
+    },
+    {
+      "log": "actual-sdk-wasm-first.log",
+      "sha256": "21f8b4a601c71a3e8c6d28b87a73c0bf97984849bd16a24e0e7dd9d94d2af4f5",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "actual-sdk-wasm2.log",
+      "sha256": "6f8909afd9a4a2099d43ac21fc43fc6e95a44e497ee14cdeaf56876f507dc9a1",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "actual-sdk-wasm3.log",
+      "sha256": "4bfc63b7c1204ab6870e27747e0163d7ce86f5ac74ae0712a9ebbb94abedfa8e",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "actual-sdk-wasm4.log",
+      "sha256": "456536db7a8e136c27fcc094e8a0536c853f5cdc3b2454e339e87ba0a0569096",
+      "test_counts": null,
+      "runner_records": [],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "restore-generation-probe.log",
+      "sha256": "a9b62534c646d4cde3e70c46720fab72ad78022aaea1ec558111d856158076c4",
+      "test_counts": [
+        1,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-wasm",
+            "--test",
+            "c331_admission_restore_probe"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.8775619160151109,
+          "disk_free_bytes": 53182976000
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 19
+    },
+    {
+      "log": "four-packages.log",
+      "sha256": "0d04c61a88d97cd7bf35ee07e9bbe533c71842de8742b0c4cb543db6f35a0af0",
+      "test_counts": [
+        609,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "content-schema",
+            "-p",
+            "content-compiler",
+            "-p",
+            "content-runtime",
+            "-p",
+            "content-native-loader"
+          ],
+          "exit": 0,
+          "locked_seconds": 89.8084026669967,
+          "disk_free_bytes": 60711976960
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 8
+    },
+    {
+      "log": "full-native.log",
+      "sha256": "874f0228d7c657f78c4aef0adae6075031ad97d45af0bbbc776ed8babc56ad3c",
+      "test_counts": [
+        1773,
+        0,
+        75
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-kernel",
+            "-p",
+            "engine-native-content",
+            "-p",
+            "engine-native"
+          ],
+          "exit": 0,
+          "locked_seconds": 36.0636432080064,
+          "disk_free_bytes": 60685971456
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "gate1b.log",
+      "sha256": "11d53e2e4fdbee16d00418501ebd4baf314830a316d99a67e3809f16b5d7cb84",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "check",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--all-targets"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.22661745897494256,
+          "disk_free_bytes": 60681474048
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "source-cap-unit.log",
+      "sha256": "d64f53b09469c6d2c657b450c9f1d6046bd769d6c7e43be3af6f241a9f964477",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts",
+            "-p",
+            "test_check_source_lines.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.06860274996142834,
+          "disk_free_bytes": 60681318400
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "source-caps.log",
+      "sha256": "99b3453f86707b747832d3695946e18d9cb19040fed89564bb5887083b7db27b",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "scripts/check-source-lines.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 5.128076584020164,
+          "disk_free_bytes": 60330897408
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 0
+    },
+    {
+      "log": "layering.log",
+      "sha256": "8642ca4d12e29b6b0615794bcf90d6bf049281e018572433a6d4b0cabfa48c0d",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "scripts/check-native-layering.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.12330204102909192,
+          "disk_free_bytes": 60330991616
+        }
+      ],
+      "frontend_counts": [],
+      "warnings": 0
+    }
+  ],
+  "actual_sdk_wasm": {
+    "actualCurrentWasm": true,
+    "actualSdkStore": true,
+    "originalTextToNative": true,
+    "positiveSchema5": true,
+    "positiveOriginalAssetOnly": true,
+    "oldFixtures": [
+      {
+        "name": "c331-old-default-package.json",
+        "schema": 3,
+        "bytes": 1483,
+        "sha256": "4c4c0408a2244b50c876c3864eab9f25f0f0763e3068546dc4c277c731197e10",
+        "restoreRuleStateEqual": true,
+        "postRestoreBadAdmissionAtomic": true
+      },
+      {
+        "name": "c331_phase8_genuine_schema4.json",
+        "schema": 4,
+        "bytes": 1546,
+        "sha256": "90e7b10a86ad2e12818254f98fab2df135fc181e57db4c7064242bfb460b5145",
+        "restoreRuleStateEqual": true,
+        "postRestoreBadAdmissionAtomic": true
+      }
+    ],
+    "unknownAssetManifestKeysPreserved": true,
+    "results": [
+      {
+        "name": "\"charlotte\":true,\"charlotte\":false",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "\"charlotte\":true,\"\\u0063harlotte\":false",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-5-true",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-3-false",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-3-null",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-4-false",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-4-null",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-empty-active-3",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-empty-active-4",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "omitted-modules-empty-active-5",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      },
+      {
+        "name": "active-executor-conflict-valid-recomputed-hash",
+        "importRejected": true,
+        "directWasmRejected": true,
+        "admissionRejected": true,
+        "restoreRejected": true,
+        "storeHandleCatalogArchiveUnchanged": true
+      }
+    ]
+  },
+  "restore_generation_diff": [
+    {
+      "after_generation": 1,
+      "after_length": 1648,
+      "all_other_fields_equal": true,
+      "before_generation": 0,
+      "before_length": 1648,
+      "byte_changes": [
+        {
+          "after": 1,
+          "before": 0,
+          "offset": 1573
+        },
+        {
+          "after": 179,
+          "before": 99,
+          "offset": 1616
+        },
+        {
+          "after": 244,
+          "before": 103,
+          "offset": 1617
+        },
+        {
+          "after": 198,
+          "before": 174,
+          "offset": 1618
+        },
+        {
+          "after": 186,
+          "before": 39,
+          "offset": 1619
+        },
+        {
+          "after": 62,
+          "before": 69,
+          "offset": 1620
+        },
+        {
+          "after": 156,
+          "before": 225,
+          "offset": 1621
+        },
+        {
+          "after": 15,
+          "before": 6,
+          "offset": 1622
+        },
+        {
+          "after": 108,
+          "before": 130,
+          "offset": 1623
+        },
+        {
+          "after": 125,
+          "before": 212,
+          "offset": 1624
+        },
+        {
+          "after": 21,
+          "before": 253,
+          "offset": 1625
+        },
+        {
+          "after": 221,
+          "before": 92,
+          "offset": 1626
+        },
+        {
+          "after": 71,
+          "before": 70,
+          "offset": 1627
+        },
+        {
+          "after": 177,
+          "before": 60,
+          "offset": 1628
+        },
+        {
+          "after": 39,
+          "before": 81,
+          "offset": 1629
+        },
+        {
+          "after": 234,
+          "before": 115,
+          "offset": 1630
+        },
+        {
+          "after": 132,
+          "before": 78,
+          "offset": 1631
+        },
+        {
+          "after": 253,
+          "before": 46,
+          "offset": 1632
+        },
+        {
+          "after": 157,
+          "before": 158,
+          "offset": 1633
+        },
+        {
+          "after": 109,
+          "before": 72,
+          "offset": 1634
+        },
+        {
+          "after": 88,
+          "before": 195,
+          "offset": 1635
+        },
+        {
+          "after": 238,
+          "before": 215,
+          "offset": 1636
+        },
+        {
+          "after": 68,
+          "before": 36,
+          "offset": 1637
+        },
+        {
+          "after": 218,
+          "before": 136,
+          "offset": 1638
+        },
+        {
+          "after": 52,
+          "before": 76,
+          "offset": 1639
+        },
+        {
+          "after": 198,
+          "before": 58,
+          "offset": 1640
+        },
+        {
+          "after": 185,
+          "before": 11,
+          "offset": 1641
+        },
+        {
+          "after": 45,
+          "before": 248,
+          "offset": 1642
+        },
+        {
+          "after": 210,
+          "before": 29,
+          "offset": 1643
+        },
+        {
+          "after": 91,
+          "before": 90,
+          "offset": 1644
+        },
+        {
+          "after": 62,
+          "before": 247,
+          "offset": 1645
+        },
+        {
+          "after": 228,
+          "before": 87,
+          "offset": 1646
+        },
+        {
+          "after": 94,
+          "before": 152,
+          "offset": 1647
+        }
+      ],
+      "name": "c331-old-default-package.json",
+      "state_hash_equal": true,
+      "typed_fields_changed": [
+        "auth_generation"
+      ],
+      "view_equal": true
+    },
+    {
+      "after_generation": 1,
+      "after_length": 1648,
+      "all_other_fields_equal": true,
+      "before_generation": 0,
+      "before_length": 1648,
+      "byte_changes": [
+        {
+          "after": 1,
+          "before": 0,
+          "offset": 1573
+        },
+        {
+          "after": 233,
+          "before": 47,
+          "offset": 1616
+        },
+        {
+          "after": 105,
+          "before": 109,
+          "offset": 1617
+        },
+        {
+          "after": 20,
+          "before": 49,
+          "offset": 1618
+        },
+        {
+          "after": 71,
+          "before": 117,
+          "offset": 1619
+        },
+        {
+          "after": 25,
+          "before": 86,
+          "offset": 1620
+        },
+        {
+          "after": 183,
+          "before": 74,
+          "offset": 1621
+        },
+        {
+          "after": 213,
+          "before": 206,
+          "offset": 1622
+        },
+        {
+          "after": 62,
+          "before": 112,
+          "offset": 1623
+        },
+        {
+          "after": 155,
+          "before": 205,
+          "offset": 1624
+        },
+        {
+          "after": 237,
+          "before": 95,
+          "offset": 1625
+        },
+        {
+          "after": 246,
+          "before": 214,
+          "offset": 1626
+        },
+        {
+          "after": 27,
+          "before": 140,
+          "offset": 1627
+        },
+        {
+          "after": 105,
+          "before": 141,
+          "offset": 1628
+        },
+        {
+          "after": 235,
+          "before": 147,
+          "offset": 1629
+        },
+        {
+          "after": 190,
+          "before": 161,
+          "offset": 1630
+        },
+        {
+          "after": 86,
+          "before": 19,
+          "offset": 1631
+        },
+        {
+          "after": 23,
+          "before": 224,
+          "offset": 1632
+        },
+        {
+          "after": 22,
+          "before": 130,
+          "offset": 1633
+        },
+        {
+          "after": 220,
+          "before": 249,
+          "offset": 1634
+        },
+        {
+          "after": 53,
+          "before": 189,
+          "offset": 1635
+        },
+        {
+          "after": 94,
+          "before": 231,
+          "offset": 1636
+        },
+        {
+          "after": 80,
+          "before": 228,
+          "offset": 1637
+        },
+        {
+          "after": 122,
+          "before": 243,
+          "offset": 1638
+        },
+        {
+          "after": 251,
+          "before": 136,
+          "offset": 1639
+        },
+        {
+          "after": 177,
+          "before": 113,
+          "offset": 1640
+        },
+        {
+          "after": 72,
+          "before": 84,
+          "offset": 1641
+        },
+        {
+          "after": 172,
+          "before": 119,
+          "offset": 1642
+        },
+        {
+          "after": 84,
+          "before": 238,
+          "offset": 1643
+        },
+        {
+          "after": 35,
+          "before": 94,
+          "offset": 1644
+        },
+        {
+          "after": 247,
+          "before": 53,
+          "offset": 1645
+        },
+        {
+          "after": 64,
+          "before": 246,
+          "offset": 1646
+        },
+        {
+          "after": 69,
+          "before": 94,
+          "offset": 1647
+        }
+      ],
+      "name": "c331_phase8_genuine_schema4.json",
+      "state_hash_equal": true,
+      "typed_fields_changed": [
+        "auth_generation"
+      ],
+      "view_equal": true
+    }
+  ],
+  "final_checks": [
+    {
+      "name": "four-packages",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "content-schema",
+        "-p",
+        "content-compiler",
+        "-p",
+        "content-runtime",
+        "-p",
+        "content-native-loader"
+      ],
+      "exit": 0,
+      "seconds": 89.84719681739807,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "exit": 0,
+      "seconds": 36.10979199409485,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 0.2628028392791748,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.100189208984375,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 5.160254001617432,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.15335416793823242,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    }
+  ],
+  "no_instrumentation_remaining": true,
+  "versions_unchanged": {
+    "rules": 331,
+    "archive": 106,
+    "abi": 758,
+    "ws": 6,
+    "format": 1,
+    "api": 1,
+    "schema": 5
+  },
+  "C8_original": "BLOCK review; originals preserved; no claim previous full SDK foundation accepted",
+  "C331": "BLOCK;262/290,remaining28,+0"
+}

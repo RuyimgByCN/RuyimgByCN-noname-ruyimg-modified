@@ -1,0 +1,14 @@
+{
+  "cases": 6,
+  "raw_escape_text_not_decoded_by_RustValue": true,
+  "boundaries": [
+    "repository",
+    "token",
+    "path"
+  ],
+  "kind": [
+    "high",
+    "low"
+  ],
+  "fixture": "/tmp/i02-phase1-ab167599/source/crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json"
+}

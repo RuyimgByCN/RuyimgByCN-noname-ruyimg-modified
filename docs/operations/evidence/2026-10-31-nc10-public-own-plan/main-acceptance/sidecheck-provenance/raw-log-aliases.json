@@ -1,0 +1,12 @@
+[
+  {
+    "original_local_copy": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/original/probe/target/flycheck0/stdout",
+    "published_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/sidecheck-provenance/flycheck0.stdout.raw.txt",
+    "sha256": "ab63e31c3dd5d6399639587307d5f9b792153f03d0cc19df7723031e3ed8c6c1"
+  },
+  {
+    "original_local_copy": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/original/probe/target/flycheck0/stderr",
+    "published_path": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/sidecheck-provenance/flycheck0.stderr.raw.txt",
+    "sha256": "23b5a1d8a1fd05d20fdf92eb70cb776b8e9b521965895e44a63a3c0ea2255572"
+  }
+]

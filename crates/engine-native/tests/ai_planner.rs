@@ -418,6 +418,9 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
         .with_deadline_ms(50)
         .with_policy_variant(1);
     let mut steps = 0u64;
+    let mut successful = 0u64;
+    let mut suspended = 0u64;
+    let probe_before = engine_native::engine::legal_actions::probe_faults();
     // NC12 长程根因修正（2026-10-19）：遮蔽填充池排除**公开区/在飞区**后，AI 的
     // 隐藏区填充内容变化 → 本用例的对局长度随之变化（同 seed 下不再于 400 步内终局）。
     // 上界放宽到 900 步以保留「不 panic、能终局」的守护语义；步数与胜方在下方断言中
@@ -427,15 +430,28 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
             Some(open) => open.observer,
             None => e.turn().current,
         };
+        let before = e.save();
+        let log_before = e.log().to_vec();
         let plan = e.plan_action(seat, &strong);
-        match e.apply_plan(&plan) {
-            Ok(CommandOutcome::Accepted { .. })
-            | Ok(CommandOutcome::Pending { .. })
-            | Ok(CommandOutcome::Suspended) => {}
-            Ok(CommandOutcome::Rejected(_)) => {}
-            Err(err) => panic!("apply: {err:?}"),
+        assert_eq!(e.save(), before, "规划不得改变权威状态或随机流");
+        assert_eq!(e.log(), log_before.as_slice(), "规划不得改变宿主日志");
+        assert_eq!(plan.sim_faults, 0, "规划不得发生模拟故障");
+        let mut outcome = e.apply_plan(&plan).expect("apply");
+        loop {
+            steps += 1;
+            match outcome {
+                CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. } => {
+                    successful += 1;
+                    break;
+                }
+                CommandOutcome::Suspended => {
+                    suspended += 1;
+                    assert!(steps < 900, "续行须在同一 900 步预算内完成");
+                    outcome = e.resume();
+                }
+                CommandOutcome::Rejected(reason) => panic!("正式结算拒绝: {reason:?}"),
+            }
         }
-        steps += 1;
     }
     assert!(e.outcome().is_some(), "900 步内终局（实走 {steps} 步）");
     // 2026-10-17（swd 改造批 143）218 → 189：装备替换改为按**栏位**判定
@@ -451,7 +467,20 @@ fn policy_v2_drives_all_seats_without_answer_routing_panic() {
     // 判定区/离场区、`table`、回合级持牌字段）后，填充内容变化 → 本用例步数
     // 179 → **484**（对局变长：AI 强度随填充池收窄而变化；胜方见下）。
     // 该变化是**策略面**的，不是规则面：语义（不 panic、能终局、胜方）保持不变。
-    assert_eq!(steps, 484, "步数冻结（策略变更须同步证据）");
+    // Own 公共建议改变策略轨迹；旧 484 快照保留为历史证据，当前守护正式推进。
+    assert!(successful > 0, "必须实际成功结算正式命令");
+    assert_eq!(successful + suspended, steps, "每次提交或续行都须被记录");
+    assert_eq!(engine_native::engine::legal_actions::probe_faults(), probe_before, "不得新增探针故障");
+    let saved = e.save();
+    let bytes = engine_native::archive::encode_archive(&saved);
+    let decoded = engine_native::archive::decode_archive(&bytes).expect("终局存档解码");
+    assert_eq!(decoded, saved, "完整快照编码往返");
+    let restored = Engine::restore(&decoded).expect("终局存档恢复");
+    assert_eq!(restored.state_hash(), e.state_hash(), "恢复保留规则状态哈希");
+    let mut expected = saved;
+    expected.auth_generation = expected.auth_generation.checked_add(1).unwrap();
+    assert_eq!(restored.save(), expected, "恢复只按既有契约轮换认证代次");
+    eprintln!("NC10_SEMANTIC seed=8211 steps={steps} successful={successful} suspended={suspended} simulation_faults=0 new_probe_faults=0 restored=true");
     assert!(
         matches!(e.outcome().map(|o| o.winner), Some(engine_native::Winner::Player(3))),
         "胜方冻结：{:?}",

@@ -1,0 +1,31 @@
+[
+  {
+    "name": "source-and-c2",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "source"
+    ],
+    "exit": 0,
+    "seconds": 1.2839980125427246
+  },
+  {
+    "name": "c-choice",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc08"
+    ],
+    "exit": 101,
+    "seconds": 1.7043960094451904
+  }
+]

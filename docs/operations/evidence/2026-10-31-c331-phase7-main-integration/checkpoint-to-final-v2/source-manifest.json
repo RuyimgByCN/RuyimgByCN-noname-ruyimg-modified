@@ -1,0 +1,45 @@
+{
+  "checkpoint_manifest_sha256": "a391b36931980bee560b4ec7282d42f33fe13d5d98ba73265101d430391e29e5",
+  "final_manifest_sha256": "0d7a18e9fd5225fd09f7902fb32172609ef10a8f783df97587eba37b716544cd",
+  "changed": [
+    {
+      "path": "crates/engine-native/tests/c331_host_source_metadata.rs",
+      "checkpoint_sha256": "867f4ca1980da83f7b1cee9fcd8aa6afe920743bf42b5a70a3976132c507199e",
+      "final_sha256": "2a58562e2a28b9ee3fd91442b02605c6c8c5e7a63d593fcaac4569e45c5191c4",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    },
+    {
+      "path": "crates/engine-native/tests/nc04_cards_given_event.rs",
+      "checkpoint_sha256": "e0477947ad7150a5594de24c5c6b096750f55eefcfe840d09f1b9945001c07a3",
+      "final_sha256": "8f9fdde456e512b2d8b858b4eddf6b0f55217b73e9840adf0bcc2463054b0589",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    },
+    {
+      "path": "crates/engine-native/tests/nc04_vm_resume.rs",
+      "checkpoint_sha256": "6786e43f1709cd9a0164044b519811c8144bdc34648957eb00b636dc3c86a84b",
+      "final_sha256": "90f1955dc830c19a5f0f0e3e4143549a94cb950fc225730b9a362dca0e894388",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    },
+    {
+      "path": "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+      "checkpoint_sha256": "8d87fbe12abad6879010852e7d2ff99f6fb535da7ea226f8f37746be38c85bbf",
+      "final_sha256": "6c9f60ff058ad7471bee33d2e7872785c7cb16311dc5cbc81792f8a1a760ea19",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    },
+    {
+      "path": "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+      "checkpoint_sha256": "cf6166fc586914fe23a63e6d070a5c5e1d6f07342abe589ab685758e89308ef1",
+      "final_sha256": "554a0bdcc67d4dfa34b6fa84f8d01783ae7c9dd9ebbbd16974bae3263e5671cc",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    },
+    {
+      "path": "crates/engine-native/tests/nc09_machine_ownership.rs",
+      "checkpoint_sha256": "6baa4795fc98843c632ed34ce63a28e9ade61e2828defdc5ec8d9136a6919b16",
+      "final_sha256": "3ed83f1c1e822ff39770733dc0a8f299f8472999337814ea4856b0d7b662a292",
+      "kind": "test-only; approved106 gate expectations or unused imports; no production changes"
+    }
+  ],
+  "production_changes_since_checkpoint": [],
+  "qualification": "Prior parent SOURCEONLY review applies to checkpoint bytes; six changed test files require incremental review",
+  "whole_c331": "BLOCK"
+}

@@ -1,0 +1,12 @@
+{
+  "head": false,
+  "tree": false,
+  "index": false,
+  "index_entries": false,
+  "staged": false,
+  "tracked_status": true,
+  "protected": true,
+  "tracked_hashes": true,
+  "hooks": false,
+  "old_archives_manifests": false
+}

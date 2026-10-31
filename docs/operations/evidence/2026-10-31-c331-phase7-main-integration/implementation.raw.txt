@@ -1,0 +1,48 @@
+# C331 phase7：Main5fc/C6 私有集成与 Source33 兼容（2026-10-31）
+
+本轮私有实现和下述定向/原生/Gate1b检查完成，供独立增量复核；**不代表整项C331验收或可合Main**。排序来源证据仍262/290、余28、+0；Xuanying完整loseEnd/use及Schema5/Core等留后续。
+
+执行从08:55:16 UTC开始；19分31秒实体checkpoint已于09:14:27存在，父已fresh核SHA/tar。35分前已结束新增重命令，当前仅封存。未提交、暂存、推送或修改Main源码/项目文档。
+
+- 私有工作树：`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree`，detached HEAD精确`5fc0f77403d90fa4555156bf01722450cbe7bf3b`。
+- 证据E：`/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase7`。全部相对证据路径下文均相对E。
+- 原C6只读权威：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree`；140源manifest `81d66d59f0ca336761f28629850f9daf7a955670e7c17725cde40b88a1ba21e7`未变。
+- 依Decision29组成132个C-only、7个无重叠三方合并、1个UI冲突；最终148文件冻结。UI同时保留严格`source_skill`和C的`OrderTriggers`映射。
+- 抽取唯一只读`resolution::ready_park_index`，正式dispatch和source provenance复用C原有“同depth先非TriggerOrder、否则第一个”的规则。未授予执行、answer、root权限。
+- Source33完整ExpectedAsk唯一/形状、owner、启用逻辑技能、全局名称唯一、genuine直接inner、非VM、Other/RootNone限制保留；初始P/Q source绑定仍不构成prefix证书。legacy13字段/445 oracle/T/J/W未新增修改。
+- C331私有NGSA106严格拒绝105；ABI758/WS6、format1/API1、默认schema3/非默认schema4与默认hash中性不变。106为未发布中间布局，后续Core字段未实现，不承诺最终稳定106。
+- 保留C6既有`engine-core/.../load_package_checks.rs`逐字内容（Decision26既有admission）；依父限定只测两个真实`c331_schema_tests`，不把它误列新旧线规则。
+
+关键真实红绿及首次失败均保留：
+
+- `critical-red.log`实际三红：OrderPark先于OptionalGate令source为None、真实105错误接受、header仍105；`critical-green.log`同三测试3/3绿（真实遗计/刚烈、Other隐私、106字节恢复/fullsave/hash/log轨迹）。
+- genuine105来自原330正样本WAL的`state.snapshot_hex`原字节解码：1896字节，SHA `3e07feb6ef61e8a8fd140e36649eda855c7b6d100b30d753215ee1ede4b607c8`；无header改写。新106 reader拒绝，原`5ec814…`真实NGSA reader仍`Ok(330)`；它不是WAL reader。
+- `source-unit.log`2绿2红：原fixture误把park0当消费者、伪造unowned gate被C绑定门禁正确拒绝；调整fixture以实际selector定位并保留拒绝，`source-unit2.log`4/4绿。
+- `source-and-c.log`24绿1红：将native gate伪绑VM active的旧测试现被C正确拒绝；保留负控并新增真实VM optional的字节恢复/source=None，`source-and-c2.log`25/25绿。未放宽restore或source资格。
+- `c-choice.log`76绿1红/50忽略：原330/105夹具已应先被106 envelope拒绝；只改期望，未改夹具，`c-choice2.log`77/0/50。
+- `frontend-type.log`只缺新树的既有生成imports；只读复制Main现有12导入文件并fresh核全部18生成文件，`frontend-type2.log`和181前端测试绿。225f native/c7ce legacy均属现有330/105产物，不是当前C331/106 WASM验收。
+- `full-native.log`首次在l_rounds37绿6红：新树`../../../archive`来源链接缺失；仅私有只读链接补齐，原始错误保留。未修改canonical upstream。
+- `full-native2.log`在misc227绿1红：Source33测试写死header105，改为106；`full-native3.log`在nc_rounds145绿4红/7忽略：原v323–326真实105夹具先被格式门禁拒绝，测试准确改为archive-format拒绝，不解析/迁移旧payload，历史字节保留。
+- `full-native4.log`首次全绿。独立新target的`gate1b-strict.log`发现一个上述新测试unused import；删除并准确重命名格式门禁测试，`gate1b-strict2.log`全target严格通过；其后`full-native5.log`对最终同源码完整重跑全绿。未把不同源码或重叠测试计数相加；本轮未改C6 golden期望。
+
+最终实际命令/结果（离线，所有重命令经`/tmp/noname-run-serialized.py`全局锁，jobs2/incremental0）：
+
+- `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native`：**1761/0/75**，exit0，31.56s，`full-native5.log`；精确源绑定`pre-full4/source-manifest.json`与final148内容一致。
+- 独立`CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`：exit0；先前strict失败保留，修后同独立target缓存重用检查1.27s，`gate1b-result2.json`。
+- `cargo test --offline -p engine-core c331_schema_tests`：真实lib target2/0，其它target仅过滤，exit0，`legacy-c6-admission.log`。
+- `pnpm --dir apps/web-client typecheck` exit0；`pnpm --dir apps/web-client test`181/0；`targeted-results5.json`。
+- `cargo check --offline -p engine-native-wasm -p desktop-client -p game-server` host检查exit0，23.93s；不代表WASM平台/GUI/WS运行验收，已有非strict warnings保留。
+- `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py`2/0；`python3 -B scripts/check-source-lines.py`9015文件上限通过；`python3 -B scripts/check-native-layering.py`0向上引用。未声称LSP clean。
+
+可审冻结/补丁：
+
+- 早期`checkpoint20/source-manifest.json` SHA `a391b36931980bee560b4ec7282d42f33fe13d5d98ba73265101d430391e29e5`，原始checkpoint/tar/patch均保留。
+- 最终`final-freeze7/source-manifest.json` SHA **`0d7a18e9fd5225fd09f7902fb32172609ef10a8f783df97587eba37b716544cd`**；`final-freeze7/composed-source.tar.gz` **`d227cfd4ad67246359f3264e5e086e84073bd6de93bd1424e04e46ec109b0ec3`**。
+- 相对精确Main5fc：`final-freeze7/vs-main5fc.patch` SHA **`44a0fab9a2f06ac5985362dca1a6f5565aa356fd83316b896f09f257308b4f67`**；`git apply --reverse --check`通过，无index操作。
+- `main5fc-baseline-sources.tar.gz` SHA `dd506c0e0b5e12359d3ebadfd74731b3b0357c035afea9f9f0cb3431d4371208`；相对只读C6的`vs-frozen-c6.patch` SHA `716d1ec2c801b01ee01375fe10c53d710157db754b4cece97f0db62885a8c0f9`。
+- 父`1f0da040`的SOURCEONLY No issues适用于checkpoint；后续**仅6个测试文件变化、0生产变化**，不能自动覆盖新字节。增量`checkpoint-to-final-v2/source-manifest.json` SHA **`e95e298a89e88eb9ec2aac24ba092545acee9e7ed86c84d420f1345118086bba`**，增量patch `c316787f2772ba3cb2cc3f39ace6be6410bf3815dccaeadae00c2c64dc9710ca`，仍须独立增量复核。
+- `results-bound.json`、`protected-after.json`、`composition-final-audit.json`、`main-outside-c140-audit.json`和最终artifact索引提供源/命令/保护绑定。
+
+保护结论：09:31:47 fresh核Main31867个源/生产包/资产文件、18生成文件、defaultdist37、hooks均零差异；Main index SHA仍`ed845aec2067f273b7e11c545407d1831f7fed26f43597839dc2ee9ac375dbfa`且空暂存，私有index亦空。Main仅父Docs变化，已按指示允许。原C140零差异；原5ec reader二进制SHA仍原值。Main在C140外50文件保持原blob、4个必要Source integration测试/helper文件精确列入manifest；Decision29 approval/raw全部SHA仍匹配，未写Main。
+
+跳过当前C331/106产品WASM、真实GUI/WS/WAL重跑及完整workspace/legacy-core回归；旧运行证据不会冒充本组合验收。主要风险：106中间布局和整C331先决未完成；剩余28来源、完整Xuanying lossEnd/use、Core provider/grant/lifetime/death、canonical Damage/有序窗口、共享阶段/rescue/LossEnd/blocker、indexed/filterStop/out/hidden/reveal、schema5/SDK等在后续phase8+。GaiMing332/106、R05-333/107/ABI759/WS7按已批准顺序另行执行；Main不合入当前C。

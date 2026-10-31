@@ -1,0 +1,18 @@
+{
+  "Main_head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "all_non_doc_tracked_changes": [],
+  "all_non_doc_protected_changes": [],
+  "parent_owned_doc_changes": [
+    "docs/architecture/native-progress.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-source-provenance/README.md",
+    "docs/operations/evidence/2026-10-31-pa09-product-pool/scope.json",
+    "docs/operations/evidence/2026-10-31-r05-runtime-contract/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "index_bytes_equal": true,
+  "index_entries_equal": true,
+  "empty_staging": true,
+  "hooks_equal": true,
+  "old_archives_manifests_equal": true
+}

@@ -1,0 +1,1 @@
+{"command": ["python3", "-B", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-serialization-recovery-a7ow63dx/lock-test.py", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-serialization-recovery-a7ow63dx/lock-test.jsonl", "B"], "exit": 0, "locked_seconds": 0.2342864579986781, "disk_free_bytes": 74885939200}

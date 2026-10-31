@@ -1,0 +1,2276 @@
+--- a/apps/web-client/scripts/native-vm-install.test.mjs
++++ b/apps/web-client/scripts/native-vm-install.test.mjs
+@@ -232,3 +232,22 @@
+   setMatchFrozen(false);
+   assert.equal(record(), undefined, "nothing committed when the match froze during validation");
+ });
++
++test("schema5 SDK preserves defaults and rejects downgrade presence before local-store mutation", () => {
++  for (const [table, field, value] of [["skill_index", "charlotte", false], ["skill_index", "group_children", []], ["trigger_index", "force_die", false]]) {
++    const p = structuredClone(v1); p[table][0][field] = value;
++    for (const schema of [3, 4]) { p.manifest.content_schema_version = schema; rejects(p, /schema5/); }
++    p.manifest.content_schema_version = 5;
++    assert.equal(validateNativePackage(p), p);
++    assert.deepEqual(p[table][0][field], value);
++    p[table][0][field] = null;
++    rejects(p, /schema5/);
++  }
++});
++test("schema5 SDK native binding has one authority and defers real factory capabilities to Rust", () => {
++  const p = structuredClone(v1); p.manifest.content_schema_version = 5;
++  p.trigger_index[0].host_key = "host:sanjian_weapon";
++  assert.throws(() => validateNativePackage(p), /conflict/);
++  p.trigger_index[0].module = ""; p.trigger_index[0].entry_pc = 0;
++  assert.equal(validateNativePackage(p), p);
++});
+--- a/apps/web-client/src/engine/bundledNativePackages.ts
++++ b/apps/web-client/src/engine/bundledNativePackages.ts
+@@ -38,6 +38,7 @@
+     package_id: string;
+     version: string;
+     logic_hash: number[];
++    content_schema_version?: number;
+     dependencies?: Array<{ namespace: string; package_id: string; version: string; logic_hash?: number[] }>;
+   };
+   cards?: unknown;
+@@ -46,6 +47,7 @@
+   modules?: unknown;
+   skill_index?: unknown;
+   trigger_index?: unknown;
++  active_index?: unknown;
+ }
+ 
+ const bundled: Record<string, { package: { modules: unknown[] }; payload: unknown }> = {
+@@ -122,6 +124,7 @@
+  * 客户端不复刻规范序列化以免与内核漂移。
+  */
+ function validateVmModules(payload: NativePackagePayload): void {
++  validateNativeMechanismFields(payload);
+   const modules = payload.modules as unknown[];
+   const codeLength = new Map<string, number>();
+   for (const module of modules) {
+@@ -158,12 +161,46 @@
+     if (!Array.isArray(triggerIndex)) throw new Error("扩展包触发索引格式无效");
+     for (const entry of triggerIndex) {
+       const e = entry as Record<string, unknown> | null;
+-      if (!e || typeof e !== "object" || typeof e.module !== "string" || !codeLength.has(e.module)) {
++      const native = e?.host_key !== undefined;
++      if (native && (payload.manifest.content_schema_version !== 5 || typeof e?.host_key !== "string"
++        || !e.host_key.startsWith("host:") || (e.module !== undefined && e.module !== "") || e.entry_pc !== 0)) {
++        throw new Error("schema5 native executor conflict or invalid host_key");
++      }
++      if (!e || typeof e !== "object" || (!native && (typeof e.module !== "string" || !codeLength.has(e.module)))) {
+         throw new Error("扩展包触发索引引用了不存在的 VM 模块");
+       }
+-      if (!nonNegativeInt(e.entry_pc) || e.entry_pc >= codeLength.get(e.module)!
++      if (!nonNegativeInt(e.entry_pc) || (!native && e.entry_pc >= codeLength.get(e.module as string)!)
+         || !nonNegativeInt(e.skill_def_id) || (skillIndex !== undefined && !skills.has(e.skill_def_id))) {
+         throw new Error(`扩展包触发索引入口或技能引用无效: ${e.module}`);
++      }
++    }
++  }
++}
++
++
++function validateNativeMechanismFields(payload: NativePackagePayload): void {
++  const schema = payload.manifest.content_schema_version;
++  if (schema !== undefined && ![3, 4, 5].includes(schema)) throw new Error("unsupported content schema");
++  const fields: Array<[unknown, string[], string]> = [
++    [payload.skill_index, ["charlotte", "persevere", "forever", "temporary", "group_children", "reveal", "onremove"], "技能"],
++    [payload.trigger_index, ["host_key", "force_die", "force_out", "repeat", "hidden", "event_skill"], "触发"],
++    [payload.active_index, ["host_key"], "主动"],
++  ];
++  for (const [entries, names, label] of fields) {
++    if (entries === undefined) continue;
++    if (!Array.isArray(entries)) throw new Error(`扩展包${label}索引格式无效`);
++    for (const entry of entries) {
++      if (!entry || typeof entry !== "object") continue;
++      for (const name of names) {
++        if (!Object.hasOwn(entry, name)) continue;
++        if (schema !== 5 || entry[name] == null) throw new Error(`schema5 field requires schema5: ${name}`);
++        if (["charlotte", "persevere", "forever", "temporary", "force_die", "force_out"].includes(name)
++          && typeof entry[name] !== "boolean") throw new Error(`schema5 literal boolean required: ${name}`);
++        if (name === "group_children" && (!Array.isArray(entry[name]) || !entry[name].every(nonNegativeInt))) {
++          throw new Error("invalid schema5 group_children");
++        }
++        if (name === "repeat" && !["once", "damage_amount", "damage_amount_else_one"].includes(entry[name])) throw new Error("invalid schema5 repeat");
++        if (name === "hidden" && !["public_only", "ask_reveal", "run_hidden"].includes(entry[name])) throw new Error("invalid schema5 hidden");
+       }
+     }
+   }
+--- a/crates/content-compiler/src/ast.rs
++++ b/crates/content-compiler/src/ast.rs
+@@ -24,6 +24,14 @@
+     pub non_gainable: bool,
+     /// Conversion skill whose branch can be toggled by generic rules.
+     pub conversion: bool,
++    /// Explicit schema5 charlotte trait.
++    pub charlotte: Option<bool>,
++    /// Explicit schema5 persevere trait.
++    pub persevere: Option<bool>,
++    /// Explicit schema5 forever trait.
++    pub forever: Option<bool>,
++    /// Explicit schema5 temporary trait.
++    pub temporary: Option<bool>,
+     /// Items.
+     pub items: Vec<SkillItemAst>,
+     /// Span.
+--- a/crates/content-compiler/src/lib.rs
++++ b/crates/content-compiler/src/lib.rs
+@@ -101,6 +101,13 @@
+     let trigger_index: Vec<PackageTriggerEntry> = triggers
+         .into_iter()
+         .map(|t| PackageTriggerEntry {
++            host_key: None,
++            force_die: None,
++            force_out: None,
++            repeat: None,
++            hidden: None,
++            event_skill: None,
++
+             trigger_def_id: t.trigger_def_id,
+             skill_def_id: t.skill_def_id,
+             event: t.event,
+@@ -130,6 +137,8 @@
+     let active_index: Vec<PackageActiveEntry> = actives
+         .into_iter()
+         .map(|a| PackageActiveEntry {
++            host_key: None,
++
+             skill_def_id: a.skill_def_id,
+             window: a.window,
+             module: a.module,
+@@ -245,6 +254,14 @@
+         .skills
+         .iter()
+         .map(|skill| PackageSkillEntry {
++            charlotte: skill.charlotte,
++            persevere: skill.persevere,
++            forever: skill.forever,
++            temporary: skill.temporary,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+             skill_def_id: skill.def_id,
+             name: skill.name.clone(),
+             locked: skill.locked,
+@@ -270,6 +287,7 @@
+         asset_paths: Default::default(),
+         compiler_version: COMPILER_VERSION.into(),
+     };
++    pkg.manifest.content_schema_version = pkg.required_content_schema();
+     pkg.manifest.logic_hash = pkg.compute_logic_hash();
+     let _ = maps; // source maps available for debugger tooling
+     Ok(pkg)
+--- a/crates/content-compiler/src/lsp/hover_docs/skill.rs
++++ b/crates/content-compiler/src/lsp/hover_docs/skill.rs
+@@ -3,7 +3,7 @@
+ pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
+     Some(match word {
+             "skill" => {
+-                "Define a skill.\n\n```\nskill name(def_id) [locked] [lord_only] [non_gainable] [conversion] {\n  trigger ... { effect ...; }\n  active play_phase [uses_per_turn N|owner_hp|owner_lost_hp_min_one] [once_per_game] [owner_missing_skill def_id] [hand_gt_hp|hand_gt_max_hp|hand_limit_positive|equip_nonempty|hand_nonempty|face_up] [targets min max [other] [lowest_hp|highest_hp] [unlinked] [wounded] [male] [max_by_owner_lost_hp|max_by_owner_hp] [hp_at_least_owner|hp_gt_owner|hp_lte_owner] [hp_gt N] [hand_gt_owner|hand_lte_owner] [hand_lt N] [hand_nonempty] [can_compare] [can_use_on_owner card_kind] [second_can_use_juedou_on_first] [equipment_pair_with_armor] [has_equip] [has_discardable_equip] [has_gainable_equip] [in_attack_range] [hand_equip_nonempty] [has_discardable_hand_equip] [unused_by_skill_this_turn|unused_by_skill_this_play_phase] [match_selected_card_count] [selected_cards_match_target_equip_count]] [select_hand|select_he min max [allow_cancel] [same_suit|same_color|distinct_suits] [distinct_categories] [card_equip|card_armor|card_sha|card_basic|card_nonbasic|card_non_equip|card_red] [unused_category_by_skill_this_turn|unused_category_by_skill_this_play_phase|unused_category_by_owner_history_this_turn]] { effect ...; }\n  modifier target mode value;\n}\n```\n`lord_only` keeps every trigger, active, view-as, and modifier inactive unless the owner has the Lord identity. `conversion` exposes the skill's branch to generic conversion rules."
++                "Define a skill.\n\n```\nskill name(def_id) [locked] [lord_only] [non_gainable] [conversion] [charlotte] [persevere] [forever] [temporary] {\n  trigger ... { effect ...; }\n  active play_phase [uses_per_turn N|owner_hp|owner_lost_hp_min_one] [once_per_game] [owner_missing_skill def_id] [hand_gt_hp|hand_gt_max_hp|hand_limit_positive|equip_nonempty|hand_nonempty|face_up] [targets min max [other] [lowest_hp|highest_hp] [unlinked] [wounded] [male] [max_by_owner_lost_hp|max_by_owner_hp] [hp_at_least_owner|hp_gt_owner|hp_lte_owner] [hp_gt N] [hand_gt_owner|hand_lte_owner] [hand_lt N] [hand_nonempty] [can_compare] [can_use_on_owner card_kind] [second_can_use_juedou_on_first] [equipment_pair_with_armor] [has_equip] [has_discardable_equip] [has_gainable_equip] [in_attack_range] [hand_equip_nonempty] [has_discardable_hand_equip] [unused_by_skill_this_turn|unused_by_skill_this_play_phase] [match_selected_card_count] [selected_cards_match_target_equip_count]] [select_hand|select_he min max [allow_cancel] [same_suit|same_color|distinct_suits] [distinct_categories] [card_equip|card_armor|card_sha|card_basic|card_nonbasic|card_non_equip|card_red] [unused_category_by_skill_this_turn|unused_category_by_skill_this_play_phase|unused_category_by_owner_history_this_turn]] { effect ...; }\n  modifier target mode value;\n}\n```\n`lord_only` keeps every trigger, active, view-as, and modifier inactive unless the owner has the Lord identity. `conversion` exposes the skill's branch to generic conversion rules."
+             }
+             "trigger" => {
+                 "Define a triggered ability.\n\nEvents include game_started, damage_before, damage_prevented, damage, hp_lost, card_used, phase_prepare, phase_play_end, phase_draw_skipped, phase_end, death, dying, dying_after, max_hp_changed, cards_drawn.\nFilters include owner_is_target, owner_is_source, owner_is_source_or_target, owner_alive, owner_alive_card_targets_gt_one, and the documented source/rate filters."
+@@ -593,6 +593,9 @@
+             "choose_link_other" => {
+                 "Effect: forces the owner to choose another living unlinked player and link them. Requires Rule VM ABI 213."
+             }
++            "charlotte" | "persevere" | "forever" | "temporary" => {
++                "Explicit schema5 declaration trait. Publishing preserves it in the package hash; native execution rejects traits whose Core consumer is not implemented."
++            }
+             "lord_only" => {
+                 "Skill declaration marker: the skill is active only while its owner has the Lord identity."
+             }
+--- a/crates/content-compiler/src/parse.rs
++++ b/crates/content-compiler/src/parse.rs
+@@ -91,6 +91,11 @@
+         let mut lord_only = false;
+         let mut non_gainable = false;
+         let mut conversion = false;
++        let mut charlotte = None;
++        let mut persevere = None;
++        let mut forever = None;
++        let mut temporary = None;
++
+         loop {
+             match &self.peek().kind {
+                 TokenKind::Ident(value) if value == "locked" && !locked => {
+@@ -109,6 +114,10 @@
+                     conversion = true;
+                     self.bump();
+                 }
++                TokenKind::Ident(value) if value == "charlotte" && charlotte.is_none() => { charlotte = Some(true); self.bump(); }
++                TokenKind::Ident(value) if value == "persevere" && persevere.is_none() => { persevere = Some(true); self.bump(); }
++                TokenKind::Ident(value) if value == "forever" && forever.is_none() => { forever = Some(true); self.bump(); }
++                TokenKind::Ident(value) if value == "temporary" && temporary.is_none() => { temporary = Some(true); self.bump(); }
+                 _ => break,
+             }
+         }
+@@ -125,6 +134,7 @@
+             lord_only,
+             non_gainable,
+             conversion,
++            charlotte, persevere, forever, temporary,
+             items,
+             span: Span {
+                 start,
+--- a/crates/content-compiler/src/typecheck/skills.rs
++++ b/crates/content-compiler/src/typecheck/skills.rs
+@@ -44,6 +44,11 @@
+         lord_only: sk.lord_only,
+         non_gainable: sk.non_gainable,
+         conversion: sk.conversion,
++        charlotte: sk.charlotte,
++        persevere: sk.persevere,
++        forever: sk.forever,
++        temporary: sk.temporary,
++
+         triggers,
+         actives,
+         view_as,
+--- a/crates/content-native-loader/src/lib.rs
++++ b/crates/content-native-loader/src/lib.rs
+@@ -256,6 +256,7 @@
+ }
+ 
+ mod vm_active;
++mod mechanisms;
+ mod vm_generals;
+ pub use vm_generals::bridge_generals_with_vm_package;
+ 
+@@ -264,6 +265,7 @@
+ ) -> Result<VmBridgeOutcome, BridgeError> {
+     use engine_native::event::{EventKind, Timing};
+     pkg.validate().map_err(|reason| invalid("package", reason))?;
++    mechanisms::validate_runtime_mechanisms(pkg)?;
+     content_runtime::check_engine_compat(&pkg.manifest, &content_runtime::tooling_host_versions())
+         .map_err(|error| BridgeError::InvalidField {
+             field: "manifest.rule_vm_abi_version",
+@@ -376,6 +378,7 @@
+             None => filter,
+         };
+         out.push(engine_native::content::extension::VmSkillDecl {
++            declaration_hash: None,
+             name: pkg.skill_index.iter().find(|skill| skill.skill_def_id == t.skill_def_id)
+                 .ok_or_else(|| invalid("trigger_index.skill_def_id", "missing logical skill"))?.name.clone(),
+             module: module.clone(),
+@@ -429,6 +432,9 @@
+             "modifier_index",
+             "native VM modifier declarations are unsupported",
+         ));
++    }
++    if pkg.has_native_mechanisms() {
++        for decl in &mut out { decl.declaration_hash = Some(pkg.compute_logic_hash()); }
+     }
+     Ok(VmBridgeOutcome { decls: out })
+ }
+--- /dev/null
++++ b/crates/content-native-loader/src/mechanisms.rs
+@@ -0,0 +1,88 @@
++//! Finite admission at the existing native bridge: data support is not runtime support.
++use super::*;
++use content_schema::{ContentPackage, HiddenTriggerPolicy, RevealBinding, TriggerRepeat};
++
++pub(super) fn validate_runtime_mechanisms(pkg: &ContentPackage) -> Result<(), BridgeError> {
++    if !pkg.has_native_mechanisms() {
++        return Ok(());
++    }
++    for skill in &pkg.skill_index {
++        if let Some(key) = &skill.onremove {
++            if HostBehavior::from_key(key).is_none() {
++                return Err(invalid(
++                    "skill_index.onremove",
++                    "unknown_native_cleanup_key",
++                ));
++            }
++            // No existing factory exposes a cleanup-role invocation through this declaration.
++            return Err(invalid("skill_index.onremove", "unsupported_cleanup_role"));
++        }
++        if skill.charlotte == Some(true)
++            || skill.persevere == Some(true)
++            || skill.forever == Some(true)
++            || skill.temporary == Some(true)
++        {
++            return Err(invalid(
++                "skill_index",
++                "unsupported_skill_traits_or_temporary_lifetime",
++            ));
++        }
++        if skill
++            .group_children
++            .as_ref()
++            .is_some_and(|children| !children.is_empty())
++        {
++            return Err(invalid(
++                "skill_index.group_children",
++                "unsupported_provider_group_lifetime",
++            ));
++        }
++        if skill
++            .reveal
++            .as_ref()
++            .is_some_and(|reveal| *reveal != RevealBinding::None)
++        {
++            return Err(invalid("skill_index.reveal", "unsupported_reveal_binding"));
++        }
++    }
++    for trigger in &pkg.trigger_index {
++        if let Some(key) = &trigger.host_key {
++            validate_native_key(key)?;
++        }
++        if trigger.force_die == Some(true)
++            || trigger.force_out == Some(true)
++            || trigger.repeat.is_some_and(|r| r != TriggerRepeat::Once)
++            || trigger
++                .hidden
++                .is_some_and(|h| h != HiddenTriggerPolicy::PublicOnly)
++            || trigger.event_skill.is_some()
++        {
++            return Err(invalid(
++                "trigger_index",
++                "unsupported_trigger_participation_or_named_window",
++            ));
++        }
++    }
++    for active in &pkg.active_index {
++        if active.window == "dying" {
++            return Err(invalid(
++                "active_index.window",
++                "unsupported_rescue_action_window",
++            ));
++        }
++        if let Some(key) = &active.host_key {
++            validate_native_key(key)?;
++        }
++    }
++    Ok(())
++}
++fn validate_native_key(key: &str) -> Result<(), BridgeError> {
++    if HostBehavior::from_key(key).is_none() {
++        return Err(invalid("host_key", "unknown_native_execution_key"));
++    }
++    // A known ordinary body key is not proof that its explicit window/filter is implemented.
++    Err(invalid(
++        "host_key",
++        "unsupported_explicit_native_declaration_binding",
++    ))
++}
+--- a/crates/content-native-loader/src/vm_active.rs
++++ b/crates/content-native-loader/src/vm_active.rs
+@@ -161,6 +161,7 @@
+             mark_at_least: active.mark_at_least,
+         };
+         decls.push(engine_native::content::extension::VmSkillDecl {
++            declaration_hash: None,
+             name: skill.name.clone(),
+             module: module.clone(),
+             trigger: meta,
+--- a/crates/content-runtime/examples/gen_doomsday_brawl_package.rs
++++ b/crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+@@ -72,6 +72,14 @@
+         modules: vec![],
+         skill_index: vec![
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 0,
+                 name: "shishi".into(),
+                 locked: false,
+@@ -80,6 +88,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 1,
+                 name: "xunmeng".into(),
+                 locked: false,
+@@ -88,6 +104,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 2,
+                 name: "zaibian".into(),
+                 locked: false,
+--- a/crates/content-runtime/examples/gen_epic_cards_package.rs
++++ b/crates/content-runtime/examples/gen_epic_cards_package.rs
+@@ -81,6 +81,14 @@
+         manifest,
+         modules: vec![],
+         skill_index: vec![PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+             skill_def_id: 0,
+             name: "reguhuo".into(),
+             locked: false,
+@@ -89,6 +97,14 @@
+             conversion: false,
+         },
+         PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+             skill_def_id: 1,
+             name: "rangjie".into(),
+             locked: false,
+--- a/crates/content-runtime/examples/gen_hero_kill_package.rs
++++ b/crates/content-runtime/examples/gen_hero_kill_package.rs
+@@ -74,6 +74,14 @@
+         modules: vec![],
+         skill_index: vec![
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 0,
+                 name: "yxs_fanji".into(),
+                 locked: false,
+@@ -82,6 +90,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 1,
+                 name: "yxs_fanji2".into(),
+                 locked: false,
+@@ -90,6 +106,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 2,
+                 name: "yxs_menshen".into(),
+                 locked: false,
+@@ -98,6 +122,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 3,
+                 name: "yxs_menshen3".into(),
+                 locked: false,
+@@ -106,6 +138,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 4,
+                 name: "yxs_menshen2".into(),
+                 locked: false,
+--- a/crates/content-runtime/examples/gen_mark_supplement_package.rs
++++ b/crates/content-runtime/examples/gen_mark_supplement_package.rs
+@@ -77,6 +77,14 @@
+         modules: vec![],
+         skill_index: vec![
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 0,
+                 name: "xigua_mopaifanbei".into(),
+                 locked: false,
+@@ -85,6 +93,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 1,
+                 name: "xigua_xueliangfanbei".into(),
+                 locked: false,
+@@ -93,6 +109,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 2,
+                 name: "kurou".into(),
+                 locked: false,
+@@ -101,6 +125,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 3,
+                 name: "zhuwanzhongji".into(),
+                 locked: false,
+@@ -109,6 +141,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 4,
+                 name: "fz_liegong".into(),
+                 locked: false,
+@@ -117,6 +157,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 5,
+                 name: "fz_xinkuanggu".into(),
+                 locked: false,
+--- a/crates/content-runtime/examples/gen_select_beautify_package.rs
++++ b/crates/content-runtime/examples/gen_select_beautify_package.rs
+@@ -75,6 +75,14 @@
+         modules: vec![],
+         skill_index: vec![
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 0,
+                 name: "xiefang".into(),
+                 locked: false,
+@@ -83,6 +91,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 1,
+                 name: "new_zhixi".into(),
+                 locked: false,
+@@ -91,6 +107,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 2,
+                 name: "new_zhixi_mark2".into(),
+                 locked: false,
+@@ -99,6 +123,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 3,
+                 name: "new_meibu".into(),
+                 locked: false,
+@@ -107,6 +139,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 4,
+                 name: "new_meibu_range".into(),
+                 locked: false,
+@@ -115,6 +155,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 5,
+                 name: "sbzhaxiang".into(),
+                 locked: false,
+@@ -123,6 +171,14 @@
+                 conversion: false,
+             },
+             content_schema::PackageSkillEntry {
++            charlotte: None,
++            persevere: None,
++            forever: None,
++            temporary: None,
++            group_children: None,
++            reveal: None,
++            onremove: None,
++
+                 skill_def_id: 6,
+                 name: "jishe".into(),
+                 locked: false,
+--- a/crates/content-runtime/src/compat.rs
++++ b/crates/content-runtime/src/compat.rs
+@@ -28,7 +28,7 @@
+             host.rule_vm_abi, manifest.rule_vm_abi_version
+         )));
+     }
+-    if !matches!((host.content_schema, manifest.content_schema_version), (4, 3 | 4) | (3, 3)) {
++    if !matches!((host.content_schema, manifest.content_schema_version), (5, 3 | 4 | 5) | (4, 3 | 4) | (3, 3)) {
+         return Err(RuntimeError::Incompatible(format!(
+             "content_schema host={} package={}",
+             host.content_schema, manifest.content_schema_version
+--- a/crates/content-runtime/src/store/ordering.rs
++++ b/crates/content-runtime/src/store/ordering.rs
+@@ -86,6 +86,7 @@
+             );
+         }
+     }
++    ContentPackage::validate_native_mechanism_graph(&ordered).map_err(RuntimeError::Package)?;
+     Ok(ordered)
+ }
+ 
+--- a/crates/content-schema/src/ir.rs
++++ b/crates/content-schema/src/ir.rs
+@@ -39,6 +39,18 @@
+     /// Conversion skill whose branch can be toggled by generic rules.
+     #[serde(default)]
+     pub conversion: bool,
++    /// Explicit schema5 charlotte trait.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub charlotte: Option<bool>,
++    /// Explicit schema5 persevere trait.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub persevere: Option<bool>,
++    /// Explicit schema5 forever trait.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub forever: Option<bool>,
++    /// Explicit schema5 temporary trait.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub temporary: Option<bool>,
+     /// Triggers.
+     pub triggers: Vec<TriggerIr>,
+     /// Active (on-demand) skills.
+--- a/crates/content-schema/src/package.rs
++++ b/crates/content-schema/src/package.rs
+@@ -8,6 +8,8 @@
+ use std::path::{Component, Path};
+ mod hashing;
+ mod trigger_order;
++mod mechanisms;
++pub use mechanisms::{TriggerRepeat, HiddenTriggerPolicy, RevealBinding};
+ pub use trigger_order::TriggerTiming;
+ use trigger_order::{default_order_selectable, is_true, is_zero_priority};
+ 
+@@ -242,7 +244,26 @@
+ 
+ /// Trigger index entry for package (static).
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
+ pub struct PackageTriggerEntry {
++    /// Schema5 host key; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub host_key: Option<String>,
++    /// Schema5 force die; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub force_die: Option<bool>,
++    /// Schema5 force out; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub force_out: Option<bool>,
++    /// Schema5 repeat; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub repeat: Option<TriggerRepeat>,
++    /// Schema5 hidden; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub hidden: Option<HiddenTriggerPolicy>,
++    /// Schema5 event skill; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub event_skill: Option<u32>,
+     /// Trigger def id.
+     pub trigger_def_id: u32,
+     /// Skill def id.
+@@ -267,6 +288,7 @@
+     #[serde(default = "default_order_selectable", skip_serializing_if = "is_true")]
+     pub order_selectable: bool,
+     /// Module name containing handler.
++    #[serde(default)]
+     pub module: String,
+     /// Entry PC in module.
+     pub entry_pc: u32,
+@@ -274,7 +296,29 @@
+ 
+ /// Skill-level metadata independent of any one handler module.
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
+ pub struct PackageSkillEntry {
++    /// Schema5 charlotte; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub charlotte: Option<bool>,
++    /// Schema5 persevere; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub persevere: Option<bool>,
++    /// Schema5 forever; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub forever: Option<bool>,
++    /// Schema5 temporary; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub temporary: Option<bool>,
++    /// Schema5 group children; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub group_children: Option<Vec<u32>>,
++    /// Schema5 reveal; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub reveal: Option<RevealBinding>,
++    /// Schema5 onremove; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub onremove: Option<String>,
+     /// Skill definition id.
+     pub skill_def_id: u32,
+     /// Source-level stable name.
+@@ -569,12 +613,17 @@
+ 
+ /// Active skill index entry (player-activated).
+ #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
+ pub struct PackageActiveEntry {
++    /// Schema5 host key; presence is execution metadata.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
++    pub host_key: Option<String>,
+     /// Skill def id.
+     pub skill_def_id: u32,
+     /// Window: play_phase | any
+     pub window: String,
+     /// Module name.
++    #[serde(default)]
+     pub module: String,
+     /// Entry PC.
+     pub entry_pc: u32,
+@@ -1065,6 +1114,8 @@
+ 
+     /// Deserialize.
+     pub fn from_json_bytes(data: &[u8]) -> Result<Self, String> {
++        let value: serde_json::Value = serde_json::from_slice(data).map_err(|e| e.to_string())?;
++        mechanisms::validate_wire_presence(&value)?;
+         serde_json::from_slice(data).map_err(|e| e.to_string())
+     }
+ }
+--- a/crates/content-schema/src/package/hashing.rs
++++ b/crates/content-schema/src/package/hashing.rs
+@@ -14,6 +14,10 @@
+         h.update(self.manifest.package_id.as_bytes());
+         h.update(self.manifest.version.as_bytes());
+         h.update(self.compiler_version.as_bytes());
++        if self.has_native_mechanisms() {
++            h.update(b"npack-native-mechanisms/1");
++            h.update(&self.native_mechanisms_hash());
++        }
+         if !self.manifest.dependencies.is_empty() {
+             h.update(b"dependencies/v1");
+             let mut dependencies = self.manifest.dependencies.clone();
+--- /dev/null
++++ b/crates/content-schema/src/package/mechanisms.rs
+@@ -0,0 +1,360 @@
++//! Schema5 declaration data; runtime capability admission stays in the native loader.
++use super::*;
++
++/// Number of invocations sampled by a future indexed trigger consumer.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum TriggerRepeat {
++    /// One ordinary invocation.
++    Once,
++    /// One invocation per damage point.
++    DamageAmount,
++    /// Damage points, or one invocation for a non-damage event.
++    DamageAmountElseOne,
++}
++/// Admission of concealed skill ownership.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum HiddenTriggerPolicy {
++    /// Existing public ownership only.
++    PublicOnly,
++    /// Require a genuine reveal binding.
++    AskReveal,
++    /// Preserve concealed ownership.
++    RunHidden,
++}
++/// Declared reveal action; handler references are genuine logical definitions.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case", deny_unknown_fields)]
++pub enum RevealBinding {
++    /// No reveal mechanism.
++    None,
++    /// Genuine handlers around the public confirmation.
++    TriggerHook {
++        /// Handler before confirmation.
++        before: Option<u32>,
++        /// Handler after confirmation.
++        after: Option<u32>,
++    },
++    /// Explicit public confirmation.
++    ConfirmPublic,
++}
++
++pub(super) fn validate_wire_presence(value: &serde_json::Value) -> Result<(), String> {
++    let schema = value["manifest"]["content_schema_version"].as_u64();
++    if !matches!(schema, Some(3..=5)) {
++        return Err("unsupported content_schema; expected3/4/5".into());
++    }
++    let fields: &[(&str, &[&str])] = &[
++        (
++            "skill_index",
++            &[
++                "charlotte",
++                "persevere",
++                "forever",
++                "temporary",
++                "group_children",
++                "reveal",
++                "onremove",
++            ],
++        ),
++        (
++            "trigger_index",
++            &[
++                "host_key",
++                "force_die",
++                "force_out",
++                "repeat",
++                "hidden",
++                "event_skill",
++            ],
++        ),
++        ("active_index", &["host_key"]),
++    ];
++    for (table, names) in fields {
++        if let Some(entries) = value[*table].as_array() {
++            for entry in entries {
++                for key in *names {
++                    if let Some(field) = entry.get(*key) {
++                        if schema != Some(5) || field.is_null() {
++                            return Err(format!(
++                                "schema5 field {table}.{key} requires schema5 and a literal value"
++                            ));
++                        }
++                    }
++                }
++            }
++        }
++    }
++    Ok(())
++}
++
++impl ContentPackage {
++    /// Presence, including explicit default values, requires schema5.
++    pub fn has_native_mechanisms(&self) -> bool {
++        self.skill_index.iter().any(|s| {
++            s.charlotte.is_some()
++                || s.persevere.is_some()
++                || s.forever.is_some()
++                || s.temporary.is_some()
++                || s.group_children.is_some()
++                || s.reveal.is_some()
++                || s.onremove.is_some()
++        }) || self.trigger_index.iter().any(|t| {
++            t.host_key.is_some()
++                || t.force_die.is_some()
++                || t.force_out.is_some()
++                || t.repeat.is_some()
++                || t.hidden.is_some()
++                || t.event_skill.is_some()
++        }) || self.active_index.iter().any(|a| a.host_key.is_some())
++    }
++
++    /// Canonical declaration digest; preserves presence, positions and exact bindings.
++    pub fn native_mechanisms_hash(&self) -> [u8; 32] {
++        let mut h = blake3::Hasher::new();
++        h.update(b"npack-native-mechanisms/1");
++        let mut segment = |data: Vec<u8>| {
++            h.update(&(data.len() as u64).to_le_bytes());
++            h.update(&data);
++        };
++        for (position, s) in self.skill_index.iter().enumerate() {
++            segment(
++                serde_json::to_vec(&(
++                    position,
++                    s.skill_def_id,
++                    &s.name,
++                    s.locked,
++                    s.charlotte,
++                    s.persevere,
++                    s.forever,
++                    s.temporary,
++                    &s.group_children,
++                    &s.reveal,
++                    &s.onremove,
++                ))
++                .expect("typed declaration"),
++            );
++        }
++        for (position, t) in self.trigger_index.iter().enumerate() {
++            segment(serde_json::to_vec(&(position, t)).expect("typed handler"));
++        }
++        for (position, a) in self.active_index.iter().enumerate() {
++            segment(serde_json::to_vec(&(position, a)).expect("typed active handler"));
++        }
++        *h.finalize().as_bytes()
++    }
++
++    pub(super) fn validate_native_mechanisms(&self) -> Result<(), String> {
++        if !self.has_native_mechanisms() {
++            return Ok(());
++        }
++        if self.skill_index.len() > u16::MAX as usize {
++            return Err("skill definition capacity exceeded".into());
++        }
++        let mut triggers = std::collections::BTreeSet::new();
++        let mut actives = std::collections::BTreeSet::new();
++        for t in &self.trigger_index {
++            if !triggers.insert(t.trigger_def_id) {
++                return Err("duplicate genuine handler identity".into());
++            }
++            validate_executor(&t.module, &t.host_key, t.entry_pc)?;
++            let boundary = matches!(
++                t.event.as_str(),
++                "skill_before" | "skill_begin" | "skill_end" | "skill_after"
++            );
++            if boundary != t.event_skill.is_some() {
++                return Err("event_skill requires a genuine named skill window".into());
++            }
++            if matches!(t.repeat, Some(TriggerRepeat::DamageAmount))
++                && !matches!(
++                    t.event.as_str(),
++                    "damage"
++                        | "damage_before"
++                        | "damage_begin"
++                        | "damage_end"
++                        | "damage_after"
++                        | "damage_source"
++                )
++            {
++                return Err("damage_amount repeat requires a damage window".into());
++            }
++            if matches!(t.hidden, Some(HiddenTriggerPolicy::AskReveal)) {
++                let skill = self
++                    .skill_index
++                    .iter()
++                    .find(|s| s.skill_def_id == t.skill_def_id);
++                if !skill.is_some_and(|s| {
++                    matches!(
++                        s.reveal,
++                        Some(RevealBinding::ConfirmPublic | RevealBinding::TriggerHook { .. })
++                    )
++                }) {
++                    return Err("ask_reveal requires a genuine reveal binding".into());
++                }
++            }
++        }
++        for a in &self.active_index {
++            validate_executor(&a.module, &a.host_key, a.entry_pc)?;
++            if !actives.insert(a.skill_def_id) {
++                return Err("duplicate active handler identity".into());
++            }
++            if !self
++                .skill_index
++                .iter()
++                .any(|s| s.skill_def_id == a.skill_def_id)
++            {
++                return Err("active references unknown logical skill".into());
++            }
++            if self.has_native_mechanisms()
++                && !matches!(a.window.as_str(), "play_phase" | "any" | "dying")
++            {
++                return Err("unknown active window".into());
++            }
++        }
++        for skill in &self.skill_index {
++            if let Some(key) = &skill.onremove {
++                if !key.starts_with("host:") || key.len() == 5 {
++                    return Err("invalid finite cleanup key".into());
++                }
++            }
++            let children = skill.group_children.as_deref().unwrap_or_default();
++            let unique: std::collections::BTreeSet<_> = children.iter().collect();
++            if children.len() > u16::MAX as usize
++                || unique.len() != children.len()
++                || children.contains(&skill.skill_def_id)
++            {
++                return Err("invalid group_children edges".into());
++            }
++            if matches!(
++                &skill.reveal,
++                Some(RevealBinding::TriggerHook {
++                    before: None,
++                    after: None
++                })
++            ) {
++                return Err("empty reveal hook binding".into());
++            }
++        }
++        if self.manifest.dependencies.is_empty() {
++            Self::validate_native_mechanism_graph(std::slice::from_ref(self))?;
++        }
++        Ok(())
++    }
++
++    /// Resolve numeric declaration edges only within the exact dependency-ordered package set.
++    pub fn validate_native_mechanism_graph(packages: &[Self]) -> Result<(), String> {
++        if !packages.iter().any(Self::has_native_mechanisms) {
++            return Ok(());
++        }
++        let mut graph = BTreeMap::<(usize, u32), Vec<(usize, u32)>>::new();
++        for (index, package) in packages.iter().enumerate() {
++            let mut allowed = std::collections::BTreeSet::from([index]);
++            let mut pending = vec![index];
++            while let Some(current) = pending.pop() {
++                for d in &packages[current].manifest.dependencies {
++                    let found = packages
++                        .iter()
++                        .position(|p| {
++                            p.manifest.namespace == d.namespace
++                                && p.manifest.package_id == d.package_id
++                                && p.manifest.version == d.version
++                                && (d.logic_hash == [0; 32]
++                                    || d.logic_hash == p.manifest.logic_hash)
++                        })
++                        .ok_or_else(|| "missing locked mechanism dependency".to_string())?;
++                    if allowed.insert(found) {
++                        pending.push(found);
++                    }
++                }
++            }
++            let resolve = |id: u32, handler: bool| -> Result<(usize, u32), String> {
++                let candidates: Vec<_> = allowed
++                    .iter()
++                    .copied()
++                    .filter(|i| {
++                        packages[*i]
++                            .skill_index
++                            .iter()
++                            .any(|s| s.skill_def_id == id)
++                    })
++                    .collect();
++                if candidates.len() != 1 {
++                    return Err(format!("unresolved or ambiguous genuine skill {id}"));
++                }
++                let i = candidates[0];
++                if handler
++                    && !packages[i]
++                        .trigger_index
++                        .iter()
++                        .any(|t| t.skill_def_id == id)
++                    && !packages[i]
++                        .active_index
++                        .iter()
++                        .any(|a| a.skill_def_id == id)
++                {
++                    return Err("reference is not a genuine handler".into());
++                }
++                Ok((i, id))
++            };
++            for s in &package.skill_index {
++                let mut children = Vec::new();
++                for child in s.group_children.as_deref().unwrap_or_default() {
++                    children.push(resolve(*child, false)?);
++                }
++                graph.insert((index, s.skill_def_id), children);
++                if let Some(RevealBinding::TriggerHook { before, after }) = &s.reveal {
++                    for id in before.iter().chain(after.iter()) {
++                        resolve(*id, true)?;
++                    }
++                }
++            }
++            for t in &package.trigger_index {
++                if let Some(id) = t.event_skill {
++                    resolve(id, true)?;
++                }
++            }
++        }
++        let mut incoming: BTreeMap<_, usize> = graph.keys().map(|k| (*k, 0)).collect();
++        for children in graph.values() {
++            for child in children {
++                *incoming.get_mut(child).ok_or("dangling group child")? += 1;
++            }
++        }
++        let mut ready: Vec<_> = incoming
++            .iter()
++            .filter_map(|(k, n)| (*n == 0).then_some(*k))
++            .collect();
++        let mut count = 0;
++        while let Some(key) = ready.pop() {
++            count += 1;
++            for child in &graph[&key] {
++                let n = incoming.get_mut(child).expect("checked edge");
++                *n -= 1;
++                if *n == 0 {
++                    ready.push(*child);
++                }
++            }
++        }
++        if count != graph.len() {
++            return Err("cyclic group_children".into());
++        }
++        Ok(())
++    }
++}
++fn validate_executor(module: &str, host: &Option<String>, pc: u32) -> Result<(), String> {
++    match host {
++        Some(key) if module.is_empty() && pc == 0 && key.starts_with("host:") && key.len() > 5 => Ok(()),
++        None if !module.is_empty() => Ok(()),
++        _ => Err("exactly one verified module or native host_key is required; host entry_pc must be zero".into()),
++    }
++}
++
++// Reject explicit null without losing Option presence in direct serde SDK callers.
++pub(super) fn deserialize_present<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
++where
++    D: serde::Deserializer<'de>,
++    T: Deserialize<'de>,
++{
++    T::deserialize(deserializer).map(Some)
++}
+--- a/crates/content-schema/src/package/trigger_order.rs
++++ b/crates/content-schema/src/package/trigger_order.rs
+@@ -33,7 +33,7 @@
+ impl ContentPackage {
+     /// Choose the publishing schema from actual metadata, without changing old hashes.
+     pub fn required_content_schema(&self) -> u32 {
+-        if self.trigger_index.iter().any(PackageTriggerEntry::has_nondefault_order) { 4 } else { 3 }
++        if self.has_native_mechanisms() { 5 } else if self.trigger_index.iter().any(PackageTriggerEntry::has_nondefault_order) { 4 } else { 3 }
+     }
+     /// Validate the execution schema even when the caller supplies a host with schema zero.
+     pub fn validate_trigger_order_schema(&self) -> Result<(), String> {
+@@ -44,6 +44,7 @@
+         if self.manifest.content_schema_version != required {
+             return Err(format!("content_schema {} requires {required} for trigger ordering", self.manifest.content_schema_version));
+         }
++        self.validate_native_mechanisms()?;
+         let mut ids = std::collections::BTreeSet::new();
+         let mut names = std::collections::BTreeSet::new();
+         for skill in &self.skill_index {
+@@ -54,7 +55,7 @@
+         let mut modules = std::collections::BTreeSet::new();
+         if self.modules.iter().any(|m| !modules.insert(&m.name)) { return Err("duplicate module identity".into()); }
+         for trigger in &self.trigger_index {
+-            if !ids.contains(&trigger.skill_def_id) || !modules.contains(&trigger.module) {
++            if !ids.contains(&trigger.skill_def_id) || (trigger.host_key.is_none() && !modules.contains(&trigger.module)) {
+                 return Err("trigger references unknown skill/module identity".into());
+             }
+         }
+--- a/crates/engine-api/src/version.rs
++++ b/crates/engine-api/src/version.rs
+@@ -3,7 +3,7 @@
+ use serde::{Deserialize, Serialize};
+ 
+ /// Highest content schema version readable by current native hosts.
+-pub const CONTENT_SCHEMA_VERSION: u32 = 4;
++pub const CONTENT_SCHEMA_VERSION: u32 = 5;
+ 
+ /// Current installable package format version.
+ pub const PACKAGE_FORMAT_VERSION: u32 = 1;
+--- a/crates/engine-core/src/content/registry/load_package_checks.rs
++++ b/crates/engine-core/src/content/registry/load_package_checks.rs
+@@ -542,6 +542,13 @@
+         p.manifest.logic_hash = p.compute_logic_hash();
+         p.validate().unwrap();
+         assert!(ContentRegistry::new().load_package(&p).is_err());
++        p.trigger_index[0].priority = 0;
++        p.skill_index[0].charlotte = Some(false);
++        p.manifest.content_schema_version = 5;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        p.validate().unwrap();
++        let error = ContentRegistry::new().load_package(&p).unwrap_err();
++        assert!(error.to_string().contains("legacy execution requires schema3"));
+     }
+     #[test]
+     fn legacy_effect_abi_validation_is_preserved_before_execution() {
+--- a/crates/engine-native-content/src/content/extension.rs
++++ b/crates/engine-native-content/src/content/extension.rs
+@@ -90,6 +90,8 @@
+ /// 物携带，`logic_hash` 为内容锁锚）。
+ #[derive(Debug, Clone)]
+ pub struct VmSkillDecl {
++    /// Validated schema5 package declaration identity; never an execution permission.
++    pub declaration_hash: Option<[u8; 32]>,
+     /// 技能名（目录内唯一；intern 进全局符号表）。
+     pub name: String,
+     /// 已验证字节码模块。
+@@ -212,6 +214,7 @@
+             h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes());
+             let module = skill.module.to_bytes(); h.update(&(module.len() as u64).to_le_bytes()); h.update(&module);
+             crate::rvm_bridge::hash_trigger_meta(&mut h, &skill.trigger); skill.filter.hash_semantics(&mut h);
++            if let Some(hash) = skill.declaration_hash { h.update(b"native-extension-mechanisms/1"); h.update(&hash); }
+         }
+     }
+     u64::from_le_bytes(h.finalize().as_bytes()[..8].try_into().expect("eight bytes"))
+--- /dev/null
++++ b/crates/engine-native/tests/c331_schema5_datachain.rs
+@@ -0,0 +1,364 @@
++use content_schema::ContentPackage;
++fn package() -> ContentPackage {
++    content_compiler::compile_source_named("thirdparty-schema5", "skill schema5_draw(99108001) { trigger damage owner_is_target { effect draw_cards(self,1); } }").unwrap()
++}
++#[test]
++fn schema5_explicit_default_is_data_and_runtime_compatible() {
++    let mut value = serde_json::to_value(package()).unwrap();
++    value["manifest"]["content_schema_version"] = 5.into();
++    value["skill_index"][0]["charlotte"] = false.into();
++    let mut parsed = ContentPackage::from_json_bytes(&serde_json::to_vec(&value).unwrap()).unwrap();
++    assert_eq!(parsed.required_content_schema(), 5);
++    parsed.manifest.logic_hash = parsed.compute_logic_hash();
++    parsed.validate().unwrap();
++    content_native_loader::bridge_vm_skill_decls(&parsed).unwrap();
++}
++#[test]
++fn schema5_fields_present_in_old_schema_reject_even_defaults() {
++    for (table, key, value) in [
++        ("skill_index", "charlotte", serde_json::json!(false)),
++        ("skill_index", "group_children", serde_json::json!([])),
++        ("trigger_index", "force_die", serde_json::json!(false)),
++    ] {
++        let mut value_package = serde_json::to_value(package()).unwrap();
++        value_package[table][0][key] = value;
++        let result = ContentPackage::from_json_bytes(&serde_json::to_vec(&value_package).unwrap())
++            .and_then(|p| p.validate());
++        assert!(result.is_err(), "old schema must reject {key} presence");
++    }
++}
++#[test]
++fn schema5_compiler_declaration_selects_schema5() {
++    let p=content_compiler::compile_source("skill schema5_trait(99108002) charlotte { trigger damage always { effect draw_cards(self,1); } }").unwrap();
++    assert_eq!(p.manifest.content_schema_version, 5);
++    p.validate().unwrap();
++    assert!(
++        content_native_loader::bridge_vm_skill_decls(&p).is_err(),
++        "unsupported trait cannot enter runtime"
++    );
++}
++fn finish(p: &mut ContentPackage) {
++    p.manifest.content_schema_version = p.required_content_schema();
++    p.manifest.logic_hash = p.compute_logic_hash();
++    p.manifest.asset_hash = p.compute_asset_hash();
++}
++fn default5() -> ContentPackage {
++    let mut p = package();
++    p.skill_index[0].charlotte = Some(false);
++    finish(&mut p);
++    p
++}
++#[test]
++fn schema5_old3_and_genuine4_bytes_hashes_and_readers_stay_positive() {
++    for bytes in [
++        include_bytes!("fixtures/c331-old-default-package.json").as_slice(),
++        include_bytes!("fixtures/c331_phase8_genuine_schema4.json").as_slice(),
++    ] {
++        let p = ContentPackage::from_json_bytes(bytes).unwrap();
++        assert_eq!(p.to_json_bytes().unwrap(), bytes);
++        assert_eq!(p.manifest.logic_hash, p.compute_logic_hash());
++        p.validate().unwrap();
++        content_native_loader::bridge_vm_skill_decls(&p).unwrap();
++        let mut old_host = content_runtime::tooling_host_versions();
++        old_host.content_schema = 4;
++        content_runtime::check_engine_compat(&p.manifest, &old_host).unwrap();
++    }
++    let p = default5();
++    for schema in [0, 3, 4] {
++        let mut host = content_runtime::tooling_host_versions();
++        host.content_schema = schema;
++        assert!(content_runtime::check_engine_compat(&p.manifest, &host).is_err());
++    }
++}
++#[test]
++fn schema5_false_empty_none_presence_downgrade_and_unknown_fields() {
++    let fields = [
++        ("skill_index", "charlotte", serde_json::json!(false)),
++        ("skill_index", "persevere", serde_json::json!(false)),
++        ("skill_index", "forever", serde_json::json!(false)),
++        ("skill_index", "temporary", serde_json::json!(false)),
++        ("skill_index", "group_children", serde_json::json!([])),
++        ("skill_index", "reveal", serde_json::json!("none")),
++        ("trigger_index", "force_die", serde_json::json!(false)),
++        ("trigger_index", "force_out", serde_json::json!(false)),
++        ("trigger_index", "repeat", serde_json::json!("once")),
++        ("trigger_index", "hidden", serde_json::json!("public_only")),
++    ];
++    for (table, key, value) in fields {
++        let mut wire = serde_json::to_value(package()).unwrap();
++        wire[table][0][key] = value;
++        wire["manifest"]["content_schema_version"] = 5.into();
++        let mut p = ContentPackage::from_json_bytes(&serde_json::to_vec(&wire).unwrap()).unwrap();
++        finish(&mut p);
++        p.validate().unwrap();
++        assert_eq!(
++            serde_json::to_value(&p).unwrap()[table][0][key],
++            wire[table][0][key]
++        );
++        for version in [3, 4] {
++            let mut downgraded = p.clone();
++            if version == 4 {
++                downgraded.trigger_index[0].priority = 17;
++            }
++            downgraded.manifest.content_schema_version = version;
++            downgraded.manifest.logic_hash = downgraded.compute_logic_hash();
++            assert!(downgraded.validate().is_err());
++            assert!(ContentPackage::from_json_bytes(&downgraded.to_json_bytes().unwrap()).is_err());
++        }
++        wire[table][0][key] = serde_json::Value::Null;
++        assert!(
++            serde_json::from_value::<ContentPackage>(wire).is_err(),
++            "direct SDK null {key}"
++        );
++    }
++    for version in [0, 2, 6, u32::MAX] {
++        let mut p = default5();
++        p.manifest.content_schema_version = version;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        assert!(p.validate().is_err());
++    }
++    for table in ["skill_index", "trigger_index"] {
++        let mut wire = serde_json::to_value(default5()).unwrap();
++        wire[table][0]["unreviewed_execution_switch"] = true.into();
++        assert!(serde_json::from_value::<ContentPackage>(wire).is_err());
++    }
++}
++#[test]
++fn schema5_hash_binds_positions_traits_tuple_keys_edges_and_cleanup() {
++    let p = default5();
++    let hash = p.compute_logic_hash();
++    for change in 0..12 {
++        let mut q = p.clone();
++        match change {
++            0 => q.skill_index[0].temporary = Some(false),
++            1 => q.skill_index[0].persevere = Some(false),
++            2 => q.skill_index[0].group_children = Some(vec![]),
++            3 => q.skill_index[0].reveal = Some(content_schema::RevealBinding::None),
++            4 => q.skill_index[0].onremove = Some("host:sanjian_weapon".into()),
++            5 => q.trigger_index[0].force_die = Some(false),
++            6 => q.trigger_index[0].priority = 2,
++            7 => q.trigger_index[0].entry_pc += 1,
++            8 => q.trigger_index[0].host_key = Some("host:sanjian_weapon".into()),
++            9 => q.trigger_index[0].event_skill = Some(99108001),
++            10 => q.trigger_index[0].module.push('x'),
++            11 => q.skill_index[0].name.push('x'),
++            _ => unreachable!(),
++        }
++        assert_ne!(hash, q.compute_logic_hash(), "mutation{change}");
++    }
++    let mut pair = p.clone();
++    let mut next = pair.trigger_index[0].clone();
++    next.trigger_def_id += 100;
++    next.filter = "always".into();
++    pair.trigger_index.push(next);
++    let h = pair.compute_logic_hash();
++    pair.trigger_index.reverse();
++    assert_ne!(h, pair.compute_logic_hash());
++    let mut bytes = String::from_utf8(p.to_json_bytes().unwrap()).unwrap();
++    bytes = bytes.replace(
++        "\"charlotte\":false",
++        "\"charlotte\":true,\"charlotte\":false",
++    );
++    assert!(ContentPackage::from_json_bytes(bytes.as_bytes()).is_err());
++}
++#[test]
++fn schema5_runtime_rejects_unimplemented_mechanisms_before_engine_mutation() {
++    let existing = engine_native::Engine::new(10801, 3);
++    let before = existing.save();
++    let before_hash = existing.state_hash();
++    for change in 0..9 {
++        let mut p = default5();
++        match change {
++            0 => p.trigger_index[0].force_die = Some(true),
++            1 => p.trigger_index[0].force_out = Some(true),
++            2 => p.trigger_index[0].repeat = Some(content_schema::TriggerRepeat::DamageAmount),
++            3 => p.trigger_index[0].hidden = Some(content_schema::HiddenTriggerPolicy::RunHidden),
++            4 => p.skill_index[0].temporary = Some(true),
++            5 => p.skill_index[0].forever = Some(true),
++            6 => p.skill_index[0].reveal = Some(content_schema::RevealBinding::ConfirmPublic),
++            7 => p.skill_index[0].onremove = Some("host:sanjian_weapon".into()),
++            8 => p.skill_index[0].onremove = Some("host:unknown_cleanup".into()),
++            _ => unreachable!(),
++        }
++        finish(&mut p);
++        p.validate().unwrap();
++        assert!(
++            content_native_loader::bridge_vm_skill_decls(&p).is_err(),
++            "mechanism{change}"
++        );
++        assert_eq!(existing.save(), before);
++        assert_eq!(existing.state_hash(), before_hash);
++    }
++}
++#[test]
++fn schema5_known_native_key_is_not_a_cleanup_or_window_permission() {
++    for key in ["host:sanjian_weapon", "host:unknown_execution"] {
++        let mut p = default5();
++        p.trigger_index[0].module.clear();
++        p.trigger_index[0].entry_pc = 0;
++        p.trigger_index[0].host_key = Some(key.into());
++        finish(&mut p);
++        p.validate().unwrap();
++        let error = format!(
++            "{:?}",
++            content_native_loader::bridge_vm_skill_decls(&p).unwrap_err()
++        );
++        assert!(error.contains(if key.ends_with("unknown_execution") {
++            "unknown_native_execution_key"
++        } else {
++            "unsupported_explicit_native_declaration_binding"
++        }));
++        p.trigger_index[0].module = p.modules[0].name.clone();
++        finish(&mut p);
++        assert!(p.validate().is_err(), "native and RVM authorities conflict");
++    }
++}
++#[test]
++fn schema5_group_and_named_event_edges_resolve_genuine_dependency_handlers() {
++    let child = content_compiler::compile_source_named(
++        "thirdparty-child",
++        "skill unrelated_child(99108003) { trigger damage always { effect draw_cards(self,1); } }",
++    )
++    .unwrap();
++    let mut parent = default5();
++    parent
++        .manifest
++        .dependencies
++        .push(content_schema::PackageDependency {
++            namespace: child.manifest.namespace.clone(),
++            package_id: child.manifest.package_id.clone(),
++            version: child.manifest.version.clone(),
++            logic_hash: child.manifest.logic_hash,
++        });
++    parent.skill_index[0].group_children = Some(vec![99108003]);
++    parent.skill_index[0].reveal = Some(content_schema::RevealBinding::TriggerHook {
++        before: Some(99108003),
++        after: None,
++    });
++    parent.trigger_index[0].event = "skill_begin".into();
++    parent.trigger_index[0].event_skill = Some(99108003);
++    finish(&mut parent);
++    parent.validate().unwrap();
++    ContentPackage::validate_native_mechanism_graph(&[child.clone(), parent.clone()]).unwrap();
++    assert!(ContentPackage::validate_native_mechanism_graph(&[parent.clone()]).is_err());
++    let root = tempfile::tempdir().unwrap();
++    let store = content_runtime::PackageStore::open(root.path()).unwrap();
++    let options = content_runtime::InstallOptions {
++        allow_unsigned: true,
++        ..Default::default()
++    };
++    store
++        .install(&child.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    store
++        .install(&parent.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    let lock = store.current_lock().unwrap();
++    let loaded = store.load_locked_packages(&lock).unwrap();
++    assert_eq!(loaded, [child.clone(), parent.clone()]);
++    assert!(
++        content_native_loader::bridge_vm_skill_decls(&parent).is_err(),
++        "data installation is not runtime support"
++    );
++    for change in 0..4 {
++        let mut q = parent.clone();
++        match change {
++            0 => q.skill_index[0].group_children = Some(vec![99108003, 99108003]),
++            1 => q.skill_index[0].group_children = Some(vec![99108001]),
++            2 => q.trigger_index[0].event_skill = Some(0),
++            3 => {
++                q.skill_index[0].reveal = Some(content_schema::RevealBinding::TriggerHook {
++                    before: Some(0),
++                    after: None,
++                })
++            }
++            _ => unreachable!(),
++        };
++        finish(&mut q);
++        assert!(
++            q.validate().is_err()
++                || ContentPackage::validate_native_mechanism_graph(&[child.clone(), q]).is_err()
++        );
++    }
++}
++#[test]
++fn schema5_default_declaration_lock_is_bound_and_public_sdk_native_vm_conflict_rejects() {
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let p = default5();
++    let vm = content_native_loader::bridge_vm_skill_decls(&p)
++        .unwrap()
++        .decls;
++    let mut pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "thirdparty-schema5",
++            version: 1,
++            description: "SDK equal validation",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: vm,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let e = engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).unwrap();
++    let hash = e.ruleset_version();
++    let mut explicit = p.clone();
++    explicit.skill_index[0].temporary = Some(false);
++    finish(&mut explicit);
++    pack.vm_skills = content_native_loader::bridge_vm_skill_decls(&explicit)
++        .unwrap()
++        .decls;
++    let second = engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).unwrap();
++    assert_ne!(hash, second.ruleset_version());
++    pack.host_skills
++        .push(engine_native::content::host::HostSkillDecl {
++            name: "schema5_draw",
++            behavior: engine_native::content::host::HostBehavior::SanjianWeaponDamage,
++        });
++    assert!(engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).is_err());
++}
++
++#[test]
++fn schema5_invalid_data_install_is_atomic_and_default_vm_body_still_executes() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = content_runtime::PackageStore::open(dir.path()).unwrap();
++    let options = content_runtime::InstallOptions {
++        allow_unsigned: true,
++        ..Default::default()
++    };
++    let p = default5();
++    store
++        .install(&p.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    let lock = store.current_lock().unwrap();
++    let mut invalid = p.clone();
++    invalid.manifest.content_schema_version = 3;
++    invalid.manifest.logic_hash = invalid.compute_logic_hash();
++    assert!(store
++        .install(&invalid.to_json_bytes().unwrap(), None, &options)
++        .is_err());
++    assert_eq!(lock, store.current_lock().unwrap());
++    assert_eq!(store.load_locked_packages(&lock).unwrap(), [p.clone()]);
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "thirdparty-schema5-positive",
++            version: 1,
++            description: "supported default VM semantics",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let mut engine = engine_native::Engine::new_with_extensions(10803, 3, &[&pack]).unwrap();
++    engine.debug_grant(1, "schema5_draw");
++    let hand = engine.state_core().player(1).hand.len();
++    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    assert_eq!(engine.state_core().player(1).hand.len(), hand + 1);
++}
+--- /dev/null
++++ b/crates/engine-native/tests/fixtures/c331_phase8_genuine_schema4.json
+@@ -0,0 +1 @@
++{"manifest":{"package_format_version":1,"namespace":"official","package_id":"c331-schema","version":"0.2.0","content_schema_version":4,"rule_vm_abi_version":3,"min_engine_api":1,"max_engine_api":1,"capabilities":{"emit_effects":true,"run_queries":false,"request_choice":false,"read_skill_state":false,"write_skill_state":false,"read_marks_self":false,"read_public_seats":false,"_reserved":null},"logic_hash":[32,185,160,216,68,199,238,249,239,75,78,16,216,45,90,84,1,56,212,156,100,131,59,223,240,75,155,140,57,117,239,6],"asset_hash":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"author":"noname-next","license":{"schema_version":1,"code_license":{"type":"Unspecified"},"default_asset_license":{"type":"Unspecified"},"asset_sources":[],"redistribution":"FreeRedistribution","trademark_notes":null,"changelog":[]}},"modules":[{"name":"c331_schema_phase_end","code":[83,16,1,0,0,0,80,1,1],"local_count":0,"max_stack":8,"entry_pc":0,"logic_hash":[225,193,75,239,12,221,174,239,38,187,221,146,208,179,146,172,100,6,124,159,114,219,138,2,51,22,142,95,55,198,61,210],"caps_mask":1}],"skill_index":[{"skill_def_id":4200000001,"name":"c331_schema","locked":true}],"character_index":[],"card_index":[],"trigger_index":[{"trigger_def_id":1,"skill_def_id":4200000001,"event":"phase_end","filter":"always","optional":false,"timing":"last","priority":-2147483648,"order_selectable":false,"module":"c331_schema_phase_end","entry_pc":0}],"modifier_index":[],"active_index":[],"view_as_index":[],"compiler_version":"0.5.0-active-selection"}--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -105,3 +105,6 @@
+ 
+ #[path = "../c331_source33_integration.rs"]
+ mod c331_source33_integration;
++
++#[path = "../c331_schema5_datachain.rs"]
++mod c331_schema5_datachain;
+--- a/crates/engine-native/tests/nc04_cards_given_event.rs
++++ b/crates/engine-native/tests/nc04_cards_given_event.rs
+@@ -63,6 +63,7 @@
+ 
+ fn cards_given_pack(optional: bool) -> ExtensionPack {
+     let decl = VmSkillDecl {
++            declaration_hash: None,
+         name: "cg_probe".to_string(),
+         module: draw_event_player_module("cg_probe"),
+         trigger: engine_native::catalog::TriggerMeta {
+--- a/crates/engine-native/tests/nc04_vm_resume.rs
++++ b/crates/engine-native/tests/nc04_vm_resume.rs
+@@ -62,6 +62,7 @@
+ 
+ fn pack(name: &str, code: Vec<u8>, skill: &str) -> ExtensionPack {
+     let decl = VmSkillDecl {
++            declaration_hash: None,
+         name: skill.to_string(),
+         module: module(name, code),
+         trigger: engine_native::catalog::TriggerMeta {
+@@ -446,6 +447,7 @@
+         engine_native::rvm_named::compile_named("owner_alive_once_per_round").expect("滤名编译"),
+     ));
+     let decl = VmSkillDecl {
++            declaration_hash: None,
+         name: "nc04_once_skill".to_string(),
+         module: module("nc04-once-module", choice_then_halt()),
+         trigger: engine_native::catalog::TriggerMeta {
+@@ -536,6 +538,7 @@
+         engine_native::rvm_named::compile_named("owner_alive_first").expect("滤名编译"),
+     ));
+     let decl = VmSkillDecl {
++            declaration_hash: None,
+         name: "nc04_hits_skill".to_string(),
+         module: module("nc04-hits-module", choice_then_halt()),
+         trigger: engine_native::catalog::TriggerMeta {
+--- a/crates/engine-native/tests/nc10_opaque_vm_privacy.rs
++++ b/crates/engine-native/tests/nc10_opaque_vm_privacy.rs
+@@ -54,6 +54,7 @@
+         init_hook: InitHook::None,
+         enabled: true,
+         vm_skills: vec![VmSkillDecl {
++            declaration_hash: None,
+             name: "nc10_opaque".into(),
+             module: rule_vm::BytecodeModule {
+                 name: "nc10-opaque".into(),
+--- a/crates/engine-native/tests/nc10_redaction_helper_contract.rs
++++ b/crates/engine-native/tests/nc10_redaction_helper_contract.rs
+@@ -77,6 +77,7 @@
+         init_hook: InitHook::None,
+         enabled: true,
+         vm_skills: vec![VmSkillDecl {
++            declaration_hash: None,
+             name: "nc10_pending_card".into(),
+             module: rule_vm::BytecodeModule {
+                 name: "nc10-pending-card".into(),
+--- a/crates/engine-native/tests/nc10_single_hidden_trap.rs
++++ b/crates/engine-native/tests/nc10_single_hidden_trap.rs
+@@ -347,6 +347,7 @@
+         init_hook: InitHook::None,
+         enabled: true,
+         vm_skills: vec![VmSkillDecl {
++            declaration_hash: None,
+             name: "nc10_vm_probe".into(),
+             module: rule_vm::BytecodeModule {
+                 name: "nc10_vm_probe".into(),
+--- a/crates/engine-native/tests/t8_rvm_bridge.rs
++++ b/crates/engine-native/tests/t8_rvm_bridge.rs
+@@ -150,6 +150,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_t8");
+     let name = "t8酒尾";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -179,6 +180,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_t8");
+     let name = "t8酒尾";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -212,6 +214,7 @@
+     let module = module_of(&pkg, "hnl_overrun_t8");
+     let name = "t8超限";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -274,6 +277,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
+     let name = "t8酒尾选择";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -338,6 +342,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
+     let name = "t8酒尾选择";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -375,6 +380,7 @@
+     let snap = e.save();
+     // 版本 +1 的同包（版本指纹漂移）
+     let mut drifted = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module: module_of(
+             &compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("重编译"),
+@@ -453,6 +459,7 @@
+     let module = module_of(&pkg, "hnl_capped_t8");
+     let name = "t8改上限";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -478,6 +485,7 @@
+     }
+     let name = "t8坏码";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -504,6 +512,7 @@
+     module.caps_mask |= 0xFFFF_0000; // 未知能力位
+     let name = "t8越权";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -523,6 +532,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_t8");
+     let name = "t8酒尾";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -583,6 +593,7 @@
+     let module = module_of(&pkg, "hnl_src_t8");
+     let name = "t8源";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: TriggerMeta {
+@@ -615,6 +626,7 @@
+     let module = module_of(&pkg, "hnl_always_t8");
+     let name = "t8常";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -681,6 +693,7 @@
+         let module = module_of(&pkg, "hnl_xproc_t8");
+         let name = "t8跨进程";
+         let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+             name: name.to_string(),
+             module,
+             trigger: phase_end_trigger(),
+@@ -709,6 +722,7 @@
+     let module = module_of(&pkg, "hnl_xproc_t8");
+     let name = "t8跨进程";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -798,6 +812,7 @@
+     let module = module_of(&pkg, "hnl_jiuwei_t8");
+     let name = "t8酒尾";
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: name.to_string(),
+         module,
+         trigger: phase_end_trigger(),
+@@ -838,6 +853,7 @@
+             cards: Vec::new(),
+             host_skills: Vec::new(),
+             vm_skills: vec![VmSkillDecl {
++            declaration_hash: None,
+                 name: decls[0].name.clone(),
+                 module: decls[0].module.clone(),
+                 trigger: TriggerMeta {
+@@ -921,6 +937,7 @@
+ 
+     for (idx, (filter, setup)) in cases.iter().enumerate() {
+         let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+             name: name.to_string(),
+             module: module.clone(),
+             trigger: trig.clone(),
+@@ -1158,6 +1175,7 @@
+         .enumerate()
+     {
+         let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+             name: name.to_string(),
+             module: module.clone(),
+             trigger: trig.clone(),
+@@ -1205,6 +1223,7 @@
+     let pkg = compile_source_named("t8-rvm-bridge", BTE_DSL).expect("DSL 编译");
+     let module = module_of(&pkg, "hnl_bte_t8");
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: "t8阵".to_string(),
+         module,
+         trigger: TriggerMeta {
+@@ -1268,6 +1287,7 @@
+     event: EventKind,
+ ) -> ExtensionPack {
+     pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: "t8参".to_string(),
+         module: module.clone(),
+         trigger: TriggerMeta {
+@@ -1470,6 +1490,7 @@
+     let pkg = compile_source_named("t8-rvm-bridge", DBF_DSL).expect("DSL 编译");
+     let module = module_of(&pkg, "hnl_dbf_t8");
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: "t8伤".to_string(),
+         module,
+         trigger: TriggerMeta {
+@@ -1523,6 +1544,7 @@
+     .expect("DSL 编译");
+     let module = module_of(&pkg, "hnl_mvf_t8");
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: "t8移".to_string(),
+         module,
+         trigger: TriggerMeta {
+@@ -1590,6 +1612,7 @@
+     // 一步会推进阶段并触发 Draw 摸牌，污染手牌账。
+     let case = |filter: P, setup: fn(&mut Engine)| -> bool {
+         let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+             name: name.to_string(),
+             module: module.clone(),
+             trigger: trig.clone(),
+@@ -1645,6 +1668,7 @@
+     .expect("DSL 编译");
+     let module = module_of(&pkg, "hnl_tgt_t8");
+     let pack = pack_with(vec![VmSkillDecl {
++            declaration_hash: None,
+         name: "t8指".to_string(),
+         module,
+         trigger: TriggerMeta {
+@@ -1836,155 +1860,5 @@
+ }
+ 
+ /// add_mark 写入标记。
+-#[test]
+-fn t8_add_mark_writes() {
+-    let dsl = "\
+-skill hnl_mark(990022) {
+-  trigger damage owner_is_target {
+-    effect add_mark(self, 7, 2);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_mark");
+-    keep_only(&mut e, 1, &["hnl_mark"]);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(
+-        e.state_core().vm_aux.marks.get(&(1, 7)).copied(),
+-        Some(2)
+-    );
+-}
+-
+-/// change_max_hp 改变体力上限。
+-#[test]
+-fn t8_change_max_hp_writes() {
+-    let dsl = "\
+-skill hnl_max(990025) {
+-  trigger damage owner_is_target {
+-    effect change_max_hp(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_max");
+-    keep_only(&mut e, 1, &["hnl_max"]);
+-    let before = e.state_core().player(1).max_hp;
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(e.state_core().player(1).max_hp, before + 1);
+-}
+-
+-/// hand_count 查询为真才摸牌；空手不摸。
+-#[test]
+-fn t8_hand_count_query_gates_draw() {
+-    let dsl = "\
+-skill hnl_hc(990030) {
+-  trigger damage owner_is_target {
+-    if hand_count(self) > 0 {
+-      effect draw_cards(self, 1);
+-    }
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_hc");
+-    keep_only(&mut e, 1, &["hnl_hc"]);
+-    let h = hand_len(&e, 1);
+-    assert!(h > 0);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
+-    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
+-    e.state_core_mut().discard.extend(gone);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
+-}
+-
+-/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
+-#[test]
+-fn t8_lost_history_dual_gate() {
+-    let dsl = "\
+-skill hnl_lost(990040) {
+-  trigger damage owner_alive_lost_hand_this_turn {
+-    effect draw_cards(self, 1);
+-  }
+-}
+-skill hnl_drop(990041) {
+-  trigger damage owner_is_target {
+-    effect discard_hand(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_lost");
+-    e.debug_grant(1, "hnl_drop");
+-    keep_only(&mut e, 1, &["hnl_lost", "hnl_drop"]);
+-    let h = hand_len(&e, 1);
+-    assert!(h > 0);
+-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h, "同优先filter在弃牌子事件返回后重新放行");
+-    assert!(
+-        e.state_core().vm_aux.lost.get(&1).is_some_and(|c| !c.is_empty()),
+-        "弃牌写入丢失史"
+-    );
+-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "下一事件仍可再次看到丢失史");
+-}
+-
+-/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
+-#[test]
+-fn t8_move_batch_dual_gate() {
+-    let dsl = "\
+-skill hnl_batch(990042) {
+-  trigger cards_moved owner_alive_discard_batch {
+-    effect draw_cards(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_batch");
+-    keep_only(&mut e, 1, &["hnl_batch"]);
+-    let h = hand_len(&e, 1);
+-    let card = e.debug_place(0, "sha");
+-    e.debug_give_hand_card(0, 2, card);
+-    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
+-    e.debug_set_skill_enabled(1, "hnl_batch", false);
+-    let card2 = e.debug_place(0, "shan");
+-    e.debug_give_hand_card(0, 2, card2);
+-    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
+-}
+-
+-/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
+-#[test]
+-fn t8_skill_uses_remaining_dual_gate() {
+-    let dsl = "\
+-skill hnl_uses(990050) {
+-  trigger damage owner_is_target {
+-    let remaining = skill_uses_remaining(self_skill);
+-    if remaining > 0 {
+-      effect draw_cards(self, 1);
+-    }
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_uses");
+-    keep_only(&mut e, 1, &["hnl_uses"]);
+-    let h = hand_len(&e, 1);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
+-    let def = e.catalog().skill_by_name("hnl_uses").expect("技能");
+-    e.state_core_mut()
+-        .skills
+-        .get_mut(&(1, def))
+-        .expect("实例")
+-        .once_used = true;
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
+-}
++#[path = "t8_vm_state_effects.rs"]
++mod vm_state_effects;
+--- /dev/null
++++ b/crates/engine-native/tests/t8_vm_state_effects.rs
+@@ -0,0 +1,156 @@
++//! VM writes, state queries and history filters through the existing bridge.
++use super::*;
++
++#[test]
++fn t8_add_mark_writes() {
++    let dsl = "\
++skill hnl_mark(990022) {
++  trigger damage owner_is_target {
++    effect add_mark(self, 7, 2);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_mark");
++    keep_only(&mut e, 1, &["hnl_mark"]);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().vm_aux.marks.get(&(1, 7)).copied(), Some(2));
++}
++
++/// change_max_hp 改变体力上限。
++#[test]
++fn t8_change_max_hp_writes() {
++    let dsl = "\
++skill hnl_max(990025) {
++  trigger damage owner_is_target {
++    effect change_max_hp(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_max");
++    keep_only(&mut e, 1, &["hnl_max"]);
++    let before = e.state_core().player(1).max_hp;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().player(1).max_hp, before + 1);
++}
++
++/// hand_count 查询为真才摸牌；空手不摸。
++#[test]
++fn t8_hand_count_query_gates_draw() {
++    let dsl = "\
++skill hnl_hc(990030) {
++  trigger damage owner_is_target {
++    if hand_count(self) > 0 {
++      effect draw_cards(self, 1);
++    }
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_hc");
++    keep_only(&mut e, 1, &["hnl_hc"]);
++    let h = hand_len(&e, 1);
++    assert!(h > 0);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
++    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
++    e.state_core_mut().discard.extend(gone);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
++}
++
++/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
++#[test]
++fn t8_lost_history_dual_gate() {
++    let dsl = "\
++skill hnl_lost(990040) {
++  trigger damage owner_alive_lost_hand_this_turn {
++    effect draw_cards(self, 1);
++  }
++}
++skill hnl_drop(990041) {
++  trigger damage owner_is_target {
++    effect discard_hand(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_lost");
++    e.debug_grant(1, "hnl_drop");
++    keep_only(&mut e, 1, &["hnl_lost", "hnl_drop"]);
++    let h = hand_len(&e, 1);
++    assert!(h > 0);
++    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h, "同优先filter在弃牌子事件返回后重新放行");
++    assert!(
++        e.state_core()
++            .vm_aux
++            .lost
++            .get(&1)
++            .is_some_and(|c| !c.is_empty()),
++        "弃牌写入丢失史"
++    );
++    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "下一事件仍可再次看到丢失史");
++}
++
++/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
++#[test]
++fn t8_move_batch_dual_gate() {
++    let dsl = "\
++skill hnl_batch(990042) {
++  trigger cards_moved owner_alive_discard_batch {
++    effect draw_cards(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_batch");
++    keep_only(&mut e, 1, &["hnl_batch"]);
++    let h = hand_len(&e, 1);
++    let card = e.debug_place(0, "sha");
++    e.debug_give_hand_card(0, 2, card);
++    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
++    e.debug_set_skill_enabled(1, "hnl_batch", false);
++    let card2 = e.debug_place(0, "shan");
++    e.debug_give_hand_card(0, 2, card2);
++    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
++}
++
++/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
++#[test]
++fn t8_skill_uses_remaining_dual_gate() {
++    let dsl = "\
++skill hnl_uses(990050) {
++  trigger damage owner_is_target {
++    let remaining = skill_uses_remaining(self_skill);
++    if remaining > 0 {
++      effect draw_cards(self, 1);
++    }
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_uses");
++    keep_only(&mut e, 1, &["hnl_uses"]);
++    let h = hand_len(&e, 1);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
++    let def = e.catalog().skill_by_name("hnl_uses").expect("技能");
++    e.state_core_mut()
++        .skills
++        .get_mut(&(1, def))
++        .expect("实例")
++        .once_used = true;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
++}

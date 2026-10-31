@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-nc10-main-final-audit.py", line 29, in <module>
+    preflight=(E/'preflight.stdout.log').read_text();assert '21/21' in preflight or len(re.findall(r'✅',preflight))==21
+AssertionError

@@ -1,0 +1,2 @@
+engine-native layering passed: 0 upward references <= 0
+{"command": ["python3", "-B", "scripts/check-native-layering.py"], "exit": 0, "locked_seconds": 0.12330204102909192, "disk_free_bytes": 60330991616}

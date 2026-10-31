@@ -1,0 +1,12 @@
+{
+  "final_manifest": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/manifest.json",
+  "source_six_unchanged_during_all_checks": true,
+  "full_native": [
+    1719,
+    0,
+    75
+  ],
+  "all10checks_exit0": true,
+  "new_delta_only": "crates/engine-native/tests/ai_planner.rs",
+  "review_pending": true
+}

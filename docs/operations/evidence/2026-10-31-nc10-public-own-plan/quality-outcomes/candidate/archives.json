@@ -1,0 +1,1002 @@
+[
+  {
+    "seed": 45000,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45000.ngsa",
+    "sha256": "35d30cb4fabb54548929970f5da64f50196d5b0644ff3f554ba1227dea659557"
+  },
+  {
+    "seed": 45001,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45001.ngsa",
+    "sha256": "1174579ae75f89dc4e6a400d53d5b0e825e37d7ce84ed182b9d0f8147b7cf390"
+  },
+  {
+    "seed": 45002,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45002.ngsa",
+    "sha256": "7de9dbbfab65f949e76f214f98e6c3164dfc406a76df742f7ea45c2468daf84c"
+  },
+  {
+    "seed": 45003,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45003.ngsa",
+    "sha256": "5a11d24f929571d95bcb624e1b22c101cae4380a99c77820daf87b69a2335a71"
+  },
+  {
+    "seed": 45004,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45004.ngsa",
+    "sha256": "74f4457cbd3b242a1dc94eda564a044320d602f46755b445b7f30a59c2bb72a7"
+  },
+  {
+    "seed": 45005,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45005.ngsa",
+    "sha256": "4d6affddf217fe52b0711a39d5fdd875513f5d01325ae9630ccf6f1619fa8aff"
+  },
+  {
+    "seed": 45006,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45006.ngsa",
+    "sha256": "4b3c7a6e2b7ecf4617599d9c838035f96365771b35e1794875df459a131d41b6"
+  },
+  {
+    "seed": 45007,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45007.ngsa",
+    "sha256": "70828099e56ffc64f1d142d88aea689cfe48d665e93037d04cc51289a3eb0ede"
+  },
+  {
+    "seed": 45008,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45008.ngsa",
+    "sha256": "89c6d85e8eebb7da549b433167842d8de91a85d6cf8a822296cff75785d17646"
+  },
+  {
+    "seed": 45009,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45009.ngsa",
+    "sha256": "3551a8d092f575bab48daaff69320623e4baaa24255167ca0541383ea3f1fe1a"
+  },
+  {
+    "seed": 45010,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45010.ngsa",
+    "sha256": "2b16fac2a0a142f81de1680287c1e2e312318bfe62e2aac63406ab848663e6db"
+  },
+  {
+    "seed": 45011,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45011.ngsa",
+    "sha256": "71cfa2baec8a7d319987c53a61e6195227115c1a8f84a9674f734a3dbfe3e4b3"
+  },
+  {
+    "seed": 45012,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45012.ngsa",
+    "sha256": "94a9eef6a8424de60f5b02c89e900f23dc1252e6881ed3022e6669d36cc5f091"
+  },
+  {
+    "seed": 45013,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45013.ngsa",
+    "sha256": "86173feb64818179073abb45d40614d1780ea25822eee4e2334889bcb2f09e32"
+  },
+  {
+    "seed": 45014,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45014.ngsa",
+    "sha256": "fcf4da375c6913e4d7f7721d8fe5739064a05fd760923584de396239bb856d2e"
+  },
+  {
+    "seed": 45015,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45015.ngsa",
+    "sha256": "844ac7a6ac836bea90566710b994d731ba9bef112e1474a8be2c02efbd51a5a1"
+  },
+  {
+    "seed": 45016,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45016.ngsa",
+    "sha256": "90ef4ca4a4a6e87981317cc4fc295d87e29e518b4206c172d40826d9e984d051"
+  },
+  {
+    "seed": 45017,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45017.ngsa",
+    "sha256": "f0ca1628c89d9a348b714ba97cd195485d3769cd77f4f234de949e7655351acc"
+  },
+  {
+    "seed": 45018,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45018.ngsa",
+    "sha256": "b993b43b79029c099ef14e2e823c2ed0b1a817972a65902ff4ff48f25df64a48"
+  },
+  {
+    "seed": 45019,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45019.ngsa",
+    "sha256": "050c454561a6ff77a794c9ab4c4b119901fc663589b16aae1366ef15aa75f1aa"
+  },
+  {
+    "seed": 45020,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45020.ngsa",
+    "sha256": "e6976114ee7a0430cc6f7a5ee30ea37ac2464ceb916fa61968ab4e1594ac1365"
+  },
+  {
+    "seed": 45021,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45021.ngsa",
+    "sha256": "6664776160031d3804e6b883cd11455e0ef88a925ed4d50c57586054f27e1916"
+  },
+  {
+    "seed": 45022,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45022.ngsa",
+    "sha256": "9e66d59d9da4520ea1e94ad3297a9b39b38ea7d79531f86ebc8f6ba0d1b78997"
+  },
+  {
+    "seed": 45023,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45023.ngsa",
+    "sha256": "6badebfa9735e156b75718daafc44635b5cef0bd896ef9e7b825303412c006b5"
+  },
+  {
+    "seed": 45024,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45024.ngsa",
+    "sha256": "f23b0adf71b17af9f4cbfed645e6df33d8f5de040e24f38291820de0b8dfde8a"
+  },
+  {
+    "seed": 45025,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45025.ngsa",
+    "sha256": "d519ae3bcf5bed7a9b09bc0262705ced76c448c10277ee248c7d10b826715e51"
+  },
+  {
+    "seed": 45026,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45026.ngsa",
+    "sha256": "a75bcc1ce6de3017bb3649f73e101df95afe73bdc133671b6ba7d1a165585908"
+  },
+  {
+    "seed": 45027,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45027.ngsa",
+    "sha256": "9255a19c584600188d24144c8f55d133d37d3ca2ac00242ecc624e97a00e6006"
+  },
+  {
+    "seed": 45028,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45028.ngsa",
+    "sha256": "1996f9e64620b92711473affc07e01d064efe7a7fc133201d7c12d99305f8652"
+  },
+  {
+    "seed": 45029,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45029.ngsa",
+    "sha256": "f328dd99b3e7e4318e22975ed540403fea0c77364c02afd7cd06aa94287f50a1"
+  },
+  {
+    "seed": 45030,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45030.ngsa",
+    "sha256": "da1c9ce0d013e71f07c2f1749312040bf54c62c583f3f06673e9786c9375e625"
+  },
+  {
+    "seed": 45031,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45031.ngsa",
+    "sha256": "38128d37801e87d4647482667c30c9da6c5eed69b2742b81e3570bf658cf54e6"
+  },
+  {
+    "seed": 45032,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45032.ngsa",
+    "sha256": "e9aa5fc3b00fb3c476f0de95d0a56396167b4fd3333d07c8c100212584e03dcd"
+  },
+  {
+    "seed": 45033,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45033.ngsa",
+    "sha256": "dcee4a55377a83bf29ed2767e86117fb0b6db5ce4e6a6ea94a7e556aed53912e"
+  },
+  {
+    "seed": 45034,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45034.ngsa",
+    "sha256": "7798947446a496b3460a173b2e29a2e23bbdafe4e28d149032f87d11e2535158"
+  },
+  {
+    "seed": 45035,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45035.ngsa",
+    "sha256": "bac1395591e720370c3fb1be2dda0895a987343b614434a0e12fe2185199eed1"
+  },
+  {
+    "seed": 45036,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45036.ngsa",
+    "sha256": "14188427e4d04f38330d63588d4aa8deb2ea9121a8107773b60dd2ffb3dbb77b"
+  },
+  {
+    "seed": 45037,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45037.ngsa",
+    "sha256": "ed2703c81187b044d09398f8f3dcd5f4aa2ff459137e54d600a54d24a90e2acb"
+  },
+  {
+    "seed": 45038,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45038.ngsa",
+    "sha256": "a5dbd099265d04d407003bc3f0cc5f29d9e945499d673665e8a06b7433c2ad2d"
+  },
+  {
+    "seed": 45039,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45039.ngsa",
+    "sha256": "c9e0ec43952997be8cdfa6b0123dcdd4ca66ba6e2783008b1499432cc91b3730"
+  },
+  {
+    "seed": 45040,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45040.ngsa",
+    "sha256": "c75febf63452a7c9d9d27eabbb6b67d570af853adc829bc5e1b51ab5c67b527d"
+  },
+  {
+    "seed": 45041,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45041.ngsa",
+    "sha256": "da07e62ec5b870f64c39cc6603f54f6da74f3c48e8a510e2310e7cddbb158ced"
+  },
+  {
+    "seed": 45042,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45042.ngsa",
+    "sha256": "b42f275a2653e15308f24035a9c601a802f6ebd43ae700bbe1f0df5e8c311843"
+  },
+  {
+    "seed": 45043,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45043.ngsa",
+    "sha256": "fa74ede9040411b5ba2e977d77f9df49499cfdfc34c23a253a06cba8d672fb60"
+  },
+  {
+    "seed": 45044,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45044.ngsa",
+    "sha256": "98a17d149a6d74f8b812e49d56f8054246c7003d334e2299c70995861f2a3349"
+  },
+  {
+    "seed": 45045,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45045.ngsa",
+    "sha256": "b0dfd5b4f4acbafe6a2143d0718df85e271eca35f7e0e1965f3a31d5de432431"
+  },
+  {
+    "seed": 45046,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45046.ngsa",
+    "sha256": "1bfa67190b39f7ac05bf018d4baaa9e30efd36ce20029ab12fd76be40a033705"
+  },
+  {
+    "seed": 45047,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45047.ngsa",
+    "sha256": "a63bd95f07dd3c7a022db6a02069c592de5efdd8f0c58b212980d01d07eb4cdd"
+  },
+  {
+    "seed": 45048,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45048.ngsa",
+    "sha256": "b3dccf0effa97f89b253285bdbe956e086b56de7dbd9046f1e8789691fe47b47"
+  },
+  {
+    "seed": 45049,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45049.ngsa",
+    "sha256": "2d304b31dba63b9c8dc32eb27470aec49efa8b62431cfbda11beb13829653a74"
+  },
+  {
+    "seed": 45050,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45050.ngsa",
+    "sha256": "dd0e50ed77dd5bdbdab04c5a77d173333c9ccd56944c7c2a84c79a6f4f498cb7"
+  },
+  {
+    "seed": 45051,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45051.ngsa",
+    "sha256": "336dc4ef7a3e94dce5f03d2bea3e8e97019069db662c576bff3c3240c6e87f84"
+  },
+  {
+    "seed": 45052,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45052.ngsa",
+    "sha256": "bda340bc90ae07c4c514d909dd34aa17f51e3729dd4b647560b295cacb245351"
+  },
+  {
+    "seed": 45053,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45053.ngsa",
+    "sha256": "dc95764159a7ed4572d3a1b6d27a65a8ce68b76755979327c2e8940d9ce7d5a0"
+  },
+  {
+    "seed": 45054,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45054.ngsa",
+    "sha256": "d824609257820d92c279ec100e7d8c01ccc8953cf45274e4826fde95aac35b85"
+  },
+  {
+    "seed": 45055,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45055.ngsa",
+    "sha256": "3a51cb0c667a6ff53d4715a7e3d3635c7fabd96ae0a3b8afa57910ccb35f22ec"
+  },
+  {
+    "seed": 45056,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45056.ngsa",
+    "sha256": "da86ce53dc408c878b36d56931d5ab3558ef9a7c289104efdae892ecf31a57ad"
+  },
+  {
+    "seed": 45057,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45057.ngsa",
+    "sha256": "0550d17f9883ac7b852bd7293133a2bf668c630b885bdaacd64a058d96fe4592"
+  },
+  {
+    "seed": 45058,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45058.ngsa",
+    "sha256": "0a1da0547002acf171503ede2d6f62dfa8d3e12a26051c52623d19c563a4cc81"
+  },
+  {
+    "seed": 45059,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45059.ngsa",
+    "sha256": "ea9f08c9fabdbb645222ee10c1af58f0753d8927d0559153cc95b299c34b99c6"
+  },
+  {
+    "seed": 45060,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45060.ngsa",
+    "sha256": "08d9e4d92d0a12f314c9d0d7fd17a82ee819437bf2f01849faf008902fe1d4e5"
+  },
+  {
+    "seed": 45061,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45061.ngsa",
+    "sha256": "a4d87945b69b2ff74e4e55d82f2170f207ebac5a71bd8adf3a0bed0787a35f74"
+  },
+  {
+    "seed": 45062,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45062.ngsa",
+    "sha256": "f041626a15410f3a5b2524eece707e71656791246b51cea514a5afb9b1a4acde"
+  },
+  {
+    "seed": 45063,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45063.ngsa",
+    "sha256": "a0594feeddbdede0735252b6cb197ff27cb24ee922764f8cdd4a60ac7fd0e56b"
+  },
+  {
+    "seed": 45064,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45064.ngsa",
+    "sha256": "6cc3c4e52b82d3e31fd16e471b6cfd9cd46d29962248909243f99ee546022d60"
+  },
+  {
+    "seed": 45065,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45065.ngsa",
+    "sha256": "304003f2187fb531ba346d8854ddfa61315b958e216721fb1eaa5e76d98b1e99"
+  },
+  {
+    "seed": 45066,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45066.ngsa",
+    "sha256": "979ed1ffc28cd27a9ae329a95bd7f6facaf5f2c34fa3e36f7cf01a2668f5b5f2"
+  },
+  {
+    "seed": 45067,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45067.ngsa",
+    "sha256": "9701b2e81a2fe0637eb22fd29a04c36b75b4afbb7fc94df02b4fde17c8e41b04"
+  },
+  {
+    "seed": 45068,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45068.ngsa",
+    "sha256": "a0062eb53422ff85bad23004b12186ed3bf5398d1d89633780de8063382eafd1"
+  },
+  {
+    "seed": 45069,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45069.ngsa",
+    "sha256": "2ba03874c9e6adcb6552fa8c1521f62850e47eb3b41a1b193042ab3f108c5ae2"
+  },
+  {
+    "seed": 45070,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45070.ngsa",
+    "sha256": "d48d61b0a7c8d297de1bb2a99dac4ebc008840b4bfbb2a70e51118b52a698488"
+  },
+  {
+    "seed": 45071,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45071.ngsa",
+    "sha256": "422545643c978db4302e36d95ec6f8c54a816d0d0b53bde52db939233aa89ef8"
+  },
+  {
+    "seed": 45072,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45072.ngsa",
+    "sha256": "24e764233a5fc76cca2e35fc8c6f800cf4496378c3712513a6e73c3fac46eb14"
+  },
+  {
+    "seed": 45073,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45073.ngsa",
+    "sha256": "3e0bfbc8b502530c556094a6e1f9f1b466fc418ccc6d6e9b6b98057a95452588"
+  },
+  {
+    "seed": 45074,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45074.ngsa",
+    "sha256": "f1df30af54139b06aa72144ba582202d1e3ed925b33ecd6cb4740db24ae8678e"
+  },
+  {
+    "seed": 45075,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45075.ngsa",
+    "sha256": "756c82a40f37b410d7db8a314e0dad527f6affc69f9b5e2d24187db6bf99d089"
+  },
+  {
+    "seed": 45076,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45076.ngsa",
+    "sha256": "e9f4d83b06872cdf2296fc471e2c4a0f506b8a1f67c66f4053b63f0d4ba8f63f"
+  },
+  {
+    "seed": 45077,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45077.ngsa",
+    "sha256": "cca507bab9c5f31e9a575621ab59f9c17bb6403a5397f637a0dcd9f0b27c808a"
+  },
+  {
+    "seed": 45078,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45078.ngsa",
+    "sha256": "cdb67d5e4ef5765cac3a8eef775a8ca3e2596a7a3f08c429e9d1b80b909528aa"
+  },
+  {
+    "seed": 45079,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45079.ngsa",
+    "sha256": "11bfe77bb93b8c1c33deb375f77410827b87cc5394bdc9fd7de7139fd9bc8ab6"
+  },
+  {
+    "seed": 45080,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45080.ngsa",
+    "sha256": "97029c7627cefc4e8e5d900c5db869fd25a437897d94026fad1189f1f2b9d949"
+  },
+  {
+    "seed": 45081,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45081.ngsa",
+    "sha256": "b1aaf60ea5ddb520dc4beceeb33a5245c36e4e9bbf6eaba5b4462531ff895bb1"
+  },
+  {
+    "seed": 45082,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45082.ngsa",
+    "sha256": "1d0d3faaf56a6af74d6d22cf5b37b5e74056a2f335ffdce77b3886cb316b2162"
+  },
+  {
+    "seed": 45083,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45083.ngsa",
+    "sha256": "a5e086600d9aa097e9884db9e9199ebc03445bc235c32928c056b59f06c6286f"
+  },
+  {
+    "seed": 45084,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45084.ngsa",
+    "sha256": "0639996f8b88016f5b2203c6f658656d57d4f3f1870e78a3672eb794a5b75cae"
+  },
+  {
+    "seed": 45085,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45085.ngsa",
+    "sha256": "0a73d8a85b8e79519a12bdd92473e6b34ed215630e38f6f5706a2d7e1903a0ec"
+  },
+  {
+    "seed": 45086,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45086.ngsa",
+    "sha256": "cf52640dfb71a8c35a0c5cc42c69e0aaac192d17317669c8e327e949e66f733b"
+  },
+  {
+    "seed": 45087,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45087.ngsa",
+    "sha256": "42da733ecb0c1e59f003279e18b96fc030c5c7b4c16c3f1671b7f396ac1dd496"
+  },
+  {
+    "seed": 45088,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45088.ngsa",
+    "sha256": "c47a35fb431e21f779d13c7e58df68e53dfe2943784ebae2174e9098663d7ed7"
+  },
+  {
+    "seed": 45089,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45089.ngsa",
+    "sha256": "998f38998f4bb5cda22be9f025dbe87bd82348ffa4b2792b822c37dd9119233a"
+  },
+  {
+    "seed": 45090,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45090.ngsa",
+    "sha256": "a54111408547179b4da1988eebfe60d991876950ca864b12b3f4d129dad3299a"
+  },
+  {
+    "seed": 45091,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45091.ngsa",
+    "sha256": "fe7e69904211832d124a18e1e9e4931e573558821ffdfe9b5b8dde7a6ba57821"
+  },
+  {
+    "seed": 45092,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45092.ngsa",
+    "sha256": "b2c44bb3a9ddb8cbd443ba73ed07b829ef56679d088b89df1812e1e9c7fa0548"
+  },
+  {
+    "seed": 45093,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45093.ngsa",
+    "sha256": "564e43fb88898a04082d3c4d42b2fac5dbfa86125325717256c45c63c338cfbf"
+  },
+  {
+    "seed": 45094,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45094.ngsa",
+    "sha256": "a235e9deada2b6ea5dbf0914faa2c0f25aef68e8f817de93016ca1d5f829220e"
+  },
+  {
+    "seed": 45095,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45095.ngsa",
+    "sha256": "fc6a85af4465c9da88a8539997b0a277896a7d3eab40d0a91182a340c827fb41"
+  },
+  {
+    "seed": 45096,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45096.ngsa",
+    "sha256": "c4bdb02774a37c8e00071efd7beed0b27d3127b381bdca2b2e1b0722ab5bc5c0"
+  },
+  {
+    "seed": 45097,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45097.ngsa",
+    "sha256": "7c9901c262c736b5bbeb8e3a26a90b40a22bb3df8e1f49c2bcb7ae07a6ce8a76"
+  },
+  {
+    "seed": 45098,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45098.ngsa",
+    "sha256": "b70c91db1de7e93eb78d60cbf5c0a5ed141acf0c237a68aec6f06e6913079b49"
+  },
+  {
+    "seed": 45099,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45099.ngsa",
+    "sha256": "03103cc476163443b32e7abc5257c4ba79b701ea258bc3bcf00a327733c4922e"
+  },
+  {
+    "seed": 45100,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45100.ngsa",
+    "sha256": "9716635e65ed1849dbaaa17efdc5b1ca65b1d0519884b917f13c2740b85df117"
+  },
+  {
+    "seed": 45101,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45101.ngsa",
+    "sha256": "8470ae4f596411c0852b9f836f318d439128080dda1aacd91eeeadb6a9726d5b"
+  },
+  {
+    "seed": 45102,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45102.ngsa",
+    "sha256": "9e30ff0cf5052300f6a03dfb9fa946cb04dd017b5076e0a22f2ef5ed748097b3"
+  },
+  {
+    "seed": 45103,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45103.ngsa",
+    "sha256": "d419fbaa6dcda9576926aa1bd16998e0aae7b7aa95ba9a2f1c6bf3b51481e12b"
+  },
+  {
+    "seed": 45104,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45104.ngsa",
+    "sha256": "998815aedc27387f4fc3897f126963a1f09255f6dab53e8a03b33998d0267137"
+  },
+  {
+    "seed": 45105,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45105.ngsa",
+    "sha256": "b59b234e240be62165b589082c5f8236fcd9782eb7a818418eefef1fc3d456b2"
+  },
+  {
+    "seed": 45106,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45106.ngsa",
+    "sha256": "3a5f3e626bf3a65ba8b47f9ba79a5e26b8c2b0cb3171e658261c81c6f5d0485c"
+  },
+  {
+    "seed": 45107,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45107.ngsa",
+    "sha256": "13568f93f68ea622790b546cb1d8b89cba462386cfb7b5f475ff4b3184a03d9b"
+  },
+  {
+    "seed": 45108,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45108.ngsa",
+    "sha256": "d2e4200e7d792464d1f0fbf58c0f3aa83aa9de97561c701d3ae1208b2e555111"
+  },
+  {
+    "seed": 45109,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45109.ngsa",
+    "sha256": "9a277716494332a8ad624d735643a89534ad7b24dbcdbb6cc2d34ca486c3c4eb"
+  },
+  {
+    "seed": 45110,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45110.ngsa",
+    "sha256": "ce400aa0565ceddef14f3ef182ae949eb793d83334223d4c24e5ad609e3100fd"
+  },
+  {
+    "seed": 45111,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45111.ngsa",
+    "sha256": "c74fdc44a41a9bff6a9d8ab1fa76c0a32f010338183efbb8cc6407f9a1758d97"
+  },
+  {
+    "seed": 45112,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45112.ngsa",
+    "sha256": "1db35539e6d4e383dbbf4ee2fe8f9d639a2253641ddd0ef8f6ffb417cda7e857"
+  },
+  {
+    "seed": 45113,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45113.ngsa",
+    "sha256": "08a868323418ac5e6dbb6cf88af918247ae0f1a11c83e401a2b89e043ad5a3b1"
+  },
+  {
+    "seed": 45114,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45114.ngsa",
+    "sha256": "68afead2f2efa60011450cd17453465d37bf9047782b6770f571670e3d1f2739"
+  },
+  {
+    "seed": 45115,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45115.ngsa",
+    "sha256": "8ff52dc7eca90a70a17158c5ba3297cbb150955396ad9045e376b5341171aa64"
+  },
+  {
+    "seed": 45116,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45116.ngsa",
+    "sha256": "be292e3935f7d071521d51c53d6c0cfa4d98a427229c9818ab4dd780e16ef7c3"
+  },
+  {
+    "seed": 45117,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45117.ngsa",
+    "sha256": "7f9f8b349b1ec138818252975ebeeacaa81cf3692b4afb156ea697fe9e1a0fbf"
+  },
+  {
+    "seed": 45118,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45118.ngsa",
+    "sha256": "aaa626d9779c95f6036f7fc436cfaceb717bd04ac922c23714116433b55cfd14"
+  },
+  {
+    "seed": 45119,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45119.ngsa",
+    "sha256": "a731b78ab60add563df5c1dc0f7fa809b25af352ebd50a58f4ea4b070d683fab"
+  },
+  {
+    "seed": 45120,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45120.ngsa",
+    "sha256": "6fdcbc028c9f58b5c77231a1c98df27cb806c0df9b93c20b30ed849d1eb6a51c"
+  },
+  {
+    "seed": 45121,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45121.ngsa",
+    "sha256": "3c6c4605569bee2a40979219e13ba12888a851693392ef87e3b83bb42535ddb1"
+  },
+  {
+    "seed": 45122,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45122.ngsa",
+    "sha256": "eafb3081a077ad259cff9e58c96e1e03e6fa75d692ef7258ca67b8049ad8f760"
+  },
+  {
+    "seed": 45123,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45123.ngsa",
+    "sha256": "56b9026a7000e7d6e14a01c03f8babd18a2d9728d1cb45f262c08d4ef932e113"
+  },
+  {
+    "seed": 45124,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45124.ngsa",
+    "sha256": "af14044aa82fdfcd9a3364ba5e09b6e69e94184e04be6bf30f89c67335aec4a6"
+  },
+  {
+    "seed": 45125,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45125.ngsa",
+    "sha256": "807150841fe4ebf15e4025882190d596343f9e6d4c9478c853835648cd61d37e"
+  },
+  {
+    "seed": 45126,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45126.ngsa",
+    "sha256": "91c02b9d9e1aa1f4b15c71309aa5390bbba8edfcfe6c79ed3ed9df63dbda0ba3"
+  },
+  {
+    "seed": 45127,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45127.ngsa",
+    "sha256": "157583628aca33051ce3115fae5e2dfd2b900f2e54260cd403696472c28c3ca8"
+  },
+  {
+    "seed": 45128,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45128.ngsa",
+    "sha256": "60f521cd8295a65634223bebd9e335d7e94f8db8b59b10611490dc2d57b1eb7b"
+  },
+  {
+    "seed": 45129,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45129.ngsa",
+    "sha256": "ae126d0cd7ebafd3b87c7bd991d4d8e4b8e742aeb5bf6737a00eb76cc137a82b"
+  },
+  {
+    "seed": 45130,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45130.ngsa",
+    "sha256": "c5d449c3ec4f49a4846cf07634d993283e9d293c2e97c639effff78c5b4f8d8f"
+  },
+  {
+    "seed": 45131,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45131.ngsa",
+    "sha256": "97899c10b7dc33bdfd9467334bc87049811873b3081b9e29b0771ba7b15902c4"
+  },
+  {
+    "seed": 45132,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45132.ngsa",
+    "sha256": "641dd4a5dbde7723fb6fd3b35222c6fac1d7972a033929a04ee2257661a729a3"
+  },
+  {
+    "seed": 45133,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45133.ngsa",
+    "sha256": "62b785a957159b4a9b0da2ffda7303ff5e4487f7e5f70617fcced6cd6a9d7838"
+  },
+  {
+    "seed": 45134,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45134.ngsa",
+    "sha256": "5ea0da5ee0521987d92fd40199b5dbe473d14f72ecff0ddb0632a2403dd2977f"
+  },
+  {
+    "seed": 45135,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45135.ngsa",
+    "sha256": "ee784d52b9fd97f2d9234aef7f12a60db2e9d9c11918b379014fc70a603bb496"
+  },
+  {
+    "seed": 45136,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45136.ngsa",
+    "sha256": "1e9b86ddbd0b27307d99b011c639556afa29b79800bfcbab66ac14a1a3bef128"
+  },
+  {
+    "seed": 45137,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45137.ngsa",
+    "sha256": "78e2891980ff83dbccddf1245d8755bd72f6ad454ccfd65cf2b4dd4595bfd633"
+  },
+  {
+    "seed": 45138,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45138.ngsa",
+    "sha256": "b3868f89ae87588589a33e6c821e887d7412cd552cf63e92e772616e6ff938f3"
+  },
+  {
+    "seed": 45139,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45139.ngsa",
+    "sha256": "815a36ad10a2b66ce53edc2556dddb93273356d6fccd4bc70ef95580f1fd4d41"
+  },
+  {
+    "seed": 45140,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45140.ngsa",
+    "sha256": "a5f3d3beffa80c5c6f9005db12ce85101fc5b2d6be7f7e3e59d3e5671b8bf93d"
+  },
+  {
+    "seed": 45141,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45141.ngsa",
+    "sha256": "c25e2992d6c5fb9a96775d10b5d5cae6e6c184287794fca40b390fa2ae32f64d"
+  },
+  {
+    "seed": 45142,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45142.ngsa",
+    "sha256": "623387253b8c5232d8297296d840c1bc367715a5a256d2304b2e8b89157e925a"
+  },
+  {
+    "seed": 45143,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45143.ngsa",
+    "sha256": "3ba28d4483194cfdfbec34c82aafdb966dc7a65c0d058166e27bc53cb16f45e6"
+  },
+  {
+    "seed": 45144,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45144.ngsa",
+    "sha256": "0b6c45296e3e76347090f527c552837b6fcdbb3f7233f9300f7ad2e307fc704a"
+  },
+  {
+    "seed": 45145,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45145.ngsa",
+    "sha256": "47cd52c1c4c54d6914dc786bddb734f0d3d8c46f5606107c079fbaa8f670d2a2"
+  },
+  {
+    "seed": 45146,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45146.ngsa",
+    "sha256": "4ae0ee5ba7ba4d50aad29f651369b8c052f64ce2757e07460db53f3b16c23366"
+  },
+  {
+    "seed": 45147,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45147.ngsa",
+    "sha256": "f975b0ceff86b20b7cfdfcec973fd342fa479f15110c05c8c1cc70424000ed65"
+  },
+  {
+    "seed": 45148,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45148.ngsa",
+    "sha256": "b16947cda10af2d518cd167d7b7d16bc664fa561ce90d2a61b33d28e898ad896"
+  },
+  {
+    "seed": 45149,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45149.ngsa",
+    "sha256": "f2be6d30094f19b9d24cde1ad183b498f18d3311c42f017da05ce7ec9319a7c5"
+  },
+  {
+    "seed": 45150,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45150.ngsa",
+    "sha256": "49f06ae2959ef51d0406d995181eedbf99cc2a436383009cdc0ea49f24c16490"
+  },
+  {
+    "seed": 45151,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45151.ngsa",
+    "sha256": "1675a86402579a25e2000f761feaa38311df2bcf4eca7fa23f0275b80eb83464"
+  },
+  {
+    "seed": 45152,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45152.ngsa",
+    "sha256": "bedcb2296b2df9248b799af1bfb7fd9503a208acab469b5584a854a381f852e9"
+  },
+  {
+    "seed": 45153,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45153.ngsa",
+    "sha256": "03a7d7f3e728a24f7b717eb63a382cd9369eb4a69c798eb8e8619072258a26d2"
+  },
+  {
+    "seed": 45154,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45154.ngsa",
+    "sha256": "6566feee068a1cf0df20953ea9b3a39b3440878700c594ebb9a8c1d1ad031617"
+  },
+  {
+    "seed": 45155,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45155.ngsa",
+    "sha256": "ed3109fca27fb10c7832f295011c0c71b2356d7d1437136a97151c302a54c376"
+  },
+  {
+    "seed": 45156,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45156.ngsa",
+    "sha256": "85f5ee1a027e0352556323578dfb3ce7d82aeddcf9c438b1e6a85b0086e152ae"
+  },
+  {
+    "seed": 45157,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45157.ngsa",
+    "sha256": "74dffaaa861b7dda572db472e9a04d765ae94c6eb5e191e6b9722b04f77ff0d2"
+  },
+  {
+    "seed": 45158,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45158.ngsa",
+    "sha256": "e7e472213c5f598b6690f7748ec1f1aea2e54cc92b50a45f5dd257f16c64725c"
+  },
+  {
+    "seed": 45159,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45159.ngsa",
+    "sha256": "8bd5792a019187ae237013e32b9ac96ed943c5097a73aa52b452e12662050b89"
+  },
+  {
+    "seed": 45160,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45160.ngsa",
+    "sha256": "06d8432cf11b466c7706c4039c536d7be0dec0a8f9489d548e20938e9c2d2853"
+  },
+  {
+    "seed": 45161,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45161.ngsa",
+    "sha256": "3735cd93266ae6bfa6c9254fa24ee6afd2eff188d40414835f15a4cf0654081b"
+  },
+  {
+    "seed": 45162,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45162.ngsa",
+    "sha256": "e77eb41df606437d79a55e6664b42a840deebfad29c907b7e73d50f2a08fb706"
+  },
+  {
+    "seed": 45163,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45163.ngsa",
+    "sha256": "f073581ec6ab887afcb8ee37fc7ed02b7e2c39a8b4f869ccc98d7e2232f463d4"
+  },
+  {
+    "seed": 45164,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45164.ngsa",
+    "sha256": "bcc5110655eccb90a1b5f2c87155b48f6327d2ce894f2d7585f8ec0a8180c863"
+  },
+  {
+    "seed": 45165,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45165.ngsa",
+    "sha256": "d0964f6054e6ad97016bdc25f459823f8493c2b4f03dbacb3ba0e347519298f9"
+  },
+  {
+    "seed": 45166,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45166.ngsa",
+    "sha256": "866e4ab4129c9d795de6b3463441407f79b100567d48e7b9a9a18e6962c46511"
+  },
+  {
+    "seed": 45167,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45167.ngsa",
+    "sha256": "f344147a548d12656ea525a04b459d6c71d85b3c141a8bfae4932ab22aab884c"
+  },
+  {
+    "seed": 45168,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45168.ngsa",
+    "sha256": "2f552f84df3ba192e66e27fce0550e31fbc95b51d5825e540cde6d2aab2c592a"
+  },
+  {
+    "seed": 45169,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45169.ngsa",
+    "sha256": "f3c59ec38eaa0b0e57811ed75ff03eb1c30f70548beee7591121007f614e800d"
+  },
+  {
+    "seed": 45170,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45170.ngsa",
+    "sha256": "654a66e8671593e78ef352fae196f943ad461320759a176c76e4114701c80bbd"
+  },
+  {
+    "seed": 45171,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45171.ngsa",
+    "sha256": "87f7401c982052017f9c9f208d4091b7a276a5cc0c97b06b330b02770b13acbc"
+  },
+  {
+    "seed": 45172,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45172.ngsa",
+    "sha256": "4619078dd2f450e6ce6f5477509e5cdf3f50c5442f98bb59076cf76ea875ec0b"
+  },
+  {
+    "seed": 45173,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45173.ngsa",
+    "sha256": "e33258f3e68aab801e56f7df23f5ad317716637c8970add7e16686dd4cf42c69"
+  },
+  {
+    "seed": 45174,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45174.ngsa",
+    "sha256": "9c7290f836c3a5076887576edc288b461f40c9e5cb98f47554f91868e3968626"
+  },
+  {
+    "seed": 45175,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45175.ngsa",
+    "sha256": "9142afc247652eab8c1be0758495404894269201bb83010c1ccb06cdcac7b8bf"
+  },
+  {
+    "seed": 45176,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45176.ngsa",
+    "sha256": "10dfd3f6e2d024f66c76833e912ed2671e53fdfd723fc1bb98cfd087f7b7e4d9"
+  },
+  {
+    "seed": 45177,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45177.ngsa",
+    "sha256": "93e11b9e9ef21a4a714806e473eda08ae5e45f534570be94ec7fe78ab0b0d83d"
+  },
+  {
+    "seed": 45178,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45178.ngsa",
+    "sha256": "3d864ed2afb19e79fd552d59161fa545fd95bda8af9f7355465accf639d8f8af"
+  },
+  {
+    "seed": 45179,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45179.ngsa",
+    "sha256": "c554f0189d1889510c14a13de8e413fecabfd1be2ea6f3bc3c4d94adc110868c"
+  },
+  {
+    "seed": 45180,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45180.ngsa",
+    "sha256": "8ad3b591b9d0605d9ac73612d45b8cbe36504c2f51eb3744aa19be44596d7566"
+  },
+  {
+    "seed": 45181,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45181.ngsa",
+    "sha256": "0122c38201ea5dc5facce8b4c9aa996ff666b3624e9861b61fde4db21868c6f7"
+  },
+  {
+    "seed": 45182,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45182.ngsa",
+    "sha256": "13841343e42981703b76cbf0b3c90cea1007f81db743906f49be212b0864ac6d"
+  },
+  {
+    "seed": 45183,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45183.ngsa",
+    "sha256": "d87803222816b8fe7bff89fa7c0d27468d6f7957765c1f185ccc6b8706397706"
+  },
+  {
+    "seed": 45184,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45184.ngsa",
+    "sha256": "a4467104b7a2f97ebf142b2aeaca41b22f08852e1e1092ff1811f4ac417d48a7"
+  },
+  {
+    "seed": 45185,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45185.ngsa",
+    "sha256": "0730e76330ee54dbc48e12560673f7d78ee16d288f4fb6f05049de76164d1b0b"
+  },
+  {
+    "seed": 45186,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45186.ngsa",
+    "sha256": "37cc46120f4802d181b3017529aa00c561485938ca6ec57746717f346ee17987"
+  },
+  {
+    "seed": 45187,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45187.ngsa",
+    "sha256": "df779048a4f9497ee69ed3fd6952418ea51b50b184fd230852a09ed35a78b002"
+  },
+  {
+    "seed": 45188,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45188.ngsa",
+    "sha256": "ad90f4d4805d2c7e4ccf51fa6b38bd17e5ccb85a35814436e222b13cf9144306"
+  },
+  {
+    "seed": 45189,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45189.ngsa",
+    "sha256": "769bd513f74739f8f2a8ac0e91f922ab19bb74fadf9e01c470a275326546c2e1"
+  },
+  {
+    "seed": 45190,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45190.ngsa",
+    "sha256": "527a172c3aefbb91715238409e7dd25ef079304496d14ffeaa707fa9d8ff1ab3"
+  },
+  {
+    "seed": 45191,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45191.ngsa",
+    "sha256": "60f58a09d3a263306504cea0025a82e6f6341e882d95d4d69504ab8de0ca634d"
+  },
+  {
+    "seed": 45192,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45192.ngsa",
+    "sha256": "9573744024b3cac2dcc37b631dadfd00a484e7be44a41c6218e6ed5ebd71d475"
+  },
+  {
+    "seed": 45193,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45193.ngsa",
+    "sha256": "72b0ab9a0787eeee02f8190146bb26bad67d4904a24a8312c42b3851a9230381"
+  },
+  {
+    "seed": 45194,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45194.ngsa",
+    "sha256": "8ae969294b72bb07832647f13b58a72b556a9a2658c6f793f44b1c6b7129becf"
+  },
+  {
+    "seed": 45195,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45195.ngsa",
+    "sha256": "3d0cbc2042b39429aff8e52cf3070e176e9e8026196212a5088c82b9f102fc39"
+  },
+  {
+    "seed": 45196,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45196.ngsa",
+    "sha256": "5b1e243297d0a282fc04788805032d8707910cbfca6d143094a57af94b414bee"
+  },
+  {
+    "seed": 45197,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45197.ngsa",
+    "sha256": "717a5584d368ca47bcf54d960b4da3a92e428f547e08f56d50ffdfe43ac91670"
+  },
+  {
+    "seed": 45198,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45198.ngsa",
+    "sha256": "9cee0287a70e7d0dbe827893fdf12c5fb9282ec90994cc2a00a4ddd6e80e3f3c"
+  },
+  {
+    "seed": 45199,
+    "path": "/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/final-45199.ngsa",
+    "sha256": "4bd95a6796aac6b1679d3936cc97ddd98d657c5197afab8efbfb401784bd5651"
+  }
+]

@@ -1,0 +1,1316 @@
+{
+  "utc": "2026-10-31T12:00:48.035674+00:00",
+  "files": [
+    {
+      "path": "baseline-c8-repair.json",
+      "sha256": "6f5fa8d2698f87f9164fba9ab6772aec592446c40881fa1918e56dffe85f25f6",
+      "bytes": 7806533
+    },
+    {
+      "path": "baseline-c8-repair.tar.gz",
+      "sha256": "edb0f186f1fceff61f810cfe2f303380e0f33c2b338505f6e48c2d3daece3e18",
+      "bytes": 5440099
+    },
+    {
+      "path": "caps-first.log",
+      "sha256": "28c42b96f90e89842ce62e5ebb10d698aa490393f7e64c664ddb1e4c1581260a",
+      "bytes": 96
+    },
+    {
+      "path": "caps2.log",
+      "sha256": "28c42b96f90e89842ce62e5ebb10d698aa490393f7e64c664ddb1e4c1581260a",
+      "bytes": 96
+    },
+    {
+      "path": "check-results.json",
+      "sha256": "438763f22bbec3a9521c03727c92de31ec9b35882dec488da87af636cdbf6171",
+      "bytes": 1733
+    },
+    {
+      "path": "check-runner.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "check-runner.pid",
+      "sha256": "7e235f06bf0d3743fbd25ec165217f9dd54640b183e71e562f5983cd3f9a646e",
+      "bytes": 6
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/src/engine/debug.rs",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+      "bytes": 31691
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "58fd31bd0f70a435d1ff3da7373f8377e7c7a7d77f3a28bf1ed859cad985445a",
+      "bytes": 27115
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/src/engine/hash.rs",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0",
+      "bytes": 34087
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "a8dad23594ddeb2e7231d904ae5cce7b36fe76eb62e4410abf898270408091cb",
+      "bytes": 24369
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb",
+      "bytes": 2812
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/hearth.rs",
+      "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+      "bytes": 11814
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "bytes": 39802
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "bytes": 42931
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "bytes": 41188
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+      "bytes": 28314
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+      "bytes": 13025
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+      "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+      "bytes": 3062
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "bytes": 13270
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "19f307a944e95a08460ea99e79bf7aaaf4cc3ccdea9c5199b4b0e14cddf60008",
+      "bytes": 32238
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "04ae3136e659063eae3de5edb21451586d83d58f7cd0e1ba7f97eab2c0def3b4",
+      "bytes": 28355
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "bytes": 6966
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive.rs",
+      "sha256": "bcc1758e3954263d186c0ba9292738302a200ebb77834154c2a49aa574ab9ab5",
+      "bytes": 14705
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "bef8d74f19dbea7e6ec4ba5eb4652e027bda64982cb44dfa683919d5cb82c6e9",
+      "bytes": 11998
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+      "bytes": 47252
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+      "bytes": 5418
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+      "bytes": 23116
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/sha.rs",
+      "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+      "bytes": 15737
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+      "bytes": 2600
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002",
+      "bytes": 29626
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "73c41717c61565dfd9a84226dffc7e5a887f68a971f131ed05fd7440106374ce",
+      "bytes": 23334
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "01889915d7b7a591037ac9af65af0f91e75ff2bf531a5f6906574499f009b968",
+      "bytes": 25279
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "e3165fb571e68a32346f297f7b3211435a33f61f33f9e93a5f4fe92056c15fe2",
+      "bytes": 22404
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "d3a6c0f2e9f8e66232d0502e475c96615e5c8ddbdf35d4e61825ff25b8725470",
+      "bytes": 46441
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/rvm_ops.rs",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c",
+      "bytes": 27890
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "24ef3e6befd409aab7bfbfb694d4be7b4a8fce71d149db143b4a5ab20e1031da",
+      "bytes": 16908
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "508cd6a703b496a71f89bad9dba94d64d3c04b90fa176c0e81055ed42fdf7994",
+      "bytes": 14542
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "45fe2c08d34776ba3bb4643a640fa4745847b3574976c2d71aed56fdeed5da48",
+      "bytes": 23960
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "107ca190a06ccb8acb4e3cb957fc1882130f4ee906f0c29c4a3c8cc061a71543",
+      "bytes": 17080
+    },
+    {
+      "path": "checkpoint20/changed-source.tar.gz",
+      "sha256": "c51c6693d9200f185fc426c1c5660cbbb9fa8991d8c0f7330a8c43374c42a6da",
+      "bytes": 155272
+    },
+    {
+      "path": "checkpoint20/source-manifest.json",
+      "sha256": "f19f4f13d6c01529f45faa063c9fc96dbed2be02e892122020acfa8373db4c81",
+      "bytes": 9815
+    },
+    {
+      "path": "checkpoint20/vs-c8-repair.patch",
+      "sha256": "87d0258ca8bf9fcc4b90b71814511832a2c60e57e5e7a9c11bd2c9fe2def46c5",
+      "bytes": 59619
+    },
+    {
+      "path": "checkpoint20-result.json",
+      "sha256": "6f9b5e4cf9e0429df6898e24e0c048ffd2be449551aa940918a45ebad69212d3",
+      "bytes": 400
+    },
+    {
+      "path": "compile-first.log",
+      "sha256": "73c5a7c376b93f00d78ba198a11c4f320307197eac19fdd2aa8cd8afea7f0333",
+      "bytes": 8367
+    },
+    {
+      "path": "compile-first.pid",
+      "sha256": "80b7119370261271d1eb788551337e2b41100a8c1b679410c20d73feb3a67862",
+      "bytes": 6
+    },
+    {
+      "path": "compile2.log",
+      "sha256": "c35ae36ffd9f00498190fff40eca45b4e066e43228add3bd0d9f631142a8e56d",
+      "bytes": 7885
+    },
+    {
+      "path": "compile2.pid",
+      "sha256": "e67d1c7eb614ecc585330726266f67ef0c6a41d9a696dd1d2511819f95faf443",
+      "bytes": 6
+    },
+    {
+      "path": "damage-callers-before.txt",
+      "sha256": "d20369eadf23fa0b190bb5b1be43a2d7ef0cd052539f9070080ee13eebb5bae1",
+      "bytes": 200492
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/src/engine/debug.rs",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+      "bytes": 31691
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "58fd31bd0f70a435d1ff3da7373f8377e7c7a7d77f3a28bf1ed859cad985445a",
+      "bytes": 27115
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/src/engine/hash.rs",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0",
+      "bytes": 34087
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "a8dad23594ddeb2e7231d904ae5cce7b36fe76eb62e4410abf898270408091cb",
+      "bytes": 24369
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb",
+      "bytes": 2812
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/boss.rs",
+      "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+      "bytes": 8377
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/hearth.rs",
+      "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+      "bytes": 11814
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "bytes": 39802
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "bytes": 42931
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "bytes": 41188
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+      "bytes": 28314
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+      "bytes": 13025
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41",
+      "bytes": 16056
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "061d91c6d3ffcd08cd9794464fb71393d8bb73c3155870113fd1256205ac5bda",
+      "bytes": 22375
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285",
+      "bytes": 23671
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/standard/skills/xiang_de.rs",
+      "sha256": "e226fac3ee8c64adcab182248aea512841852feee3374c6e9f7c0c52c8d5cd5f",
+      "bytes": 1476
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+      "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+      "bytes": 3062
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "bytes": 13270
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "19f307a944e95a08460ea99e79bf7aaaf4cc3ccdea9c5199b4b0e14cddf60008",
+      "bytes": 32238
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "04ae3136e659063eae3de5edb21451586d83d58f7cd0e1ba7f97eab2c0def3b4",
+      "bytes": 28355
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "bytes": 6966
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/archive.rs",
+      "sha256": "bcc1758e3954263d186c0ba9292738302a200ebb77834154c2a49aa574ab9ab5",
+      "bytes": 14705
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "bef8d74f19dbea7e6ec4ba5eb4652e027bda64982cb44dfa683919d5cb82c6e9",
+      "bytes": 11998
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+      "bytes": 47252
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+      "bytes": 5418
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+      "bytes": 23116
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel/sha.rs",
+      "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+      "bytes": 15737
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+      "bytes": 2600
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002",
+      "bytes": 29626
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "73c41717c61565dfd9a84226dffc7e5a887f68a971f131ed05fd7440106374ce",
+      "bytes": 23334
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "01889915d7b7a591037ac9af65af0f91e75ff2bf531a5f6906574499f009b968",
+      "bytes": 25279
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "e3165fb571e68a32346f297f7b3211435a33f61f33f9e93a5f4fe92056c15fe2",
+      "bytes": 22404
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "d3a6c0f2e9f8e66232d0502e475c96615e5c8ddbdf35d4e61825ff25b8725470",
+      "bytes": 46441
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/rvm_ops.rs",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c",
+      "bytes": 27890
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "24ef3e6befd409aab7bfbfb694d4be7b4a8fce71d149db143b4a5ab20e1031da",
+      "bytes": 16908
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "508cd6a703b496a71f89bad9dba94d64d3c04b90fa176c0e81055ed42fdf7994",
+      "bytes": 14542
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "45fe2c08d34776ba3bb4643a640fa4745847b3574976c2d71aed56fdeed5da48",
+      "bytes": 23960
+    },
+    {
+      "path": "final-freeze9/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "107ca190a06ccb8acb4e3cb957fc1882130f4ee906f0c29c4a3c8cc061a71543",
+      "bytes": 17080
+    },
+    {
+      "path": "final-freeze9/changed-source.tar.gz",
+      "sha256": "007c4a5ccce55ceed57bed8296f228a82d7b0111fd8c825309aaf988681f95fd",
+      "bytes": 171335
+    },
+    {
+      "path": "final-freeze9/source-manifest.json",
+      "sha256": "fe9a244af41e26e90ee4969053957c929478850f7a88c991cdbd6080f89197db",
+      "bytes": 11196
+    },
+    {
+      "path": "final-freeze9/vs-c8-repair.patch",
+      "sha256": "e337dbc539e71f6275169fd7195b8b1d588554d34c3cc49c722438f5a767105f",
+      "bytes": 94879
+    },
+    {
+      "path": "final-freeze9-result.json",
+      "sha256": "cdfd98e7e3d2d6b2dd290d6c580d4e12eeeb085115e4f42d5b9dd601804e32da",
+      "bytes": 401
+    },
+    {
+      "path": "freeze.py",
+      "sha256": "2a6689b7b2c74f22d391cd5f89ba9c68dd62ce9fc6cd7afd497be33af33a38dd",
+      "bytes": 2687
+    },
+    {
+      "path": "full-native-summary.json",
+      "sha256": "7d42c47822aab2d7ca91bbaa37c78898ce995cbd4e6d060e3984029dce46fb77",
+      "bytes": 613
+    },
+    {
+      "path": "full-native.log",
+      "sha256": "ec8cc30a109a21d5abfcfa98d1e14f10bb854b4543c30dfa1c31ea35358ae5a7",
+      "bytes": 160282
+    },
+    {
+      "path": "full-source/composed-source.tar.gz",
+      "sha256": "8971135b03a951ff183ab892e8b71158ec42fa8a786b953d6dee3e2619920250",
+      "bytes": 764170
+    },
+    {
+      "path": "full-source/source-manifest.json",
+      "sha256": "b1571db999a8795e4ff4687eb2b14a10a2772c4ba8b85dd974a89e3f459c4c4f",
+      "bytes": 32219
+    },
+    {
+      "path": "full-source/vs-main5fc.patch",
+      "sha256": "a7caf7cfb704fa7d41d21339c0e2b3a299eef42aafb0c6e10706b0ec5eab5576",
+      "bytes": 768179
+    },
+    {
+      "path": "gate1b.log",
+      "sha256": "856b36553c3bb012d171d6af6e1fb09133edd5bce730cc21d70a5f6528e3571b",
+      "bytes": 887
+    },
+    {
+      "path": "initial-red.log",
+      "sha256": "a0e6cb6782726a7481b5d9b3af6d7255ed67451ee6f0f14a12869dba8917ef1d",
+      "bytes": 2336
+    },
+    {
+      "path": "initial-red.pid",
+      "sha256": "cabc221cab7fbb4a02c359c3c41fed7359cc9c0d4baafba73f173104437d5481",
+      "bytes": 6
+    },
+    {
+      "path": "layering-initial.log",
+      "sha256": "a3ace901f75e478b721fcf4c44872d5018603966a215b00b24b328dbdeadda9e",
+      "bytes": 56
+    },
+    {
+      "path": "layering.log",
+      "sha256": "444233f54970824589d61768edf26dba48a8b3c7e80f9619d6a089ebbde48df4",
+      "bytes": 204
+    },
+    {
+      "path": "patch-reverse-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/src/engine/debug.rs",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+      "bytes": 31691
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "58fd31bd0f70a435d1ff3da7373f8377e7c7a7d77f3a28bf1ed859cad985445a",
+      "bytes": 27115
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/src/engine/hash.rs",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0",
+      "bytes": 34087
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "a8dad23594ddeb2e7231d904ae5cce7b36fe76eb62e4410abf898270408091cb",
+      "bytes": 24369
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb",
+      "bytes": 2812
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/hearth.rs",
+      "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+      "bytes": 11814
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "bytes": 39802
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "bytes": 42931
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "bytes": 41188
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+      "bytes": 28314
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+      "bytes": 13025
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+      "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+      "bytes": 3062
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "bytes": 13270
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "19f307a944e95a08460ea99e79bf7aaaf4cc3ccdea9c5199b4b0e14cddf60008",
+      "bytes": 32238
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "04ae3136e659063eae3de5edb21451586d83d58f7cd0e1ba7f97eab2c0def3b4",
+      "bytes": 28355
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "bytes": 6966
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/archive.rs",
+      "sha256": "bcc1758e3954263d186c0ba9292738302a200ebb77834154c2a49aa574ab9ab5",
+      "bytes": 14705
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "bef8d74f19dbea7e6ec4ba5eb4652e027bda64982cb44dfa683919d5cb82c6e9",
+      "bytes": 11998
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+      "bytes": 47252
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+      "bytes": 5418
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+      "bytes": 23116
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel/sha.rs",
+      "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+      "bytes": 15737
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+      "bytes": 2600
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002",
+      "bytes": 29626
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "73c41717c61565dfd9a84226dffc7e5a887f68a971f131ed05fd7440106374ce",
+      "bytes": 23334
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "01889915d7b7a591037ac9af65af0f91e75ff2bf531a5f6906574499f009b968",
+      "bytes": 25279
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "e3165fb571e68a32346f297f7b3211435a33f61f33f9e93a5f4fe92056c15fe2",
+      "bytes": 22404
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "d3a6c0f2e9f8e66232d0502e475c96615e5c8ddbdf35d4e61825ff25b8725470",
+      "bytes": 46441
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/rvm_ops.rs",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c",
+      "bytes": 27890
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "24ef3e6befd409aab7bfbfb694d4be7b4a8fce71d149db143b4a5ab20e1031da",
+      "bytes": 16908
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "508cd6a703b496a71f89bad9dba94d64d3c04b90fa176c0e81055ed42fdf7994",
+      "bytes": 14542
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "45fe2c08d34776ba3bb4643a640fa4745847b3574976c2d71aed56fdeed5da48",
+      "bytes": 23960
+    },
+    {
+      "path": "pre-final/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "107ca190a06ccb8acb4e3cb957fc1882130f4ee906f0c29c4a3c8cc061a71543",
+      "bytes": 17080
+    },
+    {
+      "path": "pre-final/changed-source.tar.gz",
+      "sha256": "56b7603c9dd9df9e9db593558df81573d721135338e2b3cfac09174ce577b4ef",
+      "bytes": 156475
+    },
+    {
+      "path": "pre-final/source-manifest.json",
+      "sha256": "202fa9e270aafa98bd4136b13ac841cc37e2aa412843bd6e96c9ffe7735e2c3b",
+      "bytes": 9815
+    },
+    {
+      "path": "pre-final/vs-c8-repair.patch",
+      "sha256": "9f0562226bbc3923e9fa93bff97af9e9985909d28d1a7fc800962c5ef5382647",
+      "bytes": 71508
+    },
+    {
+      "path": "pre-final-result.json",
+      "sha256": "99cfc3542ca92caea46db47859b2e0c8c0dbf13f43b029e9eeda656a0ccd084f",
+      "bytes": 397
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/src/engine/debug.rs",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+      "bytes": 31691
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "58fd31bd0f70a435d1ff3da7373f8377e7c7a7d77f3a28bf1ed859cad985445a",
+      "bytes": 27115
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/src/engine/hash.rs",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0",
+      "bytes": 34087
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "a8dad23594ddeb2e7231d904ae5cce7b36fe76eb62e4410abf898270408091cb",
+      "bytes": 24369
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb",
+      "bytes": 2812
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/boss.rs",
+      "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+      "bytes": 8377
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/hearth.rs",
+      "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+      "bytes": 11814
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "bytes": 39802
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "bytes": 42931
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "bytes": 41188
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+      "bytes": 28314
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+      "bytes": 13025
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_status.rs",
+      "sha256": "bf42c01726bb2670416fcd4a23544cf024bbc78d5b6ab56330aaf7cc5c2e7e41",
+      "bytes": 16056
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "061d91c6d3ffcd08cd9794464fb71393d8bb73c3155870113fd1256205ac5bda",
+      "bytes": 22375
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_status.rs",
+      "sha256": "f3176bd89a33760791c9c1fb239ca2fd187e6f667d1f03353c1835a24fa86285",
+      "bytes": 23671
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/standard/skills/xiang_de.rs",
+      "sha256": "e226fac3ee8c64adcab182248aea512841852feee3374c6e9f7c0c52c8d5cd5f",
+      "bytes": 1476
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+      "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+      "bytes": 3062
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "bytes": 13270
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "19f307a944e95a08460ea99e79bf7aaaf4cc3ccdea9c5199b4b0e14cddf60008",
+      "bytes": 32238
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "04ae3136e659063eae3de5edb21451586d83d58f7cd0e1ba7f97eab2c0def3b4",
+      "bytes": 28355
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "bytes": 6966
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/archive.rs",
+      "sha256": "bcc1758e3954263d186c0ba9292738302a200ebb77834154c2a49aa574ab9ab5",
+      "bytes": 14705
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "bef8d74f19dbea7e6ec4ba5eb4652e027bda64982cb44dfa683919d5cb82c6e9",
+      "bytes": 11998
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+      "bytes": 47252
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+      "bytes": 5418
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+      "bytes": 23116
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel/sha.rs",
+      "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+      "bytes": 15737
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+      "bytes": 2600
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002",
+      "bytes": 29626
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "73c41717c61565dfd9a84226dffc7e5a887f68a971f131ed05fd7440106374ce",
+      "bytes": 23334
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "01889915d7b7a591037ac9af65af0f91e75ff2bf531a5f6906574499f009b968",
+      "bytes": 25279
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "e3165fb571e68a32346f297f7b3211435a33f61f33f9e93a5f4fe92056c15fe2",
+      "bytes": 22404
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "d3a6c0f2e9f8e66232d0502e475c96615e5c8ddbdf35d4e61825ff25b8725470",
+      "bytes": 46441
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/rvm_ops.rs",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c",
+      "bytes": 27890
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "24ef3e6befd409aab7bfbfb694d4be7b4a8fce71d149db143b4a5ab20e1031da",
+      "bytes": 16908
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "508cd6a703b496a71f89bad9dba94d64d3c04b90fa176c0e81055ed42fdf7994",
+      "bytes": 14542
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "45fe2c08d34776ba3bb4643a640fa4745847b3574976c2d71aed56fdeed5da48",
+      "bytes": 23960
+    },
+    {
+      "path": "pre-full/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "107ca190a06ccb8acb4e3cb957fc1882130f4ee906f0c29c4a3c8cc061a71543",
+      "bytes": 17080
+    },
+    {
+      "path": "pre-full/changed-source.tar.gz",
+      "sha256": "5e8a446263f66fdd6e403c1c0a18e20a76e5e65dbdb4e5f1a5e7f82886ca04df",
+      "bytes": 171335
+    },
+    {
+      "path": "pre-full/source-manifest.json",
+      "sha256": "367458cb5d3a0c635673dfc2034718dd7ac1a1b29022c1fb4bac56028f0275d0",
+      "bytes": 11196
+    },
+    {
+      "path": "pre-full/vs-c8-repair.patch",
+      "sha256": "e337dbc539e71f6275169fd7195b8b1d588554d34c3cc49c722438f5a767105f",
+      "bytes": 94879
+    },
+    {
+      "path": "pre-full-result.json",
+      "sha256": "9d5474954dc3983d9b350d91b9c840f1c88f4fd9450162d72595765ef4cb1e1e",
+      "bytes": 396
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/src/engine/debug.rs",
+      "sha256": "cf4f9b11065a33079b75351a883be1b6d1f25baa6d45c853e5f7471ee0c44b83",
+      "bytes": 31691
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/src/engine/hash/machine.rs",
+      "sha256": "58fd31bd0f70a435d1ff3da7373f8377e7c7a7d77f3a28bf1ed859cad985445a",
+      "bytes": 27115
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/src/engine/hash.rs",
+      "sha256": "e047f925a91ca1c49b86016348977bfff3a5e3ce7edff47f4384219f78e76ba0",
+      "bytes": 34087
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "a8dad23594ddeb2e7231d904ae5cce7b36fe76eb62e4410abf898270408091cb",
+      "bytes": 24369
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb",
+      "bytes": 2812
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/hearth.rs",
+      "sha256": "9f56db6cf5ab369e088dfec8e18fede52d004418d269f9bb87b21889c668e426",
+      "bytes": 11814
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "4a69485f0e46ef6091e87b694d47dbe7a5accac5d8fd603e4e96a70b20645c48",
+      "bytes": 39802
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+      "bytes": 42931
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "69071f12829a5de0bba260f2bc8e7559580e438a8e7237b1193ede601086a68e",
+      "bytes": 41188
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "f611724f901029ef3890b21bb9fbba85ecf2177d0b2c43faf91ba1e8c0daef54",
+      "bytes": 28314
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_recovery.rs",
+      "sha256": "d031f1d8c74f518cdbc26d4584d6133b574a5c1fbc59fd48a77e39b0bbb0b82b",
+      "bytes": 13025
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-content/src/content/vm_effects/pingkou.rs",
+      "sha256": "8465ef203e340319230c01a6e8bbe53130d784fce7f762a0ec73e58c1a1fccd6",
+      "bytes": 3062
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive/events.rs",
+      "sha256": "f12ff035bf18e1ed3975ccd77b7271e4ada8299c41d36bb391f917bc4ba6c070",
+      "bytes": 13270
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "sha256": "19f307a944e95a08460ea99e79bf7aaaf4cc3ccdea9c5199b4b0e14cddf60008",
+      "bytes": 32238
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "sha256": "04ae3136e659063eae3de5edb21451586d83d58f7cd0e1ba7f97eab2c0def3b4",
+      "bytes": 28355
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "94dc7d4e43c59fe13336170f846883b1a89cb8a0959a1ea9323893ed29537f21",
+      "bytes": 6966
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/archive.rs",
+      "sha256": "bcc1758e3954263d186c0ba9292738302a200ebb77834154c2a49aa574ab9ab5",
+      "bytes": 14705
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "bef8d74f19dbea7e6ec4ba5eb4652e027bda64982cb44dfa683919d5cb82c6e9",
+      "bytes": 11998
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "d2cce6710623b58d0645b9d788680bcd2adb666d302af0e7400cb1c5c0293268",
+      "bytes": 47252
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel/duel.rs",
+      "sha256": "bb21c33790668036f83e09f673cee0c78b6a2c00f669a2ef20b6bae9c07f563c",
+      "bytes": 5418
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel/intrinsic.rs",
+      "sha256": "4c37b75eca22558ed532622bb7845258840c2b258f7488881404ca1d0c987bb9",
+      "bytes": 23116
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel/sha.rs",
+      "sha256": "12d0fcf84a5c8cde62e3f2fe966d421cfe9c5f696f4f6c4b36e106368a8df590",
+      "bytes": 15737
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "abba3207977992c4e9a777469b157676337409777655a8f9ad11c11b2395288c",
+      "bytes": 2600
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "8dfcc6a1ff40ae56012ae6f7e5a97184410d95faef0512df91f79882bfb85002",
+      "bytes": 29626
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "73c41717c61565dfd9a84226dffc7e5a887f68a971f131ed05fd7440106374ce",
+      "bytes": 23334
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "01889915d7b7a591037ac9af65af0f91e75ff2bf531a5f6906574499f009b968",
+      "bytes": 25279
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+      "sha256": "e3165fb571e68a32346f297f7b3211435a33f61f33f9e93a5f4fe92056c15fe2",
+      "bytes": 22404
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "d3a6c0f2e9f8e66232d0502e475c96615e5c8ddbdf35d4e61825ff25b8725470",
+      "bytes": 46441
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/rvm_ops.rs",
+      "sha256": "8d954dbc852f02b78cb0eabbdd20a70a519efb9c108b79e9ec1accf6f669b47c",
+      "bytes": 27890
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "sha256": "24ef3e6befd409aab7bfbfb694d4be7b4a8fce71d149db143b4a5ab20e1031da",
+      "bytes": 16908
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/snap/restore.rs",
+      "sha256": "508cd6a703b496a71f89bad9dba94d64d3c04b90fa176c0e81055ed42fdf7994",
+      "bytes": 14542
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/snap/types.rs",
+      "sha256": "45fe2c08d34776ba3bb4643a640fa4745847b3574976c2d71aed56fdeed5da48",
+      "bytes": 23960
+    },
+    {
+      "path": "pre-targeted/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "107ca190a06ccb8acb4e3cb957fc1882130f4ee906f0c29c4a3c8cc061a71543",
+      "bytes": 17080
+    },
+    {
+      "path": "pre-targeted/changed-source.tar.gz",
+      "sha256": "8942cbce46aec419ec334109fc0722e04c68ea6950b1f50167613b91070dbdb0",
+      "bytes": 156009
+    },
+    {
+      "path": "pre-targeted/source-manifest.json",
+      "sha256": "128e336868a5e796ec7341f9882c8924f8d4097edfbbeca32d9c0f906f846a17",
+      "bytes": 9815
+    },
+    {
+      "path": "pre-targeted/vs-c8-repair.patch",
+      "sha256": "2b676513f434c174c2891e819c1a4dd9dbaeff75d4c04bc7f55537c436e6b825",
+      "bytes": 69870
+    },
+    {
+      "path": "pre-targeted-result.json",
+      "sha256": "fa6f2952a2302d97458912649f5c09e5f07e568624847e612f6915310bd5eaaf",
+      "bytes": 400
+    },
+    {
+      "path": "private-generated-and-lock.json",
+      "sha256": "3968e0224cafedff6420ff5b3f544e614e952785c80a11f041131335cb360860",
+      "bytes": 3261
+    },
+    {
+      "path": "protected-after.json",
+      "sha256": "d0dcdc8cc26da3f5e288f530f7353671b40129ee83377b092ee63799b13c5796",
+      "bytes": 3202
+    },
+    {
+      "path": "results-bound.json",
+      "sha256": "dcc415f792ac8c3249932f2256c4d16ba283d89a3480f262965403efd9f78e99",
+      "bytes": 657
+    },
+    {
+      "path": "run-checks.py",
+      "sha256": "9c2ffcc9dbac7602a171f7c8bb2689bbdbeb9d273b6b82c3fc9f09b796917a91",
+      "bytes": 1610
+    },
+    {
+      "path": "seal-result.log",
+      "sha256": "553c8551e15a6af9be6a7a50b4152fb83e4c4961db5eecf912a38c527e3d494b",
+      "bytes": 613
+    },
+    {
+      "path": "seal.py",
+      "sha256": "5acc9f3a1084688e2dfa2755c6f1f88f9ba9890787a77f226ff0c46422460fa7",
+      "bytes": 5374
+    },
+    {
+      "path": "source-cap-unit.log",
+      "sha256": "4f91a41edb6be11738cb72aa2893a9d97e68b6caa649b001709519ed0adae33c",
+      "bytes": 295
+    },
+    {
+      "path": "source-caps.log",
+      "sha256": "dc93b3b1157ef984a4fd1420b43b98f8b0a81970670d1492e6dd8b0af3b4c2a9",
+      "bytes": 241
+    },
+    {
+      "path": "targeted-first.log",
+      "sha256": "dd5a3c03df33573183019478ecf9e6b5da79b7004164c04ee09b32ab6e79dea7",
+      "bytes": 1755
+    },
+    {
+      "path": "targeted-first.pid",
+      "sha256": "8a676506d25626e5fa5920462c4c812c85bb75a3038acdb2d9e71e4fd197dedd",
+      "bytes": 6
+    },
+    {
+      "path": "targeted2.log",
+      "sha256": "a1f64bd94be76fa276da776f80672f53bf8fe2cb257c91d1355e95fd965d944e",
+      "bytes": 1620
+    },
+    {
+      "path": "targeted2.pid",
+      "sha256": "7f707459dee8ade110efdc79a618ca9173bde962239affde93cd4fe9525399f0",
+      "bytes": 6
+    },
+    {
+      "path": "targeted3.log",
+      "sha256": "d0787f0ed080bc4e8071973461a15940fc6b92169b75ba62d75262e8b3f6faa5",
+      "bytes": 1622
+    },
+    {
+      "path": "targeted3.pid",
+      "sha256": "979d68c9cbe248d9603da1e676e5b1ee1621603005e599d99623beaea63c7d3e",
+      "bytes": 6
+    },
+    {
+      "path": "targeted4.log",
+      "sha256": "212aa4e3c61edf6c11805f1a4dd65f66ebdbf1b6cb6e55091065e7e59291fbe9",
+      "bytes": 978
+    },
+    {
+      "path": "targeted4.pid",
+      "sha256": "9588665f38a473740095f947d07fd7b7a1ee5f9eb181ff6ad3a48eb2b8256f6f",
+      "bytes": 6
+    },
+    {
+      "path": "targeted5.log",
+      "sha256": "2efa62e28b9219ced76b0a1df64490574de21122ca4fe07e201e71a9c0ec6045",
+      "bytes": 1218
+    },
+    {
+      "path": "targeted5.pid",
+      "sha256": "319ebbadd92ddefb5909dcdb455479af6a5d857e2d308a57a6d637e7fec269c3",
+      "bytes": 6
+    },
+    {
+      "path": "targeted6.log",
+      "sha256": "961792d250b34edc9331b12b5ce3cdc890b703c5e06cdcdce4091316476166d1",
+      "bytes": 1986
+    },
+    {
+      "path": "targeted6.pid",
+      "sha256": "0c88dcc9063b4e496cf004c6d9ab99c7a5dc9f005ebed54b9df4754a58d2fc05",
+      "bytes": 6
+    },
+    {
+      "path": "targeted7.log",
+      "sha256": "1805295e9105b081503e718561008dcd7ddaad171d087428e66d2fe21be01f78",
+      "bytes": 1336
+    },
+    {
+      "path": "targeted7.pid",
+      "sha256": "dea941149efef0594a5342d4554d1eb1409742e00697e8ff01e3b9488686324b",
+      "bytes": 6
+    }
+  ],
+  "report": {
+    "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/53f077bd-d71f-4a84-951d-fe5af72ea145/implementation/c331-phase9-canonical-damage.md",
+    "sha256": "2bdc227e81576dc66b0a50b78c4e529363ddfaa9883329b9f4e52b60f4299b5d",
+    "lines": 56
+  },
+  "qualification": "BLOCKED partial postHP runtime; independent review required"
+}

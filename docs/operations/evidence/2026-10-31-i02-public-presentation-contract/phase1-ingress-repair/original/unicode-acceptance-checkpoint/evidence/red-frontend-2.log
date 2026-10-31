@@ -1,0 +1,286 @@
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (20.7955ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (12.581417ms)
+✔ 初始化错误有结果，后续可创建新 Worker (11.689208ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (10.018583ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (10.96375ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (10.988584ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (15.914333ms)
+✔ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (25.180791ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (18.182584ms)
+✔ Worker bad present batch_unknown preserves pending until dispose (14.714417ms)
+✔ Worker bad present null_revision preserves pending until dispose (10.871958ms)
+✔ Worker bad present unsafe_revision preserves pending until dispose (11.226916ms)
+✔ Worker bad present mixed_revision preserves pending until dispose (11.197041ms)
+✔ Worker bad present string_revision preserves pending until dispose (22.100167ms)
+✔ Worker bad present bad_status preserves pending until dispose (9.749083ms)
+✔ Worker bad present overflow_nonempty preserves pending until dispose (8.807959ms)
+✔ Worker bad present invalid_domain preserves pending until dispose (7.611792ms)
+✔ Worker bad present invalid_reason preserves pending until dispose (8.5085ms)
+✔ Worker bad present scope_unknown preserves pending until dispose (8.031959ms)
+✔ Worker bad present duplicate_scope preserves pending until dispose (9.409333ms)
+✔ Worker bad present duplicate_ordinal preserves pending until dispose (8.314458ms)
+✔ Worker bad present unknown_event preserves pending until dispose (7.656125ms)
+✔ Worker bad present event_unknown preserves pending until dispose (7.807416ms)
+✔ Worker bad present actor_zero preserves pending until dispose (7.845416ms)
+✔ Worker bad present actor_negative preserves pending until dispose (9.886584ms)
+✔ Worker bad present actor_fraction preserves pending until dispose (7.224875ms)
+✔ Worker bad present actor_string preserves pending until dispose (7.214167ms)
+✔ Worker bad present actor_out_of_view preserves pending until dispose (6.81425ms)
+✔ Worker bad present actor_u32_over preserves pending until dispose (6.789041ms)
+✔ Worker bad present actor_null preserves pending until dispose (9.464125ms)
+✔ Worker bad present duplicate_target preserves pending until dispose (6.741292ms)
+✔ Worker bad present missing_nullable_voice preserves pending until dispose (6.288958ms)
+✔ Worker bad present amount_zero preserves pending until dispose (7.533291ms)
+✔ Worker bad present bad_nature preserves pending until dispose (6.624958ms)
+✔ Worker bad present bad_effective_kind preserves pending until dispose (11.919375ms)
+✔ Worker bad present token_traversal preserves pending until dispose (10.640791ms)
+✔ Worker bad present token_controls preserves pending until dispose (8.097833ms)
+✔ Worker bad present role_local_id_wrong preserves pending until dispose (10.010334ms)
+✔ Worker bad present role_kind_wrong preserves pending until dispose (13.247583ms)
+✔ Worker bad present owner_unknown preserves pending until dispose (14.538167ms)
+✔ Worker bad present digest_upper preserves pending until dispose (12.418917ms)
+✔ Worker bad present digest_algorithm preserves pending until dispose (11.4065ms)
+✔ Worker bad present size_zero preserves pending until dispose (20.908ms)
+✔ Worker bad present source_kind preserves pending until dispose (19.26475ms)
+✔ Worker bad present reference_private preserves pending until dispose (13.869584ms)
+✔ Worker bad present path_escape preserves pending until dispose (7.036042ms)
+✔ Worker bad present invalid_category preserves pending until dispose (6.839625ms)
+✔ Worker bad present empty_assets preserves pending until dispose (7.485708ms)
+✔ Worker bad present form_token preserves pending until dispose (7.212875ms)
+✔ Worker bad present owner_tag preserves pending until dispose (9.088167ms)
+✔ Worker bad present asset_unknown preserves pending until dispose (7.374917ms)
+✔ Worker bad present role_unknown preserves pending until dispose (7.717875ms)
+✔ Worker bad present id_token_escape preserves pending until dispose (15.89125ms)
+✔ Worker bad present oversized_utf8 preserves pending until dispose (8.989917ms)
+✔ Worker bad present null_targets_bad preserves pending until dispose (9.011041ms)
+✔ Worker bad present missing_source preserves pending until dispose (7.473125ms)
+✔ Worker bad present repository_bom preserves pending until dispose (6.853208ms)
+✔ actual IPC to EngineClient bad present batch_unknown preserves pending (6.86ms)
+✔ actual IPC to EngineClient bad present null_revision preserves pending (6.573041ms)
+✔ actual IPC to EngineClient bad present unsafe_revision preserves pending (8.55575ms)
+✔ actual IPC to EngineClient bad present mixed_revision preserves pending (7.374916ms)
+✔ actual IPC to EngineClient bad present string_revision preserves pending (6.538292ms)
+✔ actual IPC to EngineClient bad present bad_status preserves pending (6.983209ms)
+✔ actual IPC to EngineClient bad present overflow_nonempty preserves pending (6.949375ms)
+✔ actual IPC to EngineClient bad present invalid_domain preserves pending (39.263417ms)
+✔ actual IPC to EngineClient bad present invalid_reason preserves pending (6.935625ms)
+✔ actual IPC to EngineClient bad present scope_unknown preserves pending (6.333708ms)
+✔ actual IPC to EngineClient bad present duplicate_scope preserves pending (7.0295ms)
+✔ actual IPC to EngineClient bad present duplicate_ordinal preserves pending (6.225292ms)
+✔ actual IPC to EngineClient bad present unknown_event preserves pending (8.805209ms)
+✔ actual IPC to EngineClient bad present event_unknown preserves pending (7.142625ms)
+✔ actual IPC to EngineClient bad present actor_zero preserves pending (7.243209ms)
+✔ actual IPC to EngineClient bad present actor_negative preserves pending (6.426167ms)
+✔ actual IPC to EngineClient bad present actor_fraction preserves pending (6.505917ms)
+✔ actual IPC to EngineClient bad present actor_string preserves pending (8.64175ms)
+✔ actual IPC to EngineClient bad present actor_out_of_view preserves pending (7.312375ms)
+✔ actual IPC to EngineClient bad present actor_u32_over preserves pending (7.156625ms)
+✔ actual IPC to EngineClient bad present actor_null preserves pending (6.990625ms)
+✔ actual IPC to EngineClient bad present duplicate_target preserves pending (7.132875ms)
+✔ actual IPC to EngineClient bad present missing_nullable_voice preserves pending (8.550416ms)
+✔ actual IPC to EngineClient bad present amount_zero preserves pending (6.7195ms)
+✔ actual IPC to EngineClient bad present bad_nature preserves pending (6.73375ms)
+✔ actual IPC to EngineClient bad present bad_effective_kind preserves pending (15.989834ms)
+✔ actual IPC to EngineClient bad present token_traversal preserves pending (10.314833ms)
+✔ actual IPC to EngineClient bad present token_controls preserves pending (9.233292ms)
+✔ actual IPC to EngineClient bad present role_local_id_wrong preserves pending (7.053542ms)
+✔ actual IPC to EngineClient bad present role_kind_wrong preserves pending (6.797792ms)
+✔ actual IPC to EngineClient bad present owner_unknown preserves pending (6.93175ms)
+✔ actual IPC to EngineClient bad present digest_upper preserves pending (6.744458ms)
+✔ actual IPC to EngineClient bad present digest_algorithm preserves pending (8.512666ms)
+✔ actual IPC to EngineClient bad present size_zero preserves pending (6.2285ms)
+✔ actual IPC to EngineClient bad present source_kind preserves pending (6.371875ms)
+✔ actual IPC to EngineClient bad present reference_private preserves pending (6.73ms)
+✔ actual IPC to EngineClient bad present path_escape preserves pending (6.463542ms)
+✔ actual IPC to EngineClient bad present invalid_category preserves pending (8.897542ms)
+✔ actual IPC to EngineClient bad present empty_assets preserves pending (7.105667ms)
+✔ actual IPC to EngineClient bad present form_token preserves pending (6.960292ms)
+✔ actual IPC to EngineClient bad present owner_tag preserves pending (6.979208ms)
+✔ actual IPC to EngineClient bad present asset_unknown preserves pending (6.914542ms)
+✔ actual IPC to EngineClient bad present role_unknown preserves pending (8.805167ms)
+✔ actual IPC to EngineClient bad present id_token_escape preserves pending (6.900083ms)
+✔ actual IPC to EngineClient bad present oversized_utf8 preserves pending (6.555416ms)
+✔ actual IPC to EngineClient bad present null_targets_bad preserves pending (6.220958ms)
+✔ actual IPC to EngineClient bad present missing_source preserves pending (6.220917ms)
+✔ actual IPC to EngineClient bad present repository_bom preserves pending (9.695625ms)
+✔ actual SAB poll rejects malformed presentation before settling or deleting pending (7.022792ms)
+✔ actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation (12.780458ms)
+✔ shared Worker request guard sends eight and rejects ninth before map/postMessage (6.41625ms)
+✔ eight retained malformed responses keep capacity until explicit dispose (16.361875ms)
+✖ compound-invalid IPC autoStep preserves uncertain pending before observer normalization (6.905834ms)
+✖ compound-invalid IPC chooseGeneral preserves uncertain pending before observer normalization (6.431042ms)
+✔ compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup (28.339292ms)
+✔ actual frozen Main5fc TS network and desktop readers accept the optional response (28.936542ms)
+✔ new parser accepts all seven events and legacy absence without altering autoStep strings (1.520541ms)
+✔ bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through (0.860333ms)
+✔ bad present null_revision is atomic in actual network/store ingress and IPC pass-through (0.261458ms)
+✔ bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through (0.265042ms)
+✔ bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through (0.237875ms)
+✔ bad present string_revision is atomic in actual network/store ingress and IPC pass-through (0.254833ms)
+✔ bad present bad_status is atomic in actual network/store ingress and IPC pass-through (0.206125ms)
+✔ bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through (0.232166ms)
+✔ bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through (0.25975ms)
+✔ bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through (0.244875ms)
+✔ bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through (0.205125ms)
+✔ bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through (0.26125ms)
+✔ bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through (0.289834ms)
+✔ bad present unknown_event is atomic in actual network/store ingress and IPC pass-through (0.192958ms)
+✔ bad present event_unknown is atomic in actual network/store ingress and IPC pass-through (0.194625ms)
+✔ bad present actor_zero is atomic in actual network/store ingress and IPC pass-through (0.180041ms)
+✔ bad present actor_negative is atomic in actual network/store ingress and IPC pass-through (0.195667ms)
+✔ bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through (0.168083ms)
+✔ bad present actor_string is atomic in actual network/store ingress and IPC pass-through (0.169042ms)
+✔ bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through (0.161083ms)
+✔ bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through (0.167542ms)
+✔ bad present actor_null is atomic in actual network/store ingress and IPC pass-through (0.165208ms)
+✔ bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through (0.221167ms)
+✔ bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through (0.201667ms)
+✔ bad present amount_zero is atomic in actual network/store ingress and IPC pass-through (0.279375ms)
+✔ bad present bad_nature is atomic in actual network/store ingress and IPC pass-through (0.258458ms)
+✔ bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through (0.252791ms)
+✔ bad present token_traversal is atomic in actual network/store ingress and IPC pass-through (0.231042ms)
+✔ bad present token_controls is atomic in actual network/store ingress and IPC pass-through (0.216292ms)
+✔ bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through (0.1815ms)
+✔ bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through (0.967666ms)
+✔ bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through (0.518667ms)
+✔ bad present digest_upper is atomic in actual network/store ingress and IPC pass-through (0.576042ms)
+✔ bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through (0.899417ms)
+✔ bad present size_zero is atomic in actual network/store ingress and IPC pass-through (1.392958ms)
+✔ bad present source_kind is atomic in actual network/store ingress and IPC pass-through (0.3205ms)
+✔ bad present reference_private is atomic in actual network/store ingress and IPC pass-through (1.134459ms)
+✔ bad present path_escape is atomic in actual network/store ingress and IPC pass-through (0.711833ms)
+✔ bad present invalid_category is atomic in actual network/store ingress and IPC pass-through (3.549583ms)
+✔ bad present empty_assets is atomic in actual network/store ingress and IPC pass-through (0.283542ms)
+✔ bad present form_token is atomic in actual network/store ingress and IPC pass-through (0.197584ms)
+✔ bad present owner_tag is atomic in actual network/store ingress and IPC pass-through (0.167958ms)
+✔ bad present asset_unknown is atomic in actual network/store ingress and IPC pass-through (0.174334ms)
+✔ bad present role_unknown is atomic in actual network/store ingress and IPC pass-through (0.156708ms)
+✔ bad present id_token_escape is atomic in actual network/store ingress and IPC pass-through (0.159125ms)
+✔ bad present oversized_utf8 is atomic in actual network/store ingress and IPC pass-through (0.217209ms)
+✔ bad present null_targets_bad is atomic in actual network/store ingress and IPC pass-through (0.189875ms)
+✔ bad present missing_source is atomic in actual network/store ingress and IPC pass-through (0.284041ms)
+✔ bad present repository_bom is atomic in actual network/store ingress and IPC pass-through (0.22675ms)
+✔ unmatched malformed broadcast does not reject another call or mutate receipt storage (0.153875ms)
+✔ bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches (0.46825ms)
+✔ new metadata keeps the existing WS256KiB limit before receipt mutation (0.464333ms)
+✔ compat m4a and zero SDK general/skill ids retain concrete leaf semantics (0.190125ms)
+✔ malformed conn_seq0 broadcast with a colliding key cannot reject a pending call (0.116625ms)
+✖ network sequential malformed outcomes retain at most eight original intents and replay no fresh keys (0.809875ms)
+✖ network full retained map cannot admit a missing persisted recovery entry (0.365ms)
+✖ network legacy successful absence releases capacity and creation does not allocate an intent (0.233791ms)
+ℹ tests 170
+ℹ suites 0
+ℹ pass 165
+ℹ fail 5
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1335.175167
+
+✖ failing tests:
+
+test at apps/web-client/scripts/nc04-worker-failure.test.mjs:358:3
+✖ compound-invalid IPC autoStep preserves uncertain pending before observer normalization (6.905834ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /协议错误，操作结果未确认/. Input:
+  
+  'Error: Desktop IPC: Error: native: generals metadata invalid; 操作结果可能未知，请先确认当前局面'
+  
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-worker-failure.test.mjs:365:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Desktop IPC: Error: native: generals metadata invalid; 操作结果可能未知，请先确认当前局面
+        at worker.onmessage (eval at fixture (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-worker-failure.test.mjs:51:24), <anonymous>:81:26)
+        at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/engine/desktopEngineTransport.ts:79:37,
+    expected: /协议错误，操作结果未确认/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/nc04-worker-failure.test.mjs:358:3
+✖ compound-invalid IPC chooseGeneral preserves uncertain pending before observer normalization (6.431042ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /协议错误，操作结果未确认/. Input:
+  
+  'Error: Desktop IPC: Error: native: generals metadata invalid; 操作结果可能未知，请先确认当前局面'
+  
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-worker-failure.test.mjs:365:5)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: Desktop IPC: Error: native: generals metadata invalid; 操作结果可能未知，请先确认当前局面
+        at worker.onmessage (eval at fixture (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-worker-failure.test.mjs:51:24), <anonymous>:81:26)
+        at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/engine/desktopEngineTransport.ts:79:37,
+    expected: /协议错误，操作结果未确认/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/presentation-metadata.test.mjs:123:1
+✖ network sequential malformed outcomes retain at most eight original intents and replay no fresh keys (0.809875ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /not submitted|未提交/. Input:
+  
+  'Error: 服务端呈现元数据无效，操作结果未确认: Error: native: public presentation metadata invalid'
+  
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:136:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: 服务端呈现元数据无效，操作结果未确认: Error: native: public presentation metadata invalid
+        at NetworkEngineClient.handleMessage (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/engine/networkClient.ts:411:33)
+        at TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:134:40)
+        at async Test.run (node:internal/test_runner/test:1389:7)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /not submitted|未提交/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/presentation-metadata.test.mjs:145:1
+✖ network full retained map cannot admit a missing persisted recovery entry (0.365ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  
+  9 !== 8
+  
+      at TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:150:35)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 9,
+    expected: 8,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
+
+test at apps/web-client/scripts/presentation-metadata.test.mjs:155:1
+✖ network legacy successful absence releases capacity and creation does not allocate an intent (0.233791ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /未提交/. Input:
+  
+  'Error: 服务端呈现元数据无效，操作结果未确认: Error: native: public presentation metadata invalid'
+  
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:161:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: Error: 服务端呈现元数据无效，操作结果未确认: Error: native: public presentation metadata invalid
+        at NetworkEngineClient.handleMessage (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/engine/networkClient.ts:411:33)
+        at TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:160:51)
+        at Test.runInAsyncScope (node:async_hooks:226:14)
+        at Test.run (node:internal/test_runner/test:1382:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+        at Test.postRun (node:internal/test_runner/test:1522:19)
+        at Test.run (node:internal/test_runner/test:1447:12)
+        at async Test.processPendingSubtests (node:internal/test_runner/test:960:7),
+    expected: /未提交/,
+    operator: 'rejects',
+    diff: 'simple'
+  }
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "--test", "apps/web-client/scripts/nc04-worker-failure.test.mjs", "apps/web-client/scripts/presentation-metadata.test.mjs"], "exit": 1, "locked_seconds": 1.3699411249835975, "disk_free_bytes": 38055620608}

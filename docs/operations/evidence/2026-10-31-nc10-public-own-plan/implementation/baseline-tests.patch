@@ -1,0 +1,13 @@
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index 09e7c9bc..dc3ab8f4 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -100,5 +100,8 @@ mod nc10_redaction_helper_contract;
+ #[path = "../nc10_j2_vm_privacy.rs"]
+ mod nc10_j2_vm_privacy;
+ 
++#[path = "../nc10_public_own_plan.rs"]
++mod nc10_public_own_plan;
++
+ #[path = "../nc10_source_provenance.rs"]
+ mod nc10_source_provenance;

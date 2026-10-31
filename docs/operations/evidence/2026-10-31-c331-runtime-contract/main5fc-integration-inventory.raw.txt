@@ -1,0 +1,54 @@
+Inventory only: reviewed frozen C6 → accepted Main5fc; no integration or behavior approval.
+Verified 2026-10-31 from immutable blobs; no source/config/package/version/worktree/index/branch writes, builds, tests, or network.
+Main = `5fc0f77403d90fa4555156bf01722450cbe7bf3b`, parent `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`; C base = `38ab1678df9b4b7b991d3b3122b1d937fd2648a1`.
+Frozen authority = `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase6-161ir30z/snapshot`; all 140 supplied file hashes match.
+Manifest = `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase6/final-freeze6/source-manifest.json`; SHA256 `81d66d59f0ca336761f28629850f9daf7a955670e7c17725cde40b88a1ba21e7`.
+Private evidence directory `E` = `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c331-main5fc-inventory-1c6ba2f3-t3tubl5j`.
+[Exact path/blob inventory, groups, additions and Main-only paths](</var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c331-main5fc-inventory-1c6ba2f3-t3tubl5j/inventory.json>); raw outputs are `E/raw3way/<path>`; inputs `E/{base,main,c}/<path>`; C deltas `E/c-deltas/<path>`.
+
+| Group | Exact result relative to C base |
+|---|---|
+| Cchangesonly | 132 paths: 118 crates, 12 apps, Cargo.lock, scripts/merge-npack-skills.py. |
+| Mainchangesonly | 0 inside frozen140; 1,822 outside: 54 non-doc paths and 1,768 docs/evidence paths, all listed in JSON. Outside frozen, C is defined as immutable base. |
+| bothidentical | 0 changed paths. |
+| nonoverlapclean3way | 7 paths below; exit 0, no conflict markers. Text compatibility only. |
+| conflict | 1 path below; merge-file exit 1, one conflict block. |
+
+All 140 frozen paths actually differ from immutable base: 121 modifications + 19 additions; no existing C path missing from Main.
+All 19 additions are absent from both base and Main; no add/add collisions. Main has no deleted paths, hence no deletion/rename-away collision; exact-blob rename candidates = 0. Similarity renames were not inferred.
+
+| Overlap path (`E/raw3way/` prefix) | Result / review focus |
+|---|---|
+| apps/desktop-client/src/native_envelope.rs | Clean; retain Main source validation/forwarding alongside C Skill labels and OrderTriggers mapping. |
+| apps/game-server/src/native_view.rs | Clean; retain `source_skill` in full Own pattern and public ChoiceRequest constructor; add C Skill label/OrderTriggers mapping. |
+| apps/game-server/src/native_ws_e2e.rs | Clean; retain Main `mod source_skill` and add C `mod c331`; root test entry affects both suites. |
+| apps/game-server/src/native_ws_e2e/peer.rs | Clean; preserve Main helper evolution and C evidence dump helpers; inspect sibling-module callers. |
+| apps/web-client/src/engine/observerMetadata.ts | CONFLICT, line 23: Main returns source_skill metadata; C changes pick_tag + exact trigger_order into OrderTriggers. Preserve both concerns in a later reviewed edit. |
+| apps/web-client/src/worker/nativeBackend.ts | Clean; Main source handling remains, C adds skill option decoding/labels. |
+| crates/engine-native-kernel/src/snap/asks.rs | Clean; retain Main OptionalGate/direct-inner metadata derivation plus C TriggerOrder ask. |
+| crates/engine-native-wasm/src/session.rs | Clean; retain Main full Own pattern/source output, add C Skill JSON and OrderTriggers mapping. |
+
+Critical semantic conflict despite textual cleanliness: Main `engine/choice_source.rs:9–12` chooses the first same-depth park; C `resolution.rs:433–445` prefers a non-TriggerOrder park, falling back to first same-depth.
+C also reinserts a yielding order machine at index 0 (`resolution.rs:461–465`) after starting its child. Thus first-depth order park and actual OptionalGate consumer can differ; unchanged Main source derivation can suppress otherwise valid source metadata. Static trace only, not an executed failure.
+Recommendation: require explicit review of the exact producer/consumer predicate against C6 dispatch; do not loosen uniqueness, ownership, all choice-shape equality, direct-inner provenance, or native OptionalGate restriction. No scheduler/gate/source-authority edits made or behavior resolution proposed here.
+Main source field remains metadata under Source27/Source33 qualifications, never a certificate or execution/answer authority; preserve unknown/VM/Other/ambiguous generic output and existing Root/Confirm/Cancel/VM/fuel boundaries.
+
+[Static consumer inventory](</var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c331-main5fc-inventory-1c6ba2f3-t3tubl5j/consumer-hits.json>) records file/line/body matches from 3,119 Main source files (34,098,516 bytes) plus C-new source; no archived 3.1GB/body scan.
+Public ABI reaches: ChoiceOption::Skill, MachineSnapshot::TriggerOrder, TriggerMeta.order_selectable, PackageTriggerEntry ordering fields, VmHandlerSet.active Option, behavior window methods, hashing/restore/codec consumers. C updates are indexed; regex inspection is not a compile proof.
+Old C whole-file copies of native_view/session omit Main source fields in full Own patterns; native_view's public ChoiceRequest constructor also needs the new field. Clean raw merges retain it. This is the new API's same type name, not the legacy thirteen-field DTO.
+No separate C-new ChoiceRequest literal was found; any newly introduced public literal needs `source_skill: None` absent qualified provenance. Whole-choice comparisons must retain source semantics; both C and Main tests are consumer reaches, not permission to drop fields.
+Retain Main `engine-api/src/choice.rs`, native `view.rs`, `engine/views.rs`, `engine/choice_source.rs`, and Main's nc10 source tests. Preserve legacy DTOs in `engine-core/src/engine/source_tests/choice_request_4dd.rs`, `snapshot/legacy_choice.rs`, and WS6 `tests/support/ws6_choice_before_source.rs` with their old fields, positional decoding, diagnostics and ownership.
+Root/module/register reaches: content-schema package→trigger_order; content-native-loader lib→vm_generals/vm_active; kernel resolution→trigger_order, rvm_bridge/rvm_named→identity; host metadata→source_order/wudian; native groups misc/nc08 and WS root→new C modules. Keep Main groups/nc_rounds source registration.
+Loader root callers `apps/game-server/src/native.rs` and `engine-native-wasm/src/installed_packs.rs` switch to `bridge_generals_with_vm_package`; review logical skill identity, registration, package/default hashing and extension content-lock consumers together.
+Xuanying C6 repair is existing scope: shared `xuanying_target_spec` drives producer and host ask derivation (alive others, min=max=1, cancel=true); preserve exact owner/stage/options/prompt predicate and Main ExpectedAsk metadata helper/defaults. Parent grant excludes damage child; do not invent a grant contract.
+Prompt registry `kernel/archive/resolution.rs` adds exact `trigger_order` and `xuanying_target`; retain archive unknown-prompt rejection. UI checks and producer literals must remain aligned.
+
+Identity boundaries: accepted Main is rules330 / NGSA105 / ABI758 / WS6. Existing frozen C is rules331 / NGSA105 private (Decisions22/26); archive option tag6 and machine tag83, queue hash additions, TriggerOrder restore binding and content-lock changes need joint review.
+C schema host ceiling4 accepts explicit schema3/4; PackageManifest::new still defaults3 and default ordering fields skip serialization; `required_content_schema` selects3/4. No pending schema5/106/grant/damage-contract v1–v3 work is included or approved.
+Front/desktop/Worker/WS reaches are native envelope, observerMetadata, nativeBackend, BattleView→TriggerOrderChoice, session JSON, native_view, WS root/peer/c331; keep accepted front types, source tests, strict metadata validation, legacy WS decoder, desktop WASM transport default and ABI758/WS6 header expectations.
+Phase/window and transport boundaries require later targeted/full acceptance; clean hunks do not establish rule equivalence or cross-target trajectories. No new performance claim, approval of full C/body, or completion of remaining28.
+Recommendation: use accepted Main as destination authority, apply only reviewed C deltas with frozen bytes as C authority, retain the eight raw outputs for review, and resolve the UI hunk/predicate issue explicitly before any integration. Never whole-file-copy old C over Source33 Main.
+
+Commands: `GIT_OPTIONAL_LOCKS=0 git cat-file --batch`, immutable `git show`, and eight `git merge-file -p --diff3` invocations on owned private inputs; Python only derived inventories and checked hashes/index metadata. Builds/tests/network not run.
+[Read-only index audit](</var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c331-main5fc-inventory-1c6ba2f3-t3tubl5j/index-audit.json>): HEAD=Main5fc, 44,306 index entries, zero staged differences/unmerged stages; original manifests/frozen140 retained unchanged.
+Skipped: compilation, tests, similarity rename heuristics and original worktree content audit. Risk: textual clean merges still leave the demonstrated consumer mismatch and unexecuted API/fixture/transport regressions; independent acceptance review remains required.

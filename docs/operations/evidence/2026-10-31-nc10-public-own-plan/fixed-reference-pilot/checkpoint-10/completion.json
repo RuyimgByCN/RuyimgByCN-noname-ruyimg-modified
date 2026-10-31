@@ -1,0 +1,11 @@
+{
+  "games": 256,
+  "formal_submits": 84344,
+  "final_summary": "/tmp/nc10-fixed-reference-38de1942/evidence/summary.json",
+  "source_restored": true,
+  "command_exits": [
+    0,
+    0,
+    0
+  ]
+}

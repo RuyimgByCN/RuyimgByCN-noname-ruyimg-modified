@@ -1,0 +1,48 @@
+{
+  "name": "wasm-build",
+  "argv": [
+    "wasm-pack",
+    "build",
+    "crates/engine-native-wasm",
+    "--target",
+    "web",
+    "--dev",
+    "--mode",
+    "no-install",
+    "--no-opt",
+    "--out-dir",
+    "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+    "--",
+    "--offline"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "wasm-pack",
+    "build",
+    "crates/engine-native-wasm",
+    "--target",
+    "web",
+    "--dev",
+    "--mode",
+    "no-install",
+    "--no-opt",
+    "--out-dir",
+    "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+    "--",
+    "--offline"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 24.336066415999085,
+  "minimum_free_bytes": 38090002432,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "7cd039a2456372e8eb28cd30af5e8e2043d977913c7e75d07eed104b88aff661",
+  "stderr_sha256": "3c7d120ee33e4263c5c2a55db5b71ee9d6407d3facc1fdb3b0da9ebb6ebf29e9"
+}

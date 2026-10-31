@@ -1,0 +1,7 @@
+
+running 1 test
+test nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 152 filtered out; finished in 23.97s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc12_ai_strength_baseline_statistics", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 27.51845604099799, "disk_free_bytes": 32840929280}

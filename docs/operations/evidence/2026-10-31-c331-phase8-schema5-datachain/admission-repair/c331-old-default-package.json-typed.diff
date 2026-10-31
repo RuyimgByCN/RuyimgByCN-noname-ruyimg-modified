@@ -1,0 +1,11 @@
+--- before
++++ after
+@@ -562,7 +562,7 @@
+         },
+     },
+     last_dedup: 0,
+-    auth_generation: 0,
++    auth_generation: 1,
+     segment_open: false,
+     segment_checkpoint: None,
+     resolution: ResolutionSnapshot {

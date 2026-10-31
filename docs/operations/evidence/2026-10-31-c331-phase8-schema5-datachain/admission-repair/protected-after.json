@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-31T11:00:09.615745+00:00",
+  "Main_head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "main_protected_count": 31867,
+  "main_source_packages_assets_mismatches": [],
+  "generated18_mismatches": [],
+  "defaultdist_count": 37,
+  "original_c6_140_mismatches": [],
+  "hooks_mismatches": [],
+  "main_index_sha256": "95071120faf57e6be9ff569b61377841d7d2b221e66bc72d7aaf8e700d805ae5",
+  "main_staged_empty": true,
+  "private_staged_empty": true,
+  "Main_parent_docs_allowed": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-source-provenance/README.md",
+    "docs/operations/evidence/2026-10-31-pa09-product-pool/scope.json",
+    "docs/operations/evidence/2026-10-31-r05-runtime-contract/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "original_c8_130_artifacts_unchanged": true,
+  "original_c8_full166_manifest_unchanged": true,
+  "after_checkpoint_changes": [
+    "apps/web-client/scripts/c331-admission-repair-smoke.mjs"
+  ],
+  "all_production_code_equals_checkpoint_and_build_test_source": true,
+  "temporary_probe_removed": true
+}

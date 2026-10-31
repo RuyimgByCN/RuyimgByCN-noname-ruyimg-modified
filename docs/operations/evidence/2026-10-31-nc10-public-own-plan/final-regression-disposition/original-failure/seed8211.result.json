@@ -1,0 +1,44 @@
+{
+  "name": "seed8211",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "misc",
+    "policy_v2_drives_all_seats_without_answer_routing_panic",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "misc",
+    "policy_v2_drives_all_seats_without_answer_routing_panic",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 101,
+  "wall_seconds": 2.025423417042475,
+  "minimum_free_bytes": 39839956992,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "8567eef812fc58105fe20e30f9638da79cb17a72f139fffe54e5163b4e3d6abe",
+  "stderr_sha256": "1cdfc6d259fd78ff5928dab40822c9cbacc0a4641c011e7b3c0c4a229cfd8900"
+}

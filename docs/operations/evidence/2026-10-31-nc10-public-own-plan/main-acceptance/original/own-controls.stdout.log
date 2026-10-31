@@ -1,0 +1,10 @@
+
+running 4 tests
+test nc10_public_own_plan::changed_public_options_are_rejected_without_a_hidden_fallback ... ok
+test nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park ... ok
+test nc10_public_own_plan::own_advice_cancelled_before_apply_does_not_submit ... ok
+test nc10_public_own_plan::shared_public_selector_obeys_order_card_preference_and_bounds ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 153 filtered out; finished in 0.04s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_public_own_plan", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 0.4045442080241628, "disk_free_bytes": 37511925760}

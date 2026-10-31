@@ -1,0 +1,125 @@
+diff --git a/apps/web-client/scripts/presentation-metadata.test.mjs b/apps/web-client/scripts/presentation-metadata.test.mjs
+--- a/apps/web-client/scripts/presentation-metadata.test.mjs
++++ b/apps/web-client/scripts/presentation-metadata.test.mjs
+@@ -119,3 +119,48 @@
+   const old=console.error;console.error=()=>{};t.after(()=>{console.error=old;});
+   f.client.handleMessage(JSON.stringify(message));assert.equal(rejected,0);assert.equal(f.client.pending.size,1);assert.equal(f.client.revision,1);
+ });
++
++test("network sequential malformed outcomes retain at most eight original intents and replay no fresh keys", async t => {
++  const f=network(t);f.client.playerId=1;f.client.connectionId=4;
++  const sent=[];f.client.send=message=>sent.push(message);
++  for(let i=0;i<8;i++) {
++    const promise=f.client.endPhase();const request=sent.at(-1);
++    const rejected=assert.rejects(promise,/结果未确认/);
++    f.client.handleMessage(outcome(null,request.payload.idempotency_key));await rejected;
++  }
++  const pending=[...f.client.pending];const storage=[...f.storage];const idem=f.client.idemSeq;const seq=f.client.connSeq;
++  const ninth=f.client.endPhase();const rejected=assert.rejects(ninth,/not submitted|未提交/);
++  if (sent.length>8) { // Bound the old broken implementation's otherwise unresolved promise for red evidence.
++    const request=sent.at(-1);f.client.handleMessage(outcome(null,request.payload.idempotency_key));
++  }
++  await rejected;
++  assert.deepEqual([...f.client.pending],pending);assert.deepEqual([...f.storage],storage);
++  assert.equal(f.client.idemSeq,idem);assert.equal(f.client.connSeq,seq);assert.equal(sent.length,8);
++  const keys=pending.map(([key])=>key);f.client.replayPending();
++  assert.equal(f.client.pending.size,8);assert.deepEqual(sent.slice(8).map(m=>m.payload.idempotency_key),keys);
++  assert.ok(sent.slice(8).every(m=>m.payload.replay));assert.equal(f.client.idemSeq,idem);
++  f.client.dispose();assert.equal(f.client.pending.size,0);
++});
++
++test("network full retained map cannot admit a missing persisted recovery entry", t => {
++  const f=network(t);f.client.playerId=1;const sent=[];f.client.send=message=>sent.push(message);
++  for(let i=1;i<=8;i++) f.client.pending.set(i,{key:i,kind:"EndPhase",resolve(){},reject(){}});
++  const persisted={roomId:7,key:99,kind:"EndPhase",createdAt:1};f.client.persistedPending=persisted;
++  f.storage.set("noname-next.pending-command",JSON.stringify(persisted));const storage=[...f.storage];
++  f.client.replayPending();assert.equal(f.client.pending.size,8);
++  assert.deepEqual(sent.map(m=>m.payload.idempotency_key),[1,2,3,4,5,6,7,8]);
++  assert.deepEqual([...f.storage],storage);assert.equal(f.client.persistedPending,persisted);
++});
++
++test("network legacy successful absence releases capacity and creation does not allocate an intent", async t => {
++  const f=network(t);f.client.playerId=1;f.client.connectionId=5;const sent=[];f.client.send=m=>sent.push(m);
++  const calls=Array.from({length:8},()=>f.client.endPhase());
++  calls.forEach(p=>p.catch(()=>{})); // Observe earlier calls even if the capacity assertion fails.
++  const rejected=assert.rejects(f.client.endPhase(),/未提交/);
++  if(sent.length>8) {const m=sent.at(-1);f.client.handleMessage(outcome(null,m.payload.idempotency_key));}
++  await rejected;
++  for(const request of sent.slice(0,8)) {const message=JSON.parse(outcome(undefined,request.payload.idempotency_key));delete message.payload.presentation;f.client.handleMessage(JSON.stringify(message));}
++  await Promise.all(calls);assert.equal(f.client.pending.size,0);
++  const idem=f.client.idemSeq;const joined=f.client.createRoom(2,1);assert.equal(f.client.pending.size,0);assert.equal(f.client.idemSeq,idem);
++  assert.equal(sent.at(-1).type,"CreateRoom");f.client.joinWaiter.resolve({roomId:7});f.client.joinWaiter=null;await joined;
++});
+diff --git a/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json b/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json
+--- a/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json
++++ b/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json
+@@ -465,5 +465,14 @@
+         "remove": true
+       }
+     ]
++  },
++  {
++    "name": "repository_bom",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/owner/repository",
++        "value": "repo﻿"
++      }
++    ]
+   }
+ ]
+diff --git a/crates/engine-protocol/tests/presentation_main5fc_reader.rs b/crates/engine-protocol/tests/presentation_main5fc_reader.rs
+--- a/crates/engine-protocol/tests/presentation_main5fc_reader.rs
++++ b/crates/engine-protocol/tests/presentation_main5fc_reader.rs
+@@ -23,7 +23,11 @@
+ 
+ #[test]
+ fn old_and_new_client_request_contract_remains_strict_and_unchanged() {
+-    let input = serde_json::json!({"type":"SnapshotRequest","payload":{"header":{"protocol_version":6,"room_id":1,"conn_seq":2,"revision":2},"last_revision":2,"presentation":{}}});
+-    assert!(wire::decode_c2s(&input.to_string()).is_err());
+-    assert!(engine_protocol::decode_c2s(&input.to_string()).is_err());
++    let input = serde_json::json!({"type":"SnapshotRequest","payload":{"header":{"protocol_version":6,"room_id":1,"conn_seq":2,"revision":2},"last_revision":2}});
++    assert!(wire::decode_c2s(&input.to_string()).is_ok());
++    assert!(engine_protocol::decode_c2s(&input.to_string()).is_ok());
++    let mut with_presentation=input.clone();
++    with_presentation["payload"]["presentation"]=serde_json::json!({});
++    assert!(wire::decode_c2s(&with_presentation.to_string()).is_err());
++    assert!(engine_protocol::decode_c2s(&with_presentation.to_string()).is_err());
+ }
+diff --git a/apps/web-client/scripts/nc04-worker-failure.test.mjs b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+--- a/apps/web-client/scripts/nc04-worker-failure.test.mjs
++++ b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+@@ -352,3 +352,33 @@
+     f.client.dispose();assert.equal(f.client.pending.size,0);
+   }
+ });
++
++// Independent review repro: Source27 must not convert compound-invalid success into ordinary cleanup.
++for (const nested of [false, true]) {
++  test(`compound-invalid IPC ${nested ? "chooseGeneral" : "autoStep"} preserves uncertain pending before observer normalization`, async () => {
++    const envelope=presentationEnvelope(null);envelope.view.seats[0].generals=[];
++    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
++    const f=fixture({desktopNative:true,invoke:async (command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
++    await f.client.connect();const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
++    const pending=[...f.client.pending];const received=f.received.length;
++    await assert.rejects(promise,/协议错误，操作结果未确认/);
++    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  });
++}
++
++test("compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup", async () => {
++  for(const presentation of ["absent","valid"]) for(const nested of [false,true]) {
++    const envelope=presentationEnvelope();if(presentation==="absent") delete envelope.presentation;
++    envelope.view.seats[0].generals=[];
++    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
++    const f=fixture({desktopNative:true,invoke:async(command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
++    await f.client.connect();const received=f.received.length;
++    const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
++    await assert.rejects(promise,/generals metadata invalid/);
++    assert.equal(f.client.pending.size,0);assert.equal(f.received.length,received+1);
++    f.client.dispose();
++  }
++});

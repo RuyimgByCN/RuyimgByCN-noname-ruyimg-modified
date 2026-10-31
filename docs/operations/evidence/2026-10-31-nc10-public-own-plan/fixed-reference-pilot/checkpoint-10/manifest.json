@@ -1,0 +1,124 @@
+{
+  "created_utc": "2026-10-31T10:37:55.559239+00:00",
+  "completed_games": 202,
+  "formal_counts": {
+    "Accepted": 53887,
+    "Pending": 11063
+  },
+  "STOP": false,
+  "command_results": {
+    "calibration": {
+      "name": "calibration",
+      "exit": 0,
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_fixed_reference_calibration",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_fixed_reference_calibration",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "source": {
+        "crates/engine-native/src/ai.rs": "39649adbefee68b9352d84155cf089dee4ea1fd97e3a4ff2856589149a24adce",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "89b04f7cf6d937e41b768caa37d1e91bde4a00ed2b810a08663f9f82e90fbdad",
+        "reference_binding": "8910346b3be7851bf49c7b84c13f2dd439451ec84484179bce85214c71efc56e",
+        "swd_cards": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+      },
+      "source_after": {
+        "crates/engine-native/src/ai.rs": "39649adbefee68b9352d84155cf089dee4ea1fd97e3a4ff2856589149a24adce",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "89b04f7cf6d937e41b768caa37d1e91bde4a00ed2b810a08663f9f82e90fbdad"
+      },
+      "binary_sha256": "7dfb575584c4df844922837976d074be34881add2cb22ec55e3bac9856e42071",
+      "wall_seconds": 4.566195874998812,
+      "minimum_free_bytes": 73724321792,
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "stdout_sha256": "8898e9f00788e5061372cd8ba3f870e02a9ea3f536cc21aa9d86cef5b81f69e3",
+      "stderr_sha256": "7aad7ee80de1ef1ca8e7c7c440c039320712282d4ab6225db37c93355b71ec2c"
+    },
+    "candidate-own-control": {
+      "name": "candidate-own-control",
+      "exit": 0,
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_public_own_plan",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_public_own_plan",
+        "--",
+        "--nocapture",
+        "--test-threads=1"
+      ],
+      "source": {
+        "crates/engine-native/src/ai.rs": "39649adbefee68b9352d84155cf089dee4ea1fd97e3a4ff2856589149a24adce",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "89b04f7cf6d937e41b768caa37d1e91bde4a00ed2b810a08663f9f82e90fbdad",
+        "reference_binding": "8910346b3be7851bf49c7b84c13f2dd439451ec84484179bce85214c71efc56e",
+        "swd_cards": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+      },
+      "source_after": {
+        "crates/engine-native/src/ai.rs": "39649adbefee68b9352d84155cf089dee4ea1fd97e3a4ff2856589149a24adce",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "89b04f7cf6d937e41b768caa37d1e91bde4a00ed2b810a08663f9f82e90fbdad"
+      },
+      "binary_sha256": "7dfb575584c4df844922837976d074be34881add2cb22ec55e3bac9856e42071",
+      "wall_seconds": 0.5291495000128634,
+      "minimum_free_bytes": 73702862848,
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "stdout_sha256": "dc07e16c70021f321ebdf2d5cb2d460920bc123676df46116efef75e674a1ce1",
+      "stderr_sha256": "479909190de6f819d7603f2047680e667591ed9988f76bd09d15e77601338f3f"
+    },
+    "pilot": "running/pending"
+  },
+  "measurement_patch": "/tmp/nc10-fixed-reference-38de1942/evidence/measurement-only.patch",
+  "measurement_patch_sha256": "e75b85687ca69b37c2691cfe5d830be01e709f275606792611a4a93f189e0b1e",
+  "reference_binding": "/tmp/nc10-fixed-reference-38de1942/evidence/reference-binding.json",
+  "source_restoration_pending": true
+}

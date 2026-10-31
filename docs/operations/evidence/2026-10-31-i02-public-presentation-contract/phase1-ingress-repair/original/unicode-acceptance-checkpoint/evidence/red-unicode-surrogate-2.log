@@ -1,0 +1,28 @@
+✖ raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass (1.940583ms)
+ℹ tests 1
+ℹ suites 0
+ℹ pass 0
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 333.679958
+
+✖ failing tests:
+
+test at apps/web-client/scripts/presentation-metadata.test.mjs:200:1
+✖ raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass (1.940583ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception: repository_lone_high
+      at TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/presentation-metadata.test.mjs:204:68)
+      at Test.runInAsyncScope (node:async_hooks:226:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /presentation metadata invalid/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "--test", "--test-name-pattern=raw escaped surrogate", "apps/web-client/scripts/presentation-metadata.test.mjs"], "exit": 1, "locked_seconds": 0.3750188749982044, "disk_free_bytes": 31102001152}

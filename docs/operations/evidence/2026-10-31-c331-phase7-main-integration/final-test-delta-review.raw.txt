@@ -1,0 +1,25 @@
+## Review
+
+No issues found.
+
+- **Correct — The final delta is limited to six test files.** I read the complete [incremental patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase7/checkpoint-to-final-v2/vs-checkpoint20.patch:1) and the changed sections in the frozen final source. The [independent audit](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase7-final-a15p3fz_/independent-results.json:1) confirms 148 source entries, exactly six changed test files, and **zero production changes** since the reviewed checkpoint. The checkpoint production verdict therefore remains applicable.
+
+- **Correct — Genuine105 fixtures now test the required format boundary.** The CardsGiven, VM-resume, archive-field, and Lianyaohu historical tests expect `UnsupportedFormatVersion(105)`. They read the original fixtures without rewriting headers or payloads. This matches Decision29’s strict rejection before historical payload parsing. Current CardsGiven behavior, field-hash distinctions, jar-order trajectories, and restore positives remain outside the changed assertions.
+
+- **Correct — Format106 wrong-rules rejection remains independently tested.** The unchanged [rules328 regression](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase7-final-a15p3fz_/snapshot/crates/engine-native/tests/adr0786_j2_active_bridge.rs:137) sets both snapshot rule fields to328, encodes with the current106 codec, decodes successfully, then requires `RuleVersionMismatch { snapshot: 328, catalog: 331 }`. The final raw log records it passing. Converting old105 tests to format rejection therefore does not remove the separate rules gate check.
+
+- **Correct — The NC09 update preserves its negative proof.** In [machine ownership coverage](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase7-final-a15p3fz_/snapshot/crates/engine-native/tests/nc09_machine_ownership.rs:500), only the newly encoded header assertion changes from105 to106. Unknown prompts still require `prompt_unknown`; subsequent byte-restored choice-shape mutations still require rejection. The silent-first-handler test changes only an unused import.
+
+- **Correct — Source qualification and restore restrictions are not relaxed.** Their production code and checkpoint regressions are unchanged. Final logs retain passing checks for unowned/wrong-shape/multiple asks, genuine optional VM restore with source `None`, and the P/Q example showing that initial source metadata does not certify the next pending prompt. No positive source proof was replaced by unconditional acceptance.
+
+- **Correct — Final results bind to final source.** I read the [audit parser](/tmp/noname-parent-c331-phase7-final-audit.py:1): it verifies final tar contents, all148 source hashes, equality with `pre-full4`, and96 retained evidence hashes. It independently counts **17 raw summaries totaling1761 passed /0 failed /75 ignored** from `full-native5.log`. Manifest SHA is `0d7a18e9…716544cd`; source tar SHA is `d227cfd4…09b0ec3`.
+
+- **Correct — Verification history remains explicit.** `full-native4` was the first full green; the independent strict check then exposed an unused import, which was removed before `full-native5`. The retained strict rerun reports exit0 for `cargo check --offline -p engine-native --all-targets` with `RUSTFLAGS=-Dwarnings`. Earlier failures remain preserved. Targeted and earlier full counts are not added to the final1761 total; C6 golden expectations are unchanged.
+
+- **Correct — Protection claims remain bounded.** The retained protection record reports no differences for Main’s31867 protected files, original C140, hooks, generated18, or index. The parent audit verifies that record and its evidence binding; it expressly does not claim a new31867-file rescan. The1896-byte genuine105 fixture remains identified by SHA `3e07feb6…4b607c8`, with original NGSA-reader positive `Ok(330)`—not a WAL-reader result.
+
+- **Fixed:** None by this reviewer; review-only.
+
+- **Merge verdict: OK with notes** for the sealed **private phase7 foundation and final test delta**. This does not authorize Main integration or accept whole C331. Source coverage remains **262/290,+0**; remaining28, schema5, provider/grant/lifetime, Damage/window work, Xuanying lossEnd/use, and all37 obligations remain pending. NGSA106 remains an unpublished intermediate layout.
+
+Skipped new executions, builds, tests, network actions, Main writes, and re-auditing unchanged production source. Existing330 generated imports and host checks provide no new C331 WASM/GUI/IPC/WS/WAL or platform qualification.

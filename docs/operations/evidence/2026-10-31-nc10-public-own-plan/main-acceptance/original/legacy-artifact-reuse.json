@@ -1,0 +1,17 @@
+{
+  "legacyGenerated12Unchanged": true,
+  "legacyWasmSha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+  "legacySourceDirectoriesBound": [
+    "crates/engine-core/",
+    "crates/engine-wasm/",
+    "crates/rule-api/",
+    "crates/rule-vm/",
+    "crates/engine-api/",
+    "content/",
+    "packages/"
+  ],
+  "unchangedTrackedInputsCount": 19114,
+  "currentLegacyNativeHashEvidence": "legacy-crosshash.result.json + cross-target-current-values.json",
+  "currentLegacy19GoldenEvidence": "conformance.result.json + conformance.stdout.log",
+  "qualification": "Existing Main originalrelease legacy artifacts reused; all legacy/code/content/package inputs unchanged through current NC10 native-only integration. Native WASM was freshly rebuilt by original Main build script; no legacy rebuild or golden rewrite."
+}

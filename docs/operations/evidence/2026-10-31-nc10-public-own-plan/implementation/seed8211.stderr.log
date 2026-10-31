@@ -1,0 +1,10 @@
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.82s
+     Running tests/groups/misc.rs (/tmp/nc10-own-36992565/target/debug/deps/misc-6bce960f507446bf)
+
+thread 'ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic' (17630522) panicked at crates/engine-native/tests/groups/../ai_planner.rs:454:5:
+assertion `left == right` failed: 步数冻结（策略变更须同步证据）
+  left: 119
+ right: 484
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `-p engine-native --test misc`

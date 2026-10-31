@@ -1,0 +1,29 @@
+{
+  "created_unix": 1793437917.957869,
+  "binaries": [
+    {
+      "variant": "candidate",
+      "original_path": "/tmp/pa09-candidate-f82ecf3c/target/release/deps/desktop_client-c125369028041ad8",
+      "retained_path": "/tmp/pa09-target-retirement-cdb76be8/retained-binaries/candidate-desktop_client-c125369028041ad8",
+      "sha256": "de03f09a3303980c112af8f58d0016e5a607a1e15ef2127c5128ed0cb21f904b",
+      "bytes": 5537088,
+      "original_mode": "0o755",
+      "retained_mode": "0o755",
+      "original_mtime_ns": 1793432537309782094,
+      "retained_mtime_ns": 1793432537309782094,
+      "qualification": "Original measurement metadata/logs keep their original build paths. This manifest records byte-identical relocation before retiring the owned build directory; no benchmark rerun, upload or installation."
+    },
+    {
+      "variant": "serial",
+      "original_path": "/tmp/pa09-candidate-f82ecf3c/baseline-target/release/deps/desktop_client-c125369028041ad8",
+      "retained_path": "/tmp/pa09-target-retirement-cdb76be8/retained-binaries/serial-desktop_client-c125369028041ad8",
+      "sha256": "4955e512af14093285a6756bed8b268ef9738ca38cbb4726040872e35d51f36e",
+      "bytes": 5457760,
+      "original_mode": "0o755",
+      "retained_mode": "0o755",
+      "original_mtime_ns": 1793432660197678453,
+      "retained_mtime_ns": 1793432660197678453,
+      "qualification": "Original measurement metadata/logs keep their original build paths. This manifest records byte-identical relocation before retiring the owned build directory; no benchmark rerun, upload or installation."
+    }
+  ]
+}

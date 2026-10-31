@@ -1,0 +1,20 @@
+{
+  "final_rust": "final-api-protocol.log (11 passing tests)",
+  "affected_callers": "callers-check.log (exit0)",
+  "full_frontend_before_final_header_guard": "frontend-guard-fixed.log (330/330)",
+  "final_header_guard_affected_frontend": "frontend-final-ingress.log (190/190)",
+  "final_typecheck": "typecheck-sealed.log (exit0)",
+  "line_gate": "line-gate-seal.log",
+  "line_selftest": "line-selftest-seal.log",
+  "failures_retained": [
+    "cargo-api-protocol.log",
+    "cargo-api-protocol-2.log",
+    "frontend-full.log",
+    "frontend-full-2.log",
+    "frontend-presentation.log",
+    "frontend-bounded-final.log",
+    "typecheck.log",
+    "full-patch-reverse-check.json"
+  ],
+  "final_header_guard_note": "Bad conn_seq0 broadcast with matching key must not reject a call; final targeted suites cover change; full330 predates only this localized guard/test."
+}

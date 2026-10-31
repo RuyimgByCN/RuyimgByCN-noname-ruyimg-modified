@@ -1,0 +1,10 @@
+{
+  "reason": "Automatic Rust analyzer workspace check used non-controlled target/jobs/incremental; stopped only analyzer/check for our new worktree",
+  "stopped_analyzer": [
+    53579
+  ],
+  "terminated": [],
+  "processes": [],
+  "note": "First auto-check already completed before termination attempt; analyzer suspended to prevent further uncontrolled checks. Its local worktree target is not used by controlled tests.",
+  "cleanup": "Terminated only this session analyzer53579 after controlled verification; no resumed auto-check."
+}

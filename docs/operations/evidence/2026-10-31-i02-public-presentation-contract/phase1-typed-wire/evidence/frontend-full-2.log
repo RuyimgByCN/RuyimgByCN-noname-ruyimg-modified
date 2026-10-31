@@ -1,0 +1,426 @@
+npm notice run noname-next-web-client@0.1.0 test
+npm notice run node --import ./scripts/ts-register.mjs --test
+✔ two slots preserve def zero and defaults accept old payloads (0.894541ms)
+✔ canonical kinds and prompts reach real envelope conversion (0.517166ms)
+✔ metadata wrong types refuse explicitly at local JSON boundary (0.329875ms)
+✔ old functional TypeScript reader ignores extra metadata (4.655917ms)
+✔ production prompt literals and extension keys have readable presentation without internal keys (51.400375ms)
+✔ desktop builds both WASM engines before the frontend, forcing native web output (58.860625ms)
+✔ Windows desktop runs pnpm.cmd through a shell (49.881542ms)
+✔ a failed native build prevents publishing a frontend with a stale native package (42.206708ms)
+✔ native build creates a missing package from source with portable PATH and argument boundaries (68.167625ms)
+✔ native build failure preserves the previous usable package and clears temporary output (53.444125ms)
+✔ native Node smoke target remains available without shell interpolation (49.059916ms)
+✔ legacy build prepends rustup PATH even when the cargo executable has a Windows suffix (49.051542ms)
+✔ MSI keeps the Chinese product name with the matching WiX locale (0.6195ms)
+✔ Linux separates the package id from the Chinese window and launcher names (1.068125ms)
+✔ Tauri hooks resolve the actual sibling web client from the desktop crate (0.182875ms)
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (10.785583ms)
+✔ 目录项与包元数据不一致会被判失败 (5.069375ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (1.688625ms)
+✔ 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入） (0.9885ms)
+✔ 空候选是显式空状态，不是错误也不是静默白屏 (0.076666ms)
+✔ 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集 (0.439083ms)
+✔ 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示） (0.071042ms)
+✔ 重新加载中保留旧候选但清掉旧错误 (0.062833ms)
+✔ 座位投影：只取目标座位，提取原生技能名与 id (0.157875ms)
+✔ 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清） (0.089708ms)
+✔ 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能 (0.194291ms)
+✔ 选将失败：显示错误、不应用刷新信封、不留下成功态 (0.161542ms)
+✔ 失败后重试成功：清除错误并进入成功态 (0.153333ms)
+✔ 返回与请求不一致（错座位）不得显示成功 (0.106209ms)
+✔ 畸形返回（缺刷新信封）不得显示成功 (0.078375ms)
+✔ 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误 (0.089584ms)
+✔ 空候选名在发起请求前就被拒绝 (0.052791ms)
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.488584ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.179583ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.132583ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.322458ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (0.511625ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.193917ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.227ms)
+✔ 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择 (1.495666ms)
+✔ identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null (0.132834ms)
+✔ 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位 (0.202958ms)
+✔ visible general definition reaches the existing seat view (0.0735ms)
+✔ 候选解析：内核形态通过，逐项结构化且不改写字段 (0.846834ms)
+✔ 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集 (0.3915ms)
+✔ 选将返回解析：与请求不一致即报错（错座位/错名字不算成功） (0.232333ms)
+✔ 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级 (0.303833ms)
+✔ 选将失败：原始错误文本保留，且不改缓存（状态未变） (0.44875ms)
+✔ 选将成功：技能集可见变化，且 revision 不变时缓存必须失效 (0.253541ms)
+✔ 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面） (0.141292ms)
+✔ 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将 (0.075792ms)
+✖ 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验 (0.352167ms)
+✖ 真实 WASM：装配不改 revision，状态变化只体现在 state_hash (0.117667ms)
+✖ 真实 WASM：未知武将与越界座位显式报错，且不改状态 (0.072583ms)
+✖ 真实 WASM：选将后权威候选重查（缓存不再命中） (0.068417ms)
+✔ 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接 (1.1835ms)
+✔ 无合成：内核不给 EndPhase/应答候选就不出现 (0.323166ms)
+✔ 查询按 (handle, revision) 记忆化 (0.15675ms)
+✔ 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接 (0.3155ms)
+✔ 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见 (0.504125ms)
+✔ all discoverable packages install actual versioned data; active set reaches the match (52.896292ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (1.138292ms)
+✔ all lifecycle content mutations are blocked during a match (0.265709ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.926833ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.3125ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.20825ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.177ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (2.375583ms)
+✔ old standard saves without packages remain compatible (0.12475ms)
+✔ same-version logic fingerprint conflict rejects installation atomically (3.318083ms)
+✔ same-version logic fingerprint conflict rejects upgrade atomically (1.012291ms)
+✔ same-version asset content conflict rejects installation atomically (0.56275ms)
+✔ same-version asset content conflict rejects upgrade atomically (0.260125ms)
+✔ same-version copies tolerate JSON formatting and object key order (0.454833ms)
+✔ unsafe identity fields cannot enter the browser content lock (0.492833ms)
+✔ package dependencies are checked for match start and frozen save restore (2.651125ms)
+✔ fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint (1.052792ms)
+✔ formal import installs a VM package with its modules and reaches the match (1.64775ms)
+✔ import rejects malformed packages without touching installed content (2.443083ms)
+✔ import upgrades to a new version, keeps the old copy, and rolls back (0.821458ms)
+✔ disable, uninstall and revoke affect new matches and saved matches as the contract requires (0.590625ms)
+✔ import is blocked while a match is frozen (0.159584ms)
+✔ catalog packages without VM modules keep their manifest+asset payload (6.910666ms)
+✔ validated import commits only after the deep validator passes and marks the copy unsigned (0.363625ms)
+✔ validated import aborts without touching the store when the deep validator rejects (0.267333ms)
+✔ validated import never calls the deep validator when the structural layer or preconditions reject (0.985708ms)
+✔ validated import re-checks preconditions at commit time (store may change during async validation) (0.346ms)
+✔ complete VM-only package survives match preparation and frozen save restoration (3.797833ms)
+✔ VM payload must have an array of modules and does not excuse malformed assets (0.431875ms)
+✔ 座位和人数在进入 WASM 及选将前拒绝整数截断 (0.88775ms)
+✔ 牌和技能 ID 在进入 WASM 前拒绝整数截断 (0.129833ms)
+✔ native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data (0.895375ms)
+✔ native other outcome shapes and unknown detail pass through unchanged (0.124291ms)
+✔ actual BattleView computed and banner recognize a rebel observer's win and loss (3.337167ms)
+✔ identity victory follows each observer's own role, including loyalists losing to rebels (0.3085ms)
+✔ SingleWin zero and normalized last seat render a banner with the matching observer result (0.925125ms)
+✔ group, unknown, unmodeled, draw, abort and hidden identity render neutral banners (0.919292ms)
+✔ view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation (0.542ms)
+✔ MatchEnded timeline uses shared outcome wording (0.866042ms)
+✔ 原生零号座位的回合与结束阶段可见 (69.09225ms)
+✔ 非零座位与准备阶段保持可见 (16.024833ms)
+✔ 旧线无当前玩家的零哨兵仍使用事件回退或不显示 (10.487542ms)
+(node:57787) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (105.484959ms)
+✔ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (49.98275ms)
+✔ 其他请求在途时发送失败不提前结束 SAB 唤醒 (11.348375ms)
+✔ 性能探针丢弃未发送请求，保留成功请求 (1.362125ms)
+node:fs:697
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+    at Object.openSync (node:fs:697:18)
+    at readFileSync (node:fs:543:35)
+    at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-restore-atomicity.test.mjs:7:30
+    at ModuleJob.run (node:internal/modules/esm/module_job:447:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-restore-atomicity.test.mjs (486.753625ms)
+node:fs:697
+  return binding.open(
+                 ^
+
+Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+    at Object.openSync (node:fs:697:18)
+    at readFileSync (node:fs:543:35)
+    at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-start-atomicity.test.mjs:6:30
+    at ModuleJob.run (node:internal/modules/esm/module_job:447:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-start-atomicity.test.mjs (192.910167ms)
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (25.452083ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (21.891583ms)
+✔ 初始化错误有结果，后续可创建新 Worker (17.762583ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (23.646875ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (11.252167ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (10.52375ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (17.355625ms)
+✔ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (15.508917ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (10.018833ms)
+✔ Worker bad present batch_unknown preserves pending until dispose (9.563459ms)
+✔ Worker bad present null_revision preserves pending until dispose (11.290875ms)
+✔ Worker bad present unsafe_revision preserves pending until dispose (8.476ms)
+✔ Worker bad present mixed_revision preserves pending until dispose (8.400833ms)
+✔ Worker bad present string_revision preserves pending until dispose (8.759084ms)
+✔ Worker bad present bad_status preserves pending until dispose (9.765167ms)
+✔ Worker bad present overflow_nonempty preserves pending until dispose (10.0885ms)
+✔ Worker bad present invalid_domain preserves pending until dispose (7.481334ms)
+✔ Worker bad present invalid_reason preserves pending until dispose (8.558458ms)
+✔ Worker bad present scope_unknown preserves pending until dispose (8.324083ms)
+✔ Worker bad present duplicate_scope preserves pending until dispose (7.769333ms)
+✔ Worker bad present duplicate_ordinal preserves pending until dispose (9.875584ms)
+✔ Worker bad present unknown_event preserves pending until dispose (6.804041ms)
+✔ Worker bad present event_unknown preserves pending until dispose (6.822042ms)
+✔ Worker bad present actor_zero preserves pending until dispose (6.5945ms)
+✔ Worker bad present actor_negative preserves pending until dispose (6.513583ms)
+✔ Worker bad present actor_fraction preserves pending until dispose (9.045833ms)
+✔ Worker bad present actor_string preserves pending until dispose (6.842375ms)
+✔ Worker bad present actor_out_of_view preserves pending until dispose (7.08475ms)
+✔ Worker bad present actor_u32_over preserves pending until dispose (6.898ms)
+✔ Worker bad present actor_null preserves pending until dispose (6.499125ms)
+✔ Worker bad present duplicate_target preserves pending until dispose (7.949792ms)
+✔ Worker bad present missing_nullable_voice preserves pending until dispose (6.911417ms)
+✔ Worker bad present amount_zero preserves pending until dispose (6.405417ms)
+✔ Worker bad present bad_nature preserves pending until dispose (7.5985ms)
+✔ Worker bad present bad_effective_kind preserves pending until dispose (7.048375ms)
+✔ Worker bad present token_traversal preserves pending until dispose (8.656542ms)
+✔ Worker bad present token_controls preserves pending until dispose (10.877542ms)
+✔ Worker bad present role_local_id_wrong preserves pending until dispose (8.3605ms)
+✔ Worker bad present role_kind_wrong preserves pending until dispose (7.723208ms)
+✔ Worker bad present owner_unknown preserves pending until dispose (7.06675ms)
+✔ Worker bad present digest_upper preserves pending until dispose (7.988708ms)
+✔ Worker bad present digest_algorithm preserves pending until dispose (7.717042ms)
+✔ Worker bad present size_zero preserves pending until dispose (8.650084ms)
+✔ Worker bad present source_kind preserves pending until dispose (7.102375ms)
+✔ Worker bad present reference_private preserves pending until dispose (6.90625ms)
+✔ Worker bad present path_escape preserves pending until dispose (6.936375ms)
+✔ Worker bad present invalid_category preserves pending until dispose (7.569208ms)
+✔ Worker bad present empty_assets preserves pending until dispose (8.817917ms)
+✔ Worker bad present form_token preserves pending until dispose (6.946542ms)
+✔ actual IPC to EngineClient bad present batch_unknown preserves pending (7.163209ms)
+✔ actual IPC to EngineClient bad present null_revision preserves pending (6.765208ms)
+✔ actual IPC to EngineClient bad present unsafe_revision preserves pending (6.438375ms)
+✔ actual IPC to EngineClient bad present mixed_revision preserves pending (8.457583ms)
+✔ actual IPC to EngineClient bad present string_revision preserves pending (6.80025ms)
+✔ actual IPC to EngineClient bad present bad_status preserves pending (6.887958ms)
+✔ actual IPC to EngineClient bad present overflow_nonempty preserves pending (6.549041ms)
+✔ actual IPC to EngineClient bad present invalid_domain preserves pending (5.933917ms)
+✔ actual IPC to EngineClient bad present invalid_reason preserves pending (8.241791ms)
+✔ actual IPC to EngineClient bad present scope_unknown preserves pending (6.05925ms)
+✔ actual IPC to EngineClient bad present duplicate_scope preserves pending (6.537792ms)
+✔ actual IPC to EngineClient bad present duplicate_ordinal preserves pending (6.548666ms)
+✔ actual IPC to EngineClient bad present unknown_event preserves pending (6.094333ms)
+✔ actual IPC to EngineClient bad present event_unknown preserves pending (8.300375ms)
+✔ actual IPC to EngineClient bad present actor_zero preserves pending (6.126541ms)
+✔ actual IPC to EngineClient bad present actor_negative preserves pending (6.547ms)
+✔ actual IPC to EngineClient bad present actor_fraction preserves pending (6.051167ms)
+✔ actual IPC to EngineClient bad present actor_string preserves pending (6.809709ms)
+✔ actual IPC to EngineClient bad present actor_out_of_view preserves pending (8.004834ms)
+✔ actual IPC to EngineClient bad present actor_u32_over preserves pending (6.13175ms)
+✔ actual IPC to EngineClient bad present actor_null preserves pending (7.050041ms)
+✔ actual IPC to EngineClient bad present duplicate_target preserves pending (6.888208ms)
+✔ actual IPC to EngineClient bad present missing_nullable_voice preserves pending (6.311042ms)
+✔ actual IPC to EngineClient bad present amount_zero preserves pending (8.951125ms)
+✔ actual IPC to EngineClient bad present bad_nature preserves pending (6.728125ms)
+✔ actual IPC to EngineClient bad present bad_effective_kind preserves pending (6.708209ms)
+✔ actual IPC to EngineClient bad present token_traversal preserves pending (6.470334ms)
+✔ actual IPC to EngineClient bad present token_controls preserves pending (6.147416ms)
+✔ actual IPC to EngineClient bad present role_local_id_wrong preserves pending (8.35ms)
+✔ actual IPC to EngineClient bad present role_kind_wrong preserves pending (6.943041ms)
+✔ actual IPC to EngineClient bad present owner_unknown preserves pending (6.615584ms)
+✔ actual IPC to EngineClient bad present digest_upper preserves pending (6.716708ms)
+✔ actual IPC to EngineClient bad present digest_algorithm preserves pending (6.413416ms)
+✔ actual IPC to EngineClient bad present size_zero preserves pending (8.331833ms)
+✔ actual IPC to EngineClient bad present source_kind preserves pending (6.581833ms)
+✔ actual IPC to EngineClient bad present reference_private preserves pending (6.450083ms)
+✔ actual IPC to EngineClient bad present path_escape preserves pending (5.90875ms)
+✔ actual IPC to EngineClient bad present invalid_category preserves pending (6.063875ms)
+✔ actual IPC to EngineClient bad present empty_assets preserves pending (6.18325ms)
+✔ actual IPC to EngineClient bad present form_token preserves pending (8.466834ms)
+✔ actual SAB poll rejects malformed presentation before settling or deleting pending (6.464333ms)
+✔ actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation (12.602417ms)
+✔ source metadata is optional but strict when present (0.590709ms)
+✔ desktop normal and chooseGeneral envelopes preserve source and deadline (0.366041ms)
+✔ frozen WS6 TypeScript reader ignores source while current reader preserves it (18.514334ms)
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (12.970625ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (0.610375ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (2.523792ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.60175ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.397166ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.228542ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.085417ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (8.311541ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (5.310375ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.481458ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (1.027625ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.813916ms)
+✔ 取消待确认命令会清除刷新持久化 (0.280333ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.145375ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.554958ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (0.969708ms)
+✔ network SingleWin stays one-based with all authoritative projection fields unchanged (0.350334ms)
+✔ finished status shares the banner's view and MatchEnded fallback wording (4.968584ms)
+✔ B metadata is preserved on real network consumer messages and malformed metadata refuses join (0.33275ms)
+✔ WS6 rejects an old Welcome before creating rooms (0.145167ms)
+✔ WS6 room configuration and deadline reach the actual network consumer (0.180208ms)
+✔ server countdown ignores client wall clock skew 60000 and later jumps (4.156333ms)
+✔ server countdown ignores client wall clock skew -60000 and later jumps (2.777417ms)
+✔ clock calibration requires matching Pong, measures RTT, and resets across reconnect (7.293541ms)
+✔ source skill and deadline survive JoinOk, outcome and snapshot (0.385708ms)
+✔ UP37 available voices resolve from the existing manifest and actual catalog identities (109.740833ms)
+✔ resource URL rejects traversal, absolute paths, encoded separators and invalid segments (0.094333ms)
+✔ N01 declaration reference and Zhouyu declared variants resolve actual source voices (18.898958ms)
+✔ declared aliases isolate exact numeric skill IDs, validate backing bytes and reject duplicates (0.785375ms)
+✔ B current character isolates unrelated shared-skill actors and retains declared substitute forms (24.52925ms)
+✔ B real tempname chooses its declared voice and missing actor bindings never borrow the skill pool (27.248917ms)
+✔ cross-pack substitute declaration binds to its global exact character owner (10.394916ms)
+✔ compat backing uses category and source identity while preserving role isolation (0.270709ms)
+✔ checked-in compat reaches actual role aliases and preserves original raw audio count (11.527583ms)
+✔ 身份局胜负类型映射 (0.438791ms)
+✔ 单挑/势力与未建模形态 (0.081583ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.071083ms)
+✔ 原生命令的拒绝原因可显示，未知原因保留 (0.107458ms)
+✔ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.098708ms)
+✔ malformed and unmodeled outcome detail stays visible without inventing a winner (0.087541ms)
+✔ desktop IPC preserves request order, ids, errors and continues on the same engine (4.79425ms)
+✔ dispose suppresses late IPC replies and never submits queued operations (2.027292ms)
+✔ mismatched IPC response is an explicit unknown-result error, without retry (0.235625ms)
+✔ Wasm is the default and an explicit persistent/URL fallback remains available (0.258458ms)
+(node:57799) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dispose during resource allocation closes it once and submits no request (5.125042ms)
+✔ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (30.215625ms)
+✔ IPC refuses malformed B metadata before delivering a view envelope (0.204ms)
+✔ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (4.521291ms)
+✔ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (3.5795ms)
+✔ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (1.13725ms)
+✔ a rejected resource open drains accepted slots without submitting requests (1.941917ms)
+✔ nearest-rank 分位与 NC12 口径一致；空输入为 null (0.419209ms)
+✔ 帧间隔统计：刷新周期估计与超预算比例 (0.164ms)
+✔ 交互记录：有输入时端到端从输入起算，缺失段为 null (0.21225ms)
+✔ Worker 分段：关闭时只发原回包，开启时回包后追加分段 (0.502458ms)
+✔ actual frozen Main5fc TS network and desktop readers accept the optional response (20.973875ms)
+✔ new parser accepts all seven events and legacy absence without altering autoStep strings (1.595209ms)
+✔ bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through (0.874083ms)
+✔ bad present null_revision is atomic in actual network/store ingress and IPC pass-through (0.277708ms)
+✔ bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through (0.270833ms)
+✔ bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through (0.240167ms)
+✔ bad present string_revision is atomic in actual network/store ingress and IPC pass-through (0.226958ms)
+✔ bad present bad_status is atomic in actual network/store ingress and IPC pass-through (0.231667ms)
+✔ bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through (0.250125ms)
+✔ bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through (0.296583ms)
+✔ bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through (0.22375ms)
+✔ bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through (0.194667ms)
+✔ bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through (0.209042ms)
+✔ bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through (0.255792ms)
+✔ bad present unknown_event is atomic in actual network/store ingress and IPC pass-through (0.176916ms)
+✔ bad present event_unknown is atomic in actual network/store ingress and IPC pass-through (0.18925ms)
+✔ bad present actor_zero is atomic in actual network/store ingress and IPC pass-through (0.165167ms)
+✔ bad present actor_negative is atomic in actual network/store ingress and IPC pass-through (0.161541ms)
+✔ bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through (0.179292ms)
+✔ bad present actor_string is atomic in actual network/store ingress and IPC pass-through (0.422625ms)
+✔ bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through (0.226125ms)
+✔ bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through (0.182208ms)
+✔ bad present actor_null is atomic in actual network/store ingress and IPC pass-through (0.188291ms)
+✔ bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through (0.263416ms)
+✔ bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through (0.233958ms)
+✔ bad present amount_zero is atomic in actual network/store ingress and IPC pass-through (0.381375ms)
+✔ bad present bad_nature is atomic in actual network/store ingress and IPC pass-through (0.496625ms)
+✔ bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through (0.259166ms)
+✔ bad present token_traversal is atomic in actual network/store ingress and IPC pass-through (0.28625ms)
+✔ bad present token_controls is atomic in actual network/store ingress and IPC pass-through (0.229083ms)
+✔ bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through (0.186166ms)
+✔ bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through (0.183459ms)
+✔ bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through (0.194417ms)
+✔ bad present digest_upper is atomic in actual network/store ingress and IPC pass-through (0.192916ms)
+✔ bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through (0.212459ms)
+✔ bad present size_zero is atomic in actual network/store ingress and IPC pass-through (0.185709ms)
+✔ bad present source_kind is atomic in actual network/store ingress and IPC pass-through (0.187584ms)
+✔ bad present reference_private is atomic in actual network/store ingress and IPC pass-through (0.206792ms)
+✔ bad present path_escape is atomic in actual network/store ingress and IPC pass-through (0.17875ms)
+✔ bad present invalid_category is atomic in actual network/store ingress and IPC pass-through (0.188042ms)
+✔ bad present empty_assets is atomic in actual network/store ingress and IPC pass-through (0.170208ms)
+✔ bad present form_token is atomic in actual network/store ingress and IPC pass-through (0.191167ms)
+✔ unmatched malformed broadcast does not reject another call or mutate receipt storage (0.179833ms)
+✔ bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches (1.610291ms)
+ℹ tests 301
+ℹ suites 0
+ℹ pass 295
+ℹ fail 6
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1537.888209
+
+✖ failing tests:
+
+test at scripts/native-general-select.test.mjs:372:1
+✖ 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验 (0.352167ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+      at Object.openSync (node:fs:697:18)
+      at readFileSync (node:fs:543:35)
+      at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:365:25
+      at async ensureWasm (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:369:3)
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:373:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+  }
+
+test at scripts/native-general-select.test.mjs:403:1
+✖ 真实 WASM：装配不改 revision，状态变化只体现在 state_hash (0.117667ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+      at Object.openSync (node:fs:697:18)
+      at readFileSync (node:fs:543:35)
+      at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:365:25
+      at async ensureWasm (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:369:3)
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:373:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+  }
+
+test at scripts/native-general-select.test.mjs:427:1
+✖ 真实 WASM：未知武将与越界座位显式报错，且不改状态 (0.072583ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+      at Object.openSync (node:fs:697:18)
+      at readFileSync (node:fs:543:35)
+      at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:365:25
+      at async ensureWasm (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:369:3)
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:373:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+  }
+
+test at scripts/native-general-select.test.mjs:453:1
+✖ 真实 WASM：选将后权威候选重查（缓存不再命中） (0.068417ms)
+  Error: ENOENT: no such file or directory, open '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+      at Object.openSync (node:fs:697:18)
+      at readFileSync (node:fs:543:35)
+      at file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:365:25
+      at async ensureWasm (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:369:3)
+      at async TestContext.<anonymous> (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/native-general-select.test.mjs:373:3)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    errno: -2,
+    code: 'ENOENT',
+    syscall: 'open',
+    path: '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm'
+  }
+
+test at scripts/nc04-restore-atomicity.test.mjs:1:1
+✖ scripts/nc04-restore-atomicity.test.mjs (486.753625ms)
+  'test failed'
+
+test at scripts/nc04-start-atomicity.test.mjs:1:1
+✖ scripts/nc04-start-atomicity.test.mjs (192.910167ms)
+  'test failed'
+{"command": ["npm", "--prefix", "apps/web-client", "test"], "exit": 1, "locked_seconds": 1.7200465840287507, "disk_free_bytes": 45393666048}

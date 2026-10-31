@@ -1,0 +1,8 @@
+{
+  "finding": "P2 sealed pilot report understated calibration Own count3; observed4. own>=3 was an assertion minimum, not count.",
+  "observed_own_calls": 4,
+  "calibration_rows": 24,
+  "raw": "/tmp/nc10-fixed-reference-38de1942/evidence/calibration-actual.json",
+  "raw_sha256": "d6357de16776626a634e49a575d5ed1265820a0efcddb60ed9f2a55b9b7cfbd7",
+  "sealed_report_not_edited": true
+}

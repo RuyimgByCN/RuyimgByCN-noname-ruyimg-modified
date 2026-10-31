@@ -1,0 +1,43 @@
+{"argv": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08", "nc08_cross_target_real::", "--", "--nocapture"], "extraEnvironment": {"NONAME_CROSS_TARGET_NATIVE_OUT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-native.json"}}
+
+running 1 test
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 94 filtered out; finished in 0.02s
+
+{"exit": 0}
+{"argv": ["node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/wasm-trajectory.mjs", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-wasm.json"], "extraEnvironment": {}}
+{"steps":40,"final_hash":"a2e722ecf28c3364b2105b3e34398e529b653a1f1c92690044ab9bf0170af966","wasm":"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"}
+{"exit": 0}
+{"argv": ["/Library/Frameworks/Python.framework/Versions/3.10/bin/python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/compare.py", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-native.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-wasm.json"], "extraEnvironment": {}}
+{
+  "direct_steps": 40,
+  "restore_before_steps": 20,
+  "restore_after_steps": 20,
+  "final_revision": 40,
+  "final_hash": "a2e722ecf28c3364b2105b3e34398e529b653a1f1c92690044ab9bf0170af966",
+  "native_wasm_match": true
+}
+{"exit": 0}
+{"argv": ["cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "cross_target_package", "--", "--nocapture"], "extraEnvironment": {"NONAME_CROSS_TARGET_PACKS": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/huanle-packs.json", "NONAME_CROSS_TARGET_NATIVE_OUT": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-package-native.json"}}
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+{"exit": 0}
+{"argv": ["node", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/wasm-package-trajectory.mjs", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/huanle-packs.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-package-wasm.json"], "extraEnvironment": {}}
+{"steps":20,"final_hash":"d9bfaeb2e875018b0379ef0e5ec69b4a86ce516c9a741a86e6675d396b9e28fa"}
+{"exit": 0}
+{"argv": ["/Library/Frameworks/Python.framework/Versions/3.10/bin/python3", "-B", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-24-native-wasm-cross-target/compare.py", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-package-native.json", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectory-package-wasm.json"], "extraEnvironment": {}}
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "d9bfaeb2e875018b0379ef0e5ec69b4a86ce516c9a741a86e6675d396b9e28fa",
+  "native_wasm_match": true
+}
+{"exit": 0}
+{"command": ["python3", "-B", "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/trajectories.py"], "exit": 0, "locked_seconds": 7.348663124954328, "disk_free_bytes": 35772604416}

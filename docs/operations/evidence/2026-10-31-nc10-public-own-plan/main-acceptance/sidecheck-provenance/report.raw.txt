@@ -1,0 +1,16 @@
+# Private probe target provenance addendum
+
+Evidence root E: `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`.
+`E/probe/target` was created **2026-10-31 11:28:39.549155Z**, before the first recorded explicit probe run at 11:38Z.
+The setup wrote `probe/Cargo.toml` at 11:28:09Z and `probe/src/main.rs` at 11:28:30Z; tool results automatically reported TOML/Rust diagnostics.
+Retained `target/flycheck0` logs prove a separate partial **Cargo check**; timing and flycheck layout strongly associate it with automatic editor/language-service checking, but no launch record proves the precise parent executable.
+It was not the later runtime Shan exit101, and no retained compiler diagnostic proves an initial compile-error termination; missing fingerprint messages are normal cache misses.
+The extra dep graphs have mtimes 11:28:50Z (`engine_api`, 13,450,818 bytes) and 11:28:58Z (`rule_api`, 68,957,259 bytes); metadata was read without hashing/rescanning those binaries.
+Effective sidecheck behavior included local target, dev/check debug2 and incremental caches; exact historical argv, environment, jobs, serializer use and exit are **unreconstructable** from retained evidence.
+Its stderr explicitly says `Updating crates.io index` and `Locking 40 packages`; whole-session offline execution cannot be claimed, and transferred network bytes are not established.
+All recorded accepted probe executions explicitly ran `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe`; private target contains no probe executable.
+The sidecheck-created **private Cargo.lock** was subsequently shared with offline accepted probe builds, which compiled those dependencies in the handed target: dependency selection was reused, private-target compiled products were not the recorded execution artifacts.
+Main release WASM used the recorded target override; tested artifact SHA remains `30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd`.
+Main/source6, original final report and sealed714 artifact index were preserved; no rebuild, test, profile/network action, index write, or cleanup occurred in this audit.
+Structured result: `/tmp/nc10-main-own-provenance-addendum/record.json` (SHA256 `703c3cdf6b30f63af74b131a98541143eb37aa61184dbd8417977abbf7f011c0`).
+Skipped exhaustive historical launcher reconstruction; residual risk is the unrecorded sidecheck environment/exit and its shared private lock selection. Preserve targets pending parent cleanup guard.

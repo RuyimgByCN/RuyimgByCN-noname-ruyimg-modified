@@ -1,0 +1,1393 @@
+[
+  {
+    "name": "baseline-quality200",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc12_ai_strength_baseline_statistics",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc12_ai_strength_baseline_statistics",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 13.179577332979534,
+    "minimum_free_bytes": 39868317696,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "386889817d60989a7995bf5d5f7c5f5e8f67ae954b3ce60cd9e9ac159794f4e2",
+    "stderr_sha256": "cb22bfa89397a37287105d25489360423a1149881e88b157299e119c6e904058",
+    "result_sha256": "5998b8b9b01df3c5a13f98dee2db727c993b7a696ad9adff951b870a6742d136",
+    "production_source_state": "baseline5fc",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    }
+  },
+  {
+    "name": "baseline-seed8211",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "policy_v2_drives_all_seats_without_answer_routing_panic",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "policy_v2_drives_all_seats_without_answer_routing_panic",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 2.538985458028037,
+    "minimum_free_bytes": 39866490880,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "909a4604e391302a0e1b1dbcd107bb9ccbd46815e41787dfa4a8e4498b3af3b0",
+    "stderr_sha256": "c7272a9057a8f1ba56b1e5559d090f5fd7565f1a66cda11dc50ff6e7bbf582ab",
+    "result_sha256": "da86c9c195da232e951b5bc0129a6dfbd14b26da69b5ec46a39617336223f3b1",
+    "production_source_state": "baseline5fc",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    }
+  },
+  {
+    "name": "domains-nc",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 49.68345366703579,
+    "minimum_free_bytes": 37994364928,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "d15d267f1e7f79c98f2722463b07f47f88f3e7392c0845fe6c72ce4046a85415",
+    "stderr_sha256": "92bdabf51a1359e3608d892e3a71de65c48029ca0be7e44163c5ba9333e0245d",
+    "result_sha256": "5ada2b7fc508fab3a2c3ff93c7cd30098364e42de33145bd12bb8cda907c5acd",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "domains",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "--test",
+      "misc",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "--test",
+      "misc",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 9.615224250010215,
+    "minimum_free_bytes": 38063824896,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "42306435d2fd7049eb97e8e6f8d043582226d10c1d3c9e1674cb5773a469f5ad",
+    "stderr_sha256": "29e910255800de6fffe23f77b5c8cd974a69bd18c550dc5e42dc0c453f7166cf",
+    "result_sha256": "a04a82bb66d0e5bfeb158e7f40277395d9a9fdadb3e1f7965da64f42737122cb",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "final-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 34.404539457987994,
+    "minimum_free_bytes": 38889189376,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "a18a704e7ff7bf46763d1680680fcb3b494f7db1ba6a1b0152e2e0e445d45562",
+    "stderr_sha256": "03f433f6f4db2732c0db5e95afa4279f8bf7c2f2594a933da6aeecb2d5685c20",
+    "result_sha256": "9454dd553bdbc27759c2891c29dedac7c72ceffe6e77214b2220f86f6d0c1857",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "first-divergence",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "first_public_choice_action_divergence",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "first_public_choice_action_divergence",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 3.52751108299708,
+    "minimum_free_bytes": 34912645120,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "2ff2b83459810271ab1378af3165ebe869644b123768f182f0b1ca07011674da",
+    "stderr_sha256": "2f81d4ca685ea506c48c81308c702cd825d59234b168ad7d54776ec200b97f0d",
+    "result_sha256": "590702572ef099daa6639cbb1db22630db0d21b0bfe81742be0f446e12726596",
+    "production_source_state": "baseline planner plus exact v2 advice copied into test-only diagnostic",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    },
+    "diagnostic_source": "/tmp/nc10-own-36992565/evidence/first-divergence-source.json"
+  },
+  {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 22.79004333302146,
+    "minimum_free_bytes": 38813278208,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/gate1b-target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "RUSTFLAGS": "-Dwarnings"
+    },
+    "stdout_sha256": "bdd8e0940f67e24c124b273a1f4ecc5ea5281b29e7e1993a75e884c58bbbfd43",
+    "stderr_sha256": "2f30693d87466185fee4fb3c083985e576e9810c9189b2fd29ddbe97e3f67c1f",
+    "result_sha256": "bfad42af6785f27c5c217cc917738876b778c38fd074260e0bd6a1501d1a6f7e",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "green-final",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 1.5566437079687603,
+    "minimum_free_bytes": 39845257216,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "b85e5989bea8f65c88d082b157bd337ae12387b0432718a332bffb5636019c04",
+    "stderr_sha256": "7f67bc4d4d8b351ecdc7daa4d6d52cb9c0f9363936c4218e290e756f8fcc3818",
+    "result_sha256": "7f8c9ecda1226a921bb83dfa8bfee48c318c5e9a45bbf7a656c6abbba8202334",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "green",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 3.560764542024117,
+    "minimum_free_bytes": 39849418752,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "46874a26f4c07635769d47fd2be73591017558bdfd643b4548d8870e5ecbe235",
+    "stderr_sha256": "6dc10f9cf13332195551d2f4441293f5c925965a7bbb4b3c9317641dec155954",
+    "result_sha256": "3dce30c10e68f7ae3d993443e2543905df5d5ab638ddb3c7e0461745eb51da26",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "line-gate",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 4.55462599999737,
+    "minimum_free_bytes": 38428385280,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "1faeb422a0abcba81163622b382b3f27fe29741925a2789ab53279283a2ce7e5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result_sha256": "72918a745da4fc96839e2bafbd33e40e888d2282e39657a15495f4e27d9d493a",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "line-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 0.5202055409899913,
+    "minimum_free_bytes": 38428643328,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "03d5173f0552d1cb14ddb4b56b378b24785c30a2f3a46760ffe4cfe424bd303a",
+    "stderr_sha256": "cc4ce8d54ec0f6a2d972abf34157488e5e132e9d71efaebb422979f2bf3356f8",
+    "result_sha256": "4da097296f6d30f5d245f4390118730ea3635eed6c9da7566f371135b2717868",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "native-full-fixtures",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 23.823500792030245,
+    "minimum_free_bytes": 38762967040,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "0c108ed7bfc378f33c16fbf2bfbba0164f8452b05408b5dbf94d57e92ff5ef58",
+    "stderr_sha256": "644283e10c4e3c3b680f2f580fbdb9dc7f19abbf61213d3325e3485a92feefe0",
+    "result_sha256": "0a7f39caf1d12443d95674bad4c6562c670868a6f5f1c02313a59f448d714d7c",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "native-full",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 33.39843379199738,
+    "minimum_free_bytes": 39397429248,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "3f355492285838a6126d43f4c8617fae8fd04f2bda43968c681103e330e83387",
+    "stderr_sha256": "60d699b85d7b94ec373a9bf34103c6c407f7e85a96e6468404547531d3ef9d6a",
+    "result_sha256": "b0c49f6190ffddc79551ca7b9808fb31dd5c538e36b0ba341562e7d03edb56db",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "positive-applies",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 24.28719804197317,
+    "minimum_free_bytes": 39117729792,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "398093f7969d3b1d56c52526c4f1dd8640a71b5481df848b5f8e99d78f3549a2",
+    "stderr_sha256": "66166a795ce50bdb7c883dce4721bc34a9f781a8401bece5f34822d950e93416",
+    "result_sha256": "42dad8233682d83cb8d80615ae950f2860e7241368691e0a00d59a1151d2d157",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "quality200",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc12_ai_strength_baseline_statistics",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc12_ai_strength_baseline_statistics",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 12.69910016603535,
+    "minimum_free_bytes": 39845785600,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "0db00279f25217ac7cd9f006f386c166af03d4c40d6252613816ef8de8f63f48",
+    "stderr_sha256": "d905b384f9c2c41ffc4ac35631ce1c720cef4ae3b706a65bedc7d2dca9801b5a",
+    "result_sha256": "a8e5d14cb6fd94bd8ed54a96c2f6ba2dd83fe51e378504e28cdf8d46269071b1",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "red-complete",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 1.5395490839728154,
+    "minimum_free_bytes": 39796121600,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "1049d575eb60c10e1d0c2d71d739c912798b8288dee59c0cda3879867f126124",
+    "stderr_sha256": "e4ee6ebcbc091c4e584f12aa9eab3be1855dbf686f7b71380ab4a38fdea6e825",
+    "result_sha256": "82da0842202359a4a18e6e6555639b98f81f1c60091d3d57c05beae9a2225799",
+    "production_source_state": "baseline5fc",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    }
+  },
+  {
+    "name": "red-privacy",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "complete_own_plan_cannot_depend",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "complete_own_plan_cannot_depend",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 4.073993166035507,
+    "minimum_free_bytes": 39868706816,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "b05f87dcecf2873a1ee7b20f36e1fc701fee0822fbacdf6a15286e6710d3284a",
+    "stderr_sha256": "d68306db77ad361eee1517383ee34dd8e9a0e487cee38245cb96a7a1c4828681",
+    "result_sha256": "63874b93b653c225437a503350fdc74d6490ec38805c3e5853f4e0939c59a1e9",
+    "production_source_state": "baseline5fc",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    }
+  },
+  {
+    "name": "red",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 48.64507141703507,
+    "minimum_free_bytes": 39835295744,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "e57b4943972239e0961989333b5959e87cf7cc91283655d9844c1c592b61faac",
+    "stderr_sha256": "23ccbf01876ff17c31c90ec73fd3b9a751abcf089385fe64d88634d87c411406",
+    "result_sha256": "c9b8c5f9b0528dfe531146e24ad01398b447af030a0df19dfd690858a51286c6",
+    "production_source_state": "baseline5fc",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    }
+  },
+  {
+    "name": "seed8211",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "policy_v2_drives_all_seats_without_answer_routing_panic",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "misc",
+      "policy_v2_drives_all_seats_without_answer_routing_panic",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 101,
+    "wall_seconds": 2.025423417042475,
+    "minimum_free_bytes": 39839956992,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "8567eef812fc58105fe20e30f9638da79cb17a72f139fffe54e5163b4e3d6abe",
+    "stderr_sha256": "1cdfc6d259fd78ff5928dab40822c9cbacc0a4641c011e7b3c0c4a229cfd8900",
+    "result_sha256": "99fa073147e8c72c68c08e7943731ca7e8546e14cd7e2d2d32b92d3fc01b22ae",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "session",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "pa09_native_session",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "pa09_native_session",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 27.909547167015262,
+    "minimum_free_bytes": 39092146176,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "9402c022d86add6f78a8fa531120a9346542c8b8dbd4ddf0b559487b9dad2838",
+    "stderr_sha256": "56970f74a4db1e54f94dd0d46434d897df46362093b73240b8d6d864ed58796c",
+    "result_sha256": "ac03138509a24557cce6ff81b543c4070878cec5a88b104630772c7c1a7b47c2",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 5.041589875007048,
+    "minimum_free_bytes": 34892226560,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/gate1b-target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true",
+      "RUSTFLAGS": "-Dwarnings"
+    },
+    "stdout_sha256": "d4e26191be71c448613026e09fdcbe51426f2d67cef7e48bd6d38cd20b902ffc",
+    "stderr_sha256": "369c67af83ecfd198c1b59caaae67e4f06e2a657bc70d122922d5b817c598eb3",
+    "result_sha256": "eb30bbe8b5c1059a5957fe2dc6a41da4609869db40fed5f5acb14ccee0748c40",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-line-gate",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 4.040842208021786,
+    "minimum_free_bytes": 34885316608,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "7476d57ec45d44b4fe46280f691d72e3e1fcb35b8214c93d7fcb0e06fea1e65e",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result_sha256": "37e35abe88c2e02b436a4d93ee223e1b9717cd3b1462459dd71861db27ee1dea",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-own",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "nc10_public_own_plan",
+      "--",
+      "--nocapture",
+      "--test-threads=1"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 4.556223082996439,
+    "minimum_free_bytes": 34770800640,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "1191202674e9095ae10eb16038eaedfac1da5b7576cd012a52d5683ecd5d1b17",
+    "stderr_sha256": "031605737f00d09aa77e7d3c83b05fa36e66d5750484e8abb007322223b4757f",
+    "result_sha256": "91eb7deb09cf5e0fca52f773fde4611cad9276349dc5407780491169024731f3",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-session",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "nc10_public_own_session",
+      "--test",
+      "pa09_native_session"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "nc10_public_own_session",
+      "--test",
+      "pa09_native_session"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 5.560507291986141,
+    "minimum_free_bytes": 34927144960,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "9af491a321fded063368f5d93954d8fece2e01a8f55b47f2c0e1eac8e257eaa6",
+    "stderr_sha256": "9a8dbbd83cdf25e65ee85e19bdf0377a2c11dfe2b4ccf90da7450354e7a7d8e8",
+    "result_sha256": "baf7c0ff60589055edf75f518628f6affe5b06390006ceb93658747ce5c7ffa5",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-wasm-build",
+    "argv": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--dev",
+      "--mode",
+      "no-install",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+      "--",
+      "--offline"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--dev",
+      "--mode",
+      "no-install",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+      "--",
+      "--offline"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 4.037962125032209,
+    "minimum_free_bytes": 34914680832,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "ad190d30ac5cd8aab70de28a346ebe7af449327f4c64285c0c8be58990897ab0",
+    "stderr_sha256": "c34aa2b1e67af611dfe21aa03d6ad49217e1e5cda2b84ef1f8245ddc41e18b3a",
+    "result_sha256": "f975fe1d628dd9f13d98960fe24a6f9f64ab24bceb144279d05d88197466de53",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "v2-wasm-own",
+    "argv": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 0.5074849590309896,
+    "minimum_free_bytes": 34917294080,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "4bed96f5339ef2d5531ba6cb0d6fc4bef87b9ba1ef75e0dfccda813440357bbf",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result_sha256": "9dd08703eded8b05bef83a54b017ffac9c5fd1a27acb2d2231760ac5961f334c",
+    "production_source_state": "candidate-v2",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "wasm-build",
+    "argv": [
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--dev",
+      "--mode",
+      "no-install",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+      "--",
+      "--offline"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "wasm-pack",
+      "build",
+      "crates/engine-native-wasm",
+      "--target",
+      "web",
+      "--dev",
+      "--mode",
+      "no-install",
+      "--no-opt",
+      "--out-dir",
+      "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg",
+      "--",
+      "--offline"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 24.336066415999085,
+    "minimum_free_bytes": 38090002432,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "7cd039a2456372e8eb28cd30af5e8e2043d977913c7e75d07eed104b88aff661",
+    "stderr_sha256": "3c7d120ee33e4263c5c2a55db5b71ee9d6407d3facc1fdb3b0da9ebb6ebf29e9",
+    "result_sha256": "307846827d0c16202459009c99b3193b3b26259d53374bda970b37a3da559eb4",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "wasm-crate-full",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--no-fail-fast"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--no-fail-fast"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 4.580225291021634,
+    "minimum_free_bytes": 38428532736,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "771462d3517bb8012868b82698d55f3bcdefeadbd0355650457f270b136f5aed",
+    "stderr_sha256": "9dbd5253172de7f7e1f043bb1fa858fcd8b1198467ce1228767f2ef7240a60fc",
+    "result_sha256": "abf351d958bfd85d1d7c958d6fda764066b7fe42f8dca3fcb32afe2a24efcc57",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "wasm-own",
+    "argv": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 0.5196285000420175,
+    "minimum_free_bytes": 38064861184,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "ab54d87d0831a5171609efc1af1e97648067dbf4b53be59731be2aae68672c6f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "result_sha256": "660d126452e046765cd1ff235a1b28fd2d5942daac75ba829ad59d20c82a87b5",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  },
+  {
+    "name": "worker-current",
+    "argv": [
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/native-worker-smoke.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "--import",
+      "./apps/web-client/scripts/ts-register.mjs",
+      "apps/web-client/scripts/native-worker-smoke.mjs"
+    ],
+    "cwd": "/tmp/nc10-own-36992565/worktree",
+    "exit": 0,
+    "wall_seconds": 2.534273832978215,
+    "minimum_free_bytes": 38079672320,
+    "environment": {
+      "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_NET_OFFLINE": "true"
+    },
+    "stdout_sha256": "fbc90e4ed03b524f514097981fd1f5c61aac486666888e98f087a60a8026f06d",
+    "stderr_sha256": "1cb131c1897e7c9913db4a70e61227ede508c1454704ad8d299b0cf88446720d",
+    "result_sha256": "6316ac8259739556c9c875db8d67072e69c7a7c14777b0398cc268a8970f0493",
+    "production_source_state": "candidate-v1",
+    "production_sources": {
+      "crates/engine-native/src/ai.rs": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    }
+  }
+]

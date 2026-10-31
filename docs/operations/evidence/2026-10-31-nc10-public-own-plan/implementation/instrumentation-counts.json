@@ -1,0 +1,8 @@
+{
+  "crates/engine-native/tests/ai_planner.rs": 8,
+  "crates/engine-native/tests/nc07_discard_duplicate_probe.rs": 1,
+  "crates/engine-native/tests/nc10_ai_bounds.rs": 3,
+  "crates/engine-native/tests/nc10_ai_information_boundary.rs": 1,
+  "crates/engine-native/tests/nc12_ai_strength_baseline.rs": 1,
+  "crates/engine-native/tests/nc12_swd_authoritative_stability.rs": 2
+}

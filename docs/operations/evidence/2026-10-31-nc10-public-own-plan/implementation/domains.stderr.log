@@ -1,0 +1,21 @@
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.49s
+     Running tests/groups/misc.rs (/tmp/nc10-own-36992565/target/debug/deps/misc-6bce960f507446bf)
+OWN_QUALITY_TRAJECTORY steps=119 outcome=Some(Outcome { winner: Player(3) })
+
+thread 'ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic' (17675067) panicked at crates/engine-native/tests/groups/../ai_planner.rs:463:5:
+assertion `left == right` failed: 步数冻结（策略变更须同步证据）
+  left: 119
+ right: 484
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+DBG 校验器拒绝 valid_nnvm.bin ⇒ InvalidBytecode("empty code")（结构化错误，非 panic）
+DBG 语料回放：verify 解码 2 个、校验通过 1、结构化拒绝 1（**无 panic**）
+DBG 语料回放：fuzz_bytecode_module 5 个样本
+DBG 语料 bad_magic.bin ⇒ 结构化错误：bad magic
+DBG 语料 truncated_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料 valid_seed.bin ⇒ 结构化错误：bad magic
+DBG 语料回放：bytecode ok=2 err=3（**无 panic**）
+DBG 语料回放：新种子 /private/tmp/nc10-own-36992565/worktree/crates/engine-native/../../fuzz/corpus/fuzz_bytecode_module/valid_nnvm.bin 解码成功 name=fuzz_seed_nnvm
+NOTE 语料回放：ok=2 err=3；旧格式 `NVM1` 样本仍在（已登记为历史遗留，可清理）
+after p0 sha→p1: marks=[((0, 3304378096), 1)] vm_aux_all=1
+error: test failed, to rerun pass `-p engine-native --test misc`

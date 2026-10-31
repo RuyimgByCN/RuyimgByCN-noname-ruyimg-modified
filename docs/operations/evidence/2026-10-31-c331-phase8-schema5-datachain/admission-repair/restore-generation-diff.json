@@ -1,0 +1,362 @@
+[
+  {
+    "after_generation": 1,
+    "after_length": 1648,
+    "all_other_fields_equal": true,
+    "before_generation": 0,
+    "before_length": 1648,
+    "byte_changes": [
+      {
+        "after": 1,
+        "before": 0,
+        "offset": 1573
+      },
+      {
+        "after": 179,
+        "before": 99,
+        "offset": 1616
+      },
+      {
+        "after": 244,
+        "before": 103,
+        "offset": 1617
+      },
+      {
+        "after": 198,
+        "before": 174,
+        "offset": 1618
+      },
+      {
+        "after": 186,
+        "before": 39,
+        "offset": 1619
+      },
+      {
+        "after": 62,
+        "before": 69,
+        "offset": 1620
+      },
+      {
+        "after": 156,
+        "before": 225,
+        "offset": 1621
+      },
+      {
+        "after": 15,
+        "before": 6,
+        "offset": 1622
+      },
+      {
+        "after": 108,
+        "before": 130,
+        "offset": 1623
+      },
+      {
+        "after": 125,
+        "before": 212,
+        "offset": 1624
+      },
+      {
+        "after": 21,
+        "before": 253,
+        "offset": 1625
+      },
+      {
+        "after": 221,
+        "before": 92,
+        "offset": 1626
+      },
+      {
+        "after": 71,
+        "before": 70,
+        "offset": 1627
+      },
+      {
+        "after": 177,
+        "before": 60,
+        "offset": 1628
+      },
+      {
+        "after": 39,
+        "before": 81,
+        "offset": 1629
+      },
+      {
+        "after": 234,
+        "before": 115,
+        "offset": 1630
+      },
+      {
+        "after": 132,
+        "before": 78,
+        "offset": 1631
+      },
+      {
+        "after": 253,
+        "before": 46,
+        "offset": 1632
+      },
+      {
+        "after": 157,
+        "before": 158,
+        "offset": 1633
+      },
+      {
+        "after": 109,
+        "before": 72,
+        "offset": 1634
+      },
+      {
+        "after": 88,
+        "before": 195,
+        "offset": 1635
+      },
+      {
+        "after": 238,
+        "before": 215,
+        "offset": 1636
+      },
+      {
+        "after": 68,
+        "before": 36,
+        "offset": 1637
+      },
+      {
+        "after": 218,
+        "before": 136,
+        "offset": 1638
+      },
+      {
+        "after": 52,
+        "before": 76,
+        "offset": 1639
+      },
+      {
+        "after": 198,
+        "before": 58,
+        "offset": 1640
+      },
+      {
+        "after": 185,
+        "before": 11,
+        "offset": 1641
+      },
+      {
+        "after": 45,
+        "before": 248,
+        "offset": 1642
+      },
+      {
+        "after": 210,
+        "before": 29,
+        "offset": 1643
+      },
+      {
+        "after": 91,
+        "before": 90,
+        "offset": 1644
+      },
+      {
+        "after": 62,
+        "before": 247,
+        "offset": 1645
+      },
+      {
+        "after": 228,
+        "before": 87,
+        "offset": 1646
+      },
+      {
+        "after": 94,
+        "before": 152,
+        "offset": 1647
+      }
+    ],
+    "name": "c331-old-default-package.json",
+    "state_hash_equal": true,
+    "typed_fields_changed": [
+      "auth_generation"
+    ],
+    "view_equal": true
+  },
+  {
+    "after_generation": 1,
+    "after_length": 1648,
+    "all_other_fields_equal": true,
+    "before_generation": 0,
+    "before_length": 1648,
+    "byte_changes": [
+      {
+        "after": 1,
+        "before": 0,
+        "offset": 1573
+      },
+      {
+        "after": 233,
+        "before": 47,
+        "offset": 1616
+      },
+      {
+        "after": 105,
+        "before": 109,
+        "offset": 1617
+      },
+      {
+        "after": 20,
+        "before": 49,
+        "offset": 1618
+      },
+      {
+        "after": 71,
+        "before": 117,
+        "offset": 1619
+      },
+      {
+        "after": 25,
+        "before": 86,
+        "offset": 1620
+      },
+      {
+        "after": 183,
+        "before": 74,
+        "offset": 1621
+      },
+      {
+        "after": 213,
+        "before": 206,
+        "offset": 1622
+      },
+      {
+        "after": 62,
+        "before": 112,
+        "offset": 1623
+      },
+      {
+        "after": 155,
+        "before": 205,
+        "offset": 1624
+      },
+      {
+        "after": 237,
+        "before": 95,
+        "offset": 1625
+      },
+      {
+        "after": 246,
+        "before": 214,
+        "offset": 1626
+      },
+      {
+        "after": 27,
+        "before": 140,
+        "offset": 1627
+      },
+      {
+        "after": 105,
+        "before": 141,
+        "offset": 1628
+      },
+      {
+        "after": 235,
+        "before": 147,
+        "offset": 1629
+      },
+      {
+        "after": 190,
+        "before": 161,
+        "offset": 1630
+      },
+      {
+        "after": 86,
+        "before": 19,
+        "offset": 1631
+      },
+      {
+        "after": 23,
+        "before": 224,
+        "offset": 1632
+      },
+      {
+        "after": 22,
+        "before": 130,
+        "offset": 1633
+      },
+      {
+        "after": 220,
+        "before": 249,
+        "offset": 1634
+      },
+      {
+        "after": 53,
+        "before": 189,
+        "offset": 1635
+      },
+      {
+        "after": 94,
+        "before": 231,
+        "offset": 1636
+      },
+      {
+        "after": 80,
+        "before": 228,
+        "offset": 1637
+      },
+      {
+        "after": 122,
+        "before": 243,
+        "offset": 1638
+      },
+      {
+        "after": 251,
+        "before": 136,
+        "offset": 1639
+      },
+      {
+        "after": 177,
+        "before": 113,
+        "offset": 1640
+      },
+      {
+        "after": 72,
+        "before": 84,
+        "offset": 1641
+      },
+      {
+        "after": 172,
+        "before": 119,
+        "offset": 1642
+      },
+      {
+        "after": 84,
+        "before": 238,
+        "offset": 1643
+      },
+      {
+        "after": 35,
+        "before": 94,
+        "offset": 1644
+      },
+      {
+        "after": 247,
+        "before": 53,
+        "offset": 1645
+      },
+      {
+        "after": 64,
+        "before": 246,
+        "offset": 1646
+      },
+      {
+        "after": 69,
+        "before": 94,
+        "offset": 1647
+      }
+    ],
+    "name": "c331_phase8_genuine_schema4.json",
+    "state_hash_equal": true,
+    "typed_fields_changed": [
+      "auth_generation"
+    ],
+    "view_equal": true
+  }
+]

@@ -1,0 +1,30 @@
+## Review
+
+Scope: private C8 declaration foundation only, against accepted C7. Reviewed the complete implementation report, final 35-file patch, frozen C8 sources, and relevant C7 sources. The supplied identity record binds the 166-file composition and manifest `852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494`; I did not independently recompute hashes.
+
+- **Correct:** New entry fields retain explicit false, empty vectors, and `RevealBinding::None`. `deserialize_present` rejects explicit null; `required_content_schema` selects 5 on presence and rejects rehashed downgrades. Evidence: C8 `crates/content-schema/src/package/mechanisms.rs:94,354`, `package/trigger_order.rs:35`.
+- **Correct:** Schema5 metadata contributes a domain-separated digest covering declaration positions, logical identities, handlers, bindings, and policies. The validated package digest reaches the existing native extension content lock. Evidence: C8 `package/mechanisms.rs:114`, `package/hashing.rs:17`, `content-native-loader/src/lib.rs:436`, `engine-native-content/src/content/extension.rs:217`.
+- **Correct:** Store ordering invokes dependency-graph resolution, rejects ambiguous references, checks handler-index membership, and detects group cycles. Dependency version/hash checks remain in the existing Store path. Evidence: C8 `content-runtime/src/store/ordering.rs:31,89`, `package/mechanisms.rs:246`.
+- **Correct:** Full-package native admission rejects unsupported traits, groups, reveal, cleanup roles, participation policies, named windows, rescue windows, and explicit native bindings before producing executable declarations. Known ordinary host keys grant no cleanup authority. Evidence: C8 `content-native-loader/src/mechanisms.rs:5`.
+- **Correct:** Read all 12 schema5 test cases, including actual default VM execution and extension-lock mutation. Old schema3 bytes match the C7 fixture; schema4 fixture content matches the supplied historical artifact. Compatibility tests compare stored hashes without first replacing them. Evidence: C8 `engine-native/tests/c331_schema5_datachain.rs:53,326`.
+- **Correct:** The six moved T8 state/effect tests retain their assertions and remain included through `t8_rvm_bridge.rs:1863`. Legacy execution still rejects schemas4/5 at `engine-core/src/content/registry/load_package_checks.rs:16`. C331/106/758/WS6 boundaries remain as supplied.
+
+- **Finding: P1 — Asset-only admission bypasses the new declaration guard.**
+  Location: C8 [bundledNativePackages.ts:107](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase8-kc0cu91p/snapshot/apps/web-client/src/engine/bundledNativePackages.ts:107), with C7 [installed_packs.rs:41](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase7-final-a15p3fz_/snapshot/crates/engine-native-wasm/src/installed_packs.rs:41).
+  Evidence: `validateNativeMechanismFields` runs only inside `validateVmModules`; both SDK and Rust dispatch skip full-package validation when `modules` is absent. Starting with an accepted manifest-plus-assets payload, adding `skill_index:[{skill_def_id:1,name:"x",charlotte:true}]` under schema5 passes those gates and the declaration is ignored while assets load. Schema3/4 false/null presence likewise escapes the new guard.
+  Smallest fix: invoke presence validation independently of modules and reject declaration-bearing partial payloads at the existing Rust asset fallback. Preserve ordinary manifest-plus-assets payloads. Add one regression through validated import for this omitted-modules case.
+
+- **Finding: P1 — Duplicate schema5 fields survive the real importer through normalization.**
+  Location: C8 [package.rs:1116](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase8-kc0cu91p/snapshot/crates/content-schema/src/package.rs:1116); unchanged fallback `apps/web-client/src/engine/extensionStore.ts:202,209,184`; C7 `engine-native-wasm/src/installed_packs.rs:120,131`.
+  Evidence: the raw reader correctly reparses original bytes into typed entries, rejecting duplicate fields. Actual SDK import first performs `JSON.parse` then `JSON.stringify`; WASM also parses into `Value` before typed deserialization. A valid default5 package whose `"charlotte":false` becomes `"charlotte":true,"charlotte":false` therefore becomes valid false-only input before Rust sees it. The new duplicate test at `c331_schema5_datachain.rs:158` covers only the raw reader.
+  Smallest fix: reject duplicate declaration keys at the original-text import boundaries before normalization, and preserve that protection for direct WASM admission. Add the same mutation to the real importer regression.
+
+- **Finding: P2 — Active native executor conflicts lack the SDK structural check.**
+  Location: C8 `apps/web-client/src/engine/bundledNativePackages.ts:161,187`.
+  Evidence: host-key/module/entry-PC exclusivity is checked only for `trigger_index`. `active_index` receives only the generic presence check, so an active entry containing both a nonempty module and `host_key:"host:sanjian_weapon"` passes `validateNativePackage`. Full-package Rust validation rejects it, so this is a structural-validation gap without an execution grant.
+  Smallest fix: reuse the trigger executor-shape check for active entries and add one active conflict case.
+
+- **Fixed:** None; review-only.
+- **Merge verdict: BLOCK** for accepting this frozen private C8 foundation until the two P1 admission gaps are corrected. Actual C29 Core completion and C331/Main merge remain **BLOCK** independently.
+
+Skipped compilation, tests, network, writes, staging, and independent line-cap/hash execution. Worker-reported test totals and line-cap passes remain external evidence; no LSP-clean or full runtime-parity claim is made.

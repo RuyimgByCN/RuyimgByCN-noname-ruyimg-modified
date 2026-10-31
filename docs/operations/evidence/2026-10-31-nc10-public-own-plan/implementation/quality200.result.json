@@ -1,0 +1,44 @@
+{
+  "name": "quality200",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc12_ai_strength_baseline_statistics",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "nc12_ai_strength_baseline_statistics",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 12.69910016603535,
+  "minimum_free_bytes": 39845785600,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "0db00279f25217ac7cd9f006f386c166af03d4c40d6252613816ef8de8f63f48",
+  "stderr_sha256": "d905b384f9c2c41ffc4ac35631ce1c720cef4ae3b706a65bedc7d2dca9801b5a"
+}

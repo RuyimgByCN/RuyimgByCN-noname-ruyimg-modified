@@ -1,0 +1,222 @@
+{
+  "utc": "2026-10-31T10:14:39.404587+00:00",
+  "logs": [
+    {
+      "log": "initial-red.log",
+      "sha256": "24060b63c42f4844e8bf07f7f3585fab2c41fa8abfaa4dbff819d5be83e1fb37",
+      "tests": [
+        0,
+        3,
+        0
+      ],
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.9995249590137973,
+          "disk_free_bytes": 33283944448
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "first-green-attempt.log",
+      "sha256": "f1a3872b2300aa93580e0361bc930277a4490d33e1aeb8c572b67b3e59e7904c",
+      "tests": [
+        3,
+        0,
+        0
+      ],
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 24.96177620900562,
+          "disk_free_bytes": 27711885312
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "green-attempt2.log",
+      "sha256": "3a382e4a02f615a816cd491abd06b43edc8a04c8f04af4ece92aec90852faa6d",
+      "tests": [
+        3,
+        0,
+        0
+      ],
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 11.157068208034616,
+          "disk_free_bytes": 27666305024
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "matrix-first.log",
+      "sha256": "97498a797d2edeb3d88eedb98cd7a04068d37858bbda07a4fa43b47d23a15f06",
+      "tests": null,
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.0218666670261882,
+          "disk_free_bytes": 26494996480
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "matrix-attempt2.log",
+      "sha256": "257ee8af45f9993d4ab04f3d5b620e1bd4ca730b91e52e81900989b52db604b1",
+      "tests": [
+        10,
+        0,
+        0
+      ],
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 2.456424958014395,
+          "disk_free_bytes": 26506301440
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "targeted-packages-first.log",
+      "sha256": "bc1a8ebd0dde62c5c109e3075f86b8004b70afae1af82f6a746812135667834b",
+      "tests": [
+        609,
+        0,
+        0
+      ],
+      "runner_results": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "content-schema",
+            "-p",
+            "content-compiler",
+            "-p",
+            "content-runtime",
+            "-p",
+            "content-native-loader"
+          ],
+          "exit": 0,
+          "locked_seconds": 77.93274600000586,
+          "disk_free_bytes": 26488938496
+        }
+      ],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "frontend-tests-first.log",
+      "sha256": "f052f597a527383a1f676a38b841ff455cfb5ea23e0fba26255f8dda5fb80abe",
+      "tests": null,
+      "runner_results": [],
+      "frontend_tests": [
+        "\u2139 tests 183",
+        "\u2139 pass 182",
+        "\u2139 fail 1"
+      ],
+      "qualification": ""
+    },
+    {
+      "log": "frontend-tests2.log",
+      "sha256": "535d61d181a45379b8f70700c50cd4a4a4c8c5f85242f69b94d118d1f5c73f9e",
+      "tests": null,
+      "runner_results": [],
+      "frontend_tests": [
+        "\u2139 tests 183",
+        "\u2139 pass 183",
+        "\u2139 fail 0"
+      ],
+      "qualification": ""
+    },
+    {
+      "log": "frontend-type-first.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "tests": null,
+      "runner_results": [],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "frontend-type2.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "tests": null,
+      "runner_results": [],
+      "frontend_tests": [],
+      "qualification": ""
+    },
+    {
+      "log": "full-native-first.log",
+      "sha256": "fe8f55ffe9450ed7c1a12e8ea63b4179d34d9da3dd30bf621bf4c89b743926ed",
+      "tests": null,
+      "runner_results": [],
+      "frontend_tests": [],
+      "qualification": "full-native-first is setup failure only, shared runner missing; no native tests ran"
+    }
+  ],
+  "global_heavy_coordination": "paused awaiting parent authority; helper and lock removed externally; no self recreation",
+  "c331": "BLOCK;262/290 unchanged"
+}

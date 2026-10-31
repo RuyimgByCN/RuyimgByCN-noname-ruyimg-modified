@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T12:19:12.656279+00:00",
+  "status": "INTEGRITY_PASS_RULE_ACCEPTANCE_BLOCKED",
+  "sources": 191,
+  "increment": 42,
+  "artifact_sha_verified": 261,
+  "full_native_counts": [
+    1774,
+    8,
+    75
+  ],
+  "full_native_exit": 101,
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9-final-a_fz1xyd/snapshot",
+  "qualification": "8 original failures preserved, preHP/Before/Begin1..4/SubmitHp and callback migration incomplete; no Main merge or C9 acceptance."
+}

@@ -1,0 +1,11 @@
+
+running 5 tests
+test auto_step_answers_real_empty_hujia_window_without_panicking ... ok
+test native_errors_are_strings_and_leave_the_session_usable ... ok
+test native_session_and_existing_wasm_api_keep_identical_trajectories ... ok
+test source_actual_native_ask_survives_session_and_binding_json ... ok
+test zero_deadline_keeps_the_node_bounded_candidate_policy ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native-wasm", "--test", "pa09_native_session", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 25.06762741599232, "disk_free_bytes": 39068491776}

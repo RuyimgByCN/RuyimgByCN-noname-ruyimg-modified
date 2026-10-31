@@ -1,0 +1,28 @@
+{
+  "name": "line-gate",
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check-source-lines.py"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "scripts/check-source-lines.py"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 4.55462599999737,
+  "minimum_free_bytes": 38428385280,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "1faeb422a0abcba81163622b382b3f27fe29741925a2789ab53279283a2ce7e5",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

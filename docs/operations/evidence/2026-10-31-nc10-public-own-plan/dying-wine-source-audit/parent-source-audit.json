@@ -1,0 +1,43 @@
+{
+  "utc": "2026-10-31T10:06:26.675598+00:00",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "versions": "330/105/758/WS6",
+  "qualification": "Existingformalrule source/counterexample audit, NOTnewcodefix/acceptance; do not repairbyAIheuristic or silentlyrelaxrestore",
+  "current_observation": {
+    "seed": 8211,
+    "step_zero_based": 61,
+    "responder": 1,
+    "dying_player": 0,
+    "own_card_85_kind": "Jiu",
+    "public_choice": "RespondCard dying_save [Pass,Card85] min=max1 allow_cancel=false",
+    "both_single_submit_results": "Accepted",
+    "candidate_action_consequence": "Card85discard/P0hp1/DyingSaved",
+    "original_action_consequence": "Pass/P0PlayerDied",
+    "source_counterexample_sha256": "fa1b341990410cbf127042a0a88a4774afe282e402262cc3ad7aa8620f105885"
+  },
+  "source_findings": [
+    "kernel combat_rules is_tao_like Jiu andTianxianjiu unconditionallytrue despite self-rescuecomments",
+    "snap asks shapes is_tao_like joinsTao/Jiu/Dinvxuanshuang true; separatehelper differsadditionalJijiu/Futai/variantguards too, fullscopepending",
+    "adoptedextra.js73 savable requires dying===player or explicitjiuOther skilltag; prototype inputallrolesNone/Ownskills[]",
+    "rulesbaselinev30/v89 declare wine/selfrescue, no namedother-winepermissionfoundinboundedbaseline/coverage/ledgersearch; notglobalabsenceproof"
+  ],
+  "disposition": "KeepOwnplanning-onlysourceunchanged. Source-reviewandmeaningfulactuallive/restorepositive/negativecounterexamplesrequiredinlaterCtrueRescueor separatelyauthorizedrulesbatch; newsharedpredicate mustpreservespecificjiuOther capabilitiesifactuallyregistered, no blanketpermission/no duplicateAI ban. DoesnotcloseallC/NC10/UP37.",
+  "source_identities": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/combat_rules.rs",
+      "sha256": "47a01f07387267edb4c30869566a523faf54d230562c9389d97551a6a47be4ed"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "sha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/dying.rs",
+      "sha256": "7d657643ad1086665160dbfb17988c7b3a7be6454a2f3a5dc9d08524a5430fa6"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/extra.js",
+      "sha256": "7ed3c5c5ee25742047671658a1c6d5ae1367b38960fd4c6f2c6c1b4f59d748af"
+    }
+  ]
+}

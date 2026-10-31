@@ -1,0 +1,58 @@
+{
+  "sealed_utc": "2026-10-31T11:14:29.219138+00:00",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "versions": "330/105/758/WS6 unchanged",
+  "files": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755,
+      "lines": 861,
+      "baseline_sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645,
+      "lines": 712,
+      "baseline_sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732,
+      "lines": 107,
+      "baseline_sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440,
+      "lines": 285,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400,
+      "lines": 64,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "bytes": 22417,
+      "lines": 489,
+      "baseline_sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1"
+    }
+  ],
+  "composed_patch_sha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110",
+  "semantic_delta_sha256": "f77cb22318e2775e4bd6188447185154a8a35b7b9a618c93e32e82a7876e2232",
+  "overlay_sha256": "03f73c007593cfb2f2986bb44357c920ebd6e8e0f1a0c6ab40cf4e38916404e2",
+  "commands_sha256": "36efb37ba177b4803217fab92c4ddb26654bc08d94440e95a5f48e660fb453a7",
+  "full_source_manifest_sha256": "5507f41a2dc5fadd580cf493dc7ce81f1206ba5322d26870ed2cc923a471f455",
+  "all_required_checks_exit0": true,
+  "patch_apply_check_exit": 0,
+  "no_staged_files": true,
+  "acceptance": "Private verification complete; incremental source review and parent Main integration pending; wholeNC10/all37/no-choice/VM/equivalence not completed"
+}

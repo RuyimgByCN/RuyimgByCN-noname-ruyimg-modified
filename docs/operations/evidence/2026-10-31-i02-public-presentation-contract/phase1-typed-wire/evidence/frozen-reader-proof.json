@@ -1,0 +1,18 @@
+{
+  "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts": {
+    "original": "apps/web-client/src/engine/networkClient.ts",
+    "sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132"
+  },
+  "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts": {
+    "original": "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face"
+  },
+  "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs": {
+    "original": "crates/engine-protocol/src/messages.rs",
+    "sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e"
+  },
+  "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs": {
+    "original": "crates/engine-protocol/src/wire.rs",
+    "sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63"
+  }
+}

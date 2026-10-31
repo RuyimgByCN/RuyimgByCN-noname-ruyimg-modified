@@ -1,0 +1,42 @@
+{
+  "name": "native-full",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native",
+    "--no-fail-fast"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native",
+    "--no-fail-fast"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 101,
+  "wall_seconds": 33.39843379199738,
+  "minimum_free_bytes": 39397429248,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "3f355492285838a6126d43f4c8617fae8fd04f2bda43968c681103e330e83387",
+  "stderr_sha256": "60d699b85d7b94ec373a9bf34103c6c407f7e85a96e6468404547531d3ef9d6a"
+}

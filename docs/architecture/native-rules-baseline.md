@@ -1,5 +1,8 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**2026-10-31新增源码／实际反例待修（Main5fc，330/105/758/WS6）**：seed8211第61步公开`dying_save`向seat1提供Jiu85救P0，正式提交Accepted，P0回1；旧策略Pass则P0死。现有runtime `is_tao_like`对Jiu返回true，restore helper亦把Jiu并入通用桃；已采纳`card/extra.js`的savable限定self或明确`jiuOther`能力。v30/v89自救意图不能证明当前实现等价。见[原输入／两实际结果与源码SHA](../operations/evidence/2026-10-31-nc10-public-own-plan/dying-wine-source-audit/parent-source-audit.json)。这是现存规则缺口的待修记录，不是新增允许差异、不变更既有20/54台账计数；酒变体及两个helper其余资格差异仍须逐源核对。Own规划修复不得用AI特殊禁酒掩盖；正式修复需在真实rescue阶段按实际源及授权边界建立直接／恢复正负控、保留原330证据，不在本次纯规划切片修改规则／restore。
+
+
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
 > **当前本地验收源码（2026-10-30；验收对象`9dbc655` + ADR0787 A，按裁决18收口入库）**：规则330／存档105／ABI758／WS6，53个源码/测试/fixture路径逐字节等于已复审候选。Recover仅成功耐久commit后解除自动暂停，现有Pong校准倒计时按单调经过时间推进，两个P2已有实际红绿及独立复审。主树原生/workspace、实际当前WASM/Worker、WS/WAL/跨进程恢复及校时页面均完成，最终完整preflight21/21、组合复审OK with notes；命令、计数、保留失败与未验证边界集中见[进度主稿](native-progress.md)及[集成证据](../operations/evidence/2026-10-30-adr0787-timeout/README.md)。14 golden经旧规则常量回退探针匹配后重录，真实329档和WS5读者保留。标准无包规则号330；已安装包规则身份继续按既有`330 ^ (lock | (1u64 << 63))`派生并以完整u64保存。WS6拒旧，archive105/ABI758未升；后续331及332仍须依次实际验收，新增schema4合同另获裁决26限定批准，尚未在主树实施。
@@ -6186,7 +6189,7 @@ event.trigger('phaseAfter');
 
 | 层 | 结果 |
 |---|---:|
-| **唯一 kind**（6 子包 201 张卡）| **128** |
+| **唯一 kind**（6 子包 201 张卡） | **128** |
 | **`catalog.rs` 已登记** | **128 / 128（100%）** ✅ |
 | **`CardKind::X` 直接出现在 `host/step·factory·support`** | **48（37.5%）** |
 | **`CardKind::X` 出现在 `content/standard`** | **3** |

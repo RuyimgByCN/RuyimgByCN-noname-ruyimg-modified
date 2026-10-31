@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T09:42:49.570874+00:00",
+  "status": "PASS bounded source/evidence/raw-count bindings",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase7-final-a15p3fz_/snapshot",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "source_count": 148,
+  "fresh_current_working_source": true,
+  "checkpoint_to_final_changed": [
+    "crates/engine-native/tests/c331_host_source_metadata.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc07_archive_hash_fields.rs",
+    "crates/engine-native/tests/nc07_lianyaohu_hash.rs",
+    "crates/engine-native/tests/nc09_machine_ownership.rs"
+  ],
+  "production_changes_since_checkpoint": 0,
+  "evidence96_fresh": true,
+  "source_exactly_matches_final_full_native": true,
+  "full_native": [
+    1761,
+    0,
+    75
+  ],
+  "full_native_summaries": 17,
+  "qualification": "Parent read-only tar/hash/JSON/log/count checks; no producer/tests/build/GUI/JS/network execution. No Main31867-asset fresh rescan; bounded Main33/18/dist separately verified. Privatephase7foundation not Cwholeacceptance/newCproduct qualification."
+}

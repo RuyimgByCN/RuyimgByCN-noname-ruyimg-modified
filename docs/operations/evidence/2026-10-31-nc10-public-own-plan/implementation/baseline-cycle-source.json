@@ -1,0 +1,5 @@
+{
+  "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+  "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+  "crates/engine-native/tests/nc10_public_own_plan.rs": "5fea4348a38a5fac6e5c13f38652d21eeb017506c764e5266ae033d21728d21c"
+}

@@ -1,0 +1,22 @@
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.30s
+     Running unittests src/lib.rs (/tmp/nc10-own-36992565/target/debug/deps/engine_native-93e440f1e35a06a2)
+     Running tests/groups/g1.rs (/tmp/nc10-own-36992565/target/debug/deps/g1-d7db121f3fa3a4da)
+     Running tests/groups/g1_shahai.rs (/tmp/nc10-own-36992565/target/debug/deps/g1_shahai-2d3ade89d410b9c7)
+     Running tests/groups/kernel.rs (/tmp/nc10-own-36992565/target/debug/deps/kernel-c66fa1d4f3fdb655)
+     Running tests/groups/l_rounds.rs (/tmp/nc10-own-36992565/target/debug/deps/l_rounds-e35cd4abfe202ac1)
+     Running tests/groups/misc.rs (/tmp/nc10-own-36992565/target/debug/deps/misc-6bce960f507446bf)
+error: test failed, to rerun pass `-p engine-native --test misc`
+     Running tests/groups/nc08.rs (/tmp/nc10-own-36992565/target/debug/deps/nc08-367a7dcb703d082a)
+     Running tests/groups/nc08_upstream_a_k.rs (/tmp/nc10-own-36992565/target/debug/deps/nc08_upstream_a_k-c488c8c59d700f27)
+     Running tests/groups/nc08_upstream_l_z.rs (/tmp/nc10-own-36992565/target/debug/deps/nc08_upstream_l_z-1df529cf4fcbbe12)
+     Running tests/groups/nc_rounds.rs (/tmp/nc10-own-36992565/target/debug/deps/nc_rounds-fb18dbc55758dba6)
+     Running tests/groups/swd.rs (/tmp/nc10-own-36992565/target/debug/deps/swd-255d311151fe4f95)
+     Running tests/groups/test_registry.rs (/tmp/nc10-own-36992565/target/debug/deps/test_registry-aa71ab4f4fe36d6c)
+     Running unittests src/lib.rs (/tmp/nc10-own-36992565/target/debug/deps/engine_native_content-d3e4272bfe7bd617)
+     Running unittests src/lib.rs (/tmp/nc10-own-36992565/target/debug/deps/engine_native_kernel-d8af084864bb7b24)
+   Doc-tests engine_native
+   Doc-tests engine_native_content
+   Doc-tests engine_native_kernel
+error: 1 target failed:
+    `-p engine-native --test misc`

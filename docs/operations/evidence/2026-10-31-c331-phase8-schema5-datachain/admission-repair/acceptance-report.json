@@ -1,0 +1,125 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Seven-file repair addresses omitted-module partial declarations, preserves original JSON at validated SDK/native single/array admission boundaries, and shares active/trigger executor checks without new wire/Core semantics."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Genuine Rust2P1 and frontend3 initial failures, current private WASM build+actualSDK harness, final1773/0/75,609 packages,13 relevant WASM,186frontend/type,strict/caps,originalC8/Main/C6 protections and applicable patches sealed."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/scripts/c331-admission-repair-smoke.mjs",
+    "apps/web-client/scripts/native-vm-install.test.mjs",
+    "apps/web-client/src/engine/bundledNativePackages.ts",
+    "apps/web-client/src/engine/extensionStore.ts",
+    "crates/engine-native-wasm/Cargo.toml",
+    "crates/engine-native-wasm/src/installed_packs.rs",
+    "crates/engine-native-wasm/tests/c331_admission_repair.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "crates/engine-native-wasm/tests/c331_admission_repair.rs",
+    "apps/web-client/scripts/native-vm-install.test.mjs",
+    "apps/web-client/scripts/c331-admission-repair-smoke.mjs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native-wasm --test c331_admission_repair",
+      "result": "failed",
+      "summary": "rust-red.log exit=101"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-wasm --test c331_admission_repair",
+      "result": "passed",
+      "summary": "rust-green-first.log exit=0"
+    },
+    {
+      "command": "wasm-pack build crates/engine-native-wasm --target nodejs --release --no-opt --out-dir /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/admission-repair/node-wasm -- --offline",
+      "result": "passed",
+      "summary": "current-wasm-build.log exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-wasm --test c331_admission_repair --test gt014_import_validation_parity --test installed_package_payload",
+      "result": "passed",
+      "summary": "rust-targeted2.log exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-wasm --test c331_admission_restore_probe",
+      "result": "passed",
+      "summary": "restore-generation-probe.log exit=0"
+    },
+    {
+      "command": "cargo test --offline -p content-schema -p content-compiler -p content-runtime -p content-native-loader",
+      "result": "passed",
+      "summary": "four-packages.log exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "result": "passed",
+      "summary": "full-native.log exit=0"
+    },
+    {
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "gate1b.log exit=0"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "result": "passed",
+      "summary": "source-cap-unit.log exit=0"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "source-caps.log exit=0"
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "result": "passed",
+      "summary": "layering.log exit=0"
+    },
+    {
+      "command": "pnpm --dir apps/web-client test",
+      "result": "passed",
+      "summary": "frontend-green2.log:186/0"
+    },
+    {
+      "command": "pnpm --dir apps/web-client typecheck",
+      "result": "passed",
+      "summary": "frontend-type-first.log:exit0"
+    },
+    {
+      "command": "node --import ./scripts/ts-register.mjs scripts/c331-admission-repair-smoke.mjs E",
+      "result": "passed",
+      "summary": "actual-sdk-wasm4.log:11 rejected input trajectories,3/4/5 and asset positives; all original handles/store/hash/archive unchanged on rejection"
+    }
+  ],
+  "validationOutput": [
+    "Rust initial1passed2failed -> repair3passed;relevant WASM targets13passed0failed",
+    "Frontend initial183passed3failed ->186passed0failed;typecheck exit0",
+    "Current owned Node WASM build66.91s exit0;wasm db64d471c60afec3e003d61dcb1539b801054ea1f0ba029cfbab2d27bdc92fdd",
+    "Actual SDK/native WASM11 bad payloads reject at import/validate/new/restore; original localstore/hash/archive/view unchanged",
+    "Old3/4 exact fixture hashes and bytes preserved; intended restore rotates only auth_generation0to1 and checksum; complete normalized typed snapshots equal",
+    "Full native1773passed0failed75ignored;fourpackages609passed0failed;strict independent target Gate1b passed",
+    "Source caps9021,unit2passed,layering0;all three applicable patches reverse-check pass",
+    "Original C8 130 artifacts/index/report/full166 manifest unchanged; Main31867source/packages/assets+18generated+37dist/hooks and C6original140 unchanged; indexes empty",
+    "Temporary decoder probe removed in finally; no runtime instrumentation remains"
+  ],
+  "residualRisks": [
+    "Original C8 remains rejected snapshot; this repair needs independent review before any C9 decision",
+    "Whole C331 remains BLOCK:262/290 proven28remaining; schema5/Core runtime consumer gaps unchanged",
+    "Synchronous structure-only SDK helper remains structural by existing contract; product imports use validated native path",
+    "No GUI/network playback/CI/massive workspace rerun; no Core/format/ABI/protocol changes"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Move declaration presence guard outside module dispatch; reject partial declaration assets; forward original import text through existing native validator; use existing ContentPackage raw reader and serde RawValue for arrays; share trigger/active executor shape; add actual entry and WASM regressions.",
+  "reviewFindings": [
+    "TwoP1 and P2 initial failures reproduced and repaired; parent independent review pending",
+    "Additional old-positive restore raw-equality red was a harness mistake: complete decoded state shows only intentional auth_generation rotation plus checksum; corrected rule-state and post-restore baseline checks pass",
+    "Initial diagnostic,fixture edit and harness-store-conflict failures preserved separately"
+  ],
+  "manualNotes": "Authoritative53-line report /Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f5eba30e-08f6-4eb0-b133-61d6df8ec48f/implementation/c331-phase8-admission-repair.md; final7-file manifest /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/admission-repair/final-freeze/source-manifest.json; complete170-source manifest /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/admission-repair/full-source/source-manifest.json"
+}

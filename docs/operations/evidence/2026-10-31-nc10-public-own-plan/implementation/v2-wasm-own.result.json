@@ -1,0 +1,30 @@
+{
+  "name": "v2-wasm-own",
+  "argv": [
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "node",
+    "--import",
+    "./apps/web-client/scripts/ts-register.mjs",
+    "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 0,
+  "wall_seconds": 0.5074849590309896,
+  "minimum_free_bytes": 34917294080,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "4bed96f5339ef2d5531ba6cb0d6fc4bef87b9ba1ef75e0dfccda813440357bbf",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

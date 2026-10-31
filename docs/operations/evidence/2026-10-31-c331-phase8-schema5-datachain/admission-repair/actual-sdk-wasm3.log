@@ -1,0 +1,12 @@
+file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/engine/extensionStore.ts:52
+        throw new Error(`同版本包内容冲突: ${version}`);
+              ^
+
+Error: 同版本包内容冲突: 1.0.0
+    at checkVersionCopy (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/engine/extensionStore.ts:52:15)
+    at checkImportPreconditions (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/engine/extensionStore.ts:169:9)
+    at prepareImport (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/engine/extensionStore.ts:155:5)
+    at importExtensionPackageValidated (file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/engine/extensionStore.ts:135:22)
+    at file:///private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/scripts/c331-admission-repair-smoke.mjs:75:38
+
+Node.js v26.4.0

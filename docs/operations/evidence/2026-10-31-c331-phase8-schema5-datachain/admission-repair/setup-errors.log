@@ -1,0 +1,1 @@
+10:45:51 fixture exporter edit initially matched pre-rustfmt text, assertion failed; no source edit from that attempt. Current WASM build already passed; test-only export fixed next.

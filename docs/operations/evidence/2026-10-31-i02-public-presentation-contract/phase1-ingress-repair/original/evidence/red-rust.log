@@ -1,0 +1,42 @@
+   Compiling engine-protocol v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.78s
+     Running unittests src/lib.rs (/tmp/i02-phase1-ab167599/target/debug/deps/engine_api-7e058f95e9ef088f)
+
+running 4 tests
+test version::abi_coordination_tests::abort_bump_without_claim ... ok
+test manifest::tests::manifest_hash_is_stable_and_nonzero ... ok
+test manifest::tests::different_seed_changes_hash ... ok
+test version::abi_coordination_tests::claims_are_unique ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (/tmp/i02-phase1-ab167599/target/debug/deps/engine_protocol-87a5bab53374f018)
+
+running 1 test
+test wire::tests::roundtrip_hello ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/presentation.rs (/tmp/i02-phase1-ab167599/target/debug/deps/presentation-13208ca976d10391)
+
+running 3 tests
+test package_and_original_identities_are_discriminated ... ok
+test old_absence_and_seven_typed_events_roundtrip ... ok
+test invalid_present_payloads_are_rejected_at_actual_wire_ingress ... FAILED
+
+failures:
+
+---- invalid_present_payloads_are_rejected_at_actual_wire_ingress stdout ----
+
+thread 'invalid_present_payloads_are_rejected_at_actual_wire_ingress' (19849809) panicked at crates/engine-protocol/tests/presentation.rs:60:9:
+"repository_bom"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    invalid_present_payloads_are_rejected_at_actual_wire_ingress
+
+test result: FAILED. 2 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p engine-protocol --test presentation`
+{"command": ["cargo", "test", "--offline", "-p", "engine-api", "-p", "engine-protocol"], "exit": 101, "locked_seconds": 0.8457987500005402, "disk_free_bytes": 38058676224}

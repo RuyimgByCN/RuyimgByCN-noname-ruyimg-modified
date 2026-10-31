@@ -1,0 +1,42 @@
+{
+  "utc": "2026-10-31T11:06:45.713890+00:00",
+  "files": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706"
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2"
+    },
+    {
+      "path": "crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+    }
+  ],
+  "semantic_delta_sha256": "f77cb22318e2775e4bd6188447185154a8a35b7b9a618c93e32e82a7876e2232",
+  "commands": {
+    "seed8211": 0,
+    "own-controls": 0,
+    "shan-control": 0,
+    "sessions": 0,
+    "native-final": 0,
+    "line-unit": 0,
+    "line-gate": 0,
+    "layering-unit": 0,
+    "layering-gate": 0,
+    "gate1b": 0
+  }
+}

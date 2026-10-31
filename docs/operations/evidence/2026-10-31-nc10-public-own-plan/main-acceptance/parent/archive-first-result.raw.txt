@@ -1,0 +1,6 @@
+{
+  "utc": "2026-10-31T12:22:57.380236+00:00",
+  "qualification": "Post-freeze evidence archive; new files were not inputs to the 11:42:19–11:49:59 frozen preflight. Original reports/seals unchanged; alternate gzip names mapped losslessly. Private binaries/caches remain unmodified and are not force-added. C9 remains blocked with8 failures. I02 only private typed-wire foundation. Main Own bounded acceptance independently reviewed and lock-aligned.",
+  "copied_files": 1570,
+  "archive_bytes": 122732804
+}

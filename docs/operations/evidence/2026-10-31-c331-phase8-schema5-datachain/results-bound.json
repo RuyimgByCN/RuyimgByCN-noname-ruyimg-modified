@@ -1,0 +1,513 @@
+{
+  "utc": "2026-10-31T10:24:52.312883+00:00",
+  "source_refs": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/pre-full2/source-manifest.json",
+      "sha256": "31f4efb9b613c1718ae8cbdf76cf84f589aea5029c90e3408a7c4276843417de"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/final-freeze8-v2/source-manifest.json",
+      "sha256": "852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8/full-source/source-manifest.json",
+      "sha256": "b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1"
+    }
+  ],
+  "logs": [
+    {
+      "log": "initial-red.log",
+      "sha256": "24060b63c42f4844e8bf07f7f3585fab2c41fa8abfaa4dbff819d5be83e1fb37",
+      "test_counts": [
+        0,
+        3,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.9995249590137973,
+          "disk_free_bytes": 33283944448
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "first-green-attempt.log",
+      "sha256": "f1a3872b2300aa93580e0361bc930277a4490d33e1aeb8c572b67b3e59e7904c",
+      "test_counts": [
+        3,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 24.96177620900562,
+          "disk_free_bytes": 27711885312
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "green-attempt2.log",
+      "sha256": "3a382e4a02f615a816cd491abd06b43edc8a04c8f04af4ece92aec90852faa6d",
+      "test_counts": [
+        3,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 11.157068208034616,
+          "disk_free_bytes": 27666305024
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "matrix-first.log",
+      "sha256": "97498a797d2edeb3d88eedb98cd7a04068d37858bbda07a4fa43b47d23a15f06",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 101,
+          "locked_seconds": 1.0218666670261882,
+          "disk_free_bytes": 26494996480
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "matrix-attempt2.log",
+      "sha256": "257ee8af45f9993d4ab04f3d5b620e1bd4ca730b91e52e81900989b52db604b1",
+      "test_counts": [
+        10,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--test",
+            "nc_rounds",
+            "schema5"
+          ],
+          "exit": 0,
+          "locked_seconds": 2.456424958014395,
+          "disk_free_bytes": 26506301440
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "targeted-packages-first.log",
+      "sha256": "bc1a8ebd0dde62c5c109e3075f86b8004b70afae1af82f6a746812135667834b",
+      "test_counts": [
+        609,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "content-schema",
+            "-p",
+            "content-compiler",
+            "-p",
+            "content-runtime",
+            "-p",
+            "content-native-loader"
+          ],
+          "exit": 0,
+          "locked_seconds": 77.93274600000586,
+          "disk_free_bytes": 26488938496
+        }
+      ],
+      "warnings": 8,
+      "frontend_counts": []
+    },
+    {
+      "log": "frontend-tests-first.log",
+      "sha256": "f052f597a527383a1f676a38b841ff455cfb5ea23e0fba26255f8dda5fb80abe",
+      "test_counts": null,
+      "runner_records": [],
+      "warnings": 0,
+      "frontend_counts": [
+        "\u2139 tests 183",
+        "\u2139 pass 182",
+        "\u2139 fail 1"
+      ]
+    },
+    {
+      "log": "frontend-tests2.log",
+      "sha256": "535d61d181a45379b8f70700c50cd4a4a4c8c5f85242f69b94d118d1f5c73f9e",
+      "test_counts": null,
+      "runner_records": [],
+      "warnings": 0,
+      "frontend_counts": [
+        "\u2139 tests 183",
+        "\u2139 pass 183",
+        "\u2139 fail 0"
+      ]
+    },
+    {
+      "log": "frontend-type-first.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "test_counts": null,
+      "runner_records": [],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "frontend-type2.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "test_counts": null,
+      "runner_records": [],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "full-native-first.log",
+      "sha256": "fe8f55ffe9450ed7c1a12e8ea63b4179d34d9da3dd30bf621bf4c89b743926ed",
+      "test_counts": null,
+      "runner_records": [],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "full-native2.log",
+      "sha256": "f5e9774d279b78d2447d5d7f872771e331b82ab756a73b6402c8e1fa21f7af04",
+      "test_counts": [
+        1764,
+        1,
+        75
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-kernel",
+            "-p",
+            "engine-native-content",
+            "-p",
+            "engine-native"
+          ],
+          "exit": 101,
+          "locked_seconds": 54.336291416024324,
+          "disk_free_bytes": 74796859392
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "full-native3.log",
+      "sha256": "167abc1de90be3239600ca45ee71883e4a934e2086dab99343570eeaa13a5946",
+      "test_counts": [
+        1773,
+        0,
+        75
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-native-kernel",
+            "-p",
+            "engine-native-content",
+            "-p",
+            "engine-native"
+          ],
+          "exit": 0,
+          "locked_seconds": 34.686673082993366,
+          "disk_free_bytes": 74707640320
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "legacy-admission.log",
+      "sha256": "494ce4f05671c37d32decff4e80113439e795829eb0e8c19dd096744cec2377a",
+      "test_counts": [
+        2,
+        0,
+        0
+      ],
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "test",
+            "--offline",
+            "-p",
+            "engine-core",
+            "c331_schema_tests"
+          ],
+          "exit": 0,
+          "locked_seconds": 59.67618637502892,
+          "disk_free_bytes": 74587082752
+        }
+      ],
+      "warnings": 522,
+      "frontend_counts": []
+    },
+    {
+      "log": "gate1b-strict.log",
+      "sha256": "d70b7dda16780ff9ee14510cd46c47f6262766f1960740ba59d9b1bfcd942618",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "cargo",
+            "check",
+            "--offline",
+            "-p",
+            "engine-native",
+            "--all-targets"
+          ],
+          "exit": 0,
+          "locked_seconds": 18.113741249952,
+          "disk_free_bytes": 74619658240
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "source-cap-unit.log",
+      "sha256": "45957a9a818f6eb9754eedf65776a4410c0514be481e0e4c253a2cec59fe49b3",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "-m",
+            "unittest",
+            "discover",
+            "-s",
+            "scripts",
+            "-p",
+            "test_check_source_lines.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.0707605829811655,
+          "disk_free_bytes": 74619617280
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "source-caps.log",
+      "sha256": "07b7cdeb481e614b0025c827ed707f855f2ad214d675a6fa839582556a95888d",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "scripts/check-source-lines.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 4.128478917002212,
+          "disk_free_bytes": 74662113280
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    },
+    {
+      "log": "layering.log",
+      "sha256": "5e2c5ee4dfcce9f29d81ea759158357729dbf102dc70836a380c699373132909",
+      "test_counts": null,
+      "runner_records": [
+        {
+          "command": [
+            "python3",
+            "-B",
+            "scripts/check-native-layering.py"
+          ],
+          "exit": 0,
+          "locked_seconds": 0.13560687500284985,
+          "disk_free_bytes": 74662088704
+        }
+      ],
+      "warnings": 0,
+      "frontend_counts": []
+    }
+  ],
+  "gate1b": {
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 36.90819978713989,
+    "independent_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings",
+    "incremental": 0,
+    "jobs": 2,
+    "lock_device": 16777231,
+    "lock_inode": 620205209
+  },
+  "final_checks": [
+    {
+      "name": "full-native3",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "exit": 0,
+      "seconds": 34.718639850616455
+    },
+    {
+      "name": "legacy-admission",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "c331_schema_tests"
+      ],
+      "exit": 0,
+      "seconds": 59.70825695991516
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 18.174453020095825
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.154716968536377
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.1655890941619873
+    }
+  ],
+  "compatibility": {
+    "rule": 331,
+    "archive": 106,
+    "abi": 758,
+    "ws": 6,
+    "format": 1,
+    "api": 1,
+    "schema_default": 3,
+    "nondefault_order": 4,
+    "mechanisms": 5,
+    "schema_ceiling": 5,
+    "legacy_execution_only": 3
+  },
+  "not_implemented": "Core provider/lifetime/reveal/out/indexed/named window/rescue/explicit native declaration consumer; nondefault metadata controlled native loader rejection. VM cleanup wire binding not represented by onremove:String; no complete cleanup/SDK parity claim.",
+  "C331": "BLOCK,262/290,remaining28,+0",
+  "C29approved_contract_hashes": {
+    "approval-request.md": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+    "approval-request-review.raw.txt": "9500b545421e5b15db2efd916ca9aaf4e5ca7cb79c0c9f9b44907031343e170f",
+    "proposal-v1.raw.txt": "6499a28149f499fe3b51fecf573b22b705173dc9a20c9bd2a7d16c108d8d55b2",
+    "proposal-v2.raw.txt": "996e77443fdefbfaacfd51c710bad8d270f074d3f2b9cb78528022e1316b08e1",
+    "proposal-v3.raw.txt": "1fae43770e5d147c08602744473be625a1b930b67022a9638bef81571b3011da",
+    "review-v3.raw.txt": "e910f00253d5246f2c9d2df81444c6af0e323ccd8a7bda16b877e1e228908f01"
+  },
+  "coordination_recovery": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-serialization-recovery-a7ow63dx",
+  "no_staged_files": true
+}

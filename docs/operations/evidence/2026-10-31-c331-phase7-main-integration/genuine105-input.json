@@ -1,0 +1,8 @@
+{
+  "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/positive/330.json",
+  "record_sha256": "45ba9d383c5f58a931864a8f2f7e329d6ead2b28f380100110de4e4bf847d462",
+  "field": "state.snapshot_hex decoded, no byte/header edits",
+  "fixture": "crates/engine-native/tests/fixtures/c331_phase7_genuine_105.ngsa",
+  "fixture_sha256": "3e07feb6ef61e8a8fd140e36649eda855c7b6d100b30d753215ee1ede4b607c8",
+  "bytes": 1896
+}

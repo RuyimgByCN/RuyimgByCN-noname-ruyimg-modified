@@ -1,0 +1,205 @@
+{
+  "revision": 2,
+  "status": "complete",
+  "unavailable": [],
+  "occurrences": [
+    {
+      "ordinal": 0,
+      "event": {
+        "kind": "card_used",
+        "actor": 1,
+        "targets": [
+          2
+        ],
+        "effective": {
+          "kind": "sha",
+          "key": "sha",
+          "nature": "normal"
+        },
+        "voice": {
+          "role": {
+            "owner": {
+              "kind": "original",
+              "repository": "https://github.com/libnoname/noname.git",
+              "adopted_revision": "1111111111111111111111111111111111111111",
+              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "kind": "general",
+            "local_id": {
+              "pack": "standard",
+              "raw_symbol": "liubei"
+            }
+          },
+          "form": null,
+          "assets": [
+            {
+              "source": {
+                "kind": "original",
+                "repository": "https://github.com/libnoname/noname.git",
+                "adopted_revision": "1111111111111111111111111111111111111111",
+                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+              },
+              "reference": {
+                "kind": "original",
+                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                "source_category": "core",
+                "source_path": "audio/die/liubei.mp3"
+              },
+              "digest_algorithm": "sha256",
+              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+              "size": 1234
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ordinal": 1,
+      "event": {
+        "kind": "card_responded",
+        "actor": 2,
+        "effective": {
+          "kind": "sha",
+          "key": "sha",
+          "nature": "normal"
+        },
+        "voice": null
+      }
+    },
+    {
+      "ordinal": 2,
+      "event": {
+        "kind": "skill_activated",
+        "actor": 1,
+        "skill": {
+          "definition": {
+            "owner": {
+              "kind": "original",
+              "repository": "https://github.com/libnoname/noname.git",
+              "adopted_revision": "1111111111111111111111111111111111111111",
+              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "kind": "skill",
+            "local_id": {
+              "pack": "standard",
+              "raw_symbol": "rende"
+            }
+          }
+        },
+        "targets": null,
+        "voice": {
+          "role": {
+            "owner": {
+              "kind": "original",
+              "repository": "https://github.com/libnoname/noname.git",
+              "adopted_revision": "1111111111111111111111111111111111111111",
+              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "kind": "general",
+            "local_id": {
+              "pack": "standard",
+              "raw_symbol": "liubei"
+            }
+          },
+          "form": null,
+          "assets": [
+            {
+              "source": {
+                "kind": "original",
+                "repository": "https://github.com/libnoname/noname.git",
+                "adopted_revision": "1111111111111111111111111111111111111111",
+                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+              },
+              "reference": {
+                "kind": "original",
+                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                "source_category": "core",
+                "source_path": "audio/die/liubei.mp3"
+              },
+              "digest_algorithm": "sha256",
+              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+              "size": 1234
+            }
+          ]
+        }
+      }
+    },
+    {
+      "ordinal": 3,
+      "event": {
+        "kind": "damage_dealt",
+        "source": 1,
+        "target": 2,
+        "amount": 1,
+        "nature": "fire"
+      }
+    },
+    {
+      "ordinal": 4,
+      "event": {
+        "kind": "damage_prevented",
+        "source": null,
+        "target": 2,
+        "nature": "thunder"
+      }
+    },
+    {
+      "ordinal": 5,
+      "event": {
+        "kind": "hp_recovered",
+        "actor": 1,
+        "amount": 1
+      }
+    },
+    {
+      "ordinal": 6,
+      "event": {
+        "kind": "player_died",
+        "actor": 2,
+        "killer": 1,
+        "voice": {
+          "role": {
+            "owner": {
+              "kind": "original",
+              "repository": "https://github.com/libnoname/noname.git",
+              "adopted_revision": "1111111111111111111111111111111111111111",
+              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+            },
+            "kind": "general",
+            "local_id": {
+              "pack": "standard",
+              "raw_symbol": "liubei"
+            }
+          },
+          "form": null,
+          "assets": [
+            {
+              "source": {
+                "kind": "original",
+                "repository": "https://github.com/libnoname/noname.git",
+                "adopted_revision": "1111111111111111111111111111111111111111",
+                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+              },
+              "reference": {
+                "kind": "original",
+                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                "source_category": "core",
+                "source_path": "audio/die/liubei.mp3"
+              },
+              "digest_algorithm": "sha256",
+              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+              "size": 1234
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

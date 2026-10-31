@@ -1,0 +1,39 @@
+# NC10 final private regression disposition (2026-10-31)
+Implemented only the reviewed seed8211 test disposition. **All requested private checks pass on the final six-file source: native kernel/content/facade1719/0/75; targeted regression/Own/Shan/session checks and maintenance/strict gates exit0.** Incremental source review and parent Main integration remain pending. Production policy is unchanged from frozen v2; this is not complete NC10/strength/upstream/all37 acceptance.
+
+Review and preserved history
+- Read the full [quality disposition](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f7d9ea86-e45d-48d7-9707-feb292c56236/reviews/nc10-public-own-quality-disposition.md). Existing whole-Goal bugfix/test authorization covers this disposition; no new rule/protocol decision or numbered user decision was created.
+- New E=`/tmp/nc10-final-regression-d9f5d064/final-regression-disposition`; [checkpoint10](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/progress.json) and its report destination were supplied immediately/updated before10 minutes.
+- `E/before-source/crates/engine-native/tests/ai_planner.rs` is byte-equal to original5fc. `E/original-failure/` preserves the actual119-versus484 failure and original484 baseline success, with raw stdout/stderr/results and SHA. Original v2, measurements, reports, goldens and expectation history were not rewritten.
+
+Only new test delta
+- `crates/engine-native/tests/ai_planner.rs::policy_v2_drives_all_seats_without_answer_routing_panic` retains node64/deadline50ms/variant1, all original historical comments, completion within900 and the P3 winner check. It removes only the exact484 trajectory requirement; **119 is never asserted**.
+- Each plan must leave the complete saved authority/RNG state and host log unchanged and report zero simulation faults. Each actual apply must return Accepted/Pending, or explicitly resume legitimate Suspended outcomes within the same900-operation bound; Rejected/apply errors fail immediately. Successful and suspended formal operations are counted, with no retry/try-next behavior.
+- The final snapshot must encode/decode exactly; restore must preserve the rule-state hash and complete Save, allowing only the documented `auth_generation + 1`. No arbitrary/unknown byte fields are normalized. The test requires successful formal progress and no new probe faults.
+- Narrow execution actually records119 successful formal applications,0 suspensions,0 simulation faults,0 new probe faults and a successful full restore; P3 still wins. This is observed output, not a new fixed trajectory.
+
+Final validation
+| Command/check | Actual result |
+| --- | --- |
+| Seed8211 semantic regression | 1/0, exit0 |
+| Frozen complete-Plan P/Q, positive Pending, cancel/bounds/card-first controls | 4/0, exit0 |
+| Existing Shan-over-Pass guard | 1/0, exit0 |
+| Rust NativeSession targets `nc10_public_own_session` + `pa09_native_session` | **1+5=6/0**, exit0 |
+| Full `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast -- --test-threads=1` | **1719 passed / 0 failed / 75 ignored**, exit0 |
+| Required source-line script unit/gate | 2/0;8996 maintained files within physical/Rust-effective limits, exit0 |
+| Layering unit/gate | 9/0;0 upward references, exit0 |
+| Independent Gate1b | `RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`, exit0 in `/tmp/nc10-own-36992565/gate1b-target` |
+- All10 command records bind the same six source SHA before/after, including the full run's pre-source snapshot and final source. Raw exits/stdout/stderr/SHA and ignored tests remain in E. NativeSession compilation retains18 existing dead-code warnings (19 warning headers including summary); no native/strict warning was suppressed.
+- Heavy commands used the restored `/tmp/noname-run-serialized.py` and global lock inode620205209, own warm/independent strict targets, jobs2/incremental0/offline and3GiB disk monitoring. No all-workspace/CI/GUI run or new dependency installation. No LSP diagnostics tool was available in this worker allowlist; no “LSP clean” result is claimed.
+
+Sealed review inputs
+- [Complete six-file manifest](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/manifest.json), [composed patch](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/candidate.patch), [source overlay](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source-overlay.tar.gz), complete source/, full-worktree SHA manifest and [commands](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/commands.json).
+- Complete patch SHA256 `c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110`; clean-fixture apply-check exit0. Only incremental file since v2 is ai_planner.rs: [semantic delta](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/semantic-delta.patch), SHA256 `f77cb22318e2775e4bd6188447185154a8a35b7b9a618c93e32e82a7876e2232`.
+- [Preservation](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/preservation.json): all five frozen v2 files unchanged; Main315 held source/generated/package paths unchanged; parent-owned Docs allowed; private staging empty. No Main/C/package/old-sealed-source writes, commit/push, production-policy/root/VM/fuel/arithmetic/restore/version/gate changes.
+- Production SHA therefore retains the previously audited v2 current-WASM/Worker binding. **No fresh WebAssembly build or Worker execution was done in this step**; Rust session tests above are fresh. The required full native regression includes its existing NC12 guard; neither audited200-outcome experiment nor the fixed-reference pilot was repeated.
+
+Linked errata and limits
+- [Calibration P2 erratum](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/calibration-erratum.json): the retained24-row calibration actually contains **4 Own** calls; old “3” described the minimum assertion, not the observed count. The sealed pilot report/digest remains unchanged.
+- [Session-count erratum](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/session-count-erratum.json): archived v2 and fresh output both show1+5=6 tests; prior worker “7” statements were counting errors, not a dropped/skipped test. Original raw/report bytes remain unchanged.
+- Previously independently audited quality evidence supplies219,544 actual Accepted/Pending returns and656 final archive restorations across scoped profiles; it supports this bounded disposition, not general strength. Existing Wine-other/native330 equivalence gap remains separate C29 rescue work and is not encoded as a new normative test. Historical private all19, no-choice/descendant privacy, VM/Host/all37/platform and whole-Goal obligations remain open.
+Recommended next step: incremental review of the single-test semantic delta and six-file composition, then parent-controlled Main integration. Skipped fresh WASM/Worker, strength campaigns and broad platform/workspace checks as instructed; broader quality and adopted-rule equivalence remain unresolved risks.

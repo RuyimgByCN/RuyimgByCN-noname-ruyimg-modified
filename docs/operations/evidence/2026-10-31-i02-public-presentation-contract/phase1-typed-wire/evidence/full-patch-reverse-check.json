@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "git",
+    "apply",
+    "--reverse",
+    "--check",
+    "/tmp/i02-phase1-ab167599/final-checkpoint/full.patch"
+  ],
+  "exit": 128,
+  "stdout": "",
+  "stderr": "error: corrupt patch at /tmp/i02-phase1-ab167599/final-checkpoint/full.patch:3328\n"
+}

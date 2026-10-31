@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-31T11:51:29.481336+00:00",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "index_sha256": "07839f826d79765ed82367e4cd3d10f8e0b375dce84894c852a0cfa3d83a5cc4",
+  "logical_entries": 44306,
+  "logical_exact_HEAD": true,
+  "nonzero_stages": [],
+  "logical_sha256": "fdff335e23cb17ba51839cd6782c2f3c34e9bc7fa36b19f8f18b451ce9c50365",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-main-logical-index-fqxo3v7i",
+  "qualification": "Freshread-only git--no-optional-locks/GIT_OPTIONAL_LOCKS0; rawSHAstableacrossprobe; provescurrentindexmode/blob/stageequalsHEAD, doesnotexplainbefore11:26\u2192freeze11:42statcacheSHAchange; noMainDocs/indexwrite."
+}

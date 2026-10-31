@@ -1,0 +1,18 @@
+[
+  {
+    "name": "full-native2",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "exit": 101,
+    "seconds": 8.812333106994629
+  }
+]

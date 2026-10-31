@@ -1,0 +1,472 @@
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -530,18 +530,29 @@
+     )
+ }
+ 
+-fn projected_choice_action(choice: ChoiceView) -> GameAction {
++/// Public command advice; selecting an option does not certify its continuation.
++pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
+     let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
+-        return GameAction::NextPhase;
++        return None;
+     };
+-    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
+-        vec![ChoiceOption::Pass]
+-    } else if min == 0 && allow_cancel {
+-        Vec::new()
++    let mut distinct = Vec::new();
++    for option in options {
++        if !distinct.contains(&option) {
++            distinct.push(option);
++        }
++    }
++    let take = min.max(1).min(max).min(distinct.len());
++    let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
++        .take(take).copied().collect();
++    let mut selection = if cards.len() == take {
++        cards
+     } else {
+-        options.into_iter().take(min).collect()
++        distinct.into_iter().take(take).collect()
+     };
+-    GameAction::Answer { choice_id: id, selection }
++    if allow_cancel && (selection.len() < min || selection.len() > max) {
++        selection.clear();
++    }
++    Some(GameAction::Answer { choice_id: id, selection })
+ }
+ 
+ impl Engine {
+@@ -550,9 +561,15 @@
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
+         let submitted_revision = self.revision();
+-        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
++        let public_action = match self.ai_session(seat).choice() {
++            Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
++            // Preserve the existing non-owner VM leaf without treating it as an answer.
++            Some(choice @ ChoiceView::Other { .. }) if vm_choice_leaf(&choice) => Some(GameAction::NextPhase),
++            _ => None,
++        };
++        if let Some(action) = public_action {
+             return Plan {
+-                seat, revision: submitted_revision, action: projected_choice_action(choice),
++                seat, revision: submitted_revision, action,
+                 nodes_used: 0, budget_exhausted: false, timed_out: false,
+                 cancelled: planner.cancelled(), sim_faults: 0,
+             };
+@@ -762,8 +779,8 @@
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
+-                return projected_choice_action(choice);
++            if let Some(action) = sim.ai_session(seat).choice().and_then(projected_choice_action) {
++                return action;
+             }
+             if !sim.ai_session(seat).view().players[seat as usize].alive {
+                 return GameAction::NextPhase;
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -576,29 +576,15 @@
+             return Ok(serde_json::json!({ "done": true }).to_string());
+         }
+         if let Some(c) = self.inner.open_choice() {
+-            let take = c.spec.min.max(1).min(c.spec.max).min(c.spec.options.len());
+-            let sel: Vec<_> = c
+-                .spec
+-                .options
+-                .iter()
+-                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
+-                .take(take)
+-                .cloned()
+-                .collect();
+-            let sel = if sel.len() == take {
+-                sel
+-            } else {
+-                c.spec.options.iter().take(take).cloned().collect()
+-            };
+-            let (cid, obs) = (c.id, c.observer);
++            let obs = c.observer;
++            let action = engine_native::ai::projected_choice_action(
++                self.inner.ai_session(obs).choice().expect("open observer choice"),
++            ).expect("observer owns the choice");
+             let out = self.inner.submit(engine_native::GameCommand {
+                 actor: obs,
+                 expected_revision: self.inner.revision(),
+                 dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+-                action: GameAction::Answer {
+-                    choice_id: cid,
+-                    selection: sel,
+-                },
++                action,
+             });
+             return Ok(serde_json::json!({
+                 "kind": "answer",
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -100,5 +100,8 @@
+ #[path = "../nc10_j2_vm_privacy.rs"]
+ mod nc10_j2_vm_privacy;
+ 
++#[path = "../nc10_public_own_plan.rs"]
++mod nc10_public_own_plan;
++
+ #[path = "../nc10_source_provenance.rs"]
+ mod nc10_source_provenance;
+--- /dev/null
++++ b/crates/engine-native/tests/nc10_public_own_plan.rs
+@@ -0,0 +1,285 @@
++//! Public Own-choice advice must not execute saved private continuations.
++use engine_native::ai::BoundedPlanner;
++use engine_native::{ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction, Phase};
++
++fn restore(snapshot: &engine_native::StateSnapshot) -> Engine {
++    Engine::restore(
++        &engine_native::archive::decode_archive(&engine_native::archive::encode_archive(snapshot))
++            .unwrap(),
++    )
++    .unwrap()
++}
++
++fn yiji_pair() -> [Engine; 2] {
++    let mut engine = Engine::new(2306, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    engine.debug_grant(1, "遗计");
++    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    let snapshot = engine.save();
++    let mut later = snapshot.clone();
++    later.resolution.parks.push(engine_native::ParkSnapshot {
++        resume_depth: snapshot.resolution.stack.len(),
++        slot: engine_native::resolution::Slot::Trigger {
++            frame: engine_native::resolution::NO_FRAME,
++        },
++        machine: engine_native::MachineSnapshot::JiJie {
++            owner: 0,
++            stage: engine_native::snap::JiJieStageSnap::Ask,
++            card: None,
++        },
++    });
++    [restore(&snapshot), restore(&later)]
++}
++
++#[test]
++fn complete_own_plan_cannot_depend_on_an_unseen_later_park() {
++    let pair = yiji_pair();
++    let inputs = pair
++        .each_ref()
++        .map(|engine| format!("{:?}", engine.ai_session(1).input()));
++    let events = pair
++        .each_ref()
++        .map(|engine| format!("{:?}", engine.event_view_for(1)));
++    assert_eq!(inputs[0], inputs[1]);
++    assert_eq!(events[0], events[1]);
++    assert!(matches!(
++        pair[0].ai_session(1).choice(),
++        Some(ChoiceView::Own {
++            source_skill: Some("遗计"),
++            ..
++        })
++    ));
++    let originals = pair.each_ref().map(|engine| engine.save());
++    let mut samples = Vec::new();
++    for budget in [48, 64, 0, 1, 2, 4, 8] {
++        let planner = BoundedPlanner::new(budget)
++            .with_lookahead(2)
++            .with_policy_variant(1);
++        let plans = pair
++            .each_ref()
++            .map(|engine| engine.plan_action(1, &planner));
++        let full = plans.each_ref().map(|plan| format!("{plan:?}"));
++        eprintln!(
++            "OWN_PARK budget={budget} inputs={inputs:?} pre_events={events:?} plans={full:?}"
++        );
++        if let Ok(directory) = std::env::var("NC10_OWN_EVIDENCE") {
++            let path = std::path::Path::new(&directory);
++            std::fs::create_dir_all(path).unwrap();
++            std::fs::write(
++                path.join(format!("plans-{budget}.txt")),
++                format!("{full:#?}\ninputs={inputs:#?}\nevents={events:#?}\n"),
++            )
++            .unwrap();
++            for (side, snapshot) in originals.iter().enumerate() {
++                std::fs::write(
++                    path.join(format!("park-{side}.ngsa")),
++                    engine_native::archive::encode_archive(snapshot),
++                )
++                .unwrap();
++            }
++        }
++        samples.push((budget, full, plans));
++    }
++    for (budget, full, plans) in samples {
++        assert_eq!(
++            full[0], full[1],
++            "complete Plan must depend only on public input"
++        );
++        for (side, (engine, plan)) in pair.iter().zip(&plans).enumerate() {
++            assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));
++            assert!(!plan.budget_exhausted && !plan.timed_out && !plan.cancelled);
++            assert!(
++                matches!(&plan.action, GameAction::Answer { selection, .. } if selection == &[ChoiceOption::Confirm])
++            );
++            let mut restored = restore(&engine.save());
++            let before_revision = restored.revision();
++            let outcome = restored.apply_plan(plan).unwrap();
++            assert!(
++                matches!(outcome, CommandOutcome::Pending { .. }),
++                "{outcome:?}"
++            );
++            assert_eq!(restored.revision(), before_revision + 1);
++            Engine::restore(&restored.save()).unwrap();
++            eprintln!("OWN_APPLY budget={budget} side={side} outcome={outcome:?}");
++            if let Ok(directory) = std::env::var("NC10_OWN_EVIDENCE") {
++                let path = std::path::Path::new(&directory);
++                std::fs::write(
++                    path.join(format!("park-{side}-after-{budget}.ngsa")),
++                    engine_native::archive::encode_archive(&restored.save()),
++                )
++                .unwrap();
++                std::fs::write(
++                    path.join(format!("park-{side}-outcome-{budget}.txt")),
++                    format!("{outcome:?}\n"),
++                )
++                .unwrap();
++            }
++        }
++    }
++    assert_eq!(pair.each_ref().map(|engine| engine.save()), originals);
++}
++
++#[test]
++fn own_advice_cancelled_before_apply_does_not_submit() {
++    let [mut engine, _] = yiji_pair();
++    let before = engine.save();
++    let planner = BoundedPlanner::new(64).with_deadline_ms(0);
++    planner.cancel();
++    let plan = engine.plan_action(1, &planner);
++    assert!(plan.cancelled);
++    assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));
++    assert!(matches!(
++        engine.apply_plan(&plan),
++        Err(engine_native::ai::ApplyPlanError::Cancelled)
++    ));
++    assert_eq!(engine.save(), before);
++}
++
++#[test]
++fn shared_public_selector_obeys_order_card_preference_and_bounds() {
++    use engine_native::ai::projected_choice_action;
++    use engine_native::{ChoiceKind, ChoiceSpec};
++    let cases = [
++        (
++            vec![ChoiceOption::Pass, ChoiceOption::Card(7)],
++            1,
++            1,
++            false,
++            vec![ChoiceOption::Card(7)],
++            true,
++        ),
++        (
++            vec![ChoiceOption::Confirm],
++            1,
++            1,
++            true,
++            vec![ChoiceOption::Confirm],
++            true,
++        ),
++        (
++            vec![ChoiceOption::Tag(1), ChoiceOption::Tag(0)],
++            1,
++            1,
++            false,
++            vec![ChoiceOption::Tag(1)],
++            true,
++        ),
++        (
++            vec![
++                ChoiceOption::Card(7),
++                ChoiceOption::Card(7),
++                ChoiceOption::Card(8),
++            ],
++            2,
++            2,
++            false,
++            vec![ChoiceOption::Card(7), ChoiceOption::Card(8)],
++            true,
++        ),
++        (vec![], 0, 0, false, vec![], true),
++        (
++            vec![ChoiceOption::Pass],
++            0,
++            1,
++            false,
++            vec![ChoiceOption::Pass],
++            true,
++        ),
++        (vec![], 1, 1, true, vec![], true),
++        (vec![], 1, 1, false, vec![], false),
++        (
++            vec![ChoiceOption::Player(2)],
++            2,
++            2,
++            true,
++            vec![],
++            true,
++        ),
++        (
++            vec![ChoiceOption::Player(2)],
++            2,
++            2,
++            false,
++            vec![ChoiceOption::Player(2)],
++            false,
++        ),
++        (
++            vec![ChoiceOption::Card(9)],
++            2,
++            1,
++            false,
++            vec![ChoiceOption::Card(9)],
++            false,
++        ),
++        (vec![ChoiceOption::Card(9)], 1, 0, true, vec![], true),
++    ];
++    for (options, min, max, allow_cancel, expected, accepted) in cases {
++        let spec = ChoiceSpec {
++            kind: ChoiceKind::SelectCards,
++            prompt: "public-selector",
++            options: options.clone(),
++            min,
++            max,
++            allow_cancel,
++        };
++        let choice = ChoiceView::Own {
++            id: 91,
++            kind: spec.kind,
++            prompt: spec.prompt,
++            options,
++            min,
++            max,
++            allow_cancel,
++            source_skill: None,
++        };
++        let action = projected_choice_action(choice).unwrap();
++        assert!(
++            matches!(action, GameAction::Answer { choice_id: 91, ref selection } if selection == &expected)
++        );
++        assert_eq!(spec.accepts(&expected), accepted);
++    }
++    assert!(projected_choice_action(ChoiceView::Other {
++        id: 91,
++        observer: 1,
++        prompt: "public-selector"
++    })
++    .is_none());
++}
++
++#[test]
++fn changed_public_options_are_rejected_without_a_hidden_fallback() {
++    let [mut engine, _] = yiji_pair();
++    let mut saved = engine.save();
++    let open = saved.resolution.open_choice.as_mut().unwrap();
++    open.spec.min = 2;
++    open.spec.max = 2;
++    assert!(
++        Engine::restore(&saved).is_err(),
++        "native ask binding still rejects a mismatched archive"
++    );
++    let before = engine.save();
++    let mut plan = engine.plan_action(1, &BoundedPlanner::new(64));
++    let Some(ChoiceView::Own { id, .. }) = engine.ai_session(1).choice() else {
++        panic!("own choice")
++    };
++    plan.action = engine_native::ai::projected_choice_action(ChoiceView::Own {
++        id,
++        kind: engine_native::ChoiceKind::PickTag,
++        prompt: "mutated",
++        options: vec![ChoiceOption::Tag(0)],
++        min: 1,
++        max: 1,
++        allow_cancel: false,
++        source_skill: None,
++    })
++    .unwrap();
++    assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));
++    assert!(matches!(
++        engine.apply_plan(&plan).unwrap(),
++        CommandOutcome::Rejected(engine_native::RejectReason::InvalidChoice)
++    ));
++    assert_eq!(engine.save(), before);
++}
+--- /dev/null
++++ b/crates/engine-native-wasm/tests/nc10_public_own_session.rs
+@@ -0,0 +1,64 @@
++use engine_native_wasm::NativeSession;
++
++#[test]
++fn auto_step_uses_the_same_public_card_advice_and_submits_once() {
++    use engine_native::{
++        ai::{projected_choice_action, BoundedPlanner},
++        ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
++    };
++    let mut engine = Engine::new(2303, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    engine.debug_place(1, "shan");
++    let sha = engine.debug_place(0, "sha");
++    assert!(matches!(
++        engine.submit(GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: 1,
++            action: GameAction::PlayCard {
++                card: sha,
++                targets: vec![1]
++            }
++        }),
++        CommandOutcome::Pending { .. }
++    ));
++    let choice = engine.open_choice().unwrap();
++    let (observer, choice_id) = (choice.observer, choice.id);
++    let action = projected_choice_action(engine.ai_session(observer).choice().unwrap()).unwrap();
++    assert!(
++        matches!(&action, GameAction::Answer { selection, .. } if matches!(selection.as_slice(), [ChoiceOption::Card(_)]))
++    );
++    let plan = engine.plan_action(observer, &BoundedPlanner::new(64));
++    assert_eq!(format!("{:?}", plan.action), format!("{action:?}"));
++    let GameAction::Answer { selection, .. } = action else {
++        unreachable!()
++    };
++    let indices = selection
++        .iter()
++        .map(|option| {
++            choice
++                .spec
++                .options
++                .iter()
++                .position(|item| item == option)
++                .unwrap() as u32
++        })
++        .collect();
++    let archive =
++        engine_native_wasm::hex_encode(&engine_native::archive::encode_archive(&engine.save()));
++    let mut expected = NativeSession::new(3, 0).unwrap();
++    expected.restore_hex_checked(&archive).unwrap();
++    expected
++        .answer(observer as u32, choice_id, indices)
++        .unwrap();
++    let mut actual = NativeSession::new(3, 0).unwrap();
++    actual.restore_hex_checked(&archive).unwrap();
++    let revision = actual.revision();
++    let reply: serde_json::Value = serde_json::from_str(&actual.auto_step().unwrap()).unwrap();
++    assert_eq!(reply["kind"], "answer");
++    assert_eq!(actual.revision(), revision + 1);
++    assert_eq!(actual.save_hex(), expected.save_hex());
++}

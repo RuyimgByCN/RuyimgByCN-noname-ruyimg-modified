@@ -1,0 +1,37 @@
+{
+  "source_head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "archive": 105,
+  "purpose": "Existing accepted matching native binding fixture only; no phase1 rebuild/new-export claim",
+  "files": {
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": {
+      "main_sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+      "owned_sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+      "bytes": 5901
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": {
+      "main_sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "owned_sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "bytes": 3030
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": {
+      "main_sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+      "owned_sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+      "bytes": 21179
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": {
+      "main_sha256": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1",
+      "owned_sha256": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1",
+      "bytes": 3565932
+    },
+    "apps/web-client/src/worker/native-pkg/.gitignore": {
+      "main_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "owned_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1
+    },
+    "apps/web-client/src/worker/native-pkg/package.json": {
+      "main_sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+      "owned_sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+      "bytes": 488
+    }
+  }
+}

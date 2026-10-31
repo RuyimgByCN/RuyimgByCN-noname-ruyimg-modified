@@ -1,0 +1,32 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.07s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/engine_native-5e7d14102d429995)
+
+running 4 tests
+test engine::choice_source::tests::source_catalog_alias_is_not_resolved_by_first_match ... ok
+test engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask ... FAILED
+test engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown ... FAILED
+test engine::choice_source::tests::source_requires_first_depth_consumer_not_just_a_unique_active_ask ... ok
+
+failures:
+
+---- engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask stdout ----
+
+thread 'engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask' (17621356) panicked at crates/engine-native/src/engine/choice_source.rs:133:13:
+gate
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown stdout ----
+
+thread 'engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown' (17621357) panicked at crates/engine-native/src/engine/choice_source.rs:70:10:
+called `Result::unwrap()` on an `Err` value: BadTag("trigger_order_binding", 0)
+
+
+failures:
+    engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask
+    engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 11 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --lib`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--lib", "choice_source"], "exit": 101, "locked_seconds": 1.1467924590106122, "disk_free_bytes": 39814537216}

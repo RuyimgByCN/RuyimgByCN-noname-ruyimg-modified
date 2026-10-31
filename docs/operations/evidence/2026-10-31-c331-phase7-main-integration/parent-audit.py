@@ -1,0 +1,23 @@
+from pathlib import Path,PurePosixPath
+import json,hashlib,tarfile,tempfile,re,datetime
+E=Path('/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase7');W=E.parent.parent/'worktree';D=Path(tempfile.mkdtemp(prefix='noname-parent-c331-phase7-final-'));S=D/'snapshot';S.mkdir()
+def load(n):return json.loads((E/n).read_bytes())
+def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+F=E/'final-freeze7';assert sha(F/'source-manifest.json')=='0d7a18e9fd5225fd09f7902fb32172609ef10a8f783df97587eba37b716544cd';assert sha(F/'composed-source.tar.gz')=='d227cfd4ad67246359f3264e5e086e84073bd6de93bd1424e04e46ec109b0ec3';assert sha(F/'vs-main5fc.patch')=='44a0fab9a2f06ac5985362dca1a6f5565aa356fd83316b896f09f257308b4f67'
+m=load('final-freeze7/source-manifest.json');rows={r['path']:r['sha256'] for r in m['files']};assert len(rows)==148;seen=set()
+with tarfile.open(F/'composed-source.tar.gz','r:gz') as t:
+ for entry in t:
+  n=entry.name.removeprefix('./');p=PurePosixPath(n);assert entry.isfile() and not p.is_absolute() and '..' not in p.parts and n in rows and n not in seen;seen.add(n);b=t.extractfile(entry).read();assert hashlib.sha256(b).hexdigest()==rows[n];dest=S/n;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes(b);assert sha(W/n)==rows[n]
+assert seen==set(rows)
+old=load('checkpoint20/source-manifest.json');oldrows={r['path']:r['sha256'] for r in old['files']};assert oldrows.keys()==rows.keys();changed=[n for n in rows if rows[n]!=oldrows[n]];delta=load('checkpoint-to-final-v2/source-manifest.json');assert len(changed)==6 and set(changed)=={r['path'] for r in delta['changed']};assert all(n.startswith('crates/engine-native/tests/') for n in changed)
+assert sha(E/'checkpoint-to-final-v2/source-manifest.json')=='e95e298a89e88eb9ec2aac24ba092545acee9e7ed86c84d420f1345118086bba'
+for r in delta['changed']:assert r['checkpoint_sha256']==oldrows[r['path']] and r['final_sha256']==rows[r['path']]
+pre=load('pre-full4/source-manifest.json');assert {r['path']:r['sha256'] for r in pre['files']}==rows
+idx=load('final-freeze7/evidence-manifest.json');assert len(idx)==96
+for r in idx:assert (E/r['path']).stat().st_size==r['bytes'] and sha(E/r['path'])==r['sha256'],r['path']
+bound=load('results-bound.json');assert sha(E/bound['source_manifest'])==bound['source_manifest_sha256'];text=(E/'full-native5.log').read_text();suites=re.findall(r'test result: ok\. (\d+) passed; (\d+) failed; (\d+) ignored;',text);tot=[sum(int(x[i]) for x in suites) for i in range(3)];assert tot==[1761,0,75] and len(suites)==17;assert bound['full_native']['counts']==dict(zip(['passed','failed','ignored'],tot))
+strict=load('gate1b-result2.json');assert strict['exit']==0 and strict['RUSTFLAGS']=='-Dwarnings' and strict['independent_target']!=str(E.parent.parent/'target');assert '--all-targets' in strict['argv'];assert 'Finished' in (E/'gate1b-strict2.log').read_text()
+protect=load('protected-after.json');assert not protect['main_source_packages_dist_mismatches'] and not protect['original_c140_mismatches'] and not protect['hooks_mismatches'] and not protect['generated18_mismatches'];assert protect['main_index']['cached_diff_empty'] and protect['main_index']['before_sha256']==protect['main_index']['after_sha256'];assert protect['private_cached_diff_empty'] and protect['current_source_matches_passed_full_native_and_strict']
+assert protect['defaultdist_files']==37 and len(protect['generated18'])==18
+assert hashlib.sha256((F/'vs-main5fc.patch').read_bytes()+b'!').hexdigest()!='44a0fab9a2f06ac5985362dca1a6f5565aa356fd83316b896f09f257308b4f67'
+out={'utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'status':'PASS bounded source/evidence/raw-count bindings','snapshot':str(S),'base':m['base'],'source_count':148,'fresh_current_working_source':True,'checkpoint_to_final_changed':changed,'production_changes_since_checkpoint':0,'evidence96_fresh':True,'source_exactly_matches_final_full_native':True,'full_native':tot,'full_native_summaries':len(suites),'gate1b':strict,'protected_worker_snapshot':protect,'qualification':'Parent read-only tar/hash/JSON/log/count checks; no producer/tests/build/GUI/JS/network execution. No Main31867-asset fresh rescan; bounded Main33/18/dist separately verified. Privatephase7foundation not Cwholeacceptance/newCproduct qualification.'};(D/'independent-results.json').write_text(json.dumps(out,indent=2)+'\n');Path('/tmp/noname-parent-c331-phase7-final-current.json').write_text(json.dumps({'root':str(D),'snapshot':str(S)},indent=2)+'\n');print(json.dumps({k:v for k,v in out.items() if k not in ['protected_worker_snapshot','gate1b']},indent=2))

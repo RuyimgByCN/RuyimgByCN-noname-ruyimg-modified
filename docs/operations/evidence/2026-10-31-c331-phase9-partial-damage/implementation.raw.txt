@@ -1,0 +1,56 @@
+C331 phase9 — canonical signed damage / post-HP runtime checkpoint, BLOCKED partial
+核验日期 2026-10-31；private5fc+C7+C8 admission repair；非 Main 导入，非完整 C9 验收。
+C331 仍 BLOCK：262/290、remaining28、+0；331/NGSA106(private)/ABI758/WS6，format/API1 不变。
+证据根 E=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9。
+
+实际已做：
+- DamageData.amount:i32 为 root 当前量；settlement 分开 committed_damage、hp_loss、outcome、notrigger、progress。
+- Submit HP 前 checked modifiers 写回 canonical root；armor 只影响 HP 损失，不从 canonical amount 扣除。
+- 正数提交可 Some(n)+hp_loss0；full armor、无限 HP 均有真实 pending target trigger 测试。
+- 现有 root Before 队列→HP commit→现有 root targetDamage 队列→DamageFlow{root}；targetDamage 现先于 Dying。
+- DamageFlow 在 root Intrinsic 存续，等实际 Dying 子树结束，再发普通 Source/End/After child frames，最后逐个 chain child。
+- progress 在 emit/yield 前写 root；新窗口只存 root identity+kind；没有第二 scheduler/registry/amount authority。
+- Ctx/current damage、ordering/filter/gate/start 解析显式 window root；VM context 从 live root 取现值和死源清理后 source。
+- signed VM amount 复用既有 32bit bits；无新 HostContext 字段/opcode/query/ordinal。Host/OptionalGate variant 字段布局未改。
+- codec/hash/snapshot/restore 收录 signed root/settlement/window/Flow；machine84、window21、canonical damage22、event kinds23..27。
+- source 统计和 DamageDealt 数量取 canonical submitted source amount；HP 损失单独记录，不能据 Some(n) 放行后续窗口。
+- checked amount/HP 算术故障走现有 rejection/rollback；运行循环清理已死 source；zero 终止正常窗口并执行一次 Zero handler。
+
+明确未实现，不能把这一轮称完整 Damage lifecycle：
+- Before 没迁成普通 child window；没有独立 Begin/Begin1..4/SubmitHp progress 或 targetDamage child window。
+- P::Before 不是新的 pre-HP driver；当前 Flow 只在现有 commit/target 队列之后启动。
+- 现有大量 inline native/source callbacks 尚未逐一迁到上游对应窗口；部分 post callbacks 集中在 End，不能作规则等价证明。
+- cancel/replacement 子树、post-submit stop/dead-source 的完整实际确认矩阵未覆盖；replacement receipt None 的真实 Dying 等待已测。
+- chain 收集/冻结时点、目标死亡/link 清理边界未完成证明；只有实际 parent rescue 完成后才推进子 damage 的定向绿。
+- root/amount/progress/ancestry/order/duplicate commit 全伪造矩阵未完成；已测 window错root、重复commit、实际pending codec完整typed restore。
+- 所有旧规则轨迹/golden 首个语义分歧尚未完成归因，未重录期望。
+
+实际验证（所有 Rust heavy 走原 helper/lock，offline/jobs2/incremental0；未清理目标、未杀进程）：
+- initial-red.log：真实取消仍派 target、target 在 Dying 后的反例失败；原 chain 无合法 Tao fixture 的失败保留后修 fixture。
+- compile-first.log/compile2.log/targeted-first.log/targeted4.log 等失败原文保留，不能混记成绿。
+- targeted6.log、targeted7.log：9 passed/0 failed；含取消、target→Dying、chain救援、root改量/VM/log、full armor、Source真实声明窗口。
+- 另外含 Source byte decode+restore+完整 snapshot(auth_generation单独规范化)+继续回答/hash；wrong-root 和 duplicate-commit 负控。
+- zero执行一次+signed overflow rollback、无限HP positive receipt/zero loss、绝情 LoseHp replacement无receipt/无target触发。
+- full-native.log：cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast：1774/8/75，exit101。
+- 八失败：feiren chain quantity；xielv朱羽窗；楚江王死亡；A0新增variant sample但总数仍硬编码82；lingqu零量计数；旧chain；dying立即死亡；golden group。
+- 上述是真实失败/待修，未删测试、未更 golden，不能称完整 native 验收通过；细节 full-native-summary.json。
+- gate1b.log：独立 target-strict，RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets exit0。
+- source-cap-unit/source-caps/layering logs：2 passed；9025 files pass；0 upward refs。无 LSP/WASM/GUI 新 C9 验收声明。
+
+精确冻结：
+- checkpoint20 在11:30:11建成，37files；manifest f19f4f13d6c01529f45faa063c9fc96dbed2be02e892122020acfa8373db4c81；父独立核验仅checkpoint。
+- final-freeze9 42files，manifest fe9a244af41e26e90ee4969053957c929478850f7a88c991cdbd6080f89197db。
+- increment tar 007c4a5ccce55ceed57bed8296f228a82d7b0111fd8c825309aaf988681f95fd；patch e337dbc539e71f6275169fd7195b8b1d588554d34c3cc49c722438f5a767105f。
+- full-source 191files；manifest b1571db999a8795e4ff4687eb2b14a10a2772c4ba8b85dd974a89e3f459c4c4f。
+- full tar 8971135b03a951ff183ab892e8b71158ec42fa8a786b953d6dee3e2619920250；Main5fc patch a7caf7cfb704fa7d41d21339c0e2b3a299eef42aafb0c6e10706b0ec5eab5576。
+- increment/full reverse apply checks pass；final source 完全等于 full native/independent Gate1b 所见源；新3Rust职责文件已正常 rustfmt。
+
+保护与调度：
+- protected-after.json：原 Main31867 基线未刷新；仅隔离授权 Own6 exact hash delta，原其他 source/package/defaultdist37/C6原140/hooks 零意外差异。
+- Main generated18 只有worker WASM变更，等父 Own6 product-binding 30e97f8a…；完整旧/新hash及receipt路径在保护JSON；不是 C9 artifact。
+- private old330 import12文件fresh零差异；原 C7/C8/repair artifact indexes 逐文件复核；private index empty，无 stage/commit/push/Main写入。
+- 多次全局锁等待保留 wall/locked；最后既有检查管线11:51全部完成；40min后未起新heavy；未换锁/目标/复制Main Own策略。
+- results-bound.json、check-results.json、protected-after.json、artifact-index.json 是独立审阅入口。
+
+建议下一步：独立审阅本 post-HP 子集和八失败，下一有界增量先补真实 pre-HP/Begin窗口与 native callback 归位，再扩展停止/死亡/恢复矩阵。
+跳过完整 pre-Begin/来源等价、完整 forgery、C9平台产物验收；风险：本轮有8个全量失败，禁止合并或声称完整 C9 foundation。

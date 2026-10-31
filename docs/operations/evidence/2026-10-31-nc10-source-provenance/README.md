@@ -1,6 +1,6 @@
 # NC10：Own询问来源字段与兼容验收（2026-10-31）
 
-[裁决27](user-decision27.json)批准的source_skill已实现，33文件候选已接入Main并完成本地限定接纳，尚待本批入库发布。基准HEAD仍4dd0b286，规则330／NGSA105／ABI758／WS6保持；桌面执行transport仍默认WASM（规则backend默认native与之不同）。最终Main门禁、父fresh核验及组合复审已通过，见[Main V3限定接纳](main-final/README.md)；这不构成整NC10或Goal验收。
+[裁决27](user-decision27.json)批准的source_skill已实现，33文件候选已接入Main并完成本地限定接纳，已入库发布为5fc0f774，实际CI41183155464 ten-green并经父fresh／独立登记；见[发布证据](publication-ci/README.md)。基准parent为4dd0b286，当前5fc0f774规则330／NGSA105／ABI758／WS6保持；桌面执行transport仍默认WASM（规则backend默认native与之不同）。最终Main门禁、父fresh核验及组合复审已通过，见[Main V3限定接纳](main-final/README.md)；这不构成整NC10或Goal验收。
 
 ## 合同与代码边界
 
@@ -36,4 +36,4 @@ API／TS／NativeSession／Worker／IPC／WS6／network／Vue文本展示转发�
 
 新的P/Q实际byte restore均接受：完整初始PolicyInput／pre-events／source=遗计相同，Confirm后首Pending分别jiji_target/owner1与jijie_give_target/owner0。原[源码候选](confirm-prefix-source-countercandidate.raw.txt)仍保留其未执行时的历史资格，后来实际反例／红绿在原始包与已登记nc_rounds测试中。此例只限制来源字段的证书含义，不放任何门禁。
 
-原19 NoCert／旧329 runtime、完整质量／上游／平台验收仍未关闭；本批没有并入旧私有runtime，不用两个Err代替隐私正向通过。Android授权设备仍0，最新Apple CLI18s超时当前unknown，历史unavailable与当前unknown分开见[readiness](physical-readiness-after-user27.json)。整体Goal仍未完成。
+原19 NoCert／旧329 runtime、完整质量／上游／平台验收仍未关闭；本批没有并入旧私有runtime，不用两个Err代替隐私正向通过。Android授权设备在08:15仍0；此前devicectl18s超时的unknown保留，新xcdevice成功JSON给一台物理iPhone、available0，见[本次readiness](physical-readiness-5fc.json)。旧CLI unknown不回填成当时unavailable；均非真机产品验收。整体Goal仍未完成。

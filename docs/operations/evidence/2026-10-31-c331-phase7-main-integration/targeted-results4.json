@@ -1,0 +1,27 @@
+[
+  {
+    "name": "c-choice2",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc08"
+    ],
+    "exit": 0,
+    "seconds": 6.412456035614014
+  },
+  {
+    "name": "frontend-type",
+    "argv": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "exit": 2,
+    "seconds": 1.8748540878295898
+  }
+]

@@ -1,0 +1,23 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+error[E0308]: `match` arms have incompatible types
+   --> crates/engine-native-content/src/content/host/step/skills_status.rs:219:34
+    |
+217 | /                     match ctx.current_damage() {
+218 | |                         Ok(d) if d.target == self.owner => (d.amount.max(0) as u32).saturating_mul(10),
+    | |                                                            ------------------------------------------- this is found to be of type `u32`
+219 | |                         Ok(d) => d.amount.saturating_mul(15),
+    | |                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `u32`, found `i32`
+220 | |                         Err(_) => 5,
+221 | |                     }
+    | |_____________________- `match` arms have incompatible types
+    |
+help: you can convert an `i32` to a `u32` and panic if the converted value doesn't fit
+    |
+219 |                         Ok(d) => d.amount.saturating_mul(15).try_into().unwrap(),
+    |                                                             ++++++++++++++++++++
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `engine-native-content` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9_"], "exit": 101, "locked_seconds": 3.9017180830123834, "disk_free_bytes": 38059782144}

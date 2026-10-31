@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-31T10:04:47.770140+00:00",
+  "status": "PASS bounded frozen-source/30command/log/count/product binding audit; ACCEPTANCE BLOCK",
+  "source_files": 5,
+  "delta_v2_files": [
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native/tests/nc10_public_own_plan.rs"
+  ],
+  "commands": 30,
+  "products": 6,
+  "final_native_v1": [
+    1718,
+    1,
+    75
+  ],
+  "quality_assertion": "Preservedseed8211 119vs484 failure; firstdivergenceseat1Pass/Card85bothAccepted;200seedformaloutcomedistributionsstillpending",
+  "timeout": "Worker45min orchestrationtimeout aftersealed09:40source/report; not an additional producttest failure",
+  "full44303unchanged_files": "Inherited exact5fc/originalworkerGitblob audit; no parent3GB rescan, no currentworking audit duringactivequalitydiagnostics",
+  "qualification": "Read-only parentfrozen5/tar/manifest/30rawcommands/counts/6products checks only; no producer/test/build/JS/network execution. No Mainintegration/privacyallstates/NoCert19/quality/wholeGoal closure."
+}

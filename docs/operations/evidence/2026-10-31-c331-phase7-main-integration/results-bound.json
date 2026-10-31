@@ -1,0 +1,202 @@
+{
+  "utc": "2026-10-31T09:31:49.574425+00:00",
+  "source_manifest": "pre-full4/source-manifest.json",
+  "source_manifest_sha256": "9fa61cd8706bbf9406d4b8b0206407c4063a26195b76b9a701c4b01f4afc188c",
+  "full_native": {
+    "exit": 0,
+    "counts": {
+      "passed": 1761,
+      "failed": 0,
+      "ignored": 75
+    },
+    "result_lines": 17,
+    "results": [
+      {
+        "name": "full-native5",
+        "argv": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native-kernel",
+          "-p",
+          "engine-native-content",
+          "-p",
+          "engine-native"
+        ],
+        "exit": 0,
+        "seconds": 31.558935165405273
+      },
+      {
+        "name": "source-cap-unit",
+        "argv": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_check_source_lines.py"
+        ],
+        "exit": 0,
+        "seconds": 0.08676815032958984
+      },
+      {
+        "name": "source-caps",
+        "argv": [
+          "python3",
+          "-B",
+          "scripts/check-source-lines.py"
+        ],
+        "exit": 0,
+        "seconds": 4.198091983795166
+      },
+      {
+        "name": "layering",
+        "argv": [
+          "python3",
+          "-B",
+          "scripts/check-native-layering.py"
+        ],
+        "exit": 0,
+        "seconds": 0.1510169506072998
+      }
+    ]
+  },
+  "gate1b": {
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 1.274662733078003,
+    "independent_target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings",
+    "incremental": 0,
+    "jobs": 2
+  },
+  "frontend": [
+    {
+      "name": "frontend-type2",
+      "argv": [
+        "pnpm",
+        "--dir",
+        "apps/web-client",
+        "typecheck"
+      ],
+      "exit": 0,
+      "seconds": 8.602089881896973
+    },
+    {
+      "name": "frontend-tests",
+      "argv": [
+        "pnpm",
+        "--dir",
+        "apps/web-client",
+        "test"
+      ],
+      "exit": 0,
+      "seconds": 1.0793571472167969
+    }
+  ],
+  "source_and_c": {
+    "name": "source-and-c2",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "source"
+    ],
+    "exit": 0,
+    "seconds": 1.2839980125427246
+  },
+  "c_choice": {
+    "name": "c-choice2",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc08"
+    ],
+    "exit": 0,
+    "seconds": 6.412456035614014
+  },
+  "legacy_admission": {
+    "name": "legacy-c6-admission",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "c331_schema_tests"
+    ],
+    "exit": 0,
+    "seconds": 65.18055009841919
+  },
+  "adapter_check": [
+    {
+      "name": "native-adapters-check",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "-p",
+        "desktop-client",
+        "-p",
+        "game-server"
+      ],
+      "exit": 0,
+      "seconds": 23.982957124710083
+    }
+  ],
+  "source_unit": "source-unit2.log:4passed",
+  "critical_red_green": "critical-red.log 0/3 -> critical-green.log3/3",
+  "genuine105_input": {
+    "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/old-wal-reader/positive/330.json",
+    "record_sha256": "45ba9d383c5f58a931864a8f2f7e329d6ead2b28f380100110de4e4bf847d462",
+    "field": "state.snapshot_hex decoded, no byte/header edits",
+    "fixture": "crates/engine-native/tests/fixtures/c331_phase7_genuine_105.ngsa",
+    "fixture_sha256": "3e07feb6ef61e8a8fd140e36649eda855c7b6d100b30d753215ee1ede4b607c8",
+    "bytes": 1896
+  },
+  "decision29_json_sha256": "745b14383f66b3c01611f7d280fc4ebdd37d5c635846a0263dd54f1f413502e4",
+  "approved_contracts": {
+    "approval-request.md": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+    "approval-request-review.raw.txt": "9500b545421e5b15db2efd916ca9aaf4e5ca7cb79c0c9f9b44907031343e170f",
+    "proposal-v1.raw.txt": "6499a28149f499fe3b51fecf573b22b705173dc9a20c9bd2a7d16c108d8d55b2",
+    "proposal-v2.raw.txt": "996e77443fdefbfaacfd51c710bad8d270f074d3f2b9cb78528022e1316b08e1",
+    "proposal-v3.raw.txt": "1fae43770e5d147c08602744473be625a1b930b67022a9638bef81571b3011da",
+    "review-v3.raw.txt": "e910f00253d5246f2c9d2df81444c6af0e323ccd8a7bda16b877e1e228908f01"
+  },
+  "boundary": {
+    "ruleset": 331,
+    "archive": 106,
+    "rule_vm_abi": 758,
+    "ws_protocol": 6,
+    "format": 1,
+    "api": 1,
+    "default_schema": 3,
+    "nondefault_schema": 4,
+    "private106": "unpublished intermediate; later Core fields pending"
+  },
+  "whole_c331": "BLOCK",
+  "source_proof": "262/290 unchanged; remaining28",
+  "frontend_generated": "Only existing330/105 Main import materials; no currentC331/106 WASM/GUI/WS/WAL acceptance claimed",
+  "review_gate": "independent parent review required"
+}

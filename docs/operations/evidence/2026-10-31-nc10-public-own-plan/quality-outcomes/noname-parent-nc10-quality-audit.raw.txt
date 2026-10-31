@@ -1,0 +1,54 @@
+{
+  "utc": "2026-10-31T10:27:20.063341+00:00",
+  "status": "PASS",
+  "manifest_sha256": "ebe1772371530f84b0275367eb410561a9d28e6dacd96da174a7026f2fbe7bd2",
+  "fresh_evidence_hashes": 441,
+  "results": {
+    "baseline": {
+      "games": 200,
+      "counts": {
+        "Accepted": 52512,
+        "Pending": 10670
+      },
+      "actual_submits": 63182,
+      "steps_p50_p90_max": [
+        321,
+        413,
+        464
+      ],
+      "winners": {
+        "Player(2)": 74,
+        "Player(3)": 115,
+        "Player(0)": 3,
+        "Player(1)": 8
+      },
+      "final_archive_hashes": 200,
+      "source_and_binary_binding": true
+    },
+    "candidate": {
+      "games": 200,
+      "counts": {
+        "Accepted": 60046,
+        "Pending": 11972
+      },
+      "actual_submits": 72018,
+      "steps_p50_p90_max": [
+        366,
+        479,
+        577
+      ],
+      "winners": {
+        "Player(2)": 73,
+        "Player(3)": 114,
+        "Player(0)": 8,
+        "Player(1)": 5
+      },
+      "final_archive_hashes": 200,
+      "source_and_binary_binding": true
+    }
+  },
+  "restored_candidate_files": 5,
+  "quality_test_restored_to_Main5fc": true,
+  "staging_empty": true,
+  "qualification": "Independent raw retained-evidence parse, not a producer rerun or new execution/restore; NGSA decoded/restored in original Rust command; here bytes/header/hash only. Complete input/Plan retained as Rust Debug strings, not a new structured DTO. No strength/upstream-rule/fullNC10 acceptance."
+}

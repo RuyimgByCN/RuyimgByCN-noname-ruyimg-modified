@@ -1,0 +1,5 @@
+{
+  "private_symlink": "/tmp/nc10-own-36992565/archive",
+  "read_fixture_source": "/Users/ruyimg/Documents/Claude/sanguosha/archive",
+  "reason": "First full test retained ENOENT upstream fixture failures; no source or fixture modifications"
+}

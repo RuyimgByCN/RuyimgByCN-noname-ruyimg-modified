@@ -1,0 +1,15 @@
+{
+  "sealed_utc": "2026-10-31T08:31:54.973796+00:00",
+  "run_id": 41183155464,
+  "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "manifest_path": "copy-manifest.json",
+  "manifest_sha256": "8f7eec2708f01641d7cc35dfda78dbc24222bcf858b09675bac74009c2af7b38",
+  "manifest_bytes": 21594,
+  "summary_path": "verified-publication-ci-summary.json",
+  "summary_sha256": "a638daebf7e93c123d723b1fbe3497db882e991539ed35cfef1a2883bdf80f44",
+  "summary_bytes": 312438,
+  "listed_current_files_verified": 92,
+  "copy_file_count_including_manifest_and_this_seal": 94,
+  "qualification": "Copy all listed92 files plus manifest and thisseal=94primary files. Seal intentionally excluded from manifest to avoid self-reference. Ten private raw download originals excluded; gzip copies are byte-verified primary evidence. Datedcheckpoint live-stream hashes are historical, finalmanifest binds currentfiles.",
+  "no_main_writes": true
+}

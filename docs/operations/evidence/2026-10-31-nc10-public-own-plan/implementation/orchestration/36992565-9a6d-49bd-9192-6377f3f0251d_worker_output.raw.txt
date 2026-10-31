@@ -1,0 +1,45 @@
+Partial output before timeout:
+Implemented the private Own-choice leaf and the v2 cancel-edge correction. The [57-line report](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/36992565-9a6d-49bd-9192-6377f3f0251d/implementation/nc10-public-own-plan-leaf.md) links the frozen source, patches, commands, archives and results.
+
+Final artifacts are in [final-v2](/tmp/nc10-own-36992565/evidence/final-v2/manifest.json). The [incremental delta](/tmp/nc10-own-36992565/evidence/delta-v2.patch) SHA256 is `fa9f4f6db9e42e4d8e74d646da60d29c6200327e7a853b3dc35b7a2c59cb372e`; checkpoint v1 remains unchanged.
+
+The Main330 P/Q leak is reproduced and repaired for this boundary: complete Plans previously exposed 4 versus 11 nodes; both now return equal public advice and genuinely apply to Pending. V2 targeted tests, affected sessions, fresh WASM checks, Gate1b and line gates pass.
+
+Acceptance remains **BLOCK**. Seed8211 still fails its preserved 484-step expectation: the candidate finishes in 119 steps, with P3 still winning. The first action divergence is captured at step61: old Pass permits P0’s death; new Card85 saves P0. Both independent formal submissions return Accepted.
+
+Skipped further quality runs within the bound. The existing 200-seed counter metric does not measure formal reject/fault distributions or establish strength equivalence; those and broader NC10 scope remain pending.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Implemented only the authorized private public-Own selector/session change and bounded cancel-edge correction; formal rules, VM/root gates, versions and Main source remain unchanged."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Sealed source, full and incremental patches, 30 command records, red/green archives, actual formal outcomes, quality deviations and preservation audits."
+    }
+  ],
+  "changedFiles": [
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_public_own_plan.rs",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "crates/engine-native/tests/nc10_public_own_plan.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs"
+  ],
+  "commandsRun": [
+    {
+      "command": "Baseline privacy regression",
+      "result": "failed",
+      "summary": "Expected red: complete Plan equality fails on nodes4 versus11."
+    },
+    {
+      "command": "

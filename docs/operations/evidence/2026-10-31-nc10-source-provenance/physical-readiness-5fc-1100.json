@@ -1,0 +1,37 @@
+{
+  "utc": "2026-10-31T11:16:38.087680+00:00",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "versions": "330/105/758/WS6",
+  "results": {
+    "android": {
+      "argv": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "failure": null,
+      "stdout_sha256": "36f15c2fe32964a6fbe902e914a47739d4e6304b0d3e812bf08096ff0419b7ae",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "authorized_devices": 0
+    },
+    "apple": {
+      "argv": [
+        "xcrun",
+        "xcdevice",
+        "list",
+        "--timeout",
+        "10"
+      ],
+      "exit": 0,
+      "failure": null,
+      "stdout_sha256": "7e070dcfa17ac77714b2f4bb31eb5581eb9d8f3414f0bcaf99340cd481faeea4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "valid_json": true,
+      "physical_iphone_rows": 1,
+      "available_physical_iphone_rows": 0
+    }
+  },
+  "raw_private_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-readiness-5fc-c7rhy76o",
+  "qualification": "Readonlyavailabilityonly; no installation/signing/game/playback/HID/TCC/networkauth/30minpowerthermalacceptance; oldtimeoutsretainedseparately"
+}

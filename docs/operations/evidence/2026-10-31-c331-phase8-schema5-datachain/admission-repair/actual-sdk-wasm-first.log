@@ -1,0 +1,97 @@
+{
+  "actualCurrentWasm": true,
+  "actualSdkStore": true,
+  "originalTextToNative": true,
+  "positiveSchema5": true,
+  "positiveOriginalAssetOnly": true,
+  "results": [
+    {
+      "name": "\"charlotte\":true,\"charlotte\":false",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "\"charlotte\":true,\"\\u0063harlotte\":false",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-5-true",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-3-false",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-3-null",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-4-false",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-4-null",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-empty-active-3",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-empty-active-4",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "omitted-modules-empty-active-5",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    },
+    {
+      "name": "active-executor-conflict-valid-recomputed-hash",
+      "importRejected": true,
+      "directWasmRejected": true,
+      "admissionRejected": true,
+      "restoreRejected": true,
+      "storeHandleCatalogArchiveUnchanged": true
+    }
+  ]
+}

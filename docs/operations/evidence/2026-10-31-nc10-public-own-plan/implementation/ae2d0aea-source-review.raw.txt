@@ -1,0 +1,24 @@
+## Review
+
+No issues found.
+
+- **Scope:** Incremental source review of the sealed [final-v2 manifest](/tmp/nc10-own-36992565/evidence/final-v2/manifest.json:1), [two-file delta](/tmp/nc10-own-36992565/evidence/delta-v2.patch:1), affected frozen source/tests, implementation report and retained first-divergence evidence. The prior five-file v1 review remains unchanged. Digests are manifest-reported; none were freshly computed.
+
+- **Correct — cancellation now follows the public acceptance contract.** Frozen [ai.rs:552](/tmp/nc10-own-36992565/evidence/final-v2/source/crates/engine-native/src/ai.rs:552) clears an out-of-bounds selection only when `allow_cancel` is true. [ChoiceSpec::accepts](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/choice.rs:78) expressly accepts that empty selection. This resolves the previously qualified `min=max=2/options1/allow_cancel=true` edge without probing or resuming a continuation.
+
+- **Correct — bounded behavior is preserved.** Valid-count selections retain ordered deduplication and card-first preference. Min0/max0 still permits empty selection. With cancellation disallowed, insufficient/inconsistent shapes still produce deterministic advice subject to formal rejection. The helper always returns `Some(Answer)` for Own, so this correction cannot trigger hidden-search fallback. Other still returns `None`.
+
+- **Correct — the added test distinguishes permission from insufficiency.** Frozen [nc10_public_own_plan.rs:192](/tmp/nc10-own-36992565/evidence/final-v2/source/crates/engine-native/tests/nc10_public_own_plan.rs:192) pairs identical insufficient options/bounds with cancellation enabled and disabled, asserting both the emitted selection and `ChoiceSpec::accepts` result. Existing ordering, duplicate, card preference and malformed-bound controls remain.
+
+- **Correct — no broader production mechanism changes.** The delta changes only helper cancellation handling and its bounds table. The Own route still returns before planner cloning/redaction/search, with complete public-derived Plan metadata. NativeSession still shares the helper and submits once. Observer authority, Other VM leaf behavior, ordinary/descendant routes, Source27 qualification, wire shapes, versions and formal rules remain unchanged.
+
+- **Qualified semantic evidence:** [first-divergence.json](/tmp/nc10-own-36992565/evidence/first-divergence.json:1) records seed8211 step61, seat1, choice5: public `dying_save` options `[Pass, Card(85)]`, own card85=`Jiu`, no visible skills/roles/generals. Old advice selects Pass; the diagnostic’s copied v2 selector selects Card85. Independent restored formal submissions both return Accepted: old permits P0’s death, while new discards85, recovers P0 and emits DyingSaved. This establishes a concrete policy-action/effect divergence, not quality equivalence.
+
+- **Existing formal-rule issue stays outside this delta.** The unchanged [combat predicate](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/combat_rules.rs:72) accepts Jiu without checking responder equals dying; [restore ask reconstruction](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/asks/shapes.rs:64) likewise includes Jiu. Thus selecting the published card does not violate the current choice schema. The separately identified upstream rescue restriction needs its own rules review; duplicating that restriction inside AI would not resolve the formal authority gap.
+
+- **Acceptance remains separate.** The report preserves the 119-versus-484 regression and distinguishes v1 quality measurements from v2 targeted checks. The first divergence explains a policy cause; strength, opponent and formal outcome distributions remain pending. Neither an automatic 484→119 substitution nor an upstream-equivalence claim follows. The worker timeout is an orchestration outcome, not evidence of a product-test failure.
+
+- **Fixed:** None applied during review; the reviewed v2 delta resolves the cancellable insufficient-count edge.
+- **Merge verdict: OK with notes — SOURCE ONLY ready.** Quality acceptance remains **BLOCK**, pending regression disposition and the parent’s sealed command/product audit. No new approval decision is assumed; historical all19, no-choice/private-VM/descendant and all37 obligations remain open.
+
+Skipped execution, builds, writes, fresh hashes and independent product-log validation. Remaining risks are broader policy quality, the separate rescue-rule gap and unclosed privacy/runtime domains.

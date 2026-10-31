@@ -1,0 +1,52 @@
+{
+  "gate1b": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "layering-gate": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "layering-unit": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "line-gate": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "line-unit": {
+    "passed": 0,
+    "failed": 0,
+    "ignored": 0
+  },
+  "native-final": {
+    "passed": 1719,
+    "failed": 0,
+    "ignored": 75
+  },
+  "own-controls": {
+    "passed": 4,
+    "failed": 0,
+    "ignored": 0
+  },
+  "seed8211": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  },
+  "sessions": {
+    "passed": 6,
+    "failed": 0,
+    "ignored": 0
+  },
+  "shan-control": {
+    "passed": 1,
+    "failed": 0,
+    "ignored": 0
+  }
+}

@@ -1,5 +1,11 @@
 # Native GitHub Actions entry
 
+Latest registered source: `5fc0f77403d90fa4555156bf01722450cbe7bf3b`.
+[Run 41183155464](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464)
+completed successfully on all ten jobs. The [independent evidence record](evidence/2026-10-31-nc10-source-provenance/publication-ci/README.md)
+binds this exact head, original logs and installer metadata. It does not establish
+installer execution, signing, physical-platform acceptance or native performance benefit.
+
 The native source root contains `.github/workflows/ci.yml` and `Cargo.toml`.
 A push or pull request runs the workflow on every branch. Publishing this tree
 as a new branch does not change the repository's default branch.

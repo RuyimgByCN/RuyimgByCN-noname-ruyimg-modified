@@ -1,0 +1,19 @@
+{
+  "decision": 30,
+  "recorded_utc": "2026-10-31T10:48:10.643227+00:00",
+  "time_qualification": "Parent record timestamp, not independently measured selection-click time.",
+  "question": "是否批准已具体化并复审的I02公开呈现／自动语音合同？这会新增响应协议元数据，按您的Goal约束须单独取得答复；审批页SHA256为301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d。",
+  "answer": "批准限定合同（推荐）",
+  "approval_page_sha256": "301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d",
+  "approval_page": "approval-request.md",
+  "approved": "Exact reviewed I02v3 condensed approvalpage: optional S→C presentation, producer-only public commitment projection, immutable qualified genuine-definition/resource binding, one volatile Engine logrange lifecycle, local release-only and composer take once, serverafterdurable takeonce, additive parameterlessWASM getter, full author/resource/audio lifecycle acceptance conditional on realcompatibility/hash proof.",
+  "dependencies": "C29trueSkillInvocation/cost/provider andR05rawbyte/fullLock/controlledfactory useexistingauthorization; notalreadyimplemented. Actualacceptedbaselineatimplementation retained.",
+  "not_authorized": "No automatic rule/archive/ABI/WS/schema version allocation or migration; no borrowingreservedR05 axes; VMKillPlayer/DeathMachine genuine semanticrepair needsseparateconcretescope/decision. No root/VM continuation gate release; nowholeI02acceptance.",
+  "goal_milestones": "4/27 unchanged",
+  "source_baseline": "5fc0f77403d90fa4555156bf01722450cbe7bf3b;330/105/758/WS6;API1/format1;desktoptransportWASM",
+  "artifact_sha256": {
+    "proposal-v3.raw.txt": "eca931b2c444502a09a1cce1cd587218729a9b8eb785d353d3e1a2406dbce866",
+    "review-v3.raw.txt": "482edb85134662f2f9ab2ff144b4d257b3b2e8316bdcc48b7ecc20b1259e5e49",
+    "approval-page-review.raw.txt": "a1a0f37095529a8b46293e025efa609f16bc0d4fb53018d154b31b2ab2dff5e5"
+  }
+}

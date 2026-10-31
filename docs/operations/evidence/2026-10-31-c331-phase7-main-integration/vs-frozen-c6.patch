@@ -1,0 +1,1366 @@
+diff --git a/apps/desktop-client/src/native_envelope.rs b/apps/desktop-client/src/native_envelope.rs
+index 90892f8b..92f33423 100644
+--- a/apps/desktop-client/src/native_envelope.rs
++++ b/apps/desktop-client/src/native_envelope.rs
+@@ -88,6 +88,7 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
+     }).transpose()?;
+     let kind = if raw["prompt"] == "trigger_order" && raw["native_kind"] == "pick_tag" { json!(engine_api::ChoiceKind::OrderTriggers) } else { native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom"))) };
+     if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
++    if raw.get("source_skill").is_some_and(|value| !value.is_null() && value.as_str().is_none_or(str::is_empty)) { return Err("invalid source_skill".into()); }
+     let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,
+         "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
+             json!({"token": index, "label_key": option_label(option)})
+@@ -95,6 +96,7 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
+     for (source, target) in [
+         ("prompt", "prompt"),
+         ("native_kind", "native_kind"),
++        ("source_skill", "source_skill"),
+         ("min", "min_count"),
+         ("max", "max_count"),
+         ("allowCancel", "allow_cancel"),
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+index 5e54c481..7e6eba99 100644
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -267,6 +267,7 @@ pub fn choice_for(
+         max,
+         allow_cancel,
+         prompt,
++        source_skill,
+     } = view
+     else {
+         return None;
+@@ -298,6 +299,7 @@ pub fn choice_for(
+         continuation_id: id,
+         kind: if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+         native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
++        source_skill: source_skill.map(str::to_owned),
+         prompt: Some(prompt.to_owned()),
+         min_count: min as u8,
+         max_count: max as u8,
+diff --git a/apps/game-server/src/native_ws_e2e.rs b/apps/game-server/src/native_ws_e2e.rs
+index 35ad10f2..83e41e21 100644
+--- a/apps/game-server/src/native_ws_e2e.rs
++++ b/apps/game-server/src/native_ws_e2e.rs
+@@ -6,6 +6,7 @@ mod commit_crash;
+ mod double_failure;
+ mod durability;
+ mod referee;
++mod source_skill;
+ 
+ use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
+ use engine_api::{
+@@ -32,15 +33,23 @@ struct Server {
+ 
+ impl Server {
+     async fn start(cfg: &ServerConfig, restored: usize) -> Self {
++        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
++            .await
++            .expect("bind loopback");
++        Self::start_on(cfg, restored, listener).await
++    }
++
++    async fn start_on(
++        cfg: &ServerConfig,
++        restored: usize,
++        listener: tokio::net::TcpListener,
++    ) -> Self {
+         let lobby = bootstrap(cfg);
+         assert_eq!(
+             lobby.restore_native_rooms().expect("restore rooms"),
+             restored
+         );
+         let app = build_router(lobby.clone(), ServeDir::new(&cfg.original_content_root));
+-        let listener = tokio::net::TcpListener::bind("127.0.0.1:0")
+-            .await
+-            .expect("bind loopback");
+         let url = format!("ws://{}/ws", listener.local_addr().unwrap());
+         let task = tokio::spawn(async move { axum::serve(listener, app).await.unwrap() });
+         Self { url, lobby, task }
+@@ -762,36 +771,63 @@ fn native_ws_replay_without_receipt_is_rejected() {
+ /// 仍必须继续处理其他玩家的命令；慢连接被断开并可重新同步。
+ #[test]
+ fn native_extensions_ws_slow_spectator_does_not_block_commands() {
+-    struct PacingGuard;
+-    impl Drop for PacingGuard {
+-        fn drop(&mut self) {
+-            crate::TEST_WRITER_DELAY_MS.store(0, std::sync::atomic::Ordering::Relaxed);
+-            crate::TEST_OUTBOUND_QUEUE.store(0, std::sync::atomic::Ordering::Relaxed);
+-        }
+-    }
+-    let _guard = PacingGuard;
+-    // 小队列 + 放慢 writer：不读取的客户端在少量消息内必然饱和。
+-    crate::TEST_WRITER_DELAY_MS.store(5, std::sync::atomic::Ordering::Relaxed);
+-    crate::TEST_OUTBOUND_QUEUE.store(8, std::sync::atomic::Ordering::Relaxed);
+     let directory = tempfile::tempdir().unwrap();
+     let cfg = local_config(directory.path());
+     runtime().block_on(async {
+-        let server = Server::start(&cfg, 0).await;
++        // Bound both TCP buffers: an unread loopback socket otherwise fits all broadcasts
++        // on some OSes, regardless of an artificial delay between writer sends.
++        let listener = tokio::net::TcpSocket::new_v4().unwrap();
++        listener.set_send_buffer_size(1024).unwrap();
++        let send_buffer = listener.send_buffer_size().unwrap();
++        assert!(send_buffer <= 64 * 1024, "unexpected TCP send buffer: {send_buffer}");
++        listener.bind("127.0.0.1:0".parse().unwrap()).unwrap();
++        let listener = listener.listen(128).unwrap();
++        let address = listener.local_addr().unwrap();
++        let server = Server::start_on(&cfg, 0, listener).await;
+         let mut a = Peer::connect(&server).await;
+         let initial = a.create().await;
+         let mut b = Peer::connect(&server).await;
+         b.join(a.room, 1, None).await;
+         // B 只是占座；持续读掉广播，避免它自己成为慢连接干扰断言。
+         let b_reader = tokio::spawn(async move {
+-            while let Some(Ok(frame)) = b.ws.next().await {
+-                if matches!(frame, Message::Close(_)) {
+-                    break;
++            let mut outcomes = 0;
++            let mut text_bytes = 0;
++            while let Some(frame) = b.ws.next().await {
++                match frame.unwrap() {
++                    Message::Text(text) => {
++                        text_bytes += text.len();
++                        let message = decode_s2c(text.as_ref()).unwrap();
++                        if let ServerMessage::CommandOutcome { idempotency_key, .. } = &message {
++                            outcomes += 1;
++                            State::from_message(message.clone()).assert_player(PlayerId::new(2));
++                            if idempotency_key.0 == 9999 {
++                                return (outcomes, text_bytes);
++                            }
++                        }
++                    }
++                    Message::Close(_) => break,
++                    _ => {}
+                 }
+             }
++            panic!("reading player disconnected before the accepted command");
+         });
+-        let mut slow = Peer::connect(&server).await;
+-        slow.spectate(a.room).await;
+-        // 从此不再读 slow：让服务端 writer/队列饱和。
++        let socket = tokio::net::TcpSocket::new_v4().unwrap();
++        socket.set_recv_buffer_size(1024).unwrap();
++        let recv_buffer = socket.recv_buffer_size().unwrap();
++        assert!(recv_buffer <= 64 * 1024, "unexpected TCP receive buffer: {recv_buffer}");
++        let stream = socket.connect(address).await.unwrap();
++        let (ws, response) = tokio_tungstenite::client_async(
++            &server.url,
++            MaybeTlsStream::Plain(stream),
++        ).await.unwrap();
++        assert_eq!(response.status().as_u16(), 101);
++        let mut slow = Peer::from_ws(ws).await;
++        slow.spectate(a.room).await.assert_spectator();
++        let token = slow.token.clone();
++        let store = super::native_room_store::NativeRoomStore::new(&cfg.native_room_store);
++        let original_member = store.load_all().unwrap()[0].state.members.iter()
++            .find(|member| member.reconnect_token == token).unwrap().connection_id;
++        // From here until the close check, the real Spectator socket is never read.
+         let mut revision = initial.view.revision;
+         for key in 1..=300u64 {
+             let (result, state) = tokio::time::timeout(
+@@ -816,12 +852,15 @@ fn native_extensions_ws_slow_spectator_does_not_block_commands() {
+             revision = state.view.revision;
+             // A 每命令还会收到名册广播；用短等待排空，保持其队列不因测试
+             // 自身的读取节奏而饱和。
+-            while tokio::time::timeout(Duration::from_millis(2), a.ws.next())
+-                .await
+-                .is_ok()
+-            {}
++            loop {
++                match tokio::time::timeout(Duration::from_millis(2), a.ws.next()).await {
++                    Err(_) => break,
++                    Ok(Some(Ok(Message::Text(_)))) => {}
++                    other => panic!("active player must remain connected: {other:?}"),
++                }
++            }
+         }
+-        let (accepted, _) = tokio::time::timeout(
++        let (accepted, after) = tokio::time::timeout(
+             Duration::from_secs(3),
+             a.submit(a.player, revision, 9999, CommandKind::EndPhase),
+         )
+@@ -831,22 +870,48 @@ fn native_extensions_ws_slow_spectator_does_not_block_commands() {
+             matches!(accepted, CommandResult::Accepted { .. }),
+             "{accepted:?}"
+         );
+-        // 服务端应主动关闭慢连接，而不是让它继续占据广播槽位。
+-        let closed = tokio::time::timeout(Duration::from_secs(10), async {
++        // Missing broadcasts plus a real close prove saturation; starting to read a
++        // merely buffered socket here must not turn the test green.
++        let mut outcomes = 0;
++        let mut wire_bytes = 0;
++        tokio::time::timeout(Duration::from_secs(10), async {
+             while let Some(frame) = slow.ws.next().await {
+                 match frame {
+-                    Ok(Message::Close(_)) => return true,
+-                    Ok(_) => continue,
+-                    Err(_) => return true,
++                    Ok(Message::Close(_)) | Err(_) => break,
++                    Ok(Message::Text(text)) => {
++                        wire_bytes += text.len();
++                        let message = decode_s2c(text.as_ref()).unwrap();
++                        if matches!(message, ServerMessage::CommandOutcome { .. }) {
++                            State::from_message(message).assert_spectator();
++                            outcomes += 1;
++                        }
++                    }
++                    Ok(_) => {}
+                 }
+             }
+-            true
+         })
+         .await
+         .expect("慢连接应在期限内被断开");
+-        assert!(closed);
+-        b_reader.abort();
+-        println!("NATIVE_WS slow_spectator=disconnected commands=301");
++        assert!(outcomes > 0 && outcomes < 301,
++            "backpressure must drop broadcasts before reading resumes: {outcomes}");
++
++        let mut reconnected = Peer::connect(&server).await;
++        let restored = reconnected.join(a.room, 0, Some(token.clone())).await;
++        restored.assert_spectator();
++        assert_eq!(restored.view.revision, after.view.revision);
++        assert_eq!(restored.view.state_hash, after.view.state_hash);
++        assert_eq!(reconnected.snapshot().await, restored);
++        let records = store.load_all().unwrap();
++        let members = &records[0].state.members;
++        assert_eq!(members.len(), 3, "reconnect must reclaim the old member");
++        assert!(!members.iter().any(|member| member.connection_id == original_member));
++        assert_eq!(members.iter().filter(|member| member.reconnect_token == token).count(), 1);
++        reconnected.close().await;
++        let (healthy_outcomes, healthy_bytes) = tokio::time::timeout(Duration::from_secs(3), b_reader)
++            .await.expect("reading player receives all commands").unwrap();
++        assert_eq!(healthy_outcomes, 301);
++        assert!(healthy_bytes < 1024 * 1024, "broadcast load stays below 1 MiB");
++        println!("NATIVE_WS slow_spectator=disconnected commands=301 send_buffer={send_buffer} recv_buffer={recv_buffer} buffered_outcomes={outcomes} text_bytes={wire_bytes} healthy_outcomes={healthy_outcomes} healthy_bytes={healthy_bytes} reconnect=pass members=3");
+         server.stop().await;
+     });
+ }
+diff --git a/apps/game-server/src/native_ws_e2e/peer.rs b/apps/game-server/src/native_ws_e2e/peer.rs
+index b8bc3eff..a0f219a6 100644
+--- a/apps/game-server/src/native_ws_e2e/peer.rs
++++ b/apps/game-server/src/native_ws_e2e/peer.rs
+@@ -9,6 +9,10 @@ impl Peer {
+     pub(super) async fn connect_url(url: &str) -> Self {
+         let (ws, response) = tokio_tungstenite::connect_async(url).await.unwrap();
+         assert_eq!(response.status().as_u16(), 101);
++        Self::from_ws(ws).await
++    }
++
++    pub(super) async fn from_ws(ws: WebSocketStream<MaybeTlsStream<TcpStream>>) -> Self {
+         let mut peer = Self {
+             ws,
+             room: 0,
+diff --git a/apps/web-client/scripts/nc10-source-provenance.test.mjs b/apps/web-client/scripts/nc10-source-provenance.test.mjs
+new file mode 100644
+index 00000000..13b38e5c
+--- /dev/null
++++ b/apps/web-client/scripts/nc10-source-provenance.test.mjs
+@@ -0,0 +1,39 @@
++import assert from "node:assert/strict";
++import { test } from "node:test";
++import { choiceMetadata,choicePromptLabel } from "../src/engine/observerMetadata.ts";
++import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
++const choice={choice_id:1,observer:1,prompt:"trigger_confirm",native_kind:"confirm",source_skill:"遗计",options:[{token:0,label_key:"confirm"}],deadline_unix_ms:12345};
++test("source metadata is optional but strict when present",()=>{
++ assert.equal(choiceMetadata(choice).source_skill,"遗计");
++ for(const source_skill of [null,undefined]) assert.equal(choiceMetadata({source_skill}).source_skill,undefined);
++ for(const source_skill of ["",1,{},[],true]) assert.throws(()=>choiceMetadata({source_skill}),/source_skill/);
++ assert.equal(choicePromptLabel(choice),"是否发动【遗计】？");
++ assert.equal(choicePromptLabel({...choice,source_skill:null}),"是否发动技能？");
++ const text="<img src=x onerror=alert(1)>";
++ assert.equal(choicePromptLabel({...choice,source_skill:text}),`是否发动【${text}】？`);
++});
++test("desktop normal and chooseGeneral envelopes preserve source and deadline",async()=>{
++ for(const type of ["observer","chooseGeneral"]){
++  const envelope={view:{seats:[]},choice:{...choice},events:[],legal_actions:[],result:null};
++  const transport=new DesktopEngineTransport(async(cmd,args)=>cmd==="native_engine_open"?27:cmd==="native_engine_close"?null:{id:args.request.id,ok:true,data:type==="chooseGeneral"?{envelope}:envelope});
++  const reply=new Promise(resolve=>{transport.onmessage=e=>resolve(e.data);});
++  transport.postMessage({id:1,type});
++  const value=await reply;const result=type==="chooseGeneral"?value.data.envelope:value.data;
++  assert.equal(result.choice.source_skill,"遗计");assert.equal(result.choice.deadline_unix_ms,12345);transport.terminate();
++ }
++});
++
++
++test("frozen WS6 TypeScript reader ignores source while current reader preserves it",async()=>{
++ const old=await import("./ws6-observer-metadata-before-source.ts");
++ assert.equal(old.choiceMetadata(choice).source_skill,undefined);
++ assert.equal(old.choicePromptLabel(choice),"是否发动技能？");
++ assert.equal(choiceMetadata(choice).source_skill,"遗计");
++});
++
++test("C order mapping and strict source forwarding coexist",()=>{
++ const result=choiceMetadata({native_kind:"pick_tag",prompt:"trigger_order",source_skill:"遗计"});
++ assert.equal(result.kind,"OrderTriggers");assert.equal(result.source_skill,"遗计");
++ assert.equal(choiceMetadata({native_kind:"pick_tag",prompt:"other"}).kind,"Custom");
++ assert.throws(()=>choiceMetadata({native_kind:"pick_tag",prompt:"trigger_order",source_skill:""}),/source_skill/);
++});
+diff --git a/apps/web-client/src/engine/observerMetadata.ts b/apps/web-client/src/engine/observerMetadata.ts
+index df59634d..2844761b 100644
+--- a/apps/web-client/src/engine/observerMetadata.ts
++++ b/apps/web-client/src/engine/observerMetadata.ts
+@@ -15,11 +15,12 @@ export function generalSlots(value: unknown): [GeneralSlotView | null, GeneralSl
+   return value as [GeneralSlotView | null, GeneralSlotView | null];
+ }
+ 
+-export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown; kind?: string }): Pick<ChoiceRequest, "prompt" | "native_kind" | "kind"> {
++export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown; source_skill?: unknown; kind?: string }): Pick<ChoiceRequest, "prompt" | "native_kind" | "source_skill" | "kind"> {
+   if (value.prompt != null && typeof value.prompt !== "string") throw new Error("native: prompt metadata invalid");
+   if (value.native_kind != null && (typeof value.native_kind !== "string" || !Object.hasOwn(CHOICE_KINDS, value.native_kind))) throw new Error("native: native_kind metadata invalid");
++  if (value.source_skill != null && (typeof value.source_skill !== "string" || value.source_skill.length === 0)) throw new Error("native: source_skill metadata invalid");
+   const native_kind = value.native_kind as NativeChoiceKind | undefined;
+-  return { ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind === "pick_tag" && value.prompt === "trigger_order" ? "OrderTriggers" : native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
++  return { ...(value.source_skill == null ? {} : {source_skill: value.source_skill as string}), ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind === "pick_tag" && value.prompt === "trigger_order" ? "OrderTriggers" : native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
+ }
+ 
+ const KIND_LABELS: Record<string, string> = {
+@@ -43,6 +44,7 @@ export function choiceKindLabel(choice: ChoiceRequest): string {
+ }
+ 
+ export function choicePromptLabel(choice: ChoiceRequest): string {
++  if (choice.prompt === "trigger_confirm" && choice.source_skill) return `是否发动【${choice.source_skill}】？`;
+   if (!choice.prompt) return choiceKindLabel(choice);
+   return Object.hasOwn(PROMPTS, choice.prompt) ? PROMPTS[choice.prompt] : choiceKindLabel(choice);
+ }
+diff --git a/apps/web-client/src/worker/nativeBackend.ts b/apps/web-client/src/worker/nativeBackend.ts
+index 5e4b5cb5..02c3ba90 100644
+--- a/apps/web-client/src/worker/nativeBackend.ts
++++ b/apps/web-client/src/worker/nativeBackend.ts
+@@ -311,6 +311,7 @@ interface NativeChoiceJson {
+   hidden?: boolean;
+   kind?: string;
+   native_kind?: unknown;
++  source_skill?: unknown;
+ }
+ 
+ /** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */
+diff --git a/crates/engine-native-kernel/src/archive.rs b/crates/engine-native-kernel/src/archive.rs
+index 4aa8a3ee..25e06ba8 100644
+--- a/crates/engine-native-kernel/src/archive.rs
++++ b/crates/engine-native-kernel/src/archive.rs
+@@ -110,7 +110,9 @@ use crate::state::{
+ /// `xuanyuanjian_marked`。v103 字节被拒绝。
+ /// v105（2026-10-17，swd 昆仑镜批 149）：`TurnState` 追加昆仑镜快照
+ /// （`kunlunjing_snapshot`/`kunlunjing_hp`）。v104 字节被拒绝。
+-pub const ARCHIVE_FORMAT_VERSION: u16 = 105;
++/// v106: Decision29 private C331 integration. Strict105 rejection; unpublished while
++/// approved later C Core layouts are still pending in this intermediate format.
++pub const ARCHIVE_FORMAT_VERSION: u16 = 106;
+ 
+ /// 存档魔数（"NGSA" = noname-game snapshot archive）。
+ pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index f0258d71..ec199175 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -42,6 +42,14 @@ impl Clone for Park {
+     }
+ }
+ 
++/// The formal ready consumer: effect/admission parks precede their suspended order park.
++/// This read-only selection conveys neither answer nor execution authority.
++pub fn ready_park_index(res: &Resolution) -> Option<usize> {
++    res.parks.iter().position(|park| {
++        park.resume_depth == res.stack.len() && park.machine.trigger_order().is_none()
++    }).or_else(|| res.parks.iter().position(|park| park.resume_depth == res.stack.len()))
++}
++
+ /// 机器归属：帧固有流程，或某帧上的一次触发。
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+ pub enum Slot {
+@@ -430,18 +438,7 @@ pub fn run(
+ 
+         // A) 恢复深度匹配的挂起机器
+         if res.open_choice.is_none() {
+-            if let Some(idx) = res
+-                .parks
+-                .iter()
+-                .position(|p| {
+-                    p.resume_depth == res.stack.len() && p.machine.trigger_order().is_none()
+-                })
+-                .or_else(|| {
+-                    res.parks
+-                        .iter()
+-                        .position(|p| p.resume_depth == res.stack.len())
+-                })
+-            {
++            if let Some(idx) = ready_park_index(res) {
+                 let mut park = res.parks.remove(idx);
+                 let prior_skills: std::collections::BTreeSet<_> =
+                     core.skills.keys().copied().collect();
+diff --git a/crates/engine-native-kernel/src/snap/asks.rs b/crates/engine-native-kernel/src/snap/asks.rs
+index 64303e9a..e3d386d6 100644
+--- a/crates/engine-native-kernel/src/snap/asks.rs
++++ b/crates/engine-native-kernel/src/snap/asks.rs
+@@ -410,19 +410,16 @@ pub fn active_ask(
+             ))
+         }
+         MachineSnapshot::Death { .. } => None,
+-        MachineSnapshot::OptionalGate {
+-            owner,
+-            asked,
+-            inner,
+-            ..
+-        } => {
++        MachineSnapshot::OptionalGate { owner, asked, inner, .. } => {
+             if let Some(e) = inner {
+-                return active_ask(e, core, catalog);
+-            }
+-            if !*asked {
+-                return None;
++                let mut ask = active_ask(e, core, catalog)?;
++                ask.source_skill = optional_source(e, catalog);
++                return Some(ask);
+             }
+-            Some(confirm_ask(*owner, "trigger_confirm"))
++            if !*asked { return None; }
++            let mut ask = confirm_ask(*owner, "trigger_confirm");
++            ask.source_skill = optional_source(machine, catalog);
++            Some(ask)
+         }
+         // ---- 内容机器 ----
+         MachineSnapshot::SanCai { owner, stage, .. } => match stage {
+@@ -1024,3 +1021,33 @@ pub fn active_ask(
+         _ => None,
+     }
+ }
++
++// Only OptionalGate::step has the direct delegation contract used by this source.
++fn optional_source(machine: &MachineSnapshot, catalog: &Catalog) -> Option<&'static str> {
++    let MachineSnapshot::OptionalGate {
++        def, asked, inner, ..
++    } = machine
++    else {
++        return None;
++    };
++    if let Some(inner) = inner {
++        return optional_source(inner, catalog);
++    }
++    if !asked {
++        return None;
++    }
++    let declared = catalog.skills.get(*def as usize)?;
++    if declared.name.is_empty()
++        || declared.behavior.is_vm_skill()
++        || !declared.trigger.as_ref().is_some_and(|meta| meta.optional)
++        || catalog
++            .skills
++            .iter()
++            .filter(|entry| entry.name == declared.name)
++            .count()
++            != 1
++    {
++        return None;
++    }
++    Some(declared.name)
++}
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+index 1242514a..5e7c6266 100644
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -421,8 +421,9 @@ impl NativeSession {
+                 min,
+                 max,
+                 allow_cancel,
+-                ..
+-            }) => serde_json::json!({
++                source_skill,
++            }) => {
++                let mut choice = serde_json::json!({
+                 "id": id,
+                 "observer": seat,
+                 "prompt": prompt,
+@@ -440,8 +441,10 @@ impl NativeSession {
+                     engine_native::ChoiceOption::Skill(s) => serde_json::json!({ "skill": self.inner.catalog().skill_name(*s) }),
+                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
+                 }).collect::<Vec<_>>(),
+-            })
+-            .to_string(),
++                });
++                if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
++                choice.to_string()
++            },
+             Some(ChoiceView::Other {
+                 id,
+                 observer,
+diff --git a/crates/engine-native/src/engine/choice_source.rs b/crates/engine-native/src/engine/choice_source.rs
+new file mode 100644
+index 00000000..3066f396
+--- /dev/null
++++ b/crates/engine-native/src/engine/choice_source.rs
+@@ -0,0 +1,205 @@
++//! Owner-visible ask identity, not a root certificate or permission to resume.
++use super::*;
++impl Engine {
++    pub(super) fn choice_source_skill(
++        &self,
++        open: &crate::choice::OpenChoice,
++    ) -> Option<&'static str> {
++        let resolution = &self.state.resolution;
++        let consumer = crate::resolution::ready_park_index(resolution)?;
++        let mut producer = None;
++        for (index, park) in resolution.parks.iter().enumerate() {
++            let snapshot = park.machine.snapshot();
++            if let Some(ask) = crate::snap::active_ask(&snapshot, &self.state.core, &self.catalog) {
++                if producer.is_some()
++                    || ask.observer != open.observer
++                    || ask.prompt != open.spec.prompt
++                    || ask.kind != open.spec.kind
++                    || ask.options != open.spec.options
++                    || ask.min != open.spec.min
++                    || ask.max != open.spec.max
++                    || ask.allow_cancel != open.spec.allow_cancel
++                {
++                    return None;
++                }
++                let source =
++                    if matches!(snapshot, crate::snap::MachineSnapshot::OptionalGate { .. }) {
++                        ask.source_skill
++                    } else {
++                        None
++                    };
++                producer = Some((index, source));
++            }
++        }
++        let (index, source) = producer?;
++        if index != consumer {
++            return None;
++        }
++        let name = source?;
++        self.view_for(open.observer).players[open.observer as usize]
++            .skills
++            .contains(&name)
++            .then_some(name)
++    }
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::{ChoiceView, MachineSnapshot, Phase};
++    fn fixture() -> Engine {
++        let mut engine = Engine::new(2306, 3);
++        engine.debug_set_turn(0, Phase::Play, 1);
++        for seat in 0..3 {
++            engine.debug_clear_hand(seat);
++        }
++        engine.debug_grant(1, "遗计");
++        engine.debug_deal_damage(Some(0), 1, 1, crate::event::DamageNature::Normal);
++        engine
++    }
++    fn source(engine: &Engine) -> Option<&'static str> {
++        let Some(ChoiceView::Own { source_skill, .. }) = engine.choice_view_for(Some(1)) else {
++            panic!("own ask")
++        };
++        source_skill
++    }
++    fn restored(snapshot: crate::StateSnapshot) -> Engine {
++        Engine::restore(
++            &crate::archive::decode_archive(&crate::archive::encode_archive(&snapshot)).unwrap(),
++        )
++        .unwrap()
++    }
++    #[test]
++    fn source_requires_actual_ready_consumer_not_just_a_unique_active_ask() {
++        let engine = fixture();
++        assert_eq!(source(&engine), Some("遗计"));
++        let mut saved = engine.save();
++        let mut earlier = saved.resolution.parks.last().unwrap().clone();
++        earlier.machine = MachineSnapshot::JiJi {
++            owner: 1,
++            stage: crate::snap::JiJiStageSnap::Draw,
++            target: None,
++            given: 0,
++        };
++        saved.resolution.parks.insert(0, earlier);
++        assert_eq!(
++            source(&restored(saved)),
++            None,
++            "restore remains accepted but the first consumer is not the ask producer"
++        );
++        let mut saved = engine.save();
++        saved.resolution.parks.last_mut().unwrap().resume_depth = 0;
++        assert_eq!(source(&restored(saved)), None);
++    }
++    #[test]
++    fn source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown() {
++        let mut engine = fixture();
++        engine
++            .state
++            .resolution
++            .open_choice
++            .as_mut()
++            .unwrap()
++            .spec
++            .max = 2;
++        assert_eq!(source(&engine), None);
++        let engine = fixture();
++        for name in ["刚烈", "奸雄"] {
++            let mut saved = engine.save();
++            let MachineSnapshot::OptionalGate { def, .. } =
++                &mut saved.resolution.parks.last_mut().unwrap().machine
++            else {
++                panic!("gate")
++            };
++            *def = engine.catalog.skill_by_name(name).unwrap();
++            // C binds the parked trigger to its window; this forged snapshot now rejects.
++            assert!(Engine::restore(&saved).is_err());
++            let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
++            let mut probe = fixture();
++            probe.state.resolution.parks[index].machine = saved.resolution.parks[index]
++                .machine
++                .restore(&probe.catalog)
++                .unwrap();
++            assert_eq!(source(&probe), None);
++        }
++        let mut engine = fixture();
++        let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
++        let p = &engine.state.resolution.parks[index];
++        let duplicate = crate::resolution::Park {
++            resume_depth: p.resume_depth,
++            slot: p.slot,
++            machine: p.machine.fork(),
++        };
++        engine.state.resolution.parks.push(duplicate);
++        assert_eq!(source(&engine), None);
++    }
++    #[test]
++    fn source_uses_only_the_actual_direct_inner_ask() {
++        let engine = fixture();
++        let mut saved = engine.save();
++        let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
++        let inner = saved.resolution.parks[index].machine.clone();
++        let MachineSnapshot::OptionalGate { event, .. } = &inner else {
++            panic!("gate")
++        };
++        saved.resolution.parks[index].machine = MachineSnapshot::OptionalGate {
++            owner: 1,
++            def: engine.catalog.skill_by_name("刚烈").unwrap(),
++            event: event.clone(),
++            asked: true,
++            inner: Some(Box::new(inner)),
++        };
++        assert_eq!(
++            source(&restored(saved)),
++            Some("遗计"),
++            "outer unowned name cannot replace inner source"
++        );
++        let mut saved = engine.save();
++        let MachineSnapshot::OptionalGate { inner, .. } =
++            &mut saved.resolution.parks[index].machine
++        else {
++            panic!("gate")
++        };
++        *inner = Some(Box::new(MachineSnapshot::JiJi {
++            owner: 1,
++            stage: crate::snap::JiJiStageSnap::GiveCard,
++            target: None,
++            given: 0,
++        }));
++        let mut engine = engine;
++        engine.state.resolution.parks[index].machine = saved.resolution.parks[index]
++            .machine
++            .restore(&engine.catalog)
++            .unwrap();
++        assert_eq!(
++            source(&engine),
++            None,
++            "inner different ask cannot borrow the outer name"
++        );
++    }
++    #[test]
++    fn source_catalog_alias_is_not_resolved_by_first_match() {
++        use crate::catalog::{
++            Catalog, QueryCtx, SkillBehavior, SkillDef, SkillLimits, SkillMachine,
++        };
++        struct Alias;
++        impl SkillBehavior for Alias {
++            fn filter(&self, _: &QueryCtx<'_>, _: u8, _: &crate::EventData) -> bool {
++                false
++            }
++            fn start(&self, _: u8, _: &crate::EventData) -> Box<dyn SkillMachine> {
++                panic!("not executed")
++            }
++        }
++        let mut engine = fixture();
++        let mut catalog = crate::content::standard::standard_catalog();
++        catalog.skills.push(SkillDef {
++            name: "遗计",
++            trigger: None,
++            limits: SkillLimits::default(),
++            behavior: Box::new(Alias),
++        });
++        engine.catalog = std::sync::Arc::new(Catalog::build(catalog.cards, catalog.skills));
++        assert_eq!(source(&engine), None);
++    }
++}
+diff --git a/crates/engine-native/tests/c331_host_source_metadata.rs b/crates/engine-native/tests/c331_host_source_metadata.rs
+index 257dbd19..18b30cb2 100644
+--- a/crates/engine-native/tests/c331_host_source_metadata.rs
++++ b/crates/engine-native/tests/c331_host_source_metadata.rs
+@@ -35,7 +35,7 @@ fn direct_source_profiles_keep_priority_silent_and_translated_choice_qualificati
+ fn actual_silent_first_handler_runs_before_the_normal_order_choice_and_restores() {
+     use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
+     use engine_native::content::host::HostSkillDecl;
+-    use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
++    use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
+     let pkg=content_compiler::compile_source("skill c331_source_a(420006000) locked { trigger damage_before owner_is_target { effect storage_set(self_skill,1,1); } } skill c331_source_b(420006001) locked { trigger damage_before owner_is_target { effect storage_set(self_skill,1,1); } }").unwrap();
+     let p = ExtensionPack {
+         def: ExtensionDef {
+diff --git a/crates/engine-native/tests/c331_source33_integration.rs b/crates/engine-native/tests/c331_source33_integration.rs
+new file mode 100644
+index 00000000..ea52390a
+--- /dev/null
++++ b/crates/engine-native/tests/c331_source33_integration.rs
+@@ -0,0 +1,96 @@
++//! Decision29 integration: actual consumer provenance and strict private106 boundary.
++use engine_native::{
++    ChoiceOption, ChoiceView, CommandOutcome, Engine, GameAction, GameCommand, Phase,
++};
++fn answer(e: &mut Engine, selection: Vec<ChoiceOption>) {
++    let c = e.open_choice().unwrap().clone();
++    let out = e.submit(GameCommand {
++        actor: c.observer,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection,
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++fn source(e: &Engine) -> Option<&'static str> {
++    let Some(ChoiceView::Own { source_skill, .. }) = e.choice_view_for(Some(1)) else {
++        panic!("own")
++    };
++    source_skill
++}
++#[test]
++fn phase7_actual_order_park_does_not_hide_optional_gate_consumer_source() {
++    let mut e = Engine::new(290733, 3);
++    e.debug_set_turn(0, Phase::Play, 1);
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    for name in ["遗计", "刚烈"] {
++        e.debug_grant(1, name);
++    }
++    e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_order");
++    assert_eq!(
++        source(&e),
++        None,
++        "order asks are generic, never root certificates"
++    );
++    let def = e.catalog().skill_by_name("遗计").unwrap();
++    answer(&mut e, vec![ChoiceOption::Skill(def)]);
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
++    let saved = e.save();
++    assert!(matches!(
++        saved.resolution.parks[0].machine,
++        engine_native::MachineSnapshot::TriggerOrder { .. }
++    ));
++    assert!(saved.resolution.parks.iter().any(|p| matches!(
++        p.machine,
++        engine_native::MachineSnapshot::OptionalGate { .. }
++    )));
++    assert_eq!(
++        source(&e),
++        Some("遗计"),
++        "source follows the formal non-order consumer, not the first same-depth order park"
++    );
++    let decoded =
++        engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&saved))
++            .unwrap();
++    let mut r = Engine::restore(&decoded).unwrap();
++    assert_eq!(source(&r), Some("遗计"));
++    assert!(matches!(
++        r.choice_view_for(Some(0)),
++        Some(ChoiceView::Other { .. })
++    ));
++    let cursor = e.log().len();
++    for engine in [&mut e, &mut r] {
++        answer(engine, vec![ChoiceOption::Confirm]);
++    }
++    let expected = e.save();
++    let mut actual = r.save();
++    actual.auth_generation = expected.auth_generation;
++    assert_eq!(actual, expected);
++    assert_eq!(&e.log()[cursor..], r.log());
++    assert_eq!(e.state_hash(), r.state_hash());
++}
++#[test]
++fn phase7_genuine105_is_rejected_without_migration() {
++    let raw = include_bytes!("fixtures/c331_phase7_genuine_105.ngsa");
++    assert_eq!(&raw[..6], b"NGSAi\0");
++    assert!(matches!(
++        engine_native::archive::decode_archive(raw),
++        Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))
++    ));
++}
++#[test]
++fn phase7_private106_header_and_full_state_roundtrip() {
++    let e = Engine::new(2907106, 3);
++    let raw = engine_native::archive::encode_archive(&e.save());
++    assert_eq!(u16::from_le_bytes([raw[4], raw[5]]), 106);
++    let decoded = engine_native::archive::decode_archive(&raw).unwrap();
++    assert_eq!(decoded, e.save());
++    let r = Engine::restore(&decoded).unwrap();
++    assert_eq!(r.state_hash(), e.state_hash());
++}
+diff --git a/crates/engine-native/tests/fixtures/c331_phase7_genuine_105.ngsa b/crates/engine-native/tests/fixtures/c331_phase7_genuine_105.ngsa
+new file mode 100644
+index 0000000000000000000000000000000000000000..bb2f76ae9dcaa2b8593a4eb59fe6a132f328e96f
+GIT binary patch
+literal 1896
+zcmd_qw@X7o9Ki9!*jqIAUSo+p_TG&(YGUub#oh}zi{Pe%e}=f|;G{U~q~Pf2COC=U
+z_wsy#1P3=EKlt3;yW<}3_dD(x4d%*OMWa$-4ZVxh%g>I|<M+Bko=_+qRPtCU1~RcB
+z08z-n7VINz%CJP<^>D(debj&~ZOSmkq^DSb1@;j(We_(j1HMSMj~bBW+*hWZ^zmpw
+z2YN7$G7KRO?U=*>M3~Ww1Q?NtW<+8Qg$PF~s?mpH1Y!^qXoU(hs6-e-QH6B`Aqmdt
+zh91$-K!-*6As_C@MliJ4!3M_Qihg(_1S!~s0}R-M7h+I>CX{0tZ7`t`KFERxA|QUN
+z3n)b%>Yzp~<}r;Lh&sDr728Nh0a~z$5fmX7xkyABN-&FI_(OcJh!u2MM^dAExPH@W
+zv^gRVYpBF^mM%4&yv;iIhejL?A-zi)|AST({YQw?_&voJaUi!hrjtY6`N3Vs@tFF;
+WlA+zdG@iacU!5I2KHY!3wtWJ_7dX8D
+
+literal 0
+HcmV?d00001
+
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index f5ef97ba..81119266 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -99,3 +99,9 @@ mod nc10_redaction_helper_contract;
+ 
+ #[path = "../nc10_j2_vm_privacy.rs"]
+ mod nc10_j2_vm_privacy;
++
++#[path = "../nc10_source_provenance.rs"]
++mod nc10_source_provenance;
++
++#[path = "../c331_source33_integration.rs"]
++mod c331_source33_integration;
+diff --git a/crates/engine-native/tests/native_kernel/d4.rs b/crates/engine-native/tests/native_kernel/d4.rs
+index d4e57c1a..1fe13388 100644
+--- a/crates/engine-native/tests/native_kernel/d4.rs
++++ b/crates/engine-native/tests/native_kernel/d4.rs
+@@ -44,7 +44,7 @@ fn d4_boss_b0_archive_format_v79_rejects_v78_without_migration() {
+         decode_archive, encode_archive, ArchiveError, ARCHIVE_FORMAT_VERSION, ARCHIVE_MAGIC,
+     };
+ 
+-    assert_eq!(ARCHIVE_FORMAT_VERSION, 105);
++    assert_eq!(ARCHIVE_FORMAT_VERSION, 106);
+     let e = Engine::new_boss(29102, 3, 0, 0);
+     let mut bytes = encode_archive(&e.save());
+     // 伪造头格式版本 84（载荷仍为 v86 布局）——门禁应拒收。
+diff --git a/crates/engine-native/tests/nc04_cards_given_event.rs b/crates/engine-native/tests/nc04_cards_given_event.rs
+index a6a8878a..f5aaee93 100644
+--- a/crates/engine-native/tests/nc04_cards_given_event.rs
++++ b/crates/engine-native/tests/nc04_cards_given_event.rs
+@@ -340,35 +340,11 @@ fn single_cards_given_frame_carries_all_cards() {
+ /// 逐张口径的**两个各含 1 张的 CardsGiven 帧**——升号后不得被静默接受并按
+ /// v326 的单帧语义续行。
+ #[test]
+-fn v325_and_earlier_archives_are_rejected_by_rule_version() {
+-    use engine_native::archive::decode_archive;
+-    use engine_native::snap::SnapshotError;
+-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+-        .join("../../docs/operations/evidence/2026-10-29-nc04-cards-given-v326");
+-    let snap = decode_archive(&std::fs::read(ev.join("native-v325.ngsa")).unwrap()).unwrap();
+-    assert_eq!(snap.ruleset_version, 325);
+-    assert!(matches!(
+-        Engine::restore(&snap),
+-        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 331 })
+-    ));
+-    // 挂起档：目录版本 = 标准版本 ^ 内容锁；与当前目录的差异只来自标准版本位。
+-    let pack = cards_given_pack(true);
+-    let catalog_version = Engine::new_with_extensions(23005, 4, &[&pack])
+-        .unwrap()
+-        .ruleset_version();
+-    let snap =
+-        decode_archive(&std::fs::read(ev.join("cards-given-v325.ngsa")).unwrap()).unwrap();
+-    assert_ne!(snap.ruleset_version, catalog_version, "C331 also binds direct trigger metadata and handler identity");
+-    let given_frames = snap
+-        .resolution
+-        .stack
+-        .iter()
+-        .filter(|f| matches!(f.data, engine_native::event::EventData::CardsGiven { .. }))
+-        .count();
+-    assert_eq!(given_frames, 2, "夹具保留 v325 逐张口径的两个 CardsGiven 帧");
+-    assert!(matches!(
+-        Engine::restore_with_extensions(&snap, &[&pack]),
+-        Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
+-            if snapshot == snap.ruleset_version && catalog == catalog_version
+-    ));
++fn v325_and_earlier_archives_are_rejected_by_archive_format() {
++    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
++    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-29-nc04-cards-given-v326");
++    for name in ["native-v325.ngsa", "cards-given-v325.ngsa"] {
++        let raw=std::fs::read(ev.join(name)).unwrap();
++        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
++    }
+ }
+diff --git a/crates/engine-native/tests/nc04_vm_resume.rs b/crates/engine-native/tests/nc04_vm_resume.rs
+index c22e9cc7..ea434a57 100644
+--- a/crates/engine-native/tests/nc04_vm_resume.rs
++++ b/crates/engine-native/tests/nc04_vm_resume.rs
+@@ -595,16 +595,11 @@ fn nc04_vm_restore_preserves_hit_counting() {
+ 
+ /// 旧档拒绝（版本策略）：v323 普通档解码成功但按规则版本拒绝恢复。
+ #[test]
+-fn b7_plain_v323_archive_is_rejected_by_rule_version() {
++fn b7_plain_v323_archive_is_rejected_by_archive_format() {
+     let old = include_bytes!(
+         "../../../docs/operations/evidence/2026-10-28-b7-vm-suspend-restore/native-v323.ngsa"
+     );
+-    let snapshot = engine_native::archive::decode_archive(old).unwrap();
+-    assert_eq!(snapshot.ruleset_version, 323);
+-    assert!(matches!(
+-        Engine::restore(&snapshot),
+-        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 331 })
+-    ));
++    assert!(matches!(engine_native::archive::decode_archive(old), Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
+ }
+ 
+ /// 旧档拒绝（不可靠恢复）：v323 含挂起 VM 机的档用旧 Rvm 编码，新解码
+diff --git a/crates/engine-native/tests/nc07_archive_hash_fields.rs b/crates/engine-native/tests/nc07_archive_hash_fields.rs
+index 16c02a66..bc948585 100644
+--- a/crates/engine-native/tests/nc07_archive_hash_fields.rs
++++ b/crates/engine-native/tests/nc07_archive_hash_fields.rs
+@@ -121,15 +121,11 @@ fn minwan_targets_enters_hash() {
+ /// v326 及更早存档按版本门禁拒绝（裁决第 11 项）。夹具为 v326 版本号上采集的
+ /// 普通档（仁德前的出牌阶段静止态，见证据目录 capture-v326）。
+ #[test]
+-fn v326_and_earlier_archives_are_rejected_by_rule_version() {
+-    use engine_native::archive::decode_archive;
+-    use engine_native::snap::SnapshotError;
+-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+-        .join("../../docs/operations/evidence/2026-10-29-nc07-archive-hash-fields");
+-    let snap = decode_archive(&std::fs::read(ev.join("native-v326.ngsa")).unwrap()).unwrap();
+-    assert_eq!(snap.ruleset_version, 326);
+-    assert!(matches!(
+-        Engine::restore(&snap),
+-        Err(SnapshotError::RuleVersionMismatch { snapshot: 326, catalog: 331 })
+-    ));
++fn v326_and_earlier_archives_are_rejected_by_archive_format() {
++    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
++    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-29-nc07-archive-hash-fields");
++    for name in ["native-v326.ngsa"] {
++        let raw=std::fs::read(ev.join(name)).unwrap();
++        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
++    }
+ }
+diff --git a/crates/engine-native/tests/nc07_lianyaohu_hash.rs b/crates/engine-native/tests/nc07_lianyaohu_hash.rs
+index 4f60e499..30f4b83a 100644
+--- a/crates/engine-native/tests/nc07_lianyaohu_hash.rs
++++ b/crates/engine-native/tests/nc07_lianyaohu_hash.rs
+@@ -3,9 +3,7 @@
+ //! 按壶序生成、结算丢弃序也随之不同——同摘要不同语义。修复后摘要必须
+ //! 区分，且归档往返、炼化结算与日志轨迹同步区分；v324 及更早旧档按
+ //! 版本门禁拒绝（存档 v105、全局原生 ABI 不变）。
+-use engine_native::archive::decode_archive;
+ use engine_native::content::extension::ExtensionPack;
+-use engine_native::snap::SnapshotError;
+ use engine_native::{
+     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
+ };
+@@ -125,33 +123,11 @@ fn different_jar_orders_have_different_hashes_and_trajectories() {
+ }
+ 
+ #[test]
+-fn v324_and_earlier_archives_are_rejected_by_rule_version() {
+-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+-        .join("../../docs/operations/evidence/2026-10-28-nc07-lianyaohu-hash");
+-    // 普通档：标准目录版本直接拒绝。
+-    for (name, version) in [("native-v323.ngsa", 323u64), ("native-v324.ngsa", 324u64)] {
+-        let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
+-        assert_eq!(snap.ruleset_version, version);
+-        assert!(matches!(
+-            Engine::restore(&snap),
+-            Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
+-                if snapshot == version && catalog == 331
+-        ));
+-    }
+-    // 壶仓档：目录版本 = 标准版本 ^（内容锁 | 高位）。v324 壶仓档正是
+-    // 「壶序未入摘要」时代的产物，升号后不能被静默接受。
+-    let pack = load_pack();
+-    let catalog_version = Engine::new_with_extensions(3504, 4, &[&pack])
+-        .unwrap()
+-        .ruleset_version();
+-    for (name, _version) in [("lianyaohu-v323.ngsa", 323u64), ("lianyaohu-v324.ngsa", 324u64)] {
+-        let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
+-        // 壶仓档与当前目录的差异只来自标准版本位（内容锁互相抵消）。
+-        assert_ne!(snap.ruleset_version, catalog_version, "C331 also binds direct trigger metadata and handler identity");
+-        assert!(matches!(
+-            Engine::restore_with_extensions(&snap, &[&pack]),
+-            Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
+-                if snapshot == snap.ruleset_version && catalog == catalog_version
+-        ));
++fn v324_and_earlier_archives_are_rejected_by_archive_format() {
++    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
++    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-28-nc07-lianyaohu-hash");
++    for name in ["native-v323.ngsa", "native-v324.ngsa", "lianyaohu-v323.ngsa", "lianyaohu-v324.ngsa"] {
++        let raw=std::fs::read(ev.join(name)).unwrap();
++        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
+     }
+ }
+diff --git a/crates/engine-native/tests/nc08_trigger_order_counterexample.rs b/crates/engine-native/tests/nc08_trigger_order_counterexample.rs
+index 764a39e9..d0e2e517 100644
+--- a/crates/engine-native/tests/nc08_trigger_order_counterexample.rs
++++ b/crates/engine-native/tests/nc08_trigger_order_counterexample.rs
+@@ -474,13 +474,10 @@ fn direct_extension_metadata_and_filter_identity_bind_restore() {
+         }
+         assert!(Engine::restore_with_extensions(&snap, &[&changed]).is_err());
+     }
+-    let old = engine_native::archive::decode_archive(include_bytes!(
+-        "fixtures/c331-real330-pending.ngsa"
+-    ))
+-    .unwrap();
++    // Original330/105 bytes remain unchanged; Decision29 now rejects their envelope first.
+     assert!(matches!(
+-        Engine::restore_with_extensions(&old, &[&p]),
+-        Err(engine_native::SnapshotError::RuleVersionMismatch { .. })
++        engine_native::archive::decode_archive(include_bytes!("fixtures/c331-real330-pending.ngsa")),
++        Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))
+     ));
+ }
+ 
+diff --git a/crates/engine-native/tests/nc09_machine_ownership.rs b/crates/engine-native/tests/nc09_machine_ownership.rs
+index cbb0e936..9a8ef3a4 100644
+--- a/crates/engine-native/tests/nc09_machine_ownership.rs
++++ b/crates/engine-native/tests/nc09_machine_ownership.rs
+@@ -509,7 +509,7 @@ fn archive_encoding_rejects_unknown_prompts_without_changing_existing_layout() {
+         let fixture = fixture(window);
+         let original = fixture.engine.save();
+         let bytes = engine_native::archive::encode_archive(&original);
+-        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 105);
++        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 106);
+         if let Some(directory) = std::env::var_os("NC09_MACHINE_ARCHIVE_OUT") {
+             let directory = std::path::PathBuf::from(directory);
+             std::fs::create_dir_all(&directory).unwrap();
+diff --git a/crates/engine-native/tests/nc10_source_provenance.rs b/crates/engine-native/tests/nc10_source_provenance.rs
+new file mode 100644
+index 00000000..72583f7b
+--- /dev/null
++++ b/crates/engine-native/tests/nc10_source_provenance.rs
+@@ -0,0 +1,295 @@
++//! Approved27 owner-only source metadata; source does not certify a root.
++use engine_native::{CommandOutcome, Engine, Phase};
++
++#[test]
++fn native_optional_confirm_publishes_own_source_only() {
++    let mut engine = Engine::new(2306, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    engine.debug_grant(1, "遗计");
++    assert!(matches!(
++        engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal),
++        CommandOutcome::Pending { .. }
++    ));
++    let before = engine_native::archive::encode_archive(&engine.save());
++    if let Ok(directory) = std::env::var("SOURCE27_EVIDENCE") {
++        let path = std::path::Path::new(&directory);
++        std::fs::create_dir_all(path).unwrap();
++        std::fs::write(path.join("actual-native-ask.ngsa"), &before).unwrap();
++        std::fs::write(
++            path.join("actual-native-ask.hex"),
++            before
++                .iter()
++                .map(|byte| format!("{byte:02x}"))
++                .collect::<String>(),
++        )
++        .unwrap();
++    }
++    let own = format!("{:?}", engine.choice_view_for(Some(1)).unwrap());
++    eprintln!("SOURCE27_OWN {own}");
++    assert!(
++        own.contains("source_skill: Some(\"遗计\")"),
++        "owner must see the actual native ask source: {own}"
++    );
++    assert_eq!(format!("{:?}", engine.choice_view_referee().unwrap()), own);
++    assert_eq!(format!("{:?}", engine.ai_session(1).choice().unwrap()), own);
++    let other = format!("{:?}", engine.choice_view_for(Some(0)).unwrap());
++    assert!(!other.contains("source_skill"));
++    assert!(other.contains("trigger_confirm"));
++    assert_eq!(
++        engine_native::archive::encode_archive(&engine.save()),
++        before
++    );
++}
++
++#[test]
++fn native_known_optional_families_publish_their_exact_names() {
++    for name in ["遗计", "刚烈", "奸雄"] {
++        let mut engine = Engine::new(2306, 3);
++        engine.debug_set_turn(0, Phase::Play, 1);
++        for seat in 0..3 {
++            engine.debug_clear_hand(seat);
++        }
++        engine.debug_grant(1, name);
++        let sha = engine.debug_place(0, "sha");
++        let result = engine.submit(engine_native::GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: engine.revision() + 1,
++            action: engine_native::GameAction::PlayCard {
++                card: sha,
++                targets: vec![1],
++            },
++        });
++        assert!(
++            matches!(result, CommandOutcome::Pending { .. }),
++            "{name}: {result:?}"
++        );
++        let Some(engine_native::ChoiceView::Own { source_skill, .. }) =
++            engine.choice_view_for(Some(1))
++        else {
++            panic!("{name}: own ask");
++        };
++        assert_eq!(source_skill, Some(name));
++    }
++}
++
++#[test]
++fn native_source_is_stable_across_private_deck_rng_and_counters() {
++    let mut engine = Engine::new(2306, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    engine.debug_grant(1, "遗计");
++    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    let mut saved = engine.save();
++    saved.core.deck.reverse();
++    saved.core.rng = engine_native::rng::RuleRng::from_seed(99);
++    saved.core.vm_aux.drawn.insert(1, u32::MAX);
++    let left = Engine::restore(&engine.save()).unwrap();
++    let right = Engine::restore(&saved).unwrap();
++    assert_eq!(
++        format!("{:?}", left.ai_session(1).input()),
++        format!("{:?}", right.ai_session(1).input())
++    );
++    assert_eq!(
++        format!("{:?}", left.event_view_for(1)),
++        format!("{:?}", right.event_view_for(1))
++    );
++}
++#[test]
++fn actual_vm_ask_and_restored_vm_gate_sources_stay_unknown() {
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack};
++    let package=content_compiler::compile_source_named("source-vm","skill source_vm(99107927) { active play_phase targets 0 0 { effect resolve_ol_jie_danshou(self); } }").unwrap();
++    let decls = content_native_loader::bridge_vm_skill_decls(&package)
++        .unwrap()
++        .decls;
++    let name = decls[0].name.clone();
++    let pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "source-vm",
++            version: 1,
++            description: "source rejection",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: decls,
++        init_hook: Default::default(),
++        enabled: true,
++    };
++    let mut engine = Engine::new_with_extensions(2306, 3, &[&pack]).unwrap();
++    engine.debug_set_turn(0, Phase::Play, 1);
++    engine.debug_grant(0, &name);
++    let skill = engine.catalog().skill_by_name(&name).unwrap();
++    let result = engine.submit(engine_native::GameCommand {
++        actor: 0,
++        expected_revision: engine.revision(),
++        dedup_id: engine.revision() + 1,
++        action: engine_native::GameAction::ActivateSkill { skill },
++    });
++    assert!(
++        matches!(result, CommandOutcome::Pending { .. }),
++        "{result:?}"
++    );
++    let Some(engine_native::ChoiceView::Own { source_skill, .. }) = engine.choice_view_for(Some(0))
++    else {
++        panic!("VM ask must exist")
++    };
++    assert_eq!(source_skill, None);
++    assert_eq!(
++        engine.open_choice().unwrap().spec.prompt,
++        "rvm_danshou_option"
++    );
++    let mut native = Engine::new_with_extensions(2306, 3, &[&pack]).unwrap();
++    native.debug_set_turn(0, Phase::Play, 1);
++    native.debug_grant(1, "遗计");
++    native.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    native.debug_grant(1, &name);
++    let mut saved = native.save();
++    let engine_native::MachineSnapshot::OptionalGate { def, .. } =
++        &mut saved.resolution.parks.last_mut().unwrap().machine
++    else {
++        panic!("native gate")
++    };
++    *def = native.catalog().skill_by_name(&name).unwrap();
++    // C rejects rebinding a native parked trigger to an unrelated VM-active definition.
++    assert!(Engine::restore_with_extensions(&saved, &[&pack]).is_err());
++    let optional = content_compiler::compile_source_named("source-vm-optional", "skill source_vm_optional(99107928) { trigger damage owner_is_target optional { effect draw_cards(self,1); } }").unwrap();
++    let optional_pack = engine_native::content::extension::ExtensionPack {
++        def: engine_native::content::extension::ExtensionDef {
++            name: "source-vm-optional",
++            version: 1,
++            description: "actual optional VM provenance",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&optional)
++            .unwrap()
++            .decls,
++        init_hook: engine_native::content::extension::InitHook::None,
++        enabled: true,
++    };
++    let mut actual = Engine::new_with_extensions(2306, 3, &[&optional_pack]).unwrap();
++    actual.debug_set_turn(0, Phase::Play, 1);
++    actual.debug_grant(1, "source_vm_optional");
++    actual.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    assert_eq!(actual.open_choice().unwrap().spec.prompt, "trigger_confirm");
++    let snapshot = engine_native::archive::decode_archive(&engine_native::archive::encode_archive(
++        &actual.save(),
++    ))
++    .unwrap();
++    let restored = Engine::restore_with_extensions(&snapshot, &[&optional_pack]).unwrap();
++    for engine in [&actual, &restored] {
++        assert!(matches!(
++            engine.choice_view_for(Some(1)),
++            Some(engine_native::ChoiceView::Own {
++                source_skill: None,
++                ..
++            })
++        ));
++    }
++}
++
++#[test]
++fn source_initial_binding_does_not_certify_the_next_pending_prompt() {
++    let mut engine = Engine::new(2306, 3);
++    engine.debug_set_turn(0, Phase::Play, 1);
++    for seat in 0..3 {
++        engine.debug_clear_hand(seat);
++    }
++    engine.debug_grant(1, "遗计");
++    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    let original = engine.save();
++    let mut with_later_park = original.clone();
++    with_later_park
++        .resolution
++        .parks
++        .push(engine_native::ParkSnapshot {
++            resume_depth: original.resolution.stack.len(),
++            slot: engine_native::resolution::Slot::Trigger {
++                frame: engine_native::resolution::NO_FRAME,
++            },
++            machine: engine_native::MachineSnapshot::JiJie {
++                owner: 0,
++                stage: engine_native::snap::JiJieStageSnap::Ask,
++                card: None,
++            },
++        });
++    let restore = |snapshot: &engine_native::StateSnapshot| {
++        Engine::restore(
++            &engine_native::archive::decode_archive(&engine_native::archive::encode_archive(
++                snapshot,
++            ))
++            .unwrap(),
++        )
++        .unwrap()
++    };
++    let mut left = restore(&original);
++    let mut right = restore(&with_later_park);
++    let input = format!("{:?}", left.ai_session(1).input());
++    assert_eq!(input, format!("{:?}", right.ai_session(1).input()));
++    assert_eq!(left.event_view_for(1), right.event_view_for(1));
++    let pre_events = format!("{:?}", left.event_view_for(1));
++    assert!(matches!(
++        left.choice_view_for(Some(1)),
++        Some(engine_native::ChoiceView::Own {
++            source_skill: Some("遗计"),
++            ..
++        })
++    ));
++    let mut pending = Vec::new();
++    for (label, candidate) in [("p-only", &mut left), ("p-then-q", &mut right)] {
++        let before = engine_native::archive::encode_archive(&candidate.save());
++        let choice = candidate.open_choice().unwrap().clone();
++        let result = candidate.submit(engine_native::GameCommand {
++            actor: choice.observer,
++            expected_revision: candidate.revision(),
++            dedup_id: candidate.revision() + 1,
++            action: engine_native::GameAction::Answer {
++                choice_id: choice.id,
++                selection: vec![engine_native::ChoiceOption::Confirm],
++            },
++        });
++        assert!(
++            matches!(result, CommandOutcome::Pending { .. }),
++            "{label}: {result:?}"
++        );
++        let next = candidate.open_choice().unwrap();
++        pending.push((next.spec.prompt, next.observer));
++        eprintln!(
++            "SOURCE27_PREFIX {label}: {result:?}; first Pending={:?}",
++            pending.last().unwrap()
++        );
++        if let Ok(directory) = std::env::var("SOURCE27_EVIDENCE") {
++            let path = std::path::Path::new(&directory);
++            std::fs::create_dir_all(path).unwrap();
++            std::fs::write(
++                path.join(format!("source-prefix-{label}-before.ngsa")),
++                before,
++            )
++            .unwrap();
++            std::fs::write(
++                path.join(format!("source-prefix-{label}-input.txt")),
++                &input,
++            )
++            .unwrap();
++            std::fs::write(
++                path.join(format!("source-prefix-{label}-events.txt")),
++                &pre_events,
++            )
++            .unwrap();
++            std::fs::write(
++                path.join(format!("source-prefix-{label}-after.ngsa")),
++                engine_native::archive::encode_archive(&candidate.save()),
++            )
++            .unwrap();
++        }
++    }
++    assert_eq!(pending[0], ("jiji_target", 1));
++    assert_eq!(pending[1], ("jijie_give_target", 0));
++}
+diff --git a/crates/engine-native/tests/pa12_tag656_version.rs b/crates/engine-native/tests/pa12_tag656_version.rs
+index 6b92711e..79535bdc 100644
+--- a/crates/engine-native/tests/pa12_tag656_version.rs
++++ b/crates/engine-native/tests/pa12_tag656_version.rs
+@@ -1,13 +1,11 @@
+-use engine_native::{archive::{decode_archive, encode_archive, ARCHIVE_FORMAT_VERSION}, snap::SnapshotError, Engine};
++use engine_native::{archive::{decode_archive, encode_archive, ARCHIVE_FORMAT_VERSION}, Engine};
+ 
+ #[test]
+ fn v322_archive_is_rejected_and_current_archive_round_trips() {
+     let old = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/native-v322.ngsa");
+-    let snapshot = decode_archive(old).unwrap();
+-    assert_eq!(snapshot.ruleset_version, 322);
+-    // B6（v323）→ B7（v324）→ NC07（v325）：目录规则版本已升，322 旧档仍按版本拒绝。
+-    assert!(matches!(Engine::restore(&snapshot), Err(SnapshotError::RuleVersionMismatch { snapshot: 322, catalog: 331 })));
+-    assert_eq!(ARCHIVE_FORMAT_VERSION, 105);
++    // Decision29 rejects the original105 envelope before any historical rules gate.
++    assert!(matches!(decode_archive(old), Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
++    assert_eq!(ARCHIVE_FORMAT_VERSION, 106);
+     let engine = Engine::new(65101, 4);
+     let snapshot = decode_archive(&encode_archive(&engine.save())).unwrap();
+     assert_eq!(snapshot.ruleset_version, 331);

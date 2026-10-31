@@ -1,0 +1,77 @@
+{
+  "crates/engine-native-content/src/content/standard.rs": {
+    "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+    "relevant": [
+      "pub const STANDARD_RULESET_VERSION: u64 = 330;"
+    ]
+  },
+  "crates/engine-native-kernel/src/archive.rs": {
+    "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+    "relevant": [
+      "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;"
+    ]
+  },
+  "crates/engine-api/src/version.rs": {
+    "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+    "relevant": [
+      "pub const PACKAGE_FORMAT_VERSION: u32 = 1;",
+      "pub const RULE_VM_ABI_VERSION: u32 = 758;"
+    ]
+  },
+  "crates/engine-protocol/src/lib.rs": {
+    "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+    "relevant": [
+      "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;"
+    ]
+  },
+  "apps/web-client/src/engine/desktopEngineTransport.ts": {
+    "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "relevant": [
+      "  try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === \"native\" ? \"native\" : \"wasm\"; }"
+    ]
+  },
+  "apps/web-client/vite.config.ts": {
+    "sha256": "edea5f3bdfc9838cc21f30c0a4c1b1722a76f293c3eb5d84a0aa3c69dfdf393a",
+    "relevant": [
+      "    \"import.meta.env.VITE_ENGINE_BACKEND\": JSON.stringify(",
+      "      process.env.VITE_ENGINE_BACKEND ?? \"native\","
+    ]
+  },
+  "apps/web-client/scripts/build-native.mjs": {
+    "sha256": "dca82af3c5a31df9edc594a2a152ac978047d4334d9d90c7b28333c0fd518d19",
+    "relevant": [
+      "  CARGO_TARGET_DIR: join(root, \"target\"),",
+      "    \"wasm-pack\",",
+      "    [\"build\", crate, \"--target\", target, \"--release\", \"--no-opt\", \"--out-dir\", tmp],"
+    ]
+  },
+  "apps/web-client/scripts/build-wasm.mjs": {
+    "sha256": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+    "relevant": [
+      " * Prefers wasm-pack; falls back to cargo + wasm-bindgen-cli if available.",
+      "if (has(\"wasm-pack\")) {",
+      "  console.log(\"Using wasm-pack\u2026\");",
+      "    \"wasm-pack\",",
+      "    [\"build\", crate, \"--target\", \"web\", \"--out-dir\", outDir, \"--release\", \"--\", \"--no-default-features\"],",
+      "      env: { ...toolEnv, CARGO_TARGET_DIR: join(root, \"target\") },",
+      "  console.log(\"wasm-pack not found; using cargo + wasm-bindgen\u2026\");",
+      "    [\"build\", \"-p\", \"engine-wasm\", \"--target\", \"wasm32-unknown-unknown\", \"--release\"],"
+    ]
+  },
+  "Cargo.toml": {
+    "sha256": "ee2c34fd5e1af005b8fe9b9198e4d1557b2be9469fba1574b4fd321a1c4baf6b",
+    "relevant": []
+  },
+  "Cargo.lock": {
+    "sha256": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+    "relevant": []
+  },
+  "apps/web-client/package.json": {
+    "sha256": "0c8adc61dbc34980378b7b0147917cd297efeaaf282c81a7b9a04c23cb5489c1",
+    "relevant": []
+  },
+  "apps/web-client/pnpm-lock.yaml": {
+    "sha256": "13ed626a8a9cf978c0aa24a435508b857479379d8752e3a46258a0c5de330d6f",
+    "relevant": []
+  }
+}

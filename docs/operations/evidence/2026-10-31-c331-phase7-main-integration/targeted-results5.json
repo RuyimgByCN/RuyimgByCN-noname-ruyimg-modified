@@ -1,0 +1,24 @@
+[
+  {
+    "name": "frontend-type2",
+    "argv": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "typecheck"
+    ],
+    "exit": 0,
+    "seconds": 8.602089881896973
+  },
+  {
+    "name": "frontend-tests",
+    "argv": [
+      "pnpm",
+      "--dir",
+      "apps/web-client",
+      "test"
+    ],
+    "exit": 0,
+    "seconds": 1.0793571472167969
+  }
+]

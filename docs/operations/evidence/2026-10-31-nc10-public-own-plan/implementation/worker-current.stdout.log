@@ -1,0 +1,2 @@
+{"total":82,"failed":0}
+{"command": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "apps/web-client/scripts/native-worker-smoke.mjs"], "exit": 0, "locked_seconds": 0.49080295802559704, "disk_free_bytes": 38079655936}

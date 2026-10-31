@@ -1,0 +1,168 @@
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "35-file C7 increment implements typed schema5 declarations/presence/hash/compiler/qualified-store validation/SDK data admission; no new Core semantics accepted as no-op, no protocol/state expansion."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Actual initial3reds, real3/4 byte/hash fixtures, final1773/0/75,609/0 targeted,183 frontend/type, independent strict Gate1b, exact source binding, protected Main/C6/C7 and applicable patches provided for independent review."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/scripts/native-vm-install.test.mjs",
+    "apps/web-client/src/engine/bundledNativePackages.ts",
+    "crates/content-compiler/src/ast.rs",
+    "crates/content-compiler/src/lib.rs",
+    "crates/content-compiler/src/lsp/hover_docs/skill.rs",
+    "crates/content-compiler/src/parse.rs",
+    "crates/content-compiler/src/typecheck/skills.rs",
+    "crates/content-native-loader/src/lib.rs",
+    "crates/content-native-loader/src/mechanisms.rs",
+    "crates/content-native-loader/src/vm_active.rs",
+    "crates/content-runtime/examples/gen_doomsday_brawl_package.rs",
+    "crates/content-runtime/examples/gen_epic_cards_package.rs",
+    "crates/content-runtime/examples/gen_hero_kill_package.rs",
+    "crates/content-runtime/examples/gen_mark_supplement_package.rs",
+    "crates/content-runtime/examples/gen_select_beautify_package.rs",
+    "crates/content-runtime/src/compat.rs",
+    "crates/content-runtime/src/store/ordering.rs",
+    "crates/content-schema/src/ir.rs",
+    "crates/content-schema/src/package.rs",
+    "crates/content-schema/src/package/hashing.rs",
+    "crates/content-schema/src/package/mechanisms.rs",
+    "crates/content-schema/src/package/trigger_order.rs",
+    "crates/engine-api/src/version.rs",
+    "crates/engine-core/src/content/registry/load_package_checks.rs",
+    "crates/engine-native-content/src/content/extension.rs",
+    "crates/engine-native/tests/c331_schema5_datachain.rs",
+    "crates/engine-native/tests/fixtures/c331_phase8_genuine_schema4.json",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc04_cards_given_event.rs",
+    "crates/engine-native/tests/nc04_vm_resume.rs",
+    "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+    "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+    "crates/engine-native/tests/nc10_single_hidden_trap.rs",
+    "crates/engine-native/tests/t8_rvm_bridge.rs",
+    "crates/engine-native/tests/t8_rvm_bridge/state_effects.rs"
+  ],
+  "testsAddedOrUpdated": [
+    "crates/engine-native/tests/c331_schema5_datachain.rs",
+    "crates/engine-native/tests/fixtures/c331_phase8_genuine_schema4.json",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-core/src/content/registry/load_package_checks.rs",
+    "apps/web-client/scripts/native-vm-install.test.mjs",
+    "crates/engine-native/tests/t8_rvm_bridge/state_effects.rs"
+  ],
+  "commandsRun": [
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds schema5",
+      "result": "failed",
+      "summary": "initial-red.log; exit=101"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds schema5",
+      "result": "passed",
+      "summary": "first-green-attempt.log; exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds schema5",
+      "result": "passed",
+      "summary": "green-attempt2.log; exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds schema5",
+      "result": "failed",
+      "summary": "matrix-first.log; exit=101"
+    },
+    {
+      "command": "cargo test --offline -p engine-native --test nc_rounds schema5",
+      "result": "passed",
+      "summary": "matrix-attempt2.log; exit=0"
+    },
+    {
+      "command": "cargo test --offline -p content-schema -p content-compiler -p content-runtime -p content-native-loader",
+      "result": "passed",
+      "summary": "targeted-packages-first.log; exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "result": "failed",
+      "summary": "full-native2.log; exit=101"
+    },
+    {
+      "command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native",
+      "result": "passed",
+      "summary": "full-native3.log; exit=0"
+    },
+    {
+      "command": "cargo test --offline -p engine-core c331_schema_tests",
+      "result": "passed",
+      "summary": "legacy-admission.log; exit=0"
+    },
+    {
+      "command": "cargo check --offline -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "gate1b-strict.log; exit=0"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "result": "passed",
+      "summary": "source-cap-unit.log; exit=0"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "source-caps.log; exit=0"
+    },
+    {
+      "command": "python3 -B scripts/check-native-layering.py",
+      "result": "passed",
+      "summary": "layering.log; exit=0"
+    },
+    {
+      "command": "pnpm --dir apps/web-client test",
+      "result": "passed",
+      "summary": "frontend-tests2.log:183/0"
+    },
+    {
+      "command": "pnpm --dir apps/web-client typecheck",
+      "result": "passed",
+      "summary": "frontend-type2.log:exit0"
+    },
+    {
+      "command": "RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets",
+      "result": "passed",
+      "summary": "Gate1b owned independent target-strict;18.11s locked"
+    }
+  ],
+  "validationOutput": [
+    "full-native3:1773passed0failed75ignored;finalexactsource",
+    "Four targeted packages609passed0failed0ignored",
+    "Frontend183passed0failed;typecheck exit0",
+    "Independent Gate1b -Dwarnings native all-targets exit0",
+    "Legacy admission actual lib2passed0failed incl schema5 controlled rejection",
+    "Source caps9019;gate unit2passed;layering0",
+    "Main31867source/packages/assets+18generated+37defaultdist/hooks/index unchanged;C6original140unchanged;accepted C7manifest/tar/index retained",
+    "35-file increment final852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494;full166source b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1",
+    "All C7/Main/checkpoint applicable patches reverse-check passed; initial invalid difflib artifact kept"
+  ],
+  "residualRisks": [
+    "Whole C331 remains BLOCK;source262/290 remaining28,+0",
+    "Schema5/106 private intermediate; runtime nondefault policies/providers/windows/reveal/expiry/rescue and explicit native declaration binding remain unsupported and controlled rejections",
+    "onremove:String cannot represent VM cleanup binding; complete cleanup/SDK parity remains future consumer work",
+    "Immutable historical binaries are unchanged; no claim of retroactive downgrade rejection fix",
+    "Current product WASM/GUI/WS/WAL and massive workspace not rerun",
+    "Independent parent datachain/increment review required before Core phase9"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Added direct optional schema5 declaration fields with strict presence guards and canonical hash, genuine dependency graph resolution in existing store, compiler trait path, shared finite failclosed native admission, existing SDK guards and mechanical constructors. Default3/tuple4 byte/hash preserved.",
+  "reviewFindings": [
+    "No local blocker found; independent review pending",
+    "First full-native environment attempt did not execute due missing global runner; parent restored exact helper/lock before retry",
+    "First actual full native failed only test registry; fixed meaningful submodule registration, final full native passed"
+  ],
+  "manualNotes": "Authoritative report /Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b3c27608-7e4a-43a2-bdd0-478320265df7/implementation/c331-phase8-schema5-datachain.md; evidence /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase8; schema5 data support must not be read as runtime capability acceptance"
+}

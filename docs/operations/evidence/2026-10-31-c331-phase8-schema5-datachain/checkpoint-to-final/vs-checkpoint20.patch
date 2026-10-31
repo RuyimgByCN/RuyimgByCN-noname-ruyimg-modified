@@ -1,0 +1,2695 @@
+diff --git a/crates/content-compiler/src/lsp/hover_docs/skill.rs b/crates/content-compiler/src/lsp/hover_docs/skill.rs
+new file mode 100644
+index 00000000..f01958b6
+--- /dev/null
++++ b/crates/content-compiler/src/lsp/hover_docs/skill.rs
+@@ -0,0 +1,866 @@
++//! LSP 悬停文档链：关键字与效果说明（结算器见 `skill_resolvers`，owner_* 条件见 `skill_owner_filters`）。
++
++pub(in super::super) fn documentation(word: &str) -> Option<&'static str> {
++    Some(match word {
++            "skill" => {
++                "Define a skill.\n\n```\nskill name(def_id) [locked] [lord_only] [non_gainable] [conversion] [charlotte] [persevere] [forever] [temporary] {\n  trigger ... { effect ...; }\n  active play_phase [uses_per_turn N|owner_hp|owner_lost_hp_min_one] [once_per_game] [owner_missing_skill def_id] [hand_gt_hp|hand_gt_max_hp|hand_limit_positive|equip_nonempty|hand_nonempty|face_up] [targets min max [other] [lowest_hp|highest_hp] [unlinked] [wounded] [male] [max_by_owner_lost_hp|max_by_owner_hp] [hp_at_least_owner|hp_gt_owner|hp_lte_owner] [hp_gt N] [hand_gt_owner|hand_lte_owner] [hand_lt N] [hand_nonempty] [can_compare] [can_use_on_owner card_kind] [second_can_use_juedou_on_first] [equipment_pair_with_armor] [has_equip] [has_discardable_equip] [has_gainable_equip] [in_attack_range] [hand_equip_nonempty] [has_discardable_hand_equip] [unused_by_skill_this_turn|unused_by_skill_this_play_phase] [match_selected_card_count] [selected_cards_match_target_equip_count]] [select_hand|select_he min max [allow_cancel] [same_suit|same_color|distinct_suits] [distinct_categories] [card_equip|card_armor|card_sha|card_basic|card_nonbasic|card_non_equip|card_red] [unused_category_by_skill_this_turn|unused_category_by_skill_this_play_phase|unused_category_by_owner_history_this_turn]] { effect ...; }\n  modifier target mode value;\n}\n```\n`lord_only` keeps every trigger, active, view-as, and modifier inactive unless the owner has the Lord identity. `conversion` exposes the skill's branch to generic conversion rules."
++            }
++            "trigger" => {
++                "Define a triggered ability.\n\nEvents include game_started, damage_before, damage_prevented, damage, hp_lost, card_used, phase_prepare, phase_play_end, phase_draw_skipped, phase_end, death, dying, dying_after, max_hp_changed, cards_drawn.\nFilters include owner_is_target, owner_is_source, owner_is_source_or_target, owner_alive, owner_alive_card_targets_gt_one, and the documented source/rate filters."
++            }
++            "active" => {
++                "Define a player-activated skill body. Optional `uses_per_turn N|owner_hp|owner_lost_hp_min_one|living_rebel_count`, `uses_per_play_phase N`, `once_per_game`, `owner_missing_skill def_id`, `hand_gt_hp`, `hand_gt_max_hp`, `hand_limit_positive`, `equip_nonempty`, `hand_nonempty`, `face_up`, `targets min max`, and `select_hand`/`select_he` clauses are authoritative contracts enforced by the engine."
++            }
++            "view_as" => {
++                "Treat matching physical source cards as another card kind. Optional `from hand_equip`, `from hand_expansion`, `up_to 2` or `exactly 2`, `same_suit`, `nature fire|thunder`, `multi_card_bonus damage_1|recover_1|discard_current_hand_equip`, `uses_per_turn N`, `ignore_distance`, `red_unrespondable`, `black_no_use_count`, `no_use_count`, `target_lacks_source_suit_unrespondable`, and `refund_use_count_if_no_damage` clauses are authoritative. Source-free dynamic families use `basic|ordinary_trick any any from none branch N once_per_round next_branch N cost ...`; `cost swap_lower_hand uses_per_turn 1` swaps whole hands with a lower-hand target before continuing; delegated `shan response` and `sha any` rules use `from group_<tag>` and ask matching other players in seat order."
++            }
++            "exactly" => {
++                "View-as clause: require exactly the following number of physical source cards."
++            }
++            "choose_discard_weapon_or_lose_hp" => {
++                "Effect: pay one of two active-skill costs: discard one current physical weapon from hand/equipment, or lose 1 HP. If only one cost is legal it is forced. Requires Rule VM ABI 222.\n\n```\neffect choose_discard_weapon_or_lose_hp(self);\n```"
++            }
++            "uses_per_turn" => {
++                "Active/view-as clause: positive fixed per-turn activation limit; active skills may use `owner_hp`, `owner_lost_hp_min_one`, or `living_rebel_count` to read a dynamic limit at each activation. Checked by the engine and reset at turn start."
++            }
++            "uses_per_play_phase" => {
++                "Active-only clause: positive activation limit reset on every entry to a Play phase, including extra Play phases. Requires Rule VM ABI 301."
++            }
++            "choose_range" => {
++                "Expression: `choose_range(min, max)` offers every non-negative integer in the inclusive dynamic range and evaluates to the selected token. At most 255 options; requires Rule VM ABI 92."
++            }
++            "branch" => {
++                "Source-free view-as clause: require the skill instance's current conversion branch (0..31)."
++            }
++            "once_per_round" => {
++                "Source-free view-as clause: the declared branch may resolve only once in the current round."
++            }
++            "next_branch" => {
++                "Source-free view-as clause: select this conversion branch after a successful cost payment."
++            }
++            "cost" => {
++                "Source-free view-as clause: authoritative cost `gain_max_hp_1`, `disable_equip_slot`, deterministic `guhuo`, or a tagged `face_down_hand` card."
++            }
++            "ignore_distance" => {
++                "View-as clause: skip only the converted card's ordinary distance check; all other target, use-count, response, and effect rules remain active. Requires Rule VM ABI 4."
++            }
++            "red_unrespondable" => {
++                "View-as Sha clause: when the selected source card is effectively red, only this converted Sha becomes unrespondable. Requires Rule VM ABI 14."
++            }
++            "black_no_use_count" => {
++                "View-as Sha clause: when the selected source card is effectively black, only this converted Sha skips the ordinary use-limit check and count increment. Requires Rule VM ABI 14."
++            }
++            "no_use_count" => {
++                "View-as Sha clause: this converted Sha skips the ordinary use-limit check and count increment. Requires Rule VM ABI 521."
++            }
++            "target_lacks_source_suit_unrespondable" => {
++                "View-as Sha clause: each target without a hand card matching the physical source card's effective suit cannot respond to this Sha. Requires Rule VM ABI 521."
++            }
++            "refund_use_count_if_no_damage" => {
++                "View-as Sha clause: after this exact converted Sha finishes, refund its ordinary use count if it dealt no damage. Requires Rule VM ABI 354."
++            }
++            "non_basic" => "Card filter: match cards whose effective kind is not a basic card.",
++            "hand_gt_hp" => {
++                "Active-skill clause: activation is legal only while the owner's hand count exceeds current HP."
++            }
++            "hand_gt_max_hp" => {
++                "Active-skill clause: activation is legal only while the owner's hand count exceeds maximum HP."
++            }
++            "hand_limit_positive" => {
++                "Active-skill clause: activation is legal only while the owner's current hand limit is positive. Requires Rule VM ABI 143."
++            }
++            "equip_nonempty" => {
++                "Active-skill clause: activation is legal only while the owner's equipment zone is nonempty. Requires Rule VM ABI 58."
++            }
++            "face_up" => {
++                "Active-skill clause: activation is legal only while the owner is face up. Requires Rule VM ABI 151."
++            }
++            "once_per_game" => {
++                "Active-skill clause: the skill may resolve at most once during the match. The lifetime counter is not reset at turn boundaries. Requires Rule VM ABI 58."
++            }
++            "targets" => {
++                "Active-skill clause: inclusive minimum and maximum number of distinct living player targets. Append `other` to exclude the owner, `lowest_hp`/`highest_hp` to require a global HP extremum, `unlinked` to require an unlinked target, `wounded` to require current HP below maximum HP, `male` to require male/double-sex targets, `hp_at_least_owner`/`hp_gt_owner`/`hp_lte_owner` to compare target HP with the owner's current HP, `hp_gt N` to require current HP above a literal threshold, `hand_gt_owner` to require more hand cards than the owner, `hand_lt N` to require fewer than N hand cards, `hand_nonempty` to require at least one hand card, `can_compare` to require both participants to have hand cards, `can_use_on_owner card_kind` to require a legal source-free use against the owner, `second_can_use_juedou_on_first` to require the second of exactly two targets to be able to use Duel on the first, `equipment_pair_with_armor` for an exact two-target equipment pair containing discardable armor, `has_equip` to require a nonempty equipment zone, `has_discardable_equip` to require equipment the skill owner may discard, `has_gainable_equip` to require equipment the skill owner may gain, `in_attack_range` to require the owner's current attack range, `hand_equip_nonempty` to require a nonempty hand/equipment region, `has_discardable_hand_equip` to require a discardable hand/equipment card, `unused_by_skill_this_turn` or `unused_by_skill_this_play_phase` to reject targets this skill already recorded in that scope, `match_selected_card_count` to bind target count to card count, or `selected_cards_match_target_equip_count` to bind the selected-card count to the sole target's equipment count."
++            }
++            "other" => "Active-target constraint: the skill owner cannot be selected as a target.",
++            "lowest_hp" => {
++                "Active-target constraint: every selected target must tie for the lowest current HP among living players."
++            }
++            "highest_hp" => {
++                "Active-target constraint: every selected target must tie for the highest current HP among living players."
++            }
++            "unlinked" => {
++                "Active-target constraint: every selected target must currently be unlinked."
++            }
++            "wounded" => {
++                "Active-target constraint: every selected target must currently be alive and below maximum HP. Requires Rule VM ABI 109."
++            }
++            "male" => {
++                "Active-target constraint: every selected target must be male or double-sex. Requires Rule VM ABI 151."
++            }
++            "hp_at_least_owner" => {
++                "Active-target constraint: every selected target's current HP must be at least the skill owner's current HP."
++            }
++            "hp_gt_owner" => {
++                "Active-target constraint: every selected target's current HP must be greater than the skill owner's current HP. Requires Rule VM ABI 121."
++            }
++            "hp_lte_owner" => {
++                "Active-target constraint: every selected target's current HP must be less than or equal to the skill owner's current HP. Requires Rule VM ABI 402."
++            }
++            "hp_gt" => {
++                "Active-target constraint: `hp_gt N` requires every selected target to have more than N current HP. Revalidated by the engine and requires Rule VM ABI 132."
++            }
++            "hand_gt_owner" => {
++                "Active-target constraint: every selected target must currently have more hand cards than the skill owner. Revalidated by the engine and requires Rule VM ABI 113."
++            }
++            "hand_lte_owner" => {
++                "Active-target constraint: every selected target must currently have no more hand cards than the skill owner. Revalidated by the engine and requires Rule VM ABI 514."
++            }
++            "pair_hand_difference_lte_three" => {
++                "Active-target constraint: exactly two selected targets must have hand-card counts differing by at most three. Revalidated by the engine and requires Rule VM ABI 535."
++            }
++            "potqingyan" => {
++                "View-as cost: reveal exactly min(round uses + 1, 5) hand cards without consuming them; unavailable while any card shown by the previous activation remains in hand. Requires Rule VM ABI 544."
++            }
++            "hand_lt" => {
++                "Active-target constraint: `hand_lt N` requires every selected target to have fewer than N hand cards. Revalidated by the engine and requires Rule VM ABI 128."
++            }
++            "hand_nonempty" => {
++                "Active-skill/target constraint: outside `targets`, the owner must have at least one hand card (ABI 151); inside `targets`, every selected target must have at least one hand card (ABI 150)."
++            }
++            "can_compare" => {
++                "Active-target constraint: the skill owner and every selected target must each currently have at least one hand card. Revalidated before opening the owner's card selection; requires Rule VM ABI 47."
++            }
++            "can_use_on_owner" => {
++                "Active-target constraint: every selected target must currently be able to use the following source-free card kind on the skill owner. The engine checks user state, use locks, target locks, self-target rules, and target-count modifiers. Currently supports `juedou`; requires Rule VM ABI 23."
++            }
++            "second_can_use_juedou_on_first" => {
++                "Active-target constraint: requires exactly two other targets and checks that the second can currently use a source-free Duel on the first. Target order is authoritative and legality is checked before active-skill card costs. Requires Rule VM ABI 183."
++            }
++            "equipment_pair_with_armor" => {
++                "Active-target constraint: requires exactly two distinct living targets, each with discardable equipment, and at least one with discardable armor. Requires Rule VM ABI 32."
++            }
++            "has_equip" => {
++                "Active-target constraint: every selected target must currently have at least one card in its equipment zone. Requires Rule VM ABI 97."
++            }
++            "has_discardable_equip" => {
++                "Active-target constraint: every selected target must currently have at least one equipment card the skill owner may discard. Equipment-zone ownership and discard protection are authoritatively revalidated. Requires Rule VM ABI 136."
++            }
++            "has_gainable_equip" => {
++                "Active-target constraint: every selected target must currently have at least one equipment card the skill owner may gain. Equipment-zone ownership and gain protection are authoritatively revalidated. Requires Rule VM ABI 327."
++            }
++            "has_gainable_hand_equip" => {
++                "Active-target constraint: every selected target must currently have at least one hand/equipment card the skill owner may gain. Zone ownership and gain protection are authoritatively revalidated. Requires Rule VM ABI 355."
++            }
++            "in_attack_range" => {
++                "Active-target constraint: every selected target must currently be inside the skill owner's attack range. Distance and attack-range modifiers are authoritatively revalidated. Requires Rule VM ABI 155."
++            }
++            "hand_equip_nonempty" => {
++                "Active-target constraint: every selected target must currently have at least one card in hand or equipment. Requires Rule VM ABI 192."
++            }
++            "has_discardable_hand_equip" => {
++                "Active-target constraint: every selected target must currently have at least one hand/equipment card the skill owner may discard. Zone ownership and discard protection are authoritatively revalidated. Requires Rule VM ABI 155."
++            }
++            "unused_by_skill_this_turn" => {
++                "Active-target constraint: rejects any target already recorded in this skill instance's canonical turn-scoped uniqueness state. Requires Rule VM ABI 52."
++            }
++            "unused_by_skill_this_play_phase" => {
++                "Active-target constraint: rejects any target already recorded by this skill in the current Play phase. The target history resets on every entry to a Play phase, including extra Play phases. Requires Rule VM ABI 292."
++            }
++            "match_selected_card_count" => {
++                "Active-target constraint: requires selected-player and selected-card counts to be equal; both declarations must use the same min/max range. Requires Rule VM ABI 109."
++            }
++            "selected_cards_match_target_equip_count" => {
++                "Active-target constraint: requires exactly one equipped target and binds the selected-card count to that target's current equipment-card count. The count is revalidated before the activation resolves. Requires Rule VM ABI 157."
++            }
++            "select_hand" => {
++                "Active-skill clause: inclusive minimum and maximum number of distinct cards selected from the owner's hand. Append `allow_cancel` to allow cancellation at the choice barrier, `same_suit` to require one non-virtual effective suit, `same_color` to require one effective color, `distinct_categories` to require unique basic/trick/equipment categories, `card_sha` to offer only logical Sha cards, `card_basic` to offer only effective basic cards, `card_nonbasic` to exclude effective basic cards, `card_non_equip` to exclude effective equipment cards, or `card_heart` to require an effective heart suit."
++            }
++            "select_he" => {
++                "Active-skill clause: inclusive minimum and maximum number of distinct cards selected from the owner's hand or equipment zone. Append `allow_cancel` to allow cancellation at the choice barrier, `same_suit` to require one non-virtual effective suit, `distinct_categories` to require unique basic/trick/equipment categories, `card_equip` to offer only effective equipment cards, `card_armor` to offer only physical armor cards, `card_sha` to offer only logical Sha cards, `card_basic` to offer only effective basic cards, or `card_nonbasic` to exclude effective basic cards."
++            }
++            "card_nonbasic" => {
++                "Active-card selection filter: offer only cards whose effective kind is not basic. Requires Rule VM ABI 327."
++            }
++            "card_non_equip" => {
++                "Active-card selection filter: offer only cards whose effective kind is not equipment. Requires Rule VM ABI 497."
++            }
++            "card_heart" => {
++                "Active-card selection filter: offer only cards whose effective suit is heart. Requires Rule VM ABI 494."
++            }
++            "allow_cancel" => {
++                "Active-card selection constraint: the selection barrier may be cancelled without paying cards or consuming the active-skill use. Cancellation remains invalid for non-cancellable choices."
++            }
++            "same_suit" => {
++                "Active-card constraint: all selected physical cards must have the same non-virtual effective suit. Requires Rule VM ABI 304."
++            }
++            "same_color" => {
++                "Active-card constraint: all selected cards must have the same effective red/black color."
++            }
++            "distinct_categories" => {
++                "Active-card constraint: selected cards must have pairwise-distinct effective basic/trick/equipment categories. Requires Rule VM ABI 109."
++            }
++            "sum_effective_number_exact" => {
++                "Active hand-card constraint: selected distinct cards must have effective numbers totaling exactly the positive configured value. Requires Rule VM ABI 301."
++            }
++            "unused_category_by_skill_this_turn" => {
++                "Active-card constraint: offers and accepts only cards whose effective basic/trick/equipment category is not yet recorded by this skill in the current turn. Requires Rule VM ABI 52."
++            }
++            "unused_category_by_skill_this_play_phase" => {
++                "Active-card constraint: offers and accepts only cards whose effective basic/trick/equipment category is not yet recorded by this skill in the current play phase. The history resets on every entry to a Play phase. Requires Rule VM ABI 110."
++            }
++            "unused_category_by_owner_history_this_turn" => {
++                "Active-card constraint: offers and accepts only cards whose effective basic/trick/equipment category has not been used or discarded by the owner in the current turn. Requires Rule VM ABI 285."
++            }
++            "modifier" => {
++                "Define a passive modifier.\n\n```\nmodifier target mode value;\n```\nA value may be an integer or a documented query-time source such as owner_hp, owner_lost_hp, owner_skill_mark, owner_skill_use_count, alive_group_count, alive_female_count, alive_other_count_capped_four, alive_wounded_count_zero_or_at_least_four, alive_wounded_count_at_least_N, alive_other_qun_count, alive_field_rank_thirteen_player_count, field_mount_card_count_ceil_half, owner_unique_max_hand, owner_hand_gt_other, owner_hand_lt_other, owner_qun_other_shu, owner_turned_over_diff_other, owner_linked_diff_other, owner_hand_equip_gte_other, owner_sha_damage_dealt_zero_this_turn, queried_player_hand_gt_hp_signed, queried_player_judge_nonempty_other_than_owner, queried_player_linked_other_than_owner, queried_player_other_than_owner, queried_source_enemy_owner_ally_target_other_than_owner, owner_max_hand_before_skill_fires_this_turn, owner_no_mount, owner_armor_empty, owner_healthy, owner_has_weapon, owner_has_treasure, owner_has_heart_equip, alive_mounted_player_count_min_one, owner_equip_count, owner_equip_count_at_least_N, owner_equip_count_odd, owner_equip_count_even, owner_equip_count_half_floor, owner_equip_count_exactly_one, owner_hp_gt_two, owner_hp_le_two, owner_lost_hp_at_least_two, owner_all_others_in_attack_range, owner_sha_used_zero, owner_sha_used_nonzero, owner_sha_used_exactly_one, owner_sha_used_exactly_two, owner_non_damage_hand_type_count, owner_sha_hand_count, owner_distinct_hand_card_suits_used_this_turn, owner_current_turn_card_use_count, owner_play_phase_card_use_count_zero, or owner_turn_damage_dealt; prefix a dynamic value with `-` to subtract it.\nTargets include distance_from, distance_to, global_distance_to, attack_range, global_attack_range, global_hand_limit, global_damage_taken_amount(nature), global_damage_taken_final_amount(nature), hand_limit_base, hand_limit, draw_count, optional_draw_count, sha_use_limit, sha_target_limit, judgment_rewrite, judgment_rewrite_hand_equip, judgment_rewrite_red_hand_equip_expansion, judgment_best_from_draw_pile, card_target_limit(selector), observer_foreign_hand_faces_visible, observer_hidden_identities_visible, damage_amount(selector), card_suit(selector), card_name(selector), card_nature(selector), card_targets_all(selector), card_targets_self_only.\nModes: add, override, multiply, min, max."
++            }
++            "optional_draw_count" => {
++                "Modifier target: offers one draw-phase confirmation per owning skill, then adds that skill's grouped positive contribution."
++            }
++            "effect" => {
++                "Request an effect from the trigger body.\n\n```\neffect draw_cards(self, N);\n```"
++            }
++            "damage" => "Trigger event: fires after damage is dealt to the owner.",
++            "hp_lost" => "Trigger event: fires after HP is lost without damage.",
++            "phase_prepare" => "Trigger event: fires at the start of the preparation phase.",
++            "phase_begin" => {
++                "Trigger event: fires once at the start of a turn, immediately before phase_prepare triggers."
++            }
++            "phase_judge" => "Trigger event: fires at the start of the judgment phase.",
++            "phase_draw" => "Trigger event: fires at the start of the draw phase.",
++            "phase_play" => "Trigger event: fires at the start of the play phase.",
++            "phase_discard" => "Trigger event: fires at the start of the discard phase.",
++            "phase_end" => "Trigger event: fires at the end of a phase.",
++            "phase_draw_end" => {
++                "Trigger event: fires when the draw phase ends. Requires Rule VM ABI 50."
++            }
++            "phase_play_end" => "Trigger event: fires when the play phase ends.",
++            "phase_any_end" => {
++                "Trigger event: fires after any concrete Prepare, Judge, Draw, Play, Discard, or End phase. It carries bounded target and actual-HP-change histories for that one phase. Requires Rule VM ABI 98."
++            }
++            "phase_draw_skipped" => {
++                "Trigger event: fires when a player's draw phase is skipped or cancelled."
++            }
++            "death" => "Trigger event: fires when a player dies.",
++            "card_targeted" => {
++                "Trigger event: fires once for each declared target, in target order."
++            }
++            "card_responded" => "Trigger event: fires when a logical response card is committed.",
++            "card_resolved" => {
++                "Trigger event: fires once after one logical card finishes all targets, responses, damage, dying, and nested choices. `event_source` is the user, `event_card` is the physical carrier, and `event_targets` preserves declared target order. Requires Rule VM ABI 503."
++            }
++            "sha_dodged" => {
++                "Trigger event: fires once after a target supplies every Shan required to fully dodge one logical Sha. `event_source` is the Sha user, `event_player` is the dodging target, and `event_card` is the physical Sha."
++            }
++            "sha_resolved" => {
++                "Trigger event: fires once after one logical Sha finishes every target, response, damage, dying, and nested choice. `event_source` and `event_player` are the Sha user; `event_card` is its physical carrier. Requires Rule VM ABI 54."
++            }
++            "hand_compare_started" => {
++                "Trigger event: fires after the initiator has selected a valid hand card and before the other participant chooses. `event_player` is the initiator, `event_source` is the target, and the initiator's selected card is captured privately for follow-up effects. Requires Rule VM ABI 65 for comparison effects."
++            }
++            "hand_compare_finished" => {
++                "Trigger event: fires after both comparison cards are revealed and moved to the discard pile. `event_player` is the initiator, `event_source` is the target, and both physical cards are captured in participant order. Requires Rule VM ABI 65 for comparison effects."
++            }
++            "judgment_resolved" => {
++                "Trigger event: fires once after a judgment and every rewrite opportunity complete. `event_player` is the judged player, `event_card` is the delayed trick/equipment cause when present, and the final physical result card is captured as the first event card. Requires Rule VM ABI 86."
++            }
++            "cards_given" => {
++                "Trigger event: fires after an attributed player-to-player gift. `event_source` is the giver, `event_player` is the recipient, and `event_cards` contains the transferred physical cards. Requires Rule VM ABI 181."
++            }
++            "dying" => "Trigger event: fires when a player enters dying state.",
++            "dying_after" => "Trigger event: fires when a saved player leaves dying state.",
++            "max_hp_changed" => "Trigger event: fires after a player's maximum HP changes.",
++            "distance_from" => "Modifier target: adjusts distance from owner to other players.",
++            "distance_from_if_hp_gte_target" => {
++                "Modifier target: sets the owner's final distance to a target to one when the owner's HP is at least that target's HP. Requires `override 1`."
++            }
++            "distance_from_skill_bound_target" => {
++                "Modifier target: sets the owner's final distance to this skill instance's bound target to one. Requires `override 1` and Rule VM ABI 196."
++            }
++            "attack_range" => "Modifier target: adjusts owner's attack range.",
++            "hand_limit_base" => {
++                "Modifier target: adjusts the base hand limit before ordinary hand-limit bonuses."
++            }
++            "hand_limit_base_max_hp" => {
++                "Modifier target: uses maximum HP instead of current HP as the hand-limit base when non-zero."
++            }
++            "skip_judge_phase" => {
++                "Modifier target: skips the owner's judgment phase while non-zero."
++            }
++            "skip_discard_phase" => {
++                "Modifier target: skips the owner's discard phase while non-zero."
++            }
++            "restore_skipped_phase" => {
++                "Modifier target: after the engine records a skipped/cancelled phase audit event, restore that exact owner phase instead of advancing past it. Covers Judge, Draw, Play, and Discard phase skip paths. Requires `override 1` and Rule VM ABI 111."
++            }
++            "turn_face_down_cancel" => {
++                "Modifier target: prevents a face-up owner from being turned face-down. An owner who is already face-down may still turn face-up. Requires `override 1` and Rule VM ABI 111."
++            }
++            "turn_over_cancel" => {
++                "Modifier target: prevents the owner from changing either face-up/face-down state. Requires `override 1` and Rule VM ABI 164."
++            }
++            "discard_phase_includes_equip" => {
++                "Modifier target: counts the owner's equipment together with hand cards during the ordinary discard-to-limit phase and permits discarding from either zone. Requires `override 1`."
++            }
++            "draw_phase_scry_four_split_two" => {
++                "Modifier target: offers an optional draw-phase reorder of four cards with exactly two left on top and two sent to the bottom."
++            }
++            "initial_hand_count" => {
++                "Modifier target: adjusts the owner's initial hand size before the first turn."
++            }
++            "card_suit" => {
++                "Card-suit modifier: `card_suit(spade) override heart` makes the owner's physical spade cards count as hearts in rule checks."
++            }
++            "card_name" => {
++                "Card-name modifier: `card_name(red) override sha` makes the owner's red cards behave as Sha without mutating the physical cards."
++            }
++            "card_nature" => {
++                "Card-nature modifier: `card_nature(sha) override kami` changes the damage nature of matching cards without mutating their physical identity."
++            }
++            "sha_unrespondable" => {
++                "Modifier target: prevents targets from answering matching cards when they resolve as Sha."
++            }
++            "card_use_unrespondable" => {
++                "Modifier target: prevents other players from answering matching cards used by the skill owner."
++            }
++            "sha_unrespondable_within_distance" => {
++                "Modifier target: prevents a target from answering the owner's Sha when their final distance is at most the positive override value."
++            }
++            "sha_use_unrespondable_within_distance" => {
++                "Modifier target: prevents every target from answering a Sha use when its source or one target owns the modifier and the other participant's final distance to that owner is at most the positive override value."
++            }
++            "sha_target_unrespondable" => {
++                "Target-side modifier: prevents an incoming Sha from being answered when the target owns this skill."
++            }
++            "damage_taken_source_range_threshold" => {
++                "Target-side damage policy: source attack range below the positive threshold caps damage at one; above it adds one."
++            }
++            "sha_damage_source_range_threshold" => {
++                "Source-side logical Sha damage policy: owner attack range below the positive threshold caps final damage at one; above it adds one before later damage modifiers."
++            }
++            "sha_damage" => {
++                "Modifier target: adjusts damage dealt by the owner's Sha/Juedou, or only matching Sha when given a card selector."
++            }
++            "sha_damage_taken" => {
++                "Target-side modifier: adjusts damage received by the owner specifically from a logical Sha."
++            }
++            "sha_damage_if_outside_target_range" => {
++                "Source-side modifier: adjusts logical Sha damage only when the source is outside the target's attack range."
++            }
++            "card_distance_unlimited" => {
++                "Modifier target: ignores ordinary target-distance limits for all cards used by the owner, or only matching cards when given a selector."
++            }
++            "card_discard_protected" => {
++                "Target-side modifier: matching physical equipment in the owner's equipment zone cannot be discarded by another player. Requires `override 1`."
++            }
++            "card_gain_protected" => {
++                "Target-side modifier: matching physical cards in the owner's hand/equipment/judgment zones cannot be gained by another player. Requires `override 1` and Rule VM ABI 300."
++            }
++            "card_distance_unlimited_if_target_hand_gte_owner" => {
++                "Target-aware modifier: matching cards ignore ordinary distance only when the target has at least as many hand cards as the owner."
++            }
++            "card_distance_limit" => {
++                "Card-aware modifier target: overrides the ordinary target-distance limit for matching cards. Requires `override` with a non-negative integer."
++            }
++            "virtual_bagua_if_armor_slot_empty" => {
++                "Provide the owner with a virtual Bagua response only while their armor slot is enabled and empty. Requires `override 1` and Rule VM ABI 87."
++            }
++            "sha_response_count_if_other_female" => {
++                "Sha participant modifier: when the owner is the source or current target and the other participant has female or double sex, add to that target's required Shan count. Requires `add` and Rule VM ABI 89."
++            }
++            "sha_response_count_if_source_owner_target_distance_le_one" => {
++                "Sha source modifier: when the owner uses Sha against a target within final distance one, add to that target's required Shan count. Requires `add` and Rule VM ABI 353."
++            }
++            "duel_opponent_response_count" => {
++                "Duel participant modifier: add to the Sha count required from the modifier owner's opponent in each exchange. Requires `add` and Rule VM ABI 167."
++            }
++            "tao_use_save_cancel_for_non_dying_others_during_owner_turn" => {
++                "Global Tao restriction: during the modifier owner's current turn, other players who are not themselves dying cannot proactively use Tao or use Tao to save a dying player. The turn owner and a dying player remain allowed. Use `override 1`, or `override owner_skill_mark` for a turn-scoped activation mark (ABI 218)."
++            }
++            "card_target_limit" => {
++                "Card-aware modifier target: adjusts the maximum number of distinct targets for matching independently-targeted cards. It requires a selector and Rule VM ABI 19."
++            }
++            "judgment_rewrite_hand_equip" => {
++                "Permit one optional judgment rewrite from the owner's hand or equipment zone. Every eligible rewriter is offered in seat order; requires Rule VM ABI 24."
++            }
++            "judgment_rewrite_red_hand_equip_expansion" => {
++                "Permit one optional judgment rewrite using an effective-red card from the owner's hand, equipment, or expansion zone. Every eligible rewriter is offered in seat order; requires Rule VM ABI 342."
++            }
++            "judgment_best_from_draw_pile" => {
++                "Use the highest-scoring card in the draw pile for each judgment owned by this player; requires Rule VM ABI 72."
++            }
++            "observer_foreign_hand_faces_visible" => {
++                "Observer-projection modifier: reveals every other player's hand-card faces only to the owning seated player or that player's private replay export. Requires `override 1` and Rule VM ABI 20."
++            }
++            "observer_hidden_identities_visible" => {
++                "Observer-projection modifier: reveals identities that would otherwise be hidden only to the owning seated player or that player's private replay export. Requires `override 1` and Rule VM ABI 20."
++            }
++            "card_targets_all" => {
++                "Card-aware modifier target: matching cards must target every otherwise-legal player. Selectors: sha, basic, non_basic, trick, equip, suits, red, black."
++            }
++            "card_target_cancel" => {
++                "Target-side modifier: matching cards cannot select the skill owner. Selectors include names, categories, suits/colors, ordinary_trick, black_trick, and damage_trick; a query-time value such as owner_hand_empty may make the restriction conditional."
++            }
++            "armor_card_target_cancel" => {
++                "Armor modifier: matching cards cannot select the skill owner unless the source ignores armor or the owner's armor effects are disabled."
++            }
++            "armor_damage_taken_amount" => {
++                "Armor modifier: adjusts incoming normal, fire, or thunder damage unless the source ignores armor or the owner's armor effects are disabled."
++            }
++            "armor_link_gain_cancel" => {
++                "Armor modifier: prevents the unlinked owner from gaining linked state while armor is active; removing existing linked state remains allowed."
++            }
++            "link_loss_cancel" => {
++                "Modifier: prevents a living linked owner from losing the chain mark. Requires `override 1` and Rule VM ABI 213."
++            }
++            "ignore_armor" => {
++                "Source-side modifier: suppresses armor-owned targeting and damage modifiers."
++            }
++            "armor_effect_disabled" => {
++                "Target-side modifier: suppresses armor-owned targeting and damage modifiers for the owner."
++            }
++            "damage_amount" => {
++                "Source-side modifier: adjusts non-lose-HP damage dealt by the owner. An optional (normal), (fire), or (thunder) selector limits the original nature."
++            }
++            "damage_as_hp_loss" => {
++                "Source-side replacement: damage dealt by the owner becomes equal HP loss. Add `(sha)` to limit the replacement to logical Sha damage. Requires `override 1`."
++            }
++            "damage_between_owner_and_other_as_hp_loss" => {
++                "Relationship replacement: damage dealt by the owner to another player, or received by the owner from another living player, becomes equal HP loss. Requires `override 1`."
++            }
++            "damage_taken_cancel" => {
++                "Target-side modifier: cancels damage received by the owner. With (normal), (fire), or (thunder), it only matches that resolved nature."
++            }
++            "damage_taken_amount" => {
++                "Target-side modifier: adjusts non-lose-HP damage received by the owner. An optional (normal), (fire), or (thunder) selector limits the resolved nature."
++            }
++            "global_damage_taken_amount" => {
++                "Living-owner aura: adjusts ordinary incoming damage for every queried player. An optional nature selector limits the resolved nature."
++            }
++            "global_damage_taken_final_amount" => {
++                "Living-owner aura: adjusts final incoming damage after ordinary and armor modifiers for every queried player. An optional nature selector limits the resolved nature."
++            }
++            "global_draw_count" => {
++                "Living-owner aura: adjusts every queried player's draw-phase count. Requires Rule VM ABI 215."
++            }
++            "global_hand_limit" => {
++                "Living-owner aura: adjusts every queried player's hand limit while the skill owner is alive."
++            }
++            "global_sha_use_limit" => {
++                "Living-owner aura: adjusts every queried player's ordinary Sha use limit. Requires Rule VM ABI 215."
++            }
++            "global_distance_to" => {
++                "Living-owner aura: adjusts distance from a queried source to a queried target."
++            }
++            "damage_taken_final_amount" => {
++                "Late target-side modifier: adjusts final non-lose-HP damage after equipment and ordinary amount modifiers. An optional (normal), (fire), or (thunder) selector limits the resolved nature."
++            }
++            "damage_taken_nature" => {
++                "Target-side modifier: overrides the resolved nature of incoming non-lose-HP damage. Use 0 for normal, 1 for fire, or 2 for thunder."
++            }
++            "card_target_cancel_from_current" => {
++                "Target-side modifier: cards from the current turn owner cannot select the skill owner. The currently supported selector is any."
++            }
++            "card_target_cancel_if_target_lacks_matching_suit" => {
++                "Target-side modifier: a card cannot select the skill owner unless their hand contains that card's suit."
++            }
++            "card_target_cancel_if_other_user_hp_gte_target" => {
++                "Target-side modifier: cards from another player whose current HP is at least the skill owner's current HP cannot select the owner. Requires Rule VM ABI 107."
++            }
++            "card_target_cancel_if_other_user_distance_gt_one" => {
++                "Target-side modifier: matching cards from another player whose final distance to the skill owner is greater than one cannot select the owner. Requires Rule VM ABI 166."
++            }
++            "card_target_cancel_if_other_user_hand_gte_target_and_armor_empty" => {
++                "Target-side modifier: matching cards from another player with at least as many hand cards cannot select an armorless skill owner."
++            }
++            "card_targets_self_only" => {
++                "Modifier target: cards used by the owner may not target another player."
++            }
++            "card_use_cancel" => {
++                "Modifier target: prevents the owner from proactively using any card, or only cards matching an optional selector."
++            }
++            "card_action_cancel_for_skill_color_mask" => {
++                "Modifier target: prevents the owner from using, responding with, or saving with a physical card whose effective red/black color appears in this skill instance's color-lock state. Requires `override 1` and Rule VM ABI 48."
++            }
++            "card_use_unrespondable_within_responder_to_owner_distance" => {
++                "Source-side modifier: cards used by the owner cannot be answered by another player whose final distance to the owner is within the configured threshold."
++            }
++            "card_use_unrespondable_within_owner_to_responder_distance" => {
++                "Source-side modifier: cards used by the owner cannot be answered by another player within the configured final distance from the owner."
++            }
++            "card_response_cancel" => {
++                "Modifier target: prevents the owner from responding with any card, or only cards matching an optional selector."
++            }
++            "hand_card_use_response_cancel" => {
++                "Modifier target: prevents the owner from using or responding with physical cards in hand while leaving non-hand responses available."
++            }
++            "hand_card_gained_this_turn_only" => {
++                "Modifier target: during the owner's Play phase, only physical hand cards gained this turn may be used or played as responses. Requires Rule VM ABI 380."
++            }
++            "card_save_cancel" => {
++                "Modifier target: prevents the owner from using any card to save a dying player, or specifically 桃/酒 with the tao or jiu selector."
++            }
++            "sha_response_cancel" => {
++                "Modifier target: prevents the owner from responding with 杀 when non-zero."
++            }
++            "sha_ignored_hand_limit" => {
++                "Modifier target: excludes the owner's 杀 from hand-limit count and discard-phase choices when non-zero."
++            }
++            "card_ignored_hand_limit" => {
++                "Card-aware modifier target: excludes matching cards from hand-limit count and discard-phase choices. Selectors include card names, sha/sha_fire/sha_red/sha_diamond, categories, suits, and colors."
++            }
++            "queried_player_other_than_owner" => {
++                "Query-time modifier value: one when the queried living player is not the skill owner, otherwise zero."
++            }
++            "queried_player_wounded_in_owner_attack_range_other" => {
++                "Query-time modifier value: one when the queried living player is wounded, differs from the owner, and is in the owner's attack range; otherwise zero."
++            }
++            "queried_source_enemy_owner_ally_target_other_than_owner" => {
++                "Global distance aura value: one when the target is the owner's living ally other than the owner and the source is the target's enemy."
++            }
++            "queried_player_qun_owner_lord_alive" => {
++                "Query-time modifier value: one for a living Qun card user while the living modifier owner is the Lord. ABI 553."
++            }
++            "alive_group_count" => {
++                "Read-only `alive_group_count()` query and query-time modifier value: the number of distinct non-empty groups among living players' characters. The expression query requires Rule VM ABI 6."
++            }
++            "alive_wounded_or_guiming_wu_count" => {
++                "Read-only `alive_wounded_or_guiming_wu_count(player)` query: living wounded-player count, plus other living Wu players while that player is the Lord and has enabled Guiming. Requires Rule VM ABI 190."
++            }
++            "unique_max_current_hp" => {
++                "Read-only `unique_max_current_hp(player)` query: one only when the living player has strictly more current HP than every other living player. Requires Rule VM ABI 7."
++            }
++            "unique_max_current_hp_at" => {
++                "Read-only `unique_max_current_hp_at(player, value)` query: one only when the living player would be the unique current-HP leader at the supplied value, leaving every other player unchanged. Requires Rule VM ABI 7."
++            }
++            "lifetime_damage_dealt" => {
++                "Read-only `lifetime_damage_dealt(player)` query: total non-HP-loss damage points dealt by that player during the current match. Requires Rule VM ABI 8."
++            }
++            "public_card_kind_count" => {
++                "Read-only `public_card_kind_count(card_kind)` query: number of physical matching cards in the shared draw and discard piles. Requires Rule VM ABI 11."
++            }
++            "field_equipment_kind_count" => {
++                "Read-only `field_equipment_kind_count(card_kind)` query: number of physical matching cards in living players' equipment zones. Requires Rule VM ABI 102."
++            }
++            "hand_equip_suit_count" => {
++                "Read-only `hand_equip_suit_count(player, suit)` query: number of cards in that player's hand/equipment region with the requested effective suit. Requires Rule VM ABI 229."
++            }
++            "round_number_capped" => {
++                "Read-only `round_number_capped(cap)` query: the current round number limited to the supplied non-negative cap. Requires Rule VM ABI 75."
++            }
++            "alive_female_count" => {
++                "Query-time modifier value: the number of alive players whose character sex is female."
++            }
++            "alive_wounded_count_zero_or_at_least_four" => {
++                "Query-time modifier value: one while no alive player is wounded or at least four alive players are wounded, otherwise zero."
++            }
++            "alive_other_count_capped_four" => {
++                "Query-time modifier value: the number of other alive players, capped at four."
++            }
++            "alive_other_qun_count" => {
++                "Query-time modifier value: the number of other alive players whose character group is qun."
++            }
++            "round_number_capped_five" => {
++                "Query-time modifier value: the current round number, capped at five."
++            }
++            "round_at_least_alive_qun_count" => {
++                "Query-time modifier value: one while the round number is at least the number of alive qun characters, otherwise zero."
++            }
++            "round_below_alive_qun_count" => {
++                "Query-time modifier value: one while the round number is below the number of alive qun characters, otherwise zero."
++            }
++            "alive_field_rank_thirteen_player_count" => {
++                "Query-time modifier value: number of alive players with at least one rank-K card in their equip or judge zone."
++            }
++            "field_mount_card_count_ceil_half" => {
++                "Query-time modifier value: half the mount cards on living players' fields, rounded up."
++            }
++            "queried_player_hand_gt_hp_signed" => {
++                "Global attack-range modifier value: positive one when the queried player's hand count exceeds HP, otherwise negative one."
++            }
++            "queried_player_judge_nonempty_other_than_owner" => {
++                "Global incoming-damage aura value: one when the queried living player differs from the owner and has a judge-zone card, otherwise zero."
++            }
++            "queried_player_linked_other_than_owner" => {
++                "Global incoming-damage aura value: one when the queried living player differs from the owner and is linked, otherwise zero."
++            }
++            "queried_player_linked_first_living_skill_owner" => {
++                "Global aura value: one when the queried living player is linked and this modifier belongs to the first living enabled owner of its skill definition; otherwise zero. Requires Rule VM ABI 213."
++            }
++            "queried_player_mark_positive_2172383355" => {
++                "Parameterized global-aura value: one while the queried living player has the stable mark id in the numeric suffix; otherwise zero. Requires Rule VM ABI 215."
++            }
++            "choose_link_other" => {
++                "Effect: forces the owner to choose another living unlinked player and link them. Requires Rule VM ABI 213."
++            }
++            "charlotte" | "persevere" | "forever" | "temporary" => {
++                "Explicit schema5 declaration trait. Publishing preserves it in the package hash; native execution rejects traits whose Core consumer is not implemented."
++            }
++            "lord_only" => {
++                "Skill declaration marker: the skill is active only while its owner has the Lord identity."
++            }
++            "non_gainable" => {
++                "Skill declaration marker: the skill cannot be copied or gained by another skill."
++            }
++            "conversion" => {
++                "Skill declaration marker: the skill has a generic togglable conversion branch."
++            }
++            "alive_mounted_player_count_min_one" => {
++                "Query-time modifier value: the number of alive players with at least one offensive or defensive mount equipped, with a minimum of one."
++            }
++            "alive_wounded_or_guiming_wu_count_min_one" => {
++                "Query-time modifier value: living wounded-player count, plus other living Wu players while the owner is the Lord and has enabled Guiming; minimum one. Requires Rule VM ABI 145."
++            }
++            "sha_use_limit" => {
++                "Modifier target: adjusts proactive 杀 uses allowed during the owner's turn."
++            }
++            "sha_use_cancel" => {
++                "Modifier target: prevents the owner from proactively using 杀 when non-zero."
++            }
++            "card_use_unlimited" => {
++                "Modifier target: removes ordinary use limits for all cards, or for cards matching an optional name/category/suit/color selector."
++            }
++            "first_hand_card_suit_use_unlimited" => {
++                "Modifier target: during the owner's turn, the first physical hand card of each effective suit ignores and does not consume ordinary use limits. Requires Rule VM ABI 507."
++            }
++            "add" => {
++                "Modifier mode: adds to the base value.\n\n```\nmodifier distance_from add -1;\n```"
++            }
++            "override" => "Modifier mode: overrides the base value entirely.",
++            "draw_cards" => {
++                "Effect: draws N cards for the specified player.\n\n```\neffect draw_cards(self, 1);\n```"
++            }
++            "draw_each_by_seat" => {
++                "Effect: both distinct living players draw the same count in seat order.\n\n```\neffect draw_each_by_seat(event_player, event_source, 1);\n```"
++            }
++            "draw_then_give_one" => {
++                "Effect: draws first, resolves draw triggers, then forces one card from hand/equipment to the target. Use `drawn_only` to restrict the gift to cards drawn by this activation, `any_hand_equip` for any current card, or `any_hand_equip_use_equipment` to let the recipient optionally use gifted equipment after movement triggers. The last mode requires Rule VM ABI 227.\n\n```\neffect draw_then_give_one(self, event_source, 2, drawn_only);\n```"
++            }
++            "draw_then_take_one" => {
++                "Effect: draws first, resolves draw triggers, then lets a living taker choose one of the drawer's hand/equipment cards to gain.\n\n```\neffect draw_then_take_one(self, event_source, 3);\n```"
++            }
++            "draw_then_choose_give_or_discard_hand" => {
++                "Active-only staged effect: draws `draw_count` cards, waits for every nested draw trigger, then forces the owner to give exactly `payment_count` hand cards to another living player or discard that many hand cards. If fewer cards remain, every currently discardable hand card is discarded. Skill ownership, living players, target legality, and hand-card ownership are revalidated at every choice barrier. Requires Rule VM ABI 116.\n\n```\neffect draw_then_choose_give_or_discard_hand(self, 2, 2);\n```"
++            }
++            "choose_give_or_discard_hand" => {
++                "Effect: if the owner has at least `payment_count` hand cards, forces a choice to give exactly that many to one currently hand-empty living player or discard that many. Recipient scope and card ownership are revalidated at every choice barrier. Requires Rule VM ABI 581.\n\n```\neffect choose_give_or_discard_hand(self, 2, hand_empty);\n```"
++            }
++            "choose_discard_hand_equip_then_recover_target" => {
++                "Effect: lets the chooser cancel or discard exactly `count` current hand/equipment cards, then recovers the specified living wounded target by `amount` after movement triggers finish. Skill ownership, target state, and selected cards are revalidated when the choice resolves. Requires Rule VM ABI 582.\n\n```\neffect choose_discard_hand_equip_then_recover_target(self, event_player, 2, 1);\n```"
++            }
++            "take_one_card" => {
++                "Effect: lets the recipient choose and gain one card from the source. Scope is `hand_equip`, `equip`, or `hand_equip_judge`; the same scope and gain protection are revalidated when resolving the choice. `hand_equip_judge` requires Rule VM ABI 334.\n\n```\neffect take_one_card(event_player, self, hand_equip_judge);\n```"
++            }
++            "take_one_event_target_hand" => {
++                "Effect: lets the player choose and gain one hand card from the first counterpart carried by the triggering event. Requires Rule VM ABI 231.\n\n```\neffect take_one_event_target_hand(self);\n```"
++            }
++            "choose_end_extra_draw_or_play_by_used_suits" => {
++                "Effect: after the current End phase, choose a complete extra Draw or Play phase; when distinct effective suits among cards used this turn reach current HP, execute both in Draw-then-Play order. Requires Rule VM ABI 232.\n\n```\neffect choose_end_extra_draw_or_play_by_used_suits(self);\n```"
++            }
++            "lose_hp_double_current_damage_then_replace" => {
++                "Damage-before effect: lose HP equal to the bound current damage, wait for that HP-loss resolution, double the bound damage, then permanently replace the originating skill. Requires Rule VM ABI 233.\n\n```\neffect lose_hp_double_current_damage_then_replace(self, 3481582878);\n```"
++            }
++            "take_target_hand_then_repeat_until_max" => {
++                "Active-only effect: take one hand card from the mandatory selected target, then after each complete movement-trigger chain optionally choose another player whose hand is still larger. Stops once the owner ties for the largest living hand or cancels. Requires `targets 1 1 other hand_gt_owner` and Rule VM ABI 113.\n\n```\neffect take_target_hand_then_repeat_until_max(self, event_source, self_skill);\n```"
++            }
++            "gain_event_cards" => {
++                "Effect: gains every physical card captured by the triggering event that is still in the discard pile. Requires Rule VM ABI 82.\n\n```\neffect gain_event_cards(self);\n```"
++            }
++            "gain_card_if_discard" => {
++                "Effect: gains one physical card only if it is still in the shared discard pile. Requires Rule VM ABI 151.\n\n```\neffect gain_card_if_discard(self, event_card);\n```"
++            }
++            "choose_draw_or_discard_target_card_record_sha" => {
++                "Effect: lets the current Sha user cancel, draw one card, or discard one current target hand/equipment card. Accepting either branch binds this skill and target to the exact resolving Sha. Requires Rule VM ABI 152.\n\n```\neffect choose_draw_or_discard_target_card_record_sha(self, event_card, event_player);\n```"
++            }
++            "gain_target_equipment" => {
++                "Effect: gains every card currently equipped by `target` in the requested slot. The target zone and slot membership are revalidated at effect resolution. Slots are `weapon`, `armor`, `horse_def`, `horse_off`, and `treasure`. Requires Rule VM ABI 117.\n\n```\neffect gain_target_equipment(self, event_source, weapon);\n```"
++            }
++            "discard_all_target_equipment" => {
++                "Effect: discards every equipment card that `actor` may currently discard from `target`. Target living state, equipment-zone ownership, and discard protection are revalidated at resolution; no eligible equipment is a deterministic no-op. Requires Rule VM ABI 118.\n\n```\neffect discard_all_target_equipment(self, event_player);\n```"
++            }
++            "increase_current_sha_target_damage" => {
++                "Effect: revalidates the suspended proactive Sha source/card/current-target tuple and increases only that target's saved damage. Other targets of the same Sha are unchanged. Available only in `card_targeted` triggers and requires Rule VM ABI 119.\n\n```\neffect increase_current_sha_target_damage(self, event_card, event_player, 1);\n```"
++            }
++            "turn_over" => {
++                "Effect: toggles a living player's character card. A face-down player skips their next whole turn and returns face-up.\n\n```\neffect turn_over(self);\n```"
++            }
++            "restore_character_state" => {
++                "Effect: restores a living character card to its normal state without toggling an already-normal state: remove linked state and turn face-up if needed. Requires Rule VM ABI 93.\n\n```\neffect restore_character_state(self);\n```"
++            }
++            "discard_all_hand_equip_judge" => {
++                "Effect: forcibly discards every card in a living player's hand, equipment, and judgment zones. Requires Rule VM ABI 93.\n\n```\neffect discard_all_hand_equip_judge(self);\n```"
++            }
++            "damage_then_discard_all_judge" => {
++                "Effect: deals one ordinary self-damage, waits for the complete damage, dying, and save chain, then discards every card currently in the player's judgment zone. Requires Rule VM ABI 224.\n\n```\neffect damage_then_discard_all_judge(self);\n```"
++            }
++            "replace_draw_gain_top_two_add_skills_if_different_colors" => {
++                "Effect: replaces the pending normal draw, publicly reveals and gains the top two cards, waits for gain movement triggers, then grants both configured skills until turn end only when the two effective colors differ. Requires Rule VM ABI 225.\n\n```\neffect replace_draw_gain_top_two_add_skills_if_different_colors(self, first_skill_def, second_skill_def);\n```"
++            }
++            "choose_gain_target_card_alternate_zone_then_target_draw" => {
++                "Active-only effect: choose and gain one current hand/equipment card from the selected other target, excluding the zone already used by this skill in the current Play phase, then let that target draw one card after movement triggers finish. Requires `targets 1 1 other hand_equip_nonempty` and Rule VM ABI 226.\n\n```\neffect choose_gain_target_card_alternate_zone_then_target_draw(self, event_source);\n```"
++            }
++            "choose_discard_target_card_resolve_current_sha" => {
++                "Effect: forces the current Sha user to discard one hand/equipment card from the current target. Equipment makes only that target unable to respond; a non-equipment card makes the target gain the physical Sha if it remains in the discard pile. Available only in `card_targeted` triggers and requires Rule VM ABI 94.\n\n```\neffect choose_discard_target_card_resolve_current_sha(self, event_card, event_player);\n```"
++            }
++            "choose_discard_target_card_resolve_current_sha_nonbasic_bonus" => {
++                "Effect: forces the current Sha user to discard one hand/equipment card from the current target. A non-basic card makes only that target unable to respond, grants the supplied modifier skill, and adds one matching mark; a basic card makes the target gain the physical Sha if it remains in the discard pile. Available only in `card_targeted` triggers and requires Rule VM ABI 312.\n\n```\neffect choose_discard_target_card_resolve_current_sha_nonbasic_bonus(self, event_card, event_player, bonus_skill_def);\n```"
++            }
++            "remove_skill_by_def" => {
++                "Effect: removes every instance of one stable skill definition from the specified player.\n\n```\neffect remove_skill_by_def(self, skill_def);\n```"
++            }
++            "add_bound_skill" => {
++                "Effect: grants the specified skill definition to a living player and binds that skill instance to one living target. Repeated grants update the same instance's bound target. Requires Rule VM ABI 130.\n\n```\neffect add_bound_skill(self, skill_def, event_source);\n```"
++            }
++            "replace_skill_with_bound_after_resolution_if_target_alive" => {
++                "Effect: after the current effect, trigger, and dying/save resolution finishes, replaces one skill instance with a helper bound to `target` only if that target remains alive. Requires Rule VM ABI 132.\n\n```\neffect replace_skill_with_bound_after_resolution_if_target_alive(self, self_skill, helper_skill_def, event_source);\n```"
++            }
++            "choose_discard_all_hand_or_equip_draw_lost_hp_then_lose_hp" => {
++                "Effect: forces the owner to choose a nonempty hand or equipment zone, discards every discardable card in that zone, waits for movement triggers, draws the discarded count plus current lost HP, waits for draw triggers, then loses 1 HP. Requires Rule VM ABI 133.\n\n```\neffect choose_discard_all_hand_or_equip_draw_lost_hp_then_lose_hp(self);\n```"
++            }
++            "choose_discard_hand_add_skill_by_color" => {
++                "Effect: optionally discards one hand card, then grants the configured red- or black-discard skill using the card's effective color.\n\n```\neffect choose_discard_hand_add_skill_by_color(self, red_skill_def, black_skill_def);\n```"
++            }
++            "choose_discard_matching_equip_color_add_skill" => {
++                "Effect: optionally discards one non-basic hand/equipment card whose effective color matches at least one of the player's equipped cards, then grants or updates a color-lock skill on the target. Repeated grants merge colors and replace the recorded source. Requires Rule VM ABI 48.\n\n```\neffect choose_discard_matching_equip_color_add_skill(self, event_player, skill_def);\n```"
++            }
++            "use_virtual_sha_from_card_color_lock_source_if_no_sha" => {
++                "Effect: if the owner used no Sha in the current play phase, the source recorded in this skill instance uses a suitless virtual Sha on the owner while ignoring distance and ordinary Sha-use count. Requires Rule VM ABI 48.\n\n```\neffect use_virtual_sha_from_card_color_lock_source_if_no_sha(self);\n```"
++            }
++            "choose_current_card_use_enhancements" => {
++                "Effect: for the suspended one-target Sha or ordinary trick, forces the user to choose one or two of: add one legal target, ignore armor, become unrespondable, or draw after each damage event. Exact-card policies are stored in the supplied temporary helper and revalidated at each choice barrier. Requires Rule VM ABI 49.\n\n```\neffect choose_current_card_use_enhancements(self, event_card, helper_skill_def);\n```"
++            }
++            "make_current_card_unrespondable" => {
++                "Effect: records the suspended physical card in the supplied temporary helper so only that exact use skips Shan and Wuxie response windows. The helper is created or merged without affecting later cards. Requires Rule VM ABI 220.\n\n```\neffect make_current_card_unrespondable(self, event_card, helper_skill_def);\n```"
++            }
++            "choose_draw_or_discard_add_skill" => {
++                "Effect: forces the skill owner to choose between gaining the draw helper then drawing one card, or gaining the discard helper then discarding exactly one hand/equipment card. The discard branch is omitted when it has no legal cost, and both stages are revalidated. Requires Rule VM ABI 50.\n\n```\neffect choose_draw_or_discard_add_skill(self, draw_skill_def, discard_skill_def);\n```"
++            }
++            "choose_three_way_draw_or_discard_add_skill" => {
++                "Effect: lets the skill owner cancel or choose between drawing one card, gaining the draw helper then drawing two cards, or discarding exactly one hand/equipment card then gaining the discard helper. The discard branch is omitted when it has no legal cost, and both stages are revalidated. Requires Rule VM ABI 315.\n\n```\neffect choose_three_way_draw_or_discard_add_skill(self, draw_skill_def, discard_skill_def);\n```"
++            }
++            "choose_discarded_black_basic_as_bingliang" => {
++                "Effect: captures the full triggering discard batch, repeatedly offers its still-discarded effective black basic cards, and uses each selected physical card as a distance-unlimited Bingliang through ordinary target, CardUsed, Wuxie, and delayed-trick settlement. Each iteration is cancellable and revalidated. Requires Rule VM ABI 51.\n\n```\neffect choose_discarded_black_basic_as_bingliang(self);\n```"
++            }
++            "choose_discard_judge_use_virtual_sha_draw_if_no_damage" => {
++                "Effect: optionally discards one judgment card from the target, then uses a fixed suitless virtual Sha without consuming the ordinary use count. If that exact Sha is illegal or commits no damage, the owner draws one card with skill provenance. Requires Rule VM ABI 51.\n\n```\neffect choose_discard_judge_use_virtual_sha_draw_if_no_damage(self, event_player);\n```"
++            }
++            "discard_selected_record_unique_category_target" => {
++                "Effect: atomically records the selected card's effective basic/trick/equipment category and the selected target in the originating skill's turn- or play-phase-scoped state, then discards that selected hand/equipment card. Requires the matching uniqueness clauses.\n\n```\neffect discard_selected_record_unique_category_target(self, event_source);\n```"
++            }
++            "choose_target_draw_or_discard_by_skill_use_count_link_if_wounded" => {
++                "Effect: lets the owner choose whether the target draws or discards the originating active skill's current turn use count. The target chooses forced discard cards; after nested effects finish, the owner becomes linked if the target is wounded. Requires Rule VM ABI 52.\n\n```\neffect choose_target_draw_or_discard_by_skill_use_count_link_if_wounded(self, event_source);\n```"
++            }
++            "choose_target_draw_or_discard_by_skill_use_count_toggle_link_if_wounded" => {
++                "Effect: lets the owner choose whether the target draws or discards the originating active skill's current turn use count. The target chooses forced discard cards; after nested effects finish, the owner's linked state toggles if the target is wounded. Requires the exact play-phase uniqueness contract and Rule VM ABI 314.\n\n```\neffect choose_target_draw_or_discard_by_skill_use_count_toggle_link_if_wounded(self, event_source);\n```"
++            }
++            "choose_reveal_other_hand_card_remember_category" => {
++                "Effect: forces the owner to choose another living player with hand cards, choose and publicly reveal one of those cards, and remember its effective basic/trick/equipment category for the current Play phase. Requires Rule VM ABI 53.\n\n```\neffect choose_reveal_other_hand_card_remember_category(self);\n```"
++            }
++            "draw_then_give_exact_record_phase_target" => {
++                "Effect: draws `count` cards, then forces the owner to give exactly that many current hand/equipment cards to the other current Play-phase player and records that target for delayed phase logic. Requires Rule VM ABI 53.\n\n```\neffect draw_then_give_exact_record_phase_target(self, event_player, 2);\n```"
++            }
++            "clear_phase_gift_target" => {
++                "Effect: clears the originating skill instance's delayed Play-phase gift target. Requires Rule VM ABI 53.\n\n```\neffect clear_phase_gift_target(self);\n```"
++            }
++            "choose_gain_resolved_sha_or_shan_then_optional_use_sha" => {
++                "Effect: gives a legal non-owner/non-original-target recipient either the resolved physical Sha or all captured physical Shan cards still in discard. A red gift lets the recipient optionally use a physical or physical view-as Sha without ordinary use count; targets must be in the original owner's attack range and cannot include that owner. Requires Rule VM ABI 54.\n\n```\neffect choose_gain_resolved_sha_or_shan_then_optional_use_sha(self, event_card);\n```"
++            }
++            "choose_gain_all_resolved_sha_shan_then_color_rewards" => {
++                "Effect: gives one legal non-owner/non-original-target recipient every resolved physical Sha and captured physical Shan source still in discard. A red gift lets the recipient optionally use Sha without ordinary use count; a black gift makes that recipient draw one card. Follow-up Sha targets use the original owner's attack range and cannot include that owner. Requires Rule VM ABI 310.\n\n```\neffect choose_gain_all_resolved_sha_shan_then_color_rewards(self, event_card);\n```"
++            }
++            "skip_current_phase" => {
++                "Effect: skips the current player's entered non-idle phase, records the skipped-phase audit event/count, and advances through the ordinary phase lifecycle. Prepare/Judge/End support requires Rule VM ABI 388.\n\n```\neffect skip_current_phase(self);\n```"
++            }
++            "finish_current_phase_abort_resolution" => {
++                "Effect: discards the shared processing area, aborts the remaining current resolution, and finishes the current phase without recording it as skipped. Requires Rule VM ABI 286.\n\n```\neffect finish_current_phase_abort_resolution(self);\n```"
++            }
++            "gain_top_card_to_skill_pile" => {
++                "Effect: moves the draw-pile top card into the originating skill's public skill pile. Requires Rule VM ABI 287.\n\n```\neffect gain_top_card_to_skill_pile(self);\n```"
++            }
++            "choose_discard_skill_pile_card_add_marked_skill" => {
++                "Effect: chooses and discards one card from the originating skill's public pile, then grants the target a helper skill and adds one same-id mark after movement triggers. Requires Rule VM ABI 287.\n\n```\neffect choose_discard_skill_pile_card_add_marked_skill(self, event_player, helper_skill_def);\n```"
++            }
++            "gain_one_hand_from_selected_targets" => {
++                "Effect: gains one current hand card from each active-skill target in submitted order. Requires `targets ... other max_by_owner_hp hand_nonempty` and Rule VM ABI 288.\n\n```\neffect gain_one_hand_from_selected_targets(self);\n```"
++            }
++            "choose_repolu_targets_draw" => {
++                "Death-trigger effect: the owner, including a dead owner, may cancel or choose one or more living recipients. A successful choice increments the originating skill's same-id mark once, then each selected recipient draws the previous mark plus one card in seat order. Requires Rule VM ABI 291.\n\n```\neffect choose_repolu_targets_draw(self);\n```"
++            }
++            "choose_other_targets_by_skipped_phase_count_damage" => {
++                "Effect: forces the owner to choose one to X distinct living other players, where X is this turn's current skipped-phase count, then deals the supplied amount to each in submitted order. Requires Rule VM ABI 55.\n\n```\neffect choose_other_targets_by_skipped_phase_count_damage(self, 1);\n```"
++            }
++            "reveal_uniform_hand_draw_self_choose_others" => {
++                "Effect: publicly reveals the owner's current hand. If every card has one uniform effective color, the owner chooses zero to the current hand count of other living players; the chosen players and owner each draw one in canonical seat order. Requires Rule VM ABI 56.\n\n```\neffect reveal_uniform_hand_draw_self_choose_others(self);\n```"
++            }
++            "choose_card_user_or_add_target" => {
++                "Effect: chooses another legal target of the suspended single-target Sha/ordinary trick. That player may give one hand card and become the user, or become an extra target. Requires Rule VM ABI 57.\n\n```\neffect choose_card_user_or_add_target(self, event_card);\n```"
++            }
++            "choose_discard_equipment_reduce_current_damage" => {
++                "Effect: forces one effective equipment card to be discarded from hand/equipment, then reduces the bound pre-resolution damage by one. Requires a damage_before trigger and Rule VM ABI 57.\n\n```\neffect choose_discard_equipment_reduce_current_damage(self);\n```"
++            }
++            "choose_discard_equipment_prevent_current_damage" => {
++                "Effect: forces one effective equipment card to be discarded from hand/equipment, then prevents the entire bound pre-resolution damage segment. Requires a damage_before trigger and Rule VM ABI 398.\n\n```\neffect choose_discard_equipment_prevent_current_damage(self);\n```"
++            }
++            "choose_move_target_equipment_or_draw" => {
++                "Effect: lets the owner cancel, draw one, or move one compatible equipment card from the other player into the owner's matching slot, replacing an occupied slot normally. Requires Rule VM ABI 58.\n\n```\neffect choose_move_target_equipment_or_draw(self, event_player);\n```"
++            }
++            "choose_move_target_equipment_and_or_draw" => {
++                "Effect: lets the owner cancel, draw one, move one compatible equipment card from the other player into the owner's matching slot, or choose both available actions in move-then-draw order. Requires Rule VM ABI 146.\n\n```\neffect choose_move_target_equipment_and_or_draw(self, event_player);\n```"
++            }
++            "choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both" => {
++                "Effect: the bound direct-Sha damage target discards up to the source's current attack range from hand/equipment or increases the damage and chain base by one. A physical source weapon forces discard followed by the increase, then is discarded. Requires Rule VM ABI 147.\n\n```\neffect choose_target_discard_attack_range_cards_or_increase_damage_weapon_forces_both(self, event_player);\n```"
++            }
++            "choose_draw_or_recast_add_skill" => {
++                "Effect: lets the owner cancel, draw one card and gain `draw_skill_def`, or choose one current hand/equipment card to recast and gain `recast_skill_def`. The branch and card are revalidated. Requires Rule VM ABI 148.\n\n```\neffect choose_draw_or_recast_add_skill(self, draw_skill_def, recast_skill_def);\n```"
++            }
++            "choose_gain_sha_for_opening_extra_play" => {
++                "Effect: only during the turn-opening extra Play phase created by this skill, lets the owner cancel or gain the first physical Sha from the draw pile, then discard pile. The gained card alone ignores distance and accepting arms the phase-end consequence. Requires Rule VM ABI 149.\n\n```\neffect choose_gain_sha_for_opening_extra_play(self);\n```"
++            }
++            "finish_opening_extra_play_sha_gain" => {
++                "Effect: clears this skill's armed exact-card policy and deals 1 self-damage if the owner dealt no damage after accepting the opening-phase Sha. Requires Rule VM ABI 149.\n\n```\neffect finish_opening_extra_play_sha_gain(self);\n```"
++            }
++            "reveal_target_hand_gain_shan_armor_or_draw_two" => {
++                "Effect: publicly reveals one nonempty target hand, gives every effective Shan and physical armor to the skill owner in hand order, or draws two when none match. Requires `targets 1 1 other hand_nonempty` and Rule VM ABI 150.\n\n```\neffect reveal_target_hand_gain_shan_armor_or_draw_two(self, event_source);\n```"
++            }
++            "give_all_equipment_choose_recover_or_damage" => {
++                "Effect: gives all current equipment to one recipient. After movement triggers, that recipient may cancel target selection to recover the owner by the captured count, or damage one to that many distinct players in current attack range. Requires Rule VM ABI 58.\n\n```\neffect give_all_equipment_choose_recover_or_damage(self, event_source);\n```"
++            }
++            "choose_target_discard_weapon_range_hand_or_increase_damage" => {
++                "Effect: the bound Sha damage target may discard exactly the source's physical weapon range in hand cards. If the target cannot or cancels, the damage and its chain base increase by one; if paid, the selected hand cards and the source's current physical weapon are discarded in that order. Requires Rule VM ABI 59.\n\n```\neffect choose_target_discard_weapon_range_hand_or_increase_damage(self, event_player);\n```"
++            }
++            "choose_target_discard_distance_hand_or_increase_damage" => {
++                "Effect: the bound damage target may discard exactly `max(1, 4-distance from source)` current hand cards. If the target has fewer cards or cancels, the current damage and chain base increase by one. Requires Rule VM ABI 322.\n\n```\neffect choose_target_discard_distance_hand_or_increase_damage(self, event_player);\n```"
++            }
++            "choose_draw_view_two_gain_or_move_equipment" => {
++                "Effect: lets the owner cancel, draw one card, privately inspect up to two deterministically sampled current hand cards from the other player and gain one, or move one compatible equipment card into the owner's matching slot. Requires Rule VM ABI 323.\n\n```\neffect choose_draw_view_two_gain_or_move_equipment(self, event_player);\n```"
++            }
++            "gain_from_skill_pile" => {
++                "取用（expansion P1，ADR 0641）：从自己的技能牌堆（武将牌上）选一张牌加入手牌。参数 (player, self_skill)。"
++            }
++            "gain_whole_skill_pile" => {
++                "Effect: moves every card from your own skill pile (the cards placed on your general card) into your hand, creating the pile if needed. No-op when the pile is empty.\n\n```\neffect gain_whole_skill_pile(self, self_skill, 1234567890);\n```"
++            }
++            "place_hand_cards_to_deck_top" => {
++                "Effect: select cards from your hand and place them on top of the draw pile.\n\n```\neffect place_hand_cards_to_deck_top(self, self_skill, 2);\n```"
++            }
++            "rearrange_pile_to_deck_top" => {
++                "Effect: select count cards from the specified skill pile and place them on top of the draw pile.\n\n```\neffect rearrange_pile_to_deck_top(self, self_skill, 1234567890, 3);\n```"
++            }
++            "reset_linked_selected_targets" => {
++                "Effect: resets every selected linked target, then deals 1 fire damage to each (duansuo).\n\n```\neffect reset_linked_selected_targets(self);\n```"
++            }
++            "choose_hand_cards_to_skill_pile" => {
++                "Effect: select between min and max cards from your hand and place them into your own skill pile.\n\n```\neffect choose_hand_cards_to_skill_pile(self, self_skill, 1, hand_count(self));\n```"
++            }
++            "choose_target_hand_card_to_pile" => {
++                "Effect: pick another player with hand cards, then one of their hand cards, and move it into your own skill pile (the cards on your general card).\n\n```\neffect choose_target_hand_card_to_pile(self, self_skill, 1234567890);\n```"
++            }
++            "choose_one_from_skill_pile_discard" => {
++                "Effect: lets you pick one card from your own skill pile and discard it. No-op when the pile is empty.\n\n```\neffect choose_one_from_skill_pile_discard(self, self_skill, 1234567890);\n```"
++            }
++            "place_top_deck_to_expansion" => {
++                "Effect: places the top N cards of the draw pile into your own skill pile (the cards placed on your general card), creating the pile if needed.\n\n```\neffect place_top_deck_to_expansion(self, self_skill, 1234567890, 2);\n```"
++            }
++            _ => return super::skill_resolvers::documentation(word),
++    })
++}
+diff --git a/crates/content-native-loader/src/mechanisms.rs b/crates/content-native-loader/src/mechanisms.rs
+index f58163b2..da6001ed 100644
+--- a/crates/content-native-loader/src/mechanisms.rs
++++ b/crates/content-native-loader/src/mechanisms.rs
+@@ -3,40 +3,76 @@ use super::*;
+ use content_schema::{ContentPackage, HiddenTriggerPolicy, RevealBinding, TriggerRepeat};
+ 
+ pub(super) fn validate_runtime_mechanisms(pkg: &ContentPackage) -> Result<(), BridgeError> {
+-    if !pkg.has_native_mechanisms() { return Ok(()); }
++    if !pkg.has_native_mechanisms() {
++        return Ok(());
++    }
+     for skill in &pkg.skill_index {
+         if let Some(key) = &skill.onremove {
+             if HostBehavior::from_key(key).is_none() {
+-                return Err(invalid("skill_index.onremove", "unknown_native_cleanup_key"));
++                return Err(invalid(
++                    "skill_index.onremove",
++                    "unknown_native_cleanup_key",
++                ));
+             }
+             // No existing factory exposes a cleanup-role invocation through this declaration.
+             return Err(invalid("skill_index.onremove", "unsupported_cleanup_role"));
+         }
+-        if skill.charlotte == Some(true) || skill.persevere == Some(true)
+-            || skill.forever == Some(true) || skill.temporary == Some(true) {
+-            return Err(invalid("skill_index", "unsupported_skill_traits_or_temporary_lifetime"));
++        if skill.charlotte == Some(true)
++            || skill.persevere == Some(true)
++            || skill.forever == Some(true)
++            || skill.temporary == Some(true)
++        {
++            return Err(invalid(
++                "skill_index",
++                "unsupported_skill_traits_or_temporary_lifetime",
++            ));
+         }
+-        if skill.group_children.as_ref().is_some_and(|children| !children.is_empty()) {
+-            return Err(invalid("skill_index.group_children", "unsupported_provider_group_lifetime"));
++        if skill
++            .group_children
++            .as_ref()
++            .is_some_and(|children| !children.is_empty())
++        {
++            return Err(invalid(
++                "skill_index.group_children",
++                "unsupported_provider_group_lifetime",
++            ));
+         }
+-        if skill.reveal.as_ref().is_some_and(|reveal| *reveal != RevealBinding::None) {
++        if skill
++            .reveal
++            .as_ref()
++            .is_some_and(|reveal| *reveal != RevealBinding::None)
++        {
+             return Err(invalid("skill_index.reveal", "unsupported_reveal_binding"));
+         }
+     }
+     for trigger in &pkg.trigger_index {
+-        if let Some(key) = &trigger.host_key { validate_native_key(key)?; }
+-        if trigger.force_die == Some(true) || trigger.force_out == Some(true)
++        if let Some(key) = &trigger.host_key {
++            validate_native_key(key)?;
++        }
++        if trigger.force_die == Some(true)
++            || trigger.force_out == Some(true)
+             || trigger.repeat.is_some_and(|r| r != TriggerRepeat::Once)
+-            || trigger.hidden.is_some_and(|h| h != HiddenTriggerPolicy::PublicOnly)
+-            || trigger.event_skill.is_some() {
+-            return Err(invalid("trigger_index", "unsupported_trigger_participation_or_named_window"));
++            || trigger
++                .hidden
++                .is_some_and(|h| h != HiddenTriggerPolicy::PublicOnly)
++            || trigger.event_skill.is_some()
++        {
++            return Err(invalid(
++                "trigger_index",
++                "unsupported_trigger_participation_or_named_window",
++            ));
+         }
+     }
+     for active in &pkg.active_index {
+         if active.window == "dying" {
+-            return Err(invalid("active_index.window", "unsupported_rescue_action_window"));
++            return Err(invalid(
++                "active_index.window",
++                "unsupported_rescue_action_window",
++            ));
++        }
++        if let Some(key) = &active.host_key {
++            validate_native_key(key)?;
+         }
+-        if let Some(key) = &active.host_key { validate_native_key(key)?; }
+     }
+     Ok(())
+ }
+@@ -45,5 +81,8 @@ fn validate_native_key(key: &str) -> Result<(), BridgeError> {
+         return Err(invalid("host_key", "unknown_native_execution_key"));
+     }
+     // A known ordinary body key is not proof that its explicit window/filter is implemented.
+-    Err(invalid("host_key", "unsupported_explicit_native_declaration_binding"))
++    Err(invalid(
++        "host_key",
++        "unsupported_explicit_native_declaration_binding",
++    ))
+ }
+diff --git a/crates/content-schema/src/package/mechanisms.rs b/crates/content-schema/src/package/mechanisms.rs
+index 9c28ca52..f9b9f033 100644
+--- a/crates/content-schema/src/package/mechanisms.rs
++++ b/crates/content-schema/src/package/mechanisms.rs
+@@ -46,8 +46,29 @@ pub(super) fn validate_wire_presence(value: &serde_json::Value) -> Result<(), St
+         return Err("unsupported content_schema; expected3/4/5".into());
+     }
+     let fields: &[(&str, &[&str])] = &[
+-        ("skill_index", &["charlotte", "persevere", "forever", "temporary", "group_children", "reveal", "onremove"]),
+-        ("trigger_index", &["host_key", "force_die", "force_out", "repeat", "hidden", "event_skill"]),
++        (
++            "skill_index",
++            &[
++                "charlotte",
++                "persevere",
++                "forever",
++                "temporary",
++                "group_children",
++                "reveal",
++                "onremove",
++            ],
++        ),
++        (
++            "trigger_index",
++            &[
++                "host_key",
++                "force_die",
++                "force_out",
++                "repeat",
++                "hidden",
++                "event_skill",
++            ],
++        ),
+         ("active_index", &["host_key"]),
+     ];
+     for (table, names) in fields {
+@@ -56,7 +77,9 @@ pub(super) fn validate_wire_presence(value: &serde_json::Value) -> Result<(), St
+                 for key in *names {
+                     if let Some(field) = entry.get(*key) {
+                         if schema != Some(5) || field.is_null() {
+-                            return Err(format!("schema5 field {table}.{key} requires schema5 and a literal value"));
++                            return Err(format!(
++                                "schema5 field {table}.{key} requires schema5 and a literal value"
++                            ));
+                         }
+                     }
+                 }
+@@ -69,22 +92,49 @@ pub(super) fn validate_wire_presence(value: &serde_json::Value) -> Result<(), St
+ impl ContentPackage {
+     /// Presence, including explicit default values, requires schema5.
+     pub fn has_native_mechanisms(&self) -> bool {
+-        self.skill_index.iter().any(|s| s.charlotte.is_some() || s.persevere.is_some()
+-            || s.forever.is_some() || s.temporary.is_some() || s.group_children.is_some()
+-            || s.reveal.is_some() || s.onremove.is_some())
+-            || self.trigger_index.iter().any(|t| t.host_key.is_some() || t.force_die.is_some()
+-                || t.force_out.is_some() || t.repeat.is_some() || t.hidden.is_some() || t.event_skill.is_some())
+-            || self.active_index.iter().any(|a| a.host_key.is_some())
++        self.skill_index.iter().any(|s| {
++            s.charlotte.is_some()
++                || s.persevere.is_some()
++                || s.forever.is_some()
++                || s.temporary.is_some()
++                || s.group_children.is_some()
++                || s.reveal.is_some()
++                || s.onremove.is_some()
++        }) || self.trigger_index.iter().any(|t| {
++            t.host_key.is_some()
++                || t.force_die.is_some()
++                || t.force_out.is_some()
++                || t.repeat.is_some()
++                || t.hidden.is_some()
++                || t.event_skill.is_some()
++        }) || self.active_index.iter().any(|a| a.host_key.is_some())
+     }
+ 
+     /// Canonical declaration digest; preserves presence, positions and exact bindings.
+     pub fn native_mechanisms_hash(&self) -> [u8; 32] {
+         let mut h = blake3::Hasher::new();
+         h.update(b"npack-native-mechanisms/1");
+-        let mut segment = |data: Vec<u8>| { h.update(&(data.len() as u64).to_le_bytes()); h.update(&data); };
++        let mut segment = |data: Vec<u8>| {
++            h.update(&(data.len() as u64).to_le_bytes());
++            h.update(&data);
++        };
+         for (position, s) in self.skill_index.iter().enumerate() {
+-            segment(serde_json::to_vec(&(position, s.skill_def_id, &s.name, s.locked, s.charlotte,
+-                s.persevere, s.forever, s.temporary, &s.group_children, &s.reveal, &s.onremove)).expect("typed declaration"));
++            segment(
++                serde_json::to_vec(&(
++                    position,
++                    s.skill_def_id,
++                    &s.name,
++                    s.locked,
++                    s.charlotte,
++                    s.persevere,
++                    s.forever,
++                    s.temporary,
++                    &s.group_children,
++                    &s.reveal,
++                    &s.onremove,
++                ))
++                .expect("typed declaration"),
++            );
+         }
+         for (position, t) in self.trigger_index.iter().enumerate() {
+             segment(serde_json::to_vec(&(position, t)).expect("typed handler"));
+@@ -96,84 +146,199 @@ impl ContentPackage {
+     }
+ 
+     pub(super) fn validate_native_mechanisms(&self) -> Result<(), String> {
+-        if !self.has_native_mechanisms() { return Ok(()); }
+-        if self.skill_index.len() > u16::MAX as usize { return Err("skill definition capacity exceeded".into()); }
++        if !self.has_native_mechanisms() {
++            return Ok(());
++        }
++        if self.skill_index.len() > u16::MAX as usize {
++            return Err("skill definition capacity exceeded".into());
++        }
+         let mut triggers = std::collections::BTreeSet::new();
+         let mut actives = std::collections::BTreeSet::new();
+         for t in &self.trigger_index {
+-            if !triggers.insert(t.trigger_def_id) { return Err("duplicate genuine handler identity".into()); }
++            if !triggers.insert(t.trigger_def_id) {
++                return Err("duplicate genuine handler identity".into());
++            }
+             validate_executor(&t.module, &t.host_key, t.entry_pc)?;
+-            let boundary = matches!(t.event.as_str(), "skill_before" | "skill_begin" | "skill_end" | "skill_after");
+-            if boundary != t.event_skill.is_some() { return Err("event_skill requires a genuine named skill window".into()); }
+-            if matches!(t.repeat, Some(TriggerRepeat::DamageAmount)) && !matches!(t.event.as_str(), "damage" | "damage_before" | "damage_begin" | "damage_end" | "damage_after" | "damage_source") {
++            let boundary = matches!(
++                t.event.as_str(),
++                "skill_before" | "skill_begin" | "skill_end" | "skill_after"
++            );
++            if boundary != t.event_skill.is_some() {
++                return Err("event_skill requires a genuine named skill window".into());
++            }
++            if matches!(t.repeat, Some(TriggerRepeat::DamageAmount))
++                && !matches!(
++                    t.event.as_str(),
++                    "damage"
++                        | "damage_before"
++                        | "damage_begin"
++                        | "damage_end"
++                        | "damage_after"
++                        | "damage_source"
++                )
++            {
+                 return Err("damage_amount repeat requires a damage window".into());
+             }
+             if matches!(t.hidden, Some(HiddenTriggerPolicy::AskReveal)) {
+-                let skill = self.skill_index.iter().find(|s| s.skill_def_id == t.skill_def_id);
+-                if !skill.is_some_and(|s| matches!(s.reveal, Some(RevealBinding::ConfirmPublic | RevealBinding::TriggerHook { .. }))) {
++                let skill = self
++                    .skill_index
++                    .iter()
++                    .find(|s| s.skill_def_id == t.skill_def_id);
++                if !skill.is_some_and(|s| {
++                    matches!(
++                        s.reveal,
++                        Some(RevealBinding::ConfirmPublic | RevealBinding::TriggerHook { .. })
++                    )
++                }) {
+                     return Err("ask_reveal requires a genuine reveal binding".into());
+                 }
+             }
+         }
+         for a in &self.active_index {
+             validate_executor(&a.module, &a.host_key, a.entry_pc)?;
+-            if !actives.insert(a.skill_def_id) { return Err("duplicate active handler identity".into()); }
+-            if !self.skill_index.iter().any(|s| s.skill_def_id == a.skill_def_id) { return Err("active references unknown logical skill".into()); }
+-            if self.has_native_mechanisms() && !matches!(a.window.as_str(), "play_phase" | "any" | "dying") { return Err("unknown active window".into()); }
++            if !actives.insert(a.skill_def_id) {
++                return Err("duplicate active handler identity".into());
++            }
++            if !self
++                .skill_index
++                .iter()
++                .any(|s| s.skill_def_id == a.skill_def_id)
++            {
++                return Err("active references unknown logical skill".into());
++            }
++            if self.has_native_mechanisms()
++                && !matches!(a.window.as_str(), "play_phase" | "any" | "dying")
++            {
++                return Err("unknown active window".into());
++            }
+         }
+         for skill in &self.skill_index {
+             if let Some(key) = &skill.onremove {
+-                if !key.starts_with("host:") || key.len() == 5 { return Err("invalid finite cleanup key".into()); }
++                if !key.starts_with("host:") || key.len() == 5 {
++                    return Err("invalid finite cleanup key".into());
++                }
+             }
+             let children = skill.group_children.as_deref().unwrap_or_default();
+             let unique: std::collections::BTreeSet<_> = children.iter().collect();
+-            if children.len() > u16::MAX as usize || unique.len() != children.len() || children.contains(&skill.skill_def_id) { return Err("invalid group_children edges".into()); }
+-            if matches!(&skill.reveal, Some(RevealBinding::TriggerHook { before: None, after: None })) { return Err("empty reveal hook binding".into()); }
++            if children.len() > u16::MAX as usize
++                || unique.len() != children.len()
++                || children.contains(&skill.skill_def_id)
++            {
++                return Err("invalid group_children edges".into());
++            }
++            if matches!(
++                &skill.reveal,
++                Some(RevealBinding::TriggerHook {
++                    before: None,
++                    after: None
++                })
++            ) {
++                return Err("empty reveal hook binding".into());
++            }
++        }
++        if self.manifest.dependencies.is_empty() {
++            Self::validate_native_mechanism_graph(std::slice::from_ref(self))?;
+         }
+-        if self.manifest.dependencies.is_empty() { Self::validate_native_mechanism_graph(std::slice::from_ref(self))?; }
+         Ok(())
+     }
+ 
+     /// Resolve numeric declaration edges only within the exact dependency-ordered package set.
+     pub fn validate_native_mechanism_graph(packages: &[Self]) -> Result<(), String> {
+-        if !packages.iter().any(Self::has_native_mechanisms) { return Ok(()); }
+-        let mut graph = BTreeMap::<(usize,u32),Vec<(usize,u32)>>::new();
++        if !packages.iter().any(Self::has_native_mechanisms) {
++            return Ok(());
++        }
++        let mut graph = BTreeMap::<(usize, u32), Vec<(usize, u32)>>::new();
+         for (index, package) in packages.iter().enumerate() {
+             let mut allowed = std::collections::BTreeSet::from([index]);
+             let mut pending = vec![index];
+             while let Some(current) = pending.pop() {
+                 for d in &packages[current].manifest.dependencies {
+-                    let found = packages.iter().position(|p| p.manifest.namespace == d.namespace && p.manifest.package_id == d.package_id && p.manifest.version == d.version && (d.logic_hash == [0;32] || d.logic_hash == p.manifest.logic_hash))
++                    let found = packages
++                        .iter()
++                        .position(|p| {
++                            p.manifest.namespace == d.namespace
++                                && p.manifest.package_id == d.package_id
++                                && p.manifest.version == d.version
++                                && (d.logic_hash == [0; 32]
++                                    || d.logic_hash == p.manifest.logic_hash)
++                        })
+                         .ok_or_else(|| "missing locked mechanism dependency".to_string())?;
+-                    if allowed.insert(found) { pending.push(found); }
++                    if allowed.insert(found) {
++                        pending.push(found);
++                    }
+                 }
+             }
+-            let resolve = |id: u32, handler: bool| -> Result<(usize,u32),String> {
+-                let candidates: Vec<_> = allowed.iter().copied().filter(|i| packages[*i].skill_index.iter().any(|s| s.skill_def_id == id)).collect();
+-                if candidates.len() != 1 { return Err(format!("unresolved or ambiguous genuine skill {id}")); }
++            let resolve = |id: u32, handler: bool| -> Result<(usize, u32), String> {
++                let candidates: Vec<_> = allowed
++                    .iter()
++                    .copied()
++                    .filter(|i| {
++                        packages[*i]
++                            .skill_index
++                            .iter()
++                            .any(|s| s.skill_def_id == id)
++                    })
++                    .collect();
++                if candidates.len() != 1 {
++                    return Err(format!("unresolved or ambiguous genuine skill {id}"));
++                }
+                 let i = candidates[0];
+-                if handler && !packages[i].trigger_index.iter().any(|t| t.skill_def_id == id) && !packages[i].active_index.iter().any(|a| a.skill_def_id == id) { return Err("reference is not a genuine handler".into()); }
+-                Ok((i,id))
++                if handler
++                    && !packages[i]
++                        .trigger_index
++                        .iter()
++                        .any(|t| t.skill_def_id == id)
++                    && !packages[i]
++                        .active_index
++                        .iter()
++                        .any(|a| a.skill_def_id == id)
++                {
++                    return Err("reference is not a genuine handler".into());
++                }
++                Ok((i, id))
+             };
+             for s in &package.skill_index {
+                 let mut children = Vec::new();
+-                for child in s.group_children.as_deref().unwrap_or_default() { children.push(resolve(*child, false)?); }
+-                graph.insert((index,s.skill_def_id), children);
++                for child in s.group_children.as_deref().unwrap_or_default() {
++                    children.push(resolve(*child, false)?);
++                }
++                graph.insert((index, s.skill_def_id), children);
+                 if let Some(RevealBinding::TriggerHook { before, after }) = &s.reveal {
+-                    for id in before.iter().chain(after.iter()) { resolve(*id,true)?; }
++                    for id in before.iter().chain(after.iter()) {
++                        resolve(*id, true)?;
++                    }
++                }
++            }
++            for t in &package.trigger_index {
++                if let Some(id) = t.event_skill {
++                    resolve(id, true)?;
+                 }
+             }
+-            for t in &package.trigger_index { if let Some(id) = t.event_skill { resolve(id,true)?; } }
+         }
+-        let mut incoming: BTreeMap<_,usize> = graph.keys().map(|k| (*k,0)).collect();
+-        for children in graph.values() { for child in children { *incoming.get_mut(child).ok_or("dangling group child")? += 1; } }
+-        let mut ready: Vec<_> = incoming.iter().filter_map(|(k,n)| (*n == 0).then_some(*k)).collect();
++        let mut incoming: BTreeMap<_, usize> = graph.keys().map(|k| (*k, 0)).collect();
++        for children in graph.values() {
++            for child in children {
++                *incoming.get_mut(child).ok_or("dangling group child")? += 1;
++            }
++        }
++        let mut ready: Vec<_> = incoming
++            .iter()
++            .filter_map(|(k, n)| (*n == 0).then_some(*k))
++            .collect();
+         let mut count = 0;
+         while let Some(key) = ready.pop() {
+             count += 1;
+-            for child in &graph[&key] { let n=incoming.get_mut(child).expect("checked edge"); *n -= 1; if *n == 0 { ready.push(*child); } }
++            for child in &graph[&key] {
++                let n = incoming.get_mut(child).expect("checked edge");
++                *n -= 1;
++                if *n == 0 {
++                    ready.push(*child);
++                }
++            }
++        }
++        if count != graph.len() {
++            return Err("cyclic group_children".into());
+         }
+-        if count != graph.len() { return Err("cyclic group_children".into()); }
+         Ok(())
+     }
+ }
+@@ -187,6 +352,9 @@ fn validate_executor(module: &str, host: &Option<String>, pc: u32) -> Result<(),
+ 
+ // Reject explicit null without losing Option presence in direct serde SDK callers.
+ pub(super) fn deserialize_present<'de, D, T>(deserializer: D) -> Result<Option<T>, D::Error>
+-where D: serde::Deserializer<'de>, T: Deserialize<'de> {
++where
++    D: serde::Deserializer<'de>,
++    T: Deserialize<'de>,
++{
+     T::deserialize(deserializer).map(Some)
+ }
+diff --git a/crates/engine-core/src/content/registry/load_package_checks.rs b/crates/engine-core/src/content/registry/load_package_checks.rs
+new file mode 100644
+index 00000000..df6ac8fc
+--- /dev/null
++++ b/crates/engine-core/src/content/registry/load_package_checks.rs
+@@ -0,0 +1,564 @@
++//! 内容包装载前的校验与按 ABI 启用的历史追踪（`load_package_inner` 的前两段）。
++
++use super::*;
++
++impl ContentRegistry {
++    /// 装载前校验：逻辑哈希、重复装载、VM ABI 门槛与依赖闭包（只读）。
++    /// 返回 `Ok(false)` 表示同一逻辑哈希的包已装载，调用方应直接成功返回（幂等）。
++    pub(super) fn validate_package_for_load(
++        &self,
++        pkg: &ContentPackage,
++    ) -> Result<bool, ContentLoadError> {
++        pkg.validate_vm_effect_abi()
++            .map_err(ContentLoadError::Invalid)?;
++        pkg.validate_trigger_order_schema()
++            .map_err(ContentLoadError::Invalid)?;
++        if pkg.manifest.content_schema_version != 3 {
++            return Err(ContentLoadError::Invalid(
++                "legacy execution requires schema3 default ordering".into(),
++            ));
++        }
++        if pkg.manifest.logic_hash != pkg.compute_logic_hash() {
++            return Err(ContentLoadError::Invalid(format!(
++                "logic hash mismatch for {}/{}@{}",
++                pkg.manifest.namespace, pkg.manifest.package_id, pkg.manifest.version
++            )));
++        }
++        pkg.modules
++            .iter()
++            .try_for_each(content_schema::validate_vm_module_hash)
++            .map_err(ContentLoadError::Invalid)?;
++        if self
++            .packages
++            .iter()
++            .any(|p| p.logic_hash == pkg.manifest.logic_hash)
++        {
++            return Ok(false);
++        }
++        if self.packages.iter().any(|loaded| {
++            loaded.namespace == pkg.manifest.namespace
++                && loaded.package_id == pkg.manifest.package_id
++        }) {
++            return Err(ContentLoadError::Conflict(format!(
++                "package slot {}/{}",
++                pkg.manifest.namespace, pkg.manifest.package_id
++            )));
++        }
++        let dingpan_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(module, rule_vm::bytecode::effect_tag::RESOLVE_DINGPAN)
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let tanlu_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(module, rule_vm::bytecode::effect_tag::RESOLVE_TANLU)
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let same_color_judgment_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::JUDGE_SAME_COLOR_GAIN_REPEAT,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let current_trick_nullification_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::CHOOSE_CURRENT_TRICK_TARGETS_TO_NULLIFY,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let protected_black_judgment_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::JUDGE_BLACK_GAIN_REPEAT_PROTECT_HAND_LIMIT,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let all_resolved_sha_gift_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::CHOOSE_GAIN_ALL_RESOLVED_SHA_SHAN_THEN_COLOR_REWARDS,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let reduced_tuxi_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::CHOOSE_OTHER_HAND_TARGETS_GAIN_ONE_REDUCE_DRAW,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let rejianchu_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::CHOOSE_DISCARD_TARGET_CARD_RESOLVE_CURRENT_SHA_NONBASIC_BONUS,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let dcqiaomeng_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(module, rule_vm::bytecode::effect_tag::RESOLVE_DCQIAOMENG)
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        let repindi_modules: BTreeSet<_> = pkg
++            .modules
++            .iter()
++            .filter(|module| {
++                module_uses_effect_tag(
++                    module,
++                    rule_vm::bytecode::effect_tag::CHOOSE_TARGET_DRAW_OR_DISCARD_BY_SKILL_USE_COUNT_TOGGLE_LINK_IF_WOUNDED,
++                )
++            })
++            .map(|module| module.name.as_str())
++            .collect();
++        if pkg.manifest.rule_vm_abi_version < 301
++            && (pkg
++                .modifier_index
++                .iter()
++                .any(|modifier| modifier.target == "card_number")
++                || pkg.active_index.iter().any(|active| {
++                    active.uses_per_play_phase.is_some()
++                        || active
++                            .selection
++                            .as_ref()
++                            .is_some_and(|selection| selection.sum_effective_number_exact.is_some())
++                }))
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 301 content requires rule_vm_abi_version >= 301".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 302
++            && (!dingpan_modules.is_empty()
++                || pkg.active_index.iter().any(|active| {
++                    active.uses_per_turn_source.as_deref() == Some("living_rebel_count")
++                }))
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 302 content requires rule_vm_abi_version >= 302".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 303 && !tanlu_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 303 content requires rule_vm_abi_version >= 303".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 304
++            && pkg.active_index.iter().any(|active| {
++                active
++                    .selection
++                    .as_ref()
++                    .is_some_and(|selection| selection.same_suit)
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 304 content requires rule_vm_abi_version >= 304".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 305
++            && pkg.trigger_index.iter().any(|trigger| {
++                trigger.filter == "owner_source_tiesuo_target_alive_unlinked_hand_equip_nonempty"
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 305 content requires rule_vm_abi_version >= 305".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 306
++            && pkg
++                .trigger_index
++                .iter()
++                .any(|trigger| trigger.filter == "owner_alive_source_target_was_linked")
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 306 content requires rule_vm_abi_version >= 306".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 307 && !same_color_judgment_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 307 content requires rule_vm_abi_version >= 307".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 308
++            && (!current_trick_nullification_modules.is_empty()
++                || pkg.trigger_index.iter().any(|trigger| {
++                    trigger.filter == "owner_alive_non_multitarget_trick_targets_gt_one"
++                }))
++        {
++            return Err(ContentLoadError::Invalid(
++                "ABI 308 content requires rule_vm_abi_version >= 308".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 309 && !protected_black_judgment_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 309 content requires rule_vm_abi_version >= 309".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 310 && !all_resolved_sha_gift_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 310 content requires rule_vm_abi_version >= 310".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 311 && !reduced_tuxi_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 311 content requires rule_vm_abi_version >= 311".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 312 && !rejianchu_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 312 content requires rule_vm_abi_version >= 312".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 313 && !dcqiaomeng_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 313 content requires rule_vm_abi_version >= 313".into(),
++            ));
++        }
++        if pkg.manifest.rule_vm_abi_version < 314 && !repindi_modules.is_empty() {
++            return Err(ContentLoadError::Invalid(
++                "ABI 314 content requires rule_vm_abi_version >= 314".into(),
++            ));
++        }
++        if pkg
++            .trigger_index
++            .iter()
++            .any(|trigger| dingpan_modules.contains(trigger.module.as_str()))
++            || dingpan_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .active_index
++                    .iter()
++                    .filter(|active| active.module == **module)
++                    .any(|active| {
++                        found = true;
++                        active.window != "play_phase"
++                            || active.uses_per_turn_source.as_deref() != Some("living_rebel_count")
++                            || !active.targets.as_ref().is_some_and(|targets| {
++                                targets.min == 1
++                                    && targets.max == 1
++                                    && targets.allow_self
++                                    && targets.has_equip
++                            })
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "Dingpan bytecode requires `active play_phase uses_per_turn living_rebel_count targets 1 1 has_equip`".into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| tanlu_modules.contains(active.module.as_str()))
++            || tanlu_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "phase_begin"
++                            || trigger.filter != "owner_alive_not_target"
++                            || !trigger.optional
++                            || !trigger.choice_actor.is_owner()
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "Tanlu bytecode requires `trigger phase_begin owner_alive_not_target optional`"
++                    .into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| current_trick_nullification_modules.contains(active.module.as_str()))
++            || current_trick_nullification_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "card_used"
++                            || trigger.filter != "owner_alive_non_multitarget_trick_targets_gt_one"
++                            || trigger.optional
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "current-trick target nullification bytecode requires `trigger card_used owner_alive_non_multitarget_trick_targets_gt_one`".into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| protected_black_judgment_modules.contains(active.module.as_str()))
++            || protected_black_judgment_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "phase_prepare"
++                            || trigger.filter != "owner_is_target"
++                            || !trigger.optional
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "protected black-judgment bytecode requires `trigger phase_prepare owner_is_target optional`".into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| reduced_tuxi_modules.contains(active.module.as_str()))
++            || reduced_tuxi_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "phase_draw"
++                            || trigger.filter != "owner_is_target_positive_draw_other_hand_nonempty"
++                            || !trigger.optional
++                            || !trigger.choice_actor.is_owner()
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "reduced Tuxi bytecode requires `trigger phase_draw owner_is_target_positive_draw_other_hand_nonempty optional`".into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| rejianchu_modules.contains(active.module.as_str()))
++            || rejianchu_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "card_targeted"
++                            || trigger.filter
++                                != "owner_source_sha_target_alive_has_discardable_hand_equip"
++                            || !trigger.optional
++                            || !trigger.choice_actor.is_owner()
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "Rejianchu bytecode requires `trigger card_targeted owner_source_sha_target_alive_has_discardable_hand_equip optional`".into(),
++            ));
++        }
++        if pkg
++            .active_index
++            .iter()
++            .any(|active| dcqiaomeng_modules.contains(active.module.as_str()))
++            || dcqiaomeng_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .trigger_index
++                    .iter()
++                    .filter(|trigger| trigger.module == **module)
++                    .any(|trigger| {
++                        found = true;
++                        trigger.event != "card_targeted"
++                            || trigger.filter
++                                != "owner_source_first_target_black_card_any_target_other_discardable_hand_equip"
++                            || !trigger.optional
++                            || !trigger.choice_actor.is_owner()
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "Dcqiaomeng bytecode requires `trigger card_targeted owner_source_first_target_black_card_any_target_other_discardable_hand_equip optional`".into(),
++            ));
++        }
++        if pkg
++            .trigger_index
++            .iter()
++            .any(|trigger| repindi_modules.contains(trigger.module.as_str()))
++            || repindi_modules.iter().any(|module| {
++                let mut found = false;
++                let invalid = pkg
++                    .active_index
++                    .iter()
++                    .filter(|active| active.module == **module)
++                    .any(|active| {
++                        found = true;
++                        active.window != "play_phase"
++                            || !active.targets.as_ref().is_some_and(|targets| {
++                                targets.min == 1
++                                    && targets.max == 1
++                                    && targets.allow_self
++                                    && targets.unused_by_skill_this_play_phase
++                            })
++                            || !active.selection.as_ref().is_some_and(|selection| {
++                                selection.zone == "hand_equip"
++                                    && selection.min == 1
++                                    && selection.max == 1
++                                    && !selection.allow_cancel
++                                    && selection.unused_category_by_skill_this_play_phase
++                            })
++                    });
++                !found || invalid
++            })
++        {
++            return Err(ContentLoadError::Invalid(
++                "Repindi bytecode requires `active play_phase targets 1 1 unused_by_skill_this_play_phase select_he 1 1 unused_category_by_skill_this_play_phase`".into(),
++            ));
++        }
++        if pkg.manifest.dependencies.is_empty() {
++            let available_skills: BTreeSet<_> = self
++                .package_skills
++                .keys()
++                .copied()
++                .chain(pkg.skill_index.iter().map(|skill| skill.skill_def_id))
++                .collect();
++            validate_character_skills(&pkg.character_index, &available_skills)?;
++        }
++        Ok(true)
++    }
++
++    /// 按包声明的 VM ABI 版本启用对应的回合/事件历史追踪。
++    pub(super) fn enable_package_tracking(&mut self, pkg: &ContentPackage) {
++        if pkg.manifest.rule_vm_abi_version >= 42 {
++            self.track_turn_hand_card_suit_history = true;
++            self.track_play_card_category_history = true;
++        }
++        if pkg
++            .trigger_index
++            .iter()
++            .any(|trigger| trigger.filter == "owner_alive_play_phase_card_category_count_positive")
++        {
++            self.track_play_card_category_history_all_users = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 43 {
++            self.track_sha_use_refund_provenance = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 44 {
++            self.track_opening_extra_play_lifecycle = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 232 {
++            self.track_turn_used_card_suit_history = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 285 {
++            self.track_owner_card_category_history = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 347 {
++            self.track_damage_taken_count = true;
++        }
++        if pkg.manifest.rule_vm_abi_version >= 353 {
++            self.track_turn_damage_pair_counts = true;
++        }
++        if pkg
++            .skill_index
++            .iter()
++            .any(|skill| skill.skill_def_id == 2_581_852_991)
++        {
++            self.track_entered_dying_history = true;
++        }
++        if pkg.modules.iter().any(|module| {
++            module_uses_effect_tag(
++                module,
++                rule_vm::bytecode::effect_tag::CHOOSE_LOSE_HP_USE_VIRTUAL_SHA_BY_BASIC_VARIANTS,
++            )
++        }) {
++            self.track_turn_basic_card_variant_history = true;
++        }
++        if pkg.modules.iter().any(|module| {
++            module_uses_effect_tag(module, rule_vm::bytecode::effect_tag::ALIGN_DEBATE_OPINIONS)
++        }) {
++            self.track_damaged_by_player_bitset = true;
++        }
++    }
++}
++
++#[cfg(test)]
++mod c331_schema_tests {
++    use super::*;
++    #[test]
++    fn legacy_only_executes_schema3_default_and_validates_before_idempotency() {
++        let mut p = content_compiler::compile_source("skill c331_legacy(4200000011) locked { trigger phase_end always { effect draw_cards(self, 1); } }").unwrap();
++        let mut registry = ContentRegistry::new();
++        registry.load_package(&p).unwrap();
++        p.trigger_index[0].priority = 17;
++        assert!(registry.load_package(&p).is_err());
++        p.manifest.logic_hash = p.compute_logic_hash();
++        assert!(ContentRegistry::new().load_package(&p).is_err());
++        p.manifest.content_schema_version = 4;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        p.validate().unwrap();
++        assert!(ContentRegistry::new().load_package(&p).is_err());
++        p.trigger_index[0].priority = 0;
++        p.skill_index[0].charlotte = Some(false);
++        p.manifest.content_schema_version = 5;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        p.validate().unwrap();
++        let error = ContentRegistry::new().load_package(&p).unwrap_err();
++        assert!(error.to_string().contains("legacy execution requires schema3"));
++    }
++    #[test]
++    fn legacy_effect_abi_validation_is_preserved_before_execution() {
++        let mut p = content_compiler::compile_source("skill c331_abi(4200000012) locked { trigger phase_end always { effect choose_other_targets_by_skipped_phase_count_damage_draw(self, 1); } }").unwrap();
++        ContentRegistry::new().load_package(&p).unwrap();
++        p.manifest.rule_vm_abi_version = 757;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        let error = ContentRegistry::new()
++            .load_package(&p)
++            .expect_err("effect 772 requires ABI758");
++        assert!(error.to_string().contains("effect 772"), "{error}");
++    }
++}
+diff --git a/crates/engine-native/tests/c331_schema5_datachain.rs b/crates/engine-native/tests/c331_schema5_datachain.rs
+index 5cf9d417..49e19dc4 100644
+--- a/crates/engine-native/tests/c331_schema5_datachain.rs
++++ b/crates/engine-native/tests/c331_schema5_datachain.rs
+@@ -4,114 +4,396 @@ fn package() -> ContentPackage {
+ }
+ #[test]
+ fn schema5_explicit_default_is_data_and_runtime_compatible() {
+-    let mut value=serde_json::to_value(package()).unwrap();
+-    value["manifest"]["content_schema_version"]=5.into();
+-    value["skill_index"][0]["charlotte"]=false.into();
+-    let mut parsed=ContentPackage::from_json_bytes(&serde_json::to_vec(&value).unwrap()).unwrap();
+-    assert_eq!(parsed.required_content_schema(),5);
+-    parsed.manifest.logic_hash=parsed.compute_logic_hash();
++    let mut value = serde_json::to_value(package()).unwrap();
++    value["manifest"]["content_schema_version"] = 5.into();
++    value["skill_index"][0]["charlotte"] = false.into();
++    let mut parsed = ContentPackage::from_json_bytes(&serde_json::to_vec(&value).unwrap()).unwrap();
++    assert_eq!(parsed.required_content_schema(), 5);
++    parsed.manifest.logic_hash = parsed.compute_logic_hash();
+     parsed.validate().unwrap();
+     content_native_loader::bridge_vm_skill_decls(&parsed).unwrap();
+ }
+ #[test]
+ fn schema5_fields_present_in_old_schema_reject_even_defaults() {
+-    for (table,key,value) in [("skill_index","charlotte",serde_json::json!(false)),("skill_index","group_children",serde_json::json!([])),("trigger_index","force_die",serde_json::json!(false))] {
+-        let mut value_package=serde_json::to_value(package()).unwrap();
+-        value_package[table][0][key]=value;
+-        let result=ContentPackage::from_json_bytes(&serde_json::to_vec(&value_package).unwrap()).and_then(|p|p.validate());
+-        assert!(result.is_err(),"old schema must reject {key} presence");
++    for (table, key, value) in [
++        ("skill_index", "charlotte", serde_json::json!(false)),
++        ("skill_index", "group_children", serde_json::json!([])),
++        ("trigger_index", "force_die", serde_json::json!(false)),
++    ] {
++        let mut value_package = serde_json::to_value(package()).unwrap();
++        value_package[table][0][key] = value;
++        let result = ContentPackage::from_json_bytes(&serde_json::to_vec(&value_package).unwrap())
++            .and_then(|p| p.validate());
++        assert!(result.is_err(), "old schema must reject {key} presence");
+     }
+ }
+ #[test]
+ fn schema5_compiler_declaration_selects_schema5() {
+     let p=content_compiler::compile_source("skill schema5_trait(99108002) charlotte { trigger damage always { effect draw_cards(self,1); } }").unwrap();
+-    assert_eq!(p.manifest.content_schema_version,5);
++    assert_eq!(p.manifest.content_schema_version, 5);
+     p.validate().unwrap();
+-    assert!(content_native_loader::bridge_vm_skill_decls(&p).is_err(),"unsupported trait cannot enter runtime");
++    assert!(
++        content_native_loader::bridge_vm_skill_decls(&p).is_err(),
++        "unsupported trait cannot enter runtime"
++    );
+ }
+ fn finish(p: &mut ContentPackage) {
+-    p.manifest.content_schema_version=p.required_content_schema();
+-    p.manifest.logic_hash=p.compute_logic_hash();
+-    p.manifest.asset_hash=p.compute_asset_hash();
++    p.manifest.content_schema_version = p.required_content_schema();
++    p.manifest.logic_hash = p.compute_logic_hash();
++    p.manifest.asset_hash = p.compute_asset_hash();
+ }
+ fn default5() -> ContentPackage {
+-    let mut p=package(); p.skill_index[0].charlotte=Some(false);finish(&mut p);p
++    let mut p = package();
++    p.skill_index[0].charlotte = Some(false);
++    finish(&mut p);
++    p
+ }
+ #[test]
+ fn schema5_old3_and_genuine4_bytes_hashes_and_readers_stay_positive() {
+-    for bytes in [include_bytes!("fixtures/c331-old-default-package.json").as_slice(),include_bytes!("fixtures/c331_phase8_genuine_schema4.json").as_slice()] {
+-        let p=ContentPackage::from_json_bytes(bytes).unwrap();
+-        assert_eq!(p.to_json_bytes().unwrap(),bytes);
+-        assert_eq!(p.manifest.logic_hash,p.compute_logic_hash());p.validate().unwrap();
++    for bytes in [
++        include_bytes!("fixtures/c331-old-default-package.json").as_slice(),
++        include_bytes!("fixtures/c331_phase8_genuine_schema4.json").as_slice(),
++    ] {
++        let p = ContentPackage::from_json_bytes(bytes).unwrap();
++        assert_eq!(p.to_json_bytes().unwrap(), bytes);
++        assert_eq!(p.manifest.logic_hash, p.compute_logic_hash());
++        p.validate().unwrap();
+         content_native_loader::bridge_vm_skill_decls(&p).unwrap();
+-        let mut old_host=content_runtime::tooling_host_versions();old_host.content_schema=4;
+-        content_runtime::check_engine_compat(&p.manifest,&old_host).unwrap();
++        let mut old_host = content_runtime::tooling_host_versions();
++        old_host.content_schema = 4;
++        content_runtime::check_engine_compat(&p.manifest, &old_host).unwrap();
++    }
++    let p = default5();
++    for schema in [0, 3, 4] {
++        let mut host = content_runtime::tooling_host_versions();
++        host.content_schema = schema;
++        assert!(content_runtime::check_engine_compat(&p.manifest, &host).is_err());
+     }
+-    let p=default5();
+-    for schema in [0,3,4] {let mut host=content_runtime::tooling_host_versions();host.content_schema=schema;assert!(content_runtime::check_engine_compat(&p.manifest,&host).is_err());}
+ }
+ #[test]
+ fn schema5_false_empty_none_presence_downgrade_and_unknown_fields() {
+-    let fields=[("skill_index","charlotte",serde_json::json!(false)),("skill_index","persevere",serde_json::json!(false)),("skill_index","forever",serde_json::json!(false)),("skill_index","temporary",serde_json::json!(false)),("skill_index","group_children",serde_json::json!([])),("skill_index","reveal",serde_json::json!("none")),("trigger_index","force_die",serde_json::json!(false)),("trigger_index","force_out",serde_json::json!(false)),("trigger_index","repeat",serde_json::json!("once")),("trigger_index","hidden",serde_json::json!("public_only"))];
+-    for (table,key,value) in fields {
+-        let mut wire=serde_json::to_value(package()).unwrap();wire[table][0][key]=value;wire["manifest"]["content_schema_version"]=5.into();
+-        let mut p=ContentPackage::from_json_bytes(&serde_json::to_vec(&wire).unwrap()).unwrap();finish(&mut p);p.validate().unwrap();
+-        assert_eq!(serde_json::to_value(&p).unwrap()[table][0][key],wire[table][0][key]);
+-        for version in [3,4] {
+-            let mut downgraded=p.clone();if version==4 {downgraded.trigger_index[0].priority=17;}
+-            downgraded.manifest.content_schema_version=version;downgraded.manifest.logic_hash=downgraded.compute_logic_hash();assert!(downgraded.validate().is_err());
++    let fields = [
++        ("skill_index", "charlotte", serde_json::json!(false)),
++        ("skill_index", "persevere", serde_json::json!(false)),
++        ("skill_index", "forever", serde_json::json!(false)),
++        ("skill_index", "temporary", serde_json::json!(false)),
++        ("skill_index", "group_children", serde_json::json!([])),
++        ("skill_index", "reveal", serde_json::json!("none")),
++        ("trigger_index", "force_die", serde_json::json!(false)),
++        ("trigger_index", "force_out", serde_json::json!(false)),
++        ("trigger_index", "repeat", serde_json::json!("once")),
++        ("trigger_index", "hidden", serde_json::json!("public_only")),
++    ];
++    for (table, key, value) in fields {
++        let mut wire = serde_json::to_value(package()).unwrap();
++        wire[table][0][key] = value;
++        wire["manifest"]["content_schema_version"] = 5.into();
++        let mut p = ContentPackage::from_json_bytes(&serde_json::to_vec(&wire).unwrap()).unwrap();
++        finish(&mut p);
++        p.validate().unwrap();
++        assert_eq!(
++            serde_json::to_value(&p).unwrap()[table][0][key],
++            wire[table][0][key]
++        );
++        for version in [3, 4] {
++            let mut downgraded = p.clone();
++            if version == 4 {
++                downgraded.trigger_index[0].priority = 17;
++            }
++            downgraded.manifest.content_schema_version = version;
++            downgraded.manifest.logic_hash = downgraded.compute_logic_hash();
++            assert!(downgraded.validate().is_err());
+             assert!(ContentPackage::from_json_bytes(&downgraded.to_json_bytes().unwrap()).is_err());
+         }
+-        wire[table][0][key]=serde_json::Value::Null;
+-        assert!(serde_json::from_value::<ContentPackage>(wire).is_err(),"direct SDK null {key}");
++        wire[table][0][key] = serde_json::Value::Null;
++        assert!(
++            serde_json::from_value::<ContentPackage>(wire).is_err(),
++            "direct SDK null {key}"
++        );
++    }
++    for version in [0, 2, 6, u32::MAX] {
++        let mut p = default5();
++        p.manifest.content_schema_version = version;
++        p.manifest.logic_hash = p.compute_logic_hash();
++        assert!(p.validate().is_err());
++    }
++    for table in ["skill_index", "trigger_index"] {
++        let mut wire = serde_json::to_value(default5()).unwrap();
++        wire[table][0]["unreviewed_execution_switch"] = true.into();
++        assert!(serde_json::from_value::<ContentPackage>(wire).is_err());
+     }
+-    for version in [0,2,6,u32::MAX] {let mut p=default5();p.manifest.content_schema_version=version;p.manifest.logic_hash=p.compute_logic_hash();assert!(p.validate().is_err());}
+-    for table in ["skill_index","trigger_index"] {let mut wire=serde_json::to_value(default5()).unwrap();wire[table][0]["unreviewed_execution_switch"]=true.into();assert!(serde_json::from_value::<ContentPackage>(wire).is_err());}
+ }
+ #[test]
+ fn schema5_hash_binds_positions_traits_tuple_keys_edges_and_cleanup() {
+-    let p=default5();let hash=p.compute_logic_hash();
++    let p = default5();
++    let hash = p.compute_logic_hash();
+     for change in 0..12 {
+-        let mut q=p.clone();match change {
+-            0=>q.skill_index[0].temporary=Some(false),1=>q.skill_index[0].persevere=Some(false),2=>q.skill_index[0].group_children=Some(vec![]),3=>q.skill_index[0].reveal=Some(content_schema::RevealBinding::None),4=>q.skill_index[0].onremove=Some("host:sanjian_weapon".into()),5=>q.trigger_index[0].force_die=Some(false),6=>q.trigger_index[0].priority=2,7=>q.trigger_index[0].entry_pc+=1,8=>q.trigger_index[0].host_key=Some("host:sanjian_weapon".into()),9=>q.trigger_index[0].event_skill=Some(99108001),10=>q.trigger_index[0].module.push('x'),11=>q.skill_index[0].name.push('x'),_=>unreachable!()}
+-        assert_ne!(hash,q.compute_logic_hash(),"mutation{change}");
++        let mut q = p.clone();
++        match change {
++            0 => q.skill_index[0].temporary = Some(false),
++            1 => q.skill_index[0].persevere = Some(false),
++            2 => q.skill_index[0].group_children = Some(vec![]),
++            3 => q.skill_index[0].reveal = Some(content_schema::RevealBinding::None),
++            4 => q.skill_index[0].onremove = Some("host:sanjian_weapon".into()),
++            5 => q.trigger_index[0].force_die = Some(false),
++            6 => q.trigger_index[0].priority = 2,
++            7 => q.trigger_index[0].entry_pc += 1,
++            8 => q.trigger_index[0].host_key = Some("host:sanjian_weapon".into()),
++            9 => q.trigger_index[0].event_skill = Some(99108001),
++            10 => q.trigger_index[0].module.push('x'),
++            11 => q.skill_index[0].name.push('x'),
++            _ => unreachable!(),
++        }
++        assert_ne!(hash, q.compute_logic_hash(), "mutation{change}");
+     }
+-    let mut pair=p.clone();let mut next=pair.trigger_index[0].clone();next.trigger_def_id+=100;next.filter="always".into();pair.trigger_index.push(next);let h=pair.compute_logic_hash();pair.trigger_index.reverse();assert_ne!(h,pair.compute_logic_hash());
+-    let mut bytes=String::from_utf8(p.to_json_bytes().unwrap()).unwrap();bytes=bytes.replace("\"charlotte\":false","\"charlotte\":true,\"charlotte\":false");assert!(ContentPackage::from_json_bytes(bytes.as_bytes()).is_err());
++    let mut pair = p.clone();
++    let mut next = pair.trigger_index[0].clone();
++    next.trigger_def_id += 100;
++    next.filter = "always".into();
++    pair.trigger_index.push(next);
++    let h = pair.compute_logic_hash();
++    pair.trigger_index.reverse();
++    assert_ne!(h, pair.compute_logic_hash());
++    let mut bytes = String::from_utf8(p.to_json_bytes().unwrap()).unwrap();
++    bytes = bytes.replace(
++        "\"charlotte\":false",
++        "\"charlotte\":true,\"charlotte\":false",
++    );
++    assert!(ContentPackage::from_json_bytes(bytes.as_bytes()).is_err());
+ }
+ #[test]
+ fn schema5_runtime_rejects_unimplemented_mechanisms_before_engine_mutation() {
+-    let existing=engine_native::Engine::new(10801,3);let before=existing.save();let before_hash=existing.state_hash();
++    let existing = engine_native::Engine::new(10801, 3);
++    let before = existing.save();
++    let before_hash = existing.state_hash();
+     for change in 0..9 {
+-        let mut p=default5();match change {
+-            0=>p.trigger_index[0].force_die=Some(true),1=>p.trigger_index[0].force_out=Some(true),2=>p.trigger_index[0].repeat=Some(content_schema::TriggerRepeat::DamageAmount),3=>p.trigger_index[0].hidden=Some(content_schema::HiddenTriggerPolicy::RunHidden),4=>p.skill_index[0].temporary=Some(true),5=>p.skill_index[0].forever=Some(true),6=>p.skill_index[0].reveal=Some(content_schema::RevealBinding::ConfirmPublic),7=>p.skill_index[0].onremove=Some("host:sanjian_weapon".into()),8=>p.skill_index[0].onremove=Some("host:unknown_cleanup".into()),_=>unreachable!()}
+-        finish(&mut p);p.validate().unwrap();assert!(content_native_loader::bridge_vm_skill_decls(&p).is_err(),"mechanism{change}");assert_eq!(existing.save(),before);assert_eq!(existing.state_hash(),before_hash);
++        let mut p = default5();
++        match change {
++            0 => p.trigger_index[0].force_die = Some(true),
++            1 => p.trigger_index[0].force_out = Some(true),
++            2 => p.trigger_index[0].repeat = Some(content_schema::TriggerRepeat::DamageAmount),
++            3 => p.trigger_index[0].hidden = Some(content_schema::HiddenTriggerPolicy::RunHidden),
++            4 => p.skill_index[0].temporary = Some(true),
++            5 => p.skill_index[0].forever = Some(true),
++            6 => p.skill_index[0].reveal = Some(content_schema::RevealBinding::ConfirmPublic),
++            7 => p.skill_index[0].onremove = Some("host:sanjian_weapon".into()),
++            8 => p.skill_index[0].onremove = Some("host:unknown_cleanup".into()),
++            _ => unreachable!(),
++        }
++        finish(&mut p);
++        p.validate().unwrap();
++        assert!(
++            content_native_loader::bridge_vm_skill_decls(&p).is_err(),
++            "mechanism{change}"
++        );
++        assert_eq!(existing.save(), before);
++        assert_eq!(existing.state_hash(), before_hash);
+     }
+ }
+ #[test]
+ fn schema5_known_native_key_is_not_a_cleanup_or_window_permission() {
+-    for key in ["host:sanjian_weapon","host:unknown_execution"] {
+-        let mut p=default5();p.trigger_index[0].module.clear();p.trigger_index[0].entry_pc=0;p.trigger_index[0].host_key=Some(key.into());finish(&mut p);p.validate().unwrap();
+-        let error=format!("{:?}",content_native_loader::bridge_vm_skill_decls(&p).unwrap_err());assert!(error.contains(if key.ends_with("unknown_execution"){ "unknown_native_execution_key" }else{"unsupported_explicit_native_declaration_binding"}));
+-        p.trigger_index[0].module=p.modules[0].name.clone();finish(&mut p);assert!(p.validate().is_err(),"native and RVM authorities conflict");
++    for key in ["host:sanjian_weapon", "host:unknown_execution"] {
++        let mut p = default5();
++        p.trigger_index[0].module.clear();
++        p.trigger_index[0].entry_pc = 0;
++        p.trigger_index[0].host_key = Some(key.into());
++        finish(&mut p);
++        p.validate().unwrap();
++        let error = format!(
++            "{:?}",
++            content_native_loader::bridge_vm_skill_decls(&p).unwrap_err()
++        );
++        assert!(error.contains(if key.ends_with("unknown_execution") {
++            "unknown_native_execution_key"
++        } else {
++            "unsupported_explicit_native_declaration_binding"
++        }));
++        p.trigger_index[0].module = p.modules[0].name.clone();
++        finish(&mut p);
++        assert!(p.validate().is_err(), "native and RVM authorities conflict");
+     }
+ }
+ #[test]
+ fn schema5_group_and_named_event_edges_resolve_genuine_dependency_handlers() {
+-    let child=content_compiler::compile_source_named("thirdparty-child","skill unrelated_child(99108003) { trigger damage always { effect draw_cards(self,1); } }").unwrap();
+-    let mut parent=default5();parent.manifest.dependencies.push(content_schema::PackageDependency {namespace:child.manifest.namespace.clone(),package_id:child.manifest.package_id.clone(),version:child.manifest.version.clone(),logic_hash:child.manifest.logic_hash});parent.skill_index[0].group_children=Some(vec![99108003]);parent.skill_index[0].reveal=Some(content_schema::RevealBinding::TriggerHook{before:Some(99108003),after:None});parent.trigger_index[0].event="skill_begin".into();parent.trigger_index[0].event_skill=Some(99108003);finish(&mut parent);parent.validate().unwrap();
+-    ContentPackage::validate_native_mechanism_graph(&[child.clone(),parent.clone()]).unwrap();assert!(ContentPackage::validate_native_mechanism_graph(&[parent.clone()]).is_err());
+-    let root=tempfile::tempdir().unwrap();let store=content_runtime::PackageStore::open(root.path()).unwrap();let options=content_runtime::InstallOptions{allow_unsigned:true,..Default::default()};store.install(&child.to_json_bytes().unwrap(),None,&options).unwrap();store.install(&parent.to_json_bytes().unwrap(),None,&options).unwrap();let lock=store.current_lock().unwrap();let loaded=store.load_locked_packages(&lock).unwrap();assert_eq!(loaded,[child.clone(),parent.clone()]);assert!(content_native_loader::bridge_vm_skill_decls(&parent).is_err(),"data installation is not runtime support");
++    let child = content_compiler::compile_source_named(
++        "thirdparty-child",
++        "skill unrelated_child(99108003) { trigger damage always { effect draw_cards(self,1); } }",
++    )
++    .unwrap();
++    let mut parent = default5();
++    parent
++        .manifest
++        .dependencies
++        .push(content_schema::PackageDependency {
++            namespace: child.manifest.namespace.clone(),
++            package_id: child.manifest.package_id.clone(),
++            version: child.manifest.version.clone(),
++            logic_hash: child.manifest.logic_hash,
++        });
++    parent.skill_index[0].group_children = Some(vec![99108003]);
++    parent.skill_index[0].reveal = Some(content_schema::RevealBinding::TriggerHook {
++        before: Some(99108003),
++        after: None,
++    });
++    parent.trigger_index[0].event = "skill_begin".into();
++    parent.trigger_index[0].event_skill = Some(99108003);
++    finish(&mut parent);
++    parent.validate().unwrap();
++    ContentPackage::validate_native_mechanism_graph(&[child.clone(), parent.clone()]).unwrap();
++    assert!(ContentPackage::validate_native_mechanism_graph(&[parent.clone()]).is_err());
++    let root = tempfile::tempdir().unwrap();
++    let store = content_runtime::PackageStore::open(root.path()).unwrap();
++    let options = content_runtime::InstallOptions {
++        allow_unsigned: true,
++        ..Default::default()
++    };
++    store
++        .install(&child.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    store
++        .install(&parent.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    let lock = store.current_lock().unwrap();
++    let loaded = store.load_locked_packages(&lock).unwrap();
++    assert_eq!(loaded, [child.clone(), parent.clone()]);
++    assert!(
++        content_native_loader::bridge_vm_skill_decls(&parent).is_err(),
++        "data installation is not runtime support"
++    );
+     for change in 0..4 {
+-        let mut q=parent.clone();match change {0=>q.skill_index[0].group_children=Some(vec![99108003,99108003]),1=>q.skill_index[0].group_children=Some(vec![99108001]),2=>q.trigger_index[0].event_skill=Some(0),3=>q.skill_index[0].reveal=Some(content_schema::RevealBinding::TriggerHook{before:Some(0),after:None}),_=>unreachable!()};finish(&mut q);assert!(q.validate().is_err()||ContentPackage::validate_native_mechanism_graph(&[child.clone(),q]).is_err());
++        let mut q = parent.clone();
++        match change {
++            0 => q.skill_index[0].group_children = Some(vec![99108003, 99108003]),
++            1 => q.skill_index[0].group_children = Some(vec![99108001]),
++            2 => q.trigger_index[0].event_skill = Some(0),
++            3 => {
++                q.skill_index[0].reveal = Some(content_schema::RevealBinding::TriggerHook {
++                    before: Some(0),
++                    after: None,
++                })
++            }
++            _ => unreachable!(),
++        };
++        finish(&mut q);
++        assert!(
++            q.validate().is_err()
++                || ContentPackage::validate_native_mechanism_graph(&[child.clone(), q]).is_err()
++        );
+     }
+ }
+ #[test]
+ fn schema5_default_declaration_lock_is_bound_and_public_sdk_native_vm_conflict_rejects() {
+-    use engine_native::content::extension::{ExtensionDef,ExtensionPack,InitHook};
+-    let p=default5();let vm=content_native_loader::bridge_vm_skill_decls(&p).unwrap().decls;
+-    let mut pack=ExtensionPack{def:ExtensionDef{name:"thirdparty-schema5",version:1,description:"SDK equal validation"},generals:vec![],cards:vec![],host_skills:vec![],vm_skills:vm,init_hook:InitHook::None,enabled:true};
+-    let e=engine_native::Engine::new_with_extensions(10802,3,&[&pack]).unwrap();let hash=e.ruleset_version();
+-    let mut explicit=p.clone();explicit.skill_index[0].temporary=Some(false);finish(&mut explicit);pack.vm_skills=content_native_loader::bridge_vm_skill_decls(&explicit).unwrap().decls;let second=engine_native::Engine::new_with_extensions(10802,3,&[&pack]).unwrap();assert_ne!(hash,second.ruleset_version());
+-    pack.host_skills.push(engine_native::content::host::HostSkillDecl{name:"schema5_draw",behavior:engine_native::content::host::HostBehavior::SanjianWeaponDamage});assert!(engine_native::Engine::new_with_extensions(10802,3,&[&pack]).is_err());
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let p = default5();
++    let vm = content_native_loader::bridge_vm_skill_decls(&p)
++        .unwrap()
++        .decls;
++    let mut pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "thirdparty-schema5",
++            version: 1,
++            description: "SDK equal validation",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: vm,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let e = engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).unwrap();
++    let hash = e.ruleset_version();
++    let mut explicit = p.clone();
++    explicit.skill_index[0].temporary = Some(false);
++    finish(&mut explicit);
++    pack.vm_skills = content_native_loader::bridge_vm_skill_decls(&explicit)
++        .unwrap()
++        .decls;
++    let second = engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).unwrap();
++    assert_ne!(hash, second.ruleset_version());
++    pack.host_skills
++        .push(engine_native::content::host::HostSkillDecl {
++            name: "schema5_draw",
++            behavior: engine_native::content::host::HostBehavior::SanjianWeaponDamage,
++        });
++    assert!(engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).is_err());
++}
++
++#[test]
++fn schema5_invalid_data_install_is_atomic_and_default_vm_body_still_executes() {
++    let dir = tempfile::tempdir().unwrap();
++    let store = content_runtime::PackageStore::open(dir.path()).unwrap();
++    let options = content_runtime::InstallOptions {
++        allow_unsigned: true,
++        ..Default::default()
++    };
++    let p = default5();
++    store
++        .install(&p.to_json_bytes().unwrap(), None, &options)
++        .unwrap();
++    let lock = store.current_lock().unwrap();
++    let mut invalid = p.clone();
++    invalid.manifest.content_schema_version = 3;
++    invalid.manifest.logic_hash = invalid.compute_logic_hash();
++    assert!(store
++        .install(&invalid.to_json_bytes().unwrap(), None, &options)
++        .is_err());
++    assert_eq!(lock, store.current_lock().unwrap());
++    assert_eq!(store.load_locked_packages(&lock).unwrap(), [p.clone()]);
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let pack = ExtensionPack {
++        def: ExtensionDef {
++            name: "thirdparty-schema5-positive",
++            version: 1,
++            description: "supported default VM semantics",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let mut engine = engine_native::Engine::new_with_extensions(10803, 3, &[&pack]).unwrap();
++    engine.debug_grant(1, "schema5_draw");
++    let hand = engine.state_core().player(1).hand.len();
++    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
++    assert_eq!(engine.state_core().player(1).hand.len(), hand + 1);
++}
++
++#[test]
++fn schema5_windows_policy_combinations_and_real_child_cycle_reject() {
++    let mut p=content_compiler::compile_source_named("schema5-cycle", "skill cycle_parent(99108004) { trigger damage always { effect draw_cards(self,1); } } skill real_child(99108005) { trigger damage always { effect draw_cards(self,1); } }").unwrap();
++    p.skill_index[0].group_children = Some(vec![99108005]);
++    p.skill_index[1].group_children = Some(vec![99108004]);
++    finish(&mut p);
++    assert!(p.validate().unwrap_err().contains("cyclic"));
++    let mut p = default5();
++    p.trigger_index[0].event_skill = Some(99108001);
++    finish(&mut p);
++    assert!(p.validate().unwrap_err().contains("event_skill"));
++    let mut p = default5();
++    p.trigger_index[0].event = "cards_drawn".into();
++    p.trigger_index[0].repeat = Some(content_schema::TriggerRepeat::DamageAmount);
++    finish(&mut p);
++    assert!(p.validate().is_err());
++    let mut p = content_compiler::compile_source_named(
++        "schema5-rescue",
++        "skill schema5_rescue(99108006) { active play_phase { effect draw_cards(self,1); } }",
++    )
++    .unwrap();
++    p.skill_index[0].charlotte = Some(false);
++    p.active_index[0].window = "dying".into();
++    finish(&mut p);
++    p.validate().unwrap();
++    assert!(format!(
++        "{:?}",
++        content_native_loader::bridge_vm_skill_decls(&p).unwrap_err()
++    )
++    .contains("unsupported_rescue_action_window"));
++    let mut wire = serde_json::to_value(default5()).unwrap();
++    wire["skill_index"][0]["onremove"] = serde_json::json!({"callback":"script"});
++    assert!(ContentPackage::from_json_bytes(&serde_json::to_vec(&wire).unwrap()).is_err());
+ }
+diff --git a/crates/engine-native/tests/t8_rvm_bridge.rs b/crates/engine-native/tests/t8_rvm_bridge.rs
+index 5dc0594f..d6c88e03 100644
+--- a/crates/engine-native/tests/t8_rvm_bridge.rs
++++ b/crates/engine-native/tests/t8_rvm_bridge.rs
+@@ -1860,5 +1860,5 @@ skill hnl_pile_see(990024) {
+ }
+ 
+ /// add_mark 写入标记。
+-#[path = "t8_vm_state_effects.rs"]
++#[path = "t8_rvm_bridge/state_effects.rs"]
+ mod vm_state_effects;
+diff --git a/crates/engine-native/tests/t8_rvm_bridge/state_effects.rs b/crates/engine-native/tests/t8_rvm_bridge/state_effects.rs
+new file mode 100644
+index 00000000..c68f5830
+--- /dev/null
++++ b/crates/engine-native/tests/t8_rvm_bridge/state_effects.rs
+@@ -0,0 +1,156 @@
++//! VM writes, state queries and history filters through the existing bridge.
++use super::*;
++
++#[test]
++fn t8_add_mark_writes() {
++    let dsl = "\
++skill hnl_mark(990022) {
++  trigger damage owner_is_target {
++    effect add_mark(self, 7, 2);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_mark");
++    keep_only(&mut e, 1, &["hnl_mark"]);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().vm_aux.marks.get(&(1, 7)).copied(), Some(2));
++}
++
++/// change_max_hp 改变体力上限。
++#[test]
++fn t8_change_max_hp_writes() {
++    let dsl = "\
++skill hnl_max(990025) {
++  trigger damage owner_is_target {
++    effect change_max_hp(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_max");
++    keep_only(&mut e, 1, &["hnl_max"]);
++    let before = e.state_core().player(1).max_hp;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().player(1).max_hp, before + 1);
++}
++
++/// hand_count 查询为真才摸牌；空手不摸。
++#[test]
++fn t8_hand_count_query_gates_draw() {
++    let dsl = "\
++skill hnl_hc(990030) {
++  trigger damage owner_is_target {
++    if hand_count(self) > 0 {
++      effect draw_cards(self, 1);
++    }
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_hc");
++    keep_only(&mut e, 1, &["hnl_hc"]);
++    let h = hand_len(&e, 1);
++    assert!(h > 0);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
++    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
++    e.state_core_mut().discard.extend(gone);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
++}
++
++/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
++#[test]
++fn t8_lost_history_dual_gate() {
++    let dsl = "\
++skill hnl_lost(990040) {
++  trigger damage owner_alive_lost_hand_this_turn {
++    effect draw_cards(self, 1);
++  }
++}
++skill hnl_drop(990041) {
++  trigger damage owner_is_target {
++    effect discard_hand(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_lost");
++    e.debug_grant(1, "hnl_drop");
++    keep_only(&mut e, 1, &["hnl_lost", "hnl_drop"]);
++    let h = hand_len(&e, 1);
++    assert!(h > 0);
++    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h, "同优先filter在弃牌子事件返回后重新放行");
++    assert!(
++        e.state_core()
++            .vm_aux
++            .lost
++            .get(&1)
++            .is_some_and(|c| !c.is_empty()),
++        "弃牌写入丢失史"
++    );
++    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "下一事件仍可再次看到丢失史");
++}
++
++/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
++#[test]
++fn t8_move_batch_dual_gate() {
++    let dsl = "\
++skill hnl_batch(990042) {
++  trigger cards_moved owner_alive_discard_batch {
++    effect draw_cards(self, 1);
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_batch");
++    keep_only(&mut e, 1, &["hnl_batch"]);
++    let h = hand_len(&e, 1);
++    let card = e.debug_place(0, "sha");
++    e.debug_give_hand_card(0, 2, card);
++    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
++    e.debug_set_skill_enabled(1, "hnl_batch", false);
++    let card2 = e.debug_place(0, "shan");
++    e.debug_give_hand_card(0, 2, card2);
++    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
++}
++
++/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
++#[test]
++fn t8_skill_uses_remaining_dual_gate() {
++    let dsl = "\
++skill hnl_uses(990050) {
++  trigger damage owner_is_target {
++    let remaining = skill_uses_remaining(self_skill);
++    if remaining > 0 {
++      effect draw_cards(self, 1);
++    }
++  }
++}
++";
++    let pack = install_dsl(dsl);
++    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
++    e.debug_grant(1, "hnl_uses");
++    keep_only(&mut e, 1, &["hnl_uses"]);
++    let h = hand_len(&e, 1);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
++    let def = e.catalog().skill_by_name("hnl_uses").expect("技能");
++    e.state_core_mut()
++        .skills
++        .get_mut(&(1, def))
++        .expect("实例")
++        .once_used = true;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
++}
+diff --git a/crates/engine-native/tests/t8_vm_state_effects.rs b/crates/engine-native/tests/t8_vm_state_effects.rs
+deleted file mode 100644
+index 5a94d26e..00000000
+--- a/crates/engine-native/tests/t8_vm_state_effects.rs
++++ /dev/null
+@@ -1,155 +0,0 @@
+-//! VM writes, state queries and history filters through the existing bridge.
+-use super::*;
+-
+-#[test]
+-fn t8_add_mark_writes() {
+-    let dsl = "\
+-skill hnl_mark(990022) {
+-  trigger damage owner_is_target {
+-    effect add_mark(self, 7, 2);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_mark");
+-    keep_only(&mut e, 1, &["hnl_mark"]);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(
+-        e.state_core().vm_aux.marks.get(&(1, 7)).copied(),
+-        Some(2)
+-    );
+-}
+-
+-/// change_max_hp 改变体力上限。
+-#[test]
+-fn t8_change_max_hp_writes() {
+-    let dsl = "\
+-skill hnl_max(990025) {
+-  trigger damage owner_is_target {
+-    effect change_max_hp(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_max");
+-    keep_only(&mut e, 1, &["hnl_max"]);
+-    let before = e.state_core().player(1).max_hp;
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(e.state_core().player(1).max_hp, before + 1);
+-}
+-
+-/// hand_count 查询为真才摸牌；空手不摸。
+-#[test]
+-fn t8_hand_count_query_gates_draw() {
+-    let dsl = "\
+-skill hnl_hc(990030) {
+-  trigger damage owner_is_target {
+-    if hand_count(self) > 0 {
+-      effect draw_cards(self, 1);
+-    }
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_hc");
+-    keep_only(&mut e, 1, &["hnl_hc"]);
+-    let h = hand_len(&e, 1);
+-    assert!(h > 0);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
+-    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
+-    e.state_core_mut().discard.extend(gone);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
+-}
+-
+-/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
+-#[test]
+-fn t8_lost_history_dual_gate() {
+-    let dsl = "\
+-skill hnl_lost(990040) {
+-  trigger damage owner_alive_lost_hand_this_turn {
+-    effect draw_cards(self, 1);
+-  }
+-}
+-skill hnl_drop(990041) {
+-  trigger damage owner_is_target {
+-    effect discard_hand(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_lost");
+-    e.debug_grant(1, "hnl_drop");
+-    keep_only(&mut e, 1, &["hnl_lost", "hnl_drop"]);
+-    let h = hand_len(&e, 1);
+-    assert!(h > 0);
+-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h, "同优先filter在弃牌子事件返回后重新放行");
+-    assert!(
+-        e.state_core().vm_aux.lost.get(&1).is_some_and(|c| !c.is_empty()),
+-        "弃牌写入丢失史"
+-    );
+-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "下一事件仍可再次看到丢失史");
+-}
+-
+-/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
+-#[test]
+-fn t8_move_batch_dual_gate() {
+-    let dsl = "\
+-skill hnl_batch(990042) {
+-  trigger cards_moved owner_alive_discard_batch {
+-    effect draw_cards(self, 1);
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_batch");
+-    keep_only(&mut e, 1, &["hnl_batch"]);
+-    let h = hand_len(&e, 1);
+-    let card = e.debug_place(0, "sha");
+-    e.debug_give_hand_card(0, 2, card);
+-    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
+-    e.debug_set_skill_enabled(1, "hnl_batch", false);
+-    let card2 = e.debug_place(0, "shan");
+-    e.debug_give_hand_card(0, 2, card2);
+-    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
+-}
+-
+-/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
+-#[test]
+-fn t8_skill_uses_remaining_dual_gate() {
+-    let dsl = "\
+-skill hnl_uses(990050) {
+-  trigger damage owner_is_target {
+-    let remaining = skill_uses_remaining(self_skill);
+-    if remaining > 0 {
+-      effect draw_cards(self, 1);
+-    }
+-  }
+-}
+-";
+-    let pack = install_dsl(dsl);
+-    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
+-    e.debug_grant(1, "hnl_uses");
+-    keep_only(&mut e, 1, &["hnl_uses"]);
+-    let h = hand_len(&e, 1);
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
+-    let def = e.catalog().skill_by_name("hnl_uses").expect("技能");
+-    e.state_core_mut()
+-        .skills
+-        .get_mut(&(1, def))
+-        .expect("实例")
+-        .once_used = true;
+-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+-    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
+-}

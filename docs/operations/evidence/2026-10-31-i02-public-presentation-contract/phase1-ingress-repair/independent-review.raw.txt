@@ -1,0 +1,23 @@
+## Review
+
+No issues found.
+
+Incrementally reviewed the immutable [repair delta](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/repair.patch), materialized affected sources, added tests and supplied validation records. The prior two P1/two P2 findings and the added lone-surrogate counterexample are resolved in this candidate. Historical reviews remain unchanged.
+
+- **Correct — compound-invalid IPC routing:** [desktopEngineTransport.ts:37](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/apps/web-client/src/engine/desktopEngineTransport.ts:37) now checks presentation before observer normalization. Malformed presentation returns the raw successful response to EngineClient’s uncertain-result path, preserving pending entries and avoiding receipt timing cleanup. Absent or valid presentation retains existing Source27 behavior. [Compound-response tests](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/apps/web-client/scripts/nc04-worker-failure.test.mjs:356) cover direct and nested responses, all malformed batches, missing context, and ordinary cleanup for valid/absent presentation.
+
+- **Correct — bounded network retention:** [networkClient.ts:426](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/apps/web-client/src/engine/networkClient.ts:426) checks the existing fixed-eight limit before key allocation, map insertion, storage or sending. Persisted-placeholder admission is bounded at line 476; replay of existing keys remains outside new-command admission and allocates no replacement keys. Tests cover sequential malformed replies, all six command routes, unchanged counters/storage on excess requests, same-key rejoin, legacy settlement and disposal. This deliberately changes excess-concurrency behavior without introducing a queue or receipt ledger.
+
+- **Correct — repository whitespace parity:** [Rust validation:22](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/crates/engine-api/src/presentation/validation.rs:22) and [TS validation:16](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/apps/web-client/src/engine/presentationMetadata.ts:16) use the same explicit forbidden set, including U+0085 and U+FEFF. The earlier Unicode-property mismatch is removed.
+
+- **Correct — surrogate handling:** TS rejects lone UTF-16 units in repository/token validation; path components reuse token validation. Unicode mode preserves valid astral pairs. [Rust tests:98](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/crates/engine-protocol/tests/presentation.rs:98) inject invalid escapes directly into raw wire JSON, avoiding premature conversion through `Value`. Shared high/low-surrogate cases and positive astral repository/key/path cases exercise both boundaries.
+
+- **Correct — meaningful C→S compatibility assertion:** [presentation_main5fc_reader.rs:25](/tmp/i02-phase1-ingress-repair-89364384/unicode-acceptance-checkpoint/source/crates/engine-protocol/tests/presentation_main5fc_reader.rs:25) now requires valid `RequestSnapshot` decoding to succeed in frozen/current readers before asserting rejection of the additional field. Existing positive S→C decoding and strict malformed-field/size/player checks remain intact.
+
+- **Validation evidence:** Inspected supplied final logs recording **441/441 frontend tests**, **12 Rust API/protocol tests**, and the final validation index recording typecheck success. The affected-callers check predates the Unicode addendum; that addendum changes TS and test/fixture inputs, not Rust production code. These are reviewed worker results, not reviewer executions. Source/artifact hashes were not independently recomputed.
+
+- **Fixed:** No edits by this reviewer; corrective source changes are verified above.
+- **Merge verdict: OK with notes for the private I02 typed-wire foundation.** No remaining issue was found within this incremental repair scope. This verdict establishes neither Main integration nor current-Main/WASM equivalence. The pinned `225f…` fixture remains an old5fc regression input. Producer disclosure, committed spans, verified resource membership, C29/R05/VM-death dependencies and full-I02 acceptance remain pending.
+
+Skipped builds/tests, network, Main writes, GUI/audio and independent hash verification.
+Residual risk: this foundation validates structure and ingress handling; it does not establish occurrence authority, resource membership or complete automatic audio behavior.

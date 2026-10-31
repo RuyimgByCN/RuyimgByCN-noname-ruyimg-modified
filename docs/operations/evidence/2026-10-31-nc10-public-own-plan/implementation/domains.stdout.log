@@ -1,0 +1,268 @@
+
+running 220 tests
+test adr0786_j2_active_bridge::active_skill_retains_every_trigger_handler ... ok
+test adr0786_j2_active_bridge::author_active_and_trigger_share_skill_identity_and_storage ... ok
+test adr0786_j2_active_bridge::author_active_index_is_available_after_formal_bridge ... ok
+test adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration ... ok
+test adr0786_j2_active_bridge::unsupported_active_contracts_and_entry_pc_reject_explicitly ... ok
+test adr0786_j2_effect_choices::actual_pinghe_source_keeps_max_hp_hand_limit_and_prevention_timing ... ok
+test adr0786_j2_effect_choices::content_callbacks_and_effect_codec_work_before_host_abi_is_advertised ... ok
+test adr0786_j2_effect_choices::danshou_all_four_options_settle_then_discard_ordinal_with_every_choice_checkpoint ... ok
+test adr0786_j2_effect_choices::danshou_insufficient_discard_cancel_and_next_play_phase_reset ... ok
+test adr0786_j2_effect_choices::fenghe_actual_give_and_filtered_recast_keep_damage_prevented_across_checkpoints ... ok
+test adr0786_j2_effect_choices::fenghe_rewards_only_actual_give_with_owned_yingba_and_living_damage_source ... ok
+test adr0786_j2_effect_choices::pingkou_counts_real_skips_and_settles_each_damage_before_drawing ... ok
+test adr0786_j2_effect_choices::pingkou_prevention_and_nested_dying_save_or_death_resume_without_duplicate_draw ... ok
+test adr0786_j2_package_versions::shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_native_declarations ... ok
+test adr0786_j2_review_regressions::active_body_with_preceding_draw_or_unreachable_danshou_is_not_pre_rejected ... ok
+test adr0786_j2_review_regressions::danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills ... ok
+test adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore ... ok
+test adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_can_kill_target_before_its_draw_is_started ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_subtree_finishes_before_target_draw_and_ordinal_discard ... ok
+test adr0786_j2_review_regressions::fenghe_forged_deck_reference_rejects_byte_restore_without_double_ownership ... ok
+test adr0786_j2_review_regressions::fenghe_genuine_gift_keeps_cards_given_and_giver_benefit ... ok
+test adr0786_j2_review_regressions::grouped_following_handler_rechecks_owner_and_instance_after_first_handler ... ok
+test adr0786_j2_review_regressions::grouped_following_waits_for_last_discard_subtree_before_rechecking_owner ... ok
+test adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate ... ok
+test adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped ... ok
+test ai_content_tuning::content_tuning_defaults_and_helpers ... ok
+test ai_content_tuning::content_tuning_is_deterministic ... ok
+test ai_content_tuning::content_tuning_prefers_high_weight_enemy ... ok
+test ai_planner::plan_apply_roundtrip_at_high_water ... ok
+test ai_planner::plan_enumerates_confirm_and_cancel_fallbacks ... ok
+test ai_planner::plan_enumerates_single_choice_fallbacks ... ok
+test ai_planner::plan_pipeline_works_with_hidden_opponent_cards ... ok
+test ai_planner::plan_sim_uses_session_high_water ... ok
+test ai_planner::policy_and_plan_reject_cleanly_at_dedup_exhaustion ... ok
+test ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic ... FAILED
+test ai_planner::policy_v2_plays_value_card_and_is_deterministic ... ok
+test ai_planner::redact_deterministic_with_empty_deck_fallback ... ok
+test ai_planner::redact_preserves_card_ownership_and_multiset ... ok
+test ai_planner::redact_shuffles_unknown_pool_when_deck_present ... ok
+test ai_planner::t13_plan_cancel_mid_run_cross_thread ... ok
+test ai_planner::t13_plan_pool_more_seats_than_workers_keeps_order ... ok
+test ai_planner::t13_plan_pool_parallel_matches_sequential ... ok
+test ai_planner::two_ply_lookahead_deterministic_and_bounded ... ok
+test boss_play_eight::l03_eight_dimension_from_fresh_install ... ok
+test boss_play_eight::u02_eight_dimension_from_fresh_install ... ok
+test d5_longxue_mbqianlong::longxue_marks_accumulate_and_cap ... ok
+test d5_longxue_mbqianlong::longxue_opening_marks_twenty_or_sixty ... ok
+test d5_longxue_mbqianlong::longxue_package_maps_host_and_defers_external ... ok
+test d5_longxue_mbqianlong::longxue_threshold_grants_when_skill_exists ... ok
+test d5_longxue_mbqianlong::longxue_weitong_registration_only ... ok
+test d5_longxue_mbqianlong::qingzheng_discards_both_sides_and_punishes_fewer ... ok
+test d5_longxue_mbqianlong::qingzheng_no_damage_when_target_discards_enough ... ok
+test e02_c3_lifecycle::e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1 ... ok
+test e02_c3_lifecycle::e03_c3_uninstall_during_active_game_lock_pinned ... ok
+test epic_rangjie_after_damage::rangjie_decline_and_absent ... ok
+test epic_rangjie_after_damage::rangjie_gains_basic_card ... ok
+test epic_rangjie_after_damage::rangjie_moves_card_between_players ... ok
+test epic_reguhuo_viewas::reguhuo_absent_rejected ... ok
+test epic_reguhuo_viewas::reguhuo_declares_sha_with_target ... ok
+test epic_reguhuo_viewas::reguhuo_declares_tao_from_hand ... ok
+test epic_reguhuo_viewas::reguhuo_is_once_per_turn ... ok
+test fuzz_corpus_replay::replay_bytecode_verify_on_decoded_corpus ... ok
+test fuzz_corpus_replay::replay_fuzz_bytecode_module_corpus ... ok
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... ok
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... ok
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_referee_projection::full_info_entry_cannot_escape_to_ordinary_views_or_ai_sessions ... ok
+test nc09_referee_projection::referee_includes_machine_held_cards_and_private_choice_after_archive ... ok
+test nc09_referee_projection::referee_reveals_both_dark_generals_and_identities_without_mutating_authority ... ok
+test pa01_catalog_index_equivalence::dispatch_candidates_match_trigger_meta_membership ... ok
+test pa01_catalog_index_equivalence::synthetic_catalog_membership_and_first_match_name ... ok
+test pa08_fullhand_dump::pa08_fullhand_dump ... FULLHAND_HEX_LEN:3816
+FULLHAND_HEX:4e47534169004a010000000000003e070000000000004a0100000000000020000000000000004a010000000000000104000000000000000001030204000000000000000001020304000000000000000105000000050000001e000000000000001c00000002000000030000000c0000000f000000000000000a0000000e000000200000002b0000001e0000002900000028000000250000003000000032000000330000002f0000005500000056000000690000006800000042000000450000003f0000003c000000760000005c0000005000000078000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001040000000400000004000000000000001800000034000000230000004e0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010400000004000000040000000000000031000000270000006300000015000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001040000000400000004000000000000000800000043000000750000002100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004c000000000000005e0000005a0000005f00000049000000660000006c000000530000000d00000016000000480000003600000010000000090000004f000000350000007000000064000000730000003e0000005b0000004d0000000500000054000000460000007b0000001f0000002a00000017000000260000006f0000001a0000004b000000570000001900000071000000010000003d000000600000001100000004000000140000001d0000000700000079000000410000002200000077000000510000005200000006000000400000000b00000062000000440000004a000000370000003a0000002c000000580000006e0000002d0000007a00000039000000590000006700000013000000120000004c000000380000003b0000001b000000240000006a00000072000000470000002e000000060000000000000061000000740000005d000000650000006b0000006d0000000000000000000000e26de613b8b86ebb7d0000000000000000020100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000240000000100000000000000000000000000000000000000000000000000fb0f000000a19535e39e98b36c697885a51a0ccd0393ee9a6dc7a026bd00d26a87c095729e
+ok
+test pa12_batch1_vocabulary::pa12_batch1_owner_alive_triggers_on_others_end_phase ... ok
+test pa12_batch1_vocabulary::pa12_batch1_owner_is_source_after_own_card_used ... ok
+test pa12_batch1_vocabulary::pa12_batch1_vocabulary_mapping_and_strict_reject ... ok
+test pa12_batch2_phase_events::pa12_batch2_phase_begin_is_turn_start_of_owner_only ... ok
+test pa12_batch2_phase_events::pa12_batch2_sha_dodged_owner_is_source ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_filter_mapping ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_alive_not_target ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_is_source_or_target ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_source_ordinary_trick ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_source_sha ... ok
+test pa12_batch3b_once_limits::pa12_batch3b_once_per_round_window ... ok
+test pa12_batch3b_once_limits::pa12_batch3b_once_per_turn_window ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_1_turn_over_toggles_face ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_2_accept_rejects_zero_count ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_2_discard_hand_equip_count ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_3_damage_rewrite_window ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_3_storage_set_clears_on_phase_play ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_4_dichou_predicates ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_fenli_bridges_with_skip_wiring ... ok
+test pa12_dsl_native_prototype::pa12_dsl_choice_max_hp_branch ... ok
+test pa12_dsl_native_prototype::pa12_dsl_choice_recover_branch ... ok
+test pa12_dsl_native_prototype::pa12_dsl_filter_not_fired_when_unique_max ... ok
+test pa12_dsl_native_prototype::pa12_dsl_fires_once_per_turn_at_end_phase_and_first_answer_lands ... ok
+test pa12_dsl_native_prototype::pa12_dsl_pause_save_restore_resume_both_branches ... ok
+test pa12_tag656_version::v322_archive_is_rejected_and_current_archive_round_trips ... ok
+test standard_catalog_inventory::defective_kinds_hold_declared_counts ... ok
+test standard_catalog_inventory::standard_catalog_matches_declared_inventory ... ok
+test t11_boss_pangtong_niepan::niepan_dying_save_or_decline ... ok
+test t11_boss_pangtong_niepan::niepan_play_phase_effect_and_yuhuo_chain ... ok
+test t11_boss_pangtong_niepan::niepan_state_roundtrip ... ok
+test t11_boss_pangtong_niepan::shenwei_draw_and_hand_limit_bonus ... ok
+test t11_boss_zhugeliang_hlss::hlss_assembly_initializes_stars_and_light_refill ... ok
+test t11_boss_zhugeliang_hlss::hlss_fengqi_decline_does_nothing ... ok
+test t11_boss_zhugeliang_hlss::hlss_fengqi_picks_unused_trick_and_records ... ok
+test t11_boss_zhugeliang_hlss::hlss_gaiming_picks_judge_result_or_declines ... ok
+test t11_boss_zhugeliang_hlss::hlss_with_infinite_hp_keeps_stars ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin2_blocks_turnover_and_voids_delayed_trick ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin_skip_prevents_star_loss ... ok
+test t11_boss_zhugeliang_hlss::hlss_zero_stars_awakens_and_stops_refill ... ok
+test t12_dual_diag::diag_dual_namespace_hang_point ... [diag] 开始双仓桥接
+[diag] 桥接完成: noname=113张 liuli=113张
+[diag] 双仓建局开始
+[diag] 双仓建局: 372.167µs cards=350
+[diag] step 0: Accepted { state_hash: [216, 155, 176, 166, 7, 158, 113, 136, 1, 153, 38, 46, 64, 238, 70, 83, 115, 158, 218, 62, 187, 164, 252, 255, 15, 158, 187, 130, 8, 111, 42, 197] } seat=0 elapsed=77.833µs hand_counts=[6, 4, 4]
+[diag] step 1: Accepted { state_hash: [148, 99, 178, 187, 238, 166, 184, 253, 89, 171, 36, 191, 184, 0, 18, 191, 132, 76, 142, 247, 243, 154, 189, 207, 81, 19, 22, 144, 96, 213, 233, 154] } seat=0 elapsed=51.333µs hand_counts=[6, 4, 4]
+[diag] step 2: Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "discard_to_limit", options: [Card(164), Card(256), Card(230), Card(224), Card(293), Card(186)], min: 2, max: 2, allow_cancel: false } } } seat=0 elapsed=13.75µs hand_counts=[6, 4, 4]
+[diag] step 3: Rejected(ChoicePending) seat=0 elapsed=125ns hand_counts=[6, 4, 4]
+[diag] step 4: Rejected(ChoicePending) seat=0 elapsed=83ns hand_counts=[6, 4, 4]
+[diag] step 5: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 6: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 7: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 8: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 9: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 10: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 11: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 12: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 13: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 14: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 15: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 16: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 17: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 18: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 19: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 20: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] step 21: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 22: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 23: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 24: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 25: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 26: Rejected(ChoicePending) seat=0 elapsed=0ns hand_counts=[6, 4, 4]
+[diag] step 27: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 28: Rejected(ChoicePending) seat=0 elapsed=41ns hand_counts=[6, 4, 4]
+[diag] step 29: Rejected(ChoicePending) seat=0 elapsed=42ns hand_counts=[6, 4, 4]
+[diag] 完成
+ok
+test t12_g2g4_channels::g2g4_cardpile_liuli ... ok
+test t12_g2g4_channels::g2g4_cardpile_noname ... ok
+test t12_g2g4_channels::g2g4_d3_select ... ok
+test t12_g2g4_channels::g2g4_shaai_ow ... ok
+test t12_g2g4_channels::g2g4_shaai_xianjian ... ok
+test t12_g2g4_channels::g2g4_shahai_gujian ... ok
+test t12_g2g4_channels::g2g4_shahai_gwent ... ok
+test t12_g2g4_channels::g2g4_shahai_hearth ... ok
+test t12_g2g4_channels::g2g4_shahai_mtg ... ok
+test t12_g2g4_channels::g2g4_shahai_swd ... ok
+test t12_g2g4_channels::g2g4_shahai_yunchou ... ok
+test t12_g2g4_channels::g2g4_shahai_zhenfa ... ok
+test t12_g2g4_channels::g2g4_wudian ... ok
+test t12_g2g4_channels::g2g4_wuxing ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_dual_namespace ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_dual_namespace_worker ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_liuli ... ok
+test t12_g5_relays::t12_g5_relay_d3_generals ... ok
+test t12_g5_relays::t12_g5_relay_d3_generals_worker ... ok
+test t12_g5_relays::t12_g5_relay_shaai_ow ... ok
+test t12_g5_relays::t12_g5_relay_shaai_xianjian ... ok
+test t12_g5_relays::t12_g5_relay_shahai_gujian ... ok
+test t12_g5_relays::t12_g5_relay_shahai_gwent ... ok
+test t12_g5_relays::t12_g5_relay_shahai_hearth ... ok
+test t12_g5_relays::t12_g5_relay_shahai_mtg ... ok
+test t12_g5_relays::t12_g5_relay_shahai_swd ... ok
+test t12_g5_relays::t12_g5_relay_shahai_yunchou ... ok
+test t12_g5_relays::t12_g5_relay_shahai_zhenfa ... ok
+test t12_g5_relays::t12_g5_relay_wudian ... ok
+test t12_g5_relays::t12_g5_relay_wuxing ... ok
+test t13_info_isolation::deep_fields_turned_over_and_skills ... ok
+test t13_info_isolation::identity_role_visibility_and_death_reveal ... ok
+test t13_info_isolation::isolation_boss_stage_hidden ... ok
+test t13_info_isolation::isolation_doudizhu_two_sides ... ok
+test t13_info_isolation::isolation_extension_cards_hidden_like_standard ... ok
+test t13_info_isolation::isolation_generals_public_in_non_kingdoms_modes ... ok
+test t13_info_isolation::isolation_identity_roles_hidden ... ok
+test t13_info_isolation::isolation_kingdoms_seat_matrix ... ok
+test t13_info_isolation::isolation_kof_two_player ... ok
+test t13_info_isolation::isolation_planner_redaction_leaves_authority_intact ... ok
+test t13_info_isolation::isolation_prototype_seat_matrix ... ok
+test t13_info_isolation::isolation_versus_teammates_hidden ... ok
+test t8_rvm_bridge::t8_add_mark_writes ... ok
+test t8_rvm_bridge::t8_bte_kind_classification ... ok
+test t8_rvm_bridge::t8_bte_play_phase_filter_dual_gate_and_phase_kind ... ok
+test t8_rvm_bridge::t8_bte_zero_count_negative ... ok
+test t8_rvm_bridge::t8_change_max_hp_writes ... ok
+test t8_rvm_bridge::t8_filter_damage_before_hand_empty_elemental_or_trick ... ok
+test t8_rvm_bridge::t8_filter_damage_source_movable_field_card ... ok
+test t8_rvm_bridge::t8_filter_family_owner_gate_and_predicates ... ok
+test t8_rvm_bridge::t8_filter_param_hp_below_dual_gate_and_threshold ... ok
+test t8_rvm_bridge::t8_filter_param_play_count_and_at_least_hp ... ok
+test t8_rvm_bridge::t8_filter_targeted_by_other_sha ... ok
+test t8_rvm_bridge::t8_filter_tied_max_family ... ok
+test t8_rvm_bridge::t8_hand_count_query_gates_draw ... ok
+test t8_rvm_bridge::t8_loader_maps_all_carried_named_filters ... ok
+test t8_rvm_bridge::t8_loader_maps_parameterized_filters ... ok
+test t8_rvm_bridge::t8_lost_history_dual_gate ... ok
+test t8_rvm_bridge::t8_move_batch_dual_gate ... ok
+test t8_rvm_bridge::t8_named_filter_vocabulary_maps ... ok
+test t8_rvm_bridge::t8_named_sha_once_dual_gate ... ok
+test t8_rvm_bridge::t8_named_wounded_sha_dual_gate ... ok
+test t8_rvm_bridge::t8_rejection_caps_escalation_denied ... ok
+test t8_rvm_bridge::t8_rejection_corrupted_bytecode_rejected_at_load ... ok
+test t8_rvm_bridge::t8_rejection_tampered_snapshot_module_rejected ... ok
+test t8_rvm_bridge::t8_rejection_unmapped_effect_rolls_back ... ok
+test t8_rvm_bridge::t8_skill_pile_then_nonempty_filter ... ok
+test t8_rvm_bridge::t8_skill_uses_remaining_dual_gate ... ok
+test t8_rvm_bridge::t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_rvm_bridge::t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_rvm_bridge::t8_vm_skill_cross_process_resume ... ok
+test t8_rvm_bridge::t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_rvm_bridge::t8_vm_skill_filter_always ... ok
+test t8_rvm_bridge::t8_vm_skill_filter_owner_is_source ... ok
+test t8_rvm_bridge::t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+test t8_rvm_bridge::t8_vm_skill_id_reverse_lookup_wired ... ok
+test t8_rvm_bridge::t8_vm_skill_loader_bridge_end_to_end ... ok
+test t8_rvm_bridge::t8_vm_skill_loader_rejects_unsupported_filters ... ok
+test t8_rvm_bridge::t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_rvm_bridge::t8_vm_skill_save_restore_roundtrip ... ok
+test t9_d5_surface::infinite_hp_survives_damage_and_recovery ... ok
+test t9_d5_surface::t9_infinity_hp_maps_to_sentinel ... ok
+test t9_d5_surface::t9_invalid_hp_values_are_rejected ... ok
+test t9_d5_surface::t9_unknown_mapping_is_not_a_noop ... ok
+test t9_d5_surface::t9_zhuge_and_ylyg_skills_stay_unmapped ... ok
+test u01_d3_moyan::u01_moyan_from_real_install ... ok
+test u03_cardpile_eight::u03_eight_dimension_from_fresh_install ... ok
+test u04_coin_eight::u04_eight_dimension_from_fresh_install ... ok
+test u08_hero_kill_batch1::yxs_fanji_absent_no_window ... ok
+test u08_hero_kill_batch1::yxs_fanji_counterattacks_source ... ok
+test u08_menshen_batch2::menshen3_clears_marker ... ok
+test u08_menshen_batch2::menshen_marks_target ... ok
+
+failures:
+
+failures:
+    ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic
+
+test result: FAILED. 219 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.69s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "--test", "misc", "--", "--nocapture", "--test-threads=1"], "exit": 101, "locked_seconds": 9.20872470899485, "disk_free_bytes": 38065201152}

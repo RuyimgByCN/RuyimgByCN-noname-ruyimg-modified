@@ -1,0 +1,60 @@
+{
+  "sealed_utc": "2026-10-31T09:40:17.260084+00:00",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "base_tree": "9ba4253837da66457669bd19c5120a9163b2a05b",
+  "versions": "rules330/NGSA105/ABI758/WS6",
+  "files": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755,
+      "lines": 861,
+      "baseline_sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645,
+      "lines": 712,
+      "baseline_sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732,
+      "lines": 107,
+      "baseline_sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440,
+      "lines": 285,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400,
+      "lines": 64,
+      "baseline_sha256": null
+    }
+  ],
+  "tracked_files": 44306,
+  "unchanged_tracked_files": 44303,
+  "full_manifest_sha256": "454b6a54e7353d4d899de2c97a0b4972dc6c2cae88ae8c2cfcaf1ba39c8b432f",
+  "patch_sha256": "316b2588119799597965595c4c2a65493a84d26158bdb0317366cbf187e2b3a6",
+  "overlay_sha256": "783d814a10860fe15fdaab2608fb70ed51030354ec66953fa55355e5ac27a0e6",
+  "commands_sha256": "0890b230d22c4940554b05a555a60f18d9048d3919b8bf0e9e47ea1945bf356c",
+  "counts_sha256": "8b3cab08637f7399dd876e6dced820b1f14f81fba88a46882fb924578fe82ee8",
+  "products_sha256": "833eb9bf5d181980e86c7ac9431b2ead640b5b5561bbd4653618672857712805",
+  "staged": "",
+  "status": "BLOCK: frozen seed8211 trajectory119vs484; no NC10/old19/all37/wholeGoal closure",
+  "baseline_quality": "200/200 finish,fault0,steps321/413/464",
+  "candidate_quality": "200/200 finish,fault0,steps366/479/577",
+  "proof": "Main330 same public P/Q fullPlan4vs11 nodes -> public zero-node equal Plans + genuine Pending both; finite nextPending still differs",
+  "authorization": "Parent explicitly applies existing user wholeGoal NC10 bugfix authorization; separate-policy approval in design/review was advisory inference, not new user restriction. No new numbered decision. All Decision27 formal/root/VM/fuel/restore/version exclusions retained.",
+  "quality_counter_qualification": "Existing200-seed guard reports simulation/probe counters only; formal submit outcome distributions/per-game winners are unmeasured. Stats measured onv1; v2 only fixes cardinality-invalid cancel edge.",
+  "incremental_delta_sha256": "fa9f4f6db9e42e4d8e74d646da60d29c6200327e7a853b3dc35b7a2c59cb372e",
+  "first_divergence": "/tmp/nc10-own-36992565/evidence/first-divergence.json"
+}

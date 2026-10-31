@@ -1,0 +1,384 @@
+diff --git a/apps/web-client/scripts/c331-admission-repair-smoke.mjs b/apps/web-client/scripts/c331-admission-repair-smoke.mjs
+new file mode 100644
+index 00000000..8681343e
+--- /dev/null
++++ b/apps/web-client/scripts/c331-admission-repair-smoke.mjs
+@@ -0,0 +1,78 @@
++// Actual schema5 import → native WASM admission, retaining the original live handle on errors.
++import assert from "node:assert/strict";
++import { readFileSync, writeFileSync } from "node:fs";
++import { createHash } from "node:crypto";
++import { createRequire } from "node:module";
++import { join } from "node:path";
++import { importExtensionPackageValidated, activateExtension } from "../src/engine/extensionStore.ts";
++import { prepareNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
++import { validateNativePackage } from "../src/engine/bundledNativePackages.ts";
++const evidence = process.argv[2];
++const { NativeEngine, validate_pack_json } = createRequire(import.meta.url)(join(evidence, "node-wasm/engine_native_wasm.js"));
++const memory = new Map();
++globalThis.localStorage = { getItem:key => memory.get(key) ?? null, setItem:(key,value) => memory.set(key,String(value)), removeItem:key => memory.delete(key) };
++const goodRaw = readFileSync(join(evidence,"genuine-schema5.json"),"utf8");
++const good = JSON.parse(goodRaw);
++let forwarded;
++const validate = async text => { forwarded = text; validate_pack_json(text); };
++await importExtensionPackageValidated(goodRaw, validate);
++assert.equal(forwarded,goodRaw);
++activateExtension(`${good.manifest.namespace}/${good.manifest.package_id}`);
++const content = prepareNativeMatchContent();
++const handle = NativeEngine.new_with_packs_json(3,10825n,content.packsJson);
++const archive = handle.save_hex(), hash = handle.state_hash_hex(), view = handle.view_json(0);
++const results = [];
++async function rejectEveryEntry(name, raw, pattern, duplicate = false) {
++  const stored = JSON.stringify([...memory]);
++  await assert.rejects(() => importExtensionPackageValidated(raw,validate),pattern);
++  if (duplicate) assert.equal(forwarded,raw,"original duplicate text reaches the actual native reader");
++  assert.throws(() => validate_pack_json(raw),pattern);
++  assert.throws(() => NativeEngine.new_with_packs_json(3,10825n,`[${raw}]`),pattern);
++  assert.throws(() => handle.restore_hex_with_packs_json(archive,`[${raw}]`),pattern);
++  assert.equal(JSON.stringify([...memory]),stored);
++  assert.equal(handle.save_hex(),archive); assert.equal(handle.state_hash_hex(),hash); assert.equal(handle.view_json(0),view);
++  results.push({name,importRejected:true,directWasmRejected:true,admissionRejected:true,restoreRejected:true,storeHandleCatalogArchiveUnchanged:true});
++}
++for (const encoded of ['"charlotte":true,"charlotte":false','"charlotte":true,"\\u0063harlotte":false']) {
++  const raw = goodRaw.replace('"charlotte":false',encoded); assert.notEqual(raw,goodRaw);
++  await rejectEveryEntry(encoded,raw,/duplicate field.*charlotte/,true);
++}
++const assetsRaw = readFileSync(join(evidence,"genuine-asset-only.json"),"utf8");
++validate_pack_json(assetsRaw);
++await importExtensionPackageValidated(assetsRaw,validate);
++const assetsHandle = NativeEngine.new_with_packs_json(3,10826n,`[${assetsRaw}]`); assetsHandle.free();
++for (const [schema,value] of [[5,true],[3,false],[3,null],[4,false],[4,null]]) {
++  const partial = JSON.parse(assetsRaw); partial.manifest.content_schema_version = schema;
++  partial.skill_index = [{skill_def_id:99108020,name:"repair_draw",charlotte:value}];
++  await rejectEveryEntry(`omitted-modules-${schema}-${value}`,JSON.stringify(partial),/schema5|partial.*modules/);
++}
++for (const schema of [3,4,5]) {
++  const partial = JSON.parse(assetsRaw); partial.manifest.content_schema_version = schema;partial.active_index = [];
++  await rejectEveryEntry(`omitted-modules-empty-active-${schema}`,JSON.stringify(partial),/partial.*modules/);
++}
++const activeRaw=readFileSync(join(evidence,"active-conflict-recomputed.json"),"utf8");
++assert.throws(() => validateNativePackage(JSON.parse(activeRaw)),/conflict/);
++await rejectEveryEntry("active-executor-conflict-valid-recomputed-hash",activeRaw,/conflict|exactly one/);
++handle.free();
++const oldFixtures=[];
++for (const name of ["c331-old-default-package.json","c331_phase8_genuine_schema4.json"]) {
++  const bytes=readFileSync(new URL(`../../../crates/engine-native/tests/fixtures/${name}`,import.meta.url));
++  const raw=bytes.toString("utf8");validate_pack_json(raw);
++  await importExtensionPackageValidated(raw,validate);
++  const old=NativeEngine.new_with_packs_json(3,10827n,`[${raw}]`);
++  const saved=old.save_hex(), state=old.state_hash_hex(), projection=old.view_json(0);
++  old.restore_hex_with_packs_json(saved,`[${raw}]`);
++  // Restore intentionally rotates auth_generation; compare rule state and a new fixed baseline.
++  assert.equal(old.state_hash_hex(),state);assert.equal(old.view_json(0),projection);
++  const restoredBaseline=old.save_hex();
++  const duplicate=goodRaw.replace('"charlotte":false','"charlotte":true,"charlotte":false');
++  assert.throws(()=>old.restore_hex_with_packs_json(restoredBaseline,`[${duplicate}]`),/duplicate field.*charlotte/);
++  assert.equal(old.save_hex(),restoredBaseline);assert.equal(old.state_hash_hex(),state);old.free();
++  oldFixtures.push({name,schema:JSON.parse(raw).manifest.content_schema_version,bytes:bytes.length,sha256:createHash("sha256").update(bytes).digest("hex"),restoreRuleStateEqual:true,postRestoreBadAdmissionAtomic:true});
++}
++const extra=JSON.parse(assetsRaw);extra.manifest.unknown_presentation="second";
++const unknownRaw=JSON.stringify(extra).replace('"unknown_presentation":"second"','"unknown_presentation":"first","unknown_presentation":"second"');
++memory.clear();validate_pack_json(unknownRaw);await importExtensionPackageValidated(unknownRaw,validate);
++const output={actualCurrentWasm:true,actualSdkStore:true,originalTextToNative:true,positiveSchema5:true,positiveOriginalAssetOnly:true,oldFixtures,unknownAssetManifestKeysPreserved:true,results};
++writeFileSync(join(evidence,"actual-sdk-wasm-result.json"),JSON.stringify(output,null,2));
++console.log(JSON.stringify(output,null,2));
+diff --git a/apps/web-client/scripts/native-vm-install.test.mjs b/apps/web-client/scripts/native-vm-install.test.mjs
+index 1ed0d0b1..a1c28c4f 100644
+--- a/apps/web-client/scripts/native-vm-install.test.mjs
++++ b/apps/web-client/scripts/native-vm-install.test.mjs
+@@ -251,3 +251,22 @@ test("schema5 SDK native binding has one authority and defers real factory capab
+   p.trigger_index[0].module = ""; p.trigger_index[0].entry_pc = 0;
+   assert.equal(validateNativePackage(p), p);
+ });
++
++test("repair: omitted modules cannot discard declarations in validated import", async () => {
++  const manifest = structuredClone(v1.manifest);
++  for (const [schema, value] of [[5, true], [3, false], [4, null]]) {
++    const partial = { manifest: { ...manifest, content_schema_version: schema }, characters: { generals: [] }, skill_index: [{ skill_def_id: 99108020, name: "repair_draw", charlotte: value }] };
++    const before = storage.get(storeKey);
++    await assert.rejects(() => importExtensionPackageValidated(JSON.stringify(partial), async () => {}), /schema5|modules|declaration/);
++    assert.equal(storage.get(storeKey), before);
++  }
++});
++test("repair: validated import delivers original text to native typed reader", async () => {
++  const raw = JSON.stringify(v1, null, 2);
++  await importExtensionPackageValidated(raw, async (received) => assert.equal(received, raw));
++});
++test("repair: active native and VM executor conflicts reject in SDK", () => {
++  const p = structuredClone(v1); p.manifest.content_schema_version = 5;
++  p.active_index = [{ skill_def_id: p.skill_index[0].skill_def_id, window: "play_phase", host_key: "host:sanjian_weapon", module: p.modules[0].name, entry_pc: 0 }];
++  assert.throws(() => validateNativePackage(p), /conflict/);
++});
+diff --git a/apps/web-client/src/engine/bundledNativePackages.ts b/apps/web-client/src/engine/bundledNativePackages.ts
+index 99f38922..e89b626d 100644
+--- a/apps/web-client/src/engine/bundledNativePackages.ts
++++ b/apps/web-client/src/engine/bundledNativePackages.ts
+@@ -101,6 +101,14 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
+       seen.add(key);
+     }
+   }
++  validateNativeMechanismFields(payload);
++  if (payload.modules === undefined && [payload.skill_index, payload.trigger_index, payload.active_index,
++    (payload as unknown as Record<string, unknown>).modifier_index, (payload as unknown as Record<string, unknown>).view_as_index].some((entry) => entry !== undefined)) {
++    throw new Error("扩展包缺少 modules: declaration-bearing partial npack requires modules");
++  }
++  if (payload.modules === undefined && payload.manifest.content_schema_version === 5) {
++    throw new Error("schema5 declaration package requires modules");
++  }
+   if (payload?.modules !== undefined && !Array.isArray(payload.modules)) {
+     throw new Error("扩展包 VM 模块格式无效");
+   }
+@@ -124,7 +132,6 @@ function nonNegativeInt(value: unknown): value is number {
+  * 客户端不复刻规范序列化以免与内核漂移。
+  */
+ function validateVmModules(payload: NativePackagePayload): void {
+-  validateNativeMechanismFields(payload);
+   const modules = payload.modules as unknown[];
+   const codeLength = new Map<string, number>();
+   for (const module of modules) {
+@@ -156,10 +163,10 @@ function validateVmModules(payload: NativePackagePayload): void {
+       skills.add(e.skill_def_id);
+     }
+   }
+-  const triggerIndex = payload.trigger_index;
+-  if (triggerIndex !== undefined) {
+-    if (!Array.isArray(triggerIndex)) throw new Error("扩展包触发索引格式无效");
+-    for (const entry of triggerIndex) {
++  for (const [index, label] of [[payload.trigger_index, "触发"], [payload.active_index, "主动"]] as const) {
++    if (index === undefined) continue;
++    if (!Array.isArray(index)) throw new Error(`扩展包${label}索引格式无效`);
++    for (const entry of index) {
+       const e = entry as Record<string, unknown> | null;
+       const native = e?.host_key !== undefined;
+       if (native && (payload.manifest.content_schema_version !== 5 || typeof e?.host_key !== "string"
+@@ -167,11 +174,11 @@ function validateVmModules(payload: NativePackagePayload): void {
+         throw new Error("schema5 native executor conflict or invalid host_key");
+       }
+       if (!e || typeof e !== "object" || (!native && (typeof e.module !== "string" || !codeLength.has(e.module)))) {
+-        throw new Error("扩展包触发索引引用了不存在的 VM 模块");
++        throw new Error(`扩展包${label}索引引用了不存在的 VM 模块`);
+       }
+       if (!nonNegativeInt(e.entry_pc) || (!native && e.entry_pc >= codeLength.get(e.module as string)!)
+         || !nonNegativeInt(e.skill_def_id) || (skillIndex !== undefined && !skills.has(e.skill_def_id))) {
+-        throw new Error(`扩展包触发索引入口或技能引用无效: ${e.module}`);
++        throw new Error(`扩展包${label}索引入口或技能引用无效: ${e.module}`);
+       }
+     }
+   }
+diff --git a/apps/web-client/src/engine/extensionStore.ts b/apps/web-client/src/engine/extensionStore.ts
+index b453c377..084c28b9 100644
+--- a/apps/web-client/src/engine/extensionStore.ts
++++ b/apps/web-client/src/engine/extensionStore.ts
+@@ -172,16 +172,16 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
+ }
+ 
+ /**
+- * 导入期深层校验入口（GT-014，裁决第 12 项）：结构层通过后，把规范化载荷交
++ * 导入期深层校验入口（GT-014，裁决第 12 项）：结构层通过后，把原始 JSON 文本交
+  * `deepValidate`（产品路径为 Worker 内的 Rust 校验器）裁决；拒绝即抛出且
+  * **不改写存储**；通过才提交。`deepValidate` 抛出的错误原样透传。
+  */
+ export async function importExtensionPackageValidated(
+   json: string,
+-  deepValidate: (canonicalPackJson: string) => Promise<void>,
++  deepValidate: (rawPackJson: string) => Promise<void>,
+ ): Promise<ExtensionStoreSnapshot> {
+   const prepared = prepareImport(json);
+-  await deepValidate(prepared.canonical);
++  await deepValidate(json);
+   return commitImport(prepared);
+ }
+ 
+diff --git a/crates/engine-native-wasm/Cargo.toml b/crates/engine-native-wasm/Cargo.toml
+index ca9fddcf..f4f65623 100644
+--- a/crates/engine-native-wasm/Cargo.toml
++++ b/crates/engine-native-wasm/Cargo.toml
+@@ -13,7 +13,7 @@ engine-native = { path = "../engine-native" }
+ content-native-loader = { path = "../content-native-loader" }
+ content-schema = { workspace = true }
+ wasm-bindgen = { workspace = true }
+-serde_json = { workspace = true }
++serde_json = { workspace = true, features = ["raw_value"] }
+ blake3 = { workspace = true }
+ 
+ [dev-dependencies]
+diff --git a/crates/engine-native-wasm/src/installed_packs.rs b/crates/engine-native-wasm/src/installed_packs.rs
+index ea50339b..33cfd227 100644
+--- a/crates/engine-native-wasm/src/installed_packs.rs
++++ b/crates/engine-native-wasm/src/installed_packs.rs
+@@ -24,6 +24,35 @@ fn json(value: &Value) -> String {
+     value.to_string()
+ }
+ 
++// Validate original declaration text before Value can normalize duplicate keys.
++fn parse_pack_json(pack_json: &str) -> Result<Value, String> {
++    let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
++    let declarations = [
++        "skill_index",
++        "trigger_index",
++        "active_index",
++        "modifier_index",
++        "view_as_index",
++    ]
++    .iter()
++    .any(|key| item.get(*key).is_some());
++    if item.get("modules").is_some() {
++        let package = content_schema::ContentPackage::from_json_bytes(pack_json.as_bytes())
++            .map_err(|e| format!("npack: {e}"))?;
++        package.validate().map_err(|e| format!("npack: {e}"))?;
++    } else if declarations {
++        return Err("declaration-bearing partial npack requires modules".into());
++    } else if let Some(schema) = item
++        .get("manifest")
++        .and_then(|m| m.get("content_schema_version"))
++    {
++        if !matches!(schema.as_u64(), Some(3 | 4)) {
++            return Err("unsupported asset-only content_schema; schema5 declaration package requires modules".into());
++        }
++    }
++    Ok(item)
++}
++
+ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
+     let manifest = &item["manifest"];
+     let namespace = required(manifest, "namespace")?;
+@@ -74,7 +103,10 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
+             .and_then(Value::as_array)
+             .is_some_and(|v| !v.is_empty());
+         let generals = if vm_modules {
+-            content_native_loader::bridge_generals_with_vm_package(&json(characters), &serde_json::from_value(item.clone()).map_err(|e| format!("npack: {e}"))?)
++            content_native_loader::bridge_generals_with_vm_package(
++                &json(characters),
++                &serde_json::from_value(item.clone()).map_err(|e| format!("npack: {e}"))?,
++            )
+         } else {
+             content_native_loader::bridge_generals(&json(characters))
+         }
+@@ -117,7 +149,7 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
+ /// 依赖解析仍在开局（`packs_from_json`）执行。与 `packs_from_json` 的单项
+ /// 分派保持一致（含无 manifest 的旧 cards.json 元素）。
+ pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+-    let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
++    let item = parse_pack_json(pack_json)?;
+     if item.get("manifest").is_some() {
+         installed_pack(&item).map(|_| ())
+     } else {
+@@ -128,10 +160,13 @@ pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
+ }
+ 
+ pub(super) fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
+-    let value: Value = serde_json::from_str(packs_json).map_err(|e| format!("packs JSON: {e}"))?;
+-    let arr = value
+-        .as_array()
+-        .ok_or_else(|| "packs 须为 JSON 数组".to_string())?;
++    let raw: Vec<&serde_json::value::RawValue> =
++        serde_json::from_str(packs_json).map_err(|e| format!("packs 须为 JSON 数组: {e}"))?;
++    let items: Vec<Value> = raw
++        .iter()
++        .map(|item| parse_pack_json(item.get()))
++        .collect::<Result<_, _>>()?;
++    let arr = &items;
+     let mut slots = BTreeMap::new();
+     for (index, item) in arr.iter().enumerate() {
+         if let Some(manifest) = item.get("manifest") {
+diff --git a/crates/engine-native-wasm/tests/c331_admission_repair.rs b/crates/engine-native-wasm/tests/c331_admission_repair.rs
+new file mode 100644
+index 00000000..abd72e19
+--- /dev/null
++++ b/crates/engine-native-wasm/tests/c331_admission_repair.rs
+@@ -0,0 +1,95 @@
++use content_schema::ContentPackage;
++use engine_native_wasm::{engine_from_packs, validate_pack_json, NativeSession};
++use serde_json::{json, Value};
++fn package() -> ContentPackage {
++    let mut p=content_compiler::compile_source_named("repair-schema5","skill repair_draw(99108020) { trigger damage owner_is_target { effect draw_cards(self,1); } }").unwrap();
++    p.skill_index[0].charlotte = Some(false);
++    p.manifest.content_schema_version = 5;
++    p.manifest.logic_hash = p.compute_logic_hash();
++    p
++}
++fn assets() -> Value {
++    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
++        .join("../../packages/extensions/huanle-upstream-noname");
++    json!({"manifest":serde_json::from_slice::<Value>(&std::fs::read(root.join("package.npack.json")).unwrap()).unwrap()["manifest"],"cards":serde_json::from_slice::<Value>(&std::fs::read(root.join("assets/cards.json")).unwrap()).unwrap()})
++}
++#[test]
++fn omitted_modules_declarations_reject_at_real_validate_admit_restore() {
++    let good = assets();
++    validate_pack_json(&good.to_string()).unwrap();
++    let mut handle = NativeSession::new_with_packs_json(3, 10820, &format!("[{good}]")).unwrap();
++    let saved = handle.save_hex();
++    let view = handle.view_json(0).unwrap();
++    for (version, value) in [(5, json!(true)), (3, json!(false)), (4, Value::Null)] {
++        let mut bad = good.clone();
++        bad["manifest"]["content_schema_version"] = version.into();
++        bad["skill_index"] =
++            json!([{"skill_def_id":99108020,"name":"repair_draw","charlotte":value}]);
++        let raw = bad.to_string();
++        assert!(
++            validate_pack_json(&raw).is_err(),
++            "omitted modules schema{version}"
++        );
++        assert!(engine_from_packs(3, 10820, &format!("[{raw}]")).is_err());
++        assert!(handle
++            .restore_hex_with_packs_json(&saved, &format!("[{raw}]"))
++            .is_err());
++        assert_eq!(saved, handle.save_hex());
++        assert_eq!(view, handle.view_json(0).unwrap());
++    }
++}
++#[test]
++fn duplicate_raw_declaration_rejects_single_array_and_preserves_handle() {
++    let p = package();
++    let raw = String::from_utf8(p.to_json_bytes().unwrap()).unwrap();
++    validate_pack_json(&raw).unwrap();
++    let mut handle = NativeSession::new_with_packs_json(3, 10821, &format!("[{raw}]")).unwrap();
++    let saved = handle.save_hex();
++    let view = handle.view_json(0).unwrap();
++    let duplicate = raw.replace(
++        "\"charlotte\":false",
++        "\"charlotte\":true,\"charlotte\":false",
++    );
++    assert_ne!(raw, duplicate);
++    let err = validate_pack_json(&duplicate).expect_err("raw duplicate must reject");
++    assert!(
++        err.contains("duplicate field") && err.contains("charlotte"),
++        "{err}"
++    );
++    assert!(engine_from_packs(3, 10821, &format!("[{duplicate}]")).is_err());
++    assert!(handle
++        .restore_hex_with_packs_json(&saved, &format!("[{duplicate}]"))
++        .is_err());
++    assert_eq!(saved, handle.save_hex());
++    assert_eq!(view, handle.view_json(0).unwrap());
++}
++#[test]
++fn export_genuine_schema5_fixture_for_actual_sdk_wasm_path() {
++    if let Ok(directory) = std::env::var("C331_REPAIR_EVIDENCE") {
++        let directory = std::path::Path::new(&directory);
++        std::fs::write(
++            directory.join("genuine-schema5.json"),
++            package().to_json_bytes().unwrap(),
++        )
++        .unwrap();
++        std::fs::write(
++            directory.join("genuine-asset-only.json"),
++            assets().to_string(),
++        )
++        .unwrap();
++        let mut active = content_compiler::compile_source_named(
++            "repair-active",
++            "skill repair_active(99108021) { active play_phase { effect draw_cards(self,1); } }",
++        )
++        .unwrap();
++        active.skill_index[0].charlotte = Some(false);
++        active.active_index[0].host_key = Some("host:sanjian_weapon".into());
++        active.manifest.content_schema_version = 5;
++        active.manifest.logic_hash = active.compute_logic_hash();
++        std::fs::write(
++            directory.join("active-conflict-recomputed.json"),
++            active.to_json_bytes().unwrap(),
++        )
++        .unwrap();
++    }
++}

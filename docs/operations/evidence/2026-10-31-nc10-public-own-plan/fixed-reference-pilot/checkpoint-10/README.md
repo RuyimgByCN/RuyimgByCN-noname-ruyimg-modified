@@ -1,0 +1,1 @@
+Concrete checkpoint before10min. Calibration full-input/full-Plan/formal-outcome24steps with3Own PASS; candidate Own controls4/0. Pilot fixed reference shares one byte-identical normalized5fc path in one instrumented binary; raw partial/completed submits and games in parent directory. Original frozen source copied under original/ and restored by finally; no Main writes.

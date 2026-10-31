@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-31T09:13:31.667873+00:00",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py"
+      ],
+      "exit": 0,
+      "stdout_sha256": "1ec0ef8a4042dad0f17b59af28bab0ba507bcc6b1e2e83a7a77ce0499ba889f2",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+      "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b"
+    }
+  ],
+  "scope": "PostDecision29 / exact5fcCI / PAnegative / currentreadiness documentation only; no product/source/versions modified"
+}

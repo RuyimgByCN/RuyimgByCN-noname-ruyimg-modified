@@ -1,0 +1,185 @@
+{
+  "utc": "2026-10-31T10:16:04.027966+00:00",
+  "base_c7_manifest_sha256": "0d7a18e9fd5225fd09f7902fb32172609ef10a8f783df97587eba37b716544cd",
+  "files": [
+    {
+      "path": "apps/web-client/scripts/native-vm-install.test.mjs",
+      "baseline_c7_sha256": "26e9283d6b3c9cc07996b4266ee93e0dd4df2df9ce646780529db9271a58f258",
+      "sha256": "9bd10249225d62e4237dd19dfbcac781c8c5fb71a3f4ae83b3e5dbc8eccd85ed"
+    },
+    {
+      "path": "apps/web-client/src/engine/bundledNativePackages.ts",
+      "baseline_c7_sha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b",
+      "sha256": "84511bb5f57caf3d631572ecb47a439fff08434580f11d3f8ff5d757fb41cc69"
+    },
+    {
+      "path": "crates/content-compiler/src/ast.rs",
+      "baseline_c7_sha256": "7a2a17c3b061040154f73c98e73072c4c794befb1ad845b3e6b5828e83804ddb",
+      "sha256": "6a62a30f2f645e80151be0e11160e9e99770c3adc064453e83afc19416063be7"
+    },
+    {
+      "path": "crates/content-compiler/src/lib.rs",
+      "baseline_c7_sha256": "234274acba3eabeab47f227664a26e8e7c56492f9c6f515d34a08d5433e7a015",
+      "sha256": "155be8fe50eaf67d287966f3baac74fba752d4aa9e9920d9aba93fa1a908790f"
+    },
+    {
+      "path": "crates/content-compiler/src/lsp/hover_docs/skill.rs",
+      "baseline_c7_sha256": "cda2574c9e3afa35b194a979315ddaa84e80bb615a73a4e546c84d17157d2177",
+      "sha256": "c8672c123b36860fc6d6879b4582630c1ca7145fd92d0deff93bc2b62a3bb4b6"
+    },
+    {
+      "path": "crates/content-compiler/src/parse.rs",
+      "baseline_c7_sha256": "66a856eda0ec6355e66b451477409af722cc6f4886fabf7eca2b86b7d28db756",
+      "sha256": "af03fbf64d9bdbb2152a84bfe21a364da6cce6d50c07149a9ec33f0783193579"
+    },
+    {
+      "path": "crates/content-compiler/src/typecheck/skills.rs",
+      "baseline_c7_sha256": "e3d02f47e2d77647de84ec84f8167e563450e8ad6cd42ddb164af1ddae501fbb",
+      "sha256": "1042ad96e6b6bff45dccab6161d43a43d804960182eedc8d04c459f95ac4814c"
+    },
+    {
+      "path": "crates/content-native-loader/src/lib.rs",
+      "baseline_c7_sha256": "5ff35dcb76db1cab86b6d1e3bfb8189e9744116b5343b63e25ff8c9c219ab56d",
+      "sha256": "ff705ae76260bf4d90d1cb89ae3a1e9e69c5777a7ba37580306e5053146d0452"
+    },
+    {
+      "path": "crates/content-native-loader/src/mechanisms.rs",
+      "baseline_c7_sha256": null,
+      "sha256": "6e5fc8bb214dda29b4ef1d4ecdd33cb65b10a34a25a84c7a47d8149cee18c835"
+    },
+    {
+      "path": "crates/content-native-loader/src/vm_active.rs",
+      "baseline_c7_sha256": "d5f489952c03400560764b7215f0b581d8e3ea539a078a378de39789f714aef2",
+      "sha256": "e8629aedb9c9436ea5b2b10986edbec678ecfb6ae2a7b4d33f41f5f88f3a88ad"
+    },
+    {
+      "path": "crates/content-runtime/examples/gen_doomsday_brawl_package.rs",
+      "baseline_c7_sha256": "1988663c83bfa92d1f4a22392a8839979d7a832cd4aaa926444747ad06b8c947",
+      "sha256": "7d1bc3efeee13ff320ecb0638577b056dce4f2df17b4909279658000b7073862"
+    },
+    {
+      "path": "crates/content-runtime/examples/gen_epic_cards_package.rs",
+      "baseline_c7_sha256": "d8d9e4679b2487d72d12bbedfef8d7bb58d4bcae1dfa7855321b31141991fb01",
+      "sha256": "295b34e085e4218cf7e2d873ba7dbe80e22c298323f5037c13025a43c4218042"
+    },
+    {
+      "path": "crates/content-runtime/examples/gen_hero_kill_package.rs",
+      "baseline_c7_sha256": "6db6855e163cb904fab4b83a1f49bfe129554cd49f8639c6e23021c59cd2e7f4",
+      "sha256": "a4aee9e6830270820e278d8e11e1317b4c6a628acfe4160b38d85e4d8c168e09"
+    },
+    {
+      "path": "crates/content-runtime/examples/gen_mark_supplement_package.rs",
+      "baseline_c7_sha256": "eda8b2334a677952500b1d70fc731b29bc8e43d9e7c56741aecd03eae460cf9a",
+      "sha256": "0cbe15cb5c87d55e64cb470aa31abff99168f0aff907ce77b7a5946ca9284a01"
+    },
+    {
+      "path": "crates/content-runtime/examples/gen_select_beautify_package.rs",
+      "baseline_c7_sha256": "ce927977e21bb2c493ec61f7946c948b7c4552dc85d255dd2b6bcaf07f1408c5",
+      "sha256": "7221ca689dba7204d3aace91683e4697d25ff5768acf78d9db584e35c5693388"
+    },
+    {
+      "path": "crates/content-runtime/src/compat.rs",
+      "baseline_c7_sha256": "6f55431c9b0fde8dca64cb989398c5f5fab838bb047127ed8d1cc8fd4560f867",
+      "sha256": "3b8c7c7858dda548ed6bcea74d656834765297fd7daf2d1e078e58ec58716815"
+    },
+    {
+      "path": "crates/content-runtime/src/store/ordering.rs",
+      "baseline_c7_sha256": "2eab5471c7146d795604a0ab5d76ee2c61e667c0da3f38d20b6a9e281ca6c61f",
+      "sha256": "45650de4471bba69765f69c9faeb9c63140903e71c66d7389591d11eeecc3f0e"
+    },
+    {
+      "path": "crates/content-schema/src/ir.rs",
+      "baseline_c7_sha256": "040821f01af598e454b79d03668b088c22f088cd878c7eedd4faf0702e0de85c",
+      "sha256": "93c35d2483daae17bda7b0d219af5d27861e5ec16a8d39744156f581fc3d2459"
+    },
+    {
+      "path": "crates/content-schema/src/package.rs",
+      "baseline_c7_sha256": "215f66cd7ce51cfc449e05334a8a586e166a071e894091ff2538b5e430635f63",
+      "sha256": "af265e977c09423a75818bc9aa925c27bfa3dfeaf18ce6f974fc3d418581a5ff"
+    },
+    {
+      "path": "crates/content-schema/src/package/hashing.rs",
+      "baseline_c7_sha256": "fc407f9bd668da3f41b615945987bbf5436f0e7fc961203f94cf0d6c7644cfa2",
+      "sha256": "3cc92fc3a73445707fffacc50e99f52c7fcaaf04ea21c6293c68c3327e0f8d30"
+    },
+    {
+      "path": "crates/content-schema/src/package/mechanisms.rs",
+      "baseline_c7_sha256": null,
+      "sha256": "b1bffac51cb8b2765f94366b39624fecbd1ca1809973611130fbe3148e8546ac"
+    },
+    {
+      "path": "crates/content-schema/src/package/trigger_order.rs",
+      "baseline_c7_sha256": "cb6291584a5f8be79d068d0f13f5ab88ee8b39d5c8ce50953aab728c816ef03e",
+      "sha256": "16ab9e422789c38e1937059abc2ca7143895ce3d05a5207203b9dc6ab62cb581"
+    },
+    {
+      "path": "crates/engine-api/src/version.rs",
+      "baseline_c7_sha256": "32afaef5db69e5d7deb737cff272a238a0a57ac56fc2ba6edb01e956aad5a8ee",
+      "sha256": "16037d1d2feee1702f3be969e675462b300c39ae3c8d98a2be15edf71c30166d"
+    },
+    {
+      "path": "crates/engine-core/src/content/registry/load_package_checks.rs",
+      "baseline_c7_sha256": "a6a07d14249e70c9144d90fdf233e7c9122cfda524d54d92bc6d46ddc08c38b5",
+      "sha256": "bcb01649420ed097424a1c9072ebfc220437ee075f81b0ca255997be1c7c5d12"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/extension.rs",
+      "baseline_c7_sha256": "072bb461d328749776b7149f0fda3d57b7ce0055e8079bc378fe3477ca378490",
+      "sha256": "c87d762dcce3aa984d98f3b42cb436b2252914963268cdd64ea25ce5534d15d8"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_schema5_datachain.rs",
+      "baseline_c7_sha256": null,
+      "sha256": "69b54468644693e0ea9c2b8af705e60b2541dd44663c3c8c6f5cba76acc8f0b9"
+    },
+    {
+      "path": "crates/engine-native/tests/fixtures/c331_phase8_genuine_schema4.json",
+      "baseline_c7_sha256": null,
+      "sha256": "90e7b10a86ad2e12818254f98fab2df135fc181e57db4c7064242bfb460b5145"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "baseline_c7_sha256": "15314728ffe6dee359fc32a7179bb2ce2380de32855997b46da14bde85fec3fd",
+      "sha256": "1ed0e392e846bdf1d2961d4e0fbba3ceef6037350fa76c5ee9ee3acb1d8bebcb"
+    },
+    {
+      "path": "crates/engine-native/tests/nc04_cards_given_event.rs",
+      "baseline_c7_sha256": "8f9fdde456e512b2d8b858b4eddf6b0f55217b73e9840adf0bcc2463054b0589",
+      "sha256": "7a6c0ce3b37a6a9956adbbb6b9da4d3ee599100604bd9af45e20288c2f7bf706"
+    },
+    {
+      "path": "crates/engine-native/tests/nc04_vm_resume.rs",
+      "baseline_c7_sha256": "90f1955dc830c19a5f0f0e3e4143549a94cb950fc225730b9a362dca0e894388",
+      "sha256": "08ede01d4378f30969448e8416fce8f14f828838a86349148ed61f2f907d3aed"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+      "baseline_c7_sha256": "0a29f4ccfd9defb78fd5602f7870a10575827d7fbb0995584a52d5d6fbb4bf0d",
+      "sha256": "f81b1b31fa850fd1bd6179631e33120604f7c0f23007e4d5d2c252b7008b265b"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+      "baseline_c7_sha256": "4db62ab5fa7af6258fdadef28db1c3a017c838052facc46d097e6c918170a304",
+      "sha256": "f0d42664898b8ff2bf82ce72d2b25a260741dc00f2b345bc028cb6e94317c4e3"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_single_hidden_trap.rs",
+      "baseline_c7_sha256": "48d758d7406ddfa72da2896e717c8647d52fa18d43f0e42aaad018f12b14fdb0",
+      "sha256": "7fce27ac6374976a18f45516892aff041d6c3c7fc3ecaa8594949f661cc62e5f"
+    },
+    {
+      "path": "crates/engine-native/tests/t8_rvm_bridge.rs",
+      "baseline_c7_sha256": "9f189d9cb99b6317536c01676f31cd5fadbb5c031c601c40dc8f97d5c1052719",
+      "sha256": "b5ecccb616311bfd76461c56fadefd220d750c8fd44cb65b06d61c4b7808eabf"
+    },
+    {
+      "path": "crates/engine-native/tests/t8_vm_state_effects.rs",
+      "baseline_c7_sha256": null,
+      "sha256": "cbcd4a78357efa454d351f83bf21a42e4484bc3335a20c3c3ac3329e94381371"
+    }
+  ],
+  "scope": "Schema5 declaration/parser/hash/compiler/loader/SDK data foundation; unimplemented runtime mechanisms reject",
+  "whole_c331": "BLOCK",
+  "source_proof": "262/290,remaining28,+0",
+  "no_staged_files": true
+}

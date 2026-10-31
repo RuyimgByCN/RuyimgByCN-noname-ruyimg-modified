@@ -1,0 +1,20 @@
+## Review
+
+No issues found.
+
+Incrementally reviewed the local ownership correction and baseline/version clarification in [v3](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/a7a86b2e-9c71-44f6-8207-ee6ab108e4db/proposals/i02-public-presentation-events-contract-v3.md:41), against the previously inspected source paths. V1/v2 reviews remain unchanged.
+
+- **Correct — v2’s remaining P1 is closed at design level.** V3 line 41 makes direct NativeSession commands and both auto_step branches release only. Existing command strings, WASM forwarding and nested auto_step outcome strings remain unchanged. Line 42 identifies exactly one consumer: Worker `nativeEnvelope` or mutable Rust desktop `native_envelope`, taking once into top-level `EngineEnvelope.presentation`. This resolves the competing wrapper/getter drains without another queue or cache.
+
+- **Correct — baseline and failed-response handling:** Line 43 explicitly prevents baseline/stale/no-progress responses from consuming prior publication, retires unread Released state at the next command entry, preserves Held, and distinguishes internal view/legal/choice reads from baseline operations. Line 79 adds actual-path acceptance for direct commands, both auto_step branches, second-take None, composer failure, old bundles and baseline exclusions. These requirements fit the previously inspected [Worker dispatch](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/nativeBackend.ts:889) and [desktop dispatch](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/desktop-client/src/native_engine_host.rs:249).
+
+- **Correct — server ownership remains separate from local memory release:** Line 44 retains one post-durability take followed by DTO cloning for recipients. No local wrapper rule permits server publication before durable commit.
+
+- **Correct — version clarification:** Line 68 treats 330/105/758/WS6 as the inspected historical baseline. Compatibility and hash/archive checks apply against the accepted implementation baseline when work occurs; the proposal neither reverts later accepted versions nor borrows or allocates reserved axes. The conditional package-hash boundary at line 26 remains intact.
+
+- **Fixed:** None in source. The remaining v2 finding is resolved by the revised contract.
+
+- **Merge verdict: OK with notes — DESIGN READY for the specific user decision described at v3 line 83.** This is readiness for contract approval, not implementation authorization or full-I02 acceptance. Earlier privacy, qualified identity, controlled-factory, C29, VM-death and resource-scope dependencies remain unchanged.
+
+Skipped implementation, tests/builds, network, JS execution and GUI/audio checks.
+Residual risk: the revised delivery path and compatibility/state-equivalence gates still require implementation evidence; no full-I02 or physical-hearing claim is made.

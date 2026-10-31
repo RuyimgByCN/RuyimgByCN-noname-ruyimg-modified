@@ -1,0 +1,3768 @@
+diff --git a/apps/game-server/src/room.rs b/apps/game-server/src/room.rs
+index f8fa8da2..806c56c4 100644
+--- a/apps/game-server/src/room.rs
++++ b/apps/game-server/src/room.rs
+@@ -395,6 +395,7 @@ async fn room_loop(
+                             legal_actions: legal_for(&engine, member.role, member.player_id),
+                             choice: choice_for(&engine, member.role, member.player_id),
+                             public_event_codes: vec![],
++                            presentation: None,
+                         };
+                         let _ = reply.send(Ok(msg));
+                         continue;
+@@ -448,6 +449,7 @@ async fn room_loop(
+                             legal_actions: legal_for(&engine, member.role, member.player_id),
+                             choice,
+                             public_event_codes: public_codes(engine.last_events()),
++                            presentation: None,
+                         }));
+                     }
+                     CommandResult::Rejected { .. } => {
+@@ -465,6 +467,7 @@ async fn room_loop(
+                             legal_actions: legal_for(&engine, member.role, member.player_id),
+                             choice: choice_for(&engine, member.role, member.player_id),
+                             public_event_codes: vec![],
++                            presentation: None,
+                         }));
+                     }
+                 }
+@@ -604,6 +607,7 @@ async fn fanout_after_command(
+             legal_actions: legal_for(engine, m.role, m.player_id),
+             choice,
+             public_event_codes: public_codes(engine.last_events()),
++            presentation: None,
+         };
+         let _ = out.send(&msg).await;
+     }
+diff --git a/apps/game-server/src/room_native_actor.rs b/apps/game-server/src/room_native_actor.rs
+index 63d86cd2..40dd0c65 100644
+--- a/apps/game-server/src/room_native_actor.rs
++++ b/apps/game-server/src/room_native_actor.rs
+@@ -79,6 +79,7 @@ fn legacy_replay_rejection(
+         legal_actions: legal_actions_for(session.engine(), player_id),
+         choice: session.choice_for(RoomRole::Player, Some(player_id)),
+         public_event_codes: vec![],
++        presentation: None,
+     })
+ }
+ 
+@@ -479,6 +480,7 @@ async fn native_room_loop(
+                             legal_actions: legal_actions_for(session.engine(), m.player_id),
+                             choice: session.choice_for(m.role.into(), Some(m.player_id)),
+                             public_event_codes: vec![],
++                            presentation: None,
+                         }));
+                         continue;
+                     }
+@@ -568,6 +570,7 @@ async fn native_room_loop(
+                     legal_actions: legal,
+                     choice,
+                     public_event_codes: public_event_codes.clone(),
++                    presentation: None,
+                 }));
+                 // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）。
+                 // 发送必须有界：慢客户端的队列满时立即标记/移出广播，绝不 await。
+@@ -601,6 +604,7 @@ async fn native_room_loop(
+                         },
+                         choice: session.choice_for(role, seat),
+                         public_event_codes: public_event_codes.clone(),
++                        presentation: None,
+                     };
+                     if out.try_send(&msg) == SendStatus::Full {
+                         stalled.push(other.connection_id);
+diff --git a/apps/game-server/src/room_native_actor/timeout.rs b/apps/game-server/src/room_native_actor/timeout.rs
+index db6be805..9e087594 100644
+--- a/apps/game-server/src/room_native_actor/timeout.rs
++++ b/apps/game-server/src/room_native_actor/timeout.rs
+@@ -36,6 +36,7 @@ pub(super) async fn automatic_step(
+                         .map(|p| legal_actions_for(session.engine(), p))
+                         .unwrap_or_default(),
+                     public_event_codes: public_event_codes.clone(),
++                    presentation: None,
+                 };
+                 if out.try_send(&message) == SendStatus::Full {
+                     stalled.push(member.connection_id);
+diff --git a/apps/web-client/scripts/nc03-worker-clone.test.mjs b/apps/web-client/scripts/nc03-worker-clone.test.mjs
+index fd92f535..8ded2ebd 100644
+--- a/apps/web-client/scripts/nc03-worker-clone.test.mjs
++++ b/apps/web-client/scripts/nc03-worker-clone.test.mjs
+@@ -1,3 +1,4 @@
++import { MAX_ENGINE_OUTSTANDING } from "../src/engine/desktopEngineTransport.ts";
+ import assert from "node:assert/strict";
+ import { readFileSync } from "node:fs";
+ import { test } from "node:test";
+@@ -19,8 +20,8 @@ function fixture() {
+     .outputText.replace(/\nexport\s*\{\};?\s*$/, "");
+   const sent = [];
+   const failed = [];
+-  const EngineClient = new Function("perfRequestSent", "perfRequestFailed", js + "\nreturn EngineClient;")(
+-    () => {}, (id) => failed.push(id),
++  const EngineClient = new Function("perfRequestSent", "perfRequestFailed", "MAX_ENGINE_OUTSTANDING", js + "\nreturn EngineClient;")(
++    () => {}, (id) => failed.push(id), MAX_ENGINE_OUTSTANDING,
+   );
+   const client = new EngineClient();
+   const worker = {
+diff --git a/apps/web-client/scripts/nc04-worker-failure.test.mjs b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+index b8af23c6..08201853 100644
+--- a/apps/web-client/scripts/nc04-worker-failure.test.mjs
++++ b/apps/web-client/scripts/nc04-worker-failure.test.mjs
+@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
+ import { readFileSync } from "node:fs";
+ import { test } from "node:test";
+ import ts from "typescript";
+-import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
++import { invalidPresentationBatches, presentationEnvelope } from "./presentation-fixtures.mjs";
++import { validatePresentationResponse } from "../src/engine/presentationMetadata.ts";
++import { DesktopEngineTransport, MAX_ENGINE_OUTSTANDING } from "../src/engine/desktopEngineTransport.ts";
+ 
+ async function settles(promise) {
+   let timer;
+@@ -18,7 +20,7 @@ async function settles(promise) {
+ 
+ // Use the production client class with a controllable Worker; the browser test
+ // additionally exercises actual browser event dispatch and a native Worker.
+-function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
++function fixture({ autoInit = true, desktopNative = false, invoke, sab = false } = {}) {
+   const source = readFileSync(new URL("../src/engine/client.ts", import.meta.url), "utf8");
+   const ast = ts.createSourceFile("client.ts", source, ts.ScriptTarget.Latest, true);
+   const declaration = ast.statements.find((node) => ts.isClassDeclaration(node) && node.name?.text === "EngineClient");
+@@ -49,12 +51,12 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
+   const EngineClient = new Function(
+     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
+     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
+-    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
++    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", "validatePresentationResponse", "MAX_ENGINE_OUTSTANDING", js + "\nreturn EngineClient;",
+   )(FakeWorker, FakeWorker, () => desktopNative, (id) => sent.push(id), (id) => failed.push(id),
+-    (id) => received.push(id), () => {}, () => false, () => null, { error: () => {} },
++    (id) => received.push(id), () => {}, () => false, () => sab ? "sab" : null, { error: () => {} },
+     () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
+       constructor() { super(invoke); }
+-    });
++    }, validatePresentationResponse, MAX_ENGINE_OUTSTANDING);
+   return { client: new EngineClient(), workers, failed, sent, received };
+ }
+ 
+@@ -217,19 +219,19 @@ test("desktop burst keeps production EngineClient pending and unresolved promise
+       (value) => { settled.push({ ok: true, value }); },
+       (error) => { settled.push({ ok: false, error }); },
+     ));
+-    assert.ok(f.client.pending.size <= 8, "synchronous rejection must immediately delete pending");
++    assert.ok(f.client.pending.size <= 8, "excess requests must not insert pending");
+     if (i === 0) await new Promise((resolve) => setImmediate(resolve));
+   }
+   await new Promise((resolve) => setImmediate(resolve));
+   assert.equal(f.client.pending.size, 8);
+   assert.deepEqual([...f.client.pending.keys()], [2, 3, 4, 5, 6, 7, 8, 9]);
+   assert.equal(settled.length, 120, "only eight caller promises may remain unresolved");
+-  assert.equal(wakes, 129);
++  assert.equal(wakes, 9);
+   assert.equal(settlements, 1, "rejected excess requests must not settle accepted shared waits");
+-  assert.equal(f.sent.length, 129);
++  assert.equal(f.sent.length, 9);
+   assert.deepEqual(f.received, [1]);
+   assert.ok(settled.every((result) => !result.ok && /not submitted|未提交/.test(result.error.message) && !/未知|unknown/.test(result.error.message)));
+-  assert.deepEqual(f.failed, Array.from({ length: 120 }, (_, i) => i + 10));
++  assert.deepEqual(f.failed, [], "capacity rejection precedes perf submission");
+   assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2]);
+   release();
+   await settles(Promise.all(promises));
+@@ -276,3 +278,107 @@ test("disposing eight accepted desktop requests retires the old resource and rec
+   await new Promise((resolve) => setImmediate(resolve));
+   assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61, 62]);
+ });
++
++// Actual Worker and SAB settlement must validate before removing/acknowledging a pending call.
++for (const {name,batch} of invalidPresentationBatches()) {
++  test(`Worker bad present ${name} preserves pending until dispose`, async () => {
++    const f=fixture();await f.client.connect();const worker=f.workers[0];
++    const promise=f.client.autoStep();const id=worker.sent.at(-1).id;
++    const pending=[...f.client.pending];const received=f.received.length;
++    worker.reply(id,presentationEnvelope(batch));
++    await assert.rejects(promise,/协议错误，操作结果未确认/);
++    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  });
++}
++
++for (const {name,batch} of invalidPresentationBatches()) {
++  test(`actual IPC to EngineClient bad present ${name} preserves pending`, async () => {
++    const f=fixture({desktopNative:true,invoke:async (command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":presentationEnvelope(batch)}:undefined});
++    await f.client.connect();const promise=f.client.autoStep();const pending=[...f.client.pending];
++    const received=f.received.length;await assert.rejects(promise,/协议错误，操作结果未确认/);
++    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  });
++}
++
++test("actual SAB poll rejects malformed presentation before settling or deleting pending", async t => {
++  const old={document:globalThis.document,crossOriginIsolated:globalThis.crossOriginIsolated,requestAnimationFrame:globalThis.requestAnimationFrame};
++  const frames=[];globalThis.document={createElement:()=>({style:{}}),head:{appendChild(){}},body:{appendChild(){}}};
++  globalThis.crossOriginIsolated=true;globalThis.requestAnimationFrame=fn=>{frames.push(fn);return frames.length;};
++  t.after(()=>{Object.assign(globalThis,old);});
++  const f=fixture({sab:true});await f.client.connect();const worker=f.workers[0];
++  const promise=f.client.autoStep();const id=worker.sent.at(-1).id;
++  const pending=[...f.client.pending];const received=f.received.length;
++  const sab=worker.sent[0].latencySab;assert.ok(sab instanceof SharedArrayBuffer);
++  const raw=new TextEncoder().encode(JSON.stringify({id,ok:true,data:presentationEnvelope(null)}));
++  new Uint8Array(sab,8,raw.length).set(raw);const ints=new Int32Array(sab,0,2);Atomics.store(ints,1,raw.length);Atomics.store(ints,0,1);
++  frames.shift()();await assert.rejects(promise,/协议错误，操作结果未确认/);
++  assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);assert.ok(frames.length>0);
++  f.client.dispose();assert.equal(f.client.pending.size,0);
++});
++
++test("actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation", async () => {
++  for (const desktopNative of [false,true]) {
++    const bad={assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope:presentationEnvelope(null)};
++    const f=fixture({desktopNative,invoke:async (command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":bad}:undefined});
++    await f.client.connect();const promise=f.client.chooseGeneral(0,"liubei");const pending=[...f.client.pending];const received=f.received.length;
++    if (!desktopNative) f.workers[0].reply(f.workers[0].sent.at(-1).id,bad);
++    await assert.rejects(promise,/协议错误，操作结果未确认/);assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  }
++});
++
++test("shared Worker request guard sends eight and rejects ninth before map/postMessage", async () => {
++  const f=fixture();await f.client.connect();const worker=f.workers[0];
++  const calls=Array.from({length:8},()=>f.client.autoStep());const pending=[...f.client.pending];const sent=worker.sent.length;
++  await assert.rejects(f.client.autoStep(),/未提交/);assert.deepEqual([...f.client.pending],pending);assert.equal(worker.sent.length,sent);
++  for (const request of worker.sent.slice(-8)) worker.reply(request.id,{kind:"plan",outcome:'{"outcome":"accepted"}'});
++  await Promise.all(calls);assert.equal(f.client.pending.size,0);
++  const next=f.client.autoStep();worker.reply(worker.sent.at(-1).id,{outcome:"accepted"});await next;f.client.dispose();
++});
++
++test("eight retained malformed responses keep capacity until explicit dispose", async () => {
++  for (const desktopNative of [false,true]) {
++    const f=fixture({desktopNative,invoke:async (command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":presentationEnvelope(null)}:undefined});
++    await f.client.connect();const calls=Array.from({length:8},()=>f.client.autoStep());
++    const results=Promise.all(calls.map(p=>assert.rejects(p,/结果未确认/)));
++    if (!desktopNative) for (const request of f.workers[0].sent.slice(-8)) f.workers[0].reply(request.id,presentationEnvelope(null));
++    await results;const pending=[...f.client.pending];assert.equal(pending.length,8);
++    await assert.rejects(f.client.autoStep(),/未提交/);assert.deepEqual([...f.client.pending],pending);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  }
++});
++
++// Independent review repro: Source27 must not convert compound-invalid success into ordinary cleanup.
++for (const nested of [false, true]) {
++  test(`compound-invalid IPC ${nested ? "chooseGeneral" : "autoStep"} preserves uncertain pending before observer normalization`, async () => {
++    const envelope=presentationEnvelope(null);envelope.view.seats[0].generals=[];
++    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
++    const f=fixture({desktopNative:true,invoke:async (command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
++    await f.client.connect();const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
++    const pending=[...f.client.pending];const received=f.received.length;
++    await assert.rejects(promise,/协议错误，操作结果未确认/);
++    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  });
++}
++
++test("compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup", async () => {
++  for(const presentation of ["absent","valid"]) for(const nested of [false,true]) {
++    const envelope=presentationEnvelope();if(presentation==="absent") delete envelope.presentation;
++    envelope.view.seats[0].generals=[];
++    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
++    const f=fixture({desktopNative:true,invoke:async(command,args)=>command==="native_engine_open"?1:
++      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
++    await f.client.connect();const received=f.received.length;
++    const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
++    await assert.rejects(promise,/generals metadata invalid/);
++    assert.equal(f.client.pending.size,0);assert.equal(f.received.length,received+1);
++    f.client.dispose();
++  }
++});
+diff --git a/apps/web-client/src/engine/client.ts b/apps/web-client/src/engine/client.ts
+index 652498af..a8af7ebc 100644
+--- a/apps/web-client/src/engine/client.ts
++++ b/apps/web-client/src/engine/client.ts
+@@ -1,3 +1,4 @@
++import { validatePresentationResponse } from "./presentationMetadata";
+ import type {
+   ChooseGeneralPayload,
+   EngineEnvelope,
+@@ -11,7 +12,7 @@ import type {
+   WorkerResponse,
+ } from "../types/engine";
+ import { desktopContentBundle, isTauriShell } from "./desktopHost";
+-import { DesktopEngineTransport, desktopEngineChoice, type EngineTransport } from "./desktopEngineTransport";
++import { DesktopEngineTransport, desktopEngineChoice, MAX_ENGINE_OUTSTANDING, type EngineTransport } from "./desktopEngineTransport";
+ import {
+   perfRequestSent,
+   perfRequestFailed,
+@@ -102,6 +103,10 @@ export class EngineClient {
+       const p = this.pending.get(msg.id);
+       // SAB 提前应用后 pending 已删除——此时跳过计时与重复应用
+       if (!p) return;
++      if (msg.ok) {
++        try { validatePresentationResponse(msg.data); }
++        catch (error) { p.reject(new Error(`Worker 协议错误，操作结果未确认: ${String(error)}`)); return; }
++      }
+       perfResponseReceived(msg.id);
+       this.pending.delete(msg.id);
+       (globalThis as unknown as { __latencySabDebug?: { settle?: () => void } })
+@@ -186,6 +191,10 @@ export class EngineClient {
+             };
+             const p = this.pending.get(resp.id);
+             if (p) {
++              if (resp.ok) {
++                try { validatePresentationResponse(resp.data); }
++                catch (error) { p.reject(new Error(`Worker 协议错误，操作结果未确认: ${String(error)}`)); throw error; }
++              }
+               perfResponseReceived(resp.id);
+               this.pending.delete(resp.id);
+               settle();
+@@ -251,6 +260,7 @@ export class EngineClient {
+ 
+   private request(body: WorkerRequest): Promise<unknown> {
+     if (!this.worker) return Promise.reject(new Error("worker not connected"));
++    if (this.pending.size >= MAX_ENGINE_OUTSTANDING) return Promise.reject(new Error("Engine busy; request was not submitted（未提交）"));
+     return new Promise((resolve, reject) => {
+       this.pending.set(body.id, { resolve, reject });
+       perfRequestSent(body.id, body.type);
+diff --git a/apps/web-client/src/engine/desktopEngineTransport.ts b/apps/web-client/src/engine/desktopEngineTransport.ts
+index 4ce3cf7a..47822778 100644
+--- a/apps/web-client/src/engine/desktopEngineTransport.ts
++++ b/apps/web-client/src/engine/desktopEngineTransport.ts
+@@ -17,7 +17,7 @@ type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>
+ export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
+ export type DesktopEngineChoice = "wasm" | "native";
+ // Match the native queue capacity, conservatively including active/opening requests.
+-const MAX_DESKTOP_OUTSTANDING = 8;
++export const MAX_ENGINE_OUTSTANDING = 8;
+ 
+ /** Wasm stays the default until all six PA09 conditions have evidence. */
+ export function desktopEngineChoice(): DesktopEngineChoice {
+@@ -58,7 +58,7 @@ export class DesktopEngineTransport implements EngineTransport {
+ 
+   postMessage(request: WorkerRequest): void {
+     if (this.closed) throw new Error("Desktop engine transport closed");
+-    if (this.outstanding >= MAX_DESKTOP_OUTSTANDING) {
++    if (this.outstanding >= MAX_ENGINE_OUTSTANDING) {
+       throw new Error("Desktop engine busy; request was not submitted（未提交）");
+     }
+     this.outstanding++;
+diff --git a/apps/web-client/src/engine/networkClient.ts b/apps/web-client/src/engine/networkClient.ts
+index f1867b31..67a84c8b 100644
+--- a/apps/web-client/src/engine/networkClient.ts
++++ b/apps/web-client/src/engine/networkClient.ts
+@@ -1,3 +1,4 @@
++import { presentationMetadata } from "./presentationMetadata";
+ import { validateObserverMetadata } from "./observerMetadata";
+ import { publicEventLabel } from "./publicEvents";
+ import type {
+@@ -519,6 +520,23 @@ export class NetworkEngineClient {
+       return;
+     }
+     const payload = message.payload ?? {};
++    if (Object.hasOwn(payload, "presentation")) {
++      try {
++        if (new TextEncoder().encode(json).length > 256 * 1024) throw new Error("presentation envelope exceeds 256KiB");
++        if (message.type !== "CommandOutcome" || !payload.view) throw new Error("unexpected presentation location");
++        const view = payload.view as ObserverSnapshot;
++        presentationMetadata(payload.presentation, view.revision, view.seats.length);
++      } catch (error) {
++        const failure = new Error(`服务端呈现元数据无效，操作结果未确认: ${String(error)}`);
++        const key = payload.idempotency_key;
++        const header = payload.header as Partial<MessageHeader> | undefined;
++        const matchingReply = header?.room_id === this.roomId && typeof header.conn_seq === "number" && Number.isSafeInteger(header.conn_seq) && header.conn_seq > 0;
++        const call = matchingReply && typeof key === "number" && Number.isSafeInteger(key) && key > 0 ? this.pending.get(key) : undefined;
++        if (call) call.reject(failure);
++        else console.error(failure.message);
++        return;
++      }
++    }
+     if (payload.view) {
+       try { validateObserverMetadata(payload.view as ObserverSnapshot, (payload.choice as ChoiceRequest | null) ?? null); }
+       catch (error) { this.rejectOutstanding(new Error(`服务端元数据无效：${String(error)}`)); return; }
+@@ -639,6 +657,7 @@ export class NetworkEngineClient {
+       (payload.legal_actions as LegalAction[] | undefined) ?? [],
+       payload.result ?? null
+     );
++    if (Object.hasOwn(payload, "presentation")) envelope.presentation = presentationMetadata(payload.presentation, view.revision, view.seats.length);
+     const key = Number(payload.idempotency_key ?? 0);
+     clearPendingStorage(key);
+     if (this.persistedPending?.key === key) this.persistedPending = null;
+diff --git a/apps/web-client/src/engine/viewStore.ts b/apps/web-client/src/engine/viewStore.ts
+index 4c32dc55..ac05ca9e 100644
+--- a/apps/web-client/src/engine/viewStore.ts
++++ b/apps/web-client/src/engine/viewStore.ts
+@@ -1,3 +1,4 @@
++import { validatePresentationResponse } from "./presentationMetadata";
+ import { reactive } from "vue";
+ import type { ChoiceRequest, EngineEnvelope, LegalAction, ObserverSnapshot } from "../types/engine";
+ import { perfEnvelopeApplied, perfEnvelopeApplying } from "./perfProbe";
+@@ -68,6 +69,7 @@ export function createViewStore(): ViewState {
+ let effectId = 1;
+ 
+ export function applyEnvelope(store: ViewState, env: EngineEnvelope) {
++  validatePresentationResponse(env);
+   // 表现层性能采样（默认关闭时立即返回）：记录应用信封、DOM 刷新与下一帧时刻。
+   perfEnvelopeApplying();
+   applyEnvelopeState(store, env);
+diff --git a/apps/web-client/src/types/engine.ts b/apps/web-client/src/types/engine.ts
+index 8eebd7e1..57802793 100644
+--- a/apps/web-client/src/types/engine.ts
++++ b/apps/web-client/src/types/engine.ts
+@@ -1,4 +1,5 @@
+ /** Shared engine / observer types (mirrors engine-api JSON). */
++import type { PublicPresentationBatch } from "./presentation";
+ 
+ export type PlayerId = number;
+ export type CardId = number;
+@@ -104,6 +105,7 @@ export interface ChoiceRequest {
+ export interface EngineEnvelope {
+   result: unknown;
+   events: unknown[];
++  presentation?: PublicPresentationBatch;
+   choice: ChoiceRequest | null;
+   view: ObserverSnapshot;
+   legal_actions: LegalAction[];
+diff --git a/crates/engine-api/src/lib.rs b/crates/engine-api/src/lib.rs
+index 349b380c..90873bbb 100644
+--- a/crates/engine-api/src/lib.rs
++++ b/crates/engine-api/src/lib.rs
+@@ -11,6 +11,7 @@ mod event;
+ mod ids;
+ mod manifest;
+ mod outcome;
++mod presentation;
+ mod version;
+ mod view;
+ 
+@@ -20,6 +21,7 @@ pub use event::*;
+ pub use ids::*;
+ pub use manifest::*;
+ pub use outcome::*;
++pub use presentation::*;
+ pub use version::*;
+ pub use view::*;
+ 
+diff --git a/crates/engine-protocol/src/lib.rs b/crates/engine-protocol/src/lib.rs
+index 741a7cf9..ac256aca 100644
+--- a/crates/engine-protocol/src/lib.rs
++++ b/crates/engine-protocol/src/lib.rs
+@@ -8,6 +8,7 @@
+ #![deny(missing_docs)]
+ 
+ mod messages;
++mod presentation;
+ mod wire;
+ 
+ pub use messages::*;
+diff --git a/crates/engine-protocol/src/messages.rs b/crates/engine-protocol/src/messages.rs
+index c49365ea..58973fb9 100644
+--- a/crates/engine-protocol/src/messages.rs
++++ b/crates/engine-protocol/src/messages.rs
+@@ -159,6 +159,9 @@ pub enum ServerMessage {
+         choice: Option<ChoiceRequest>,
+         /// Public event codes only (optional sanitized list).
+         public_event_codes: Vec<u32>,
++        /// Optional typed public presentation; current producers omit it.
++        #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::presentation::deserialize_optional")]
++        presentation: Option<engine_api::PublicPresentationBatch>,
+     },
+     /// Room public roster update.
+     RoomRoster {
+diff --git a/crates/engine-protocol/src/wire.rs b/crates/engine-protocol/src/wire.rs
+index fa86dcf2..99d7aedd 100644
+--- a/crates/engine-protocol/src/wire.rs
++++ b/crates/engine-protocol/src/wire.rs
+@@ -34,6 +34,7 @@ pub fn decode_c2s(text: &str) -> Result<ClientMessage, WireError> {
+ 
+ /// Encode server message.
+ pub fn encode_s2c(msg: &ServerMessage) -> Result<String, WireError> {
++    crate::presentation::validate(msg)?;
+     let s = serde_json::to_string(msg).map_err(|e| WireError::Json(e.to_string()))?;
+     if s.len() > MAX_MESSAGE_BYTES {
+         return Err(WireError::TooLarge(s.len()));
+@@ -46,7 +47,9 @@ pub fn decode_s2c(text: &str) -> Result<ServerMessage, WireError> {
+     if text.len() > MAX_MESSAGE_BYTES {
+         return Err(WireError::TooLarge(text.len()));
+     }
+-    serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))
++    let message = serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))?;
++    crate::presentation::validate(&message)?;
++    Ok(message)
+ }
+ 
+ #[cfg(test)]
+diff --git a/apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts b/apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts
+@@ -0,0 +1,97 @@
++import { invoke } from "@tauri-apps/api/core";
++import { urlParam } from "./autoDrive";
++import { validateObserverMetadata } from "./observerMetadata";
++import { normalizeNativeOutcome } from "./nativeOutcome";
++import type { ChooseGeneralPayload, EngineEnvelope, WorkerRequest, WorkerResponse } from "../types/engine";
++
++/** The messaging seam shared by a Worker and the desktop IPC adapter. */
++export interface EngineTransport {
++  onmessage: ((event: MessageEvent<WorkerResponse>) => void) | null;
++  onerror: ((event: ErrorEvent) => void) | null;
++  postMessage(request: WorkerRequest): void;
++  terminate(): void;
++  addEventListener(type: "messageerror", listener: () => void): void;
++}
++
++type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>;
++export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
++export type DesktopEngineChoice = "wasm" | "native";
++// Match the native queue capacity, conservatively including active/opening requests.
++const MAX_DESKTOP_OUTSTANDING = 8;
++
++/** Wasm stays the default until all six PA09 conditions have evidence. */
++export function desktopEngineChoice(): DesktopEngineChoice {
++  const override = typeof location === "undefined" ? null : urlParam("engineTransport");
++  if (override === "native" || override === "wasm") return override;
++  try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === "native" ? "native" : "wasm"; }
++  catch { return "wasm"; }
++}
++
++function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {
++  validateObserverMetadata(envelope.view, envelope.choice);
++  return { ...envelope, view: { ...envelope.view, outcome: normalizeNativeOutcome(envelope.view.outcome) } };
++}
++
++/** Normalize only the two existing local response locations; network envelopes never enter here. */
++function normalizeResponse(response: WorkerResponse, request: WorkerRequest): WorkerResponse {
++  if (!response.ok || !response.data || typeof response.data !== "object") return response;
++  if (request.type === "chooseGeneral") {
++    const data = response.data as ChooseGeneralPayload;
++    if (data.envelope?.view) return { ...response, data: { ...data, envelope: normalizeEnvelope(data.envelope) } };
++  } else {
++    const data = response.data as EngineEnvelope;
++    if (data.view) return { ...response, data: normalizeEnvelope(data) };
++  }
++  return response;
++}
++
++/** Serial invoke calls carry the same WorkerRequest/WorkerResponse, including controlled errors. */
++export class DesktopEngineTransport implements EngineTransport {
++  onmessage: EngineTransport["onmessage"] = null;
++  onerror: EngineTransport["onerror"] = null;
++  private closed = false;
++  private outstanding = 0;
++  private tail: Promise<void> = Promise.resolve();
++  private resource: Promise<number> | null = null;
++
++  constructor(private call: Invoke = invoke) {}
++
++  postMessage(request: WorkerRequest): void {
++    if (this.closed) throw new Error("Desktop engine transport closed");
++    if (this.outstanding >= MAX_DESKTOP_OUTSTANDING) {
++      throw new Error("Desktop engine busy; request was not submitted（未提交）");
++    }
++    this.outstanding++;
++    this.tail = this.tail.then(async () => {
++      try {
++        if (this.closed) return;
++        let response: WorkerResponse;
++        try {
++          this.resource ??= this.call<number>("native_engine_open");
++          const resourceId = await this.resource;
++          if (this.closed) return;
++          response = await this.call<WorkerResponse>("native_engine_request", { resourceId, request });
++          response = normalizeResponse(response, request);
++          if (response.id !== request.id || typeof response.ok !== "boolean") {
++            throw new Error("invalid IPC response");
++          }
++        } catch (error) {
++          response = { id: request.id, ok: false, error: `Desktop IPC: ${String(error)}; 操作结果可能未知，请先确认当前局面` };
++        }
++        if (!this.closed) this.onmessage?.({ data: response } as MessageEvent<WorkerResponse>);
++      } finally {
++        if (!this.closed) this.outstanding--;
++      }
++    }).catch((error) => console.error("Desktop engine response listener failed", error));
++  }
++
++  terminate(): void {
++    if (this.closed) return;
++    this.closed = true;
++    this.outstanding = 0;
++    void this.resource?.then((resourceId) => this.call("native_engine_close", { resourceId }))
++      .catch((error) => console.error("Desktop engine resource close failed", error));
++  }
++  // invoke returns structured JSON; decoding failures reject its promise.
++  addEventListener(_type: "messageerror", _listener: () => void): void {}
++}
+diff --git a/apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts b/apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts
+@@ -0,0 +1,815 @@
++import { validateObserverMetadata } from "./observerMetadata";
++import { publicEventLabel } from "./publicEvents";
++import type {
++  ChoiceRequest,
++  EngineEnvelope,
++  LegalAction,
++  ObserverSnapshot,
++} from "../types/engine";
++
++const NETWORK_PROTOCOL_VERSION = 6;
++
++type CommandKind =
++  | "EndPhase"
++  | "Surrender"
++  | { PlayCard: { card: number; targets: number[]; card_targets: number[] } }
++  | { ActivateSkill: { skill: number; targets: number[]; card_targets: number[] } }
++  | {
++      UseSkillCard: {
++        skill: number;
++        card_kind: number;
++        targets: number[];
++        equip_slot: number;
++      };
++    }
++  | {
++      ResolveChoice: {
++        choice_id: number;
++        selections: number[];
++        cancelled: boolean;
++      };
++    };
++
++interface MessageHeader {
++  protocol_version: number;
++  room_id: number;
++  conn_seq: number;
++  revision: number;
++}
++
++export interface RoomRoster {
++  room_id: number;
++  seats: {
++    seat: number;
++    player_id: number;
++    display_name: string;
++    connected: boolean;
++    managed: boolean;
++  }[];
++  choice_timeout_secs: number | null;
++  started: boolean;
++  finished: boolean;
++}
++
++const PENDING_STORAGE_KEY = "noname-next.pending-command";
++/** 刷新后仍重放 pending 的最长时间；过期视为陈旧意图，避免隔天误重放。 */
++const PENDING_TTL_MS = 10 * 60 * 1000;
++
++type PersistedPending = {
++  roomId: number;
++  key: number;
++  kind: CommandKind;
++  createdAt: number;
++};
++
++function loadPersistedPending(): PersistedPending | null {
++  try {
++    if (typeof sessionStorage === "undefined") return null;
++    const raw = sessionStorage.getItem(PENDING_STORAGE_KEY);
++    if (!raw) return null;
++    const parsed = JSON.parse(raw) as Partial<PersistedPending>;
++    if (
++      !parsed ||
++      typeof parsed.roomId !== "number" ||
++      typeof parsed.key !== "number" ||
++      typeof parsed.createdAt !== "number" ||
++      !parsed.kind
++    ) {
++      return null;
++    }
++    if (Date.now() - parsed.createdAt > PENDING_TTL_MS) return null;
++    return {
++      roomId: parsed.roomId,
++      key: parsed.key,
++      kind: parsed.kind as CommandKind,
++      createdAt: parsed.createdAt,
++    };
++  } catch {
++    return null;
++  }
++}
++
++function storePending(kind: CommandKind, key: number, roomId: number): void {
++  try {
++    if (typeof sessionStorage === "undefined" || !roomId) return;
++    sessionStorage.setItem(
++      PENDING_STORAGE_KEY,
++      JSON.stringify({ roomId, key, kind, createdAt: Date.now() }),
++    );
++  } catch {
++    /* 存储不可用时保持原有同实例重连语义 */
++  }
++}
++
++function clearPendingStorage(key: number): void {
++  try {
++    if (typeof sessionStorage === "undefined") return;
++    const raw = sessionStorage.getItem(PENDING_STORAGE_KEY);
++    if (!raw) return;
++    const parsed = JSON.parse(raw) as Partial<PersistedPending>;
++    if (parsed.key === key) sessionStorage.removeItem(PENDING_STORAGE_KEY);
++  } catch {
++    /* ignore */
++  }
++}
++
++export interface OnlineSession {
++  roomId: number;
++  playerId: number;
++  seat: number;
++  role: "Player" | "Spectator" | "Referee";
++  reconnectToken: string;
++  view: ObserverSnapshot;
++  envelope: EngineEnvelope;
++}
++
++type PendingCommand = {
++  /** 原命令内容；重连后必须用**同一 key 与同一命令**重放，不能换 key 重做。 */
++  kind: CommandKind;
++  key: number;
++  resolve: (value: EngineEnvelope) => void;
++  reject: (reason: Error) => void;
++};
++
++type JoinWaiter = {
++  resolve: (value: OnlineSession) => void;
++  reject: (reason: Error) => void;
++};
++
++/**
++ * Browser transport for the authoritative game-server WebSocket protocol.
++ * It only submits normalized commands and consumes observer projections.
++ */
++export class NetworkEngineClient {
++  private socket: WebSocket | null = null;
++  private connectionId = 0;
++  private roomId = 0;
++  private playerId = 0;
++  private revision = 0;
++  private connSeq = 0;
++  private idemSeq = 1;
++  private choice: ChoiceRequest | null = null;
++  private session: OnlineSession | null = null;
++  private roomPassword = "";
++  private welcomeWaiter: { resolve: () => void; reject: (e: Error) => void } | null = null;
++  private joinWaiter: JoinWaiter | null = null;
++  private pending = new Map<number, PendingCommand>();
++  private persistedPending: PersistedPending | null = loadPersistedPending();
++  private snapshotWaiters = new Map<
++    number,
++    { resolve: (view: ObserverSnapshot) => void; reject: (e: Error) => void }
++  >();
++  private envelopeListeners = new Set<(envelope: EngineEnvelope) => void>();
++  private rosterListeners = new Set<(roster: RoomRoster) => void>();
++  private closeListeners = new Set<() => void>();
++  private heartbeat: number | null = null;
++  private clockProbe: { connSeq: number; roomId: number; sentAt: number } | null = null;
++  private serverTimeAnchor: { unixMs: number; monotonicMs: number } | null = null;
++  private disposed = false;
++  /// NC09 自动重连：最近一次连接参数（断开后按退避重试）
++  private lastUrl: string | null = null;
++  private lastName = "";
++  private reconnectTimer: number | null = null;
++  private reconnectAttempts = 0;
++  private reconnectListeners = new Set<(state: "reconnecting" | "reconnected" | "failed") => void>();
++
++  async connect(url: string, displayName: string): Promise<void> {
++    if (this.socket?.readyState === WebSocket.OPEN) return;
++    this.disposed = false;
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
++    this.lastUrl = url;
++    this.lastName = displayName;
++
++    const welcome = new Promise<void>((resolve, reject) => {
++      this.welcomeWaiter = { resolve, reject };
++    });
++    const opened = new Promise<void>((resolve, reject) => {
++      const socket = new WebSocket(normalizeWsUrl(url));
++      this.socket = socket;
++      socket.onopen = () => {
++        if (this.socket !== socket) {
++          reject(new Error("WebSocket 连接已替换"));
++          return;
++        }
++        this.connSeq = 0;
++        this.idemSeq = 1;
++        resolve();
++      };
++      socket.onerror = () => reject(new Error("WebSocket 连接失败"));
++      socket.onmessage = (event) => {
++        if (this.socket === socket) this.handleMessage(String(event.data));
++      };
++      socket.onclose = () => {
++        reject(new Error("WebSocket 连接已关闭"));
++        if (this.socket === socket) this.handleClose();
++      };
++    });
++
++    // NC09：`opened` 失败时 `welcome` 仍会在稍后 reject——必须预先挂一个 no-op catch，
++    // 否则控制台出现 `Uncaught (in promise)`（UI 已显示「WebSocket 连接失败」但仍有未处理拒绝）。
++    void welcome.catch(() => undefined);
++    await opened;
++    await welcome;
++    this.send({
++      type: "Hello",
++      payload: {
++        versions: {
++          engine_api: 1,
++          rule_vm_abi: 167,
++          content_schema: 3,
++          network_protocol: NETWORK_PROTOCOL_VERSION,
++          replay_schema: 1,
++          snapshot_schema: 1,
++          package_format: 1,
++          engine_build_id: "noname-next-web",
++        },
++        display_name: displayName,
++      },
++    });
++    this.sendHeartbeat();
++  }
++
++  /** Display estimate only; server deadlines remain authoritative. */
++  secondsUntilServerDeadline(deadline: number | undefined): number | null {
++    if (deadline == null || !this.serverTimeAnchor) return null;
++    const elapsed = performance.now() - this.serverTimeAnchor.monotonicMs;
++    return Math.max(0, Math.ceil((deadline - this.serverTimeAnchor.unixMs - elapsed) / 1000));
++  }
++
++  createRoom(players: number, seed: number, password = "", choiceTimeoutSecs = 30): Promise<OnlineSession> {
++    return this.joinRequest({ type: "CreateRoom", payload: { players, seed, password, choice_timeout_secs: choiceTimeoutSecs } }, password);
++  }
++
++  joinRoom(
++    roomId: number,
++    password = "",
++    reconnectToken: string | null = null
++  ): Promise<OnlineSession> {
++    this.roomId = roomId;
++    return this.joinRequest({
++      type: "JoinRoom",
++      payload: {
++        room_id: roomId,
++        password,
++        preferred_seat: null,
++        reconnect_token: reconnectToken,
++      },
++    }, password);
++  }
++
++  spectate(roomId: number): Promise<OnlineSession> {
++    this.roomId = roomId;
++    return this.joinRequest({ type: "Spectate", payload: { room_id: roomId } }, "");
++  }
++
++  rejoinRoom(): Promise<OnlineSession> {
++    const session = this.session;
++    if (!session) return Promise.reject(new Error("尚未加入房间"));
++    return session.role === "Spectator"
++      ? this.spectate(session.roomId)
++      : this.joinRoom(session.roomId, this.roomPassword, session.reconnectToken);
++  }
++
++  onEnvelope(listener: (envelope: EngineEnvelope) => void): () => void {
++    this.envelopeListeners.add(listener);
++    return () => this.envelopeListeners.delete(listener);
++  }
++
++  /// 断线通知（NC09）：注册后返回取消函数。
++  onClose(listener: () => void): () => void {
++    this.closeListeners.add(listener);
++    return () => this.closeListeners.delete(listener);
++  }
++
++  onRoster(listener: (roster: RoomRoster) => void): () => void {
++    this.rosterListeners.add(listener);
++    return () => this.rosterListeners.delete(listener);
++  }
++
++  /// 取消所有尚未确认的命令（UI 取消入口）：拒绝等待者并清除刷新持久化，
++  /// 避免下一次入房继续重放。服务端是否已提交需另行查询/接受不确定语义。
++  cancelPendingCommands(reason = "已取消待确认命令"): void {
++    for (const pending of this.pending.values()) {
++      clearPendingStorage(pending.key);
++      pending.reject(new Error(reason));
++    }
++    this.pending.clear();
++    if (this.persistedPending) {
++      clearPendingStorage(this.persistedPending.key);
++      this.persistedPending = null;
++    }
++  }
++
++  endPhase(_actor = 0): Promise<EngineEnvelope> {
++    return this.submit("EndPhase");
++  }
++
++  playCard(
++    _actor: number,
++    card: number,
++    targets: number[]
++  ): Promise<EngineEnvelope> {
++    return this.submit({ PlayCard: { card, targets, card_targets: [] } });
++  }
++
++  activateSkill(
++    _actor: number,
++    skill: number,
++    targets: number[],
++    cardTargets: number[]
++  ): Promise<EngineEnvelope> {
++    return this.submit({
++      ActivateSkill: { skill, targets, card_targets: cardTargets },
++    });
++  }
++
++  useSkillCard(
++    _actor: number,
++    skill: number,
++    cardKind: number,
++    targets: number[],
++    equipSlot: number
++  ): Promise<EngineEnvelope> {
++    return this.submit({
++      UseSkillCard: {
++        skill,
++        card_kind: cardKind,
++        targets,
++        equip_slot: equipSlot,
++      },
++    });
++  }
++
++  resolveChoice(
++    _actor: number,
++    choiceId: number,
++    selections: number[],
++    cancelled = false
++  ): Promise<EngineEnvelope> {
++    return this.submit({
++      ResolveChoice: {
++        choice_id: choiceId,
++        selections,
++        cancelled,
++      },
++    });
++  }
++
++  surrender(): Promise<EngineEnvelope> {
++    return this.submit("Surrender");
++  }
++
++  requestSnapshot(): Promise<ObserverSnapshot> {
++    const header = this.nextHeader();
++    return new Promise<ObserverSnapshot>((resolve, reject) => {
++      this.snapshotWaiters.set(header.conn_seq, { resolve, reject });
++      try {
++        this.send({
++          type: "RequestSnapshot",
++          payload: { header, last_revision: this.revision },
++        });
++      } catch (error) {
++        this.snapshotWaiters.delete(header.conn_seq);
++        reject(error);
++      }
++    });
++  }
++
++  dispose(): void {
++    this.disposed = true;
++    if (this.reconnectTimer != null) {
++      window.clearTimeout(this.reconnectTimer);
++      this.reconnectTimer = null;
++    }
++    this.reconnectAttempts = 0;
++    if (this.heartbeat != null && typeof window !== "undefined") {
++      window.clearInterval(this.heartbeat);
++    }
++    this.heartbeat = null;
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
++    const socket = this.socket;
++    this.socket = null;
++    socket?.close(1000, "client dispose");
++    this.session = null;
++    this.roomPassword = "";
++    this.playerId = 0;
++    this.rejectOutstanding(new Error("连接已关闭"));
++    this.envelopeListeners.clear();
++    this.rosterListeners.clear();
++    this.closeListeners.clear();
++    this.reconnectListeners.clear();
++  }
++
++  private async joinRequest(message: unknown, password: string): Promise<OnlineSession> {
++    const joined = this.waitForJoin();
++    try {
++      this.send(message);
++      this.roomPassword = password;
++    } catch (error) {
++      this.joinWaiter?.reject(error instanceof Error ? error : new Error(String(error)));
++      this.joinWaiter = null;
++    }
++    return joined;
++  }
++
++  private waitForJoin(): Promise<OnlineSession> {
++    if (this.joinWaiter) throw new Error("已有入房请求");
++    return new Promise((resolve, reject) => {
++      this.joinWaiter = { resolve, reject };
++    });
++  }
++
++  private submit(kind: CommandKind): Promise<EngineEnvelope> {
++    if (!this.roomId || !this.playerId) {
++      return Promise.reject(new Error("当前不是已入座玩家"));
++    }
++    const key = this.connectionId * 1_000_000 + this.idemSeq++;
++    let intent!: PendingCommand;
++    const promise = new Promise<EngineEnvelope>((resolve, reject) => {
++      intent = { kind, key, resolve, reject };
++      this.pending.set(key, intent);
++    });
++    try {
++      this.sendSubmit(intent);
++      this.persistedPending = { roomId: this.roomId, key, kind, createdAt: Date.now() };
++      storePending(kind, key, this.roomId);
++    } catch (error) {
++      this.pending.delete(key);
++      clearPendingStorage(key);
++      return Promise.reject(error);
++    }
++    return promise;
++  }
++
++  /// 用命令自己的 key/内容提交。重连重放与新命令共用这一条路径，
++  /// 确保重放绝不会分配新 key 或改变命令内容。
++  private sendSubmit(intent: PendingCommand, replay = false): void {
++    this.send({
++      type: "SubmitCommand",
++      payload: {
++        header: this.nextHeader(),
++        command: {
++          actor: this.playerId,
++          expected_revision: this.revision,
++          idempotency_key: intent.key,
++          kind: intent.kind,
++        },
++        idempotency_key: intent.key,
++        replay,
++      },
++    });
++  }
++
++  /// 断线前已发出但未确认的命令在重新入房后**先用原 key 重放**。
++  /// WebSocket 保序，因此 UI 在 JoinOk 之后产生的新提交一定排在这些
++  /// 重放之后；服务端按 reconnect token + key 返回原 Accepted 或只执行一次。
++  private replayPending(): void {
++    const persisted =
++      this.persistedPending && this.persistedPending.roomId === this.roomId
++        ? this.persistedPending
++        : null;
++    if (persisted && !this.pending.has(persisted.key)) {
++      // 页面刷新后的新实例没有旧 Promise；用占位 pending 承接服务端回执，
++      // 并通过 envelope 监听者把权威结果交回界面。
++      const intent: PendingCommand = {
++        kind: persisted.kind,
++        key: persisted.key,
++        resolve: (envelope) => {
++          for (const listener of this.envelopeListeners) listener(envelope);
++        },
++        reject: () => undefined,
++      };
++      this.pending.set(intent.key, intent);
++    }
++    if (!this.pending.size) return;
++    for (const intent of [...this.pending.values()]) {
++      try {
++        this.sendSubmit(intent, true);
++      } catch {
++        // 连接再次断开：保留意图，下次 JoinOk 继续用原 key 结算。
++        return;
++      }
++    }
++  }
++
++  private nextHeader(): MessageHeader {
++    return {
++      protocol_version: NETWORK_PROTOCOL_VERSION,
++      room_id: this.roomId,
++      conn_seq: ++this.connSeq,
++      revision: this.revision,
++    };
++  }
++
++  private send(message: unknown): void {
++    if (this.socket?.readyState !== WebSocket.OPEN) {
++      throw new Error("WebSocket 未连接");
++    }
++    this.socket.send(JSON.stringify(message));
++  }
++
++  private handleMessage(json: string): void {
++    let message: { type?: string; payload?: Record<string, unknown> };
++    try {
++      message = JSON.parse(json) as typeof message;
++    } catch {
++      this.rejectOutstanding(new Error("服务端返回了无效 JSON"));
++      return;
++    }
++    const payload = message.payload ?? {};
++    if (payload.view) {
++      try { validateObserverMetadata(payload.view as ObserverSnapshot, (payload.choice as ChoiceRequest | null) ?? null); }
++      catch (error) { this.rejectOutstanding(new Error(`服务端元数据无效：${String(error)}`)); return; }
++    }
++
++    switch (message.type) {
++      case "Welcome":
++        if (payload.protocol_version !== NETWORK_PROTOCOL_VERSION || (payload.versions as { network_protocol?: number } | undefined)?.network_protocol !== NETWORK_PROTOCOL_VERSION) {
++          this.rejectOutstanding(new Error("服务端协议版本不兼容：需要 WS6"));
++          this.socket?.close();
++          return;
++        }
++        this.connectionId = Number(payload.connection_id ?? 0);
++        this.welcomeWaiter?.resolve();
++        this.welcomeWaiter = null;
++        break;
++      case "RoomCreated":
++        this.roomId = Number(payload.room_id ?? 0);
++        break;
++      case "JoinOk": {
++        this.roomId = Number(payload.room_id ?? this.roomId);
++        this.playerId = Number(payload.player_id ?? 0);
++        const view = payload.view as unknown as ObserverSnapshot;
++        this.choice = (payload.choice as ChoiceRequest | null | undefined) ?? null;
++        this.revision = view.revision;
++        const session: OnlineSession = {
++          roomId: this.roomId,
++          playerId: this.playerId,
++          seat: Number(payload.seat ?? 255),
++          role: String(payload.role ?? "Spectator") as OnlineSession["role"],
++          reconnectToken: String(payload.reconnect_token ?? ""),
++          view,
++          envelope: envelopeFromView(
++            view,
++            this.choice,
++            [],
++            (payload.legal_actions as LegalAction[] | undefined) ?? [],
++            null
++          ),
++        };
++        this.session = session;
++        // 先同步发出同 key 重放，再 resolve 入房；UI 在 JoinOk 后的新提交
++        // 因此一定排在重放之后（WebSocket 保序）。
++        this.replayPending();
++        this.joinWaiter?.resolve(session);
++        this.joinWaiter = null;
++        this.startHeartbeat();
++        break;
++      }
++      case "RoomRoster": {
++        const roster = payload as unknown as RoomRoster;
++        if ((roster.choice_timeout_secs !== null && ![10, 15, 30, 60, 90].includes(roster.choice_timeout_secs)) || !Array.isArray(roster.seats) || roster.seats.some((seat) => typeof seat.managed !== "boolean")) {
++          this.rejectOutstanding(new Error("服务端房间超时配置无效")); return;
++        }
++        for (const listener of this.rosterListeners) listener(roster);
++        break;
++      }
++      case "CommandOutcome":
++        this.handleOutcome(payload);
++        break;
++      case "Snapshot": {
++        const header = payload.header as unknown as MessageHeader;
++        const view = payload.view as unknown as ObserverSnapshot;
++        this.choice = (payload.choice as ChoiceRequest | null | undefined) ?? null;
++        this.revision = view.revision;
++        const waiter = this.snapshotWaiters.get(header.conn_seq);
++        if (waiter) {
++          this.snapshotWaiters.delete(header.conn_seq);
++          waiter.resolve(view);
++        }
++        const envelope = envelopeFromView(
++          view,
++          this.choice,
++          [],
++          (payload.legal_actions as LegalAction[] | undefined) ?? [],
++          null
++        );
++        for (const listener of this.envelopeListeners) listener(envelope);
++        break;
++      }
++      case "Pong": {
++        const header = payload.header as MessageHeader | undefined;
++        const probe = this.clockProbe;
++        const receivedAt = performance.now();
++        const serverTime = payload.server_time_ms;
++        if (probe && header?.protocol_version === NETWORK_PROTOCOL_VERSION &&
++            header.conn_seq === probe.connSeq && header.room_id === probe.roomId &&
++            typeof serverTime === "number" && Number.isSafeInteger(serverTime) && serverTime > 0 &&
++            receivedAt >= probe.sentAt) {
++          this.serverTimeAnchor = { unixMs: serverTime + (receivedAt - probe.sentAt) / 2, monotonicMs: receivedAt };
++          this.clockProbe = null;
++        }
++        break;
++      }
++      case "Error": {
++        const error = new Error(String(payload.message ?? "服务端错误"));
++        if (this.joinWaiter) {
++          this.joinWaiter.reject(error);
++          this.joinWaiter = null;
++        } else {
++          this.rejectOutstanding(error);
++        }
++        break;
++      }
++    }
++  }
++
++  private handleOutcome(payload: Record<string, unknown>): void {
++    const view = payload.view as unknown as ObserverSnapshot;
++    const previousRevision = this.revision;
++    this.revision = view.revision;
++    this.choice = (payload.choice as ChoiceRequest | null | undefined) ?? null;
++    const eventCodes = (payload.public_event_codes as number[] | undefined) ?? [];
++    const envelope = envelopeFromView(
++      view,
++      this.choice,
++      eventCodes,
++      (payload.legal_actions as LegalAction[] | undefined) ?? [],
++      payload.result ?? null
++    );
++    const key = Number(payload.idempotency_key ?? 0);
++    clearPendingStorage(key);
++    if (this.persistedPending?.key === key) this.persistedPending = null;
++    const pending = this.pending.get(key);
++    if (pending) {
++      this.pending.delete(key);
++      const rejection = commandRejection(payload.result);
++      if (rejection) {
++        for (const listener of this.envelopeListeners) listener(envelope);
++        pending.reject(new Error(rejection));
++      } else pending.resolve(envelope);
++    } else {
++      for (const listener of this.envelopeListeners) listener(envelope);
++    }
++
++    if (previousRevision > 0 && view.revision > previousRevision + 1) {
++      void this.requestSnapshot().catch(() => undefined);
++    }
++  }
++
++  private startHeartbeat(): void {
++    if (this.heartbeat != null) window.clearInterval(this.heartbeat);
++    this.heartbeat = window.setInterval(() => {
++      if (this.socket?.readyState !== WebSocket.OPEN) return;
++      this.sendHeartbeat();
++    }, 15_000);
++  }
++
++  private sendHeartbeat(): void {
++    const header = this.nextHeader();
++    this.clockProbe = { connSeq: header.conn_seq, roomId: header.room_id, sentAt: performance.now() };
++    this.send({ type: "Heartbeat", payload: { header } });
++  }
++
++  private handleClose(): void {
++    this.clockProbe = null;
++    this.serverTimeAnchor = null;
++    if (this.heartbeat != null) window.clearInterval(this.heartbeat);
++    // NC09：断线必须**可见**——此前服务端中途崩溃时界面保持旧状态、无任何提示。
++    // 这里向监听者广播一次「已断开」，由界面写入状态行与日志。
++    for (const listener of this.closeListeners) {
++      try {
++        listener();
++      } catch {
++        /* 监听者异常不得影响其它监听者 */
++      }
++    }
++    this.heartbeat = null;
++    this.socket = null;
++    this.playerId = 0;
++    if (!this.disposed) {
++      // 待确认命令必须跨重连保留：ACK 可能已丢，服务端也许已提交。
++      // 入房/欢迎/快照 waiter 无法跨连接，明确失败；pending 留到 JoinOk 重放。
++      this.suspendOutstanding(new Error("与服务端的连接已断开"));
++      this.scheduleReconnect();
++    }
++  }
++
++  /// 断线自动重连（指数退避，最多 5 次；成功/失败均广播状态）。
++  private scheduleReconnect(): void {
++    if (this.reconnectTimer != null) return;
++    if (!this.lastUrl) return;
++    if (this.reconnectAttempts >= 5) {
++      this.failPendingUncertain();
++      for (const l of this.reconnectListeners) l("failed");
++      return;
++    }
++    const delay = Math.min(1000 * 2 ** this.reconnectAttempts, 8000);
++    this.reconnectAttempts += 1;
++    for (const l of this.reconnectListeners) l("reconnecting");
++    this.reconnectTimer = window.setTimeout(() => {
++      this.reconnectTimer = null;
++      const url = this.lastUrl;
++      if (!url || this.disposed) return;
++      void this.connect(url, this.lastName)
++        .then(() => {
++          this.reconnectAttempts = 0;
++          for (const l of this.reconnectListeners) l("reconnected");
++        })
++        .catch(() => {
++          this.scheduleReconnect();
++        });
++    }, delay);
++  }
++
++  /// 自动重连状态通知（NC09）。
++  onReconnect(listener: (state: "reconnecting" | "reconnected" | "failed") => void): () => void {
++    this.reconnectListeners.add(listener);
++    return () => this.reconnectListeners.delete(listener);
++  }
++
++  /// 连接级 waiter 跨不过断线；命令意图 `pending` 有意保留。
++  private suspendOutstanding(error: Error): void {
++    this.welcomeWaiter?.reject(error);
++    this.welcomeWaiter = null;
++    this.joinWaiter?.reject(error);
++    this.joinWaiter = null;
++    for (const pending of this.snapshotWaiters.values()) pending.reject(error);
++    this.snapshotWaiters.clear();
++  }
++
++  /// 自动重连彻底失败：不能把未确认提交说成已撤销或已拒绝。
++  private failPendingUncertain(): void {
++    if (!this.pending.size) return;
++    for (const pending of this.pending.values()) {
++      pending.reject(
++        new Error("提交结果不确定：连接已断开且自动重连失败，请重新进入房间后再操作")
++      );
++    }
++    this.pending.clear();
++  }
++
++  private rejectOutstanding(error: Error): void {
++    this.suspendOutstanding(error);
++    for (const pending of this.pending.values()) pending.reject(error);
++    this.pending.clear();
++  }
++}
++
++function normalizeWsUrl(url: string): string {
++  const trimmed = url.trim();
++  if (trimmed.startsWith("http://")) return `ws://${trimmed.slice(7)}`;
++  if (trimmed.startsWith("https://")) return `wss://${trimmed.slice(8)}`;
++  return trimmed;
++}
++
++export function onlineReconnectKey(wsUrl: string, roomId: number): string {
++  const origin = new URL(normalizeWsUrl(wsUrl)).origin;
++  return `noname-next.reconnect.${encodeURIComponent(origin)}.${roomId}`;
++}
++
++function envelopeFromView(
++  view: ObserverSnapshot,
++  choice: ChoiceRequest | null,
++  publicEventCodes: number[],
++  legalActions: LegalAction[],
++  result: unknown
++): EngineEnvelope {
++  return {
++    result,
++    events: publicEventCodes.map((code) => ({
++      PublicEvent: { code, label: publicEventLabel(code) },
++    })),
++    choice,
++    view,
++    legal_actions: legalActions,
++    hash_hex: hashHex(view.state_hash),
++    revision: view.revision,
++    finished: isFinished(view.outcome),
++  };
++}
++
++function hashHex(hash: ObserverSnapshot["state_hash"]): string {
++  if (typeof hash === "string") return hash;
++  return hash.map((byte) => byte.toString(16).padStart(2, "0")).join("");
++}
++
++function isFinished(outcome: unknown): boolean {
++  if (outcome == null || outcome === "InProgress") return false;
++  return !(typeof outcome === "object" && "InProgress" in (outcome as object));
++}
++
++function commandRejection(result: unknown): string | null {
++  if (!result || typeof result !== "object" || !("Rejected" in result)) return null;
++  const rejected = (result as { Rejected: unknown }).Rejected;
++  const code =
++    rejected && typeof rejected === "object" && "IllegalAction" in rejected
++      ? (rejected as { IllegalAction?: { code?: unknown } }).IllegalAction?.code
++      : undefined;
++  if (code === "legacy_replay_no_receipt") {
++    return "提交结果不确定：旧房间没有可核对的回执，已停止重放；请以房间当前状态为准";
++  }
++  return `命令被拒绝：${JSON.stringify(rejected)}`;
++}
+diff --git a/apps/web-client/scripts/presentation-fixtures.mjs b/apps/web-client/scripts/presentation-fixtures.mjs
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/presentation-fixtures.mjs
+@@ -0,0 +1,23 @@
++import { readFileSync } from "node:fs";
++
++const fixtureRoot = new URL("../../../crates/engine-protocol/tests/fixtures/", import.meta.url);
++export const presentationBatch = () => JSON.parse(readFileSync(new URL("i02-presentation.json", fixtureRoot), "utf8"));
++export const invalidPresentationBatches = () => JSON.parse(readFileSync(new URL("i02-presentation-invalid.json", fixtureRoot), "utf8")).map(({name, changes}) => {
++  const batch = presentationBatch();
++  for (const change of changes) {
++    const parts = change.pointer.slice(1).split("/");
++    const key = parts.pop();
++    const parent = parts.reduce((value, part) => value[part], batch);
++    if (change.remove) delete parent[key]; else parent[key] = change.value;
++  }
++  return { name, batch };
++});
++export function presentationView(revision = 2) {
++  return { revision, state_hash: Array(32).fill(0), observer: "Spectator", round: 1, current_player: 1,
++    phase: "Play", seats: [1, 2].map(player => ({player, seat: player - 1, hp: 4, max_hp: 4, alive: true, hand_count: 0, identity: null, skills: []})),
++    known_cards: [], outcome: "InProgress" };
++}
++export function presentationEnvelope(batch = presentationBatch()) {
++  return { result: {outcome: "accepted"}, events: [], presentation: batch, view: presentationView(),
++    choice: null, legal_actions: [], hash_hex: "00".repeat(32), revision: 2, finished: false };
++}
+diff --git a/apps/web-client/scripts/presentation-metadata.test.mjs b/apps/web-client/scripts/presentation-metadata.test.mjs
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/scripts/presentation-metadata.test.mjs
+@@ -0,0 +1,166 @@
++import assert from "node:assert/strict";
++import { readFileSync } from "node:fs";
++import { test } from "node:test";
++import ts from "typescript";
++import { presentationMetadata, validatePresentationResponse } from "../src/engine/presentationMetadata.ts";
++import { NetworkEngineClient } from "../src/engine/networkClient.ts";
++import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
++import { applyEnvelope, createViewStore } from "../src/engine/viewStore.ts";
++import { presentationBatch, invalidPresentationBatches, presentationView, presentationEnvelope } from "./presentation-fixtures.mjs";
++
++async function frozenReader(name) {
++  const source = readFileSync(new URL(`./fixtures/i02-main5fc/${name}.ts`, import.meta.url), "utf8");
++  const relocated = source.replace(/from "(\.\.?\/[^"\n]+)"/g, (_, path) => `from "${new URL(path + ".ts", new URL("../src/engine/", import.meta.url)).href}"`);
++  const resolved = relocated.replace('from "@tauri-apps/api/core"', `from "${import.meta.resolve("@tauri-apps/api/core")}"`);
++  const js = ts.transpileModule(resolved, {compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
++  return import(`data:text/javascript;base64,${Buffer.from(js).toString("base64")}`);
++}
++
++function network(t, Client = NetworkEngineClient) {
++  const previousWindow = globalThis.window;
++  const previousStorage = globalThis.sessionStorage;
++  const storage = new Map();
++  globalThis.sessionStorage = {getItem:key=>storage.get(key) ?? null,setItem:(key,value)=>storage.set(key,value),removeItem:key=>storage.delete(key)};
++  globalThis.window = { clearTimeout(){}, clearInterval(){} };
++  const client = new Client();
++  t.after(() => { client.dispose(); globalThis.window = previousWindow; globalThis.sessionStorage = previousStorage; });
++  client.revision = 1; client.roomId = 7;
++  const envelopes = []; client.onEnvelope(e => envelopes.push(e));
++  return {client, envelopes, storage};
++}
++function outcome(batch, key = 9) {
++  return JSON.stringify({type:"CommandOutcome",payload:{header:{protocol_version:6,room_id:7,conn_seq:9,revision:2}, idempotency_key:key,
++    result:{Accepted:{new_revision:2,state_hash:Array(32).fill(0)}},view:presentationView(),choice:null,legal_actions:[],public_event_codes:[3],presentation:batch}});
++}
++
++test("actual frozen Main5fc TS network and desktop readers accept the optional response", async t => {
++  const {NetworkEngineClient: OldClient} = await frozenReader("networkClient");
++  const f=network(t,OldClient); f.client.handleMessage(outcome(presentationBatch()));
++  assert.equal(f.envelopes.length,1); assert.equal(f.envelopes[0].presentation,undefined);
++  const {DesktopEngineTransport: OldDesktop} = await frozenReader("desktopEngineTransport");
++  const old = new OldDesktop(async command => command === "native_engine_open" ? 1 : {id:1,ok:true,data:presentationEnvelope()});
++  const response = await new Promise(resolve => {old.onmessage=({data})=>resolve(data);old.postMessage({id:1,type:"autoStep"});});
++  assert.equal(response.ok,true); assert.deepEqual(response.data.presentation,presentationBatch());old.terminate();
++});
++
++test("new parser accepts all seven events and legacy absence without altering autoStep strings", t => {
++  assert.equal(presentationMetadata(undefined,2,2),undefined);
++  assert.deepEqual(presentationMetadata(presentationBatch(),2,2),presentationBatch());
++  const f=network(t);f.client.handleMessage(outcome(presentationBatch()));
++  assert.deepEqual(f.envelopes[0].presentation,presentationBatch());
++  const env=presentationEnvelope();env.result={kind:"answer",outcome:'{"outcome":"accepted","revision":2}'};
++  const before=JSON.stringify(env.result);validatePresentationResponse(env);assert.equal(JSON.stringify(env.result),before);
++  delete env.presentation;validatePresentationResponse(env);assert.equal(Object.hasOwn(env,"presentation"),false);
++});
++
++for (const {name,batch} of invalidPresentationBatches()) {
++  test(`bad present ${name} is atomic in actual network/store ingress and IPC pass-through`, async t => {
++    const f=network(t); const errors=[]; const unrelated=[];
++    const pending={resolve(){throw new Error("must not ACK");},reject:e=>errors.push(e)};
++    const other={resolve(){},reject:e=>unrelated.push(e)};
++    f.client.pending.set(9,pending); f.client.pending.set(10,other);
++    const persisted={roomId:7,key:9,kind:"EndPhase",createdAt:1}; f.client.persistedPending=persisted;
++    const beforePending=[...f.client.pending];const beforeChoice=f.client.choice;
++    f.storage.set("noname-next.pending-command",JSON.stringify(persisted));const beforeStorage=[...f.storage];
++    f.client.handleMessage(outcome(batch));
++    assert.equal(f.client.revision,1);assert.equal(f.client.choice,beforeChoice);assert.deepEqual([...f.client.pending],beforePending);
++    assert.deepEqual([...f.storage],beforeStorage);assert.equal(f.client.persistedPending,persisted);assert.equal(f.envelopes.length,0);assert.equal(errors.length,1);assert.equal(unrelated.length,0);
++    assert.match(errors[0].message,/结果未确认/);
++    const store=createViewStore();const before=JSON.stringify(store);
++    assert.throws(()=>applyEnvelope(store,presentationEnvelope(batch)),/presentation metadata invalid/);assert.equal(JSON.stringify(store),before);
++    for (const nested of [false,true]) {
++      const envelope=presentationEnvelope(batch);
++      const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
++      const desktop=new DesktopEngineTransport(async command=>command==="native_engine_open"?1:{id:1,ok:true,data});
++      const reply=await new Promise(resolve=>{desktop.onmessage=({data})=>resolve(data);desktop.postMessage({id:1,type:nested?"chooseGeneral":"autoStep",seat:0,name:"liubei"});});
++      assert.equal(reply.ok,true);
++      assert.throws(()=>validatePresentationResponse(reply.data),/presentation metadata invalid/);
++      desktop.terminate();
++    }
++    f.client.dispose();assert.equal(f.client.pending.size,0);
++  });
++}
++
++test("unmatched malformed broadcast does not reject another call or mutate receipt storage", t => {
++  const f=network(t);let rejected=0;f.client.pending.set(10,{resolve(){},reject(){rejected++;}});
++  const old=console.error;const reports=[];console.error=e=>reports.push(e);t.after(()=>{console.error=old;});
++  f.client.handleMessage(outcome(null,0));assert.equal(rejected,0);assert.equal(f.client.pending.size,1);assert.equal(f.client.revision,1);assert.equal(reports.length,1);
++});
++
++test("bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches", () => {
++  assert.throws(()=>presentationMetadata(null,2,2));
++  const b=presentationBatch();b.occurrences=Array.from({length:1025},(_,ordinal)=>({ordinal,event:{kind:"hp_recovered",actor:1,amount:1}}));assert.throws(()=>presentationMetadata(b,2,2));
++  const big=presentationBatch();const voice=big.occurrences[0].event.voice;big.occurrences=Array.from({length:90},(_,ordinal)=>({ordinal,event:{kind:"player_died",actor:1,killer:null,voice}}));assert.throws(()=>presentationMetadata(big,2,2));
++  const p=presentationBatch();const role=p.occurrences[0].event.voice.role;
++  const owner={kind:"package",namespace:"author",package_id:"voice",version:"1.0.0",logic_hash:"4".repeat(64),content_hash:"5".repeat(64)};
++  role.owner=owner;role.local_id=42;presentationMetadata(p,2,2);
++  role.local_id={pack:"standard",raw_symbol:"liubei"};assert.throws(()=>presentationMetadata(p,2,2));
++});
++
++test("new metadata keeps the existing WS256KiB limit before receipt mutation", t => {
++  const f=network(t);const errors=[];const pending={resolve(){},reject:e=>errors.push(e)};f.client.pending.set(9,pending);
++  const message=JSON.parse(outcome(presentationBatch()));message.payload.padding="x".repeat(256*1024);
++  f.client.handleMessage(JSON.stringify(message));assert.equal(errors.length,1);assert.equal(f.client.pending.get(9),pending);assert.equal(f.client.revision,1);assert.equal(f.envelopes.length,0);
++});
++
++test("compat m4a and zero SDK general/skill ids retain concrete leaf semantics", () => {
++  const b=presentationBatch();const a=b.occurrences[0].event.voice.assets[0];
++  a.reference={kind:"original",path:"audio-declared/key/role/die/mugyu.m4a",source_category:"compat",source_path:"audio/skill/mugyu.m4a"};
++  presentationMetadata(b,2,2);
++  const role=b.occurrences[0].event.voice.role;role.owner={kind:"package",namespace:"author",package_id:"voice",version:"1",logic_hash:"1".repeat(64),content_hash:"2".repeat(64)};role.local_id=0;
++  presentationMetadata(b,2,2);
++  const reversed=Object.fromEntries(Object.entries(a).reverse());b.occurrences[0].event.voice.assets.push(reversed);
++  assert.throws(()=>presentationMetadata(b,2,2));
++});
++
++test("malformed conn_seq0 broadcast with a colliding key cannot reject a pending call", t => {
++  const f=network(t);let rejected=0;f.client.pending.set(9,{resolve(){},reject(){rejected++;}});
++  const message=JSON.parse(outcome(null,9));message.payload.header.conn_seq=0;
++  const old=console.error;console.error=()=>{};t.after(()=>{console.error=old;});
++  f.client.handleMessage(JSON.stringify(message));assert.equal(rejected,0);assert.equal(f.client.pending.size,1);assert.equal(f.client.revision,1);
++});
++
++test("network sequential malformed outcomes retain at most eight original intents and replay no fresh keys", async t => {
++  const f=network(t);f.client.playerId=1;f.client.connectionId=4;
++  const sent=[];f.client.send=message=>sent.push(message);
++  for(let i=0;i<8;i++) {
++    const promise=f.client.endPhase();const request=sent.at(-1);
++    const rejected=assert.rejects(promise,/结果未确认/);
++    f.client.handleMessage(outcome(null,request.payload.idempotency_key));await rejected;
++  }
++  const pending=[...f.client.pending];const storage=[...f.storage];const idem=f.client.idemSeq;const seq=f.client.connSeq;
++  const ninth=f.client.endPhase();const rejected=assert.rejects(ninth,/not submitted|未提交/);
++  if (sent.length>8) { // Bound the old broken implementation's otherwise unresolved promise for red evidence.
++    const request=sent.at(-1);f.client.handleMessage(outcome(null,request.payload.idempotency_key));
++  }
++  await rejected;
++  assert.deepEqual([...f.client.pending],pending);assert.deepEqual([...f.storage],storage);
++  assert.equal(f.client.idemSeq,idem);assert.equal(f.client.connSeq,seq);assert.equal(sent.length,8);
++  const keys=pending.map(([key])=>key);f.client.replayPending();
++  assert.equal(f.client.pending.size,8);assert.deepEqual(sent.slice(8).map(m=>m.payload.idempotency_key),keys);
++  assert.ok(sent.slice(8).every(m=>m.payload.replay));assert.equal(f.client.idemSeq,idem);
++  f.client.dispose();assert.equal(f.client.pending.size,0);
++});
++
++test("network full retained map cannot admit a missing persisted recovery entry", t => {
++  const f=network(t);f.client.playerId=1;const sent=[];f.client.send=message=>sent.push(message);
++  for(let i=1;i<=8;i++) f.client.pending.set(i,{key:i,kind:"EndPhase",resolve(){},reject(){}});
++  const persisted={roomId:7,key:99,kind:"EndPhase",createdAt:1};f.client.persistedPending=persisted;
++  f.storage.set("noname-next.pending-command",JSON.stringify(persisted));const storage=[...f.storage];
++  f.client.replayPending();assert.equal(f.client.pending.size,8);
++  assert.deepEqual(sent.map(m=>m.payload.idempotency_key),[1,2,3,4,5,6,7,8]);
++  assert.deepEqual([...f.storage],storage);assert.equal(f.client.persistedPending,persisted);
++});
++
++test("network legacy successful absence releases capacity and creation does not allocate an intent", async t => {
++  const f=network(t);f.client.playerId=1;f.client.connectionId=5;const sent=[];f.client.send=m=>sent.push(m);
++  const calls=Array.from({length:8},()=>f.client.endPhase());
++  calls.forEach(p=>p.catch(()=>{})); // Observe earlier calls even if the capacity assertion fails.
++  const rejected=assert.rejects(f.client.endPhase(),/未提交/);
++  if(sent.length>8) {const m=sent.at(-1);f.client.handleMessage(outcome(null,m.payload.idempotency_key));}
++  await rejected;
++  for(const request of sent.slice(0,8)) {const message=JSON.parse(outcome(undefined,request.payload.idempotency_key));delete message.payload.presentation;f.client.handleMessage(JSON.stringify(message));}
++  await Promise.all(calls);assert.equal(f.client.pending.size,0);
++  const idem=f.client.idemSeq;const joined=f.client.createRoom(2,1);assert.equal(f.client.pending.size,0);assert.equal(f.client.idemSeq,idem);
++  assert.equal(sent.at(-1).type,"CreateRoom");f.client.joinWaiter.resolve({roomId:7});f.client.joinWaiter=null;await joined;
++});
+diff --git a/apps/web-client/src/engine/presentationMetadata.ts b/apps/web-client/src/engine/presentationMetadata.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/src/engine/presentationMetadata.ts
+@@ -0,0 +1,105 @@
++import type { PublicPresentationBatch } from "../types/presentation";
++
++function check(ok: unknown): asserts ok { if (!ok) throw new Error("native: public presentation metadata invalid"); }
++function object(v: unknown, keys: string[]): Record<string, any> {
++  check(v && typeof v === "object" && !Array.isArray(v));
++  const o = v as Record<string, any>;
++  check(Object.keys(o).length === keys.length && keys.every(k => Object.hasOwn(o, k)));
++  return o;
++}
++function integer(v: unknown, max = 0xffffffff, min = 0): v is number { return typeof v === "number" && Number.isSafeInteger(v) && v >= min && v <= max; }
++function token(v: unknown): v is string { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && v !== "." && v !== ".." && !/[\\/%?#:\u0000-\u001f\u007f-\u009f]/u.test(v); }
++function path(v: unknown): v is string { return typeof v === "string" && new TextEncoder().encode(v).length <= 256 && v.split("/").every(token); }
++function hex(v: unknown, n = 64): boolean { return typeof v === "string" && v.length === n && /^[a-f0-9]+$/.test(v); }
++function repository(v: unknown): boolean { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && !/[\s\\\u0000-\u001f\u007f-\u009f]/u.test(v); }
++function owner(v: unknown): void {
++  const kind = (v as any)?.kind;
++  if (kind === "package") {
++    const o = object(v, ["kind", "namespace", "package_id", "version", "logic_hash", "content_hash"]);
++    check(token(o.namespace) && token(o.package_id) && token(o.version) && hex(o.logic_hash) && hex(o.content_hash));
++  } else {
++    const o = object(v, ["kind", "repository", "adopted_revision", "catalog_sha256", "asset_manifest_sha256"]);
++    check(kind === "original" && repository(o.repository) && hex(o.adopted_revision, 40) && hex(o.catalog_sha256) && hex(o.asset_manifest_sha256));
++  }
++}
++function definition(v: unknown, kind: string): void {
++  const o = object(v, ["owner", "kind", "local_id"]); owner(o.owner); check(o.kind === kind);
++  if (o.owner.kind === "package") check(integer(o.local_id, 0xffffffff, kind === "card" ? 1 : 0));
++  else { const id = object(o.local_id, ["pack", "raw_symbol"]); check(token(id.pack) && token(id.raw_symbol)); }
++}
++function asset(v: unknown): void {
++  const o = object(v, ["source", "reference", "digest_algorithm", "digest", "size"]); owner(o.source);
++  check(hex(o.digest) && integer(o.size, Number.MAX_SAFE_INTEGER, 1));
++  if (o.source.kind === "package") {
++    const ref = object(o.reference, ["kind", "namespace", "package_id", "asset_id"]);
++    check(ref.kind === "package" && ref.namespace === o.source.namespace && ref.package_id === o.source.package_id && token(ref.asset_id) && o.digest_algorithm === "blake3");
++  } else {
++    const ref = object(o.reference, ["kind", "path", "source_category", "source_path"]);
++    check(ref.kind === "original" && path(ref.path) && (ref.path.startsWith("audio-declared/") || ref.path.startsWith("audio/") || ref.path.startsWith("audio-compat/")) && path(ref.source_path) && ref.source_path.startsWith("audio/") && ["core", "compat"].includes(ref.source_category) && o.digest_algorithm === "sha256");
++  }
++}
++function voice(v: unknown): void {
++  if (v === null) return;
++  const o = object(v, ["role", "form", "assets"]); definition(o.role, "general");
++  check(o.form === null || token(o.form));
++  check(Array.isArray(o.assets) && o.assets.length > 0 && o.assets.length <= 1024);
++  o.assets.forEach(asset);
++  const keys = o.assets.map((a: any) => JSON.stringify([
++    a.source.kind, a.source.namespace, a.source.package_id, a.source.version, a.source.logic_hash, a.source.content_hash,
++    a.source.repository, a.source.adopted_revision, a.source.catalog_sha256, a.source.asset_manifest_sha256,
++    a.reference.kind, a.reference.namespace, a.reference.package_id, a.reference.asset_id, a.reference.path,
++    a.reference.source_category, a.reference.source_path, a.digest_algorithm, a.digest, a.size,
++  ]));
++  check(new Set(keys).size === o.assets.length);
++}
++const NATURES = ["normal", "fire", "thunder"];
++function effective(v: unknown): void { const o = object(v, ["kind", "key", "nature"]); check(CARD_KINDS.includes(o.kind) && token(o.key) && NATURES.includes(o.nature)); }
++function event(v: unknown, players: number): void {
++  const kind = (v as any)?.kind;
++  const fields: Record<string, string[]> = {
++    card_used: ["actor", "targets", "effective", "voice"], card_responded: ["actor", "effective", "voice"],
++    skill_activated: ["actor", "skill", "targets", "voice"], damage_dealt: ["source", "target", "amount", "nature"],
++    damage_prevented: ["source", "target", "nature"], hp_recovered: ["actor", "amount"], player_died: ["actor", "killer", "voice"],
++  };
++  check(typeof kind === "string" && Object.hasOwn(fields, kind)); const o = object(v, ["kind", ...fields[kind]]);
++  for (const key of ["actor", "target"]) if (Object.hasOwn(o, key)) check(integer(o[key], players, 1));
++  for (const key of ["source", "killer"]) if (Object.hasOwn(o, key)) check(o[key] === null || integer(o[key], players, 1));
++  if (Object.hasOwn(o, "amount")) check(integer(o.amount, 0xffffffff, 1));
++  if (Object.hasOwn(o, "nature")) check(NATURES.includes(o.nature));
++  if (Object.hasOwn(o, "voice")) voice(o.voice);
++  if (Object.hasOwn(o, "effective")) effective(o.effective);
++  if (Object.hasOwn(o, "targets") && o.targets !== null) check(Array.isArray(o.targets) && o.targets.length <= 16 && o.targets.every((p: unknown) => integer(p, players, 1)) && new Set(o.targets).size === o.targets.length);
++  if (Object.hasOwn(o, "skill")) definition(object(o.skill, ["definition"]).definition, "skill");
++}
++
++/** Absent is legacy compatible; present data is validated before any recipient mutation. */
++export function presentationMetadata(value: unknown, revision: number, players: number): PublicPresentationBatch | undefined {
++  if (value === undefined) return undefined;
++  const o = object(value, ["revision", "status", "unavailable", "occurrences"]);
++  check(integer(o.revision, Number.MAX_SAFE_INTEGER) && o.revision === revision && ["complete", "incomplete", "overflow"].includes(o.status));
++  check(new TextEncoder().encode(JSON.stringify(value)).length <= 65536);
++  check(Array.isArray(o.unavailable) && o.unavailable.length <= 28);
++  for (const item of o.unavailable) {
++    const scope = object(item, ["domain", "reason"]);
++    check(["card_use", "card_response", "skill_activation", "damage", "recovery", "death", "voice_identity"].includes(scope.domain));
++    check(["source_no_audio_discriminator", "commit_boundary_unproved", "verified_binding_missing", "public_binding_unavailable"].includes(scope.reason));
++  }
++  check(new Set(o.unavailable.map((v: any) => `${v.domain}:${v.reason}`)).size === o.unavailable.length);
++  check(o.status !== "complete" || o.unavailable.length === 0);
++  check(Array.isArray(o.occurrences) && o.occurrences.length <= 1024 && (o.status !== "overflow" || o.occurrences.length === 0));
++  o.occurrences.forEach((item: unknown, index: number) => { const entry = object(item, ["ordinal", "event"]); check(entry.ordinal === index); event(entry.event, players); });
++  return value as PublicPresentationBatch;
++}
++
++/** Validate only actual envelope response locations, including nested chooseGeneral. */
++export function validatePresentationResponse(value: unknown): void {
++  if (!value || typeof value !== "object") return;
++  const o = value as Record<string, any>;
++  if (Object.hasOwn(o, "presentation")) {
++    check(o.presentation !== undefined && o.view && Array.isArray(o.view.seats));
++    check(o.revision === undefined || o.revision === o.view.revision);
++    presentationMetadata(o.presentation, o.revision ?? o.view.revision, o.view.seats.length);
++  }
++  if (Object.hasOwn(o, "envelope")) validatePresentationResponse(o.envelope);
++}
++const CARD_KINDS: string[] = ["sha", "shan", "tao", "horse_plus", "horse_minus", "weapon", "armor", "huosha", "tiesuo", "nanman", "wanjian", "juedou", "wuxie", "lebu", "bingliang", "shandian", "guohe", "shunshou", "jiu", "leisha", "shoulijian", "wuxingpan", "wangmeizhike", "sanjian", "shuigong", "fudichouxin", "chenhuodajie", "suolianjia", "hongshui", "toulianghuanzhu", "linghunzhihuo", "zhaomingdan", "jihuocard", "youdishenru", "geanguanhuo", "caochuanjiejian", "shezhanqunru", "shujinsan", "mianlijinzhen", "feibiao", "jinlianzhu", "tanhuadong", "yougeng", "qingtuan", "yuanbaorou", "gudonggeng", "mapodoufu", "chunbing", "liyutang", "molicha", "xiajiao", "mizhilianou", "luyugeng", "bingpotong", "qiankunbiao", "longxugou", "shenhuofeiya", "ziyangdan", "yunvyuanshen", "shihuifen", "liufengsan", "shatang", "heilonglinpian", "liutouge", "mutoumianju", "dinvxuanshuang", "gjyuheng", "dunpaigedang", "zhiliaobo", "yuansuhuimie", "xingjiegoutong", "chuansongmen", "tanshezhiren", "shijieshu", "yanziyaoshui", "aozuzhilei", "wenyi", "zhihuanjun", "baoxueyaoshui", "qinpendayu", "birinongwu", "ciguhanshuang", "kunenfayin", "shanbengshu", "poxiao", "zumoshoukao", "monkey", "xuelunyang", "mianju", "jiuwei", "wuzhong", "taoyuan", "wugu", "jiedao", "renwang", "qinggang", "xuanyuanjian", "qilin", "hanbing", "zhuge", "guanshi", "qinglong", "zhangba", "cixiong", "fangtian", "hufu", "liuxinghuoyu", "caoyao", "chilongya", "tianxianjiu", "xixueguizhihuan", "guiyoujie", "shentoumianju", "xingjunyan", "qinglonglingzhu", "zhufangshenshi", "fengxueren", "yufulu", "yangpijuan", "daihuofenglun", "xiayuncailing", "langeguaiyi", "longlushanfeng", "haidao", "shuimomuxue", "feixu", "yixialan", "shamolvzhou", "linzhongjianta", "bingheyaosai", "youlin", "lindixiliu", "dizaizhen", "jiguan", "xuejibingbao", "shenmiguo", "fengyinzhidan", "lianyaohu", "qiankundai", "shennongding", "nvwashi", "kunlunjingc", "donghuangzhong", "kongdongyin", "jingleishan", "chiyuxi", "guisheqi", "xianluhui", "guilingzhitao", "sifeizhenmian", "shuchui", "sadengjinhuan", "haotianta", "yuruyi", "yuchanqian", "yuchankun", "yuchanzhen", "yuchanxun", "yuchankan", "yuchanli", "yuchangen", "yuchandui", "shencaojie", "qinglongzhigui", "zhuquezhizhang", "baishouzhihu", "xuanwuzhihuang", "huanglinzhicong", "hslingjian", "tianfuzhen", "qixingzhen", "niaoxiangzhen", "changshezhen", "pozhenjue"];
+diff --git a/apps/web-client/src/types/presentation.ts b/apps/web-client/src/types/presentation.ts
+new file mode 100644
+--- /dev/null
++++ b/apps/web-client/src/types/presentation.ts
+@@ -0,0 +1,30 @@
++/** Frozen leaf data; producer disclosure and resource membership are separate responsibilities. */
++export type FrozenOwnerKey =
++  | { kind: "package"; namespace: string; package_id: string; version: string; logic_hash: string; content_hash: string }
++  | { kind: "original"; repository: string; adopted_revision: string; catalog_sha256: string; asset_manifest_sha256: string };
++export type QualifiedDefinitionKey =
++  | { owner: Extract<FrozenOwnerKey, {kind: "package"}>; kind: "general" | "skill" | "card"; local_id: number }
++  | { owner: Extract<FrozenOwnerKey, {kind: "original"}>; kind: "general" | "skill" | "card"; local_id: {pack: string; raw_symbol: string} };
++export type BoundAudioAsset = {
++  source: FrozenOwnerKey;
++  reference: {kind: "package"; namespace: string; package_id: string; asset_id: string}
++    | {kind: "original"; path: string; source_category: "core" | "compat"; source_path: string};
++  digest_algorithm: "sha256" | "blake3"; digest: string; size: number;
++};
++export type PublicVoice = { role: QualifiedDefinitionKey; form: string | null; assets: BoundAudioAsset[] };
++export type PresentationNature = "normal" | "fire" | "thunder";
++export type EffectivePresentationCard = {kind: string; key: string; nature: PresentationNature};
++export type PublicPresentationEvent =
++  | {kind: "card_used"; actor: number; targets: number[] | null; effective: EffectivePresentationCard; voice: PublicVoice | null}
++  | {kind: "card_responded"; actor: number; effective: EffectivePresentationCard; voice: PublicVoice | null}
++  | {kind: "skill_activated"; actor: number; skill: {definition: QualifiedDefinitionKey}; targets: number[] | null; voice: PublicVoice | null}
++  | {kind: "damage_dealt"; source: number | null; target: number; amount: number; nature: PresentationNature}
++  | {kind: "damage_prevented"; source: number | null; target: number; nature: PresentationNature}
++  | {kind: "hp_recovered"; actor: number; amount: number}
++  | {kind: "player_died"; actor: number; killer: number | null; voice: PublicVoice | null};
++export type PresentationDomain = "card_use" | "card_response" | "skill_activation" | "damage" | "recovery" | "death" | "voice_identity";
++export type PublicPresentationBatch = {
++  revision: number; status: "complete" | "incomplete" | "overflow";
++  unavailable: {domain: PresentationDomain; reason: "source_no_audio_discriminator" | "commit_boundary_unproved" | "verified_binding_missing" | "public_binding_unavailable"}[];
++  occurrences: {ordinal: number; event: PublicPresentationEvent}[];
++};
+diff --git a/crates/engine-api/src/presentation.rs b/crates/engine-api/src/presentation.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-api/src/presentation.rs
+@@ -0,0 +1,382 @@
++//! Optional public presentation data. Structure is not proof of producer disclosure authority.
++use crate::PlayerId;
++use serde::{Deserialize, Deserializer, Serialize};
++
++/// Maximum committed public occurrences in one batch.
++pub const MAX_PRESENTATION_OCCURRENCES: usize = 1024;
++/// Maximum encoded batch size at transport boundaries.
++pub const MAX_PRESENTATION_BYTES: usize = 64 * 1024;
++/// Largest integer exactly representable by every supported JSON consumer.
++pub const MAX_PRESENTATION_REVISION: u64 = 9_007_199_254_740_991;
++
++/// An exact frozen resource owner, without granting runtime authority.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
++pub enum FrozenOwnerKey {
++    /// Existing LockedPackage identity fields.
++    Package {
++        /// Package namespace.
++        namespace: String,
++        /// Package slot.
++        package_id: String,
++        /// Exact installed version.
++        version: String,
++        /// BLAKE3 semantic hash.
++        logic_hash: String,
++        /// BLAKE3 original package byte hash.
++        content_hash: String,
++    },
++    /// Pins for imported original presentation inputs.
++    Original {
++        /// Explicit repository identifier.
++        repository: String,
++        /// Adopted source commit.
++        adopted_revision: String,
++        /// SHA256 of the frozen catalog bytes.
++        catalog_sha256: String,
++        /// SHA256 of the frozen manifest bytes.
++        asset_manifest_sha256: String,
++    },
++}
++
++/// Genuine definition category.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum PresentationDefinitionKind {
++    /// General definition.
++    General,
++    /// Skill definition.
++    Skill,
++    /// Card definition.
++    Card,
++}
++
++/// An original source symbol, never a translated name.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct OriginalDefinitionKey {
++    /// Source pack.
++    pub pack: String,
++    /// Raw source symbol.
++    pub raw_symbol: String,
++}
++
++/// Package-local numeric identity or explicit original source symbol.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(untagged)]
++pub enum PresentationLocalId {
++    /// Existing SDK definition id; zero rules follow the definition category.
++    Package(u32),
++    /// Exact imported symbol, valid only with an original owner.
++    Original(OriginalDefinitionKey),
++}
++
++/// Qualified definition identity; numeric runtime indexes are not resource bindings.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct QualifiedDefinitionKey {
++    /// Frozen owner.
++    pub owner: FrozenOwnerKey,
++    /// Definition category.
++    pub kind: PresentationDefinitionKind,
++    /// Local id whose representation must match the owner.
++    pub local_id: PresentationLocalId,
++}
++
++/// Exact existing asset reference shape, selected by source category.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
++pub enum PresentationAssetRef {
++    /// Existing ActiveAssetRef fields.
++    Package {
++        /// Namespace owning the asset.
++        namespace: String,
++        /// Package owning the asset.
++        package_id: String,
++        /// Package-local asset id.
++        asset_id: String,
++    },
++    /// Existing original alias/backing reference.
++    Original {
++        /// Canonical manifest path.
++        path: String,
++        /// Core or verified compatibility backing.
++        source_category: OriginalAudioCategory,
++        /// Source-relative backing path.
++        source_path: String,
++    },
++}
++
++/// Existing original audio backing categories.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum OriginalAudioCategory {
++    /// Canonical original payload.
++    Core,
++    /// Verified compatibility derivative.
++    Compat,
++}
++
++/// Payload digest algorithm, not the aggregate asset hash.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "lowercase")]
++pub enum PresentationDigestAlgorithm {
++    /// Original payload digest.
++    Sha256,
++    /// Package manifest payload digest.
++    Blake3,
++}
++
++/// A frozen audio payload; membership is checked by the future verified resolver.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct BoundAudioAsset {
++    /// Explicit frozen source (including dependency assets).
++    pub source: FrozenOwnerKey,
++    /// Exact resource reference.
++    pub reference: PresentationAssetRef,
++    /// Payload hash algorithm.
++    pub digest_algorithm: PresentationDigestAlgorithm,
++    /// Lowercase hexadecimal payload digest.
++    pub digest: String,
++    /// Positive payload byte length.
++    pub size: u64,
++}
++
++/// Public occurrence-time speaker declaration, not a cryptographic certificate.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct PublicVoice {
++    /// Qualified genuine general definition.
++    pub role: QualifiedDefinitionKey,
++    /// Public form, or explicit null for the base role.
++    #[serde(deserialize_with = "required_nullable")]
++    pub form: Option<String>,
++    /// Ordered payload candidates.
++    pub assets: Vec<BoundAudioAsset>,
++}
++
++/// Actual effective card identity after validation and view-as conversion.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct EffectivePresentationCard {
++    /// Existing CardKind key, distinct from physical name and audio basename.
++    pub kind: String,
++    /// Committed public use name.
++    pub key: String,
++    /// Actual damage nature.
++    pub nature: PresentationNature,
++}
++
++/// Public modeled card/damage natures.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum PresentationNature {
++    /// Normal.
++    Normal,
++    /// Fire.
++    Fire,
++    /// Thunder.
++    Thunder,
++}
++
++/// Committed skill identity, without a prompt/source_skill shortcut.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct PublicPresentationSkill {
++    /// Qualified skill definition.
++    pub definition: QualifiedDefinitionKey,
++}
++
++/// Seven public committed occurrence types; producers are not implemented by these DTOs.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "kind", rename_all = "snake_case", deny_unknown_fields)]
++pub enum PublicPresentationEvent {
++    /// An effective card was used.
++    CardUsed {
++        /// API player id (one based).
++        actor: PlayerId,
++        /// Public targets, or explicit null when unavailable.
++        #[serde(deserialize_with = "required_nullable")]
++        targets: Option<Vec<PlayerId>>,
++        /// Effective card.
++        effective: EffectivePresentationCard,
++        /// Public speaker or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        voice: Option<PublicVoice>,
++    },
++    /// An effective card was responded.
++    CardResponded {
++        /// API player id.
++        actor: PlayerId,
++        /// Effective response.
++        effective: EffectivePresentationCard,
++        /// Public speaker or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        voice: Option<PublicVoice>,
++    },
++    /// A genuine skill activation committed.
++    SkillActivated {
++        /// API player id.
++        actor: PlayerId,
++        /// Genuine qualified skill.
++        skill: PublicPresentationSkill,
++        /// Public targets or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        targets: Option<Vec<PlayerId>>,
++        /// Public speaker or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        voice: Option<PublicVoice>,
++    },
++    /// Actual positive damage dealt.
++    DamageDealt {
++        /// Public source or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        source: Option<PlayerId>,
++        /// API target id.
++        target: PlayerId,
++        /// Actual positive amount.
++        amount: u32,
++        /// Final nature.
++        nature: PresentationNature,
++    },
++    /// Damage was prevented.
++    DamagePrevented {
++        /// Public source or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        source: Option<PlayerId>,
++        /// API target id.
++        target: PlayerId,
++        /// Final nature.
++        nature: PresentationNature,
++    },
++    /// Actual positive HP recovered.
++    HpRecovered {
++        /// API player id.
++        actor: PlayerId,
++        /// Actual positive amount.
++        amount: u32,
++    },
++    /// A genuine death committed.
++    PlayerDied {
++        /// API player id.
++        actor: PlayerId,
++        /// Public killer or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        killer: Option<PlayerId>,
++        /// Public speaker or explicit null.
++        #[serde(deserialize_with = "required_nullable")]
++        voice: Option<PublicVoice>,
++    },
++}
++
++/// Stable public ordinal within a committed revision.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct PublicOccurrence {
++    /// Zero-based contiguous ordinal; never a private log offset.
++    pub ordinal: u32,
++    /// Typed public occurrence.
++    pub event: PublicPresentationEvent,
++}
++
++/// Public static capability domain.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum PresentationDomain {
++    /// Card use.
++    CardUse,
++    /// Response.
++    CardResponse,
++    /// Genuine activation.
++    SkillActivation,
++    /// Damage.
++    Damage,
++    /// Recovery.
++    Recovery,
++    /// Death.
++    Death,
++    /// Voice binding.
++    VoiceIdentity,
++}
++
++/// Static public capability gap, never derived from a hidden occurrence.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum PresentationUnavailableReason {
++    /// Source has no proven discriminator.
++    SourceNoAudioDiscriminator,
++    /// True commitment boundary is unproved.
++    CommitBoundaryUnproved,
++    /// Verified qualified binding is absent.
++    VerifiedBindingMissing,
++    /// Public binding support is absent.
++    PublicBindingUnavailable,
++}
++
++/// A public static capability gap.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(deny_unknown_fields)]
++pub struct UnavailablePresentationScope {
++    /// Capability domain.
++    pub domain: PresentationDomain,
++    /// Public static reason.
++    pub reason: PresentationUnavailableReason,
++}
++
++/// Completeness of public presentation metadata.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(rename_all = "snake_case")]
++pub enum PresentationStatus {
++    /// All supported public occurrences included.
++    Complete,
++    /// Public static capability/history gap.
++    Incomplete,
++    /// Public metadata overflow, with no partial occurrences.
++    Overflow,
++}
++
++/// Optional metadata, validated atomically before transport state changes.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(try_from = "RawPublicPresentationBatch")]
++pub struct PublicPresentationBatch {
++    /// Existing committed revision.
++    pub revision: u64,
++    /// Public completeness status.
++    pub status: PresentationStatus,
++    /// Public static capability gaps.
++    pub unavailable: Vec<UnavailablePresentationScope>,
++    /// Ordered public occurrences.
++    pub occurrences: Vec<PublicOccurrence>,
++}
++
++#[derive(Deserialize)]
++#[serde(deny_unknown_fields)]
++struct RawPublicPresentationBatch {
++    revision: u64,
++    status: PresentationStatus,
++    unavailable: Vec<UnavailablePresentationScope>,
++    occurrences: Vec<PublicOccurrence>,
++}
++
++fn required_nullable<'de, D: Deserializer<'de>, T: Deserialize<'de>>(
++    d: D,
++) -> Result<Option<T>, D::Error> {
++    Option::<T>::deserialize(d)
++}
++
++impl TryFrom<RawPublicPresentationBatch> for PublicPresentationBatch {
++    type Error = String;
++    fn try_from(raw: RawPublicPresentationBatch) -> Result<Self, Self::Error> {
++        let batch = Self {
++            revision: raw.revision,
++            status: raw.status,
++            unavailable: raw.unavailable,
++            occurrences: raw.occurrences,
++        };
++        batch.validate()?;
++        Ok(batch)
++    }
++}
++
++mod validation;
+diff --git a/crates/engine-api/src/presentation/validation.rs b/crates/engine-api/src/presentation/validation.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-api/src/presentation/validation.rs
+@@ -0,0 +1,392 @@
++use super::*;
++
++fn require(ok: bool) -> Result<(), String> {
++    ok.then_some(())
++        .ok_or_else(|| "invalid public presentation metadata".into())
++}
++fn token(s: &str) -> bool {
++    !s.is_empty()
++        && s.len() <= 256
++        && s != "."
++        && s != ".."
++        && !s.chars().any(|c| c.is_control() || "/\\%?#:".contains(c))
++}
++fn path(s: &str) -> bool {
++    !s.is_empty() && s.len() <= 256 && s.split('/').all(token)
++}
++fn hex(s: &str, len: usize) -> bool {
++    s.len() == len
++        && s.bytes()
++            .all(|b| b.is_ascii_digit() || (b'a'..=b'f').contains(&b))
++}
++fn repository(s: &str) -> bool {
++    !s.is_empty()
++        && s.len() <= 256
++        && !s
++            .chars()
++            .any(|c| c.is_control() || c.is_whitespace() || c == '\\')
++}
++fn owner(v: &FrozenOwnerKey) -> bool {
++    match v {
++        FrozenOwnerKey::Package {
++            namespace,
++            package_id,
++            version,
++            logic_hash,
++            content_hash,
++        } => {
++            token(namespace)
++                && token(package_id)
++                && token(version)
++                && hex(logic_hash, 64)
++                && hex(content_hash, 64)
++        }
++        FrozenOwnerKey::Original {
++            repository,
++            adopted_revision,
++            catalog_sha256,
++            asset_manifest_sha256,
++        } => {
++            self::repository(repository)
++                && hex(adopted_revision, 40)
++                && hex(catalog_sha256, 64)
++                && hex(asset_manifest_sha256, 64)
++        }
++    }
++}
++fn definition(v: &QualifiedDefinitionKey, kind: PresentationDefinitionKind) -> bool {
++    owner(&v.owner)
++        && v.kind == kind
++        && match (&v.owner, &v.local_id) {
++            (FrozenOwnerKey::Package { .. }, PresentationLocalId::Package(id)) => {
++                kind != PresentationDefinitionKind::Card || *id > 0
++            }
++            (FrozenOwnerKey::Original { .. }, PresentationLocalId::Original(id)) => {
++                token(&id.pack) && token(&id.raw_symbol)
++            }
++            _ => false,
++        }
++}
++fn asset(v: &BoundAudioAsset) -> bool {
++    owner(&v.source)
++        && hex(&v.digest, 64)
++        && v.size > 0
++        && v.size <= MAX_PRESENTATION_REVISION
++        && match (&v.source, &v.reference) {
++            (
++                FrozenOwnerKey::Package {
++                    namespace: ns,
++                    package_id: pid,
++                    ..
++                },
++                PresentationAssetRef::Package {
++                    namespace,
++                    package_id,
++                    asset_id,
++                },
++            ) => {
++                ns == namespace
++                    && pid == package_id
++                    && token(asset_id)
++                    && v.digest_algorithm == PresentationDigestAlgorithm::Blake3
++            }
++            (
++                FrozenOwnerKey::Original { .. },
++                PresentationAssetRef::Original {
++                    path: p,
++                    source_path,
++                    ..
++                },
++            ) => {
++                path(p)
++                    && path(source_path)
++                    && (p.starts_with("audio-declared/")
++                        || p.starts_with("audio/")
++                        || p.starts_with("audio-compat/"))
++                    && source_path.starts_with("audio/")
++                    && v.digest_algorithm == PresentationDigestAlgorithm::Sha256
++            }
++            _ => false,
++        }
++}
++fn voice(v: &Option<PublicVoice>) -> bool {
++    v.as_ref().is_none_or(|v| {
++        definition(&v.role, PresentationDefinitionKind::General)
++            && v.form.as_deref().is_none_or(token)
++            && !v.assets.is_empty()
++            && v.assets.len() <= 1024
++            && v.assets.iter().all(asset)
++            && v.assets
++                .iter()
++                .enumerate()
++                .all(|(i, a)| !v.assets[..i].contains(a))
++    })
++}
++fn player(p: PlayerId, players: u32) -> bool {
++    p.raw() > 0 && p.raw() <= players
++}
++fn targets(v: &Option<Vec<PlayerId>>, players: u32) -> bool {
++    v.as_ref().is_none_or(|v| {
++        v.len() <= 16
++            && v.iter().all(|p| player(*p, players))
++            && v.iter().enumerate().all(|(i, p)| !v[..i].contains(p))
++    })
++}
++fn effective(v: &EffectivePresentationCard) -> bool {
++    // These are the existing CardKind::key values; no kernel dependency belongs in this leaf crate.
++    CARD_KINDS.contains(&v.kind.as_str()) && token(&v.key)
++}
++
++impl PublicPresentationBatch {
++    /// Validate leaf constraints. This does not authorize public disclosure or resolve resources.
++    pub fn validate(&self) -> Result<(), String> {
++        require(
++            self.revision <= MAX_PRESENTATION_REVISION
++                && self.occurrences.len() <= MAX_PRESENTATION_OCCURRENCES
++                && self.unavailable.len() <= 28
++                && self
++                    .unavailable
++                    .iter()
++                    .enumerate()
++                    .all(|(i, v)| !self.unavailable[..i].contains(v))
++                && (self.status != PresentationStatus::Complete || self.unavailable.is_empty())
++                && (self.status != PresentationStatus::Overflow || self.occurrences.is_empty()),
++        )?;
++        for (index, v) in self.occurrences.iter().enumerate() {
++            require(v.ordinal as usize == index)?;
++        }
++        self.validate_players(u32::MAX)
++    }
++
++    /// Validate API one-based player references against the accompanying observer seat count.
++    pub fn validate_players(&self, players: u32) -> Result<(), String> {
++        for v in &self.occurrences {
++            let ok = match &v.event {
++                PublicPresentationEvent::CardUsed {
++                    actor,
++                    targets: ts,
++                    effective: e,
++                    voice: v,
++                } => player(*actor, players) && targets(ts, players) && effective(e) && voice(v),
++                PublicPresentationEvent::CardResponded {
++                    actor,
++                    effective: e,
++                    voice: v,
++                } => player(*actor, players) && effective(e) && voice(v),
++                PublicPresentationEvent::SkillActivated {
++                    actor,
++                    skill,
++                    targets: ts,
++                    voice: v,
++                } => {
++                    player(*actor, players)
++                        && definition(&skill.definition, PresentationDefinitionKind::Skill)
++                        && targets(ts, players)
++                        && voice(v)
++                }
++                PublicPresentationEvent::DamageDealt {
++                    source,
++                    target,
++                    amount,
++                    ..
++                } => {
++                    source.is_none_or(|p| player(p, players))
++                        && player(*target, players)
++                        && *amount > 0
++                }
++                PublicPresentationEvent::DamagePrevented { source, target, .. } => {
++                    source.is_none_or(|p| player(p, players)) && player(*target, players)
++                }
++                PublicPresentationEvent::HpRecovered { actor, amount } => {
++                    player(*actor, players) && *amount > 0
++                }
++                PublicPresentationEvent::PlayerDied {
++                    actor,
++                    killer,
++                    voice: v,
++                } => {
++                    player(*actor, players) && killer.is_none_or(|p| player(p, players)) && voice(v)
++                }
++            };
++            require(ok)?;
++        }
++        Ok(())
++    }
++}
++
++const CARD_KINDS: &[&str] = &[
++    "sha",
++    "shan",
++    "tao",
++    "horse_plus",
++    "horse_minus",
++    "weapon",
++    "armor",
++    "huosha",
++    "tiesuo",
++    "nanman",
++    "wanjian",
++    "juedou",
++    "wuxie",
++    "lebu",
++    "bingliang",
++    "shandian",
++    "guohe",
++    "shunshou",
++    "jiu",
++    "leisha",
++    "shoulijian",
++    "wuxingpan",
++    "wangmeizhike",
++    "sanjian",
++    "shuigong",
++    "fudichouxin",
++    "chenhuodajie",
++    "suolianjia",
++    "hongshui",
++    "toulianghuanzhu",
++    "linghunzhihuo",
++    "zhaomingdan",
++    "jihuocard",
++    "youdishenru",
++    "geanguanhuo",
++    "caochuanjiejian",
++    "shezhanqunru",
++    "shujinsan",
++    "mianlijinzhen",
++    "feibiao",
++    "jinlianzhu",
++    "tanhuadong",
++    "yougeng",
++    "qingtuan",
++    "yuanbaorou",
++    "gudonggeng",
++    "mapodoufu",
++    "chunbing",
++    "liyutang",
++    "molicha",
++    "xiajiao",
++    "mizhilianou",
++    "luyugeng",
++    "bingpotong",
++    "qiankunbiao",
++    "longxugou",
++    "shenhuofeiya",
++    "ziyangdan",
++    "yunvyuanshen",
++    "shihuifen",
++    "liufengsan",
++    "shatang",
++    "heilonglinpian",
++    "liutouge",
++    "mutoumianju",
++    "dinvxuanshuang",
++    "gjyuheng",
++    "dunpaigedang",
++    "zhiliaobo",
++    "yuansuhuimie",
++    "xingjiegoutong",
++    "chuansongmen",
++    "tanshezhiren",
++    "shijieshu",
++    "yanziyaoshui",
++    "aozuzhilei",
++    "wenyi",
++    "zhihuanjun",
++    "baoxueyaoshui",
++    "qinpendayu",
++    "birinongwu",
++    "ciguhanshuang",
++    "kunenfayin",
++    "shanbengshu",
++    "poxiao",
++    "zumoshoukao",
++    "monkey",
++    "xuelunyang",
++    "mianju",
++    "jiuwei",
++    "wuzhong",
++    "taoyuan",
++    "wugu",
++    "jiedao",
++    "renwang",
++    "qinggang",
++    "xuanyuanjian",
++    "qilin",
++    "hanbing",
++    "zhuge",
++    "guanshi",
++    "qinglong",
++    "zhangba",
++    "cixiong",
++    "fangtian",
++    "hufu",
++    "liuxinghuoyu",
++    "caoyao",
++    "chilongya",
++    "tianxianjiu",
++    "xixueguizhihuan",
++    "guiyoujie",
++    "shentoumianju",
++    "xingjunyan",
++    "qinglonglingzhu",
++    "zhufangshenshi",
++    "fengxueren",
++    "yufulu",
++    "yangpijuan",
++    "daihuofenglun",
++    "xiayuncailing",
++    "langeguaiyi",
++    "longlushanfeng",
++    "haidao",
++    "shuimomuxue",
++    "feixu",
++    "yixialan",
++    "shamolvzhou",
++    "linzhongjianta",
++    "bingheyaosai",
++    "youlin",
++    "lindixiliu",
++    "dizaizhen",
++    "jiguan",
++    "xuejibingbao",
++    "shenmiguo",
++    "fengyinzhidan",
++    "lianyaohu",
++    "qiankundai",
++    "shennongding",
++    "nvwashi",
++    "kunlunjingc",
++    "donghuangzhong",
++    "kongdongyin",
++    "jingleishan",
++    "chiyuxi",
++    "guisheqi",
++    "xianluhui",
++    "guilingzhitao",
++    "sifeizhenmian",
++    "shuchui",
++    "sadengjinhuan",
++    "haotianta",
++    "yuruyi",
++    "yuchanqian",
++    "yuchankun",
++    "yuchanzhen",
++    "yuchanxun",
++    "yuchankan",
++    "yuchanli",
++    "yuchangen",
++    "yuchandui",
++    "shencaojie",
++    "qinglongzhigui",
++    "zhuquezhizhang",
++    "baishouzhihu",
++    "xuanwuzhihuang",
++    "huanglinzhicong",
++    "hslingjian",
++    "tianfuzhen",
++    "qixingzhen",
++    "niaoxiangzhen",
++    "changshezhen",
++    "pozhenjue",
++];
+diff --git a/crates/engine-protocol/src/presentation.rs b/crates/engine-protocol/src/presentation.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/src/presentation.rs
+@@ -0,0 +1,40 @@
++use engine_api::{PublicPresentationBatch, MAX_PRESENTATION_BYTES};
++use serde::{Deserialize, Deserializer};
++
++pub(crate) fn deserialize_optional<'de, D: Deserializer<'de>>(
++    d: D,
++) -> Result<Option<PublicPresentationBatch>, D::Error> {
++    let batch = PublicPresentationBatch::deserialize(d)?;
++    let bytes = serde_json::to_vec(&batch).map_err(serde::de::Error::custom)?;
++    if bytes.len() > MAX_PRESENTATION_BYTES {
++        return Err(serde::de::Error::custom(
++            "public presentation batch exceeds 64KiB",
++        ));
++    }
++    Ok(Some(batch))
++}
++
++pub(crate) fn validate(message: &crate::ServerMessage) -> Result<(), crate::wire::WireError> {
++    if let crate::ServerMessage::CommandOutcome {
++        view,
++        presentation: Some(batch),
++        ..
++    } = message
++    {
++        batch.validate().map_err(crate::wire::WireError::Json)?;
++        batch
++            .validate_players(view.seats.len() as u32)
++            .map_err(crate::wire::WireError::Json)?;
++        if batch.revision != view.revision
++            || serde_json::to_vec(batch)
++                .map_err(|e| crate::wire::WireError::Json(e.to_string()))?
++                .len()
++                > MAX_PRESENTATION_BYTES
++        {
++            return Err(crate::wire::WireError::Json(
++                "invalid public presentation revision or size".into(),
++            ));
++        }
++    }
++    Ok(())
++}
+diff --git a/crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs b/crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs
+@@ -0,0 +1,273 @@
++//! Typed client/server messages.
++
++use engine_api::{
++    ChoiceRequest, Command, CommandResult, IdempotencyKey, LegalAction, ObserverSnapshot, PlayerId,
++    VersionBundle,
++};
++use serde::{Deserialize, Serialize};
++
++use crate::NETWORK_PROTOCOL_VERSION;
++
++/// Envelope header common to room-scoped messages.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++pub struct MessageHeader {
++    /// Protocol version.
++    pub protocol_version: u32,
++    /// Room id (0 if not in room).
++    pub room_id: u64,
++    /// Per-connection monotonic sequence (client→server).
++    pub conn_seq: u64,
++    /// Associated authority revision when applicable.
++    pub revision: u64,
++}
++
++impl MessageHeader {
++    /// New header.
++    pub fn new(room_id: u64, conn_seq: u64, revision: u64) -> Self {
++        Self {
++            protocol_version: NETWORK_PROTOCOL_VERSION,
++            room_id,
++            conn_seq,
++            revision,
++        }
++    }
++}
++
++/// Client → Server.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "type", content = "payload", deny_unknown_fields)]
++pub enum ClientMessage {
++    /// Capability / version hello.
++    Hello {
++        /// Client-reported versions.
++        versions: VersionBundle,
++        /// Display name (not trusted for auth).
++        display_name: String,
++    },
++    /// Create a new identity room.
++    CreateRoom {
++        /// Native choice window, default 30 seconds.
++        #[serde(default)]
++        choice_timeout_secs: Option<u8>,
++        /// Seat count 2..=8.
++        players: u8,
++        /// Rule RNG seed.
++        seed: u64,
++        /// Optional soft password (Phase 7 toy auth).
++        password: String,
++    },
++    /// Join existing room.
++    JoinRoom {
++        /// Room id.
++        room_id: u64,
++        /// Password if required.
++        password: String,
++        /// Preferred seat (0-based); server may reassign.
++        preferred_seat: Option<u8>,
++        /// Reconnect token from prior JoinOk.
++        reconnect_token: Option<String>,
++    },
++    /// Spectate (public projection only).
++    Spectate {
++        /// Room id.
++        room_id: u64,
++    },
++    /// Submit a normalized command.
++    SubmitCommand {
++        /// Header with room + conn_seq + expected revision.
++        header: MessageHeader,
++        /// Command body.
++        command: Command,
++        /// Idempotency key (required for network).
++        idempotency_key: IdempotencyKey,
++        /// True when this is a reconnect replay. A legacy room without a saved
++        /// receipt must reject it instead of executing a possibly-duplicate command.
++        #[serde(default)]
++        replay: bool,
++    },
++    /// Request full observer snapshot (after gap or reconnect).
++    RequestSnapshot {
++        /// Header.
++        header: MessageHeader,
++        /// Last revision client has (0 if none).
++        last_revision: u64,
++    },
++    /// Heartbeat / keepalive.
++    Heartbeat {
++        /// Header.
++        header: MessageHeader,
++    },
++    /// Leave room gracefully.
++    LeaveRoom {
++        /// Room id.
++        room_id: u64,
++    },
++}
++
++/// Server → Client.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[serde(tag = "type", content = "payload")]
++pub enum ServerMessage {
++    /// Server hello / welcome.
++    Welcome {
++        /// Assigned connection id.
++        connection_id: u64,
++        /// Protocol version.
++        protocol_version: u32,
++        /// Server version bundle.
++        versions: VersionBundle,
++    },
++    /// Room created.
++    RoomCreated {
++        /// Room id.
++        room_id: u64,
++        /// Host seat player id once seated.
++        host_hint: String,
++    },
++    /// Join accepted.
++    JoinOk {
++        /// Room id.
++        room_id: u64,
++        /// Assigned player id (0 for spectator).
++        player_id: u32,
++        /// Seat index.
++        seat: u8,
++        /// Role.
++        role: ClientRole,
++        /// Token for reconnect.
++        reconnect_token: String,
++        /// Initial observer view.
++        view: ObserverSnapshot,
++        /// Current personalized choice barrier, if any.
++        choice: Option<ChoiceRequest>,
++        /// Personalized actions currently legal for this client.
++        legal_actions: Vec<LegalAction>,
++    },
++    /// Command accepted or rejected (no hidden info in reject messages).
++    CommandOutcome {
++        /// Header echo.
++        header: MessageHeader,
++        /// Idempotency key echo.
++        idempotency_key: IdempotencyKey,
++        /// Result.
++        result: CommandResult,
++        /// Observer view for *this* client only.
++        view: ObserverSnapshot,
++        /// Personalized actions legal after applying (or rejecting) the command.
++        legal_actions: Vec<LegalAction>,
++        /// Pending choice if any (already filtered to this observer when personal).
++        choice: Option<ChoiceRequest>,
++        /// Public event codes only (optional sanitized list).
++        public_event_codes: Vec<u32>,
++    },
++    /// Room public roster update.
++    RoomRoster {
++        /// Native room window; legacy rooms have no choice timer.
++        choice_timeout_secs: Option<u8>,
++        /// Room id.
++        room_id: u64,
++        /// Seats filled.
++        seats: Vec<SeatPresence>,
++        /// Match started?
++        started: bool,
++        /// Finished?
++        finished: bool,
++    },
++    /// Snapshot response.
++    Snapshot {
++        /// Header.
++        header: MessageHeader,
++        /// Full observer view for this client.
++        view: ObserverSnapshot,
++        /// Current personalized choice barrier, if any.
++        choice: Option<ChoiceRequest>,
++        /// Personalized actions legal at the snapshot revision.
++        legal_actions: Vec<LegalAction>,
++    },
++    /// Heartbeat reply.
++    Pong {
++        /// Header.
++        header: MessageHeader,
++        /// Server Unix milliseconds (not used by rules).
++        server_time_ms: u64,
++    },
++    /// Error that is safe to show (never includes hidden cards/identity of others).
++    Error {
++        /// Machine code.
++        code: ErrorCode,
++        /// Safe message.
++        message: String,
++        /// Optional room.
++        room_id: Option<u64>,
++    },
++}
++
++/// Client role in a room.
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++pub enum ClientRole {
++    /// Seated player.
++    Player,
++    /// Public spectator.
++    Spectator,
++    /// Referee (debug; full view) — not granted by default join.
++    Referee,
++}
++
++/// Presence of a seat (public).
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++pub struct SeatPresence {
++    /// Seat index.
++    pub seat: u8,
++    /// Player id if seated.
++    pub player_id: u32,
++    /// Display name (sanitized).
++    pub display_name: String,
++    /// Connected now.
++    pub connected: bool,
++    /// Server-controlled seat takeover.
++    pub managed: bool,
++}
++
++/// Safe error codes (no hidden-state leakage).
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++pub enum ErrorCode {
++    /// Protocol / parse.
++    BadMessage,
++    /// Auth / password.
++    Unauthorized,
++    /// Room missing.
++    RoomNotFound,
++    /// Room full.
++    RoomFull,
++    /// Not in room.
++    NotInRoom,
++    /// Rate limited.
++    RateLimited,
++    /// Internal.
++    Internal,
++    /// Version mismatch.
++    VersionMismatch,
++    /// Duplicate / stale handled as command result usually.
++    Conflict,
++}
++
++/// Helper: sanitize error for wire (strip anything that might look like state dumps).
++pub fn public_error(code: ErrorCode, message: impl Into<String>) -> ServerMessage {
++    let message = message.into();
++    // Hard cap length; never attach dumps.
++    let message = if message.len() > 200 {
++        message.chars().take(200).collect()
++    } else {
++        message
++    };
++    ServerMessage::Error {
++        code,
++        message,
++        room_id: None,
++    }
++}
++
++/// Map player id for JSON (engine uses PlayerId).
++pub fn player_raw(p: PlayerId) -> u32 {
++    p.raw()
++}
+diff --git a/crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs b/crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs
+@@ -0,0 +1,68 @@
++//! JSON encode/decode with size limits.
++
++use crate::messages::{ClientMessage, ServerMessage};
++use crate::MAX_MESSAGE_BYTES;
++use thiserror::Error;
++
++/// Wire codec error.
++#[derive(Debug, Error, Clone, PartialEq, Eq)]
++pub enum WireError {
++    /// Message too large.
++    #[error("message too large: {0} bytes")]
++    TooLarge(usize),
++    /// JSON error.
++    #[error("json: {0}")]
++    Json(String),
++}
++
++/// Encode client message.
++pub fn encode_c2s(msg: &ClientMessage) -> Result<String, WireError> {
++    let s = serde_json::to_string(msg).map_err(|e| WireError::Json(e.to_string()))?;
++    if s.len() > MAX_MESSAGE_BYTES {
++        return Err(WireError::TooLarge(s.len()));
++    }
++    Ok(s)
++}
++
++/// Decode client message.
++pub fn decode_c2s(text: &str) -> Result<ClientMessage, WireError> {
++    if text.len() > MAX_MESSAGE_BYTES {
++        return Err(WireError::TooLarge(text.len()));
++    }
++    serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))
++}
++
++/// Encode server message.
++pub fn encode_s2c(msg: &ServerMessage) -> Result<String, WireError> {
++    let s = serde_json::to_string(msg).map_err(|e| WireError::Json(e.to_string()))?;
++    if s.len() > MAX_MESSAGE_BYTES {
++        return Err(WireError::TooLarge(s.len()));
++    }
++    Ok(s)
++}
++
++/// Decode server message (clients / tests).
++pub fn decode_s2c(text: &str) -> Result<ServerMessage, WireError> {
++    if text.len() > MAX_MESSAGE_BYTES {
++        return Err(WireError::TooLarge(text.len()));
++    }
++    serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))
++}
++
++#[cfg(test)]
++mod tests {
++    use super::*;
++    use crate::messages::ClientMessage;
++    use engine_api::VersionBundle;
++
++    #[test]
++    fn roundtrip_hello() {
++        let m = ClientMessage::Hello {
++            versions: VersionBundle::current(),
++            display_name: "tester".into(),
++        };
++        let s = encode_c2s(&m).unwrap();
++        let d = decode_c2s(&s).unwrap();
++        assert_eq!(m, d);
++    }
++}
+diff --git a/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json b/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json
+@@ -0,0 +1,478 @@
++[
++  {
++    "name": "batch_unknown",
++    "changes": [
++      {
++        "pointer": "/private_snapshot",
++        "value": {}
++      }
++    ]
++  },
++  {
++    "name": "null_revision",
++    "changes": [
++      {
++        "pointer": "/revision",
++        "value": null
++      }
++    ]
++  },
++  {
++    "name": "unsafe_revision",
++    "changes": [
++      {
++        "pointer": "/revision",
++        "value": 9007199254740992
++      }
++    ]
++  },
++  {
++    "name": "mixed_revision",
++    "changes": [
++      {
++        "pointer": "/revision",
++        "value": 1
++      }
++    ]
++  },
++  {
++    "name": "string_revision",
++    "changes": [
++      {
++        "pointer": "/revision",
++        "value": "2"
++      }
++    ]
++  },
++  {
++    "name": "bad_status",
++    "changes": [
++      {
++        "pointer": "/status",
++        "value": "secret"
++      }
++    ]
++  },
++  {
++    "name": "overflow_nonempty",
++    "changes": [
++      {
++        "pointer": "/status",
++        "value": "overflow"
++      }
++    ]
++  },
++  {
++    "name": "invalid_domain",
++    "changes": [
++      {
++        "pointer": "/unavailable",
++        "value": [
++          {
++            "domain": "secret",
++            "reason": "verified_binding_missing"
++          }
++        ]
++      },
++      {
++        "pointer": "/status",
++        "value": "incomplete"
++      }
++    ]
++  },
++  {
++    "name": "invalid_reason",
++    "changes": [
++      {
++        "pointer": "/unavailable",
++        "value": [
++          {
++            "domain": "death",
++            "reason": "secret"
++          }
++        ]
++      },
++      {
++        "pointer": "/status",
++        "value": "incomplete"
++      }
++    ]
++  },
++  {
++    "name": "scope_unknown",
++    "changes": [
++      {
++        "pointer": "/unavailable",
++        "value": [
++          {
++            "domain": "death",
++            "reason": "verified_binding_missing",
++            "owner": 1
++          }
++        ]
++      },
++      {
++        "pointer": "/status",
++        "value": "incomplete"
++      }
++    ]
++  },
++  {
++    "name": "duplicate_scope",
++    "changes": [
++      {
++        "pointer": "/unavailable",
++        "value": [
++          {
++            "domain": "death",
++            "reason": "verified_binding_missing"
++          },
++          {
++            "domain": "death",
++            "reason": "verified_binding_missing"
++          }
++        ]
++      },
++      {
++        "pointer": "/status",
++        "value": "incomplete"
++      }
++    ]
++  },
++  {
++    "name": "duplicate_ordinal",
++    "changes": [
++      {
++        "pointer": "/occurrences/1/ordinal",
++        "value": 0
++      }
++    ]
++  },
++  {
++    "name": "unknown_event",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/kind",
++        "value": "CardPlayed"
++      }
++    ]
++  },
++  {
++    "name": "event_unknown",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/source_skill",
++        "value": "rende"
++      }
++    ]
++  },
++  {
++    "name": "actor_zero",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": 0
++      }
++    ]
++  },
++  {
++    "name": "actor_negative",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": -1
++      }
++    ]
++  },
++  {
++    "name": "actor_fraction",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": 1.5
++      }
++    ]
++  },
++  {
++    "name": "actor_string",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": "1"
++      }
++    ]
++  },
++  {
++    "name": "actor_out_of_view",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": 3
++      }
++    ]
++  },
++  {
++    "name": "actor_u32_over",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": 4294967296
++      }
++    ]
++  },
++  {
++    "name": "actor_null",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/actor",
++        "value": null
++      }
++    ]
++  },
++  {
++    "name": "duplicate_target",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/targets",
++        "value": [
++          2,
++          2
++        ]
++      }
++    ]
++  },
++  {
++    "name": "missing_nullable_voice",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice",
++        "remove": true
++      }
++    ]
++  },
++  {
++    "name": "amount_zero",
++    "changes": [
++      {
++        "pointer": "/occurrences/3/event/amount",
++        "value": 0
++      }
++    ]
++  },
++  {
++    "name": "bad_nature",
++    "changes": [
++      {
++        "pointer": "/occurrences/3/event/nature",
++        "value": "ice"
++      }
++    ]
++  },
++  {
++    "name": "bad_effective_kind",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/effective/kind",
++        "value": "invented"
++      }
++    ]
++  },
++  {
++    "name": "token_traversal",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/effective/key",
++        "value": "../sha"
++      }
++    ]
++  },
++  {
++    "name": "token_controls",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/effective/key",
++        "value": "sha"
++      }
++    ]
++  },
++  {
++    "name": "role_local_id_wrong",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/local_id",
++        "value": 8
++      }
++    ]
++  },
++  {
++    "name": "role_kind_wrong",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/kind",
++        "value": "skill"
++      }
++    ]
++  },
++  {
++    "name": "owner_unknown",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/owner/opaque",
++        "value": "untrusted"
++      }
++    ]
++  },
++  {
++    "name": "digest_upper",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/digest",
++        "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
++      }
++    ]
++  },
++  {
++    "name": "digest_algorithm",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/digest_algorithm",
++        "value": "blake3"
++      }
++    ]
++  },
++  {
++    "name": "size_zero",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/size",
++        "value": 0
++      }
++    ]
++  },
++  {
++    "name": "source_kind",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/source/kind",
++        "value": "builtin"
++      }
++    ]
++  },
++  {
++    "name": "reference_private",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/reference/player",
++        "value": 1
++      }
++    ]
++  },
++  {
++    "name": "path_escape",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
++        "value": "audio/../bad.mp3"
++      }
++    ]
++  },
++  {
++    "name": "invalid_category",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/reference/source_category",
++        "value": "private"
++      }
++    ]
++  },
++  {
++    "name": "empty_assets",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets",
++        "value": []
++      }
++    ]
++  },
++  {
++    "name": "form_token",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/form",
++        "value": "hidden/other"
++      }
++    ]
++  },
++  {
++    "name": "owner_tag",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/owner/kind",
++        "value": "builtin"
++      }
++    ]
++  },
++  {
++    "name": "asset_unknown",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/assets/0/private_snapshot",
++        "value": {}
++      }
++    ]
++  },
++  {
++    "name": "role_unknown",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/def",
++        "value": 8
++      }
++    ]
++  },
++  {
++    "name": "id_token_escape",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/local_id/raw_symbol",
++        "value": "liubei%2Fother"
++      }
++    ]
++  },
++  {
++    "name": "oversized_utf8",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/effective/key",
++        "value": "刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘刘"
++      }
++    ]
++  },
++  {
++    "name": "null_targets_bad",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/targets",
++        "value": {}
++      }
++    ]
++  },
++  {
++    "name": "missing_source",
++    "changes": [
++      {
++        "pointer": "/occurrences/3/event/source",
++        "remove": true
++      }
++    ]
++  },
++  {
++    "name": "repository_bom",
++    "changes": [
++      {
++        "pointer": "/occurrences/0/event/voice/role/owner/repository",
++        "value": "repo﻿"
++      }
++    ]
++  }
++]
+diff --git a/crates/engine-protocol/tests/fixtures/i02-presentation.json b/crates/engine-protocol/tests/fixtures/i02-presentation.json
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/fixtures/i02-presentation.json
+@@ -0,0 +1,205 @@
++{
++  "revision": 2,
++  "status": "complete",
++  "unavailable": [],
++  "occurrences": [
++    {
++      "ordinal": 0,
++      "event": {
++        "kind": "card_used",
++        "actor": 1,
++        "targets": [
++          2
++        ],
++        "effective": {
++          "kind": "sha",
++          "key": "sha",
++          "nature": "normal"
++        },
++        "voice": {
++          "role": {
++            "owner": {
++              "kind": "original",
++              "repository": "https://github.com/libnoname/noname.git",
++              "adopted_revision": "1111111111111111111111111111111111111111",
++              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++            },
++            "kind": "general",
++            "local_id": {
++              "pack": "standard",
++              "raw_symbol": "liubei"
++            }
++          },
++          "form": null,
++          "assets": [
++            {
++              "source": {
++                "kind": "original",
++                "repository": "https://github.com/libnoname/noname.git",
++                "adopted_revision": "1111111111111111111111111111111111111111",
++                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++              },
++              "reference": {
++                "kind": "original",
++                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
++                "source_category": "core",
++                "source_path": "audio/die/liubei.mp3"
++              },
++              "digest_algorithm": "sha256",
++              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
++              "size": 1234
++            }
++          ]
++        }
++      }
++    },
++    {
++      "ordinal": 1,
++      "event": {
++        "kind": "card_responded",
++        "actor": 2,
++        "effective": {
++          "kind": "sha",
++          "key": "sha",
++          "nature": "normal"
++        },
++        "voice": null
++      }
++    },
++    {
++      "ordinal": 2,
++      "event": {
++        "kind": "skill_activated",
++        "actor": 1,
++        "skill": {
++          "definition": {
++            "owner": {
++              "kind": "original",
++              "repository": "https://github.com/libnoname/noname.git",
++              "adopted_revision": "1111111111111111111111111111111111111111",
++              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++            },
++            "kind": "skill",
++            "local_id": {
++              "pack": "standard",
++              "raw_symbol": "rende"
++            }
++          }
++        },
++        "targets": null,
++        "voice": {
++          "role": {
++            "owner": {
++              "kind": "original",
++              "repository": "https://github.com/libnoname/noname.git",
++              "adopted_revision": "1111111111111111111111111111111111111111",
++              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++            },
++            "kind": "general",
++            "local_id": {
++              "pack": "standard",
++              "raw_symbol": "liubei"
++            }
++          },
++          "form": null,
++          "assets": [
++            {
++              "source": {
++                "kind": "original",
++                "repository": "https://github.com/libnoname/noname.git",
++                "adopted_revision": "1111111111111111111111111111111111111111",
++                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++              },
++              "reference": {
++                "kind": "original",
++                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
++                "source_category": "core",
++                "source_path": "audio/die/liubei.mp3"
++              },
++              "digest_algorithm": "sha256",
++              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
++              "size": 1234
++            }
++          ]
++        }
++      }
++    },
++    {
++      "ordinal": 3,
++      "event": {
++        "kind": "damage_dealt",
++        "source": 1,
++        "target": 2,
++        "amount": 1,
++        "nature": "fire"
++      }
++    },
++    {
++      "ordinal": 4,
++      "event": {
++        "kind": "damage_prevented",
++        "source": null,
++        "target": 2,
++        "nature": "thunder"
++      }
++    },
++    {
++      "ordinal": 5,
++      "event": {
++        "kind": "hp_recovered",
++        "actor": 1,
++        "amount": 1
++      }
++    },
++    {
++      "ordinal": 6,
++      "event": {
++        "kind": "player_died",
++        "actor": 2,
++        "killer": 1,
++        "voice": {
++          "role": {
++            "owner": {
++              "kind": "original",
++              "repository": "https://github.com/libnoname/noname.git",
++              "adopted_revision": "1111111111111111111111111111111111111111",
++              "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++              "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++            },
++            "kind": "general",
++            "local_id": {
++              "pack": "standard",
++              "raw_symbol": "liubei"
++            }
++          },
++          "form": null,
++          "assets": [
++            {
++              "source": {
++                "kind": "original",
++                "repository": "https://github.com/libnoname/noname.git",
++                "adopted_revision": "1111111111111111111111111111111111111111",
++                "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
++                "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
++              },
++              "reference": {
++                "kind": "original",
++                "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
++                "source_category": "core",
++                "source_path": "audio/die/liubei.mp3"
++              },
++              "digest_algorithm": "sha256",
++              "digest": "6666666666666666666666666666666666666666666666666666666666666666",
++              "size": 1234
++            }
++          ]
++        }
++      }
++    }
++  ]
++}
+diff --git a/crates/engine-protocol/tests/presentation.rs b/crates/engine-protocol/tests/presentation.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/presentation.rs
+@@ -0,0 +1,95 @@
++use engine_api::PublicPresentationBatch;
++use engine_protocol::{decode_s2c, encode_s2c, ServerMessage};
++use serde_json::{json, Value};
++
++fn batch() -> Value {
++    serde_json::from_str(include_str!("fixtures/i02-presentation.json")).unwrap()
++}
++fn outcome(presentation: Option<Value>) -> Value {
++    let seat = |player| json!({"player":player,"seat":player-1,"hp":4,"max_hp":4,"alive":true,"hand_count":0,"identity":null,"skills":[]});
++    let mut v = json!({"type":"CommandOutcome","payload":{
++        "header":{"protocol_version":6,"room_id":7,"conn_seq":9,"revision":2},"idempotency_key":9,
++        "result":{"Accepted":{"new_revision":2,"state_hash":vec![0;32]}},
++        "view":{"revision":2,"state_hash":vec![0;32],"observer":"Spectator","round":1,"current_player":1,"phase":"Play","seats":[seat(1),seat(2)],"known_cards":[],"outcome":"InProgress"},
++        "legal_actions":[],"choice":null,"public_event_codes":[3,5,7]
++    }});
++    if let Some(p) = presentation {
++        v["payload"]["presentation"] = p;
++    }
++    v
++}
++
++#[test]
++fn old_absence_and_seven_typed_events_roundtrip() {
++    let absent = decode_s2c(&outcome(None).to_string()).unwrap();
++    assert!(!encode_s2c(&absent).unwrap().contains("presentation"));
++    let message = decode_s2c(&outcome(Some(batch())).to_string()).unwrap();
++    let roundtrip = decode_s2c(&encode_s2c(&message).unwrap()).unwrap();
++    assert_eq!(message, roundtrip);
++    let ServerMessage::CommandOutcome {
++        presentation: Some(p),
++        ..
++    } = message
++    else {
++        panic!()
++    };
++    assert_eq!(p.occurrences.len(), 7);
++}
++
++#[test]
++fn invalid_present_payloads_are_rejected_at_actual_wire_ingress() {
++    let cases: Vec<Value> =
++        serde_json::from_str(include_str!("fixtures/i02-presentation-invalid.json")).unwrap();
++    for case in cases {
++        let mut bad = batch();
++        for change in case["changes"].as_array().unwrap() {
++            let (parent, key) = change["pointer"]
++                .as_str()
++                .unwrap()
++                .rsplit_once('/')
++                .unwrap();
++            let target = bad.pointer_mut(parent).unwrap();
++            if change["remove"] == true {
++                target.as_object_mut().unwrap().remove(key);
++            } else if let Some(object) = target.as_object_mut() {
++                object.insert(key.into(), change["value"].clone());
++            } else {
++                target[key.parse::<usize>().unwrap()] = change["value"].clone();
++            }
++        }
++        assert!(
++            decode_s2c(&outcome(Some(bad)).to_string()).is_err(),
++            "{}",
++            case["name"]
++        );
++    }
++    assert!(decode_s2c(&outcome(Some(Value::Null)).to_string()).is_err());
++    let mut too_many = batch();
++    too_many["occurrences"] = Value::Array(
++        (0..1025)
++            .map(|i| json!({"ordinal":i,"event":{"kind":"hp_recovered","actor":1,"amount":1}}))
++            .collect(),
++    );
++    assert!(serde_json::from_value::<PublicPresentationBatch>(too_many).is_err());
++    let mut too_large = batch();
++    let voice = too_large["occurrences"][0]["event"]["voice"].clone();
++    too_large["occurrences"] = Value::Array((0..90).map(|i|json!({"ordinal":i,"event":{"kind":"player_died","actor":1,"killer":null,"voice":voice}})).collect());
++    assert!(decode_s2c(&outcome(Some(too_large)).to_string()).is_err());
++}
++
++#[test]
++fn package_and_original_identities_are_discriminated() {
++    let mut b = batch();
++    let owner = json!({"kind":"package","namespace":"author","package_id":"voices","version":"1.0.0","logic_hash":"1".repeat(64),"content_hash":"2".repeat(64)});
++    let role = &mut b["occurrences"][0]["event"]["voice"]["role"];
++    role["owner"] = owner.clone();
++    role["local_id"] = json!(42);
++    let asset = &mut b["occurrences"][0]["event"]["voice"]["assets"][0];
++    asset["source"] = owner;
++    asset["reference"] = json!({"kind":"package","namespace":"author","package_id":"voices","asset_id":"die_liubei"});
++    asset["digest_algorithm"] = json!("blake3");
++    assert!(decode_s2c(&outcome(Some(b.clone())).to_string()).is_ok());
++    b["occurrences"][0]["event"]["voice"]["role"]["local_id"] =
++        json!({"pack":"standard","raw_symbol":"liubei"});
++    assert!(decode_s2c(&outcome(Some(b)).to_string()).is_err());
++}
+diff --git a/crates/engine-protocol/tests/presentation_main5fc_reader.rs b/crates/engine-protocol/tests/presentation_main5fc_reader.rs
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/presentation_main5fc_reader.rs
+@@ -0,0 +1,33 @@
++//! Frozen 5fc source readers, not rewritten compatibility approximations.
++#[path = "fixtures/i02-main5fc/messages.rs"]
++mod messages;
++#[path = "fixtures/i02-main5fc/wire.rs"]
++mod wire;
++pub use messages::*;
++pub const NETWORK_PROTOCOL_VERSION: u32 = 6;
++pub const MAX_MESSAGE_BYTES: usize = 256 * 1024;
++
++#[test]
++fn actual_old_reader_ignores_optional_new_response_field() {
++    let input = serde_json::json!({"type":"CommandOutcome","payload":{
++        "header":{"protocol_version":6,"room_id":1,"conn_seq":2,"revision":2},"idempotency_key":2,
++        "result":{"Accepted":{"new_revision":2,"state_hash":vec![0;32]}},
++        "view":{"revision":2,"state_hash":vec![0;32],"observer":"Spectator","round":1,"current_player":0,"phase":"Idle","seats":[],"known_cards":[],"outcome":"InProgress"},
++        "legal_actions":[],"choice":null,"public_event_codes":[],
++        "presentation":{"revision":2,"status":"complete","unavailable":[],"occurrences":[]}
++    }});
++    let old = wire::decode_s2c(&input.to_string()).unwrap();
++    assert!(!wire::encode_s2c(&old).unwrap().contains("presentation"));
++    assert!(engine_protocol::decode_s2c(&input.to_string()).is_ok());
++}
++
++#[test]
++fn old_and_new_client_request_contract_remains_strict_and_unchanged() {
++    let input = serde_json::json!({"type":"SnapshotRequest","payload":{"header":{"protocol_version":6,"room_id":1,"conn_seq":2,"revision":2},"last_revision":2}});
++    assert!(wire::decode_c2s(&input.to_string()).is_ok());
++    assert!(engine_protocol::decode_c2s(&input.to_string()).is_ok());
++    let mut with_presentation=input.clone();
++    with_presentation["payload"]["presentation"]=serde_json::json!({});
++    assert!(wire::decode_c2s(&with_presentation.to_string()).is_err());
++    assert!(engine_protocol::decode_c2s(&with_presentation.to_string()).is_err());
++}

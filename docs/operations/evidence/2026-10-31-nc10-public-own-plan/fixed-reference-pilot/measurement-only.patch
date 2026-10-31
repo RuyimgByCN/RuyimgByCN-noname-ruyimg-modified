@@ -1,0 +1,258 @@
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -283,6 +283,40 @@
+     Stale { submitted: u64, current: u64 },
+     /// 计划在生成时即被取消。
+     Cancelled,
++}
++
++/// Public command advice; selecting an option does not certify its continuation.
++pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
++    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
++        return None;
++    };
++    let mut distinct = Vec::new();
++    for option in options {
++        if !distinct.contains(&option) {
++            distinct.push(option);
++        }
++    }
++    let take = min.max(1).min(max).min(distinct.len());
++    let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
++        .take(take).copied().collect();
++    let mut selection = if cards.len() == take {
++        cards
++    } else {
++        distinct.into_iter().take(take).collect()
++    };
++    if allow_cancel && (selection.len() < min || selection.len() > max) {
++        selection.clear();
++    }
++    Some(GameAction::Answer { choice_id: id, selection })
++}
++
++thread_local! { static MEASUREMENT_REFERENCE: std::cell::Cell<bool> = const { std::cell::Cell::new(false) }; }
++/// Temporary measurement switch; never part of the candidate patch.
++pub fn measurement_reference_plan(engine: &Engine, seat: u8, planner: &BoundedPlanner) -> Plan {
++    struct Reset(bool);
++    impl Drop for Reset { fn drop(&mut self) { MEASUREMENT_REFERENCE.with(|flag| flag.set(self.0)); } }
++    let _reset = Reset(MEASUREMENT_REFERENCE.with(|flag| flag.replace(true)));
++    engine.plan_action(seat, planner)
+ }
+ 
+ impl Engine {
+@@ -530,29 +564,18 @@
+     )
+ }
+ 
+-/// Public command advice; selecting an option does not certify its continuation.
+-pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
++fn measurement_reference_choice_action(choice: ChoiceView) -> GameAction {
+     let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
+-        return None;
++        return GameAction::NextPhase;
+     };
+-    let mut distinct = Vec::new();
+-    for option in options {
+-        if !distinct.contains(&option) {
+-            distinct.push(option);
+-        }
+-    }
+-    let take = min.max(1).min(max).min(distinct.len());
+-    let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
+-        .take(take).copied().collect();
+-    let mut selection = if cards.len() == take {
+-        cards
++    let selection = if min <= 1 && max >= 1 && options.contains(&ChoiceOption::Pass) {
++        vec![ChoiceOption::Pass]
++    } else if min == 0 && allow_cancel {
++        Vec::new()
+     } else {
+-        distinct.into_iter().take(take).collect()
++        options.into_iter().take(min).collect()
+     };
+-    if allow_cancel && (selection.len() < min || selection.len() > max) {
+-        selection.clear();
+-    }
+-    Some(GameAction::Answer { choice_id: id, selection })
++    GameAction::Answer { choice_id: id, selection }
+ }
+ 
+ impl Engine {
+@@ -560,16 +583,16 @@
+     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
++        if !MEASUREMENT_REFERENCE.with(|flag| flag.get()) {
++            if let Some(choice @ ChoiceView::Own { .. }) = self.ai_session(seat).choice() {
++                return Plan { seat, revision: self.revision(), action: projected_choice_action(choice).expect("Own advice"),
++                    nodes_used: 0, budget_exhausted: false, timed_out: false, cancelled: planner.cancelled(), sim_faults: 0 };
++            }
++        }
+         let submitted_revision = self.revision();
+-        let public_action = match self.ai_session(seat).choice() {
+-            Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
+-            // Preserve the existing non-owner VM leaf without treating it as an answer.
+-            Some(choice @ ChoiceView::Other { .. }) if vm_choice_leaf(&choice) => Some(GameAction::NextPhase),
+-            _ => None,
+-        };
+-        if let Some(action) = public_action {
++        if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
+             return Plan {
+-                seat, revision: submitted_revision, action,
++                seat, revision: submitted_revision, action: measurement_reference_choice_action(choice),
+                 nodes_used: 0, budget_exhausted: false, timed_out: false,
+                 cancelled: planner.cancelled(), sim_faults: 0,
+             };
+@@ -779,8 +802,8 @@
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+         let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            if let Some(action) = sim.ai_session(seat).choice().and_then(projected_choice_action) {
+-                return action;
++            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
++                return measurement_reference_choice_action(choice);
+             }
+             if !sim.ai_session(seat).view().players[seat as usize].alive {
+                 return GameAction::NextPhase;
+--- a/crates/engine-native/tests/nc12_ai_strength_baseline.rs
++++ b/crates/engine-native/tests/nc12_ai_strength_baseline.rs
+@@ -30,61 +30,84 @@
+ }
+ 
+ #[test]
+-fn nc12_ai_strength_baseline_statistics() {
+-    let planner = BoundedPlanner::new(8)
+-        .with_deadline_ms(50)
+-        .with_lookahead(1)
+-        .with_policy_variant(0);
+-    let seeds: Vec<u64> = (45000..45200).collect();
+-    let mut steps_all: Vec<usize> = Vec::new();
+-    let mut finished = 0usize;
+-    let mut faults = 0u64;
+-    for seed in seeds {
+-        let mut e = swd_engine(seed);
+-        let probe_before = engine_native::engine::legal_actions::probe_faults();
+-        let mut steps = 0usize;
+-        while e.outcome().is_none() && steps < 1200 {
+-            let seat = match e.open_choice() {
+-                Some(open) => open.observer,
+-                None => e.turn().current,
+-            };
+-            let plan = e.plan_action(seat, &planner);
+-            faults += plan.sim_faults as u64;
+-            if plan.sim_faults > 0 {
+-                break; // 命中故障：本局终止统计（故障由断言报告）
+-            }
+-            let action = plan.action;
+-            let _ = e.submit(GameCommand {
+-                actor: seat,
+-                expected_revision: e.revision(),
+-                dedup_id: next_dedup(),
+-                action,
+-            });
+-            steps += 1;
++fn nc10_fixed_reference_calibration() {
++    use engine_native::{ChoiceView, CommandOutcome};
++    let path=std::path::Path::new("/tmp/nc10-fixed-reference-38de1942/evidence");
++    let expected:Vec<serde_json::Value>=serde_json::from_str(&std::fs::read_to_string(path.join("calibration-expected.json")).unwrap()).unwrap();
++    let planner=BoundedPlanner::new(8).with_deadline_ms(50).with_lookahead(1).with_policy_variant(0);
++    let mut engine=swd_engine(45000);let mut own=0;let mut rows=Vec::new();
++    for row in expected {
++        let seat=row["seat"].as_u64().unwrap() as u8;
++        let input=engine.ai_session(seat).input();let before=engine.save();
++        let plan=engine_native::ai::measurement_reference_plan(&engine,seat,&planner);
++        assert_eq!(engine.save(),before,"switch/planning cannot modify authority/RNG");
++        assert_eq!(format!("{input:?}"),row["input"].as_str().unwrap());
++        assert_eq!(format!("{plan:?}"),row["plan"].as_str().unwrap());
++        if matches!(input.choice,Some(ChoiceView::Own{..})) {
++            own+=1;
++            let proposal=engine.plan_action(seat,&planner);
++            assert_eq!(proposal.nodes_used,0,"reference flag restored after call");
++            assert_eq!(engine.save(),before);
+         }
+-        faults += engine_native::engine::legal_actions::probe_faults() - probe_before;
+-        steps_all.push(steps);
+-        if e.outcome().is_some() {
+-            finished += 1;
+-        }
+-    }
+-    steps_all.sort_unstable();
+-    let n = steps_all.len();
+-    let pct = |p: f64| steps_all[((n as f64 - 1.0) * p).round() as usize];
+-    eprintln!(
+-        "AI_BASELINE n={n} finished={finished} steps_p50={} steps_p90={} steps_max={} faults={faults}",
+-        pct(0.5),
+-        pct(0.9),
+-        steps_all[n - 1]
+-    );
+-    assert_eq!(
+-        faults, 0,
+-        "统计期间命中内核悬空引用故障（详见 nc12_dangling_reference_repro）"
+-    );
+-    assert!(
+-        finished * 2 >= n,
+-        "终局率过低：{finished}/{n}（策略面观测，低于半数视为异常）"
+-    );
++        let out=engine.submit(GameCommand{actor:seat,expected_revision:engine.revision(),dedup_id:row["dedup"].as_u64().unwrap(),action:plan.action.clone()});
++        assert_eq!(format!("{out:?}"),row["outcome"].as_str().unwrap());
++        assert!(matches!(out,CommandOutcome::Accepted{..}|CommandOutcome::Pending{..}));
++        rows.push(serde_json::json!({"step":row["step"],"input":format!("{input:?}"),"plan":format!("{plan:?}"),"outcome":format!("{out:?}")}));
++    }
++    assert!(own>=3);
++    std::fs::write(path.join("calibration-actual.json"),serde_json::to_vec_pretty(&serde_json::json!({"rows":rows,"own_calls":own,"all_full_input_plan_outcome_equal":true,"authority_rng_unchanged_by_switch":true})).unwrap()).unwrap();
++}
++
++#[test]
++fn nc10_fixed_reference_pilot() {
++    use engine_native::{ChoiceView,CommandOutcome,Winner};
++    use std::{collections::BTreeMap,io::Write};
++    let root=std::path::Path::new("/tmp/nc10-fixed-reference-38de1942/evidence");
++    let mut trace=std::io::BufWriter::new(std::fs::File::create(root.join("pilot-submits.jsonl")).unwrap());
++    let mut games=std::io::BufWriter::new(std::fs::File::create(root.join("pilot-games.jsonl")).unwrap());
++    let pack_path=std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json");
++    let pack=content_native_loader::bridge_pack(&std::fs::read_to_string(pack_path).unwrap()).unwrap().pack;
++    let planner=BoundedPlanner::new(8).with_deadline_ms(50).with_lookahead(1).with_policy_variant(0);
++    for seed in 46000..46032u64 {
++      for challenger in 0..4u8 {
++       for arm in ["baseline","candidate"] {
++        let mut engine=swd_engine(seed);let mut steps=0usize;let mut counts:BTreeMap<String,u64>=BTreeMap::new();let mut own=0;let mut refcalls=0;let mut proposalcalls=0;let mut simfaults=0u64;
++        let game=(|| -> Result<(),String> {
++         while engine.outcome().is_none() && steps<1200 {
++          let seat=engine.open_choice().map(|c|c.observer).unwrap_or(engine.turn().current);
++          let input=engine.ai_session(seat).input();let before=engine.save();let events=engine.event_view_for(seat);
++          let reference=arm=="baseline" || seat!=challenger;
++          let planned=std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| if reference {engine_native::ai::measurement_reference_plan(&engine,seat,&planner)}else{engine.plan_action(seat,&planner)}));
++          let plan=match planned {Ok(p)=>p,Err(_)=>{*counts.entry("PlannerPanic".into()).or_default()+=1;return Err("planner panic".into());}};
++          assert_eq!(engine.save(),before);
++          simfaults+=plan.sim_faults as u64;
++          if reference {refcalls+=1;}else{proposalcalls+=1;}
++          own+=usize::from(matches!(input.choice,Some(ChoiceView::Own{..})));
++          let action=plan.action.clone();let revision=engine.revision();let dedup=steps as u64+1;
++          let returned=std::panic::catch_unwind(std::panic::AssertUnwindSafe(||engine.submit(GameCommand{actor:seat,expected_revision:revision,dedup_id:dedup,action})));
++          let outcome=match returned {Ok(out)=>out,Err(_)=>{*counts.entry("SubmitPanic".into()).or_default()+=1;return Err("submit panic".into());}};
++          let kind=match &outcome {CommandOutcome::Accepted{..}=>"Accepted",CommandOutcome::Pending{..}=>"Pending",CommandOutcome::Rejected(_)=>"Rejected",CommandOutcome::Suspended=>"Suspended"};
++          *counts.entry(kind.into()).or_default()+=1;
++          writeln!(trace,"{}",serde_json::json!({"seed":seed,"challenger":challenger,"arm":arm,"step":steps,"seat":seat,"reference":reference,"input":format!("{input:?}"),"plan":format!("{plan:?}"),"outcome":format!("{outcome:?}"),"after_revision":engine.revision()})).unwrap();
++          steps+=1;
++          if matches!(outcome,CommandOutcome::Rejected(_)) || plan.sim_faults>0 {
++           std::fs::write(root.join("STOP-before.ngsa"),engine_native::archive::encode_archive(&before)).unwrap();
++           std::fs::write(root.join("STOP-context.json"),serde_json::to_vec_pretty(&serde_json::json!({"seed":seed,"challenger":challenger,"arm":arm,"input":format!("{input:?}"),"pre_events":format!("{events:?}"),"plan":format!("{plan:?}"),"outcome":format!("{outcome:?}")})).unwrap()).unwrap();
++           return Err(format!("formal rejection or simulation fault: {outcome:?}"));
++          }
++         }
++         Ok(())
++        })();
++        let finished=engine.outcome().is_some();let won=matches!(engine.outcome().map(|o|o.winner),Some(Winner::Player(p)) if p==challenger);
++        let bytes=engine_native::archive::encode_archive(&engine.save());
++        std::fs::write(root.join(format!("final-{seed}-{challenger}-{arm}.ngsa")),&bytes).unwrap();
++        let restored=Engine::restore_with_extensions(&engine_native::archive::decode_archive(&bytes).unwrap(),&[&pack]).unwrap();assert_eq!(format!("{:?}",restored.outcome()),format!("{:?}",engine.outcome()));
++        let row=serde_json::json!({"seed":seed,"challenger":challenger,"arm":arm,"steps":steps,"finished":finished,"winner":engine.outcome().map(|o|format!("{:?}",o.winner)),"challenger_win":won,"counts":counts,"own_calls":own,"reference_calls":refcalls,"candidate_calls":proposalcalls,"sim_faults":simfaults,"byte_restore":true,"error":game.as_ref().err()});
++        writeln!(games,"{row}").unwrap();trace.flush().unwrap();games.flush().unwrap();
++        if let Err(error)=game {std::fs::write(root.join("STOP.json"),serde_json::to_vec_pretty(&row).unwrap()).unwrap();panic!("{error}; pilot stops, no retry");}
++       }
++      }
++    }
+ }
+ 
+ /// Reproducible strategy comparison; run explicitly with --ignored --nocapture --test-threads=1.

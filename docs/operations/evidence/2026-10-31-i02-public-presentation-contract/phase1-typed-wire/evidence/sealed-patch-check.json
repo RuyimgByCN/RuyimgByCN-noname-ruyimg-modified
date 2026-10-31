@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "git",
+    "apply",
+    "--reverse",
+    "--check",
+    "/tmp/i02-phase1-ab167599/sealed-checkpoint/full.patch"
+  ],
+  "exit": 0,
+  "stdout": "",
+  "stderr": "",
+  "initial_artifact_failure": "full patch builder splitlines treated adversarial U+0085 fixture input as a line break; corrected builder uses LF only; sources and tests unchanged."
+}

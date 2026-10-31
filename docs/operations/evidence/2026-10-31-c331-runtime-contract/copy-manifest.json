@@ -1,0 +1,70 @@
+{
+  "utc": "2026-10-31T08:19:29.745174+00:00",
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/82809eaf-7028-4f87-b375-0319ed8ae900/proposals/c331-remaining-mechanisms-concrete-contract.md",
+      "stored": "proposal-v1.raw.txt",
+      "bytes": 43660,
+      "sha256": "6499a28149f499fe3b51fecf573b22b705173dc9a20c9bd2a7d16c108d8d55b2"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/0c6a92b4-a293-414b-912e-8242b176d48b/proposals/c331-remaining-mechanisms-concrete-contract-v2.md",
+      "stored": "proposal-v2.raw.txt",
+      "bytes": 33934,
+      "sha256": "996e77443fdefbfaacfd51c710bad8d270f074d3f2b9cb78528022e1316b08e1"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d1b943e2-cc32-4b06-920d-2c8af1f3d70e/proposals/c331-remaining-mechanisms-concrete-contract-v3.md",
+      "stored": "proposal-v3.raw.txt",
+      "bytes": 23286,
+      "sha256": "1fae43770e5d147c08602744473be625a1b930b67022a9638bef81571b3011da"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8e410bbd-dadf-4916-b3ff-23e5a74469cd/reviews/c331-remaining-mechanisms-contract-v1.md",
+      "stored": "review-v1.raw.txt",
+      "bytes": 7459,
+      "sha256": "3764d12d7ca462adb0ffbdec878866d0df01ca90217c12aecb5fc60e1ed019eb"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8817a6d1-d7a6-4684-9ff7-67c5349a1be2/reviews/c331-remaining-mechanisms-contract-v2.md",
+      "stored": "review-v2.raw.txt",
+      "bytes": 6791,
+      "sha256": "3eaeb89a99fae71f5358e6606dcd6d205186126ab77de2db091c30151aa3562e"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/06a65ce9-12f6-431a-b437-77a5b4ae9a54/reviews/c331-remaining-mechanisms-contract-v3.md",
+      "stored": "review-v3.raw.txt",
+      "bytes": 5411,
+      "sha256": "e910f00253d5246f2c9d2df81444c6af0e323ccd8a7bda16b877e1e228908f01"
+    },
+    {
+      "source": "/tmp/c331-contract-v3-notes/grant-callers.json",
+      "stored": "grant-callers.json",
+      "bytes": 44555,
+      "sha256": "00b10213badc7ef827148ed4787fad079c5af85d6ed7a1fac67bdb81d48a3a57"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/1c6ba2f3-045c-48e3-bd52-116c33481cfc/proposals/c331-main5fc-integration-inventory.md",
+      "stored": "main5fc-integration-inventory.raw.txt",
+      "bytes": 9102,
+      "sha256": "d9c25d2e30f6ae5fb471c1aead75d6bbf178218e6726fdc5a6f964642a20be43"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/c0650d45-8cb0-48b6-80f9-2e5510d5c0ce/reviews/c331-concrete-approval-request.md",
+      "stored": "approval-request-review.raw.txt",
+      "bytes": 2674,
+      "sha256": "9500b545421e5b15db2efd916ca9aaf4e5ca7cb79c0c9f9b44907031343e170f"
+    }
+  ],
+  "scope": "Concrete reviewed v1+v2+v3 proposal only; finalreviewreadyNOTimplementationapproval/versionallocation. No Main tracked changes.",
+  "approval_page": {
+    "path": "approval-request.md",
+    "bytes": 4349,
+    "sha256": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+    "status": "Explicit userapproved Decision29; privatephase7started, notacceptance"
+  },
+  "user_decision": {
+    "path": "user-decision29.json",
+    "sha256": "745b14383f66b3c01611f7d280fc4ebdd37d5c635846a0263dd54f1f413502e4"
+  }
+}

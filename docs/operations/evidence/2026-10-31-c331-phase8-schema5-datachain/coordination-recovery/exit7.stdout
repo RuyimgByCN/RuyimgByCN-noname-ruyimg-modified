@@ -1,0 +1,1 @@
+{"command": ["python3", "-c", "import sys;sys.exit(7)"], "exit": 7, "locked_seconds": 0.01666504197055474, "disk_free_bytes": 74884800512}

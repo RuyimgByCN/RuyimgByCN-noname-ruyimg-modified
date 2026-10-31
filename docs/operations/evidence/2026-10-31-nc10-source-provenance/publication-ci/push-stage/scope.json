@@ -1,0 +1,113 @@
+{
+  "repository": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "branch": "refs/heads/native-convergence",
+  "accepted_commit": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "accepted_tree": "9ba4253837da66457669bd19c5120a9163b2a05b",
+  "expected_old_remote": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "scoped_hooks_path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-decision25-nc27-hooks-xsjqor0d",
+  "scoped_hook_sha256": "ba0dbbd4e1d9d34fe6534aa0a716460a90ca9c29c2bafba8c59cccc1f8aa3d96",
+  "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "selftests": [
+    {
+      "name": "accepted",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "decision25 scoped check accepted exact repository, existing branch, expected base and accepted increment\n"
+    },
+    {
+      "name": "wrong-repo",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git-wrong"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: repository does not match explicit approval\n"
+    },
+    {
+      "name": "wrong-branch",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/main 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "wrong-commit",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "delete",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "(delete) 0000000000000000000000000000000000000000 refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "multiple",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 4dd0b286b995fe414128b6c52eb83a4d0d85f6cd\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: expected exactly one ref update\n"
+    },
+    {
+      "name": "remote-race",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 1111111111111111111111111111111111111111\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: remote branch differs from the expected accepted base\n"
+    },
+    {
+      "name": "missing-old-ref",
+      "argv": [
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git"
+      ],
+      "stdin": "5fc0f77403d90fa4555156bf01722450cbe7bf3b 5fc0f77403d90fa4555156bf01722450cbe7bf3b refs/heads/native-convergence 0000000000000000000000000000000000000000\n",
+      "expected": 1,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: remote branch differs from the expected accepted base\n"
+    }
+  ],
+  "authorization": "Decision25 exact accepted NC27 source-field commit, existingpublic repository/branch only; noforce/newremote/persistentsettings",
+  "created_utc": "2026-10-31T08:02:43.182700+00:00",
+  "private_evidence_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-5fc0f774-publication-z03yx4in",
+  "main_writes": "none; receipts and all CI evidence private only",
+  "plan_sha256": "a24db6895489866b42470a665e6b6516db59f0645c6fc35239928922ad16c4ba"
+}

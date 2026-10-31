@@ -1,0 +1,7 @@
+
+running 1 test
+test nc12_ai_strength_baseline::nc10_fixed_reference_calibration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 157 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_fixed_reference_calibration", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 4.339359333971515, "disk_free_bytes": 73724989440}

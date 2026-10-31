@@ -1,0 +1,2 @@
+检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+{"command": ["python3", "-B", "scripts/check_doc_line_refs.py", "--strict"], "exit": 0, "locked_seconds": 18.454513582983054, "disk_free_bytes": 33455808512}

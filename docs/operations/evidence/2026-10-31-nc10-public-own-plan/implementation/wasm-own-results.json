@@ -1,0 +1,252 @@
+[
+  {
+    "side": 0,
+    "transport": "binding",
+    "before": "1",
+    "after": "2",
+    "choice": {
+      "allowCancel": true,
+      "id": 1,
+      "kind": "Confirm",
+      "max": 1,
+      "min": 1,
+      "native_kind": "confirm",
+      "observer": 1,
+      "options": [
+        "confirm"
+      ],
+      "prompt": "trigger_confirm",
+      "source_skill": "遗计"
+    },
+    "nexts": [
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 1,
+        "prompt": "jiji_target"
+      },
+      {
+        "allowCancel": true,
+        "id": 2,
+        "kind": "SelectTargets",
+        "max": 1,
+        "min": 0,
+        "native_kind": "select_players",
+        "observer": 1,
+        "options": [
+          {
+            "player": 0
+          },
+          {
+            "player": 2
+          }
+        ],
+        "prompt": "jiji_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 1,
+        "prompt": "jiji_target"
+      }
+    ],
+    "result": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "public_codes": [
+      10,
+      2,
+      10
+    ]
+  },
+  {
+    "side": 0,
+    "transport": "worker-adapter",
+    "before": "1",
+    "after": "2",
+    "choice": {
+      "allowCancel": true,
+      "id": 1,
+      "kind": "Confirm",
+      "max": 1,
+      "min": 1,
+      "native_kind": "confirm",
+      "observer": 1,
+      "options": [
+        "confirm"
+      ],
+      "prompt": "trigger_confirm",
+      "source_skill": "遗计"
+    },
+    "nexts": [
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 1,
+        "prompt": "jiji_target"
+      },
+      {
+        "allowCancel": true,
+        "id": 2,
+        "kind": "SelectTargets",
+        "max": 1,
+        "min": 0,
+        "native_kind": "select_players",
+        "observer": 1,
+        "options": [
+          {
+            "player": 0
+          },
+          {
+            "player": 2
+          }
+        ],
+        "prompt": "jiji_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 1,
+        "prompt": "jiji_target"
+      }
+    ],
+    "result": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "public_codes": [
+      10,
+      2,
+      10
+    ]
+  },
+  {
+    "side": 1,
+    "transport": "binding",
+    "before": "1",
+    "after": "2",
+    "choice": {
+      "allowCancel": true,
+      "id": 1,
+      "kind": "Confirm",
+      "max": 1,
+      "min": 1,
+      "native_kind": "confirm",
+      "observer": 1,
+      "options": [
+        "confirm"
+      ],
+      "prompt": "trigger_confirm",
+      "source_skill": "遗计"
+    },
+    "nexts": [
+      {
+        "allowCancel": false,
+        "id": 2,
+        "kind": "SelectTargets",
+        "max": 1,
+        "min": 1,
+        "native_kind": "select_players",
+        "observer": 0,
+        "options": [
+          {
+            "player": 0
+          },
+          {
+            "player": 1
+          },
+          {
+            "player": 2
+          }
+        ],
+        "prompt": "jijie_give_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 0,
+        "prompt": "jijie_give_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 0,
+        "prompt": "jijie_give_target"
+      }
+    ],
+    "result": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "public_codes": [
+      10,
+      2,
+      10
+    ]
+  },
+  {
+    "side": 1,
+    "transport": "worker-adapter",
+    "before": "1",
+    "after": "2",
+    "choice": {
+      "allowCancel": true,
+      "id": 1,
+      "kind": "Confirm",
+      "max": 1,
+      "min": 1,
+      "native_kind": "confirm",
+      "observer": 1,
+      "options": [
+        "confirm"
+      ],
+      "prompt": "trigger_confirm",
+      "source_skill": "遗计"
+    },
+    "nexts": [
+      {
+        "allowCancel": false,
+        "id": 2,
+        "kind": "SelectTargets",
+        "max": 1,
+        "min": 1,
+        "native_kind": "select_players",
+        "observer": 0,
+        "options": [
+          {
+            "player": 0
+          },
+          {
+            "player": 1
+          },
+          {
+            "player": 2
+          }
+        ],
+        "prompt": "jijie_give_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 0,
+        "prompt": "jijie_give_target"
+      },
+      {
+        "hidden": true,
+        "id": 2,
+        "observer": 0,
+        "prompt": "jijie_give_target"
+      }
+    ],
+    "result": {
+      "kind": "answer",
+      "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+    },
+    "public_codes": [
+      10,
+      2,
+      10
+    ]
+  }
+]

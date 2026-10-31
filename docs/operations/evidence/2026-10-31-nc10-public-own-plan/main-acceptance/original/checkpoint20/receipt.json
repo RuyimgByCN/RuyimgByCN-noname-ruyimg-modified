@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-31T11:22:46.649203+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-nc10-main-integration-7c6amd0l",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "status": "EXACT6 APPLIED; Mainfunctionalacceptancepending",
+  "patch_sha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110",
+  "source_manifest_sha256": "9b6a9c446d43a4da854ba2c8f67a79fddb7c0f0d78169ea0a7c268545a641d28",
+  "files": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755,
+      "lines": 861,
+      "baseline_sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645,
+      "lines": 712,
+      "baseline_sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732,
+      "lines": 107,
+      "baseline_sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440,
+      "lines": 285,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400,
+      "lines": 64,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "bytes": 22417,
+      "lines": 489,
+      "baseline_sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1"
+    }
+  ],
+  "before_tracked_doc_changes": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-rules-baseline.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-source-provenance/README.md",
+    "docs/operations/evidence/2026-10-31-pa09-product-pool/scope.json",
+    "docs/operations/evidence/2026-10-31-r05-runtime-contract/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "before_git_status_sha256": "2d4fc41f03c368ebccbfd55597bbeaf279a7fc2467025c481d28bd95a1821d38",
+  "after_source6_exact": true,
+  "index_empty": true,
+  "qualification": "Parent integration underGoal existingbugfixscope; original484red/quality evidence preserved. NoC/I02code, rules/protocol/restore/gates unchanged; no commit/publication yet; defaultdist/generated not touchedbyapply."
+}

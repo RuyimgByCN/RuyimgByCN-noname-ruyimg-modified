@@ -1,0 +1,8 @@
+
+> noname-next-web-client@0.1.0 typecheck /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client
+> vue-tsc --noEmit
+
+src/worker/engine.worker.ts(7,34): error TS2307: Cannot find module '../wasm-pkg/engine_wasm.js' or its corresponding type declarations.
+src/worker/nativeBackend.ts(32,56): error TS2307: Cannot find module './native-pkg/engine_native_wasm.js' or its corresponding type declarations.
+ ELIFECYCLE  Command failed with exit code 2.
+{"command": ["pnpm", "--dir", "apps/web-client", "typecheck"], "exit": 2, "locked_seconds": 1.383942125015892, "disk_free_bytes": 38079582208}

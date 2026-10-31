@@ -1,0 +1,44 @@
+{
+  "name": "red-privacy",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "complete_own_plan_cannot_depend",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "nc_rounds",
+    "complete_own_plan_cannot_depend",
+    "--",
+    "--nocapture",
+    "--test-threads=1"
+  ],
+  "cwd": "/tmp/nc10-own-36992565/worktree",
+  "exit": 101,
+  "wall_seconds": 4.073993166035507,
+  "minimum_free_bytes": 39868706816,
+  "environment": {
+    "CARGO_TARGET_DIR": "/tmp/nc10-own-36992565/target",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_NET_OFFLINE": "true"
+  },
+  "stdout_sha256": "b05f87dcecf2873a1ee7b20f36e1fc701fee0822fbacdf6a15286e6710d3284a",
+  "stderr_sha256": "d68306db77ad361eee1517383ee34dd8e9a0e487cee38245cb96a7a1c4828681"
+}

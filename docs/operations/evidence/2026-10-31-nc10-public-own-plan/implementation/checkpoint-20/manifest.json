@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-31T09:18:13.541723+00:00",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "versions": "330/105/758/WS6",
+  "source": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "bytes": 35630,
+      "baseline_blob": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645,
+      "baseline_blob": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732,
+      "baseline_blob": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "543186583fbdb28d6a0d29862d8cf97f3aebfeb5af496e5793dbde4abc5b305c",
+      "bytes": 9289,
+      "baseline_blob": null
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400,
+      "baseline_blob": null
+    }
+  ],
+  "patch_sha256": "cbfebd8a78045e87dc4539169c5b1cd6099caca6d8118081f7ec0ac65cf14b50",
+  "status": "BLOCK for acceptance: seed8211 retains119vs484 frozen expectation failure; no ordinaryRoot/VM/formal changes",
+  "evidence_root": "/tmp/nc10-own-36992565/evidence",
+  "Main_checkpoint": "/tmp/nc10-own-36992565/evidence/checkpoint.json",
+  "unfinished": [
+    "Baseline privacy-specific assertion/quality comparison cycle currently in progress; candidate source sealed here independently of temporary baseline test state",
+    "Final source/command seal + reviewer handoff",
+    "No-choice/descendant VM/private effects/all37/wholeGoal remain BLOCK",
+    "Real desktop IPC and full opponent quality matrix not run"
+  ]
+}

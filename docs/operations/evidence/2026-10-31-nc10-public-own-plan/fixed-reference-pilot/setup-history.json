@@ -1,0 +1,5 @@
+{
+  "initial_setup": "First normalization assertion failed before instrumented source was written; recovery/source backups already existed. Literal insertion normalization corrected; whole normalized file exact5fc asserted before writing measurement source. Raw failed tool output retained by session.",
+  "test_failures": [],
+  "prior_timeouts": "Prior45min/25min orchestration failures retained in earlier report/recovery, not converted into test failures."
+}

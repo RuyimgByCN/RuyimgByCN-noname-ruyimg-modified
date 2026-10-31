@@ -1,0 +1,133 @@
+diff --git a/apps/web-client/scripts/presentation-fixtures.mjs b/apps/web-client/scripts/presentation-fixtures.mjs
+--- a/apps/web-client/scripts/presentation-fixtures.mjs
++++ b/apps/web-client/scripts/presentation-fixtures.mjs
+@@ -2,7 +2,7 @@
+ 
+ const fixtureRoot = new URL("../../../crates/engine-protocol/tests/fixtures/", import.meta.url);
+ export const presentationBatch = () => JSON.parse(readFileSync(new URL("i02-presentation.json", fixtureRoot), "utf8"));
+-export const invalidPresentationBatches = () => JSON.parse(readFileSync(new URL("i02-presentation-invalid.json", fixtureRoot), "utf8")).map(({name, changes}) => {
++const invalidRegularBatches = () => JSON.parse(readFileSync(new URL("i02-presentation-invalid.json", fixtureRoot), "utf8")).map(({name, changes}) => {
+   const batch = presentationBatch();
+   for (const change of changes) {
+     const parts = change.pointer.slice(1).split("/");
+@@ -12,6 +12,12 @@
+   }
+   return { name, batch };
+ });
++export const surrogatePresentationBatches = () => JSON.parse(readFileSync(new URL("i02-presentation-surrogates.json", fixtureRoot), "utf8")).map(({name,pointer,raw_json_value}) => {
++  const batch=presentationBatch();const parts=pointer.slice(1).split("/");const key=parts.pop();
++  const parent=parts.reduce((value,part)=>value[part],batch);parent[key]=JSON.parse(raw_json_value);
++  return {name,batch};
++});
++export const invalidPresentationBatches = () => [...invalidRegularBatches(),...surrogatePresentationBatches()];
+ export function presentationView(revision = 2) {
+   return { revision, state_hash: Array(32).fill(0), observer: "Spectator", round: 1, current_player: 1,
+     phase: "Play", seats: [1, 2].map(player => ({player, seat: player - 1, hp: 4, max_hp: 4, alive: true, hand_count: 0, identity: null, skills: []})),
+diff --git a/apps/web-client/scripts/presentation-metadata.test.mjs b/apps/web-client/scripts/presentation-metadata.test.mjs
+--- a/apps/web-client/scripts/presentation-metadata.test.mjs
++++ b/apps/web-client/scripts/presentation-metadata.test.mjs
+@@ -6,7 +6,7 @@
+ import { NetworkEngineClient } from "../src/engine/networkClient.ts";
+ import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
+ import { applyEnvelope, createViewStore } from "../src/engine/viewStore.ts";
+-import { presentationBatch, invalidPresentationBatches, presentationView, presentationEnvelope } from "./presentation-fixtures.mjs";
++import { presentationBatch, invalidPresentationBatches, surrogatePresentationBatches, presentationView, presentationEnvelope } from "./presentation-fixtures.mjs";
+ 
+ async function frozenReader(name) {
+   const source = readFileSync(new URL(`./fixtures/i02-main5fc/${name}.ts`, import.meta.url), "utf8");
+@@ -196,3 +196,10 @@
+   const broadcast=JSON.parse(outcome(null,9));broadcast.payload.header.conn_seq=0;f.client.handleMessage(JSON.stringify(broadcast));
+   assert.equal(rejected,0);assert.equal(f.client.pending.get(9),intent);assert.equal(f.client.revision,1);assert.equal(reports.length,3);
+ });
++
++test("raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass", () => {
++  const good=presentationBatch();good.occurrences[0].event.voice.role.owner.repository="repo🐉";
++  good.occurrences[0].event.effective.key="sha🐉";good.occurrences[0].event.voice.assets[0].reference.path="audio/die/role🐉.mp3";
++  assert.deepEqual(presentationMetadata(good,2,2),good);
++  for(const {name,batch} of surrogatePresentationBatches()) assert.throws(()=>presentationMetadata(batch,2,2),/presentation metadata invalid/,name);
++});
+diff --git a/apps/web-client/src/engine/presentationMetadata.ts b/apps/web-client/src/engine/presentationMetadata.ts
+--- a/apps/web-client/src/engine/presentationMetadata.ts
++++ b/apps/web-client/src/engine/presentationMetadata.ts
+@@ -8,11 +8,12 @@
+   return o;
+ }
+ function integer(v: unknown, max = 0xffffffff, min = 0): v is number { return typeof v === "number" && Number.isSafeInteger(v) && v >= min && v <= max; }
+-function token(v: unknown): v is string { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && v !== "." && v !== ".." && !/[\\/%?#:\u0000-\u001f\u007f-\u009f]/u.test(v); }
++// Unicode-mode surrogate ranges reject lone UTF-16 code units while preserving valid astral pairs.
++function token(v: unknown): v is string { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && v !== "." && v !== ".." && !/[\\/%?#:\u0000-\u001f\u007f-\u009f\ud800-\udfff]/u.test(v); }
+ function path(v: unknown): v is string { return typeof v === "string" && new TextEncoder().encode(v).length <= 256 && v.split("/").every(token); }
+ function hex(v: unknown, n = 64): boolean { return typeof v === "string" && v.length === n && /^[a-f0-9]+$/.test(v); }
+ // Exact shared policy: C0/C1 controls, Unicode White_Space, BOM, and backslash.
+-function repository(v: unknown): boolean { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && !/[\u0000-\u0020\u007f-\u00a0\u1680\u2000-\u200a\u2028-\u2029\u202f\u205f\u3000\ufeff\\]/u.test(v); }
++function repository(v: unknown): boolean { return typeof v === "string" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && !/[\u0000-\u0020\u007f-\u00a0\u1680\u2000-\u200a\u2028-\u2029\u202f\u205f\u3000\ufeff\ud800-\udfff\\]/u.test(v); }
+ function owner(v: unknown): void {
+   const kind = (v as any)?.kind;
+   if (kind === "package") {
+diff --git a/crates/engine-protocol/tests/presentation.rs b/crates/engine-protocol/tests/presentation.rs
+--- a/crates/engine-protocol/tests/presentation.rs
++++ b/crates/engine-protocol/tests/presentation.rs
+@@ -93,3 +93,26 @@
+         json!({"pack":"standard","raw_symbol":"liubei"});
+     assert!(decode_s2c(&outcome(Some(b)).to_string()).is_err());
+ }
++
++#[test]
++fn raw_json_surrogates_reject_before_utf8_string_creation_and_valid_astral_pairs_pass() {
++    let cases: Vec<Value> =
++        serde_json::from_str(include_str!("fixtures/i02-presentation-surrogates.json")).unwrap();
++    for case in cases {
++        let mut bad = batch();
++        *bad.pointer_mut(case["pointer"].as_str().unwrap()).unwrap() =
++            json!("I02_RAW_UNICODE_SENTINEL");
++        // Keep invalid escapes in raw JSON: parsing the injected value as Value first would lose this boundary.
++        let raw = outcome(Some(bad)).to_string().replace(
++            "\"I02_RAW_UNICODE_SENTINEL\"",
++            case["raw_json_value"].as_str().unwrap(),
++        );
++        assert!(decode_s2c(&raw).is_err(), "{}", case["name"]);
++    }
++    let mut good = batch();
++    good["occurrences"][0]["event"]["voice"]["role"]["owner"]["repository"] = json!("repo🐉");
++    good["occurrences"][0]["event"]["effective"]["key"] = json!("sha🐉");
++    good["occurrences"][0]["event"]["voice"]["assets"][0]["reference"]["path"] =
++        json!("audio/die/role🐉.mp3");
++    assert!(decode_s2c(&outcome(Some(good)).to_string()).is_ok());
++}
+diff --git a/crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json b/crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json
+new file mode 100644
+--- /dev/null
++++ b/crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json
+@@ -0,0 +1,32 @@
++[
++  {
++    "name": "repository_lone_high",
++    "pointer": "/occurrences/0/event/voice/role/owner/repository",
++    "raw_json_value": "\"repo\\ud800\""
++  },
++  {
++    "name": "repository_lone_low",
++    "pointer": "/occurrences/0/event/voice/role/owner/repository",
++    "raw_json_value": "\"repo\\udfff\""
++  },
++  {
++    "name": "token_lone_high",
++    "pointer": "/occurrences/0/event/effective/key",
++    "raw_json_value": "\"sha\\ud800\""
++  },
++  {
++    "name": "token_lone_low",
++    "pointer": "/occurrences/0/event/effective/key",
++    "raw_json_value": "\"sha\\udfff\""
++  },
++  {
++    "name": "path_lone_high",
++    "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
++    "raw_json_value": "\"audio/die/role\\ud800\""
++  },
++  {
++    "name": "path_lone_low",
++    "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
++    "raw_json_value": "\"audio/die/role\\udfff\""
++  }
++]

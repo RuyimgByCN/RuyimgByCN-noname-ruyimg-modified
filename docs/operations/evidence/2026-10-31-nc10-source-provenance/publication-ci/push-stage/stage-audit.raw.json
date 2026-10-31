@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "staged_paths": 477,
+  "staged_blob_bytes": 81550091,
+  "every_staged_and_working_blob_matches_plan": true,
+  "source33": 33,
+  "whitespace": [
+    {
+      "scope": "maintained",
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "scope": "all-raw",
+      "exit": 2,
+      "stdout_sha256": "d82e07d899adc4bc4a32d8b8c0dc3c60e1ecd505b9c3c832a2132e3c879cc0b4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "plan_sha256": "a24db6895489866b42470a665e6b6516db59f0645c6fc35239928922ad16c4ba",
+  "generated_build_artifacts_staged": false
+}

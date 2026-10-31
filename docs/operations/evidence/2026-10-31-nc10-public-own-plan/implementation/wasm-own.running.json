@@ -1,0 +1,1 @@
+{"pid": 77586, "argv": ["node", "--import", "./apps/web-client/scripts/ts-register.mjs", "/tmp/nc10-own-36992565/evidence/wasm-own.mjs"], "started": "2026-10-31T09:13:11.329228+00:00"}

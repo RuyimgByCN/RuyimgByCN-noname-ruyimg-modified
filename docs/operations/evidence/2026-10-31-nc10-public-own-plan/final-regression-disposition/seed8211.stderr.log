@@ -1,0 +1,5 @@
+   Compiling engine-native v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.44s
+     Running tests/groups/misc.rs (/tmp/nc10-own-36992565/target/debug/deps/misc-6bce960f507446bf)
+NC10_SEMANTIC seed=8211 steps=119 successful=119 suspended=0 simulation_faults=0 new_probe_faults=0 restored=true

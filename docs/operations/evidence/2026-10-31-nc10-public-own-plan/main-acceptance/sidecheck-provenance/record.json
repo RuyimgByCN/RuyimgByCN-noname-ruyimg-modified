@@ -1,0 +1,366 @@
+{
+  "auditUtc": "2026-10-31T12:01:06.888087+00:00",
+  "scope": "Bounded read-only provenance audit; writes only this new record and new <=20-line report. No commands/builds/network/gates rerun, no Main/index/old714/finalreport edits, no target cleanup.",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8",
+  "privateTarget": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target",
+  "creationAndMetadata": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target",
+      "bytes": 192,
+      "birthUtc": "2026-10-31T11:28:39.549155+00:00",
+      "mtimeUtc": "2026-10-31T11:28:46.216872+00:00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/CACHEDIR.TAG",
+      "bytes": 177,
+      "birthUtc": "2026-10-31T11:28:39.549518+00:00",
+      "mtimeUtc": "2026-10-31T11:28:39.549560+00:00",
+      "sha256": "6d9d1d216e0f83abc5e5662ca62c92b4f23009466b54fa27321a69acdb778bb2"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/.rustc_info.json",
+      "bytes": 3024,
+      "birthUtc": "2026-10-31T11:28:43.879233+00:00",
+      "mtimeUtc": "2026-10-31T11:28:46.031873+00:00",
+      "sha256": "bad72a66932b74ffc089dec06fc3115b0552a16f9e7fd3cfeb8032dc19e0075c"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/.cargo-lock",
+      "bytes": 0,
+      "birthUtc": "2026-10-31T11:28:39.549827+00:00",
+      "mtimeUtc": "2026-10-31T11:28:39.549827+00:00",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/flycheck0/stdout",
+      "bytes": 31357,
+      "birthUtc": "2026-10-31T11:28:46.216921+00:00",
+      "mtimeUtc": "2026-10-31T11:28:48.477760+00:00",
+      "sha256": "ab63e31c3dd5d6399639587307d5f9b792153f03d0cc19df7723031e3ed8c6c1"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/flycheck0/stderr",
+      "bytes": 48751,
+      "birthUtc": "2026-10-31T11:28:46.216969+00:00",
+      "mtimeUtc": "2026-10-31T11:28:48.252265+00:00",
+      "sha256": "23b5a1d8a1fd05d20fdf92eb70cb776b8e9b521965895e44a63a3c0ea2255572"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+      "bytes": 383,
+      "birthUtc": "2026-10-31T11:28:09.965219+00:00",
+      "mtimeUtc": "2026-10-31T11:32:32.757928+00:00",
+      "sha256": "5c61b076cdef9bb20a5a27ed09ae8c0ed031551a5c28f13510be0b13440991cc"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.lock",
+      "bytes": 8262,
+      "birthUtc": "2026-10-31T11:28:48.207485+00:00",
+      "mtimeUtc": "2026-10-31T11:28:48.207563+00:00",
+      "sha256": "7a7cb132258c1e557086dd852f471426e7f67b9750c0104155895a246fe0c367"
+    }
+  ],
+  "incrementalMetadataOnly": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/incremental/engine_api-2hzu4mv02i67k/s-hnq1rzxprx-0eoql0t-ak3wabm5oygmap9bbttgzzmhe/dep-graph.bin",
+      "bytes": 13450818,
+      "birthUtc": "2026-10-31T11:28:49.229952+00:00",
+      "mtimeUtc": "2026-10-31T11:28:50.100199+00:00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/incremental/rule_api-0bt8upvttyra7/s-hnq1s0h1gi-15l5rbj-8354opo88b51xuq6nivqi3c5f/dep-graph.bin",
+      "bytes": 68957259,
+      "birthUtc": "2026-10-31T11:28:50.131621+00:00",
+      "mtimeUtc": "2026-10-31T11:28:58.666786+00:00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/incremental/resource_schema-2dn1arzgj9pud/s-hnq1rzzrmy-1n6ahlk-0f31b6i73dimvzdb82dxij124/dep-graph.bin",
+      "bytes": 2413195,
+      "birthUtc": "2026-10-31T11:28:49.325803+00:00",
+      "mtimeUtc": "2026-10-31T11:28:49.448279+00:00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/incremental/licensing_schema-2jkafif42us05/s-hnq1rzzrnh-1kzwk5b-cs2kybqvy1p1m65ivggf1qmnx/dep-graph.bin",
+      "bytes": 1732784,
+      "birthUtc": "2026-10-31T11:28:49.325812+00:00",
+      "mtimeUtc": "2026-10-31T11:28:49.417979+00:00"
+    }
+  ],
+  "fingerprints": [
+    {
+      "file": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/.fingerprint/rule-api-23470db23fd3cbef/lib-rule_api.json",
+        "bytes": 527,
+        "birthUtc": "2026-10-31T11:28:58.741943+00:00",
+        "mtimeUtc": "2026-10-31T11:28:58.741975+00:00",
+        "sha256": "893a2a06ee84561bf901e1500774a7ccf690faf12a964c62d1e9fc1e863b3f0a"
+      },
+      "content": {
+        "rustc": 2179919275645516985,
+        "features": "[]",
+        "declared_features": "[]",
+        "target": 14107874460111721714,
+        "profile": 2330448797067240312,
+        "path": 6190619562054365310,
+        "deps": [
+          [
+            1957009224993739128,
+            "thiserror",
+            false,
+            6144025531613532100
+          ],
+          [
+            6557439603276904804,
+            "serde",
+            false,
+            10429003026710130675
+          ],
+          [
+            15385754174596886646,
+            "engine_api",
+            false,
+            5493244976951899225
+          ]
+        ],
+        "local": [
+          {
+            "CheckDepInfo": {
+              "dep_info": "debug/.fingerprint/rule-api-23470db23fd3cbef/dep-lib-rule_api",
+              "checksum": false
+            }
+          }
+        ],
+        "rustflags": [],
+        "config": 8247474407144887393,
+        "compile_kind": 0
+      }
+    },
+    {
+      "file": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target/debug/.fingerprint/engine-api-4334c2b068286246/lib-engine_api.json",
+        "bytes": 528,
+        "birthUtc": "2026-10-31T11:28:50.114880+00:00",
+        "mtimeUtc": "2026-10-31T11:28:50.114911+00:00",
+        "sha256": "ed03eea9071f694cc29f2ab19e6b3c574474f29e84a076a27cbda44823c0f239"
+      },
+      "content": {
+        "rustc": 2179919275645516985,
+        "features": "[]",
+        "declared_features": "[]",
+        "target": 17632975488965878994,
+        "profile": 2330448797067240312,
+        "path": 12012899805638576235,
+        "deps": [
+          [
+            1957009224993739128,
+            "thiserror",
+            false,
+            6144025531613532100
+          ],
+          [
+            6557439603276904804,
+            "serde",
+            false,
+            10429003026710130675
+          ],
+          [
+            8841681343991089453,
+            "blake3",
+            false,
+            15579814554837413059
+          ]
+        ],
+        "local": [
+          {
+            "CheckDepInfo": {
+              "dep_info": "debug/.fingerprint/engine-api-4334c2b068286246/dep-lib-engine_api",
+              "checksum": false
+            }
+          }
+        ],
+        "rustflags": [],
+        "config": 8247474407144887393,
+        "compile_kind": 0
+      }
+    }
+  ],
+  "sessionSetupEvents": [
+    {
+      "sessionLine": 49,
+      "utc": "2026-10-31T11:28:09.574Z",
+      "tool": "write",
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+      "writtenContentSha256": "6e142d075e86a08a7b765e60abef232579fe5db370b6c2e06c2fe58cb39422d6"
+    },
+    {
+      "sessionLine": 50,
+      "utc": "2026-10-31T11:28:13.001Z",
+      "text": "\u2713 TOML clean \u00b7 3020ms"
+    },
+    {
+      "sessionLine": 51,
+      "utc": "2026-10-31T11:28:30.450Z",
+      "tool": "write",
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/src/main.rs",
+      "writtenContentSha256": "b4a6688e8185c9cd97a94481a75aa3f973fee08e2e36cfb097ce179f1a2f83bb"
+    },
+    {
+      "sessionLine": 52,
+      "utc": "2026-10-31T11:28:31.362Z",
+      "text": "\u2713 Rust clean \u00b7 574ms"
+    }
+  ],
+  "origin": {
+    "observed": "Separate partial Cargo CHECK/flycheck target created11:28:39Z following private manifest/source writes and automatic TOML/Rust diagnostics; retained flycheck logs identify cargo::commands::check::exec and Check test=false/true targets.",
+    "triggerAttribution": "Strong temporal and flycheck-directory evidence of automatic editor/language-service check after functions.write setup; no retained OS parent/launch argv establishes exact launcher identity.",
+    "firstExplicitCompileNotOrigin": "First recorded cargo run is11:38 and uses handed Main target; path probes themselves do not invoke Cargo.",
+    "historicalArgv": null,
+    "historicalEnvironment": null,
+    "historicalExit": null,
+    "unreconstructable": "Exact historical launch argv/env/exit not retained. No build-finished or compiler-error message in flycheck stdout; truncated logs do not prove success, compile error, kill, or reason for stopping. Fingerprint missing-file messages are not compiler errors.",
+    "effectiveBehavior": "Local probe/target, dev/check opt0/debug2; incremental caches exist; fingerprint rustflags empty. Cannot claim jobs2/offline/incremental0/global-serializer controls applied to this sidecheck.",
+    "networkEvidence": "flycheck stderr says Updating crates.io index and Locking40 packages to latest compatible versions; this records index-update activity/attempt, not proof of transferred bytes. No audit network performed."
+  },
+  "retainedFlycheckSummary": {
+    "stderrOpening": [
+      "    Updating crates.io index",
+      "     Locking 40 packages to latest compatible versions"
+    ],
+    "cargoCheckStackMarkerPresent": true,
+    "stdoutStructuredRelevantMessages": [],
+    "buildFinishedPresent": false,
+    "noPrivateProbeExecutable": true
+  },
+  "recordedCommands": [
+    {
+      "name": "canonical-snapshots",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--manifest-path",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+        "--",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8",
+        "compare"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "exit": 0,
+      "runningLines": [
+        "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8 compare`"
+      ],
+      "resultSha256": "19c23ffe4b76bd05b0e1c4a89da351f63775373ec92374d46143780d412eba5d"
+    },
+    {
+      "name": "native-probe-attempt2",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--manifest-path",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+        "--",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "exit": 0,
+      "runningLines": [
+        "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`"
+      ],
+      "resultSha256": "22244e626502204e202c05bd5db4832ca9be7786da78c77f752f0945c4c99056"
+    },
+    {
+      "name": "native-probe-final",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--manifest-path",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+        "--",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "exit": 0,
+      "runningLines": [
+        "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`"
+      ],
+      "resultSha256": "9992b0e6265147d9742ac072159bdd297f380bfd0ca1a6f6f134c51a7563a2ff"
+    },
+    {
+      "name": "native-probe",
+      "argv": [
+        "cargo",
+        "run",
+        "--offline",
+        "--manifest-path",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/Cargo.toml",
+        "--",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true"
+      },
+      "exit": 101,
+      "runningLines": [
+        "     Running `/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`"
+      ],
+      "resultSha256": "7382c8d3483ef6a7e1fe4b6e29039fb8282142757eaa3f1ef4074c3d0fe7a42b"
+    },
+    {
+      "name": "native-wasm-build",
+      "argv": [
+        "node",
+        "scripts/build-native.mjs"
+      ],
+      "environment": {
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_NET_OFFLINE": "true",
+        "NODE_OPTIONS": "--require=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/target-preload.cjs"
+      },
+      "exit": 0,
+      "runningLines": [],
+      "resultSha256": "f37fef6433b1ddbf726072b7d2eb67d1ece8e6fefa4c7511ac9ff19947d05c31"
+    }
+  ],
+  "acceptedProductUse": {
+    "privateTargetCompiledProducts": "No accepted probe/build is recorded using these products. Explicit probe run lines execute /tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe; Main release child override targets that same owned target; actual tested WASM SHA bound separately.",
+    "all26RecordedTargetEnvironments": [
+      "strict-target for Gate1b; handed Main target for remaining25"
+    ],
+    "indirectSharedSetupInput": "Private probe/Cargo.lock was created11:28:48 during sidecheck and subsequently consumed by recorded offline private probe builds, which compiled its dependencies afresh in handed target. Thus final probes reuse the dependency selection, not this private target compiled cache. Main workspace lock untouched; own private newer dependency versions visible in first explicit compile stderr.",
+    "limits": "Historical undocumented processes cannot be exhaustively reconstructed; no retrospective claim that the entire session was offline or all Cargo activity used the recorded target."
+  },
+  "sealedEvidenceUnchanged": {
+    "manifestSha256": "85a3abdaaec1e43d19d1f895c45e8bff842869a5bbe5a4e48786b9a930896569",
+    "artifactIndex714Sha256": "f6548db4b0e03bc1aae78ddf40641e8cec15d7f8127823420ddfde9d35491ae5",
+    "originalFinalReportSha256": "6ee15caea5559b42bab52b72a401707fc52604ba42bd5e5db93bdc807a35086b",
+    "source6StillExact": true,
+    "noCleanup": true
+  },
+  "residualRisks": [
+    "Automatic sidecheck was outside26 recorded serialized/offline/incremental0 commands; exact launcher argv/environment/exit unreconstructable.",
+    "Private probe lock selection originated during sidecheck and was shared with accepted offline probes; compiled private-target products were not their recorded execution artifacts."
+  ],
+  "noStagingCommandsIssued": true
+}

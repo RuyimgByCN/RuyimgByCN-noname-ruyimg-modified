@@ -1,0 +1,1 @@
+{"command": ["cargo", "check", "--offline", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 5.572702458011918, "disk_free_bytes": 45299593216}

@@ -1,0 +1,176 @@
+    Checking engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-api)
+    Checking libc v0.2.186
+    Checking licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/licensing-schema)
+    Checking resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/resource-schema)
+    Checking errno v0.3.14
+    Checking bitflags v2.13.0
+    Checking rustix v1.1.4
+    Checking rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-api)
+    Checking getrandom v0.4.3
+    Checking once_cell v1.21.4
+    Checking fastrand v2.4.1
+    Checking tempfile v3.27.0
+    Checking rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-vm)
+    Checking engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+    Checking content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-schema)
+error[E0425]: cannot find type `EventId` in this scope
+   --> crates/engine-native-kernel/src/snap/types.rs:205:24
+    |
+205 |     DamageFlow { root: EventId },
+    |                        ^^^^^^^ not found in this scope
+    |
+help: consider importing this type alias
+    |
+  1 + use crate::ids::EventId;
+    |
+
+error[E0433]: cannot find type `Stage` in this scope
+   --> crates/engine-native-kernel/src/snap/validation.rs:463:34
+    |
+463 | ...   if matches!(f.stage, Stage::BeforeTriggers | Stage::Commit) && d.settlement.progress != crate::event::DamageProgress::Before ...
+    |                            ^^^^^ use of undeclared type `Stage`
+    |
+help: consider importing this enum
+    |
+  1 + use crate::event::Stage;
+    |
+
+error[E0433]: cannot find type `Stage` in this scope
+   --> crates/engine-native-kernel/src/snap/validation.rs:463:58
+    |
+463 | ...   if matches!(f.stage, Stage::BeforeTriggers | Stage::Commit) && d.settlement.progress != crate::event::DamageProgress::Before ...
+    |                                                    ^^^^^ use of undeclared type `Stage`
+    |
+help: consider importing this enum
+    |
+  1 + use crate::event::Stage;
+    |
+
+error[E0433]: cannot find type `Stage` in this scope
+   --> crates/engine-native-kernel/src/snap/validation.rs:485:129
+    |
+485 | ...on.stack.iter().any(|f|f.id==root && f.stage==Stage::Intrinsic && matches!(f.data,EventData::Damage(_))) {return Err(SnapshotErr...
+    |                                                  ^^^^^ use of undeclared type `Stage`
+    |
+help: consider importing this enum
+    |
+  1 + use crate::event::Stage;
+    |
+
+error[E0308]: mismatched types
+    --> crates/engine-native-kernel/src/kernel/damage.rs:1066:26
+     |
+1054 | pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u32) {
+     |                                                                               --- expected due to this parameter type
+...
+1066 |                 amount = cap.max(0);
+     |                          ^^^^^^^^^^ expected `u32`, found `i32`
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/kernel/sha.rs:265:17
+    |
+262 |               ctx.emit(EventData::Damage(damage_data_with(
+    |                                          ---------------- arguments to this function are incorrect
+...
+265 | /                 1 + luoyi_bonus(ctx, Some(self.source))
+266 | |                     + xiongshou_bonus(ctx, self.source, self.target)
+267 | |                     + self.jiu_damage_bonus()
+268 | |                     + u32::from(self.xiandan_bonus)
+269 | |                     + liaoyuan,
+    | |______________________________^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:787:8
+    |
+787 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+...
+790 |     amount: i32,
+    |     -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+265 ~                 (1 + luoyi_bonus(ctx, Some(self.source))
+266 |                     + xiongshou_bonus(ctx, self.source, self.target)
+267 |                     + self.jiu_damage_bonus()
+268 |                     + u32::from(self.xiandan_bonus)
+269 ~                     + liaoyuan).try_into().unwrap(),
+    |
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/kernel/duel.rs:80:25
+    |
+ 77 |                     ctx.emit(EventData::Damage(damage_data(
+    |                                                ----------- arguments to this function are incorrect
+...
+ 80 |                         1 + luoyi_bonus(ctx, Some(opponent)),
+    |                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:782:8
+    |
+782 | pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+    |        ^^^^^^^^^^^                                             -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+ 80 |                         (1 + luoyi_bonus(ctx, Some(opponent))).try_into().unwrap(),
+    |                         +                                    +++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/kernel/duel.rs:139:17
+    |
+136 |             ctx.emit(EventData::Damage(damage_data(
+    |                                        ----------- arguments to this function are incorrect
+...
+139 |                 1 + luoyi_bonus(ctx, Some(opponent)),
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:782:8
+    |
+782 | pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+    |        ^^^^^^^^^^^                                             -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+139 |                 (1 + luoyi_bonus(ctx, Some(opponent))).try_into().unwrap(),
+    |                 +                                    +++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/rvm_ops.rs:308:29
+    |
+307 |                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+    |                                            -------------------------------- arguments to this function are incorrect
+308 |                     src, t, amount, nature, None,
+    |                             ^^^^^^ expected `i32`, found `u32`
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:787:8
+    |
+787 | pub fn damage_data_with(
+    |        ^^^^^^^^^^^^^^^^
+...
+790 |     amount: i32,
+    |     -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+308 |                     src, t, amount.try_into().unwrap(), nature, None,
+    |                                   ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/rvm_ops.rs:599:55
+    |
+599 |                     ctx.current_damage_mut().amount = next;
+    |                     -------------------------------   ^^^^ expected `i32`, found `u32`
+    |                     |
+    |                     expected due to the type of this binding
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/rvm_bridge.rs:107:27
+    |
+107 |             event_amount: d.amount,
+    |                           ^^^^^^^^ expected `u32`, found `i32`
+
+Some errors have detailed explanations: E0308, E0425, E0433.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `engine-native-kernel` (lib) due to 11 previous errors
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "check", "--offline", "-p", "engine-native", "--all-targets"], "exit": 101, "locked_seconds": 15.855954750033561, "disk_free_bytes": 40867438592}

@@ -1,0 +1,380 @@
+[
+  {
+    "path": "apps/desktop-client/tests/native_planner_measurement.rs",
+    "expected": "21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f",
+    "actual": "21439312d6d58051d78e6e305a2735d6c74b2ac3f4cc249b5716d06270b18b8f",
+    "equal": true
+  },
+  {
+    "path": "apps/game-server/src/native.rs",
+    "expected": "dcce31938f7233293ea894bb8126fc1ce6cecfe40d9a79733cade69fe19e0692",
+    "actual": "dcce31938f7233293ea894bb8126fc1ce6cecfe40d9a79733cade69fe19e0692",
+    "equal": true
+  },
+  {
+    "path": "apps/web-client/scripts/pa09-desktop-transport.test.mjs",
+    "expected": "2dfc94c5f161b703ff127236820234cd72ddb4a50ecc8badae269710001ef8f1",
+    "actual": "2dfc94c5f161b703ff127236820234cd72ddb4a50ecc8badae269710001ef8f1",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-content/src/content/host.rs",
+    "expected": "cec8d4ad133527087ed11e493ac273d15c5abb99106a8bf65fc876e00dde5212",
+    "actual": "cec8d4ad133527087ed11e493ac273d15c5abb99106a8bf65fc876e00dde5212",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-content/src/content/host/simulation.rs",
+    "expected": "ea54795c4642d09cfc08adcb2dfcce109b8a4ee7ed21da423f5347c4c8d877c3",
+    "actual": "ea54795c4642d09cfc08adcb2dfcce109b8a4ee7ed21da423f5347c4c8d877c3",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/catalog.rs",
+    "expected": "4eb398355432b5d5001de2c93f44f5d0e1bedbbeaad6cdc11ad0a572123d8041",
+    "actual": "4eb398355432b5d5001de2c93f44f5d0e1bedbbeaad6cdc11ad0a572123d8041",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/lib.rs",
+    "expected": "65d704ccb35ccfe8aca032f5c33f0192d1feee78d6da8820790a4c3b9159dbe2",
+    "actual": "65d704ccb35ccfe8aca032f5c33f0192d1feee78d6da8820790a4c3b9159dbe2",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/machine.rs",
+    "expected": "b8e70a952d5fd49b8b384e09ac8f684395a5bd26744633e3e06a91ecdfb54bf6",
+    "actual": "b8e70a952d5fd49b8b384e09ac8f684395a5bd26744633e3e06a91ecdfb54bf6",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/resolution.rs",
+    "expected": "9bc4bebda4fa910326e7283ea8e9e0ac0f057a5af20c20b7e8b4c51119ff15c6",
+    "actual": "9bc4bebda4fa910326e7283ea8e9e0ac0f057a5af20c20b7e8b4c51119ff15c6",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/rvm_bridge.rs",
+    "expected": "5df21a8840f2f9c7fdc98fa6de95f060c827b1790b2eaecae5f3e53404947697",
+    "actual": "5df21a8840f2f9c7fdc98fa6de95f060c827b1790b2eaecae5f3e53404947697",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/rvm_bridge/handlers.rs",
+    "expected": "de6622e28c698f87ea465856a5dc21a009a7b5652affbef7945a708176680b1f",
+    "actual": "de6622e28c698f87ea465856a5dc21a009a7b5652affbef7945a708176680b1f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/rvm_bridge/machine.rs",
+    "expected": "4918dc7d8d6104b5392a575338f0aae9147170a039d141f252d152ac2da1240a",
+    "actual": "4918dc7d8d6104b5392a575338f0aae9147170a039d141f252d152ac2da1240a",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/rvm_named.rs",
+    "expected": "03a90c80cf05db0507376527b38a4f74f964d173d2c91a4e2190dc3638ac36cb",
+    "actual": "03a90c80cf05db0507376527b38a4f74f964d173d2c91a4e2190dc3638ac36cb",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-kernel/src/simulation.rs",
+    "expected": "e6ef0f1ba3815416173dc2e35de6c95df4bce52e32cd858155ea4a352559806e",
+    "actual": "e6ef0f1ba3815416173dc2e35de6c95df4bce52e32cd858155ea4a352559806e",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-wasm/src/session.rs",
+    "expected": "e855c9b07ca7e9a55242bf9233aa31012e63c6bbca6fff3724f436405ede2e7e",
+    "actual": "e855c9b07ca7e9a55242bf9233aa31012e63c6bbca6fff3724f436405ede2e7e",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native-wasm/tests/pa09_native_session.rs",
+    "expected": "a55e81d8f8820f5c611409aec895831ea5b1c9e69d65a0e8bda4ea9e37a738e1",
+    "actual": "a55e81d8f8820f5c611409aec895831ea5b1c9e69d65a0e8bda4ea9e37a738e1",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/examples/nc12_bench.rs",
+    "expected": "5894063b11d1f35827d22aa7da6568a67ffc5b09c5471a593a3a0821a32e70a1",
+    "actual": "5894063b11d1f35827d22aa7da6568a67ffc5b09c5471a593a3a0821a32e70a1",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/examples/nc12_bench/scenarios.rs",
+    "expected": "6f088bfead3ee3ca9a12e2b5c0e3fe55f104db2c81000b6ca941ce253e1c843b",
+    "actual": "6f088bfead3ee3ca9a12e2b5c0e3fe55f104db2c81000b6ca941ce253e1c843b",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/ai.rs",
+    "expected": "48c7c56589789b8a833885261905c63439e2ac00bce940dd181d9a2d9a637985",
+    "actual": "48c7c56589789b8a833885261905c63439e2ac00bce940dd181d9a2d9a637985",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/ai/redact.rs",
+    "expected": "528ae85e9519ae1069002154910e02db3574833c184eb97ef398d12d3530832f",
+    "actual": "528ae85e9519ae1069002154910e02db3574833c184eb97ef398d12d3530832f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/ai/remap.rs",
+    "expected": "d7ab2f1f85bd4f047166a993944b8018d13f0cabfb8a3bc8ab5d9ede769fc384",
+    "actual": "d7ab2f1f85bd4f047166a993944b8018d13f0cabfb8a3bc8ab5d9ede769fc384",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/ai/trial.rs",
+    "expected": "9b0791363f2cadc3f7ec17b6915237c7bae0dda5eba2c6960cc47a199bc510e6",
+    "actual": "9b0791363f2cadc3f7ec17b6915237c7bae0dda5eba2c6960cc47a199bc510e6",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/ai_pool.rs",
+    "expected": "2db7bda6691855f45d19ff05fcc9381b7e18e41b88ff64985849007733a4d343",
+    "actual": "2db7bda6691855f45d19ff05fcc9381b7e18e41b88ff64985849007733a4d343",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/engine.rs",
+    "expected": "7d70d55e44ddbb753018403377961918b5c39e354f729027e10287b2eb1f81ac",
+    "actual": "7d70d55e44ddbb753018403377961918b5c39e354f729027e10287b2eb1f81ac",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/engine/certification.rs",
+    "expected": "04c9800571e0a772f354ed5ba4c9157d3430ee3d512764e50db12daae793012d",
+    "actual": "04c9800571e0a772f354ed5ba4c9157d3430ee3d512764e50db12daae793012d",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/engine/commands.rs",
+    "expected": "4c5b25ec2ecd6573a2d8db9214aec73b6dfdc4753584f8f5c9227d630ff3ab27",
+    "actual": "4c5b25ec2ecd6573a2d8db9214aec73b6dfdc4753584f8f5c9227d630ff3ab27",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/engine/legal_actions.rs",
+    "expected": "569c00b6c08f38c3fa7c966a4f6b3ac01eda4c79b2d85dc90050233169c59a52",
+    "actual": "569c00b6c08f38c3fa7c966a4f6b3ac01eda4c79b2d85dc90050233169c59a52",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/engine/simulation.rs",
+    "expected": "ebefc2b6cde355e4eddc1ec3cec122cf51155ddc0a72bd3d82cfbe23aba8f3d7",
+    "actual": "ebefc2b6cde355e4eddc1ec3cec122cf51155ddc0a72bd3d82cfbe23aba8f3d7",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/src/lib.rs",
+    "expected": "b2fca45efb9d80fbadbb2cda9b425c325933c5146bf80bfb8b2983c8c9ed975c",
+    "actual": "b2fca45efb9d80fbadbb2cda9b425c325933c5146bf80bfb8b2983c8c9ed975c",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/adr0786_j2_effect_choices.rs",
+    "expected": "a94ceb6bf50b4b2e331c706eb2e3f2106e9eb869f3d81583899b3a8bb1b81b4f",
+    "actual": "a94ceb6bf50b4b2e331c706eb2e3f2106e9eb869f3d81583899b3a8bb1b81b4f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/ai_content_tuning.rs",
+    "expected": "6ed20b00710527c43c015c40d3d29cda811c10b0420b407389bdf835f0f2bb1d",
+    "actual": "6ed20b00710527c43c015c40d3d29cda811c10b0420b407389bdf835f0f2bb1d",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/ai_planner.rs",
+    "expected": "8c4575b079fddfecf6997b8a43c1f1923b954d6b01af165f80f5e34148ec835a",
+    "actual": "8c4575b079fddfecf6997b8a43c1f1923b954d6b01af165f80f5e34148ec835a",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+    "expected": "98f3c510713958cb12c1ce8ccd1ae5158c06293382d83e8a1a62fd14e3e59c1b",
+    "actual": "98f3c510713958cb12c1ce8ccd1ae5158c06293382d83e8a1a62fd14e3e59c1b",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/l01_ai_tuning_eight.rs",
+    "expected": "e734df0836753866a08e1470df206523a665ccda02c35d405874afa72d932f76",
+    "actual": "e734df0836753866a08e1470df206523a665ccda02c35d405874afa72d932f76",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/native_kernel/n10.rs",
+    "expected": "7a1cf762774922cf3370a50968b9031d75c0bbccaf443b7d06bb1692915e8e89",
+    "actual": "7a1cf762774922cf3370a50968b9031d75c0bbccaf443b7d06bb1692915e8e89",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc03_ai_consistency.rs",
+    "expected": "d0407791dfd457fc83760e613717dd997f4db26023d3bed5f7830568120867fa",
+    "actual": "d0407791dfd457fc83760e613717dd997f4db26023d3bed5f7830568120867fa",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc07_discard_duplicate_probe.rs",
+    "expected": "9127b5cd10f60e71536db56bda6493cfb09032e14746ae3fdf8a26cce9095cc4",
+    "actual": "9127b5cd10f60e71536db56bda6493cfb09032e14746ae3fdf8a26cce9095cc4",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_ai_boundary_and_cancel.rs",
+    "expected": "232237c89aaedc62c18c304efbd9fa90feed7c120ed0eafd19f1997cf7be2604",
+    "actual": "232237c89aaedc62c18c304efbd9fa90feed7c120ed0eafd19f1997cf7be2604",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_ai_bounds.rs",
+    "expected": "3ffa3eacd2463b7e71bd6987dd7e057b22f9ee0d7103a6b5f35231e4ddeb5a51",
+    "actual": "3ffa3eacd2463b7e71bd6987dd7e057b22f9ee0d7103a6b5f35231e4ddeb5a51",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_ai_information_boundary.rs",
+    "expected": "51e532145d51f370d9453dd1e5a0c62005cc867b1f4d0cef9bdb2f61c489fbf6",
+    "actual": "51e532145d51f370d9453dd1e5a0c62005cc867b1f4d0cef9bdb2f61c489fbf6",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_duel_nullify_privacy.rs",
+    "expected": "32151de6f1991291bc493428bb0dfe05a8b3a6c012b5a26a7ec2985c7f6a6e7f",
+    "actual": "32151de6f1991291bc493428bb0dfe05a8b3a6c012b5a26a7ec2985c7f6a6e7f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_empty_choice.rs",
+    "expected": "c518dd5c543f17441c1780d37e77d16be4704aaa7e760dcb1a38c570e366a794",
+    "actual": "c518dd5c543f17441c1780d37e77d16be4704aaa7e760dcb1a38c570e366a794",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_host_privacy.rs",
+    "expected": "2fbbfa4ac8bd6e2f32604df8f15d8e0c9cc751d16115fee374b018cf5f8c24c4",
+    "actual": "2fbbfa4ac8bd6e2f32604df8f15d8e0c9cc751d16115fee374b018cf5f8c24c4",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_implicit_effect_privacy.rs",
+    "expected": "7c7a54d60e24191df7b4e35514f8e098dee15df8646d9533cbb5bd9c02e798e3",
+    "actual": "7c7a54d60e24191df7b4e35514f8e098dee15df8646d9533cbb5bd9c02e798e3",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_j2_vm_privacy.rs",
+    "expected": "ea1ee25beb2fd7fb06b84b8ed0d1a7e1e7ed41cd6e8520ac276b3b24fffd543b",
+    "actual": "ea1ee25beb2fd7fb06b84b8ed0d1a7e1e7ed41cd6e8520ac276b3b24fffd543b",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_live_hidden_cards.rs",
+    "expected": "68072d34a9f2085d4fc61c875107f54d6eb7029874955035ab413fadee000a7d",
+    "actual": "68072d34a9f2085d4fc61c875107f54d6eb7029874955035ab413fadee000a7d",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_multiple_hidden_traps.rs",
+    "expected": "698a9cd23d9ca579f4ea24c66c255e85ac64cc4608da1073e30a7fc6fc8ad88f",
+    "actual": "698a9cd23d9ca579f4ea24c66c255e85ac64cc4608da1073e30a7fc6fc8ad88f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+    "expected": "a101b6f246aba9125b024b7c62e80a31df22d48e4c37a50c282cc66b2834bd85",
+    "actual": "a101b6f246aba9125b024b7c62e80a31df22d48e4c37a50c282cc66b2834bd85",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_pending_duel_privacy.rs",
+    "expected": "921c4182da917b935c58db0a69d69cf466a90632c0e24cf38bc6f7a756a24b0b",
+    "actual": "921c4182da917b935c58db0a69d69cf466a90632c0e24cf38bc6f7a756a24b0b",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_planner_pool.rs",
+    "expected": "47feeff2d30bf2968421e664cfa574b499eb40e28e99ea966c26a03d07b3d4c9",
+    "actual": "47feeff2d30bf2968421e664cfa574b499eb40e28e99ea966c26a03d07b3d4c9",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_private_scalar.rs",
+    "expected": "a7e180ab78c9b898845e1d18181c978480426c84e882b7edc1e3daef8065e9cd",
+    "actual": "a7e180ab78c9b898845e1d18181c978480426c84e882b7edc1e3daef8065e9cd",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+    "expected": "b4c6c2fa44c00652c0dace73d0df87c3679fee94bfcec2e52a11b8755210978f",
+    "actual": "b4c6c2fa44c00652c0dace73d0df87c3679fee94bfcec2e52a11b8755210978f",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_single_hidden_trap.rs",
+    "expected": "e71d0728a7d2f61ac0b4271a5a17140c528a8d938f97eb0075abb850f90c3600",
+    "actual": "e71d0728a7d2f61ac0b4271a5a17140c528a8d938f97eb0075abb850f90c3600",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc10_skill_pile_conservation.rs",
+    "expected": "a86d66db4e1e46ef88b6a4b7a681645d5e733b21ae33e0c4776e712cfe7d7fcc",
+    "actual": "a86d66db4e1e46ef88b6a4b7a681645d5e733b21ae33e0c4776e712cfe7d7fcc",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_ai_strength_baseline.rs",
+    "expected": "d13cb30cdaa9ccdce7974b5e25a49e3b4b1408be76812b86472ed4ba247402df",
+    "actual": "d13cb30cdaa9ccdce7974b5e25a49e3b4b1408be76812b86472ed4ba247402df",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_dangling_reference_probe.rs",
+    "expected": "e2e92b562fc01fb18fb78ad513289ca701da9df09de45d81ee118475f746c51a",
+    "actual": "e2e92b562fc01fb18fb78ad513289ca701da9df09de45d81ee118475f746c51a",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_dangling_reference_repro.rs",
+    "expected": "004ee941a62ac00c27c7a78c4e3fb8a8b9f0824439c9d627c2da4d5897dd83fe",
+    "actual": "004ee941a62ac00c27c7a78c4e3fb8a8b9f0824439c9d627c2da4d5897dd83fe",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/nc12_swd_authoritative_stability.rs",
+    "expected": "83d5057ff77c85485156d61d939bcd0d7e3117e1c2d758ba1ca604c14bd09de7",
+    "actual": "83d5057ff77c85485156d61d939bcd0d7e3117e1c2d758ba1ca604c14bd09de7",
+    "equal": true
+  },
+  {
+    "path": "crates/engine-native/tests/t9_d5_surface.rs",
+    "expected": "45f5888617b48247734307ab8a12641d4861d1293321a76515fe9d2577f68f38",
+    "actual": "45f5888617b48247734307ab8a12641d4861d1293321a76515fe9d2577f68f38",
+    "equal": true
+  },
+  {
+    "path": "crates/rule-vm/src/lib.rs",
+    "expected": "bdc8dc7ffc9894a5aa231882833ee9ff20bd8761bcd4115c20e4f398bfe21714",
+    "actual": "bdc8dc7ffc9894a5aa231882833ee9ff20bd8761bcd4115c20e4f398bfe21714",
+    "equal": true
+  },
+  {
+    "path": "crates/rule-vm/src/vm.rs",
+    "expected": "fd34f83c338cb7b4dc9c7c11f3a63e1080c23378a29983ef7fe6e5ab13f2f833",
+    "actual": "fd34f83c338cb7b4dc9c7c11f3a63e1080c23378a29983ef7fe6e5ab13f2f833",
+    "equal": true
+  },
+  {
+    "path": "crates/rule-vm/src/vm/controlled.rs",
+    "expected": "19998e068e3005e0090d67000cfb19ae18fedad9ebf5d06d54b9ab869550ca7b",
+    "actual": "19998e068e3005e0090d67000cfb19ae18fedad9ebf5d06d54b9ab869550ca7b",
+    "equal": true
+  },
+  {
+    "path": "crates/rule-vm/tests/controlled.rs",
+    "expected": "6953140270e9a8ca4f829835fd6f0937f8d774cd0c7162e8dbb062a029fbc2d6",
+    "actual": "6953140270e9a8ca4f829835fd6f0937f8d774cd0c7162e8dbb062a029fbc2d6",
+    "equal": true
+  }
+]

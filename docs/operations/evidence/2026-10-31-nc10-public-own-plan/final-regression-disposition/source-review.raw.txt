@@ -1,0 +1,24 @@
+## Review
+
+No issues found.
+
+- **Scope:** Reviewed the frozen [semantic delta](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/semantic-delta.patch:1), final test body, manifest, retained original failure, targeted outputs and errata. The five v2 files retain their previously reviewed identities according to the manifest/preservation records; this review does not repeat their source assessment or freshly compute hashes.
+
+- **Correct — the regression disposition matches the agreed gate.** Frozen [ai_planner.rs:415](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/tests/ai_planner.rs:415) retains seed8211, node64, deadline50ms, variant1, the 900-operation bound and P3 winner assertion. It replaces the exact484 policy trajectory pin with substantive execution checks. It does not assert119, encode Jiu-other rescue as normative, or change a rules golden.
+
+- **Correct — planning and formal application are checked independently.** Every planner call must preserve the complete saved state/RNG and host log and report zero simulation faults. Every application must return Accepted/Pending or enter explicit suspension handling; apply errors and Rejected outcomes fail immediately. There is no skip, alternate-action retry or silent fallback.
+
+- **Correct — suspension is bounded without replanning.** Each submit/resume result consumes the same operation counter. Before another `resume`, the test requires remaining budget. A terminal return can consume operation900, while another suspension at that boundary fails. This matches the existing [resume contract](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/commands.rs:75). The retained run observed zero suspensions, so this branch is source-reviewed rather than newly exercised here.
+
+- **Correct — restore validation is specific and complete.** [ai_planner.rs:474](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/tests/ai_planner.rs:474) requires exact snapshot encode/decode equality, restored rule-state hash equality and complete restored Save equality, allowing only checked `auth_generation+1`. That exception matches the existing restore implementation; no arbitrary fields are normalized.
+
+- **Evidence supports closing the private regression gate.** The inspected [seed output](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/seed8211.stderr.log:5) records119 successful applications, zero suspensions/simulation faults/new probe faults and successful restore. Own controls pass4/0, Shan passes1/0, and fresh session outputs show **1+5=6** passing tests. Full native summary rows total1719 passed/0 failed/75 ignored; the independent strict Gate1b record reports exit0. Parent verification of all command/source bindings remains the final evidence audit.
+
+- **Correct — history and reporting corrections remain visible.** The original [119-versus484 failure](/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/seed8211.stderr.log:5) is retained. Linked errata correctly record four calibration Own calls and six session tests while preserving original sealed reports. This resolves the prior calibration P2 through an explicit correction.
+
+- **Fixed:** None applied during review. The submitted test delta addresses the outstanding semantic regression disposition.
+- **Merge verdict: OK with notes — the private bounded fix is ready for Main functional integration**, subject to the parent’s final evidence audit and required Main checks. No new strength campaign is required absent a new failure or policy change. Fresh WASM/Worker execution was not performed in this step; production remains the previously reviewed v2.
+
+Complete NC10, historical private all19/NoCert, no-choice/descendant privacy, all37/platform/whole-Goal work and the separate C29 rescue-rule gap remain open.
+
+Skipped execution, fresh hashing and exhaustive command/product parsing. The verdict covers this semantic delta and bounded integration readiness, not general strength or adopted-rule equivalence.

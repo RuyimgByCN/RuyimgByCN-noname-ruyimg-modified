@@ -1,0 +1,50 @@
+# NC10 quality outcomes — bounded test-only verification (2026-10-31)
+The missing formal-outcome evidence is now measured for both exact baseline and frozen v2 candidate: **400/400 games finished, 135,200 actual submits returned Accepted or Pending, and all400 final archives decoded/restored successfully**. This is capability evidence for one native profile, not strength acceptance or upstream-rule equivalence. No permanent source/test/expectation change was made.
+
+Recovery and identity
+- Confirmed previous `/tmp/nc10-own-36992565/evidence/final-v2/manifest.json`, checkpoint20 and implementation report exist; all5 current frozen source files matched v2 SHA. Prior45-minute runtime timeout is retained as **ORCHESTRATION FAILURE after sealing**, separately from the preserved119-vs484 test failure. No alternate CLI or old run continuation was assumed.
+- No owned prior benchmark/analyzer process remained; the earlier analyzer was terminated, not silently resumed. Private index was empty; Main's315 held non-document source/generated/package paths matched. Parent-owned Main documentation changes are allowed.
+- New evidence root Q=`/tmp/nc10-own-quality-8ed2ce6f/evidence`; [checkpoint10](/tmp/nc10-own-quality-8ed2ce6f/evidence/checkpoint-10/complete.json) was created/reported before its deadline. Original v2/report/raw/delta/expectations/manifests were not rewritten.
+
+Experiment
+- Temporarily instrumented only the existing `nc12_ai_strength_baseline_statistics` test: same200 seeds45000..45199, four-seat `Engine::new` Prototype, swd card pack, node8/deadline50ms/depth1/variant0,1200-step limit and original dedup allocator. Original legacy fault/completion assertions remain; no484 expectation was edited or rerun.
+- Baseline production files and test-group entry were temporarily exact5fc bytes; candidate phase used exact frozen v2 bytes. All5 candidate files and the original quality test were restored byte-for-byte in `finally`, then independently checked. The filtered quality test alone ran; privacy4/full-native/WASM/Gate1b were not rerun.
+- Both commands: `cargo test --offline -p engine-native --test nc_rounds nc12_ai_strength_baseline_statistics -- --nocapture --test-threads=1`, exit0. Global heavy lock, existing owned target `/tmp/nc10-own-36992565/target`, jobs2, incremental0/offline, disk>3GiB; no dependency installation or other target use.
+- Later C8 coordination incident was reported after these jobs finished. New heavy work was paused; our wrapper PIDs6267/7712 were absent and both paths existed at our subsequent read-only check. Historical unlinked-inode status is unknown; no path/lock was recreated, no other PID was signalled, and completed exits were not changed. Details: `Q/coordination-incident.json`.
+- Each actual submit records the complete authorized PolicyInput, complete Plan, actor/dedup/revision and returned CommandOutcome. Planner/submit panic handling records context and resumes the failure; any actual rejection would seal before/after/context and STOP without retry. No stop condition occurred. Final NGSA encode/decode/restore also exercised final-state ownership/shape validation; it does not prove every intermediate state or all content.
+
+Actual results
+| Measurement | Baseline5fc | Candidate v2 |
+| --- | ---: | ---: |
+| Games finished / attempted | 200/200 | 200/200 |
+| Actual submits | 63,182 | 72,018 |
+| Accepted | 52,512 | 60,046 |
+| Pending | 10,670 | 11,972 |
+| Rejected, including VmFault | 0 | 0 |
+| Suspended | 0 | 0 |
+| Planner / submit panics | 0/0 | 0/0 |
+| Final NGSA decode/restore successes | 200 | 200 |
+| Steps p50 / p90 / max | 321 / 413 / 464 | 366 / 479 / 577 |
+| Observed Plan timed_out flags | 0 | 0 |
+| Final winner P0 / P1 / P2 / P3 | 3 / 8 / 74 / 115 | 8 / 5 / 73 / 114 |
+- Every per-game count sum equals its steps; streamed submit rows independently reproduce all counts, contiguous step numbering and revision+1 for every return. The200-seed distribution reproduces the previous uninstrumented observations. Same-seed winner is unchanged in136 games and changes in64; all seats use each phase's planner, so these are self-play outcomes, not paired challenger wins.
+- The original sim/probe counters also remain0, but the new formal counts above are independently observed returns rather than an inference from neutral Own.sim_faults. No Error==Error privacy/capability claim is used.
+
+Public first-divergence interpretation and distinct existing rule issue
+- The retained seed8211 case is zero-based step61, responderP1, choice5: `RespondCard/dying_save`, ordered `[Pass,Card85]`, min=max1, no cancel. P1 publicly has HP1, Own hand kinds Weapon90/Jiu85, equips118, skills[], roleNone; P0 has public HP0 and visible roleNone. Public event history ends with P3 damaging P0, DyingEntered(P0), then this ask. No private Core/PC/future or hidden role was used to justify a choice or infer a target.
+- RoleNone establishes no faction/alliance. This explicitly configured Prototype benchmark has last-survivor victory, making P0 another competitor, not P1 itself; it does not establish any identity-mode ally/enemy relationship. Spending the only visible Jiu at HP1 has an observable resource cost, but tactical optimality cannot be inferred from one generic ask.
+- New advice takes the first Card option rather than Pass; the old observed action is Pass. Retained independent restored single submits both return Accepted: old permits P0's death; new discards85 and emits HpRecovered(P0,1)/DyingSaved(P0,85). Separately measured full games remain484/P3 versus119/P3. This identifies a policy-action consequence, not equal strength.
+- Parent identified a separate **existing formal-rule/options/restore gap**, and read-only source checks confirm it: kernel `kernel/combat_rules.rs::is_tao_like` accepts Jiu unconditionally despite its self-rescue comment; `snap/asks/shapes.rs` groups Jiu with Tao. Adopted upstream `apps/core/card/extra.js::savable` requires `dying===player || hasSkillTag("jiuOther",...)`. The recorded responder has no projected such skill. Current330 option advice/formal acceptance therefore differs from adopted upstream rescue semantics.
+- The option-production gap already exists with the old planner. It is not a newly illegal AI selection against the current native schema, and it must not be hidden by a Jiu-only selector exception. Existing Tianxianjiu permissiveness is also noted by source, without claiming an additional execution experiment. No formal/restore/gate/lifecycle/version/selector change was made in this run; separate rescue-action/rule-equivalence work remains required.
+
+Strength and assertion disposition
+- Existing house `policy_head2head`/`quality_matrix` use the same linked BoundedPlanner implementation for all seats. Across baseline/candidate builds their reference opponents also change; they cannot supply a byte-identical fixed opponent here. The example's public-input TablePolicy is private to its example. No new opponent framework, copied baseline AI, protocol or production policy was created. Fixed-opponent/role-balanced win evidence remains pending.
+- Proposal only: keep the original484 assertion, red result and baseline trace intact now. Review exact484 as an old-policy trajectory pin, rather than an immutable user requirement or rules law; assess corrected rescue semantics, meaningful public-policy application/effect/completion checks and fixed-opponent outcomes before changing its disposition. Do not substitute119 or waive quality from200 self-play completions. C29 formal rescue/restore correction requires its separate review.
+
+Review artifacts
+- [Machine summary](/tmp/nc10-own-quality-8ed2ce6f/evidence/summary.json), [baseline command/source/binary identity](/tmp/nc10-own-quality-8ed2ce6f/evidence/baseline/result.json), [candidate identity](/tmp/nc10-own-quality-8ed2ce6f/evidence/candidate/result.json): exact source hashes, frozen temporary source copies, Cargo/profile/rustc, argv/environment/exits, stdout/stderr SHA and copied benchmark-binary SHA.
+- Full per-game rows: `Q/baseline/games.jsonl`, `Q/candidate/games.jsonl`; every actual submit: each phase's `submits.jsonl`. Each phase retains200 final NGSA files and `archives.json`; these are generated current330 data, not old329 archive replay.
+- [Public/source context](/tmp/nc10-own-quality-8ed2ce6f/evidence/public-divergence-and-rule-context.json) links the unchanged original first-divergence full inputs/pre-events/formal outcomes/archives and records inspected rule/opponent source SHA. [Preservation](/tmp/nc10-own-quality-8ed2ce6f/evidence/preservation.json) and `restored.json` prove restoration, empty private index and Main held315 equality.
+
+Quality disposition remains for parent review. This clears the formal-outcome measurement gap for this exact profile; the existing rescue-equivalence counterexample, frozen trajectory red, strength comparison, original private NoCert research, no-choice/descendant VM/private effects, all37 content and whole Goal remain open.
+Skipped fixed-opponent/new platform/VM-host matrices and all production fixes. Risk: native Accepted and valid final archives do not establish adopted-rule equivalence or AI strength.

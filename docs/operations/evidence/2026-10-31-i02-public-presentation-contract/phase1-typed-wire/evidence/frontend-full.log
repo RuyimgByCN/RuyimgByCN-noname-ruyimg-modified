@@ -1,0 +1,490 @@
+npm notice run noname-next-web-client@0.1.0 test
+npm notice run node --import ./scripts/ts-register.mjs --test
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/approved-b-metadata.test.mjs (478.41775ms)
+✔ desktop builds both WASM engines before the frontend, forcing native web output (71.905209ms)
+✔ Windows desktop runs pnpm.cmd through a shell (45.050125ms)
+✔ a failed native build prevents publishing a frontend with a stale native package (56.486458ms)
+✔ native build creates a missing package from source with portable PATH and argument boundaries (47.602583ms)
+✔ native build failure preserves the previous usable package and clears temporary output (47.769ms)
+✔ native Node smoke target remains available without shell interpolation (56.195417ms)
+✔ legacy build prepends rustup PATH even when the cargo executable has a Windows suffix (58.070792ms)
+✔ MSI keeps the Chinese product name with the matching WiX locale (3.912292ms)
+✔ Linux separates the package id from the Chinese window and launcher names (1.07725ms)
+✔ Tauri hooks resolve the actual sibling web client from the desktop crate (0.227125ms)
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (9.774541ms)
+✔ 目录项与包元数据不一致会被判失败 (2.671542ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (3.764042ms)
+✔ 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入） (0.912208ms)
+✔ 空候选是显式空状态，不是错误也不是静默白屏 (0.073542ms)
+✔ 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集 (0.469625ms)
+✔ 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示） (0.085666ms)
+✔ 重新加载中保留旧候选但清掉旧错误 (0.067625ms)
+✔ 座位投影：只取目标座位，提取原生技能名与 id (0.163042ms)
+✔ 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清） (0.093833ms)
+✔ 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能 (0.201625ms)
+✔ 选将失败：显示错误、不应用刷新信封、不留下成功态 (0.170958ms)
+✔ 失败后重试成功：清除错误并进入成功态 (0.159875ms)
+✔ 返回与请求不一致（错座位）不得显示成功 (0.090125ms)
+✔ 畸形返回（缺刷新信封）不得显示成功 (0.080792ms)
+✔ 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误 (0.092875ms)
+✔ 空候选名在发起请求前就被拒绝 (0.057083ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-adapter.test.mjs (569.18725ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-general-select.test.mjs (432.827917ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/native-legal-actions.test.mjs (467.629625ms)
+✔ all discoverable packages install actual versioned data; active set reaches the match (14.336833ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (1.197792ms)
+✔ all lifecycle content mutations are blocked during a match (0.271208ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.338375ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.258083ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.196708ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.165ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (0.368667ms)
+✔ old standard saves without packages remain compatible (0.09625ms)
+✔ same-version logic fingerprint conflict rejects installation atomically (0.408916ms)
+✔ same-version logic fingerprint conflict rejects upgrade atomically (0.345708ms)
+✔ same-version asset content conflict rejects installation atomically (0.311625ms)
+✔ same-version asset content conflict rejects upgrade atomically (0.264875ms)
+✔ same-version copies tolerate JSON formatting and object key order (0.468209ms)
+✔ unsafe identity fields cannot enter the browser content lock (0.439166ms)
+✔ package dependencies are checked for match start and frozen save restore (3.271542ms)
+✔ fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint (2.095416ms)
+✔ formal import installs a VM package with its modules and reaches the match (31.489125ms)
+✔ import rejects malformed packages without touching installed content (1.540167ms)
+✔ import upgrades to a new version, keeps the old copy, and rolls back (0.80625ms)
+✔ disable, uninstall and revoke affect new matches and saved matches as the contract requires (0.578958ms)
+✔ import is blocked while a match is frozen (0.162958ms)
+✔ catalog packages without VM modules keep their manifest+asset payload (15.389666ms)
+✔ validated import commits only after the deep validator passes and marks the copy unsigned (0.375834ms)
+✔ validated import aborts without touching the store when the deep validator rejects (0.380167ms)
+✔ validated import never calls the deep validator when the structural layer or preconditions reject (0.577917ms)
+✔ validated import re-checks preconditions at commit time (store may change during async validation) (0.107459ms)
+✔ complete VM-only package survives match preparation and frozen save restoration (1.413917ms)
+✔ VM payload must have an array of modules and does not excuse malformed assets (0.348542ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc03-native-input-bounds.test.mjs (438.931084ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc03-outcome-ui.test.mjs (496.950833ms)
+✔ 原生零号座位的回合与结束阶段可见 (140.953042ms)
+✔ 非零座位与准备阶段保持可见 (16.383625ms)
+✔ 旧线无当前玩家的零哨兵仍使用事件回退或不显示 (23.533ms)
+(node:55358) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (46.356ms)
+✔ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (34.447542ms)
+✔ 其他请求在途时发送失败不提前结束 SAB 唤醒 (15.024083ms)
+✔ 性能探针丢弃未发送请求，保留成功请求 (0.563083ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-restore-atomicity.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-restore-atomicity.test.mjs (238.825166ms)
+node:internal/modules/esm/resolve:272
+    throw new ERR_MODULE_NOT_FOUND(
+          ^
+
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/nc04-start-atomicity.test.mjs
+    at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+    at moduleResolve (node:internal/modules/esm/resolve:879:10)
+    at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+    at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+    at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+    at nextStep (node:internal/modules/customization_hooks:189:26)
+    at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+    at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+  code: 'ERR_MODULE_NOT_FOUND',
+  url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+}
+
+Node.js v26.4.0
+✖ scripts/nc04-start-atomicity.test.mjs (212.057291ms)
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (28.571417ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (13.681125ms)
+✔ 初始化错误有结果，后续可创建新 Worker (25.439625ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (10.195209ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (13.779709ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (14.158292ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (20.150833ms)
+✔ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (12.162166ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (16.417917ms)
+✔ Worker bad present batch_unknown preserves pending until dispose (9.549666ms)
+✔ Worker bad present null_revision preserves pending until dispose (9.927792ms)
+✔ Worker bad present unsafe_revision preserves pending until dispose (10.674833ms)
+✔ Worker bad present mixed_revision preserves pending until dispose (9.319584ms)
+✔ Worker bad present string_revision preserves pending until dispose (8.102ms)
+✔ Worker bad present bad_status preserves pending until dispose (8.999042ms)
+✔ Worker bad present overflow_nonempty preserves pending until dispose (8.47825ms)
+✔ Worker bad present invalid_domain preserves pending until dispose (8.555375ms)
+✔ Worker bad present invalid_reason preserves pending until dispose (10.407666ms)
+✔ Worker bad present scope_unknown preserves pending until dispose (7.407833ms)
+✔ Worker bad present duplicate_scope preserves pending until dispose (7.690708ms)
+✔ Worker bad present duplicate_ordinal preserves pending until dispose (8.517667ms)
+✔ Worker bad present unknown_event preserves pending until dispose (8.705625ms)
+✔ Worker bad present event_unknown preserves pending until dispose (9.207625ms)
+✔ Worker bad present actor_zero preserves pending until dispose (7.130459ms)
+✔ Worker bad present actor_negative preserves pending until dispose (6.689083ms)
+✔ Worker bad present actor_fraction preserves pending until dispose (6.774834ms)
+✔ Worker bad present actor_string preserves pending until dispose (6.953167ms)
+✔ Worker bad present actor_out_of_view preserves pending until dispose (9.367292ms)
+✔ Worker bad present actor_u32_over preserves pending until dispose (7.238125ms)
+✔ Worker bad present actor_null preserves pending until dispose (6.76775ms)
+✔ Worker bad present duplicate_target preserves pending until dispose (7.040458ms)
+✔ Worker bad present missing_nullable_voice preserves pending until dispose (6.736333ms)
+✔ Worker bad present amount_zero preserves pending until dispose (11.501334ms)
+✔ Worker bad present bad_nature preserves pending until dispose (8.32475ms)
+✔ Worker bad present bad_effective_kind preserves pending until dispose (8.122875ms)
+✔ Worker bad present token_traversal preserves pending until dispose (7.877583ms)
+✔ Worker bad present token_controls preserves pending until dispose (7.670709ms)
+✔ Worker bad present role_local_id_wrong preserves pending until dispose (7.307042ms)
+✔ Worker bad present role_kind_wrong preserves pending until dispose (6.617792ms)
+✔ Worker bad present owner_unknown preserves pending until dispose (9.067416ms)
+✔ Worker bad present digest_upper preserves pending until dispose (7.922167ms)
+✔ Worker bad present digest_algorithm preserves pending until dispose (7.444458ms)
+✔ Worker bad present size_zero preserves pending until dispose (6.88675ms)
+✔ Worker bad present source_kind preserves pending until dispose (6.867792ms)
+✔ Worker bad present reference_private preserves pending until dispose (8.798541ms)
+✔ Worker bad present path_escape preserves pending until dispose (6.63125ms)
+✔ Worker bad present invalid_category preserves pending until dispose (7.19625ms)
+✔ Worker bad present empty_assets preserves pending until dispose (7.06075ms)
+✔ Worker bad present form_token preserves pending until dispose (7.01525ms)
+✔ actual IPC to EngineClient bad present batch_unknown preserves pending (9.721875ms)
+✔ actual IPC to EngineClient bad present null_revision preserves pending (6.512791ms)
+✔ actual IPC to EngineClient bad present unsafe_revision preserves pending (6.438875ms)
+✔ actual IPC to EngineClient bad present mixed_revision preserves pending (6.71625ms)
+✔ actual IPC to EngineClient bad present string_revision preserves pending (6.27625ms)
+✔ actual IPC to EngineClient bad present bad_status preserves pending (8.307584ms)
+✔ actual IPC to EngineClient bad present overflow_nonempty preserves pending (6.913583ms)
+✔ actual IPC to EngineClient bad present invalid_domain preserves pending (6.292625ms)
+✔ actual IPC to EngineClient bad present invalid_reason preserves pending (7.015792ms)
+✔ actual IPC to EngineClient bad present scope_unknown preserves pending (7.344084ms)
+✔ actual IPC to EngineClient bad present duplicate_scope preserves pending (8.417541ms)
+✔ actual IPC to EngineClient bad present duplicate_ordinal preserves pending (6.65875ms)
+✔ actual IPC to EngineClient bad present unknown_event preserves pending (6.9325ms)
+✔ actual IPC to EngineClient bad present event_unknown preserves pending (6.954792ms)
+✔ actual IPC to EngineClient bad present actor_zero preserves pending (6.459959ms)
+✔ actual IPC to EngineClient bad present actor_negative preserves pending (8.589542ms)
+✔ actual IPC to EngineClient bad present actor_fraction preserves pending (6.958833ms)
+✔ actual IPC to EngineClient bad present actor_string preserves pending (6.616917ms)
+✔ actual IPC to EngineClient bad present actor_out_of_view preserves pending (6.885208ms)
+✔ actual IPC to EngineClient bad present actor_u32_over preserves pending (6.817459ms)
+✔ actual IPC to EngineClient bad present actor_null preserves pending (8.53975ms)
+✔ actual IPC to EngineClient bad present duplicate_target preserves pending (6.992ms)
+✔ actual IPC to EngineClient bad present missing_nullable_voice preserves pending (6.731375ms)
+✔ actual IPC to EngineClient bad present amount_zero preserves pending (7.116709ms)
+✔ actual IPC to EngineClient bad present bad_nature preserves pending (7.040667ms)
+✔ actual IPC to EngineClient bad present bad_effective_kind preserves pending (9.467542ms)
+✔ actual IPC to EngineClient bad present token_traversal preserves pending (7.4795ms)
+✔ actual IPC to EngineClient bad present token_controls preserves pending (6.706875ms)
+✔ actual IPC to EngineClient bad present role_local_id_wrong preserves pending (6.90825ms)
+✔ actual IPC to EngineClient bad present role_kind_wrong preserves pending (6.43325ms)
+✔ actual IPC to EngineClient bad present owner_unknown preserves pending (8.780333ms)
+✔ actual IPC to EngineClient bad present digest_upper preserves pending (6.608125ms)
+✔ actual IPC to EngineClient bad present digest_algorithm preserves pending (6.617042ms)
+✔ actual IPC to EngineClient bad present size_zero preserves pending (6.097208ms)
+✔ actual IPC to EngineClient bad present source_kind preserves pending (6.11025ms)
+✔ actual IPC to EngineClient bad present reference_private preserves pending (8.755542ms)
+✔ actual IPC to EngineClient bad present path_escape preserves pending (6.383459ms)
+✔ actual IPC to EngineClient bad present invalid_category preserves pending (5.904917ms)
+✔ actual IPC to EngineClient bad present empty_assets preserves pending (6.099459ms)
+✔ actual IPC to EngineClient bad present form_token preserves pending (6.076333ms)
+✔ actual SAB poll rejects malformed presentation before settling or deleting pending (8.745208ms)
+✔ actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation (13.202834ms)
+✔ source metadata is optional but strict when present (0.678292ms)
+✔ desktop normal and chooseGeneral envelopes preserve source and deadline (0.326417ms)
+✔ frozen WS6 TypeScript reader ignores source while current reader preserves it (7.074167ms)
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (13.08425ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (0.691209ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (6.969375ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.786708ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.439333ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.232625ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.108ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (8.261ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (4.449834ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.4555ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (0.909084ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.500458ms)
+✔ 取消待确认命令会清除刷新持久化 (0.199583ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.168459ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.337542ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (1.324125ms)
+✔ network SingleWin stays one-based with all authoritative projection fields unchanged (0.436542ms)
+✔ finished status shares the banner's view and MatchEnded fallback wording (5.060917ms)
+✔ B metadata is preserved on real network consumer messages and malformed metadata refuses join (0.365625ms)
+✔ WS6 rejects an old Welcome before creating rooms (0.153292ms)
+✔ WS6 room configuration and deadline reach the actual network consumer (0.17ms)
+✔ server countdown ignores client wall clock skew 60000 and later jumps (8.432875ms)
+✔ server countdown ignores client wall clock skew -60000 and later jumps (3.87425ms)
+✔ clock calibration requires matching Pong, measures RTT, and resets across reconnect (8.650417ms)
+✔ source skill and deadline survive JoinOk, outcome and snapshot (0.403167ms)
+✔ UP37 available voices resolve from the existing manifest and actual catalog identities (128.679083ms)
+✔ resource URL rejects traversal, absolute paths, encoded separators and invalid segments (0.092125ms)
+✔ N01 declaration reference and Zhouyu declared variants resolve actual source voices (21.866958ms)
+✔ declared aliases isolate exact numeric skill IDs, validate backing bytes and reject duplicates (0.426875ms)
+✔ B current character isolates unrelated shared-skill actors and retains declared substitute forms (27.796042ms)
+✔ B real tempname chooses its declared voice and missing actor bindings never borrow the skill pool (30.959958ms)
+✔ cross-pack substitute declaration binds to its global exact character owner (12.926542ms)
+✔ compat backing uses category and source identity while preserving role isolation (0.305542ms)
+✔ checked-in compat reaches actual role aliases and preserves original raw audio count (11.289791ms)
+✔ 身份局胜负类型映射 (0.426542ms)
+✔ 单挑/势力与未建模形态 (0.078792ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.066709ms)
+✔ 原生命令的拒绝原因可显示，未知原因保留 (0.100125ms)
+✔ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.093083ms)
+✔ malformed and unmodeled outcome detail stays visible without inventing a winner (0.073209ms)
+✔ desktop IPC preserves request order, ids, errors and continues on the same engine (3.989333ms)
+(node:55370) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dispose suppresses late IPC replies and never submits queued operations (4.725167ms)
+✔ mismatched IPC response is an explicit unknown-result error, without retry (0.302167ms)
+✔ Wasm is the default and an explicit persistent/URL fallback remains available (0.273333ms)
+✔ dispose during resource allocation closes it once and submits no request (6.306458ms)
+✖ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (26.648208ms)
+✔ IPC refuses malformed B metadata before delivering a view envelope (0.210083ms)
+✔ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (3.952208ms)
+✔ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (1.700875ms)
+✔ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (1.202875ms)
+✔ a rejected resource open drains accepted slots without submitting requests (2.974791ms)
+✔ nearest-rank 分位与 NC12 口径一致；空输入为 null (0.40225ms)
+✔ 帧间隔统计：刷新周期估计与超预算比例 (0.174833ms)
+✔ 交互记录：有输入时端到端从输入起算，缺失段为 null (0.216708ms)
+✔ Worker 分段：关闭时只发原回包，开启时回包后追加分段 (0.518417ms)
+✔ actual frozen Main5fc TS network and desktop readers accept the optional response (22.50375ms)
+✔ new parser accepts all seven events and legacy absence without altering autoStep strings (1.642917ms)
+✔ bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through (1.205041ms)
+✔ bad present null_revision is atomic in actual network/store ingress and IPC pass-through (0.37175ms)
+✔ bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through (0.28425ms)
+✔ bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through (0.641041ms)
+✔ bad present string_revision is atomic in actual network/store ingress and IPC pass-through (0.920416ms)
+✔ bad present bad_status is atomic in actual network/store ingress and IPC pass-through (0.490375ms)
+✔ bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through (0.353708ms)
+✔ bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through (0.320666ms)
+✔ bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through (0.336084ms)
+✔ bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through (0.968083ms)
+✔ bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through (0.607292ms)
+✔ bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through (0.340875ms)
+✔ bad present unknown_event is atomic in actual network/store ingress and IPC pass-through (0.205625ms)
+✔ bad present event_unknown is atomic in actual network/store ingress and IPC pass-through (0.216459ms)
+✔ bad present actor_zero is atomic in actual network/store ingress and IPC pass-through (0.184834ms)
+✔ bad present actor_negative is atomic in actual network/store ingress and IPC pass-through (0.17675ms)
+✔ bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through (0.181292ms)
+✔ bad present actor_string is atomic in actual network/store ingress and IPC pass-through (0.181042ms)
+✔ bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through (0.159875ms)
+✔ bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through (0.181084ms)
+✔ bad present actor_null is atomic in actual network/store ingress and IPC pass-through (0.17375ms)
+✔ bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through (0.241209ms)
+✔ bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through (0.214542ms)
+✔ bad present amount_zero is atomic in actual network/store ingress and IPC pass-through (0.296459ms)
+✔ bad present bad_nature is atomic in actual network/store ingress and IPC pass-through (0.290792ms)
+✔ bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through (0.199833ms)
+✔ bad present token_traversal is atomic in actual network/store ingress and IPC pass-through (0.233958ms)
+✔ bad present token_controls is atomic in actual network/store ingress and IPC pass-through (0.207459ms)
+✔ bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through (0.177416ms)
+✔ bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through (0.167667ms)
+✔ bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through (0.183959ms)
+✔ bad present digest_upper is atomic in actual network/store ingress and IPC pass-through (0.167166ms)
+✔ bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through (0.221541ms)
+✔ bad present size_zero is atomic in actual network/store ingress and IPC pass-through (0.175875ms)
+✔ bad present source_kind is atomic in actual network/store ingress and IPC pass-through (0.199583ms)
+✔ bad present reference_private is atomic in actual network/store ingress and IPC pass-through (0.184417ms)
+✔ bad present path_escape is atomic in actual network/store ingress and IPC pass-through (0.192584ms)
+✔ bad present invalid_category is atomic in actual network/store ingress and IPC pass-through (0.181875ms)
+✔ bad present empty_assets is atomic in actual network/store ingress and IPC pass-through (0.177917ms)
+✔ bad present form_token is atomic in actual network/store ingress and IPC pass-through (0.19225ms)
+✔ unmatched malformed broadcast does not reject another call or mutate receipt storage (0.166208ms)
+✔ bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches (2.099458ms)
+ℹ tests 264
+ℹ suites 0
+ℹ pass 255
+ℹ fail 9
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1588.52075
+
+✖ failing tests:
+
+test at scripts/approved-b-metadata.test.mjs:1:1
+✖ scripts/approved-b-metadata.test.mjs (478.41775ms)
+  'test failed'
+
+test at scripts/native-adapter.test.mjs:1:1
+✖ scripts/native-adapter.test.mjs (569.18725ms)
+  'test failed'
+
+test at scripts/native-general-select.test.mjs:1:1
+✖ scripts/native-general-select.test.mjs (432.827917ms)
+  'test failed'
+
+test at scripts/native-legal-actions.test.mjs:1:1
+✖ scripts/native-legal-actions.test.mjs (467.629625ms)
+  'test failed'
+
+test at scripts/nc03-native-input-bounds.test.mjs:1:1
+✖ scripts/nc03-native-input-bounds.test.mjs (438.931084ms)
+  'test failed'
+
+test at scripts/nc03-outcome-ui.test.mjs:1:1
+✖ scripts/nc03-outcome-ui.test.mjs (496.950833ms)
+  'test failed'
+
+test at scripts/nc04-restore-atomicity.test.mjs:1:1
+✖ scripts/nc04-restore-atomicity.test.mjs (238.825166ms)
+  'test failed'
+
+test at scripts/nc04-start-atomicity.test.mjs:1:1
+✖ scripts/nc04-start-atomicity.test.mjs (212.057291ms)
+  'test failed'
+
+test at scripts/pa09-desktop-transport.test.mjs:117:1
+✖ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (26.648208ms)
+  Error [ERR_MODULE_NOT_FOUND]: Cannot find module '/private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js' imported from /private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/nativeBackend.ts
+      at finalizeResolution (node:internal/modules/esm/resolve:272:11)
+      at moduleResolve (node:internal/modules/esm/resolve:879:10)
+      at defaultResolve (node:internal/modules/esm/resolve:1006:11)
+      at #cachedDefaultResolve (node:internal/modules/esm/loader:704:20)
+      at #resolveAndMaybeBlockOnLoaderThread (node:internal/modules/esm/loader:724:38)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at resolveSync (file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/scripts/ts-hook.mjs:70:12)
+      at nextStep (node:internal/modules/customization_hooks:189:26)
+      at resolveWithHooks (node:internal/modules/customization_hooks:417:10)
+      at ModuleLoader.resolveSync (node:internal/modules/esm/loader:750:16) {
+    code: 'ERR_MODULE_NOT_FOUND',
+    url: 'file:///private/tmp/i02-phase1-ab167599/source/apps/web-client/src/worker/native-pkg/engine_native_wasm.js'
+  }
+{"command": ["npm", "--prefix", "apps/web-client", "test"], "exit": 1, "locked_seconds": 1.7743949589785188, "disk_free_bytes": 45220663296}

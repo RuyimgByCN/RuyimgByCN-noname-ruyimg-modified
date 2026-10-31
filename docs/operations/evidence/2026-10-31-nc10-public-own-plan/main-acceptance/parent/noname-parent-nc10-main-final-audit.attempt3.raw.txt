@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-nc10-main-final-audit.py", line 62, in <module>
+    assert git('ls-files','--stage').decode()==end['index_entries'];assert git('diff','--cached','--name-only')==b''
+AssertionError

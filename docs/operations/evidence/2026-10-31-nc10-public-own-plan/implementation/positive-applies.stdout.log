@@ -1,0 +1,73 @@
+
+running 67 tests
+test nc10_ai_boundary_and_cancel::cancelled_planner_marks_plan_cancelled ... ok
+test nc10_ai_boundary_and_cancel::hidden_other_hands_do_not_change_seat_input ... ok
+test nc10_ai_boundary_and_cancel::policy_variants_are_deterministic ... ok
+test nc10_ai_boundary_and_cancel::pool_parallel_matches_sequential_and_records_tail ... ok
+test nc10_ai_boundary_and_cancel::stale_plan_is_rejected ... ok
+test nc10_ai_boundary_and_cancel::tiny_budget_marks_exhausted ... ok
+test nc10_ai_bounds::content_tuning_rejects_non_finite_values ... ok
+test nc10_ai_bounds::nc10_leak_surface_quantified ... ok
+test nc10_ai_bounds::nc10_planner_is_deterministic ... ok
+test nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order ... ok
+test nc10_ai_bounds::nc10_stale_plan_is_rejected ... ok
+test nc10_ai_bounds::nc10_tiny_budget_still_legal ... ok
+test nc10_ai_bounds::zero_deadline_returns_timed_out_plan_without_blocking ... ok
+test nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information ... ok
+test nc10_ai_information_boundary::planner_detects_own_hand_change ... ok
+test nc10_ai_information_boundary::planner_is_invariant_under_hidden_information ... ok
+test nc10_duel_nullify_privacy::both_answers_can_resume_redacted_window_after_restore ... ok
+test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling
+test nc10_duel_nullify_privacy::planning_uses_only_observers_information ... ok
+test nc10_duel_nullify_privacy::public_special_zones_allow_safe_redaction ... ok
+test nc10_duel_nullify_privacy::redaction_preserves_window_and_produces_restorable_equal_hidden_zones ... ok
+test nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan ... ok
+test nc10_live_hidden_cards::dead_current_actor_does_not_probe_attacks ... ok
+test nc10_live_hidden_cards::empty_zero_minimum_choice_has_a_legal_plan_even_without_cancellation ... ok
+test nc10_live_hidden_cards::live_sha_window_hides_opponent_hand_identity ... ok
+test nc10_live_hidden_cards::private_vm_piles_are_physical_and_counterfactually_equal ... ok
+test nc10_live_hidden_cards::real_guanxing_machine_held_cards_are_not_duplicated ... ok
+test nc10_live_hidden_cards::real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path ... ok
+test nc10_live_hidden_cards::real_moyan_public_machine_held_cards_survive_both_windows ... ok
+test nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper ... ok
+test nc10_multiple_hidden_traps::multiple_hidden_traps_do_not_change_simulation_or_plans ... ok
+test nc10_multiple_hidden_traps::multiple_traps_stay_physical_from_each_observer ... ok
+test nc10_multiple_hidden_traps::real_skill_places_two_traps_and_simulation_remains_restorable ... ok
+test nc10_multiple_hidden_traps::references_follow_multiple_synthetic_traps ... ok
+test nc10_multiple_hidden_traps::scarce_suits_are_shared_across_trap_holders ... ok
+test nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf ... ok
+test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... ok
+test nc10_pending_duel_privacy::duel_planning_does_not_depend_on_opponent_hidden_card ... ok
+test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling
+test nc10_pending_duel_privacy::public_special_zones_are_preserved_during_redaction ... ok
+test nc10_pending_duel_privacy::redaction_preserves_duel_machine_and_referenced_cards ... ok
+test nc10_planner_pool::nc10_pool_full_degrades_without_losing_plans ... ok
+test nc10_planner_pool::nc10_pool_plans_are_revision_guarded ... ok
+test nc10_planner_pool::nc10_pool_respects_cancellation ... ok
+test nc10_planner_pool::nc10_pool_reuses_workers_and_returns_legal_plans ... ok
+test nc10_public_own_plan::changed_public_options_are_rejected_without_a_hidden_fallback ... ok
+test nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park ... ok
+test nc10_public_own_plan::own_advice_cancelled_before_apply_does_not_submit ... ok
+test nc10_public_own_plan::shared_public_selector_obeys_order_card_preference_and_bounds ... ok
+test nc10_redaction_helper_contract::nonobserver_shan_window_retains_restorable_filtered_options ... ok
+test nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract ... ok
+test nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract ... ok
+test nc10_single_hidden_trap::hidden_trap_sampling_is_invariant_across_seeds ... ok
+test nc10_single_hidden_trap::real_single_opponent_trap_redacts_without_duplicate_cards ... ok
+test nc10_single_hidden_trap::references_follow_their_synthetic_cards ... ok
+test nc10_single_hidden_trap::single_opponent_trap_identity_cannot_change_planning ... ok
+test nc10_single_hidden_trap::vm_opaque_storage_keeps_its_trap_reference ... ok
+test nc10_skill_pile_conservation::fixed_piles_keep_hidden_hand_permutations_equivalent ... ok
+test nc10_skill_pile_conservation::opponent_private_pile_identity_does_not_change_synthetic_hands ... ok
+test nc10_skill_pile_conservation::redaction_preserves_owned_skill_cards_for_self_and_opponents ... ok
+test nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown ... ok
+test nc10_source_provenance::native_known_optional_families_publish_their_exact_names ... ok
+test nc10_source_provenance::native_optional_confirm_publishes_own_source_only ... ok
+test nc10_source_provenance::native_source_is_stable_across_private_deck_rng_and_counters ... ok
+test nc10_source_provenance::source_initial_binding_does_not_certify_the_next_pending_prompt ... ok
+test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix
+test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix
+
+test result: ok. 63 passed; 0 failed; 4 ignored; 0 measured; 90 filtered out; finished in 2.88s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "nc10_", "--", "--nocapture", "--test-threads=1"], "exit": 0, "locked_seconds": 6.226727833040059, "disk_free_bytes": 39112114176}

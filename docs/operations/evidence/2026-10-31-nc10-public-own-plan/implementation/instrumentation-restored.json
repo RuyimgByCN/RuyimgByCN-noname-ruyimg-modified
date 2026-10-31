@@ -1,0 +1,34 @@
+{
+  "crates/engine-native/tests/nc10_ai_information_boundary.rs": {
+    "before": "157796b1f01eb1b4b6de82f2c7fc5561d3891443af7ceb628bea266557628699",
+    "restored": "157796b1f01eb1b4b6de82f2c7fc5561d3891443af7ceb628bea266557628699"
+  },
+  "crates/engine-native/tests/nc10_ai_bounds.rs": {
+    "before": "518beaa4d429016196ff4dd3c8c0c320e1c760cd44dd5c38183a275193223449",
+    "restored": "518beaa4d429016196ff4dd3c8c0c320e1c760cd44dd5c38183a275193223449"
+  },
+  "crates/engine-native/tests/ai_planner.rs": {
+    "before": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1",
+    "restored": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1"
+  },
+  "crates/engine-native/tests/nc12_swd_authoritative_stability.rs": {
+    "before": "c1f5bacfc03e82f2c82e95297a1ad3c3fc270b3fa4bedb8606311df770dc78d1",
+    "restored": "c1f5bacfc03e82f2c82e95297a1ad3c3fc270b3fa4bedb8606311df770dc78d1"
+  },
+  "crates/engine-native/tests/nc12_ai_strength_baseline.rs": {
+    "before": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622",
+    "restored": "337cf766fe3fa19748802d399201e7966b6b5b00d990a2bd68922be8fcc6c622"
+  },
+  "crates/engine-native/tests/nc07_discard_duplicate_probe.rs": {
+    "before": "2d6316240eb0bc4d6cd3157ae87f914d6e31cd26fa26bb1e1801b7d932444db5",
+    "restored": "2d6316240eb0bc4d6cd3157ae87f914d6e31cd26fa26bb1e1801b7d932444db5"
+  },
+  "crates/engine-native/tests/groups/misc.rs": {
+    "before": "e907409a21f463d040e50693085ad55b662309c92faf329cfc501f5fabb3c149",
+    "restored": "e907409a21f463d040e50693085ad55b662309c92faf329cfc501f5fabb3c149"
+  },
+  "crates/engine-native/tests/groups/nc_rounds.rs": {
+    "before": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "restored": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af"
+  }
+}

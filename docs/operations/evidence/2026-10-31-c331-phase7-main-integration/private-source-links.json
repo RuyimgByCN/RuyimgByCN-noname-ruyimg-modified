@@ -1,0 +1,12 @@
+[
+  {
+    "link": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/archive/upstream",
+    "target": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream",
+    "read_only_input": "native tests source reads; no upstream writes authorized"
+  },
+  {
+    "link": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream",
+    "target": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream",
+    "read_only_input": "native tests source reads; no upstream writes authorized"
+  }
+]

@@ -1,0 +1,39 @@
+diff --git a/apps/web-client/scripts/c331-admission-repair-smoke.mjs b/apps/web-client/scripts/c331-admission-repair-smoke.mjs
+index 3483d0bb..8681343e 100644
+--- a/apps/web-client/scripts/c331-admission-repair-smoke.mjs
++++ b/apps/web-client/scripts/c331-admission-repair-smoke.mjs
+@@ -1,6 +1,7 @@
+ // Actual schema5 import → native WASM admission, retaining the original live handle on errors.
+ import assert from "node:assert/strict";
+ import { readFileSync, writeFileSync } from "node:fs";
++import { createHash } from "node:crypto";
+ import { createRequire } from "node:module";
+ import { join } from "node:path";
+ import { importExtensionPackageValidated, activateExtension } from "../src/engine/extensionStore.ts";
+@@ -53,6 +54,25 @@ const activeRaw=readFileSync(join(evidence,"active-conflict-recomputed.json"),"u
+ assert.throws(() => validateNativePackage(JSON.parse(activeRaw)),/conflict/);
+ await rejectEveryEntry("active-executor-conflict-valid-recomputed-hash",activeRaw,/conflict|exactly one/);
+ handle.free();
+-const output={actualCurrentWasm:true,actualSdkStore:true,originalTextToNative:true,positiveSchema5:true,positiveOriginalAssetOnly:true,results};
++const oldFixtures=[];
++for (const name of ["c331-old-default-package.json","c331_phase8_genuine_schema4.json"]) {
++  const bytes=readFileSync(new URL(`../../../crates/engine-native/tests/fixtures/${name}`,import.meta.url));
++  const raw=bytes.toString("utf8");validate_pack_json(raw);
++  await importExtensionPackageValidated(raw,validate);
++  const old=NativeEngine.new_with_packs_json(3,10827n,`[${raw}]`);
++  const saved=old.save_hex(), state=old.state_hash_hex(), projection=old.view_json(0);
++  old.restore_hex_with_packs_json(saved,`[${raw}]`);
++  // Restore intentionally rotates auth_generation; compare rule state and a new fixed baseline.
++  assert.equal(old.state_hash_hex(),state);assert.equal(old.view_json(0),projection);
++  const restoredBaseline=old.save_hex();
++  const duplicate=goodRaw.replace('"charlotte":false','"charlotte":true,"charlotte":false');
++  assert.throws(()=>old.restore_hex_with_packs_json(restoredBaseline,`[${duplicate}]`),/duplicate field.*charlotte/);
++  assert.equal(old.save_hex(),restoredBaseline);assert.equal(old.state_hash_hex(),state);old.free();
++  oldFixtures.push({name,schema:JSON.parse(raw).manifest.content_schema_version,bytes:bytes.length,sha256:createHash("sha256").update(bytes).digest("hex"),restoreRuleStateEqual:true,postRestoreBadAdmissionAtomic:true});
++}
++const extra=JSON.parse(assetsRaw);extra.manifest.unknown_presentation="second";
++const unknownRaw=JSON.stringify(extra).replace('"unknown_presentation":"second"','"unknown_presentation":"first","unknown_presentation":"second"');
++memory.clear();validate_pack_json(unknownRaw);await importExtensionPackageValidated(unknownRaw,validate);
++const output={actualCurrentWasm:true,actualSdkStore:true,originalTextToNative:true,positiveSchema5:true,positiveOriginalAssetOnly:true,oldFixtures,unknownAssetManifestKeysPreserved:true,results};
+ writeFileSync(join(evidence,"actual-sdk-wasm-result.json"),JSON.stringify(output,null,2));
+ console.log(JSON.stringify(output,null,2));

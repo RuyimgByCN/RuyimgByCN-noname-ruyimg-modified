@@ -1,0 +1,128 @@
+{
+  "runId": "8ed2ce6f-5ad1-496e-bf5d-891c2a5efa25",
+  "parentSessionId": "01a18798-5949-73c1-8642-9d0f55dc485a",
+  "agent": "worker",
+  "task": "[prompt redacted]",
+  "exitCode": 1,
+  "model": "magpie/codex/gpt-6.1-sol:high",
+  "usage": {
+    "input": 16571,
+    "output": 39766,
+    "cacheRead": 6822144,
+    "cacheWrite": 0,
+    "cost": 1.1130164000000002,
+    "turns": 20
+  },
+  "error": "Subagent timed out after 1500000ms.",
+  "acceptance": {
+    "status": "rejected",
+    "evidenceStatus": "rejected",
+    "explicit": false,
+    "effectiveAcceptance": {
+      "level": "checked",
+      "explicit": false,
+      "inferredReason": [
+        "async declared writer"
+      ],
+      "criteria": [
+        {
+          "id": "criterion-1",
+          "must": "Implement the requested change without widening scope",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        },
+        {
+          "id": "criterion-2",
+          "must": "Return evidence sufficient for an independent acceptance review",
+          "evidence": [
+            "changed-files",
+            "tests-added",
+            "commands-run",
+            "residual-risks",
+            "no-staged-files"
+          ],
+          "severity": "required"
+        }
+      ],
+      "evidence": [
+        "changed-files",
+        "tests-added",
+        "commands-run",
+        "residual-risks",
+        "no-staged-files"
+      ],
+      "verify": [],
+      "review": {
+        "agent": "reviewer",
+        "required": true
+      },
+      "stopRules": []
+    },
+    "inferredReason": [
+      "async declared writer"
+    ],
+    "criteria": [
+      {
+        "id": "criterion-1",
+        "must": "Implement the requested change without widening scope",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      },
+      {
+        "id": "criterion-2",
+        "must": "Return evidence sufficient for an independent acceptance review",
+        "evidence": [
+          "changed-files",
+          "tests-added",
+          "commands-run",
+          "residual-risks",
+          "no-staged-files"
+        ],
+        "severity": "required"
+      }
+    ],
+    "runtimeChecks": [
+      {
+        "id": "timeout",
+        "status": "failed",
+        "message": "Acceptance was not evaluated because the subagent timed out."
+      }
+    ],
+    "verifyRuns": []
+  },
+  "launchContractDigest": "92769b01ce7b5f1f59131a4d5e7262a636badb6b48ff7e2752decaab658bb9e2",
+  "launchResolvedExtensions": {
+    "version": 1,
+    "source": "launch-resolved",
+    "disableAmbientExtensions": false,
+    "runtime": [
+      "sha256:08959f0ff6830669"
+    ],
+    "configured": [],
+    "required": [],
+    "effective": [
+      "sha256:08959f0ff6830669"
+    ],
+    "omitted": {
+      "runtime": 0,
+      "configured": 0,
+      "required": 0,
+      "effective": 0
+    }
+  },
+  "transcriptPath": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/8ed2ce6f-5ad1-496e-bf5d-891c2a5efa25_worker_transcript.jsonl",
+  "skills": [],
+  "timestamp": 1793441768809
+}

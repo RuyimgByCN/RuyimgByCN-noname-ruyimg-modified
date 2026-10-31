@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "artifact_index_sha256": "ff5872f92c53e920b6cf8ec0247e0439cf59e04e076de8720af5e0b0f1c5d380",
+  "fresh_files": 130,
+  "report_sha256": "11683e7f664309c9c5f4f9c7d733466af6d616f02bfa1fe49477ff8775e75f57",
+  "qualification": "No rerun, completeindexfilehashes afterproducer finalseal"
+}

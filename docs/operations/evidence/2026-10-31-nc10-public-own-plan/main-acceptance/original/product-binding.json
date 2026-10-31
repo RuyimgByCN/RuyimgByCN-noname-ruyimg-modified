@@ -1,0 +1,58 @@
+{
+  "utc": "2026-10-31T11:43:44.490151+00:00",
+  "mainWasmSha256": "30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd",
+  "bundleWasmAsset": "/assets/engine_native_wasm_bg-CZ6P17l5.wasm",
+  "bundleAssetSha256": "30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd",
+  "servedSameWasm": true,
+  "worker": "engine.native.worker-BRuCdwmm.js",
+  "workerSha256": "21dd6118fe39836a5bada3786af11288f1bedba77cab7672ddaa83185b9c7c66",
+  "productionAppReferencesWorker": true,
+  "browserResultSha256": "853c5c46e2b7189dd7d71814d78691ae358ec15dd794f6f050a28c29c3eb7226",
+  "bundleModuleTableSha256": "5e99e0528f86500cb2a58fe3da23c7e6cb003aa517309604274c486643d982c6",
+  "mainOriginalBuildSha256": "dca82af3c5a31df9edc594a2a152ac978047d4334d9d90c7b28333c0fd518d19",
+  "targetOverrideChildLogSha256": "69b4a7646c9f5c164e16e73a184fe7a6bc7dfe12f0e538a05ab7ea943cd1893a",
+  "source6": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755,
+      "lines": 861,
+      "baseline_sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645,
+      "lines": 712,
+      "baseline_sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732,
+      "lines": 107,
+      "baseline_sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440,
+      "lines": 285,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400,
+      "lines": 64,
+      "baseline_sha256": null
+    },
+    {
+      "path": "crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "bytes": 22417,
+      "lines": 489,
+      "baseline_sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1"
+    }
+  ]
+}

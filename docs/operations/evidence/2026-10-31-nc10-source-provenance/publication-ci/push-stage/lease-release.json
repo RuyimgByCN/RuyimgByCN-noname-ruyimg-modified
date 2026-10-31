@@ -1,0 +1,12 @@
+{
+  "at_utc": "2026-10-31T08:07:48.620252+00:00",
+  "lease": "Publication/source immutability lease released; no Main writes made by worker at any point; all later evidence privateonly",
+  "head_sha": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "push_completed_utc": "2026-10-31T08:05:21.331573+00:00",
+  "push_exit": 0,
+  "remote_refs": {
+    "refs/heads/native-convergence": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "accepted477_working_and_committed_bytes_exact": true
+}

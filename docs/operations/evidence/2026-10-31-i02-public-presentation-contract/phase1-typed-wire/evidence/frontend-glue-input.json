@@ -1,0 +1,5 @@
+{
+  "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm.js",
+  "sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+  "purpose": "Unmodified existing generated JS module import for stub frontend tests; no WASM copied/built or engine equivalence claimed."
+}

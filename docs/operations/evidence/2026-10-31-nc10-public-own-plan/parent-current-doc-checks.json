@@ -1,0 +1,57 @@
+{
+  "utc": "2026-10-31T11:37:52.694036+00:00",
+  "status": "PASS",
+  "exact_changed_doc_count": 16,
+  "local_links": {
+    "docs/architecture/native-progress.md": [],
+    "docs/architecture/native-rules-baseline.md": [],
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-runtime-contract/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-phase7-main-integration/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-phase8-schema5-datachain/README.md": [],
+    "docs/operations/evidence/2026-10-31-c331-phase8-schema5-datachain/admission-repair/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/quality-outcomes/checkpoint-10/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/checkpoint-20/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/fixed-reference-pilot/README.md": [],
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/fixed-reference-pilot/checkpoint-10/README.md": [],
+    "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/README.md": [],
+    "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-typed-wire/README.md": [],
+    "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/approval-request.md": []
+  },
+  "checks": {
+    "line-unit": {
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "b38122eb00786a1dde791468e577d2a36fbd71bde53d316bdbbeaf12a03db7c1",
+      "stdout_tail": "",
+      "stderr_tail": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.034s\n\nOK\n"
+    },
+    "strict-doc": {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+      "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b",
+      "stdout_tail": "检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n",
+      "stderr_tail": "\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n"
+    }
+  },
+  "qualification": "Cheapparentdocumentationchecks only; ongoing Mainfunctional worker mayupdategenerated18, no product/preflightacceptanceclaim"
+}

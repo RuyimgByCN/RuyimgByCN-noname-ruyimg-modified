@@ -1,0 +1,102 @@
+{
+  "profile": {
+    "seeds": [
+      45000,
+      45199
+    ],
+    "games_per_phase": 200,
+    "seats": 4,
+    "mode": "plain Engine::new free-for-all; swd cards extension; no assigned generals",
+    "node_budget": 8,
+    "deadline_ms": 50,
+    "depth": 1,
+    "variant": 0,
+    "step_limit": 1200,
+    "dedup": "unchanged original AtomicU64 allocator; one actual submit per loop"
+  },
+  "phases": {
+    "baseline": {
+      "games": 200,
+      "finished": 200,
+      "actual_submits": 63182,
+      "Accepted": 52512,
+      "Pending": 10670,
+      "Rejected": 0,
+      "Suspended": 0,
+      "VmFault": 0,
+      "planner_panics": 0,
+      "submit_panics": 0,
+      "reject_reasons": {},
+      "winners": {
+        "Player(0)": 3,
+        "Player(1)": 8,
+        "Player(2)": 74,
+        "Player(3)": 115
+      },
+      "steps_p50_p90_max": [
+        321,
+        413,
+        464
+      ],
+      "plan_timed_out_flags": 0,
+      "successful_final_byte_restores": 200,
+      "binary_sha256": "1781cba932307e8f46cbe77e9283b17781ac14110ad33fe2d56239e5d6c0c211",
+      "result_sha256": "417798f7de965e5151960c46b6a475058cf295879094fc0a985285e03d377e4b",
+      "trace_sha256": "2ffbf084cb824a9cd7f7f769e1456e61f5d30038424233952adcd35b4dbadf3d",
+      "games_sha256": "ebc3f908e9950f962ed662cf3c7e6c46793fccefa731526ea29fed1dff152a8d",
+      "source": {
+        "crates/engine-native/src/ai.rs": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+        "crates/engine-native-wasm/src/session.rs": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+        "crates/engine-native/tests/groups/nc_rounds.rs": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "766fe77399aef538575efbce138de15c31107b67614aea60126e4d5d8f6ca190",
+        "Cargo.lock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+        "swd_cards": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+      },
+      "source_binding_unchanged_during_command": true
+    },
+    "candidate": {
+      "games": 200,
+      "finished": 200,
+      "actual_submits": 72018,
+      "Accepted": 60046,
+      "Pending": 11972,
+      "Rejected": 0,
+      "Suspended": 0,
+      "VmFault": 0,
+      "planner_panics": 0,
+      "submit_panics": 0,
+      "reject_reasons": {},
+      "winners": {
+        "Player(0)": 8,
+        "Player(1)": 5,
+        "Player(2)": 73,
+        "Player(3)": 114
+      },
+      "steps_p50_p90_max": [
+        366,
+        479,
+        577
+      ],
+      "plan_timed_out_flags": 0,
+      "successful_final_byte_restores": 200,
+      "binary_sha256": "45a93dad86785f2e50ca8e76156b34761b61ad1896b81c7fd060ec346c8d68f6",
+      "result_sha256": "5defe735dc2d7babf8a32702d980795c2a981bce64bbb9c1fcc3da6e16db40c9",
+      "trace_sha256": "bbe80513931f0c300536b97e1c8bd689d6b6baf52eefcacf041fb7ef66949988",
+      "games_sha256": "51e60b57913d32e2c57408790db0bd95863541ccea8853db32d9cd68cc48fe71",
+      "source": {
+        "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+        "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+        "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+        "crates/engine-native/tests/nc12_ai_strength_baseline.rs": "766fe77399aef538575efbce138de15c31107b67614aea60126e4d5d8f6ca190",
+        "Cargo.lock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+        "swd_cards": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+      },
+      "source_binding_unchanged_during_command": true
+    }
+  },
+  "paired_self_play": {
+    "same_winner": 136,
+    "different_winner": 64,
+    "note": "All seats use each phase implementation; not a fixed-opponent strength comparison."
+  }
+}

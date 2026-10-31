@@ -1,0 +1,44 @@
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -532,7 +532,7 @@
+ 
+ /// Public command advice; selecting an option does not certify its continuation.
+ pub fn projected_choice_action(choice: ChoiceView) -> Option<GameAction> {
+-    let ChoiceView::Own { id, options, min, max, .. } = choice else {
++    let ChoiceView::Own { id, options, min, max, allow_cancel, .. } = choice else {
+         return None;
+     };
+     let mut distinct = Vec::new();
+@@ -544,11 +544,14 @@
+     let take = min.max(1).min(max).min(distinct.len());
+     let cards: Vec<_> = distinct.iter().filter(|option| matches!(option, ChoiceOption::Card(_)))
+         .take(take).copied().collect();
+-    let selection = if cards.len() == take {
++    let mut selection = if cards.len() == take {
+         cards
+     } else {
+         distinct.into_iter().take(take).collect()
+     };
++    if allow_cancel && (selection.len() < min || selection.len() > max) {
++        selection.clear();
++    }
+     Some(GameAction::Answer { choice_id: id, selection })
+ }
+ 
+--- a/crates/engine-native/tests/nc10_public_own_plan.rs
++++ b/crates/engine-native/tests/nc10_public_own_plan.rs
+@@ -195,6 +195,14 @@
+             2,
+             2,
+             true,
++            vec![],
++            true,
++        ),
++        (
++            vec![ChoiceOption::Player(2)],
++            2,
++            2,
++            false,
+             vec![ChoiceOption::Player(2)],
+             false,
+         ),

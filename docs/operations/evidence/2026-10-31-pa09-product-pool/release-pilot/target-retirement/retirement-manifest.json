@@ -1,0 +1,159 @@
+{
+  "started_unix": 1793438041.665004,
+  "authorized_targets": [
+    "/tmp/pa09-candidate-f82ecf3c/target",
+    "/tmp/pa09-candidate-f82ecf3c/baseline-target"
+  ],
+  "status": "removed",
+  "removed_paths": [
+    "/tmp/pa09-candidate-f82ecf3c/target",
+    "/tmp/pa09-candidate-f82ecf3c/baseline-target"
+  ],
+  "removed_allocated_bytes_du": 5200220160,
+  "removed_logical_file_bytes": 5170059038,
+  "global_lock": {
+    "exclusive": true,
+    "acquired_unix": 1793438041.6721458,
+    "held_through_checks_removal_verification": true,
+    "released_after_unix": 1793438078.823804
+  },
+  "commands": [
+    {
+      "name": "process-owners",
+      "argv": [
+        "ps",
+        "-axo",
+        "pid=,ppid=,uid=,lstart=,command="
+      ],
+      "started_unix": 1793438041.672321,
+      "finished_unix": 1793438041.712718,
+      "exit": 0
+    },
+    {
+      "name": "cwd-owners",
+      "argv": [
+        "/usr/sbin/lsof",
+        "-nP",
+        "-d",
+        "cwd",
+        "-Fpcn"
+      ],
+      "started_unix": 1793438041.713624,
+      "finished_unix": 1793438042.070189,
+      "exit": 0
+    },
+    {
+      "name": "open-files-0",
+      "argv": [
+        "/usr/sbin/lsof",
+        "-nP",
+        "+D",
+        "/tmp/pa09-candidate-f82ecf3c/target"
+      ],
+      "started_unix": 1793438042.071409,
+      "finished_unix": 1793438042.335136,
+      "exit": 1
+    },
+    {
+      "name": "open-files-1",
+      "argv": [
+        "/usr/sbin/lsof",
+        "-nP",
+        "+D",
+        "/tmp/pa09-candidate-f82ecf3c/baseline-target"
+      ],
+      "started_unix": 1793438042.33535,
+      "finished_unix": 1793438042.5481899,
+      "exit": 1
+    },
+    {
+      "name": "df-before",
+      "argv": [
+        "df",
+        "-k",
+        "/tmp/pa09-target-retirement-cdb76be8"
+      ],
+      "started_unix": 1793438042.54846,
+      "finished_unix": 1793438042.55291,
+      "exit": 0
+    },
+    {
+      "name": "du-before",
+      "argv": [
+        "du",
+        "-sk",
+        "/tmp/pa09-candidate-f82ecf3c/target",
+        "/tmp/pa09-candidate-f82ecf3c/baseline-target"
+      ],
+      "started_unix": 1793438042.553046,
+      "finished_unix": 1793438042.606375,
+      "exit": 0
+    },
+    {
+      "name": "df-after",
+      "argv": [
+        "df",
+        "-k",
+        "/tmp/pa09-target-retirement-cdb76be8"
+      ],
+      "started_unix": 1793438078.816691,
+      "finished_unix": 1793438078.823584,
+      "exit": 0
+    }
+  ],
+  "matching_pid_commands": [],
+  "owned_tree_cwd_processes": [],
+  "active_use_checks": "No matching target PID commands, no owned-tree cwd processes, both recursive lsof checks returned1 with empty stdout/stderr.",
+  "disk_before": {
+    "total": 994631127040,
+    "used": 956635115520,
+    "free": 37996011520
+  },
+  "du_before": [
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/target",
+      "allocated_kib": 3643540,
+      "allocated_bytes": 3730984960
+    },
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/baseline-target",
+      "allocated_kib": 1434800,
+      "allocated_bytes": 1469235200
+    }
+  ],
+  "removed_file_accounting": [
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/target",
+      "unique_regular_files": 5892,
+      "unique_regular_logical_bytes": 3713106513
+    },
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/baseline-target",
+      "unique_regular_files": 3907,
+      "unique_regular_logical_bytes": 1456952525
+    }
+  ],
+  "preserved_file_or_symlink_count": 89944,
+  "before_manifest_sha256": "87b712a87b4b762cd7b0890bd4aad94b378eee186fc9a37f4a47ef8ffa2c41b6",
+  "du_after": [
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/target",
+      "exists": false,
+      "allocated_bytes": 0
+    },
+    {
+      "path": "/tmp/pa09-candidate-f82ecf3c/baseline-target",
+      "exists": false,
+      "allocated_bytes": 0
+    }
+  ],
+  "after_manifest_sha256": "87b712a87b4b762cd7b0890bd4aad94b378eee186fc9a37f4a47ef8ffa2c41b6",
+  "source_evidence_stability": "identical",
+  "retained_binaries_verified_after_removal": true,
+  "disk_after": {
+    "total": 994631127040,
+    "used": 951818825728,
+    "free": 42812301312
+  },
+  "finished_unix": 1793438078.823939
+}

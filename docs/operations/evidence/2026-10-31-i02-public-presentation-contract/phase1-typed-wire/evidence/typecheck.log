@@ -1,0 +1,4 @@
+npm notice run noname-next-web-client@0.1.0 typecheck
+npm notice run vue-tsc --noEmit
+src/worker/engine.worker.ts(7,34): error TS2307: Cannot find module '../wasm-pkg/engine_wasm.js' or its corresponding type declarations.
+src/worker/nativeBackend.ts(32,56): error TS2307: Cannot find module './native-pkg/engine_native_wasm.js' or its corresponding type declarations.

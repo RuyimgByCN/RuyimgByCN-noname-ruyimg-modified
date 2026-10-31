@@ -1,0 +1,18 @@
+{
+  "aggregate": [
+    1774,
+    8,
+    75
+  ],
+  "failed_tests": [
+    "g1_wudian::yuanshi::yuanshi_feiren_chain_damage_not_bonused",
+    "g1_shahai_swd::xielv::swd_generals_b25_xielv_zhuyu",
+    "native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source",
+    "a0_tag_registry::machine_snapshot_tags_unique_and_roundtrip",
+    "native_kernel::boss_xuanwu::boss_xuanwu_lingqu_damage_counter",
+    "native_kernel::combat::propagated_damage_is_full_resolution",
+    "native_kernel::dying::dying_rescue_and_death",
+    "replay_scenarios::replay_scenarios_match_golden"
+  ],
+  "raw_exit": 101
+}

@@ -1,0 +1,61 @@
+{
+  "original_case": "/tmp/nc10-own-36992565/evidence/first-divergence.json",
+  "original_case_sha256": "fa1b341990410cbf127042a0a88a4774afe282e402262cc3ad7aa8620f105885",
+  "public_facts": {
+    "mode": "explicit test configuration Engine::new -> Prototype; last living player wins",
+    "seat": 1,
+    "role": null,
+    "visible_P0_role": null,
+    "own_hp": 1,
+    "P0_public_hp": 0,
+    "own_skills": [],
+    "own_hand_kinds": [
+      [
+        90,
+        "Weapon"
+      ],
+      [
+        85,
+        "Jiu"
+      ]
+    ],
+    "choice": {
+      "id": 5,
+      "kind": "RespondCard",
+      "prompt": "dying_save",
+      "options": [
+        "Pass",
+        "Card(85)"
+      ],
+      "min": 1,
+      "max": 1,
+      "allow_cancel": false
+    },
+    "public_event_tail": [
+      "CardPlayed P3->P0 card9",
+      "DamageDealt P3->P0 amount1",
+      "DyingEntered P0",
+      "ChoiceOpened id5 observer1"
+    ]
+  },
+  "interpretation": "No hidden role/alliance inferred. In this explicitly configured Prototype benchmark P0 is another competitor for last-survivor victory; generic card-first advice chooses the first Card option rather than Pass. Tactical optimality does not follow from that ordering. Actual prior formal events identify healing P0; no private PC is used to infer a dying target.",
+  "existing_formal_rule_gap": {
+    "classification": "Existing rule/options and restore-shape permissiveness, independently raised by parent then source-checked here; not an AI advice illegality against current330 formal schema",
+    "kernel": "is_tao_like accepts Jiu unconditionally despite comment about self rescue; Tianxianjiu similarly unconditional",
+    "restore_shape": "snap/asks/shapes.rs includes Jiu in unconditional Tao-like kinds",
+    "upstream": "savable returns dying===player || player.hasSkillTag(\"jiuOther\",null,dying,true)",
+    "consequence": "Actor1 no skills is offeredJiu85 for another dying player and formal submit accepts; this is separate from upstream-rule equivalence. No selector exception/formal/restore change performed."
+  },
+  "strength_pilot": {
+    "status": "not run",
+    "reason": "Existing policy_head2head and quality_matrix use the same linked BoundedPlanner implementation for every seat. Across builds their reference opponent also changes. TablePolicy is example-private; creating/exposing a new opponent harness or copying baselineAI would widen this task. Self-play winner rows are not fixed-opponent strength evidence."
+  },
+  "source_sha256": {
+    "/tmp/nc10-own-36992565/worktree/crates/engine-native-kernel/src/kernel/combat_rules.rs": "47a01f07387267edb4c30869566a523faf54d230562c9389d97551a6a47be4ed",
+    "/tmp/nc10-own-36992565/worktree/crates/engine-native-kernel/src/snap/asks/shapes.rs": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/card/extra.js": "7ed3c5c5ee25742047671658a1c6d5ae1367b38960fd4c6f2c6c1b4f59d748af",
+    "/tmp/nc10-own-36992565/worktree/crates/engine-native-kernel/src/kernel/death.rs": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0",
+    "/tmp/nc10-own-36992565/worktree/apps/game-server/examples/policy_head2head.rs": "9ea7393e77ee3dda2150f3f3fd3ea7d02bf8782b0d0810b44461b54014aae143",
+    "/tmp/nc10-own-36992565/worktree/crates/engine-native/examples/n10_table.rs": "0dd24fb1e7d8326b0698d790fc2109646face04c1fa3f8a6c9d3c87a19da613f"
+  }
+}

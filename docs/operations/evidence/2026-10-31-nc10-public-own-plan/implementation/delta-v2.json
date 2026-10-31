@@ -1,0 +1,17 @@
+{
+  "files": [
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "old_sha256": "fbfe7ab34aac1c362d0ab77abf6ddb923e65bf181efc5bf6e00c6f348b0c2982",
+      "new_sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_public_own_plan.rs",
+      "old_sha256": "543186583fbdb28d6a0d29862d8cf97f3aebfeb5af496e5793dbde4abc5b305c",
+      "new_sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706"
+    }
+  ],
+  "patch_sha256": "fa9f4f6db9e42e4d8e74d646da60d29c6200327e7a853b3dc35b7a2c59cb372e",
+  "scope": "Only public allow_cancel clears a cardinality-invalid selection; valid selections and private/formal boundaries unchanged",
+  "checks": "v2-own, v2-session, v2-wasm-build, v2-wasm-own, v2-gate1b, v2-line-gate exit0; first-divergence exit0"
+}

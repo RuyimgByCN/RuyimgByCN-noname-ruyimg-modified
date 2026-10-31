@@ -1,0 +1,12 @@
+
+running 1 test
+test nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park ... FAILED
+
+failures:
+
+failures:
+    nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 154 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "complete_own_plan_cannot_depend", "--", "--nocapture", "--test-threads=1"], "exit": 101, "locked_seconds": 3.5788626249996014, "disk_free_bytes": 39868616704}

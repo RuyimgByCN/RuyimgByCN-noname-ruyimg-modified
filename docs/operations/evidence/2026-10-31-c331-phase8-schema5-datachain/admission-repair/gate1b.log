@@ -1,0 +1,2 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.18s
+{"command": ["cargo", "check", "--offline", "-p", "engine-native", "--all-targets"], "exit": 0, "locked_seconds": 0.22661745897494256, "disk_free_bytes": 60681474048}

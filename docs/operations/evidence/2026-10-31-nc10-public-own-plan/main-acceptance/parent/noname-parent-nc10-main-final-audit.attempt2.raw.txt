@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-nc10-main-final-audit.py", line 37, in <module>
+    changed_modules=[p for p,sha in before['protected']['modules'].items() if sha!=end['protected']['modules'][p]];assert changed_modules==['apps/web-client/src/native-pkg/engine_native_wasm_bg.wasm']
+AssertionError

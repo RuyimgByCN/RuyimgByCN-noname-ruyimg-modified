@@ -1,0 +1,23 @@
+## Review
+
+Incremental source review of the frozen seven-file admission repair against C8. Read `vs-c8.patch`, all seven final files, relevant unchanged callers, and the supplied admission/restore evidence. Snapshot identity records full manifest `f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e` and increment `969a7cee6849c7880b853d94e09f166bf4842b68f93f26d59989518e1ba72345`; hashes were not independently recomputed.
+
+- **Fixed — previous P1, omitted modules:** [bundledNativePackages.ts:104](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-admission-repair-g4mlkco8/snapshot/apps/web-client/src/engine/bundledNativePackages.ts:104) now validates field presence independently of modules and rejects declaration-bearing partial payloads. [installed_packs.rs:28](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-admission-repair-g4mlkco8/snapshot/crates/engine-native-wasm/src/installed_packs.rs:28) applies the corresponding guard to direct validation and array admission. Empty declaration indexes and schema3/4 false/null cases cannot reach the asset fallback. Ordinary manifest-plus-assets payloads remain supported.
+
+- **Fixed — previous P1, duplicate normalization:** [extensionStore.ts:184](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-admission-repair-g4mlkco8/snapshot/apps/web-client/src/engine/extensionStore.ts:184) forwards the original input text to deep validation before committing. Rust retains that text for `ContentPackage::from_json_bytes`; array admission uses serde’s `RawValue` to retain each original element (`installed_packs.rs:40,162`). Normalized values reach bridging only after raw full-package validation succeeds. This uses the existing parser and adds no custom JSON parser or regex.
+
+- **Fixed — previous P2, active executor shape:** The shared trigger/active loop at `bundledNativePackages.ts:166` applies the same host/module/entry-PC conflict and reference checks to both indexes.
+
+- **Correct:** Direct validation, standard/identity construction, and extension restore reach the guarded admission path. Restore replaces the live engine only after successful construction (`engine-native-wasm/src/session.rs:10,25,31,714`). SDK commit likewise follows successful deep validation and repeats existing store preconditions.
+
+- **Correct:** Regression sources exercise original and escaped duplicate `charlotte` keys with the valid false-valued package hash, omitted-module variants, active conflicts, and unchanged store/handle/archive/hash on rejection. Positive cases retain original asset-only admission and genuine schema3/4 fixtures. Evidence: `engine-native-wasm/tests/c331_admission_repair.rs:17,42` and `apps/web-client/scripts/c331-admission-repair-smoke.mjs:24,56`.
+
+- **Correct:** The successful-restore byte mismatch is explained by existing authorization-generation rotation. Both supplied typed diffs show only `auth_generation: 0 → 1`, consistent with unchanged `engine-native/src/engine/snapshot.rs:544`. The original failing log remains present. The final smoke checks rule hash/view equality and establishes a post-restore archive baseline for subsequent rejection atomicity; no production restore semantics changed.
+
+- **Correct:** The seven-file delta changes admission and its checks without changing VM meaning, canonical package/hash semantics, protocols, Source33 metadata, legacy execution, or runtime consumers. Validation introduces no author whitelist. Existing store conflict/freeze/revocation checks remain intact.
+
+No issues found.
+
+- **Merge verdict: OK with notes — private C8 admission foundation only.** The two P1 findings and one P2 finding from my original review are closed by this repair. The original C8 BLOCK remains a valid historical review of the earlier bytes. C29 Core completion and C331/Main merge remain **BLOCK**.
+
+Skipped tests, builds, network, Main access, writes, and independent hash/check execution. Inspected supplied raw outputs; final source-to-green evidence binding remains for the parent to verify, with no claim of complete SDK parity or platform acceptance.

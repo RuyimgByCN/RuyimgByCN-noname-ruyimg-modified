@@ -1,0 +1,24 @@
+{
+  "full.patch": {
+    "argv": [
+      "git",
+      "apply",
+      "--reverse",
+      "--check",
+      "/tmp/i02-phase1-ingress-repair-89364384/red-input-checkpoint/full.patch"
+    ],
+    "exit": 0,
+    "stderr": ""
+  },
+  "repair.patch": {
+    "argv": [
+      "git",
+      "apply",
+      "--reverse",
+      "--check",
+      "/tmp/i02-phase1-ingress-repair-89364384/red-input-checkpoint/repair.patch"
+    ],
+    "exit": 0,
+    "stderr": ""
+  }
+}

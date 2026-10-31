@@ -1,0 +1,6 @@
+{
+  "crates/engine-native/tests/nc10_j2_vm_privacy.rs": 1,
+  "crates/engine-native/tests/nc10_live_hidden_cards.rs": 4,
+  "crates/engine-native/tests/nc10_opaque_vm_privacy.rs": 2,
+  "crates/engine-native/tests/nc10_redaction_helper_contract.rs": 1
+}

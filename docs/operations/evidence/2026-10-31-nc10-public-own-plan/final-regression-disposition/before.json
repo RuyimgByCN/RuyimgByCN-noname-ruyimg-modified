@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-31T10:58:34.947783+00:00",
+  "frozen_five": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2"
+  },
+  "original_test_sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1",
+  "review_sha256": "383be0e58552c43b119818b1875d8e059e7aece0cab16a00348fe694d1a46527",
+  "old_failures_preserved": {
+    "baseline-seed8211.stderr.log": "c7272a9057a8f1ba56b1e5559d090f5fd7565f1a66cda11dc50ff6e7bbf582ab",
+    "baseline-seed8211.result.json": "da86c9c195da232e951b5bc0129a6dfbd14b26da69b5ec46a39617336223f3b1",
+    "seed8211.stderr.log": "1cdfc6d259fd78ff5928dab40822c9cbacc0a4641c011e7b3c0c4a229cfd8900",
+    "baseline-seed8211.stdout.log": "909a4604e391302a0e1b1dbcd107bb9ccbd46815e41787dfa4a8e4498b3af3b0",
+    "seed8211.stdout.log": "8567eef812fc58105fe20e30f9638da79cb17a72f139fffe54e5163b4e3d6abe",
+    "seed8211.result.json": "99fa073147e8c72c68c08e7943731ca7e8546e14cd7e2d2d32b92d3fc01b22ae"
+  },
+  "expected_scope": "ONLY ai_planner.rs semantic regression delta; frozen v2 production and otherfour unchanged",
+  "private_index": ""
+}

@@ -1,0 +1,207 @@
+{
+  "utc": "2026-10-31T08:08:31.610533+00:00",
+  "status": "PASS identity/analysis; NEGATIVE performance result",
+  "fresh_evidence_files": 92,
+  "fresh_two_binary_hashes": true,
+  "six_release_commands_success": true,
+  "request_rows_each": 1687,
+  "full_coordinate_requestid_statehash_equality": true,
+  "warmup_games": 1,
+  "measured_games": 5,
+  "measured_auto_steps_each": 1400,
+  "pairs": [
+    {
+      "candidate": 0,
+      "serial": 1,
+      "total": {
+        "candidate": {
+          "count": 1400,
+          "accepted_jobs": 625,
+          "roundtrip_ns": {
+            "p50": 169125,
+            "p95": 279875,
+            "p99": 334708,
+            "mean": 171589.43714285715,
+            "sum": 240225212,
+            "min": 54000,
+            "max": 442959
+          },
+          "owner_ns": {
+            "p50": 143584,
+            "p95": 241417,
+            "p99": 294292,
+            "mean": 146493.56285714285,
+            "sum": 205090988,
+            "min": 45500,
+            "max": 399500
+          }
+        },
+        "serial": {
+          "count": 1400,
+          "accepted_jobs": 0,
+          "roundtrip_ns": {
+            "p50": 169708,
+            "p95": 268417,
+            "p99": 309000,
+            "mean": 168513.32428571428,
+            "sum": 235918654,
+            "min": 53083,
+            "max": 377542
+          },
+          "owner_ns": {
+            "p50": 144208,
+            "p95": 230583,
+            "p99": 266167,
+            "mean": 142964.75142857144,
+            "sum": 200150652,
+            "min": 43916,
+            "max": 330208
+          }
+        }
+      },
+      "eligible": {
+        "candidate": {
+          "count": 135,
+          "accepted_jobs": 625,
+          "roundtrip_ns": {
+            "p50": 230875,
+            "p95": 347458,
+            "p99": 416125,
+            "mean": 228073.74074074073,
+            "sum": 30789955,
+            "min": 98458,
+            "max": 442959
+          },
+          "owner_ns": {
+            "p50": 202500,
+            "p95": 305917,
+            "p99": 361667,
+            "mean": 201729.65925925926,
+            "sum": 27233504,
+            "min": 87916,
+            "max": 399500
+          }
+        },
+        "serial": {
+          "count": 135,
+          "accepted_jobs": 0,
+          "roundtrip_ns": {
+            "p50": 194916,
+            "p95": 302292,
+            "p99": 320375,
+            "mean": 192682.71851851852,
+            "sum": 26012167,
+            "min": 78584,
+            "max": 340166
+          },
+          "owner_ns": {
+            "p50": 167792,
+            "p95": 263292,
+            "p99": 283375,
+            "mean": 167164.85185185185,
+            "sum": 22567255,
+            "min": 67792,
+            "max": 304750
+          }
+        }
+      }
+    },
+    {
+      "candidate": 3,
+      "serial": 2,
+      "total": {
+        "candidate": {
+          "count": 1400,
+          "accepted_jobs": 625,
+          "roundtrip_ns": {
+            "p50": 174166,
+            "p95": 269500,
+            "p99": 313958,
+            "mean": 169068.95857142858,
+            "sum": 236696542,
+            "min": 53375,
+            "max": 444542
+          },
+          "owner_ns": {
+            "p50": 147042,
+            "p95": 233042,
+            "p99": 282791,
+            "mean": 144102.68071428573,
+            "sum": 201743753,
+            "min": 43666,
+            "max": 402583
+          }
+        },
+        "serial": {
+          "count": 1400,
+          "accepted_jobs": 0,
+          "roundtrip_ns": {
+            "p50": 161416,
+            "p95": 262250,
+            "p99": 297334,
+            "mean": 163109.1607142857,
+            "sum": 228352825,
+            "min": 51416,
+            "max": 406833
+          },
+          "owner_ns": {
+            "p50": 137542,
+            "p95": 224916,
+            "p99": 255166,
+            "mean": 138978.11214285714,
+            "sum": 194569357,
+            "min": 42208,
+            "max": 358083
+          }
+        }
+      },
+      "eligible": {
+        "candidate": {
+          "count": 135,
+          "accepted_jobs": 625,
+          "roundtrip_ns": {
+            "p50": 232916,
+            "p95": 346041,
+            "p99": 392750,
+            "mean": 229168.21481481483,
+            "sum": 30937709,
+            "min": 99292,
+            "max": 444542
+          },
+          "owner_ns": {
+            "p50": 205000,
+            "p95": 306208,
+            "p99": 350958,
+            "mean": 201749.98518518519,
+            "sum": 27236248,
+            "min": 88083,
+            "max": 402583
+          }
+        },
+        "serial": {
+          "count": 135,
+          "accepted_jobs": 0,
+          "roundtrip_ns": {
+            "p50": 187042,
+            "p95": 306542,
+            "p99": 351459,
+            "mean": 186849.94814814813,
+            "sum": 25224743,
+            "min": 73083,
+            "max": 406833
+          },
+          "owner_ns": {
+            "p50": 160916,
+            "p95": 265375,
+            "p99": 311334,
+            "mean": 162607.71851851852,
+            "sum": 21952042,
+            "min": 63417,
+            "max": 358083
+          }
+        }
+      }
+    }
+  ],
+  "qualification": "Read-only parent SHA/JSON/raw-row parser; no producer/test/build/network execution. One seed/load, four processes; no stable overall or eligible-subset benefit, no admission threshold/defaultswitch/Main integration or fullPA09 acceptance."
+}

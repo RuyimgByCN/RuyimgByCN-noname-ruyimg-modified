@@ -1,0 +1,17 @@
+## Review — acceptance addendum
+
+No issues found.
+
+- **Scope:** Reviewed the provenance reports, corrective manifest, command records, lock-verification logic, unchanged Rust harness and seven-case comparisons. This addendum qualifies the immutable original review; it does not rewrite its evidence. No hashes were freshly computed by this reviewer.
+
+- **Original evidence limitation is material and correctly retained.** The original private probe selected21 external versions differing from Main’s lock. Its seven native outputs therefore supplied cross-dependency compatibility evidence, not exact Main-lock consumer proof. The separate sidecheck’s precise launcher/argv/environment/exit remain unknown; `Updating crates.io index` prevents a whole-session offline claim. Recorded explicit probe executions did not use the private target’s compiled products. See the [provenance addendum](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/0425dc78-418a-456c-ab39-0848d485f156/verification/nc10-main-private-probe-target-provenance.md:1).
+
+- **Fixed in the supplied corrective evidence — exact-lock consumer gap.** [driver.py](/tmp/nc10-main-lock-repair-0425dc78/driver.py:1) verifies every selected external `(name, version, source, checksum)` against Main’s retained lock and checks metadata/lock package-set agreement before compilation. The records bind all30 external entries, unchanged probe Rust source and unchanged Main source6/lock. Subsequent generation and canonical comparison use serialized `--offline --locked` commands, both exit0, with a separately named executed binary and retained binary copy.
+
+- **Correct — output equivalence is substantive.** [comparison.json](/tmp/nc10-main-lock-repair-0425dc78/comparison.json:1) records all seven new native archives equal to both preserved actual Main-WASM archives and old native outputs, byte for byte. Full replies, revisions, hashes and event codes also match. The unchanged harness retains genuine P/Q Pending, successful optional cancellation and explicit Shan Pass/Card controls; invalid empty Shan preserves state. Restore permits only the documented authentication-generation increment. No output normalization conceals differences.
+
+- **Correct — the repair is narrowly sufficient.** The [parent’s original Main audit](/tmp/noname-parent-nc10-main-final-audit.json:1) now records PASS for714 retained artifacts,26 commands, source/product bindings and frozen gates. The new probe closes the distinct dependency-provenance gap without changing production inputs or the accepted `30e97f8a…` WASM. Repeating the full suite, browser or WASM build is unnecessary for this correction alone. Original evidence, failures and binary identities remain preserved.
+
+- **Merge verdict: OK with notes — bounded Main acceptance holds after this corrective evidence.** The parent’s independent parsing of the new repair artifacts remains its final audit step. Historical sidecheck/network-attempt uncertainty and the earlier index limitation stay disclosed; neither is retroactively explained by the successful rerun. No broader NC10, strength, platform, upstream-rule or whole-Goal acceptance follows.
+
+Skipped execution, fresh hashing and exhaustive independent lock/artifact parsing. The remaining provenance uncertainty concerns the historical sidecheck; its exact-lock consumer-proof gap is addressed by the new run.

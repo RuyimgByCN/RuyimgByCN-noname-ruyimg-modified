@@ -1,0 +1,13 @@
+{
+  "class": "None",
+  "deadline_ms": 50,
+  "depth": 1,
+  "index": 1,
+  "input": "PolicyInput { view: PlayerView { seat: 0, players: [PlayerCellView { seat: 0, alive: true, hp: 4, max_hp: 4, hand: Own([17, 23, 5, 31, 88, 83]), hand_count: 6, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 1, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 2, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }, PlayerCellView { seat: 3, alive: true, hp: 4, max_hp: 4, hand: Hidden, hand_count: 4, equips: [], judge: [], generals: [None, None], revealed_generals: [false, false], turned_over: false, skills: [], role: None }], cards: [PhysicalCard { id: 17, owner: Some(0), zone: Hand }, PhysicalCard { id: 23, owner: Some(0), zone: Hand }, PhysicalCard { id: 5, owner: Some(0), zone: Hand }, PhysicalCard { id: 31, owner: Some(0), zone: Hand }, PhysicalCard { id: 88, owner: Some(0), zone: Hand }, PhysicalCard { id: 83, owner: Some(0), zone: Hand }], deck_count: 106, discard: [], table: [], turn: 0, phase: Draw, round: 1, outcome: None, ruleset_version: 330 }, choice: None, revision: 1, quota_remaining: None, own_hand_kinds: [(17, Sha), (23, Sha), (5, Sha), (31, Shan), (88, LeiSha), (83, HorseMinus)] }",
+  "nodes": 64,
+  "note": "Current330 public domain sample; not an exact historical private NoCert location or a privacy proof",
+  "pre_events": "[Public(PhaseChanged { player: 0, phase: Judge, begin: false }), Public(PhaseChanged { player: 0, phase: Draw, begin: true }), Public(CardsDrawn { player: 0, cards: [88, 83] })]",
+  "seat": 0,
+  "test": "ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic",
+  "variant": 1
+}

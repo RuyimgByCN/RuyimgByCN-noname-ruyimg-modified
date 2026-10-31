@@ -1,0 +1,2 @@
+npm notice run noname-next-web-client@0.1.0 test
+npm notice run node --import ./scripts/ts-register.mjs --test

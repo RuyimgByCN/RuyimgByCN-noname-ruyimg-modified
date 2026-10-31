@@ -79,6 +79,14 @@
 
 **28. 三技能／异步摸牌与完整锁合同及333／106／759／WS7**：用户对已独立复审的[具体审批稿](../2026-10-31-r05-runtime-contract/approval-request.md)明确选择“批准限定合同与版本（推荐）”。批准v3＋v4＋v5所列涕泣／宝梳／避祸、真实Begin／Prepare与Draw／gain异步续行、191处caller迁移、三个固定compound、按逻辑身份隔离的四角色、精确Damage／生命周期、持久D/R/G／detached及公开有符号投影；新locked工厂仅从原始包／资产及完整ContentLock验证结果构实际规则目录，不再另接裸packs。批准安装nativeFrozenVersions、保存canonical_locked_content／frozen_packages、五类显式请求及Browser／WASM／Desktop／server／HTTP／WAL同一原局上下文恢复；缺原文的旧安装提示重装，缺完整原上下文的旧扩展档受控拒绝且保留原件，不拿当前包补过去身份。实际C331和改命332依次验收后，本批独占规则**333**／NGSA**106**／VM ABI**759**／WS**7**；号码若被占须重新裁决，不自动顺延，不提前将不完整C接入。format1／API1及C既定schema3默认／4非默认保持；若须新增包字段／schema另报。完整版本拒绝／原档原锁保全、12类场景、各端真实执行及独立复审不可豁免；不授权NC10 root／Confirm／Cancel／VM续行放行，不建第二内核／包仓库／指纹。Main仍330／105／758／WS6，批准不表示实施或任何通过。见[原选择及各稿件SHA](../2026-10-31-r05-runtime-contract/user-decision28.json)。
 
+## 补充裁决（2026-10-31，C331完整机制／schema与档号调整）
+
+**29. 限定合同实施与106→107档号排布**：用户对已三轮复审、裁决页窄复审通过的[具体审批页](../2026-10-31-c331-runtime-contract/approval-request.md)明确选择“批准限定合同与档号（推荐）”。批准v1＋v2＋v3明确supersede后的C-local Damage量／窗口、共同phase queue、真实handler／group／provider／expiry／death cleanup、hidden／无槽reveal／out投影、rescue／operation LossEnd、技能确认／cost／真实边界及Weitong／Rangjie修正、schema5解析／hash／锁／恢复及全写者读者迁移；整合5fc保留NC27兼容，实际consumer只读选择共用而不改变C调度／来源资格。版本排布改为**C规则331／NGSA106→改命规则332／NGSA106→R05规则333／NGSA107**，仅替代28的R05存档106预约；R05既有ABI759／WS7保持，不重批。C保留ABI758／WS6的条件是VM指令／context意义不变且可选out投影实测兼容，若不能满足须另报精确边界，不能借用R05号。新C reader严格拒绝105并保留原bytes／hash／锁／reader，无迁移授权；旧schema3/4中性正例和新字段降级拒绝继续必要。实际331仍先于332，实际332先于R05；不释放NC10 root／Confirm／Cancel／VM门禁、不自动切默认／验收或上调37来源。262/290／剩28／16条件翻译及全部body／平台差异继续完成。当前Main5fc仍330/105/758/WS6，新隔离phase7开始，不把批准写成实现通过。见[原选择及各稿SHA](../2026-10-31-c331-runtime-contract/user-decision29.json)。
+
+## 补充裁决（2026-10-31，I02公开呈现／自动语音合同）
+
+**30. 限定I02响应、资源绑定及提交消费合同**：用户对已三轮复审、审批页窄复审通过的[具体审批页](../2026-10-31-i02-public-presentation-contract/approval-request.md)明确选择“批准限定合同（推荐）”，批准稿SHA `301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d`。允许一个可缺省S→C `presentation`、实际提交且公开的Rust投影、真实定义的不可变qualified来源／资源binding、现有日志上的单一易失范围、NativeSession只release而Worker／桌面composer一次take、服务器耐久后一次take及无参数WASM读取；保留旧命令／结果字符串、粗事件码文案及真实响应增加code3条数的明确验证。允许桥接definition_id与必要真实PackageCharacter／Skill／CardEntry可缺省voice_assets，复用现有资源／skin系统，按原字节／可信pin／完整锁构造，禁中文名／运行时索引猜身份、第二registry／包仓库。新字段缺省中性与资源hash／锁／catalog版本影响须实证，任何须额外schema／规则／档／ABI／WS号码或迁移另报，不自动分配、不借R05号码、不回退届时已接受版本。C29真实成本／provider与R05原字节factory沿既有批准顺序实施；VM KillPlayer／DeathMachine真正死亡语义仍需另有具体方案／授权，不能以声音修复夹带。全37、234动态、2487缺backing、18其他资源与SDK作者生命周期保持；仅合同实施获批，不表示I02、平台／听感或整体Goal验收。见[原选择及SHA](../2026-10-31-i02-public-presentation-contract/user-decision30.json)。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

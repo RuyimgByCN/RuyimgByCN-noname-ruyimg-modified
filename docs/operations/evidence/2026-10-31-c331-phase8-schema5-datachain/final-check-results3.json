@@ -1,0 +1,67 @@
+[
+  {
+    "name": "full-native3",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "exit": 0,
+    "seconds": 34.718639850616455
+  },
+  {
+    "name": "legacy-admission",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-core",
+      "c331_schema_tests"
+    ],
+    "exit": 0,
+    "seconds": 59.70825695991516
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 18.174453020095825
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 4.154716968536377
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "seconds": 0.1655890941619873
+  }
+]

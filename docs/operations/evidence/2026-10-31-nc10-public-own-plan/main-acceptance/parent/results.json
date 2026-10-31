@@ -1,0 +1,30 @@
+{
+  "utc": "2026-10-31T12:30:55.900555+00:00",
+  "scope": "Post-freeze documentation additions; not included in original21 frozen gates",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_local_links.py",
+        "--all"
+      ],
+      "exit": 0,
+      "seconds": 1.0391838550567627,
+      "stdout": "检查 1950 个文件，坏链 0\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check_doc_line_refs.py",
+        "--strict"
+      ],
+      "exit": 0,
+      "seconds": 12.969855070114136,
+      "stdout": "检查 1065 处 `file:line` 引用；文件不存在 6 种；越界 0 处\n",
+      "stderr": "\n找不到的文件（可能是文档里的示例路径）：\n  - path.rs（2 处）\n  - .../gujian/skill.js（1 处）\n  - character/offline/.../offline_piracyS.js（1 处）\n  - .../swd/skill.js（1 处）\n  - schema/package.rs（1 处）\n  - step_skills_status.rs（1 处）\n"
+    }
+  ]
+}

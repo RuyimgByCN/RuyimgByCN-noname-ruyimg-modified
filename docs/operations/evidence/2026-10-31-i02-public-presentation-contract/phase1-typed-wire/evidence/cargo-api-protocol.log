@@ -1,0 +1,109 @@
+   Compiling proc-macro2 v1.0.106
+   Compiling quote v1.0.46
+   Compiling unicode-ident v1.0.24
+   Compiling find-msvc-tools v0.1.9
+   Compiling shlex v2.0.1
+   Compiling serde_core v1.0.228
+   Compiling cc v1.2.66
+   Compiling syn v2.0.118
+   Compiling blake3 v1.8.5
+   Compiling thiserror v2.0.18
+   Compiling serde v1.0.228
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayref v0.3.9
+   Compiling cfg-if v1.0.4
+   Compiling arrayvec v0.7.8
+   Compiling zmij v1.0.21
+   Compiling serde_json v1.0.150
+   Compiling engine-api v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-api)
+   Compiling memchr v2.8.3
+   Compiling itoa v1.0.18
+   Compiling engine-protocol v0.1.0 (/private/tmp/i02-phase1-ab167599/source/crates/engine-protocol)
+error[E0425]: cannot find type `WireError` in the crate root
+  --> crates/engine-protocol/src/presentation.rs:13:77
+   |
+13 | pub(crate) fn validate(message: &crate::ServerMessage) -> Result<(), crate::WireError> {
+   |                                                                             ^^^^^^^^^ not found in the crate root
+   |
+help: consider importing this enum
+   |
+ 1 + use crate::wire::WireError;
+   |
+help: if you import `WireError`, refer to it directly
+   |
+13 - pub(crate) fn validate(message: &crate::ServerMessage) -> Result<(), crate::WireError> {
+13 + pub(crate) fn validate(message: &crate::ServerMessage) -> Result<(), WireError> {
+   |
+
+error[E0433]: cannot find `WireError` in `crate`
+  --> crates/engine-protocol/src/presentation.rs:15:41
+   |
+15 |         batch.validate().map_err(crate::WireError::Json)?;
+   |                                         ^^^^^^^^^ could not find `WireError` in the crate root
+   |
+help: consider importing this enum
+   |
+ 1 + use crate::wire::WireError;
+   |
+help: if you import `WireError`, refer to it directly
+   |
+15 -         batch.validate().map_err(crate::WireError::Json)?;
+15 +         batch.validate().map_err(WireError::Json)?;
+   |
+
+error[E0433]: cannot find `WireError` in `crate`
+  --> crates/engine-protocol/src/presentation.rs:16:72
+   |
+16 |         batch.validate_players(view.seats.len() as u32).map_err(crate::WireError::Json)?;
+   |                                                                        ^^^^^^^^^ could not find `WireError` in the crate root
+   |
+help: consider importing this enum
+   |
+ 1 + use crate::wire::WireError;
+   |
+help: if you import `WireError`, refer to it directly
+   |
+16 -         batch.validate_players(view.seats.len() as u32).map_err(crate::WireError::Json)?;
+16 +         batch.validate_players(view.seats.len() as u32).map_err(WireError::Json)?;
+   |
+
+error[E0433]: cannot find `WireError` in `crate`
+  --> crates/engine-protocol/src/presentation.rs:17:92
+   |
+17 | ...on::to_vec(batch).map_err(|e| crate::WireError::Json(e.to_string()))?.len() > MAX_PRESENTATION_BYTES {
+   |                                         ^^^^^^^^^ could not find `WireError` in the crate root
+   |
+help: consider importing this enum
+   |
+ 1 + use crate::wire::WireError;
+   |
+help: if you import `WireError`, refer to it directly
+   |
+17 -         if batch.revision != view.revision || serde_json::to_vec(batch).map_err(|e| crate::WireError::Json(e.to_string()))?.len() > MAX_PRESENTATION_BYTES {
+17 +         if batch.revision != view.revision || serde_json::to_vec(batch).map_err(|e| WireError::Json(e.to_string()))?.len() > MAX_PRESENTATION_BYTES {
+   |
+
+error[E0433]: cannot find `WireError` in `crate`
+  --> crates/engine-protocol/src/presentation.rs:18:31
+   |
+18 |             return Err(crate::WireError::Json("invalid public presentation revision or size".into()));
+   |                               ^^^^^^^^^ could not find `WireError` in the crate root
+   |
+help: consider importing this enum
+   |
+ 1 + use crate::wire::WireError;
+   |
+help: if you import `WireError`, refer to it directly
+   |
+18 -             return Err(crate::WireError::Json("invalid public presentation revision or size".into()));
+18 +             return Err(WireError::Json("invalid public presentation revision or size".into()));
+   |
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `engine-protocol` (lib) due to 5 previous errors
+warning: build failed, waiting for other jobs to finish...
+error: could not compile `engine-protocol` (lib test) due to 5 previous errors
+{"command": ["cargo", "test", "--offline", "-p", "engine-api", "-p", "engine-protocol"], "exit": 101, "locked_seconds": 6.700856667011976, "disk_free_bytes": 50563833856}

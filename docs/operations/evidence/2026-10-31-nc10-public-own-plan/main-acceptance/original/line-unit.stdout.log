@@ -1,0 +1,1 @@
+{"command": ["python3", "-B", "-m", "unittest", "discover", "-s", "scripts", "-p", "test_check_source_lines.py"], "exit": 0, "locked_seconds": 0.10900316596962512, "disk_free_bytes": 34124816384}

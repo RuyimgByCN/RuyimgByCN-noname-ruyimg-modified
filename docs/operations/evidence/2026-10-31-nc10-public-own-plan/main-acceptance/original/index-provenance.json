@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T11:50:40.821271+00:00",
+  "initialSnapshotUtc": "2026-10-31T11:26:08.879430+00:00",
+  "initialIndexSha256": "e1184e55629aff236e5a9923e8a4bcb166592d952d56d1b37f1575474c1bdcc9",
+  "freezeEntryUtc": "2026-10-31T11:42:19.226134+00:00",
+  "freezeIndexSha256": "07839f826d79765ed82367e4cd3d10f8e0b375dce84894c852a0cfa3d83a5cc4",
+  "freezeCopiedIndexOriginalMtimeUtc": "2026-10-31T11:31:34.478891+00:00",
+  "initialToFreezeRawChanged": true,
+  "currentLogicalEntriesEqualHead": true,
+  "entries": 44306,
+  "allStagesZero": true,
+  "stagedEmpty": true,
+  "cause": "Unknown pre-freeze raw index change; initial snapshot omitted raw copy/logical entries. Parent normalgitstatus integration occurred before initialsnapshot, so does not explain it; LSP/cache speculation is not attribution. No verifier/parent staging/reset/index-directwrite reported; no index restoration done.",
+  "parentDisposition": "Explicitly approved honest provenance limitation; freeze raw+logical exact comparison required, no green-test repeats."
+}

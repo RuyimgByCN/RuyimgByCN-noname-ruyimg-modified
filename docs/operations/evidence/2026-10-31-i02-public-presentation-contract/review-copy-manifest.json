@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-31T10:41:27.018557+00:00",
+  "copies": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/4786a6f6-4f6e-4f11-8d96-63bfbff3ee19/reviews/c331-phase8-schema5-datachain.md",
+      "target": "docs/operations/evidence/2026-10-31-c331-phase8-schema5-datachain/source-review-v1.raw.txt",
+      "sha256": "e0bea2f3223af11e96bb6eefff0571c6d99ae8a1031406e50d4bd9a35aadad3f",
+      "bytes": 5766
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3dc4ccee-49c6-4896-8e46-06a23ec4220f/reviews/i02-public-presentation-events-contract-v3.md",
+      "target": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/review-v3.raw.txt",
+      "sha256": "482edb85134662f2f9ab2ff144b4d257b3b2e8316bdcc48b7ecc20b1259e5e49",
+      "bytes": 2945
+    }
+  ]
+}

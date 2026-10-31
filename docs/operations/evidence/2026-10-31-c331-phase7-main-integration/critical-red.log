@@ -1,0 +1,53 @@
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-api)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/resource-schema)
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/licensing-schema)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-vm)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-schema)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-runtime)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-compiler)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 27.87s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 3 tests
+test c331_source33_integration::phase7_genuine105_is_rejected_without_migration ... FAILED
+test c331_source33_integration::phase7_private106_header_and_full_state_roundtrip ... FAILED
+test c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source ... FAILED
+
+failures:
+
+---- c331_source33_integration::phase7_genuine105_is_rejected_without_migration stdout ----
+
+thread 'c331_source33_integration::phase7_genuine105_is_rejected_without_migration' (17604111) panicked at crates/engine-native/tests/groups/../c331_source33_integration.rs:82:5:
+assertion failed: matches!(engine_native::archive::decode_archive(raw),
+    Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105)))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- c331_source33_integration::phase7_private106_header_and_full_state_roundtrip stdout ----
+
+thread 'c331_source33_integration::phase7_private106_header_and_full_state_roundtrip' (17604112) panicked at crates/engine-native/tests/groups/../c331_source33_integration.rs:91:5:
+assertion `left == right` failed
+  left: 105
+ right: 106
+
+---- c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source stdout ----
+
+thread 'c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source' (17604110) panicked at crates/engine-native/tests/groups/../c331_source33_integration.rs:53:5:
+assertion `left == right` failed: source follows the formal non-order consumer, not the first same-depth order park
+  left: None
+ right: Some("遗计")
+
+
+failures:
+    c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source
+    c331_source33_integration::phase7_genuine105_is_rejected_without_migration
+    c331_source33_integration::phase7_private106_header_and_full_state_roundtrip
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 153 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "phase7_"], "exit": 101, "locked_seconds": 27.91851308301557, "disk_free_bytes": 41804382208}

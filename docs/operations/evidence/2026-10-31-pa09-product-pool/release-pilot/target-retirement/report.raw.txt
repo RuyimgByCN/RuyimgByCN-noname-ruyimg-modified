@@ -1,0 +1,28 @@
+Retired only `/tmp/pa09-candidate-f82ecf3c/target` and `/tmp/pa09-candidate-f82ecf3c/baseline-target` under explicit Decision23 cleanup authorization. The task began2026-10-31 09:10:24Z; locked checks/removal/verification ran09:14:01.665–09:14:38.824Z. Both directories are absent. No further PA09 experiment was run.
+
+[Actual retirement manifest](/tmp/pa09-target-retirement-cdb76be8/evidence/retirement-manifest.json) records the exact deletion allowlist, commands/argv/timestamps, active-use checks, before/after disk observations, file counts and actual removed-byte accounting.
+
+| Owned build directory | Before `du -sk`, KiB | Removed allocated bytes (`du`) | Removed unique regular-file bytes | Regular files | After |
+|---|---:|---:|---:|---:|---|
+| `target` | 3,643,540 | 3,730,984,960 | 3,713,106,513 | 5,892 | Absent / 0 bytes |
+| `baseline-target` | 1,434,800 | 1,469,235,200 | 1,456,952,525 | 3,907 | Absent / 0 bytes |
+| Total | 5,078,340 | **5,200,220,160** | **5,170,059,038** | **9,799** | Both absent |
+
+Filesystem free space measured immediately around retirement rose from37,996,011,520 to42,812,301,312 bytes, an observed increase of4,816,289,792 bytes. Global free-space change differs from per-directory `du` accounting. The actual [df-before](/tmp/pa09-target-retirement-cdb76be8/evidence/df-before.stdout.txt) and [df-after](/tmp/pa09-target-retirement-cdb76be8/evidence/df-after.stdout.txt) outputs are retained.
+
+Both actual release test binaries were copied outside the targets before removal, then reverified after removal. Byte length, SHA256, executable mode0755 and original mtime were preserved; no binary was run, uploaded or installed.
+
+| Binary | Retained executable | Bytes | SHA256 |
+|---|---|---:|---|
+| Candidate | [candidate-desktop_client-c125369028041ad8](/tmp/pa09-target-retirement-cdb76be8/retained-binaries/candidate-desktop_client-c125369028041ad8) | 5,537,088 | `de03f09a3303980c112af8f58d0016e5a607a1e15ef2127c5128ed0cb21f904b` |
+| Serial | [serial-desktop_client-c125369028041ad8](/tmp/pa09-target-retirement-cdb76be8/retained-binaries/serial-desktop_client-c125369028041ad8) | 5,457,760 | `4955e512af14093285a6756bed8b268ef9738ca38cbb4726040872e35d51f36e` |
+
+The [binary relocation manifest](/tmp/pa09-target-retirement-cdb76be8/evidence/binary-relocation-manifest.json) maps original build paths to retained paths and records modes/bytes/hashes. Original measurement metadata and logs were deliberately not rewritten. Their original binary paths are now retired; future verification must use this relocation qualification and the retained executable with the same SHA256.
+
+An exclusive `/tmp/noname-phase4-heavy-command.lock` was held through active-use checks, removal and verification. `ps` PID/PPID/UID/start/command inspection found no command referencing either target; `lsof -d cwd -Fpcn` found no process cwd in either old owned tree; recursive `lsof -nP +D` on each target returned1 with empty stdout/stderr, meaning no open-file matches. The [recorded commands/results](/tmp/pa09-target-retirement-cdb76be8/evidence/retirement-manifest.json) therefore showed no active-use ambiguity. Deletion additionally required each target to be a non-symlink direct child of the exact owned parent.
+
+All **89,944 files/symlinks outside those two targets** across the owned candidate/baseline worktrees and old/release evidence roots matched before and after, including file bytes/modes and symlink targets. [Before manifest](/tmp/pa09-target-retirement-cdb76be8/evidence/source-evidence-before.json) and [after manifest](/tmp/pa09-target-retirement-cdb76be8/evidence/source-evidence-after.json) have the identical SHA256 `87b712a87b4b762cd7b0890bd4aad94b378eee186fc9a37f4a47ef8ffa2c41b6`.
+
+Frozen sources, old/release patches, all rows/logs/raw/bundles/states, owned worktrees and existing evidence therefore remain unchanged. External canonical/resource/cache symlinks were preserved without following their destinations. C/NC/Main/shared targets, `/tmp/nc27-main-functional-458ed333/cargo-target`, OriginalC, SourceProvenance private freezes and packages/resources were outside the deletion allowlist and were not touched. No Main/source/index/docs changes, staging, network, upload, installation or additional agent delegation occurred. [Private staged-file checks](/tmp/pa09-target-retirement-cdb76be8/evidence/no-staged-private.json) are empty and used `GIT_OPTIONAL_LOCKS=0`.
+
+Skipped: rebuilds, benchmarks and all other cleanup scopes. Qualification: original build paths no longer resolve, but the exact two measured release executables and all evidence needed to verify their identities remain retained.

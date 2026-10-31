@@ -1,0 +1,16 @@
+{
+  "status": "RESTORED exact archivedhelper; testsPASS",
+  "helper": "/tmp/noname-run-serialized.py",
+  "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/final-gates/serialized-wrapper-observed-at-seal.py",
+  "sha256": "d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34",
+  "lock": "/tmp/noname-phase4-heavy-command.lock",
+  "lock_dev": 16777231,
+  "lock_inode": 620205209,
+  "two_concurrent_helpers_mutually_exclusive": true,
+  "exit7_propagated": true,
+  "before_active_heavy": [],
+  "unlinked_old_lock_matches": 0,
+  "cause_original_missing": "unknown; no deletion by this recovery",
+  "first_probe_failure": "own ancestor shell command contained cargo literals; pre-mutation false positive, corrected by processcomm+ancestorPID identity",
+  "profile": "Originalargv/env/profile preserved; no new flags, no alternate lock; worker-owned3GiB monitoring unchanged"
+}

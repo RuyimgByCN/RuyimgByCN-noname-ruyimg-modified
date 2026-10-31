@@ -1,0 +1,173 @@
+{
+  "utc": "2026-10-31T11:09:41.843808+00:00",
+  "status": "PASS",
+  "fresh_current_source": 170,
+  "increment_files": 7,
+  "log_count": 19,
+  "logs": [
+    {
+      "path": "rust-red.log",
+      "counts": [
+        1,
+        2,
+        0
+      ],
+      "wrapper_exits": [
+        101
+      ]
+    },
+    {
+      "path": "frontend-red.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "rust-green-first.log",
+      "counts": [
+        3,
+        0,
+        0
+      ],
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "frontend-green-first.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "frontend-green2.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "frontend-type-first.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "current-wasm-build.log",
+      "counts": null,
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "rust-targeted2.log",
+      "counts": [
+        13,
+        0,
+        0
+      ],
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "actual-sdk-wasm-first.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "actual-sdk-wasm2.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "actual-sdk-wasm3.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "actual-sdk-wasm4.log",
+      "counts": null,
+      "wrapper_exits": []
+    },
+    {
+      "path": "restore-generation-probe.log",
+      "counts": [
+        1,
+        0,
+        0
+      ],
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "four-packages.log",
+      "counts": [
+        609,
+        0,
+        0
+      ],
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "full-native.log",
+      "counts": [
+        1773,
+        0,
+        75
+      ],
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "gate1b.log",
+      "counts": null,
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "source-cap-unit.log",
+      "counts": null,
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "source-caps.log",
+      "counts": null,
+      "wrapper_exits": [
+        0
+      ]
+    },
+    {
+      "path": "layering.log",
+      "counts": null,
+      "wrapper_exits": [
+        0
+      ]
+    }
+  ],
+  "SDK_bad_mutations": 11,
+  "actual_sdk_wasm_old3and4_positive": true,
+  "restore_only_auth_generation_and_archive_checksum": true,
+  "checkpoint_to_final_changes": [
+    "apps/web-client/scripts/c331-admission-repair-smoke.mjs"
+  ],
+  "independent_gate1b": {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 0.2628028392791748,
+    "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings"
+  },
+  "staging_empty": true,
+  "qualification": "Fresh source/log/digest/result parse, no rerun/build/restore. Original invalid crossrestore raw-equality assertion preserved. CurrentWASM identity & completeartifactindex will be registered once producerseals; no wholeC331/Main acceptance."
+}

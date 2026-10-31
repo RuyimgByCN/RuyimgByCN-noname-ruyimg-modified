@@ -1,0 +1,3 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/groups/nc_rounds.rs (/tmp/nc10-own-36992565/target/debug/deps/nc_rounds-fb18dbc55758dba6)
+AI_BASELINE n=200 finished=200 steps_p50=321 steps_p90=413 steps_max=464 faults=0

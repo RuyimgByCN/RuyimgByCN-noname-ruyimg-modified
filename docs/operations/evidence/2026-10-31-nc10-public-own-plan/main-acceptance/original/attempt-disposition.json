@@ -1,0 +1,24 @@
+{
+  "inspectionIssues": [
+    {
+      "command": "initial root package.json read",
+      "exit": 1,
+      "stderrExcerpt": "cat: package.json: No such file or directory (os error 2)",
+      "resolution": "actual frontend apps/web-client/package.json read thereafter"
+    },
+    {
+      "command": "initial target inactivity detector",
+      "exit": 1,
+      "stderrExcerpt": "AssertionError: detector matched its own parent bash command source",
+      "resolution": "restricted to actual cargo/rustc executable prefixes; handed target inactive before use"
+    },
+    {
+      "command": "exploratory guessed file probes",
+      "exit": 2,
+      "stderrExcerpt": "rg: apps/web-client/scripts/*hash*: No such file or directory; guessed nativeSaves.ts / machine sha.rs / snap core.rs absent",
+      "resolution": "read actual existing extensionStore.ts, nativeBackend.ts, snap/types.rs and original scripts; no product failure"
+    }
+  ],
+  "indexQualification": "Superseded initial-cache caveat: actual unknown pre-freeze raw index change occurred after initial11:26 snapshot (mtime11:31:34). Whole-session raw index equality not established. Parent approved honest limitation. Freeze entry/exit raw+logical identical; logical entries equal HEAD; staging empty; no repair attempted. See index-provenance.json.",
+  "nonProductProbeFailure": "native-probe exit101 retained with probe-attempt1.rs source and native-probe stdout/stderr; no product changes, no tests removed, no golden rerecord. Supervisor approved correcting the fixture assumption."
+}

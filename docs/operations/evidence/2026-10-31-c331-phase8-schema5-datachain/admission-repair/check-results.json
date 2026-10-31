@@ -1,0 +1,97 @@
+[
+  {
+    "name": "four-packages",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "content-schema",
+      "-p",
+      "content-compiler",
+      "-p",
+      "content-runtime",
+      "-p",
+      "content-native-loader"
+    ],
+    "exit": 0,
+    "seconds": 89.84719681739807,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "exit": 0,
+    "seconds": 36.10979199409485,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 0.2628028392791748,
+    "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings"
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.100189208984375,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 5.160254001617432,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "seconds": 0.15335416793823242,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  }
+]

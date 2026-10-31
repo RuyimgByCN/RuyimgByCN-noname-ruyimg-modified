@@ -1,0 +1,534 @@
+{
+  "utc": "2026-10-31T11:27:11.867581+00:00",
+  "copies": [
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/before.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/before.json",
+      "sha256": "789a90e00ea45ac997eb1083d8e095fdfd9c2c4771f022c1648ae951f51ef664",
+      "bytes": 1626
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/sessions.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/sessions.stdout.log",
+      "sha256": "1f5f4235a4dd9d19f1619472fefc0eac93348e2edad3866d92067e5e16060fb7",
+      "bytes": 899
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-unit.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-unit.stderr.log",
+      "sha256": "30b7db73967acdb055ef826f6af2556d423ce2ebb08c1494e1a654e3b2b89a3a",
+      "bytes": 100
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-unit.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-unit.running.json",
+      "sha256": "0180b75501a8ea14fe408152f1c49061a5bc3adad09958031b07396008ff7ce5",
+      "bytes": 933
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/own-controls.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/own-controls.running.json",
+      "sha256": "ec38ef83c59f4210f72121f1cf85f8a78107607586e6cf8d20f9241a851a40da",
+      "bytes": 974
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/sessions.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/sessions.result.json",
+      "sha256": "7b3df5aa63b619427237e1327e86294292cd20af74ca83331d959a63c02e70a8",
+      "bytes": 2493
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-gate.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-gate.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-gate.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-gate.result.json",
+      "sha256": "659854a3e3cf07ed576431b514583452aa40850f53ab6c6c65df077c2230e144",
+      "bytes": 2232
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/own-controls.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/own-controls.result.json",
+      "sha256": "90ef0b3e641d66cb86e7c8760f8bf165effa02fa7d48d4f8bdc065a809a92b11",
+      "bytes": 2470
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/gate1b.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/gate1b.running.json",
+      "sha256": "a9e5247efa8842a9a443451e439092a452211d9ff15079bf9e157360916af9d4",
+      "bytes": 904
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-gate.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-gate.running.json",
+      "sha256": "be18172e0b81965742c2240ca1bd3db238b50796a1feaab8e9537ca99a987be4",
+      "bytes": 883
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/gate1b.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/gate1b.stdout.log",
+      "sha256": "d01bfa601aef945bb9bf02d9b98cf69c5e664b939837b21939c71d6c0d0cf2ae",
+      "bytes": 165
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/native-final.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/native-final.stdout.log",
+      "sha256": "236727e63d249993a1172b5f30f2dbe4a0b04971e56800c21d5f8bbd14680403",
+      "bytes": 145451
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-gate.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-gate.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/calibration-erratum.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/calibration-erratum.json",
+      "sha256": "4f33e7462c1defd265f62cf1268a8e7b076905505c1bb57426e51122f05d4105",
+      "bytes": 386
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/semantic-delta.patch",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/semantic-delta.patch",
+      "sha256": "f77cb22318e2775e4bd6188447185154a8a35b7b9a618c93e32e82a7876e2232",
+      "bytes": 4063
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-unit.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-unit.running.json",
+      "sha256": "a917d30fa7bdbc4213232bba98dbc58da90fb8fc30d2acc87337d611ab5b00e5",
+      "bytes": 936
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/own-controls.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/own-controls.stdout.log",
+      "sha256": "f01a2acfff3fb19c55556b8c1e6162f4476c6c6af5316a25ce6876cc9c91bc85",
+      "bytes": 717
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/seed8211.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/seed8211.stderr.log",
+      "sha256": "867dfcbe86e36780df1c8c470c6db5923e42586769674b446f844fe1ce261c19",
+      "bytes": 496
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/narrow.launch.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/narrow.launch.log",
+      "sha256": "6135cd75df64f3991aa2a3d2d63ed7269613531b00736c1d5bb1806bdfab1860",
+      "bytes": 32
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/gate1b.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/gate1b.result.json",
+      "sha256": "7a05985d083fcb6aaed40d5e3c76307ce61be83febce4d6148db6c8dfc8864e2",
+      "bytes": 2322
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-gate.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-gate.running.json",
+      "sha256": "3bd6c719f06acf06529a3e3c5fb0c0d2e60710941f955330f2b9a5b34af0ffac",
+      "bytes": 886
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-unit.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-unit.stderr.log",
+      "sha256": "0175319c9cce06887c6ae39b1cdfb29ce571a027e75dd82a13a0a5dc0e8017a0",
+      "bytes": 107
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-unit.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-unit.result.json",
+      "sha256": "defcdcafbbb1ea7db49adf95ca43e821269b57773a33f2e357acfce0a6986e68",
+      "bytes": 2380
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/shan-control.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/shan-control.stderr.log",
+      "sha256": "846cf372ca911110440b763a48f6b86af894142f7e52623c8dd66b7521f007c9",
+      "bytes": 172
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/native-final.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/native-final.result.json",
+      "sha256": "067cbf96ba87f177eb71042b42ca8fb8ee7a1bc806202a7ac441704a1d303a08",
+      "bytes": 2512
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/pre-full-source.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/pre-full-source.json",
+      "sha256": "1aa5a0d6072cb8e8910b9cb060bdd47a27f0160a676d6e0c7fd93d3c854bcb8d",
+      "bytes": 711
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-unit.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-unit.stdout.log",
+      "sha256": "678959fd8dd05b88dd854765321b36805e33c5ac71bae9dcabe1de7d3135f6d8",
+      "bytes": 196
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/sessions.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/sessions.stderr.log",
+      "sha256": "91691a358a80619161f2371fc692fe13ef80b43ca74e855828535b02ef24d8fa",
+      "bytes": 4332
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/shan-control.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/shan-control.result.json",
+      "sha256": "c1fe6a0df7d42e9082f4eba12efbc9aa8afcd81bf17b4e91ea94653cf7edb773",
+      "bytes": 2499
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-gate.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-gate.stdout.log",
+      "sha256": "eb755b2ac064b3417693624ca410e52c2a14f8238640bf583f52e12daa9fcb1b",
+      "bytes": 240
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/seed8211.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/seed8211.running.json",
+      "sha256": "97b98fb9fb634ac8fc820b4cfc3d861afe9a036100b8a36425a9b7303ce03e22",
+      "bytes": 1004
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-gate.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-gate.result.json",
+      "sha256": "20737512aee346e2585bcc3696cb5d60532c8c8b480f78f979cd36bc61dccfc2",
+      "bytes": 2221
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-gate.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-gate.stdout.log",
+      "sha256": "3f1061ae9a4ba239601b5ccb8bbb21ee6b181da94ca1cdbdac5679c8079d2aee",
+      "bytes": 204
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/native-final.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/native-final.stderr.log",
+      "sha256": "ad9272dc6378fdb195544c14061ad0c51269b513866f8c4fba99d32c942b973d",
+      "bytes": 1791
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/session-count-erratum.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/session-count-erratum.json",
+      "sha256": "660c0d7e2a7887740b60925ae129e9502545382528fdc9111b1f83db464cc97c",
+      "bytes": 691
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/gate1b.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/gate1b.stderr.log",
+      "sha256": "7d2dedfa19672d9ac6f390d86f8a819f2501290e253a6bd8ccaf5accaaa62bb8",
+      "bytes": 282
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/native-final.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/native-final.running.json",
+      "sha256": "2bc8a5e3c907f3bcde6da209de4912f3a34711475ada9cfae256ac84744b0c40",
+      "bytes": 991
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/shan-control.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/shan-control.running.json",
+      "sha256": "fd5debf8f253222b4b80797995c0742cc536e76aae68fbba9c1c4a14cf92d348",
+      "bytes": 988
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/line-unit.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/line-unit.result.json",
+      "sha256": "6b8aa7838c491d535f1a1d8dc499ec46c1bf9e5b35fd02ef309aa72da04a591c",
+      "bytes": 2370
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/layering-unit.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/layering-unit.stdout.log",
+      "sha256": "941ec89ddad1f46aee0adc4ec69d4b35ad08ea83119afe023335e140697ea6a4",
+      "bytes": 198
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/sessions.running.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/sessions.running.json",
+      "sha256": "23452c75f4e2f11bfd963c05dc503d97c1ba5ac720bcda0311042a70f6fe552b",
+      "bytes": 987
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/shan-control.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/shan-control.stdout.log",
+      "sha256": "c174a9b590d70df5ff85c779a877ce4a72a49535e3878f6cda43bfe52e735096",
+      "bytes": 429
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checks.launch.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checks.launch.log",
+      "sha256": "c0880f5900f15f380578b8fc2d150d97c48ddd0b25bfbc44a64e34d26c9ea3eb",
+      "bytes": 310
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/own-controls.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/own-controls.stderr.log",
+      "sha256": "0267c2ad61b60e410e0c223ca8515cd79aee4eff9f35ea18f71427127fc5fe0c",
+      "bytes": 31372
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/seed8211.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/seed8211.stdout.log",
+      "sha256": "8c43a6eb78ae0ad4bee1a17935c176f1b256ef4c219f74f3b5324ea16c1fcaa2",
+      "bytes": 459
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/seed8211.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/seed8211.result.json",
+      "sha256": "a7e3ce3168755d8ac88d3e91728edfbb1fa0c073c8c4bee36aa5c485b57421d3",
+      "bytes": 2526
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/baseline-seed8211.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/baseline-seed8211.stderr.log",
+      "sha256": "c7272a9057a8f1ba56b1e5559d090f5fd7565f1a66cda11dc50ff6e7bbf582ab",
+      "bytes": 269
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/baseline-seed8211.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/baseline-seed8211.result.json",
+      "sha256": "da86c9c195da232e951b5bc0129a6dfbd14b26da69b5ec46a39617336223f3b1",
+      "bytes": 1046
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/seed8211.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/seed8211.stderr.log",
+      "sha256": "1cdfc6d259fd78ff5928dab40822c9cbacc0a4641c011e7b3c0c4a229cfd8900",
+      "bytes": 675
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/baseline-seed8211.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/baseline-seed8211.stdout.log",
+      "sha256": "909a4604e391302a0e1b1dbcd107bb9ccbd46815e41787dfa4a8e4498b3af3b0",
+      "bytes": 460
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/seed8211.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/seed8211.stdout.log",
+      "sha256": "8567eef812fc58105fe20e30f9638da79cb17a72f139fffe54e5163b4e3d6abe",
+      "bytes": 564
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/original-failure/seed8211.result.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/original-failure/seed8211.result.json",
+      "sha256": "99fa073147e8c72c68c08e7943731ca7e8546e14cd7e2d2d32b92d3fc01b22ae",
+      "bytes": 1039
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/manifest.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/manifest.json",
+      "sha256": "89c021eb0329a2604b5cb130903e8bcebd84ac9e183d9fb8dc8da7035aa4358a",
+      "bytes": 511
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/progress.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/progress.json",
+      "sha256": "af05329eef4566d4b377c79c507ae0db0d584103c967d1cc913b29882fd98225",
+      "bytes": 1340
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/completion.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/completion.json",
+      "sha256": "711d685c37a545d2d954e25289777526a29e92fa5d012938a871e55c59155b5c",
+      "bytes": 328
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/nc10_public_own_plan.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/ai_planner.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "bytes": 22417
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/groups/nc_rounds.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/src/ai.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/checkpoint-10/current-source/crates/engine-native-wasm/src/session.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/checkpoint-10/current-source/crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/patch-check.stderr.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/patch-check.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/candidate.patch",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/candidate.patch",
+      "sha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110",
+      "bytes": 21610
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/preservation.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/preservation.json",
+      "sha256": "dae8f80e14787d43261fef3f0952bfa030dcf63e15cd4265ec5f7225dd6553d1",
+      "bytes": 685
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/commands.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/commands.json",
+      "sha256": "36efb37ba177b4803217fab92c4ddb26654bc08d94440e95a5f48e660fb453a7",
+      "bytes": 26034
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/patch-check.stdout.log",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/patch-check.stdout.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/full-worktree-source-manifest.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/full-worktree-source-manifest.json",
+      "sha256": "5507f41a2dc5fadd580cf493dc7ce81f1206ba5322d26870ed2cc923a471f455",
+      "bytes": 6029533
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/manifest.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/manifest.json",
+      "sha256": "9b6a9c446d43a4da854ba2c8f67a79fddb7c0f0d78169ea0a7c268545a641d28",
+      "bytes": 2530
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/counts.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/counts.json",
+      "sha256": "0cec4dd3d573a9561abdb727b42ad7f452d68e448c5415be97a4e0c97bee7a37",
+      "bytes": 749
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/evidence-sha256.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/evidence-sha256.json",
+      "sha256": "e6589d41551e26d63227ff09bb9b443133bc3d92b65b9c29a0030b038ca9574e",
+      "bytes": 9235
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source-overlay.tar.gz",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source-overlay.tar.gz",
+      "sha256": "03f73c007593cfb2f2986bb44357c920ebd6e8e0f1a0c6ab40cf4e38916404e2",
+      "bytes": 30396
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/tests/nc10_public_own_plan.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native/tests/nc10_public_own_plan.rs",
+      "sha256": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+      "bytes": 9440
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/tests/ai_planner.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native/tests/ai_planner.rs",
+      "sha256": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "bytes": 22417
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/tests/groups/nc_rounds.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "bytes": 2732
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native/src/ai.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native/src/ai.rs",
+      "sha256": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "bytes": 35755
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+      "sha256": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "bytes": 2400
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/source/crates/engine-native-wasm/src/session.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/source/crates/engine-native-wasm/src/session.rs",
+      "sha256": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "bytes": 28645
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/apply-check/crates/engine-native/tests/ai_planner.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/apply-check/crates/engine-native/tests/ai_planner.rs",
+      "sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1",
+      "bytes": 20563
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/apply-check/crates/engine-native/tests/groups/nc_rounds.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/apply-check/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+      "bytes": 2666
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/apply-check/crates/engine-native/src/ai.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/apply-check/crates/engine-native/src/ai.rs",
+      "sha256": "d10b44b420fbd5206a1dae836c4d2df152470f357a758b76ee416e6d1b082771",
+      "bytes": 35034
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/final/apply-check/crates/engine-native-wasm/src/session.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/final/apply-check/crates/engine-native-wasm/src/session.rs",
+      "sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+      "bytes": 29086
+    },
+    {
+      "source": "/tmp/nc10-final-regression-d9f5d064/final-regression-disposition/before-source/crates/engine-native/tests/ai_planner.rs",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/before-source/crates/engine-native/tests/ai_planner.rs",
+      "sha256": "4f08c96c82cbab64f0b0beff0b8f1f4c4a9ab1f55dbe2afc115ac652f117b7d1",
+      "bytes": 20563
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d9f5d064-1f23-4ec0-a344-d287d1d88b1f/implementation/nc10-public-own-final-regression-disposition.md",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/implementation.raw.txt",
+      "sha256": "cbb8dc0e1f873269cab1395ceb731505fc4be33123a8bfe8d18169c14896c9d7",
+      "bytes": 7196
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/034f7214-3d81-488e-bf90-f876a2da7df8/reviews/nc10-public-own-final-semantic-delta.md",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/source-review.raw.txt",
+      "sha256": "9d923c822d5d9a0f7ea5f07ae49385eeb02f673aa4a9a8bef92e679bfff2dcf9",
+      "bytes": 4166
+    },
+    {
+      "source": "/tmp/noname-parent-nc10-final-regression-audit.py",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/noname-parent-nc10-final-regression-audit.py",
+      "sha256": "13eceec47a658789ed46d0771f58310b03b58e4f660301798457e0c9b4fcdeb3",
+      "bytes": 4107
+    },
+    {
+      "source": "/tmp/noname-parent-nc10-final-regression-audit.json",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/noname-parent-nc10-final-regression-audit.json",
+      "sha256": "8a1b656527777ff15453cf9cadf8a1dbae831c791fe7ec98ff30c4e62fae4405",
+      "bytes": 3820
+    },
+    {
+      "source": "/tmp/noname-parent-nc10-final-regression-audit.raw.txt",
+      "target": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/final-regression-disposition/noname-parent-nc10-final-regression-audit.raw.txt",
+      "sha256": "8a1b656527777ff15453cf9cadf8a1dbae831c791fe7ec98ff30c4e62fae4405",
+      "bytes": 3820
+    }
+  ],
+  "qualification": "Immutableprivate finalNC6+I02phase1snapshot29/rawlogs copied andsource29SHA checked. NC6Mainintegrationfunctionalpending;I02privatereviewpending, noproductionI02emitter. No binaries/generated copied."
+}

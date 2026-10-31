@@ -1,0 +1,1 @@
+{"pid": 74362, "argv": ["wasm-pack", "build", "crates/engine-native-wasm", "--target", "web", "--dev", "--mode", "no-install", "--no-opt", "--out-dir", "/tmp/nc10-own-36992565/worktree/apps/web-client/src/worker/native-pkg", "--", "--offline"], "started": "2026-10-31T09:10:27.993705+00:00"}

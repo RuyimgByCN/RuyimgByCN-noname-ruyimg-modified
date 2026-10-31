@@ -1,0 +1,143 @@
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `omnisearch_query` is never used
+   --> crates/engine-native-wasm/src/lib.rs:236:4
+    |
+236 | fn omnisearch_query(
+    |    ^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:297:4
+    |
+297 | fn desktop_adapt_apply(
+    |    ^^^^^^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_export` is never used
+   --> crates/engine-native-wasm/src/lib.rs:359:4
+    |
+359 | fn desktop_adapt_export(text: &str, name: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `cardpile_scale` is never used
+   --> crates/engine-native-wasm/src/lib.rs:368:4
+    |
+368 | fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `desktop_adapt_invoke` is never used
+   --> crates/engine-native-wasm/src/lib.rs:394:4
+    |
+394 | fn desktop_adapt_invoke() -> String {
+    |    ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `coin_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:403:4
+    |
+403 | fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `elo_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:442:4
+    |
+442 | fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
+    |    ^^^^^^^^^
+
+warning: function `sj_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:451:4
+    |
+451 | fn sj_apply(config_json: &str, commands: &str) -> String {
+    |    ^^^^^^^^
+
+warning: function `shousha_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:459:4
+    |
+459 | fn shousha_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `shousha_mvp_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:467:4
+    |
+467 | fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^
+
+warning: function `douzhuan_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:475:4
+    |
+475 | fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^
+
+warning: function `update_guard_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:483:4
+    |
+483 | fn update_guard_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^^^
+
+warning: function `drag_read_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:491:4
+    |
+491 | fn drag_read_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `boss_play_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:499:4
+    |
+499 | fn boss_play_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `fool_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:507:4
+    |
+507 | fn fool_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^
+
+warning: function `martial_apply` is never used
+   --> crates/engine-native-wasm/src/lib.rs:515:4
+    |
+515 | fn martial_apply(config_json: &str, request_json: &str) -> String {
+    |    ^^^^^^^^^^^^^
+
+warning: function `omnisearch_debug` is never used
+   --> crates/engine-native-wasm/src/lib.rs:523:4
+    |
+523 | fn omnisearch_debug(source: &str) -> String {
+    |    ^^^^^^^^^^^^^^^^
+
+warning: `engine-native-wasm` (lib) generated 18 warnings
+   Compiling engine-native-wasm v0.1.0 (/private/tmp/nc10-own-36992565/worktree/crates/engine-native-wasm)
+warning: duplicated attribute
+   --> crates/engine-native-wasm/src/lib.rs:969:5
+    |
+969 |     #[test]
+    |     ^^^^^^^
+    |
+    = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: `engine-native-wasm` (lib test) generated 2 warnings (1 duplicate)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.13s
+     Running unittests src/lib.rs (/tmp/nc10-own-36992565/target/debug/deps/engine_native_wasm-16b044e1e1e1761c)
+     Running tests/adr0786_j2_cross_target.rs (/tmp/nc10-own-36992565/target/debug/deps/adr0786_j2_cross_target-f88c870dac86d996)
+     Running tests/cross_target_multiseat.rs (/tmp/nc10-own-36992565/target/debug/deps/cross_target_multiseat-0de7315db385fb95)
+     Running tests/cross_target_package.rs (/tmp/nc10-own-36992565/target/debug/deps/cross_target_package-5cf474b37776b34c)
+     Running tests/events_hash_export.rs (/tmp/nc10-own-36992565/target/debug/deps/events_hash_export-fd4a441c91e247e4)
+     Running tests/gt014_import_validation_parity.rs (/tmp/nc10-own-36992565/target/debug/deps/gt014_import_validation_parity-17dbb1b9774508a9)
+     Running tests/installed_package_payload.rs (/tmp/nc10-own-36992565/target/debug/deps/installed_package_payload-3eec16bbc05ab4c5)
+     Running tests/nc03_actor_authorization.rs (/tmp/nc10-own-36992565/target/debug/deps/nc03_actor_authorization-28d23558a41fee0f)
+     Running tests/nc03_legal_actions_export.rs (/tmp/nc10-own-36992565/target/debug/deps/nc03_legal_actions_export-d407035ecd9f6c83)
+     Running tests/nc03_view_projection.rs (/tmp/nc10-own-36992565/target/debug/deps/nc03_view_projection-9deae12846361914)
+     Running tests/nc04_vm_control_flow.rs (/tmp/nc10-own-36992565/target/debug/deps/nc04_vm_control_flow-e9aecabce3e536eb)
+     Running tests/nc05_general_select_export.rs (/tmp/nc10-own-36992565/target/debug/deps/nc05_general_select_export-7e3065565f1c0104)
+     Running tests/nc06_skill_pile_restore.rs (/tmp/nc10-own-36992565/target/debug/deps/nc06_skill_pile_restore-74069ae361627fe2)
+     Running tests/nc08_cross_target.rs (/tmp/nc10-own-36992565/target/debug/deps/nc08_cross_target-ce0fa2ff5e753ecc)
+     Running tests/nc10_public_own_session.rs (/tmp/nc10-own-36992565/target/debug/deps/nc10_public_own_session-b1aaaa5dc739eb1e)
+     Running tests/pa09_native_session.rs (/tmp/nc10-own-36992565/target/debug/deps/pa09_native_session-13970f4637337d94)
+     Running tests/restore_boundary_handle.rs (/tmp/nc10-own-36992565/target/debug/deps/restore_boundary_handle-9b576047b8df418c)
+     Running tests/vm_module_hash.rs (/tmp/nc10-own-36992565/target/debug/deps/vm_module_hash-566e72f5074187b8)
+     Running tests/vm_package_integrity.rs (/tmp/nc10-own-36992565/target/debug/deps/vm_package_integrity-05adcd9e9ecf885c)
+     Running tests/vm_package_worker.rs (/tmp/nc10-own-36992565/target/debug/deps/vm_package_worker-db0bdb2cfcc7dcc7)
+   Doc-tests engine_native_wasm

@@ -1,0 +1,1606 @@
+diff --git a/crates/engine-native-content/src/content/host/step/hearth.rs b/crates/engine-native-content/src/content/host/step/hearth.rs
+index d0a90969..9372c5a4 100644
+--- a/crates/engine-native-content/src/content/host/step/hearth.rs
++++ b/crates/engine-native-content/src/content/host/step/hearth.rs
+@@ -137,7 +137,7 @@ impl HostMachine {
+                             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                                 Some(self.owner),
+                                 t,
+-                                dmg,
++                                dmg as i32,
+                                 crate::event::DamageNature::Thunder,
+                                 self.card,
+                             )));
+diff --git a/crates/engine-native-content/src/content/host/step/skills_damage.rs b/crates/engine-native-content/src/content/host/step/skills_damage.rs
+index 55d26dba..65b145b1 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_damage.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_damage.rs
+@@ -85,7 +85,7 @@ impl HostMachine {
+             HostBehavior::HlssXiangxing => {
+                 let damage_num = ctx
+                     .current_damage()
+-                    .map(|d| d.amount)
++                    .map(|d| d.amount.max(0) as u32)
+                     .or_else(|_| ctx.current_lose_hp())
+                     .unwrap_or(0);
+                 let p = ctx.core.player_mut(self.owner);
+@@ -157,7 +157,7 @@ impl HostMachine {
+                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                         Some(self.owner),
+                         target,
+-                        num,
++                        num as i32,
+                         crate::event::DamageNature::Thunder,
+                         None,
+                     )));
+@@ -298,6 +298,7 @@ impl HostMachine {
+                     let target = self.targets.remove(0);
+                     if ctx.core.player(target).alive {
+                         ctx.emit(EventData::Damage(crate::event::DamageData {
++                    settlement: Default::default(),
+                             source: Some(self.owner),
+                             target,
+                             amount: 1,
+diff --git a/crates/engine-native-content/src/content/host/step/skills_status.rs b/crates/engine-native-content/src/content/host/step/skills_status.rs
+index ef8d05c2..4dbd5c20 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_status.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_status.rs
+@@ -215,7 +215,7 @@ impl HostMachine {
+                     }
+                 } else {
+                     match ctx.current_damage() {
+-                        Ok(d) if d.target == self.owner => d.amount.saturating_mul(10),
++                        Ok(d) if d.target == self.owner => (d.amount.max(0) as u32).saturating_mul(10),
+                         Ok(d) => d.amount.saturating_mul(15),
+                         Err(_) => 5,
+                     }
+diff --git a/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs b/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
+index fd1eedd2..7ba7a7e2 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
+@@ -175,7 +175,7 @@ impl HostMachine {
+                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                         Some(self.owner),
+                         v,
+-                        n,
++                        n as i32,
+                         crate::event::DamageNature::Fire,
+                         None,
+                     )));
+diff --git a/crates/engine-native-content/src/content/host/step/swd_equipment.rs b/crates/engine-native-content/src/content/host/step/swd_equipment.rs
+index 6bbb633d..88042fc7 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_equipment.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_equipment.rs
+@@ -499,7 +499,7 @@ impl HostMachine {
+                 {
+                     let p = ctx.core.player(self.owner);
+                     if p.alive && p.hp < p.max_hp as i32 {
+-                        ctx.recover(self.owner, d.amount, None);
++                        ctx.recover(self.owner, d.amount.max(0) as u32, None);
+                     }
+                 }
+                 Flow::Done
+@@ -589,7 +589,7 @@ impl HostMachine {
+                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                             Some(self.owner),
+                             t,
+-                            dmg as u32,
++                            i32::from(dmg),
+                             crate::event::DamageNature::Normal,
+                             None,
+                         )));
+diff --git a/crates/engine-native-content/src/content/host/step/wudian_recovery.rs b/crates/engine-native-content/src/content/host/step/wudian_recovery.rs
+index f9fe017f..3a6a7a17 100644
+--- a/crates/engine-native-content/src/content/host/step/wudian_recovery.rs
++++ b/crates/engine-native-content/src/content/host/step/wudian_recovery.rs
+@@ -279,7 +279,7 @@ impl HostMachine {
+                         (d.amount, d.target)
+                     };
+                     if num > 0 && ctx.core.player(hurt).alive {
+-                        ctx.recover(hurt, num, None);
++                        ctx.recover(hurt, num.max(0) as u32, None);
+                     }
+                     Flow::Done
+                 }
+diff --git a/crates/engine-native-content/src/content/vm_effects/pingkou.rs b/crates/engine-native-content/src/content/vm_effects/pingkou.rs
+index d978bb05..04a5e6e2 100644
+--- a/crates/engine-native-content/src/content/vm_effects/pingkou.rs
++++ b/crates/engine-native-content/src/content/vm_effects/pingkou.rs
+@@ -32,6 +32,9 @@ pub(super) fn active_ask(core: &GameStateCore, owner: u8, state: &[u32]) -> Opti
+ }
+ 
+ pub(super) fn step(ctx: &mut Ctx<'_>, owner: u8, amount: u32, state: &mut Vec<u32>) -> Flow {
++    let Ok(amount)=i32::try_from(amount) else {
++        ctx.res.fault=Some(crate::machine::VmFault{skill:"pingkou".into(),owner,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"source amount exceeds i32".into()});return Flow::Done;
++    };
+     if state.is_empty() {
+         *state = vec![1, 0, 0, 0];
+         return active_ask(ctx.core, owner, state)
+diff --git a/crates/engine-native-kernel/src/archive.rs b/crates/engine-native-kernel/src/archive.rs
+index 25e06ba8..9b1c599d 100644
+--- a/crates/engine-native-kernel/src/archive.rs
++++ b/crates/engine-native-kernel/src/archive.rs
+@@ -287,6 +287,7 @@ use io::*;
+ mod values;
+ use values::*;
+ mod events;
++mod damage;
+ use events::*;
+ mod machine_encode;
+ use machine_encode::*;
+diff --git a/crates/engine-native-kernel/src/archive/damage.rs b/crates/engine-native-kernel/src/archive/damage.rs
+new file mode 100644
+index 00000000..2d6dde0d
+--- /dev/null
++++ b/crates/engine-native-kernel/src/archive/damage.rs
+@@ -0,0 +1,73 @@
++//! Private106 damage settlement codec; old machine field layouts are unchanged.
++use super::*;
++use crate::event::{DamageOutcome as O, DamageProgress as P, DamageSettlement};
++pub(super) fn enc_settlement(w: &mut W, s: &DamageSettlement) {
++    enc_opt_u32(w, s.committed_damage);
++    w.u32(s.hp_loss);
++    w.u8(match s.outcome {
++        O::Running => 0,
++        O::Cancelled => 1,
++        O::ReplacedByLoseHp => 2,
++        O::Zero => 3,
++        O::Completed => 4,
++    });
++    w.boolean(s.notrigger);
++    let (tag, remaining) = match &s.progress {
++        P::Before => (0, None),
++        P::HpCommitted => (1, None),
++        P::TargetDamage => (2, None),
++        P::DyingPending => (3, None),
++        P::DyingDone => (4, None),
++        P::Source => (5, None),
++        P::End => (6, None),
++        P::After => (7, None),
++        P::Chain { remaining } => (8, Some(remaining)),
++        P::Done => (9, None),
++        P::ZeroPending => (10, None),
++        P::Stopped => (11, None),
++    };
++    w.u8(tag);
++    if let Some(remaining) = remaining {
++        w.len(remaining.len());
++        for p in remaining {
++            w.u8(*p);
++        }
++    }
++}
++pub(super) fn dec_settlement(r: &mut R<'_>) -> Result<DamageSettlement, ArchiveError> {
++    let committed_damage = dec_opt_u32(r)?;
++    let hp_loss = r.u32()?;
++    let outcome = match r.u8()? {
++        0 => O::Running,
++        1 => O::Cancelled,
++        2 => O::ReplacedByLoseHp,
++        3 => O::Zero,
++        4 => O::Completed,
++        t => return Err(ArchiveError::BadTag("damage_outcome", t)),
++    };
++    let notrigger = r.boolean()?;
++    let progress = match r.u8()? {
++        0 => P::Before,
++        1 => P::HpCommitted,
++        2 => P::TargetDamage,
++        3 => P::DyingPending,
++        4 => P::DyingDone,
++        5 => P::Source,
++        6 => P::End,
++        7 => P::After,
++        8 => P::Chain {
++            remaining: r.vec(|r| r.u8())?,
++        },
++        9 => P::Done,
++        10 => P::ZeroPending,
++        11 => P::Stopped,
++        t => return Err(ArchiveError::BadTag("damage_progress", t)),
++    };
++    Ok(DamageSettlement {
++        committed_damage,
++        hp_loss,
++        outcome,
++        notrigger,
++        progress,
++    })
++}
+diff --git a/crates/engine-native-kernel/src/archive/events.rs b/crates/engine-native-kernel/src/archive/events.rs
+index 08665ff7..43736ebb 100644
+--- a/crates/engine-native-kernel/src/archive/events.rs
++++ b/crates/engine-native-kernel/src/archive/events.rs
+@@ -5,10 +5,10 @@ use super::*;
+ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+     match v {
+         EventData::Damage(d) => {
+-            w.u8(0);
++            w.u8(22);
+             enc_opt_pid(w, &d.source);
+             enc_pid(w, &d.target);
+-            w.u32(d.amount);
++            w.i32(d.amount);
+             enc_damage_nature(w, &d.nature);
+             w.boolean(d.prevented);
+             w.len(d.redirect_chain.len());
+@@ -17,7 +17,9 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+             }
+             enc_opt_u32(w, d.card);
+             w.boolean(d.from_chain);
++            super::damage::enc_settlement(w, &d.settlement);
+         }
++        EventData::DamageWindow { root, window } => { w.u8(21);w.u32(*root);w.u8(window.tag()); },
+         EventData::Recover {
+             player,
+             amount,
+@@ -195,16 +197,18 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+ 
+ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+     Ok(match r.u8()? {
+-        0 => {
++        tag @ (0 | 22) => {
+             let source = dec_opt_pid(r)?;
+             let target = dec_pid(r)?;
+-            let amount = r.u32()?;
++            let amount = r.i32()?;
+             let nature = dec_damage_nature(r)?;
+             let prevented = r.boolean()?;
+             let chain = r.vec(|r| r.u8())?;
+             let card = dec_opt_u32(r)?;
+             let from_chain = r.boolean()?;
++            let settlement = if tag == 22 { super::damage::dec_settlement(r)? } else { Default::default() };
+             EventData::Damage(DamageData {
++                settlement,
+                 source,
+                 target,
+                 amount,
+@@ -215,6 +219,7 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+                 from_chain,
+             })
+         }
++        21 => { let root=r.u32()?;let tag=r.u8()?;let window=crate::event::DamageWindowKind::from_tag(tag).ok_or(ArchiveError::BadTag("damage_window",tag))?;EventData::DamageWindow{root,window} },
+         1 => {
+             let player = dec_pid(r)?;
+             let amount = r.u32()?;
+diff --git a/crates/engine-native-kernel/src/archive/machine_decode.rs b/crates/engine-native-kernel/src/archive/machine_decode.rs
+index b90f83f5..9dccbf75 100644
+--- a/crates/engine-native-kernel/src/archive/machine_decode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_decode.rs
+@@ -2,6 +2,7 @@ use super::*;
+ 
+ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
+     Ok(match r.u8()? {
++        84 => MachineSnapshot::DamageFlow { root: r.u32()? },
+         83 => MachineSnapshot::TriggerOrder {
+             frame: r.u32()?,
+             owner: dec_pid(r)?,
+diff --git a/crates/engine-native-kernel/src/archive/machine_encode.rs b/crates/engine-native-kernel/src/archive/machine_encode.rs
+index a0423e2f..33467486 100644
+--- a/crates/engine-native-kernel/src/archive/machine_encode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_encode.rs
+@@ -2,6 +2,7 @@ use super::*;
+ 
+ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+     match m {
++        MachineSnapshot::DamageFlow { root } => { w.u8(84); w.u32(*root); },
+         MachineSnapshot::TriggerOrder {
+             frame,
+             owner,
+diff --git a/crates/engine-native-kernel/src/archive/values.rs b/crates/engine-native-kernel/src/archive/values.rs
+index 3c703e05..52bf9d02 100644
+--- a/crates/engine-native-kernel/src/archive/values.rs
++++ b/crates/engine-native-kernel/src/archive/values.rs
+@@ -133,6 +133,7 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
+         CardsLost => 20,
+         ShaDodged => 21,
+         CardsGiven => 22,
++        DamageSource => 23, DamageEnd => 24, DamageAfter => 25, DamageZero => 26, DamageCancelled => 27,
+     };
+     w.u8(t);
+ }
+@@ -163,6 +164,7 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
+         20 => CardsLost,
+         21 => ShaDodged,
+         22 => CardsGiven,
++        23 => DamageSource,24 => DamageEnd,25 => DamageAfter,26 => DamageZero,27 => DamageCancelled,
+         t => return Err(ArchiveError::BadTag("event_kind", t)),
+     })
+ }
+diff --git a/crates/engine-native-kernel/src/event.rs b/crates/engine-native-kernel/src/event.rs
+index 6eccd1c5..64ca5bcd 100644
+--- a/crates/engine-native-kernel/src/event.rs
++++ b/crates/engine-native-kernel/src/event.rs
+@@ -5,6 +5,8 @@
+ //! 技能可以在结算窗口内改写帧载荷（如伤害转移）。
+ 
+ use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
++mod damage;
++pub use damage::*;
+ 
+ /// 触发唤醒用的事件类别。
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+@@ -41,6 +43,11 @@ pub enum EventKind {
+     /// 手牌直接给予另一角色（NC04 未映射事件批）：`give_hand_card` 共享
+     /// 原语发射；DSL `cards_given` 触发窗（旧线 EventKind 同名同义）。
+     CardsGiven,
++    DamageSource,
++    DamageEnd,
++    DamageAfter,
++    DamageZero,
++    DamageCancelled,
+ }
+ 
+ /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+@@ -65,7 +72,9 @@ pub struct DamageData {
+     pub source: Option<PlayerId>,
+     /// 当前承受者——转移技能改写此字段。
+     pub target: PlayerId,
+-    pub amount: u32,
++    pub amount: i32,
++    /// One canonical submission and continuation authority.
++    pub settlement: DamageSettlement,
+     pub nature: DamageNature,
+     /// 防止类技能改写此字段；提交阶段读到 true 则不扣血。
+     pub prevented: bool,
+@@ -107,6 +116,8 @@ pub enum EventData {
+         face_down: bool,
+     },
+     Damage(DamageData),
++    /// A real child window referencing its canonical damage ancestor.
++    DamageWindow { root: EventId, window: DamageWindowKind },
+     Recover {
+         player: PlayerId,
+         amount: u32,
+@@ -207,6 +218,7 @@ impl EventData {
+     pub fn kind(&self) -> EventKind {
+         match self {
+             EventData::Damage(_) => EventKind::Damage,
++            EventData::DamageWindow { window, .. } => window.event_kind(),
+             EventData::Recover { .. } => EventKind::Recover,
+             EventData::CardsDrawn { .. } => EventKind::CardsDrawn,
+             EventData::CardsMoved { .. } => EventKind::CardsMoved,
+diff --git a/crates/engine-native-kernel/src/event/damage.rs b/crates/engine-native-kernel/src/event/damage.rs
+new file mode 100644
+index 00000000..8d1885bc
+--- /dev/null
++++ b/crates/engine-native-kernel/src/event/damage.rs
+@@ -0,0 +1,111 @@
++//! Canonical damage quantity, submission receipt and sole continuation progress.
++use super::*;
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
++pub enum DamageOutcome {
++    #[default]
++    Running,
++    Cancelled,
++    ReplacedByLoseHp,
++    Zero,
++    Completed,
++}
++#[derive(Debug, Clone, PartialEq, Eq, Default)]
++pub enum DamageProgress {
++    #[default]
++    Before,
++    HpCommitted,
++    TargetDamage,
++    DyingPending,
++    DyingDone,
++    Source,
++    End,
++    After,
++    Chain {
++        remaining: Vec<PlayerId>,
++    },
++    Done,
++    ZeroPending,
++    Stopped,
++}
++#[derive(Debug, Clone, PartialEq, Eq, Default)]
++pub struct DamageSettlement {
++    pub committed_damage: Option<u32>,
++    pub hp_loss: u32,
++    pub outcome: DamageOutcome,
++    pub notrigger: bool,
++    pub progress: DamageProgress,
++}
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum DamageWindowKind {
++    Source,
++    End,
++    After,
++    Zero,
++    Cancelled,
++}
++impl DamageWindowKind {
++    pub fn event_kind(self) -> EventKind {
++        match self {
++            Self::Source => EventKind::DamageSource,
++            Self::End => EventKind::DamageEnd,
++            Self::After => EventKind::DamageAfter,
++            Self::Zero => EventKind::DamageZero,
++            Self::Cancelled => EventKind::DamageCancelled,
++        }
++    }
++    pub fn tag(self) -> u8 {
++        match self {
++            Self::Source => 0,
++            Self::End => 1,
++            Self::After => 2,
++            Self::Zero => 3,
++            Self::Cancelled => 4,
++        }
++    }
++    pub fn from_tag(tag: u8) -> Option<Self> {
++        Some(match tag {
++            0 => Self::Source,
++            1 => Self::End,
++            2 => Self::After,
++            3 => Self::Zero,
++            4 => Self::Cancelled,
++            _ => return None,
++        })
++    }
++}
++impl DamageSettlement {
++    pub fn canonical_bytes(&self) -> Vec<u8> {
++        let mut out = b"native-damage-settlement/1".to_vec();
++        out.push(u8::from(self.committed_damage.is_some()));
++        out.extend_from_slice(&self.committed_damage.unwrap_or(0).to_le_bytes());
++        out.extend_from_slice(&self.hp_loss.to_le_bytes());
++        out.push(match self.outcome {
++            DamageOutcome::Running => 0,
++            DamageOutcome::Cancelled => 1,
++            DamageOutcome::ReplacedByLoseHp => 2,
++            DamageOutcome::Zero => 3,
++            DamageOutcome::Completed => 4,
++        });
++        out.push(u8::from(self.notrigger));
++        let (tag, remaining) = match &self.progress {
++            DamageProgress::Before => (0, None),
++            DamageProgress::HpCommitted => (1, None),
++            DamageProgress::TargetDamage => (2, None),
++            DamageProgress::DyingPending => (3, None),
++            DamageProgress::DyingDone => (4, None),
++            DamageProgress::Source => (5, None),
++            DamageProgress::End => (6, None),
++            DamageProgress::After => (7, None),
++            DamageProgress::Chain { remaining } => (8, Some(remaining)),
++            DamageProgress::Done => (9, None),
++            DamageProgress::ZeroPending => (10, None),
++            DamageProgress::Stopped => (11, None),
++        };
++        out.push(tag);
++        if let Some(xs) = remaining {
++            out.extend_from_slice(&(xs.len() as u32).to_le_bytes());
++            out.extend_from_slice(xs);
++        }
++        out
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index faa28d7a..ddfffcae 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -19,7 +19,11 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
+     };
+     record_vm_history(ctx, &data);
+     match data {
+-        EventData::Damage(d) => commit_damage(ctx, frame_id, d),
++        EventData::Damage(d) => { if d.settlement.committed_damage.is_none() { commit_damage(ctx, frame_id, d); } },
++        EventData::DamageWindow { root, window: crate::event::DamageWindowKind::End } => {
++            let d=ctx.res.frame(root).expect("damage root").damage().clone();
++            if d.amount>0 && !d.prevented && !d.settlement.notrigger {post_damage(ctx,d);}
++        },
+         EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
+         EventData::CardUsed(u) => commit_card_used(ctx, u),
+         EventData::Equipped { player, card, .. } => commit_equip(ctx, frame_id, player, card),
+@@ -44,6 +48,8 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
+ }
+ 
+ mod damage;
++mod damage_flow;
++pub use damage_flow::DamageFlow;
+ use damage::*;
+ mod events;
+ use events::*;
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index ac0557bc..a4877dc0 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -1,34 +1,16 @@
+ use super::*;
+ 
+-/// 伤害提交：读最终帧载荷（转移/防止已生效），扣血并内联濒死检查。
+-pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::event::DamageData) {
++/// Submit one canonical source amount; DamageFlow owns later callbacks and Dying.
++pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::event::DamageData) {
+     if d.prevented {
+         ctx.log(LogEvent::DamagePrevented { target: d.target });
++        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+         return;
+     }
+-    if d.amount == 0 {
++    if d.amount <= 0 {
++        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
+         return;
+     }
+-    // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
+-    // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
+-    if let Some(dcard) = d.card {
+-        if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
+-            if *card == dcard {
+-                *caused = true;
+-            }
+-        }
+-    }
+-    // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
+-    // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
+-    // 同口径；武装=当前回合玩家=链主）
+-    if ctx.core.turn.shuchui_armed
+-        && d.source == Some(ctx.core.turn.current)
+-        && d.card
+-            .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+-            .unwrap_or(false)
+-    {
+-        ctx.core.turn.shuchui_hit = true;
+-    }
+     // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
+     // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
+     // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
+@@ -41,9 +23,10 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+             if src != d.target && ctx.core.player(src).alive && ctx.core.has_skill(src, jqdef) {
+                 ctx.emit(EventData::LoseHp {
+                     player: d.target,
+-                    amount: d.amount,
++                    amount: d.amount as u32,
+                 });
+-                return;
++                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::ReplacedByLoseHp);
++        return;
+             }
+         }
+     }
+@@ -59,7 +42,8 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+                 player: d.target,
+                 amount: 1,
+             });
+-            return;
++            finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::ReplacedByLoseHp);
++        return;
+         }
+     }
+     // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
+@@ -68,12 +52,14 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+     // damageBegin 类增幅同上游一样不再结算。
+     if ctx.core.player(d.target).jidong_active {
+         ctx.log(LogEvent::DamagePrevented { target: d.target });
++        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+         return;
+     }
+     // 诚信免伤（U05 xianjian 明绣，规则 v164）：锁定——免伤状态目标受
+     // 所有伤害无效（上游 chengxin2 damageBefore trigger.cancel 同口径）
+     if ctx.core.player(d.target).chengxin_active {
+         ctx.log(LogEvent::DamagePrevented { target: d.target });
++        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+         return;
+     }
+     // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
+@@ -86,7 +72,8 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+         {
+             if ctx.core.has_skill(d.target, zdef) {
+                 ctx.log(LogEvent::DamagePrevented { target: d.target });
+-                return;
++                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
++        return;
+             }
+         }
+     }
+@@ -101,7 +88,8 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+             if ctx.core.player(d.target).alive && ctx.core.has_skill(d.target, hsdef) {
+                 ctx.log(LogEvent::DamagePrevented { target: d.target });
+                 ctx.recover(d.target, 1, None);
+-                return;
++                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
++        return;
+             }
+         }
+     }
+@@ -114,10 +102,11 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+     {
+         if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current == d.target {
+             ctx.log(LogEvent::DamagePrevented { target: d.target });
+-            return;
++            finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
++        return;
+         }
+     }
+-    let mut amount = d.amount;
++    let mut amount = i64::from(d.amount);
+     // 拟态（Boss 梼杌，规则 v217）：锁定——你于回合外受到的火属性伤害
+     // +1（上游 boss_nitai_out damageBegin1 num++ 同口径）
+     if d.nature == crate::event::DamageNature::Fire {
+@@ -214,7 +203,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+                 {
+                     if ctx.core.has_skill(src, def) {
+                         amount += 1;
+-                        if amount >= ctx.core.player(d.target).hp as u32 {
++                        if amount >= i64::from(ctx.core.player(d.target).hp) {
+                             ctx.core.turn.ciqiu_dying.push(d.target);
+                             ctx.core.skills.remove(&(src, def));
+                         }
+@@ -240,46 +229,6 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+             }
+         }
+     }
+-    // 炮台降级（U05 ow，规则 v123）：炮台持有者受伤 1 点降 1 级（上游
+-    // paotai3 damageEnd forced：storage -= trigger.num；下限 0）
+-    if ctx.core.player(d.target).paotai_lv > 0 && d.amount > 0 && !d.prevented {
+-        let lv = ctx.core.player(d.target).paotai_lv;
+-        ctx.core.player_mut(d.target).paotai_lv = lv.saturating_sub(d.amount as u8);
+-    }
+-    // 护甲（G1 扩展）：1:1 抵扣伤害，先于体力扣减
+-    let hujia = ctx.core.player(d.target).hujia;
+-    if hujia > 0 {
+-        let absorbed = (hujia as u32).min(amount);
+-        ctx.core.player_mut(d.target).hujia = hujia - absorbed as u8;
+-        amount -= absorbed;
+-        ctx.log(LogEvent::HujiaAbsorbed {
+-            player: d.target,
+-            amount: absorbed,
+-        });
+-    }
+-    // 机甲血（U05 ow D.Va，规则 v141）：1:1 抵扣伤害（体力不损）——
+-    // 上游 changeHp 拦截（体力回补+机甲血同扣）观察等价；归零后照常
+-    // 扣体力（chongzhuang 重装累计登记暂缓）。
+-    let has_jijia = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
+-        .map(|def| ctx.core.has_skill(d.target, def))
+-        .unwrap_or(false);
+-    if has_jijia {
+-        let j = ctx.core.player(d.target).jijia_hp;
+-        if j > 0 {
+-            let absorbed = (j as u32).min(amount);
+-            ctx.core.player_mut(d.target).jijia_hp = j - absorbed as u8;
+-            amount -= absorbed;
+-            ctx.log(LogEvent::HujiaAbsorbed {
+-                player: d.target,
+-                amount: absorbed,
+-            });
+-        }
+-    }
+-    if amount == 0 {
+-        return;
+-    }
+     // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
+     // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+     // 醉酒（Boss 白无常，规则 v255）：你使用的【杀】造成的伤害 +1（上
+@@ -330,13 +279,6 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+             }
+         }
+     }
+-    // damageEnd num 同口径）
+-    if let Some(src) = d.source {
+-        if src != d.target {
+-            let p = ctx.core.player_mut(src);
+-            p.turn_damage = p.turn_damage.saturating_add(amount.min(255) as u8);
+-        }
+-    }
+     // 脉轮（swd 批 137，规则 v316）：3=首次造成/受到伤害 -1、4=+1（各自
+     // 一次性；上游 mailun31/32/41/42 damageBegin 用后移除同口径）
+     {
+@@ -369,31 +311,113 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+         if hold > 0 {
+             let hp = ctx.core.player(d.target).hp;
+             let cap = hp - hold;
+-            if cap < amount as i32 {
+-                amount = cap.max(0) as u32;
++            if i64::from(cap) < amount {
++                amount = i64::from(cap.max(0));
++            }
++        }
++    }
++    let Ok(amount)=i32::try_from(amount) else {
++        ctx.res.fault=Some(crate::machine::VmFault{skill:"intrinsic_damage".into(),owner:d.target,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"canonical source amount exceeds i32".into()});return;
++    };
++    d.amount = amount;
++    if amount <= 0 { finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero); return; }
++    let submitted = amount as u32;
++    d.settlement.committed_damage = Some(submitted);
++    d.settlement.progress = crate::event::DamageProgress::HpCommitted;
++    // Source counters and logs consume canonical submitted event.num, never armor HP loss.
++    // damageEnd num 同口径）
++    if let Some(src) = d.source {
++        if src != d.target {
++            let p = ctx.core.player_mut(src);
++            p.turn_damage = p.turn_damage.saturating_add(amount.clamp(0,255) as u8);
++        }
++    }
++    // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
++    // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
++    if let Some(dcard) = d.card {
++        if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
++            if *card == dcard {
++                *caused = true;
+             }
+         }
+     }
++    // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
++    // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
++    // 同口径；武装=当前回合玩家=链主）
++    if ctx.core.turn.shuchui_armed
++        && d.source == Some(ctx.core.turn.current)
++        && d.card
++            .map(|c| ctx.catalog.card_kind(c).is_sha_like())
++            .unwrap_or(false)
++    {
++        ctx.core.turn.shuchui_hit = true;
++    }
++    let mut hp_loss = submitted;
++    // 护甲（G1 扩展）：1:1 抵扣伤害，先于体力扣减
++    let hujia = ctx.core.player(d.target).hujia;
++    if hujia > 0 {
++        let absorbed = (hujia as u32).min(hp_loss);
++        ctx.core.player_mut(d.target).hujia = hujia - absorbed as u8;
++        hp_loss -= absorbed;
++        ctx.log(LogEvent::HujiaAbsorbed {
++            player: d.target,
++            amount: absorbed,
++        });
++    }
++    // 机甲血（U05 ow D.Va，规则 v141）：1:1 抵扣伤害（体力不损）——
++    // 上游 changeHp 拦截（体力回补+机甲血同扣）观察等价；归零后照常
++    // 扣体力（chongzhuang 重装累计登记暂缓）。
++    let has_jijia = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::host::WUDIAN_JIJIA_KEY)
++        .map(|def| ctx.core.has_skill(d.target, def))
++        .unwrap_or(false);
++    if has_jijia {
++        let j = ctx.core.player(d.target).jijia_hp;
++        if j > 0 {
++            let absorbed = (j as u32).min(hp_loss);
++            ctx.core.player_mut(d.target).jijia_hp = j - absorbed as u8;
++            hp_loss -= absorbed;
++            ctx.log(LogEvent::HujiaAbsorbed {
++                player: d.target,
++                amount: absorbed,
++            });
++        }
++    }
+     let receipt = format!("vm_damage_receipt:{frame_id}");
+     for ((_, key), value) in &mut ctx.core.vm_aux.flags {
+         if key == &receipt {
+-            *value = if amount > 0 { d.target as u32 + 1 } else { 0 };
++            *value = d.target as u32 + 1;
+         }
+     }
+     let p = ctx.core.player_mut(d.target);
+     // 无限体力（上游 Infinity）：伤害照常结算与记录，但不改变体力
+     //（hp 保持 == max_hp，故「已受伤」类判据恒假——与上游一致）。
+     if !p.infinite_hp() {
+-        p.hp -= amount as i32;
++        let Some(hp)=p.hp.checked_sub(hp_loss as i32) else {
++            ctx.res.fault=Some(crate::machine::VmFault{skill:"intrinsic_damage".into(),owner:d.target,event:"Damage".into(),kind:"DamageHpOverflow".into(),detail:"HP subtraction exceeds i32".into()});return;
++        };
++        p.hp = hp;
+     }
++    d.settlement.hp_loss = if p.infinite_hp() { 0 } else { hp_loss };
++    ctx.res.frame_mut(frame_id).expect("damage root").data = EventData::Damage(d.clone());
+     hlss_light_refill(ctx, d.target);
+     ctx.log(LogEvent::DamageDealt {
+         source: d.source,
+         target: d.target,
+-        amount: d.amount,
++        amount: d.amount.max(0) as u32,
+         redirected_from: d.redirect_chain.clone(),
+         card: d.card,
+     });
++}
++
++pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
++    // 炮台降级（U05 ow，规则 v123）：炮台持有者受伤 1 点降 1 级（上游
++    // paotai3 damageEnd forced：storage -= trigger.num；下限 0）
++    if ctx.core.player(d.target).paotai_lv > 0 && d.amount > 0 && !d.prevented {
++        let lv = ctx.core.player(d.target).paotai_lv;
++        ctx.core.player_mut(d.target).paotai_lv = lv.saturating_sub(d.amount as u8);
++    }
+     // 吸血鬼指环（U05 swd 第六批，规则 v90）：锁定——你的【杀】造成
+     // 伤害后，若你已受伤，回复等量体力（上游 xixue：damageEnd sha &&
+     // hp<maxHp → recover(num)）
+@@ -411,7 +435,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+                 .iter()
+                 .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xixueguizhihuan)
+         {
+-            ctx.recover(src, d.amount, None);
++            ctx.recover(src, d.amount.max(0) as u32, None);
+         }
+     }
+     // 青龙令珠（U05 swd 第九批，规则 v93）：你对其他角色造成属性伤害
+@@ -979,56 +1003,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::even
+             }
+         }
+     }
+-    // 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
+-    let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
+-    if entering {
+-        ctx.core.player_mut(d.target).dying = true;
+-        ctx.log(LogEvent::DyingEntered { player: d.target });
+-        ctx.emit(EventData::Dying {
+-            player: d.target,
+-            source: d.source,
+-        });
+-    }
+-    // 铁索连环传导：属性伤害结算后，传导给其余被链存活玩家（座位顺序），
+-    // 随后全部解除连环。被防止/零点伤害不传导；传导伤害是完全的伤害结算
+-    // （可被转移/响应/再触发濒死），且因链已先解除而不再级联——语义取舍
+-    // 见覆盖清单行为差异表。
+-    if d.nature != crate::event::DamageNature::Normal {
+-        let target = d.target;
+-        let chained: Vec<crate::ids::PlayerId> = ctx
+-            .core
+-            .seat_order_from(target)
+-            .into_iter()
+-            .filter(|p| *p != target && ctx.core.player(*p).linked)
+-            .collect();
+-        if !chained.is_empty() {
+-            // 先解除全部连环（含目标自身）
+-            for p in ctx
+-                .core
+-                .alive_players()
+-                .filter(|p| ctx.core.player(*p).linked)
+-                .collect::<Vec<_>>()
+-            {
+-                ctx.core.player_mut(p).linked = false;
+-                ctx.log(LogEvent::Linked {
+-                    player: p,
+-                    linked: false,
+-                });
+-            }
+-            for p in chained {
+-                ctx.emit(EventData::Damage(crate::event::DamageData {
+-                    source: d.source,
+-                    target: p,
+-                    amount: d.amount,
+-                    nature: d.nature,
+-                    prevented: false,
+-                    redirect_chain: vec![],
+-                    card: d.card,
+-                    from_chain: true,
+-                }));
+-            }
+-        }
+-    }
++
+ }
+ 
+ /// 禳星·光（T11 Boss 诸葛亮族批 115，规则 v303）：持有「禳星」且星未
+@@ -1136,3 +1111,9 @@ pub(super) fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
+         }
+     }
+ }
++
++fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
++    d.settlement.outcome = outcome;
++    d.settlement.progress = if outcome == crate::event::DamageOutcome::Zero { crate::event::DamageProgress::ZeroPending } else { crate::event::DamageProgress::Stopped };
++    ctx.res.frame_mut(root).expect("damage root").data = EventData::Damage(d);
++}
+diff --git a/crates/engine-native-kernel/src/kernel/damage_flow.rs b/crates/engine-native-kernel/src/kernel/damage_flow.rs
+new file mode 100644
+index 00000000..07a94cb1
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/damage_flow.rs
+@@ -0,0 +1,145 @@
++//! One intrinsic damage continuation; settlement/progress belongs only to its root.
++use super::*;
++use crate::event::{DamageOutcome as O, DamageProgress as P, DamageWindowKind as W};
++
++#[derive(Clone)]
++pub struct DamageFlow {
++    pub root: EventId,
++}
++impl crate::catalog::SkillMachine for DamageFlow {
++    fn fork(&self) -> Box<dyn crate::catalog::SkillMachine> {
++        Box::new(self.clone())
++    }
++    fn snapshot(&self) -> crate::snap::MachineSnapshot {
++        crate::snap::MachineSnapshot::DamageFlow { root: self.root }
++    }
++    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
++        let Some(frame) = ctx.res.frame(self.root) else {
++            return Flow::Done;
++        };
++        let EventData::Damage(mut d) = frame.data.clone() else {
++            return Flow::Done;
++        };
++        if d.source.is_some_and(|s| !ctx.core.player(s).alive) {
++            d.source = None;
++        }
++        if d.prevented && d.settlement.outcome == O::Running {
++            d.settlement.outcome = O::Cancelled;
++            d.settlement.progress = P::Stopped;
++        }
++        if d.amount <= 0 && d.settlement.outcome == O::Running {
++            d.settlement.outcome = O::Zero;
++            d.settlement.progress = P::ZeroPending;
++        }
++        let mut child = None;
++        match d.settlement.progress.clone() {
++            P::Before => {
++                d.settlement.progress = P::Stopped;
++            }
++            P::ZeroPending => {
++                d.settlement.progress = P::Stopped;
++                child = Some(EventData::DamageWindow {
++                    root: self.root,
++                    window: W::Zero,
++                });
++            }
++            P::Stopped => {
++                ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
++                return Flow::Done;
++            }
++            P::HpCommitted | P::TargetDamage => {
++                d.settlement.progress = P::DyingPending;
++                if ctx.core.player(d.target).alive
++                    && ctx.core.player(d.target).hp <= 0
++                    && !ctx.core.player(d.target).dying
++                {
++                    ctx.core.player_mut(d.target).dying = true;
++                    ctx.log(LogEvent::DyingEntered { player: d.target });
++                    child = Some(EventData::Dying {
++                        player: d.target,
++                        source: d.source,
++                    });
++                }
++            }
++            P::DyingPending => {
++                d.settlement.progress = P::DyingDone;
++            }
++            P::DyingDone => {
++                d.settlement.progress = P::Source;
++                if !d.settlement.notrigger {
++                    child = Some(EventData::DamageWindow {
++                        root: self.root,
++                        window: W::Source,
++                    });
++                }
++            }
++            P::Source => {
++                d.settlement.progress = P::End;
++                if !d.settlement.notrigger {
++                    child = Some(EventData::DamageWindow {
++                        root: self.root,
++                        window: W::End,
++                    });
++                }
++            }
++            P::End => {
++                d.settlement.progress = P::After;
++                if !d.settlement.notrigger {
++                    child = Some(EventData::DamageWindow {
++                        root: self.root,
++                        window: W::After,
++                    });
++                }
++            }
++            P::After => {
++                let mut remaining = Vec::new();
++                if d.nature != crate::event::DamageNature::Normal
++                    && !d.from_chain
++                    && ctx.core.player(d.target).linked
++                {
++                    remaining = ctx
++                        .core
++                        .seat_order_from(d.target)
++                        .into_iter()
++                        .filter(|p| *p != d.target && ctx.core.player(*p).linked)
++                        .collect();
++                    for p in ctx
++                        .core
++                        .alive_players()
++                        .filter(|p| ctx.core.player(*p).linked)
++                        .collect::<Vec<_>>()
++                    {
++                        ctx.core.player_mut(p).linked = false;
++                        ctx.log(LogEvent::Linked {
++                            player: p,
++                            linked: false,
++                        });
++                    }
++                }
++                d.settlement.progress = P::Chain { remaining };
++            }
++            P::Chain { mut remaining } => {
++                if remaining.is_empty() {
++                    d.settlement.progress = P::Done;
++                    d.settlement.outcome = O::Completed;
++                } else {
++                    let target = remaining.remove(0);
++                    d.settlement.progress = P::Chain { remaining };
++                    let mut chained =
++                        damage_data_with(d.source, target, d.amount, d.nature, d.card);
++                    chained.from_chain = true;
++                    child = Some(EventData::Damage(chained));
++                }
++            }
++            P::Done => {
++                ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
++                return Flow::Done;
++            }
++        }
++        ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
++        if let Some(child) = child {
++            ctx.emit(child);
++        }
++        Flow::Yield
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel/duel.rs b/crates/engine-native-kernel/src/kernel/duel.rs
+index ed307eb4..45e8f056 100644
+--- a/crates/engine-native-kernel/src/kernel/duel.rs
++++ b/crates/engine-native-kernel/src/kernel/duel.rs
+@@ -77,7 +77,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
+                     ctx.emit(EventData::Damage(damage_data(
+                         Some(opponent),
+                         responder,
+-                        1 + luoyi_bonus(ctx, Some(opponent)),
++                        (1 + luoyi_bonus(ctx, Some(opponent))) as i32,
+                     )));
+                     return self.finish(ctx);
+                 }
+@@ -136,7 +136,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
+             ctx.emit(EventData::Damage(damage_data(
+                 Some(opponent),
+                 responder,
+-                1 + luoyi_bonus(ctx, Some(opponent)),
++                (1 + luoyi_bonus(ctx, Some(opponent))) as i32,
+             )));
+             return self.finish(ctx);
+         }
+diff --git a/crates/engine-native-kernel/src/kernel/intrinsic.rs b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+index 0ce012fc..5f07a7cd 100644
+--- a/crates/engine-native-kernel/src/kernel/intrinsic.rs
++++ b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+@@ -7,6 +7,7 @@ pub fn intrinsic_machine(
+ ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
+     match data {
++        EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
+         EventData::LoseHp { .. } => None,
+         EventData::DyingSaved { .. } => None,
+         EventData::Dying { player, source } => Some(Box::new(DyingSaveMachine {
+diff --git a/crates/engine-native-kernel/src/kernel/sha.rs b/crates/engine-native-kernel/src/kernel/sha.rs
+index 4a17748f..d9ddf1db 100644
+--- a/crates/engine-native-kernel/src/kernel/sha.rs
++++ b/crates/engine-native-kernel/src/kernel/sha.rs
+@@ -262,11 +262,11 @@ impl ShaResolveMachine {
+             ctx.emit(EventData::Damage(damage_data_with(
+                 Some(self.source),
+                 self.target,
+-                1 + luoyi_bonus(ctx, Some(self.source))
++                (1 + luoyi_bonus(ctx, Some(self.source))
+                     + xiongshou_bonus(ctx, self.source, self.target)
+                     + self.jiu_damage_bonus()
+                     + u32::from(self.xiandan_bonus)
+-                    + liaoyuan,
++                    + liaoyuan) as i32,
+                 self.nature,
+                 Some(self.card),
+             )));
+diff --git a/crates/engine-native-kernel/src/machine.rs b/crates/engine-native-kernel/src/machine.rs
+index af9ded28..333f395d 100644
+--- a/crates/engine-native-kernel/src/machine.rs
++++ b/crates/engine-native-kernel/src/machine.rs
+@@ -267,7 +267,8 @@ impl<'a> Ctx<'a> {
+     /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
+     pub fn current_damage(&self) -> Result<&DamageData, ()> {
+         let id = self.current_frame_id();
+-        match self.res.frame(id).map(|f| &f.data) {
++        let root=match self.res.frame(id).map(|f|&f.data) {Some(EventData::DamageWindow{root,..})=>*root,_=>id};
++        match self.res.frame(root).map(|f| &f.data) {
+             Some(crate::event::EventData::Damage(d)) => Ok(d),
+             _ => Err(()),
+         }
+@@ -284,6 +285,7 @@ impl<'a> Ctx<'a> {
+ 
+     pub fn current_damage_mut(&mut self) -> &mut DamageData {
+         let id = self.current_frame_id();
++        let id=match self.res.frame(id).map(|f|&f.data) {Some(EventData::DamageWindow{root,..})=>*root,_=>id};
+         self.res
+             .frame_mut(id)
+             .expect("current frame exists")
+@@ -779,7 +781,7 @@ impl<'a> Ctx<'a> {
+ }
+ 
+ /// 便捷构造：普通伤害载荷。
+-pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> DamageData {
++pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+     damage_data_with(source, target, amount, DamageNature::Normal, None)
+ }
+ 
+@@ -787,11 +789,12 @@ pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> D
+ pub fn damage_data_with(
+     source: Option<PlayerId>,
+     target: PlayerId,
+-    amount: u32,
++    amount: i32,
+     nature: DamageNature,
+     card: Option<CardId>,
+ ) -> DamageData {
+     DamageData {
++                    settlement: Default::default(),
+         source,
+         target,
+         amount,
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index ec199175..e16412ae 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -167,7 +167,8 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
+     match (kind, cur) {
+         (EventKind::Damage, Stage::BeforeTriggers) => Stage::Commit,
+         (EventKind::Damage, Stage::Commit) => Stage::AfterTriggers,
+-        (EventKind::Damage, Stage::AfterTriggers) => Stage::Done,
++        (EventKind::Damage, Stage::AfterTriggers) => Stage::Intrinsic,
++        (EventKind::Damage, Stage::Intrinsic) => Stage::Done,
+         // E03 翻面：BeforeTriggers 派发前置取消（漩涡面具写回 cancelled）
+         // → AfterTriggers 静默（无 after 触发）→ Commit 执行翻转。
+         (EventKind::TurnOverBefore, Stage::BeforeTriggers) => Stage::AfterTriggers,
+@@ -359,6 +360,11 @@ fn plan_triggers(
+             f.kind
+         }
+     };
++    if let EventData::Damage(d) = &res.frame(frame_id).expect("frame").data {
++        if !before && (d.settlement.committed_damage.is_none() || d.settlement.outcome != crate::event::DamageOutcome::Running || d.settlement.notrigger || d.amount <= 0) {
++            let f=res.frame_mut(frame_id).unwrap();f.queue.clear();f.planned=true;return;
++        }
++    }
+     let mut entries: Vec<QueuedTrigger> = Vec::new();
+     let turn_current = core.turn.current;
+     // PA01 活跃触发索引：候选遍历的代价与本局是否持有无关（目录 6215 技能
+@@ -436,6 +442,13 @@ pub fn run(
+         steps += 1;
+         res.budget -= 1;
+ 
++        // Canonical source liveness is refreshed before every collector/choice/confirmation/start.
++        for frame in &mut res.stack {
++            if let EventData::Damage(d)=&mut frame.data {
++                if d.source.is_some_and(|source|!core.player(source).alive) {d.source=None;}
++            }
++        }
++
+         // A) 恢复深度匹配的挂起机器
+         if res.open_choice.is_none() {
+             if let Some(idx) = ready_park_index(res) {
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 38c6975f..eda45473 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -57,6 +57,7 @@ pub(super) fn eligible(
+     event: &EventData,
+     kind: EventKind,
+ ) -> bool {
++    if matches!(event, EventData::Damage(d) if d.amount <= 0 || d.prevented || d.settlement.notrigger || !matches!(d.settlement.outcome,crate::event::DamageOutcome::Running)) { return false; }
+     if matches!(event, EventData::Death { player, .. } if core.player(*player).death_cancelled) {
+         return false;
+     }
+diff --git a/crates/engine-native-kernel/src/rvm_bridge.rs b/crates/engine-native-kernel/src/rvm_bridge.rs
+index 87f26b64..7b0e8747 100644
+--- a/crates/engine-native-kernel/src/rvm_bridge.rs
++++ b/crates/engine-native-kernel/src/rvm_bridge.rs
+@@ -104,7 +104,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
+             event_player: Some(d.target),
+             event_source: d.source,
+             event_card: d.card,
+-            event_amount: d.amount,
++            event_amount: d.amount as u32,
+             nature: Some(d.nature),
+             from_chain: d.from_chain,
+             kind: 1,
+diff --git a/crates/engine-native-kernel/src/rvm_bridge/machine.rs b/crates/engine-native-kernel/src/rvm_bridge/machine.rs
+index 2858f733..4c2422b2 100644
+--- a/crates/engine-native-kernel/src/rvm_bridge/machine.rs
++++ b/crates/engine-native-kernel/src/rvm_bridge/machine.rs
+@@ -344,7 +344,7 @@ impl VmMachine {
+                         .map(|p| p.raw())
+                         .unwrap_or(0),
+                     event_card: self.trig.event_card.map(|c| c as u32).unwrap_or(0),
+-                    event_amount: self.trig.event_amount,
++                    event_amount: ctx.current_damage().map(|d|d.amount as u32).unwrap_or(self.trig.event_amount),
+                 },
+                 seats,
+                 core: ctx.core,
+diff --git a/crates/engine-native-kernel/src/rvm_ops.rs b/crates/engine-native-kernel/src/rvm_ops.rs
+index a693ca66..f754ab97 100644
+--- a/crates/engine-native-kernel/src/rvm_ops.rs
++++ b/crates/engine-native-kernel/src/rvm_ops.rs
+@@ -79,7 +79,7 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
+             ..
+         } => {
+             ok_player(*target, "DealDamage")?;
+-            if *amount == 0 || *nature > 2 {
++            if *amount == 0 || *amount > i32::MAX as u32 || *nature > 2 {
+                 return Err(reject("DealDamage 越界"));
+             }
+         }
+@@ -305,7 +305,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
+                     _ => DamageNature::Normal,
+                 };
+                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+-                    src, t, amount, nature, None,
++                    src, t, amount as i32, nature, None,
+                 )));
+             }
+         }
+@@ -595,7 +595,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
+         } => {
+             if let Ok(d) = ctx.current_damage() {
+                 if d.amount > 0 && delta != 0 {
+-                    let next = (d.amount as i32).saturating_add(delta).max(0) as u32;
++                    let Some(next) = d.amount.checked_add(delta) else {
++                        ctx.res.fault=Some(crate::machine::VmFault{skill:"modify_current_damage".into(),owner:0,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"canonical i32 overflow".into()});return;
++                    };
+                     ctx.current_damage_mut().amount = next;
+                 }
+             }
+diff --git a/crates/engine-native-kernel/src/snap/machine_validation.rs b/crates/engine-native-kernel/src/snap/machine_validation.rs
+index dc136ad2..4742fba4 100644
+--- a/crates/engine-native-kernel/src/snap/machine_validation.rs
++++ b/crates/engine-native-kernel/src/snap/machine_validation.rs
+@@ -7,6 +7,7 @@ pub(super) fn check_machine(
+     core: &GameStateCore,
+ ) -> Result<(), SnapshotError> {
+     match m {
++        MachineSnapshot::DamageFlow { .. } => {},
+         MachineSnapshot::TriggerOrder { owner, candidates, asked, cursor, done, .. } => {
+             check_pid(*owner, b)?;
+             for def in candidates { check_def(*def, b)?; }
+diff --git a/crates/engine-native-kernel/src/snap/restore.rs b/crates/engine-native-kernel/src/snap/restore.rs
+index 14499b9d..eac7de8f 100644
+--- a/crates/engine-native-kernel/src/snap/restore.rs
++++ b/crates/engine-native-kernel/src/snap/restore.rs
+@@ -12,6 +12,7 @@ impl MachineSnapshot {
+             return m;
+         }
+         match self {
++            MachineSnapshot::DamageFlow { root } => Ok(Box::new(crate::kernel::DamageFlow { root: *root })),
+             MachineSnapshot::TriggerOrder {
+                 frame,
+                 owner,
+diff --git a/crates/engine-native-kernel/src/snap/types.rs b/crates/engine-native-kernel/src/snap/types.rs
+index 55a846a4..971f6c78 100644
+--- a/crates/engine-native-kernel/src/snap/types.rs
++++ b/crates/engine-native-kernel/src/snap/types.rs
+@@ -202,6 +202,7 @@ pub struct RvmPaused {
+ 
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum MachineSnapshot {
++    DamageFlow { root: crate::ids::EventId },
+     Sha {
+         card: CardId,
+         source: PlayerId,
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index 5fb57f9c..6c5fc660 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -1,4 +1,5 @@
+ use super::*;
++use crate::event::Stage;
+ 
+ /// 由目录与座位数导出恢复边界。
+ pub fn bounds_from(catalog: &Catalog, seats: usize) -> RestoreBounds {
+@@ -67,7 +68,17 @@ pub(super) fn check_cards(cs: &[CardId], b: &RestoreBounds) -> Result<(), Snapsh
+ 
+ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+     match data {
++        EventData::DamageWindow { .. } => {},
+         EventData::Damage(d) => {
++            if d.settlement.committed_damage == Some(0) || d.settlement.hp_loss > d.settlement.committed_damage.unwrap_or(0) { return Err(SnapshotError::BadTag("damage_settlement",0)); }
++            use crate::event::{DamageOutcome as O,DamageProgress as P};
++            if d.settlement.committed_damage.is_none() && !matches!(d.settlement.progress,P::Before|P::ZeroPending|P::Stopped) {return Err(SnapshotError::BadTag("damage_uncommitted_progress",0));}
++            if matches!(d.settlement.outcome,O::Cancelled|O::ReplacedByLoseHp) && !matches!(d.settlement.progress,P::Stopped) {return Err(SnapshotError::BadTag("damage_stopped_progress",0));}
++            if let P::Chain{remaining}=&d.settlement.progress {
++                check_pids(remaining,b)?;
++                let unique:std::collections::BTreeSet<_>=remaining.iter().collect();
++                if unique.len()!=remaining.len() || remaining.contains(&d.target) {return Err(SnapshotError::BadTag("damage_chain_targets",0));}
++            }
+             check_opt_pid(d.source, b)?;
+             check_pid(d.target, b)?;
+             check_pids(&d.redirect_chain, b)?;
+@@ -450,6 +461,16 @@ pub fn validate_resolution(
+             }
+         }
+         check_event_data(&f.data, b)?;
++        if let EventData::DamageWindow { root, window } = &f.data {
++            let parent=resolution.stack.iter().find(|parent|parent.id==*root).ok_or(SnapshotError::BadTag("damage_window_root",*root as u64))?;
++            if f.parent != Some(*root) || !matches!(parent.data, EventData::Damage(_)) || *root==f.id { return Err(SnapshotError::BadTag("damage_window_ancestry",*root as u64)); }
++            let d=parent.damage();
++            let valid=matches!((window,&d.settlement.progress),(crate::event::DamageWindowKind::Source,crate::event::DamageProgress::Source)|(crate::event::DamageWindowKind::End,crate::event::DamageProgress::End)|(crate::event::DamageWindowKind::After,crate::event::DamageProgress::After)|(crate::event::DamageWindowKind::Zero,crate::event::DamageProgress::Stopped));
++            if !valid {return Err(SnapshotError::BadTag("damage_window_progress",0));}
++        }
++        if let EventData::Damage(d)=&f.data {
++            if matches!(f.stage, Stage::BeforeTriggers | Stage::Commit) && d.settlement.progress != crate::event::DamageProgress::Before {return Err(SnapshotError::BadTag("damage_duplicate_commit",0));}
++        }
+         for q in &f.queue {
+             check_def(q.def, b)?;
+             check_pid(q.owner, b)?;
+@@ -469,6 +490,9 @@ pub fn validate_resolution(
+             return Err(oob("park_frame", frame as u64));
+         }
+         check_machine(&p.machine, b, core)?;
++        if let MachineSnapshot::DamageFlow { root } = p.machine {
++            if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root) || !resolution.stack.iter().any(|f|f.id==root && f.stage==Stage::Intrinsic && matches!(f.data,EventData::Damage(_))) {return Err(SnapshotError::BadTag("damage_flow_binding",root as u64));}
++        }
+     }
+     // 应答选项 ID 界
+     if let Some(ans) = &resolution.answer {
+diff --git a/crates/engine-native/src/engine/debug.rs b/crates/engine-native/src/engine/debug.rs
+index 7b6bb458..26415230 100644
+--- a/crates/engine-native/src/engine/debug.rs
++++ b/crates/engine-native/src/engine/debug.rs
+@@ -715,12 +715,14 @@ impl Engine {
+         if self.state.resolution.open_choice.is_some() {
+             return CommandOutcome::Rejected(RejectReason::ChoicePending);
+         }
++        let Ok(amount)=i32::try_from(amount) else {return CommandOutcome::Rejected(RejectReason::IllegalTargets);};
+         let log_mark = self.log.len();
+         let mut work = self.state.clone();
+         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+         crate::resolution::push_frame(
+             &mut work.resolution,
+             EventData::Damage(crate::event::DamageData {
++                    settlement: Default::default(),
+                 source,
+                 target,
+                 amount,
+@@ -750,12 +752,14 @@ impl Engine {
+         if self.state.resolution.open_choice.is_some() {
+             return CommandOutcome::Rejected(RejectReason::ChoicePending);
+         }
++        let Ok(amount)=i32::try_from(amount) else {return CommandOutcome::Rejected(RejectReason::IllegalTargets);};
+         let log_mark = self.log.len();
+         let mut work = self.state.clone();
+         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+         crate::resolution::push_frame(
+             &mut work.resolution,
+             EventData::Damage(crate::event::DamageData {
++                    settlement: Default::default(),
+                 source,
+                 target,
+                 amount,
+diff --git a/crates/engine-native/src/engine/hash.rs b/crates/engine-native/src/engine/hash.rs
+index b9c9be24..dc14585c 100644
+--- a/crates/engine-native/src/engine/hash.rs
++++ b/crates/engine-native/src/engine/hash.rs
+@@ -705,11 +705,14 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
+             push_u8(h, 1);
+             push_u8(h, d.source.map(|s| s + 1).unwrap_or(0));
+             push_u8(h, d.target);
+-            push_u32(h, d.amount);
++            push_i32(h, d.amount);
++            h.buf.extend_from_slice(&d.settlement.canonical_bytes());
++            push_u32(h,d.card.unwrap_or(u32::MAX));push_u8(h,u8::from(d.from_chain));
+             push_players(h, &d.redirect_chain);
+             push_u8(h, d.prevented as u8);
+             push_u8(h, d.nature as u8);
+         }
++        EventData::DamageWindow { root, window } => { push_u8(h,23);push_u32(h,*root);push_u8(h,window.tag()); },
+         EventData::Recover {
+             player,
+             amount,
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index 655a922e..38589d92 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -6,6 +6,7 @@ use super::*;
+ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+     use crate::snap::MachineSnapshot as M;
+     match s {
++        M::DamageFlow { root } => { push_u8(h,84);push_u32(h,*root); },
+         M::TriggerOrder {
+             frame,
+             owner,
+diff --git a/crates/engine-native/tests/a0_tag_registry.rs b/crates/engine-native/tests/a0_tag_registry.rs
+index 020b96f3..d8929bcd 100644
+--- a/crates/engine-native/tests/a0_tag_registry.rs
++++ b/crates/engine-native/tests/a0_tag_registry.rs
+@@ -29,6 +29,7 @@ use engine_native::{Engine, SkillDefId};
+ /// `Some(Box::new(Noop))` 验证嵌套编码；OptionalGate 的事件载荷用伤害。
+ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+     let damage = EventData::Damage(DamageData {
++                    settlement: Default::default(),
+         source: Some(1),
+         target: 0,
+         amount: 1,
+diff --git a/crates/engine-native/tests/c331_canonical_damage.rs b/crates/engine-native/tests/c331_canonical_damage.rs
+new file mode 100644
+index 00000000..10fb3d5a
+--- /dev/null
++++ b/crates/engine-native/tests/c331_canonical_damage.rs
+@@ -0,0 +1,174 @@
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++use engine_native::event::DamageNature;
++use engine_native::{Engine, Phase};
++fn pack(body: &str) -> ExtensionPack {
++    let source =
++        format!("skill c9_target(99109001) {{ trigger damage owner_is_target {{ {body} }} }}");
++    let p = content_compiler::compile_source_named("c9-damage", &source).unwrap();
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9-damage",
++            version: 1,
++            description: "real VM damage window",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++fn engine(p: &ExtensionPack) -> Engine {
++    let mut e = Engine::new_with_extensions(11901, 3, &[p]).unwrap();
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_grant(1, "c9_target");
++    e
++}
++#[test]
++fn c9_cancelled_root_does_not_dispatch_target_damage() {
++    let p = pack("effect draw_cards(self,1);");
++    let mut e = engine(&p);
++    e.state_core_mut().player_mut(1).jidong_active = true;
++    let hand = e.state_core().player(1).hand.len();
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(
++        e.state_core().player(1).hand.len(),
++        hand,
++        "cancelled damage has no target damage window"
++    );
++}
++#[test]
++fn c9_target_damage_runs_before_dying_subtree() {
++    let p = pack("effect recover_hp(self,1);");
++    let mut e = engine(&p);
++    e.debug_set_hp(1, 1);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(
++        e.debug_hp(1),
++        1,
++        "target damage skill recovers before dying collection"
++    );
++    assert!(e.open_choice().is_none(), "no premature rescue choice");
++}
++#[test]
++fn c9_chain_child_does_not_overtake_parent_dying() {
++    let mut e = Engine::new(11902, 3);
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_set_hp(1, 1);
++    e.debug_move_named_card_to_hand(0, "tao");
++    e.state_core_mut().player_mut(1).linked = true;
++    e.state_core_mut().player_mut(2).linked = true;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
++    assert!(e.open_choice().is_some(), "parent rescue is pending");
++    assert_eq!(
++        e.debug_hp(2),
++        4,
++        "chain child waits for complete parent dying subtree"
++    );
++}
++fn optional_pack() -> ExtensionPack {
++    let p=content_compiler::compile_source_named("c9-optional","skill c9_pause(99109002) { trigger damage owner_is_target optional { effect draw_cards(self,1); } }").unwrap();
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9-optional",
++            version: 1,
++            description: "real target optional pause",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++#[test]
++fn c9_full_armor_retains_source_quantity_positive_receipt_and_zero_hp_loss() {
++    let p = optional_pack();
++    let mut e = Engine::new_with_extensions(11903, 3, &[&p]).unwrap();
++    e.debug_grant(1, "c9_pause");
++    e.debug_set_hujia(1, 3);
++    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
++    assert!(e.open_choice().is_some());
++    let s = e.save();
++    let d = s
++        .resolution
++        .stack
++        .iter()
++        .find_map(|f| {
++            if let engine_native::event::EventData::Damage(d) = &f.data {
++                Some(d)
++            } else {
++                None
++            }
++        })
++        .unwrap();
++    assert_eq!(d.amount, 2);
++    assert_eq!(d.settlement.committed_damage, Some(2));
++    assert_eq!(d.settlement.hp_loss, 0);
++    assert_eq!(e.debug_hp(1), 4);
++    assert_eq!(e.state_core().player(1).hujia, 1);
++    let bytes = engine_native::archive::encode_archive(&s);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(decoded, s);
++    let restored = Engine::restore_with_extensions(&decoded, &[&p]).unwrap();
++    let mut after = restored.save();
++    after.auth_generation = s.auth_generation;
++    assert_eq!(after, s);
++    assert_eq!(e.state_hash(), restored.state_hash());
++}
++#[test]
++fn c9_changed_root_amount_matches_damage_log_and_later_vm_context() {
++    let source="skill c9_modify(99109003) { trigger damage_before owner_is_target { effect modify_current_damage(self,1); } } skill c9_pause(99109002) { trigger damage owner_is_target optional { effect draw_cards(self,1); } }";
++    let p = content_compiler::compile_source_named("c9-modify", source).unwrap();
++    let p = ExtensionPack {
++        def: ExtensionDef {
++            name: "c9-modify",
++            version: 1,
++            description: "actual VM before and target windows",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let mut e = Engine::new_with_extensions(11904, 3, &[&p]).unwrap();
++    e.debug_grant(1, "c9_modify");
++    e.debug_grant(1, "c9_pause");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.debug_hp(1), 2);
++    let s = e.save();
++    let d = s
++        .resolution
++        .stack
++        .iter()
++        .find_map(|f| match &f.data {
++            engine_native::event::EventData::Damage(d) => Some(d),
++            _ => None,
++        })
++        .unwrap();
++    assert_eq!(d.amount, 2);
++    assert_eq!(d.settlement.committed_damage, Some(2));
++    assert!(e.log().iter().any(|x| matches!(
++        x,
++        engine_native::machine::LogEvent::DamageDealt { amount: 2, .. }
++    )));
++    let mut forged = s.clone();
++    let f = forged
++        .resolution
++        .stack
++        .iter_mut()
++        .find(|f| matches!(f.data, engine_native::event::EventData::Damage(_)))
++        .unwrap();
++    f.stage = engine_native::event::Stage::Commit;
++    assert!(Engine::restore_with_extensions(&forged, &[&p]).is_err());
++}
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index 39114852..49b222e5 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -108,3 +108,6 @@ mod c331_source33_integration;
+ 
+ #[path = "../c331_schema5_datachain.rs"]
+ mod c331_schema5_datachain;
++
++#[path = "../c331_canonical_damage.rs"]
++mod c331_canonical_damage;

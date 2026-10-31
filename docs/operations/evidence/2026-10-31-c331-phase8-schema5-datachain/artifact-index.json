@@ -1,0 +1,661 @@
+{
+  "utc": "2026-10-31T10:30:04.740337+00:00",
+  "report": {
+    "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b3c27608-7e4a-43a2-bdd0-478320265df7/implementation/c331-phase8-schema5-datachain.md",
+    "sha256": "11683e7f664309c9c5f4f9c7d733466af6d616f02bfa1fe49477ff8775e75f57",
+    "lines": 51
+  },
+  "C331": "BLOCK;262/290,remaining28,+0",
+  "files": [
+    {
+      "path": "acceptance-report.json",
+      "sha256": "8db005a34c8d1e3df7ca7f37155bc691462df7f6cc4cddd9b9be8278d263e166",
+      "bytes": 8348
+    },
+    {
+      "path": "baseline-c7.json",
+      "sha256": "29d0812c39572894fa3a1ecde673f64b05fa37dba49524c03a9d8ccd7e2c7f94",
+      "bytes": 7805255
+    },
+    {
+      "path": "baseline-c7.tar.gz",
+      "sha256": "154def4b439ae032c9c5f67b5248216cd9f1d8afd18a4ad110d57f6615343e0b",
+      "bytes": 5595176
+    },
+    {
+      "path": "c7-patch-reverse-check.log",
+      "sha256": "39c1ed36b66725a4456d6f24b75798cd398169e6217fb591c24bd6a593cfd43e",
+      "bytes": 193
+    },
+    {
+      "path": "c7-patch-reverse-check2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "caps-first.log",
+      "sha256": "2301589483c15686c070aa3886db2e07eb553a9dfa5c0d584a9b077ebad250ec",
+      "bytes": 69
+    },
+    {
+      "path": "caps2.log",
+      "sha256": "47ce18bc9f32a73fcae5955b9921b26e924b891dc71684b1a73e5691a6d4cb8a",
+      "bytes": 96
+    },
+    {
+      "path": "caps3.log",
+      "sha256": "47ce18bc9f32a73fcae5955b9921b26e924b891dc71684b1a73e5691a6d4cb8a",
+      "bytes": 96
+    },
+    {
+      "path": "checkpoint-to-final/changed-source.tar.gz",
+      "sha256": "4694353db5637b726d81e1d0f7527bf15aa13c3fba2437f82760c6bfadb1b820",
+      "bytes": 45412
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/content-compiler/src/lsp/hover_docs/skill.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/content-native-loader/src/mechanisms.rs",
+      "sha256": "00772a2a8bf7850ec5d91b361b1430a56eaa9465ff3f70f2d6e7dcac861c9847",
+      "bytes": 2574
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/content-schema/src/package/mechanisms.rs",
+      "sha256": "fd3c7318209c067c7983b31c71690ea20c434066002bb42cf6fd1b694948b5a9",
+      "bytes": 10781
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/engine-core/src/content/registry/load_package_checks.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/engine-native/tests/c331_schema5_datachain.rs",
+      "sha256": "8f34bccdba4a7117e355f86667632b4d36d565756a952d6f862ca7858f9b3ac4",
+      "bytes": 11445
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/engine-native/tests/t8_rvm_bridge/state_effects.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/engine-native/tests/t8_rvm_bridge.rs",
+      "sha256": "b5ecccb616311bfd76461c56fadefd220d750c8fd44cb65b06d61c4b7808eabf",
+      "bytes": 71537
+    },
+    {
+      "path": "checkpoint-to-final/checkpoint-input/crates/engine-native/tests/t8_vm_state_effects.rs",
+      "sha256": "3f8eba88ab09a809c7ae70cdd6c33c95d73559b1fbfbbb9360262e68b866f759",
+      "bytes": 5098
+    },
+    {
+      "path": "checkpoint-to-final/source-manifest.json",
+      "sha256": "0e05439129949816d60a253e4ba2cf8c93a2b26a3d98834e8f2df6d5f8de6180",
+      "bytes": 2313
+    },
+    {
+      "path": "checkpoint-to-final/vs-checkpoint20.patch",
+      "sha256": "1671912af7494ab11dc58b7b3225a5c8e9b0dd212afad631f37a8776be7b310a",
+      "bytes": 170190
+    },
+    {
+      "path": "checkpoint20/changed-source.tar.gz",
+      "sha256": "85679c1143d36121cdc8a043f743b8cbeef59a8588ccfd4b7a7b3567979c180c",
+      "bytes": 105762
+    },
+    {
+      "path": "checkpoint20/source-manifest.json",
+      "sha256": "cb059772ce68a224cabb5d797512167145a6c38b2bd2042af84157b26a77d204",
+      "bytes": 8573
+    },
+    {
+      "path": "checkpoint20/vs-c7.patch",
+      "sha256": "cbe74b30f5581acee2ebc3696bb233a79f1e8cf65ff79f7e7a2b1aefb1351b5c",
+      "bytes": 80011
+    },
+    {
+      "path": "checkpoint20-result.json",
+      "sha256": "3eccd222798b576557eea5b501fc082a4a09dbcd0e2571c0ddd6064309d1d08b",
+      "bytes": 400
+    },
+    {
+      "path": "final-check-results.json",
+      "sha256": "318d9f260e8032181fc2c836d62d58ad9f20975a434bef5cfa451d2a174662b1",
+      "bytes": 283
+    },
+    {
+      "path": "final-check-results2.json",
+      "sha256": "ee1b4905f0efbc540b8799d5aaf1d579651b32de36f7da585c01cb209458ecb6",
+      "bytes": 278
+    },
+    {
+      "path": "final-check-results3.json",
+      "sha256": "b64c0176d5e85f5686c3bde1ba8639424d2a664ed7e10ce4d16a1f443726b2f8",
+      "bytes": 1102
+    },
+    {
+      "path": "final-check-runner.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-check-runner.pid",
+      "sha256": "d618fca7e9f33c0ff29888e4d308b07ec25a0a7a32089e08ec3b9c4eb323fe20",
+      "bytes": 6
+    },
+    {
+      "path": "final-check-runner2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-check-runner2.pid",
+      "sha256": "1c50d49ce5effe24b8302c9f1c9e6f97feed15fdf908191a46bc844a5a8f915c",
+      "bytes": 6
+    },
+    {
+      "path": "final-check-runner3.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-check-runner3.pid",
+      "sha256": "0bb50fab71a0c4836eb0cd469babf022d3e0ef867c9c2bbf428586872efdb673",
+      "bytes": 6
+    },
+    {
+      "path": "final-freeze8/changed-source.tar.gz",
+      "sha256": "7ca3c7a62858cad550692350d715d55d5979685faf63192b5cafc2ad99a2a736",
+      "bytes": 127306
+    },
+    {
+      "path": "final-freeze8/source-manifest.json",
+      "sha256": "5d01f6d4b1f97a1a635415876ef687f2cfd7dac93ba74e0b51ec13651ef64026",
+      "bytes": 9114
+    },
+    {
+      "path": "final-freeze8/vs-c7.patch",
+      "sha256": "74aa772018c5358dad8ac43d00f572c30d33621488351d4f20f6d0c9ac169cb2",
+      "bytes": 94803
+    },
+    {
+      "path": "final-freeze8-result.json",
+      "sha256": "727c589f1bcd688930fa29227e74932e3fef6cbc80b1fb2d9f4363bb3b82a2d3",
+      "bytes": 401
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/apps/web-client/scripts/native-vm-install.test.mjs",
+      "sha256": "26e9283d6b3c9cc07996b4266ee93e0dd4df2df9ce646780529db9271a58f258",
+      "bytes": 12554
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/apps/web-client/src/engine/bundledNativePackages.ts",
+      "sha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b",
+      "bytes": 12034
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-compiler/src/ast.rs",
+      "sha256": "7a2a17c3b061040154f73c98e73072c4c794befb1ad845b3e6b5828e83804ddb",
+      "bytes": 12891
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-compiler/src/lib.rs",
+      "sha256": "234274acba3eabeab47f227664a26e8e7c56492f9c6f515d34a08d5433e7a015",
+      "bytes": 10514
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-compiler/src/lsp/hover_docs/skill.rs",
+      "sha256": "cda2574c9e3afa35b194a979315ddaa84e80bb615a73a4e546c84d17157d2177",
+      "bytes": 83088
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-compiler/src/parse.rs",
+      "sha256": "66a856eda0ec6355e66b451477409af722cc6f4886fabf7eca2b86b7d28db756",
+      "bytes": 16226
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-compiler/src/typecheck/skills.rs",
+      "sha256": "e3d02f47e2d77647de84ec84f8167e563450e8ad6cd42ddb164af1ddae501fbb",
+      "bytes": 17712
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-native-loader/src/lib.rs",
+      "sha256": "5ff35dcb76db1cab86b6d1e3bfb8189e9744116b5343b63e25ff8c9c219ab56d",
+      "bytes": 41878
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-native-loader/src/mechanisms.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-native-loader/src/vm_active.rs",
+      "sha256": "d5f489952c03400560764b7215f0b581d8e3ea539a078a378de39789f714aef2",
+      "bytes": 10311
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/examples/gen_doomsday_brawl_package.rs",
+      "sha256": "1988663c83bfa92d1f4a22392a8839979d7a832cd4aaa926444747ad06b8c947",
+      "bytes": 6848
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/examples/gen_epic_cards_package.rs",
+      "sha256": "d8d9e4679b2487d72d12bbedfef8d7bb58d4bcae1dfa7855321b31141991fb01",
+      "bytes": 6781
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/examples/gen_hero_kill_package.rs",
+      "sha256": "6db6855e163cb904fab4b83a1f49bfe129554cd49f8639c6e23021c59cd2e7f4",
+      "bytes": 7518
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/examples/gen_mark_supplement_package.rs",
+      "sha256": "eda8b2334a677952500b1d70fc731b29bc8e43d9e7c56741aecd03eae460cf9a",
+      "bytes": 8172
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/examples/gen_select_beautify_package.rs",
+      "sha256": "ce927977e21bb2c493ec61f7946c948b7c4552dc85d255dd2b6bcaf07f1408c5",
+      "bytes": 8348
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/src/compat.rs",
+      "sha256": "6f55431c9b0fde8dca64cb989398c5f5fab838bb047127ed8d1cc8fd4560f867",
+      "bytes": 5839
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-runtime/src/store/ordering.rs",
+      "sha256": "2eab5471c7146d795604a0ab5d76ee2c61e667c0da3f38d20b6a9e281ca6c61f",
+      "bytes": 5440
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-schema/src/ir.rs",
+      "sha256": "040821f01af598e454b79d03668b088c22f088cd878c7eedd4faf0702e0de85c",
+      "bytes": 21277
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-schema/src/package/hashing.rs",
+      "sha256": "fc407f9bd668da3f41b615945987bbf5436f0e7fc961203f94cf0d6c7644cfa2",
+      "bytes": 20418
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-schema/src/package/mechanisms.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-schema/src/package/trigger_order.rs",
+      "sha256": "cb6291584a5f8be79d068d0f13f5ab88ee8b39d5c8ce50953aab728c816ef03e",
+      "bytes": 2896
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/content-schema/src/package.rs",
+      "sha256": "215f66cd7ce51cfc449e05334a8a586e166a071e894091ff2538b5e430635f63",
+      "bytes": 46081
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-api/src/version.rs",
+      "sha256": "32afaef5db69e5d7deb737cff272a238a0a57ac56fc2ba6edb01e956aad5a8ee",
+      "bytes": 4478
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-core/src/content/registry/load_package_checks.rs",
+      "sha256": "a6a07d14249e70c9144d90fdf233e7c9122cfda524d54d92bc6d46ddc08c38b5",
+      "bytes": 23323
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/c331_schema5_datachain.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/fixtures/c331_phase8_genuine_schema4.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "15314728ffe6dee359fc32a7179bb2ce2380de32855997b46da14bde85fec3fd",
+      "bytes": 2742
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/nc04_cards_given_event.rs",
+      "sha256": "8f9fdde456e512b2d8b858b4eddf6b0f55217b73e9840adf0bcc2463054b0589",
+      "bytes": 14582
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/nc04_vm_resume.rs",
+      "sha256": "90f1955dc830c19a5f0f0e3e4143549a94cb950fc225730b9a362dca0e894388",
+      "bytes": 25227
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/nc10_opaque_vm_privacy.rs",
+      "sha256": "0a29f4ccfd9defb78fd5602f7870a10575827d7fbb0995584a52d5d6fbb4bf0d",
+      "bytes": 10283
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/nc10_redaction_helper_contract.rs",
+      "sha256": "4db62ab5fa7af6258fdadef28db1c3a017c838052facc46d097e6c918170a304",
+      "bytes": 11017
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/nc10_single_hidden_trap.rs",
+      "sha256": "48d758d7406ddfa72da2896e717c8647d52fa18d43f0e42aaad018f12b14fdb0",
+      "bytes": 14775
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/t8_rvm_bridge/state_effects.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native/tests/t8_rvm_bridge.rs",
+      "sha256": "9f189d9cb99b6317536c01676f31cd5fadbb5c031c601c40dc8f97d5c1052719",
+      "bytes": 75621
+    },
+    {
+      "path": "final-freeze8-v2/baseline-changed/crates/engine-native-content/src/content/extension.rs",
+      "sha256": "072bb461d328749776b7149f0fda3d57b7ce0055e8079bc378fe3477ca378490",
+      "bytes": 12625
+    },
+    {
+      "path": "final-freeze8-v2/changed-source.tar.gz",
+      "sha256": "dc5f5b4a3f891309611b2ea9226b079b3df5d57c2a0ee21b0570036c6d140a69",
+      "bytes": 127306
+    },
+    {
+      "path": "final-freeze8-v2/source-manifest.json",
+      "sha256": "852ead19b0098ca13a329040dd95aa7efb728b28bb60ef6fa44266980513c494",
+      "bytes": 9114
+    },
+    {
+      "path": "final-freeze8-v2/vs-c7.patch",
+      "sha256": "834928c451ef29f779464f214b84422b060be519f018af2723dddf17d905a3a0",
+      "bytes": 104393
+    },
+    {
+      "path": "final-freeze8-v2-result.json",
+      "sha256": "91e82b784cfd3d90e1ae719bdc424d4c6746af4e3accaf772b9238d992dea7dd",
+      "bytes": 404
+    },
+    {
+      "path": "first-green-attempt.log",
+      "sha256": "f1a3872b2300aa93580e0361bc930277a4490d33e1aeb8c572b67b3e59e7904c",
+      "bytes": 2333
+    },
+    {
+      "path": "first-green-attempt.pid",
+      "sha256": "ba155dc82e1bad9b597d6dfaf2d15164893802a8b0cf51ee9f392006c4a89386",
+      "bytes": 6
+    },
+    {
+      "path": "freeze.py",
+      "sha256": "4313b96b5692aa9e9916abe66c30bc92d157c7ed97e4bcf277a257ff1d0dab4e",
+      "bytes": 2609
+    },
+    {
+      "path": "frontend-tests-first.log",
+      "sha256": "f052f597a527383a1f676a38b841ff455cfb5ea23e0fba26255f8dda5fb80abe",
+      "bytes": 19864
+    },
+    {
+      "path": "frontend-tests-first.pid",
+      "sha256": "3e9c3f4a8a45b2d8c86b0f6e55c6bb26611649cdb6d3e9aa254a8694b0ca26ea",
+      "bytes": 6
+    },
+    {
+      "path": "frontend-tests2.log",
+      "sha256": "535d61d181a45379b8f70700c50cd4a4a4c8c5f85242f69b94d118d1f5c73f9e",
+      "bytes": 17141
+    },
+    {
+      "path": "frontend-tests2.pid",
+      "sha256": "64e5aaf4366917a177ffa7345005d76dad2700e1cdd93130da3f9590c5358c09",
+      "bytes": 6
+    },
+    {
+      "path": "frontend-type-first.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "bytes": 172
+    },
+    {
+      "path": "frontend-type-first.pid",
+      "sha256": "fada39d0ecbd188c850dc631ed54c0b94728e23575eaefab29f7a74e66a919a9",
+      "bytes": 6
+    },
+    {
+      "path": "frontend-type2.log",
+      "sha256": "539e1871cd476fed1146800c50875bca04b5782b2ac66142103f9bc976558956",
+      "bytes": 172
+    },
+    {
+      "path": "frontend-type2.pid",
+      "sha256": "efbaf247d83ca9c2fae195a000a29d3dac9d3a2181e0e5aa6ac64a1e83008408",
+      "bytes": 6
+    },
+    {
+      "path": "full-native-first.log",
+      "sha256": "fe8f55ffe9450ed7c1a12e8ea63b4179d34d9da3dd30bf621bf4c89b743926ed",
+      "bytes": 149
+    },
+    {
+      "path": "full-native2.log",
+      "sha256": "f5e9774d279b78d2447d5d7f872771e331b82ab756a73b6402c8e1fa21f7af04",
+      "bytes": 153684
+    },
+    {
+      "path": "full-native3.log",
+      "sha256": "167abc1de90be3239600ca45ee71883e4a934e2086dab99343570eeaa13a5946",
+      "bytes": 153661
+    },
+    {
+      "path": "full-patch-reverse-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "full-source/composed-source.tar.gz",
+      "sha256": "337d8defb8ebcab8d630ac30d590fbbc280c49d04f73ebe78b360a1971f977c7",
+      "bytes": 696392
+    },
+    {
+      "path": "full-source/source-manifest.json",
+      "sha256": "b34ae2357add02177ac30c9cf4c4c9d1a204e3014c39bc367132549869f904d1",
+      "bytes": 28045
+    },
+    {
+      "path": "full-source/vs-main5fc.patch",
+      "sha256": "0b8a2bfc068c7eaeb1282c9514c5f9530967b9a173cfa6c6c879e15d8c722407",
+      "bytes": 667357
+    },
+    {
+      "path": "gate1b-result.json",
+      "sha256": "0df9d4b192d81d1346fde34535894abf2e7b35e7533b6f17a3fd590047451bba",
+      "bytes": 401
+    },
+    {
+      "path": "gate1b-strict.log",
+      "sha256": "d70b7dda16780ff9ee14510cd46c47f6262766f1960740ba59d9b1bfcd942618",
+      "bytes": 1776
+    },
+    {
+      "path": "genuine-schema4-input.json",
+      "sha256": "78bb2cea0c83bb6210cfbeba839107f6e68ceed19df32ec8bf2e97d5b0b012aa",
+      "bytes": 399
+    },
+    {
+      "path": "green-attempt2.log",
+      "sha256": "3a382e4a02f615a816cd491abd06b43edc8a04c8f04af4ece92aec90852faa6d",
+      "bytes": 1577
+    },
+    {
+      "path": "green-attempt2.pid",
+      "sha256": "6c0a05d710f4cebcbea7b1578b7db58f5214c76ad801419fe8a92402e59b25bb",
+      "bytes": 6
+    },
+    {
+      "path": "increment-patch-reverse-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "initial-red.log",
+      "sha256": "24060b63c42f4844e8bf07f7f3585fab2c41fa8abfaa4dbff819d5be83e1fb37",
+      "bytes": 2412
+    },
+    {
+      "path": "initial-red.pid",
+      "sha256": "2cd412e51d0a84fae9c0a84e584a9328a0f83c7cced2a1c007ad2a249f1c1cd6",
+      "bytes": 5
+    },
+    {
+      "path": "interim-results.json",
+      "sha256": "5314cfd105ea33136077c63aa61f7849efb334c62860cc49995098cb642f4b4b",
+      "bytes": 5493
+    },
+    {
+      "path": "layering.log",
+      "sha256": "5e2c5ee4dfcce9f29d81ea759158357729dbf102dc70836a380c699373132909",
+      "bytes": 205
+    },
+    {
+      "path": "legacy-admission.log",
+      "sha256": "494ce4f05671c37d32decff4e80113439e795829eb0e8c19dd096744cec2377a",
+      "bytes": 157488
+    },
+    {
+      "path": "matrix-attempt2.log",
+      "sha256": "257ee8af45f9993d4ab04f3d5b620e1bd4ca730b91e52e81900989b52db604b1",
+      "bytes": 1681
+    },
+    {
+      "path": "matrix-attempt2.pid",
+      "sha256": "02b74412cf83e1b4dd17cddcf1faa0865a479f9216e732cab524b1eaa6c1c6f5",
+      "bytes": 6
+    },
+    {
+      "path": "matrix-first.log",
+      "sha256": "97498a797d2edeb3d88eedb98cd7a04068d37858bbda07a4fa43b47d23a15f06",
+      "bytes": 881
+    },
+    {
+      "path": "matrix-first.pid",
+      "sha256": "ef625e638fdca884cc4970efcbcf6545a4bfc55686765d3a952e0aef141f8031",
+      "bytes": 6
+    },
+    {
+      "path": "pre-full/changed-source.tar.gz",
+      "sha256": "5907ef96781fb383ca4d5c11ceffe0d123331bb6dc0d9f17bcc9775ca980d04c",
+      "bytes": 127026
+    },
+    {
+      "path": "pre-full/source-manifest.json",
+      "sha256": "652351af36f57e56030c23683dd5a5debfbf29506f68f5894399be7c3dca005d",
+      "bytes": 9106
+    },
+    {
+      "path": "pre-full/vs-c7.patch",
+      "sha256": "20e9fe202c5e312114489571ee25321403ad4578b7839af3afc1b5beda61112d",
+      "bytes": 93093
+    },
+    {
+      "path": "pre-full-result.json",
+      "sha256": "d4742755a49685202584f9538f9b2a706d0ef38b0fdc1ae53d279c5a5727cac8",
+      "bytes": 396
+    },
+    {
+      "path": "pre-full2/changed-source.tar.gz",
+      "sha256": "2fd0fe0c50d273c85ff3284e6c88013c15c31bd018259dcf403ecb337bf9c6f6",
+      "bytes": 127306
+    },
+    {
+      "path": "pre-full2/source-manifest.json",
+      "sha256": "31f4efb9b613c1718ae8cbdf76cf84f589aea5029c90e3408a7c4276843417de",
+      "bytes": 9114
+    },
+    {
+      "path": "pre-full2/vs-c7.patch",
+      "sha256": "74aa772018c5358dad8ac43d00f572c30d33621488351d4f20f6d0c9ac169cb2",
+      "bytes": 94803
+    },
+    {
+      "path": "pre-full2-result.json",
+      "sha256": "5d0072b2ef48c02d933b9c87d89d3383cd5a84e4a818c340ba7f0bedd8771552",
+      "bytes": 397
+    },
+    {
+      "path": "protected-after.json",
+      "sha256": "9938fb8d313cbf02118bd8f115a00ed27ce56b72ab785382e44c10c2d85a4068",
+      "bytes": 1032
+    },
+    {
+      "path": "results-bound.json",
+      "sha256": "ca1882ed9baa1211cff8dddd3040698b8a31d515f25ad4170fdc1fc8df1a8fc1",
+      "bytes": 13158
+    },
+    {
+      "path": "run-final-checks.py",
+      "sha256": "d3b132ab3971ece7063ca8b4263cc53b21cf1b103ef809bc82839faab9f331b5",
+      "bytes": 1455
+    },
+    {
+      "path": "run-final-checks2.py",
+      "sha256": "3ff4e69c76bcd46a4860a8fd031bec7fe47ee9c5fb13bec753ae7f551ce03502",
+      "bytes": 1447
+    },
+    {
+      "path": "run-final-checks3.py",
+      "sha256": "e3baa0f3d1411b8e9b7217c29554b7c570ef0cccc6579a7041bcc718234cf77a",
+      "bytes": 1448
+    },
+    {
+      "path": "run-strict.py",
+      "sha256": "83c12848aa3e3c082fa4d5ebe75678f0b991976d9d480828e656d49182275987",
+      "bytes": 1222
+    },
+    {
+      "path": "seal-result.json",
+      "sha256": "cb39a90b856f1dc25fa227fcf7c7fcf228455f0bbe4e3b38c5d75bbf1d252340",
+      "bytes": 389
+    },
+    {
+      "path": "seal.py",
+      "sha256": "f690839dbd7332e3b7da0561171db4ee6b9733791a26b382cb4ff6f3e8439769",
+      "bytes": 6557
+    },
+    {
+      "path": "source-cap-unit.log",
+      "sha256": "45957a9a818f6eb9754eedf65776a4410c0514be481e0e4c253a2cec59fe49b3",
+      "bytes": 295
+    },
+    {
+      "path": "source-caps.log",
+      "sha256": "07b7cdeb481e614b0025c827ed707f855f2ad214d675a6fa839582556a95888d",
+      "bytes": 240
+    },
+    {
+      "path": "strict-runner.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "strict-runner.pid",
+      "sha256": "b2eec9852c5ef70a2f7ea567321947543b3aef6235b5e33641e229cb6322a3e6",
+      "bytes": 6
+    },
+    {
+      "path": "targeted-packages-first.log",
+      "sha256": "bc1a8ebd0dde62c5c109e3075f86b8004b70afae1af82f6a746812135667834b",
+      "bytes": 69205
+    },
+    {
+      "path": "targeted-packages-first.pid",
+      "sha256": "27914951745dc257f4d22ae8f8ebc4210368812bc267883252e477f133f45822",
+      "bytes": 6
+    }
+  ]
+}

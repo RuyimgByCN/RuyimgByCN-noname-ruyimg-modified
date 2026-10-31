@@ -1,0 +1,57 @@
+{
+  "run": {
+    "started_utc": "2026-10-31T09:00:22.853243+00:00",
+    "argv": [
+      "gh",
+      "api",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464"
+    ],
+    "exit": 0,
+    "stdout_sha256": "24558a8ff2baa387453af6c5e574b4f53938ab94bc94a4297787c4d9b65389bf",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "jobs": {
+    "started_utc": "2026-10-31T09:00:22.853581+00:00",
+    "argv": [
+      "gh",
+      "api",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/jobs?per_page=100"
+    ],
+    "exit": 0,
+    "stdout_sha256": "9f89d0efa9b3d3c7176cd264e3296ab39a5956a31f8ff78662104a379f9a473f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "artifacts": {
+    "started_utc": "2026-10-31T09:00:22.855794+00:00",
+    "argv": [
+      "gh",
+      "api",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41183155464/artifacts?per_page=100"
+    ],
+    "exit": 0,
+    "stdout_sha256": "edc0aaba35b050b9cf5f9f9d192f0198a30e96e518ad1957ad58788b96b4460c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "branch": {
+    "started_utc": "2026-10-31T09:00:23.702114+00:00",
+    "argv": [
+      "gh",
+      "api",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/git/ref/heads/native-convergence"
+    ],
+    "exit": 0,
+    "stdout_sha256": "d4330f696c8c8874fb43ca05f71befe2c6f7660b8c0e2a668d7a9130479645fc",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "main": {
+    "started_utc": "2026-10-31T09:00:23.782796+00:00",
+    "argv": [
+      "gh",
+      "api",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/git/ref/heads/main"
+    ],
+    "exit": 0,
+    "stdout_sha256": "c24f78b69d8d1a4e37c5e010dc81eb7265d5d6cb39f7c9530f53d2053fb1b1b7",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

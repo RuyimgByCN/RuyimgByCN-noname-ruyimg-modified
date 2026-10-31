@@ -1,0 +1,2054 @@
+crates/engine-native/src/engine/hash.rs-702-pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
+crates/engine-native/src/engine/hash.rs-703-    match data {
+crates/engine-native/src/engine/hash.rs:704:        EventData::Damage(d) => {
+crates/engine-native/src/engine/hash.rs-705-            push_u8(h, 1);
+crates/engine-native/src/engine/hash.rs-706-            push_u8(h, d.source.map(|s| s + 1).unwrap_or(0));
+--
+crates/engine-native-kernel/src/kernel/aoe.rs-41-    pub(super) need: CardKind,
+crates/engine-native-kernel/src/kernel/aoe.rs-42-    pub(super) asked: bool,
+crates/engine-native-kernel/src/kernel/aoe.rs:43:    /// 造成伤害的锦囊牌（DamageData.card 透传）。
+crates/engine-native-kernel/src/kernel/aoe.rs-44-    pub(super) card: crate::ids::CardId,
+crates/engine-native-kernel/src/kernel/aoe.rs-45-    /// 伤害属性（惊雷山=雷、炽羽袭=火）。
+--
+crates/engine-native-kernel/src/kernel/aoe.rs-101-            } else {
+crates/engine-native-kernel/src/kernel/aoe.rs-102-                // 放弃 → 1 点伤害（完整结算）
+crates/engine-native-kernel/src/kernel/aoe.rs:103:                ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/aoe.rs-104-                    Some(self.source),
+crates/engine-native-kernel/src/kernel/aoe.rs-105-                    self.target,
+--
+crates/engine-native-kernel/src/kernel/aoe.rs-121-        if holders.is_empty() {
+crates/engine-native-kernel/src/kernel/aoe.rs-122-            // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
+crates/engine-native-kernel/src/kernel/aoe.rs:123:            ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/aoe.rs-124-                Some(self.source),
+crates/engine-native-kernel/src/kernel/aoe.rs-125-                self.target,
+--
+crates/engine-native/src/ai/remap.rs-4-pub(super) fn event_cards(event: &mut EventData, map: &impl Fn(&mut u32)) {
+crates/engine-native/src/ai/remap.rs-5-    match event {
+crates/engine-native/src/ai/remap.rs:6:        EventData::Damage(d) => d.card.iter_mut().for_each(map),
+crates/engine-native/src/ai/remap.rs-7-        EventData::Recover { by_card, .. } => by_card.iter_mut().for_each(map),
+crates/engine-native/src/ai/remap.rs-8-        EventData::CardUsed(u) => map(&mut u.card),
+--
+crates/engine-native-kernel/src/kernel/duel.rs-75-                if shas.is_empty() || !ctx.core.player(responder).alive {
+crates/engine-native-kernel/src/kernel/duel.rs-76-                    // 轮到方无杀：不询问，直接受伤，决斗结束
+crates/engine-native-kernel/src/kernel/duel.rs:77:                    ctx.emit(EventData::Damage(damage_data(
+crates/engine-native-kernel/src/kernel/duel.rs-78-                        Some(opponent),
+crates/engine-native-kernel/src/kernel/duel.rs-79-                        responder,
+--
+crates/engine-native-kernel/src/kernel/duel.rs-134-            // 放弃 → 受伤，决斗结束（重置无双标记）
+crates/engine-native-kernel/src/kernel/duel.rs-135-            self.second_pending = false;
+crates/engine-native-kernel/src/kernel/duel.rs:136:            ctx.emit(EventData::Damage(damage_data(
+crates/engine-native-kernel/src/kernel/duel.rs-137-                Some(opponent),
+crates/engine-native-kernel/src/kernel/duel.rs-138-                responder,
+--
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-8-impl SkillBehavior for GangLieBehavior {
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-9-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs:10:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-11-            if d.target == owner && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-12-                && d.source.is_some() && d.source != Some(owner))
+--
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-15-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-16-        let source = match event {
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs:17:            EventData::Damage(d) => d.source.expect("filtered"),
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-18-            _ => unreachable!(),
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-19-        };
+--
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-51-            ctx.to_discard(card);
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-52-            if !heart && ctx.core.player(self.source).alive {
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs:53:                ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-54-                    Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/gang_lie.rs-55-                    self.source,
+--
+crates/engine-native-kernel/src/kernel/damage.rs-2-
+crates/engine-native-kernel/src/kernel/damage.rs-3-/// 伤害提交：读最终帧载荷（转移/防止已生效），扣血并内联濒死检查。
+crates/engine-native-kernel/src/kernel/damage.rs:4:pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, d: crate::event::DamageData) {
+crates/engine-native-kernel/src/kernel/damage.rs-5-    if d.prevented {
+crates/engine-native-kernel/src/kernel/damage.rs-6-        ctx.log(LogEvent::DamagePrevented { target: d.target });
+--
+crates/engine-native-kernel/src/kernel/damage.rs-522-                        // 来源无牌可弃 → 受 1 点伤害（上游取消分支同口径；
+crates/engine-native-kernel/src/kernel/damage.rs-523-                        // 来源亦空手牌时装备面不弃登记差异）
+crates/engine-native-kernel/src/kernel/damage.rs:524:                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/damage.rs-525-                            Some(d.target),
+crates/engine-native-kernel/src/kernel/damage.rs-526-                            src,
+--
+crates/engine-native-kernel/src/kernel/damage.rs-562-                        ctx.to_discard(judged);
+crates/engine-native-kernel/src/kernel/damage.rs-563-                        if black {
+crates/engine-native-kernel/src/kernel/damage.rs:564:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/damage.rs-565-                                Some(src),
+crates/engine-native-kernel/src/kernel/damage.rs-566-                                t,
+--
+crates/engine-native-kernel/src/kernel/damage.rs-591-                let seats = ctx.core.players.len() as PlayerId;
+crates/engine-native-kernel/src/kernel/damage.rs-592-                if let Some(t) = (0..seats).find(|&t| t != d.target && ctx.core.player(t).alive) {
+crates/engine-native-kernel/src/kernel/damage.rs:593:                    ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/damage.rs-594-                        Some(d.target),
+crates/engine-native-kernel/src/kernel/damage.rs-595-                        t,
+--
+crates/engine-native-kernel/src/kernel/damage.rs-641-                && ctx.core.player(src).alive
+crates/engine-native-kernel/src/kernel/damage.rs-642-            {
+crates/engine-native-kernel/src/kernel/damage.rs:643:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/damage.rs-644-                    None,
+crates/engine-native-kernel/src/kernel/damage.rs-645-                    src,
+--
+crates/engine-native-kernel/src/kernel/damage.rs-1017-            }
+crates/engine-native-kernel/src/kernel/damage.rs-1018-            for p in chained {
+crates/engine-native-kernel/src/kernel/damage.rs:1019:                ctx.emit(EventData::Damage(crate::event::DamageData {
+crates/engine-native-kernel/src/kernel/damage.rs-1020-                    source: d.source,
+crates/engine-native-kernel/src/kernel/damage.rs-1021-                    target: p,
+--
+crates/engine-native-content/src/content/vm_effects/danshou.rs-132-            state[0] = 4;
+crates/engine-native-content/src/content/vm_effects/danshou.rs-133-            if option == 3 {
+crates/engine-native-content/src/content/vm_effects/danshou.rs:134:                ctx.emit(crate::event::EventData::Damage(
+crates/engine-native-content/src/content/vm_effects/danshou.rs-135-                    crate::machine::damage_data(Some(owner), target, 1),
+crates/engine-native-content/src/content/vm_effects/danshou.rs-136-                ));
+--
+crates/engine-native-kernel/src/kernel/tricks.rs-292-                    ChoiceOption::Tag(0) => {
+crates/engine-native-kernel/src/kernel/tricks.rs-293-                        if ctx.core.player(self.victim).alive {
+crates/engine-native-kernel/src/kernel/tricks.rs:294:                            ctx.emit(crate::event::EventData::Damage(
+crates/engine-native-kernel/src/kernel/tricks.rs-295-                                crate::machine::damage_data(Some(self.holder), self.victim, 1),
+crates/engine-native-kernel/src/kernel/tricks.rs-296-                            ));
+--
+crates/engine-native/src/engine/debug.rs-721-        crate::resolution::push_frame(
+crates/engine-native/src/engine/debug.rs-722-            &mut work.resolution,
+crates/engine-native/src/engine/debug.rs:723:            EventData::Damage(crate::event::DamageData {
+crates/engine-native/src/engine/debug.rs-724-                source,
+crates/engine-native/src/engine/debug.rs-725-                target,
+--
+crates/engine-native/src/engine/debug.rs-756-        crate::resolution::push_frame(
+crates/engine-native/src/engine/debug.rs-757-            &mut work.resolution,
+crates/engine-native/src/engine/debug.rs:758:            EventData::Damage(crate::event::DamageData {
+crates/engine-native/src/engine/debug.rs-759-                source,
+crates/engine-native/src/engine/debug.rs-760-                target,
+--
+crates/engine-native/src/lib.rs-23-pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
+crates/engine-native/src/lib.rs-24-pub use engine::{AuthToken, CommandOutcome, Engine, GameAction, GameCommand, RejectReason};
+crates/engine-native/src/lib.rs:25:pub use event::{DamageData, EventData, EventKind, Phase, Stage, Timing};
+crates/engine-native/src/lib.rs-26-pub use state::{
+crates/engine-native/src/lib.rs-27-    BossStageKind, BossStagePending, BossStageState, GameMode, Outcome, Role, Winner,
+--
+crates/engine-native-kernel/src/kernel/events.rs-385-    match suit {
+crates/engine-native-kernel/src/kernel/events.rs-386-        crate::catalog::Suit::Spade => {
+crates/engine-native-kernel/src/kernel/events.rs:387:            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/events.rs-388-                None,
+crates/engine-native-kernel/src/kernel/events.rs-389-                tgt,
+--
+crates/engine-native-kernel/src/kernel/events.rs-395-        crate::catalog::Suit::Club => {
+crates/engine-native-kernel/src/kernel/events.rs-396-            ctx.recover(holder, 1, None);
+crates/engine-native-kernel/src/kernel/events.rs:397:            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/events.rs-398-                None,
+crates/engine-native-kernel/src/kernel/events.rs-399-                tgt,
+--
+crates/engine-native-kernel/src/kernel/events.rs-462-                for t in ctx.core.seat_order_from(player) {
+crates/engine-native-kernel/src/kernel/events.rs-463-                    if t != player && ctx.core.player(t).alive {
+crates/engine-native-kernel/src/kernel/events.rs:464:                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/events.rs-465-                            Some(player),
+crates/engine-native-kernel/src/kernel/events.rs-466-                            t,
+--
+crates/engine-native-kernel/src/kernel/events.rs-554-                        && ctx.core.is_boss_side(t) != ctx.core.is_boss_side(*holder)
+crates/engine-native-kernel/src/kernel/events.rs-555-                }) {
+crates/engine-native-kernel/src/kernel/events.rs:556:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/events.rs-557-                        Some(*holder),
+crates/engine-native-kernel/src/kernel/events.rs-558-                        t,
+--
+crates/engine-native-kernel/src/kernel/events.rs-583-        for holder in holders {
+crates/engine-native-kernel/src/kernel/events.rs-584-            if ctx.core.player(player).hand.is_empty() {
+crates/engine-native-kernel/src/kernel/events.rs:585:                ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/events.rs-586-                    Some(holder),
+crates/engine-native-kernel/src/kernel/events.rs-587-                    player,
+--
+crates/engine-native-kernel/src/kernel/phase.rs-186-            if ctx.core.has_skill(player, def) {
+crates/engine-native-kernel/src/kernel/phase.rs-187-                ctx.core.skills.remove(&(player, def));
+crates/engine-native-kernel/src/kernel/phase.rs:188:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase.rs-189-                    None,
+crates/engine-native-kernel/src/kernel/phase.rs-190-                    player,
+--
+crates/engine-native-kernel/src/kernel.rs-20-    record_vm_history(ctx, &data);
+crates/engine-native-kernel/src/kernel.rs-21-    match data {
+crates/engine-native-kernel/src/kernel.rs:22:        EventData::Damage(d) => commit_damage(ctx, frame_id, d),
+crates/engine-native-kernel/src/kernel.rs-23-        EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
+crates/engine-native-kernel/src/kernel.rs-24-        EventData::CardUsed(u) => commit_card_used(ctx, u),
+--
+crates/engine-native-content/src/content/vm_effects/fenghe.rs-72-        }
+crates/engine-native-content/src/content/vm_effects/fenghe.rs-73-        let source = ctx
+crates/engine-native-content/src/content/vm_effects/fenghe.rs:74:            .current_damage()
+crates/engine-native-content/src/content/vm_effects/fenghe.rs-75-            .ok()
+crates/engine-native-content/src/content/vm_effects/fenghe.rs-76-            .and_then(|d| d.source)
+--
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-8-impl SkillBehavior for SuiDunBehavior {
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-9-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs:10:        matches!(event, EventData::Damage(d) if d.target == owner && !d.prevented)
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-11-    }
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-12-
+--
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-27-    }
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-28-    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs:29:        ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-30-        Flow::Done
+crates/engine-native-content/src/content/standard/skills/sui_dun.rs-31-    }
+--
+crates/engine-native-kernel/src/snap/validation.rs-68-pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+crates/engine-native-kernel/src/snap/validation.rs-69-    match data {
+crates/engine-native-kernel/src/snap/validation.rs:70:        EventData::Damage(d) => {
+crates/engine-native-kernel/src/snap/validation.rs-71-            check_opt_pid(d.source, b)?;
+crates/engine-native-kernel/src/snap/validation.rs-72-            check_pid(d.target, b)?;
+--
+crates/engine-native-kernel/src/kernel/death.rs-232-                }
+crates/engine-native-kernel/src/kernel/death.rs-233-                if ctx.core.is_boss_side(t) != ctx.core.is_boss_side(self.player) {
+crates/engine-native-kernel/src/kernel/death.rs:234:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/death.rs-235-                        None,
+crates/engine-native-kernel/src/kernel/death.rs-236-                        t,
+--
+crates/engine-native-kernel/src/archive.rs-17-use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
+crates/engine-native-kernel/src/archive.rs-18-use crate::event::{
+crates/engine-native-kernel/src/archive.rs:19:    CardUseData, DamageData, DamageNature, EventData, EventKind, Phase, QueuedTrigger, Stage,
+crates/engine-native-kernel/src/archive.rs-20-};
+crates/engine-native-kernel/src/archive.rs-21-use crate::ids::{PlayerId, SkillDefId};
+--
+crates/engine-native-content/src/content/standard/skills/ji_ji.rs-8-impl SkillBehavior for JiJiBehavior {
+crates/engine-native-content/src/content/standard/skills/ji_ji.rs-9-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/ji_ji.rs:10:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/ji_ji.rs-11-            if d.target == owner && !d.prevented && d.amount > 0)
+crates/engine-native-content/src/content/standard/skills/ji_ji.rs-12-    }
+--
+crates/engine-native-kernel/src/kernel/sha.rs-260-        ctx.core.turn.liaoyuan_count = 0;
+crates/engine-native-kernel/src/kernel/sha.rs-261-        if ctx.core.player(self.target).alive {
+crates/engine-native-kernel/src/kernel/sha.rs:262:            ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/sha.rs-263-                Some(self.source),
+crates/engine-native-kernel/src/kernel/sha.rs-264-                self.target,
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-67-    event_source: Option<PlayerId>,
+crates/engine-native-kernel/src/rvm_bridge.rs-68-    event_card: Option<CardId>,
+crates/engine-native-kernel/src/rvm_bridge.rs:69:    event_amount: u32,
+crates/engine-native-kernel/src/rvm_bridge.rs-70-    /// 阶段事件携带（阶段种，begin 由 EventKind 区分；增量 14）。
+crates/engine-native-kernel/src/rvm_bridge.rs-71-    phase: Option<crate::event::Phase>,
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-101-fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
+crates/engine-native-kernel/src/rvm_bridge.rs-102-    match event {
+crates/engine-native-kernel/src/rvm_bridge.rs:103:        EventData::Damage(d) => VmTriggerCtx {
+crates/engine-native-kernel/src/rvm_bridge.rs-104-            event_player: Some(d.target),
+crates/engine-native-kernel/src/rvm_bridge.rs-105-            event_source: d.source,
+crates/engine-native-kernel/src/rvm_bridge.rs-106-            event_card: d.card,
+crates/engine-native-kernel/src/rvm_bridge.rs:107:            event_amount: d.amount,
+crates/engine-native-kernel/src/rvm_bridge.rs-108-            nature: Some(d.nature),
+crates/engine-native-kernel/src/rvm_bridge.rs-109-            from_chain: d.from_chain,
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-143-            event_player: Some(*recipient),
+crates/engine-native-kernel/src/rvm_bridge.rs-144-            event_source: Some(*giver),
+crates/engine-native-kernel/src/rvm_bridge.rs:145:            event_amount: cards.len() as u32,
+crates/engine-native-kernel/src/rvm_bridge.rs-146-            kind: 9,
+crates/engine-native-kernel/src/rvm_bridge.rs-147-            ..VmTriggerCtx::default()
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-201-        event_source: t.event_source,
+crates/engine-native-kernel/src/rvm_bridge.rs-202-        event_card: t.event_card,
+crates/engine-native-kernel/src/rvm_bridge.rs:203:        event_amount: t.event_amount,
+crates/engine-native-kernel/src/rvm_bridge.rs-204-        phase: t.phase,
+crates/engine-native-kernel/src/rvm_bridge.rs-205-        nature: t.nature,
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-490-            (entry.meta.event == event.kind()
+crates/engine-native-kernel/src/rvm_bridge.rs-491-                || (entry.meta.event == EventKind::DamageBefore
+crates/engine-native-kernel/src/rvm_bridge.rs:492:                    && matches!(event, EventData::Damage(_))))
+crates/engine-native-kernel/src/rvm_bridge.rs-493-                && entry.program.module.to_bytes() == bytes
+crates/engine-native-kernel/src/rvm_bridge.rs-494-        })
+--
+crates/engine-native-kernel/src/rvm_bridge.rs-672-                        .event_player
+crates/engine-native-kernel/src/rvm_bridge.rs-673-                        .is_some_and(|p| ctx.state.player(p).alive && p != owner)
+crates/engine-native-kernel/src/rvm_bridge.rs:674:                    && trig.event_amount > 0
+crates/engine-native-kernel/src/rvm_bridge.rs-675-            }
+crates/engine-native-kernel/src/rvm_bridge.rs-676-            VmFilterPolicy::Always => true,
+--
+crates/engine-native-kernel/src/kernel/judge.rs-746-                        ctx.to_discard(judge_card);
+crates/engine-native-kernel/src/kernel/judge.rs-747-                    }
+crates/engine-native-kernel/src/kernel/judge.rs:748:                    ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/judge.rs-749-                        None,
+crates/engine-native-kernel/src/kernel/judge.rs-750-                        owner,
+--
+crates/engine-native-kernel/src/kernel/judge.rs-806-                        ctx.to_discard(judge_card);
+crates/engine-native-kernel/src/kernel/judge.rs-807-                    }
+crates/engine-native-kernel/src/kernel/judge.rs:808:                    ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/judge.rs-809-                        None,
+crates/engine-native-kernel/src/kernel/judge.rs-810-                        owner,
+--
+crates/engine-native-kernel/src/kernel/phase/end.rs-47-                t != player && ctx.core.player(t).alive && ctx.core.player(t).hp >= hp_self
+crates/engine-native-kernel/src/kernel/phase/end.rs-48-            }) {
+crates/engine-native-kernel/src/kernel/phase/end.rs:49:                ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/phase/end.rs-50-                    Some(player),
+crates/engine-native-kernel/src/kernel/phase/end.rs-51-                    t,
+--
+crates/engine-native-kernel/src/kernel/phase/end.rs-150-                    continue;
+crates/engine-native-kernel/src/kernel/phase/end.rs-151-                }
+crates/engine-native-kernel/src/kernel/phase/end.rs:152:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/end.rs-153-                    Some(player),
+crates/engine-native-kernel/src/kernel/phase/end.rs-154-                    t,
+--
+crates/engine-native-kernel/src/kernel/phase/end.rs-235-            for t in 0..seats {
+crates/engine-native-kernel/src/kernel/phase/end.rs-236-                if t != player && ctx.core.player(t).alive {
+crates/engine-native-kernel/src/kernel/phase/end.rs:237:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/end.rs-238-                        Some(player),
+crates/engine-native-kernel/src/kernel/phase/end.rs-239-                        t,
+--
+crates/engine-native-kernel/src/kernel/phase/end.rs-287-                && ctx.core.turn.cards_used_play_phase == 0
+crates/engine-native-kernel/src/kernel/phase/end.rs-288-            {
+crates/engine-native-kernel/src/kernel/phase/end.rs:289:                ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/phase/end.rs-290-                    Some(*holder),
+crates/engine-native-kernel/src/kernel/phase/end.rs-291-                    player,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-66-                    .collect();
+crates/engine-native-kernel/src/kernel/phase/judge.rs-67-                for t in targets {
+crates/engine-native-kernel/src/kernel/phase/judge.rs:68:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-69-                        Some(player),
+crates/engine-native-kernel/src/kernel/phase/judge.rs-70-                        t,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-395-                    .collect();
+crates/engine-native-kernel/src/kernel/phase/judge.rs-396-                if let Some(&t) = linked.first() {
+crates/engine-native-kernel/src/kernel/phase/judge.rs:397:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-398-                        Some(player),
+crates/engine-native-kernel/src/kernel/phase/judge.rs-399-                        t,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-416-                let seats = ctx.core.players.len() as PlayerId;
+crates/engine-native-kernel/src/kernel/phase/judge.rs-417-                if let Some(t) = (0..seats).find(|&t| t != player && ctx.core.player(t).alive) {
+crates/engine-native-kernel/src/kernel/phase/judge.rs:418:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-419-                        Some(player),
+crates/engine-native-kernel/src/kernel/phase/judge.rs-420-                        t,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-464-                    }
+crates/engine-native-kernel/src/kernel/phase/judge.rs-465-                    if ctx.core.computed_distance(ctx.catalog, player, t) <= 1 {
+crates/engine-native-kernel/src/kernel/phase/judge.rs:466:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-467-                            Some(player),
+crates/engine-native-kernel/src/kernel/phase/judge.rs-468-                            t,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-526-                            });
+crates/engine-native-kernel/src/kernel/phase/judge.rs-527-                        }
+crates/engine-native-kernel/src/kernel/phase/judge.rs:528:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-529-                            None,
+crates/engine-native-kernel/src/kernel/phase/judge.rs-530-                            t,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-695-                    if red {
+crates/engine-native-kernel/src/kernel/phase/judge.rs-696-                        ctx.core.turn.yanyu_count += 1;
+crates/engine-native-kernel/src/kernel/phase/judge.rs:697:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-698-                            Some(holder),
+crates/engine-native-kernel/src/kernel/phase/judge.rs-699-                            player,
+--
+crates/engine-native-kernel/src/kernel/phase/judge.rs-729-                    _ => {
+crates/engine-native-kernel/src/kernel/phase/judge.rs-730-                        // 方片/梅花：伤 1 后失去此技
+crates/engine-native-kernel/src/kernel/phase/judge.rs:731:                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-kernel/src/kernel/phase/judge.rs-732-                            None, player, 1,
+crates/engine-native-kernel/src/kernel/phase/judge.rs-733-                        )));
+--
+crates/engine-native-kernel/src/event.rs-62-/// 伤害事件载荷：结算窗口内可被技能改写（转移/防止）。
+crates/engine-native-kernel/src/event.rs-63-#[derive(Debug, Clone, PartialEq, Eq)]
+crates/engine-native-kernel/src/event.rs:64:pub struct DamageData {
+crates/engine-native-kernel/src/event.rs-65-    pub source: Option<PlayerId>,
+crates/engine-native-kernel/src/event.rs-66-    /// 当前承受者——转移技能改写此字段。
+--
+crates/engine-native-kernel/src/event.rs-107-        face_down: bool,
+crates/engine-native-kernel/src/event.rs-108-    },
+crates/engine-native-kernel/src/event.rs:109:    Damage(DamageData),
+crates/engine-native-kernel/src/event.rs-110-    Recover {
+crates/engine-native-kernel/src/event.rs-111-        player: PlayerId,
+--
+crates/engine-native-kernel/src/event.rs-207-    pub fn kind(&self) -> EventKind {
+crates/engine-native-kernel/src/event.rs-208-        match self {
+crates/engine-native-kernel/src/event.rs:209:            EventData::Damage(_) => EventKind::Damage,
+crates/engine-native-kernel/src/event.rs-210-            EventData::Recover { .. } => EventKind::Recover,
+crates/engine-native-kernel/src/event.rs-211-            EventData::CardsDrawn { .. } => EventKind::CardsDrawn,
+--
+crates/engine-native-kernel/src/event.rs-235-    pub fn trigger_kind(&self, before: bool) -> EventKind {
+crates/engine-native-kernel/src/event.rs-236-        match self {
+crates/engine-native-kernel/src/event.rs:237:            EventData::Damage(_) if before => EventKind::DamageBefore,
+crates/engine-native-kernel/src/event.rs-238-            other => other.kind(),
+crates/engine-native-kernel/src/event.rs-239-        }
+--
+crates/engine-native-kernel/src/event.rs-328-
+crates/engine-native-kernel/src/event.rs-329-impl Frame {
+crates/engine-native-kernel/src/event.rs:330:    pub fn damage(&self) -> &DamageData {
+crates/engine-native-kernel/src/event.rs-331-        match &self.data {
+crates/engine-native-kernel/src/event.rs:332:            EventData::Damage(d) => d,
+crates/engine-native-kernel/src/event.rs-333-            other => panic!("frame {:?} is not damage: {other:?}", self.kind),
+crates/engine-native-kernel/src/event.rs-334-        }
+crates/engine-native-kernel/src/event.rs-335-    }
+crates/engine-native-kernel/src/event.rs-336-
+crates/engine-native-kernel/src/event.rs:337:    pub fn damage_mut(&mut self) -> &mut DamageData {
+crates/engine-native-kernel/src/event.rs-338-        match &mut self.data {
+crates/engine-native-kernel/src/event.rs:339:            EventData::Damage(d) => d,
+crates/engine-native-kernel/src/event.rs-340-            other => panic!("frame {other:?} is not damage"),
+crates/engine-native-kernel/src/event.rs-341-        }
+--
+crates/engine-native-kernel/src/machine.rs-8-use crate::catalog::{CardKind, Catalog, QueryCtx};
+crates/engine-native-kernel/src/machine.rs-9-use crate::choice::{ChoiceOption, ChoiceSpec, Selection};
+crates/engine-native-kernel/src/machine.rs:10:use crate::event::{CardUseData, DamageData, DamageNature, EventData, Phase};
+crates/engine-native-kernel/src/machine.rs-11-use crate::ids::{CardId, PlayerId, SkillDefId};
+crates/engine-native-kernel/src/machine.rs-12-use crate::resolution::Resolution;
+--
+crates/engine-native-kernel/src/machine.rs-266-
+crates/engine-native-kernel/src/machine.rs-267-    /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
+crates/engine-native-kernel/src/machine.rs:268:    pub fn current_damage(&self) -> Result<&DamageData, ()> {
+crates/engine-native-kernel/src/machine.rs-269-        let id = self.current_frame_id();
+crates/engine-native-kernel/src/machine.rs-270-        match self.res.frame(id).map(|f| &f.data) {
+crates/engine-native-kernel/src/machine.rs:271:            Some(crate::event::EventData::Damage(d)) => Ok(d),
+crates/engine-native-kernel/src/machine.rs-272-            _ => Err(()),
+crates/engine-native-kernel/src/machine.rs-273-        }
+--
+crates/engine-native-kernel/src/machine.rs-283-    }
+crates/engine-native-kernel/src/machine.rs-284-
+crates/engine-native-kernel/src/machine.rs:285:    pub fn current_damage_mut(&mut self) -> &mut DamageData {
+crates/engine-native-kernel/src/machine.rs-286-        let id = self.current_frame_id();
+crates/engine-native-kernel/src/machine.rs-287-        self.res
+--
+crates/engine-native-kernel/src/machine.rs-295-        &mut self,
+crates/engine-native-kernel/src/machine.rs-296-        observer: PlayerId,
+crates/engine-native-kernel/src/machine.rs:297:        damage: DamageData,
+crates/engine-native-kernel/src/machine.rs-298-    ) -> crate::ids::EventId {
+crates/engine-native-kernel/src/machine.rs-299-        let id = self.res.next_event_id;
+--
+crates/engine-native-kernel/src/machine.rs-302-            .flags
+crates/engine-native-kernel/src/machine.rs-303-            .insert((observer, format!("vm_damage_receipt:{id}")), 0);
+crates/engine-native-kernel/src/machine.rs:304:        self.emit(EventData::Damage(damage));
+crates/engine-native-kernel/src/machine.rs-305-        id
+crates/engine-native-kernel/src/machine.rs-306-    }
+--
+crates/engine-native-kernel/src/machine.rs-780-
+crates/engine-native-kernel/src/machine.rs-781-/// 便捷构造：普通伤害载荷。
+crates/engine-native-kernel/src/machine.rs:782:pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> DamageData {
+crates/engine-native-kernel/src/machine.rs-783-    damage_data_with(source, target, amount, DamageNature::Normal, None)
+crates/engine-native-kernel/src/machine.rs-784-}
+--
+crates/engine-native-kernel/src/machine.rs-791-    nature: DamageNature,
+crates/engine-native-kernel/src/machine.rs-792-    card: Option<CardId>,
+crates/engine-native-kernel/src/machine.rs:793:) -> DamageData {
+crates/engine-native-kernel/src/machine.rs:794:    DamageData {
+crates/engine-native-kernel/src/machine.rs-795-        source,
+crates/engine-native-kernel/src/machine.rs-796-        target,
+--
+crates/engine-native-content/src/content/host/factory.rs-10-        let (target, card) = match self.behavior {
+crates/engine-native-content/src/content/host/factory.rs-11-            HostBehavior::ShaDamageForceDiscard => match event {
+crates/engine-native-content/src/content/host/factory.rs:12:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-13-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-14-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-41-            // 破云：受伤者（被弃者自选弃牌）
+crates/engine-native-content/src/content/host/factory.rs-42-            HostBehavior::XianjianPoyun => match event {
+crates/engine-native-content/src/content/host/factory.rs:43:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-44-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-45-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-49-            },
+crates/engine-native-content/src/content/host/factory.rs-50-            HostBehavior::SanjianWeaponDamage => match event {
+crates/engine-native-content/src/content/host/factory.rs:51:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-52-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-53-            },
+crates/engine-native-content/src/content/host/factory.rs-54-            HostBehavior::MoshouImmunity => match event {
+crates/engine-native-content/src/content/host/factory.rs:55:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-56-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-57-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-97-            },
+crates/engine-native-content/src/content/host/factory.rs-98-            HostBehavior::JinlianzhuCancel => match event {
+crates/engine-native-content/src/content/host/factory.rs:99:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-100-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-101-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-113-            },
+crates/engine-native-content/src/content/host/factory.rs-114-            HostBehavior::WudianGuangshuHeart => match event {
+crates/engine-native-content/src/content/host/factory.rs:115:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-116-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-117-            },
+crates/engine-native-content/src/content/host/factory.rs-118-            HostBehavior::WudianGuangshuDiamond => match event {
+crates/engine-native-content/src/content/host/factory.rs:119:                EventData::Damage(d) => (Some(d.source.unwrap_or(owner)), None),
+crates/engine-native-content/src/content/host/factory.rs-120-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-121-            },
+crates/engine-native-content/src/content/host/factory.rs-122-            HostBehavior::WudianFeidan => match event {
+crates/engine-native-content/src/content/host/factory.rs:123:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-124-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-125-            },
+crates/engine-native-content/src/content/host/factory.rs-126-            HostBehavior::WudianZhiyuan => match event {
+crates/engine-native-content/src/content/host/factory.rs:127:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-128-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-129-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-133-            },
+crates/engine-native-content/src/content/host/factory.rs-134-            HostBehavior::WudianPingzhang => match event {
+crates/engine-native-content/src/content/host/factory.rs:135:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-136-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-137-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-146-            },
+crates/engine-native-content/src/content/host/factory.rs-147-            HostBehavior::XianjianAnwugu => match event {
+crates/engine-native-content/src/content/host/factory.rs:148:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-149-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-150-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-158-            },
+crates/engine-native-content/src/content/host/factory.rs-159-            HostBehavior::XianjianWangyou2 => match event {
+crates/engine-native-content/src/content/host/factory.rs:160:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-161-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-162-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-170-            },
+crates/engine-native-content/src/content/host/factory.rs-171-            HostBehavior::XianjianHushaCount => match event {
+crates/engine-native-content/src/content/host/factory.rs:172:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-173-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-174-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-196-            // 雅量：伤害目标（双方经 targets=[source,target] 提取摸牌）
+crates/engine-native-content/src/content/host/factory.rs-197-            HostBehavior::YunchouYaliang => match event {
+crates/engine-native-content/src/content/host/factory.rs:198:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-199-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-200-            },
+crates/engine-native-content/src/content/host/factory.rs-201-            // 戏才：伤害目标+伤害牌（获得面）
+crates/engine-native-content/src/content/host/factory.rs-202-            HostBehavior::YunchouXicai => match event {
+crates/engine-native-content/src/content/host/factory.rs:203:                EventData::Damage(d) => (Some(d.target), d.card),
+crates/engine-native-content/src/content/host/factory.rs-204-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-205-            },
+crates/engine-native-content/src/content/host/factory.rs-206-            // 狂骨·变体：伤害目标（距离判定面）
+crates/engine-native-content/src/content/host/factory.rs-207-            HostBehavior::YunchouDiykuanggu => match event {
+crates/engine-native-content/src/content/host/factory.rs:208:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-209-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-210-            },
+crates/engine-native-content/src/content/host/factory.rs-211-            // 纵火：伤害目标（帧直写在 step）
+crates/engine-native-content/src/content/host/factory.rs-212-            HostBehavior::YunchouZonghuo => match event {
+crates/engine-native-content/src/content/host/factory.rs:213:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-214-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-215-            },
+crates/engine-native-content/src/content/host/factory.rs-216-            // 烧营：受伤者（蔓延目标在 step 内按距离自算）
+crates/engine-native-content/src/content/host/factory.rs-217-            HostBehavior::YunchouShaoying => match event {
+crates/engine-native-content/src/content/host/factory.rs:218:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-219-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-220-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-346-            // 承剑：伤害来源（摸 1 面在效果）
+crates/engine-native-content/src/content/host/factory.rs-347-            HostBehavior::SwdChengjian => match event {
+crates/engine-native-content/src/content/host/factory.rs:348:                EventData::Damage(d) => (d.source, None),
+crates/engine-native-content/src/content/host/factory.rs-349-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-350-            },
+crates/engine-native-content/src/content/host/factory.rs-351-            // 缚斧：伤害目标（效果直写帧）
+crates/engine-native-content/src/content/host/factory.rs-352-            HostBehavior::SwdJufu => match event {
+crates/engine-native-content/src/content/host/factory.rs:353:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-354-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-355-            },
+crates/engine-native-content/src/content/host/factory.rs-356-            // 花镜：伤害目标
+crates/engine-native-content/src/content/host/factory.rs-357-            HostBehavior::SwdHuajing => match event {
+crates/engine-native-content/src/content/host/factory.rs:358:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-359-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-360-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-363-            // 破星：伤害目标（效果直写帧）
+crates/engine-native-content/src/content/host/factory.rs-364-            HostBehavior::SwdPoxing => match event {
+crates/engine-native-content/src/content/host/factory.rs:365:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-366-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-367-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-375-            // 道法：伤害来源（弃其手牌）
+crates/engine-native-content/src/content/host/factory.rs-376-            HostBehavior::SwdDaofa => match event {
+crates/engine-native-content/src/content/host/factory.rs:377:                EventData::Damage(d) => (d.source, None),
+crates/engine-native-content/src/content/host/factory.rs-378-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-379-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-392-            // 屠阵：受伤者（弃其非基本手牌）
+crates/engine-native-content/src/content/host/factory.rs-393-            HostBehavior::SwdTuzhen => match event {
+crates/engine-native-content/src/content/host/factory.rs:394:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-395-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-396-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-402-            // 悲歌：targets=[来源, 受伤者]
+crates/engine-native-content/src/content/host/factory.rs-403-            HostBehavior::YunchouBeige => match event {
+crates/engine-native-content/src/content/host/factory.rs:404:                EventData::Damage(d) => (Some(d.target), None),
+crates/engine-native-content/src/content/host/factory.rs-405-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-406-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-421-            // 红莲：伤害来源（弃其红牌）
+crates/engine-native-content/src/content/host/factory.rs-422-            HostBehavior::YunchouHonglian => match event {
+crates/engine-native-content/src/content/host/factory.rs:423:                EventData::Damage(d) => (d.source, None),
+crates/engine-native-content/src/content/host/factory.rs-424-                _ => (None, None),
+crates/engine-native-content/src/content/host/factory.rs-425-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-489-            // 射影：伤害牌（判定黑回收目标）
+crates/engine-native-content/src/content/host/factory.rs-490-            HostBehavior::XianjianSheying => match event {
+crates/engine-native-content/src/content/host/factory.rs:491:                EventData::Damage(d) => d.card.map(|c| vec![c]).unwrap_or_default(),
+crates/engine-native-content/src/content/host/factory.rs-492-                _ => Vec::new(),
+crates/engine-native-content/src/content/host/factory.rs-493-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-500-            },
+crates/engine-native-content/src/content/host/factory.rs-501-            HostBehavior::JinlianzhuCancel => match event {
+crates/engine-native-content/src/content/host/factory.rs:502:                EventData::Damage(d) => d.source.map(|s| vec![s]).unwrap_or_default(),
+crates/engine-native-content/src/content/host/factory.rs-503-                _ => Vec::new(),
+crates/engine-native-content/src/content/host/factory.rs-504-            },
+crates/engine-native-content/src/content/host/factory.rs-505-            // 雅量：伤害双方（座位序在效果内排序）
+crates/engine-native-content/src/content/host/factory.rs-506-            HostBehavior::YunchouYaliang => match event {
+crates/engine-native-content/src/content/host/factory.rs:507:                EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+crates/engine-native-content/src/content/host/factory.rs-508-                _ => Vec::new(),
+crates/engine-native-content/src/content/host/factory.rs-509-            },
+--
+crates/engine-native-content/src/content/host/factory.rs-515-            // 悲歌：targets=[来源, 受伤者]
+crates/engine-native-content/src/content/host/factory.rs-516-            HostBehavior::YunchouBeige => match event {
+crates/engine-native-content/src/content/host/factory.rs:517:                EventData::Damage(d) => vec![d.source.unwrap_or(d.target), d.target],
+crates/engine-native-content/src/content/host/factory.rs-518-                _ => Vec::new(),
+crates/engine-native-content/src/content/host/factory.rs-519-            },
+--
+crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs-816-                    });
+crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs-817-                    // 伤害 -1（前置窗口直写帧量；上游 trigger.num--）
+crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs:818:                    let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs-819-                    d.amount = d.amount.saturating_sub(1);
+crates/engine-native-content/src/content/host/step/wudian_ow_cards.rs-820-                    let self_case = self.target == Some(self.owner);
+--
+crates/engine-native-kernel/src/kernel/sha/step.rs-855-                });
+crates/engine-native-kernel/src/kernel/sha/step.rs-856-                if ctx.core.player(self.source).alive {
+crates/engine-native-kernel/src/kernel/sha/step.rs:857:                    ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/sha/step.rs-858-                        Some(self.target),
+crates/engine-native-kernel/src/kernel/sha/step.rs-859-                        self.source,
+--
+crates/engine-native-content/src/content/host/step/boss.rs-200-            }
+crates/engine-native-content/src/content/host/step/boss.rs-201-            HostBehavior::BossChiyiMark => {
+crates/engine-native-content/src/content/host/step/boss.rs:202:                ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/boss.rs-203-                Flow::Done
+crates/engine-native-content/src/content/host/step/boss.rs-204-            }
+--
+crates/engine-native-content/src/content/host/step/boss.rs-208-            }
+crates/engine-native-content/src/content/host/step/boss.rs-209-            HostBehavior::BossBaiyiThunder => {
+crates/engine-native-content/src/content/host/step/boss.rs:210:                ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/boss.rs-211-                Flow::Done
+crates/engine-native-content/src/content/host/step/boss.rs-212-            }
+--
+crates/engine-native-kernel/src/kernel/sha/resume.rs-270-        // 恰弃两张 → 强制伤害（被闪仍命中）；放弃 → 无伤。
+crates/engine-native-kernel/src/kernel/sha/resume.rs-271-        if fired && ctx.core.player(self.target).alive {
+crates/engine-native-kernel/src/kernel/sha/resume.rs:272:            ctx.emit(EventData::Damage(damage_data_with(
+crates/engine-native-kernel/src/kernel/sha/resume.rs-273-                Some(self.source),
+crates/engine-native-kernel/src/kernel/sha/resume.rs-274-                self.target,
+--
+crates/engine-native-kernel/src/rvm_ops.rs-104-        }
+crates/engine-native-kernel/src/rvm_ops.rs-105-        // PA12 批④-3：伤害改写对——只在 DamageBefore 前置窗口内合法
+crates/engine-native-kernel/src/rvm_ops.rs:106:        //（当前帧即伤害帧；宿主技同口径直写 DamageData）。
+crates/engine-native-kernel/src/rvm_ops.rs-107-        EffectRequest::PreventDamage { .. } => {}
+crates/engine-native-kernel/src/rvm_ops.rs-108-        EffectRequest::ModifyCurrentDamage { player, .. } => {
+--
+crates/engine-native-kernel/src/rvm_ops.rs-305-                    _ => DamageNature::Normal,
+crates/engine-native-kernel/src/rvm_ops.rs-306-                };
+crates/engine-native-kernel/src/rvm_ops.rs:307:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-kernel/src/rvm_ops.rs-308-                    src, t, amount, nature, None,
+crates/engine-native-kernel/src/rvm_ops.rs-309-                )));
+--
+crates/engine-native-kernel/src/rvm_ops.rs-579-            }
+crates/engine-native-kernel/src/rvm_ops.rs-580-        }
+crates/engine-native-kernel/src/rvm_ops.rs:581:        // PA12 批④-3：DSL `prevent_current_damage()` / `modify_current_damage(self, ±N)`
+crates/engine-native-kernel/src/rvm_ops.rs-582-        //（旧线：damage_id=0 绑定当前前置窗口伤害帧）。与宿主技 v187/v126 同法
+crates/engine-native-kernel/src/rvm_ops.rs:583:        // 直写 DamageData；非伤害窗口（current_damage 取不到）静默空操作。
+crates/engine-native-kernel/src/rvm_ops.rs-584-        EffectRequest::PreventDamage { .. } => {
+crates/engine-native-kernel/src/rvm_ops.rs:585:            if let Ok(d) = ctx.current_damage() {
+crates/engine-native-kernel/src/rvm_ops.rs-586-                let id = ctx.current_frame_id();
+crates/engine-native-kernel/src/rvm_ops.rs-587-                let _ = id;
+crates/engine-native-kernel/src/rvm_ops.rs-588-                if d.amount > 0 {
+crates/engine-native-kernel/src/rvm_ops.rs:589:                    ctx.current_damage_mut().prevented = true;
+crates/engine-native-kernel/src/rvm_ops.rs-590-                }
+crates/engine-native-kernel/src/rvm_ops.rs-591-            }
+--
+crates/engine-native-kernel/src/rvm_ops.rs-594-            player: _, delta, ..
+crates/engine-native-kernel/src/rvm_ops.rs-595-        } => {
+crates/engine-native-kernel/src/rvm_ops.rs:596:            if let Ok(d) = ctx.current_damage() {
+crates/engine-native-kernel/src/rvm_ops.rs-597-                if d.amount > 0 && delta != 0 {
+crates/engine-native-kernel/src/rvm_ops.rs-598-                    let next = (d.amount as i32).saturating_add(delta).max(0) as u32;
+crates/engine-native-kernel/src/rvm_ops.rs:599:                    ctx.current_damage_mut().amount = next;
+crates/engine-native-kernel/src/rvm_ops.rs-600-                }
+crates/engine-native-kernel/src/rvm_ops.rs-601-            }
+--
+crates/engine-native-kernel/src/archive/events.rs-5-pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+crates/engine-native-kernel/src/archive/events.rs-6-    match v {
+crates/engine-native-kernel/src/archive/events.rs:7:        EventData::Damage(d) => {
+crates/engine-native-kernel/src/archive/events.rs-8-            w.u8(0);
+crates/engine-native-kernel/src/archive/events.rs-9-            enc_opt_pid(w, &d.source);
+--
+crates/engine-native-kernel/src/archive/events.rs-205-            let card = dec_opt_u32(r)?;
+crates/engine-native-kernel/src/archive/events.rs-206-            let from_chain = r.boolean()?;
+crates/engine-native-kernel/src/archive/events.rs:207:            EventData::Damage(DamageData {
+crates/engine-native-kernel/src/archive/events.rs-208-                source,
+crates/engine-native-kernel/src/archive/events.rs-209-                target,
+--
+crates/engine-native-content/src/content/host/support.rs-772-                && (!ctx.state.deck.is_empty() || !ctx.state.discard.is_empty())
+crates/engine-native-content/src/content/host/support.rs-773-        }
+crates/engine-native-content/src/content/host/support.rs:774:        EventData::Damage(damage) => {
+crates/engine-native-content/src/content/host/support.rs-775-            if damage.target != owner || damage.prevented || damage.amount == 0 {
+crates/engine-native-content/src/content/host/support.rs-776-                return false;
+--
+crates/engine-native-content/src/content/host/support.rs-964-            );
+crates/engine-native-content/src/content/host/support.rs-965-        }
+crates/engine-native-content/src/content/host/support.rs:966:        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/support.rs-967-            Some(self.owner),
+crates/engine-native-content/src/content/host/support.rs-968-            t,
+--
+crates/engine-native-content/src/content/host/step/skills_status.rs-106-            // 循梦：伤害 +1；体力 >1 时失去 1 点体力
+crates/engine-native-content/src/content/host/step/skills_status.rs-107-            HostBehavior::Xunmeng => {
+crates/engine-native-content/src/content/host/step/skills_status.rs:108:                ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/skills_status.rs-109-                if ctx.core.player(self.owner).hp > 1 {
+crates/engine-native-content/src/content/host/step/skills_status.rs-110-                    // 失去体力（上游 loseHp）：无来源、不可防止
+--
+crates/engine-native-content/src/content/host/step/skills_status.rs-167-            HostBehavior::HlssYueyin => {
+crates/engine-native-content/src/content/host/step/skills_status.rs-168-                let (nature, card) = {
+crates/engine-native-content/src/content/host/step/skills_status.rs:169:                    let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/skills_status.rs-170-                    d.amount += 1;
+crates/engine-native-content/src/content/host/step/skills_status.rs-171-                    (d.nature, d.card)
+--
+crates/engine-native-content/src/content/host/step/skills_status.rs-215-                    }
+crates/engine-native-content/src/content/host/step/skills_status.rs-216-                } else {
+crates/engine-native-content/src/content/host/step/skills_status.rs:217:                    match ctx.current_damage() {
+crates/engine-native-content/src/content/host/step/skills_status.rs-218-                        Ok(d) if d.target == self.owner => d.amount.saturating_mul(10),
+crates/engine-native-content/src/content/host/step/skills_status.rs-219-                        Ok(d) => d.amount.saturating_mul(15),
+--
+crates/engine-native-content/src/content/host/step/skills_status.rs-643-            // 天香·受：按本次伤害量摸牌后移除自身
+crates/engine-native-content/src/content/host/step/skills_status.rs-644-            HostBehavior::Tianxiang2 => {
+crates/engine-native-content/src/content/host/step/skills_status.rs:645:                let amount = ctx.current_damage().map(|d| d.amount).unwrap_or(0);
+crates/engine-native-content/src/content/host/step/skills_status.rs-646-                if let Some(def) = ctx.catalog.skill_by_name(SWD_TIANXIANG2_KEY) {
+crates/engine-native-content/src/content/host/step/skills_status.rs-647-                    ctx.core.skills.remove(&(self.owner, def));
+--
+crates/engine-native-content/src/content/host/step/skills_status.rs-872-                            });
+crates/engine-native-content/src/content/host/step/skills_status.rs-873-                        }
+crates/engine-native-content/src/content/host/step/skills_status.rs:874:                        ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/skills_status.rs-875-                        let source = self.targets.first().copied();
+crates/engine-native-content/src/content/host/step/skills_status.rs-876-                        if let Some(src) = source {
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-7-            HostBehavior::YxsFanji => match self.stage {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-8-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:9:                    let Some(EventData::Damage(d)) = ctx
+crates/engine-native-content/src/content/host/step/skills_damage.rs-10-                        .res
+crates/engine-native-content/src/content/host/step/skills_damage.rs-11-                        .frame(ctx.current_frame_id())
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-85-            HostBehavior::HlssXiangxing => {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-86-                let damage_num = ctx
+crates/engine-native-content/src/content/host/step/skills_damage.rs:87:                    .current_damage()
+crates/engine-native-content/src/content/host/step/skills_damage.rs-88-                    .map(|d| d.amount)
+crates/engine-native-content/src/content/host/step/skills_damage.rs-89-                    .or_else(|_| ctx.current_lose_hp())
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-155-                        continue;
+crates/engine-native-content/src/content/host/step/skills_damage.rs-156-                    }
+crates/engine-native-content/src/content/host/step/skills_damage.rs:157:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-158-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-159-                        target,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-298-                    let target = self.targets.remove(0);
+crates/engine-native-content/src/content/host/step/skills_damage.rs-299-                    if ctx.core.player(target).alive {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:300:                        ctx.emit(EventData::Damage(crate::event::DamageData {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-301-                            source: Some(self.owner),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-302-                            target,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-321-                let frame = ctx.current_frame_id();
+crates/engine-native-content/src/content/host/step/skills_damage.rs-322-                if let Some(f) = ctx.res.frame_mut(frame) {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:323:                    if let EventData::Damage(d) = &mut f.data {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-324-                        d.amount = d.amount.saturating_add(1);
+crates/engine-native-content/src/content/host/step/skills_damage.rs-325-                        if d.nature == crate::event::DamageNature::Normal {
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-416-                    {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-417-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/skills_damage.rs:418:                        if let EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-419-                            d.redirect_chain.push(d.target);
+crates/engine-native-content/src/content/host/step/skills_damage.rs-420-                            d.target = target;
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-552-                    });
+crates/engine-native-content/src/content/host/step/skills_damage.rs-553-                    if theirs_n < mine_n {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:554:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-555-                            None,
+crates/engine-native-content/src/content/host/step/skills_damage.rs-556-                            target,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-592-                            // 弃权：受 1 点伤害（来源 = 使用者，牌归因 = 手里剑）
+crates/engine-native-content/src/content/host/step/skills_damage.rs-593-                            let source = Some(self.owner);
+crates/engine-native-content/src/content/host/step/skills_damage.rs:594:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-595-                                source,
+crates/engine-native-content/src/content/host/step/skills_damage.rs-596-                                t,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-636-                    if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+crates/engine-native-content/src/content/host/step/skills_damage.rs-637-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:638:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-639-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-640-                                t,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-733-                            }
+crates/engine-native-content/src/content/host/step/skills_damage.rs-734-                            if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:735:                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-736-                                    Some(self.owner),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-737-                                    t,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-753-                };
+crates/engine-native-content/src/content/host/step/skills_damage.rs-754-                if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:755:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-756-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-757-                        t,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-845-                            }
+crates/engine-native-content/src/content/host/step/skills_damage.rs-846-                            if ctx.core.player(self.owner).alive {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:847:                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/skills_damage.rs-848-                                    Some(t),
+crates/engine-native-content/src/content/host/step/skills_damage.rs-849-                                    self.owner,
+--
+crates/engine-native-content/src/content/host/step/skills_damage.rs-878-                    .res
+crates/engine-native-content/src/content/host/step/skills_damage.rs-879-                    .frame(frame_id)
+crates/engine-native-content/src/content/host/step/skills_damage.rs:880:                    .is_some_and(|frame| matches!(frame.data, EventData::Damage(_)));
+crates/engine-native-content/src/content/host/step/skills_damage.rs-881-                if is_damage {
+crates/engine-native-content/src/content/host/step/skills_damage.rs:882:                    ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/skills_damage.rs-883-                    Flow::Done
+crates/engine-native-content/src/content/host/step/skills_damage.rs-884-                } else {
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-34-            // 禳星：自己受到未防止伤害 / 自己失去体力
+crates/engine-native-content/src/content/host/filtering/common.rs-35-            HostBehavior::HlssXiangxing => match event {
+crates/engine-native-content/src/content/host/filtering/common.rs:36:                EventData::Damage(d) => d.target == owner && !d.prevented,
+crates/engine-native-content/src/content/host/filtering/common.rs-37-                EventData::LoseHp { player, .. } => *player == owner,
+crates/engine-native-content/src/content/host/filtering/common.rs-38-                _ => false,
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-40-            // 隐月：自己受到未防止伤害（前置窗）
+crates/engine-native-content/src/content/host/filtering/common.rs-41-            HostBehavior::HlssYueyin => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:42:                EventData::Damage(d) if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/common.rs-43-            HostBehavior::HlssFengqi => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs-44-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-65-                        && ctx.state.player(owner).mbqianlong_marks < 99
+crates/engine-native-content/src/content/host/filtering/common.rs-66-                }
+crates/engine-native-content/src/content/host/filtering/common.rs:67:                EventData::Damage(d) => {
+crates/engine-native-content/src/content/host/filtering/common.rs-68-                    ctx.state.player(owner).mbqianlong_marks < 99
+crates/engine-native-content/src/content/host/filtering/common.rs-69-                        && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-105-            // 反击：自己为伤害承受者、手牌有【杀】、伤害载体为【杀】或【决斗】
+crates/engine-native-content/src/content/host/filtering/common.rs-106-            HostBehavior::YxsFanji => match event {
+crates/engine-native-content/src/content/host/filtering/common.rs:107:                EventData::Damage(d) if d.target == owner => {
+crates/engine-native-content/src/content/host/filtering/common.rs-108-                    let has_sha = ctx
+crates/engine-native-content/src/content/host/filtering/common.rs-109-                        .state
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-148-            // 狂骨：自己为伤害来源、距离 ≤1 且伤害 >0
+crates/engine-native-content/src/content/host/filtering/common.rs-149-            HostBehavior::FzXinKuanggu => match event {
+crates/engine-native-content/src/content/host/filtering/common.rs:150:                EventData::Damage(d) if d.source == Some(owner) && d.amount > 0 => {
+crates/engine-native-content/src/content/host/filtering/common.rs-151-                    let dist = ctx.state.computed_distance(ctx.catalog, owner, d.target);
+crates/engine-native-content/src/content/host/filtering/common.rs-152-                    dist <= 1
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-195-            // 循梦：自己为伤害来源、伤害载体为【杀】且非铁索传导
+crates/engine-native-content/src/content/host/filtering/common.rs-196-            HostBehavior::Xunmeng => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:197:                EventData::Damage(d) if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-198-                    && !d.from_chain
+crates/engine-native-content/src/content/host/filtering/common.rs-199-                    && d.card.is_some_and(|c| ctx.catalog.card_kind(c).is_sha_like())),
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-214-            // 让节：自己为该伤害承受者且未防止
+crates/engine-native-content/src/content/host/filtering/common.rs-215-            HostBehavior::Rangjie => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:216:                EventData::Damage(d) if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/common.rs-217-            HostBehavior::Reguhuo => false,
+crates/engine-native-content/src/content/host/filtering/common.rs-218-            // 魔化：自己进入濒死
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-267-            // 轩辕剑·伤增：自己是伤害来源且未横置伤害
+crates/engine-native-content/src/content/host/filtering/common.rs-268-            HostBehavior::XuanyuanjianDamage => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:269:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-270-                    if d.source == Some(owner) && !d.prevented && !d.from_chain),
+crates/engine-native-content/src/content/host/filtering/common.rs-271-            // 轩辕剑·反噬：自己是伤害来源且本次加伤生效（标记位）
+crates/engine-native-content/src/content/host/filtering/common.rs-272-            HostBehavior::XuanyuanjianBacklash => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:273:                EventData::Damage(d) if d.source == Some(owner) && ctx.state.turn.xuanyuanjian_marked),
+crates/engine-native-content/src/content/host/filtering/common.rs-274-            // 轩辕：**自己回合**的阶段结束、有黑桃牌且弃牌堆有【轩辕剑】
+crates/engine-native-content/src/content/host/filtering/common.rs-275-            //（上游 trigger 为 `{ player: 'phaseEnd' }` ⇒ 只在自己回合的每个阶段结束触发）
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-398-            // 天香：自己受到未防止伤害且手中有红桃牌
+crates/engine-native-content/src/content/host/filtering/common.rs-399-            HostBehavior::Tianxiang => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:400:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-401-            if d.target == owner
+crates/engine-native-content/src/content/host/filtering/common.rs-402-                && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-407-            // 天香·受：自己是该伤害的承受者
+crates/engine-native-content/src/content/host/filtering/common.rs-408-            HostBehavior::Tianxiang2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:409:                EventData::Damage(d) if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/common.rs-410-            HostBehavior::Songci => false,
+crates/engine-native-content/src/content/host/filtering/common.rs-411-            // 清正：自己出牌阶段开始且手牌非空
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-449-            // 悲歌：伤害由杀造成、受伤者在场、持有者有牌
+crates/engine-native-content/src/content/host/filtering/common.rs-450-            HostBehavior::YunchouBeige => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:451:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-452-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-453-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-489-            // 红莲：受到来源为其他角色的伤害且来源有红牌
+crates/engine-native-content/src/content/host/filtering/common.rs-490-            HostBehavior::YunchouHonglian => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:491:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-492-            if d.target == owner && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-493-                && d.source.is_some() && d.source != Some(owner)
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-503-            // 纵火：自己造成的非火伤害（前置窗）
+crates/engine-native-content/src/content/host/filtering/common.rs-504-            HostBehavior::YunchouZonghuo => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:505:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-506-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-507-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-510-            // 烧营：自己造成的火伤害
+crates/engine-native-content/src/content/host/filtering/common.rs-511-            HostBehavior::YunchouShaoying => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:512:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-513-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-514-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-520-            // 雅量：自己造成或受到伤害，双方存活且异人
+crates/engine-native-content/src/content/host/filtering/common.rs-521-            HostBehavior::YunchouYaliang => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:522:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-523-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-524-                    && (d.source == Some(owner) || d.target == owner)
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-529-            // 戏才：自己受到有牌伤害（可选确认门走 trigger_meta optional）
+crates/engine-native-content/src/content/host/filtering/common.rs-530-            HostBehavior::YunchouXicai => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:531:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-532-                if d.target == owner && !d.prevented && d.amount > 0 && d.card.is_some()),
+crates/engine-native-content/src/content/host/filtering/common.rs-533-            // 狂骨·变体：自己造成伤害；满血时要求目标攻击距离 >1（受伤
+crates/engine-native-content/src/content/host/filtering/common.rs-534-            // 恒真——回复分支在效果内自检）
+crates/engine-native-content/src/content/host/filtering/common.rs-535-            HostBehavior::YunchouDiykuanggu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:536:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-537-                if d.source == Some(owner) && !d.prevented && d.amount > 0 && d.target != owner
+crates/engine-native-content/src/content/host/filtering/common.rs-538-                    && (ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
+crates/engine-native-content/src/content/host/filtering/common.rs-539-                        || ctx.state.seat_distance(d.target, owner) > 1)),
+crates/engine-native-content/src/content/host/filtering/common.rs-540-            HostBehavior::ShaDamageForceDiscard => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:541:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-542-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-543-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-566-            HostBehavior::GujianFeibiaoCard => false,
+crates/engine-native-content/src/content/host/filtering/common.rs-567-            HostBehavior::JinlianzhuCancel => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:568:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-569-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-570-                    && ctx.state.player(owner).hand.iter()
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-572-            HostBehavior::MoshouImmunity => false,
+crates/engine-native-content/src/content/host/filtering/common.rs-573-            HostBehavior::SanjianWeaponDamage => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:574:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-575-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-576-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-603-                EventData::Phase { player, begin: false, .. } if *player == owner),
+crates/engine-native-content/src/content/host/filtering/common.rs-604-            HostBehavior::GujianFoodGudonggeng => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:605:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-606-                if d.target == owner && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-607-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-641-                if *player == owner),
+crates/engine-native-content/src/content/host/filtering/common.rs-642-            HostBehavior::GwentKunenState => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:643:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-644-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/common.rs-645-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-694-                if *player == owner),
+crates/engine-native-content/src/content/host/filtering/common.rs-695-            HostBehavior::WudianFeidan => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:696:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-697-            if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-698-                && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-705-                })),
+crates/engine-native-content/src/content/host/filtering/common.rs-706-            HostBehavior::WudianGuangshuDiamond => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:707:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-708-                if d.source == Some(owner) && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/common.rs-709-            HostBehavior::WudianGuangshuHeart => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:710:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-711-                if d.target == owner && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/common.rs-712-            HostBehavior::WudianJidong => matches!(event,
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-715-                    && !ctx.state.player(owner).face_down),
+crates/engine-native-content/src/content/host/filtering/common.rs-716-            HostBehavior::WudianMengji => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:717:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-718-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-719-                    && ctx.state.player(owner).hujia == 0
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-725-                if *player == owner && ctx.state.player(owner).pingzhang_count > 0),
+crates/engine-native-content/src/content/host/filtering/common.rs-726-            HostBehavior::WudianPingzhang => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:727:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-728-            if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/common.rs-729-                && ctx.state.player(owner).alive
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-748-                    && ctx.state.player(owner).qianggu_active),
+crates/engine-native-content/src/content/host/filtering/common.rs-749-            HostBehavior::WudianShenqiang => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:750:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-751-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/common.rs-752-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-754-                    && ctx.state.turn.current == owner),
+crates/engine-native-content/src/content/host/filtering/common.rs-755-            HostBehavior::WudianShihuo => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:756:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-757-                if d.nature == crate::event::DamageNature::Fire
+crates/engine-native-content/src/content/host/filtering/common.rs-758-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-770-                if *player == owner),
+crates/engine-native-content/src/content/host/filtering/common.rs-771-            HostBehavior::WudianZhiyuan => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:772:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-773-                if d.source == Some(owner) && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/common.rs-774-            HostBehavior::WudianZhucheng => matches!(event,
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-855-            HostBehavior::BossChiyi => wing_round_gate(ctx, owner, event, 3),
+crates/engine-native-content/src/content/host/filtering/common.rs-856-            HostBehavior::BossChiyiMark => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:857:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-858-                if d.target == owner && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/common.rs-859-            HostBehavior::BossBaiyi => {
+--
+crates/engine-native-content/src/content/host/filtering/common.rs-867-            }
+crates/engine-native-content/src/content/host/filtering/common.rs-868-            HostBehavior::BossBaiyiThunder => matches!(event,
+crates/engine-native-content/src/content/host/filtering/common.rs:869:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/common.rs-870-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/common.rs-871-                    && d.nature == crate::event::DamageNature::Thunder
+--
+crates/engine-native-content/src/content/host/step/gwent.rs-29-                };
+crates/engine-native-content/src/content/host/step/gwent.rs-30-                if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/gwent.rs:31:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/gwent.rs-32-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/gwent.rs-33-                        t,
+--
+crates/engine-native-content/src/content/host/step/gwent.rs-229-            HostBehavior::GwentKunenState => {
+crates/engine-native-content/src/content/host/step/gwent.rs-230-                // 防止此次普通伤害并按次数扣减计数，归零移除状态
+crates/engine-native-content/src/content/host/step/gwent.rs:231:                ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/gwent.rs-232-                food_tick(ctx, self.owner, &self.def_key);
+crates/engine-native-content/src/content/host/step/gwent.rs-233-                Flow::Done
+--
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-40-                //（prevented 直写=碎盾/急冻先例）。
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-41-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/xianjian_status.rs:42:                    ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-43-                    Flow::Done
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-44-                }
+--
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-91-                    } else {
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-92-                        ctx.core.player_mut(self.owner).ya_count = 0;
+crates/engine-native-content/src/content/host/step/xianjian_status.rs:93:                        let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-94-                        d.amount = d.amount.saturating_sub(1);
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-95-                    }
+--
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-107-                    } else {
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-108-                        ctx.core.player_mut(self.owner).song_count = 0;
+crates/engine-native-content/src/content/host/step/xianjian_status.rs:109:                        ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-110-                    }
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-111-                    Flow::Done
+--
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-131-                // 窗口直写帧量=猛击同机制）。
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-132-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/xianjian_status.rs:133:                    ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-134-                    Flow::Done
+crates/engine-native-content/src/content/host/step/xianjian_status.rs-135-                }
+--
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-10-impl SkillBehavior for YaoWuBehavior {
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-11-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs:12:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-13-            if d.target == owner
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-14-                && !d.prevented
+--
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-26-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-27-        let source = match event {
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs:28:            EventData::Damage(d) => d.source.expect("filtered"),
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-29-            _ => unreachable!(),
+crates/engine-native-content/src/content/standard/skills/yao_wu.rs-30-        };
+--
+crates/engine-native-content/src/content/host/step/hearth.rs-86-                            .collect();
+crates/engine-native-content/src/content/host/step/hearth.rs-87-                        if hand.is_empty() {
+crates/engine-native-content/src/content/host/step/hearth.rs:88:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/hearth.rs-89-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/hearth.rs-90-                                t,
+--
+crates/engine-native-content/src/content/host/step/hearth.rs-135-                        let dmg = 2 - picked.len() as u32;
+crates/engine-native-content/src/content/host/step/hearth.rs-136-                        if dmg > 0 {
+crates/engine-native-content/src/content/host/step/hearth.rs:137:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/hearth.rs-138-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/hearth.rs-139-                                t,
+--
+crates/engine-native-content/src/content/host/step/wudian_recovery.rs-275-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/wudian_recovery.rs-276-                    let (num, hurt) = {
+crates/engine-native-content/src/content/host/step/wudian_recovery.rs:277:                        let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/wudian_recovery.rs-278-                        d.prevented = true;
+crates/engine-native-content/src/content/host/step/wudian_recovery.rs-279-                        (d.amount, d.target)
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-96-                    };
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-97-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:98:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-99-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-100-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-187-                        return Flow::Done;
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-188-                    }
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:189:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-190-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-191-                        t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-312-                        .collect();
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-313-                    if shans.is_empty() {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:314:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-315-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-316-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-415-                    };
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-416-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:417:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-418-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-419-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-518-                        return Flow::Done;
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-519-                    }
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:520:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-521-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-522-                        t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-572-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-573-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:574:                            crate::event::EventData::Damage(d) => Some(d.target),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-575-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-576-                        });
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-654-                    if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-655-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:656:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-657-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-658-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-765-                    });
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-766-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs:767:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-768-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_costs.rs-769-                            t,
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-86-                    && (ctx.state.player(owner).hp as u32) < ctx.state.player(owner).max_hp),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-87-            HostBehavior::XianjianNingbin => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:88:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-89-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-90-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-100-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-101-            HostBehavior::XianjianTxianqu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:102:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-103-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-104-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-123-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-124-            HostBehavior::XianjianCtianfu2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:125:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-126-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-127-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-156-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-157-            HostBehavior::XianjianHushaCount => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:158:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-159-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-160-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-226-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-227-            HostBehavior::XianjianPoyun => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:228:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-229-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-230-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-282-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-283-            HostBehavior::XianjianSheying => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:284:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-285-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-286-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-311-                        .any(|p| ctx.state.player(p).wangyou3_round != 0)),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-312-            HostBehavior::XianjianWangyou2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:313:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-314-                if !d.prevented && d.amount > 0 && ctx.state.player(d.target).alive),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-315-            HostBehavior::XianjianXjzhimeng => {
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-353-            }
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-354-            HostBehavior::XianjianZhangmu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:355:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-356-            if d.target == owner
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-357-                && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-383-                    && !ctx.state.player(*player).hand.is_empty()),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-384-            HostBehavior::XianjianAnwugu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:385:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-386-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-387-                    && d.target != owner
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-418-            // 冰心：任意体力为 1 的角色阶段结束（含自己）,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-419-            HostBehavior::XianjianSong => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:420:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-421-                if d.source == Some(owner) && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-422-            // 御风：失去手牌（弃置路径含手牌）且手牌<2、本回合<2 次,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-423-            HostBehavior::XianjianTianshe => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:424:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-425-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-426-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-429-            // 蛇蜕·息：你造成属性伤害（未防止有量）且已受伤,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-430-            HostBehavior::XianjianTianshe2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:431:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-432-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-433-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-444-            // 玄炎·燃：你的火属性伤害（非传导）,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-445-            HostBehavior::XianjianXuanyan2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:446:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-447-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-448-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-452-            // 玄炎·烬：你造成火属性伤害（未防止有量）,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-453-            HostBehavior::XianjianXuanyan3 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:454:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-455-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-456-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-459-            // 凝冰：你受到雷属性伤害（未防止有量）
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-460-            HostBehavior::XianjianYa => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:461:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-462-                if d.target == owner && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-463-            HostBehavior::XianjianLuanjian2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/xianjian.rs:464:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-465-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/xianjian.rs-466-                    && !d.prevented
+--
+crates/engine-native-kernel/src/rvm_named.rs-17-    pub event_source: Option<PlayerId>,
+crates/engine-native-kernel/src/rvm_named.rs-18-    pub event_card: Option<u32>,
+crates/engine-native-kernel/src/rvm_named.rs:19:    pub event_amount: u32,
+crates/engine-native-kernel/src/rvm_named.rs-20-    pub phase: Option<Phase>,
+crates/engine-native-kernel/src/rvm_named.rs-21-    pub nature: Option<DamageNature>,
+--
+crates/engine-native-kernel/src/rvm_named.rs-808-        Atom::Fire => v.nature == Some(DamageNature::Fire),
+crates/engine-native-kernel/src/rvm_named.rs-809-        Atom::Thunder => v.nature == Some(DamageNature::Thunder),
+crates/engine-native-kernel/src/rvm_named.rs:810:        Atom::Damage => v.kind == 1 || v.nature.is_some() || v.event_amount > 0,
+crates/engine-native-kernel/src/rvm_named.rs-811-        // 阶段帧带自己的阶段。其他帧（伤害、用牌）不带阶段，读当前回合阶段。
+crates/engine-native-kernel/src/rvm_named.rs-812-        Atom::PhasePlay => phase_is(ctx, v, Phase::Play),
+--
+crates/engine-native-kernel/src/rvm_named.rs-894-        Atom::CanDiscard(n) => me.hand.len() + me.equips.len() >= *n as usize,
+crates/engine-native-kernel/src/rvm_named.rs-895-        Atom::CountAtLeast(n) => {
+crates/engine-native-kernel/src/rvm_named.rs:896:            v.event_amount >= *n as u32
+crates/engine-native-kernel/src/rvm_named.rs-897-                || me.hand.len() >= *n as usize
+crates/engine-native-kernel/src/rvm_named.rs-898-                || me.turn_damage >= *n
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-38-            // 待行·吸收：自己受伤后且计数 >0
+crates/engine-native-content/src/content/host/filtering/swd.rs-39-            HostBehavior::SwdDaixing3 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:40:                EventData::Damage(d) if d.target == owner && !d.prevented
+crates/engine-native-content/src/content/host/filtering/swd.rs-41-                    && ctx.state.player(owner).daixing_count > 0),
+crates/engine-native-content/src/content/host/filtering/swd.rs-42-            HostBehavior::SwdJuxi => false,
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-47-            // 破舟：自己受伤后
+crates/engine-native-content/src/content/host/filtering/swd.rs-48-            HostBehavior::SwdPozhou => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:49:                EventData::Damage(d) if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/swd.rs-50-            HostBehavior::SwdPozhou2 => false,
+crates/engine-native-content/src/content/host/filtering/swd.rs-51-            // 陷阱：主动技
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-63-            // 陷阱·取回：自己受伤后且陷阱表非空
+crates/engine-native-content/src/content/host/filtering/swd.rs-64-            HostBehavior::SwdSxianjingDamage => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:65:                EventData::Damage(d) if d.target == owner && !d.prevented
+crates/engine-native-content/src/content/host/filtering/swd.rs-66-                    && !ctx.state.player(owner).sxianjing_traps.is_empty()),
+crates/engine-native-content/src/content/host/filtering/swd.rs-67-            HostBehavior::SwdGuxing => false,
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-142-            // 义山：自己受伤且有「仍在他处」的已失去牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-143-            HostBehavior::SwdYishan => match event {
+crates/engine-native-content/src/content/host/filtering/swd.rs:144:                EventData::Damage(d) if d.target == owner && !d.prevented => ctx
+crates/engine-native-content/src/content/host/filtering/swd.rs-145-                    .state
+crates/engine-native-content/src/content/host/filtering/swd.rs-146-                    .player(owner)
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-172-            // 有待蔓延目标（同一伤害事件的两面按状态区分）
+crates/engine-native-content/src/content/host/filtering/swd.rs-173-            HostBehavior::SwdShenyan => match event {
+crates/engine-native-content/src/content/host/filtering/swd.rs:174:                EventData::Damage(d) if d.source == Some(owner) && !d.prevented => {
+crates/engine-native-content/src/content/host/filtering/swd.rs-175-                    if !ctx.state.player(owner).shenyan_used {
+crates/engine-native-content/src/content/host/filtering/swd.rs-176-                        d.nature == crate::event::DamageNature::Fire
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-184-            // 孤行·计数：孤行杀窗口内自己造成伤害
+crates/engine-native-content/src/content/host/filtering/swd.rs-185-            HostBehavior::SwdGuxing3 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:186:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-187-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-188-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-263-            // 承剑：其他角色受到杀伤害（来源≠持有者）
+crates/engine-native-content/src/content/host/filtering/swd.rs-264-            HostBehavior::SwdChengjian => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:265:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-266-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-267-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-271-            // 缚斧：持有者对目标用杀伤害前置（有武器）
+crates/engine-native-content/src/content/host/filtering/swd.rs-272-            HostBehavior::SwdJufu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:273:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-274-            if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-275-                && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-280-            // 花镜：持有者造成的锦囊牌伤害
+crates/engine-native-content/src/content/host/filtering/swd.rs-281-            HostBehavior::SwdHuajing => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:282:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-283-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-284-                    && d.card.map(|c| {
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-290-            // 护盾：持有者造成伤害后自己无护甲
+crates/engine-native-content/src/content/host/filtering/swd.rs-291-            HostBehavior::SwdHudun => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:292:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-293-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-294-                    && ctx.state.player(owner).hujia == 0),
+crates/engine-native-content/src/content/host/filtering/swd.rs-295-            // 破星：持有者对体力高于自己的目标造成伤害
+crates/engine-native-content/src/content/host/filtering/swd.rs-296-            HostBehavior::SwdPoxing => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:297:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-298-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-299-                    && d.target != owner
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-312-            // 道法：其他角色受伤且来源有牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-313-            HostBehavior::SwdDaofa => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:314:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-315-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-316-                    && d.source.is_some()
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-319-            // 玉鳞：持有者即将受伤且手/装备区有装备牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-320-            HostBehavior::SwdYulin => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:321:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-322-            if d.target == owner && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-323-                && (!ctx.state.player(owner).equips.is_empty()
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-333-            // 屠阵：自己伤害他人结算后且其有非基本手牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-334-            HostBehavior::SwdTuzhen => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:335:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-336-            if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-337-                && d.target != owner
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-393-            // 逆攻积攒：自己受到真实伤害
+crates/engine-native-content/src/content/host/filtering/swd.rs-394-            HostBehavior::SwdNigongAccumulate => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:395:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-396-                if d.target == owner && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/swd.rs-397-            // 逆攻发动：无触发面
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-401-            // 朱雀之璋：受他人伤害结算后且手持（来源存活且非自己）
+crates/engine-native-content/src/content/host/filtering/swd.rs-402-            HostBehavior::SwdZhuquezhizhangHeld => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:403:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-404-                if d.target == owner && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-405-                    && d.source.is_some()
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-419-            // 玄武之璜：自己造成伤害结算后且手持且受伤
+crates/engine-native-content/src/content/host/filtering/swd.rs-420-            HostBehavior::SwdXuanwuzhihuangHeld => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:421:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-422-                if d.source == Some(owner) && !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-423-                    && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-447-            // 神草结：锦囊伤害且自己是受伤者或来源、手持神草结
+crates/engine-native-content/src/content/host/filtering/swd.rs-448-            HostBehavior::SwdShencaojieGuard => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:449:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-450-                if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-451-                    && d.card.map(|c| {
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-535-            // 隳延：自己造成伤害、对方有装备
+crates/engine-native-content/src/content/host/filtering/swd.rs-536-            HostBehavior::SwdSuiyan => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:537:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-538-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-539-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-547-            // 破浪：自己造成伤害、对方有装备
+crates/engine-native-content/src/content/host/filtering/swd.rs-548-            HostBehavior::SwdPolang => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:549:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-550-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-551-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-581-            // 取消+失去体力在机器步写回）
+crates/engine-native-content/src/content/host/filtering/swd.rs-582-            HostBehavior::SwdXuying => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:583:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-584-                if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/swd.rs-585-            // 乖戾：自己杀伤害（非铁索传导）——Before 面 +1 / After 面弃两张
+crates/engine-native-content/src/content/host/filtering/swd.rs-586-            HostBehavior::SwdGuaili => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:587:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-588-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-589-                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-592-            // 敷衍·护甲面：自己受伤结算后（无护甲目标候选在机器步求取）
+crates/engine-native-content/src/content/host/filtering/swd.rs-593-            HostBehavior::SwdFuyan => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:594:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-595-                if d.target == owner && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/swd.rs-596-            // 凌波·恒爱面：闪的响应/使用结算（双事件；frequent 摸 2）
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-606-            // 血裔·Miles 面：自己受到伤害前置
+crates/engine-native-content/src/content/host/filtering/swd.rs-607-            HostBehavior::SwdMilesXueyi => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:608:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-609-                if d.target == owner && !d.prevented),
+crates/engine-native-content/src/content/host/filtering/swd.rs-610-            // 小莫雨·山小小面：自己造成伤害结算后（每回合一次经 inst 检查）
+crates/engine-native-content/src/content/host/filtering/swd.rs-611-            HostBehavior::SwdXiaomoyu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:612:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-613-                if d.source == Some(owner) && !d.prevented && d.amount > 0),
+crates/engine-native-content/src/content/host/filtering/swd.rs-614-            // 破茧·齐面：自己弃牌后手牌为空（上游 loseEnd≈弃置面登记差异）
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-640-                let pl = ctx.state.player(owner);
+crates/engine-native-content/src/content/host/filtering/swd.rs-641-                matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:642:                    EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-643-                    if d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-644-                        && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-675-            // trigger: {source: "damageBegin"} 同口径）且 off_court 有牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-676-            HostBehavior::SwdLmazui2 => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:677:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-678-                if d.source == Some(owner) && !d.prevented
+crates/engine-native-content/src/content/host/filtering/swd.rs-679-                    && !ctx.state.player(owner).off_court.is_empty()),
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-689-            // 荡平：自己造成伤害（真实、有受害存活）
+crates/engine-native-content/src/content/host/filtering/swd.rs-690-            HostBehavior::SwdDangping => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:691:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-692-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-693-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-705-            // 极谋·姬良面：自己受伤（真实）且回合非自己
+crates/engine-native-content/src/content/host/filtering/swd.rs-706-            HostBehavior::SwdJqimou => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:707:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-708-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-709-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-736-            // 凝弦：自己受伤结算后（he 有黑色牌）
+crates/engine-native-content/src/content/host/filtering/swd.rs-737-            HostBehavior::SwdNingxian => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:738:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-739-            if d.target == owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-740-                && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-758-            // 破阵：自己受伤结算后（有来源、双方存活、手牌数不同）
+crates/engine-native-content/src/content/host/filtering/swd.rs-759-            HostBehavior::SwdPozhen => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:760:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-761-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-762-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-790-            // 因果：他人受到有来源伤害前置（来源≠自己、自己 he 有牌）
+crates/engine-native-content/src/content/host/filtering/swd.rs-791-            HostBehavior::SwdYinguo => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:792:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-793-                if d.target != owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-794-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-807-            HostBehavior::SwdHuajin2 => {
+crates/engine-native-content/src/content/host/filtering/swd.rs-808-                matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:809:                    EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-810-                    if d.source == Some(owner) && !d.prevented
+crates/engine-native-content/src/content/host/filtering/swd.rs-811-                ) || matches!(event,
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-816-            // 在 filter 掷点，原生 filter 只读故效果步掷——同净效）
+crates/engine-native-content/src/content/host/filtering/swd.rs-817-            HostBehavior::SwdMinjing => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:818:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-819-            if d.target == owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-820-                && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-832-            // 烈刃：自己以杀造成真实伤害且受害者存活有牌
+crates/engine-native-content/src/content/host/filtering/swd.rs-833-            HostBehavior::SwdLieren => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:834:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-835-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-836-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-883-                    .unwrap_or(false);
+crates/engine-native-content/src/content/host/filtering/swd.rs-884-                matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:885:                    EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-886-                    if d.target == owner && !d.prevented && in_place)
+crates/engine-native-content/src/content/host/filtering/swd.rs-887-            }
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-948-            // 观虎：自己杀伤害结算后、对方有牌（手/装备任一）
+crates/engine-native-content/src/content/host/filtering/swd.rs-949-            HostBehavior::SwdGuanhu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:950:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-951-                if d.source == Some(owner)
+crates/engine-native-content/src/content/host/filtering/swd.rs-952-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-962-            // 挥琪：自己受伤结算后（hp<maxHp 门在 filter——X=损失值）
+crates/engine-native-content/src/content/host/filtering/swd.rs-963-            HostBehavior::SwdHuiqi => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:964:                EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-965-                if d.target == owner
+crates/engine-native-content/src/content/host/filtering/swd.rs-966-                    && !d.prevented
+--
+crates/engine-native-content/src/content/host/filtering/swd.rs-991-            // 朱羽：横置角色受到非传导伤害且持有者有红牌（手/装备区）
+crates/engine-native-content/src/content/host/filtering/swd.rs-992-            HostBehavior::SwdZhuyu => matches!(event,
+crates/engine-native-content/src/content/host/filtering/swd.rs:993:            EventData::Damage(d)
+crates/engine-native-content/src/content/host/filtering/swd.rs-994-            if !d.prevented && d.amount > 0
+crates/engine-native-content/src/content/host/filtering/swd.rs-995-                && !d.from_chain
+--
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-41-                    }
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-42-                    if ctx.core.player(t).hand.is_empty() {
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs:43:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-44-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-45-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-79-                        };
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-80-                        self.targets.remove(0);
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs:81:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-82-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_jiguan_cards.rs-83-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-123-                    if options.is_empty() {
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-124-                        // 无闪：直接结算 1 点伤害（机关凤同款收口）
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs:125:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-126-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-127-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-177-                        }
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-178-                    } else {
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs:179:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-180-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-181-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-237-                        }
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-238-                    } else {
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs:239:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-240-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_zhenfa_cards.rs-241-                            t,
+--
+crates/engine-native-content/src/content/host/step/gujian.rs-120-                        .collect();
+crates/engine-native-content/src/content/host/step/gujian.rs-121-                    if options.is_empty() {
+crates/engine-native-content/src/content/host/step/gujian.rs:122:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/gujian.rs-123-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/gujian.rs-124-                            t,
+--
+crates/engine-native-content/src/content/host/step/gujian.rs-260-            HostBehavior::GujianFoodGudonggeng => {
+crates/engine-native-content/src/content/host/step/gujian.rs-261-                // 受到杀伤害：伤害 -1；一次性状态，触发即移除
+crates/engine-native-content/src/content/host/step/gujian.rs:262:                let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/gujian.rs-263-                d.amount = d.amount.saturating_sub(1);
+crates/engine-native-content/src/content/host/step/gujian.rs-264-                food_remove(ctx, self.owner, &self.def_key);
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-20-                    continue;
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-21-                }
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:22:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-23-                    Some(self.owner),
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-24-                    t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-162-                    }
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-163-                    self.card = Some(t as CardId);
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:164:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-165-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-166-                        t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-179-                if let Some(t) = self.target {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-180-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:181:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-182-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-183-                            t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-291-                        if let Some(t) = self.cards.first().map(|x| *x as PlayerId) {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-292-                            if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:293:                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-294-                                    Some(self.owner),
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-295-                                    t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-357-                        let t = *t;
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-358-                        if t != self.owner && ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:359:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-360-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-361-                                t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-375-                let amount = match ctx.res.frame(ctx.current_frame_id()) {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-376-                    Some(f) => match &f.data {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:377:                        EventData::Damage(d) => d.amount,
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-378-                        _ => 0,
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-379-                    },
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-403-                {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-404-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:405:                    if let EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-406-                        d.prevented = true;
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-407-                    }
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-416-                if ctx.core.rng.gen_range(100) < 50 {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-417-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:418:                    if let EventData::Damage(dm) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-419-                        dm.amount += 1;
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-420-                    }
+--
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-436-                };
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-437-                let _ = sid;
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs:438:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-439-                    dmg_src, self.owner, 1, nature, None,
+crates/engine-native-content/src/content/host/step/xianjian_damage.rs-440-                )));
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-12-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-13-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:14:                            crate::event::EventData::Damage(d) => Some(d.target),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-15-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-16-                        })
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-96-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-97-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:98:                            crate::event::EventData::Damage(d) => Some(d.target),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-99-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-100-                        })
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-173-                        });
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-174-                    }
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:175:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-176-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-177-                        v,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-187-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-188-                match frame {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:189:                    Some(EventData::Damage(d)) if d.source == Some(self.owner) && !d.prevented => {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:190:                        ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-191-                        Flow::Done
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-192-                    }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-259-                    // 两字段）
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-260-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:261:                    if let crate::event::EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-262-                        let t = d.target;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-263-                        d.target = d.source.expect("filter guarantees source");
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-280-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-281-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:282:                            crate::event::EventData::Damage(d) => Some((d.target, d.source)),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-283-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-284-                        })
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-363-                    };
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-364-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:365:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-366-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-367-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-458-                    }
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-459-                    if ctx.core.player(self.owner).hand.len() >= 8 {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:460:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-461-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-462-                            self.owner,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-479-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-480-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:481:                            crate::event::EventData::Damage(d) => Some(d.target),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-482-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-483-                        });
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-627-                }
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-628-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:629:                if let crate::event::EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-630-                    d.amount = d.amount.saturating_sub(1);
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-631-                }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-639-            HostBehavior::SwdMilesXueyi => {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-640-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:641:                if let crate::event::EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-642-                    d.prevented = true;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-643-                }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-657-                        .map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-658-                        .and_then(|data| match data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:659:                            crate::event::EventData::Damage(d) => Some(d.target),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-660-                            _ => None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-661-                        })
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-722-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-723-                match frame {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:724:                    Some(crate::event::EventData::Damage(d))
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-725-                        if !d.prevented && d.source == Some(self.owner) =>
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-726-                    {
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-738-                        } else {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-739-                            let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:740:                            if let crate::event::EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-741-                                d.amount += 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-742-                            }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-751-            HostBehavior::SwdXuying => {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-752-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:753:                if let crate::event::EventData::Damage(d) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-754-                    d.prevented = true;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-755-                }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-825-                    });
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-826-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:827:                    if let EventData::Damage(dm) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-828-                        dm.amount += 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-829-                        dm.nature = crate::event::DamageNature::Fire;
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-836-            HostBehavior::SwdJufu => {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-837-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:838:                if let EventData::Damage(dm) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-839-                    dm.amount += 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-840-                }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-846-                    if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-847-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:848:                        if let EventData::Damage(dm) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-849-                            dm.amount += 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-850-                        }
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-855-            // 神焰：前置面（+1 并记录蔓延目标）与结算面（逐个蔓延火伤）
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-856-            HostBehavior::SwdShenyan => {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:857:                let (target, amount) = match ctx.current_damage() {
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-858-                    Ok(d) => (d.target, d.amount),
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-859-                    Err(_) => return Flow::Done,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-862-                    // 前置面：火伤 +1、置限定位、记录原目标距离 ≤1 的其他
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-863-                    // 角色（座位序，不含来源与原目标）
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:864:                    ctx.current_damage_mut().amount = amount + 1;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-865-                    let mut pending: Vec<PlayerId> = ctx
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-866-                        .core
+--
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-890-                            continue;
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-891-                        }
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs:892:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-893-                            None,
+crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs-894-                            t,
+--
+crates/engine-native-kernel/src/rvm_bridge/machine.rs-345-                        .unwrap_or(0),
+crates/engine-native-kernel/src/rvm_bridge/machine.rs-346-                    event_card: self.trig.event_card.map(|c| c as u32).unwrap_or(0),
+crates/engine-native-kernel/src/rvm_bridge/machine.rs:347:                    event_amount: self.trig.event_amount,
+crates/engine-native-kernel/src/rvm_bridge/machine.rs-348-                },
+crates/engine-native-kernel/src/rvm_bridge/machine.rs-349-                seats,
+--
+crates/engine-native-content/src/content/host/step/yunchou.rs-206-                    .collect();
+crates/engine-native-content/src/content/host/step/yunchou.rs-207-                for t in seats {
+crates/engine-native-content/src/content/host/step/yunchou.rs:208:                    ctx.emit(crate::event::EventData::Damage(
+crates/engine-native-content/src/content/host/step/yunchou.rs-209-                        crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/yunchou.rs-210-                            Some(self.owner),
+--
+crates/engine-native-content/src/content/host/step/yunchou.rs-364-                    });
+crates/engine-native-content/src/content/host/step/yunchou.rs-365-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/yunchou.rs:366:                    if let EventData::Damage(dm) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/yunchou.rs-367-                        dm.nature = crate::event::DamageNature::Fire;
+crates/engine-native-content/src/content/host/step/yunchou.rs-368-                    }
+--
+crates/engine-native-content/src/content/host/step/yunchou.rs-397-                });
+crates/engine-native-content/src/content/host/step/yunchou.rs-398-                if red {
+crates/engine-native-content/src/content/host/step/yunchou.rs:399:                    ctx.emit(crate::event::EventData::Damage(
+crates/engine-native-content/src/content/host/step/yunchou.rs-400-                        crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/yunchou.rs-401-                            Some(self.owner),
+--
+crates/engine-native-content/src/content/host/step/skills_cards.rs-11-                    if self.cards.is_empty() {
+crates/engine-native-content/src/content/host/step/skills_cards.rs-12-                        // 首次进入：按伤害点数初始化剩余次数
+crates/engine-native-content/src/content/host/step/skills_cards.rs:13:                        let count = ctx.current_damage().map(|d| d.amount).unwrap_or(0);
+crates/engine-native-content/src/content/host/step/skills_cards.rs-14-                        if count == 0 {
+crates/engine-native-content/src/content/host/step/skills_cards.rs-15-                            return Flow::Done;
+--
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-20-                            let i = ctx.core.rng.gen_range(cands.len() as u32) as usize;
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-21-                            let t = cands[i];
+crates/engine-native-content/src/content/host/step/wudian_damage.rs:22:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-23-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-24-                                t,
+--
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-108-                    for t in sorted {
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-109-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/wudian_damage.rs:110:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-111-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/wudian_damage.rs-112-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-373-                    if options.len() < 2 {
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-374-                        // he 不足两张：directfalse → 直接火伤
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs:375:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-376-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-377-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-436-                    } else {
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-437-                        // 取消/无效 → 1 点火伤
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs:438:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-439-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_card_effects.rs-440-                            t,
+--
+crates/engine-native-content/src/content/host/step/jiguan.rs-265-                            .collect();
+crates/engine-native-content/src/content/host/step/jiguan.rs-266-                        if shans.is_empty() {
+crates/engine-native-content/src/content/host/step/jiguan.rs:267:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/jiguan.rs-268-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/jiguan.rs-269-                                t,
+--
+crates/engine-native-content/src/content/host/step/jiguan.rs-297-                            ctx.emit(EventData::CardResponded { card: c, player: t });
+crates/engine-native-content/src/content/host/step/jiguan.rs-298-                        } else if let Some(t) = responder {
+crates/engine-native-content/src/content/host/step/jiguan.rs:299:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/jiguan.rs-300-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/jiguan.rs-301-                                t,
+--
+crates/engine-native-content/src/content/host/step/jiguan.rs-318-                    };
+crates/engine-native-content/src/content/host/step/jiguan.rs-319-                    if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/jiguan.rs:320:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/jiguan.rs-321-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/jiguan.rs-322-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_response_cards.rs-207-                        cards: vec![discarded],
+crates/engine-native-content/src/content/host/step/swd_response_cards.rs-208-                    });
+crates/engine-native-content/src/content/host/step/swd_response_cards.rs:209:                    ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/swd_response_cards.rs-210-                    Flow::Done
+crates/engine-native-content/src/content/host/step/swd_response_cards.rs-211-                }
+--
+crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs-406-                    }
+crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs-407-                    // 上游 content：damage 后 gain
+crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs:408:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs-409-                        Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_equipment_skills.rs-410-                        t,
+--
+crates/engine-native-content/src/content/host/step/swd_status.rs-170-            HostBehavior::SwdMinjing => {
+crates/engine-native-content/src/content/host/step/swd_status.rs-171-                if ctx.core.rng.gen_range(3u32) == 0 {
+crates/engine-native-content/src/content/host/step/swd_status.rs:172:                    let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/host/step/swd_status.rs-173-                    d.amount = d.amount.saturating_sub(1);
+crates/engine-native-content/src/content/host/step/swd_status.rs-174-                }
+--
+crates/engine-native-content/src/content/host/step/swd_status.rs-533-            // 待行·吸收：受伤后递减计数（近似：min(计数, 伤害)）
+crates/engine-native-content/src/content/host/step/swd_status.rs-534-            HostBehavior::SwdDaixing3 => {
+crates/engine-native-content/src/content/host/step/swd_status.rs:535:                let dmg = ctx.current_damage_mut().amount as u8;
+crates/engine-native-content/src/content/host/step/swd_status.rs-536-                let cur = ctx.core.player(self.owner).daixing_count;
+crates/engine-native-content/src/content/host/step/swd_status.rs-537-                ctx.core.player_mut(self.owner).daixing_count = cur.saturating_sub(cur.min(dmg));
+--
+crates/engine-native-content/src/content/host/step/swd_status.rs-546-            // 破舟：受伤后计数累加伤害值
+crates/engine-native-content/src/content/host/step/swd_status.rs-547-            HostBehavior::SwdPozhou => {
+crates/engine-native-content/src/content/host/step/swd_status.rs:548:                let dmg = ctx.current_damage_mut().amount as u8;
+crates/engine-native-content/src/content/host/step/swd_status.rs-549-                ctx.core.player_mut(self.owner).pozhou_count =
+crates/engine-native-content/src/content/host/step/swd_status.rs-550-                    ctx.core.player(self.owner).pozhou_count.saturating_add(dmg);
+--
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-97-                    for t in targets {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-98-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs:99:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-100-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-101-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-225-                    for t in targets {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-226-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs:227:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-228-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-229-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-326-                    });
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-327-                    if targets.len() == 1 {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs:328:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-329-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-330-                            targets[0],
+--
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-335-                    } else {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-336-                        for t in targets {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs:337:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-338-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-339-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-491-                    if let Some(ChoiceOption::Player(t)) = ctx.answer().first().copied() {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-492-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs:493:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-494-                                None,
+crates/engine-native-content/src/content/host/step/swd_damage_multi.rs-495-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-66-                    if matches!(ctx.answer().first(), Some(ChoiceOption::Confirm)) {
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-67-                        if ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs:68:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-69-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-70-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-161-                        }
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-162-                    } else {
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs:163:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-164-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-165-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-180-                        }
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-181-                        _ => {
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs:182:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-183-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_targets.rs-184-                                t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-122-                        .collect();
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-123-                    if candidates.is_empty() {
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs:124:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-125-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-126-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-283-                        // 已含 h 位置）+受 1 伤
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-284-                        ctx.core.player_mut(t).fengyin_active = true;
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs:285:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-286-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-287-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-452-                    let (winner, loser) = if r0 > r1 { (t0, t1) } else { (t1, t0) };
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-453-                    ctx.give_hand_card(self.owner, winner, throw_card);
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs:454:                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-455-                        Some(winner),
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-456-                        loser,
+--
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-605-                    }
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-606-                    if damage {
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs:607:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-608-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_damage_combos.rs-609-                            t,
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-340-            // 逆攻积攒：标记 +amount（上限 4）
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-341-            HostBehavior::SwdNigongAccumulate => {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:342:                if let Some(EventData::Damage(d)) =
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-343-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-344-                {
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-411-            // 朱雀之璋：来源火 1 伤（上游 fire；native 火属性同壳）
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-412-            HostBehavior::SwdZhuquezhizhangHeld => {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:413:                if let Some(EventData::Damage(d)) =
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-414-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-415-                {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-416-                    if let Some(src) = d.source {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-417-                        if ctx.core.player(src).alive {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:418:                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-419-                                Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-420-                                src,
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-495-            // 玄武之璜：回复等量体力（伤害结算帧读 amount，hp<max 门在 filter）
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-496-            HostBehavior::SwdXuanwuzhihuangHeld => {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:497:                if let Some(EventData::Damage(d)) =
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-498-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-499-                {
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-513-            // 造成则伤+1
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-514-            HostBehavior::SwdShencaojieGuard => {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:515:                if let Some(EventData::Damage(dm)) =
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-516-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-517-                {
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-531-                        });
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-532-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:533:                        if let EventData::Damage(d2) = &mut frame.data {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-534-                            if toward_self {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-535-                                d2.amount = d2.amount.saturating_sub(1);
+--
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-587-                    let dmg = lv / 2;
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-588-                    if dmg > 0 && ctx.core.player(t).alive {
+crates/engine-native-content/src/content/host/step/swd_equipment.rs:589:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-590-                            Some(self.owner),
+crates/engine-native-content/src/content/host/step/swd_equipment.rs-591-                            t,
+--
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-9-impl SkillBehavior for WangXiBehavior {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-10-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs:11:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-12-            if d.amount > 0 && !d.prevented
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-13-                && d.source.is_some() && d.source != Some(d.target)
+--
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-19-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-20-        let other = match event {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs:21:            EventData::Damage(d) => {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-22-                if d.target == owner {
+crates/engine-native-content/src/content/standard/skills/wang_xi.rs-23-                    d.source.expect("filtered")
+--
+crates/engine-native-content/src/content/host/step/wudian_status.rs-251-                // 直写帧量——伊籍改目标同机制；上游 trigger.num++ 同口径）。
+crates/engine-native-content/src/content/host/step/wudian_status.rs-252-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/wudian_status.rs:253:                    ctx.current_damage_mut().amount += 1;
+crates/engine-native-content/src/content/host/step/wudian_status.rs-254-                    Flow::Done
+crates/engine-native-content/src/content/host/step/wudian_status.rs-255-                }
+--
+crates/engine-native-content/src/content/standard/skills/pingdeng.rs-56-        if let Some(t) = target {
+crates/engine-native-content/src/content/standard/skills/pingdeng.rs-57-            let amount = if self.emitted == 1 { 2 } else { 1 };
+crates/engine-native-content/src/content/standard/skills/pingdeng.rs:58:            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/pingdeng.rs-59-                None,
+crates/engine-native-content/src/content/standard/skills/pingdeng.rs-60-                t,
+--
+crates/engine-native-content/src/content/standard/skills/zhuxin.rs-49-            }
+crates/engine-native-content/src/content/standard/skills/zhuxin.rs-50-            if let Some(t) = best {
+crates/engine-native-content/src/content/standard/skills/zhuxin.rs:51:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/zhuxin.rs-52-                    Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/zhuxin.rs-53-                    t,
+--
+crates/engine-native-content/src/content/host/step/xianjian_recovery.rs-129-                // 娜支援同款 prevented 直写）+摸 2+回复 1+置本回合已发动。
+crates/engine-native-content/src/content/host/step/xianjian_recovery.rs-130-                HostStage::Act => {
+crates/engine-native-content/src/content/host/step/xianjian_recovery.rs:131:                    ctx.current_damage_mut().prevented = true;
+crates/engine-native-content/src/content/host/step/xianjian_recovery.rs-132-                    ctx.core.turn.txianqu_used = true;
+crates/engine-native-content/src/content/host/step/xianjian_recovery.rs-133-                    ctx.draw_cards(self.owner, 2);
+--
+crates/engine-native-content/src/content/standard/skills/zj_leiji.rs-50-            ctx.to_discard(judged);
+crates/engine-native-content/src/content/standard/skills/zj_leiji.rs-51-            if black {
+crates/engine-native-content/src/content/standard/skills/zj_leiji.rs:52:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/zj_leiji.rs-53-                    Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/zj_leiji.rs-54-                    t,
+--
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-99-            XINGXIA_STAGE_DAMAGE => {
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-100-                let t = self.actor as PlayerId;
+crates/engine-native-content/src/content/standard/skills/xingxia.rs:101:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-102-                    Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-103-                    t,
+--
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-175-                    _ => {
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-176-                        // 放弃弃红 → 1 点火焰伤害
+crates/engine-native-content/src/content/standard/skills/xingxia.rs:177:                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-178-                            Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/xingxia.rs-179-                            t,
+--
+crates/engine-native-content/src/content/standard/skills/renao.rs-44-            let seats = ctx.core.players.len() as PlayerId;
+crates/engine-native-content/src/content/standard/skills/renao.rs-45-            if let Some(t) = (0..seats).find(|&t| t != self.owner && ctx.core.player(t).alive) {
+crates/engine-native-content/src/content/standard/skills/renao.rs:46:                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/renao.rs-47-                    Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/renao.rs-48-                    t,
+--
+crates/engine-native-content/src/content/standard/skills/leizhu.rs-49-                continue;
+crates/engine-native-content/src/content/standard/skills/leizhu.rs-50-            }
+crates/engine-native-content/src/content/standard/skills/leizhu.rs:51:            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/leizhu.rs-52-                Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/leizhu.rs-53-                t,
+--
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-11-impl SkillBehavior for FanKuiBehavior {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-12-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs:13:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-14-            if d.target == owner && !d.prevented && d.amount > 0)
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-15-            && event_damage_source_stealable(ctx, event)
+--
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-18-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-19-        let source = match event {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs:20:            EventData::Damage(d) => d.source,
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-21-            _ => None,
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-22-        };
+--
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-32-fn event_damage_source_stealable(ctx: &QueryCtx<'_>, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-33-    let Some(src) = (match event {
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs:34:        EventData::Damage(d) => d.source,
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-35-        _ => None,
+crates/engine-native-content/src/content/standard/skills/fan_kui.rs-36-    }) else {
+--
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-11-impl SkillBehavior for ZhaoHuoBehavior {
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-12-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs:13:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-14-            if d.source == Some(owner) && d.target != owner && !d.prevented)
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-15-    }
+--
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-34-    }
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-35-    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs:36:        let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-37-        d.nature = crate::event::DamageNature::Fire;
+crates/engine-native-content/src/content/standard/skills/zhao_huo.rs-38-        Flow::Done
+--
+crates/engine-native-content/src/content/standard/skills/xiao_guo.rs-103-                    if ctx.core.player(self.owner).hand.contains(&card) {
+crates/engine-native-content/src/content/standard/skills/xiao_guo.rs-104-                        ctx.discard_from_hand(self.owner, card);
+crates/engine-native-content/src/content/standard/skills/xiao_guo.rs:105:                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-content/src/content/standard/skills/xiao_guo.rs-106-                            Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/xiao_guo.rs-107-                            self.target,
+--
+crates/engine-native-content/src/content/standard/skills/shou_yi.rs-9-impl SkillBehavior for ShouYiBehavior {
+crates/engine-native-content/src/content/standard/skills/shou_yi.rs-10-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/shou_yi.rs:11:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/shou_yi.rs-12-            if d.target == owner && !d.prevented && d.amount > 0)
+crates/engine-native-content/src/content/standard/skills/shou_yi.rs-13-    }
+--
+crates/engine-native-content/src/content/standard/skills/san_cai.rs-9-impl SkillBehavior for SanCaiBehavior {
+crates/engine-native-content/src/content/standard/skills/san_cai.rs-10-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/san_cai.rs:11:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/san_cai.rs-12-            if d.target == owner && !d.prevented && d.amount > 0)
+crates/engine-native-content/src/content/standard/skills/san_cai.rs-13-    }
+--
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-10-impl SkillBehavior for SuQingBehavior {
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-11-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/su_qing.rs:12:        matches!(event, EventData::Damage(d) if d.target != owner)
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-13-    }
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-14-
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-15-    fn start(&self, _owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-16-        let target = match event {
+crates/engine-native-content/src/content/standard/skills/su_qing.rs:17:            EventData::Damage(d) => d.target,
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-18-            _ => unreachable!("filter guarantees damage"),
+crates/engine-native-content/src/content/standard/skills/su_qing.rs-19-        };
+--
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-7-impl SkillBehavior for JianXiongBehavior {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-8-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs:9:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-10-            if d.target == owner && !d.prevented && d.amount > 0 && d.card.is_some())
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-11-            && d_card_in_discard(ctx, event)
+--
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-14-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-15-        let card = match event {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs:16:            EventData::Damage(d) => d.card,
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-17-            _ => None,
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-18-        };
+--
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-27-fn d_card_in_discard(ctx: &QueryCtx<'_>, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-28-    let Some(card) = (match event {
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs:29:        EventData::Damage(d) => d.card,
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-30-        _ => None,
+crates/engine-native-content/src/content/standard/skills/jian_xiong.rs-31-    }) else {
+--
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-5-impl SkillBehavior for YiShangBehavior {
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-6-    fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs:7:        matches!(event, EventData::Damage(d) if d.target == owner && !d.prevented)
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-8-    }
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-9-
+--
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-68-            YiShangStage::Apply => {
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-69-                if let ChoiceOption::Player(p) = ctx.answer_first() {
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs:70:                    let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-71-                    d.redirect_chain.push(d.target);
+crates/engine-native-content/src/content/standard/skills/yi_shang.rs-72-                    d.target = p;
+--
+crates/engine-native-content/src/content/standard/skills/huoxing.rs-41-                continue;
+crates/engine-native-content/src/content/standard/skills/huoxing.rs-42-            }
+crates/engine-native-content/src/content/standard/skills/huoxing.rs:43:            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+crates/engine-native-content/src/content/standard/skills/huoxing.rs-44-                None,
+crates/engine-native-content/src/content/standard/skills/huoxing.rs-45-                t,
+--
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-7-impl SkillBehavior for XiangDeBehavior {
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-8-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs:9:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-10-            if d.target == owner
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-11-                && !d.prevented
+--
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-39-    }
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-40-    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs:41:        let d = ctx.current_damage_mut();
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-42-        d.amount += 1;
+crates/engine-native-content/src/content/standard/skills/xiang_de.rs-43-        Flow::Done
+--
+crates/engine-native-content/src/content/standard/skills/fan_jian.rs-176-                    // v203 对齐上游：花色相符无事；不符才受 1 点伤害
+crates/engine-native-content/src/content/standard/skills/fan_jian.rs-177-                    if !suit_matches {
+crates/engine-native-content/src/content/standard/skills/fan_jian.rs:178:                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+crates/engine-native-content/src/content/standard/skills/fan_jian.rs-179-                            Some(self.owner),
+crates/engine-native-content/src/content/standard/skills/fan_jian.rs-180-                            target,
+--
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-10-impl SkillBehavior for KuangFuBehavior {
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-11-    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs:12:        matches!(event, EventData::Damage(d)
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-13-            if d.source == Some(owner)
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-14-                && d.target != owner
+--
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-22-    fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-23-        let target = match event {
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs:24:            EventData::Damage(d) => d.target,
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-25-            _ => unreachable!(),
+crates/engine-native-content/src/content/standard/skills/kuang_fu.rs-26-        };
