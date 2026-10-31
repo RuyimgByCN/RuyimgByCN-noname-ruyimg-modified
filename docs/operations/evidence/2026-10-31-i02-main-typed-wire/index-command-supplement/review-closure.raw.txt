@@ -1,0 +1,16 @@
+## Review
+
+No issues found. The prior P2 is closed by the additive supplement.
+
+- **Fixed — recovered command provenance:** The [parse command](/tmp/noname-parent-i02-index-tool-provenance/index-parse.raw.sh:5) contains the actual `def parse(p):` implementation; the [mask command](/tmp/noname-parent-i02-index-tool-provenance/index-mask-and-js-load.raw.sh:5) contains `def masked(p):`. These replace the missing provenance without executing commands or rewriting the old sealed files.
+
+- **Correct — unique selection and result binding:** [preserve.py](/tmp/i02-main-index-command-provenance-599614a0/preserve.py:26) matches an entire definition line, requires one candidate and binds its result by toolCallId. This avoids the earlier quoted-substring overwrite. The two publication excerpts contain tool calls/results with matching IDs and successful result records; private reasoning/session records are excluded.
+
+- **Correct — separate verification claims:** The [supplement audit](/tmp/noname-parent-i02-index-command-supplement-audit.json) records command/record identity checks and unchanged original artifacts. The [parent’s independent Main audit](/tmp/noname-parent-i02-main-final-audit.json) separately records the 33 ctime-only index changes and unchanged remaining bytes. I reviewed those records; I did not recompute hashes or rerun either parser. The index writer remains unknown.
+
+- **Correct — additive erratum:** The supplement corrects “13” to **12 recorded comparison categories**, preserving the original report and review. No runtime, protocol, source or gate result changes are implied.
+
+- **Merge verdict: OK with notes for bounded Main I02 phase-1 plus the previously reviewed CI environment fix.** No remaining provenance gap was found. Actual Windows success remains pending; the earlier CI result remains eight successes/two checkout failures. Producer/range/binding/audio and full-I02 acceptance remain outside this verdict.
+
+Skipped execution, tests, network, Main writes, private reasoning records and independent hash verification.
+Residual limits: command provenance does not identify the index writer, and the long-path fix still needs actual Windows CI evidence.

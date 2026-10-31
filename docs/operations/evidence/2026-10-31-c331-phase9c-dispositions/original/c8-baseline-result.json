@@ -1,0 +1,21 @@
+{
+  "argv": [
+    "python3",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native",
+    "--test",
+    "kernel",
+    "replay_scenarios_match_golden",
+    "--",
+    "--test-threads=1"
+  ],
+  "exit": 0,
+  "wall_seconds": 79.71404004096985,
+  "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-c8-golden-baseline",
+  "source_manifest_sha256": "f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e",
+  "test_after_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9"
+}

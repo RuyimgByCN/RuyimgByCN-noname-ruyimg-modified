@@ -1,0 +1,2 @@
+{"passed":true,"outcomes":5,"replayKey":1000002,"revision":2,"binarySha256":"87e20fa5dce36c9fdc484c696ffde634ac7683c72d44d78725ceea817fcb33cf"}
+{"command": ["node", "--import", "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/ts-register.mjs", "/tmp/i02-main-typed-wire-functional-33d21ba5/server-wire.mjs"], "exit": 0, "locked_seconds": 0.9382922500371933, "disk_free_bytes": 33835372544}

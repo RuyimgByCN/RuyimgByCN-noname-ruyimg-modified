@@ -1,0 +1,2466 @@
+{
+  "utc": "2026-10-31T13:31:06.928436+00:00",
+  "files": [
+    {
+      "path": "baseline-c9.json",
+      "sha256": "1fadcbd8088b76a515dbbcfd175aa6315492d568921db63251a0549793bec0f1",
+      "bytes": 32051
+    },
+    {
+      "path": "baseline-c9.tar.gz",
+      "sha256": "c11ad214434c4e40ad751240a75948fc0e031e7e938145304105081c02ac7c17",
+      "bytes": 764166
+    },
+    {
+      "path": "check-results.json",
+      "sha256": "68745943382e3407e5e4a258e2041c34b69baeb88e35336e73a24ecf6a40eecc",
+      "bytes": 2149
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "checkpoint20/changed-source.tar.gz",
+      "sha256": "d9dba6c958e013843be297456d037cb91f6f6c82f1c9ede4c98b5c643ebf756f",
+      "bytes": 65266
+    },
+    {
+      "path": "checkpoint20/vs-c9.patch",
+      "sha256": "da4b71ef7886b23551e1b0107a761ff2f1ac163e5c424455eebb2ff39dbccba5",
+      "bytes": 111082
+    },
+    {
+      "path": "checkpoint20-result.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "checkpoint20-v2/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "checkpoint20-v2/changed-source.tar.gz",
+      "sha256": "f9aae53b5f436b388acc60f5f691d89811de7dd05d438708381f046d4968a57d",
+      "bytes": 24089
+    },
+    {
+      "path": "checkpoint20-v2-result.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "checkpoint20-v3/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "checkpoint20-v3/changed-source.tar.gz",
+      "sha256": "d8e0c4354158a921c8ac6199a69fe030cc86a9f512105f7dc091a8d789b01246",
+      "bytes": 74829
+    },
+    {
+      "path": "checkpoint20-v3/source-manifest.json",
+      "sha256": "7b05dc499dc317c8999d58bad69ed7287351d0cc63528324325f598da0867f98",
+      "bytes": 7088
+    },
+    {
+      "path": "checkpoint20-v3/vs-c9.patch",
+      "sha256": "276800a90f169da46d92d637a25b820d3f27cfd0f71046f09c6295919f33227a",
+      "bytes": 117132
+    },
+    {
+      "path": "checkpoint20-v3-result.json",
+      "sha256": "a2dcffc46354c51d2aaa08c8f86ad56dc2130733fb09c02b8e30dcf3cd6673bb",
+      "bytes": 404
+    },
+    {
+      "path": "command-source-bindings.json",
+      "sha256": "6a1cd9062a75d3ed7a9ce8bf1d2239708a58a7c329ac9a92ef300c392391ae51",
+      "bytes": 3887
+    },
+    {
+      "path": "final-check-runner.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-check-runner.pid",
+      "sha256": "6fedccc974e271b74cd42d91e251f81b3d6c3cfbade4c1e56e03ba12fac53946",
+      "bytes": 6
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/boundary_snapshot/restore.rs",
+      "sha256": "9b57968d15042a43fc0793e90c6d61828baa7268bd48a1aa39242d39e1d5bcfd",
+      "bytes": 27933
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native/tests/nc08_upstream_duwen.rs",
+      "sha256": "6dc3aaae213d4d73ea9dfe27e7feaa6fb8eddc0154e711eefbd0630873bcd675",
+      "bytes": 6592
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "c870343952789906d402490fba55c213b4f5a11ed9558d05f22f95cc0f3c0c73",
+      "bytes": 39976
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+      "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "bytes": 20358
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "9f7c939521b4a3884bd7b24de7da7abd8b94dda783460a4c34550ad7d5b1f74e",
+      "bytes": 43088
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "bytes": 25251
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829",
+      "bytes": 24470
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+      "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+      "bytes": 34896
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "8da12c5083fb22be3663b1e9b8eb58f6929a9b89eb80fddd275f1b3daf60c74d",
+      "bytes": 41647
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "babcd7570f7a9bd8088e5515e3afc977bd6b806b732510da0f4d01929e8d10c8",
+      "bytes": 28332
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+      "bytes": 26429
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+      "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+      "bytes": 17074
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "bytes": 37057
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646",
+      "bytes": 28031
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+      "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "bytes": 12086
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+      "bytes": 17736
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "3363d367dcc11d17284f9a65a5931331455b840695969f63c95ec5c26937b86d",
+      "bytes": 22484
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/host/step/yunchou.rs",
+      "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "bytes": 20688
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "e189e489712d261228ce19ba3f50112d98cafcce6b4f91e54e2a4448afe0bb4a",
+      "bytes": 46448
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "final-freeze/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "final-freeze/changed-source.tar.gz",
+      "sha256": "645f221123bd2a8403e288d99ebf2cabfad36b4ab0237769d0c930d3690c1b81",
+      "bytes": 152748
+    },
+    {
+      "path": "final-freeze/source-manifest.json",
+      "sha256": "751427bc4fa64fe21f4d345015e6f637f2e242f3691a4d8c61d354aecc17ea7d",
+      "bytes": 12315
+    },
+    {
+      "path": "final-freeze/vs-c9.patch",
+      "sha256": "c4cf726ca9570468956311c90dc6498ec965ef0c731c9193bb0eef9b657775cf",
+      "bytes": 199788
+    },
+    {
+      "path": "final-freeze-result.json",
+      "sha256": "80042c46bed12e24b66e06b6d3cb42fe55d437ec0676522e8d6876d0afce6d54",
+      "bytes": 401
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/boundary_snapshot/restore.rs",
+      "sha256": "9b57968d15042a43fc0793e90c6d61828baa7268bd48a1aa39242d39e1d5bcfd",
+      "bytes": 27933
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native/tests/nc08_upstream_duwen.rs",
+      "sha256": "6dc3aaae213d4d73ea9dfe27e7feaa6fb8eddc0154e711eefbd0630873bcd675",
+      "bytes": 6592
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "c870343952789906d402490fba55c213b4f5a11ed9558d05f22f95cc0f3c0c73",
+      "bytes": 39976
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+      "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "bytes": 20358
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "9f7c939521b4a3884bd7b24de7da7abd8b94dda783460a4c34550ad7d5b1f74e",
+      "bytes": 43088
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "bytes": 25251
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829",
+      "bytes": 24470
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+      "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+      "bytes": 34896
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "8da12c5083fb22be3663b1e9b8eb58f6929a9b89eb80fddd275f1b3daf60c74d",
+      "bytes": 41647
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "babcd7570f7a9bd8088e5515e3afc977bd6b806b732510da0f4d01929e8d10c8",
+      "bytes": 28332
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+      "bytes": 26429
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+      "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+      "bytes": 17074
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "bytes": 37057
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646",
+      "bytes": 28031
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+      "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "bytes": 12086
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+      "bytes": 17736
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "3363d367dcc11d17284f9a65a5931331455b840695969f63c95ec5c26937b86d",
+      "bytes": 22484
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/host/step/yunchou.rs",
+      "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "bytes": 20688
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "e189e489712d261228ce19ba3f50112d98cafcce6b4f91e54e2a4448afe0bb4a",
+      "bytes": 46448
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "final-scope-fix/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "final-scope-fix/changed-source.tar.gz",
+      "sha256": "c0c81922c890f4025464606577b44f1e33f2b785265ba7a8239f976793f8ee58",
+      "bytes": 153744
+    },
+    {
+      "path": "final-scope-fix/source-manifest.json",
+      "sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+      "bytes": 12315
+    },
+    {
+      "path": "final-scope-fix/vs-c9.patch",
+      "sha256": "a7b30f28a20ac7575aa69b62c549fb3d17819221355d55a6ff48ddfdc95a8486",
+      "bytes": 200550
+    },
+    {
+      "path": "final-scope-fix-result.json",
+      "sha256": "4a42ab440f2381296fb436798ada86ab9f8701db26c305dc230b1f8b0c292c1e",
+      "bytes": 404
+    },
+    {
+      "path": "freeze.py",
+      "sha256": "6577446f497168a58186effe28da23eb566fa56cd20198fc72dd52dfd8e69d2c",
+      "bytes": 2897
+    },
+    {
+      "path": "full-native-final-summary.json",
+      "sha256": "9afa1ab14e5ddac6e4d6d16f154c7cdcef804bc27b90d2430d0a8b2ae646d0cf",
+      "bytes": 2477
+    },
+    {
+      "path": "full-native.log",
+      "sha256": "36de7b42a225b370ed123e4c7fd5280299d20fab55394dbf1bf15ab26ab0bca0",
+      "bytes": 158344
+    },
+    {
+      "path": "full-native1.log",
+      "sha256": "1e928991415b81fba5c36a4e9c15e71f524f302adcc99b804a8b37f72d5e1bd4",
+      "bytes": 175556
+    },
+    {
+      "path": "full-native1.pid",
+      "sha256": "13dd50115bf7406d3cd1afcf610cb42d95f7f6c6dcba25ede0425127e1d00ff1",
+      "bytes": 5
+    },
+    {
+      "path": "full-native2.log",
+      "sha256": "7379175285fb028a06448689efc4585796ee2f9f1380d4462246e59e651dca60",
+      "bytes": 160464
+    },
+    {
+      "path": "full-native2.pid",
+      "sha256": "038bf52e5df233f513048a12fe30708a0b78a0bc28559668129d2bd4852c1cf5",
+      "bytes": 6
+    },
+    {
+      "path": "full-source/composed-source.tar.gz",
+      "sha256": "f0bcac84395e3a8809f483f0fb1ca7f4d85fc9dc75271b7a0846e281c9460cfb",
+      "bytes": 805394
+    },
+    {
+      "path": "full-source/source-manifest.json",
+      "sha256": "8092454276eabcafa1fad283daf11c7709842290dc5f4ff5cadfc621bf501fa2",
+      "bytes": 35837
+    },
+    {
+      "path": "full-source/vs-main5fc.patch",
+      "sha256": "d027c660e60c34a9afb48966938b2431dfdd30d270dd536f45e7ca6a494cfa59",
+      "bytes": 903715
+    },
+    {
+      "path": "full-source-scope-fix/composed-source.tar.gz",
+      "sha256": "93df600b6f86b79d2ea77d4c461705ca46338df2a2b4e9d9a054e35fac9e1c5e",
+      "bytes": 806422
+    },
+    {
+      "path": "full-source-scope-fix/source-manifest.json",
+      "sha256": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+      "bytes": 35815
+    },
+    {
+      "path": "full-source-scope-fix/vs-main5fc.patch",
+      "sha256": "64eb00896787032f1a927be8503c07086560acd83b6e0f5fe391b726628a1fd6",
+      "bytes": 904477
+    },
+    {
+      "path": "gate1b.log",
+      "sha256": "120903045fa3ee81222264e893925fee8751b8614fdfd6b5bb209bfb9f1556c0",
+      "bytes": 887
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.archive.ngsa",
+      "sha256": "dce2745078c9fe477f32e8f977d8138351e0bb1efdcf3588b1b863cbaceaf811",
+      "bytes": 1896
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.events.txt",
+      "sha256": "c782d4edf7012fb23cc27373fa3dbdd4fa9ea9584e78a7fde745bd5638623fc8",
+      "bytes": 2322
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.snapshot.txt",
+      "sha256": "bec61f45f8642cce60fd030516dd674faa0e4bad37b71ea15b5fc1e59f5e6f9a",
+      "bytes": 20592
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.views.txt",
+      "sha256": "d58894efa28a3f112cff80a1589da47091007adba9aa607980576939deed8040",
+      "bytes": 22453
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.archive.ngsa",
+      "sha256": "15932de5af77c6ac24ec33d1c636ea9a3352c9a4dfd46e6da891c94dfbef23f9",
+      "bytes": 1901
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.events.txt",
+      "sha256": "d92727cf2f2d286a6170e4d2ccdb18c87f2d476541b063c0ba8ac49c3724b621",
+      "bytes": 1438
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.snapshot.txt",
+      "sha256": "ab686fd8427c14f65751ece454196a2719cd691fb3f674e5b29bbbd8668ded8e",
+      "bytes": 20599
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.views.txt",
+      "sha256": "8bf79a41d88c5c7e6ac04f63a6bb206e7d599442fab7d202171bc4ddddb5e46a",
+      "bytes": 22241
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.archive.ngsa",
+      "sha256": "940c6d96b359e36a5383833eb818ea503b1d816282a032603c5423a32f4417d4",
+      "bytes": 1407
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.choices.txt",
+      "sha256": "8988b3014ecf98d7f799aef0921516678c591112f2c8d5ff281689054a4ef9ec",
+      "bytes": 36
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.events.txt",
+      "sha256": "affa069791e2befca0e90cbce63c945f6bdb14fef59e5b654848f2b7de960f55",
+      "bytes": 2648
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.snapshot.txt",
+      "sha256": "93cf88b27a5836594db31b51fade65664f5debcc5ba2b73749799ba79d55e755",
+      "bytes": 12962
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.views.txt",
+      "sha256": "c668eb7221efbd05802c6f06a6bf5651af4d955c42e96ec2d4569a3956d4ff3d",
+      "bytes": 6835
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.archive.ngsa",
+      "sha256": "6cae927490cd89752b64f987acde835b3b10375418313d7bac3a90a4f54f4fb9",
+      "bytes": 1896
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.events.txt",
+      "sha256": "5fca63721996a9ee1e41ba9bb82d516257d57d3ce4310a178613eb0eb7dd36ec",
+      "bytes": 1936
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.snapshot.txt",
+      "sha256": "458b3a2d25bae8c80ab14037d8a9184e97ea1a5f91e2394bf17bc37f3bed9903",
+      "bytes": 20738
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.views.txt",
+      "sha256": "4391ce5fccc9d784d0150e0350efa60c1ee7affc3a67fa124b906c5b1199f72d",
+      "bytes": 15855
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.archive.ngsa",
+      "sha256": "3623c8123f96d2b24879a707c2211dc00f07a0c8ec499dcbedc62c8bbeb07893",
+      "bytes": 1896
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.events.txt",
+      "sha256": "1e3f00c6c8c0ce551cd3d63e8f257ca5035b5b0804b4d0a30fd9a147ab8c1abe",
+      "bytes": 1273
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.snapshot.txt",
+      "sha256": "a910ee65f4dc6a89c594cf7bc8dc3e09e6d3bd19be97570fcbdc861c732f3842",
+      "bytes": 20542
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.views.txt",
+      "sha256": "857c27d4ea751d6fc8e51a661b4bf1124d0e36379be2879050615cfe00307e00",
+      "bytes": 22579
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.archive.ngsa",
+      "sha256": "53515f61c8ef6cb200c26496175604bfad05ffc8c38de42b689fa2a9a0b67449",
+      "bytes": 1906
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.events.txt",
+      "sha256": "0c109bcb79207566f88f875e7767d70ac479c637ee0bc24e2c7dd9a0fe025a06",
+      "bytes": 6301
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.snapshot.txt",
+      "sha256": "dfc15f0cdf26ec7609aca52a5641055b4c7d03ad06a6e37a0badd7a2d25124fd",
+      "bytes": 20749
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.views.txt",
+      "sha256": "b12ee5d097fa0ce42ee2d08b42960aba82a913ef4a326cbfeccffa34e467a367",
+      "bytes": 26627
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.archive.ngsa",
+      "sha256": "29e96eb118d83fc788e29edcf3a4ced6d0364666b6f27f25215379dd64265fc8",
+      "bytes": 1896
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.events.txt",
+      "sha256": "bf44a46e8ba32c359a8a850a763366944ed8d72e5cfca481c178f4c8fb25c679",
+      "bytes": 1719
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.snapshot.txt",
+      "sha256": "a8847c46746aed47aca20875c9405a055ab39ee9bd7f808bd384c91ee3ae1f75",
+      "bytes": 20578
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.views.txt",
+      "sha256": "3d8777dd1ff15fe37df224ef16069be3af871445fefab2516852b2bfda82980d",
+      "bytes": 22466
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.archive.ngsa",
+      "sha256": "64426f6bc32e04aff99e9ea492b7110e431e71ca3a9411c4217fec2361274a78",
+      "bytes": 1896
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.events.txt",
+      "sha256": "7234a13f640d468f2523a0176d3c504016a36d566a797bf4c179cfb72ca1a6d4",
+      "bytes": 1812
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.snapshot.txt",
+      "sha256": "0e7e4089202842f689329cba93f31701cc6a2338e1db1483bcc55ce1ac3118d5",
+      "bytes": 20543
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.views.txt",
+      "sha256": "4de1e85098e16d4611beaf602ed643904bdf8b885b0f31c7e19c15718361ffdf",
+      "bytes": 23195
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.archive.ngsa",
+      "sha256": "794fd9a95e8988cc6c65e95d1e4a3f77d0d980b35699650bec618076489669e0",
+      "bytes": 2197
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.choices.txt",
+      "sha256": "3575acf29db80de1dc9ad9c8cb6219f0cb85920507dc94d8707f7fe30bcc5967",
+      "bytes": 1241
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.events.txt",
+      "sha256": "53e586c77b01ab93482d7bd9db63ea4437aadb8c15e266154a4cd03e11d975c8",
+      "bytes": 2633
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.snapshot.txt",
+      "sha256": "43b6ec471d2825ebfc84bb0b5dd1ff7e5b74be507dbcb6dc5b8cdc564effe65c",
+      "bytes": 25814
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.views.txt",
+      "sha256": "09be41600b335f177d822ceefaf392454e927290dcbb3cdb449350163ad16345",
+      "bytes": 17783
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.archive.ngsa",
+      "sha256": "1987720aafd33a8e61dafa4a9b19d9a13ca85c236904173e3f4084e724041295",
+      "bytes": 1909
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.events.txt",
+      "sha256": "34ef905acb124f1f5c0fbb3d0f2b3b7bdbc15e01ec8cd37a2e9ddde819ac302d",
+      "bytes": 3025
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.snapshot.txt",
+      "sha256": "db1d983adb93c5d881914ba3bc411862e47cf2813b4cb99fe161b4c34d28f6d6",
+      "bytes": 21035
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.views.txt",
+      "sha256": "e6259f228f774cb207c9ebc328ddbc220d4c2db82209bf3b4841fbb34eebe694",
+      "bytes": 17799
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.archive.ngsa",
+      "sha256": "7d3d31da004093e567625f8f42bc8a9c11cf8bd90cf0c18ae606edf0243f9ce8",
+      "bytes": 1906
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.events.txt",
+      "sha256": "663fcfb66eb4f4768f996bfa00eaa4ea46b5ec0d8541c57b4cc37e198f81e66e",
+      "bytes": 2161
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.snapshot.txt",
+      "sha256": "554740acfff6d3fcc8de3cf9a13a182cdd7359749fd5a22030b9070aace9fd37",
+      "bytes": 20689
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.views.txt",
+      "sha256": "9d917da058dbfd291cea8d4470d8ba3aa89849ef0514bc89326594cfc802978b",
+      "bytes": 20681
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.archive.ngsa",
+      "sha256": "6a7e44f925934644e6fb7eb32338116ccf13e5c9da50e4c4fddd4381ca56dad4",
+      "bytes": 1922
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.events.txt",
+      "sha256": "d156a057ce87b5c8fda049919c094228252a454770364d4baa2bc85c060e6986",
+      "bytes": 7933
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.snapshot.txt",
+      "sha256": "b89f12440201986a852596d9f53ccb1667e49d00ad903579692ea27d484a65f0",
+      "bytes": 21304
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.views.txt",
+      "sha256": "95291a2974ff719dbb364cd4834653f51f54c1ffbc14f39cb1cacb2eff992854",
+      "bytes": 20891
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.archive.ngsa",
+      "sha256": "9a453d3ed81342f8fa2c6b315661ff026d2e008626e5277532c4e154dd8df39a",
+      "bytes": 1927
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.events.txt",
+      "sha256": "22cb60e74451e26d9126b1577d6b6cfb68082be81eaf86284d671c8d6469a550",
+      "bytes": 8153
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.snapshot.txt",
+      "sha256": "c29a683e74cff0cbc499b85d513fe9da4ec2429de701116d5a870f0b4e3a9a55",
+      "bytes": 21307
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.views.txt",
+      "sha256": "a4d6cab10978c3068c0408acc880bd6c665d32c198d66d9017b9be0a92ccb895",
+      "bytes": 23218
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.archive.ngsa",
+      "sha256": "baa41fd28f0dbc1d5ae218f1aaf9c6cf53d68115ef923435abab5f86d71bf2f5",
+      "bytes": 1909
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8",
+      "bytes": 56
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.events.txt",
+      "sha256": "0f1bdc6037cfa8c75d1f7eed815db5e7c0f4b90d3310fdfc77912abe82a4d2c3",
+      "bytes": 2654
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.snapshot.txt",
+      "sha256": "8408849f294edb8b2b2d3bdf56863ee39793e482926a96f152d242344429f61d",
+      "bytes": 21002
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.views.txt",
+      "sha256": "4050ba695de5f069778b74afcc51c0b761067d838e596d02b8d5d305c65a6c4a",
+      "bytes": 17378
+    },
+    {
+      "path": "golden-disposition.json",
+      "sha256": "c5ec026fa5066a9aac2e43c620ac670489cab04b37d5e15ec98b86886a919da0",
+      "bytes": 12583
+    },
+    {
+      "path": "golden-traces.log",
+      "sha256": "1fc91d169ffd06d38a2b1a9cb3387347f2190ce65cd25399d9630142d23ae881",
+      "bytes": 3095
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-callbacks.py",
+      "sha256": "9b6c6a2af6d211296d3bbf2b5aaf8ccd82024d247ca1c47b9a341137e1e1eb85",
+      "bytes": 6731
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-consumers.py",
+      "sha256": "55e4b19e5bfa12d5f3224035a9996c28abf5584fb567eff8b70e395ccca51227",
+      "bytes": 2870
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-edit.py",
+      "sha256": "481461591e0e82ded60b76e0670ef559fbc901415aadfe9887b0ff34a1bfc274",
+      "bytes": 10741
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-extra-tests.txt",
+      "sha256": "2f79f1e2a3c44b98a43a28fb17bb4bf23ee05128a7c40cdc37da7fff14b1e412",
+      "bytes": 5354
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-fixtures.py",
+      "sha256": "55a421d8304ee986dfa5c5da8a58f53e79084a91b67410dc3681da0bede11221",
+      "bytes": 4445
+    },
+    {
+      "path": "implementation-scripts/c331-phase9b-validate.py",
+      "sha256": "e10cc0a150c7e036a8fbde6f2a6e008435616e8e5595b969d23fd729d63ac48a",
+      "bytes": 1575
+    },
+    {
+      "path": "initial-red.log",
+      "sha256": "06ec1868b20c801fa5c97277bf24e3b7c4fc1c8b9796dfe296fd972aecd4efd8",
+      "bytes": 1386
+    },
+    {
+      "path": "initial-red.pid",
+      "sha256": "be60919fb85ce6a6cfb66fabaa51d713717e4dba403f7e45f417eb443af59bf3",
+      "bytes": 6
+    },
+    {
+      "path": "intermediate-full-results.json",
+      "sha256": "3be021dd75e11d9a131fc284dbcd433ff07f717229dda1a4d6aee6bf52d3d3ae",
+      "bytes": 3634
+    },
+    {
+      "path": "kernel-impact.log",
+      "sha256": "4a431b2a654a66f40b69dcf9841ac2316f2434f306d6f1c722cad436243d2554",
+      "bytes": 29280
+    },
+    {
+      "path": "kernel-impact.pid",
+      "sha256": "b0a2326ca131c77425bfd9c771239af4c5590045b56ed638fbe1bdaf1603fd84",
+      "bytes": 6
+    },
+    {
+      "path": "kernel-impact2.log",
+      "sha256": "57db314bcab89ad3cbab32dc6012606e1f1035ed500a9927fb7ad3d3d40abaee",
+      "bytes": 36041
+    },
+    {
+      "path": "kernel-impact2.pid",
+      "sha256": "d616ee1349499b8dd367277a5bfc28c0a1dbfba1333bd93f8220a8b4b445b7b1",
+      "bytes": 6
+    },
+    {
+      "path": "layering.log",
+      "sha256": "bcb5f7336b5bd8a1438df0d1f69e7b5c9abfbdc8c276da5cbd4ad7001a93dc0a",
+      "bytes": 205
+    },
+    {
+      "path": "multi-before-red.log",
+      "sha256": "3e9794134f878f9006d8fab5b8d5a3928033ae0496ce427ac287e9a87d3998b7",
+      "bytes": 1371
+    },
+    {
+      "path": "multi-before-red.pid",
+      "sha256": "2c4aed186b871a1414f5eba9e213ebee980c2fe046235a8042bfcd59a6a60dca",
+      "bytes": 6
+    },
+    {
+      "path": "multi-before-red2.log",
+      "sha256": "4ebc3d94fa2c5382105d3b5d84de2c7a07a10677be687c386a8a36bb1033f1e6",
+      "bytes": 1474
+    },
+    {
+      "path": "multi-before-red2.pid",
+      "sha256": "9345e02970b3e0ac4e0fad06b66eb7f2fca4713b933911dfb282ff9f3f184ef4",
+      "bytes": 6
+    },
+    {
+      "path": "multi-before-red3.log",
+      "sha256": "526ac7e6c1172dbf894f9aea6c5c3ff8732779c2ff7c09f7b91eb5e8c51f2911",
+      "bytes": 938
+    },
+    {
+      "path": "multi-before-red3.pid",
+      "sha256": "318d9800104b01f04886951d91cfc9ba4f089e44529e30337fccfcbd951dc52b",
+      "bytes": 6
+    },
+    {
+      "path": "multi-before-red4.log",
+      "sha256": "ca3b7c6d48b437f3aa34f42ed0aa2d4d2e3cd2c7bc53c57aa9d17d90e5345cbe",
+      "bytes": 1466
+    },
+    {
+      "path": "multi-before-red4.pid",
+      "sha256": "354ea5f3ece3a3b22fb27b33b02b6768b10f58b504f1e1715a1f710e1589f8f5",
+      "bytes": 6
+    },
+    {
+      "path": "pending-validation-parent-handoff.json",
+      "sha256": "b4a625847e1730adb4e9d4f9bdad44c73ec9dc375f4994abfdc6b48aad636a46",
+      "bytes": 3476
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/boundary_snapshot/restore.rs",
+      "sha256": "9b57968d15042a43fc0793e90c6d61828baa7268bd48a1aa39242d39e1d5bcfd",
+      "bytes": 27933
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native/tests/nc08_upstream_duwen.rs",
+      "sha256": "6dc3aaae213d4d73ea9dfe27e7feaa6fb8eddc0154e711eefbd0630873bcd675",
+      "bytes": 6592
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "c870343952789906d402490fba55c213b4f5a11ed9558d05f22f95cc0f3c0c73",
+      "bytes": 39976
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+      "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "bytes": 20358
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "9f7c939521b4a3884bd7b24de7da7abd8b94dda783460a4c34550ad7d5b1f74e",
+      "bytes": 43088
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "bytes": 25251
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829",
+      "bytes": 24470
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+      "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+      "bytes": 34896
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "8da12c5083fb22be3663b1e9b8eb58f6929a9b89eb80fddd275f1b3daf60c74d",
+      "bytes": 41647
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "babcd7570f7a9bd8088e5515e3afc977bd6b806b732510da0f4d01929e8d10c8",
+      "bytes": 28332
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+      "bytes": 26429
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+      "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+      "bytes": 17074
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "bytes": 37057
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646",
+      "bytes": 28031
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+      "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "bytes": 12086
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+      "bytes": 17736
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "3363d367dcc11d17284f9a65a5931331455b840695969f63c95ec5c26937b86d",
+      "bytes": 22484
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/host/step/yunchou.rs",
+      "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "bytes": 20688
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "e189e489712d261228ce19ba3f50112d98cafcce6b4f91e54e2a4448afe0bb4a",
+      "bytes": 46448
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "pre-final-checks/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "pre-final-checks/changed-source.tar.gz",
+      "sha256": "d3e42217460ed95115a84be4ca9c5a9a6ebabee950ff8521863999f94f3958f2",
+      "bytes": 152748
+    },
+    {
+      "path": "pre-final-checks/source-manifest.json",
+      "sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b",
+      "bytes": 12315
+    },
+    {
+      "path": "pre-final-checks/vs-c9.patch",
+      "sha256": "c4cf726ca9570468956311c90dc6498ec965ef0c731c9193bb0eef9b657775cf",
+      "bytes": 199788
+    },
+    {
+      "path": "pre-final-checks-result.json",
+      "sha256": "84206c1829e0ce7b13ca6b8a77891387b8843fcc9ffb691dd0125b7b373fd3b6",
+      "bytes": 405
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/boundary_snapshot/restore.rs",
+      "sha256": "9b57968d15042a43fc0793e90c6d61828baa7268bd48a1aa39242d39e1d5bcfd",
+      "bytes": 27933
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native/tests/nc08_upstream_duwen.rs",
+      "sha256": "6dc3aaae213d4d73ea9dfe27e7feaa6fb8eddc0154e711eefbd0630873bcd675",
+      "bytes": 6592
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "c870343952789906d402490fba55c213b4f5a11ed9558d05f22f95cc0f3c0c73",
+      "bytes": 39976
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+      "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "bytes": 20358
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "9f7c939521b4a3884bd7b24de7da7abd8b94dda783460a4c34550ad7d5b1f74e",
+      "bytes": 43088
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "bytes": 25251
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829",
+      "bytes": 24470
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+      "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+      "bytes": 34896
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "8da12c5083fb22be3663b1e9b8eb58f6929a9b89eb80fddd275f1b3daf60c74d",
+      "bytes": 41647
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "babcd7570f7a9bd8088e5515e3afc977bd6b806b732510da0f4d01929e8d10c8",
+      "bytes": 28332
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+      "bytes": 26429
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+      "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+      "bytes": 17074
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "bytes": 37057
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646",
+      "bytes": 28031
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+      "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "bytes": 12086
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+      "bytes": 17736
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "3363d367dcc11d17284f9a65a5931331455b840695969f63c95ec5c26937b86d",
+      "bytes": 22484
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/host/step/yunchou.rs",
+      "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "bytes": 20688
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/rvm_bridge.rs",
+      "sha256": "e189e489712d261228ce19ba3f50112d98cafcce6b4f91e54e2a4448afe0bb4a",
+      "bytes": 46448
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "pre-format-final/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "pre-format-final/changed-source.tar.gz",
+      "sha256": "9e0a74a5fc7095a3cc2fc75916f0a213dbdfc3f37cffbd174f7ff9a53b4ae635",
+      "bytes": 152619
+    },
+    {
+      "path": "pre-format-final/source-manifest.json",
+      "sha256": "fffafe626e8927f1e9cb0ad979ef60c7707aa59009a49b4b31a7c442ea06415a",
+      "bytes": 12315
+    },
+    {
+      "path": "pre-format-final/vs-c9.patch",
+      "sha256": "722ac15ebce3c386155e2403ecbb898c9a0bf4471571293f9c85a8f75c6690cc",
+      "bytes": 184579
+    },
+    {
+      "path": "pre-format-final-result.json",
+      "sha256": "5dc47c7f5e0aabd42f85d56dc9a30ea5fa564722e58b26e282b12198b2c24de5",
+      "bytes": 405
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "pre-full1/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "pre-full1/changed-source.tar.gz",
+      "sha256": "cb998ae5d93b09273f2d4100d50794131599d3973135adf2ac5400e84ea778e4",
+      "bytes": 74864
+    },
+    {
+      "path": "pre-full1/source-manifest.json",
+      "sha256": "c3956702ed211fe5d657664d29b5f4aead0cddd118929dde39a2141e18b64a61",
+      "bytes": 7088
+    },
+    {
+      "path": "pre-full1/vs-c9.patch",
+      "sha256": "ae6904cf0cc91f3b75138df12308378fc3abcf2c8b573e723d232a4b7159ad23",
+      "bytes": 135366
+    },
+    {
+      "path": "pre-full1-result.json",
+      "sha256": "eb28936ef79731dfae4638db305110fde6e1ed7bb2b5e52066fd0efed4cbe122",
+      "bytes": 398
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/a0_tag_registry.rs",
+      "sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "bytes": 24508
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/c331_canonical_damage.rs",
+      "sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "bytes": 12921
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/c331_prehp_damage.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "bytes": 8849
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "bytes": 7675
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "bytes": 2880
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "bytes": 6105
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "bytes": 2848
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/native_kernel/combat.rs",
+      "sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "bytes": 8236
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native/tests/native_kernel/dying.rs",
+      "sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "bytes": 3753
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/skills_damage.rs",
+      "sha256": "c870343952789906d402490fba55c213b4f5a11ed9558d05f22f95cc0f3c0c73",
+      "bytes": 39976
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs",
+      "sha256": "7f5d4bc6b8507fe28ea0452b3752fab48f7b3a9f74e65925958f0d4c244c8caa",
+      "bytes": 20358
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/skills_status.rs",
+      "sha256": "9f7c939521b4a3884bd7b24de7da7abd8b94dda783460a4c34550ad7d5b1f74e",
+      "bytes": 43088
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs",
+      "sha256": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+      "bytes": 25251
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_cards.rs",
+      "sha256": "3a4c15a83e85a466ce397ead1c82383344ee8e5277969d40ea78732d0ee46829",
+      "bytes": 24470
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs",
+      "sha256": "888ce945afa82cfb5168bcf192217676f55ce8b3d279f480fc216ce0b50d3760",
+      "bytes": 34896
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs",
+      "sha256": "8da12c5083fb22be3663b1e9b8eb58f6929a9b89eb80fddd275f1b3daf60c74d",
+      "bytes": 41647
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_equipment.rs",
+      "sha256": "babcd7570f7a9bd8088e5515e3afc977bd6b806b732510da0f4d01929e8d10c8",
+      "bytes": 28332
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_recovery.rs",
+      "sha256": "1ff5cd135f788b173b76f489afb582045330d8d9577a153d6e7b021b2dafda74",
+      "bytes": 26429
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_response_cards.rs",
+      "sha256": "207a2eb8ead3ffafb48878b09f7046c7c879f5055f6b339db72c3b8b8d8b5ebe",
+      "bytes": 17074
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_status.rs",
+      "sha256": "e24632f4cc501edf0c6613b5e87e975475a3fb297d52e56772fa845b3bf4507c",
+      "bytes": 37057
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_targets.rs",
+      "sha256": "4948052b324b42d8ff0533154ec66584af1abe3a6808b982cfdac524c32cd646",
+      "bytes": 28031
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs",
+      "sha256": "6c494aaf133a7b935dc9dcabb29e2b3eab9be79529ac0346ce927ff23d7a9827",
+      "bytes": 12086
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/wudian_cards.rs",
+      "sha256": "2f595c90e9f7656664033072dad2796c946ddd049b0e0aa878d763c49f7a6b9a",
+      "bytes": 17736
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/xianjian_damage.rs",
+      "sha256": "3363d367dcc11d17284f9a65a5931331455b840695969f63c95ec5c26937b86d",
+      "bytes": 22484
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/host/step/yunchou.rs",
+      "sha256": "8ac95d7c426a23644834aadb75faf7225b7d0b695022dc2c8b82f11f459f8246",
+      "bytes": 20688
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "bytes": 46596
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/archive/damage.rs",
+      "sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "bytes": 2184
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/archive/values.rs",
+      "sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "bytes": 7172
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/event/damage.rs",
+      "sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "bytes": 3743
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/event.rs",
+      "sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "bytes": 12423
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel/damage.rs",
+      "sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "bytes": 47571
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "bytes": 5546
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/kernel.rs",
+      "sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "bytes": 2973
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "bytes": 30523
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "bytes": 23913
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "bytes": 26199
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/snap/validation.rs",
+      "sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "bytes": 20024
+    },
+    {
+      "path": "pre-full2/baseline-changed/crates/engine-native-kernel/src/snap.rs",
+      "sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "bytes": 1573
+    },
+    {
+      "path": "pre-full2/changed-source.tar.gz",
+      "sha256": "7ad3d4712e47c888156d98cc39da61825d54a17f6eed15742d1e2ae6bf073e46",
+      "bytes": 130530
+    },
+    {
+      "path": "pre-full2/source-manifest.json",
+      "sha256": "d71639ce0c68db99cf2bbaba266d825e4e67a0d6a71873bc99c63a2ce1bcb482",
+      "bytes": 11536
+    },
+    {
+      "path": "pre-full2/vs-c9.patch",
+      "sha256": "8973baae9aa9ca44689afa8945424efad7e318927ffabe488ff0eea87e5d011d",
+      "bytes": 168749
+    },
+    {
+      "path": "pre-full2-result.json",
+      "sha256": "accd6313f05f29d4ba80cd1b6a4a518060a6c31fe4caddc3767ba2b4ada9557d",
+      "bytes": 398
+    },
+    {
+      "path": "protected-after-scope-fix.json",
+      "sha256": "355c11d1d108567183043fb1fa66e26435eac59c8156b7fd725c3f2db8bd2fb4",
+      "bytes": 12184
+    },
+    {
+      "path": "protected-after.json",
+      "sha256": "02c6bbdef6f0c1dc6d9286b87158256292e7fd4b6aa8ebd1389fa5c87f592441",
+      "bytes": 12184
+    },
+    {
+      "path": "results-bound.json",
+      "sha256": "3b86eda54de680139f6bbb092b36a4d181b0061fff2eebcd59a559b25b7acdba",
+      "bytes": 3422
+    },
+    {
+      "path": "run-final-checks.py",
+      "sha256": "dcecf38dc4b6fcc96600f683249dc305a284d9c877db5bd65e191f6d693fec6f",
+      "bytes": 2090
+    },
+    {
+      "path": "scope-fix-checks/run.py",
+      "sha256": "4f0a410aa27979e61989d742cf6ae8c68854bcce1074de886e2a7d530919ce7b",
+      "bytes": 1950
+    },
+    {
+      "path": "scope-fix-checks/seal-source-only.py",
+      "sha256": "2f6530964f25174a190b63b1931e07bb7225bbd03bdce6bdfa5fc1af3965e050",
+      "bytes": 7017
+    },
+    {
+      "path": "scope-fix-checks/seal.py",
+      "sha256": "09a2bf7d0fa4346f5be0d8b3b1511d20558af931dc86a73714b77c30d4d7d5af",
+      "bytes": 8368
+    },
+    {
+      "path": "scope-fix-results-observed.json",
+      "sha256": "0b0faa1dda1b8ee47f973f379d500b3a6e6f19e4bb0838b284db5afd573b69f0",
+      "bytes": 2484
+    },
+    {
+      "path": "scope-fix-source-binding.json",
+      "sha256": "50a9f454a8c64d1dc9574c5b72c0e8b54082e2de459a73c87ef33530803505f3",
+      "bytes": 419
+    },
+    {
+      "path": "seal-result.log",
+      "sha256": "b24a151a6ade114a460ecbcff8ca4ef6e7749fb6842de9a88350951962d87e4b",
+      "bytes": 755
+    },
+    {
+      "path": "seal.py",
+      "sha256": "3117fa5201ad188752bd3d39e9ee4763743c782e70c28082d40721a0b0f9a9df",
+      "bytes": 8257
+    },
+    {
+      "path": "source-cap-unit.log",
+      "sha256": "2d63e361d9c00a6b31bd367015816a741e883ea4ea366a8f887af0543da4b8c6",
+      "bytes": 295
+    },
+    {
+      "path": "source-caps-initial.log",
+      "sha256": "7e7e9423ee38f520a5d6a38739a16e0c98a11ad82d904720de346caeb7ec2c73",
+      "bytes": 96
+    },
+    {
+      "path": "source-caps-pre-final.log",
+      "sha256": "7e7e9423ee38f520a5d6a38739a16e0c98a11ad82d904720de346caeb7ec2c73",
+      "bytes": 96
+    },
+    {
+      "path": "source-caps.log",
+      "sha256": "cb803e8c4b485e01cecdc9ce376f0ca05e581eb0dda1dc4b7ef04e5d50f1186c",
+      "bytes": 240
+    },
+    {
+      "path": "source-transition-audit.json",
+      "sha256": "be7c82db2bb2e3ef6e89e2fa487a8eccc846e87ece538a1fa31c7ade7a63f4f1",
+      "bytes": 2255
+    },
+    {
+      "path": "targeted-first.log",
+      "sha256": "29221b9c9dee353732edab1631d850d21132c2e3afd0815724a58345872d1d35",
+      "bytes": 7133
+    },
+    {
+      "path": "targeted-first.pid",
+      "sha256": "7d9b5141a8b2ecb2da981107a647e0806b8578e34fd48091bb17229b0f340eb8",
+      "bytes": 6
+    },
+    {
+      "path": "targeted2.log",
+      "sha256": "cfe6999e987d6c9c0f1f11ef22ee9adccbe1db3aeda87b6a1750939c6e90620b",
+      "bytes": 2701
+    },
+    {
+      "path": "targeted2.pid",
+      "sha256": "76306839d0c6adae583b8379cf2fce230e12166431e64444cf63155eac0961a7",
+      "bytes": 6
+    },
+    {
+      "path": "targeted3.log",
+      "sha256": "9983b617be336e7715c9a21e13b866ccf63ea6e1d02b9735530c2ee25289ba57",
+      "bytes": 2084
+    },
+    {
+      "path": "targeted3.pid",
+      "sha256": "5782cd050107eca362ef3201d22406efdba3b04021c3bf5edf407abf1231373f",
+      "bytes": 6
+    },
+    {
+      "path": "targeted4.log",
+      "sha256": "e4341d5ca2296492a4fbb7d045421943c8252717312cebdff335e92bfcf8ac91",
+      "bytes": 2084
+    },
+    {
+      "path": "targeted4.pid",
+      "sha256": "91d51af5e39a023d0b47c3532e3929110f48e0e024e635dd097759b0aa62bd2c",
+      "bytes": 6
+    },
+    {
+      "path": "targeted5.log",
+      "sha256": "134a94c2037340292d49c8ac9cf5ada6bb00d70e75515839afda888458b313be",
+      "bytes": 3996
+    },
+    {
+      "path": "targeted5.pid",
+      "sha256": "70c78b1a8f794a0c7c79e1be28eff0725cfd40eb3352e39140248fd4057e5c36",
+      "bytes": 6
+    },
+    {
+      "path": "targeted6.log",
+      "sha256": "cc55b6ac34a20d250953dabac805c8a835e29e36b17c1accfa756e1753db1bfe",
+      "bytes": 1953
+    },
+    {
+      "path": "targeted6.pid",
+      "sha256": "8b940ab58422655b19f84af3a82a8e8323f1cb76fe8a0f7415038e31119a4609",
+      "bytes": 6
+    },
+    {
+      "path": "targeted7.log",
+      "sha256": "25388913ee6cdbefece37d4de5bf70e05b4a694cb97ac9a2dc82858c66211e90",
+      "bytes": 3106
+    },
+    {
+      "path": "targeted7.pid",
+      "sha256": "f4208aa1cd1056956ec5b530d30bfe9f481d688a630b79ce98b7ad6294a113e9",
+      "bytes": 6
+    },
+    {
+      "path": "targeted8.log",
+      "sha256": "40e9769c692d97f2dac2e0af05cb452404e33240e3d883901a9155d06433779e",
+      "bytes": 29729
+    },
+    {
+      "path": "targeted8.pid",
+      "sha256": "3fabc0ba7c26e4af65fe358e7c2c6edaff34669649d1751ba9f038a80b86a36b",
+      "bytes": 6
+    },
+    {
+      "path": "targeted9.log",
+      "sha256": "499ef7d66b4ca8ec0446ef1bba44a54d86d18f6c891c7147d37fd654bcde2a46",
+      "bytes": 2885
+    },
+    {
+      "path": "targeted9.pid",
+      "sha256": "df318fa9d34c6c4d4e77ba25b8d6e8503f18a84af41ed2acf6c53e634bd0b4a3",
+      "bytes": 6
+    }
+  ],
+  "parent_owned_validation_exclusion": "scope-fix-checks/** except static Python scripts; final observed summary captured separately, parent seals actual logs",
+  "report": {
+    "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b6787aca-5e82-4428-b772-c1f509f93a6e/implementation/c331-phase9b-prehp-runtime.md",
+    "sha256": "fdd4b5a6cc58c0abc107f32fb3be91122bdb499a7156090ea75cb5904b4040e2",
+    "lines": 61
+  },
+  "final_source_manifest": {
+    "path": "final-scope-fix/source-manifest.json",
+    "sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174"
+  },
+  "qualification": "Corrected source fixed; parent-owned queued validation naturally completed. Observed1791/1/75 only preservedgolden, strict/cheap pass. Independent review required."
+}

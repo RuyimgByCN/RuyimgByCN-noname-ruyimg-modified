@@ -1,0 +1,15 @@
+{
+  "sealed_utc": "2026-10-31T13:19:35.734974+00:00",
+  "head_sha": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "run_id": 41202703042,
+  "manifest_path": "copy-manifest.json",
+  "manifest_sha256": "87c6d4290ace36c5f544d111bdf47113af71c60e0c5dfed227b3ade497629e4e",
+  "manifest_bytes": 23110,
+  "summary_path": "verified-publication-ci-summary.json",
+  "summary_sha256": "aab69bf5c4d0de3b6f38e7443aeeca5506d68737b59cc8c173501e6dfed92748",
+  "summary_bytes": 294533,
+  "listed_current_files_verified": 101,
+  "primary_file_count_including_manifest_and_seal": 103,
+  "private_raw_original_count": 12,
+  "qualification": "Copy listedfiles plusmanifest+thisseal. Originalraw downloads retained privately; exact gzip bodies/hash/CRC are primary for publication. Historical checkpoint live-stream index is dated, finalmanifest binds currentfiles. NoMainwrites."
+}

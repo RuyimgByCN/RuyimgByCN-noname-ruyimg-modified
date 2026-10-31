@@ -1,0 +1,50 @@
+{
+  "files": {
+    "index-mask-and-js-load.assistant-record.raw.jsonl": {
+      "sha256": "4233794d76ed9477303c4d77c3d427102d35f2b49d95f09f6410b383a8adc284",
+      "bytes": 30347
+    },
+    "index-mask-and-js-load.raw.sh": {
+      "sha256": "30f0840ee569e113a934dfc2f64db0f8b0921653625f5606d30f72a1517ac924",
+      "bytes": 3112
+    },
+    "index-mask-and-js-load.tool-result-record.raw.jsonl": {
+      "sha256": "aaed89aab3c102ef551b9ee1ef506e67c82f2bf446dd2299ca3bd165ef2b0ffd",
+      "bytes": 501
+    },
+    "index-mask-and-js-load.tool-result.raw.txt": {
+      "sha256": "c7b50074cf3b1fe80bcd51017a5b8fa043fb0998d7a8742bbcc5a88fb261cf88",
+      "bytes": 151
+    },
+    "index-parse.assistant-record.raw.jsonl": {
+      "sha256": "accac66052db7140bc358ddccc303666d0fbab335e942b2028cf178789a23758",
+      "bytes": 34921
+    },
+    "index-parse.raw.sh": {
+      "sha256": "7a83707d3dd4fa2fafcd1bfe8fbe41d09300b17e4be2fb3bb9af68055e88e2e9",
+      "bytes": 3655
+    },
+    "index-parse.tool-result-record.raw.jsonl": {
+      "sha256": "2540f28fe7a45b909c65c45d6e98f6b7c1d1c5a16ab3a596002a2d57be40764e",
+      "bytes": 17213
+    },
+    "index-parse.tool-result.raw.txt": {
+      "sha256": "b07b1f902d44b1eb731d3d986e6a4fc9ef28875879313335bb20ea6d83f54810",
+      "bytes": 15466
+    },
+    "manifest.json": {
+      "sha256": "fa7c41443e479a206eb54218e8055f244eca1a297c9c239cef5adfc11643e6b9",
+      "bytes": 6347
+    },
+    "preserve.py": {
+      "sha256": "e5eb7e9b8f7cb50863827eb7b4ae3b12a1dfabbd11c5ef70b832c49388c75b68",
+      "bytes": 9431
+    },
+    "report-copy.md": {
+      "sha256": "342d6cca0187d2ac2ac585aad930e3ea9a8cbbc9552c0e5c5dbad8066de78350",
+      "bytes": 2629
+    }
+  },
+  "reportPath": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/599614a0-9b12-4abe-a51d-3a9113f87c3c/verification/i02-main-index-command-provenance-supplement.md",
+  "reportSha256": "342d6cca0187d2ac2ac585aad930e3ea9a8cbbc9552c0e5c5dbad8066de78350"
+}

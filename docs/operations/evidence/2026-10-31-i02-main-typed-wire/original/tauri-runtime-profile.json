@@ -1,0 +1,19 @@
+{
+  "path": "/Users/ruyimg/Library/Application Support/org.noname.i02acceptance33d21ba5",
+  "exists": true,
+  "qualification": "New private Tauri identifier from command-local config; no user app window/input actions or Main config changes. Owned runtime profile retained, not cleaned.",
+  "files": {
+    "content/state/revoke.json": {
+      "bytes": 66,
+      "sha256": "d5706299426ee3686a18f34d35d88f0f8e510bbf61eb303970477213951e3017"
+    },
+    "content/state/active.json": {
+      "bytes": 20,
+      "sha256": "705d328077b5c075de7050a2d61daad9536c104db7709d7e086010fd63687dab"
+    },
+    "content/state/history.json": {
+      "bytes": 2,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

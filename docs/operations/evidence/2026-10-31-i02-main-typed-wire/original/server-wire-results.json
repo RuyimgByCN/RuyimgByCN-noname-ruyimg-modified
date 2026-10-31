@@ -1,0 +1,2300 @@
+{
+  "passed": true,
+  "actualServerBinary": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/game-server",
+  "binarySha256": "87e20fa5dce36c9fdc484c696ffde634ac7683c72d44d78725ceea817fcb33cf",
+  "port": 62592,
+  "room": 1,
+  "realOutcomePresentationAbsent": true,
+  "oldAndNewReaderSuccess": true,
+  "successfulFormalResult": {
+    "Accepted": {
+      "new_revision": 1,
+      "state_hash": [
+        13,
+        160,
+        176,
+        17,
+        77,
+        196,
+        218,
+        158,
+        126,
+        155,
+        196,
+        30,
+        92,
+        171,
+        229,
+        123,
+        21,
+        216,
+        133,
+        72,
+        237,
+        178,
+        105,
+        140,
+        125,
+        62,
+        39,
+        174,
+        181,
+        6,
+        186,
+        181
+      ]
+    }
+  },
+  "actualReconnectSameKey": 1000002,
+  "receiptResultEqual": true,
+  "noSecondExecutionRevision": 2,
+  "noSecondExecutionHash": [
+    201,
+    241,
+    48,
+    82,
+    155,
+    97,
+    199,
+    23,
+    111,
+    20,
+    175,
+    213,
+    195,
+    217,
+    230,
+    224,
+    54,
+    198,
+    77,
+    174,
+    233,
+    201,
+    196,
+    36,
+    106,
+    233,
+    174,
+    193,
+    136,
+    16,
+    210,
+    178
+  ],
+  "pendingAndStorageCleared": true,
+  "frames": [
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Welcome",
+        "payload": {
+          "connection_id": 1,
+          "protocol_version": 6,
+          "versions": {
+            "engine_api": 1,
+            "rule_vm_abi": 758,
+            "content_schema": 3,
+            "network_protocol": 6,
+            "replay_schema": 1,
+            "snapshot_schema": 2,
+            "package_format": 1,
+            "engine_build_id": "noname-next-0.1.0-m2"
+          }
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Pong",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 0,
+            "conn_seq": 1,
+            "revision": 0
+          },
+          "server_time_ms": 1793453737236
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomCreated",
+        "payload": {
+          "room_id": 1,
+          "host_hint": "i02-owner"
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "JoinOk",
+        "payload": {
+          "room_id": 1,
+          "player_id": 1,
+          "seat": 0,
+          "role": "Player",
+          "reconnect_token": "bcc38484-492c-4a8f-a540-a1c66d174d18",
+          "view": {
+            "revision": 0,
+            "state_hash": [
+              155,
+              77,
+              130,
+              138,
+              17,
+              92,
+              222,
+              64,
+              214,
+              157,
+              110,
+              253,
+              188,
+              11,
+              244,
+              190,
+              116,
+              224,
+              57,
+              155,
+              74,
+              71,
+              60,
+              26,
+              210,
+              76,
+              110,
+              128,
+              227,
+              78,
+              224,
+              154
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Judge",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "choice": null,
+          "legal_actions": [
+            "EndPhase"
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Welcome",
+        "payload": {
+          "connection_id": 2,
+          "protocol_version": 6,
+          "versions": {
+            "engine_api": 1,
+            "rule_vm_abi": 758,
+            "content_schema": 3,
+            "network_protocol": 6,
+            "replay_schema": 1,
+            "snapshot_schema": 2,
+            "package_format": 1,
+            "engine_build_id": "noname-next-0.1.0-m2"
+          }
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Pong",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 0,
+            "conn_seq": 1,
+            "revision": 0
+          },
+          "server_time_ms": 1793453737365
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "JoinOk",
+        "payload": {
+          "room_id": 1,
+          "player_id": 2,
+          "seat": 1,
+          "role": "Player",
+          "reconnect_token": "80bcbeb1-83e4-4124-8136-cd58027865cd",
+          "view": {
+            "revision": 0,
+            "state_hash": [
+              155,
+              77,
+              130,
+              138,
+              17,
+              92,
+              222,
+              64,
+              214,
+              157,
+              110,
+              253,
+              188,
+              11,
+              244,
+              190,
+              116,
+              224,
+              57,
+              155,
+              74,
+              71,
+              60,
+              26,
+              210,
+              76,
+              110,
+              128,
+              227,
+              78,
+              224,
+              154
+            ],
+            "observer": {
+              "Player": 2
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Judge",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 111,
+                "def": 93,
+                "suit": "Club",
+                "rank": 12,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 72,
+                "def": 12,
+                "suit": "Club",
+                "rank": 13,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 5,
+                "def": 0,
+                "suit": "Spade",
+                "rank": 10,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 97,
+                "def": 7,
+                "suit": "Spade",
+                "rank": 1,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "ShaFire"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "choice": null,
+          "legal_actions": []
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "CommandOutcome",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 0,
+            "revision": 1
+          },
+          "idempotency_key": 1000001,
+          "result": {
+            "Accepted": {
+              "new_revision": 1,
+              "state_hash": [
+                13,
+                160,
+                176,
+                17,
+                77,
+                196,
+                218,
+                158,
+                126,
+                155,
+                196,
+                30,
+                92,
+                171,
+                229,
+                123,
+                21,
+                216,
+                133,
+                72,
+                237,
+                178,
+                105,
+                140,
+                125,
+                62,
+                39,
+                174,
+                181,
+                6,
+                186,
+                181
+              ]
+            }
+          },
+          "view": {
+            "revision": 1,
+            "state_hash": [
+              13,
+              160,
+              176,
+              17,
+              77,
+              196,
+              218,
+              158,
+              126,
+              155,
+              196,
+              30,
+              92,
+              171,
+              229,
+              123,
+              21,
+              216,
+              133,
+              72,
+              237,
+              178,
+              105,
+              140,
+              125,
+              62,
+              39,
+              174,
+              181,
+              6,
+              186,
+              181
+            ],
+            "observer": {
+              "Player": 2
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Draw",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 111,
+                "def": 93,
+                "suit": "Club",
+                "rank": 12,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 72,
+                "def": 12,
+                "suit": "Club",
+                "rank": 13,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 5,
+                "def": 0,
+                "suit": "Spade",
+                "rank": 10,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 97,
+                "def": 7,
+                "suit": "Spade",
+                "rank": 1,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "ShaFire"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "legal_actions": [],
+          "choice": null,
+          "public_event_codes": [
+            8,
+            8,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "CommandOutcome",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 2,
+            "revision": 1
+          },
+          "idempotency_key": 1000001,
+          "result": {
+            "Accepted": {
+              "new_revision": 1,
+              "state_hash": [
+                13,
+                160,
+                176,
+                17,
+                77,
+                196,
+                218,
+                158,
+                126,
+                155,
+                196,
+                30,
+                92,
+                171,
+                229,
+                123,
+                21,
+                216,
+                133,
+                72,
+                237,
+                178,
+                105,
+                140,
+                125,
+                62,
+                39,
+                174,
+                181,
+                6,
+                186,
+                181
+              ]
+            }
+          },
+          "view": {
+            "revision": 1,
+            "state_hash": [
+              13,
+              160,
+              176,
+              17,
+              77,
+              196,
+              218,
+              158,
+              126,
+              155,
+              196,
+              30,
+              92,
+              171,
+              229,
+              123,
+              21,
+              216,
+              133,
+              72,
+              237,
+              178,
+              105,
+              140,
+              125,
+              62,
+              39,
+              174,
+              181,
+              6,
+              186,
+              181
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Draw",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              },
+              {
+                "id": 102,
+                "def": 10,
+                "suit": "Heart",
+                "rank": 1,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 12,
+                "def": 0,
+                "suit": "Club",
+                "rank": 7,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "legal_actions": [
+            "EndPhase"
+          ],
+          "choice": null,
+          "public_event_codes": [
+            8,
+            8,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "CommandOutcome",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 3,
+            "revision": 2
+          },
+          "idempotency_key": 1000002,
+          "result": {
+            "Accepted": {
+              "new_revision": 2,
+              "state_hash": [
+                201,
+                241,
+                48,
+                82,
+                155,
+                97,
+                199,
+                23,
+                111,
+                20,
+                175,
+                213,
+                195,
+                217,
+                230,
+                224,
+                54,
+                198,
+                77,
+                174,
+                233,
+                201,
+                196,
+                36,
+                106,
+                233,
+                174,
+                193,
+                136,
+                16,
+                210,
+                178
+              ]
+            }
+          },
+          "view": {
+            "revision": 2,
+            "state_hash": [
+              201,
+              241,
+              48,
+              82,
+              155,
+              97,
+              199,
+              23,
+              111,
+              20,
+              175,
+              213,
+              195,
+              217,
+              230,
+              224,
+              54,
+              198,
+              77,
+              174,
+              233,
+              201,
+              196,
+              36,
+              106,
+              233,
+              174,
+              193,
+              136,
+              16,
+              210,
+              178
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Play",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              },
+              {
+                "id": 102,
+                "def": 10,
+                "suit": "Heart",
+                "rank": 1,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 12,
+                "def": 0,
+                "suit": "Club",
+                "rank": 7,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "legal_actions": [
+            {
+              "PlayCard": {
+                "card": 113,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 86,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 21,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 102,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 12,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            "EndPhase"
+          ],
+          "choice": null,
+          "public_event_codes": [
+            8,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "CommandOutcome",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 0,
+            "revision": 2
+          },
+          "idempotency_key": 1000002,
+          "result": {
+            "Accepted": {
+              "new_revision": 2,
+              "state_hash": [
+                201,
+                241,
+                48,
+                82,
+                155,
+                97,
+                199,
+                23,
+                111,
+                20,
+                175,
+                213,
+                195,
+                217,
+                230,
+                224,
+                54,
+                198,
+                77,
+                174,
+                233,
+                201,
+                196,
+                36,
+                106,
+                233,
+                174,
+                193,
+                136,
+                16,
+                210,
+                178
+              ]
+            }
+          },
+          "view": {
+            "revision": 2,
+            "state_hash": [
+              201,
+              241,
+              48,
+              82,
+              155,
+              97,
+              199,
+              23,
+              111,
+              20,
+              175,
+              213,
+              195,
+              217,
+              230,
+              224,
+              54,
+              198,
+              77,
+              174,
+              233,
+              201,
+              196,
+              36,
+              106,
+              233,
+              174,
+              193,
+              136,
+              16,
+              210,
+              178
+            ],
+            "observer": {
+              "Player": 2
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Play",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 111,
+                "def": 93,
+                "suit": "Club",
+                "rank": 12,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 72,
+                "def": 12,
+                "suit": "Club",
+                "rank": 13,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 5,
+                "def": 0,
+                "suit": "Spade",
+                "rank": 10,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 97,
+                "def": 7,
+                "suit": "Spade",
+                "rank": 1,
+                "owner": 2,
+                "zone": "Hand",
+                "kind": "ShaFire"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "legal_actions": [],
+          "choice": null,
+          "public_event_codes": [
+            8,
+            8
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": false,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Welcome",
+        "payload": {
+          "connection_id": 3,
+          "protocol_version": 6,
+          "versions": {
+            "engine_api": 1,
+            "rule_vm_abi": 758,
+            "content_schema": 3,
+            "network_protocol": 6,
+            "replay_schema": 1,
+            "snapshot_schema": 2,
+            "package_format": 1,
+            "engine_build_id": "noname-next-0.1.0-m2"
+          }
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Pong",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 1,
+            "revision": 1
+          },
+          "server_time_ms": 1793453737691
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "JoinOk",
+        "payload": {
+          "room_id": 1,
+          "player_id": 1,
+          "seat": 0,
+          "role": "Player",
+          "reconnect_token": "bcc38484-492c-4a8f-a540-a1c66d174d18",
+          "view": {
+            "revision": 2,
+            "state_hash": [
+              201,
+              241,
+              48,
+              82,
+              155,
+              97,
+              199,
+              23,
+              111,
+              20,
+              175,
+              213,
+              195,
+              217,
+              230,
+              224,
+              54,
+              198,
+              77,
+              174,
+              233,
+              201,
+              196,
+              36,
+              106,
+              233,
+              174,
+              193,
+              136,
+              16,
+              210,
+              178
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Play",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              },
+              {
+                "id": 102,
+                "def": 10,
+                "suit": "Heart",
+                "rank": 1,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 12,
+                "def": 0,
+                "suit": "Club",
+                "rank": 7,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "choice": null,
+          "legal_actions": [
+            {
+              "PlayCard": {
+                "card": 113,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 86,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 21,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 102,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 12,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            "EndPhase"
+          ]
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "RoomRoster",
+        "payload": {
+          "choice_timeout_secs": 90,
+          "room_id": 1,
+          "seats": [
+            {
+              "seat": 0,
+              "player_id": 1,
+              "display_name": "i02-owner",
+              "connected": true,
+              "managed": false
+            },
+            {
+              "seat": 1,
+              "player_id": 2,
+              "display_name": "i02-peer",
+              "connected": true,
+              "managed": false
+            }
+          ],
+          "started": true,
+          "finished": false
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "CommandOutcome",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 2,
+            "revision": 2
+          },
+          "idempotency_key": 1000002,
+          "result": {
+            "Accepted": {
+              "new_revision": 2,
+              "state_hash": [
+                201,
+                241,
+                48,
+                82,
+                155,
+                97,
+                199,
+                23,
+                111,
+                20,
+                175,
+                213,
+                195,
+                217,
+                230,
+                224,
+                54,
+                198,
+                77,
+                174,
+                233,
+                201,
+                196,
+                36,
+                106,
+                233,
+                174,
+                193,
+                136,
+                16,
+                210,
+                178
+              ]
+            }
+          },
+          "view": {
+            "revision": 2,
+            "state_hash": [
+              201,
+              241,
+              48,
+              82,
+              155,
+              97,
+              199,
+              23,
+              111,
+              20,
+              175,
+              213,
+              195,
+              217,
+              230,
+              224,
+              54,
+              198,
+              77,
+              174,
+              233,
+              201,
+              196,
+              36,
+              106,
+              233,
+              174,
+              193,
+              136,
+              16,
+              210,
+              178
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Play",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              },
+              {
+                "id": 102,
+                "def": 10,
+                "suit": "Heart",
+                "rank": 1,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 12,
+                "def": 0,
+                "suit": "Club",
+                "rank": 7,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "legal_actions": [
+            {
+              "PlayCard": {
+                "card": 113,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 86,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 21,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 102,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 12,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            "EndPhase"
+          ],
+          "choice": null,
+          "public_event_codes": []
+        }
+      }
+    },
+    {
+      "url": "ws://127.0.0.1:62592/ws",
+      "message": {
+        "type": "Snapshot",
+        "payload": {
+          "header": {
+            "protocol_version": 6,
+            "room_id": 1,
+            "conn_seq": 3,
+            "revision": 2
+          },
+          "view": {
+            "revision": 2,
+            "state_hash": [
+              201,
+              241,
+              48,
+              82,
+              155,
+              97,
+              199,
+              23,
+              111,
+              20,
+              175,
+              213,
+              195,
+              217,
+              230,
+              224,
+              54,
+              198,
+              77,
+              174,
+              233,
+              201,
+              196,
+              36,
+              106,
+              233,
+              174,
+              193,
+              136,
+              16,
+              210,
+              178
+            ],
+            "observer": {
+              "Player": 1
+            },
+            "round": 1,
+            "current_player": 1,
+            "phase": "Play",
+            "seats": [
+              {
+                "player": 1,
+                "character_def": 0,
+                "seat": 0,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 6,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              },
+              {
+                "player": 2,
+                "character_def": 0,
+                "seat": 1,
+                "hp": 4,
+                "max_hp": 4,
+                "alive": true,
+                "turned_over": false,
+                "hand_count": 4,
+                "identity": null,
+                "skills": [],
+                "generals": [
+                  null,
+                  null
+                ]
+              }
+            ],
+            "known_cards": [
+              {
+                "id": 113,
+                "def": 94,
+                "suit": "Club",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 86,
+                "def": 18,
+                "suit": "Club",
+                "rank": 9,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Jiu"
+              },
+              {
+                "id": 21,
+                "def": 0,
+                "suit": "Heart",
+                "rank": 10,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              },
+              {
+                "id": 31,
+                "def": 1,
+                "suit": "Heart",
+                "rank": 2,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Shan"
+              },
+              {
+                "id": 102,
+                "def": 10,
+                "suit": "Heart",
+                "rank": 1,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Other"
+              },
+              {
+                "id": 12,
+                "def": 0,
+                "suit": "Club",
+                "rank": 7,
+                "owner": 1,
+                "zone": "Hand",
+                "kind": "Sha"
+              }
+            ],
+            "outcome": "InProgress"
+          },
+          "choice": null,
+          "legal_actions": [
+            {
+              "PlayCard": {
+                "card": 113,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 86,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 21,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 102,
+                "targets": []
+              }
+            },
+            {
+              "PlayCard": {
+                "card": 12,
+                "targets": [
+                  2
+                ]
+              }
+            },
+            "EndPhase"
+          ]
+        }
+      }
+    }
+  ],
+  "sent": [
+    {
+      "type": "Hello",
+      "payload": {
+        "versions": {
+          "engine_api": 1,
+          "rule_vm_abi": 167,
+          "content_schema": 3,
+          "network_protocol": 6,
+          "replay_schema": 1,
+          "snapshot_schema": 1,
+          "package_format": 1,
+          "engine_build_id": "noname-next-web"
+        },
+        "display_name": "i02-owner"
+      }
+    },
+    {
+      "type": "Heartbeat",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 0,
+          "conn_seq": 1,
+          "revision": 0
+        }
+      }
+    },
+    {
+      "type": "CreateRoom",
+      "payload": {
+        "players": 2,
+        "seed": 4242,
+        "password": "i02-private",
+        "choice_timeout_secs": 90
+      }
+    },
+    {
+      "type": "Hello",
+      "payload": {
+        "versions": {
+          "engine_api": 1,
+          "rule_vm_abi": 167,
+          "content_schema": 3,
+          "network_protocol": 6,
+          "replay_schema": 1,
+          "snapshot_schema": 1,
+          "package_format": 1,
+          "engine_build_id": "noname-next-web"
+        },
+        "display_name": "i02-peer"
+      }
+    },
+    {
+      "type": "Heartbeat",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 0,
+          "conn_seq": 1,
+          "revision": 0
+        }
+      }
+    },
+    {
+      "type": "JoinRoom",
+      "payload": {
+        "room_id": 1,
+        "password": "i02-private",
+        "preferred_seat": null,
+        "reconnect_token": null
+      }
+    },
+    {
+      "type": "SubmitCommand",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 1,
+          "conn_seq": 2,
+          "revision": 0
+        },
+        "command": {
+          "actor": 1,
+          "expected_revision": 0,
+          "idempotency_key": 1000001,
+          "kind": "EndPhase"
+        },
+        "idempotency_key": 1000001,
+        "replay": false
+      }
+    },
+    {
+      "type": "SubmitCommand",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 1,
+          "conn_seq": 3,
+          "revision": 1
+        },
+        "command": {
+          "actor": 1,
+          "expected_revision": 1,
+          "idempotency_key": 1000002,
+          "kind": "EndPhase"
+        },
+        "idempotency_key": 1000002,
+        "replay": false
+      }
+    },
+    {
+      "type": "Hello",
+      "payload": {
+        "versions": {
+          "engine_api": 1,
+          "rule_vm_abi": 167,
+          "content_schema": 3,
+          "network_protocol": 6,
+          "replay_schema": 1,
+          "snapshot_schema": 1,
+          "package_format": 1,
+          "engine_build_id": "noname-next-web"
+        },
+        "display_name": "i02-owner"
+      }
+    },
+    {
+      "type": "Heartbeat",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 1,
+          "conn_seq": 1,
+          "revision": 1
+        }
+      }
+    },
+    {
+      "type": "JoinRoom",
+      "payload": {
+        "room_id": 1,
+        "password": "i02-private",
+        "preferred_seat": null,
+        "reconnect_token": "bcc38484-492c-4a8f-a540-a1c66d174d18"
+      }
+    },
+    {
+      "type": "SubmitCommand",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 1,
+          "conn_seq": 2,
+          "revision": 2
+        },
+        "command": {
+          "actor": 1,
+          "expected_revision": 2,
+          "idempotency_key": 1000002,
+          "kind": "EndPhase"
+        },
+        "idempotency_key": 1000002,
+        "replay": true
+      }
+    },
+    {
+      "type": "RequestSnapshot",
+      "payload": {
+        "header": {
+          "protocol_version": 6,
+          "room_id": 1,
+          "conn_seq": 3,
+          "revision": 2
+        },
+        "last_revision": 2
+      }
+    }
+  ],
+  "serverRecordBeforeReplaySha256": "bdf26625e49ddef5b037a11b3320a131044710fce04853f72d3331d7d5c4299e",
+  "serverRecordAfterReplaySha256": "11abae5922f25a5c7256d2ad6b6e334449cee04987d0e578132897ae9e4b9f44",
+  "qualification": "Real current Main server native-room DTO omission and actual NetworkEngineClient replay. Metadata fixtures are tested separately and are not Rust producers."
+}

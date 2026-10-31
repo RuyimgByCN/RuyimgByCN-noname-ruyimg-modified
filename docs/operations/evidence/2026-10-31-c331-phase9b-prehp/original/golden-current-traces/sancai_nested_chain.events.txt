@@ -1,0 +1,182 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            12,
+            108,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 0,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:90",
+            "card:123",
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            90,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            123,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 1,
+        cards: [
+            105,
+            2,
+        ],
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 2,
+        player: 1,
+        targets: [
+            0,
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            1,
+        ),
+        target: 0,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            2,
+        ),
+    },
+    ChoiceOpened {
+        id: 2,
+        observer: 0,
+        prompt: "trigger_confirm",
+    },
+    ChoiceAnswered {
+        id: 2,
+        options: [
+            "confirm",
+        ],
+    },
+    SkillTriggered {
+        skill: "散财",
+        owner: 0,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            100,
+            46,
+        ],
+    },
+    ChoiceOpened {
+        id: 3,
+        observer: 0,
+        prompt: "sancai_target",
+    },
+    ChoiceAnswered {
+        id: 3,
+        options: [
+            "player:2",
+        ],
+    },
+    ChoiceOpened {
+        id: 4,
+        observer: 0,
+        prompt: "sancai_card",
+    },
+    ChoiceAnswered {
+        id: 4,
+        options: [
+            "card:100",
+        ],
+    },
+    CardsGiven {
+        from: 0,
+        to: 2,
+        cards: [
+            100,
+        ],
+    },
+]

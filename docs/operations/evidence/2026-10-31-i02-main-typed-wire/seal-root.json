@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-31T14:03:47.557730+00:00",
+  "manifestSha256": "f5ed0f3d22aaebb9295814665089e9f4ba441a47e35b8e3a1e5a4a2993e1b500",
+  "artifactIndexSha256": "d9e347580a35df92f0be50bfd62f644e49a09f0c4eb89d195a07af303427e635",
+  "reportSha256": "05f4cdb3f4227b32f6b1bf5488985b3142d616429412190c17c648a8bfae9b79",
+  "freezeReleaseSha256": "5931f5fd0286742b568fd00b5f5ce9a7da36a8dc66ad2de12cb1592329ac2d0d",
+  "evidenceFiles": 1054,
+  "elapsedMinutes": 52.17138573333333,
+  "MainDocFreezeReleased": true
+}

@@ -1,0 +1,2990 @@
+{
+  "utc": "2026-10-31T15:05:47.301068+00:00",
+  "status": "WITHDRAWN_BDAF_PRESERVED_CORRECTION_IN_PROGRESS",
+  "withdrawnCommit": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+  "protectedLocalRef": "refs/heads/local-evidence/i02-bdaf-unpublished-profile",
+  "publishedAcceptedParent": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "leaseReleaseUtc": "2026-10-31T14:57:23.134345+00:00",
+  "pushesBeforeWithdrawal": 0,
+  "profileFiles": 491,
+  "profileBytes": 11740402,
+  "generatedSchemaBackupFiles": 4,
+  "removedTrackingOnly": [
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/ChromeFeatureState",
+      "sha256": "32a57afb1616340d02c291bc788420b3ba59857c074040f9ade113afae69f876",
+      "bytes": 277,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Account Web Data",
+      "sha256": "5770903175145efc20e3a10926f5dba7f18253680d062de7306284cb7e455194",
+      "bytes": 75776,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Account Web Data-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Affiliation Database",
+      "sha256": "52b369ae1ac4db15be400b8d45b01d9e4c4054299fd3743f811e785a6abcbe3a",
+      "bytes": 53248,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Affiliation Database-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/AutofillAiModelCache/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/AutofillAiModelCache/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/AutofillStrikeDatabase/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/AutofillStrikeDatabase/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/BookmarkMergedSurfaceOrdering",
+      "sha256": "d914176fd50bd7f565700006a31aa97b79d3ad17cee20c8e5ff2061d5cb74817",
+      "bytes": 4,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/BudgetDatabase/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/BudgetDatabase/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/45219b37baf3e776_0",
+      "sha256": "2463c8c01ff2cc435151d6155877ac85718a5dc715257294b2168e9724abe62d",
+      "bytes": 434779,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/4590a38b9189d84d_0",
+      "sha256": "ea72f569d3bddd49ce6269c048c0e8acfd097d5c463a454f85e22d9db0f6ca04",
+      "bytes": 312,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/91fe63bbf2ea435c_0",
+      "sha256": "560968d910833254ee31e944436fe0db2729f084b5d015e360e24107862b3ee2",
+      "bytes": 22751,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/a934bae0c1b81422_0",
+      "sha256": "298bda6668be28f78f8d33eae40b3961a0854418ca7e55d11bfdb7ccb788ae08",
+      "bytes": 608,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/cb3dc9ad4ea51983_0",
+      "sha256": "755d3e83fa53006efed9dd068f79e95d13d5d73eba5b22868f55a2b35a8184a0",
+      "bytes": 2932,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/e8853a51b54f988c_0",
+      "sha256": "f1afd24551d28432233140c4802f439b1f97eb648e1534dc502d521b5b40460c",
+      "bytes": 3568014,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/Cache_Data/index-dir/the-real-index",
+      "sha256": "3ae9eeb2056a4f9375ef2f25fa2b3f7042b462d826093a4ec0ea13e199490a72",
+      "bytes": 192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/No_Vary_Search/journal.baj",
+      "sha256": "9c169428d852e25bd59b27652ed533d2a1f09f96e4c329fa5e06f47e16731543",
+      "bytes": 4,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cache/No_Vary_Search/snapshot.baf",
+      "sha256": "0c2dd377ed0cc66161e9db8f89f7d8bcb3ad8c06c4a054bdcba214ab05f58c9a",
+      "bytes": 20,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/ClientCertificates/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/ClientCertificates/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/js/3f6dc9cdbeef8a9b_0",
+      "sha256": "31c7f7eb7345a4b9a3565ec70a9e550c14d4146e34a93acb02f678fccf747efc",
+      "bytes": 225,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/js/ba678a2fbd8c358c_0",
+      "sha256": "564cf940673f2a1d8edd36b54d330deecb9e11fe28ec72cdb64691d85ca00974",
+      "bytes": 298,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/js/fcde3fd6c2223fd2_0",
+      "sha256": "b5731226d65172376ead0a93ccaea21518d98fffcfd3589f2866fd7fd36d82fc",
+      "bytes": 212,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/js/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/js/index-dir/the-real-index",
+      "sha256": "0d1bf0760bef9bec503816ddb92f5d82e3ce4b7551eeb91755696b0d05ad533b",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/wasm/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Code Cache/wasm/index-dir/the-real-index",
+      "sha256": "515dea5f953b08c075a4841cb61b3ab38f0d114b13331417009d82c23331d5ca",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cookies",
+      "sha256": "e63e5ecba16ce902f2c62dda454042ecca66a09d7a33f38fedac458d1a11f81b",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Cookies-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DIPS",
+      "sha256": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda",
+      "bytes": 4096,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DIPS-wal",
+      "sha256": "6d903de547050f5f33e10f36252ada4fb4a2f2488abe8970c6b746717907b66e",
+      "bytes": 45352,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnGraphiteCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnGraphiteCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnGraphiteCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnGraphiteCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnGraphiteCache/index",
+      "sha256": "9cf2fd7e25eec6210d5de05075252bde14884d6d245f253ae7f9b85683539286",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnWebGPUCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnWebGPUCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnWebGPUCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnWebGPUCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/DawnWebGPUCache/index",
+      "sha256": "0ee4f0beaf4f861e03da30ee88d4a0fe32197be3248bceed6a61dc8e38995440",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Device Bound Sessions",
+      "sha256": "78a06f4f93849b88f0489d00c0389205bc9d5389608c6918549df4db668d783f",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Device Bound Sessions-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Rules/000003.log",
+      "sha256": "5b149d68659ebeab90f1116b8704a32dc240fbf85171bd4a4f70d57a3d8d4bb8",
+      "bytes": 95,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Rules/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Rules/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Rules/LOG",
+      "sha256": "d9a149578a8e1dc0d9755e1b11e237af130d58a76455b1a21c1be188f958bbb6",
+      "bytes": 345,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Rules/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Scripts/000003.log",
+      "sha256": "5b149d68659ebeab90f1116b8704a32dc240fbf85171bd4a4f70d57a3d8d4bb8",
+      "bytes": 95,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Scripts/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Scripts/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Scripts/LOG",
+      "sha256": "584b50b2fc7e1da0bd818c6a705ad93a6ddbb4019dac89f81c2be7fc46e9a266",
+      "bytes": 349,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension Scripts/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension State/000003.log",
+      "sha256": "fff9c841af450dfefe7f284f645d4a26b048e6bd5709ad766b308172bc260a53",
+      "bytes": 285,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension State/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension State/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension State/LOG",
+      "sha256": "d769b8920b9a8b494c6ae66d068e8066cb83a3b99ded54b083e3d79229319f8d",
+      "bytes": 345,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extension State/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/128.png",
+      "sha256": "2576b1798cd3fa5745897dbe8f1ab12eaf12110827d290b44c6fc0396ba3bba2",
+      "bytes": 5069,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/af/messages.json",
+      "sha256": "70445794b59a9aac6bedff8fbd7c2427f9b66b1bb8fe570def80723ddaffe236",
+      "bytes": 885,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/am/messages.json",
+      "sha256": "a943ff5bd2e118e021cedc99dbbb413a7dd5d2e980c9f3bf8f135dd55b800cc7",
+      "bytes": 1262,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ar/messages.json",
+      "sha256": "ac94170794a873dccb375658c557e3e902f046281d546f72d1124c8069def826",
+      "bytes": 1221,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/as/messages.json",
+      "sha256": "f3175766f4c0a8dba2af25f0caf16ab03bb2692c9c5f6723af9e463c40a68796",
+      "bytes": 1716,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/az/messages.json",
+      "sha256": "04b2f400d71c454ade6b712d7b698f9e0efc0bd667613bf6d1974f6942730c9c",
+      "bytes": 954,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/be/messages.json",
+      "sha256": "7dfcb65f32a1117bcfe05f97dd48ea8539f014085b929de49ede84a140314eb2",
+      "bytes": 1371,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/bg/messages.json",
+      "sha256": "5a3bac520c89d98094a0ed9d06ce42eada4c2b357c2ce4bb64500b54c1f0d2aa",
+      "bytes": 1366,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/bn/messages.json",
+      "sha256": "cf63f4201d1ee02a0516f25cb74ac92c55bfa811ce0e4a1a9bf526e307faeabd",
+      "bytes": 1740,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ca/messages.json",
+      "sha256": "83e21f3a452edd2cbf072f6c83fae6e78864886450e1f874a4b16ed7942f36d5",
+      "bytes": 907,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/cs/messages.json",
+      "sha256": "ada6a72ccd25ccf57f77d28e1311120f44272f99aad5c0414de2f580bf6ce732",
+      "bytes": 890,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/cy/messages.json",
+      "sha256": "5d63894a0bb4e6a4c2cf9d4ffc5e588d21576d81a6775602d08cd97f47b98354",
+      "bytes": 911,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/da/messages.json",
+      "sha256": "b43a070137339de512538b02048be651ddc931946d1b30c19df94e475f3c74a2",
+      "bytes": 860,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/de/messages.json",
+      "sha256": "59fd7274e6a7629692766012d9da1e324011e43bd78ec3628aa0e94558977e6f",
+      "bytes": 1008,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/el/messages.json",
+      "sha256": "16593ce1ef222ae7852bfa6d32f702bbcf00beb4c4c54964465d46c85204a5d4",
+      "bytes": 1590,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/en/messages.json",
+      "sha256": "5d4872c090de9bad86ed4974ec3ac88f2a6cce74d73d3d65d4f9137fe8f399b7",
+      "bytes": 828,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/en_CA/messages.json",
+      "sha256": "5d4872c090de9bad86ed4974ec3ac88f2a6cce74d73d3d65d4f9137fe8f399b7",
+      "bytes": 828,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/en_GB/messages.json",
+      "sha256": "619793d0ff594df51d036ed0ecc70f5aa823d02221dcfe4518d4813a40c5bc92",
+      "bytes": 825,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/en_US/messages.json",
+      "sha256": "e994530a0f80554468171e1857fa0e79f28036c56f8322b401e6b7c9fb32bdb5",
+      "bytes": 1395,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/es/messages.json",
+      "sha256": "aa8a66354354dbadc57faba0a80dd6ea3e4aceefaffe32906e557f4029b31921",
+      "bytes": 938,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/es_419/messages.json",
+      "sha256": "b723547fd893f0d14cf7b15fef1de2fd99c8540d636a0fa0e3614f18216bfd0d",
+      "bytes": 936,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/et/messages.json",
+      "sha256": "621dc6ad1e5c6b1c9dd79a819ef1208a776035341a0caebea33e85d01a71bf95",
+      "bytes": 945,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/eu/messages.json",
+      "sha256": "e7ac83b739ebc72673c2b24b427e5db19bcfbc123462696826f1caba4817bdb6",
+      "bytes": 958,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/fa/messages.json",
+      "sha256": "3ac754e356b29579999779b2099956ae66308348bc6099336be75645a6f41ada",
+      "bytes": 1282,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/fi/messages.json",
+      "sha256": "87b72410683d12a4441f7a11f26093e38f651cce318e162928b9dbf84b46faa8",
+      "bytes": 888,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/fil/messages.json",
+      "sha256": "ef66d67d6cc949329804a875e577ab57342bee98342bc6fb14019f3e0b3d79e9",
+      "bytes": 916,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/fr/messages.json",
+      "sha256": "c3b75939393e53f02d22f5090ecb3ccddb097f6278ea264dfd757ea6be247f69",
+      "bytes": 954,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/fr_CA/messages.json",
+      "sha256": "01ff0e94294966bfce9797ce8af76963e77979f665aaf692960b611fe76974a2",
+      "bytes": 949,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/gl/messages.json",
+      "sha256": "673df9b1137742183465a4d20fd94d0ddb85975b2ed3a947d545a0172b57d114",
+      "bytes": 967,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/gu/messages.json",
+      "sha256": "edf08a08a1ceb1b057a6dbed1796c4714b0f078abf6a6e2b184ff16031c9675f",
+      "bytes": 1635,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/hi/messages.json",
+      "sha256": "51107cdcc464bda12f4b8cfa11c24a581364aa26968d192a97648843a9bc3a70",
+      "bytes": 1649,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/hr/messages.json",
+      "sha256": "efde691b2cb063389a7742646466ffbfa45f701997a008134d55bb0939ae30ff",
+      "bytes": 912,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/hu/messages.json",
+      "sha256": "076e129fc56343413806fcc29239b1693e31fe83c88555fbb42fbfacc212c061",
+      "bytes": 1042,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/hy/messages.json",
+      "sha256": "e7405d824180a706b9429bd6f65c566f4a02cba5c7a82ab99cc5960db4b195f4",
+      "bytes": 1255,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/id/messages.json",
+      "sha256": "83cce49048490fc546230a619578a78d574db16f7912ed6624ff708869719de6",
+      "bytes": 835,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/is/messages.json",
+      "sha256": "0929d9aa2b46caf9086509f2035591be18d76b0a274c7117bb730dd833eb8a98",
+      "bytes": 891,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/it/messages.json",
+      "sha256": "08963459e7579c914fd077b0c81897a81e8e2fbe086363bbbdfae135ea90c2de",
+      "bytes": 876,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/iw/messages.json",
+      "sha256": "69cab95d83b5e6d0629d3d70630a0c581f2e2179f2b7599af8aa11bccc6d0646",
+      "bytes": 2350,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ja/messages.json",
+      "sha256": "8868cdfa19974e5b850d2e7b46765cd6ba45b2e2dca706d7fd3dbe009212fa6b",
+      "bytes": 1137,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ka/messages.json",
+      "sha256": "669464334b56a7abe2b767a65edd72fbcca45157cb917c143fe8ed2f6bff02f6",
+      "bytes": 1917,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/kk/messages.json",
+      "sha256": "a723e94f86662e6fc71f9fe94209ef4c902051e3568b4e72ee2603dedeed7662",
+      "bytes": 1424,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/km/messages.json",
+      "sha256": "62f05cc7428cedb91c4dbb2c1001f6b45091ddc5d2618e85d6cc2347b1d965e4",
+      "bytes": 1811,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/kn/messages.json",
+      "sha256": "41cffe6d6c1d558f848a4248c7f064d9bc0f506276b5d0608ba4ed6ca3d272a1",
+      "bytes": 1872,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ko/messages.json",
+      "sha256": "c610e58bbad545e2958995c9d00cd0ce5f7290b7d8272b3820e2948de4a85f97",
+      "bytes": 1019,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/lo/messages.json",
+      "sha256": "048bb9881592a94d7079b1acec2a5492f97720ba156a26fd31fec587a91921af",
+      "bytes": 1536,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/lt/messages.json",
+      "sha256": "b67932bc54a1bf6b4b6e4cbaef3ffd6137d2a6eef883090cdc34a0f6a0120fc3",
+      "bytes": 1005,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/lv/messages.json",
+      "sha256": "295af871066a1ce81c2a396758248f0ce9a814740e3404136da35e330d46621d",
+      "bytes": 971,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/mk/messages.json",
+      "sha256": "4d5ffe97e0b84fd3c41a5ddcdbffb32905c11d024120e2af4b77db29f92cd52b",
+      "bytes": 1311,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ml/messages.json",
+      "sha256": "6714af6a4d3fbb565558bd3b24c09a0442a6ba8ce6143f6295db662736495ca4",
+      "bytes": 2068,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/mn/messages.json",
+      "sha256": "e44a38d9417a29a5ac37ffa39819c77eb366d3d78d915f636c67db2acba818d9",
+      "bytes": 1259,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/mr/messages.json",
+      "sha256": "037d28d3b9aaf5a760dd1fddec5b9d4d9d881a8f3deb20e84131694f0cc819ab",
+      "bytes": 1696,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ms/messages.json",
+      "sha256": "3b588ddd8fec31a4b22a5bd7e5a814524eea162552bd9a253ec61d6f57e1cad9",
+      "bytes": 913,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/my/messages.json",
+      "sha256": "f9cc00f9c6914fe4773d5308f83105181088fa00221f63b2ea6f93339cd142b7",
+      "bytes": 2189,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ne/messages.json",
+      "sha256": "a1b509ecc4b0ea3b682c739e30ac86b6cdccf10801c46c515c0485eae976a6fe",
+      "bytes": 1861,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/nl/messages.json",
+      "sha256": "07c20d230caf68c7cc1d776bca5ec2e02cc333563e32fdd239d4816274ad5902",
+      "bytes": 891,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/no/messages.json",
+      "sha256": "0afab3185b95601a62bb2de47b461e942e93aa1b1f959f2cf6df2280001fb35b",
+      "bytes": 855,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/or/messages.json",
+      "sha256": "aa469e31babe71855958859797a6df1e76429652af884b04136203f60d02838d",
+      "bytes": 1738,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/pa/messages.json",
+      "sha256": "36c0c3ee60ff58764f9d6a05efe8166415f1bf3ba4b5d2348e6973290ceefea6",
+      "bytes": 1680,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/pl/messages.json",
+      "sha256": "9d1b2dbb3359458e5baf3d0d34741f832fc6b0e3455dcea046c51b6dd01668a6",
+      "bytes": 955,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/pt_BR/messages.json",
+      "sha256": "bb57e718fc17626187eb64e3161a1312000032555348b853f442171877a6c081",
+      "bytes": 851,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/pt_PT/messages.json",
+      "sha256": "095041e0f611a2f0b11251c969f3ee3f12d0c66e98d9450923d4c528d12dfe70",
+      "bytes": 891,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ro/messages.json",
+      "sha256": "471c650dec886cd0ec40486cd191f935e1e79c9512a73d2ac4d0f2ff79641973",
+      "bytes": 914,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ru/messages.json",
+      "sha256": "aaabe1585f5afeafee5d6563e0a4dccd263a3b09712d52dae77f21666fe60976",
+      "bytes": 1318,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/si/messages.json",
+      "sha256": "526c6b4457337854f6e47a8290bf07a4d634f7bbf45b4efc3a5d0adb9fe02013",
+      "bytes": 1715,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sk/messages.json",
+      "sha256": "d9ca84b6aec08748eb826801a7f5597464a3593aac972db14d3b826f7f1ac8c8",
+      "bytes": 911,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sl/messages.json",
+      "sha256": "e75c45ea0c75772ed7afdf1b98b04ea6f22babe8be821f1ae4c4355cbf2e95dc",
+      "bytes": 940,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sq/messages.json",
+      "sha256": "b9234107dd75456404177a125c6469ccfded102ddb852a75dff6a9c3e51f1bc8",
+      "bytes": 927,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sr/messages.json",
+      "sha256": "0fdac42a2dec881d3b18df83ff5da72cf217851e852bd1902240db91f8d5371f",
+      "bytes": 1297,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sv/messages.json",
+      "sha256": "0430d75210dabe65f5899f4ccdb3c834b6e363e6d1a6d682541aff50e781e78b",
+      "bytes": 861,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/sw/messages.json",
+      "sha256": "9602b746a1d32bdc9dc11e155fe7145426a991572463821d970bd86b965b0882",
+      "bytes": 957,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ta/messages.json",
+      "sha256": "baa4275420327e1f4c296e85c9eaeeadbe4e3f2ceb8391beda01d0809326ca1e",
+      "bytes": 1918,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/te/messages.json",
+      "sha256": "9bc7cd7fe286f41f6a48566c3b8b7b6e6e5542954c2386613374f6f3c84490f8",
+      "bytes": 1946,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/th/messages.json",
+      "sha256": "6f3fa69ff687c6566d7b97245365ca39c9fd27f75949275965eaa40754036182",
+      "bytes": 1651,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/tr/messages.json",
+      "sha256": "62fbb78fa2245e68505f0c6281b475d27d3da76f9ff91b2bbef41eef05b9c343",
+      "bytes": 1040,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/uk/messages.json",
+      "sha256": "0505dde7a9b3d5a90ee519f96bf2b2d052e81de8a68ef1d8537b74838d7b8b80",
+      "bytes": 1310,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/ur/messages.json",
+      "sha256": "293f7bb05ff73eb5fb63f6241de4aa1bb574ec91728df34ebe80ad456d30906f",
+      "bytes": 1240,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/uz/messages.json",
+      "sha256": "54fb11c8b58dfeece06bf9c8ad5eb5c61f8a916df3efc940ac4af0263c375529",
+      "bytes": 842,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/vi/messages.json",
+      "sha256": "3751eb007a9f8ad9f7a08452673cd2fc6ca1807d4fb98eb926706e0356d2aec4",
+      "bytes": 1051,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/zh_CN/messages.json",
+      "sha256": "9c0a7674853ff9e2aa581bd9758c6dde1c56b0ae67db655fdb28bd941e6ddd5c",
+      "bytes": 850,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/zh_HK/messages.json",
+      "sha256": "30f44cfad052d73d86d12fa20cfc111563a3b2e4523b43f7d66d934ba8dace91",
+      "bytes": 1205,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/zh_TW/messages.json",
+      "sha256": "ffa97e2e6d5805d0bed1d99bf8a1a05a90338aa15bc82fea37ecfbc1f71f8d70",
+      "bytes": 820,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_locales/zu/messages.json",
+      "sha256": "86f37e7bcc5aaf9e4d14310c728f496a580f77f37b805c1f68408334334790d4",
+      "bytes": 1029,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_metadata/computed_hashes.json",
+      "sha256": "7d24a6c0e2cf56e124c7e3fd41f5e2ba888e663bdf96a0201b373a601a2c6d20",
+      "bytes": 3959,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/_metadata/verified_contents.json",
+      "sha256": "4d441fb1a868ae146813a98f1eb48e30e5e9a13c0e611a8231dfac5fc9eda1b4",
+      "bytes": 11914,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/dasherSettingSchema.json",
+      "sha256": "6c69ce0fe6fab14f1990a320d704fee362c175c00eb6c9224aa6f41108918ca6",
+      "bytes": 854,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/manifest.json",
+      "sha256": "5e189fd69b2bba6f4c563fa73b687736701c21c52eadac61e2d56b5f8d246db7",
+      "bytes": 2488,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/offscreendocument.html",
+      "sha256": "b9fa2d52a4ffabb438b56184131b893b04655b01f336066415d4fe839efe64e7",
+      "bytes": 97,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/offscreendocument_main.js",
+      "sha256": "917d2458ae42e72d90a73b90dbb0a5b0c67eb8f751554122d663d7eb67fbe3ed",
+      "bytes": 134684,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/page_embed_script.js",
+      "sha256": "6f98e519001e27a4c99987bb11c5f4a5b17a0e377839f53fd80d9dc563214e39",
+      "bytes": 339,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/ghbmnnjooekpmoecnnnilnnbdlolhkhi/1.111.1_0/service_worker_bin_prod.js",
+      "sha256": "63b3d006783e106d3aacb9cda3224d48a218dd45d50db663d38b45d2d9b2bff0",
+      "bytes": 141097,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/bg/messages.json",
+      "sha256": "a8bb5cf3fa570bd798337f6b81696bd058a817a594b72afb3742ebb32a47dddc",
+      "bytes": 773,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/ca/messages.json",
+      "sha256": "e8b4991787e773677311f3ae7559854c12cded12eb59c6fd0373171e191116a8",
+      "bytes": 652,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/cs/messages.json",
+      "sha256": "bc201f50cb52a042e53d6df24e196ccbcc9a5d5dc482bfcbeb0c44686afabab7",
+      "bytes": 618,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/da/messages.json",
+      "sha256": "9e5a1af181c9b7f70b9c28e2ac42061c14f9b3d6cd9a452e0f447d7ec495093d",
+      "bytes": 601,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/de/messages.json",
+      "sha256": "258382bd17a9307183c331cd88733634c523ea42169e4cabb33213c0e88d4aed",
+      "bytes": 628,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/el/messages.json",
+      "sha256": "d4e77302769e0d4f59d627f24194f0c3f3489adefac3903fb7d066216800896b",
+      "bytes": 764,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/en/messages.json",
+      "sha256": "3a2170deeaa0559e67da96a6530e5f29b957e72155bf8ad743edef83bf363c28",
+      "bytes": 570,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/en_GB/messages.json",
+      "sha256": "3a2170deeaa0559e67da96a6530e5f29b957e72155bf8ad743edef83bf363c28",
+      "bytes": 570,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/es/messages.json",
+      "sha256": "c0743808e652dd81cb3c14d8d3908c5283a5c02cf15d3d7adfbce2572ad92286",
+      "bytes": 638,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/es_419/messages.json",
+      "sha256": "1e4bef29513bf66f020f80c41f8f133b52ea356e593dc93f6d4f9cb2bbc221fd",
+      "bytes": 614,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/et/messages.json",
+      "sha256": "fc7ed74810b611c17f6231b4bbb5c54c932b82bf45a10fa1088d542779249adf",
+      "bytes": 572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/fi/messages.json",
+      "sha256": "4ccad22d43cb7484e8696321d7402f3bd7035c3fa7ebd27df53efab0a99b4951",
+      "bytes": 624,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/fil/messages.json",
+      "sha256": "f302cf73f7dcdb7abbb76887531cf60008338d4456aba4fe484eab749bb39c1a",
+      "bytes": 635,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/fr/messages.json",
+      "sha256": "425c924431588edb55bc274f9b82b6dce4407fb40cd79e9c368d1db9d654b6f0",
+      "bytes": 654,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/hi/messages.json",
+      "sha256": "a4e4cd5172d9c607ea486c3cf2f9da5272333f1e175d75e173399cb0738bbcd6",
+      "bytes": 812,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/hr/messages.json",
+      "sha256": "713ae9ac2c4b93a66541c666bd43361d00b597d30ce18275b5fe0eab7200573b",
+      "bytes": 595,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/hu/messages.json",
+      "sha256": "bbe7bef0789a6c9dff7aa760379d1f992f3efd888efca28cab8b411a8805d51a",
+      "bytes": 660,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/id/messages.json",
+      "sha256": "9289dd47a5ca9d70b35dcc65260e759242ed349d75706e09930dade27ccd97e9",
+      "bytes": 581,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/it/messages.json",
+      "sha256": "04539ec30baeceb570b082feb8dc21fab9b952365c7ee29feb9fcf64d5425329",
+      "bytes": 580,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/ja/messages.json",
+      "sha256": "92926bcce9eccce167e261c3312fd8d41363b75fa73c04dd80482c2219a476cd",
+      "bytes": 674,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/ko/messages.json",
+      "sha256": "24f0abf87d8c4799187ae8b522507edeb7f90fccda7fb0ab64e4ef899927caee",
+      "bytes": 608,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/lt/messages.json",
+      "sha256": "0c058e77552ff9d0bc9f09a32213aac68faeee2f30908e031ac7c79a6d0cdf39",
+      "bytes": 642,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/lv/messages.json",
+      "sha256": "6b990595bf4d81bb6e779774ca0b33895edaa5ac8925990c9bcca870dd408869",
+      "bytes": 648,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/nb/messages.json",
+      "sha256": "4ad88196076f7204112ccec036e4e8b760dfb041d4df2ab94f0887aaaa262a88",
+      "bytes": 601,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/nl/messages.json",
+      "sha256": "ae4110e3fb6702604fcfc5a9267d4c92aab55bd1aada3ab59a6b4737b7e3d6a6",
+      "bytes": 592,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/pl/messages.json",
+      "sha256": "f55c30bce5a043a78e867f8f4cf181feacadef0cbb5d4c83402f054847bd7c80",
+      "bytes": 613,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/pt_BR/messages.json",
+      "sha256": "7ff7265293b31febaa87c5f2329df5c6a8eb9f903cccd941f70fd563b5336b59",
+      "bytes": 613,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/pt_PT/messages.json",
+      "sha256": "ef28551516e35caa633d3b011552c8ed2ecacbc66af83b60852e136253a4de6a",
+      "bytes": 599,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/ro/messages.json",
+      "sha256": "65ee3fd8019b7146c3b006f0ca489f9eaf4ed47dfe759bc394b4bc6d46d8ea90",
+      "bytes": 618,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/ru/messages.json",
+      "sha256": "d085a8dacc38cf7285bd67ff6c10cda34b1c37c577f1dbbf5be55c43c13b1eaa",
+      "bytes": 721,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/sk/messages.json",
+      "sha256": "9876a7d102e915e5870b8c69dc39485c85b8546d5b4bff8c31202fba8b100d4f",
+      "bytes": 624,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/sl/messages.json",
+      "sha256": "2f57689da236775e94b547419c7bd81ed1401e6d1f3dd0b11c94533a88d930a2",
+      "bytes": 594,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/sr/messages.json",
+      "sha256": "66f7f84a8a20060f7f05bd9b532ea3c4d18e2392c9bdfe4481f8f35f08c9fdc1",
+      "bytes": 720,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/sv/messages.json",
+      "sha256": "80da2cb02de66fd946379af43da88cbaa1d56c4c4fa0e6fea55a0760d6fac5b8",
+      "bytes": 607,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/th/messages.json",
+      "sha256": "db81752467a936b153d8131a21fc5b965ce8551096d537ec8f61ba308da36304",
+      "bytes": 922,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/tr/messages.json",
+      "sha256": "ef61d11d7752eb68a695fe9bbfa5f55582abd701ace6952254c786ad64467623",
+      "bytes": 608,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/uk/messages.json",
+      "sha256": "28a592385c1cf1a5dc952c3df7a3069f7a527e9a26d0716f9849c9c27d2e07af",
+      "bytes": 697,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/vi/messages.json",
+      "sha256": "a849cc3a067e91fed53ec39f6ffaef1a98affc14ce0b436dc97e7dd4d3837122",
+      "bytes": 672,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/zh_CN/messages.json",
+      "sha256": "52b181f050eb7df9e6a74021f14da8c8c433894a1dd961094042bcd59405477b",
+      "bytes": 572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_locales/zh_TW/messages.json",
+      "sha256": "3b9d772213d148aa99a5b893242d00bc32081c464a5a595a5f6b1a7349ee8b02",
+      "bytes": 611,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_metadata/computed_hashes.json",
+      "sha256": "965203d541e442c107dbc6d5b395168123d0397559774beae4e5b9abc44ef268",
+      "bytes": 11217,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/_metadata/verified_contents.json",
+      "sha256": "52a24fa2fb3bcb18d9d8571ae385c4a830ff98ce4c18384d40a84ea7f6ba7f69",
+      "bytes": 7780,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/craw_background.js",
+      "sha256": "04cd9494b0ed83924dad12202630b20d053d9e2819c8e826a386c814cc0a1697",
+      "bytes": 544643,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/craw_window.js",
+      "sha256": "5721a4b3f8e09c869a629effd350b51c9d46f0ac136717d4db6265c0ee6f9ac8",
+      "bytes": 261316,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/css/craw_window.css",
+      "sha256": "10dfbd2d98950b79ee12f6b8e3885aabe31543048de56ad4fc0a5e34d0d9d4ec",
+      "bytes": 1741,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/html/craw_window.html",
+      "sha256": "bb8742615e4cd996ae5d0200e443ae6a6f0b473255f03affdb8fb4660de4554d",
+      "bytes": 810,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/flapper.gif",
+      "sha256": "2b73533f47a99ffea9cc405ffafa9c4c53623f62487aebfba415945120b22040",
+      "bytes": 70364,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/icon_128.png",
+      "sha256": "ffabe30fdfbe544f611f47d542a6db95c785a993edbace0d7d3116cd90183b24",
+      "bytes": 4346,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/icon_16.png",
+      "sha256": "ea3a6eb816e3a8cab8f923cea33bad0a3fa29caefb92147c1a38060b9f5b3058",
+      "bytes": 582,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/topbar_floating_button.png",
+      "sha256": "d5f9234dc36e7ffa85f35b2359a4f82276f8395efa76e4553507ea990b27fc6c",
+      "bytes": 160,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/topbar_floating_button_close.png",
+      "sha256": "131817cd9311c03df22d769dd2ad7fa2e6e9558863a89f7e5e1657424031a937",
+      "bytes": 252,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/topbar_floating_button_hover.png",
+      "sha256": "721b7aaa9a42a54a349881615a12e3a26983aca48e173fd2f66e66aa0d725735",
+      "bytes": 160,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/topbar_floating_button_maximize.png",
+      "sha256": "afa4ea944cbdec8543242e627ef46d5bfd3766dcac664e7e50cdeef2b352740c",
+      "bytes": 166,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/images/topbar_floating_button_pressed.png",
+      "sha256": "5c10ce0589eb115600f77381130b70ae0b7b3752614d86d4c89e857658aa222b",
+      "bytes": 160,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Extensions/nmmhkkegccagdldgiimedpiccmgmieda/1.0.0.6_0/manifest.json",
+      "sha256": "5dbdf0ed368be287abaff83d639b760fa5d7dc8a28e92387773b4fd3e1ba4f19",
+      "bytes": 1295,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Favicons",
+      "sha256": "1fbc7ea9722b2154b0d69c9d0ed80b6c0c98c5d389cf31ac1a2b8db030724840",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Favicons-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GCM Store/Encryption/000003.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GCM Store/Encryption/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GCM Store/Encryption/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GCM Store/Encryption/LOG",
+      "sha256": "70481761303b0eadedfaeb839fbe5537250603a06dfa7e4b7183ad38136d5a3d",
+      "bytes": 355,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GCM Store/Encryption/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GPUCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GPUCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GPUCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GPUCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/GPUCache/index",
+      "sha256": "a4e221105f9d5ed73491472d2620633857ba9ad0f467e77e26d387de6085115b",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/History",
+      "sha256": "954a81723d32aa353b7bb17cc8a9a2c41a6ceb8a86e46f489523d3a8c1220c8e",
+      "bytes": 204800,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/History-journal",
+      "sha256": "a722359d002049061c24e3666a6476c310f8ffdc81a6afdf16e1e99a93f7b021",
+      "bytes": 66176,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Extension Settings/ghbmnnjooekpmoecnnnilnnbdlolhkhi/000003.log",
+      "sha256": "9d89630da3bde9505d4c2cc684eb01c2d4d7d11028d01d309aca12b064f779e6",
+      "bytes": 49,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Extension Settings/ghbmnnjooekpmoecnnnilnnbdlolhkhi/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Extension Settings/ghbmnnjooekpmoecnnnilnnbdlolhkhi/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Extension Settings/ghbmnnjooekpmoecnnnilnnbdlolhkhi/LOG",
+      "sha256": "5fc59f8f76c7cf9ac61fedae8894a714f75f46ef02edc16bbba8feb88c781f4f",
+      "bytes": 429,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Extension Settings/ghbmnnjooekpmoecnnnilnnbdlolhkhi/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Storage/leveldb/000003.log",
+      "sha256": "d56771b512ab310917e1a714b4b85e34e8b2ede18ecbbd108fdb127072d8f2b2",
+      "bytes": 181,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Storage/leveldb/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Storage/leveldb/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Storage/leveldb/LOG",
+      "sha256": "366b1ffe3105d347179b8c4a573bbeda0fdb82c61dc69614a120154d091a0989",
+      "bytes": 357,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Local Storage/leveldb/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Login Data",
+      "sha256": "869676a006de3214994dedee2318ece6fbf55a4afc42b551ce065bb35265f8d1",
+      "bytes": 40960,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Login Data For Account",
+      "sha256": "869676a006de3214994dedee2318ece6fbf55a4afc42b551ce065bb35265f8d1",
+      "bytes": 40960,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Login Data For Account-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Login Data-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Network Action Predictor",
+      "sha256": "78c0f24e5b07037e9eb99ca2344f1b99ccc3a21c2ccecbe4282605e48a2751e7",
+      "bytes": 53248,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Network Action Predictor-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/PersistentOriginTrials/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/PersistentOriginTrials/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Preferences",
+      "sha256": "70ca2919f802647ccd82e24597ac975a9072dd1fa02d8c07fb4b5df70079378e",
+      "bytes": 10793,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/PreferredApps",
+      "sha256": "42b55d126d1e640b1ed7a6bdcb9a46c81df461fa7e131f4f8c7108c2c61c14de",
+      "bytes": 33,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/README",
+      "sha256": "c43668eec4a8d88a5b3a06a84f8846853fe33e54293c2db56899a5a5dfb4d944",
+      "bytes": 180,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Reporting and NEL",
+      "sha256": "3ed876e3f1ce4f3539836efd922c5a33e4258fbe5da639462dd8e0d9a92f979c",
+      "bytes": 36864,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Reporting and NEL-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Secure Preferences",
+      "sha256": "08a03d10f0147f2e3a33d0d998647e858dec41af3724f86696deab3f3827ae98",
+      "bytes": 19735,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SegmentInfoDB/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SegmentInfoDB/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SignalDB/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SignalDB/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SignalStorageConfigDB/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Segmentation Platform/SignalStorageConfigDB/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/ServerCertificate",
+      "sha256": "180ffbc2a4f10b5563f5a7bfe62d23909f0aa77572a06e59a9be4c6fca7176f7",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/ServerCertificate-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/Database/000003.log",
+      "sha256": "6ec4171d37e6f6b6944bdbcbae1a452b802f4405306bcd515889d2181db40806",
+      "bytes": 2296,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/Database/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/Database/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/Database/LOG",
+      "sha256": "9b2d1f2e6f15481035d2fd2b3285f39b30d555d1222f96967886562634bec9df",
+      "bytes": 361,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/Database/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/2cc80dabc69f58b6_0",
+      "sha256": "7433e2de592bac3d53e34206cd580d140d107eae0defa146b238d209d3b34c87",
+      "bytes": 472,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/4cb013792b196a35_0",
+      "sha256": "9bfcd210dc08c82ce5d351f0b2e015d246be763173e1310cc3fe651d99c308aa",
+      "bytes": 10387,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/4cb013792b196a35_1",
+      "sha256": "006dd14508ac86c7810153d6909ebe5c43eddc735eafdab7c63134aadca61ad5",
+      "bytes": 7185,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/f1cdccba37924bda_0",
+      "sha256": "690afdc2ac2e4afade9aa5987e7778edf1bc1335d3d9c3ea3b38b8db1fc58d5b",
+      "bytes": 141494,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/f1cdccba37924bda_1",
+      "sha256": "1981598c47f2aaab9e32f53361573174727c9f854417d8b2ec774d78e170ef31",
+      "bytes": 350961,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Service Worker/ScriptCache/index-dir/the-real-index",
+      "sha256": "f14d0f941df78d52063a8d0c3f00f47b49f2234d855e42b6921fb1415383b0b8",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Session Storage/000003.log",
+      "sha256": "68ce7c4c3cf43e881c30747b556a55517ae20219430536b0c6d6637bd8c5d85a",
+      "bytes": 310,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Session Storage/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Session Storage/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Session Storage/LOG",
+      "sha256": "141f1669d9c64e528b3d89f38ee06aa02d58fa4344757c5561ac39498840b383",
+      "bytes": 345,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Session Storage/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sessions/Session_13437927332245891",
+      "sha256": "08511746e48c87e50dde9ea1484f7ae6777fc927686d4cbd13dbc2ba12bb72d6",
+      "bytes": 5139,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sessions_Encrypted/Session_13437927332246214",
+      "sha256": "9e3718c367890f17a188daa1ee9eee1b6245eee167688fb0b623ac4fae2bf60a",
+      "bytes": 5479,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shared Dictionary/cache/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shared Dictionary/cache/index-dir/the-real-index",
+      "sha256": "07b93cf95c235cb09ec0fb1d8f776b486ededa2dcddaa1b0c4e700e6fc5e7293",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shared Dictionary/db",
+      "sha256": "0d6287fecedbc44ed9f51ded9de88629ec9f385ecff5da9a34e47e96fd5a9cba",
+      "bytes": 45056,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shared Dictionary/db-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shortcuts",
+      "sha256": "4d50f902dd988a05350991f9d575138fa62d7ee143eba5125bf5aac983ecd5de",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Shortcuts-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Site Characteristics Database/000003.log",
+      "sha256": "f096bc366a931fba656bdcd77b24af15a5f29fc53281a727c79f82c608ecfab8",
+      "bytes": 40,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Site Characteristics Database/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Site Characteristics Database/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Site Characteristics Database/LOG",
+      "sha256": "cdb2785fc12aa8acd3f9a6bf803368bab13f9edb540ddbb83d18ebc327f17eb4",
+      "bytes": 373,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Site Characteristics Database/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Code Cache/js/5dea14b9816ec6d9_0",
+      "sha256": "83223c7fa8aa92c294de9fc6f52e924996c3426ca736a36c89a8a4a44fcfa4e9",
+      "bytes": 308,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Code Cache/js/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Code Cache/js/index-dir/the-real-index",
+      "sha256": "23193ba5bb878f5d55a1b3997eb983c89727565a75bb837e33cf67b16a8784ce",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Code Cache/wasm/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Code Cache/wasm/index-dir/the-real-index",
+      "sha256": "e1c5a519b1783b28299b63967fc8b1f9238cbad68e8b335f8a626979973e8a4f",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnGraphiteCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnGraphiteCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnGraphiteCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnGraphiteCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnGraphiteCache/index",
+      "sha256": "359e5df58e798e2d40fc87895358944ff59e0ac997db73478ce94a65853f7c81",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnWebGPUCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnWebGPUCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnWebGPUCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnWebGPUCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/DawnWebGPUCache/index",
+      "sha256": "6abd7cc9e886a513b77daed6482fb6978c690d1d0e85da576449c8004f7ef7e8",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Device Bound Sessions",
+      "sha256": "78a06f4f93849b88f0489d00c0389205bc9d5389608c6918549df4db668d783f",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Device Bound Sessions-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/GPUCache/data_0",
+      "sha256": "d6a5fe39cd672781b256e0e3102f7022635f1d4bb7cfcc90a80fffe4d0f3877e",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/GPUCache/data_1",
+      "sha256": "902f30c1fb0597d0734bc34b979ec5d131f8f39a4b71b338083821216ec8d61b",
+      "bytes": 270336,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/GPUCache/data_2",
+      "sha256": "ec1702806f4cc7c42a82fc2b38e89835fde7c64bb32060e0823c9077ca92efb7",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/GPUCache/data_3",
+      "sha256": "e09f42c398d688dce168570291f1f92d079987deda3099a34adb9e8c0522b30c",
+      "bytes": 8192,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/GPUCache/index",
+      "sha256": "f04a671cefe2d87aa71738df7748509b74728ff7823277eb70d1d80a44eed94a",
+      "bytes": 262512,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Local Storage/leveldb/000003.log",
+      "sha256": "8bd2ea70a0b70c91de138a5b87c7936c6a6fa7c4275c54b97f4ef0ccc5b79bb4",
+      "bytes": 30,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Local Storage/leveldb/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Local Storage/leveldb/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Local Storage/leveldb/LOG",
+      "sha256": "bf0dee83368ad2140d78f4894b28b20e71653ef4ca5701f336074c1125c54f5b",
+      "bytes": 455,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Local Storage/leveldb/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Reporting and NEL",
+      "sha256": "2d6dada0da20730019917ab502a8189099aa5ad98a1b23cd30715d6f9689ef11",
+      "bytes": 36864,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Reporting and NEL-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Shared Dictionary/cache/index",
+      "sha256": "fbcfe23a2ecb82b7100c50811691dde0a33aa3da8d176be9882a9db485dc0f2d",
+      "bytes": 24,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Shared Dictionary/cache/index-dir/the-real-index",
+      "sha256": "73ca950cc48ad09ad04494e646345e4f6d9767733b3a23e69c51443da1cfb786",
+      "bytes": 48,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Shared Dictionary/db",
+      "sha256": "0d6287fecedbc44ed9f51ded9de88629ec9f385ecff5da9a34e47e96fd5a9cba",
+      "bytes": 45056,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Shared Dictionary/db-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Trust Tokens",
+      "sha256": "88bafa2a265212152b2405502209d64438a416ff594a040e666f031ef442a812",
+      "bytes": 36864,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/Trust Tokens-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/declarative_performance_observer.db",
+      "sha256": "eda4c9567974174f08a1dbcd8badf4d6199a7e9a8b78b8826548f49e20e7badf",
+      "bytes": 32768,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Storage/ext/nmmhkkegccagdldgiimedpiccmgmieda/def/declarative_performance_observer.db-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sync Data/LevelDB/000003.log",
+      "sha256": "d871567f7e0e1ea3eff4f9b05c8fa8ac73c69b41037f080449fcc1c31b662e15",
+      "bytes": 3134,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sync Data/LevelDB/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sync Data/LevelDB/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sync Data/LevelDB/LOG",
+      "sha256": "71eef9d0ef4ec21179a5c7eb38420c02f6633bf2ae5ba7445c324893bd912c87",
+      "bytes": 349,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Sync Data/LevelDB/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Top Sites",
+      "sha256": "703e21a8f84b489c99302cde63bd03b03aa1868b7f960edbd2a00f193d23d881",
+      "bytes": 20480,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Top Sites-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Trust Tokens",
+      "sha256": "88bafa2a265212152b2405502209d64438a416ff594a040e666f031ef442a812",
+      "bytes": 36864,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Trust Tokens-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/128.png",
+      "sha256": "36fa37d7b13869e4ab189350764cab7b7006f24dc85b8998dba7fe6d1a229da4",
+      "bytes": 10243,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/192.png",
+      "sha256": "ec1370090506692a566f9572cf962fe24819c496793229adb93b4e25524bf625",
+      "bytes": 10103,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/256.png",
+      "sha256": "7ca88ce2772a18613c1c30b8715bc435942cb8e112185515a342e282b449e8d5",
+      "bytes": 30010,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/32.png",
+      "sha256": "efeb751507c77b56963b563705e3d20325805e332988bb3e48cd891e2dd11b3c",
+      "bytes": 1854,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/48.png",
+      "sha256": "82fc9e7be1c1dc78bcca8c54db0fcd89e4658d542070b418b1d3f0c82e1a7389",
+      "bytes": 2982,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/64.png",
+      "sha256": "88ee95cc4940438e85c0f103638c8bfc8f326bc25c7223c5f6455657b0fcb128",
+      "bytes": 4159,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Icons/96.png",
+      "sha256": "3d5cf5e1f10b583ed4f0bb84e82e5adef1dae546ff7befc7974d459ba807b542",
+      "bytes": 6955,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/128.png",
+      "sha256": "36fa37d7b13869e4ab189350764cab7b7006f24dc85b8998dba7fe6d1a229da4",
+      "bytes": 10243,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/192.png",
+      "sha256": "ec1370090506692a566f9572cf962fe24819c496793229adb93b4e25524bf625",
+      "bytes": 10103,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/256.png",
+      "sha256": "7ca88ce2772a18613c1c30b8715bc435942cb8e112185515a342e282b449e8d5",
+      "bytes": 30010,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/32.png",
+      "sha256": "efeb751507c77b56963b563705e3d20325805e332988bb3e48cd891e2dd11b3c",
+      "bytes": 1854,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/48.png",
+      "sha256": "82fc9e7be1c1dc78bcca8c54db0fcd89e4658d542070b418b1d3f0c82e1a7389",
+      "bytes": 2982,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/64.png",
+      "sha256": "88ee95cc4940438e85c0f103638c8bfc8f326bc25c7223c5f6455657b0fcb128",
+      "bytes": 4159,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/aghbiahbpaijignceidepookljebhfak/Trusted Icons/Icons/96.png",
+      "sha256": "3d5cf5e1f10b583ed4f0bb84e82e5adef1dae546ff7befc7974d459ba807b542",
+      "bytes": 6955,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/128.png",
+      "sha256": "21e62dd92c76155912fca7c320837039c05d087d2a6590e7637b9e82ce576947",
+      "bytes": 10369,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/192.png",
+      "sha256": "62fa13461b5d8d6fb313a58ad0f60f461a80e68aefc1931755ffa4c2a8510fb6",
+      "bytes": 7081,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/256.png",
+      "sha256": "b48e75f50a26c8a54b6aa4c2d866bba84e15035a9567cc7c51ab7ea2e29f367b",
+      "bytes": 26383,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/32.png",
+      "sha256": "7cce326e62b1efd08d37bee0c3cd20258a2527e5b267a359c03240a76badced0",
+      "bytes": 1572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/48.png",
+      "sha256": "442bdbf96a0bbf2274f4f2a7a2a27bcf0e0851131284797df90bff59f738894d",
+      "bytes": 2572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/64.png",
+      "sha256": "6b2ff6fdec1a618e884b82acdff34292f05002959e1ccabf9c2723d383a47f98",
+      "bytes": 3945,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Icons/96.png",
+      "sha256": "8b45cd8893a8f096233044c28161139a3751b81f48751ad3bbc761f6db19f8d9",
+      "bytes": 7033,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/128.png",
+      "sha256": "21e62dd92c76155912fca7c320837039c05d087d2a6590e7637b9e82ce576947",
+      "bytes": 10369,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/192.png",
+      "sha256": "62fa13461b5d8d6fb313a58ad0f60f461a80e68aefc1931755ffa4c2a8510fb6",
+      "bytes": 7081,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/256.png",
+      "sha256": "b48e75f50a26c8a54b6aa4c2d866bba84e15035a9567cc7c51ab7ea2e29f367b",
+      "bytes": 26383,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/32.png",
+      "sha256": "7cce326e62b1efd08d37bee0c3cd20258a2527e5b267a359c03240a76badced0",
+      "bytes": 1572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/48.png",
+      "sha256": "442bdbf96a0bbf2274f4f2a7a2a27bcf0e0851131284797df90bff59f738894d",
+      "bytes": 2572,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/64.png",
+      "sha256": "6b2ff6fdec1a618e884b82acdff34292f05002959e1ccabf9c2723d383a47f98",
+      "bytes": 3945,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/agimnkijcaahngcdmfeangaknmldooml/Trusted Icons/Icons/96.png",
+      "sha256": "8b45cd8893a8f096233044c28161139a3751b81f48751ad3bbc761f6db19f8d9",
+      "bytes": 7033,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/128.png",
+      "sha256": "f347cab07bc35efee9af2cd12d1759679c95ed4301ef9b26f63a3c3ca01b81a8",
+      "bytes": 7998,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/192.png",
+      "sha256": "a40d5f045ad67b296abb8c3aedebad36d11de19c27ab991e0e27ec8cd5e09e18",
+      "bytes": 8310,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/256.png",
+      "sha256": "f6a845fa0308781327f9f9f3f1d657a64348b50ed7c8613e69d76d7d2f8b8adc",
+      "bytes": 22274,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/32.png",
+      "sha256": "61df75b6fe5027556482806e295bdb5d7720a51771bdcc1b377b70829b40f22c",
+      "bytes": 1273,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/48.png",
+      "sha256": "a515ad281e595a9f3e1967a07b2bdf613f651cba1b048fa55e7ba86af0394f7a",
+      "bytes": 2149,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/64.png",
+      "sha256": "42afb31349eebbfaa6289cf8a5c65288fb7b4cdff5cb99823e7f93a992629a3b",
+      "bytes": 2960,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Icons/96.png",
+      "sha256": "e1ea1bd9d66f0f7b550a43af33073cc80a270d2ec0cad510ccecb64e50d9c0ae",
+      "bytes": 5149,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/128.png",
+      "sha256": "f347cab07bc35efee9af2cd12d1759679c95ed4301ef9b26f63a3c3ca01b81a8",
+      "bytes": 7998,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/192.png",
+      "sha256": "a40d5f045ad67b296abb8c3aedebad36d11de19c27ab991e0e27ec8cd5e09e18",
+      "bytes": 8310,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/256.png",
+      "sha256": "f6a845fa0308781327f9f9f3f1d657a64348b50ed7c8613e69d76d7d2f8b8adc",
+      "bytes": 22274,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/32.png",
+      "sha256": "61df75b6fe5027556482806e295bdb5d7720a51771bdcc1b377b70829b40f22c",
+      "bytes": 1273,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/48.png",
+      "sha256": "a515ad281e595a9f3e1967a07b2bdf613f651cba1b048fa55e7ba86af0394f7a",
+      "bytes": 2149,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/64.png",
+      "sha256": "42afb31349eebbfaa6289cf8a5c65288fb7b4cdff5cb99823e7f93a992629a3b",
+      "bytes": 2960,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fhihpiojkbmbpdjeoajapmgkhlnakfjf/Trusted Icons/Icons/96.png",
+      "sha256": "e1ea1bd9d66f0f7b550a43af33073cc80a270d2ec0cad510ccecb64e50d9c0ae",
+      "bytes": 5149,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/128.png",
+      "sha256": "05043c90fd7c795f665f7d4374673857da8ba578ef01a9563cf81bf98410de57",
+      "bytes": 8591,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/192.png",
+      "sha256": "e77ddd838401a22545cde73bc8dadabfb059ea65ef0784836c7dc823ffbb587a",
+      "bytes": 7564,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/256.png",
+      "sha256": "02d9d896281e088a9ef8562cc1dce71ffba7db465f7379a0bb69ddf3dc2de52e",
+      "bytes": 21836,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/32.png",
+      "sha256": "4ef6af3958daea67637a1034e4ff3910360c34f8d5bba1bd15dcdf7078bc3c77",
+      "bytes": 1650,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/48.png",
+      "sha256": "c9a6445efb6b3ed818d1e703f82f6c0445b49efc69b1480c61cdb2944114f523",
+      "bytes": 2751,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/64.png",
+      "sha256": "e7e71e63123edd2441d670e4f27134615639e695670c3fd8e566706cc2c65654",
+      "bytes": 3605,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Icons/96.png",
+      "sha256": "360654ce87e12eca80b384779ecfcf54f95d264c5e75d5b0a4c9f9304e7610c0",
+      "bytes": 5693,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/128.png",
+      "sha256": "05043c90fd7c795f665f7d4374673857da8ba578ef01a9563cf81bf98410de57",
+      "bytes": 8591,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/192.png",
+      "sha256": "e77ddd838401a22545cde73bc8dadabfb059ea65ef0784836c7dc823ffbb587a",
+      "bytes": 7564,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/256.png",
+      "sha256": "02d9d896281e088a9ef8562cc1dce71ffba7db465f7379a0bb69ddf3dc2de52e",
+      "bytes": 21836,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/32.png",
+      "sha256": "4ef6af3958daea67637a1034e4ff3910360c34f8d5bba1bd15dcdf7078bc3c77",
+      "bytes": 1650,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/48.png",
+      "sha256": "c9a6445efb6b3ed818d1e703f82f6c0445b49efc69b1480c61cdb2944114f523",
+      "bytes": 2751,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/64.png",
+      "sha256": "e7e71e63123edd2441d670e4f27134615639e695670c3fd8e566706cc2c65654",
+      "bytes": 3605,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/fmgjjmmmlfnkbppncabfkddbjimcfncm/Trusted Icons/Icons/96.png",
+      "sha256": "360654ce87e12eca80b384779ecfcf54f95d264c5e75d5b0a4c9f9304e7610c0",
+      "bytes": 5693,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/128.png",
+      "sha256": "9ad3eeebc2ae8f90ce1d00941f4d471603af3c02e249bf756d248cbeeb37cc52",
+      "bytes": 10085,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/192.png",
+      "sha256": "f2d0468ecdf68d9b0ebf829d68ee1e2894c14358c40334342423fbb5ea8f7a57",
+      "bytes": 10277,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/256.png",
+      "sha256": "90f78b856899a392438857ef6a85c50fcd1d48dde01483a3764c06a95c3d419e",
+      "bytes": 29566,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/32.png",
+      "sha256": "56578e78a0175e9b89fef5927f9f41c7fdca566174daa7f47abbf8fb6d4afbd0",
+      "bytes": 1559,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/48.png",
+      "sha256": "d859584cdaacb63559fdc79dde2a585db9fe163eeafeaba3427e79755d78e079",
+      "bytes": 2568,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/64.png",
+      "sha256": "7c98c778ec28216e89c3d8bfa6cdf69580e9f9e5f4c5cdb886c865f928d4af4c",
+      "bytes": 3642,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Icons/96.png",
+      "sha256": "9554b438be1edeb0dcd3b00833997fa872f0e278b6e86c74f595c474597c16d7",
+      "bytes": 6371,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/128.png",
+      "sha256": "9ad3eeebc2ae8f90ce1d00941f4d471603af3c02e249bf756d248cbeeb37cc52",
+      "bytes": 10085,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/192.png",
+      "sha256": "f2d0468ecdf68d9b0ebf829d68ee1e2894c14358c40334342423fbb5ea8f7a57",
+      "bytes": 10277,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/256.png",
+      "sha256": "90f78b856899a392438857ef6a85c50fcd1d48dde01483a3764c06a95c3d419e",
+      "bytes": 29566,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/32.png",
+      "sha256": "56578e78a0175e9b89fef5927f9f41c7fdca566174daa7f47abbf8fb6d4afbd0",
+      "bytes": 1559,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/48.png",
+      "sha256": "d859584cdaacb63559fdc79dde2a585db9fe163eeafeaba3427e79755d78e079",
+      "bytes": 2568,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/64.png",
+      "sha256": "7c98c778ec28216e89c3d8bfa6cdf69580e9f9e5f4c5cdb886c865f928d4af4c",
+      "bytes": 3642,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/kefjledonklijopmnomlcbpllchaibag/Trusted Icons/Icons/96.png",
+      "sha256": "9554b438be1edeb0dcd3b00833997fa872f0e278b6e86c74f595c474597c16d7",
+      "bytes": 6371,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/128.png",
+      "sha256": "d173f0e97e87ceec803e9be8d516c37ef220f50a1dfd292f079ba533e8ada701",
+      "bytes": 7291,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/192.png",
+      "sha256": "99a6cf62c77486adceea84981408d4939f87f53d198d8fc9114a63ea1ac12275",
+      "bytes": 7313,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/256.png",
+      "sha256": "251a227d8cd7d5e85e2c7a8a3de52804626bdab74096e0d38a0ed8183bf6f5c3",
+      "bytes": 21355,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/32.png",
+      "sha256": "0eb5b575bc5ad0f0fe9e7747e7c8844397113e460ecb454780192355773d7265",
+      "bytes": 1288,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/48.png",
+      "sha256": "b44887b22da066690f192fcf504c99a16f17588777de201db29ce0708149aba0",
+      "bytes": 2132,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/64.png",
+      "sha256": "5bffe545e04d375416d4d974bf8fc6ec77d09963c16ce8eb4311e89f0c6b3815",
+      "bytes": 2921,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Icons/96.png",
+      "sha256": "a13946a861f936023fd5e11c19fafd29033c0fe26fabd8fe9a55459335e4eca3",
+      "bytes": 4911,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/128.png",
+      "sha256": "d173f0e97e87ceec803e9be8d516c37ef220f50a1dfd292f079ba533e8ada701",
+      "bytes": 7291,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/192.png",
+      "sha256": "99a6cf62c77486adceea84981408d4939f87f53d198d8fc9114a63ea1ac12275",
+      "bytes": 7313,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/256.png",
+      "sha256": "251a227d8cd7d5e85e2c7a8a3de52804626bdab74096e0d38a0ed8183bf6f5c3",
+      "bytes": 21355,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/32.png",
+      "sha256": "0eb5b575bc5ad0f0fe9e7747e7c8844397113e460ecb454780192355773d7265",
+      "bytes": 1288,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/48.png",
+      "sha256": "b44887b22da066690f192fcf504c99a16f17588777de201db29ce0708149aba0",
+      "bytes": 2132,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/64.png",
+      "sha256": "5bffe545e04d375416d4d974bf8fc6ec77d09963c16ce8eb4311e89f0c6b3815",
+      "bytes": 2921,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/mpnpojknpmmopombnjdcgaaiekajbnjb/Trusted Icons/Icons/96.png",
+      "sha256": "a13946a861f936023fd5e11c19fafd29033c0fe26fabd8fe9a55459335e4eca3",
+      "bytes": 4911,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/128.png",
+      "sha256": "c4d6a0f6c263a4d611fd6ec65643b9844f6eb0c1c9c0ec64b2fa9fcaad149170",
+      "bytes": 8958,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/192.png",
+      "sha256": "b76aa025f0516496f80008232c3f1e9584cd74090ac50c0d67c89d619595e58d",
+      "bytes": 6710,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/256.png",
+      "sha256": "b989f789c07c6d8f103d42c1adbd90a2152e54ac006a4db4956be29e5b292e94",
+      "bytes": 22941,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/32.png",
+      "sha256": "d036530ce6b5320532f359ee4b96e5b2338f78640e91bcab10e7f2e637574240",
+      "bytes": 1741,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/48.png",
+      "sha256": "04ab9b9bb94719dffe4487c44a9b5d2386b56e5d34f4b26e0c6c9c0505d78f22",
+      "bytes": 2790,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/64.png",
+      "sha256": "09a66a69d37f7e99b104f442f878fd72e8fb3637eefba61987aaaa7a2a1cb185",
+      "bytes": 3966,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Icons/96.png",
+      "sha256": "2561ac539473f6175a4387169cdf3237a7ac46dfa7de354b60d8f2c03e081e74",
+      "bytes": 6314,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/128.png",
+      "sha256": "c4d6a0f6c263a4d611fd6ec65643b9844f6eb0c1c9c0ec64b2fa9fcaad149170",
+      "bytes": 8958,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/192.png",
+      "sha256": "b76aa025f0516496f80008232c3f1e9584cd74090ac50c0d67c89d619595e58d",
+      "bytes": 6710,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/256.png",
+      "sha256": "b989f789c07c6d8f103d42c1adbd90a2152e54ac006a4db4956be29e5b292e94",
+      "bytes": 22941,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/32.png",
+      "sha256": "d036530ce6b5320532f359ee4b96e5b2338f78640e91bcab10e7f2e637574240",
+      "bytes": 1741,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/48.png",
+      "sha256": "04ab9b9bb94719dffe4487c44a9b5d2386b56e5d34f4b26e0c6c9c0505d78f22",
+      "bytes": 2790,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/64.png",
+      "sha256": "09a66a69d37f7e99b104f442f878fd72e8fb3637eefba61987aaaa7a2a1cb185",
+      "bytes": 3966,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Applications/Manifest Resources/pommaclcbfghclhalboakcipcmmndhcj/Trusted Icons/Icons/96.png",
+      "sha256": "2561ac539473f6175a4387169cdf3237a7ac46dfa7de354b60d8f2c03e081e74",
+      "bytes": 6314,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Data",
+      "sha256": "2b9725278e03967d95c5a12580333de74f091ffdd5a0bf564f02c94d4d3c61f3",
+      "bytes": 151552,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/Web Data-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/WebStorage/QuotaManager",
+      "sha256": "9d864d14dc49570c34adb2e5d0013fdf9d7d894be190fad12aee91f4106871d9",
+      "bytes": 40960,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/WebStorage/QuotaManager-journal",
+      "sha256": "0293b36db35bf8e2ea35e4005071cb03f44faca202589c6ab2a6fc381e7b199a",
+      "bytes": 8720,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/chrome_cart_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/chrome_cart_db/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/commerce_subscription_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/commerce_subscription_db/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/declarative_performance_observer.db",
+      "sha256": "eda4c9567974174f08a1dbcd8badf4d6199a7e9a8b78b8826548f49e20e7badf",
+      "bytes": 32768,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/declarative_performance_observer.db-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/discount_infos_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/discount_infos_db/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/discounts_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/discounts_db/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/heavy_ad_intervention_opt_out.db",
+      "sha256": "2adb7920679589545e8f37e3918b42d962ca404ddbd569930383478f6525b6ee",
+      "bytes": 16384,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/heavy_ad_intervention_opt_out.db-journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/optimization_guide_hint_cache_store/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/optimization_guide_hint_cache_store/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/parcel_tracking_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/parcel_tracking_db/LOG",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/000003.log",
+      "sha256": "d30b3e2600db8b2f0bb14d4c17027d9cb76e2aa697b3c75c99482fe16f67b706",
+      "bytes": 10486,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/LOG",
+      "sha256": "e590941940e4e7111c18edb077ca62ef6f820f8ea87422a879a3e060e9b1c9f2",
+      "bytes": 345,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/metadata/000003.log",
+      "sha256": "7a7ea6f855f742b70b644a2da79d4cb96746f987b9046bab753db43feb6d7ab4",
+      "bytes": 938,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/metadata/CURRENT",
+      "sha256": "0f1bad70c7bd1e0a69562853ec529355462fcd0423263a3d39d6d0d70b780443",
+      "bytes": 16,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/metadata/LOCK",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/metadata/LOG",
+      "sha256": "c886ae51401f66cdfd11c735a6a715fd382703c3f0eb995b1c268d019aba8652",
+      "bytes": 363,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Default/shared_proto_db/metadata/MANIFEST-000001",
+      "sha256": "f9d31b278e215eb0d0e9cd709edfa037e828f36214ab7906f612160fead4b2b4",
+      "bytes": 41,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/DevToolsActivePort",
+      "sha256": "51e05e142810d7241383616d159f573bc95da8ba385e4c309bd45d642b20e78d",
+      "bytes": 60,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/GPUPersistentCache/GPUCache/YLEKR24H56HBUXE23SWJ6MZXIO6EPXQZ/cache.db",
+      "sha256": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda",
+      "bytes": 4096,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/GPUPersistentCache/GPUCache/YLEKR24H56HBUXE23SWJ6MZXIO6EPXQZ/cache.db-wal",
+      "sha256": "be2eae5374e8b1916bbcbadaa8d44f14a4f60b2babfefd3ae0ef90608d0219d8",
+      "bytes": 12392,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/GPUPersistentCache/GPUCache/YLEKR24H56HBUXE23SWJ6MZXIO6EPXQZ/cache.journal",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Last Version",
+      "sha256": "30011057bcd885f70ecaacdd782fb972f894ce7e09ffc1353e55940334ae6e02",
+      "bytes": 13,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Local State",
+      "sha256": "605663272b03b5898c744cab6cb5e168e7465d02a4037fea5af66503e1cc19a4",
+      "bytes": 3431,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/_metadata/verified_contents.json",
+      "sha256": "cc8ba0e0a5b66f4b0ee5ab118f848aa6fccb36a3a2dcce1388f2a378e62b6c41",
+      "bytes": 4382,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/laya_solution_config.binarypb",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/manifest.binarypb",
+      "sha256": "e7906327ec210cd84ae69e10a926514361902a72dc2c34cc4c7a565534d51f0b",
+      "bytes": 12147,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/manifest.json",
+      "sha256": "d60a5dbc95f968982e8fa1334b64380536ff5187c1ca5b59739797fde96b70bd",
+      "bytes": 84,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/prompt_gemma4_12b_solution_config.binarypb",
+      "sha256": "0f2c3e9d8ffe29d035fb56f4cab6a10f5c543e270934b667e8394db5d13890a3",
+      "bytes": 949,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/prompt_gemma4_4b_solution_config.binarypb",
+      "sha256": "0f2c3e9d8ffe29d035fb56f4cab6a10f5c543e270934b667e8394db5d13890a3",
+      "bytes": 949,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/prompt_gemma4_solution_config.binarypb",
+      "sha256": "0f2c3e9d8ffe29d035fb56f4cab6a10f5c543e270934b667e8394db5d13890a3",
+      "bytes": 949,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/prompt_solution_config.binarypb",
+      "sha256": "0f2c3e9d8ffe29d035fb56f4cab6a10f5c543e270934b667e8394db5d13890a3",
+      "bytes": 949,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/proofreader_small_expert_model_solution_config.binarypb",
+      "sha256": "4fcf7a99bc9d8ef1e94cedc734fe3ffaac142faeae6526e3ce698b4c9b5841e2",
+      "bytes": 498,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/scam_detection_solution_config.binarypb",
+      "sha256": "3adff134a5dce3a061cdeee052a4a61b6cbb2e3ec4ea76063fc858f61a6e5b44",
+      "bytes": 1010,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/speech_recognition_small_expert_model_solution_config.binarypb",
+      "sha256": "4fa54d5929befd5dcdd3b368a40ec9ff027e6ea2dd2383f39d53b2abce5eef54",
+      "bytes": 12,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/summarizer_gemma4_12b_solution_config.binarypb",
+      "sha256": "0a2101e272b2e14cbe3704975200f33fbb2a2482929484ab231061e728e48002",
+      "bytes": 15298,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/summarizer_gemma4_4b_solution_config.binarypb",
+      "sha256": "0a2101e272b2e14cbe3704975200f33fbb2a2482929484ab231061e728e48002",
+      "bytes": 15298,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/summarizer_gemma4_solution_config.binarypb",
+      "sha256": "0a2101e272b2e14cbe3704975200f33fbb2a2482929484ab231061e728e48002",
+      "bytes": 15298,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/summarizer_nano_v3_solution_config.binarypb",
+      "sha256": "6fe373c4aa273fc929931216fa8a670342e0d3475b10617d21ccc59c78499308",
+      "bytes": 15294,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/summarizer_small_expert_model_solution_config.binarypb",
+      "sha256": "1d3a9966794769781ef419e21b285536ba7d8f0fc842de7080859608953f759b",
+      "bytes": 1415,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/writing_assistance_gemma4_12b_solution_config.binarypb",
+      "sha256": "814d2ed5e8eaadfaa6471f43ca8a024498ada20e2a6ab04fe2d21f0e0099af8c",
+      "bytes": 11670,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/writing_assistance_gemma4_4b_solution_config.binarypb",
+      "sha256": "814d2ed5e8eaadfaa6471f43ca8a024498ada20e2a6ab04fe2d21f0e0099af8c",
+      "bytes": 11670,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/writing_assistance_gemma4_solution_config.binarypb",
+      "sha256": "814d2ed5e8eaadfaa6471f43ca8a024498ada20e2a6ab04fe2d21f0e0099af8c",
+      "bytes": 11670,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/OptimizationGuideModelsManifest/1.20261018.2/writing_assistance_solution_config.binarypb",
+      "sha256": "814d2ed5e8eaadfaa6471f43ca8a024498ada20e2a6ab04fe2d21f0e0099af8c",
+      "bytes": 11670,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/Variations",
+      "sha256": "b26da4f8c7e283aa74386da0229d66af14a37986b8ca828e054fc932f68dd557",
+      "bytes": 85,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/VariationsSafeSeedV2",
+      "sha256": "b4cc4174735c28360b9081be3c3d0552d8a4b3cdb54431ac00ed0d622bab6296",
+      "bytes": 11,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/VariationsSeedV2",
+      "sha256": "3dfc09a7e4d12f39afa24cd61fb72951f21515b4f16f7a2a2d87aec88ff329e6",
+      "bytes": 40818,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/component_crx_cache/85daef3a7c36299d39d45219b6d1276396c584376c683798c184b5490e7bc773",
+      "sha256": "85daef3a7c36299d39d45219b6d1276396c584376c683798c184b5490e7bc773",
+      "bytes": 136340,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/segmentation_platform/ukm_db",
+      "sha256": "97e8d54f8a7255106f66cf1b213c4a4d7b558d21310b1c2bfedc3d0d526dddda",
+      "bytes": 4096,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/segmentation_platform/ukm_db-wal",
+      "sha256": "feb4d91df4cc8bcedf19daf773061f17a44d37837af02cd1013dfc8882dd587f",
+      "bytes": 94792,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/acl-manifests.json",
+      "sha256": "b8665c2471bd4c59d570c77e226f37410ce396da52525383a15b5cbbff9d786e",
+      "bytes": 65934,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/capabilities.json",
+      "sha256": "59a49474d004a27571558501f2e5d9af355a9e85eca873d596d495ef7ae4bdc9",
+      "bytes": 200,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/desktop-schema.json",
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "bytes": 116049,
+      "mode": "100644"
+    },
+    {
+      "path": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/macOS-schema.json",
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "bytes": 116049,
+      "mode": "100644"
+    }
+  ],
+  "sourceProductionPathsUnchanged": 31,
+  "correctedExclusionTotal": 552,
+  "archiverCounterexampleChecks": 5,
+  "indexBeforeCorrectionSha256": "b030c1a0db7c1c4989cb5fdbccd73d8d1eaf73249833e232c1915001b53f16d1",
+  "historyBoundary": "Onlyreplaceowninvalidunpublishedleafusingnormalgitcommit--amend afterstaging/audit; retainbdafviaexplicitlocalref, parentd07andallpublishedancestryunchanged. No reset/clean/stash/broadhistoryfilter/forcepush; allphysicalfilesretained.",
+  "validation": "No productcode/protocol/version/expected/goldenchanges; previouslypassedsourceboundruntimechecks reused. Reauditfullcorrectedsetandexclusiondirectories beforepublication. Original3913PASS isblobs/modesonlyandwithdrawnforwrongscope, notcurrentacceptedset."
+}

@@ -1,0 +1,19 @@
+{"name": "frontend-type", "exit": 0, "seconds": 317.81175545800943}
+{"name": "frontend-tests", "exit": 0, "seconds": 36.52481254097074}
+{"name": "native-wasm-build", "exit": 0, "seconds": 57.2656436249963}
+{"name": "worker-smoke", "exit": 0, "seconds": 5.0861318340175785}
+{"name": "vite-bundle", "exit": 0, "seconds": 1.641642624977976}
+{"name": "ingress-bundle", "exit": 0, "seconds": 0.9139598330366425}
+{"name": "server-build", "exit": 0, "seconds": 53.18895825004438}
+{"name": "tauri-build", "exit": 0, "seconds": 64.39666195795871}
+{"name": "probe-metadata", "exit": 0, "seconds": 0.47251466603484005}
+{"name": "own-controls", "exit": 0, "seconds": 0.22130458301398903}
+{"name": "semantic-seed", "exit": 0, "seconds": 0.18999254202935845}
+{"name": "native-probe", "exit": 0, "seconds": 21.867750165984035}
+{"name": "wasm-current", "exit": 0, "seconds": 0.28763499995693564}
+{"name": "canonical-compare", "exit": 0, "seconds": 0.09717391600133851}
+{"name": "own-browser", "exit": 0, "seconds": 2.186024874972645}
+{"name": "formal-trajectories", "exit": 0, "seconds": 23.10900933400262}
+{"name": "conformance", "exit": 0, "seconds": 25.293334375019185}
+{"name": "legacy-crosshash", "exit": 0, "seconds": 1.482770333008375}
+CORE/PRODUCT BUILD PIPELINE PASS

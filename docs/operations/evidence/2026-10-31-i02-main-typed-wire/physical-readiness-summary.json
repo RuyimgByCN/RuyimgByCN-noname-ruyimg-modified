@@ -1,0 +1,32 @@
+{
+  "utc": "2026-10-31T13:58:53.516510+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-readiness-d07-cxctxr8e",
+  "source": "published d07 plus uncommitted exact reviewed I02_30; MainQA source/doc freeze remains active",
+  "commands": {
+    "android": {
+      "argv": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "seconds": 0.02578115463256836
+    },
+    "apple": {
+      "argv": [
+        "xcrun",
+        "xcdevice",
+        "list",
+        "--timeout",
+        "10"
+      ],
+      "exit": 0,
+      "seconds": 11.579331159591675
+    }
+  },
+  "authorized_Android_devices": 0,
+  "Apple_valid_JSON": true,
+  "physical_iPhone_count": 1,
+  "available_physical_iPhone_count": 0,
+  "qualification": "Readiness only, no app installation, pairing, permissions/TCC/window changes, game, hearing or power/thermal acceptance. Raw device identifiers retained privately, not echoed."
+}

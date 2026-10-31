@@ -1,0 +1,1366 @@
+{
+  "source": {
+    "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts": {
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "definitions": [
+        "export interface EngineTransport {",
+        "export const DESKTOP_ENGINE_KEY = \"noname-next-desktop-engine\";",
+        "export type DesktopEngineChoice = \"wasm\" | \"native\";",
+        "export function desktopEngineChoice(): DesktopEngineChoice {",
+        "function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {",
+        "function normalizeResponse(response: WorkerResponse, request: WorkerRequest): WorkerResponse {",
+        "export class DesktopEngineTransport implements EngineTransport {"
+      ]
+    },
+    "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts": {
+      "sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "definitions": [
+        "export interface RoomRoster {",
+        "function loadPersistedPending(): PersistedPending | null {",
+        "function storePending(kind: CommandKind, key: number, roomId: number): void {",
+        "function clearPendingStorage(key: number): void {",
+        "export interface OnlineSession {",
+        "export class NetworkEngineClient {",
+        "function normalizeWsUrl(url: string): string {",
+        "export function onlineReconnectKey(wsUrl: string, roomId: number): string {",
+        "function envelopeFromView(",
+        "function hashHex(hash: ObserverSnapshot[\"state_hash\"]): string {",
+        "function isFinished(outcome: unknown): boolean {",
+        "function commandRejection(result: unknown): string | null {"
+      ]
+    },
+    "apps/web-client/scripts/presentation-fixtures.mjs": {
+      "sha256": "f6935de136ffc6f4c552199069825ae82384f29a833655c2b5f53c223d00234f",
+      "definitions": [
+        "export const presentationBatch = () => JSON.parse(readFileSync(new URL(\"i02-presentation.json\", fixtureRoot), \"utf8\"));",
+        "export const surrogatePresentationBatches = () => JSON.parse(readFileSync(new URL(\"i02-presentation-surrogates.json\", fixtureRoot), \"utf8\")).map(({name,pointer,raw_json_value}) => {",
+        "export const invalidPresentationBatches = () => [...invalidRegularBatches(),...surrogatePresentationBatches()];",
+        "export function presentationView(revision = 2) {",
+        "export function presentationEnvelope(batch = presentationBatch()) {"
+      ]
+    },
+    "apps/web-client/scripts/presentation-metadata.test.mjs": {
+      "sha256": "ea9d5d8fe2effee11eda2b69590a1463a80c31278527de73c0b53c7ecd2aaf9a",
+      "definitions": [
+        "function network(t, Client = NetworkEngineClient) {",
+        "function outcome(batch, key = 9) {",
+        "test(\"actual frozen Main5fc TS network and desktop readers accept the optional response\", async t => {",
+        "test(\"new parser accepts all seven events and legacy absence without altering autoStep strings\", t => {",
+        "test(`bad present ${name} is atomic in actual network/store ingress and IPC pass-through`, async t => {",
+        "test(\"unmatched malformed broadcast does not reject another call or mutate receipt storage\", t => {",
+        "test(\"bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches\", () => {",
+        "test(\"new metadata keeps the existing WS256KiB limit before receipt mutation\", t => {",
+        "test(\"compat m4a and zero SDK general/skill ids retain concrete leaf semantics\", () => {",
+        "test(\"malformed conn_seq0 broadcast with a colliding key cannot reject a pending call\", t => {",
+        "test(\"network sequential malformed outcomes retain at most eight original intents and replay no fresh keys\", async t => {",
+        "test(\"network full retained map cannot admit a missing persisted recovery entry\", t => {",
+        "test(\"network legacy successful absence releases capacity and creation does not allocate an intent\", async t => {",
+        "test(\"every network product command refuses ninth admission without allocating, sending or replacing storage\", async t => {",
+        "test(\"network rejoin replays exactly eight retained keys and legacy replies clear them\", async t => {",
+        "test(\"network malformed broadcast and wrong-room reply leave retained call unchanged\", t => {",
+        "test(\"raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass\", () => {"
+      ]
+    },
+    "apps/web-client/src/engine/presentationMetadata.ts": {
+      "sha256": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+      "definitions": [
+        "function check(ok: unknown): asserts ok { if (!ok) throw new Error(\"native: public presentation metadata invalid\"); }",
+        "function object(v: unknown, keys: string[]): Record<string, any> {",
+        "function integer(v: unknown, max = 0xffffffff, min = 0): v is number { return typeof v === \"number\" && Number.isSafeInteger(v) && v >= min && v <= max; }",
+        "function token(v: unknown): v is string { return typeof v === \"string\" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && v !== \".\" && v !== \"..\" && !/[\\\\/%?#:\\u0000-\\u001f\\u007f-\\u009f\\ud800-\\udfff]/u.test(v); }",
+        "function path(v: unknown): v is string { return typeof v === \"string\" && new TextEncoder().encode(v).length <= 256 && v.split(\"/\").every(token); }",
+        "function hex(v: unknown, n = 64): boolean { return typeof v === \"string\" && v.length === n && /^[a-f0-9]+$/.test(v); }",
+        "function repository(v: unknown): boolean { return typeof v === \"string\" && v.length > 0 && new TextEncoder().encode(v).length <= 256 && !/[\\u0000-\\u0020\\u007f-\\u00a0\\u1680\\u2000-\\u200a\\u2028-\\u2029\\u202f\\u205f\\u3000\\ufeff\\ud800-\\udfff\\\\]/u.test(v); }",
+        "function owner(v: unknown): void {",
+        "function definition(v: unknown, kind: string): void {",
+        "function asset(v: unknown): void {",
+        "function voice(v: unknown): void {",
+        "function effective(v: unknown): void { const o = object(v, [\"kind\", \"key\", \"nature\"]); check(CARD_KINDS.includes(o.kind) && token(o.key) && NATURES.includes(o.nature)); }",
+        "function event(v: unknown, players: number): void {",
+        "export function presentationMetadata(value: unknown, revision: number, players: number): PublicPresentationBatch | undefined {",
+        "export function validatePresentationResponse(value: unknown): void {"
+      ]
+    },
+    "apps/web-client/src/types/presentation.ts": {
+      "sha256": "cab127e67b0b68ccdba338fbf33a835ba3c747ac326bc0f5a73de419fcddc1f6",
+      "definitions": [
+        "export type FrozenOwnerKey =",
+        "export type QualifiedDefinitionKey =",
+        "export type BoundAudioAsset = {",
+        "export type PublicVoice = { role: QualifiedDefinitionKey; form: string | null; assets: BoundAudioAsset[] };",
+        "export type PresentationNature = \"normal\" | \"fire\" | \"thunder\";",
+        "export type EffectivePresentationCard = {kind: string; key: string; nature: PresentationNature};",
+        "export type PublicPresentationEvent =",
+        "export type PresentationDomain = \"card_use\" | \"card_response\" | \"skill_activation\" | \"damage\" | \"recovery\" | \"death\" | \"voice_identity\";",
+        "export type PublicPresentationBatch = {"
+      ]
+    },
+    "crates/engine-api/src/presentation.rs": {
+      "sha256": "78d99991f19c038dc0ad571b1d5d5483283cfe94c1b460a8973bb4786b321017",
+      "definitions": [
+        "pub enum FrozenOwnerKey {",
+        "pub enum PresentationDefinitionKind {",
+        "pub struct OriginalDefinitionKey {",
+        "pub enum PresentationLocalId {",
+        "pub struct QualifiedDefinitionKey {",
+        "pub enum PresentationAssetRef {",
+        "pub enum OriginalAudioCategory {",
+        "pub enum PresentationDigestAlgorithm {",
+        "pub struct BoundAudioAsset {",
+        "pub struct PublicVoice {",
+        "pub struct EffectivePresentationCard {",
+        "pub enum PresentationNature {",
+        "pub struct PublicPresentationSkill {",
+        "pub enum PublicPresentationEvent {",
+        "pub struct PublicOccurrence {",
+        "pub enum PresentationDomain {",
+        "pub enum PresentationUnavailableReason {",
+        "pub struct UnavailablePresentationScope {",
+        "pub enum PresentationStatus {",
+        "pub struct PublicPresentationBatch {",
+        "fn required_nullable<'de, D: Deserializer<'de>, T: Deserialize<'de>>(",
+        "fn try_from(raw: RawPublicPresentationBatch) -> Result<Self, Self::Error> {"
+      ]
+    },
+    "crates/engine-api/src/presentation/validation.rs": {
+      "sha256": "23135c029fbc0c6cfd2ec454c84e992bbeada614794d03d484a4cc962409e146",
+      "definitions": [
+        "fn require(ok: bool) -> Result<(), String> {",
+        "fn token(s: &str) -> bool {",
+        "fn path(s: &str) -> bool {",
+        "fn hex(s: &str, len: usize) -> bool {",
+        "fn repository(s: &str) -> bool {",
+        "fn owner(v: &FrozenOwnerKey) -> bool {",
+        "fn definition(v: &QualifiedDefinitionKey, kind: PresentationDefinitionKind) -> bool {",
+        "fn asset(v: &BoundAudioAsset) -> bool {",
+        "fn voice(v: &Option<PublicVoice>) -> bool {",
+        "fn player(p: PlayerId, players: u32) -> bool {",
+        "fn targets(v: &Option<Vec<PlayerId>>, players: u32) -> bool {",
+        "fn effective(v: &EffectivePresentationCard) -> bool {",
+        "pub fn validate(&self) -> Result<(), String> {",
+        "pub fn validate_players(&self, players: u32) -> Result<(), String> {"
+      ]
+    },
+    "crates/engine-protocol/src/presentation.rs": {
+      "sha256": "3b74feecdc7bdf1a0fc2c4e598a5d6d6eb9158db3a076303994b42ba41ca7bb3",
+      "definitions": []
+    },
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs": {
+      "sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "definitions": [
+        "pub struct MessageHeader {",
+        "pub fn new(room_id: u64, conn_seq: u64, revision: u64) -> Self {",
+        "pub enum ClientMessage {",
+        "pub enum ServerMessage {",
+        "pub enum ClientRole {",
+        "pub struct SeatPresence {",
+        "pub enum ErrorCode {",
+        "pub fn public_error(code: ErrorCode, message: impl Into<String>) -> ServerMessage {",
+        "pub fn player_raw(p: PlayerId) -> u32 {"
+      ]
+    },
+    "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs": {
+      "sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "definitions": [
+        "pub enum WireError {",
+        "pub fn encode_c2s(msg: &ClientMessage) -> Result<String, WireError> {",
+        "pub fn decode_c2s(text: &str) -> Result<ClientMessage, WireError> {",
+        "pub fn encode_s2c(msg: &ServerMessage) -> Result<String, WireError> {",
+        "pub fn decode_s2c(text: &str) -> Result<ServerMessage, WireError> {",
+        "#[test]",
+        "fn roundtrip_hello() {"
+      ]
+    },
+    "crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json": {
+      "sha256": "7021fcc8aa95a2655dd73087a21440d4569f16816145c4a3a08ae1a18288dd14",
+      "definitions": []
+    },
+    "crates/engine-protocol/tests/fixtures/i02-presentation.json": {
+      "sha256": "8991f6c39f9d065dde0570dfb98183dbe1fcd2c6707fde3900f70b92c277d0ee",
+      "definitions": []
+    },
+    "crates/engine-protocol/tests/presentation.rs": {
+      "sha256": "19310add25400a3837a6212f23508525e8907357278a4a24ce57117b24a62fbb",
+      "definitions": [
+        "fn batch() -> Value {",
+        "fn outcome(presentation: Option<Value>) -> Value {",
+        "#[test]",
+        "fn old_absence_and_seven_typed_events_roundtrip() {",
+        "#[test]",
+        "fn invalid_present_payloads_are_rejected_at_actual_wire_ingress() {",
+        "#[test]",
+        "fn package_and_original_identities_are_discriminated() {",
+        "#[test]",
+        "fn raw_json_surrogates_reject_before_utf8_string_creation_and_valid_astral_pairs_pass() {"
+      ]
+    },
+    "crates/engine-protocol/tests/presentation_main5fc_reader.rs": {
+      "sha256": "743577a6aa85e7599fec5a5991d608d2e281302b35d8d4b76c164ba1ca76cfda",
+      "definitions": [
+        "#[test]",
+        "fn actual_old_reader_ignores_optional_new_response_field() {",
+        "#[test]",
+        "fn old_and_new_client_request_contract_remains_strict_and_unchanged() {"
+      ]
+    },
+    "apps/game-server/src/room.rs": {
+      "sha256": "8c345d961cfc68caaf4f78bb9ab9fb4b35a8d3f613c1f8470975391a72aeb88a",
+      "definitions": [
+        "pub enum RoomMsg {",
+        "pub struct JoinReply {",
+        "pub struct RoomHandle {",
+        "pub fn new(id: u64, tx: mpsc::Sender<RoomMsg>) -> Self {",
+        "pub async fn send(&self, msg: RoomMsg) -> Result<(), String> {",
+        "pub fn spawn_room(",
+        "pub fn spawn_room_with_engine(",
+        "async fn room_loop(",
+        "fn project_for(",
+        "fn legal_for(",
+        "fn choice_for(",
+        "fn public_codes(events: &[engine_api::DomainEvent]) -> Vec<u32> {",
+        "async fn fanout_after_command(",
+        "async fn broadcast_roster(",
+        "fn hex_manifest(h: &engine_api::MatchManifestHash) -> String {"
+      ]
+    },
+    "apps/game-server/src/room_native_actor.rs": {
+      "sha256": "984f16e59ef74dbc54746bde0f514028f78cac60d440e51cf939b2e1fa87470c",
+      "definitions": [
+        "pub fn set_seat_timeout_secs(secs: u64) {",
+        "fn legacy_replay_rejection(",
+        "pub fn spawn_room_native(",
+        "pub fn spawn_room_native_with_password(",
+        "pub fn spawn_room_native_persisted(",
+        "pub fn spawn_room_native_persisted_with_hash(",
+        "pub fn restore_room_from_disk(",
+        "async fn native_room_loop(",
+        "fn roster_message(",
+        "fn drop_stalled(members: &mut HashMap<u64, NativeActorMember>, stalled: Vec<u64>) {",
+        "async fn broadcast_roster_native(",
+        "pub fn spawn_native_room_if_configured(",
+        "pub fn join_reply_channel() -> (",
+        "pub fn submit_reply_channel() -> (",
+        "pub fn idem(key: u64) -> IdempotencyKey {",
+        "pub fn expected(revision: u64) -> ExpectedRevision {",
+        "#[test]",
+        "fn replay_without_receipt_is_rejected_not_executed() {"
+      ]
+    },
+    "apps/game-server/src/room_native_actor/timeout.rs": {
+      "sha256": "f6543bc4ef44447817867d2a212b47c3f731f55b4e577095d882f5dbdd138e53",
+      "definitions": [
+        "fn pending() -> NativeRoomSession {",
+        "async fn automatic_storage_faults_rollback_engine_control_deadline_wal_and_dedup() {"
+      ]
+    },
+    "apps/web-client/scripts/nc03-worker-clone.test.mjs": {
+      "sha256": "cc5141727a5658f8350d81a4af06e362ab145f7cd6ac2e35f41f39594e522af9",
+      "definitions": [
+        "function fixture() {",
+        "test(\"\u672c\u5730\u547d\u4ee4\u5c06\u54cd\u5e94\u5f0f\u6570\u503c\u6570\u7ec4\u539f\u6837\u4ea4\u7ed9\u53ef\u514b\u9686\u7684 Worker \u6d88\u606f\", async () => {",
+        "test(\"postMessage \u540c\u6b65\u5931\u8d25\u91ca\u653e\u8bf7\u6c42\u3001\u6027\u80fd\u8bb0\u5f55\u548c SAB \u5524\u9192\uff0c\u968f\u540e\u53ef\u91cd\u8bd5\", async (t) => {",
+        "test(\"\u5176\u4ed6\u8bf7\u6c42\u5728\u9014\u65f6\u53d1\u9001\u5931\u8d25\u4e0d\u63d0\u524d\u7ed3\u675f SAB \u5524\u9192\", async (t) => {",
+        "test(\"\u6027\u80fd\u63a2\u9488\u4e22\u5f03\u672a\u53d1\u9001\u8bf7\u6c42\uff0c\u4fdd\u7559\u6210\u529f\u8bf7\u6c42\", (t) => {"
+      ]
+    },
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs": {
+      "sha256": "0e6eba88effbaff2201b55312da4e7677f61d81482ef3637c8a9b1cb7ce4cae7",
+      "definitions": [
+        "function fixture({ autoInit = true, desktopNative = false, invoke, sab = false } = {}) {",
+        "test(\"Worker \u9519\u8bef\u62d2\u7edd\u6240\u6709\u7b49\u5f85\u8bf7\u6c42\u3001\u4fdd\u7559\u53e5\u67c4\u5e76\u5141\u8bb8\u6838\u5bf9\u548c\u65b0\u8bf7\u6c42\", async () => {",
+        "test(\"\u56de\u5305\u65e0\u6cd5\u89e3\u7801\u65f6\u7b49\u5f85\u8bf7\u6c42\u5931\u8d25\uff0c\u539f Worker \u4fdd\u7559\", async () => {",
+        "test(\"\u521d\u59cb\u5316\u9519\u8bef\u6709\u7ed3\u679c\uff0c\u540e\u7eed\u53ef\u521b\u5efa\u65b0 Worker\", async () => {",
+        "test(\"\u91ca\u653e\u65f6\u7b49\u5f85\u8bf7\u6c42\u4e0d\u60ac\u6302\uff0c\u65e7 Worker \u9519\u8bef\u4e0d\u5f71\u54cd\u65b0\u8fde\u63a5\", async () => {",
+        "test(\"\u521d\u59cb\u5316\u88ab\u91ca\u653e\u540e\u7acb\u5373\u91cd\u8fde\uff0c\u65e7\u8fde\u63a5\u7684\u5931\u8d25\u4e0d\u80fd\u7ec8\u6b62\u65b0 Worker\", async () => {",
+        "test(\"\u7a7a\u95f2 Worker \u7684\u9519\u8bef\u6216\u91ca\u653e\u4e0d\u4f1a\u7ed3\u675f\u5176\u4ed6\u8bf7\u6c42\u7684\u5171\u4eab\u7b49\u5f85\", async () => {",
+        "test(\"desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback\", async () => {",
+        "test(\"desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry\", async (t) => {",
+        "test(\"disposing eight accepted desktop requests retires the old resource and reconnects independently\", async () => {",
+        "test(`Worker bad present ${name} preserves pending until dispose`, async () => {",
+        "test(`actual IPC to EngineClient bad present ${name} preserves pending`, async () => {",
+        "test(\"actual SAB poll rejects malformed presentation before settling or deleting pending\", async t => {",
+        "test(\"actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation\", async () => {",
+        "test(\"shared Worker request guard sends eight and rejects ninth before map/postMessage\", async () => {",
+        "test(\"eight retained malformed responses keep capacity until explicit dispose\", async () => {",
+        "test(`compound-invalid IPC ${nested ? \"chooseGeneral\" : \"autoStep\"} preserves uncertain pending before observer normalization`, async () => {",
+        "test(\"compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup\", async () => {",
+        "test(\"IPC precheck preserves all malformed presentation before bad Source27, including missing view/context\", async () => {"
+      ]
+    },
+    "apps/web-client/src/engine/client.ts": {
+      "sha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+      "definitions": [
+        "function fetchText(url: string): Promise<string> {",
+        "export class EngineClient {"
+      ]
+    },
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "sha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+      "definitions": [
+        "export interface EngineTransport {",
+        "export const DESKTOP_ENGINE_KEY = \"noname-next-desktop-engine\";",
+        "export type DesktopEngineChoice = \"wasm\" | \"native\";",
+        "export const MAX_ENGINE_OUTSTANDING = 8;",
+        "export function desktopEngineChoice(): DesktopEngineChoice {",
+        "function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {",
+        "function normalizeResponse(response: WorkerResponse, request: WorkerRequest): WorkerResponse {",
+        "export class DesktopEngineTransport implements EngineTransport {"
+      ]
+    },
+    "apps/web-client/src/engine/networkClient.ts": {
+      "sha256": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+      "definitions": [
+        "export interface RoomRoster {",
+        "function loadPersistedPending(): PersistedPending | null {",
+        "function storePending(kind: CommandKind, key: number, roomId: number): void {",
+        "function clearPendingStorage(key: number): void {",
+        "export interface OnlineSession {",
+        "export class NetworkEngineClient {",
+        "function normalizeWsUrl(url: string): string {",
+        "export function onlineReconnectKey(wsUrl: string, roomId: number): string {",
+        "function envelopeFromView(",
+        "function hashHex(hash: ObserverSnapshot[\"state_hash\"]): string {",
+        "function isFinished(outcome: unknown): boolean {",
+        "function commandRejection(result: unknown): string | null {"
+      ]
+    },
+    "apps/web-client/src/engine/viewStore.ts": {
+      "sha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+      "definitions": [
+        "export interface PresentationEvent {",
+        "export interface VisualEffect {",
+        "export interface ViewState {",
+        "export function createViewStore(): ViewState {",
+        "export function applyEnvelope(store: ViewState, env: EngineEnvelope) {",
+        "function applyEnvelopeState(store: ViewState, env: EngineEnvelope) {",
+        "function extractEffects(events: unknown[]): VisualEffect[] {",
+        "export function clearEffects(store: ViewState) {",
+        "export function pushLog(store: ViewState, text: string) {",
+        "function summarizeEvents(events: unknown[]): string[] {",
+        "export function presentationDelay(store: ViewState, baseMs: number): Promise<void> {"
+      ]
+    },
+    "apps/web-client/src/types/engine.ts": {
+      "sha256": "960c71289b820b5e3d7122c0cea199ffeae2ef9b261b1b8aa7a89b3253b10a92",
+      "definitions": [
+        "export type PlayerId = number;",
+        "export type CardId = number;",
+        "export interface SkillView {",
+        "export interface GeneralSlotView {",
+        "export type NativeChoiceKind = \"confirm\" | \"select_cards\" | \"select_players\" | \"respond_card\" | \"pick_tag\";",
+        "export interface SeatView {",
+        "export interface CardView {",
+        "export interface ObserverSnapshot {",
+        "export interface ChoiceRequest {",
+        "export interface EngineEnvelope {",
+        "export type LegalAction =",
+        "export interface ReplayMetadata {",
+        "export interface ReplayFrame {",
+        "export type ReplayPrivacy = \"full\" | \"player\" | \"public\";",
+        "export interface ContentAssetRef {",
+        "export interface ContentCatalogCharacter {",
+        "export type ContentSkinPresentation =",
+        "export interface ContentCatalogSkin {",
+        "export interface ContentCatalogAlias {",
+        "export interface ContentCatalogPage {",
+        "export interface ContentBundle {",
+        "export interface GeneralCandidate {",
+        "export interface GeneralCandidatesPayload {",
+        "export interface GeneralAssignment {",
+        "export interface ChooseGeneralPayload {",
+        "export type WorkerRequest =",
+        "export type WorkerResponse =",
+        "export interface StatusPayload {"
+      ]
+    },
+    "crates/engine-api/src/lib.rs": {
+      "sha256": "888a65c6556e4bfe2dbf251759d17351506fb44195ed8ec287591eb8a68e5108",
+      "definitions": []
+    },
+    "crates/engine-protocol/src/lib.rs": {
+      "sha256": "260432c6409ed6fcb40878e60544364ed94d1b31bd6fa2364554dabc301be672",
+      "definitions": []
+    },
+    "crates/engine-protocol/src/messages.rs": {
+      "sha256": "e64744086c7d2987815fafec0e2e851089b07dbf85a92ded45ecc7e81ebb77fe",
+      "definitions": [
+        "pub struct MessageHeader {",
+        "pub fn new(room_id: u64, conn_seq: u64, revision: u64) -> Self {",
+        "pub enum ClientMessage {",
+        "pub enum ServerMessage {",
+        "pub enum ClientRole {",
+        "pub struct SeatPresence {",
+        "pub enum ErrorCode {",
+        "pub fn public_error(code: ErrorCode, message: impl Into<String>) -> ServerMessage {",
+        "pub fn player_raw(p: PlayerId) -> u32 {"
+      ]
+    },
+    "crates/engine-protocol/src/wire.rs": {
+      "sha256": "0c2ba270a92a40efbb5a25713ea802ab32e66e9542d8c500af94665b955e2d05",
+      "definitions": [
+        "pub enum WireError {",
+        "pub fn encode_c2s(msg: &ClientMessage) -> Result<String, WireError> {",
+        "pub fn decode_c2s(text: &str) -> Result<ClientMessage, WireError> {",
+        "pub fn encode_s2c(msg: &ServerMessage) -> Result<String, WireError> {",
+        "pub fn decode_s2c(text: &str) -> Result<ServerMessage, WireError> {",
+        "#[test]",
+        "fn roundtrip_hello() {"
+      ]
+    },
+    "crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json": {
+      "sha256": "40a1ec9ad4ccf21e109d627d3000560a9f6c4a1f5db83dd239ef62af1d29ad1d",
+      "definitions": []
+    }
+  },
+  "fixtures": {
+    "i02-presentation.json": {
+      "revision": 2,
+      "status": "complete",
+      "unavailable": [],
+      "occurrences": [
+        {
+          "ordinal": 0,
+          "event": {
+            "kind": "card_used",
+            "actor": 1,
+            "targets": [
+              2
+            ],
+            "effective": {
+              "kind": "sha",
+              "key": "sha",
+              "nature": "normal"
+            },
+            "voice": {
+              "role": {
+                "owner": {
+                  "kind": "original",
+                  "repository": "https://github.com/libnoname/noname.git",
+                  "adopted_revision": "1111111111111111111111111111111111111111",
+                  "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                  "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                },
+                "kind": "general",
+                "local_id": {
+                  "pack": "standard",
+                  "raw_symbol": "liubei"
+                }
+              },
+              "form": null,
+              "assets": [
+                {
+                  "source": {
+                    "kind": "original",
+                    "repository": "https://github.com/libnoname/noname.git",
+                    "adopted_revision": "1111111111111111111111111111111111111111",
+                    "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                    "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                  },
+                  "reference": {
+                    "kind": "original",
+                    "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                    "source_category": "core",
+                    "source_path": "audio/die/liubei.mp3"
+                  },
+                  "digest_algorithm": "sha256",
+                  "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+                  "size": 1234
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ordinal": 1,
+          "event": {
+            "kind": "card_responded",
+            "actor": 2,
+            "effective": {
+              "kind": "sha",
+              "key": "sha",
+              "nature": "normal"
+            },
+            "voice": null
+          }
+        },
+        {
+          "ordinal": 2,
+          "event": {
+            "kind": "skill_activated",
+            "actor": 1,
+            "skill": {
+              "definition": {
+                "owner": {
+                  "kind": "original",
+                  "repository": "https://github.com/libnoname/noname.git",
+                  "adopted_revision": "1111111111111111111111111111111111111111",
+                  "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                  "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                },
+                "kind": "skill",
+                "local_id": {
+                  "pack": "standard",
+                  "raw_symbol": "rende"
+                }
+              }
+            },
+            "targets": null,
+            "voice": {
+              "role": {
+                "owner": {
+                  "kind": "original",
+                  "repository": "https://github.com/libnoname/noname.git",
+                  "adopted_revision": "1111111111111111111111111111111111111111",
+                  "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                  "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                },
+                "kind": "general",
+                "local_id": {
+                  "pack": "standard",
+                  "raw_symbol": "liubei"
+                }
+              },
+              "form": null,
+              "assets": [
+                {
+                  "source": {
+                    "kind": "original",
+                    "repository": "https://github.com/libnoname/noname.git",
+                    "adopted_revision": "1111111111111111111111111111111111111111",
+                    "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                    "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                  },
+                  "reference": {
+                    "kind": "original",
+                    "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                    "source_category": "core",
+                    "source_path": "audio/die/liubei.mp3"
+                  },
+                  "digest_algorithm": "sha256",
+                  "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+                  "size": 1234
+                }
+              ]
+            }
+          }
+        },
+        {
+          "ordinal": 3,
+          "event": {
+            "kind": "damage_dealt",
+            "source": 1,
+            "target": 2,
+            "amount": 1,
+            "nature": "fire"
+          }
+        },
+        {
+          "ordinal": 4,
+          "event": {
+            "kind": "damage_prevented",
+            "source": null,
+            "target": 2,
+            "nature": "thunder"
+          }
+        },
+        {
+          "ordinal": 5,
+          "event": {
+            "kind": "hp_recovered",
+            "actor": 1,
+            "amount": 1
+          }
+        },
+        {
+          "ordinal": 6,
+          "event": {
+            "kind": "player_died",
+            "actor": 2,
+            "killer": 1,
+            "voice": {
+              "role": {
+                "owner": {
+                  "kind": "original",
+                  "repository": "https://github.com/libnoname/noname.git",
+                  "adopted_revision": "1111111111111111111111111111111111111111",
+                  "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                  "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                },
+                "kind": "general",
+                "local_id": {
+                  "pack": "standard",
+                  "raw_symbol": "liubei"
+                }
+              },
+              "form": null,
+              "assets": [
+                {
+                  "source": {
+                    "kind": "original",
+                    "repository": "https://github.com/libnoname/noname.git",
+                    "adopted_revision": "1111111111111111111111111111111111111111",
+                    "catalog_sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+                    "asset_manifest_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+                  },
+                  "reference": {
+                    "kind": "original",
+                    "path": "audio-declared/standard/die/liubei/0001/liubei.mp3",
+                    "source_category": "core",
+                    "source_path": "audio/die/liubei.mp3"
+                  },
+                  "digest_algorithm": "sha256",
+                  "digest": "6666666666666666666666666666666666666666666666666666666666666666",
+                  "size": 1234
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "i02-presentation-invalid.json": [
+      {
+        "name": "batch_unknown",
+        "changes": [
+          {
+            "pointer": "/private_snapshot",
+            "value": {}
+          }
+        ]
+      },
+      {
+        "name": "null_revision",
+        "changes": [
+          {
+            "pointer": "/revision",
+            "value": null
+          }
+        ]
+      },
+      {
+        "name": "unsafe_revision",
+        "changes": [
+          {
+            "pointer": "/revision",
+            "value": 9007199254740992
+          }
+        ]
+      },
+      {
+        "name": "mixed_revision",
+        "changes": [
+          {
+            "pointer": "/revision",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "string_revision",
+        "changes": [
+          {
+            "pointer": "/revision",
+            "value": "2"
+          }
+        ]
+      },
+      {
+        "name": "bad_status",
+        "changes": [
+          {
+            "pointer": "/status",
+            "value": "secret"
+          }
+        ]
+      },
+      {
+        "name": "overflow_nonempty",
+        "changes": [
+          {
+            "pointer": "/status",
+            "value": "overflow"
+          }
+        ]
+      },
+      {
+        "name": "invalid_domain",
+        "changes": [
+          {
+            "pointer": "/unavailable",
+            "value": [
+              {
+                "domain": "secret",
+                "reason": "verified_binding_missing"
+              }
+            ]
+          },
+          {
+            "pointer": "/status",
+            "value": "incomplete"
+          }
+        ]
+      },
+      {
+        "name": "invalid_reason",
+        "changes": [
+          {
+            "pointer": "/unavailable",
+            "value": [
+              {
+                "domain": "death",
+                "reason": "secret"
+              }
+            ]
+          },
+          {
+            "pointer": "/status",
+            "value": "incomplete"
+          }
+        ]
+      },
+      {
+        "name": "scope_unknown",
+        "changes": [
+          {
+            "pointer": "/unavailable",
+            "value": [
+              {
+                "domain": "death",
+                "reason": "verified_binding_missing",
+                "owner": 1
+              }
+            ]
+          },
+          {
+            "pointer": "/status",
+            "value": "incomplete"
+          }
+        ]
+      },
+      {
+        "name": "duplicate_scope",
+        "changes": [
+          {
+            "pointer": "/unavailable",
+            "value": [
+              {
+                "domain": "death",
+                "reason": "verified_binding_missing"
+              },
+              {
+                "domain": "death",
+                "reason": "verified_binding_missing"
+              }
+            ]
+          },
+          {
+            "pointer": "/status",
+            "value": "incomplete"
+          }
+        ]
+      },
+      {
+        "name": "duplicate_ordinal",
+        "changes": [
+          {
+            "pointer": "/occurrences/1/ordinal",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "unknown_event",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/kind",
+            "value": "CardPlayed"
+          }
+        ]
+      },
+      {
+        "name": "event_unknown",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/source_skill",
+            "value": "rende"
+          }
+        ]
+      },
+      {
+        "name": "actor_zero",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "actor_negative",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": -1
+          }
+        ]
+      },
+      {
+        "name": "actor_fraction",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": 1.5
+          }
+        ]
+      },
+      {
+        "name": "actor_string",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": "1"
+          }
+        ]
+      },
+      {
+        "name": "actor_out_of_view",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": 3
+          }
+        ]
+      },
+      {
+        "name": "actor_u32_over",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": 4294967296
+          }
+        ]
+      },
+      {
+        "name": "actor_null",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/actor",
+            "value": null
+          }
+        ]
+      },
+      {
+        "name": "duplicate_target",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/targets",
+            "value": [
+              2,
+              2
+            ]
+          }
+        ]
+      },
+      {
+        "name": "missing_nullable_voice",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice",
+            "remove": true
+          }
+        ]
+      },
+      {
+        "name": "amount_zero",
+        "changes": [
+          {
+            "pointer": "/occurrences/3/event/amount",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "bad_nature",
+        "changes": [
+          {
+            "pointer": "/occurrences/3/event/nature",
+            "value": "ice"
+          }
+        ]
+      },
+      {
+        "name": "bad_effective_kind",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/effective/kind",
+            "value": "invented"
+          }
+        ]
+      },
+      {
+        "name": "token_traversal",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/effective/key",
+            "value": "../sha"
+          }
+        ]
+      },
+      {
+        "name": "token_controls",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/effective/key",
+            "value": "sha\u0085"
+          }
+        ]
+      },
+      {
+        "name": "role_local_id_wrong",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/local_id",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "name": "role_kind_wrong",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/kind",
+            "value": "skill"
+          }
+        ]
+      },
+      {
+        "name": "owner_unknown",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/opaque",
+            "value": "untrusted"
+          }
+        ]
+      },
+      {
+        "name": "digest_upper",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/digest",
+            "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+          }
+        ]
+      },
+      {
+        "name": "digest_algorithm",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/digest_algorithm",
+            "value": "blake3"
+          }
+        ]
+      },
+      {
+        "name": "size_zero",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/size",
+            "value": 0
+          }
+        ]
+      },
+      {
+        "name": "source_kind",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/source/kind",
+            "value": "builtin"
+          }
+        ]
+      },
+      {
+        "name": "reference_private",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/reference/player",
+            "value": 1
+          }
+        ]
+      },
+      {
+        "name": "path_escape",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+            "value": "audio/../bad.mp3"
+          }
+        ]
+      },
+      {
+        "name": "invalid_category",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/reference/source_category",
+            "value": "private"
+          }
+        ]
+      },
+      {
+        "name": "empty_assets",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets",
+            "value": []
+          }
+        ]
+      },
+      {
+        "name": "form_token",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/form",
+            "value": "hidden/other"
+          }
+        ]
+      },
+      {
+        "name": "owner_tag",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/kind",
+            "value": "builtin"
+          }
+        ]
+      },
+      {
+        "name": "asset_unknown",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/assets/0/private_snapshot",
+            "value": {}
+          }
+        ]
+      },
+      {
+        "name": "role_unknown",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/def",
+            "value": 8
+          }
+        ]
+      },
+      {
+        "name": "id_token_escape",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/local_id/raw_symbol",
+            "value": "liubei%2Fother"
+          }
+        ]
+      },
+      {
+        "name": "oversized_utf8",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/effective/key",
+            "value": "\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218\u5218"
+          }
+        ]
+      },
+      {
+        "name": "null_targets_bad",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/targets",
+            "value": {}
+          }
+        ]
+      },
+      {
+        "name": "missing_source",
+        "changes": [
+          {
+            "pointer": "/occurrences/3/event/source",
+            "remove": true
+          }
+        ]
+      },
+      {
+        "name": "repository_bom",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\ufeff"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_0000",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u0000"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_0009",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\t"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_000a",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\n"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_001c",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u001c"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_0020",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo "
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_007f",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u007f"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_0085",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u0085"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_009f",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u009f"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_00a0",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u00a0"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_1680",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u1680"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2000",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2000"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2001",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2001"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2002",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2002"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2003",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2003"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2004",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2004"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2005",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2005"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2006",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2006"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2007",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2007"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2008",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2008"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2009",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2009"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_200a",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u200a"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2028",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2028"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_2029",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u2029"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_202f",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u202f"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_205f",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u205f"
+          }
+        ]
+      },
+      {
+        "name": "repository_whitespace_control_3000",
+        "changes": [
+          {
+            "pointer": "/occurrences/0/event/voice/role/owner/repository",
+            "value": "repo\u3000"
+          }
+        ]
+      }
+    ],
+    "i02-presentation-surrogates.json": [
+      {
+        "name": "repository_lone_high",
+        "pointer": "/occurrences/0/event/voice/role/owner/repository",
+        "raw_json_value": "\"repo\\ud800\""
+      },
+      {
+        "name": "repository_lone_low",
+        "pointer": "/occurrences/0/event/voice/role/owner/repository",
+        "raw_json_value": "\"repo\\udfff\""
+      },
+      {
+        "name": "token_lone_high",
+        "pointer": "/occurrences/0/event/effective/key",
+        "raw_json_value": "\"sha\\ud800\""
+      },
+      {
+        "name": "token_lone_low",
+        "pointer": "/occurrences/0/event/effective/key",
+        "raw_json_value": "\"sha\\udfff\""
+      },
+      {
+        "name": "path_lone_high",
+        "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+        "raw_json_value": "\"audio/die/role\\ud800\""
+      },
+      {
+        "name": "path_lone_low",
+        "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+        "raw_json_value": "\"audio/die/role\\udfff\""
+      }
+    ]
+  }
+}

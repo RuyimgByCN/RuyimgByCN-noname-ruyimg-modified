@@ -1,0 +1,1813 @@
+{
+  "cases": 7,
+  "rows": [
+    {
+      "name": "park-0",
+      "own": {
+        "allowCancel": true,
+        "id": 1,
+        "kind": "Confirm",
+        "max": 1,
+        "min": 1,
+        "native_kind": "confirm",
+        "observer": 1,
+        "options": [
+          "confirm"
+        ],
+        "prompt": "trigger_confirm",
+        "source_skill": "遗计"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "trigger_confirm"
+      },
+      "reply": {
+        "kind": "answer",
+        "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+      },
+      "envelope": {
+        "result": {
+          "kind": "answer",
+          "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          },
+          {
+            "PublicEvent": {
+              "code": 2,
+              "label": "摸牌"
+            }
+          },
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          }
+        ],
+        "choice": {
+          "choice_id": 2,
+          "observer": 1,
+          "min_count": 0,
+          "max_count": 1,
+          "allow_cancel": true,
+          "prompt": "jiji_target",
+          "native_kind": "select_players",
+          "kind": "SelectTargets",
+          "revision": 2,
+          "options": [
+            {
+              "token": 0,
+              "label_key": "player:0"
+            },
+            {
+              "token": 1,
+              "label_key": "player:2"
+            }
+          ]
+        },
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 2,
+              "identity": null,
+              "skills": [
+                {
+                  "id": 0,
+                  "def": 0,
+                  "enabled": true,
+                  "use_count": 0,
+                  "active": false,
+                  "view_as": false,
+                  "locked": false,
+                  "name": "遗计"
+                }
+              ]
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 110,
+              "def": 92,
+              "suit": "Heart",
+              "rank": 4,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Other"
+            },
+            {
+              "id": 58,
+              "def": 11,
+              "suit": "Diamond",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 54,
+              "def": 9,
+              "suit": "Spade",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 39,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 112,
+              "def": 93,
+              "suit": "Club",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 97,
+              "def": 7,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "ShaFire"
+            },
+            {
+              "id": 107,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 102,
+              "def": 10,
+              "suit": "Heart",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 4,
+              "def": 0,
+              "suit": "Spade",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 25,
+              "def": 0,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 80,
+              "def": 3,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 49,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 8,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [
+          {
+            "ResolveChoice": {
+              "cancelled": false,
+              "choice_id": 2,
+              "selections": [
+                0
+              ]
+            }
+          },
+          {
+            "ResolveChoice": {
+              "cancelled": false,
+              "choice_id": 2,
+              "selections": [
+                1
+              ]
+            }
+          },
+          {
+            "ResolveChoice": {
+              "cancelled": true,
+              "choice_id": 2,
+              "selections": []
+            }
+          }
+        ],
+        "hash_hex": "8453394783299c92f9fca2bf0ebdd9dd865bb2828727a754d5723f21137bb5bc",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "3dfcea8afba20bc8a1d2c02eda9c510f65a398ee3f67791f8ff88045e4e24435",
+      "fullAfterSha": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "oneFormalSubmit": true,
+      "accepted": true
+    },
+    {
+      "name": "park-1",
+      "own": {
+        "allowCancel": true,
+        "id": 1,
+        "kind": "Confirm",
+        "max": 1,
+        "min": 1,
+        "native_kind": "confirm",
+        "observer": 1,
+        "options": [
+          "confirm"
+        ],
+        "prompt": "trigger_confirm",
+        "source_skill": "遗计"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "trigger_confirm"
+      },
+      "reply": {
+        "kind": "answer",
+        "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+      },
+      "envelope": {
+        "result": {
+          "kind": "answer",
+          "outcome": "{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          },
+          {
+            "PublicEvent": {
+              "code": 2,
+              "label": "摸牌"
+            }
+          },
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          }
+        ],
+        "choice": null,
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 2,
+              "identity": null,
+              "skills": [
+                {
+                  "id": 0,
+                  "def": 0,
+                  "enabled": true,
+                  "use_count": 0,
+                  "active": false,
+                  "view_as": false,
+                  "locked": false,
+                  "name": "遗计"
+                }
+              ]
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 110,
+              "def": 92,
+              "suit": "Heart",
+              "rank": 4,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Other"
+            },
+            {
+              "id": 58,
+              "def": 11,
+              "suit": "Diamond",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 54,
+              "def": 9,
+              "suit": "Spade",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 39,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 112,
+              "def": 93,
+              "suit": "Club",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 97,
+              "def": 7,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "ShaFire"
+            },
+            {
+              "id": 107,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 102,
+              "def": 10,
+              "suit": "Heart",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 4,
+              "def": 0,
+              "suit": "Spade",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 25,
+              "def": 0,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 80,
+              "def": 3,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 49,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 8,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [],
+        "hash_hex": "dfbd294ef2ecf9d19d85322dc11fdf6fae2557ded3dce3cc1ab6c8fd2acc65d3",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "6559abb96f04ddc1fd3835583d97810601229f98693edd3b2fdf92be05c21e78",
+      "fullAfterSha": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "oneFormalSubmit": true,
+      "accepted": true
+    },
+    {
+      "name": "own-cancel",
+      "own": {
+        "allowCancel": true,
+        "id": 1,
+        "kind": "Confirm",
+        "max": 1,
+        "min": 1,
+        "native_kind": "confirm",
+        "observer": 1,
+        "options": [
+          "confirm"
+        ],
+        "prompt": "trigger_confirm",
+        "source_skill": "遗计"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "trigger_confirm"
+      },
+      "reply": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 2
+      },
+      "envelope": {
+        "result": {
+          "finished": false,
+          "outcome": "accepted",
+          "reason": null,
+          "revision": 2
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          }
+        ],
+        "choice": null,
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": [
+                {
+                  "id": 0,
+                  "def": 0,
+                  "enabled": true,
+                  "use_count": 0,
+                  "active": false,
+                  "view_as": false,
+                  "locked": false,
+                  "name": "遗计"
+                }
+              ]
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 58,
+              "def": 11,
+              "suit": "Diamond",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 54,
+              "def": 9,
+              "suit": "Spade",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 39,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 112,
+              "def": 93,
+              "suit": "Club",
+              "rank": 13,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 97,
+              "def": 7,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "ShaFire"
+            },
+            {
+              "id": 107,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 102,
+              "def": 10,
+              "suit": "Heart",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 4,
+              "def": 0,
+              "suit": "Spade",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 25,
+              "def": 0,
+              "suit": "Diamond",
+              "rank": 7,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 80,
+              "def": 3,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 49,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 8,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [],
+        "hash_hex": "a87aba219bb41e7c6eb68741824612308ec369954a08ecc25a182f9f63726ef6",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "3dfcea8afba20bc8a1d2c02eda9c510f65a398ee3f67791f8ff88045e4e24435",
+      "fullAfterSha": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "oneFormalSubmit": true,
+      "accepted": true
+    },
+    {
+      "name": "shan-auto",
+      "own": {
+        "allowCancel": false,
+        "id": 1,
+        "kind": "Custom",
+        "max": 1,
+        "min": 1,
+        "native_kind": "respond_card",
+        "observer": 1,
+        "options": [
+          "pass",
+          {
+            "card": 30
+          }
+        ],
+        "prompt": "respond_shan"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "respond_shan"
+      },
+      "reply": {
+        "kind": "answer",
+        "outcome": "{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":2}"
+      },
+      "envelope": {
+        "result": {
+          "kind": "answer",
+          "outcome": "{\"finished\":false,\"outcome\":\"accepted\",\"reason\":null,\"revision\":2}"
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          }
+        ],
+        "choice": null,
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 16,
+              "def": 0,
+              "suit": "Club",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 59,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 115,
+              "def": 97,
+              "suit": "Heart",
+              "rank": 5,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 113,
+              "def": 94,
+              "suit": "Club",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 60,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 4,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 51,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 12,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            },
+            {
+              "id": 23,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 117,
+              "def": 99,
+              "suit": "Club",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 35,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 77,
+              "def": 15,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 106,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 22,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 10,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [],
+        "hash_hex": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "fullAfterSha": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "oneFormalSubmit": true,
+      "accepted": true
+    },
+    {
+      "name": "shan-direct",
+      "own": {
+        "allowCancel": false,
+        "id": 1,
+        "kind": "Custom",
+        "max": 1,
+        "min": 1,
+        "native_kind": "respond_card",
+        "observer": 1,
+        "options": [
+          "pass",
+          {
+            "card": 30
+          }
+        ],
+        "prompt": "respond_shan"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "respond_shan"
+      },
+      "reply": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 2
+      },
+      "envelope": {
+        "result": {
+          "finished": false,
+          "outcome": "accepted",
+          "reason": null,
+          "revision": 2
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          }
+        ],
+        "choice": null,
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 16,
+              "def": 0,
+              "suit": "Club",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 59,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 115,
+              "def": 97,
+              "suit": "Heart",
+              "rank": 5,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 113,
+              "def": 94,
+              "suit": "Club",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 60,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 4,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 51,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 12,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            },
+            {
+              "id": 23,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 117,
+              "def": 99,
+              "suit": "Club",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 35,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 77,
+              "def": 15,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 106,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 22,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 10,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [],
+        "hash_hex": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "fullAfterSha": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "oneFormalSubmit": true,
+      "accepted": true
+    },
+    {
+      "name": "shan-cancel",
+      "own": {
+        "allowCancel": false,
+        "id": 1,
+        "kind": "Custom",
+        "max": 1,
+        "min": 1,
+        "native_kind": "respond_card",
+        "observer": 1,
+        "options": [
+          "pass",
+          {
+            "card": 30
+          }
+        ],
+        "prompt": "respond_shan"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "respond_shan"
+      },
+      "reply": {
+        "finished": false,
+        "outcome": "rejected",
+        "reason": "InvalidChoice",
+        "revision": 1
+      },
+      "envelope": {
+        "result": {
+          "finished": false,
+          "outcome": "rejected",
+          "reason": "InvalidChoice",
+          "revision": 1
+        },
+        "events": [],
+        "choice": {
+          "choice_id": 1,
+          "observer": 1,
+          "min_count": 1,
+          "max_count": 1,
+          "allow_cancel": false,
+          "prompt": "respond_shan",
+          "native_kind": "respond_card",
+          "kind": "Custom",
+          "revision": 1,
+          "options": [
+            {
+              "token": 0,
+              "label_key": "pass"
+            },
+            {
+              "token": 1,
+              "label_key": "card:30"
+            }
+          ]
+        },
+        "view": {
+          "revision": 1,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 1,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Shan"
+            },
+            {
+              "id": 16,
+              "def": 0,
+              "suit": "Club",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 59,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 115,
+              "def": 97,
+              "suit": "Heart",
+              "rank": 5,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 113,
+              "def": 94,
+              "suit": "Club",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 60,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 4,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 51,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 12,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            },
+            {
+              "id": 23,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 117,
+              "def": 99,
+              "suit": "Club",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 35,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 77,
+              "def": 15,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 106,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 22,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 10,
+              "owner": null,
+              "zone": "Processing",
+              "kind": "Sha"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [
+          {
+            "ResolveChoice": {
+              "cancelled": false,
+              "choice_id": 1,
+              "selections": [
+                0
+              ]
+            }
+          },
+          {
+            "ResolveChoice": {
+              "cancelled": false,
+              "choice_id": 1,
+              "selections": [
+                1
+              ]
+            }
+          }
+        ],
+        "hash_hex": "c71e913702b9d82b60d5239396732e0bb7c776569ebe7b6fe17ae62bb4c129f2",
+        "revision": 1,
+        "finished": false
+      },
+      "restoredSha": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "fullAfterSha": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "oneFormalSubmit": true,
+      "accepted": false
+    },
+    {
+      "name": "shan-pass",
+      "own": {
+        "allowCancel": false,
+        "id": 1,
+        "kind": "Custom",
+        "max": 1,
+        "min": 1,
+        "native_kind": "respond_card",
+        "observer": 1,
+        "options": [
+          "pass",
+          {
+            "card": 30
+          }
+        ],
+        "prompt": "respond_shan"
+      },
+      "other": {
+        "hidden": true,
+        "id": 1,
+        "observer": 1,
+        "prompt": "respond_shan"
+      },
+      "reply": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 2
+      },
+      "envelope": {
+        "result": {
+          "finished": false,
+          "outcome": "accepted",
+          "reason": null,
+          "revision": 2
+        },
+        "events": [
+          {
+            "PublicEvent": {
+              "code": 10,
+              "label": "选择状态变化"
+            }
+          },
+          {
+            "PublicEvent": {
+              "code": 4,
+              "label": "伤害结算"
+            }
+          }
+        ],
+        "choice": null,
+        "view": {
+          "revision": 2,
+          "state_hash": "",
+          "observer": 1,
+          "round": 1,
+          "current_player": 0,
+          "phase": "Play",
+          "seats": [
+            {
+              "player": 0,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 0,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 1,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 1,
+              "hp": 3,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 1,
+              "identity": null,
+              "skills": []
+            },
+            {
+              "player": 2,
+              "character_def": 0,
+              "generals": [
+                null,
+                null
+              ],
+              "seat": 2,
+              "hp": 4,
+              "max_hp": 4,
+              "alive": true,
+              "turned_over": false,
+              "hand_count": 0,
+              "identity": null,
+              "skills": []
+            }
+          ],
+          "known_cards": [
+            {
+              "id": 30,
+              "def": 1,
+              "suit": "Heart",
+              "rank": 2,
+              "owner": 1,
+              "zone": "Hand",
+              "kind": "Shan"
+            },
+            {
+              "id": 16,
+              "def": 0,
+              "suit": "Club",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 59,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 115,
+              "def": 97,
+              "suit": "Heart",
+              "rank": 5,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 113,
+              "def": 94,
+              "suit": "Club",
+              "rank": 2,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 60,
+              "def": 17,
+              "suit": "Spade",
+              "rank": 4,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 75,
+              "def": 13,
+              "suit": "Club",
+              "rank": 6,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 51,
+              "def": 2,
+              "suit": "Heart",
+              "rank": 12,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Tao"
+            },
+            {
+              "id": 23,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 11,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            },
+            {
+              "id": 117,
+              "def": 99,
+              "suit": "Club",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 35,
+              "def": 1,
+              "suit": "Diamond",
+              "rank": 3,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Shan"
+            },
+            {
+              "id": 77,
+              "def": 15,
+              "suit": "Spade",
+              "rank": 1,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 106,
+              "def": 90,
+              "suit": "Heart",
+              "rank": 9,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Other"
+            },
+            {
+              "id": 22,
+              "def": 0,
+              "suit": "Heart",
+              "rank": 10,
+              "owner": null,
+              "zone": "DiscardPile",
+              "kind": "Sha"
+            }
+          ],
+          "outcome": null
+        },
+        "legal_actions": [],
+        "hash_hex": "3db2ec3986dfe95b34c6086f3e7bf2edff0bfdaf4807fbc67e96d533e905aefb",
+        "revision": 2,
+        "finished": false
+      },
+      "restoredSha": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "fullAfterSha": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "oneFormalSubmit": true,
+      "accepted": true
+    }
+  ],
+  "fullPlanExported": false,
+  "qualification": "Full Plan privacy is native Rust proof; current web WASM exports auto_step summary only."
+}

@@ -1,0 +1,61 @@
+C331 phase9b — actual pre-HP runtime；最后scope修复验证父接管后自然完成；golden仍 BLOCK
+核验日期2026-10-31；同一private writer，base5fc+C8 repair+C9；无Main导入/写入/stage/commit/push。
+E=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9b。
+331/NGSA106 unpublished intermediate/ABI758/WS6，format/API1不变；C331 source262/290、remaining28、+0。
+
+实际实现与三项P1处理：
+- Damage root 从 Intrinsic 启动唯一 DamageFlow{root}，Start→Before→Begin→Begin1..4→SubmitHp→HpCommitted→Target→Dying→Source→End→After→Chain→Done。
+- Before/Begin/Begin1..4/Target/Source/End/After/Zero/Cancelled 都是引用显式root的普通child frame；旧root Before/target队列不再派发。
+- 仅Damage/Window共用push_frame；Ctx.emit所有nonDamage原构造/起点保留，engine原push起点不改；progress在emit/yield前存好，无第二queue/scheduler/registry。
+- SubmitHp按父澄清为原子root进度/receipt/armor/HP提交，不发明damageSubmitHp trigger；有receipt的preHP状态拒收，恢复不重施modifiers或扣HP。
+- canonical root.amount:i32始终是source event.num；committed_damage和hp_loss分离；Some(n)不授后窗权限。
+- ordinary filter/order refresh/optional gate/start仍共用C7 genuine eligibility/source helper；payload读取统一解析checked root，queue/park保留child身份。
+- Native pre modifiers拆到Before/Begin/Begin1/Begin4；真实native相德订阅Begin3、兆火来源订阅Begin1；不再一个commit内扁平执行全部前置。
+- changeHp activation gates/伤逝移至Target前；还侠/极点/冥顽移至After；鼠槌移至End，其余inline End保持其已登记damageEnd角色。
+- Native host payload消费者全部适配root；乖戾以实际progress区分before/after；并未把Root intrinsic stage冒充旧flat Before阶段。
+- Source liveness仍逐调度边界刷新；VM采样live root source/amount；未新增HostContext字段/opcode/query/locals/marks ordinal。
+- HOST_EVENT_AMOUNT保留u32 bits→i32意义；新window kind只在既有Frame/声明绑定中；多handler恢复用真实trigger module+实际frame window双重授权。
+- chain资格在受伤者自己的HP transition持久化，属性伤害仅unlink当前受伤者；父Dying完整结束后After收集其他linked座位，逐个alive/linked重检。
+- 不依赖父target晚期仍linked/alive；各child独立root，携带canonical量；飞刃parent2→chain2源证据断言取代旧chain1期望，未重施飞刃。
+- 新restore矩阵约束receipt/outcome/progress；Completed仅Done，Zero仅ZeroPending/Stopped；Root Flow绑定slot/root/stage/精确depth，window绑定root/progress，Dying绑定target。
+- 不兼容Completed+HpCommitted、错root、错depth、preHP带receipt/重复commit等受控拒绝；原机Host/OptionalGate字段布局保留。
+
+实际测试与失败保留：
+- initial-red.log真实复现“Before只有flat root queue、没有child/Root Flow”；旧C9 42/191 seals、8红和golden文件全保持不变。
+- targeted-first/2等编译/消费者失败原文保留；full-native1为1750/37/75，root payload读取漏口修后full-native2为1780/7/75。
+- targeted9.log：18/0；scope修复前full-native同源亦包含全部18绿。含六个preHP窗和Target逐窗真实pending byte/fulltyped/RNG/继续轨迹比较。
+- 实际PlayCard+slice1覆盖多handler Begin2挂起、SubmitHp及HpCommitted；该test先暴露UnknownMachine红，修复后完整续行且HP/receipt/log不重复。
+- 含full armor/无限HP positive amount与zero HP loss；post-submit num0保留receipt但仅Zero；post-submit cancellation有实际Cancelled child且无End。
+- 含notrigger仍提交HP、Source实际loseHp死亡后End采样sourceNone、LoseHp replacement等待实际Dying子树及byte restore。
+- 含父真实死亡后chain仍传播、sibling不提前unlink、个体提交后unlink；wrong root/progress/depth/duplicate commit拒绝，原engine完整save不变。
+- StateSnapshot仅规范化已知restore auth_generation增量；runtime log按既有restore清空语义比较继续suffix，未规范化其他rule字段。
+- debug_damage+slice不生成正常command checkpoint的fixture红、未flush最后segment完成步的fixture红均保留；正例改用实际PlayCard及完成整个segment。
+- scope修复前 full-native.log：cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast =1790/1/75，exit101。
+- 唯一失败仍是replay_scenarios_match_golden：12个原expected mismatch；其余原C9七个非golden失败已修/源证据校正，未删除coverage guard。
+- A0以exhaustive variant maximum检查完整性；朱羽独立子例重建linked条件；反馈/散财真实optional取消用空selection；redirect后原linked承受者也处理chain窗。
+- 灵渠零量不派普通damageEnd，正数量只计一次；毒瘟静态源定位跟随damage_windows.rs，既有notLink登记差异未借机隐藏。
+- scope修复前 gate1b.log：独立target-strict、RUSTFLAGS=-Dwarnings、cargo check --offline -p engine-native --all-targets，exit0。
+- scope修复前 source-cap-unit/source-caps/layering：2passed、9030files通过1000effective/2000physical、0upward refs。无LSP/WASM/UI/wholeworkspace验收声明。
+
+golden和剩余边界：
+- scope修复前golden-disposition.json保存14场70个snapshot/archive/event/view/choice文件；源码级首个调度差异是root Intrinsic+新增Before child及更多event ids/progress。
+- 每场与已接受旧轨迹的首个业务语义差异仍未逐一证明；因此原12expected不改、gate保红，不以版本/哈希解释冒充规则等价。
+- inline intrinsic与普通queued handler的完整上游priority竞争、全部native source绑定归位仍未证明；named DSL/package Begin绑定消费者/SDK parity未宣完成。
+- 完整forgery矩阵、数值repeat机制、provider/death lifetime/rescue等后续范围不在此轮完成；旧死亡清技能断言不证明v3永久provider契约。
+
+冻结与保护：
+- checkpoint20-v3于约18m09s封存，27files；manifest7b05dc499dc317c8999d58bad69ed7287351d0cc63528324325f598da0867f98；两个freeze脚本失败尝试保留。
+- 最后审读发现共享构造额外改变Equipped emit起点；已最小修回所有nonDamage原语义，新增第19个构造区分回归；父允许最后短验证例外并接管等待队列。
+- final-scope-fix 46files：manifeste0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174。
+- increment tarc0c81922c890f4025464606577b44f1e33f2b785265ba7a8239f976793f8ee58；patcha7b30f28a20ac7575aa69b62c549fb3d17819221355d55a6ff48ddfdc95a8486。
+- full-source-scope-fix212files：manifestd1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049。
+- full tar93df600b6f86b79d2ea77d4c461705ca46338df2a2b4e9d9a054e35fac9e1c5e；patch64eb00896787032f1a927be8503c07086560acd83b6e0f5fe391b726628a1fd6。
+- 修后两patch reverse-apply通过；旧command-source-bindings.json只绑定pre-fix源751427…，不得冒充修后源e0ef75…已跑全量。
+- protected-after.json：原Main31867基线不刷新，Own6、父精确I02_30、nativeWASM30e97、d07HEAD/index/docs授权分开登记；其余source/package/dist37/hooks零意外差异。
+- 原C6_140及C7/C8/repair/C9 indexes fresh逐文件零差异，private old330 generated12固定；private staged empty，无Main验收/CI借用。
+- 原wrapper/lock/offline/jobs2/incremental0不变；50min后仅父明确允许的已知scope修复短验证例外，无新feature/重试/其他heavy，未清理或signal任何PID。
+- 修后组13:17排队，foreign workspace62549阻挡约10min；父接管后自然完成。13:30观测full1791/1/75(仅同一golden组)、strict0、unit/caps/F7均0，第19构造回归绿。
+- 父接管runner82177/wrapper82179及日志，不再起writer直到自然完成并核源；pending-validation-parent-handoff.json记录argv/cwd/父子/等待→实际执行，不重跑producer。
+- source入口scope-fix-source-binding.json，修后观测scope-fix-results-observed.json；旧results-bound只绑定pre-fix，父保留最终独立核源责任。
+建议独立复核本46files与矩阵/chain/source绑定，再补12场golden首个语义差异及剩余callback/SDK/source等价证据。
+跳过平台产物与完整上游等价验收；风险：原golden门禁仍红，修后结果已观测但仍待父独立核源/审阅，完整C9/C331不能报完成或合并。

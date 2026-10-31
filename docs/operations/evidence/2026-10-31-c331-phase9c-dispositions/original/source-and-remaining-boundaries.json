@@ -1,0 +1,22 @@
+{
+  "old330_reader": {
+    "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/old330/debug/examples/c331_old_reader",
+    "exists": true,
+    "sha256": "5ec8147491571b7c0145b2a31b8ab003d37fb5c9839ba1a31a668e83712abac4"
+  },
+  "source_refs": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname/apps/core/noname/library/element/content.ts",
+      "sha256": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    }
+  ],
+  "native_ordering_remaining": [
+    "Only Jueqing/Wuxin/Zuijiu genuine immutable declarations were migrated; other inline skill effects still precede ordinary queue competition.",
+    "Concrete remaining consumer: Huoshen cancel+recover in damage_windows Begin1 Commit can still precede a First Begin1 VM handler; this ordering branch is not certified.",
+    "jidong/chengxin flags and direct equipment effects have not been migrated to actual qualified provider declarations; no provider framework was invented."
+  ]
+}

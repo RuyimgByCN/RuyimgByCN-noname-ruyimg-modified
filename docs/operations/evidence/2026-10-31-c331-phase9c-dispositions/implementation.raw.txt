@@ -1,0 +1,58 @@
+C331 phase9c — damage consumer fixes / C8 golden business disposition；仍 BLOCK
+核验2026-10-31；同一private writer，base5fc+C8repair+C9b e0ef75/d1c89；Main只读，无导入/stage/commit/push。
+E=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c。
+331/106(private)/ABI758/WS6及332/106→R05 333/107不变；source262/290 remaining28 +0；不改golden expected。
+
+实现及review状态：
+- 真实复现First prevent vs绝情：旧inline replacement先扣1HP；新Jueqing/Wuxin/Zuijiu三个immutable SkillDef登记实际Before/Begin1、Normal priority0/10/0及owner角色。
+- 三者从inline块移除，使用原Frame.queue/TriggerOrder/C7 start-stop竞争；无第二scheduler/registry，不以中文名推断新身份。
+- 新内部NativeDamageSkill{owner,def,window} tag85，核无冲突；codec/hash/restore/A0 exhaustive inventory同步，定义/角色/实际window/slot/depth及已准入done记录校验。
+- body是一次原子source unit；完成修改并emit child后Done，不在child await重施效果或重查已准入continuation；nested wrapper伪造该机型拒收。
+- First prevention对绝情、First num1→0对醉酒、native admitted byte/fullsave继续及错def/nested机器负控均绿。
+- Window恢复仅允许Commit/AfterTriggers/Done，限制planned/queue/intrinsic/TriggerOrder parks；Intrinsic、BeforeTriggers和丢order机器byte负控拒收。
+- 黄金对比另发现日志错误：C9b在DamageDealt前unlink；新增实际红并修为damage记录先于changeHp/unlink，receipt/progress先存root。
+- native排序P1只部分修：Huoshen Begin1 inline cancel+recover等其他技能仍可能抢在First handler前；jidong/chengxin flags及直接装备分支未迁实际provider身份。
+- 不为本轮造provider/SDK框架；完整native窗口priority、命名SDK绑定、死亡/provider/LossEnd/repeat均未宣完成。child-stage P1已按上述反例修复。
+
+C8基线与观察方法：
+- 自有隔离c8-baseline由gitarchive5fc+精确170 frozen overlay组成，manifest f5829f4023ee465e5e97fe6ad8f998b1480999cd727c348b310686dcdf72876e。
+- 资源只读指向固定upstream；target-c8-golden-baseline独占；没有回滚/重写live Ctree、Main或旧来源。
+- baseline原14场golden组先真实PASS；观测patch后同组再次PASS。fixture/setup/观测编译错误原文保留，未当业务差异。
+- baseline/current同一test-only观察：既有命令seam前/后+最终态保存完整StateSnapshot/archive/Core/event/RNG/全部view/choice；无调度/RNG调用或算法修改。
+- 两侧before/after源码SHA与完整patch在observation-final-source-bindings.json；所有原expected常量逐项一致；拒绝错误相等不作为privacy证据。
+- 12对362个capture：相同seed/命令参数/版本331及标准catalog场景；完整Core/log/RNG/views/choices/referee比较不规范化未知字段。
+- machine JSON为golden-business-dispositions.json：逐capture旧/新完整绝对路径及SHA、snapshot/archive路径SHA、首差、原始root/window关系和未证明边界。
+
+场景 | seed | capture | FIRST业务差异/处置
+--- | ---: | ---: | ---
+sha_dodge_then_damage | 11 | 21 | 未观察到；所有命令及终态完整业务字段相同，供独立disposition review
+death_terminal_single | 71 | 19 | 未观察到；同上
+sancai_nested_chain | 23 | 25 | 未观察到；同上
+yishang_redirect | 31 | 23 | 未观察到；同上
+suidun_window_matrix | 53 | 69 | 未观察到；同上
+shouyi_dynamic_skill | 61 | 67 | 未观察到；同上
+rollback_invariants | 81 | 25 | 未观察到；完整状态与所有观察面相同，不据Error==Error推privacy
+equip_distance_matrix | 101 | 63 | 未观察到；同上
+chain_fire_propagation | 113 | 11 | 0007-after：actor0/rev3/dedup163 PlayCard95→[1]；旧先Linked2=false，新先DamageDealt(target2,num1)再Linked2=false
+aoe_response_queue | 131 | 15 | 未观察到；同上
+duel_alternating_response | 141 | 11 | 未观察到；同上
+nullify_chain_on_savage | 153 | 13 | 未观察到；同上
+
+- chain首差是实际event顺序，非hash/档号解释；旧提前解兄弟链，新由每个recipient自己的changeHp解链，C29与Liuli game.js34767–34810覆盖。
+- content.ts12092–12120先记录damage再changeHp，支撑本轮修正错误log先后；原错轨迹与红保存，未直接更新expected消红。
+- 11场只是已观察脚本完整业务面相同，不证明任意内部瞬态或全上游等价；raw调度/codec差异完整保留，独立审阅前不准重录golden。
+
+验证与冻结：
+- initial-red.log两个review P1均实际红；chain-log-red.log实际日志次序红；targeted3.log=24/0，final full亦含全部24绿。
+- 最终full native(kernel/content/facade --no-fail-fast)=1796/1/75 exit101，唯一golden组12 mismatch；独立Gate1b -Dwarnings all-targets exit0。
+- source unit2通过；9032files通过1000effective/2000physical；F7=0。encoder初次1001effective失败，按damage codec职责移出native编码后通过，未压缩绕门禁。
+- checkpoint20约17m54s、20files manifest42f90e14f4c52abf73074fa6646181ca50c442ae574dc7daf3b4b48d36418b45，已即时通知父。
+- final 21files manifestdca881deb88eefc63d7836bb0bff5fd3962b18d54352c5f20c580c95215b8379；tar e27623684d1c7d1c1b01ca4b41b98f2cf9a1061cae3a489d63ae3ac5fe0c2e5b。
+- increment patch4f2902d908fd6b3e9f80540daa15233a40ac1cf2fd5e6f4a56e6d362ea86e846；full214 manifest0ab2b44eac80e7c1d591ebe560e8be69ab4ff72a4ac35b7db92edc5c4f4925ae。
+- full tar6603f6d6cd7552b59a4daea4c0e16cfb5ba18b9fa28b41bc3f56df8ba7385969；patch539560c263823035f17aca9f7181b25be0937cdbc8ba8e47531f7dce4331bef9；两patch reverse-check通过。
+- final源与最终full/strict/current traces绑定字节一致；command-source-bindings.json/原警告和失败均保存。无C-WASM/UI/wholeworkspace重跑。
+- protected-after.json原Main31867基线不刷新，精确Own6/I02_30/CI单文件、QA18中三WASM、四tauri schemas及父docs/HEAD/index授权分别验SHA；其余生产/package/dist37/hooks零异动。
+- 原C6_140、C7/C8/repair/C9/C9b immutable indexes fresh无差异，old330 reader5ec814…及private旧generated12固定，private index空。
+- heavy仅原helper d7f…/dev16777231 inode620205209，offline/jobs2/incremental0/≥3GiB；无memory限制/换锁/pid信号；无leftover队列需接管。
+建议独立审阅三声明竞争、child矩阵与12具体dispositions，再决定是否允许rerecord；未迁inline的P1仍须真实声明/provider后续闭合。
+跳过全native源优先级/SDK/provider及内部瞬态全等价证明；风险：native排序P1部分未闭，golden仍红，C9/C331/Main merge不准报通过。

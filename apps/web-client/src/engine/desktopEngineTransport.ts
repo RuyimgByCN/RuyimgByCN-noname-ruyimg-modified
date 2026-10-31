@@ -1,3 +1,4 @@
+import { validatePresentationResponse } from "./presentationMetadata";
 import { invoke } from "@tauri-apps/api/core";
 import { urlParam } from "./autoDrive";
 import { validateObserverMetadata } from "./observerMetadata";
@@ -17,7 +18,7 @@ type Invoke = <T>(command: string, args?: Record<string, unknown>) => Promise<T>
 export const DESKTOP_ENGINE_KEY = "noname-next-desktop-engine";
 export type DesktopEngineChoice = "wasm" | "native";
 // Match the native queue capacity, conservatively including active/opening requests.
-const MAX_DESKTOP_OUTSTANDING = 8;
+export const MAX_ENGINE_OUTSTANDING = 8;
 
 /** Wasm stays the default until all six PA09 conditions have evidence. */
 export function desktopEngineChoice(): DesktopEngineChoice {
@@ -35,6 +36,9 @@ function normalizeEnvelope(envelope: EngineEnvelope): EngineEnvelope {
 /** Normalize only the two existing local response locations; network envelopes never enter here. */
 function normalizeResponse(response: WorkerResponse, request: WorkerRequest): WorkerResponse {
   if (!response.ok || !response.data || typeof response.data !== "object") return response;
+  // Preserve malformed presentation for EngineClient before observer normalization can turn it into ordinary cleanup.
+  try { validatePresentationResponse(response.data); }
+  catch { return response; }
   if (request.type === "chooseGeneral") {
     const data = response.data as ChooseGeneralPayload;
     if (data.envelope?.view) return { ...response, data: { ...data, envelope: normalizeEnvelope(data.envelope) } };
@@ -58,7 +62,7 @@ export class DesktopEngineTransport implements EngineTransport {
 
   postMessage(request: WorkerRequest): void {
     if (this.closed) throw new Error("Desktop engine transport closed");
-    if (this.outstanding >= MAX_DESKTOP_OUTSTANDING) {
+    if (this.outstanding >= MAX_ENGINE_OUTSTANDING) {
       throw new Error("Desktop engine busy; request was not submitted（未提交）");
     }
     this.outstanding++;

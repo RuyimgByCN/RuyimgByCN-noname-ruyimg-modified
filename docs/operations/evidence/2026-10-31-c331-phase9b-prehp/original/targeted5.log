@@ -1,0 +1,54 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.52s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 14 tests
+test c331_prehp_damage::c9b_notrigger_suppresses_windows_without_suppressing_submission ... ok
+test c331_canonical_damage::c9_lose_hp_replacement_has_no_damage_receipt_or_target_trigger ... ok
+test c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying ... ok
+test c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage ... ok
+test c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp ... ok
+test c331_canonical_damage::c9_infinite_hp_keeps_positive_source_receipt ... ok
+test c331_canonical_damage::c9_target_damage_runs_before_dying_subtree ... ok
+test c331_canonical_damage::c9_zero_window_runs_once_and_signed_overflow_is_atomic ... ok
+test c331_canonical_damage::c9_changed_root_amount_matches_damage_log_and_later_vm_context ... ok
+test c331_canonical_damage::c9_full_armor_retains_source_quantity_positive_receipt_and_zero_hp_loss ... ok
+test c331_canonical_damage::c9_real_vm_source_window_uses_qualified_root_and_byte_restore ... ok
+test c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt ... FAILED
+test c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore ... FAILED
+test c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root ... FAILED
+
+failures:
+
+---- c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt stdout ----
+
+thread 'c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt' (21403063) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:55:5:
+assertion `left == right` failed
+  left: [DamageDealt { source: Some(0), target: 1, amount: 2, redirected_from: [], card: None }, SkillTriggered { skill: "c9b_stop", owner: 1 }, ChoiceOpened { id: 1, observer: 1, prompt: "trigger_confirm" }]
+ right: []
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore stdout ----
+
+thread 'c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore' (21403064) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:55:5:
+assertion `left == right` failed
+  left: [DamageDealt { source: Some(0), target: 1, amount: 2, redirected_from: [], card: None }, SkillTriggered { skill: "c9b_kill", owner: 0 }, HpLost { player: 0, amount: 1 }, DyingEntered { player: 0 }, SkillToggled { player: 0, skill: "c9b_kill", enabled: false }, PlayerDied { player: 0, killer: None }, ChoiceOpened { id: 1, observer: 1, prompt: "trigger_confirm" }]
+ right: []
+
+---- c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root stdout ----
+
+thread 'c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root' (21403061) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:55:5:
+assertion `left == right` failed
+  left: [ChoiceOpened { id: 1, observer: 1, prompt: "trigger_confirm" }]
+ right: []
+
+
+failures:
+    c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root
+    c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt
+    c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore
+
+test result: FAILED. 11 passed; 3 failed; 0 ignored; 0 measured; 168 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9"], "exit": 101, "locked_seconds": 2.57166249997681, "disk_free_bytes": 49028567040}

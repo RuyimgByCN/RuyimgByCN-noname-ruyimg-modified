@@ -1,0 +1,16 @@
+## Review
+
+No issues found.
+
+- **Correct — scope:** [fix.patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/fix.patch:1) changes only the two Windows-capable matrix checkout steps. Jobs, checkout arguments, build/test flags, permissions, action versions, and dependencies remain unchanged. Main’s current workflow text matches the supplied before-file; the candidate remains private.
+- **Correct — expression and quoting:** the environments at [ci.yml:31](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/ci.yml:31) and [ci.yml:149](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/ci.yml:149) use the valid `runner.os` context. Windows selects string `'1'`; other runners select `'0'`. Quoted `"true"` supplies a string value. Git ignores the indexed key/value when the count is zero.
+- **Correct — timing and precedence:** placing `GIT_CONFIG_*` on the checkout action makes the setting available before repository checkout. Git’s environment configuration overrides file-based `core.longpaths=false` without persisting a setting; an explicit conflicting Git `-c` option would take precedence. The recorded count-zero/count-one controls and unchanged local false setting support this behavior.
+- **Correct — action inheritance, with qualification:** the proposal relies on standard JavaScript-action child processes inheriting the step environment. That is a sound mechanism, but the supplied evidence does not include checkout/toolkit implementation source or a Windows execution of this candidate. This review does not claim either was independently verified.
+- **Correct — failure addressed:** recorded annotations show both Windows jobs failed in `actions/checkout@v4`, with Git exit128 and `Filename too long`, before product builds/tests. Enabling Windows Git long paths addresses that failure directly while retaining historical evidence and upstream packages.
+- **Correct — security and compatibility:** the static OS-dependent setting adds no credentials, permissions, shell interpolation, or relaxed content validation. Its scope is the checkout action; it introduces no persistent workstation, global, or repository Git configuration. It does not establish that downstream non-Git tools support every long path.
+- **Validation boundary:** [manifest.json](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/manifest.json:1) records passing Git precedence controls; [yaml.stdout](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/yaml.stdout:1) records YAML and checkout-environment checks. These are setup controls, not Windows checkout acceptance.
+- **Fixed:** None; read-only review.
+- **Merge verdict: OK with notes**, limited to this private candidate. After the Main freeze and source acceptance, the next normal publication CI must establish Windows checkout and subsequent job success. Original run41202703042 attempt1 remains **8 success / 2 Windows failures**.
+
+Skipped: no edits, tests, builds, network, fresh hash audit, hook/config changes, or original-run retry.
+Risk: actual Windows acceptance remains pending; local Git controls and YAML parsing do not prove the candidate green.

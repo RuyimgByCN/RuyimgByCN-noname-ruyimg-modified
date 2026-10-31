@@ -1,0 +1,8 @@
+{"name": "ingress-chrome", "exit": 0, "seconds": 4.697470832965337}
+{"name": "ingress-tauri", "exit": 0, "seconds": 3.106734500033781}
+{"name": "server-wire", "exit": 0, "seconds": 0.9769587919581681}
+{"name": "legacy-wasm-build", "exit": 0, "seconds": 128.49192787497304}
+{"name": "vite-final", "exit": 0, "seconds": 1.5111940419883467}
+{"name": "own-browser-final", "exit": 0, "seconds": 1.7700451249838807}
+{"name": "legacy-crosshash-final", "exit": 0, "seconds": 0.9371657500159927}
+ALL REAL INGRESS/IPC/WS AND LEGACY IDENTITIES PASS

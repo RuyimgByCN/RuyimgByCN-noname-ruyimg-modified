@@ -159,6 +159,9 @@ pub enum ServerMessage {
         choice: Option<ChoiceRequest>,
         /// Public event codes only (optional sanitized list).
         public_event_codes: Vec<u32>,
+        /// Optional typed public presentation; current producers omit it.
+        #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "crate::presentation::deserialize_optional")]
+        presentation: Option<engine_api::PublicPresentationBatch>,
     },
     /// Room public roster update.
     RoomRoster {

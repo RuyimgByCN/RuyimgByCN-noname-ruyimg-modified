@@ -1,0 +1,19 @@
+import sys,json,hashlib,datetime,shutil,os
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).parent))
+from run import E,R,snapshot,bind,sha
+report=Path('/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/33d21ba5-8777-4019-8cfd-eb9a3d17176a/verification/i02-main-typed-wire-functional.md')
+snapshot('seal-exit')
+a=json.load(open(E/'gate-exit.json'));b=json.load(open(E/'seal-exit.json'));keys=['head','tree','indexSha256','indexEntries','headEntries','staged','trackedStatus','untrackedNames','sourceBinding','maintainedAndMarkdown','protectedSets','hooks'];comparison={k:a[k]==b[k] for k in keys};assert all(comparison.values()),comparison
+(E/'gate-to-final-seal-comparison.json').write_text(json.dumps({'allEqual':True,'fields':comparison,'gateExitUtc':a['utc'],'finalSealSnapshotUtc':b['utc']},indent=2))
+now=datetime.datetime.now(datetime.timezone.utc);start=datetime.datetime.fromisoformat(json.load(open(E/'start.json'))['utc']);elapsed=(now-start).total_seconds();assert elapsed<3600;release={'utc':now.isoformat(),'statement':'Main DOC FREEZE explicitly RELEASED. All Main source/docs/index/lock writes may resume under parent authority after this release; no integration/commit authorization is implied by this worker.','elapsedMinutes':elapsed/60,'finalSnapshot':str(E/'seal-exit.json'),'finalSnapshotSha256':sha(E/'seal-exit.json'),'gateToSealAllFieldsEqual':True,'sourceBinding':bind(),'stagingEmpty':not b['staged'],'indexRawInitialDifferentCtimeOnly33':True,'noFurtherHeavyCommandsStarted':True,'parentIndependentReviewRequired':True}
+(E/'freeze-release.json').write_text(json.dumps(release,indent=2)+'\n')
+s=report.read_text().replace('Main DOC FREEZE release: pending final private metadata seal; explicit release will be recorded in `freeze-release.json`.','**Main DOC FREEZE explicitly RELEASED '+now.isoformat()+'** after final cheap seal snapshot matched every final-gate field (`gate-to-final-seal-comparison.json`); parent may resume Main docs/source work. No commit/push authorization is implied.');assert len(s.splitlines())<=65;report.write_text(s);shutil.copy2(report,E/'i02-main-typed-wire-functional.md')
+f=E/'manifest.json';m=json.load(open(f));m['finalSealSnapshotUtc']=b['utc'];m['finalSealAllFrozenFieldsEqual']=True;m['explicitFreezeRelease']=release;m['reportPath']=str(report);m['reportSha256']=sha(report);m['reportLines']=len(s.splitlines());m['metadataToolAttempts'].append({'name':'seal-qualified','exit':0,'cause':'Precise ctime-only provenance qualification verified; all product/gate assertions unchanged.'});f.write_text(json.dumps(m,indent=2)+'\n')
+# Cache/build trees and ephemeral owned browser profiles are retained but not evidence payloads.
+exclude={'strict-target','ingress-chrome-profile','chrome-profile','browser-profile'};files={}
+for p in sorted(E.rglob('*')):
+ rel=p.relative_to(E)
+ if not p.is_file() or any(x in exclude for x in rel.parts) or rel.name in {'artifact-sha256.json','seal-root.json'}:continue
+ files[str(rel)]={'sha256':sha(p),'bytes':p.stat().st_size}
+index={'utc':now.isoformat(),'files':files,'excludedRetainedBuildOrBrowserCaches':sorted(exclude),'qualification':'Hashes cover evidence/producer/log/source/binary/materialized/product files. Build caches and ephemeral browser profiles are retained separately; no old retired target was resurrected.'};(E/'artifact-sha256.json').write_text(json.dumps(index,indent=2)+'\n');root={'utc':now.isoformat(),'manifestSha256':sha(E/'manifest.json'),'artifactIndexSha256':sha(E/'artifact-sha256.json'),'reportSha256':sha(report),'freezeReleaseSha256':sha(E/'freeze-release.json'),'evidenceFiles':len(files),'elapsedMinutes':elapsed/60,'MainDocFreezeReleased':True};(E/'seal-root.json').write_text(json.dumps(root,indent=2)+'\n');print(json.dumps(root,indent=2));print('REPORT',report,'LINES',len(s.splitlines()));print('MAIN DOC FREEZE EXPLICITLY RELEASED',now.isoformat())

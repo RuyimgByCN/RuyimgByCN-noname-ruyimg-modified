@@ -1,0 +1,35 @@
+{
+  "quantity": "root i32 source event.num; HP/armor loss separate; existing HOST_EVENT_AMOUNT consumes unchanged 32-bit bits as i32",
+  "transitions": {
+    "Before": "Jueqing/Wuxin replacements; jidong/chengxin cancellation; one ordinary existing queue",
+    "Begin": "Chilongya/Xingjunyan/liangou/feiren/ciqiu/duwen/mailun/hutian native transitions",
+    "Begin1": "Huoshen/nitai_out/zuijiu intrinsic; declared native Zhaohuo source event moved from Before",
+    "Begin3": "existing genuine native XiangDe declaration moved from Before",
+    "Begin4": "Zhaohuo target fire immunity/nitai_in/bufo/lingqu",
+    "SubmitHp": "single atomic root progress/positive receipt/armor/HP; no invented trigger",
+    "changeHp": "individual damaged player unlink and persistent chain eligibility; activation gates and shangshix before TargetDamage",
+    "After": "huanxia/Jidian/Minwan moved out of End; source read live",
+    "End": "remaining inline callbacks retain documented damageEnd roles; per-handler/source priority parity remains unproven"
+  },
+  "chain_source": "game.js34767..34810: damage changeHp unlinks only current recipient, records notLink eligibility; damageAfter collects linked recipients using current phase seat order; rechecks each linked recipient",
+  "source_refs": [
+    {
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/mode/boss.js",
+      "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169"
+    },
+    {
+      "path": "crates/rule-vm/src/vm.rs",
+      "sha256": "77e3d858f36486dfedba0604cecb4714af3058c33dd0e1dcd8518419a6dc1476"
+    }
+  ],
+  "limitations": [
+    "No general source equivalence or complete native inline-vs-queued priority proof",
+    "Named DSL/package damageBegin bindings remain an SDK consumer migration; direct locked ExtensionPack declarations exercise new runtime",
+    "Permanent-provider death/rescue/lifetime remains outside this increment; legacy test coverage does not certify v3 provider contract",
+    "Original 12 golden expected hashes untouched; whole-scenario first semantic divergence remains pending"
+  ]
+}

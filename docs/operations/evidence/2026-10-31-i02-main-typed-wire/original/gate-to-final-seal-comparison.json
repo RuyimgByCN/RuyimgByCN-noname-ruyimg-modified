@@ -1,0 +1,19 @@
+{
+  "allEqual": true,
+  "fields": {
+    "head": true,
+    "tree": true,
+    "indexSha256": true,
+    "indexEntries": true,
+    "headEntries": true,
+    "staged": true,
+    "trackedStatus": true,
+    "untrackedNames": true,
+    "sourceBinding": true,
+    "maintainedAndMarkdown": true,
+    "protectedSets": true,
+    "hooks": true
+  },
+  "gateExitUtc": "2026-10-31T13:46:26.131907+00:00",
+  "finalSealSnapshotUtc": "2026-10-31T14:03:45.292639+00:00"
+}

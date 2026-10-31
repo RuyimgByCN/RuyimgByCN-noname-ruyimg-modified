@@ -1,0 +1,17 @@
+{
+  "identifier": "org.noname.i02acceptance33d21ba5",
+  "build": {
+    "devUrl": "http://127.0.0.1:59985/?engineTransport=native&perf=1"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "I02 owned hidden IPC acceptance",
+        "visible": false,
+        "width": 1280,
+        "height": 820
+      }
+    ]
+  }
+}

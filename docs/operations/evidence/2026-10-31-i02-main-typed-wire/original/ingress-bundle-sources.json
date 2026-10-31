@@ -1,0 +1,19 @@
+{
+  "sources": {
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/client.ts": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/viewStore.ts": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/networkClient.ts": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/presentationMetadata.ts": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/outcome.ts": "9f2bab7642bc5c524d431ddca94f69e89c5c74b12175d828101f414f7f852da3",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/desktopEngineTransport.ts": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/perfProbe.ts": "78e75aebd8799c7f0078305d42733f0d7b73008229ba932e14145ae5d202d228",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/observerMetadata.ts": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/publicEvents.ts": "ed47a85581e0420478aef1afc1ecdb96be166dadda0a4a82bac00f7d9fef068d",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/desktopHost.ts": "5eda0a189488006b10ebf99817514be4537025e7314c934d74d56d20ed601824",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/autoDrive.ts": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/nativeOutcome.ts": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf",
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/perfStats.ts": "8e5e3bc6045bfadb285a8a7716cf61ff054078d743f766fb6636d65e4c14b390"
+  },
+  "entry": "assets/ingress-CCE2v_ye.js",
+  "qualification": "Private injected corpus entry using actual current production modules; original Main production UI bundle is separately built/tested."
+}

@@ -1,0 +1,532 @@
+{
+  "utc": "2026-10-31T13:52:18.557822+00:00",
+  "initial": {
+    "path": "/tmp/i02-main-typed-wire-functional-33d21ba5/before-index.raw",
+    "version": 2,
+    "count": 47913,
+    "sha256": "147da50501f3bc38f55d32abb9a4e9492f5a87c7defc6b591a4738c9ac53dc35",
+    "trailingChecksum": "4009db62dcbd212fcdc86e9bc0387de48e7ad9f8",
+    "checksumVerified": true,
+    "extensions": [
+      {
+        "signature": "TREE",
+        "size": 130441,
+        "sha256": "f4b4542957eefdf443db592fe6c86f6a6a30aa1854eeffc3da62556513893a08"
+      }
+    ],
+    "fileMtimeUtc": "2026-10-31T13:04:46.972404+00:00"
+  },
+  "gateEntry": {
+    "path": "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-entry-index.raw",
+    "version": 2,
+    "count": 47913,
+    "sha256": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36",
+    "trailingChecksum": "a2c787d218966f4ac0f1774964f1548e0d51a25b",
+    "checksumVerified": true,
+    "extensions": [
+      {
+        "signature": "TREE",
+        "size": 130441,
+        "sha256": "f4b4542957eefdf443db592fe6c86f6a6a30aa1854eeffc3da62556513893a08"
+      }
+    ],
+    "fileMtimeUtc": "2026-10-31T13:21:36.376795+00:00"
+  },
+  "gateExit": {
+    "path": "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-exit-index.raw",
+    "version": 2,
+    "count": 47913,
+    "sha256": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36",
+    "trailingChecksum": "a2c787d218966f4ac0f1774964f1548e0d51a25b",
+    "checksumVerified": true,
+    "extensions": [
+      {
+        "signature": "TREE",
+        "size": 130441,
+        "sha256": "f4b4542957eefdf443db592fe6c86f6a6a30aa1854eeffc3da62556513893a08"
+      }
+    ],
+    "fileMtimeUtc": "2026-10-31T13:21:36.376795+00:00"
+  },
+  "changedEntries": [
+    {
+      "pathBefore": "Cargo.lock",
+      "pathAfter": "Cargo.lock",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793451867,
+          "after": 1793452518
+        },
+        "ctimeNanos": {
+          "before": 883905302,
+          "after": 530642269
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/cardpile-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/cardpile-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 846376996,
+          "after": 861804722
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/cardpile-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/cardpile-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 846333663,
+          "after": 861743305
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/cardpile-upstream-noname/manifest.json",
+      "pathAfter": "packages/extensions/cardpile-upstream-noname/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 833953506,
+          "after": 682821937
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/cardpile-upstream-noname/package.npack.json",
+      "pathAfter": "packages/extensions/cardpile-upstream-noname/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 833778546,
+          "after": 682613641
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/coin-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/coin-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 833224626,
+          "after": 852697620
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/coin-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/coin-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 833009334,
+          "after": 852622244
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/coin-upstream-noname/manifest.json",
+      "pathAfter": "packages/extensions/coin-upstream-noname/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 843692439,
+          "after": 694540513
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/coin-upstream-noname/package.npack.json",
+      "pathAfter": "packages/extensions/coin-upstream-noname/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 843490812,
+          "after": 694320508
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/desktop-adapt-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/desktop-adapt-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 855610385,
+          "after": 721873787
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/desktop-adapt-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/desktop-adapt-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 855349716,
+          "after": 721639199
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/douzhuan-xingyi-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/douzhuan-xingyi-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 848760344,
+          "after": 714496801
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/douzhuan-xingyi-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/douzhuan-xingyi-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 848544509,
+          "after": 713605408
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/elo-sanction-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/elo-sanction-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 853732457,
+          "after": 720563594
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/elo-sanction-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/elo-sanction-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 853507747,
+          "after": 720342589
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/fool-plugin-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/fool-plugin-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 834789011,
+          "after": 685525743
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/fool-plugin-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/fool-plugin-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 834588176,
+          "after": 685258029
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/huanle-upstream-noname/manifest.json",
+      "pathAfter": "packages/extensions/huanle-upstream-noname/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 841365133,
+          "after": 857188566
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/huanle-upstream-noname/package.npack.json",
+      "pathAfter": "packages/extensions/huanle-upstream-noname/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 841158173,
+          "after": 857061690
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/martial-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/martial-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 849514723,
+          "after": 715793703
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/martial-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/martial-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 849306389,
+          "after": 715592199
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/omnisearch-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/omnisearch-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 847158043,
+          "after": 862695061
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/omnisearch-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/omnisearch-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 846994000,
+          "after": 696996064
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/shousha-full-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/shousha-full-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 851519444,
+          "after": 718299963
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/shousha-full-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/shousha-full-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 851325442,
+          "after": 718101376
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/shousha-mvp-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/shousha-mvp-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 840543837,
+          "after": 690743768
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/shousha-mvp-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/shousha-mvp-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 840341794,
+          "after": 690506679
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/sj-settings-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/sj-settings-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 830696112,
+          "after": 850922900
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/sj-settings-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/sj-settings-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 830432693,
+          "after": 850812482
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/update-guard-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/update-guard-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 847935714,
+          "after": 711730494
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/update-guard-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/update-guard-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452793
+        },
+        "ctimeNanos": {
+          "before": 847748546,
+          "after": 709541240
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/wuxing-upstream-liuli/manifest.json",
+      "pathAfter": "packages/extensions/wuxing-upstream-liuli/manifest.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 843121310,
+          "after": 858531575
+        }
+      }
+    },
+    {
+      "pathBefore": "packages/extensions/wuxing-upstream-liuli/package.npack.json",
+      "pathAfter": "packages/extensions/wuxing-upstream-liuli/package.npack.json",
+      "fields": {
+        "ctimeSeconds": {
+          "before": 1793446768,
+          "after": 1793452543
+        },
+        "ctimeNanos": {
+          "before": 842921559,
+          "after": 858455283
+        }
+      }
+    }
+  ],
+  "changedEntriesCount": 33,
+  "changedFields": [
+    "ctimeNanos",
+    "ctimeSeconds"
+  ],
+  "behaviorSignificantEntryChanges": [],
+  "sameVersion": true,
+  "sameExtensions": true,
+  "gateEntryExitRawExact": true,
+  "allStagesZero": true,
+  "assumeUnchangedFlagsBeforeAfterEqual": true,
+  "skipWorktreeFlagsBeforeAfterEqual": true,
+  "intentToAddFlagsBeforeAfterEqual": true,
+  "qualification": "Raw mutation origin remains unknown. This parser identifies bytes/fields, not the writer or cause. No stat/cache attribution to a process, no index repair. First seal assertion failure retained.",
+  "bodyEqualAfterMaskingOnlyEntryCtime": true,
+  "maskedBodySha256": "fedbbc8c5dd9c3b11ca38623dd1b0f26a128092dc80c6be5b67692777ba52452",
+  "allOtherBytesIncludingHeaderFlagsPaddingAndExtensionsExact": true
+}

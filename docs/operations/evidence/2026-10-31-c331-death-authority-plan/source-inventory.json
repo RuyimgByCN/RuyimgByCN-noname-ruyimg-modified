@@ -1,0 +1,37 @@
+{
+  "authority": {
+    "main": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+    "kernel_content_base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+    "kernel_content_git_diff_5fc_to_main": "empty",
+    "core_upstream": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+    "liuli_upstream": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+    "c9_snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9-final-a_fz1xyd/snapshot",
+    "live_C_tree_read": false
+  },
+  "sha256": {
+    "Main/crates/engine-native-kernel/src/kernel/death.rs": "e8081ae3578cb5717efe0b4a7cde203659c83fae631588337c0c1f6dbc5467c0",
+    "Main/crates/engine-native-kernel/src/kernel/dying.rs": "7d657643ad1086665160dbfb17988c7b3a7be6454a2f3a5dc9d08524a5430fa6",
+    "Main/crates/engine-native-kernel/src/rvm_ops.rs": "51ec86fe8b74b185f4aff2d8f7cc3a8a8f8ba73bdefdf532c44d5c1f8668b045",
+    "Main/crates/engine-native-kernel/src/resolution.rs": "d18731229a547a03a161c95e46cc3a9dd53ee3843e6f53d56e3137aaede1c104",
+    "C9/crates/engine-native-kernel/src/rvm_ops.rs": "e84325da9049a1c49976daf561f09f6959a927128f3c7a844bd04400e2a5b6e5",
+    "C9/crates/engine-native-kernel/src/resolution.rs": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+    "Core/noname/library/element/content.ts": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c",
+    "Liuli/game/game.js": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "Decision29/approval-request.md": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+    "Decision29/proposal-v2.raw.txt": "996e77443fdefbfaacfd51c710bad8d270f074d3f2b9cb78528022e1316b08e1",
+    "Decision29/proposal-v3.raw.txt": "1fae43770e5d147c08602744473be625a1b930b67022a9638bef81571b3011da"
+  },
+  "production_kill_player_dsl_declarations": [
+    "content/original/ported/offline/sclwansha.skill:4",
+    "content/original/ported/wandianlunsha/hanlong.skill:16",
+    "content/original/ported/mobile/laishou.skill:21"
+  ],
+  "native_death_entry_constructors": [
+    "kernel/rvm_ops.rs:655 (VM direct die request, currently premature state/log)",
+    "kernel/kernel/dying.rs:55 (ciqiu no-save)",
+    "kernel/kernel/dying.rs:147 (rescue exhausted)",
+    "kernel/kernel/phase.rs:206 (hxunzhi2 direct die)"
+  ],
+  "separate_not_ordinary_death_writer": "engine-native-content/src/content/host/boss.rs:146 huanren_remove_mengpo mode removal",
+  "qualification": "Bounded source inventory only; no scripts/tests/builds/JS/network executed, no 169-match semantic completion claim. Exact paths/lines and acceptance work are in the proposal."
+}

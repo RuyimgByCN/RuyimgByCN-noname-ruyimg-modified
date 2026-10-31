@@ -1,0 +1,18 @@
+{
+  "oldGuard99Source": "Own frozen-exit pre-I02 baseline",
+  "authorizedSource30ActualChanges": [
+    "apps/game-server/src/room.rs",
+    "apps/game-server/src/room_native_actor.rs",
+    "apps/game-server/src/room_native_actor/timeout.rs",
+    "apps/web-client/scripts/nc03-worker-clone.test.mjs",
+    "apps/web-client/scripts/nc04-worker-failure.test.mjs",
+    "apps/web-client/src/engine/client.ts",
+    "apps/web-client/src/engine/desktopEngineTransport.ts",
+    "apps/web-client/src/engine/networkClient.ts",
+    "apps/web-client/src/types/engine.ts",
+    "crates/engine-protocol/src/lib.rs",
+    "crates/engine-protocol/src/messages.rs"
+  ],
+  "allOtherOldGuard99Exact": true,
+  "initialToFinalComparisonWillUseCapturedInitialWithoutRefresh": true
+}

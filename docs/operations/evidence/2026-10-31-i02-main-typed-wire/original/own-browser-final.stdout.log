@@ -1,0 +1,2 @@
+{"passed":12,"exceptions":0,"rejected":0,"realUI":true,"realDedicatedWorker":true,"currentProductionDist":"/tmp/i02-main-typed-wire-functional-33d21ba5/frontend-dist"}
+{"command": ["node", "/tmp/i02-main-typed-wire-functional-33d21ba5/own-browser.mjs", "/tmp/i02-main-typed-wire-functional-33d21ba5/frontend-dist", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "/tmp/i02-main-typed-wire-functional-33d21ba5"], "exit": 0, "locked_seconds": 1.73462754098, "disk_free_bytes": 33596915712}

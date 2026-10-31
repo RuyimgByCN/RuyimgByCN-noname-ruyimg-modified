@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import ts from "typescript";
-import { DesktopEngineTransport } from "../src/engine/desktopEngineTransport.ts";
+import { invalidPresentationBatches, presentationEnvelope } from "./presentation-fixtures.mjs";
+import { validatePresentationResponse } from "../src/engine/presentationMetadata.ts";
+import { DesktopEngineTransport, MAX_ENGINE_OUTSTANDING } from "../src/engine/desktopEngineTransport.ts";
 
 async function settles(promise) {
   let timer;
@@ -18,7 +20,7 @@ async function settles(promise) {
 
 // Use the production client class with a controllable Worker; the browser test
 // additionally exercises actual browser event dispatch and a native Worker.
-function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
+function fixture({ autoInit = true, desktopNative = false, invoke, sab = false } = {}) {
   const source = readFileSync(new URL("../src/engine/client.ts", import.meta.url), "utf8");
   const ast = ts.createSourceFile("client.ts", source, ts.ScriptTarget.Latest, true);
   const declaration = ast.statements.find((node) => ts.isClassDeclaration(node) && node.name?.text === "EngineClient");
@@ -49,12 +51,12 @@ function fixture({ autoInit = true, desktopNative = false, invoke } = {}) {
   const EngineClient = new Function(
     "NativeEngineWorker", "LegacyEngineWorker", "isTauriShell", "perfRequestSent",
     "perfRequestFailed", "perfResponseReceived", "perfWorkerTimings", "startPerfProbe",
-    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", js + "\nreturn EngineClient;",
+    "urlParam", "console", "desktopEngineChoice", "DesktopEngineTransport", "validatePresentationResponse", "MAX_ENGINE_OUTSTANDING", js + "\nreturn EngineClient;",
   )(FakeWorker, FakeWorker, () => desktopNative, (id) => sent.push(id), (id) => failed.push(id),
-    (id) => received.push(id), () => {}, () => false, () => null, { error: () => {} },
+    (id) => received.push(id), () => {}, () => false, () => sab ? "sab" : null, { error: () => {} },
     () => desktopNative ? "native" : "wasm", class extends DesktopEngineTransport {
       constructor() { super(invoke); }
-    });
+    }, validatePresentationResponse, MAX_ENGINE_OUTSTANDING);
   return { client: new EngineClient(), workers, failed, sent, received };
 }
 
@@ -217,19 +219,19 @@ test("desktop burst keeps production EngineClient pending and unresolved promise
       (value) => { settled.push({ ok: true, value }); },
       (error) => { settled.push({ ok: false, error }); },
     ));
-    assert.ok(f.client.pending.size <= 8, "synchronous rejection must immediately delete pending");
+    assert.ok(f.client.pending.size <= 8, "excess requests must not insert pending");
     if (i === 0) await new Promise((resolve) => setImmediate(resolve));
   }
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(f.client.pending.size, 8);
   assert.deepEqual([...f.client.pending.keys()], [2, 3, 4, 5, 6, 7, 8, 9]);
   assert.equal(settled.length, 120, "only eight caller promises may remain unresolved");
-  assert.equal(wakes, 129);
+  assert.equal(wakes, 9);
   assert.equal(settlements, 1, "rejected excess requests must not settle accepted shared waits");
-  assert.equal(f.sent.length, 129);
+  assert.equal(f.sent.length, 9);
   assert.deepEqual(f.received, [1]);
   assert.ok(settled.every((result) => !result.ok && /not submitted|未提交/.test(result.error.message) && !/未知|unknown/.test(result.error.message)));
-  assert.deepEqual(f.failed, Array.from({ length: 120 }, (_, i) => i + 10));
+  assert.deepEqual(f.failed, [], "capacity rejection precedes perf submission");
   assert.deepEqual(calls.filter((call) => call.command === "native_engine_request").map((call) => call.args.request.id), [1, 2]);
   release();
   await settles(Promise.all(promises));
@@ -275,4 +277,127 @@ test("disposing eight accepted desktop requests retires the old resource and rec
   f.client.dispose();
   await new Promise((resolve) => setImmediate(resolve));
   assert.deepEqual(calls.filter((call) => call.command === "native_engine_close").map((call) => call.args.resourceId), [61, 62]);
+});
+
+// Actual Worker and SAB settlement must validate before removing/acknowledging a pending call.
+for (const {name,batch} of invalidPresentationBatches()) {
+  test(`Worker bad present ${name} preserves pending until dispose`, async () => {
+    const f=fixture();await f.client.connect();const worker=f.workers[0];
+    const promise=f.client.autoStep();const id=worker.sent.at(-1).id;
+    const pending=[...f.client.pending];const received=f.received.length;
+    worker.reply(id,presentationEnvelope(batch));
+    await assert.rejects(promise,/协议错误，操作结果未确认/);
+    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
+    f.client.dispose();assert.equal(f.client.pending.size,0);
+  });
+}
+
+for (const {name,batch} of invalidPresentationBatches()) {
+  test(`actual IPC to EngineClient bad present ${name} preserves pending`, async () => {
+    const f=fixture({desktopNative:true,invoke:async (command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":presentationEnvelope(batch)}:undefined});
+    await f.client.connect();const promise=f.client.autoStep();const pending=[...f.client.pending];
+    const received=f.received.length;await assert.rejects(promise,/协议错误，操作结果未确认/);
+    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
+    f.client.dispose();assert.equal(f.client.pending.size,0);
+  });
+}
+
+test("actual SAB poll rejects malformed presentation before settling or deleting pending", async t => {
+  const old={document:globalThis.document,crossOriginIsolated:globalThis.crossOriginIsolated,requestAnimationFrame:globalThis.requestAnimationFrame};
+  const frames=[];globalThis.document={createElement:()=>({style:{}}),head:{appendChild(){}},body:{appendChild(){}}};
+  globalThis.crossOriginIsolated=true;globalThis.requestAnimationFrame=fn=>{frames.push(fn);return frames.length;};
+  t.after(()=>{Object.assign(globalThis,old);});
+  const f=fixture({sab:true});await f.client.connect();const worker=f.workers[0];
+  const promise=f.client.autoStep();const id=worker.sent.at(-1).id;
+  const pending=[...f.client.pending];const received=f.received.length;
+  const sab=worker.sent[0].latencySab;assert.ok(sab instanceof SharedArrayBuffer);
+  const raw=new TextEncoder().encode(JSON.stringify({id,ok:true,data:presentationEnvelope(null)}));
+  new Uint8Array(sab,8,raw.length).set(raw);const ints=new Int32Array(sab,0,2);Atomics.store(ints,1,raw.length);Atomics.store(ints,0,1);
+  frames.shift()();await assert.rejects(promise,/协议错误，操作结果未确认/);
+  assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);assert.ok(frames.length>0);
+  f.client.dispose();assert.equal(f.client.pending.size,0);
+});
+
+test("actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation", async () => {
+  for (const desktopNative of [false,true]) {
+    const bad={assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope:presentationEnvelope(null)};
+    const f=fixture({desktopNative,invoke:async (command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":bad}:undefined});
+    await f.client.connect();const promise=f.client.chooseGeneral(0,"liubei");const pending=[...f.client.pending];const received=f.received.length;
+    if (!desktopNative) f.workers[0].reply(f.workers[0].sent.at(-1).id,bad);
+    await assert.rejects(promise,/协议错误，操作结果未确认/);assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
+    f.client.dispose();assert.equal(f.client.pending.size,0);
+  }
+});
+
+test("shared Worker request guard sends eight and rejects ninth before map/postMessage", async () => {
+  const f=fixture();await f.client.connect();const worker=f.workers[0];
+  const calls=Array.from({length:8},()=>f.client.autoStep());const pending=[...f.client.pending];const sent=worker.sent.length;
+  await assert.rejects(f.client.autoStep(),/未提交/);assert.deepEqual([...f.client.pending],pending);assert.equal(worker.sent.length,sent);
+  for (const request of worker.sent.slice(-8)) worker.reply(request.id,{kind:"plan",outcome:'{"outcome":"accepted"}'});
+  await Promise.all(calls);assert.equal(f.client.pending.size,0);
+  const next=f.client.autoStep();worker.reply(worker.sent.at(-1).id,{outcome:"accepted"});await next;f.client.dispose();
+});
+
+test("eight retained malformed responses keep capacity until explicit dispose", async () => {
+  for (const desktopNative of [false,true]) {
+    const f=fixture({desktopNative,invoke:async (command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":presentationEnvelope(null)}:undefined});
+    await f.client.connect();const calls=Array.from({length:8},()=>f.client.autoStep());
+    const results=Promise.all(calls.map(p=>assert.rejects(p,/结果未确认/)));
+    if (!desktopNative) for (const request of f.workers[0].sent.slice(-8)) f.workers[0].reply(request.id,presentationEnvelope(null));
+    await results;const pending=[...f.client.pending];assert.equal(pending.length,8);
+    await assert.rejects(f.client.autoStep(),/未提交/);assert.deepEqual([...f.client.pending],pending);
+    f.client.dispose();assert.equal(f.client.pending.size,0);
+  }
+});
+
+// Independent review repro: Source27 must not convert compound-invalid success into ordinary cleanup.
+for (const nested of [false, true]) {
+  test(`compound-invalid IPC ${nested ? "chooseGeneral" : "autoStep"} preserves uncertain pending before observer normalization`, async () => {
+    const envelope=presentationEnvelope(null);envelope.view.seats[0].generals=[];
+    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
+    const f=fixture({desktopNative:true,invoke:async (command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
+    await f.client.connect();const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
+    const pending=[...f.client.pending];const received=f.received.length;
+    await assert.rejects(promise,/协议错误，操作结果未确认/);
+    assert.deepEqual([...f.client.pending],pending);assert.equal(f.received.length,received);
+    f.client.dispose();assert.equal(f.client.pending.size,0);
+  });
+}
+
+test("compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup", async () => {
+  for(const presentation of ["absent","valid"]) for(const nested of [false,true]) {
+    const envelope=presentationEnvelope();if(presentation==="absent") delete envelope.presentation;
+    envelope.view.seats[0].generals=[];
+    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
+    const f=fixture({desktopNative:true,invoke:async(command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
+    await f.client.connect();const received=f.received.length;
+    const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();
+    await assert.rejects(promise,/generals metadata invalid/);
+    assert.equal(f.client.pending.size,0);assert.equal(f.received.length,received+1);
+    f.client.dispose();
+  }
+});
+
+test("IPC precheck preserves all malformed presentation before bad Source27, including missing view/context", async () => {
+  const malformed=[...invalidPresentationBatches().map(v=>({name:v.name,value:v.batch})),{name:"null",value:null},{name:"undefined",value:undefined},{name:"unknown_object",value:{unexpected:true}}];
+  for(const {name,value} of malformed) for(const nested of [false,true]) {
+    const envelope=presentationEnvelope(value);if(name==="undefined") envelope.presentation=undefined;
+    envelope.view.seats[0].generals=[];
+    const data=nested?{assignment:{seat:0,name:"liubei",revision:2,state_hash:"00"},envelope}:envelope;
+    const f=fixture({desktopNative:true,invoke:async(command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":data}:undefined});
+    await f.client.connect();const promise=nested?f.client.chooseGeneral(0,"liubei"):f.client.autoStep();const pending=[...f.client.pending];const received=f.received.length;
+    await assert.rejects(promise,/协议错误，操作结果未确认/,name);assert.deepEqual([...f.client.pending],pending,name);assert.equal(f.received.length,received,name);f.client.dispose();
+  }
+  for(const shape of [{presentation:null},{presentation:{},view:null},{presentation:{},view:{seats:[]}}]) {
+    const f=fixture({desktopNative:true,invoke:async(command,args)=>command==="native_engine_open"?1:
+      command==="native_engine_request"?{id:args.request.id,ok:true,data:args.request.type==="init"?"ready":shape}:undefined});
+    await f.client.connect();const promise=f.client.autoStep();const pending=[...f.client.pending];
+    await assert.rejects(promise,/结果未确认/);assert.deepEqual([...f.client.pending],pending);f.client.dispose();
+  }
 });

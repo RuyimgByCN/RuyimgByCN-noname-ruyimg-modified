@@ -1,0 +1,145 @@
+{
+  "utc": "2026-10-31T12:38:31.226406+00:00",
+  "base_c8_repair_manifest_sha256": "b1571db999a8795e4ff4687eb2b14a10a2772c4ba8b85dd974a89e3f459c4c4f",
+  "files": [
+    {
+      "path": "crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "baseline_c9_sha256": "feb5ddf4fc17dc6929c8729c8a890274c8901ab8076576e011ddae436823bbc5",
+      "sha256": "9021ad8d3205e5263dd4dd738ee3590f7901ede02f807df646464ae4285cac9e"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/damage.rs",
+      "baseline_c9_sha256": "1d78d6723896261829733046a8ce0d3df34813e57db6407865d72221bafd27ba",
+      "sha256": "fda5378dbbc959c0ab9cdf45d2379f8bebfe210924e26a7935a5589b65614187"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/values.rs",
+      "baseline_c9_sha256": "610f40aa4d18171735b42dab1f2db0da731729eb84f131b0fd59edb3696bf017",
+      "sha256": "1bc6664505aebb591195f66b49a34018119279be8d6506ea36a8d6ba532871be"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event.rs",
+      "baseline_c9_sha256": "2f8bbd559fa050dd11b8c76da3a448be47acc3d327598208bfcf4d71d216e48d",
+      "sha256": "f60e4dc4ddb2217614cf3b4327b349fd41466d808b6b9676247f3182e7e86850"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event/damage.rs",
+      "baseline_c9_sha256": "074f47152ca0cc9ba60d5fa1e46846d2c66069163347883be9b04fb1b3905e61",
+      "sha256": "c7937cef28feb13886790f91e582745ce0995deb182660e9e22fd6fa47d68150"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel.rs",
+      "baseline_c9_sha256": "46a46af5516fc0dd02f26efd7810bb592aeb76375badf38bb2f643b607420c67",
+      "sha256": "1207a3fd5eb09120077dce6fb5cec19ca948a4f6e462363529d98ecd9ea823c2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "baseline_c9_sha256": "271052b3f5a677c2add3b83bf5c2ac477e2e5a3789f647ffae7876b9104e2084",
+      "sha256": "083faf2f1faadb432442e4b35760db3bcd9eda09cf21e45aa3b035219e69f936"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "829eb15c660c3e87716ccf79ab240ac1fb53281c26e5b48ac597c7a22be996c9"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_change_hp.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "be74e1708d5c52831a2915bd648e0ae2148e84d4f4372b1b1fa902a006ab2d25"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_flow.rs",
+      "baseline_c9_sha256": "9da3ebff258fe4f58f04af5c03fc31e156e013fddd0de3d905f90d13b575f7f3",
+      "sha256": "dc4c5b9fe19d25e2a2473d5f2fb9a32bde1d795ce8902616cc50621cbb364ac4"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "ae1d4a1a788332b51e7a82c8999fcbf4e401629e513d86211e77328b8bd0d215"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "baseline_c9_sha256": "274766c04474a5c0e60105f14062fa45977512efe8ebe19a9e4f8142517a25b3",
+      "sha256": "a361bff4bf04a868b0bc501b482587f0c7de62144fdb330985d3bb8dbc41819f"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "baseline_c9_sha256": "bea744ef2730605080f2aac9e22917a637b5543d09ebbfd66c390227da04a338",
+      "sha256": "436b2d71c1303fdf72066749009266e45f6cf7bfc898f0e349d207f62c0fc55c"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "baseline_c9_sha256": "985ccdbf50639ea7e1d9fc5e7166493849d213ede5a766424652fdaac30b0472",
+      "sha256": "89e5c36601a26ba11a58705f61aa4abbfc2f31614278d3b8dbb966b2401588f9"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap.rs",
+      "baseline_c9_sha256": "debf1b270261d93fed7b4bba5c171e1d13eeecdc72f7d5c239bf903c42692f09",
+      "sha256": "68cf46d79d1073f03d2fa2f5c423ad128dd7a920a946ce3bed5880e123a52686"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "96a326f0f71343295099a525e934459f52522d1e1652ed6c6d01fd452b8ec2f8"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/validation.rs",
+      "baseline_c9_sha256": "7eb708608a2be1402b0f891e41941308ac179565a6133b0dd2f9dc782aee69df",
+      "sha256": "5ecc569749027e3b05961f5064a6a8d159d0e481f1a2104afa9548750632b328"
+    },
+    {
+      "path": "crates/engine-native/tests/a0_tag_registry.rs",
+      "baseline_c9_sha256": "9a467133df58a5d01619475e8f5b20c0f8406203fd83fe040d9c729000b6783c",
+      "sha256": "72be2c1c38c9d681b569f1787f25d5d688c8c7e601a98b878a3779267fdb85f5"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_canonical_damage.rs",
+      "baseline_c9_sha256": "5fcfc643d90a23850e129a105d8e1e6e8214cb57fd3917c0d295e51fd114a21e",
+      "sha256": "f70b77c50330e11cfc19efc41c9456f7a9604d94f49375a879d631fc218791aa"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_prehp_damage.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "f48f7605aff2161d2388e0425408eb17e051bc2254a35eb7945f5df2025c3537"
+    },
+    {
+      "path": "crates/engine-native/tests/g1_shahai_swd/xielv.rs",
+      "baseline_c9_sha256": "fb132c61711f2d693fc9c6c6544ffd5c89eadad45a442f89e42a107d02094166",
+      "sha256": "6ce314b7934ec30a282b50309de6cfb7b40493754aee64e6d40509e20079de2e"
+    },
+    {
+      "path": "crates/engine-native/tests/g1_wudian/yuanshi.rs",
+      "baseline_c9_sha256": "7a4c9bea4aaebba655c3d865da0bfac914643cdd5f6fca58cd4f51929d1f8202",
+      "sha256": "a45a83ad7d2f642dee787c5fc7bf16315992f3197de8154ff2e29e7b33bbd132"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "baseline_c9_sha256": "253f674ff1b1e24dc7efbc569abbbd5404371562bd3a10a129536a5405b585ce",
+      "sha256": "df2db332f6be7b0848189f981d93203aa9ee56e8e2a929bbd650549905690c6a"
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/boss_chujiangwang.rs",
+      "baseline_c9_sha256": "7fdc5339077a0101bb94b2dc845393143c66873e786f45547761a68a87e30753",
+      "sha256": "5a4c687dbad8effd38452339ee35fffb0d739417ff48cf6feb1b0cdd66dcc6b0"
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/boss_xuanwu.rs",
+      "baseline_c9_sha256": "e1d71ba10aab7738e739fa45f9fdaf8b656721d2707033975ca2fe6e5f9dcfe2",
+      "sha256": "462a1fca809813fd6adf29cd99bdbad627fb6cb6ee73b9f437ace78d10c0e781"
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/combat.rs",
+      "baseline_c9_sha256": "e35fd32c865e7e75470bbd67ff2fac7603a8c1121b6629d7541bc383ed0655af",
+      "sha256": "0f3360fafa484a8179d3ebb7ab7258dfe72c84f77aa3f7397518b52e0413a450"
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/dying.rs",
+      "baseline_c9_sha256": "14b6c0ebb2588680a06cab7a73cf61bd0ff1f5e958b41f2ec43337e9e8451bb0",
+      "sha256": "e8b33fd64f8de7ab239db6fbcc78c40c3f05c850f01c2b9790882158d4c27763"
+    }
+  ],
+  "scope": "C9b preHP driver checkpoint; validation results and remaining source branches reported separately",
+  "whole_c331": "BLOCK",
+  "source_proof": "262/290,remaining28,+0",
+  "no_staged_files": true
+}

@@ -1,0 +1,133 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:29:25
+    |
+ 29 |                         finish_damage(
+    |                         ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:51:21
+    |
+ 51 |                     finish_damage(
+    |                     ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:70:17
+    |
+ 70 |                 finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
+    |                 ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:77:17
+    |
+ 77 |                 finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
+    |                 ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:242:25
+    |
+242 |                         finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
+    |                         ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:296:25
+    |
+296 |                         finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
+    |                         ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0425]: cannot find function `finish_damage` in this scope
+   --> crates/engine-native-kernel/src/kernel/damage_windows.rs:310:21
+    |
+310 |                     finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
+    |                     ^^^^^^^^^^^^^ not found in this scope
+    |
+note: function `crate::kernel::damage::finish_damage` exists but is inaccessible
+   --> crates/engine-native-kernel/src/kernel/damage.rs:812:1
+    |
+812 | fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ not accessible
+
+error[E0433]: cannot find type `Stage` in this scope
+  --> crates/engine-native-kernel/src/snap/damage_validation.rs:73:72
+   |
+73 |         if f.parent != Some(*root) || *root == f.id || parent.stage != Stage::Intrinsic {
+   |                                                                        ^^^^^ use of undeclared type `Stage`
+   |
+help: consider importing this enum
+   |
+ 2 + use crate::event::Stage;
+   |
+
+error[E0433]: cannot find type `Stage` in this scope
+  --> crates/engine-native-kernel/src/snap/damage_validation.rs:85:31
+   |
+85 |         if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
+   |                               ^^^^^ use of undeclared type `Stage`
+   |
+help: consider importing this enum
+   |
+ 2 + use crate::event::Stage;
+   |
+
+error[E0433]: cannot find type `Stage` in this scope
+  --> crates/engine-native-kernel/src/snap/damage_validation.rs:85:50
+   |
+85 |         if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
+   |                                                  ^^^^^ use of undeclared type `Stage`
+   |
+help: consider importing this enum
+   |
+ 2 + use crate::event::Stage;
+   |
+
+error[E0433]: cannot find type `Stage` in this scope
+   --> crates/engine-native-kernel/src/snap/damage_validation.rs:100:23
+    |
+100 |         if f.stage == Stage::Done && (!terminal || !f.intrinsic_done || drivers != 0) {
+    |                       ^^^^^ use of undeclared type `Stage`
+    |
+help: consider importing this enum
+    |
+  2 + use crate::event::Stage;
+    |
+
+Some errors have detailed explanations: E0425, E0433.
+For more information about an error, try `rustc --explain E0425`.
+error: could not compile `engine-native-kernel` (lib) due to 11 previous errors
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9"], "exit": 101, "locked_seconds": 1.7442411669762805, "disk_free_bytes": 52121149440}

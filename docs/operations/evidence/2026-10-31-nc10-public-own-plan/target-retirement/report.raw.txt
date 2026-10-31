@@ -1,0 +1,23 @@
+# NC10 owned target retirement
+
+**RETIRED under existing Decision23 authorization.** New private evidence root: `/tmp/nc10-main-owned-target-retirement-f463dd87`.
+Original E: `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8`.
+Only the original owned E’s `probe/target` and `strict-target` were removed; their old paths are now intentionally absent.
+`probe/target`:374 files,211,907,866 logical bytes; scoped `du -sk`196,240 KiB.
+`strict-target`:552 files,75,443,424 logical bytes; scoped `du -sk`75,364 KiB.
+Both roots were real, owned UID501 directories with distinct identities and no symlinks. Four hardlink pairs were entirely internal to the private target; no outside hardlinks existed.
+Initial and immediate pre-delete ps/lsof guards passed: no target process, cargo/rustc/test/flycheck, FD, cwd or mapped-file references; unrelated rust-analyzer FDs were also checked. Detector ancestors were identified and excluded; no PID was killed.
+Full path/size/SHA/mode/mtime/inode inventories and926 completed per-file retirement receipts are retained in the new evidence root.
+Sources, private/Main locks, toolchain metadata, complete original stdout/stderr and flycheck originals, all fingerprints and executable build helpers were copied with mode/mtime/SHA preservation;672 selected target files were preserved.
+Compiler libraries/build helpers are classified as compiler caches, not accepted runtime proof. Neither retired target contained a final probe executable.
+Main warm target `/tmp/nc27-main-functional-458ed333/cargo-target` remains retained with unchanged directory identity.
+Both warm probe executables and the lock-repair binary copy remain unchanged; additional private retirement copies preserve their mode/mtime/SHA.
+Lock-aligned binary SHA stays `f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144`; old probe SHA stays `be3e2bfa6a73a4d19627932ad1d42a336dd2df7cb2d565aeeb8c6f256ec9cfd9`.
+Source6, Main lock, generated18 and default dist37 are unchanged across62 protected file hashes; all341 original-E non-target files retain bytes/mode/mtime.
+Original714 index bytes are unchanged. Parent’s historical714 PASS at2026-10-31T12:09:40.691341Z is preserved; after retirement374 indexed cache paths are authorized absences, while remaining340 indexed files were rechecked present/SHA exact.
+Original21-dependency drift, sidecheck/network-attempt evidence and unexplained raw-index history remain unchanged; no new attribution is made.
+Parent’s separately authorized I02source30 apply at13:02:52.115937Z is recorded with exact30 SHAs/patch receipt in `authorized-concurrent-change.json`; these paths are outside the62 cleanup-protected files. No baseline was refreshed and no I02 changes are attributed to cleanup.
+Global free disk observations were45,357,793,280 bytes before and44,736,958,464 after; concurrent writes/preservation copies prevent attributing this delta to retirement. Scoped DU is separate; no performance claim.
+`retirement-manifest.json` records disposition/protection; `per-file-retirement-receipts.json`, target inventories, guard JSON/raw ps/FD outputs and `artifact-sha256.json` supply evidence.
+Environment/guard failures: none. No Main/source/docs/index/hooks/global-helper/lock writes, tests, builds, network actions or other-target cleanup occurred.
+Skipped further cleanup and whole-Main rescans; warm target remains reserved for the parent’s later integration work.

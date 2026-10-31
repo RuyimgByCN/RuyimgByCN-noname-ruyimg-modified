@@ -1,0 +1,10 @@
+{"snapshot": "gate-entry", "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb", "tracked": 47913, "maintainedMarkdown": 11337, "index": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36", "freeDisk": 33711071232}
+{"name": "line-unit", "exit": 0, "seconds": 0.09790379100013524}
+{"name": "source-caps", "exit": 0, "seconds": 7.968328542017844}
+{"name": "layering-unit", "exit": 0, "seconds": 0.16860149998683482}
+{"name": "layering-gate", "exit": 0, "seconds": 0.21686058305203915}
+{"name": "strict-doc-lines", "exit": 0, "seconds": 10.141029833990615}
+{"name": "local-links", "exit": 0, "seconds": 0.5348002079990692}
+{"name": "preflight", "exit": 0, "seconds": 404.2795892910217}
+{"snapshot": "gate-exit", "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb", "tracked": 47913, "maintainedMarkdown": 11337, "index": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36", "freeDisk": 122005798912}
+{"allFrozenEqual": {"head": true, "tree": true, "indexSha256": true, "indexEntries": true, "headEntries": true, "staged": true, "trackedStatus": true, "untrackedNames": true, "sourceBinding": true, "maintainedAndMarkdown": true, "protectedSets": true, "hooks": true}, "failedGates": []}

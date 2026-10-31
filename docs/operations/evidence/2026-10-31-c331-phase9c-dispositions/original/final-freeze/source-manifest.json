@@ -1,0 +1,115 @@
+{
+  "utc": "2026-10-31T14:14:18.884574+00:00",
+  "base_c8_repair_manifest_sha256": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+  "files": [
+    {
+      "path": "crates/engine-native-content/src/content/standard.rs",
+      "baseline_c9_sha256": "1a1704f91dee6348cb83d17a6bd701c694bc5b70aad7d332b8cbf2149ec38bd6",
+      "sha256": "8d53a8c916d1c715ca73fe0c7d01a1955e8baf1e6481dd60ec738735610abc55"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/boss_skills.rs",
+      "baseline_c9_sha256": "9021ad8d3205e5263dd4dd738ee3590f7901ede02f807df646464ae4285cac9e",
+      "sha256": "cacf38b00222d2343fb7c93c7ee328e3777b058f940dea57852ef63bde359149"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/native_damage.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "59958b394df95cefedae20913cab95eef432f49e283fe763f4859670f3820d50"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/damage.rs",
+      "baseline_c9_sha256": "fda5378dbbc959c0ab9cdf45d2379f8bebfe210924e26a7935a5589b65614187",
+      "sha256": "d504130380b9cc1a5500886ed8cba617c954ebedbe468088ba762e933544e7bf"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/machine_decode.rs",
+      "baseline_c9_sha256": "33a863c14d0cb550efa75fe85189d01c6e6ec54a7258a7bbd8c87b8737a621a8",
+      "sha256": "9a0ab21640d468758e0c501ddfaddbfb5d2663bebda8868c61ed4711bd3b6665"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/archive/machine_encode.rs",
+      "baseline_c9_sha256": "55dee24e7e5a97aadfa4da6fb5a3209f19d62c023ae65f3331d082f08e9e1988",
+      "sha256": "43c6ae0b880af6e16029633a1f04707dc5329201ca10e230da887d575187b82d"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "baseline_c9_sha256": "2bff61ae6cd5a8d6ab14078cdd12a9a4dbcdb8d1c9c24ce617919dd27a9cb353",
+      "sha256": "a969b71fe59ff81d308ed1e244d72ee4d547294edb9ee08e423cda066375f2e8"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event/damage.rs",
+      "baseline_c9_sha256": "c7937cef28feb13886790f91e582745ce0995deb182660e9e22fd6fa47d68150",
+      "sha256": "71ac6001046b9c1d0cdd7f3f3383cbcbe464d54aa73f9170ec76d8b197617d69"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel.rs",
+      "baseline_c9_sha256": "51f89af1492a14fc13bbe4548b6b37402d3d63c13be19ed333644caacb78b72a",
+      "sha256": "b8bbfbe966bbf48ec6e3fde429fb8282312d01530109590aec72315f16b32074"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "baseline_c9_sha256": "e4c75bea310ac613b8e86183c60fe4b5bd6b25607d61bc4c3420c06db4a5315a",
+      "sha256": "ecc14df301b33da1a7852309d4ad70dbd7ff31dcf8e08baa1ae4bbc7b8d4f2f4"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_skill.rs",
+      "baseline_c9_sha256": null,
+      "sha256": "c85f609dbce13c109673ea2672fd69131b171580e88df044b44d5d63ab4d3444"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "baseline_c9_sha256": "18ca486c845cf723f89d624847dd4b34a209046829e0d3916315fbc2bd067ed2",
+      "sha256": "d517181f25691c1c480751f23d9c41e2d7740088aefa97fc819c2b37115f9f5e"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "baseline_c9_sha256": "ec4aa9dd8bd19e76af407c6ae4d53120307a5d1a52a4f0bea2e6443ca44d076c",
+      "sha256": "5272f0b6593121f2e15e656b47bd8779525ac3745a5a549985f8d4c1962ce418"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "baseline_c9_sha256": "57ef3b47af13ce0f278b964208156426677b915e916e9749fddfe6a98d01beb2",
+      "sha256": "faedda7621f60ad15a4a1a2a13c92b3fb530c1d31c6e5dc94f329a96706054d7"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/machine_validation.rs",
+      "baseline_c9_sha256": "db6331062d2aa744dea8aa1f8b6b2c88e5c14ef482efb2842fb070afed162f5f",
+      "sha256": "f5cb58e60e3f0bf1f40a670b1ef7087b0f8bbf716a4d64ccecaa284514b9c65b"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/restore.rs",
+      "baseline_c9_sha256": "980c3f2b3459e960a99ba31993fb3c193d5d3dd82c54473e8c4fd725cd9e71a2",
+      "sha256": "1f8d51b25f9e7127a1ba62ae7423018730ab0331205d71d4f09c7348b1c1b780"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/types.rs",
+      "baseline_c9_sha256": "51f7d7db7303e793f4ea44517133ffc64fb0d36b738d22c71f0e9b7241dd8383",
+      "sha256": "8ee5e55391e47ede8aabc21dae0538f8ea3972703f3f2ed5286c1b9ba348aff5"
+    },
+    {
+      "path": "crates/engine-native/src/engine/hash/machine.rs",
+      "baseline_c9_sha256": "e69764694fc684c3fcbaec59f28ac2223b0fc9671d5b3b2e97fb3b270b6a4781",
+      "sha256": "eb703669943691e1f47f80f4a9fdd8c30e5040af66eae3d1519a1506e0942c12"
+    },
+    {
+      "path": "crates/engine-native/tests/a0_tag_registry.rs",
+      "baseline_c9_sha256": "df7ab0463516b85e609dcbca8e990d77acded0167d8f7cac6105b4886e370a2a",
+      "sha256": "a3578a71d797e805c2298d1aa252a7d2a14780b75009adf4e3ae990dc34d15e5"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_prehp_damage.rs",
+      "baseline_c9_sha256": "6bd132b267daba7ff5b881b46488963c169fc15177a9cabfd035145eb90a746f",
+      "sha256": "18c6be7549bf44b06810cd207c620bc467397d74ba0c54e22c7b212119b7e485"
+    },
+    {
+      "path": "crates/engine-native/tests/replay_scenarios.rs",
+      "baseline_c9_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+      "sha256": "beb5d87cbc834d7e81873343e90d89e2f46470b85e534e8009266b89c86e492f"
+    }
+  ],
+  "scope": "C9b preHP driver checkpoint; validation results and remaining source branches reported separately",
+  "whole_c331": "BLOCK",
+  "source_proof": "262/290,remaining28,+0",
+  "no_staged_files": true
+}

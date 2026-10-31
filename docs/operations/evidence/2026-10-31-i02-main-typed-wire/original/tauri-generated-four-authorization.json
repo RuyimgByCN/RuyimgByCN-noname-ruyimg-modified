@@ -1,0 +1,62 @@
+{
+  "utc": "2026-10-31T13:32:55.832511+00:00",
+  "authority": "Explicit parent need_decision reply grants original tauri-build regeneration for only these four captured ignored schema outputs",
+  "allowedPaths": {
+    "apps/desktop-client/gen/schemas/capabilities.json": {
+      "sha256": "59a49474d004a27571558501f2e5d9af355a9e85eca873d596d495ef7ae4bdc9",
+      "mtimeNs": 1783928332134087389,
+      "bytes": 200,
+      "mode": 420
+    },
+    "apps/desktop-client/gen/schemas/acl-manifests.json": {
+      "sha256": "b8665c2471bd4c59d570c77e226f37410ce396da52525383a15b5cbbff9d786e",
+      "mtimeNs": 1783928332123279661,
+      "bytes": 65934,
+      "mode": 420
+    },
+    "apps/desktop-client/gen/schemas/macOS-schema.json": {
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "mtimeNs": 1783928332133135550,
+      "bytes": 116049,
+      "mode": 420
+    },
+    "apps/desktop-client/gen/schemas/desktop-schema.json": {
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "mtimeNs": 1783928332133135550,
+      "bytes": 116049,
+      "mode": 420
+    }
+  },
+  "command": [
+    "cargo",
+    "build",
+    "--offline",
+    "--locked",
+    "-p",
+    "desktop-client",
+    "--features",
+    "tauri-shell"
+  ],
+  "localTAURI_CONFIG": {
+    "identifier": "org.noname.i02acceptance33d21ba5",
+    "build": {
+      "devUrl": "http://127.0.0.1:59985/?engineTransport=native&perf=1"
+    },
+    "app": {
+      "windows": [
+        {
+          "label": "main",
+          "title": "I02 owned hidden IPC acceptance",
+          "visible": false,
+          "width": 1280,
+          "height": 820
+        }
+      ]
+    }
+  },
+  "constraints": "No Main source36/Cargo.lock/permissions/capabilities/tauri.conf mutations; no directory-wide grant, hand edits, restore or staging. Byte+mtime comparison required. Capability/permission differences or extra paths stop IPC stage.",
+  "configurationAndPermissionSourcesBefore": {
+    "apps/desktop-client/capabilities/main.json": "901bdd432ded5c82787254b24dfb96f1b46837a526556d2ad15208bf42b03bf3",
+    "apps/desktop-client/tauri.conf.json": "a5e276d7c3c6818e617ee6c9e210589a95085d41a99885627cb56657b4947556"
+  }
+}

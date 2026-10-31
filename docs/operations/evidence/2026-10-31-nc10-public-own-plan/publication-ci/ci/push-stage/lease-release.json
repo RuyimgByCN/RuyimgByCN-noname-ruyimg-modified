@@ -1,0 +1,11 @@
+{
+  "at_utc": "2026-10-31T12:48:05.496863+00:00",
+  "lease": "Read/push lease released after successful immutable source6/root/index snapshots; no Main writes by worker",
+  "head_sha": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "push_exit": 0,
+  "push_completed_utc": "2026-10-31T12:48:05.495285+00:00",
+  "remote_refs": {
+    "refs/heads/native-convergence": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  }
+}

@@ -1,0 +1,22 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+test c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress ... FAILED
+
+failures:
+
+---- c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress stdout ----
+
+thread 'c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress' (21622983) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:50:61:
+called `Result::unwrap()` on an `Err` value: IdOutOfBounds { what: "checkpoint_missing_for_open_segment", got: 0 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 185 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9b_submission_slice"], "exit": 101, "locked_seconds": 0.43708850000984967, "disk_free_bytes": 45502627840}

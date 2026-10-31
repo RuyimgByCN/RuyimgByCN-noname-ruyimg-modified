@@ -1,0 +1,63 @@
+{
+  "currentNativeWasmSha256": "7c2a9f266c88e73e720a7b4e4073d28100eb2b6b3a18f087f721a57d881460da",
+  "currentLegacyWasmSha256": "846351a9b844989c04d868dfb57b829abe5320ef452cf3da49494dd611e4cab5",
+  "changedGenerated18Paths": [
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"
+  ],
+  "finalProductionWorker": "engine.native.worker-OPeztfr4.js",
+  "finalProductionWorkerSha256": "26c57a7188b208b573e2931b923c33d86e8dd16c23e8ac47a5b8fcaec32d34cd",
+  "productionUiBrowserCases": 12,
+  "chromiumInjectionCases": 162,
+  "actualTauriInjectionCases": 161,
+  "actualTauriIdentity": {
+    "binary": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/noname-next-desktop",
+    "sha256": "c2828a5af2eee94499bcfc8f7eb4027485cc9f35c0aa267f12612edcdd07dd02",
+    "config": {
+      "identifier": "org.noname.i02acceptance33d21ba5",
+      "build": {
+        "devUrl": "http://127.0.0.1:59985/?engineTransport=native&perf=1"
+      },
+      "app": {
+        "windows": [
+          {
+            "label": "main",
+            "title": "I02 owned hidden IPC acceptance",
+            "visible": false,
+            "width": 1280,
+            "height": 820
+          }
+        ]
+      }
+    },
+    "configSha256": "e03473fb7d85dc49df940b7cfa08423c30e5638f1e0caa075aad80905b700bcf",
+    "qualification": "Actual Main Tauri/Rust bridge, private identifier and hidden window; metadata injection replaces successful JS callback data only."
+  },
+  "binaries": [
+    {
+      "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/game-server",
+      "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/game-server",
+      "sha256": "87e20fa5dce36c9fdc484c696ffde634ac7683c72d44d78725ceea817fcb33cf",
+      "bytes": 77190928
+    },
+    {
+      "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/noname-next-desktop",
+      "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/noname-next-desktop",
+      "sha256": "c2828a5af2eee94499bcfc8f7eb4027485cc9f35c0aa267f12612edcdd07dd02",
+      "bytes": 44059416
+    },
+    {
+      "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/i02-main-acceptance-probe-33d21ba5",
+      "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/i02-main-acceptance-probe-33d21ba5",
+      "sha256": "4b28c750e0e39b173c403635320dd340fb0a67dd848ffc528393d0fbf6057b4b",
+      "bytes": 14926736
+    }
+  ],
+  "WSIdentity": {
+    "binarySha256": "87e20fa5dce36c9fdc484c696ffde634ac7683c72d44d78725ceea817fcb33cf",
+    "receiptReplayKey": 1000002,
+    "revision": 2
+  },
+  "qualification": "Real current-source transports accept omission; injected80 corpus is strict-consumer evidence, not a Rust producer/public speaker/audio proof."
+}

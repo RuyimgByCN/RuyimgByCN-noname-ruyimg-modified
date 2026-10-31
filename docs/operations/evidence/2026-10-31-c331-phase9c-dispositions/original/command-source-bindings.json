@@ -1,0 +1,115 @@
+{
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/pre-checks2/source-manifest.json",
+  "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136",
+  "final_increment_manifest_sha256": "dca881deb88eefc63d7836bb0bff5fd3962b18d54352c5f20c580c95215b8379",
+  "all_final_sources_equal": true,
+  "commands": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 60.03163528442383,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "d1c0515ff8f5cbc4c73b482491f5c84a27ad14298acf6c230c6319326a979ea7",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 8.65997314453125,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "log_sha256": "7dd750a2dbc5f4e74d4265d3073a37b0e1a6b5098c00b6f5938cd12a8318b533",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 0.7833330631256104,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "4a377a59e8f204e0c3c46a8f2e18d95ca77987a5d062b0a0bdf787b325596afe",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.11063694953918457,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "0604b240dddae2ad1a41e99a7fcfe24c778f53deab05912de2fb6f4d4acceb5c",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.574910879135132,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "94f9758478edc0a02ea194f12fc1743dadd6dc825e8eb40bfb549e3b09848737",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.16389989852905273,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "bb60584ccbf44140c84d761fa3a347892fc80909eeedfac76f9096b3abcbb4ee",
+      "source_manifest_sha256": "ac53fc15052b443735f45751f9fe702e64e916b1eceb5b0fc45c34331af29136"
+    }
+  ]
+}

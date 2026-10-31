@@ -1,0 +1,14 @@
+{
+  "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "indexRawBefore": "147da50501f3bc38f55d32abb9a4e9492f5a87c7defc6b591a4738c9ac53dc35",
+  "indexRawAfter": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36",
+  "rawEqual": false,
+  "rawFrozenGateEqual": true,
+  "ctimeOnlyChangedEntries": 33,
+  "mutationOrigin": "Unknown; no attribution or index repair",
+  "fieldDiffSha256": "acd210ea6358d684f8727650bf15c6241052b74b10aee6f70beb9579e85c60f5",
+  "logicalEqualHead": true,
+  "logicalEntries": 47913,
+  "allStageZero": true,
+  "stagingEmpty": true
+}

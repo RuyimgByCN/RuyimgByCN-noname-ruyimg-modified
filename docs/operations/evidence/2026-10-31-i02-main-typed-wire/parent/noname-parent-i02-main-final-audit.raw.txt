@@ -1,0 +1,31 @@
+{
+  "utc": "2026-10-31T14:14:26.128643+00:00",
+  "status": "PASS_BOUNDED_MAIN_PHASE1_PENDING_EVIDENCE_SUPPLEMENT",
+  "fresh_artifacts": 1054,
+  "source36_current_and_materialized_exact": true,
+  "gate_comparison_categories_actual": 12,
+  "gate_window": [
+    "2026-10-31T13:39:20.541982+00:00",
+    "2026-10-31T13:46:26.131907+00:00"
+  ],
+  "seal_exit": "2026-10-31T14:03:45.292639+00:00",
+  "initial_index_to_gate_changed_entries": 33,
+  "independent_index_ctime_only": true,
+  "index_writer": "UNKNOWN, field parsing does not attribute cause",
+  "all_index_other_bytes_flags_oid_modes_extensions_exact": true,
+  "native": "7c2a9f266c88e73e720a7b4e4073d28100eb2b6b3a18f087f721a57d881460da",
+  "legacy": "846351a9b844989c04d868dfb57b829abe5320ef452cf3da49494dd611e4cab5",
+  "actual_IPC_browser_ingress_rows": [
+    161,
+    162
+  ],
+  "full_native_WASM_cases": 7,
+  "trajectories": [
+    40,
+    20
+  ],
+  "four_generated_schema_bytes_mtime_exact": true,
+  "post_freeze_change": "CIworkflow354f->b46separatelyreviewed, notoldpreflightinput",
+  "P2": "Two sealed purported original parser command files were miscaptured extractor; additive true-command supplement pending. Originalreport13 gatecategories shouldbe12 recorded fields; raw values all equal. No product rerun required.",
+  "qualification": "Only DTO/strictconsumer/omission compatibility, nineconstructorsNone; no producer/committedspan/qualifiedassetfactory/audio/SDK37/physical/Core331acceptance. Older raw index147->f4ctimeonlyfieldproof and firstsealexit1 retained."
+}

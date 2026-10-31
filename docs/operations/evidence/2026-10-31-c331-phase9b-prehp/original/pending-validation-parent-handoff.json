@@ -1,0 +1,50 @@
+{
+  "utc": "2026-10-31T13:28:01.823754+00:00",
+  "owner": "parent explicitly took ownership via supervisor reply; no next writer before completion/source validation",
+  "processes": [
+    {
+      "pid": 82177,
+      "ps_full": "82177     1 Sat Oct 31 21:17:22 2026     10:39 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9b/scope-fix-checks/run.py",
+      "cwd_lsof": "p82177\nfcwd\nn/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree\n",
+      "child_pids": [
+        "82179"
+      ]
+    },
+    {
+      "pid": 82179,
+      "ps_full": "82179 82177 Sat Oct 31 21:17:22 2026     10:39 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python /tmp/noname-run-serialized.py cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+      "cwd_lsof": "p82179\nfcwd\nn/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree\n",
+      "child_pids": [
+        "58975"
+      ]
+    }
+  ],
+  "current_full_native_log_bytes": 61412,
+  "global_lock_inode": 620205209,
+  "existing_foreign_workspace_holder_pid": 62549,
+  "signals_sent": [],
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9b/final-scope-fix/source-manifest.json",
+  "source_manifest_sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+  "source_full_binding": {
+    "files": 212,
+    "full_manifest_sha256": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+    "full_tar_sha256": "93df600b6f86b79d2ea77d4c461705ca46338df2a2b4e9d9a054e35fac9e1c5e",
+    "full_patch_sha256": "64eb00896787032f1a927be8503c07086560acd83b6e0f5fe391b726628a1fd6",
+    "increment_manifest_sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+    "no_staged_files": true
+  },
+  "queued_commands": [
+    "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast",
+    "CARGO_TARGET_DIR=owned target-strict RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets",
+    "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+    "python3 -B scripts/check-source-lines.py",
+    "python3 -B scripts/check-native-layering.py"
+  ],
+  "automatic_retries": false,
+  "other_heavy_commands": [],
+  "scope_fix_checks_status": "At handoff observation 13:28Z full-native had begun naturally; Cargo child58975 now exists, log61412bytes; final full result and strict/cheap completion still parent-owned/unconfirmed.",
+  "prior_results": "1790/1/75 and strict green belong to pre-scope-fix source only; kept separately",
+  "global_lock_lsof": "COMMAND   PID   USER   FD   TYPE DEVICE SIZE/OFF      NODE NAME\nPython  58980 ruyimg    3w   REG   1,15        0 620205209 /private/tmp/noname-phase4-heavy-command.lock\nPython  71781 ruyimg    3w   REG   1,15        0 620205209 /private/tmp/noname-phase4-heavy-command.lock\nPython  82179 ruyimg    3w   REG   1,15        0 620205209 /private/tmp/noname-phase4-heavy-command.lock\n",
+  "no_staged_files": true,
+  "status_correction": "Queue-only status applied at prior 13:25 observation; captured ps now shows transition to actual Cargo execution. No signals or new submissions."
+}

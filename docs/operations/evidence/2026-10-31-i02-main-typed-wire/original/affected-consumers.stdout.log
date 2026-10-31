@@ -1,0 +1,1 @@
+{"command": ["cargo", "check", "--offline", "-p", "game-server", "-p", "desktop-client", "--tests"], "exit": 0, "locked_seconds": 66.25686999998288, "disk_free_bytes": 40305192960}

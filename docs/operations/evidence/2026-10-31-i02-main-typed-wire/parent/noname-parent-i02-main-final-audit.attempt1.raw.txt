@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-i02-main-final-audit.py", line 43, in <module>
+    assert entry['indexEntries']==entry['headEntries'] and not entry['staged']
+AssertionError

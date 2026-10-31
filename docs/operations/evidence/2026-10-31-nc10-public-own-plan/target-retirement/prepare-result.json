@@ -1,0 +1,230 @@
+{
+  "utc": "2026-10-31T13:02:32.256895+00:00",
+  "status": "PRESERVED; guarded retirement pending",
+  "targetInventories": [
+    {
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target",
+      "fileCount": 374,
+      "logicalBytes": 211907866
+    },
+    {
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/strict-target",
+      "fileCount": 552,
+      "logicalBytes": 75443424
+    }
+  ],
+  "preservedTargetFiles": 672,
+  "oldEFilesProtected": 341,
+  "warmTargetIdentity": {
+    "path": "/tmp/nc27-main-functional-458ed333/cargo-target",
+    "realpath": "/private/tmp/nc27-main-functional-458ed333/cargo-target",
+    "device": 16777231,
+    "inode": 618133347
+  },
+  "old714HistoricalVerification": {
+    "utc": "2026-10-31T12:09:40.691341+00:00",
+    "status": "PASS",
+    "fresh_artifacts": 714,
+    "source6_current_exact": true,
+    "commands": [
+      {
+        "name": "browser",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "canonical-snapshots",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "conformance",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "formal-trajectories",
+        "exit": 0,
+        "counts": [
+          2,
+          0,
+          0
+        ],
+        "summaries": 2
+      },
+      {
+        "name": "frontend-tests",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "frontend-type",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "gate1b",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "layering-gate",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "layering-unit",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "legacy-crosshash",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "line-unit",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "native-probe-attempt2",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "native-probe-final",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "native-probe",
+        "exit": 101,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "native-wasm-build",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "native3",
+        "exit": 0,
+        "counts": [
+          1719,
+          0,
+          75
+        ],
+        "summaries": 17
+      },
+      {
+        "name": "own-controls",
+        "exit": 0,
+        "counts": [
+          4,
+          0,
+          0
+        ],
+        "summaries": 1
+      },
+      {
+        "name": "preflight",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "semantic-seed",
+        "exit": 0,
+        "counts": [
+          1,
+          0,
+          0
+        ],
+        "summaries": 1
+      },
+      {
+        "name": "shan-control",
+        "exit": 0,
+        "counts": [
+          1,
+          0,
+          0
+        ],
+        "summaries": 1
+      },
+      {
+        "name": "source-caps",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "strict-doc-lines",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "vite-bundle",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "wasm-current",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "worker-smoke",
+        "exit": 0,
+        "counts": null,
+        "summaries": 0
+      },
+      {
+        "name": "workspace",
+        "exit": 0,
+        "counts": [
+          6922,
+          0,
+          77
+        ],
+        "summaries": 165
+      }
+    ],
+    "freeze_entry": "2026-10-31T11:42:19.226134+00:00",
+    "freeze_exit": "2026-10-31T11:49:59.117970+00:00",
+    "frozen_tracked_hashes": 44306,
+    "frozen_maintained_and_markdown": 14920,
+    "all11_freeze_fields_equal": true,
+    "source33_protected99_modules18_dist37_current": true,
+    "changed_generated": [
+      "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"
+    ],
+    "current_main_wasm": "30e97f8aff0cc683e5d8bb3e2b122e023dba08260c45a3fbc0ebee630268c0bd",
+    "wasm_adapter_cases": 7,
+    "browser_worker_cases": 12,
+    "trajectory_standard_steps": 40,
+    "trajectory_installed_package_steps": 20,
+    "legacy_crosshash_pairs": 2,
+    "index_caveat": "Unexplained raw pre-freeze difference retained; freeze rawcopy+logicalexact; allHEAD stage0/emptystaging corroborated. No speculative attribution or indexrepair.",
+    "qualification": "Independent fresh retainedartifact/source/product/protection/rawcounts audit, no producer rerun; not entire44306live3GBrescan. Privateprobeunusedtarget provenance addendum pending, not shipped/neededforacceptedproduct; no broadNC10strength/all37/platformacceptance."
+  },
+  "actualProbeBinariesPreserved": true
+}

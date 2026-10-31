@@ -1,0 +1,1 @@
+{"command": ["cargo", "build", "--offline", "--locked", "-p", "game-server"], "exit": 0, "locked_seconds": 53.144021667016204, "disk_free_bytes": 35635662848}

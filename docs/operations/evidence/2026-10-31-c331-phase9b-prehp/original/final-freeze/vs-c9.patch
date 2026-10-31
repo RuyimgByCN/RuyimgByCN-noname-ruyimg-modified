@@ -1,0 +1,4317 @@
+diff --git a/crates/engine-native-content/src/content/host/step/skills_damage.rs b/crates/engine-native-content/src/content/host/step/skills_damage.rs
+index f49ffd0e..62412d1d 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_damage.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_damage.rs
+@@ -8,7 +8,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(EventData::Damage(d)) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| f.data.clone())
+                     else {
+                         return Flow::Done;
+@@ -298,7 +298,7 @@ impl HostMachine {
+                     let target = self.targets.remove(0);
+                     if ctx.core.player(target).alive {
+                         ctx.emit(EventData::Damage(crate::event::DamageData {
+-                    settlement: Default::default(),
++                            settlement: Default::default(),
+                             source: Some(self.owner),
+                             target,
+                             amount: 1,
+@@ -319,10 +319,15 @@ impl HostMachine {
+             },
+             // 轩辕剑·伤增：帧内 +1 并转雷属性、置标记
+             HostBehavior::XuanyuanjianDamage => {
+-                let frame = ctx.current_frame_id();
++                let frame = ctx.current_event_frame_id();
+                 if let Some(f) = ctx.res.frame_mut(frame) {
+                     if let EventData::Damage(d) = &mut f.data {
+-                        if let Some(amount) = d.amount.checked_add(1) { d.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                        if let Some(amount) = d.amount.checked_add(1) {
++                            d.amount = amount;
++                        } else {
++                            ctx.fail_damage_amount();
++                            return Flow::Done;
++                        }
+                         if d.nature == crate::event::DamageNature::Normal {
+                             d.nature = crate::event::DamageNature::Thunder;
+                         }
+@@ -415,7 +420,10 @@ impl HostMachine {
+                     ctx.discard_from_hand(self.owner, card);
+                     // 伤害转移（帧 target 改写 + 转移链记录）
+                     {
+-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                        let frame = ctx
++                            .res
++                            .frame_mut(ctx.current_event_frame_id())
++                            .expect("frame");
+                         if let EventData::Damage(d) = &mut frame.data {
+                             d.redirect_chain.push(d.target);
+                             d.target = target;
+@@ -874,13 +882,15 @@ impl HostMachine {
+                 _ => Flow::Done,
+             },
+             HostBehavior::D3Moyan => {
+-                let frame_id = ctx.current_frame_id();
++                let frame_id = ctx.current_event_frame_id();
+                 let is_damage = ctx
+                     .res
+                     .frame(frame_id)
+                     .is_some_and(|frame| matches!(frame.data, EventData::Damage(_)));
+                 if is_damage {
+-                    if !ctx.modify_damage_amount(1) { return Flow::Done; }
++                    if !ctx.modify_damage_amount(1) {
++                        return Flow::Done;
++                    }
+                     Flow::Done
+                 } else {
+                     moyan_round_step(self, ctx)
+diff --git a/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs b/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs
+index 05a88a31..a38c2f61 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_discard_costs.rs
+@@ -231,12 +231,13 @@ impl HostMachine {
+                 HostStage::Act => {
+                     // 花色仅首次捕获（弃牌会发射帧，之后当前帧不再是 CardUsed）
+                     if self.card.is_none() {
+-                        let suit = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+-                            Some(EventData::CardUsed(u)) => {
+-                                ctx.catalog.cards[u.card as usize].suit as u8
+-                            }
+-                            _ => return Flow::Done,
+-                        };
++                        let suit =
++                            match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
++                                Some(EventData::CardUsed(u)) => {
++                                    ctx.catalog.cards[u.card as usize].suit as u8
++                                }
++                                _ => return Flow::Done,
++                            };
+                         self.card = Some(u32::from(suit));
+                     }
+                     let suit = self.card.unwrap_or(0) as u8;
+@@ -305,7 +306,7 @@ impl HostMachine {
+             // 移花：弃 2 张手牌 → 帧「使用者/目标」对调（反弹）
+             HostBehavior::Yihua => match self.stage {
+                 HostStage::Act => {
+-                    let frame = ctx.current_frame_id();
++                    let frame = ctx.current_event_frame_id();
+                     let user = match ctx.res.frame(frame).map(|f| &f.data) {
+                         Some(EventData::CardUsed(u)) => u.player,
+                         _ => return Flow::Done,
+@@ -377,7 +378,7 @@ impl HostMachine {
+             // 贞烈：失去 1 体力 → 移出目标 → 弃置使用者一张牌（手/装备）
+             HostBehavior::Zhenlie => match self.stage {
+                 HostStage::Act => {
+-                    let user = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                    let user = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                         Some(EventData::CardUsed(u)) => u.player,
+                         _ => return Flow::Done,
+                     };
+diff --git a/crates/engine-native-content/src/content/host/step/skills_status.rs b/crates/engine-native-content/src/content/host/step/skills_status.rs
+index 9f0bc5e2..a51746b9 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_status.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_status.rs
+@@ -32,7 +32,7 @@ impl HostMachine {
+             HostBehavior::ZhuWanzhongJi => {
+                 let Some(EventData::Death { player, .. }) = ctx
+                     .res
+-                    .frame(ctx.current_frame_id())
++                    .frame(ctx.current_event_frame_id())
+                     .map(|f| f.data.clone())
+                 else {
+                     return Flow::Done;
+@@ -105,7 +105,9 @@ impl HostMachine {
+             }
+             // 循梦：伤害 +1；体力 >1 时失去 1 点体力
+             HostBehavior::Xunmeng => {
+-                if !ctx.modify_damage_amount(1) { return Flow::Done; }
++                if !ctx.modify_damage_amount(1) {
++                    return Flow::Done;
++                }
+                 if ctx.core.player(self.owner).hp > 1 {
+                     // 失去体力（上游 loseHp）：无来源、不可防止
+                     ctx.emit(EventData::LoseHp {
+@@ -167,7 +169,12 @@ impl HostMachine {
+             HostBehavior::HlssYueyin => {
+                 let (nature, card) = {
+                     let d = ctx.current_damage_mut();
+-                    if let Some(amount) = d.amount.checked_add(1) { d.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                    if let Some(amount) = d.amount.checked_add(1) {
++                        d.amount = amount;
++                    } else {
++                        ctx.fail_damage_amount();
++                        return Flow::Done;
++                    }
+                     (d.nature, d.card)
+                 };
+                 let mut bits = 0u8;
+@@ -193,7 +200,7 @@ impl HostMachine {
+             // 潜龙：按触发面累加道心值（上限 99），随后按阈值刷新解锁
+             HostBehavior::MbQianlong => {
+                 let is_phase = matches!(
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data),
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
+                     Some(crate::event::EventData::Phase { begin: true, .. })
+                 );
+                 let inc: u32 = if is_phase {
+@@ -215,7 +222,9 @@ impl HostMachine {
+                     }
+                 } else {
+                     match ctx.current_damage() {
+-                        Ok(d) if d.target == self.owner => (d.amount.max(0) as u32).saturating_mul(10),
++                        Ok(d) if d.target == self.owner => {
++                            (d.amount.max(0) as u32).saturating_mul(10)
++                        }
+                         Ok(d) => (d.amount.max(0) as u32).saturating_mul(15),
+                         Err(_) => 5,
+                     }
+@@ -239,7 +248,8 @@ impl HostMachine {
+             HostBehavior::Shenwei => Flow::Done,
+             // 止息：标记 +1；锦囊 → 置锦囊记录；显示标记 = 体力 - 计数
+             HostBehavior::NewZhixi => {
+-                let used_trick = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                let used_trick = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
++                {
+                     Some(EventData::CardUsed(u)) => {
+                         let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                         !kind.is_basic_kind() && kind.equip_slot().is_none()
+@@ -292,7 +302,7 @@ impl HostMachine {
+             }
+             // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
+             HostBehavior::Jifeng => {
+-                let n = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                let n = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                     Some(EventData::CardUsed(u)) => u.targets.len() as u32,
+                     _ => return Flow::Done,
+                 };
+@@ -313,7 +323,7 @@ impl HostMachine {
+             // 昆仑镜：阶段收束记录快照 / 阶段开始（机器内确认门）回滚
+             HostBehavior::Kunlunjing => {
+                 let begin = matches!(
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data),
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
+                     Some(EventData::Phase { begin: true, .. })
+                 );
+                 if !begin {
+@@ -376,7 +386,7 @@ impl HostMachine {
+             // 改造：选一个空栏位 → 写入 declared_slots（提交按新栏位入槽）
+             HostBehavior::Gaizao => match self.stage {
+                 HostStage::Act => {
+-                    let card = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                    let card = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                         Some(EventData::Equipped { card, .. }) => *card,
+                         _ => return Flow::Done,
+                     };
+diff --git a/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs b/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs
+index a49ae387..1b057479 100644
+--- a/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs
++++ b/crates/engine-native-content/src/content/host/step/skills_virtual_use.rs
+@@ -439,13 +439,14 @@ impl HostMachine {
+             // 此桥邪：失去装备后逐次使用机关牌（自目标/单目标/AOE）
+             HostBehavior::Cyqiaoxie => match self.stage {
+                 HostStage::Act => {
+-                    let lost_equips = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+-                        Some(EventData::CardsLost { origins, .. }) => origins
+-                            .iter()
+-                            .filter(|o| **o == crate::event::LostOrigin::Equip)
+-                            .count(),
+-                        _ => 0,
+-                    };
++                    let lost_equips =
++                        match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
++                            Some(EventData::CardsLost { origins, .. }) => origins
++                                .iter()
++                                .filter(|o| **o == crate::event::LostOrigin::Equip)
++                                .count(),
++                            _ => 0,
++                        };
+                     if lost_equips == 0 {
+                         return Flow::Done;
+                     }
+diff --git a/crates/engine-native-content/src/content/host/step/swd_cards.rs b/crates/engine-native-content/src/content/host/step/swd_cards.rs
+index 3ad05fec..a8f34fa2 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_cards.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_cards.rs
+@@ -13,12 +13,14 @@ impl HostMachine {
+                     self.target = Some(cur);
+                     let suit = match ctx.current_card_use() {
+                         Ok(u) => ctx.catalog.cards[u.card as usize].suit,
+-                        Err(_) => match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+-                            Some(crate::event::EventData::CardResponded { card, .. }) => {
+-                                ctx.catalog.cards[*card as usize].suit
++                        Err(_) => {
++                            match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
++                                Some(crate::event::EventData::CardResponded { card, .. }) => {
++                                    ctx.catalog.cards[*card as usize].suit
++                                }
++                                _ => return Flow::Done,
+                             }
+-                            _ => return Flow::Done,
+-                        },
++                        }
+                     };
+                     self.card = None;
+                     // 花色锚存 cards[0]（哨兵实体不可得——以 suit 编码入
+@@ -150,7 +152,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let target = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::CardUsed(u) => u.targets.first().copied(),
+@@ -433,7 +435,8 @@ impl HostMachine {
+             HostBehavior::SwdRumeng => match self.stage {
+                 HostStage::Act => {
+                     // 触发帧即回合角色的出牌阶段开始帧——目标在此取定
+-                    let target = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                    let target = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
++                    {
+                         Some(EventData::Phase { player, .. }) => *player,
+                         _ => return Flow::Done,
+                     };
+diff --git a/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs b/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs
+index aed737a3..60da695b 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_damage_costs.rs
+@@ -11,7 +11,7 @@ impl HostMachine {
+             HostBehavior::SwdXielei => match self.stage {
+                 HostStage::Act => {
+                     // 记录排除面：use=原目标列表；respond=载荷无来源不排除
+-                    match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                    match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                         Some(crate::event::EventData::CardUsed(u)) => {
+                             self.targets = u.targets.clone();
+                         }
+@@ -568,7 +568,7 @@ impl HostMachine {
+                     // 受害者=触发帧伤害目标（上游 trigger.player 同口径）
+                     self.target = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some(d.target),
+diff --git a/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs b/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
+index d92b2491..caead1da 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_damage_reactions.rs
+@@ -8,7 +8,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(d) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some(d.target),
+@@ -92,7 +92,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(d) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some(d.target),
+@@ -184,10 +184,12 @@ impl HostMachine {
+             }
+             // 化金触发面：伤害前置 +1；准备阶段开始移除实例
+             HostBehavior::SwdHuajin2 => {
+-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
++                let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
+                 match frame {
+                     Some(EventData::Damage(d)) if d.source == Some(self.owner) && !d.prevented => {
+-                        if !ctx.modify_damage_amount(1) { return Flow::Done; }
++                        if !ctx.modify_damage_amount(1) {
++                            return Flow::Done;
++                        }
+                         Flow::Done
+                     }
+                     Some(EventData::Phase {
+@@ -257,7 +259,10 @@ impl HostMachine {
+                     });
+                     // 帧 source/target 对调（redirect_chain 不动——上游仅换
+                     // 两字段）
+-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                    let frame = ctx
++                        .res
++                        .frame_mut(ctx.current_event_frame_id())
++                        .expect("frame");
+                     if let crate::event::EventData::Damage(d) = &mut frame.data {
+                         let t = d.target;
+                         d.target = d.source.expect("filter guarantees source");
+@@ -276,7 +281,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(d) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some((d.target, d.source)),
+@@ -475,7 +480,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let victim = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some(d.target),
+@@ -625,7 +630,10 @@ impl HostMachine {
+                         .retain(|x| *x != c);
+                     ctx.core.player_mut(self.owner).hand.push(c);
+                 }
+-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                let frame = ctx
++                    .res
++                    .frame_mut(ctx.current_event_frame_id())
++                    .expect("frame");
+                 if let crate::event::EventData::Damage(d) = &mut frame.data {
+                     d.amount = d.amount.saturating_sub(1);
+                 }
+@@ -637,7 +645,10 @@ impl HostMachine {
+             // 血裔·Miles 面：锁定——伤害前置取消+失去 1 点体力（无条件；
+             // Boss 绝情同窗）
+             HostBehavior::SwdMilesXueyi => {
+-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                let frame = ctx
++                    .res
++                    .frame_mut(ctx.current_event_frame_id())
++                    .expect("frame");
+                 if let crate::event::EventData::Damage(d) = &mut frame.data {
+                     d.prevented = true;
+                 }
+@@ -653,7 +664,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(d) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Damage(d) => Some(d.target),
+@@ -719,15 +730,19 @@ impl HostMachine {
+             // 乖戾：Before 帧 +1（缚斧同款直写）；After 帧弃两张手牌
+             //（手牌不足弃全部）
+             HostBehavior::SwdGuaili => {
+-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
++                let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
+                 match frame {
+                     Some(crate::event::EventData::Damage(d))
+                         if !d.prevented && d.source == Some(self.owner) =>
+                     {
+-                        // Before/After 同载荷同 kind——按帧 stage 区分：
+-                        // BeforeTriggers 面直写 +1；AfterTriggers 面弃两张
+-                        let stage = ctx.res.frame(ctx.current_frame_id()).expect("frame").stage;
+-                        if stage == crate::event::Stage::AfterTriggers {
++                        // Canonical payload stays on the root; persisted progress identifies this window.
++                        let after = !ctx
++                            .current_damage()
++                            .expect("damage root")
++                            .settlement
++                            .progress
++                            .is_pre_hp();
++                        if after {
+                             let hand: Vec<CardId> =
+                                 ctx.core.player(self.owner).hand.iter().copied().collect();
+                             let n = hand.len().min(2);
+@@ -736,9 +751,17 @@ impl HostMachine {
+                             }
+                             Flow::Done
+                         } else {
+-                            let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                            let frame = ctx
++                                .res
++                                .frame_mut(ctx.current_event_frame_id())
++                                .expect("frame");
+                             if let crate::event::EventData::Damage(d) = &mut frame.data {
+-                                if let Some(amount) = d.amount.checked_add(1) { d.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                                if let Some(amount) = d.amount.checked_add(1) {
++                                    d.amount = amount;
++                                } else {
++                                    ctx.fail_damage_amount();
++                                    return Flow::Done;
++                                }
+                             }
+                             Flow::Done
+                         }
+@@ -749,7 +772,10 @@ impl HostMachine {
+             // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
+             // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
+             HostBehavior::SwdXuying => {
+-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                let frame = ctx
++                    .res
++                    .frame_mut(ctx.current_event_frame_id())
++                    .expect("frame");
+                 if let crate::event::EventData::Damage(d) = &mut frame.data {
+                     d.prevented = true;
+                 }
+@@ -823,9 +849,17 @@ impl HostMachine {
+                         player: self.owner,
+                         cards: vec![discarded],
+                     });
+-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                    let frame = ctx
++                        .res
++                        .frame_mut(ctx.current_event_frame_id())
++                        .expect("frame");
+                     if let EventData::Damage(dm) = &mut frame.data {
+-                        if let Some(amount) = dm.amount.checked_add(1) { dm.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                        if let Some(amount) = dm.amount.checked_add(1) {
++                            dm.amount = amount;
++                        } else {
++                            ctx.fail_damage_amount();
++                            return Flow::Done;
++                        }
+                         dm.nature = crate::event::DamageNature::Fire;
+                     }
+                     Flow::Done
+@@ -834,9 +868,17 @@ impl HostMachine {
+             },
+             // 缚斧：DamageBefore 帧直写 num+1（乱剑先例）
+             HostBehavior::SwdJufu => {
+-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                let frame = ctx
++                    .res
++                    .frame_mut(ctx.current_event_frame_id())
++                    .expect("frame");
+                 if let EventData::Damage(dm) = &mut frame.data {
+-                    if let Some(amount) = dm.amount.checked_add(1) { dm.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                    if let Some(amount) = dm.amount.checked_add(1) {
++                        dm.amount = amount;
++                    } else {
++                        ctx.fail_damage_amount();
++                        return Flow::Done;
++                    }
+                 }
+                 Flow::Done
+             }
+@@ -844,9 +886,17 @@ impl HostMachine {
+             HostBehavior::SwdPoxing => {
+                 if let Some(t) = self.target {
+                     if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
+-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                        let frame = ctx
++                            .res
++                            .frame_mut(ctx.current_event_frame_id())
++                            .expect("frame");
+                         if let EventData::Damage(dm) = &mut frame.data {
+-                            if let Some(amount) = dm.amount.checked_add(1) { dm.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                            if let Some(amount) = dm.amount.checked_add(1) {
++                                dm.amount = amount;
++                            } else {
++                                ctx.fail_damage_amount();
++                                return Flow::Done;
++                            }
+                         }
+                     }
+                 }
+diff --git a/crates/engine-native-content/src/content/host/step/swd_equipment.rs b/crates/engine-native-content/src/content/host/step/swd_equipment.rs
+index 88042fc7..3ef72750 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_equipment.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_equipment.rs
+@@ -20,7 +20,10 @@ impl HostMachine {
+                     if revealed.is_empty() {
+                         return Flow::Done;
+                     }
+-                    ctx.core.player_mut(self.owner).off_court.extend(revealed.iter().copied());
++                    ctx.core
++                        .player_mut(self.owner)
++                        .off_court
++                        .extend(revealed.iter().copied());
+                     self.cards = revealed;
+                     self.stage = HostStage::SelectCard;
+                     Flow::WaitChoice {
+@@ -46,16 +49,33 @@ impl HostMachine {
+                             return Flow::Done;
+                         }
+                     };
+-                    let rest: Vec<_> = self.cards.iter().copied().filter(|&c| c != picked).collect();
++                    let rest: Vec<_> = self
++                        .cards
++                        .iter()
++                        .copied()
++                        .filter(|&c| c != picked)
++                        .collect();
+                     self.cards.clear();
+                     // 未选的入弃堆
+                     for c in rest {
+-                        if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == c) {
++                        if let Some(pos) = ctx
++                            .core
++                            .player(self.owner)
++                            .off_court
++                            .iter()
++                            .position(|x| *x == c)
++                        {
+                             ctx.core.player_mut(self.owner).off_court.remove(pos);
+                         }
+                         ctx.to_discard(c);
+                     }
+-                    if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == picked) {
++                    if let Some(pos) = ctx
++                        .core
++                        .player(self.owner)
++                        .off_court
++                        .iter()
++                        .position(|x| *x == picked)
++                    {
+                         ctx.core.player_mut(self.owner).off_court.remove(pos);
+                     }
+                     ctx.core.player_mut(self.owner).hand.push(picked);
+@@ -340,7 +360,7 @@ impl HostMachine {
+             // 逆攻积攒：标记 +amount（上限 4）
+             HostBehavior::SwdNigongAccumulate => {
+                 if let Some(EventData::Damage(d)) =
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                 {
+                     let lv = ctx.core.player(self.owner).nigong_lv;
+                     ctx.core.player_mut(self.owner).nigong_lv = (lv + d.amount as u8).min(4);
+@@ -411,7 +431,7 @@ impl HostMachine {
+             // 朱雀之璋：来源火 1 伤（上游 fire；native 火属性同壳）
+             HostBehavior::SwdZhuquezhizhangHeld => {
+                 if let Some(EventData::Damage(d)) =
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                 {
+                     if let Some(src) = d.source {
+                         if ctx.core.player(src).alive {
+@@ -495,7 +515,7 @@ impl HostMachine {
+             // 玄武之璜：回复等量体力（伤害结算帧读 amount，hp<max 门在 filter）
+             HostBehavior::SwdXuanwuzhihuangHeld => {
+                 if let Some(EventData::Damage(d)) =
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                 {
+                     let p = ctx.core.player(self.owner);
+                     if p.alive && p.hp < p.max_hp as i32 {
+@@ -513,7 +533,7 @@ impl HostMachine {
+             // 造成则伤+1
+             HostBehavior::SwdShencaojieGuard => {
+                 if let Some(EventData::Damage(dm)) =
+-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
++                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                 {
+                     let toward_self = dm.target == self.owner;
+                     if let Some(pos) = ctx
+@@ -529,7 +549,10 @@ impl HostMachine {
+                             player: self.owner,
+                             cards: vec![c],
+                         });
+-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                        let frame = ctx
++                            .res
++                            .frame_mut(ctx.current_event_frame_id())
++                            .expect("frame");
+                         if let EventData::Damage(d2) = &mut frame.data {
+                             if toward_self {
+                                 d2.amount = d2.amount.saturating_sub(1);
+diff --git a/crates/engine-native-content/src/content/host/step/swd_recovery.rs b/crates/engine-native-content/src/content/host/step/swd_recovery.rs
+index c6abf947..df193ec1 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_recovery.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_recovery.rs
+@@ -398,7 +398,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(dp) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Dying { player, .. } => Some(*player),
+diff --git a/crates/engine-native-content/src/content/host/step/swd_response_cards.rs b/crates/engine-native-content/src/content/host/step/swd_response_cards.rs
+index 2b736327..4d69d458 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_response_cards.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_response_cards.rs
+@@ -12,7 +12,7 @@ impl HostMachine {
+                 HostStage::Act => {
+                     let Some(p) = ctx
+                         .res
+-                        .frame(ctx.current_frame_id())
++                        .frame(ctx.current_event_frame_id())
+                         .map(|f| &f.data)
+                         .and_then(|data| match data {
+                             crate::event::EventData::Death { player, .. } => Some(*player),
+diff --git a/crates/engine-native-content/src/content/host/step/swd_status.rs b/crates/engine-native-content/src/content/host/step/swd_status.rs
+index ea7c34f4..4d33aa99 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_status.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_status.rs
+@@ -329,7 +329,7 @@ impl HostMachine {
+             HostBehavior::SwdYinyue => {
+                 let Some(r) = ctx
+                     .res
+-                    .frame(ctx.current_frame_id())
++                    .frame(ctx.current_event_frame_id())
+                     .map(|f| &f.data)
+                     .and_then(|data| match data {
+                         crate::event::EventData::Recover { player, .. } => Some(*player),
+@@ -747,11 +747,11 @@ impl HostMachine {
+             // 凭空造）。状态不移除（持久防重面不变）。
+             HostBehavior::SwdJiguanyaoGain => {
+                 // 触发帧即弃牌事件帧（栈顶）：读取其 CardsDiscarded 载荷
+-                let lost: Vec<CardId> = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+-                {
+-                    Some(EventData::CardsDiscarded { cards, .. }) => cards.clone(),
+-                    _ => Vec::new(),
+-                };
++                let lost: Vec<CardId> =
++                    match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
++                        Some(EventData::CardsDiscarded { cards, .. }) => cards.clone(),
++                        _ => Vec::new(),
++                    };
+                 let num = lost
+                     .iter()
+                     .filter(|c| matches!(ctx.catalog.card_slot_of(ctx.core, **c), Some(_)))
+diff --git a/crates/engine-native-content/src/content/host/step/swd_targets.rs b/crates/engine-native-content/src/content/host/step/swd_targets.rs
+index 380032de..264071b1 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_targets.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_targets.rs
+@@ -278,7 +278,7 @@ impl HostMachine {
+             HostBehavior::SwdFzhenwei => match self.stage {
+                 HostStage::Act => {
+                     let Some(crate::event::EventData::CardResponded { card, player }) =
+-                        ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
++                        ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                     else {
+                         return Flow::Done;
+                     };
+diff --git a/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs b/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs
+index 44113c19..58ff27fa 100644
+--- a/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_virtual_cards.rs
+@@ -211,7 +211,8 @@ impl HostMachine {
+             // 诛害：选一张手中的【杀】→ 对结束阶段角色使用（实体牌）
+             HostBehavior::SwdZhuhai => match self.stage {
+                 HostStage::Act => {
+-                    let target = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
++                    let target = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
++                    {
+                         Some(EventData::Phase { player, .. }) => *player,
+                         _ => return Flow::Done,
+                     };
+diff --git a/crates/engine-native-content/src/content/host/step/wudian_cards.rs b/crates/engine-native-content/src/content/host/step/wudian_cards.rs
+index 2fd2aaa0..12470232 100644
+--- a/crates/engine-native-content/src/content/host/step/wudian_cards.rs
++++ b/crates/engine-native-content/src/content/host/step/wudian_cards.rs
+@@ -225,7 +225,7 @@ impl HostMachine {
+                                 ctx.core.table.retain(|x| *x != c);
+                                 ctx.core.player_mut(attacker).hand.push(c);
+                             }
+-                            let fid = ctx.current_frame_id();
++                            let fid = ctx.current_event_frame_id();
+                             if let Some(f) = ctx.res.frame_mut(fid) {
+                                 if let EventData::CardUsed(u) = &mut f.data {
+                                     u.cancelled = true;
+diff --git a/crates/engine-native-content/src/content/host/step/xianjian_damage.rs b/crates/engine-native-content/src/content/host/step/xianjian_damage.rs
+index 0161ee77..3843ee8b 100644
+--- a/crates/engine-native-content/src/content/host/step/xianjian_damage.rs
++++ b/crates/engine-native-content/src/content/host/step/xianjian_damage.rs
+@@ -372,7 +372,7 @@ impl HostMachine {
+             HostBehavior::XianjianHushaCount => {
+                 // 虎煞·集（U05 xianjian 王小虎，规则 v169）：+伤害量标记
+                 //（≤3；上游 husha_count forced 同口径）。
+-                let amount = match ctx.res.frame(ctx.current_frame_id()) {
++                let amount = match ctx.res.frame(ctx.current_event_frame_id()) {
+                     Some(f) => match &f.data {
+                         EventData::Damage(d) => d.amount,
+                         _ => 0,
+@@ -401,7 +401,10 @@ impl HostMachine {
+                 ctx.discard_from_hand(self.owner, shan);
+                 // 当前帧=杀伤害前置窗口：直写 prevented（诚信同款）
+                 {
+-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                    let frame = ctx
++                        .res
++                        .frame_mut(ctx.current_event_frame_id())
++                        .expect("frame");
+                     if let EventData::Damage(d) = &mut frame.data {
+                         d.prevented = true;
+                     }
+@@ -414,9 +417,17 @@ impl HostMachine {
+                 // 流；DamageBefore 帧直写 amount=张目 prevented 同款机
+                 // 制）；每目标独立 roll（filter 已过=载体锚定成立）。
+                 if ctx.core.rng.gen_range(100) < 50 {
+-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                    let frame = ctx
++                        .res
++                        .frame_mut(ctx.current_event_frame_id())
++                        .expect("frame");
+                     if let EventData::Damage(dm) = &mut frame.data {
+-                        if let Some(amount) = dm.amount.checked_add(1) { dm.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
++                        if let Some(amount) = dm.amount.checked_add(1) {
++                            dm.amount = amount;
++                        } else {
++                            ctx.fail_damage_amount();
++                            return Flow::Done;
++                        }
+                     }
+                 }
+                 Flow::Done
+diff --git a/crates/engine-native-content/src/content/host/step/yunchou.rs b/crates/engine-native-content/src/content/host/step/yunchou.rs
+index a34d16da..756a103e 100644
+--- a/crates/engine-native-content/src/content/host/step/yunchou.rs
++++ b/crates/engine-native-content/src/content/host/step/yunchou.rs
+@@ -362,7 +362,10 @@ impl HostMachine {
+                         player: self.owner,
+                         cards: vec![c],
+                     });
+-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
++                    let frame = ctx
++                        .res
++                        .frame_mut(ctx.current_event_frame_id())
++                        .expect("frame");
+                     if let EventData::Damage(dm) = &mut frame.data {
+                         dm.nature = crate::event::DamageNature::Fire;
+                     }
+diff --git a/crates/engine-native-content/src/content/standard/boss_skills.rs b/crates/engine-native-content/src/content/standard/boss_skills.rs
+index 3825e0ea..134e111c 100644
+--- a/crates/engine-native-content/src/content/standard/boss_skills.rs
++++ b/crates/engine-native-content/src/content/standard/boss_skills.rs
+@@ -25,7 +25,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
+             // 伤害前置触发：来源有武器对持有者伤害 +1（机器一步直改
+             // 载荷，YiShang 同款窗口）
+             trigger: Some(TriggerMeta {
+-                event: EventKind::DamageBefore,
++                event: EventKind::DamageBegin3,
+                 timing: Timing::Normal,
+                 priority: 0,
+                 order_selectable: true,
+@@ -234,7 +234,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
+             // ——相德同款窗口）；免疫火伤（commit_damage 入口直读——拟
+             // 态回合内免伤同位）
+             trigger: Some(TriggerMeta {
+-                event: EventKind::DamageBefore,
++                event: EventKind::DamageBegin1,
+                 timing: Timing::Normal,
+                 priority: 0,
+                 order_selectable: true,
+diff --git a/crates/engine-native-kernel/src/archive/damage.rs b/crates/engine-native-kernel/src/archive/damage.rs
+index 2d6dde0d..1314adf6 100644
+--- a/crates/engine-native-kernel/src/archive/damage.rs
++++ b/crates/engine-native-kernel/src/archive/damage.rs
+@@ -12,22 +12,11 @@ pub(super) fn enc_settlement(w: &mut W, s: &DamageSettlement) {
+         O::Completed => 4,
+     });
+     w.boolean(s.notrigger);
+-    let (tag, remaining) = match &s.progress {
+-        P::Before => (0, None),
+-        P::HpCommitted => (1, None),
+-        P::TargetDamage => (2, None),
+-        P::DyingPending => (3, None),
+-        P::DyingDone => (4, None),
+-        P::Source => (5, None),
+-        P::End => (6, None),
+-        P::After => (7, None),
+-        P::Chain { remaining } => (8, Some(remaining)),
+-        P::Done => (9, None),
+-        P::ZeroPending => (10, None),
+-        P::Stopped => (11, None),
+-    };
+-    w.u8(tag);
+-    if let Some(remaining) = remaining {
++    w.u8(s.progress.tag());
++    if let Some(eligible) = s.progress.chain_eligible() {
++        w.boolean(eligible);
++    }
++    if let P::Chain { remaining } = &s.progress {
+         w.len(remaining.len());
+         for p in remaining {
+             w.u8(*p);
+@@ -48,19 +37,41 @@ pub(super) fn dec_settlement(r: &mut R<'_>) -> Result<DamageSettlement, ArchiveE
+     let notrigger = r.boolean()?;
+     let progress = match r.u8()? {
+         0 => P::Before,
+-        1 => P::HpCommitted,
+-        2 => P::TargetDamage,
+-        3 => P::DyingPending,
+-        4 => P::DyingDone,
+-        5 => P::Source,
+-        6 => P::End,
+-        7 => P::After,
++        1 => P::HpCommitted {
++            chain_eligible: r.boolean()?,
++        },
++        2 => P::TargetDamage {
++            chain_eligible: r.boolean()?,
++        },
++        3 => P::DyingPending {
++            chain_eligible: r.boolean()?,
++        },
++        4 => P::DyingDone {
++            chain_eligible: r.boolean()?,
++        },
++        5 => P::Source {
++            chain_eligible: r.boolean()?,
++        },
++        6 => P::End {
++            chain_eligible: r.boolean()?,
++        },
++        7 => P::After {
++            chain_eligible: r.boolean()?,
++        },
+         8 => P::Chain {
+             remaining: r.vec(|r| r.u8())?,
+         },
+         9 => P::Done,
+         10 => P::ZeroPending,
+         11 => P::Stopped,
++        12 => P::Start,
++        13 => P::Begin,
++        14 => P::Begin1,
++        15 => P::Begin2,
++        16 => P::Begin3,
++        17 => P::Begin4,
++        18 => P::SubmitHp,
++        19 => P::CancelledPending,
+         t => return Err(ArchiveError::BadTag("damage_progress", t)),
+     };
+     Ok(DamageSettlement {
+diff --git a/crates/engine-native-kernel/src/archive/values.rs b/crates/engine-native-kernel/src/archive/values.rs
+index 52bf9d02..bfd3843b 100644
+--- a/crates/engine-native-kernel/src/archive/values.rs
++++ b/crates/engine-native-kernel/src/archive/values.rs
+@@ -133,7 +133,16 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
+         CardsLost => 20,
+         ShaDodged => 21,
+         CardsGiven => 22,
+-        DamageSource => 23, DamageEnd => 24, DamageAfter => 25, DamageZero => 26, DamageCancelled => 27,
++        DamageSource => 23,
++        DamageEnd => 24,
++        DamageAfter => 25,
++        DamageZero => 26,
++        DamageCancelled => 27,
++        DamageBegin => 28,
++        DamageBegin1 => 29,
++        DamageBegin2 => 30,
++        DamageBegin3 => 31,
++        DamageBegin4 => 32,
+     };
+     w.u8(t);
+ }
+@@ -164,7 +173,16 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
+         20 => CardsLost,
+         21 => ShaDodged,
+         22 => CardsGiven,
+-        23 => DamageSource,24 => DamageEnd,25 => DamageAfter,26 => DamageZero,27 => DamageCancelled,
++        23 => DamageSource,
++        24 => DamageEnd,
++        25 => DamageAfter,
++        26 => DamageZero,
++        27 => DamageCancelled,
++        28 => DamageBegin,
++        29 => DamageBegin1,
++        30 => DamageBegin2,
++        31 => DamageBegin3,
++        32 => DamageBegin4,
+         t => return Err(ArchiveError::BadTag("event_kind", t)),
+     })
+ }
+diff --git a/crates/engine-native-kernel/src/event.rs b/crates/engine-native-kernel/src/event.rs
+index 64ca5bcd..a52e4121 100644
+--- a/crates/engine-native-kernel/src/event.rs
++++ b/crates/engine-native-kernel/src/event.rs
+@@ -48,6 +48,11 @@ pub enum EventKind {
+     DamageAfter,
+     DamageZero,
+     DamageCancelled,
++    DamageBegin,
++    DamageBegin1,
++    DamageBegin2,
++    DamageBegin3,
++    DamageBegin4,
+ }
+ 
+ /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+@@ -117,7 +122,10 @@ pub enum EventData {
+     },
+     Damage(DamageData),
+     /// A real child window referencing its canonical damage ancestor.
+-    DamageWindow { root: EventId, window: DamageWindowKind },
++    DamageWindow {
++        root: EventId,
++        window: DamageWindowKind,
++    },
+     Recover {
+         player: PlayerId,
+         amount: u32,
+diff --git a/crates/engine-native-kernel/src/event/damage.rs b/crates/engine-native-kernel/src/event/damage.rs
+index 64053a3b..5f6dcf11 100644
+--- a/crates/engine-native-kernel/src/event/damage.rs
++++ b/crates/engine-native-kernel/src/event/damage.rs
+@@ -12,19 +12,41 @@ pub enum DamageOutcome {
+ #[derive(Debug, Clone, PartialEq, Eq, Default)]
+ pub enum DamageProgress {
+     #[default]
++    Start,
+     Before,
+-    HpCommitted,
+-    TargetDamage,
+-    DyingPending,
+-    DyingDone,
+-    Source,
+-    End,
+-    After,
++    Begin,
++    Begin1,
++    Begin2,
++    Begin3,
++    Begin4,
++    SubmitHp,
++    HpCommitted {
++        chain_eligible: bool,
++    },
++    TargetDamage {
++        chain_eligible: bool,
++    },
++    DyingPending {
++        chain_eligible: bool,
++    },
++    DyingDone {
++        chain_eligible: bool,
++    },
++    Source {
++        chain_eligible: bool,
++    },
++    End {
++        chain_eligible: bool,
++    },
++    After {
++        chain_eligible: bool,
++    },
+     Chain {
+         remaining: Vec<PlayerId>,
+     },
+     Done,
+     ZeroPending,
++    CancelledPending,
+     Stopped,
+ }
+ #[derive(Debug, Clone, PartialEq, Eq, Default)]
+@@ -37,6 +59,13 @@ pub struct DamageSettlement {
+ }
+ #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+ pub enum DamageWindowKind {
++    Before,
++    Begin,
++    Begin1,
++    Begin2,
++    Begin3,
++    Begin4,
++    Target,
+     Source,
+     End,
+     After,
+@@ -46,6 +75,13 @@ pub enum DamageWindowKind {
+ impl DamageWindowKind {
+     pub fn event_kind(self) -> EventKind {
+         match self {
++            Self::Before => EventKind::DamageBefore,
++            Self::Begin => EventKind::DamageBegin,
++            Self::Begin1 => EventKind::DamageBegin1,
++            Self::Begin2 => EventKind::DamageBegin2,
++            Self::Begin3 => EventKind::DamageBegin3,
++            Self::Begin4 => EventKind::DamageBegin4,
++            Self::Target => EventKind::Damage,
+             Self::Source => EventKind::DamageSource,
+             Self::End => EventKind::DamageEnd,
+             Self::After => EventKind::DamageAfter,
+@@ -60,6 +96,13 @@ impl DamageWindowKind {
+             Self::After => 2,
+             Self::Zero => 3,
+             Self::Cancelled => 4,
++            Self::Before => 5,
++            Self::Begin => 6,
++            Self::Begin1 => 7,
++            Self::Begin2 => 8,
++            Self::Begin3 => 9,
++            Self::Begin4 => 10,
++            Self::Target => 11,
+         }
+     }
+     pub fn from_tag(tag: u8) -> Option<Self> {
+@@ -69,6 +112,13 @@ impl DamageWindowKind {
+             2 => Self::After,
+             3 => Self::Zero,
+             4 => Self::Cancelled,
++            5 => Self::Before,
++            6 => Self::Begin,
++            7 => Self::Begin1,
++            8 => Self::Begin2,
++            9 => Self::Begin3,
++            10 => Self::Begin4,
++            11 => Self::Target,
+             _ => return None,
+         })
+     }
+@@ -87,25 +137,7 @@ impl DamageSettlement {
+             DamageOutcome::Completed => 4,
+         });
+         out.push(u8::from(self.notrigger));
+-        let (tag, remaining) = match &self.progress {
+-            DamageProgress::Before => (0, None),
+-            DamageProgress::HpCommitted => (1, None),
+-            DamageProgress::TargetDamage => (2, None),
+-            DamageProgress::DyingPending => (3, None),
+-            DamageProgress::DyingDone => (4, None),
+-            DamageProgress::Source => (5, None),
+-            DamageProgress::End => (6, None),
+-            DamageProgress::After => (7, None),
+-            DamageProgress::Chain { remaining } => (8, Some(remaining)),
+-            DamageProgress::Done => (9, None),
+-            DamageProgress::ZeroPending => (10, None),
+-            DamageProgress::Stopped => (11, None),
+-        };
+-        out.push(tag);
+-        if let Some(xs) = remaining {
+-            out.extend_from_slice(&(xs.len() as u32).to_le_bytes());
+-            out.extend_from_slice(xs);
+-        }
++        out.extend(self.progress.canonical_bytes());
+         out
+     }
+ }
+@@ -122,3 +154,82 @@ pub fn damage_event<'a>(frames: &'a [Frame], frame: &'a Frame) -> &'a EventData
+         &frame.data
+     }
+ }
++
++impl DamageProgress {
++    pub fn tag(&self) -> u8 {
++        match self {
++            Self::Before => 0,
++            Self::HpCommitted { .. } => 1,
++            Self::TargetDamage { .. } => 2,
++            Self::DyingPending { .. } => 3,
++            Self::DyingDone { .. } => 4,
++            Self::Source { .. } => 5,
++            Self::End { .. } => 6,
++            Self::After { .. } => 7,
++            Self::Chain { .. } => 8,
++            Self::Done => 9,
++            Self::ZeroPending => 10,
++            Self::Stopped => 11,
++            Self::Start => 12,
++            Self::Begin => 13,
++            Self::Begin1 => 14,
++            Self::Begin2 => 15,
++            Self::Begin3 => 16,
++            Self::Begin4 => 17,
++            Self::SubmitHp => 18,
++            Self::CancelledPending => 19,
++        }
++    }
++    pub fn chain_eligible(&self) -> Option<bool> {
++        match self {
++            Self::HpCommitted { chain_eligible }
++            | Self::TargetDamage { chain_eligible }
++            | Self::DyingPending { chain_eligible }
++            | Self::DyingDone { chain_eligible }
++            | Self::Source { chain_eligible }
++            | Self::End { chain_eligible }
++            | Self::After { chain_eligible } => Some(*chain_eligible),
++            _ => None,
++        }
++    }
++    pub fn canonical_bytes(&self) -> Vec<u8> {
++        let mut out = vec![self.tag()];
++        if let Some(eligible) = self.chain_eligible() {
++            out.push(u8::from(eligible));
++        }
++        if let Self::Chain { remaining } = self {
++            out.extend_from_slice(&(remaining.len() as u32).to_le_bytes());
++            out.extend_from_slice(remaining);
++        }
++        out
++    }
++    pub fn is_pre_hp(&self) -> bool {
++        matches!(
++            self,
++            Self::Start
++                | Self::Before
++                | Self::Begin
++                | Self::Begin1
++                | Self::Begin2
++                | Self::Begin3
++                | Self::Begin4
++                | Self::SubmitHp
++        )
++    }
++    pub fn window(&self) -> Option<DamageWindowKind> {
++        use DamageWindowKind as W;
++        Some(match self {
++            Self::Before => W::Before,
++            Self::Begin => W::Begin,
++            Self::Begin1 => W::Begin1,
++            Self::Begin2 => W::Begin2,
++            Self::Begin3 => W::Begin3,
++            Self::Begin4 => W::Begin4,
++            Self::TargetDamage { .. } => W::Target,
++            Self::Source { .. } => W::Source,
++            Self::End { .. } => W::End,
++            Self::After { .. } => W::After,
++            _ => return None,
++        })
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index ddfffcae..54bcd659 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -19,11 +19,26 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
+     };
+     record_vm_history(ctx, &data);
+     match data {
+-        EventData::Damage(d) => { if d.settlement.committed_damage.is_none() { commit_damage(ctx, frame_id, d); } },
+-        EventData::DamageWindow { root, window: crate::event::DamageWindowKind::End } => {
+-            let d=ctx.res.frame(root).expect("damage root").damage().clone();
+-            if d.amount>0 && !d.prevented && !d.settlement.notrigger {post_damage(ctx,d);}
+-        },
++        EventData::DamageWindow { root, window } => {
++            damage_windows::commit_damage_window(ctx, root, window);
++            let d = ctx.res.frame(root).expect("damage root").damage().clone();
++            if window == crate::event::DamageWindowKind::End
++                && d.amount > 0
++                && !d.prevented
++                && !d.settlement.notrigger
++                && d.settlement.outcome == crate::event::DamageOutcome::Running
++            {
++                post_damage(ctx, d.clone());
++            }
++            if window == crate::event::DamageWindowKind::After
++                && d.amount > 0
++                && !d.prevented
++                && !d.settlement.notrigger
++                && d.settlement.outcome == crate::event::DamageOutcome::Running
++            {
++                damage_after::post_damage_after(ctx, d);
++            }
++        }
+         EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
+         EventData::CardUsed(u) => commit_card_used(ctx, u),
+         EventData::Equipped { player, card, .. } => commit_equip(ctx, frame_id, player, card),
+@@ -48,19 +63,22 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
+ }
+ 
+ mod damage;
++mod damage_after;
++mod damage_change_hp;
+ mod damage_flow;
+-pub use damage_flow::DamageFlow;
++mod damage_windows;
+ use damage::*;
++pub use damage_flow::DamageFlow;
+ mod events;
+ use events::*;
+ mod equipment;
+-pub use equipment::{grant_equip_skills, revoke_equip_skills};
+ use equipment::commit_equip;
++pub use equipment::{grant_equip_skills, revoke_equip_skills};
+ mod intrinsic;
+ pub use intrinsic::*;
+ mod combat_rules;
+-pub(crate) use combat_rules::*;
+ pub use combat_rules::tao_futai2_banned;
++pub(crate) use combat_rules::*;
+ mod sha;
+ pub use sha::*;
+ mod dying;
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index a4877dc0..ad276635 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -11,347 +11,21 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
+         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
+         return;
+     }
+-    // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
+-    // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
+-    // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
+-    // 加成类不触发；置于急冻前——上游 damageBefore 同层内容序）
+-    if let Some(jqdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::JUE_QING)
+-    {
+-        if let Some(src) = d.source {
+-            if src != d.target && ctx.core.player(src).alive && ctx.core.has_skill(src, jqdef) {
+-                ctx.emit(EventData::LoseHp {
+-                    player: d.target,
+-                    amount: d.amount as u32,
+-                });
+-                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::ReplacedByLoseHp);
+-        return;
+-            }
+-        }
+-    }
+-    // 无心（Boss 张春华，规则 v260）伤害半：锁定——你受到的伤害改为失去
+-    // 1 点体力（上游 damageBefore priority 10 cancel+loseHp() 无参=1 同
+-    // 口径；置于绝情后=同层 priority 序）
+-    if let Some(wxdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_WUXIN)
+-    {
+-        if ctx.core.has_skill(d.target, wxdef) && ctx.core.player(d.target).alive {
+-            ctx.emit(EventData::LoseHp {
+-                player: d.target,
+-                amount: 1,
+-            });
+-            finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::ReplacedByLoseHp);
+-        return;
+-        }
+-    }
+-    // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
+-    // 效（上游 jidong2 damageBefore trigger.cancel() 同口径；铁索传导
+-    // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
+-    // damageBegin 类增幅同上游一样不再结算。
+-    if ctx.core.player(d.target).jidong_active {
+-        ctx.log(LogEvent::DamagePrevented { target: d.target });
+-        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+-        return;
+-    }
+-    // 诚信免伤（U05 xianjian 明绣，规则 v164）：锁定——免伤状态目标受
+-    // 所有伤害无效（上游 chengxin2 damageBefore trigger.cancel 同口径）
+-    if ctx.core.player(d.target).chengxin_active {
+-        ctx.log(LogEvent::DamagePrevented { target: d.target });
+-        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+-        return;
+-    }
+-    // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
+-    // boss_zhaohuo damageBegin4 trigger.cancel 的火伤分支同口径；诚信免
+-    // 伤同位）
+-    if d.nature == crate::event::DamageNature::Fire {
+-        if let Some(zdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_ZHAOHUO)
+-        {
+-            if ctx.core.has_skill(d.target, zdef) {
+-                ctx.log(LogEvent::DamagePrevented { target: d.target });
+-                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+-        return;
+-            }
+-        }
+-    }
+-    // 火神（Boss 周瑜，规则 v263）：锁定——火属性伤害对你无效，你回复
+-    // 1 点体力（上游 damageBegin1 cancel+recover() 无参=1 同口径；置于
+-    // 招祸同位=damageBegin 层，取消后增幅不结算）
+-    if d.nature == crate::event::DamageNature::Fire {
+-        if let Some(hsdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_HUOSHEN)
+-        {
+-            if ctx.core.player(d.target).alive && ctx.core.has_skill(d.target, hsdef) {
+-                ctx.log(LogEvent::DamagePrevented { target: d.target });
+-                ctx.recover(d.target, 1, None);
+-                finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+-        return;
+-            }
+-        }
+-    }
+-    // 拟态（Boss 梼杌，规则 v217）：锁定——防止你于回合内受到的伤害
+-    //（上游 boss_nitai_in damageBegin4 trigger.cancel 同口径：当前回合
+-    // =持有者）
+-    if let Some(ndef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
+-    {
+-        if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current == d.target {
+-            ctx.log(LogEvent::DamagePrevented { target: d.target });
+-            finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+-        return;
+-        }
+-    }
+-    let mut amount = i64::from(d.amount);
+-    // 拟态（Boss 梼杌，规则 v217）：锁定——你于回合外受到的火属性伤害
+-    // +1（上游 boss_nitai_out damageBegin1 num++ 同口径）
+-    if d.nature == crate::event::DamageNature::Fire {
+-        if let Some(ndef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
+-        {
+-            if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current != d.target {
+-                amount += 1;
+-            }
+-        }
+-    }
+-    // 赤龙牙（U05 swd 第四批，规则 v88）：锁定——来源装备赤龙牙时
+-    // 火属性伤害 +1（上游 damageBegin num++；非铁索传导照常）
+-    if d.nature == crate::event::DamageNature::Fire {
+-        if let Some(src) = d.source {
+-            if ctx.core.player(src).alive
+-                && ctx
+-                    .core
+-                    .player(src)
+-                    .equips
+-                    .iter()
+-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chilongya)
+-            {
+-                amount += 1;
+-            }
+-        }
+-    }
+-    // 星君眼（U05 swd 第九批，规则 v93）：锁定——你的【杀】伤害 +1
+-    //（上游 damageBegin num++；card==sha 同口径；铁索传导为独立事件
+-    // 照常 +1）
+-    if d.card
+-        .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+-        .unwrap_or(false)
+-    {
+-        if let Some(src) = d.source {
+-            if ctx.core.player(src).alive
+-                && ctx
+-                    .core
+-                    .player(src)
+-                    .equips
+-                    .iter()
+-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xingjunyan)
+-            {
+-                amount += 1;
+-            }
+-        }
+-    }
+-    // 链钩（U05 ow 路霸，规则 v128）：本回合被钩者首次受伤害 +1
+-    //（上游 liangou2 damageBegin trigger.num++ usable:1 同口径；来源
+-    // 不限=上游无 source 条件；仅路霸出牌阶段可钩住，换回合解除）
+-    if let Some(t) = ctx.core.turn.liangou_hook {
+-        if d.target == t && !ctx.core.turn.liangou_bonus_used {
+-            amount += 1;
+-            ctx.core.turn.liangou_bonus_used = true;
+-        }
+-    }
+-    // 飞刃（U05 ow 源氏，规则 v129）：锁定——你的黑桃杀伤害 +1（非
+-    // 铁索传导；上游 damageBegin trigger.num++ notLink 同口径；花色按
+-    // 实体牌——火/雷杀为黑桃时同样命中）
+-    if d.card
+-        .map(|c| {
+-            ctx.catalog.card_kind(c).is_sha_like()
+-                && ctx.catalog.cards[c as usize].suit == crate::catalog::Suit::Spade
+-        })
+-        .unwrap_or(false)
+-        && !d.from_chain
+-    {
+-        if let Some(src) = d.source {
+-            let has_feiren = ctx
+-                .catalog
+-                .skill_by_name(crate::vocabulary::host::WUDIAN_FEIREN_KEY)
+-                .map(|def| ctx.core.has_skill(src, def))
+-                .unwrap_or(false);
+-            if has_feiren && ctx.core.player(src).alive {
+-                amount += 1;
+-            }
+-        }
+-    }
+-    // 刺猬（U07 玩点论杀韩龙，规则 v111）：锁定——你的杀对满血目标伤
+-    // 害 +1；加后 ≥ 目标体力则目标获本回合濒死即死标记（上游
+-    // addTempSkill("ciqiu_dying")）且本技能移除（一次性）
+-    if d.card
+-        .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+-        .unwrap_or(false)
+-    {
+-        if let Some(src) = d.source {
+-            if ctx.core.player(d.target).alive
+-                && ctx.core.player(d.target).hp == ctx.core.player(d.target).max_hp as i32
+-            {
+-                if let Some(def) = ctx
+-                    .catalog
+-                    .skill_by_name(crate::vocabulary::host::WUDIAN_CIQIU_KEY)
+-                {
+-                    if ctx.core.has_skill(src, def) {
+-                        amount += 1;
+-                        if amount >= i64::from(ctx.core.player(d.target).hp) {
+-                            ctx.core.turn.ciqiu_dying.push(d.target);
+-                            ctx.core.skills.remove(&(src, def));
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-    }
+-    // 毒瘟（U07 ow，规则 v122）：锁定——造成伤害时若你手牌数与受伤害
+-    // 角色相等，伤害 +1（上游 duwen damageBegin num++ 同口径；铁索传
+-    // 导为独立事件照常判定）
+-    if let Some(src) = d.source {
+-        if ctx.core.player(src).alive
+-            && ctx.core.player(src).hand.len() == ctx.core.player(d.target).hand.len()
+-        {
+-            if let Some(def) = ctx
+-                .catalog
+-                .skill_by_name(crate::vocabulary::host::WUDIAN_DUWEN_KEY)
+-            {
+-                if ctx.core.has_skill(src, def) {
+-                    amount += 1;
+-                }
+-            }
+-        }
+-    }
+-    // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
+-    // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+-    // 醉酒（Boss 白无常，规则 v255）：你使用的【杀】造成的伤害 +1（上
+-    // 游 damageBegin1 sha+shaParent 同口径；火杀/雷杀同属 sha 族）
+-    if d.card
+-        .map(|c| {
+-            matches!(
+-                ctx.catalog.card_kind(c),
+-                CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
+-            )
+-        })
+-        .unwrap_or(false)
+-    {
+-        if let Some(zjdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_ZUIJIU)
+-        {
+-            if let Some(src) = d.source {
+-                if ctx.core.has_skill(src, zjdef) {
+-                    amount += 1;
+-                }
+-            }
+-        }
+-    }
+-    // 灵渠（Boss 玄武，规则 v237）：受到的大于 1 点伤害视为 0 点（上游
+-    // 不佛（Boss 地藏王，规则 v274）：受到大于 1 点的伤害时改为其中 1
+-    // 点（上游 boss_bufo damageBegin4 num>1→num-1 同口径；置于灵渠归零
+-    // 检查前——灵渠读调整后终值；两技同持为不同武将不共存，序未登记）
+-    if amount > 1 {
+-        if let Some(bfdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_BUFO)
+-        {
+-            if ctx.core.has_skill(d.target, bfdef) {
+-                amount -= 1;
+-            }
+-        }
+-    }
+-    // boss_lingqu cancel damageBegin4 num>1 → num=0 同口径；置于增幅后
+-    // 统计前——终值>1 才归零；0 点伤害仍完成事件→受击摸 1/计数照常）
+-    if amount > 1 {
+-        if let Some(ldef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
+-        {
+-            if ctx.core.has_skill(d.target, ldef) {
+-                amount = 0;
+-            }
+-        }
+-    }
+-    // 脉轮（swd 批 137，规则 v316）：3=首次造成/受到伤害 -1、4=+1（各自
+-    // 一次性；上游 mailun31/32/41/42 damageBegin 用后移除同口径）
+-    {
+-        if let Some(src) = d.source {
+-            let mode = ctx.core.player(src).mailun_mode;
+-            if (mode == 3 || mode == 4) && !ctx.core.player(src).mailun_out_used {
+-                amount = if mode == 3 {
+-                    amount.saturating_sub(1)
+-                } else {
+-                    amount.saturating_add(1)
+-                };
+-                ctx.core.player_mut(src).mailun_out_used = true;
+-            }
+-        }
+-        let mode = ctx.core.player(d.target).mailun_mode;
+-        if (mode == 3 || mode == 4) && !ctx.core.player(d.target).mailun_in_used {
+-            amount = if mode == 3 {
+-                amount.saturating_sub(1)
+-            } else {
+-                amount.saturating_add(1)
+-            };
+-            ctx.core.player_mut(d.target).mailun_in_used = true;
+-        }
+-    }
+-    // 护天护体（swd 批 131，规则 v314）：目标寄存护天牌时伤害以「体力降至
+-    // 寄存数」为上限（上游 hutian2 damageBegin priority -55 `trigger.num =
+-    // hp - storage.hutian2.length` 同口径）
+-    {
+-        let hold = ctx.core.player(d.target).hutian_hold.len() as i32;
+-        if hold > 0 {
+-            let hp = ctx.core.player(d.target).hp;
+-            let cap = hp - hold;
+-            if i64::from(cap) < amount {
+-                amount = i64::from(cap.max(0));
+-            }
+-        }
+-    }
+-    let Ok(amount)=i32::try_from(amount) else {
+-        ctx.res.fault=Some(crate::machine::VmFault{skill:"intrinsic_damage".into(),owner:d.target,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"canonical source amount exceeds i32".into()});return;
+-    };
+-    d.amount = amount;
+-    if amount <= 0 { finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero); return; }
++    let amount = d.amount;
+     let submitted = amount as u32;
+     d.settlement.committed_damage = Some(submitted);
+-    d.settlement.progress = crate::event::DamageProgress::HpCommitted;
++    let chain_eligible = d.nature != crate::event::DamageNature::Normal
++        && !d.from_chain
++        && ctx.core.player(d.target).linked;
++    d.settlement.progress = crate::event::DamageProgress::HpCommitted { chain_eligible };
+     // Source counters and logs consume canonical submitted event.num, never armor HP loss.
+     // damageEnd num 同口径）
+     if let Some(src) = d.source {
+         if src != d.target {
+             let p = ctx.core.player_mut(src);
+-            p.turn_damage = p.turn_damage.saturating_add(amount.clamp(0,255) as u8);
++            p.turn_damage = p.turn_damage.saturating_add(amount.clamp(0, 255) as u8);
+         }
+     }
+-    // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
+-    // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
+-    if let Some(dcard) = d.card {
+-        if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
+-            if *card == dcard {
+-                *caused = true;
+-            }
+-        }
+-    }
+-    // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
+-    // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
+-    // 同口径；武装=当前回合玩家=链主）
+-    if ctx.core.turn.shuchui_armed
+-        && d.source == Some(ctx.core.turn.current)
+-        && d.card
+-            .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+-            .unwrap_or(false)
+-    {
+-        ctx.core.turn.shuchui_hit = true;
+-    }
+     let mut hp_loss = submitted;
+     // 护甲（G1 扩展）：1:1 抵扣伤害，先于体力扣减
+     let hujia = ctx.core.player(d.target).hujia;
+@@ -394,14 +68,30 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
+     // 无限体力（上游 Infinity）：伤害照常结算与记录，但不改变体力
+     //（hp 保持 == max_hp，故「已受伤」类判据恒假——与上游一致）。
+     if !p.infinite_hp() {
+-        let Some(hp)=p.hp.checked_sub(hp_loss as i32) else {
+-            ctx.res.fault=Some(crate::machine::VmFault{skill:"intrinsic_damage".into(),owner:d.target,event:"Damage".into(),kind:"DamageHpOverflow".into(),detail:"HP subtraction exceeds i32".into()});return;
++        let Some(hp) = p.hp.checked_sub(hp_loss as i32) else {
++            ctx.res.fault = Some(crate::machine::VmFault {
++                skill: "intrinsic_damage".into(),
++                owner: d.target,
++                event: "Damage".into(),
++                kind: "DamageHpOverflow".into(),
++                detail: "HP subtraction exceeds i32".into(),
++            });
++            return;
+         };
+         p.hp = hp;
+     }
+     d.settlement.hp_loss = if p.infinite_hp() { 0 } else { hp_loss };
++    if d.nature != crate::event::DamageNature::Normal && ctx.core.player(d.target).linked {
++        ctx.core.player_mut(d.target).linked = false;
++        ctx.log(LogEvent::Linked {
++            player: d.target,
++            linked: false,
++        });
++    }
++
+     ctx.res.frame_mut(frame_id).expect("damage root").data = EventData::Damage(d.clone());
+     hlss_light_refill(ctx, d.target);
++    damage_change_hp::commit_damage_change_hp(ctx, &d);
+     ctx.log(LogEvent::DamageDealt {
+         source: d.source,
+         target: d.target,
+@@ -412,6 +102,17 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
+ }
+ 
+ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
++    // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
++    // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
++    // 同口径；武装=当前回合玩家=链主）
++    if ctx.core.turn.shuchui_armed
++        && d.source == Some(ctx.core.turn.current)
++        && d.card
++            .map(|c| ctx.catalog.card_kind(c).is_sha_like())
++            .unwrap_or(false)
++    {
++        ctx.core.turn.shuchui_hit = true;
++    }
+     // 炮台降级（U05 ow，规则 v123）：炮台持有者受伤 1 点降 1 级（上游
+     // paotai3 damageEnd forced：storage -= trigger.num；下限 0）
+     if ctx.core.player(d.target).paotai_lv > 0 && d.amount > 0 && !d.prevented {
+@@ -479,51 +180,25 @@ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+             }
+         }
+     }
+-    // 隐贼（Boss 混沌，规则 v210）双臂：①激活门控——体力首次减至一半
+-    // 或更少时启用（SkillInstance.enabled 直写+SkillToggled；上游
+-    // boss_yinzei_switch changeHp enableSkill 同口径）；②伤害后弃牌——
+-    // 已激活且持有者无手牌 → 来源弃置一张手牌（确定性取首张；上游
+-    // damageEnd randomDiscard 随机改首张登记差异）
++    // 隐贼 damageEnd discard; its changeHp activation already completed before TargetDamage.
+     if let Some(ydef) = ctx
+         .catalog
+         .skill_by_name(crate::vocabulary::names::BOSS_YINZEI)
+     {
+         let holder = d.target;
+-        let has_yinzei = ctx.core.has_skill_any_state(holder, ydef);
+-        if has_yinzei {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                let was_enabled = ctx.core.has_skill(holder, ydef);
+-                if !was_enabled {
+-                    if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
+-                        inst.enabled = true;
+-                    }
+-                    ctx.log(LogEvent::SkillToggled {
+-                        player: holder,
+-                        skill: ctx.catalog.skill_name(ydef),
+-                        enabled: true,
+-                    });
+-                }
+-            }
+-            // 伤害后弃牌（激活态）
+-            if ctx.core.has_skill(holder, ydef)
+-                && ctx.core.player(holder).hand.is_empty()
+-                && ctx.core.player(holder).hp > 0
+-            {
+-                if let Some(src) = d.source {
+-                    if src != holder
+-                        && ctx.core.player(src).alive
+-                        && !ctx.core.player(src).hand.is_empty()
+-                    {
+-                        let c = ctx.core.player(src).hand[0];
++        if ctx.core.has_skill(holder, ydef)
++            && ctx.core.player(holder).hand.is_empty()
++            && ctx.core.player(holder).hp > 0
++        {
++            if let Some(src) = d.source {
++                if src != holder && ctx.core.player(src).alive {
++                    if let Some(c) = ctx.core.player(src).hand.first().copied() {
+                         ctx.discard_from_hand(src, c);
+                     }
+                 }
+             }
+         }
+     }
+-    // 伤逝（规则 v260）：体力变化（受伤扣血）后补牌
+-    shangshix_draw(ctx, d.target);
+     // 章武（Boss 刘备，规则 v261）：你受到伤害后（来源存活且非自己）——
+     // 你弃置一张牌，来源弃置一张牌，或来源受到 1 点伤害（上游 [1,∞] 自
+     // 选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃首张确定性近似
+@@ -555,52 +230,6 @@ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+             }
+         }
+     }
+-    // 极点（Boss 张角，规则 v263）：你造成伤害后——距离受伤者 1 以内的
+-    // 一名其他角色判定：黑则其受到 1 点雷伤（上游 source damageAfter
+-    // chooseTarget get.distance(trigger.player,target)<=1 + judge 黑 →
+-    // damage("thunder") 同口径；chooseTarget AI→座位序首个确定性近似；
+-    // 链挡旗标=极点雷伤不自我递归，登记差异：上游 damageAfter 真递归；
+-    // 判定为内联确定性口径，无改判窗）
+-    if let Some(jddef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_JIDIAN)
+-    {
+-        if let Some(src) = d.source {
+-            if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
+-                // 链挡：极点造成的雷伤不再触发极点
+-                if !ctx.core.turn.jidian_chain {
+-                    let seats = ctx.core.players.len() as PlayerId;
+-                    if let Some(t) = (0..seats).find(|&t| {
+-                        t != d.target
+-                            && ctx.core.player(t).alive
+-                            && ctx.core.computed_distance(ctx.catalog, d.target, t) <= 1
+-                    }) {
+-                        // 置链挡后 emit：嵌套 Damage 帧的极点臂见旗标清除
+-                        // 并跳过（挡恰一层=极点雷伤不链式，登记差异）
+-                        ctx.core.turn.jidian_chain = true;
+-                        let judged = ctx.draw_judge_card();
+-                        let black = matches!(
+-                            ctx.catalog.cards[judged as usize].suit,
+-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+-                        );
+-                        ctx.to_discard(judged);
+-                        if black {
+-                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+-                                Some(src),
+-                                t,
+-                                1,
+-                                crate::event::DamageNature::Thunder,
+-                                None,
+-                            )));
+-                        }
+-                    }
+-                } else {
+-                    // 嵌套极点雷伤到达：清链挡（仅挡一层）
+-                    ctx.core.turn.jidian_chain = false;
+-                }
+-            }
+-        }
+-    }
+     // 反噬（十殿阎罗转轮王，规则 v269）：每回合第一次受伤后置 terra 旗，
+     // 同回合再次受伤 → 随机一名其他角色受 1 点伤害（上游 boss_zlfanshi
+     // damageEnd addTempSkill boss_zlfanshi_terra 交替同口径；随机→座位序
+@@ -715,7 +344,7 @@ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+         }
+     }
+     // 灵渠（Boss 玄武，规则 v237）：每次受到伤害后摸 1 张牌且受击计数
+-    // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；0 点伤害照常；
++    // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；零量由 Zero/Stopped 截断；
+     // 计数=PlayerState.lingqu_count 跨回合持久，手牌上限 +X）
+     if let Some(ldef) = ctx
+         .catalog
+@@ -776,48 +405,6 @@ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+             ctx.draw_cards(holder, 1);
+         }
+     }
+-    // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款
+-    // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
+-    if let Some(dudef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_YANDU)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, dudef) && !ctx.core.has_skill(holder, dudef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, dudef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(dudef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    // 积财门控（Boss 饕餮，规则 v216）：体力首次≤一半激活（隐贼/延妒
+-    // 同款 enable 直写）
+-    if let Some(jdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, jdef) && !ctx.core.has_skill(holder, jdef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, jdef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(jdef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+     // 催毒（Boss 书精，规则 v220）：来源持催毒且目标非己、无中毒 →
+     // 目标授中毒实例（运行时授技=skills.insert；木神勾芒不在目录跳过
+     // 联动摸牌；上游 boss_cuidui damageEnd addSkill 同口径）
+@@ -877,133 +464,6 @@ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+             }
+         }
+     }
+-    // 邪酬门控（Boss 相柳，规则 v223）：体力首次≤一半激活（隐贼/延妒/
+-    // 积财/乱常同款 enable 直写）
+-    if let Some(edef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_ECHOU)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, edef) && !ctx.core.has_skill(holder, edef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, edef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(edef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    // 乱常门控（Boss 梼杌，规则 v218）：体力首次≤一半激活（隐贼/延妒/
+-    // 积财同款 enable 直写）
+-    if let Some(ldef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_LUANCHANG)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, ldef) && !ctx.core.has_skill(holder, ldef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ldef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(ldef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    // 虚失门控（Boss 朱厌，规则 v225）：体力首次≤一半激活（隐贼/延妒/
+-    // 积财/乱常同款 enable 直写）
+-    if let Some(sdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, sdef) && !ctx.core.has_skill(holder, sdef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, sdef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(sdef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    if let Some(xdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, xdef) && !ctx.core.has_skill(holder, xdef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, xdef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(xdef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    // 炎狱门控（Boss 毕方，规则 v229）：体力首次≤一半激活（隐贼/延妒/
+-    // 积财/乱常/虚失同款 enable 直写）
+-    if let Some(ydef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_YANYU)
+-    {
+-        let holder = d.target;
+-        if ctx.core.has_skill_any_state(holder, ydef) && !ctx.core.has_skill(holder, ydef) {
+-            let p = ctx.core.player(holder);
+-            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
+-                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
+-                    inst.enabled = true;
+-                }
+-                ctx.log(LogEvent::SkillToggled {
+-                    player: holder,
+-                    skill: ctx.catalog.skill_name(ydef),
+-                    enabled: true,
+-                });
+-            }
+-        }
+-    }
+-    // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
+-    // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
+-    // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
+-    if let Some(mdef) = ctx
+-        .catalog
+-        .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
+-    {
+-        if let Some(src) = d.source {
+-            if src != d.target
+-                && ctx.core.turn.current == src
+-                && ctx.core.has_skill(src, mdef)
+-                && ctx.core.player(src).alive
+-            {
+-                let turn = &mut ctx.core.turn;
+-                if turn.minwan_targets.is_empty() {
+-                    turn.minwan_targets.push(src);
+-                }
+-                if !turn.minwan_targets.contains(&d.target) {
+-                    turn.minwan_targets.push(d.target);
+-                }
+-            }
+-        }
+-    }
+-
+ }
+ 
+ /// 禳星·光（T11 Boss 诸葛亮族批 115，规则 v303）：持有「禳星」且星未
+@@ -1112,8 +572,14 @@ pub(super) fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
+     }
+ }
+ 
+-fn finish_damage(ctx: &mut Ctx<'_>, root: EventId, mut d: crate::event::DamageData, outcome: crate::event::DamageOutcome) {
++pub(super) fn finish_damage(
++    ctx: &mut Ctx<'_>,
++    root: EventId,
++    mut d: crate::event::DamageData,
++    outcome: crate::event::DamageOutcome,
++) {
+     d.settlement.outcome = outcome;
+-    d.settlement.progress = if outcome == crate::event::DamageOutcome::Zero { crate::event::DamageProgress::ZeroPending } else { crate::event::DamageProgress::Stopped };
++    // The active window/child keeps its progress until the root resumes.
++
+     ctx.res.frame_mut(root).expect("damage root").data = EventData::Damage(d);
+ }
+diff --git a/crates/engine-native-kernel/src/kernel/damage_after.rs b/crates/engine-native-kernel/src/kernel/damage_after.rs
+new file mode 100644
+index 00000000..1d894fd2
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/damage_after.rs
+@@ -0,0 +1,82 @@
++//! Source-qualified damageAfter callbacks, after the entire Dying/Source/End subtrees.
++use super::*;
++pub(super) fn post_damage_after(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
++    // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
++    // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
++    if let Some(dcard) = d.card.filter(|_| d.source.is_some()) {
++        if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
++            if *card == dcard {
++                *caused = true;
++            }
++        }
++    }
++    // 极点（Boss 张角，规则 v263）：你造成伤害后——距离受伤者 1 以内的
++    // 一名其他角色判定：黑则其受到 1 点雷伤（上游 source damageAfter
++    // chooseTarget get.distance(trigger.player,target)<=1 + judge 黑 →
++    // damage("thunder") 同口径；chooseTarget AI→座位序首个确定性近似；
++    // 链挡旗标=极点雷伤不自我递归，登记差异：上游 damageAfter 真递归；
++    // 判定为内联确定性口径，无改判窗）
++    if let Some(jddef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_JIDIAN)
++    {
++        if let Some(src) = d.source {
++            if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
++                // 链挡：极点造成的雷伤不再触发极点
++                if !ctx.core.turn.jidian_chain {
++                    let seats = ctx.core.players.len() as PlayerId;
++                    if let Some(t) = (0..seats).find(|&t| {
++                        t != d.target
++                            && ctx.core.player(t).alive
++                            && ctx.core.computed_distance(ctx.catalog, d.target, t) <= 1
++                    }) {
++                        // 置链挡后 emit：嵌套 Damage 帧的极点臂见旗标清除
++                        // 并跳过（挡恰一层=极点雷伤不链式，登记差异）
++                        ctx.core.turn.jidian_chain = true;
++                        let judged = ctx.draw_judge_card();
++                        let black = matches!(
++                            ctx.catalog.cards[judged as usize].suit,
++                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
++                        );
++                        ctx.to_discard(judged);
++                        if black {
++                            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
++                                Some(src),
++                                t,
++                                1,
++                                crate::event::DamageNature::Thunder,
++                                None,
++                            )));
++                        }
++                    }
++                } else {
++                    // 嵌套极点雷伤到达：清链挡（仅挡一层）
++                    ctx.core.turn.jidian_chain = false;
++                }
++            }
++        }
++    }
++    // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
++    // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
++    // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
++    if let Some(mdef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
++    {
++        if let Some(src) = d.source {
++            if src != d.target
++                && ctx.core.turn.current == src
++                && ctx.core.has_skill(src, mdef)
++                && ctx.core.player(src).alive
++            {
++                let turn = &mut ctx.core.turn;
++                if turn.minwan_targets.is_empty() {
++                    turn.minwan_targets.push(src);
++                }
++                if !turn.minwan_targets.contains(&d.target) {
++                    turn.minwan_targets.push(d.target);
++                }
++            }
++        }
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel/damage_change_hp.rs b/crates/engine-native-kernel/src/kernel/damage_change_hp.rs
+new file mode 100644
+index 00000000..fbe2a522
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/damage_change_hp.rs
+@@ -0,0 +1,172 @@
++//! HP-change gates complete before the ordinary TargetDamage window.
++use super::*;
++pub(super) fn commit_damage_change_hp(ctx: &mut Ctx<'_>, d: &crate::event::DamageData) {
++    if let Some(ydef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_YINZEI)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, ydef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                let was_enabled = ctx.core.has_skill(holder, ydef);
++                if !was_enabled {
++                    if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
++                        inst.enabled = true;
++                    }
++                    ctx.log(LogEvent::SkillToggled {
++                        player: holder,
++                        skill: ctx.catalog.skill_name(ydef),
++                        enabled: true,
++                    });
++                }
++            }
++        }
++    }
++    // 延妒门控（Boss 穷奇，规则 v213）：体力首次≤一半激活（隐贼同款
++    // enable 直写；穷奇持延妒——与隐贼块并列， holder 独立判定）
++    if let Some(dudef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_YANDU)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, dudef) && !ctx.core.has_skill(holder, dudef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, dudef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(dudef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    // 积财门控（Boss 饕餮，规则 v216）：体力首次≤一半激活（隐贼/延妒
++    // 同款 enable 直写）
++    if let Some(jdef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_JICAI)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, jdef) && !ctx.core.has_skill(holder, jdef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, jdef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(jdef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    // 邪酬门控（Boss 相柳，规则 v223）：体力首次≤一半激活（隐贼/延妒/
++    // 积财/乱常同款 enable 直写）
++    if let Some(edef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_ECHOU)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, edef) && !ctx.core.has_skill(holder, edef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, edef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(edef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    // 乱常门控（Boss 梼杌，规则 v218）：体力首次≤一半激活（隐贼/延妒/
++    // 积财同款 enable 直写）
++    if let Some(ldef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_LUANCHANG)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, ldef) && !ctx.core.has_skill(holder, ldef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ldef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(ldef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    // 虚失门控（Boss 朱厌，规则 v225）：体力首次≤一半激活（隐贼/延妒/
++    // 积财/乱常同款 enable 直写）
++    if let Some(sdef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_SIPU)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, sdef) && !ctx.core.has_skill(holder, sdef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, sdef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(sdef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    if let Some(xdef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, xdef) && !ctx.core.has_skill(holder, xdef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, xdef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(xdef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    // 炎狱门控（Boss 毕方，规则 v229）：体力首次≤一半激活（隐贼/延妒/
++    // 积财/乱常/虚失同款 enable 直写）
++    if let Some(ydef) = ctx
++        .catalog
++        .skill_by_name(crate::vocabulary::names::BOSS_YANYU)
++    {
++        let holder = d.target;
++        if ctx.core.has_skill_any_state(holder, ydef) && !ctx.core.has_skill(holder, ydef) {
++            let p = ctx.core.player(holder);
++            if p.hp > 0 && p.hp <= p.max_hp as i32 / 2 {
++                if let Some(inst) = ctx.core.skills.get_mut(&(holder, ydef)) {
++                    inst.enabled = true;
++                }
++                ctx.log(LogEvent::SkillToggled {
++                    player: holder,
++                    skill: ctx.catalog.skill_name(ydef),
++                    enabled: true,
++                });
++            }
++        }
++    }
++    shangshix_draw(ctx, d.target);
++}
+diff --git a/crates/engine-native-kernel/src/kernel/damage_flow.rs b/crates/engine-native-kernel/src/kernel/damage_flow.rs
+index 07a94cb1..2965d22e 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_flow.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_flow.rs
+@@ -1,4 +1,4 @@
+-//! One intrinsic damage continuation; settlement/progress belongs only to its root.
++//! The root owns progression; each ordinary window uses the existing child frame queue.
+ use super::*;
+ use crate::event::{DamageOutcome as O, DamageProgress as P, DamageWindowKind as W};
+ 
+@@ -23,32 +23,61 @@ impl crate::catalog::SkillMachine for DamageFlow {
+         if d.source.is_some_and(|s| !ctx.core.player(s).alive) {
+             d.source = None;
+         }
+-        if d.prevented && d.settlement.outcome == O::Running {
+-            d.settlement.outcome = O::Cancelled;
+-            d.settlement.progress = P::Stopped;
++        if d.settlement.outcome == O::Running {
++            if d.prevented {
++                ctx.log(LogEvent::DamagePrevented { target: d.target });
++                d.settlement.outcome = O::Cancelled;
++                d.settlement.progress = P::CancelledPending;
++            } else if d.amount <= 0 {
++                d.settlement.outcome = O::Zero;
++                d.settlement.progress = P::ZeroPending;
++            }
++        }
++        if d.settlement.outcome == O::Cancelled
++            && !matches!(d.settlement.progress, P::Stopped | P::CancelledPending)
++        {
++            d.settlement.progress = P::CancelledPending;
+         }
+-        if d.amount <= 0 && d.settlement.outcome == O::Running {
+-            d.settlement.outcome = O::Zero;
+-            d.settlement.progress = P::ZeroPending;
++        if d.settlement.outcome == O::ReplacedByLoseHp {
++            d.settlement.progress = P::Stopped;
+         }
+         let mut child = None;
+         match d.settlement.progress.clone() {
+-            P::Before => {
+-                d.settlement.progress = P::Stopped;
++            P::Start => d.settlement.progress = P::Before,
++            P::Before => d.settlement.progress = P::Begin,
++            P::Begin => d.settlement.progress = P::Begin1,
++            P::Begin1 => d.settlement.progress = P::Begin2,
++            P::Begin2 => d.settlement.progress = P::Begin3,
++            P::Begin3 => d.settlement.progress = P::Begin4,
++            P::Begin4 => d.settlement.progress = P::SubmitHp,
++            P::SubmitHp => {
++                ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d.clone());
++                commit_damage(ctx, self.root, d);
++                return Flow::Yield;
+             }
+-            P::ZeroPending => {
++            P::ZeroPending | P::CancelledPending => {
++                let window = if d.settlement.progress == P::ZeroPending {
++                    W::Zero
++                } else {
++                    W::Cancelled
++                };
+                 d.settlement.progress = P::Stopped;
+-                child = Some(EventData::DamageWindow {
+-                    root: self.root,
+-                    window: W::Zero,
+-                });
++                if !d.settlement.notrigger {
++                    child = Some(EventData::DamageWindow {
++                        root: self.root,
++                        window,
++                    });
++                }
+             }
+-            P::Stopped => {
++            P::Stopped | P::Done => {
+                 ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
+                 return Flow::Done;
+             }
+-            P::HpCommitted | P::TargetDamage => {
+-                d.settlement.progress = P::DyingPending;
++            P::HpCommitted { chain_eligible } => {
++                d.settlement.progress = P::TargetDamage { chain_eligible }
++            }
++            P::TargetDamage { chain_eligible } => {
++                d.settlement.progress = P::DyingPending { chain_eligible };
+                 if ctx.core.player(d.target).alive
+                     && ctx.core.player(d.target).hp <= 0
+                     && !ctx.core.player(d.target).dying
+@@ -61,61 +90,22 @@ impl crate::catalog::SkillMachine for DamageFlow {
+                     });
+                 }
+             }
+-            P::DyingPending => {
+-                d.settlement.progress = P::DyingDone;
+-            }
+-            P::DyingDone => {
+-                d.settlement.progress = P::Source;
+-                if !d.settlement.notrigger {
+-                    child = Some(EventData::DamageWindow {
+-                        root: self.root,
+-                        window: W::Source,
+-                    });
+-                }
+-            }
+-            P::Source => {
+-                d.settlement.progress = P::End;
+-                if !d.settlement.notrigger {
+-                    child = Some(EventData::DamageWindow {
+-                        root: self.root,
+-                        window: W::End,
+-                    });
+-                }
+-            }
+-            P::End => {
+-                d.settlement.progress = P::After;
+-                if !d.settlement.notrigger {
+-                    child = Some(EventData::DamageWindow {
+-                        root: self.root,
+-                        window: W::After,
+-                    });
+-                }
++            P::DyingPending { chain_eligible } => {
++                d.settlement.progress = P::DyingDone { chain_eligible }
+             }
+-            P::After => {
+-                let mut remaining = Vec::new();
+-                if d.nature != crate::event::DamageNature::Normal
+-                    && !d.from_chain
+-                    && ctx.core.player(d.target).linked
+-                {
+-                    remaining = ctx
+-                        .core
+-                        .seat_order_from(d.target)
++            P::DyingDone { chain_eligible } => d.settlement.progress = P::Source { chain_eligible },
++            P::Source { chain_eligible } => d.settlement.progress = P::End { chain_eligible },
++            P::End { chain_eligible } => d.settlement.progress = P::After { chain_eligible },
++            P::After { chain_eligible } => {
++                let remaining = if chain_eligible {
++                    ctx.core
++                        .seat_order_from(ctx.core.turn.current)
+                         .into_iter()
+                         .filter(|p| *p != d.target && ctx.core.player(*p).linked)
+-                        .collect();
+-                    for p in ctx
+-                        .core
+-                        .alive_players()
+-                        .filter(|p| ctx.core.player(*p).linked)
+-                        .collect::<Vec<_>>()
+-                    {
+-                        ctx.core.player_mut(p).linked = false;
+-                        ctx.log(LogEvent::Linked {
+-                            player: p,
+-                            linked: false,
+-                        });
+-                    }
+-                }
++                        .collect()
++                } else {
++                    Vec::new()
++                };
+                 d.settlement.progress = P::Chain { remaining };
+             }
+             P::Chain { mut remaining } => {
+@@ -125,15 +115,21 @@ impl crate::catalog::SkillMachine for DamageFlow {
+                 } else {
+                     let target = remaining.remove(0);
+                     d.settlement.progress = P::Chain { remaining };
+-                    let mut chained =
+-                        damage_data_with(d.source, target, d.amount, d.nature, d.card);
+-                    chained.from_chain = true;
+-                    child = Some(EventData::Damage(chained));
++                    if ctx.core.player(target).alive && ctx.core.player(target).linked {
++                        let mut chained =
++                            damage_data_with(d.source, target, d.amount, d.nature, d.card);
++                        chained.from_chain = true;
++                        child = Some(EventData::Damage(chained));
++                    }
+                 }
+             }
+-            P::Done => {
+-                ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
+-                return Flow::Done;
++        }
++        if child.is_none() && !d.settlement.notrigger {
++            if let Some(window) = d.settlement.progress.window() {
++                child = Some(EventData::DamageWindow {
++                    root: self.root,
++                    window,
++                });
+             }
+         }
+         ctx.res.frame_mut(self.root).unwrap().data = EventData::Damage(d);
+diff --git a/crates/engine-native-kernel/src/kernel/damage_windows.rs b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+new file mode 100644
+index 00000000..712fba0c
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+@@ -0,0 +1,355 @@
++//! Source-qualified native damage transitions; ordinary window queues follow each commit.
++use super::*;
++use crate::event::DamageWindowKind as Window;
++pub(super) fn commit_damage_window(ctx: &mut Ctx<'_>, root: EventId, window: Window) {
++    let mut d = ctx.res.frame(root).expect("damage root").damage().clone();
++    if d.prevented
++        || d.amount <= 0
++        || d.settlement.outcome != crate::event::DamageOutcome::Running
++        || d.settlement.notrigger
++    {
++        return;
++    }
++    let mut amount = i64::from(d.amount);
++    match window {
++        Window::Before => {
++            // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
++            // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
++            // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
++            // 加成类不触发；置于急冻前——上游 damageBefore 同层内容序）
++            if let Some(jqdef) = ctx
++                .catalog
++                .skill_by_name(crate::vocabulary::names::JUE_QING)
++            {
++                if let Some(src) = d.source {
++                    if src != d.target
++                        && ctx.core.player(src).alive
++                        && ctx.core.has_skill(src, jqdef)
++                    {
++                        finish_damage(
++                            ctx,
++                            root,
++                            d.clone(),
++                            crate::event::DamageOutcome::ReplacedByLoseHp,
++                        );
++                        ctx.emit(EventData::LoseHp {
++                            player: d.target,
++                            amount: d.amount as u32,
++                        });
++                        return;
++                    }
++                }
++            }
++            // 无心（Boss 张春华，规则 v260）伤害半：锁定——你受到的伤害改为失去
++            // 1 点体力（上游 damageBefore priority 10 cancel+loseHp() 无参=1 同
++            // 口径；置于绝情后=同层 priority 序）
++            if let Some(wxdef) = ctx
++                .catalog
++                .skill_by_name(crate::vocabulary::names::BOSS_WUXIN)
++            {
++                if ctx.core.has_skill(d.target, wxdef) && ctx.core.player(d.target).alive {
++                    finish_damage(
++                        ctx,
++                        root,
++                        d.clone(),
++                        crate::event::DamageOutcome::ReplacedByLoseHp,
++                    );
++                    ctx.emit(EventData::LoseHp {
++                        player: d.target,
++                        amount: 1,
++                    });
++                    return;
++                }
++            }
++            // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
++            // 效（上游 jidong2 damageBefore trigger.cancel() 同口径；铁索传导
++            // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
++            // damageBegin 类增幅同上游一样不再结算。
++            if ctx.core.player(d.target).jidong_active {
++                ctx.log(LogEvent::DamagePrevented { target: d.target });
++                finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
++                return;
++            }
++            // 诚信免伤（U05 xianjian 明绣，规则 v164）：锁定——免伤状态目标受
++            // 所有伤害无效（上游 chengxin2 damageBefore trigger.cancel 同口径）
++            if ctx.core.player(d.target).chengxin_active {
++                ctx.log(LogEvent::DamagePrevented { target: d.target });
++                finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
++                return;
++            }
++        }
++        Window::Begin => {
++            // 赤龙牙（U05 swd 第四批，规则 v88）：锁定——来源装备赤龙牙时
++            // 火属性伤害 +1（上游 damageBegin num++；非铁索传导照常）
++            if d.nature == crate::event::DamageNature::Fire {
++                if let Some(src) = d.source {
++                    if ctx.core.player(src).alive
++                        && ctx
++                            .core
++                            .player(src)
++                            .equips
++                            .iter()
++                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chilongya)
++                    {
++                        amount += 1;
++                    }
++                }
++            }
++            // 星君眼（U05 swd 第九批，规则 v93）：锁定——你的【杀】伤害 +1
++            //（上游 damageBegin num++；card==sha 同口径；铁索传导为独立事件
++            // 照常 +1）
++            if d.card
++                .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
++                .unwrap_or(false)
++            {
++                if let Some(src) = d.source {
++                    if ctx.core.player(src).alive
++                        && ctx
++                            .core
++                            .player(src)
++                            .equips
++                            .iter()
++                            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xingjunyan)
++                    {
++                        amount += 1;
++                    }
++                }
++            }
++            // 链钩（U05 ow 路霸，规则 v128）：本回合被钩者首次受伤害 +1
++            //（上游 liangou2 damageBegin trigger.num++ usable:1 同口径；来源
++            // 不限=上游无 source 条件；仅路霸出牌阶段可钩住，换回合解除）
++            if let Some(t) = ctx.core.turn.liangou_hook {
++                if d.target == t && !ctx.core.turn.liangou_bonus_used {
++                    amount += 1;
++                    ctx.core.turn.liangou_bonus_used = true;
++                }
++            }
++            // 飞刃（U05 ow 源氏，规则 v129）：锁定——你的黑桃杀伤害 +1（非
++            // 铁索传导；上游 damageBegin trigger.num++ notLink 同口径；花色按
++            // 实体牌——火/雷杀为黑桃时同样命中）
++            if d.card
++                .map(|c| {
++                    ctx.catalog.card_kind(c).is_sha_like()
++                        && ctx.catalog.cards[c as usize].suit == crate::catalog::Suit::Spade
++                })
++                .unwrap_or(false)
++                && !d.from_chain
++            {
++                if let Some(src) = d.source {
++                    let has_feiren = ctx
++                        .catalog
++                        .skill_by_name(crate::vocabulary::host::WUDIAN_FEIREN_KEY)
++                        .map(|def| ctx.core.has_skill(src, def))
++                        .unwrap_or(false);
++                    if has_feiren && ctx.core.player(src).alive {
++                        amount += 1;
++                    }
++                }
++            }
++            // 刺猬（U07 玩点论杀韩龙，规则 v111）：锁定——你的杀对满血目标伤
++            // 害 +1；加后 ≥ 目标体力则目标获本回合濒死即死标记（上游
++            // addTempSkill("ciqiu_dying")）且本技能移除（一次性）
++            if d.card
++                .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
++                .unwrap_or(false)
++            {
++                if let Some(src) = d.source {
++                    if ctx.core.player(d.target).alive
++                        && ctx.core.player(d.target).hp == ctx.core.player(d.target).max_hp as i32
++                    {
++                        if let Some(def) = ctx
++                            .catalog
++                            .skill_by_name(crate::vocabulary::host::WUDIAN_CIQIU_KEY)
++                        {
++                            if ctx.core.has_skill(src, def) {
++                                amount += 1;
++                                if amount >= i64::from(ctx.core.player(d.target).hp) {
++                                    ctx.core.turn.ciqiu_dying.push(d.target);
++                                    ctx.core.skills.remove(&(src, def));
++                                }
++                            }
++                        }
++                    }
++                }
++            }
++            // 毒瘟（U07 ow，规则 v122）：锁定——造成伤害时若你手牌数与受伤害
++            // 角色相等，伤害 +1（上游 duwen damageBegin num++ 同口径；铁索传
++            // 导为独立事件照常判定）
++            if let Some(src) = d.source {
++                if ctx.core.player(src).alive
++                    && ctx.core.player(src).hand.len() == ctx.core.player(d.target).hand.len()
++                {
++                    if let Some(def) = ctx
++                        .catalog
++                        .skill_by_name(crate::vocabulary::host::WUDIAN_DUWEN_KEY)
++                    {
++                        if ctx.core.has_skill(src, def) {
++                            amount += 1;
++                        }
++                    }
++                }
++            }
++            // 脉轮（swd 批 137，规则 v316）：3=首次造成/受到伤害 -1、4=+1（各自
++            // 一次性；上游 mailun31/32/41/42 damageBegin 用后移除同口径）
++            {
++                if let Some(src) = d.source {
++                    let mode = ctx.core.player(src).mailun_mode;
++                    if (mode == 3 || mode == 4) && !ctx.core.player(src).mailun_out_used {
++                        amount = if mode == 3 {
++                            amount.saturating_sub(1)
++                        } else {
++                            amount.saturating_add(1)
++                        };
++                        ctx.core.player_mut(src).mailun_out_used = true;
++                    }
++                }
++                let mode = ctx.core.player(d.target).mailun_mode;
++                if (mode == 3 || mode == 4) && !ctx.core.player(d.target).mailun_in_used {
++                    amount = if mode == 3 {
++                        amount.saturating_sub(1)
++                    } else {
++                        amount.saturating_add(1)
++                    };
++                    ctx.core.player_mut(d.target).mailun_in_used = true;
++                }
++            }
++            // 护天护体（swd 批 131，规则 v314）：目标寄存护天牌时伤害以「体力降至
++            // 寄存数」为上限（上游 hutian2 damageBegin priority -55 `trigger.num =
++            // hp - storage.hutian2.length` 同口径）
++            {
++                let hold = ctx.core.player(d.target).hutian_hold.len() as i32;
++                if hold > 0 {
++                    let hp = ctx.core.player(d.target).hp;
++                    let cap = hp - hold;
++                    if i64::from(cap) < amount {
++                        amount = i64::from(cap.max(0));
++                    }
++                }
++            }
++        }
++        Window::Begin1 => {
++            // 火神（Boss 周瑜，规则 v263）：锁定——火属性伤害对你无效，你回复
++            // 1 点体力（上游 damageBegin1 cancel+recover() 无参=1 同口径；置于
++            // 招祸同位=damageBegin 层，取消后增幅不结算）
++            if d.nature == crate::event::DamageNature::Fire {
++                if let Some(hsdef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_HUOSHEN)
++                {
++                    if ctx.core.player(d.target).alive && ctx.core.has_skill(d.target, hsdef) {
++                        ctx.log(LogEvent::DamagePrevented { target: d.target });
++                        finish_damage(ctx, root, d.clone(), crate::event::DamageOutcome::Cancelled);
++                        ctx.recover(d.target, 1, None);
++                        return;
++                    }
++                }
++            }
++
++            // 拟态（Boss 梼杌，规则 v217）：锁定——你于回合外受到的火属性伤害
++            // +1（上游 boss_nitai_out damageBegin1 num++ 同口径）
++            if d.nature == crate::event::DamageNature::Fire {
++                if let Some(ndef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
++                {
++                    if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current != d.target {
++                        amount += 1;
++                    }
++                }
++            }
++            // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
++            // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
++            // 醉酒（Boss 白无常，规则 v255）：你使用的【杀】造成的伤害 +1（上
++            // 游 damageBegin1 sha+shaParent 同口径；火杀/雷杀同属 sha 族）
++            if d.card
++                .map(|c| {
++                    matches!(
++                        ctx.catalog.card_kind(c),
++                        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
++                    )
++                })
++                .unwrap_or(false)
++            {
++                if let Some(zjdef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_ZUIJIU)
++                {
++                    if let Some(src) = d.source {
++                        if ctx.core.has_skill(src, zjdef) {
++                            amount += 1;
++                        }
++                    }
++                }
++            }
++        }
++        Window::Begin4 => {
++            // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
++            // boss_zhaohuo damageBegin4 trigger.cancel 的火伤分支同口径；诚信免
++            // 伤同位）
++            if d.nature == crate::event::DamageNature::Fire {
++                if let Some(zdef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_ZHAOHUO)
++                {
++                    if ctx.core.has_skill(d.target, zdef) {
++                        ctx.log(LogEvent::DamagePrevented { target: d.target });
++                        finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
++                        return;
++                    }
++                }
++            }
++            // 拟态（Boss 梼杌，规则 v217）：锁定——防止你于回合内受到的伤害
++            //（上游 boss_nitai_in damageBegin4 trigger.cancel 同口径：当前回合
++            // =持有者）
++            if let Some(ndef) = ctx
++                .catalog
++                .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
++            {
++                if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current == d.target {
++                    ctx.log(LogEvent::DamagePrevented { target: d.target });
++                    finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
++                    return;
++                }
++            }
++            // 灵渠（Boss 玄武，规则 v237）：受到的大于 1 点伤害视为 0 点（上游
++            // 不佛（Boss 地藏王，规则 v274）：受到大于 1 点的伤害时改为其中 1
++            // 点（上游 boss_bufo damageBegin4 num>1→num-1 同口径；置于灵渠归零
++            // 检查前——灵渠读调整后终值；两技同持为不同武将不共存，序未登记）
++            if amount > 1 {
++                if let Some(bfdef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_BUFO)
++                {
++                    if ctx.core.has_skill(d.target, bfdef) {
++                        amount -= 1;
++                    }
++                }
++            }
++            // boss_lingqu cancel damageBegin4 num>1 → num=0 同口径；置于增幅后
++            // 统计前——终值>1 才归零；随后 Zero/Stopped 不派普通 damageEnd。）
++            if amount > 1 {
++                if let Some(ldef) = ctx
++                    .catalog
++                    .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
++                {
++                    if ctx.core.has_skill(d.target, ldef) {
++                        amount = 0;
++                    }
++                }
++            }
++        }
++        _ => return,
++    }
++    let Ok(amount) = i32::try_from(amount) else {
++        ctx.res.fault = Some(crate::machine::VmFault {
++            skill: "intrinsic_damage".into(),
++            owner: d.target,
++            event: "Damage".into(),
++            kind: "DamageAmountOverflow".into(),
++            detail: "canonical source amount exceeds i32".into(),
++        });
++        return;
++    };
++    d.amount = amount;
++    ctx.res.frame_mut(root).unwrap().data = EventData::Damage(d);
++}
+diff --git a/crates/engine-native-kernel/src/machine.rs b/crates/engine-native-kernel/src/machine.rs
+index 2eb80a6b..74f6d075 100644
+--- a/crates/engine-native-kernel/src/machine.rs
++++ b/crates/engine-native-kernel/src/machine.rs
+@@ -264,10 +264,18 @@ impl<'a> Ctx<'a> {
+             .turn_over_before_mut()
+     }
+ 
++    /// Damage handlers read their checked root payload while their queue retains the child frame.
++    pub fn current_event_frame_id(&self) -> crate::ids::EventId {
++        let id = self.current_frame_id();
++        match &self.res.frame(id).expect("current frame").data {
++            EventData::DamageWindow { root, .. } => *root,
++            _ => id,
++        }
++    }
++
+     /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
+     pub fn current_damage(&self) -> Result<&DamageData, ()> {
+-        let id = self.current_frame_id();
+-        let root=match self.res.frame(id).map(|f|&f.data) {Some(EventData::DamageWindow{root,..})=>*root,_=>id};
++        let root = self.current_event_frame_id();
+         match self.res.frame(root).map(|f| &f.data) {
+             Some(crate::event::EventData::Damage(d)) => Ok(d),
+             _ => Err(()),
+@@ -284,8 +292,7 @@ impl<'a> Ctx<'a> {
+     }
+ 
+     pub fn current_damage_mut(&mut self) -> &mut DamageData {
+-        let id = self.current_frame_id();
+-        let id=match self.res.frame(id).map(|f|&f.data) {Some(EventData::DamageWindow{root,..})=>*root,_=>id};
++        let id = self.current_event_frame_id();
+         self.res
+             .frame_mut(id)
+             .expect("current frame exists")
+@@ -294,12 +301,24 @@ impl<'a> Ctx<'a> {
+ 
+     /// Reject signed source-quantity overflow through the existing atomic command fault path.
+     pub fn fail_damage_amount(&mut self) {
+-        self.res.fault=Some(VmFault{skill:"native_damage_modifier".into(),owner:0,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"canonical source amount exceeds i32".into()});
++        self.res.fault = Some(VmFault {
++            skill: "native_damage_modifier".into(),
++            owner: 0,
++            event: "Damage".into(),
++            kind: "DamageAmountOverflow".into(),
++            detail: "canonical source amount exceeds i32".into(),
++        });
+     }
+-    pub fn modify_damage_amount(&mut self, delta:i32)->bool {
+-        let Ok(d)=self.current_damage() else{return false};
+-        let Some(amount)=d.amount.checked_add(delta) else{self.fail_damage_amount();return false};
+-        self.current_damage_mut().amount=amount;true
++    pub fn modify_damage_amount(&mut self, delta: i32) -> bool {
++        let Ok(d) = self.current_damage() else {
++            return false;
++        };
++        let Some(amount) = d.amount.checked_add(delta) else {
++            self.fail_damage_amount();
++            return false;
++        };
++        self.current_damage_mut().amount = amount;
++        true
+     }
+ 
+     /// Request a durable result for one emitted damage frame; nested damage has a different id.
+@@ -332,36 +351,7 @@ impl<'a> Ctx<'a> {
+     /// 机器挂起深度在启动时已记录，子事件弹栈后自动恢复。
+     /// 伤害帧以「前置触发窗口」为初始阶段，其余帧先提交。
+     pub fn emit(&mut self, data: EventData) {
+-        let id = self.res.next_event_id;
+-        self.res.next_event_id += 1;
+-        let parent = self.res.stack.last().map(|f| f.id);
+-        let kind = data.kind();
+-        let stage = match kind {
+-            // 伤害与翻面带前置窗口（伤害前置 / 翻面前置取消），机器发射的
+-            // 子事件同样必须从 BeforeTriggers 起步——否则取消写回发生在
+-            // Commit 之后（E03 帧生命周期缺陷根因）。
+-            crate::event::EventKind::Damage
+-            | crate::event::EventKind::TurnOverBefore
+-            | crate::event::EventKind::Death
+-            | crate::event::EventKind::PhaseBegin => {
+-                // 死亡前置窗口（规则 v170）：机器发射的 Death 同样从
+-                // BeforeTriggers 起步（遗言/拦截技在 DeathMachine 前）。
+-                // PhaseBegin 前置窗口（PA12 批⑤-2，§2 K）：阶段开始类
+-                // 技能（奋励 skip 系）须在入场行为 begin_* 之前执行。
+-                crate::event::Stage::BeforeTriggers
+-            }
+-            _ => crate::event::Stage::Commit,
+-        };
+-        self.res.stack.push(crate::event::Frame {
+-            id,
+-            parent,
+-            kind,
+-            data,
+-            stage,
+-            queue: Vec::new(),
+-            planned: false,
+-            intrinsic_done: false,
+-        });
++        crate::resolution::push_frame(self.res, data);
+     }
+ 
+     // ---- 选择 ----
+@@ -677,15 +667,27 @@ impl<'a> Ctx<'a> {
+     // ---- 技能实例 ----
+ 
+     /// Preserve native instance overwrite semantics and register a genuinely new subscription.
+-    pub fn insert_skill(&mut self, key: (PlayerId, crate::ids::SkillDefId), instance: crate::state::SkillInstance) -> Option<crate::state::SkillInstance> {
++    pub fn insert_skill(
++        &mut self,
++        key: (PlayerId, crate::ids::SkillDefId),
++        instance: crate::state::SkillInstance,
++    ) -> Option<crate::state::SkillInstance> {
+         let old = self.core.skills.insert(key, instance);
+-        if old.is_none() { crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1); }
++        if old.is_none() {
++            crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
++        }
+         old
+     }
+ 
+     /// Insert only if absent; existing instances retain their limits and lifetime.
+-    pub fn ensure_skill(&mut self, key: (PlayerId, crate::ids::SkillDefId), instance: crate::state::SkillInstance) {
+-        if !self.core.skills.contains_key(&key) { self.insert_skill(key, instance); }
++    pub fn ensure_skill(
++        &mut self,
++        key: (PlayerId, crate::ids::SkillDefId),
++        instance: crate::state::SkillInstance,
++    ) {
++        if !self.core.skills.contains_key(&key) {
++            self.insert_skill(key, instance);
++        }
+     }
+ 
+     pub fn skill_enabled(&self, owner: PlayerId, def: SkillDefId) -> bool {
+@@ -804,7 +806,7 @@ pub fn damage_data_with(
+     card: Option<CardId>,
+ ) -> DamageData {
+     DamageData {
+-                    settlement: Default::default(),
++        settlement: Default::default(),
+         source,
+         target,
+         amount,
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index a02579ad..00d70c89 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -45,9 +45,16 @@ impl Clone for Park {
+ /// The formal ready consumer: effect/admission parks precede their suspended order park.
+ /// This read-only selection conveys neither answer nor execution authority.
+ pub fn ready_park_index(res: &Resolution) -> Option<usize> {
+-    res.parks.iter().position(|park| {
+-        park.resume_depth == res.stack.len() && park.machine.trigger_order().is_none()
+-    }).or_else(|| res.parks.iter().position(|park| park.resume_depth == res.stack.len()))
++    res.parks
++        .iter()
++        .position(|park| {
++            park.resume_depth == res.stack.len() && park.machine.trigger_order().is_none()
++        })
++        .or_else(|| {
++            res.parks
++                .iter()
++                .position(|park| park.resume_depth == res.stack.len())
++        })
+ }
+ 
+ /// 机器归属：帧固有流程，或某帧上的一次触发。
+@@ -114,23 +121,25 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
+     res.next_event_id += 1;
+     let parent = res.stack.last().map(|f| f.id);
+     let kind = data.kind();
+-    let stage = match kind {
+-        EventKind::Damage => Stage::BeforeTriggers,
+-        // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
+-        EventKind::TurnOverBefore => Stage::BeforeTriggers,
+-        // 装备前置窗口（swd 批 143 改造，规则 v318）：BeforeTriggers 派发
+-        // useCardToBegin 类技（改造改写装备栏后再入槽）
+-        EventKind::Equipped => Stage::BeforeTriggers,
+-        // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
+-        // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
+-        EventKind::Death => Stage::BeforeTriggers,
+-        // 阶段开始前置窗口（PA12 批⑤-2，计划 §2 K）：PhaseBegin 触发的
+-        // 技能（VM/宿主）须在阶段入场行为（commit_phase→begin_*：摸牌等）
+-        // **之前**执行——「阶段开始时可跳过/改写本阶段」类技能（奋励
+-        // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
+-        // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
+-        EventKind::PhaseBegin => Stage::BeforeTriggers,
+-        _ => Stage::Commit,
++    let stage = match &data {
++        EventData::Damage(_) => Stage::Intrinsic,
++        _ => match kind {
++            // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
++            EventKind::TurnOverBefore => Stage::BeforeTriggers,
++            // 装备前置窗口（swd 批 143 改造，规则 v318）：BeforeTriggers 派发
++            // useCardToBegin 类技（改造改写装备栏后再入槽）
++            EventKind::Equipped => Stage::BeforeTriggers,
++            // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
++            // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
++            EventKind::Death => Stage::BeforeTriggers,
++            // 阶段开始前置窗口（PA12 批⑤-2，计划 §2 K）：PhaseBegin 触发的
++            // 技能（VM/宿主）须在阶段入场行为（commit_phase→begin_*：摸牌等）
++            // **之前**执行——「阶段开始时可跳过/改写本阶段」类技能（奋励
++            // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
++            // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
++            EventKind::PhaseBegin => Stage::BeforeTriggers,
++            _ => Stage::Commit,
++        },
+     };
+     res.stack.push(Frame {
+         id,
+@@ -167,7 +176,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
+     match (kind, cur) {
+         (EventKind::Damage, Stage::BeforeTriggers) => Stage::Commit,
+         (EventKind::Damage, Stage::Commit) => Stage::AfterTriggers,
+-        (EventKind::Damage, Stage::AfterTriggers) => Stage::Intrinsic,
++        (EventKind::Damage, Stage::AfterTriggers) => Stage::Done,
+         (EventKind::Damage, Stage::Intrinsic) => Stage::Done,
+         // E03 翻面：BeforeTriggers 派发前置取消（漩涡面具写回 cancelled）
+         // → AfterTriggers 静默（无 after 触发）→ Commit 执行翻转。
+@@ -270,7 +279,7 @@ impl SkillMachine for OptionalGate {
+             ctx.core,
+             ctx.catalog,
+             &qt,
+-            crate::event::damage_event(&ctx.res.stack,frame),
++            crate::event::damage_event(&ctx.res.stack, frame),
+             trigger_order::event_kind(frame),
+         ) {
+             return Flow::Done;
+@@ -301,8 +310,13 @@ impl SkillMachine for OptionalGate {
+                 skill: def.name,
+                 owner: self.owner,
+             });
+-            let event=crate::event::damage_event(&ctx.res.stack,ctx.res.stack.last().expect("frame")).clone();
+-            self.inner = Some(def.behavior.start_in_window(&ctx.query(), self.owner, &event, kind));
++            let event =
++                crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
++                    .clone();
++            self.inner = Some(
++                def.behavior
++                    .start_in_window(&ctx.query(), self.owner, &event, kind),
++            );
+         }
+         let flow = self.inner.as_mut().expect("inner started").step(ctx);
+         if matches!(flow, Flow::Done) {
+@@ -358,8 +372,16 @@ fn plan_triggers(
+         }
+     };
+     if let EventData::Damage(d) = &res.frame(frame_id).expect("frame").data {
+-        if !before && (d.settlement.committed_damage.is_none() || d.settlement.outcome != crate::event::DamageOutcome::Running || d.settlement.notrigger || d.amount <= 0) {
+-            let f=res.frame_mut(frame_id).unwrap();f.queue.clear();f.planned=true;return;
++        if !before
++            && (d.settlement.committed_damage.is_none()
++                || d.settlement.outcome != crate::event::DamageOutcome::Running
++                || d.settlement.notrigger
++                || d.amount <= 0)
++        {
++            let f = res.frame_mut(frame_id).unwrap();
++            f.queue.clear();
++            f.planned = true;
++            return;
+         }
+     }
+     let mut entries: Vec<QueuedTrigger> = Vec::new();
+@@ -441,8 +463,10 @@ pub fn run(
+ 
+         // Canonical source liveness is refreshed before every collector/choice/confirmation/start.
+         for frame in &mut res.stack {
+-            if let EventData::Damage(d)=&mut frame.data {
+-                if d.source.is_some_and(|source|!core.player(source).alive) {d.source=None;}
++            if let EventData::Damage(d) = &mut frame.data {
++                if d.source.is_some_and(|source| !core.player(source).alive) {
++                    d.source = None;
++                }
+             }
+         }
+ 
+@@ -593,7 +617,8 @@ fn start_queued_trigger(
+     };
+     let qt = res.frame_mut(frame_id).expect("frame").queue.remove(index);
+     let event = res.frame(frame_id).expect("frame").data.clone();
+-    let actual_event=crate::event::damage_event(&res.stack,res.frame(frame_id).expect("frame")).clone();
++    let actual_event =
++        crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
+     if !trigger_order::eligible(
+         core,
+         catalog,
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index b636ecc7..75e0e574 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -57,9 +57,26 @@ pub(super) fn eligible(
+     event: &EventData,
+     kind: EventKind,
+ ) -> bool {
+-    if let EventData::Damage(d)=event {
+-        let terminal=matches!((kind,d.settlement.outcome),(EventKind::DamageZero,crate::event::DamageOutcome::Zero)|(EventKind::DamageCancelled,crate::event::DamageOutcome::Cancelled));
+-        if !terminal && (d.amount<=0 || d.prevented || d.settlement.notrigger || d.settlement.outcome!=crate::event::DamageOutcome::Running) {return false;}
++    if let EventData::Damage(d) = event {
++        let terminal = matches!(
++            (kind, d.settlement.outcome),
++            (EventKind::DamageZero, crate::event::DamageOutcome::Zero)
++                | (
++                    EventKind::DamageCancelled,
++                    crate::event::DamageOutcome::Cancelled
++                )
++        );
++        if d.settlement.notrigger {
++            return false;
++        }
++        if !terminal
++            && (d.amount <= 0
++                || d.prevented
++                || d.settlement.notrigger
++                || d.settlement.outcome != crate::event::DamageOutcome::Running)
++        {
++            return false;
++        }
+     }
+     if matches!(event, EventData::Death { player, .. } if core.player(*player).death_cancelled) {
+         return false;
+@@ -96,7 +113,14 @@ fn group(
+     seats: usize,
+ ) -> Vec<QueuedTrigger> {
+     let mut available = frame.queue.iter().filter(|q| {
+-        bucket(q, seats) == cursor && eligible(core, catalog, q, crate::event::damage_event(frames,frame), event_kind(frame))
++        bucket(q, seats) == cursor
++            && eligible(
++                core,
++                catalog,
++                q,
++                crate::event::damage_event(frames, frame),
++                event_kind(frame),
++            )
+     });
+     let Some(first) = available.next().cloned() else {
+         return Vec::new();
+@@ -528,7 +552,15 @@ pub fn validate_trigger_bindings(
+                 def: *def,
+                 order: (0, 0, 0, 0, *def),
+             };
+-            if *event != frame.data || !eligible(core, catalog, &q, crate::event::damage_event(&res.stack,frame), event_kind(frame)) {
++            if *event != frame.data
++                || !eligible(
++                    core,
++                    catalog,
++                    &q,
++                    crate::event::damage_event(&res.stack, frame),
++                    event_kind(frame),
++                )
++            {
+                 return Err(bad());
+             }
+         }
+@@ -576,7 +608,14 @@ pub fn validate_trigger_bindings(
+                 return Err(bad());
+             }
+             if *asked {
+-                let qs = group(core, &res.stack, f, catalog, *cursor, *normal_owners as usize);
++                let qs = group(
++                    core,
++                    &res.stack,
++                    f,
++                    catalog,
++                    *cursor,
++                    *normal_owners as usize,
++                );
+                 let Some(open) = &res.open_choice else {
+                     return Err(bad());
+                 };
+@@ -650,7 +689,12 @@ fn validate_vm_window(
+                 .skill_by_name(skill_name)
+                 .ok_or(SnapshotError::UnknownMachine)?;
+             let behavior = &catalog.skills[def as usize].behavior;
+-            if event.kind() != frame.data.kind()
++            let data_kind = if matches!(frame.data, EventData::DamageWindow { .. }) {
++                EventKind::Damage
++            } else {
++                frame.data.kind()
++            };
++            if event.kind() != data_kind
+                 || !behavior.vm_trigger_window_is_authorized(module, event_kind(frame))
+             {
+                 return Err(SnapshotError::UnknownMachine);
+diff --git a/crates/engine-native-kernel/src/rvm_bridge.rs b/crates/engine-native-kernel/src/rvm_bridge.rs
+index 7b0e8747..6e03985b 100644
+--- a/crates/engine-native-kernel/src/rvm_bridge.rs
++++ b/crates/engine-native-kernel/src/rvm_bridge.rs
+@@ -488,8 +488,12 @@ impl SkillBehavior for VmSkillBehavior {
+         };
+         set.triggers.iter().any(|entry| {
+             (entry.meta.event == event.kind()
+-                || (entry.meta.event == EventKind::DamageBefore
+-                    && matches!(event, EventData::Damage(_))))
++                // The saved payload is canonical damage; the owning frame validates the exact window.
++                || (matches!(event, EventData::Damage(_)) && matches!(entry.meta.event,
++                    EventKind::DamageBefore|EventKind::Damage|EventKind::DamageBegin|
++                    EventKind::DamageBegin1|EventKind::DamageBegin2|EventKind::DamageBegin3|
++                    EventKind::DamageBegin4|EventKind::DamageSource|EventKind::DamageEnd|
++                    EventKind::DamageAfter|EventKind::DamageZero|EventKind::DamageCancelled)))
+                 && entry.program.module.to_bytes() == bytes
+         })
+     }
+diff --git a/crates/engine-native-kernel/src/snap.rs b/crates/engine-native-kernel/src/snap.rs
+index 1e63f57f..1818bce0 100644
+--- a/crates/engine-native-kernel/src/snap.rs
++++ b/crates/engine-native-kernel/src/snap.rs
+@@ -12,14 +12,14 @@
+ 
+ use crate::catalog::{CardKind, Catalog, SkillMachine};
+ use crate::choice::{ChoiceKind, ChoiceOption, OpenChoice, Selection};
+-use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
+-use crate::vocabulary::host::HostBehavior;
+-use crate::vocabulary::generals::{general_gender, Gender};
+-use crate::vocabulary::names::{GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
+ use crate::event::{DamageNature, EventData, Frame};
+ use crate::ids::{CardId, PlayerId, SkillDefId};
+ use crate::resolution::{Slot, NO_FRAME};
+ use crate::state::{GameMode, GameStateCore, Outcome, Winner};
++use crate::vocabulary::generals::{general_gender, Gender};
++use crate::vocabulary::host::HostBehavior;
++use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
++use crate::vocabulary::names::{GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
+ 
+ mod types;
+ pub use types::*;
+@@ -32,3 +32,5 @@ use machine_validation::*;
+ mod asks;
+ pub use asks::*;
+ mod restore;
++
++mod damage_validation;
+diff --git a/crates/engine-native-kernel/src/snap/damage_validation.rs b/crates/engine-native-kernel/src/snap/damage_validation.rs
+new file mode 100644
+index 00000000..9d38f29c
+--- /dev/null
++++ b/crates/engine-native-kernel/src/snap/damage_validation.rs
+@@ -0,0 +1,115 @@
++//! Damage receipt, progress, child ancestry and continuation must describe one execution.
++use super::*;
++use crate::event::{
++    DamageData, DamageOutcome as O, DamageProgress as P, DamageWindowKind as W, Frame, Stage,
++};
++
++pub(super) fn check_settlement(d: &DamageData, b: &RestoreBounds) -> Result<(), SnapshotError> {
++    let s = &d.settlement;
++    let receipt = s.committed_damage.is_some();
++    if s.committed_damage == Some(0) || s.hp_loss > s.committed_damage.unwrap_or(0) {
++        return Err(SnapshotError::BadTag("damage_settlement", 0));
++    }
++    let post = matches!(
++        s.progress,
++        P::HpCommitted { .. }
++            | P::TargetDamage { .. }
++            | P::DyingPending { .. }
++            | P::DyingDone { .. }
++            | P::Source { .. }
++            | P::End { .. }
++            | P::After { .. }
++            | P::Chain { .. }
++    );
++    let valid = match s.outcome {
++        O::Running => {
++            if receipt {
++                post
++            } else {
++                s.progress.is_pre_hp()
++            }
++        }
++        O::Completed => receipt && s.progress == P::Done,
++        O::Cancelled => {
++            matches!(s.progress, P::CancelledPending | P::Stopped) || s.progress.window().is_some()
++        }
++        O::ReplacedByLoseHp => !receipt && (s.progress.is_pre_hp() || s.progress == P::Stopped),
++        O::Zero => matches!(s.progress, P::ZeroPending | P::Stopped),
++    };
++    if !valid || (!receipt && post) || (receipt && s.progress.is_pre_hp()) {
++        return Err(SnapshotError::BadTag("damage_outcome_progress", 0));
++    }
++    if s.progress.chain_eligible() == Some(true)
++        && (d.from_chain || d.nature == crate::event::DamageNature::Normal)
++    {
++        return Err(SnapshotError::BadTag("damage_chain_eligibility", 0));
++    }
++    if let P::Chain { remaining } = &s.progress {
++        super::validation::check_pids(remaining, b)?;
++        let unique: std::collections::BTreeSet<_> = remaining.iter().collect();
++        if unique.len() != remaining.len()
++            || remaining.contains(&d.target)
++            || (!remaining.is_empty()
++                && (d.from_chain || d.nature == crate::event::DamageNature::Normal))
++        {
++            return Err(SnapshotError::BadTag("damage_chain_targets", 0));
++        }
++    }
++    Ok(())
++}
++
++pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), SnapshotError> {
++    if let EventData::DamageWindow { root, window } = &f.data {
++        let parent = res
++            .stack
++            .iter()
++            .find(|p| p.id == *root)
++            .ok_or(SnapshotError::BadTag("damage_window_root", *root as u64))?;
++        let EventData::Damage(d) = &parent.data else {
++            return Err(SnapshotError::BadTag("damage_window_root_type", 0));
++        };
++        if f.parent != Some(*root) || *root == f.id || parent.stage != Stage::Intrinsic {
++            return Err(SnapshotError::BadTag("damage_window_ancestry", 0));
++        }
++        let terminal = matches!(
++            (window, d.settlement.outcome, &d.settlement.progress),
++            (W::Zero, O::Zero, P::Stopped) | (W::Cancelled, O::Cancelled, P::Stopped)
++        );
++        if !terminal && d.settlement.progress.window() != Some(*window) {
++            return Err(SnapshotError::BadTag("damage_window_progress", 0));
++        }
++    }
++    if let EventData::Dying { player, .. } = &f.data {
++        if let Some(parent) = f
++            .parent
++            .and_then(|id| res.stack.iter().find(|parent| parent.id == id))
++        {
++            if let EventData::Damage(d) = &parent.data {
++                if *player != d.target || !matches!(d.settlement.progress, P::DyingPending { .. }) {
++                    return Err(SnapshotError::BadTag("damage_dying_binding", 0));
++                }
++            }
++        }
++    }
++    if let EventData::Damage(d) = &f.data {
++        if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
++            return Err(SnapshotError::BadTag("damage_root_stage", 0));
++        }
++        let drivers = res
++            .parks
++            .iter()
++            .filter(|p| matches!(p.machine,MachineSnapshot::DamageFlow{root}if root==f.id))
++            .count();
++        let terminal = matches!(d.settlement.progress, P::Done | P::Stopped);
++        if drivers > 1
++            || (d.settlement.progress != P::Start && !f.intrinsic_done && drivers != 1)
++            || (f.intrinsic_done && !terminal)
++        {
++            return Err(SnapshotError::BadTag("damage_root_continuation", 0));
++        }
++        if f.stage == Stage::Done && (!terminal || !f.intrinsic_done || drivers != 0) {
++            return Err(SnapshotError::BadTag("damage_finished_continuation", 0));
++        }
++    }
++    Ok(())
++}
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index c57285ea..0047733a 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -68,17 +68,9 @@ pub(super) fn check_cards(cs: &[CardId], b: &RestoreBounds) -> Result<(), Snapsh
+ 
+ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+     match data {
+-        EventData::DamageWindow { .. } => {},
++        EventData::DamageWindow { .. } => {}
+         EventData::Damage(d) => {
+-            if d.settlement.committed_damage == Some(0) || d.settlement.hp_loss > d.settlement.committed_damage.unwrap_or(0) { return Err(SnapshotError::BadTag("damage_settlement",0)); }
+-            use crate::event::{DamageOutcome as O,DamageProgress as P};
+-            if d.settlement.committed_damage.is_none() && !matches!(d.settlement.progress,P::Before|P::ZeroPending|P::Stopped) {return Err(SnapshotError::BadTag("damage_uncommitted_progress",0));}
+-            if matches!(d.settlement.outcome,O::Cancelled|O::ReplacedByLoseHp) && !matches!(d.settlement.progress,P::Stopped) {return Err(SnapshotError::BadTag("damage_stopped_progress",0));}
+-            if let P::Chain{remaining}=&d.settlement.progress {
+-                check_pids(remaining,b)?;
+-                let unique:std::collections::BTreeSet<_>=remaining.iter().collect();
+-                if unique.len()!=remaining.len() || remaining.contains(&d.target) {return Err(SnapshotError::BadTag("damage_chain_targets",0));}
+-            }
++            super::damage_validation::check_settlement(d, b)?;
+             check_opt_pid(d.source, b)?;
+             check_pid(d.target, b)?;
+             check_pids(&d.redirect_chain, b)?;
+@@ -381,10 +373,18 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+                 }
+             }
+         }
+-        MachineSnapshot::XunXun { stage: XunXunStageSnap::Arrange, top, .. } => {
++        MachineSnapshot::XunXun {
++            stage: XunXunStageSnap::Arrange,
++            top,
++            ..
++        } => {
+             out.extend(top.iter().copied());
+         }
+-        MachineSnapshot::JiJie { stage: JiJieStageSnap::Read, card, .. } => {
++        MachineSnapshot::JiJie {
++            stage: JiJieStageSnap::Read,
++            card,
++            ..
++        } => {
+             out.extend(card);
+         }
+         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
+@@ -445,6 +445,9 @@ pub fn validate_resolution(
+     b: &RestoreBounds,
+     core: &GameStateCore,
+ ) -> Result<(), SnapshotError> {
++    if resolution.open_choice.is_some() && resolution.parks.is_empty() {
++        return Err(oob("choice_without_machine", 0));
++    }
+     // 栈帧：唯一性、水位、父子链（父必须存在且是更早的帧）
+     let mut ids: std::collections::BTreeMap<u32, usize> = Default::default();
+     for (i, f) in resolution.stack.iter().enumerate() {
+@@ -461,18 +464,14 @@ pub fn validate_resolution(
+             }
+         }
+         check_event_data(&f.data, b)?;
+-        if matches!(f.data,EventData::Damage(_) | EventData::DamageWindow{..}) && f.kind != f.data.kind() {return Err(SnapshotError::BadTag("damage_frame_kind",0));}
+-        if let EventData::DamageWindow { root, window } = &f.data {
+-            let parent=resolution.stack.iter().find(|parent|parent.id==*root).ok_or(SnapshotError::BadTag("damage_window_root",*root as u64))?;
+-            if f.parent != Some(*root) || !matches!(parent.data, EventData::Damage(_)) || *root==f.id { return Err(SnapshotError::BadTag("damage_window_ancestry",*root as u64)); }
+-            let d=parent.damage();
+-            let valid=matches!((window,&d.settlement.progress),(crate::event::DamageWindowKind::Source,crate::event::DamageProgress::Source)|(crate::event::DamageWindowKind::End,crate::event::DamageProgress::End)|(crate::event::DamageWindowKind::After,crate::event::DamageProgress::After)|(crate::event::DamageWindowKind::Zero,crate::event::DamageProgress::Stopped));
+-            if !valid {return Err(SnapshotError::BadTag("damage_window_progress",0));}
+-        }
+-        if let EventData::Damage(d)=&f.data {
+-            if matches!(f.stage,Stage::AfterTriggers|Stage::Intrinsic|Stage::Done) && d.settlement.progress==crate::event::DamageProgress::Before {return Err(SnapshotError::BadTag("damage_missing_submission_progress",0));}
+-            if matches!(f.stage, Stage::BeforeTriggers | Stage::Commit) && d.settlement.progress != crate::event::DamageProgress::Before {return Err(SnapshotError::BadTag("damage_duplicate_commit",0));}
+-        }
++        if matches!(
++            f.data,
++            EventData::Damage(_) | EventData::DamageWindow { .. }
++        ) && f.kind != f.data.kind()
++        {
++            return Err(SnapshotError::BadTag("damage_frame_kind", 0));
++        }
++        super::damage_validation::check_frame(f, resolution)?;
+         for q in &f.queue {
+             check_def(q.def, b)?;
+             check_pid(q.owner, b)?;
+@@ -493,7 +492,16 @@ pub fn validate_resolution(
+         }
+         check_machine(&p.machine, b, core)?;
+         if let MachineSnapshot::DamageFlow { root } = p.machine {
+-            if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root) || !resolution.stack.iter().any(|f|f.id==root && f.stage==Stage::Intrinsic && matches!(f.data,EventData::Damage(_))) {return Err(SnapshotError::BadTag("damage_flow_binding",root as u64));}
++            if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root)
++                || !resolution.stack.iter().enumerate().any(|(i, f)| {
++                    f.id == root
++                        && p.resume_depth == i + 1
++                        && f.stage == Stage::Intrinsic
++                        && matches!(f.data, EventData::Damage(_))
++                })
++            {
++                return Err(SnapshotError::BadTag("damage_flow_binding", root as u64));
++            }
+         }
+     }
+     // 应答选项 ID 界
+diff --git a/crates/engine-native/tests/a0_tag_registry.rs b/crates/engine-native/tests/a0_tag_registry.rs
+index 44cf2a4f..c45fb6ad 100644
+--- a/crates/engine-native/tests/a0_tag_registry.rs
++++ b/crates/engine-native/tests/a0_tag_registry.rs
+@@ -29,7 +29,7 @@ use engine_native::{Engine, SkillDefId};
+ /// `Some(Box::new(Noop))` 验证嵌套编码；OptionalGate 的事件载荷用伤害。
+ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+     let damage = EventData::Damage(DamageData {
+-                    settlement: Default::default(),
++        settlement: Default::default(),
+         source: Some(1),
+         target: 0,
+         amount: 1,
+@@ -39,7 +39,8 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+         card: None,
+         from_chain: false,
+     });
+-    vec![("DamageFlow",MachineSnapshot::DamageFlow{root:1}),
++    vec![
++        ("DamageFlow", MachineSnapshot::DamageFlow { root: 1 }),
+         (
+             "Sha",
+             MachineSnapshot::Sha {
+@@ -718,7 +719,12 @@ fn machine_snapshot_tags_unique_and_roundtrip() {
+     assert_eq!(all_data.len(), samples.len(), "样例数与编码数不一致");
+     assert_eq!(
+         samples.len(),
+-        variant_index(&samples[samples.len() - 1].1) as usize + 1,
++        samples
++            .iter()
++            .map(|(_, machine)| variant_index(machine))
++            .max()
++            .unwrap() as usize
++            + 1,
+         "变体清单不完整"
+     );
+ 
+diff --git a/crates/engine-native/tests/boundary_snapshot/restore.rs b/crates/engine-native/tests/boundary_snapshot/restore.rs
+index ca5d7ec1..d8a30e8b 100644
+--- a/crates/engine-native/tests/boundary_snapshot/restore.rs
++++ b/crates/engine-native/tests/boundary_snapshot/restore.rs
+@@ -327,17 +327,25 @@ fn restore_rejects_choice_id_overrun() {
+ fn restore_rejects_tampered_gate_event_payload() {
+     let e = setup_sancai_pending();
+     let mut snap = e.save();
++    let mut invalid = snap
++        .resolution
++        .stack
++        .iter()
++        .find_map(|f| match &f.data {
++            EventData::Damage(d) => Some(d.clone()),
++            _ => None,
++        })
++        .unwrap();
++    invalid.target = 255;
+     let mut patched = false;
+     for park in &mut snap.resolution.parks {
+         if let MachineSnapshot::OptionalGate { event, .. } = &mut park.machine {
+-            // 散财确认闸门挂在伤害帧上：载荷为 Damage
+-            if let EventData::Damage(d) = event {
+-                d.target = 255;
+-                patched = true;
+-            }
++            // 新闸门携带 window/root 引用；伪造带越界ID的旧payload仍先过信任边界校验。
++            *event = EventData::Damage(invalid.clone());
++            patched = true;
+         }
+     }
+-    assert!(patched, "挂起的闸门机器应携带 Damage 事件载荷");
++    assert!(patched, "实际 OptionalGate 应已被篡改");
+     assert!(matches!(
+         Engine::restore(&snap),
+         Err(SnapshotError::IdOutOfBounds { what: "player", .. })
+diff --git a/crates/engine-native/tests/c331_canonical_damage.rs b/crates/engine-native/tests/c331_canonical_damage.rs
+index 4675812c..25602880 100644
+--- a/crates/engine-native/tests/c331_canonical_damage.rs
++++ b/crates/engine-native/tests/c331_canonical_damage.rs
+@@ -353,3 +353,42 @@ fn c9_lose_hp_replacement_has_no_damage_receipt_or_target_trigger() {
+         .iter()
+         .any(|x| matches!(x, engine_native::machine::LogEvent::DamageDealt { .. })));
+ }
++#[test]
++fn c9b_before_is_an_actual_child_with_root_continuation_before_hp() {
++    let raw=content_compiler::compile_source_named("c9b-before","skill c9b_before(99109101) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } }").unwrap();
++    let p = ExtensionPack {
++        def: ExtensionDef {
++            name: "c9b-before",
++            version: 1,
++            description: "preHP root binding",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&raw)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    };
++    let mut e = Engine::new_with_extensions(12001, 3, &[&p]).unwrap();
++    e.debug_grant(1, "c9b_before");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    let s = e.save();
++    assert_eq!(e.debug_hp(1), 4);
++    assert!(
++        s.resolution.stack.iter().any(|f| matches!(
++            f.data,
++            engine_native::event::EventData::DamageWindow { .. }
++        ) && f.kind
++            == engine_native::event::EventKind::DamageBefore),
++        "Before must be a real ordinary child window"
++    );
++    assert!(
++        s.resolution.parks.iter().any(|p| matches!(
++            p.machine,
++            engine_native::snap::MachineSnapshot::DamageFlow { .. }
++        )),
++        "root Flow already owns preHP progression"
++    );
++}
+diff --git a/crates/engine-native/tests/c331_prehp_damage.rs b/crates/engine-native/tests/c331_prehp_damage.rs
+new file mode 100644
+index 00000000..191cb1d2
+--- /dev/null
++++ b/crates/engine-native/tests/c331_prehp_damage.rs
+@@ -0,0 +1,454 @@
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++use engine_native::event::{DamageNature, DamageOutcome, DamageProgress, EventData, EventKind};
++use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
++
++fn package(source: &str, bindings: &[(&str, EventKind)]) -> ExtensionPack {
++    let raw = content_compiler::compile_source_named("c9b", source).unwrap();
++    let mut decls = content_native_loader::bridge_vm_skill_decls(&raw)
++        .unwrap()
++        .decls;
++    for (name, kind) in bindings {
++        decls
++            .iter_mut()
++            .find(|d| d.name == *name)
++            .unwrap()
++            .trigger
++            .event = *kind;
++    }
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9b",
++            version: 1,
++            description: "actual declared damage windows",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++fn answer(e: &mut Engine, selection: Vec<ChoiceOption>) {
++    let c = e.open_choice().unwrap().clone();
++    let out = e.submit(GameCommand {
++        actor: c.observer,
++        expected_revision: e.revision(),
++        dedup_id: e.revision() + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection,
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++fn restore(e: &Engine, p: &ExtensionPack) -> Engine {
++    let s = e.save();
++    let bytes = engine_native::archive::encode_archive(&s);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(decoded, s);
++    let r = Engine::restore_with_extensions(&decoded, &[p]).unwrap();
++    let mut normalized = r.save();
++    normalized.auth_generation = s.auth_generation;
++    assert_eq!(normalized, s);
++    assert_eq!(e.state_hash(), r.state_hash());
++    assert!(
++        r.log().is_empty(),
++        "restore starts a fresh runtime log; compare continuation suffixes"
++    );
++    r
++}
++fn same(a: &Engine, b: &Engine) {
++    let mut sa = a.save();
++    let mut sb = b.save();
++    sa.auth_generation = 0;
++    sb.auth_generation = 0;
++    assert_eq!(sa, sb);
++    assert_eq!(a.state_hash(), b.state_hash());
++    assert!(
++        a.log().ends_with(b.log()),
++        "restored continuation events must match the original suffix"
++    );
++}
++#[test]
++fn c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root() {
++    let p=package("skill c9b_a(99109111) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_b(99109112) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_c(99109113) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_d(99109114) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_e(99109115) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_f(99109116) { trigger damage_before owner_is_target optional { effect modify_current_damage(self,1); } } skill c9b_t(99109117) { trigger damage owner_is_target optional { effect draw_cards(self,event_amount); } }",&[("c9b_b",EventKind::DamageBegin),("c9b_c",EventKind::DamageBegin1),("c9b_d",EventKind::DamageBegin2),("c9b_e",EventKind::DamageBegin3),("c9b_f",EventKind::DamageBegin4)]);
++    let mut e = Engine::new_with_extensions(12011, 3, &[&p]).unwrap();
++    e.debug_set_max_hp(1, 20);
++    e.debug_set_hp(1, 20);
++    for name in [
++        "c9b_a", "c9b_b", "c9b_c", "c9b_d", "c9b_e", "c9b_f", "c9b_t",
++    ] {
++        e.debug_grant(1, name);
++    }
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    for (i, kind) in [
++        EventKind::DamageBefore,
++        EventKind::DamageBegin,
++        EventKind::DamageBegin1,
++        EventKind::DamageBegin2,
++        EventKind::DamageBegin3,
++        EventKind::DamageBegin4,
++        EventKind::Damage,
++    ]
++    .into_iter()
++    .enumerate()
++    {
++        let s = e.save();
++        let root = s
++            .resolution
++            .stack
++            .iter()
++            .find(|f| matches!(f.data, EventData::Damage(_)))
++            .unwrap();
++        let d = root.damage();
++        assert_eq!(d.amount, 1 + i as i32);
++        assert_eq!(
++            d.settlement.committed_damage,
++            if i == 6 { Some(7) } else { None }
++        );
++        assert_eq!(e.debug_hp(1), if i == 6 { 13 } else { 20 });
++        let window = s
++            .resolution
++            .stack
++            .iter()
++            .find(|f| matches!(f.data, EventData::DamageWindow { .. }))
++            .unwrap();
++        assert_eq!(window.parent, Some(root.id));
++        assert_eq!(window.kind, kind);
++        let mut r = restore(&e, &p);
++        let before = e.save();
++        let mut forged = before.clone();
++        let root = forged
++            .resolution
++            .stack
++            .iter_mut()
++            .find(|f| matches!(f.data, EventData::Damage(_)))
++            .unwrap();
++        root.damage_mut().settlement.outcome = DamageOutcome::Completed;
++        assert!(Engine::restore_with_extensions(&forged, &[&p]).is_err());
++        assert_eq!(e.save(), before);
++        answer(&mut e, vec![ChoiceOption::Confirm]);
++        answer(&mut r, vec![ChoiceOption::Confirm]);
++        same(&e, &r);
++    }
++    assert!(e.open_choice().is_none());
++    assert_eq!(e.debug_hp(1), 13);
++    assert_eq!(
++        e.log()
++            .iter()
++            .filter(|x| matches!(
++                x,
++                engine_native::machine::LogEvent::DamageDealt { amount: 7, .. }
++            ))
++            .count(),
++        1
++    );
++}
++#[test]
++fn c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt() {
++    let p=package("skill c9b_stop(99109121) { trigger damage_before owner_is_target { effect modify_current_damage(self,-2); } } skill c9b_zero(99109122) { trigger damage owner_is_target optional { effect draw_cards(self,1); } } skill c9b_end(99109123) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[("c9b_stop",EventKind::Damage),("c9b_zero",EventKind::DamageZero),("c9b_end",EventKind::DamageEnd)]);
++    let mut e = Engine::new_with_extensions(12021, 3, &[&p]).unwrap();
++    for name in ["c9b_stop", "c9b_zero", "c9b_end"] {
++        e.debug_grant(1, name);
++    }
++    let h = e.debug_hand(1).len();
++    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
++    assert_eq!(e.debug_hp(1), 2);
++    let s = e.save();
++    let d = s
++        .resolution
++        .stack
++        .iter()
++        .find(|f| matches!(f.data, EventData::Damage(_)))
++        .unwrap()
++        .damage();
++    assert_eq!(d.amount, 0);
++    assert_eq!(d.settlement.committed_damage, Some(2));
++    assert_eq!(d.settlement.hp_loss, 2);
++    assert_eq!(d.settlement.outcome, DamageOutcome::Zero);
++    assert_eq!(d.settlement.progress, DamageProgress::Stopped);
++    let mut r = restore(&e, &p);
++    answer(&mut e, vec![ChoiceOption::Confirm]);
++    answer(&mut r, vec![ChoiceOption::Confirm]);
++    same(&e, &r);
++    assert_eq!(e.debug_hand(1).len(), h + 1);
++}
++#[test]
++fn c9b_source_death_is_cleared_before_end_and_restore() {
++    let p=package("skill c9b_kill(99109131) { trigger damage owner_is_source { effect lose_hp(self,1); } } skill c9b_end(99109132) { trigger damage owner_is_target optional { effect draw_cards(self,event_amount); } }",&[("c9b_kill",EventKind::DamageSource),("c9b_end",EventKind::DamageEnd)]);
++    let mut e = Engine::new_with_extensions(12031, 3, &[&p]).unwrap();
++    e.debug_grant(0, "c9b_kill");
++    e.debug_grant(1, "c9b_end");
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    e.debug_set_hp(0, 1);
++    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
++    assert!(!e.debug_alive(0));
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
++    let s = e.save();
++    let d = s
++        .resolution
++        .stack
++        .iter()
++        .find(|f| matches!(f.data, EventData::Damage(_)))
++        .unwrap()
++        .damage();
++    assert_eq!(d.source, None);
++    assert_eq!(d.amount, 2);
++    let mut r = restore(&e, &p);
++    answer(&mut e, vec![ChoiceOption::Confirm]);
++    answer(&mut r, vec![ChoiceOption::Confirm]);
++    same(&e, &r);
++    assert_eq!(e.debug_hand(1).len(), 2);
++}
++#[test]
++fn c9b_notrigger_suppresses_windows_without_suppressing_submission() {
++    let p=package("skill c9b_watch(99109141) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[]);
++    let mut e = Engine::new_with_extensions(12041, 3, &[&p]).unwrap();
++    e.debug_grant(1, "c9b_watch");
++    let mut core = e.save().core;
++    let mut res = engine_native::resolution::Resolution::new(10000);
++    let mut logs = Vec::new();
++    let mut d = engine_native::machine::damage_data(Some(0), 1, 2);
++    d.settlement.notrigger = true;
++    let id = engine_native::resolution::push_frame(&mut res, EventData::Damage(d));
++    let hand = core.player(1).hand.len();
++    let mut submitted = false;
++    for _ in 0..200 {
++        let out =
++            engine_native::resolution::run(&mut core, &mut res, e.catalog(), &mut logs, Some(1));
++        if let Some(root) = res.frame(id) {
++            let d = root.damage();
++            if d.settlement.committed_damage == Some(2) {
++                submitted = true;
++                assert_eq!(d.amount, 2);
++                assert_eq!(d.settlement.hp_loss, 2);
++            }
++        }
++        assert!(!matches!(
++            out,
++            engine_native::resolution::StepOutcome::Fault
++                | engine_native::resolution::StepOutcome::Pending
++        ));
++        if out == engine_native::resolution::StepOutcome::Done {
++            break;
++        }
++    }
++    assert!(submitted);
++    assert!(res.stack.is_empty());
++    assert_eq!(core.player(1).hp, 2);
++    assert_eq!(core.player(1).hand.len(), hand);
++}
++
++#[test]
++fn c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress() {
++    let mut p=package("skill c9b_multi(99109151) { trigger damage_before owner_is_target { effect draw_cards(self,1); } trigger damage_before owner_is_target { effect draw_cards(self,1); } }",&[]);
++    for decl in &mut p.vm_skills {
++        decl.trigger.event = EventKind::DamageBegin2;
++        if let engine_native::rvm_bridge::VmFilterPolicy::Handlers(set) = &mut decl.filter {
++            for handler in &mut std::sync::Arc::make_mut(set).triggers {
++                handler.meta.event = EventKind::DamageBegin2;
++            }
++        }
++    }
++    let mut e = Engine::new_with_extensions(12051, 3, &[&p]).unwrap();
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    e.debug_grant(1, "c9b_multi");
++    e.debug_clear_hand(1);
++    let card = e.debug_place(0, "sha");
++    e.set_time_slice(Some(1));
++    e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.revision() + 1,
++        action: GameAction::PlayCard {
++            card,
++            targets: vec![1],
++        },
++    });
++    let mut branch = None;
++    let mut saw_submission = false;
++    let mut checked_matrix = false;
++    let mut saw_following = false;
++    for _ in 0..300 {
++        let s = e.save();
++        if s.resolution
++            .stack
++            .iter()
++            .any(|f| matches!(f.data, EventData::DamageWindow { .. }))
++            && s.resolution.open_choice.is_none()
++        {
++            let mut invalid = s.clone();
++            if let Some(driver) = invalid.resolution.parks.iter_mut().find(|park| {
++                matches!(
++                    park.machine,
++                    engine_native::snap::MachineSnapshot::DamageFlow { .. }
++                )
++            }) {
++                driver.resume_depth += 1;
++                assert!(Engine::restore_with_extensions(&invalid, &[&p]).is_err());
++                assert_eq!(e.save(), s);
++            }
++        }
++
++        if s.resolution.parks.iter().any(|park|matches!(&park.machine,engine_native::snap::MachineSnapshot::Rvm{following,..}if !following.is_empty())) {let _=restore(&e,&p);saw_following=true;}
++
++        if let Some(root) = s
++            .resolution
++            .stack
++            .iter()
++            .find(|f| matches!(f.data, EventData::Damage(_)))
++        {
++            let d = root.damage();
++            if d.settlement.progress == DamageProgress::SubmitHp {
++                saw_submission = true;
++                assert_eq!(d.settlement.committed_damage, None);
++                assert_eq!(e.debug_hp(1), 4);
++                let mut r = restore(&e, &p);
++                r.set_time_slice(None);
++                assert!(!matches!(r.resume(), CommandOutcome::Rejected(_)));
++                branch = Some(r);
++            }
++            if matches!(d.settlement.progress, DamageProgress::HpCommitted { .. }) {
++                assert_eq!(d.amount, 1);
++                assert_eq!(d.settlement.committed_damage, Some(1));
++                assert_eq!(d.settlement.hp_loss, 1);
++                let mut invalid = s.clone();
++                let d = invalid
++                    .resolution
++                    .stack
++                    .iter_mut()
++                    .find(|f| matches!(f.data, EventData::Damage(_)))
++                    .unwrap()
++                    .damage_mut();
++                d.settlement.outcome = DamageOutcome::Completed;
++                assert!(Engine::restore_with_extensions(&invalid, &[&p]).is_err());
++                assert_eq!(e.save(), s);
++                checked_matrix = true;
++            }
++        }
++        if s.resolution.stack.is_empty() && !s.segment_open {
++            break;
++        }
++        assert!(!matches!(e.resume(), CommandOutcome::Rejected(_)));
++    }
++    assert!(
++        saw_submission && checked_matrix && saw_following,
++        "submission={saw_submission} matrix={checked_matrix} following={saw_following}"
++    );
++    let r = branch.unwrap();
++    same(&e, &r);
++    assert_eq!(e.debug_hp(1), 3);
++    assert_eq!(e.state_core().player(1).hujia, 0);
++    assert_eq!(
++        e.log()
++            .iter()
++            .filter(|x| matches!(x, engine_native::machine::LogEvent::DamageDealt { .. }))
++            .count(),
++        1
++    );
++}
++#[test]
++fn c9b_dead_parent_keeps_chain_eligibility_and_siblings_unlink_on_their_own_submission() {
++    let p=package("skill c9b_chain_pause(99109161) { trigger damage_before owner_is_target optional { effect draw_cards(self,1); } }",&[]);
++    let mut e = Engine::new_with_extensions(12061, 4, &[&p]).unwrap();
++    e.debug_grant(2, "c9b_chain_pause");
++    for player in 0..4 {
++        e.debug_clear_hand(player);
++    }
++    e.debug_set_hp(1, 1);
++    for player in [1, 2, 3] {
++        e.state_core_mut().player_mut(player).linked = true;
++    }
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
++    assert!(!e.debug_alive(1));
++    assert!(!e.state_core().player(1).linked);
++    assert!(e.state_core().player(2).linked);
++    assert!(e.state_core().player(3).linked);
++    assert_eq!(e.debug_hp(2), 4);
++    assert_eq!(e.debug_hp(3), 4);
++    let mut r = restore(&e, &p);
++    answer(&mut e, vec![]);
++    answer(&mut r, vec![]);
++    same(&e, &r);
++    assert_eq!(e.debug_hp(2), 3);
++    assert_eq!(e.debug_hp(3), 3);
++    assert!(!e.state_core().player(2).linked);
++    assert!(!e.state_core().player(3).linked);
++}
++#[test]
++fn c9b_post_submit_cancel_has_a_real_cancelled_child_without_zero_or_end() {
++    let p=package("skill c9b_cancel(99109171) { trigger damage_before owner_is_target { effect prevent_current_damage(); } } skill c9b_cancelled(99109172) { trigger damage owner_is_target optional { effect draw_cards(self,1); } } skill c9b_end(99109173) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[("c9b_cancel",EventKind::Damage),("c9b_cancelled",EventKind::DamageCancelled),("c9b_end",EventKind::DamageEnd)]);
++    let mut e = Engine::new_with_extensions(12071, 3, &[&p]).unwrap();
++    for name in ["c9b_cancel", "c9b_cancelled", "c9b_end"] {
++        e.debug_grant(1, name);
++    }
++    let h = e.debug_hand(1).len();
++    e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
++    let s = e.save();
++    let root = s
++        .resolution
++        .stack
++        .iter()
++        .find(|f| matches!(f.data, EventData::Damage(_)))
++        .unwrap();
++    assert_eq!(root.damage().settlement.committed_damage, Some(2));
++    assert_eq!(root.damage().settlement.outcome, DamageOutcome::Cancelled);
++    assert!(s
++        .resolution
++        .stack
++        .iter()
++        .any(|f| matches!(f.data, EventData::DamageWindow { .. })
++            && f.kind == EventKind::DamageCancelled));
++    let mut r = restore(&e, &p);
++    answer(&mut e, vec![ChoiceOption::Confirm]);
++    answer(&mut r, vec![ChoiceOption::Confirm]);
++    same(&e, &r);
++    assert_eq!(e.debug_hp(1), 2);
++    assert_eq!(e.debug_hand(1).len(), h + 1);
++}
++#[test]
++fn c9b_replacement_waits_for_real_lose_hp_and_dying_children_across_restore() {
++    let p=package("skill c9b_unused(99109181) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[]);
++    let mut e = Engine::new_with_extensions(12081, 3, &[&p]).unwrap();
++    e.debug_grant(0, "绝情");
++    e.debug_grant(1, "c9b_unused");
++    e.debug_set_hp(1, 1);
++    for player in 0..3 {
++        e.debug_clear_hand(player);
++    }
++    e.debug_move_named_card_to_hand(0, "tao");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "dying_save");
++    let s = e.save();
++    let root = s
++        .resolution
++        .stack
++        .iter()
++        .find(|f| matches!(f.data, EventData::Damage(_)))
++        .unwrap();
++    assert_eq!(
++        root.damage().settlement.outcome,
++        DamageOutcome::ReplacedByLoseHp
++    );
++    assert_eq!(root.damage().settlement.committed_damage, None);
++    assert!(s
++        .resolution
++        .stack
++        .iter()
++        .any(|f| matches!(f.data, EventData::LoseHp { .. })));
++    let mut r = restore(&e, &p);
++    for game in [&mut e, &mut r] {
++        while game.open_choice().is_some() {
++            answer(game, vec![ChoiceOption::Pass]);
++        }
++    }
++    same(&e, &r);
++    assert!(!e.debug_alive(1));
++    assert!(!e
++        .log()
++        .iter()
++        .any(|x| matches!(x, engine_native::machine::LogEvent::DamageDealt { .. })));
++}
+diff --git a/crates/engine-native/tests/g1_shahai_swd/xielv.rs b/crates/engine-native/tests/g1_shahai_swd/xielv.rs
+index 115286d5..53910cb3 100644
+--- a/crates/engine-native/tests/g1_shahai_swd/xielv.rs
++++ b/crates/engine-native/tests/g1_shahai_swd/xielv.rs
+@@ -174,6 +174,8 @@ fn swd_generals_b25_xielv_zhuyu() {
+     assert_eq!(e.debug_hp(1), 6, "朱羽：横置目标伤害 +1（8-2）");
+     assert_eq!(hand_len_w(&e, 0), 0, "朱羽：红牌已弃");
+ 
++    // 反例 ②b 是独立的 linked-only 条件；前例 fire/changeHp 已解除横置。
++    e.state_core_mut().player_mut(1).linked = true;
+     // 反例 ②b：取消 → 1 伤
+     {
+         let mut snap = e.save();
+diff --git a/crates/engine-native/tests/g1_wudian/yuanshi.rs b/crates/engine-native/tests/g1_wudian/yuanshi.rs
+index d46513f4..f56c26bc 100644
+--- a/crates/engine-native/tests/g1_wudian/yuanshi.rs
++++ b/crates/engine-native/tests/g1_wudian/yuanshi.rs
+@@ -248,5 +248,9 @@ fn yuanshi_feiren_chain_damage_not_bonused() {
+         );
+     }
+     assert_eq!(e.debug_hp(1), 2, "主伤害 +1（4→2）");
+-    assert_eq!(e.debug_hp(2), 3, "传导伤害不加成（4→3）");
++    assert_eq!(
++        e.debug_hp(2),
++        2,
++        "传导携带主事件 num2；notLink 防止再次施加飞刃，不能降回基础 num1"
++    );
+ }
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index 49b222e5..8a0af651 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -111,3 +111,5 @@ mod c331_schema5_datachain;
+ 
+ #[path = "../c331_canonical_damage.rs"]
+ mod c331_canonical_damage;
++#[path = "../c331_prehp_damage.rs"]
++mod c331_prehp_damage;
+diff --git a/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs b/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs
+index 80393cd6..e0258e60 100644
+--- a/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs
++++ b/crates/engine-native/tests/native_kernel/boss_chujiangwang.rs
+@@ -149,23 +149,32 @@ fn boss_chujiangwang_bingfeng_death_flip_source() {
+     advance_to_play(&mut e, 0);
+     let out = e.debug_deal_damage(Some(0), 1, 10, DamageNature::Normal);
+     let _ = out;
+-    for _ in 0..3 {
++    for _ in 0..8 {
+         match e.open_choice() {
+-            Some(c) if c.spec.prompt == "dying_save" => {
++            Some(c) if matches!(c.spec.prompt, "dying_save" | "trigger_confirm") => {
+                 let (cid, obs) = (c.id, c.observer);
++                let selection = if c.spec.prompt == "trigger_confirm" {
++                    vec![]
++                } else {
++                    vec![ChoiceOption::Pass]
++                };
+                 submit_cmd(
+                     &mut e,
+                     obs,
+                     GameAction::Answer {
+                         choice_id: cid,
+-                        selection: vec![ChoiceOption::Pass],
++                        selection,
+                     },
+                 );
+             }
+             _ => break,
+         }
+     }
+-    assert!(!e.state_core().player(1).alive, "楚江王已死亡");
++    assert!(
++        !e.state_core().player(1).alive,
++        "楚江王已死亡; pending={:?}",
++        e.open_choice()
++    );
+     assert!(e.debug_face_down(0), "冰封：来源 0 号被翻面");
+     let snap = e.save();
+     let r = engine_native::Engine::restore(&snap).expect("往返");
+diff --git a/crates/engine-native/tests/native_kernel/boss_xuanwu.rs b/crates/engine-native/tests/native_kernel/boss_xuanwu.rs
+index e57a0295..9fcd36c3 100644
+--- a/crates/engine-native/tests/native_kernel/boss_xuanwu.rs
++++ b/crates/engine-native/tests/native_kernel/boss_xuanwu.rs
+@@ -1,7 +1,7 @@
+ use super::*;
+ 
+ /// 四象系玄武首片（规则 v237/存档 v54）：灵渠——①受伤>1 点归零（终值
+-/// 口径：1+凶兽=2 亦归零）；②每次受伤摸 1+受击计数（0 点伤害照常）；
++/// 口径：1+凶兽=2 亦归零）；②每次受伤摸 1+受击计数（零量不派普通 damageEnd）；
+ /// ③手牌上限+计数。玄武条目（群目录近似/hp4/[神裔,灵渠]；boss_xuanlin2
+ /// 玄麟=关卡流程面登记不落内核）。
+ #[test]
+@@ -22,37 +22,45 @@ fn boss_xuanwu_lingqu_damage_counter() {
+     assert!(e.state_core().skills.contains_key(&(1, ldef)));
+     assert!(e.state_core().skills.contains_key(&(1, sdef)), "神裔共用");
+ 
+-    // ① 大于 1 点伤害归零：3 点直伤 → hp 不变；摸 1+计数 1（0 点照常）
++    // ① 大于 1 点伤害归零：3 点直伤 → hp 不变；Zero/Stopped，不摸牌或增加普通 damageEnd 计数
+     e.debug_clear_hand(1);
+     let h1 = e.debug_hand(1).len();
+     e.debug_deal_damage(Some(0), 1, 3, DamageNature::Normal);
+     drain_choices(&mut e);
+     assert_eq!(e.debug_hp(1), 4, "灵渠：3 点伤害归零");
+-    assert_eq!(e.state_core().player(1).lingqu_count, 1, "0 点伤害仍计数");
+-    assert_eq!(e.debug_hand(1).len(), h1 + 1, "0 点伤害仍摸 1");
++    assert_eq!(
++        e.state_core().player(1).lingqu_count,
++        0,
++        "Zero 终止普通 damageEnd，不计数"
++    );
++    assert_eq!(e.debug_hand(1).len(), h1, "Zero 不派普通 damageEnd 摸牌");
+ 
+-    // ② 1 点伤害照常：hp-1、再摸 1、计数 2
++    // ② 1 点伤害照常：hp-1、摸 1、计数 1
+     e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+     drain_choices(&mut e);
+     assert_eq!(e.debug_hp(1), 3, "1 点伤害照常结算");
+-    assert_eq!(e.state_core().player(1).lingqu_count, 2);
+-    assert_eq!(e.debug_hand(1).len(), h1 + 2);
++    assert_eq!(e.state_core().player(1).lingqu_count, 1);
++    assert_eq!(e.debug_hand(1).len(), h1 + 1);
+ 
+     // ③ 增幅终值口径：1 点基础+赤龙牙类增幅终值>1 → 归零（借火杀+焚天
+     //    不可得，直接 2 点直伤验证终值门槛）
+     e.debug_deal_damage(Some(0), 1, 2, DamageNature::Normal);
+     drain_choices(&mut e);
+     assert_eq!(e.debug_hp(1), 3, "2 点伤害归零");
+-    assert_eq!(e.state_core().player(1).lingqu_count, 3);
++    assert_eq!(e.state_core().player(1).lingqu_count, 1);
+ 
+-    // ④ 手牌上限+计数：hp3 基数 3 + 计数 3 = 6
++    // ④ 手牌上限+计数：hp3 基数3 + 一次正数damageEnd计数1 = 4
+     let lim = e.state_core().hand_limit(e.catalog(), 1);
+-    assert_eq!(lim, 6, "手牌上限 = hp 3 + 灵渠计数 3");
++    assert_eq!(lim, 4, "手牌上限 = hp3 + 一次正数 damageEnd");
+ 
+     // ⑤ 存档 v54 往返：计数跨存档
+     let snap = e.save();
+     let r = Engine::restore(&snap).expect("往返");
+-    assert_eq!(r.state_core().player(1).lingqu_count, 3, "灵渠计数入存档");
++    assert_eq!(
++        r.state_core().player(1).lingqu_count,
++        1,
++        "仅正数 damageEnd 的灵渠计数入存档"
++    );
+     assert!(
+         r.state_core().skills.contains_key(&(1, ldef)),
+         "灵渠实例往返"
+diff --git a/crates/engine-native/tests/native_kernel/combat.rs b/crates/engine-native/tests/native_kernel/combat.rs
+index ac43f659..7987f45e 100644
+--- a/crates/engine-native/tests/native_kernel/combat.rs
++++ b/crates/engine-native/tests/native_kernel/combat.rs
+@@ -187,13 +187,29 @@ fn propagated_damage_is_full_resolution() {
+             _ => break,
+         }
+     }
++    // changeHp 以最终承受者为准；3 必须真的横置才有传播资格。
++    e.state_core_mut().player_mut(3).linked = true;
+     // 火杀先在 1 处结算 → 移伤确认 → 转移给 3
+     assert_eq!(prompt_of(&e), "trigger_confirm");
+     answer(&mut e, ChoiceOption::Confirm);
+     assert_eq!(prompt_of(&e), "yishang_target");
+     answer(&mut e, ChoiceOption::Player(3));
+-    // 转移后的 1 不掉血；传导以 3 为中心 → 2（仍链）掉血
+-    assert_eq!(hp(&e, 1), 4);
++    // 1 仍横置，因此会再次成为真实 chain root；拒绝该 child 的移伤后再检查 2。
++    while let Some(c) = e.open_choice().cloned() {
++        if c.spec.prompt != "trigger_confirm" {
++            break;
++        }
++        submit_cmd(
++            &mut e,
++            c.observer,
++            GameAction::Answer {
++                choice_id: c.id,
++                selection: vec![],
++            },
++        );
++    }
++    // 转移后的 1 会作为独立传播承受者受伤；以最终目标3的 changeHp 资格传播。
++    assert_eq!(hp(&e, 1), 3);
+     assert_eq!(hp(&e, 3), 3);
+     assert_eq!(hp(&e, 2), 3);
+ }
+diff --git a/crates/engine-native/tests/native_kernel/dying.rs b/crates/engine-native/tests/native_kernel/dying.rs
+index e3430245..ff20a128 100644
+--- a/crates/engine-native/tests/native_kernel/dying.rs
++++ b/crates/engine-native/tests/native_kernel/dying.rs
+@@ -64,8 +64,19 @@ fn dying_rescue_and_death() {
+     let discard_before = e.debug_discard_len();
+     let dead_hand = e.debug_hand(0).len();
+     play(&mut e, sha, vec![0]);
+-    // 无人持桃：全部跳过询问，直接死亡
+-    assert!(!e.debug_alive(0));
++    // 散财的真实 targetDamage admission 先于 Dying，拒绝后无人持桃才死亡。
++    if prompt_of(&e) == "trigger_confirm" {
++        let c = e.open_choice().unwrap().clone();
++        submit_cmd(
++            &mut e,
++            c.observer,
++            GameAction::Answer {
++                choice_id: c.id,
++                selection: vec![],
++            },
++        );
++    }
++    assert!(!e.debug_alive(0), "pending={:?}", e.open_choice());
+     assert!(!e.debug_has_skill(0, "散财"));
+     assert_eq!(
+         e.debug_discard_len(),
+diff --git a/crates/engine-native/tests/nc08_upstream_duwen.rs b/crates/engine-native/tests/nc08_upstream_duwen.rs
+index ceb72fa7..ed6818bd 100644
+--- a/crates/engine-native/tests/nc08_upstream_duwen.rs
++++ b/crates/engine-native/tests/nc08_upstream_duwen.rs
+@@ -39,10 +39,11 @@ fn next_dedup() -> u64 {
+ fn ow_engine(seed: u64) -> Engine {
+     let root =
+         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+-    let json =
+-        std::fs::read_to_string(root.join("shaai-ow-upstream-noname/assets/cards.json"))
+-            .expect("读 ow 包");
+-    let mut pack = content_native_loader::bridge_pack(&json).expect("桥接 pack 段").pack;
++    let json = std::fs::read_to_string(root.join("shaai-ow-upstream-noname/assets/cards.json"))
++        .expect("读 ow 包");
++    let mut pack = content_native_loader::bridge_pack(&json)
++        .expect("桥接 pack 段")
++        .pack;
+     let bridged = content_native_loader::bridge_generals(&json).expect("桥接 generals 段");
+     pack.generals = bridged.generals;
+     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
+@@ -50,20 +51,30 @@ fn ow_engine(seed: u64) -> Engine {
+ 
+ fn drain(e: &mut Engine) {
+     for _ in 0..64 {
+-        let Some(c) = e.open_choice().cloned() else { break };
++        let Some(c) = e.open_choice().cloned() else {
++            break;
++        };
+         let sel: Vec<engine_native::ChoiceOption> =
+             if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+                 vec![engine_native::ChoiceOption::Pass]
+             } else if c.spec.allow_cancel {
+                 Vec::new()
+             } else {
+-                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
++                c.spec
++                    .options
++                    .iter()
++                    .take(c.spec.min.max(1))
++                    .copied()
++                    .collect()
+             };
+         let _ = e.submit(GameCommand {
+             actor: c.observer,
+             expected_revision: e.revision(),
+             dedup_id: next_dedup(),
+-            action: engine_native::GameAction::Answer { choice_id: c.id, selection: sel },
++            action: engine_native::GameAction::Answer {
++                choice_id: c.id,
++                selection: sel,
++            },
+         });
+     }
+ }
+@@ -89,7 +100,10 @@ fn upstream_duwen_equal_hands_adds_one_damage() {
+     let hp_before = e.debug_hp(1);
+     let out = e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+     assert!(
+-        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
++        matches!(
++            out,
++            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
++        ),
+         "{out:?}"
+     );
+     assert!(
+@@ -124,7 +138,11 @@ fn upstream_duwen_unequal_hands_no_bonus() {
+     let hp_before = e.debug_hp(1);
+     let _ = e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+     drain(&mut e);
+-    assert_eq!(e.debug_hp(1), hp_before - 1, "手牌不等 → 伤害不加成（1 点）");
++    assert_eq!(
++        e.debug_hp(1),
++        hp_before - 1,
++        "手牌不等 → 伤害不加成（1 点）"
++    );
+ }
+ 
+ /// 上游点 1（技能门槛）：**未持技**者手牌相等也不加成。
+@@ -155,7 +173,7 @@ fn upstream_duwen_requires_the_skill() {
+ fn upstream_duwen_notlink_difference_is_fixed() {
+     let src = std::fs::read_to_string(concat!(
+         env!("CARGO_MANIFEST_DIR"),
+-        "/../engine-native-kernel/src/kernel/damage.rs"
++        "/../engine-native-kernel/src/kernel/damage_windows.rs"
+     ))
+     .expect("读 damage 源码");
+     let idx = src.find("毒瘟（U07 ow").expect("毒瘟分支");
+@@ -165,9 +183,6 @@ fn upstream_duwen_notlink_difference_is_fixed() {
+         seg.contains("铁索传") && seg.contains("导为独立事件照常判定"),
+         "差异固定：原生对铁索传导事件照常判定（上游 event.notLink() 排除）：{seg}"
+     );
+-    assert!(
+-        seg.contains("amount += 1"),
+-        "效果固定：伤害 +1：{seg}"
+-    );
++    assert!(seg.contains("amount += 1"), "效果固定：伤害 +1：{seg}");
+     let _ = Phase::Play;
+ }

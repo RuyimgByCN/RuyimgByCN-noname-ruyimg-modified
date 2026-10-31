@@ -1,0 +1,50 @@
+{
+  "sourceHarnessSha256": "36e417b0c37b89830ad9a8c3d586a49d24ea6e985e99f326303d0b96733bbf1f",
+  "MainLockAlignedExternalCount": 30,
+  "cases": [
+    {
+      "name": "park-0",
+      "nativeSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "wasmSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "fullEqual": true
+    },
+    {
+      "name": "park-1",
+      "nativeSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "wasmSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "fullEqual": true
+    },
+    {
+      "name": "own-cancel",
+      "nativeSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "wasmSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "fullEqual": true
+    },
+    {
+      "name": "shan-auto",
+      "nativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "wasmSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "fullEqual": true
+    },
+    {
+      "name": "shan-direct",
+      "nativeSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "wasmSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "fullEqual": true
+    },
+    {
+      "name": "shan-cancel",
+      "nativeSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "wasmSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "fullEqual": true
+    },
+    {
+      "name": "shan-pass",
+      "nativeSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "wasmSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "fullEqual": true
+    }
+  ],
+  "fullReplyHashRevisionEventsEqual": true,
+  "fullPlanQualification": "Actual web WASM exports summary only. Complete Plan P/Q budgets0/1/2/4/8/48/64 are fresh Main Rust group proof; no claim full Plan exported from JS."
+}

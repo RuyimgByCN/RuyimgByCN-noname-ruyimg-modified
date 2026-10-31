@@ -1,0 +1,771 @@
+{
+  "utc": "2026-10-31T14:04:11.250914+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci41202703042-ready-uf1cp9us",
+  "copies": [
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/artifacts-final.stderr",
+      "relative": "ci/ci-stage/artifacts-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/artifacts-final.stdout",
+      "relative": "ci/ci-stage/artifacts-final.stdout",
+      "sha256": "38dcaa74a7389befff51daef87ae68c7a2e99557fa94524e5545cc792294e230",
+      "bytes": 1543
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-artifacts.stderr",
+      "relative": "ci/ci-stage/checkpoint-artifacts.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-artifacts.stdout",
+      "relative": "ci/ci-stage/checkpoint-artifacts.stdout",
+      "sha256": "e146818c4386096d8d4351d87200dd7b926639a714ee11c8993ec33c92c37cc9",
+      "bytes": 788
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-copy-manifest.json",
+      "relative": "ci/ci-stage/checkpoint-copy-manifest.json",
+      "sha256": "e1d321d101f2b9aca8e99b07e2762c46e9f685df4a1f35278c49a42c8aefa6e2",
+      "bytes": 4258
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-jobs.stderr",
+      "relative": "ci/ci-stage/checkpoint-jobs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-jobs.stdout",
+      "relative": "ci/ci-stage/checkpoint-jobs.stdout",
+      "sha256": "55333f335040b2a9d18cb6498fb3eecdff7039d85d13f594054ac9952aef86bd",
+      "bytes": 30431
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-run.stderr",
+      "relative": "ci/ci-stage/checkpoint-run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/checkpoint-run.stdout",
+      "relative": "ci/ci-stage/checkpoint-run.stdout",
+      "sha256": "f5bc64493aeb38a802e521266c08083747aa130105a964129f6d097a477e51f0",
+      "bytes": 15309
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/discovery-command.json",
+      "relative": "ci/ci-stage/discovery-command.json",
+      "sha256": "2039f644c2a8d49e996c759788c39a0ff3fec8f5c2e1a61e92f58990ac03a7a4",
+      "bytes": 380
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/discovery.stderr",
+      "relative": "ci/ci-stage/discovery.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/discovery.stdout",
+      "relative": "ci/ci-stage/discovery.stdout",
+      "sha256": "098e60985aa68388182aaff828ce1e4af4cf12c96cf9aa14fd920032beee77b7",
+      "bytes": 15345
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/driver.stderr",
+      "relative": "ci/ci-stage/driver.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/driver.stdout",
+      "relative": "ci/ci-stage/driver.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503879-detail.stderr",
+      "relative": "ci/ci-stage/job-124541503879-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503879-detail.stdout",
+      "relative": "ci/ci-stage/job-124541503879-detail.stdout",
+      "sha256": "cef31461e82a83463735ff969897cbae8454323fef6a0ee95c6aaccde8dda19a",
+      "bytes": 2477
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503879-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541503879-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503879-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541503879-raw-log.stdout.gz",
+      "sha256": "d09c300b1ce115598fc8706a271c7dd23385334c2d48a3327f2dc2d4e9d1bcac",
+      "bytes": 29413
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503994-detail.stderr",
+      "relative": "ci/ci-stage/job-124541503994-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503994-detail.stdout",
+      "relative": "ci/ci-stage/job-124541503994-detail.stdout",
+      "sha256": "b6d9fc8c5cc1fff2a80205c0227d72a33f253ea568871619d6f923eb3c295804",
+      "bytes": 3761
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503994-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541503994-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503994-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541503994-raw-log.stdout.gz",
+      "sha256": "980eee4342beb644844ced98679f0bac2b8e683d811cb61a40a5fdff952e4612",
+      "bytes": 52528
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503995-detail.stderr",
+      "relative": "ci/ci-stage/job-124541503995-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503995-detail.stdout",
+      "relative": "ci/ci-stage/job-124541503995-detail.stdout",
+      "sha256": "7c3b5ca8fdab7e4f30fd1642b1b0d5ca42391e5d141ecdb9d614be89c5b109dc",
+      "bytes": 4382
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503995-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541503995-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541503995-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541503995-raw-log.stdout.gz",
+      "sha256": "442ce657604b0da5f181afaffef95d22a49a5b3837fc8fa20460cf55edd06477",
+      "bytes": 356060
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504003-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504003-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504003-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504003-detail.stdout",
+      "sha256": "4867ca94dbc0db76836c1d1e21e969e48c48b81ec138d92ec6375d6945ca421e",
+      "bytes": 2458
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504003-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504003-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504003-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504003-raw-log.stdout.gz",
+      "sha256": "edee54241da092e61953a31fe4386378ab44a4eb2b036e30da48aa85b10049b0",
+      "bytes": 57425
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504023-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504023-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504023-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504023-detail.stdout",
+      "sha256": "21e00e126cd34987005e96c88af8cf16779d434ab67e90943cf6b5498f9a58bf",
+      "bytes": 3759
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504023-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504023-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504023-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504023-raw-log.stdout.gz",
+      "sha256": "88359767582f2a72e976a9895a12c6e1c0c5af3b5eb7c6e6794996321fd98576",
+      "bytes": 34670
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504027-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504027-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504027-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504027-detail.stdout",
+      "sha256": "6a9d9cd0c561836fea09194f842cf63a8cdf4e5c1ae8acf3190ed378cbd84680",
+      "bytes": 2289
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504027-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504027-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504027-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504027-raw-log.stdout.gz",
+      "sha256": "38153b50e967b35c36898a6827440325a257f89644d2443922520ec0f5b6274b",
+      "bytes": 4131
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504046-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504046-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504046-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504046-detail.stdout",
+      "sha256": "cd88207dc91dc1e4048edaff6a0b1e2dfb43e3bba437c988cd4d1700612cb669",
+      "bytes": 2479
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504046-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504046-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504046-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504046-raw-log.stdout.gz",
+      "sha256": "5931f2bb1980c9a4845d29cd396db7020eb5763e17a04117cf96f7542e1d92ed",
+      "bytes": 29759
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504048-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504048-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504048-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504048-detail.stdout",
+      "sha256": "d8935ff07c7f6d5d66ce379c5570a4b8d1a72d105569fa7d9ce82ca272f18be4",
+      "bytes": 2460
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504048-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504048-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504048-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504048-raw-log.stdout.gz",
+      "sha256": "95990eb72f8167c72502043b57be5e19702c6d284d9c552c42030f3510c6ef22",
+      "bytes": 58872
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504124-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504124-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504124-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504124-detail.stdout",
+      "sha256": "6a1dd4dbb09d9da33996956f75d5eabb252bf0a366faaf9ea0cdecd82a45420e",
+      "bytes": 3213
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504124-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504124-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504124-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504124-raw-log.stdout.gz",
+      "sha256": "98e6af9f854319f6a6699870ee03bdbfef42d10f93fdc4027484bd6585ea1856",
+      "bytes": 4219
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504216-detail.stderr",
+      "relative": "ci/ci-stage/job-124541504216-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504216-detail.stdout",
+      "relative": "ci/ci-stage/job-124541504216-detail.stdout",
+      "sha256": "9f4c0333b3050a7b110fb787ad4e04cc0167246c1a94f1c34bcbce33764772e2",
+      "bytes": 4110
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504216-raw-log.stderr",
+      "relative": "ci/ci-stage/job-124541504216-raw-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-124541504216-raw-log.stdout.gz",
+      "relative": "ci/ci-stage/job-124541504216-raw-log.stdout.gz",
+      "sha256": "ded7523392903c1653787ee3fe8dead6248c697996a13681f68a5b88e13103b3",
+      "bytes": 100076
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/job-analyzer.json",
+      "relative": "ci/ci-stage/job-analyzer.json",
+      "sha256": "636a13addeccfdffe57cb939a194d81c4c02d858a8e60abf987cfcbe3e2a605b",
+      "bytes": 127791
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/jobs-final.stderr",
+      "relative": "ci/ci-stage/jobs-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/jobs-final.stdout",
+      "relative": "ci/ci-stage/jobs-final.stdout",
+      "sha256": "859bd5171376cfaa8a592a9c25bffc951e072a10ae58c8ee2379e726c59751d8",
+      "bytes": 31425
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/jobs-initial.stderr",
+      "relative": "ci/ci-stage/jobs-initial.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/jobs-initial.stdout",
+      "relative": "ci/ci-stage/jobs-initial.stdout",
+      "sha256": "911a1120d0d9d4e9862e39affa63c63db772a102d589494b7cccbb2a936fb0b7",
+      "bytes": 27621
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/monitor.py",
+      "relative": "ci/ci-stage/monitor.py",
+      "sha256": "ba41e14b18b757c214bf8d27529ac0b707e747ebb8d3b669a29ebe68fbe1d287",
+      "bytes": 802
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/observation-state.json",
+      "relative": "ci/ci-stage/observation-state.json",
+      "sha256": "629038b9ef50e29e13a16f4d8ebb6f58d85e8e2719ea3f2640538ea02d94d7bb",
+      "bytes": 138174
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/observe-ci.py",
+      "relative": "ci/ci-stage/observe-ci.py",
+      "sha256": "c13e654a9d9eb5f4c4c3615d49d8d9b824f35e9960cd40a010593bd5ebbd9a7a",
+      "bytes": 9809
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/run-final.stderr",
+      "relative": "ci/ci-stage/run-final.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/run-final.stdout",
+      "relative": "ci/ci-stage/run-final.stdout",
+      "sha256": "99d150cef85714b62b47a0732cb99404732437c4fcf327d5d90d72f0682d7089",
+      "bytes": 15312
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/run-initial.stderr",
+      "relative": "ci/ci-stage/run-initial.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/run-initial.stdout",
+      "relative": "ci/ci-stage/run-initial.stdout",
+      "sha256": "f5bc64493aeb38a802e521266c08083747aa130105a964129f6d097a477e51f0",
+      "bytes": 15309
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/watch.stderr",
+      "relative": "ci/ci-stage/watch.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/watch.stdout",
+      "relative": "ci/ci-stage/watch.stdout",
+      "sha256": "b114acce70d935e83cb7c7d6711c08f361ee170d54c5b14bc39e25b4ed3dcc2e",
+      "bytes": 459813
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-build-early-detail.stderr",
+      "relative": "ci/ci-stage/windows-build-early-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-build-early-detail.stdout",
+      "relative": "ci/ci-stage/windows-build-early-detail.stdout",
+      "sha256": "6a9d9cd0c561836fea09194f842cf63a8cdf4e5c1ae8acf3190ed378cbd84680",
+      "bytes": 2289
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-build-early-log.stderr",
+      "relative": "ci/ci-stage/windows-build-early-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-build-early-log.stdout.gz",
+      "relative": "ci/ci-stage/windows-build-early-log.stdout.gz",
+      "sha256": "38153b50e967b35c36898a6827440325a257f89644d2443922520ec0f5b6274b",
+      "bytes": 4131
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-checkout-early-commands.json",
+      "relative": "ci/ci-stage/windows-checkout-early-commands.json",
+      "sha256": "6123f2715a1f23903713abb4adafab90194ccc4a7ea326a484a226832a53607a",
+      "bytes": 1285
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-desktop-early-detail.stderr",
+      "relative": "ci/ci-stage/windows-desktop-early-detail.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-desktop-early-detail.stdout",
+      "relative": "ci/ci-stage/windows-desktop-early-detail.stdout",
+      "sha256": "6a1dd4dbb09d9da33996956f75d5eabb252bf0a366faaf9ea0cdecd82a45420e",
+      "bytes": 3213
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-desktop-early-log.stderr",
+      "relative": "ci/ci-stage/windows-desktop-early-log.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/windows-desktop-early-log.stdout.gz",
+      "relative": "ci/ci-stage/windows-desktop-early-log.stdout.gz",
+      "sha256": "98e6af9f854319f6a6699870ee03bdbfef42d10f93fdc4027484bd6585ea1856",
+      "bytes": 4219
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/accepted-commit.raw.json",
+      "relative": "ci/push-stage/accepted-commit.raw.json",
+      "sha256": "7216642759dabaf8b802c625ea611e733689a197aadc7b4bffd0966c6a36d860",
+      "bytes": 927
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/accepted3618-tree-stat.json",
+      "relative": "ci/push-stage/accepted3618-tree-stat.json",
+      "sha256": "da63e6cf3ff5be088e8984927bf1c93b165d20104022db5400ebdb80c53a0301",
+      "bytes": 1000595
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/branch-after.stderr",
+      "relative": "ci/push-stage/branch-after.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/branch-after.stdout",
+      "relative": "ci/push-stage/branch-after.stdout",
+      "sha256": "f2fa5a5bc5067f4576dc77989aab2923e940bf5982cf3d4c567a2c09cca0f568",
+      "bytes": 5018
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/driver.stderr",
+      "relative": "ci/push-stage/driver.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/driver.stdout",
+      "relative": "ci/push-stage/driver.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/lease-release.json",
+      "relative": "ci/push-stage/lease-release.json",
+      "sha256": "f647cbbdaac57dccefa0dad73907021ccfccef498d386362d40b1bd318b619ef",
+      "bytes": 479
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/main-after.stderr",
+      "relative": "ci/push-stage/main-after.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/main-after.stdout",
+      "relative": "ci/push-stage/main-after.stdout",
+      "sha256": "d0652394531d1ae59fe48e34900876eaad0d839bc4b96b6947721fbba32eb569",
+      "bytes": 4380
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/new-objects-audit.json",
+      "relative": "ci/push-stage/new-objects-audit.json",
+      "sha256": "c50521ea82c1e975038fef06de1a8fc1739750e07f7ad4ceba5a0d6f018ed98a",
+      "bytes": 667490
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/protected-admission.json",
+      "relative": "ci/push-stage/protected-admission.json",
+      "sha256": "4c9cf0b44add842e381e32c2f19a96fc807b8d6be88ba8d1916b6d5f48906a11",
+      "bytes": 1981
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/publication-driver.py",
+      "relative": "ci/push-stage/publication-driver.py",
+      "sha256": "ab4eb7ba49e60fc2601e2d959fc1dbd7158d631e99bde1223a944c40895e6446",
+      "bytes": 12331
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/push-copy-manifest.json",
+      "relative": "ci/push-stage/push-copy-manifest.json",
+      "sha256": "2deb271fedd8af470350f441a845775746bc8a8e13310fc2648e58c340baa916",
+      "bytes": 3858
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/push.stderr",
+      "relative": "ci/push-stage/push.stderr",
+      "sha256": "460150f6cc4f39960d97572e75880761187409b88c2dd980f189443931862d8a",
+      "bytes": 19884
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/push.stdout",
+      "relative": "ci/push-stage/push.stdout",
+      "sha256": "401515e6c0cb690993ada2fa7739bf006baa6ed6c06d555304a512baa41b7384",
+      "bytes": 504
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/remote-before.stderr",
+      "relative": "ci/push-stage/remote-before.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/remote-before.stdout",
+      "relative": "ci/push-stage/remote-before.stdout",
+      "sha256": "c5900fe218fbf314a37d02f87aaa64dcba7704098b56dc2192fe82b7ee21d4b2",
+      "bytes": 128
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/result.json",
+      "relative": "ci/push-stage/result.json",
+      "sha256": "c010c314e2602a8a86368f78d1467885a181dd9e849a172475ad8e5ef72eb6fa",
+      "bytes": 482568
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/scope.json",
+      "relative": "ci/push-stage/scope.json",
+      "sha256": "9656eceef839b6cb3634189e7d133142b39b0ba51d11170869161bcea48e2f50",
+      "bytes": 5576
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/scoped-pre-push.raw.txt",
+      "relative": "ci/push-stage/scoped-pre-push.raw.txt",
+      "sha256": "c991082cb655afdf03af7998ca0fd5bdfb22bca876318d97aaf31de58468b308",
+      "bytes": 1598
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/source6-admission.raw.json",
+      "relative": "ci/push-stage/source6-admission.raw.json",
+      "sha256": "85a3abdaaec1e43d19d1f895c45e8bff842869a5bbe5a4e48786b9a930896569",
+      "bytes": 2978
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/stage-audit.raw.json",
+      "relative": "ci/push-stage/stage-audit.raw.json",
+      "sha256": "0d528d124a538cf332bdc095149e8078ac84c0073660600e5ad2b77b007cde4a",
+      "bytes": 1377
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/verified-publication-ci-summary.json",
+      "relative": "ci/verified-publication-ci-summary.json",
+      "sha256": "aab69bf5c4d0de3b6f38e7443aeeca5506d68737b59cc8c173501e6dfed92748",
+      "bytes": 294533
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/verify-publication-ci.py",
+      "relative": "ci/verify-publication-ci.py",
+      "sha256": "f4c8d4f3d39286009d926b51a619cc25acb47c4e5890c575d9377f32b1dce959",
+      "bytes": 15144
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/copy-manifest.json",
+      "relative": "ci/copy-manifest.json",
+      "sha256": "87c6d4290ace36c5f544d111bdf47113af71c60e0c5dfed227b3ade497629e4e",
+      "bytes": 23110
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/artifact-index-seal.json",
+      "relative": "ci/artifact-index-seal.json",
+      "sha256": "544571686778c616c826ef54ad9870dfcb38e2d7b6337493383da7e634396524",
+      "bytes": 859
+    },
+    {
+      "source": "/tmp/noname-parent-ci41202703042-audit.py",
+      "relative": "parent/noname-parent-ci41202703042-audit.py",
+      "sha256": "6fabd12f2103e509855e311ccdff3082b9212b8b0794b522ccb8eb276a4f30b2",
+      "bytes": 6002
+    },
+    {
+      "source": "/tmp/noname-parent-ci41202703042-audit.json",
+      "relative": "parent/noname-parent-ci41202703042-audit.json",
+      "sha256": "fccc981a1c2bde5f22b1804a29bdbc01350da4b8c87a21840a37f981fdee36e6",
+      "bytes": 1767
+    },
+    {
+      "source": "/tmp/noname-parent-ci41202703042-audit.raw.txt",
+      "relative": "parent/noname-parent-ci41202703042-audit.raw.txt",
+      "sha256": "fccc981a1c2bde5f22b1804a29bdbc01350da4b8c87a21840a37f981fdee36e6",
+      "bytes": 1767
+    },
+    {
+      "source": "/tmp/noname-parent-ci41202703042-audit.attempt1.raw.txt",
+      "relative": "parent/noname-parent-ci41202703042-audit.attempt1.raw.txt",
+      "sha256": "7508ddcccd457d5530a58a41b6642802feec190f7e206b30db40c15577207147",
+      "bytes": 287
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/run.stderr",
+      "relative": "parent/live-api/run.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/summary.json",
+      "relative": "parent/live-api/summary.json",
+      "sha256": "fccc981a1c2bde5f22b1804a29bdbc01350da4b8c87a21840a37f981fdee36e6",
+      "bytes": 1767
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/main_ref.stdout",
+      "relative": "parent/live-api/main_ref.stdout",
+      "sha256": "c24f78b69d8d1a4e37c5e010dc81eb7265d5d6cb39f7c9530f53d2053fb1b1b7",
+      "bytes": 386
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/main_ref.stderr",
+      "relative": "parent/live-api/main_ref.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/run.stdout",
+      "relative": "parent/live-api/run.stdout",
+      "sha256": "99d150cef85714b62b47a0732cb99404732437c4fcf327d5d90d72f0682d7089",
+      "bytes": 15312
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/native_ref.stdout",
+      "relative": "parent/live-api/native_ref.stdout",
+      "sha256": "0d3be6432d95c8698098791644db8cccf804d9d8503579ef0f159add75b2c7ca",
+      "bytes": 433
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/jobs.stdout",
+      "relative": "parent/live-api/jobs.stdout",
+      "sha256": "859bd5171376cfaa8a592a9c25bffc951e072a10ae58c8ee2379e726c59751d8",
+      "bytes": 31425
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/commit.stderr",
+      "relative": "parent/live-api/commit.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/jobs.stderr",
+      "relative": "parent/live-api/jobs.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/commit.stdout",
+      "relative": "parent/live-api/commit.stdout",
+      "sha256": "55f67b770a2796e1d8a1b39bb0ccc0c7074b869d866cd6c8b23d941fba548d70",
+      "bytes": 1367900
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed/native_ref.stderr",
+      "relative": "parent/live-api/native_ref.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/97773363-63cd-4746-befd-1f27484f497a/publication/nc10-public-own-accepted-push-and-ci.md",
+      "relative": "publication.raw.txt",
+      "sha256": "38a4974fb304a22936f837ab6a3dfff0047bb77fafabeddde5c59f994264de7e",
+      "bytes": 26157
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/23b66b15-8ffe-4199-99f9-b66c59335651/reviews/nc10-ci41202703042-independent-registration.md",
+      "relative": "registration-review.raw.txt",
+      "sha256": "7961b7f81113cb45e6ccdb6d7f2046036bd6fc058a3b378087c25e83408509e4",
+      "bytes": 5565
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/ci.before.yml",
+      "relative": "checkout-fix/ci.before.yml",
+      "sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+      "bytes": 7273
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/ci.yml",
+      "relative": "checkout-fix/ci.yml",
+      "sha256": "b46fd58a50fe5a74c537929d66919fca694163588c19600226426d48f43c45e8",
+      "bytes": 7777
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/fix.patch",
+      "relative": "checkout-fix/fix.patch",
+      "sha256": "a53b2361568f200058e183d112dbfddc8b1addc7c646fe9441d4486414c4995d",
+      "bytes": 950
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/manifest.json",
+      "relative": "checkout-fix/manifest.json",
+      "sha256": "f2fe5a4ad057ad07a1fe49f42733ce7c1f32b85b749fd869e49ebcce9c2e9278",
+      "bytes": 1049
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/yaml.stdout",
+      "relative": "checkout-fix/yaml.stdout",
+      "sha256": "2752ef450e5d42d007015db59f258e86a5de891c9f981ac1402e1ec89023903d",
+      "bytes": 45
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c/yaml.stderr",
+      "relative": "checkout-fix/yaml.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/fc3857f8-ad6f-4af2-bcce-94cad5cb01ec/reviews/windows-checkout-longpaths.md",
+      "relative": "checkout-fix/review.raw.txt",
+      "sha256": "6af33106e2cb67da67047a6a78fd366defe45b0b1d20ec3c81c5f22bd75907de",
+      "bytes": 3309
+    }
+  ],
+  "copied_files": 127,
+  "status": "PRIVATE_ARCHIVE_PACKET_READY_NOT_APPLIED_TO_MAIN",
+  "qualification": "Exact103primaryCI files plusparentaudit/liveAPIs/review andprivatecheckoutfix. Mainfreeze respected; oldd07CI remains8/2. No product/build/cache files copied; freshWindowsacceptancestillpending."
+}

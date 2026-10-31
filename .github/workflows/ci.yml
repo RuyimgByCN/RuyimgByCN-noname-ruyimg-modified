@@ -27,6 +27,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        # Windows Git needs long-path support before checking out deep evidence paths.
+        env:
+          GIT_CONFIG_COUNT: ${{ runner.os == 'Windows' && '1' || '0' }}
+          GIT_CONFIG_KEY_0: core.longpaths
+          GIT_CONFIG_VALUE_0: "true"
         with:
           path: noname-next
       - uses: dtolnay/rust-toolchain@stable
@@ -140,6 +145,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
+        # Windows Git needs long-path support before checking out deep evidence paths.
+        env:
+          GIT_CONFIG_COUNT: ${{ runner.os == 'Windows' && '1' || '0' }}
+          GIT_CONFIG_KEY_0: core.longpaths
+          GIT_CONFIG_VALUE_0: "true"
         with:
           path: noname-next
       - uses: dtolnay/rust-toolchain@stable

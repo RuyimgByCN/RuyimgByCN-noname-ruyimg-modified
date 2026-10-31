@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/i02-main-typed-wire-functional-33d21ba5/seal.py", line 13, in <module>
+    before=json.load(open(E/'before.json'));after=json.load(open(E/'gate-exit.json'));frozen=json.load(open(E/'gate-comparison.json'));assert frozen['allEqual'] and not frozen['failedGates'];fields=['head','tree','indexSha256','indexEntries','headEntries','staged','trackedStatus','untrackedNames','sourceBinding','maintainedAndMarkdown','hooks'];comparison={k:before[k]==after[k] for k in fields};comparison['protectedSets']={k:before['protectedSets'][k]==after['protectedSets'][k] for k in before['protectedSets']};assert all(comparison[k] for k in fields);assert all(v for k,v in comparison['protectedSets'].items() if k!='modules');assert not after['staged']
+AssertionError
+
+
+Command exited with code 1

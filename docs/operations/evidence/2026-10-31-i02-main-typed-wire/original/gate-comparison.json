@@ -1,0 +1,18 @@
+{
+  "allEqual": true,
+  "fields": {
+    "head": true,
+    "tree": true,
+    "indexSha256": true,
+    "indexEntries": true,
+    "headEntries": true,
+    "staged": true,
+    "trackedStatus": true,
+    "untrackedNames": true,
+    "sourceBinding": true,
+    "maintainedAndMarkdown": true,
+    "protectedSets": true,
+    "hooks": true
+  },
+  "failedGates": []
+}

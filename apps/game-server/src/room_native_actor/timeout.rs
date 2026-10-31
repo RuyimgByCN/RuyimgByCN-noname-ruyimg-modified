@@ -36,6 +36,7 @@ pub(super) async fn automatic_step(
                         .map(|p| legal_actions_for(session.engine(), p))
                         .unwrap_or_default(),
                     public_event_codes: public_event_codes.clone(),
+                    presentation: None,
                 };
                 if out.try_send(&message) == SendStatus::Full {
                     stalled.push(member.connection_id);

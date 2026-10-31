@@ -1,0 +1,39 @@
+{
+  "selfAndAncestorsExcluded": [
+    86978,
+    86977,
+    83749,
+    26337,
+    20941,
+    20940,
+    6004,
+    1
+  ],
+  "targetOrOwnedEvidencePathReferences": [],
+  "otherRustProcessesForReview": [
+    {
+      "pid": 7954,
+      "ppid": 55185,
+      "uid": 501,
+      "command": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rust-analyzer"
+    },
+    {
+      "pid": 8125,
+      "ppid": 7954,
+      "uid": 501,
+      "command": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/libexec/rust-analyzer-proc-macro-srv"
+    },
+    {
+      "pid": 84449,
+      "ppid": 22578,
+      "uid": 501,
+      "command": "bash -c cat > /tmp/wp11-scp-debug.py <<'EOF'\\012import importlib.util\\012import sys\\012from pathlib import Path\\012\\012REPO = Path(\"/Users/ruyimg/Documents/Project/MyShell/.worktrees/wp-11-scpx\")\\012spec = importlib.util.spec_from_file_location(\"sftp_smoke\", REPO / \"scripts/run-sftp-smoke.py\")\\012smoke = importlib.util.module_from_spec(spec)\\012spec.loader.exec_module(smoke)\\012smoke.TESTS = (\"tests::scp_e2e::scp_checksum_sync_preview_e2e\",)\\012sys.argv = [\"run-sftp-smoke.py\"]\\012smoke.main()\\012EOF\\012cd /Users/ruyimg/Documents/Project/MyShell/.worktrees/wp-11-scpx && export CARGO_TARGET_DIR=/Users/ruyimg/Documents/Project/MyShell/.worktrees/.target-scpx CARGO_NET_GIT_FETCH_WITH_CLI=true && PATH=/tmp/wp11-bin:$PATH SCPX_SSH_BACKEND=russh timeout 300 python3 /tmp/wp11-scp-debug.py > /tmp/wp11-scp-debug.log 2>&1; echo \"exit=$?\"; tail -40 /tmp/wp11-scp-debug.log"
+    },
+    {
+      "pid": 84473,
+      "ppid": 84454,
+      "uid": 501,
+      "command": "/Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/cargo test --features russh-backend --manifest-path /Users/ruyimg/Documents/Project/MyShell/.worktrees/wp-11-scpx/src-tauri/Cargo.toml --lib tests::scp_e2e::scp_checksum_sync_preview_e2e -- --ignored --exact --test-threads=1 --nocapture"
+    }
+  ]
+}

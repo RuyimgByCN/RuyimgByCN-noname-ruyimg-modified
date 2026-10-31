@@ -1,0 +1,33 @@
+{
+  "utc": "2026-10-31T13:35:55.995783+00:00",
+  "status": "INTEGRITY_PASS_FINAL_GOLDEN_STILL_RED_NOT_RUNTIME_ACCEPTANCE",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw/snapshot",
+  "increment": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw/increment",
+  "artifact_hashes": 490,
+  "full_sources": 212,
+  "increment_sources": 46,
+  "manifest": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+  "increment_manifest": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+  "final_native_counts": [
+    1791,
+    1,
+    75
+  ],
+  "strict_exit": 0,
+  "parent_owned_validation_files_sealed": 12,
+  "parent_owned_runner_complete": [
+    {
+      "pid": "82177",
+      "exit": 1,
+      "ps": ""
+    },
+    {
+      "pid": "82179",
+      "exit": 1,
+      "ps": ""
+    }
+  ],
+  "source_live_all212_equal_tar": true,
+  "qualification": "Finale0ef scope-fixed source has1791/1/75, distinct frompreFix751427 source1790/1. Onegolden group/12scenario mismatches retained, no goldenrerecord or Main import. 46hashes assertedbeforeeachqueuedcommand andfull212freshafter; global lock queuewall notperformancemeasure."
+}

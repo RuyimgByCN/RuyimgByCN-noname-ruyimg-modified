@@ -1,0 +1,92 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/engine-api",
+    "crates/content-native-loader",
+    "crates/rule-api",
+    "crates/engine-core",
+    "crates/engine-native",
+    "crates/engine-native-kernel",
+    "crates/engine-native-content",
+    "crates/engine-native-wasm",
+    "crates/engine-native-wasm",
+    "crates/rule-vm",
+    "crates/content-schema",
+    "crates/content-compiler",
+    "crates/engine-protocol",
+    "crates/engine-ai",
+    "crates/legacy-analyzer",
+    "crates/engine-wasm",
+    "crates/content-runtime",
+    "crates/diagnostics",
+    "crates/conformance",
+    "crates/resource-schema",
+    "crates/resource-compiler",
+    "crates/accessibility-schema",
+    "crates/devtools",
+    "crates/licensing-schema",
+    "packages/resource-runtime",
+    "packages/renderer-runtime",
+    "apps/engine-cli",
+    "apps/game-server",
+    "apps/content-cli",
+    "apps/desktop-client",
+    "apps/extension-studio",
+    "apps/benchmark-runner",
+]
+default-members = [
+    "crates/engine-api",
+    "crates/rule-api",
+    "crates/engine-core",
+    "crates/rule-vm",
+    "crates/content-schema",
+    "crates/content-compiler",
+    "crates/resource-schema",
+    "crates/resource-compiler",
+    "crates/accessibility-schema",
+    "crates/devtools",
+    "crates/licensing-schema",
+    "packages/resource-runtime",
+    "packages/renderer-runtime",
+    "apps/engine-cli",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["noname-next"]
+repository = "https://github.com/local/noname-next"
+
+[workspace.dependencies]
+engine-api = { path = "crates/engine-api" }
+rule-api = { path = "crates/rule-api" }
+engine-core = { path = "crates/engine-core" }
+engine-ai = { path = "crates/engine-ai" }
+rule-vm = { path = "crates/rule-vm" }
+content-schema = { path = "crates/content-schema" }
+content-runtime = { path = "crates/content-runtime" }
+diagnostics = { path = "crates/diagnostics" }
+resource-schema = { path = "crates/resource-schema" }
+resource-compiler = { path = "crates/resource-compiler" }
+accessibility-schema = { path = "crates/accessibility-schema" }
+devtools = { path = "crates/devtools" }
+licensing-schema = { path = "crates/licensing-schema" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tempfile = "3"
+thiserror = "2"
+blake3 = { version = "1", features = ["pure"] }  # 纯 Rust 实现：Android aarch64 无 NDK 也能构建（第 968 轮）
+bytemuck = { version = "1", features = ["derive"] }
+wasm-bindgen = "0.2"
+console_error_panic_hook = "0.1"
+proptest = "1"
+
+[profile.dev]
+# 只留行号表：panic 回溯仍有文件与行号，测试二进制的编译、链接与 target 体积约减半；
+# 需要在调试器里看局部变量时临时用 CARGO_PROFILE_DEV_DEBUG=true。
+debug = "line-tables-only"
+
+[profile.release]
+lto = true
+codegen-units = 1

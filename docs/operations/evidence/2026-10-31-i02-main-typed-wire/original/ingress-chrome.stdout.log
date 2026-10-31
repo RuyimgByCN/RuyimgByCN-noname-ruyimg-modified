@@ -1,0 +1,2 @@
+{"runtime":"chrome","passed":true,"cases":162,"actualRequests":329,"positiveAbsent":163,"sharedCorpus":80}
+{"command": ["node", "/tmp/i02-main-typed-wire-functional-33d21ba5/run-ingress.mjs", "chrome"], "exit": 0, "locked_seconds": 4.653818332997616, "disk_free_bytes": 33851670528}

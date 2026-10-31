@@ -11,6 +11,7 @@ mod event;
 mod ids;
 mod manifest;
 mod outcome;
+mod presentation;
 mod version;
 mod view;
 
@@ -20,6 +21,7 @@ pub use event::*;
 pub use ids::*;
 pub use manifest::*;
 pub use outcome::*;
+pub use presentation::*;
 pub use version::*;
 pub use view::*;
 

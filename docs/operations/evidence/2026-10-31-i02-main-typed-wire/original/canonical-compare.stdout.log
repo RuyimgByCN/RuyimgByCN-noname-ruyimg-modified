@@ -1,0 +1,2 @@
+full canonical snapshots equal=7; no ignored fields
+{"command": ["cargo", "run", "--offline", "--locked", "--manifest-path", "/tmp/i02-main-typed-wire-functional-33d21ba5/probe/Cargo.toml", "--", "/tmp/i02-main-typed-wire-functional-33d21ba5", "compare"], "exit": 0, "locked_seconds": 0.06389683397719637, "disk_free_bytes": 34167762944}

@@ -1,0 +1,11 @@
+{
+  "source": "Parent steering, no CI tool calls by this verifier",
+  "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "run": 41202703042,
+  "attempt": 1,
+  "success": 8,
+  "failure": 2,
+  "status": "Parent investigating raw failures; no old CI or local results substituted",
+  "C9": "Private failed branch not accepted/imported; separate target",
+  "parentConfirmedFailureCause": "Both Windows failures are checkout path-too-long failures; runtime did not execute. Parent preparing/reviewing private workflow repair; Main workflow remains frozen unchanged."
+}

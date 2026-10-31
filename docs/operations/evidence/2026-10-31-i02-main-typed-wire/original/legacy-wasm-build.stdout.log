@@ -1,0 +1,3 @@
+Using wasm-pack…
+WASM package written to /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/wasm-pkg
+{"command": ["node", "scripts/build-wasm.mjs"], "exit": 0, "locked_seconds": 128.44259583298117, "disk_free_bytes": 33642799104}

@@ -1,0 +1,50 @@
+[
+  {
+    "argv": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124541504027"
+    ],
+    "exit": 0,
+    "started_utc": "2026-10-31T12:52:33.735668+00:00",
+    "finished_utc": "2026-10-31T12:52:34.473151+00:00",
+    "http1": true
+  },
+  {
+    "argv": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124541504027/logs"
+    ],
+    "exit": 0,
+    "started_utc": "2026-10-31T12:52:34.473343+00:00",
+    "finished_utc": "2026-10-31T12:52:36.742027+00:00",
+    "http1": true
+  },
+  {
+    "argv": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124541504124"
+    ],
+    "exit": 0,
+    "started_utc": "2026-10-31T12:52:36.742774+00:00",
+    "finished_utc": "2026-10-31T12:52:37.438301+00:00",
+    "http1": true
+  },
+  {
+    "argv": [
+      "gh",
+      "api",
+      "--allow-escape-sequences",
+      "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/jobs/124541504124/logs"
+    ],
+    "exit": 0,
+    "started_utc": "2026-10-31T12:52:37.438619+00:00",
+    "finished_utc": "2026-10-31T12:52:39.410712+00:00",
+    "http1": true
+  }
+]

@@ -1,0 +1,6 @@
+
+> noname-next-web-client@0.1.0 smoke:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node --import ./scripts/ts-register.mjs scripts/native-worker-smoke.mjs
+
+{"total":82,"failed":0}
+{"command": ["pnpm", "smoke:native"], "exit": 0, "locked_seconds": 0.5810087079880759, "disk_free_bytes": 37034946560}

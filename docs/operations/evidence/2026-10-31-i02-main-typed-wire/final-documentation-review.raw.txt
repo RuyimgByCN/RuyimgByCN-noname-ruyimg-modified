@@ -1,0 +1,17 @@
+## Review
+
+No issues found.
+
+- **Correct — current versus historical acceptance:** The [I02 Main README](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-i02-main-typed-wire/README.md:3) and top progress paragraphs distinguish accepted d07/Own results, the current I02 Main acceptance, and the still-uncommitted batch. Current `7c2a…` native/`846351…` legacy products are separated from historical Own/old-fixture identities.
+
+- **Correct — limitations remain explicit:** The documentation retains nine None constructors, consumer-only injection evidence, pending producer/range/factory/audio work, unknown index writer, original sealer failure and additive 13→12-category correction. The post-freeze CI change is not included retroactively in the earlier preflight; Windows success remains pending.
+
+- **Correct — private C331 status:** [C9b](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-phase9b-prehp/README.md:7) preserves 1791/1 and two P1s. [C9c](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-phase9c-dispositions/README.md:7) preserves the remaining ordering P1, 1796/1, limited 362-pair observations, uncompared outcome_raw and no golden rerecording. DeathFlow is clearly an authorized plan awaiting implementation, not Main functionality.
+
+- **Correct — scope and preservation:** The observed apps/crates delta contains the reviewed 30 code/test paths; the workflow adds only the previously reviewed checkout configuration. No C331 production import appears. Own retirement documentation distinguishes 926 receipts/672 retained files from active Main warm targets. Publication text separates private products/session records from selected evidence and tool-only excerpts; copy-map entries alone do not claim publication.
+
+- **Fixed:** None by this reviewer. Earlier raw reports and reviews remain preserved.
+- **Merge verdict: OK with notes for the reviewed documentation and proposed 31-path code/test/config scope.** The final exclusion manifest and staged-path audit were not yet available at inspection, so this does not certify the eventual staged set. Parent’s full Markdown-link scan remains separate from the earlier seven-root navigation check.
+
+Skipped runtime re-review, tests/builds/network, Main writes, archive rehashing and publication.
+Residual limit: local-only products/caches must remain excluded from the final stage; full-I02 and Windows-green claims remain unsupported.

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "repository_lone_high",
+    "pointer": "/occurrences/0/event/voice/role/owner/repository",
+    "raw_json_value": "\"repo\\ud800\""
+  },
+  {
+    "name": "repository_lone_low",
+    "pointer": "/occurrences/0/event/voice/role/owner/repository",
+    "raw_json_value": "\"repo\\udfff\""
+  },
+  {
+    "name": "token_lone_high",
+    "pointer": "/occurrences/0/event/effective/key",
+    "raw_json_value": "\"sha\\ud800\""
+  },
+  {
+    "name": "token_lone_low",
+    "pointer": "/occurrences/0/event/effective/key",
+    "raw_json_value": "\"sha\\udfff\""
+  },
+  {
+    "name": "path_lone_high",
+    "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+    "raw_json_value": "\"audio/die/role\\ud800\""
+  },
+  {
+    "name": "path_lone_low",
+    "pointer": "/occurrences/0/event/voice/assets/0/reference/path",
+    "raw_json_value": "\"audio/die/role\\udfff\""
+  }
+]

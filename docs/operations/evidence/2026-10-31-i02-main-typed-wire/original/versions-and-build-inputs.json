@@ -1,0 +1,55 @@
+{
+  "crates/engine-native-content/src/content/standard.rs": {
+    "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+    "relevant": [
+      "pub const STANDARD_RULESET_VERSION: u64 = 330;"
+    ]
+  },
+  "crates/engine-native-kernel/src/archive.rs": {
+    "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+    "relevant": [
+      "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;"
+    ]
+  },
+  "crates/engine-api/src/version.rs": {
+    "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+    "relevant": [
+      "pub const PACKAGE_FORMAT_VERSION: u32 = 1;",
+      "pub const RULE_VM_ABI_VERSION: u32 = 758;"
+    ]
+  },
+  "crates/engine-protocol/src/lib.rs": {
+    "sha256": "260432c6409ed6fcb40878e60544364ed94d1b31bd6fa2364554dabc301be672",
+    "relevant": [
+      "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;"
+    ]
+  },
+  "apps/web-client/vite.config.ts": {
+    "sha256": "edea5f3bdfc9838cc21f30c0a4c1b1722a76f293c3eb5d84a0aa3c69dfdf393a",
+    "relevant": [
+      "      process.env.VITE_ENGINE_BACKEND ?? \"native\","
+    ]
+  },
+  "apps/web-client/src/engine/desktopEngineTransport.ts": {
+    "sha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+    "relevant": [
+      "  try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === \"native\" ? \"native\" : \"wasm\"; }"
+    ]
+  },
+  "Cargo.toml": {
+    "sha256": "ee2c34fd5e1af005b8fe9b9198e4d1557b2be9469fba1574b4fd321a1c4baf6b",
+    "relevant": []
+  },
+  "Cargo.lock": {
+    "sha256": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+    "relevant": []
+  },
+  "apps/web-client/scripts/build-native.mjs": {
+    "sha256": "dca82af3c5a31df9edc594a2a152ac978047d4334d9d90c7b28333c0fd518d19",
+    "relevant": []
+  },
+  "apps/web-client/scripts/build-wasm.mjs": {
+    "sha256": "ee968efc0bcb1e59a1248328928e3aa4eda403cfa55da632656055872566618e",
+    "relevant": []
+  }
+}

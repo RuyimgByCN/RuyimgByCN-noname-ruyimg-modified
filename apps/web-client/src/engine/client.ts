@@ -1,3 +1,4 @@
+import { validatePresentationResponse } from "./presentationMetadata";
 import type {
   ChooseGeneralPayload,
   EngineEnvelope,
@@ -11,7 +12,7 @@ import type {
   WorkerResponse,
 } from "../types/engine";
 import { desktopContentBundle, isTauriShell } from "./desktopHost";
-import { DesktopEngineTransport, desktopEngineChoice, type EngineTransport } from "./desktopEngineTransport";
+import { DesktopEngineTransport, desktopEngineChoice, MAX_ENGINE_OUTSTANDING, type EngineTransport } from "./desktopEngineTransport";
 import {
   perfRequestSent,
   perfRequestFailed,
@@ -102,6 +103,10 @@ export class EngineClient {
       const p = this.pending.get(msg.id);
       // SAB 提前应用后 pending 已删除——此时跳过计时与重复应用
       if (!p) return;
+      if (msg.ok) {
+        try { validatePresentationResponse(msg.data); }
+        catch (error) { p.reject(new Error(`Worker 协议错误，操作结果未确认: ${String(error)}`)); return; }
+      }
       perfResponseReceived(msg.id);
       this.pending.delete(msg.id);
       (globalThis as unknown as { __latencySabDebug?: { settle?: () => void } })
@@ -186,6 +191,10 @@ export class EngineClient {
             };
             const p = this.pending.get(resp.id);
             if (p) {
+              if (resp.ok) {
+                try { validatePresentationResponse(resp.data); }
+                catch (error) { p.reject(new Error(`Worker 协议错误，操作结果未确认: ${String(error)}`)); throw error; }
+              }
               perfResponseReceived(resp.id);
               this.pending.delete(resp.id);
               settle();
@@ -251,6 +260,7 @@ export class EngineClient {
 
   private request(body: WorkerRequest): Promise<unknown> {
     if (!this.worker) return Promise.reject(new Error("worker not connected"));
+    if (this.pending.size >= MAX_ENGINE_OUTSTANDING) return Promise.reject(new Error("Engine busy; request was not submitted（未提交）"));
     return new Promise((resolve, reject) => {
       this.pending.set(body.id, { resolve, reject });
       perfRequestSent(body.id, body.type);

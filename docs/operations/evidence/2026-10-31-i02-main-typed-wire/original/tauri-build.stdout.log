@@ -1,0 +1,1 @@
+{"command": ["cargo", "build", "--offline", "--locked", "-p", "desktop-client", "--features", "tauri-shell"], "exit": 0, "locked_seconds": 64.35552454198478, "disk_free_bytes": 34496458752}

@@ -1,0 +1,23 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.64s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+test c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp ... FAILED
+
+failures:
+
+---- c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp stdout ----
+
+thread 'c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp' (21018792) panicked at crates/engine-native/tests/groups/../c331_canonical_damage.rs:358:648:
+Before must be a real ordinary child window
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 177 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9b_before"], "exit": 101, "locked_seconds": 2.6945324999978766, "disk_free_bytes": 42391887872}

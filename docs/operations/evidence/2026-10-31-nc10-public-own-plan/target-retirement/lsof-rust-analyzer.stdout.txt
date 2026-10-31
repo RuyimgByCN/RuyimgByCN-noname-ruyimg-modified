@@ -1,0 +1,37 @@
+COMMAND    PID   USER   FD   TYPE             DEVICE  SIZE/OFF                NODE NAME
+rust-anal 7954 ruyimg  cwd    DIR               1,15       736           618953337 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree
+rust-anal 7954 ruyimg  txt    REG               1,15  39506880           618781674 /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/bin/rust-analyzer
+rust-anal 7954 ruyimg  txt    REG               1,15   4129088 1152921500312613838 /usr/lib/dyld
+rust-anal 7954 ruyimg  txt    REG               1,15 203876200           190924987 /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/lib/librustc_driver-eea6b8737cd03a8e.dylib
+rust-anal 7954 ruyimg    0u  unix 0x2cfaaf3325cf39b4       0t0                     ->0x144a4bb89b79283
+rust-anal 7954 ruyimg    1u  unix 0x83c2fd36bb0f8e0c       0t0                     ->0xd2f9d898cb918201
+rust-anal 7954 ruyimg    2u  unix 0x10723b1624a9cb42       0t0                     ->0x5d6c28f6523151a
+rust-anal 7954 ruyimg    4   PIPE 0x258be1f8a18e469c     65536                     ->0x69df0ed25defbb0e
+rust-anal 7954 ruyimg    5   PIPE 0xa11c975265c97517     65536                     ->0x3853c2c1f0a1ff30
+rust-anal 8125 ruyimg  cwd    DIR               1,15       736           618953337 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree
+rust-anal 8125 ruyimg  txt    REG               1,15   1454880           190925038 /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/libexec/rust-analyzer-proc-macro-srv
+rust-anal 8125 ruyimg  txt    REG               1,15    554088           620113794 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libctor_proc_macro-f3975ddc017686b6.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15    743736           620114201 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/librustversion-bd417c1fbc108b60.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   4129088 1152921500312613838 /usr/lib/dyld
+rust-anal 8125 ruyimg  txt    REG               1,15   3638712           620115421 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libserde_with_macros-a019f2ee0169cefb.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3228504           620114901 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libderive_more_impl-9e5e774b41c50094.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3256904           620114962 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libthiserror_impl-08929be4c0b4f4ec.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3226872           620114975 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libzerovec_derive-c5636ad71294ebb8.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3797336           620114961 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libzerofrom_derive-745004a12f4d5e69.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   2902824           620114890 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libtokio_macros-4f1203f1479ae93d.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   4094088           620115252 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libdarling_macro-a1da9ff7a2126cfb.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3598576           620115206 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libtracing_attributes-f6ee17c138b37212.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   2618984           620114724 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libcssparser_macros-21e454fd293129db.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3304088           620115032 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libthiserror_impl-0fe70d041e114cc9.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3491736           620115353 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libclap_derive-d34b971f60c73be2.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3021320           620114811 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libphf_macros-f07a409739d189af.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3862552           620114976 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libschemars_derive-81b4f9858208701a.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   2975800           620114819 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libdisplaydoc-77be848cfe919b24.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   2596712           620115145 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libfutures_macro-c1fa06d22a3ee787.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   5574032           620115443 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libwasm_bindgen_macro-3e5e9ee48b4ed12c.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   3533416           620114938 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libyoke_derive-c19338f8671228a0.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15   4133048           620115394 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/target/debug/deps/libserde_derive-d9e95d98e36ea1d2.dylib
+rust-anal 8125 ruyimg  txt    REG               1,15 203876200           190924987 /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/lib/librustc_driver-eea6b8737cd03a8e.dylib
+rust-anal 8125 ruyimg    0   PIPE 0x69df0ed25defbb0e     65536                     ->0x258be1f8a18e469c
+rust-anal 8125 ruyimg    1   PIPE 0x3853c2c1f0a1ff30     65536                     ->0xa11c975265c97517
+rust-anal 8125 ruyimg    2u  unix 0x10723b1624a9cb42       0t0                     ->0x5d6c28f6523151a

@@ -1,0 +1,9 @@
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling engine-protocol v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-protocol)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.99s
+     Running unittests src/lib.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/engine_api-7e058f95e9ef088f)
+     Running unittests src/lib.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/engine_protocol-87a5bab53374f018)
+     Running tests/presentation.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/presentation-13208ca976d10391)
+     Running tests/presentation_main5fc_reader.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/presentation_main5fc_reader-46eb3cbf3315b49e)
+   Doc-tests engine_api
+   Doc-tests engine_protocol

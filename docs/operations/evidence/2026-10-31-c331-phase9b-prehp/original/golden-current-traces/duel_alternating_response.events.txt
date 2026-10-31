@@ -1,0 +1,79 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            21,
+            71,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 58,
+        player: 0,
+        targets: [
+            2,
+        ],
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 2,
+        prompt: "duel_sha",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:8",
+        ],
+    },
+    CardDiscarded {
+        player: 2,
+        cards: [
+            8,
+        ],
+    },
+    ChoiceOpened {
+        id: 2,
+        observer: 0,
+        prompt: "duel_sha",
+    },
+    ChoiceAnswered {
+        id: 2,
+        options: [
+            "card:27",
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            27,
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            0,
+        ),
+        target: 2,
+        amount: 1,
+        redirected_from: [],
+        card: None,
+    },
+]

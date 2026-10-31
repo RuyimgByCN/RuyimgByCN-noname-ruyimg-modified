@@ -1,0 +1,17 @@
+## Review
+
+No issues found in the corrected staged-scope evidence.
+
+- **Correct — actual corrected stage:** The [stage audit](/tmp/noname-i02-corrected-stage-audit.json:3) identifies tree `844bfe868292926e981622419a07f9f4c5dd08a3`, **3428 changed files / 105,889,317 bytes**, against parent d07. Its [auditor](/tmp/noname-i02-corrected-stage-audit.py:3) compares the complete cached delta against the plan, checks stage-zero modes and blob identities, and verifies the same 31 code/test/config blobs remain unchanged. I reviewed this logic and its recorded result; I did not independently run Git or recompute hashes.
+
+- **Correct — exclusions and retention:** The recorded delta removes exactly **495 tracked paths**: 491 profile/cache files plus four generated-schema backups. All **552 exclusions** are retained locally. The audit explicitly checks absence of the two removed subtrees from the prospective tree. The [fixed archiver](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-i02-main-typed-wire/prepublication-correction/archiver-fixed.raw.py:5) recognizes the actual profile-directory prefix while preserving legitimate metadata such as `tauri-runtime-profile.json`.
+
+- **Correct — withdrawal is explicit:** The revised README and correction records preserve the original mistake and stop, qualify the old 3913-file audit as historical, and distinguish physical copies from publication scope. The [lease release](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-i02-bdaf-prepublication-stop-p2c8ce71/lease-release.json:2) records zero push, guard and network requests. No fresh remote observation is claimed.
+
+- **Correct — history boundary:** The proposed amend replaces only the invalid unpublished leaf, retaining bdaf under its local protective ref and preserving d07/published ancestry. The new public commit must have d07 as parent and must not descend from bdaf; those post-amend checks remain outstanding.
+
+- **Fixed:** No edits by this reviewer.
+- **Merge verdict: OK with notes for this corrected 3428-file stage.** After normal hooks and amendment, bind publication to the fresh commit/tree and run the normal guard against expected-old d07. This verdict does not certify the future commit, remote state, Windows success or full-I02 completion.
+
+Skipped tests/builds/network, Main writes, independent blob hashing and all browser/account/session/cache bodies.
+Residual limit: excluded-body sensitivity was not assessed; those files are excluded wholesale, and fresh post-amend publication checks are still required.

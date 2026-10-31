@@ -1,0 +1,45 @@
+
+#[test]
+fn c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress() {
+    let p=package("skill c9b_unowned(99109151) { trigger damage owner_is_target { effect draw_cards(self,1); } }",&[]);
+    let mut e=Engine::new_with_extensions(12051,3,&[&p]).unwrap();e.debug_set_hujia(1,1);e.set_time_slice(Some(1));e.debug_deal_damage(Some(0),1,2,DamageNature::Normal);
+    let mut branch=None;let mut saw_submission=false;let mut checked_matrix=false;
+    for _ in 0..300 {
+        let s=e.save();
+        if let Some(root)=s.resolution.stack.iter().find(|f|matches!(f.data,EventData::Damage(_))) {
+            let d=root.damage();
+            if d.settlement.progress==DamageProgress::SubmitHp {
+                saw_submission=true;assert_eq!(d.settlement.committed_damage,None);assert_eq!(e.debug_hp(1),4);
+                let mut r=restore(&e,&p);r.set_time_slice(None);assert!(!matches!(r.resume(),CommandOutcome::Rejected(_)));branch=Some(r);
+            }
+            if matches!(d.settlement.progress,DamageProgress::HpCommitted{..}) {
+                assert_eq!(d.amount,2);assert_eq!(d.settlement.committed_damage,Some(2));assert_eq!(d.settlement.hp_loss,1);
+                let mut invalid=s.clone();let d=invalid.resolution.stack.iter_mut().find(|f|matches!(f.data,EventData::Damage(_))).unwrap().damage_mut();d.settlement.outcome=DamageOutcome::Completed;
+                assert!(Engine::restore_with_extensions(&invalid,&[&p]).is_err());assert_eq!(e.save(),s);checked_matrix=true;
+            }
+        }
+        if s.resolution.stack.is_empty(){break;}
+        assert!(!matches!(e.resume(),CommandOutcome::Rejected(_)));
+    }
+    assert!(saw_submission&&checked_matrix);let r=branch.unwrap();same(&e,&r);assert_eq!(e.debug_hp(1),3);assert_eq!(e.state_core().player(1).hujia,0);
+    assert_eq!(e.log().iter().filter(|x|matches!(x,engine_native::machine::LogEvent::DamageDealt{..})).count(),1);
+}
+#[test]
+fn c9b_dead_parent_keeps_chain_eligibility_and_siblings_unlink_on_their_own_submission(){
+    let p=package("skill c9b_chain_pause(99109161) { trigger damage_before owner_is_target optional { effect draw_cards(self,1); } }",&[]);
+    let mut e=Engine::new_with_extensions(12061,4,&[&p]).unwrap();e.debug_grant(2,"c9b_chain_pause");for player in 0..4 {e.debug_clear_hand(player);}e.debug_set_hp(1,1);for player in [1,2,3]{e.state_core_mut().player_mut(player).linked=true;}
+    e.debug_deal_damage(Some(0),1,1,DamageNature::Fire);assert!(!e.debug_alive(1));assert!(!e.state_core().player(1).linked);assert!(e.state_core().player(2).linked);assert!(e.state_core().player(3).linked);assert_eq!(e.debug_hp(2),4);assert_eq!(e.debug_hp(3),4);
+    let mut r=restore(&e,&p);answer(&mut e,vec![]);answer(&mut r,vec![]);same(&e,&r);assert_eq!(e.debug_hp(2),3);assert_eq!(e.debug_hp(3),3);assert!(!e.state_core().player(2).linked);assert!(!e.state_core().player(3).linked);
+}
+#[test]
+fn c9b_post_submit_cancel_has_a_real_cancelled_child_without_zero_or_end(){
+    let p=package("skill c9b_cancel(99109171) { trigger damage_before owner_is_target { effect prevent_current_damage(); } } skill c9b_cancelled(99109172) { trigger damage owner_is_target optional { effect draw_cards(self,1); } } skill c9b_end(99109173) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[("c9b_cancel",EventKind::Damage),("c9b_cancelled",EventKind::DamageCancelled),("c9b_end",EventKind::DamageEnd)]);
+    let mut e=Engine::new_with_extensions(12071,3,&[&p]).unwrap();for name in ["c9b_cancel","c9b_cancelled","c9b_end"]{e.debug_grant(1,name);}let h=e.debug_hand(1).len();e.debug_deal_damage(Some(0),1,2,DamageNature::Normal);let s=e.save();let root=s.resolution.stack.iter().find(|f|matches!(f.data,EventData::Damage(_))).unwrap();assert_eq!(root.damage().settlement.committed_damage,Some(2));assert_eq!(root.damage().settlement.outcome,DamageOutcome::Cancelled);assert!(s.resolution.stack.iter().any(|f|matches!(f.data,EventData::DamageWindow{..})&&f.kind==EventKind::DamageCancelled));let mut r=restore(&e,&p);answer(&mut e,vec![ChoiceOption::Confirm]);answer(&mut r,vec![ChoiceOption::Confirm]);same(&e,&r);assert_eq!(e.debug_hp(1),2);assert_eq!(e.debug_hand(1).len(),h+1);
+}
+#[test]
+fn c9b_replacement_waits_for_real_lose_hp_and_dying_children_across_restore(){
+    let p=package("skill c9b_unused(99109181) { trigger damage owner_is_target { effect draw_cards(self,9); } }",&[]);
+    let mut e=Engine::new_with_extensions(12081,3,&[&p]).unwrap();e.debug_grant(0,"绝情");e.debug_grant(1,"c9b_unused");e.debug_set_hp(1,1);for player in 0..3 {e.debug_clear_hand(player);}e.debug_move_named_card_to_hand(0,"tao");e.debug_deal_damage(Some(0),1,1,DamageNature::Normal);assert_eq!(e.open_choice().unwrap().spec.prompt,"dying_save");let s=e.save();let root=s.resolution.stack.iter().find(|f|matches!(f.data,EventData::Damage(_))).unwrap();assert_eq!(root.damage().settlement.outcome,DamageOutcome::ReplacedByLoseHp);assert_eq!(root.damage().settlement.committed_damage,None);assert!(s.resolution.stack.iter().any(|f|matches!(f.data,EventData::LoseHp{..})));let mut r=restore(&e,&p);
+    for game in [&mut e,&mut r] {while game.open_choice().is_some(){answer(game,vec![ChoiceOption::Pass]);}}
+    same(&e,&r);assert!(!e.debug_alive(1));assert!(!e.log().iter().any(|x|matches!(x,engine_native::machine::LogEvent::DamageDealt{..})));
+}

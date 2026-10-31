@@ -1,0 +1,290 @@
+{
+  "expected_file_sha256_before": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+  "expected_file_sha256_after": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+  "expectations_changed": false,
+  "trace_files": [
+    {
+      "path": "golden-current-traces/aoe_response_queue.archive.ngsa",
+      "sha256": "dce2745078c9fe477f32e8f977d8138351e0bb1efdcf3588b1b863cbaceaf811"
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.events.txt",
+      "sha256": "c782d4edf7012fb23cc27373fa3dbdd4fa9ea9584e78a7fde745bd5638623fc8"
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.snapshot.txt",
+      "sha256": "bec61f45f8642cce60fd030516dd674faa0e4bad37b71ea15b5fc1e59f5e6f9a"
+    },
+    {
+      "path": "golden-current-traces/aoe_response_queue.views.txt",
+      "sha256": "d58894efa28a3f112cff80a1589da47091007adba9aa607980576939deed8040"
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.archive.ngsa",
+      "sha256": "15932de5af77c6ac24ec33d1c636ea9a3352c9a4dfd46e6da891c94dfbef23f9"
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.events.txt",
+      "sha256": "d92727cf2f2d286a6170e4d2ccdb18c87f2d476541b063c0ba8ac49c3724b621"
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.snapshot.txt",
+      "sha256": "ab686fd8427c14f65751ece454196a2719cd691fb3f674e5b29bbbd8668ded8e"
+    },
+    {
+      "path": "golden-current-traces/chain_fire_propagation.views.txt",
+      "sha256": "8bf79a41d88c5c7e6ac04f63a6bb206e7d599442fab7d202171bc4ddddb5e46a"
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.archive.ngsa",
+      "sha256": "940c6d96b359e36a5383833eb818ea503b1d816282a032603c5423a32f4417d4"
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.choices.txt",
+      "sha256": "8988b3014ecf98d7f799aef0921516678c591112f2c8d5ff281689054a4ef9ec"
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.events.txt",
+      "sha256": "affa069791e2befca0e90cbce63c945f6bdb14fef59e5b654848f2b7de960f55"
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.snapshot.txt",
+      "sha256": "93cf88b27a5836594db31b51fade65664f5debcc5ba2b73749799ba79d55e755"
+    },
+    {
+      "path": "golden-current-traces/death_terminal_single.views.txt",
+      "sha256": "c668eb7221efbd05802c6f06a6bf5651af4d955c42e96ec2d4569a3956d4ff3d"
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.archive.ngsa",
+      "sha256": "6cae927490cd89752b64f987acde835b3b10375418313d7bac3a90a4f54f4fb9"
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.events.txt",
+      "sha256": "5fca63721996a9ee1e41ba9bb82d516257d57d3ce4310a178613eb0eb7dd36ec"
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.snapshot.txt",
+      "sha256": "458b3a2d25bae8c80ab14037d8a9184e97ea1a5f91e2394bf17bc37f3bed9903"
+    },
+    {
+      "path": "golden-current-traces/discard_to_limit.views.txt",
+      "sha256": "4391ce5fccc9d784d0150e0350efa60c1ee7affc3a67fa124b906c5b1199f72d"
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.archive.ngsa",
+      "sha256": "3623c8123f96d2b24879a707c2211dc00f07a0c8ec499dcbedc62c8bbeb07893"
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.events.txt",
+      "sha256": "1e3f00c6c8c0ce551cd3d63e8f257ca5035b5b0804b4d0a30fd9a147ab8c1abe"
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.snapshot.txt",
+      "sha256": "a910ee65f4dc6a89c594cf7bc8dc3e09e6d3bd19be97570fcbdc861c732f3842"
+    },
+    {
+      "path": "golden-current-traces/duel_alternating_response.views.txt",
+      "sha256": "857c27d4ea751d6fc8e51a661b4bf1124d0e36379be2879050615cfe00307e00"
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.archive.ngsa",
+      "sha256": "53515f61c8ef6cb200c26496175604bfad05ffc8c38de42b689fa2a9a0b67449"
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.events.txt",
+      "sha256": "0c109bcb79207566f88f875e7767d70ac479c637ee0bc24e2c7dd9a0fe025a06"
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.snapshot.txt",
+      "sha256": "dfc15f0cdf26ec7609aca52a5641055b4c7d03ad06a6e37a0badd7a2d25124fd"
+    },
+    {
+      "path": "golden-current-traces/equip_distance_matrix.views.txt",
+      "sha256": "b12ee5d097fa0ce42ee2d08b42960aba82a913ef4a326cbfeccffa34e467a367"
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.archive.ngsa",
+      "sha256": "29e96eb118d83fc788e29edcf3a4ced6d0364666b6f27f25215379dd64265fc8"
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.events.txt",
+      "sha256": "bf44a46e8ba32c359a8a850a763366944ed8d72e5cfca481c178f4c8fb25c679"
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.snapshot.txt",
+      "sha256": "a8847c46746aed47aca20875c9405a055ab39ee9bd7f808bd384c91ee3ae1f75"
+    },
+    {
+      "path": "golden-current-traces/judge_phase_delayed_tricks.views.txt",
+      "sha256": "3d8777dd1ff15fe37df224ef16069be3af871445fefab2516852b2bfda82980d"
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.archive.ngsa",
+      "sha256": "64426f6bc32e04aff99e9ea492b7110e431e71ca3a9411c4217fec2361274a78"
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.events.txt",
+      "sha256": "7234a13f640d468f2523a0176d3c504016a36d566a797bf4c179cfb72ca1a6d4"
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.snapshot.txt",
+      "sha256": "0e7e4089202842f689329cba93f31701cc6a2338e1db1483bcc55ce1ac3118d5"
+    },
+    {
+      "path": "golden-current-traces/nullify_chain_on_savage.views.txt",
+      "sha256": "4de1e85098e16d4611beaf602ed643904bdf8b885b0f31c7e19c15718361ffdf"
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.archive.ngsa",
+      "sha256": "794fd9a95e8988cc6c65e95d1e4a3f77d0d980b35699650bec618076489669e0"
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.choices.txt",
+      "sha256": "3575acf29db80de1dc9ad9c8cb6219f0cb85920507dc94d8707f7fe30bcc5967"
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.events.txt",
+      "sha256": "53e586c77b01ab93482d7bd9db63ea4437aadb8c15e266154a4cd03e11d975c8"
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.snapshot.txt",
+      "sha256": "43b6ec471d2825ebfc84bb0b5dd1ff7e5b74be507dbcb6dc5b8cdc564effe65c"
+    },
+    {
+      "path": "golden-current-traces/rollback_invariants.views.txt",
+      "sha256": "09be41600b335f177d822ceefaf392454e927290dcbb3cdb449350163ad16345"
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.archive.ngsa",
+      "sha256": "1987720aafd33a8e61dafa4a9b19d9a13ca85c236904173e3f4084e724041295"
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.events.txt",
+      "sha256": "34ef905acb124f1f5c0fbb3d0f2b3b7bdbc15e01ec8cd37a2e9ddde819ac302d"
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.snapshot.txt",
+      "sha256": "db1d983adb93c5d881914ba3bc411862e47cf2813b4cb99fe161b4c34d28f6d6"
+    },
+    {
+      "path": "golden-current-traces/sancai_nested_chain.views.txt",
+      "sha256": "e6259f228f774cb207c9ebc328ddbc220d4c2db82209bf3b4841fbb34eebe694"
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.archive.ngsa",
+      "sha256": "7d3d31da004093e567625f8f42bc8a9c11cf8bd90cf0c18ae606edf0243f9ce8"
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.events.txt",
+      "sha256": "663fcfb66eb4f4768f996bfa00eaa4ea46b5ec0d8541c57b4cc37e198f81e66e"
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.snapshot.txt",
+      "sha256": "554740acfff6d3fcc8de3cf9a13a182cdd7359749fd5a22030b9070aace9fd37"
+    },
+    {
+      "path": "golden-current-traces/sha_dodge_then_damage.views.txt",
+      "sha256": "9d917da058dbfd291cea8d4470d8ba3aa89849ef0514bc89326594cfc802978b"
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.archive.ngsa",
+      "sha256": "6a7e44f925934644e6fb7eb32338116ccf13e5c9da50e4c4fddd4381ca56dad4"
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.events.txt",
+      "sha256": "d156a057ce87b5c8fda049919c094228252a454770364d4baa2bc85c060e6986"
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.snapshot.txt",
+      "sha256": "b89f12440201986a852596d9f53ccb1667e49d00ad903579692ea27d484a65f0"
+    },
+    {
+      "path": "golden-current-traces/shouyi_dynamic_skill.views.txt",
+      "sha256": "95291a2974ff719dbb364cd4834653f51f54c1ffbc14f39cb1cacb2eff992854"
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.archive.ngsa",
+      "sha256": "9a453d3ed81342f8fa2c6b315661ff026d2e008626e5277532c4e154dd8df39a"
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.events.txt",
+      "sha256": "22cb60e74451e26d9126b1577d6b6cfb68082be81eaf86284d671c8d6469a550"
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.snapshot.txt",
+      "sha256": "c29a683e74cff0cbc499b85d513fe9da4ec2429de701116d5a870f0b4e3a9a55"
+    },
+    {
+      "path": "golden-current-traces/suidun_window_matrix.views.txt",
+      "sha256": "a4d6cab10978c3068c0408acc880bd6c665d32c198d66d9017b9be0a92ccb895"
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.archive.ngsa",
+      "sha256": "baa41fd28f0dbc1d5ae218f1aaf9c6cf53d68115ef923435abab5f86d71bf2f5"
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.choices.txt",
+      "sha256": "4a41c55d41a9a4b36cd44af85ab44b265487e3a1ee38cf789bd62d7dff7333e8"
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.events.txt",
+      "sha256": "0f1bdc6037cfa8c75d1f7eed815db5e7c0f4b90d3310fdfc77912abe82a4d2c3"
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.snapshot.txt",
+      "sha256": "8408849f294edb8b2b2d3bdf56863ee39793e482926a96f152d242344429f61d"
+    },
+    {
+      "path": "golden-current-traces/yishang_redirect.views.txt",
+      "sha256": "4050ba695de5f069778b74afcc51c0b761067d838e596d02b8d5d305c65a6c4a"
+    }
+  ],
+  "mismatch_count": 12,
+  "classification": "Source-level first scheduling difference: damage root starts Intrinsic with DamageFlow, emits ordinary Before child; old flat Before queue removed. Additional frame ids/progress/settlement hashes and target-before-Dying/individual chain unlink change traces. No claim that this alone attributes every scenario mismatch.",
+  "remaining": "Whole-scenario first semantic divergence comparison against the accepted old trace remains pending; retain all 12 original expected hashes and the red gate."
+}

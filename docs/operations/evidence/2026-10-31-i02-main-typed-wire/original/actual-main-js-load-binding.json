@@ -1,0 +1,62 @@
+{
+  "entry": "assets/ingress-CCE2v_ye.js",
+  "entrySha256": "47c9bf4be122e4d74e750761f2a165ac488521f7cf534b9514821a471cc24f4e",
+  "actualLoadedEntryChunks": {
+    "chrome": {
+      "root": "/tmp/i02-main-typed-wire-functional-33d21ba5/ingress-dist",
+      "url": "http://127.0.0.1:62126/?engineTransport=wasm&latency=sab&perf=1",
+      "actualEntryRequests": [
+        {
+          "path": "/assets/ingress-CCE2v_ye.js",
+          "sha256": "47c9bf4be122e4d74e750761f2a165ac488521f7cf534b9514821a471cc24f4e",
+          "bytes": 434320
+        }
+      ],
+      "resultSha256": "35288d415322d41ec58237297a7d2965a852dd473926f58abaf6a946a67f4205"
+    },
+    "tauri": {
+      "root": "/tmp/i02-main-typed-wire-functional-33d21ba5/ingress-dist",
+      "url": "http://127.0.0.1:59985/?engineTransport=native&latency=sab&perf=1",
+      "actualEntryRequests": [
+        {
+          "path": "/assets/ingress-CCE2v_ye.js",
+          "sha256": "47c9bf4be122e4d74e750761f2a165ac488521f7cf534b9514821a471cc24f4e",
+          "bytes": 434320
+        }
+      ],
+      "resultSha256": "a4d3a6772a7a1064bc3b24019fa9ce5653bf5adcd61314990d92086c49fc9c00"
+    }
+  },
+  "currentMainModules": {
+    "apps/web-client/src/engine/client.ts": {
+      "sourceSha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+      "transformedIntoPrivateEntry": true
+    },
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "sourceSha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+      "transformedIntoPrivateEntry": true
+    },
+    "apps/web-client/src/engine/networkClient.ts": {
+      "sourceSha256": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+      "transformedIntoPrivateEntry": true
+    },
+    "apps/web-client/src/engine/presentationMetadata.ts": {
+      "sourceSha256": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+      "transformedIntoPrivateEntry": true
+    },
+    "apps/web-client/src/engine/viewStore.ts": {
+      "sourceSha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+      "transformedIntoPrivateEntry": true
+    }
+  },
+  "requiredTransportSentinelsPresent": [
+    "native_engine_open",
+    "native_engine_request",
+    "native_engine_close",
+    "public presentation metadata invalid"
+  ],
+  "actualNativeIPCRequestsAndPositiveReplies": "Tauri report actualRequests811/positiveAbsent162/getTransportKind desktop-native assertion; actual compiled Main Rust binary identity in tauri-executed-identity.json",
+  "injectionBoundary": "Only successful real Tauri callback data is explicitly replaced for bad metadata fixtures; original invoke and native IPC dispatch remain in place. No Rust metadata producer claim.",
+  "defaultDist37Served": false,
+  "qualification": "Current Main I02 JS is bundled into a private harness entry and actually fetched by both Chromium and hidden Tauri. The original current Main UI production bundle is separately validated by own-browser-final; no claim that private entry is the unchanged shipped desktop UI."
+}

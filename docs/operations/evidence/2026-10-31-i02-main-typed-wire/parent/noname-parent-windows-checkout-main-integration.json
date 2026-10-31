@@ -1,0 +1,13 @@
+{
+  "utc": "2026-10-31T14:07:43.031493+00:00",
+  "status": "REVIEWED_CI_CHECKOUT_FIX_APPLIED_AFTER_EXPLICIT_MAIN_FREEZE_RELEASE",
+  "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "path": ".github/workflows/ci.yml",
+  "before": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+  "after": "b46fd58a50fe5a74c537929d66919fca694163588c19600226426d48f43c45e8",
+  "patch": "a53b2361568f200058e183d112dbfddc8b1addc7c646fe9441d4486414c4995d",
+  "source30_Own6_MainLock_unchanged": true,
+  "index_raw_unchanged_during_apply": "f69891318f018bbf9ee9c03dc5a26498226120016630c03f393ce35b8c5aa9c8",
+  "staging_empty": true,
+  "qualification": "OriginalI02Main21-gate snapshot containedoldworkflow354f. ThislaterconfigonlychangeseparatelyYAML/Gitenvvalidated/reviewed, no runtime source changed. WindowsactualnextCIstillpending; originald07run8/2 notrerun."
+}

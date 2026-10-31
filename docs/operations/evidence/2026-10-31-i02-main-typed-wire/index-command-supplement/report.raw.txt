@@ -1,0 +1,17 @@
+# I02 index command provenance supplement
+
+P2 corrected additively: the two old sealed command files captured the later extractor. They remain unchanged; this supplement recovers the actual executed defining commands from structured retained-session assistant tool calls.
+New evidence root: `/tmp/i02-main-index-command-provenance-599614a0`; selection, SHA256s, raw records and result bindings are in `manifest.json`.
+`index-parse.raw.sh`: original assistant session line 401, timestamp `2026-10-31T13:52:17.611Z`, matching result line 402.
+`index-mask-and-js-load.raw.sh`: original assistant session line 403, timestamp `2026-10-31T13:53:47.510Z`, matching result line 404.
+Both tool-call IDs, exact full-command hashes, assistant/result raw JSONL records and full returned text are preserved. Result records match each toolCallId and report no tool error.
+Selection requires an entire command line exactly equal to `def parse(p):` or `def masked(p):`, within assistant bash calls, with exactly one candidate each. Quoted substring/search predicates in the later extractor do not satisfy this rule; no last-match overwrite is used.
+Commands are archival only and were NOT executed or syntax-checked. No parser rerun, test, build, network, Main/source/schema/index write or old-E rewrite occurred.
+Old miscaptured file SHA256s (also match the original sealed artifact index):
+`index-parse-original-command.sh`: `1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a`.
+`index-mask-and-js-load-original-command.sh`: `1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a`.
+Number erratum: the original report’s “all13” comparison wording means **12 recorded comparison categories**, as both `gate-comparison.json` and `gate-to-final-seal-comparison.json` actually contain12 keys.
+Those keys are `head`, `tree`, `indexSha256`, `indexEntries`, `headEntries`, `staged`, `trackedStatus`, `untrackedNames`, `sourceBinding`, `maintainedAndMarkdown`, `protectedSets`, `hooks`. No thirteenth category is claimed; original report preserved.
+The source-session snapshot SHA/byte count and all retained old-file hashes are recorded. This is a provenance repair, not independent raw-index certification; mutation origin remains unknown and the parent’s independent parser is separate.
+Prior21-gate/native7c/legacy846/actual IPC/WS evidence is unchanged. Later parent-authorized Main CI changes are outside this supplement.
+Skipped execution, new acceptance checks and target cleanup. Residual risk: this supplement establishes retained-command identity, not independent correctness of their index interpretation.

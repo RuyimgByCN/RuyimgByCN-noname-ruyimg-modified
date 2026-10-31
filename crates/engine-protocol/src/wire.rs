@@ -34,6 +34,7 @@ pub fn decode_c2s(text: &str) -> Result<ClientMessage, WireError> {
 
 /// Encode server message.
 pub fn encode_s2c(msg: &ServerMessage) -> Result<String, WireError> {
+    crate::presentation::validate(msg)?;
     let s = serde_json::to_string(msg).map_err(|e| WireError::Json(e.to_string()))?;
     if s.len() > MAX_MESSAGE_BYTES {
         return Err(WireError::TooLarge(s.len()));
@@ -46,7 +47,9 @@ pub fn decode_s2c(text: &str) -> Result<ServerMessage, WireError> {
     if text.len() > MAX_MESSAGE_BYTES {
         return Err(WireError::TooLarge(text.len()));
     }
-    serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))
+    let message = serde_json::from_str(text).map_err(|e| WireError::Json(e.to_string()))?;
+    crate::presentation::validate(&message)?;
+    Ok(message)
 }
 
 #[cfg(test)]

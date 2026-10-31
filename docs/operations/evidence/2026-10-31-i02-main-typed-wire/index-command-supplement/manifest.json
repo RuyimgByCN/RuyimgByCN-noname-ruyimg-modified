@@ -1,0 +1,119 @@
+{
+  "utc": "2026-10-31T14:14:15.631961+00:00",
+  "scope": "Additive readonly metadata preservation supplement; no recovered command executed, no raw-index parse rerun, no tests/builds/network/Main/schema/index/old-E writes",
+  "sourceSession": {
+    "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/2026-10-29T12-17-50-921Z_01a18798-5949-73c1-8642-9d0f55dc485a/df47e19c-73c6-4cdd-a45e-5437618a62f2/run-0/session.jsonl",
+    "snapshotByteCount": 3400818,
+    "snapshotLineCount": 436,
+    "snapshotSha256": "21efbea165d458b515b896fad94ff4d41070ebf84c54decf5415b1ef8563802b",
+    "qualification": "Hash identifies the exact bytes read at capture; append-only later session records may change the full-file hash. Exact selected raw records are preserved."
+  },
+  "recoveredCommands": [
+    {
+      "name": "index-parse",
+      "selection": "Exact whole command line equals 'def parse(p):'; assistant bash toolCall only; unique match; no substring or last-match overwrite",
+      "toolCallId": "call_7a740d9e1fc34689b464dd46ed4935c4|fc_03de275bc66d19ea016ae5f283731881918fe5445709019eb6",
+      "assistantSessionLine": 401,
+      "assistantRecordId": "3c319d47",
+      "assistantTimestamp": "2026-10-31T13:52:17.611Z",
+      "assistantRawRecordSha256": "accac66052db7140bc358ddccc303666d0fbab335e942b2028cf178789a23758",
+      "resultSessionLine": 402,
+      "resultRecordId": "82b03c9b",
+      "resultTimestamp": "2026-10-31T13:52:19.132Z",
+      "resultRawRecordSha256": "2540f28fe7a45b909c65c45d6e98f6b7c1d1c5a16ab3a596002a2d57be40764e",
+      "resultIsError": false,
+      "fullCommandSha256": "7a83707d3dd4fa2fafcd1bfe8fbe41d09300b17e4be2fb3bb9af68055e88e2e9",
+      "commandBytes": 3655,
+      "archivalOnlyDoNotExecute": true
+    },
+    {
+      "name": "index-mask-and-js-load",
+      "selection": "Exact whole command line equals 'def masked(p):'; assistant bash toolCall only; unique match; no substring or last-match overwrite",
+      "toolCallId": "call_f2cd7762eb894a4eb788b212827b7b59|fc_0cc54cfa92f4748f016ae5f2e123548191a17d4b4b6f1a3bd9",
+      "assistantSessionLine": 403,
+      "assistantRecordId": "235c03a2",
+      "assistantTimestamp": "2026-10-31T13:53:47.510Z",
+      "assistantRawRecordSha256": "4233794d76ed9477303c4d77c3d427102d35f2b49d95f09f6410b383a8adc284",
+      "resultSessionLine": 404,
+      "resultRecordId": "7d70ccf4",
+      "resultTimestamp": "2026-10-31T13:53:48.813Z",
+      "resultRawRecordSha256": "aaed89aab3c102ef551b9ee1ef506e67c82f2bf446dd2299ca3bd165ef2b0ffd",
+      "resultIsError": false,
+      "fullCommandSha256": "30f0840ee569e113a934dfc2f64db0f8b0921653625f5606d30f72a1517ac924",
+      "commandBytes": 3112,
+      "archivalOnlyDoNotExecute": true
+    }
+  ],
+  "miscapturedSealedFiles": [
+    {
+      "path": "/tmp/i02-main-typed-wire-functional-33d21ba5/index-parse-original-command.sh",
+      "sha256": "1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a",
+      "matchesOriginalSealedArtifactIndex": true,
+      "label": "MISCAPTURED: later extractor/seal-patching command, not defining parser/mask command; retained unchanged"
+    },
+    {
+      "path": "/tmp/i02-main-typed-wire-functional-33d21ba5/index-mask-and-js-load-original-command.sh",
+      "sha256": "1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a",
+      "matchesOriginalSealedArtifactIndex": true,
+      "label": "MISCAPTURED: later extractor/seal-patching command, not defining parser/mask command; retained unchanged"
+    }
+  ],
+  "countErratum": {
+    "from": 13,
+    "to": 12,
+    "meaning": "Recorded comparison categories, not an invented separately proved thirteenth category",
+    "files": [
+      {
+        "file": "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-comparison.json",
+        "sha256": "cade0c2c8028746feaf5f2a7247f2875d80fe9045b363996b8fa0fbb5265d725",
+        "recordedComparisonCategories": 12,
+        "keys": [
+          "head",
+          "tree",
+          "indexSha256",
+          "indexEntries",
+          "headEntries",
+          "staged",
+          "trackedStatus",
+          "untrackedNames",
+          "sourceBinding",
+          "maintainedAndMarkdown",
+          "protectedSets",
+          "hooks"
+        ]
+      },
+      {
+        "file": "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-to-final-seal-comparison.json",
+        "sha256": "0955225a5b850064443487861f97769b3b03f0eb67ea9406a5b11831edf615ed",
+        "recordedComparisonCategories": 12,
+        "keys": [
+          "head",
+          "tree",
+          "indexSha256",
+          "indexEntries",
+          "headEntries",
+          "staged",
+          "trackedStatus",
+          "untrackedNames",
+          "sourceBinding",
+          "maintainedAndMarkdown",
+          "protectedSets",
+          "hooks"
+        ]
+      }
+    ]
+  },
+  "preservedOldFileHashes": {
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/index-parse-original-command.sh": "1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/index-mask-and-js-load-original-command.sh": "1d86fd8d712a02784b39584a3e8d9eea02be8a33bfbb5064eae4fce14431589a",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-comparison.json": "cade0c2c8028746feaf5f2a7247f2875d80fe9045b363996b8fa0fbb5265d725",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/gate-to-final-seal-comparison.json": "0955225a5b850064443487861f97769b3b03f0eb67ea9406a5b11831edf615ed",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/i02-main-typed-wire-functional.md": "05f4cdb3f4227b32f6b1bf5488985b3142d616429412190c17c648a8bfae9b79",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/artifact-sha256.json": "d9e347580a35df92f0be50bfd62f644e49a09f0c4eb89d195a07af303427e635",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/manifest.json": "f5ed0f3d22aaebb9295814665089e9f4ba441a47e35b8e3a1e5a4a2993e1b500",
+    "/tmp/i02-main-typed-wire-functional-33d21ba5/seal-root.json": "ed8621bf6894d72c803a8592669a191f56317d0fad19af72d2b3469a75748a46"
+  },
+  "oldFilesUnchanged": true,
+  "priorRuntimeResultsReevaluated": false,
+  "qualification": "Restores command provenance, not an independent certification of original parser correctness or raw-index conclusions; parent independent parser remains separate. Current Main CI workflow after freeze is outside this supplement."
+}

@@ -1,0 +1,20 @@
+[
+  {
+    "label": "baseline",
+    "file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-baseline/crates/engine-native/tests/replay_scenarios.rs",
+    "before_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+    "after_sha256": "b226f97ba4e3cf7c0d0c08f037ea3362deb54650511af53926d84b277ce5c0b1",
+    "patch_sha256": "2a24137364ae211e2bdf0ed5d39c2705fd19e1b22dfb8f7d4892e153fcabd54d",
+    "golden_constants_unchanged": true,
+    "observation": "complete snapshots/archive/core/log/RNG/views/choices at existing command seam plus final; no scheduling calls or RNG calls"
+  },
+  {
+    "label": "current",
+    "file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native/tests/replay_scenarios.rs",
+    "before_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+    "after_sha256": "beb5d87cbc834d7e81873343e90d89e2f46470b85e534e8009266b89c86e492f",
+    "patch_sha256": "40eede355577f573aff25e67f8aecc73150c8ba7ede9e304b30e4406503afb8e",
+    "golden_constants_unchanged": true,
+    "observation": "complete snapshots/archive/core/log/RNG/views/choices at existing command seam plus final; no scheduling calls or RNG calls"
+  }
+]

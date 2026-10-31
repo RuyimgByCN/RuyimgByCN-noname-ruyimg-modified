@@ -1,6 +1,6 @@
 # NC10公开Own纯规划修复与限定验收（2026-10-31）
 
-基线Main `5fc0f77403d90fa4555156bf01722450cbe7bf3b`，330/105/758/WS6。最终六文件已精确接入Main工作树，并完成本地限定验收；提交与发布另行登记。总体Goal授权本次现有API修复，沿用 `plan_action -> Plan`；裁决30属于I02，不是本修复的授权来源。
+基线Main `5fc0f77403d90fa4555156bf01722450cbe7bf3b`，330/105/758/WS6。最终六文件已精确接入Main并完成限定验收，按裁决18入库 `d07b35f94a42b282222dda4ab7bbc5c39ab8fddb`，随后按25正常发布至native-convergence；远端main保持。[本次exact-head CI失败已独立登记](publication-ci/README.md)，两个Windows checkout失败的局部longpaths修正另行审查并接入，真实新Windows结果待后续CI，不能挪用旧5fc十绿。总体Goal授权本次现有API修复，沿用 `plan_action -> Plan`；裁决30属于I02，不是本修复的授权来源。
 
 Own分支在时钟、克隆、遮蔽、候选枚举及模拟前返回，和NativeSession共享公开选项选择器。真实P/Q完整公开输入及事件相同，完整Plan由nodes4/11差异修为相等，两个建议实际提交均Pending；后续续行仍不同，不构成执行证书。v2只在allow_cancel为真且选项数不合界时清成空答案，否则保留确定性建议；不隐藏搜索或重试正式提交。
 

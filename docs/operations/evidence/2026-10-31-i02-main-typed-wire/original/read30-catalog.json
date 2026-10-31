@@ -1,0 +1,152 @@
+{
+  "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts": {
+    "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+    "lines": 97,
+    "bytes": 4572
+  },
+  "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts": {
+    "sha256": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+    "lines": 815,
+    "bytes": 27411
+  },
+  "apps/web-client/scripts/presentation-fixtures.mjs": {
+    "sha256": "f6935de136ffc6f4c552199069825ae82384f29a833655c2b5f53c223d00234f",
+    "lines": 29,
+    "bytes": 1882
+  },
+  "apps/web-client/scripts/presentation-metadata.test.mjs": {
+    "sha256": "ea9d5d8fe2effee11eda2b69590a1463a80c31278527de73c0b53c7ecd2aaf9a",
+    "lines": 205,
+    "bytes": 16252
+  },
+  "apps/web-client/src/engine/presentationMetadata.ts": {
+    "sha256": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+    "lines": 107,
+    "bytes": 10429
+  },
+  "apps/web-client/src/types/presentation.ts": {
+    "sha256": "cab127e67b0b68ccdba338fbf33a835ba3c747ac326bc0f5a73de419fcddc1f6",
+    "lines": 30,
+    "bytes": 2526
+  },
+  "crates/engine-api/src/presentation.rs": {
+    "sha256": "78d99991f19c038dc0ad571b1d5d5483283cfe94c1b460a8973bb4786b321017",
+    "lines": 382,
+    "bytes": 12554
+  },
+  "crates/engine-api/src/presentation/validation.rs": {
+    "sha256": "23135c029fbc0c6cfd2ec454c84e992bbeada614794d03d484a4cc962409e146",
+    "lines": 394,
+    "bytes": 10969
+  },
+  "crates/engine-protocol/src/presentation.rs": {
+    "sha256": "3b74feecdc7bdf1a0fc2c4e598a5d6d6eb9158db3a076303994b42ba41ca7bb3",
+    "lines": 40,
+    "bytes": 1378
+  },
+  "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs": {
+    "sha256": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+    "lines": 273,
+    "bytes": 7884
+  },
+  "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs": {
+    "sha256": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+    "lines": 68,
+    "bytes": 1950
+  },
+  "crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json": {
+    "sha256": "7021fcc8aa95a2655dd73087a21440d4569f16816145c4a3a08ae1a18288dd14",
+    "lines": 716,
+    "bytes": 13721
+  },
+  "crates/engine-protocol/tests/fixtures/i02-presentation.json": {
+    "sha256": "8991f6c39f9d065dde0570dfb98183dbe1fcd2c6707fde3900f70b92c277d0ee",
+    "lines": 205,
+    "bytes": 6711
+  },
+  "crates/engine-protocol/tests/presentation.rs": {
+    "sha256": "19310add25400a3837a6212f23508525e8907357278a4a24ce57117b24a62fbb",
+    "lines": 118,
+    "bytes": 5402
+  },
+  "crates/engine-protocol/tests/presentation_main5fc_reader.rs": {
+    "sha256": "743577a6aa85e7599fec5a5991d608d2e281302b35d8d4b76c164ba1ca76cfda",
+    "lines": 33,
+    "bytes": 1810
+  },
+  "apps/game-server/src/room.rs": {
+    "sha256": "8c345d961cfc68caaf4f78bb9ab9fb4b35a8d3f613c1f8470975391a72aeb88a",
+    "lines": 652,
+    "bytes": 24070
+  },
+  "apps/game-server/src/room_native_actor.rs": {
+    "sha256": "984f16e59ef74dbc54746bde0f514028f78cac60d440e51cf939b2e1fa87470c",
+    "lines": 930,
+    "bytes": 37980
+  },
+  "apps/game-server/src/room_native_actor/timeout.rs": {
+    "sha256": "f6543bc4ef44447817867d2a212b47c3f731f55b4e577095d882f5dbdd138e53",
+    "lines": 160,
+    "bytes": 6356
+  },
+  "apps/web-client/scripts/nc03-worker-clone.test.mjs": {
+    "sha256": "cc5141727a5658f8350d81a4af06e362ab145f7cd6ac2e35f41f39594e522af9",
+    "lines": 119,
+    "bytes": 5271
+  },
+  "apps/web-client/scripts/nc04-worker-failure.test.mjs": {
+    "sha256": "0e6eba88effbaff2201b55312da4e7677f61d81482ef3637c8a9b1cb7ce4cae7",
+    "lines": 403,
+    "bytes": 22154
+  },
+  "apps/web-client/src/engine/client.ts": {
+    "sha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+    "lines": 471,
+    "bytes": 17835
+  },
+  "apps/web-client/src/engine/desktopEngineTransport.ts": {
+    "sha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+    "lines": 101,
+    "bytes": 4851
+  },
+  "apps/web-client/src/engine/networkClient.ts": {
+    "sha256": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+    "lines": 836,
+    "bytes": 28999
+  },
+  "apps/web-client/src/engine/viewStore.ts": {
+    "sha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+    "lines": 201,
+    "bytes": 6379
+  },
+  "apps/web-client/src/types/engine.ts": {
+    "sha256": "960c71289b820b5e3d7122c0cea199ffeae2ef9b261b1b8aa7a89b3253b10a92",
+    "lines": 354,
+    "bytes": 8795
+  },
+  "crates/engine-api/src/lib.rs": {
+    "sha256": "888a65c6556e4bfe2dbf251759d17351506fb44195ed8ec287591eb8a68e5108",
+    "lines": 35,
+    "bytes": 805
+  },
+  "crates/engine-protocol/src/lib.rs": {
+    "sha256": "260432c6409ed6fcb40878e60544364ed94d1b31bd6fa2364554dabc301be672",
+    "lines": 24,
+    "bytes": 761
+  },
+  "crates/engine-protocol/src/messages.rs": {
+    "sha256": "e64744086c7d2987815fafec0e2e851089b07dbf85a92ded45ecc7e81ebb77fe",
+    "lines": 276,
+    "bytes": 8157
+  },
+  "crates/engine-protocol/src/wire.rs": {
+    "sha256": "0c2ba270a92a40efbb5a25713ea802ab32e66e9542d8c500af94665b955e2d05",
+    "lines": 71,
+    "bytes": 2069
+  },
+  "crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json": {
+    "sha256": "40a1ec9ad4ccf21e109d627d3000560a9f6c4a1f5db83dd239ef62af1d29ad1d",
+    "lines": 32,
+    "bytes": 884
+  }
+}

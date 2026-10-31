@@ -1,3 +1,5 @@
+import { MAX_ENGINE_OUTSTANDING } from "./desktopEngineTransport";
+import { presentationMetadata } from "./presentationMetadata";
 import { validateObserverMetadata } from "./observerMetadata";
 import { publicEventLabel } from "./publicEvents";
 import type {
@@ -425,6 +427,7 @@ export class NetworkEngineClient {
     if (!this.roomId || !this.playerId) {
       return Promise.reject(new Error("当前不是已入座玩家"));
     }
+    if (this.pending.size >= MAX_ENGINE_OUTSTANDING) return Promise.reject(new Error("Engine busy; request was not submitted（未提交）"));
     const key = this.connectionId * 1_000_000 + this.idemSeq++;
     let intent!: PendingCommand;
     const promise = new Promise<EngineEnvelope>((resolve, reject) => {
@@ -470,7 +473,7 @@ export class NetworkEngineClient {
       this.persistedPending && this.persistedPending.roomId === this.roomId
         ? this.persistedPending
         : null;
-    if (persisted && !this.pending.has(persisted.key)) {
+    if (persisted && !this.pending.has(persisted.key) && this.pending.size < MAX_ENGINE_OUTSTANDING) {
       // 页面刷新后的新实例没有旧 Promise；用占位 pending 承接服务端回执，
       // 并通过 envelope 监听者把权威结果交回界面。
       const intent: PendingCommand = {
@@ -519,6 +522,23 @@ export class NetworkEngineClient {
       return;
     }
     const payload = message.payload ?? {};
+    if (Object.hasOwn(payload, "presentation")) {
+      try {
+        if (new TextEncoder().encode(json).length > 256 * 1024) throw new Error("presentation envelope exceeds 256KiB");
+        if (message.type !== "CommandOutcome" || !payload.view) throw new Error("unexpected presentation location");
+        const view = payload.view as ObserverSnapshot;
+        presentationMetadata(payload.presentation, view.revision, view.seats.length);
+      } catch (error) {
+        const failure = new Error(`服务端呈现元数据无效，操作结果未确认: ${String(error)}`);
+        const key = payload.idempotency_key;
+        const header = payload.header as Partial<MessageHeader> | undefined;
+        const matchingReply = header?.room_id === this.roomId && typeof header.conn_seq === "number" && Number.isSafeInteger(header.conn_seq) && header.conn_seq > 0;
+        const call = matchingReply && typeof key === "number" && Number.isSafeInteger(key) && key > 0 ? this.pending.get(key) : undefined;
+        if (call) call.reject(failure);
+        else console.error(failure.message);
+        return;
+      }
+    }
     if (payload.view) {
       try { validateObserverMetadata(payload.view as ObserverSnapshot, (payload.choice as ChoiceRequest | null) ?? null); }
       catch (error) { this.rejectOutstanding(new Error(`服务端元数据无效：${String(error)}`)); return; }
@@ -639,6 +659,7 @@ export class NetworkEngineClient {
       (payload.legal_actions as LegalAction[] | undefined) ?? [],
       payload.result ?? null
     );
+    if (Object.hasOwn(payload, "presentation")) envelope.presentation = presentationMetadata(payload.presentation, view.revision, view.seats.length);
     const key = Number(payload.idempotency_key ?? 0);
     clearPendingStorage(key);
     if (this.persistedPending?.key === key) this.persistedPending = null;

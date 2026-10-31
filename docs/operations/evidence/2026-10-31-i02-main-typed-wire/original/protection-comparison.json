@@ -1,0 +1,20 @@
+{
+  "head": true,
+  "tree": true,
+  "indexSha256": false,
+  "indexEntries": true,
+  "headEntries": true,
+  "staged": true,
+  "trackedStatus": true,
+  "untrackedNames": true,
+  "sourceBinding": true,
+  "maintainedAndMarkdown": true,
+  "hooks": true,
+  "protectedSets": {
+    "admission31": true,
+    "protected": true,
+    "modules": false,
+    "dist": true,
+    "root_gates": true
+  }
+}

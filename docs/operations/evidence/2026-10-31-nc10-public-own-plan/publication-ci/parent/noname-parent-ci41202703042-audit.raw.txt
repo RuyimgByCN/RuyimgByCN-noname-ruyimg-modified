@@ -1,0 +1,80 @@
+{
+  "utc": "2026-10-31T13:30:44.673016+00:00",
+  "status": "PASS_INDEPENDENT_REGISTRATION_OF_8_SUCCESS_2_FAILURE",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41202703042-__7ls7ed",
+  "source_E": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd",
+  "manifest_entries_SHA_CRC": 101,
+  "primary_files": 103,
+  "gzip_logs": 10,
+  "decompressed_bytes": 4245871,
+  "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "run": 41202703042,
+  "attempt": 1,
+  "job_counts": {
+    "success": 8,
+    "failure": 2
+  },
+  "step_counts": {
+    "success": 110,
+    "failure": 2,
+    "skipped": 14,
+    "null": 0
+  },
+  "rust_counts": {
+    "gates-ubuntu": [
+      6922,
+      0,
+      77
+    ],
+    "build-macos-latest": [
+      853,
+      0,
+      0
+    ],
+    "build-ubuntu-latest": [
+      853,
+      0,
+      0
+    ],
+    "native-web": [
+      1830,
+      0,
+      75
+    ]
+  },
+  "Windows_checkout_failures": {
+    "build-windows-latest": {
+      "CRLF": 197,
+      "failed_step": 2,
+      "compile_and_test_executed": false
+    },
+    "desktop-windows-latest": {
+      "CRLF": 198,
+      "failed_step": 2,
+      "compile_and_test_executed": false
+    }
+  },
+  "independent_live_API_reads": [
+    [
+      "run",
+      0
+    ],
+    [
+      "jobs",
+      0
+    ],
+    [
+      "commit",
+      0
+    ],
+    [
+      "native_ref",
+      0
+    ],
+    [
+      "main_ref",
+      0
+    ]
+  ],
+  "qualification": "Windows product steps were skipped after real checkout Filename too long, not test failures or passes. Raw failures retained; no rerun/dispatch/push/Main writes. Original d07 source only, later I02 Main changes not CI inputs. Source6 committed blobSHA freshly checked, not a repeated204MB body hash scan."
+}

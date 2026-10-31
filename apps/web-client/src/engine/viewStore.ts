@@ -1,3 +1,4 @@
+import { validatePresentationResponse } from "./presentationMetadata";
 import { reactive } from "vue";
 import type { ChoiceRequest, EngineEnvelope, LegalAction, ObserverSnapshot } from "../types/engine";
 import { perfEnvelopeApplied, perfEnvelopeApplying } from "./perfProbe";
@@ -68,6 +69,7 @@ export function createViewStore(): ViewState {
 let effectId = 1;
 
 export function applyEnvelope(store: ViewState, env: EngineEnvelope) {
+  validatePresentationResponse(env);
   // 表现层性能采样（默认关闭时立即返回）：记录应用信封、DOM 刷新与下一帧时刻。
   perfEnvelopeApplying();
   applyEnvelopeState(store, env);

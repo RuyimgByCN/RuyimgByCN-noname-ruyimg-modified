@@ -1,0 +1,392 @@
+    Blocking waiting for file lock on package cache
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.65s
+     Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/kernel-b09703a09ed5dfc8)
+
+running 341 tests
+test native_kernel::activate::activate_skill_without_grant_rejected ... ok
+test native_kernel::area_attacks::aoe_continues_after_midqueue_death ... ok
+test native_kernel::area_attacks::savage_per_target_nullify ... ok
+test native_kernel::area_attacks::savage_nullified_target_discards_once ... ok
+test native_kernel::area_attacks::archery_attack_all_pass_takes_damage ... ok
+test native_kernel::area_attacks::aoe_target_freeze_at_commit ... ok
+test native_kernel::activate::activate_skill_rejected_outside_play_phase ... ok
+test native_kernel::area_attacks::savage_attack_response_skip_and_pass ... ok
+test native_kernel::boss_bianchengwang::boss_bianchengwang_leizhu_death_thunder_sequential ... ok
+test native_kernel::boss_bifang::boss_bifang_honglianx_red_excluded_and_judge_gain ... ok
+test native_kernel::boss_chujiangwang::boss_chujiangwang_fankui_reuse_gain ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_bufo_prepare_range1_fire ... ok
+test native_kernel::boss_bianchengwang::boss_bianchengwang_leizhou_leifu_phase_arms ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_bufo_damage_cap ... ok
+
+thread 'native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source' (21550643) panicked at crates/engine-native/tests/groups/../native_kernel/boss_chujiangwang.rs:168:5:
+楚江王已死亡; pending=Some(OpenChoice { id: 1, observer: 1, spec: ChoiceSpec { kind: Confirm, prompt: "trigger_confirm", options: [Confirm], min: 1, max: 1, allow_cancel: true } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test native_kernel::boss_chujiangwang::boss_chujiangwang_weimu_black_trick_block ... ok
+test native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source ... FAILED
+test native_kernel::boss_dushiwang::boss_dushiwang_remen_aoe_skip ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_wuliang_prepare_recover_end_draw ... ok
+test native_kernel::boss_bifang::boss_bifang_zhaohuo_fire_nature_and_immune ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_zhifen_prepare_steal_and_fire ... ok
+test native_kernel::boss_dongzhuo::boss_dongzhuo_jiuchi_viewas ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_huoxing_death_fire_all ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_remen_sha_reject_then_armor ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_diting_distance_both_ways ... ok
+test native_kernel::boss_hundun::boss_hundun_wuzang_draw_and_hand_limit ... ok
+test native_kernel::boss_guojia::boss_guojia_qizuo_trick_reuse ... ok
+test native_kernel::boss_futai2::boss_futai2_tao_banned_both_sides ... ok
+test native_kernel::boss_bifang::boss_bifang_yanyu_judge_fire_max_three ... ok
+test native_kernel::boss_guojia::boss_guojia_yuance_judge_branches ... ok
+test native_kernel::boss_baihu::boss_baihu_kuangxiao_sha_range_and_targets ... ok
+test native_kernel::boss_liubei::boss_liubei_zhangwu_discard_or_damage ... ok
+test native_kernel::boss_mengpo::boss_mengpo_shiyou_distinct_suit_gain ... ok
+test native_kernel::boss_liubei::boss_liubei_xiaoxiong_gain_and_damage ... ok
+test native_kernel::boss_mamian::boss_mamian_lianyu_fire_all ... ok
+test native_kernel::boss_mengpo::boss_mengpo_wanghun_death_clear_and_disable ... ok
+test native_kernel::boss_hundun::boss_hundun_xiangde_yinzei ... ok
+test native_kernel::boss_mode::boss_mode_add_fellow_seat_expansion ... ok
+test native_kernel::boss_luocha::boss_luocha_yushou_moyany ... ok
+test native_kernel::boss_mengpo::boss_mengpo_wangshi_basic_ban_turn_clear ... ok
+test native_kernel::boss_heiwuchang::boss_heiwuchang_guiji_taiping_suoming_xixing ... ok
+test native_kernel::boss_mode::boss_mode_chongzheng_revival_and_victory ... ok
+test native_kernel::boss_mamian::boss_mamian_juece_last_hand_damage ... ok
+test native_kernel::boss_nianshou::boss_nianshou_ruizhi_prune ... ok
+test native_kernel::boss_guojia::boss_guojia_guimou_mad_lifecycle ... ok
+test native_kernel::boss_jinshenrushou::boss_jinshenrushou_xingqiu_link_toggle ... ok
+test native_kernel::boss_nianshou::boss_nianshou_jingjue_danshu_recover ... ok
+test native_kernel::boss_pangtong::boss_pangtong_qiwu_club_recover ... ok
+test native_kernel::boss_nianshou::boss_nianshou_shouyi_range_free ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_abi_source_fire_no_source_skip ... ok
+test native_kernel::boss_nianshou::boss_nianshou_nianrui_mengtai ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_pingdeng_death_two_wave_fire ... ok
+test native_kernel::boss_huoshenzhurong::boss_huoshenzhurong_xingxia_yanling_burn ... ok
+test native_kernel::boss_mushengoumang::boss_mushengoumang_buchun_revive_and_recover ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_suozu_link_all_others ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_juhun_end_flip_first ... ok
+test native_kernel::boss_pangtong::boss_pangtong_tianyu_end_link_all ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_panguan_delay_reject ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_wangxiang_death_strip_equips ... ok
+test native_kernel::boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_futai_recover_wounded ... ok
+test native_kernel::boss_stage::boss_stage_opening_and_first_actor ... ok
+test native_kernel::boss_nianshou::boss_nianshou_nbianshen_rotation_renxing ... ok
+test native_kernel::boss_shuishengonggong::boss_shuishengonggong_juehong_strip_enemies ... ok
+test native_kernel::boss_songdiwang::boss_songdiwang_heisheng_death_link_shengfu ... ok
+test native_kernel::boss_shuishenxuanming::boss_shuishenxuanming_zirun_draw_all ... ok
+test native_kernel::boss_taishanwang::boss_taishanwang_fudu_kujiu_arms ... ok
+test native_kernel::boss_taishanwang::boss_taishanwang_renao_death_fire ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_zhue_dual_draw ... ok
+test native_kernel::boss_qinglong::boss_qinglong_shenyi_judge_void_and_never_flipped ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_yandu_gain_at_end_phase ... ok
+test native_kernel::boss_shujing::boss_shujing_cuidui_poison_cycle ... ok
+test native_kernel::boss_taowu::boss_taowu_luanchang_virtual_aoe ... ok
+test native_kernel::boss_taotie::boss_taotie_cangmu_jicai ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_yaoshou_distance_minus_two ... ok
+DBG sd=77 inhand=true judge=[]
+test native_kernel::boss_taotie::boss_taotie_tanyu_skip_discard_and_max_hand_lose_hp ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_jiushou_limit_nine_and_refill ... ok
+test native_kernel::boss_taihao::boss_taihao_shenen_aura ... ok
+test native_kernel::boss_xuanwu::boss_xuanwu_lingqu_damage_counter ... ok
+test native_kernel::boss_taowu::boss_taowu_minwan_lockset_draw_and_target_mod ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_zhuxin_death_min_hp ... ok
+test native_kernel::boss_taowu::boss_taowu_nitai_in_shield_out_fire ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_zhadao_pierce_renwang ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_tiemian_black_sha_block ... ok
+test native_kernel::area_attacks::savage_nullify_after_deck_drain_conserves ... ok
+test native_kernel::boss_yandi::boss_yandi_shaohao_pure_entries ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_fengdong_hand_ban ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_duqu_shedu_echou ... ok
+test native_kernel::boss_yecha::boss_yecha_modao_mojian_danshu ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_xunyou_steal_and_equip ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_wuxin_damage_only ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_jidian_chain_guard ... ok
+test native_kernel::boss_yinjian::boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou ... ok
+test native_kernel::boss_zhouyu::boss_zhouyu_huoshen_fire_immune_recover ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_lunhui_swap_at_judge ... ok
+test native_kernel::boss_qinglong::boss_qinglong_releiji_thunder_judge ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_fanshi_damage_toggle ... ok
+test native_kernel::boss_yanling::boss_yanling_huihuo_furan ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_jueqing_wuxin_damage_faces ... ok
+test native_kernel::boss_zhenji::boss_zhenji_tashui_flip_and_fanghua ... ok
+test native_kernel::boss_wuguanwang::boss_wuguanwang_zhiwang_gongzheng_xuechi ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_wuxin_delay_and_shangshix ... ok
+test native_kernel::boss_zhenji::boss_zhenji_lingbo_jiaoxia_draws ... ok
+test native_kernel::caocao::caocao_jianxiong_takes_damaging_card ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_wangsheng_virtual_savage ... ok
+test native_kernel::chain::chain_double_nullify_leaves_nobody_linked ... ok
+test native_kernel::chain::chain_card_toggles_link ... ok
+test native_kernel::catalog::catalog_shared_across_commands ... ok
+test native_kernel::chain::chain_nullify_is_per_target_first_only ... ok
+test native_kernel::chain::chain_nullify_is_per_target_second_only ... ok
+test native_kernel::chain::chain_propagation_preserves_source ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_tiandao_rewrite ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn ... ok
+test native_kernel::combat::normal_damage_does_not_propagate ... ok
+test native_kernel::combat::fire_sha_propagates_through_chain ... ok
+
+thread 'native_kernel::combat::propagated_damage_is_full_resolution' (21550754) panicked at crates/engine-native/tests/groups/../native_kernel/combat.rs:200:5:
+assertion `left == right` failed
+  left: 4
+ right: 3
+test native_kernel::combat::fire_sha_shares_sha_limit ... ok
+test native_kernel::d4::d4_boss_b0_add_fellow_api_appends_and_marks_boss_side ... ok
+test native_kernel::combat::sha_damage_dealt_carries_card ... ok
+test native_kernel::combat::propagated_damage_is_full_resolution ... FAILED
+test native_kernel::d4::d4_boss_b0_archive_format_v79_rejects_v78_without_migration ... ok
+test native_kernel::boss_zhouyu::boss_zhouyu_honglian_end_and_xianyin ... ok
+test native_kernel::d4::d4_boss_b0_change_boss_api_reinit_updates_pointer ... ok
+test native_kernel::d4::d4_boss_b0_ban_query_stub_always_false ... ok
+test native_kernel::combat::sha_dodge_damage_limit_and_range ... ok
+test native_kernel::boss_zhuyin::boss_zhuyin_xiongshou_semantics ... ok
+test native_kernel::d4::d4_boss_b1_qingmu_host_tags ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_sipu_use_ban_first_two ... ok
+test native_kernel::d4::d4_boss_b2_sixiang_host_tags ... ok
+test native_kernel::combat::thunder_damage_propagates_and_unlinks_all ... ok
+test native_kernel::boss_zhuanxu::boss_zhuanxu_zaoyi_grant_and_exec ... ok
+test native_kernel::d4::d4_boss_b0_stage_state_default_none_roundtrip ... ok
+test native_kernel::cixiong::cixiong_opposite_gender_discard_or_draw ... ok
+test native_kernel::d4::d4_boss_b3_sixiang3_host_tags ... ok
+test native_kernel::d4::d4_boss_b2_chiyan2_chain_to_zhurong ... ok
+test native_kernel::d4::d4_boss_b2_xuanlin2_chain_to_gonggong ... ok
+test native_kernel::d4::d4_boss_b0_hash_includes_stage_fields ... ok
+test native_kernel::d4::d4_boss_b1_qingmu2_chain_to_goumang ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_juyuan_storage_and_extra_target ... ok
+test native_kernel::d4::d4_boss_b3_baimang3_chain_to_shaohao_sides ... ok
+test native_kernel::d4::d4_boss_b3_chiyan3_chain_to_yandi_sides ... ok
+test native_kernel::d4::d4_boss_b4_host_tags ... ok
+test native_kernel::d4::d4_boss_b1_qingmu3_chain_to_taihao_sides ... ok
+test native_kernel::d4::d4_boss_b3_xuanlin3_chain_to_zhuanxu ... ok
+test native_kernel::d4::d4_boss_b4_chiyi_mark_then_real_damage ... ok
+test native_kernel::daqiao::daqiao_guose_diamond_as_le ... ok
+test native_kernel::boss_zhuque::boss_zhuque_fentian_red_cards ... ok
+test native_kernel::d4::d4_boss_b2_baimang2_chain_to_rushou ... ok
+test native_kernel::d4::d4_boss_b4_baiyi_discard_thunder_and_draw ... ok
+test native_kernel::dead::dead_skill_holder_excluded_from_rewrite ... ok
+test native_kernel::d4::d4_boss_b4_qingyi_rounds_change_hp ... ok
+test native_kernel::d4::d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji ... ok
+test native_kernel::death::death_clears_judge_zone ... ok
+test native_kernel::diaochan::diaochan_biyue_draws_at_end_phase ... ok
+test native_kernel::discard::discard_phase_enforces_hand_limit ... ok
+test native_kernel::distance::distance_clamp_to_minimum_1 ... ok
+test native_kernel::d4::d4_boss_b4_bianshen3_changes_boss_seeded ... ok
+test native_kernel::duel::duel_can_be_nullified ... ok
+test native_kernel::e01::e01_extension_registry_lifecycle ... ok
+test native_kernel::duel::duel_damage_can_kill ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_xushi_flip_and_aoe ... ok
+test native_kernel::d4::d4_boss_b4_bianshen4_changes_boss_seeded ... ok
+test native_kernel::e02::e02_registry_rejects_uninstalled_operations ... ok
+test native_kernel::duel::duel_alternating_sha_until_pass ... ok
+test native_kernel::doudizhu::doudizhu_mode_victory_and_roundtrip ... ok
+test native_kernel::duel::duel_no_sha_immediate_loss ... ok
+test native_kernel::duel::duel_does_not_consume_sha_limit ... ok
+test native_kernel::e03::e03_extension_cards_in_catalog_and_game ... ok
+test native_kernel::e04::e04_extension_conflict_detection ... ok
+test native_kernel::dying::dying_save_with_jiu_derivation_restores ... ok
+test native_kernel::e06::e06_extension_general_metadata ... ok
+test native_kernel::doudizhu::doudizhu_binglin_opening_draw ... ok
+test native_kernel::e05::e05_extension_card_in_game ... ok
+test native_kernel::general::general_assembly_grants_and_remove_revokes_slot_skills ... ok
+test native_kernel::d4::d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo ... ok
+test native_kernel::equipment::equip_distance_skips_dead_players ... ok
+test native_kernel::ganning::ganning_qixi_black_card_as_dismantle ... ok
+
+thread 'native_kernel::dying::dying_rescue_and_death' (21550798) panicked at crates/engine-native/tests/groups/../native_kernel/dying.rs:71:5:
+pending=Some(OpenChoice { id: 2, observer: 0, spec: ChoiceSpec { kind: Confirm, prompt: "trigger_confirm", options: [Confirm], min: 1, max: 1, allow_cancel: true } })
+test native_kernel::dying::dying_rescue_and_death ... FAILED
+test native_kernel::gongsunzan::gongsunzan_assembly_yicong_distance ... ok
+test native_kernel::equipment::equip_horses_weapon_range_and_replacement ... ok
+test native_kernel::e03::e03_extension_catalog_content_lock_in_game_and_restore ... ok
+test native_kernel::general::general_bundle_grant_full_skill_set ... ok
+test native_kernel::guanshi::guanshi_forces_damage_after_dodge ... ok
+DEBUG out=Accepted { state_hash: [23, 140, 189, 44, 41, 100, 119, 162, 213, 241, 5, 60, 90, 197, 153, 116, 82, 78, 162, 220, 65, 236, 229, 71, 108, 240, 239, 204, 58, 187, 162, 193] } hp1=3 discard=[97, 100, 53, 47, 123, 116, 90, 51, 106, 89, 78, 114, 54, 11, 66, 117, 59, 6, 45] table=[] hand0=[52]
+test native_kernel::guanyu::guanyu_wusheng_red_card_as_sha ... ok
+test native_kernel::ganfuren::ganfuren_assembly_shushen_shenzhi ... ok
+PROBE-FT pre: hand0=[20] alive=[true, true, true, test native_kernel::guidao::guidao_rewrite_replaces_judgment ... ok
+true] eq0=[123]
+test native_kernel::guidao::guidao_tiandu_combo_final_card_gained ... ok
+test native_kernel::guojia::guojia_jiji_draws_and_gives_one_card ... ok
+PROBE-FT out=Pending { choice: OpenChoice { id: 1, observer: 2, spec: ChoiceSpec { kind: RespondCard, prompt: "respond_shan", options: [Pass, Card(32)], min: 1, max: 1, test native_kernel::guozhan::guozhan_compensatory_reveal_during_targeting ... ok
+allow_cancel: false } } }
+test native_kernel::fangtian::fangtian_multi_target_sha ... ok
+test native_kernel::huanggai::huanggai_kurou_lose_hp_draw_two ... ok
+test native_kernel::huangyueying::huangyueying_jizhi_draws_on_trick ... ok
+test native_kernel::guozhan::guozhan_reveal_gating_view_isolation ... ok
+test native_kernel::equipment::armor_bagua_judgement_semantics ... ok
+test native_kernel::huatuo::huatuo_qingnang_heals_wounded_player ... ok
+test native_kernel::guozhan::guozhan_general_slots_roundtrip ... ok
+test native_kernel::hujia::hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass ... ok
+test native_kernel::guidao::guidao_two_holders_asked_in_seat_order ... ok
+PROBE-HB2 ask2 prompt=hanbing_prevent_confirm obs=0
+PROBE-HB2 after hp1=3 hand1=[47]
+test native_kernel::hujia::hujia_shan_counts_toward_wushuang_requirement ... ok
+test native_kernel::hujia::hujia_skips_non_wei_helpers ... ok
+test native_kernel::hanbing::hanbing_prevents_damage_discards_two_cards ... ok
+test native_kernel::hujia::hujia_public_asks_do_not_leak_hidden_shan ... ok
+test native_kernel::guozhan::guozhan_m3_faction_victory ... ok
+test native_kernel::host::host_assembler_prototype_contract ... ok
+test native_kernel::hujia::hujia_pending_ask_byte_roundtrip_restores ... ok
+test native_kernel::identity::identity_lord_killing_loyalist_discards_all ... ok
+test native_kernel::identity::identity_lord_penalty_discards_equips ... ok
+test native_kernel::identity::identity_lord_death_decides_by_faction ... ok
+test native_kernel::identity::identity_lord_side_wins_when_rebels_and_traitor_dead ... ok
+test native_kernel::identity::identity_rebel_death_rewards_killer ... ok
+test native_kernel::jijiang::jijiang_activate_not_phase_locked ... ok
+test native_kernel::jijiang::jijiang_pending_ask_restore_continues ... ok
+test native_kernel::jiu::jiu_boosts_next_sha_once_per_turn ... ok
+test native_kernel::jiu::jiu_bonus_survives_byte_restore ... ok
+test native_kernel::general::general_faction_mapping_complete ... ok
+test native_kernel::jiu::jiu_saves_dying_player ... ok
+
+thread 'native_kernel::identity::identity_matrix_for_supported_seats' (21550845) panicked at crates/engine-native/src/engine/construction.rs:23:9:
+identity mode supports 4-8 seats, got 2
+
+thread 'native_kernel::identity::identity_matrix_for_supported_seats' (21550845) panicked at crates/engine-native/src/engine/construction.rs:23:9:
+identity mode supports 4-8 seats, got 3
+
+thread 'native_kernel::identity::identity_matrix_for_supported_seats' (21550845) panicked at crates/engine-native/src/engine/construction.rs:23:9:
+identity mode supports 4-8 seats, got 9
+test native_kernel::judgement::delayed_trick_play_time_nullify_window ... ok
+test native_kernel::identity::identity_matrix_for_supported_seats ... ok
+test native_kernel::judgement::judge_order_delayed_first_then_lightning_hit_kills ... ok
+test native_kernel::judgement::judge_lightning_saved_by_enough_taos ... ok
+test native_kernel::judgement::judge_zone_same_name_limit ... ok
+test native_kernel::judgement::bing_judgement_skips_draw_phase ... ok
+test native_kernel::judgement::judgement_event_order_rewrite_then_tiandu ... ok
+test native_kernel::judgement::judgement_no_rewrite_single_finalized ... ok
+test native_kernel::judgement::delayed_trick_bing_and_shandian_nullify_window ... ok
+test native_kernel::judgement::lightning_miss_to_next_with_same_name_discards ... ok
+test native_kernel::judgement::le_judgement_skips_play_phase ... ok
+test native_kernel::judgement::lightning_damage_has_no_card ... ok
+test native_kernel::judgement::lightning_miss_transfer_skips_dead_seat ... ok
+test native_kernel::judgement::judge_owner_death_settles_zones_and_conservation ... ok
+test native_kernel::judgement::judge_order_grouping_multi_cards_and_restore ... ok
+test native_kernel::leisha::leisha_resolves_as_sha_and_shares_limit ... ok
+test native_kernel::kof::kof_engine_mode_session_advance ... ok
+test native_kernel::leisha::leisha_pending_ask_byte_roundtrip ... ok
+test native_kernel::last::last_rebel_reward_precedes_victory ... ok
+test native_kernel::distance::distance_range_reference_differential ... ok
+test native_kernel::identity::identity_full_match_replay_reaches_lord_side_victory ... ok
+test native_kernel::liubei::liubei_rende_gives_cards_and_heals ... ok
+test native_kernel::luxun::luxun_lianying_triggers_on_forced_discard ... ok
+test native_kernel::general::general_table_grants_all_bundles ... ok
+test native_kernel::luxun::luxun_qianxun_blocks_le_target ... ok
+test native_kernel::luxun::luxun_lianying_draws_after_losing_last_card ... ok
+test native_kernel::lidian::lidian_assembly_xunxun_wangxi ... ok
+test native_kernel::luoshen::luoshen_repeat_judgement_gains_black_cards ... ok
+test native_kernel::lvbu::lvbu_wushuang_duel_needs_double_sha ... ok
+test native_kernel::lvmeng::lvmeng_keji_skips_discard_without_sha ... ok
+test native_kernel::liubei::liubei_jijiang_borrows_sha_from_shu_helper ... ok
+test native_kernel::lvbu::lvbu_wushuang_sha_needs_two_dodges ... ok
+test native_kernel::n04f::n04f_snapshot_association_validation ... ok
+test native_kernel::machao::machao_tieji_judgement_blocks_shan_on_red ... ok
+test native_kernel::machao::machao_mashu_distance_minus_one ... ok
+test native_kernel::kof::kof_m1_two_player_pure_command_endgame ... ok
+test native_kernel::n08::n08_jijiu_red_card_as_tao ... ok
+test native_kernel::n08::n08_liuli_transfers_sha_target ... ok
+test native_kernel::n08::n08_hujia_borrows_shan_from_others ... ok
+test native_kernel::n08::n08_lijian_forces_duel ... ok
+test native_kernel::n10::n10_planner_cancel_and_deadline ... ok
+test native_kernel::n10::n10_planner_stale_rejection ... ok
+test native_kernel::n08::n08_fanjian_give_and_damage ... ok
+test native_kernel::n10::n10_planner_isolation_and_budget ... ok
+test native_kernel::n11::n11_kof_session_parse_negatives ... ok
+test native_kernel::n08::n08_jieyin_heals_both ... ok
+test native_kernel::n10::n10_policy_input_isolation ... ok
+test native_kernel::n10a::n10a_private_choice_answer_hidden_from_others ... ok
+test native_kernel::no::no_nullify_window_for_basic_card ... ok
+test native_kernel::n11b::n11b_archive_header_and_length_validation ... ok
+test native_kernel::n08::n08_qingguo_qicai_jiuyuan ... ok
+test native_kernel::no::no_paoxiao_second_sha_rejected ... ok
+test native_kernel::n11::n11_reveal_grants_skills_and_hp ... ok
+test native_kernel::negative::negative_hp_rescued_by_three_taos ... ok
+test native_kernel::nullify::nullify_cancels_savage ... ok
+test native_kernel::nullify::nullify_on_nullify_reverses ... ok
+test native_kernel::identity::identity_pure_command_traitor_victory ... ok
+test native_kernel::n11a::n11a_auth_token_instance_and_generation_binding ... ok
+test native_kernel::presentation::presentation_visibility_and_render_determinism ... ok
+CARD suit=Club inhand1=true
+test native_kernel::nullify::nullify_rejected_when_played_actively ... ok
+test native_kernel::p2::p2_death_with_machine_held_cards ... ok
+test native_kernel::qinglong::qinglong_replays_sha_after_dodge ... ok
+PLAY Accepted { state_hash: [216, 197, 244, 194, 73, 86, 75, 116, 174, 233, 34, 255, 190, 86, 27, 83, 45, 167, 126, 39, 184, 121, 238, 192, 8, 106, 219, 150, 114, 72, 9, 194] }
+test native_kernel::probe::probe_tashui2_tmp ... ok
+test native_kernel::rende::rende_cumulative_crosses_two_across_activations ... ok
+PROBE-QL pre dist=2 range=5 hand0_has_sha=true alive1=true
+test native_kernel::rejections::rejections_leave_state_unchanged ... ok
+PROBE-QL sha_out=Pending { choice: OpenChoice { id: 1, observer: 0, spec: ChoiceSpec { kind: SelectCards, prompt: "qilin_discard_horse", options: [Card(79)], min: 0, max: 1, allow_cancel: true } } } eq0=[115] eq1=[79] hp1=4
+DBG open: obs=0 prompt=fanjian_target kind=SelectPlayers min=1 max=1 opts=[Player(1), Player(2)]
+DBG derived: obs=0 prompt=fanjian_target kind=SelectPlayers min=1 max=1 opts=[Player(1), Player(2)]
+test native_kernel::render::render_frame_guozhan_generals_isolation ... ok
+test native_kernel::qilin::qilin_bow_discards_target_horse_on_sha_damage ... ok
+test native_kernel::renwang::renwang_blocks_black_sha_only ... ok
+test native_kernel::rollback::abort_after_restore_restores_segment_start ... ok
+test native_kernel::replay::replay_determinism_same_seed_identical ... ok
+test native_kernel::p2::p2_new_choice_points_per_submission_conservation ... ok
+test native_kernel::replay::replay_different_seed_diverges ... ok
+test native_kernel::rollback::abort_requires_open_segment_and_nonsliced_rollback_unchanged ... ok
+test native_kernel::rollback::abort_contract_direct_vs_restored_identical ... ok
+test native_kernel::rollback::budget_exhaustion_rolls_back ... ok
+test native_kernel::rollback::aborted_segment_restores_pre_command_state ... ok
+test native_kernel::d4::d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo ... ok
+test native_kernel::qinggang::qinggang_pierces_armor ... ok
+test native_kernel::guozhan::guozhan_m3_victory_regression_matrix ... ok
+test native_kernel::seat::seat_quota_bounds_commands_and_resets_per_round ... ok
+test native_kernel::simayi::simayi_fankui_steals_from_damage_source ... ok
+test native_kernel::simayi::simayi_fankui_decline_takes_nothing ... ok
+test native_kernel::sancai::sancai_nested_choice_chain_and_decline ... ok
+test native_kernel::snatch::snatch_steals_card_within_distance ... ok
+test native_kernel::simayi::simayi_guicai_rewrites_with_any_suit_card ... ok
+test native_kernel::identity::identity_pure_command_match_reaches_outcome ... ok
+test native_kernel::shandian::shandian_hits_and_transfers ... ok
+test native_kernel::sun::sun_xiangxiang_jixiang_draws_on_equip_loss ... ok
+test native_kernel::skill::skill_disabled_gate_excludes_rewriter ... ok
+test native_kernel::suidun::suidun_prevents_once_per_turn ... ok
+test native_kernel::sunquan::sunquan_zhiheng_discard_n_draw_n ... ok
+test native_kernel::shouyi::shouyi_grants_temporary_yishang_until_owner_turn_end ... ok
+test native_kernel::snapshot::snapshot_roundtrip_while_suspended ... ok
+test native_kernel::suqing::suqing_disables_queued_suidun_mid_resolution ... ok
+test native_kernel::versus::versus_4v4_eight_seats_team_victory ... ok
+test native_kernel::suspension::suspended_segment_rejects_commands_and_resume_requires_open_segment ... ok
+test native_kernel::tiandu::tiandu_gain_own_judge_card_only ... ok
+test native_kernel::versus::versus_mode_team_victory_and_rewards ... ok
+test native_kernel::versus::versus_substitute_revive_on_death ... ok
+test native_kernel::tiandu::tiandu_other_holder_not_asked ... ok
+test native_kernel::wugu::wugu_jiedao_trick_behaviors ... ok
+test native_kernel::wuzhong::wuzhong_taoyuan_trick_behaviors ... ok
+test native_kernel::weapon::weapon_replacement_terminates_old_range ... ok
+test native_kernel::xiahoudun::xiahoudun_ganglie_non_heart_reflects ... ok
+test native_kernel::zhangba::zhangba_two_cards_as_sha ... ok
+test native_kernel::xuchu::xuchu_luoyi_boosts_sha_damage ... ok
+test native_kernel::yuanshu::yuanshu_assembly_wangzun_tongji ... ok
+test native_kernel::yiji::yiji_assembly_jijie_jiyuan ... ok
+test native_kernel::yishang::yishang_redirects_damage_in_before_window ... ok
+test native_kernel::zhiheng::zhiheng_decline_draws_nothing ... ok
+test native_kernel::replay::replay_and_restore_per_command_parity ... ok
+test native_kernel::zhangfei::zhangfei_paoxiao_removes_sha_limit ... ok
+test native_kernel::zhaoyun::zhaoyun_longdan_sha_as_dodge ... ok
+test native_kernel::suspension::time_slice_resumes_to_identical_result ... ok
+test native_kernel::zhugeliang::zhugeliang_kongcheng_blocks_sha_and_duel_targets ... ok
+test native_kernel::zhouyu::zhouyu_yingzi_extra_draw_at_draw_phase ... ok
+test native_kernel::zhuge::zhuge_crossbow_unlimited_sha ... ok
+test native_kernel::zhangliao::zhangliao_tuxi_replaces_draw ... ok
+test native_kernel::zhugeliang::zhugeliang_guanxing_reorders_deck_top ... ok
+test native_kernel::reshuffle::reshuffle_conserves_every_card_exactly_once ... ok
+test native_kernel::standard::standard_missing_generals_assembly_and_behaviors ... ok
+test native_kernel::zhu::zhu_skills_require_lord_role_in_identity_mode ... ok
+test native_kernel::n10::n10_planner_baseline_completes_games ... ok
+test native_kernel::p2::p2_identity_endgame_per_submission_parity ... ok
+test native_kernel::kof::kof_session_consistency_and_midrestore ... ok
+test native_kernel::identity::identity_versus_boss_replay_restore_parity ... ok
+
+failures:
+
+failures:
+    native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source
+    native_kernel::combat::propagated_damage_is_full_resolution
+    native_kernel::dying::dying_rescue_and_death
+
+test result: FAILED. 338 passed; 3 failed; 0 ignored; 0 measured; 94 filtered out; finished in 1.00s
+
+error: test failed, to rerun pass `-p engine-native --test kernel`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "native_kernel::", "--", "--nocapture"], "exit": 101, "locked_seconds": 4.707559958973434, "disk_free_bytes": 48538189824}

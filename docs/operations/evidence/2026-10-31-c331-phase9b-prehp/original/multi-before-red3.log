@@ -1,0 +1,12 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+error[E0596]: cannot borrow data in an `Arc` as mutable
+   --> crates/engine-native/tests/groups/../c331_prehp_damage.rs:251:28
+    |
+251 |             for handler in &mut set.triggers {handler.meta.event=EventKind::DamageBegin2;}
+    |                            ^^^^^^^^^^^^^^^^^ cannot borrow as mutable
+    |
+    = help: trait `DerefMut` is required to modify through a dereference, but it is not implemented for `Arc<VmHandlerSet>`
+
+For more information about this error, try `rustc --explain E0596`.
+error: could not compile `engine-native` (test "nc_rounds") due to 1 previous error
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9b_submission_slice"], "exit": 101, "locked_seconds": 1.3507636669673957, "disk_free_bytes": 45464616960}

@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-31T14:47:05.111225+00:00",
+  "status": "ACCEPT_BOUNDED_I02_PHASE1_AND_CI_CONFIGURATION",
+  "mainParent": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "source30Patch": "1b154aa7573fff3fc5b2fdfb54e5dbd743206c4c2b91f1e384050f38b5cdae94",
+  "workflowSha256": "b46fd58a50fe5a74c537929d66919fca694163588c19600226426d48f43c45e8",
+  "parentIntegrityAudit": "parent/noname-parent-i02-main-final-audit.json",
+  "supplementClosed": "index-command-supplement/review-closure.raw.txt",
+  "documentationReview": "final-documentation-review.raw.txt",
+  "qualification": "Original parent integrity JSON pending supplement is historical; true-command provenance/P2 now independently closed. No fullI02/producer/range/factory/audio/Core331/all37 acceptance. Windows success awaits next realexact-headCI; d07 stays8/2. Stage/publication and their exactSHA/modes separatelyauditedunder18/25.",
+  "publicationCandidateCorrection": {
+    "withdrawn": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+    "reason": "491testprofile/cachefiles plus4schema backups excluded from accepted tree; no push occurred",
+    "record": "prepublication-correction/correction-scope.json",
+    "scope": "Runtime31sourceacceptance unchanged; publication set reaudited aftercorrection, original3913scopewithdrawn"
+  }
+}

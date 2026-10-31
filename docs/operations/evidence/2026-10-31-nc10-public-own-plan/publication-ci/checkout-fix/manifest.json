@@ -1,0 +1,25 @@
+{
+  "utc": "2026-10-31T13:24:59.601476+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c",
+  "base": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "base_workflow_sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+  "candidate_sha256": "b46fd58a50fe5a74c537929d66919fca694163588c19600226426d48f43c45e8",
+  "patch_sha256": "a53b2361568f200058e183d112dbfddc8b1addc7c646fe9441d4486414c4995d",
+  "command_local_config_selfchecks": [
+    {
+      "GIT_CONFIG_COUNT": "0",
+      "expected": "false",
+      "actual": "false",
+      "exit": 0
+    },
+    {
+      "GIT_CONFIG_COUNT": "1",
+      "expected": "true",
+      "actual": "true",
+      "exit": 0
+    }
+  ],
+  "local_config_after": "false",
+  "yaml_exit": 0,
+  "qualification": "PRIVATE ONLY, no Main edits/commit/push/global config. Existing two Windows checkout failures are the red; macOS Git env precedence/YAML are setup controls, not a real Windows filesystem checkout green. Real Windows next CI still required."
+}

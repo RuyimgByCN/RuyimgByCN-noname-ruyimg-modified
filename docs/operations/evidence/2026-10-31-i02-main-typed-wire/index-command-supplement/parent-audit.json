@@ -1,0 +1,32 @@
+{
+  "utc": "2026-10-31T14:18:07.958823+00:00",
+  "status": "PASS_ADDITIVE_P2_COMMAND_RECOVERY",
+  "root": "/tmp/noname-parent-i02-index-tool-provenance",
+  "sourceSupplement": "/tmp/i02-main-index-command-provenance-599614a0",
+  "fresh_artifacts": 11,
+  "recovered": [
+    {
+      "name": "index-parse",
+      "toolCallId": "call_7a740d9e1fc34689b464dd46ed4935c4|fc_03de275bc66d19ea016ae5f283731881918fe5445709019eb6",
+      "uniqueActualDefinition": true,
+      "commandSha256": "7a83707d3dd4fa2fafcd1bfe8fbe41d09300b17e4be2fb3bb9af68055e88e2e9",
+      "assistantRawRecordSha256": "accac66052db7140bc358ddccc303666d0fbab335e942b2028cf178789a23758",
+      "resultRawRecordSha256": "2540f28fe7a45b909c65c45d6e98f6b7c1d1c5a16ab3a596002a2d57be40764e"
+    },
+    {
+      "name": "index-mask-and-js-load",
+      "toolCallId": "call_f2cd7762eb894a4eb788b212827b7b59|fc_0cc54cfa92f4748f016ae5f2e123548191a17d4b4b6f1a3bd9",
+      "uniqueActualDefinition": true,
+      "commandSha256": "30f0840ee569e113a934dfc2f64db0f8b0921653625f5606d30f72a1517ac924",
+      "assistantRawRecordSha256": "4233794d76ed9477303c4d77c3d427102d35f2b49d95f09f6410b383a8adc284",
+      "resultRawRecordSha256": "aaed89aab3c102ef551b9ee1ef506e67c82f2bf446dd2299ca3bd165ef2b0ffd"
+    }
+  ],
+  "oldSealedFilesUnchanged": true,
+  "gateCategoryErratum": {
+    "original": 13,
+    "actual": 12
+  },
+  "independentRawIndexAudit": "/tmp/noname-parent-i02-main-final-audit.json",
+  "qualification": "Actual executed command identities recovered uniquely from fixed session prefix; no command rerun. Full assistant raw records preserved privately only; publish exact commands and tool-only excerpts. Main/source/index unchanged."
+}

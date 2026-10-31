@@ -1,0 +1,24 @@
+{
+  "source6": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+    "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+  },
+  "root_protected": {
+    ".github/workflows/ci.yml": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+    "Cargo.lock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50",
+    "Cargo.toml": "ee2c34fd5e1af005b8fe9b9198e4d1557b2be9469fba1574b4fd321a1c4baf6b",
+    "scripts/check-native-layering.py": "b38cfd91f819be0b6113f8107e377a9388a0833ac4ae6f504b2c23bb2638f082",
+    "scripts/check-native-wasm-cross-target.py": "db31806f3b8d5a9ae034ea63cfa0725026ecb1dc9a6bce2ccb6fed6377b8024e",
+    "scripts/check-source-lines.py": "e9a0e10d02f76ad526898323de9e5b5a4ab5ad3682a3adfd3c605c4ea1be426a",
+    "scripts/preflight.py": "5412c73f9b2e88fbd48918b5f24977a417e628099b9e6b59c743a4f6ccebae92",
+    "apps/web-client/package.json": "0c8adc61dbc34980378b7b0147917cd297efeaaf282c81a7b9a04c23cb5489c1",
+    "apps/web-client/pnpm-lock.yaml": "13ed626a8a9cf978c0aa24a435508b857479379d8752e3a46258a0c5de330d6f",
+    ".gitattributes": "9dbbbde6fb0c137b5a47b3d3738b3ca9399dec80a03f9acc1399ffc1d3619388"
+  },
+  "scope": "Frozenroot7, frontendpackage/lock, exactattributes and source6 only; no broad source/media/product rehash",
+  "composed_patch_sha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110"
+}

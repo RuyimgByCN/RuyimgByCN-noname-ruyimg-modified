@@ -1,0 +1,31 @@
+## Review
+
+- **Correct：登记结论为 OK with notes，仅接受记录失败。** [run41202703042](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41202703042)、attempt **1**、exact **`d07b35f94a42b282222dda4ab7bbc5c39ab8fddb`**，tree **`7cfa8e085e94e760999e14b90861857f8c9962bb`**、parent5fc；最终为 **8 success / 2 failure**，不是10绿。
+- 已读 producer 人类正文、父 fresh parser/结果、保留API、失败与定向通过日志、seal和scope。父 [audit PASS](/tmp/noname-parent-ci41202703042-audit.json:1) 核过 **101项SHA/CRC、十gzip与原字节共4,245,871B、source6 committed blob SHA**；**本 reviewer 未执行脚本或独立重算哈希**。
+- 父五次 live API run/jobs/commit/native_ref/main_ref 均exit0；已独立读取run/jobs及两ref响应，确认d07、attempt1、8/2与main **`47347c6608d651660ae9459e59eb529b3cef277f`**。commit正文单行1.3MB超工具上限，其tree绑定引用已读父脚本/结果，未冒称完整读取。
+- **已知CI阻塞：**Windows build **124541504027**、desktop **124541504124** 均在step **2 actions/checkout@v4**失败；[build原日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/private-raw-downloads/job-124541504027-raw-log.stdout:174)与desktop175行起各有 **4文件+1目录 `Filename too long`，Git exit128**，涉及已提交C/I02证据长路径。
+- 原detail明确Windows build/tests及desktop准备/installer/upload为 **skipped**，未执行，不能称Windows测试通过或测试断言失败。最小后续是单独处理checkout路径兼容并取得新CI；私有workflow候选及fc385审阅不计作本次已修复。
+- **Step口径：126 = 110 success / 2 failure / 14 skipped / 0 null**。Windows build4项、desktop9项、macOS Linux依赖1项；API有skip状态/名称，无正式原因文本，不补造原因。
+- **通过范围引用父raw regex：**gates **6922/0/77**、native-web **1830/0/75**、macOS/Ubuntu library各 **853/0/0**（passed/failed/ignored）。范围重叠，不相加为unique tests；LocalMain1719与私有probe结果不替代本CI。
+- **独立核日志：**Worker **82/0**、frontend **179/0/0**；gates资源 **17/17**、conformance **19**、cross-target PASS。[四个OwnPlan具名用例](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/private-raw-downloads/job-124541503995-raw-log.stdout:13515)为ok；shared-session AutoStep用例引用producer，未扩展为完整NC10/privacy等价证明。
+- **独立核预算日志：**start-hash-p50 / distance-query-p95 / snapshot-restore / observer-projection：Ubuntu **76/0/65/31μs**、macOS **66/1/59/29μs**，预算 **100/300/200/100μs**，均PASS；只属hosted legacy预算，不证明native收益、非劣性或AI强度。
+
+独立读 [artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/ci-stage/artifacts-final.stdout:1)：仅两项，采集时未过期且绑定exact run/head；**无Windows artifact**。
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| Ubuntu | 13044000437 / 266360913 | `72b1b223511f7473bbbacfb8cfef31ad3c655b4e5a6f79399b45b0b44453799e` |
+| macOS | 13043089852 / 32810200 | `70534e958a5dac0988c3d6138ad800584aa27ff86eac4535604ff34377bb2f9b` |
+
+- **发布：**单次普通HTTPS exact-ref push exit0，old5fc→d07；scope八项selfchecks符合预期，fresh guard **`c991082c…`**、原hook **`e349af…`**不变、persistent hooksPath unset据保留scope/producer核验。未进行新push。
+- **审计分层：**父staged3618项body/mode审计与publisher fresh **3618项/204,625,141B metadata**分开；后者不是重新hash204MB正文。source6 fresh committed SHA由父核验。91.21MiB为Git舍入进度；33.779859s wall与33.709689s locked差值含startup/queue，不是pure queue。
+- **Watch：**唯一HTTP1 watch exit1来自实际CI失败；producer记录33次API exit0、无HTTP错误/第二watch/rerun/dispatch，与父另五次live读取分列。
+- **输入边界：**[lease](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd/push-stage/lease-release.json:1)于 **12:48:05.496863Z**释放；父13:02后I02 source30及当前QA冻结Main不是d07 CI输入。本review未读取运行中Main。
+- **归档：**101项+manifest+seal共 **103 primary**；manifest SHA **`87c6d4290ace36c5f544d111bdf47113af71c60e0c5dfed227b3ade497629e4e`**，summary SHA **`aab69bf5c4d0de3b6f38e7443aeeca5506d68737b59cc8c173501e6dfed92748`**。12份private originals（10final+2early）排除；gzip保留Windows **197/198 CRLF**，早/最终一致引用producer，最终复制用root manifest+seal。
+- **3166 warning loglines**含重复、ignored及14skip保留。父说明首轮parser `len(int)`错误与修正均保留、该失败发生在API前；它是核验工具失败，不计产品red。
+- 旧5fc/run41183155464十绿及更早失败历史保留；本次失败不覆盖旧结果，旧绿也不覆盖本次。发布契约仍记330/105/758/WS6、desktop WASM default。
+- **Fixed：**无修改；登记真实性未发现新增矛盾。No issues found.
+- **Merge verdict：OK with notes（仅记录8/2失败）；Windows checkout仍是CI blocker，whole Goal未完成。**
+
+未执行network/tests/build、producer脚本、下载/安装或Main/source/index写入；未验签名、实体安装、听觉/功耗或后续workflow候选。
+风险：保存完整103份primary及父audit/live证据；必须取得新的Windows实际结果，才能解除checkout阻塞。

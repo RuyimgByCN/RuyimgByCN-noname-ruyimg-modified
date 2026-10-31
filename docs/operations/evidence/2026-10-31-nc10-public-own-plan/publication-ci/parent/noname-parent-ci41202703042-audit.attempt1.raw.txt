@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-ci41202703042-audit.py", line 30, in <module>
+    assert len(push['push_attempts'])==1 and push['increment_blob_bytes']==204625141 and len(push['committed_increment_paths'])==3618
+TypeError: object of type 'int' has no len()

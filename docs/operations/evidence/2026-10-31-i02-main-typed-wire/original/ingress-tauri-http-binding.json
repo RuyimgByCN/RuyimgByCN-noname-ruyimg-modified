@@ -1,0 +1,18 @@
+{
+  "mode": "tauri",
+  "root": "/tmp/i02-main-typed-wire-functional-33d21ba5/ingress-dist",
+  "url": "http://127.0.0.1:59985/?engineTransport=native&latency=sab&perf=1",
+  "requests": [
+    {
+      "path": "/",
+      "sha256": "2633108e84eae3164886218dfeacd5d21d7a09ae5e10c6500a8fb3a8693d8ceb",
+      "bytes": 147
+    },
+    {
+      "path": "/assets/ingress-CCE2v_ye.js",
+      "sha256": "47c9bf4be122e4d74e750761f2a165ac488521f7cf534b9514821a471cc24f4e",
+      "bytes": 434320
+    }
+  ],
+  "errors": []
+}

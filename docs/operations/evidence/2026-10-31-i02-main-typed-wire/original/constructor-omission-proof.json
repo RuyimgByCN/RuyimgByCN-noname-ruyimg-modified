@@ -1,0 +1,31 @@
+{
+  "productionConstructorsNone": 9,
+  "files": {
+    "apps/game-server/src/room.rs": {
+      "sha256": "8c345d961cfc68caaf4f78bb9ab9fb4b35a8d3f613c1f8470975391a72aeb88a",
+      "NoneLines": [
+        398,
+        452,
+        470,
+        610
+      ]
+    },
+    "apps/game-server/src/room_native_actor.rs": {
+      "sha256": "984f16e59ef74dbc54746bde0f514028f78cac60d440e51cf939b2e1fa87470c",
+      "NoneLines": [
+        82,
+        483,
+        573,
+        607
+      ]
+    },
+    "apps/game-server/src/room_native_actor/timeout.rs": {
+      "sha256": "f6543bc4ef44447817867d2a212b47c3f731f55b4e577095d882f5dbdd138e53",
+      "NoneLines": [
+        39
+      ]
+    }
+  },
+  "actualServerOmissionEvidence": "server-wire-results.json",
+  "qualification": "No presentation producer/getter added; fixtures do not prove resource/voice/audio authority."
+}

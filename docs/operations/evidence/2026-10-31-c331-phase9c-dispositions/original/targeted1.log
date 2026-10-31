@@ -1,0 +1,14 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.10s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 2 tests
+test c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement ... ok
+test c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 187 filtered out; finished in 0.00s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9c"], "exit": 0, "locked_seconds": 9.144416750001255, "disk_free_bytes": 129316601856}

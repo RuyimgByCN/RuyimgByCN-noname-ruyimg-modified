@@ -79,6 +79,7 @@ fn legacy_replay_rejection(
         legal_actions: legal_actions_for(session.engine(), player_id),
         choice: session.choice_for(RoomRole::Player, Some(player_id)),
         public_event_codes: vec![],
+        presentation: None,
     })
 }
 
@@ -479,6 +480,7 @@ async fn native_room_loop(
                             legal_actions: legal_actions_for(session.engine(), m.player_id),
                             choice: session.choice_for(m.role.into(), Some(m.player_id)),
                             public_event_codes: vec![],
+                            presentation: None,
                         }));
                         continue;
                     }
@@ -568,6 +570,7 @@ async fn native_room_loop(
                     legal_actions: legal,
                     choice,
                     public_event_codes: public_event_codes.clone(),
+                    presentation: None,
                 }));
                 // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）。
                 // 发送必须有界：慢客户端的队列满时立即标记/移出广播，绝不 await。
@@ -601,6 +604,7 @@ async fn native_room_loop(
                         },
                         choice: session.choice_for(role, seat),
                         public_event_codes: public_event_codes.clone(),
+                        presentation: None,
                     };
                     if out.try_send(&msg) == SendStatus::Full {
                         stalled.push(other.connection_id);

@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-31T13:00:07.343374+00:00",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8",
+  "retirementRoot": "/tmp/nc10-main-owned-target-retirement-f463dd87",
+  "targets": [
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/probe/target",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8/strict-target"
+  ],
+  "MainWarmMustRetain": "/tmp/nc27-main-functional-458ed333/cargo-target",
+  "initialPsExit": 0
+}

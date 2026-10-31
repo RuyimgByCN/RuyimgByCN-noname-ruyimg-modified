@@ -1,0 +1,56 @@
+{
+  "utc": "2026-10-31T13:39:31.078941+00:00",
+  "argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "scripts/check_doc_line_refs.py",
+    "--strict"
+  ],
+  "sourceBinding": {
+    "source36": {
+      "apps/web-client/scripts/fixtures/i02-main5fc/desktopEngineTransport.ts": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "apps/web-client/scripts/fixtures/i02-main5fc/networkClient.ts": "f70fcbca34709389708a822e65cf3a2bf198c55cb8f81210a3217eb91e8c1132",
+      "apps/web-client/scripts/presentation-fixtures.mjs": "f6935de136ffc6f4c552199069825ae82384f29a833655c2b5f53c223d00234f",
+      "apps/web-client/scripts/presentation-metadata.test.mjs": "ea9d5d8fe2effee11eda2b69590a1463a80c31278527de73c0b53c7ecd2aaf9a",
+      "apps/web-client/src/engine/presentationMetadata.ts": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+      "apps/web-client/src/types/presentation.ts": "cab127e67b0b68ccdba338fbf33a835ba3c747ac326bc0f5a73de419fcddc1f6",
+      "crates/engine-api/src/presentation.rs": "78d99991f19c038dc0ad571b1d5d5483283cfe94c1b460a8973bb4786b321017",
+      "crates/engine-api/src/presentation/validation.rs": "23135c029fbc0c6cfd2ec454c84e992bbeada614794d03d484a4cc962409e146",
+      "crates/engine-protocol/src/presentation.rs": "3b74feecdc7bdf1a0fc2c4e598a5d6d6eb9158db3a076303994b42ba41ca7bb3",
+      "crates/engine-protocol/tests/fixtures/i02-main5fc/messages.rs": "20da1f6470028ffec86a03267ff2e080963046320f7c0f991c139e4436f3e97e",
+      "crates/engine-protocol/tests/fixtures/i02-main5fc/wire.rs": "334a46ff51f47f10c35f0c6cece98932814ef7c4d1e0df394de01b6ce00bdc63",
+      "crates/engine-protocol/tests/fixtures/i02-presentation-invalid.json": "7021fcc8aa95a2655dd73087a21440d4569f16816145c4a3a08ae1a18288dd14",
+      "crates/engine-protocol/tests/fixtures/i02-presentation.json": "8991f6c39f9d065dde0570dfb98183dbe1fcd2c6707fde3900f70b92c277d0ee",
+      "crates/engine-protocol/tests/presentation.rs": "19310add25400a3837a6212f23508525e8907357278a4a24ce57117b24a62fbb",
+      "crates/engine-protocol/tests/presentation_main5fc_reader.rs": "743577a6aa85e7599fec5a5991d608d2e281302b35d8d4b76c164ba1ca76cfda",
+      "apps/game-server/src/room.rs": "8c345d961cfc68caaf4f78bb9ab9fb4b35a8d3f613c1f8470975391a72aeb88a",
+      "apps/game-server/src/room_native_actor.rs": "984f16e59ef74dbc54746bde0f514028f78cac60d440e51cf939b2e1fa87470c",
+      "apps/game-server/src/room_native_actor/timeout.rs": "f6543bc4ef44447817867d2a212b47c3f731f55b4e577095d882f5dbdd138e53",
+      "apps/web-client/scripts/nc03-worker-clone.test.mjs": "cc5141727a5658f8350d81a4af06e362ab145f7cd6ac2e35f41f39594e522af9",
+      "apps/web-client/scripts/nc04-worker-failure.test.mjs": "0e6eba88effbaff2201b55312da4e7677f61d81482ef3637c8a9b1cb7ce4cae7",
+      "apps/web-client/src/engine/client.ts": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+      "apps/web-client/src/engine/desktopEngineTransport.ts": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+      "apps/web-client/src/engine/networkClient.ts": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+      "apps/web-client/src/engine/viewStore.ts": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+      "apps/web-client/src/types/engine.ts": "960c71289b820b5e3d7122c0cea199ffeae2ef9b261b1b8aa7a89b3253b10a92",
+      "crates/engine-api/src/lib.rs": "888a65c6556e4bfe2dbf251759d17351506fb44195ed8ec287591eb8a68e5108",
+      "crates/engine-protocol/src/lib.rs": "260432c6409ed6fcb40878e60544364ed94d1b31bd6fa2364554dabc301be672",
+      "crates/engine-protocol/src/messages.rs": "e64744086c7d2987815fafec0e2e851089b07dbf85a92ded45ecc7e81ebb77fe",
+      "crates/engine-protocol/src/wire.rs": "0c2ba270a92a40efbb5a25713ea802ab32e66e9542d8c500af94665b955e2d05",
+      "crates/engine-protocol/tests/fixtures/i02-presentation-surrogates.json": "40a1ec9ad4ccf21e109d627d3000560a9f6c4a1f5db83dd239ef62af1d29ad1d",
+      "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+      "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+      "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+      "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b",
+      "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+      "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706"
+    },
+    "MainCargoLock": "a9a79c887edb5cc0650ad3e0d9f595b55fcbe1be91d70fcde248378f1b86af50"
+  },
+  "commandSourceHashes": {
+    "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/scripts/check_doc_line_refs.py": "4dc340f5d6646a18705c8d171a276134c4af4a0892d5292939217cdaecdcecfe"
+  }
+}

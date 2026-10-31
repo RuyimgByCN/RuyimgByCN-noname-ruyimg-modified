@@ -1,0 +1,2 @@
+{"runtime":"tauri","passed":true,"cases":161,"actualRequests":811,"positiveAbsent":162,"sharedCorpus":80}
+{"command": ["node", "/tmp/i02-main-typed-wire-functional-33d21ba5/run-ingress.mjs", "tauri"], "exit": 0, "locked_seconds": 3.070658332959283, "disk_free_bytes": 33833054208}

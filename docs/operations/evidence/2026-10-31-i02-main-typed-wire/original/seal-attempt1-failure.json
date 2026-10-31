@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-31T13:48:08.229697+00:00",
+  "sealAttempt1Exit": 1,
+  "comparisonFlags": {
+    "head": true,
+    "tree": true,
+    "indexSha256": false,
+    "indexEntries": true,
+    "headEntries": true,
+    "staged": true,
+    "trackedStatus": true,
+    "untrackedNames": true,
+    "sourceBinding": true,
+    "maintainedAndMarkdown": true,
+    "hooks": true
+  },
+  "maintainedChanges": {},
+  "protectedSets": {
+    "admission31": true,
+    "protected": true,
+    "modules": false,
+    "dist": true,
+    "root_gates": true
+  },
+  "initialStatus": " M apps/game-server/src/room.rs\n M apps/game-server/src/room_native_actor.rs\n M apps/game-server/src/room_native_actor/timeout.rs\n M apps/web-client/scripts/nc03-worker-clone.test.mjs\n M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/src/engine/client.ts\n M apps/web-client/src/engine/desktopEngineTransport.ts\n M apps/web-client/src/engine/networkClient.ts\n M apps/web-client/src/engine/viewStore.ts\n M apps/web-client/src/types/engine.ts\n M crates/engine-api/src/lib.rs\n M crates/engine-protocol/src/lib.rs\n M crates/engine-protocol/src/messages.rs\n M crates/engine-protocol/src/wire.rs\n M docs/architecture/native-progress.md\n M docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/README.md\n M docs/operations/evidence/2026-10-31-nc10-public-own-plan/README.md\n M docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/README.md\n",
+  "finalStatus": " M apps/game-server/src/room.rs\n M apps/game-server/src/room_native_actor.rs\n M apps/game-server/src/room_native_actor/timeout.rs\n M apps/web-client/scripts/nc03-worker-clone.test.mjs\n M apps/web-client/scripts/nc04-worker-failure.test.mjs\n M apps/web-client/src/engine/client.ts\n M apps/web-client/src/engine/desktopEngineTransport.ts\n M apps/web-client/src/engine/networkClient.ts\n M apps/web-client/src/engine/viewStore.ts\n M apps/web-client/src/types/engine.ts\n M crates/engine-api/src/lib.rs\n M crates/engine-protocol/src/lib.rs\n M crates/engine-protocol/src/messages.rs\n M crates/engine-protocol/src/wire.rs\n M docs/architecture/native-progress.md\n M docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/README.md\n M docs/operations/evidence/2026-10-31-nc10-public-own-plan/README.md\n M docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/README.md\n",
+  "initialIndexSha256": "147da50501f3bc38f55d32abb9a4e9492f5a87c7defc6b591a4738c9ac53dc35",
+  "finalIndexSha256": "f4c050aaf4abb85fd4e201f54897034316aa69ff55e7389e63a8b7257d14ef36"
+}

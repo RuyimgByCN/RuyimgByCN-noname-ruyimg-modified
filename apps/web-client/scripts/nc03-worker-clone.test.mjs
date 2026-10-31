@@ -1,3 +1,4 @@
+import { MAX_ENGINE_OUTSTANDING } from "../src/engine/desktopEngineTransport.ts";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
@@ -19,8 +20,8 @@ function fixture() {
     .outputText.replace(/\nexport\s*\{\};?\s*$/, "");
   const sent = [];
   const failed = [];
-  const EngineClient = new Function("perfRequestSent", "perfRequestFailed", js + "\nreturn EngineClient;")(
-    () => {}, (id) => failed.push(id),
+  const EngineClient = new Function("perfRequestSent", "perfRequestFailed", "MAX_ENGINE_OUTSTANDING", js + "\nreturn EngineClient;")(
+    () => {}, (id) => failed.push(id), MAX_ENGINE_OUTSTANDING,
   );
   const client = new EngineClient();
   const worker = {

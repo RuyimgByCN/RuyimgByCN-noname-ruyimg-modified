@@ -1,0 +1,68 @@
+[
+  {
+    "log": "full-native1.log",
+    "sha256": "1e928991415b81fba5c36a4e9c15e71f524f302adcc99b804a8b37f72d5e1bd4",
+    "counts": [
+      1750,
+      37,
+      75
+    ],
+    "failures": [
+      "g1_wudian::changqing::changqing_luanjian_dual_sha_viewas_multi_target",
+      "g1_wudian::nangonghuang::nangonghuang_zhangmu_flash_discard_prevent",
+      "g1_wudian::wangxiaohu::wangxiaohu_husha_marks_and_virtual_cards",
+      "g1_shahai_swd::five::swd_generals_b19_five_damage_line_skills",
+      "g1_shahai_swd::huajin::swd_deferred_b99_huajin_minjing",
+      "g1_shahai_swd::guaili::swd_generals_b71_guaili_fuyan_wuxie_guanhu",
+      "g1_shahai_swd::hlingbo::swd_generals_b72_hlingbo_miles_xueyi",
+      "g1_shahai_swd::huanjian::swd_generals_b70_huanjian_weida_xuying",
+      "g1_shahai_swd::lexue::swd_generals_b83_lexue_zhenjiu_lmazui",
+      "g1_shahai_swd::lianda::swd_generals_b64_lianda_suiyan_duanxing_polang_youyin",
+      "g1_shahai_swd::pozhen::swd_deferred_b94_pozhen_guiyan2",
+      "g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong",
+      "g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures",
+      "g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard",
+      "g1_shahai_swd::xielv::swd_generals_b25_xielv_zhuyu",
+      "g1_shahai_yunchou::g1::g1_yunchou_generals_batch3_zonghuo_shaoying",
+      "g1_shahai_swd::xuanzhou::swd_deferred_b97_xuanzhou_yinguo",
+      "g1_shahai_swd::xuanying::swd_generals_b90_xuanying_lieren",
+      "g1_shahai_swd::yijue::swd_generals_b86_yijue_dangping",
+      "boundary_snapshot::restore::restore_rejects_choice_without_machine",
+      "boundary_snapshot::restore::restore_rejects_tampered_gate_event_payload",
+      "native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source",
+      "native_kernel::boss_xuanwu::boss_xuanwu_lingqu_damage_counter",
+      "native_kernel::combat::propagated_damage_is_full_resolution",
+      "native_kernel::dying::dying_rescue_and_death",
+      "native_kernel::suidun::suidun_prevents_once_per_turn",
+      "replay_scenarios::replay_scenarios_match_golden",
+      "u08_hero_kill_batch1::yxs_fanji_counterattacks_source",
+      "u01_d3_moyan::u01_moyan_from_real_install",
+      "nc08_upstream_duwen::upstream_duwen_notlink_difference_is_fixed",
+      "nc08_upstream_swd_shencaojie_reverse::upstream_shencaojie_reverse_branch_reduces_damage",
+      "nc08_upstream_swd_xuanwu::upstream_xuanwuzhihuang_heals_after_damage",
+      "nc08_upstream_swd_shencaojie_window::upstream_shencaojie_window_on_trick_damage",
+      "nc08_upstream_swd_zhuque::upstream_zhuquezhizhang_retaliates_on_source",
+      "swd_mohua2_transform::mohua2_transforms_on_dying",
+      "swd_tianxiang_redirect::tianxiang_redirects_damage_and_target_draws",
+      "swd_xuanyuanjian_card::xuanyuanjian_no_backlash_with_xuanyuan"
+    ]
+  },
+  {
+    "log": "full-native2.log",
+    "sha256": "7379175285fb028a06448689efc4585796ee2f9f1380d4462246e59e651dca60",
+    "counts": [
+      1780,
+      7,
+      75
+    ],
+    "failures": [
+      "boundary_snapshot::restore::restore_rejects_choice_without_machine",
+      "boundary_snapshot::restore::restore_rejects_tampered_gate_event_payload",
+      "native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source",
+      "native_kernel::combat::propagated_damage_is_full_resolution",
+      "native_kernel::dying::dying_rescue_and_death",
+      "replay_scenarios::replay_scenarios_match_golden",
+      "nc08_upstream_duwen::upstream_duwen_notlink_difference_is_fixed"
+    ]
+  }
+]

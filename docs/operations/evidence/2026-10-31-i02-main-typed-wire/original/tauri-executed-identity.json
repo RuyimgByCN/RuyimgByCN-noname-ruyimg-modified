@@ -1,0 +1,23 @@
+{
+  "binary": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/noname-next-desktop",
+  "sha256": "c2828a5af2eee94499bcfc8f7eb4027485cc9f35c0aa267f12612edcdd07dd02",
+  "config": {
+    "identifier": "org.noname.i02acceptance33d21ba5",
+    "build": {
+      "devUrl": "http://127.0.0.1:59985/?engineTransport=native&perf=1"
+    },
+    "app": {
+      "windows": [
+        {
+          "label": "main",
+          "title": "I02 owned hidden IPC acceptance",
+          "visible": false,
+          "width": 1280,
+          "height": 820
+        }
+      ]
+    }
+  },
+  "configSha256": "e03473fb7d85dc49df940b7cfa08423c30e5638f1e0caa075aad80905b700bcf",
+  "qualification": "Actual Main Tauri/Rust bridge, private identifier and hidden window; metadata injection replaces successful JS callback data only."
+}

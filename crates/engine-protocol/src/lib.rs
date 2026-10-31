@@ -8,6 +8,7 @@
 #![deny(missing_docs)]
 
 mod messages;
+mod presentation;
 mod wire;
 
 pub use messages::*;

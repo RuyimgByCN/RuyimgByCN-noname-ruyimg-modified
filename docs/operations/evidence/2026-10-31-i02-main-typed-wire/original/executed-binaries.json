@@ -1,0 +1,20 @@
+[
+  {
+    "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/game-server",
+    "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/game-server",
+    "sha256": "87e20fa5dce36c9fdc484c696ffde634ac7683c72d44d78725ceea817fcb33cf",
+    "bytes": 77190928
+  },
+  {
+    "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/noname-next-desktop",
+    "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/noname-next-desktop",
+    "sha256": "c2828a5af2eee94499bcfc8f7eb4027485cc9f35c0aa267f12612edcdd07dd02",
+    "bytes": 44059416
+  },
+  {
+    "executedPath": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/i02-main-acceptance-probe-33d21ba5",
+    "preservedPath": "/tmp/i02-main-typed-wire-functional-33d21ba5/executed-binaries/i02-main-acceptance-probe-33d21ba5",
+    "sha256": "4b28c750e0e39b173c403635320dd340fb0a67dd848ffc528393d0fbf6057b4b",
+    "bytes": 14926736
+  }
+]

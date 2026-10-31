@@ -1,0 +1,10 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-baseline/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.92s
+     Running tests/groups/kernel.rs (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-c8-golden-baseline/debug/deps/kernel-b09703a09ed5dfc8)
+
+running 1 test
+test replay_scenarios::replay_scenarios_match_golden ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 434 filtered out; finished in 0.53s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "replay_scenarios_match_golden", "--", "--test-threads=1"], "exit": 0, "locked_seconds": 4.499570665997453, "disk_free_bytes": 134578327552}

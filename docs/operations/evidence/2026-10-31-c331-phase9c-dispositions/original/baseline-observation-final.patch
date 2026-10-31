@@ -1,0 +1,90 @@
+--- a/crates/engine-native/tests/replay_scenarios.rs
++++ b/crates/engine-native/tests/replay_scenarios.rs
+@@ -22,7 +22,7 @@
+ 
+ fn submit_cmd(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
+     let expected_revision = e.revision();
+-    e.submit(GameCommand {
++    observed_submit(e, GameCommand {
+         actor,
+         expected_revision,
+         dedup_id: fresh_dedup(),
+@@ -256,7 +256,7 @@
+     };
+     let before = e.state_hash();
+     assert!(matches!(
+-        e.submit(GameCommand {
++        observed_submit_command_first(GameCommand {
+             actor: e.open_choice().unwrap().observer,
+             expected_revision: e.revision(),
+             dedup_id: fresh_dedup(),
+@@ -264,7 +264,7 @@
+                 choice_id: id,
+                 selection: vec![ChoiceOption::Card(9999)],
+             },
+-        }),
++        }, &mut e),
+         CommandOutcome::Rejected(engine_native::RejectReason::InvalidChoice)
+     ));
+     assert_eq!(e.state_hash(), before);
+@@ -272,7 +272,7 @@
+     e.debug_set_budget(2);
+     let before_small_budget = e.state_hash();
+     assert!(matches!(
+-        e.submit(GameCommand {
++        observed_submit_command_first(GameCommand {
+             actor: e.open_choice().unwrap().observer,
+             expected_revision: e.revision(),
+             dedup_id: fresh_dedup(),
+@@ -280,7 +280,7 @@
+                 choice_id: id,
+                 selection: vec![ChoiceOption::Confirm],
+             },
+-        }),
++        }, &mut e),
+         CommandOutcome::Rejected(engine_native::RejectReason::BudgetExhausted)
+     ));
+     assert_eq!(e.state_hash(), before_small_budget);
+@@ -1210,6 +1210,7 @@
+ fn replay_scenarios_match_golden() {
+     let mut bad = Vec::new();
+     for (name, run, _mechs, golden) in SCENARIOS {
++        SEMANTIC_NAME.with(|n|*n.borrow_mut()=name.to_string());SEMANTIC_STEP.store(0,Ordering::SeqCst);
+         let hex = hex(&run());
+         if hex != *golden {
+             bad.push(format!("{name} actual={hex} expected={golden}"));
+@@ -1240,6 +1241,7 @@
+ 
+ // Opt-in evidence captures complete rule state and observable trajectories without changing expectations.
+ fn traced_state_hash(engine: &Engine) -> [u8; 32] {
++    semantic_capture(engine,"final","","");
+     static INDEX: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+     if let Ok(directory) = std::env::var("C331_GOLDEN_TRACE_DIR") {
+         let index = INDEX.fetch_add(1, Ordering::SeqCst);
+@@ -1292,3 +1294,26 @@
+         eprintln!("GOLDEN_HEX {name} {}", hex(&run()));
+     }
+ }
++
++// Opt-in pure observation at the existing command seam; no scheduler or RNG calls.
++thread_local! {static SEMANTIC_NAME:std::cell::RefCell<String>=const {std::cell::RefCell::new(String::new())};}
++static SEMANTIC_STEP:std::sync::atomic::AtomicUsize=std::sync::atomic::AtomicUsize::new(0);
++fn observed_submit(e:&mut Engine,command:GameCommand)->CommandOutcome {
++    let command_text=format!("{command:?}");semantic_capture(e,"before",&command_text,"");
++    let out=e.submit(command);semantic_capture(e,"after",&command_text,&format!("{out:?}"));out
++}
++fn semantic_capture(e:&Engine,phase:&str,command:&str,outcome:&str) {
++    let Ok(directory)=std::env::var("C331_SEMANTIC_TRACE_DIR")else{return;};
++    SEMANTIC_NAME.with(|name| {
++        let directory=std::path::Path::new(&directory).join(name.borrow().as_str());std::fs::create_dir_all(&directory).unwrap();
++        let index=SEMANTIC_STEP.fetch_add(1,Ordering::SeqCst);let stem=format!("{index:04}-{phase}");let s=e.save();
++        let views:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.view_for(p)).collect();
++        let choices:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.choice_view_for(Some(p))).collect();
++        let value=serde_json::json!({"command":command,"phase":phase,"outcome_raw":outcome,"core":format!("{:#?}",s.core),"events":format!("{:#?}",e.log()),"rng":format!("{:?}",s.core.rng),"views":format!("{views:#?}"),"choices":format!("{choices:#?}"),"referee":format!("{:#?}",e.choice_view_referee()),"ruleset_version":s.ruleset_version,"resolution":format!("{:#?}",s.resolution)});
++        std::fs::write(directory.join(format!("{stem}.json")),serde_json::to_vec_pretty(&value).unwrap()).unwrap();
++        std::fs::write(directory.join(format!("{stem}.snapshot.txt")),format!("{s:#?}")).unwrap();
++        std::fs::write(directory.join(format!("{stem}.archive.ngsa")),engine_native::archive::encode_archive(&s)).unwrap();
++    });
++}
++
++fn observed_submit_command_first(command:GameCommand,e:&mut Engine)->CommandOutcome{observed_submit(e,command)}

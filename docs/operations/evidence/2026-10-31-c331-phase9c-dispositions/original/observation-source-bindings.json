@@ -1,0 +1,18 @@
+[
+  {
+    "label": "baseline",
+    "file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-baseline/crates/engine-native/tests/replay_scenarios.rs",
+    "before_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+    "after_sha256": "b6b9d9e0cc99111632e50b9083baad003356e8457cad8d9c0f07250a4ef54a42",
+    "patch_sha256": "bbc5618aa34c2a35e6b5013380691500df8cf0b7340f171407bab9895e78f5b4",
+    "changes": "pure command seam observation; original golden constants unchanged"
+  },
+  {
+    "label": "current",
+    "file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native/tests/replay_scenarios.rs",
+    "before_sha256": "8afa78bbe83eae545d0aa2a9228b75aafa569cd4e0424cf593763987829f30f9",
+    "after_sha256": "b6b9d9e0cc99111632e50b9083baad003356e8457cad8d9c0f07250a4ef54a42",
+    "patch_sha256": "bbc5618aa34c2a35e6b5013380691500df8cf0b7340f171407bab9895e78f5b4",
+    "changes": "pure command seam observation; original golden constants unchanged"
+  }
+]

@@ -1,0 +1,115 @@
+{
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9b/pre-final-checks/source-manifest.json",
+  "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b",
+  "final_increment_manifest_sha256": "751427bc4fa64fe21f4d345015e6f637f2e242f3691a4d8c61d354aecc17ea7d",
+  "all_final_sources_equal": true,
+  "commands": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 60.1526358127594,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "36de7b42a225b370ed123e4c7fd5280299d20fab55394dbf1bf15ab26ab0bca0",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 8.43445611000061,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "log_sha256": "120903045fa3ee81222264e893925fee8751b8614fdfd6b5bb209bfb9f1556c0",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 0.21193599700927734,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "1fc91d169ffd06d38a2b1a9cb3387347f2190ce65cd25399d9630142d23ae881",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.10137701034545898,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "2d63e361d9c00a6b31bd367015816a741e883ea4ea366a8f887af0543da4b8c6",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.623813152313232,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "cb803e8c4b485e01cecdc9ce376f0ca05e581eb0dda1dc4b7ef04e5d50f1186c",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.21091508865356445,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "log_sha256": "bcb5f7336b5bd8a1438df0d1f69e7b5c9abfbdc8c276da5cbd4ad7001a93dc0a",
+      "source_manifest_sha256": "3d08c3323a2313076e55af2c51382bb7c023d0086ce613d6028af0d16d78570b"
+    }
+  ]
+}

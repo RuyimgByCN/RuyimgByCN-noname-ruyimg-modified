@@ -1,0 +1,44 @@
+[
+  {
+    "path": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-acceptance-probe",
+    "bytes": 14953848,
+    "sha256": "be3e2bfa6a73a4d19627932ad1d42a336dd2df7cb2d565aeeb8c6f256ec9cfd9",
+    "mode": 493,
+    "mtimeNs": 1793446804743955999,
+    "birthUtc": "2026-10-31T11:40:04.742054+00:00",
+    "device": 16777231,
+    "inode": 621483465,
+    "links": 1,
+    "uid": 501,
+    "allocatedBytes": 14954496,
+    "preservedCopy": "/tmp/nc10-main-owned-target-retirement-f463dd87/preserved/runtime-binaries/Main-warm/nc10-main-acceptance-probe"
+  },
+  {
+    "path": "/tmp/nc27-main-functional-458ed333/cargo-target/debug/nc10-main-lock-acceptance-probe",
+    "bytes": 14925920,
+    "sha256": "f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144",
+    "mode": 493,
+    "mtimeNs": 1793448848332646093,
+    "birthUtc": "2026-10-31T12:14:08.322115+00:00",
+    "device": 16777231,
+    "inode": 622098052,
+    "links": 1,
+    "uid": 501,
+    "allocatedBytes": 14929920,
+    "preservedCopy": "/tmp/nc10-main-owned-target-retirement-f463dd87/preserved/runtime-binaries/Main-warm/nc10-main-lock-acceptance-probe"
+  },
+  {
+    "path": "/tmp/nc10-main-lock-repair-0425dc78/binary/nc10-main-lock-acceptance-probe",
+    "bytes": 14925920,
+    "sha256": "f9c404a462bd5dfcae7f687f053ed62e9fb2fff55f0470acd334a2a059174144",
+    "mode": 493,
+    "mtimeNs": 1793448848332646093,
+    "birthUtc": "2026-10-31T12:14:08.332646+00:00",
+    "device": 16777231,
+    "inode": 622102090,
+    "links": 1,
+    "uid": 501,
+    "allocatedBytes": 14929920,
+    "preservedCopy": "/tmp/nc10-main-owned-target-retirement-f463dd87/preserved/runtime-binaries/lock-repair/nc10-main-lock-acceptance-probe"
+  }
+]

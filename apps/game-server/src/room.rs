@@ -395,6 +395,7 @@ async fn room_loop(
                             legal_actions: legal_for(&engine, member.role, member.player_id),
                             choice: choice_for(&engine, member.role, member.player_id),
                             public_event_codes: vec![],
+                            presentation: None,
                         };
                         let _ = reply.send(Ok(msg));
                         continue;
@@ -448,6 +449,7 @@ async fn room_loop(
                             legal_actions: legal_for(&engine, member.role, member.player_id),
                             choice,
                             public_event_codes: public_codes(engine.last_events()),
+                            presentation: None,
                         }));
                     }
                     CommandResult::Rejected { .. } => {
@@ -465,6 +467,7 @@ async fn room_loop(
                             legal_actions: legal_for(&engine, member.role, member.player_id),
                             choice: choice_for(&engine, member.role, member.player_id),
                             public_event_codes: vec![],
+                            presentation: None,
                         }));
                     }
                 }
@@ -604,6 +607,7 @@ async fn fanout_after_command(
             legal_actions: legal_for(engine, m.role, m.player_id),
             choice,
             public_event_codes: public_codes(engine.last_events()),
+            presentation: None,
         };
         let _ = out.send(&msg).await;
     }

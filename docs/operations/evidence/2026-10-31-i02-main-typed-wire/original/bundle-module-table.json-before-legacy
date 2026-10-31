@@ -1,0 +1,284 @@
+{
+  "sourceModules": {
+    "src/main.ts": {
+      "sourceSha256": "5fcb569c3d8560277a944aed2e604a6445bdb12846d3a4a06ad1ec3d7c48ac43",
+      "transformInputSha256": "5fcb569c3d8560277a944aed2e604a6445bdb12846d3a4a06ad1ec3d7c48ac43"
+    },
+    "src/App.vue": {
+      "sourceSha256": "a74d4a5d3d6f04be26de2122bebb3d99678d5a70644a02c24678f409521dc801",
+      "transformInputSha256": "a74d4a5d3d6f04be26de2122bebb3d99678d5a70644a02c24678f409521dc801"
+    },
+    "src/styles/global.css": {
+      "sourceSha256": "27a717203a0e3c4726cb23380c965869a76f31b025dcd0309b065a0778324784",
+      "transformInputSha256": "27a717203a0e3c4726cb23380c965869a76f31b025dcd0309b065a0778324784"
+    },
+    "src/router.ts": {
+      "sourceSha256": "b978db5ab44f77defe7f140be6d73582f500de51d0cf6dedbdabe07b4e9f3212",
+      "transformInputSha256": "b978db5ab44f77defe7f140be6d73582f500de51d0cf6dedbdabe07b4e9f3212"
+    },
+    "src/engine/desktopHost.ts": {
+      "sourceSha256": "5eda0a189488006b10ebf99817514be4537025e7314c934d74d56d20ed601824",
+      "transformInputSha256": "5eda0a189488006b10ebf99817514be4537025e7314c934d74d56d20ed601824"
+    },
+    "src/views/HomeView.vue": {
+      "sourceSha256": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2",
+      "transformInputSha256": "c6202cb45a799db3233a48edcae14cf513142d8fdf1d805c9ae4d12c63e3fdb2"
+    },
+    "src/views/SettingsView.vue": {
+      "sourceSha256": "c4dbd34b1a7db3c8acae0d1818a96c920c7d6a113a559e75881adac71ef1c964",
+      "transformInputSha256": "c4dbd34b1a7db3c8acae0d1818a96c920c7d6a113a559e75881adac71ef1c964"
+    },
+    "src/views/CollectionView.vue": {
+      "sourceSha256": "1f68995cd7d0d68bcd467e6029fa9e0d18af81a943178164672405dc3b18484b",
+      "transformInputSha256": "1f68995cd7d0d68bcd467e6029fa9e0d18af81a943178164672405dc3b18484b"
+    },
+    "src/views/ExtensionsView.vue": {
+      "sourceSha256": "b7d58314556a7e4ef733e545877fa57910db3b769ce71b9453dff6365f1553b5",
+      "transformInputSha256": "b7d58314556a7e4ef733e545877fa57910db3b769ce71b9453dff6365f1553b5"
+    },
+    "src/views/ReplayView.vue": {
+      "sourceSha256": "93e006eae1cec1b3c05e4fcbf09dc4139ab31ad11ef4b8e8489aa15e5fd577f6",
+      "transformInputSha256": "93e006eae1cec1b3c05e4fcbf09dc4139ab31ad11ef4b8e8489aa15e5fd577f6"
+    },
+    "src/views/BattleView.vue": {
+      "sourceSha256": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79",
+      "transformInputSha256": "fe6252ed17789fbd1345557d64d2836164f3ee7ee2d6e61b18fff6c50f8adb79"
+    },
+    "src/engine/desktopEngineTransport.ts": {
+      "sourceSha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e",
+      "transformInputSha256": "5872a44e896bc256c24638e7da49d28bc33d831bc7cb3e683e1342a8c814fc2e"
+    },
+    "src/components/NativePackagesPanel.vue": {
+      "sourceSha256": "f56938eb4db310bf85119f792b798fafc831429ea7e505bb82c2ea6f7c780432",
+      "transformInputSha256": "f56938eb4db310bf85119f792b798fafc831429ea7e505bb82c2ea6f7c780432"
+    },
+    "src/engine/extensionCatalog.ts": {
+      "sourceSha256": "96af49e5056c972eb46464589189b59dee0ecd79cfbd1e12200e2ab4fb830e86",
+      "transformInputSha256": "96af49e5056c972eb46464589189b59dee0ecd79cfbd1e12200e2ab4fb830e86"
+    },
+    "src/engine/client.ts": {
+      "sourceSha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054",
+      "transformInputSha256": "5989a75089978d1e3deb81c1611d104cc47e2de3c70355479dec3a3312d20054"
+    },
+    "src/engine/extensionStore.ts": {
+      "sourceSha256": "da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f",
+      "transformInputSha256": "da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f"
+    },
+    "src/engine/observerMetadata.ts": {
+      "sourceSha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800",
+      "transformInputSha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800"
+    },
+    "src/engine/viewStore.ts": {
+      "sourceSha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc",
+      "transformInputSha256": "90cfd59e2dd574fe6311f8eec0df2643dcc77a6f222da34cfe3b012c14186bcc"
+    },
+    "src/engine/nativeMatchContent.ts": {
+      "sourceSha256": "3a7896f7213f1f6298000f9d45386b59c6b9c1cec4299f9d374226017284043f",
+      "transformInputSha256": "3a7896f7213f1f6298000f9d45386b59c6b9c1cec4299f9d374226017284043f"
+    },
+    "src/engine/networkClient.ts": {
+      "sourceSha256": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71",
+      "transformInputSha256": "b1330535a0bba8c68e45135c701c1065f3c03ded035d3477a2300634d14bee71"
+    },
+    "src/engine/originalResources.ts": {
+      "sourceSha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8",
+      "transformInputSha256": "5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8"
+    },
+    "src/engine/generalSelectModel.ts": {
+      "sourceSha256": "4c8607d805ff642df0ef3b9d315e6d654d43e3fa5317d8f3da2a3fa81da7c58a",
+      "transformInputSha256": "4c8607d805ff642df0ef3b9d315e6d654d43e3fa5317d8f3da2a3fa81da7c58a"
+    },
+    "src/engine/appearanceStore.ts": {
+      "sourceSha256": "cf3eda691efdcd86ac0890251b4f41c060e039d83ed083cb095f2bd947c7e324",
+      "transformInputSha256": "cf3eda691efdcd86ac0890251b4f41c060e039d83ed083cb095f2bd947c7e324"
+    },
+    "src/components/battle/BattleBoard.vue": {
+      "sourceSha256": "29c9afdd3dcc9503227b8662ff1ccd812d0e483c81b2cca8acef40646ee009f0",
+      "transformInputSha256": "29c9afdd3dcc9503227b8662ff1ccd812d0e483c81b2cca8acef40646ee009f0"
+    },
+    "src/engine/outcome.ts": {
+      "sourceSha256": "9f2bab7642bc5c524d431ddca94f69e89c5c74b12175d828101f414f7f852da3",
+      "transformInputSha256": "9f2bab7642bc5c524d431ddca94f69e89c5c74b12175d828101f414f7f852da3"
+    },
+    "src/components/battle/GeneralSelectPanel.vue": {
+      "sourceSha256": "a65c2ad5f2700329da5ff49236c10e7d530163adc300e56b0f49a62c685a7667",
+      "transformInputSha256": "a65c2ad5f2700329da5ff49236c10e7d530163adc300e56b0f49a62c685a7667"
+    },
+    "src/engine/nativeOutcome.ts": {
+      "sourceSha256": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf",
+      "transformInputSha256": "1763d40e083bb9a2613a0321ed306886619ea3d1d3cb1f93b4b5ffb608492bcf"
+    },
+    "src/engine/bundledNativePackages.ts": {
+      "sourceSha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b",
+      "transformInputSha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b"
+    },
+    "src/engine/presentationMetadata.ts": {
+      "sourceSha256": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42",
+      "transformInputSha256": "797112206a770f8827ce98db4c1ac63463aa026694363f212bf5d486416f7e42"
+    },
+    "src/engine/perfProbe.ts": {
+      "sourceSha256": "78e75aebd8799c7f0078305d42733f0d7b73008229ba932e14145ae5d202d228",
+      "transformInputSha256": "78e75aebd8799c7f0078305d42733f0d7b73008229ba932e14145ae5d202d228"
+    },
+    "src/engine/autoDrive.ts": {
+      "sourceSha256": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10",
+      "transformInputSha256": "959aa9e986d6de4c59ae22f29342e2a254620c3765845937a744db0c027bae10"
+    },
+    "src/engine/publicEvents.ts": {
+      "sourceSha256": "ed47a85581e0420478aef1afc1ecdb96be166dadda0a4a82bac00f7d9fef068d",
+      "transformInputSha256": "ed47a85581e0420478aef1afc1ecdb96be166dadda0a4a82bac00f7d9fef068d"
+    },
+    "src/components/battle/SeatCard.vue": {
+      "sourceSha256": "bd8f23ffb28614c36beb50840067c2fb440f55b235111f1853643852b6c9748f",
+      "transformInputSha256": "bd8f23ffb28614c36beb50840067c2fb440f55b235111f1853643852b6c9748f"
+    },
+    "src/components/battle/HandStrip.vue": {
+      "sourceSha256": "5dafe6453f0228f3300a4c0a1a3ca2f7f5a31d4d6c64c82e6ceecdab19606261",
+      "transformInputSha256": "5dafe6453f0228f3300a4c0a1a3ca2f7f5a31d4d6c64c82e6ceecdab19606261"
+    },
+    "src/engine/perfStats.ts": {
+      "sourceSha256": "8e5e3bc6045bfadb285a8a7716cf61ff054078d743f766fb6636d65e4c14b390",
+      "transformInputSha256": "8e5e3bc6045bfadb285a8a7716cf61ff054078d743f766fb6636d65e4c14b390"
+    },
+    "src/components/battle/GeneralPortrait.vue": {
+      "sourceSha256": "dfaf2dd1164df0ad7fec2585187e41cdf609bf0e24371396b504885f75d8e2cf",
+      "transformInputSha256": "dfaf2dd1164df0ad7fec2585187e41cdf609bf0e24371396b504885f75d8e2cf"
+    }
+  },
+  "chunks": {
+    "assets/index-jC10sqNn.css": {
+      "type": "asset",
+      "outputSha256": "1b05590decbdef5e39ffd88e1a2439c5fb3ceac8c437f0943464262e7ee349cc"
+    },
+    "assets/index-D7Ez9hWG.js": {
+      "type": "chunk",
+      "isEntry": true,
+      "facadeModuleId": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/index.html",
+      "modules": [
+        "\u0000vite/modulepreload-polyfill.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@vue+shared@3.5.39/node_modules/@vue/shared/dist/shared.esm-bundler.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@vue+reactivity@3.5.39/node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@vue+runtime-core@3.5.39/node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@vue+runtime-dom@3.5.39/node_modules/@vue/runtime-dom/dist/runtime-dom.esm-bundler.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vue-router@4.6.4_vue@3.5.39_typescript@5.9.3_/node_modules/vue-router/dist/devtools-EWN81iOl.mjs",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/vue-router@4.6.4_vue@3.5.39_typescript@5.9.3_/node_modules/vue-router/dist/vue-router.mjs",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/App.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@tauri-apps+api@2.11.1/node_modules/@tauri-apps/api/external/tslib/tslib.es6.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/node_modules/.pnpm/@tauri-apps+api@2.11.1/node_modules/@tauri-apps/api/core.js",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/desktopHost.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/HomeView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/HomeView.vue?vue&type=style&index=0&scoped=bb2f538c&lang.css",
+        "\u0000plugin-vue:export-helper",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/HomeView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/observerMetadata.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/presentationMetadata.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/autoDrive.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/nativeOutcome.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/desktopEngineTransport.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/perfStats.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/perfProbe.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/engine.native.worker.ts?worker",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/engine.worker.ts?worker",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/client.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/appearanceStore.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/extensionCatalog.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-liuli/assets/pile.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/cardpile-upstream-noname/assets/pile.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/d3-upstream-noname/assets/character.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/huanle-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-ow-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gujian-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-gwent-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-hearth-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-mtg-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-swd-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-yunchou-upstream-noname/assets/character.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wudian-upstream-noname/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/package.npack.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/packages/extensions/wuxing-upstream-liuli/assets/cards.json",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/bundledNativePackages.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/extensionStore.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/nativeMatchContent.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/publicEvents.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/networkClient.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/outcome.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/viewStore.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/generalSelectModel.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralPortrait.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralPortrait.vue?vue&type=style&index=0&scoped=689e5d5b&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralPortrait.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/SeatCard.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/SeatCard.vue?vue&type=style&index=0&scoped=fdcad0a8&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/SeatCard.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/HandStrip.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/HandStrip.vue?vue&type=style&index=0&scoped=b2b16095&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/HandStrip.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/BattleBoard.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/BattleBoard.vue?vue&type=style&index=0&scoped=9182a2db&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/BattleBoard.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralSelectPanel.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralSelectPanel.vue?vue&type=style&index=0&scoped=9fa84d6d&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/battle/GeneralSelectPanel.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/BattleView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/BattleView.vue?vue&type=style&index=0&scoped=14eda8d9&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/BattleView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/components/NativePackagesPanel.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/SettingsView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/SettingsView.vue?vue&type=style&index=0&scoped=637706ba&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/SettingsView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ReplayView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ReplayView.vue?vue&type=style&index=0&scoped=91fcaceb&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ReplayView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/originalResources.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/CollectionView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/CollectionView.vue?vue&type=style&index=0&scoped=fcfc63fc&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/CollectionView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ExtensionsView.vue?vue&type=script&setup=true&lang.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ExtensionsView.vue?vue&type=style&index=0&scoped=2bd63404&lang.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/views/ExtensionsView.vue",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/router.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/styles/global.css",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/main.ts",
+        "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/index.html"
+      ],
+      "outputSha256": "97a7bc3a47f29209ebfbc4b50cbb1ef9df7e281528cd241000c8bac4261dadc9"
+    },
+    "assets/engine_wasm_bg-Cba5ZGKQ.wasm": {
+      "type": "asset",
+      "outputSha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164"
+    },
+    "assets/engine.worker-D-EG_Mz5.js": {
+      "type": "asset",
+      "outputSha256": "ea77ba8456b89b02de544bdb23855214366dd3aa0386819557a9aeb603a5c3f6"
+    },
+    "assets/engine_native_wasm_bg-Ch-6nc_X.wasm": {
+      "type": "asset",
+      "outputSha256": "7c2a9f266c88e73e720a7b4e4073d28100eb2b6b3a18f087f721a57d881460da"
+    },
+    "assets/engine.native.worker-OPeztfr4.js": {
+      "type": "asset",
+      "outputSha256": "26c57a7188b208b573e2931b923c33d86e8dd16c23e8ac47a5b8fcaec32d34cd"
+    },
+    "index.html": {
+      "type": "asset",
+      "outputSha256": "eb3446dd193110a3e8ad30780b46fd50ccdf14a487156b4344169a53988e8d33"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** Shared engine / observer types (mirrors engine-api JSON). */
+import type { PublicPresentationBatch } from "./presentation";
 
 export type PlayerId = number;
 export type CardId = number;
@@ -104,6 +105,7 @@ export interface ChoiceRequest {
 export interface EngineEnvelope {
   result: unknown;
   events: unknown[];
+  presentation?: PublicPresentationBatch;
   choice: ChoiceRequest | null;
   view: ObserverSnapshot;
   legal_actions: LegalAction[];

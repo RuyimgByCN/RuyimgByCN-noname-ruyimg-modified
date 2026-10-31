@@ -1,0 +1,95 @@
+{
+  "utc": "2026-10-31T13:30:46.701708+00:00",
+  "counts": [
+    1791,
+    1,
+    75
+  ],
+  "failures": [
+    "replay_scenarios::replay_scenarios_match_golden"
+  ],
+  "constructor_regression": [
+    "test c331_prehp_damage::c9b_damage_constructor_sharing_preserves_existing_equipped_emit_entry ... ok"
+  ],
+  "source_manifest_sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+  "full_log_sha256": "9f5cb3f40562470d1427b8486b09c7e8c6fd5a7e7c80f8e508354dab403573ad",
+  "observed_results": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 668.8059387207031,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 34.535385847091675,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 3.705461025238037,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 61.710076332092285,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.7270472049713135,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null
+    }
+  ],
+  "owner": "parent retains final verification/sealing ownership; no resubmission"
+}

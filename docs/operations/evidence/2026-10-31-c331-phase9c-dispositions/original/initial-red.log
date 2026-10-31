@@ -1,0 +1,32 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.31s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 2 tests
+test c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement ... FAILED
+test c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore ... FAILED
+
+failures:
+
+---- c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement stdout ----
+
+thread 'c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement' (23003038) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:525:5:
+assertion `left == right` failed: First prevention must run before ordinary native Jueqing
+  left: 3
+ right: 4
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore stdout ----
+
+thread 'c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore' (23003039) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:533:116:
+impossible window stage Intrinsic
+
+
+failures:
+    c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement
+    c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 187 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9c"], "exit": 101, "locked_seconds": 3.3559261659975164, "disk_free_bytes": 121984770048}

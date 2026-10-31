@@ -1,0 +1,1005 @@
+diff --git a/crates/engine-native-content/src/content/standard.rs b/crates/engine-native-content/src/content/standard.rs
+index 35a36f17..071e7163 100644
+--- a/crates/engine-native-content/src/content/standard.rs
++++ b/crates/engine-native-content/src/content/standard.rs
+@@ -566,3 +566,5 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
+     skills.extend(boss_skills::skills());
+     (cards, skills)
+ }
++
++mod native_damage;
+diff --git a/crates/engine-native-content/src/content/standard/boss_skills.rs b/crates/engine-native-content/src/content/standard/boss_skills.rs
+index 134e111c..61312d2d 100644
+--- a/crates/engine-native-content/src/content/standard/boss_skills.rs
++++ b/crates/engine-native-content/src/content/standard/boss_skills.rs
+@@ -562,9 +562,19 @@ pub(super) fn skills() -> Vec<SkillDef> {
+         SkillDef {
+             name: BOSS_ZUIJIU,
+             // 查询型单面：commit_damage 臂——source sha 伤害 +1
+-            trigger: None,
++            trigger: Some(TriggerMeta {
++                event: EventKind::DamageBegin1,
++                timing: Timing::Normal,
++                priority: 0,
++                order_selectable: true,
++                optional: false,
++                extra_events: Vec::new(),
++            }),
+             limits: SkillLimits::default(),
+-            behavior: Box::new(NoopBehavior),
++            behavior: Box::new(native_damage::NativeDamageBehavior {
++                name: BOSS_ZUIJIU,
++                effect: crate::event::NativeDamageEffect::Zuijiu,
++            }),
+         },
+         SkillDef {
+             name: BOSS_XIAOSHOU,
+@@ -663,17 +673,37 @@ pub(super) fn skills() -> Vec<SkillDef> {
+             name: JUE_QING,
+             // 查询型单面：commit_damage 入口直读臂（急冻前——上游
+             // damageBefore 层）——来源伤害改为目标失去等量体力
+-            trigger: None,
++            trigger: Some(TriggerMeta {
++                event: EventKind::DamageBefore,
++                timing: Timing::Normal,
++                priority: 0,
++                order_selectable: true,
++                optional: false,
++                extra_events: Vec::new(),
++            }),
+             limits: SkillLimits::default(),
+-            behavior: Box::new(NoopBehavior),
++            behavior: Box::new(native_damage::NativeDamageBehavior {
++                name: JUE_QING,
++                effect: crate::event::NativeDamageEffect::Jueqing,
++            }),
+         },
+         SkillDef {
+             name: BOSS_WUXIN,
+             // 查询型双面：commit_damage 入口直读臂（受伤→失 1）+
+             // PlayCard 校验臂（乐/兵拒——延时禁指定他人）
+-            trigger: None,
++            trigger: Some(TriggerMeta {
++                event: EventKind::DamageBefore,
++                timing: Timing::Normal,
++                priority: 10,
++                order_selectable: true,
++                optional: false,
++                extra_events: Vec::new(),
++            }),
+             limits: SkillLimits::default(),
+-            behavior: Box::new(NoopBehavior),
++            behavior: Box::new(native_damage::NativeDamageBehavior {
++                name: BOSS_WUXIN,
++                effect: crate::event::NativeDamageEffect::Wuxin,
++            }),
+         },
+         SkillDef {
+             name: BOSS_SHANGSHIX,
+diff --git a/crates/engine-native-content/src/content/standard/native_damage.rs b/crates/engine-native-content/src/content/standard/native_damage.rs
+new file mode 100644
+index 00000000..481a1880
+--- /dev/null
++++ b/crates/engine-native-content/src/content/standard/native_damage.rs
+@@ -0,0 +1,35 @@
++//! Genuine existing native declarations use the ordinary source-window competition.
++use super::*;
++use crate::event::NativeDamageEffect;
++pub(super) struct NativeDamageBehavior {
++    pub name: &'static str,
++    pub effect: NativeDamageEffect,
++}
++impl SkillBehavior for NativeDamageBehavior {
++    fn native_damage_effect(&self) -> Option<NativeDamageEffect> {
++        Some(self.effect)
++    }
++    fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
++        matches!(event,EventData::Damage(d)if self.effect.matches(owner,d,ctx.catalog))
++    }
++    fn start(&self, _owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {
++        NoopBehavior.start(_owner, _event)
++    }
++    fn start_in_window(
++        &self,
++        ctx: &QueryCtx<'_>,
++        owner: PlayerId,
++        _event: &EventData,
++        kind: EventKind,
++    ) -> Box<dyn SkillMachine> {
++        assert_eq!(kind, self.effect.window().event_kind());
++        Box::new(crate::kernel::NativeDamageSkill {
++            owner,
++            def: ctx
++                .catalog
++                .skill_by_name(self.name)
++                .expect("immutable declaration"),
++            window: self.effect.window(),
++        })
++    }
++}
+diff --git a/crates/engine-native-kernel/src/archive/damage.rs b/crates/engine-native-kernel/src/archive/damage.rs
+index 1314adf6..b357f4bf 100644
+--- a/crates/engine-native-kernel/src/archive/damage.rs
++++ b/crates/engine-native-kernel/src/archive/damage.rs
+@@ -82,3 +82,15 @@ pub(super) fn dec_settlement(r: &mut R<'_>) -> Result<DamageSettlement, ArchiveE
+         progress,
+     })
+ }
++
++pub(super) fn enc_native_damage_skill(
++    w: &mut W,
++    owner: u8,
++    def: u16,
++    window: crate::event::DamageWindowKind,
++) {
++    w.u8(85);
++    w.u8(owner);
++    w.u16(def);
++    w.u8(window.tag());
++}
+diff --git a/crates/engine-native-kernel/src/archive/machine_decode.rs b/crates/engine-native-kernel/src/archive/machine_decode.rs
+index 9dccbf75..63d8e005 100644
+--- a/crates/engine-native-kernel/src/archive/machine_decode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_decode.rs
+@@ -2,6 +2,12 @@ use super::*;
+ 
+ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
+     Ok(match r.u8()? {
++        85 => MachineSnapshot::NativeDamageSkill {
++            owner: r.u8()?,
++            def: r.u16()?,
++            window: crate::event::DamageWindowKind::from_tag(r.u8()?)
++                .ok_or(ArchiveError::BadTag("native_damage_window", 0))?,
++        },
+         84 => MachineSnapshot::DamageFlow { root: r.u32()? },
+         83 => MachineSnapshot::TriggerOrder {
+             frame: r.u32()?,
+diff --git a/crates/engine-native-kernel/src/archive/machine_encode.rs b/crates/engine-native-kernel/src/archive/machine_encode.rs
+index 33467486..80e03599 100644
+--- a/crates/engine-native-kernel/src/archive/machine_encode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_encode.rs
+@@ -1,8 +1,15 @@
++use super::damage::enc_native_damage_skill;
+ use super::*;
+ 
+ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+     match m {
+-        MachineSnapshot::DamageFlow { root } => { w.u8(84); w.u32(*root); },
++        MachineSnapshot::NativeDamageSkill { owner, def, window } => {
++            enc_native_damage_skill(w, *owner, *def, *window)
++        }
++        MachineSnapshot::DamageFlow { root } => {
++            w.u8(84);
++            w.u32(*root);
++        }
+         MachineSnapshot::TriggerOrder {
+             frame,
+             owner,
+diff --git a/crates/engine-native-kernel/src/catalog.rs b/crates/engine-native-kernel/src/catalog.rs
+index 8a34093b..daba0b79 100644
+--- a/crates/engine-native-kernel/src/catalog.rs
++++ b/crates/engine-native-kernel/src/catalog.rs
+@@ -678,6 +678,10 @@ impl std::fmt::Debug for SkillDef {
+ /// 原生技能行为接口。触发过滤在 collect 与运行前各做一次，
+ /// 运行前重查使「结算中途被禁用」的技能不再生效。
+ pub trait SkillBehavior: Send + Sync {
++    fn native_damage_effect(&self) -> Option<crate::event::NativeDamageEffect> {
++        None
++    }
++
+     /// 该技能所有者是否在给定事件上触发（只读查询）。
+     fn filter(
+         &self,
+diff --git a/crates/engine-native-kernel/src/event/damage.rs b/crates/engine-native-kernel/src/event/damage.rs
+index 5f6dcf11..60c28039 100644
+--- a/crates/engine-native-kernel/src/event/damage.rs
++++ b/crates/engine-native-kernel/src/event/damage.rs
+@@ -233,3 +233,34 @@ impl DamageProgress {
+         })
+     }
+ }
++
++/// Existing native declarations whose damage body is an atomic source unit.
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum NativeDamageEffect {
++    Jueqing,
++    Wuxin,
++    Zuijiu,
++}
++impl NativeDamageEffect {
++    pub fn window(self) -> DamageWindowKind {
++        match self {
++            Self::Jueqing | Self::Wuxin => DamageWindowKind::Before,
++            Self::Zuijiu => DamageWindowKind::Begin1,
++        }
++    }
++    pub fn matches(
++        self,
++        owner: PlayerId,
++        d: &DamageData,
++        catalog: &crate::catalog::Catalog,
++    ) -> bool {
++        match self {
++            Self::Jueqing => d.source == Some(owner) && d.target != owner,
++            Self::Wuxin => d.target == owner,
++            Self::Zuijiu => {
++                d.source == Some(owner)
++                    && d.card.is_some_and(|c| catalog.card_kind(c).is_sha_like())
++            }
++        }
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index 54bcd659..08b3d2e1 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -66,9 +66,11 @@ mod damage;
+ mod damage_after;
+ mod damage_change_hp;
+ mod damage_flow;
++mod damage_skill;
+ mod damage_windows;
+ use damage::*;
+ pub use damage_flow::DamageFlow;
++pub use damage_skill::NativeDamageSkill;
+ mod events;
+ use events::*;
+ mod equipment;
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index ad276635..da54363f 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -81,6 +81,14 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
+         p.hp = hp;
+     }
+     d.settlement.hp_loss = if p.infinite_hp() { 0 } else { hp_loss };
++    ctx.res.frame_mut(frame_id).expect("damage root").data = EventData::Damage(d.clone());
++    ctx.log(LogEvent::DamageDealt {
++        source: d.source,
++        target: d.target,
++        amount: d.amount.max(0) as u32,
++        redirected_from: d.redirect_chain.clone(),
++        card: d.card,
++    });
+     if d.nature != crate::event::DamageNature::Normal && ctx.core.player(d.target).linked {
+         ctx.core.player_mut(d.target).linked = false;
+         ctx.log(LogEvent::Linked {
+@@ -92,13 +100,6 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
+     ctx.res.frame_mut(frame_id).expect("damage root").data = EventData::Damage(d.clone());
+     hlss_light_refill(ctx, d.target);
+     damage_change_hp::commit_damage_change_hp(ctx, &d);
+-    ctx.log(LogEvent::DamageDealt {
+-        source: d.source,
+-        target: d.target,
+-        amount: d.amount.max(0) as u32,
+-        redirected_from: d.redirect_chain.clone(),
+-        card: d.card,
+-    });
+ }
+ 
+ pub(super) fn post_damage(ctx: &mut Ctx<'_>, d: crate::event::DamageData) {
+diff --git a/crates/engine-native-kernel/src/kernel/damage_skill.rs b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+new file mode 100644
+index 00000000..ce7cba20
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+@@ -0,0 +1,56 @@
++//! One admitted, atomic native source unit; children complete after this body has finished.
++use super::*;
++use crate::event::{DamageWindowKind, NativeDamageEffect};
++#[derive(Clone)]
++pub struct NativeDamageSkill {
++    pub owner: PlayerId,
++    pub def: crate::ids::SkillDefId,
++    pub window: DamageWindowKind,
++}
++impl SkillMachine for NativeDamageSkill {
++    fn fork(&self) -> Box<dyn SkillMachine> {
++        Box::new(self.clone())
++    }
++    fn snapshot(&self) -> crate::snap::MachineSnapshot {
++        crate::snap::MachineSnapshot::NativeDamageSkill {
++            owner: self.owner,
++            def: self.def,
++            window: self.window,
++        }
++    }
++    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
++        let Some(effect) = ctx
++            .catalog
++            .skills
++            .get(self.def as usize)
++            .and_then(|s| s.behavior.native_damage_effect())
++        else {
++            return Flow::Done;
++        };
++        let d = ctx.current_damage().expect("checked window root").clone();
++        match effect {
++            NativeDamageEffect::Jueqing | NativeDamageEffect::Wuxin => {
++                let root = ctx.current_event_frame_id();
++                let amount = if effect == NativeDamageEffect::Jueqing {
++                    d.amount as u32
++                } else {
++                    1
++                };
++                finish_damage(
++                    ctx,
++                    root,
++                    d.clone(),
++                    crate::event::DamageOutcome::ReplacedByLoseHp,
++                );
++                ctx.emit(EventData::LoseHp {
++                    player: d.target,
++                    amount,
++                });
++            }
++            NativeDamageEffect::Zuijiu => {
++                ctx.modify_damage_amount(1);
++            }
++        }
++        Flow::Done
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel/damage_windows.rs b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+index 712fba0c..625c674e 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_windows.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+@@ -13,54 +13,6 @@ pub(super) fn commit_damage_window(ctx: &mut Ctx<'_>, root: EventId, window: Win
+     let mut amount = i64::from(d.amount);
+     match window {
+         Window::Before => {
+-            // 绝情（Boss 张春华，规则 v260；一将包旧绝情）：锁定——你造成的伤害
+-            // 改为目标失去等量体力（上游 source damageBefore cancel+loseHp(num)
+-            // 同口径；num=增幅前原始值=d.amount；取消后伤害事件不再结算=受击/
+-            // 加成类不触发；置于急冻前——上游 damageBefore 同层内容序）
+-            if let Some(jqdef) = ctx
+-                .catalog
+-                .skill_by_name(crate::vocabulary::names::JUE_QING)
+-            {
+-                if let Some(src) = d.source {
+-                    if src != d.target
+-                        && ctx.core.player(src).alive
+-                        && ctx.core.has_skill(src, jqdef)
+-                    {
+-                        finish_damage(
+-                            ctx,
+-                            root,
+-                            d.clone(),
+-                            crate::event::DamageOutcome::ReplacedByLoseHp,
+-                        );
+-                        ctx.emit(EventData::LoseHp {
+-                            player: d.target,
+-                            amount: d.amount as u32,
+-                        });
+-                        return;
+-                    }
+-                }
+-            }
+-            // 无心（Boss 张春华，规则 v260）伤害半：锁定——你受到的伤害改为失去
+-            // 1 点体力（上游 damageBefore priority 10 cancel+loseHp() 无参=1 同
+-            // 口径；置于绝情后=同层 priority 序）
+-            if let Some(wxdef) = ctx
+-                .catalog
+-                .skill_by_name(crate::vocabulary::names::BOSS_WUXIN)
+-            {
+-                if ctx.core.has_skill(d.target, wxdef) && ctx.core.player(d.target).alive {
+-                    finish_damage(
+-                        ctx,
+-                        root,
+-                        d.clone(),
+-                        crate::event::DamageOutcome::ReplacedByLoseHp,
+-                    );
+-                    ctx.emit(EventData::LoseHp {
+-                        player: d.target,
+-                        amount: 1,
+-                    });
+-                    return;
+-                }
+-            }
+             // 急冻冰封（U05 ow 美，规则 v127）：锁定——冰封目标受所有伤害无
+             // 效（上游 jidong2 damageBefore trigger.cancel() 同口径；铁索传导
+             // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
+@@ -257,30 +209,6 @@ pub(super) fn commit_damage_window(ctx: &mut Ctx<'_>, root: EventId, window: Win
+                     }
+                 }
+             }
+-            // 回合伤害统计（U05 xianjian 明绣，规则 v160 灵火门控）：来源本回
+-            // 合已造成伤害 +实际量（护甲/机甲吸收后；上游 getStat("damage") 按
+-            // 醉酒（Boss 白无常，规则 v255）：你使用的【杀】造成的伤害 +1（上
+-            // 游 damageBegin1 sha+shaParent 同口径；火杀/雷杀同属 sha 族）
+-            if d.card
+-                .map(|c| {
+-                    matches!(
+-                        ctx.catalog.card_kind(c),
+-                        CardKind::Sha | CardKind::FireSha | CardKind::LeiSha
+-                    )
+-                })
+-                .unwrap_or(false)
+-            {
+-                if let Some(zjdef) = ctx
+-                    .catalog
+-                    .skill_by_name(crate::vocabulary::names::BOSS_ZUIJIU)
+-                {
+-                    if let Some(src) = d.source {
+-                        if ctx.core.has_skill(src, zjdef) {
+-                            amount += 1;
+-                        }
+-                    }
+-                }
+-            }
+         }
+         Window::Begin4 => {
+             // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 75e0e574..25ef56a9 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -501,6 +501,43 @@ pub fn validate_trigger_bindings(
+             return Err(bad());
+         }
+     }
++    for park in &res.parks {
++        if !matches!(park.machine, MachineSnapshot::NativeDamageSkill { .. })
++            && contains_native_damage(&park.machine)
++        {
++            return Err(bad());
++        }
++    }
++    for park in &res.parks {
++        if let MachineSnapshot::NativeDamageSkill { owner, def, window } = &park.machine {
++            let Slot::Trigger { frame } = park.slot else {
++                return Err(bad());
++            };
++            let f = res.stack.iter().find(|f| f.id == frame).ok_or_else(bad)?;
++            let effect = catalog
++                .skills
++                .get(*def as usize)
++                .and_then(|s| s.behavior.native_damage_effect())
++                .ok_or_else(bad)?;
++            let payload = crate::event::damage_event(&res.stack, f);
++            let admitted=res.parks.iter().any(|p|matches!(&p.machine,MachineSnapshot::TriggerOrder{frame:order_frame,done,..}if *order_frame==frame&&done.contains(&(*owner,*def))));
++            let q = QueuedTrigger {
++                owner: *owner,
++                def: *def,
++                order: (0, 0, 0, 0, *def),
++            };
++            if !matches!(f.data,EventData::DamageWindow{window:w,..}if w==*window)
++                || f.stage != Stage::AfterTriggers
++                || park.resume_depth
++                    != res.stack.iter().position(|frame| frame.id == f.id).unwrap() + 1
++                || effect.window() != *window
++                || !admitted
++                || !eligible(core, catalog, &q, payload, event_kind(f))
++            {
++                return Err(bad());
++            }
++        }
++    }
+     for park in &res.parks {
+         if requires_trigger_frame(&park.machine, catalog) {
+             let Slot::Trigger { frame } = park.slot else {
+@@ -671,6 +708,22 @@ fn contains_window(machine: &MachineSnapshot) -> bool {
+     }
+ }
+ 
++fn contains_native_damage(machine: &MachineSnapshot) -> bool {
++    match machine {
++        MachineSnapshot::NativeDamageSkill { .. } => true,
++        MachineSnapshot::OptionalGate { inner, .. }
++        | MachineSnapshot::Aoe { inner, .. }
++        | MachineSnapshot::Chain { inner, .. }
++        | MachineSnapshot::Jijiang { inner, .. }
++        | MachineSnapshot::LiJian { inner, .. }
++        | MachineSnapshot::NullifyWindow { effect: inner, .. } => {
++            inner.as_deref().is_some_and(contains_native_damage)
++        }
++        MachineSnapshot::Rvm { following, .. } => following.iter().any(contains_native_damage),
++        _ => false,
++    }
++}
++
+ // A module already identifies a handler; only the owning frame decides its before/after window.
+ fn validate_vm_window(
+     machine: &MachineSnapshot,
+diff --git a/crates/engine-native-kernel/src/snap/damage_validation.rs b/crates/engine-native-kernel/src/snap/damage_validation.rs
+index 9d38f29c..da59c577 100644
+--- a/crates/engine-native-kernel/src/snap/damage_validation.rs
++++ b/crates/engine-native-kernel/src/snap/damage_validation.rs
+@@ -71,6 +71,30 @@ pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), Sna
+         if f.parent != Some(*root) || *root == f.id || parent.stage != Stage::Intrinsic {
+             return Err(SnapshotError::BadTag("damage_window_ancestry", 0));
+         }
++        let trigger_parks = res
++            .parks
++            .iter()
++            .filter(|p| matches!(p.slot,crate::resolution::Slot::Trigger{frame}if frame==f.id))
++            .count();
++        let intrinsic_park = res
++            .parks
++            .iter()
++            .any(|p| matches!(p.slot,crate::resolution::Slot::Intrinsic{frame}if frame==f.id));
++        let reachable = match f.stage {
++            Stage::Commit | Stage::Done => !f.planned && f.queue.is_empty() && trigger_parks == 0,
++            Stage::AfterTriggers => {
++                let orders=res.parks.iter().filter(|p|matches!(&p.machine,MachineSnapshot::TriggerOrder{frame,..}if *frame==f.id)).count();
++                if f.planned {
++                    orders == 1 || (orders == 0 && trigger_parks == 0 && f.queue.is_empty())
++                } else {
++                    f.queue.is_empty() && trigger_parks == 0
++                }
++            }
++            _ => false,
++        };
++        if !reachable || f.intrinsic_done || intrinsic_park {
++            return Err(SnapshotError::BadTag("damage_window_stage", 0));
++        }
+         let terminal = matches!(
+             (window, d.settlement.outcome, &d.settlement.progress),
+             (W::Zero, O::Zero, P::Stopped) | (W::Cancelled, O::Cancelled, P::Stopped)
+diff --git a/crates/engine-native-kernel/src/snap/machine_validation.rs b/crates/engine-native-kernel/src/snap/machine_validation.rs
+index 4742fba4..084d8542 100644
+--- a/crates/engine-native-kernel/src/snap/machine_validation.rs
++++ b/crates/engine-native-kernel/src/snap/machine_validation.rs
+@@ -7,12 +7,33 @@ pub(super) fn check_machine(
+     core: &GameStateCore,
+ ) -> Result<(), SnapshotError> {
+     match m {
+-        MachineSnapshot::DamageFlow { .. } => {},
+-        MachineSnapshot::TriggerOrder { owner, candidates, asked, cursor, done, .. } => {
++        MachineSnapshot::NativeDamageSkill { owner, def, .. } => {
+             check_pid(*owner, b)?;
+-            for def in candidates { check_def(*def, b)?; }
+-            for (pid, def) in done { check_pid(*pid, b)?; check_def(*def, b)?; }
+-            if (*asked && candidates.len() < 2) || candidates.windows(2).any(|ds| ds[0] >= ds[1]) || *cursor > b.seats as u16 + 1 { return Err(SnapshotError::BadTag("trigger_order_candidates", 0)); }
++            check_def(*def, b)?;
++        }
++        MachineSnapshot::DamageFlow { .. } => {}
++        MachineSnapshot::TriggerOrder {
++            owner,
++            candidates,
++            asked,
++            cursor,
++            done,
++            ..
++        } => {
++            check_pid(*owner, b)?;
++            for def in candidates {
++                check_def(*def, b)?;
++            }
++            for (pid, def) in done {
++                check_pid(*pid, b)?;
++                check_def(*def, b)?;
++            }
++            if (*asked && candidates.len() < 2)
++                || candidates.windows(2).any(|ds| ds[0] >= ds[1])
++                || *cursor > b.seats as u16 + 1
++            {
++                return Err(SnapshotError::BadTag("trigger_order_candidates", 0));
++            }
+         }
+         MachineSnapshot::Sha {
+             card,
+diff --git a/crates/engine-native-kernel/src/snap/restore.rs b/crates/engine-native-kernel/src/snap/restore.rs
+index eac7de8f..fff7f70a 100644
+--- a/crates/engine-native-kernel/src/snap/restore.rs
++++ b/crates/engine-native-kernel/src/snap/restore.rs
+@@ -12,7 +12,24 @@ impl MachineSnapshot {
+             return m;
+         }
+         match self {
+-            MachineSnapshot::DamageFlow { root } => Ok(Box::new(crate::kernel::DamageFlow { root: *root })),
++            MachineSnapshot::NativeDamageSkill { owner, def, window } => {
++                if catalog
++                    .skills
++                    .get(*def as usize)
++                    .and_then(|s| s.behavior.native_damage_effect())
++                    .is_none_or(|e| e.window() != *window)
++                {
++                    return Err(SnapshotError::UnknownMachine);
++                }
++                Ok(Box::new(crate::kernel::NativeDamageSkill {
++                    owner: *owner,
++                    def: *def,
++                    window: *window,
++                }))
++            }
++            MachineSnapshot::DamageFlow { root } => {
++                Ok(Box::new(crate::kernel::DamageFlow { root: *root }))
++            }
+             MachineSnapshot::TriggerOrder {
+                 frame,
+                 owner,
+diff --git a/crates/engine-native-kernel/src/snap/types.rs b/crates/engine-native-kernel/src/snap/types.rs
+index 971f6c78..841a3fa4 100644
+--- a/crates/engine-native-kernel/src/snap/types.rs
++++ b/crates/engine-native-kernel/src/snap/types.rs
+@@ -202,7 +202,14 @@ pub struct RvmPaused {
+ 
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum MachineSnapshot {
+-    DamageFlow { root: crate::ids::EventId },
++    DamageFlow {
++        root: crate::ids::EventId,
++    },
++    NativeDamageSkill {
++        owner: PlayerId,
++        def: SkillDefId,
++        window: crate::event::DamageWindowKind,
++    },
+     Sha {
+         card: CardId,
+         source: PlayerId,
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index 38589d92..8f82993e 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -6,7 +6,16 @@ use super::*;
+ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+     use crate::snap::MachineSnapshot as M;
+     match s {
+-        M::DamageFlow { root } => { push_u8(h,84);push_u32(h,*root); },
++        M::NativeDamageSkill { owner, def, window } => {
++            push_u8(h, 85);
++            push_u8(h, *owner);
++            push_u16(h, *def);
++            push_u8(h, window.tag());
++        }
++        M::DamageFlow { root } => {
++            push_u8(h, 84);
++            push_u32(h, *root);
++        }
+         M::TriggerOrder {
+             frame,
+             owner,
+diff --git a/crates/engine-native/tests/a0_tag_registry.rs b/crates/engine-native/tests/a0_tag_registry.rs
+index c45fb6ad..5c8a8bde 100644
+--- a/crates/engine-native/tests/a0_tag_registry.rs
++++ b/crates/engine-native/tests/a0_tag_registry.rs
+@@ -41,6 +41,14 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+     });
+     vec![
+         ("DamageFlow", MachineSnapshot::DamageFlow { root: 1 }),
++        (
++            "NativeDamageSkill",
++            MachineSnapshot::NativeDamageSkill {
++                owner: 0,
++                def: 0,
++                window: engine_native::event::DamageWindowKind::Before,
++            },
++        ),
+         (
+             "Sha",
+             MachineSnapshot::Sha {
+@@ -666,6 +674,7 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
+         M::Rvm { .. } => 80,
+         M::TriggerOrder { .. } => 81,
+         M::DamageFlow { .. } => 82,
++        M::NativeDamageSkill { .. } => 83,
+     }
+ }
+ 
+diff --git a/crates/engine-native/tests/c331_prehp_damage.rs b/crates/engine-native/tests/c331_prehp_damage.rs
+index 8f94714f..b8acecb8 100644
+--- a/crates/engine-native/tests/c331_prehp_damage.rs
++++ b/crates/engine-native/tests/c331_prehp_damage.rs
+@@ -517,3 +517,189 @@ fn c9b_damage_constructor_sharing_preserves_existing_equipped_emit_entry() {
+     assert_eq!(res.stack[2].parent, Some(2));
+     assert_eq!(res.next_event_id, 4);
+ }
++#[test]
++fn c9c_first_prevention_competes_before_native_jueqing_replacement() {
++    let mut p=package("skill c9c_first(99109201) { trigger damage_before owner_is_target { effect prevent_current_damage(); } }",&[]);
++    p.vm_skills[0].trigger.timing = engine_native::event::Timing::First;
++    let mut e = Engine::new_with_extensions(12101, 3, &[&p]).unwrap();
++    e.debug_grant(0, "绝情");
++    e.debug_grant(1, "c9c_first");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(
++        e.debug_hp(1),
++        4,
++        "First prevention must run before ordinary native Jueqing"
++    );
++    assert!(!e
++        .log()
++        .iter()
++        .any(|event| matches!(event, engine_native::machine::LogEvent::HpLost { .. })));
++}
++#[test]
++fn c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore() {
++    let p=package("skill c9c_pause(99109202) { trigger damage_before owner_is_target optional { effect draw_cards(self,1); } }",&[]);
++    let mut e = Engine::new_with_extensions(12102, 3, &[&p]).unwrap();
++    e.debug_grant(1, "c9c_pause");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    let original = e.save();
++    for stage in [
++        engine_native::event::Stage::Intrinsic,
++        engine_native::event::Stage::BeforeTriggers,
++    ] {
++        let mut bad = original.clone();
++        let id = bad
++            .resolution
++            .stack
++            .iter_mut()
++            .find_map(|f| {
++                if matches!(f.data, EventData::DamageWindow { .. }) {
++                    f.stage = stage;
++                    f.queue.clear();
++                    f.planned = false;
++                    f.intrinsic_done = false;
++                    Some(f.id)
++                } else {
++                    None
++                }
++            })
++            .unwrap();
++        bad.resolution.parks.retain(
++            |p| !matches!(p.slot,engine_native::resolution::Slot::Trigger{frame}if frame==id),
++        );
++        bad.resolution.open_choice = None;
++        let decoded =
++            engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&bad))
++                .unwrap();
++        assert!(
++            Engine::restore_with_extensions(&decoded, &[&p]).is_err(),
++            "impossible window stage {stage:?}"
++        );
++        assert_eq!(e.save(), original);
++    }
++    let mut missing = original.clone();
++    missing.resolution.parks.retain(|park| {
++        !matches!(
++            park.machine,
++            engine_native::snap::MachineSnapshot::TriggerOrder { .. }
++        )
++    });
++    let decoded =
++        engine_native::archive::decode_archive(&engine_native::archive::encode_archive(&missing))
++            .unwrap();
++    assert!(Engine::restore_with_extensions(&decoded, &[&p]).is_err());
++    assert_eq!(e.save(), original);
++}
++#[test]
++fn c9c_first_quantity_change_is_seen_by_native_zuijiu() {
++    let mut p=package("skill c9c_num(99109203) { trigger damage_before owner_is_target { effect modify_current_damage(self,-1); } }",&[("c9c_num",EventKind::DamageBegin1)]);
++    p.vm_skills[0].trigger.timing = engine_native::event::Timing::First;
++    let mut e = Engine::new_with_extensions(12103, 3, &[&p]).unwrap();
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    e.debug_grant(0, "醉酒");
++    e.debug_grant(1, "c9c_num");
++    e.debug_clear_hand(1);
++    let card = e.debug_place(0, "sha");
++    let h = e.debug_hp(1);
++    answer_play(&mut e, card);
++    assert_eq!(
++        e.debug_hp(1),
++        h,
++        "First num1→0 stops ordinary Zuijiu; it cannot pre-increment num before First"
++    );
++}
++fn answer_play(e: &mut Engine, card: u32) {
++    let out = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.revision() + 1,
++        action: GameAction::PlayCard {
++            card,
++            targets: vec![1],
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)));
++}
++#[test]
++fn c9c_native_admitted_body_roundtrips_and_cannot_forge_another_definition() {
++    let p=package("skill c9c_unowned(99109204) { trigger damage owner_is_target { effect draw_cards(self,1); } }",&[]);
++    let mut e = Engine::new_with_extensions(12104, 3, &[&p]).unwrap();
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    e.debug_grant(0, "绝情");
++    e.debug_clear_hand(1);
++    let card = e.debug_place(0, "sha");
++    e.set_time_slice(Some(1));
++    answer_play(&mut e, card);
++    let mut branch = None;
++    for _ in 0..200 {
++        let s = e.save();
++        if s.resolution.parks.iter().any(|p| {
++            matches!(
++                p.machine,
++                engine_native::snap::MachineSnapshot::NativeDamageSkill { .. }
++            )
++        }) {
++            let mut r = restore(&e, &p);
++            r.set_time_slice(None);
++            r.resume();
++            branch = Some(r);
++            let mut nested = s.clone();
++            let event = nested.resolution.stack.last().unwrap().data.clone();
++            for park in &mut nested.resolution.parks {
++                if let engine_native::snap::MachineSnapshot::NativeDamageSkill {
++                    owner, def, ..
++                } = &park.machine
++                {
++                    park.machine = engine_native::snap::MachineSnapshot::OptionalGate {
++                        owner: *owner,
++                        def: *def,
++                        event: event.clone(),
++                        asked: true,
++                        inner: Some(Box::new(park.machine.clone())),
++                    };
++                }
++            }
++            assert!(Engine::restore_with_extensions(&nested, &[&p]).is_err());
++            let mut invalid = s.clone();
++            for park in &mut invalid.resolution.parks {
++                if let engine_native::snap::MachineSnapshot::NativeDamageSkill { def, .. } =
++                    &mut park.machine
++                {
++                    *def = 0;
++                }
++            }
++            let bytes = engine_native::archive::encode_archive(&invalid);
++            let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++            assert!(Engine::restore_with_extensions(&decoded, &[&p]).is_err());
++            assert_eq!(e.save(), s);
++        }
++        if s.resolution.stack.is_empty() && !s.segment_open {
++            break;
++        }
++        e.resume();
++    }
++    assert!(branch.is_some());
++    same(&e, &branch.unwrap());
++    assert_eq!(e.debug_hp(1), 3);
++    assert_eq!(
++        e.log()
++            .iter()
++            .filter(|x| matches!(x, engine_native::machine::LogEvent::HpLost { .. }))
++            .count(),
++        1
++    );
++}
++#[test]
++fn c9c_damage_record_precedes_each_recipients_change_hp_unlink() {
++    let mut e = Engine::new(12105, 3);
++    e.state_core_mut().player_mut(1).linked = true;
++    e.state_core_mut().player_mut(2).linked = true;
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
++    for player in [1, 2] {
++        let dealt=e.log().iter().position(|event|matches!(event,engine_native::machine::LogEvent::DamageDealt{target,..}if *target==player)).unwrap();
++        let unlink=e.log().iter().position(|event|matches!(event,engine_native::machine::LogEvent::Linked{player:p,linked:false}if *p==player)).unwrap();
++        assert!(
++            dealt < unlink,
++            "damage record comes before its changeHp unlink: {player}"
++        );
++    }
++}
+diff --git a/crates/engine-native/tests/replay_scenarios.rs b/crates/engine-native/tests/replay_scenarios.rs
+index ebdda668..f95655d7 100644
+--- a/crates/engine-native/tests/replay_scenarios.rs
++++ b/crates/engine-native/tests/replay_scenarios.rs
+@@ -22,12 +22,15 @@ fn fresh_dedup() -> u64 {
+ 
+ fn submit_cmd(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
+     let expected_revision = e.revision();
+-    e.submit(GameCommand {
+-        actor,
+-        expected_revision,
+-        dedup_id: fresh_dedup(),
+-        action,
+-    })
++    observed_submit(
++        e,
++        GameCommand {
++            actor,
++            expected_revision,
++            dedup_id: fresh_dedup(),
++            action,
++        },
++    )
+ }
+ 
+ fn next_phase(e: &mut Engine) -> CommandOutcome {
+@@ -256,15 +259,18 @@ fn scenario_rollback_invariants() -> [u8; 32] {
+     };
+     let before = e.state_hash();
+     assert!(matches!(
+-        e.submit(GameCommand {
+-            actor: e.open_choice().unwrap().observer,
+-            expected_revision: e.revision(),
+-            dedup_id: fresh_dedup(),
+-            action: GameAction::Answer {
+-                choice_id: id,
+-                selection: vec![ChoiceOption::Card(9999)],
++        observed_submit_command_first(
++            GameCommand {
++                actor: e.open_choice().unwrap().observer,
++                expected_revision: e.revision(),
++                dedup_id: fresh_dedup(),
++                action: GameAction::Answer {
++                    choice_id: id,
++                    selection: vec![ChoiceOption::Card(9999)],
++                },
+             },
+-        }),
++            &mut e
++        ),
+         CommandOutcome::Rejected(engine_native::RejectReason::InvalidChoice)
+     ));
+     assert_eq!(e.state_hash(), before);
+@@ -272,15 +278,18 @@ fn scenario_rollback_invariants() -> [u8; 32] {
+     e.debug_set_budget(2);
+     let before_small_budget = e.state_hash();
+     assert!(matches!(
+-        e.submit(GameCommand {
+-            actor: e.open_choice().unwrap().observer,
+-            expected_revision: e.revision(),
+-            dedup_id: fresh_dedup(),
+-            action: GameAction::Answer {
+-                choice_id: id,
+-                selection: vec![ChoiceOption::Confirm],
++        observed_submit_command_first(
++            GameCommand {
++                actor: e.open_choice().unwrap().observer,
++                expected_revision: e.revision(),
++                dedup_id: fresh_dedup(),
++                action: GameAction::Answer {
++                    choice_id: id,
++                    selection: vec![ChoiceOption::Confirm],
++                },
+             },
+-        }),
++            &mut e
++        ),
+         CommandOutcome::Rejected(engine_native::RejectReason::BudgetExhausted)
+     ));
+     assert_eq!(e.state_hash(), before_small_budget);
+@@ -1210,6 +1219,8 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
+ fn replay_scenarios_match_golden() {
+     let mut bad = Vec::new();
+     for (name, run, _mechs, golden) in SCENARIOS {
++        SEMANTIC_NAME.with(|n| *n.borrow_mut() = name.to_string());
++        SEMANTIC_STEP.store(0, Ordering::SeqCst);
+         let hex = hex(&run());
+         if hex != *golden {
+             bad.push(format!("{name} actual={hex} expected={golden}"));
+@@ -1240,6 +1251,7 @@ fn scenarios_are_registered_in_coverage_manifest() {
+ 
+ // Opt-in evidence captures complete rule state and observable trajectories without changing expectations.
+ fn traced_state_hash(engine: &Engine) -> [u8; 32] {
++    semantic_capture(engine, "final", "", "");
+     static INDEX: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+     if let Ok(directory) = std::env::var("C331_GOLDEN_TRACE_DIR") {
+         let index = INDEX.fetch_add(1, Ordering::SeqCst);
+@@ -1292,3 +1304,33 @@ fn pa12_print_golden_hex() {
+         eprintln!("GOLDEN_HEX {name} {}", hex(&run()));
+     }
+ }
++
++// Opt-in pure observation at the existing command seam; no scheduler or RNG calls.
++thread_local! {static SEMANTIC_NAME:std::cell::RefCell<String>=const {std::cell::RefCell::new(String::new())};}
++static SEMANTIC_STEP: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
++fn observed_submit(e: &mut Engine, command: GameCommand) -> CommandOutcome {
++    let command_text = format!("{command:?}");
++    semantic_capture(e, "before", &command_text, "");
++    let out = e.submit(command);
++    semantic_capture(e, "after", &command_text, &format!("{out:?}"));
++    out
++}
++fn semantic_capture(e: &Engine, phase: &str, command: &str, outcome: &str) {
++    let Ok(directory) = std::env::var("C331_SEMANTIC_TRACE_DIR") else {
++        return;
++    };
++    SEMANTIC_NAME.with(|name| {
++        let directory=std::path::Path::new(&directory).join(name.borrow().as_str());std::fs::create_dir_all(&directory).unwrap();
++        let index=SEMANTIC_STEP.fetch_add(1,Ordering::SeqCst);let stem=format!("{index:04}-{phase}");let s=e.save();
++        let views:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.view_for(p)).collect();
++        let choices:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.choice_view_for(Some(p))).collect();
++        let value=serde_json::json!({"command":command,"phase":phase,"outcome_raw":outcome,"core":format!("{:#?}",s.core),"events":format!("{:#?}",e.log()),"rng":format!("{:?}",s.core.rng),"views":format!("{views:#?}"),"choices":format!("{choices:#?}"),"referee":format!("{:#?}",e.choice_view_referee()),"ruleset_version":s.ruleset_version,"resolution":format!("{:#?}",s.resolution)});
++        std::fs::write(directory.join(format!("{stem}.json")),serde_json::to_vec_pretty(&value).unwrap()).unwrap();
++        std::fs::write(directory.join(format!("{stem}.snapshot.txt")),format!("{s:#?}")).unwrap();
++        std::fs::write(directory.join(format!("{stem}.archive.ngsa")),engine_native::archive::encode_archive(&s)).unwrap();
++    });
++}
++
++fn observed_submit_command_first(command: GameCommand, e: &mut Engine) -> CommandOutcome {
++    observed_submit(e, command)
++}

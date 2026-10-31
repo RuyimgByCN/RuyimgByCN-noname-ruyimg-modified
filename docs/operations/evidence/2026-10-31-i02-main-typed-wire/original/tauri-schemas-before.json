@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T13:30:38.990889+00:00",
+  "files": {
+    "apps/desktop-client/gen/schemas/capabilities.json": {
+      "sha256": "59a49474d004a27571558501f2e5d9af355a9e85eca873d596d495ef7ae4bdc9",
+      "mtimeNs": 1783928332134087389,
+      "bytes": 200
+    },
+    "apps/desktop-client/gen/schemas/acl-manifests.json": {
+      "sha256": "b8665c2471bd4c59d570c77e226f37410ce396da52525383a15b5cbbff9d786e",
+      "mtimeNs": 1783928332123279661,
+      "bytes": 65934
+    },
+    "apps/desktop-client/gen/schemas/macOS-schema.json": {
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "mtimeNs": 1783928332133135550,
+      "bytes": 116049
+    },
+    "apps/desktop-client/gen/schemas/desktop-schema.json": {
+      "sha256": "f68a9c570ecff07ac6826145d33b966d6fc02f7d680967f44437268b08a6ba78",
+      "mtimeNs": 1783928332133135550,
+      "bytes": 116049
+    }
+  },
+  "qualification": "Tauri build uses write_if_changed for existing ACL/schema outputs; content+mtime equality required, no permission to change Main schema inputs."
+}

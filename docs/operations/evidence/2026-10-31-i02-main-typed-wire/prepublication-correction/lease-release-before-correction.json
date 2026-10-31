@@ -1,0 +1,13 @@
+{
+  "released_utc": "2026-10-31T14:57:23.134345+00:00",
+  "status": "RELEASED_PUBLICATION_WITHDRAWN_BEFORE_PUSH",
+  "proposed_commit": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+  "proposed_tree": "2a40493319ba1cd02875e94d4a9f5b45a5c9adf1",
+  "expected_old_remote": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "push_attempts": 0,
+  "guard_created": false,
+  "network_requests": 0,
+  "main_writes": false,
+  "git_commands_executed": 0,
+  "reason": "Supervisor explicitly withdrew bdaf publication: selected dedicated browser profile/cache not within accepted scope. Preserve metadata only; no account/session bodies inspected, no ref/index/commit/history changes."
+}

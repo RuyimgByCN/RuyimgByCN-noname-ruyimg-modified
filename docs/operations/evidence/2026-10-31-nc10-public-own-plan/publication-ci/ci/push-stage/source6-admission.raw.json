@@ -1,0 +1,45 @@
+{
+  "utc": "2026-10-31T11:51:06.329997+00:00",
+  "head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "headTree": "9ba4253837da66457669bd19c5120a9163b2a05b",
+  "source6": {
+    "crates/engine-native/src/ai.rs": "fa5c9fe92fe5b8dda0fdbfa1c8cdb6399d3883e7d2ae300e23c4923830d3764f",
+    "crates/engine-native-wasm/src/session.rs": "96e49714e3e7456b40ff5582113ad0dd1480350ab30976d516fb12cd6922f1a1",
+    "crates/engine-native/tests/groups/nc_rounds.rs": "7f411bf4195042ec4277df7f9b4a82998157806527284e0055330104a42109af",
+    "crates/engine-native/tests/nc10_public_own_plan.rs": "499a8379228af9ba4bf36f782366d2f5e53d86bbc1b1bce55c0a738789507706",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs": "e66b2db0167709bbf256c0f485b19673090217afc8ab736f332432a3ea19c0e2",
+    "crates/engine-native/tests/ai_planner.rs": "ac4398c915cdba4e3f0f7d0487c686ad631e0f7c8678714a1aa06d39afaf336b"
+  },
+  "composedPatchSha256": "c2ebaa41542c63f169b0c55367817a6d22cad22231401ed6af94859017016110",
+  "sourceManifestSha256": "9b6a9c446d43a4da854ba2c8f67a79fddb7c0f0d78169ea0a7c268545a641d28",
+  "commands": 26,
+  "allOriginalAttemptsExit0": false,
+  "allFinalRequiredExit0": true,
+  "resolvedSetupFailures": [
+    {
+      "name": "native-probe",
+      "exit": 101,
+      "cause": "Private harness incorrectly assumed empty Shan selection accepted; actual spec min1/max1 allow_cancelfalse, InvalidChoice+unchanged fullstate, explicitPass and genuineOwncancel separately verified; final probe + WASM + browser passed"
+    }
+  ],
+  "initialToFinalIndexUnchanged": false,
+  "freezeIndexUnchanged": true,
+  "indexLogicalEntriesEqualHead": true,
+  "indexProvenanceLimitation": "Unknown pre-freeze raw SHA change; no initial raw copy/logical entries. No restoration performed.",
+  "noStagedFiles": true,
+  "source33Unchanged": true,
+  "protected99Unchanged": true,
+  "defaultDist37Unchanged": true,
+  "wholeTrackedPrePost": 44306,
+  "trackedChanges": [
+    "docs/architecture/native-progress.md"
+  ],
+  "freezeFieldsEqual": true,
+  "qualification": "Main functional + bounded product acceptance only; no NC10 strength / no-choice privacy / VM closure / all37 / overall Goal completion claim. Full Plan privacy proven by native Rust tests; public WASM auto_step summary is not full Plan.",
+  "status": "PASS bounded Main functional/product checks + frozen final gates; independent parent review pending",
+  "finalReport": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/df47e19c-73c6-4cdd-a45e-5437618a62f2/verification/nc10-public-own-main-functional.md",
+  "finalReportSha256": "6ee15caea5559b42bab52b72a401707fc52604ba42bd5e5db93bdc807a35086b",
+  "freezeComparisonSha256": "dab4449a709f1712b3dc84d1eb7089d1df6692289b26f8f570615f8fb10d22ef",
+  "indexProvenanceSha256": "4a97b640be4a377657b7068e9f063d51c6f79c57d81cd4820f3ba75ed6681efd",
+  "parentLogicalAuditSha256": "d000d2c9379ebf28ef00847d97ecda0c8dee0fbb03f6187717fee068700b3454"
+}

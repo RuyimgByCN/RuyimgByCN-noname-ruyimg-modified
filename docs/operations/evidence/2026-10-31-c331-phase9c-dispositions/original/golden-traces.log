@@ -1,0 +1,15 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0425]: cannot find function `enc_native_damage_skill` in this scope
+ --> crates/engine-native-kernel/src/archive/machine_encode.rs:6:13
+  |
+6 |             enc_native_damage_skill(w, *owner, *def, *window)
+  |             ^^^^^^^^^^^^^^^^^^^^^^^ not found in this scope
+  |
+help: consider importing this function
+  |
+1 + use crate::archive::damage::enc_native_damage_skill;
+  |
+
+For more information about this error, try `rustc --explain E0425`.
+error: could not compile `engine-native-kernel` (lib) due to 1 previous error
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "replay_scenarios_match_golden", "--", "--test-threads=1"], "exit": 101, "locked_seconds": 1.2173175419447944, "disk_free_bytes": 134597701632}

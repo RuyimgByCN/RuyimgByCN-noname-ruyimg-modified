@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-31T12:40:25.135642+00:00",
+  "status": "PASS",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "staged_files": 3618,
+  "staged_bytes": 204625141,
+  "raw_blob_mode_all_exact": true,
+  "production_exact_six": [
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native-wasm/tests/nc10_public_own_session.rs",
+    "crates/engine-native/src/ai.rs",
+    "crates/engine-native/tests/ai_planner.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_public_own_plan.rs"
+  ],
+  "approved_pages_sha_exact": true,
+  "curated_source_markdown_whitespace_exit": 0,
+  "raw_evidence_whitespace_exit": 2,
+  "staged_markdown_portable_links_bad": [],
+  "preexisting_sibling_archive_instruction_links": [
+    [
+      "docs/architecture/native-progress.md",
+      "../../../AGENTS.md"
+    ],
+    [
+      "docs/architecture/native-progress.md",
+      "../../../archive/upstream/noname/apps/core/mode/boss.js"
+    ],
+    [
+      "docs/architecture/native-rules-baseline.md",
+      "../../../archive/upstream/noname/apps/core/character/standard/translate.js"
+    ]
+  ],
+  "unrelated_untracked_and_original_local_reports_preserved": true,
+  "qualification": "Does not treat raw evidence whitespace as maintained code faults or normalize historical bytes. Does not import C/I02 production code or close wholeGoal."
+}

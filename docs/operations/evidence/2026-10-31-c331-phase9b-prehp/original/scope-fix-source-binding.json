@@ -1,0 +1,8 @@
+{
+  "files": 212,
+  "full_manifest_sha256": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+  "full_tar_sha256": "93df600b6f86b79d2ea77d4c461705ca46338df2a2b4e9d9a054e35fac9e1c5e",
+  "full_patch_sha256": "64eb00896787032f1a927be8503c07086560acd83b6e0f5fe391b726628a1fd6",
+  "increment_manifest_sha256": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+  "no_staged_files": true
+}

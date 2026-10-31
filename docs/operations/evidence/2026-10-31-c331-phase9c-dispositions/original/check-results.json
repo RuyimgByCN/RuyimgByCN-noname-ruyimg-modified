@@ -1,0 +1,97 @@
+[
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "seconds": 6.062712907791138,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 101,
+    "seconds": 1.2602949142456055,
+    "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings"
+  },
+  {
+    "name": "golden-traces",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "kernel",
+      "replay_scenarios_match_golden",
+      "--",
+      "--test-threads=1"
+    ],
+    "exit": 101,
+    "seconds": 1.2476401329040527,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.09059476852416992,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 4.480288028717041,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0,
+    "seconds": 0.15306901931762695,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  }
+]
