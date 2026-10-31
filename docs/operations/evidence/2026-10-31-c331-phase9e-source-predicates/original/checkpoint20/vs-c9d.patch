@@ -1,0 +1,1032 @@
+diff --git a/crates/engine-native-content/src/content/host.rs b/crates/engine-native-content/src/content/host.rs
+index df49ae3e..cdbff151 100644
+--- a/crates/engine-native-content/src/content/host.rs
++++ b/crates/engine-native-content/src/content/host.rs
+@@ -153,7 +153,7 @@ impl SkillBehavior for HostSkillBehavior {
+         kind: crate::event::EventKind,
+     ) -> bool {
+         if let Some(effect) = self.native_damage_effect(kind) {
+-            return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx));
++            return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx,None));
+         }
+         self.filter(ctx, owner, event)
+     }
+diff --git a/crates/engine-native-content/src/content/standard/native_damage.rs b/crates/engine-native-content/src/content/standard/native_damage.rs
+index b0b290db..906cbd0e 100644
+--- a/crates/engine-native-content/src/content/standard/native_damage.rs
++++ b/crates/engine-native-content/src/content/standard/native_damage.rs
+@@ -22,7 +22,7 @@ impl SkillBehavior for NativeDamageBehavior {
+         event: &EventData,
+         kind: EventKind,
+     ) -> bool {
+-        matches!(event, EventData::Damage(d) if self.native_damage_effect(kind).is_some_and(|effect|effect.matches(owner,d,ctx)))
++        matches!(event, EventData::Damage(d) if self.native_damage_effect(kind).is_some_and(|effect|effect.matches(owner,d,ctx,None)))
+     }
+     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+         NoopBehavior.start(owner, event)
+diff --git a/crates/engine-native-kernel/src/event/native_damage.rs b/crates/engine-native-kernel/src/event/native_damage.rs
+index 1be9c568..ece6206a 100644
+--- a/crates/engine-native-kernel/src/event/native_damage.rs
++++ b/crates/engine-native-kernel/src/event/native_damage.rs
+@@ -53,14 +53,13 @@ impl NativeDamageEffect {
+             | Self::Xingjunyan
+             | Self::Liangou
+             | Self::Feiren
+-            | Self::Ciqiu
+             | Self::Duwen
+             | Self::MailunOut3
+             | Self::MailunIn3
+             | Self::MailunOut4
+             | Self::MailunIn4
+             | Self::Hutian => DamageWindowKind::Begin,
+-            Self::Zuijiu | Self::Huoshen | Self::NitaiOut | Self::ZhaohuoSource => {
++            Self::Ciqiu | Self::Zuijiu | Self::Huoshen | Self::NitaiOut | Self::ZhaohuoSource => {
+                 DamageWindowKind::Begin1
+             }
+             Self::Zhaohuo | Self::NitaiIn | Self::Bufo | Self::LingquCancel => {
+@@ -131,14 +130,28 @@ impl NativeDamageEffect {
+             _ => None,
+         }
+     }
+-    pub fn matches(self, owner: PlayerId, d: &DamageData, ctx: &QueryCtx<'_>) -> bool {
++    pub fn matches(
++        self,
++        owner: PlayerId,
++        d: &DamageData,
++        ctx: &QueryCtx<'_>,
++        parent: Option<&Frame>,
++    ) -> bool {
+         let core = ctx.state;
+         let catalog = ctx.catalog;
+         let p = core.player(owner);
+         let source = d.source == Some(owner);
+         let target = d.target == owner;
+         let fire = d.nature == DamageNature::Fire;
+-        let sha = d.card.is_some_and(|c| catalog.card_kind(c).is_sha_like());
++        let sha = d.card.is_some_and(|card| {
++            let kind = parent
++                .and_then(|p| match &p.data {
++                    EventData::CardUsed(u) if u.card == card => u.use_as,
++                    _ => None,
++                })
++                .unwrap_or_else(|| catalog.card_kind(card));
++            kind.is_sha_like()
++        });
+         let equip = |kind| p.equips.iter().any(|c| catalog.card_kind(*c) == kind);
+         if !p.alive {
+             return false;
+@@ -146,10 +159,18 @@ impl NativeDamageEffect {
+         match self {
+             Self::Jueqing => source && !target,
+             Self::Wuxin => target,
+-            Self::Zuijiu => source && sha,
++            Self::Zuijiu => {
++                source
++                    && sha
++                    && parent.is_some_and(|p| {
++                        p.stage == Stage::Intrinsic
++                            && matches!(&p.data, EventData::CardUsed(u)
++                    if u.use_as.unwrap_or_else(||catalog.card_kind(u.card)).is_sha_like())
++                    })
++            }
+             Self::Jidong => target && p.jidong_active,
+             Self::Chengxin => target && p.chengxin_active,
+-            Self::Chilongya => source && fire && equip(CardKind::Chilongya),
++            Self::Chilongya => source && fire && !d.from_chain && equip(CardKind::Chilongya),
+             Self::Xingjunyan => (source || target) && sha && equip(CardKind::Xingjunyan),
+             Self::Liangou => {
+                 target && core.turn.liangou_hook == Some(owner) && !core.turn.liangou_bonus_used
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index 15ebfb6a..d532cb93 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -130,26 +130,8 @@ pub(super) fn post_damage(
+         }
+     }
+     if effect == crate::event::NativeDamageEffect::Xixue {
+-        // 吸血鬼指环（U05 swd 第六批，规则 v90）：锁定——你的【杀】造成
+-        // 伤害后，若你已受伤，回复等量体力（上游 xixue：damageEnd sha &&
+-        // hp<maxHp → recover(num)）
+-        if let Some(src) = d.source {
+-            if src != d.target
+-                && ctx.core.player(src).alive
+-                && ctx.core.player(src).hp < ctx.core.player(src).max_hp as i32
+-                && d.card
+-                    .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+-                    .unwrap_or(false)
+-                && ctx
+-                    .core
+-                    .player(src)
+-                    .equips
+-                    .iter()
+-                    .any(|c| ctx.catalog.card_kind(*c) == CardKind::Xixueguizhihuan)
+-            {
+-                ctx.recover(src, d.amount.max(0) as u32, None);
+-            }
+-        }
++        let source = d.source.expect("admitted source role");
++        ctx.recover(source, d.amount as u32, None);
+     }
+     if effect == crate::event::NativeDamageEffect::Qinglong {
+         // 青龙令珠（U05 swd 第九批，规则 v93）：你对其他角色造成属性伤害
+diff --git a/crates/engine-native-kernel/src/kernel/damage_windows.rs b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+index 0d2680d3..11b957e9 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_windows.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+@@ -43,7 +43,7 @@ pub(super) fn apply_native_damage(
+             if effect == crate::event::NativeDamageEffect::Chilongya {
+                 // 赤龙牙（U05 swd 第四批，规则 v88）：锁定——来源装备赤龙牙时
+                 // 火属性伤害 +1（上游 damageBegin num++；非铁索传导照常）
+-                if d.nature == crate::event::DamageNature::Fire {
++                if d.nature == crate::event::DamageNature::Fire && !d.from_chain {
+                     if let Some(src) = d.source {
+                         if ctx.core.player(src).alive
+                             && ctx
+@@ -96,35 +96,6 @@ pub(super) fn apply_native_damage(
+                     }
+                 }
+             }
+-            if effect == crate::event::NativeDamageEffect::Ciqiu {
+-                // 刺猬（U07 玩点论杀韩龙，规则 v111）：锁定——你的杀对满血目标伤
+-                // 害 +1；加后 ≥ 目标体力则目标获本回合濒死即死标记（上游
+-                // addTempSkill("ciqiu_dying")）且本技能移除（一次性）
+-                if d.card
+-                    .map(|c| ctx.catalog.card_kind(c) == CardKind::Sha)
+-                    .unwrap_or(false)
+-                {
+-                    if let Some(src) = d.source {
+-                        if ctx.core.player(d.target).alive
+-                            && ctx.core.player(d.target).hp
+-                                == ctx.core.player(d.target).max_hp as i32
+-                        {
+-                            if let Some(def) = ctx
+-                                .catalog
+-                                .skill_by_name(crate::vocabulary::host::WUDIAN_CIQIU_KEY)
+-                            {
+-                                if ctx.core.has_skill(src, def) {
+-                                    amount += 1;
+-                                    if amount >= i64::from(ctx.core.player(d.target).hp) {
+-                                        ctx.core.turn.ciqiu_dying.push(d.target);
+-                                        ctx.core.skills.remove(&(src, def));
+-                                    }
+-                                }
+-                            }
+-                        }
+-                    }
+-                }
+-            }
+             if effect == crate::event::NativeDamageEffect::Duwen {
+                 // 毒瘟（U07 ow，规则 v122）：锁定——造成伤害时若你手牌数与受伤害
+                 // 角色相等，伤害 +1（上游 duwen damageBegin num++ 同口径；铁索传
+@@ -174,18 +145,35 @@ pub(super) fn apply_native_damage(
+                 // 寄存数」为上限（上游 hutian2 damageBegin priority -55 `trigger.num =
+                 // hp - storage.hutian2.length` 同口径）
+                 {
+-                    let hold = ctx.core.player(d.target).hutian_hold.len() as i32;
++                    let hold = ctx.core.player(d.target).hutian_hold.len();
+                     if hold > 0 {
+-                        let hp = ctx.core.player(d.target).hp;
+-                        let cap = hp - hold;
+-                        if i64::from(cap) < amount {
+-                            amount = i64::from(cap.max(0));
+-                        }
++                        let Ok(hold) = i64::try_from(hold) else {
++                            ctx.fail_damage_amount();
++                            return;
++                        };
++                        let Some(cap) = i64::from(ctx.core.player(d.target).hp).checked_sub(hold)
++                        else {
++                            ctx.fail_damage_amount();
++                            return;
++                        };
++                        amount = amount.min(cap);
+                     }
+                 }
+             }
+         }
+         Window::Begin1 => {
++            if effect == crate::event::NativeDamageEffect::Ciqiu {
++                let source = d.source.expect("admitted source role");
++                amount += 1;
++                if amount >= i64::from(ctx.core.player(d.target).hp) {
++                    ctx.core.turn.ciqiu_dying.push(d.target);
++                    let def = ctx
++                        .catalog
++                        .skill_by_name(crate::vocabulary::host::WUDIAN_CIQIU_KEY)
++                        .expect("immutable Ciqiu definition");
++                    ctx.core.skills.remove(&(source, def));
++                }
++            }
+             if effect == crate::event::NativeDamageEffect::Huoshen {
+                 // 火神（Boss 周瑜，规则 v263）：锁定——火属性伤害对你无效，你回复
+                 // 1 点体力（上游 damageBegin1 cancel+recover() 无参=1）。
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index 131638e1..ff7c4f14 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -275,13 +275,7 @@ impl SkillMachine for OptionalGate {
+             def: self.def,
+             order: (0, 0, 0, 0, self.def),
+         };
+-        if !trigger_order::eligible(
+-            ctx.core,
+-            ctx.catalog,
+-            &qt,
+-            crate::event::damage_event(&ctx.res.stack, frame),
+-            trigger_order::event_kind(frame),
+-        ) {
++        if !trigger_order::eligible(ctx.core, ctx.catalog, &qt, &ctx.res.stack, frame) {
+             return Flow::Done;
+         }
+         let kind = trigger_order::event_kind(frame);
+@@ -636,8 +630,8 @@ fn start_queued_trigger(
+         core,
+         catalog,
+         &qt,
+-        &actual_event,
+-        trigger_order::event_kind(res.frame(frame_id).expect("frame")),
++        &res.stack,
++        res.frame(frame_id).expect("frame"),
+     ) {
+         return;
+     }
+@@ -713,7 +707,6 @@ fn notify_new_skills(
+             continue;
+         }
+         let kind = trigger_order::event_kind(frame);
+-        let event = crate::event::damage_event(&res.stack, frame);
+         for &def in catalog.candidates(kind) {
+             let skill = &catalog.skills[def as usize];
+             if !skill
+@@ -729,7 +722,7 @@ fn notify_new_skills(
+                     def,
+                     order: (0, 0, 0, 0, def),
+                 };
+-                if trigger_order::eligible(core, catalog, &q, event, kind) {
++                if trigger_order::eligible(core, catalog, &q, &res.stack, frame) {
+                     helpers.push((owner, def));
+                 }
+             }
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 58faf58e..032ce87f 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -54,9 +54,11 @@ pub(super) fn eligible(
+     core: &GameStateCore,
+     catalog: &Catalog,
+     q: &QueuedTrigger,
+-    event: &EventData,
+-    kind: EventKind,
++    frames: &[Frame],
++    frame: &Frame,
+ ) -> bool {
++    let event = crate::event::damage_event(frames, frame);
++    let kind = event_kind(frame);
+     if let EventData::Damage(d) = event {
+         let terminal = matches!(
+             (kind, d.settlement.outcome),
+@@ -95,15 +97,43 @@ pub(super) fn eligible(
+     (helper || inst.is_some_and(|i| i.enabled && (!def.limits.once_per_turn || !i.once_used)))
+         && core.player(q.owner).alive
+         && (meta.event == kind || meta.extra_events.contains(&kind))
+-        && def.behavior.filter_in_window(
+-            &QueryCtx {
+-                state: core,
+-                catalog,
+-            },
+-            q.owner,
+-            event,
+-            kind,
+-        )
++        && if let (Some(effect), EventData::Damage(d)) =
++            (def.behavior.native_damage_effect(kind), event)
++        {
++            let root = match frame.data {
++                EventData::DamageWindow { root, .. } => frames.iter().find(|f| f.id == root),
++                EventData::Damage(_) => Some(frame),
++                _ => None,
++            };
++            let parent = root.and_then(|root| {
++                root.parent.and_then(|id| {
++                    let index = frames.iter().position(|f| f.id == root.id)?;
++                    index
++                        .checked_sub(1)
++                        .and_then(|i| frames.get(i))
++                        .filter(|p| p.id == id)
++                })
++            });
++            effect.matches(
++                q.owner,
++                d,
++                &QueryCtx {
++                    state: core,
++                    catalog,
++                },
++                parent,
++            )
++        } else {
++            def.behavior.filter_in_window(
++                &QueryCtx {
++                    state: core,
++                    catalog,
++                },
++                q.owner,
++                event,
++                kind,
++            )
++        }
+ }
+ fn group(
+     core: &GameStateCore,
+@@ -113,16 +143,10 @@ fn group(
+     cursor: u16,
+     seats: usize,
+ ) -> Vec<QueuedTrigger> {
+-    let mut available = frame.queue.iter().filter(|q| {
+-        bucket(q, seats) == cursor
+-            && eligible(
+-                core,
+-                catalog,
+-                q,
+-                crate::event::damage_event(frames, frame),
+-                event_kind(frame),
+-            )
+-    });
++    let mut available = frame
++        .queue
++        .iter()
++        .filter(|q| bucket(q, seats) == cursor && eligible(core, catalog, q, frames, frame));
+     let Some(first) = available.next().cloned() else {
+         return Vec::new();
+     };
+@@ -529,7 +553,6 @@ pub fn validate_trigger_bindings(
+                 .get(*def as usize)
+                 .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
+                 .ok_or_else(bad)?;
+-            let payload = crate::event::damage_event(&res.stack, f);
+             let admitted=res.parks.iter().any(|p|matches!(&p.machine,MachineSnapshot::TriggerOrder{frame:order_frame,done,..}if *order_frame==frame&&done.contains(&(*owner,*def))));
+             let q = QueuedTrigger {
+                 owner: *owner,
+@@ -542,7 +565,7 @@ pub fn validate_trigger_bindings(
+                     != res.stack.iter().position(|frame| frame.id == f.id).unwrap() + 1
+                 || effect.window() != *window
+                 || !admitted
+-                || !eligible(core, catalog, &q, payload, event_kind(f))
++                || !eligible(core, catalog, &q, &res.stack, f)
+             {
+                 return Err(bad());
+             }
+@@ -599,15 +622,7 @@ pub fn validate_trigger_bindings(
+                 def: *def,
+                 order: (0, 0, 0, 0, *def),
+             };
+-            if *event != frame.data
+-                || !eligible(
+-                    core,
+-                    catalog,
+-                    &q,
+-                    crate::event::damage_event(&res.stack, frame),
+-                    event_kind(frame),
+-                )
+-            {
++            if *event != frame.data || !eligible(core, catalog, &q, &res.stack, frame) {
+                 return Err(bad());
+             }
+         }
+diff --git a/crates/engine-native-kernel/src/rvm_bridge.rs b/crates/engine-native-kernel/src/rvm_bridge.rs
+index 6e03985b..f8da5a23 100644
+--- a/crates/engine-native-kernel/src/rvm_bridge.rs
++++ b/crates/engine-native-kernel/src/rvm_bridge.rs
+@@ -1073,3 +1073,6 @@ impl VmHost for EngineVmHost<'_> {
+         )
+     }
+ }
++
++#[cfg(test)]
++mod damage_context_tests;
+diff --git a/crates/engine-native-kernel/src/rvm_bridge/damage_context_tests.rs b/crates/engine-native-kernel/src/rvm_bridge/damage_context_tests.rs
+new file mode 100644
+index 00000000..4d64eedc
+--- /dev/null
++++ b/crates/engine-native-kernel/src/rvm_bridge/damage_context_tests.rs
+@@ -0,0 +1,41 @@
++use super::*;
++#[test]
++fn negative_canonical_damage_reaches_filter_and_signed_vm_host_unchanged() {
++    use rule_vm::{assemble, BytecodeModule, CollectingHost, Op, VerifiedModule};
++    let event = EventData::Damage(crate::machine::damage_data(None, 0, -1));
++    let trigger = trigger_ctx_of(&event);
++    assert_eq!(trigger.event_amount, u32::MAX);
++    assert_eq!(filter_view(&trigger).event_amount, u32::MAX);
++    let code = assemble(&[
++        Op::HostEventAmount,
++        Op::ConstI32(-1),
++        Op::Eq,
++        Op::HostChoice(1),
++        Op::Halt,
++    ]);
++    let name = "signed-damage-probe".to_string();
++    let logic_hash = BytecodeModule::compute_logic_hash(&name, &code, 0, 0, 0);
++    let module = BytecodeModule {
++        name,
++        code,
++        local_count: 0,
++        max_stack: 8,
++        entry_pc: 0,
++        logic_hash,
++        caps_mask: rule_vm::bytecode::caps::REQUEST_CHOICE,
++    };
++    let mut host = CollectingHost {
++        ctx: HostContext {
++            event_amount: trigger.event_amount,
++            ..Default::default()
++        },
++        ..Default::default()
++    };
++    let result = RuleVm::new()
++        .execute(&VerifiedModule::verify(module).unwrap(), &mut host, 100)
++        .unwrap();
++    assert!(
++        matches!(result,ExecResult::Paused{options,..}if options==vec![1]),
++        "HOST_EVENT_AMOUNT must evaluate to signed -1"
++    );
++}
+diff --git a/crates/engine-native-kernel/src/snap/damage_validation.rs b/crates/engine-native-kernel/src/snap/damage_validation.rs
+index da59c577..3fbd4a9c 100644
+--- a/crates/engine-native-kernel/src/snap/damage_validation.rs
++++ b/crates/engine-native-kernel/src/snap/damage_validation.rs
+@@ -116,6 +116,22 @@ pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), Sna
+         }
+     }
+     if let EventData::Damage(d) = &f.data {
++        let index = res
++            .stack
++            .iter()
++            .position(|p| p.id == f.id)
++            .expect("current frame");
++        let immediate = index.checked_sub(1).and_then(|i| res.stack.get(i));
++        if f.parent != immediate.map(|p| p.id) {
++            return Err(SnapshotError::BadTag("damage_immediate_parent", 0));
++        }
++        let chain = immediate.is_some_and(|p| {
++            matches!(&p.data,EventData::Damage(parent)
++            if p.stage==Stage::Intrinsic && matches!(parent.settlement.progress,P::Chain{..}))
++        });
++        if d.from_chain != chain {
++            return Err(SnapshotError::BadTag("damage_chain_cause", 0));
++        }
+         if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
+             return Err(SnapshotError::BadTag("damage_root_stage", 0));
+         }
+diff --git a/crates/engine-native/tests/c331_source_predicates.rs b/crates/engine-native/tests/c331_source_predicates.rs
+new file mode 100644
+index 00000000..90f61078
+--- /dev/null
++++ b/crates/engine-native/tests/c331_source_predicates.rs
+@@ -0,0 +1,536 @@
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++use engine_native::event::{DamageNature, DamageProgress, EventData, EventKind};
++use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
++
++fn source_pack(name: &str) -> ExtensionPack {
++    let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
++        .join("../../packages/extensions")
++        .join(name)
++        .join("assets/cards.json");
++    content_native_loader::bridge_pack(&std::fs::read_to_string(path).unwrap())
++        .unwrap()
++        .pack
++}
++fn vm_pack(source: &str, kind: EventKind, timing: engine_native::Timing) -> ExtensionPack {
++    let raw = content_compiler::compile_source_named("c9e", source).unwrap();
++    let mut vm_skills = content_native_loader::bridge_vm_skill_decls(&raw)
++        .unwrap()
++        .decls;
++    vm_skills[0].trigger.event = kind;
++    vm_skills[0].trigger.timing = timing;
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9e",
++            version: 1,
++            description: "source predicate cases",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++fn equip(e: &mut Engine, kind: CardKind) {
++    let card = (0..e.catalog().cards.len() as u32)
++        .find(|&card| e.catalog().card_kind(card) == kind)
++        .unwrap();
++    let name = e.catalog().cards[card as usize].name;
++    let card = e.debug_place(0, name);
++    e.state_core_mut().player_mut(0).hand.retain(|c| *c != card);
++    e.state_core_mut().player_mut(0).equips.push(card);
++}
++fn card(e: &Engine, kind: CardKind) -> u32 {
++    (0..e.catalog().cards.len() as u32)
++        .find(|&c| e.catalog().card_kind(c) == kind)
++        .unwrap()
++}
++fn play(e: &mut Engine, card: u32) {
++    let out = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.revision() + 1,
++        action: GameAction::PlayCard {
++            card,
++            targets: vec![1],
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++#[test]
++fn c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health() {
++    let source = source_pack("wudian-upstream-noname");
++    let vm=vm_pack("skill c9e_first(99109401) { trigger damage_before owner_is_target { effect modify_current_damage(self,-1); } }",EventKind::DamageBegin1,engine_native::Timing::First);
++    let mut e = Engine::new_with_extensions(13001, 3, &[&source, &vm]).unwrap();
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    e.debug_clear_hand(1);
++    e.debug_grant(0, "ciqiu");
++    e.debug_grant(1, "c9e_first");
++    e.debug_set_max_hp(1, 2);
++    e.debug_set_hp(1, 2);
++    let def = e.catalog().skill_by_name("ciqiu").unwrap();
++    let c = e.debug_place(0, "sha");
++    play(&mut e, c);
++    assert_eq!(
++        e.debug_hp(1),
++        2,
++        "First Begin1 must precede Ciqiu increment/removal"
++    );
++    assert!(e.state_core().has_skill(0, def));
++    assert!(e.state_core().turn.ciqiu_dying.is_empty());
++}
++#[test]
++fn c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal() {
++    let source = source_pack("wudian-upstream-noname");
++    for kind in [CardKind::FireSha, CardKind::LeiSha] {
++        let mut e = Engine::new_with_extensions(13002, 3, &[&source]).unwrap();
++        e.debug_grant(0, "ciqiu");
++        e.debug_set_max_hp(1, 2);
++        e.debug_set_hp(1, 2);
++        let c = card(&e, kind);
++        e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Fire, c);
++        assert_eq!(
++            e.debug_hp(1),
++            0,
++            "{kind:?} must execute the admitted Sha-family body"
++        );
++        assert!(!e
++            .state_core()
++            .has_skill_any_state(0, e.catalog().skill_by_name("ciqiu").unwrap()));
++    }
++}
++#[test]
++fn c9e_xixue_elemental_sha_executes_admitted_recovery() {
++    let source = source_pack("shahai-swd-upstream-noname");
++    for kind in [CardKind::FireSha, CardKind::LeiSha] {
++        let mut e = Engine::new_with_extensions(13003, 3, &[&source]).unwrap();
++        equip(&mut e, CardKind::Xixueguizhihuan);
++        e.debug_set_hp(0, 2);
++        let c = card(&e, kind);
++        e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Fire, c);
++        assert_eq!(
++            e.debug_hp(0),
++            3,
++            "{kind:?} must execute the admitted Sha-family recovery"
++        );
++    }
++}
++#[test]
++fn c9e_chilongya_direct_linked_victim_differs_from_real_chain_child() {
++    let source = source_pack("shahai-swd-upstream-noname");
++    let mut e = Engine::new_with_extensions(13004, 3, &[&source]).unwrap();
++    equip(&mut e, CardKind::Chilongya);
++    for p in [1, 2] {
++        e.state_core_mut().player_mut(p).linked = true;
++    }
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Fire);
++    assert_eq!(
++        e.debug_hp(1),
++        2,
++        "linked direct victim still receives the source bonus"
++    );
++    assert_eq!(
++        e.debug_hp(2),
++        2,
++        "propagated child carries2 without applying source bonus again"
++    );
++    let amounts: Vec<_> = e
++        .log()
++        .iter()
++        .filter_map(|x| {
++            if let engine_native::machine::LogEvent::DamageDealt { target, amount, .. } = x {
++                Some((*target, *amount))
++            } else {
++                None
++            }
++        })
++        .collect();
++    assert_eq!(amounts, vec![(1, 2), (2, 2)]);
++}
++#[test]
++fn c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify() {
++    let mut e = Engine::new(13005, 3);
++    e.debug_grant(0, "醉酒");
++    let c = card(&e, CardKind::Sha);
++    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, c);
++    assert_eq!(
++        e.debug_hp(1),
++        3,
++        "card identity alone does not prove an immediate Sha parent"
++    );
++}
++fn hutian_deposit(e: &mut Engine) {
++    let cards: Vec<_> = e.state_core().deck.iter().copied().take(3).collect();
++    assert_eq!(cards.len(), 3);
++    e.state_core_mut().deck.retain(|c| !cards.contains(c));
++    e.state_core_mut().player_mut(2).hutian_deposit = Some(1);
++    let p = e.state_core_mut().player_mut(1);
++    p.hutian_owner = Some(2);
++    p.hutian_hold = cards;
++}
++#[test]
++fn c9e_hutian_negative_cap_is_persisted_before_zero_transition() {
++    let mut e = Engine::new(13006, 3);
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    e.debug_clear_hand(1);
++    e.debug_set_hp(1, 2);
++    hutian_deposit(&mut e);
++    let c = e.debug_place(0, "sha");
++    e.set_time_slice(Some(1));
++    play(&mut e, c);
++    let mut found = false;
++    for _ in 0..300 {
++        if let Some(d) = e.save().resolution.stack.iter().find_map(|f| {
++            if let EventData::Damage(d) = &f.data {
++                Some(d.clone())
++            } else {
++                None
++            }
++        }) {
++            if d.amount <= 0 && d.settlement.progress == DamageProgress::Begin {
++                found = true;
++                assert_eq!(
++                    d.amount, -1,
++                    "source hp2-deposit3 is signed -1, never clamp tozero"
++                );
++                break;
++            }
++        }
++        e.resume();
++    }
++    assert!(found, "actual native Hutian body was observed");
++}
++
++fn capture(e: &Engine, name: &str) {
++    let Ok(directory) = std::env::var("C331_PREDICATE_TRACE_DIR") else {
++        return;
++    };
++    let dir = std::path::Path::new(&directory);
++    std::fs::create_dir_all(dir).unwrap();
++    let s = e.save();
++    let views: Vec<_> = (0..s.core.players.len() as u8)
++        .map(|p| e.view_for(p))
++        .collect();
++    let choices: Vec<_> = (0..s.core.players.len() as u8)
++        .map(|p| e.choice_view_for(Some(p)))
++        .collect();
++    let value = serde_json::json!({"case":name,"core":format!("{:#?}",s.core),"events":format!("{:#?}",e.log()),"rng":format!("{:?}",s.core.rng),"views":format!("{views:#?}"),"choices":format!("{choices:#?}"),"referee":format!("{:#?}",e.choice_view_referee()),"resolution":format!("{:#?}",s.resolution),"state_hash":e.state_hash()});
++    std::fs::write(
++        dir.join(format!("{name}.json")),
++        serde_json::to_vec_pretty(&value).unwrap(),
++    )
++    .unwrap();
++    std::fs::write(dir.join(format!("{name}.snapshot.txt")), format!("{s:#?}")).unwrap();
++    std::fs::write(
++        dir.join(format!("{name}.archive.ngsa")),
++        engine_native::archive::encode_archive(&s),
++    )
++    .unwrap();
++}
++fn restore(e: &Engine, packs: &[&ExtensionPack]) -> Engine {
++    let saved = e.save();
++    let bytes = engine_native::archive::encode_archive(&saved);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert_eq!(saved, decoded);
++    let typed = Engine::restore_with_extensions(&saved, packs).unwrap();
++    let restored = Engine::restore_with_extensions(&decoded, packs).unwrap();
++    let mut normalized = restored.save();
++    normalized.auth_generation = saved.auth_generation;
++    assert_eq!(normalized, saved);
++    assert_eq!(typed.state_hash(), restored.state_hash());
++    restored
++}
++fn finish(e: &mut Engine) {
++    e.set_time_slice(None);
++    for _ in 0..500 {
++        if let Some(c) = e.open_choice().cloned() {
++            let selection = if c.spec.options.contains(&ChoiceOption::Pass) {
++                vec![ChoiceOption::Pass]
++            } else if c.spec.allow_cancel {
++                vec![]
++            } else {
++                c.spec
++                    .options
++                    .iter()
++                    .take(c.spec.min as usize)
++                    .copied()
++                    .collect()
++            };
++            let out = e.submit(GameCommand {
++                actor: c.observer,
++                expected_revision: e.revision(),
++                dedup_id: e.revision() + 1,
++                action: GameAction::Answer {
++                    choice_id: c.id,
++                    selection,
++                },
++            });
++            assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++        } else if e.save().resolution.stack.is_empty() && !e.save().segment_open {
++            return;
++        } else {
++            e.resume();
++        }
++    }
++    panic!("continuation did not finish");
++}
++fn same_final(expected: &Engine, restored: &Engine) {
++    let mut a = expected.save();
++    let mut b = restored.save();
++    a.auth_generation = 0;
++    b.auth_generation = 0;
++    assert_eq!(a, b);
++    assert_eq!(expected.state_hash(), restored.state_hash());
++    assert!(
++        expected.log().ends_with(restored.log()),
++        "full log/RNG/cost/child suffix must agree"
++    );
++}
++fn sliced(mut e: Engine, packs: &[&ExtensionPack], card: u32, name: &str) -> Engine {
++    let mut expected = e.clone();
++    play(&mut expected, card);
++    finish(&mut expected);
++    e.set_time_slice(Some(1));
++    play(&mut e, card);
++    let mut count = 0;
++    for _ in 0..500 {
++        if e.save().resolution.stack.is_empty() && !e.save().segment_open {
++            break;
++        }
++        assert!(
++            e.open_choice().is_none(),
++            "fixture must have no discretionary response"
++        );
++        if e.save()
++            .resolution
++            .stack
++            .iter()
++            .any(|f| matches!(&f.data,EventData::Damage(d)if d.amount<0))
++        {
++            capture(&e, &format!("{name}-negative-{count}"));
++        }
++        let mut restored = restore(&e, packs);
++        finish(&mut restored);
++        same_final(&expected, &restored);
++        count += 1;
++        if e.save().resolution.parks.iter().any(|p| {
++            matches!(
++                p.machine,
++                engine_native::snap::MachineSnapshot::NativeDamageSkill { .. }
++            )
++        }) {
++            capture(&e, &format!("{name}-native-{count}"));
++        }
++        e.resume();
++    }
++    assert!(count > 0);
++    same_final(&expected, &e);
++    capture(&e, &format!("{name}-final"));
++    e
++}
++#[test]
++fn c9e_real_sha_chain_and_alias_parent_roundtrip_at_every_slice() {
++    let mut aliases = source_pack("shahai-swd-upstream-noname");
++    aliases.cards.push(engine_native::catalog::CardDef::basic(
++        "c9e_sha_alias",
++        CardKind::FireSha,
++    ));
++    for name in ["sha", "fire_sha", "leisha", "c9e_sha_alias"] {
++        let mut e = Engine::new_with_extensions(13007, 3, &[&aliases]).unwrap();
++        e.debug_set_turn(0, engine_native::Phase::Play, 1);
++        for p in 0..3 {
++            e.debug_clear_hand(p);
++        }
++        e.debug_grant(0, "醉酒");
++        for p in [1, 2] {
++            e.state_core_mut().player_mut(p).linked = true;
++        }
++        let c = e.debug_place(0, name);
++        let e = sliced(e, &[&aliases], c, name);
++        assert_eq!(
++            e.debug_hp(1),
++            2,
++            "direct actual Sha parent qualifies {name}"
++        );
++        assert_eq!(
++            e.debug_hp(2),
++            if name == "sha" { 4 } else { 2 },
++            "independent same-card chain never requalifies through its Sha ancestor"
++        );
++    }
++}
++#[test]
++fn c9e_elemental_ciqiu_and_xixue_roundtrip_before_body_and_children() {
++    let swd = source_pack("shahai-swd-upstream-noname");
++    let diy = source_pack("wudian-upstream-noname");
++    for name in ["fire_sha", "leisha"] {
++        for ciqiu in [true, false] {
++            let mut e = Engine::new_with_extensions(13008, 3, &[&swd, &diy]).unwrap();
++            e.debug_set_turn(0, engine_native::Phase::Play, 1);
++            for p in 0..3 {
++                e.debug_clear_hand(p);
++            }
++            e.debug_set_hp(0, 2);
++            e.debug_set_max_hp(1, 8);
++            e.debug_set_hp(1, 8);
++            if ciqiu {
++                e.debug_grant(0, "ciqiu");
++            } else {
++                equip(&mut e, CardKind::Xixueguizhihuan);
++            }
++            let c = e.debug_place(0, name);
++            let e = sliced(e, &[&swd, &diy], c, &format!("{name}-{ciqiu}"));
++            assert_eq!(e.debug_hp(1), if ciqiu { 6 } else { 7 });
++            assert_eq!(e.debug_hp(0), if ciqiu { 2 } else { 3 });
++        }
++    }
++}
++#[test]
++fn c9e_chilongya_equipment_qualified_chain_roundtrips() {
++    let swd = source_pack("shahai-swd-upstream-noname");
++    let mut e = Engine::new_with_extensions(13009, 3, &[&swd]).unwrap();
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    equip(&mut e, CardKind::Chilongya);
++    for p in [1, 2] {
++        e.state_core_mut().player_mut(p).linked = true;
++    }
++    let c = e.debug_place(0, "fire_sha");
++    let e = sliced(e, &[&swd], c, "chilongya-chain");
++    assert_eq!(e.debug_hp(1), 2);
++    assert_eq!(e.debug_hp(2), 2);
++}
++
++fn reject_restore_atomic(
++    e: &Engine,
++    packs: &[&ExtensionPack],
++    bad: &engine_native::snap::StateSnapshot,
++) {
++    let original = e.save();
++    let bytes = engine_native::archive::encode_archive(bad);
++    let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
++    assert!(Engine::restore_with_extensions(bad, packs).is_err());
++    assert!(Engine::restore_with_extensions(&decoded, packs).is_err());
++    assert_eq!(e.save(), original);
++}
++#[test]
++fn c9e_zuijiu_admitted_parent_and_source_forgeries_reject_atomically() {
++    let mut e = Engine::new(13010, 3);
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    e.debug_grant(0, "醉酒");
++    let c = e.debug_place(0, "sha");
++    let def = e.catalog().skill_by_name("醉酒").unwrap();
++    e.set_time_slice(Some(1));
++    play(&mut e, c);
++    let mut found = false;
++    for _ in 0..300 {
++        let s = e.save();
++        if s.resolution.parks.iter().any(|p|matches!(p.machine,engine_native::snap::MachineSnapshot::NativeDamageSkill{def:d,..}if d==def)) {
++            found=true;capture(&e,"zuijiu-admitted-parent");
++            let root=s.resolution.stack.iter().position(|f|matches!(f.data,EventData::Damage(_))).unwrap();let parent=root-1;
++            for case in 0..6 {
++                let mut bad=s.clone();
++                match case {
++                    0=>bad.resolution.stack[root].parent=None,
++                    1=>if let EventData::Damage(d)=&mut bad.resolution.stack[root].data{d.from_chain=true;},
++                    2=>if let EventData::CardUsed(u)=&mut bad.resolution.stack[parent].data{u.use_as=Some(CardKind::Duel);},
++                    3=>bad.resolution.stack[parent].stage=engine_native::Stage::AfterTriggers,
++                    4=>if let EventData::Damage(d)=&mut bad.resolution.stack[root].data{d.card=None;},
++                    5=>if let EventData::Damage(d)=&mut bad.resolution.stack[root].data{d.source=Some(2);},
++                    _=>unreachable!(),
++                }
++                reject_restore_atomic(&e,&[],&bad);
++            }
++            let mut restored=restore(&e,&[]);finish(&mut restored);finish(&mut e);same_final(&e,&restored);break;
++        }
++        e.resume();
++    }
++    assert!(found);
++    assert_eq!(e.debug_hp(1), 2);
++}
++#[test]
++fn c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission() {
++    let mut e = Engine::new(13011, 3);
++    e.debug_set_turn(0, engine_native::Phase::Play, 1);
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    e.debug_grant(0, "醉酒");
++    for p in [1, 2] {
++        e.state_core_mut().player_mut(p).linked = true;
++    }
++    let c = e.debug_place(0, "fire_sha");
++    e.set_time_slice(Some(1));
++    play(&mut e, c);
++    let mut found = false;
++    for _ in 0..400 {
++        let s = e.save();
++        if let Some(index) = s
++            .resolution
++            .stack
++            .iter()
++            .position(|f| matches!(&f.data,EventData::Damage(d)if d.from_chain&&d.target==2))
++        {
++            found = true;
++            capture(&e, "same-card-chain-immediate-parent");
++            let ancestor = s
++                .resolution
++                .stack
++                .iter()
++                .find(|f| matches!(f.data, EventData::CardUsed(_)))
++                .unwrap()
++                .id;
++            for skip_parent in [false, true] {
++                let mut bad = s.clone();
++                if let EventData::Damage(d) = &mut bad.resolution.stack[index].data {
++                    d.from_chain = false;
++                }
++                if skip_parent {
++                    bad.resolution.stack[index].parent = Some(ancestor);
++                }
++                reject_restore_atomic(&e, &[], &bad);
++            }
++            let mut restored = restore(&e, &[]);
++            finish(&mut restored);
++            finish(&mut e);
++            same_final(&e, &restored);
++            break;
++        }
++        e.resume();
++    }
++    assert!(found);
++    assert_eq!(e.debug_hp(2), 2);
++}
++#[test]
++fn c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip() {
++    let mut vm=vm_pack("skill c9e_zero(99109402) { trigger damage_before owner_is_target { if event_amount < 0 { effect draw_cards(self,0-event_amount); } } } skill c9e_late(99109403) { trigger damage_before owner_is_target { effect draw_cards(self,1); } }",EventKind::DamageZero,engine_native::Timing::Normal);
++    vm.vm_skills[1].trigger.event = EventKind::DamageBegin;
++    vm.vm_skills[1].trigger.timing = engine_native::Timing::Last;
++    for hp in [2, 3, 4] {
++        let mut e = Engine::new_with_extensions(13012, 3, &[&vm]).unwrap();
++        e.debug_set_turn(0, engine_native::Phase::Play, 1);
++        for p in 0..3 {
++            e.debug_clear_hand(p);
++        }
++        e.debug_grant(1, "c9e_zero");
++        e.debug_grant(1, "c9e_late");
++        e.debug_set_hp(1, hp);
++        hutian_deposit(&mut e);
++        let c = e.debug_place(0, "sha");
++        let e = sliced(e, &[&vm], c, &format!("hutian-hp{hp}"));
++        assert_eq!(e.debug_hp(1), if hp == 4 { 3 } else { hp });
++        assert_eq!(e.debug_hand(1).len(),if hp==3{0}else{1},"negative signed host amount draws1; zero draws0; positive allows later ordinary handler");
++        let dealt = e
++            .log()
++            .iter()
++            .filter(|x| matches!(x, engine_native::machine::LogEvent::DamageDealt { .. }))
++            .count();
++        assert_eq!(dealt, if hp == 4 { 1 } else { 0 });
++    }
++}
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index 8a0af651..a75edcea 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -113,3 +113,5 @@ mod c331_schema5_datachain;
+ mod c331_canonical_damage;
+ #[path = "../c331_prehp_damage.rs"]
+ mod c331_prehp_damage;
++#[path = "../c331_source_predicates.rs"]
++mod c331_source_predicates;

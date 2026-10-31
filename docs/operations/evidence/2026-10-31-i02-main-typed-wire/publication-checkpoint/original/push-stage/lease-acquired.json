@@ -1,0 +1,9 @@
+{
+  "acquired_utc": "2026-10-31T15:15:54.790572+00:00",
+  "status": "READ_ONLY_PUBLICATION_LEASE_ACQUIRED",
+  "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "tree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+  "expected_old": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "release_boundary": "Immediately after push/guard/ref preservation seal, before CI watch",
+  "main_writes_authorized": false
+}

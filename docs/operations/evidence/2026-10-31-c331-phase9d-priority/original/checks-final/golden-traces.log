@@ -1,0 +1,34 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/kernel-b09703a09ed5dfc8)
+
+running 1 test
+test replay_scenarios::replay_scenarios_match_golden ... FAILED
+
+failures:
+
+---- replay_scenarios::replay_scenarios_match_golden stdout ----
+
+thread 'replay_scenarios::replay_scenarios_match_golden' (25539031) panicked at crates/engine-native/tests/groups/../replay_scenarios.rs:1229:5:
+golden mismatches:
+sha_dodge_then_damage actual=9fc6441957420c956cf82259a1a40c68248e8b80ca83c0ea3ae588b01dfd9dd7 expected=2300271a75e41264b3ee6190e992f60a5514a72a8078f8539198a9331bdc82c1
+death_terminal_single actual=5f779317f21b11fb4d8b9d597de690aa44078762b91cb62ce6cc3f72c630e096 expected=985e3fd95363d7daef2ede88e5d9f8d55eaad80ca61aa9ea0bf9a63d744e0dcc
+sancai_nested_chain actual=1d68fde253b34a6b710651b1712bc1ce4e593d0a188849e6ca8b4b00fd666a86 expected=fd79ad5aeb71119e6ff87a298ba097ab0b055bac8926604dc40525c2e337dac6
+yishang_redirect actual=ccf6be0a3525adeb638dc84a7933f44adc24c83ec49c312ad75ec98fdcd830f8 expected=d4805d2b990ecc63fdc40ae754d30dccb7307d1e9a373a6836809fea444934ba
+suidun_window_matrix actual=dcc8cd5da4acc766992143db3616689f16c8c382cc32564a5c49a44de4dd1077 expected=61bada7c584729c89881994f6847e4f960c7c6bd3519bd248bf99e30397380b8
+shouyi_dynamic_skill actual=629a42f86e0f33b2e830d2410120017aa2694ec8c242a396fae685857e80c741 expected=c680a9073b41c0a899ef7f2528dcda5b9d3c457624b3d40ce4deb709017d0543
+rollback_invariants actual=86d7d9931da6133e23970ea0fbf9358065fe0b3dbfe528f9cae6f4340ed4300e expected=0de72d7f6aeabe19fcb7580a834f549cad585c09d2b9d0709cc9c9326ebdb568
+equip_distance_matrix actual=9e79881f85bfe17faedde1474361213d6ca05ed7f115f09ca9b0e062fdc6e5bb expected=297ad69be0e8f5bd99169f9c736199e0967cbb1285859b2840325e37cd2bb0ac
+chain_fire_propagation actual=f1eb4cda86bc1795a8b9dc510bfec402f3b3af7f3ed4c6ca36c04f9d179f2a16 expected=086f831278aaaac6acaf7283eaa8c34a68d540ebfad8c1895246d13ff0d2a6a2
+aoe_response_queue actual=98abbd720f9f6dc599131b9b5c4a5cf5319d40a7b70703dffc957502c33f5869 expected=242a4e3004017ff39c934525fb5809b1cca6f78a1e4291b2656f3f20f2144b29
+duel_alternating_response actual=804483da6ea7c1f2313fb9854a22bb153643e9950f824102c39a4b484b4a015c expected=4e9dad356c0f51cee6cfd761c9284b95d515cfa345c6b7db86c04c74a621db55
+nullify_chain_on_savage actual=d58d260b032c7a136c2610722bfdea231ed5da72fc29902caa2e7e3c5bc7e080 expected=7c45c45d1c41be7531e25727f8d9e10b70a82fd6e22f9c1c4ac96b72ea3fbaae
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    replay_scenarios::replay_scenarios_match_golden
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 434 filtered out; finished in 0.53s
+
+error: test failed, to rerun pass `-p engine-native --test kernel`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "replay_scenarios_match_golden", "--", "--test-threads=1"], "exit": 101, "locked_seconds": 0.6450337499845773, "disk_free_bytes": 141633941504}

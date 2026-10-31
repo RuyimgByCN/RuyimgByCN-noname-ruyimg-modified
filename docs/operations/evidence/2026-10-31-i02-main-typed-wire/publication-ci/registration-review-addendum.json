@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-31T16:01:43.628417+00:00",
+  "status": "INDEPENDENT_REGISTRATION_REVIEW_ACCEPTED_OK_WITH_NOTES",
+  "run": 41214274772,
+  "attempt": 1,
+  "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "reviewOriginal": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/a9ffdca1-748c-4fdd-a6aa-9557487f68df/reviews/i02-ci41214274772-independent-registration.md",
+  "publishedReview": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci/independent-registration-review.raw.txt",
+  "reviewSha256": "c83ac399bce03e469aa9f6a0d64e1f41b2939b5926ae29c601a5d9fbdd9bf526",
+  "parentAudit": "parent/noname-parent-ci41214274772-audit.json",
+  "qualification": "Originalarchive-map datedpendingreview retained, thisaddendum closesregistrationreview only. 10/10newrun doesnotrewriteoldd078/2failure orwholeGoal/platform/producer acceptance."
+}

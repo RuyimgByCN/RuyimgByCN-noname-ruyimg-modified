@@ -1,0 +1,28 @@
+{
+  "utc": "2026-10-31T16:46:50.865132+00:00",
+  "status": "PASS_CONCORDANCE41_COUNTS_AND_SOURCE_BINDING_HASHES",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e-concordance-supplement",
+  "rows": 41,
+  "findings": 17,
+  "rowStatuses": {
+    "concrete-defect": 19,
+    "checked-agreement": 10,
+    "unproved-boundary": 12
+  },
+  "uniqueReferencedSourceFiles": 12,
+  "sha256": {
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/yijiang.js": "e12aee745fd63ea58fa6c7685bb6ae44426f53cf64cfdc37853c1bf7d2812b79",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_skill.rs": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/mode/boss.js": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/ow.js": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/xianjian.js": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/diy.js": "50b76233ac608bf5d5aab64e12ef68b33b7f905c28aeabc0301371944fcc0d51",
+    "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/swd.js": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_after.rs": "7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71"
+  },
+  "qualification": "Onlysourceidentity/countvalidation. All17reportedbusinessdefects requireindependentsemanticreview+actualredgreenrepairs; all12unprovedrows remainrequired. No source/test/Mainwrites ornewexecution."
+}

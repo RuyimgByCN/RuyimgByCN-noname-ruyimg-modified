@@ -1,0 +1,25 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+warning: unused import: `ChoiceOption`
+ --> crates/engine-native/tests/groups/../c331_source_predicates.rs:3:31
+  |
+3 | use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+  |                               ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0599]: no method named `take_card_anywhere` found for mutable reference `&mut GameStateCore` in the current scope
+  --> crates/engine-native/tests/groups/../c331_source_predicates.rs:17:24
+   |
+17 |     e.state_core_mut().take_card_anywhere(card);
+   |                        ^^^^^^^^^^^^^^^^^^ method not found in `&mut GameStateCore`
+
+error[E0599]: no method named `take_card_anywhere` found for mutable reference `&mut GameStateCore` in the current scope
+  --> crates/engine-native/tests/groups/../c331_source_predicates.rs:77:45
+   |
+77 |     for &card in &cards {e.state_core_mut().take_card_anywhere(card);}
+   |                                             ^^^^^^^^^^^^^^^^^^ method not found in `&mut GameStateCore`
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `engine-native` (test "nc_rounds") generated 1 warning
+error: could not compile `engine-native` (test "nc_rounds") due to 2 previous errors; 1 warning emitted
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_source_predicates", "--", "--nocapture"], "exit": 101, "locked_seconds": 0.9500834160135128, "disk_free_bytes": 135748960256}

@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T15:33:32.016605+00:00",
+  "readinessUtc": "2026-10-31T15:31:55.196341+00:00",
+  "sourceRawKeptPrivate": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-readiness-34e-uekou1cn",
+  "authorizedAndroid": 0,
+  "availablePhysicalIPhone": 0,
+  "iPhoneUnavailableReasons": [
+    {
+      "domain": "com.apple.dt.deviceprep",
+      "code": -27,
+      "category": "DEVELOPER_MODE_REQUIRED"
+    }
+  ],
+  "qualification": "Parsed existing retained readiness JSON, no new device command/pair/install/permission changes. No raw IDs/names/error descriptions echoed."
+}

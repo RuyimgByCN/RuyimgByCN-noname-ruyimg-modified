@@ -1,0 +1,21 @@
+{
+  "utc": "2026-10-31T17:00:13.904175+00:00",
+  "files": 8,
+  "localLinkReferences": 861,
+  "bad": {
+    "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/README.md": [
+      "artifact-index.json"
+    ]
+  },
+  "checked": [
+    "docs/architecture/native-progress.md",
+    "docs/operations/evidence/2026-10-31-c331-change-hp-plan/README.md",
+    "docs/operations/evidence/2026-10-31-c331-phase9d-priority/README.md",
+    "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-checkpoint/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/publication-ci/README.md"
+  ],
+  "notes": "Initialhelpcommandusedparentcwdmissingprefixandfailed2, correctedabsoluteprojectpath. check_local_links hasnohelpoptionanddefault7filespassed; thisexplicitcheckcoversall8narrativefiles. No products/testsreexecuted."
+}

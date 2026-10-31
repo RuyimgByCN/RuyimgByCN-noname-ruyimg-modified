@@ -1,0 +1,31 @@
+2026-10-31 additive READ-ONLY phase9e concordance supplement; original phase9e seal remains authoritative and unchanged.
+Observed audit start16:24:55Z; original seal16:20:29.075090Z. Queued guidance was consumed after sealing; exact request-delivery time was not supplied.
+Supervisor authorized <=10min, no source/heavy/Main/device changes. No tests, builds, network or device operations were performed.
+All41 finite Damage declarations/windows/roles and admission/body paths were inspected against pinned source; all41 window/role tuples agree at this finite scope.
+Row status:10 checked-agreement,19 concrete-defect,12 explicit unproved-boundary. Checked-agreement is not whole source/provider/async equivalence.
+Machine detail and exact source keys/paths/hashes/lines, sealed consumers and next-slice counterexample plans: concordance.json; raw41 excerpts: source-excerpts.txt.
+Seventeen unfixed finding groups:
+- F01 (Jueqing): Native source&&!target rejects self-source damage; source replaces it with loseHp.
+- F02 (Xingjunyan,Ciqiu,Xixue): Direct use_as Sha resolves through immediate CardUsed, but propagated root immediate parent is Damage. It falls back to physical carrier kind and can reject genuine virtual-Sha damage. Existing name-alias FireSha tests do not cover this.
+- F03 (ZhaohuoSource,Zhaohuo): Self-source damage should cancel in Begin1, but native source body changes nature to Fire and delays cancellation to Begin4. Target-arm filter also omits owner==source when nature is changed back.
+- F04 (Shuchui): Native admission omits !shuchui_hit, allowing repeated admission/log/competition after the flag is already true. Body also rechecks physical Sha kind after context-qualified virtual-Sha admission, allowing a no-op alias.
+- F05 (Xixue): Native rejects self-target Sha damage recovery while source permits it.
+- F06 (Paotai): Positive canonical amounts>=256 truncate before subtraction; level3 and amount256 leaves3 instead of0 when recipient survives.
+- F07 (Qinglong): Native chooses a random card unconditionally instead of preserving player selection/cancellation, consuming different RNG and cost trajectories.
+- F08 (Yinzei): Native requires source hand cards, excludes equipment-only source, and deterministically discards first hand card instead of source randomDiscard.
+- F09 (Zhangwu): Native forces first hand discard for holder/source, omits variable he cost and cancellation, and adds a self-source exclusion absent from filter.
+- F10 (Zlfanshi): Native clears terra after retaliation and alternates every other hit; source keeps it until temp expiry and retaliates on every later hit. Native chooses first seat instead of random.
+- F11 (Abi): Native always emits Fire and does not consume the source nature RNG.
+- F12 (Yuance): Native always takes option1 and performs an inline judge; actual cancellation/choice/rejudge trajectory is absent.
+- F13 (Jiding): Native emits virtual LeiSha but never removes the admitted Jiding definition, allowing repeated invocations. Grouped recover/provenance and friendship mode semantics are additionally unproved.
+- F14 (Cuidui): Native only checks other living target, so allied damage can poison; source enemy condition is absent. Mushengoumang linked draw is omitted.
+- F15 (Duqu): Native excludes self but fails to exclude a different source that also owns enabled Duqu; that source incorrectly gains shedu.
+- F16 (Jidian): Native auto-selects first target and uses jidian_chain to suppress recursion. A nonblack judgment can leave the flag set and suppress the next unrelated damage reaction.
+- F17 (Minwan): Native additionally rejects source==target, leaving target set empty where source initializes [owner] on self-source damage.
+No new counterexample plan was executed; findings are connected-source conclusions requiring correction/regression in the next parent-sequenced writer slice, not accepted variants.
+Additional explicit unknowns include Feiren altered/suit modifiers; applied provider grant/removal/renew/expiry; Huanxia parent-skill provenance; Zhue async draw ordering; full grouped skill/cost/liveness semantics.
+Original7333 indexed artifacts, original51-line external report and all219 original/live source hashes were rechecked unchanged; original-preservation.json records evidence.
+Original full1821/1/75, strict/caps/layering passes remain scoped to their original executed cases; this audit adds no green runtime acceptance.
+Original increment14 manifest7e22da5716d417150e058c6f94695bffc78a64bf67f02b6a08e98deec384b8b7; composition219 manifest578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753.
+Keep Ctree frozen for parent review/sequencing; no ChangeHp/Death implementation or golden rerecord begins from this supplement. Source262/290 remaining28+0; wholeC331 remains BLOCK.
+Skipped tests/builds and implementation. Concrete defects and unproved provider/async boundaries remain mandatory risks.

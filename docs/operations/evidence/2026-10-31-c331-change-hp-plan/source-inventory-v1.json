@@ -1,0 +1,74 @@
+{
+  "kind": "read-only-next-Core-source-inventory",
+  "main": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+  "fallback_rule": "Use frozen214 overlay first; unchanged kernel/content files are supplied Main/5fc byte-equal. No live C tree inspected.",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9c-final-ld22eim7/snapshot",
+  "snapshot_files_observed": 214,
+  "source_manifest_sha256_supplied_and_confirmed_in_parent_audit": "0ab2b44eac80e7c1d591ebe560e8be69ab4ff72a4ac35b7db92edc5c4f4925ae",
+  "manifest_qualification": "Parent immutable audit /tmp/noname-parent-c9c-final-audit.json records manifest identity; original manifest bytes were not separately available in the supplied snapshot directory, so this run did not recompute its digest.",
+  "upstream_heads_observed": {
+    "noname": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+    "noname-liuli": "8485dbb29ff16f9b258a766b1a17ef75f883aade"
+  },
+  "sha256_observed": {
+    "C9c/kernel/damage_change_hp.rs": "be74e1708d5c52831a2915bd648e0ae2148e84d4f4372b1b1fa902a006ab2d25",
+    "C9c/kernel/damage.rs": "ecc14df301b33da1a7852309d4ad70dbd7ff31dcf8e08baa1ae4bbc7b8d4f2f4",
+    "C9c/kernel/damage_flow.rs": "0ea44f598613d20d1eaa6224c358f9a0f86cf76207fe850c9c42663faad057d4",
+    "C9c/machine.rs": "cd7a54a0c778b9031ff0e7f1e28d1b9a56d504b11ef4674ced2a22fa6bfa7b2c",
+    "Core/mode/boss.js": "d92b9b66f158b2877a2d403a70048b803af649696f5be2ba41bef6dc1e3f7865",
+    "Liuli/character/extra.js": "888e041f8a2d7eec97ab91edd62d5a78a6f4dd94ba4a8a3a2d55ab0bc3d8091a"
+  },
+  "ordinary_change_hp_source": {
+    "Core": "player.js9188-9197 captures originalHp; content.ts12322-12370 mutates then triggers; player.js3271 returns raw?hp:max(0,hp)",
+    "Liuli": "game/game.js26494 creates event;20979-21009 mutates then triggers; lacks Core changedHp field/gate",
+    "Damage": "Core content.ts12115-12161,12223-12225: changeHp children, actual target damage, Dying, source; notrigger suppresses child trigger",
+    "Recover": "Core content.ts12229-12255: cap positive recover, await changeHp; no child for nonpositive capped recovery",
+    "LoseHp": "Core content.ts12258-12281: await changeHp, then Dying",
+    "MaxHp": "Core content.ts12289-12320: separate loseMaxHp/gainMaxHp bodies and update; not ordinary changeHp by name",
+    "Die": "Core content.ts12531: committed die body invokes changeHp(-hp,false).forceDie; future DeathFlow integration only"
+  },
+  "boss_switch_helper_definitions": [
+    "Core mode/boss.js4537 boss_echou_switch -> boss_echou_switch_on, changedHp gate4553",
+    "Core mode/boss.js4616 boss_xushi_switch -> boss_xushi_switch_on, changedHp gate4632",
+    "Core mode/boss.js4735 boss_yanyu_switch -> boss_yanyu_switch_on, changedHp gate4751",
+    "Core mode/boss.js4821 boss_sipu_switch -> boss_sipu_switch_on, changedHp gate4837",
+    "Core mode/boss.js5232 boss_yinzei_switch -> boss_yinzei_switch_on, changedHp gate5248",
+    "Core mode/boss.js5260 boss_jicai_switch -> boss_jicai_switch_on, changedHp gate5276",
+    "Core mode/boss.js5288 boss_luanchang_switch -> boss_luanchang_switch_on, changedHp gate5304",
+    "Core mode/boss.js5316 boss_yandu_switch -> boss_yandu_switch_on, changedHp gate5332",
+    "Liuli mode/boss.js3971/4041/4154/4237/4636/4663/4690/4717 corresponding switches: no changedHp gate"
+  ],
+  "other_genuine_consumers": [
+    "Core mode/boss.js9589 shangshix, player loseEnd/changeHp, hand<4 draw4-hand; Liuli mode/boss.js8687 same",
+    "Liuli character/extra.js296 hlss_xiangxing group hlss_xiangxing_hp;418-450 player changeHp/loseMaxHp/gainMaxHp, getHp<maxHp, First priority-100 forced silent charlotte forceDie, direct hp=maxHp assignment (no nested ordinary changeHp)"
+  ],
+  "effective_raw_hp_writes_by_operation": {
+    "Damage": ["C9c kernel/damage.rs81 checked subtraction;101 refill;102 switch/draw callback"],
+    "LoseHp": ["C9c kernel/damage.rs544 subtract;546 refill;548 Dying before558 Shangshix", "standard/skills/ku_rou.rs62", "standard/skills/kuang_fu.rs56", "C9c host/step/wudian_cards.rs279"],
+    "Recover": ["C9c machine.rs680 cap/saturating add;687 already-committed Recover frame; no ChangeHp", "kernel/events.rs844 Shangshix misplaced at recovery callback behind Jicai lookup return823"],
+    "Direct_assignment_requires_source_classification_not_automatic_event": ["kernel/phase/judge.rs292-293 Lunhui exchange", "kernel/events.rs705 gain HP", "C9c host/boss.rs312/323/337/339/368/375/377 wing recovery/loss/revive/clamp", "C9c host/step/skills_damage.rs114/168 HLSS source assignment", "C9c host/step/xianjian_recovery.rs452 clamp after maxHP loss", "C9c host/step/gwent.rs95 maxHP/recovery body", "C9c host/step/skills_recovery.rs109 maxHP/reset", "C9c host/step/swd_response_cards.rs70 reset", "C9c host/step/xianjian_status.rs279 Shiying reset", "C9c host/step/swd_equipment.rs330 Kongdongyin reset", "standard/skills/buchun.rs114 revive reset"],
+    "MaxHp": ["C9c machine.rs664 cap after lose_max_hp", "C9c rvm_ops.rs320/324 clamp/fill after maxHP modify"],
+    "Dying_Death_not_damage_or_rescue": ["C9c rvm_ops.rs649 EnterDying clamp", "C9c rvm_ops.rs662 premature KillPlayer zero (later DeathFlow repair)", "kernel/death.rs116 substitute assembly;132 committed death zero"],
+    "Assembly_mode_removal_not_ordinary_changeHp": ["state/general_assembly.rs21", "C9c host/boss.rs155 Mengpo removal", "C9c host/boss.rs451/453/473/518/531/561 mode/fellow assembly/reinit"]
+  },
+  "recover_helper_call_files_base_lexical_inventory_not_semantic_completion": [
+    "kernel/damage.rs", "kernel/monkey.rs", "kernel/tricks.rs", "kernel/dying.rs", "kernel/events.rs", "kernel/phase/judge.rs", "machine.rs", "rvm_ops.rs",
+    "standard/skills/jie_yin.rs", "standard/skills/shen_zhi.rs", "standard/skills/yao_wu.rs", "standard/skills/futai.rs", "standard/skills/buchun.rs", "standard/skills/rende.rs", "standard/skills/qing_nang.rs",
+    "host/support.rs", "host/step/hearth.rs", "host/step/swd_card_effects.rs", "host/step/swd_damage_multi.rs", "host/step/swd_equipment_skills.rs", "host/step/swd_damage_targets.rs", "host/step/swd_equipment.rs", "host/step/swd_damage_combos.rs", "host/step/wudian_recovery.rs", "host/step/xianjian_recovery.rs", "host/step/skills_recovery.rs", "host/step/gujian.rs", "host/step/jiguan.rs", "host/step/swd_recovery.rs", "host/step/yunchou.rs", "host/step/mtg.rs"
+  ],
+  "native_consumers_current": [
+    "C9c kernel/damage_change_hp.rs eight parent-enabled mutations + shangshix_draw171",
+    "C9c kernel/damage.rs474 hlss_light_refill checks alive and parent enabled only",
+    "kernel/events.rs628 shangshix genuine loss-half call;844 misplaced HP-half recovery call"
+  ],
+  "integration_seams": [
+    "event.rs + event/damage.rs progress; kernel.rs; kernel/intrinsic.rs; kernel/damage_flow.rs; kernel/damage.rs; machine.rs; rvm_ops.rs; rvm_bridge/machine.rs",
+    "resolution.rs and resolution/trigger_order.rs existing C7 Frame.queue/order/admission/restore; catalog SkillDef/TriggerMeta; native content declarations and group/provider bootstrap",
+    "snap.rs + snap/machine_validation.rs + snap/validation.rs + snap/damage_validation.rs + snap/restore.rs; archive/events.rs + archive/damage.rs + archive/machine_encode.rs + machine_decode.rs; engine/hash.rs and engine/hash/machine.rs"
+  ],
+  "internal_tag_probe": {
+    "occupied": "EventData21 DamageWindow,22 movement; Machine84 DamageFlow,85 NativeDamageSkill",
+    "only_candidates_not_allocations": "EventData23; Machine86/87 if finite LoseHp continuation/new atomic native consumer actually needs tags. No matches for these in supplied encoder/decoder; recheck C9d sealed manifests before choosing. No public ABI/WS/schema allocation."
+  },
+  "evidence_qualification": "Read-only source/contract/hash inspection; no tests, builds, scripts, JS, network or live-writer tree access. C9c12 dispositions contain11 observed business-equal scenarios and one chain log order difference; outcome_raw future parser is not Internal/Fuel parity. All37 equivalence unproven."
+}

@@ -1,0 +1,20 @@
+## Review
+
+One P2 documentation inconsistency remains; no product-source or publication-scope blocker was found.
+
+- **Finding — P2: Current progress retains an obsolete Windows-pending statement.** [native-progress.md:14](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/architecture/native-progress.md:14) says “真实Windows绿仍待新提交CI” after describing the longpaths fix. The updated I02 paragraph, both publication READMEs and the accepted CI audit establish actual Windows checkout/build/desktop success in run41214274772. **Smallest fix:** replace that pending clause with a link to the new exact-34e CI result, while preserving d07’s historical 8/2 failure.
+
+- **Correct — publication and CI separation:** The [checkpoint README](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-checkpoint/README.md:11) preserves seven successes/three running as a dated checkpoint. The [final registration](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci/README.md:5) separately records 10/10 and 128 success/two skipped steps, retains the parser correction, and limits installer evidence to API/upload metadata.
+
+- **Correct — C331 boundaries:** The [C9d README](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-phase9d-priority/README.md:7) retains 1802/1/75, two P1s and three mandatory defects. The [ChangeHp README](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-change-hp-plan/README.md:5) describes the corrected notrigger behavior as future implementation, including ordinary callbacks for positive damage with armor-reduced num0. Neither claims Main integration or golden acceptance.
+
+- **Correct — physical readiness:** The current progress statement matches the redacted receipts: Android authorized0, one detected physical iPhone/available0, deviceprep−27 Developer Mode required. It makes no installation, permission-change, physical-audio or sustained-power claim.
+
+- **Correct — post-release scope:** The [write receipt](/tmp/noname-parent-post34e-main-write-receipt.json:1) and its script distinguish three changed tracked documents and enumerated new evidence from unchanged code/config, products, approvals and hooks. They retain HEAD34e and empty staging, without retroactively treating these documents as 34e CI inputs. I reviewed the records and assertions; I did not recompute hashes.
+
+- **Validation records:** The supplied seven-document scan records 821 local references with no bad links; strict-line output records 1065 references with zero out-of-range locations and preserves unresolved example-path notices. No checks were rerun.
+- **Fixed:** None by this reviewer.
+- **Merge verdict: OK with notes for the reviewed post34e documentation/evidence scope; correct the stale P2 sentence before the next documentation commit.** This does not certify a future staged tree or advance private C331/full-I02 acceptance.
+
+Skipped tests/builds/network, Main writes, active C reads, profile bodies and independent hash verification.
+Residual limit: current-status wording needs the one correction; installer/device/audio and whole-Goal acceptance remain outside this review.

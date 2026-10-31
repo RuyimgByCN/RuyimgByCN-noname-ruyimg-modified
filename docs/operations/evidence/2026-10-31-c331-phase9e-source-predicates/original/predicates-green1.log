@@ -1,0 +1,27 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+warning: unused import: `ChoiceOption`
+ --> crates/engine-native/tests/groups/../c331_source_predicates.rs:3:31
+  |
+3 | use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+  |                               ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc_rounds") generated 1 warning (run `cargo fix --test "nc_rounds" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.69s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 6 tests
+test c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify ... ok
+test c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition ... ok
+test c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal ... ok
+test c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health ... ok
+test c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child ... ok
+test c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 198 filtered out; finished in 0.01s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_source_predicates", "--", "--nocapture"], "exit": 0, "locked_seconds": 8.727503040980082, "disk_free_bytes": 139950080000}

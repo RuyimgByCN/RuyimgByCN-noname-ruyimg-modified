@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-31T15:19:16.302978+00:00",
+  "owned_launchers": [
+    {
+      "pid_file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9d/checks-final/runner.pid",
+      "pid": 80949,
+      "ps_exit": 1,
+      "active": false
+    },
+    {
+      "pid_file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9d/full1-runner.pid",
+      "pid": 27139,
+      "ps_exit": 1,
+      "active": false
+    }
+  ],
+  "all_six_final_producers_have_recorded_exits": true,
+  "queued_owned_producers": [],
+  "no_new_heavy_after_151647Z": true,
+  "no_signals_sent": true,
+  "no_staged_files": true
+}

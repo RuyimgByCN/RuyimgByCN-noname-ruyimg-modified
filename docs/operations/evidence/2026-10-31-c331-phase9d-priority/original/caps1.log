@@ -1,0 +1,5 @@
+crates/engine-native/tests/g1_shahai_mtg.rs: 2222 lines (limit 2000)
+crates/engine-native/tests/t8_rvm_bridge.rs: 2020 lines (limit 2000)
+crates/engine-native/examples/nc12_bench/scenarios.rs: 1142 effective Rust lines (limit 1000)
+crates/engine-native-kernel/src/rvm_named.rs: 1088 effective Rust lines (limit 1000)
+crates/engine-native-kernel/src/snap/asks.rs: 1032 effective Rust lines (limit 1000)

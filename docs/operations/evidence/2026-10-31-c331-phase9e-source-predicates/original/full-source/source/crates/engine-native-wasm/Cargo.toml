@@ -1,0 +1,21 @@
+[package]
+name = "engine-native-wasm"
+version = "0.1.0"
+edition = "2021"
+description = "engine-native 的 wasm_bindgen 窄壳（T13 客户端产品面）：标准目录建局/窄动作/座位视图投影/auto_step 规划驱动/存档十六进制往返"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+engine-api = { workspace = true }
+engine-native = { path = "../engine-native" }
+content-native-loader = { path = "../content-native-loader" }
+content-schema = { workspace = true }
+wasm-bindgen = { workspace = true }
+serde_json = { workspace = true, features = ["raw_value"] }
+blake3 = { workspace = true }
+
+[dev-dependencies]
+content-compiler = { path = "../content-compiler" }
+rule-vm = { workspace = true }

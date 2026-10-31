@@ -1,0 +1,20 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.80s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_source_predicates::c9e_ciqiu_alias_removes_the_actual_admitted_definition' (26911653) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:704:5:
+remove the admitted def, never a lookup by another declaration's name
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_source_predicates::c9e_ciqiu_alias_removes_the_actual_admitted_definition ... FAILED
+
+failures:
+
+failures:
+    c331_source_predicates::c9e_ciqiu_alias_removes_the_actual_admitted_definition
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 214 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9e_ciqiu_alias", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.9171619580010884, "disk_free_bytes": 135826882560}

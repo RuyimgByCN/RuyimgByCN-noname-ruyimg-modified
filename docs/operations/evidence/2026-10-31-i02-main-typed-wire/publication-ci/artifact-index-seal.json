@@ -1,0 +1,20 @@
+{
+  "sealed_utc": "2026-10-31T15:47:44.569964+00:00",
+  "head_sha": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "run_id": 41214274772,
+  "manifest_path": "copy-manifest-v2.json",
+  "manifest_sha256": "2e181d8142ca9018175ef091655ab32ca625c4f1da57edc29ee7c3d5ab5aa000",
+  "manifest_bytes": 30617,
+  "summary_path": "verified-publication-ci-summary-v2.json",
+  "summary_sha256": "9df2fc31eae8bd0702f816ce66721c28e29056b5321c8733dcaa1b38a1a03ad1",
+  "summary_bytes": 1001266,
+  "listed_current_files_verified": 119,
+  "primary_file_count_including_manifest_and_seal": 121,
+  "private_original_count": 10,
+  "semantic_assertions": "10success/130steps128success2Linuxdepsskip0failure0null;Windowsstep2success+config1/core.longpaths/true;workspace6929/77,APIprotocol12,native1830/75,3OSlib853,front441,Worker82,resource17,conformance19,crosshash,4OwnPlan+1session,budgets,3unexpiredexactheadartifacts allassertedactual",
+  "current_copy_authority": "copy-manifest-v2.json andthisseal. Firstpass parser/summary/copymanifest andcheckpointstream index aredated/historical; parser-correction.json preservesincorrectlatestheaderinterpretation andfailedrunning-Ncontrol. AllrawAPI/logs unchanged.",
+  "copy_instruction": "Copy119listedfiles plusmanifest+seal (actualcount fields authoritative); private rawdownloads10excluded; useexactgzipbytes, noLFnormalization.",
+  "no_main_reads_after_lease": true,
+  "no_main_writes": true,
+  "no_staged_files_during_push_lease": true
+}

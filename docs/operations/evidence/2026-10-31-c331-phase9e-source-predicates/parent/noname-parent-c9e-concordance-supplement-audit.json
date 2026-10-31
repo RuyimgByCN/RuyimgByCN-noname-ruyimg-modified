@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T16:42:15.504072+00:00",
+  "status": "PASS_ADDITIVE_READONLY_SUPPLEMENT_INTEGRITY_NOT_RULE_ACCEPTANCE",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e-concordance-supplement",
+  "files": 5,
+  "counts": {
+    "concrete-defect": 19,
+    "checked-agreement": 10,
+    "unproved-boundary": 12
+  },
+  "original7333IndexAndExternalReportStillExact": true,
+  "originalSource219Identity": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "sourceAndTestArtifactOriginalUnchanged": true,
+  "qualification": "17concretefindinggroups/19rows reported,10finiteagreements/12explicitunproved; independentconnected-source review required. No newcode/tests/builds/Main/device writes orproducers. Steeringcompletedrace noted, no fallback/rerun."
+}

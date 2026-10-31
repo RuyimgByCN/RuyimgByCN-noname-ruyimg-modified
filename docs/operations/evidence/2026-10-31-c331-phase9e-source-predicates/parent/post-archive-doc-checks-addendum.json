@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-31T17:03:53.540053+00:00",
+  "checks": {
+    "localLinks": {
+      "files": 8,
+      "references": 861,
+      "bad": 0
+    },
+    "sourceLineGate": {
+      "maintainedFiles": 9018,
+      "physicalLimit": 2000,
+      "rustEffectiveLimit": 1000,
+      "exit": 0
+    },
+    "sourceLineGateUnit": {
+      "passed": 2,
+      "exit": 0
+    },
+    "docLineReferences": {
+      "checked": 1065,
+      "outOfRange": 0,
+      "missingExampleCategories": 6,
+      "exit": 0
+    }
+  },
+  "scope": "CurrentMain34edocs/evidenceonly; sourcecheck9018 isMain330, notprivateC9e9035. MainCI34e andoldpreflight21unchangedinputs. InitialREADMEgziplinkerror andcwdhelpassumptions recorded, no producer rerun.",
+  "copies": [
+    {
+      "source": "/tmp/noname-post-c9e-doc-links.json",
+      "destination": "noname-post-c9e-doc-links.json",
+      "bytes": 1025,
+      "sha256": "3976a98450a6c203a046087458c1d69e071546f9a03ef65ae7fb3f3ebd539afd"
+    },
+    {
+      "source": "/tmp/noname-post-c9e-doc-links.attempt1.json",
+      "destination": "noname-post-c9e-doc-links.attempt1.json",
+      "bytes": 1098,
+      "sha256": "7b611029e6fd15974ff73701814a4d5976e3b7238ff894b8a501f804f46a4dba"
+    },
+    {
+      "source": "/tmp/noname-post-c9e-strict-doc-lines.raw.txt",
+      "destination": "noname-post-c9e-strict-doc-lines.raw.txt",
+      "bytes": 352,
+      "sha256": "85e4b4f9b53297eb2fb3a466b3b88ee945659caf8945144e52e12c689087b5bd"
+    },
+    {
+      "source": "/tmp/noname-post-c9e-source-cap-unit.raw.txt",
+      "destination": "noname-post-c9e-source-cap-unit.raw.txt",
+      "bytes": 100,
+      "sha256": "d1276a2d9d79b9ed0a61446aa751886a8b573a45c52c4fe838159bc8be061837"
+    },
+    {
+      "source": "/tmp/noname-post-c9e-source-caps.raw.txt",
+      "destination": "noname-post-c9e-source-caps.raw.txt",
+      "bytes": 96,
+      "sha256": "53074153c075749ee090e5ebbd1efb1e6f245d7b9f53c4de417056173b050277"
+    }
+  ]
+}

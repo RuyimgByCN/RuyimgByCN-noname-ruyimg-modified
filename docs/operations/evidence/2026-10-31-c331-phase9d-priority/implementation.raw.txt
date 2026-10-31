@@ -1,0 +1,56 @@
+2026-10-31 C331 phase9d — bounded existing-window damage priority migration; independent review required.
+Whole Damage/C331/Main merge remains BLOCK: source262/290, remaining28, +0. No golden rerecord or SDK/source parity acceptance.
+Private writer remains based on 5fc; C9c214/21 and all 5215 indexed artifacts were independently rehashed without changes.
+Evidence root: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9d`.
+Machine inventory: `source-inventory-and-remaining-boundaries.json` pins 41 units, actual source paths/hashes/keys, roles, tuples, qualifications, producer/cleanup consumers and mandatory defects.
+All formerly inline Before/Begin/Begin1/Begin4/End/After callbacks now run as individually admitted native units through the existing Frame.queue/TriggerOrder; window Commit performs no skill effects.
+Begin2/Target/Source contain no former inline source unit; Begin3 XiangDe already uses the ordinary queue. Original Zhaohuo Begin1 source conversion is preserved.
+Fifteen genuine source/card helper definitions were appended after the original 215 builtins; status/equip/deposit qualification identifies recipient/holder without fabricating parent-skill ownership.
+Owned definitions retain real enabled instances. Helper renewals enter the existing register_added consumer; stopped, zero or cancelled roots exclude downstream units through shared eligibility.
+Existing tag85 carries owner/def/window; codec/hash/archive/inventory remain synchronized. Restore checks actual qualified identity, admission, root window, slot/stage/depth and nested-machine rejection.
+An atomic native body returns Done before its emitted children finish; no provider is rechecked midway through a completed body's child. NonDamage construction remains unchanged.
+Actual Huoshen RED: First Begin1 num1→0 expected HP2, got HP3. Final GREEN: First stops recovery; real Boss Zhouyu positive independently recovers HP4→5.
+Six added regressions cover that counterexample, real Boss identity, applied-recipient removal/renewal, helper Order choice, seven byte-restore forgeries/atomic rejection, Mailun First zero, and actual Recover-child restore exactly once.
+Final full native: **1802 passed / 1 failed / 75 ignored**, exit101; sole failure is replay_scenarios_match_golden. The focused final file contributes 20 passing tests in that run.
+Independent Gate1b (`RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`) passed; cap unit2, source9033 and layering0 passed.
+Commands, log hashes, exact tested-source identity and targets: `command-source-bindings.json`; raw final logs/results: `checks-final/`; aggregate: `full-native-summary.json`.
+Twelve original expected goldens remain unchanged. Accepted C8 producer PASS14 was reused; no baseline producer rebuild or rerun.
+Refreshed comparison: `golden-business-and-outcome-dispositions.json`; complete current snapshots/archives/resolution/core/log/RNG/views/choices remain in `checks-final/current-*-traces-v3`.
+
+| Scenario | Seed | Paired captures | Observed six-field business disposition |
+|---|---:|---:|---|
+| sha_dodge_then_damage | 11 | 21 | Equal |
+| death_terminal_single | 71 | 19 | Equal |
+| sancai_nested_chain | 23 | 25 | Equal |
+| yishang_redirect | 31 | 23 | Equal |
+| suidun_window_matrix | 53 | 69 | Equal |
+| shouyi_dynamic_skill | 61 | 67 | Equal |
+| rollback_invariants | 81 | 25 | Equal |
+| equip_distance_matrix | 101 | 63 | Equal |
+| chain_fire_propagation | 113 | 11 | Source-supported unlink/log order |
+| aoe_response_queue | 131 | 15 | Equal |
+| duel_alternating_response | 141 | 11 | Equal |
+| nullify_chain_on_savage | 153 | 13 | Equal |
+
+Across362 pairs, outcome discriminants agree; 32 Pending payloads and4 complete Rejected reasons agree. All139 Accepted hashes remain raw and separately recorded; 187 boundaries have no command outcome.
+Chain first difference remains 0007-after: actor0/revision3/dedup163/card95→[1]; old event11 unlinks player2 prematurely, current records DamageDealt(target2,1) before its own unlink.
+No unknown fields were normalized. This does not prove arbitrary internal/fuel equivalence, scheduling/archive equality, privacy from matching rejections, or global source parity.
+**Unfixed concrete rule defect:** Chilongya admits chain damage despite source notLink; amount1 becomes2 rather than1, changing canonical quantity/HP/log and descendants.
+**Unfixed concrete qualification defect:** Zuijiu checks damage.card without proving genuine immediate Sha parent; chain/non-Sha-parent damage can receive an invalid increment. QueryCtx ancestry and live/restore admission need the same real parent fact.
+**Unfixed concrete rule defect:** Hutian clamps hp−deposit to0; HP2/deposit3 should preserve canonical−1. Later window handlers, signed host amount, persistence and zero progression need exact regression coverage.
+Those three are mandatory repairs, not accepted variants or optional gaps. Exact affected live/restore/provider consumers and minimal tests are in the machine inventory; supervisor directed preserving this frozen priority delta for review.
+**Remaining mechanism:** genuine ChangeHp queue is absent. HLSS refill, eight boss activation gates, Shangshix and DVa HP interception remain direct source consumers; they were not relabelled as DamageEnd/After.
+Next approved work after independent review: repair these predicates/parent qualification, then genuine ChangeHp consumer; DeathFlow/provider/LossEnd/wholeSDK remain later work. Plan8791 ordering unchanged.
+Clock: start14:36:47Z; checkpoint14:54:52Z,22 files, reverse-checkPASS. Checkpoint manifest0183cb2ddf377096e7a3f60fba9c802a62b28020666b6db534634d67c62e49e2.
+Final producers completed before15:09Z, source/protection seal15:14:15Z; no new heavy after15:16:47Z and no queued/active owned producer remains.
+Setup/compiler/parser/zero-test attempts, initial full-suite failures and positive-body migration error remain raw evidence; only final source-bound results above establish current status.
+Accidental cargo fmt changes outside scope were restored from C9c214+5fc bytes; formatted bytes and restoration records remain under accidental-format-original/. Final increment has only18 intended files.
+Main was read-only: exact Own6/I02_30/CI/generated/schema exceptions were checked separately from original31867; defaultdist37, originalC6_140, hooks, private generated12 and old330 reader pins were preserved.
+Observed Main HEADbdaf is receipt-bound but supervisor explicitly marks that commit withdrawn/not pushed, correction local stage; this report supplies no Main publication or QA acceptance claim.
+Private331/NGSA106/ABI758/WS6, public format/API1 and future332/106→R05333/107 remain unchanged; private staging is empty, no commit/push.
+Increment18 manifest: `487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9`.
+Increment tar: `47d000a8caaa960c78bd3116b0a780c9541098116ba09db4dac3453587fd2a65`; patch: `43bce71e225b160c6376989b229bbf13a83751a04aafd13cd96afeb7b3eec1ea`.
+Composed217 manifest: `0d4583771720f7eeb3bf87a84dc3fc52fc7d471105830d99e894b81446214053`.
+Composed tar: `761350fdc78a28418e34af4b0caee5c0bb1c33c7d3207a92e9291564b1e18e8f`; patch: `0576b3132e49e56730a8712e3215b3b40400b9d9413622529d2ac37e6ed9f04f`.
+Both patches reverse-check; immutable materialized source trees are final-freeze/source/ and full-source/source/. Hashes/status: results-bound.json; protection: protected-after.json; all phase9d artifacts: artifact-index.json and artifact-index.sha256.
+Skipped broad WASM/UI/workspace campaigns and golden rerecording. Mandatory rule/qualification defects, actual ChangeHp ordering and the red golden gate remain risks; no full Damage/C331 acceptance follows.

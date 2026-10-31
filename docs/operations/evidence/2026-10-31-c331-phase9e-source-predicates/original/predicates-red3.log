@@ -1,0 +1,66 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+warning: unused import: `ChoiceOption`
+ --> crates/engine-native/tests/groups/../c331_source_predicates.rs:3:31
+  |
+3 | use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+  |                               ^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc_rounds") generated 1 warning (run `cargo fix --test "nc_rounds" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.69s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 6 tests
+
+thread 'c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify' (26496496) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:75:5:
+assertion `left == right` failed: card identity alone does not prove an immediate Sha parent
+  left: 2
+ right: 3
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal' (26496492) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:47:9:
+assertion `left == right` failed: FireSha must execute the admitted Sha-family body
+  left: 1
+ right: 0
+
+thread 'c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition' (26496494) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:91:28:
+assertion `left == right` failed: source hp2-deposit3 is signed -1, never clamp tozero
+  left: 0
+ right: -1
+test c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify ... FAILED
+test c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition ... FAILED
+test c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal ... FAILED
+
+thread 'c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health' (26496493) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:36:5:
+assertion `left == right` failed: First Begin1 must precede Ciqiu increment/removal
+  left: 1
+ right: 2
+test c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health ... FAILED
+
+thread 'c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery' (26496495) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:57:9:
+assertion `left == right` failed: FireSha must execute the admitted Sha-family recovery
+  left: 2
+ right: 3
+test c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery ... FAILED
+
+thread 'c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child' (26496491) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:67:5:
+assertion `left == right` failed: propagated child carries2 without applying source bonus again
+  left: 1
+ right: 2
+test c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child ... FAILED
+
+failures:
+
+failures:
+    c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child
+    c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal
+    c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health
+    c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition
+    c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery
+    c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify
+
+test result: FAILED. 0 passed; 6 failed; 0 ignored; 0 measured; 198 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_source_predicates", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.733805708005093, "disk_free_bytes": 138841915392}

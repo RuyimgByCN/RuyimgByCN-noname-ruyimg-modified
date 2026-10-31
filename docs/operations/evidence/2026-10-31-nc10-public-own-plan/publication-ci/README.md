@@ -6,6 +6,6 @@
 
 其余实际结果含workspace6922/0/77、native-web1830/0/75、macOS／Ubuntu各lib853/0/0及前端179／Worker82／resources17／conformance19；计数重叠。十日志原字节4245871、3166 warning行含重复；安装器元数据不等同安装／真机整局。父fresh101 SHA／CRC、十gzip和五次独立live API核对通过；原解析push_attempts类型错误及修正保留。
 
-最小修正只给两个含Windows的checkout action设置局部GIT_CONFIG_COUNT（Windows1，其余0）、GIT_CONFIG_KEY_0=core.longpaths、GIT_CONFIG_VALUE_0=true。原workflow354f1231…→b46fd58a…；本地Git优先级正负控制／Ruby YAML与独立源码复审通过，无持久Git配置变化。14:07:43在I02明确解除冻结后由父精确应用，见I02证据的parent receipt。它不属于之前的冻结preflight；标准JS action子进程继承环境为所依赖行为，真正Windows checkout／构建结果仍须下一正常提交CI验证。
+最小修正只给两个含Windows的checkout action设置局部GIT_CONFIG_COUNT（Windows1，其余0）、GIT_CONFIG_KEY_0=core.longpaths、GIT_CONFIG_VALUE_0=true。原workflow354f1231…→b46fd58a…；本地Git优先级正负控制／Ruby YAML与独立源码复审通过，无持久Git配置变化。14:07:43在I02明确解除冻结后由父精确应用，见I02证据的parent receipt。它不属于之前的冻结preflight；后续34e正常发布的[真实新CI独立登记](../../2026-10-31-i02-main-typed-wire/publication-ci/README.md)已确认两Windows checkout、完整build／desktop installer与上传成功，新run最终10/10；安装器只有API元数据，不等同实体安装。本目录d07的8/2失败保持。
 
 当前结果和后续待办以[进度主稿](../../../../architecture/native-progress.md)为准。

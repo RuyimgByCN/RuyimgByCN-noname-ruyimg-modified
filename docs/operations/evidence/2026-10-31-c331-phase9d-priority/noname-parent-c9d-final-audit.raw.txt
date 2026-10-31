@@ -1,0 +1,95 @@
+{
+  "utc": "2026-10-31T15:25:01.731453+00:00",
+  "status": "PASS_INTEGRITY_BOUNDED_MIGRATION_REVIEW_PENDING_WHOLE_DAMAGE_BLOCK",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88/snapshot",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9d",
+  "artifactFiles": 2319,
+  "fullFiles": 217,
+  "incrementFiles": 18,
+  "sourceManifest": "0d4583771720f7eeb3bf87a84dc3fc52fc7d471105830d99e894b81446214053",
+  "incrementManifest": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+  "trackedDiffOutside217": [],
+  "commands": [
+    {
+      "name": "full-native",
+      "exit": 101,
+      "counts": [
+        1802,
+        1,
+        75
+      ]
+    },
+    {
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "golden-traces",
+      "exit": 101,
+      "counts": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "source-cap-unit",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "source-caps",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "layering",
+      "exit": 0,
+      "counts": null
+    }
+  ],
+  "pairedCaptures": 362,
+  "actualOutcomeCounts": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "nonAcceptedEntirePayloadEqual": true,
+  "AcceptedExact32ByteHashRetainedNotCompared": true,
+  "observedEqualScenarios": 11,
+  "observedBusinessDifferences": [
+    {
+      "scenario": "chain_fire_propagation",
+      "differences": [
+        {
+          "step": "0007-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0008-before",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0009-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0010-final",
+          "fields": [
+            "events"
+          ]
+        }
+      ]
+    }
+  ],
+  "qualification": "No product/golden/C331/Main acceptance. Needs connected-source review of41units/15helpers/admission/lifetimes/restore. Three concrete source defects Chilongya notLink,Zuijiu immediateSha ancestry,Hutian signed remainmandatoryrepairs; genuineChangeHp andDeathFlow stillabsent. No golden expected changed."
+}

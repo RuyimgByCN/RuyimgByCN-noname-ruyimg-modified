@@ -1,0 +1,37 @@
+{
+  "sealed_utc": "2026-10-31T16:35:14.696550+00:00",
+  "files": [
+    {
+      "path": "audit.py",
+      "sha256": "02b8f51de2e1dd47e6db58ef2bf2192daa39145922e649d58dd613cee3b4a6d3",
+      "bytes": 15438
+    },
+    {
+      "path": "concordance.json",
+      "sha256": "b05bcf2a176ef4b50110242187151d3ea6701e7d2c14e7129b7d73e862c8338d",
+      "bytes": 106132
+    },
+    {
+      "path": "original-preservation.json",
+      "sha256": "ce3be5eb5fbe6f3579ef08bed3efd286cfe45dd4308de93197c157e783d12b28",
+      "bytes": 811
+    },
+    {
+      "path": "report.md",
+      "sha256": "5849c70dc2034015bf33d3d1adbabaffe32031c5bb96bb4001f2652969f8acc2",
+      "bytes": 4923
+    },
+    {
+      "path": "source-excerpts.txt",
+      "sha256": "08a3d6cfbebddf8bc34e9e2f63309c6292611c7176575bf993feb135b1fe5cc6",
+      "bytes": 45928
+    }
+  ],
+  "scope": "additive read-only audit; original phase9e unchanged",
+  "row_counts": {
+    "concrete-defect": 19,
+    "checked-agreement": 10,
+    "unproved-boundary": 12
+  },
+  "no_source_or_staging_changes": true
+}

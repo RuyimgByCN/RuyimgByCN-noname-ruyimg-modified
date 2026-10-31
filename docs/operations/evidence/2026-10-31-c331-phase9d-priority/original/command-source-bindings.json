@@ -1,0 +1,114 @@
+{
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9d/final-freeze/source-manifest.json",
+  "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+  "all_current_source_bytes_equal": true,
+  "commands": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 57.34818983078003,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "0407fd01236803ac97509b4660f35deffe5eed5bfd1ea5a5675b3b083de845cd"
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 20.561846017837524,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "4b74fd2fe8fa1fe3d8fa87259979679f6aa9c65aa5bdbc2ee3a2534a343133b1"
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 0.6758649349212646,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "91ca51a602711df009de258cb42dfd0d24db9aecd86678f2d4fa9210cddb86c0"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.09212493896484375,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "02474d1b97b4daf6f097646900218eb844938e8255f229475489b0b343a8bc90"
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.245429992675781,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "baeb0ef3848c0c98a179a6314e6ad05b48e20b4fbeb28c1e8e773e3168984867"
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.1598508358001709,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "log_sha256": "075e9278200639be086194d49034e1c20f996e048afbf5dcc6eec7b767cfafb0"
+    }
+  ]
+}

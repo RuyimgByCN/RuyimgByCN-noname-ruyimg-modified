@@ -1,0 +1,69 @@
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-api)
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+warning: unused import: `Catalog`
+ --> crates/engine-native-kernel/src/event/native_damage.rs:3:32
+  |
+3 | use crate::catalog::{CardKind, Catalog, QueryCtx, TriggerMeta};
+  |                                ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-schema)
+error[E0061]: this method takes 1 argument but 0 arguments were supplied
+   --> crates/engine-native-kernel/src/snap/restore.rs:19:46
+    |
+ 19 |                     .and_then(|s| s.behavior.native_damage_effect())
+    |                                              ^^^^^^^^^^^^^^^^^^^^-- argument #1 of type `event::EventKind` is missing
+    |
+note: method defined here
+   --> crates/engine-native-kernel/src/catalog.rs:681:8
+    |
+681 |     fn native_damage_effect(
+    |        ^^^^^^^^^^^^^^^^^^^^
+682 |         &self,
+683 |         _kind: crate::event::EventKind,
+    |         ------------------------------
+help: provide the argument
+    |
+ 19 |                     .and_then(|s| s.behavior.native_damage_effect(/* event::EventKind */))
+    |                                                                   ++++++++++++++++++++++
+
+warning: unused variable: `zdef`
+   --> crates/engine-native-kernel/src/kernel/damage.rs:282:21
+    |
+282 |         if let Some(zdef) = ctx
+    |                     ^^^^ help: if this is intentional, prefix it with an underscore: `_zdef`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `ycdef`
+   --> crates/engine-native-kernel/src/kernel/damage.rs:331:21
+    |
+331 |         if let Some(ycdef) = ctx
+    |                     ^^^^^ help: if this is intentional, prefix it with an underscore: `_ycdef`
+
+warning: unused variable: `jddef`
+   --> crates/engine-native-kernel/src/kernel/damage.rs:380:21
+    |
+380 |         if let Some(jddef) = ctx
+    |                     ^^^^^ help: if this is intentional, prefix it with an underscore: `_jddef`
+
+warning: unused variable: `rxdef`
+   --> crates/engine-native-kernel/src/kernel/damage.rs:401:21
+    |
+401 |         if let Some(rxdef) = ctx
+    |                     ^^^^^ help: if this is intentional, prefix it with an underscore: `_rxdef`
+
+warning: unused variable: `owner`
+ --> crates/engine-native-kernel/src/kernel/damage_after.rs:7:5
+  |
+7 |     owner: PlayerId,
+  |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_owner`
+
+For more information about this error, try `rustc --explain E0061`.
+warning: `engine-native-kernel` (lib) generated 6 warnings
+error: could not compile `engine-native-kernel` (lib) due to 1 previous error; 6 warnings emitted
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_prehp_damage", "--", "--nocapture"], "exit": 101, "locked_seconds": 18.38208895799471, "disk_free_bytes": 145860595712}

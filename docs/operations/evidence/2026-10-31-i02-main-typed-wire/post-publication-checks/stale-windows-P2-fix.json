@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-31T16:16:56.892145+00:00",
+  "status": "PARENT_FIXED_REVIEW_P2_STALE_WINDOWS_PENDING_CLAUSE",
+  "originalReviewSha256": "f8b190b3954ab615a785deec9b588584b1abcc1267b995fa44610d9545299fd5",
+  "file": "docs/architecture/native-progress.md",
+  "oldClause": "真实Windows绿仍待新提交CI，不挪用旧5fc ten-green",
+  "newClause": "真实Windows checkout、build/tests与desktop installer/upload已由新[34e exact-head CI](../operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci/README.md)验证通过；d07旧失败及5fc当时ten-green均按各自提交保留",
+  "oldAbsentNewPresentAndLinkExists": true,
+  "qualification": "Smallnarrativecorrectiononly, no runtime/source/protocol/golden/productchanges. OriginalreviewP2retainedbyteexact. Exact34eCI10of10 indepregistered, oldd078/2failure unchanged. LaterMainDocstagingauditmustuseupdatedhash."
+}

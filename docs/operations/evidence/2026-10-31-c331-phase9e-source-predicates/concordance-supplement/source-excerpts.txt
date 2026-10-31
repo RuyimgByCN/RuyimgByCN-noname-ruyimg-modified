@@ -1,0 +1,1324 @@
+
+## Jueqing /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/yijiang.js:11930
+11930: 			jueqing:{
+11931: 				trigger:{source:'damageBefore'},
+11932: 				forced:true,
+11933: 				audio:2,
+11934: 				//priority:16,
+11935: 				check:function(){return false;},
+11936: 				content:function(){
+11937: 					trigger.cancel();
+11938: 					trigger.player.loseHp(trigger.num);
+11939: 				},
+11940: 				ai:{
+11941: 					jueqing:true
+11942: 				}
+11943: 			},
+11944: 			shangshi:{
+11945: 				audio:2,
+11946: 				trigger:{
+11947: 					player:['loseAfter','changeHp','gainMaxHpAfter','loseMaxHpAfter'],
+11948: 					global:['equipAfter','addJudgeAfter','gainAfter','loseAsyncAfter','addToExpansionAfter'],
+11949: 				},
+11950: 				frequent:true,
+11951: 				filter:function(event,player){
+11952: 					if(event.getl&&!event.getl(player)) return false;
+11953: 					return player.countCards('h')<player.getDamagedHp();
+11954: 				},
+11955: 				content:function(){
+
+## Wuxin /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:8769
+8769: 			boss_wuxin:{
+8770: 				trigger:{player:'damageBefore'},
+8771: 				forced:true,
+8772: 				priority:10,
+8773: 				content:function(){
+8774: 					trigger.cancel();
+8775: 					player.loseHp();
+8776: 				},
+8777: 				audio:2,
+8778: 			},
+8779: 			shenwei:{
+8780: 				audio:2,
+8781: 				unique:true,
+8782: 				trigger:{player:'phaseDrawBegin'},
+8783: 				forced:true,
+8784: 				content:function(){
+8785: 					trigger.num+=Math.min(3,game.players.length-1);
+8786: 				},
+8787: 				mod:{
+8788: 					maxHandcard:function(player,current){
+8789: 						return current+Math.min(3,game.players.length-1);
+8790: 					}
+8791: 				}
+8792: 			},
+8793: 			boss_baonuwash:{
+8794: 				trigger:{player:'phaseAfter'},
+
+## Jidong /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js:2085
+2085: 			jidong2:{
+2086: 				trigger:{player:'damageBefore'},
+2087: 				forced:true,
+2088: 				content:function(){
+2089: 					trigger.cancel();
+2090: 				},
+2091: 				ai:{
+2092: 					nofire:true,
+2093: 					nothunder:true,
+2094: 					nodamage:true,
+2095: 					effect:{
+2096: 						target:function(card,player,target,current){
+2097: 							if(get.tag(card,'damage')) return [0,0];
+2098: 						}
+2099: 					},
+2100: 				},
+2101: 				mod:{
+2102: 					targetEnabled:function(card,player,target){
+2103: 						if(player!=target) return false;
+2104: 					}
+2105: 				}
+2106: 			},
+2107: 			chongzhuang:{
+2108: 				trigger:{source:'damageEnd'},
+2109: 				forced:true,
+2110: 				filter:function(event,player){
+
+## Chengxin /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/xianjian.js:734
+734: 			chengxin2:{
+735: 				trigger:{player:'damageBefore'},
+736: 				mark:true,
+737: 				forced:true,
+738: 				content:function(){
+739: 					trigger.cancel();
+740: 				},
+741: 				ai:{
+742: 					nofire:true,
+743: 					nothunder:true,
+744: 					nodamage:true,
+745: 					effect:{
+746: 						target:function(card,player,target,current){
+747: 							if(get.tag(card,'damage')) return [0,0];
+748: 						}
+749: 					},
+750: 				},
+751: 				intro:{
+752: 					content:'防止一切伤害'
+753: 				}
+754: 			},
+755: 			tianwu:{
+756: 				trigger:{player:'useCardToBegin'},
+757: 				filter:function(event,player){
+758: 					if(get.is.altered('tianwu')&&player.hasSkill('tianwu2')) return false;
+759: 					return event.targets&&event.targets.length==1&&player.getEnemies().contains(event.target);
+
+## Chilongya /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js:4506
+4506: 			chilongya:{
+4507: 				trigger:{source:'damageBegin'},
+4508: 				forced:true,
+4509: 				filter:function(event){
+4510: 					return event.nature=='fire'&&event.notLink();
+4511: 				},
+4512: 				content:function(){
+4513: 					trigger.num++;
+4514: 				}
+4515: 			},
+4516: 			chilongya2:{
+4517: 				trigger:{source:'damageBegin'},
+4518: 				filter:function(event,player){
+4519: 					return (event.card&&event.card.name=='sha');
+4520: 				},
+4521: 				popup:false,
+4522: 				forced:true,
+4523: 				content:function(){
+4524: 					if(Math.random()<0.5){
+4525: 						trigger.num++;
+4526: 						trigger.player.addSkill('chilongfengxue');
+4527: 					}
+4528: 				}
+4529: 			},
+4530: 			chilongfengxue:{
+4531: 				trigger:{global:'shaAfter'},
+
+## Xingjunyan /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js:4455
+4455: 			xingjunyan:{
+4456: 				trigger:{source:'damageBegin',player:'damageBegin'},
+4457: 				forced:true,
+4458: 				filter:function(event,player){
+4459: 					return event.card&&event.card.name=='sha';
+4460: 				},
+4461: 				content:function(){
+4462: 					trigger.num++;
+4463: 				},
+4464: 				ai:{
+4465: 					effect:{
+4466: 						target:function(card,player,target){
+4467: 							if(card.name=='sha'){
+4468: 								return [1,-2];
+4469: 							}
+4470: 						}
+4471: 					}
+4472: 				}
+4473: 			},
+4474: 			baihupifeng:{
+4475: 				trigger:{player:'phaseEnd'},
+4476: 				frequent:true,
+4477: 				filter:function(event,player){
+4478: 					return player.isMinHp()&&player.isDamaged();
+4479: 				},
+4480: 				content:function(){
+
+## Liangou /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js:570
+570: 			liangou2:{
+571: 				mod:{
+572: 					// cardEnabled:function(card,player){
+573: 					// 	return false;
+574: 					// },
+575: 					// cardUsable:function(card,player){
+576: 					// 	return false;
+577: 					// },
+578: 					// cardRespondable:function(card,player){
+579: 					// 	return false;
+580: 					// },
+581: 					// cardSavable:function(card,player){
+582: 					// 	return false;
+583: 					// },
+584: 					globalTo:function(from,to){
+585: 						if(from==to.storage.liangou2) return -Infinity;
+586: 					}
+587: 				},
+588: 				onremove:true,
+589: 				trigger:{player:'damageBegin'},
+590: 				usable:1,
+591: 				forced:true,
+592: 				popup:false,
+593: 				content:function(){
+594: 					trigger.num++;
+595: 				},
+
+## Feiren /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js:2496
+2496: 			feiren:{
+2497: 				trigger:{source:'damageBegin'},
+2498: 				forced:true,
+2499: 				// alter:true,
+2500: 				filter:function(event,player){
+2501: 					return !get.is.altered('feiren')&&event.card&&event.card.name=='sha'&&get.suit(event.card)=='spade'&&event.notLink();
+2502: 				},
+2503: 				content:function(){
+2504: 					trigger.num++;
+2505: 				},
+2506: 				mod:{
+2507: 					targetInRange:function(card){
+2508: 						if(card.name=='sha') return true;
+2509: 					},
+2510: 					selectTarget:function(card,player,range){
+2511: 						if(card.name=='sha'&&range[1]!=-1&&get.suit(card)=='club'){
+2512: 							range[1]++;
+2513: 						}
+2514: 					},
+2515: 				},
+2516: 				ai:{
+2517: 					threaten:1.4
+2518: 				}
+2519: 			},
+2520: 			feiren3:{
+2521: 				trigger:{player:'useCardAfter'},
+
+## Ciqiu /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/diy.js:17654
+17654: 			ciqiu:{
+17655: 				trigger:{source:"damageBegin1"},
+17656: 				forced:true,
+17657: 				filter:function(event){
+17658: 					return event.card&&event.card.name=='sha'&&event.player.isHealthy();
+17659: 				},
+17660: 				content:function(){
+17661: 					"step 0"
+17662: 					trigger.num++;
+17663: 					if(trigger.num>=trigger.player.hp){
+17664: 						trigger.player.addTempSkill('ciqiu_dying');
+17665: 						player.removeSkill('ciqiu')
+17666: 					}
+17667: 				},
+17668: 				ai:{
+17669: 					effect:{
+17670: 						player:function(card,player,target){
+17671: 							if(card.name=='sha'&&target.isHealthy()&&get.attitude(player,target)>0){
+17672: 							return [1,-2];
+17673: 							}
+17674: 						},
+17675: 					},
+17676: 				},
+17677: 			},
+17678: 			ciqiu_dying:{
+17679: 				trigger:{player:"dyingBegin"},
+
+## Duwen /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js:1548
+1548: 			duwen:{
+1549: 				trigger:{source:'damageBegin'},
+1550: 				check:function(event,player){
+1551: 					return get.attitude(player,event.player)<=0;
+1552: 				},
+1553: 				forced:true,
+1554: 				filter:function(event,player){
+1555: 					return player.countCards('h')==event.player.countCards('h')&&event.notLink();
+1556: 				},
+1557: 				content:function(){
+1558: 					trigger.num++;
+1559: 				},
+1560: 				ai:{
+1561: 					threaten:1.5
+1562: 				},
+1563: 			},
+1564: 			duwen2:{
+1565: 				trigger:{source:'damageEnd'},
+1566: 				forced:true,
+1567: 				filter:function(event,player){
+1568: 					return event.card&&event.card.name=='sha'&&player.hp==event.player.hp&&event.notLink();
+1569: 				},
+1570: 				content:function(){
+1571: 					player.draw(2);
+1572: 				}
+1573: 			},
+
+## MailunOut3 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:9237
+9237: 			mailun31:{
+9238: 				trigger:{source:'damageBegin'},
+9239: 				forced:true,
+9240: 				content:function(){
+9241: 					trigger.num--;
+9242: 					player.removeSkill('mailun31');
+9243: 				}
+9244: 			},
+9245: 			mailun32:{
+9246: 				trigger:{player:'damageBegin'},
+9247: 				forced:true,
+9248: 				content:function(){
+9249: 					trigger.num--;
+9250: 					player.removeSkill('mailun32');
+9251: 				}
+9252: 			},
+9253: 			mailun41:{
+9254: 				trigger:{source:'damageBegin'},
+9255: 				forced:true,
+9256: 				content:function(){
+9257: 					trigger.num++;
+9258: 					player.removeSkill('mailun41');
+9259: 				}
+9260: 			},
+9261: 			mailun42:{
+9262: 				trigger:{player:'damageBegin'},
+
+## MailunIn3 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:9245
+9245: 			mailun32:{
+9246: 				trigger:{player:'damageBegin'},
+9247: 				forced:true,
+9248: 				content:function(){
+9249: 					trigger.num--;
+9250: 					player.removeSkill('mailun32');
+9251: 				}
+9252: 			},
+9253: 			mailun41:{
+9254: 				trigger:{source:'damageBegin'},
+9255: 				forced:true,
+9256: 				content:function(){
+9257: 					trigger.num++;
+9258: 					player.removeSkill('mailun41');
+9259: 				}
+9260: 			},
+9261: 			mailun42:{
+9262: 				trigger:{player:'damageBegin'},
+9263: 				forced:true,
+9264: 				content:function(){
+9265: 					trigger.num++;
+9266: 					player.removeSkill('mailun42');
+9267: 				}
+9268: 			},
+9269: 			mailun5:{
+9270: 				trigger:{player:'phaseDrawBegin'},
+
+## MailunOut4 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:9253
+9253: 			mailun41:{
+9254: 				trigger:{source:'damageBegin'},
+9255: 				forced:true,
+9256: 				content:function(){
+9257: 					trigger.num++;
+9258: 					player.removeSkill('mailun41');
+9259: 				}
+9260: 			},
+9261: 			mailun42:{
+9262: 				trigger:{player:'damageBegin'},
+9263: 				forced:true,
+9264: 				content:function(){
+9265: 					trigger.num++;
+9266: 					player.removeSkill('mailun42');
+9267: 				}
+9268: 			},
+9269: 			mailun5:{
+9270: 				trigger:{player:'phaseDrawBegin'},
+9271: 				forced:true,
+9272: 				popup:false,
+9273: 				content:function(){
+9274: 					trigger.num--;
+9275: 				},
+9276: 				mod:{
+9277: 					maxHandcard:function(player,num){
+9278: 						return num+1;
+
+## MailunIn4 /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:9261
+9261: 			mailun42:{
+9262: 				trigger:{player:'damageBegin'},
+9263: 				forced:true,
+9264: 				content:function(){
+9265: 					trigger.num++;
+9266: 					player.removeSkill('mailun42');
+9267: 				}
+9268: 			},
+9269: 			mailun5:{
+9270: 				trigger:{player:'phaseDrawBegin'},
+9271: 				forced:true,
+9272: 				popup:false,
+9273: 				content:function(){
+9274: 					trigger.num--;
+9275: 				},
+9276: 				mod:{
+9277: 					maxHandcard:function(player,num){
+9278: 						return num+1;
+9279: 					}
+9280: 				}
+9281: 			},
+9282: 			mailun6:{
+9283: 				trigger:{player:'phaseDrawBegin'},
+9284: 				forced:true,
+9285: 				popup:false,
+9286: 				content:function(){
+
+## Hutian /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:3348
+3348: 			hutian2:{
+3349: 				trigger:{player:['damageBegin','loseHpBegin']},
+3350: 				forced:true,
+3351: 				priority:-55,
+3352: 				mark:true,
+3353: 				filter:function(event,player){
+3354: 					return player.hp-event.num<player.storage.hutian2.length;
+3355: 				},
+3356: 				content:function(){
+3357: 					trigger.num=player.hp-player.storage.hutian2.length;
+3358: 				},
+3359: 				intro:{
+3360: 					content:'cards'
+3361: 				},
+3362: 				ai:{
+3363: 					effect:{
+3364: 						target:function(card,player,target){
+3365: 							if(get.tag(card,'damage')||get.tag(card,'loseHp')){
+3366: 								if(target.hp<=target.storage.hutian2.length) return 0;
+3367: 							}
+3368: 						}
+3369: 					}
+3370: 				}
+3371: 			},
+3372: 			hutian3:{
+3373: 				trigger:{player:['phaseEnd','dieBegin']},
+
+## Zuijiu /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:7634
+7634: 			boss_zuijiu:{
+7635: 				trigger:{source:'damageBegin1'},
+7636: 				filter:function(event){
+7637: 					return event.card&&event.card.name=='sha'&&event.getParent().name=='sha';
+7638: 				},
+7639: 				forced:true,
+7640: 				content:function(){
+7641: 					trigger.num++;
+7642: 				}
+7643: 			},
+7644: 			boss_xixing:{
+7645: 				trigger:{player:'phaseZhunbeiBegin'},
+7646: 				direct:true,
+7647: 				content:function(){
+7648: 					"step 0"
+7649: 					player.chooseTarget(get.prompt('boss_xixing'),function(card,player,target){
+7650: 						return player!=target&&target.isLinked();
+7651: 					}).ai=function(target){
+7652: 						return get.damageEffect(target,player,player,'thunder');
+7653: 					}
+7654: 					"step 1"
+7655: 					if(result.bool){
+7656: 						player.logSkill('boss_xixing',result.targets);
+7657: 						result.targets[0].damage('thunder');
+7658: 						player.recover();
+7659: 					}
+
+## Huoshen /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:8405
+8405: 			huoshen:{
+8406: 				trigger:{player:'damageBegin1'},
+8407: 				forced:true,
+8408: 				unique:true,
+8409: 				filter:function(event){
+8410: 					return event.nature=='fire';
+8411: 				},
+8412: 				content:function(){
+8413: 					trigger.cancel();
+8414: 					player.recover();
+8415: 				},
+8416: 				ai:{
+8417: 					effect:{
+8418: 						target:function(card){
+8419: 							if(get.tag(card,'fireDamage')){
+8420: 								return [0,2];
+8421: 							}
+8422: 						}
+8423: 					}
+8424: 				},
+8425: 			},
+8426: 			boss_xianyin:{
+8427: 				trigger:{player:'loseEnd'},
+8428: 				frequent:true,
+8429: 				unique:true,
+8430: 				filter:function(event,player){
+
+## NitaiOut /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4885
+4885: 			boss_nitai:{
+4886: 				group:['boss_nitai_in','boss_nitai_out'],
+4887: 				subSkill:{
+4888: 					in:{
+4889: 						trigger:{player:'damageBegin4'},
+4890: 						forced:true,
+4891: 						filter:function(event,player){
+4892: 							return _status.currentPhase==player;
+4893: 						},
+4894: 						content:function(){
+4895: 							trigger.cancel();
+4896: 						}
+4897: 					},
+4898: 					out:{
+4899: 						trigger:{player:'damageBegin1'},
+4900: 						forced:true,
+4901: 						filter:function(event,player){
+4902: 							return _status.currentPhase!=player&&event.nature=='fire';
+4903: 						},
+4904: 						content:function(){
+4905: 							trigger.num++;
+4906: 						}
+4907: 					}
+4908: 				}
+4909: 			},
+4910: 			boss_minwan:{
+4911: 				group:['boss_minwan_clear','boss_minwan_draw','boss_minwan_add'],
+4912: 				subSkill:{
+4913: 					clear:{
+4914: 						trigger:{player:'phaseAfter'},
+4915: 						silent:true,
+4916: 						content:function(){
+4917: 							delete player.storage.boss_minwan;
+4918: 						}
+4919: 					},
+4920: 					draw:{
+4921: 						trigger:{player:'useCard'},
+4922: 						forced:true,
+4923: 						filter:function(event,player){
+4924: 							return _status.currentPhase==player&&Array.isArray(player.storage.boss_minwan);
+4925: 						},
+4926: 						content:function(){
+4927: 							player.draw();
+4928: 						}
+4929: 					},
+4930: 					add:{
+4931: 						trigger:{source:'damageAfter'},
+4932: 						filter:function(event,player){
+
+## ZhaohuoSource /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4093
+4093: 			boss_zhaohuo:{
+4094: 				trigger:{
+4095: 					player:'damageBegin4',
+4096: 					source:'damageBegin1',
+4097: 				},
+4098: 				forced:true,
+4099: 				filter:function(event,player){
+4100: 					if(player==event.player) return event.nature=='fire'||player==event.source;
+4101: 					return true;
+4102: 				},
+4103: 				content:function(){
+4104: 					if(player==trigger.player) trigger.cancel();
+4105: 					else trigger.nature='fire';
+4106: 				},
+4107: 				ai:{
+4108: 					unequip:true,
+4109: 					skillTagFilter:function(player){
+4110: 						if(player!=_status.currentPhase) return false;
+4111: 					},
+4112: 				},
+4113: 			},
+4114: 			boss_honglianx:{
+4115: 				mod:{
+4116: 					ignoredHandcard:function (card,player){
+4117: 						if(get.color(card)=='red'){
+4118: 							return true;
+4119: 						}
+4120: 					},
+4121: 					cardDiscardable:function (card,player,name){
+4122: 						if(name=='phaseDiscard'&&get.color(card)=='red') return false;
+4123: 					},
+4124: 				},
+4125: 				forced:true,
+4126: 				trigger:{player:'phaseZhunbeiBegin'},
+4127: 				content:function(){
+4128: 					'step 0'
+4129: 					event.num1=3;
+4130: 					event.num2=[0,1,2,3].randomGet();
+4131: 					event.togain=[];
+4132: 					while(event.togain.length<event.num2){
+4133: 						var card=get.cardPile(function(card){
+4134: 							return !event.togain.contains(card)&&get.color(card)=='red';
+4135: 						});
+4136: 						if(card) event.togain.push(card);
+4137: 						else break;
+4138: 					}
+4139: 					event.num1-=event.togain.length;
+4140: 					if(event.togain.length) player.gain(event.togain,'draw');
+
+## Zhaohuo /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4093
+4093: 			boss_zhaohuo:{
+4094: 				trigger:{
+4095: 					player:'damageBegin4',
+4096: 					source:'damageBegin1',
+4097: 				},
+4098: 				forced:true,
+4099: 				filter:function(event,player){
+4100: 					if(player==event.player) return event.nature=='fire'||player==event.source;
+4101: 					return true;
+4102: 				},
+4103: 				content:function(){
+4104: 					if(player==trigger.player) trigger.cancel();
+4105: 					else trigger.nature='fire';
+4106: 				},
+4107: 				ai:{
+4108: 					unequip:true,
+4109: 					skillTagFilter:function(player){
+4110: 						if(player!=_status.currentPhase) return false;
+4111: 					},
+4112: 				},
+4113: 			},
+4114: 			boss_honglianx:{
+4115: 				mod:{
+4116: 					ignoredHandcard:function (card,player){
+4117: 						if(get.color(card)=='red'){
+4118: 							return true;
+4119: 						}
+4120: 					},
+4121: 					cardDiscardable:function (card,player,name){
+4122: 						if(name=='phaseDiscard'&&get.color(card)=='red') return false;
+4123: 					},
+4124: 				},
+4125: 				forced:true,
+4126: 				trigger:{player:'phaseZhunbeiBegin'},
+4127: 				content:function(){
+4128: 					'step 0'
+4129: 					event.num1=3;
+4130: 					event.num2=[0,1,2,3].randomGet();
+4131: 					event.togain=[];
+4132: 					while(event.togain.length<event.num2){
+4133: 						var card=get.cardPile(function(card){
+4134: 							return !event.togain.contains(card)&&get.color(card)=='red';
+4135: 						});
+4136: 						if(card) event.togain.push(card);
+4137: 						else break;
+4138: 					}
+4139: 					event.num1-=event.togain.length;
+4140: 					if(event.togain.length) player.gain(event.togain,'draw');
+
+## NitaiIn /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4885
+4885: 			boss_nitai:{
+4886: 				group:['boss_nitai_in','boss_nitai_out'],
+4887: 				subSkill:{
+4888: 					in:{
+4889: 						trigger:{player:'damageBegin4'},
+4890: 						forced:true,
+4891: 						filter:function(event,player){
+4892: 							return _status.currentPhase==player;
+4893: 						},
+4894: 						content:function(){
+4895: 							trigger.cancel();
+4896: 						}
+4897: 					},
+4898: 					out:{
+4899: 						trigger:{player:'damageBegin1'},
+4900: 						forced:true,
+4901: 						filter:function(event,player){
+4902: 							return _status.currentPhase!=player&&event.nature=='fire';
+4903: 						},
+4904: 						content:function(){
+4905: 							trigger.num++;
+4906: 						}
+4907: 					}
+4908: 				}
+4909: 			},
+4910: 			boss_minwan:{
+4911: 				group:['boss_minwan_clear','boss_minwan_draw','boss_minwan_add'],
+4912: 				subSkill:{
+4913: 					clear:{
+4914: 						trigger:{player:'phaseAfter'},
+4915: 						silent:true,
+4916: 						content:function(){
+4917: 							delete player.storage.boss_minwan;
+4918: 						}
+4919: 					},
+4920: 					draw:{
+4921: 						trigger:{player:'useCard'},
+4922: 						forced:true,
+4923: 						filter:function(event,player){
+4924: 							return _status.currentPhase==player&&Array.isArray(player.storage.boss_minwan);
+4925: 						},
+4926: 						content:function(){
+4927: 							player.draw();
+4928: 						}
+4929: 					},
+4930: 					add:{
+4931: 						trigger:{source:'damageAfter'},
+4932: 						filter:function(event,player){
+
+## Bufo /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:3405
+3405: 			"boss_bufo":{
+3406: 				audio:true,
+3407: 				forced:true,
+3408: 				trigger:{
+3409: 					player:['damageBegin4','phaseZhunbeiBegin'],
+3410: 				},
+3411: 				filter:function(event,player,name){
+3412: 					if(name=='damageBegin4'){return event.num&&event.num>1;}
+3413: 					return game.hasPlayer(function(target){
+3414: 						return player!=target&&get.distance(player,target)<=1;
+3415: 					});
+3416: 				},
+3417: 				content:function(){
+3418: 					var name=event.triggername;
+3419: 					if(name=='damageBegin4'){
+3420: 						trigger.num--;
+3421: 					}
+3422: 					else{
+3423: 						game.countPlayer(function(target){
+3424: 							if(player!=target&&get.distance(player,target)<=1){
+3425: 								target.damage(1,player,'fire');
+3426: 							}
+3427: 						});
+3428: 					}
+3429: 				},
+3430: 			},
+
+## LingquCancel /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4403
+4403: 			boss_lingqu:{
+4404: 				init:function(player){
+4405: 					player.storage.boss_lingqu=0;
+4406: 				},
+4407: 				trigger:{player:'damageEnd'},
+4408: 				forced:true,
+4409: 				content:function(){
+4410: 					player.draw();
+4411: 					player.storage.boss_lingqu++;
+4412: 					player.markSkill('boss_lingqu');
+4413: 				},
+4414: 				intro:{
+4415: 					content:'手牌上限+#'
+4416: 				},
+4417: 				mod:{
+4418: 					maxHandcard:function(player,num){
+4419: 						return num+player.storage.boss_lingqu;
+4420: 					}
+4421: 				},
+4422: 				group:'boss_lingqu_cancel',
+4423: 				subSkill:{
+4424: 					cancel:{
+4425: 						trigger:{player:'damageBegin4'},
+4426: 						priority:-11,
+4427: 						forced:true,
+4428: 						filter:function(event){
+4429: 							return event.num>1;
+4430: 						},
+4431: 						content:function(){
+4432: 							trigger.num=0;
+4433: 						}
+4434: 					}
+4435: 				}
+4436: 			},
+4437: 			boss_baiyi:{
+4438: 				group:['boss_baiyi_draw','boss_baiyi_thunder','boss_baiyi_discard'],
+4439: 				subSkill:{
+4440: 					discard:{
+4441: 						trigger:{global:'roundStart'},
+4442: 						forced:true,
+4443: 						filter:function(){
+4444: 							return game.roundNumber==5;
+4445: 						},
+4446: 						logTarget:function(event,player){
+4447: 							return player.getEnemies();
+4448: 						},
+4449: 						content:function(){
+4450: 							'step 0'
+
+## Shuchui /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js:2582
+2582: 			shuchui2:{
+2583: 				trigger:{source:'damageEnd'},
+2584: 				forced:true,
+2585: 				popup:false,
+2586: 				onremove:true,
+2587: 				filter:function(event,player){
+2588: 					return event.card&&event.card.name=='sha'&&!player.storage.shuchui2;
+2589: 				},
+2590: 				content:function(){
+2591: 					player.storage.shuchui2=true;
+2592: 				}
+2593: 			},
+2594: 			xuejibingbao:{
+2595: 				trigger:{player:'phaseDrawBegin'},
+2596: 				forced:true,
+2597: 				mark:true,
+2598: 				temp:true,
+2599: 				intro:{
+2600: 					content:'摸牌阶段摸牌数+1'
+2601: 				},
+2602: 				nopop:true,
+2603: 				content:function(){
+2604: 					trigger.num++;
+2605: 					player.storage.xuejibingbao--;
+2606: 					if(player.storage.xuejibingbao<=0){
+2607: 						player.removeSkill('xuejibingbao');
+2608: 						delete player.storage.xuejibingbao;
+2609: 					}
+2610: 					else{
+2611: 						player.updateMarks();
+2612: 					}
+2613: 				}
+2614: 			},
+2615: 			gouhunluo:{
+2616: 				mark:true,
+2617: 				intro:{
+2618: 					content:function(storage,player){
+2619: 						if(storage==1){
+2620: 							'在'+get.translation(player.storage.gouhunluo2)+'的下个准备阶段失去一点体力并弃置所有手牌'
+2621: 						}
+2622: 						return '在'+storage+'轮后'+get.translation(player.storage.gouhunluo2)+'的准备阶段失去一点体力并弃置所有手牌'
+2623: 					}
+2624: 				},
+2625: 				nopop:true,
+2626: 				temp:true,
+2627: 				trigger:{global:'phaseBegin'},
+2628: 				forced:true,
+2629: 				popup:false,
+
+## Paotai /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js:1010
+1010: 			paotai3:{
+1011: 				trigger:{player:'damageEnd'},
+1012: 				forced:true,
+1013: 				popup:false,
+1014: 				filter:function(event,player){
+1015: 					return player.storage.paotai>0&&event.num>0;
+1016: 				},
+1017: 				content:function(){
+1018: 					player.storage.paotai-=trigger.num;
+1019: 					if(player.storage.paotai<=0){
+1020: 						player.storage.paotai=0;
+1021: 						player.unmarkSkill('paotai');
+1022: 					}
+1023: 					else{
+1024: 						player.updateMarks();
+1025: 					}
+1026: 				}
+1027: 			},
+1028: 			bfengshi:{
+1029: 				trigger:{player:'shaBegin'},
+1030: 				forced:true,
+1031: 				// alter:true,
+1032: 				check:function(event,player){
+1033: 					return get.attitude(player,event.target)<=0;
+1034: 				},
+1035: 				filter:function(event,player){
+
+## Xixue /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js:4744
+4744: 			xixue:{
+4745: 				trigger:{source:'damageEnd'},
+4746: 				forced:true,
+4747: 				filter:function(event,player){
+4748: 					return event.card&&event.card.name=='sha'&&player.hp<player.maxHp;
+4749: 				},
+4750: 				content:function(){
+4751: 					player.recover(trigger.num);
+4752: 				}
+4753: 			},
+4754: 			guangshatianyi:{
+4755: 				trigger:{player:'damageBegin'},
+4756: 				forced:true,
+4757: 				filter:function(event,player){
+4758: 					if(event.source&&event.source.hasSkillTag('unequip',false,{
+4759: 						name:event.card?event.card.name:null,
+4760: 						target:player,
+4761: 						card:event.card
+4762: 					})) return false;
+4763: 					if(Math.random()>1/3) return false;
+4764: 					return true;
+4765: 				},
+4766: 				content:function(){
+4767: 					trigger.num--;
+4768: 				}
+4769: 			},
+
+## Qinglong /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js:4439
+4439: 			qinglonglingzhu:{
+4440: 				trigger:{source:'damageEnd'},
+4441: 				direct:true,
+4442: 				filter:function(event,player){
+4443: 					if(event._notrigger.contains(event.player)) return false;
+4444: 					return event.nature&&event.player&&event.player.isAlive();
+4445: 				},
+4446: 				content:function(){
+4447: 					player.gainPlayerCard(get.prompt('qinglonglingzhu',trigger.player),trigger.player,function(button){
+4448: 						if(get.attitude(player,trigger.player)<=0){
+4449: 							return get.buttonValue(button);
+4450: 						}
+4451: 						return 0;
+4452: 					},'he').logSkill=['qinglonglingzhu',trigger.player];
+4453: 				},
+4454: 			},
+4455: 			xingjunyan:{
+4456: 				trigger:{source:'damageBegin',player:'damageBegin'},
+4457: 				forced:true,
+4458: 				filter:function(event,player){
+4459: 					return event.card&&event.card.name=='sha';
+4460: 				},
+4461: 				content:function(){
+4462: 					trigger.num++;
+4463: 				},
+4464: 				ai:{
+
+## Yinzei /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4783
+4783: 			boss_yinzei:{
+4784: 				trigger:{player:'damageEnd'},
+4785: 				forced:true,
+4786: 				logTarget:'source',
+4787: 				filter:function(event,player){
+4788: 					return event.source&&event.source.isIn()&&event.source!=player&&event.source.countCards('he')&&!player.countCards('h');
+4789: 				},
+4790: 				content:function(){
+4791: 					trigger.source.randomDiscard();
+4792: 				}
+4793: 			},
+4794: 			boss_zhue:{
+4795: 				trigger:{global:'damageEnd'},
+4796: 				forced:true,
+4797: 				filter:function(event,player){
+4798: 					return event.source&&event.source.isIn()&&event.source!=player;
+4799: 				},
+4800: 				logTarget:'source',
+4801: 				content:function(){
+4802: 					game.asyncDraw([player,trigger.source]);
+4803: 				}
+4804: 			},
+4805: 			boss_yandu:{
+4806: 				trigger:{global:'phaseJieshuBegin'},
+4807: 				filter:function(event,player){
+4808: 					return event.player!=player&&!event.player.getStat('damage')&&event.player.countCards('he');
+
+## Zhangwu /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:6596
+6596: 			boss_zhangwu:{
+6597: 				global:'boss_zhangwu_ai',
+6598: 				trigger:{player:'damageEnd'},
+6599: 				check:function(event,player){
+6600: 					return event.source&&event.source.isIn()&&get.damageEffect(event.source,player,player)>0;
+6601: 				},
+6602: 				filter:function(event){
+6603: 					return event.source&&event.source.isAlive();
+6604: 				},
+6605: 				direct:true,
+6606: 				logTarget:'source',
+6607: 				content:function(){
+6608: 					'step 0'
+6609: 					player.chooseToDiscard(get.prompt('boss_zhangwu',trigger.source),'he',[1,Infinity]).set('ai',function(card){
+6610: 						if(get.attitude(player,target)<0) return 8-get.value(card);
+6611: 						return 0;
+6612: 					}).set('logSkill',['boss_zhangwu',trigger.source]);
+6613: 					'step 1'
+6614: 					if(result.bool){
+6615: 						var num=result.cards.length;
+6616: 						var cnum=get.cnNumber(num);
+6617: 						event.num=num;
+6618: 						trigger.source.chooseToDiscard('he','章武：弃置'+cnum+'张牌，或取消并受到'+cnum+'点伤害',num).set('ai',function(card){
+6619: 							if(!trigger.source.hasSkillTag('nodamage')) return 10-get.value(card);
+6620: 							return 0;
+6621: 						});
+
+## Zlfanshi /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:3225
+3225: 			boss_zlfanshi:{
+3226: 				trigger:{player:'damageEnd'},
+3227: 				forced:true,
+3228: 				content:function(){
+3229: 					if(player.hasSkill('boss_zlfanshi_terra')){
+3230: 						var list=game.players.slice(0);
+3231: 						list.remove(player);
+3232: 						if(list.length){
+3233: 							var target=list.randomGet();
+3234: 							player.line(target);
+3235: 							target.damage();
+3236: 						}
+3237: 					}
+3238: 					else player.addTempSkill('boss_zlfanshi_terra');
+3239: 				},
+3240: 			},
+3241: 			boss_zlfanshi_terra:{charlotte:true},
+3242: 			//孟婆:
+3243: 			"boss_shiyou":{
+3244: 				audio:true,
+3245: 				trigger:{global:'loseAfter'},
+3246: 				filter:function(event,player){
+3247: 					var evt=event.getParent(3);
+3248: 					return event.type=='discard'&&evt.name=='phaseDiscard'&&evt.player==event.player&&evt.player!=player&&event.cards2&&event.cards2.filterInD('d').length>0;
+3249: 				},
+3250: 				content:function(){
+
+## Zhue /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4794
+4794: 			boss_zhue:{
+4795: 				trigger:{global:'damageEnd'},
+4796: 				forced:true,
+4797: 				filter:function(event,player){
+4798: 					return event.source&&event.source.isIn()&&event.source!=player;
+4799: 				},
+4800: 				logTarget:'source',
+4801: 				content:function(){
+4802: 					game.asyncDraw([player,trigger.source]);
+4803: 				}
+4804: 			},
+4805: 			boss_yandu:{
+4806: 				trigger:{global:'phaseJieshuBegin'},
+4807: 				filter:function(event,player){
+4808: 					return event.player!=player&&!event.player.getStat('damage')&&event.player.countCards('he');
+4809: 				},
+4810: 				logTarget:'player',
+4811: 				forced:true,
+4812: 				content:function(){
+4813: 					player.gainPlayerCard(trigger.player,true);
+4814: 				}
+4815: 			},
+4816: 			boss_futai:{
+4817: 				global:'boss_futai2',
+4818: 				trigger:{player:'phaseZhunbeiBegin'},
+4819: 				logTarget:function(event,player){
+
+## Abi /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:3149
+3149: 			boss_abi:{
+3150: 				trigger:{player:'damageEnd'},
+3151: 				forced:true,
+3152: 				filter:function(event){
+3153: 					return event.source!=undefined;
+3154: 				},
+3155: 				logTarget:'source',
+3156: 				content:function(){
+3157: 					trigger.source.damage().nature=['fire','thunder'].randomGet();
+3158: 				},
+3159: 			},
+3160: 			boss_pingdeng:{
+3161: 				trigger:{player:'die'},
+3162: 				forceDie:true,
+3163: 				forced:true,
+3164: 				content:function(){
+3165: 					'step 0'
+3166: 					var list=game.filterPlayer(function(current){
+3167: 						return current!=player&&!game.hasPlayer(function(current2){
+3168: 							return current2.hp>current.hp;
+3169: 						});
+3170: 					});
+3171: 					if(list.length){
+3172: 						var target=list.randomGet()
+3173: 						player.line(target);
+3174: 						target.damage(2).nature=lib.linked.randomGet();
+
+## Yuance /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:6392
+6392: 			boss_yuance:{
+6393: 				trigger:{global:'damageEnd'},
+6394: 				filter:function(event){
+6395: 					return event.source&&event.source!=event.player&&event.source.isAlive()&&event.player.isAlive();
+6396: 				},
+6397: 				direct:true,
+6398: 				content:function(){
+6399: 					'step 0'
+6400: 					var att1=get.attitude(player,trigger.player);
+6401: 					var att2=get.attitude(player,trigger.source);
+6402: 					var targets=player.getEnemies();
+6403: 					var stop=false;
+6404: 					for(var i=0;i<targets.length;i++){
+6405: 						var skills=targets[i].getSkills();
+6406: 						for(var j=0;j<skills.length;j++){
+6407: 							if(get.tag(skills[j],'rejudge',targets[i])){
+6408: 								stop=true;break;
+6409: 							}
+6410: 						}
+6411: 					}
+6412: 					var rand=Math.random()<0.5?'选项一':'选项二';
+6413: 					var sourcename=get.translation(trigger.source);
+6414: 					var playername=get.translation(trigger.player);
+6415: 					player.chooseControl('选项一','选项二','cancel2',function(){
+6416: 						if(att1==0&&att2==0) return rand;
+6417: 						if(att1*att2>=0){
+
+## Lingqu /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4403
+4403: 			boss_lingqu:{
+4404: 				init:function(player){
+4405: 					player.storage.boss_lingqu=0;
+4406: 				},
+4407: 				trigger:{player:'damageEnd'},
+4408: 				forced:true,
+4409: 				content:function(){
+4410: 					player.draw();
+4411: 					player.storage.boss_lingqu++;
+4412: 					player.markSkill('boss_lingqu');
+4413: 				},
+4414: 				intro:{
+4415: 					content:'手牌上限+#'
+4416: 				},
+4417: 				mod:{
+4418: 					maxHandcard:function(player,num){
+4419: 						return num+player.storage.boss_lingqu;
+4420: 					}
+4421: 				},
+4422: 				group:'boss_lingqu_cancel',
+4423: 				subSkill:{
+4424: 					cancel:{
+4425: 						trigger:{player:'damageBegin4'},
+4426: 						priority:-11,
+4427: 						forced:true,
+4428: 						filter:function(event){
+
+## Jiding /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4546
+4546: 			boss_jiding:{
+4547: 				trigger:{global:'damageEnd'},
+4548: 				forced:true,
+4549: 				mark:true,
+4550: 				intro:{
+4551: 					content:'info'
+4552: 				},
+4553: 				filter:function(event,player){
+4554: 					return event.player!=player&&event.player.isFriendOf(player)&&
+4555: 						event.source&&event.source.isIn()&&event.source.isEnemyOf(player);
+4556: 				},
+4557: 				logTarget:'source',
+4558: 				content:function(){
+4559: 					'step 0'
+4560: 					player.useCard({name:'sha',nature:'thunder'},trigger.source);
+4561: 					'step 1'
+4562: 					player.removeSkill('boss_jiding');
+4563: 				},
+4564: 				group:'boss_jiding_recover',
+4565: 				subSkill:{
+4566: 					recover:{
+4567: 						trigger:{source:'damageEnd'},
+4568: 						silent:true,
+4569: 						filter:function(event,player){
+4570: 							return event.getParent(3).name=='boss_jiding';
+4571: 						},
+
+## Renxing /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:7167
+7167: 			boss_renxing:{
+7168: 				trigger:{global:['damageEnd','recoverEnd']},
+7169: 				forced:true,
+7170: 				filter:function(event,player){
+7171: 					return _status.currentPhase!=player;
+7172: 				},
+7173: 				content:function(){
+7174: 					player.draw();
+7175: 				}
+7176: 			},
+7177: 			boss_ruizhi:{
+7178: 				trigger:{global:'phaseZhunbeiBegin'},
+7179: 				forced:true,
+7180: 				filter:function(event,player){
+7181: 					return event.player!=player&&(event.player.countCards('h')>1||event.player.countCards('e')>1);
+7182: 				},
+7183: 				content:function(){
+7184: 					'step 0'
+7185: 					player.line(trigger.player,'green');
+7186: 					var next=trigger.player.chooseCard(true,'选择保留一张手牌和一张装备区内的牌，然后弃置其它牌','he',function(card){
+7187: 						switch(get.position(card)){
+7188: 							case 'h':{
+7189: 								if(ui.selected.cards.length){
+7190: 									return get.position(ui.selected.cards[0])=='e';
+7191: 								}
+7192: 								else{
+
+## Cuidui /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:6223
+6223: 			boss_cuidu:{
+6224: 				trigger:{source:'damageEnd'},
+6225: 				forced:true,
+6226: 				unique:true,
+6227: 				filter:function(event,player){
+6228: 					if(event._notrigger.contains(event.player)) return false;
+6229: 					return event.player.isIn()&&event.player.isEnemyOf(player)&&!event.player.hasSkill('boss_zhongdu');
+6230: 				},
+6231: 				logTarget:'player',
+6232: 				content:function(){
+6233: 					trigger.player.addSkill('boss_zhongdu');
+6234: 					var boss=game.findPlayer(function(current){
+6235: 						return current.name=='boss_mushengoumang';
+6236: 					});
+6237: 					if(boss){
+6238: 						boss.draw();
+6239: 					}
+6240: 				}
+6241: 			},
+6242: 			boss_zhongdu:{
+6243: 				trigger:{player:'phaseZhunbeiBegin'},
+6244: 				forced:true,
+6245: 				mark:true,
+6246: 				nopop:true,
+6247: 				temp:true,
+6248: 				intro:{
+
+## Duqu /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:3913
+3913: 			boss_duqu:{
+3914: 				trigger:{player:'damageEnd'},
+3915: 				filter:function(event,player){
+3916: 					return event.source&&!event.source.hasSkill('boss_duqu');
+3917: 				},
+3918: 				content:function(){
+3919: 					var target=trigger.source;
+3920: 					if(!target.storage.boss_shedu) target.storage.boss_shedu=0;
+3921: 					target.storage.boss_shedu++;
+3922: 					target.markSkill('boss_shedu');
+3923: 				},
+3924: 				forced:true,
+3925: 				global:'boss_shedu',
+3926: 				mod:{
+3927: 					cardname:function (card,player){
+3928: 						if(card.name=='tao') return 'sha';
+3929: 					},
+3930: 				},
+3931: 			},
+3932: 			boss_shedu:{
+3933: 				trigger:{player:"phaseBegin"},
+3934: 				mark:true,
+3935: 				intro:{content:'mark'},
+3936: 				forced:true,
+3937: 				filter:function(event,player){
+3938: 					return player.storage.boss_shedu&&player.storage.boss_shedu>0;
+
+## Huanxia /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js:1939
+1939: 			huanxia:{
+1940: 				enable:'chooseToUse',
+1941: 				filterCard:function(card){
+1942: 					return get.color(card)=='red';
+1943: 				},
+1944: 				position:'he',
+1945: 				viewAs:{name:'sha'},
+1946: 				viewAsFilter:function(player){
+1947: 					if(!player.countCards('he',{color:'red'})) return false;
+1948: 				},
+1949: 				prompt:'将一张红色牌当杀使用',
+1950: 				check:function(card){return 5-get.value(card)},
+1951: 				ai:{
+1952: 					order:function(){
+1953: 						return get.order({name:'sha'})+0.1;
+1954: 					},
+1955: 					respondSha:true,
+1956: 					skillTagFilter:function(player,tag,arg){
+1957: 						if(arg!='use') return false;
+1958: 						if(!player.countCards('he',{color:'red'})) return false;
+1959: 					},
+1960: 				},
+1961: 				group:['huanxia_expire','huanxia_draw','huanxia_gain'],
+1962: 				subSkill:{
+1963: 					expire:{
+1964: 						trigger:{source:'damageAfter'},
+1965: 						forced:true,
+1966: 						popup:false,
+1967: 						filter:function(event){
+1968: 							return event.parent.skill=='huanxia';
+1969: 						},
+1970: 						content:function(){
+1971: 							player.storage.huanxia=true;
+1972: 						}
+1973: 					},
+1974: 					draw:{
+1975: 						trigger:{player:'shaAfter'},
+1976: 						forced:true,
+1977: 						popup:false,
+1978: 						content:function(){
+1979: 							if(trigger.parent.skill=='huanxia'){
+1980: 								var card=trigger.cards[0];
+1981: 								if(get.itemtype(card)=='card'&&get.position(card)=='d'&&!player.storage.huanxia){
+1982: 									ui.special.appendChild(card);
+1983: 									if(!player.storage.huanxia_draw){
+1984: 										player.storage.huanxia_draw=[];
+1985: 									}
+1986: 									player.storage.huanxia_draw.push(card);
+
+## Jidian /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:8275
+8275: 			jidian:{
+8276: 				audio:2,
+8277: 				trigger:{source:'damageAfter'},
+8278: 				direct:true,
+8279: 				unique:true,
+8280: 				content:function(){
+8281: 					"step 0"
+8282: 					player.chooseTarget(get.prompt('jidian'),function(card,player,target){
+8283: 						return get.distance(trigger.player,target)<=1&&trigger.player!=target;
+8284: 					}).ai=function(target){
+8285: 						return get.damageEffect(target,player,player,'thunder')+0.1;
+8286: 					}
+8287: 					"step 1"
+8288: 					if(result.bool){
+8289: 						event.target=result.targets[0];
+8290: 						event.target.judge(function(card){
+8291: 							return get.color(card)=='red'?0:-1;
+8292: 						})
+8293: 						player.logSkill('jidian',event.target,false);
+8294: 						trigger.player.line(event.target,'thunder');
+8295: 					}
+8296: 					else{
+8297: 						event.finish();
+8298: 					}
+8299: 					"step 2"
+8300: 					if(result.color=='black'){
+
+## Minwan /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js:4910
+4910: 			boss_minwan:{
+4911: 				group:['boss_minwan_clear','boss_minwan_draw','boss_minwan_add'],
+4912: 				subSkill:{
+4913: 					clear:{
+4914: 						trigger:{player:'phaseAfter'},
+4915: 						silent:true,
+4916: 						content:function(){
+4917: 							delete player.storage.boss_minwan;
+4918: 						}
+4919: 					},
+4920: 					draw:{
+4921: 						trigger:{player:'useCard'},
+4922: 						forced:true,
+4923: 						filter:function(event,player){
+4924: 							return _status.currentPhase==player&&Array.isArray(player.storage.boss_minwan);
+4925: 						},
+4926: 						content:function(){
+4927: 							player.draw();
+4928: 						}
+4929: 					},
+4930: 					add:{
+4931: 						trigger:{source:'damageAfter'},
+4932: 						filter:function(event,player){
+4933: 							return _status.currentPhase==player;
+4934: 						},
+4935: 						forced:true,
+4936: 						content:function(){
+4937: 							if(!player.storage.boss_minwan){
+4938: 								player.storage.boss_minwan=[player];
+4939: 							}
+4940: 							player.storage.boss_minwan.add(trigger.player);
+4941: 						}
+4942: 					}
+4943: 				},
+4944: 				mod:{
+4945: 					playerEnabled:function(card,player,target){
+4946: 						if(_status.currentPhase==player&&Array.isArray(player.storage.boss_minwan)&&!player.storage.boss_minwan.contains(target)){
+4947: 							return false;
+4948: 						}
+4949: 					}
+4950: 				}
+4951: 			},
+4952: 			boss_tanyu:{
+4953: 				trigger:{player:'phaseDiscardBefore'},
+4954: 				forced:true,
+4955: 				content:function(){
+4956: 					trigger.cancel();
+4957: 				},

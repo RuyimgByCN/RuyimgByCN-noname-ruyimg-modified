@@ -1,0 +1,117 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            88,
+            18,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 0,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:64",
+            "card:65",
+            "card:110",
+            "card:101",
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            64,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            65,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            110,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            101,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 1,
+        cards: [
+            71,
+            119,
+        ],
+    },
+]

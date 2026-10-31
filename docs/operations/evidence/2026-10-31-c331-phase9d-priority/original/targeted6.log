@@ -1,0 +1,20 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.72s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_prehp_damage::c9d_huoshen_body_finishes_before_recover_child_restore' (25378528) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:6:69:
+called `Result::unwrap()` on an `Err` value: Type { pos: 38, message: "unknown event recover" }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_prehp_damage::c9d_huoshen_body_finishes_before_recover_child_restore ... FAILED
+
+failures:
+
+failures:
+    c331_prehp_damage::c9d_huoshen_body_finishes_before_recover_child_restore
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 197 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9d_huoshen_body", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.7587344170315191, "disk_free_bytes": 142037725184}

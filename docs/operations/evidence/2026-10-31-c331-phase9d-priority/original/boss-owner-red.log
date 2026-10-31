@@ -1,0 +1,24 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.74s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+inst None, alive true, effect Some(Huoshen), seat 1
+log [DamageDealt { source: Some(0), target: 1, amount: 2, redirected_from: [], card: None }];choice None
+
+thread 'c331_prehp_damage::c9d_huoshen_real_boss_general_uses_the_same_queue' (25241644) panicked at crates/engine-native/tests/groups/../c331_prehp_damage.rs:819:5:
+assertion `left == right` failed
+  left: 2
+ right: 5
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_prehp_damage::c9d_huoshen_real_boss_general_uses_the_same_queue ... FAILED
+
+failures:
+
+failures:
+    c331_prehp_damage::c9d_huoshen_real_boss_general_uses_the_same_queue
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 195 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9d_huoshen_real", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.7740309169748798, "disk_free_bytes": 142511771648}

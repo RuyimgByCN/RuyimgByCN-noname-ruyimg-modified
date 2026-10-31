@@ -1,0 +1,9 @@
+{
+  "command": [
+    "gh",
+    "api",
+    "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs?head_sha=34e83f0550bb70ef4af6083697428de7be2f02f8&event=push&branch=native-convergence&per_page=20"
+  ],
+  "exit": 0,
+  "http1": true
+}

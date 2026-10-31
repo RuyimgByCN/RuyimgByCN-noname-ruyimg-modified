@@ -1,0 +1,159 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            17,
+            89,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 0,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:85",
+            "card:69",
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            85,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            69,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 1,
+        cards: [
+            93,
+            54,
+        ],
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 29,
+        player: 1,
+        targets: [
+            0,
+        ],
+    },
+    ChoiceOpened {
+        id: 2,
+        observer: 0,
+        prompt: "trigger_confirm",
+    },
+    ChoiceAnswered {
+        id: 2,
+        options: [
+            "confirm",
+        ],
+    },
+    SkillTriggered {
+        skill: "移伤",
+        owner: 0,
+    },
+    ChoiceOpened {
+        id: 3,
+        observer: 0,
+        prompt: "yishang_target",
+    },
+    ChoiceAnswered {
+        id: 3,
+        options: [
+            "player:2",
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            1,
+        ),
+        target: 2,
+        amount: 1,
+        redirected_from: [
+            0,
+        ],
+        card: Some(
+            29,
+        ),
+    },
+]

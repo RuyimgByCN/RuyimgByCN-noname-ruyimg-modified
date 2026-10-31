@@ -1,0 +1,23 @@
+## Review
+
+No issues found.
+
+- **Correct — current C9e status:** [native-progress.md:12](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/architecture/native-progress.md:12) and the [C9e README](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/README.md:5) distinguish five bounded repairs from **1821/1/75**, the remaining golden failure, 17 mandatory defect groups and the additional chain-birth P1. They do not turn the later read-only counterexamples into executed regressions or increase 262/290 coverage.
+
+- **Correct — evidence and sequencing:** The original report, parent audit and independent BLOCK review support the stated 219/14 composition, seven command bindings, 18 focused passes and 162 capture triples. The separately sealed concordance retains **10 limited agreements / 19 defective rows / 12 unproved rows**. F02 remains open; F07/09/12/13/16 require genuine continuations. F13 correctly requires removal after the complete card subtree with actual admitted-definition/group provenance.
+
+- **Correct — historical framing:** The C7–C9d paragraph is explicitly historical. Current text retains the failed full runs and earlier BLOCK findings without presenting them as unresolved status for repairs subsequently verified in C9e. The prior Windows-pending P2 is corrected by linking actual exact-34e CI success while preserving d07’s failure.
+
+- **Correct — later mechanisms remain pending:** Ordinary ChangeHp, including positive notrigger damage with armor-reduced num0, and shared DeathFlow/provider/lifetime/LossEnd work remain implementation requirements. Plan acceptance is not described as code acceptance; Main remains34e/330 with no C production import.
+
+- **Correct — archive boundaries:** Reviewed [archive-c9e.py](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/parent/archive-c9e.py:5), its directory-classification controls and copy assertions. They reject profile/cache/build/private-session paths while permitting evidence snapshots and materialized source. The initial 7351-copy map stays separate from later archiver/check addenda. Narrative links use the actual gzip index and materialized manifest paths.
+
+- **Correct — intentional staging boundary:** The [current write receipt](/tmp/noname-parent-post-c9e-main-write-receipt.json:49528) distinguishes the existing **2540 staged documentation paths** from the newer working-tree progress update and untracked C9e evidence root. Its index binding remains `fb7832…`. This intentional staged/working difference is not worker drift. No future restaged tree or commit is certified here.
+
+- **Validation records:** The supplied addendum records eight narratives/861 local references with bad0, 1065 line references with out-of-range0, two line-gate unit passes and Main9018 within its limits. Private C9e9035 is separately labelled. Initial gzip-link and invocation-path mistakes remain recorded; these cheap checks do not replace runtime acceptance. I did not rerun checks or recompute hashes.
+
+- **Fixed:** None by this reviewer.
+- **Merge verdict: OK with notes for these documentation updates and archive scope only.** C9e remains BLOCK; no golden rerecording, full Damage/C331, source37, I02 or whole-Goal acceptance follows.
+
+Skipped tests/builds/network/device actions, Main/staging writes, live private-C reads, bulk artifact-body inspection and independent hashing.
+Residual limit: the next staged set requires its own exact path/blob/mode audit; current runtime and provider/continuation blockers remain unchanged.

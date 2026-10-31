@@ -1,0 +1,1668 @@
+{
+  "audit_observed_start_utc": "2026-10-31T16:24:55Z",
+  "original_seal_utc": "2026-10-31T16:20:29.075090Z",
+  "queued_request_delivery_exact_time": "not supplied; consumed after original seal; no time guessed",
+  "audit_utc": "2026-10-31T16:34:30.241046+00:00",
+  "scope": "READ ONLY additive audit, supervisor authorized <=10min; no source/heavy/Main/device changes",
+  "counts": {
+    "concrete-defect": 19,
+    "checked-agreement": 10,
+    "unproved-boundary": 12
+  },
+  "row_count": 41,
+  "findings_count": 17,
+  "rows": [
+    {
+      "effect": "Jueqing",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/yijiang.js",
+        "sha256": "e12aee745fd63ea58fa6c7685bb6ae44426f53cf64cfdc37853c1bf7d2812b79",
+        "source_key": "jueqing",
+        "group_parent_key": "jueqing",
+        "line": 11930,
+        "window": "Before",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 160,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_skill.rs",
+        "sha256": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+        "dispatch": "Jueqing"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F01"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Wuxin",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_wuxin",
+        "group_parent_key": "boss_wuxin",
+        "line": 8769,
+        "window": "Before",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 10,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 161,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_skill.rs",
+        "sha256": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+        "dispatch": "Wuxin"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Jidong",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+        "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+        "source_key": "jidong2",
+        "group_parent_key": "jidong2",
+        "line": 2085,
+        "window": "Before",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 171,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "recipient.jidong_active until turnover; owner is recipient, no parent-skill assumption"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Jidong"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Flag cancellation agrees; exact temp-skill grant/removal/turnover lifetime and disabled-provider coverage not proved by declaration reading.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Chengxin",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/xianjian.js",
+        "sha256": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+        "source_key": "chengxin2",
+        "group_parent_key": "chengxin2",
+        "line": 734,
+        "window": "Before",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 172,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "recipient.chengxin_active until recipient End; producer records rescued recipient, no parent ownership"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Chengxin"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Recipient flag cancellation agrees; grantor/renewal/recipient End expiry and independent provider lifetime remain bounded adapter facts.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Chilongya",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+        "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+        "source_key": "chilongya",
+        "group_parent_key": "chilongya",
+        "line": 4506,
+        "window": "Begin",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 173,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "owner.equips contains exact CardKind::Chilongya"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Chilongya"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Fire/notLink and body +1 agree; complete equipment suppression/provider lifetime outside physical equip qualification unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Xingjunyan",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+        "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+        "source_key": "xingjunyan",
+        "group_parent_key": "xingjunyan",
+        "line": 4455,
+        "window": "Begin",
+        "role": [
+          "source",
+          "player"
+        ],
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 174,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "owner.equips contains exact CardKind::Xingjunyan; actual source OR target role"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Xingjunyan"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F02"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Liangou",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+        "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+        "source_key": "liangou2",
+        "group_parent_key": "liangou2",
+        "line": 570,
+        "window": "Begin",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": false
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 175,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "turn.liangou_hook==recipient and !bonus_used; grantor is not needed by this player trigger (distance modifier remains elsewhere)"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Liangou"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Player damageBegin +1/once bit agrees; source usable1 and grantor-related lifetime/renewal equivalence not exhaustively proved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Feiren",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+        "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+        "source_key": "feiren",
+        "group_parent_key": "feiren",
+        "line": 2496,
+        "window": "Begin",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 178,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Feiren"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Sha/spade/notLink and body+1 agree for baseline; source get.is.altered(feiren) and dynamic suit modifier condition are not represented/proved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Ciqiu",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/diy.js",
+        "sha256": "50b76233ac608bf5d5aab64e12ef68b33b7f905c28aeabc0301371944fcc0d51",
+        "source_key": "ciqiu",
+        "group_parent_key": "ciqiu",
+        "line": 17654,
+        "window": "Begin1",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 186,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Ciqiu"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F02"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Duwen",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+        "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+        "source_key": "duwen",
+        "group_parent_key": "duwen",
+        "line": 1548,
+        "window": "Begin",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 189,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Duwen"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "MailunOut3",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "mailun31",
+        "group_parent_key": "mailun31",
+        "line": 9237,
+        "window": "Begin",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 192,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "source.mailun_mode==3&&!mailun_out_used"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "MailunOut3"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Role/window signed +/-1 and per-arm used bit agree; source removeSkill and complete regeneration/expiry/renew lifetime across modes remain unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "MailunIn3",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "mailun32",
+        "group_parent_key": "mailun32",
+        "line": 9245,
+        "window": "Begin",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 194,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "target.mailun_mode==3&&!mailun_in_used"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "MailunIn3"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Role/window signed +/-1 and per-arm used bit agree; source removeSkill and complete regeneration/expiry/renew lifetime across modes remain unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "MailunOut4",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "mailun41",
+        "group_parent_key": "mailun41",
+        "line": 9253,
+        "window": "Begin",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 193,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "source.mailun_mode==4&&!mailun_out_used"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "MailunOut4"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Role/window signed +/-1 and per-arm used bit agree; source removeSkill and complete regeneration/expiry/renew lifetime across modes remain unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "MailunIn4",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "mailun42",
+        "group_parent_key": "mailun42",
+        "line": 9261,
+        "window": "Begin",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 195,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "target.mailun_mode==4&&!mailun_in_used"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "MailunIn4"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Role/window signed +/-1 and per-arm used bit agree; source removeSkill and complete regeneration/expiry/renew lifetime across modes remain unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Hutian",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "hutian2",
+        "group_parent_key": "hutian2",
+        "line": 3348,
+        "window": "Begin",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": -55,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 196,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "recipient.hutian_hold nonempty; existing hutian_owner/deposit links preserved"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Hutian"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "DamageBegin signed hp-deposit and -55 agree; loseHpBegin arm and full deposit provider lifetime are outside this Damage-unit reading.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Zuijiu",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zuijiu",
+        "group_parent_key": "boss_zuijiu",
+        "line": 7634,
+        "window": "Begin1",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 162,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_skill.rs",
+        "sha256": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+        "dispatch": "Zuijiu"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Huoshen",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "huoshen",
+        "group_parent_key": "huoshen",
+        "line": 8405,
+        "window": "Begin1",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 201,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Huoshen"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "NitaiOut",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_nitai_out",
+        "group_parent_key": "boss_nitai",
+        "line": 4899,
+        "window": "Begin1",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 202,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "NitaiOut"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "ZhaohuoSource",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zhaohuo",
+        "group_parent_key": "boss_zhaohuo",
+        "line": 4093,
+        "window": "Begin1",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 205,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_skill.rs",
+        "sha256": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+        "dispatch": "ZhaohuoSource"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F03"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Zhaohuo",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zhaohuo",
+        "group_parent_key": "boss_zhaohuo",
+        "line": 4093,
+        "window": "Begin4",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 204,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Zhaohuo"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F03"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "NitaiIn",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_nitai_in",
+        "group_parent_key": "boss_nitai",
+        "line": 4889,
+        "window": "Begin4",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 203,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "NitaiIn"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Bufo",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_bufo",
+        "group_parent_key": "boss_bufo",
+        "line": 3405,
+        "window": "Begin4",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": null,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "Bufo"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "LingquCancel",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_lingqu_cancel",
+        "group_parent_key": "boss_lingqu",
+        "line": 4425,
+        "window": "Begin4",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": -11,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 206,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_windows.rs",
+        "sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+        "dispatch": "LingquCancel"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Shuchui",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+        "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+        "source_key": "shuchui2",
+        "group_parent_key": "shuchui2",
+        "line": 2582,
+        "window": "End",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": false
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 207,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "turn.shuchui_armed && source==current && sha-like card; temporary reaction persists during use loop independently of equip loss"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Shuchui"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F04"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Paotai",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+        "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+        "source_key": "paotai3",
+        "group_parent_key": "paotai3",
+        "line": 1010,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": false
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 208,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "recipient.paotai_lv>0, existing producer level state"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Paotai"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F06"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Xixue",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+        "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+        "source_key": "xixue",
+        "group_parent_key": "xixue",
+        "line": 4744,
+        "window": "End",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 209,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "source exact Xixueguizhihuan equip, injured, sha-like existing body filter"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Xixue"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F02",
+        "F05"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Qinglong",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+        "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+        "source_key": "qinglonglingzhu",
+        "group_parent_key": "qinglonglingzhu",
+        "line": 4439,
+        "window": "End",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 216,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "source exact Qinglonglingzhu equip; elemental damage; live other target with cards"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Qinglong"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F07"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Yinzei",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_yinzei",
+        "group_parent_key": "boss_yinzei",
+        "line": 4783,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 225,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Yinzei"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F08"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Zhangwu",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zhangwu",
+        "group_parent_key": "boss_zhangwu",
+        "line": 6596,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 233,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Zhangwu"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F09"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Zlfanshi",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zlfanshi",
+        "group_parent_key": "boss_zlfanshi",
+        "line": 3225,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": null,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Zlfanshi"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F10"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Zhue",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_zhue",
+        "group_parent_key": "boss_zhue",
+        "line": 4794,
+        "window": "End",
+        "role": "global",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 235,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Zhue"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Global role/filter/two draws agree at body intent; asyncDraw versus back-to-back native draw child/hook ordering remains unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Abi",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_abi",
+        "group_parent_key": "boss_abi",
+        "line": 3149,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 236,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Abi"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F11"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Yuance",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_yuance",
+        "group_parent_key": "boss_yuance",
+        "line": 6392,
+        "window": "End",
+        "role": "global",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 237,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Yuance"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F12"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Lingqu",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_lingqu",
+        "group_parent_key": "boss_lingqu",
+        "line": 4403,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 234,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Lingqu"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Jiding",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_jiding",
+        "group_parent_key": "boss_jiding",
+        "line": 4546,
+        "window": "End",
+        "role": "global",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 243,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Jiding"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F13"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Renxing",
+      "status": "checked-agreement",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_renxing",
+        "group_parent_key": "boss_renxing",
+        "line": 7167,
+        "window": "End",
+        "role": "global",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 252,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Renxing"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Cuidui",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_cuidu",
+        "group_parent_key": "boss_cuidu",
+        "line": 6223,
+        "window": "End",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 253,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Cuidui"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F14"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Duqu",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_duqu",
+        "group_parent_key": "boss_duqu",
+        "line": 3913,
+        "window": "End",
+        "role": "player",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 261,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage.rs",
+        "sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+        "dispatch": "Duqu"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F15"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Huanxia",
+      "status": "unproved-boundary",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+        "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+        "source_key": "huanxia_expire",
+        "group_parent_key": "huanxia",
+        "line": 1964,
+        "window": "After",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": false
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 262,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "source, exact d.card==turn.huanxia_track.last.card; original active-use producer and cleanup retained"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_after.rs",
+        "sha256": "7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71",
+        "dispatch": "Huanxia"
+      },
+      "predicate_body_concordance": "No additional finite predicate/body discrepancy established in this bounded reading; qualifying limitations below remain unproved.",
+      "findings": [],
+      "unproved_source_provider_async": "DamageAfter source tuple agrees; actual event.parent.skill==huanxia is approximated by last tracked card only. Grantor/origin/generation/concurrent/nested fidelity is unproved.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Jidian",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "jidian",
+        "group_parent_key": "jidian",
+        "line": 8275,
+        "window": "After",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 271,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_after.rs",
+        "sha256": "7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71",
+        "dispatch": "Jidian"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F16"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    },
+    {
+      "effect": "Minwan",
+      "status": "concrete-defect",
+      "source": {
+        "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+        "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+        "source_key": "boss_minwan_add",
+        "group_parent_key": "boss_minwan",
+        "line": 4931,
+        "window": "After",
+        "role": "source",
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        }
+      },
+      "declaration_comparison": "Window and role agree for this finite Damage unit; Normal priority matches explicit/default source metadata (Wuxin10,Hutian-55,LingquCancel-11). This is not whole grouped-skill acceptance.",
+      "native_admission": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/event/native_damage.rs",
+        "line": 272,
+        "sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+        "qualified_effect": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback"
+      },
+      "native_body": {
+        "sealed_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/full-source/source/crates/engine-native-kernel/src/kernel/damage_after.rs",
+        "sha256": "7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71",
+        "dispatch": "Minwan"
+      },
+      "predicate_body_concordance": "Concrete differences below",
+      "findings": [
+        "F17"
+      ],
+      "unproved_source_provider_async": "Full lifecycle, cost, transient/fuel and global-source equivalence not established by read-only declaration comparison.",
+      "live_restore_consumer": "Existing shared resolution/trigger_order.rs::eligible; group/start/ready-park restore use canonical root and current immediate parent. Atomic NativeDamageSkill body finishes before children; no new tests or runtime claims from this audit."
+    }
+  ],
+  "findings": [
+    {
+      "id": "F01",
+      "effects": [
+        "Jueqing"
+      ],
+      "source_evidence": "character/yijiang.js11930-11938 has no self-target exclusion",
+      "sealed_consumer": "event/native_damage.rs::matches(Jueqing)",
+      "concrete_difference": "Native source&&!target rejects self-source damage; source replaces it with loseHp.",
+      "next_slice_counterexample_plan": "Actual Jueqing owner damages itself; distinguish HP loss from damage receipt/armor/target windows, byte/full restore before admission and child.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F02",
+      "effects": [
+        "Xingjunyan",
+        "Ciqiu",
+        "Xixue"
+      ],
+      "source_evidence": "card/swd.js4455/4744; diy.js17654 use event.card.name=sha; machine.rs::use_virtual_card uses an arbitrary physical carrier with use_as",
+      "sealed_consumer": "event/native_damage.rs Sha calculation; kernel/sha.rs emitted card; kernel/damage_flow.rs chain copy",
+      "concrete_difference": "Direct use_as Sha resolves through immediate CardUsed, but propagated root immediate parent is Damage. It falls back to physical carrier kind and can reject genuine virtual-Sha damage. Existing name-alias FireSha tests do not cover this.",
+      "next_slice_counterexample_plan": "Real use_virtual_card Sha with non-Sha carrier plus elemental conversion and linked siblings; equip Xingjunyan/Xixue or own Ciqiu. Preserve actual card meaning separately from Zuijiu immediate-parent admission; do not accept an arbitrary ancestor Sha.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F03",
+      "effects": [
+        "ZhaohuoSource",
+        "Zhaohuo"
+      ],
+      "source_evidence": "mode/boss.js4099-4105: if owner==victim, cancel; target filter accepts fire OR owner==source",
+      "sealed_consumer": "event/native_damage.rs Zhaohuo predicates; kernel/damage_skill.rs ZhaohuoSource",
+      "concrete_difference": "Self-source damage should cancel in Begin1, but native source body changes nature to Fire and delays cancellation to Begin4. Target-arm filter also omits owner==source when nature is changed back.",
+      "next_slice_counterexample_plan": "Self-source normal damage plus First Begin2/3/4 observers; cancellation must precede those. Mutate/restore actual admitted role and nature, no fake role names.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F04",
+      "effects": [
+        "Shuchui"
+      ],
+      "source_evidence": "card/swd.js2587-2591 requires !storage.shuchui2",
+      "sealed_consumer": "event/native_damage.rs::matches(Shuchui); kernel/damage.rs Shuchui",
+      "concrete_difference": "Native admission omits !shuchui_hit, allowing repeated admission/log/competition after the flag is already true. Body also rechecks physical Sha kind after context-qualified virtual-Sha admission, allowing a no-op alias.",
+      "next_slice_counterexample_plan": "Two Sha hits while same actual temp unit remains armed; second must not admit. Direct real non-Sha carrier/use_as Sha must set hit; test loss/renew/order/byte restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F05",
+      "effects": [
+        "Xixue"
+      ],
+      "source_evidence": "card/swd.js4747-4751 has no source!=target condition",
+      "sealed_consumer": "event/native_damage.rs::matches(Xixue)",
+      "concrete_difference": "Native rejects self-target Sha damage recovery while source permits it.",
+      "next_slice_counterexample_plan": "Wounded equipped owner receives self-source Sha damage via a real redirect/cause; verify damage then recovery and exact child suffix.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F06",
+      "effects": [
+        "Paotai"
+      ],
+      "source_evidence": "character/ow.js1017-1021 subtracts full trigger.num then clamps level to0",
+      "sealed_consumer": "kernel/damage.rs Paotai lv.saturating_sub(d.amount as u8)",
+      "concrete_difference": "Positive canonical amounts>=256 truncate before subtraction; level3 and amount256 leaves3 instead of0 when recipient survives.",
+      "next_slice_counterexample_plan": "Live recipient HP>256, level3, canonical256; inspect level/log and restore around the admitted body. Use checked/full-width subtraction.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F07",
+      "effects": [
+        "Qinglong"
+      ],
+      "source_evidence": "card/swd.js4441-4452 direct gainPlayerCard he",
+      "sealed_consumer": "kernel/damage.rs Qinglong; NativeDamageEffect::meta optional=false",
+      "concrete_difference": "Native chooses a random card unconditionally instead of preserving player selection/cancellation, consuming different RNG and cost trajectories.",
+      "next_slice_counterexample_plan": "Multiple hand/equip choices, choose a nonfirst card and cancellation; keep source/provider identity through pending choice/restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F08",
+      "effects": [
+        "Yinzei"
+      ],
+      "source_evidence": "mode/boss.js4788-4791 accepts source he cards and randomDiscard",
+      "sealed_consumer": "event/native_damage.rs Yinzei; kernel/damage.rs Yinzei",
+      "concrete_difference": "Native requires source hand cards, excludes equipment-only source, and deterministically discards first hand card instead of source randomDiscard.",
+      "next_slice_counterexample_plan": "Empty-handed Yinzei victim; source has only equipment, then multiple he cards; compare actual eligible zones/RNG, child/loss ordering and restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F09",
+      "effects": [
+        "Zhangwu"
+      ],
+      "source_evidence": "mode/boss.js6598-6635 direct chooseToDiscard he [1,Infinity], optional follow-up cost/damage",
+      "sealed_consumer": "kernel/damage.rs Zhangwu; matches requires source!=target",
+      "concrete_difference": "Native forces first hand discard for holder/source, omits variable he cost and cancellation, and adds a self-source exclusion absent from filter.",
+      "next_slice_counterexample_plan": "Cancel first cost, pay2 using equipment, source cancels follow-up; exact quantity/cost/loss events and restored choices.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F10",
+      "effects": [
+        "Zlfanshi"
+      ],
+      "source_evidence": "mode/boss.js3229-3238 terra remains while present; list.randomGet",
+      "sealed_consumer": "kernel/damage.rs Zlfanshi",
+      "concrete_difference": "Native clears terra after retaliation and alternates every other hit; source keeps it until temp expiry and retaliates on every later hit. Native chooses first seat instead of random.",
+      "next_slice_counterexample_plan": "Three hits in one turn and at least3 alternate targets; verify second AND third retaliation, RNG, expiry/restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F11",
+      "effects": [
+        "Abi"
+      ],
+      "source_evidence": "mode/boss.js3157 random fire/thunder",
+      "sealed_consumer": "kernel/damage.rs Abi",
+      "concrete_difference": "Native always emits Fire and does not consume the source nature RNG.",
+      "next_slice_counterexample_plan": "Seed producing Thunder; compare RNG/nature/link propagation and restored continuation. Check implicit source semantics independently before changing it.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F12",
+      "effects": [
+        "Yuance"
+      ],
+      "source_evidence": "mode/boss.js6397-6455 direct chooseControl options/cancel, judge/rejudge decision",
+      "sealed_consumer": "kernel/damage.rs Yuance",
+      "concrete_difference": "Native always takes option1 and performs an inline judge; actual cancellation/choice/rejudge trajectory is absent.",
+      "next_slice_counterexample_plan": "Cancel, select option2 and real rejudge provider; preserve all pending/cost/judgment/HP choices through restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F13",
+      "effects": [
+        "Jiding"
+      ],
+      "source_evidence": "mode/boss.js4559-4562 removes boss_jiding after useCard; grouped recover4556+",
+      "sealed_consumer": "kernel/damage.rs Jiding",
+      "concrete_difference": "Native emits virtual LeiSha but never removes the admitted Jiding definition, allowing repeated invocations. Grouped recover/provenance and friendship mode semantics are additionally unproved.",
+      "next_slice_counterexample_plan": "Two allied damage events after one Jiding activation, including dodged first virtual Sha; verify removal timing, virtual-card nature/provenance, recovery subgroup and restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F14",
+      "effects": [
+        "Cuidui"
+      ],
+      "source_evidence": "mode/boss.js6227-6239 requires target.isEnemyOf(owner), then Zhongdu and Mushengoumang draw",
+      "sealed_consumer": "event/native_damage.rs Cuidui; kernel/damage.rs Cuidui",
+      "concrete_difference": "Native only checks other living target, so allied damage can poison; source enemy condition is absent. Mushengoumang linked draw is omitted.",
+      "next_slice_counterexample_plan": "Actual team-mode allied versus enemy targets, named Mushengoumang present, poison grant/renew/loss and restored child order.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F15",
+      "effects": [
+        "Duqu"
+      ],
+      "source_evidence": "mode/boss.js3915-3922 excludes source with boss_duqu",
+      "sealed_consumer": "event/native_damage.rs Duqu; kernel/damage.rs Duqu",
+      "concrete_difference": "Native excludes self but fails to exclude a different source that also owns enabled Duqu; that source incorrectly gains shedu.",
+      "next_slice_counterexample_plan": "Both source and victim own Duqu, compare with source without Duqu; source/owner spoof atomic rejection and restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F16",
+      "effects": [
+        "Jidian"
+      ],
+      "source_evidence": "mode/boss.js8275-8305 direct optional target/judge, no anti-recursion flag",
+      "sealed_consumer": "kernel/damage_after.rs Jidian",
+      "concrete_difference": "Native auto-selects first target and uses jidian_chain to suppress recursion. A nonblack judgment can leave the flag set and suppress the next unrelated damage reaction.",
+      "next_slice_counterexample_plan": "Cancel, choose alternate target, red then unrelated damage, black nested reaction; real judge/rejudge and exactly-once restored choices.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    },
+    {
+      "id": "F17",
+      "effects": [
+        "Minwan"
+      ],
+      "source_evidence": "mode/boss.js4930-4940 only checks currentPhase==owner",
+      "sealed_consumer": "event/native_damage.rs Minwan; kernel/damage_after.rs Minwan",
+      "concrete_difference": "Native additionally rejects source==target, leaving target set empty where source initializes [owner] on self-source damage.",
+      "next_slice_counterexample_plan": "Current-turn owner damages itself and then attempts a card target; compare lock set, order and byte/full restore.",
+      "runtime_reproduced_in_this_readonly_audit": false,
+      "status": "unfixed concrete defect; no accepted variant"
+    }
+  ],
+  "limits": [
+    "All41 declaration/window/role and card-family/admission/body paths inspected; no41 mirror tests or builds.",
+    "checked-agreement only describes inspected finite declaration/predicate/body scope, not whole source/provider/async acceptance.",
+    "New findings are unfixed mandatory defects, not accepted variants. Parent must sequence next writer before ChangeHp.",
+    "Original1821/1/75 tests remain authoritative for original executed cases; these new counterexample plans were not run.",
+    "WholeC331 source262/290 remaining28+0 and golden red unchanged."
+  ]
+}

@@ -1,0 +1,14 @@
+## Review
+
+No issues found.
+
+**Fixed — The notrigger P1 is closed at plan level.** [V2](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/06933b8b-0d67-4c35-ba93-36d22bdb2b34/proposals/c29-change-hp-shared-consumer-plan-v2.md:4) explicitly preserves ordinary ChangeHp and eligible callbacks for positive submitted `damage.notrigger`, including full-armor num0. It limits suppression to the source-prescribed automatic lifecycle and damage windows, matching the previously inspected `_triggered=null` versus explicit `trigger("changeHp")` distinction.
+
+- **Correct:** Receipt, parent progress, lifecycle policy and restore checks cannot suppress the ordinary window or duplicate HP/armor/callback effects. Already-admitted children retain their continuation semantics.
+- **Correct:** The future Shangshix hand1→draw3 fixtures distinguish positive damage, full absorption and zero/prevented roots. They require real child ordering and byte-restore/fault checks without claiming execution.
+- **Correct:** The original guide, inventory and BLOCK review remain immutable. The supplement expressly supersedes both erroneous notrigger statements and qualifies bdaf as withdrawn historical identity.
+- **Correct:** The sequence retains C9d seal/review, then repair/review of Chilongya notLink, Zuijiu immediate-Sha ancestry and signed Hutian, before ChangeHp and DeathFlow. Existing Recover-caller, HLSS, provider and named-disable requirements remain in force.
+
+**Merge verdict: OK with notes — the corrected guide is ready for future implementation under Decision29.** No additional permission or version/tag reservation follows. This closes the plan finding only; it accepts no code, full C331, I02 or all37-source equivalence.
+
+I read the supplement and parent audit; their reported hash verification was not independently recomputed here. No tests, builds, network, JavaScript execution, live-C access or writes occurred. Residual risk remains in the unimplemented callback ordering and production caller migration.

@@ -1,0 +1,163 @@
+{
+  "sealed_utc": "2026-10-31T15:33:35.454216+00:00",
+  "api_checkpoint_utc": "2026-10-31T15:33:03.587644+00:00",
+  "run_id": 41214274772,
+  "head_sha": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "run_status": "in_progress",
+  "run_conclusion": null,
+  "lease_release": {
+    "at_utc": "2026-10-31T15:19:09.396745+00:00",
+    "lease": "READONLY publication lease RELEASED; no Main writes; all further work onlyprivate CI/API/logs",
+    "head_sha": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "push_exit": 0,
+    "push_attempts": 1,
+    "remote_refs": {
+      "refs/heads/native-convergence": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+      "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+    },
+    "error": null,
+    "preservation_error": null,
+    "push_completed_utc": "2026-10-31T15:19:09.395399+00:00"
+  },
+  "push_exit": 0,
+  "job_statuses": [
+    {
+      "id": 124575425092,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425265,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425270,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425298,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124575425307,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425308,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124575425342,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425343,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425348,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425410,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "immutable_evidence_files": [
+    {
+      "path": "push-stage/result.json",
+      "bytes": 505276,
+      "sha256": "15ffcf673f36c6067c2033f37b7ee773f8895cfe42383890467c52f28e0162e4"
+    },
+    {
+      "path": "push-stage/push.stdout",
+      "bytes": 524,
+      "sha256": "762b6a28fc908314d2c6c91f89397238b09769357fe080544bf711fe187ae817"
+    },
+    {
+      "path": "push-stage/push.stderr",
+      "bytes": 20337,
+      "sha256": "3bea9e080ce7227fcbde6927411166c6c8f23fc910ada2f0f4cff00c14012e2c"
+    },
+    {
+      "path": "push-stage/scope.json",
+      "bytes": 3851,
+      "sha256": "cfb2997f63ace76c62d63a6b3ab8d6ff2bb5a4a44037cab6b2d391986399781b"
+    },
+    {
+      "path": "push-stage/lease-release.json",
+      "bytes": 535,
+      "sha256": "d91a25ce732dcea02355c3023f9f95be4c0def03bcaaf3fc9ea8701b06f66e5b"
+    },
+    {
+      "path": "push-stage/push-copy-manifest.json",
+      "bytes": 6128,
+      "sha256": "4bf7f29ae4f8d57bfa54d300a03c0183cdbed0e3305175afcb65a5a4b1a572c3"
+    },
+    {
+      "path": "push-stage/accepted-commit.raw.json",
+      "bytes": 1185,
+      "sha256": "53fbc1da03721b054c69be33b82922ed1ff9cd5e2b93c697e453962594752771"
+    },
+    {
+      "path": "push-stage/stage-plan.raw.json",
+      "bytes": 1301202,
+      "sha256": "7b1b801ff8845560b5fbffb61b13bdb79e19742f9bfe60b86b160fe22b396a85"
+    },
+    {
+      "path": "push-stage/stage-audit.raw.json",
+      "bytes": 90969,
+      "sha256": "2b13c6f21a51e4bea60d77ed3619db81b3401977fce22aa7eb4430776ea28eb6"
+    },
+    {
+      "path": "ci-stage/checkpoint-run.stdout",
+      "bytes": 15251,
+      "sha256": "93f59b0e0f8eb392f4cb7e8bdc637e3b9d8fd48eb80272421ede0dbc42694851"
+    },
+    {
+      "path": "ci-stage/checkpoint-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ci-stage/checkpoint-jobs.stdout",
+      "bytes": 30743,
+      "sha256": "5225c0369acde06ea6cbda1f38b30df827d9b8834f5449fc7438b153d5b5cc67"
+    },
+    {
+      "path": "ci-stage/checkpoint-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ci-stage/checkpoint-artifacts.stdout",
+      "bytes": 788,
+      "sha256": "adcff4a7bde18b5aa60592bf8e30ad315bf09fc763865da56b4b49d119a52b20"
+    },
+    {
+      "path": "ci-stage/checkpoint-artifacts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "live_stream_index_qualification": "Original ci-stage/checkpoint-copy-manifest.json isdated, includesthen-live watch/state. Thisenvelope bindsimmutable checkpointAPI/push/leasefiles only; noMainread."
+}

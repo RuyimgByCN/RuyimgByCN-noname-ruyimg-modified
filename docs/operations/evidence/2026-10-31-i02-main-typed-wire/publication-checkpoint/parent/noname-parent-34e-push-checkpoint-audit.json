@@ -1,0 +1,124 @@
+{
+  "utc": "2026-10-31T15:41:11.204301+00:00",
+  "status": "PUSH_AND_LEASE_INDEPENDENT_RETAINED_CHECKPOINT_PASS_FINAL_CI_PENDING",
+  "evidenceRoot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-34e83f05-i02-xs39v_py",
+  "freshCheckpointImmutableFiles": 15,
+  "checkpointUtc": "2026-10-31T15:33:03.587644+00:00",
+  "run": 41214274772,
+  "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "pushCompleted": "2026-10-31T15:19:09.395399+00:00",
+  "leaseRelease": "2026-10-31T15:19:09.396745+00:00",
+  "remoteRefsAtProducerRelease": {
+    "refs/heads/native-convergence": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "windowsCheckpoint": [
+    {
+      "job": "desktop-windows-latest",
+      "jobConclusion": null,
+      "checkout": [
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T15:19:14Z",
+          "completed_at": "2026-10-31T15:20:27Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "pending",
+          "conclusion": null,
+          "number": 22,
+          "started_at": null,
+          "completed_at": null
+        }
+      ]
+    },
+    {
+      "job": "build-windows-latest",
+      "jobConclusion": "success",
+      "checkout": [
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-10-31T15:19:13Z",
+          "completed_at": "2026-10-31T15:20:10Z"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12,
+          "started_at": "2026-10-31T15:24:29Z",
+          "completed_at": "2026-10-31T15:24:31Z"
+        }
+      ]
+    }
+  ],
+  "jobs": [
+    {
+      "id": 124575425092,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425265,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425270,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425298,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124575425307,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425308,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124575425342,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425343,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425348,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124575425410,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null
+    }
+  ],
+  "qualification": "Retained immutable push/API checkpoint independently hashed and parsed; no currentliveAPI/remote query yet. In-progress checkpoint notfinalCI, no installer/device/wholeGoal claim."
+}

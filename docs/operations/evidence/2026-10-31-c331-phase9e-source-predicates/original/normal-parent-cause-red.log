@@ -1,0 +1,20 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.62s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission' (26976973) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:416:5:
+assertion failed: Engine::restore_with_extensions(bad, packs).is_err()
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission ... FAILED
+
+failures:
+
+failures:
+    c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 215 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9e_chain_cause", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.6822669579996727, "disk_free_bytes": 135798321152}

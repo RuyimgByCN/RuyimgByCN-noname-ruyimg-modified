@@ -1,0 +1,111 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            101,
+            51,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 55,
+        player: 0,
+        targets: [
+            1,
+            2,
+            3,
+        ],
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 1,
+        prompt: "nullify_window",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:70",
+        ],
+    },
+    CardDiscarded {
+        player: 1,
+        cards: [
+            70,
+        ],
+    },
+    ChoiceOpened {
+        id: 2,
+        observer: 2,
+        prompt: "nullify_window",
+    },
+    ChoiceAnswered {
+        id: 2,
+        options: [
+            "card:73",
+        ],
+    },
+    CardDiscarded {
+        player: 2,
+        cards: [
+            73,
+        ],
+    },
+    ChoiceOpened {
+        id: 3,
+        observer: 1,
+        prompt: "aoe_response",
+    },
+    ChoiceAnswered {
+        id: 3,
+        options: [
+            "card:28",
+        ],
+    },
+    CardDiscarded {
+        player: 1,
+        cards: [
+            28,
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            0,
+        ),
+        target: 3,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            55,
+        ),
+    },
+    DamageDealt {
+        source: Some(
+            0,
+        ),
+        target: 2,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            55,
+        ),
+    },
+]

@@ -1,0 +1,14 @@
+{
+  "recorded_utc": "2026-10-31T15:46:37.957054+00:00",
+  "scope": "Private derived parser correction only; no raw CI/API/log rewrite or product rerun",
+  "first_pass": "verified-publication-ci-summary.json used latest Running header; aggregateRust/CI results accurate but interleavedstderr misattributed API4 toengine_cli andoldreader3 toengine_wasm, reportedincorrectselected5. Firstpasssource/summary/copymanifest retained asdatednon-authoritative interpretation.",
+  "rejected_selfcheck": {
+    "assertion": "Cargo header count == result count == running-N declaration count",
+    "headers": 167,
+    "results": 167,
+    "running_declarations": 174,
+    "result": "failed: extra running-N lines are not suite boundaries; do not use them"
+  },
+  "corrective_evidence": "All167Cargo headers/results FIFO match; selectedAPI4+protocol1+presentation4+oldreader3=12. Counts derivedfromrawcontexts, notfilledfromlocalacceptance.",
+  "current_authority": "verify-publication-ci-v2.py -> verified-publication-ci-summary-v2.json + copy-manifest-v2.json + finalartifact-index-seal.json; firstpassandcheckpointliveindices aredated, notcurrentcopyauthority."
+}

@@ -1,0 +1,75 @@
+{
+  "utc": "2026-10-31T14:50:52.147118+00:00",
+  "groups": {
+    "Before": [
+      "Jueqing",
+      "Wuxin",
+      "Jidong",
+      "Chengxin"
+    ],
+    "Begin": [
+      "Chilongya",
+      "Xingjunyan",
+      "Liangou",
+      "Feiren",
+      "Ciqiu",
+      "Duwen",
+      "MailunOut3",
+      "MailunIn3",
+      "MailunOut4",
+      "MailunIn4",
+      "Hutian"
+    ],
+    "Begin1": [
+      "Zuijiu",
+      "Huoshen",
+      "NitaiOut"
+    ],
+    "Begin4": [
+      "Zhaohuo",
+      "NitaiIn",
+      "Bufo",
+      "LingquCancel"
+    ],
+    "End": [
+      "Shuchui",
+      "Paotai",
+      "Xixue",
+      "Qinglong",
+      "Yinzei",
+      "Zhangwu",
+      "Zlfanshi",
+      "Zhue",
+      "Abi",
+      "Yuance",
+      "Lingqu",
+      "Jiding",
+      "Renxing",
+      "Cuidui",
+      "Duqu"
+    ],
+    "After": [
+      "Huanxia",
+      "Jidian",
+      "Minwan"
+    ]
+  },
+  "helpers": {
+    "Jidong": "ow/jidong2",
+    "Chengxin": "xianjian/chengxin2",
+    "Chilongya": "card-swd/chilongya",
+    "Xingjunyan": "card-swd/xingjunyan",
+    "Liangou": "ow/liangou2",
+    "MailunOut3": "swd/mailun31",
+    "MailunIn3": "swd/mailun32",
+    "MailunOut4": "swd/mailun41",
+    "MailunIn4": "swd/mailun42",
+    "Hutian": "swd/hutian2",
+    "Shuchui": "card-swd/shuchui2",
+    "Paotai": "ow/paotai3",
+    "Xixue": "card-swd/xixue",
+    "Qinglong": "card-swd/qinglonglingzhu",
+    "Huanxia": "swd/huanxia_expire"
+  },
+  "change_hp": "explicit next bounded slice per supervisor; genuine ChangeHp consumer absent"
+}

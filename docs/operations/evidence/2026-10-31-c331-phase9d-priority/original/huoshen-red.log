@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running tests/groups/kernel.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/kernel-b09703a09ed5dfc8)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 435 filtered out; finished in 0.00s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "kernel", "c9d_first_zero", "--", "--nocapture"], "exit": 0, "locked_seconds": 0.2502059579710476, "disk_free_bytes": 146417016832}

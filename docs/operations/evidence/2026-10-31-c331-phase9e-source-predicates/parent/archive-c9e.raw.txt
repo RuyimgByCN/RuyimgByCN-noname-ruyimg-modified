@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-31T16:55:40.549419+00:00",
+  "mainHead": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "scope": "Parent postpublication docs/evidence only, C9e219/14 source seal + original7333artifacts and separate READONLY41sourceaudit and BLOCKreview. No CproductionMainimport/source/generated/default/version/lock changes. Original failed attempts preserved, profile/cache/privatefullsession/binaries excluded by asserted directory classification.",
+  "files": 7351,
+  "sourceBytes": 172197746,
+  "archiveBytes": 170935878,
+  "acceptance": "Fiveboundedcounterexamplesfixed/reviewed; new17sourcefindinggroups + chainbirthP1 and12unprovedrows remainmandatory; no goldenrerecord/C331/Goal closure."
+}

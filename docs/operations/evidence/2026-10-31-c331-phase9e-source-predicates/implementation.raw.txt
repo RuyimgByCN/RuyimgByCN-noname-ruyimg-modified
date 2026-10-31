@@ -1,0 +1,51 @@
+2026-10-31 C331 phase9e — actual native damage predicates and parent/cause repair; independent review required.
+Whole Damage/C331/Main merge remains BLOCK: source262/290, remaining28, +0. No golden rerecord, SDK/37-source parity or ChangeHp/Death acceptance.
+Evidence root: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e`.
+Started from verified C9d217/18, manifest0d458377…/487bb400… and preserved all2319 artifacts, C9c5215, older seals and initial failures without rewrites.
+Machine detail: `source-predicate-repair-and-remaining-boundaries.json` pins source/package hashes, all41 existing native units, repaired branches, live/restore consumers, exact tests and mandatory remaining mechanisms.
+
+| Concrete defect | Resulting repair and actual evidence |
+|---|---|
+| Ciqiu wrong Begin window | Declaration/body now Begin1. First num1→0 leaves HP2, preserves the skill and dying marker. Initial HP1!=2 RED retained. |
+| Ciqiu/Xixue elemental admission/body mismatch | One qualified Sha-family admission governs atomic execution. FireSha/LeiSha quantity/removal/recovery positives and restored children pass; initial HP1!=0 and HP2!=3 REDs retained. |
+| Chilongya lacks notLink | Direct linked victim still gets bonus2; actual propagated child carries2 without another bonus. Initial child HP1!=2 RED retained; real equipment qualification and removal/restore rejection pass. |
+| Zuijiu lacks immediate Sha parent | Shared eligibility resolves canonical root and its actual adjacent parent CardUsed Intrinsic context, using immutable effective kind/use_as. Same-card chain with Sha ancestor, real Duel, no parent and wrong owner exclude; direct Sha/family/alias positives pass. Initial HP2!=3 RED retained. |
+| Hutian clamps signed quantity | Checked wide subtraction and checked i32 storage preserve hp2−deposit3=−1. Negative/zero/positive/cancelled paths, later ordinary filters, Zero VM signed amount, receipts, HP/log/RNG and byte/full restore pass. Initial0!=-1 RED retained. |
+| Actual admitted definition aliases | Ciqiu removes existing NativeDamageSkill.def directly; additional alias-removal RED retained. Feiren/Duwen bodies consume already-qualified admission rather than querying canonical names. |
+| Forged propagated cause | Parent adjacency and from_chain must agree with the actual Chain transition; parent must be elemental, non-chain, positive running committed damage. At child Start, carried amount/nature/source/card and distinct target agree. Normal-parent acceptance RED retained. |
+| Duwen inherited notLink deficit | Shared predicate now excludes propagation, matching ow.js1548. Replaced a removed-comment assertion with real direct-linked/propagated HP/log regression; affected four source tests pass. |
+
+Source meaning: Liuli game.js32254 and Core gameEvent.ts1058 define notLink by immediate `_lianhuan`/`_lianhuan2` parent, not the victim's current linked state.
+Native DamageFlow is the genuine chain emitter; existing persisted Frame.parent/from_chain/progress/receipt facts establish that cause. No invented cause flag, parent name, registry, scheduler or speculative context framework was added.
+Native selection, Order choice, start, helper refresh and ready-park/restore qualification share the same existing frames/current-frame consumer. An arbitrary Sha ancestor cannot qualify a propagated root.
+Ciqiu+Zuijiu now expose a real same-owner Begin1 Order choice. Both choices survive byte/full restore and produce the correct different Ciqiu removal outcomes.
+Actual atomic units finish before their children; completed bodies are neither repeated nor requalified during emitted child continuation. Existing tag85/codec/hash/inventory remain synchronized; no new persisted field/tag/schema/ABI/WS number.
+Private331/NGSA106/ABI758/WS6 and public format/API1 remain unchanged; future332/106→R05333/107 ordering remains unchanged. NonDamage scheduling and approved HP/armor bookkeeping were preserved.
+Final focused native predicate group: **18 passed**; affected Duwen group4 passed; kernel signed-context opcode probe passed. Source-qualified package fixtures include actual wudian/ow/swd data and explicit immutable aliases.
+Fuel1 cases byte-decode and typed-restore every suspension, compare complete states/RNG/cost/log suffixes against uninterrupted execution, and retain only the known auth_generation restore increment as a regression comparison adjustment.
+Final raw predicate evidence: `checks-final4/predicate-traces/` contains162 complete JSON/snapshot/archive capture triples, including actual parent/chain context, native admissions, negative amounts, ordering and final states.
+Final full kernel/content/facade: **1821 passed / 1 failed / 75 ignored**, exit101; sole failure is replay_scenarios_match_golden with twelve original expected hashes unchanged.
+Independent owned-target Gate1b with `RUSTFLAGS=-Dwarnings --all-targets` passed. Cap unit2, maintained-source9035 and layering0 passed.
+Every final4 command asserts the complete219-source manifest before and after execution; exact commands/targets/log hashes: `command-source-bindings.json`; raw results: `checks-final4/check-results.json`.
+Initial semantic REDs, compiler/setup mistakes, wrong card fixture, open-segment comparison error, zero-draw probe trap, earlier frozen producers and old comment-test failure remain preserved; none substitutes for final-source results.
+Golden supplement: `golden-business-and-outcome-dispositions.json` compares362 paired captures across12 scenarios against the retained accepted-C8 positive producer; C8 was not rebuilt or rerun.
+Eleven scenarios retain equality of complete observed Core/log/RNG/all seat views/projected choices/referee choice; chain retains the source-supported damage-record-before-own-unlink difference at0007-after.
+Chain input remains actor0/revision3/dedup163/card95→[1]; old event11 prematurely unlinks player2, current records DamageDealt(target2,1) before player2's own unlink.
+Outcome counts:187 boundaries without a command outcome,139 Accepted,32 Pending,4 Rejected. Discriminants, complete Pending payloads and complete rejection reasons agree; Accepted's exact32-byte disputed hash is retained separately.
+No unknown golden fields were normalized. Full raw scheduling/archives remain evidence; no arbitrary transient/fuel/general equivalence or privacy conclusion follows from matching errors.
+Remaining mandatory mechanisms: genuine ordinary ChangeHp consumer for HLSS/eight boss gates/Shangshix/DVa, then reviewed DeathFlow8791/provider/LossEnd and wholeSDK/source acceptance.
+Future positive damage.notrigger must still run ordinary ChangeHp, including armor leaving HP delta0. This phase did not introduce or relabel that missing mechanism; damage lifecycle suppression does not authorize suppressing it.
+Existing deterministic AI/judgment/optional-callback approximations and broader provider lifetimes remain unproved; this repair is not whole upstream rule equivalence.
+Checkpoint20 was early15:50:01Z,12 files, focused12+signed-unit green, reverse-checkPASS: manifestab978c3b1a7bca260522f6accf1ceafcdfce4a24f84c23054ed62f717a298dee.
+Final4 frozen16:10:21Z; final producers completed before16:12:41Z, source/protection seal16:14:06Z. No new heavy producer after cutoff; no active/queued owned producer remains.
+All heavy checks used the pinned d7f helper/original device16777231 inode620205209 lock, offline/jobs2/incremental0/default profiles and disk>=3GiB. No signals, memory caps, target cleanup or broad campaigns.
+Main remained read-only at corrected34e83f0550bb70ef4af6083697428de7be2f02f8/tree22e6eab72d104baf7a658d5ff2d832128ac32e4a, parentd07; withdrawn bdaf local ref and non-ancestry verified.
+Exact Own6/I02_30/CI/generated/schema receipts stay separate from original31867 baseline; defaultdist37, private generated12, originalC6_140, hooks and old330 reader pins preserved. Parent publication/CI receipt is copied, not borrowed as C verification.
+Private HEAD stays5fc, staging empty, no commit/push/Main code import. Exact audit: `protected-after.json`; final counts/hashes: `results-bound.json`.
+Increment14 manifest: `7e22da5716d417150e058c6f94695bffc78a64bf67f02b6a08e98deec384b8b7`.
+Increment tar: `f5f0622957b940aa1496ffa0921b233bc9d4fd6e32f3bb31383ccd7ec9140d5d`; patch: `69fa58e62e8d6363be43a523db0ec2af8fcddf451fda2da11522ef9cb515dd0d`.
+Composed219 manifest: `578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753`.
+Composed tar: `17290b69a531cab569fadb6222340755000e30f0fea96b930e903433455620e3`; patch: `9320411f48ca4a2527c59d86f933ff0b92935735e160ab9af0bea6716025c0b8`.
+Both patches reverse-check; immutable materialized snapshots: final-freeze4/source/ and full-source/source/. All phase9e evidence is indexed by artifact-index.json and artifact-index.sha256.
+Next step: independent review of14/219, actual source/cause/alias regressions and twelve dispositions before the genuine ChangeHp slice. No source predicate repair authorizes golden rerecording by itself.
+Skipped broad WASM/UI/workspace campaigns, C8 producer reruns, golden rerecording and ChangeHp/Death implementation. Golden gate and remaining mandatory mechanisms keep Damage/C331 BLOCKED.

@@ -1,0 +1,137 @@
+{
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/final-freeze4/complete-source-manifest.json",
+  "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+  "increment_manifest_sha256": "7e22da5716d417150e058c6f94695bffc78a64bf67f02b6a08e98deec384b8b7",
+  "before_and_after_each_producer_asserted": true,
+  "all_current_source_bytes_equal": true,
+  "commands": [
+    {
+      "name": "predicate-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "c331_source_predicates",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 3.2711429595947266,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "386bc936e2f98aa3431b160772a49a96f468dddd1f78c21bfd1c30cc581ed09e"
+    },
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 50.98133087158203,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "b9db68399aad04f19a3444c9c255e1ee78c04797f8e62fe9ab581fded33d221c"
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 8.06315279006958,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "48de7a53c0d046c73770ac2e257bdc57ae46200cbfebec97c17c251f133e679a"
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 0.6683900356292725,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "decd0f4a5d482fa5864c617237123081435f80bc0c373539f6eb83d3964838fb"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.09808802604675293,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "f300775d76e9175ec67848fc12137137b04adee02deaf5b23f43049fb64ba912"
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.491582870483398,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "ed649b657f170b87851f55145173b5f85b267be5c1dc57769de5cb3a3ce6e1dd"
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.16567611694335938,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "4c21fe16061e79e484b0f3f0158c8ac7453f33037ff152eef18d01c2789ecf74",
+      "log_sha256": "d9196275edaa78a12bdab93584b49b882c78972fd97da7dd356a23cf4138695e"
+    }
+  ]
+}

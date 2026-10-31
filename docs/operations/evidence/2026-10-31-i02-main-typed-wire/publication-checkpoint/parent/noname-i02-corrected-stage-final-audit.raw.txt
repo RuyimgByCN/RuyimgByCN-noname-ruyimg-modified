@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-31T15:13:59.977571+00:00",
+  "status": "PASS_CORRECTED_STAGED_TREE_BLOBS_MODES_AND_EXCLUSIONS",
+  "tree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+  "prospectiveParent": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "withdrawnLeaf": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+  "protectedLocalRef": "refs/heads/local-evidence/i02-bdaf-unpublished-profile",
+  "files": 3433,
+  "bytes": 105988114,
+  "allBlobsModesExact": true,
+  "495TrackingRemovedPhysicalFilesRetained": true,
+  "552ExcludedLocalAliasesRetained": true,
+  "noBrowserProfileOrGeneratedBinaryPathsInNewTree": true,
+  "original31ProductionBlobBytesUnchanged": true,
+  "indexSha256": "38b98518003684be99b9f72ed492935a2f93c5bb18aa9de579f0e63aa621ac74",
+  "historyPlan": "Normal amend owninvalidunpublishedleaf, preservingbadprotectedref+parentd07+allpublishedancestry; no reset/clean/stash/force/broadfilter. No runtimecheckrerunsnecessary."
+}

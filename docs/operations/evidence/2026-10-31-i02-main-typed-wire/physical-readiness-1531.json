@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-31T15:31:55.196341+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-readiness-34e-uekou1cn",
+  "source": "local accepted34e83f0550bb70ef4af6083697428de7be2f02f8, normalpublication/CI pending; Mainreadonlylease70026df3 respected",
+  "commands": {
+    "android": {
+      "argv": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "seconds": 0.01574070897186175,
+      "timedOut": false,
+      "stdoutSha256": "36f15c2fe32964a6fbe902e914a47739d4e6304b0d3e812bf08096ff0419b7ae",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "apple": {
+      "argv": [
+        "xcrun",
+        "xcdevice",
+        "list",
+        "--timeout",
+        "10"
+      ],
+      "exit": 0,
+      "seconds": 10.885511916014366,
+      "timedOut": false,
+      "stdoutSha256": "7e070dcfa17ac77714b2f4bb31eb5581eb9d8f3414f0bcaf99340cd481faeea4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "authorized_Android_devices": 0,
+  "Apple_valid_JSON": true,
+  "physical_iPhone_count": 1,
+  "available_physical_iPhone_count": 0,
+  "qualification": "Readiness only; no install/pairing/TCC/permissions/windows/game/hearing/thermal action. Raw device identifiers private, no real-platform acceptance."
+}

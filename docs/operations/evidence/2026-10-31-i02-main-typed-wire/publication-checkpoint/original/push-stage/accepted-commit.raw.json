@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-31T15:14:33.415602+00:00",
+  "status": "CORRECTED_LOCAL_ACCEPTANCE_COMMITTED_NOT_YET_PUBLISHED",
+  "commit": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "tree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+  "parent": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "withdrawnLeaf": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+  "withdrawnLeafProtectedLocalRef": "refs/heads/local-evidence/i02-bdaf-unpublished-profile",
+  "withdrawnLeafNotAncestor": true,
+  "publishedD07FullAncestryPreserved": true,
+  "normalCommitHooksNotBypassed": true,
+  "files": 3433,
+  "bytes": 105988114,
+  "productionPaths": 31,
+  "excludedLocalAliasesRetained": 552,
+  "trackingRemovedOnly": 495,
+  "trackedAndStagingClean": true,
+  "stageAudit": "/tmp/noname-i02-corrected-stage-audit.json",
+  "review": "2353a0eb-d8c7-40c1-96da-76a6ba367e7c",
+  "publication": "Needsfreshguard/normal25pushproposedthisSHAexpectedOldd07; earlierbdafproposalwithdrawnbeforeanypushnetwork",
+  "qualification": "No reset/clean/stash/force/broadfilter/physicaldeletion; onlyowninvalidunpublishedleafamendedwithprotectedoldref. Source31/runtimechecksunchanged, no audio/fullI02/Core331/Windowsgreen claim."
+}

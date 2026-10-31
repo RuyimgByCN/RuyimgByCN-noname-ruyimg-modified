@@ -1,0 +1,33 @@
+{
+  "utc": "2026-10-31T15:43:17.455382+00:00",
+  "status": "NORMAL_PUBLICATION_INDEPENDENT_CHECKPOINT_PUSH_AUDIT_PASS_FINAL_CI_PENDING",
+  "sourceRoot": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-34e83f05-i02-xs39v_py",
+  "parentReadRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-34e-push-i4n1a0vd",
+  "freshPushFiles": 36,
+  "selftests": 8,
+  "guardSha256": "0fdec5de034827b180b1b9295716e00ce2ada33a1a54e352c60091948af9713b",
+  "originalHookUnchanged": true,
+  "rawLogicalFlagsUntrackedBeforeImmediateAfterExact": true,
+  "excluded552AndWithdrawnLeafBoundaryPass": true,
+  "files": 3433,
+  "bytes": 105988114,
+  "pushExit": 0,
+  "pushAttempts": 1,
+  "pushFinished": "2026-10-31T15:19:09.395399+00:00",
+  "pushSecondsIncludingQueue": 39.27421170799062,
+  "writingObjectsPrinted": [
+    [
+      "2082",
+      "2082",
+      "25.88"
+    ]
+  ],
+  "normalFullAcceptedAncestryOnly": true,
+  "freshParentRemoteRefs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "34e83f0550bb70ef4af6083697428de7be2f02f8"
+  },
+  "liveRemoteExit": 0,
+  "newCI": 41214274772,
+  "qualification": "Parent fresh immutable push files/gzip/selftests/scope/ancestry/index comparison plus one independent current remote query. Printed MiB rounded not exact wire. CI checkpoint running isnotfinal acceptance; no rerun/watch/dispatch or product/test/target changes."
+}

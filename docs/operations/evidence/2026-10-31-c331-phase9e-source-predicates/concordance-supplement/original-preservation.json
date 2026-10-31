@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-31T16:34:31.560436+00:00",
+  "original_index_sha256": "ffc132bb84468ac24f31f0e7ed99dfc3695f2626ecca4b3c4d6cff61cb5a893a",
+  "artifacts_checked": 7333,
+  "original_external_outputs": [
+    {
+      "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/0b7ce162-d228-460e-a9c9-7fb28e076018/implementation/c331-phase9e-source-predicate-repair.md",
+      "sha256": "8a576676e38e5c04f56d45cba004ed3abece45236a7544f5e7309d49e2ebda74",
+      "lines": 51
+    }
+  ],
+  "source_manifest_sha256": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "sources_checked": 219,
+  "original_and_live_source_hashes_equal": true,
+  "mismatches": [],
+  "no_staged_files": true,
+  "no_tests_builds_network_or_device_operations": true
+}

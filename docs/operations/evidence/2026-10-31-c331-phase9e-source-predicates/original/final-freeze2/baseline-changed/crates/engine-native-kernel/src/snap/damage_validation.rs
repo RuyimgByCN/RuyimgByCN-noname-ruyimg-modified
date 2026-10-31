@@ -1,0 +1,139 @@
+//! Damage receipt, progress, child ancestry and continuation must describe one execution.
+use super::*;
+use crate::event::{
+    DamageData, DamageOutcome as O, DamageProgress as P, DamageWindowKind as W, Frame, Stage,
+};
+
+pub(super) fn check_settlement(d: &DamageData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+    let s = &d.settlement;
+    let receipt = s.committed_damage.is_some();
+    if s.committed_damage == Some(0) || s.hp_loss > s.committed_damage.unwrap_or(0) {
+        return Err(SnapshotError::BadTag("damage_settlement", 0));
+    }
+    let post = matches!(
+        s.progress,
+        P::HpCommitted { .. }
+            | P::TargetDamage { .. }
+            | P::DyingPending { .. }
+            | P::DyingDone { .. }
+            | P::Source { .. }
+            | P::End { .. }
+            | P::After { .. }
+            | P::Chain { .. }
+    );
+    let valid = match s.outcome {
+        O::Running => {
+            if receipt {
+                post
+            } else {
+                s.progress.is_pre_hp()
+            }
+        }
+        O::Completed => receipt && s.progress == P::Done,
+        O::Cancelled => {
+            matches!(s.progress, P::CancelledPending | P::Stopped) || s.progress.window().is_some()
+        }
+        O::ReplacedByLoseHp => !receipt && (s.progress.is_pre_hp() || s.progress == P::Stopped),
+        O::Zero => matches!(s.progress, P::ZeroPending | P::Stopped),
+    };
+    if !valid || (!receipt && post) || (receipt && s.progress.is_pre_hp()) {
+        return Err(SnapshotError::BadTag("damage_outcome_progress", 0));
+    }
+    if s.progress.chain_eligible() == Some(true)
+        && (d.from_chain || d.nature == crate::event::DamageNature::Normal)
+    {
+        return Err(SnapshotError::BadTag("damage_chain_eligibility", 0));
+    }
+    if let P::Chain { remaining } = &s.progress {
+        super::validation::check_pids(remaining, b)?;
+        let unique: std::collections::BTreeSet<_> = remaining.iter().collect();
+        if unique.len() != remaining.len()
+            || remaining.contains(&d.target)
+            || (!remaining.is_empty()
+                && (d.from_chain || d.nature == crate::event::DamageNature::Normal))
+        {
+            return Err(SnapshotError::BadTag("damage_chain_targets", 0));
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), SnapshotError> {
+    if let EventData::DamageWindow { root, window } = &f.data {
+        let parent = res
+            .stack
+            .iter()
+            .find(|p| p.id == *root)
+            .ok_or(SnapshotError::BadTag("damage_window_root", *root as u64))?;
+        let EventData::Damage(d) = &parent.data else {
+            return Err(SnapshotError::BadTag("damage_window_root_type", 0));
+        };
+        if f.parent != Some(*root) || *root == f.id || parent.stage != Stage::Intrinsic {
+            return Err(SnapshotError::BadTag("damage_window_ancestry", 0));
+        }
+        let trigger_parks = res
+            .parks
+            .iter()
+            .filter(|p| matches!(p.slot,crate::resolution::Slot::Trigger{frame}if frame==f.id))
+            .count();
+        let intrinsic_park = res
+            .parks
+            .iter()
+            .any(|p| matches!(p.slot,crate::resolution::Slot::Intrinsic{frame}if frame==f.id));
+        let reachable = match f.stage {
+            Stage::Commit | Stage::Done => !f.planned && f.queue.is_empty() && trigger_parks == 0,
+            Stage::AfterTriggers => {
+                let orders=res.parks.iter().filter(|p|matches!(&p.machine,MachineSnapshot::TriggerOrder{frame,..}if *frame==f.id)).count();
+                if f.planned {
+                    orders == 1 || (orders == 0 && trigger_parks == 0 && f.queue.is_empty())
+                } else {
+                    f.queue.is_empty() && trigger_parks == 0
+                }
+            }
+            _ => false,
+        };
+        if !reachable || f.intrinsic_done || intrinsic_park {
+            return Err(SnapshotError::BadTag("damage_window_stage", 0));
+        }
+        let terminal = matches!(
+            (window, d.settlement.outcome, &d.settlement.progress),
+            (W::Zero, O::Zero, P::Stopped) | (W::Cancelled, O::Cancelled, P::Stopped)
+        );
+        if !terminal && d.settlement.progress.window() != Some(*window) {
+            return Err(SnapshotError::BadTag("damage_window_progress", 0));
+        }
+    }
+    if let EventData::Dying { player, .. } = &f.data {
+        if let Some(parent) = f
+            .parent
+            .and_then(|id| res.stack.iter().find(|parent| parent.id == id))
+        {
+            if let EventData::Damage(d) = &parent.data {
+                if *player != d.target || !matches!(d.settlement.progress, P::DyingPending { .. }) {
+                    return Err(SnapshotError::BadTag("damage_dying_binding", 0));
+                }
+            }
+        }
+    }
+    if let EventData::Damage(d) = &f.data {
+        if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
+            return Err(SnapshotError::BadTag("damage_root_stage", 0));
+        }
+        let drivers = res
+            .parks
+            .iter()
+            .filter(|p| matches!(p.machine,MachineSnapshot::DamageFlow{root}if root==f.id))
+            .count();
+        let terminal = matches!(d.settlement.progress, P::Done | P::Stopped);
+        if drivers > 1
+            || (d.settlement.progress != P::Start && !f.intrinsic_done && drivers != 1)
+            || (f.intrinsic_done && !terminal)
+        {
+            return Err(SnapshotError::BadTag("damage_root_continuation", 0));
+        }
+        if f.stage == Stage::Done && (!terminal || !f.intrinsic_done || drivers != 0) {
+            return Err(SnapshotError::BadTag("damage_finished_continuation", 0));
+        }
+    }
+    Ok(())
+}

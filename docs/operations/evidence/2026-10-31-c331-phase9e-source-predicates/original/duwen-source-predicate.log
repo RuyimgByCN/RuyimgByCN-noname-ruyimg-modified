@@ -1,0 +1,16 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.83s
+     Running tests/groups/nc08_upstream_a_k.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc08_upstream_a_k-3f10a832cbb13d19)
+
+running 4 tests
+test nc08_upstream_duwen::upstream_duwen_requires_the_skill ... ok
+test nc08_upstream_duwen::upstream_duwen_equal_hands_adds_one_damage ... ok
+test nc08_upstream_duwen::upstream_duwen_unequal_hands_no_bonus ... ok
+test nc08_upstream_duwen::upstream_duwen_notlink_difference_is_fixed ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 135 filtered out; finished in 0.00s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08_upstream_a_k", "nc08_upstream_duwen", "--", "--nocapture"], "exit": 0, "locked_seconds": 7.866915083024651, "disk_free_bytes": 134526377984}

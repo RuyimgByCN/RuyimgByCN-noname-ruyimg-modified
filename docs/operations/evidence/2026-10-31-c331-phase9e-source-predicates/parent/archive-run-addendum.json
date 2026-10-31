@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T16:59:14.021482+00:00",
+  "scope": "Additive exactarchiver/commandoutput preservation; original7351copy-map remains unchanged. No originalworker/index/source/rawrecord rewrites.",
+  "command": "python3 -B /tmp/noname-parent-archive-c9e.py > /tmp/noname-parent-archive-c9e.raw.txt 2>&1",
+  "exit": 0,
+  "copies": [
+    {
+      "source": "/tmp/noname-parent-archive-c9e.py",
+      "destination": "archive-c9e.py",
+      "sha256": "af120bff2eb5e4d12232b6bf6a4a6f442ef7308ad0a739f9c1cc399b5e40aaaa",
+      "bytes": 4592
+    },
+    {
+      "source": "/tmp/noname-parent-archive-c9e.raw.txt",
+      "destination": "archive-c9e.raw.txt",
+      "sha256": "594156e4faba369a956cf016ac105fde6791a10311c6b42f74f87ed959893f37",
+      "bytes": 705
+    },
+    {
+      "source": "/tmp/noname-parent-c9e-archive-summary.json",
+      "destination": "archive-c9e-summary.json",
+      "sha256": "594156e4faba369a956cf016ac105fde6791a10311c6b42f74f87ed959893f37",
+      "bytes": 705
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-31T16:16:40.653416+00:00",
+  "baseline_C8_not_rerun": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-observed3.log",
+  "source_harness": {
+    "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native/tests/replay_scenarios.rs",
+    "sha256": "beb5d87cbc834d7e81873343e90d89e2f46470b85e534e8009266b89c86e492f",
+    "unchanged_C9d_original_constants": true
+  },
+  "source_command_binding": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/command-source-bindings.json",
+  "scenarios": 12,
+  "paired_captures": 362,
+  "outcome_counts": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "discriminants_complete_pending_and_rejections_equal": true,
+  "Accepted_hash_retained_separately": true,
+  "normalization": [],
+  "privacy_or_arbitrary_fuel_or_global_equivalence_claim": false
+}

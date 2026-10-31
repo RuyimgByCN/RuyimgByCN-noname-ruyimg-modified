@@ -1,0 +1,31 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.76s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 12 tests
+test c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify ... ok
+test c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health ... ok
+test c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition ... ok
+test c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal ... ok
+test c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission ... ok
+test c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child ... ok
+test c331_source_predicates::c9e_zuijiu_admitted_parent_and_source_forgeries_reject_atomically ... ok
+test c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery ... ok
+
+thread 'c331_source_predicates::c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip' (26748543) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:59:5:
+Rejected(VmFault { skill: "c9e_zero", detail: "Host: host error: rvm_bridge 未映射: DrawCards 零量（事件 1）" })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_source_predicates::c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip ... FAILED
+test c331_source_predicates::c9e_chilongya_equipment_qualified_chain_roundtrips ... ok
+test c331_source_predicates::c9e_elemental_ciqiu_and_xixue_roundtrip_before_body_and_children ... ok
+test c331_source_predicates::c9e_real_sha_chain_and_alias_parent_roundtrip_at_every_slice ... ok
+
+failures:
+
+failures:
+    c331_source_predicates::c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip
+
+test result: FAILED. 11 passed; 1 failed; 0 ignored; 0 measured; 198 filtered out; finished in 1.19s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_source_predicates", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.981366375053767, "disk_free_bytes": 136212664320}

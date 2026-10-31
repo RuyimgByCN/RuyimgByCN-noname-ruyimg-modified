@@ -1,0 +1,484 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            38,
+            81,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 1,
+        observer: 0,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 1,
+        options: [
+            "card:39",
+            "card:29",
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            39,
+        ],
+    },
+    CardDiscarded {
+        player: 0,
+        cards: [
+            29,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 1,
+        cards: [
+            53,
+            119,
+        ],
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 22,
+        player: 1,
+        targets: [
+            0,
+        ],
+    },
+    SkillTriggered {
+        skill: "碎盾",
+        owner: 0,
+    },
+    DamagePrevented {
+        target: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 2,
+        observer: 1,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 2,
+        options: [
+            "card:115",
+            "card:66",
+        ],
+    },
+    CardDiscarded {
+        player: 1,
+        cards: [
+            115,
+        ],
+    },
+    CardDiscarded {
+        player: 1,
+        cards: [
+            66,
+        ],
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 1,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 2,
+        cards: [
+            7,
+            50,
+        ],
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 3,
+        observer: 2,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 3,
+        options: [
+            "card:16",
+            "card:118",
+        ],
+    },
+    CardDiscarded {
+        player: 2,
+        cards: [
+            16,
+        ],
+    },
+    CardDiscarded {
+        player: 2,
+        cards: [
+            118,
+        ],
+    },
+    PhaseChanged {
+        player: 2,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 2,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 2,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 3,
+        cards: [
+            116,
+            35,
+        ],
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 19,
+        player: 3,
+        targets: [
+            0,
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            3,
+        ),
+        target: 0,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            19,
+        ),
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Discard,
+        begin: true,
+    },
+    ChoiceOpened {
+        id: 4,
+        observer: 3,
+        prompt: "discard_to_limit",
+    },
+    ChoiceAnswered {
+        id: 4,
+        options: [
+            "card:4",
+            "card:99",
+        ],
+    },
+    CardDiscarded {
+        player: 3,
+        cards: [
+            4,
+        ],
+    },
+    CardDiscarded {
+        player: 3,
+        cards: [
+            99,
+        ],
+    },
+    PhaseChanged {
+        player: 3,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 3,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 3,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            73,
+            0,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Discard,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: End,
+        begin: false,
+    },
+    TurnEnded {
+        player: 0,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: true,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 1,
+        cards: [
+            47,
+            25,
+        ],
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 1,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 18,
+        player: 1,
+        targets: [
+            0,
+        ],
+    },
+    SkillTriggered {
+        skill: "肃清",
+        owner: 2,
+    },
+    SkillToggled {
+        player: 0,
+        skill: "碎盾",
+        enabled: false,
+    },
+    DamageDealt {
+        source: Some(
+            1,
+        ),
+        target: 0,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            18,
+        ),
+    },
+]

@@ -1,0 +1,9 @@
+{
+  "passed": 1821,
+  "failed": 1,
+  "ignored": 75,
+  "failed_names": [
+    "replay_scenarios::replay_scenarios_match_golden"
+  ],
+  "exit": 101
+}

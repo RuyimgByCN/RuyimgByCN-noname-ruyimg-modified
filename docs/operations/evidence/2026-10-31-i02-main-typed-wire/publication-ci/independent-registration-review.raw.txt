@@ -1,0 +1,34 @@
+## Review
+
+- **Correct：可接受修正版正常发布及新CI登记，OK with notes。** [run41214274772](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41214274772)、attempt **1**、exact **`34e83f0550bb70ef4af6083697428de7be2f02f8`**，tree **`22e6eab72d104baf7a658d5ff2d832128ac32e4a`**、parent d07；最终 **10/10 success**，created **15:19:08Z**、updated **15:42:09Z**。
+- 已读producer人类正文、v2 checker、parser-correction、父fresh脚本/完整结果、push audit、原API及定向日志。[父audit PASS](/tmp/noname-parent-ci41214274772-audit.json:1)核过 **119项SHA/CRC、十gzip与原字节4,846,646B、36个source committed/current hashes**；**本review未执行脚本、联网或重算哈希**。
+- 父六次独立live API run/jobs/artifacts/commit/native_ref/main_ref均exit0；已读run/jobs/artifacts和两ref原响应，exact34e/10success一致，remote main仍 **`47347c6608d651660ae9459e59eb529b3cef277f`**；commit tree/parent绑定引用已读父脚本/结果。
+- **Windows修正有新实际结果：**build **124575425342**、desktop **124575425298** 的checkout step2均success；原日志分别54–56、56–58行记录 `GIT_CONFIG_COUNT:1`、`core.longpaths`、`true`。Windows build/tests及desktop installer10/upload11均执行成功。
+- **Step口径独立于job：130 = 128 success / 2 skipped / 0 failure / 0 null**。仅macOS/Windows desktop step6 Linux dependencies skipped；保留API名称/状态，不编造正式原因文本。
+- **Rust汇总引用父raw regex：**workspace **6929/0/77，167 summaries**；native-web **1830/0/75，49 summaries**；三OS library各 **853/0/0，26 summaries**。范围重叠，不相加为unique tests。
+- **FIFO归属独立抽查通过：**[API上下文](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-34e83f05-i02-xs39v_py/private-raw-downloads/job-124575425410-raw-log.stdout:7883)显示下一engine_cli header先于API结果到达；[protocol/presentation上下文](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-34e83f05-i02-xs39v_py/private-raw-downloads/job-124575425410-raw-log.stdout:13911)直接支持 **4+1+4+3=12**。父核全167对，未发现v2仍误归属的证据。
+- 初版latest-header得到API5、running-N **174≠167** 的失败均在 [parser-correction](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-34e83f05-i02-xs39v_py/parser-correction.json:1)保留；这是派生解析修正，不是产品失败。原summary/manifest/checkpoint索引仅作历史，当前以v2为准。
+- **独立核native-web日志：**四OwnPlan+一Ownsession用例为ok，Worker **82/0**、frontend **441/0/0skip**；资源17、conformance19、crosshash PASS引用已读父核验与producer解析，不冒称逐行全文复核。
+- legacy预算 **100/300/200/100μs**；Ubuntu **50/0/48/20**、macOS **65/0/68/27** 均PASS，引用producer预算记录；不证明native收益、非劣性、AI强度或整体验收。
+
+原及父live [artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41214274772-pt2hndgb/artifacts.stdout:1)绑定exact run/head，三者采集时未过期：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| macOS | 13048525856 / 32815658 | `e6863988f6c610cc65389de8af0f70ff60be86d3f51adcc164daf08a4ba1e28c` |
+| Windows | 13048080685 / 26284483 | `1739013fca5de8a8f7b44aaa2e88b3ec75bd66e7614657a8e585e48b61a91fdb` |
+| Ubuntu | 13047329567 / 266390102 | `80610641eea36f806bb3ed3a685a8c0b6e845c392e26d6ff92229934d59ab768` |
+
+- Windows原日志2177–2180行上传digest、ID、bytes与API一致；仅证明产出/上传，无archive下载、安装、设备或签名证明。
+- **发布边界：**[父push audit](/tmp/noname-parent-34e-publication-push-audit.json:1)支持单次普通exact-ref push0、八项guard selfchecks、原hook e349不变及push窗口raw/logical index、flags、untracked稳定；未force/filter/推送backup ref或改写已发布d07历史。
+- 原bdaf未发布错误leaf在push前被拦截，local protective ref保留、非34e祖先；同parent d07，仅纠正未发布leaf。552项排除仍在本地、未读cache正文；初始491 profile/cache及4 schema误纳入的历史不擦除。
+- 父全3433项body/mode审计与publisher fresh **3433项/105,988,114B metadata及46个body SHA**分开，不称新hash105MB；source I02 30+CI1边界保留。25.88MiB为舍入pack；wall39.274212s/locked39.241594s差值含startup/queue。
+- lease于 **15:19:09.396745Z**释放；父随后授权Docs/evidence改动不属34e CI输入，也不是worker drift。未读取当前Main作为该run输入不变量。
+- 唯一HTTP1 watch自然exit0、31次producer CI API全0、无transport/rerun/dispatch；父后续六次live读取分列。旧d07/run41202703042 **8/2 checkout failure仍是历史failure**。
+- **归档当前authority：**119项+manifest+seal共 **121 primary**；manifest-v2 SHA **`2e181d8142ca9018175ef091655ab32ca625c4f1da57edc29ee7c3d5ab5aa000`**，summary-v2 SHA **`9df2fc31eae8bd0702f816ce66721c28e29056b5321c8733dcaa1b38a1a03ad1`**；十private originals排除。
+- 原字节gzip保留Windows build/desktop **3844/2221 CRLF**，无LF归一化；**3628 warning loglines含重复**及ignored名称保留。首次错误解析与历史checkpoint不覆盖最终v2。
+- **Fixed：**本review无修改。No issues found.
+- **Merge verdict：OK with notes，仅接受正常发布与exact34e新CI登记。** 范围仍为I02 consumer typed phase1/strict ingress/None9；不覆盖producer/audio/range/factory/Core331/full37、私有C9阻塞或wholeGoal4/27；330/105/758/WS6及WASM default不变。
+
+未执行tests/builds/network/Main/index写入，未读旧PI cache或私有assistant thought正文，未验实体安装/签名/性能收益。
+风险：保存完整121份primary及父audit/live补充证据；本次Windows绿不回写旧d07失败，也不解除既有整体Goal边界。

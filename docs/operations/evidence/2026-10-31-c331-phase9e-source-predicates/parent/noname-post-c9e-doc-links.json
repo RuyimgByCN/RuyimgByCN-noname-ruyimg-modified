@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-31T17:02:01.536980+00:00",
+  "files": 8,
+  "localLinkReferences": 861,
+  "bad": {},
+  "checked": [
+    "docs/architecture/native-progress.md",
+    "docs/operations/evidence/2026-10-31-c331-change-hp-plan/README.md",
+    "docs/operations/evidence/2026-10-31-c331-phase9d-priority/README.md",
+    "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-checkpoint/README.md",
+    "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci/README.md",
+    "docs/operations/evidence/2026-10-31-nc10-public-own-plan/publication-ci/README.md"
+  ],
+  "notes": "FirstexplicitcheckfoundoneREADMEindexlink uncompressed whilearchiveindexis losslessgzip. Correctedlinktopresent.gz, originalfirstresultretained. Initialtwohelpcalls usedparentcwdwrongpath andexit2; corrected actualprojectpath. No product/source/testproducer rerun."
+}

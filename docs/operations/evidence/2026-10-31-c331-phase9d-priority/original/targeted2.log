@@ -1,0 +1,29 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-compiler)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 10.12s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 15 tests
+test c331_prehp_damage::c9b_damage_constructor_sharing_preserves_existing_equipped_emit_entry ... ok
+test c331_prehp_damage::c9b_notrigger_suppresses_windows_without_suppressing_submission ... ok
+test c331_prehp_damage::c9c_damage_record_precedes_each_recipients_change_hp_unlink ... ok
+test c331_prehp_damage::c9c_first_quantity_change_is_seen_by_native_zuijiu ... ok
+test c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement ... ok
+test c331_prehp_damage::c9d_first_zero_precedes_huoshen_cancel_and_recover ... ok
+test c331_prehp_damage::c9b_replacement_waits_for_real_lose_hp_and_dying_children_across_restore ... ok
+test c331_prehp_damage::c9b_post_submit_cancel_has_a_real_cancelled_child_without_zero_or_end ... ok
+test c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt ... ok
+test c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore ... ok
+test c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore ... ok
+test c331_prehp_damage::c9b_dead_parent_keeps_chain_eligibility_and_siblings_unlink_on_their_own_submission ... ok
+test c331_prehp_damage::c9c_native_admitted_body_roundtrips_and_cannot_forge_another_definition ... ok
+test c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root ... ok
+test c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 178 filtered out; finished in 0.02s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_prehp_damage", "--", "--nocapture"], "exit": 0, "locked_seconds": 10.177897832996678, "disk_free_bytes": 145813544960}

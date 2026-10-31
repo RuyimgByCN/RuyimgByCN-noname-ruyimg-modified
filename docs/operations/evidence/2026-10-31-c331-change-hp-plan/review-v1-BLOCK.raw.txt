@@ -1,0 +1,18 @@
+## Review
+
+**Merge verdict: BLOCK pending one bounded source-semantic correction.** The remaining guide is suitable for the next C29 slice; this is neither code acceptance nor a new authorization request.
+
+- **Correct:** Frozen C9c [damage submission:81–102](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9c-final-ld22eim7/snapshot/crates/engine-native-kernel/src/kernel/damage.rs:81) directly invokes refill/switch/draw callbacks after HP mutation. Replacing these with one awaited ordinary ChangeHp frame, durable receipt/progress and the existing queue addresses the actual seam. The guide correctly distinguishes canonical damage, applied HP delta and Core `changedHp`.
+- **Correct:** The source-qualified eight switch helpers, HLSS First/−100/forceDie direct assignment, and separate Shangshix loseEnd subscription are appropriate. Provider ownership and named disable reasons must replace parent-enabled heuristics.
+- **Correct:** The guide explicitly requires finite continuations across Recover callers and LoseHp→ChangeHp→Dying, rather than merely pushing a child while synchronous draw/ask code continues. Its restore matrix preserves admitted continuations without replaying HP or callbacks.
+
+**Finding — P1: `damage.notrigger` does not suppress the ordinary ChangeHp trigger in the adopted Core source.**  
+[Guide line26](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/4f27f4d2-25b9-4460-80f5-4f13ade2c32e/proposals/c29-change-hp-shared-consumer-plan.md:26) says “notrigger suppresses its actual ChangeHp triggers too.” Actual [content.ts:12118](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/content.ts:12118) sets the ChangeHp child’s `_triggered=null`, suppressing its generic lifecycle windows. Its body still unconditionally calls [event.trigger("changeHp"):12370](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/content.ts:12370). [GameEvent.loop:247](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts:247) still executes that body, and `trigger(name)` does not use `_triggered` as an ordinary-trigger gate.
+
+**Smallest correction:** Preserve the ordinary ChangeHp event and eligible consumers for positive notrigger damage, including full-armor num0; suppress only the source-prescribed generic lifecycle and damage windows. Add a focused source-trace case with eligible Shangshix, asserting its ordinary ChangeHp draw completes before parent progression while suppressed damage windows remain absent. This is a correctness correction within C29, not a new opcode/context or permission boundary.
+
+The required sequence is **C9d seal/review → repair/review the still-open Chilongya notLink, Zuijiu immediate-Sha ancestry and signed Hutian defects → genuine ChangeHp → shared DeathFlow**. Those three defects must remain explicit prerequisites; this consumer cannot repair pre-HP rules.
+
+Decision29 already authorizes the genuine HP-child machinery. Keep private331/106/758/WS6 and the approved 332/106→R05-333/107 sequence unchanged. Treat bdaf solely as a historical read identity, not published/accepted Main; frozen C9c remains the overlay authority. Full C/all37/I02 acceptance remains open.
+
+Skipped implementation, tests, builds, network, JavaScript execution and live C reads; no writes were made. Hashes were not independently recomputed. Risk remains in callback ordering and caller migration until the corrected guide is implemented and verified.

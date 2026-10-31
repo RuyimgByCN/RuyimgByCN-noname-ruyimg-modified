@@ -1,0 +1,105 @@
+{
+  "utc": "2026-10-31T16:28:59.041160+00:00",
+  "status": "PASS_FROZEN_PREDICATE_REPAIR_INTEGRITY_REVIEW_PENDING_WHOLE_DAMAGE_BLOCK",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e",
+  "artifactFiles": 7333,
+  "fullFiles": 219,
+  "incrementFiles": 14,
+  "sourceManifest": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "incrementManifest": "7e22da5716d417150e058c6f94695bffc78a64bf67f02b6a08e98deec384b8b7",
+  "trackedDiffOutside219": [],
+  "commands": [
+    {
+      "name": "predicate-traces",
+      "exit": 0,
+      "counts": [
+        18,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "full-native",
+      "exit": 101,
+      "counts": [
+        1821,
+        1,
+        75
+      ]
+    },
+    {
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "golden-traces",
+      "exit": 101,
+      "counts": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "source-cap-unit",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "source-caps",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "layering",
+      "exit": 0,
+      "counts": null
+    }
+  ],
+  "predicateFullCaptureTriples": 162,
+  "pairedCaptures": 362,
+  "actualOutcomeCounts": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "nonAcceptedEntirePayloadEqual": true,
+  "AcceptedExact32ByteHashRetainedNotCompared": true,
+  "observedEqualScenarios": 11,
+  "observedBusinessDifferences": [
+    {
+      "scenario": "chain_fire_propagation",
+      "differences": [
+        {
+          "step": "0007-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0008-before",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0009-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0010-final",
+          "fields": [
+            "events"
+          ]
+        }
+      ]
+    }
+  ],
+  "qualification": "No product/golden/C331/Main acceptance. Needs connected-source review offivepredicate/window/family/contextfixes andadditionalaliases/Duwen/forgedchain. Read-only41concordancesupplement pending. GenuineChangeHp andDeathFlow stillabsent. No golden expected changed."
+}

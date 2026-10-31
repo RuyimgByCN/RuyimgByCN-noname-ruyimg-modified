@@ -1,0 +1,13 @@
+{
+  "utc": "2026-10-31T17:08:46.171235+00:00",
+  "reviewer": "9775e7b6-d971-4a07-b7ad-0346f1534f65",
+  "reviewSHA256": "94b2a13bbc1a00075f902f4a672bc7cbe129c487ec633dc66e140dcd0001d4ba",
+  "verdict": "Noissues;OKnotesfornarratives/archiveonly",
+  "scope": "Main34eunchanged. Original2540Docsstaged and newerworkingnative-progress+C9eroot independentlyreviewed. FuturestagedtreeNOTcertifiedbyreview, requiresParentexactpath/blob/modeaudit. No Cproduction/wholeC331/golden/37source/I02/Goalacceptance.",
+  "evidence": [
+    "docs-scope-review.raw.txt",
+    "parent/noname-post-c9e-doc-links.json",
+    "parent/post-archive-doc-checks-addendum.json"
+  ],
+  "indexAtReview": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7"
+}

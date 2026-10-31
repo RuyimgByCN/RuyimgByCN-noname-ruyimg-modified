@@ -1,0 +1,79 @@
+/// O4 内容债①修复（2026-10-14）：离线回退路径的全依赖闭包内嵌——
+/// standard 的 roster 跨包引用 refresh 技能、refresh/shenhua/yijiang
+/// 等又逐级跨引（ADR 0542 delta 的传递闭包），单包/部分装载均无法
+/// 通过 roster 闭包校验。内嵌 standard（编译期 Rust 目录）之外的
+/// 全部依赖 npack，装载后统一校验。
+pub(crate) const FALLBACK_CLOSURE_NPACKS: &[(&str, &[u8])] = &[
+    (
+        "refresh",
+        include_bytes!("../../../content/original/ported/refresh/refresh.npack.json"),
+    ),
+    (
+        "shenhua",
+        include_bytes!("../../../content/original/ported/shenhua/shenhua.npack.json"),
+    ),
+    (
+        "yijiang",
+        include_bytes!("../../../content/original/ported/yijiang/yijiang.npack.json"),
+    ),
+    (
+        "extra",
+        include_bytes!("../../../content/original/ported/extra/extra.npack.json"),
+    ),
+    (
+        "newjiang",
+        include_bytes!("../../../content/original/ported/newjiang/newjiang.npack.json"),
+    ),
+    (
+        "bingshi",
+        include_bytes!("../../../content/original/ported/bingshi/bingshi.npack.json"),
+    ),
+    (
+        "sp",
+        include_bytes!("../../../content/original/ported/sp/sp.npack.json"),
+    ),
+    (
+        "mobile",
+        include_bytes!("../../../content/original/ported/mobile/mobile.npack.json"),
+    ),
+    (
+        "onlyOL",
+        include_bytes!("../../../content/original/ported/onlyOL/onlyOL.npack.json"),
+    ),
+    (
+        "sp2",
+        include_bytes!("../../../content/original/ported/sp2/sp2.npack.json"),
+    ),
+    (
+        "yingbian",
+        include_bytes!("../../../content/original/ported/yingbian/yingbian.npack.json"),
+    ),
+    (
+        "tw",
+        include_bytes!("../../../content/original/ported/tw/tw.npack.json"),
+    ),
+    (
+        "diy",
+        include_bytes!("../../../content/original/ported/diy/diy.npack.json"),
+    ),
+    (
+        "xianding",
+        include_bytes!("../../../content/original/ported/xianding/xianding.npack.json"),
+    ),
+    (
+        "jsrg",
+        include_bytes!("../../../content/original/ported/jsrg/jsrg.npack.json"),
+    ),
+    (
+        "sb",
+        include_bytes!("../../../content/original/ported/sb/sb.npack.json"),
+    ),
+    (
+        "huicui",
+        include_bytes!("../../../content/original/ported/huicui/huicui.npack.json"),
+    ),
+    (
+        "shiji",
+        include_bytes!("../../../content/original/ported/shiji/shiji.npack.json"),
+    ),
+];

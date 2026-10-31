@@ -1,0 +1,38 @@
+## Review
+
+**The queue migration removes unconditional Commit precedence, but C9d still has two concrete P1 defects beyond the three declared mandatory repairs.** Reviewed the immutable 217-source composition, 18-file patch, implementation/inventory, connected admission/body/restore paths, regression sources and refreshed comparison method. Full manifest: `0d4583771720f7eeb3bf87a84dc3fc52fc7d471105830d99e894b81446214053`; increment: `487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9`. Parent integrity verification is supplied evidence.
+
+- **Fixed — previous inline-precedence mechanism:** `kernel.rs:22` now performs no DamageWindow skill effects. The 41 finite effects dispatch through individually admitted NativeDamageSkill units; End/After bodies select only the admitted effect and holder. Fifteen helper definitions append after the original 215 builtins. Evidence: `standard/native_damage.rs:51`, `kernel/damage_skill.rs:21`, `kernel/damage.rs:105`, `kernel/damage_after.rs:3`.
+- **Correct — qualification:** Ordinary definitions require enabled owned instances. Helpers qualify the actual recipient/status, equipped card, deposit or tracking state through `event/native_damage.rs:134`; they do not fabricate ownership of the originating parent skill. Collection deduplicates owner/definition pairs, and shared eligibility rechecks the live root.
+- **Correct — renewal/removal path:** Eligible helper state enters existing `register_added`; owner-window cursor and done records prevent re-expansion after execution. Removed status/equipment fails subsequent eligibility. Evidence: `resolution.rs:393,700`, `resolution/trigger_order.rs:53,326`. This is a bounded adapter, not completion of the future provider-lifetime contract.
+- **Correct — continuation:** Tag85 retains owner/definition/window and uses the existing codec/hash. Restore checks actual effect/window, trigger slot/stage/depth, root binding and admission record; nested machines reject. An atomic body finishes before its emitted Recover/LoseHp subtree, so completed effects are not repeated or requalified while that child awaits.
+- **Correct — actual regressions:** Huoshen First-zero leaves HP2; a real Boss Zhouyu instance independently recovers HP4→5. Tests also cover recipient state removal/renewal, helper ordering, seven illegal byte mutations, Mailun stopping and actual Recover-child restoration exactly once (`tests/c331_prehp_damage.rs:708–895`). These close the reported Huoshen precedence counterexample.
+
+- **Finding: P1 — Ciqiu is registered in the wrong source window.**
+  Location: [event/native_damage.rs:52](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88/snapshot/crates/engine-native-kernel/src/event/native_damage.rs:52).
+  Evidence: Ciqiu maps to Begin, while adopted Liuli `character/diy.js:17654–17658` explicitly declares `source:"damageBegin1"`. Its increment and possible self-removal therefore occur before a First Begin1 handler can stop or change the damage. This is an incorrect declaration boundary within the migration.
+  Smallest fix: map Ciqiu and its finite body dispatch to Begin1; update the inventory and add a First Begin1 num1→0 case proving neither increment nor self-removal occurs prematurely.
+
+- **Finding: P1 — admitted elemental-Sha units can execute no effect because body predicates disagree with admission.**
+  Location: `event/native_damage.rs:165,186`; [damage_windows.rs:99](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88/snapshot/crates/engine-native-kernel/src/kernel/damage_windows.rs:99); [damage.rs:132](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88/snapshot/crates/engine-native-kernel/src/kernel/damage.rs:132).
+  Evidence: Ciqiu and Xixue admission accept `is_sha_like()`, which includes FireSha/LeiSha. Their bodies still require exact `CardKind::Sha`. A wounded Xixue holder causing elemental-Sha damage is admitted and logged, yet receives no recovery; Ciqiu similarly omits its increment/removal. Adopted `card/swd.js:4744–4751` and `character/diy.js:17654–17665` use the shared source card name `sha`.
+  Smallest fix: use one consistent qualified predicate for admission and body, preserving the actual source’s Sha family. Add FireSha/LeiSha positives and restored continuation checks; do not resolve this by narrowing admission to ordinary Sha.
+
+The following inherited defects remain mandatory, separately from those new findings:
+
+| Defect | Current source evidence | Required repair |
+|---|---|---|
+| Chilongya lacks notLink | `event/native_damage.rs:152`; `damage_windows.rs:43` | Exclude genuine chain roots at shared live/restore admission and verify canonical amount/HP/log. |
+| Zuijiu lacks immediate Sha ancestry | `event/native_damage.rs:149` | Carry/query the actual root-parent execution context in both admission and restore; `damage.card` alone is insufficient. |
+| Hutian loses signed quantity | `damage_windows.rs:182` clamps `hp−deposit` to zero | Preserve canonical −1 for HP2/deposit3, with signed context/hash/restore and Zero progression coverage. |
+
+Genuine ChangeHp remains absent: HLSS refill, boss activation gates, Shangshix and DVa interception still use direct consumers. Positive notrigger damage must retain the approved ordinary ChangeHp transition, including zero HP delta; suppressing damage lifecycle windows does not authorize suppressing that transition.
+
+- **Golden assessment:** The refreshed script compares all six complete business fields across 362 paired captures, identical commands/phases/versions, outcome discriminants, complete Pending payloads and complete Rejected reasons. Only Accepted’s exact 32-byte hash is separated and retained. Counts are 187 no-outcome, 139 Accepted, 32 Pending and four Rejected; no unknown-field normalization is used.
+- **Bounded disposition:** Eleven scenarios remain equal at observed command boundaries/final state. Chain’s first difference remains `0007-after`: player2’s damage record now precedes its own unlink, matching the previously reviewed source transition. Raw scheduling/archive differences remain evidence, not equality claims; matching rejection results establish no privacy conclusion.
+- **Rerecord decision:** These dispositions support later source-specific assessment after the mandatory fixes and review, with refreshed captures for resulting bytes. They do **not** authorize changing golden expectations now.
+- **Validation evidence:** Final supplied results are **1802/1/75**, sole golden-group failure; strict, source/unit and layering checks pass. The original expectations and red evidence remain preserved.
+
+- **Merge verdict: BLOCK.** The existing queue structure fixes the unconditional-precedence mechanism, but incorrect Ciqiu window and admission/body mismatches prevent bounded migration acceptance. Whole Damage/C331/Main acceptance remains blocked independently.
+
+Skipped tests, builds, network, writes and live C-tree reads. Risk remains incorrect source-window/card qualification, the three inherited rule defects, missing ChangeHp and unproved internal/fuel equivalence.

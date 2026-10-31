@@ -1,0 +1,24 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.77s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 15 tests
+test c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health ... ok
+test c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition ... ok
+test c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal ... ok
+test c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify ... ok
+test c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission ... ok
+test c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child ... ok
+test c331_source_predicates::c9e_zuijiu_admitted_parent_and_source_forgeries_reject_atomically ... ok
+test c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery ... ok
+test c331_source_predicates::c9e_chilongya_equipment_removal_rejects_unexecuted_body_restore ... ok
+test c331_source_predicates::c9e_cancelled_damage_never_enters_hutian_or_zero_receipt_path ... ok
+test c331_source_predicates::c9e_real_duel_immediate_parent_and_target_only_zuijiu_are_negative_controls ... ok
+test c331_source_predicates::c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip ... ok
+test c331_source_predicates::c9e_chilongya_equipment_qualified_chain_roundtrips ... ok
+test c331_source_predicates::c9e_elemental_ciqiu_and_xixue_roundtrip_before_body_and_children ... ok
+test c331_source_predicates::c9e_real_sha_chain_and_alias_parent_roundtrip_at_every_slice ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 198 filtered out; finished in 1.15s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_source_predicates", "--", "--nocapture"], "exit": 0, "locked_seconds": 2.9536064169951715, "disk_free_bytes": 135940550656}

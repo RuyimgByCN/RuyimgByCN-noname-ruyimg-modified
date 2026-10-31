@@ -1,0 +1,89 @@
+[
+    PhaseChanged {
+        player: 0,
+        phase: Judge,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: true,
+    },
+    CardsDrawn {
+        player: 0,
+        cards: [
+            28,
+            27,
+        ],
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Draw,
+        begin: false,
+    },
+    PhaseChanged {
+        player: 0,
+        phase: Play,
+        begin: true,
+    },
+    CardPlayed {
+        card: 99,
+        player: 0,
+        targets: [
+            1,
+            2,
+        ],
+    },
+    Linked {
+        player: 1,
+        linked: true,
+    },
+    Linked {
+        player: 2,
+        linked: true,
+    },
+    CardPlayed {
+        card: 95,
+        player: 0,
+        targets: [
+            1,
+        ],
+    },
+    DamageDealt {
+        source: Some(
+            0,
+        ),
+        target: 1,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            95,
+        ),
+    },
+    Linked {
+        player: 1,
+        linked: false,
+    },
+    DamageDealt {
+        source: Some(
+            0,
+        ),
+        target: 2,
+        amount: 1,
+        redirected_from: [],
+        card: Some(
+            95,
+        ),
+    },
+    Linked {
+        player: 2,
+        linked: false,
+    },
+    DamageDealt {
+        source: None,
+        target: 2,
+        amount: 1,
+        redirected_from: [],
+        card: None,
+    },
+]

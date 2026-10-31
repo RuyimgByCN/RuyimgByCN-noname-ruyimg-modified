@@ -1,0 +1,1040 @@
+{
+  "utc": "2026-10-31T16:16:40.645311+00:00",
+  "repairs": [
+    {
+      "id": "review-Ciqiu-window",
+      "before": "Begin body precedes First Begin1: actual target HP1 instead of2; self-removal may occur early",
+      "after": "Begin1 declaration and body; First num1->0 preserves HP2, owned definition and dying marker",
+      "tests": [
+        "c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health",
+        "c9e_ciqiu_and_zuijiu_share_real_begin1_order_choice_and_restore"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "review-Ciqiu-Xixue-family",
+      "before": "FireSha/LeiSha admission but exact-Sha body: Ciqiu targetHP1 instead0; Xixue sourceHP2 instead3",
+      "after": "Shared Sha-family/context predicate qualifies admission; atomic body consumes admitted unit, no contradictory card requery",
+      "tests": [
+        "c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal",
+        "c9e_xixue_elemental_sha_executes_admitted_recovery",
+        "c9e_elemental_ciqiu_and_xixue_roundtrip_before_body_and_children"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "Chilongya-notLink",
+      "before": "Linked direct target gets2, propagated child incorrectly gets3 (HP1)",
+      "after": "Direct linked victim still qualifies; real propagated child carries2 without bonus (HP2). Live predicate uses existing from_chain proven by actual emitter/restore cause, not target.linked",
+      "tests": [
+        "c9e_chilongya_direct_linked_victim_differs_from_real_chain_child",
+        "c9e_chilongya_equipment_qualified_chain_roundtrips",
+        "c9e_chilongya_equipment_removal_rejects_unexecuted_body_restore"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "Zuijiu-immediate-parent",
+      "before": "Damage card alone admits: no actual Sha parent causes HP2 instead3",
+      "after": "Resolve canonical root then only its actual adjacent parent CardUsed in Intrinsic execution, immutable effective kind/use_as Sha family; never accept an arbitrary Sha ancestor. Shared live selection/start/ready-park/restore use same consumer",
+      "tests": [
+        "c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify",
+        "c9e_real_sha_chain_and_alias_parent_roundtrip_at_every_slice",
+        "c9e_real_duel_immediate_parent_and_target_only_zuijiu_are_negative_controls",
+        "c9e_zuijiu_admitted_parent_and_source_forgeries_reject_atomically"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "Hutian-signed",
+      "before": "HP2/deposit3 canonical0 instead-1",
+      "after": "Checked wide subtraction and checked i32 storage preserve-1; negative/zero skip later ordinary Begin and HP receipt; actual Zero VM reads signed amount and draws1 only for negative; positive cap permits later handler; cancellation never enters this body",
+      "tests": [
+        "c9e_hutian_negative_cap_is_persisted_before_zero_transition",
+        "c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip",
+        "c9e_cancelled_damage_never_enters_hutian_or_zero_receipt_path",
+        "negative_canonical_damage_reaches_filter_and_signed_vm_host_unchanged"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "admitted-definition-alias",
+      "before": "Actual alias admitted, but Ciqiu removes canonical-name def; actual alias remains (additional RED)",
+      "after": "Existing serialized NativeDamageSkill.def is passed to atomic body and removed directly. Feiren/Duwen quantity bodies consume shared admission instead of querying canonical names",
+      "tests": [
+        "c9e_ciqiu_alias_removes_the_actual_admitted_definition",
+        "c9e_admitted_host_alias_quantity_bodies_do_not_requery_canonical_names"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "cause-forgery",
+      "before": "Normal parent in Chain phase accepted a propagated child (additional byte/typed restore RED)",
+      "after": "Damage parent adjacency; from_chain exactly matches actual parent Chain transition; parent must be elemental, non-chain, positive running committed damage. At child Start, carried amount/nature/source/card and distinct target must agree. Later mutable canonical fields are not falsely frozen",
+      "tests": [
+        "c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission"
+      ],
+      "status": "implemented; targeted and final full passed"
+    },
+    {
+      "id": "Duwen-notLink",
+      "before": "Inherited Duwen predicate omits source notLink; old test only asserted a comment documenting divergence",
+      "after": "Same actual cause qualification excludes propagated bonus; real direct-linked/child HP and log regression replaces comment assertion",
+      "tests": [
+        "upstream_duwen_notlink_difference_is_fixed"
+      ],
+      "status": "implemented; four affected source tests and final full passed; old comment-test failure retained"
+    }
+  ],
+  "all_existing_window_source_units": [
+    {
+      "effect": "Jueqing",
+      "window": "Before",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "character/yijiang.js",
+      "source_unit": "jueqing",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/yijiang.js",
+      "source_sha256": "e12aee745fd63ea58fa6c7685bb6ae44426f53cf64cfdc37853c1bf7d2812b79",
+      "source_declaration_line": 11930,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Wuxin",
+      "window": "Before",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_wuxin",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 8769,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 10,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Jidong",
+      "window": "Before",
+      "immutable_definition": "native:liuli/ow/jidong2",
+      "source_package": "character/ow.js",
+      "source_unit": "ow/jidong2",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "source_sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "source_declaration_line": 2085,
+      "owner_role": "target/recipient",
+      "qualification": "recipient.jidong_active until turnover; owner is recipient, no parent-skill assumption",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Chengxin",
+      "window": "Before",
+      "immutable_definition": "native:liuli/xianjian/chengxin2",
+      "source_package": "character/xianjian.js",
+      "source_unit": "xianjian/chengxin2",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/xianjian.js",
+      "source_sha256": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+      "source_declaration_line": 734,
+      "owner_role": "target/recipient",
+      "qualification": "recipient.chengxin_active until recipient End; producer records rescued recipient, no parent ownership",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Chilongya",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/card-swd/chilongya",
+      "source_package": "card/swd.js",
+      "source_unit": "card-swd/chilongya",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "source_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "source_declaration_line": 4506,
+      "owner_role": "source",
+      "qualification": "owner.equips contains exact CardKind::Chilongya",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Xingjunyan",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/card-swd/xingjunyan",
+      "source_package": "card/swd.js",
+      "source_unit": "card-swd/xingjunyan",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "source_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "source_declaration_line": 4455,
+      "owner_role": "source-or-target",
+      "qualification": "owner.equips contains exact CardKind::Xingjunyan; actual source OR target role",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Liangou",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/ow/liangou2",
+      "source_package": "character/ow.js",
+      "source_unit": "ow/liangou2",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "source_sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "source_declaration_line": 570,
+      "owner_role": "target/recipient",
+      "qualification": "turn.liangou_hook==recipient and !bonus_used; grantor is not needed by this player trigger (distance modifier remains elsewhere)",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": false
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Feiren",
+      "window": "Begin",
+      "immutable_definition": "host:wudian_feiren",
+      "source_package": "character/ow.js",
+      "source_unit": "feiren",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "source_sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "source_declaration_line": 2496,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Ciqiu",
+      "window": "Begin1",
+      "immutable_definition": "host:wudian_ciqiu",
+      "source_package": "character/diy.js",
+      "source_unit": "ciqiu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/diy.js",
+      "source_sha256": "50b76233ac608bf5d5aab64e12ef68b33b7f905c28aeabc0301371944fcc0d51",
+      "source_declaration_line": 17654,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Duwen",
+      "window": "Begin",
+      "immutable_definition": "host:wudian_duwen",
+      "source_package": "character/ow.js",
+      "source_unit": "duwen",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "source_sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "source_declaration_line": 1548,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "MailunOut3",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/swd/mailun31",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/mailun31",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 9237,
+      "owner_role": "source",
+      "qualification": "source.mailun_mode==3&&!mailun_out_used",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "MailunIn3",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/swd/mailun32",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/mailun32",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 9245,
+      "owner_role": "target/recipient",
+      "qualification": "target.mailun_mode==3&&!mailun_in_used",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "MailunOut4",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/swd/mailun41",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/mailun41",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 9253,
+      "owner_role": "source",
+      "qualification": "source.mailun_mode==4&&!mailun_out_used",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "MailunIn4",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/swd/mailun42",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/mailun42",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 9261,
+      "owner_role": "target/recipient",
+      "qualification": "target.mailun_mode==4&&!mailun_in_used",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Hutian",
+      "window": "Begin",
+      "immutable_definition": "native:liuli/swd/hutian2",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/hutian2",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 3348,
+      "owner_role": "target/recipient",
+      "qualification": "recipient.hutian_hold nonempty; existing hutian_owner/deposit links preserved",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": -55,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Zuijiu",
+      "window": "Begin1",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zuijiu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 7634,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Huoshen",
+      "window": "Begin1",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "huoshen",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 8405,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "NitaiOut",
+      "window": "Begin1",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_nitai",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4885,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "ZhaohuoSource",
+      "window": "Begin1",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zhaohuo",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4093,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Zhaohuo",
+      "window": "Begin4",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zhaohuo",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4093,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "NitaiIn",
+      "window": "Begin4",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_nitai",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4885,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Bufo",
+      "window": "Begin4",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_bufo",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 3405,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "LingquCancel",
+      "window": "Begin4",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_lingqu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4403,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": -11,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Shuchui",
+      "window": "End",
+      "immutable_definition": "native:liuli/card-swd/shuchui2",
+      "source_package": "card/swd.js",
+      "source_unit": "card-swd/shuchui2",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "source_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "source_declaration_line": 2582,
+      "owner_role": "source",
+      "qualification": "turn.shuchui_armed && source==current && sha-like card; temporary reaction persists during use loop independently of equip loss",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": false
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Paotai",
+      "window": "End",
+      "immutable_definition": "native:liuli/ow/paotai3",
+      "source_package": "character/ow.js",
+      "source_unit": "ow/paotai3",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "source_sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "source_declaration_line": 1010,
+      "owner_role": "target/recipient",
+      "qualification": "recipient.paotai_lv>0, existing producer level state",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": false
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Xixue",
+      "window": "End",
+      "immutable_definition": "native:liuli/card-swd/xixue",
+      "source_package": "card/swd.js",
+      "source_unit": "card-swd/xixue",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "source_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "source_declaration_line": 4744,
+      "owner_role": "source",
+      "qualification": "source exact Xixueguizhihuan equip, injured, sha-like existing body filter",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Qinglong",
+      "window": "End",
+      "immutable_definition": "native:liuli/card-swd/qinglonglingzhu",
+      "source_package": "card/swd.js",
+      "source_unit": "card-swd/qinglonglingzhu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "source_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "source_declaration_line": 4439,
+      "owner_role": "source",
+      "qualification": "source exact Qinglonglingzhu equip; elemental damage; live other target with cards",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Yinzei",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_yinzei",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4783,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Zhangwu",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zhangwu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 6596,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Zlfanshi",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zlfanshi",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 3225,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Zhue",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_zhue",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4794,
+      "owner_role": "global skill holder",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Abi",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_abi",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 3149,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Yuance",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_yuance",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 6392,
+      "owner_role": "global skill holder",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Lingqu",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_lingqu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4403,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Jiding",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_jiding",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4546,
+      "owner_role": "global skill holder",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Renxing",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_renxing",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 7167,
+      "owner_role": "global skill holder",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Cuidui",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_cuidu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 6223,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Duqu",
+      "window": "End",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_duqu",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 3913,
+      "owner_role": "target/recipient",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Huanxia",
+      "window": "After",
+      "immutable_definition": "native:liuli/swd/huanxia_expire",
+      "source_package": "character/swd.js",
+      "source_unit": "swd/huanxia_expire",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "source_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "source_declaration_line": 1939,
+      "owner_role": "source",
+      "qualification": "source, exact d.card==turn.huanxia_track.last.card; original active-use producer and cleanup retained",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": false
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Jidian",
+      "window": "After",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "jidian",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 8275,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    },
+    {
+      "effect": "Minwan",
+      "window": "After",
+      "immutable_definition": "Existing immutable boss/standard SkillDef mapped by source constant in standard/native_damage.rs::configure",
+      "source_package": "mode/boss.js",
+      "source_unit": "boss_minwan",
+      "source_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "source_sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "source_declaration_line": 4910,
+      "owner_role": "source",
+      "qualification": "Real existing core.skills[(owner,def)] enabled, live owner; no arbitrary flag fallback",
+      "filter_authority": "event/native_damage.rs::NativeDamageEffect::matches, plus unchanged body guards",
+      "admission": "existing Frame.queue -> TriggerOrder -> shared eligible -> start_queued_trigger; helper state renewals use existing register_added",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "continuation": "tag85 NativeDamageSkill owner/def/window; exact slot/stage/depth/admission checks; atomic body returns Done before emitted children; no provider requery inside completed child subtree",
+      "status": "existing queue preserved; actual predicate/parent repairs below authoritative for this slice"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/game/game.js",
+      "line": 32254,
+      "meaning": "notLink rejects immediate _lianhuan/_lianhuan2",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts",
+      "line": 1058,
+      "meaning": "same notLink definition",
+      "sha256": "9a777f0f88f46d706bb6539c8ea2ae09c87d90e5ffad43c289e1a8423a2be4b8"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "line": 4506,
+      "meaning": "Chilongya source Fire damageBegin +notLink",
+      "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "line": 7634,
+      "meaning": "Zuijiu damage.card Sha AND immediate Sha parent",
+      "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/swd.js",
+      "line": 3348,
+      "meaning": "Hutian signed hp-deposit priority-55",
+      "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/diy.js",
+      "line": 17654,
+      "meaning": "Ciqiu source damageBegin1, Sha family, actual self-removal",
+      "sha256": "50b76233ac608bf5d5aab64e12ef68b33b7f905c28aeabc0301371944fcc0d51"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/card/swd.js",
+      "line": 4744,
+      "meaning": "Xixue Sha-family recovery",
+      "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/archive/upstream/noname-liuli/noname/character/ow.js",
+      "line": 1548,
+      "meaning": "Duwen equal hands +notLink",
+      "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa"
+    }
+  ],
+  "fixture_package_pins": [
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/packages/extensions/wudian-upstream-noname/assets/cards.json",
+      "sha256": "7ccf4bb8cba84606949c5d434c7abc6a916d10871aae53a699e0920517823b27"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/packages/extensions/shaai-ow-upstream-noname/assets/cards.json",
+      "sha256": "bef0351b5b2f9ea2556a3c231fac052d93c9eee1ccc3e676cf274f5d8e1530aa"
+    },
+    {
+      "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/packages/extensions/shahai-swd-upstream-noname/assets/cards.json",
+      "sha256": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724"
+    }
+  ],
+  "consumer_inventory": {
+    "shared_live_and_restore": "resolution/trigger_order.rs::eligible now accepts existing frames/current frame; derives canonical event/kind and immediate parent",
+    "callers": [
+      "TriggerOrder group/choice/selection",
+      "OptionalGate start guard",
+      "start_queued_trigger",
+      "notify_new_skills finite helper refresh",
+      "NativeDamageSkill ready-park restore binding",
+      "VM trigger continuation restore binding"
+    ],
+    "source_body": "kernel/damage_skill.rs passes admitted owner/def/window; atomic bodies finish before children; no provider requery within completed child",
+    "restore_cause": "snap/damage_validation.rs; existing Frame.parent/from_chain/receipt/progress fields only",
+    "codec_hash_inventory": "No persisted fields/tags/schema/ABI/WS numbers added; existing frame/data fields already encoded and hashed; full A0 inventory passed"
+  },
+  "raw_predicate_captures": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/checks-final4/predicate-traces",
+  "unfixed_required": [
+    "Genuine ChangeHp shared queue/consumer remains absent; HLSS/eight boss switches/Shangshix/DVa direct consumers remain required.",
+    "Next ChangeHp must run ordinary changeHp for positive notrigger damage, including armor leaving HP delta0; suppress only damage lifecycle windows as authorized.",
+    "DeathFlow/provider/LossEnd/wholeSDK/37-source equivalence remain mandatory subsequent work.",
+    "Existing deterministic AI/judgment/optional callback approximations outside these predicate repairs are not upstream parity proof."
+  ],
+  "whole_c331": "BLOCK;262/290 remaining28 +0",
+  "golden_rerecord": false,
+  "normalization": "Only known successful-restore auth_generation increment in regression comparisons; no golden business/outcome normalization."
+}
