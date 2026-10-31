@@ -1,0 +1,26 @@
+{
+  "name": "frontend-typecheck",
+  "argv": [
+    "pnpm",
+    "typecheck"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "pnpm",
+    "typecheck"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "exit": 0,
+  "wall_seconds": 1.5169954579905607,
+  "minimum_free_bytes": 85505470464,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "988112f1b8f6592dd4ec5eb57c633313c6dc42dbd6bd48b887651478b54f501a",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

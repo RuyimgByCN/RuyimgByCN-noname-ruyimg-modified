@@ -1,0 +1,45 @@
+已修复本轮实际复现的 legacy serde P2 诊断差异；**等待50ca独立复审与父方最终接入验收，NC10/runtime仍BLOCK**。核验于 2026-10-31T06:36:09.450558+00:00，约17分钟内完成；未重跑已通过的6916 workspace、native全量、WS或GUI。
+
+唯一工作树：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree`，基线仍为 `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`。复用自有 `../target`，jobs2、incremental0、全局串行锁；本轮最低已记录空闲约77GiB。未stage/commit/push，未触碰Main、旧329运行树、C331/PA09写者或其targets/locks。
+
+具体修复与边界：
+
+- 唯一生产增量是 [legacy_choice.rs](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/snapshot/legacy_choice.rs)。删除手写 `WithoutSource`／`LegacySequence` 及自定义 map visitor，改为**私有 serde remote archive reader**，复用共享 `ChoiceRequest` 返回类型，保留旧13字段及 `ChoiceRequest` 名称。
+- 新 `source_skill` 在该私有reader上 `serde(skip)`，由派生reader按旧unknown键规则消费：任意合法JSON、重复与escaped source键在共享String校验前被忽略。source被排除在位置字段计数外，故旧13-element错误和额外第14元素拒绝语义均恢复。
+- 旧native_kind验证调用既有 `engine_api::choice_kind_from_native`，不复制生产public enum；无string-error替换、catch-and-ignore、通用对象折叠、新restore gate或新依赖。
+- `without_source`／typed capture／两种restore／序列化代码未变；共享wire reader、native source资格/producer谓词、调度器、formal restore、VM/fuel/算术、默认WASM、规则330/archive105/ABI758/WS6均未改。这不是第二套public domain API或schema。
+
+调用影响仅为 `Snapshot.pending_choice` 的Deserialize，经直接serde与 `Snapshot::from_bytes` 可观察；错误仍由原 `SnapshotError::Deserialize(String)` 包装。旧typed剥离/失败原子性及WASM `pendingChoiceJson` 保持既有路径。engine-core消费者和legacy WASM需使用新构建；native WASM、native Tauri、WS、前端source逻辑未变，未做无关重建。
+
+测试与实际red→green：
+
+- 测试入口登记在既有 `engine::source_tests`，精确CLI：`cargo test --offline -p engine-core --lib legacy_choice_errors_match_4dd_oracle -- --nocapture`。完整命令与环境见 [results.json](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/results.json)。
+- test-only oracle从 `4dd0b286:crates/engine-api/src/choice.rs` 冻结，类型名称确为 `ChoiceRequest`，仅ids import重定向；反向恢复该import后与git对象逐字节相同。完整Snapshot envelope也保留原字段/顺序/default及名称。[oracle](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/choice_request_4dd.rs)。
+- **445个完整Snapshot输入**，每个同时比较旧oracle、bytes及直接serde的完整 `SnapshotError::Deserialize`，包括error文本、line、column，不是只比is_err。[测试源码](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs)。
+- 覆盖scalar pending；位置序列长度**0..14**；13个旧字段各自缺失、重复、错误类型与source交互；source任意JSON类别、escaped键、嵌套值、重复键；其它unknown重复键、nested option错误、malformed与trailing输入。
+- prepatch实际 **18差异**：7个scalar expected由 `struct ChoiceRequest` 变成 `a legacy choice map`；11个短序列expected由13变14。原 `[0]`等行列号也完整保留。assertion red exit101。[red矩阵](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/red-matrix.json)、[实际red日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-assertion-red.log)。
+- postpatch **445/445旧新一致，0差异**，bytes及直接serde均匹配；同一矩阵不改期待值。[green矩阵](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/green-matrix.json)、[green日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-green.log)。第一次测试模块路径编译失败单独保留，未算功能red。
+
+| 本轮受影响验证 | 实际结果 |
+|---|---|
+| engine-core full `cargo test --offline -p engine-core --no-fail-fast` | **3861 passed / 0 failed / 1 ignored**，13 suites；含原T/J/W及新增差分test |
+| 原生目标的legacy WASM typed-restore sink | **1/0**；两种typed restore后完整choice对照，source不外泄 |
+| 实际legacy WASM wasm-pack/web/release重建 | exit0，自有target，独立新产物目录，未覆盖V2产品 |
+| 新WASM实际 `pendingChoiceJson`/envelope sink | Node加载新15MB wasm，120步观察**33个实际pending choices**，均无source字段，exit0 |
+| 行数门禁与diff | source-line单测2/0、8997文件行数/有效行数门禁、diff --check通过 |
+
+WASM实跑只是实际legacy sink的无source不变量，**不是JS API未暴露的typed-poisoned Snapshot恢复实跑**；后者由原生目标sink测试覆盖。没有新增production setter或Snapshot JS API。[实跑脚本/结果](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/legacy-wasm-sink-smoke.json)。
+未另跑全core `-D warnings`：该线有继承的107/109 warnings，本轮不改其warning策略；受影响core已经全量编译/运行。没有以此冒充严格全workspace通过。
+
+冻结与复审材料：
+
+- 约第10分钟（**06:27:16 UTC**）已封存 [checkpoint12.json](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/checkpoint12.json)，当时仅WASM重建pending；现在所有本轮命令结果已收齐，[final-seal](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/final-seal.json) pending为空。
+- [v3最小delta](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/v3-delta.patch) 相对不可变V2，**仅4文件**：1个生产reader、测试登记、差分test、旧DTO oracle。SHA256：`014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092`。
+- [4文件源码manifest](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source-manifest-v3.json) SHA256：`6ebf6c33ec7cffc08b8084629ccdde75d277c62dadf72c37a5cecb6cf8e7cf19`；[源码tar](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/changed-source.tar.gz)与源码实体一并保留。
+- [完整v3 manifest](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/full-source-manifest-v3.json) **43,869文件**，逐项定位V2 frozen source或本次4文件overlay；SHA256：`4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e`。V2 freeze、原review、旧失败、20分钟检查点均未覆盖。
+- 新legacy wasm SHA256：`c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164`，产物在 `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg`，逐文件SHA见results。尚未安装到父方最终frontend。
+
+继承范围必须明确：V2的workspace6916/0/77、native、WS、GUI等仍只证明V2对应范围；本次3861 core及受影响sink/build提供legacy增量证据，不能相加或写成v3全产品验收。资源worker29be完成两次verify的消息属父方独立工作，本轮没有运行sync或改变其catalog/manifest。
+
+建议父方将此具体v3 delta与445项old/new矩阵交回50ca复审，再在Main最终集成时做自己的必要检查并采用新legacy WASM。有限矩阵不穷尽所有JSON/非JSON格式；不声称广泛上游规则等价。
+未放行Confirm-prefix/Cancel-tail/root/VM续行，未解决或豁免原19 NoCert；整体runtime与Goal继续BLOCK。

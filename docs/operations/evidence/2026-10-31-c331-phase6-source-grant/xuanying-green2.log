@@ -1,0 +1,14 @@
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-native-loader)
+error[E0609]: no field `res` on type `StateSnapshot`
+   --> crates/engine-native/tests/groups/../g1_shahai_swd/xuanying.rs:362:21
+    |
+362 |         let c = bad.res.open_choice.as_mut().unwrap();
+    |                     ^^^ unknown field
+    |
+    = note: available fields are: `ruleset_version`, `core`, `last_dedup`, `auth_generation`, `segment_open` ... and 2 others
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `engine-native` (test "g1_shahai") due to 1 previous error
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1_shahai", "source_parent"], "exit": 101, "locked_seconds": 6.591662916005589, "disk_free_bytes": 95230173184}

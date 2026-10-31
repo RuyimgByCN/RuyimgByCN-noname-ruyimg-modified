@@ -1,0 +1,20 @@
+{
+  "utc": "2026-10-31T06:27:45.010819+00:00",
+  "command": [
+    "wasm-pack",
+    "build",
+    "crates/engine-wasm",
+    "--target",
+    "web",
+    "--release",
+    "--no-opt",
+    "--out-dir",
+    "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg",
+    "--",
+    "--no-default-features"
+  ],
+  "exit": 0,
+  "wallIncludingLockQueueSeconds": 209.31315012500272,
+  "log": "p2-legacy-wasm-build.log",
+  "diskFree": 86353178624
+}

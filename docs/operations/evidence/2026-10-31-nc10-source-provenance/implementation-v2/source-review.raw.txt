@@ -1,0 +1,28 @@
+## Review
+
+**No issues found.**
+
+- **Scope:** Read the complete approved v1/v2 contracts, review-v2, and user-decision27; reviewed all 31 files in the supplied patch and connected production callers from `final-freeze-v2/source`. This is a source-contract review, not full-repository or release acceptance.
+- **Identity:** Frozen metadata records base `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, manifest SHA256 `48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`, and patch SHA256 `46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43`. These match the requested identities; I did not recompute hashes.
+
+- **Correct — exact producer/consumer binding:** [choice_source.rs:8](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-native/src/engine/choice_source.rs:8) selects the first park at current stack depth, examines all top-level active asks, requires exactly one, compares observer/prompt/kind/ordered options/min/max/cancel, and requires producer identity to equal that consumer. It does not select only a matching subset.
+- **Correct — actual answer path:** Read `engine/apply_command.rs:109`, `engine/commands.rs:180`, and `engine-native-kernel/src/resolution.rs:411`. Answer installation leaves stack/park order unchanged; the runner selects the same first-depth park before frame progression. The metadata helper does not execute a speculative step.
+- **Correct — source qualification and delegation:** [asks.rs:1022](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-native-kernel/src/snap/asks.rs:1022) reads the exact leaf OptionalGate def, requires a nonempty name, optional declaration, non-VM behavior, and uniqueness across the entire catalog. Only OptionalGate chains delegate source identity; unsupported inner machines return None. Its direct delegation agrees with `OptionalGate::step`.
+- **Correct — owner qualification:** The final name must occur in the owner’s existing `PlayerView.skills`. Source derivation adds no filter execution, once-use check, PC/fuel check, ancestor disclosure, or private-state certificate.
+- **Correct — visibility:** [views.rs:134](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-native/src/engine/views.rs:134) computes the field only for Own. Trusted Referee uses that same computation; AI calls the same owner projection. Other retains generic metadata. Direct Host/VM producers cannot acquire source through the helper’s OptionalGate-only admission.
+- **Correct — forwarding:** NativeSession, desktop envelope, Worker `readChoice`, shared API, native server choice, desktop transport, network client, and view store preserve the field through their connected seams. [timeout.rs:124](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/apps/game-server/src/room_native/timeout.rs:124) still attaches the existing deadline and timeout policy after native choice projection.
+- **Correct — strict wire and safe text:** API deserialization and frontend metadata validation accept missing/null, preserve nonempty strings, and reject empty strings or wrong types. [BattleView.vue:789](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/apps/web-client/src/views/BattleView.vue:789) renders the generated label through Vue text interpolation.
+- **Correct — no hidden authority change:** The patch does not change scheduler, native restore validation, canonical archive, root gates, VM continuation policy, versions, or default engine selection. ExpectedAsk source metadata is excluded from native restore’s explicit shape comparisons. Legacy typed capture/two restores clone and clear only source after existing validation; no caller object mutation or new authority check was introduced. Detailed JSON compatibility remains the other review’s scope.
+- **Correct — certificate boundary retained:** The paired byte-restored test and recorded `v2-source-physical.log` show equal full input/events/source with different subsequent Pending prompts (`jiji_target` versus `jijie_give_target`). That limits prefix certification; it does not contradict the approved source-field contract.
+
+- **Fixed:** None; review remained read-only.
+- **Finding:** No concrete P0/P1/P2 defect attributable to this diff qualified.
+
+Recorded evidence inspected includes the v2 workspace exit-0 record and relevant source/desktop/Session/WS6 test results, frontend 179/179 output, and both four-case WK reports. I did not independently sum the claimed workspace totals.
+
+**Resource verification remains CURRENT FAIL:** [v2-original-sync-verify.log:7](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.log:7) reports `asset manifest tree summaries mismatch`; the earlier gate run also failed. Copied/hardlinked APFS evidence does not establish full acceptance. The orchestration timeout after sealing is not a test failure.
+
+- **Merge verdict: OK with notes for the approved single-field source contract only.** Full acceptance remains unestablished; NC10/runtime stays BLOCK, original 19 NoCert cases remain unresolved, and the old 329 runtime must not be merged through this approval.
+
+No tests, builds, network calls, producer execution, shell commands, or writes were performed; the other 43,836 frozen files were not reviewed.  
+Remaining risks are the failed resource gate and independently unproved root/prefix/tail behavior; source identity grants no execution certificate.

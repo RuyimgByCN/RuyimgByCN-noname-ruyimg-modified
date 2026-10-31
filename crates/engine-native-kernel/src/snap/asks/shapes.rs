@@ -12,6 +12,8 @@ pub struct ExpectedAsk {
     pub min: usize,
     pub max: usize,
     pub allow_cancel: bool,
+    /// Derived ask metadata, excluded from snapshots and formal shape validation.
+    pub source_skill: Option<&'static str>,
 }
 
 pub fn ask(
@@ -31,6 +33,7 @@ pub fn ask(
         min,
         max,
         allow_cancel,
+        source_skill: None,
     }
 }
 

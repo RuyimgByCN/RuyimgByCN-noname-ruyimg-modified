@@ -1,0 +1,60 @@
+## Review
+
+- **Correct：本次可登记 CI 成功，结论为 OK with notes（仅登记/归档）。** 对象仅为 [run 41125396035](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41125396035)、attempt **1**、exact head **`4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`**。[原 run API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/run-final.stdout:1) 为 `completed/success`，最终更新时间 **2026-10-30T21:06:28Z**。
+- 完整读取 producer 报告及 acceptance block、producer checker、最终 manifest、父新 parser 与全部结果；另定向核对原 API/private 原日志。未声称独立全文复核全部日志，也未重跑 hash 或脚本。
+- 父 [独立 parser](/tmp/noname-parent-ci41125396035-audit.py:1) / [PASS 结果](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41125396035-audit-ztju5c3a/independent-results.json:1) 核得以下 **10/10 job success**：
+
+| Job | ID |
+| --- | ---: |
+| perf-ubuntu-latest | 124302464730 |
+| perf-macos-latest | 124302465138 |
+| gates-ubuntu | 124302465251 |
+| native-web | 124302465291 |
+| desktop-macos-latest | 124302465364 |
+| desktop-ubuntu-latest | 124302465407 |
+| build-macos-latest | 124302465418 |
+| build-windows-latest | 124302465420 |
+| build-ubuntu-latest | 124302465489 |
+| desktop-windows-latest | 124302465532 |
+
+- **Step API 单独成立：**父 parser 比较十份 detail 与 jobs API 的 steps，核得 **130 = 128 success / 2 skipped / 0 failure / 0 null**；未用 job success 补填 step。两处 skipped 均为 macOS/Windows 的 Linux Tauri dependencies。
+- **Windows 修复范围有实际新 CI 支持：**独立读取 [Windows detail](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465532-detail.stdout:1)，step **7 prepare、10 installer、11 upload** 均直接返回 success。
+- 独立核 [Windows 原日志](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/private-raw-downloads/job-124302465532-raw-log.stdout:833)：资源 sync/verify、五个 audio-compat 文件及 diff guard 已执行；**2113–2131** 行记录应用及两种安装包构建，**2163–2166** 行的上传 digest、ID、bytes 与 artifact API 一致。
+- **历史不改写：**新结果支持本次 Windows checkout/packaging 修复范围；原777 run41114612841 的 **9 success / 1 Windows resource-prepare failure** 仍保留。新绿不能反推旧 runner provenance SHA，也不能把受控 Git 复现当作旧 runner 字节观测。
+
+- **Rust 范围引用父独立原日志 regex：**workspace gates **6894 passed / 0 failed / 77 ignored**；native regressions **1815/0/75**；三 OS library build 各 **838/0/0**。范围重叠，**不得相加为 unique tests**。
+- **独立定向核日志：**[native-web](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/private-raw-downloads/job-124302465291-raw-log.stdout:4545) 为 Worker **82/0**；同日志 **5446** 行起 frontend **175 passed / 0 failed / 0 skipped**。
+- **独立定向核日志：**gates conformance **19 / ALL PASS**，cross-target 为 `ALL CROSS-TARGET CHECKS PASSED`；[Gate4/full verify](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/private-raw-downloads/job-124302465251-raw-log.stdout:21733) 为资源测试 **17/17**、legacy **366**、portraits **2707**、audio **9652**、audio-compat **5**。其余准备 job 的 sync/verify/diff guard 引用 producer checker。
+- 发布契约记录为 **Rules330 / archive105 / ABI758 / WS6，WASM default**；本登记依据提交声明与已核保护快照，不重新验收规则等价、默认引擎或当前 Main。
+
+独立核性能原日志；以下是 hosted legacy release `server-baseline` 预算结果：
+
+| 指标（μs） | 预算 | Ubuntu | macOS |
+| --- | ---: | ---: | ---: |
+| start-hash-p50 | 100 | 57 | 71 |
+| distance-query-p95 | 300 | 0 | 0 |
+| snapshot-restore | 200 | 53 | 61 |
+| observer-projection | 100 | 22 | 27 |
+
+- 两 tier 均 `PASS`；不支持 native 性能收益、非劣性或同设备前后改善结论。
+
+独立读取 [artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/artifacts-final.stdout:1)，三者采集时未过期，均绑定 exact run/head：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| macOS | 13012150411 / 32803079 | `c19ff30080cd48afe7eeac672d397b202f117856ca254c8cce0b2eb8f10d693b` |
+| Windows | 13010748280 / 26274800 | `e0130f1105d01170adc3caaf42c4b6a5a6b55d5bc29f5393e92cb012df755d3c` |
+| Ubuntu | 13010039279 / 266343986 | `4af11ffe90452497f890962f8c4ea3dd07dd849e60fc12587607c994c6bdffa2` |
+
+- **发布快照：**push exit **0**、单次普通 nonforce；原 branch API 为 exact4dd/tree **`184829236b7c17fe472fecbb1ba77b8129c65a6e`**、parent777。父 parser 核得 remote native=4dd，main 仍为 **`47347c6608d651660ae9459e59eb529b3cef277f`**。
+- 父 parser 核得 **351 changed paths、155 protected hashes 前后相同**，fresh guard **`20c228…`** 八项 selfchecks 符合预期、原 hook **`e349af…`** 不变且 persistent hooksPath unset；source4/package-tree snapshots 的校验另由已读 producer checker 支持。
+- push wall **8.445246s**、locked **8.386769s**，差值含 startup/queue；Git **279 objects / 53 deltas / 22.72 MiB** 为 producer 保留的舍入进度，非 exact wire bytes。唯一 default watch exit **0**，无 fallback/新 rerun。
+- **时间与当前 Main 边界：**lease 于 **20:43:27.690435Z** 释放；观察为 **20:44:20–21:07:26Z**。当前父 Decision27 文档及 source worker 私有工作不属于 immutable4dd；未检查当前 Main，也不将其作为发布不变量。
+- **归档依据：**父 parser 已核 **95 项 bytes/SHA256/CRC32**、十份日志 gzip 全解压 SHA/bytes/CRC/CRLF 及全部 Rust 汇总。[最终 manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/copy-manifest.json:1) 对应 **96 primary 文件含自身**；十份 private raw originals 排除在 publication copy set 外。
+- 日志解压合计 **4,733,040 bytes**；Windows build/desktop CRLF **3837/2207** 保留。归档使用 gzip；checkpoint live-stream index 是历史索引，当前复制以最终 root manifest 为准。
+- **3628 warning loglines** 引用 producer 计数，含重复 compiler summaries；ignored 与两处 skips 均保留。未发现具体证据矛盾。
+- **Fixed：**无修改。No issues found.
+- **Merge verdict：OK with notes，仅指 exact4dd CI 证据可登记/归档。** 不关闭 PA09 六条件、Whole I02/37/Goal，也不证明实体安装、signing、设备行为、新 Main GUI 或 native default switch。
+
+未执行新 network/watch/tests/build、producer 脚本、下载/安装或 source/index/Main 写入；未扩展 source4/WK 既定验收。
+风险：CI checkout/packaging 通过的适用范围有限；需持久保存完整96份 primary 证据，旧777失败与历史 a1f/da7e/首轮失败继续分列。

@@ -1,0 +1,34 @@
+## Review
+
+No issues found.
+
+- **Correct — Scope is limited to three source files.** The frozen [patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/final-freeze5/vs-final-freeze4.patch:1) adds exactly 17 tuple overrides, one test module, and its nc08 registration. The existing `trigger_meta()` composition applies only timing, priority, and selectability; event and optional semantics remain intact. The other 27 contract rows receive no production overrides.
+
+- **Correct — The Boss regression observes real handler behavior.** The [Boss test](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/c331_source_order_phase5.rs:134) places three Normal peers on owner 1, starts the owner ring there, and grants BossBaimang2 to owner 0. At both choice pauses, stage kind must remain `None` and the 白芒 log must be absent; after the peers finish, it requires `SixiangChain` and the owner-0 log. The retained handler calls `sixiang_mark_hide`, which writes that state and log. The red run fails with actual `SixiangChain` versus expected `None`.
+
+- **Correct — The Yuchan regression observes an actual card replacement.** The [Yuchan test](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/c331_source_order_phase5.rs:176) plays 桃 from owner 0 and checks that the 乾 entity has left hand and the 坤 entity is present before owner 1’s Normal choices. The retained handler removes the old card and obtains the replacement from deck/discard. The old Last tuple fails the first hand assertion.
+
+- **Correct — Restore coverage includes both three- and two-candidate pauses.** Each behavior test calls the [round-trip helpers](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/c331_source_order_phase5.rs:105) at both pauses. They encode/decode NGSA bytes, restore with the extension catalog, compare the whole snapshot while normalizing only root `auth_generation`, compare state hashes, answer both engines, and compare the entire newly emitted log suffix.
+
+- **Correct — The 44-row check exercises the public behavior API and is registered.** It invokes `HostBehavior::trigger_meta()` for all 44 rows and checks the resulting tuple. The [nc08 module registration](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/groups/nc08.rs:118) includes all three tests; their full names appear as passing in each retained green run. Upstream semantics for all 44 rows remain the peer reviewer’s separate scope.
+
+- **Correct — Recorded red/green results agree across raw logs and result JSON.** I read `full-results.json`, `gate-results.json`, `validation-summary.json`, raw red/green logs, runner code, and aggregate result lines. Counts below are passed/failed/ignored:
+
+| Retained run | Result | Exit |
+|---|---:|---:|
+| Pre-fix three tests | 0 / 3 / 0 | 101 |
+| nc08 green | 77 / 0 / 50 | 0 |
+| engine-native full | 1739 / 0 / 75 | 0 |
+| Sole final ten-package aggregate | 2906 / 0 / 76 | 0 |
+
+- **Correct — The aggregate uses the stated default test options.** Its raw footer matches the ten-package argv in `full-results.json`, with no `--test-threads=1`. The lock helper serializes commands and forwards argv unchanged. The aggregate contains 103 result rows; Native and nc08 counts overlap with it and must not be added again. Source-cap unit tests report 2/2, source caps report 8,997 files within the 2,000-line/Rust 1,000-effective-line limits, and F7 reports zero upward references.
+
+- **Correct — Freeze identity now closes the previously pending comparison.** I read the new [retained parser](/tmp/noname-parent-c331-phase5-retained-summary.py:1) and its [freeze result](/tmp/noname-parent-c331-phase5-retained/pre-checkpoint-post-freeze.json:1). Checkpoint20, pre-full, and final5 have equal ordered arrays of 135 path/SHA pairs. Their compact canonical array is 18,936 bytes with SHA `dcedfa22a6cff71adeb4a6107b911e462623bc609e37c7359b7226bdfd0e64f6`, exactly matching `source-and-result-binding.json`. The earlier parent audit verifies final source135, evidence46, changed3/unchanged132, and raw result counts; I did not rerun that audit.
+
+- **Correct — Failure history remains visible.** All three original static-parser failures and compiler warnings remain retained. The review timeout and recovery Git-directory diagnostics are review-infrastructure events, separate from product test results.
+
+- **Fixed:** None; this review made no edits.
+
+- **Merge verdict: OK with notes** for the behavior, tests, and freeze evidence of this three-file phase5 delta. **Whole C331 remains BLOCK** on the remaining 28 ordering items and recorded mechanism gaps. Final4 product qualifications remain historical; these Rust results provide no new WASM/IPC/GUI/platform qualification or compact/rebase validation.
+
+Skipped execution, live-tree scans, and the peer’s full 44-source semantic audit. No tests, builds, producers, or network actions ran; the verdict applies to frozen C135, not the separate NC27 writer’s mutable tree.

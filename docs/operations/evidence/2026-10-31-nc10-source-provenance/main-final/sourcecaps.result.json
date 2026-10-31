@@ -1,0 +1,28 @@
+{
+  "name": "sourcecaps",
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check-source-lines.py"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "scripts/check-source-lines.py"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 8.065488666004967,
+  "minimum_free_bytes": 60179763200,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "865fa49adc551ca2f060ae5c9e675248f32edc585de7dd9e3247f963d9739d1e",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

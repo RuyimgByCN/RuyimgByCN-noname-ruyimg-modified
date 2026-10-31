@@ -267,6 +267,7 @@ pub fn choice_for(
         max,
         allow_cancel,
         prompt,
+        source_skill,
     } = view
     else {
         return None;
@@ -297,6 +298,7 @@ pub fn choice_for(
         continuation_id: id,
         kind: engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
         native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
+        source_skill: source_skill.map(str::to_owned),
         prompt: Some(prompt.to_owned()),
         min_count: min as u8,
         max_count: max as u8,

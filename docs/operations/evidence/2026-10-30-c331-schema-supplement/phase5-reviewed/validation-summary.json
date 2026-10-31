@@ -1,0 +1,78 @@
+{
+  "source-order-red": {
+    "path": "../evidence/phase5/source-order-red.log",
+    "sha256": "a2a35d4e1a0e267f5df1f182cb092904164ca6e77d9bed41d04ca0a9f8f71bfc",
+    "test_result_rows": 1,
+    "passed": 0,
+    "failed": 3,
+    "ignored": 0,
+    "first_lines": [
+      "   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)",
+      "warning: unused import: `ChoiceOption`",
+      "  --> crates/engine-native/tests/groups/../c331_host_source_metadata.rs:38:25"
+    ],
+    "last_lines": [
+      "test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 124 filtered out; finished in 0.00s",
+      "",
+      "error: test failed, to rerun pass `-p engine-native --test nc08`",
+      "{\"command\": [\"cargo\", \"test\", \"--offline\", \"-p\", \"engine-native\", \"--test\", \"nc08\", \"c331_source_order_phase5\"], \"exit\": 101, \"locked_seconds\": 2.073772875010036, \"disk_free_bytes\": 97096028160}"
+    ]
+  },
+  "nc08-green": {
+    "path": "../evidence/phase5/nc08-green.log",
+    "sha256": "408f0bf3eb59fdf5d50381afd907ae21661578eb526c924534dfb7286ab25aeb",
+    "test_result_rows": 1,
+    "passed": 77,
+    "failed": 0,
+    "ignored": 50,
+    "first_lines": [
+      "   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel)",
+      "   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-content)",
+      "   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)"
+    ],
+    "last_lines": [
+      "",
+      "test result: ok. 77 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.53s",
+      "",
+      "{\"command\": [\"cargo\", \"test\", \"--offline\", \"-p\", \"engine-native\", \"--test\", \"nc08\"], \"exit\": 0, \"locked_seconds\": 7.7824680829944555, \"disk_free_bytes\": 96984920064}"
+    ]
+  },
+  "engine-native-full": {
+    "path": "../evidence/phase5/engine-native-full.log",
+    "sha256": "eacd7a6d4733c62c1f4f7f2336d8897f70d8ccf6444cd4a911b2f4609ba73874",
+    "test_result_rows": 13,
+    "passed": 1739,
+    "failed": 0,
+    "ignored": 75,
+    "first_lines": [
+      "warning: unused import: `ChoiceOption`",
+      "  --> crates/engine-native/tests/groups/../c331_host_source_metadata.rs:38:25",
+      "   |"
+    ],
+    "last_lines": [
+      "",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "",
+      "{\"command\": [\"cargo\", \"test\", \"--offline\", \"-p\", \"engine-native\"], \"exit\": 0, \"locked_seconds\": 40.28420558400103, \"disk_free_bytes\": 96960385024}"
+    ]
+  },
+  "affected-default-final": {
+    "path": "../evidence/phase5/affected-default-final.log",
+    "sha256": "69b54beab38e11a138d5632f0d7eab459227a2625fba4db9542b24b20fe0e834",
+    "test_result_rows": 103,
+    "passed": 2906,
+    "failed": 0,
+    "ignored": 76,
+    "first_lines": [
+      "warning: output filename collision at /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/../target/debug/examples/rehash_npack",
+      "  |",
+      "  = note: the example target `rehash_npack` in package `content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-schema)` has the same output filename as the example target `rehash_npack` in package `content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-runtime)`"
+    ],
+    "last_lines": [
+      "",
+      "test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s",
+      "",
+      "{\"command\": [\"cargo\", \"test\", \"--offline\", \"--no-fail-fast\", \"-p\", \"engine-native-kernel\", \"-p\", \"engine-native-content\", \"-p\", \"engine-native\", \"-p\", \"engine-native-wasm\", \"-p\", \"game-server\", \"-p\", \"desktop-client\", \"-p\", \"content-schema\", \"-p\", \"content-compiler\", \"-p\", \"content-runtime\", \"-p\", \"content-native-loader\"], \"exit\": 0, \"locked_seconds\": 297.3711048749974, \"disk_free_bytes\": 96957206528}"
+    ]
+  }
+}

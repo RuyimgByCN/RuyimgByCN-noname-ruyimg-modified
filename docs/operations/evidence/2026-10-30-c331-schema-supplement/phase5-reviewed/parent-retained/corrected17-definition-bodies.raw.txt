@@ -1,0 +1,812 @@
+## BossBaimang2 | laneA | boss_baimang2 | archive/upstream/noname-liuli/noname/mode/boss.js:5637
+body SHA256 67055ca4bda9e97197591b7f0c07e6499503cd2c3ab047a196f0fedc987b1552
+{
+				mode:['boss'],
+				global:'boss_baimang2x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				unique:true,
+				fixed:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossBaimang2 | laneA | boss_baimang2 | archive/upstream/noname/apps/core/mode/boss.js:6318
+body SHA256 411847a15e19b9c5fdc28c8de653ea940cffa20c523630b8f991bbc35bd06bbf
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_baimang2x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			unique: true,
+			fixed: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossBaimang3 | laneA | boss_baimang3 | archive/upstream/noname-liuli/noname/mode/boss.js:5721
+body SHA256 20431f21f1353b5dbe4f326f2a6804e9b05b0b78b2c96d4215eaba636d312605
+{
+				mode:['boss'],
+				global:'boss_baimang3x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				unique:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					player.nextSeat.hide();
+					player.previousSeat.hide();
+					game.addVideo('hidePlayer',player);
+					game.addVideo('hidePlayer',player.nextSeat);
+					game.addVideo('hidePlayer',player.previousSeat);
+				}
+			}
+
+## BossBaimang3 | laneA | boss_baimang3 | archive/upstream/noname/apps/core/mode/boss.js:6410
+body SHA256 ac2429eb7edabcdac01fd90efba7adecf7c206a31b53ca662f2aacce327d4b0a
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_baimang3x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			unique: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				player.nextSeat.hide();
+				player.previousSeat.hide();
+				game.addVideo("hidePlayer", player);
+				game.addVideo("hidePlayer", player.nextSeat);
+				game.addVideo("hidePlayer", player.previousSeat);
+			},
+		}
+
+## BossBianshen3 | laneA | boss_bianshen3 | archive/upstream/noname-liuli/noname/mode/boss.js:7482
+body SHA256 25252eac6a90e942a6605fa6fb96914d024863647e685b1bc8af5478b7ea1d61
+{
+				mode:['boss'],
+				global:'boss_bianshen3x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossBianshen3 | laneA | boss_bianshen3 | archive/upstream/noname/apps/core/mode/boss.js:8374
+body SHA256 8b3de5bfde3005d90ae27e8a2946d539cf3b0825f68e1272981ac4c7e1fcb40a
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_bianshen3x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossBianshen4 | laneA | boss_bianshen4 | archive/upstream/noname-liuli/noname/mode/boss.js:7510
+body SHA256 8573870d909905617500522fcff4c8798ba4d37944305da7400ee65cd7f850be
+{
+				mode:['boss'],
+				global:'boss_bianshen4x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossBianshen4 | laneA | boss_bianshen4 | archive/upstream/noname/apps/core/mode/boss.js:8404
+body SHA256 f362534d1e08478c22c63e93acf9a5447c553b89d125be75af029532b19f182d
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_bianshen4x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossChiyan2 | laneA | boss_chiyan2 | archive/upstream/noname-liuli/noname/mode/boss.js:5112
+body SHA256 b62681975dc6aeab2d537da7408e097f6c917d4961527c177e5be6aca7127978
+{
+				mode:['boss'],
+				global:'boss_chiyan2x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				unique:true,
+				fixed:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossChiyan2 | laneA | boss_chiyan2 | archive/upstream/noname/apps/core/mode/boss.js:5741
+body SHA256 50c21081e685dbed2305ae699c5033e5e4c5e4b579a89bc90fe09b4dac6a63d6
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_chiyan2x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			unique: true,
+			fixed: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossChiyan3 | laneA | boss_chiyan3 | archive/upstream/noname-liuli/noname/mode/boss.js:5196
+body SHA256 6511340b22ea14810e9b041034a60e784e177bf3489460349ec3ecf16386ea52
+{
+				mode:['boss'],
+				global:'boss_chiyan3x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				unique:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					player.nextSeat.hide();
+					player.previousSeat.hide();
+					game.addVideo('hidePlayer',player);
+					game.addVideo('hidePlayer',player.nextSeat);
+					game.addVideo('hidePlayer',player.previousSeat);
+				}
+			}
+
+## BossChiyan3 | laneA | boss_chiyan3 | archive/upstream/noname/apps/core/mode/boss.js:5833
+body SHA256 e3b82662099a2a70b0a0754364c29c1113959ad1a898a8461f858277cd8ad031
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_chiyan3x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			unique: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				player.nextSeat.hide();
+				player.previousSeat.hide();
+				game.addVideo("hidePlayer", player);
+				game.addVideo("hidePlayer", player.nextSeat);
+				game.addVideo("hidePlayer", player.previousSeat);
+			},
+		}
+
+## BossHuanrenDie | laneA | boss_newhuanren2 | archive/upstream/noname-liuli/noname/mode/boss.js:2776
+body SHA256 80ab869d091552fbc0a8f2681d6e52a16884e18d5b85adf5b43e772e0572ee37
+{			
+				trigger:{global:['die']},
+				forced:true,
+				priority:-10,
+				fixed:true,
+				globalFixed:true,
+				charlotte:true,
+				silent:true,
+				popup:false,
+				forceDie:true,
+				filter:function(event,player){
+					if(lib.config.mode!='boss') return false;
+					if(_status.shidianyanluo_level==undefined) return false;
+					return player==game.boss&&event.player==player;
+				},
+				content:function(){
+					var next=game.createEvent('shidianyanluo_huanren',false,trigger.getParent());
+					next.player=player;
+					next.forceDie=true;
+					next.setContent(lib.skill.boss_newhuanren2.contentx);
+				},
+				contentx:function(){
+					'step 0'
+					game.delay();
+					var list=game.filterPlayer();
+					for(var x=0;x<list.length;x++){
+						list[x].removeSkill('diaohulishan');
+						list[x].removeSkill('guogong2');
+					}
+					var list=game.boss.getEnemies();
+					for(var x=0;x<list.length;x++){
+						list[x].removeSkill('boss_wangshi2');
+					}
+					'step 1'
+					var list=[
+						['boss_chujiangwang','boss_songdiwang','boss_wuguanwang','boss_yanluowang'],
+						['boss_bianchengwang','boss_taishanwang','boss_dushiwang','boss_pingdengwang'],
+						['boss_zhuanlunwang'],
+					][_status.shidianyanluo_level];
+					//如果mengpo死亡且50回合内通过第三关，list[2]变成地藏王
+					if(game.phaseNumber<=50&&_status.shidianyanluo_level==2&&_status.shidianyanluo_mengpodie==true){
+						list=['boss_dizangwang'];
+					}
+					if(list.length==1) event._result={control:list[0]};					
+					else{
+						player.chooseControl(list).set('forceDie',true).set('choice',list.randomGet()).set('ai',function(){return _status.event.choice}).prompt='选择下一个登场的武将';
+					}
+					'step 2'
+					_status.shidianyanluo_level++;
+					game.changeBoss(result.control);
+					//地藏王登场摸3
+					if(result.control=='boss_dizangwang'){game.boss.draw(3);}
+					//计回合数
+					var level=_status.shidianyanluo_level;
+					//孟婆
+					if(!_status.shidianyanluo_mengpo){
+						if(Math.random()<=0.5||level==2){
+							if(game.me!=game.boss){
+								game.boss.changeSeat(6);
+							}
+							else{
+								game.boss.nextSeat.changeSeat(3);
+								game.boss.previousSeat.changeSeat(5);
+							}
+							//game.addBossFellow();
+							var fellow=game.addFellow(game.me==game.boss?1:7,'boss_mengpo','zoominanim');
+							if(_status.shidianyanluo_level!=0){
+								fellow.directgain(get.cards(4));
+							}
+							fellow.side=true;
+							fellow.identity='zhong';
+							fellow.setIdentity('zhong');
+							game.addVideo('setIdentity',fellow,'zhong');			
+							_status.shidianyanluo_mengpo=true;
+						}
+					}
+					else{
+						//移除孟婆
+						game.countPlayer2(function(current){
+							if(current.name=='boss_mengpo'){			
+								current.removed=true;
+								current.classList.add('dead');
+								current.remove();
+								game.players.remove(current);
+							}
+						});
+					}
+					//然后是boss进行回合
+					game.phaseLoop(game.boss);
+				}
+			}
+
+## BossHuanrenDie | laneA | boss_newhuanren2 | archive/upstream/noname/apps/core/mode/boss.js:3469
+body SHA256 c1211bdfe8647c8d72f7121ec57768a7f8ff9d0e32d94370f0c200d8a694301f
+{
+			trigger: { global: ["die"] },
+			forced: true,
+			priority: -10,
+			fixed: true,
+			globalFixed: true,
+			charlotte: true,
+			silent: true,
+			popup: false,
+			forceDie: true,
+			filter(event, player) {
+				if (lib.config.mode !== "boss") {
+					return false;
+				}
+				if (_status.shidianyanluo_level == null) {
+					return false;
+				}
+				return player === game.boss && event.player === player;
+			},
+			async content(event, trigger, player) {
+				const next = game.createEvent("shidianyanluo_huanren", false, trigger.getParent());
+				next.player = player;
+				next.forceDie = true;
+				next.setContent(lib.skill.boss_newhuanren2.contentx);
+			},
+			contentx: [
+				async (event, trigger, player) => {
+					const delay = game.delay();
+					const players = game.filterPlayer();
+					for (const current of players) {
+						current.removeSkill("diaohulishan");
+						current.removeSkill("guogong2");
+					}
+					const enemies = game.boss.getEnemies();
+					for (const current of enemies) {
+						current.removeSkill("boss_wangshi2");
+					}
+					await delay;
+				},
+				async (event, trigger, player) => {
+					let list = [["boss_chujiangwang", "boss_songdiwang", "boss_wuguanwang", "boss_yanluowang"], ["boss_bianchengwang", "boss_taishanwang", "boss_dushiwang", "boss_pingdengwang"], ["boss_zhuanlunwang"]][_status.shidianyanluo_level];
+					//如果mengpo死亡且50回合内通过第三关，list[2]变成地藏王
+					if (game.phaseNumber <= 50 && _status.shidianyanluo_level === 2 && _status.shidianyanluo_mengpodie === true) {
+						list = ["boss_dizangwang"];
+					}
+					if (
+						_status.shidianyanluo_level === 2 &&
+						game.boss
+							.getEnemies()
+							.map(cur => {
+								const names = get.nameList(cur);
+								for (const name of names) {
+									if (lib.rank.s.includes(name) || lib.rank.ap.includes(name) || lib.rank.a.includes(name) || lib.rank.am.includes(name)) {
+										return name;
+									}
+								}
+								return false;
+							})
+							.reduce((val, name) => {
+								if (lib.rank.s.includes(name)) {
+									return val + 1;
+								}
+								if (lib.rank.ap.includes(name)) {
+									return val + 0.36;
+								}
+								if (lib.rank.a.includes(name)) {
+									return val + 0.13;
+								}
+								if (lib.rank.am.includes(name)) {
+									return val + 0.05;
+								}
+							}, 0) > Math.random()
+					) {
+						list = ["boss_shikieiki"];
+					}
+					let control = list[0];
+					if (list.length !== 1) {
+						const result = await player
+							.chooseControl({
+								controls: list,
+								prompt: "选择下一个登场的武将",
+								ai: () => _status.event.choice,
+							})
+							.set("forceDie", true)
+							.set("choice", list.randomGet())
+							.forResult();
+						control = result.control;
+					}
+					_status.shidianyanluo_level++;
+					game.changeBoss(control);
+					//地藏王登场摸3
+					if (control === "boss_dizangwang") {
+						game.boss.draw(3);
+					}
+					//计回合数
+					const level = _status.shidianyanluo_level;
+					//孟婆
+					if (!_status.shidianyanluo_mengpo) {
+						if (Math.random() <= 0.5 || level === 2) {
+							if (game.me !== game.boss) {
+								game.boss.changeSeat(6);
+							} else {
+								game.boss.nextSeat.changeSeat(3);
+								game.boss.previousSeat.changeSeat(5);
+							}
+							//game.addBossFellow();
+							const fellow = game.addFellow(game.me === game.boss ? 1 : 7, "boss_mengpo", "zoominanim");
+							if (_status.shidianyanluo_level !== 0) {
+								fellow.directgain(get.cards(4));
+							}
+							fellow.side = true;
+							fellow.identity = "zhong";
+							fellow.setIdentity("zhong");
+							game.addVideo("setIdentity", fellow, "zhong");
+							_status.shidianyanluo_mengpo = true;
+						}
+					} else {
+						//移除孟婆
+						game.countPlayer2(current => {
+							if (current.name === "boss_mengpo") {
+								current.removed = true;
+								current.classList.add("dead");
+								current.remove();
+								game.players.remove(current);
+							}
+						});
+					}
+					//然后是boss进行回合
+					game.phaseLoop(game.boss);
+				},
+			],
+		}
+
+## BossQingmu2 | laneA | boss_qingmu2 | archive/upstream/noname-liuli/noname/mode/boss.js:5283
+body SHA256 06cd0b60ee53303911ca8112222c86dfa9b670ed3efdb776b01fee865b57a233
+{
+				mode:['boss'],
+				global:'boss_qingmu2x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				unique:true,
+				fixed:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossQingmu2 | laneA | boss_qingmu2 | archive/upstream/noname/apps/core/mode/boss.js:5929
+body SHA256 3314f8eaed551fcfac3c46ad533fbd628afecdc60d4c5af67dc3a47a05fc5334
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_qingmu2x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			unique: true,
+			fixed: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossQingmu3 | laneA | boss_qingmu3 | archive/upstream/noname-liuli/noname/mode/boss.js:5367
+body SHA256 872d8493d54a504b2fb12feb9e2d9c3019025582674e54d01c42a5075c874084
+{
+				mode:['boss'],
+				global:'boss_qingmu3x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				unique:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					player.nextSeat.hide();
+					player.previousSeat.hide();
+					game.addVideo('hidePlayer',player);
+					game.addVideo('hidePlayer',player.nextSeat);
+					game.addVideo('hidePlayer',player.previousSeat);
+				}
+			}
+
+## BossQingmu3 | laneA | boss_qingmu3 | archive/upstream/noname/apps/core/mode/boss.js:6021
+body SHA256 bf3262cd1752533f27dac1d7dd61510a3c30c5cf6b6a26a119bb41f79b98f8ab
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_qingmu3x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			unique: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				player.nextSeat.hide();
+				player.previousSeat.hide();
+				game.addVideo("hidePlayer", player);
+				game.addVideo("hidePlayer", player.nextSeat);
+				game.addVideo("hidePlayer", player.previousSeat);
+			},
+		}
+
+## BossXuanlin2 | laneA | boss_xuanlin2 | archive/upstream/noname-liuli/noname/mode/boss.js:5454
+body SHA256 48c98a2a34c1b09d3fc83c8d8f0151c195781af0fa7aa8b3e3d2a4ca32db18d5
+{
+				mode:['boss'],
+				global:'boss_xuanlin2x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				unique:true,
+				fixed:true,
+				filter:function(event,player){
+					return player==game.boss;
+				},
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+				}
+			}
+
+## BossXuanlin2 | laneA | boss_xuanlin2 | archive/upstream/noname/apps/core/mode/boss.js:6117
+body SHA256 7a985e71d814b32d98c098838a2f7315bb5557a1acad7fd3aa744ba07c508443
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_xuanlin2x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			unique: true,
+			fixed: true,
+			filter(event, player) {
+				return player === game.boss;
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+			},
+		}
+
+## BossXuanlin3 | laneA | boss_xuanlin3 | archive/upstream/noname-liuli/noname/mode/boss.js:5537
+body SHA256 e9c2692f19b4819dfb6ce84d77bdd351c6e4ab8938fb041155b4d5cb6d1bbe2e
+{
+				mode:['boss'],
+				global:'boss_xuanlin3x',
+				trigger:{player:'dieBegin'},
+				silent:true,
+				fixed:true,
+				unique:true,
+				filter:function(event,player){
+					if(game.boss&&game.boss.name=='boss_zhuanxu') return false;
+					return true;
+				},
+				content:function(){
+					player.hide();
+					game.addVideo('hidePlayer',player);
+					if(player.nextSeat.side==player.side){
+						player.nextSeat.hide();
+						game.addVideo('hidePlayer',player.nextSeat);
+					}
+					if(player.previousSeat.side==player.side){
+						player.previousSeat.hide();
+						player.previousSeat.node.handcards1.hide();
+						player.previousSeat.node.handcards2.hide();
+						game.addVideo('hidePlayer',player.previousSeat);
+						game.addVideo('deleteHandcards',player.previousSeat);
+					}
+				}
+			}
+
+## BossXuanlin3 | laneA | boss_xuanlin3 | archive/upstream/noname/apps/core/mode/boss.js:6208
+body SHA256 64ddc2b4b788d5196d0860a30a822ae96edcf96ce57195f66e8184f5abe1d4e2
+{
+			charlotte: true,
+			mode: ["boss"],
+			global: "boss_xuanlin3x",
+			trigger: { player: "dieBegin" },
+			silent: true,
+			fixed: true,
+			unique: true,
+			filter(event, player) {
+				return !game.boss || game.boss.name !== "boss_zhuanxu";
+			},
+			async content(event, trigger, player) {
+				player.hide();
+				game.addVideo("hidePlayer", player);
+				if (player.nextSeat.side === player.side) {
+					player.nextSeat.hide();
+					game.addVideo("hidePlayer", player.nextSeat);
+				}
+				if (player.previousSeat.side === player.side) {
+					player.previousSeat.hide();
+					player.previousSeat.node.handcards1.hide();
+					player.previousSeat.node.handcards2.hide();
+					game.addVideo("hidePlayer", player.previousSeat);
+					game.addVideo("deleteHandcards", player.previousSeat);
+				}
+			},
+		}
+
+## GujianYunvyuanshen | laneA | yunvyuanshen_skill | archive/upstream/noname-liuli/noname/card/gujian.js:1529
+body SHA256 82997cc0ee954bcfbd891ceb2fb78324b4dcac03de4180cc55b805ebd65d92aa
+{
+				mark:'card',
+				intro:{
+					content:'下一进入濒死状态时回复一点体力'
+				},
+				trigger:{player:'dying'},
+				forced:true,
+				priority:6.1,
+				onremove:true,
+				filter:function(event,player){
+					return player.hp<=0;
+				},
+				content:function(){
+					player.recover();
+					player.removeSkill('yunvyuanshen_skill');
+				}
+			}
+
+## GujianYunvyuanshen | laneA | yunvyuanshen_skill | archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/skill.js:439
+body SHA256 e27d8f5522306a666f5876bd7486c18c92d4c2af123002fb802ca311be7b2c0a
+{
+		mark: "card",
+		intro: {
+			content: "下一进入濒死状态时回复1点体力",
+		},
+		trigger: { player: "dying" },
+		forced: true,
+		priority: 6.1,
+		onremove: true,
+		filter(event, player) {
+			return player.hp <= 0;
+		},
+		content() {
+			player.recover();
+			player.removeSkill("yunvyuanshen_skill");
+		},
+	}
+
+## GwentBirinState | laneA | gw_birinongwu_clear | archive/upstream/noname-liuli/noname/card/gwent.js:2021
+body SHA256 0c24086d048417ab559829d0ecb3b5e23612dd9426ec88fc4afbe405e776dc52
+{
+						trigger:{player:'phaseUseAfter'},
+						silent:true,
+						content:function(){
+							player.removeSkill('gw_birinongwu');
+						}
+					}
+
+## GwentBirinState | laneA | gw_birinongwu_clear | archive/upstream/noname/apps/core/extension/杀海拾遗/card/gwent/skill.js:216
+body SHA256 24b1cf954ffbf612216e52bb298a5e668ef75792816ab0d2881f8d66bd49c926
+{
+				trigger: { player: "phaseUseAfter" },
+				silent: true,
+				content() {
+					player.removeSkill("gw_birinongwu");
+				},
+			}
+
+## GwentQinpenState | laneA | gw_qinpendayu_clear | archive/upstream/noname-liuli/noname/card/gwent.js:1996
+body SHA256 725bf72409e95fd6938bf4992e3d5d529b7f93222bebee6888873575785e6040
+{
+						trigger:{player:'phaseDiscardAfter'},
+						silent:true,
+						content:function(){
+							player.removeSkill('gw_qinpendayu');
+						}
+					}
+
+## GwentQinpenState | laneA | gw_qinpendayu_clear | archive/upstream/noname/apps/core/extension/杀海拾遗/card/gwent/skill.js:189
+body SHA256 afae002d5b73b70ba6f23a1da4e3ae739c20c1d403750b23ba198e81cc706ef7
+{
+				trigger: { player: "phaseDiscardAfter" },
+				silent: true,
+				content() {
+					player.removeSkill("gw_qinpendayu");
+				},
+			}
+
+## SwdYuchanSwap | laneB | g_yuchan_swap | archive/upstream/noname-liuli/noname/card/swd.js:2331
+body SHA256 135832292d864614edf8a436cef8b0dac70898f6fc9e968d25424ade4134354e
+{
+				trigger:{player:'useCardAfter'},
+				silent:true,
+				priority:-1,
+				content:function(){
+					var hs=player.getCards('h');
+					var list=['yuchanqian','yuchankun','yuchanzhen','yuchanxun','yuchangen','yuchanli','yuchankan','yuchandui'];
+					for(var i=0;i<hs.length;i++){
+						if(hs[i].name.indexOf('yuchan')==0){
+							hs[i].init([hs[i].suit,hs[i].number,list.randomGet(hs[i].name)]);
+						}
+					}
+				}
+			}
+
+## SwdYuchanSwap | laneB | g_yuchan_swap | archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js:114
+body SHA256 33babf88d2b5cbf601805c0954b089f19823d7b12736d1cd80debad8e9733e1a
+{
+		trigger: { player: "useCardAfter" },
+		silent: true,
+		priority: -1,
+		content() {
+			var hs = player.getCards("h");
+			var list = ["yuchanqian", "yuchankun", "yuchanzhen", "yuchanxun", "yuchangen", "yuchanli", "yuchankan", "yuchandui"];
+			for (var i = 0; i < hs.length; i++) {
+				if (hs[i].name.indexOf("yuchan") === 0) {
+					hs[i].init([hs[i].suit, hs[i].number, list.randomGet(hs[i].name)]);
+				}
+			}
+		},
+	}
+
+## Xiefang | laneB | xiefang | archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162
+body SHA256 55e11a3d19c2438c18c730e6d67691fba7668b55482daecd0c7dc47cd0b5a300
+{
+        trigger: {
+            global: ["dieEnd", "gameDrawEnd"],
+        },
+        forced: true,
+        onremove:function(player){
+        player.removeSkill('xiefang_mark');       
+    },    
+    init:function(player){
+    var cc = (game.countPlayer(function(current) {
+                return current.hasSex('female');
+            }));
+                if (cc > 0) {
+                player.addSkill("xiefang_mark");
+                player.storage.xiefang_mark = cc;              
+                player.syncStorage("xiefang_mark");  
+            }else{
+                player.removeSkill("xiefang_mark");
+                }            
+    },                
+        priority:-1,
+        silent:true,
+        content: function() {
+            var cc = (game.countPlayer(function(current) {
+                return current.hasSex('female');
+            }));
+            if (cc > 0) {
+                player.addSkill("xiefang_mark");
+                player.storage.xiefang_mark = cc;         
+                player.syncStorage("xiefang_mark");       
+            }else{
+                player.removeSkill("xiefang_mark");
+                }            
+        },
+        subSkill: {
+             mark: {
+            mark:true,
+            marktext:"撷芳-",
+             mark:true,
+             intro: {},
+                sub: true,
+            },
+        },
+        mod: {
+            globalFrom: function(from, to, distance) {
+                return distance - game.countPlayer(function(current) {
+                    return current.hasSex('female');
+                });
+            },
+        },
+    }
+
+## XiguaXueliangFanbei | laneB | _xigua_xueliangfanbei_ | archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:2261
+body SHA256 337bf7d5efc326b6741b94c96b4038fcb561c5bcc03cdd8532c807cb5b2f926c
+{
+                    trigger: {
+                        global: "gameStart",
+                    },
+                    silent: true,
+                    charlotte: true,
+                    forced: true,
+                    content: function () {
+                        player.gainMaxHp(player.hp);
+                        player.recover(player.hp);
+                    },
+                }

@@ -1,0 +1,606 @@
+{
+  "primary_files_including_manifest": 96,
+  "copies": [
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/artifacts-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/artifacts-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/artifacts-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/artifacts-final.stdout",
+      "bytes": 2300,
+      "sha256": "3b42606cecfab9bccc78a2023fc87fb4ac5d4bcea0a7f97dd52ac23100d0550b"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-artifacts.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-artifacts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-artifacts.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-artifacts.stdout",
+      "bytes": 2300,
+      "sha256": "3b42606cecfab9bccc78a2023fc87fb4ac5d4bcea0a7f97dd52ac23100d0550b"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-copy-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-copy-manifest.json",
+      "bytes": 2843,
+      "sha256": "97b4571a8f1398d926b36cf941b885ad908a4ce142780dbda3e032250418f823"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-jobs.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-jobs.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-jobs.stdout",
+      "bytes": 31565,
+      "sha256": "7a67a03b2cf2fc96dfd97271a9ac8156ee104230d2cf60d8f63a490190629c9a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-run.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/checkpoint-run.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/checkpoint-run.stdout",
+      "bytes": 14762,
+      "sha256": "07e553b0aeaf0a1e82f39d2da393c7f193f904a6d9cf8f55a2b6c3c6e4651fe2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/discovery-command.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/discovery-command.json",
+      "bytes": 380,
+      "sha256": "24674364d77d4ef521186148b4af675860b4c8fec08b7c84aa8432b1fe84fab1"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/discovery.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/discovery.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/discovery.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/discovery.stdout",
+      "bytes": 14798,
+      "sha256": "1c31fbf735b47fc6eb4ca22f88da959a00e64867522f5bb8274dbe50db50db1f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/driver.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/driver.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/driver.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302464730-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302464730-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302464730-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302464730-detail.stdout",
+      "bytes": 2479,
+      "sha256": "be60a588aed7421dafefd9b342fbf7af5367315f44b4d3f063cfa997bfb3ea00"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302464730-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302464730-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302464730-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302464730-raw-log.stdout.gz",
+      "bytes": 29495,
+      "sha256": "885a674cbfb8bdd0a9a2af11a6cb3a40dde4c57525e0ff520373ecd20a82c715"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465138-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465138-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465138-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465138-detail.stdout",
+      "bytes": 2477,
+      "sha256": "73df6e12c2e7c47288bd5ef31586b31bd464a6954bcd2da1a318f24136f3d4a7"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465138-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465138-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465138-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465138-raw-log.stdout.gz",
+      "bytes": 28834,
+      "sha256": "83d2c9ef7956fdcf8618b8a63024efd0c48e8f004fb2ff124624405e02f040bf"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465251-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465251-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465251-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465251-detail.stdout",
+      "bytes": 4382,
+      "sha256": "fb6953eecf2fa7dfb63968d572adda8d99bacbcb327841e48d9ecb91478e9133"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465251-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465251-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465251-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465251-raw-log.stdout.gz",
+      "bytes": 354866,
+      "sha256": "5e682f2105626aaec4eadce305a9140709f49d45594d114f87fade6684e84357"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465291-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465291-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465291-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465291-detail.stdout",
+      "bytes": 4110,
+      "sha256": "af8dc20284c975a6b52b49b46051bf9f64c3d36be1109d9643ea9164b9494f22"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465291-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465291-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465291-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465291-raw-log.stdout.gz",
+      "bytes": 99483,
+      "sha256": "eeae604a29a954383ae870412df88576ae771db862d2a7b651d0686ddcd485eb"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465364-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465364-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465364-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465364-detail.stdout",
+      "bytes": 3759,
+      "sha256": "0a363ae41e82802491b892d5d197fcef5b297e3bd92cd2091dcf5bbd9bee27a1"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465364-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465364-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465364-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465364-raw-log.stdout.gz",
+      "bytes": 34660,
+      "sha256": "4791e274a1c81c9858b957614ca92a20d086650fc1290c4870fffe807676403d"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465407-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465407-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465407-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465407-detail.stdout",
+      "bytes": 3761,
+      "sha256": "9c5ab51d06332a2c75e9b90579a3b9f2261d6bbc3bfd92139480d57882640b8a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465407-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465407-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465407-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465407-raw-log.stdout.gz",
+      "bytes": 52752,
+      "sha256": "ed5934afd2c5dea899b7fb38eeffd10e598ab104ca599994cfca4559577ebac5"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465418-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465418-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465418-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465418-detail.stdout",
+      "bytes": 2458,
+      "sha256": "c2aa192bd9131d80f46b17f89c71b7abc9837ec568f38c9fa745edbd3cc70388"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465418-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465418-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465418-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465418-raw-log.stdout.gz",
+      "bytes": 56587,
+      "sha256": "c21a5ead5b9b1cbba02189df62d2cfab993745c47ad41c9b684cf3ef4a82932f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465420-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465420-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465420-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465420-detail.stdout",
+      "bytes": 2462,
+      "sha256": "20f7a9652cd3d8227324ae46cf29daab75a2d55af0cc734dbadd57df0de0c7be"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465420-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465420-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465420-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465420-raw-log.stdout.gz",
+      "bytes": 59113,
+      "sha256": "33e1f5b396a1f659e5b8d5c14a3e783fbee86c2a82bb8ac2efebbc5d23c2bf36"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465489-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465489-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465489-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465489-detail.stdout",
+      "bytes": 2460,
+      "sha256": "8cbad6bed58f6b81cbba12d49d6123adc757205e776f1bb9ac2209b28f1eb924"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465489-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465489-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465489-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465489-raw-log.stdout.gz",
+      "bytes": 58207,
+      "sha256": "a767803ff3e64c2562216a46cd5ff3c4dedee26a0312e5f6b243df713aafa116"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465532-detail.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465532-detail.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465532-detail.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465532-detail.stdout",
+      "bytes": 3763,
+      "sha256": "236f24e9a4921c5df47dabf458befcf783ad8eed98b703dc3337b46591fc574e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465532-raw-log.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465532-raw-log.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-124302465532-raw-log.stdout.gz",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-124302465532-raw-log.stdout.gz",
+      "bytes": 32319,
+      "sha256": "54758b7e3c0a0d334a9ae686a008ce57817fcd10493816fed8c55b4c1dc1e1a0"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/job-analyzer.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/job-analyzer.json",
+      "bytes": 128417,
+      "sha256": "c6d0ee6af26dbff11b4bfa19edc5049d31e90604e4eadbbfdec6da17d807df46"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/jobs-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/jobs-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/jobs-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/jobs-final.stdout",
+      "bytes": 32148,
+      "sha256": "b0a528637961c8a340c678a780e5d20087b4368f0e03070d419354c8ffe40ff2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/jobs-initial.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/jobs-initial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/jobs-initial.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/jobs-initial.stdout",
+      "bytes": 25710,
+      "sha256": "bd265faf03b7db8b6cc1d7aebbb7afcb85c4029a24543e22d64880a4d8c8ce9f"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/monitor.py",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/monitor.py",
+      "bytes": 802,
+      "sha256": "ba41e14b18b757c214bf8d27529ac0b707e747ebb8d3b669a29ebe68fbe1d287"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/observation-state.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/observation-state.json",
+      "bytes": 138679,
+      "sha256": "f147f2000adec13283cb10bb42cb4e2b77ae4ee73a7d7e15cd760dda453ba2eb"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/observe-ci.py",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/observe-ci.py",
+      "bytes": 9985,
+      "sha256": "aa71e63772b991f82d828ce545cf4a06b983ca8563690b81366ed19bba9be9a0"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/run-final.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/run-final.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/run-final.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/run-final.stdout",
+      "bytes": 14765,
+      "sha256": "4ed1eb9de1670b96806b759dfcac991a9ccda9fdcabc10ed092fb3db3f73a39c"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/run-initial.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/run-initial.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/run-initial.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/run-initial.stdout",
+      "bytes": 14762,
+      "sha256": "07e553b0aeaf0a1e82f39d2da393c7f193f904a6d9cf8f55a2b6c3c6e4651fe2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/watch.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/watch.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/ci-stage/watch.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/ci-stage/watch.stdout",
+      "bytes": 146060,
+      "sha256": "c7e10214cddb2f43c6051f01e49744c99b8709122c091587eab0f18c1bcd5f64"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/branch-after.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/branch-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/branch-after.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/branch-after.stdout",
+      "bytes": 4457,
+      "sha256": "59ec8d9c9f6b16b982acfc8b2275afff5d3d2fdf245154dbfeb72d2f6545cdbf"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/driver.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/driver.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/driver.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/driver.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/lease-release.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/lease-release.json",
+      "bytes": 499,
+      "sha256": "7269655028a29fbdd923d21bfd7d04dd9a179a61f59646b6f78cd263bc95d0c2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/main-after.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/main-after.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/main-after.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/main-after.stdout",
+      "bytes": 4380,
+      "sha256": "d0652394531d1ae59fe48e34900876eaad0d839bc4b96b6947721fbba32eb569"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/new-objects-audit.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/new-objects-audit.json",
+      "bytes": 60140,
+      "sha256": "6871645679caf08b400b76e0a115fc00eab6aea0b71e91ea4b8264babf20b388"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/protected-admission.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/protected-admission.json",
+      "bytes": 24667,
+      "sha256": "1b0a544f330c2b5e6f5d23dd3444f117ee53d09302c6e8f97f25287a0e95f95a"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/publication-driver.py",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/publication-driver.py",
+      "bytes": 10366,
+      "sha256": "0f9af07135f7a8f20e12c7f99e731d5c1f7da6ed87068409c553dde7301157f3"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/push-copy-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/push-copy-manifest.json",
+      "bytes": 3086,
+      "sha256": "b37390dd82d31510df60325075171728ac10f92d9293c347831597d8ea25e1e3"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/push.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/push.stderr",
+      "bytes": 14734,
+      "sha256": "fa189daee053f769f95091345f27c45cb586f0abda47ca6884a62ca35b457c1d"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/push.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/push.stdout",
+      "bytes": 482,
+      "sha256": "c1f0d992a30db1e2923cd749c341fb457dafa1c912fa477c97635e97695e901d"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/remote-before.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/remote-before.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/remote-before.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/remote-before.stdout",
+      "bytes": 128,
+      "sha256": "884445a097fbffd1085abc23d2048a422c6601be229431c1b91e3149e7b7fb8b"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/result.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/result.json",
+      "bytes": 98665,
+      "sha256": "9e3b29d5aada735c1247616cb95be8bca3d351c3381ce68e93d7d736bf596a93"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/scope.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/scope.json",
+      "bytes": 5374,
+      "sha256": "60dc9ff66c8b300684fe29342878beb48323f3ed054c457bc121f2221d0abfca"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/push-stage/scoped-pre-push.raw.txt",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/push-stage/scoped-pre-push.raw.txt",
+      "bytes": 1577,
+      "sha256": "20c22832833ba9d74b5f3f6436925d3e4fdc4dc9d0500f8de5b691893b750f14"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/artifacts.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/artifacts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/artifacts.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/artifacts.stdout",
+      "bytes": 1545,
+      "sha256": "ed451195d19a8418711838596847205b123a207ad7a76e7f8184889a65c2336c"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/jobs.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/jobs.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/jobs.stdout",
+      "bytes": 31154,
+      "sha256": "2eb8e029ffafbbf29272e006652b776297f7cd2e68a466e11b1b051bc340ec42"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/run.stderr",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/run.stdout",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/run.stdout",
+      "bytes": 14762,
+      "sha256": "07e553b0aeaf0a1e82f39d2da393c7f193f904a6d9cf8f55a2b6c3c6e4651fe2"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/task15-checkpoint/summary.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/task15-checkpoint/summary.json",
+      "bytes": 3117,
+      "sha256": "1848c649885a2698f60e170807a603b45e874d495a9acf1db9a1e11e01917001"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/verified-publication-ci-summary.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/verified-publication-ci-summary.json",
+      "bytes": 309027,
+      "sha256": "d0ac0e32083cdf30755d44ab444ad48f645c095e67c6b764fc515dcdd92fa7b6"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/verify-publication-ci.py",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/verify-publication-ci.py",
+      "bytes": 13561,
+      "sha256": "fb7ea3e290736a915453b9f89bc135f09e74b4ffd2ad756f7fe1a135749ed1b7"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-4dd0b286-publication-wgwyoh_i/copy-manifest.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/copy-manifest.json",
+      "bytes": 22150,
+      "sha256": "98a2937c8c632866add6e91f643be086f10c14e8df5bcee6e6a965b5f96505a9"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/26c3514d-3411-462c-bf65-db8c78835247/publication/pa09-js-admission-and-checkout-accepted-push-and-run.md",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/producer.raw.txt",
+      "bytes": 14842,
+      "sha256": "011eb9282c5fa4c39fdedeeb4a965a7cca59da50832d1adf273f198477b64905"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f4ddfea6-1c96-46c6-9b8a-019932144f0b/reviews/pa09-ci41125396035-independent-registration.md",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/independent-review.raw.txt",
+      "bytes": 7144,
+      "sha256": "d34fc856a41ce75b5eb442fe04f6651c46b4e9e714178f7fbfbf940431a7f6e5"
+    },
+    {
+      "source": "/tmp/noname-parent-ci41125396035-audit.py",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/parent-independent-audit.py",
+      "bytes": 5327,
+      "sha256": "ddf6403ae4e1a2b366584f6dd2afea6b8cea6a995e2e56ab45f494a79aa71588"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41125396035-audit-ztju5c3a/independent-results.json",
+      "stored": "docs/operations/evidence/2026-10-30-pa09-js-admission/publication-ci/parent-independent-results.json",
+      "bytes": 7174,
+      "sha256": "35d7398bde8056000019698508733657798895c779ce06735f4f4e10b1b9fd8e"
+    }
+  ],
+  "qualification": "Original gzip bytes retained; 10private fullraw originals excluded; datedcheckpointstreamindex retained as history not currentcopyindex"
+}

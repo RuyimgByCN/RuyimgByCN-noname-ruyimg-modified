@@ -1,0 +1,281 @@
+{
+  "result": "PASS",
+  "manifest_entries_verified": 95,
+  "primary_files_including_manifest": 96,
+  "run": {
+    "id": 41125396035,
+    "head_sha": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "updated_at": "2026-10-30T21:06:28Z"
+  },
+  "jobs": [
+    {
+      "id": 124302464730,
+      "name": "perf-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 189872,
+      "log_sha256": "26f30b9af6eb098ef54d2eedfc7467e39bcff0212c94242faf4f896a581938da",
+      "log_crc32": "54452d14",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ],
+      "metrics": [
+        {
+          "name": "start-hash-p50",
+          "actual_us": 57,
+          "budget_us": 100
+        },
+        {
+          "name": "distance-query-p95",
+          "actual_us": 0,
+          "budget_us": 300
+        },
+        {
+          "name": "snapshot-restore",
+          "actual_us": 53,
+          "budget_us": 200
+        },
+        {
+          "name": "observer-projection",
+          "actual_us": 22,
+          "budget_us": 100
+        }
+      ]
+    },
+    {
+      "id": 124302465138,
+      "name": "perf-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 191716,
+      "log_sha256": "375211c2ff5dc4d031c0f11c5a154f86c916b39bf23edf58fbc0799f47d552e8",
+      "log_crc32": "d6ca35a4",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ],
+      "metrics": [
+        {
+          "name": "start-hash-p50",
+          "actual_us": 71,
+          "budget_us": 100
+        },
+        {
+          "name": "distance-query-p95",
+          "actual_us": 0,
+          "budget_us": 300
+        },
+        {
+          "name": "snapshot-restore",
+          "actual_us": 61,
+          "budget_us": 200
+        },
+        {
+          "name": "observer-projection",
+          "actual_us": 27,
+          "budget_us": 100
+        }
+      ]
+    },
+    {
+      "id": 124302465251,
+      "name": "gates-ubuntu",
+      "conclusion": "success",
+      "log_bytes": 2157674,
+      "log_sha256": "9143c7209e6961f952b5f15603c88ea370628f3fc5eef547c577c59c5d436a38",
+      "log_crc32": "0337599f",
+      "crlf": 0,
+      "rust_totals": [
+        6894,
+        0,
+        77
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465291,
+      "name": "native-web",
+      "conclusion": "success",
+      "log_bytes": 477198,
+      "log_sha256": "7db88162a3e0cd28f14208be963cdd89713f7131907ac381d4ed9f89db22a21a",
+      "log_crc32": "6a125170",
+      "crlf": 0,
+      "rust_totals": [
+        1815,
+        0,
+        75
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465364,
+      "name": "desktop-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 182761,
+      "log_sha256": "37a7fef83a8e33bf84532773bed9fb823018bd6f6dc84b1945d955ba2cb09325",
+      "log_crc32": "c070f009",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465407,
+      "name": "desktop-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 278768,
+      "log_sha256": "2b0232be868267460f0fd6d34347c6390329c329d485e4adb8b402ddc330136c",
+      "log_crc32": "d5785cdc",
+      "crlf": 0,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465418,
+      "name": "build-macos-latest",
+      "conclusion": "success",
+      "log_bytes": 361219,
+      "log_sha256": "fef03d68b7d4d4edc8e73e9634a90c1b9c35862a702850d9860f550f0226ee4e",
+      "log_crc32": "0d665c2c",
+      "crlf": 0,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465420,
+      "name": "build-windows-latest",
+      "conclusion": "success",
+      "log_bytes": 367045,
+      "log_sha256": "1ee8fde7b55ac7264f9aefaf15e806f5d76e7a6676280c91b984e82ec9ea31a5",
+      "log_crc32": "dcdf6cff",
+      "crlf": 3837,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465489,
+      "name": "build-ubuntu-latest",
+      "conclusion": "success",
+      "log_bytes": 358506,
+      "log_sha256": "186e0939874d6eab7ac77efe6f5ad549cb30bf84cba4302417999a0cb2707e93",
+      "log_crc32": "f1198e58",
+      "crlf": 0,
+      "rust_totals": [
+        838,
+        0,
+        0
+      ],
+      "metrics": []
+    },
+    {
+      "id": 124302465532,
+      "name": "desktop-windows-latest",
+      "conclusion": "success",
+      "log_bytes": 168281,
+      "log_sha256": "5f2e9669c3607fd86c69b9ce94d7fd30b247554c6f0e069b3cfb080245f6b31e",
+      "log_crc32": "be8e0c40",
+      "crlf": 2207,
+      "rust_totals": [
+        0,
+        0,
+        0
+      ],
+      "metrics": []
+    }
+  ],
+  "steps": {
+    "total": 130,
+    "success": 128,
+    "skipped": 2,
+    "failure": 0,
+    "null": 0
+  },
+  "artifacts": [
+    {
+      "id": 13012150411,
+      "name": "installer-macos-latest",
+      "bytes": 32803079,
+      "digest": "sha256:c19ff30080cd48afe7eeac672d397b202f117856ca254c8cce0b2eb8f10d693b"
+    },
+    {
+      "id": 13010748280,
+      "name": "installer-windows-latest",
+      "bytes": 26274800,
+      "digest": "sha256:e0130f1105d01170adc3caaf42c4b6a5a6b55d5bc29f5393e92cb012df755d3c"
+    },
+    {
+      "id": 13010039279,
+      "name": "installer-ubuntu-latest",
+      "bytes": 266343986,
+      "digest": "sha256:4af11ffe90452497f890962f8c4ea3dd07dd849e60fc12587607c994c6bdffa2"
+    }
+  ],
+  "push": {
+    "exit": 0,
+    "attempts": 1,
+    "changed_paths": 351,
+    "protected": 155,
+    "before_after_equal": true,
+    "guard_sha256": "20c22832833ba9d74b5f3f6436925d3e4fdc4dc9d0500f8de5b691893b750f14",
+    "guard_selftests": 8,
+    "remote_after_refs": {
+      "refs/heads/native-convergence": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+      "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+    },
+    "lease": {
+      "at_utc": "2026-10-30T20:43:27.690435+00:00",
+      "lease": "Main publication evidence lease released after receipt copy; all later writes own/tmp only",
+      "head_sha": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+      "remote_refs": {
+        "refs/heads/native-convergence": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+        "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+      },
+      "push_exit": 0,
+      "push_completed_utc": "2026-10-30T20:43:04.056526+00:00",
+      "protected_paths_unchanged": 155
+    }
+  },
+  "watch": [
+    {
+      "command": [
+        "gh",
+        "run",
+        "watch",
+        "41125396035",
+        "--repo",
+        "RuyimgByCN/RuyimgByCN-noname-ruyimg-modified",
+        "--exit-status",
+        "--interval",
+        "10",
+        "--compact"
+      ],
+      "name": "watch",
+      "http1": false,
+      "exit": 0
+    }
+  ],
+  "warnings_ignored_not_erased": true,
+  "warning_count_producer": 3628,
+  "qualification": "Fresh retained bytes/API/detail/gzip/hash/CRC/count verification only; no producer/tests/build/network or currentMain snapshot. NewWindowsprepare/installer/upload success, no installer download/install/signing/device/defaultswitch claim."
+}

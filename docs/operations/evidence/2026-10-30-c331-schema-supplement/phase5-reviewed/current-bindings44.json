@@ -1,0 +1,579 @@
+{
+  "rows": [
+    {
+      "variant": "BossBaimang2",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 8,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossBaimang3",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 9,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossBaiyi",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 602,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossBaiyiThunder",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 610,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossBianshen3",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 10,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossBianshen4",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 11,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossChiyan2",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 12,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossChiyan3",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 13,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossChiyi",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 584,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossChiyiMark",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 593,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossHuanren",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 566,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossHuanrenDie",
+      "tuple": {
+        "timing": "Normal",
+        "priority": -999,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 14,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossQingmu2",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 15,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossQingmu3",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 16,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossQingyi",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 584,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "BossXuanlin2",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 17,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "BossXuanlin3",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 18,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "GujianYunvyuanshen",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 610,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 19,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "GwentBirinState",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 20,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "GwentCiguState",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 859,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "GwentKunenState",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 869,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "GwentQinpenState",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 21,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "Miedao",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 304,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "Shishi",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 221,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "SwdBaishouzhihuHeld",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 399,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdGouhunluoSub",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 1151,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdHuanglinzhicongHeld",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 381,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdJiguanyaoGain",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 1126,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdJiguanyuanGain",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 1106,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdJuxiCount",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 54,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdQinglongzhiguiHeld",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 373,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdSxianjingDamage",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 85,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdSxianjingGain",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 76,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdXuanwuzhihuangHeld",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 446,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "SwdYuchanSwap",
+      "tuple": {
+        "timing": "Normal",
+        "priority": -99,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 22,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "SwdZhuquezhizhangHeld",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 390,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00"
+      }
+    },
+    {
+      "variant": "WudianPaotaiFire",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/wudian.rs",
+        "line": 104,
+        "sha256": "bdd02d86a53d9db2ece7bcd3add6a8fa8ce2175f2bd8ebbfa03f2f9b24d56a64"
+      }
+    },
+    {
+      "variant": "WudianQiangguGuard",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/wudian.rs",
+        "line": 193,
+        "sha256": "bdd02d86a53d9db2ece7bcd3add6a8fa8ce2175f2bd8ebbfa03f2f9b24d56a64"
+      }
+    },
+    {
+      "variant": "WudianZhenchaDraw",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/wudian.rs",
+        "line": 114,
+        "sha256": "bdd02d86a53d9db2ece7bcd3add6a8fa8ce2175f2bd8ebbfa03f2f9b24d56a64"
+      }
+    },
+    {
+      "variant": "XianjianHushaCount",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/xianjian.rs",
+        "line": 291,
+        "sha256": "d4123407ed7222fde5a633c1b8a70bddb776f6189ee6d73f5dd72632a38442ac"
+      }
+    },
+    {
+      "variant": "Xiefang",
+      "tuple": {
+        "timing": "Normal",
+        "priority": -99,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 23,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "XiguaXueliangFanbei",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 1,
+        "order_selectable": false
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 24,
+        "sha256": "58fd0d6f7d5be5f5aa2706d8fbba71f31cae795a986a200c4261a2572db85927"
+      }
+    },
+    {
+      "variant": "Xunmeng",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 230,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    },
+    {
+      "variant": "Zaibian",
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "native_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 212,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab"
+      }
+    }
+  ],
+  "exact_current_bindings": 44,
+  "corrected": 17,
+  "matching_without_override": 27
+}

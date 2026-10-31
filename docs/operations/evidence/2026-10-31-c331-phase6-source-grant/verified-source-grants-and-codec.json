@@ -1,0 +1,107 @@
+{
+  "source_rows": [
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "parent_line": 970,
+      "parent_body_sha256": "e62a312067849af220285dd4e2d1aa00d830c6abb03f5bb39ffb76f4d1a833f0",
+      "group": [
+        "xuanying_sha",
+        "xuanying_use"
+      ],
+      "declared_only": [
+        "xuanying_shan",
+        "xuanying_damage"
+      ],
+      "children": {
+        "sha": {
+          "body_sha256": "4908690639f10c9591aa70666cd57757d428429b51192ae8e84dc386bddad96b",
+          "body": " {\n\t\t\t\tenable: \"chooseToUse\",\n\t\t\t\tviewAs: {\n\t\t\t\t\tname: \"sha\",\n\t\t\t\t\tisCard: true,\n\t\t\t\t},\n\t\t\t\tviewAsFilter(player) {\n\t\t\t\t\tif (player.isLinked()) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t\tprecontent() {\n\t\t\t\t\tplayer.link();\n\t\t\t\t},\n\t\t\t\tfilterCard() {\n\t\t\t\t\treturn false;\n\t\t\t\t},\n\t\t\t\tselectCard: -1,\n\t\t\t\tprompt: \"横置武将牌，视为使用一张无视距离的杀\",\n\t\t\t\tai: {\n\t\t\t\t\torder() {\n\t\t\t\t\t\treturn 3.15;\n\t\t\t\t\t},\n\t\t\t\t\tskillTagFilter(player, tag, arg) {\n\t\t\t\t\t\tif (arg === \"respond\") {\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (player.isLinked()) {\n\t\t\t\t\t\t\treturn false;\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t\trespondSha: true,\n\t\t\t\t},\n\t\t\t\tmod: {\n\t\t\t\t\ttargetInRange(card) {\n\t\t\t\t\t\tif (_status.event.skill === \"xuanying_sha\") {\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t}"
+        },
+        "shan": {
+          "body_sha256": "ae96778831d5c909155ce59eb125d07600933e128bfbf6ab3d7c338c215fef49",
+          "body": " {\n\t\t\t\ttrigger: { player: [\"chooseToRespondBegin\", \"chooseToUseBegin\"] },\n\t\t\t\tfilter(event, player) {\n\t\t\t\t\tif (!player.isLinked()) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\tif (event.responded) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\tif (!event.filterCard({ name: \"shan\" }, player, event)) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn true;\n\t\t\t\t},\n\t\t\t\tcheck(event, player) {\n\t\t\t\t\tif (get.damageEffect(player, event.player, player) >= 0) {\n\t\t\t\t\t\treturn false;\n\t\t\t\t\t}\n\t\t\t\t\treturn true;\n\t\t\t\t},\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tplayer.link();\n\t\t\t\t\t\"step 1\";\n\t\t\t\t\ttrigger.untrigger();\n\t\t\t\t\ttrigger.responded = true;\n\t\t\t\t\ttrigger.result = { bool: true, card: { name: \"shan\" } };\n\t\t\t\t},\n\t\t\t\tai: {\n\t\t\t\t\trespondShan: true,\n\t\t\t\t\ttarget(card, player, target, current) {\n\t\t\t\t\t\tif (!player.isLinked() && current < 0) {\n\t\t\t\t\t\t\treturn 1.5;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (!target.hasFriend()) {\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (get.tag(card, \"loseCard\") && _status.currentPhase !== target && target.countCards(\"he\")) {\n\t\t\t\t\t\t\treturn [0.5, Math.max(2, target.countCards(\"h\"))];\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif (get.tag(card, \"respondSha\") || get.tag(card, \"respondShan\")) {\n\t\t\t\t\t\t\tif (get.attitude(player, target) > 0 && card.name === \"juedou\") {\n\t\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\treturn [0.5, target.countCards(\"h\", \"sha\") + target.countCards(\"h\", \"shan\")];\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t}"
+        },
+        "damage": {
+          "body_sha256": "b61956d38c8d3dedb226f5c2201f8bcddc0b93f6f9a292eec4c7d5670b5e272d",
+          "body": " {\n\t\t\t\ttrigger: { player: \"damageEnd\" },\n\t\t\t\tfilter(event, player) {\n\t\t\t\t\treturn event.source && event.source.isAlive() && player.isLinked() && lib.filter.targetEnabled({ name: \"sha\" }, player, event.source);\n\t\t\t\t},\n\t\t\t\tcheck(event, player) {\n\t\t\t\t\treturn get.effect(event.source, { name: \"sha\" }, player, player) > 0;\n\t\t\t\t},\n\t\t\t\tlogTarget: \"source\",\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tplayer.link();\n\t\t\t\t\t\"step 1\";\n\t\t\t\t\tplayer.useCard({ name: \"sha\" }, trigger.source);\n\t\t\t\t},\n\t\t\t}"
+        },
+        "use": {
+          "body_sha256": "0752aacc24d5eb6f26a4a78e69a63e96bf2620673c113b2ceadf34a5b9283fac",
+          "body": " {\n\t\t\t\ttrigger: { player: \"loseEnd\" },\n\t\t\t\tdirect: true,\n\t\t\t\tfilter(event, player) {\n\t\t\t\t\treturn _status.currentPhase !== player && player.isLinked() && event.cards && event.cards.length;\n\t\t\t\t},\n\t\t\t\tcontent() {\n\t\t\t\t\t\"step 0\";\n\t\t\t\t\tplayer\n\t\t\t\t\t\t.chooseTarget(get.prompt(\"xuanying\"), function (card, player, target) {\n\t\t\t\t\t\t\treturn lib.filter.targetEnabled({ name: \"sha\" }, player, target);\n\t\t\t\t\t\t})\n\t\t\t\t\t\t.set(\"ai\", function (target) {\n\t\t\t\t\t\t\treturn get.effect(target, { name: \"sha\" }, _status.event.player);\n\t\t\t\t\t\t})\n\t\t\t\t\t\t.set(\"autodelay\", 0.5);\n\t\t\t\t\t\"step 1\";\n\t\t\t\t\tif (result.bool) {\n\t\t\t\t\t\tplayer.logSkill(\"xuanying\");\n\t\t\t\t\t\tplayer.link();\n\t\t\t\t\t\tplayer.useCard({ name: \"sha\" }, result.targets, false);\n\t\t\t\t\t}\n\t\t\t\t},\n\t\t\t}"
+        }
+      }
+    },
+    {
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "parent_line": 1328,
+      "parent_body_sha256": "68c831a273e2f11b74e1b62987b8e1742794544f8470ed4eb42d71befd56dc69",
+      "group": [
+        "xuanying_sha",
+        "xuanying_use"
+      ],
+      "declared_only": [
+        "xuanying_shan",
+        "xuanying_damage"
+      ],
+      "children": {
+        "sha": {
+          "body_sha256": "9f4efba347cc14f5bec659ab1f6b114e6fe26be0f8cad9ae30a6b64e422757c5",
+          "body": "{\n\t\t\t\t\t\tenable:'chooseToUse',\n\t\t\t\t\t\tviewAs:{name:'sha'},\n\t\t\t\t\t\tviewAsFilter:function(player){\n\t\t\t\t\t\t\tif(player.isLinked()) return false;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tprecontent:function(){\n\t\t\t\t\t\t\tplayer.link();\n\t\t\t\t\t\t\t// player.getStat().card.sha--;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tfilterCard:function(){return false},\n\t\t\t\t\t\tselectCard:-1,\n\t\t\t\t\t\tprompt:'横置武将牌，视为使用一张无视距离的杀',\n\t\t\t\t\t\tai:{\n\t\t\t\t\t\t\torder:function(){\n\t\t\t\t\t\t\t\t// if(_status.event.player.countCards('h',{type:'equip'})) return 9;\n\t\t\t\t\t\t\t\treturn 3.15;\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\tskillTagFilter:function(player,tag,arg){\n\t\t\t\t\t\t\t\tif(arg!='use') return false;\n\t\t\t\t\t\t\t\tif(player.isLinked()) return false;\n\t\t\t\t\t\t\t},\n\t\t\t\t\t\t\trespondSha:true,\n\t\t\t\t\t\t},\n\t\t\t\t\t\tmod:{\n\t\t\t\t\t\t\ttargetInRange:function(card){\n\t\t\t\t\t\t\t\tif(_status.event.skill=='xuanying_sha') return true;\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t}"
+        },
+        "shan": {
+          "body_sha256": "f6255019b9c30c350f146fd5dad8c0f09666294026b5dfa759380aadecb62894",
+          "body": "{\n\t\t\t\t\t\ttrigger:{player:['chooseToRespondBegin','chooseToUseBegin']},\n\t\t\t\t\t\tfilter:function(event,player){\n\t\t\t\t\t\t\tif(!player.isLinked()) return false;\n\t\t\t\t\t\t\tif(event.responded) return false;\n\t\t\t\t\t\t\tif(!event.filterCard({name:'shan'},player,event)) return false;\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tcheck:function(event,player){\n\t\t\t\t\t\t\tif(get.damageEffect(player,event.player,player)>=0) return false;\n\t\t\t\t\t\t\treturn true;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tcontent:function(){\n\t\t\t\t\t\t\t'step 0'\n\t\t\t\t\t\t\tplayer.link();\n\t\t\t\t\t\t\t'step 1'\n\t\t\t\t\t\t\ttrigger.untrigger();\n\t\t\t\t\t\t\ttrigger.responded=true;\n\t\t\t\t\t\t\ttrigger.result={bool:true,card:{name:'shan'}}\n\t\t\t\t\t\t},\n\t\t\t\t\t\tai:{\n\t\t\t\t\t\t\trespondShan:true,\n\t\t\t\t\t\t\ttarget:function(card,player,target,current){\n\t\t\t\t\t\t\t\tif(!player.isLinked()&&current<0) return 1.5;\n\t\t\t\t\t\t\t\tif(!target.hasFriend()) return;\n\t\t\t\t\t\t\t\tif(get.tag(card,'loseCard')&&_status.currentPhase!=target&&target.countCards('he')){\n\t\t\t\t\t\t\t\t\treturn [0.5,Math.max(2,target.countCards('h'))];\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\tif(get.tag(card,'respondSha')||get.tag(card,'respondShan')){\n\t\t\t\t\t\t\t\t\tif(get.attitude(player,target)>0&&card.name=='juedou') return;\n\t\t\t\t\t\t\t\t\treturn [0.5,target.countCards('h','sha')+target.countCards('h','shan')];\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}"
+        },
+        "damage": {
+          "body_sha256": "949583f9c71689b429a96e85a9994994a0b5df12ac0a40171cd465fdcdb090b0",
+          "body": "{\n\t\t\t\t\t\ttrigger:{player:'damageEnd'},\n\t\t\t\t\t\tfilter:function(event,player){\n\t\t\t\t\t\t\treturn event.source&&event.source.isAlive()&&player.isLinked()&&\n\t\t\t\t\t\t\tlib.filter.targetEnabled({name:'sha'},player,event.source);\n\t\t\t\t\t\t},\n\t\t\t\t\t\tcheck:function(event,player){\n\t\t\t\t\t\t\treturn get.effect(event.source,{name:'sha'},player,player)>0;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tlogTarget:'source',\n\t\t\t\t\t\tcontent:function(){\n\t\t\t\t\t\t\t'step 0'\n\t\t\t\t\t\t\tplayer.link();\n\t\t\t\t\t\t\t'step 1'\n\t\t\t\t\t\t\tplayer.useCard({name:'sha'},trigger.source);\n\t\t\t\t\t\t}\n\t\t\t\t\t}"
+        },
+        "use": {
+          "body_sha256": "788dd9ad9edf1716bd0ea9937de374e9146ea42a11dd50c736ea689e0518d494",
+          "body": "{\n\t\t\t\t\t\ttrigger:{player:'loseEnd'},\n\t\t\t\t\t\tdirect:true,\n\t\t\t\t\t\tfilter:function(event,player){\n\t\t\t\t\t\t\treturn _status.currentPhase!=player&&player.isLinked()&&event.cards&&event.cards.length;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tcontent:function(){\n\t\t\t\t\t\t\t'step 0'\n\t\t\t\t\t\t\tplayer.chooseTarget(get.prompt('xuanying'),function(card,player,target){\n\t\t\t\t\t\t\t\treturn lib.filter.targetEnabled({name:'sha'},player,target);\n\t\t\t\t\t\t\t}).set('ai',function(target){\n\t\t\t\t\t\t\t\treturn get.effect(target,{name:'sha'},_status.event.player);\n\t\t\t\t\t\t\t}).set('autodelay',0.5);\n\t\t\t\t\t\t\t'step 1'\n\t\t\t\t\t\t\tif(result.bool){\n\t\t\t\t\t\t\t\tplayer.logSkill('xuanying');\n\t\t\t\t\t\t\t\tplayer.link();\n\t\t\t\t\t\t\t\tplayer.useCard({name:'sha'},result.targets,false);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t},\n\t\t\t\t\t}\n\t\t\t\t"
+        }
+      }
+    }
+  ],
+  "selected_asset": {
+    "path": "packages/extensions/shahai-swd-upstream-noname/assets/cards.json",
+    "sha256": "98f954cfb7e781a09f5674010d71d3acf984eb8c508bc08db1e1133c5a19c724",
+    "source": "noname",
+    "upstream_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "general": {
+      "name": "swd_duanmeng",
+      "faction": "shu",
+      "hp": 4,
+      "gender": "female",
+      "skills": [
+        {
+          "name": "xuanying",
+          "mapping": "host:xuanying"
+        },
+        {
+          "name": "lieren",
+          "mapping": "host:lieren"
+        }
+      ]
+    }
+  },
+  "codec_fix": {
+    "path": "crates/engine-native-kernel/src/archive/resolution.rs",
+    "old_sha256": "ddd79f3318ca65b986260ffeef1d4424e8c37367dba0e845ff784c6cf0c244a0",
+    "new_sha256": "989d4527cb101245c8cb659c5f0a3382326cc5c3864b7df3878a4baf50ab578c",
+    "old_prompts": 77,
+    "new_prompts": 78,
+    "only_new_literal": "xuanying_target",
+    "all_old_entries_and_order_unchanged": true,
+    "encoding": "existing UTF8 string bytes, not numeric prompt IDs",
+    "all_other_file_bytes_unchanged": true
+  },
+  "proof_count": {
+    "proven": 262,
+    "total": 290,
+    "added": 0
+  },
+  "pending": "Full loseEnd/use and other chooseToUse contexts remain required; no explicit damage grant supplied; no equipment tuple changes."
+}

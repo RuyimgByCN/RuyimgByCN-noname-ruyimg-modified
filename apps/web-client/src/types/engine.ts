@@ -98,6 +98,7 @@ export interface ChoiceRequest {
   kind?: string;
   prompt?: string;
   native_kind?: NativeChoiceKind;
+  source_skill?: string | null;
 }
 
 export interface EngineEnvelope {

@@ -1,0 +1,35 @@
+## Review
+
+Reviewed the complete implementation report, exact patch, all nine frozen sources, baseline evaluation/control code, final manifests, retained failures, and actual measurement logs. Authority is private baseline `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, rule330 / NGSA105 / ABI758 / WS6. Current Main’s unrelated source27 work is outside this comparison.
+
+The [source manifest](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/source-manifest.json) and [patch-application record](/tmp/pa09-candidate-f82ecf3c/evidence/patch-apply-check.json) agree on nine files and patch SHA256 `692e2a3bffd5610d7b1bccb7775409375f79b9492cc1e4c0d8dbfffc964fc498`. These recorded hashes were not independently recomputed.
+
+- **Correct — shared evaluation preserves baseline behavior.** [evaluation.rs:8](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai/evaluation.rs:8) retains the original trial clone, revision/dedup command construction, caught submit panic, rejection handling, and scoring. [ai.rs:592](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai.rs:592) prepares and redacts once, enumerates the original attempts once, and passes the shared baseline to workers. Rejected attempts still consume nodes; other policies/depths and zero/one-candidate evaluation retain serial behavior.
+- **Correct — bounded owner admission.** [candidate_pool.rs:69](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai/candidate_pool.rs:69) checks cancellation, the shared owner clock, and global budget before each consecutive root. When outstanding accepted work reaches `workers`, it joins the oldest first. Queue rejection computes that root once locally with at most `workers − 1` accepted jobs outstanding, preserving the combined bound.
+- **Correct — ordered reduction and visible failure.** [candidate_pool.rs:96](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai/candidate_pool.rs:96) gives each accepted closure its only result sender. Accepted work drains before reduction or failure; missing results assert, unexpected panics propagate, and neither path retries through `plan_all`. Reduction follows root order, uses strict `score > previous`, and appends caught-fault diagnostics in that order.
+- **Correct — actual session integration and lifecycle.** [session.rs:626](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native-wasm/src/session.rs:626) routes native default64/50 planning to root parallelism. Constructors start without a pool; restores replace only the engine and retain the pool; replacement/drop reaches existing close-and-join behavior. Workers receive simulation data, never the authoritative session or owner locks. WASM keeps its serial route; no request, knob, protocol, version, or transport-default change appears in the patch.
+- **Correct — observational counter boundary.** [ai_pool.rs:81](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai_pool.rs:81) counts successful acceptance only. The native session getter exposes that observation without adding it to replies, plans, archives, hashes, or policy decisions. It proves neither completion nor overlap.
+- **Correct — connected tests provide stronger evidence than that counter.** [engine tests:77](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native/src/ai/candidate_pool/tests.rs:77) require roots0/1 on two distinct non-owner thread IDs with peak concurrency2; other tests cover budget prefixes, rejects, ties, faults, lost jobs, and authority preservation. [Session tests:72](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/crates/engine-native-wasm/src/session/planner_pool_tests.rs:72) compare actual default stepping with the original serial control and check restores. [Host tests:48](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/apps/desktop-client/src/native_engine_host/pool_tests.rs:48) traverse request/owner/dispatch/session/envelope and exercise close/drain. Engine fault/delay hooks are `cfg(test)` and absent from measured dependency builds.
+- **Correct — retained validation supports the report.** Actual final logs show native suites **1716 passed / 0 failed / 75 ignored**, affected suites **97 / 0 / 3**, and successful wasm32 checking. The [line gate](/tmp/pa09-candidate-f82ecf3c/evidence/final-source-lines.log) passes both limits; the frozen files’ maximum physical length is821. Earlier measurement, restore-expectation, and missing-fixture failures remain recorded separately.
+- **Fixed:** None; review was read-only.
+
+No issues found.
+
+The accepted timing contract permits admission prefixes and selected policies to differ from serial wall-clock scheduling. Admitted work drains past expiry; there is no hard-preemption guarantee. Authoritative submission/revision checks remain intact. Known NC10 root/privacy counterexamples remain untouched and open.
+
+The [ABBA data](/tmp/pa09-candidate-f82ecf3c/evidence/host-abba.json), driver log, and four actual run logs agree:
+
+| Run | Roundtrip p95, µs | Owner p95, µs | Jobs / pool-bearing steps |
+|---|---:|---:|---:|
+| Candidate A1 | 1777.584 | 1562.125 | 625 / 135 |
+| Serial B1 | 1742.125 | 1529.791 | 0 / 0 |
+| Serial B2 | 1739.375 | 1531.708 | 0 / 0 |
+| Candidate A2 | 1757.792 | 1543.584 | 625 / 135 |
+
+Each run measured1400 steps and five completed games; all share digest `803da246ffb0b09b764b24dd81f5a37734f1a33aeb2245ff96fb177307c1685c`. Normal/stress session checkpoints improve, but candidate host p95 is higher in both comparisons. Whole-route benefit is unproved.
+
+- **Smallest evidence-led next step:** In a separately authorized experiment, repeat this same serial/candidate host comparison in release profile before changing admission policy. Existing evidence is explicitly unoptimized debug; release could change the compute/queue balance in either direction.
+- **Subset analysis cannot be recovered from these logs.** [Host fixture:90](/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/sources/apps/desktop-client/src/native_engine_host/pool_tests.rs:90) prints aggregate percentiles only and sorts its timing vectors. A future test-only row needs `variant`, `abba_run`, `game_index`, `step_index`, `request_id`, `accepted_jobs_delta`, `roundtrip_ns`, `owner_ns`, and `hash_hex`; run metadata should retain profile and source/binary identities. Parent analysis can select candidate `accepted_jobs_delta > 0`, pair serial rows by game/step after verifying hashes, and report that subset alongside all1400 steps. Present evidence justifies no particular admission threshold.
+- **Merge verdict: OK with notes for the sealed private candidate’s correctness.** This is not approval for Main integration, a default switch, or PA09 performance acceptance.
+
+Skipped: execution, hash recomputation, release/GUI/platform testing, and all source/Main/index writes. Risk: whole-route benefit remains unestablished, and bounded admitted work can outlive cancellation/deadline observation.

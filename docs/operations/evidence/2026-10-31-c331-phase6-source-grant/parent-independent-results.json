@@ -1,0 +1,98 @@
+{
+  "status": "PASS byte identity and retained result counts only",
+  "source_files": 140,
+  "source_manifest_sha256": "81d66d59f0ca336761f28629850f9daf7a955670e7c17725cde40b88a1ba21e7",
+  "source_tar_sha256": "b9cb5c97658750bc11becc8e23a0cd074112cf3f2d38d173aaa71be3fa2084b1",
+  "all140_tar_and_worktree_fresh_sha_match": true,
+  "pre_full_post_full_ordered_source_rows_equal": true,
+  "results": [
+    {
+      "name": "registered-group",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "g1_shahai"
+      ],
+      "started": "2026-10-31T06:05:12.028426+00:00",
+      "exit": 0,
+      "seconds": 28.913660049438477
+    },
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "started": "2026-10-31T06:05:40.947173+00:00",
+      "exit": 0,
+      "seconds": 42.6407310962677
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "started": "2026-10-31T06:06:23.592684+00:00",
+      "exit": 0,
+      "seconds": 0.09440016746520996
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "started": "2026-10-31T06:06:23.691782+00:00",
+      "exit": 0,
+      "seconds": 4.093412160873413
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "started": "2026-10-31T06:06:27.790229+00:00",
+      "exit": 0,
+      "seconds": 0.1455519199371338
+    }
+  ],
+  "counts": {
+    "registered-group": {
+      "passed": 177,
+      "failed": 0,
+      "ignored": 0,
+      "summaries": 1
+    },
+    "full-native": {
+      "passed": 1749,
+      "failed": 0,
+      "ignored": 75,
+      "summaries": 17
+    }
+  },
+  "source_proof": "262/290 +0",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c331-phase6-161ir30z/snapshot",
+  "qualification": "No new tests/build/network/producer execution; no semantic independent approval. Existing prompt dictionary uses UTF8 strings, not numeric prompt IDs. All C remains private/BLOCK."
+}

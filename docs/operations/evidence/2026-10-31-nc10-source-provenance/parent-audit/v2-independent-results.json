@@ -1,0 +1,331 @@
+{
+  "status": "PASS retained-identity-and-results; resource gate STILL FAIL",
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "manifest_sha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e",
+  "patch_sha256": "46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43",
+  "source_files_fresh_sha": 43867,
+  "source_bytes": 3100217611,
+  "unchanged_sources_fresh_git_blob_match": 43836,
+  "changed31_worktree_and_frozen_equal": true,
+  "base_new_paths": [
+    "apps/game-server/src/native_ws_e2e/source_skill.rs",
+    "apps/game-server/tests/support/ws6_choice_before_source.rs",
+    "apps/web-client/scripts/nc10-source-provenance.test.mjs",
+    "apps/web-client/scripts/nc10-source-ui.ts",
+    "apps/web-client/scripts/ws6-observer-metadata-before-source.ts",
+    "crates/engine-core/src/engine/source_tests.rs",
+    "crates/engine-core/src/snapshot/legacy_choice.rs",
+    "crates/engine-native/src/engine/choice_source.rs",
+    "crates/engine-native/tests/nc10_source_provenance.rs"
+  ],
+  "reverse_patch_check": 0,
+  "negative_sha_selfcheck": "PASS",
+  "source_audit_seconds": 4.029404791013803,
+  "commands": 58,
+  "failures_retained": [
+    {
+      "name": "final-gates",
+      "exit": 1,
+      "log": "final-gates.log"
+    },
+    {
+      "name": "final-strict-native",
+      "exit": 101,
+      "log": "final-strict-native.log"
+    },
+    {
+      "name": "frontend-source",
+      "exit": 1,
+      "log": "frontend-source.log"
+    },
+    {
+      "name": "red-naive-expanded",
+      "exit": 101,
+      "log": "red-naive-expanded.log"
+    },
+    {
+      "name": "red-naive-legacy",
+      "exit": 101,
+      "log": "red-naive-legacy.log"
+    },
+    {
+      "name": "red-native-source",
+      "exit": 101,
+      "log": "red-native-source.log"
+    },
+    {
+      "name": "source-final-native-corrected",
+      "exit": 101,
+      "log": "source-final-native-corrected.log"
+    },
+    {
+      "name": "source-final-native-vm",
+      "exit": 101,
+      "log": "source-final-native-vm.log"
+    },
+    {
+      "name": "source-final-native",
+      "exit": 101,
+      "log": "source-final-native.log"
+    },
+    {
+      "name": "source-final-vm-commit",
+      "exit": 101,
+      "log": "source-final-vm-commit.log"
+    },
+    {
+      "name": "source-prefix-false-lemma-red",
+      "exit": 101,
+      "log": "source-prefix-false-lemma-red.log"
+    },
+    {
+      "name": "v2-original-sync-verify",
+      "exit": 1,
+      "log": "v2-original-sync-verify.log"
+    }
+  ],
+  "rust_summaries": {
+    "desktop-host": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "final-gates": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 2
+    },
+    "final-native-all-layers": {
+      "passed": 1715,
+      "failed": 0,
+      "ignored": 75,
+      "suites": 17
+    },
+    "final-source-physical": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "final-workspace": {
+      "passed": 6916,
+      "failed": 0,
+      "ignored": 77,
+      "suites": 164
+    },
+    "full-native": {
+      "passed": 1705,
+      "failed": 0,
+      "ignored": 75,
+      "suites": 13
+    },
+    "full-workspace": {
+      "passed": 6909,
+      "failed": 0,
+      "ignored": 77,
+      "suites": 164
+    },
+    "green-legacy-source": {
+      "passed": 6,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "green-native-source": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "red-naive-expanded": {
+      "passed": 1,
+      "failed": 5,
+      "ignored": 0,
+      "suites": 1
+    },
+    "red-naive-legacy": {
+      "passed": 1,
+      "failed": 2,
+      "ignored": 0,
+      "suites": 1
+    },
+    "red-native-source": {
+      "passed": 0,
+      "failed": 1,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-all-native-green": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-desktop-host": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-final-legacy-matrix": {
+      "passed": 9,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-final-native-corrected": {
+      "passed": 3,
+      "failed": 1,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-final-native-vm": {
+      "passed": 3,
+      "failed": 1,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-final-vm-commit": {
+      "passed": 3,
+      "failed": 1,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-fixture": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-host-kunlun-green": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 12
+    },
+    "source-legacy-expanded": {
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-legacy-sink": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-native-unit": {
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-prefix-false-lemma-red": {
+      "passed": 0,
+      "failed": 1,
+      "ignored": 0,
+      "suites": 1
+    },
+    "source-ws-real": {
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "v2-current-wasm-cross": {
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 2
+    },
+    "v2-source-physical": {
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0,
+      "suites": 1
+    },
+    "v2-workspace": {
+      "passed": 6916,
+      "failed": 0,
+      "ignored": 77,
+      "suites": 164
+    }
+  },
+  "product_records": 95,
+  "product_missing_now": [],
+  "actual_wk_reports": {
+    "actual-wk-final-report.json": {
+      "passed": true,
+      "cases": [
+        {
+          "mode": "native",
+          "heading": "是否发动【遗计】？",
+          "transport": "wasm-worker",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "missing",
+          "heading": "是否发动技能？",
+          "transport": "wasm-worker",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "null",
+          "heading": "是否发动技能？",
+          "transport": "wasm-worker",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "escaped",
+          "heading": "是否发动【<img src=x onerror=alert(1)>】？",
+          "transport": "wasm-worker",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        }
+      ]
+    },
+    "actual-tauri-final-report.json": {
+      "passed": true,
+      "cases": [
+        {
+          "mode": "native",
+          "heading": "是否发动【遗计】？",
+          "transport": "desktop-native",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "missing",
+          "heading": "是否发动技能？",
+          "transport": "desktop-native",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "null",
+          "heading": "是否发动技能？",
+          "transport": "desktop-native",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        },
+        {
+          "mode": "escaped",
+          "heading": "是否发动【<img src=x onerror=alert(1)>】？",
+          "transport": "desktop-native",
+          "actualWorkerSource": "遗计",
+          "archiveUnchanged": true
+        }
+      ]
+    }
+  },
+  "v1_v2_delta_only_test": [
+    "crates/engine-native/tests/nc10_source_provenance.rs"
+  ],
+  "qualification": "Fresh bytes/Git identity/log/result parsing only. No producer/product execution, no tests/build/network. UI injected missing/null/escaped cases are compatibility/safe text, not natural source authority. No root/privacy/quality/global acceptance claim."
+}

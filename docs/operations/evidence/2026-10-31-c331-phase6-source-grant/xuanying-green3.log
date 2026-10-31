@@ -1,0 +1,12 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.64s
+     Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-c1181315dc2a39bd)
+
+running 3 tests
+test g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack ... ok
+test g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore ... ok
+test g1_shahai_swd::xuanying::source_parent_active_restore_rejects_wrong_choice_fields ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 174 filtered out; finished in 0.02s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1_shahai", "source_parent"], "exit": 0, "locked_seconds": 2.720046666014241, "disk_free_bytes": 95104593920}

@@ -9,6 +9,7 @@ use crate::state::GameState;
 use engine_api::{ChoiceRequest, MatchManifestHash, VersionBundle, SNAPSHOT_SCHEMA_VERSION};
 use serde::{Deserialize, Serialize};
 use thiserror::Error;
+pub(crate) mod legacy_choice;
 
 /// Snapshot envelope.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -26,7 +27,7 @@ pub struct Snapshot {
     #[serde(default)]
     pub manifest_hash: MatchManifestHash,
     /// Published choice contract when the snapshot was taken at an input barrier.
-    #[serde(default)]
+    #[serde(default, serialize_with = "legacy_choice::serialize", deserialize_with = "legacy_choice::deserialize")]
     pub pending_choice: Option<ChoiceRequest>,
     /// Full canonical state.
     pub state: GameState,
@@ -288,6 +289,7 @@ mod tests {
             kind: engine_api::ChoiceKind::SelectCards,
             prompt: None,
             native_kind: None,
+            source_skill: None,
         };
         let mut snapshot = Snapshot::capture(&state);
         snapshot.pending_choice = Some(choice.clone());

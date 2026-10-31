@@ -1,0 +1,116 @@
+{
+  "status": "PASS retained incremental/resource/Main identity and result parsing",
+  "v3_changed_files": [
+    "crates/engine-core/src/engine/source_tests.rs",
+    "crates/engine-core/src/engine/source_tests/choice_request_4dd.rs",
+    "crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+    "crates/engine-core/src/snapshot/legacy_choice.rs"
+  ],
+  "v3_composed_source_count": 43869,
+  "only_legacy_reader_production_delta": true,
+  "oracle_reverse_import_exact4dd": true,
+  "differential_cases": 445,
+  "prepatch_differences": 18,
+  "postpatch_differences": 0,
+  "differential_scope": "Acceptance/error diagnostics including positions; successful rows do NOT prove all decoded values equal",
+  "core_full": {
+    "passed": 3861,
+    "failed": 0,
+    "ignored": 1,
+    "suites": 13
+  },
+  "p2_logs_fresh_sha": 7,
+  "p2_products_fresh_sha": 6,
+  "resource_evidence_fresh_sha": 19,
+  "resource_link_pairs": {
+    "before": {
+      "legacy-source": [
+        0,
+        366
+      ],
+      "portraits": [
+        0,
+        2707
+      ],
+      "audio": [
+        0,
+        9652
+      ],
+      "audio-compat": [
+        0,
+        5
+      ],
+      "audio-declared": [
+        0,
+        23393
+      ]
+    },
+    "after": {
+      "legacy-source": [
+        0,
+        366
+      ],
+      "portraits": [
+        2707,
+        0
+      ],
+      "audio": [
+        9652,
+        0
+      ],
+      "audio-compat": [
+        0,
+        5
+      ],
+      "audio-declared": [
+        23383,
+        10
+      ]
+    }
+  },
+  "original_resource_exit1_preserved": true,
+  "resource_repair_three_exits": [
+    0,
+    0,
+    0
+  ],
+  "MainV2_evidence_files_fresh_sha": 30,
+  "MainV2_invariants": {
+    "invariants": {
+      "head": true,
+      "tree": true,
+      "index_sha256": true,
+      "staged": true,
+      "tracked_status": true,
+      "admission31": true,
+      "admission_mismatches": true,
+      "input_hashes": true,
+      "guard": true,
+      "attribute_sha256": true,
+      "root_gates": true,
+      "docs_dirty": true,
+      "source3": true,
+      "protected": true,
+      "modules": true,
+      "dist": true,
+      "pa09_admission_sha256": true
+    },
+    "all_equal": true,
+    "scope": "Narrow native/API/frontend/Cargo inputs and inherited PA09 path sets; no broad43867/3GB source rescan",
+    "counts": {
+      "input_hashes": 1131,
+      "admission31": 31,
+      "protected": 99,
+      "modules": 18,
+      "dist": 37,
+      "docs_dirty": 6,
+      "root_gates": 7
+    }
+  },
+  "MainV2_native_counts": [
+    1715,
+    0,
+    75
+  ],
+  "qualification": "No producer/product execution or new tests/build/network; v3 incremental proof is not new whole-workspace acceptance. MainV2 is not MainV3. Original root/NoCert/privacy/quality remain open."
+}

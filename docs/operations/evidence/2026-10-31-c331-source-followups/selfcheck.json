@@ -1,0 +1,87 @@
+{
+  "timestamp": "2026-10-31T05:20:26.324781+00:00",
+  "result": "passed evidence consistency assertions (not build/tests)",
+  "checks": {
+    "rows": 16,
+    "actual_keys": 17,
+    "source_body_file_sha_matches": 32,
+    "source_manifest_files_rechecked": 328,
+    "snapshot_file_count": 135,
+    "original_E_sha_unchanged": true,
+    "old_unknown_records_preserved": true,
+    "no_staged_files": true,
+    "index_sha_before": "2409bf1c2ae677d076bec93091d3a517cbe2b40a7520240dda009a985f9cae12",
+    "index_sha_after": "2409bf1c2ae677d076bec93091d3a517cbe2b40a7520240dda009a985f9cae12",
+    "index_sha_unchanged_since_input_capture": true,
+    "prior_lane_rows_equal_E": 16
+  },
+  "prior_lane_inputs": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/inputs/laneA-ordering.json",
+      "sha256": "2f69a62182a025b16ce7a2f7ca2cb236d1a3726be52762383b181b57fc2cac00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/inputs/laneB-ordering-evidence.json",
+      "sha256": "34554acbe472427bdf2de6ebdd4f4900b68ae766766c52ed80a9bd93ee2976d4"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/assemble-evidence.py",
+      "sha256": "a30056c184b39964aa5b614681f3ae511502a6a18c9ab5a22a0530ad80ad92a1"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/ast-scan.json",
+      "sha256": "c37dc545b28aaa47815d7489679663a0a5b606ea067ecf8ba5a7113e9b1739fd"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/catalog-stamped-source-check.json",
+      "sha256": "4af78aa2930b88bca3f01e08a5610204c28a8888ca9b9e4e7dce9ae98e90806f"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/files.json",
+      "sha256": "1ff4fb2b902c5d1865ff8ad9cc2b00756175e2887568b837065913886c504a99"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/frozen135-manifest.json",
+      "sha256": "a31705294156a844630c9780a7bb070171a75de4e2ab8eb32da3d7edb9f96554"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/inputs.json",
+      "sha256": "533b37381e073fbcfdbe0cb3341ad4819df2d6c4c200aa9bddacc263a9a02285"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/parse-only.cjs",
+      "sha256": "4a6400fba713471c8168524200ed85c238cc575b3cfa0b5f9a599b26804e050b"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/parse-summary.json",
+      "sha256": "e2c4ae8297817abc466ae0016f0872b51b4d998e6b330d8e3594825889962acb"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/raw-excerpts.json",
+      "sha256": "a402c45f324a09ad55665f25e55a26c0b7842d7594008e54614fd062b3bb76e1"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/source-manifest.json",
+      "sha256": "ba00f689bb0fe3f7836f94085aaab049740063b7b454f19002416505650d4198"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/translation16.json",
+      "sha256": "81351e6531df6a3a3d808fdd41d02b02528863f7eaef117da9a2cbdf483d6554"
+    },
+    {
+      "path": "/tmp/c331-remaining16-3a0effb3/prior-lane16-reconciliation.json",
+      "sha256": "7d55271a6970db7afa2eb3a88035b65adce06a567b039a683884e830a5adbe42"
+    }
+  ],
+  "not_run": [
+    "builds",
+    "tests",
+    "Cargo",
+    "network",
+    "upstream JavaScript execution",
+    "runtime harness"
+  ],
+  "interpretation": "No staged changes; no explicit index writes. Shared main may change concurrently. Snapshot/E are frozen; live catalog bytes are separately hashed, not substituted for frozen code."
+}

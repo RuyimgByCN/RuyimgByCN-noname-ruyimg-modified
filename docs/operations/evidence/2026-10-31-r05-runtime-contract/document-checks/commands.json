@@ -1,0 +1,76 @@
+[
+  {
+    "utc": "2026-10-31T05:50:19.591592+00:00",
+    "name": "line-tests",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0,
+    "seconds": 0.07025316599174403,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "cc4ce8d54ec0f6a2d972abf34157488e5e132e9d71efaebb422979f2bf3356f8"
+  },
+  {
+    "utc": "2026-10-31T05:50:27.736277+00:00",
+    "name": "line-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0,
+    "seconds": 8.144373833987629,
+    "stdout_sha256": "5533d278fc7a25598f97aed0b7fc111f5433ac50989987d0dcb759614aa87ce4",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "utc": "2026-10-31T05:50:28.770064+00:00",
+    "name": "links",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 1.0336424580018502,
+    "stdout_sha256": "1007885e881daeeda211a67daab7e67c38c9914527d35027e2e97317575f3b0b",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "utc": "2026-10-31T05:50:38.288994+00:00",
+    "name": "strict",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "exit": 0,
+    "seconds": 9.497898457979318,
+    "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+    "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b"
+  },
+  {
+    "utc": "2026-10-31T05:50:38.529563+00:00",
+    "name": "whitespace",
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.24035412500961684,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "utc": "2026-10-31T06:24:37.444577+00:00",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-wasm",
+    "--lib",
+    "source_skill_legacy_sink",
+    "--",
+    "--nocapture"
+  ],
+  "exit": 0,
+  "wallIncludingLockQueueSeconds": 21.763483249989804,
+  "log": "p2-legacy-wasm-sink.log",
+  "diskFree": 87527264256
+}

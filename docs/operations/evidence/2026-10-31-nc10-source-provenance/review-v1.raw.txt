@@ -1,0 +1,59 @@
+What this change does: 提案补充“本人当前被询问发动哪个已知技能”的来源表达，保留 generic prompt。**Owner 可见性小合同具备提交裁决的依据；字段、WS6、legacy 适配和任何 root gate 修改均未获本审查批准。**
+
+## Review
+
+- **Correct — 审查范围：**完整读取 114 行提案、phase4 报告及必要实际源码，沿 OptionalGate、active_ask、投影、共享 ChoiceRequest 和产品转发路径核查。private 仍是 329／WS5；Main `777bf339` 的 330／WS6、`deadline_unix_ms` 仅据所供不可变对象摘录确认，未把 private 源当作 Main 当前实现，未触碰 finalgate lease。
+
+- **Correct — 普通 owner 具名提示有上游依据。**`content.ts:4185–4201` 在普通 createTrigger 询问分支使用 info.prompt 或 `get.prompt(event.skill, …)`；`get/index.js:1518` 生成具名发动提示；`content.ts:8367` 的本人分支显示该 prompt，online 分支经 `gameEvent.ts:994` 定向发送给应答玩家。
+- 该依据支持普通、已知 native OptionalGate 的 owner 来源披露，不能外推 hidden/invisible、direct/cost、Other 或普通旁观者。遗计 frequent 可能自动确认，不能声称每次都出现对话框。原 B/C 无公开技能资格，提案选择 None 是明确的保守子集，没有擅自扩大这类异常恢复件的可见性合同。
+
+- **Correct — 来源资格与碰撞规则。**名字应取 exact ask 对应 `catalog[def].name`，再验证全 catalog 唯一且唯一项仍为该 def；不能用 `by_name` first-match、实际 filter 或实际实例集合消歧。owner 资格只使用既有合法 PlayerView.skills，不新增 once、marks、flags、PC、fuel、ancestor 或“已验证”公开位。
+- SDK／VM／未知 producer 默认 None；Other 不增加来源，trusted referee 的 full-info Own 使用与 owner 相同的派生结果。来源只由 native view 计算，adapter 转发，不让 AI 额外遍历 private parks；`AiSession::choice/input` 与人类 Own 的新增来源信息须一致。
+
+- **Correct — inner 与同 prompt producer 分开处理。**`snap/asks.rs:409` 在 OptionalGate.inner 存在时委托内层；提案不继承外层名字是必要限制。Host 昆仑镜 `step/skills_status.rs:334` 另发 `trigger_confirm`，首版 None；不能凭相同 prompt 冒充 native OptionalGate 来源。
+
+- **来源绑定仍是实施前置，不是已经完成的保证。**现 native restore 在 `engine/snapshot.rs:134` 检查唯一 active_ask 与 OpenChoice 形状；scheduler 在 `resolution.rs:488` 却选择首个深度匹配的 park。二者不是同一谓词。
+- 因此提案第 3 项要求的“exact producer 与实际消费者一致”必须成立，不能仅复制第 2 项唯一形状检查就宣布完成。也不能通过察看实际空 queue、私有 ancestor 或当前 park 恰为何种机器来给 root 授权。无法在批准边界内建立绑定时，来源保持 None，root 继续 NoCert。
+- 新 ExpectedAsk 元数据必须与既有恢复形状比较分离；`engine/snapshot.rs:143` 当前逐项比较 observer/prompt/kind/options/min/max/cancel，不能把新增来源资格加入恢复接受条件。
+
+- **Finding P2 — legacy 剥离计划尚缺直接 typed Snapshot 路径。**
+  - 提案只明确在 `Snapshot.pending_choice` 序列化边界剥离；但 [Engine::snapshot／restore_snapshot](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-core/src/engine.rs:404) 及 `restore_snapshot_with_manifest:446` 直接 clone pending_choice，可以完全绕过 JSON 编解码。
+  - 获批字段后，宿主直接传入带 `source_skill: Some(...)` 的 typed Snapshot，若沿现有 clone 路径恢复，legacy `last_choice` 仍可携带该来源；`engine-wasm/src/lib.rs:275` 又直接将 last_choice 输出。这不满足首版 legacy 来源统一未知、不得信任恢复 metadata 的目标。此为方案覆盖缺项，尚无实现回归可宣称。
+  - **最小补充合同：**明确既有 typed capture/两种 restore 入口也只丢弃 source_skill、维持其余字段及原接受集合，并加入不经过 to_bytes/from_bytes 的用例；无需新 ledger 或新 snapshot。
+  - JSON 适配还须在共享 ChoiceRequest 的新字段类型校验**之前**忽略该键：旧 reader 原本忽略的 `source_skill:123`、对象或空字符串，不得因新增 String 校验使 legacy archive 被拒绝。wire 的严格校验与 legacy archive 的忽略规则应分开。
+
+传播清单与最小责任如下；名称字段不能静默丢失，也不能覆盖 Main 已有 deadline：
+
+| 链路 | 审查结论／获批后责任 |
+|---|---|
+| native kernel → view | `snap/asks/shapes.rs`、`snap/asks.rs` 派生元数据；`engine/views.rs::build_choice_view` 统一资格／形状绑定；不写 ChoiceSpec、OpenChoice、MachineSnapshot、LogEvent 或 hash。 |
+| PolicyInput／AI | `view.rs::AiSession::choice/input` 自动携带；同时核对 `ai.rs` 的枚举／projected_choice_action／vm_choice_leaf、`ai/trial.rs` 与 certificate 入口，保持来源缺失时保守，不增加私有补猜。 |
+| WASM → Worker | `engine-native-wasm/session.rs::open_choice_json` 当前手工构造 JSON；`nativeBackend.ts::NativeChoiceJson/readChoice`、`observerMetadata.ts::choiceMetadata` 当前挑选字段，均须显式支持；随后 `nativeEnvelope → engine.native.worker → EngineClient → viewStore` 保持转发。 |
+| Desktop | `native_envelope.rs::choice` 当前 whitelist 必须增校验／转发；`desktopEngineTransport.ts::normalizeResponse` 覆盖普通 envelope 与 chooseGeneral.envelope 两处。token/cancel authority 不变。 |
+| native WS／角色 | `native_view.rs::choice_for` 显式解构 Own 并构造共享 API；room actor 的 JoinOk、CommandOutcome、Snapshot、重连均保持按成员角色投影。Owner／trusted referee 可得 Own，Other 不升级为完整 choice，spectator 保持 None。 |
+| network／UI | `networkClient.ts:507` 统一校验，三个 message 分支保持整个 choice；`types/engine.ts`、`viewStore`、`BattleView.vue:778` 与 choicePromptLabel 更新。仅文本插值；Referee 可见不等于有权代答。 |
+| shared API／legacy | `engine-api/choice.rs`、协议 choice payload、legacy `request_choice`（`effect/primitives/pack_tw_1/recover_hp.rs:269`）及 snapshot fixtures 均纳入；legacy producer 为 None。Main 的 `deadline_unix_ms`、timeout/revision/continuation 等原字段必须保留。 |
+
+Main WS6 内可选扩展可作为推荐政策提交协议裁决：缺失/null 归一未知，None 省略；新值非字符串或空名在 wire adapter 拒绝；旧客户端继续 generic UI。源码上的未知字段容忍不等于兼容矩阵已通过，也不允许 WS5 绕过既有握手。不能把 private 旧 whitelist 整段覆盖到 Main，损失 deadline 或 PA3 改动。
+
+- **phase4 原证据保留：**A 的真实遗计来源在满足提案资格时为“遗计”；B/C 仅改 saved def、owner 仍只知遗计，因此均 None，保持可恢复及 NoCert。B 正式 Confirm Accepted、C 正式 Confirm panic 的差异没有被字段消除。合法持有刚烈／奸雄的询问应各显示其自身来源，不能继续冒称遗计。
+- **对我上一份 review 的追加纠正：**标准无 VM catalog 的 `vm_card_history=false`；`kernel/events.rs:641` 在访问 drawn 前返回。phase4 已实际验证 MAX drawn 不变、Confirm 仍 Pending。不能再泛称该遗计路径“摸牌必读 private drawn”；VM catalog 路径与 phase3 阻断保持区分。
+
+有限遗计 prefix 的局部源码依据成立：受信 JiJiBehavior.start 新建 Draw/target=None/given=0；deckCount≥2 排除洗牌 RNG，history=false 排除 drawn；首次目标窗只列合法存活其它座位。但还须证明标准行为身份、once_per_turn=false、所有 CardsDrawn 插入 family，以及当前答案至首次 Pending 期间的实际消费者／调度前缀。唯一名字本身不证明这些条件。
+
+首次 jiji_target 应是候选叶边界；`note_future_draw`、内容无关 hidden pool、typed remap 都保留。当前直接 policy_score 不按新卡身份估值，并不授权后续候选枚举／多层搜索使用新未知手牌。Cancel 令 OptionalGate Done 后继续父尾链，必须独立证明；不能套用 Confirm 的局部 prefix、固定分数或试算 Accepted 捷径。
+
+| 合同 | 审批准备度 |
+|---|---|
+| Owner 已知 native 技能与 Own 当前询问关联；Other generic、未知 None | **可提交明确可见性裁决**；上游依据足够支持这个窄范围，本审查不代批准。 |
+| source_skill 类型、全 catalog 唯一性、统一 native view 派生 | **条件齐备可审字段合同**；exact producer／consumer 绑定仍是实施准入条件。 |
+| API／TS／IPC／Main WS6 optional extension | **待协议明确批准**；兼容与 deadline 保留未实测，不自动升号。 |
+| legacy metadata 剥离 | **补齐上述 P2 后再批**；仅剥来源，不改变旧档接受域或其它字段。 |
+| rules／native archive／ABI／opcode 不变 | 设计目标合理；未来 diff 与旧字节验证后才能确认实现兑现。 |
+| root／PC-handler／Confirm prefix／Cancel-tail certificate | **Open，不批准放行**；原 19 项 NoCert 继续登记，不能改成两个 Err 豁免。 |
+
+- **Fixed：**无；本次为只读设计审查。
+- **Merge verdict：OK with notes（仅可见性补充提案方向）；legacy P2 需补充，全部发布／字段批准及 NC10/runtime 仍未解除 BLOCK。**
+
+未运行 tests/build/network/producer 或新实验，未改源码、Main、字段或协议；未复审 Main committed range、全量 Host 或 binaries。  
+风险：新增合法来源会改变输入等价类，必须先取得权限裁决；来源名不能替代合法 root、公共执行前缀或完整 Plan 隐私证明。

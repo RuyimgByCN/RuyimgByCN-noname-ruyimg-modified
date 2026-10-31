@@ -1,0 +1,170 @@
+{
+  "utc": "2026-10-31T06:28:31.670690+00:00",
+  "paths": {
+    "crates/engine-native-kernel/src/archive.rs": {
+      "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+      "relevant_lines": [
+        {
+          "line": 113,
+          "text": "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;"
+        }
+      ]
+    },
+    "crates/engine-api/src/lib.rs": {
+      "sha256": "3bef8070403118dde4a6f72f22fe2c1cfb270379be4c971da70ede2424e798fa",
+      "relevant_lines": [
+        {
+          "line": 30,
+          "text": "pub const SNAPSHOT_SCHEMA_VERSION: u32 = 2;"
+        },
+        {
+          "line": 33,
+          "text": "pub const REPLAY_SCHEMA_VERSION: u32 = 1;"
+        }
+      ]
+    },
+    "crates/engine-api/src/version.rs": {
+      "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "relevant_lines": [
+        {
+          "line": 6,
+          "text": "pub const CONTENT_SCHEMA_VERSION: u32 = 3;"
+        },
+        {
+          "line": 9,
+          "text": "pub const PACKAGE_FORMAT_VERSION: u32 = 1;"
+        },
+        {
+          "line": 17,
+          "text": "pub const RULE_VM_ABI_VERSION: u32 = 758;"
+        }
+      ]
+    },
+    "crates/engine-protocol/src/lib.rs": {
+      "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "relevant_lines": [
+        {
+          "line": 17,
+          "text": "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;"
+        }
+      ]
+    },
+    "apps/web-client/vite.config.ts": {
+      "sha256": "edea5f3bdfc9838cc21f30c0a4c1b1722a76f293c3eb5d84a0aa3c69dfdf393a",
+      "relevant_lines": [
+        {
+          "line": 11,
+          "text": "    \"import.meta.env.VITE_ENGINE_BACKEND\": JSON.stringify("
+        },
+        {
+          "line": 12,
+          "text": "      process.env.VITE_ENGINE_BACKEND ?? \"native\","
+        }
+      ]
+    },
+    "apps/web-client/src/engine/client.ts": {
+      "sha256": "1fd1db7aff51d6a3e911afc1124784eb369a256d8a792137491788b2892bc130",
+      "relevant_lines": [
+        {
+          "line": 14,
+          "text": "import { DesktopEngineTransport, desktopEngineChoice, type EngineTransport } from \"./desktopEngineTransport\";"
+        },
+        {
+          "line": 40,
+          "text": " * T13 产品面：默认原生后端（VITE_ENGINE_BACKEND=legacy 回退旧线）。"
+        },
+        {
+          "line": 58,
+          "text": "    // 默认 native；仅当 VITE_ENGINE_BACKEND=legacy 时走旧线 wasm。"
+        },
+        {
+          "line": 59,
+          "text": "    const backend = String(import.meta.env.VITE_ENGINE_BACKEND ?? \"native\").toLowerCase();"
+        },
+        {
+          "line": 68,
+          "text": "    const desktopNative = this.native && isTauriShell() && desktopEngineChoice() === \"native\";"
+        }
+      ]
+    },
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "relevant_lines": [
+        {
+          "line": 23,
+          "text": "export function desktopEngineChoice(): DesktopEngineChoice {"
+        }
+      ]
+    },
+    "crates/engine-native/Cargo.toml": {
+      "sha256": "9178bcf574ba2635669394e34ccd23f3b6ffcf4ec6d73a79359d3b3c12001445",
+      "relevant_lines": [
+        {
+          "line": 64,
+          "text": "name = \"nc_rounds\""
+        }
+      ]
+    },
+    "crates/engine-native/tests/groups/nc_rounds.rs": {
+      "sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+      "relevant_lines": [
+        {
+          "line": 103,
+          "text": "#[path = \"../nc10_source_provenance.rs\"]"
+        },
+        {
+          "line": 104,
+          "text": "mod nc10_source_provenance;"
+        }
+      ]
+    },
+    "crates/engine-native/src/engine/choice_source.rs": {
+      "sha256": "b4cdf9eedf010e3110e61c405f2cfb02b3a09cb43280f0793d042df4551fd696",
+      "relevant_lines": [
+        {
+          "line": 76,
+          "text": "    fn source_requires_first_depth_consumer_not_just_a_unique_active_ask() {"
+        },
+        {
+          "line": 98,
+          "text": "    fn source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown() {"
+        },
+        {
+          "line": 131,
+          "text": "    fn source_uses_only_the_actual_direct_inner_ask() {"
+        },
+        {
+          "line": 173,
+          "text": "    fn source_catalog_alias_is_not_resolved_by_first_match() {"
+        }
+      ]
+    },
+    "crates/engine-native/tests/nc10_source_provenance.rs": {
+      "sha256": "8df57dc35be62cc7d489b15016d8e9e61a3fc6193ca4164708bbf118462d7ea9",
+      "relevant_lines": [
+        {
+          "line": 5,
+          "text": "fn native_optional_confirm_publishes_own_source_only() {"
+        },
+        {
+          "line": 48,
+          "text": "fn native_known_optional_families_publish_their_exact_names() {"
+        },
+        {
+          "line": 80,
+          "text": "fn native_source_is_stable_across_private_deck_rng_and_counters() {"
+        },
+        {
+          "line": 104,
+          "text": "fn actual_vm_ask_and_restored_vm_gate_sources_stay_unknown() {"
+        },
+        {
+          "line": 170,
+          "text": "fn source_initial_binding_does_not_certify_the_next_pending_prompt() {"
+        }
+      ]
+    }
+  },
+  "default_backend": "native",
+  "rules_equivalence": "not claimed"
+}

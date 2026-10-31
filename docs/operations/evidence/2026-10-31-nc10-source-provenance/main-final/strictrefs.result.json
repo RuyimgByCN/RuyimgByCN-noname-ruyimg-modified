@@ -1,0 +1,30 @@
+{
+  "name": "strictrefs",
+  "argv": [
+    "python3",
+    "-B",
+    "scripts/check_doc_line_refs.py",
+    "--strict"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "scripts/check_doc_line_refs.py",
+    "--strict"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 9.07135704200482,
+  "minimum_free_bytes": 60178944000,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "3bf58653186c3ed634aa12acc0ed9096e909a18687e5e97a7c42502155cd0c7b",
+  "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b"
+}

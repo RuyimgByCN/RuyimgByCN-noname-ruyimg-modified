@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/f82ecf3c-964c-4956-b6aa-33e01b626084/implementation/pa09-single-seat-persistent-pool-candidate.md",
+      "stored": "candidate-report.raw.txt",
+      "bytes": 16299,
+      "sha256": "de9ca963a1e91676ec0eb365fdc648906c91ce2c71a4712dbd3769945dfacde9"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/candidate.patch",
+      "stored": "candidate.patch",
+      "bytes": 59268,
+      "sha256": "692e2a3bffd5610d7b1bccb7775409375f79b9492cc1e4c0d8dbfffc964fc498"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/final-evidence/source-manifest.json",
+      "stored": "candidate-source-manifest.json",
+      "bytes": 2201,
+      "sha256": "274d72ffb16508c4b4718ade5c43efebd734b2690071ffa2e34c379fd0ac37e4"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/host-abba.json",
+      "stored": "host-abba.json",
+      "bytes": 4270,
+      "sha256": "823e9a476cbe436a06d3c44cd9c1dc3f42275fb5d349c3c55658747124bb7eeb"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/host-abba.log",
+      "stored": "host-abba.raw.txt",
+      "bytes": 4103,
+      "sha256": "6a3b58604ab859e7f1e622de944567894a31901c95c0519f52a24373a8c72982"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/default-session-timing.log",
+      "stored": "initial-single-candidate-failure.raw.txt",
+      "bytes": 1646,
+      "sha256": "8fdf6e64c08716c233be7ccfb6c79334eaac165f5a9351a28e6e396cf7a2cf85"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/default-session-timing-v2.log",
+      "stored": "default-session-timing.raw.txt",
+      "bytes": 2333,
+      "sha256": "aac029a645bedd685b9c51960c80a08b9f90a26a1055790890fbc42c063d8fb4"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/final-native.summary.json",
+      "stored": "native-summary.json",
+      "bytes": 3626,
+      "sha256": "ad1785687a1cb7a3124b3510c268dff38e178f2811d6b5ae8ea140dffcfc8d23"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/final-affected.summary.json",
+      "stored": "affected-summary.json",
+      "bytes": 5595,
+      "sha256": "579d2baf3f3abdeaf3f885238b108fa0ddd57e3cf09685e7122668b3e9390458"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/patch-apply-check.json",
+      "stored": "patch-apply-check.json",
+      "bytes": 321,
+      "sha256": "235730d9cd4ca1149946a9e8f2b9f9b14d0a83e26d138bb8e9d192bc03527335"
+    },
+    {
+      "source": "/tmp/pa09-candidate-f82ecf3c/evidence/final-integrity.json",
+      "stored": "final-integrity.json",
+      "bytes": 3502,
+      "sha256": "7a1fc1203baa90aa8e1011ef9d5697c096754d00fbefbf3042dded8155c68c09"
+    }
+  ],
+  "qualification": "Unreviewed private prototype and actual measurements; failed/nonspeedup outcomes preserved. No Maincodeintegration or defaultswitch."
+}

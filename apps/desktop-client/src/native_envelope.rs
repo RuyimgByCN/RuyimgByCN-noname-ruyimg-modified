@@ -87,6 +87,7 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
     }).transpose()?;
     let kind = native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom")));
     if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
+    if raw.get("source_skill").is_some_and(|value| !value.is_null() && value.as_str().is_none_or(str::is_empty)) { return Err("invalid source_skill".into()); }
     let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,
         "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
             json!({"token": index, "label_key": option_label(option)})
@@ -94,6 +95,7 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
     for (source, target) in [
         ("prompt", "prompt"),
         ("native_kind", "native_kind"),
+        ("source_skill", "source_skill"),
         ("min", "min_count"),
         ("max", "max_count"),
         ("allowCancel", "allow_cancel"),

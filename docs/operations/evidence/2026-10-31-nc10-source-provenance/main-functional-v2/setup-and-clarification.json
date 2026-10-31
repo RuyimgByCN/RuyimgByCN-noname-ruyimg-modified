@@ -1,0 +1,16 @@
+{
+  "non_product_issues": [
+    {
+      "command": "Initial parallel inspection: root package.json and guessed source path probes",
+      "result": "failed path probes",
+      "qualification": "No root package.json or guessed paths exist; corrected by reading actual crate/frontend paths. Not product test failures."
+    },
+    {
+      "command": "python3 -B /tmp/nc27-main-functional-driver.py before && serialized cargo tree ...",
+      "result": "tool timeout30s while cargo tree waited for global lock; formal before.json successfully captured; tree logs empty",
+      "qualification": "No tests executed in that attempt. Reissued read-only cargo tree without heavy lock because dependency inspection is light, then heavy native suite queued asynchronously."
+    }
+  ],
+  "clarification": "Supervisor confirmed ArtifactnativeSource141/anySource/oldRustMatrix fragment was surplus concatenated task text, not file/scenario/test; no command required and no product failure.",
+  "index_limit": "Initial exploratory git status --short used default optional-lock behavior before formal before.json. A possible initial stat-cache refresh cannot be excluded. Formal before/after index SHA identical; staging empty throughout."
+}

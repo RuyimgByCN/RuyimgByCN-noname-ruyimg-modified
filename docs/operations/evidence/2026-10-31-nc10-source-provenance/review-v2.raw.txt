@@ -1,0 +1,42 @@
+What this change does: v2 补齐了 legacy 来源剥离的全部入口，并把 exact ask producer 与 scheduler 实际选择的 park 明确绑定。**我提出的 legacy P2 已在设计层闭合；这份单字段合同可提交用户明确批准，尚不构成实现、发布或 root gate 授权。**
+
+## Review
+
+- **Correct — 范围：**完整读取 87 行 v2，只复核 legacy P2 和 producer/consumer 前置，并核对对应实际源码。v1 已接受的保守方向继续有效，没有重开字段范围、协议版本或其它系统设计。Main 当前基线按 Parent 说明为 `4dd0b286`；本次未复审其 committed range，也未触碰 Main／lease。
+
+- **Fixed — legacy P2：设计覆盖已闭合，未标为实现 Fixed。**
+  - v2 §一的 `L(choice)` 只清除新 `source_skill`，明确保留输入对象、其余 choice 字段及既有 Engine 恢复行为。
+  - 已覆盖 `Engine::snapshot`、两种 typed restore、state-only Snapshot restore、JSON 方法与直接 serde，以及 legacy WASM sink；不再依赖一次 JSON roundtrip 间接覆盖 typed 路径。
+  - 这与实际 [engine-core/src/engine.rs:397](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-core/src/engine.rs:397) 的 capture／直接 clone 安装路径相符。T1–T5 明确验证“不经 JSON、输入不变、成功清来源、失败不安装”，补上了 v1 的具体缺项。
+  - v2 §二要求在 legacy pending_choice 边界先以 IgnoredAny 等价语义消费新键，再校验其余原字段；数字、对象、空名及重复 source 不会误走新增严格 String 验证。
+  - 同时禁止通用对象重编码折叠其它重复键，保留旧字段错误、语法／解析界限、manifest／schema／content 校验及错误映射；严格 wire 校验不复用 legacy 忽略器。该边界划分可接受。
+  - `deadline_unix_ms`、timeout、revision、continuation、prompt、native_kind、options/token 均被明确保留；不能以剥来源为名重建最小 choice。
+
+- **Correct — producer/consumer 前置已精确到当前实现。**
+  - v2 §四要求在同一不可变 R/O 上，对**全部** top-level parks 派生 active asks，必须恰有一项 P，并逐项匹配 OpenChoice；不是只在匹配形状的子集中挑一个。
+  - C 按原 parks 顺序取首个 `resume_depth == stack.len()` 的 park，要求 C=P 的实际身份一致；同名、同 def 或同形状均不能替代该条件。
+  - [apply_command.rs:109](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/src/engine/apply_command.rs:109) 的有效 Answer 只移除 open_choice、记录应答并设置 answer，不改变 stack／parks。正式 submit 随后进入 finish_segment/run，期间没有额外插入 intrinsic 或重排 park 的动作。
+  - [resolution.rs:460](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/resolution.rs:460) 在 park 分支前只有 fault、budget、time-slice 检查及计步／扣预算。这些检查可能提前返回，**不会先执行别的 intrinsic/framework 或改选另一个消费者**。v2 使用“runner 到达 park 分支时”的限定正确，无需新增预算／故障公开位。
+  - `OptionalGate::step` 对已有 inner 直接委托，`active_ask` 也委托 inner；仅支持已核对的直接委托链、其它链路 None，符合当前 seam。外层名字不能为内层盖章。
+  - C=P 只证明首次选中哪个 park，不证明它执行后新增子事件、其它 parks、queue 或父尾链安全。v2 保留这一区分，也没有把新谓词加入 restore 或修改 scheduler。
+
+- **Finding：**本次限定复审未发现仍需补充的具体 P1/P2。
+
+No issues found.
+
+| 合同 | 审批准备度 |
+|---|---|
+| 普通已知 native OptionalGate 的 Own 可空来源；全 catalog 唯一、owner 资格、Other generic、未知 None | v1 方向保留，v2 可一起提交用户裁决；本审查未代批准字段或可见性。 |
+| exact producer=P 与 first-depth consumer=C | 设计前置已明确，可进入未来获批后的实现／测试；不增加 PC、fuel、ancestor、公开标志或 ledger。 |
+| legacy typed＋JSON 只剥来源 | **原 P2 DESIGN closed**；矩阵覆盖充分，后续仍须验证实际 diff 与失败原子性。 |
+| Main WS6 可选 metadata、API／TS／IPC 转发 | 仍待明确批准；不分配新版本，不丢 deadline，不把 private WS5 手工 whitelist 覆盖到 Main。 |
+| Confirm-prefix／Cancel-tail／VM 续行／root certificate | **不在本合同批准范围内，继续 Open。**来源绑定不授权执行或评分。 |
+
+没有要求再扩字段或补一套来源系统。此设计的下一步可以是对 **v1＋v2 这个具体单字段合同**作用户裁决；实现后再按 T/J/W 矩阵验收，不能把本次设计闭合写成测试通过。
+
+原 A/B/C 恢复域与证据保留；B/C 无资格仍为 None，并不因字段新增而解除 NoCert。phase3 lifetime 限定面 Fixed、旧帧默认 Deny、完整 Plan 隐私要求、future-draw／typed remap 边界及原 19 项 NoCert 均不变，不能用两个 Err 作正向通过。
+
+- **Merge verdict：OK with notes（v2 设计增补）；单字段合同已具备审批准备度，NC10/runtime 继续 BLOCK。**
+
+未实施、未改字段／源码／Main，未运行 tests/build/network/producer 或新实验；未重审 v1 已接受的传播清单。  
+剩余风险属于实施兑现与独立 root 证明，不能由来源名或本次设计结论替代。

@@ -1,0 +1,140 @@
+# R05 具体契约补充 v3（设计修订／待独立复审与具体裁决）
+
+本稿替代v2的规范性结论，v1/v2及两份reviews均原样保留；只有191处caller清单作为具名不可变附录继续引用。**未实现、未运行测试或实验、未证明上游等价。** 三份Main noop仍属必做规则，不是差异排除。
+核验：2026-10-30，Main只读HEAD=`777bf33969e5ecc04b63971adab26be32f12fd28`；现规则330／Archive105／ABI758／content schema3／WS6。finalgates/publication lease保持；未写Main、源码、API、schema、版本、index、docs或原始证据。
+已完整读63行v2复审与150行v2，重读canonical AGENTS/SPEC相关条款与ponytail，并沿五个finding读实际源码；无可调用CodeGraph，只用指定文件的read/rg。范围是v3私有设计，源码新鲜度绑定本次HEAD与末节SHA，不复跑全仓或191caller实验。
+路径：`N=/Users/ruyimg/Documents/Claude/sanguosha/noname-next`；`K=N/crates/engine-native-kernel/src`，`C=N/crates/engine-native-content/src`，`E=N/crates/engine-native/src`；`U=/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core`。
+
+## 1. 五个finding与确定修订（关闭与否仍由独立review裁定）
+
+| Finding | v3规范修订 | 定向源依据 |
+|---|---|---|
+| 1 P1：Transfer后eligible⊆held矛盾 | §4按G.progress区分待转移/历史引用；Transfer原子移owner并推进After，eligible不删；After允许牌已弃/转移/销毁，不重复Transfer | U/noname/library/element/content.ts:11309,11340；K/snap/ownership.rs:25 |
+| 2 P1：official专属入口 | §2允许任意已验证调用包/逻辑技能使用相同三compound；四角色模板不按namespace授权；状态按逻辑身份隔离，同身份不同owner共享target槽 | SPEC §1.1/§5；K/rvm_bridge.rs:969–993 |
+| 3 P1：Next死亡disabled歧义 | §6普通死亡原样保留Next实例、storage与enabled；死亡只靠alive门控；revive不启用也不禁用，无新增“死前enabled”字段 | U/.../content.ts:12557；player.js:9429；K/resolution.rs:332,542 |
+| 4 P1：宝梳正数假设 | §5在logSkillBegin子结算后计算m；m=0按addMark默认+1，m<0照加；Combs保留有符号/存在0，只在值>0且非fixed消费 | U/character/xianding/skill.js:42013–42050；player.js:4800,4865 |
+| 5 P2：重复core.r05_binding_hash | §2删该字段及专用fingerprint，修复既有ContentLock→验证包→Catalog→ruleset/恢复身份链；不新增R05持久身份权威 | content-runtime/src/lock.rs:7,65、store.rs:691；content-schema/src/package/hashing.rs:7 |
+
+## 2. 独立作者、身份、现有状态载体与唯一锁链
+
+保留DSL→compiler→npack/rule-vm→J2提交泵路线；公开效果为 `ResolveTiqi{player:PlayerId,skill:SkillId}`、`ResolveBaoshu{player,skill}`、`ResolveDcbihuo{player,skill}`，对应resolve_tiqi/baoshu/dcbihuo(self)。它们是固定规则流程，不开放任意mark/expiry或通用timing框架。
+任何namespace的独立作者可在自己包、自己逻辑技能下声明/调用这些效果；授权只来自包/模块/能力验证、真实声明身份、自绑定owner和准确执行窗口。manifest写official不多给权力；同名、同raw skill id、猜中helper名都不能借用另一包的状态或授权。
+逻辑身份 `I=(namespace,package_id,logical_skill_def_id)`，name用于核对/展示，version与logic/content hash由本局既有ContentLock绑定；同一包slot只允许一个锁定版本。恢复与模块续行使用声明逻辑技能身份，不拿handler模块名代替I。
+现有ContentPackage没有mark声明、PackageSkillEntry没有helper-role/expiry。选定无新增包字段：loader验证该handler使用的compound与既有trigger声明，按固定四角色模板为该I在**同一Catalog**派生私有helper定义；名称在包/逻辑技能下限定，模板不固定为official包或三个源skill名。
+角色固定为Limit（Tiqi）、Combs（Baoshu）、Next/Current（Dcbihuo）。每个 `(I,role)` 恰一helper；多个handler调用同一compound复用它。helper行为/到期规则由模板生成；不靠写进skill_index便假定有行为，不新建权限registry或要求作者填不存在的mark dependency section。
+**复用已有存储**：`VmAux.marks[(target,u32(helper_catalog_def))]:i32`。helper由 `(I,role)` 唯一解析，因而语义槽是 `(I,role,target)`；施加者owner不入key。同I两个owner对同target累加，两个I永不混槽。Catalog ID是当前锁内引用，不承诺跨锁稳定或自动迁移。
+同一原局锁下Catalog必须按已验证依赖顺序确定性合并，私有helpers按I/role确定顺序追加；禁止输入包数组顺序改变ID却保持同一身份。容量不足、重复身份/角色、已知裸mark冲突在建目录时拒绝，不能用截断/哈希碰撞合并两个slot；不分配实际新mark数字。
+通用AddMark/RemoveMark以及带mark或grant-skill参数的效果（含Fenghe）碰这些私有helper键/定义即拒；动态参数在commit复检，恢复挂起效果也复检。不因同owner/同包放行；只有与执行绑定匹配的compound、helper和有限清理回调能写，零条目不会被旧通用删除语义破坏。
+若作者明确依赖并引用官方tiqi/baoshu/dcbihuo，沿既有依赖解析验证原声明，此时使用被引用的官方I；若在自己技能下调用compound则使用自己的I。两种用法都可独立安装发布，不要求重编客户端，也不以官方包可用代替第三方能力。
+**唯一身份链**：复用 `ContentLock{LockedPackage(namespace,package_id,version,logic_hash,content_hash),lock_hash}`；PackageStore.load_locked_packages核对规范锁与实际包，离线冻结副本入口按同一LockedPackage规则验证。loader将已验证包身份传到ExtensionPack/VmSkillDecl/Catalog；Main当前内部声明会丢失这些字段，必须补传递，不能仅信name/version。
+native现 `content_lock_id` 只散列name/version，须改用上述规范锁的现有聚合身份作为输入，继续经现有Catalog.ruleset_version及snapshot规则门绑定。完整包锁核对沿原局锁/冻结副本上下文执行；同名同版换字节必须失败，不能声称现有弱锁已足够。
+WASM engine_from_archive、server from_saved、restore_with_extensions统一传递**原局既有ContentLock及锁定包/冻结字节上下文**，按规范锁完整核对后重建同一Catalog，再走已有snapshot规则门。裸扩展archive没有原局锁上下文或锁不符则受控拒绝（待审候选），不取最新包；这是共享恢复接缝的参数/信封传递，不增core字段或R05锁。
+删除v2的core.r05_binding_hash、R05专用包指纹和相应codec/hash字段；没有额外合法状态区别需要它们。固定角色模板由规则版本约束，调用声明已在现有package logic hash内；Catalog派生helper/权限关系不另存为第二份状态权威。
+
+## 3. 阶段、191caller与异步接口（继续完整迁移）
+
+顺序：全局BeforeStart先到期清理→翻面整回合跳过判定→BeginStart→真实phaseBegin→Prepare→Judge→Draw→Play→Discard→End→phaseEnd→全局phaseAfter先到期清理→下一回合。首回合也开真实Begin/Prepare；追加Prepare不移动旧extra_phase编码。
+每次真正phaseDraw包括额外阶段建立D：Before→Begin→Begin1→Begin2→主draw/替代及子结算→End→After。Skipped在Before前终止；cancel发Cancelled不再End/After；Before后Begin前finish是Omitted，Begin后finish仍End/After；未创建阶段不伪造终窗。
+D=`{player,pending:i32,num_fixed:bool,actual_gain:u32,outcome}`，outcome=Running/Ended/Skipped/Cancelled/Omitted；pending修正逐项有符号相加，执行入口才max(0,pending)，溢出明确Fault。fixed在每handler和写回时重查；普通Draw不开Begin2，不消费Combs或重复应用Current。
+D.actual_gain仅折叠“recipient是阶段角色、gain直接父是Draw、最近phaseDraw祖先就是D”的gain历史cards长度；非draw gain/他人draw/嵌套D排除。手牌净增、请求数、draw.result、回合drawn均不能代替；End中后续handler真draw仍可改变后发动涕泣的live读数。
+191处完整表只保留为[v2不可变caller附录](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/7c4b4b60-7758-45d4-bc57-70218cddaf39/proposals/r05-concrete-runtime-contract-supplement-v2.md:18)：68文件，kernel44/content147/facade0，T/Y/P/M全迁；只引用该调用表，不继承v2被本稿纠正的规范。
+T为末尾发Draw后Done，父窗仍待child；Y沿既有stage/Yield；P拆摸后选/弃/移/授技及前序child续行；M保存目标顺序/index逐次yield。void commit/helper移入该帧Intrinsic；主阶段之外的Host、VM、J2、伤害/濒死/死亡/卡牌及Boss换将都不能省略。
+内部 `start_draw(parent:Option<EventId>,player:PlayerId,count:u32)->Result<Option<EventId>,VmFault>` 只建真实Draw帧，不取牌不入手；0无事件/RNG返回None，正数返回handle。Some须匹配scheduler本步处理slot；None只允许真正顶层NO_FRAME主动且栈空，不能丢D祖先。
+caller设后续step并Yield，恢复承诺该Draw/gain/后窗子树已排完，不承诺获得数、不返回同步Vec。已有child先排完；旧Ctx::draw_cards同步API在新规则runtime清零删除，bootstrap无事件发牌可沿旧构造路径。禁止同步入手再补phantom parent。
+白翼/脉轮/神恩/无脏/藏目等真实数值修正归到同一pending前窗，真正独立draw不合并；caller注释为directgain的路径须按对应源确认为非Draw gain。附录不是68文件逐来源等价证明，本次没有重扫/实跑它们。
+
+## 4. Gain按阶段验证引用与唯一持牌
+
+R=`Draw{player,requested:u32,held_cards:Vec<CardId>,terminal}`，terminal=Running/Completed/Cancelled/Prevented/Exhausted；R.held是已抽未获牌实体的唯一owner。DrawMachine只存root/step；G与CardsDrawn/日志的cards都是引用，不重复登记owner。
+G=`DrawGain{draw:R,recipient,eligible:Vec<CardId>,progress,history_recorded:bool,cancelled:bool}`。progress只在G载荷保存一份，GainMachine只引用G帧；取Filter/RecordHistory/Transfer/After/Aborted/Done。eligible是有序事件cards，Transfer后仍保留，不能为通过ownership而清空历史。
+| G.progress／原子转移 | 引用、计数与恢复约束 |
+|---|---|
+| Filter、RecordHistory入口 | history_recorded=false；eligible唯一、ID在界且为R.held子集；过滤/改写移牌同步更新真正owner，未记gain不改D计数 |
+| RecordHistory→Transfer | 确认过滤后非空eligible；同一步设置history_recorded=true、按祖先谓词给D加eligible.len、推进progress=Transfer；不移实体，不留可重复记账的中间快照 |
+| Transfer入口／Transfer→After | history_recorded=true，待转移eligible仍须来自R.held；同一步从held移除并加入recipient实际牌区、更新progress=After，保持eligible不变，**不再加D计数**；不允许在半移牌时yield |
+| After、已完成Done | history_recorded=true；eligible仅作历史引用，ID在界/顺序保留，**不要求⊆held或仍在recipient手里**；全局ownership只数实际牌区/其他持牌帧，progress禁止再次Transfer；After子事件可挂起/死亡/弃置/转交 |
+| Aborted或未记history的Done | 由cancel/空结果/死亡路径决定history_recorded；原子释放剩余held并设置终态；已记history保留，未记则不增加；eligible作为历史或尝试引用，不倒推牌当前owner |
+source先记gain event（content.ts:11309），11340还会修改其cards；合法修改eligible必须同一步按长度差调整D一次，不能因牌后来被弃/转交而删eligible或减数。记录后死亡/取消只停止源中尚未执行步骤，不能无条件撤掉已存在历史。
+反例的合法态明确接受：c从R.held→recipient.hand，G.progress=After、eligible=[c]，之后After子技能移c/等待。保存恢复时c只在实际owner处计一次，G继续After，不重复入手/记数；把progress改回Transfer但c已不在held则拒档。
+G结束弹栈后，其已完成历史数量只留D.actual_gain在线折叠；不新增全局gain历史副本或另一个阶段counter。D直到本次终止分支及全部有效子结算完成才弹出，不把End/Skipped/Cancelled三个分支全发一遍；Frame.id/parent、Stage、queue/planned/intrinsic_done和Resolution保持唯一调度链。
+抽前cancel/prevention/dead/out→不取牌；抽后gain取消/死亡且源未指定返还→剩余held转 `core.detached_cards:Vec<(CardId,Unclaimed|Destroyed)>`，不自动回牌堆或弃牌。显式return-top/bottom按指定顺序释放；已转移牌死亡走实际Death弃牌，不回R。
+Unclaimed与Destroyed不可洗回，Destroyed不能普通gain；不用可被旧技能回收的player.off_court或公开table冒充。DrawPending内部持牌区对席位/观战/AI隐藏牌面，Referee可见；owner枚举增加Frame R.held与detached，G历史引用不计owner。
+洗牌仅deck空且discard非空时沿RuleRng进行，held不进入洗牌池，普通cancel不倒转已耗RNG。上游get.cards完全枯竭会平局/返回[]；候选保留v2的Winner::Draw映射既有MatchOutcome::Draw，部分已抽牌转detached且本次无gain，仍须具体审批。
+Fault丢弃命令工作副本并回滚其日志；开放分片按既有checkpoint回段前，恢复牌区/held/detached/RNG/marks。Pending之前已提交步骤不被后续非法答案倒退；Suspended保留持牌，开放段BudgetExhausted须显式abort回checkpoint，不当作cancel。
+
+## 5. 三规则及宝梳零/负参数的完整分支
+
+Tiqi排除自己的D，live统计n≠2时可选确认；content确定d=abs(n−2)→普通draw(d)→await→target.isIn→选择+d/−d/cancel。取消符号不撤奖励牌；对本I目标Limit累加，Some0仍存在，最终hand-limit在其他基数/修饰后加全部启用Limit并clamp0，不把负数cast为usize。
+Baoshu成本在当时maxHp>0时可选1..maxHp名在场角色，含自己、无重复、可取消；成功成本后必须经真实logSkillBegin子结算并yield，再进入content读取maxHp、按座次确定targets和 `m=1+maxHp−k`，不能在选择时冻结m或宣称m恒正。
+源content.ts:4270调用logSkill后才建content；player.js:10159插入logSkillBegin，emptyEvent实际trigger。Main写一条SkillTriggered日志不等于已有这个窗；候选在既有技能发动接缝补最小 `SkillLogBegin{player,logical_skill,targets}` 事件/续行，不造通用时机框架。actor若在content入口前死亡按源prevention，不因此否认活着但maxHp改变的反例。
+本I的Combs操作严格模拟source addMark：`delta=(m==0 ? 1 : m)`；旧槽不存在先视为0，checked加delta，结果**含负数与0均保留条目/helper**。例如k=2/content maxHp=1→m0→加1；k=3/maxHp=1→加−1；旧+1加−1→Some0，不删。
+逐目标：isIn→仅当前linked才发link(false)→await重查→仅当前face_down才turnOver(false)→await→isIn才装helper并加delta；取消翻面不重试、不doubletoggle。已进入单个async content后不在每await新加owner.alive拦截；子事件各遵自身forceDie/includeOut。
+Combs在目标非fixed Begin2仅当stored>0触发：pending加全部正值→移除同量→归零onunmark清storage/helper。stored≤0时不触发、不消费、不按回合删除；后续正授标可累加回正。普通draw、fixed、未达Begin2的skip/cancel不消费；已消费后cancel不返还。
+Dcbihuo每个合格Source窗−1／End窗+1各可选一名在场目标（含自己）或取消，每事件一次不乘伤害点数。写本I的Next，抵消Some0不删；目标真实phaseBegin在启用Next时原子take含0→移除Next/helper→写Current/装默认临时helper。
+同回合新伤害继续写Next，不覆盖Current；本回合每个非fixed额外D都加Current而不消费，fixed不应用；Current/Limit到最近任意角色全局phaseAfter或BeforeStart到期，Combs/Next无这项expiry。
+
+## 6. 四角色生命周期与原enabled保持
+
+| 入口 | Limit / Combs / Next / Current 的规范结果 |
+|---|---|
+| 显式disable/enable | 保留四槽；只按明确操作改helper.enabled，失父技能不撤他人已获效果 |
+| 普通死亡 | 清Limit、Combs、Current及helper；**Next实例、值、原enabled全部原样保留**，仅alive=false让现有入队/运行门禁失效 |
+| revive | 只恢复源规定的玩家存活等状态，不改Next.enabled；死前true复活仍true，死前false仍false，无“死亡前enabled”新字段 |
+| 显式移除helper／clearSkills(true)／uninit replacement | 删除该I/role/target槽及helper；clearSkills(false)按源charlotte排除保留；不把replacement重置套到普通死亡 |
+| 全局After/BeforeStart expiry | 在收其他trigger前清Limit/Current（含disabled）；Next/Combs保留；边界中新授保留至下一边界，不二扫 |
+Main有限callback仍需接K/rvm_ops:417（按def跨owner retain先收集受影响owner逐个清理）、machine:725、kernel/death:98/147、C/content/host/boss:443、host/step/xianjian_status:293、E/engine/construction:149/general_select:62/debug:481和R05内部清理；不假定已有通用onremove。
+普通死亡从清除集合排除Next并保留同一个SkillInstance；不得先disable再靠revive猜回。上下文启用/存活门禁直接复用resolution.rs:332,542。reserveDead/excludeMark依赖的模式信息Main未通用实现，须按source分支补模式契约/fixture，不能宣支持或永久排除。
+
+## 7. Damage凭据、窗口与恢复绑定
+
+顺序仍是Begin修正→Damage提交/HP吸收→damage窗→濒死/死亡完成→Source→End→After。每次trigger以及arrangeTrigger重筛前执行filterStop：死亡source清None、num≤0发damageZero并stop；Source子事件杀死source后End不补回原source，v1错误例不再出现。
+`DamageData.committed_damage:Option<u32>`仅认证提交；amount保留最终event_num，notrigger/post_stopped分开保存。cancel/prevent/转LoseHp或提交前num≤0为None；正数护甲/机甲全吸收、无限HP可Some但HP损失0；notrigger或后续num0仍不得凭Some开启后窗。
+避祸各窗还须source存在且非自伤、相应owner在场/启用；victim死亡不自动取消存活source资格。伤害最终目标/source以可改写原帧为准，链伤每帧独立；现vm_damage_receipt“目标+1”不是该凭据。
+改写面保留：damage.rs:4–121拒绝/替代，132–245与294–376的数值修正统一event_num，250–279护甲/机甲独立算hp_amount；认证在事件num修正完/HP吸收前，统计/炮台/日志同步最终num。389回血、502/1134伤逝及LoseHp1122、events628/844补牌caller均按191异步范围整理，不声称仅加receipt即等价。
+调度器从实际Park.slot封存 `ExecutionBinding{owner,I,role,slot,window_frame,root_frame}`，传入vm_commit只读权威；本步临时executing_slot不入持久状态。恢复按原声明/module/锁与实际frame核对，禁止stack.last猜原窗，开始后的合法async不重做queued-handler死亡拦截。
+| 机器 | 类型/祖先/步骤约束 |
+|---|---|
+| 三compound Trigger(W) | Tiqi为D终窗且owner≠D.player；Baoshu为Prepare且owner=W.player；Dcbihuo为认证Source/End且对应source/target；NO_FRAME/Intrinsic不能冒充这一授权 |
+| helper Trigger(W) | 按同I角色：Limit无trigger；Combs/Current为owner的Begin2；Next为owner真实turnBegin；Next读取还要求原enabled与alive，不重置它们 |
+| DrawPhase/Draw/Gain流程 | 各自Intrinsic(D/R/G)合法；G.parent=R、R.parent沿真实caller，G引用按§4分阶段校验；root/frame/player/role/step不符拒档 |
+| P/M或compound等child后继续 | 保存后续step/targets/index及原slot，沿resume_depth等child排完；child弹出至caller恢复间合法快照不要求已完成child继续存在；绑定D/Damage根仍须存在 |
+持久增量仅D/R/G及精确window、必要机器游标/内容局部d或m/targets/index、Damage凭据/停止位与detached实体区；marks/SkillInstance.enabled均复用，不增R05 binding hash。codec/hash/ownership/父引用/phase-step校验同改；G.After历史引用不得再次算owner。
+C331有效窗口接口须等实际验收后重核；本稿不使用私有133当现成Main能力，也不宣90来源完成。实际331验收后仍须完成已批准332的前置验收，再申请本具体增量；未分配任何新版本/tag。
+
+## 8. 投影与第三方多身份显示
+
+linked:bool与四语义Option<i32>保留；**Combs同样可负/存在0**。多个独立I必须按已公开逻辑技能分项显示，不合并成共享权威slot：候选SeatView增加有序 `r05_effects:[{skill:QualifiedSkillRef,tiqi_limit,baoshu_combs,dcbihuo_next,dcbihuo_current}]`，QualifiedSkillRef仅namespace/package_id/logical_skill_def_id，四值None或有符号数。
+每项只在至少一槽存在时输出，按公开I稳定排序；Some0或负Combs都不是空项。本人/其他席位/观战/AI见相同公开值与linked，Referee另按既有权限见私牌。死亡Next照显、disabled保值；不输出raw mark/helper IDs、VmAux、D.pending/历史或隐藏内部信息。分项投影是身份隔离所需适配，仍待单独审批。
+涕泣Own选择context=`TiqiAdjustment{skill:I,target,delta:u32}`，从已验证本次内容局部派生；拥有者/可信Referee见，其他人仅Other询问存在，AI只拿同席位视图；不从history重算d，不因Referee可见授应答权。
+落点仍是E/view.rs/engine/views.rs→wasm/session.rs view_to_json/open_choice_json→Worker nativeBackend.ts→engine-api SeatView/ChoiceRequest、server native_view.rs和web types；JSON保持null与signed整数，target沿现有0基/API1基归一。新Prepare及SkillLogBegin消费者也列影响面，不自动输出内部事件。
+新效果/内部查询/隐式nested读取对未来NC10 publicprefix/cert默认Opaque；先补公开prompt leaf，不因某些值公开就认证整个compound为Public，不借私有NC候选。当前无build/真实WASM/投影或隐私通过结论。
+
+## 9. 12类待验收场景与必要审批轴
+
+1. 首回合/额外回合Begin/Prepare与翻面跳回合；旧phase_begin包过渡不等于旧rule恢复；新event/ABI旧包明确拒绝、原档锁不覆盖。
+2. D实际0/1/2/3，skip/cancel/Omitted/死亡；fixed/普通Draw/额外D边界与signed pending，禁止handdelta/回合drawn替代。
+3. 附录T/Y/P/M真实caller覆盖xianjian_card_use110、mtg617、yunchou293、phase/draw165、tricks18、wang_xi57，后续不提前/重复。
+4. Filter/RecordHistory/Transfer/After/Aborted逐边界恢复；特别c入手清held后After挂起、再弃置/转交仍保留eligible历史，一owner、一次transfer/计数。
+5. Tiqi多owner live读/抵消0，先draw再取消；奖励draw后owner死仍forceDie选符号，target离场不选；Limit到期及负上限clamp。
+6. Baoshu成本后logSkillBegin改maxHp；m=0→+1、m<0照加、正负抵消Some0；≤0不消费，后续加回正才消费；座次、self/2P、嵌套重置与取消不doubletoggle。
+7. Source先End、三点各一次、缺source/自伤/redirect/链伤、可取消选自己或他人，成功凭据与窗资格分开。
+8. source在damage/Source子事件死亡后清除；victim救回/死亡、num0/notrigger/转LoseHp、armor全吸收/无限HP按独立决策。
+9. Next原enabled=true/false各死→保存恢复→复活，enabled原值不变；只有alive且enabled的真实Begin原子转Current；当前回合新伤害仍写Next。
+10. disable/remove/expiry/death/replacement四角色逐格；两个非official包自己的compound不串槽，同I两个owner合并target槽；非法generic mark/grant拒绝。
+11. 所有等待点字节恢复/合法重答/分片abort，完整对象、events、choice/context、RNG、ownership、绑定/游标相等；正确After不拒，伪Transfer/错I/错锁拒档。
+12. native/真实WASM/上游JS差分及同公开视图、私有牌/历史/locals不同的反事实；完整Plan及有效apply相等，不以两个Err或仅hash相等代通过。
+以上12类全部pending；新场景登记misc，复用nc_rounds内nc04_vm_resume/nc06_generic_content_state/nc10_j2_vm_privacy，autotests=false。后续实现须跑影响定向及AGENTS原生三包/行数门禁，本任务不跑；golden先解释完整对象/事件/RNG首分岔与恢复归因，独立review后才重录。
+审批轴保持：规则330→待定（精确阶段/SkillLogBegin/Draw/gain/枯竭平局及组合顺序）；ABI758→待定（三compound与门禁）；Archive105→待定（D/R/G、detached、Damage与续行）；content schema3/公开schema/WS6→待定（声明导入/身份传递与分项投影）。
+严格拒规则/格式不匹配、保留原档/锁/旧制品仍为候选，依snapshot.rs:60/archive.rs:180提出；不承诺并行旧dispatcher或复活engine-core，迁移另批，旧外部reader按既有安全退出policy留证。不自动批准旧105拒绝/迁移，不领取新数字。
+当前授权仅可继续私有source fixture、预期轨迹和接口核验；正式源码/DSL/npack/锁/主稿需待具体裁决与实际331+332前置验收。本稿不宣五项已由review关闭，更不宣三noop、37来源、NC10或平台完成。
+
+## 10. 源摘录身份与原稿保全（只读SHA，不是实验）
+
+source本次实读：U/.../player.js:4800/4865/9429/10159，content.ts:11/4270/11309/11340/12557；xianding/skill.js:41912/41983/42017。`...=noname/library/element`。这些分别证明addMark零默认/负数、Next复活、cost-content间真实事件与gain历史可变。
+主线实读：content-runtime/src/lock.rs:7/65、store.rs:691、content-schema/src/package/hashing.rs:7、C/content/extension.rs:196、E/engine/snapshot.rs:60、K/rvm_bridge.rs:969、resolution.rs:332/542、snap/ownership.rs:25；均绑定本稿HEAD，不据旧描述补完成声明。
+SHA256：U/.../player.js=`fc34249bcfeb48e676ecff6c973892e5d9affe039201d537237c08a294546bcd`；content.ts=`09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c`；xianding/skill.js=`31bb9b6d850b256429762f0e7aec508ed376845d3940757184f3d49fd4700ef0`。
+SHA256：content-runtime/lock.rs=`765e4301adaf571639948013a52051c25404d01bd52ff923685b7b93a00cd13b`；store.rs=`f26001e774fecd04b8665331c34aeb82ca3539901d954c8c861f4f76e2afd723`；content-schema/package/hashing.rs=`496e4635146cc2eb52e78d7dbca904a426b2c774529c65a58ab828105cc472b2`。
+不可变v2 SHA256=`8db9cb9e3a5d3454430ec69deafaa5a96c056dc139faeba546f7e438650d7aad`；其caller文件集合SHA=`8bbfdc49e90f001661ceb9c273c52fd986a31464a4da8e6676940c8687bcc8d0`是上轮source记录，本次不冒称重扫。v2复审SHA=`34ca1162f3d16748701218b9c928bdede3bd48d3e96d7dbc27e435474233c17f`。
+v1 SHA256=`e8153c7881ec2e7cc503a3adf06ea8b3341afb898f82699d4625c1c4f1f1be09`；v1正式review=`f3b22c8cc9c653bd7a12d9d2d79acd6ba327e8dd1e6d4a679169282c61691226`，本次只读保全。
+期间只读index曾见其他批次暂存，随后外部提交推进HEAD到`4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`、暂存归空；本任务无git写操作。定向比对777bf339→该HEAD，三个native crate无差异；本稿源摘录仍按初读基线标识，不冒称全仓冻结。
+未运行build/tests/media/新实验/全repo扫描；只写此v3。风险仍是191异步迁移及新持久/身份/投影契约尚未批准、未实测；本稿交下一独立review，不把设计纠正说成实现已修。

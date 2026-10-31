@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-31T07:45:58.457637+00:00",
+  "status": "PASS",
+  "evidence_index_files": 95,
+  "source33": 33,
+  "protected99": 99,
+  "generated18": 18,
+  "defaultdist37": 37,
+  "frozen_markdown": 1927,
+  "workspace": [
+    6917,
+    0,
+    77
+  ],
+  "workspace_summaries": 164,
+  "commands": 16,
+  "retained_harness_failure": 1,
+  "compiler_diagnostic_headers": 727,
+  "changed_generated": [
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"
+  ],
+  "frontend_products": 45,
+  "actual_native": {
+    "passed": true,
+    "fixtureRestoreBytesIdentical": false,
+    "restoreNormalization": "Engine::restore increments auth_generation; metadata-read invariance uses post-restore baseline",
+    "fixture": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/physical/v2/actual-native-ask.hex",
+    "fixtureSha256": "0cfe323c57def22331698e26432b8b3d785f39d202ec865f0feff8f350677bb4",
+    "fixtureArchiveRuleVersion": "330",
+    "raw": {
+      "0": "{\"hidden\":true,\"id\":1,\"observer\":1,\"prompt\":\"trigger_confirm\"}",
+      "1": "{\"allowCancel\":true,\"id\":1,\"kind\":\"Confirm\",\"max\":1,\"min\":1,\"native_kind\":\"confirm\",\"observer\":1,\"options\":[\"confirm\"],\"prompt\":\"trigger_confirm\",\"source_skill\":\"遗计\"}",
+      "2": "{\"hidden\":true,\"id\":1,\"observer\":1,\"prompt\":\"trigger_confirm\"}"
+    },
+    "owner": 1,
+    "source_skill": "遗计",
+    "otherHidden": true,
+    "saveBeforeAfterIdentical": true,
+    "wasmSha256": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1"
+  },
+  "actual_legacy": {
+    "passed": true,
+    "steps": 120,
+    "pendingChoicesObserved": 33,
+    "wasmRuntime": true,
+    "scope": "real generated WASM pendingChoiceJson and envelopes; typed poisoned restore covered by native-target sink test, not exposed in this JS API"
+  },
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "index_empty": true,
+  "post_window_index_sha256": "bc56a2f4af7bad20b3590eb90f1235885f8cd178e5ea7d0ba1d45ba82fb5c108",
+  "window_index_sha256": "af7ed45d7242c83aa88986ace70d3e378dde873988fd58c693b440a3b62ddbd7",
+  "logical_index_all_entries_equal_HEAD": true,
+  "post_window_raw_index_changed": true,
+  "raw_index_change_cause": "not established; no staged-content change; final-window byte equality verified independently above",
+  "negative_sha_selfcheck": true,
+  "qualification": "Fresh bounded SHA/Git/JSON/log parser only; no tests/build/product/network execution, no full43869/3GB rescan. Final snapshot docs exact at audit time; later evidence additions are separately checked."
+}

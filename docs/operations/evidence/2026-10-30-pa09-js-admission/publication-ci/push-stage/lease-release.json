@@ -1,0 +1,12 @@
+{
+  "at_utc": "2026-10-30T20:43:27.690435+00:00",
+  "lease": "Main publication evidence lease released after receipt copy; all later writes own/tmp only",
+  "head_sha": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "remote_refs": {
+    "refs/heads/native-convergence": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f"
+  },
+  "push_exit": 0,
+  "push_completed_utc": "2026-10-30T20:43:04.056526+00:00",
+  "protected_paths_unchanged": 155
+}

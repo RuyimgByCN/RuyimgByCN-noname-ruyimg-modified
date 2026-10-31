@@ -1,0 +1,36 @@
+{
+  "utc": "2026-10-31T05:59:53.852936+00:00",
+  "baseline": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "report": {
+    "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/02c3c0c6-c24a-4974-8c7d-65e6d85dbf7b/proposals/pa09-single-seat-product-persistent-pool-seam.md",
+    "bytes": 13698,
+    "sha256": "80454658943cc0787714a185e23f8c58ece4fa8a4ac5711aa6185a872a98416c"
+  },
+  "finding": "Currentdesktopusespersistentownerthread, directsingleactingseatplanner. plan_all([seat]) addsonejob/clone andnotparallelcandidatebenefit; default64nodes50ms, GUIplannerConfigabsent. No productgain demonstrated.",
+  "parent_clarification": "Exactsamewallclockserial-vs-paralleladmittednodecount wasresearchconstraintnotusercontract; AIclockalreadyhostnondeterministic andcommandsrecorded. Preserveoriginalcandidatecontiguousadmittedprefix/order, oneownerstart/globaldeadlinebeforeadmission, globalnodebudget/boundedinflighttail, allacceptedworkonce/drain/orderedreduce. UntimedfullPlanparity andrealdefaulttimedroutebenefit mustbeactualmeasured; no newrequest/userknob/version/rulechanges.",
+  "implementation_run": "f82ecf3c-964c-4956-b6aa-33e01b626084",
+  "implementation_scope": "NEWprivate4ddtree only, reuseexistingpool; no Mainmerge ordefaultswitch; source27/Cdifferentprivatewriters",
+  "actual_results": {
+    "native": [
+      1716,
+      0,
+      75
+    ],
+    "affected": [
+      97,
+      0,
+      3
+    ],
+    "session_checkpoints": "Normal and stress nativeSession gains measured; no GUI/release/native-vs-WASM qualification",
+    "host_route": "Four ABBA runs/1400requests each/fulltrajectorydigest identical,625acceptedjobs135poolstepspercandidateRun; candidatewhole-routep95higherbothRuns, NO consistent overall benefit",
+    "defaults": "Desktop WASM retained"
+  },
+  "implementation_status": "Nine-file PRIVATE candidate implemented and independent source review No issues/OKwithnotes; NOT Mainintegrated/PA09accepted",
+  "measurement_followup": "Same-load release experiment privately running; no claimed result/no Mainchange",
+  "review": {
+    "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/e3edeaff-4837-4474-bc58-288aaa1b81b0/reviews/pa09-single-seat-pool-candidate.md",
+    "stored": "candidate-independent-review.raw.txt",
+    "bytes": 7157,
+    "sha256": "e447f7313b6fbe8b6d3e80d4cdd890f31ca8065c4fa853ec4a5c4d7cb66a605e"
+  }
+}

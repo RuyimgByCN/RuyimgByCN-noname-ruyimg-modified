@@ -1,0 +1,2 @@
+native engine pkg (web) deployed to /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg
+{"command": ["node", "scripts/build-native.mjs"], "exit": 0, "locked_seconds": 52.794125958986115, "disk_free_bytes": 48026198016}

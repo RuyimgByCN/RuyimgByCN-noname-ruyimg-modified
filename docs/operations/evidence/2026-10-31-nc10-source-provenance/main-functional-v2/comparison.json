@@ -1,0 +1,32 @@
+{
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "tracked_status": true,
+    "admission31": true,
+    "admission_mismatches": true,
+    "input_hashes": true,
+    "guard": true,
+    "attribute_sha256": true,
+    "root_gates": true,
+    "docs_dirty": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "pa09_admission_sha256": true
+  },
+  "all_equal": true,
+  "scope": "Narrow native/API/frontend/Cargo inputs and inherited PA09 path sets; no broad43867/3GB source rescan",
+  "counts": {
+    "input_hashes": 1131,
+    "admission31": 31,
+    "protected": 99,
+    "modules": 18,
+    "dist": 37,
+    "docs_dirty": 6,
+    "root_gates": 7
+  }
+}

@@ -1,0 +1,104 @@
+engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+├── blake3 v1.8.5
+│   ├── arrayref v0.3.9
+│   ├── arrayvec v0.7.8
+│   ├── cfg-if v1.0.4
+│   └── constant_time_eq v0.4.2
+│   [build-dependencies]
+│   └── cc v1.2.66
+│       ├── find-msvc-tools v0.1.9
+│       └── shlex v2.0.1
+├── engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+│   ├── engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+│   │   ├── blake3 v1.8.5 (*)
+│   │   ├── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+│   │   │   ├── engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+│   │   │   │   ├── blake3 v1.8.5 (*)
+│   │   │   │   ├── serde v1.0.228
+│   │   │   │   │   ├── serde_core v1.0.228
+│   │   │   │   │   └── serde_derive v1.0.228 (proc-macro)
+│   │   │   │   │       ├── proc-macro2 v1.0.106
+│   │   │   │   │       │   └── unicode-ident v1.0.24
+│   │   │   │   │       ├── quote v1.0.46
+│   │   │   │   │       │   └── proc-macro2 v1.0.106 (*)
+│   │   │   │   │       └── syn v2.0.118
+│   │   │   │   │           ├── proc-macro2 v1.0.106 (*)
+│   │   │   │   │           ├── quote v1.0.46 (*)
+│   │   │   │   │           └── unicode-ident v1.0.24
+│   │   │   │   └── thiserror v2.0.18
+│   │   │   │       └── thiserror-impl v2.0.18 (proc-macro)
+│   │   │   │           ├── proc-macro2 v1.0.106 (*)
+│   │   │   │           ├── quote v1.0.46 (*)
+│   │   │   │           └── syn v2.0.118 (*)
+│   │   │   ├── serde v1.0.228 (*)
+│   │   │   └── thiserror v2.0.18 (*)
+│   │   └── rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+│   │       ├── blake3 v1.8.5 (*)
+│   │       ├── engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api) (*)
+│   │       ├── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api) (*)
+│   │       ├── serde v1.0.228 (*)
+│   │       └── thiserror v2.0.18 (*)
+│   ├── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api) (*)
+│   └── rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm) (*)
+├── engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel) (*)
+└── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api) (*)
+[dev-dependencies]
+├── blake3 v1.8.5 (*)
+├── content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+│   ├── blake3 v1.8.5 (*)
+│   ├── content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+│   │   ├── blake3 v1.8.5 (*)
+│   │   ├── engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api) (*)
+│   │   ├── licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+│   │   │   ├── serde v1.0.228 (*)
+│   │   │   └── serde_json v1.0.150
+│   │   │       ├── itoa v1.0.18
+│   │   │       ├── memchr v2.8.3
+│   │   │       ├── serde_core v1.0.228
+│   │   │       └── zmij v1.0.21
+│   │   ├── resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+│   │   │   ├── blake3 v1.8.5 (*)
+│   │   │   ├── serde v1.0.228 (*)
+│   │   │   └── serde_json v1.0.150 (*)
+│   │   ├── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api) (*)
+│   │   ├── rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm) (*)
+│   │   ├── serde v1.0.228 (*)
+│   │   └── serde_json v1.0.150 (*)
+│   ├── rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api) (*)
+│   ├── rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm) (*)
+│   ├── serde v1.0.228 (*)
+│   └── thiserror v2.0.18 (*)
+├── content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+│   ├── content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+│   │   ├── blake3 v1.8.5 (*)
+│   │   ├── content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema) (*)
+│   │   ├── engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api) (*)
+│   │   ├── resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema) (*)
+│   │   ├── serde v1.0.228 (*)
+│   │   ├── serde_json v1.0.150 (*)
+│   │   └── thiserror v2.0.18 (*)
+│   ├── content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema) (*)
+│   ├── engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native) (*)
+│   ├── serde v1.0.228 (*)
+│   └── serde_json v1.0.150 (*)
+├── content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime) (*)
+├── content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema) (*)
+├── resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema) (*)
+├── rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm) (*)
+├── serde v1.0.228 (*)
+├── serde_json v1.0.150 (*)
+└── tempfile v3.27.0
+    ├── fastrand v2.4.1
+    ├── getrandom v0.4.3
+    │   ├── cfg-if v1.0.4
+    │   └── libc v0.2.186
+    ├── once_cell v1.21.4
+    └── rustix v1.1.4
+        ├── bitflags v2.13.0
+        ├── errno v0.3.14
+        │   └── libc v0.2.186
+        └── libc v0.2.186
+
+engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content) (*)
+
+engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel) (*)

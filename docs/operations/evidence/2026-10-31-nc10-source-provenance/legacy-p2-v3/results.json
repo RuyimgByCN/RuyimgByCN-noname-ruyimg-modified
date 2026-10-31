@@ -1,0 +1,222 @@
+{
+  "utc": "2026-10-31T06:30:39.622761+00:00",
+  "runs": [
+    {
+      "utc": "2026-10-31T06:21:02.296546+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/red-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 23.311260333983228,
+      "log": "p2-legacy-red.log",
+      "diskFree": 88282525696,
+      "name": "p2-legacy-red",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-red.log",
+      "logSha256": "4d632ff1ddc7bb39d9f0753daa860376e6c3049a84190231654a864bc5954377"
+    },
+    {
+      "utc": "2026-10-31T06:21:58.257374+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/red-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 30.929608209000435,
+      "log": "p2-legacy-assertion-red.log",
+      "diskFree": 88294117376,
+      "name": "p2-legacy-assertion-red",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-assertion-red.log",
+      "logSha256": "f6cc00075467791a27a4b866e5116412e97f665c14c999d1a9c62c1be3d2990f"
+    },
+    {
+      "utc": "2026-10-31T06:23:34.747828+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/green-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 34.492751000012504,
+      "log": "p2-legacy-green.log",
+      "diskFree": 87547052032,
+      "name": "p2-legacy-green",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-green.log",
+      "logSha256": "a3a5d5ee5a68e511f359dc82890c8cd672be6f1b39dab738188c5d92c59e0e4a"
+    },
+    {
+      "utc": "2026-10-31T06:25:49.986473+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 94.30121958398377,
+      "log": "p2-core-full.log",
+      "diskFree": 86359834624,
+      "name": "p2-core-full",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-core-full.log",
+      "logSha256": "a0f24d98114b1d7571eb3c2bbe9921fed6af7e4271b86df1c00652f5a1333e46"
+    },
+    {
+      "utc": "2026-10-31T06:24:37.444577+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-wasm",
+        "--lib",
+        "source_skill_legacy_sink",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 21.763483249989804,
+      "log": "p2-legacy-wasm-sink.log",
+      "diskFree": 87527264256,
+      "name": "p2-legacy-wasm-sink",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-wasm-sink.log",
+      "logSha256": "572e6aa7fa10a0da07730c167883d10fedeefbd22909d1a49bbca1ca91f0e878"
+    },
+    {
+      "utc": "2026-10-31T06:27:45.010819+00:00",
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg",
+        "--",
+        "--no-default-features"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 209.31315012500272,
+      "log": "p2-legacy-wasm-build.log",
+      "diskFree": 86353178624,
+      "name": "p2-legacy-wasm-build",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-wasm-build.log",
+      "logSha256": "6a50aa25a70777dcf2fdd36a0aa02c53a6eef9255e18f6dd6bc148f8a7738316"
+    },
+    {
+      "utc": "2026-10-31T06:32:14.524450+00:00",
+      "command": [
+        "node",
+        "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/legacy-wasm-sink-smoke.mjs"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 0.376498083001934,
+      "log": "p2-actual-legacy-wasm-sink.log",
+      "diskFree": 82859446272,
+      "name": "p2-actual-legacy-wasm-sink",
+      "logPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-actual-legacy-wasm-sink.log",
+      "logSha256": "5aa707955660547bae56ad7f82c701be51e692d34515156ff5b85357c75abd09"
+    }
+  ],
+  "coreFullCounts": {
+    "passed": 3861,
+    "failed": 0,
+    "ignored": 1,
+    "suites": 13
+  },
+  "differentialCases": 445,
+  "prepatchDifferences": 18,
+  "postpatchDifferences": 0,
+  "productionChangedFiles": [
+    "crates/engine-core/src/snapshot/legacy_choice.rs"
+  ],
+  "targetTestFiles": [
+    "crates/engine-core/src/engine/source_tests.rs",
+    "crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+    "crates/engine-core/src/engine/source_tests/choice_request_4dd.rs"
+  ],
+  "unexpectedTrackedChanges": [],
+  "products": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/engine_wasm_bg.wasm",
+      "bytes": 15389161,
+      "sha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/engine_wasm.d.ts",
+      "bytes": 6751,
+      "sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/.gitignore",
+      "bytes": 1,
+      "sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/package.json",
+      "bytes": 352,
+      "sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/engine_wasm_bg.wasm.d.ts",
+      "bytes": 2602,
+      "sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/legacy-wasm-pkg/engine_wasm.js",
+      "bytes": 22554,
+      "sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf"
+    }
+  ],
+  "inheritedV2Bounds": "6916 workspace/native/WS/GUI results are inherited, not v3 reruns; only legacy affected validation run here. New legacy WASM was rebuilt into a separate evidence package, not installed into old frontend.",
+  "pending": [],
+  "versions": {
+    "rules": 330,
+    "archive": 105,
+    "abi": 758,
+    "ws": 6
+  },
+  "runtime": "BLOCK",
+  "actualLegacyWasmSink": {
+    "passed": true,
+    "steps": 120,
+    "pendingChoicesObserved": 33,
+    "wasmRuntime": true,
+    "scope": "real generated WASM pendingChoiceJson and envelopes; typed poisoned restore covered by native-target sink test, not exposed in this JS API"
+  },
+  "completedUtc": "2026-10-31T06:33:38.342858+00:00",
+  "noStagedFiles": true,
+  "oracleExactBaseSourceExceptIdsImport": true,
+  "oracleBaseSha256": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6",
+  "sourceLineGate": "2 source-line unit tests and full source-line limit check passed",
+  "strictCore": "No -D warnings core rerun: existing core has107/109 inherited warnings; full affected core compiled/tests passed; new oracle/reader added no diagnostics."
+}

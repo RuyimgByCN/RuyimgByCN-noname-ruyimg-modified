@@ -1,0 +1,23 @@
+{
+  "utc": "2026-10-31T06:22:40.162612+00:00",
+  "cases": 445,
+  "differences": 18,
+  "files": [
+    {
+      "path": "crates/engine-core/src/snapshot/legacy_choice.rs",
+      "sha256": "2ab8e6d7a696e7a82915bfc85baac310c41ddee11214a8092f41964ec8a5ae2b"
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests.rs",
+      "sha256": "ab34685dbb72cee7edc839dc92b9d52c7330a7b2a2d0784d2cb07cbae02db0f6"
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+      "sha256": "b3abfafd8f7a13b78d09097ffbc77dc55cf4d35e71ba324db982669859ffe10d"
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests/choice_request_4dd.rs",
+      "sha256": "1b906494d37a1763b55dfae8f56d69cbc440342181d17c0c2c612b5c4a41a90d"
+    }
+  ]
+}

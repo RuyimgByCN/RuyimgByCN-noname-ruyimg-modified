@@ -1,0 +1,63 @@
+## Review
+
+- **设计结论：Revise。**v2 已具体解决兼容承诺、Draw 调用范围和死亡 source 的旧问题，但仍有持牌恢复矛盾、独立作者能力限制及生命周期歧义，尚不能作为实施审批定稿。
+- **Correct：**完整读完150行；重新核对三 native src 的 draw 调用集合、上游 draw/gain/filterStop、内容锁、helper 删除与恢复接缝。
+- **Fixed：**无文件修改；下表“关闭”仅指设计问题已回答，不表示功能实现或测试通过。
+- **Merge verdict：BLOCK，仅针对 v2 设计定稿。**R05 三份 noop 仍必做；规则、ABI、Archive、schema、协议版本均未获本次授权。
+
+对象 [P：r05-concrete-runtime-contract-supplement-v2.md](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/7c4b4b60-7758-45d4-bc57-70218cddaf39/proposals/r05-concrete-runtime-contract-supplement-v2.md)。下文 `N=/Users/ruyimg/Documents/Claude/sanguosha/noname-next`，`K=N/crates/engine-native-kernel/src`，`C=N/crates/engine-native-content/src`，`E=N/crates/engine-native/src`；`U=/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core`。
+
+**上一轮七项逐项复核**
+
+| v1 阻断 | v2 结论与证据 |
+|---|---|
+| 兼容政策 | **设计层关闭。**P:10–11 明确严格拒绝为待批候选、不覆盖原档、不承诺并行旧 native；与 `E/engine/snapshot.rs:60`、`K/archive.rs:180` 一致。旧 alias 仍只是迁移入口，不是旧规则恢复或永久差异。 |
+| 全部 Draw caller | **调用范围问题关闭。**P:19–55 的 kernel44/content147 清单与本次限定搜索相符，未发现漏列调用；P/M/T/Y 区分及删除旧同步 API 已明确。`xianjian_card_use:110`、`mtg:617`、`yunchou:293` 等同步后续动作已纳入，不能再按“只迁主 phase caller”实施。 |
+| 实体持牌与生命周期 | **未关闭。**P:59–68 补了 held/detached、RNG及回滚承诺，但 P:115 的恢复条件与 Transfer 后状态冲突，见 Finding 1。 |
+| mark schema／稳定身份／权限 | **部分解决。**P:84 撤回不存在的 mark section，P:94 明确旧通用写操作不能绕过；但替换成 official 专属入口违反独立作者范围，见 Finding 2。绑定哈希另见 P2 注记。 |
+| 死亡 source／两后窗 | **设计层关闭。**`U/element/player.js:8990` 清死亡 source；`gameEvent.ts:494` 在 trigger 前调用，`content.ts:4023` 的 arrangeTrigger 也在重新筛选队列前调用。P:71 的双重检查有源依据，Source 内死亡后不恢复原 source 的纠错成立。 |
+| helper／恢复绑定 | **部分解决。**P:109–116 已区分合法 Draw Intrinsic 与 compound Trigger，不借 C331 充当现成能力；删除入口表也具体。Next 的 enabled 状态仍有歧义，见 Finding 3。 |
+| 公开投影 | **字段方案已具体。**P:120–125 给出 linked、四 Option、选择 context、观察者过滤与消费端；Opaque 不算 NC10 完成的限制保留。梳只允许正数的约束尚有源语义缺口，见 Finding 4。 |
+
+**Finding 1：P1，Transfer 后合法续行会违反 `eligible⊆held`（P:59–60、66、115）。**
+
+P 规定 Draw.held_cards 是唯一实体持有者，转移到目标区后从 held 删除；同时要求 DrawGain 的 eligible 是 held 子集。取牌 `c`→RecordHistory→Transfer 入手并清 held→Gain After 子触发挂起，是设计自身允许的状态，此时 eligible 仍引用 `c`，但 held 已无 `c`。
+按 P:115 的无条件恢复约束会拒绝这个合法快照；若为满足子集关系继续把 `c` 留在 held，则与目标手牌重复持有，违反 `K/snap/ownership.rs:25` 的唯一所有权约定。
+最小修订：按 Gain step 区分“待转移引用”和“已完成历史引用”。Transfer 前 eligible 必须来自 held；Transfer 后由 step 证明不能再次转移，eligible 只作历史引用，不再要求仍由 Draw 持有。明确每一步原子地更新 held、目标区、history 与 step，并覆盖 After 子事件暂停/恢复反例。
+不得通过删除 eligible 历史信息来掩盖问题：上游 `U/element/content.ts:11309` 先记 gain event，`:11340` 后仍操作其 cards；统计更新与实体持有需要分开验证。
+
+**Finding 2：P1，official 专属 compound 是新增的能力限制（P:85、91）。**
+
+v2 允许独立作者“引用三个已验证官方技能”，却禁止其在自己包、自己逻辑技能下声明同一 compound。由于本路线也不公开对应 D 查询／signed pending 操作，这不是仅保护官方数据，而是关闭独立作者编写对应规则行为的入口。
+这与本任务明确要求独立作者规则/技能，以及 canonical SPEC:46“第三方规则经 compiler→npack→rule-vm 独立发布、共用宿主契约”冲突；不能把解除该限制归为未来另审的“通用化”。
+最小修订：保留三个固定语义 compound 和严格窗口/角色校验，但绑定经验证的**调用包与逻辑技能**，允许非 official namespace；独立技能的状态键需按该身份隔离，同一逻辑技能不同 owner 仍共享目标槽。若作者显式引用官方技能，则沿既有依赖解析验证该引用。
+授权应来自已有包验证、VM capability、声明身份和宿主执行窗口。`K/rvm_bridge.rs:969` 的 J2 自绑定可复用；manifest 上写了 `official` 本身不是额外权威。无需开放任意 mark/expiry，也无需新建权限注册系统。
+
+**Finding 3：P1，“Next 可 disabled，复活重新门控”没有确定规则结果（P:98、101）。**
+
+存在两种合法前态：Next 已启用，或 Next 原先被显式禁用；两者都有 next storage。P:101 允许死亡时保留为 disabled，随后“复活重新门控”，却未说明怎样保留这一区别。
+若复活统一启用，原先禁用的 Next 会提前转 current；若统一不启用，原先有效的 Next 会永久停住。上游普通死亡路径 `U/element/content.ts:12557` 没有把这个非临时 helper 改成 disabled，`player.revive():9429` 也不执行统一技能启用。
+最小修订：死亡保留 Next 实例及原有 enabled 值；死亡期间依现有 alive 门禁阻止触发，复活不额外改 enabled。`K/resolution.rs:332,542` 已同时检查 enabled/alive，不需新增“死亡前是否启用”字段。
+
+**Finding 4：P1，宝梳正数槽假设漏掉了 source 的 `addMark` 参数语义（P:89、94、120，验收6）。**
+
+P 特别允许选择后 maxHp 变化、在 content 重新算 `m=1+maxHp−k`，却规定 combs 只允许 Some(正数)。上游 `xianding/skill.js:42017` 确实这样重算，但调用的是 `player.addMark`，其 `player.js:4800` 会把零参数改为1，负数则照加；`hasMark`:4865 仅在当前计数>0时成立。
+因此在 P 自己包含的 maxHp 变化分支，`k=2、content maxHp=1` 得 m=0，源结果是加1；直接 checked_add(0)、拒绝零或不授标都不等价。更低的 m 可产生负计数，也不能由正数投影约束抹掉。
+该间隙并非必须先假定并发命令：`content.ts:4270` 在成本完成后 logSkill，再创建技能 content；`player.js:10159` 插入可触发的 logSkillBegin，`content.ts:11` 的 emptyEvent 会实际触发该事件。
+最小修订：写清宝梳调用 `addMark` 的零默认规则和负值行为，helper 仍只在计数>0时消费；投影按实际有符号 storage 表达。若要证明 m≤0 在选定规则组合永不可达，须提供该不变量的源依据，不能同时保留“maxHp变化”验收而默认正数。
+
+**Finding 5：P2，`core.r05_binding_hash` 未说明独立必要性（P:67、93）。**
+
+v2 正确发现 native `content_lock_id`（`C/content/extension.rs:196`）仅含 name/version；但现有 `content-runtime/src/lock.rs:7,65` 已有 namespace/package/version/logic_hash/content_hash 的规范锁，`store.rs:691` 校验其实际包，`content-schema/src/package/hashing.rs:7` 已覆盖逻辑技能和声明。
+P 同时将 R05 身份/绑定哈希加入 native 现有锁计算，又把同一派生值写入独立 core 字段再比一次。固定角色表还随规则版本冻结，目前没有指出后者额外区分哪种合法状态。
+最小改动应先确定唯一的 Catalog/包锁身份输入并传到现有恢复边界；若既有身份表示确实不足，提出共享身份接缝的准确缺口。没有额外验证目的时，删掉 R05 专用持久哈希，避免为内容规则再扩 core/codec/hash。
+这不等于现有 native 弱锁已经足够，也不否定 VerifiedPackageIdentity 的传递；问题是修一次身份链后又保存一份无独立语义的指纹。
+
+**仍需保持的审批边界**
+
+P:64 新增枯竭平局、detached reason、DrawPending 等已明确列为候选；上游 `U/get/index.js:3626` 确实有取牌不足时 game.over 平局分支，不能拿旧 native 部分发牌作为等价。它们的终局/释放及投影消费者仍需随具体字段一起审批，不能被“191处换异步入口”隐含批准。
+12类场景全部未跑；caller 清单、删除矩阵和绑定矩阵也不是各来源等价证明。当前可关闭上述三个设计问题，但不能用关闭数推断 R05 完成或 C331/332 已提供新接口。
+下一版只需补齐上述反例与身份接缝：修阶段化持牌验证、开放经验证的独立作者绑定、保留 Next 原 enabled、补宝梳参数边界，并解释或删除重复持久哈希。无需再增加泛化框架或重问是否做 R05。
+
+未运行构建、测试、解析程序或物理实验；未复算 proposal 的 SHA 集合，未改任何源码/配置/版本。
+风险：v2 仍为未实现、未批准的设计；本 review 不分配任何新版本或批准旧档拒绝、迁移、协议与持久字段增量。

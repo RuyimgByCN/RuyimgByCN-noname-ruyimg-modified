@@ -421,8 +421,9 @@ impl NativeSession {
                 min,
                 max,
                 allow_cancel,
-                ..
-            }) => serde_json::json!({
+                source_skill,
+            }) => {
+                let mut choice = serde_json::json!({
                 "id": id,
                 "observer": seat,
                 "prompt": prompt,
@@ -439,8 +440,10 @@ impl NativeSession {
                     engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
                 }).collect::<Vec<_>>(),
-            })
-            .to_string(),
+                });
+                if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
+                choice.to_string()
+            },
             Some(ChoiceView::Other {
                 id,
                 observer,

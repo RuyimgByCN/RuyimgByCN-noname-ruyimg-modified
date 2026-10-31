@@ -1,0 +1,58 @@
+## Review
+- **Correct：**三个指定 DSL 均仍是 `INTENTIONAL_EMPTY_NOOP`；上游真实规则均属于必做范围，不能转成规则差异。
+- **Fixed：**无；本次只读，未修改源码、文档、上游、编号或 Git metadata。
+- **Finding：P1，R05 完整实现仍缺运行时能力。**缺口集中于准确阶段窗口、可改写摸牌数量、阶段实际摸牌归属、目标侧跨回合状态及到期清理，证据如下。
+- **Merge verdict：BLOCK，仅指“R05 三技能完成验收”。**不裁定当前 Main 的合并或 preflight。
+
+本报告根目录为 `/Users/ruyimg/Documents/Claude/sanguosha`；下文 `N=noname-next/`，`K=N/crates/engine-native-kernel/src/`，`C=N/crates/engine-native-content/src/`。基线标签采用任务给定的 Main `da7e+alias9 / 330/105/758/WS6`，未读取 Git metadata 核验。已读 canonical AGENTS/SPEC；本次工具未提供可调用的 CodeGraph，采用限定路径搜索和源码读取。旧错误 notes 未作为依据。
+
+**三个技能的实际规则**
+
+| 技能与源码 | 触发、选择与参数 | 顺序、寿命、重复与边界 |
+|---|---|---|
+| 涕泣 `tiqi`：[xianding/skill.js:41912](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/xianding/skill.js:41912) | 全局 `phaseDrawEnd / phaseDrawSkipped / phaseDrawCancelled`，排除技能拥有者自己的摸牌阶段；`frequent:true`，可不发动。统计阶段角色的 gain history：直接父事件名为 `draw`，且 `getParent("phaseDraw") === trigger`；合计实际获得牌数 `n`，仅 `n≠2` 时发动，差值 `d=abs(n−2)`。 | 拥有者先摸 `d`，等待该摸牌结算，再检查阶段角色 `isIn()`；仍在场才选择 `+d / −d / cancel`。取消只放弃修改上限，不撤销已摸牌。修改写入**阶段角色** `tiqi_effect`，多次累加，增加其手牌上限；没有限次字段。跳过/取消也按同一历史查询统计，不能把“计划摸牌数”当实际数。 |
+| 宝梳 `baoshu`：[xianding/skill.js:41983](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/xianding/skill.js:41983) | 拥有者 `phaseZhunbeiBegin`，`maxHp>0`；可取消选人，选择 `1..maxHp` 名角色，未排除自己。内容执行时按座次排序，以当时 `player.maxHp` 和已选人数 `k` 算每人标记数 `m=1+maxHp−k`。 | 每目标依次检查在场→`await link(false)`→`await turnOver(false)`→再检查在场→添加 `baoshu_draw`、累加 `m` 枚“梳”。目标自己的 `phaseDrawBegin2` 强制触发，只有 `!numFixed` 且有标记才将全部标记数加到 `trigger.num`，随后移除这些标记；归零的 `onunmark` 删除 storage 和子技能。无手牌上限效果、无“两回合”倒计时、无 2P 特判；2P 只是可选角色不足时限制实际人数。固定摸牌不消费标记，跳过该窗口也不消费。 |
+| 避祸 `dcbihuo`：[sp2/skill.js:7743](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/sp2/skill.js:7743) | 拥有者作为受伤者触发 `damageEnd`，每次 `+1`；作为来源触发 `damageSource`，每次 `−1`。必须存在来源且受伤者≠来源；数值不乘伤害点数。可取消选择一名角色，未排除自己、来源或受伤者。角色归属由 [sp2/character.js:274](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/character/sp2/character.js:274) 确认是冯方，不是 mobile/bihuo。 | 每次对目标 `dcbihuo_effect` 累加正负值并添加 helper；没有限次或截断，正负可以抵消至零。目标 `phaseBegin` 读取累计值→移除 effect 技能及其 storage→写入 `dcbihuo_sha`→添加临时技能。之后该回合每次非 fixed 的 `phaseDrawBegin2` 都加该值，**不在摸牌后消费 current 值**。本回合新伤害另写 next 值，不能覆盖或提前消费 current 值；固定摸牌不调整。 |
+
+共同寿命证据：[player.js:11954](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js:11954) 的无参数 `addTempSkill` 默认到全局 `phaseAfter / phaseBeforeStart`，不是“获得者下一回合结束”；`tiqi_effect` 和 `dcbihuo_sha` 均如此。`removeSkill` 的 `onremove:true` 删除同名 storage（同文件:11822）；宝梳归零经 `removeMark`:4758、`unmarkSkill`:10538 执行自己的清理。宝梳其他分支不会按回合自动减一。
+
+**已存在的可复用能力；测试均只核实源码及注册，未执行**
+
+| 能力 | 实际实现与限制 | 真正测试及所在 group |
+|---|---|---|
+| 合法选择、取消、去重、串行等待 | `K/choice.rs:58` `ChoiceSpec::accepts` 校验范围、数量、重复及空取消；`N/crates/engine-native/src/engine/apply_command.rs:109` 检查应答者。`C/content/vm_effects/pingkou.rs:4` 已有可取消多玩家选择、座次排序、逐目标 Yield；它的“仅其他角色”和数量来源不能直接当宝梳效果。 | `adr0786_j2_effect_choices::pingkou_counts_real_skips_and_settles_each_damage_before_drawing`，文件:261，group `misc`；含恢复/子事件处理的同组 `pingkou_prevention_and_nested_dying_save_or_death_resume_without_duplicate_draw`:407。 |
+| 标记增减、实际摸牌 | `K/rvm_ops.rs:334` `commit_effect(AddMark/RemoveMark)` 真正写 `(player,mark)` 的 `i32` 标记；`K/machine.rs:369` `Ctx::draw_cards` 按牌库实际可取张数返回并发 `CardsDrawn`，含洗牌 RNG。 | `t8_rvm_bridge::t8_add_mark_writes`，文件:1824，group `misc`；实际嵌套摸牌/恢复另见上述平寇测试。不能由这些测试推出 R05 已实现。 |
+| 同技能、同拥有者私有存储 | `K/rvm_ops.rs:53,544` 的 `storage_key` / `StorageSet` 写 owner-scoped flags；`K/rvm_ops/query.rs:352` 查询同一命名空间。API 值为 `u32`，VM 解码负值截成零，零写入删除；不能原样表达避祸有符号值和“存在但为零”。 | `adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped`，文件:247，group `misc`；`nc04_vm_resume::nc04_vm_restore_uses_declared_skill_for_storage`:401，group `nc_rounds`。 |
+| 可恢复的内容效果机器 | `C/content/hooks.rs:10` 将 `vm_commit/validate/ask` 接入现有目录；`K/rvm_bridge/machine.rs:444` `pump_commit` 顺序泵送效果、等待子事件；现有 `commit_state` 已参与快照。不是第二调度器。 | `adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted`，文件:369，group `misc`；此能力不自动提供新的 R05 效果。 |
+| 禁用/死亡后触发门控 | `K/resolution.rs:331,530` 入队及运行前检查 enabled/alive、重查 filter；`K/rvm_bridge/machine.rs:480` 对 following handler 也检查。仅证明触发门控，不能证明任意挂起效果或 storage 自动清理。 | `adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate`，文件:304，group `misc`；测试显式包含归档恢复。 |
+| 通用状态持久化与部分生命周期 | `K/state.rs:815` `VmAux` 已有 marks/flags/storage 等；`clear_turn`:859 清 draw/hits/lost 和回合 once，flags 仅删除指定 skipped-phase 键，marks/storage 不通用清空。 | `nc06_generic_content_state::{nc06_shape_marks_is_same_sourced,nc06_shape_flags_is_same_sourced,nc06_generic_turn_scoped_state_clears_on_turn_change}`，文件:59/72/153，group `nc_rounds`。后者实际断言不能证明任意 flags 已清。 |
+| 翻面、横置及临时宿主技能 | `K/kernel/events.rs:31,409` 的 linked/turnover 提交是**切换**，翻面保留取消窗；宝梳需按当前状态决定是否发事件并等待，不能无条件调用两次切换。`K/machine.rs:693,725` 临时技能到**拥有者**回合结束，且不执行通用 storage onremove。 | `pa12_batch4_1_host_primitives::pa12_batch4_1_turn_over_toggles_face`，文件:112，group `misc`；`native_kernel::shouyi::shouyi_grants_temporary_yishang_until_owner_turn_end`，文件:8，group `kernel`。均不证明宝梳重置或全局回合到期等价。 |
+
+注册依据：`N/crates/engine-native/Cargo.toml:8` 禁止自动发现；上述文件分别由 `tests/groups/misc.rs:46,76,106,112`、`nc_rounds.rs:19,25`、`kernel.rs:19` 纳入。没有把未注册文件或枚举定义当成测试通过证据。
+
+**明确缺口与尚未验证项**
+
+- **P1，摸牌数量窗口缺口：**`K/event.rs:13,101,245` 只有通用 Phase/CardsDrawn，Phase 为 Judge/Draw/Play/Discard/End；没有携带 signed pending count、`numFixed`、阶段身份及结束原因的等价摸牌窗口。`K/kernel/phase/draw.rs:3` 直接走跳过分支或执行摸牌，现有额外摸牌也散落其后；不能把总量改写替换成另发一次 DrawCards。
+- **P1，编译存在≠原生可执行：**`rule-api/src/effect/draw_and_gain.rs:141` 的 `IncreaseCurrentDrawCount` 是 `u32 count`；VM tag 90（`rule-vm/src/bytecode/effect_tag.rs:182`）解码时负数截零（`vm/effects/resolve_qixing.rs:347`）。`K/rvm_ops.rs:58,180` 原生 allowlist 未接该效果，落入拒绝分支；`AddSkillUntilTurnEnd`、`ChooseOthersAddMark` 同样不能凭 API/编译器存在宣称原生已支持。本次限定搜索在 `crates/` 未找到名为 `DrawCountOverride` 的符号。
+- 编译侧真正测试是 `content_compiler::tests::skill_pile_storage_and_dying_jiu_require::current_draw_count_increase_requires_abi61_and_draw_phase`（文件:828，经 `src/tests.rs:39` 注册）；它使用 CollectingHost，只证明编译及效果生成。旧 `engine-core` 的 `increase_current_draw_count` 有实现，也不能作为当前 native 能力。
+- **P1，涕泣实际统计缺口：**`K/kernel/events.rs:661` / `rvm_ops/query.rs:322` 只累计、查询本回合摸牌；`CardsDrawn` 载荷无 draw/phaseDraw 归属，`rvm_bridge.rs:100` 的 `trigger_ctx_of` 也未映射 CardsDrawn。回合总数、手牌增量、基础额定数量均不等于上游历史谓词。
+- **P1，公开阶段/排序窗口缺口：**`content-native-loader/src/lib.rs:302` 明确拒绝未映射的 `phase_prepare`；`:344` 把 `phase_begin` 映射 Judge，且首回合缺 Judge begin。`:390` 当前 trigger 固定 Normal/priority 0；`K/resolution.rs:351` 仍区分 VM 前置、Host 后置。现状不能准确承载宝梳准备时机或避祸真正 phaseBegin。
+- **P1，动态手牌上限缺口：**`K/state/core_ops.rs:837` 有实际 hand-limit 查询及部分专用规则、`hand_limit_base` 回调，但没有读取 `tiqi_effect` 的有符号加量；loader `lib.rs:420` 只接受受限的 `hand_limit_base_max_hp` modifier，不能把完整 DSL modifier 支持视为 native 已导入。
+- **未验证：**当前单一 Damage 后窗与上游独立 `damageEnd → damageSource` 的相对顺序、实际受伤/取消/转失血/濒死死亡后资格并未建立等价证明。`K/kernel/damage.rs:4` 有提前返回，`resolution.rs:481` 随后仍推进 AfterTriggers，故接避祸前必须核对实际提交凭据，不能只用 Damage 枚举和 source/target filter。
+- **未验证：**`K/kernel/death.rs:139` 死亡移除技能，但所读路径未提供 R05 通用 storage/mark onremove；禁用、死亡、替补复活后的 retained-state 策略没有 R05 回归。现有门控测试不能代替这些生命周期测试。
+
+**最小完整影响面与契约边界**
+
+- 内容入口：三份现有 `.skill`，对应 `ported/{xianding,sp2}/*.npack.json`、既有角色技能引用及包内容锁；当前 DSL 注释中的人物/技能字样有错，不能据此改人物绑定。无证据要求新增包、导出系统或 PackageStore。
+- 共享规则入口：现有 `K/event.rs`、`kernel/phase{,.rs}`、`kernel/events.rs`、伤害提交/后窗、`resolution.rs`；只补准确窗口、数量和归属所需内容，不引第二调度器。若增加持久字段，须同步 archive 编解码、hash、恢复校验、快照引用和消费者。
+- 内容承载入口：复用 `C/content/vm_effects{.rs,/}` 或既有 `content/host/` 机器；同步 `content/hooks.rs` 的 step/ask/validate、恢复及目录注册。Host 路线涉及现有 `K/vocabulary/host/` 的行为/元数据与内容 host 分派；不能只加一个行为枚举。
+- 若走新增 DSL 效果入口，影响才扩至 `rule-api`、VM tag/解码、compiler typecheck/codegen、schema ABI 校验、native accept/commit/codec 和 loader；已有 `ChooseOthersAddMark` 排除自己、delta/人数约束不等于宝梳，不能靠重命名复用。
+- 既有 namespace 可承载目标侧梳标记、涕泣 signed 加量，以及避祸 next/current 两个独立槽；现有 signed marks 可作为候选载体。须保留“存在且为零”和 helper 生命周期，不能用仅 `u32`、零即删除的 StorageSet 冒充等价；具体键/标记号仍需沿现有分配规则确定，本报告不分配。
+- 新测试/fixture 必须包含：涕泣正常/跳过/取消、实际数不足及嵌套额外摸牌、先摸后取消/目标离场、上限叠加到期；宝梳 self/多人/2P、按座次逐个重置及中途离场、固定摸牌保标/下一有效窗口全消费；避祸双角色正负、每事件而非伤害点数、抵消为零、current/next 隔离、额外摸牌阶段、fixed、死亡/禁用/恢复。纳入已有测试 group，并覆盖每个新等待点归档、重答、事件/RNG 轨迹；不得只更新 golden 消除变化。
+
+**可按既有授权直接推进：**三技能完整保真实现所需的限定源码核验、反例/fixture、既有 frame/storage/namespace、Rust 单写与 PackageStore 路线内的内容代码；无需重新裁决“是否做 R05”，也无需另造系统。
+**需提出具体契约并核对既有授权覆盖：**准确准备/回合开始及非 fixed 摸牌窗口的公开事件语义；signed 数量改写及实际摸牌归属的宿主接口；全局回合到期与 onremove/死亡/复活清理；若方案确需新增 Effect ABI、持久字段或升级规则/存档/schema，提交精确增量及兼容影响后再确认未覆盖部分，不能现在泛批一个“新原语系统”。
+331 的 owner/priority/选序元数据仅是概念依赖，当前所读 Main 不具备私有 C331 的可调用能力；应等待 actual331 验收并复核最终接口。GaiMing332 的前置关系保持，不占 333、不改版本。
+
+未运行 build/tests、Main preflight、资源 review 或真实 WASM 验收；未重审 R01–R10、37 来源或全部测试组。
+风险：以上是当前所读源码的能力审计，非三技能完成证明；331 接入后需重核事件与排序接口，不能将现有绿色历史外推为 R05 等价。

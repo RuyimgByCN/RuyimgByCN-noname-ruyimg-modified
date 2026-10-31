@@ -1,0 +1,28 @@
+{
+  "name": "legacy-cross",
+  "argv": [
+    "python3",
+    "-B",
+    "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 2.0242702920222655,
+  "minimum_free_bytes": 47749865472,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "be2f1b9dad7163b5db585408d01814b7faed51e41416837ff1d0ab4b243ad153",
+  "stderr_sha256": "b9d04d7b5c221a50552203ce220bd4b08d864b89b8ec8c618887323b87c65451"
+}

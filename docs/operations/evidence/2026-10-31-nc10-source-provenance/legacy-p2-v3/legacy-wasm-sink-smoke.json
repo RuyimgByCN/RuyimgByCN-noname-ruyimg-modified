@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "steps": 120,
+  "pendingChoicesObserved": 33,
+  "wasmRuntime": true,
+  "scope": "real generated WASM pendingChoiceJson and envelopes; typed poisoned restore covered by native-target sink test, not exposed in this JS API"
+}

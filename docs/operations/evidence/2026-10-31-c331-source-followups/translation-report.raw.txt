@@ -1,0 +1,56 @@
+C331 remaining16 translation qualification — read-only follow-up
+
+Result: 0 proven-always; all 16 are conditional/ambiguous and still blocked. Exact lib.translate values remain null (17 keys because SwdLexue has two). No unknown was converted to false; 262/290 and the existing Source44/runtime counts remain unchanged.
+
+Baseline: frozen C5 snapshot135, base38ab/rules331private. E SHA256 `1cafd83bf7d2954c28c883c7d74e771ea33cffd5d1d9ef5218afdf53b4fe3fcc`; original E and prior laneA/B records preserved. Live main observed `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, differing from task-named `4dd330`; frozen code was not replaced.
+
+Complete 16-row JSON includes all 32 original bodies, registration occurrences, exact keys, file/body SHA256, source paths, calculator references, catalog origins, per-row load prerequisites, minimal review-only metadata and unchanged original unknown records:
+[translation16.json](/tmp/c331-remaining16-3a0effb3/translation16.json).
+[39 raw excerpts](/tmp/c331-remaining16-3a0effb3/raw-excerpts.json) · [AST inventory](/tmp/c331-remaining16-3a0effb3/ast-scan.json) · [catalog/stamped-source checks](/tmp/c331-remaining16-3a0effb3/catalog-stamped-source-check.json) · [prior lane16 reconciliation](/tmp/c331-remaining16-3a0effb3/prior-lane16-reconciliation.json) · [selfcheck](/tmp/c331-remaining16-3a0effb3/selfcheck.json).
+
+| Variant | Actual lib.translate key(s) | Truth at arrangeTrigger | Review-only timing/priority |
+|---|---|---|---|
+| BossBaimang2x | `boss_baimang2x` | unknown; blocked | Normal / -1000 |
+| BossBaimang3x | `boss_baimang3x` | unknown; blocked | Normal / -1000 |
+| BossBianshen3x | `boss_bianshen3x` | unknown; blocked | Normal / -1000 |
+| BossBianshen4x | `boss_bianshen4x` | unknown; blocked | Normal / -1000 |
+| BossChiyan2x | `boss_chiyan2x` | unknown; blocked | Normal / -1000 |
+| BossChiyan3x | `boss_chiyan3x` | unknown; blocked | Normal / -1000 |
+| BossQingmu2x | `boss_qingmu2x` | unknown; blocked | Normal / -1000 |
+| BossQingmu3x | `boss_qingmu3x` | unknown; blocked | Normal / -1000 |
+| BossXuanlin2x | `boss_xuanlin2x` | unknown; blocked | Normal / -1000 |
+| BossXuanlin3x | `boss_xuanlin3x` | unknown; blocked | Normal / -1000 |
+| JinlianzhuCancel | `g_jinlianzhu` | unknown; blocked | Normal / 0 |
+| ShengkeCheck | `_shengke` | unknown; blocked | Normal / 0 |
+| SwdLexue | `lexue1`, `lexue2` | unknown; blocked | Normal / 0 |
+| SwdShencaojieGuard | `g_shencaojie` | unknown; blocked | Normal / 0 |
+| SwdShenmiguoWindow | `g_shenmiguo` | unknown; blocked | Normal / 0 |
+| ZhuWanzhongJi | `_xigua_zhuwanzhongji_` | unknown; blocked | Normal / 0 |
+
+Every row remains conditional/ambiguous/still-blocked; order_selectable stays null in evidence. Boss −1000 is independently established from priority:-10 ×100. Other six rows are Normal/0. A reviewed boolean requires the final exact-key truth under the actual loaded context; a single combined Lexue flag cannot represent differing lexue1/lexue2 truth.
+
+All 37 adopted source instances remain in scope: 323 extension-tree JS/module files plus five selected external dependencies inventoried; 322/328 parsed using installed Acorn 8.18.0 without executing source. No exact target translation-table entry, literal lib.translate target assignment, or statically named subSkill-generated target was found in that parsed inventory. This is a syntactic result, not a complete global absence or import/alias proof.
+Six unparsed files are retained with SHA/error in JSON (如真似幻 js/list.js, js/vue.js; 皮肤切换 record.js, 十周年ui动皮自动生成参数.js, 参数.js; 龙血玄黄 专属技能区/必看文件.js). Dormant/vendor files were not assumed loaded. Runtime-computed aliases, encoded code and resources not resolved by this inventory remain unknown.
+
+Concrete source constraints:
+
+- Both boots copy configurable translation maps into real lib.translate (core init/index.ts:55; Liuli game.js:9764). At that step each supplied exact key receives its configured value; whether that value survives until arrangeTrigger is unbound.
+- Both adopted boss-play versions restore storage.translate using existing || stored; 祖安武将 has the same cache route. Boss mode is loaded separately when current mode=boss; boss-play arenaReady loads boss only outside boss mode, then versus. Missing mode-table literals therefore do not establish false under actual saved state.
+- Modern 杀海拾遗 requires successful gwent→gujian; with both gwent/yunchou flags the actual branch is gwent→gujian→yunchou→swd→hearth→[ow,xianjian concurrently]. Each loadPack imports card/character concurrently. These consequences cannot be excluded to manufacture a package context.
+- Core registers mode→characters→card pile→cards→non-connect play/init, then extension content via Promise.allSettled. Actual enabled iteration order, async completions, arenaReady/video and event-time writes must be bound through the comparator observation point; a universal total order is not supplied.
+- finishSkill gives named subSkill children their own name or child||parent translation. Ordinary group/global grants do not inherit translations. 十周年UI/meihua.js wraps finishSkill and preserves this subSkill rule; lexue1/lexue2 are independent group entries.
+- _shengke is the actual adopted wuxing key. g_jinlianzhu/g_shencaojie/g_shenmiguo are independent card-global skills. Zhu assignment requires zhujizhongwang=true and identity mode (source default=false); _xigua_zhuwanzhongji_ is registered through underscore-global finishing. A false registration guard does not prove translation falsity.
+- Catalog inspection covers 41 package directories and the current 15-entry client catalog/bundle. They describe availability, not a selected installed/enabled lock. No fixed context was invented and no source path was added to production. Eight checked Shahai/boss-play files match their payload-stamped canonical commits; core mode/boss.js differs from the boss-play stamped commit and is separately hashed.
+
+Next action: bind an actual full enabled package/source combination, mode/config/storage values and the translation-write order through arrangeTrigger. Review the linked evidence before metadata integration. If static replay cannot resolve the remaining writes, the JSON proposes a minimal owned read-only harness for separate approval; no runtime harness was executed. The original 12 ambiguous runtime mechanisms remain untouched.
+
+Evidence consistency checks passed: 16 rows/17 keys, 32 file+body SHA matches, 328 source identities rechecked, snapshot135 manifest, original E unchanged, all old unknown records retained, no staged files, index SHA unchanged since input capture (`2409bf1c2ae677d076bec93091d3a517cbe2b40a7520240dda009a985f9cae12`).
+SHA256 translation16.json: `81351e6531df6a3a3d808fdd41d02b02528863f7eaef117da9a2cbdf483d6554`
+SHA256 raw-excerpts.json: `a402c45f324a09ad55665f25e55a26c0b7842d7594008e54614fd062b3bb76e1`
+SHA256 selfcheck.json: `f8330aae512403509e78c48d8ad58549f424dcfbbeb91cd2973b8edb829ad970`
+
+Skipped: builds, tests, Cargo, network and upstream JavaScript execution. Risk: none of these static candidates closes the runtime translation gate; formal review and actual context proof remain required.
+
+```acceptance-report
+{"criteriaSatisfied":[{"id":"criterion-1","status":"satisfied","evidence":"Read-only audit completed for exactly16 E rows; frozen E and all source/config/Rust/index files left unedited; no scope/mechanism expansion."},{"id":"criterion-2","status":"satisfied","evidence":"Linked complete JSON16,32 bodies,39 excerpts,source/catalog hashes,Acorn inventory and passing evidence consistency selfcheck."}],"changedFiles":["/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3a0effb3-8ed2-4d37-8751-6055f340d40e/reviews/c331-remaining16-translation-source-followup.md"],"testsAddedOrUpdated":[],"commandsRun":[{"command":"node /tmp/c331-remaining16-3a0effb3/parse-only.cjs","result":"passed","summary":"Static inventory328;322 parsed;6 unresolved parse errors explicitly retained."},{"command":"python3 -B /tmp/c331-remaining16-3a0effb3/assemble-evidence.py","result":"passed","summary":"Evidence consistency and SHA assertions passed after correcting owned excerpt bounds."},{"command":"git diff --cached --name-only","result":"passed","summary":"Empty; no staged files."}],"validationOutput":["16 rows/17 actual keys/32 body-file SHA matches/39 raw excerpts;E unchanged;index unchanged;all artifact SHA rechecked."],"residualRisks":["16 translation gates remain blocked by unbound actual load context;6 parse errors and computed/encoded mutations prevent global absence proof.","Live main differs from task named head;frozenC5 remains sole code baseline."],"noStagedFiles":true,"diffSummary":"One owned report and temporary read-only evidence artifacts; no production edits or count increases.","reviewFindings":["blocker: no exact final lib.translate state proven for any of the16;formal reviewer gate pending."],"manualNotes":"No builds/tests/network/Cargo/upstream JS run. Only owned static parsers and evidence assertions executed."}
+```

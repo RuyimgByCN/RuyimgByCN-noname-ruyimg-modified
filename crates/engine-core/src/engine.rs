@@ -399,7 +399,7 @@ impl Engine {
             .map(|m| m.manifest_hash())
             .unwrap_or_default();
         let mut snapshot = Snapshot::capture_with_manifest(&self.state, mh);
-        snapshot.pending_choice = self.last_choice.clone();
+        snapshot.pending_choice = crate::snapshot::legacy_choice::without_source(&self.last_choice);
         snapshot
     }
 
@@ -413,7 +413,7 @@ impl Engine {
         self.state = state;
         self.log = ReplayLog::new(hash);
         self.last_events.clear();
-        self.last_choice = snap.pending_choice.clone();
+        self.last_choice = crate::snapshot::legacy_choice::without_source(&snap.pending_choice);
         self.manifest = None;
         Ok(())
     }
@@ -441,7 +441,7 @@ impl Engine {
         self.state = state;
         self.log = ReplayLog::with_manifest(hash, manifest_hash);
         self.last_events.clear();
-        self.last_choice = snap.pending_choice.clone();
+        self.last_choice = crate::snapshot::legacy_choice::without_source(&snap.pending_choice);
         self.manifest = Some(manifest);
         Ok(())
     }
@@ -747,3 +747,7 @@ mod tests {
         assert_eq!(live.state_hash(), replayed.state_hash());
     }
 }
+
+#[cfg(test)]
+#[path = "engine/source_tests.rs"]
+mod source_tests;

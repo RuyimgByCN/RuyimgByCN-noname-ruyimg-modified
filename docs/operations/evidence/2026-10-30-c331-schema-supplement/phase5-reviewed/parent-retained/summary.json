@@ -1,0 +1,267 @@
+{
+  "result": "PASS",
+  "validated_unique": 44,
+  "lane_counts": {
+    "A": 22,
+    "B": 22
+  },
+  "corrected": 17,
+  "corrected_lane_counts": {
+    "A": 14,
+    "B": 3
+  },
+  "matching_without_override": 27,
+  "remaining_unique": 28,
+  "remaining_status_counts": {
+    "needs-runtime-translation": 16,
+    "ambiguous-source": 12
+  },
+  "remaining": [
+    {
+      "variant": "BossBaimang2x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossBaimang3x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossBianshen3x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossBianshen4x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossChiyan2x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossChiyan3x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossQingmu2x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossQingmu3x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossXuanlin2x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "BossXuanlin3x",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+      ]
+    },
+    {
+      "variant": "GwentFengyinState",
+      "status": "ambiguous-source",
+      "reason": [
+        "no source trigger/priority queue entry: gw_zumoshoukao grants addTempSkill(fengyin,{player:phaseAfter}); engine removes expiry before addList, native synthetic PhaseEnd trigger clears all enabled flags instead of source blocker semantics"
+      ]
+    },
+    {
+      "variant": "JinlianzhuCancel",
+      "status": "needs-runtime-translation",
+      "reason": [
+        "direct source listener has no forced property; native optional=false is valid only because chooseToUse/Confirm remains inside machine, not a forced equivalence proof"
+      ]
+    },
+    {
+      "variant": "Kunlunjing",
+      "status": "ambiguous-source",
+      "reason": [
+        "one native behavior combines beginning optional rollback and end silent snapshot with incompatible source tuples; current hook fires each phase rather than full-turn phaseBegin/phaseAfter"
+      ]
+    },
+    {
+      "variant": "MbQianlong",
+      "status": "ambiguous-source",
+      "reason": [
+        "Liuli initial root priority 6 => 600 but gain/damage subskills priority 0; Core begin/add priority 0 and root handles custom After events; Core getIndex and die firstDo/forceDie not reconstructed by merged native behavior; enterGame and first phase timing remain functional gaps"
+      ]
+    },
+    {
+      "variant": "MbWeitong",
+      "status": "ambiguous-source",
+      "reason": "同名两源实际 trigger/priority 不同：Liuli global phaseBefore/player enterGame, p10→1000；Core player mbqianlong_beginBegin, p缺→0。Native PhaseBegin First/10 对两源都不符，未授权选择来源。"
+    },
+    {
+      "variant": "Niepan",
+      "status": "ambiguous-source",
+      "reason": "两源 niepan 均 enable chooseToUse、无 trigger；Native Dying optional 是救援桥，不能把技能对象默认0当 arrangeTrigger排序证明。"
+    },
+    {
+      "variant": "SanjianWeaponDamage",
+      "status": "ambiguous-source",
+      "reason": "sanjian_skill 两源均 equipSkill:true；Liuli addList=-30、Core get.priority=-25；Native host:sanjian_weapon 对象来源不能由路径常量决定。"
+    },
+    {
+      "variant": "ShengkeCheck",
+      "status": "needs-runtime-translation",
+      "reason": "真实名 _shengke，target useCardToBegin；给定 play 包未定义 _shengke 译名；popup:false/forced:true 均不排除选序。"
+    },
+    {
+      "variant": "SwdFengyinState",
+      "status": "ambiguous-source",
+      "reason": "两源 fengyin 为 charlotte 状态 blocker，无 trigger；jiguanfeng 的 addTempSkill(fengyin,{player:phaseBegin}) 是失效移除，不是技能触发项。"
+    },
+    {
+      "variant": "SwdLexue",
+      "status": "needs-runtime-translation",
+      "reason": "group lexue1/lexue2 为两个独立技能名，分别 player phaseBegin/phaseEnd；只有 lexue 译名，group 不自动继承译名；Native合并成任意角色 Judge begin 单窗。"
+    },
+    {
+      "variant": "SwdNigongAccumulate",
+      "status": "ambiguous-source",
+      "reason": "Liuli nigong 未声明 equipSkill，旧 addList=0；Core nigong 明确 equipSkill:true，get.priority=-25。不能因是装备技能就替 Liuli补 equipSkill。"
+    },
+    {
+      "variant": "SwdShencaojieGuard",
+      "status": "needs-runtime-translation",
+      "reason": "真实名 g_shencaojie，source/player damageBegin direct；只有 card shencaojie 译名，没有证明 lib.translate.g_shencaojie。"
+    },
+    {
+      "variant": "SwdShenmiguoWindow",
+      "status": "needs-runtime-translation",
+      "reason": "真实名 g_shenmiguo，player useCardAfter direct；只有 card shenmiguo 译名，没有证明 lib.translate.g_shenmiguo。"
+    },
+    {
+      "variant": "SwdShouyin",
+      "status": "ambiguous-source",
+      "reason": "shouyin 两源为 enable chooseToUse 的 dying 救援技能，无 trigger；Native Dying 队列为桥接。"
+    },
+    {
+      "variant": "SwdXuanying",
+      "status": "ambiguous-source",
+      "reason": "两源均声明 xuanying_damage(player damageEnd)，但实际parent group仅xuanying_sha/xuanying_use，不含damage；Native Damage反击虽对应声明body，却不能证明默认授技可达。"
+    },
+    {
+      "variant": "XianjianChengxin",
+      "status": "ambiguous-source",
+      "reason": "chengxin enable chooseToUse/round4，无 dying trigger；round生成 roundcount 只监听 roundStart，不是本Native Dying候选。"
+    },
+    {
+      "variant": "XianjianShuiyun5",
+      "status": "ambiguous-source",
+      "reason": "shuiyun5 enable chooseToUse/dying filter，无 trigger；Native Dying optional 是救援桥。"
+    },
+    {
+      "variant": "ZhuWanzhongJi",
+      "status": "needs-runtime-translation",
+      "reason": "实际赋值名 _xigua_zhuwanzhongji_，global dieBegin，charlotte/forced；给定扩展无这个键的译名，不能用 host别名 zhuwanzhongji 查译名。"
+    }
+  ],
+  "union_disjoint_complete72": true,
+  "lane_reconciliation_records": 66,
+  "unique_reconciliation_paths": 6,
+  "all_lane_reconciliations_match": true,
+  "unique_caller_paths": [
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/common.rs",
+      "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "checked_sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+      "identity_source": "retained immutable base38ab Git blob, absent from135 delta snapshot; not a fresh live-tree check"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/boss.rs",
+      "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+      "checked_sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+      "identity_source": "retained immutable base38ab Git blob, absent from135 delta snapshot; not a fresh live-tree check"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gujian.rs",
+      "sha256": "f551778b0c86f322c1208800d5e7af72dec8e2ba97b59cbb30084f5074e3cb76",
+      "checked_sha256": "f551778b0c86f322c1208800d5e7af72dec8e2ba97b59cbb30084f5074e3cb76",
+      "identity_source": "parent frozen135 snapshot"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/gwent.rs",
+      "sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382",
+      "checked_sha256": "31bfcc3e9b4452322bc01f6ee752325be56262bd2d9d5174193c06d42de79382",
+      "identity_source": "parent frozen135 snapshot"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/swd.rs",
+      "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+      "checked_sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+      "identity_source": "retained immutable base38ab Git blob, absent from135 delta snapshot; not a fresh live-tree check"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/xianjian.rs",
+      "sha256": "e2fb2ed77be221994c3b7f8b08b0727d09422631a727dd962db62591e8fb80e5",
+      "checked_sha256": "e2fb2ed77be221994c3b7f8b08b0727d09422631a727dd962db62591e8fb80e5",
+      "identity_source": "retained immutable base38ab Git blob, absent from135 delta snapshot; not a fresh live-tree check"
+    }
+  ],
+  "private_caller_reference_records": 189,
+  "related_registration_records": 18,
+  "module_installations": 6,
+  "input_identities": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/validated-ordering44.json",
+      "bytes": 338706,
+      "sha256": "37e7ebd9cd6933bc8b871cfe3ec0010e7860f6ba85f9eea0c5638abbd1158161"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/current-bindings44.json",
+      "bytes": 17072,
+      "sha256": "ca2274056fefca051acb3babddb448e37ccd1e020247ce3645c775ffff168bcd"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/remaining28.json",
+      "bytes": 249154,
+      "sha256": "1cafd83bf7d2954c28c883c7d74e771ea33cffd5d1d9ef5218afdf53b4fe3fcc"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/registration-supplement.json",
+      "bytes": 10941,
+      "sha256": "35f7329ed956fbe05259427593012b858e78f4185d1c038d1e287f46b3ff64ee"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/inputs/laneA-ordering.json",
+      "bytes": 526506,
+      "sha256": "2f69a62182a025b16ce7a2f7ca2cb236d1a3726be52762383b181b57fc2cac00"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/inputs/laneB-ordering-evidence.json",
+      "bytes": 512483,
+      "sha256": "34554acbe472427bdf2de6ebdd4f4900b68ae766766c52ed80a9bd93ee2976d4"
+    }
+  ],
+  "qualification": "Fresh retained-only extraction/sets/hash reconciliation; unchanged caller files missing from delta snapshot checked against retainedbaseGit blobs, not live/upstream. Source properties/registration are evidence claims for reviewer semantic assessment, not newly executed upstream runtime."
+}

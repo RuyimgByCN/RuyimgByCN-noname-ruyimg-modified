@@ -1,0 +1,68 @@
+阶段5已实现并冻结：只修17项明确排序元组，27项仅绑定证明；最终十包默认并行 **2906通过 / 0失败 / 76忽略，exit0**。整C331仍BLOCK，剩28项及既有机制缺口未闭，等待Parent独立审。
+
+核验日期2026-10-30 UTC；私有HEAD仍`38ab1678df9b4b7b991d3b3122b1d937fd2648a1`，index空。源码相对final4仅3文件变化：`metadata/source_order.rs`、新增`tests/c331_source_order_phase5.rs`及`tests/groups/nc08.rs`；其余132文件逐SHA不变。未写Main/alias9/NC10、配置、版本、ABI、协议或archive表示；未stage/commit。
+以下证据均位于`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/`。
+
+已完整读取四份phase4审查及两lane共72行原JSON；原输入、审查副本和SHA均保存在`inputs/`及最终索引。原phase4错误记录/生成器、freeze和历史原始失败未覆盖。
+P2补充在`calculator-corrections.json`：历史NewMeibu/NewZhixi的计算器改指实际`archive/upstream/noname/apps/core/noname/get/index.js`，SHA=`8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d`，621–646行。此补充只纠正历史计算器身份链，无产品改动；原记录中的其他历史绑定仍以final4定位。
+`audit-source-order.py`对缺失计算器明确assert，并自检missing-path必须失败；原两条`.ts`/缺SHA记录仍完整保留。原档案SHA=`cc9cdd0ea7940736f3970a51a4cc7710b5eedcf562e6ed09d464880d7451e644`。
+
+44项来源独立验证结果在`validated-ordering44.json`：实际file/body SHA、顶层排序属性、Core/Liuli各自公式、真实译名或子技能注册链、当前私有filter/step与元数据均核对；未把silent之外的null译名强转false。
+66处lane caller文件与当前私有文件SHA匹配；绑定来自当前私有树，不把Main330 fallback冒充当前实现。`registration-supplement.json`另核18条实际group/grant关联及6处skill/translate模块安装。
+`current-bindings44.json`与注册Rust契约测试核实际44项API输出：17修正、27保持匹配；没有为27项添加生产override，也没有生产source-path标签/registry。
+排序来源由**218→262/290，剩28**，依据是这44项实际当前绑定及运行结果；不是自动累加candidate。历史sourceRows234含16非current只保留历史口径，不与262混算，也不表示37来源完整规则等价。
+
+17项修正保持event/optional及现有生命周期不变：
+
+| Native分支 | 最终排序元组（Timing / effective priority / selectable） |
+|---|---|
+| BossBaimang2/3、BossBianshen3/4、BossChiyan2/3、BossQingmu2/3、BossXuanlin2/3（10项） | Normal / 1 / false |
+| BossHuanrenDie | Normal / -999 / false |
+| GujianYunvyuanshen | Normal / 610 / true |
+| GwentBirinState、GwentQinpenState | Normal / 1 / false |
+| SwdYuchanSwap、Xiefang | Normal / -99 / false |
+| XiguaXueliangFanbei | Normal / 1 / false |
+
+真实行为回归不是仅镜像元数据：BossBaimang2旧First会先写SixiangChain，修后必须等待较早owner的Normal桶；SwdYuchanSwap旧Last会延后真实玉蝉换形，修后在后一个owner的Normal选择前已完成乾→坤实体替换。
+两个用例均在3候选和2候选的真实暂停边界做NGSA byte encode/decode/restore，比较完整save（仅归一化auth_generation）、state hash及恢复后全部日志；均接入nc08组。
+原元组契约及两行为用例先 **0通过/3失败**；修后同一注册组全量通过。`source-order-red.log`原始反例、生成器最初三次静态解析失败以及所有warnings均保留，未改写成成功。
+
+| 检查 | 结果 | 完整原始记录 |
+|---|---:|---|
+| `cargo test --offline -p engine-native --test nc08` | 77/0/50，exit0 | `nc08-green.log` |
+| `cargo test --offline -p engine-native` | 1739/0/75，exit0，40.28s | `engine-native-full.log` |
+| 原十包默认并行，本批仅一次 | 2906/0/76，exit0，297.37s | `affected-default-final.log` |
+| source-cap脚本单测 / sourcecaps / F7 | 2/2；8997文件及Rust有效行通过；0向上依赖 | `gate-results.json`及三份gate日志 |
+
+完整argv、起止身份、exit和时间在`full-results.json`；计数逐条来自原`test result`，保存在`validation-summary.json`。没有将Native专项与十包重复相加；十包无`--test-threads=1`，沿用阶段4限定C331 fixture锁。
+所有重任务使用既有全局锁/helper、`CARGO_TARGET_DIR=../target`、jobs2、incremental0，编译前盘余约90GiB；未清缓存。未额外做IPC/WK/GUI/WASM构建或平台矩阵，也不把本批Rust结果外推为这些产品已重验。
+phase4产品资格维持原审查边界：plain NGSA105 WAL base revision10未变；本批不新增compact/rebase或压缩archive实测主张。
+
+20分钟checkpoint已提前落`checkpoint20/`：135文件，manifest=`d0eefba41915f902a39c57ba953225052e382247c6348d11f2df5ee47b9e2a9e`，源码tar=`b484727850a4779bfe2a3f45801df03edc0041acc9903e2ec33861ad9b7be512`；`checkpoint20-status.json`保留当时完整Native已绿、十包进行中的状态。
+最终封存`final-freeze5/`含完整135源码、3文件增量tar、vs-final4 patch、证据tar及SHA清单；证据tar不重复压入已独立保留并列SHA的历史binary副本。
+最终source manifest SHA=`cbeab39b1316d77df884242b5494c8b7da2cc5baf8737431ab8a716da6eaaf16`。
+最终source tar SHA=`34023da5cc41d2a7971ad5b3c1a8396a49f0ff40d4a8141e7876fdfada107aef`。
+最终evidence manifest SHA=`54f676804a99d3a8614942f8985761eb23f1079fcbd6b1c67c75cb5651d8901f`。
+前后full及live的135份file/SHA列表完全一致，内容树身份=`dcedfa22a6cff71adeb4a6107b911e462623bc609e37c7359b7226bdfd0e64f6`；记录在`source-and-result-binding.json`。final4原manifest/tar仍分别为`6f8eabd8…`/`9866a12f…`。
+完整最终工件索引`final-artifact-index.json` SHA=`9658ee81cc9097857adcdcd7ff880f8b9e5cc8f9c48d27dd51b52fc52c992ca6`；它也覆盖封存后生成的结果绑定。历史普通server binary在`binaries-before/`保留，未覆盖证据中的旧330/5ec或phase2/3/4冻结binary。
+
+剩余28项逐项原body/原因保存在`remaining28.json`，没有从范围排除：
+12 ambiguous：GwentFengyinState、Kunlunjing、MbQianlong、MbWeitong、Niepan、SanjianWeaponDamage、SwdFengyinState、SwdNigongAccumulate、SwdShouyin、SwdXuanying、XianjianChengxin、XianjianShuiyun5。
+16 runtime-translation：BossBaimang2x/3x、BossBianshen3x/4x、BossChiyan2x/3x、BossQingmu2x/3x、BossXuanlin2x/3x、JinlianzhuCancel、ShengkeCheck、SwdLexue、SwdShencaojieGuard、SwdShenmiguoWindow、ZhuWanzhongJi。
+PhaseBegin VM-before/Host-after、dieBegin/die/dieAfter压窗、救援/过期桥、完整回合/phase映射、indexed、forceDie/out/hidden/filterStop等继续单列；normal_owners撤回结论未变，本批没有新增机制或历史ledger。
+建议Parent独立复审3文件增量、44绑定/17修正和两真实红绿，再决定接入；本报告不替Main PA09/CI/final gates作结论。
+
+```acceptance-report
+{
+  "criteriaSatisfied":[{"id":"criterion-1","status":"satisfied","evidence":"Implemented exactly17 approved tuple corrections;27 matching rows proof-only;28 unresolved untouched; calculator P2 fixed in supplemental evidence only."},{"id":"criterion-2","status":"satisfied","evidence":"Immutable135-source freeze, delta3, actual red/green,1739 Native pass and sole2906 default-parallel aggregate, full argv/exits/raw/SHA and remaining28 are retained."}],
+  "changedFiles":["crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs","crates/engine-native/tests/c331_source_order_phase5.rs","crates/engine-native/tests/groups/nc08.rs"],
+  "testsAddedOrUpdated":["crates/engine-native/tests/c331_source_order_phase5.rs","crates/engine-native/tests/groups/nc08.rs"],
+  "commandsRun":[{"command":"cargo test --offline -p engine-native --test nc08 c331_source_order_phase5 (pre-fix)","result":"failed","summary":"Required actual red:0 passed/3 failed."},{"command":"cargo test --offline -p engine-native --test nc08","result":"passed","summary":"77 passed/0 failed/50 ignored."},{"command":"cargo test --offline -p engine-native","result":"passed","summary":"1739 passed/0 failed/75 ignored."},{"command":"original ten-package cargo test --offline --no-fail-fast, exact argv in full-results.json","result":"passed","summary":"One final-source default-parallel run:2906 passed/0 failed/76 ignored."},{"command":"required source-cap unit/source-lines/native-layering gates","result":"passed","summary":"2/2;8997 files within limits;F7=0."}],
+  "validationOutput":["All135 live source hashes match before/after full snapshots.","44 actual current branch/source bindings:17 corrected,27 matching;262/290 ordering proven,28 pending."],
+  "residualRisks":["Whole C331 remains BLOCK;28 source-order items and explicit mechanism/37-source functional gaps remain.","Independent implementation review required; no new platform/runtime matrix qualification."],
+  "noStagedFiles":true,
+  "diffSummary":"Three source files:17 tuple overrides and registered actual source-order/restore regressions; evidence corrections and proofs are phase5-only.",
+  "reviewFindings":["No new implementation counterexample observed in executed checks; Parent independent review remains required."],
+  "manualNotes":"Skipped mechanism expansion, unresolved source selection, unknown-translation coercion and extra IPC/WK/WASM/platform builds. All original failures and older freezes remain retained."
+}
+```

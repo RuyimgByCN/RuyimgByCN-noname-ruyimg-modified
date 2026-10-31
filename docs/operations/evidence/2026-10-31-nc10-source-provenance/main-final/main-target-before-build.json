@@ -1,0 +1,32 @@
+{
+  "target": {
+    "exists": true,
+    "mtime_ns": 1793337066646569853,
+    "size": 192
+  },
+  "target/debug": {
+    "exists": true,
+    "mtime_ns": 1793331744230657239,
+    "size": 256
+  },
+  "target/release": {
+    "exists": false
+  },
+  "target/wasm32-unknown-unknown": {
+    "exists": false
+  },
+  "target/wasm32-unknown-unknown/release": {
+    "exists": false
+  },
+  "target/.rustc_info.json": {
+    "exists": true,
+    "mtime_ns": 1793423433676184050,
+    "size": 1688,
+    "sha256": "576857d05b43eb078ea7372d9d36ff19e1cf73580014c2e39d169621fbb1f0f4"
+  },
+  "apps/web-client/node_modules/.vite-temp": {
+    "exists": true,
+    "mtime_ns": 1793345549463886470,
+    "size": 64
+  }
+}

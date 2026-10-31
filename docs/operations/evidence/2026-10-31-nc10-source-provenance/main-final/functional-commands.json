@@ -1,0 +1,458 @@
+[
+  {
+    "name": "actual-legacy-sink",
+    "argv": [
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.5073117910069413,
+    "minimum_free_bytes": 47810363392,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "d5f01a8f69bf4131050fe6f5fc63c4231a6695527fe3e66c925aa3ec3647a397",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "/tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.17593204096192494,
+      "disk_free_bytes": 47810342912
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:54.962418+00:00"
+  },
+  {
+    "name": "actual-native-source-final",
+    "argv": [
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 0.5074429580126889,
+    "minimum_free_bytes": 47810129920,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "3839dc5067361c9e0e964c01c84938d0f95baf962775e883c39d22fd7b57b20f",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.059295250044669956,
+      "disk_free_bytes": 47810551808
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:54.454595+00:00"
+  },
+  {
+    "name": "actual-native-source",
+    "argv": [
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 1,
+    "wall_seconds": 0.5207564999582246,
+    "minimum_free_bytes": 47811301376,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "ea1e11f34fc8071b2a623810b2cd9887d35fb4a676a1748094eeacd3c53e4852",
+    "stderr_sha256": "8d6886bd420740f7abc829f90c3ad199565688e1d62b5427a9649ec6bb1f0864",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+      ],
+      "exit": 1,
+      "locked_seconds": 0.05290929204784334,
+      "disk_free_bytes": 47811256320
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:12.750867+00:00"
+  },
+  {
+    "name": "build-legacy",
+    "argv": [
+      "node",
+      "scripts/build-wasm.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/build-wasm.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 113.44090016599512,
+    "minimum_free_bytes": 47813537792,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "7e96d623c55e016a46c11452afc937cfca31e9056d54d2df38f9f8458b48076f",
+    "stderr_sha256": "999f3f1321b4c2baea840e76b2538dbf40dd1e01c1078585b1433a0a3acef6ad",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "scripts/build-wasm.mjs"
+      ],
+      "exit": 0,
+      "locked_seconds": 113.11387479200494,
+      "disk_free_bytes": 47813521408
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:08:07.231612+00:00"
+  },
+  {
+    "name": "build-native",
+    "argv": [
+      "node",
+      "scripts/build-native.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "scripts/build-native.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 77.11900062498171,
+    "minimum_free_bytes": 48022351872,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "2465d52129f97ac1fcb8ee311ab9f4dd8e5d1dfbb5d6bb351c533df4124f281e",
+    "stderr_sha256": "a1c97441b70eb99de6a821b6599d18901d2a448a6cfb6f92c05bef826ee836dd",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "scripts/build-native.mjs"
+      ],
+      "exit": 0,
+      "locked_seconds": 52.794125958986115,
+      "disk_free_bytes": 48026198016
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:06:50.110145+00:00"
+  },
+  {
+    "name": "conformance",
+    "argv": [
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "run",
+      "--offline",
+      "-p",
+      "conformance"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 70.49932212504791,
+    "minimum_free_bytes": 48333631488,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "3e6d242df12454fb3176328514aa0e85c9b078f8caae6fc3fdd95c7dae62f406",
+    "stderr_sha256": "dc775a8da6486733a6477a0d1232614de151d604b67038ba99ce22490b7d952b",
+    "wrapper_record": {
+      "command": [
+        "cargo",
+        "run",
+        "--offline",
+        "-p",
+        "conformance"
+      ],
+      "exit": 0,
+      "locked_seconds": 24.242707709025126,
+      "disk_free_bytes": 48333524992
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:06:03.690862+00:00"
+  },
+  {
+    "name": "frontend-post-wasm",
+    "argv": [
+      "pnpm",
+      "test"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "test"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.5162018749979325,
+    "minimum_free_bytes": 47809003520,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "157d798e579afae251d65be1697c07232e0a61ca38c7a38757060787fa5f0621",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrapper_record": {
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "exit": 0,
+      "locked_seconds": 1.110993749985937,
+      "disk_free_bytes": 47808647168
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:56.483001+00:00"
+  },
+  {
+    "name": "legacy-cross",
+    "argv": [
+      "python3",
+      "-B",
+      "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 2.0242702920222655,
+    "minimum_free_bytes": 47749865472,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "be2f1b9dad7163b5db585408d01814b7faed51e41416837ff1d0ab4b243ad153",
+    "stderr_sha256": "b9d04d7b5c221a50552203ce220bd4b08d864b89b8ec8c618887323b87c65451",
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 1.671241124975495,
+      "disk_free_bytes": 47750139904
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:58.000833+00:00"
+  },
+  {
+    "name": "native-cross",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "python3",
+      "-B",
+      "scripts/check-native-wasm-cross-target.py"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 25.224064374982845,
+    "minimum_free_bytes": 47371927552,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "c319b34d94dd2248dffc73f39177258adc3cf7d233922dd3f588c33f28955c08",
+    "stderr_sha256": "b12397f3f7389c3a4a01839f90bfcaf0112a7d656d56189c80ab986471daa6ec",
+    "wrapper_record": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-native-wasm-cross-target.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 24.702599999960512,
+      "disk_free_bytes": 47371960320
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:11:00.026288+00:00"
+  },
+  {
+    "name": "vite-post-wasm",
+    "argv": [
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "node",
+      "/tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.520184374996461,
+    "minimum_free_bytes": 47350448128,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "65711c936c5f37e60c23612aabeec7dbd85b4ae224c9f2e2d2adda49a3a11eca",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "wrapper_record": {
+      "command": [
+        "node",
+        "/tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs"
+      ],
+      "exit": 0,
+      "locked_seconds": 1.2646379579673521,
+      "disk_free_bytes": 47330922496
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:11:25.251426+00:00"
+  },
+  {
+    "name": "worker-smoke",
+    "argv": [
+      "pnpm",
+      "smoke:native"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "pnpm",
+      "smoke:native"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "exit": 0,
+    "wall_seconds": 1.0112378330086358,
+    "minimum_free_bytes": 47809912832,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "164a81b3f64692f1946dc31207802d2a174fc81f93b5b4b735941c98c6dd29be",
+    "stderr_sha256": "1cb131c1897e7c9913db4a70e61227ede508c1454704ad8d299b0cf88446720d",
+    "wrapper_record": {
+      "command": [
+        "pnpm",
+        "smoke:native"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.4863021660130471,
+      "disk_free_bytes": 47809814528
+    },
+    "log_start_filesystem_utc": "2026-10-31T07:10:55.471684+00:00"
+  },
+  {
+    "name": "workspace",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "serialized_argv": [
+      "python3",
+      "-B",
+      "/tmp/noname-run-serialized.py",
+      "cargo",
+      "test",
+      "--offline",
+      "--workspace",
+      "--no-fail-fast"
+    ],
+    "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+    "exit": 0,
+    "wall_seconds": 417.02578645804897,
+    "minimum_free_bytes": 48599724032,
+    "disk_stop": false,
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_BUILD_JOBS": "2",
+      "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+    },
+    "stdout_sha256": "a9a4611e8c8823135374e95601da95d29bbd754e6a8637ee40812476cd9423d2",
+    "stderr_sha256": "e4d702008ebad832968ec335f39cefa065cfdcb6eacbccb13a08c6759ad8c92f",
+    "wrapper_record": {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "--workspace",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "locked_seconds": 416.7739670840092,
+      "disk_free_bytes": 48641642496
+    },
+    "log_start_filesystem_utc": "2026-10-31T06:59:53.082443+00:00"
+  }
+]

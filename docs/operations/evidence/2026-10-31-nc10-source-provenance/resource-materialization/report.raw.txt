@@ -1,0 +1,150 @@
+The NC27 private resource gate is repaired. Existing `--resources-only` materialization restored the adopted hardlink topology; both requested verification commands now exit 0. No product source or tracked file bytes changed. This is an operational materialization result, with no claim about overall NC27 acceptance, runtime behavior, or privacy fixes. Final seal UTC: 2026-10-31T06:15:01Z.
+
+The preserved original full verification failed at `verifyCatalog` → `asset manifest tree summaries mismatch`, after all `verifyTree` file-list/content checks. Original attempt: [/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.json), [failure log](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.log), exit 1; log SHA256 `8b6b91d3e0a4512c733f601b206ca91d4ed4c3d51e13c6593303bb2fa6b16d43`. It was not overwritten or reset.
+
+The actual difference was file identity, not content. All 2,707 portrait and 9,652 audio target files had different source/target inode identities before repair, with equal sizes and SHA256 values. Their manifest expected hardlinks. Legacy-source and audio-compat already matched. Existing cache evidence records `cp -cR` from the canonical generated assets into the private ignored cache; the measured topology is consistent with that clone operation. The filesystem's internal clone mechanism was not separately inspected.
+
+| Tree | Files | Bytes | Expected linked/copied | Before linked/copied | After linked/copied |
+|---|---:|---:|---:|---:|---:|
+| legacy-source | 366 | 15623344 | 0/366 | 0/366 | 0/366 |
+| portraits | 2707 | 406385818 | 2707/0 | 0/2707 | 2707/0 |
+| audio | 9652 | 651011056 | 9652/0 | 0/9652 | 9652/0 |
+| audio-compat | 5 | 263579 | 0/5 | 0/5 | 0/5 |
+
+All 23,393 declared audio outputs were also compared to their adopted source/hash bindings. Complete actual source/target path, dev, ino, size, mtime and SHA256 tuples are retained in [before-pairs.jsonl](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/before-pairs.jsonl) and [after-pairs.jsonl](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/after-pairs.jsonl). These contain the four bounded trees and declared aliases, not a full canonical source scan. Before hashes read the selected files; the after inspector reuses hashes only for matching dev/ino/size/mtime identities, while both existing verifier commands independently enforce their content checks. Ordered relative-path/content-hash totals are identical before/after:
+
+```json
+{
+  "legacy-source": "eb7a1b4b320a7bba15ee913175397d949b455726c7b1e47e90e3924c854bd60a",
+  "portraits": "e4f89e84fae0ffbc3339008f98de41baace93a4c61bb923601db272f8bd445ff",
+  "audio": "c2414c72893d48c46f4fdafc271bb5a650e2de0e314ec65352f25a99f160d3bf",
+  "audio-compat": "b5d9a0146ab0b232ca6f701000f83eb16f914e925cbd5e887b0a61eda2d07416"
+}
+```
+
+Preflight examined the existing script's resource branch and its `syncTree`/`syncDeclaredAudio` callees. The mutable domain was exactly private ignored `content/original/assets/{portraits,audio,audio-compat,audio-declared}`; recursive lstat checks rejected symlinks or special files, target ancestors were real directories inside the private worktree, and no tracked path fell under those roots. The default `../archive` source symlink is pre-existing and resolves to `/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core`. It was used for reads and link sources only. Targets did not resolve into that canonical root. No source file contents were opened for writing; creating hardlinks necessarily changes inode link counts/ctime. The manifest was an ordinary single-link file, and its current bytes were checked against the existing writer's exact JSON serialization before execution.
+
+The sole corrective command was the existing script, with no hand-edited manifest or expectations and no full sync/catalog/porting generation. Exact commands from private worktree `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree`:
+
+```sh
+GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-resource-gate-refresh node scripts/sync-original-content.mjs --resources-only
+GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-resource-gate-verify node scripts/sync-original-content.mjs --resources-only --verify-only
+GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-original-sync-verify-repaired node scripts/sync-original-content.mjs --verify-only
+```
+
+Each attempt ran sequentially through `/tmp/noname-run-serialized.py`, holding `/tmp/noname-phase4-heavy-command.lock`; `run.py` enforced disk headroom and set `CARGO_TARGET_DIR=/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/target`, `CARGO_BUILD_JOBS=2`, `CARGO_INCREMENTAL=0`. `GIT_OPTIONAL_LOCKS=0` prevented incidental Git index refreshes. `NONAME_ORIGINAL_ROOT` and skin-source were unset; no source override was supplied. Node was `/Users/ruyimg/.local/share/fnm/node-versions/v26.4.0/installation/bin/node` (`v26.4.0`). Only relevant nonsecret environment values are recorded; the inherited environment was not dumped.
+
+| Separate attempt | Exit | Time including lock queue | Actual result |
+|---|---:|---:|---|
+| `nc27-resource-gate-refresh` | 0 | 23.118s | Resources synced; 2,707 portrait + 9,652 audio hardlinks, five compat copies |
+| `nc27-resource-gate-verify` | 0 | 13.006s | Existing resources-only verification passed |
+| `nc27-original-sync-verify-repaired` | 0 | 17.748s | Original full verification passed, including catalog and manifest comparisons |
+
+Attempt JSON/log pairs are retained in E under those exact names. [Before audit](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/before.json), [after audit](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/after.json), and [final seal](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/final-seal.json) retain the detailed protection evidence. [evidence-sha256.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/evidence-sha256.json) identifies these evidence bytes.
+
+The actual private HEAD stayed `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, and the staged set stayed empty. Frozen `final-freeze-v2/source-manifest.json` SHA256 stayed `48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`. Each of its 31 changed files was hashed against both the working and frozen copies before repair, after repair, and at final seal. No frozen file was written. Full tracked-file metadata ledgers covered 43,858 paths without rehashing the 3.10 GB full tracked tree. The only tracked stat change was the manifest's authorized identical-byte rewrite; every other tracked stat tuple stayed unchanged. Individually pinned catalog/package/ported/lock inputs stayed byte-identical. No reset, Git metadata repair, canonical content write, source cleanup, or evidence cleanup occurred.
+
+| Protected object | Before and after SHA256 |
+|---|---|
+| Formal asset manifest | `7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493` |
+| Catalog | `2c375927fec9387a2a78e58db7d49422091fb17427c082e220db5e18ac0779fe` |
+| Compat provenance | `1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313` |
+| Private Git index | `9319410c9d5f596ca2622ba755bbbb5005a88cd53e576254583c3d179b1cd300` |
+| Upstream Git index | `58a583c2d10d9118830f3a28b45b01473b5c86ce3dcc5988c1b78be2944f661e` |
+
+The exact direct14 path set was recovered after repair from `docs/operations/evidence/2026-10-30-up37-i02-audio-compat/parent-main-source-admission.json:source14`. Only that historical artifact's path set was used; expected hashes came from the current 4dd frozen manifest. Six entries are compat inputs (five M4A plus provenance), and eight are CI/script/resource inputs. All fourteen working/frozen current hashes match. For paths not individually hashed before repair, unchanged before/after/final stat tuples connect the final frozen-matching content to the preflight; the manifest has explicit individual before/after SHA proof. This does not claim that all fourteen were individually hashed before repair.
+
+| Direct input | Current working = frozen expected SHA256 |
+|---|---|
+| `.github/workflows/ci.yml` | `354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30` |
+| `apps/web-client/scripts/original-resources.test.mjs` | `a6dab7d02c20ab50c17f9efceb0409f84254468beb3794cd6c9e8f6f98d9a5f2` |
+| `apps/web-client/src/engine/originalResources.ts` | `5bd44e885256c9aa8c839c932c0873bacfd0c6aac9e5f5dfd6e25164c89e95e8` |
+| `content/original/asset-manifest.json` | `7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493` |
+| `scripts/original-audio-resources.mjs` | `1c5a206d8ecc0bcc76a2a73f91d2db138da0d2281f64e59ef6d7b6c53a591759` |
+| `scripts/sync-original-content.mjs` | `051aff38ef8fce82f9042ae77f8186e26a4a75a17d5f61c4e9aabae36c5a5cb0` |
+| `scripts/test_original_audio_resources.mjs` | `fdd39d936cd78139eacc758e1773c7120179fed94554cf8a29f25bee305ee873` |
+| `scripts/test_original_resources.mjs` | `755395780759e06967f5b607289ecc6eabc1d4653286cec7d684aff70a330c42` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu1.m4a` | `292f9f080941b7747a567d6baeaad1aa4bc2e70241e54fb7d6852a879860b263` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu2.m4a` | `c79db091671e53d7295de7d0398751fd87e4b48fa7a7bb2a9c30c6391f280aa8` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu3.m4a` | `838c20baee6e6f7ad66e260801fb9fd3df3613c9d97e1f9eeff9616b2e67227f` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu4.m4a` | `58f241df479023a8921172528fc31e973361e7f53596bd7a2da89d2164e63a84` |
+| `content/original-audio-compat/audio/skill/tsumugi_mugyu5.m4a` | `e08b01cfd8fc8eb4e5a6269f2f1fe9565c3a295256949f22cddcd2e3f9c660a7` |
+| `content/original-audio-compat/provenance.json` | `1bd98a3e5d7ab22f6749b132d041f409e95a0dbf2f7ed9a603ec256422cc5313` |
+
+For a repeat on a new private clone, use the same existing resource-only command after repeating the path/ignored/source-provenance and manifest-byte prediction checks; choose new evidence attempt names because `run.py` rejects overwriting existing logs. A copied cache can recur; no product-code fix is warranted by this result. Independent review remains the parent's gate.
+
+Skipped full preflight, builds, GUI/audio decoding, additional tests, and integration acceptance as requested. Residual risk: a future copy/clone can again lose hardlink identity; these verification results apply to this private materialization only.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Existing --resources-only refreshed only four private ignored generated asset roots; tracked manifest was rewritten to identical SHA256; Source31, catalog, package/lock inputs and Git indexes stayed pinned."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Before/after actual source-target dev/ino/size/SHA tuples, tree summaries, Source31/direct14 pins and separate preserved command logs support independent review."
+    }
+  ],
+  "changedFiles": [
+    "content/original/assets/portraits/ (ignored materialization)",
+    "content/original/assets/audio/ (ignored materialization)",
+    "content/original/assets/audio-compat/ (ignored materialization)",
+    "content/original/assets/audio-declared/ (ignored materialization)",
+    "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/nc27-resource-gate-materialization/",
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/29be60c5-8097-4f06-acd5-7f9a1fb4785f/verification/nc27-private-resource-gate-materialization.md"
+  ],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 CARGO_BUILD_JOBS=2 python3 -B /tmp/noname-run-serialized.py python3 -B ../evidence/nc27-resource-gate-materialization/inspect.py before",
+      "result": "passed",
+      "summary": "Bounded tuple/path/byte-pin preflight proved only portrait/audio link-count mismatch."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-resource-gate-refresh node scripts/sync-original-content.mjs --resources-only",
+      "result": "passed",
+      "summary": "Exit0; adopted link counts restored."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 CARGO_BUILD_JOBS=2 python3 -B /tmp/noname-run-serialized.py python3 -B ../evidence/nc27-resource-gate-materialization/inspect.py after",
+      "result": "passed",
+      "summary": "All summaries now match; protected SHAs unchanged; only manifest stat changed."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-resource-gate-verify node scripts/sync-original-content.mjs --resources-only --verify-only",
+      "result": "passed",
+      "summary": "Exit0, 13.006 seconds including lock queue."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/run.py nc27-original-sync-verify-repaired node scripts/sync-original-content.mjs --verify-only",
+      "result": "passed",
+      "summary": "Exit0, 17.748 seconds including lock queue; original failure log retained."
+    },
+    {
+      "command": "GIT_OPTIONAL_LOCKS=0 python3 -B ../evidence/nc27-resource-gate-materialization/seal.py",
+      "result": "passed",
+      "summary": "Source31, direct14 and all tracked final metadata/protected hashes pass; staged empty."
+    }
+  ],
+  "validationOutput": [
+    "Before: portraits0 linked/2707 copied; audio0 linked/9652 copied. After: portraits2707 linked/0 copied; audio9652 linked/0 copied.",
+    "Formal manifest SHA256 before=after=7e5792aaefc8fbecd880581fbbea4dab5fed3c09d8a3ffe625fca65c4ffa5493.",
+    "HEAD4dd0b286b995fe414128b6c52eb83a4d0d85f6cd; frozen manifest48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e unchanged; both Git indexes rechecked at final report."
+  ],
+  "residualRisks": [
+    "Future cache copy/clone may lose hardlink identity again.",
+    "Direct14 exact set was completed after refresh using unchanged metadata ledgers plus current frozen hashes; not all fourteen had individual preflight hashes.",
+    "Scope excludes overall NC27 acceptance, runtime/privacy verification and full integration preflight."
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "No tracked content diff or product source edits; private ignored resource link topology restored through existing materializer; evidence/report added outside worktree.",
+  "reviewFindings": [
+    "No blockers found in bounded repair audit; independent parent reviewer gate remains required."
+  ],
+  "manualNotes": "Six compat inputs are a subset of direct14. No builds, GUI, ffmpeg/decode, Cargo/WASM/browser/tests, full sync or full-tree rehash performed."
+}
+```

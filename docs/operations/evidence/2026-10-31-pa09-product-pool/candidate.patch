@@ -1,0 +1,1532 @@
+diff --git a/apps/desktop-client/src/native_engine_host.rs b/apps/desktop-client/src/native_engine_host.rs
+index 68ff99f1..302db17b 100644
+--- a/apps/desktop-client/src/native_engine_host.rs
++++ b/apps/desktop-client/src/native_engine_host.rs
+@@ -404,3 +404,6 @@ mod tests {
+         owner.join().unwrap();
+     }
+ }
++
++#[cfg(test)]
++mod pool_tests;
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+index 10194aa1..1b4b6f40 100644
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -363,6 +363,8 @@ pub struct NativeSession {
+     inner: Engine,
+     planner_nodes: usize,
+     deadline_ms: u64,
++    #[cfg(not(target_arch = "wasm32"))]
++    planner_pool: Option<engine_native::ai_pool::PlannerPool>,
+ }
+ 
+ impl NativeSession {
+@@ -372,6 +374,8 @@ impl NativeSession {
+             inner: Engine::new(seed, players as usize),
+             planner_nodes: 64,
+             deadline_ms: 50,
++            #[cfg(not(target_arch = "wasm32"))]
++            planner_pool: None,
+         })
+     }
+ 
+@@ -381,6 +385,14 @@ impl NativeSession {
+         self.deadline_ms = deadline_ms;
+     }
+ 
++    /// Accepted candidate jobs on this native session's persistent pool.
++    #[cfg(not(target_arch = "wasm32"))]
++    pub fn planner_jobs_submitted(&self) -> usize {
++        self.planner_pool
++            .as_ref()
++            .map_or(0, |pool| pool.submitted_jobs())
++    }
++
+     pub fn revision(&self) -> u64 {
+         self.inner.revision()
+     }
+@@ -611,7 +623,20 @@ impl NativeSession {
+         } else {
+             planner.with_deadline_ms(self.deadline_ms)
+         };
++        #[cfg(target_arch = "wasm32")]
+         let plan = self.inner.plan_action(seat, &planner);
++        #[cfg(not(target_arch = "wasm32"))]
++        let plan = if self.planner_nodes > 1 {
++            let pool = self.planner_pool.get_or_insert_with(|| {
++                let workers = std::thread::available_parallelism()
++                    .map_or(1, usize::from)
++                    .min(4);
++                engine_native::ai_pool::PlannerPool::new(workers, workers)
++            });
++            self.inner.plan_action_with_pool(seat, &planner, pool)
++        } else {
++            self.inner.plan_action(seat, &planner)
++        };
+         match self.inner.apply_plan(&plan) {
+             Ok(out) => Ok(serde_json::json!({
+                 "kind": "plan",
+@@ -689,6 +714,8 @@ impl NativeSession {
+             inner: engine_identity_from_packs(players, seed, packs_json)?,
+             planner_nodes: 64,
+             deadline_ms: 50,
++            #[cfg(not(target_arch = "wasm32"))]
++            planner_pool: None,
+         })
+     }
+ 
+@@ -703,6 +730,8 @@ impl NativeSession {
+             inner,
+             planner_nodes: 64,
+             deadline_ms: 50,
++            #[cfg(not(target_arch = "wasm32"))]
++            planner_pool: None,
+         })
+     }
+ 
+@@ -721,3 +750,6 @@ impl NativeSession {
+         prefix_count(&self.inner, prefix)
+     }
+ }
++
++#[cfg(all(test, not(target_arch = "wasm32")))]
++mod planner_pool_tests;
+diff --git a/crates/engine-native/src/ai.rs b/crates/engine-native/src/ai.rs
+index 85058c4f..16239c0c 100644
+--- a/crates/engine-native/src/ai.rs
++++ b/crates/engine-native/src/ai.rs
+@@ -10,6 +10,9 @@ use std::sync::atomic::{AtomicBool, Ordering};
+ use std::time::{Duration, Instant};
+ mod redact;
+ mod remap;
++mod evaluation;
++#[cfg(not(target_arch = "wasm32"))]
++mod candidate_pool;
+ pub use redact::*;
+ 
+ /// 单选候选枚举上限（防超大选项集撑爆候选向量；真实询问的选项数
+@@ -549,12 +552,43 @@ impl Engine {
+     /// 以启发式评分（敌方体力下降 − 己方体力下降）选最优动作。
+     /// 不修改权威状态；克隆隔离保证规划中途的模拟不外泄。
+     pub fn plan_action(&self, seat: u8, planner: &BoundedPlanner) -> Plan {
++        self.plan_action_impl(seat, planner, None)
++    }
++
++    /// Native root-candidate parallelism for the session's single-layer policy.
++    /// Admission shares one deadline; up to pool.workers() admitted attempts may finish after it.
++    #[cfg(not(target_arch = "wasm32"))]
++    pub fn plan_action_with_pool(
++        &self,
++        seat: u8,
++        planner: &BoundedPlanner,
++        pool: &crate::ai_pool::PlannerPool,
++    ) -> Plan {
++        if planner.lookahead_depth != 1 || planner.policy_variant != 0 {
++            return self.plan_action(seat, planner);
++        }
++        self.plan_action_impl(seat, planner, Some(pool))
++    }
++
++    fn plan_action_impl(
++        &self,
++        seat: u8,
++        planner: &BoundedPlanner,
++        pool: Option<&crate::ai_pool::PlannerPool>,
++    ) -> Plan {
++        #[cfg(target_arch = "wasm32")]
++        let _ = pool;
+         let submitted_revision = self.revision();
+         if let Some(choice) = self.ai_session(seat).choice().filter(vm_choice_leaf) {
+             return Plan {
+-                seat, revision: submitted_revision, action: projected_choice_action(choice),
+-                nodes_used: 0, budget_exhausted: false, timed_out: false,
+-                cancelled: planner.cancelled(), sim_faults: 0,
++                seat,
++                revision: submitted_revision,
++                action: projected_choice_action(choice),
++                nodes_used: 0,
++                budget_exhausted: false,
++                timed_out: false,
++                cancelled: planner.cancelled(),
++                sim_faults: 0,
+             };
+         }
+         // wasm 目标无 wall-clock 时间源（Instant::now panic）：deadline
+@@ -574,6 +608,19 @@ impl Engine {
+ 
+         // 候选生成（只依赖只读投影）
+         let candidates = enumerate_candidates_variant(&sim, seat, planner.policy_variant);
++        #[cfg(not(target_arch = "wasm32"))]
++        if let Some(pool) = pool.filter(|_| candidates.len().min(planner.node_budget) > 1) {
++            return candidate_pool::plan_candidates(
++                sim,
++                baseline_view,
++                candidates,
++                seat,
++                submitted_revision,
++                planner,
++                started.expect("native planning clock"),
++                pool,
++            );
++        }
+ 
+         let mut nodes = 0usize;
+         let mut sim_faults = 0u32;
+@@ -609,101 +656,27 @@ impl Engine {
+             // 自身的会话高水位推进，不再用固定 `1_000_000 + nodes` 偏移
+             // （真实高水位越过该区间时合法候选全部被当重复拒绝，
+             // 规划退化为 NextPhase）。
+-            let mut trial = sim.clone();
+-            // NC12 根因诊断：记录**提交前**上下文（提交失败会把状态留在中途态，仅看提交后
+-            // 无法定位发出失效用牌的机器）
+-            let pre_context = {
+-                let res = trial.resolution();
+-                let frames: Vec<String> = res
+-                    .stack
+-                    .iter()
+-                    .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
+-                    .collect();
+-                let parks: Vec<String> = res
+-                    .parks
+-                    .iter()
+-                    .map(|p| format!("{:?}", p.machine.snapshot()))
+-                    .collect();
+-                format!(
+-                    "PRE rev={} phase={:?} action={action:?} frames=[{}] parks=[{}]",
+-                    trial.revision(),
+-                    trial.turn().phase,
+-                    frames.join(" ; "),
+-                    parks.join(" ; ")
+-                )
+-            };
+-            // NC12 长程缺陷防护（2026-10-19）：模拟提交在**克隆**上推进规则，
+-            // 若内核在模拟状态上触发不变量 panic（实测 `machine.rs:408
+-            // card 93 not in hand of 0`，发生在 plan_action→submit→finish_segment
+-            // →commit_frame），**不得让整个进程崩溃**——捕获该 panic、记录一次
+-            // 模拟故障、跳过本候选。真实提交路径**不**捕获（内核不变量仍硬失败）。
+-            let sim_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+-                trial.submit(GameCommand {
+-                    actor: seat,
+-                    expected_revision: trial.revision(),
+-                    dedup_id: trial.last_dedup.saturating_add(1),
+-                    action: action.clone(),
+-                })
+-            }));
+-            let out = match sim_result {
+-                Ok(out) => out,
+-                Err(_) => {
+-                    sim_faults = sim_faults.saturating_add(1);
+-                    {
+-                        let core = trial.state_core();
+-                        let hands: Vec<String> = core
+-                            .players
+-                            .iter()
+-                            .enumerate()
+-                            .map(|(i, p)| format!("p{i}:hp={}/{} hand={:?}", p.hp, p.max_hp, p.hand))
+-                            .collect();
+-                        // 事件栈与挂起机器：定位**发出失效用牌的路径**
+-                        let res = trial.resolution();
+-                        let frames: Vec<String> = res
+-                            .stack
+-                            .iter()
+-                            .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
+-                            .collect();
+-                        let parks: Vec<String> = res
+-                            .parks
+-                            .iter()
+-                            .map(|p| format!("{:?}", p.machine.snapshot()))
+-                            .collect();
+-                        note_sim_fault(pre_context.clone());
+-                        note_sim_fault(format!(
+-                            "POST seat={seat} rev={} phase={:?} action={action:?} table={:?} hands=[{}] frames=[{}] parks=[{}]",
+-                            trial.revision(),
+-                            trial.turn().phase,
+-                            core.table,
+-                            hands.join(" | "),
+-                            frames.join(" ; "),
+-                            parks.join(" ; ")
+-                        ));
++            let (trial, mut score) =
++                match evaluation::evaluate(&sim, &baseline_view, seat, &action, planner) {
++                    Ok(Some(result)) => result,
++                    Ok(None) => continue,
++                    Err(contexts) => {
++                        sim_faults = sim_faults.saturating_add(1);
++                        for context in contexts {
++                            note_sim_fault(context);
++                        }
++                        continue;
+                     }
+-                    // 说明（2026-10-19）：现场切片诊断代码已按仓库维护门禁
+-                    // （`maintenance_guards::production_sources_have_no_debug_output_or_env_switches`
+-                    // 禁止生产源码出现 println!/eprintln!/env::var）**移除**；
+-                    // 诊断信息改由 `sim_faults`（本函数）与 `legal_actions::probe_faults()`
+-                    // 计数承载，现场比对结论见
+-                    // docs/operations/evidence/2026-10-18-nc12-plan-crash/README.md §7。
+-                    continue; // 模拟故障候选不计分
+-                }
+-            };
+-            if matches!(out, CommandOutcome::Rejected(_)) {
+-                continue; // 非法候选不计分
+-            }
+-            let after = trial.ai_session(seat).view();
+-            let mut score = policy_score(
+-                &baseline_view,
+-                &after,
+-                seat,
+-                planner.policy_variant,
+-                planner.content_tuning.as_ref(),
+-            );
++                };
+             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
+             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
+-            if planner.lookahead_depth >= 2 && trial.outcome().is_none()
+-                && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)
++            if planner.lookahead_depth >= 2
++                && trial.outcome().is_none()
++                && !trial
++                    .ai_session(seat)
++                    .choice()
++                    .as_ref()
++                    .is_some_and(vm_choice_leaf)
+             {
+                 let opp = match trial.open_choice() {
+                     Some(open) => open.observer,
+@@ -761,18 +734,9 @@ impl Engine {
+         // NC10：回退动作也必须**合法**——预算为 0/全部候选被拒时不得盲目返回
+         // `NextPhase`（非本人回合或阶段不允许时它会被内核拒绝）。优先用内核
+         // 权威动作查询的首个候选；查询为空时退回 `NextPhase`（由提交侧校验拒绝）。
+-        let action = best.map(|(_, a)| a).unwrap_or_else(|| {
+-            if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
+-                return projected_choice_action(choice);
+-            }
+-            if !sim.ai_session(seat).view().players[seat as usize].alive {
+-                return GameAction::NextPhase;
+-            }
+-            sim.legal_actions(seat)
+-                .into_iter()
+-                .next()
+-                .unwrap_or(GameAction::NextPhase)
+-        });
++        let action = best
++            .map(|(_, a)| a)
++            .unwrap_or_else(|| fallback_action(&sim, seat));
+         Plan {
+             seat,
+             revision: submitted_revision,
+@@ -781,7 +745,7 @@ impl Engine {
+             budget_exhausted,
+             timed_out,
+             cancelled: false,
+-                    sim_faults,
++            sim_faults,
+         }
+     }
+ 
+@@ -842,3 +806,16 @@ pub fn clear_sim_fault_log() {
+         log.clear();
+     }
+ }
++
++fn fallback_action(sim: &Engine, seat: u8) -> GameAction {
++    if let Some(choice @ ChoiceView::Own { .. }) = sim.ai_session(seat).choice() {
++        return projected_choice_action(choice);
++    }
++    if !sim.ai_session(seat).view().players[seat as usize].alive {
++        return GameAction::NextPhase;
++    }
++    sim.legal_actions(seat)
++        .into_iter()
++        .next()
++        .unwrap_or(GameAction::NextPhase)
++}
+diff --git a/crates/engine-native/src/ai_pool.rs b/crates/engine-native/src/ai_pool.rs
+index dcbf9ee9..ffe6eeb3 100644
+--- a/crates/engine-native/src/ai_pool.rs
++++ b/crates/engine-native/src/ai_pool.rs
+@@ -18,6 +18,7 @@
+ 
+ use crate::ai::{BoundedPlanner, Plan};
+ use crate::Engine;
++use std::sync::atomic::{AtomicUsize, Ordering};
+ use std::sync::mpsc::{sync_channel, SyncSender};
+ use std::sync::Mutex;
+ 
+@@ -33,6 +34,7 @@ pub struct PlannerPool {
+     workers: usize,
+     queue_cap: usize,
+     handles: Mutex<Vec<std::thread::JoinHandle<()>>>,
++    submitted_jobs: AtomicUsize,
+ }
+ 
+ impl PlannerPool {
+@@ -61,6 +63,7 @@ impl PlannerPool {
+             workers,
+             queue_cap,
+             handles: Mutex::new(handles),
++            submitted_jobs: AtomicUsize::new(0),
+         }
+     }
+ 
+@@ -74,13 +77,20 @@ impl PlannerPool {
+         self.queue_cap
+     }
+ 
++    /// Number of jobs accepted by this pool; rejected submissions do not count.
++    pub fn submitted_jobs(&self) -> usize {
++        self.submitted_jobs.load(Ordering::Relaxed)
++    }
++
+     /// 提交一个任务（非阻塞）：队列满返回 `Err(PoolFull)`，调用方据此降级。
+     pub fn try_submit<F: FnOnce() + Send + 'static>(&self, f: F) -> Result<(), PoolFull> {
+         self.tx
+             .as_ref()
+             .expect("pool open")
+             .try_send(Box::new(f))
+-            .map_err(|_| PoolFull)
++            .map_err(|_| PoolFull)?;
++        self.submitted_jobs.fetch_add(1, Ordering::Relaxed);
++        Ok(())
+     }
+ 
+     /// 规划若干座位：并发受池限制，队列满则**降级为串行**（同线程内规划），
+diff --git a/apps/desktop-client/src/native_engine_host/pool_tests.rs b/apps/desktop-client/src/native_engine_host/pool_tests.rs
+new file mode 100644
+index 00000000..0f3eb242
+--- /dev/null
++++ b/apps/desktop-client/src/native_engine_host/pool_tests.rs
+@@ -0,0 +1,224 @@
++//! Default native owner-queue route measurements; no GUI or IPC performance claim.
++use super::*;
++use std::sync::mpsc;
++use std::time::{Duration, Instant};
++
++type Sample = (usize, u128);
++
++fn measured_host() -> (
++    NativeEngineHost,
++    mpsc::Receiver<Sample>,
++    std::thread::JoinHandle<()>,
++) {
++    let (sender, receiver) = sync_channel::<Job>(8);
++    let closed = Arc::new(AtomicBool::new(false));
++    let owner_closed = closed.clone();
++    let (metrics_tx, metrics_rx) = mpsc::channel();
++    let owner = std::thread::Builder::new()
++        .name("desktop-engine".into())
++        .spawn(move || {
++            let mut host = HostSession::default();
++            run_requests(receiver, &owner_closed, |request| {
++                let auto = request["type"] == "autoStep";
++                let before = host
++                    .session
++                    .as_ref()
++                    .map_or(0, NativeSession::planner_jobs_submitted);
++                let started = Instant::now();
++                let result = host.dispatch(request);
++                if auto {
++                    let after = host.session.as_ref().unwrap().planner_jobs_submitted();
++                    metrics_tx
++                        .send((after - before, started.elapsed().as_nanos()))
++                        .unwrap();
++                }
++                result
++            });
++        })
++        .unwrap();
++    (
++        NativeEngineHost {
++            sender: Mutex::new(Some(sender)),
++            closed,
++        },
++        metrics_rx,
++        owner,
++    )
++}
++
++#[tokio::test]
++async fn actual_default_auto_step_owner_queue_submits_candidate_jobs_and_closes() {
++    let (host, metrics, owner) = measured_host();
++    assert_eq!(
++        host.request(json!({"id":1,"type":"init"})).await.unwrap()["ok"],
++        true
++    );
++    assert_eq!(
++        host.request(
++            json!({"id":2,"type":"start","players":4,"seed":42,"observer":0,"mode":"identity"})
++        )
++        .await
++        .unwrap()["ok"],
++        true
++    );
++    let mut submitted = 0;
++    for id in 3..131 {
++        let response = host
++            .request(json!({"id":id,"type":"autoStep"}))
++            .await
++            .unwrap();
++        assert_eq!(response["ok"], true, "{response}");
++        assert!(response["data"]["hash_hex"]
++            .as_str()
++            .is_some_and(|hash| hash.len() == 64));
++        submitted += metrics.recv_timeout(Duration::from_secs(2)).unwrap().0;
++    }
++    assert!(submitted > 1, "actual pool jobs, not just a created pool");
++    host.close();
++    assert!(host
++        .request(json!({"id":132,"type":"autoStep"}))
++        .await
++        .unwrap_err()
++        .contains("closed"));
++    owner.join().unwrap();
++}
++
++fn percentile(values: &mut [u128], percent: usize) -> u128 {
++    values.sort_unstable();
++    values[(values.len() * percent).div_ceil(100).saturating_sub(1)]
++}
++
++#[tokio::test]
++#[ignore = "actual default native owner-queue route timing; run explicitly"]
++async fn actual_default_auto_step_owner_queue_measurement() {
++    let (host, metrics, owner) = measured_host();
++    host.request(json!({"id":1,"type":"init"})).await.unwrap();
++    let mut id = 2;
++    let mut roundtrip_ns = Vec::new();
++    let mut owner_ns = Vec::new();
++    let mut submitted = 0;
++    let mut pool_steps = 0;
++    let mut completed_games = 0;
++    let mut trajectory = blake3::Hasher::new();
++    for game in 0..6 {
++        host.request(
++            json!({"id":id,"type":"start","players":4,"seed":42,"observer":0,"mode":"identity"}),
++        )
++        .await
++        .unwrap();
++        id += 1;
++        for _ in 0..1500 {
++            let started = Instant::now();
++            let response = host
++                .request(json!({"id":id,"type":"autoStep"}))
++                .await
++                .unwrap();
++            let elapsed = started.elapsed().as_nanos();
++            id += 1;
++            assert_eq!(response["ok"], true, "{response}");
++            let (jobs, compute) = metrics.recv_timeout(Duration::from_secs(2)).unwrap();
++            if game > 0 {
++                submitted += jobs;
++                pool_steps += usize::from(jobs > 0);
++                owner_ns.push(compute);
++                roundtrip_ns.push(elapsed);
++                trajectory.update(&serde_json::to_vec(&response["data"]).unwrap());
++            }
++            if response["data"]["finished"] == true {
++                if game > 0 {
++                    completed_games += 1;
++                }
++                break;
++            }
++        }
++    }
++    assert!(submitted > 0);
++    println!(
++        "{}",
++        json!({"route":"NativeEngineHost::request/run_requests/HostSession::dispatch/NativeSession::auto_step/envelope",
++        "players":4,"seed":42,"nodes":64,"deadline_ms":50,"samples":roundtrip_ns.len(),"completed_games":completed_games,
++        "accepted_candidate_jobs":submitted,"pool_steps":pool_steps,"warmup_games":1,
++        "roundtrip_p50_ns":percentile(&mut roundtrip_ns,50),"roundtrip_p95_ns":percentile(&mut roundtrip_ns,95),
++        "owner_p50_ns":percentile(&mut owner_ns,50),"owner_p95_ns":percentile(&mut owner_ns,95),
++        "trajectory_digest":trajectory.finalize().to_hex().to_string(),
++        "limitations":"test fixture uses actual owner queue/dispatch/envelope, excludes Tauri ResourceTable/WebView/IPC; no serial comparison here"})
++    );
++    host.close();
++    owner.join().unwrap();
++}
++
++#[tokio::test]
++async fn close_finishes_admitted_default_candidate_work_and_rejects_queued_command() {
++    let (sender, receiver) = sync_channel::<Job>(8);
++    let closed = Arc::new(AtomicBool::new(false));
++    let owner_closed = closed.clone();
++    let host = NativeEngineHost {
++        sender: Mutex::new(Some(sender)),
++        closed,
++    };
++    let (entered_tx, entered_rx) = sync_channel(1);
++    let (release_tx, release_rx) = sync_channel(1);
++    let (done_tx, done_rx) = sync_channel(1);
++    let owner = std::thread::spawn(move || {
++        let mut session = HostSession::default();
++        session.dispatch(json!({"id":1,"type":"init"})).unwrap();
++        session
++            .dispatch(
++                json!({"id":2,"type":"start","players":4,"seed":42,"observer":0,"mode":"identity"}),
++            )
++            .unwrap();
++        let mut checkpoint = None;
++        for id in 3..503 {
++            let live = session.session.as_ref().unwrap();
++            let archive = live.save_hex();
++            let before = live.planner_jobs_submitted();
++            session
++                .dispatch(json!({"id":id,"type":"autoStep"}))
++                .unwrap();
++            if session.session.as_ref().unwrap().planner_jobs_submitted() - before > 1 {
++                checkpoint = Some(archive);
++                break;
++            }
++        }
++        session
++            .dispatch(json!({"id":504,"type":"restore","hex":checkpoint.unwrap(),"packsJson":"[]"}))
++            .unwrap();
++        let before = session.session.as_ref().unwrap().planner_jobs_submitted();
++        run_requests(receiver, &owner_closed, |request| {
++            entered_tx.send(()).unwrap();
++            release_rx.recv().unwrap();
++            session.dispatch(request)
++        });
++        let submitted = session.session.as_ref().unwrap().planner_jobs_submitted() - before;
++        drop(session);
++        done_tx.send(submitted).unwrap();
++    });
++    let (executing_tx, executing_rx) = oneshot::channel();
++    host.sender
++        .lock()
++        .unwrap()
++        .as_ref()
++        .unwrap()
++        .try_send((json!({"id":505,"type":"autoStep"}), executing_tx))
++        .unwrap();
++    entered_rx.recv_timeout(Duration::from_secs(5)).unwrap();
++    let (queued_tx, queued_rx) = oneshot::channel();
++    host.sender
++        .lock()
++        .unwrap()
++        .as_ref()
++        .unwrap()
++        .try_send((json!({"id":506,"type":"autoStep"}), queued_tx))
++        .unwrap();
++    host.close();
++    release_tx.send(()).unwrap();
++    assert_eq!(executing_rx.await.unwrap()["ok"], true);
++    let queued = queued_rx.await.unwrap();
++    assert_eq!(queued["ok"], false);
++    assert!(queued["error"]
++        .as_str()
++        .unwrap()
++        .contains("closed before execution"));
++    assert!(done_rx.recv_timeout(Duration::from_secs(5)).unwrap() > 1);
++    owner.join().unwrap();
++}
+diff --git a/crates/engine-native-wasm/src/session/planner_pool_tests.rs b/crates/engine-native-wasm/src/session/planner_pool_tests.rs
+new file mode 100644
+index 00000000..85a7b268
+--- /dev/null
++++ b/crates/engine-native-wasm/src/session/planner_pool_tests.rs
+@@ -0,0 +1,215 @@
++use super::*;
++use std::time::Instant;
++
++// Main4dd's original auto_step is the serial control; no production option is introduced.
++impl NativeSession {
++    fn serial_auto_step_for_measurement(&mut self) -> Result<String, String> {
++        if self.inner.outcome().is_some() {
++            return Ok(serde_json::json!({ "done": true }).to_string());
++        }
++        if let Some(c) = self.inner.open_choice() {
++            let take = c.spec.min.max(1).min(c.spec.max).min(c.spec.options.len());
++            let sel: Vec<_> = c
++                .spec
++                .options
++                .iter()
++                .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
++                .take(take)
++                .cloned()
++                .collect();
++            let sel = if sel.len() == take {
++                sel
++            } else {
++                c.spec.options.iter().take(take).cloned().collect()
++            };
++            let (cid, obs) = (c.id, c.observer);
++            let out = self.inner.submit(engine_native::GameCommand {
++                actor: obs,
++                expected_revision: self.inner.revision(),
++                dedup_id: self.inner.revision().wrapping_mul(2).max(1),
++                action: GameAction::Answer {
++                    choice_id: cid,
++                    selection: sel,
++                },
++            });
++            return Ok(serde_json::json!({
++                "kind": "answer",
++                "outcome": outcome_json(&self.inner, &out),
++            })
++            .to_string());
++        }
++        let seat = self.inner.turn().current;
++        let planner = BoundedPlanner::new(self.planner_nodes);
++        // Zero disables the native clock so node-bounded WASM/native comparisons use the same policy.
++        let planner = if self.deadline_ms == 0 {
++            planner
++        } else {
++            planner.with_deadline_ms(self.deadline_ms)
++        };
++        let plan = self.inner.plan_action(seat, &planner);
++        match self.inner.apply_plan(&plan) {
++            Ok(out) => Ok(serde_json::json!({
++                "kind": "plan",
++                "seat": seat,
++                "outcome": outcome_json(&self.inner, &out),
++                "finished": self.inner.outcome().is_some(),
++            })
++            .to_string()),
++            Err(e) => Ok(serde_json::json!({
++                "kind": "plan",
++                "seat": seat,
++                "error": match e {
++                    engine_native::ai::ApplyPlanError::Stale { .. } => "stale",
++                    engine_native::ai::ApplyPlanError::Cancelled => "cancelled",
++                },
++            })
++            .to_string()),
++        }
++    }
++}
++
++#[test]
++fn default_auto_step_uses_real_pool_jobs_and_preserves_session_trajectory() {
++    let mut parallel = NativeSession::new_identity(4, 42).unwrap();
++    let mut serial = NativeSession::new_identity(4, 42).unwrap();
++    for _ in 0..128 {
++        let before = parallel.planner_jobs_submitted();
++        assert_eq!(
++            serial.serial_auto_step_for_measurement().unwrap(),
++            parallel.auto_step().unwrap()
++        );
++        assert_eq!(serial.save_hex(), parallel.save_hex());
++        assert_eq!(serial.state_hash_hex(), parallel.state_hash_hex());
++        assert!(parallel.planner_jobs_submitted() >= before);
++        if parallel.is_finished() {
++            break;
++        }
++    }
++    assert!(
++        parallel.planner_jobs_submitted() > 0,
++        "created pool is not sufficient: actual jobs required"
++    );
++    let accepted = parallel.planner_jobs_submitted();
++    let pool = parallel.planner_pool.as_ref().unwrap() as *const _;
++    let archive = parallel.save_hex();
++    parallel
++        .restore_hex_with_packs_json(&archive, "[]")
++        .unwrap();
++    assert_eq!(parallel.planner_jobs_submitted(), accepted);
++    assert_eq!(parallel.planner_pool.as_ref().unwrap() as *const _, pool);
++    serial.restore_hex_with_packs_json(&archive, "[]").unwrap();
++    let restored_archive = parallel.save_hex();
++    assert!(parallel.restore_hex_with_packs_json("bad", "[]").is_err());
++    assert_eq!(parallel.save_hex(), restored_archive);
++    assert_eq!(parallel.planner_jobs_submitted(), accepted);
++    for budget in [0, 1] {
++        parallel.set_planner(budget, 0);
++        serial.set_planner(budget, 0);
++        assert_eq!(
++            serial.serial_auto_step_for_measurement().unwrap(),
++            parallel.auto_step().unwrap()
++        );
++        assert_eq!(serial.save_hex(), parallel.save_hex());
++        assert_eq!(parallel.planner_jobs_submitted(), accepted);
++    }
++}
++
++fn percentile(values: &mut [u128], percent: usize) -> u128 {
++    values.sort_unstable();
++    values[(values.len() * percent).div_ceil(100).saturating_sub(1)]
++}
++
++#[test]
++#[ignore = "same-process default native auto_step timing; run explicitly"]
++fn default_auto_step_serial_and_candidate_pool_measurement() {
++    for rich in [false, true] {
++        let mut source = NativeSession::new_identity(4, 42).unwrap();
++        source.next_phase(0).unwrap();
++        source.next_phase(0).unwrap();
++        let mut archive = None;
++        let mut checkpoint_step = 0;
++        for step in 0..500 {
++            let before_archive = source.save_hex();
++            let before_jobs = source.planner_jobs_submitted();
++            source.auto_step().unwrap();
++            if source.planner_jobs_submitted() - before_jobs > 1 {
++                archive = Some(before_archive);
++                checkpoint_step = step;
++                break;
++            }
++        }
++        let archive = archive.expect("a real default step with multiple root jobs");
++        source.restore_hex_with_packs_json(&archive, "[]").unwrap();
++        if rich {
++            let mut snapshot = source.inner.save();
++            let actor = snapshot.core.turn.current as usize;
++            let deck = std::mem::take(&mut snapshot.core.deck);
++            snapshot.core.players[actor].hand.extend(deck);
++            source.inner = Engine::restore(&snapshot).unwrap();
++        }
++        let archive = source.save_hex();
++        let mut serial = NativeSession::new_identity(4, 42).unwrap();
++        let mut parallel = NativeSession::new_identity(4, 42).unwrap();
++        let mut direct_ns = Vec::new();
++        let mut pooled_ns = Vec::new();
++        let mut jobs = 0;
++        for sample in 0..202 {
++            serial.restore_hex_with_packs_json(&archive, "[]").unwrap();
++            parallel
++                .restore_hex_with_packs_json(&archive, "[]")
++                .unwrap();
++            let before = parallel.planner_jobs_submitted();
++            let (serial_reply, parallel_reply, direct, pooled) = if sample % 2 == 0 {
++                let started = Instant::now();
++                let serial_reply = serial.serial_auto_step_for_measurement().unwrap();
++                let direct = started.elapsed().as_nanos();
++                let started = Instant::now();
++                let parallel_reply = parallel.auto_step().unwrap();
++                (
++                    serial_reply,
++                    parallel_reply,
++                    direct,
++                    started.elapsed().as_nanos(),
++                )
++            } else {
++                let started = Instant::now();
++                let parallel_reply = parallel.auto_step().unwrap();
++                let pooled = started.elapsed().as_nanos();
++                let started = Instant::now();
++                let serial_reply = serial.serial_auto_step_for_measurement().unwrap();
++                (
++                    serial_reply,
++                    parallel_reply,
++                    started.elapsed().as_nanos(),
++                    pooled,
++                )
++            };
++            assert_eq!(serial_reply, parallel_reply);
++            assert_eq!(serial.save_hex(), parallel.save_hex());
++            let accepted = parallel.planner_jobs_submitted() - before;
++            assert!(
++                accepted > 1,
++                "each measured step must submit distinct root jobs"
++            );
++            if sample >= 2 {
++                direct_ns.push(direct);
++                pooled_ns.push(pooled);
++                jobs += accepted;
++            }
++        }
++        println!(
++            "{}",
++            serde_json::json!({
++                "route": "NativeSession::auto_step", "seed":42,"players":4,
++                "nodes":64,"deadline_ms":50,"candidate_rich":rich,
++                "samples":200,"accepted_candidate_jobs":jobs,"checkpoint_after_steps":checkpoint_step,
++                "workers":parallel.planner_pool.as_ref().unwrap().workers(),
++                "serial_p50_ns":percentile(&mut direct_ns,50),
++                "serial_p95_ns":percentile(&mut direct_ns,95),
++                "pool_p50_ns":percentile(&mut pooled_ns,50),
++                "pool_p95_ns":percentile(&mut pooled_ns,95),
++                "controls":"AB/BA alternating; restore outside timing; 2 warmups; complete replies and archives equal; counters included; no test delay hooks"
++            })
++        );
++    }
++}
+diff --git a/crates/engine-native/src/ai/candidate_pool.rs b/crates/engine-native/src/ai/candidate_pool.rs
+new file mode 100644
+index 00000000..b6e9b98b
+--- /dev/null
++++ b/crates/engine-native/src/ai/candidate_pool.rs
+@@ -0,0 +1,163 @@
++//! Bounded admission of one seat's root attempts; results are reduced in source order.
++use super::*;
++use crate::ai_pool::PlannerPool;
++use std::collections::VecDeque;
++use std::sync::{mpsc, Arc};
++
++type Evaluation = Result<Option<i64>, [String; 2]>;
++type Completed = std::thread::Result<Evaluation>;
++type Pending = VecDeque<(usize, mpsc::Receiver<Completed>)>;
++
++#[cfg(test)]
++type RootHook = Arc<dyn Fn(usize) + Send + Sync>;
++#[cfg(test)]
++static ROOT_HOOK: std::sync::Mutex<Option<RootHook>> = std::sync::Mutex::new(None);
++
++fn evaluate_root(
++    index: usize,
++    sim: &Engine,
++    baseline: &crate::view::PlayerView,
++    seat: u8,
++    action: &GameAction,
++    planner: &BoundedPlanner,
++) -> Evaluation {
++    #[cfg(not(test))]
++    let _ = index;
++    #[cfg(test)]
++    {
++        let hook = ROOT_HOOK.lock().unwrap().clone();
++        if let Some(hook) = hook {
++            hook(index);
++        }
++    }
++    evaluation::evaluate(sim, baseline, seat, action, planner)
++        .map(|trial| trial.map(|(_, score)| score))
++}
++
++fn join_next(pending: &mut Pending, results: &mut [Option<Completed>]) -> bool {
++    let (index, receiver) = pending.pop_front().expect("admitted candidate");
++    match receiver.recv() {
++        Ok(result) => {
++            let failed = result.is_err();
++            results[index] = Some(result);
++            failed
++        }
++        Err(_) => true,
++    }
++}
++
++pub(super) fn plan_candidates(
++    sim: Engine,
++    baseline_view: crate::view::PlayerView,
++    candidates: Vec<GameAction>,
++    seat: u8,
++    revision: u64,
++    planner: &BoundedPlanner,
++    started: Instant,
++    pool: &PlannerPool,
++) -> Plan {
++    let sim = Arc::new(sim);
++    let baseline_view = Arc::new(baseline_view);
++    let mut results: Vec<Option<Completed>> =
++        Vec::with_capacity(candidates.len().min(planner.node_budget));
++    let mut pending = VecDeque::with_capacity(pool.workers());
++    let mut timed_out = false;
++    let mut budget_exhausted = false;
++    let mut cancelled_action = None;
++    let mut failed = false;
++
++    for (idx, action) in candidates.iter().enumerate() {
++        if pending.len() == pool.workers() {
++            failed = join_next(&mut pending, &mut results);
++        }
++        if failed {
++            break;
++        }
++        if planner.cancelled() {
++            cancelled_action = Some(action.clone());
++            break;
++        }
++        if planner
++            .deadline_ms
++            .is_some_and(|ms| started.elapsed() > Duration::from_millis(ms))
++        {
++            timed_out = true;
++            break;
++        }
++        if idx >= planner.node_budget {
++            budget_exhausted = true;
++            break;
++        }
++        results.push(None);
++        let root = sim.clone();
++        let baseline = baseline_view.clone();
++        let action_owned = action.clone();
++        let config = planner.clone();
++        // Each accepted job owns its only sender: a lost job disconnects without an owner-held sender.
++        let (tx, receiver) = mpsc::channel();
++        match pool.try_submit(move || {
++            let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++                evaluate_root(idx, &root, &baseline, seat, &action_owned, &config)
++            }));
++            let _ = tx.send(result);
++        }) {
++            Ok(()) => pending.push_back((idx, receiver)),
++            Err(_) => {
++                // A rejected closure never ran: compute only this root attempt once locally.
++                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++                    evaluate_root(idx, &sim, &baseline_view, seat, action, planner)
++                }));
++                failed = result.is_err();
++                results[idx] = Some(result);
++            }
++        }
++    }
++    while !pending.is_empty() {
++        join_next(&mut pending, &mut results);
++    }
++    assert!(
++        results.iter().all(Option::is_some),
++        "candidate worker lost an admitted result"
++    );
++    let nodes = results.len();
++    let mut best = None;
++    let mut sim_faults = 0u32;
++    for (index, result) in results.into_iter().enumerate() {
++        let result = match result.expect("admitted candidate result") {
++            Ok(result) => result,
++            Err(panic) => std::panic::resume_unwind(panic),
++        };
++        match result {
++            Ok(Some(score)) => {
++                if best.as_ref().is_none_or(|(previous, _)| score > *previous) {
++                    best = Some((score, candidates[index].clone()));
++                }
++            }
++            Ok(None) => {}
++            Err(contexts) => {
++                sim_faults = sim_faults.saturating_add(1);
++                for context in contexts {
++                    note_sim_fault(context);
++                }
++            }
++        }
++    }
++    let cancelled = cancelled_action.is_some();
++    let action = cancelled_action.unwrap_or_else(|| {
++        best.map(|(_, action)| action)
++            .unwrap_or_else(|| fallback_action(&sim, seat))
++    });
++    Plan {
++        seat,
++        revision,
++        action,
++        nodes_used: nodes,
++        budget_exhausted,
++        timed_out,
++        cancelled,
++        sim_faults,
++    }
++}
++
++#[cfg(test)]
++mod tests;
+diff --git a/crates/engine-native/src/ai/candidate_pool/tests.rs b/crates/engine-native/src/ai/candidate_pool/tests.rs
+new file mode 100644
+index 00000000..80811621
+--- /dev/null
++++ b/crates/engine-native/src/ai/candidate_pool/tests.rs
+@@ -0,0 +1,401 @@
++use super::*;
++use std::sync::atomic::{AtomicUsize, Ordering};
++use std::sync::{Mutex, MutexGuard};
++
++static TEST_LOCK: Mutex<()> = Mutex::new(());
++
++struct Hooks(MutexGuard<'static, ()>);
++impl Hooks {
++    fn new() -> Self {
++        Self(TEST_LOCK.lock().unwrap_or_else(|error| error.into_inner()))
++    }
++}
++impl Drop for Hooks {
++    fn drop(&mut self) {
++        *ROOT_HOOK.lock().unwrap() = None;
++        *evaluation::SUBMIT_HOOK.lock().unwrap() = None;
++        let _ = &self.0;
++    }
++}
++
++fn candidate_rich_engine() -> Engine {
++    let mut engine = Engine::new_identity(42, 4);
++    for _ in 0..2 {
++        engine.submit(GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: engine.last_dedup + 1,
++            action: GameAction::NextPhase,
++        });
++    }
++    let mut snapshot = engine.save();
++    let deck = std::mem::take(&mut snapshot.core.deck);
++    snapshot.core.players[0].hand.extend(deck);
++    Engine::restore(&snapshot).unwrap()
++}
++
++fn assert_same_plan(left: &Plan, right: &Plan) {
++    assert_eq!(format!("{left:?}"), format!("{right:?}"));
++}
++
++#[test]
++fn untimed_full_plan_parity_for_budget_prefixes_and_authority() {
++    let _hooks = Hooks::new();
++    let pool = PlannerPool::new(2, 2);
++    let mut engine = candidate_rich_engine();
++    for step in 0..20 {
++        let seat = engine
++            .open_choice()
++            .map_or(engine.turn().current, |c| c.observer);
++        let before = crate::archive::encode_archive(&engine.save());
++        let hash = engine.state_hash();
++        let legals = engine.legal_actions(seat);
++        let mut sim = engine.clone_for_simulation();
++        redact_opponent_hands(&mut sim, seat);
++        let count = enumerate_candidates_variant(&sim, seat, 0).len();
++        for budget in [0, 1, 2, count.saturating_sub(1), count, count + 1] {
++            let planner = BoundedPlanner::new(budget);
++            let serial = engine.plan_action(seat, &planner);
++            let parallel = engine.plan_action_with_pool(seat, &planner, &pool);
++            assert_same_plan(&serial, &parallel);
++            assert_eq!(before, crate::archive::encode_archive(&engine.save()));
++            assert_eq!(hash, engine.state_hash());
++            assert_eq!(legals, engine.legal_actions(seat));
++        }
++        let plan = engine.plan_action(seat, &BoundedPlanner::new(16));
++        engine.apply_plan(&plan).unwrap();
++        if engine.outcome().is_some() {
++            break;
++        }
++        assert!(step < 20);
++    }
++    assert!(pool.submitted_jobs() > 0);
++}
++
++#[test]
++fn timed_single_seat_overlaps_two_workers_and_stops_at_contiguous_prefix() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = PlannerPool::new(2, 2);
++    let counts = Arc::new(Mutex::new(vec![0; 256]));
++    let threads = Arc::new(Mutex::new(std::collections::HashSet::new()));
++    let active = Arc::new(AtomicUsize::new(0));
++    let peak = Arc::new(AtomicUsize::new(0));
++    let observed = (
++        counts.clone(),
++        threads.clone(),
++        active.clone(),
++        peak.clone(),
++    );
++    *ROOT_HOOK.lock().unwrap() = Some(Arc::new(move |index| {
++        observed.0.lock().unwrap()[index] += 1;
++        observed
++            .1
++            .lock()
++            .unwrap()
++            .insert(std::thread::current().id());
++        let now = observed.2.fetch_add(1, Ordering::SeqCst) + 1;
++        observed.3.fetch_max(now, Ordering::SeqCst);
++        std::thread::sleep(Duration::from_millis(100));
++        observed.2.fetch_sub(1, Ordering::SeqCst);
++    }));
++    let started = Instant::now();
++    let plan =
++        engine.plan_action_with_pool(0, &BoundedPlanner::new(64).with_deadline_ms(50), &pool);
++    assert!(plan.timed_out);
++    assert_eq!(plan.nodes_used, 2);
++    assert_eq!(pool.submitted_jobs(), 2);
++    assert_eq!(peak.load(Ordering::SeqCst), 2);
++    let threads = threads.lock().unwrap();
++    assert_eq!(threads.len(), 2);
++    assert!(!threads.contains(&std::thread::current().id()));
++    let counts = counts.lock().unwrap();
++    assert_eq!(&counts[..2], &[1, 1]);
++    assert!(counts[2..].iter().all(|count| *count == 0));
++    assert_eq!(
++        active.load(Ordering::SeqCst),
++        0,
++        "accepted work was drained"
++    );
++    assert!(started.elapsed() < Duration::from_secs(2));
++}
++
++#[test]
++fn full_queue_computes_each_rejected_root_once_locally() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = PlannerPool::new(1, 1);
++    let (started_tx, started_rx) = mpsc::channel();
++    let (release_tx, release_rx) = mpsc::channel();
++    pool.try_submit(move || {
++        started_tx.send(()).unwrap();
++        let _ = release_rx.recv();
++    })
++    .unwrap();
++    started_rx.recv_timeout(Duration::from_secs(2)).unwrap();
++    pool.try_submit(|| {}).unwrap();
++    let accepted = pool.submitted_jobs();
++    let counts = Arc::new(Mutex::new(vec![0; 4]));
++    let observed = counts.clone();
++    let owner = std::thread::current().id();
++    *ROOT_HOOK.lock().unwrap() = Some(Arc::new(move |index| {
++        assert_eq!(std::thread::current().id(), owner);
++        observed.lock().unwrap()[index] += 1;
++    }));
++    let planner = BoundedPlanner::new(4);
++    let actual = engine.plan_action_with_pool(0, &planner, &pool);
++    assert_same_plan(&actual, &engine.plan_action(0, &planner));
++    assert_eq!(*counts.lock().unwrap(), [1, 1, 1, 1]);
++    assert_eq!(pool.submitted_jobs(), accepted);
++    release_tx.send(()).unwrap();
++}
++
++#[test]
++fn unexpected_worker_panic_drains_other_roots_without_retry_and_pool_survives() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = PlannerPool::new(2, 2);
++    let counts = Arc::new(Mutex::new(vec![0; 256]));
++    let observed = counts.clone();
++    let drained = Arc::new(AtomicUsize::new(0));
++    let done = drained.clone();
++    *ROOT_HOOK.lock().unwrap() = Some(Arc::new(move |index| {
++        observed.lock().unwrap()[index] += 1;
++        if index == 0 {
++            panic!("unexpected candidate fault");
++        }
++        std::thread::sleep(Duration::from_millis(20));
++        done.fetch_add(1, Ordering::SeqCst);
++    }));
++    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++        engine.plan_action_with_pool(0, &BoundedPlanner::new(64), &pool)
++    }));
++    assert!(result.is_err());
++    assert_eq!(drained.load(Ordering::SeqCst), 1);
++    let counts = counts.lock().unwrap();
++    assert_eq!(&counts[..2], &[1, 1]);
++    assert!(counts[2..].iter().all(|count| *count == 0));
++    drop(counts);
++    *ROOT_HOOK.lock().unwrap() = None;
++    let (tx, rx) = mpsc::channel();
++    pool.try_submit(move || tx.send(()).unwrap()).unwrap();
++    rx.recv_timeout(Duration::from_secs(2)).unwrap();
++}
++
++#[test]
++fn caught_trial_faults_and_diagnostics_are_reduced_in_candidate_order() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = PlannerPool::new(2, 2);
++    let planner = BoundedPlanner::new(8);
++    clear_sim_fault_log();
++    *evaluation::SUBMIT_HOOK.lock().unwrap() =
++        Some((Arc::as_ptr(&planner.cancel) as usize, |action| {
++            if matches!(action, GameAction::PlayCard { .. }) {
++                panic!("caught trial submit");
++            }
++        }));
++    let serial = engine.plan_action(0, &planner);
++    let serial_contexts = sim_fault_log();
++    clear_sim_fault_log();
++    let parallel = engine.plan_action_with_pool(0, &planner, &pool);
++    assert_same_plan(&serial, &parallel);
++    assert_eq!(serial.sim_faults, 8);
++    assert_eq!(serial_contexts, sim_fault_log());
++}
++
++#[test]
++fn zero_one_candidates_ties_rejects_and_other_policies_preserve_serial_behavior() {
++    let _hooks = Hooks::new();
++    let pool = PlannerPool::new(2, 2);
++    let engine = Engine::new(42, 4);
++    let planner = BoundedPlanner::new(64);
++    assert_same_plan(
++        &engine.plan_action(0, &planner),
++        &engine.plan_action_with_pool(0, &planner, &pool),
++    );
++    assert_eq!(pool.submitted_jobs(), 0);
++    let mut sim = engine.clone_for_simulation();
++    redact_opponent_hands(&mut sim, 0);
++    let baseline = sim.ai_session(0).view();
++    let candidates = vec![
++        GameAction::PlayCard {
++            card: u16::MAX as _,
++            targets: vec![1],
++        },
++        GameAction::NextPhase,
++        GameAction::NextPhase,
++    ];
++    let expected = GameAction::NextPhase;
++    let plan = plan_candidates(
++        sim,
++        baseline,
++        candidates,
++        0,
++        engine.revision(),
++        &planner,
++        Instant::now(),
++        &pool,
++    );
++    assert_eq!(plan.nodes_used, 3);
++    assert_eq!(plan.action, expected);
++    let engine = candidate_rich_engine();
++    for planner in [
++        BoundedPlanner::new(8).with_lookahead(2),
++        BoundedPlanner::new(8).with_policy_variant(1),
++    ] {
++        let accepted = pool.submitted_jobs();
++        assert_same_plan(
++            &engine.plan_action(0, &planner),
++            &engine.plan_action_with_pool(0, &planner, &pool),
++        );
++        assert_eq!(pool.submitted_jobs(), accepted);
++    }
++}
++
++#[test]
++fn lost_accepted_job_disconnects_without_recomputation_or_deadlock() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = Arc::new(PlannerPool::new(1, 1));
++    let (started_tx, started_rx) = mpsc::channel();
++    let (release_tx, release_rx) = mpsc::channel();
++    pool.try_submit(move || {
++        started_tx.send(()).unwrap();
++        release_rx.recv().unwrap();
++        panic!("unrelated job kills worker before queued root executes");
++    })
++    .unwrap();
++    started_rx.recv_timeout(Duration::from_secs(2)).unwrap();
++    let observed = pool.clone();
++    let release = std::thread::spawn(move || {
++        let started = Instant::now();
++        while observed.submitted_jobs() < 2 && started.elapsed() < Duration::from_secs(2) {
++            std::thread::yield_now();
++        }
++        release_tx.send(()).unwrap();
++    });
++    let attempts = Arc::new(AtomicUsize::new(0));
++    let observed = attempts.clone();
++    *ROOT_HOOK.lock().unwrap() = Some(Arc::new(move |_| {
++        observed.fetch_add(1, Ordering::SeqCst);
++    }));
++    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++        engine.plan_action_with_pool(0, &BoundedPlanner::new(8), &pool)
++    }));
++    release.join().unwrap();
++    assert!(result.is_err());
++    assert_eq!(pool.submitted_jobs(), 2);
++    assert_eq!(
++        attempts.load(Ordering::SeqCst),
++        0,
++        "lost accepted root must not be retried"
++    );
++}
++
++#[test]
++fn distinct_equal_scores_choose_first_root_independent_of_completion_order() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let planner = BoundedPlanner::new(64);
++    let mut sim = engine.clone_for_simulation();
++    redact_opponent_hands(&mut sim, 0);
++    let baseline = sim.ai_session(0).view();
++    let mut first = None;
++    let mut pair = None;
++    for action in enumerate_candidates_variant(&sim, 0, 0) {
++        if let Ok(Some((_, score))) = evaluation::evaluate(&sim, &baseline, 0, &action, &planner) {
++            if let Some((old_score, old_action)) = &first {
++                if score == *old_score && action != *old_action {
++                    pair = Some(vec![old_action.clone(), action]);
++                    break;
++                }
++            } else {
++                first = Some((score, action));
++            }
++        }
++    }
++    let candidates = pair.expect("two distinct legal roots with equal scores");
++    let expected = candidates[0].clone();
++    *ROOT_HOOK.lock().unwrap() = Some(Arc::new(|index| {
++        if index == 0 {
++            std::thread::sleep(Duration::from_millis(20));
++        }
++    }));
++    let pool = PlannerPool::new(2, 2);
++    let actual = plan_candidates(
++        sim,
++        baseline,
++        candidates,
++        0,
++        engine.revision(),
++        &planner,
++        Instant::now(),
++        &pool,
++    );
++    assert_eq!(actual.action, expected);
++}
++
++#[test]
++fn public_input_own_cards_and_hidden_permutations_keep_full_plan_and_root_legals() {
++    let _hooks = Hooks::new();
++    let pool = PlannerPool::new(2, 2);
++    for seed in [42, 42021, 42022] {
++        let mut base = Engine::new(seed, 4);
++        for _ in 0..2 {
++            base.submit(GameCommand {
++                actor: 0,
++                expected_revision: base.revision(),
++                dedup_id: base.last_dedup + 1,
++                action: GameAction::NextPhase,
++            });
++        }
++        let mut hidden = base.clone();
++        let core = hidden.state_core_mut();
++        let lens: Vec<_> = core.players.iter().skip(1).map(|p| p.hand.len()).collect();
++        let mut cards = std::mem::take(&mut core.deck);
++        for player in core.players.iter_mut().skip(1) {
++            cards.append(&mut player.hand);
++        }
++        cards.rotate_left(7);
++        let mut offset = 0;
++        for (player, count) in core.players.iter_mut().skip(1).zip(lens) {
++            player.hand = cards[offset..offset + count].to_vec();
++            offset += count;
++        }
++        core.deck = cards[offset..].to_vec();
++        assert_eq!(
++            format!("{:?}", base.ai_session(0).input()),
++            format!("{:?}", hidden.ai_session(0).input())
++        );
++        assert_eq!(base.legal_actions(0), hidden.legal_actions(0));
++        let planner = BoundedPlanner::new(64);
++        let expected = base.plan_action(0, &planner);
++        assert_same_plan(&expected, &base.plan_action_with_pool(0, &planner, &pool));
++        assert_same_plan(&expected, &hidden.plan_action_with_pool(0, &planner, &pool));
++        let mut own = base.clone();
++        let core = own.state_core_mut();
++        std::mem::swap(&mut core.players[0].hand[0], &mut core.deck[0]);
++        assert_ne!(
++            format!("{:?}", base.ai_session(0).input()),
++            format!("{:?}", own.ai_session(0).input()),
++            "own-card positive control"
++        );
++    }
++}
++
++#[test]
++fn cancelled_and_expired_admission_submit_no_jobs() {
++    let _hooks = Hooks::new();
++    let engine = candidate_rich_engine();
++    let pool = PlannerPool::new(2, 2);
++    let cancelled = BoundedPlanner::new(64);
++    cancelled.cancel();
++    let plan = engine.plan_action_with_pool(0, &cancelled, &pool);
++    assert_same_plan(&engine.plan_action(0, &cancelled), &plan);
++    let expired =
++        engine.plan_action_with_pool(0, &BoundedPlanner::new(64).with_deadline_ms(0), &pool);
++    assert!(expired.timed_out);
++    assert_eq!(expired.nodes_used, 0);
++    assert_eq!(pool.submitted_jobs(), 0);
++}
+diff --git a/crates/engine-native/src/ai/evaluation.rs b/crates/engine-native/src/ai/evaluation.rs
+new file mode 100644
+index 00000000..b585229e
+--- /dev/null
++++ b/crates/engine-native/src/ai/evaluation.rs
+@@ -0,0 +1,106 @@
++//! One root attempt, shared by serial and native pooled planning.
++use super::*;
++
++#[cfg(test)]
++pub(super) static SUBMIT_HOOK: std::sync::Mutex<Option<(usize, fn(&GameAction))>> =
++    std::sync::Mutex::new(None);
++
++pub(super) fn evaluate(
++    sim: &Engine,
++    baseline_view: &crate::view::PlayerView,
++    seat: u8,
++    action: &GameAction,
++    planner: &BoundedPlanner,
++) -> Result<Option<(Engine, i64)>, [String; 2]> {
++    let mut trial = sim.clone();
++    // NC12 根因诊断：记录**提交前**上下文（提交失败会把状态留在中途态，仅看提交后
++    // 无法定位发出失效用牌的机器）
++    let pre_context = {
++        let res = trial.resolution();
++        let frames: Vec<String> = res
++            .stack
++            .iter()
++            .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
++            .collect();
++        let parks: Vec<String> = res
++            .parks
++            .iter()
++            .map(|p| format!("{:?}", p.machine.snapshot()))
++            .collect();
++        format!(
++            "PRE rev={} phase={:?} action={action:?} frames=[{}] parks=[{}]",
++            trial.revision(),
++            trial.turn().phase,
++            frames.join(" ; "),
++            parks.join(" ; ")
++        )
++    };
++    // NC12 长程缺陷防护（2026-10-19）：模拟提交在**克隆**上推进规则，
++    // 若内核在模拟状态上触发不变量 panic（实测 `machine.rs:408
++    // card 93 not in hand of 0`，发生在 plan_action→submit→finish_segment
++    // →commit_frame），**不得让整个进程崩溃**——捕获该 panic、记录一次
++    // 模拟故障、跳过本候选。真实提交路径**不**捕获（内核不变量仍硬失败）。
++    let sim_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
++        #[cfg(test)]
++        {
++            let hook = *SUBMIT_HOOK.lock().unwrap();
++            if let Some((planner_id, hook)) = hook {
++                if planner_id == std::sync::Arc::as_ptr(&planner.cancel) as usize {
++                    hook(action);
++                }
++            }
++        }
++        trial.submit(GameCommand {
++            actor: seat,
++            expected_revision: trial.revision(),
++            dedup_id: trial.last_dedup.saturating_add(1),
++            action: action.clone(),
++        })
++    }));
++    let out = match sim_result {
++        Ok(out) => out,
++        Err(_) => {
++            let core = trial.state_core();
++            let hands: Vec<String> = core
++                .players
++                .iter()
++                .enumerate()
++                .map(|(i, p)| format!("p{i}:hp={}/{} hand={:?}", p.hp, p.max_hp, p.hand))
++                .collect();
++            // 事件栈与挂起机器：定位**发出失效用牌的路径**
++            let res = trial.resolution();
++            let frames: Vec<String> = res
++                .stack
++                .iter()
++                .map(|f| format!("{:?}/{:?}/{:?}", f.id, f.kind, f.data))
++                .collect();
++            let parks: Vec<String> = res
++                .parks
++                .iter()
++                .map(|p| format!("{:?}", p.machine.snapshot()))
++                .collect();
++            let post_context = format!(
++                    "POST seat={seat} rev={} phase={:?} action={action:?} table={:?} hands=[{}] frames=[{}] parks=[{}]",
++                    trial.revision(),
++                    trial.turn().phase,
++                    core.table,
++                    hands.join(" | "),
++                    frames.join(" ; "),
++                    parks.join(" ; ")
++                );
++            return Err([pre_context, post_context]);
++        }
++    };
++    if matches!(out, CommandOutcome::Rejected(_)) {
++        return Ok(None); // 非法候选不计分
++    }
++    let after = trial.ai_session(seat).view();
++    let score = policy_score(
++        baseline_view,
++        &after,
++        seat,
++        planner.policy_variant,
++        planner.content_tuning.as_ref(),
++    );
++    Ok(Some((trial, score)))
++}

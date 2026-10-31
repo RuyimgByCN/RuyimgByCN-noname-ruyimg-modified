@@ -110,6 +110,12 @@ are registered in the [current progress](../architecture/native-progress.md#deli
 and the [independent alias-publication CI record](evidence/2026-10-30-up37-i02-audio-aliases/publication-ci/README.md).
 The later [compat-publication CI record](evidence/2026-10-30-up37-i02-audio-compat/publication-ci/README.md)
 retains its Windows resource-preparation failure separately.
+The [4dd publication CI record](evidence/2026-10-30-pa09-js-admission/publication-ci/README.md)
+independently binds run 41125396035 to that exact head: all ten jobs succeeded,
+including Windows resource preparation, installer creation and artifact upload.
+This confirms the new platform run without assigning unobserved provenance
+bytes to the old runner; uploaded artifact metadata is not installation or
+signing verification.
 The first run's successful macOS desktop artifact
 `installer-macos-latest` (32,791,200 bytes), three OS build jobs and native-web
 job do not establish a fully green workflow or validate these corrected bundles.

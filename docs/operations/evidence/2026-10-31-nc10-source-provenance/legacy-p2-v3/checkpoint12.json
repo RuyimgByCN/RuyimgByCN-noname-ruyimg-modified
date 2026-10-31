@@ -1,0 +1,142 @@
+{
+  "utc": "2026-10-31T06:27:16.366500+00:00",
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "worktree": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree",
+  "parentV2Manifest": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source-manifest.json",
+  "parentV2ManifestSha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e",
+  "scope": "Only legacy reader production changed; 3 test/oracle/registration files. No source outside these4 differs from retained candidate V2.",
+  "files": [
+    {
+      "path": "crates/engine-core/src/snapshot/legacy_choice.rs",
+      "sha256": "de8834412e59e79a1068a43858a43c576e97713297ac5578d641289cac73f862",
+      "bytes": 2567,
+      "oldV2Sha256": "2ab8e6d7a696e7a82915bfc85baac310c41ddee11214a8092f41964ec8a5ae2b",
+      "production": true
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests.rs",
+      "sha256": "ab34685dbb72cee7edc839dc92b9d52c7330a7b2a2d0784d2cb07cbae02db0f6",
+      "bytes": 10901,
+      "oldV2Sha256": "40d7c707a6693166ee085910acc598c739c6c71f7de4162b3e8a3b95dcad5c1f",
+      "production": false
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+      "sha256": "def6e41add0842fb661538471a9889a1d563b3f9b6ea5e851eef3d00b4acaa97",
+      "bytes": 7415,
+      "oldV2Sha256": null,
+      "production": false
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests/choice_request_4dd.rs",
+      "sha256": "1b906494d37a1763b55dfae8f56d69cbc440342181d17c0c2c612b5c4a41a90d",
+      "bytes": 3693,
+      "oldV2Sha256": null,
+      "production": false
+    }
+  ],
+  "deltaPatchSha256": "014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092",
+  "outsideP2CandidateChanges": [],
+  "noStagedFiles": true,
+  "completed": {
+    "p2-legacy-red": {
+      "utc": "2026-10-31T06:21:02.296546+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/red-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 23.311260333983228,
+      "log": "p2-legacy-red.log",
+      "diskFree": 88282525696
+    },
+    "p2-legacy-assertion-red": {
+      "utc": "2026-10-31T06:21:58.257374+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/red-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 30.929608209000435,
+      "log": "p2-legacy-assertion-red.log",
+      "diskFree": 88294117376
+    },
+    "p2-legacy-green": {
+      "utc": "2026-10-31T06:23:34.747828+00:00",
+      "command": [
+        "env",
+        "NC27_ERROR_MATRIX_OUT=/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-serde/green-matrix.json",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "legacy_choice_errors_match_4dd_oracle",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 34.492751000012504,
+      "log": "p2-legacy-green.log",
+      "diskFree": 87547052032
+    },
+    "p2-core-full": {
+      "utc": "2026-10-31T06:25:49.986473+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--no-fail-fast"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 94.30121958398377,
+      "log": "p2-core-full.log",
+      "diskFree": 86359834624
+    },
+    "p2-legacy-wasm-sink": {
+      "utc": "2026-10-31T06:24:37.444577+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-wasm",
+        "--lib",
+        "source_skill_legacy_sink",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 21.763483249989804,
+      "log": "p2-legacy-wasm-sink.log",
+      "diskFree": 87527264256
+    }
+  },
+  "pending": [
+    {
+      "name": "p2-legacy-wasm-build",
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/p2-legacy-wasm-build.log"
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "related_definitions_and_links": [
+    {
+      "variant": "Miedao",
+      "selected": "miedao2",
+      "related": "miedao",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "a941324bd7ee6bd50d2bebecd3545ac834180e35f75dff9bc96a1dc3defa84f1",
+      "registration": "parent group grants selected source branch",
+      "group": "['miedao1','miedao2']"
+    },
+    {
+      "variant": "Miedao",
+      "selected": "miedao2",
+      "related": "miedao",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "3013b4f0f65046814abc37912144c4e05be881d8d2465eb54c20f945ec69919c",
+      "registration": "parent group grants selected source branch",
+      "group": "[\"miedao1\", \"miedao2\"]"
+    },
+    {
+      "variant": "SwdGouhunluoSub",
+      "selected": "gouhunluo",
+      "related": "gouhunluo2",
+      "path": "archive/upstream/noname-liuli/noname/card/swd.js",
+      "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "body_sha256": "a35896a569a6725ecf108eb2ccb242800bd530a261749fb84e0619076fc06787",
+      "registration": "selected source root also registers related cleanup; functional gap preserved",
+      "group": ""
+    },
+    {
+      "variant": "SwdGouhunluoSub",
+      "selected": "gouhunluo",
+      "related": "gouhunluo2",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js",
+      "sha256": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646",
+      "body_sha256": "e6ac6e13c03928f1bf404d8e9ba308bd9254374a52f94cc4e67fde273dd2c94f",
+      "registration": "selected source root also registers related cleanup; functional gap preserved",
+      "group": ""
+    },
+    {
+      "variant": "SwdJuxiCount",
+      "selected": "juxi_count",
+      "related": "juxi",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "7f1d369c181b3059d647c1ff73e1d2a9cf2f9150894474a299a34942b4ea854d",
+      "registration": "parent group grants selected source branch",
+      "group": "'juxi_count'"
+    },
+    {
+      "variant": "SwdJuxiCount",
+      "selected": "juxi_count",
+      "related": "juxi",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "0c7064a90a931d28cfef50eecd7d7385cbf83fa2074fad45c7ed89720d2753cf",
+      "registration": "parent group grants selected source branch",
+      "group": "\"juxi_count\""
+    },
+    {
+      "variant": "SwdSxianjingDamage",
+      "selected": "sxianjing_damage",
+      "related": "sxianjing",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "ae906d6c5ba45aac645aefe3fdb60cbcb16cc422d4929358a561b44e01366b3c",
+      "registration": "parent group grants selected source branch",
+      "group": "['sxianjing_gain','sxianjing_damage']"
+    },
+    {
+      "variant": "SwdSxianjingDamage",
+      "selected": "sxianjing_damage",
+      "related": "sxianjing",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "6f01bf038844b67ddeece51ab3ad86ae95534d61ab68b86274397223ec12fc50",
+      "registration": "parent group grants selected source branch",
+      "group": "[\"sxianjing_gain\", \"sxianjing_damage\"]"
+    },
+    {
+      "variant": "SwdSxianjingGain",
+      "selected": "sxianjing_gain",
+      "related": "sxianjing",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "ae906d6c5ba45aac645aefe3fdb60cbcb16cc422d4929358a561b44e01366b3c",
+      "registration": "parent group grants selected source branch",
+      "group": "['sxianjing_gain','sxianjing_damage']"
+    },
+    {
+      "variant": "SwdSxianjingGain",
+      "selected": "sxianjing_gain",
+      "related": "sxianjing",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "6f01bf038844b67ddeece51ab3ad86ae95534d61ab68b86274397223ec12fc50",
+      "registration": "parent group grants selected source branch",
+      "group": "[\"sxianjing_gain\", \"sxianjing_damage\"]"
+    },
+    {
+      "variant": "WudianPaotaiFire",
+      "selected": "paotai2",
+      "related": "paotai",
+      "path": "archive/upstream/noname-liuli/noname/character/ow.js",
+      "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "body_sha256": "fa1f5f947b5db98d17e72a82aabb1e8d4eb5b78a011f835c653eb09b96e452bd",
+      "registration": "parent group grants selected source branch",
+      "group": "['paotai2','paotai3']"
+    },
+    {
+      "variant": "WudianPaotaiFire",
+      "selected": "paotai2",
+      "related": "paotai",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js",
+      "sha256": "69fbd9fd26c3817bbb62426d389e666b74a18224b60f0fab9625254901503193",
+      "body_sha256": "e8dff1ca04d4c81012aba963b6be29fe571d95b8ef0c3f0c2d3b79c3892b4fb3",
+      "registration": "parent group grants selected source branch",
+      "group": "[\"paotai2\", \"paotai3\"]"
+    },
+    {
+      "variant": "WudianQiangguGuard",
+      "selected": "qianggu2",
+      "related": "qianggu",
+      "path": "archive/upstream/noname-liuli/noname/character/ow.js",
+      "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "body_sha256": "db33351815ef659595e7430000e06e7386275c18accccfbebf02ab8825a8c771",
+      "registration": "parent content explicitly grants selected independent skill",
+      "group": ""
+    },
+    {
+      "variant": "WudianQiangguGuard",
+      "selected": "qianggu2",
+      "related": "qianggu",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js",
+      "sha256": "69fbd9fd26c3817bbb62426d389e666b74a18224b60f0fab9625254901503193",
+      "body_sha256": "2eb07f62ee31fee53a5a84838c11209bebe20023ec12a59a5c021adcdd41362f",
+      "registration": "parent content explicitly grants selected independent skill",
+      "group": ""
+    },
+    {
+      "variant": "WudianZhenchaDraw",
+      "selected": "zhencha_sha",
+      "related": "zhencha",
+      "path": "archive/upstream/noname-liuli/noname/character/ow.js",
+      "sha256": "d7e345860eb748504e8fcde2c86eeb95f87dcf7d260fcf2c393c8ba03e93f3aa",
+      "body_sha256": "7692c8ef19dbacef59c93b04da3ceb5f375fec24bbaacbe175a0ffe05cbc0a32",
+      "registration": "parent group grants selected source branch",
+      "group": "'zhencha_sha'"
+    },
+    {
+      "variant": "WudianZhenchaDraw",
+      "selected": "zhencha_sha",
+      "related": "zhencha",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/skill.js",
+      "sha256": "69fbd9fd26c3817bbb62426d389e666b74a18224b60f0fab9625254901503193",
+      "body_sha256": "f728aa46f1c7a1881132dfd14f1a8b62672490069b41931ebfc6fc816fad9c8a",
+      "registration": "parent group grants selected source branch",
+      "group": "\"zhencha_sha\""
+    },
+    {
+      "variant": "XianjianHushaCount",
+      "selected": "husha_count",
+      "related": "husha",
+      "path": "archive/upstream/noname-liuli/noname/character/xianjian.js",
+      "sha256": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+      "body_sha256": "4a92a634ac6a3da1cd29275fb795679f419dd79f01d5681898d3668ea07a74b0",
+      "registration": "parent group grants selected source branch",
+      "group": "'husha_count'"
+    },
+    {
+      "variant": "XianjianHushaCount",
+      "selected": "husha_count",
+      "related": "husha",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js",
+      "sha256": "e0724c58d7cb80db1fe4dd251d896f5444711a5c2454ab44b9916b1d3d5db7e7",
+      "body_sha256": "08d93ca7d2235427b96602e43f06665e5be695af428cf56e69e37b63713f11a5",
+      "registration": "parent group grants selected source branch",
+      "group": "\"husha_count\""
+    }
+  ],
+  "module_installations": [
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/index.js",
+      "sha256": "af96d75e33ab9d77e1657c292e4f4251f5355743fd0abf3d6ec0660b1dfca749",
+      "skill": "02258835c137c058118b00896784bf11665849dd2d1907324e93021dff22a913",
+      "translate": "3ff0f5958ec88823a08ea4522dbfcdd9ebe7f6fe249eba886af2f5cb5f242364"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/card/gwent/index.js",
+      "sha256": "7f54b33a30a7f934e7ebdc88004c8361c13a57309e263f66ec50f27bdefc7835",
+      "skill": "3eb8c16e613f865c7aa11e85eaecfee14743f373dff86fd2873ba96603af664d",
+      "translate": "49c5385f2176ea11ee4905e535e0811398807c78dd8eef4db16f7c689cf1b661"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/index.js",
+      "sha256": "678ddd8788e35b3830c09a5c61fdd280121bde0ec925f2ee929de1ea9201124c",
+      "skill": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646",
+      "translate": "5d9ff26a6eb6e647442d4dd01a94bfbc0f72b933b6bbe3a5b56d89e048f48d43"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/index.js",
+      "sha256": "075ca362578cc6a36f78b9a2bceda776d822f4f982282c3e471d856f22aa5856",
+      "skill": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "translate": "48ee34e36fcd805362b1f668e7900498fc04477982b67b3ee34b589d88c01166"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/ow/index.js",
+      "sha256": "1c420c0410f94d8186ca0bbc062c7e59d25ddfcc18127aada3243a4cc4f741db",
+      "skill": "69fbd9fd26c3817bbb62426d389e666b74a18224b60f0fab9625254901503193",
+      "translate": "e3489ca9bab04f861163485a011da6774295156b2728238256786bcec7634e25"
+    },
+    {
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/index.js",
+      "sha256": "99cf45215ae2a7f0265d6df9aa17995bb880b6b5b02c5a4e2dd0734278641c77",
+      "skill": "e0724c58d7cb80db1fe4dd251d896f5444711a5c2454ab44b9916b1d3d5db7e7",
+      "translate": "b84dcde49a37d698dbf4869a77ae116d8f7b2792f6521e14fb19d1933c11855b"
+    }
+  ],
+  "qualification": "Existing selected source branches only; no bridge/event/window/expiry reconstruction accepted."
+}

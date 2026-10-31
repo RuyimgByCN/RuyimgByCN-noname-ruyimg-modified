@@ -112,6 +112,9 @@ fn kunlunjing_snapshot_and_rewind() {
     for _ in 0..24 {
         if let Some(c) = e.open_choice().cloned() {
             if c.spec.prompt == "trigger_confirm" {
+                assert!(matches!(e.choice_view_for(Some(c.observer)),
+                    Some(engine_native::ChoiceView::Own { source_skill: None, .. })),
+                    "Host same-prompt ask must not acquire OptionalGate provenance");
                 let out = e.submit(GameCommand {
                     actor: c.observer,
                     expected_revision: e.revision(),

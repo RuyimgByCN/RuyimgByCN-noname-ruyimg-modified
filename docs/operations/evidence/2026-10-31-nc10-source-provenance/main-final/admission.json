@@ -1,0 +1,189 @@
+{
+  "utc": "2026-10-31T06:23:25.510888+00:00",
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "source_manifest_sha256": "4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e",
+  "phase": "Main v3 composed33 integrated, uncommitted, final acceptance pending",
+  "known_pending": "P2 closed by715cc independent recheck; Main final gates/currentWASM/combined acceptance still pending",
+  "before_docs_dirty_preserved": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/README.md",
+    "docs/operations/evidence/2026-10-30-windows-provenance-checkout/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "paths": {
+    "apps/desktop-client/src/native_envelope.rs": {
+      "before_sha256": "2a687e605d8514791d1671282f2d07d6d3e0a2f16c85dad01c4299c01739efe4",
+      "candidate_sha256": "d5acd0976df0bc52a2a0a7bcc42ebdaacf04a41f38fa9d530f0fbebd5de50a99",
+      "bytes": 6436
+    },
+    "apps/desktop-client/tests/native_engine_host.rs": {
+      "before_sha256": "5082c0cd4303ff1daddd5d453a02d27531ba750e1a2082e53f8220e535250761",
+      "candidate_sha256": "def6d6cc674c17c88157206f3690c0e93f4f6a76fcdf532530bb583a854f8ac3",
+      "bytes": 13272
+    },
+    "apps/game-server/src/native_view.rs": {
+      "before_sha256": "a0106ff5da1d2e2b114eb7d3c51820f1fd9a6e4ecd81f47bbcc78de0a42228d4",
+      "candidate_sha256": "58489515fb09c45062791977292abcb98b272c79e0aa05b0a9714faaf8642a25",
+      "bytes": 16028
+    },
+    "apps/game-server/src/native_ws_e2e.rs": {
+      "before_sha256": "08f008efc6cc0395e91f8571670916bb107c9d81a97cc874b6ace283459a8935",
+      "candidate_sha256": "b3da9130c61940da6b0c8b030ca819b37a8b7aa107e8287f6d61a5e61ad22e5d",
+      "bytes": 37654
+    },
+    "apps/game-server/src/native_ws_e2e/source_skill.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "2817b38616909db331a7089279b9f6f8ecbb280cd8d0118156ba866956076956",
+      "bytes": 6293
+    },
+    "apps/game-server/tests/support/ws6_choice_before_source.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "9cd9966474e75ff90375aeb7d6bac5879ae34eeacb7521b13aa1b73e40c860e3",
+      "bytes": 3690
+    },
+    "apps/web-client/scripts/nc10-source-provenance.test.mjs": {
+      "before_sha256": null,
+      "candidate_sha256": "c9a36e98e95d714755b76c6301a6f6ca400ae801ec2244494ff5c7ca4d40361e",
+      "bytes": 2221
+    },
+    "apps/web-client/scripts/nc10-source-ui.ts": {
+      "before_sha256": null,
+      "candidate_sha256": "5c7555ccf09b335cebaacd81c1573919e0e14a3a2a7914d35356036151aa2d7a",
+      "bytes": 3446
+    },
+    "apps/web-client/scripts/network-client.test.mjs": {
+      "before_sha256": "d168782f0a626188d2e8f5850a0e205a4331812351678eca0aa01e03b37b121e",
+      "candidate_sha256": "ee7481f3a2c50f6f353581a18821bc9c328f703d9253bafe2ca39fb925fc5d8d",
+      "bytes": 27627
+    },
+    "apps/web-client/scripts/ws6-observer-metadata-before-source.ts": {
+      "before_sha256": null,
+      "candidate_sha256": "09de518cfb8e5c4352c8c9c026382ca388f1f0f3fa7ab41fa11e21f86da9a555",
+      "bytes": 3860
+    },
+    "apps/web-client/src/engine/observerMetadata.ts": {
+      "before_sha256": "0e7a63c4ce832f48250e1cb1a39a7f11de4500e134377c138f750a94c43434cd",
+      "candidate_sha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800",
+      "bytes": 4196
+    },
+    "apps/web-client/src/types/engine.ts": {
+      "before_sha256": "975e95bc63d9451df3fd113d43ad92d7061fb9c7067e8b74f72e27f26d359f4c",
+      "candidate_sha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358",
+      "bytes": 8690
+    },
+    "apps/web-client/src/worker/nativeBackend.ts": {
+      "before_sha256": "e380fe1b34e8e90d0164b6367b7e251427d02c560bb820c792f4cc0581600573",
+      "candidate_sha256": "4d5a195d687ebb68c78ea5e2bd59768f6e165349a4c8a9efdb07e45ee5343a24",
+      "bytes": 35395
+    },
+    "crates/engine-api/src/choice.rs": {
+      "before_sha256": "426f4338274327e5c4ff8e6ccd1ae6d8bd863f150dc77d5c3379ad01996042f6",
+      "candidate_sha256": "a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6",
+      "bytes": 4179
+    },
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs": {
+      "before_sha256": "7b3295622c2cf1259f4ccb4fcab517c1536a1065a8622d7326e49e5e666b461c",
+      "candidate_sha256": "1db4ba0e9fa4cce95d9c429bce73887c3ff0587bbd05a978defd908cce7a918b",
+      "bytes": 23508
+    },
+    "crates/engine-core/src/engine.rs": {
+      "before_sha256": "48e7c7167ff9256ee907db2d9f197acaeaa3751f3c7eec1bb7a91453e528be38",
+      "candidate_sha256": "61d3d75b48cec7b72560b0a312dced62cd72d20ce67baf7071432740e6a27ec9",
+      "bytes": 28209
+    },
+    "crates/engine-core/src/engine/source_tests.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "ab34685dbb72cee7edc839dc92b9d52c7330a7b2a2d0784d2cb07cbae02db0f6",
+      "bytes": 10901
+    },
+    "crates/engine-core/src/snapshot.rs": {
+      "before_sha256": "0a64cbb3ca80acc7daba5f3c4897596971e9cf40a447d4dc851bebab34c3d0c7",
+      "candidate_sha256": "3d915e64742662229169337aa121020910d19fbff04ce62578e61336b1a43c03",
+      "bytes": 12152
+    },
+    "crates/engine-core/src/snapshot/legacy_choice.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "de8834412e59e79a1068a43858a43c576e97713297ac5578d641289cac73f862",
+      "bytes": 2567
+    },
+    "crates/engine-native-kernel/src/snap/asks.rs": {
+      "before_sha256": "2db7ba73e96859dbbf80fa3ac7fd719c93954f8ab9cab2075aad05e264817a5c",
+      "candidate_sha256": "2c7cd8f238da2c25c2855231cc44b218b7aa5b8c9ca5a50ca58f5b715b4b50aa",
+      "bytes": 36299
+    },
+    "crates/engine-native-kernel/src/snap/asks/shapes.rs": {
+      "before_sha256": "669f83ffaa58a9d9a3f7da4bfc413e8664c0626b8acba84a13d8578008882a1f",
+      "candidate_sha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91",
+      "bytes": 2984
+    },
+    "crates/engine-native-wasm/src/session.rs": {
+      "before_sha256": "99064278c5afe72f839c926376be782daed78fdadbf18a877fbd593473e59206",
+      "candidate_sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+      "bytes": 29086
+    },
+    "crates/engine-native-wasm/tests/pa09_native_session.rs": {
+      "before_sha256": "39a9348362c5813497d9432e9bf30c78ab5693a7bdce30e4879f0ffa6cc9c45d",
+      "candidate_sha256": "c3777b64bca69e0921502826be7aa9f1389f52a274342ce439757cfa673fa04f",
+      "bytes": 5247
+    },
+    "crates/engine-native/src/engine.rs": {
+      "before_sha256": "2cf94c4f1cfbcaae43b2d9d96c6a5dcef8487bf68fade72a08e19c000a6db3fd",
+      "candidate_sha256": "0553ef09300b3d9b2488dea4d37d54033d4f9c3c5fddb483aaf628710dfb8bd6",
+      "bytes": 19338
+    },
+    "crates/engine-native/src/engine/choice_source.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "b4cdf9eedf010e3110e61c405f2cfb02b3a09cb43280f0793d042df4551fd696",
+      "bytes": 7103
+    },
+    "crates/engine-native/src/engine/views.rs": {
+      "before_sha256": "971e26121ce21309bdad093c55209e1f0966c1621d87d68ef122f8ee7ab66b64",
+      "candidate_sha256": "df6f0895163f614ccb65e994e5686449adbc944fe1cf2fe7b93b7a9583d6e3d2",
+      "bytes": 9072
+    },
+    "crates/engine-native/src/view.rs": {
+      "before_sha256": "4b1dcd2d1e2c7c0e557d37cdd1348ba01b04cc7804249f1e01215102906242fe",
+      "candidate_sha256": "b0e41367f862b128d5d696eb5fe1ed9111fffa16cf4c43b01cd10d61bae6efe6",
+      "bytes": 9186
+    },
+    "crates/engine-native/tests/groups/nc_rounds.rs": {
+      "before_sha256": "ed57a11018583abc19f62e39732263beb61b021517f0c7a5b471ff0d143d10f6",
+      "candidate_sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+      "bytes": 2666
+    },
+    "crates/engine-native/tests/nc10_source_provenance.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "8df57dc35be62cc7d489b15016d8e9e61a3fc6193ca4164708bbf118462d7ea9",
+      "bytes": 9944
+    },
+    "crates/engine-native/tests/swd_kunlunjing_rewind.rs": {
+      "before_sha256": "39c77a6f9d1dff725facb9320145ac517cbf93825052e37c84acb7a9f6abd772",
+      "candidate_sha256": "8c8ea40937275b266b73a19d50e77e3fced223cad31db09355ff5f11d4f62d41",
+      "bytes": 8444
+    },
+    "crates/engine-wasm/src/lib.rs": {
+      "before_sha256": "4f54601d1bc6a66b2617d39f82f952352fdc5253adf4d6ceb171867edfcd44f6",
+      "candidate_sha256": "ff41f28cd57c41f4caeab25df1a5e10ca76dbe13ed8451e557f5aa2b369334bf",
+      "bytes": 27566
+    },
+    "crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "def6e41add0842fb661538471a9889a1d563b3f9b6ea5e851eef3d00b4acaa97",
+      "bytes": 7415
+    },
+    "crates/engine-core/src/engine/source_tests/choice_request_4dd.rs": {
+      "before_sha256": null,
+      "candidate_sha256": "1b906494d37a1763b55dfae8f56d69cbc440342181d17c0c2c612b5c4a41a90d",
+      "bytes": 3693
+    }
+  },
+  "protection": "No C331/PA09/old329 source integrated; only this exact reviewed31-source overlay; versions unchanged; staging empty",
+  "all31_after_sha_match": true,
+  "post_utc": "2026-10-31T06:23:25.527587+00:00",
+  "v2_admission_source_manifest_sha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e",
+  "v3_delta_patch_sha256": "014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092",
+  "v3_integrated_utc": "2026-10-31T06:54:37.204700+00:00",
+  "all33_sha_match": true
+}

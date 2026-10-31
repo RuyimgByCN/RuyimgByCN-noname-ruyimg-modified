@@ -71,6 +71,14 @@
 
 **26. 限定schema4增量**：用户对[已独立复审的具体合同](../2026-10-30-c331-schema-supplement/README.md)明确选择“批准限定schema4（推荐）”。仅带非默认trigger排序数据的新不可变包用schema4；新native host明确读取schema3默认与schema4非默认，执行入口拒非默认schema3、全默认schema4、未知schema及schema0绕过；新legacy只执行schema3默认，拒新排序语义。旧schema3默认逻辑hash中性、原件/版本/冻结锁保留；schema4非默认段在原trigger条目原位并绑定数组位置及handler身份，元组/位置/filter/顺序篡改有负控。固定旧native public bridge拒合规schema4，但旧host0或恶意伪装schema3并按旧算法重算hash的新包仍可能被旧程序接受；可信冻结锁仅保护其绑定内容，新host必须拒降级，不追溯承诺修好旧binary。维持format1/API1/ABI758/NGSA105/WS6，不新增VM指令/查询/效果/命令/Worker字段；多handler不同元组、forceDie/out/indexed/hidden/filterStop等仍阻断对应来源验收，不因此豁免。规则331仍按裁决22在已验收A330（`38ab1678`）后独占实施，改命332仍待331实际验收。批准不等于实现或任何运行通过；真实新旧读者、正式安装/恢复/跨端、hash及原C验收矩阵须完成。见[本次明确选择与稿件指纹](../2026-10-30-c331-schema-supplement/user-decision26.json)。
 
+## 补充裁决（2026-10-31，NC10询问来源）
+
+**27. Own可选来源单字段合同**：用户对已完成两轮独立复审的[v1＋v2具体合同](../2026-10-31-nc10-source-provenance/README.md)明确选择“批准限定实施（推荐）”。允许普通、已知native OptionalGate的Own增加可空`source_skill`，须全catalog唯一、既有owner已知资格、exact producer与实际first-depth consumer相同；本人及现有可信Referee可见同一派生结果，Other generic，未知None，inner不借outer盖章。允许API／TS／IPC／WS6兼容转发并保留deadline等全部旧字段；legacy typed捕获／两种恢复及JSON读写只剥该新元数据，JSON忽略先于共享String校验，保留其余字段、旧档接受域、错误与失败原子性，并完成typed不经JSON的对抗及完整兼容矩阵。维持规则330／NGSA105／ABI758／WS6，不分配新版本；不批准root gate、Confirm前缀、Cancel尾链、VM续行放行或正式filter／restore／fuel／算术变化。原19项NoCert和完整Plan隐私要求保持，批准不等于实现或验收完成。实施由新私有4dd工作树独立推进，旧329／WS5 runtime候选不并入；见[原选择与稿件SHA](../2026-10-31-nc10-source-provenance/user-decision27.json)。
+
+## 补充裁决（2026-10-31，R05精确规则与恢复合同）
+
+**28. 三技能／异步摸牌与完整锁合同及333／106／759／WS7**：用户对已独立复审的[具体审批稿](../2026-10-31-r05-runtime-contract/approval-request.md)明确选择“批准限定合同与版本（推荐）”。批准v3＋v4＋v5所列涕泣／宝梳／避祸、真实Begin／Prepare与Draw／gain异步续行、191处caller迁移、三个固定compound、按逻辑身份隔离的四角色、精确Damage／生命周期、持久D/R/G／detached及公开有符号投影；新locked工厂仅从原始包／资产及完整ContentLock验证结果构实际规则目录，不再另接裸packs。批准安装nativeFrozenVersions、保存canonical_locked_content／frozen_packages、五类显式请求及Browser／WASM／Desktop／server／HTTP／WAL同一原局上下文恢复；缺原文的旧安装提示重装，缺完整原上下文的旧扩展档受控拒绝且保留原件，不拿当前包补过去身份。实际C331和改命332依次验收后，本批独占规则**333**／NGSA**106**／VM ABI**759**／WS**7**；号码若被占须重新裁决，不自动顺延，不提前将不完整C接入。format1／API1及C既定schema3默认／4非默认保持；若须新增包字段／schema另报。完整版本拒绝／原档原锁保全、12类场景、各端真实执行及独立复审不可豁免；不授权NC10 root／Confirm／Cancel／VM续行放行，不建第二内核／包仓库／指纹。Main仍330／105／758／WS6，批准不表示实施或任何通过。见[原选择及各稿件SHA](../2026-10-31-r05-runtime-contract/user-decision28.json)。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

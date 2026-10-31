@@ -1,0 +1,21 @@
+{
+  "completedUtc": "2026-10-31T06:33:38.342858+00:00",
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "sourceManifestSha256": "6ebf6c33ec7cffc08b8084629ccdde75d277c62dadf72c37a5cecb6cf8e7cf19",
+  "fullSourceManifestSha256": "4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e",
+  "deltaPatchSha256": "014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092",
+  "actualWasmSha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+  "pending": [],
+  "noStagedFiles": true,
+  "resourcePolicy": {
+    "ownTarget": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/target",
+    "jobs": 2,
+    "incremental": 0,
+    "globalSerializedLock": "/tmp/noname-phase4-heavy-command.lock",
+    "minimumCompletedFreeBytes": 82859446272
+  },
+  "runtime": "BLOCK",
+  "reportPath": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-error-compatibility-repair.md",
+  "reportSha256": "2b285d15edd2a12f8b2bf32ffe002323d9a1322cf0480e399beb48fe1ff49500",
+  "reportLines": 45
+}

@@ -94,6 +94,8 @@ pub enum ChoiceView {
         min: usize,
         max: usize,
         allow_cancel: bool,
+        /// Known native skill producing this exact owner-visible ask.
+        source_skill: Option<&'static str>,
     },
     /// 他人/观战者：仅知道询问的存在、观察者与类型，**不含任何选项**。
     Other {

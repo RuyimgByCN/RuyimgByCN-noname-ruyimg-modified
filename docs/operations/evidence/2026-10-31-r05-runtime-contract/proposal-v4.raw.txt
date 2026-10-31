@@ -1,0 +1,82 @@
+# R05 v4：完整ContentLock与原始包字节恢复接缝（仅设计附件，待具体裁决）
+
+本附件只补v3 review唯一新增P1；[v3规范](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/97d4f9b5-f314-4df4-ad17-a27e4b902fb0/proposals/r05-concrete-runtime-contract-supplement-v3.md)其余契约和不可变191caller附录继续有效，不重设计三技能/helpers。五项v2 finding仅在设计层关闭，三noop和12类场景仍未实现/未验收。
+2026-10-30只读HEAD=`4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`，规则330／Archive105／ABI758／schema3／WS6；本任务不写Main/source/config/API/schema/版本/index/docs，不跑build/tests或新实验。**NC27 source_skill的单独批准不授权本R05恢复增量**；本附件所有新增字段/参数与旧档拒绝策略仍待用户具体裁决，未分配数字。
+路径均相对`N=noname-next`；`B=apps/web-client/src`，`W=crates/engine-native-wasm/src`，`S=apps/game-server/src`，`R=crates/content-runtime/src`，`E=crates/engine-native/src`。完整读v3 review并限定读下列实际接缝，无可调用CodeGraph；不复扫191caller或重审NC27/资源。
+
+## 1. 原始字节与最小字段，只有一条内容身份链
+
+选择**保留并验证原始package.json字节**，不引入JSON规范化契约。content_hash唯一口径为`R/sign.rs:20 content_hash_hex(raw_bytes)`；logic_hash按包语义计算。空格、缩进、CRLF、键顺序或尾换行变动可使content_hash不同，即使解析对象与logic_hash相同。
+沿用服务端现成形状：`FrozenPackage={binding:LockedPackage,package_json:String,assets:Map<relative_path,Vec<u8>>}`；package_json必须是已接受UTF-8原文的无损字符串，重新UTF-8编码逐字节相同；不得parse→stringify后充当原文。资产存原始字节，不能把解析后的cards/characters/pile对象当原资产。
+浏览器NativeSaveSlot/NativeMatchContent候选**只增两个字段**：`canonical_locked_content:ContentLock`与`frozen_packages:FrozenPackage[]`；服务端NativeRoomState已有frozen_packages，只增`canonical_locked_content:ContentLock`。聚合锁与逐包binding互相完整匹配，不再增加hash/版本/原局状态字段。
+浏览器现`contentLock:string[]`是启用包key列表，`lockSeed`是logic指纹拼串，`packsJson`是重序列化载荷；三者都不是Rust ContentLock。保留旧字段作兼容展示/旧档辨识，**不参与新路径身份授权**；新路径不可同时从packsJson另建一套内容，亦不能从当前安装记录给旧档补锁。
+安装记录另增 `InstalledExtensionRecord.nativeFrozenVersions?:Record<version,FrozenPackage>`，使用现有slot/history/生命周期，不建第二包仓库。新安装/导入深层验证后才原子写该项；旧nativeVersions对象串不回填为“原始”。同slot同version字节不同即冲突拒绝并保原记录；新局必须选定一个精确安装副本。
+`ExtensionsView→prepareImport`须在JSON.parse前保存局部`originalPackageJson=input`；候选prepare结果带该原文，`validateFrozenPackage`对同一原文UTF-8字节核身份/hash，成功后写`nativeFrozenVersions[version].package_json=originalPackageJson`。现prepareImport只保canonical=JSON.stringify(payload)，**不保原字节**，不能据旧注释推断有原包。
+文件入口从ArrayBuffer严格UTF-8无损解码并保存原文（不剥BOM/换行、不替换非法字节）；粘贴文本按实际提交UTF-8为原文，不能将textarea重排后的文本冒充原文件。BOM不被包parser接受即拒绝。保留字节/核hash**不等于验签**，本地unsigned标记及既有签名信任policy不变。
+`bundledNativePackages.ts`当前从JSON对象拼manifest+assets再stringify，不可能重建旧原文。新安装候选Vite `package.npack.json?raw`保完整原包文本，资产用原文件ArrayBuffer（可经既有?url分发）保全字节；Rust仍验同一原文与声明资产，旧编译对象不充输入。旧记录缺nativeFrozenVersions按§4重装；upgrade/rollback/activate/save caller同改。
+安装单包用显式`validateFrozenPackage{packageJson,assets}`请求，沿现validator校验原文/资产并返回`FrozenPackage`（含Rust算binding），不在此强求完整依赖集。新增EngineClient.validateFrozenPackage并改ExtensionsView.deepValidate/import回调接返回值，prepareImport/commitImport只写验证返回原文副本；聚合锁在新局prepare产生，JS不复刻blake3。旧validatePackage不充冻结证明。
+
+单个JSON导入无声明资产可用空assets；有声明资产必须一并取得相对路径原字节，否则拒装，不从任意URL/当前全局目录补。这里只补保留/验证，不改签名信任；旧validatePackage保持旧请求/结果形态，不能因旧reader忽略新参数而误验为完整冻结包。
+
+## 2. 唯一规范匹配点与新局锁来源
+
+在已有R锁/校验职责中提炼共享纯函数候选 `verify_locked_content(lock:&ContentLock,copies:&[FrozenPackage])->Result<VerifiedLockedContent,...>`；server冻结校验与W.installed_packs共同调用。只复用现有content_hash/ContentPackage.validate/资产hash/依赖排序，不另定义锁算法或R05 registry。
+该匹配点按顺序核：①缺省/重复slot及字段类型拒绝；②`ContentLock::from_packages(lock.packages.clone())==lock`，原输入不是规范顺序也拒；③copy.bindings与lock.packages逐slot**全集相等**、不缺/不多；④hash原package_json.as_bytes并核binding.content_hash；⑤parse完整ContentPackage、validate/ABI，核namespace/package_id/version/logic_hash；⑥依赖版本/logic_hash与全集；⑦资产路径安全、声明集合和每份source_hash严格核对，未声明额外资产拒绝。
+Validated结果只能由上述匹配点构造，持原锁/copies与依赖排序解析包；bridge不接未经验证替身。JS旧摘要检查可提前报错但不代此点。撤销仍在宿主原policy边界核slot/content_hash；无AssetManifest却提供资产不绕过声明验证。原byte hash在解析前核，不能先重序列化再hash。
+**新局唯一采集时刻**：安装副本被选择后、Engine初始化/RNG前，Rust从选定copies验证出LockedPackage，调用现有`ContentLock::from_packages`生成本局原锁，再经过上述verify；将其结果与copies冻结进会话。标准局用`ContentLock::empty()`，不是空字符串lock_hash。
+浏览器通过拟议Worker/IPC请求`prepareLockedContent{frozenPackagesJson}`调用共享Rust冻结入口，得到`{canonical_locked_content,frozen_packages}`；`prepareNativeMatchContent`改为await该结果，不从对象重算锁，BattleView只在start成功后存入matchContent。返回的copies原字节不变；start时再次核验避免异步间改包。
+服务器只冻结本局选定slot及完整依赖闭包；可从当前安装锁取得对应LockedPackage，再`freeze_binding`读取并验证那些slot/version/bytes/assets。不要把current_lock中的无关启用包加入原局，也不能多次按package_id读取时悄悄换新版本；前后不符就失败，原局集合一经建立不再查active。
+
+## 3. 实际接缝→拟议参数及持久化流（均未实现）
+
+| 实际源码接缝 | 新局采集／保存字段 | 恢复与校验的确定流向 |
+|---|---|---|
+| B/extensionStore.ts:179/200/231；bundledNativePackages.ts:211 | 原文+原资产→逐包验证→nativeFrozenVersions[version]；旧nativeVersions不冒原字节 | install/import/upgrade/rollback/activate及ExtensionsView所有caller读选定冻结项；同版白空格变体也不覆盖 |
+| B/nativeMatchContent.ts:19/42/60；BattleView.vue:246/297/319 | active key仅用于选副本；prepareLockedContent取得原锁/copies；NativeSaveSlot以两个新增字段随hex原子保存 | restoreNativeMatchContent只读slot内两字段，现安装集仅做原撤销policy检查；不再snapshot(JSON.parse(save.packsJson))生成替身锁 |
+| B/types/engine.ts、client.ts:start/restoreHex、engine.native.worker.ts:64/94、worker/nativeBackend.ts:961 | 新显式请求`startLocked{players,seed,observer,mode,lockedContentJson}`／`restoreLocked{hex,lockedContentJson}`，字符串编码两个context字段；NativeSession存Verified上下文 | `new_with_locked_content_json(players,seed,ctx)`及identity同形；`restore_hex_with_locked_content_json(hex,ctx)`先候选成功才交换，保持规划设置；旧reader不识别新type即拒，不能忽略字段降旧入口 |
+| W/lib.rs／session.rs:30/656/710／installed_packs.rs:27 | 新参数进入共享Rust匹配点；bridge只用已验证package与asset bytes；pack身份沿v3完整锁链 | 原installed_pack的`item.to_string()` digest不再充当该路径原包身份；旧packs_from_json仅旧入口，不能给新锁路径降级；NativeSession导出只读`locked_content_json()`保存原context |
+| DesktopEngineTransport→native_engine_host.rs:Request Start/Restore、dispatch:230/311 | 同一个新WorkerRequest经现有native_engine_request IPC，Rust Request显式增startLocked/restoreLocked/saveLocked/prepareLockedContent/validateFrozenPackage，不新建队列 | 有界大小检查纳入context/资产总量；Desktop/Worker同NativeSession入口，候选和live恢复传同context；未知新type拒绝，无packsJson兜底 |
+| S/native.rs:179/212、native/frozen.rs:11/119/189、room_native_actor.rs:833 | load_scoped/选定binding→现FrozenNativePackage原文+assets→生成聚合原锁；new_with_packs/set_frozen_packages须改为同时传Verified上下文 | 现freeze_binding按原slot读版本，hash一致才refreeze；load_room_packages收expected ContentLock并走共享verify，不把“按pack_refs重载成功”当完整匹配 |
+| S/room_native.rs:34/172/363/391、lobby.rs:133、room_native_actor.rs:143 | NativeRoomState新增canonical_locked_content，与既有frozen_packages/snapshot_hex同一耐久写入；pack_refs只留可核对旧索引 | lobby/restore_room_from_disk统一用state两字段→verify→packs/context→from_saved；去掉只传load_pack(ref)的旁路，不能从任意当前packs接恢复 |
+| S/room_native/wal.rs:160/211/224 | 不向每条WAL复制锁或资产；WAL始终属于持有原context的该NativeRoomState/session | recover(packs,verified_content)→恢复base_snapshot→按原命令回放；validate_wal/recover_wal及最终再次Engine::restore都传同context；compact_wal仅换base，不改锁/copies |
+| E/engine/snapshot.rs:45/60；Catalog/ExtensionPack身份链 | 延用v3已选共享provenance接缝，Engine接`VerifiedLockedContent`所证明的精确包集合/锁identity，内核不解析JSON或读store | restore_with_extensions(snapshot,packs,verified_content)构目录并核packs provenance==verified集合，再既有ruleset/ownership/Resolution校验；engine标准restore只允许标准Catalog，无新core.r05_hash |
+WS客户端不发送可信锁以替换服务器会话：WS建房由服务端选择/冻结，断线恢复/Recover使用服务器原context；现ObserverSnapshot/命令无需携原包字节。服务端HTTP `/native/matches`、restore请求及save_fresh_match/restore_match也必须返回/接收同两个信封字段，不再仅packages id+archive_hex按当前安装重载；这是同一恢复旁路修复，不另立功能。
+新保存用显式`saveLocked`请求，返回同一NativeSession的`{hex,canonical_locked_content,frozen_packages}`；BattleView.saveMatch只把该原子快照填NativeSaveSlot，matchContent为UI缓存须与返回锁一致，不能用当前安装集拼信封。旧save只返回hex，不能自动包装为新扩展存档；NativeSession getter必须返回建局/恢复时保留的原context而非重建包对象。
+FrozenNativePackage现server私有；只将该现有形状与纯字节匹配逻辑下移已有R职责供W/server复用，文件系统/撤销留adapter，kernel不依赖PackageStore。新API的请求type、字段与大小边界须严格验证；原档/原锁保存不重写，新增API/依赖/公开兼容均待审。
+资产锁：binding.content_hash锁原package JSON；包内asset_manifest/asset_paths与asset_hash/logic_hash锁声明，copies.assets必须逐项匹配原声明。安装被升级/停用/卸载后仍从保存的copies恢复；缺少/损坏资产不退回最新同名文件，不能仅验cards/characters/pile三项而漏其他声明资产。
+
+## 4. 精确空值／旧新context政策表（候选，未授权拒旧档）
+
+以下是信封**字段形状的精确JSON示意**；`"<L0>"`代表Rust `ContentLock::empty().lock_hash`真实非空值，`"<L>"`/`"<P>"`代表经验证的非空锁/冻结包，非可直接使用的测试hash。缺字段、null、空对象、合法空集合必须区别，解析不得`unwrap_or([])`抹平。
+| 保存字段JSON | 拟议处理（仍先过Archive/规则门） |
+|---|---|
+| `{}` | 仅可作为legacy标准候选：旧contentLock/pack_refs为空、packsJson缺或精确解析[]，snapshot必须真标准Catalog；有任意扩展证据则拒缺上下文，不生成原锁冒充 |
+| `{"lockedContentJson":""}`、`{"lockedContentJson":"null"}` 或 `{"lockedContentJson":"{}"}`（新transport请求） | startLocked/restoreLocked拒空字符串、null对象或缺字段对象；不转标准，不退旧入口 |
+| `{"canonical_locked_content":null,"frozen_packages":null}` 或 `{"canonical_locked_content":{},"frozen_packages":[]}` | 新字段已出现但无效，拒绝；不能按缺字段legacy分支接受 |
+| `{"canonical_locked_content":{"packages":[],"lock_hash":"<L0>"},"frozen_packages":[]}` | 新标准局合法空context；Rust重算L0核对，Engine只走标准Catalog |
+| `{"canonical_locked_content":{"packages":[],"lock_hash":""},"frozen_packages":[]}` | 拒错误empty hash；空数组不是允许空hash |
+| `{"canonical_locked_content":"<L>","frozen_packages":["<P>"]}` | 类型错误，拒；ContentLock须为完整对象，frozen元素须为对象，不能传旧string[] |
+| `{"contentLock":["ns/pkg"],"lockSeed":"old","packsJson":"[...]"}` | legacy扩展缺原锁/原字节，拒绝候选并保留原档；不得用该对象串/当前副本补出过去content_hash |
+| `{"canonical_locked_content":{"packages":["<LockedPackage>"],"lock_hash":"<L>"},"frozen_packages":[]}` | 无论hash看似正确都因copy缺失或元素类型拒绝；任一新字段缺失亦拒 |
+合法非空形状是`canonical_locked_content`原生ContentLock对象及`frozen_packages:[{binding:{namespace,package_id,version,logic_hash,content_hash},package_json,assets}]`的类型化值；`assets:{}`只在原包确无声明资产时接受，不能以`{}`跳过验证。
+现server旧精确pack_refs可经freeze_reference补原副本，这是源码已有policy；本新路径**不默许迁移**。如要兼容缺聚合锁但有旧精确binding的记录，另行批准仅按那些原binding/refrozen bytes/资产验证的迁移，不从当前active或package_id选择替代；失败保留落盘记录与房号。
+旧InstalledExtensionRecord只有nativeVersions或纯对象而无nativeFrozenVersions，不能声称已留原字节：新局提示重装原产物；从原保存档缺context恢复同样不能用重装变新hash救旧局。新信封/IPC/HTTP字段、strict unknown/type处理与legacy拒绝均需单独审批，不并入NC27。
+
+## 5. 未运行的严格匹配验收计划及边界
+
+1. 同包对象两份原文仅空白/CRLF不同：logic_hash相同、content_hash不同；分别构各自原锁可新建局，交叉恢复必须拒；parse/stringify不能让它们相等，同版安装不覆盖。
+2. 标准缺context的legacy候选、新合法空锁、null、{}、空hash、单字段缺失、无manifest旧cards载荷逐项验；扩展档不能伪装标准，拒绝后原hex/锁/旧句柄不变。
+3. 改namespace/slot/version/logic_hash/content_hash/lock_hash、重复/缺多包、换顺序不规范锁、依赖不完整或同名跨namespace逐项拒；校验必须发生在Engine初始化/RNG之前。
+4. 原assets全部同字节恢复；缺/多/改一byte、声明路径越界或symlink回读/错误source_hash拒；保存后卸载/升级不影响原副本，撤销继续依原slot/content_hash拒。
+5. Browser保存→Worker/WASM与Desktop IPC恢复逐字段同对象/选择/RNG；修改packsJson而新context没改不得改变引擎（新路径只用context），缺context不得走原packsJson兜底。
+6. Server冻结→耐久存档→lobby/from_saved/restore_room_from_disk、WS Recover、WAL base回放及最终再restore均传同context；任一旁路用当前包替换、WAL原包不符拒且原文件/房号保留。
+7. 安装文件与粘贴、内置raw分发、历史version回退、freeze时读取竞态、坏UTF-8/BOM不剥离、总大小限制、prepare成功后start前更换context的受控失败全部纳入定向caller测试；不新增性能/全包实验。
+这些只补原12类中身份/恢复覆盖，不表示已新增测试或任何通过。v3的规则/ABI/Archive/投影/191异步迁移、实际331→实际332前置与单独申请R05增量保持；原局精确字节恢复不能由NC27 source_skill授权推导。
+
+## 6. 源定位与保全身份
+
+实读B/extensionStore.ts:179–252/413–443、nativeMatchContent.ts:19–80、bundledNativePackages.ts:1/211、BattleView.vue:246/297/319、ExtensionsView.vue:80/97；W/installed_packs.rs:27/136（to_string digest）、session.rs:30/710；desktop native_engine_host.rs:119/311；S/native/frozen.rs:11/38/119/189、native.rs:179/212/549、room_native.rs:34/391、wal.rs:160/211/224、lobby.rs:133、actor:143/833；R/sign.rs:20/store.rs:224/281/691；E/engine/snapshot.rs:45/60。
+SHA256：B/extensionStore.ts=`da4a2375f6209deaaa43e14c8ade539705c2f1ce6f6a4d4d06e39d7482948b5f`；nativeMatchContent.ts=`3a7896f7213f1f6298000f9d45386b59c6b9c1cec4299f9d374226017284043f`；W/installed_packs.rs=`f0b8db5c28f55f3da83f047e06dc4767abcb62704937e392a54826ceee4d4eba`。
+SHA256：S/native/frozen.rs=`fa9f8fb6074509478bdb4b9f00302dc81fd65bbe2b6d74853cc4e5f71d1f5847`；wal.rs=`3c28a61b008c75a79a4a3a7f111ee2453c45c5a0e8e88e1ae463875f0325cf6e`；R/sign.rs=`b850221ee1f32002db66b223966bb84a4c3e0494cb611ab06603039724f66ef5`。
+v3 SHA256=`58b3e1a05c8d4dbe4cd92a0f89b5104daab1334bbcef26a54a854218106bce3f`；v3 review=`e09f4f1ee5453a75d8e3b28ef5eed1768212618a400383f44802237830531672`。只读保留v1–v3与全部reviews；只产本私有附件，不分配版本、不写已实现状态。
+未做build/tests/解析实验/资源或全repo扫描；剩余风险是新安装记录、保存信封、NativeSession/IPC/HTTP/WAL/Engine参数尚未批准或实现。此为一个恢复身份链补件，交独立review，不宣R05完成。

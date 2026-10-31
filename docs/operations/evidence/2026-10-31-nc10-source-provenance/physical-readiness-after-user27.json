@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-31T05:20:56.541540+00:00",
+  "android_authorized_devices": 0,
+  "physical_iphone_unavailable": null,
+  "private_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-after-user27-xcpxadww",
+  "qualification": "After userdecision27 read-only readiness; raw device IDs/names stayprivate; no install/signing/input/TCC/settings changes or qualification claim",
+  "physical_iphone_readiness": "unknown: devicectl list timed out18s, no JSON result",
+  "parser_note": "Initial false only meant no unavailable literal in empty stdout; corrected to unknown, never infer available from missing output"
+}

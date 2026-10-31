@@ -1,0 +1,41 @@
+[
+  {
+    "name": "links",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_local_links.py",
+      "--all"
+    ],
+    "exit": 0,
+    "seconds": 0.694243167003151,
+    "stdout_sha256": "c5a601efb33bafe45da4f0433ec29fc4235c068bcc2b43aec4495a65b73eed56",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "name": "strict",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check_doc_line_refs.py",
+      "--strict"
+    ],
+    "exit": 0,
+    "seconds": 9.122290250001242,
+    "stdout_sha256": "7b8d26acaa7062c76fcdb1bd828e5d4dfc82fb1e1c5fcae1f016ea8c29a34aaf",
+    "stderr_sha256": "8b7260a262f76dcc6da79ef5cad6e06be69efc52cc48e1b1c311b16de6941a8b"
+  },
+  {
+    "name": "whitespace",
+    "argv": [
+      "git",
+      "--no-optional-locks",
+      "diff",
+      "--check"
+    ],
+    "exit": 0,
+    "seconds": 0.05644370798836462,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

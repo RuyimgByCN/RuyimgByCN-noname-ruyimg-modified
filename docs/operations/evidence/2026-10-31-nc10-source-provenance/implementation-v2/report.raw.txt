@@ -1,0 +1,45 @@
+已实施 decision27 单字段合同，**尚未获得独立实现验收；NC10/runtime 保持 BLOCK**。本报告封存于 2026-10-31T05:56:00.727727+00:00；不启动更多重命令，当前已无 pending command／owned heavy PID。
+
+私有 worktree：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree`。HEAD 精确为 `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`；未 stage／commit／push，未合并 Main、旧 NC runtime 或旧证据树。
+
+20 分钟检查点实际在 **05:16:23 UTC** 封存，早于 04:57:42 开始后的 20 分钟：[checkpoint20 manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/checkpoint20/manifest.json)，含当时 patch、源码 overlay、基线完整树、结果与 blockers。
+最终完整源码为 **43,867 文件、31 个改动文件**：[完整 source](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source)、[逐文件 manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source-manifest.json)、[最小 patch](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/minimal.patch)。
+Manifest SHA256：`48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`。
+Patch SHA256：`46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43`。
+v1 最终 freeze 也保留；v2 只补一行测试事件证据写入以修复 unused-variable 严格检查，生产字节与 v1 相同。
+
+实现边界：
+
+- native Own 派生非空逻辑 `source_skill`；全 catalog 唯一、exact def、现有 owner public-skill 资格、唯一完整 ask 形状、producer 等于原顺序首个深度匹配 consumer；仅直接 OptionalGate inner 链可继承内层自己的来源。
+- VM、未知、歧义、未拥有的 def、错误形状、多个 ask、错误 consumer／深度及 Host 昆仑镜直接同 prompt 为 None；Other 不增字段。Referee、AI 与 owner 使用同一投影。
+- API／NativeSession／WASM／Worker／local／desktop／WS6／network／安全文本 UI 转发；缺失/null 兼容，present 空名／错类型拒绝；保留 deadline、prompt、native_kind、options/token、revision/continuation 等旧字段。
+- legacy producer 为 None；typed capture／两种 typed restore 只复制清 source，输入不变、失败原子性不变。Snapshot 直接 serde／bytes 编码剥离；解码以局部字段流过滤先忽略任意合法 source JSON／重复 source，再调用共享严格 reader，不折叠其它重复键。保留旧 positional 13-field serde 接受域。
+- rules330／archive105／ABI758／WS6、默认 WASM、PA09 admission/lifecycle、调度器、正式 restore 校验、root gate、VM/fuel/算术、目录／内容锁均未改。[范围核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/scope-validation.json)。
+
+已保存的实际 red→green：原 native ask 缺字段的断言 red；naive 共享字段下 typed capture／两种 restore 与 legacy 错值／重复 source 的五项断言 red；最终对应定向测试全绿。编译错误及 VM 夹具迭代失败也保留，未计为功能 red。
+原始命令、完整日志 SHA、退出码、wall 含排队时间见 [command-index](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/command-index.json) 和 [sealed handoff](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/sealed-handoff.json)。
+
+| 冻结源码验证 | 实际结果 |
+|---|---|
+| v2 `cargo test --offline --workspace --no-fail-fast` | **6916 passed／0 failed／77 ignored**，164 suites |
+| native kernel＋content＋engine 全量 | **1715／0／75**，生产与最终 v2 相同；v2 workspace 亦包含最终测试 |
+| v2 native 三层 `cargo check --all-targets`，`RUSTFLAGS=-D warnings` | exit0；前一次 unused-variable 失败保留 |
+| source native／legacy 定向 | native5／0、binding4／0、legacy9／0；真实 VM、Host、两 typed restore、state-only、content/hash/schema/manifest 错误、WASM sink 均覆盖 |
+| 前端完整 tests＋typecheck＋外置 Vite | **179／0**；最终 WASM 字节安装后再跑，exit0 |
+| conformance／native-WASM trajectories／legacy cross-target hashes | conformance19／0，正式 trajectory/package 比较 exit0；4/42、2/1 哈希与 manifest chain／skill-vm 检查通过 |
+| current native＋legacy WASM、owned desktop host／Tauri products | 均自有 target 重建；Worker smoke82／0，正式 host/wasm 轨迹与既有 host 测试通过 |
+| source line＋layering gates、original resource unit tests | source/layer checks通过；resource单测17／0 |
+| original `sync-original-content --verify-only` | **仍失败**，见下述限定；不能称所有 CI gate 通过 |
+
+实物证据：[产品 SHA manifest](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/products-manifest.json) 记录 95 个产物；[physical](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/physical) 保存真实 native ask、WS6 owner／Referee／Other／spectator／重连原始 JSON、Q 反例前后档案与完整输入／事件。
+自有 WKWebView 的当前 WASM Worker→EngineClient→BattleView，及自有当前 Tauri 的 native IPC→BattleView，最终字节各 **4 场景通过**：[Web WK](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/actual-wk-final-report.json)、[Tauri WK](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/actual-tauri-final-report.json)。实际 native 具名提示、真实点击、archive 不变通过；missing/null/恶意名称场景在真实 restore 后注入元数据，只证明 UI 兼容／转义，不冒称自然来源。Tauri 显式选择 native；产品默认仍 WASM。
+
+新增有界 Q 回归实际确认：相同完整初始 PolicyInput、空 pre-events、`source_skill=遗计`，两份 byte restore 均被接受；P-only Confirm 首停 `jiji_target`／owner1，附加合法旧 Q 后首停 `jijie_give_target`／owner0。错误 equality 假设实跑 red，最终精确结果断言 green；未改 scheduler／restore／source 谓词。这是恢复域反例，不声称自然可达，更不是 prefix／root 修复。
+
+未完成 gate 的具体事实：新私有树最初缺 ignored portraits cache；只读 APFS 克隆原资源缓存后，`verifyTree` 的文件清单、大小和内容检查完成，随后 `verifyCatalog` 报 **asset manifest tree summaries mismatch**。该汇总包含 hardlinked/copied；APFS 克隆改变 inode 关系。未重写 manifest、重生成内容或修改上游来绿化；仍须父方独立判定并以正确私有资源准备复核。[原始失败](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.log)。
+
+旧 source63、phase4 21 档、phase3 12 档和不可变 v1/review 哈希核对通过：[保护核验](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/old-evidence-preserved.json)。没有把旧 A329 档升级／在 A330 重放，没有导入旧私有 19 NoCert 测试；上述绿色计数只属于 4dd 基线，**不代表原 19 项修复或豁免**。
+资源与工具链见 [resources](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/resources-toolchains.json)：owned target、jobs2、incremental0、全局 `/tmp/noname-phase4-heavy-command.lock`；每次锁内检查≥3GiB，最低记录仍约73GiB，未清他人产物、未抢锁。全部 runner 现已完成，无待收结果。
+
+下一步是父方独立审阅此具体 patch／T-J-W 证据，并解决资源 gate 环境差异后决定字段验收；不能据本报告发布、合并或解除 runtime BLOCK。
+未做 Confirm-prefix／Cancel-tail／VM 续行放行、全质量矩阵或广泛上游规则等价证明；独立验收与原 19 NoCert 风险继续保留。

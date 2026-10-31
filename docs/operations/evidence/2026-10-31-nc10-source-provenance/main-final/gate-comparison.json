@@ -1,0 +1,30 @@
+{
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "tracked_status": true,
+    "admission31": true,
+    "admission_mismatches": true,
+    "input_hashes": true,
+    "guard": true,
+    "attribute_sha256": true,
+    "root_gates": true,
+    "docs_dirty": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "pa09_admission_sha256": true
+  },
+  "docs_and_packages": {
+    "docs_markdown": true,
+    "package_git_trees": true,
+    "package_tracked_diff_sha256": true,
+    "package_status": true,
+    "main_target": true
+  },
+  "all_equal": true,
+  "docs_markdown_count": 1927
+}

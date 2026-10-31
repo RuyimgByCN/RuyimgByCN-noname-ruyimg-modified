@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-nc27-main-final-audit.py", line 51, in <module>
+    warn=sum(bool(re.match(r'^warning(?:\[[^\]]+\])?:',x)) for x in (E/'workspace.stderr.log').read_text().splitlines());assert warn==727,warn
+AssertionError: 782

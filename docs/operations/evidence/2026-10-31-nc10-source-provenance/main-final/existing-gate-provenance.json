@@ -1,0 +1,9 @@
+{
+  "legacy_sink_original": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/legacy-wasm-sink-smoke.mjs",
+  "legacy_sink_original_sha256": "1371a9be01fc955e20c0bb5e87aa0933a21113c74491c014dc0356dcbbfeb86a",
+  "legacy_sink_change": "Only pkg path; relative own output changes naturally by script location",
+  "legacy_cross_original": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/cross-target-current.py",
+  "legacy_cross_original_sha256": "18849cd6ed09c030dff2dd842349ea9cc0e3ba105a926ac7bcaa91334f75b4e8",
+  "legacy_cross_change": "Only output JSON path",
+  "exact_replacements_verified": true
+}

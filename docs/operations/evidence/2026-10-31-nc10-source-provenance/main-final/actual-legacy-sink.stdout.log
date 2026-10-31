@@ -1,0 +1,2 @@
+{"passed":true,"steps":120,"pendingChoicesObserved":33,"wasmRuntime":true,"scope":"real generated WASM pendingChoiceJson and envelopes; typed poisoned restore covered by native-target sink test, not exposed in this JS API"}
+{"command": ["node", "/tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs"], "exit": 0, "locked_seconds": 0.17593204096192494, "disk_free_bytes": 47810342912}

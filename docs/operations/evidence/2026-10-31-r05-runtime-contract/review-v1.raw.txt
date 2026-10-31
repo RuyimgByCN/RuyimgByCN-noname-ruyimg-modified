@@ -1,0 +1,70 @@
+## Review
+
+- **设计结论：Revise。**三具名 compound 可以沿用 J2 提交泵，但方案尚未证明是最小完整改动；Draw 调用迁移、标记身份解析、源角色死亡语义和兼容承诺仍有阻断。
+- **Correct：**已完整读取指定 proposal。其 `a1f+compat14` 是历史读取基线，不作为当前错误；当前 Main 按任务给定为 `777bf339`，Rust 仍 `330/105/758/WS6`。
+- **Fixed：**无。本次只读 source/design 审查，未修改文件、运行实验或分配版本。
+- **Merge verdict：BLOCK，仅针对该 proposal 作为实施审批定稿。**三份 noop 仍必须完成，以下修订不改变 R05 范围。
+
+审查对象 [P：r05-concrete-runtime-contract-supplement.md](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/1bf3bfca-611c-4706-a7c0-561691ae1f4d/proposals/r05-concrete-runtime-contract-supplement.md)。下文 `N=/Users/ruyimg/Documents/Claude/sanguosha/noname-next`，`K=N/crates/engine-native-kernel/src`，`C=N/crates/engine-native-content/src`；`U=/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core`。
+
+**核实成立的 source/design 部分**
+
+| 项目 | 本次核实结果 |
+|---|---|
+| Source 在 End 前 | `U/noname/library/element/content.ts:12223` 显式触发 `damageSource`，content 完成后才由 `gameEvent.ts:279` 自动发 End；P:41 的顺序纠正成立。 |
+| 护甲全吸收仍可触发避祸 | 上游 Damage 的 num 与 HP 减少量分开，护甲在 `content.ts:12332` 的 changeHp 中抵扣；不能用当前 native `damage.rs:280` 的零 HP 损失提前返回或 `vm_damage_receipt` 代替资格。 |
+| 回合／摸牌终止与消费 | `content.ts:4742` BeforeStart 在翻面检测前，Begin/准备在其后；`gameEvent.ts:247` 区分 Skipped、Cancelled、Omitted、End/After。宝梳只在非 fixed Begin2 消费，之后再取消不返还；避祸 current 在额外有效摸牌阶段重复应用，均符合指定技能源码。 |
+| 全局到期、死亡 next 保留 | `gameEvent.ts:580` 在收集技能前处理到期；`content.ts:12557` 普通死亡 unmark、移除临时技，未统一移除所有非临时技能。宝梳 onunmark 清理、避祸 next 没有同款清理，P:38 的区别成立。 |
+| 已开始的 async 内容 | `AsyncCompiler.ts:15` 委托单个 array 内容，`ArrayCompiler.ts:31` 只在调用该函数前检查；不在每个 await 后重查 owner。涕泣 chooseControl 的 `forceDie=true` 由 `player.js:6928` 确认。不能直接套平寇每步 owner.alive 门槛。 |
+| signed/零条目基础载体 | `K/archive/auxiliary.rs:63,122` 编解码 i32 并保留零，`engine-native/src/engine/hash.rs:33` 编入条目数及值；`VmAux::clear_turn` 不清 marks。现有恢复校验未见“零即删除”归一化；这只支持载体，不提供 helper 一致性验证。 |
+
+**Finding：P1，兼容承诺与当前严格版本门冲突（P:11、59、92）。**
+
+`engine-native/src/engine/snapshot.rs:60` 要求 snapshot 规则版本等于重建 Catalog 版本；`K/archive.rs:180` 只接受当前格式。包锁不能让新 native 同时恢复旧规则330，保留旧 alias 也不能保留旧 dispatcher 行为。
+最小修订：明确本批候选采用“新 reader 对不匹配规则／格式受控拒绝，保留原档和锁、不覆盖数据；旧外部 reader／制品仅按既有保留与安全退出政策留证”。若要迁移或继续产品运行旧局，另列准确输入版本、转换与退出条件待批，不能默认承诺并行旧 native，更不要求复活 engine-core。
+`phase_begin→Judge` 可作为明确的过渡兼容入口，但不能据此宣称旧规则恢复，也不能把37来源中错误 alias 永久登记为差异；后续仍须迁移到对应真实时机。
+
+**Finding：P1，Draw 异步迁移范围与接口尚未闭合（P:16、22–27、影响表②）。**
+
+已限定检索 native kernel/content/engine 三处 src 的全部 `.draw_cards(...)` 实际调用。所见调用均丢弃返回的 `Vec<CardId>`，未发现直接使用返回值的调用方；但大量调用方依赖“调用结束时牌已入手／牌库已改变”，因此改返回类型不是主要问题。
+具体反例：`C/content/host/step/xianjian_card_use.rs:110` 摸2后立即克隆手牌开选择；`step/mtg.rs:617` 摸2后立即生成弃牌选项；`step/yunchou.rs:293` 摸2后立即弃牌；`K/kernel/phase/draw.rs:165` 摸1后立即取手牌置顶；`K/kernel/tricks.rs:18` 摸牌后立即弃置锦囊本体。多目标循环及相邻两次 draw 也依赖顺序。
+因此不能只迁主阶段补摸 caller，或同步发牌后补一个 phantom Draw parent。所有可能在 D 祖先下执行的普通 draw——standard/Host、VM DrawCards、J2 compound、伤害／濒死／死亡／卡牌机器——都需要真实 Draw→gain→子结算完成的边界；仅凭 `turn.phase==Draw` 无法筛选。
+最小补件是一张限定 caller 分类表：哪些只需发 Draw 后返回、哪些拆出“摸后选／弃／移牌／下一目标”续行，哪些确证不可能位于 D 下；同时写明新异步入口的返回承诺，以及旧同步 API 的合法使用范围。不得保留其同步签名却改成排队语义。
+`K/machine.rs:369` 当前先移牌后发 CardsDrawn，`K/kernel.rs:37` 明确该事件不是 gain 提交。P 必须指定抽出而未获牌的唯一持有者、过滤／防获得／取消时去向、等待中的 cards/step 保存位置，以及洗牌 RNG、Fault/abort 的回滚边界。`K/snap/ownership.rs:25` 当前不把 Frame.cards 当实体持牌；仅写 player/request 的新 Draw 载荷不足以证明中途归档合法。
+
+**Finding：P1，来源先死后的避祸资格写错（P:41，验收8）。**
+
+[上游 player.damage():8990](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js:8990) 安装的 `filterStop` 会执行 `if (this.source && this.source.isDead()) delete this.source`；`gameEvent.ts:494` 每次 trigger 会调用它。因此“source 死了引用仍保留，可供存活 victim 的 End filter”与实际源相反。
+最小修订：在 Source/End 各窗前遵守这项来源清理；若 Source 窗子结算使 source 死亡，后续 End 的 `dcbihuo.filter` 也可能因 source 已被删除而不成立。不能只检查当前技能 owner，也不能用不可变“原始来源”恢复资格。
+同一 filterStop 在 num≤0 时触发 damageZero、finish 并置 `_triggered=null`，支持通常零伤害不进两后窗；`notrigger` 另有构造及 content 门控。成功 receipt 与窗口资格必须分开定义，不能由 `Some(n)` 单独授权两窗。
+native `damage.rs:250` 后还有伤害修正；“最终事件 num”与护甲吸收量目前混在局部 amount 流程中。需列出认证写点、取消／转失血／零／吸收分支的决策表，不能仅称“统一认证”而不说明哪些共享伤害路径必须整理。
+
+**Finding：P1，helper/mark 定义与依赖解析被当成现有能力（P:31–32、55–57）。**
+
+`content-schema/src/package.rs:709` 的完整 ContentPackage 没有 mark 声明表；`:265` 的 PackageSkillEntry 也没有 helper role／expiry／onremove 元数据。PackageStore 的包依赖与逻辑哈希校验存在，但不会解析一个未定义的“mark 定义”。P 中“锁必须含匹配 helper/mark 定义”目前没有落点。
+loader `lib.rs:302,420` 只桥接现有 trigger/active 与受限 modifier；无 trigger 的 tiqi_effect 也不会因为写进 skill_index 就成为带 hand-limit/onremove 行为的可授予技能。
+最小修订：选定并写明一个封闭方案——由 loader/Catalog 内固定 R05 角色表识别已验证的声明与同包 helper，或提出具体 schema 角色字段及其引用验证。必须给出 declaring package、逻辑 skill、helper role、稳定 mark key 的映射、冲突拒绝和哈希覆盖；“优先无字段”还不能提交审批。
+第三方调用三个 compound 可复用 `K/rvm_bridge.rs:969` 的 J2 owner/skill 自绑定，但这不验证包归属、helper 角色、准确窗口或 mark 所有权。公开调用身份与固定同名 helper 之间怎样匹配，仍需准确写定。
+
+**Finding：P1，零存在及 onremove 的完整边界尚未受保护（P:30–38）。**
+
+`K/rvm_ops.rs:342` AddMark 相加为零即删除，`:357` RemoveMark 的 amount0／结果≤0会删除；`:91` 接收层只验 player，没有 reserved-mark 授权。任意现有 AddMark/RemoveMark 若碰到新全局裸 ID，就能破坏 next/current 的零存在和 helper 一致性。
+最小修订：四槽由经验证的 R05 内容操作独占写入；旧通用效果及带 mark 参数的 compound 对这些保留槽采用明确拒绝／受限授权。数值为零时 helper 可存在；死亡 next 保留、禁用保值、显式移除删值须分别验证，不能用 `MarkCount==0` 判断缺失。
+当前 `RemoveSkill` 在 `rvm_ops.rs:417` 按 def 跨 owner retain，临时到期在 `machine.rs:725` 仅禁用，死亡／替补在 `kernel/death.rs:98,147` 直接 remove。不能把这些直接当 owner-scoped onremove。补一张四 helper 的删除入口表及限定回调接入范围即可，无需通用生命周期框架；reserveDead/excludeMark 所依赖的真实模式信息也须标明来源，未有实现的分支不得写成已支持。
+
+**Finding：P1，窗口授权与流程机器绑定还缺可审核的类型关系（P:16、49–52、验收11）。**
+
+现有 J2 `pump_commit` 复用可行，但 `C/content/hooks.rs` 的提交回调没有权威 Slot 入参，`Ctx::current_frame_id`（`K/machine.rs:219`）仍按栈找帧；`snap/validation.rs:462` 只验证 slot 引用存在，未验证业务类型与根引用。
+需明确：三 compound 只能从匹配声明的 `Trigger(window)` 启动，window 必须引用仍在场的正确 D／Damage；DrawPhaseMachine／DrawMachine 则可以合法占用其自身根的 `Intrinsic`。禁止的是拿 Intrinsic/NO_FRAME 冒充技能触发授权，不能把 C331 cancelDeath 的限制全盘套到新 Draw 流程。
+补充有限绑定矩阵、保存字段与恢复拒绝条件：slot/frame/window/root/player/declared role/continuation step 的对应关系；处理某个 root 时不得再次从 stack.last 猜权威。C331 私有133仍属候选；本次不沿用旧快照“slot P1 尚未修”的状态，也不宣称其90来源已验收。
+
+**Finding：P1，公开投影与新增布局尚不足以具体审批（P:55、59–61、待裁决C/D）。**
+
+P 正确指出现有 PlayerCellView 缺 linked/marks，但还没有给出最终字段契约。最小可审核候选是每座位 `linked:bool`，及四个固定语义槽的 `Option<i32>`（None=不存在、Some(0)=存在零）；梳限定正常正数，其他槽可有符号。涕泣选择另需明确 target 与差值 d 的受过滤选择上下文；无需因本批 UI 直接公开 D.pending 或全部 VmAux。
+必须写定这些值对座位／观战／Referee/AI 的可见性、死亡 next 保留时的展示，以及 native/Worker/server 序列化位置；不得读取 debug 私有状态。默认 Opaque 与公开 prompt leaf 只是临时保守隔离，不是 NC10 完成。
+D/Draw/窗口、Damage receipt 与新续行状态的 codec/hash/恢复影响确实需要另批；当前只是字段草案，尚缺 Draw 持牌状态和上述绑定布局。规则、ABI、Archive、schema、WS 均未分配，已批准331+332不覆盖本批；不得据本 review 自动选新版本或批准拒105／迁移105。
+
+最小补交内容就是上述七项的具体修订：统一兼容政策、完整限定 Draw caller/持牌续行表、修正来源死亡决策表、落定角色/mark解析与写权限、四 helper 删除矩阵、窗口绑定矩阵、公开字段及持久布局清单。完成后可审具体增量，无需再问“是否做 R05”，也无需扩成全框架。
+
+未运行 build/tests、12类场景、旧审计命令或私有 C331 验收；未重审资源CI、全包或37来源总体。
+风险：当前 proposal 含一处明确上游语义错误及数项未闭合契约，不能据三 compound 命名或历史绿灯认定最小、可实现或等价。

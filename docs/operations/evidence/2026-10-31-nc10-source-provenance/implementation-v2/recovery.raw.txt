@@ -1,0 +1,44 @@
+本轮仅完成**恢复封存**，未新增产品源码、fixtures、测试、构建、npm/Cargo/WASM/GUI/sync 或清理动作。原 run 的 60 分钟 **TIMEOUT 是 orchestration 结果**，不等于产品测试失败，也不构成实现完成或验收通过。NC10/runtime 继续 **BLOCK**。
+
+恢复核验／封存：2026-10-31T06:01:03.188982+00:00。权威恢复包为 [checkpoint.json](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/checkpoint.json)，以下结果均来自保留记录，未重跑。
+
+- 精确 private ROOT：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6`；worktree：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree`；owned target：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/target`。
+- 当前私有 HEAD／要求 base 均为 `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`。
+- 必须的 **20 分钟检查点已找到**：原 `/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/checkpoint20/manifest.json`，实际封存 **05:16:23.341102 UTC**，距 04:57:42.364929 开始约18分41秒。恢复包有[独立副本](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/checkpoint20/manifest.json)、当时源码 overlay／patch／树文件／SHA256SUMS；这证明文件当时已保存，不证明父会话当时已收到通知。
+- 该早期 patch SHA256：`21b29b0eaccfe382bee9768f89df25810a69296a960543bd1f7e5d7232d72634`。
+- 最终完整 source freeze：`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source`，共 **43,867 文件**，05:47:13 UTC 封存；[完整 manifest 副本](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/source-manifest.json)，SHA256 `48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`。
+- [最终最小 patch](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/source.patch)，SHA256 `46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43`；[base完整树](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/base-tree.txt)、[31文件当前源码 overlay](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/source-overlay.tar.gz)、[只读 status](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/status.txt) 已保存。
+- 31 个当前改动文件均与既有最终 freeze 的 SHA 一致。恢复期间未写 index；私有 index 只读检查前后 SHA 相同，暂存区为空。未 stage／commit／push，未触碰 Main、旧329运行树或其他写者 target／lock。
+
+保留候选实现覆盖 Own `source_skill`、catalog 唯一／owner公开资格／exact producer=first-depth consumer、直接 OptionalGate inner 来源、未知None／Other generic、API/Worker/IPC/WS6/UI转发，以及 legacy typed capture／两 restore／serde/bytes 的单字段剥离和严格 wire 分离。**本恢复未对其重新做实现审查；仍是待独立验收的候选。**
+
+[58条实际命令及退出码](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/commands.json)、[原始结果JSON副本](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/command-results)、[全部失败分类与日志引用](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/failed-results.json) 已封存。日志均保留在原 evidence，恢复包记录各日志 SHA。
+
+| 保留的实际验证 | 保留结果／适用范围 |
+|---|---|
+| v2 workspace 全量 | exit0；6916 passed／0 failed／77 ignored，164 suites |
+| native kernel＋content＋engine 全量 | exit0；1715／0／75，v2前的生产相同；v2 workspace包含最终测试 |
+| v2 strict native 三层 all-target | exit0，`RUSTFLAGS=-D warnings`；早先 unused-variable 失败仍保留 |
+| v2前端完整 tests/typecheck/外置Vite | exit0；179／0；最终 WASM 产物安装后执行 |
+| native＋legacy WASM 构建／正式 native-WASM trajectory/package 比较 | retained exit0；未在恢复期间构建或执行 |
+| legacy cross-target／conformance | retained exit0；conformance19／0及两组哈希／chain／skill-vm |
+| source 定向矩阵 | native5／0、binding4／0、legacy9／0；对应 typed/JSON/wire、manifest/schema/hash/content 错误与WASM sink |
+| 实际 WS6／desktop host／Worker | retained exit0；原始角色／重连 JSON，host 测试及 Worker82／0留存 |
+| 自有 Web WK／Tauri native IPC WK | retained各4场景通过；missing/null/恶意名称为真实restore后的UI注入案例，非自然来源证明 |
+| source-line/layering／资源单测 | 保留通过；资源单测17／0 |
+| 原资源 sync gate | **仍失败**：最初缺 ignored portraits；克隆缓存后仍报 `asset manifest tree summaries mismatch`，exit1 |
+
+资源失败的精确原日志为 [v2-original-sync-verify.log](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.log)。原代码的该汇总包含 hardlinked/copied；APFS 克隆 inode 关系可能解释差异，**尚未验证此因果或修复**。不得把它改记为全门禁通过；本恢复未改 manifest／cache／内容，也未启动 sync。
+
+已有功能 red：native 缺字段、naive 共享字段导致 typed capture／两 typed restore 与早期 JSON 忽略失败；后续 green 记录均保留。VM夹具／错误API／DSL／缺包／unused-variable 等开发失败单列，未冒充功能 red。可选 Q 测试已经存在并有 red→green：相同初始来源不能保证相同下一 Pending；恢复没有继续实验或修改它。
+
+保留的 [95产物SHA清单](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/products-manifest.json)、[受保护旧证据记录](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/protected-evidence.json)、[资源工具链](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/resources-toolchains.json) 已复制。此前记录的 source63、phase4 21档、phase3 12档及不可变提案/review哈希核对通过；恢复没有重放／升级旧 A329 档。
+
+当前进程快照见 [processes.json](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/processes.json)：**没有匹配本 ROOT 的进程，没有缺失命令结果文件**。不存在需要本恢复推测退出／取消的 owned heavy PID。全局 `/tmp/noname-phase4-heavy-command.lock` 未被获取、删除或变更；不推断其他写者的持锁状态，不触碰 C331 worker49b、PA09 f82 或其产物。
+
+版本／受保护面：保留规则 **330／archive105／ABI758／WS6**、默认 WASM。原范围记录列出的 scheduler、正式 restore validators、root gate、VM/fuel/算术、packages 与 Cargo.lock 未变；本恢复只复制 artifacts 和读取私有状态。Decision28/R05以及331→332顺序是另一个任务，未开始。
+
+仍缺：资源 sync gate 的独立诊断与正确私有准备；独立实现 acceptance review；未运行/未建立的全质量矩阵、广泛上游规则等价、Confirm-prefix／Cancel-tail／VM续行／root放行。原 **19 NoCert** 未导入当前基线测试，也未豁免；6916等绿色计数不能替代它们。
+
+建议父方直接消费此恢复包，独立审阅候选，并只补未完成的资源 gate／验收工作；**不要重跑已通过项目来补恢复信息**。原45行报告只作历史材料，本路径为本次权威交接。
+未重新验证产品行为或解决资源失败；恢复交接完成不表示单字段已验收，更不解除 runtime BLOCK。

@@ -1,0 +1,23 @@
+{
+  "rustc --version": {
+    "exit": 0,
+    "stdout": "rustc 1.95.0 (59807616e 2026-04-14)\n",
+    "stderr": ""
+  },
+  "cargo --version": {
+    "exit": 0,
+    "stdout": "cargo 1.95.0 (f2d3ce0bd 2026-03-21)\n",
+    "stderr": ""
+  },
+  "node --version": {
+    "exit": 0,
+    "stdout": "v26.4.0\n",
+    "stderr": ""
+  },
+  "pnpm --version": {
+    "exit": 0,
+    "stdout": "10.34.3\n",
+    "stderr": ""
+  },
+  "target_ownership": "New path /tmp/nc27-main-functional-458ed333/cargo-target created exclusively by this worker; no warm target reused; no C/PA/privateNC27 targets touched."
+}

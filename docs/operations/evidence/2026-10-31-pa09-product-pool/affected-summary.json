@@ -1,0 +1,177 @@
+{
+  "suites": [
+    {
+      "target": "Running unittests src/lib.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/desktop_client-975cec7492bdd720)",
+      "status": "ok",
+      "passed": 14,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "Running tests/native_engine_host.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/native_engine_host-109937c2dc44f97d)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/native_planner_measurement.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/native_planner_measurement-285fd9b9a4c6d321)",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "Running unittests src/lib.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/engine_native_wasm-f74d69f6bdf553ac)",
+      "status": "ok",
+      "passed": 28,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "Running tests/adr0786_j2_cross_target.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/adr0786_j2_cross_target-a09eac7a975e65a4)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/cross_target_multiseat.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/cross_target_multiseat-a4efbaa4147d6dc1)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/cross_target_package.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/cross_target_package-cb2affdfb35cd661)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/events_hash_export.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/events_hash_export-70654798c764b3da)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/gt014_import_validation_parity.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/gt014_import_validation_parity-70e1f21e8b773d35)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/installed_package_payload.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/installed_package_payload-00acd1169d5f7adb)",
+      "status": "ok",
+      "passed": 7,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc03_actor_authorization.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc03_actor_authorization-f6fec3712d34169c)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc03_legal_actions_export.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc03_legal_actions_export-e839e0811725a7a7)",
+      "status": "ok",
+      "passed": 5,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc03_view_projection.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc03_view_projection-8d53d939a061139c)",
+      "status": "ok",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc04_vm_control_flow.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc04_vm_control_flow-34c210873fdc7624)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc05_general_select_export.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc05_general_select_export-07d2dfc6198c5656)",
+      "status": "ok",
+      "passed": 2,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc06_skill_pile_restore.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc06_skill_pile_restore-34e61e8c9ae5cae2)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/nc08_cross_target.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/nc08_cross_target-2e47b6f4c9a39cb6)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/pa09_native_session.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/pa09_native_session-3212784d0f946ad1)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/restore_boundary_handle.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/restore_boundary_handle-3983a771985e1647)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/vm_module_hash.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/vm_module_hash-d9f7e6c82eeaf33c)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/vm_package_integrity.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/vm_package_integrity-f6e29da16592b877)",
+      "status": "ok",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/vm_package_worker.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/vm_package_worker-2cf0f4b08cc42e38)",
+      "status": "ok",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests desktop_client",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native_wasm",
+      "status": "ok",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "totals": {
+    "passed": 97,
+    "failed": 0,
+    "ignored": 3
+  }
+}

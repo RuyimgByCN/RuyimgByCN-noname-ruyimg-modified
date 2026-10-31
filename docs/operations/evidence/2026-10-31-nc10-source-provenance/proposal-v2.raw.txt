@@ -1,0 +1,87 @@
+**NC10 公共确认来源补充 v2：规范增补，待独立复审及用户批准；runtime 仍 BLOCK。** 本稿替换 v1 中 legacy 剥离覆盖范围和 exact producer／consumer 前置的不足，其余保守可见性、命名及传播约束继续适用。本轮仅设计与只读核验，未改 Main／source／字段／schema／协议／版本／gate，未运行 tests、build、network 或新实验。
+
+不可变依据：[v1，完整 114 行](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b15bf199-4584-4c55-af84-dd510fed4b95/proposals/nc10-confirm-public-provenance-supplement.md)，SHA256 `54e54dc2c48e03f07acf5aa3bcf1675fc69899b9c66e9424c979a9053cc1409d`；[独立 review，完整 59 行](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/93a12c7e-e697-4d2c-ae1a-298fa4ed5546/reviews/nc10-confirm-public-provenance-supplement.md)，SHA256 `f29b810a4b597599ee044ff08aef3823252c2f1f618e5e42383317940ce65037`。二者及旧 phase3／phase4 证据均不重写。review 的 legacy P2 在此补齐**设计覆盖**，不标为已实现 Fixed。
+
+基线是 private `977cdf1f…`、329／WS5；Main `777bf339` 为 A330／WS6，已有 `deadline_unix_ms`。本稿将 v1 的“PA3”表述纠正为 **PA09／A330 相关变更**，不改原证据。C331 typedSkill257 不视为 Main 已有能力。本稿不分配新版本，不覆盖 Main 当前 dirty 或其 lease。
+
+保留的字段建议仍为：Own 的 `source_skill: Option<&'static str>`，共享输出 ChoiceRequest 为 `Option<String>`，JSON／TS 为可缺失或 null 的非空逻辑名，None 省略；Other 不增字段，generic prompt／archive KNOWN_PROMPTS 不变。普通已知 native OptionalGate 的 owner 具名提示有 v1 所列上游 get.prompt→chooseBool UI 依据；hidden／invisible、未知 producer、Host 昆仑镜直接询问及 VM 仍不因此获准披露或执行。
+
+源名须来自 exact ask 自己的 `catalog[def].name`；整个公共 catalog 唯一，唯一项仍是同一 def，且满足既有合法 owner 技能投影资格。不能用 first-match、实际 filter／实例集合消歧，不公开 def ordinal、PC、fuel、ancestor 或已验证标志。innerSome 不继承 outer 名字；仅经已有、已证明直接委托的内层路径派生。未知统一 None，不增加未知原因；AI 与人类 Own 使用同一投影，adapter 不另读 private parks。后述消费者绑定也是必要前置。
+
+**一、legacy 的统一规则：只剥新 source_skill，不改变其余字段或接受域。** 定义 L(c) 为 c 的副本，仅将新字段 source_skill 置 None；c 本身不变，c 的其它字段逐项不变，c=None 仍为 None。它不是通用净化器，不删 prompt／native_kind／deadline_unix_ms／timeout／revision／continuation／options 或其它现有元数据，不重排 token，也不改 GameState、manifest、hash、fuel 或模块校验。
+
+只在 JSON 层剥离是不够的。实际 [Engine::snapshot／两种 restore](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-core/src/engine.rs:397) 直接 clone pending_choice；[legacy WASM pendingChoiceJson](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-wasm/src/lib.rs:275) 直接序列化 last_choice。故以下 typed 边界与 JSON 边界必须同时满足，不能互相替代。
+
+| 边界 | 规范要求 |
+|---|---|
+| legacy producer／request_choice | 新字段固定为 None；不从旧 prompt 或存档猜来源。 |
+| `Snapshot::capture`／`capture_with_manifest` | 当前本来产生 pending_choice=None，维持原行为；任何随后附加 legacy choice 的既有捕获路径只附加 L(choice)。 |
+| `Engine::snapshot` | 返回的 snapshot.pending_choice 必须是 L(self.last_choice)，即使 runtime last_choice 被 typed 调用方／测试置为 Some 来源也不能带出；`&self` 捕获不能为清 metadata 修改当前 Engine 或 caller 数据。 |
+| `Engine::restore_snapshot(&Snapshot)` | 保留原 `snap.restore()` 验证及成功／失败处理；成功安装 last_choice 时只安装 L(snap.pending_choice)，不直接信任 clone。失败不安装副本、不提前清当前 Engine，保持原失败原子性。 |
+| `Engine::restore_snapshot_with_manifest` | 同样安装 L(pending_choice)，同时保留原 manifest 校验、错误映射、pinning 与 replay-log 处理；不能为清 source 跳过或提前改变这些行为。 |
+| typed `Snapshot::restore`／`restore_with_manifest` | 本来返回 GameState，不返回可信 choice 来源；新增 source 无论 Some／None 都不成为接受条件。Engine 重新安装 choice 的责任仍在上述入口，不要求修改借入的 Snapshot。 |
+| `Snapshot::to_bytes`／直接 serde Serialize Snapshot | pending_choice 的新 source 不写入，包括手工构造 typed Snapshot 中的 Some；其余字段使用既有序列化语义，不能把整个 choice 删掉或重建成最小形状。 |
+| `Snapshot::from_bytes`／直接 serde Deserialize Snapshot | 在 legacy pending_choice 字段边界，先忽略新 source 的 JSON 值，再走其余原字段的类型／结构校验；不能先反序列化为新增严格字段的共享 ChoiceRequest 后再清空。 |
+| legacy `last_choice` → WASM／产品输出 | 正常 producer 与两种恢复路径形成 None 不变量；从恢复得到的伪造来源不得经 pendingChoiceJson 输出。该 sink 需独立断言，不以“snapshot bytes 没字段”代替。 |
+
+成功恢复的 Engine 原本会重设 log／last_events／manifest 等；“只剥来源”指 choice 数据仅有这一新增字段变化，既有 Engine 恢复语义照旧。不得修改输入 Snapshot，也不得把 malformed source 当额外拒绝理由；合法性校验仍完整执行。
+
+**二、legacy JSON 忽略与 S2C wire 严格校验是两个边界。** legacy 只把 `pending_choice.source_skill` 当旧 reader 不认识的键，消耗并忽略其任意合法 JSON 值（可采用局部 IgnoredAny 等价语义）；这一步必须发生在共享 String／非空名校验**之前**。若适配器内部仍要使用共享 ChoiceRequest，交给它的字段流中不得再有该键。
+
+该忽略只针对这一新 metadata 字段，不递归删除 GameState、options 或其它对象中恰好同名的键，不给其它未知／已知字段新增净化规则。其它字段的原类型检查、已知重复字段处理、必填字段、解析大小／深度和 JSON 语法错误保持旧语义；不能先转通用对象再重编码而悄悄折叠其它重复键或改变原校验。重复出现的新 source 键也按旧未知键处理，不能新增 legacy duplicate-source 拒绝规则。
+
+| 新 source 的输入形态 | legacy Snapshot JSON（其它部分原本有效） | 新 S2C ChoiceRequest／Worker／IPC metadata |
+|---|---|---|
+| 缺失／null | 接受，None | 接受，None；None 可省略输出 |
+| 非空字符串，包括看似可信的“遗计” | 接受但忽略，None | 语法可接受并保留；是否为可信 native 来源仍由权威投影绑定，不由字符串自证 |
+| 空字符串 `""` | 接受但忽略，None | 拒绝 |
+| 数字／对象／数组／布尔值 | 接受但忽略，None | 拒绝 |
+| 新 source 重复键 | 如旧未知键一样忽略；其余旧字段语义不变 | 依新严格 wire 字段的既定重复字段规则；不得借 legacy 忽略器放宽 wire |
+| 非法 JSON／超既有解析界限／其它旧字段错误 | 保持原拒绝，不因忽略 source 而放宽 | 保持原拒绝 |
+
+因此不允许把 legacy 宽松忽略放到共享 ChoiceRequest 的全局 Deserialize 中，导致 wire 也吞掉数字／对象；也不允许把 wire 的非空 String 验证直接套入 legacy archive，拒绝旧 reader 会忽略的值。C2S ResolveChoice 不新增来源 authority；未增加任何来源签名、ledger 或持久证书。
+
+**三、typed＋JSON 边界验收矩阵（均为待实施后的测试计划，本轮未运行）。** “对照”指同一有效 fixture 仅将新 source 清为 None／删除该键，不能另改 choice 或 state 来得到通过。
+
+| 用例／路径 | 必须直接验证的结果 |
+|---|---|
+| T1 typed capture，无 JSON | 测试模块建立 runtime last_choice.source_skill=Some("伪造来源")，直接 `Engine::snapshot()`；返回 choice 来源为 None，其余 choice／Snapshot 字段与对照相同，原 Engine 不变；全程不调用 to_bytes/from_bytes 或 serde。 |
+| T2 typed restore，无 JSON | 手工构造有效 typed Snapshot，分别设 Some("伪造来源")／Some("")／None；直接 restore_snapshot；接受结果与对照相同，last_choice 来源为 None，其余字段相同；输入 Snapshot 的原 Some 不被修改。 |
+| T3 typed manifest restore，无 JSON | 对同三种 source 直接 restore_snapshot_with_manifest；正确 manifest 成功且清来源，错误 manifest 仍是原拒绝／错误映射，失败 Engine 状态不变；不是先做 JSON roundtrip 再测。 |
+| T4 typed state-only restore | 直接 Snapshot::restore／restore_with_manifest；新 source 不影响返回 GameState／hash 或原 schema、ID、content／manifest 校验。 |
+| T5 legacy WASM sink | T2／T3 得到的 Engine 经既有 last_choice 输出到 pendingChoiceJson，不出现伪造来源，options／token、deadline、timeout、revision、continuation、prompt、native_kind 全保留。检查可用同模块测试 seam，不新增生产 setter。 |
+| J1 legacy JSON read | 对矩阵每种值测 from_bytes 和直接 serde Deserialize Snapshot；数字／对象／空名尤其必须先被忽略，不触发共享 String 验证；合法旧档仍可恢复，来源为 None。 |
+| J2 legacy JSON write | 手工 typed Snapshot 的 Some("伪造来源")／Some("")，经 to_bytes 与直接 serde Serialize 均不写新键；None 对照的全部既有字段和旧字节 golden 保持。 |
+| J3 旧错误回归 | 在 J1 上叠加坏 ID、choice 绑定不符、schema／content／manifest 错误、其它字段类型错误及已知重复字段；保留原拒绝及既定错误口径，不能因清 source 改成接受或换成 source 类型错误。 |
+| W1 严格 wire 对照 | 同样的 missing/null/string/empty/number/object/array/bool 走 S2C、Worker 和 IPC 校验，结果按上表；有效 native source 不被全局剥离。 |
+| W2 兼容与转发 | frozen WS6 reader／旧缺失值→新 reader；两处 desktop envelope、native WS 角色与重连、network/UI 统一转发；Main deadline_unix_ms 与所有旧字段不丢失，不绕过 WS5／WS6 握手。 |
+
+最低测试命名可为 `legacy_typed_capture_strips_only_source_skill`、`legacy_typed_restore_without_json_strips_source_skill`、`legacy_typed_manifest_restore_without_json_strips_source_skill`、`legacy_json_ignores_source_before_shared_validation`、`wire_source_skill_remains_strict`；只是具体断言目标，不是已加入或已通过的测试。
+
+**四、exact producer／consumer 绑定的必要谓词。** 当前 native restore 的 [唯一 active_ask 比较](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/src/engine/snapshot.rs:134) 与 [scheduler 的 first-depth park](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native-kernel/src/resolution.rs:488) 不是同一谓词。以下只用于派生投影的准入与未来证明，**不加进 restore 接受条件，也不重排 parks／改 scheduler**。
+
+在同一不可变 resolution R 及当前 OpenChoice O 上：D=R.stack.len()；A 为所有 top-level park 经既有 active_ask 派生出的当前询问记录，连同产生它的 park 身份。必须 A 恰有一项，其 park 为 P，且 observer／prompt／kind／完整 options 顺序／min／max／cancel 与 O 完全一致；仅“匹配形状的子集里有一项”不够，不能忽略其它 active asks。
+
+另令 C 为 R.parks 原顺序中**首个** resume_depth==D 的 park，必须存在且 C 与 P 是同一 park，不能只是 def 名或询问形状相同。[既有 Answer 应用](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-native/src/engine/apply_command.rs:109) 校验 id／actor／selection 后只 take open_choice、记录应答并设置 answer，不重排 parks 或改变 stack，故这是 runner 到达 park 分支时实际会选择的消费者。不得执行一步试算来“确认”它。
+
+若 P 通过 inner 委托，来源必须属于真正消费答案的受信内层 exact ask：只认可已核对会直接委托的既有路径，outer 不盖章；不支持的 wrapper／Host／VM 链路为 None。匹配时使用的 park 身份或路径只在同次派生中比较，不发布、不持久化、不生成新 token／marker。若无 C、P 深度不符、C≠P、多个承接者或内层路径不符，来源为 None、root 继续 NoCert；不能选择“刚好是遗计”的另一个 park 来满足名字。
+
+该结构绑定不是 root 安全证书：C=P 也不能证明 Draw 子事件之后不会调度其它旧 park／queue。来源资格不得暗加“实际队列为空”“没有私有 ancestor”等条件，再以此声称公共 family 已被证明。若批准边界内无法建立上述 exact 绑定，实施必须停在未知；不以新公开 flags／PC／fuel／ancestor 列表补洞。
+
+| 待测原点情形 | 投影与规则要求 |
+|---|---|
+| 唯一 ask、P=C、native／全 catalog 唯一／owner 已知资格均满足 | 才可能给 exact def 的逻辑名；不自动给 root certificate |
+| 唯一 ask 在 P，但更早的深度匹配 park C≠P，即使二者同名 | None；原恢复域保持，不执行 C 搜索来源 |
+| 两个 active asks、P 不在当前深度、无消费者、wrong ask／innerSome 不同询问 | None，不继承 outer，不收紧 restore |
+| Host 同 prompt／VM／旧 frame／别名歧义／无合法来源 | 维持默认未知与既有 Deny；不借名字授权旧 fuel 或查询 |
+| P=C 之后出现未知 tail／CardsDrawn 插入 family | source 身份不能授予其执行；Confirm 前缀与 Cancel-tail 继续分别待证 |
+
+**五、保留的安全与传播边界。** v1 的 NativeSession.open_choice_json→Worker/local adapter→desktop→native WS→network/UI 全链路、本人／trusted referee／Other／spectator 可见性、Main deadline 保留均继续要求；typed clone 入口不能被这条 JSON 链路遮蔽。首次 jiji_target 是待审叶边界，note_future_draw／typed remap／隐藏池填充不能授权未知新卡的后续候选或多层评分。具名来源不证明 Confirm 的实际调度前缀，更不证明 Cancel 结束该门后的父尾链。
+
+原 phase4 A/B/C archives 和旧完整输入不变：按窄 owner 资格 A 可候选“遗计”，原 B/C 仍 None，B 的正式 Confirm Accepted、C 的真实 panic 均保留；新输入中的 B/C 仍不能算隐私修复。相同未知来源、相同 VM 声明技能但 scalar／fuel 不同的比较继续要求完整 Plan 隐私或默认 Deny。phase3 lifetime 限定面 Fixed、VM 两效果阻断、旧帧默认拒绝、原 19 项 NoCert 均不被本设计解除；不把两个 Err 当正向 green，不改 formal filter／算术／restore／fuel 来删反例。
+
+**可供 Parent 在有界复审后使用的批准文本（本稿不是批准本身）：**
+
+> 同意仅实施普通、已知 native OptionalGate 的 Own `source_skill` 可选来源补充：须满足全 catalog 唯一、既有 owner 资格及 exact producer 等于 first-depth consumer 的前置；未知 None，Other generic，不新增私有 frame／PC／fuel／ancestor 公开信息。允许按经复审的 Main WS6 可选 metadata 兼容方案更新 API／TS／IPC 转发，但不得丢失 PA09／A330 deadline 等旧字段；不在此分配新版本。legacy capture、两种 typed restore 和 JSON 读写只剥离这一新字段，JSON 忽略必须先于共享 String 校验，其余字段、旧档接受域和错误处理保持。须完成 typed 无 JSON 对抗用例及完整兼容矩阵后再申请发布验收。本批准不包含任何 root gate／Confirm-prefix／Cancel-tail／VM 续行放行，不解除 NC10/runtime BLOCK。
+
+若独立复审不能接受这些不变量，Parent 应先缩减或否决契约，不将 v2 当作实现授权。Owner 可见性、WS6 可选字段与 legacy 剥离仍待用户明确同意；本轮无新实施、无测试通过声明。

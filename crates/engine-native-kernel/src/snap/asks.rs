@@ -406,19 +406,16 @@ pub fn active_ask(
             ))
         }
         MachineSnapshot::Death { .. } => None,
-        MachineSnapshot::OptionalGate {
-            owner,
-            asked,
-            inner,
-            ..
-        } => {
+        MachineSnapshot::OptionalGate { owner, asked, inner, .. } => {
             if let Some(e) = inner {
-                return active_ask(e, core, catalog);
+                let mut ask = active_ask(e, core, catalog)?;
+                ask.source_skill = optional_source(e, catalog);
+                return Some(ask);
             }
-            if !*asked {
-                return None;
-            }
-            Some(confirm_ask(*owner, "trigger_confirm"))
+            if !*asked { return None; }
+            let mut ask = confirm_ask(*owner, "trigger_confirm");
+            ask.source_skill = optional_source(machine, catalog);
+            Some(ask)
         }
         // ---- 内容机器 ----
         MachineSnapshot::SanCai { owner, stage, .. } => match stage {
@@ -1019,4 +1016,34 @@ pub fn active_ask(
         // ---- 无询问机器 ----
         _ => None,
     }
+}
+
+// Only OptionalGate::step has the direct delegation contract used by this source.
+fn optional_source(machine: &MachineSnapshot, catalog: &Catalog) -> Option<&'static str> {
+    let MachineSnapshot::OptionalGate {
+        def, asked, inner, ..
+    } = machine
+    else {
+        return None;
+    };
+    if let Some(inner) = inner {
+        return optional_source(inner, catalog);
+    }
+    if !asked {
+        return None;
+    }
+    let declared = catalog.skills.get(*def as usize)?;
+    if declared.name.is_empty()
+        || declared.behavior.is_vm_skill()
+        || !declared.trigger.as_ref().is_some_and(|meta| meta.optional)
+        || catalog
+            .skills
+            .iter()
+            .filter(|entry| entry.name == declared.name)
+            .count()
+            != 1
+    {
+        return None;
+    }
+    Some(declared.name)
 }

@@ -1,0 +1,201 @@
+{
+  "totals": {
+    "passed": 1715,
+    "failed": 0,
+    "ignored": 75
+  },
+  "summaries": [
+    {
+      "target": "Running unittests src/lib.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/engine_native-93e440f1e35a06a2)",
+      "passed": 15,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/g1.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/g1-d7db121f3fa3a4da)",
+      "passed": 166,
+      "failed": 0,
+      "ignored": 1
+    },
+    {
+      "target": "Running tests/groups/g1_shahai.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/g1_shahai-2d3ade89d410b9c7)",
+      "passed": 174,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/kernel.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/kernel-c66fa1d4f3fdb655)",
+      "passed": 435,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/l_rounds.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/l_rounds-e35cd4abfe202ac1)",
+      "passed": 43,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/misc.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/misc-6bce960f507446bf)",
+      "passed": 220,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/nc08.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/nc08-367a7dcb703d082a)",
+      "passed": 45,
+      "failed": 0,
+      "ignored": 50
+    },
+    {
+      "target": "Running tests/groups/nc08_upstream_a_k.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/nc08_upstream_a_k-c488c8c59d700f27)",
+      "passed": 130,
+      "failed": 0,
+      "ignored": 9
+    },
+    {
+      "target": "Running tests/groups/nc08_upstream_l_z.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/nc08_upstream_l_z-1df529cf4fcbbe12)",
+      "passed": 199,
+      "failed": 0,
+      "ignored": 8
+    },
+    {
+      "target": "Running tests/groups/nc_rounds.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/nc_rounds-fb18dbc55758dba6)",
+      "passed": 146,
+      "failed": 0,
+      "ignored": 7
+    },
+    {
+      "target": "Running tests/groups/swd.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/swd-255d311151fe4f95)",
+      "passed": 134,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running tests/groups/test_registry.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/test_registry-aa71ab4f4fe36d6c)",
+      "passed": 1,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running unittests src/lib.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/engine_native_content-d3e4272bfe7bd617)",
+      "passed": 4,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Running unittests src/lib.rs (/tmp/nc27-main-functional-458ed333/cargo-target/debug/deps/engine_native_kernel-d8af084864bb7b24)",
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native_content",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    {
+      "target": "Doc-tests engine_native_kernel",
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    }
+  ],
+  "source_subset_included_in_totals": [
+    "test engine::choice_source::tests::source_catalog_alias_is_not_resolved_by_first_match ... ok",
+    "test engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask ... ok",
+    "test engine::choice_source::tests::source_requires_first_depth_consumer_not_just_a_unique_active_ask ... ok",
+    "test engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown ... ok",
+    "test nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown ... ok",
+    "test nc10_source_provenance::native_known_optional_families_publish_their_exact_names ... ok",
+    "test nc10_source_provenance::native_optional_confirm_publishes_own_source_only ... ok",
+    "test nc10_source_provenance::native_source_is_stable_across_private_deck_rng_and_counters ... ok",
+    "test nc10_source_provenance::source_initial_binding_does_not_certify_the_next_pending_prompt ... ok"
+  ],
+  "ignored_tests": [
+    "test g1_huanle::xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线",
+    "test nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger ... ignored, 登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::cap_card_targeted ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_damage_begin_second ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_death_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_game_start ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_judge_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_sha_after ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_sha_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::cap_sha_begin ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档",
+    "test nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；修复需改未跟踪的 content/host/filtering/swd.rs",
+    "test nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs",
+    "test nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs",
+    "test nc08_registered_defect_guards::g20_jiuwei_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::g20_liyutang_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::g20_paotai2_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::g20_zhucheng_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::g20_ziyu_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_registered_defect_guards::g23_binxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_donghuangzhong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_guangshu_spade_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_huanling_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_jidong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_lingxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_lingyu_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_lqingcheng_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_menshen_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::g23_xuanyuan_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs",
+    "test nc08_registered_defect_guards::guard_chengxin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_cigu_pre_draw ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_fenglue_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_fuchou2_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_gaiming_judge_before ... ignored, 补 `judgeBefore` 幕并挂上后转绿",
+    "test nc08_registered_defect_guards::guard_hutian_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted ... ignored, 补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）",
+    "test nc08_registered_defect_guards::guard_mb_phase_before_enter_game ... ignored, 补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿",
+    "test nc08_registered_defect_guards::guard_mopaifanbei_second_draw ... ignored, 补「第 2 次」档或摸牌前幕后转绿",
+    "test nc08_registered_defect_guards::guard_mufeng_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_niepan_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_prepare_phase_exists ... ignored, 补 `Phase::Prepare` 后转绿",
+    "test nc08_registered_defect_guards::guard_rangjie_branch1_draws ... ignored, 补 `draw_cards` 后转绿（分支 1 应摸牌）",
+    "test nc08_registered_defect_guards::guard_shouyin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_shuiyun5_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿",
+    "test nc08_registered_defect_guards::guard_xiangxing_lose_hp_end ... ignored, 补 LoseHpEnd 幕并挂上后转绿",
+    "test nc08_registered_defect_guards::guard_yueyin_fourth_damage ... ignored, 补「第 4 次」档后转绿",
+    "test nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase ... ignored, 补 dieBegin 幕 / 改事件种类后转绿",
+    "test nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch ... ignored, 登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；修复需改未跟踪的 content/host/filtering/swd.rs",
+    "test nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage ... ignored, 登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs",
+    "test nc08_registered_defect_guards::lexue_any_phase_of_owner_only ... ignored, 登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs",
+    "test nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker ... ignored, 登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs",
+    "test nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase ... ignored, 登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；修复需改未跟踪的 content/host/filtering/common.rs",
+    "test nc08_upstream_gujian_dinvxuanshuang::upstream_dinvxuanshuang_recovers ... ignored, 帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项",
+    "test nc08_upstream_gujian_liyutang::upstream_liyutang_target_gains_the_card ... ignored, 鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项",
+    "test nc08_upstream_gujian_longxugou::upstream_longxugou_steals_and_equips ... ignored, 龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项",
+    "test nc08_upstream_gujian_mapodoufu::upstream_mapodoufu_target_gains_the_card ... ignored, 麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项",
+    "test nc08_upstream_gujian_mizhilianou::upstream_mizhilianou_heart_as_tao ... ignored, 蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项",
+    "test nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_target_needs_he_cards ... ignored, 乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项",
+    "test nc08_upstream_gujian_shihuifen::upstream_shihuifen_blocks_cards_on_others ... ignored, 石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项",
+    "test nc08_upstream_hearth_shenenshu::upstream_shenenshu_replaces_hand_with_basics ... ignored, 神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项",
+    "test nc08_upstream_jijiang::upstream_jijiang_shu_ally_plays_sha_for_lord ... ignored, 激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收",
+    "test nc08_upstream_rangjie::upstream_rangjie_move_branch_must_draw_one ... ignored, 登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；修复需改未跟踪的 content/host/step/skills_cards.rs，待 host 拆分落定",
+    "test nc08_upstream_swd_baishouzhihu::upstream_baishouzhihu_opens_target_window ... ignored, 第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs",
+    "test nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_target_discards ... ignored, 苍螭之璧属转换缺口（未交付）——转换后启用本用例，见台账第 117 行",
+    "test nc08_upstream_swd_hufu::upstream_swd_hufu_dying_only ... ignored, 虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项",
+    "test nc08_upstream_wuxing_shengke_branches::upstream_wuxing_shengke_three_branches ... ignored, 五行生克两支未能在行为面复现（三次均 −1）——见第 51 项",
+    "test nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_after_damage ... ignored, 趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项",
+    "test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_chain_kill_fires_on_first_target ... ignored, 链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查",
+    "test nc08_upstream_yunchou_zonghuo::upstream_zonghuo_discards_one_without_asking ... ignored, 纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项",
+    "test nc04_vm_fault::nc04_pause_and_resume ... ignored, NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖",
+    "test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling",
+    "test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling",
+    "test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix",
+    "test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix",
+    "test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过",
+    "test nc12_dangling_reference_repro::nc12_repro_seed_44170_step_10 ... ignored, 登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过"
+  ],
+  "overlap_note": "5 provenance integration +4 choice_source unit are subsets of1715; not added again",
+  "filtered_out": 0
+}

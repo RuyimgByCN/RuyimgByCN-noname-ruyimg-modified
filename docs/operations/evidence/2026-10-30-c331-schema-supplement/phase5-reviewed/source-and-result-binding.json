@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-30T20:47:00.672442+00:00",
+  "head": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "pre_full_manifest_sha256": "b72249870862f030a4b8ee88c7703cf4daaa4e109273b2f6f368ae533e592af3",
+  "post_full_manifest_sha256": "cbeab39b1316d77df884242b5494c8b7da2cc5baf8737431ab8a716da6eaaf16",
+  "source_files": 135,
+  "source_file_lists_byte_identical": true,
+  "live_matches_final": true,
+  "source_tree_identity_sha256": "dcedfa22a6cff71adeb4a6107b911e462623bc609e37c7359b7226bdfd0e64f6",
+  "incremental_source_paths": [
+    "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+    "crates/engine-native/tests/c331_source_order_phase5.rs",
+    "crates/engine-native/tests/groups/nc08.rs"
+  ],
+  "no_staged_files": true,
+  "phase4_freeze_and_bad_evidence_preserved": true,
+  "phase4_bad_calculator_rows_unchanged": 2,
+  "native_full_exit": 0,
+  "ten_package_runs_this_batch": 1,
+  "ten_package_exit": 0,
+  "proven_ordering": 262,
+  "total_triggering": 290,
+  "remaining": 28,
+  "whole_C331": "BLOCK",
+  "no_main_alias9_nc10_or_config_version_writes": "Source delta exactly3 paths in this private cwd; all other132 frozen source files unchanged; no stage/commit; evidence and report outputs outside source tree."
+}

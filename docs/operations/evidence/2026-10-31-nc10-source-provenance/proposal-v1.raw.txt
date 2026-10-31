@@ -1,0 +1,114 @@
+建议选择一个明确补充：**只在 Own 询问投影增加可空的 `source_skill` 稳定逻辑名，保留现有 generic `prompt`。** 它回答“正在询问我发动哪个已知技能”，不回答“该技能的祖先、剩余队列或 VM 续行是否安全”。本稿仅为待审批契约与实施影响方案；未新增字段、未修改源码／Main／schema／wire／版本，未运行 build、tests 或新实验。整个 NC10/runtime 继续 BLOCK，不能据本稿承诺 phase4 那一项或原 19 项会变绿。
+
+基线必须区分：private candidate 仍为 `977cdf1f…`、329／105／758／私有 WS5，保存着 phase3 source63 和 phase4 单测试文件增量；Main 未含该 NC10 API 候选。只读 `git show 777bf339` 确认 Main 协议为 **6**，共享 ChoiceRequest 已含 `deadline_unix_ms` 及既有 prompt/native_kind；本方案不能用私有 WS5 推导 Main 应再升到 6，也不能覆盖正在验证的 PA3 dirty。C331 的独立 typedSkill257 不是 Main 已有能力，本方案不依赖它。
+
+只读摘录与 SHA／行号索引在 [source-excerpts.md](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/native-confirm-provenance-proposal/source-excerpts.md) 和 [source-excerpt-manifest.json](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/evidence/opaque-implementation/native-confirm-provenance-proposal/source-excerpt-manifest.json)。旧 [phase4 报告](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b5b1a40e-d98b-4a86-aec2-2a4fba70520b/implementation/nc10-native-confirm-public-family-proof.md)、A/B/C archives、完整输入及所有原失败均保留。
+
+上游有具体 UI 来源先例，但范围是“普通可选技能真的进入询问分支时”。[content.ts:4174](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/content.ts:4174) 的 createTrigger 选择 info.prompt 或 `get.prompt(event.skill, …, player)`，随后 `player.chooseBool(str)`；[get/index.js:1518](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/get/index.js:1518) 明确生成 `是否发动【${get.skillTranslation(skill, player)}】？` 或带目标的同类文案。[chooseBool:8367](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/content.ts:8367) 的 isMine 分支将 event.prompt 放入本人的 dialog；online 分支调用 sendAsync，[gameEvent.ts:994](/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/gameEvent.ts:994) 通过 `this.player.send(...)` 将该事件参数／set 定向送到应答玩家。标准 yiji／ganglie／jianxiong 声明在 `character/standard/skill.js:707／473／331`；yiji 的 frequent 可以自动确认，不能说它每次都显示对话框，但需要手动确认时仍走这条具名提示分支。
+
+这支持 owner 在应答前知道所询问技能。它不支持任意隐藏缓存、父 frame、saved PC、fuel 或其它玩家的选择来源也变公开。createTrigger 前面另处理 hiddenSkills／invisibleSkills／skillHidden，direct／cost 分支也不同；未全审这些特殊分支，也未实跑上游 UI。所读普通分支在确认成功之后才 logSkill；不能从它推导 Other／旁观者在确认前应收到技能名。因此初版只补普通 native OptionalGate 的、本人公开技能集合中已知的来源，Other 保持现有 generic。
+
+两条路线比较如下，推荐第二条：
+
+| 路线 | 成本与兼容含义 | 判断 |
+|---|---|---|
+| 用既有 prompt 区分来源 | 改 canonical ChoiceSpec.prompt 或动态拼接名字会碰 `&'static str`、KNOWN_PROMPTS、存档恢复、hash／旧锁，而且 Other 目前也复制该 prompt，容易扩大可见性。只改 Own 投影为预先声明的 `trigger_confirm_jiji` 等静态键可以避开存档变化，但仍需同一来源解析器、逐技能键表、UI 映射和兼容契约；把逻辑身份编码进展示键不能省去来源证明，多包名称也不能靠拼接解决。 | 不选。尤其不改 `trigger_confirm` 的存档含义。 |
+| 新 Own `source_skill` 可选字段 | 一个稳定逻辑名，使用 catalog 已有名字；generic prompt、choice id、选项 token 和 Cancel 表示保持原样。需更新投影与元数据转发处，并处理共享 ChoiceRequest 的 legacy 快照耦合；不需要 N 套 prompt 键或通用 capability registry。 | **选此路线**，先审批 owner 信息边界与输出 schema，尚不授权 root gate。 |
+
+建议契约的准确类型如下；这是提案类型，未写入代码：
+
+```text
+engine_native::ChoiceView::Own {
+    ...existing fields...,
+    source_skill: Option<&'static str>,
+}
+ChoiceView::Other：不增加 source_skill。
+
+engine_api::ChoiceRequest.source_skill: Option<String>
+    serde default；None 不序列化；非空 UTF-8 逻辑名才可为 Some。
+NativeSession / native WS / IPC：统一键名 source_skill。
+TypeScript ChoiceRequest：source_skill?: string | null。
+缺失与 null 均归一为未知；旧 payload 不报错。
+```
+
+例如已知 Own 仍有 `prompt:"trigger_confirm"`、`native_kind:"confirm"`、options=[Confirm]、min=max=1、allow_cancel=true，只额外有 `source_skill:"遗计"`。未知来源省略该键；读取 null 与省略等价。没有 `source_def`、package index、module hash、frame id、PC、fuel、ancestor list 或 source-known reason。展示可以安全地按文本渲染“是否发动【遗计】？”，未知则沿用 generic 文案；不得 v-html 拼接未转义内容。ResolveChoice 仍只回 choice id／选项 token／cancel，不让客户端回传来源决定 authority。
+
+稳定逻辑名是 **当前锁定 Catalog 中 SkillDef.name 的原值**，不是翻译文案、上游 JS id 的猜测，也不是数组下标。标准 native 的逻辑名目前就是“遗计”等既有键。唯一性必须在整个公共 catalog 上计算，不按实际实例、实际 filter 或本次匹配后的模块集合缩小。若两个 package 导出同一个 catalog name，或同名绑定不唯一，结果是 None；不得借 `by_name` 的 first-match、私有 def ordinal 或未集成的 typedSkill257 消歧。已有命名空间若本来就是唯一 SkillDef.name，可原样使用；本次不另造 package 身份字段。将来若必须支持重复名的来源显示，需另审明确的公开限定名契约，当前默认未知即可。
+
+来源派生必须与正在产生当前询问的 exact ask 绑定，而非在 AI 里按 actual park 猜是哪类：
+
+1. 建议沿已有 `snap::active_ask → ExpectedAsk` 派生面补一个**不持久化的来源元数据槽**，共用现有询问形状，不设第二 ledger、registry 或新的 authority。通用 ask 构造默认 None。普通 OptionalGate 只有 asked=true、inner=None、owner 与当前应答者一致时，才能以该 gate 自己的 def 读取 catalog 的逻辑名；该名字必须唯一、定义属于 native 非 VM 的 optional 询问，且名字在该 owner 的现有合法公开技能投影中。不能调用 filter、读取 once／marks／flags／私有 locals 或探秘试跑来判断可公开。
+2. Engine 当前 ChoiceView 投影必须将唯一 active ask 与当前 OpenChoice 的 observer／kind／prompt／完整 options 顺序／min／max／allow_cancel 逐项核对，并由当前 OpenChoice 给出 id、由当前 Engine 给出 revision。没有唯一来源、存在两个承接者、来源与当前 ask 不符时，只给 None。新增来源不参与恢复接受／拒绝校验，不改变既有存档允许域。ExpectedAsk 本来就是派生形状；不得把新 metadata 填回 ChoiceSpec、OpenChoice、MachineSnapshot、LogEvent 或 canonical hash。
+3. OptionalGate.inner=Some 时使用既有 active_ask 的内层委托语义，**不继承外层 def 的名字**。只有内层自身属于上述已证明的普通 OptionalGate、并真正匹配当前询问，才可能给出内层自己的名字；其它内层返回 None。inner 的 jiji_target／Host／RVM 询问不能借外层“遗计”盖章。另需把“exact ask 的生产者”与 scheduler 下一实际消费者的一致性列作测试和证明条件；名字不是 scheduler 路由证书。
+4. 原生 Host 昆仑镜的直接同 prompt 询问是另一 producer，不能因名字或字符串相似放行。当前 `Host/asks.rs` 没有 Kunlunjing 对应分支，所读 step 虽在 SelectNature 等待确认，也不足以复用普通 OptionalGate 的来源合同。**初版该 producer 为 None**；若将来补其 exact ask 和 def_key／behavior 绑定，应独立审这条 owner 可见 UI 来源，不把普通门的字段扩成 Host 全白名单。
+5. VM producer／未知自定义 producer 一律 None；即使遇到相同 prompt，也不能由该字符串制造 native 来源。当前 VM 常见询问本来是 rvm_choice 等，本文不声称当前 ABI 可任意制造 native trigger_confirm。未来若有 VM 的合法具名询问，也须另有公共来源合同；相同技能名不能授权 saved frame／PC／remaining fuel。
+6. 实际源名必须来自 exact ask 的 catalog[def]，唯一反查后的定义必须仍是同一项；不用公开名字取一个无关定义后说 actual hash 与自身相等即完成绑定。最终所有 Own 接收者（本人及现有受信裁判的 full-info Own）看到同一派生结果；Other 不增加该键，普通旁观者仍按现有服务端规则无完整 choice。未知统一为 None，不公开未知原因。
+
+这里“名字在 owner 的公开技能投影中”使用已经合法公开的 PlayerView.skills，不直接检查 private instance presence／enabled／once flag；既有投影本身处理这些状态。它是保守的来源可见性限制，不是把当前技能存储变公开。若不能从这些既有公开事实证明 owner 对这个逻辑名有权获知，便 None。
+
+phase4 的反例必须按原始域保留，不追溯改写旧证据：
+
+| 对象 | 本建议首版的 source_skill | 意义 |
+|---|---|---|
+| 原 A：真实遗计，公开 own skill 含遗计、名字唯一 | 遗计 | 在批准的扩展输入中明确当前具名询问。 |
+| 原 B／C：仅改 saved def 为刚烈／奸雄，但公开 own skills 仍只有遗计 | None | 这两个恢复件缺少本建议要求的 owner 公开来源资格；不为了输出三个名字而公开一个未获资格的 saved def。仍维持未知／NoCert。 |
+| 刚烈／奸雄的合法具名询问：实际 def、公开 owner 技能与 catalog 唯一绑定一致 | 刚烈／奸雄 | 这些 legitimate family 应各输出自身名字，绝不能继续冒称遗计。新完整 PolicyInput 因 owner 原本有权知道的来源信息而不同。 |
+| 相同声明技能、只改变 VM scalar／saved fuel／私有缓存 | 来源保持相同（首版 VM 为 None） | 原 privacy 比较仍须成立或旧帧继续 Deny，不能靠来源字段区分私有值。 |
+
+若独立 review 主张即使原 B／C 这类无公开技能资格的恢复询问，owner 也应知道 authority 当前实际问的是哪个 def，那是**更宽的可见性合同**；本建议没有自动采用它。按本建议，原 B/C 在新输入中仍同为 None，而正式 Confirm 一个 Accepted、一个 panic，因此未知来源必须继续拒绝，字段没有消灭这部分反例。无论最终资格如何裁定，旧 A/B/C 的 archives、旧完整输入及 panic 结果都不能删。新增合法信息会改变输入等价类，必须先由上游 owner 可见先例和明确权限裁决支持，不能把“旧反例在新输入不等价”当作旧隐私缺陷凭空消失。
+
+具体传播与影响位置如下；来源只计算一次于 native view 层，各 adapter 仅转发和校验，不各自遍历 private parks：
+
+| 位置／链路 | 若获批需做的最小变化 |
+|---|---|
+| `engine-native-kernel/src/snap/asks/shapes.rs`、`snap/asks.rs` | 给既有派生 ExpectedAsk 补可选来源；OptionalGate 分支绑定自身 def，inner 委托保持，不新增持久字段。未知 producers 默认 None。 |
+| `engine-native/src/view.rs`、`engine/views.rs` | Own 增字段；build_choice_view 校验 exact ask、public owner 资格与 catalog 唯一性；Other 不变。 |
+| `AiSession::choice/input → PolicyInput.choice` | 自动携带与人类 Own 完全相同的数据；planner 不另从 actual park 得到更强答案。来源丢失时不从 prompt／私有状态补猜。 |
+| `engine-native-wasm/src/session.rs::open_choice_json` | 从 ChoiceView 复制 source_skill；WASM facade lib.rs 的函数签名不变，不加 ABI/opcode。 |
+| `web-client/src/worker/nativeBackend.ts` | NativeChoiceJson 读取该可选 unknown 值；readChoice 经 choiceMetadata 校验并转成统一 ChoiceRequest；nativeEnvelope／engine.native.worker／EngineClient／viewStore 原样携带。 |
+| `web-client/src/engine/observerMetadata.ts`、`types/engine.ts`、BattleView | 新字段缺失／null 兼容；present 非字符串或空名字拒绝。只作安全文本展示，不解析成命令或 authorization。当前 BattleView 已通过 choicePromptLabel 生成标题，复用该 seam。 |
+| `desktop-client/src/native_envelope.rs::choice` | 当前手工挑选字段，必须显式增加 source_skill 校验／转发，否则会静默丢字段；native_engine_host 的 token／cancel 检查不改。 |
+| `desktopEngineTransport.ts → EngineClient/local UI` | 复用同一 validateObserverMetadata，覆盖两处既有 local response envelope 位置；不新建桌面来源账本。 |
+| `game-server/src/native_view.rs::choice_for` | 用 native Own 的来源构造共享 API ChoiceRequest；保持 owner／referee／spectator 的现有成员角色授权。Other 仍不变成完整 choice，public_event_codes 和 ChoiceOpened 不新增源名。 |
+| `engine-api/src/choice.rs`、`engine-protocol ServerMessage` 的 choice payload | API 增可选 source_skill；JoinOk／CommandOutcome／Snapshot 既有 personalized choice 自然携带；C2S ResolveChoice 不加字段、不接受来源作为 authority。 |
+| `web-client/src/engine/networkClient.ts` | 已有 observer metadata 校验和 ChoiceRequest 转发点统一支持该可选值，保留未知旧字段兼容；不能在网络路径借用 local adapter 补 private 信息。 |
+| 共享类型的旧构造者／fixtures | `engine-core` 的 make_choice 与 snapshot 测试等现有 ChoiceRequest struct literal 需显式 None；与 Main 现有 deadline_unix_ms 并存，不能覆写 PA3 字段。旧 JSON 读者、Worker／IPC／WS6 fixture 同步覆盖。 |
+
+有一个必须正面处理的持久化耦合：[engine-core Snapshot.pending_choice](/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-legal-c661whgg/worktree/crates/engine-core/src/snapshot.rs:25) 直接持有共享 ChoiceRequest，to_bytes 使用 serde_json；Engine 保存／恢复 last_choice 时也复制它。因此不能只因 native archive 没新字段便声称没有持久影响。
+
+建议给 legacy `Snapshot.pending_choice` 的**既有序列化边界**加一个局部的 metadata 剥离适配：编码时不写 source_skill，解码时忽略它并还原 None，保留所有原字段；legacy 运行时 choice 构造也为 None。共享 wire ChoiceRequest 用 serde default＋None 省略，使旧 archive bytes 不因默认空值改变。该适配只丢弃新提案的非权威展示元数据，不检查 filter、不改变 snapshot 的接受／拒绝集合，不改 GameState／continuation／hash／fuel；也不把来自存档或客户端的来源当成可信 provenance。它不是第二套 snapshot 或 ledger，但必须纳入未来兼容变更的明确审批和旧字节测试。若不能做到这一点，就不能承诺“不新增持久字段”；不能默许它落入 legacy pending_choice 存档再说只是 UI 字段。
+
+推荐兼容政策为 **Main WS6 内的可选 personalized metadata 扩展**，不是本轮自动升号。现 JSON 读者通常忽略未知字段，新增读者用 default 接受旧缺失值；但这只是源码依据，兼容矩阵尚未运行。旧客户端继续 generic UI；新客户端连旧服务端得到 None，AI 不据缺字段放宽。明确不保证 WS5 客户端绕过既有版本握手连接 WS6；冻结旧 JSON reader 的解析测试不能当成跨协议握手通过。
+
+| 轴 | 建议／需审批的边界 |
+|---|---|
+| owner 信息可见性与 PolicyInput 合同 | **需要新确认**：允许 exact、已合法知道的 native 可选技能名与当前 Own 询问关联，明确 Other 保持 generic、未知一律 None。上游先例不是自动授权。 |
+| API／TS schema／WS6／IPC JSON | **需要明确批准上述一个字段及旧读者策略**。推荐不升 WS6，但是否作为兼容扩展由协议审查裁定，不能私下占用新版本号；若判 breaking，另报版本决定。 |
+| rules／native archive／VM ABI／opcode | 推荐不变：不改正式效果／命令／persistent state／archive prompts／VM sandbox。此项也须在未来 diff 和旧字节验证后确认，不能以“向后兼容”代替检查。 |
+| legacy Snapshot 耦合 | 需批准仅剥离非权威 metadata 的局部兼容适配；不批准更严 restore 或改 formal filter 作为附带修复。 |
+| NC10 root certificate／scheduler gate | **本提案不授权修改**。source 元数据可独立评审；安全前缀和 Cancel 尾链仍须独立证明后才实施。 |
+
+对遗计 root 的结论应精确到“有条件的有限前缀”，不能将来源字段当完整证书。源码可证明 JiJiBehavior.start 不看旧私有缓存，而创建 stage=Draw、target=None、given=0；Draw 固定摸 2，之后 Target 只按本人手牌数量、存活其它座位和 given=0 生成首次 jiji_target。若公共 deckCount≥2，不走 discard 洗牌／RNG；catalog.vm_card_history=false 时不读 drawn 累加器。调度器遇到该 WaitChoice 立即 Pending，尚未执行后面的给牌选择或父尾链。
+
+但要把这一局部事实提升成 Engine 的安全 prefix，至少还需同时证明：source_skill 是 exact 遗计 producer；唯一逻辑名确实绑定受信的 JiJiBehavior 而非同名自定义行为，并有标准定义的 `once_per_turn=false`，不能在进入 Draw 前读 private inst.once_used；标准 native catalog 无 VM、card history 为 false；公开可见技能和装备／判定约束排除其它会在 CardsDrawn 子事件插入效果的 family；有至少一个其它存活合法目标；当前答复确实由该 producer 消费，期间没有未分类的旧 park／queue／ancestor 抢先调度。**名字本身未公开这些路径事实。** 当前 no-VM 的 trial_certifies_root 直接接受 Complete 成功结果的捷径，不足以代替这条新来源路由的前缀证明。
+
+因此“Confirm 到首次 jiji_target 为止”是可评审的候选边界，尚不是已完成证书。不得在发现实际队列恰为空或实际 park 恰是 JiJi 后缩集合，再称公共证明成立；如现 metadata 无法排除其它调度消费者，就维持 NoCert。本稿不提公开 park count／stack depth／父技能／prefix-verified flag 来绕过缺口。
+
+Cancel 更弱：空答使 OptionalGate 立即 Done，随后 scheduler 继续父 frame、queued triggers 和其它 parks；source_skill 只标记被取消的门，没有说明这些尾链。phase4 原 fixture 的 Cancel 正式 Accepted，不代表所有同新输入状态都如此。不能给 Cancel 固定模拟分数后省略正式尾链合法性，也不能把试算得到 Accepted 就当公共非拒绝证明。未证明尾链前，Cancel 仍应在执行未知尾链前 Opaque／NoCert；这并不改变用户正式 Cancel 的规则语义。
+
+未知新手牌仍需单独审：`Ctx::draw_cards` 在受控路径先 note_future_draw；当前显式使用点主要阻断未来 VM 读取，不会自动保护所有 native 续行。redaction 通过内容无关隐藏池和 typed remap 处理牌引用，OptionalGate.inner 也会递归 remap，但这解决的是隐藏牌采样与引用一致性，不是 origin／fuel／旧 ancestor 合同。当前 policy_score 的直接计算使用 hp、hand_count、equipment 数和公开技能权重，所读函数没有按新卡 id 估值；仍须防后续候选枚举读取 after-view 的新手牌身份、把未知牌动作带到多层评分。建议候选前缀严格作为首次 jiji_target 的叶边界，只用已证明的公开计数投影评分，后续给牌／用牌继续需要独立知识证明；未满足前缀合法性前不能先执行探秘再丢分数。所有这些都只是后续测试／实现边界，本轮未试跑。
+
+若将来获批，测试计划应覆盖下列具体合同，而非只看一个 green：
+
+- projection：owner／trusted referee 的合法 native OptionalGate 具名；Other／spectator 不新增来源；唯一名字／跨包同名／空名／无公开 owner 资格／noOrigin 分别为已知或 None；source 必须等于 exact def 名，不取 first-match。
+- producer 负向：外层有名字但 innerSome 的实际询问不同；两个同形 active asks；旧或错误 ask；Host 昆仑镜同 prompt；VM 同字符串或未知 producer，均不借外层／prompt 伪造来源。未知不披露原因。
+- phase4 A/B/C：原 archives 与原输入证据保留并仍可恢复；按获批可见性规范验证 A 的名字、原 B/C 的 None；另用合法所属技能的刚烈／奸雄询问验证各自逻辑名。不能靠删反例或收紧 restore 绿化。
+- 同来源隐私：只改隐藏 deck identity／顺序、RNG、drawn／其它缓存，保持**扩展后的完整 PolicyInput＋events**相同。若前缀确获证，budget0／48 必须两边真正 Ok、完整 Plan／stats 相等、attempts 在执行前计数、authority bytes 不变，真实 byte restore＋apply 非 Rejected。不能用两个 Err 算正向；正式 apply 可以摸到真实不同新卡，但 Plan 不应泄其原先未知身份。
+- VM scalar／remaining fuel：来源相同（初版均 unknown）时原 privacy guards、旧帧默认 Deny、phase3 两效果阻断、query PC20、sampled fault 正向及 Scalar 自然反例不弱化，不改 formal 算术／fuel／restore。
+- prefix 与 Cancel：Confirm 首次 Pending 后不跑未知给牌／用牌尾链；存在未证 ancestor／queued family 时拒绝。Cancel 的合法尾链须独立覆盖，否则不发证；不能暗用实际空队列作公共授权。
+- wire／adapters：new→frozen WS6 reader、old/missing/null→new reader；wrong type／empty source 拒绝；Worker raw JSON、local envelope、两处 desktop response、native WS 的角色与重连 snapshot 一致；不遗漏 Main deadline_unix_ms；C2S 伪造 source 不改变执行。
+- persistence：native archive／canonical hash／旧内容锁保持；legacy pending_choice 编解码不持久化或信任 source_skill；含伪造 source 的 legacy archive 仍按旧接受规则处理但不获得来源权限。不能新增持久 public certificate。
+
+上述 tests 均为计划，本轮一项未运行。当前授权仅覆盖这份 proposal、只读源码摘录与指纹核验；字段发布、schema/WS6 扩展、legacy 兼容适配以及任何 root gate 修改，都不能由本稿自动取得授权。Parent 可以据此先批准或否决 owner 来源补充这一小合同，再独立审判有限 prefix 的路线是否成立。
+
+未修改 phase4 单测试增量、phase3 bounded repair 或任何旧 archive；未做新实验。source_skill 可以补齐 owner 应答所需的来源表达，但尚不证明 ancestor／tail、旧帧 fuel 或全部 Plan 隐私，runtime 保持 BLOCK。

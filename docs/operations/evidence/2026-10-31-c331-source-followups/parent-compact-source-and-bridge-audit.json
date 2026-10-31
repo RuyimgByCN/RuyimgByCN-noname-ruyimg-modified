@@ -1,0 +1,401 @@
+{
+  "source_report_sha256": "b06329172c8a2fa6864d7c614ab6eb2438d2168a9c53fdbf00a76fae1598659d",
+  "rows": [
+    {
+      "variant": "GwentFengyinState",
+      "group": "expiry",
+      "producer": "shahai-gwent-upstream-noname",
+      "host_key": "host:gwent_fengyin_state",
+      "catalog_skill_name": "gw_fengyin_state",
+      "grant_chain": "Zumoshoukao card -> card_kind_host_skills registers gw_fengyin_state; GwentZumoCard inserts enabled state instance and disables every other owned skill; GwentFengyinState re-enables all and removes itself.",
+      "event_window": "Host PhaseBegin after Commit; PhaseEnd AfterTriggers after commit_phase; phase progression/interleaving still requires runtime qualification",
+      "root_cause": "Source gw_zumoshoukao grants fengyin expiring at owner full-turn phaseAfter; blocker has no trigger. Native PhaseEnd is every phase, after Commit, and globally re-enables independently disabled/locked skills. Source removes temp blocker before collecting triggers. Normal/0/true is a synthetic queue tuple, not a source tuple.",
+      "minimal_next_step": "Use existing phase/frame lifecycle to expire the specific blocker before trigger collection at owner full-turn end; preserve other disable causes and source locked/persevere exclusions. Exact blocker/expiry representation is a real runtime mechanism gap; any new durable representation needs concrete contract review.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "Kunlunjing",
+      "group": "branch",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "host:kunlunjing",
+      "catalog_skill_name": "kunlunjing",
+      "grant_chain": "swd_yuwentuo general -> kunlunjing mapping -> one host SkillDef; upstream parent group explicitly grants kunlunjing1 and kunlunjing2.",
+      "event_window": "Host PhaseBegin after Commit; PhaseEnd AfterTriggers after commit_phase; phase progression/interleaving still requires runtime qualification",
+      "root_cause": "One native SkillDef has PhaseBegin plus PhaseEnd with a single Normal/0/selectable tuple. Both sources require separate owner full-turn beginning rollback Normal/1000/true and end snapshot Normal/1/false. Native filter/step run each phase, beginning checks HP against snapshot, end snapshots without HP test; snapshot is global turn storage, unlike source owner storage. Liuli additionally has altered check and final loseHp branch absent from current noname body; tuple difference is between branches, not sources.",
+      "minimal_next_step": "Keep current noname baseline and register Liuli altered branch difference. Separate actual source handlers at existing declaration/catalog boundary, or review an event-specific metadata lookup consumed by all queue/revalidation/hash paths. First fix full-turn windows and per-owner snapshot semantics; assigning one package tuple cannot work. Distinct existing source skill names are preferable to invented source labels.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "MbQianlong",
+      "group": "numeric+merged",
+      "producer": "longxue-upstream-liuli",
+      "host_key": "host:mbqianlong",
+      "catalog_skill_name": "mbqianlong",
+      "grant_chain": "longxue assets/cards.json mb_caomao -> mbqianlong -> host:mbqianlong; native assembly owns one SkillDef. Upstream Liuli root groups _1/_2/_3; noname root groups begin/add/die and custom After hooks.",
+      "event_window": "Host PhaseBegin after Commit; PhaseEnd AfterTriggers after commit_phase; phase progression/interleaving still requires runtime qualification",
+      "root_cause": "Actual native producer is upstream-liuli:longxue 1.0.0, not official:mobile. Initial Liuli branch Normal/600/true and gain/damage branches Normal/0/true are merged into First/6 for PhaseBegin/CardsDrawn/CardsMoved/Damage. Noname begin/add use 0, root custom After events refresh, add is indexed and die is First/0/forceDie. Native first phase_number==1 is delayed, enterGame absent; one damage event uses target branch before source branch, unlike independent source triggers.",
+      "minimal_next_step": "Bind Longxue Liuli branches using their real declarations; keep noname official mobile as separately recorded scope. Split initial/gain/taken/dealt handlers before assigning tuples; supply actual initial/enterGame windows. Noname indexed/custom/death branches need real runtime mechanisms, not a numeric patch. Do not turn the global default into a Liuli source selector.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "MbWeitong",
+      "group": "numeric",
+      "producer": "longxue-upstream-liuli",
+      "host_key": "host:mbweitong",
+      "catalog_skill_name": "mbweitong",
+      "grant_chain": "longxue mb_caomao -> mbweitong host declaration -> owned SkillDef; MbWeitong step is Done; MbQianlong initial step scans other Wei holders for 60 rather than 20.",
+      "event_window": "Host PhaseBegin after Commit; PhaseEnd AfterTriggers after commit_phase; phase progression/interleaving still requires runtime qualification",
+      "root_cause": "Actual producer identifies Liuli, whose global phaseBefore/player enterGame priority10 yields Normal/1000/true. Noname is player mbqianlong_beginBegin with Normal/0/true. Current First/10 PhaseBegin and no-op step plus cross-skill boost conflate source order with a reconstruction shortcut; filter checks first native phase and another qualifying holder.",
+      "minimal_next_step": "Record qualified Longxue declaration binding before using Normal/1000/true for this source; preserve noname custom-before branch in the difference register. Repair initial/enterGame and the cross-skill dependency with MbQianlong; tuple-only changes do not prove the event window. A Core-only global default would erase the selected Liuli producer.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "Niepan",
+      "group": "rescue",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "host:niepan",
+      "catalog_skill_name": "niepan",
+      "grant_chain": "swd拓跋玉儿 -> niepan host mapping -> Dying optional owned SkillDef; effect calls niepan_effect. Separate official:shenhua VM declaration exists, but it is not this host grant.",
+      "event_window": "Dying Commit -> AfterTriggers (source-order comparator and optional confirm) -> Intrinsic DyingSaveMachine Tao/Pass rounds",
+      "root_cause": "Both selected source bodies are enable:chooseToUse with dying filter, not trigger declarations. Native Dying AfterTriggers offers trigger ordering/confirmation before intrinsic Tao rescue. Core source includes broader niepan content/skill choice than a bare revive. Official shenhua npack niepan_dying optional=false is a separate VM reconstruction and cannot justify host optional=true or source priority0.",
+      "minimal_next_step": "Use existing DyingSaveMachine/choice and effect boundaries to define responder/action selection, pass/retry and interaction with Tao. Preserve host filter/effect qualification. A minimal bridge can reuse those boundaries, but treating rescue as arrangeTrigger requires explicit behavioral contract review; schema4 priority metadata is insufficient.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "SanjianWeaponDamage",
+      "group": "numeric",
+      "producer": "wudian-upstream-noname",
+      "host_key": "host:sanjian_weapon",
+      "catalog_skill_name": "wd_sanjian",
+      "grant_chain": "Wudian sanjian club5 weapon equip_skills=[wd_sanjian]; skills wd_sanjian mapping host:sanjian_weapon; bridge_pack registers; grant_equip_skills grants on equip/revokes on removal.",
+      "event_window": "Damage AfterTriggers; source-specific damageEnd/damageAfter/damageSource qualification still required",
+      "root_cause": "Producer is upstream-noname:wudian 1.0.0, not an arbitrary guozhan source filepath. Wudian upstream list reuses sanjian; its card module imports local card/skill, but does not itself declare sanjian_skill. Adopted core guozhan body equipSkill has -25, Liuli guozhan -30; native Damage Normal/0/true. Producer resolution alone does not prove upstream global-card load context; core baseline tuple is -25 pending the qualified logical binding.",
+      "minimal_next_step": "Bind wd_sanjian reconstruction explicitly to actual core sanjian_skill declaration and its reused-card context; register Liuli -30 delta. Apply -25 at that declaration metadata boundary once bound; retain source damageSource window and optional in-handler card/target choices. A shared global host tuple cannot also encode a future Liuli declaration.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": false,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "SwdFengyinState",
+      "group": "expiry",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "host:swd_fengyin_state",
+      "catalog_skill_name": "swd_fengyin_state",
+      "grant_chain": "Jiguanfeng card kind companion registers swd_fengyin_state; failed Shan branch inserts the state and disables other skills; state step re-enables all then removes state.",
+      "event_window": "Host PhaseBegin after Commit; PhaseEnd AfterTriggers after commit_phase; phase progression/interleaving still requires runtime qualification",
+      "root_cause": "Source jiguanfeng addTempSkill fengyin expires at owner full-turn phaseBegin before addList, no source trigger. Native state uses host PhaseBegin AfterTriggers, after phase Commit and every phase, Normal/0/true. Unconditional enabled=true is not removing a skill blocker and loses unrelated disable causes; current noname persevereSkill exemption differs from Liuli forever exemption.",
+      "minimal_next_step": "Expire blocker at owner full-turn begin before collection via existing phase/frame lifecycle, and preserve unrelated disabling. Do not make charlotte into order_selectable=false or use priority as an expiry substitute. Blocker representation/precise lifetime is a runtime contract gap; review any durable changes explicitly.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "SwdNigongAccumulate",
+      "group": "numeric",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "nigong_accumulate",
+      "catalog_skill_name": "nigong_accumulate",
+      "grant_chain": "swd_guilingzhitao -> equip_skills nigong_accumulate/nigong_strike; CardKind::Guilingzhitao companion declares both; equip lifecycle grants actual instance; behavior accumulates min(4,lv+damage).",
+      "event_window": "Damage AfterTriggers; source-specific damageEnd/damageAfter/damageSource qualification still required",
+      "root_cause": "Actual producer is upstream-noname:shahai-swd 1.0.0. Its core nigong explicitly equipSkill:true gives Normal/-25/true; Liuli lacks equipSkill so gives Normal/0/true despite being equipment. Native Damage Normal/0/true agrees only with Liuli; nigong2/3 are active group members and do not supply accumulation metadata. Native generic Damage is not by itself qualified as source damageAfter.",
+      "minimal_next_step": "Bind selected core declaration and assign -25 locally, retain Liuli0 as registered difference. Verify damageAfter event placement and equip revoke before counting proof. Per-declaration override plumbing is needed only if both producers share this HostBehavior; do not infer equipSkill from the card slot.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": false,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "SwdShouyin",
+      "group": "rescue",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "host:shouyin",
+      "catalog_skill_name": "shouyin",
+      "grant_chain": "swd_muyue -> shouyin mapping -> host owned instance; filter any Dying, unused and face-up; effect consumes limited use, emits turnover and recovers seats.",
+      "event_window": "Dying Commit -> AfterTriggers (source-order comparator and optional confirm) -> Intrinsic DyingSaveMachine Tao/Pass rounds",
+      "root_cause": "Source enable:chooseToUse permits rescue during dying with no trigger tuple. Native Dying Normal/0/true optional is collected before intrinsic Tao rescue. Core heals wounded living players fully; Liuli altered branch caps recovery at2. Source turnover completes before seat-ordered recovery; native emits turnover then performs recovery in one step.",
+      "minimal_next_step": "Specify rescue action ordering and turnover child-event completion using existing rescue/choice/effect boundaries; retain Core full recovery and register Liuli altered cap. No fabricated trigger tuple. Restore/interleaving needs runtime verification when implemented.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "SwdXuanying",
+      "group": "grant",
+      "producer": "shahai-swd-upstream-noname",
+      "host_key": "host:xuanying",
+      "catalog_skill_name": "xuanying",
+      "grant_chain": "swd_duanmeng -> parent xuanying host mapping grants the merged native active+Damage behavior. Both upstream parent groups grant only xuanying_sha/xuanying_use; finishSkill registers xuanying_damage definition/translation but normal group expansion does not grant it.",
+      "event_window": "Damage AfterTriggers; source-specific damageEnd/damageAfter/damageSource qualification still required",
+      "root_cause": "Declared damage child has Normal/0/true in both sources, but presence under subSkill is not ownership. Selected package has no explicit xuanying_damage grant, and selected source module has no explicit full-key damage grant. Native parent host instance makes linked damage counterattack reachable anyway; body matches an ungranted declaration. Native reaction also guards virtual Sha with nonempty deck, not in source.",
+      "minimal_next_step": "Keep actual parent active/loseEnd grants and declared child tuple separate. Correct native default reachability to actual source group using existing grant/filter boundaries; only support damage reaction for an explicitly qualified child grant. Adding damage to default parent group would be an unapproved source semantic change. No new schema is needed just to stop conflating existing branches, but complete active/use behavior remains runtime work.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "XianjianChengxin",
+      "group": "rescue",
+      "producer": "shaai-xianjian-upstream-noname",
+      "host_key": "host:xj_chengxin",
+      "catalog_skill_name": "chengxin",
+      "grant_chain": "明绣 -> chengxin mapping host:xj_chengxin; filter Dying other-player + ready round; effect cooldown round+4, recover target to1, set chengxin_active.",
+      "event_window": "Dying Commit -> AfterTriggers (source-order comparator and optional confirm) -> Intrinsic DyingSaveMachine Tao/Pass rounds",
+      "root_cause": "Source enable:chooseToUse round4, dying target, no source trigger. Generated roundcount is a roundStart cooldown helper, not this rescue. Native Dying Normal/0/true optional runs before Tao and excludes owner although source selected dying target need not be another player. Immunity until target full-turn phaseAfter differs from generic phase timing.",
+      "minimal_next_step": "Define existing rescue action/cooldown/target behavior against actual source, including self rescue, then target phaseAfter expiry; keep roundcount helper separate. Reuse DyingSaveMachine/choice boundaries. Any new rescue classification field is a contract change pending review, not part of a tuple patch.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    },
+    {
+      "variant": "XianjianShuiyun5",
+      "group": "rescue",
+      "producer": "shaai-xianjian-upstream-noname",
+      "host_key": "host:xj_shuiyun5",
+      "catalog_skill_name": "shuiyun5",
+      "grant_chain": "紫萱 general explicitly grants shuiyun5 mapping host:xj_shuiyun5 as well as shuiyun; native Dying filter other-player + off_court nonempty; step chooses/discards stored card, recovers1, increments count.",
+      "event_window": "Dying Commit -> AfterTriggers (source-order comparator and optional confirm) -> Intrinsic DyingSaveMachine Tao/Pass rounds",
+      "root_cause": "Upstream chooseToUse dying action has no trigger tuple. Selected native package supplies explicit auxiliary grant (not merely a parent subSkill inference). Native Dying Normal/0/true optional is synthetic and excludes self, unlike source dying target filter; generic off_court nonempty must also be qualified as shuiyun storage cards.",
+      "minimal_next_step": "Reuse rescue action choice and stored-card effect seams, fix target/storage qualification and repeated rescue/pass behavior; retain actual explicit native grant. No priority0 proof from translation or auxiliary skill presence; review any rescue-window contract extension before implementation.",
+      "needs_source_choice": false,
+      "needs_runtime_mechanism": true,
+      "new_proven_count": 0
+    }
+  ],
+  "fresh_source_checks": [
+    {
+      "variant": "GwentFengyinState",
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "body_sha256": "15abb661c7485b5f46d37275438830c5ebdbfe4fd86cfeba92bde818eb44d84b",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "GwentFengyinState",
+      "path": "archive/upstream/noname/apps/core/noname/library/skill.js",
+      "file_sha256": "d21356bbe6a5ee8768f2295f9c4572c3411f69343dc1b574a639ab3bd20742d6",
+      "body_sha256": "c644ecd7cdebc695a69ef9cfc6329fd342adaac7dbe05712997ea9906251fe80",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Kunlunjing",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "cc92c3429e1636bac365b21a9b1c3e53e9fe9478aac44fddb4bfd4045d0767ce",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Kunlunjing",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "c7694b22800958b9eddb2166c6a2d6846b4cad2eddfd50fc2d3a9fc92704b7c5",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Kunlunjing",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "da62707a732cf1f421de9120a8bd8388fad13772be08255a1f4a1eff997097e4",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Kunlunjing",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "890be472308b54f5331995b66026794c53cf32a2d9a9ed3ec553e0d70f39c579",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "file_sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "body_sha256": "0f447835c295e4a00c21605f35f6c28398b524927ed77e0d73630aadfbf2d1d6",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname/apps/core/character/mobile/skill.js",
+      "file_sha256": "b3e78ce3c14f86be9fa90c455a820a7f270c3630ba2e7af61ab9424acf20f37b",
+      "body_sha256": "b06c532d595ed087180ac4f88cf9cfd7f74a625fe9f1a3c297a9a6821eb041f4",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "file_sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "body_sha256": "0b0035a2f2dd50a41395bbf89454619db038fc8eb3ddeedb9b1dff5d044991de",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "file_sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "body_sha256": "058c3c0c6474f65d1437558020273fb349d2eca2ee6469efde6b929e80350443",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "file_sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "body_sha256": "75bb5d12dd96639da6f3181702cf3b38fddb532b7d990420451a8a9694f535b1",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname/apps/core/character/mobile/skill.js",
+      "file_sha256": "b3e78ce3c14f86be9fa90c455a820a7f270c3630ba2e7af61ab9424acf20f37b",
+      "body_sha256": "ec3bb0db6d290c032cea64de387102a60c6438034f69cb3750bf57d8caf829eb",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname/apps/core/character/mobile/skill.js",
+      "file_sha256": "b3e78ce3c14f86be9fa90c455a820a7f270c3630ba2e7af61ab9424acf20f37b",
+      "body_sha256": "594de236425de445d108fbd10a97f5cd75c02da122daf86a367e324d410b9a0b",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbQianlong",
+      "path": "archive/upstream/noname/apps/core/character/mobile/skill.js",
+      "file_sha256": "b3e78ce3c14f86be9fa90c455a820a7f270c3630ba2e7af61ab9424acf20f37b",
+      "body_sha256": "f371669818939a75935cb14c11ccc61d68bf336b797abc299a7da88f97375aae",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbWeitong",
+      "path": "archive/upstream/noname-liuli/noname/character/mobile.js",
+      "file_sha256": "24a3c1fa495d58abeff716335804ecc19fafafdec46af10ef6a717b469d161f0",
+      "body_sha256": "aba83b78f74aa30ff6798272170b7dbdce176de00b476cc2dd64ad0e67ce1b1a",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "MbWeitong",
+      "path": "archive/upstream/noname/apps/core/character/mobile/skill.js",
+      "file_sha256": "b3e78ce3c14f86be9fa90c455a820a7f270c3630ba2e7af61ab9424acf20f37b",
+      "body_sha256": "8a895689b6142424c84afbd6725e43d3423da9e52e7f0a5972a44306c13b1863",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Niepan",
+      "path": "archive/upstream/noname-liuli/noname/character/shenhua.js",
+      "file_sha256": "719cd2e1876966db89126b9c8b6074ebab98127a7132a14110e1186c6a2808b9",
+      "body_sha256": "e1d8d5dfd7e413b4bd62eea725434f2d5c04664f52206e88f0233b1357d3b464",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "Niepan",
+      "path": "archive/upstream/noname/apps/core/character/shenhua/skill.js",
+      "file_sha256": "8a3412279fb82aef60f226d2e5d034605459036aabed0290d4a7146dca8e369f",
+      "body_sha256": "b6c9055c81c9657db5af6e29b04be3641ce4a1653eebf3b71794a4dc727ec441",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SanjianWeaponDamage",
+      "path": "archive/upstream/noname-liuli/noname/card/guozhan.js",
+      "file_sha256": "98fc51a5da7329cd5991f7a8fedb595994e8329cd6ca099bfafa9a2bf471068a",
+      "body_sha256": "4f47436e619faa1a45bbf635d98a1545495b216bd802a3dbc2371a06dbc0e8f1",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SanjianWeaponDamage",
+      "path": "archive/upstream/noname/apps/core/card/guozhan.js",
+      "file_sha256": "4d7312faf64b8213f0061139088e1389ea0a2dc2789a769155faf584de06431d",
+      "body_sha256": "68419bbf4554b00931087faeb0e0c8753dca847d17a22bb4843d7af77a8c7d07",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdFengyinState",
+      "path": "archive/upstream/noname-liuli/noname/game/game.js",
+      "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "body_sha256": "15abb661c7485b5f46d37275438830c5ebdbfe4fd86cfeba92bde818eb44d84b",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdFengyinState",
+      "path": "archive/upstream/noname/apps/core/noname/library/skill.js",
+      "file_sha256": "d21356bbe6a5ee8768f2295f9c4572c3411f69343dc1b574a639ab3bd20742d6",
+      "body_sha256": "c644ecd7cdebc695a69ef9cfc6329fd342adaac7dbe05712997ea9906251fe80",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdNigongAccumulate",
+      "path": "archive/upstream/noname-liuli/noname/card/swd.js",
+      "file_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "body_sha256": "021fb9af393b4a1926fe1498c82ccb47548138948823e1c70fa869808046a14b",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdNigongAccumulate",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js",
+      "file_sha256": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646",
+      "body_sha256": "5fc94eb7ca18262b5a5d05033028a30298c993038da04e74972c01ac54f2d1eb",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdShouyin",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "ae6e64853a90656daec55addde491065a0410934e6dd7a4926f21b6620206408",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdShouyin",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "dbf9f40a82d58f294b3e3f2afe6dad7f118878399f2c0a3223506fc511dc1da9",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdXuanying",
+      "path": "archive/upstream/noname-liuli/noname/character/swd.js",
+      "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+      "body_sha256": "949583f9c71689b429a96e85a9994994a0b5df12ac0a40171cd465fdcdb090b0",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "SwdXuanying",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+      "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+      "body_sha256": "5849f7e9d156b18289284cd4f338959616ae009f155a33e6e3ee64c578cc207a",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "XianjianChengxin",
+      "path": "archive/upstream/noname-liuli/noname/character/xianjian.js",
+      "file_sha256": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+      "body_sha256": "791eddc0778b351597d74fd733811e1d5b644f0c4a9e8439623bffc1ee902d10",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "XianjianChengxin",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js",
+      "file_sha256": "e0724c58d7cb80db1fe4dd251d896f5444711a5c2454ab44b9916b1d3d5db7e7",
+      "body_sha256": "46f343a927557d55eb5d86aafb18ac6c2d66d45b385d71c7a77c0b2d201802be",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "XianjianShuiyun5",
+      "path": "archive/upstream/noname-liuli/noname/character/xianjian.js",
+      "file_sha256": "6f589c438377e291ba3d9ff2d4575df6841dac12686f1ef38a819b738a0f8885",
+      "body_sha256": "4fe28c19deed73636afa52afd5e293fcf93f9e7d7d04c2ff00ed0a1db1cadc84",
+      "source_and_literal_body_freshmatch": true
+    },
+    {
+      "variant": "XianjianShuiyun5",
+      "path": "archive/upstream/noname/apps/core/extension/杀海拾遗/character/xianjian/skill.js",
+      "file_sha256": "e0724c58d7cb80db1fe4dd251d896f5444711a5c2454ab44b9916b1d3d5db7e7",
+      "body_sha256": "9548799550b137a893273939c7393f4f28eb460dbc51a7155a83c31107bb279e",
+      "source_and_literal_body_freshmatch": true
+    }
+  ],
+  "qualification": "32sourcebody/file SHA+literalcontainment only, no semantic runtime/locked-context acceptance; count262/290 unchanged",
+  "post_json_note": "\n\nThe exact source/bridge questions are narrowed above; no broad C authorization is needed. Remaining approvals concern only the explicitly named declaration/per-handler/rescue/blocker contracts, if those extensions are chosen.\n\nSkipped: runtime execution, installed-room inspection and all builds/tests, as requested. Risk: static source/declaration identity does not prove scheduling equivalence or qualified binding.\n"
+}

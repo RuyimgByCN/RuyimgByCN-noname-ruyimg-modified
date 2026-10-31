@@ -1,0 +1,36 @@
+warning: duplicated attribute
+   --> crates/engine-native-wasm/src/lib.rs:969:5
+    |
+969 |     #[test]
+    |     ^^^^^^^
+    |
+    = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native-wasm` (lib test) generated 2 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running unittests src/lib.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/engine_native_wasm-16b044e1e1e1761c)
+
+running 1 test
+
+thread 'session::planner_pool_tests::default_auto_step_serial_and_candidate_pool_measurement' (15958059) panicked at crates/engine-native-wasm/src/session/planner_pool_tests.rs:175:13:
+each measured step must submit distinct root jobs
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test session::planner_pool_tests::default_auto_step_serial_and_candidate_pool_measurement ... FAILED
+
+failures:
+
+failures:
+    session::planner_pool_tests::default_auto_step_serial_and_candidate_pool_measurement
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 28 filtered out; finished in 0.02s
+
+error: test failed, to rerun pass `-p engine-native-wasm --lib`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native-wasm", "--lib", "default_auto_step_serial_and_candidate_pool_measurement", "--", "--ignored", "--nocapture"], "exit": 101, "locked_seconds": 0.11670870799571276, "disk_free_bytes": 92162142208}

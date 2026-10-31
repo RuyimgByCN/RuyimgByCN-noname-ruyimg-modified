@@ -1,0 +1,288 @@
+{
+  "qualification": "PASS Main V2 native + frontend functional checks ONLY; parent review required; not integrated batch acceptance",
+  "sealed_utc": "2026-10-31T06:37:11.044230+00:00",
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "tree": "184829236b7c17fe472fecbb1ba77b8129c65a6e",
+  "admission_manifest": "/tmp/noname-parent-nc27-main-admission.json",
+  "admission_sha256": "de5056a89f90c0a19116662f631771411916f18ddf65ce3c11f25e7262a64cf7",
+  "private_v2_source_manifest_sha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e",
+  "native": {
+    "totals": {
+      "passed": 1715,
+      "failed": 0,
+      "ignored": 75
+    },
+    "suites": 17,
+    "source_subset_passed": 9
+  },
+  "frontend": {
+    "tests": 179,
+    "pass": 179,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "production": {
+    "transformed_modules": 117,
+    "traced_main_source_modules": 35,
+    "output_files": 45,
+    "out_dir": "/tmp/nc27-main-functional-458ed333/frontend-dist",
+    "config_loader": "runner",
+    "original_config_dirname": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+    "existing_generated_modules_reused_readonly": true
+  },
+  "commands": [
+    {
+      "name": "native-all-layers",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+      "exit": 0,
+      "wall_seconds": 117.34344658299233,
+      "minimum_free_bytes": 85499445248,
+      "disk_stop": false,
+      "environment": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+      },
+      "stdout_sha256": "de44451b902c233b160480e1aa4e5fe126fe2e425b3bae7f8336be0d189d9fab",
+      "stderr_sha256": "771e4cf2cba2da33564000964d32bbc8bd32f021a77964c6c6373df8b13c174f",
+      "wrapper_record": {
+        "command": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native-kernel",
+          "-p",
+          "engine-native-content",
+          "-p",
+          "engine-native"
+        ],
+        "exit": 0,
+        "locked_seconds": 60.70646158300224,
+        "disk_free_bytes": 85505720320
+      },
+      "warning_lines": [],
+      "actual_error_lines": []
+    },
+    {
+      "name": "frontend-tests",
+      "argv": [
+        "pnpm",
+        "test"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "pnpm",
+        "test"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "wall_seconds": 66.46615025002393,
+      "minimum_free_bytes": 85494562816,
+      "disk_stop": false,
+      "environment": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+      },
+      "stdout_sha256": "1e467fe8b77964e7e15230b02947139d8ef0099fd8e58ff58cba1147770876a4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapper_record": {
+        "command": [
+          "pnpm",
+          "test"
+        ],
+        "exit": 0,
+        "locked_seconds": 1.0781110830139369,
+        "disk_free_bytes": 85505626112
+      },
+      "warning_lines": [
+        "(node:19228) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.",
+        "(node:19241) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided."
+      ],
+      "actual_error_lines": []
+    },
+    {
+      "name": "frontend-typecheck",
+      "argv": [
+        "pnpm",
+        "typecheck"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "pnpm",
+        "typecheck"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "wall_seconds": 1.5169954579905607,
+      "minimum_free_bytes": 85505470464,
+      "disk_stop": false,
+      "environment": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+      },
+      "stdout_sha256": "988112f1b8f6592dd4ec5eb57c633313c6dc42dbd6bd48b887651478b54f501a",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapper_record": {
+        "command": [
+          "pnpm",
+          "typecheck"
+        ],
+        "exit": 0,
+        "locked_seconds": 1.4814712499792222,
+        "disk_free_bytes": 85505449984
+      },
+      "warning_lines": [],
+      "actual_error_lines": []
+    },
+    {
+      "name": "frontend-build",
+      "argv": [
+        "node",
+        "/tmp/nc27-main-functional-458ed333/vite-build.mjs"
+      ],
+      "serialized_argv": [
+        "python3",
+        "-B",
+        "/tmp/noname-run-serialized.py",
+        "node",
+        "/tmp/nc27-main-functional-458ed333/vite-build.mjs"
+      ],
+      "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+      "exit": 0,
+      "wall_seconds": 1.5133028750133235,
+      "minimum_free_bytes": 85483134976,
+      "disk_stop": false,
+      "environment": {
+        "CARGO_INCREMENTAL": "0",
+        "CARGO_BUILD_JOBS": "2",
+        "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+      },
+      "stdout_sha256": "2f096fdca81cd6e6836187c9a28d0ad16f015fde64b4041f47c8509649bd93a3",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "wrapper_record": {
+        "command": [
+          "node",
+          "/tmp/nc27-main-functional-458ed333/vite-build.mjs"
+        ],
+        "exit": 0,
+        "locked_seconds": 1.2192798330215737,
+        "disk_free_bytes": 85463662592
+      },
+      "warning_lines": [],
+      "actual_error_lines": []
+    }
+  ],
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "tracked_status": true,
+    "admission31": true,
+    "admission_mismatches": true,
+    "input_hashes": true,
+    "guard": true,
+    "attribute_sha256": true,
+    "root_gates": true,
+    "docs_dirty": true,
+    "source3": true,
+    "protected": true,
+    "modules": true,
+    "dist": true,
+    "pa09_admission_sha256": true
+  },
+  "counts": {
+    "input_hashes": 1131,
+    "admission31": 31,
+    "protected": 99,
+    "modules": 18,
+    "dist": 37,
+    "docs_dirty": 6,
+    "root_gates": 7
+  },
+  "versions": {
+    "crates/engine-native-content/src/content/standard.rs": {
+      "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+      "value": 330
+    },
+    "crates/engine-native-kernel/src/archive.rs": {
+      "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+      "value": 105
+    },
+    "crates/engine-api/src/version.rs": {
+      "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "value": 758
+    },
+    "crates/engine-protocol/src/lib.rs": {
+      "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "value": 6
+    }
+  },
+  "defaults": {
+    "frontend_rule_backend": "native",
+    "desktop_transport": "WASM unless explicitly overridden"
+  },
+  "no_staged_files": true,
+  "target": {
+    "path": "/tmp/nc27-main-functional-458ed333/cargo-target",
+    "ownership": "Created exclusively by worker458ed333; now released to parent for final Main gate reuse. Retained, not deleted; no process from this worker remains using it."
+  },
+  "lease": "Main functional read lease released after sealed handoff",
+  "not_covered": [
+    "P2 legacy serde repair690c or later Main v3",
+    "full workspace/old engine-core/legacy WASM/full preflight",
+    "current actual WASM execution, product GUI, browser, WebView, physical devices",
+    "upstream rule equivalence, resource-sync acceptance, whole batch acceptance"
+  ],
+  "setup": {
+    "non_product_issues": [
+      {
+        "command": "Initial parallel inspection: root package.json and guessed source path probes",
+        "result": "failed path probes",
+        "qualification": "No root package.json or guessed paths exist; corrected by reading actual crate/frontend paths. Not product test failures."
+      },
+      {
+        "command": "python3 -B /tmp/nc27-main-functional-driver.py before && serialized cargo tree ...",
+        "result": "tool timeout30s while cargo tree waited for global lock; formal before.json successfully captured; tree logs empty",
+        "qualification": "No tests executed in that attempt. Reissued read-only cargo tree without heavy lock because dependency inspection is light, then heavy native suite queued asynchronously."
+      }
+    ],
+    "clarification": "Supervisor confirmed ArtifactnativeSource141/anySource/oldRustMatrix fragment was surplus concatenated task text, not file/scenario/test; no command required and no product failure.",
+    "index_limit": "Initial exploratory git status --short used default optional-lock behavior before formal before.json. A possible initial stat-cache refresh cannot be excluded. Formal before/after index SHA identical; staging empty throughout."
+  },
+  "free_disk_bytes": 75757772800
+}

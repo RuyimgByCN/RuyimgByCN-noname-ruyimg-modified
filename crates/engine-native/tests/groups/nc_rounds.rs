@@ -99,3 +99,6 @@ mod nc10_redaction_helper_contract;
 
 #[path = "../nc10_j2_vm_privacy.rs"]
 mod nc10_j2_vm_privacy;
+
+#[path = "../nc10_source_provenance.rs"]
+mod nc10_source_provenance;

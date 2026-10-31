@@ -1,0 +1,27 @@
+{
+  "result": "PASS",
+  "manifests": [
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/pre-full-freeze/source-manifest.json",
+      "bytes": 22890,
+      "sha256": "b72249870862f030a4b8ee88c7703cf4daaa4e109273b2f6f368ae533e592af3"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/checkpoint20/source-manifest.json",
+      "bytes": 22890,
+      "sha256": "d0eefba41915f902a39c57ba953225052e382247c6348d11f2df5ee47b9e2a9e"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/final-freeze5/source-manifest.json",
+      "bytes": 22890,
+      "sha256": "cbeab39b1316d77df884242b5494c8b7da2cc5baf8737431ab8a716da6eaaf16"
+    }
+  ],
+  "ordered_files_arrays_equal": true,
+  "path_sha_pairs": 135,
+  "canonicalization": "UTF8 json.dumps(files,sort_keys=True,separators=(comma,colon)); all keys ASCII; sort_keys=False gives same bytes because input keys already sorted",
+  "canonical_bytes": 18936,
+  "source_tree_identity_sha256": "dcedfa22a6cff71adeb4a6107b911e462623bc609e37c7359b7226bdfd0e64f6",
+  "recorded_identity_equal": true,
+  "qualification": "Read-only retained JSON/hash comparison; no producer or live-tree scan"
+}

@@ -1,0 +1,456 @@
+{
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/5cad4e16-8b93-4535-98a8-cde600ab8c47/implementation/nc10-own-source-supplement-approved27.md",
+      "stored": "implementation-v2/report.raw.txt",
+      "bytes": 8136,
+      "sha256": "7236ba694f360f9a62358c5f6da0f94a3d080efea019c05257cef30c2b2b42c7"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered-checkpoint.md",
+      "stored": "implementation-v2/recovery.raw.txt",
+      "bytes": 9579,
+      "sha256": "c53fce9dd1aa10af14ad71e90222b49da58fc8895e60930a213d16614522cb2f"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8e51f0f9-6b94-4976-a6b6-59631e9e06ac/reviews/nc27-frozen-independent.task-1.md",
+      "stored": "implementation-v2/source-review.raw.txt",
+      "bytes": 5764,
+      "sha256": "fbc1b4ef01013661f7b31da4cf8465989663c92792f6650b79a172191b44f0fa"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8e51f0f9-6b94-4976-a6b6-59631e9e06ac/reviews/nc27-frozen-independent.task-2.md",
+      "stored": "implementation-v2/legacy-review-with-P2.raw.txt",
+      "bytes": 7953,
+      "sha256": "dd4ec34b03be63285887328bc645ea9cf4b145cd10318b5103246b5459ec9695"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-error-compatibility-repair.md",
+      "stored": "legacy-p2-v3/report.raw.txt",
+      "bytes": 9404,
+      "sha256": "2b285d15edd2a12f8b2bf32ffe002323d9a1322cf0480e399beb48fe1ff49500"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/715cc435-7a1a-41f8-9346-b967d458a99e/reviews/nc27-legacy-serde-p2-v3-recheck.md",
+      "stored": "legacy-p2-v3/independent-recheck.raw.txt",
+      "bytes": 5473,
+      "sha256": "c52c7a74b991ccfdd435efbba626fd7559680c75d0d7433f5fab1a4f19cce980"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/29be60c5-8097-4f06-acd5-7f9a1fb4785f/verification/nc27-private-resource-gate-materialization.md",
+      "stored": "resource-materialization/report.raw.txt",
+      "bytes": 15520,
+      "sha256": "1146fceb0be285adc4637f59ce4650e7bb81043dc69b7dc8b913a34e66dc79e5"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/458ed333-4788-4c83-b58a-9cedb48adf24/verification/nc27-main-native-and-frontend-functional.md",
+      "stored": "main-functional-v2/report.raw.txt",
+      "bytes": 14008,
+      "sha256": "390998591df44266758af712b01e29ab58cdf888b9c7a405af3b86a07f9a22b6"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source-manifest.json",
+      "stored": "implementation-v2/source-manifest.json",
+      "bytes": 11677352,
+      "sha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e"
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/minimal.patch",
+      "stored": "implementation-v2/source.patch",
+      "bytes": 79561,
+      "sha256": "46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/source-overlay.tar.gz",
+      "stored": "implementation-v2/source-overlay.tar.gz",
+      "bytes": 107857,
+      "sha256": "4b605e7fe77d7a52e56c6316b1ff3190b5fe9264639580e02a4b0b9178f613ea"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/checkpoint.json",
+      "stored": "implementation-v2/recovery-checkpoint.json",
+      "bytes": 17362,
+      "sha256": "448b0de2f05ddbf10b46e50c2ac6fdb5f6009c2b754175112feb5add00ee520e"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/checkpoint20/manifest.json",
+      "stored": "implementation-v2/checkpoint20-manifest.json",
+      "bytes": 11262,
+      "sha256": "1c016f283413d5b9e367784655eb0acd645d704d20a621b107ccffe701ada657"
+    },
+    {
+      "source": "/tmp/noname-parent-nc27-audit.py",
+      "stored": "parent-audit/audit-v2.py",
+      "bytes": 6584,
+      "sha256": "81ffc63b56a42795623833807a68ae74bb3e7455aa652ed04431e8ce4ba0ea81"
+    },
+    {
+      "source": "/tmp/noname-parent-nc27-incremental-audit.py",
+      "stored": "parent-audit/audit-incremental.py",
+      "bytes": 6676,
+      "sha256": "caa13d529eb0b42f66beb2a81bc0629bddfa3bc2fa46ca5c4321a8feef1ef0f9"
+    },
+    {
+      "source": "/tmp/noname-parent-nc27-audit/independent-results.json",
+      "stored": "parent-audit/v2-independent-results.json",
+      "bytes": 8077,
+      "sha256": "f00caaf00d067d3bea5f8830eb1027ad965db3bf630ae37ba18d7c2b8b54ef04"
+    },
+    {
+      "source": "/tmp/noname-parent-nc27-audit/incremental-resource-main-results.json",
+      "stored": "parent-audit/incremental-independent-results.json",
+      "bytes": 2765,
+      "sha256": "81d7f25dccc5b08c5ee95792ba5c949f0e553d64fb0740f6394c1118d582e047"
+    },
+    {
+      "source": "/tmp/noname-parent-nc27-main-admission.json",
+      "stored": "parent-audit/main-admission-v3.json",
+      "bytes": 9481,
+      "sha256": "6c9fdfdeb3e17b8f0d379ea2da4cb2a95f9a5a3dd1bdd67af41a7cc2adb66364"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/SHA256SUMS",
+      "stored": "legacy-p2-v3/SHA256SUMS",
+      "bytes": 2277,
+      "sha256": "f5f30861b6cd951039e21feb7f28d5a446fe0dfe0472146c387f8168dfecd998"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/assertion-red-manifest.json",
+      "stored": "legacy-p2-v3/assertion-red-manifest.json",
+      "bytes": 781,
+      "sha256": "858ed41e28c5937252ed126fd29beca52a204ecdffae7a13ce2d257f32a31ebb"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/base-tree.txt",
+      "stored": "legacy-p2-v3/base-tree.txt",
+      "bytes": 5076652,
+      "sha256": "6c394f927e722bbc4ba77e6c36c3198b621189951079cd4c2ce266e1bdd4ee03"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/changed-source.tar.gz",
+      "stored": "legacy-p2-v3/changed-source.tar.gz",
+      "bytes": 6888,
+      "sha256": "cbe57c2203637b19865ed7c878d5b9d5bdfa6667da126ce7597f417ad09b7424"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/checkpoint12.json",
+      "stored": "legacy-p2-v3/checkpoint12.json",
+      "bytes": 4743,
+      "sha256": "a37297691d3b58ab65af1e3249f0fec85162b7035ad03e119541c9d50dc55733"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/final-seal.json",
+      "stored": "legacy-p2-v3/final-seal.json",
+      "bytes": 1161,
+      "sha256": "2c3cce004a5bce22450c15e74de7f2b5d42d06386a6b12a93f6f76f7f90c57f2"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/full-source-manifest-v3.json",
+      "stored": "legacy-p2-v3/full-source-manifest-v3.json",
+      "bytes": 17555045,
+      "sha256": "4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/green-matrix.json",
+      "stored": "legacy-p2-v3/green-matrix.json.gz",
+      "source_bytes": 2425555,
+      "source_sha256": "c56f956d6240e857060ff5251a35664b41e7b4e82f9ea05f0945e17395926584",
+      "bytes": 27521,
+      "sha256": "eeab9c0a53b5462a572ff3de514df90f7eb3c2c16e7936bebefc07cd78d0e14c",
+      "compression": "gzip exact decoded bytes"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/legacy-wasm-sink-smoke.json",
+      "stored": "legacy-p2-v3/legacy-wasm-sink-smoke.json",
+      "bytes": 244,
+      "sha256": "c15622f467b637b891b95b05b16a25150a77ea944cb0b0e2e9aaac3f5a2668da"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/legacy-wasm-sink-smoke.mjs",
+      "stored": "legacy-p2-v3/legacy-wasm-sink-smoke.mjs",
+      "bytes": 1454,
+      "sha256": "1371a9be01fc955e20c0bb5e87aa0933a21113c74491c014dc0356dcbbfeb86a"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-actual-legacy-wasm-sink.json",
+      "stored": "legacy-p2-v3/p2-actual-legacy-wasm-sink.json",
+      "bytes": 430,
+      "sha256": "5bfdba47f702b5adce36e5b4688580c0b591168bc03fd5a5234a6b86c7139586"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-core-full.json",
+      "stored": "legacy-p2-v3/p2-core-full.json",
+      "bytes": 283,
+      "sha256": "642507ae5d7b2df0443801319f3b961ec135e7bc76b810cc57082c678fc910a8"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-legacy-assertion-red.json",
+      "stored": "legacy-p2-v3/p2-legacy-assertion-red.json",
+      "bytes": 522,
+      "sha256": "7ca5deac537008d6121769448980ad7744f291378ee24bbd4249ea0be98ce33a"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-legacy-green.json",
+      "stored": "legacy-p2-v3/p2-legacy-green.json",
+      "bytes": 514,
+      "sha256": "35b95c1b6045c06a93d0f57b42cdd8a1a8db1017ebf887ef6d925fa9de016ef7"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-legacy-red.json",
+      "stored": "legacy-p2-v3/p2-legacy-red.json",
+      "bytes": 512,
+      "sha256": "260ceb4bd2f7d7cbba4ffbb7199c8557d46444ba8cf11892bac6251755709fec"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-legacy-wasm-build.json",
+      "stored": "legacy-p2-v3/p2-legacy-wasm-build.json",
+      "bytes": 498,
+      "sha256": "324d8bdc407300666a0c4946b90b9535497e62ff2453fcdeae1d644e67b304a9"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/p2-legacy-wasm-sink.json",
+      "stored": "legacy-p2-v3/p2-legacy-wasm-sink.json",
+      "bytes": 343,
+      "sha256": "9f3cc8b70d17b60782c29d56e838dc94e93f610a127ec58a5412dbfcbde1487a"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/red-matrix.json",
+      "stored": "legacy-p2-v3/red-matrix.json.gz",
+      "source_bytes": 2425559,
+      "source_sha256": "cd86dfc3e6dbea65695dd5bf99e04d37cafe98b7e9133690efb5dfd44426d8b3",
+      "bytes": 27596,
+      "sha256": "ce78a5d74bcff081b1463bd35abe10cf223130156e4a5f8e6e28897c1aa2d204",
+      "compression": "gzip exact decoded bytes"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/results.json",
+      "stored": "legacy-p2-v3/results.json",
+      "bytes": 8750,
+      "sha256": "ac69ad86bb874c2293449823c5b99af67da40cb85801a541da16e333198c7832"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/choice_request_4dd.rs",
+      "stored": "legacy-p2-v3/source/crates/engine-core/src/engine/source_tests/choice_request_4dd.rs",
+      "bytes": 3693,
+      "sha256": "1b906494d37a1763b55dfae8f56d69cbc440342181d17c0c2c612b5c4a41a90d"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+      "stored": "legacy-p2-v3/source/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs",
+      "bytes": 7415,
+      "sha256": "def6e41add0842fb661538471a9889a1d563b3f9b6ea5e851eef3d00b4acaa97"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests.rs",
+      "stored": "legacy-p2-v3/source/crates/engine-core/src/engine/source_tests.rs",
+      "bytes": 10901,
+      "sha256": "ab34685dbb72cee7edc839dc92b9d52c7330a7b2a2d0784d2cb07cbae02db0f6"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/snapshot/legacy_choice.rs",
+      "stored": "legacy-p2-v3/source/crates/engine-core/src/snapshot/legacy_choice.rs",
+      "bytes": 2567,
+      "sha256": "de8834412e59e79a1068a43858a43c576e97713297ac5578d641289cac73f862"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source-manifest-v3.json",
+      "stored": "legacy-p2-v3/source-manifest-v3.json",
+      "bytes": 1871,
+      "sha256": "6ebf6c33ec7cffc08b8084629ccdde75d277c62dadf72c37a5cecb6cf8e7cf19"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/v3-delta.patch",
+      "stored": "legacy-p2-v3/v3-delta.patch",
+      "bytes": 16878,
+      "sha256": "014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/artifact-sha256.json",
+      "stored": "main-functional-v2/artifact-sha256.json",
+      "bytes": 4056,
+      "sha256": "94191f6b13c86a3011ef6ae81153be08c1619f475166b399424af94ffb2f906b"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/after.json",
+      "stored": "main-functional-v2/after.json",
+      "bytes": 171320,
+      "sha256": "58698f3244b34589eca2ea6dd870131c61076dc1b484402747dcad9017800171"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/before.json",
+      "stored": "main-functional-v2/before.json",
+      "bytes": 171320,
+      "sha256": "258c9bba50fc45265730d04d084f83ed49356d4b91c969430594fbc57d668765"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/bundle-module-table.json",
+      "stored": "main-functional-v2/bundle-module-table.json",
+      "bytes": 22527,
+      "sha256": "3c91b6d62dda0428ddbfe6a13f73caa8ef03f190e5c88e04ff14298a8ce647aa"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/capture-driver.py",
+      "stored": "main-functional-v2/capture-driver.py",
+      "bytes": 4365,
+      "sha256": "f5a41447dea26a3443d407ed7c77baecedcd01c7cddb623b1d7ad608b3db840b"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/comparison.json",
+      "stored": "main-functional-v2/comparison.json",
+      "bytes": 737,
+      "sha256": "be5db62bef3eaee10b5266b4fbf7b4d83c878882ed4ca5d272024f1ed825d0b6"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-build.result.json",
+      "stored": "main-functional-v2/frontend-build.result.json",
+      "bytes": 796,
+      "sha256": "9a6e0adf94c6cfafc57b8d437899444e2bcead6f5302e57340f389e63394679d"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-build.stderr.log",
+      "stored": "main-functional-v2/frontend-build.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-build.stdout.log",
+      "stored": "main-functional-v2/frontend-build.stdout.log",
+      "bytes": 1712,
+      "sha256": "2f096fdca81cd6e6836187c9a28d0ad16f015fde64b4041f47c8509649bd93a3"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-driver.log",
+      "stored": "main-functional-v2/frontend-driver.log",
+      "bytes": 1993,
+      "sha256": "19a53de77561cac35397016199301559735524c94554844efe4ed6ab18078dfc"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-products.json",
+      "stored": "main-functional-v2/frontend-products.json",
+      "bytes": 6334,
+      "sha256": "268f5067ad7e85c13c335893783af8bd8240788c7d68bd20100ea18a65b58dfd"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-tests.result.json",
+      "stored": "main-functional-v2/frontend-tests.result.json",
+      "bytes": 705,
+      "sha256": "0e164ee353f2081c5ffb49a6390f0c01d8e92a143f9108fb089a3c96a84ae6e5"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-tests.stderr.log",
+      "stored": "main-functional-v2/frontend-tests.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-tests.stdout.log",
+      "stored": "main-functional-v2/frontend-tests.stdout.log",
+      "bytes": 16831,
+      "sha256": "1e467fe8b77964e7e15230b02947139d8ef0099fd8e58ff58cba1147770876a4"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-typecheck.result.json",
+      "stored": "main-functional-v2/frontend-typecheck.result.json",
+      "bytes": 720,
+      "sha256": "6f401f5fe9587ee040f79703f26c927376fb4559225c291d8b36eccdf4c4b7a3"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-typecheck.stderr.log",
+      "stored": "main-functional-v2/frontend-typecheck.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/frontend-typecheck.stdout.log",
+      "stored": "main-functional-v2/frontend-typecheck.stdout.log",
+      "bytes": 247,
+      "sha256": "988112f1b8f6592dd4ec5eb57c633313c6dc42dbd6bd48b887651478b54f501a"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-all-layers.result.json",
+      "stored": "main-functional-v2/native-all-layers.result.json",
+      "bytes": 945,
+      "sha256": "33acfaeb633447349abbfd8525ec23b9efbc817b3af372feb3d55999c9d86840"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-all-layers.stderr.log",
+      "stored": "main-functional-v2/native-all-layers.stderr.log",
+      "bytes": 4169,
+      "sha256": "771e4cf2cba2da33564000964d32bbc8bd32f021a77964c6c6373df8b13c174f"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-all-layers.stdout.log",
+      "stored": "main-functional-v2/native-all-layers.stdout.log",
+      "bytes": 145039,
+      "sha256": "de44451b902c233b160480e1aa4e5fe126fe2e425b3bae7f8336be0d189d9fab"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-dependencies.stderr",
+      "stored": "main-functional-v2/native-dependencies.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-dependencies.txt",
+      "stored": "main-functional-v2/native-dependencies.txt",
+      "bytes": 6925,
+      "sha256": "c74097fc63ca889a61681bac6ea0a28953ddec694f87b9c6cab03ad36747b242"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-driver.log",
+      "stored": "main-functional-v2/native-driver.log",
+      "bytes": 813,
+      "sha256": "9cb8e57dc24efb039e3e2e6d5575fd6ac05448ad559f33bbe615c44b61692eaa"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/native-parsed.json",
+      "stored": "main-functional-v2/native-parsed.json",
+      "bytes": 18904,
+      "sha256": "7c1c16ea94b27a494ee98137295c6ec1a18f87bb0dad7f30ab736217f9c98ec5"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/post-versions.json",
+      "stored": "main-functional-v2/post-versions.json",
+      "bytes": 608,
+      "sha256": "5587afba8d697b1b6ea6011e820229be9581bd841b62161cd74daa3aee6ecf84"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/seal.py",
+      "stored": "main-functional-v2/seal.py",
+      "bytes": 7970,
+      "sha256": "4039bb1315f536c77ce9b6129a2a6f6c2e9b6226217deeb2df8d4cfbc3f9eb29"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/setup-and-clarification.json",
+      "stored": "main-functional-v2/setup-and-clarification.json",
+      "bytes": 1226,
+      "sha256": "d0b8ea331f28e97de4f99d32e83c9ae197e845ad4ac79756933502469275569c"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/summary.json",
+      "stored": "main-functional-v2/summary.json",
+      "bytes": 9740,
+      "sha256": "69c1ba319e034b4e07e92d2c54fdc28f7c8313d53729024d3396d2a251b67308"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/tools-and-ownership.json",
+      "stored": "main-functional-v2/tools-and-ownership.json",
+      "bytes": 583,
+      "sha256": "d9cd990fec6e3e658c8488d616e8d775be5687e54c64716bdcf8e732ccc5a1f4"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/versions-default-and-source-registration.json",
+      "stored": "main-functional-v2/versions-default-and-source-registration.json",
+      "bytes": 5373,
+      "sha256": "39801f421285a9ca9f96ce26516a7cd8c5509597694adb75172550a59526bff0"
+    },
+    {
+      "source": "/tmp/nc27-main-functional-458ed333/vite-build.mjs",
+      "stored": "main-functional-v2/vite-build.mjs",
+      "bytes": 1978,
+      "sha256": "420b7c5e81817fda2880db3adc64d60963766d2f3d70816d50d4d03c78166a76"
+    }
+  ],
+  "raw_bundle": "implementation-v2/raw-bundle-manifest.json",
+  "qualification": "V2review+P2v3incremental and MainV2functional. Not new wholeMainV3 acceptance or runtime/root closure. Source33currentlyintegrated/uncommitted; finalchecks pending."
+}

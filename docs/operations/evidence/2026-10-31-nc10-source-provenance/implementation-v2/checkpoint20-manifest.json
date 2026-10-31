@@ -1,0 +1,334 @@
+{
+  "utc": "2026-10-31T05:16:23.341102+00:00",
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "scope": "complete base git tree plus full changed-file source overlay; reconstructable source freeze without staged objects",
+  "patchSha256": "21b29b0eaccfe382bee9768f89df25810a69296a960543bd1f7e5d7232d72634",
+  "baseTreeSha256": "6c394f927e722bbc4ba77e6c36c3198b621189951079cd4c2ce266e1bdd4ee03",
+  "files": [
+    {
+      "path": "apps/desktop-client/src/native_envelope.rs",
+      "bytes": 6436,
+      "sha256": "d5acd0976df0bc52a2a0a7bcc42ebdaacf04a41f38fa9d530f0fbebd5de50a99"
+    },
+    {
+      "path": "apps/game-server/src/native_view.rs",
+      "bytes": 16028,
+      "sha256": "58489515fb09c45062791977292abcb98b272c79e0aa05b0a9714faaf8642a25"
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "bytes": 37654,
+      "sha256": "b3da9130c61940da6b0c8b030ca819b37a8b7aa107e8287f6d61a5e61ad22e5d"
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/source_skill.rs",
+      "bytes": 6293,
+      "sha256": "2817b38616909db331a7089279b9f6f8ecbb280cd8d0118156ba866956076956"
+    },
+    {
+      "path": "apps/game-server/tests/support/ws6_choice_before_source.rs",
+      "bytes": 3690,
+      "sha256": "9cd9966474e75ff90375aeb7d6bac5879ae34eeacb7521b13aa1b73e40c860e3"
+    },
+    {
+      "path": "apps/web-client/scripts/nc10-source-provenance.test.mjs",
+      "bytes": 1853,
+      "sha256": "241d78a87627469e6b7420c3c0d9ba2948cf69dc65a95dba5b92eaf44bce3176"
+    },
+    {
+      "path": "apps/web-client/src/engine/observerMetadata.ts",
+      "bytes": 4196,
+      "sha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800"
+    },
+    {
+      "path": "apps/web-client/src/types/engine.ts",
+      "bytes": 8690,
+      "sha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358"
+    },
+    {
+      "path": "apps/web-client/src/worker/nativeBackend.ts",
+      "bytes": 35395,
+      "sha256": "4d5a195d687ebb68c78ea5e2bd59768f6e165349a4c8a9efdb07e45ee5343a24"
+    },
+    {
+      "path": "crates/engine-api/src/choice.rs",
+      "bytes": 4179,
+      "sha256": "a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6"
+    },
+    {
+      "path": "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+      "bytes": 23508,
+      "sha256": "1db4ba0e9fa4cce95d9c429bce73887c3ff0587bbd05a978defd908cce7a918b"
+    },
+    {
+      "path": "crates/engine-core/src/engine.rs",
+      "bytes": 28209,
+      "sha256": "61d3d75b48cec7b72560b0a312dced62cd72d20ce67baf7071432740e6a27ec9"
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests.rs",
+      "bytes": 7691,
+      "sha256": "53b3e5736a88d87571e1a8444dfd0056b1f6e3db1dfb17dda08502937253531a"
+    },
+    {
+      "path": "crates/engine-core/src/snapshot.rs",
+      "bytes": 12148,
+      "sha256": "0d608675557c51f89b93c2467c4c816987194a05146cc2ad7b7c2e339f41b3e1"
+    },
+    {
+      "path": "crates/engine-core/src/snapshot/legacy_choice.rs",
+      "bytes": 3620,
+      "sha256": "2ab8e6d7a696e7a82915bfc85baac310c41ddee11214a8092f41964ec8a5ae2b"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "bytes": 36163,
+      "sha256": "23b8aeb8723cde85ceb94996e7d550fe6d0f2e1bf1f700cf2c7fbc85df0e8d42"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "bytes": 2984,
+      "sha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91"
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "bytes": 29086,
+      "sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8"
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/pa09_native_session.rs",
+      "bytes": 5116,
+      "sha256": "c30f2c52fb2410a1ea21e0a4e62c198c82b85ab3e983c7fc10bf2bb043b242ec"
+    },
+    {
+      "path": "crates/engine-native/src/engine.rs",
+      "bytes": 19338,
+      "sha256": "0553ef09300b3d9b2488dea4d37d54033d4f9c3c5fddb483aaf628710dfb8bd6"
+    },
+    {
+      "path": "crates/engine-native/src/engine/choice_source.rs",
+      "bytes": 7022,
+      "sha256": "d6994dbfb9604476610f66a64cf43e87e46a5a70cc0db326cc2c10eb3d4da8d6"
+    },
+    {
+      "path": "crates/engine-native/src/engine/views.rs",
+      "bytes": 9072,
+      "sha256": "df6f0895163f614ccb65e994e5686449adbc944fe1cf2fe7b93b7a9583d6e3d2"
+    },
+    {
+      "path": "crates/engine-native/src/view.rs",
+      "bytes": 9186,
+      "sha256": "b0e41367f862b128d5d696eb5fe1ed9111fffa16cf4c43b01cd10d61bae6efe6"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "bytes": 2666,
+      "sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383"
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_source_provenance.rs",
+      "bytes": 2680,
+      "sha256": "42298c1f4f081745d1bfc06e00906c4ad6126e1ab22822175cfdfe446bd6b3ff"
+    },
+    {
+      "path": "crates/engine-wasm/src/lib.rs",
+      "bytes": 27016,
+      "sha256": "ca1211b288533d2eafc1b4396184b50045052c70deb09df37deb90522bd6117a"
+    }
+  ],
+  "status": " M apps/desktop-client/src/native_envelope.rs\n M apps/game-server/src/native_view.rs\n M apps/game-server/src/native_ws_e2e.rs\n M apps/web-client/src/engine/observerMetadata.ts\n M apps/web-client/src/types/engine.ts\n M apps/web-client/src/worker/nativeBackend.ts\n M crates/engine-api/src/choice.rs\n M crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs\n M crates/engine-core/src/engine.rs\n M crates/engine-core/src/snapshot.rs\n M crates/engine-native-kernel/src/snap/asks.rs\n M crates/engine-native-kernel/src/snap/asks/shapes.rs\n M crates/engine-native-wasm/src/session.rs\n M crates/engine-native-wasm/tests/pa09_native_session.rs\n M crates/engine-native/src/engine.rs\n M crates/engine-native/src/engine/views.rs\n M crates/engine-native/src/view.rs\n M crates/engine-native/tests/groups/nc_rounds.rs\n M crates/engine-wasm/src/lib.rs\n?? apps/game-server/src/native_ws_e2e/source_skill.rs\n?? apps/game-server/tests/support/ws6_choice_before_source.rs\n?? apps/web-client/scripts/nc10-source-provenance.test.mjs\n?? crates/engine-core/src/engine/\n?? crates/engine-core/src/snapshot/\n?? crates/engine-native/src/engine/choice_source.rs\n?? crates/engine-native/tests/nc10_source_provenance.rs\n",
+  "staged": "",
+  "diskFreeBytes": 82787160064,
+  "completedCommands": {
+    "frontend-source": {
+      "utc": "2026-10-31T05:09:12.831571+00:00",
+      "command": [
+        "bash",
+        "-c",
+        "cd apps/web-client && pnpm test"
+      ],
+      "exit": 1,
+      "wallIncludingLockQueueSeconds": 89.3406817909854,
+      "log": "frontend-source.log",
+      "diskFree": 90944835584
+    },
+    "green-legacy-source": {
+      "utc": "2026-10-31T05:04:29.433155+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "source_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 25.762465334002627,
+      "log": "green-legacy-source.log",
+      "diskFree": 91543916544
+    },
+    "green-native-source": {
+      "utc": "2026-10-31T05:04:36.532829+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_source_provenance",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 32.856207624980016,
+      "log": "green-native-source.log",
+      "diskFree": 91526873088
+    },
+    "legacy-wasm-build": {
+      "utc": "2026-10-31T05:11:45.979897+00:00",
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree/apps/web-client/src/wasm-pkg",
+        "--",
+        "--no-default-features"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 194.4786311670032,
+      "log": "legacy-wasm-build.log",
+      "diskFree": 89394192384
+    },
+    "native-wasm-build": {
+      "utc": "2026-10-31T05:12:16.854839+00:00",
+      "command": [
+        "wasm-pack",
+        "build",
+        "crates/engine-native-wasm",
+        "--target",
+        "web",
+        "--release",
+        "--no-opt",
+        "--out-dir",
+        "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree/apps/web-client/src/worker/native-pkg"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 225.35044366700458,
+      "log": "native-wasm-build.log",
+      "diskFree": 89326714880
+    },
+    "red-naive-expanded": {
+      "utc": "2026-10-31T05:03:00.630380+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "source_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 26.8451157080126,
+      "log": "red-naive-expanded.log",
+      "diskFree": 91621879808
+    },
+    "red-naive-legacy": {
+      "utc": "2026-10-31T05:01:42.999655+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-core",
+        "--lib",
+        "source_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 41.973084375000326,
+      "log": "red-naive-legacy.log",
+      "diskFree": 91915075584
+    },
+    "red-native-source": {
+      "utc": "2026-10-31T04:59:44.163713+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "nc10_source_provenance",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "wallIncludingLockQueueSeconds": 26.388071374996798,
+      "log": "red-native-source.log",
+      "diskFree": 92246294528
+    },
+    "source-native-unit": {
+      "utc": "2026-10-31T05:09:11.678669+00:00",
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--lib",
+        "choice_source",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 88.2106221250142,
+      "log": "source-native-unit.log",
+      "diskFree": 90944483328
+    },
+    "workspace-check": {
+      "utc": "2026-10-31T05:09:08.112416+00:00",
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "--workspace",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "wallIncludingLockQueueSeconds": 84.64805004102527,
+      "log": "workspace-check.log",
+      "diskFree": 90967556096
+    }
+  },
+  "runningOrQueued": [
+    "conformance",
+    "desktop-host",
+    "full-native",
+    "full-workspace",
+    "native-host-example",
+    "own-node-modules-copy",
+    "source-fixture",
+    "source-legacy-sink",
+    "source-ws-real"
+  ],
+  "blockers": [
+    "Independent implementation review pending",
+    "Complete runtime/WS/UI and full-suite validation pending at checkpoint",
+    "NC10 root/runtime remains BLOCK; no root work authorized"
+  ]
+}

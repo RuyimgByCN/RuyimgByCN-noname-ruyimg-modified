@@ -1,0 +1,367 @@
+{
+  "recoveryStartedUtc": "2026-10-31T06:01:02.716670+00:00",
+  "sealedUtc": "2026-10-31T06:01:03.188982+00:00",
+  "scope": "Recovery seal only; no product source, fixtures, tests, builds, sync, cleanup, or authority changes",
+  "originalRun": "5cad4e16-8b93-4535-98a8-cde600ab8c47",
+  "orchestratorOutcome": "Original run hit 60-minute orchestration TIMEOUT; not a product-test exit status",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6",
+  "worktree": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/worktree",
+  "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/target",
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "requiredBase": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "baseMatches": true,
+  "checkpoint20Utc": "2026-10-31T05:16:23.341102+00:00",
+  "checkpoint20RecoveredCopy": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/checkpoint20/manifest.json",
+  "sourceFreezeUtc": "2026-10-31T05:47:13.611200+00:00",
+  "completeFrozenSourcePath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source",
+  "completeFrozenSourceFiles": 43867,
+  "changedFiles": [
+    "apps/desktop-client/src/native_envelope.rs",
+    "apps/desktop-client/tests/native_engine_host.rs",
+    "apps/game-server/src/native_view.rs",
+    "apps/game-server/src/native_ws_e2e.rs",
+    "apps/game-server/src/native_ws_e2e/source_skill.rs",
+    "apps/game-server/tests/support/ws6_choice_before_source.rs",
+    "apps/web-client/scripts/nc10-source-provenance.test.mjs",
+    "apps/web-client/scripts/nc10-source-ui.ts",
+    "apps/web-client/scripts/network-client.test.mjs",
+    "apps/web-client/scripts/ws6-observer-metadata-before-source.ts",
+    "apps/web-client/src/engine/observerMetadata.ts",
+    "apps/web-client/src/types/engine.ts",
+    "apps/web-client/src/worker/nativeBackend.ts",
+    "crates/engine-api/src/choice.rs",
+    "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+    "crates/engine-core/src/engine.rs",
+    "crates/engine-core/src/engine/source_tests.rs",
+    "crates/engine-core/src/snapshot.rs",
+    "crates/engine-core/src/snapshot/legacy_choice.rs",
+    "crates/engine-native-kernel/src/snap/asks.rs",
+    "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+    "crates/engine-native-wasm/src/session.rs",
+    "crates/engine-native-wasm/tests/pa09_native_session.rs",
+    "crates/engine-native/src/engine.rs",
+    "crates/engine-native/src/engine/choice_source.rs",
+    "crates/engine-native/src/engine/views.rs",
+    "crates/engine-native/src/view.rs",
+    "crates/engine-native/tests/groups/nc_rounds.rs",
+    "crates/engine-native/tests/nc10_source_provenance.rs",
+    "crates/engine-native/tests/swd_kunlunjing_rewind.rs",
+    "crates/engine-wasm/src/lib.rs"
+  ],
+  "currentSourceIdentities": [
+    {
+      "path": "apps/desktop-client/src/native_envelope.rs",
+      "sha256": "d5acd0976df0bc52a2a0a7bcc42ebdaacf04a41f38fa9d530f0fbebd5de50a99",
+      "expectedFrozenSha256": "d5acd0976df0bc52a2a0a7bcc42ebdaacf04a41f38fa9d530f0fbebd5de50a99",
+      "matches": true,
+      "bytes": 6436
+    },
+    {
+      "path": "apps/desktop-client/tests/native_engine_host.rs",
+      "sha256": "def6d6cc674c17c88157206f3690c0e93f4f6a76fcdf532530bb583a854f8ac3",
+      "expectedFrozenSha256": "def6d6cc674c17c88157206f3690c0e93f4f6a76fcdf532530bb583a854f8ac3",
+      "matches": true,
+      "bytes": 13272
+    },
+    {
+      "path": "apps/game-server/src/native_view.rs",
+      "sha256": "58489515fb09c45062791977292abcb98b272c79e0aa05b0a9714faaf8642a25",
+      "expectedFrozenSha256": "58489515fb09c45062791977292abcb98b272c79e0aa05b0a9714faaf8642a25",
+      "matches": true,
+      "bytes": 16028
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e.rs",
+      "sha256": "b3da9130c61940da6b0c8b030ca819b37a8b7aa107e8287f6d61a5e61ad22e5d",
+      "expectedFrozenSha256": "b3da9130c61940da6b0c8b030ca819b37a8b7aa107e8287f6d61a5e61ad22e5d",
+      "matches": true,
+      "bytes": 37654
+    },
+    {
+      "path": "apps/game-server/src/native_ws_e2e/source_skill.rs",
+      "sha256": "2817b38616909db331a7089279b9f6f8ecbb280cd8d0118156ba866956076956",
+      "expectedFrozenSha256": "2817b38616909db331a7089279b9f6f8ecbb280cd8d0118156ba866956076956",
+      "matches": true,
+      "bytes": 6293
+    },
+    {
+      "path": "apps/game-server/tests/support/ws6_choice_before_source.rs",
+      "sha256": "9cd9966474e75ff90375aeb7d6bac5879ae34eeacb7521b13aa1b73e40c860e3",
+      "expectedFrozenSha256": "9cd9966474e75ff90375aeb7d6bac5879ae34eeacb7521b13aa1b73e40c860e3",
+      "matches": true,
+      "bytes": 3690
+    },
+    {
+      "path": "apps/web-client/scripts/nc10-source-provenance.test.mjs",
+      "sha256": "c9a36e98e95d714755b76c6301a6f6ca400ae801ec2244494ff5c7ca4d40361e",
+      "expectedFrozenSha256": "c9a36e98e95d714755b76c6301a6f6ca400ae801ec2244494ff5c7ca4d40361e",
+      "matches": true,
+      "bytes": 2221
+    },
+    {
+      "path": "apps/web-client/scripts/nc10-source-ui.ts",
+      "sha256": "5c7555ccf09b335cebaacd81c1573919e0e14a3a2a7914d35356036151aa2d7a",
+      "expectedFrozenSha256": "5c7555ccf09b335cebaacd81c1573919e0e14a3a2a7914d35356036151aa2d7a",
+      "matches": true,
+      "bytes": 3446
+    },
+    {
+      "path": "apps/web-client/scripts/network-client.test.mjs",
+      "sha256": "ee7481f3a2c50f6f353581a18821bc9c328f703d9253bafe2ca39fb925fc5d8d",
+      "expectedFrozenSha256": "ee7481f3a2c50f6f353581a18821bc9c328f703d9253bafe2ca39fb925fc5d8d",
+      "matches": true,
+      "bytes": 27627
+    },
+    {
+      "path": "apps/web-client/scripts/ws6-observer-metadata-before-source.ts",
+      "sha256": "09de518cfb8e5c4352c8c9c026382ca388f1f0f3fa7ab41fa11e21f86da9a555",
+      "expectedFrozenSha256": "09de518cfb8e5c4352c8c9c026382ca388f1f0f3fa7ab41fa11e21f86da9a555",
+      "matches": true,
+      "bytes": 3860
+    },
+    {
+      "path": "apps/web-client/src/engine/observerMetadata.ts",
+      "sha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800",
+      "expectedFrozenSha256": "8743f7eee68589ac0042a76e7a89ef183cf30216989867aad686e1d9a413c800",
+      "matches": true,
+      "bytes": 4196
+    },
+    {
+      "path": "apps/web-client/src/types/engine.ts",
+      "sha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358",
+      "expectedFrozenSha256": "1b5de94c399f6d7927bd23b30516187b39ebc2538c55b8ed5ca80e2cb6370358",
+      "matches": true,
+      "bytes": 8690
+    },
+    {
+      "path": "apps/web-client/src/worker/nativeBackend.ts",
+      "sha256": "4d5a195d687ebb68c78ea5e2bd59768f6e165349a4c8a9efdb07e45ee5343a24",
+      "expectedFrozenSha256": "4d5a195d687ebb68c78ea5e2bd59768f6e165349a4c8a9efdb07e45ee5343a24",
+      "matches": true,
+      "bytes": 35395
+    },
+    {
+      "path": "crates/engine-api/src/choice.rs",
+      "sha256": "a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6",
+      "expectedFrozenSha256": "a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6",
+      "matches": true,
+      "bytes": 4179
+    },
+    {
+      "path": "crates/engine-core/src/effect/primitives/pack_tw_1/recover_hp.rs",
+      "sha256": "1db4ba0e9fa4cce95d9c429bce73887c3ff0587bbd05a978defd908cce7a918b",
+      "expectedFrozenSha256": "1db4ba0e9fa4cce95d9c429bce73887c3ff0587bbd05a978defd908cce7a918b",
+      "matches": true,
+      "bytes": 23508
+    },
+    {
+      "path": "crates/engine-core/src/engine.rs",
+      "sha256": "61d3d75b48cec7b72560b0a312dced62cd72d20ce67baf7071432740e6a27ec9",
+      "expectedFrozenSha256": "61d3d75b48cec7b72560b0a312dced62cd72d20ce67baf7071432740e6a27ec9",
+      "matches": true,
+      "bytes": 28209
+    },
+    {
+      "path": "crates/engine-core/src/engine/source_tests.rs",
+      "sha256": "40d7c707a6693166ee085910acc598c739c6c71f7de4162b3e8a3b95dcad5c1f",
+      "expectedFrozenSha256": "40d7c707a6693166ee085910acc598c739c6c71f7de4162b3e8a3b95dcad5c1f",
+      "matches": true,
+      "bytes": 10825
+    },
+    {
+      "path": "crates/engine-core/src/snapshot.rs",
+      "sha256": "3d915e64742662229169337aa121020910d19fbff04ce62578e61336b1a43c03",
+      "expectedFrozenSha256": "3d915e64742662229169337aa121020910d19fbff04ce62578e61336b1a43c03",
+      "matches": true,
+      "bytes": 12152
+    },
+    {
+      "path": "crates/engine-core/src/snapshot/legacy_choice.rs",
+      "sha256": "2ab8e6d7a696e7a82915bfc85baac310c41ddee11214a8092f41964ec8a5ae2b",
+      "expectedFrozenSha256": "2ab8e6d7a696e7a82915bfc85baac310c41ddee11214a8092f41964ec8a5ae2b",
+      "matches": true,
+      "bytes": 3620
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "sha256": "2c7cd8f238da2c25c2855231cc44b218b7aa5b8c9ca5a50ca58f5b715b4b50aa",
+      "expectedFrozenSha256": "2c7cd8f238da2c25c2855231cc44b218b7aa5b8c9ca5a50ca58f5b715b4b50aa",
+      "matches": true,
+      "bytes": 36299
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "sha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91",
+      "expectedFrozenSha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91",
+      "matches": true,
+      "bytes": 2984
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "sha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+      "expectedFrozenSha256": "092386089c04d0cc22706918a00f23d24d2e525079ae6469f18edebd41230ff8",
+      "matches": true,
+      "bytes": 29086
+    },
+    {
+      "path": "crates/engine-native-wasm/tests/pa09_native_session.rs",
+      "sha256": "c3777b64bca69e0921502826be7aa9f1389f52a274342ce439757cfa673fa04f",
+      "expectedFrozenSha256": "c3777b64bca69e0921502826be7aa9f1389f52a274342ce439757cfa673fa04f",
+      "matches": true,
+      "bytes": 5247
+    },
+    {
+      "path": "crates/engine-native/src/engine.rs",
+      "sha256": "0553ef09300b3d9b2488dea4d37d54033d4f9c3c5fddb483aaf628710dfb8bd6",
+      "expectedFrozenSha256": "0553ef09300b3d9b2488dea4d37d54033d4f9c3c5fddb483aaf628710dfb8bd6",
+      "matches": true,
+      "bytes": 19338
+    },
+    {
+      "path": "crates/engine-native/src/engine/choice_source.rs",
+      "sha256": "b4cdf9eedf010e3110e61c405f2cfb02b3a09cb43280f0793d042df4551fd696",
+      "expectedFrozenSha256": "b4cdf9eedf010e3110e61c405f2cfb02b3a09cb43280f0793d042df4551fd696",
+      "matches": true,
+      "bytes": 7103
+    },
+    {
+      "path": "crates/engine-native/src/engine/views.rs",
+      "sha256": "df6f0895163f614ccb65e994e5686449adbc944fe1cf2fe7b93b7a9583d6e3d2",
+      "expectedFrozenSha256": "df6f0895163f614ccb65e994e5686449adbc944fe1cf2fe7b93b7a9583d6e3d2",
+      "matches": true,
+      "bytes": 9072
+    },
+    {
+      "path": "crates/engine-native/src/view.rs",
+      "sha256": "b0e41367f862b128d5d696eb5fe1ed9111fffa16cf4c43b01cd10d61bae6efe6",
+      "expectedFrozenSha256": "b0e41367f862b128d5d696eb5fe1ed9111fffa16cf4c43b01cd10d61bae6efe6",
+      "matches": true,
+      "bytes": 9186
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "sha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+      "expectedFrozenSha256": "c3f459392c3375c430b55f0d3caa3806df37936ee8e63a85f5d86d97e2196383",
+      "matches": true,
+      "bytes": 2666
+    },
+    {
+      "path": "crates/engine-native/tests/nc10_source_provenance.rs",
+      "sha256": "8df57dc35be62cc7d489b15016d8e9e61a3fc6193ca4164708bbf118462d7ea9",
+      "expectedFrozenSha256": "8df57dc35be62cc7d489b15016d8e9e61a3fc6193ca4164708bbf118462d7ea9",
+      "matches": true,
+      "bytes": 9944
+    },
+    {
+      "path": "crates/engine-native/tests/swd_kunlunjing_rewind.rs",
+      "sha256": "8c8ea40937275b266b73a19d50e77e3fced223cad31db09355ff5f11d4f62d41",
+      "expectedFrozenSha256": "8c8ea40937275b266b73a19d50e77e3fced223cad31db09355ff5f11d4f62d41",
+      "matches": true,
+      "bytes": 8444
+    },
+    {
+      "path": "crates/engine-wasm/src/lib.rs",
+      "sha256": "ff41f28cd57c41f4caeab25df1a5e10ca76dbe13ed8451e557f5aa2b369334bf",
+      "expectedFrozenSha256": "ff41f28cd57c41f4caeab25df1a5e10ca76dbe13ed8451e557f5aa2b369334bf",
+      "matches": true,
+      "bytes": 27566
+    }
+  ],
+  "currentChangedSourcesMatchRetainedFreeze": true,
+  "sourceManifestSha256": "48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e",
+  "patchSha256": "46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43",
+  "indexShaBeforeReadOnlyInspection": "9319410c9d5f596ca2622ba755bbbb5005a88cd53e576254583c3d179b1cd300",
+  "indexShaAfterReadOnlyInspection": "9319410c9d5f596ca2622ba755bbbb5005a88cd53e576254583c3d179b1cd300",
+  "indexUnchangedByRecovery": true,
+  "stagedFiles": [],
+  "noStagedFiles": true,
+  "processes": {
+    "utc": "2026-10-31T06:01:03.188197+00:00",
+    "matchingOwnedRootProcesses": [],
+    "missingResultFiles": [],
+    "globalLock": "/tmp/noname-phase4-heavy-command.lock",
+    "lockOwnership": "Not acquired, probed with a locking syscall, removed or changed during recovery. No ownership claim about other writers.",
+    "actions": "No process was killed; no heavy command started."
+  },
+  "completedRetainedCommands": 58,
+  "failedRetainedCommands": [
+    {
+      "name": "final-gates",
+      "exit": 1,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-gates.log"
+    },
+    {
+      "name": "final-strict-native",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-strict-native.log"
+    },
+    {
+      "name": "frontend-source",
+      "exit": 1,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/frontend-source.log"
+    },
+    {
+      "name": "red-naive-expanded",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/red-naive-expanded.log"
+    },
+    {
+      "name": "red-naive-legacy",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/red-naive-legacy.log"
+    },
+    {
+      "name": "red-native-source",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/red-native-source.log"
+    },
+    {
+      "name": "source-final-native-corrected",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/source-final-native-corrected.log"
+    },
+    {
+      "name": "source-final-native-vm",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/source-final-native-vm.log"
+    },
+    {
+      "name": "source-final-native",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/source-final-native.log"
+    },
+    {
+      "name": "source-final-vm-commit",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/source-final-vm-commit.log"
+    },
+    {
+      "name": "source-prefix-false-lemma-red",
+      "exit": 101,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/source-prefix-false-lemma-red.log"
+    },
+    {
+      "name": "v2-original-sync-verify",
+      "exit": 1,
+      "log": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/v2-original-sync-verify.log"
+    }
+  ],
+  "versions": {
+    "rules": 330,
+    "nativeArchive": 105,
+    "vmAbi": 758,
+    "ws": 6
+  },
+  "protectedSeams": "See retained scope-validation.json; scheduler, formal restore validators, root gate, VM/fuel/arithmetic, packages/Cargo.lock untouched. Recovery made no source edits.",
+  "remaining": [
+    "Original resource sync gate failed: asset manifest tree summaries mismatch; hardlinked/copied explanation remains a hypothesis, not a verified fix.",
+    "Independent implementation acceptance review pending; not all mandatory gates green.",
+    "Original 19 NoCert and runtime BLOCK remain. No broad upstream equivalence or full quality matrix.",
+    "R05/Decision28 and C331/PA09 other writers are separate and untouched."
+  ],
+  "authoritativeRecoveryReport": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered-checkpoint.md",
+  "authoritativeRecoveryReportSha256": "c53fce9dd1aa10af14ad71e90222b49da58fc8895e60930a213d16614522cb2f",
+  "reportLogicalLines": 44,
+  "failedResultsFile": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d3a47bb0-718e-4a4b-ab39-ed59690ce52f/implementation/nc10-own-source-supplement-approved27-recovered/failed-results.json",
+  "backgroundSession": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/2026-10-29T12-17-50-921Z_01a18798-5949-73c1-8642-9d0f55dc485a/d4884f99-617a-4b09-9c2f-d593f5401a4b/run-0/session.jsonl"
+}

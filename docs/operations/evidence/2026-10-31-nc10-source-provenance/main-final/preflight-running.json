@@ -1,0 +1,8 @@
+{
+  "utc": "2026-10-31T07:27:26.880879+00:00",
+  "process_lines": [
+    "35739 34505       01:17 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B /tmp/noname-run-serialized.py python3 -B scripts/preflight.py",
+    "35740 35739       01:17 /Library/Frameworks/Python.framework/Versions/3.10/Resources/Python.app/Contents/MacOS/Python -B scripts/preflight.py"
+  ],
+  "completed_result_exists": false
+}

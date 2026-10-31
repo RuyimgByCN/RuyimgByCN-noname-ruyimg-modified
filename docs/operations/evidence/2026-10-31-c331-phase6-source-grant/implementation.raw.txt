@@ -1,0 +1,62 @@
+本批已修复旋影默认父技错误授予Damage反击，并保留实际父技授予后的主动杀。执行中另修复两项既有恢复缺口；均先保留真实红，获Parent逐项授权后实施。完整loseEnd-use仍pending，来源计数保持**262/290，新增0**，整C331仍BLOCK。
+
+仅写既有私有C工作树及`../evidence/phase6`。HEAD仍`38ab1678df9b4b7b991d3b3122b1d937fd2648a1`，index空；Main4dd、其他NC27树、项目docs、配置、版本、提交均未写，未清缓存或中断其他driver。
+当前源码增量7文件：kernel `vocabulary/host/metadata/swd.rs`、`vocabulary/host/behavior.rs`、`archive/resolution.rs`；content `host/filtering/swd.rs`、`host/step/swd_damage_targets.rs`、`host/asks.rs`；既有注册测试 `g1_shahai_swd/xuanying.rs`。
+以下记录相对于`/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase6/`。
+
+已读实际两源xuanying完整body、父group、子技注册、所有当前Native调用方及测试、生产`bridge_pack`/host factory/正式general assembly路径。
+两源父group均为`xuanying_sha`和`xuanying_use`；shan/damage虽在subSkill中注册，均不在父group。实际selected noname asset中的端蒙只声明parent xuanying及lieren，没有独立damage声明。
+`verified-source-grants-and-codec.json`保留实际file/body SHA、完整四子技body、精确group、实际general声明和字典前后核验；`source-grant-evidence.json`列loader/grant/effect路径与当前接口边界。未执行上游JS，也未冒称已核某个实际installed-room lock。
+
+修复采用原有grant/filter/machine边界：父技不再登记Damage TriggerMeta，filter不再接受Damage，删除未授予的反击机器分支；保留原ActivateSkill主动杀和目标选择，不添加damage到来源group，也不支持虚构的显式damage grant。
+这不是整技关闭：新增回归从实际producer asset经生产bridge再正式`assign_general_named("swd_duanmeng")`拥有父技，不用debug_grant补授。主动确认仍可对距离2目标发起真实虚拟杀并横置；取消不横置、不伤目标。
+负例中parent owned、linked、回合外受1点真实伤害，旧实现确认后攻击者HP4→3，修后攻击者HP保持4、持有者仍横置且不产生反击CardPlayed。该反例独立于恢复修复。
+
+两层恢复缺陷分别登记，授权全文边界保存在`approved-boundaries.md`：
+1. 生产active发出的既有`xuanying_target`未入静态字典，byte decode真实报`BadTag("prompt_unknown",0)`。只尾追加此既有literal；原数组完整前缀不变，其他文件字节及错误路径未改。prompt按UTF8 string编码，本处没有数字prompt ID，不涉及档格式/ChoiceKind/协议变化。
+2. 尾追加后decode通过，但Engine restore仍报`OpenChoiceMismatch { observer:0 }`，因为host_ask缺SwdXuanying派生。现仅对既有TargetChoice阶段补准确派生，producer与恢复共用同一ChoiceSpec helper，避免双写选项算法。其余stage返回None；未新增机器字段、stage、State或放宽恢复总校验。
+确认和取消均走真实byte encode/decode→Engine restore；比较完整save（仅按既有规则归一化auth_generation）、state hash、完整后续日志，save内包含choices/resolution/全部RNG。
+负控覆盖options、observer、已知但错误prompt、allow_cancel、min、max、ChoiceKind及错误Act stage；均仍拒绝。另验证未登记的其他literal继续报原prompt_unknown错误。
+
+| 原始记录 | 实际结果与资格 |
+|---|---|
+| `xuanying-red.log` | 首次误用未注册Cargo target，未运行测试；保留driver错误，不算语义红 |
+| `xuanying-red2.log` | 0通过/2失败：真实默认授予反击错误及独立prompt codec错误 |
+| `xuanying-green1.log` | 1通过/1失败：Damage负例已绿；真实restore缺ask派生仍红 |
+| `xuanying-green2.log` | 新负控fixture的resolution字段拼写编译错误；保留，不算产品反例 |
+| `xuanying-green3.log` | 三项定向3/0，随后完整注册组包含最终全部负控 |
+| `registered-group.log` | `cargo test --offline -p engine-native --test g1_shahai`：177/0/0 |
+| `full-native.log` | `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native`：合计1749/0/75 |
+
+`validation-results.json`保存完整argv、开始时间、exit与耗时，所有最终命令exit0。完整原生三包约42.6s；没有golden失败、没有重录或改期望值。
+源码门禁8997文件及Rust有效行上限通过，脚本单测2/2、F7=0；日志分别为`source-caps.log`、`source-cap-unit.log`、`layering.log`。
+重任务均用原全局锁/helper、jobs2、incremental0、现有私有`../target`，编译前磁盘远高于3GiB；未跑十包全量、fat GUI/IPC/WK/WASM或全部平台构建。其他树的排队driver未动。
+
+完整loseEnd-use保持明确接口待办：现有CardsLost不覆盖全部take_hand_card/hand_to_off_court路径，批量give_hand_cards又逐张发CardsLost；CardsMoved/CardsDiscarded不能无重复地拼出统一“全次损失已完成”窗口。原source过滤还要求回合外、linked、非空cards并在loss end选择合法Sha目标。
+因此本批不将use错误绑定到任意部分丢失事件，也不引入per-handler/declaration框架、额外持久状态、救援/blocker协议。更广chooseToUse上下文和既有virtual carrier/deck限制不冒称完整等价。
+SanjianWeaponDamage/SwdNigongAccumulate两装备元组未改，继续等待明确资格与既有契约核验；未用未来或未选Liuli差异论证新API。Xuanying仍留在待办，不因删除错误Damage callback缩小290分母或增加proven计数。
+
+开工前135份frozen5逐SHA一致；本批另触及5份当时未列入135的文件，编辑前均与immutable HEAD38ab逐字一致，故源封存扩为140文件，记录各自origin而非取Main fallback。
+20分钟实体checkpoint为`checkpoint20/`：manifest=`c07c7408352000a7ab3c004c9f87298a3c96b54d92b6abf94d9bc37db597808e`，源码tar=`4a6927dcea3b95b52bea990057fb3d7def132cf8db9cd6a38371f5488f5e92e6`；当时两层红及fixture编译状态均如实标记。
+最终`final-freeze6/`含140源码、7文件增量tar、vs-phase5 patch、证据tar及SHA清单；pre-full与post-full的140份file/SHA列表完全一致。
+最终source manifest SHA=`81d66d59f0ca336761f28629850f9daf7a955670e7c17725cde40b88a1ba21e7`。
+最终source tar SHA=`b9cb5c97658750bc11becc8e23a0cd074112cf3f2d38d173aaa71be3fa2084b1`。
+最终evidence manifest SHA=`116043f141c72efd6278853aa77623a00f7100134991fe0cbb214647feb7f99f`。
+结果绑定`source-result-binding.json` SHA=`d74af67433509f89c3f225f55cfec4afad7f28d3235028cf7527b86065e6c970`；工件总索引`final-artifact-index.json` SHA=`54ee40f1527fe7cfcd2d2473b019a8cd9ad50055c540477d91e40b48dc7cb6a8`，包含封存后补充的授权说明。
+原frozen5 manifest/tar仍为`cbeab39b…`/`34023da5…`；phase2/3/4/5旧报告、计数、错误、冻结及证据binary未覆盖。
+建议Parent独立审7文件增量，分别关闭非法Damage授予、现有prompt codec漏登和缺expected-ask派生三个反例；来源完整性及C331总体仍保持BLOCK。
+
+```acceptance-report
+{
+  "criteriaSatisfied":[{"id":"criterion-1","status":"satisfied","evidence":"Removed only ungranted default Damage reachability, preserved actual granted active Sha, and fixed two specifically authorized existing restoration defects; no source-count completion or unapproved mechanism expansion."},{"id":"criterion-2","status":"satisfied","evidence":"Separate actual counterattack/codec/restore reds, exact active/cancel byte-restore trajectories and negative controls, registered177 green, native3-package1749 green, source/evidence freeze140 and delta7 are retained."}],
+  "changedFiles":["crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs","crates/engine-native-kernel/src/vocabulary/host/behavior.rs","crates/engine-native-kernel/src/archive/resolution.rs","crates/engine-native-content/src/content/host/filtering/swd.rs","crates/engine-native-content/src/content/host/step/swd_damage_targets.rs","crates/engine-native-content/src/content/host/asks.rs","crates/engine-native/tests/g1_shahai_swd/xuanying.rs"],
+  "testsAddedOrUpdated":["crates/engine-native/tests/g1_shahai_swd/xuanying.rs"],
+  "commandsRun":[{"command":"cargo test --offline -p engine-native --test g1_shahai source_parent_grant (pre-fix)","result":"failed","summary":"Actual two reds: counterattack4→3 and prompt_unknown."},{"command":"cargo test --offline -p engine-native --test g1_shahai source_parent","result":"passed","summary":"3/0 after source and authorized restoration repairs."},{"command":"cargo test --offline -p engine-native --test g1_shahai","result":"passed","summary":"177/0/0 including final negative controls."},{"command":"cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native","result":"passed","summary":"1749/0/75; no golden changes."},{"command":"source-cap unit/source-lines/native-layering gates","result":"passed","summary":"2/2;8997 files within limits;F7=0."}],
+  "validationOutput":["140 pre/post source entries match live SHA;135 original frozen5 verified before editing;5 supplementary originals match immutable HEAD.","Wrong options/observer/prompt/kind/min/max/cancel/stage still reject; unrelated unknown prompt still rejects."],
+  "residualRisks":["Full loseEnd-use and broader source behavior remain pending;262/290 unchanged and whole C331 BLOCK.","Both optional equipment tuples remain pending; Parent independent implementation review required."],
+  "noStagedFiles":true,
+  "diffSummary":"Seven files: remove ungranted Damage branch, preserve active branch, append one existing prompt literal, share one accurate ask producer/derivation, and add actual grant/restore regressions.",
+  "reviewFindings":["No further counterexample observed in executed native checks; independent review remains required."],
+  "manualNotes":"Skipped incomplete loss-event approximation, explicit invented damage grants, new APIs/states/versions and extra platform/full-load builds. All original errors and prior frozen evidence retained."
+}
+```

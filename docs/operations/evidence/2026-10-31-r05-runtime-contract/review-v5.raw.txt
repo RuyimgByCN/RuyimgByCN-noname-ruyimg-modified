@@ -1,0 +1,23 @@
+## Review
+
+- **设计结论：最后一项 P1 已关闭。v3＋v4＋v5 已可提交具体用户契约审批。**
+- **Correct：**已完整读取 [v5 七条勘误](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-r05-runtime-contract/proposal-v5.raw.txt)，本次仅复核验证上下文与实际规则内容的绑定；先前已关闭的结论保持不变。
+- **Fixed（设计）：**v5 删除 locked 路径的独立裸 packs 输入，关闭了 v4 的伪造 range 反例。没有产品代码修复或验收结论。
+- **Merge verdict：OK with notes，仅指设计可进入契约审批，不指代码合并或授权实施。**
+
+No issues found.
+
+关闭依据具体成立：
+
+1. **第1、3条切断替换入口。**locked 工厂只接收参数/快照及 `VerifiedLockedContent`，不再接收第二份 packs、Catalog 或 packsJson；派生 packs 在受控工厂内部生成并直接用于构建。
+2. **第2条约束验证结果本身。**私有字段、无可修改引用、信封反序列化必须重新验证，避免把验证类型当作可自行填入的来源标签。
+3. **第4、6条保留既有权威边界。**可信 Rust 手建 packs API 继续存在，但不能由网络/JSON provenance 提升为 locked 输入；不要求沙箱化宿主 Rust，也不让 kernel 引入 JSON、PackageStore 或向上依赖。
+4. **第5条覆盖恢复旁路。**NativeSession、服务端恢复及 WAL 使用同一验证上下文和由其构建的不可变 Catalog，没有重新接受任意裸 packs 的出口。
+5. **第7条针对原反例验证。**独立旧 packs 数组修改不再有参数位置；修改冻结资产则必须重验，保留旧锁时拒绝，并明确要求检查真实各端调用与模块可见性。
+
+这些修订通过收紧构造路径完成绑定，没有新增指纹、持久身份字段、第二证书或包管理系统。
+
+**可审批不等于已批准。**v4 的原始字节安装、保存信封、显式请求、legacy 政策，以及 v3 的规则/ABI/Archive/投影增量仍须具体裁决；本 review 不分配版本，不借用裁决27授权，实际331→实际332的前置关系不变。
+
+本次未读取产品源码、运行测试或检查实现调用；上述关闭仅适用于设计契约。
+风险：实施后仍须验证类型可见性及 Worker/Desktop/server/WAL 无裸 packs 旁路，R05 三技能与全部验收仍未完成。

@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-31T07:15:48.767055+00:00",
+  "versions": {
+    "crates/engine-native-content/src/content/standard.rs": {
+      "sha256": "6944c153b70a37ae8ce1d452fc6424497b3bc13c576135330a5baf7c08bd2f5f",
+      "relevant_lines": [
+        "pub const STANDARD_RULESET_VERSION: u64 = 330;"
+      ]
+    },
+    "crates/engine-native-kernel/src/archive.rs": {
+      "sha256": "976da7d42ad88b4d0832774a974aef9949437ac7bed099e83fa280d72d34da09",
+      "relevant_lines": [
+        "pub const ARCHIVE_FORMAT_VERSION: u16 = 105;"
+      ]
+    },
+    "crates/engine-api/src/version.rs": {
+      "sha256": "c49711ad3f29b89cbcecc4f1f5a4d486adc4c44ead081a33abf1c6b8cc6866d8",
+      "relevant_lines": [
+        "pub const CONTENT_SCHEMA_VERSION: u32 = 3;",
+        "pub const PACKAGE_FORMAT_VERSION: u32 = 1;",
+        "pub const RULE_VM_ABI_VERSION: u32 = 758;"
+      ]
+    },
+    "crates/engine-protocol/src/lib.rs": {
+      "sha256": "24063f924aa1a2290c0831513a874af083c2cb02c9749b7abdb10b5a2c02f33f",
+      "relevant_lines": [
+        "pub const NETWORK_PROTOCOL_VERSION: u32 = 6;"
+      ]
+    },
+    "apps/web-client/src/engine/desktopEngineTransport.ts": {
+      "sha256": "6224bdc95960bdca458693a67176af6936b12d28edbc256e105f6a283197face",
+      "relevant_lines": [
+        "  try { return localStorage.getItem(DESKTOP_ENGINE_KEY) === \"native\" ? \"native\" : \"wasm\"; }"
+      ]
+    },
+    "apps/web-client/vite.config.ts": {
+      "sha256": "edea5f3bdfc9838cc21f30c0a4c1b1722a76f293c3eb5d84a0aa3c69dfdf393a",
+      "relevant_lines": [
+        "    \"import.meta.env.VITE_ENGINE_BACKEND\": JSON.stringify(",
+        "      process.env.VITE_ENGINE_BACKEND ?? \"native\","
+      ]
+    }
+  },
+  "defaults": {
+    "web_rule_backend": "native",
+    "desktop_transport": "WASM unless explicitly overridden"
+  },
+  "generated18_sha256": "d6de366503863550a72406db3dce093e8442b5b70cf42de282b728462b4b349a",
+  "frontend_product_files": 45,
+  "typecheck_inherited": true
+}

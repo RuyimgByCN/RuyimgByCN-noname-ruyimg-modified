@@ -1,0 +1,122 @@
+{
+  "after.json": {
+    "bytes": 171320,
+    "sha256": "58698f3244b34589eca2ea6dd870131c61076dc1b484402747dcad9017800171"
+  },
+  "before.json": {
+    "bytes": 171320,
+    "sha256": "258c9bba50fc45265730d04d084f83ed49356d4b91c969430594fbc57d668765"
+  },
+  "bundle-module-table.json": {
+    "bytes": 22527,
+    "sha256": "3c91b6d62dda0428ddbfe6a13f73caa8ef03f190e5c88e04ff14298a8ce647aa"
+  },
+  "capture-driver.py": {
+    "bytes": 4365,
+    "sha256": "f5a41447dea26a3443d407ed7c77baecedcd01c7cddb623b1d7ad608b3db840b"
+  },
+  "comparison.json": {
+    "bytes": 737,
+    "sha256": "be5db62bef3eaee10b5266b4fbf7b4d83c878882ed4ca5d272024f1ed825d0b6"
+  },
+  "frontend-build.result.json": {
+    "bytes": 796,
+    "sha256": "9a6e0adf94c6cfafc57b8d437899444e2bcead6f5302e57340f389e63394679d"
+  },
+  "frontend-build.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "frontend-build.stdout.log": {
+    "bytes": 1712,
+    "sha256": "2f096fdca81cd6e6836187c9a28d0ad16f015fde64b4041f47c8509649bd93a3"
+  },
+  "frontend-driver.log": {
+    "bytes": 1993,
+    "sha256": "19a53de77561cac35397016199301559735524c94554844efe4ed6ab18078dfc"
+  },
+  "frontend-products.json": {
+    "bytes": 6334,
+    "sha256": "268f5067ad7e85c13c335893783af8bd8240788c7d68bd20100ea18a65b58dfd"
+  },
+  "frontend-tests.result.json": {
+    "bytes": 705,
+    "sha256": "0e164ee353f2081c5ffb49a6390f0c01d8e92a143f9108fb089a3c96a84ae6e5"
+  },
+  "frontend-tests.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "frontend-tests.stdout.log": {
+    "bytes": 16831,
+    "sha256": "1e467fe8b77964e7e15230b02947139d8ef0099fd8e58ff58cba1147770876a4"
+  },
+  "frontend-typecheck.result.json": {
+    "bytes": 720,
+    "sha256": "6f401f5fe9587ee040f79703f26c927376fb4559225c291d8b36eccdf4c4b7a3"
+  },
+  "frontend-typecheck.stderr.log": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "frontend-typecheck.stdout.log": {
+    "bytes": 247,
+    "sha256": "988112f1b8f6592dd4ec5eb57c633313c6dc42dbd6bd48b887651478b54f501a"
+  },
+  "native-all-layers.result.json": {
+    "bytes": 945,
+    "sha256": "33acfaeb633447349abbfd8525ec23b9efbc817b3af372feb3d55999c9d86840"
+  },
+  "native-all-layers.stderr.log": {
+    "bytes": 4169,
+    "sha256": "771e4cf2cba2da33564000964d32bbc8bd32f021a77964c6c6373df8b13c174f"
+  },
+  "native-all-layers.stdout.log": {
+    "bytes": 145039,
+    "sha256": "de44451b902c233b160480e1aa4e5fe126fe2e425b3bae7f8336be0d189d9fab"
+  },
+  "native-dependencies.stderr": {
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "native-dependencies.txt": {
+    "bytes": 6925,
+    "sha256": "c74097fc63ca889a61681bac6ea0a28953ddec694f87b9c6cab03ad36747b242"
+  },
+  "native-driver.log": {
+    "bytes": 813,
+    "sha256": "9cb8e57dc24efb039e3e2e6d5575fd6ac05448ad559f33bbe615c44b61692eaa"
+  },
+  "native-parsed.json": {
+    "bytes": 18904,
+    "sha256": "7c1c16ea94b27a494ee98137295c6ec1a18f87bb0dad7f30ab736217f9c98ec5"
+  },
+  "post-versions.json": {
+    "bytes": 608,
+    "sha256": "5587afba8d697b1b6ea6011e820229be9581bd841b62161cd74daa3aee6ecf84"
+  },
+  "seal.py": {
+    "bytes": 7970,
+    "sha256": "4039bb1315f536c77ce9b6129a2a6f6c2e9b6226217deeb2df8d4cfbc3f9eb29"
+  },
+  "setup-and-clarification.json": {
+    "bytes": 1226,
+    "sha256": "d0b8ea331f28e97de4f99d32e83c9ae197e845ad4ac79756933502469275569c"
+  },
+  "summary.json": {
+    "bytes": 9740,
+    "sha256": "69c1ba319e034b4e07e92d2c54fdc28f7c8313d53729024d3396d2a251b67308"
+  },
+  "tools-and-ownership.json": {
+    "bytes": 583,
+    "sha256": "d9cd990fec6e3e658c8488d616e8d775be5687e54c64716bdcf8e732ccc5a1f4"
+  },
+  "versions-default-and-source-registration.json": {
+    "bytes": 5373,
+    "sha256": "39801f421285a9ca9f96ce26516a7cd8c5509597694adb75172550a59526bff0"
+  },
+  "vite-build.mjs": {
+    "bytes": 1978,
+    "sha256": "420b7c5e81817fda2880db3adc64d60963766d2f3d70816d50d4d03c78166a76"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "frontend-tests",
+  "argv": [
+    "pnpm",
+    "test"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "pnpm",
+    "test"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "exit": 0,
+  "wall_seconds": 66.46615025002393,
+  "minimum_free_bytes": 85494562816,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "1e467fe8b77964e7e15230b02947139d8ef0099fd8e58ff58cba1147770876a4",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

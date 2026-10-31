@@ -1,0 +1,662 @@
+[
+  {
+    "variant": "BossBaimang2x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 824,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossQingmu3x\n            | HostBehavior::BossBaimang2x\n            | HostBehavior::BossChiyan2x\n            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 60,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 白芒·转阶：蓐收 + 两明星 + 全场回满 + 挑战者重整\n            HostBehavior::BossBaimang2x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"蓐收\",\n                        add_fellows: &[\"明星\", \"明星\"],\n                        side_reinits: &[],\n                        heal_all: true,\n                        chain_level: 2,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossBaimang3x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 827,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {\n                ctx.state"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 118,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 白芒3·转阶：少昊 + 侧座蓐收/明星 + 一明星 fellow\n            HostBehavior::BossBaimang3x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"少昊\",\n                        add_fellows: &[\"明星\"],\n                        side_reinits: &[(-1, \"蓐收\"), (1, \"明星\")],\n                        heal_all: false,\n                        chain_level: 3,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossBianshen3x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 830,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {\n                ctx.state\n                    .boss_mode()\n                    .map(|(b, _)| b == owner)\n                    .unwrap_or(false)"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 172,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 后援3·转阶：种子化 → 白无常/黑无常\n            HostBehavior::BossBianshen3x => {\n                bianshen_run_change_boss(ctx, self.owner, &[\"白无常\", \"黑无常\"]);\n                Flow::Done\n            }\n            // 后援4·转阶：种子化 → 夜叉/罗刹\n            HostBehavior::BossBianshen4x => {\n                bianshen_run_change_boss(ctx, self.owner, &[\"夜叉\", \"罗刹\"]);\n                Flow::Done\n            }\n            HostBehavior::BossHuanren => {\n                huanren_on_game_start(ctx, self.owner);"
+      }
+    ]
+  },
+  {
+    "variant": "BossBianshen4x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 831,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {\n                ctx.state\n                    .boss_mode()\n                    .map(|(b, _)| b == owner)\n                    .unwrap_or(false)\n                    && matches!("
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 177,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 后援4·转阶：种子化 → 夜叉/罗刹\n            HostBehavior::BossBianshen4x => {\n                bianshen_run_change_boss(ctx, self.owner, &[\"夜叉\", \"罗刹\"]);\n                Flow::Done\n            }\n            HostBehavior::BossHuanren => {\n                huanren_on_game_start(ctx, self.owner);\n                Flow::Done\n            }\n            HostBehavior::BossHuanrenDie => match self.stage {\n                HostStage::Act => huanren_die_ask(ctx, self),\n                HostStage::HuanrenPick => {"
+      }
+    ]
+  },
+  {
+    "variant": "BossChiyan2x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 825,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossBaimang2x\n            | HostBehavior::BossChiyan2x\n            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 75,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 赤炎·转阶：祝融 + 两焰灵 + 全场回满 + 挑战者重整\n            HostBehavior::BossChiyan2x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"祝融\",\n                        add_fellows: &[\"焰灵\", \"焰灵\"],\n                        side_reinits: &[],\n                        heal_all: true,\n                        chain_level: 2,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossChiyan3x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 828,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {\n                ctx.state\n                    .boss_mode()"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 133,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 赤炎3·转阶：炎帝 + 侧座祝融/焰灵\n            HostBehavior::BossChiyan3x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"炎帝\",\n                        add_fellows: &[],\n                        side_reinits: &[(-1, \"祝融\"), (1, \"焰灵\")],\n                        heal_all: false,\n                        chain_level: 3,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossQingmu2x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 509
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 822,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 四象隐藏链·转阶 + 后援3/4·转阶：同上（技能仍在 DeathMachine 前）\n            HostBehavior::BossQingmu2x\n            | HostBehavior::BossQingmu3x\n            | HostBehavior::BossBaimang2x\n            | HostBehavior::BossChiyan2x\n            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 12,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 青木·转阶：取消死亡执行 + 换勾芒 + 全场回满 + 两书精 + 挑战者重整\n            HostBehavior::BossQingmu2x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"勾芒\",\n                        add_fellows: &[\"书精\", \"书精\"],\n                        side_reinits: &[],\n                        heal_all: true,\n                        chain_level: 2,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossQingmu3x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 525
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 823,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            HostBehavior::BossQingmu2x\n            | HostBehavior::BossQingmu3x\n            | HostBehavior::BossBaimang2x\n            | HostBehavior::BossChiyan2x\n            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 32,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 青木3·转阶：太昊 + 侧座勾芒/书精 + 挑战者重整\n            HostBehavior::BossQingmu3x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"太昊\",\n                        add_fellows: &[],\n                        side_reinits: &[(-1, \"勾芒\"), (1, \"书精\")],\n                        heal_all: false,\n                        chain_level: 3,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossXuanlin2x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 826,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossChiyan2x\n            | HostBehavior::BossXuanlin2x\n            | HostBehavior::BossBaimang3x\n            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 90,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 玄麟·转阶：共工 + 一玄冥 + 全场回满 + 挑战者重整\n            HostBehavior::BossXuanlin2x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"共工\",\n                        add_fellows: &[\"玄冥\"],\n                        side_reinits: &[],\n                        heal_all: true,\n                        chain_level: 2,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "BossXuanlin3x",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": -10,
+        "order_selectable": true,
+        "event": "Death",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 550
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "Source dieBegin/die/dieAfter distinctions are merged into native Death before DeathMachine; source ordering proof does not repair or accept this window gap."
+    ],
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 829,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            | HostBehavior::BossChiyan3x\n            | HostBehavior::BossXuanlin3x\n            | HostBehavior::BossBianshen3x\n            | HostBehavior::BossBianshen4x => matches!(event,\n                EventData::Death { player, .. }\n                if *player == owner\n                    && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)),\n            // 还人开局：关卡尚未进入十殿，且持有者是 Boss\n            HostBehavior::BossHuanren => {\n                ctx.state\n                    .boss_mode()\n                    .map(|(b, _)| b == owner)"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/step/boss.rs",
+        "sha256": "be79e6664d927a34a6912720c47eefe9f48d08df9e15d74501e7e1e2d3ad63f9",
+        "line": 148,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            // 玄麟3·转阶：颛顼 + 共工 fellow + 次座玄冥\n            HostBehavior::BossXuanlin3x => {\n                sixiang_run_chain(\n                    ctx,\n                    self.owner,\n                    &SixiangChainParams {\n                        next_boss: \"颛顼\",\n                        add_fellows: &[\"共工\"],\n                        side_reinits: &[(1, \"玄冥\")],\n                        heal_all: false,\n                        chain_level: 3,\n                    },"
+      }
+    ]
+  },
+  {
+    "variant": "JinlianzhuCancel",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "metadata": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true,
+        "event": "DamageBefore",
+        "optional": false,
+        "extra_events": []
+      },
+      "definition": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "line": 731
+      },
+      "source_order_override": null
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": [
+      "direct source listener has no forced property; native optional=false is valid only because chooseToUse/Confirm remains inside machine, not a forced equivalence proof"
+    ],
+    "native_callers": [
+      {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-content/src/content/host/step/skills_status.rs",
+        "sha256": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+        "line": 827,
+        "basis": "snapshot134-parent-verified",
+        "context": "            }\n            HostBehavior::JinlianzhuCancel => match self.stage {\n                HostStage::Act => {\n                    // 伤害前置：持有者确认是否打出金莲烛\n                    if !ctx.core.player(self.owner).alive {\n                        return Flow::Done;\n                    }\n                    let has = ctx\n                        .core\n                        .player(self.owner)\n                        .hand\n                        .iter()"
+      },
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "line": 567,
+        "basis": "canonical-Main-Rust330-future-C-diff",
+        "context": "            HostBehavior::GujianFeibiaoCard => false,\n            HostBehavior::JinlianzhuCancel => matches!(event,\n                EventData::Damage(d)\n                if !d.prevented && d.amount > 0\n                    && ctx.state.player(owner).hand.iter()\n                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Jinlianzhu)),\n            HostBehavior::MoshouImmunity => false,\n            HostBehavior::SanjianWeaponDamage => matches!(event,\n                EventData::Damage(d)\n                if d.source == Some(owner) && !d.prevented && d.amount > 0\n                    && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)\n                    && !ctx.state.player(owner).hand.is_empty()),"
+      }
+    ]
+  },
+  {
+    "variant": "ShengkeCheck",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "location": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 674,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "excerpt": "HostBehavior::ShengkeCheck => Some(TriggerMeta {\n                event: EventKind::CardUsed,\n                timing: Timing::Normal,\n                priority: 0,\n                order_selectable: true,\n                optional: false,\n                extra_events: Vec::new(),\n            })",
+        "origin": "snapshot331"
+      },
+      "event": "EventKind::CardUsed",
+      "optional": false,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "extra_events": []
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": "真实名 _shengke，target useCardToBegin；给定 play 包未定义 _shengke 译名；popup:false/forced:true 均不排除选序。",
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "line": 547,
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "end_line": 551,
+        "excerpt": "HostBehavior::ShengkeCheck => matches!(event,\n                EventData::CardUsed(u)\n                if u.targets.contains(&owner)\n                    && ctx.state.card_natures.contains_key(&u.card)\n                    && ctx.state.player(owner).wunature.is_some()),",
+        "origin": "canonicalMain330-future-C-diff-required"
+      }
+    ]
+  },
+  {
+    "variant": "SwdLexue",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "location": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 824,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00",
+        "excerpt": "HostBehavior::SwdLexue => Some(TriggerMeta {\n                event: EventKind::PhaseBegin,\n                timing: Timing::Normal,\n                priority: 0,\n                order_selectable: true,\n                optional: false,\n                extra_events: Vec::new(),\n            })",
+        "origin": "snapshot331"
+      },
+      "event": "EventKind::PhaseBegin",
+      "optional": false,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "extra_events": []
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": "group lexue1/lexue2 为两个独立技能名，分别 player phaseBegin/phaseEnd；只有 lexue 译名，group 不自动继承译名；Native合并成任意角色 Judge begin 单窗。",
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/swd.rs",
+        "line": 667,
+        "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+        "end_line": 670,
+        "excerpt": "HostBehavior::SwdLexue => matches!(event,\n                EventData::Phase { phase: crate::event::Phase::Judge, begin: true, .. }\n                if ctx.state.player(owner).alive),\n            // 枕流触发面：自己准备阶段开始且 off_court 有牌",
+        "origin": "canonicalMain330-future-C-diff-required"
+      }
+    ]
+  },
+  {
+    "variant": "SwdShencaojieGuard",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "location": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 438,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00",
+        "excerpt": "HostBehavior::SwdShencaojieGuard => Some(TriggerMeta {\n                event: EventKind::DamageBefore,\n                timing: Timing::Normal,\n                priority: 0,\n                order_selectable: true,\n                optional: true,\n                extra_events: Vec::new(),\n            })",
+        "origin": "snapshot331"
+      },
+      "event": "EventKind::DamageBefore",
+      "optional": true,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "extra_events": []
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": "真实名 g_shencaojie，source/player damageBegin direct；只有 card shencaojie 译名，没有证明 lib.translate.g_shencaojie。",
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/swd.rs",
+        "line": 448,
+        "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+        "end_line": 458,
+        "excerpt": "HostBehavior::SwdShencaojieGuard => matches!(event,\n                EventData::Damage(d)\n                if !d.prevented && d.amount > 0\n                    && d.card.map(|c| {\n                        let k = ctx.catalog.card_kind(c);\n                        !k.is_basic_kind() && k.equip_slot().is_none()\n                    })\n                    .unwrap_or(false)\n                    && (d.target == owner || d.source == Some(owner))\n                    && hand_has_kind(ctx, owner, CardKind::Shencaojie)),\n            // 黄麟之琮：自己准备阶段无护甲且手持",
+        "origin": "canonicalMain330-future-C-diff-required"
+      }
+    ]
+  },
+  {
+    "variant": "SwdShenmiguoWindow",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "location": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+        "line": 508,
+        "sha256": "4030dc346e865bec07f259cd72c1ad27f5beb94da961371ff1c1eaa952200b00",
+        "excerpt": "HostBehavior::SwdShenmiguoWindow => Some(TriggerMeta {\n                event: EventKind::CardUsed,\n                timing: Timing::Normal,\n                priority: 0,\n                order_selectable: true,\n                optional: true,\n                extra_events: Vec::new(),\n            })",
+        "origin": "snapshot331"
+      },
+      "event": "EventKind::CardUsed",
+      "optional": true,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "extra_events": []
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": "真实名 g_shenmiguo，player useCardAfter direct；只有 card shenmiguo 译名，没有证明 lib.translate.g_shenmiguo。",
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/swd.rs",
+        "line": 473,
+        "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+        "end_line": 499,
+        "excerpt": "HostBehavior::SwdShenmiguoWindow => matches!(event,\n                EventData::CardUsed(u)\n                if u.player == owner\n                    && u.use_as.map(|k| k == ctx.catalog.card_kind(u.card)).unwrap_or(true)\n                    && ctx.state.turn.phase == crate::event::Phase::Play\n                    && ctx.state.turn.current == owner\n                    && !ctx.state.turn.shenmiguo_used\n                    && {\n                        let k = ctx.catalog.card_kind(u.card);\n                        if matches!(\n                            k,\n                            CardKind::Shenmiguo\n                                | CardKind::Wugu\n                                | CardKind::Jiguan\n                                | CardKind::Le\n                                | CardKind::Bing\n                                | CardKind::ShanDian\n                        ) {\n                            false\n                        } else {\n                            k.is_basic_kind() || k.equip_slot().is_none()\n                        }\n                    }\n                    && hand_has_kind(ctx, owner, CardKind::Shenmiguo)\n                    && u.targets.iter().all(|t| ctx.state.player(*t).alive)),\n            // 浴尘：回合外使用/打出黑色牌结算后（双事件；he 有牌的目标\n            // 在机器步求取，filter 只验事件形状）",
+        "origin": "canonicalMain330-future-C-diff-required"
+      }
+    ]
+  },
+  {
+    "variant": "ZhuWanzhongJi",
+    "original_status": "needs-runtime-translation",
+    "current_native": {
+      "location": {
+        "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase4-review-ibn3o01q/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/common.rs",
+        "line": 162,
+        "sha256": "2115319e1d15e2d47c6d9570f2d51906dcbb1f0f65fd83e8892e3276ce61d6ab",
+        "excerpt": "HostBehavior::ZhuWanzhongJi => Some(TriggerMeta {\n                event: EventKind::Death,\n                timing: Timing::Normal,\n                priority: 0,\n                order_selectable: true,\n                optional: false,\n                extra_events: Vec::new(),\n            })",
+        "origin": "snapshot331"
+      },
+      "event": "EventKind::Death",
+      "optional": false,
+      "tuple": {
+        "timing": "Normal",
+        "priority": 0,
+        "order_selectable": true
+      },
+      "extra_events": []
+    },
+    "source_records_equal_frozen_E": true,
+    "functional_gaps": "实际赋值名 _xigua_zhuwanzhongji_，global dieBegin，charlotte/forced；给定扩展无这个键的译名，不能用 host别名 zhuwanzhongji 查译名。",
+    "native_callers": [
+      {
+        "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/host/filtering/common.rs",
+        "line": 157,
+        "sha256": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "end_line": 165,
+        "excerpt": "HostBehavior::ZhuWanzhongJi => match event {\n                EventData::Death { player, .. } => {\n                    let roles = ctx.state.identity_roles().unwrap_or_default();\n                    roles.get(*player as usize) == Some(&crate::state::Role::Lord)\n                        && roles.get(owner as usize) == Some(&crate::state::Role::Loyalist)\n                }\n                _ => false,\n            },\n            // 血量翻倍：自己首次阶段开始（标记未置位）",
+        "origin": "canonicalMain330-future-C-diff-required"
+      }
+    ]
+  }
+]

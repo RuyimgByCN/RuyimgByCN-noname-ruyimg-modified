@@ -1,0 +1,161 @@
+{
+  "utc": "2026-10-31T07:14:47.357094+00:00",
+  "status": "functional phase PASS; DocsReady awaited; final4 gates not run",
+  "invariants": {
+    "head": true,
+    "tree": true,
+    "index_sha256": true,
+    "staged": true,
+    "admission31": true,
+    "admission_mismatches": true,
+    "guard": true,
+    "attribute_sha256": true,
+    "root_gates": true,
+    "source3": true,
+    "protected": true,
+    "dist": true,
+    "pa09_admission_sha256": true,
+    "content_package_git_trees_status_diff_unchanged": true,
+    "main_target_and_vite_temp_directory_stamps_unchanged": true,
+    "all18_product_hashes_current": true,
+    "declarations_unchanged_V2_typecheck_inherited": true,
+    "only_generated_input_changes": true
+  },
+  "changed_captured_inputs": [
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm"
+  ],
+  "changed_generated_paths": [
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"
+  ],
+  "source33_count": 33,
+  "protected99_count": 99,
+  "defaultdist37_count": 37,
+  "new18_products": {
+    "apps/web-client/public/pkg/.gitignore": {
+      "before_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "after_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1,
+      "changed": false
+    },
+    "apps/web-client/public/pkg/engine_wasm.d.ts": {
+      "before_sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+      "after_sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+      "bytes": 6751,
+      "changed": false
+    },
+    "apps/web-client/public/pkg/engine_wasm.js": {
+      "before_sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+      "after_sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+      "bytes": 22554,
+      "changed": false
+    },
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm": {
+      "before_sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+      "after_sha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+      "bytes": 15389161,
+      "changed": true
+    },
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm.d.ts": {
+      "before_sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+      "after_sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+      "bytes": 2602,
+      "changed": false
+    },
+    "apps/web-client/public/pkg/package.json": {
+      "before_sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+      "after_sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+      "bytes": 352,
+      "changed": false
+    },
+    "apps/web-client/src/wasm-pkg/.gitignore": {
+      "before_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "after_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1,
+      "changed": false
+    },
+    "apps/web-client/src/wasm-pkg/engine_wasm.d.ts": {
+      "before_sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+      "after_sha256": "370ed8e132888c9b45f4fb0ffa20ea7fb0d6534605131a235f9d60847f30a604",
+      "bytes": 6751,
+      "changed": false
+    },
+    "apps/web-client/src/wasm-pkg/engine_wasm.js": {
+      "before_sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+      "after_sha256": "8e6525a482fe453de1a51d9f3a987f21ec08e5cd106fb2601454d8f1c8bf05bf",
+      "bytes": 22554,
+      "changed": false
+    },
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm": {
+      "before_sha256": "2b1cc44e511484c804f10640429b32075fa525227f5d07468bdf5f9dc1fab355",
+      "after_sha256": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+      "bytes": 15389161,
+      "changed": true
+    },
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm.d.ts": {
+      "before_sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+      "after_sha256": "6349feab25404342fe3d089ace37e55a7216f33223fc941680355a8fffd7425a",
+      "bytes": 2602,
+      "changed": false
+    },
+    "apps/web-client/src/wasm-pkg/package.json": {
+      "before_sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+      "after_sha256": "173c556cda484991aaa55f1a9ceb4525a0fd0b75be4b8515b47859784dfd5a8f",
+      "bytes": 352,
+      "changed": false
+    },
+    "apps/web-client/src/worker/native-pkg/.gitignore": {
+      "before_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "after_sha256": "684888c0ebb17f374298b65ee2807526c066094c701bcc7ebbe1c1095f494fc1",
+      "bytes": 1,
+      "changed": false
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.d.ts": {
+      "before_sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+      "after_sha256": "ae256f8fafbc5d97d67b96970636e0ac6c51dc3f5307e925502c158122eb06df",
+      "bytes": 5901,
+      "changed": false
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm.js": {
+      "before_sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+      "after_sha256": "cedbc99193c6fccb60ccdccb649bb905b7e6e085fbbc4bb565155a818378277a",
+      "bytes": 21179,
+      "changed": false
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm": {
+      "before_sha256": "2292d7ab1c04b05724e49eb750962bb78af119dac80011524b18574742ed189b",
+      "after_sha256": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1",
+      "bytes": 3565932,
+      "changed": true
+    },
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm.d.ts": {
+      "before_sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "after_sha256": "b25c0116c6eab07f213705ad78f97aa19c2cf32c6f5f119380540054a7aea5f8",
+      "bytes": 3030,
+      "changed": false
+    },
+    "apps/web-client/src/worker/native-pkg/package.json": {
+      "before_sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+      "after_sha256": "031e88f4a278663a094af91940d7240533f8b3c6b83a538fe6ecbd674946dbb6",
+      "bytes": 488,
+      "changed": false
+    }
+  },
+  "typecheck": "V2 inherited: TS/config and generated declaration inputs unchanged; full frontend rerun because nc04-start/restore atomicity tests import regenerated WASM",
+  "harness_failure": {
+    "attempt": "actual-native-source",
+    "exit": 1,
+    "reason": "Own extra assertion fixture bytes == post-restore save fails because Engine::restore increments auth_generation",
+    "preserved": [
+      "actual-native-source-attempt1.mjs",
+      "actual-native-source.stdout.log",
+      "actual-native-source.stderr.log",
+      "actual-native-source.result.json"
+    ],
+    "corrected_attempt": "actual-native-source-final",
+    "required_scope": "save immediately after restore vs save after metadata reads; equal",
+    "source_edited": false
+  }
+}

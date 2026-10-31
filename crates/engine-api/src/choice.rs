@@ -35,6 +35,9 @@ pub struct ChoiceRequest {
     /// Precise native choice kind, restricted to the five canonical names.
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_native_kind")]
     pub native_kind: Option<String>,
+    /// Known native skill producing this owner-visible ask; never command authority.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_source_skill")]
+    pub source_skill: Option<String>,
 }
 
 /// Preserve the existing wire enum while retaining precise native choice metadata.
@@ -94,4 +97,12 @@ pub enum ChoiceKind {
     DiscardToLimit,
     /// Generic / content-defined.
     Custom,
+}
+
+fn deserialize_source_skill<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {
+    let value = Option::<String>::deserialize(deserializer)?;
+    if value.as_deref().is_some_and(str::is_empty) {
+        return Err(serde::de::Error::custom("empty source_skill"));
+    }
+    Ok(value)
 }

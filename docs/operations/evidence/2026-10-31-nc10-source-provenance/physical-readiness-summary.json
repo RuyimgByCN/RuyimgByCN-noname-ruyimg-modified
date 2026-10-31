@@ -1,0 +1,10 @@
+{
+  "observed_utc": "2026-10-30T20:52:39.081379+00:00",
+  "android_cli_available": true,
+  "android_authorized_devices": 0,
+  "apple_cli_exit": 0,
+  "physical_iphone": "unavailable",
+  "other_apple_listed_entries": "disconnected/shutdown; not qualified as physical running games",
+  "private_raw_root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-device-readiness-private-28boj80u",
+  "qualification": "Readiness only; no device IDs/names copied; no install/TCC/input/device changes; not game/power/thermal acceptance"
+}

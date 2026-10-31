@@ -1,0 +1,73 @@
+[
+  {
+    "name": "registered-group",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "g1_shahai"
+    ],
+    "started": "2026-10-31T06:05:12.028426+00:00",
+    "exit": 0,
+    "seconds": 28.913660049438477
+  },
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native"
+    ],
+    "started": "2026-10-31T06:05:40.947173+00:00",
+    "exit": 0,
+    "seconds": 42.6407310962677
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "started": "2026-10-31T06:06:23.592684+00:00",
+    "exit": 0,
+    "seconds": 0.09440016746520996
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "started": "2026-10-31T06:06:23.691782+00:00",
+    "exit": 0,
+    "seconds": 4.093412160873413
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "started": "2026-10-31T06:06:27.790229+00:00",
+    "exit": 0,
+    "seconds": 0.1455519199371338
+  }
+]

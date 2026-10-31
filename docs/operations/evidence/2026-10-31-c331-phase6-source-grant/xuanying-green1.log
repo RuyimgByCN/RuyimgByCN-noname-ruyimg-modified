@@ -1,0 +1,27 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.50s
+     Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-c1181315dc2a39bd)
+
+running 2 tests
+test g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack ... ok
+test g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore ... FAILED
+
+failures:
+
+---- g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore stdout ----
+
+thread 'g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore' (15785738) panicked at crates/engine-native/tests/groups/../g1_shahai_swd/xuanying.rs:321:70:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 0 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore
+
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 174 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test g1_shahai`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1_shahai", "source_parent_grant"], "exit": 101, "locked_seconds": 8.569901375012705, "disk_free_bytes": 98318721024}

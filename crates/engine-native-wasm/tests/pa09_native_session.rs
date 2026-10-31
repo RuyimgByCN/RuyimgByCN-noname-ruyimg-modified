@@ -94,3 +94,35 @@ fn auto_step_answers_real_empty_hujia_window_without_panicking() {
     assert_eq!(binding.auto_step().unwrap(), reply);
     assert_eq!(binding.save_hex(), native.save_hex());
 }
+
+#[test]
+fn source_actual_native_ask_survives_session_and_binding_json() {
+    let mut engine = engine_native::Engine::new(2306, 3);
+    engine.debug_set_turn(0, engine_native::Phase::Play, 1);
+    for seat in 0..3 {
+        engine.debug_clear_hand(seat);
+    }
+    engine.debug_grant(1, "遗计");
+    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+    let hex =
+        engine_native_wasm::hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+    let mut session = NativeSession::new(3, 0).unwrap();
+    session.restore_hex(&hex).unwrap();
+    let mut binding = NativeEngine::new(3, 0).unwrap();
+    binding.restore_hex_checked(&hex).unwrap();
+    let before = session.save_hex();
+    for seat in 0..3 {
+        let raw = session.open_choice_json(seat).unwrap();
+        assert_eq!(raw, binding.open_choice_json(seat).unwrap());
+        let value: serde_json::Value = serde_json::from_str(&raw).unwrap();
+        if seat == 1 {
+            assert_eq!(value["source_skill"], "遗计");
+            assert_eq!(value["prompt"], "trigger_confirm");
+        } else {
+            assert!(value.get("source_skill").is_none());
+            assert_eq!(value["hidden"], true);
+        }
+    }
+    assert_eq!(session.save_hex(), before);
+    assert_eq!(binding.save_hex(), before);
+}

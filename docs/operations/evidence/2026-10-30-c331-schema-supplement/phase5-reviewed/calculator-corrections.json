@@ -1,0 +1,127 @@
+{
+  "original_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase4/host-source-batch1.json",
+  "original_sha256": "cc9cdd0ea7940736f3970a51a4cc7710b5eedcf562e6ed09d464880d7451e644",
+  "records": [
+    {
+      "variant": "NewMeibu",
+      "source_instance": "noname",
+      "source": {
+        "path": "archive/upstream/noname/apps/core/character/sp/skill.js",
+        "sha256": "8fa5e9958df76f6d539ef9354cfe09722719ea54e47d8e23731450c175318680",
+        "name": "new_meibu",
+        "line": 35046,
+        "props": {
+          "trigger": "{\n\t\t\tglobal: \"phaseUseBegin\",\n\t\t}",
+          "subSkill": "{\n\t\t\trange: {\n\t\t\t\tonremove: true,\n\t\t\t\tcharlotte: true,\n\t\t\t\tmod: {\n\t\t\t\t\tglobalFrom(from, to, num) {\n\t\t\t\t\t\tif (from.getStorage(\"new_meibu_range\").includes(to)) {\n\t\t\t\t\t\t\treturn -Infinity;\n\t\t\t\t\t\t}\n\t\t\t\t\t},\n\t\t\t\t},\n\t\t\t\tsub: true,\n\t\t\t},\n\t\t}"
+        },
+        "method_flags": [],
+        "translation": {
+          "truthy": true,
+          "text": "\"魅步\"",
+          "path": "archive/upstream/noname/apps/core/character/sp/translate.js",
+          "line": 223,
+          "sha256": "a06576b54782d4029e4e4c7034e3dbfc10d8cdad22fd01cd48c5caeebeb1bc0b"
+        },
+        "tuple": {
+          "timing": "Normal",
+          "priority": 0,
+          "order_selectable": true
+        },
+        "formula": "Core get.priority -25/-50/-75"
+      },
+      "effective_priority": 0,
+      "timing": "Normal",
+      "order_selectable": true,
+      "calculator": {
+        "path": "archive/upstream/noname/apps/core/noname/get/index.js",
+        "formula": "_priority cache or priority*100 + silent -25*equipSkill -50*cardSkill -75*ruleSkill",
+        "sha256": "8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d",
+        "line": 621,
+        "end_line": 646
+      },
+      "native_callers": [
+        "crates/engine-native-content/src/content/host/step.rs:596:            HostBehavior::NewMeibu => self.step_skills_virtual_use(ctx),",
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs:99:            HostBehavior::NewMeibu => match self.stage {",
+        "crates/engine-native-content/src/content/host/filtering/common.rs:88:            HostBehavior::NewMeibu => match event {",
+        "crates/engine-native-content/src/content/host/filtering.rs:83:            HostBehavior::NewMeibu => self.filter_common(ctx, owner, event),",
+        "crates/engine-native-content/src/content/host/factory.rs:28:            HostBehavior::NewMeibu => match event {"
+      ],
+      "translation_absence": null,
+      "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+      "native_caller_file_sha256": {
+        "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+        "crates/engine-native-content/src/content/host/step/skills_virtual_use.rs": "cdfdc6c1cd56e24877365fc3b5f6b94c6ded325b3b58c2d45be30bf28c7f25a3",
+        "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+        "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+      },
+      "native_order_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 18,
+        "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+      },
+      "correction": "Supplement only: original phase4 wrong .ts path and absent SHA remain unchanged."
+    },
+    {
+      "variant": "NewZhixi",
+      "source_instance": "noname",
+      "source": {
+        "path": "archive/upstream/noname/apps/core/character/sp/skill.js",
+        "sha256": "8fa5e9958df76f6d539ef9354cfe09722719ea54e47d8e23731450c175318680",
+        "name": "new_zhixi",
+        "line": 35205,
+        "props": {
+          "trigger": "{\n\t\t\tplayer: \"useCard1\",\n\t\t}",
+          "forced": "true",
+          "firstDo": "true"
+        },
+        "method_flags": [],
+        "translation": {
+          "truthy": true,
+          "text": "\"止息\"",
+          "path": "archive/upstream/noname/apps/core/character/sp/translate.js",
+          "line": 227,
+          "sha256": "a06576b54782d4029e4e4c7034e3dbfc10d8cdad22fd01cd48c5caeebeb1bc0b"
+        },
+        "tuple": {
+          "timing": "First",
+          "priority": 0,
+          "order_selectable": true
+        },
+        "formula": "Core get.priority -25/-50/-75"
+      },
+      "effective_priority": 0,
+      "timing": "First",
+      "order_selectable": true,
+      "calculator": {
+        "path": "archive/upstream/noname/apps/core/noname/get/index.js",
+        "formula": "_priority cache or priority*100 + silent -25*equipSkill -50*cardSkill -75*ruleSkill",
+        "sha256": "8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d",
+        "line": 621,
+        "end_line": 646
+      },
+      "native_callers": [
+        "crates/engine-native-content/src/content/host/step.rs:598:            HostBehavior::NewZhixi => self.step_skills_status(ctx),",
+        "crates/engine-native-content/src/content/host/step/skills_status.rs:241:            HostBehavior::NewZhixi => {",
+        "crates/engine-native-content/src/content/host/filtering/common.rs:202:            HostBehavior::NewZhixi => matches!(event,",
+        "crates/engine-native-content/src/content/host/filtering.rs:111:            HostBehavior::NewZhixi => self.filter_common(ctx, owner, event),",
+        "crates/engine-native-content/src/content/host/factory.rs:320:            HostBehavior::NewZhixi => (None, None),"
+      ],
+      "translation_absence": null,
+      "qualification": "ordering metadata of the actual selected definition, not a whole-source equivalence claim",
+      "native_caller_file_sha256": {
+        "crates/engine-native-content/src/content/host/step.rs": "a7f5b54d3a6b5f2464be875cb4cb3de9fac08c16dbec97f7521a5f79fdc81553",
+        "crates/engine-native-content/src/content/host/step/skills_status.rs": "a7806205f34e8354e13a6f66bafcae36fbd35dd0a92419ce94dc86351c6e2eb5",
+        "crates/engine-native-content/src/content/host/filtering/common.rs": "c41f17529499e055f50fe6121f20a98fd1f3f1a012e91136d7ed3835975b0e69",
+        "crates/engine-native-content/src/content/host/filtering.rs": "0b3cd233eb6becd80454397173b4d6ed1184c272f232ecd374e1d0fd70e1bb3b",
+        "crates/engine-native-content/src/content/host/factory.rs": "a43e82a26c400a7d34b6c168db687227daeb40929f3c478d3439129160ca6928"
+      },
+      "native_order_binding": {
+        "path": "crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs",
+        "line": 20,
+        "sha256": "510e484941deaf44c0504eff9d82a3babe514752b46e3e5ce6b83267caf6be22"
+      },
+      "correction": "Supplement only: original phase4 wrong .ts path and absent SHA remain unchanged."
+    }
+  ]
+}

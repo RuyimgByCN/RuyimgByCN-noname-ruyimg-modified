@@ -1,0 +1,71 @@
+{
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "timestamp_unix": 1793428137.371231,
+  "files": [
+    {
+      "path": "apps/desktop-client/src/native_engine_host.rs",
+      "bytes": 14713,
+      "sha256": "3159b845c116cfdec098f1cda59ae3756442a58aa861ab5e56e9ddbb64670e61",
+      "lines": 409,
+      "new": false
+    },
+    {
+      "path": "apps/desktop-client/src/native_engine_host/pool_tests.rs",
+      "bytes": 8199,
+      "sha256": "a8f7cc154682eba2ac806814110ee6d210c83538312ff4fbf436e2c62b937ff5",
+      "lines": 224,
+      "new": true
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "bytes": 30165,
+      "sha256": "38fb92eb93e3543bc72097efed4647ad66fc51ccfb7ced40bac60b1327ffb494",
+      "lines": 755,
+      "new": false
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session/planner_pool_tests.rs",
+      "bytes": 8966,
+      "sha256": "b0d2f13343c207d7012a696d9e35ea63b0120f1cdf8de239e71b135d7352565b",
+      "lines": 215,
+      "new": true
+    },
+    {
+      "path": "crates/engine-native/src/ai.rs",
+      "bytes": 32466,
+      "sha256": "96d1f5231df316908f444921eff4b8bf0de22581c42e999bc40d796010177f3a",
+      "lines": 821,
+      "new": false
+    },
+    {
+      "path": "crates/engine-native/src/ai/candidate_pool.rs",
+      "bytes": 5168,
+      "sha256": "9a9c1425d5e45253e6f5042b6d37611f8e66711e44f016cb36376b545978a241",
+      "lines": 163,
+      "new": true
+    },
+    {
+      "path": "crates/engine-native/src/ai/candidate_pool/tests.rs",
+      "bytes": 14493,
+      "sha256": "4a8d43c47b98bad2d9bf8c457c6da437a3e20f23fed7ce672827509330f52318",
+      "lines": 401,
+      "new": true
+    },
+    {
+      "path": "crates/engine-native/src/ai/evaluation.rs",
+      "bytes": 3985,
+      "sha256": "e7d86109335241a1fc653ed1ce4597c1f317616d804e5a2afd75bc068198335c",
+      "lines": 106,
+      "new": true
+    },
+    {
+      "path": "crates/engine-native/src/ai_pool.rs",
+      "bytes": 6405,
+      "sha256": "9b8dead1698c6cffc6eb9daa4573139dadbae7e389b42d576e59a1580383bf35",
+      "lines": 167,
+      "new": false
+    }
+  ],
+  "patch_sha256": "692e2a3bffd5610d7b1bccb7775409375f79b9492cc1e4c0d8dbfffc964fc498",
+  "no_staged_files": true
+}

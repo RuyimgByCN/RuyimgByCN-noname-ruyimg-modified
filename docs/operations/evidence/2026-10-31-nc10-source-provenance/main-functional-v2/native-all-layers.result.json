@@ -1,0 +1,40 @@
+{
+  "name": "native-all-layers",
+  "argv": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-native-kernel",
+    "-p",
+    "engine-native-content",
+    "-p",
+    "engine-native"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 117.34344658299233,
+  "minimum_free_bytes": 85499445248,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "de44451b902c233b160480e1aa4e5fe126fe2e425b3bae7f8336be0d189d9fab",
+  "stderr_sha256": "771e4cf2cba2da33564000964d32bbc8bd32f021a77964c6c6373df8b13c174f"
+}

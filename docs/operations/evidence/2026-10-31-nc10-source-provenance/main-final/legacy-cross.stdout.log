@@ -1,0 +1,16 @@
+[
+  {
+    "players": 4,
+    "seed": 42,
+    "native": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff",
+    "wasm": "8fe8316a05b9617c3aec072d0212af65f2c62d5d906e3b4eb0bf9159788159ff"
+  },
+  {
+    "players": 2,
+    "seed": 1,
+    "native": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8",
+    "wasm": "6fb9d95a59233864b01c4f00dbe345dcce7f5be36a96c2a0472fcf84c2c40eb8"
+  }
+]
+ALL CURRENT-SOURCE CROSS-TARGET CHECKS PASSED
+{"command": ["python3", "-B", "/tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py"], "exit": 0, "locked_seconds": 1.671241124975495, "disk_free_bytes": 47750139904}

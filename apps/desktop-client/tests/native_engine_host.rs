@@ -281,3 +281,36 @@ async fn document_cleanup_retires_only_native_hosts_and_preserves_unrelated_reso
     table.close(unrelated_id).unwrap();
     assert!(other_closed.load(Ordering::Acquire));
 }
+
+#[tokio::test]
+async fn source_actual_native_choice_reaches_desktop_host_only_for_owner() {
+    let mut engine = engine_native::Engine::new(2306, 3);
+    engine.debug_set_turn(0, engine_native::Phase::Play, 1);
+    for seat in 0..3 {
+        engine.debug_clear_hand(seat);
+    }
+    engine.debug_grant(1, "遗计");
+    engine.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+    let hex =
+        engine_native_wasm::hex_encode(&engine_native::archive::encode_archive(&engine.save()));
+    let host = NativeEngineHost::new().unwrap();
+    request(&host, json!({"type":"init"})).await;
+    for observer in [1, 0, 2] {
+        request(
+            &host,
+            json!({"type":"start","players":3,"seed":2306,"observer":observer}),
+        )
+        .await;
+        let restored = request(&host, json!({"type":"restore","hex":hex})).await;
+        if observer == 1 {
+            assert_eq!(restored["choice"]["source_skill"], "遗计");
+            assert_eq!(restored["choice"]["prompt"], "trigger_confirm");
+        } else {
+            assert!(restored["choice"].is_null());
+        }
+        let saved = request(&host, json!({"type":"save"})).await;
+        let projected = request(&host, json!({"type":"observer"})).await;
+        assert_eq!(projected["choice"], restored["choice"]);
+        assert_eq!(request(&host, json!({"type":"save"})).await, saved);
+    }
+}

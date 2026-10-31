@@ -1,0 +1,40 @@
+{
+  "name": "lineunit",
+  "argv": [
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts",
+    "-p",
+    "test_check_source_lines.py"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "python3",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts",
+    "-p",
+    "test_check_source_lines.py"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 0.5072448330465704,
+  "minimum_free_bytes": 60180402176,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "0274c49bfdd86a58b933ce4b881f7a16d8bc37468c3aca5bef2c1baadc7e35d3",
+  "stderr_sha256": "cc4ce8d54ec0f6a2d972abf34157488e5e132e9d71efaebb422979f2bf3356f8"
+}

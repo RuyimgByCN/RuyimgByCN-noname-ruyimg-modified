@@ -5,6 +5,7 @@ mod commit_crash;
 mod double_failure;
 mod durability;
 mod referee;
+mod source_skill;
 
 use super::{bootstrap, build_router, config::ServerConfig, lobby::Lobby};
 use engine_api::{

@@ -1,0 +1,14 @@
+error: no test target named `g1_shahai_swd` in `engine-native` package
+help: available test targets:
+    g1
+    g1_shahai
+    kernel
+    l_rounds
+    misc
+    nc08
+    nc08_upstream_a_k
+    nc08_upstream_l_z
+    nc_rounds
+    swd
+    test_registry
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1_shahai_swd", "source_parent_grant"], "exit": 101, "locked_seconds": 0.11296729199239053, "disk_free_bytes": 98388811776}

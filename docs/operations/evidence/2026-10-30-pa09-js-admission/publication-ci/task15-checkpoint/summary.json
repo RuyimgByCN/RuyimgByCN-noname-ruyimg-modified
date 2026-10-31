@@ -1,0 +1,126 @@
+{
+  "at_utc": "2026-10-30T20:56:10.562324+00:00",
+  "head_sha": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "run_id": 41125396035,
+  "push_receipt": "../push-stage/result.json",
+  "lease_receipt": "../push-stage/lease-release.json",
+  "commands": [
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41125396035"
+      ],
+      "exit": 0,
+      "finished_utc": "2026-10-30T20:56:11.213684+00:00",
+      "http1": true
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41125396035/jobs?per_page=100"
+      ],
+      "exit": 0,
+      "finished_utc": "2026-10-30T20:56:12.106846+00:00",
+      "http1": true
+    },
+    {
+      "argv": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41125396035/artifacts?per_page=100"
+      ],
+      "exit": 0,
+      "finished_utc": "2026-10-30T20:56:12.766840+00:00",
+      "http1": true
+    }
+  ],
+  "run": {
+    "id": 41125396035,
+    "head_sha": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+    "run_attempt": 1,
+    "event": "push",
+    "status": "in_progress",
+    "conclusion": null
+  },
+  "jobs": [
+    {
+      "id": 124302464730,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465138,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465251,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124302465291,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465364,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null
+    },
+    {
+      "id": 124302465407,
+      "name": "desktop-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465418,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465420,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465489,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 124302465532,
+      "name": "desktop-windows-latest",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13010748280,
+      "name": "installer-windows-latest",
+      "size_in_bytes": 26274800,
+      "digest": "sha256:e0130f1105d01170adc3caaf42c4b6a5a6b55d5bc29f5393e92cb012df755d3c"
+    },
+    {
+      "id": 13010039279,
+      "name": "installer-ubuntu-latest",
+      "size_in_bytes": 266343986,
+      "digest": "sha256:4af11ffe90452497f890962f8c4ea3dd07dd849e60fc12587607c994c6bdffa2"
+    }
+  ]
+}

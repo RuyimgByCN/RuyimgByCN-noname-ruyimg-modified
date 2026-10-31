@@ -1,0 +1,85 @@
+Main V2 native and frontend functional checks passed: **native 1715 passed / 0 failed / 75 ignored**, complete frontend **179 passed / 0 failed / 0 skipped**, typecheck exit 0, and external Vite production build exit 0. This is a functional qualification for the tested Main V2 inputs, pending parent review. It does **not** accept the integrated batch, legacy P2, current actual WASM, or product GUI.
+
+Verification date: **2026-10-31 UTC**. Formal input snapshot was taken before execution; the exit snapshot is at approximately 06:29Z, post-version reads were performed again at approximately 06:36Z, and evidence was sealed at **06:37:11Z**, within the 25-minute assignment. Main HEAD is `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, tree `184829236b7c17fe472fecbb1ba77b8129c65a6e`. Post-read versions remain **rules 330 / archive 105 / ABI 758 / WS 6**. The frontend rule backend defaults to native; desktop transport defaults to WASM unless explicitly overridden. These are distinct defaults.
+
+The [machine summary](/tmp/nc27-main-functional-458ed333/summary.json), [command records and wrapper results](/tmp/nc27-main-functional-458ed333/summary.json), [native parsed results](/tmp/nc27-main-functional-458ed333/native-parsed.json), and [artifact SHA index](/tmp/nc27-main-functional-458ed333/artifact-sha256.json) contain the actual evidence. The artifact index covers **30 evidence files** and has SHA256 `94191f6b13c86a3011ef6ae81153be08c1619f475166b399424af94ffb2f906b`. The index excludes itself, the Cargo target directory, the frontend product directory, and this report; products have their own complete manifest.
+
+Main's exact 31 admitted file hashes match [/tmp/noname-parent-nc27-main-admission.json](/tmp/noname-parent-nc27-main-admission.json), which binds the reviewed private V2 source manifest SHA256 `48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`. I did not rescan the private 43,867-file / approximately 3GB freeze or its 95 products; the parent owns that already completed identity audit. I verified current Main bytes for the admitted 31 and the functional input/protection sets below.
+
+All four heavy commands used `python3 -B /tmp/noname-run-serialized.py <argv>` and its global `fcntl` lock. Environment was `CARGO_BUILD_JOBS=2`, `CARGO_INCREMENTAL=0`, and `CARGO_TARGET_DIR=/tmp/nc27-main-functional-458ed333/cargo-target`. Minimum sampled free disk across the four commands was **85,483,134,976 bytes**, above 3 GiB. No disk stop occurred. Main native command cwd was `/Users/ruyimg/Documents/Claude/sanguosha/noname-next`; the three frontend commands used its `apps/web-client` directory.
+
+| Exact child argv | Actual result | Lock-held / wall seconds | Raw stdout / stderr |
+|---|---|---:|---|
+| `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native` | exit 0; 1715 pass, 0 fail, 75 ignored; 17 result summaries | 60.706 / 117.343 | [stdout](/tmp/nc27-main-functional-458ed333/native-all-layers.stdout.log), [stderr](/tmp/nc27-main-functional-458ed333/native-all-layers.stderr.log) |
+| `pnpm test` | exit 0; 179 tests, 179 pass, 0 fail/cancel/skip/todo | 1.078 / 66.466 | [stdout](/tmp/nc27-main-functional-458ed333/frontend-tests.stdout.log), [stderr](/tmp/nc27-main-functional-458ed333/frontend-tests.stderr.log) |
+| `pnpm typecheck` | exit 0; runs `vue-tsc --noEmit` | 1.481 / 1.517 | [stdout](/tmp/nc27-main-functional-458ed333/frontend-typecheck.stdout.log), [stderr](/tmp/nc27-main-functional-458ed333/frontend-typecheck.stderr.log) |
+| `node /tmp/nc27-main-functional-458ed333/vite-build.mjs` | exit 0; 117 transformed modules; 35 traced Main source modules; 45 external product files | 1.219 / 1.513 | [stdout](/tmp/nc27-main-functional-458ed333/frontend-build.stdout.log), [stderr](/tmp/nc27-main-functional-458ed333/frontend-build.stderr.log) |
+
+Actual native totals were parsed from all 17 summaries and independently asserted against 1715/0/75. The mandatory full run includes the registered `nc_rounds` binary (**146 pass / 0 fail / 7 ignored**) and all five `nc10_source_provenance` cases: native owner-only source, known optional families, private deck/RNG/counter invariance, VM/restored VM sources staying unknown, and the initial-binding/next-prompt counterexample. It also includes all four `engine::choice_source::tests` cases: first depth consumer, shape/multiple asks/unowned definitions, direct inner ask, and catalog aliases. These nine passing tests are **subsets of 1715**, not additional totals. No targeted rerun was needed. The [parsed native evidence](/tmp/nc27-main-functional-458ed333/native-parsed.json) lists all nine exact names, every suite count, and all 75 ignored test lines. Ignored tests were retained; no ignored test was forced to run.
+
+Before native testing, the read-only command `cargo tree --offline -p engine-native-kernel -p engine-native-content -p engine-native --edges normal,build,dev` succeeded. Its [complete dependency tree](/tmp/nc27-main-functional-458ed333/native-dependencies.txt) contains no `engine-core`, including dev/build closure. Therefore this run did not need a legacy repair lease, and it did not execute legacy Core or legacy WASM tests.
+
+The external Vite build follows the approved prior [PA09 runner pattern](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-30-pa09-js-admission/main-acceptance/vite-build.mjs): `globalThis.__dirname` points to the original Main web directory, `configLoader: 'runner'` loads original Main `vite.config.ts`, and `build.outDir` points outside Main. The [own runner](/tmp/nc27-main-functional-458ed333/vite-build.mjs) uses existing Main generated modules as read-only inputs and writes only `/tmp/nc27-main-functional-458ed333/frontend-dist`. No generated package or WASM was rebuilt. The [module table](/tmp/nc27-main-functional-458ed333/bundle-module-table.json) binds 35 source file SHA256 values, transform inputs, chunk module membership, and output SHA256 values. Main entry, client, and frozen desktop transport source/input bytes were explicitly asserted equal. The [45-file product manifest](/tmp/nc27-main-functional-458ed333/frontend-products.json) binds the external outputs, including the reused existing WASM bytes. This demonstrates bundling, not execution of current-source WASM.
+
+The [entry snapshot](/tmp/nc27-main-functional-458ed333/before.json), [exit snapshot](/tmp/nc27-main-functional-458ed333/after.json), and [comparison](/tmp/nc27-main-functional-458ed333/comparison.json) prove these formal-window invariants:
+
+- **1,131** captured native/kernel/content/API source, frontend source/scripts, Cargo/lock/config inputs: identical path sets and SHA256 values.
+- Exact admitted **31** file hashes: all match admission on entry and exit.
+- Inherited PA09 **99** protected paths and frozen source3: unchanged; the source3 also match the prior admission identities.
+- Shared generated modules **18** and default Main dist paths **37**: unchanged.
+- Pre-existing dirty docs **6**: unchanged. Tracked dirty status also remained identical.
+- Root gate files **7**, PA09 admission manifest, `.gitattributes`, and `.pi-lens.json` guard: unchanged.
+- HEAD/tree/index SHA256 and empty staged set: unchanged. Formal-window index SHA256 is `af7ed45d7242c83aa88986ace70d3e378dde873988fd58c693b440a3b62ddbd7`.
+
+The [post-version evidence](/tmp/nc27-main-functional-458ed333/post-versions.json) independently reads each version constant and binds its current source hash to the initial captured input/protection hashes. [Tool versions and ownership](/tmp/nc27-main-functional-458ed333/tools-and-ownership.json) record Rust 1.95.0, Cargo 1.95.0, Node v26.4.0, and pnpm 10.34.3. The build reports Vite 6.4.3.
+
+No Rust compiler warning or actual error diagnostic appeared. Frontend tests retained **two Node ExperimentalWarning messages** about localStorage lacking `--localstorage-file`; they did not fail tests. Frontend typecheck/build stderr files are empty. Test names containing “failed” are ordinary successful negative-test descriptions, not failures.
+
+Non-product setup limitations are retained in [setup and clarification](/tmp/nc27-main-functional-458ed333/setup-and-clarification.json). Initial exploratory reads probed nonexistent root `package.json` and guessed paths, then switched to actual paths. An initial serialized dependency-tree attempt hit the tool's 30-second timeout while waiting for the shared lock; the formal before snapshot completed, no test ran in that attempt, and the light read-only dependency command was subsequently run successfully outside the heavy queue. The parent clarified that `ArtifactnativeSource141 / anySource / oldRustMatrix` was surplus concatenated task text, not a requested file/scenario/test; no extra check was added and this is not a product failure.
+
+The first exploratory `git status --short` occurred before the formal index hash and used normal optional-lock behavior. A pre-snapshot Git stat-cache refresh cannot be excluded. Formal entry-to-exit index bytes are proven identical, and staging remained empty. I did not stage, commit, push, install binaries/dependencies, sync resources, use browser/GUI, change gates/defaults/versions/fuel/scheduler/AI, add Main tests, or change any Main source/docs/index content intentionally. No `node_modules` build/config output was requested; runner loading avoided Vite's default config-bundle write path. The 18/37 hashes demonstrate shared modules/default dist preservation; this was not an exhaustive node_modules rehash.
+
+The new Cargo target is retained at **`/tmp/nc27-main-functional-458ed333/cargo-target`**. It was created exclusively by this worker, is now idle, and is **released to the parent for final Main gate reuse**. No C/PA/privateNC27 target was touched. The Main functional read lease is released with this sealed handoff. Parent review remains required before using these results in an acceptance decision.
+
+Skipped: legacy P2/v3 repair, full workspace/old Core/legacy WASM, full preflight/root gate execution, current actual WASM execution, product GUI/platform/physical checks, source/media full-tree rescan, resource synchronization, and upstream equivalence.
+Risk: qualification binds the tested V2 Main bytes only; later legacy integration requires its own applicable checks, and this report does not grant whole-batch acceptance.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {"id": "criterion-1", "status": "satisfied", "evidence": "Verification-only assignment completed without Main edits: mandatory native3, frontend179, typecheck, external production build; entry/exit1131 inputs and31/99/18/37/6 protection sets match."},
+    {"id": "criterion-2", "status": "satisfied", "evidence": "30 SHA-indexed evidence files include actual argv, wrapper exits, separate stdout/stderr, parsed1715/0/75, nine included source tests, frontend179, production input/output hashes, and formal entry/exit comparisons."}
+  ],
+  "changedFiles": [
+    "/tmp/nc27-main-functional-driver.py",
+    "/tmp/nc27-main-functional-458ed333/**",
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/458ed333-4788-4c83-b58a-9cedb48adf24/verification/nc27-main-native-and-frontend-functional.md"
+  ],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {"command": "cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native", "result": "passed", "summary": "1715 passed;0 failed;75 ignored;17 summaries;5 provenance+4 choice_source included without rerun"},
+    {"command": "pnpm test", "result": "passed", "summary": "179 passed;0 failed/cancelled/skipped/todo;two retained localStorage ExperimentalWarning messages"},
+    {"command": "pnpm typecheck", "result": "passed", "summary": "vue-tsc --noEmit exit0"},
+    {"command": "node /tmp/nc27-main-functional-458ed333/vite-build.mjs", "result": "passed", "summary": "Original Main config;runner/original __dirname;117 transformed modules;35 traced Main sources;45 external outputs"},
+    {"command": "cargo tree --offline -p engine-native-kernel -p engine-native-content -p engine-native --edges normal,build,dev", "result": "passed", "summary": "Complete dependency closure has no engine-core"},
+    {"command": "Initial serialized dependency-tree attempt", "result": "not-run", "summary": "Tool timeout30s while waiting for global lock;no tests ran in this attempt"},
+    {"command": "seal.py evidence self-check", "result": "passed", "summary": "All four wrapper/log hashes,17 native summaries,179 frontend counts,9 source subset names,35 source module hashes,and output chunk hashes asserted"}
+  ],
+  "validationOutput": [
+    "Main native1715/0/75 and frontend179/0 functional qualification only;parent review required",
+    "All formal entry/exit invariants true;staged set empty",
+    "Artifact index SHA25694191f6b13c86a3011ef6ae81153be08c1619f475166b399424af94ffb2f906b",
+    "Versions330/105/758/WS6;frontend native backend;desktop default WASM"
+  ],
+  "residualRisks": [
+    "Independent parent/reviewer gate remains required;whole batch not accepted",
+    "Legacy P2 repair/private690c and any later Mainv3 are outside this qualification",
+    "Existing generated WASM reused for bundling;current-source actual WASM/product GUI not exercised",
+    "First exploratory status precedes index hash;pre-snapshot stat-cache refresh cannot be excluded"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Own/tmp evidence and isolated products only;no Main source/docs/test changes;Main dirty31+docs preserved",
+  "reviewFindings": ["No functional blockers observed in requested scope;independent review pending"],
+  "manualNotes": "Main functional read lease released. New owned Cargo target /tmp/nc27-main-functional-458ed333/cargo-target retained idle and handed to parent for final gate reuse. Surplus task fragment clarified by supervisor;no extra check required. No workspace/legacy/WASM/GUI/fullpreflight runs."
+}
+```

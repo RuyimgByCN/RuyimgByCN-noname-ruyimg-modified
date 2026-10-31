@@ -691,3 +691,60 @@ mod tests {
         }
     }
 }
+
+#[cfg(test)]
+mod source_skill_legacy_sink {
+    use super::*;
+    #[test]
+    fn source_typed_restore_both_entries_never_reaches_pending_choice_json() {
+        let mut original = Engine::new();
+        original.submit(Command {
+            actor: PlayerId::NONE,
+            expected_revision: ExpectedRevision(0),
+            idempotency_key: IdempotencyKey(0),
+            kind: CommandKind::StartGame {
+                player_count: 2,
+                rng_seed: 7,
+                ruleset: "identity-standard".into(),
+            },
+        });
+        let mut state = original.state().clone();
+        state.resolution.pending_choice_id = 7;
+        state.resolution.pending_observer = 2;
+        state.resolution.choice_revision = state.revision;
+        state.resolution.continuation_id = 19;
+        let mut snapshot =
+            engine_core::Snapshot::capture_with_manifest(&state, original.manifest_hash());
+        snapshot.pending_choice=Some(serde_json::from_value(serde_json::json!({"choice_id":7,"observer":2,"options":[{"token":42,"label_key":"keep"}],"min_count":1,"max_count":1,"allow_cancel":true,"timeout_policy":"Standard","deadline_unix_ms":123456,"revision":state.revision,"continuation_id":19,"kind":"Confirm","prompt":"trigger_confirm","native_kind":"confirm","source_skill":"forged"})).unwrap());
+        let mut expected = snapshot.pending_choice.clone().unwrap();
+        expected.source_skill = None;
+        for manifest in [false, true] {
+            let mut inner = Engine::new();
+            if manifest {
+                inner
+                    .restore_snapshot_with_manifest(&snapshot, original.manifest().unwrap().clone())
+                    .unwrap();
+            } else {
+                inner.restore_snapshot(&snapshot).unwrap();
+            }
+            let wasm = WasmEngine {
+                inner,
+                observer_player: 2,
+                replay: None,
+            };
+            let actual: engine_api::ChoiceRequest =
+                serde_json::from_str(&wasm.pending_choice_json()).unwrap();
+            assert_eq!(actual, expected);
+            assert!(!wasm.pending_choice_json().contains("source_skill"));
+        }
+        assert_eq!(
+            snapshot
+                .pending_choice
+                .as_ref()
+                .unwrap()
+                .source_skill
+                .as_deref(),
+            Some("forged")
+        );
+    }
+}

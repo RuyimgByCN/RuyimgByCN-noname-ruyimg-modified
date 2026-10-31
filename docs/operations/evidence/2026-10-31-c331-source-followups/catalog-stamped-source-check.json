@@ -1,0 +1,74 @@
+[
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/skill.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "02258835c137c058118b00896784bf11665849dd2d1907324e93021dff22a913",
+    "stamped_file_sha256": "02258835c137c058118b00896784bf11665849dd2d1907324e93021dff22a913",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/translate.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "3ff0f5958ec88823a08ea4522dbfcdd9ebe7f6fe249eba886af2f5cb5f242364",
+    "stamped_file_sha256": "3ff0f5958ec88823a08ea4522dbfcdd9ebe7f6fe249eba886af2f5cb5f242364",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/skill.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646",
+    "stamped_file_sha256": "eda7ee16a42c4f36d1ccbfd4b16e9e698025cf720d5ed28771ef58da0aff0646",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/translate.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "5d9ff26a6eb6e647442d4dd01a94bfbc0f72b933b6bbe3a5b56d89e048f48d43",
+    "stamped_file_sha256": "5d9ff26a6eb6e647442d4dd01a94bfbc0f72b933b6bbe3a5b56d89e048f48d43",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+    "stamped_file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/translate.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "48ee34e36fcd805362b1f668e7900498fc04477982b67b3ee34b589d88c01166",
+    "stamped_file_sha256": "48ee34e36fcd805362b1f668e7900498fc04477982b67b3ee34b589d88c01166",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/main/precontent.js",
+    "package_stamped_commit": "5c02a745eb33b61b2e61e1167e1b71ca163911f6",
+    "current_sha256": "95a854ef57cfc88d81f2d4afdb8055a7e8069f0bfbb3745139c9fa29f8a5cb76",
+    "stamped_file_sha256": "95a854ef57cfc88d81f2d4afdb8055a7e8069f0bfbb3745139c9fa29f8a5cb76",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/boss/extension.js",
+    "package_stamped_commit": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+    "current_sha256": "86b72a454c2293b193b62c1e0e0e1bb99470c7a5b705849fb64c2d2dc33be741",
+    "stamped_file_sha256": "86b72a454c2293b193b62c1e0e0e1bb99470c7a5b705849fb64c2d2dc33be741",
+    "same_bytes": true,
+    "error": null
+  },
+  {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/mode/boss.js",
+    "package_stamped_commit": "df2682e66af9930fe02861a25cb6f2cd2ef6ae36",
+    "current_sha256": "d92b9b66f158b2877a2d403a70048b803af649696f5be2ba41bef6dc1e3f7865",
+    "stamped_file_sha256": "61c40715337ac1b1a93f759277cf46b83ca9778e9d1a3301ca87887e9944f188",
+    "same_bytes": false,
+    "error": null
+  }
+]

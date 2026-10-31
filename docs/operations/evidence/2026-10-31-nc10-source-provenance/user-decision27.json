@@ -1,0 +1,55 @@
+{
+  "decision": 27,
+  "recorded_utc": "2026-10-31T04:54:00.913939+00:00",
+  "user_answer": "批准限定实施（推荐）",
+  "base_head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "authorization": "Implement the specifically reviewed v1+v2 single-field contract; approval is not implementation or acceptance.",
+  "approved": [
+    "Ordinary known native OptionalGate Own nullable source_skill; owner and existing trusted Referee only; Other generic, unknown None",
+    "Global catalog uniqueness, existing owner-known qualification, exact producer identical to actual first-depth consumer",
+    "Compatible API/TS/IPC/WS6 metadata forwarding; preserve all existing fields including deadline_unix_ms",
+    "Legacy typed capture/two restores/JSON serialization and deserialization strip only new source metadata; ignore arbitrary source JSON before shared strict String validation; preserve original acceptance/errors/atomicity",
+    "Meaningful typed-without-JSON adversarial cases, strict wire and complete forwarding/compatibility matrix"
+  ],
+  "unchanged_versions": {
+    "rules": 330,
+    "native_archive": 105,
+    "vm_abi": 758,
+    "ws_protocol": 6
+  },
+  "not_authorized": [
+    "Root certificate/gate relaxation",
+    "Confirm-prefix or Cancel-tail certification",
+    "VM continuation release",
+    "Changing formal rules/restore domain/fuel/arithmetic",
+    "New version allocation or default engine switch"
+  ],
+  "original_19_no_cert": "Preserved; not counted as privacy success or waived",
+  "artifacts": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/b15bf199-4584-4c55-af84-dd510fed4b95/proposals/nc10-confirm-public-provenance-supplement.md",
+      "stored": "proposal-v1.raw.txt",
+      "bytes": 23773,
+      "sha256": "54e54dc2c48e03f07acf5aa3bcf1675fc69899b9c66e9424c979a9053cc1409d"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/93a12c7e-e697-4d2c-ae1a-298fa4ed5546/reviews/nc10-confirm-public-provenance-supplement.md",
+      "stored": "review-v1.raw.txt",
+      "bytes": 9934,
+      "sha256": "f29b810a4b597599ee044ff08aef3823252c2f1f618e5e42383317940ce65037"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/4db40183-1e40-448d-b5c2-3c728553a6be/proposals/nc10-confirm-public-provenance-supplement-v2.md",
+      "stored": "proposal-v2.raw.txt",
+      "bytes": 16607,
+      "sha256": "7d711850b66ac35c5b95ea58c0e7eee8727467c445e1afa36e231bbfb11ac054"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/e4327a49-796d-47a5-81b0-c0d3848e1dfe/reviews/nc10-confirm-public-provenance-supplement-v2.md",
+      "stored": "review-v2.raw.txt",
+      "bytes": 5630,
+      "sha256": "f755372c8648848057923b106f89b4ebdc0e3cde0156ce750d9dcde089d009ee"
+    }
+  ],
+  "implementation_status": "not yet implemented; tests pending"
+}

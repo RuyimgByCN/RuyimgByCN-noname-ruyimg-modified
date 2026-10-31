@@ -1,0 +1,26 @@
+{
+  "name": "vite-post-wasm",
+  "argv": [
+    "node",
+    "/tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "node",
+    "/tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "exit": 0,
+  "wall_seconds": 1.520184374996461,
+  "minimum_free_bytes": 47350448128,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "65711c936c5f37e60c23612aabeec7dbd85b4ae224c9f2e2d2adda49a3a11eca",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

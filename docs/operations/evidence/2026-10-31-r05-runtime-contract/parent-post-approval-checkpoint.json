@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T05:51:31.202284+00:00",
+  "head": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "staged_empty": true,
+  "tracked_changes": [
+    "docs/architecture/native-progress.md",
+    "docs/architecture/native-remaining-ledger.md",
+    "docs/operations/evidence/2026-10-28-user-decisions/README.md",
+    "docs/operations/evidence/2026-10-30-pa09-js-admission/README.md",
+    "docs/operations/evidence/2026-10-30-windows-provenance-checkout/README.md",
+    "docs/operations/native-ci.md"
+  ],
+  "tracked_changes_docs_only": true,
+  "new_scoped_markdown_files": 6,
+  "new_scoped_markdown_trailing_whitespace": [],
+  "decision28": "Explicitly approved;333/106/759/WS7 afteractual331then332, noautoallocationonconflict",
+  "current_runtime": "330/105/758/WS6 WASMdefault; no newnativeSourceMain",
+  "active_runs": {
+    "nc27": "5cad4e16-8b93-4535-98a8-cde600ab8c47",
+    "c331phase6privatewriter": "49b6bc6d-0a93-42dc-92ab-e1771b725ad0",
+    "pa09poolreadonly": "02c3c0c6-c24a-4974-8c7d-65e6d85dbf7b"
+  },
+  "completed_static_scopes": "C16allunknown, C12producer/bridgegapnarrowed/32freshsourcebodies, NCConfirmsourcecountercandidateNOTexecuted;sourceProof262unchanged",
+  "physical": "Androidauthorized0; Apple18stimeout/noJSON/currentunknown, oldunavailablehistorical",
+  "document_gates": "line-tests2, linecaps8992, links1924bad0, strict1065/oob0/6examplesretained, trackedwhitespace0; no Main Rust Cargo product reruns"
+}

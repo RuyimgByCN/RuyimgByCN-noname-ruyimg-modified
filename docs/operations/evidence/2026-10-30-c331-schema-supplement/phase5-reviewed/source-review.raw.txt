@@ -1,0 +1,35 @@
+## Review
+
+No issues found.
+
+- **Correct — The three-file increment stays within scope.** [source_order.rs:8](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata/source_order.rs:8) adds exactly 17 overrides. The existing [application seam:832](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native-kernel/src/vocabulary/host/metadata.rs:832) replaces only timing, priority and ordering selectability; event, optionality and extra events remain intact. Parent verification confirms 135 frozen files, three changed paths and 132 unchanged paths.
+
+- **Correct — All 44 bindings reconcile.** I read all 44 compact records, the retained corrected-definition bodies, the production increment and the registered contract test. The [retained extraction:1](/tmp/noname-parent-c331-phase5-retained/summary.json:1) verifies 22 rows from each lane, **17 corrections = 14A + 3B**, and **27 matching rows**. The 27 retain their existing metadata and receive no new production override.
+
+The 17 corrected tuples are supported by their actual source properties:
+
+| Branches | Timing / effective priority / selectable | Source basis |
+|---|---|---|
+| BossBaimang2/3, BossBianshen3/4, BossChiyan2/3, BossQingmu2/3, BossXuanlin2/3 | Normal / 1 / false | `silent:true`; no `firstDo` |
+| BossHuanrenDie | Normal / −999 / false | `priority:-10`, `silent:true` |
+| GujianYunvyuanshen | Normal / 610 / true | `priority:6.1`, actual nonempty skill translation |
+| GwentBirinState, GwentQinpenState, XiguaXueliangFanbei | Normal / 1 / false | Selected cleanup/global definitions declare `silent:true` |
+| SwdYuchanSwap, Xiefang | Normal / −99 / false | `priority:-1`, `silent:true`; Yuchan has no `lastDo` |
+
+- **Correct — Core and Liuli formulas remain distinct.** The retained [algorithm excerpts:2](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/validated-ordering44.json:2) support Core’s `_priority` cache or `p×100 + silent −25×equip −50×card −75×rule`. Liuli’s older `addList` computes `p×100 + silent −30×equip −30×rule`, ignoring the cache and card flag. None of the accepted corrections depends on concealing this difference.
+
+- **Correct — Translation and registration proofs preserve the relevant distinctions.** Non-silent accepted rows use a real translation key or the documented `finishSkill` subskill fallback. Ordinary `group` membership does not inherit translations or parent ordering properties. BossHuanren remains selectable despite `charlotte:true`; silent rows derive false from `silent`, independently of unresolved translation values. The 16 unresolved translation rows remain pending. The [registration supplement:1](/tmp/noname-parent-c331-phase5-retained/registration18-and-modules6.json:1) preserves 18 group/grant relationships and six module identities. Three module excerpts are retained; the other three and unavailable complete parent bodies remain qualified by the original records, SHA values and group literals.
+
+- **Correct — Caller identity is bounded accurately.** There are **66 reconciliation records across six unique caller paths**, all matching the recorded lane SHA values. Two paths were checked against the parent’s frozen snapshot; four absent paths were checked against immutable base `38ab1678…` blobs. This supports reconciliation of the former Main330 fallback records without claiming a fresh live-tree inspection. The exact origins appear in [summary.json:205](/tmp/noname-parent-c331-phase5-retained/summary.json:205).
+
+- **Fixed — The old phase 4 calculator-evidence P2 can close.** Both NewMeibu and NewZhixi now have supplemental `get/index.js` identities, SHA `8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d`, and lines 621–646. [audit-source-order.py:6](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/evidence/phase5/audit-source-order.py:6) requires the dependency to exist and self-checks that a missing calculator fails. Its retained successful output confirms completion. The original incorrect `.ts` records and generator remain preserved, with original record SHA `cc9cdd0e…`; this closes the evidence defect through the supplement. No reviewer edits were made.
+
+- **Correct — Test registration and retained results support this increment.** The [44-row API contract:5](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/c331_source_order_phase5.rs:5) is registered in [nc08.rs:118](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase5-parent-9_4z200c/snapshot/crates/engine-native/tests/groups/nc08.rs:118). Parent verification independently counted retained red **0/3**, nc08 green **77/0/50 ignored**, Native **1739/0/75**, and ten-package **2906/0/76**, with successful final exits. Detailed real-behavior assessment belongs to the peer review; I ran nothing.
+
+- **Correct — 262/290 is defensible as the scoped ordering-proof count.** The prior 218 plus these 44 current bindings yields 262. The accepted 44 and remaining 28 form a disjoint, complete partition of the prior 72; the remaining set retains 12 ambiguous-source and 16 runtime-translation entries. Historical 234 source rows, including 16 noncurrent rows, are kept separate. This count does not establish functional or upstream-rule equivalence.
+
+- **Merge verdict — OK with notes for this frozen three-file increment. Whole C331 / full 37-source acceptance remains BLOCK:** the 28 entries, phase/death-window mapping, rescue/expiry bridges, indexed handling, `forceDie`/out/hidden/`filterStop`, and broader functional acceptance remain open. The separate new `4dd` writer is outside this review.
+
+Execution limit: the original timeout and process-recovery “Git not a repository” warning are recorded separately; neither establishes a source or product failure. Recovery used the completed bounded retained-evidence extraction.
+
+Skipped live/Main/upstream reads, producer execution, tests, builds and network access. Residual risk is the explicitly unclosed C331 scope and the retained-evidence limits above.

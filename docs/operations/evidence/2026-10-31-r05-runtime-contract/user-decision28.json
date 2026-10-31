@@ -1,0 +1,55 @@
+{
+  "decision": 28,
+  "recorded_utc": "2026-10-31T05:37:10.428498+00:00",
+  "goal_id": "mvtiifg9-z5ez1k",
+  "question": "是否批准已复审的R05限定合同及审批稿中的候选版本、旧扩展档政策，并在实际331→332验收后实施？",
+  "answer": "批准限定合同与版本（推荐）",
+  "selected_preview": "合同v3＋v4＋v5，三技能涕泣／宝梳／避祸、191处异步Draw/gain、原包资产完整ContentLock→实际Catalog、Browser/WASM/Desktop/server/HTTP/WAL同源恢复、缺原上下文旧扩展档保留原档受控拒绝，实际331/332后333/106/759/WS7，不放宽NC10门禁、不豁免验收",
+  "versions": {
+    "rules": 333,
+    "archive": 106,
+    "vm_abi": 759,
+    "ws": 7,
+    "prerequisite": "actual accepted C331 then accepted GaiMing332; if occupied must reapprove, no automatic increment"
+  },
+  "main_at_approval": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "current_runtime_unchanged": "330/105/758/WS6 WASMdefault",
+  "implementation_status": "Not implemented; approved contract only; all actual acceptance pending",
+  "files": [
+    {
+      "path": "approval-request.md",
+      "bytes": 3385,
+      "sha256": "e5d22778368d937bbc86ebcf6523ce2bda6a11ffcf0509a1a8659576ffe27d3d"
+    },
+    {
+      "path": "proposal-v3.raw.txt",
+      "bytes": 27617,
+      "sha256": "58b3e1a05c8d4dbe4cd92a0f89b5104daab1334bbcef26a54a854218106bce3f"
+    },
+    {
+      "path": "proposal-v4.raw.txt",
+      "bytes": 18716,
+      "sha256": "9bf645cb8d47692657584ad26a2327c158944d75401ac735f7fd038e08841bea"
+    },
+    {
+      "path": "proposal-v5.raw.txt",
+      "bytes": 3948,
+      "sha256": "30b1170190bed03b22e8b8618da7b3b267b1aeeb9242131e24ddf0e06c41346e"
+    },
+    {
+      "path": "review-v3.raw.txt",
+      "bytes": 7720,
+      "sha256": "e09f4f1ee5453a75d8e3b28ef5eed1768212618a400383f44802237830531672"
+    },
+    {
+      "path": "review-v4.raw.txt",
+      "bytes": 5397,
+      "sha256": "915c819996c1c701573f33fe9d315ce5c28e47917f3fe819d45f5b818dd80d9b"
+    },
+    {
+      "path": "review-v5.raw.txt",
+      "bytes": 2407,
+      "sha256": "436e7e488d28787ac6af7c144b1ce8cba3dd305eb2ff5aa33443d16e2c08d58b"
+    }
+  ]
+}

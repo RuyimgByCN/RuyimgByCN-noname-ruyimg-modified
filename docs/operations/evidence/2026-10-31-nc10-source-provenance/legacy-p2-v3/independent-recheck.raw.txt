@@ -1,0 +1,34 @@
+## Review
+
+**此前报告的 legacy serde P2 已在 v3 中闭合；四文件 delta 无新增合格 finding。** 本次只读复核实现、oracle、矩阵和保留日志，未执行测试、构建、网络或 producer，未修改 Main。
+
+审查对象为 [v3-delta.patch](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/v3-delta.patch)，记录的 SHA256 为 `014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092`；四文件 manifest 为 `6ebf6c33ec7cffc08b8084629ccdde75d277c62dadf72c37a5cecb6cf8e7cf19`。
+
+- **Fixed — 原 P2 诊断漂移，复核确认。** [legacy_choice.rs:46](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/snapshot/legacy_choice.rs:46) 使用私有 `serde(remote = "ChoiceRequest", rename = "ChoiceRequest")`。
+  旧 13 个字段的类型、顺序和反序列化默认值保留，source 为 `serde(skip)`；已删除手写 map/sequence 适配，没有错误字符串替换。
+  保留 red 矩阵实际复现 **7 个 scalar、11 个短序列诊断差异**；green 中 `pending_choice:0` 恢复为 `expected struct ChoiceRequest`，短序列恢复旧 13-field 诊断，第 14 元素仍按旧错误位置拒绝。
+
+- **Correct — source 仍按旧 unknown 键处理。** skipped source 不进入严格 String 校验，也不计入位置字段；任意合法 JSON 值、重复与 escaped source 键按派生 reader 的未知字段规则消费。
+  其余字段继续使用原类型与重复键检查，没有对象重编码或递归清除其它对象中的同名键。[native_kind 校验:68](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/snapshot/legacy_choice.rs:68) 调用既有 canonical helper，生产代码未复制公共 enum、另建公共 schema 或改变 wire reader。
+
+- **Correct — oracle 没有通过改名改变 expected 诊断。** [旧 DTO:9](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/choice_request_4dd.rs:9) 的真实类型名为 `ChoiceRequest`，保留旧 13 字段及 validators，ids import 重定向。
+  [OldSnapshot:11](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs:11) 的 serde 名称、字段顺序、类型和 defaults 对应旧完整 Snapshot envelope；不是仅对孤立 choice 比较。
+
+- **Correct — 差分断言直接覆盖 P2。** [比较代码:189](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/690c785a-d775-4f93-8ef9-371f54c28532/implementation/nc27-legacy-serde-p2-v3/source/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs:189) 比较旧 oracle、`Snapshot::from_bytes` 与直接 serde 的完整 `SnapshotError::Deserialize(String)`，包含行列号。
+  生成器覆盖长度 0..14、全部旧字段的缺失/重复/类型组合、source 类别与嵌套、其它 unknown、malformed 和 trailing 输入。保留日志明确记录 **445 cases / 18 differences → 445 cases / 0 differences**；green 矩阵无 unequal 项。
+  成功分支比较的是接受结果 `Ok(())`，不是全部解码 payload 相等或序列化字节相等；后两者不能由这 445 项额外推导。
+
+- **Correct — 增量保持在四文件内。** 唯一生产修改为 legacy reader，其余是测试登记、差分测试和 test-only oracle。`without_source`、序列化、typed capture/restore 均未改；source predicate、scheduler、formal restore、版本与 root gate 不在该 delta 中。
+
+| 保留的实际验证 | 本次认可的证据范围 |
+|---|---|
+| engine-core full **3861/0/1**，13 suites | 已核对原始日志各 suite 汇总；属于受影响 core 验证。 |
+| legacy WASM 原生目标 sink **1/0** | 两种 typed restore 后的既有 pendingChoiceJson 测试通过。 |
+| 新 legacy WASM 实跑 **120 steps / 33 choices** | 脚本加载独立新包并检查 pendingChoiceJson/envelope 均无 source；WASM 记录 hash 为 `c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164`。 |
+| typed-poisoned Snapshot 的实际 JS/WASM 恢复 | JS API 未暴露该入口，未声称覆盖；由上述原生目标 sink 测试提供证据。 |
+
+- **Finding：**No issues found.
+- **Merge verdict：OK with notes — 原 P2 closed，具体 v3 delta 可进入父方集成与最终检查。** V2 的 6916 workspace、native/frontend、WS/UI 结果不能改写为 v3 全产品通过；资源同步的新操作验收属父方独立工作，本轮不复判。
+
+未重算源码/产品 SHA、未重新执行矩阵，也未证明所有 JSON 或非 JSON serde 格式等价；父方身份审计作为单独证据保留。  
+本结论只关闭这项 P2；Main 最终接入验收、原 19 NoCert、Confirm/Cancel 尾链及 Root/runtime BLOCK 均未被解除。

@@ -142,6 +142,7 @@ impl Engine {
                 min: open.spec.min,
                 max: open.spec.max,
                 allow_cancel: open.spec.allow_cancel,
+                source_skill: self.choice_source_skill(open),
             }
         } else {
             crate::view::ChoiceView::Other {

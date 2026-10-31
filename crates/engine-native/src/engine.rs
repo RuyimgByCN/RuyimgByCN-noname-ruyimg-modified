@@ -484,3 +484,5 @@ mod play_card_targets;
 use play_card_targets::*;
 mod play_sha;
 use play_sha::*;
+
+mod choice_source;

@@ -1,0 +1,35 @@
+[
+  {
+    "name": "source-cap-unit",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "source-caps",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "exit": 0
+  },
+  {
+    "name": "layering",
+    "command": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "exit": 0
+  }
+]

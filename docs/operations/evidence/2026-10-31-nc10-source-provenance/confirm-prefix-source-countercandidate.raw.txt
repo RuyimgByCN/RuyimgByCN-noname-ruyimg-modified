@@ -1,0 +1,54 @@
+## Review
+
+**The proposed finite Confirm-prefix lemma is false over the current restore domain.** Exact source binding `C=P` identifies the first consumer, but an old park can run after CardsDrawn finishes and before Yiji opens its first `jiji_target`. This remains possible with no VM, history=false, sufficient deck, and no enabled CardsDrawn trigger families.
+
+- **Scope:** Read-only design/proof review of the approved source-prefix sections in proposal v1/v2 and review-v2, plus the relevant current source. `.git/refs/heads/main` identifies `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`; this is a working-source inspection, not a committed-range review.
+- **Authorization:** UserDecision27 permits the existing `source_skill` supplement only. It authorizes no root, Confirm, Cancel, scheduler, or restore change. Main A330/WS6 and old private A329/WS5 remain distinct; the source27 shared-type work is not treated as already integrated into Main.
+- **Fixed:** None; no files were changed.
+
+**Correct — the local Yiji behavior and the child-depth exclusion are provable.**
+
+1. Standard Yiji is bound to `JiJiBehavior` with default limits, hence `once_per_turn=false`: [standard_skills.rs:93](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/standard_skills.rs:93). Its fresh start sets `Draw`, `target=None`, `given=0`: [ji_ji.rs:14](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/skills/ji_ji.rs:14).
+2. On Confirm, `OptionalGate::step` starts the inner machine **and calls its first step in the same scheduler invocation**: [resolution.rs:237](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/resolution.rs:237). There is no separate start-to-Draw scheduling gap.
+3. Draw takes two cards, switches to Target, and returns `Flow::Yield`: [ji_ji.rs:69](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/skills/ji_ji.rs:69). With public deckCount≥2, [Ctx::draw_cards:369](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/machine.rs:369) avoids discard reshuffling and pushes one CardsDrawn frame through `emit`.
+4. If the initial stack length is D, that frame raises it to D+1. Existing restore validation requires every old park’s `resume_depth≤D`: [validation.rs:457](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/validation.rs:457). Therefore no old park matches while the child remains at D+1.
+5. CardsDrawn commit has no additional intrinsic effect; history=false bypasses the drawn accumulator: [kernel.rs:15](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel.rs:15), [events.rs:640](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/kernel/events.rs:640). With no matching enabled draw triggers, its path is Commit→AfterTriggers→Done→pop.
+
+**Finding — P1, the proposed depth argument ends before the required Pending boundary.**
+
+The runner removes P before stepping it, then handles `Flow::Yield` by appending P to `parks`. Its resume depth remains D. When CardsDrawn pops, the runner again selects the **first** park at the current depth, before advancing any parent intrinsic or queue: [resolution.rs:411](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/resolution.rs:411). Consequently an initially later old park Q at depth D now precedes P.
+
+A concrete valid-restore countercandidate can be specified without an experiment:
+
+- Start with an admitted current-version three-seat standard Yiji Confirm state S: owner=1, all seats alive, deckCount=110, only Yiji enabled, no enabled CardsDrawn triggers, parks=[P], and adequate segment budget. P satisfies the assumed exact-source contract.
+- Define S′ by appending exactly one park Q: `resume_depth=D`, `slot=Trigger { frame:NO_FRAME }`, `machine=JiJie { owner:0, stage:Ask, card:None }`. Preserve the complete core, stack, current choice, counters, checkpoint, and P.
+- Q passes the checked restore rules: its seat is in bounds; its depth equals D; NO_FRAME is explicitly exempt from frame-existence checks; its machine carries no held card. JiJie validation checks owner/card bounds, without requiring a current enabled JiJie instance: [machine_validation.rs:232](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/machine_validation.rs:232).
+- Q contributes no initial active ask: only JiJie `Read` does so, whereas Q is `Ask`: [asks.rs:904](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/asks.rs:904). Thus P remains the unique ask and first depth-D consumer. Both states still derive the same approved `source_skill`.
+- Standard content restoration directly reconstructs this machine without calling its activation eligibility check: [standard.rs:344](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard.rs:344). Engine restoration installs the validated parks in their existing order: [snapshot.rs:510](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/snapshot.rs:510).
+- The public input and restored pre-events are identical between S and S′: Q changes no public core data, enabled skills, catalog, choice, revision, or log.
+
+Their control flow differs:
+
+| Boundary | S | S′ |
+|---|---|---|
+| Initial Confirm consumer | P starts Yiji and draws two | Same |
+| After P yields | parks=[P], depth=D+1 | parks=[Q,P], depth=D+1 |
+| CardsDrawn finishes | depth returns to D | Same |
+| Next park | P opens `jiji_target`, observer 1 | Q runs first |
+| First Pending | Yiji target choice | `jijie_give_target`, observer 0 |
+
+Q’s Ask step removes the bottom deck card and immediately returns that different WaitChoice: [ji_jie.rs:65](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content/src/content/standard/skills/ji_jie.rs:65). The deck remains nonempty after Yiji’s two draws. This is a source-validated countercandidate construction, **not** a newly generated archive, observed execution, or claim of natural gameplay reachability.
+
+**Contract implication:** Public enabled-skill and draw-family exclusions control newly planned CardsDrawn triggers. They do not constrain previously restored parks. Exact `C=P`, unique ask, and the existing depth bound therefore do not imply that P remains the next consumer when depth returns to D. Neither source provenance nor park-before-intrinsic priority closes this gap.
+
+The strongest established prefix ends after P’s initial Draw/Yield and the isolated child interval. Reaching P’s target prompt additionally requires a scheduling fact about intervening old parks. That fact is absent from the allowed public contract and existing restore invariants. This review proposes no stricter restore rule, private-state predicate, published park information, or additional field to supply it.
+
+Old phase4 evidence remains intact: `complete-objects.json:1479` records A→Yiji Pending, B→Accepted, C→`panic: filtered`, with no natural-reachability claim. B/C do not refute the assumed new qualified-source contract; the independent Q construction addresses the remaining scheduling claim. Their A329 archives were neither upgraded nor replayed against Main A330.
+
+Unknown future cards still cannot guide candidate enumeration or scoring beyond the proved leaf; `note_future_draw`, remap, and lifetime guards remain required. The no-VM Complete/trial shortcut supplies no missing scheduling proof. Cancel still exposes an unknown tail and is outside this proof. Original 19 NoCert outcomes and quality remain unresolved.
+
+- **Merge verdict: BLOCK any Confirm-prefix/root release based on this lemma.** The separately approved source field is unaffected; this analysis grants no implementation approval.
+- Any later authorized verification should exercise the specified paired restore states and assert the first Pending prompt/observer. No such experiment was performed here.
+
+Skipped tests, builds, network, archive generation/replay, and all source/gate edits as required.  
+Risk: the approved source name proves initial provenance, but currently cannot guarantee uninterrupted execution to Yiji’s first target prompt.

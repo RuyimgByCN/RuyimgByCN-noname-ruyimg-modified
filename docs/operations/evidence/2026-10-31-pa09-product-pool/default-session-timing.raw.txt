@@ -1,0 +1,31 @@
+   Compiling engine-native v0.1.0 (/private/tmp/pa09-candidate-f82ecf3c/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/tmp/pa09-candidate-f82ecf3c/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/tmp/pa09-candidate-f82ecf3c/worktree/crates/engine-native-wasm)
+warning: duplicated attribute
+   --> crates/engine-native-wasm/src/lib.rs:969:5
+    |
+969 |     #[test]
+    |     ^^^^^^^
+    |
+    = note: `#[warn(duplicate_macro_attributes)]` on by default
+
+warning: function `err` is never used
+  --> crates/engine-native-wasm/src/lib.rs:80:4
+   |
+80 | fn err<E: std::fmt::Debug>(e: E) -> JsValue {
+   |    ^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native-wasm` (lib test) generated 2 warnings
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.20s
+     Running unittests src/lib.rs (/tmp/pa09-candidate-f82ecf3c/target/debug/deps/engine_native_wasm-16b044e1e1e1761c)
+
+running 1 test
+{"accepted_candidate_jobs":800,"candidate_rich":false,"checkpoint_after_steps":6,"controls":"AB/BA alternating; restore outside timing; 2 warmups; complete replies and archives equal; counters included; no test delay hooks","deadline_ms":50,"nodes":64,"players":4,"pool_p50_ns":186083,"pool_p95_ns":231584,"route":"NativeSession::auto_step","samples":200,"seed":42,"serial_p50_ns":235750,"serial_p95_ns":252750,"workers":4}
+{"accepted_candidate_jobs":12800,"candidate_rich":true,"checkpoint_after_steps":6,"controls":"AB/BA alternating; restore outside timing; 2 warmups; complete replies and archives equal; counters included; no test delay hooks","deadline_ms":50,"nodes":64,"players":4,"pool_p50_ns":1104000,"pool_p95_ns":1237209,"route":"NativeSession::auto_step","samples":200,"seed":42,"serial_p50_ns":2360958,"serial_p95_ns":2471667,"workers":4}
+test session::planner_pool_tests::default_auto_step_serial_and_candidate_pool_measurement ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 28 filtered out; finished in 1.07s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native-wasm", "--lib", "default_auto_step_serial_and_candidate_pool_measurement", "--", "--ignored", "--nocapture"], "exit": 0, "locked_seconds": 4.304694374994142, "disk_free_bytes": 92075958272}

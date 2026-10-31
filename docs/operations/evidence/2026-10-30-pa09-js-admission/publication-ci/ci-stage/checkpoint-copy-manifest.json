@@ -1,0 +1,102 @@
+[
+  {
+    "path": "checkpoint-artifacts.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "checkpoint-artifacts.stdout",
+    "bytes": 2300,
+    "sha256": "3b42606cecfab9bccc78a2023fc87fb4ac5d4bcea0a7f97dd52ac23100d0550b"
+  },
+  {
+    "path": "checkpoint-jobs.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "checkpoint-jobs.stdout",
+    "bytes": 31565,
+    "sha256": "7a67a03b2cf2fc96dfd97271a9ac8156ee104230d2cf60d8f63a490190629c9a"
+  },
+  {
+    "path": "checkpoint-run.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "checkpoint-run.stdout",
+    "bytes": 14762,
+    "sha256": "07e553b0aeaf0a1e82f39d2da393c7f193f904a6d9cf8f55a2b6c3c6e4651fe2"
+  },
+  {
+    "path": "discovery-command.json",
+    "bytes": 380,
+    "sha256": "24674364d77d4ef521186148b4af675860b4c8fec08b7c84aa8432b1fe84fab1"
+  },
+  {
+    "path": "discovery.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "discovery.stdout",
+    "bytes": 14798,
+    "sha256": "1c31fbf735b47fc6eb4ca22f88da959a00e64867522f5bb8274dbe50db50db1f"
+  },
+  {
+    "path": "driver.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "driver.stdout",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "jobs-initial.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "jobs-initial.stdout",
+    "bytes": 25710,
+    "sha256": "bd265faf03b7db8b6cc1d7aebbb7afcb85c4029a24543e22d64880a4d8c8ce9f"
+  },
+  {
+    "path": "monitor.py",
+    "bytes": 802,
+    "sha256": "ba41e14b18b757c214bf8d27529ac0b707e747ebb8d3b669a29ebe68fbe1d287"
+  },
+  {
+    "path": "observation-state.json",
+    "bytes": 3709,
+    "sha256": "62c283e752bb81188bd7803ece165a623c9e3325f9c9a2db4e5ea421884685ad"
+  },
+  {
+    "path": "observe-ci.py",
+    "bytes": 9985,
+    "sha256": "aa71e63772b991f82d828ce545cf4a06b983ca8563690b81366ed19bba9be9a0"
+  },
+  {
+    "path": "run-initial.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "run-initial.stdout",
+    "bytes": 14762,
+    "sha256": "07e553b0aeaf0a1e82f39d2da393c7f193f904a6d9cf8f55a2b6c3c6e4651fe2"
+  },
+  {
+    "path": "watch.stderr",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "watch.stdout",
+    "bytes": 89822,
+    "sha256": "63d394a151ebb55595139e301f315b668ba05dbf927177189f20c815fde3f50d"
+  }
+]

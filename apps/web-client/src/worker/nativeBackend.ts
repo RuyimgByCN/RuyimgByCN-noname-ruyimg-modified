@@ -310,6 +310,7 @@ interface NativeChoiceJson {
   hidden?: boolean;
   kind?: string;
   native_kind?: unknown;
+  source_skill?: unknown;
 }
 
 /** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */

@@ -1,0 +1,13 @@
+# R05 v5：删除 locked 路径的独立裸 packs 输入（仅合同勘误，未批准／未实施）
+
+2026-10-31。本文仅替代 [v4](proposal-v4.raw.txt) §2 的派生输入约束及 §3 Engine 行三参 API；v3、v4其他已审设计原文与待批政策不变。[v4复审](review-v4.raw.txt)的具体反例是：合法验证后单独修改 ExtensionPack.cards 的 range，保留全部 provenance 标签，再把 packs 与原验证上下文一起传给恢复。标签相等不能约束规则字段。
+
+1. 新 locked 产品入口只收已验证上下文。候选外层接口为 `start_locked_engine(args, &VerifiedLockedContent)`、`restore_locked_engine(snapshot, &VerifiedLockedContent)`；**删除** `restore_with_extensions(snapshot, packs, verified_content)` 这种同时传裸 packs 的新接口。不得接第二份 packsJson、Catalog、卡牌数组、host/vm_skills、包来源标签或caller构造的派生包来替换上下文的规则内容。
+2. 原 `VerifiedLockedContent` 只有共享原字节／完整锁校验函数可构造，字段私有；外层可以读取原信封保存，但不能独立改写已验证解析包、资产或返回可修改引用。克隆保持同一不可变已验证内容；反序列化信封必须再次验证，不能derive Deserialize直接取得已验证类型。这里不新增第二证书、指纹或版本字段。
+3. 在既有 `content-native-loader`／宿主构建职责内，受控 locked 工厂只从该对象持有的已验证解析包与资产确定性桥接，再直接调用现有标准Catalog构建及Engine初始化／恢复。工厂内派生 packs 不返回给caller后再接回；不得把来源标签相等当派生证明。禁止从当前store、旧packsJson、另传参数或缓存中的不同包填充缺项。现有provenance校验保留为额外校验。
+4. 保持 facade→content→kernel 分层：上述锁校验／包解析与工厂位于现有content-runtime／content-native-loader／宿主职责。Engine/kernel不增加PackageStore、文件系统、JSON或向上依赖；工厂可使用现有受信Rust Catalog/Engine接口，但浏览器、Desktop、server的 locked 路径不能直接暴露这些裸构造参数。内置Rust规则仍是既有可信主机能力，不宣称本合同能沙箱化任意宿主Rust代码。
+5. NativeSession新局／恢复只持原已验证上下文，调用同一工厂。服务器新局、from_saved、lobby、HTTP、WAL base及最后再次restore一律同源；WAL回放继续使用由该对象构建的同一不可变Catalog，不接任意裸packs回参。每条命令执行仍是同一个Rust权威内核，未加第二引擎／调度器。
+6. 旧公开手建packs接口保留给既有可信Rust调用／测试，不因此取得新的 locked 身份；网络／JSON请求不得根据提供的provenance把它提升到新路径。legacy标准／旧扩展的接受或拒绝仍严格按v4待批表，不从旧入口兜底补上下文。新saveLocked仍原子导出同一会话hex与原context，标准新局使用经验证的规范empty锁。
+7. 必须加入有意义的回归：合法原资产的range=r，保留原锁／原context而改独立旧packs数组为r+1，这份数组在新locked入口没有参数位置，不能影响新局或恢复；只能改FrozenPackage原资产后重新送验证，保留旧锁必拒。相同约束覆盖host/vm_skills和WAL恢复工厂。实现后验证Rust类型／模块可见性、真实Worker／Desktop／server入口没有裸packs旁路，不能以接口命名代替调用检查。
+
+本勘误无需新JSON规范、内容hash、持久状态字段、能力框架或另一个包仓库。v4所提保存信封、安装原文、显式请求、旧档政策及v3规则／ABI／存档变化仍须具体用户批准，未分配任何版本；裁决27不覆盖R05。此处只补一处设计反例，未改产品源码、未运行测试，不声明三技能／191异步draw／12类验收或整个R05完成。

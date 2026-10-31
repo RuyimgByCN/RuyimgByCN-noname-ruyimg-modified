@@ -1,0 +1,71 @@
+{
+  "qualification": "Design reports/reviews only; v3+v4+v5 independentlyready for specific userapproval; no newimplementation/versions/approval.",
+  "files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/829092c2-c43a-4a30-be3a-8f0e32a5194f/proposals/r05-current-native-primitives-and-missing-scope.md",
+      "stored": "source-audit.raw.txt",
+      "bytes": 14747,
+      "sha256": "147fb1b16e8e878d267f5ad81c606147247d4e284957fe45a9676dfbf0798382"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/1bf3bfca-611c-4706-a7c0-561691ae1f4d/proposals/r05-concrete-runtime-contract-supplement.md",
+      "stored": "proposal-v1.raw.txt",
+      "bytes": 34391,
+      "sha256": "e8153c7881ec2e7cc503a3adf06ea8b3341afb898f82699d4625c1c4f1f1be09"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/dc517013-7deb-4133-8d7a-3da16b2b3093/reviews/r05-concrete-contract-supplement.md",
+      "stored": "review-v1.raw.txt",
+      "bytes": 12205,
+      "sha256": "f3b22c8cc9c653bd7a12d9d2d79acd6ba327e8dd1e6d4a679169282c61691226"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/7c4b4b60-7758-45d4-bc57-70218cddaf39/proposals/r05-concrete-runtime-contract-supplement-v2.md",
+      "stored": "proposal-v2.raw.txt",
+      "bytes": 32350,
+      "sha256": "8db9cb9e3a5d3454430ec69deafaa5a96c056dc139faeba546f7e438650d7aad"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/752ed8b0-b45c-44f9-81f6-05fd043205dc/reviews/r05-concrete-contract-supplement-v2.md",
+      "stored": "review-v2.raw.txt",
+      "bytes": 9811,
+      "sha256": "34ca1162f3d16748701218b9c928bdede3bd48d3e96d7dbc27e435474233c17f"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/97d4f9b5-f314-4df4-ad17-a27e4b902fb0/proposals/r05-concrete-runtime-contract-supplement-v3.md",
+      "stored": "proposal-v3.raw.txt",
+      "bytes": 27617,
+      "sha256": "58b3e1a05c8d4dbe4cd92a0f89b5104daab1334bbcef26a54a854218106bce3f"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/49206ee7-6281-445a-a64c-86c2542cfd30/reviews/r05-concrete-contract-supplement-v3.md",
+      "stored": "review-v3.raw.txt",
+      "bytes": 7720,
+      "sha256": "e09f4f1ee5453a75d8e3b28ef5eed1768212618a400383f44802237830531672"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/449b4fb2-e2c1-4844-9082-b5db6ec19118/proposals/r05-content-lock-restore-contract-supplement-v4.md",
+      "stored": "proposal-v4.raw.txt",
+      "bytes": 18716,
+      "sha256": "9bf645cb8d47692657584ad26a2327c158944d75401ac735f7fd038e08841bea"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/de703060-d77d-4d27-99ac-290ae4daa536/reviews/r05-content-lock-restore-contract-v4.md",
+      "stored": "review-v4.raw.txt",
+      "bytes": 5397,
+      "sha256": "915c819996c1c701573f33fe9d315ce5c28e47917f3fe819d45f5b818dd80d9b"
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/d7a3622c-9eba-4133-a1ec-d720e1d75d21/reviews/r05-content-lock-restore-contract-v5.md",
+      "stored": "review-v5.raw.txt",
+      "bytes": 2407,
+      "sha256": "436e7e488d28787ac6af7c144b1ce8cba3dd305eb2ff5aa33443d16e2c08d58b"
+    },
+    {
+      "source": "Parent-authored seven-clause design erratum, 2026-10-31; source code unmodified",
+      "stored": "proposal-v5.raw.txt",
+      "bytes": 3948,
+      "sha256": "30b1170190bed03b22e8b8618da7b3b267b1aeeb9242131e24ddf0e06c41346e"
+    }
+  ]
+}

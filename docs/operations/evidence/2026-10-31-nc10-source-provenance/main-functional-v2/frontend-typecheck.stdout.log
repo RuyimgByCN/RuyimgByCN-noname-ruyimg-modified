@@ -1,0 +1,5 @@
+
+> noname-next-web-client@0.1.0 typecheck /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> vue-tsc --noEmit
+
+{"command": ["pnpm", "typecheck"], "exit": 0, "locked_seconds": 1.4814712499792222, "disk_free_bytes": 85505449984}

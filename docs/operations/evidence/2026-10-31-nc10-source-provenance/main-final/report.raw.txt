@@ -1,0 +1,187 @@
+Requested MainV3 checks PASS; parent review required; overall Goal remains BLOCK. Main V3's actual full workspace result is **6917 passed / 0 failed / 77 ignored**, across **164 summaries**. The unchanged Main build scripts rebuilt both current WASMs, actual source/sink and Worker checks passed, frontend179 passed after regeneration, conformance19 and cross-target checks passed, and the external production bundle passed. Final-gate pending list: **[]**; unexpected failure list: **[]**. Parent review remains required; these checks do **not** close the overall Goal/runtime BLOCK.
+
+Verified on **2026-10-31 UTC**, starting approximately **06:59Z**, sealed **2026-10-31T07:32:46.728491+00:00**. Main HEAD `4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`, tree `184829236b7c17fe472fecbb1ba77b8129c65a6e`. Rules/archive/ABI/WS remain **330/105/758/6**; frontend rule backend defaults to native, desktop transport defaults to **WASM** unless explicitly overridden. No default switch was made.
+
+The [machine summary](/tmp/nc27-main-final-v3-8e1fad00/summary.json), [all command records](/tmp/nc27-main-final-v3-8e1fad00/summary.json), [workspace parser](/tmp/nc27-main-final-v3-8e1fad00/workspace-parsed.json), [generated18 manifest](/tmp/nc27-main-final-v3-8e1fad00/generated18-products.json), and [final artifact index](/tmp/nc27-main-final-v3-8e1fad00/artifact-sha256.json) are authoritative evidence. Final index SHA256 `95b22a3aff2bfe4a7390261881e0aa75f62bb62672961b1b9b3cd9edf1447c99`. The index excludes itself, the external frontend product directory and this report; the [product manifest](/tmp/nc27-main-final-v3-8e1fad00/frontend-products.json) covers all45 external files. No full43869/3GB source rescan was performed; the parent's reviewed V3 full-manifest identity was inherited.
+
+The [copied admission](/tmp/nc27-main-final-v3-8e1fad00/admission.json) binds the **33 Main source files** to V3 source manifest `4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e` and V3 delta `014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092`. Its legacy V2-named fields are not used as a count: actual33 hashes were checked directly. [V2 inheritance binding](/tmp/nc27-main-final-v3-8e1fad00/v2-inherited-binding.json) freshly rehashed all30 prior evidence files, confirmed all1131 prior functional inputs matched this V3 entry, and preserved the old/new legacy-reader hashes. **V2 workspace6916 is not reported as V3.** Native1715/source tests are subsets of the newly executed V3 workspace6917, not added totals.
+
+All heavy invocations used `python3 -B /tmp/noname-run-serialized.py <child argv>` with its global lock. Environment included jobs2, incremental0, offline Cargo, and the retained own target `/tmp/nc27-main-functional-458ed333/cargo-target`. Minimum sampled disk across recorded commands was **47350448128 bytes**, above3GiB; no disk stop occurred. Cargo/root commands used Main root cwd; frontend build/smoke/tests used Main `apps/web-client` cwd. Exact argv, cwd, exits, lock-held/wall time, separate stdout/stderr and hashes are recorded per command. Times below are lock-held / wall seconds; queue time is not performance evidence.
+
+| Actual child argv | Actual result | Seconds | Raw stdout / stderr |
+|---|---|---:|---|
+| `node /tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs` | exit 0;120 steps / 33 pending choices / no source | 0.176 / 0.507 | [actual-legacy-sink](/tmp/nc27-main-final-v3-8e1fad00/actual-legacy-sink.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/actual-legacy-sink.stderr.log) |
+| `node /tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs` | exit 1;retained extra restore-equality harness failure | 0.053 / 0.521 | [actual-native-source](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.stderr.log) |
+| `node /tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs` | exit 0;owner1 source,Other hidden,metadata reads preserve save | 0.059 / 0.507 | [actual-native-source-final](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source-final.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source-final.stderr.log) |
+| `node scripts/build-wasm.mjs` | exit 0 | 113.114 / 113.441 | [build-legacy](/tmp/nc27-main-final-v3-8e1fad00/build-legacy.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/build-legacy.stderr.log) |
+| `node scripts/build-native.mjs` | exit 0 | 52.794 / 77.119 | [build-native](/tmp/nc27-main-final-v3-8e1fad00/build-native.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/build-native.stderr.log) |
+| `cargo run --offline -p conformance` | exit 0;19 vectors | 24.243 / 70.499 | [conformance](/tmp/nc27-main-final-v3-8e1fad00/conformance.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/conformance.stderr.log) |
+| `pnpm test` | exit 0;179 pass / 0 fail / 0 skipped | 1.111 / 1.516 | [frontend-post-wasm](/tmp/nc27-main-final-v3-8e1fad00/frontend-post-wasm.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/frontend-post-wasm.stderr.log) |
+| `python3 -B /tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py` | exit 0 | 1.671 / 2.024 | [legacy-cross](/tmp/nc27-main-final-v3-8e1fad00/legacy-cross.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/legacy-cross.stderr.log) |
+| `python3 -B -m unittest discover -s scripts -p test_check_source_lines.py` | exit 0;2 tests | 0.057 / 0.507 | [lineunit](/tmp/nc27-main-final-v3-8e1fad00/lineunit.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/lineunit.stderr.log) |
+| `python3 -B scripts/check-native-wasm-cross-target.py` | exit 0;standard40 and package20 trajectories + midpoint restore | 24.703 / 25.224 | [native-cross](/tmp/nc27-main-final-v3-8e1fad00/native-cross.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/native-cross.stderr.log) |
+| `python3 -B scripts/preflight.py` | exit 0;21 gates;no --quick | 336.045 / 336.205 | [preflight](/tmp/nc27-main-final-v3-8e1fad00/preflight.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/preflight.stderr.log) |
+| `python3 -B scripts/check-source-lines.py` | exit 0 | 7.951 / 8.065 | [sourcecaps](/tmp/nc27-main-final-v3-8e1fad00/sourcecaps.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/sourcecaps.stderr.log) |
+| `python3 -B scripts/check_doc_line_refs.py --strict` | exit 0 | 8.818 / 9.071 | [strictrefs](/tmp/nc27-main-final-v3-8e1fad00/strictrefs.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/strictrefs.stderr.log) |
+| `node /tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs` | exit 0;117 transformed / 35 traced Main sources / 45 outputs | 1.265 / 1.520 | [vite-post-wasm](/tmp/nc27-main-final-v3-8e1fad00/vite-post-wasm.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/vite-post-wasm.stderr.log) |
+| `pnpm smoke:native` | exit 0;82 checks / 0 failed | 0.486 / 1.011 | [worker-smoke](/tmp/nc27-main-final-v3-8e1fad00/worker-smoke.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/worker-smoke.stderr.log) |
+| `cargo test --offline --workspace --no-fail-fast` | exit 0; 6917 pass / 0 fail / 77 ignored;164 summaries | 416.774 / 417.026 | [workspace](/tmp/nc27-main-final-v3-8e1fad00/workspace.stdout.log) / [stderr](/tmp/nc27-main-final-v3-8e1fad00/workspace.stderr.log) |
+
+The workspace includes the new445-case serde error-oracle test, all five registered `nc10_source_provenance` tests, four `engine::choice_source` tests, `source_actual_native_ask_survives_session_and_binding_json`, and the legacy `source_typed_restore_both_entries_never_reaches_pending_choice_json` sink test. Exact passing names and all77 ignored lines are in the [workspace parser](/tmp/nc27-main-final-v3-8e1fad00/workspace-parsed.json). The actual-source test and typed-poisoned legacy restore are native-target tests inside6917; the JavaScript legacy sink below does not claim to expose typed Snapshot restore.
+
+The Main scripts were unchanged. [Child receipts](/tmp/nc27-main-final-v3-8e1fad00/build-child-argv.jsonl) show native `wasm-pack build <crate> --target web --release --no-opt --out-dir <Main .native-pkg-tmp>` and legacy `wasm-pack build <crate> --target web --out-dir <Main wasm-pkg> --release -- --no-default-features`. The [approved preload](/tmp/nc27-main-final-v3-8e1fad00/build-target.cjs) changed **only child `CARGO_TARGET_DIR`**, preserving argv, release/codegen settings and optimization policy. Existing legacy Cargo metadata has `wasm-opt = false`; no fallback CLI was selected. Existing wasm-pack0.15.0 and cached wasm-bindgen0.2.126 were used; no update/install command was issued by this worker. The build's own “Installing wasm-bindgen” informational line and newer-wasm-pack advisory remain in raw logs.
+
+All18 authorized generated paths were rehashed before and after. Only three byte files changed: native WASM and the two identical legacy WASM copies. New native WASM SHA256 **`225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1`**; new legacy SHA256 **`c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164`**, identical to the reviewed private P2/V3 artifact. The generated18 path set stayed identical and `.native-pkg-tmp` was removed by the original script. No Main target/default-dist write was needed.
+
+[Actual current native WASM evidence](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.json) uses accepted `physical/v2/actual-native-ask.hex`, fixture SHA256 `0cfe323c57def22331698e26432b8b3d785f39d202ec865f0feff8f350677bb4`, with archive rule330. Raw owner1 JSON contains `source_skill:"遗计"`; seats0/2 are hidden and have no source field. The save immediately after restore and save after reading all metadata are identical. [Actual legacy WASM evidence](/tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.json) records120 steps and33 actual pending choices, all without source in `pendingChoiceJson` and envelopes. Its harness is the reviewed private P2 script with only package path/output location redirected to current Main/own evidence.
+
+One first failure is explicitly retained. My initial own source harness additionally asserted that the imported archive bytes equal the save immediately after restore; it failed before metadata reads. Existing `Engine::restore` increments `auth_generation` (`crates/engine-native/src/engine/snapshot.rs`, around542), so that extra equality was outside the requested metadata-read invariant. The [exact first script](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source-attempt1.mjs), [first stderr](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.stderr.log), [first result](/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.result.json), and original stdout are preserved. Only the own harness was corrected to compare the post-restore baseline against post-metadata save, as the accepted session test does. The corrected run records `fixtureRestoreBytesIdentical:false` and `saveBeforeAfterIdentical:true`. No product source, restore semantics or expected product result was changed.
+
+Real production Worker smoke passed82/0 against newly rebuilt modules. Full frontend179 was rerun because `nc04-start-atomicity.test.mjs` and `nc04-restore-atomicity.test.mjs` import actual generated WASM. Generated declarations and all maintained TS/config inputs are unchanged, so the prior Main typecheck remains a valid inherited subset; it was not redundantly rerun. The current external Vite build uses original Main config, runner loader and original config `__dirname`; no config bundle is written into node_modules. Its [module table](/tmp/nc27-main-final-v3-8e1fad00/bundle-module-table.json) binds35 Main-source file/input hashes and final chunks. The bundle has117 transformed modules and45 externally hashed products. Current native/legacy JS source and WASM bytes are bundled; no browser/GUI execution is claimed.
+
+Legacy cross-target checks compare two initial-state hashes against actual current legacy WASM and verify manifest chain plus skill-VM smoke, using the existing private gate with only evidence output path changed. Current native-WASM gate compares standard40-step and installed-package20-step trajectories, including midpoint save/restore, by revision/hash/public-event codes. These rerun tests overlap workspace coverage and are not added to6917. Conformance19 is a separate vector gate, not19 extra Rust tests.
+
+[Functional invariants](/tmp/nc27-main-final-v3-8e1fad00/functional-phase.json) prove source33, protected99, root7, default-dist37, HEAD/tree/index/staged, source3, content-package Git trees/status/diff and attribute/guard stability. Only the authorized generated byte files changed among1131 captured native/API/frontend/Cargo inputs. Main target directory stamps, its `.rustc_info.json`, and node_modules `.vite-temp` directory stamps remained unchanged across the build phase. This is a bounded write-protection check, not an exhaustive node_modules/media rehash.
+
+The parent was contacted before final gates and documentation edits were allowed to finish before DocsReady. DocsReady was recorded at **2026-10-31T07:25:50.551742+00:00**. Final [entry](/tmp/nc27-main-final-v3-8e1fad00/gate-entry.json), [exit](/tmp/nc27-main-final-v3-8e1fad00/gate-exit.json), [docs/package supplements](/tmp/nc27-main-final-v3-8e1fad00/gate-entry-supplement.json), and [comparison](/tmp/nc27-main-final-v3-8e1fad00/gate-comparison.json) provide final-window evidence. Final comparison result: **True**; frozen Markdown files captured: **1927**. During that window source33, new18 generated products, dist37, root7, protected99, Cargo/input hashes, docs identities, packages, HEAD/tree/index and empty staging are compared. No gate autofix was run.
+
+Actual source-cap output:
+
+```text
+Source line limit passed: 9003 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+```
+
+Strict file:line checker reported1065 citations,6 missing path-pattern kinds and0 out-of-range citations,exit0. Its raw stderr lists path.rs, .../gujian/skill.js, character/offline/.../offline_piracyS.js, .../swd/skill.js, schema/package.rs and step_skills_status.rs. These diagnostics are preserved; actual filesystem-link qualification comes from the separate core/all link gates inside full preflight.
+
+Warnings are retained. Workspace stderr contains **727 compiler-warning diagnostic-header occurrences**, plus55 Cargo summary headers that repeat warning information; these are not unique-warning counts and must not be added. Repeated warnings in conformance/build/cross logs are also not summed into a distinct total. Node localStorage ExperimentalWarning and wasm-pack metadata/update notices remain in their original logs. No `-D warnings` qualification is claimed. Full-preflight outer stdout/stderr are retained; the existing preflight internally captures its child output, so undisclosed raw child logs are not claimed.
+
+This worker changed only authorized generated product bytes and own/tmp evidence/report, with no source/docs/rootgate/version/default edits, stage/commit/push, dependency install, resource sync, GUI/Tauri release build, or product autofix. Parent-owned docs/evidence changes outside the final frozen window are preserved. The reused Cargo target is retained and released to the parent after this handoff; no other task target was touched.
+
+Recommended next step: parent/reviewer verify these exact source/product/doc bindings and recorded final-gate results before an acceptance decision. Any later parent evidence/status copy falls outside this frozen window and needs the steered fresh cheap local-link/strict checks; no full workspace or WASM rerun is implied. Overall Goal remains **BLOCK**; this run does not certify root/NoCert/continuation semantics, wider rule equivalence, physical platforms, or new Main GUI behavior.
+
+Skipped: GUI/Tauri release/physical-platform checks, redundant V2 native/typecheck reruns, dependency/resource sync and full source/media rescan. Risk: the retained harness first failure is outside the requested product invariant; all broader Goal blockers and independent review requirements remain.
+
+```acceptance-report
+{
+  "criteriaSatisfied": [
+    {
+      "id": "criterion-1",
+      "status": "satisfied",
+      "evidence": "Requested MainV3 workspace/current-WASM/functional/final-gate checks completed within authorized generated18-only mutation scope."
+    },
+    {
+      "id": "criterion-2",
+      "status": "satisfied",
+      "evidence": "Actual commands/exits/stdout/stderr/SHA,workspace6917/0/77,ignored/warning lists,new18 manifests,source/product/docs invariant snapshots,and first harness failure retained."
+    }
+  ],
+  "changedFiles": [
+    "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+    "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+    "/tmp/nc27-main-final-v3-8e1fad00/**",
+    "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8e1fad00-dd0e-451d-ae07-ef846b5d7e93/verification/nc27-main-final-v3-acceptance.md"
+  ],
+  "testsAddedOrUpdated": [],
+  "commandsRun": [
+    {
+      "command": "node /tmp/nc27-main-final-v3-8e1fad00/legacy-wasm-sink-smoke.mjs",
+      "result": "passed",
+      "summary": "actual-legacy-sink: exit0"
+    },
+    {
+      "command": "node /tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs",
+      "result": "passed",
+      "summary": "actual-native-source-final: exit0"
+    },
+    {
+      "command": "node /tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs",
+      "result": "failed",
+      "summary": "actual-native-source: exit1"
+    },
+    {
+      "command": "node scripts/build-wasm.mjs",
+      "result": "passed",
+      "summary": "build-legacy: exit0"
+    },
+    {
+      "command": "node scripts/build-native.mjs",
+      "result": "passed",
+      "summary": "build-native: exit0"
+    },
+    {
+      "command": "cargo run --offline -p conformance",
+      "result": "passed",
+      "summary": "conformance: exit0"
+    },
+    {
+      "command": "pnpm test",
+      "result": "passed",
+      "summary": "frontend-post-wasm: exit0"
+    },
+    {
+      "command": "python3 -B /tmp/nc27-main-final-v3-8e1fad00/cross-target-current.py",
+      "result": "passed",
+      "summary": "legacy-cross: exit0"
+    },
+    {
+      "command": "python3 -B -m unittest discover -s scripts -p test_check_source_lines.py",
+      "result": "passed",
+      "summary": "lineunit: exit0"
+    },
+    {
+      "command": "python3 -B scripts/check-native-wasm-cross-target.py",
+      "result": "passed",
+      "summary": "native-cross: exit0"
+    },
+    {
+      "command": "python3 -B scripts/preflight.py",
+      "result": "passed",
+      "summary": "preflight: exit0"
+    },
+    {
+      "command": "python3 -B scripts/check-source-lines.py",
+      "result": "passed",
+      "summary": "sourcecaps: exit0"
+    },
+    {
+      "command": "python3 -B scripts/check_doc_line_refs.py --strict",
+      "result": "passed",
+      "summary": "strictrefs: exit0"
+    },
+    {
+      "command": "node /tmp/nc27-main-final-v3-8e1fad00/vite-build.mjs",
+      "result": "passed",
+      "summary": "vite-post-wasm: exit0"
+    },
+    {
+      "command": "pnpm smoke:native",
+      "result": "passed",
+      "summary": "worker-smoke: exit0"
+    },
+    {
+      "command": "cargo test --offline --workspace --no-fail-fast",
+      "result": "passed",
+      "summary": "workspace: exit0"
+    }
+  ],
+  "validationOutput": [
+    "MainV3 workspace6917/0/77 across164 summaries",
+    "Actual current native source/Other-hidden/save-read invariant passed;legacy120steps33choices noSource;Worker82/0;frontend179/0",
+    "Final pending: [];unexpected failures: []",
+    "Final index SHA256 95b22a3aff2bfe4a7390261881e0aa75f62bb62672961b1b9b3cd9edf1447c99"
+  ],
+  "residualRisks": [
+    "Overall Goal/runtime remains BLOCK;parent review required",
+    "No new Main GUI/Tauri release/physical/upstream-equivalence qualification",
+    "Initial own overstrict restore-equality harness failure retained and explained"
+  ],
+  "noStagedFiles": true,
+  "diffSummary": "Only3 WASM byte paths changed within authorized generated18;Main source/docs/gates/defaults untouched by worker",
+  "reviewFindings": [
+    "No unexpected functional failure observed;final pending/failure lists in summary are authoritative",
+    "Required independent parent/reviewer gate remains"
+  ],
+  "manualNotes": "Target /tmp/nc27-main-functional-458ed333/cargo-target retained;exclusive worker reuse lease released after handoff. Skipped GUI/platform/fullmedia checks;Goal remainsBLOCK."
+}
+```

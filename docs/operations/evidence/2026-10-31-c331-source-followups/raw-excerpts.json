@@ -1,0 +1,431 @@
+[
+  {
+    "id": "core-priority",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/get/index.js",
+    "file_sha256": "8515ed7242d2638720180507a778cb273d8f33743eac12c5237d2f50e805823d",
+    "lines": [
+      621,
+      647
+    ],
+    "excerpt": "\tpriority(skill) {\n\t\tconst info = get.info(skill);\n\t\tif (!info) {\n\t\t\treturn 0;\n\t\t}\n\t\tif (\"_priority\" in info) {\n\t\t\treturn info._priority;\n\t\t}\n\t\tlet priority = 0;\n\t\tif (info.priority) {\n\t\t\tpriority = info.priority * 100;\n\t\t}\n\t\tif (info.silent) {\n\t\t\tpriority++;\n\t\t}\n\t\tif (info.equipSkill) {\n\t\t\tpriority -= 25;\n\t\t}\n\t\tif (info.cardSkill) {\n\t\t\tpriority -= 50;\n\t\t}\n\t\tif (info.ruleSkill) {\n\t\t\tpriority -= 75;\n\t\t}\n\t\tinfo._priority = priority;\n\t\treturn priority;\n\t}",
+    "excerpt_sha256": "df315f9c29e709d0c1be4cb2b30e72a8d31d4d72f5ff68d5fdf427968bafa5f5"
+  },
+  {
+    "id": "liuli-priority",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+    "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "lines": [
+      32346,
+      32382
+    ],
+    "excerpt": "\t\t\t\t\tvar addList=function(skill,player){\n\t\t\t\t\t\tif(listAdded[skill]) return;\n\t\t\t\t\t\tif(player.forbiddenSkills[skill]) return;\n\t\t\t\t\t\tif(player.disabledSkills[skill]) return;\n\t\t\t\t\t\tlistAdded[skill]=true;\n\t\t\t\t\t\tvar info=lib.skill[skill];\n\t\t\t\t\t\tvar num=0;\n\t\t\t\t\t\tif(info.priority){\n\t\t\t\t\t\t\tnum=info.priority*100;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif(info.silent){\n\t\t\t\t\t\t\tnum++;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tif(info.equipSkill) num-=30;\n\t\t\t\t\t\tif(info.ruleSkill) num-=30;\n\t\t\t\t\t\tif(info.firstDo){\n\t\t\t\t\t\t\tlist.push([skill,player,num]);\n\t\t\t\t\t\t\tlist.sort(function(a,b){\n\t\t\t\t\t\t\t\treturn b[2]-a[2];\n\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\tallbool=true;\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}\n\t\t\t\t\t\telse if(info.lastDo){\n\t\t\t\t\t\t\tlist2.push([skill,player,num]);\n\t\t\t\t\t\t\tlist2.sort(function(a,b){\n\t\t\t\t\t\t\t\treturn b[2]-a[2];\n\t\t\t\t\t\t\t});\n\t\t\t\t\t\t\tallbool=true;\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t}\n\t\t\t\t\t\tmapxx.list.push([skill,player,num]);\n\t\t\t\t\t\tmapxx.list.sort(function(a,b){\n\t\t\t\t\t\t\treturn b[2]-a[2];\n\t\t\t\t\t\t});\n\t\t\t\t\t\tallbool=true;\n\t\t\t\t\t};",
+    "excerpt_sha256": "9c275eb8e39ce81005f0856d077b72abe6cc4e605be2e16d65eb90e9695fb807"
+  },
+  {
+    "id": "core-selectability",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/content.ts",
+    "file_sha256": "09951b61fe8d9199ed1eb8b373faaf206d683e24b2a93a75ffc2259330891e6c",
+    "lines": [
+      4017,
+      4068
+    ],
+    "excerpt": "\tasync arrangeTrigger(event, trigger, player) {\n\t\tconst doingList = event.doingList.slice(0);\n\n\t\twhile (doingList.length > 0) {\n\t\t\tevent.doing = doingList.shift();\n\t\t\twhile (true) {\n\t\t\t\tif (trigger.filterStop && trigger.filterStop()) {\n\t\t\t\t\treturn;\n\t\t\t\t}\n\t\t\t\tconst usableSkills = event.doing.todoList.filter(info => lib.filter.filterTrigger(trigger, info.player, event.triggername, info.skill, info.indexedData));\n\t\t\t\tif (usableSkills.length == 0) {\n\t\t\t\t\tbreak;\n\t\t\t\t} else {\n\t\t\t\t\tevent.doing.todoList = event.doing.todoList.filter(i => i.priority <= usableSkills[0].priority);\n\t\t\t\t\t//firstDo时机和lastDo时机不进行技能优先级选择\n\t\t\t\t\tif (get.itemtype(event.doing.player) !== \"player\") {\n\t\t\t\t\t\tevent.current = usableSkills[0];\n\t\t\t\t\t} else {\n\t\t\t\t\t\tevent.choice = usableSkills.filter(n => n.priority == usableSkills[0].priority);\n\t\t\t\t\t\t//现在只要找到一个同优先度技能为silent，或没有技能描述的技能 便优先执行该技能\n\t\t\t\t\t\tconst silentSkill = event.choice.find(item => {\n\t\t\t\t\t\t\tconst skillInfo = lib.skill[item.skill];\n\t\t\t\t\t\t\treturn skillInfo && (skillInfo.silent || !lib.translate[item.skill]);\n\t\t\t\t\t\t});\n\t\t\t\t\t\tif (silentSkill) {\n\t\t\t\t\t\t\tevent.current = silentSkill;\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tconst currentChoice = event.choice[0];\n\t\t\t\t\t\t\tconst skillsToChoose = event.choice.map(i => i.skill).unique();\n\t\t\t\t\t\t\tif (event.choice.length === 1 || skillsToChoose.length === 1) {\n\t\t\t\t\t\t\t\tevent.current = currentChoice;\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tconst currentPlayer = currentChoice.player;\n\t\t\t\t\t\t\t\tconst next = currentPlayer.chooseControl(skillsToChoose.map(skill => get.skillTranslation(skill, currentPlayer, true)));\n\t\t\t\t\t\t\t\tnext.set(\"prompt\", \"选择下一个触发的技能\");\n\t\t\t\t\t\t\t\tnext.set(\"forceDie\", true);\n\t\t\t\t\t\t\t\tnext.set(\"arrangeSkill\", true);\n\t\t\t\t\t\t\t\tnext.set(\"includeOut\", true);\n\t\t\t\t\t\t\t\tconst result = await next.forResult();\n\t\t\t\t\t\t\t\t//千里走单骑全责，把敌人打死可能会打断chooseControl\n\t\t\t\t\t\t\t\tif (result) {\n\t\t\t\t\t\t\t\t\tevent.current = usableSkills.find(info => info.skill == skillsToChoose[result.index]);\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\tevent.current = usableSkills[0];\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tevent.doing.doneList.push(event.current);\n\t\t\t\t\tevent.doing.todoList.remove(event.current);\n\t\t\t\t\tconst result = await game.createTrigger(event.triggername, event.current.skill, event.current.player, trigger, event.current.indexedData).forResult();\n\t\t\t\t\tif (get.itemtype(event.doing.player) === \"player\" && result === \"cancelled\") {",
+    "excerpt_sha256": "62a0645c85590f8e0b7ac81fb6a64cc2e42556d70296498f7ac8647b679ea012"
+  },
+  {
+    "id": "liuli-selectability",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+    "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "lines": [
+      15257,
+      15300
+    ],
+    "excerpt": "    \t\t\t\t\t\tnext.triggername = 'game_' + event.currentSkill;\n    \t\t\t\t\t\tnext.gameSkill = true;\n    \t\t\t\t\t\t//这个是真正的event\n    \t\t\t\t\t\tnext.sourceEvent = event.eTrigger;\n\t\t\t\t\t\t}\n\t\t\t\t    }\n\t\t\t\t    'step 2'\n\t\t\t\t    event.goto(0);\n\t\t\t\t},\n\t\t\t\tarrangeTrigger:function(){\n\t\t\t\t\t'step 0'\n\t\t\t\t\tif(event.runGameSkills?.length) {\n\t\t\t\t\t    var run = game.createEvent('runGameSkills',false,event);\n\t\t\t\t\t    run.setContent('runGameSkills');\n\t\t\t\t\t    run.runGameSkills = event.runGameSkills;\n\t\t\t\t\t    run.eTrigger = event.eTrigger;\n\t\t\t\t\t}\n\t\t\t\t\tevent.filter1=function(info){\n\t\t\t\t\t\tif(info[1].isDead()&&!lib.skill[info[0]].forceDie) return false;\n\t\t\t\t\t\tif(info[1].isOut()&&!lib.skill[info[0]].forceOut) return false;\n\t\t\t\t\t\treturn lib.filter.filterTrigger(trigger,info[1],event.triggername,info[0]);\n\t\t\t\t\t}\n\t\t\t\t\tevent.filter2=function(info2){\n\t\t\t\t\t\tvar info=lib.skill[info2[0]];\n\t\t\t\t\t\tif(!lib.translate[info2[0]]||info.silent) return false;\n\t\t\t\t\t\treturn true;\n\t\t\t\t\t}\n\t\t\t\t\tevent.filter3=function(info,info2){\n\t\t\t\t\t\treturn event.filter2(info2)&&event.filter1(info2)&&info2[1]==info[1]&&info[2]==info2[2]&&(lib.skill.global.contains(info2[0])||info[1].hasSkill(info2[0],true));\n\t\t\t\t\t}\n\t\t\t\t\t'step 1'\n\t\t\t\t\tif(trigger.filterStop&&trigger.filterStop()){\n\t\t\t\t\t\tevent.finish();\n\t\t\t\t\t}\n\t\t\t\t\telse if(event.list.length){\n\t\t\t\t\t\tvar info=event.list.shift();\n\t\t\t\t\t\tgame.createTrigger(event.triggername,info[0],info[1],trigger);\n\t\t\t\t\t\tevent.redo();\n\t\t\t\t\t}\n\t\t\t\t\t'step 2'\n\t\t\t\t\tif(!event.map.length){\n\t\t\t\t\t\tif(event.list2.length){\n\t\t\t\t\t\t\tvar info=event.list2.shift();\n\t\t\t\t\t\t\tgame.createTrigger(event.triggername,info[0],info[1],trigger);",
+    "excerpt_sha256": "d5d377126ef4def18d4c1f6c84567791a0ee748419dea724125d218a3b437cfb"
+  },
+  {
+    "id": "core-finishSkill",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/game/index.js",
+    "file_sha256": "2a500fdd85a392708fb9163c2cc178ad508e9cab9b5aecf79f962d4a806f4cf4",
+    "lines": [
+      8762,
+      8794
+    ],
+    "excerpt": "\t\tif (info.subSkill && !sub) {\n\t\t\tObject.keys(info.subSkill).forEach(value => {\n\t\t\t\tconst iValue = `${skillId}_${value}`;\n\t\t\t\tlib.skill[iValue] = info.subSkill[value];\n\t\t\t\tlib.skill[iValue].sub = true;\n\t\t\t\tif (info.subSkill[value].sourceSkill === undefined) {\n\t\t\t\t\tlib.skill[iValue].sourceSkill = skillId;\n\t\t\t\t}\n\t\t\t\tif (info.subSkill[value].name) {\n\t\t\t\t\tlib.translate[iValue] = info.subSkill[value].name;\n\t\t\t\t} else {\n\t\t\t\t\tlib.translate[iValue] = lib.translate[iValue] || lib.translate[skillId];\n\t\t\t\t}\n\t\t\t\tif (info.subSkill[value].description) {\n\t\t\t\t\tlib.translate[`${iValue}_info`] = info.subSkill[value].description;\n\t\t\t\t}\n\t\t\t\tif (info.subSkill[value].marktext) {\n\t\t\t\t\tlib.translate[`${iValue}_bg`] = info.subSkill[value].marktext;\n\t\t\t\t}\n\t\t\t\tgame.finishSkill(iValue, true);\n\t\t\t});\n\t\t}\n\t\tif (info.round) {\n\t\t\tconst k = `${skillId}_roundcount`;\n\t\t\tif (typeof info.group === \"string\") {\n\t\t\t\tinfo.group = [info.group, k];\n\t\t\t} else if (Array.isArray(info.group)) {\n\t\t\t\tinfo.group.add(k);\n\t\t\t} else {\n\t\t\t\tinfo.group = [k];\n\t\t\t}\n\t\t\tlib.skill[k] = ((round, name) => ({\n\t\t\t\tinit: player => {",
+    "excerpt_sha256": "8c1500e3857e09c97d14bf6fc0197a5538066901703e6becfb6b1371eb9429c2"
+  },
+  {
+    "id": "core-underscore-global",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/game/index.js",
+    "file_sha256": "2a500fdd85a392708fb9163c2cc178ad508e9cab9b5aecf79f962d4a806f4cf4",
+    "lines": [
+      8858,
+      8865
+    ],
+    "excerpt": "\t\t\t}\n\t\t\tinfo._priority = priority;\n\t\t}\n\t\tif (skillId[0] === \"_\") {\n\t\t\tgame.addGlobalSkill(skillId);\n\t\t}\n\t}\n\tfinishCard(cardId) {",
+    "excerpt_sha256": "d4d7b491877ce62b0b06d4633a3409dcdda01b41b1542d0d242b5ba18f8913aa"
+  },
+  {
+    "id": "core-finishCards",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/game/index.js",
+    "file_sha256": "2a500fdd85a392708fb9163c2cc178ad508e9cab9b5aecf79f962d4a806f4cf4",
+    "lines": [
+      8997,
+      9002
+    ],
+    "excerpt": "\tfinishCards() {\n\t\t_status.cardsFinished = true;\n\t\tObject.keys(lib.card).forEach(i => game.finishCard(i));\n\t\tObject.keys(lib.skill).forEach(i => game.finishSkill(i));\n\t}\n\t/**@type {CheckMod} */",
+    "excerpt_sha256": "03ba6850da78b99c26dcd900095f79cf7a2cf891e6316aa7ad1139626fcdde09"
+  },
+  {
+    "id": "liuli-finishSkill",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+    "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "lines": [
+      44137,
+      44216
+    ],
+    "excerpt": "\t\t\tif(info.inherit){\n\t\t\t\tconst skill=lib.skill[info.inherit];\n\t\t\t\tif(skill) Object.keys(skill).forEach(value=>{\n\t\t\t\t\tif(info[value]!=undefined) return;\n\t\t\t\t\tif(value=='audio'&&(typeof info[value]=='number'||typeof info[value]=='boolean')) info[value]=info.inherit;\n\t\t\t\t\telse info[value]=skill[value];\n\t\t\t\t});\n\t\t\t\tif(lib.translate[i]==undefined) lib.translate[i]=lib.translate[info.inherit];\n\t\t\t\tif(lib.translate[iInfo]==undefined) lib.translate[iInfo]=lib.translate[`${info.inherit}_info`];\n\t\t\t}\n\t\t\tif(info.limited){\n\t\t\t\tif(info.mark===undefined) info.mark=true;\n\t\t\t\tif(!info.intro) info.intro={};\n\t\t\t\tif(info.intro.content===undefined) info.intro.content='limited';\n\t\t\t\tif(info.skillAnimation===undefined) info.skillAnimation=true;\n\t\t\t\tif(info.init===undefined) info.init=(player,skill)=>player.storage[skill]=false;\n\t\t\t}\n\t\t\tif(info.subSkill&&!sub) Object.keys(info.subSkill).forEach(value=>{\n\t\t\t\tconst iValue=`${i}_${value}`;\n\t\t\t\tlib.skill[iValue]=info.subSkill[value];\n\t\t\t\tlib.skill[iValue].sub=true;\n\t\t\t\tif(info.subSkill[value].name) lib.translate[iValue]=info.subSkill[value].name;\n\t\t\t\telse lib.translate[iValue]=lib.translate[iValue]||lib.translate[i];\n\t\t\t\tif(info.subSkill[value].description) lib.translate[`${iValue}_info`]=info.subSkill[value].description;\n\t\t\t\tif(info.subSkill[value].marktext) lib.translate[`${iValue}_bg`]=info.subSkill[value].marktext;\n\t\t\t\tgame.finishSkill(iValue,true);\n\t\t\t});\n\t\t\tif(info.round){\n\t\t\t\tconst k=`${i}_roundcount`;\n\t\t\t\tif(typeof info.group=='string') info.group=[info.group,k];\n\t\t\t\telse if(Array.isArray(info.group)) info.group.add(k);\n\t\t\t\telse info.group=[k];\n\t\t\t\tlib.skill[k]=((round,name)=>({\n\t\t\t\t\tinit:player=>{\n\t\t\t\t\t\tif(typeof player.storage[name]!=='number') player.storage[name]=1-round;\n\t\t\t\t\t},\n\t\t\t\t\tintro:{\n\t\t\t\t\t\tcontent:(storage,player)=>{\n\t\t\t\t\t\t\tlet str='';\n\t\t\t\t\t\t\tconst info=get.info(name.slice(0,name.indexOf('_roundcount')));\n\t\t\t\t\t\t\tif(info&&info.addintro) str+=info.addintro(storage,player);\n\t\t\t\t\t\t\tconst num=round-(game.roundNumber-storage);\n\t\t\t\t\t\t\tif(num>0) str+=`${get.cnNumber(num)}轮后${info.roundtext||'技能重置'}`;\n\t\t\t\t\t\t\telse str+='技能可发动';\n\t\t\t\t\t\t\treturn str;\n\t\t\t\t\t\t},\n\t\t\t\t\t\tmarkcount:(storage,player)=>Math.max(round-(game.roundNumber-storage),0)\n\t\t\t\t\t},\n\t\t\t\t\ttrigger:{global:'roundStart'},\n\t\t\t\t\tforced:true,\n\t\t\t\t\tpopup:false,\n\t\t\t\t\tsilent:true,\n\t\t\t\t\tcontent:()=>{\n\t\t\t\t\t\tif(lib.skill[event.name.slice(0,event.name.indexOf('_roundcount'))].round-(game.roundNumber-player.storage[event.name])>0) player.updateMarks();\n\t\t\t\t\t\telse player.unmarkSkill(event.name);\n\t\t\t\t\t}\n\t\t\t\t}))(info.round,k);\n\t\t\t\tlib.translate[k]=lib.translate[i]||'';\n\t\t\t\tlib.translate[`${k}_bg`]=lib.translate[`${i}_bg`]||lib.translate[k]//lib.translate[k][0];\n\t\t\t}\n\t\t\tif(info.marktext) lib.translate[`${i}_bg`]=info.marktext;\n\t\t\tif(info.silent){\n\t\t\t\tif(!info.hasOwnProperty('forced')) info.forced=true;\n\t\t\t\tif(!info.hasOwnProperty('popup')) info.popup=false;\n\t\t\t}\n\t\t\tif(!info.hasOwnProperty('_priority')){\n\t\t\t\tlet priority=0;\n\t\t\t\tif(info.priority){\n\t\t\t\t\tpriority=info.priority*100;\n\t\t\t\t}\n\t\t\t\tif(info.silent){\n\t\t\t\t\tpriority++;\n\t\t\t\t}\n\t\t\t\tif(info.equipSkill) priority-=25;\n\t\t\t\tif(info.cardSkill) priority-=50;\n\t\t\t\tif(info.ruleSkill) priority-=75;\n\t\t\t\tinfo._priority=priority;\n\t\t\t}\n\t\t\tif(i[0]=='_') game.addGlobalSkill(i);\n\t\t},",
+    "excerpt_sha256": "1f3013d56b2ae73169d62e33227d39c1b4218b7265e47e9d803dbbee14abd173"
+  },
+  {
+    "id": "core-config-translate",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/index.ts",
+    "file_sha256": "5115cb59cc38714605a94889bde0837bc6bc3406d686e51eb896121f76226274",
+    "lines": [
+      42,
+      58
+    ],
+    "excerpt": "\tawait loadConfig();\n\n\t// 兼容原有鏖战布尔设置，保持原规则并正确显示新的选择菜单。\n\tfor (const mode of [\"guozhan\", \"connect\"]) {\n\t\tconst settings = lib.config.mode_config[mode];\n\t\tif (!settings) continue;\n\t\tfor (const key of [\"aozhan\", \"connect_aozhan\"]) {\n\t\t\tif (typeof settings[key] === \"boolean\") {\n\t\t\t\tsettings[key] = settings[key] ? \"normal\" : \"off\";\n\t\t\t}\n\t\t}\n\t}\n\n\tfor (const name in get.config(\"translate\")) {\n\t\tlib.translate[name] = get.config(\"translate\")[name];\n\t}\n",
+    "excerpt_sha256": "343be66cc0a3375f592ca153b37d8c79be802abfe146d955f8ec2b60861ce65f"
+  },
+  {
+    "id": "liuli-config-translate",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+    "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "lines": [
+      9760,
+      9770
+    ],
+    "excerpt": "\t\t\t\t\t\telse{\n\t\t\t\t\t\t\tlib.config[i]=config2[i];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tfor(var i in lib.config.translate){\n\t\t\t\t\t\tlib.translate[i]=lib.config.translate[i];\n\t\t\t\t\t}\n\n\t\t\t\t\tlib.config.all.characters=[];\n\t\t\t\t\tlib.config.all.cards=[];\n\t\t\t\t\tlib.config.all.plays=[];",
+    "excerpt_sha256": "3f822d132dee790a6a360fb22df2443277a2942e5b31fe6669567de93993fff3"
+  },
+  {
+    "id": "core-load-order-imports",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/index.ts",
+    "file_sha256": "5115cb59cc38714605a94889bde0837bc6bc3406d686e51eb896121f76226274",
+    "lines": [
+      305,
+      367
+    ],
+    "excerpt": "\n\tconst extensionlist = await getExtensionList();\n\tif (extensionlist.length) {\n\t\t_status.extensionLoading = [];\n\t\t_status.extensionLoaded = [];\n\t\tfor (const i of extensionlist) {\n\t\t\tawait importExtension(i);\n\t\t}\n\t\tif (_status.extensionLoading) {\n\t\t\tawait Promise.all(_status.extensionLoading);\n\t\t}\n\t\tdelete _status.extensionLoading;\n\t}\n\n\tif (Array.isArray(lib.onprepare) && lib.onprepare.length) {\n\t\t_status.onprepare = Object.freeze(\n\t\t\tlib.onprepare.map(fn => {\n\t\t\t\tif (typeof fn !== \"function\") return;\n\t\t\t\treturn fn();\n\t\t\t})\n\t\t);\n\t}\n\n\tconst toLoad: Promise<any>[] = [];\n\n\tlet show_splash;\n\tswitch (config.get(\"show_splash\")) {\n\t\tcase \"off\":\n\t\t\tshow_splash = false;\n\t\t\tbreak;\n\t\tcase \"init\":\n\t\t\tshow_splash = !localStorage.getItem(\"show_splash_off\");\n\t\t\tbreak;\n\t\tcase \"always\":\n\t\t\tshow_splash = true;\n\t\t\tbreak;\n\t}\n\tlocalStorage.removeItem(\"show_splash_off\");\n\n\tif (localStorage.getItem(`${lib.configprefix}playback`)) {\n\t\ttoLoad.push(importMode(config.get(\"mode\")));\n\t} else if ((localStorage.getItem(`${lib.configprefix}directstart`) || !show_splash) && config.get(\"all\").mode.includes(config.get(\"mode\"))) {\n\t\ttoLoad.push(importMode(config.get(\"mode\")));\n\t}\n\n\tfor (const cardPack of config.get(\"all\").cards) {\n\t\ttoLoad.push(importCardPack(cardPack));\n\t}\n\tfor (const characterPack of config.get(\"all\").characters) {\n\t\ttoLoad.push(importCharacterPack(characterPack));\n\t}\n\ttoLoad.push(lib.init.promises.js(`${lib.assetURL}character`, \"rank\"));\n\ttoLoad.push(lib.init.promises.js(`${lib.assetURL}character`, \"replace\"));\n\ttoLoad.push(lib.init.promises.js(`${lib.assetURL}character`, \"perfectPairs\"));\n\n\tawait Promise.allSettled(toLoad);\n\n\tif (_status.importing) {\n\t\tlet promises = [];\n\t\tfor (const type in _status.importing) {\n\t\t\tpromises.addArray(_status.importing[type]);\n\t\t}\n\t\tawait Promise.allSettled(promises);",
+    "excerpt_sha256": "885dd59885a25a4572f80004d50f2fabcf95506aa09468d0c919eebe37d407d3"
+  },
+  {
+    "id": "core-load-order-registration",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/index.ts",
+    "file_sha256": "5115cb59cc38714605a94889bde0837bc6bc3406d686e51eb896121f76226274",
+    "lines": [
+      513,
+      551
+    ],
+    "excerpt": "\tlib.connectCardPack = [];\n\n\tconst currentMode = lib.imported.mode[lib.config.mode];\n\tloadMode(currentMode);\n\t// 为了模式扩展，两个东西删不了\n\tlib.init.start = currentMode.start;\n\tlib.init.startBefore = currentMode.startBefore;\n\n\tif (lib.imported.character != null) {\n\t\tObject.values(lib.imported.character).forEach(loadCharacter);\n\t}\n\n\tloadCardPile();\n\n\tif (lib.imported.card != null) {\n\t\tObject.values(lib.imported.card).forEach(loadCard);\n\t}\n\n\tif (lib.cardPack.mode_derivation) {\n\t\tlib.cardPack.mode_derivation = lib.cardPack.mode_derivation.filter(item => {\n\t\t\tif (typeof lib.card[item].derivation == \"string\" && !lib.character[lib.card[item].derivation]) {\n\t\t\t\treturn false;\n\t\t\t}\n\t\t\treturn !(typeof lib.card[item].derivationpack == \"string\" && !lib.config.cards.includes(lib.card[item].derivationpack));\n\t\t});\n\n\t\tif (lib.cardPack.mode_derivation.length === 0) {\n\t\t\tdelete lib.cardPack.mode_derivation;\n\t\t}\n\t}\n\n\tif (lib.config.mode === \"connect\") {\n\t\t_status.connectMode = true;\n\t} else {\n\t\tif (lib.imported.play != null) {\n\t\t\tObject.values(lib.imported.play).forEach(loadPlay);\n\t\t}\n\n\t\tlib.card.list = lib.card.list.filter(cardData => {",
+    "excerpt_sha256": "4cd5a0292da1cbfe0b33a2fea24e3062714555a533bcaf58ef2170acbeeb9376"
+  },
+  {
+    "id": "core-load-order-content",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/index.ts",
+    "file_sha256": "5115cb59cc38714605a94889bde0837bc6bc3406d686e51eb896121f76226274",
+    "lines": [
+      586,
+      597
+    ],
+    "excerpt": "\tif (Array.isArray(lib.extensions)) {\n\t\tawait Promise.allSettled(lib.extensions.map(loadExtension));\n\t}\n\n\tif (lib.init.startBefore) {\n\t\tlib.init.startBefore();\n\t\tdelete lib.init.startBefore;\n\t}\n\n\tui.create.arena();\n\tgame.createEvent(\"game\", false).setContent(lib.init.start);\n\tif (lib.mode[lib.config.mode] && lib.mode[lib.config.mode].fromextension) {",
+    "excerpt_sha256": "3e904fba73a916de85295ab4c967e7f023ce650e0cd4e84fe54b0395289f2a1a"
+  },
+  {
+    "id": "core-loadCard",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/loading.ts",
+    "file_sha256": "41da4383c3c3f514ed51a97bb1ca267da4fd645f22a9a301044b8e97d9a15e19",
+    "lines": [
+      55,
+      85
+    ],
+    "excerpt": "\t\t\t\t\t}\n\n\t\t\t\t\tlib.card.list.addArray(pile);\n\t\t\t\t}\n\t\t\t\tbreak;\n\t\t\tdefault:\n\t\t\t\tfor (const [itemName, item] of Object.entries(configItem)) {\n\t\t\t\t\tif (configName === \"skill\" && itemName[0] === \"_\" && !item.forceLoad && (lib.config.mode !== \"connect\" ? !lib.config.cards.includes(cardConfigName) : !cardConfig.connect)) {\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (configName === \"translate\" && itemName === cardConfigName) {\n\t\t\t\t\t\tlib[configName][`${itemName}_card_config`] = item;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tif (lib[configName][itemName] == null) {\n\t\t\t\t\t\t\tif (configName === \"skill\" && !item.forceLoad && lib.config.mode === \"connect\" && !cardConfig.connect) {\n\t\t\t\t\t\t\t\tlib[configName][itemName] = {\n\t\t\t\t\t\t\t\t\tnopop: item.nopop,\n\t\t\t\t\t\t\t\t\tderivation: item.derivation,\n\t\t\t\t\t\t\t\t};\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\t\tObject.defineProperty(lib[configName], itemName, Object.getOwnPropertyDescriptor(configItem, itemName));\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tconsole.log(`duplicated ${configName} in card ${cardConfigName}:\\n${itemName}:\\nlib.${configName}.${itemName}`, lib[configName][itemName], `\\ncard.${cardConfigName}.${configName}.${itemName}`, item);\n\t\t\t\t\t\t}\n\n\t\t\t\t\t\tif (configName === \"card\" && lib[configName][itemName].derivation) {\n\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\tlib.cardPack.mode_derivation ??= [];",
+    "excerpt_sha256": "44f3dbba037a86620a89ab1abe336851bd4bc083cb01e606c0b1fb5534724c0c"
+  },
+  {
+    "id": "core-loadCharacter",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/loading.ts",
+    "file_sha256": "41da4383c3c3f514ed51a97bb1ca267da4fd645f22a9a301044b8e97d9a15e19",
+    "lines": [
+      184,
+      220
+    ],
+    "excerpt": "\t\t\t\t\t\t\t\t\tlib.skilllist.add(skill);\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\n\t\t\t\t\tif (key === \"skill\" && key2[0] === \"_\" && (lib.config.mode !== \"connect\" ? !lib.config.characters.includes(name) : !character.connect)) {\n\t\t\t\t\t\tcontinue;\n\t\t\t\t\t}\n\n\t\t\t\t\tif (key === \"translate\" && key2 === name) {\n\t\t\t\t\t\tlib[key][`${key2}_character_config`] = value2;\n\t\t\t\t\t} else {\n\t\t\t\t\t\tif (lib[key][key2] == null) {\n\t\t\t\t\t\t\tif (key === \"skill\" && !value2.forceLoad && lib.config.mode === \"connect\" && !character.connect) {\n\t\t\t\t\t\t\t\tlib[key][key2] = {\n\t\t\t\t\t\t\t\t\tnopop: value2.nopop,\n\t\t\t\t\t\t\t\t\tderivation: value2.derivation,\n\t\t\t\t\t\t\t\t};\n\t\t\t\t\t\t\t} else if (key === \"character\") {\n\t\t\t\t\t\t\t\tlib.character[key2] = value2;\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\t\tObject.defineProperty(lib[key], key2, Object.getOwnPropertyDescriptor(character[key], key2));\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tif (key === \"card\" && lib[key][key2].derivation) {\n\t\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\t\tif (!lib.cardPack.mode_derivation) {\n\t\t\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\t\t\tlib.cardPack.mode_derivation = [key2];\n\t\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\t\t// @ts-expect-error ignore\n\t\t\t\t\t\t\t\t\tlib.cardPack.mode_derivation.push(key2);\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t} else if (Array.isArray(lib[key][key2]) && Array.isArray(value2)) {\n\t\t\t\t\t\t\tlib[key][key2].addArray(value2);",
+    "excerpt_sha256": "06bfb9c8247e4df6697a459207e3f37ec45dd19a5d04b0e14a44306c7c160156"
+  },
+  {
+    "id": "core-loadPlay",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/init/loading.ts",
+    "file_sha256": "41da4383c3c3f514ed51a97bb1ca267da4fd645f22a9a301044b8e97d9a15e19",
+    "lines": [
+      437,
+      489
+    ],
+    "excerpt": "export function loadPlay(playConfig: importPlayConfig) {\n\tconst i = playConfig.name;\n\n\tif (lib.config.hiddenPlayPack.includes(i)) {\n\t\treturn;\n\t}\n\tif (playConfig.forbid && playConfig.forbid.includes(lib.config.mode)) {\n\t\treturn;\n\t}\n\tif (playConfig.mode && !playConfig.mode.includes(lib.config.mode)) {\n\t\treturn;\n\t}\n\n\t// @ts-expect-error ignore\n\tlib.element = mixinElement(playConfig, lib.element);\n\tmixinGeneral(playConfig, \"game\", game);\n\tmixinGeneral(playConfig, \"ui\", ui);\n\tmixinGeneral(playConfig, \"get\", get);\n\tfor (const [configName, configItem] of Object.entries(playConfig)) {\n\t\tswitch (configName) {\n\t\t\tcase \"name\":\n\t\t\tcase \"mode\":\n\t\t\tcase \"forbid\":\n\t\t\tcase \"init\":\n\t\t\tcase \"element\":\n\t\t\tcase \"game\":\n\t\t\tcase \"get\":\n\t\t\tcase \"ui\":\n\t\t\tcase \"arenaReady\":\n\t\t\t\tbreak;\n\t\t\tdefault:\n\t\t\t\tfor (const [itemName, item] of Object.entries(configItem)) {\n\t\t\t\t\tif (configName !== \"translate\" || itemName !== i) {\n\t\t\t\t\t\tif (lib[configName][itemName] != null) {\n\t\t\t\t\t\t\tconsole.log(`duplicated ${configName} in play ${i}:\\n${itemName}:\\nlib.${configName}.${itemName}`, lib[configName][itemName], `\\nplay.${i}.${configName}.${itemName}`, item);\n\t\t\t\t\t\t}\n\t\t\t\t\t\tlib[configName][itemName] = item;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tbreak;\n\t\t}\n\t}\n\n\tif (typeof playConfig.init == \"function\") {\n\t\tplayConfig.init();\n\t}\n\tif (typeof playConfig.arenaReady == \"function\") {\n\t\tlib.arenaReady?.push(playConfig.arenaReady);\n\t}\n}\n\nfunction extSkillInject(extName, skillInfo) {\n\tif (typeof skillInfo.audio == \"number\" || typeof skillInfo.audio == \"boolean\") {",
+    "excerpt_sha256": "3ccfb3b1c2f48cd5c2b797ff770e6e5a7f8e3107b2433d2ebda513b2b13752ae"
+  },
+  {
+    "id": "liuli-loadPlay",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+    "file_sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+    "lines": [
+      11432,
+      11494
+    ],
+    "excerpt": "\t\t\t\t\t\tif(lib.cardPack.mode_derivation.length==0){\n\t\t\t\t\t\t\tdelete lib.cardPack.mode_derivation;\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tif(lib.config.mode!='connect'){\n\t\t\t\t\t\tfor(i in play){\n\t\t\t\t\t\t\tif(lib.config.hiddenPlayPack.contains(i)) continue;\n\t\t\t\t\t\t\tif(play[i].forbid&&play[i].forbid.contains(lib.config.mode)) continue;\n\t\t\t\t\t\t\tif(play[i].mode&&play[i].mode.contains(lib.config.mode)==false) continue;\n\t\t\t\t\t\t\tfor(j in play[i].element){\n\t\t\t\t\t\t\t\tif(!lib.element[j]) lib.element[j]=[];\n\t\t\t\t\t\t\t\tfor(k in play[i].element[j]){\n\t\t\t\t\t\t\t\t\tif(k=='init'){\n\t\t\t\t\t\t\t\t\t\tif(!lib.element[j].inits) lib.element[j].inits=[];\n\t\t\t\t\t\t\t\t\t\tlib.element[j].inits.push(play[i].element[j][k]);\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\telse{\n\t\t\t\t\t\t\t\t\t\tlib.element[j][k]=play[i].element[j][k];\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tfor(j in play[i].ui){\n\t\t\t\t\t\t\t\tif(typeof play[i].ui[j]=='object'){\n\t\t\t\t\t\t\t\t\tif(ui[j]==undefined) ui[j]={};\n\t\t\t\t\t\t\t\t\tfor(k in play[i].ui[j]){\n\t\t\t\t\t\t\t\t\t\tui[j][k]=play[i].ui[j][k];\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\telse{\n\t\t\t\t\t\t\t\t\tui[j]=play[i].ui[j];\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tfor(j in play[i].game){\n\t\t\t\t\t\t\t\tgame[j]=play[i].game[j];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tfor(j in play[i].get){\n\t\t\t\t\t\t\t\tget[j]=play[i].get[j];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tfor(j in play[i]){\n\t\t\t\t\t\t\t\tif(j=='mode'||j=='forbid'||j=='init'||j=='element'||\n\t\t\t\t\t\t\t\tj=='game'||j=='get'||j=='ui'||j=='arenaReady') continue;\n\t\t\t\t\t\t\t\tfor(k in play[i][j]){\n\t\t\t\t\t\t\t\t\tif(j=='translate'&&k==i){\n\t\t\t\t\t\t\t\t\t\t// lib[j][k+'_play_config']=play[i][j][k];\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\telse{\n\t\t\t\t\t\t\t\t\t\tif(lib[j][k]!=undefined){\n\t\t\t\t\t\t\t\t\t\t\tconsole.log(\n\t\t\t\t\t\t\t\t\t\t\t\t`dublicate ${j} in play ${i}:\\n${k}:\\nlib.${j}.${k}`,\n\t\t\t\t\t\t\t\t\t\t\t\tlib[j][k],\n\t\t\t\t\t\t\t\t\t\t\t\t`\\nplay.${i}.${j}.${k}`,\n\t\t\t\t\t\t\t\t\t\t\t\tplay[i][j][k]\n\t\t\t\t\t\t\t\t\t\t\t);\n\t\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\t\tlib[j][k]=play[i][j][k];\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tif(typeof play[i].init=='function') play[i].init();\n\t\t\t\t\t\t\tif(typeof play[i].arenaReady=='function') lib.arenaReady.push(play[i].arenaReady);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n",
+    "excerpt_sha256": "def434f27532775dffe9bafa606a71acb4042abbd46da8ae6d812a351e153c9b"
+  },
+  {
+    "id": "core-extension-precontent-call",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/game/index.js",
+    "file_sha256": "2a500fdd85a392708fb9163c2cc178ad508e9cab9b5aecf79f962d4a806f4cf4",
+    "lines": [
+      3132,
+      3149
+    ],
+    "excerpt": "\t\t\tlib.extensionPack[name] = extensionPack;\n\t\t\tconst { arenaReady, content, prepare, precontent } = object;\n\t\t\textensionPack.code = {\n\t\t\t\tarenaReady,\n\t\t\t\tcontent,\n\t\t\t\tprepare,\n\t\t\t\tprecontent,\n\t\t\t\thelp: object.help,\n\t\t\t\tconfig: object.config,\n\t\t\t};\n\t\t\ttry {\n\t\t\t\tif (precontent) {\n\t\t\t\t\t_status.extension = name;\n\n\t\t\t\t\tawait precontent.call(object, config);\n\t\t\t\t\tdelete _status.extension;\n\t\t\t\t}\n\t\t\t\tif (prepare) {",
+    "excerpt_sha256": "b92342e9afe083be2174f84c4467d79fbc2af256df5bda0975b54a697160dc4c"
+  },
+  {
+    "id": "core-shahai-precontent",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/main/precontent.js",
+    "file_sha256": "95a854ef57cfc88d81f2d4afdb8055a7e8069f0bfbb3745139c9fa29f8a5cb76",
+    "lines": [
+      1,
+      76
+    ],
+    "excerpt": "import { lib, game, ui, get, ai, _status } from \"./utils.js\";\n\nexport async function precontent(config, pack) {\n\t/**\n\t * 同时加载多个扩展包\n\t * @param { string } pack\n\t * @param { string } name\n\t * @param { string[] } types\n\t * @returns { Promise<boolean> }\n\t */\n\tasync function loadPack(pack, name, types) {\n\t\ttry {\n\t\t\tlet extensions = [];\n\t\t\tfor (let type of types) {\n\t\t\t\textensions.push(import(`../${type}/${pack}/index.js`));\n\t\t\t}\n\t\t\tawait Promise.all(extensions);\n\t\t\tfor (let type of types) {\n\t\t\t\tlib.translate[`${pack}_${type}_config`] = name;\n\t\t\t}\n\t\t\treturn true;\n\t\t} catch (err) {\n\t\t\tconsole.error(\"Failed to import extension 『杀海拾遗』: \", err);\n\t\t\talert(`『杀海拾遗』扩展加载“${name}”扩展包时失败`);\n\t\t\treturn false;\n\t\t}\n\t}\n\tif (lib.config.extension_杀海拾遗_gwent) {\n\t\tlet success =\n\t\t\t(await loadPack(\"gwent\", \"昆特牌\", [\"card\", \"character\"])) &&\n\t\t\t// “古剑奇谭”依赖“昆特牌”\n\t\t\t(await loadPack(\"gujian\", \"古剑奇谭\", [\"card\", \"character\"]));\n\t\tif (lib.config.extension_杀海拾遗_yunchou) {\n\t\t\tif (\n\t\t\t\t// “运筹帷幄”是独立扩展，优先加载\n\t\t\t\t(await loadPack(\"yunchou\", \"运筹帷幄\", [\"card\", \"character\"])) &&\n\t\t\t\tsuccess &&\n\t\t\t\t// “轩辕剑”依赖上述所有扩展\n\t\t\t\t(await loadPack(\"swd\", \"轩辕剑\", [\"card\", \"character\"])) &&\n\t\t\t\t// “炉石传说”依赖“轩辕剑”\n\t\t\t\t(await loadPack(\"hearth\", \"炉石传说\", [\"card\", \"character\"]))\n\t\t\t) {\n\t\t\t\t// 以下这些扩展包均依赖上述扩展包\n\t\t\t\tconst results = await Promise.allSettled([import(\"../character/ow/index.js\"), import(\"../character/xianjian/index.js\")]);\n\t\t\t\tresults.forEach(result => {\n\t\t\t\t\tif (result.status === \"fulfilled\") {\n\t\t\t\t\t\tlib.translate.ow_character_config = \"守望先锋\";\n\t\t\t\t\t\tlib.translate.xianjian_character_config = \"仙剑奇侠传\";\n\t\t\t\t\t} else {\n\t\t\t\t\t\tconsole.error(\"『杀海拾遗』扩展模块加载失败\", result.reason);\n\t\t\t\t\t}\n\t\t\t\t});\n\t\t\t}\n\t\t}\n\t} else if (lib.config.extension_杀海拾遗_yunchou) {\n\t\tawait loadPack(\"yunchou\", \"运筹帷幄\", [\"card\", \"character\"]);\n\t}\n\tif (lib.config.extension_杀海拾遗_mtg) {\n\t\t// 适用于多模块、无依赖、并发场景，一个加载失败其余仍正常加载\n\t\tconst results = await Promise.allSettled([import(\"../card/mtg/index.js\"), import(\"../character/mtg/index.js\")]);\n\t\tresults.forEach(result => {\n\t\t\tif (result.status === \"fulfilled\") {\n\t\t\t\tlib.translate.mtg_card_config = \"万智牌\";\n\t\t\t\tlib.translate.mtg_character_config = \"万智牌\";\n\t\t\t} else {\n\t\t\t\tconsole.error(\"『杀海拾遗』扩展模块加载失败\", result.reason);\n\t\t\t}\n\t\t});\n\t}\n\tif (lib.config.extension_杀海拾遗_wuxing) {\n\t\tawait loadPack(\"wuxing\", \"五行生克\", [\"play\"]);\n\t}\n\tif (lib.config.extension_杀海拾遗_zhenfa) {\n\t\tawait loadPack(\"zhenfa\", \"阵法牌\", [\"card\"]);\n\t}\n}",
+    "excerpt_sha256": "e498377cbce083212228e4e7df20051de378336d06a9bc09b5dcb77d63c6fdf3"
+  },
+  {
+    "id": "core-gujian-registration",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/gujian/index.js",
+    "file_sha256": "af96d75e33ab9d77e1657c292e4f4251f5355743fd0abf3d6ec0660b1dfca749",
+    "lines": [
+      1,
+      17
+    ],
+    "excerpt": "import { game } from \"../../main/utils.js\";\nimport card from \"./card.js\";\nimport cardType from \"./type.js\";\nimport list from \"./list.js\";\nimport skill from \"./skill.js\";\nimport translate from \"./translate.js\";\n\nawait game.import(\"card\", function () {\n\treturn {\n\t\tname: \"gujian\",\n\t\tcard,\n\t\tskill,\n\t\tcardType,\n\t\ttranslate,\n\t\tlist,\n\t};\n});",
+    "excerpt_sha256": "80e5392a26a1871daa7277be8681b7d7f86b42eeec035619c58fcb86a3ba20bc"
+  },
+  {
+    "id": "core-swd-card-registration",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/card/swd/index.js",
+    "file_sha256": "678ddd8788e35b3830c09a5c61fdd280121bde0ec925f2ee929de1ea9201124c",
+    "lines": [
+      1,
+      19
+    ],
+    "excerpt": "import { game } from \"../../main/utils.js\";\nimport card from \"./card.js\";\nimport cardType from \"./type.js\";\nimport list from \"./list.js\";\nimport skill from \"./skill.js\";\nimport translate from \"./translate.js\";\nimport help from \"./help.js\";\n\ngame.import(\"card\", function () {\n\treturn {\n\t\tname: \"swd\",\n\t\tcard,\n\t\tskill,\n\t\tcardType,\n\t\thelp,\n\t\ttranslate,\n\t\tlist,\n\t};\n});",
+    "excerpt_sha256": "2a583e22a04ab71501658c7dfd9ced4b96550d893073afd344be34bcdf2842f7"
+  },
+  {
+    "id": "core-swd-character-registration",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/index.js",
+    "file_sha256": "075ca362578cc6a36f78b9a2bceda776d822f4f982282c3e471d856f22aa5856",
+    "lines": [
+      1,
+      17
+    ],
+    "excerpt": "import { game } from \"../../main/utils.js\";\nimport character from \"./character.js\";\nimport characterIntro from \"./intro.js\";\nimport perfectPair from \"./perfectPair.js\";\nimport skill from \"./skill.js\";\nimport translate from \"./translate.js\";\n\ngame.import(\"character\", function () {\n\treturn {\n\t\tname: \"swd\",\n\t\tcharacter,\n\t\tcharacterIntro,\n\t\tperfectPair,\n\t\tskill,\n\t\ttranslate,\n\t};\n});",
+    "excerpt_sha256": "ee804efc9150e7a8abeb546ea5081c6b56c531586b7d9a8755832a54859cbb45"
+  },
+  {
+    "id": "core-boss-play-init",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/boss/extension.js",
+    "file_sha256": "86b72a454c2293b193b62c1e0e0e1bb99470c7a5b705849fb64c2d2dc33be741",
+    "lines": [
+      6,
+      73
+    ],
+    "excerpt": "\t\tinit() {\n\t\t\tif (get.mode() === \"tafang\") {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tlet storage = localStorage.getItem(\"boss_storage_playpackconfig\");\n\t\t\ttry {\n\t\t\t\tstorage = JSON.parse(storage) || {};\n\t\t\t} catch (e) {\n\t\t\t\tstorage = {};\n\t\t\t}\n\t\t\tif (get.mode() !== \"boss\") {\n\t\t\t\tlib.characterPack.boss = storage.boss || {};\n\t\t\t\tfor (const i in lib.characterPack.boss) {\n\t\t\t\t\tlib.characterPack.boss[i].img = `image/mode/boss/character/${i}.jpg`;\n\t\t\t\t\tlib.character[i] = lib.characterPack.boss[i];\n\t\t\t\t\tif (typeof lib.character[i][2] !== \"number\" && (typeof lib.character[i][2] !== \"string\" || lib.character[i][2].indexOf(\"/\") === -1)) {\n\t\t\t\t\t\tlib.character[i][2] = Infinity;\n\t\t\t\t\t}\n\t\t\t\t\tif (!lib.config.boss_enableai_playpackconfig) {\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tlet list2 = storage.versus || {};\n\t\t\tif (get.mode() !== \"versus\" || get.config(\"versus_mode\") !== \"jiange\") {\n\t\t\t\tlib.characterPack.jiange = list2;\n\t\t\t\tfor (const i in lib.characterPack.jiange) {\n\t\t\t\t\tlib.characterPack.jiange[i].img = `image/mode/versus/character/${i}.jpg`;\n\t\t\t\t\tlib.character[i] = lib.characterPack.jiange[i];\n\t\t\t\t\tif (typeof lib.character[i][2] !== \"number\") {\n\t\t\t\t\t\tlib.character[i][2] = Infinity;\n\t\t\t\t\t}\n\t\t\t\t\tif (!lib.config.boss_enableai_playpackconfig) {\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlib.characterIntro.boss_liedixuande = lib.characterIntro.liubei;\n\t\t\t\tlib.characterIntro.boss_gongshenyueying = lib.characterIntro.huangyueying;\n\t\t\t\tlib.characterIntro.boss_tianhoukongming = lib.characterIntro.shen_zhugeliang;\n\t\t\t\tlib.characterIntro.boss_yuhuoshiyuan = lib.characterIntro.pangtong;\n\t\t\t\tlib.characterIntro.boss_qiaokuijunyi = lib.characterIntro.zhanghe;\n\t\t\t\tlib.characterIntro.boss_jiarenzidan = lib.characterIntro.caozhen;\n\t\t\t\tlib.characterIntro.boss_duanyuzhongda = lib.characterIntro.simayi;\n\t\t\t\tlib.characterIntro.boss_juechenmiaocai = lib.characterIntro.xiahouyuan;\n\t\t\t\tlib.characterIntro.boss_kumuyuanrang = lib.characterIntro.xiahoudun;\n\t\t\t\tlib.characterIntro.boss_baijiwenyuan = lib.characterIntro.zhangliao;\n\t\t\t\tlib.characterIntro.boss_yihanyunchang = lib.characterIntro.guanyu;\n\t\t\t\tlib.characterIntro.boss_fuweizilong = lib.characterIntro.zhaoyun;\n\t\t\t\tlib.characterIntro.boss_lvbu1 = lib.characterIntro.lvbu;\n\t\t\t\tlib.characterIntro.boss_lvbu2 = lib.characterIntro.lvbu;\n\t\t\t\tlib.characterIntro.boss_lvbu3 = lib.characterIntro.lvbu;\n\t\t\t} else if (_status.mode !== \"jiange\") {\n\t\t\t\tfor (const i in list2) {\n\t\t\t\t\tlib.character[i] = list2[i];\n\t\t\t\t\tif (!lib.config.boss_enableai_playpackconfig) {\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tlet list = storage.translate || {};\n\t\t\tlist.boss_character_config = \"挑战武将\";\n\t\t\tlist.jiange_character_config = \"剑阁武将\";\n\n\t\t\tfor (const i in list) {\n\t\t\t\tlib.translate[i] ||= list[i];\n\t\t\t}\n\t\t},\n\t\tarenaReady() {",
+    "excerpt_sha256": "a7daf3f459270aa2ff9bb1347a449a574f1ff794e1b177c19e1c049b8098db95"
+  },
+  {
+    "id": "core-boss-play-arena",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/boss/extension.js",
+    "file_sha256": "86b72a454c2293b193b62c1e0e0e1bb99470c7a5b705849fb64c2d2dc33be741",
+    "lines": [
+      74,
+      148
+    ],
+    "excerpt": "\t\t\tif (get.mode() === \"tafang\") {\n\t\t\t\treturn;\n\t\t\t}\n\t\t\tlet storage = localStorage.getItem(\"boss_storage_playpackconfig\");\n\t\t\ttry {\n\t\t\t\tstorage = JSON.parse(storage) || {};\n\t\t\t} catch (e) {\n\t\t\t\tstorage = {};\n\t\t\t}\n\t\t\tif (!storage.translate) {\n\t\t\t\tstorage.translate = {};\n\t\t\t}\n\t\t\tconst loadversus = function () {\n\t\t\t\tif (get.mode() !== \"versus\") {\n\t\t\t\t\tgame.loadModeAsync(\"versus\", function (mode) {\n\t\t\t\t\t\tfor (const i in mode.translate) {\n\t\t\t\t\t\t\tlib.translate[i] ||= mode.translate[i];\n\t\t\t\t\t\t\tstorage.translate[i] = mode.translate[i];\n\t\t\t\t\t\t}\n\t\t\t\t\t\tfor (const i in mode.skill) {\n\t\t\t\t\t\t\tif (lib.skill[i]) {\n\t\t\t\t\t\t\t\tconsole.log(i);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\tif (i !== \"versus_ladder\") {\n\t\t\t\t\t\t\t\tlib.skill[i] = mode.skill[i];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tfor (const ii in mode.skill) {\n\t\t\t\t\t\t\tif (ii !== \"versus_ladder\") {\n\t\t\t\t\t\t\t\tgame.finishSkill(ii);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tstorage.versus = {};\n\t\t\t\t\t\tfor (const i in mode.jiangeboss) {\n\t\t\t\t\t\t\tif (mode.jiangeboss[i].isBossAllowed) {\n\t\t\t\t\t\t\t\tstorage.versus[i] = mode.jiangeboss[i];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tlocalStorage.setItem(\"boss_storage_playpackconfig\", JSON.stringify(storage));\n\t\t\t\t\t});\n\t\t\t\t} else {\n\t\t\t\t\tlocalStorage.setItem(\"boss_storage_playpackconfig\", JSON.stringify(storage));\n\t\t\t\t}\n\t\t\t};\n\t\t\tif (get.mode() !== \"boss\") {\n\t\t\t\tgame.loadModeAsync(\"boss\", function (mode) {\n\t\t\t\t\tfor (const i in mode.translate) {\n\t\t\t\t\t\tlib.translate[i] ||= mode.translate[i];\n\t\t\t\t\t\tstorage.translate[i] = mode.translate[i];\n\t\t\t\t\t}\n\t\t\t\t\tfor (const i in mode.skill) {\n\t\t\t\t\t\tif (lib.skill[i]) {\n\t\t\t\t\t\t\tconsole.log(i);\n\t\t\t\t\t\t}\n\t\t\t\t\t\tlib.skill[i] = mode.skill[i];\n\t\t\t\t\t}\n\t\t\t\t\tfor (const ii in mode.skill) {\n\t\t\t\t\t\tif (ii !== \"versus_ladder\") {\n\t\t\t\t\t\t\tgame.finishSkill(ii);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tstorage.boss = {};\n\t\t\t\t\tfor (const i in mode.characterPack.mode_boss) {\n\t\t\t\t\t\tif (mode.characterPack.mode_boss[i].isBossAllowed) {\n\t\t\t\t\t\t\tstorage.boss[i] = mode.characterPack.mode_boss[i];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tloadversus();\n\t\t\t\t});\n\t\t\t} else {\n\t\t\t\tloadversus();\n\t\t\t}\n\t\t},\n\t};\n});",
+    "excerpt_sha256": "902dd0a96b62bf2298c7b603ff1d39f68b52a49884df1c891b4a9f4e3a6ad123"
+  },
+  {
+    "id": "liuli-boss-play",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/boss/extension.js",
+    "file_sha256": "3c5e48764afd868c14a7e9ad751e8ef837d64f4e6a5ccfb43e25837950c28d35",
+    "lines": [
+      5,
+      138
+    ],
+    "excerpt": "\t\tinit:function(){\n\t\t\tif(get.mode()=='tafang') return;\n\t\t\tvar storage=localStorage.getItem('boss_storage_playpackconfig');\n\t\t\ttry{\n\t\t\t\tstorage=JSON.parse(storage)||{};\n\t\t\t}\n\t\t\tcatch(e){\n\t\t\t\tstorage={};\n\t\t\t}\n\t\t\tif(get.mode()!='boss'){\n\t\t\t\tlib.characterPack.mode_extension_boss=storage.boss||{};\n\t\t\t\tfor(var i in lib.characterPack.mode_extension_boss){\n\t\t\t\t\tlib.characterPack.mode_extension_boss[i][4].push('mode:boss');\n\t\t\t\t\tlib.character[i]=lib.characterPack.mode_extension_boss[i];\n\t\t\t\t\tif(typeof lib.character[i][2]!='number'&&(typeof lib.character[i][2]!='string'||lib.character[i][2].indexOf('/')==-1)){\n\t\t\t\t\t\tlib.character[i][2]=Infinity;\n\t\t\t\t\t}\n\t\t\t\t\tif(!lib.config.boss_enableai_playpackconfig){\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tvar list2=storage.versus||{};\n\t\t\tif(get.mode()!='versus'||get.config('versus_mode')!='jiange'){\n\t\t\t\tlib.characterPack.mode_extension_jiange=list2;\n\t\t\t\tfor(var i in list2){\n\t\t\t\t\tlib.characterPack.mode_extension_jiange[i]=list2[i];\n\t\t\t\t\tlib.characterPack.mode_extension_jiange[i][4].push('mode:versus');\n\t\t\t\t\tlib.character[i]=list2[i];\n\t\t\t\t\tif(typeof lib.character[i][2]!='number'){\n\t\t\t\t\t\tlib.character[i][2]=Infinity;\n\t\t\t\t\t}\n\t\t\t\t\tif(!lib.config.boss_enableai_playpackconfig){\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t\tlib.characterIntro.boss_liedixuande=lib.characterIntro.liubei;\n\t\t\t\tlib.characterIntro.boss_gongshenyueying=lib.characterIntro.huangyueying;\n\t\t\t\tlib.characterIntro.boss_tianhoukongming=lib.characterIntro.shen_zhugeliang;\n\t\t\t\tlib.characterIntro.boss_yuhuoshiyuan=lib.characterIntro.pangtong;\n\t\t\t\tlib.characterIntro.boss_qiaokuijunyi=lib.characterIntro.zhanghe;\n\t\t\t\tlib.characterIntro.boss_jiarenzidan=lib.characterIntro.caozhen;\n\t\t\t\tlib.characterIntro.boss_duanyuzhongda=lib.characterIntro.simayi;\n\t\t\t\tlib.characterIntro.boss_juechenmiaocai=lib.characterIntro.xiahouyuan;\n\t\t\t}\n\t\t\telse if(_status.mode!='jiange'){\n\t\t\t\tfor(var i in list2){\n\t\t\t\t\tlib.character[i]=list2[i];\n\t\t\t\t\tif(!lib.config.boss_enableai_playpackconfig){\n\t\t\t\t\t\tlib.config.forbidai.push(i);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t\tvar list=storage.translate||{};\n\t\t\tlist.mode_extension_boss_character_config='挑战武将';\n\t\t\tlist.mode_extension_jiange_character_config='剑阁武将';\n\n\t\t\tfor(var i in list){\n\t\t\t\tlib.translate[i]=lib.translate[i]||list[i];\n\t\t\t}\n\t\t},\n\t\tarenaReady:function(){\n\t\t\tif(get.mode()=='tafang') return;\n\t\t\tvar storage=localStorage.getItem('boss_storage_playpackconfig');\n\t\t\ttry{\n\t\t\t\tstorage=JSON.parse(storage)||{};\n\t\t\t}\n\t\t\tcatch(e){\n\t\t\t\tstorage={};\n\t\t\t}\n\t\t\tif(!storage.translate){\n\t\t\t\tstorage.translate={};\n\t\t\t}\n\t\t\tvar loadversus=function(){\n\t\t\t\tif(get.mode()!='versus'){\n\t\t\t\t\tgame.loadModeAsync('versus',function(mode){\n\t\t\t\t\t\tfor(var i in mode.translate){\n\t\t\t\t\t\t\tlib.translate[i]=lib.translate[i]||mode.translate[i];\n\t\t\t\t\t\t\tstorage.translate[i]=mode.translate[i];\n\t\t\t\t\t\t}\n\t\t\t\t\t\tfor(var i in mode.skill){\n\t\t\t\t\t\t\tif(lib.skill[i]) console.log(i);\n\t\t\t\t\t\t\tif(i!='versus_ladder'){\n\t\t\t\t\t\t\t\tlib.skill[i]=mode.skill[i];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tfor(var ii in mode.skill){\n\t\t\t\t\t\t\tif(ii!='versus_ladder'){\n\t\t\t\t\t\t\t\tgame.finishSkill(ii);\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tstorage.versus={};\n\t\t\t\t\t\tfor(var i in mode.jiangeboss){\n\t\t\t\t\t\t\tif(mode.jiangeboss[i][4].contains('bossallowed')){\n\t\t\t\t\t\t\t\tstorage.versus[i]=mode.jiangeboss[i];\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t\tlocalStorage.setItem('boss_storage_playpackconfig',JSON.stringify(storage));\n\t\t\t\t\t});\n\t\t\t\t}\n\t\t\t\telse{\n\t\t\t\t\tlocalStorage.setItem('boss_storage_playpackconfig',JSON.stringify(storage));\n\t\t\t\t}\n\t\t\t};\n\t\t\tif(get.mode()!='boss'){\n\t\t\t\tgame.loadModeAsync('boss',function(mode){\n\t\t\t\t\tfor(var i in mode.translate){\n\t\t\t\t\t\tlib.translate[i]=lib.translate[i]||mode.translate[i];\n\t\t\t\t\t\tstorage.translate[i]=mode.translate[i];\n\t\t\t\t\t}\n\t\t\t\t\tfor(var i in mode.skill){\n\t\t\t\t\t\tif(lib.skill[i]) console.log(i);\n\t\t\t\t\t\tlib.skill[i]=mode.skill[i];\n\t\t\t\t\t}\n\t\t\t\t\tfor(var ii in mode.skill){\n\t\t\t\t\t\tif(ii!='versus_ladder'){\n\t\t\t\t\t\t\tgame.finishSkill(ii);\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tstorage.boss={};\n\t\t\t\t\tfor(var i in mode.characterPack.mode_boss){\n\t\t\t\t\t\tif(mode.characterPack.mode_boss[i][4].contains('bossallowed')){\n\t\t\t\t\t\t\tstorage.boss[i]=mode.characterPack.mode_boss[i];\n\t\t\t\t\t\t}\n\t\t\t\t\t}\n\t\t\t\t\tloadversus();\n\t\t\t\t});\n\t\t\t}\n\t\t\telse{\n\t\t\t\tloadversus();\n\t\t\t}\n\t\t},\n\t};\n});",
+    "excerpt_sha256": "9a22ecb4ae8be4eefe7481b67a7662cf78e64b6f36b7ac6e95f6859ad980053d"
+  },
+  {
+    "id": "liuli-zhuan-boss-map",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js",
+    "file_sha256": "d8e90d70a9d7fc5b236ab9ff734daa312f3e84b3eaec5ffd1947b92cab33e829",
+    "lines": [
+      139,
+      151
+    ],
+    "excerpt": "                    lib.character[i] = list2[i];\n                    if (!lib.config.boss_enableai_playpackconfig) {\n                        lib.config.forbidai.push(i);\n                    }\n                }\n            }\n            var list = storage.translate || {};\n            list.mode_extension_boss_character_config = '挑战武将';\n            list.mode_extension_jiange_character_config = '剑阁武将';\n\n            for (var i in list) {\n                lib.translate[i] = lib.translate[i] || list[i];\n            }",
+    "excerpt_sha256": "3b5002f801d7715b0de01b3ea020bd01b8e5bd42c5bad88c7d92678c679733cd"
+  },
+  {
+    "id": "liuli-finishSkill-wrapper",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/十周年UI/meihua.js",
+    "file_sha256": "2148cd5255a9d6c8105d1f320cce7a02dfa1ebde0a8795eb20f6f4c2ab857f92",
+    "lines": [
+      3434,
+      3462
+    ],
+    "excerpt": "        game.oldfinishSkill = game.finishSkill;\n        game.finishSkill = function(i, sub) {\n            var info = lib.skill[i];\n            if (info.zhuanhuanji) {\n                if (info.mark === undefined) info.mark = true;\n                if (info.marktext) info.marktext = info.name;\n            }\n            if (info.subSkill && !sub) {\n                for (var j in info.subSkill) {\n                    lib.skill[i + '_' + j] = info.subSkill[j];\n                    lib.skill[i + '_' + j].sub = true;\n                    lib.skill[i + '_' + j].parentskill = i;\n                    if (info.subSkill[j].name) {\n                        lib.translate[i + '_' + j] = info.subSkill[j].name;\n                    } else {\n                        lib.translate[i + '_' + j] = lib.translate[i + '_' + j] || lib.translate[i];\n                    }\n                    if (info.subSkill[j].description) {\n                        lib.translate[i + '_' + j + '_info'] = info.subSkill[j].description;\n                    }\n                    if (info.subSkill[j].marktext) {\n                        lib.translate[i + '_' + j + '_bg'] = info.subSkill[j].marktext;\n                    }\n                    game.oldfinishSkill(i + '_' + j, true);\n                }\n            }\n            return game.oldfinishSkill(i, sub);\n        };\n        //鸟鸟的虚拟马，我用有点bug，无码有码的情况下🐎飞了",
+    "excerpt_sha256": "8b6ef1fb80a446beeaf8f50e29285f3143d044c5c72d010c13d33b4400230a43"
+  },
+  {
+    "id": "liuli-mark-content",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "file_sha256": "df022b56df575f5ca4df92398e1ecc5acafda4ef09805aa0e851d52c46a1176f",
+    "lines": [
+      330,
+      339
+    ],
+    "excerpt": "    };\n    return {\n        name: \"标记补充\",\n        content: function (config, pack) {\n            //引入css\n            lib.init.css(lib.assetURL + 'extension/标记补充', 'extension');\n            lib.init.css(lib.assetURL + 'extension/标记补充', 'mark');\n            window.numToGuanjie=function(num,to){\n                var str=['shibing','shifuzhang','baifuzhang','qianfuzhang','xiaowei','xianfengjiangjun','zhongjunjiangjun','lingjunjiangjun','biaoqijiangjun','dajiangjun','dayuanshuai','taixuhuanjing','boss_zhong','boss_zhu'];\n                if(!to) {",
+    "excerpt_sha256": "1038323922a68c58e9f9428142f4c92f7c8747840160a4f5a5390d79ff49e0cb"
+  },
+  {
+    "id": "liuli-zhu-guard-body",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "file_sha256": "df022b56df575f5ca4df92398e1ecc5acafda4ef09805aa0e851d52c46a1176f",
+    "lines": [
+      2288,
+      2322
+    ],
+    "excerpt": "            //主亡忠继\n            if (config.zhujizhongwang && lib.config.mode == 'identity') {\n                lib.skill._xigua_zhuwanzhongji_ = {\n                    charlotte: true,\n                    trigger: {\n                        global: \"dieBegin\",\n                    },\n                    forced: true,\n                    filter: function (event, player) {\n                        return event.player.identity == 'zhu' && (player.identity == 'zhong' || player.identity == 'mingzhong');\n                    },\n                    logTarget: \"player\",\n                    content: function () {\n                        game.broadcastAll(function (player, target) {\n                            target.identity = player.identity;\n                            if (player.identity == 'mingzhong') game.zhong = target;\n                            delete target.isZhu;\n                            player.identity = 'zhu';\n                            game.zhu = player;\n                            player.showIdentity();\n                            target.showIdentity();\n                        }, player, trigger.player);\n                        event.trigger('zhuUpdate');\n                    },\n                };\n            };\n\n            //手杀击杀特效\n            if (config.shoushajishatexiao) {\n                lib.skill._shoushajisha_ = {\n                    trigger: {\n                        source: \"dieBegin\",\n                    },\n                    silent: true,\n                    charlotte: true,",
+    "excerpt_sha256": "a3a36231a420c8988c40098e5264c1b21bd65e265192d494ac227856b3b73fe7"
+  },
+  {
+    "id": "liuli-zhu-config-default",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/标记补充/extension.js",
+    "file_sha256": "df022b56df575f5ca4df92398e1ecc5acafda4ef09805aa0e851d52c46a1176f",
+    "lines": [
+      6487,
+      6492
+    ],
+    "excerpt": "            zhujizhongwang: {\n                name: '主亡忠继模式',\n                init: false,\n                intro: \"身份模式生效，主公死了由忠臣继承，重启生效。\",\n            },\n        }, help: {}, package: {",
+    "excerpt_sha256": "32fa0033690dc3c950134545706f4c6e7d66ba6d9c6008a98c86b320d1470387"
+  },
+  {
+    "id": "liuli-wuxing-registration",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/wuxing/extension.js",
+    "file_sha256": "d85d932d053331f5a2cb79117f5b4fed4b745f24dbaae1b3c4c8351f0556ec7c",
+    "lines": [
+      1,
+      25
+    ],
+    "excerpt": "'use strict';\ngame.import('play',function(lib,game,ui,get,ai,_status){\n\treturn {\n\t\tname:'wuxing',\n\t\tarenaReady:function(){\n\t\t\tif(_status.connectMode) return;\n\t\t\tlib.card.list.splice(Math.floor(lib.card.list.length*Math.random()),0,['spade',5,'wuxingpan']);\n\t\t\tif(!_status.video){\n\t\t\t\tlib.video.push({\n\t\t\t\t\ttype:'play',\n\t\t\t\t\tname:'wuxing'\n\t\t\t\t});\n\t\t\t}\n\t\t},\n\t\tvideo:function(){\n\t\t\tfor(var i in this.translate){\n\t\t\t\tlib.translate[i]=this.translate[i];\n\t\t\t}\n\t\t\tfor(var i in this.card){\n\t\t\t\tlib.card[i]=this.card[i];\n\t\t\t}\n\t\t\tfor(var i in this.skill){\n\t\t\t\tlib.skill[i]=this.skill[i];\n\t\t\t}\n\t\t},",
+    "excerpt_sha256": "317667519f32e97617e4de1c0cbe84715c3611086c71acf094f04f11de984611"
+  },
+  {
+    "id": "liuli-wuxing-body",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/extension/wuxing/extension.js",
+    "file_sha256": "d85d932d053331f5a2cb79117f5b4fed4b745f24dbaae1b3c4c8351f0556ec7c",
+    "lines": [
+      60,
+      72
+    ],
+    "excerpt": "\t\t},\n\t\tskill:{\n\t\t\t_shengke:{\n\t\t\t\ttrigger:{target:'useCardToBegin'},\n\t\t\t\tforced:true,\n\t\t\t\tpopup:false,\n\t\t\t\tfilter:function(event,player){\n\t\t\t\t\tif(_status.connectMode) return false;\n\t\t\t\t\treturn event.card.wunature&&player.wunature;\n\t\t\t\t},\n\t\t\t\tcontent:function(){\n\t\t\t\t\tswitch(trigger.card.wunature){\n\t\t\t\t\t\tcase 'metal':",
+    "excerpt_sha256": "f12f77c659503e08bdd622fee58eaad770eb7060d79738c7cdbf71472969cae0"
+  },
+  {
+    "id": "core-lexue-group",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/extension/杀海拾遗/character/swd/skill.js",
+    "file_sha256": "dee41eaa74d8f027eddb61df726e50f17819d25aed40bc65adf9352f5894d471",
+    "lines": [
+      5950,
+      5958
+    ],
+    "excerpt": "\tlexue: {\n\t\tgroup: [\"lexue1\", \"lexue2\"],\n\t},\n\tlexue1: {\n\t\ttrigger: { player: \"phaseBegin\" },\n\t\tforced: true,\n\t\tpopup: false,\n\t\tcontent() {\n\t\t\tplayer.removeSkill(player.storage.lexue);",
+    "excerpt_sha256": "302464c74f2a0696757c5876c6f34e01d978d2a1b0778ba97c549b9cbfe19c0c"
+  },
+  {
+    "id": "liuli-lexue-group",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/swd.js",
+    "file_sha256": "b3c5b6a47035652c9f18eb71eba0530972fa9d6634b2cf918f9d71031e3f6e9c",
+    "lines": [
+      7094,
+      7118
+    ],
+    "excerpt": "\t\t\t},\n\t\t\tlexue:{\n\t\t\t\tgroup:['lexue1','lexue2'],\n\t\t\t},\n\t\t\tlexue1:{\n\t\t\t\ttrigger:{player:'phaseBegin'},\n\t\t\t\tforced:true,\n\t\t\t\tpopup:false,\n\t\t\t\tcontent:function(){\n\t\t\t\t\tplayer.removeSkill(player.storage.lexue);\n\t\t\t\t\tswitch(Math.floor(Math.random()*4)){\n\t\t\t\t\t\tcase 0:if(lib.skill.zhiheng){player.addSkill('zhiheng'); player.storage.lexue='zhiheng';player.popup('zhiheng');}break;\n\t\t\t\t\t\tcase 1:if(lib.skill.jizhi){player.addSkill('jizhi'); player.storage.lexue='jizhi';player.popup('jizhi');}break;\n\t\t\t\t\t\tcase 2:if(lib.skill.dimeng){player.addSkill('dimeng'); player.storage.lexue='dimeng';player.popup('dimeng');}break;\n\t\t\t\t\t\tcase 3:if(lib.skill.quhu){player.addSkill('quhu'); player.storage.lexue='quhu';player.popup('quhu');}break;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t},\n\t\t\tlexue2:{\n\t\t\t\ttrigger:{player:'phaseEnd'},\n\t\t\t\tforced:true,\n\t\t\t\tpopup:false,\n\t\t\t\tcontent:function(){\n\t\t\t\t\tplayer.removeSkill(player.storage.lexue);\n\t\t\t\t\tswitch(Math.floor(Math.random()*4)){",
+    "excerpt_sha256": "e9275f0860b1a22248b76c62e39c405c73ca3d16ca0fc53f11df49de4aadbb6b"
+  },
+  {
+    "id": "liuli-gujian-global",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/gujian.js",
+    "file_sha256": "f013b42c11d63c21a9fc8148e5232246bafd36ac2e2b03cc03ef927ce812040d",
+    "lines": [
+      26,
+      35
+    ],
+    "excerpt": "\t\t\t\t}\n\t\t\t},\n\t\t\tjinlianzhu:{\n\t\t\t\ttype:'trick',\n\t\t\t\tfullskin:true,\n\t\t\t\tfilterTarget:true,\n\t\t\t\tglobal:'g_jinlianzhu',\n\t\t\t\tcontent:function(){\n\t\t\t\t\tvar evt=event.getParent(3)._trigger;\n\t\t\t\t\tevt.cancel()",
+    "excerpt_sha256": "c618c6ae49fc818ed8447c7b037ee4e5920dd14681652a8ab1159b07123411d2"
+  },
+  {
+    "id": "liuli-shencaojie-global",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js",
+    "file_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+    "lines": [
+      264,
+      274
+    ],
+    "excerpt": "\t\t\t},\n\t\t\tshencaojie:{\n\t\t\t\tfullskin:true,\n\t\t\t\ttype:'trick',\n\t\t\t\tnodelay:true,\n\t\t\t\t// chongzhu:true,\n\t\t\t\tglobal:'g_shencaojie',\n\t\t\t\tcontent:function(){\n\t\t\t\t\tvar evt=event.getParent('g_shencaojie')._trigger;\n\t\t\t\t\tif(evt){\n\t\t\t\t\t\tif(evt.player==player){",
+    "excerpt_sha256": "f109fafc6b815edcd9a87c284ed127aa193fcd2ca1aece58e91bcb1fb4dd34fb"
+  },
+  {
+    "id": "liuli-shenmiguo-global",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js",
+    "file_sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+    "lines": [
+      1031,
+      1041
+    ],
+    "excerpt": "\t\t\t\t\t},\n\t\t\t\t}\n\t\t\t},\n\t\t\tshenmiguo:{\n\t\t\t\tfullskin:true,\n\t\t\t\ttype:'basic',\n\t\t\t\tglobal:'g_shenmiguo',\n\t\t\t\tcontent:function(){\n\t\t\t\t\tif(Array.isArray(player.storage.shenmiguo)){\n\t\t\t\t\t\tplayer.useCard(player.storage.shenmiguo[0],player.storage.shenmiguo[1]);\n\t\t\t\t\t}",
+    "excerpt_sha256": "30c86451ee8d591b8182476f834745b7cdc5271d08c63baaaacae811b9178ce8"
+  },
+  {
+    "id": "catalog-ui",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/extensionCatalog.ts",
+    "file_sha256": "96af49e5056c972eb46464589189b59dee0ecd79cfbd1e12200e2ab4fb830e86",
+    "lines": [
+      1,
+      144
+    ],
+    "excerpt": "/**\n * G1 转换包目录（15 个）——对齐 packages/extensions 与宿主契约装载面。\n * 客户端管理面以本目录为「可发现」源；真实装载入局仍待窄壳扩展 API。\n */\nexport interface ExtensionCatalogEntry {\n  /** 目录名（packages/extensions/<dir>） */\n  dir: string;\n  packageId: string;\n  namespace: string;\n  version: string;\n  /** 展示名 */\n  title: string;\n  /** 逻辑指纹前缀（目录识别，非完整哈希） */\n  logicFingerprint: string;\n}\n\n/** 15 个 G1 转换包（2026-10-16 与仓库目录核对）。 */\nexport const EXTENSION_CATALOG: ExtensionCatalogEntry[] = [\n  {\n    dir: \"cardpile-upstream-liuli\",\n    packageId: \"cardpile\",\n    namespace: \"upstream-liuli\",\n    version: \"1.0.0\",\n    title: \"牌堆（琉璃）\",\n    logicFingerprint: \"8dd99eb2\",\n  },\n  {\n    dir: \"cardpile-upstream-noname\",\n    packageId: \"cardpile\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"牌堆（无名）\",\n    logicFingerprint: \"83aa81c4\",\n  },\n  {\n    dir: \"d3-upstream-noname\",\n    packageId: \"d3-select\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"3D精选\",\n    logicFingerprint: \"6f257a96\",\n  },\n  {\n    dir: \"huanle-upstream-noname\",\n    packageId: \"huanle-cards\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"欢乐卡牌\",\n    logicFingerprint: \"6ae1907c\",\n  },\n  {\n    dir: \"shaai-ow-upstream-noname\",\n    packageId: \"shaai-ow\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"守望先锋\",\n    logicFingerprint: \"6117a13e\",\n  },\n  {\n    dir: \"shaai-xianjian-upstream-noname\",\n    packageId: \"shaai-xianjian\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"仙剑奇侠传\",\n    logicFingerprint: \"d9ee1863\",\n  },\n  {\n    dir: \"shahai-gujian-upstream-noname\",\n    packageId: \"shahai-gujian\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"古剑奇谭\",\n    logicFingerprint: \"ae13018f\",\n  },\n  {\n    dir: \"shahai-gwent-upstream-noname\",\n    packageId: \"shahai-gwent\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"昆特牌\",\n    logicFingerprint: \"0bd2569a\",\n  },\n  {\n    dir: \"shahai-hearth-upstream-noname\",\n    packageId: \"shahai-hearth\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"炉石传说\",\n    logicFingerprint: \"deafc31c\",\n  },\n  {\n    dir: \"shahai-mtg-upstream-noname\",\n    packageId: \"shahai-mtg\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"万智牌\",\n    logicFingerprint: \"6417be73\",\n  },\n  {\n    dir: \"shahai-swd-upstream-noname\",\n    packageId: \"shahai-swd\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"轩辕剑\",\n    logicFingerprint: \"31ccea98\",\n  },\n  {\n    dir: \"shahai-yunchou-upstream-noname\",\n    packageId: \"shahai-yunchou\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"运筹帷幄\",\n    logicFingerprint: \"57491089\",\n  },\n  {\n    dir: \"shahai-zhenfa-upstream-noname\",\n    packageId: \"shahai-zhenfa\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"阵法\",\n    logicFingerprint: \"53945b47\",\n  },\n  {\n    dir: \"wudian-upstream-noname\",\n    packageId: \"wudian\",\n    namespace: \"upstream-noname\",\n    version: \"1.0.0\",\n    title: \"玩点论杀\",\n    logicFingerprint: \"e0d488b6\",\n  },\n  {\n    dir: \"wuxing-upstream-liuli\",\n    packageId: \"wuxing\",\n    namespace: \"upstream-liuli\",\n    version: \"1.0.0\",\n    title: \"五行\",\n    logicFingerprint: \"845ea6fa\",\n  },\n];\n\n/** 稳定键：同 package_id 跨命名空间可并存。 */\nexport function extensionKey(e: Pick<ExtensionCatalogEntry, \"namespace\" | \"packageId\">): string {\n  return `${e.namespace}/${e.packageId}`;\n}",
+    "excerpt_sha256": "4f1ebcb1d0169e9dbc267a9dbe51b204c05297e88c7852c8ac600910f42aa35c"
+  },
+  {
+    "id": "catalog-bundled",
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/engine/bundledNativePackages.ts",
+    "file_sha256": "6ffc2f55b1361199529f5cdf356fa8632334ae589322a87c9dee3e737bb00c5b",
+    "lines": [
+      1,
+      69
+    ],
+    "excerpt": "// 安装时复制随应用分发的实际包数据；开局和读档只使用固定副本。\nimport type { ExtensionCatalogEntry } from \"./extensionCatalog\";\nimport package0 from \"../../../../packages/extensions/cardpile-upstream-liuli/package.npack.json\";\nimport data0_pile from \"../../../../packages/extensions/cardpile-upstream-liuli/assets/pile.json\";\nimport package1 from \"../../../../packages/extensions/cardpile-upstream-noname/package.npack.json\";\nimport data1_pile from \"../../../../packages/extensions/cardpile-upstream-noname/assets/pile.json\";\nimport package2 from \"../../../../packages/extensions/d3-upstream-noname/package.npack.json\";\nimport data2_characters from \"../../../../packages/extensions/d3-upstream-noname/assets/character.json\";\nimport package3 from \"../../../../packages/extensions/huanle-upstream-noname/package.npack.json\";\nimport data3_cards from \"../../../../packages/extensions/huanle-upstream-noname/assets/cards.json\";\nimport package4 from \"../../../../packages/extensions/shaai-ow-upstream-noname/package.npack.json\";\nimport data4_cards from \"../../../../packages/extensions/shaai-ow-upstream-noname/assets/cards.json\";\nimport package5 from \"../../../../packages/extensions/shaai-xianjian-upstream-noname/package.npack.json\";\nimport data5_cards from \"../../../../packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json\";\nimport package6 from \"../../../../packages/extensions/shahai-gujian-upstream-noname/package.npack.json\";\nimport data6_cards from \"../../../../packages/extensions/shahai-gujian-upstream-noname/assets/cards.json\";\nimport package7 from \"../../../../packages/extensions/shahai-gwent-upstream-noname/package.npack.json\";\nimport data7_cards from \"../../../../packages/extensions/shahai-gwent-upstream-noname/assets/cards.json\";\nimport package8 from \"../../../../packages/extensions/shahai-hearth-upstream-noname/package.npack.json\";\nimport data8_cards from \"../../../../packages/extensions/shahai-hearth-upstream-noname/assets/cards.json\";\nimport package9 from \"../../../../packages/extensions/shahai-mtg-upstream-noname/package.npack.json\";\nimport data9_cards from \"../../../../packages/extensions/shahai-mtg-upstream-noname/assets/cards.json\";\nimport package10 from \"../../../../packages/extensions/shahai-swd-upstream-noname/package.npack.json\";\nimport data10_cards from \"../../../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json\";\nimport package11 from \"../../../../packages/extensions/shahai-yunchou-upstream-noname/package.npack.json\";\nimport data11_cards from \"../../../../packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json\";\nimport data11_characters from \"../../../../packages/extensions/shahai-yunchou-upstream-noname/assets/character.json\";\nimport package12 from \"../../../../packages/extensions/shahai-zhenfa-upstream-noname/package.npack.json\";\nimport data12_cards from \"../../../../packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json\";\nimport package13 from \"../../../../packages/extensions/wudian-upstream-noname/package.npack.json\";\nimport data13_cards from \"../../../../packages/extensions/wudian-upstream-noname/assets/cards.json\";\nimport package14 from \"../../../../packages/extensions/wuxing-upstream-liuli/package.npack.json\";\nimport data14_cards from \"../../../../packages/extensions/wuxing-upstream-liuli/assets/cards.json\";\n\nexport interface NativePackagePayload {\n  manifest: {\n    namespace: string;\n    package_id: string;\n    version: string;\n    logic_hash: number[];\n    dependencies?: Array<{ namespace: string; package_id: string; version: string; logic_hash?: number[] }>;\n  };\n  cards?: unknown;\n  characters?: unknown;\n  pile?: unknown;\n  modules?: unknown;\n  skill_index?: unknown;\n  trigger_index?: unknown;\n}\n\nconst bundled: Record<string, { package: { modules: unknown[] }; payload: unknown }> = {\n  \"cardpile-upstream-liuli\": { package: package0, payload: { manifest: package0.manifest, pile: data0_pile } },\n  \"cardpile-upstream-noname\": { package: package1, payload: { manifest: package1.manifest, pile: data1_pile } },\n  \"d3-upstream-noname\": { package: package2, payload: { manifest: package2.manifest, characters: data2_characters } },\n  \"huanle-upstream-noname\": { package: package3, payload: { manifest: package3.manifest, cards: data3_cards } },\n  \"shaai-ow-upstream-noname\": { package: package4, payload: { manifest: package4.manifest, cards: data4_cards } },\n  \"shaai-xianjian-upstream-noname\": { package: package5, payload: { manifest: package5.manifest, cards: data5_cards } },\n  \"shahai-gujian-upstream-noname\": { package: package6, payload: { manifest: package6.manifest, cards: data6_cards } },\n  \"shahai-gwent-upstream-noname\": { package: package7, payload: { manifest: package7.manifest, cards: data7_cards } },\n  \"shahai-hearth-upstream-noname\": { package: package8, payload: { manifest: package8.manifest, cards: data8_cards } },\n  \"shahai-mtg-upstream-noname\": { package: package9, payload: { manifest: package9.manifest, cards: data9_cards } },\n  \"shahai-swd-upstream-noname\": { package: package10, payload: { manifest: package10.manifest, cards: data10_cards } },\n  \"shahai-yunchou-upstream-noname\": { package: package11, payload: { manifest: package11.manifest, cards: data11_cards, characters: data11_characters } },\n  \"shahai-zhenfa-upstream-noname\": { package: package12, payload: { manifest: package12.manifest, cards: data12_cards } },\n  \"wudian-upstream-noname\": { package: package13, payload: { manifest: package13.manifest, cards: data13_cards } },\n  \"wuxing-upstream-liuli\": { package: package14, payload: { manifest: package14.manifest, cards: data14_cards } },\n};\n\nfunction validIdentity(value: unknown): value is string {",
+    "excerpt_sha256": "711b28ee0e2387864e904dfd1550d661ddc9fe2a5f82f2597812328b9e9f2bc2"
+  }
+]

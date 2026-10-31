@@ -1,0 +1,26 @@
+{
+  "name": "actual-native-source-final",
+  "argv": [
+    "node",
+    "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "node",
+    "/tmp/nc27-main-final-v3-8e1fad00/actual-native-source.mjs"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next",
+  "exit": 0,
+  "wall_seconds": 0.5074429580126889,
+  "minimum_free_bytes": 47810129920,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "3839dc5067361c9e0e964c01c84938d0f95baf962775e883c39d22fd7b57b20f",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

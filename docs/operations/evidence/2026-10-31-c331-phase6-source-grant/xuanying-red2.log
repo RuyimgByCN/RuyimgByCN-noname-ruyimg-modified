@@ -1,0 +1,32 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.83s
+     Running tests/groups/g1_shahai.rs (../target/debug/deps/g1_shahai-c1181315dc2a39bd)
+
+running 2 tests
+test g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore ... FAILED
+test g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack ... FAILED
+
+failures:
+
+---- g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore stdout ----
+
+thread 'g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore' (15768817) panicked at crates/engine-native/tests/groups/../g1_shahai_swd/xuanying.rs:320:63:
+called `Result::unwrap()` on an `Err` value: BadTag("prompt_unknown", 0)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack stdout ----
+
+thread 'g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack' (15768818) panicked at crates/engine-native/tests/groups/../g1_shahai_swd/xuanying.rs:283:5:
+assertion `left == right` failed: registered xuanying_damage is not granted by the actual parent group
+  left: 3
+ right: 4
+
+
+failures:
+    g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore
+    g1_shahai_swd::xuanying::source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 174 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test g1_shahai`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "g1_shahai", "source_parent_grant"], "exit": 101, "locked_seconds": 2.8667685840046033, "disk_free_bytes": 98360107008}

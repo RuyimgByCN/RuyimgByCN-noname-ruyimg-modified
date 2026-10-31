@@ -1,0 +1,47 @@
+[
+  {
+    "label": "engine-native-full",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native"
+    ],
+    "started_utc": "2026-10-30T20:35:38.435004+00:00",
+    "exit": 0,
+    "seconds": 40.335537910461426
+  },
+  {
+    "label": "affected-default-final",
+    "command": [
+      "cargo",
+      "test",
+      "--offline",
+      "--no-fail-fast",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "-p",
+      "engine-native-wasm",
+      "-p",
+      "game-server",
+      "-p",
+      "desktop-client",
+      "-p",
+      "content-schema",
+      "-p",
+      "content-compiler",
+      "-p",
+      "content-runtime",
+      "-p",
+      "content-native-loader"
+    ],
+    "started_utc": "2026-10-30T20:36:19.064987+00:00",
+    "exit": 0,
+    "seconds": 297.39942502975464
+  }
+]

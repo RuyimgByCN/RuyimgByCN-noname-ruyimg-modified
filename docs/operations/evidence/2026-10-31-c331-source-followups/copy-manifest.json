@@ -1,0 +1,56 @@
+{
+  "copied_files": [
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/3a0effb3-8ed2-4d37-8751-6055f340d40e/reviews/c331-remaining16-translation-source-followup.md",
+      "stored": "translation-report.raw.txt",
+      "sha256": "d094a6a671bc4a9db0e6ef6dddda1f872b9b02f3db4fe52da2ab22b40a12e305",
+      "bytes": 9191
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/040dfd32-fd0b-44c7-a800-8a84b604ed76/proposals/c331-remaining12-source-and-bridge-contracts.md",
+      "stored": "source-and-bridge-report.raw.txt",
+      "sha256": "b06329172c8a2fa6864d7c614ab6eb2438d2168a9c53fdbf00a76fae1598659d",
+      "bytes": 163982
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/translation16.json",
+      "stored": "translation16.json",
+      "sha256": "81351e6531df6a3a3d808fdd41d02b02528863f7eaef117da9a2cbdf483d6554",
+      "bytes": 299030
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/raw-excerpts.json",
+      "stored": "raw-excerpts.json",
+      "sha256": "a402c45f324a09ad55665f25e55a26c0b7842d7594008e54614fd062b3bb76e1",
+      "bytes": 72212
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/ast-scan.json",
+      "stored": "ast-scan.json",
+      "sha256": "c37dc545b28aaa47815d7489679663a0a5b606ea067ecf8ba5a7113e9b1739fd",
+      "bytes": 22955412
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/catalog-stamped-source-check.json",
+      "stored": "catalog-stamped-source-check.json",
+      "sha256": "4af78aa2930b88bca3f01e08a5610204c28a8888ca9b9e4e7dce9ae98e90806f",
+      "bytes": 3961
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/prior-lane16-reconciliation.json",
+      "stored": "prior-lane16-reconciliation.json",
+      "sha256": "7d55271a6970db7afa2eb3a88035b65adce06a567b039a683884e830a5adbe42",
+      "bytes": 42655
+    },
+    {
+      "source": "/tmp/c331-remaining16-3a0effb3/selfcheck.json",
+      "stored": "selfcheck.json",
+      "sha256": "f8330aae512403509e78c48d8ad58549f424dcfbbeb91cd2973b8edb829ad970",
+      "bytes": 3497
+    }
+  ],
+  "parent_generated": [
+    "parent-compact-source-and-bridge-audit.json"
+  ],
+  "qualification": "Static source narrowing only;16translation+12mechanisms remain pending. Archive original warnings/parse errors; no runtime acceptance."
+}

@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T06:25:49.986473+00:00",
+  "command": [
+    "cargo",
+    "test",
+    "--offline",
+    "-p",
+    "engine-core",
+    "--no-fail-fast"
+  ],
+  "exit": 0,
+  "wallIncludingLockQueueSeconds": 94.30121958398377,
+  "log": "p2-core-full.log",
+  "diskFree": 86359834624
+}

@@ -617,3 +617,18 @@ test('clock calibration requires matching Pong, measures RTT, and resets across 
   now=500;replacement.receive('Pong',{header:newProbe.payload.header,server_time_ms:1_004_000});countdown.tick();
   assert.equal(countdown.value.value,6,'same deadline resumes with actual remaining time, not a full window');
 });
+
+
+test("source skill and deadline survive JoinOk, outcome and snapshot", async (t) => {
+  const { client, connect } = fixture(t);
+  const socket = await connect();
+  const choice = { choice_id: 8, observer: 1, options: [{ token: 0, label_key: "confirm" }], prompt: "trigger_confirm", native_kind: "confirm", source_skill: "遗计", deadline_unix_ms: 123456 };
+  const pending = client.joinRoom(7); join(socket, { choice });
+  assert.deepEqual((await pending).envelope.choice, choice);
+  const envelopes = []; client.onEnvelope(envelope => envelopes.push(envelope));
+  socket.receive("CommandOutcome", { view: view(2), choice, legal_actions: [], result: { Accepted: {} }, idempotency_key: 99 });
+  assert.deepEqual(envelopes.at(-1).choice, choice);
+  const snapshot = client.requestSnapshot(); const request = socket.sent.at(-1);
+  socket.receive("Snapshot", { header: request.payload.header, view: view(2), choice, legal_actions: [] });
+  await snapshot; assert.deepEqual(envelopes.at(-1).choice, choice);
+});

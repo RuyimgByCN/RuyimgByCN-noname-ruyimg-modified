@@ -1,0 +1,94 @@
+{
+  "utc": "2026-10-31T06:12:19.133001+00:00",
+  "head": "38ab1678df9b4b7b991d3b3122b1d937fd2648a1",
+  "private_worktree": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree",
+  "frozen5_135_preverified": true,
+  "source_snapshot_files": 140,
+  "extra5_immutable_HEAD_files": [
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/host/behavior.rs",
+      "sha256": "ddde9bb0f2c8e445ede3d8776f78484952992bdc91ae22fcb22e255b09ab703a",
+      "origin": "immutable HEAD38ab; absent from frozen135"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/filtering/swd.rs",
+      "sha256": "9968db832556f4ecd9ebd98b2943ad491a446e4cbd2929ada3622d1a46c4ff18",
+      "origin": "immutable HEAD38ab; absent from frozen135"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+      "sha256": "8ffdf2f2ceb731b1b155c7fec9119a36aab9be8ddb2b299e76f41d657279a25a",
+      "origin": "immutable HEAD38ab; absent from frozen135"
+    },
+    {
+      "path": "crates/engine-native/tests/g1_shahai_swd/xuanying.rs",
+      "sha256": "a257d074f24251c8034a3803ce82ca0e1044c129d05e5f77e2faa59c06749f52",
+      "origin": "immutable HEAD38ab; absent from frozen135"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/host/asks.rs",
+      "sha256": "b38f15f68e81b7398890976de08b944c4791439d4f37ff9c885e826a62e653db",
+      "origin": "immutable HEAD38ab; absent frozen135"
+    }
+  ],
+  "pre_post_source_lists_equal": true,
+  "pre_full_manifest_sha256": "1b0cba67c4ea8865d7434d06193119bc93a451db6f47713dc786f6f8a2ccd8fa",
+  "final_manifest_sha256": "81d66d59f0ca336761f28629850f9daf7a955670e7c17725cde40b88a1ba21e7",
+  "source_tree_identity": "03628142b0734df97e1ae400ec720a18fb057600ca573c8a24239b2f470a78ae",
+  "changed_files": [
+    "crates/engine-native-content/src/content/host/asks.rs",
+    "crates/engine-native-content/src/content/host/filtering/swd.rs",
+    "crates/engine-native-content/src/content/host/step/swd_damage_targets.rs",
+    "crates/engine-native-kernel/src/archive/resolution.rs",
+    "crates/engine-native-kernel/src/vocabulary/host/behavior.rs",
+    "crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs",
+    "crates/engine-native/tests/g1_shahai_swd/xuanying.rs"
+  ],
+  "no_staged_files": true,
+  "source_proof": {
+    "proven": 262,
+    "denominator": 290,
+    "added": 0
+  },
+  "lifecycle_pending": "xuanying_use full loseEnd and broader chooseToUse contexts; no source exclusion",
+  "two_equipment_tuples": "unchanged/pending",
+  "golden": "full native command passed, no golden expectation changes",
+  "main_other_writer_scope": "Only exact7 private source paths changed; no Main/config/other-tree writes, staging, commits or cleanup",
+  "raw_test_counts": {
+    "xuanying-red": {
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    "xuanying-red2": {
+      "passed": 0,
+      "failed": 2,
+      "ignored": 0
+    },
+    "xuanying-green1": {
+      "passed": 1,
+      "failed": 1,
+      "ignored": 0
+    },
+    "xuanying-green2": {
+      "passed": 0,
+      "failed": 0,
+      "ignored": 0
+    },
+    "xuanying-green3": {
+      "passed": 3,
+      "failed": 0,
+      "ignored": 0
+    },
+    "registered-group": {
+      "passed": 177,
+      "failed": 0,
+      "ignored": 0
+    },
+    "full-native": {
+      "passed": 1749,
+      "failed": 0,
+      "ignored": 75
+    }
+  }
+}

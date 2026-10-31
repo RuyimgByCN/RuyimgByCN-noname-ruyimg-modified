@@ -1,0 +1,148 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/content-native-loader)
+warning: unused import: `ChoiceOption`
+  --> crates/engine-native/tests/groups/../c331_host_source_metadata.rs:38:25
+   |
+38 |     use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                         ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08") generated 1 warning (run `cargo fix --test "nc08" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.22s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-523977beb66ce5e1)
+
+running 127 tests
+test c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula ... ok
+test c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings ... ok
+test c331_host_source_metadata::direct_source_profiles_keep_priority_silent_and_translated_choice_qualification ... ok
+test c331_host_source_metadata::actual_silent_first_handler_runs_before_the_normal_order_choice_and_restores ... ok
+test c331_damage_windows::trigger_only_intrinsic_slot_cannot_hide_wrong_window ... ok
+test c331_damage_windows::trigger_only_no_frame_sentinel_cannot_hide_wrong_window ... ok
+test c331_damage_windows::actual_active_catalog_module_keeps_its_intrinsic_resume_path ... ok
+test nc08_config_acceptance::config_invalid_data_rejected ... ok
+test c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last ... ok
+test c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first ... ok
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+test nc08_card_ownership_partition::card_ownership_partition_roundtrip ... ok
+test c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses ... ok
+test nc08_config_acceptance::config_init_hook_parses ... ok
+test nc08_composition_acceptance::composition_duplicate_card_names_report ... ok
+test nc08_loader_card_skills::card_skills_declare_host_skill ... ok
+test nc08_loader_card_skills::card_skills_deduplicated ... ok
+test nc08_config_acceptance::config_metadata_complete ... ok
+test nc08_loader_card_skills::unknown_card_skill_key_rejected ... ok
+test nc08_conversion_gap_regression::conversion_gap_inventory_is_still_absent ... ok
+test nc08_config_acceptance::config_enabled_flag_gates_cards ... ok
+test c331_fellow_windows::actual_fellow_inventory_and_grants_use_only_existing_normal_and_global_maps ... ok
+test nc08_prepare_phase_mapping::prepare_phase_triggers_are_folded_into_judge_begin ... ok
+test nc08_prepare_phase_mapping::xiuluo_filter_requires_hand_which_upstream_does_not ... ok
+test nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger ... ignored, 登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::cap_card_targeted ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_damage_begin_second ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_death_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_game_start ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_judge_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_after ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_begin ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g20_jiuwei_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_liyutang_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_paotai2_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_zhucheng_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_ziyu_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g23_binxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_donghuangzhong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_guangshu_spade_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_huanling_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_jidong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lingxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lingyu_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lqingcheng_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_menshen_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_xuanyuan_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::guard_chengxin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_cigu_pre_draw ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_fenglue_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_fuchou2_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_gaiming_judge_before ... ignored, 补 `judgeBefore` 幕并挂上后转绿
+test nc08_registered_defect_guards::guard_hutian_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted ... ignored, 补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）
+test nc08_registered_defect_guards::guard_mb_phase_before_enter_game ... ignored, 补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿
+test nc08_registered_defect_guards::guard_mopaifanbei_second_draw ... ignored, 补「第 2 次」档或摸牌前幕后转绿
+test nc08_registered_defect_guards::guard_mufeng_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test nc08_registered_defect_guards::guard_niepan_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_prepare_phase_exists ... ignored, 补 `Phase::Prepare` 后转绿
+test nc08_registered_defect_guards::guard_rangjie_branch1_draws ... ignored, 补 `draw_cards` 后转绿（分支 1 应摸牌）
+test nc08_registered_defect_guards::guard_shouyin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_shuiyun5_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_xiangxing_lose_hp_end ... ignored, 补 LoseHpEnd 幕并挂上后转绿
+test nc08_registered_defect_guards::guard_yueyin_fourth_damage ... ignored, 补「第 4 次」档后转绿
+test nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase ... ignored, 补 dieBegin 幕 / 改事件种类后转绿
+test nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch ... ignored, 登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage ... ignored, 登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs
+test nc08_registered_defect_guards::lexue_any_phase_of_owner_only ... ignored, 登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker ... ignored, 登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs
+test nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase ... ignored, 登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_loader_card_skills::real_pack_still_bridges ... ok
+test nc08_dead_host_keys::dead_host_keys_are_absent_from_catalog ... ok
+test nc08_manifest_matrix::manifest_matrix_over_package_dirs ... ok
+test nc08_phase_end_dispatch_probe::probe_phase_end_skills_and_candidates ... ok
+test nc08_card_name_prefix_regression::card_name_double_prefix_regression ... ok
+test nc08_save_restore_pile::save_restore_roundtrip_pile_packages ... ok
+test nc08_composition_acceptance::composition_all_card_packs_together ... ok
+test nc08_skill_mapping_inventory::skill_mapping_inventory_matches_baseline ... ok
+test nc08_standard_deck_coverage::standard_deck_kind_instance_coverage ... ok
+test nc08_trigger_order_counterexample::actual_vm_add_skill_enters_current_bucket_and_done_identity_does_not_repeat ... ok
+test nc08_trigger_order_counterexample::c331_huanle_equipment_priority_waits_for_normal_owner_peers ... ok
+test nc08_pile_pair_matrix::pile_pair_matrix_over_card_packs ... ok
+test nc08_acceptance_sweep_small_packages::acceptance_sweep_small_packages ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_requires_one_window_for_nonasking_optional_continuation ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_window_authority_cannot_hide_in_vm_following ... ok
+test nc08_trigger_order_counterexample::c331_review_k2_swapped_seats_nested_grant_rejoins_the_frozen_ancestor ... ok
+test nc08_trigger_order_counterexample::c331_review_k2_window_survives_real_set_turn_state_and_seat_change ... ok
+test nc08_trigger_order_counterexample::c331_review_k4_active_damage_before_remains_explicitly_unsupported ... ok
+test nc08_swd_yuchan_family_probe::swd_yuchan_family_active_use_probe ... ok
+test nc08_trigger_order_counterexample::c331_review_s2_grouped_handlers_keep_max_hp_hand_limit ... ok
+test nc08_trigger_order_counterexample::c331_review_k3_real_pending_reveal_injects_same_and_future_owner_once ... ok
+test nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates ... ok
+test nc08_trigger_order_counterexample::invalid_order_answers_do_not_change_state_or_rng ... ok
+test nc08_trigger_order_counterexample::direct_extension_metadata_and_filter_identity_bind_restore ... ok
+test nc08_trigger_order_counterexample::nc08_same_priority_pair_asks_player_for_next_skill ... ok
+test nc08_save_restore_four_sources::save_restore_roundtrip_four_sources ... ok
+test nc08_trigger_order_counterexample::optional_confirmation_rechecks_existence_enabled_alive_and_filter ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_every_window_slice_restores_without_a_lifecycle_gap ... ok
+test nc08_trigger_order_counterexample::machine_fields_and_queue_alias_mutations_are_rejected ... ok
+test nc08_trigger_order_counterexample::priority_extremes_never_negate_or_overflow ... ok
+test nc08_trigger_order_counterexample::silent_and_unnamed_metadata_runs_before_any_selectable_sibling ... ok
+test nc08_trigger_order_counterexample::owner_buckets_precede_priority_and_first_last_are_automatic ... ok
+test nc08_trigger_order_counterexample::same_priority_temporarily_false_filter_revives_but_passed_priority_does_not ... ok
+test nc08_rescue_card_set_survey::rescue_card_set_survey ... ok
+test nc08_trigger_order_counterexample::pending_and_optional_byte_restart_preserve_full_continuation ... ok
+test nc08_trigger_order_counterexample::three_skills_choose_next_then_rebuild_and_optional_can_decline ... ok
+test nc08_save_restore_matrix::save_restore_matrix_over_packages ... ok
+test nc08_general_pair_matrix::general_pair_matrix_with_card_packs ... ok
+test nc08_upgrade_acceptance::upgrade_downgrade_still_bridges ... ok
+test nc08_zhenfa_mode_gate_survey::zhenfa_mode_gate_survey ... ok
+test nc08_identity_gate_matrix::identity_version_gate_over_all_packages ... ok
+test nc08_replay_determinism_five_sources::replay_determinism_per_pack ... ok
+test nc08_u08_reachability::u08_skills_are_declared_but_have_no_carrier ... ok
+test nc08_upgrade_skill_mapping::upgrade_skill_mapping_change_is_detected ... ok
+test nc08_upgrade_acceptance::upgrade_card_addition_is_additive ... ok
+test nc08_upgrade_acceptance::upgrade_version_bump_keeps_content ... ok
+test nc08_global_cards_active_use_probe::global_cards_active_use_probe ... ok
+test nc08_upgrade_acceptance::upgrade_old_and_new_coexist ... ok
+test nc08_upgrade_five_sources::upgrade_per_source_five_sources ... ok
+test nc08_composition_pair_matrix::composition_pair_matrix_all_pairs ... ok
+test nc08_upgrade_matrix::upgrade_matrix_over_packages ... ok
+test nc08_skill_pair_matrix::skill_pair_matrix_over_general_packs ... ok
+test nc08_acceptance_sweep_all_packages::acceptance_sweep_all_packages ... ok
+
+test result: ok. 77 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08"], "exit": 0, "locked_seconds": 7.7824680829944555, "disk_free_bytes": 96984920064}

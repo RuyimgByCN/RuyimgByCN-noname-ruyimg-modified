@@ -1,0 +1,34 @@
+## Review
+
+**No issues found.**
+
+**Merge verdict: OK with notes — combined acceptance of the approved NC27 source-field batch.** This covers Main’s reviewed 33-source composition and regenerated products; it does not certify broader NC10/runtime behavior.
+
+- **Correct — review and identity chain:** Read the complete [Main V3 final report](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8e1fad00-dd0e-451d-ae07-ef846b5d7e93/verification/nc27-main-final-v3-acceptance.md), admission, generated18 manifest, artifact index, final comparison, archived P2 report/recheck, and four-file delta. The [admission](/tmp/nc27-main-final-v3-8e1fad00/admission.json) binds all33 paths to manifest `4f81d2ec82329854df3f5662602bd6b985c1b69050c220e993f3da41da9f5b0e` and delta `014197d181102ce8dd306cf27de42f215ed5ba471c8e4222baf5b8fbf40d2092`. Final entry/exit contain those33 hashes with no admission mismatch. Parent’s prior full-source and incremental identity audits remain separate evidence; this review did not repeat their hashing.
+
+- **Correct — source contract retained:** Main’s [choice_source.rs:8](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/choice_source.rs:8) retains the reviewed unique-active-ask, complete shape, and exact first-depth consumer checks. [asks.rs:1022](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/asks.rs:1022) retains catalog-global uniqueness, native optional qualification, and direct inner delegation. No new source-field defect or authority change was found.
+
+- **Fixed — legacy diagnostic P2:** The archived independent recheck closes the original P2, and Main’s [legacy_choice.rs:43](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-core/src/snapshot/legacy_choice.rs:43) contains that repair: a private serde remote reader preserving the old13 fields and `ChoiceRequest` diagnostics, with only source skipped. The delta changes one production reader plus test registration/oracle/test files. It leaves wire strictness, typed stripping, scheduler, native source predicates, and formal restore semantics unchanged. The 445-input oracle establishes acceptance/error agreement, including positions; it does not independently prove every successful decoded value equal.
+
+- **Correct — current generated products:** The [18-path manifest](/tmp/nc27-main-final-v3-8e1fad00/generated18-products.json) records only three changed byte files: native WASM `225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1` and two identical legacy copies `c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164`. JS, declarations, package metadata, and path set remain unchanged. Read the original build scripts, preload, and child receipts: the preload redirects only `CARGO_TARGET_DIR`, preserving release arguments and optimization policy.
+
+- **Correct — actual current runtime checks:** Recorded native WASM output gives owner1 `遗计`, hides source from seats0/2, and preserves save bytes across metadata reads. Actual legacy WASM observes120 steps/33 pending choices without source. Workspace raw output includes the native source, WS6, desktop, Session, diagnostic-oracle, and typed-poisoned legacy sink tests.
+
+| Final recorded validation | Result and qualification |
+|---|---|
+| Main V3 workspace | **6917 passed / 0 failed / 77 ignored**,164 summaries; exit0. V2’s6916 was not substituted. |
+| Frontend / production Worker | **179/0** and **82/0**, against regenerated modules. |
+| Conformance / native cross-target | **19 vectors**; standard40/package20 trajectories and midpoint restores pass. These overlap other coverage and are not added totals. |
+| Final gates | Full preflight **21/21**, source-line unit tests2/0,9003-file line caps, strict references exit0. Six missing example/path-pattern diagnostics and zero out-of-range citations remain recorded. |
+
+- **Correct — failure accounting:** The first source harness’s exit1 is preserved. It asserted imported archive bytes equal post-restore bytes, while [snapshot.rs:542](/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native/src/engine/snapshot.rs:542) already increments `auth_generation`. The corrected harness compares post-restore save against post-metadata save. No product fix or gate relaxation was used. Historical resource failures remain preserved alongside the separately audited repair; they are not rewritten as passes.
+
+- **Correct — final window:** [gate-comparison.json](/tmp/nc27-main-final-v3-8e1fad00/gate-comparison.json) records unchanged source33, generated18, default-dist37, root7, protected99,1927 Markdown identities, package trees/status/diff, HEAD/tree/index, and empty staging. Its window is **07:25:51–07:31:45 UTC**, sealed07:32:46. Later evidence/status archives fall outside that freeze and retain the planned cheap documentation-check requirement.
+
+- **Correct — claims remain bounded:** Versions stay330/105/758/WS6; native web backend and default desktop WASM transport remain distinct and unchanged. Prior WK web4/Tauri native4 and UI/IPC/WS evidence is inherited within its source binding; no new Main GUI qualification is claimed. Warning occurrences remain disclosed, not treated as unique counts or warning-free qualification.
+
+- **Finding:** No new qualifying P0/P1/P2 issue in this batch. No edits were applied during review.
+- **Acceptance boundary:** The source-field batch is ready for the parent’s authorized local closure/publication workflow. C6/PA/private old329 runtime is not admitted. Root, Confirm-prefix, Cancel-tail, VM/fuel/arithmetic/scheduler release, original19 NoCert, and overall Goal remain **BLOCK**.
+
+Skipped: execution, fresh hash/aggregate recomputation, full-repository re-audit, and new GUI/platform checks; the parent’s final fresh parser was still absent when checked.  
+Risk: this acceptance depends on the reviewed source/product bindings and final-window records; it grants no broader runtime or rule-equivalence certificate.

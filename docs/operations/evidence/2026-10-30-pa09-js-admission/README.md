@@ -29,7 +29,7 @@
 
 父[fresh只读parser](parent-main-audit/audit-final-gates.py)／[结果](parent-main-audit/final-gates-independent-results.json)重核18份索引证据及index SHA、四exactargv／原日志SHA／wrapper实际exit0、全部21条成功摘要与18项capture比较，当前三源及attribute再次hash匹配准入。没有冗余重扫当前全部21,726路径；原preflight抑制内部子项日志，只声明接口实际输出。三改动路径的主动LSP结果为[clean3／diagnostics0](parent-main-audit/lsp-paths-result.json)，不外推Rust覆盖。
 
-独立组合结论No issues、无新增P0/P1/P2、OK with notes，仅接受PA09 JS admission和精确路径属性修正，见[父组合接纳](parent-combination-acceptance.json)。按裁决18本地收口、裁决25限定正常发布另记实际receipt；不关闭PA09六条件、新Windows平台结果或整个Goal。门禁编排首版runs.run参数形式在启动前被校验拒绝，改为工具规定的key／params形式后才启动，未运行失败实验或更换执行通道。
+独立组合结论No issues、无新增P0/P1/P2、OK with notes，仅接受PA09 JS admission和精确路径属性修正，见[父组合接纳](parent-combination-acceptance.json)。按裁决18本地提交、裁决25普通发布为`4dd0b286b995fe414128b6c52eb83a4d0d85f6cd`，push0／精确guard／main保持见[发布receipt](publication/result.json)；真实run41125396035十job成功、Windows prepare／installer／upload均成功并独立登记，见[新CI证据](publication-ci/README.md)。原777的9/1不回填；新结果不关闭PA09六条件、实体安装／签名／真机或整个Goal。门禁编排首版runs.run参数形式在启动前被校验拒绝，改为工具规定的key／params形式后才启动，未运行失败实验或更换执行通道。
 
 ## 历史测量保全与边界
 

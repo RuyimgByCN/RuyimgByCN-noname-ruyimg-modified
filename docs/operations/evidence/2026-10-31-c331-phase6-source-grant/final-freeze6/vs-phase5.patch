@@ -1,0 +1,343 @@
+--- a/crates/engine-native-content/src/content/host/asks.rs
++++ b/crates/engine-native-content/src/content/host/asks.rs
+@@ -8,6 +8,17 @@
+ 
+ use super::asks_mtg::active_ask_mtg;
+ use super::asks_wudian::active_ask_wudian;
++
++pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
++    ChoiceSpec {
++        kind: ChoiceKind::SelectPlayers,
++        prompt: "xuanying_target",
++        options: core.alive_players().filter(|p| *p != owner).map(ChoiceOption::Player).collect(),
++        min: 1,
++        max: 1,
++        allow_cancel: true,
++    }
++}
+ 
+ /// 宿主机器的询问派生：按行为 + 阶段还原 host.rs 各 step 中
+ /// 创建该 `WaitChoice` 时的 `ChoiceSpec`（挂起时 stage 已前移到下一阶段）。
+@@ -29,6 +40,12 @@
+     let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
+     let stage = HostStage::from_tag(stage)?;
+     match behavior {
++        HostBehavior::SwdXuanying => {
++            if stage != HostStage::TargetChoice { return None; }
++            let spec = xuanying_target_spec(core, owner);
++            if spec.options.is_empty() { return None; }
++            Some(ask(owner, spec.prompt, spec.kind, spec.options, spec.min, spec.max, spec.allow_cancel))
++        }
+         HostBehavior::Liaoyuan => {
+             if stage != HostStage::SelectCard {
+                 return None;
+--- a/crates/engine-native-content/src/content/host/filtering/swd.rs
++++ b/crates/engine-native-content/src/content/host/filtering/swd.rs
+@@ -700,14 +700,8 @@
+             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
+             HostBehavior::SwdMingfu => matches!(event,
+                 EventData::Phase { player, begin, .. } if *player == owner && false),
+-            // 玄影·端蒙面：自己受伤（真实）、已横置、来源存活
+-            HostBehavior::SwdXuanying => matches!(event,
+-                EventData::Damage(d)
+-                if d.target == owner
+-                    && !d.prevented
+-                    && d.amount > 0
+-                    && ctx.state.player(owner).linked
+-                    && d.source.map(|s| ctx.state.player(s).alive).unwrap_or(false)),
++            // 旋影父技不授予 damage 子技；保留独立的主动入口。
++            HostBehavior::SwdXuanying => false,
+             // 极谋·姬良面：自己受伤（真实）且回合非自己
+             HostBehavior::SwdJqimou => matches!(event,
+                 EventData::Damage(d)
+--- a/crates/engine-native-content/src/content/host/step/swd_damage_targets.rs
++++ b/crates/engine-native-content/src/content/host/step/swd_damage_targets.rs
+@@ -80,56 +80,18 @@
+                 }
+                 _ => Flow::Done,
+             },
+-            // 玄影·端蒙面（受伤反击面）：解除横置 + 对来源虚拟杀
+-            //（ActivateSkill 面走下方 stage 分支——两入口按触发帧区分：
+-            // 帧存在且为 Damage=反击面；无帧=主动面）
++            // 旋影父技的已授予主动 sha 面；未授予的 damage 不进入本机。
+             HostBehavior::SwdXuanying => {
+-                let frame_dmg = ctx
+-                    .res
+-                    .frame(ctx.current_frame_id())
+-                    .map(|f| &f.data)
+-                    .and_then(|data| match data {
+-                        crate::event::EventData::Damage(d) => Some(d.source),
+-                        _ => None,
+-                    });
+-                if let Some(Some(src)) = frame_dmg {
+-                    if !ctx.core.player(src).alive {
+-                        return Flow::Done;
+-                    }
+-                    // 已横置（filter 保证）→ commit_linked 翻转为未横置
+-                    ctx.emit(EventData::Linked {
+-                        player: self.owner,
+-                        linked: false,
+-                    });
+-                    if !ctx.core.deck.is_empty() {
+-                        ctx.use_virtual_card(self.owner, CardKind::Sha, vec![src]);
+-                    }
+-                    return Flow::Done;
+-                }
+-                // 主动面（ActivateSkill）：TargetChoice 任一其他存活 →
+-                // 横置自身 + 虚拟杀
+                 match self.stage {
+                     HostStage::Act => {
+-                        let options: Vec<ChoiceOption> = ctx
+-                            .core
+-                            .alive_players()
+-                            .filter(|p| *p != self.owner)
+-                            .map(ChoiceOption::Player)
+-                            .collect();
+-                        if options.is_empty() {
++                        let spec = asks::xuanying_target_spec(ctx.core, self.owner);
++                        if spec.options.is_empty() {
+                             return Flow::Done;
+                         }
+                         self.stage = HostStage::TargetChoice;
+                         Flow::WaitChoice {
+                             observer: self.owner,
+-                            spec: ChoiceSpec {
+-                                kind: ChoiceKind::SelectPlayers,
+-                                prompt: "xuanying_target",
+-                                options,
+-                                min: 1,
+-                                max: 1,
+-                                allow_cancel: true,
+-                            },
++                            spec,
+                         }
+                     }
+                     HostStage::TargetChoice => {
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -145,6 +145,7 @@
+     "rvm_fenghe_destination",
+     "rvm_pingkou_targets",
+     "trigger_order",
++    "xuanying_target",
+ ];
+ 
+ pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
+--- a/crates/engine-native-kernel/src/vocabulary/host/behavior.rs
++++ b/crates/engine-native-kernel/src/vocabulary/host/behavior.rs
+@@ -1105,10 +1105,8 @@
+     /// equip 同口径；登记差异：实体发现替代 createCard；巧械 cyqiaoxie
+     /// 挂后续批）。
+     SwdCyxianjiang,
+-    /// 玄影·端蒙面（tag 387，武将面批 90 端蒙）：锁定 marker——未横置
+-    /// 时可横置自身视为使用无视距离【杀】；已横置时可横置自身视为出
+-    /// 【闪】/受伤后反击来源/回合外失去牌时反击目标（上游 xuanying
+-    /// 四子技同口径；登记差异：响应面收敛为标记面+出闪窗扩展臂）。
++    /// 旋影·端蒙面（tag 387）：父技授予 sha/use，不授予 shan/damage。
++    /// 原生保留未横置时的主动虚拟杀；loseEnd-use 的完整时机仍待接线。
+     SwdXuanying,
+     /// 烈刃（tag 388，武将面批 90 端蒙）：杀造成伤害后（每触发与目标
+     /// 拼点，赢则获得其一张 he；上游 lieren chooseToCompare+gainPlayerCard
+--- a/crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs
++++ b/crates/engine-native-kernel/src/vocabulary/host/metadata/swd.rs
+@@ -907,16 +907,8 @@
+                 optional: true,
+                 extra_events: Vec::new(),
+             }),
+-            // 玄影·端蒙面：自己受伤结算后（damageEnd 反击面——已横置且
+-            // 来源存活可反击；sha 面经 ActivateSkill）
+-            HostBehavior::SwdXuanying => Some(TriggerMeta {
+-                event: EventKind::Damage,
+-                timing: Timing::Normal,
+-                priority: 0,
+-                order_selectable: true,
+-                optional: true,
+-                extra_events: Vec::new(),
+-            }),
++            // 父技只授予 sha/use，不授予 damage；loseEnd-use 尚待接线。
++            HostBehavior::SwdXuanying => None,
+             // 烈刃：自己杀造成伤害结算后（每触发与目标拼点，optional）
+             HostBehavior::SwdLieren => Some(TriggerMeta {
+                 event: EventKind::Damage,
+--- a/crates/engine-native/tests/g1_shahai_swd/xuanying.rs
++++ b/crates/engine-native/tests/g1_shahai_swd/xuanying.rs
+@@ -222,3 +222,179 @@
+     assert_eq!(e.debug_hp(1), 7, "烈刃前序：p1 受 1 伤（8→7）");
+     assert!(hand_len_w(&e, 0) >= 1, "烈刃赢：获得 p1 一张牌（手牌≥1）");
+ }
++
++// Load the actual selected producer asset; general assignment, not debug_grant, owns the parent.
++fn source_parent_pack() -> ExtensionPack {
++    let asset = repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json");
++    bridge(&std::fs::read_to_string(asset).unwrap())
++}
++fn source_parent_engine(pack: &ExtensionPack) -> Engine {
++    let mut e = Engine::new_with_extensions(331801, 4, &[pack]).unwrap();
++    e.assign_general_named(0, "swd_duanmeng").unwrap();
++    for owner in 0..4 {
++        e.debug_clear_hand(owner);
++    }
++    let def = e.catalog().skill_by_name("xuanying").unwrap();
++    assert!(e.state_core().skills.contains_key(&(0, def)));
++    assert!(e.catalog().skill_by_name("xuanying_damage").is_none());
++    e
++}
++fn source_answer(e: &mut Engine, selection: Vec<ChoiceOption>) {
++    let c = e.open_choice().unwrap().clone();
++    let result = e.submit(GameCommand {
++        actor: c.observer,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection,
++        },
++    });
++    assert!(!matches!(result, CommandOutcome::Rejected(_)), "{result:?}");
++}
++fn source_settle(e: &mut Engine) {
++    for _ in 0..16 {
++        let Some(c) = e.open_choice() else {
++            return;
++        };
++        let selection = if c.spec.options.contains(&ChoiceOption::Confirm) {
++            vec![ChoiceOption::Confirm]
++        } else if c.spec.options.contains(&ChoiceOption::Pass) {
++            vec![ChoiceOption::Pass]
++        } else {
++            c.spec.options.iter().take(c.spec.min).copied().collect()
++        };
++        source_answer(e, selection);
++    }
++    panic!("source fixture did not settle");
++}
++#[test]
++fn source_parent_grant_linked_damage_does_not_grant_damage_child_counterattack() {
++    let pack = source_parent_pack();
++    let mut e = source_parent_engine(&pack);
++    e.debug_set_turn(1, Phase::Play, 1);
++    e.state_core_mut().players[0].linked = true;
++    let attacker_hp = e.debug_hp(1);
++    let owner_hp = e.debug_hp(0);
++    let cursor = e.log().len();
++    e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
++    source_settle(&mut e);
++    assert_eq!(e.debug_hp(0), owner_hp - 1);
++    assert_eq!(
++        e.debug_hp(1),
++        attacker_hp,
++        "registered xuanying_damage is not granted by the actual parent group"
++    );
++    assert!(
++        e.state_core().player(0).linked,
++        "ungranted damage child cannot unlink the owner"
++    );
++    assert!(
++        !e.log()[cursor..]
++            .iter()
++            .any(|event| matches!(event, engine_native::LogEvent::CardPlayed { player: 0, .. })),
++        "parent damage must not manufacture a Sha"
++    );
++    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
++    let r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
++    let expected = e.save();
++    let mut actual = r.save();
++    actual.auth_generation = expected.auth_generation;
++    assert_eq!(actual, expected);
++}
++#[test]
++fn source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore() {
++    for target in [Some(2), None] {
++        let pack = source_parent_pack();
++        let mut e = source_parent_engine(&pack);
++        e.debug_set_turn(0, Phase::Play, 1);
++        let def = e.catalog().skill_by_name("xuanying").unwrap();
++        let result = e.submit(GameCommand {
++            actor: 0,
++            expected_revision: e.revision(),
++            dedup_id: e.save().last_dedup + 1,
++            action: GameAction::ActivateSkill { skill: def },
++        });
++        assert!(!matches!(result, CommandOutcome::Rejected(_)), "{result:?}");
++        assert_eq!(e.open_choice().unwrap().spec.prompt, "xuanying_target");
++        let snap = decode_archive(&encode_archive(&e.save())).unwrap();
++        let mut r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
++        let cursor = e.log().len();
++        for engine in [&mut e, &mut r] {
++            source_answer(
++                engine,
++                target.map(ChoiceOption::Player).into_iter().collect(),
++            );
++            source_settle(engine);
++        }
++        let expected = e.save();
++        let mut actual = r.save();
++        actual.auth_generation = expected.auth_generation;
++        assert_eq!(actual, expected);
++        assert_eq!(e.state_hash(), r.state_hash());
++        assert_eq!(&e.log()[cursor..], r.log());
++        assert_eq!(e.state_core().player(0).linked, target.is_some());
++        assert_eq!(
++            e.debug_hp(2),
++            if target.is_some() { 3 } else { 4 },
++            "granted sha keeps its out-of-range target branch; cancellation spends nothing"
++        );
++    }
++}
++
++#[test]
++fn source_parent_active_restore_rejects_wrong_choice_fields() {
++    let pack = source_parent_pack();
++    let mut e = source_parent_engine(&pack);
++    e.debug_set_turn(0, Phase::Play, 1);
++    let def = e.catalog().skill_by_name("xuanying").unwrap();
++    let result = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::ActivateSkill { skill: def },
++    });
++    assert!(!matches!(result, CommandOutcome::Rejected(_)));
++    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
++    assert!(Engine::restore_with_extensions(&snap, &[&pack]).is_ok());
++    let mut unknown = snap.clone();
++    unknown.resolution.open_choice.as_mut().unwrap().spec.prompt = "c331_unknown_xuanying";
++    assert!(matches!(
++        decode_archive(&encode_archive(&unknown)),
++        Err(engine_native::archive::ArchiveError::BadTag(
++            "prompt_unknown",
++            0
++        ))
++    ));
++    for case in 0..8 {
++        let mut bad = snap.clone();
++        let c = bad.resolution.open_choice.as_mut().unwrap();
++        match case {
++            0 => c.spec.options.push(ChoiceOption::Player(0)),
++            1 => c.observer = 1,
++            2 => c.spec.prompt = "rende_target",
++            3 => c.spec.allow_cancel = false,
++            4 => c.spec.min = 0,
++            5 => c.spec.kind = engine_native::choice::ChoiceKind::SelectCards,
++            6 => c.spec.max = 2,
++            7 => {
++                let stage = bad
++                    .resolution
++                    .parks
++                    .iter_mut()
++                    .find_map(|p| match &mut p.machine {
++                        engine_native::snap::MachineSnapshot::Host { stage, .. } => Some(stage),
++                        _ => None,
++                    })
++                    .unwrap();
++                *stage = 0;
++            }
++            _ => unreachable!(),
++        }
++        let decoded = decode_archive(&encode_archive(&bad)).unwrap();
++        assert!(
++            Engine::restore_with_extensions(&decoded, &[&pack]).is_err(),
++            "case{case} must not relax the existing exact ask contract"
++        );
++    }
++}

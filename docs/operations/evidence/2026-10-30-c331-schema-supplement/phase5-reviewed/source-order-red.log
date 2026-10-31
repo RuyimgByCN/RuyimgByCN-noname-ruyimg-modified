@@ -1,0 +1,50 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/worktree/crates/engine-native)
+warning: unused import: `ChoiceOption`
+  --> crates/engine-native/tests/groups/../c331_host_source_metadata.rs:38:25
+   |
+38 |     use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+   |                         ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc08") generated 1 warning (run `cargo fix --test "nc08" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.04s
+     Running tests/groups/nc08.rs (../target/debug/deps/nc08-523977beb66ce5e1)
+
+running 3 tests
+test c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings ... FAILED
+test c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last ... FAILED
+test c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first ... FAILED
+
+failures:
+
+---- c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings stdout ----
+
+thread 'c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings' (14416086) panicked at crates/engine-native/tests/groups/../c331_source_order_phase5.rs:53:9:
+assertion `left == right` failed: BossBaimang2
+  left: (First, 0, true)
+ right: (Normal, 1, false)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last stdout ----
+
+thread 'c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last' (14416088) panicked at crates/engine-native/tests/groups/../c331_source_order_phase5.rs:209:9:
+source useCardAfter has no lastDo: owner0's Normal branch must run before owner1's bucket
+
+---- c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first stdout ----
+
+thread 'c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first' (14416087) panicked at crates/engine-native/tests/groups/../c331_source_order_phase5.rs:148:9:
+assertion `left == right` failed: silent dieBegin has no firstDo: the later owner's Normal bucket must wait
+  left: SixiangChain
+ right: None
+
+
+failures:
+    c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings
+    c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first
+    c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 124 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc08`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc08", "c331_source_order_phase5"], "exit": 101, "locked_seconds": 2.073772875010036, "disk_free_bytes": 97096028160}

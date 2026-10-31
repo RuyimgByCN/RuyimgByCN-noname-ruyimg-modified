@@ -1,0 +1,46 @@
+## Review
+
+审查对象为 decision27 的单字段合同及冻结实现；全程只读，未运行测试、构建、网络或 producer，未修改文件。
+下文 E 指[证据目录](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence)，F 指 E/final-freeze-v2/source。
+冻结清单声明 43,867 文件、31 个改动文件；manifest 为 `48b6fa497c0ba22f512726a9566e496f5801b04e895c65ec725e8a66f3d0421e`，patch 为 `46edddeb016a61185888ad64bcbde359cde7b74a194aa7fe613651d1e6f18f43`。
+基线核对使用所供 patch、冻结旧 DTO 与 retained worktree 的 `4dd0b286…` HEAD；未使用 Main 新文档替代源码。
+
+- **Correct — 严格 wire 与 legacy 忽略边界分离。** [choice.rs:39](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-api/src/choice.rs:39) 对缺失/null 接受，对非空字符串保留，空字符串及非字符串拒绝。
+  [legacy_choice.rs:72](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/snapshot/legacy_choice.rs:72) 在共享 String 校验前消费 `IgnoredAny`；重复 source 同样忽略，其它键逐个转交，没有通用对象折叠。
+  解码后的 escaped source 键会被识别；嵌套值整体消费，不递归删除 options 或其它对象内的同名键。旧 unknown 值仍交给原 reader，非法 JSON 与 trailing input 仍受 serde_json 外层解析约束。
+
+- **Correct — typed 路径只清除新增字段。** [legacy_choice.rs:9](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/snapshot/legacy_choice.rs:9) clone 后仅置 source=None；capture 与两种 restore 均调用它。
+  [engine.rs:411](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/engine.rs:411) 先完成原 restore 校验，再写 live authority；manifest 路径也保持这一顺序。输入 Snapshot 不变，失败不会提前清 live choice。
+  state-only restore 校验未改；直接 serde 与 bytes 方法都经 pending_choice 字段适配；位置序列限制为旧 13 字段，额外元素仍被 JSON reader 拒绝。
+
+- **Finding — P2：旧 malformed pending_choice 的诊断文本发生变化。** [legacy_choice.rs:52](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/snapshot/legacy_choice.rs:52) 将 expected 文本改成 `"a legacy choice map"`。
+  具体输入为其它部分有效、`pending_choice: 0` 的 Snapshot：旧 derived reader 的 expected 为 `"struct ChoiceRequest"`；当前走新增 visitor，expected 改变。已核对所用 [serde_derive:45](/Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_derive-1.0.228/src/de/struct_.rs:45) 的生成规则。
+  [snapshot.rs:149](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/snapshot.rs:149) 将该文本存入 `SnapshotError::Deserialize(String)`，因此是可观察的错误差异，虽未改变拒绝结果。
+  最小修正：该 visitor 使用旧 expected 文本。短位置序列的长度诊断也应由父方 differential parser 核对；本审查未将其推断为另一个已验证 finding。
+
+实际验收记录与覆盖范围：
+
+| 边界 | 已核对证据及限制 |
+|---|---|
+| T1–T4 | [source_tests.rs:28](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-core/src/engine/source_tests.rs:28) 确实直接执行 typed capture、两 typed restore、state-only restore，并检查输入不变及旧错误；不是 JSON roundtrip 替代。 |
+| T5 | [engine-wasm/lib.rs:699](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/crates/engine-wasm/src/lib.rs:699) 对两 typed restore 后的 pendingChoiceJson 比较完整 choice；该测试在原生目标运行，不能称为实际旧 WASM 注毒恢复实跑。 |
+| J | 日志记录 legacy9/0，覆盖直接 serde/bytes、任意值类别、重复 source、重复 choice_id、13 字段序列及 schema/hash/content 错误；未覆盖所有旧字段重复组合及 escaped/nested/malformed/trailing 差分。 |
+| W | frozen Rust WS6 DTO 解析真实 choice 后，仅少 source；当前 reader 接受旧缺失/null。TS 冻结 reader 也是解析 fixture，不是旧客户端二进制实际连接。 |
+| 实际 WS6 | 已读取五份完整 raw Snapshot：owner、Referee、重连 choice 相同，deadline=`1793424145469`；Other/spectator choice=null。[测试源码:92](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/apps/game-server/src/native_ws_e2e/source_skill.rs:92) 对应这些角色与重连断言。 |
+| 实际 UI | WK WASM 与 Tauri native 各四场景报告通过。[UI harness:15](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/apps/web-client/scripts/nc10-source-ui.ts:15) 先断言真实 restore 来源，再注入 missing/null/恶意名称；后三项只证明展示兼容和转义。native 场景实际点击，且 observer 查询前后 archive 相同。 |
+
+- **Correct — 产品身份有记录，结论应保持有界。** [products-manifest.json:426](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/products-manifest.json:426) 中，生产 frontend 与实际 UI 服务目录记录相同 native WASM `225f8627…`、legacy WASM `b6939772…` 和两个 Worker hash；同时记录 owned desktop binary、bridge、WK launcher 身份。
+  runner 服务的是 `source-ui-final-dist`，Tauri 使用 owned target binary；cleanup 路径包含 client.dispose、子进程 SIGTERM 和 server.close。未独立检查当前 PID 或重新计算产品 SHA，不能把 manifest 声明等同本轮重新验字节。
+
+- **Correct — v1/v2 差异与结果口径。** 所读对应测试段仅新增保存 pre-events 的一行；它修复严格检查的 unused-variable，并未修改生产行为。
+  workspace **6916/0/77**、native **1715/0/75**、frontend **179/0** 有记录；native 与 workspace 重叠，不得相加。v2 workspace 日志列出了本次 legacy、sink、native binding 和 WS 测试通过。
+
+- **Correct — 未完成项仍是未完成项。** original resource verify 当前仍失败于 tree summaries；[同步脚本:1499](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-nc10-source27-pkix8fs6/evidence/final-freeze-v2/source/scripts/sync-original-content.mjs:1499) 按 inode 区分 hardlinked/copied，支持 APFS clone 改变统计的解释，但该解释不能代替 gate 通过。
+  旧 frontend setup 失败、v1 strict 失败和原 19 NoCert 均须保留；任务的一小时时限/timeout 不能记成通过。
+  两份完整 retained PolicyInput 相同、pre-events 均为 `[]`，但 Q 对抗记录首停分别为 `jiji_target`/owner1 与 `jijie_give_target`/owner0，继续证明来源名不足以认证后续调度；没有解除 root/runtime BLOCK。
+
+- **Fixed：**本审查未修改文件。
+- **Merge verdict：OK with notes（仅本次 legacy serde 与跨端证据审查范围）；P2 诊断差异需准确记录或修正。完整字段验收仍需合并其它审查及父方解析器结果，NC10/runtime 继续 BLOCK。**
+
+未运行新检查，未独立重哈希全部冻结文件，未收到父方 fresh parser 结果，也未审非 JSON serde 格式或其它 child 负责的 projection 谓词。  
+剩余风险是尚未穷尽的旧输入/错误兼容、未通过的资源 gate，以及原有 root/尾链/VM NoCert；绿色计数不代表完整验收。

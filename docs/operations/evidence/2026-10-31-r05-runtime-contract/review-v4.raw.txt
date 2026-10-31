@@ -1,0 +1,40 @@
+## Review
+
+- **设计结论：Revise，仅剩 Engine 入参绑定的一处缺口。**v4 已具体补齐原始字节、完整锁、保存信封、显式请求及各恢复旁路，但“packs 的 provenance 相等”仍不足以证明 Engine 使用的规则内容来自已验证字节。
+- **Correct：**完整读取 v4，并定向核对 Browser、WASM、Desktop、server/WAL、共享锁校验及 Engine 恢复入口。v3 其余五项设计结论保持关闭。
+- **Fixed：**无文件修改；以下关闭只表示设计问题已回答。
+- **Merge verdict：BLOCK，仅针对最后恢复契约的审批定稿。**不否定其余已明确的路线，也不表示需要新增哈希或包管理器。
+
+对象 [P：r05-content-lock-restore-contract-supplement-v4.md](/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/449b4fb2-e2c1-4844-9082-b5db6ec19118/proposals/r05-content-lock-restore-contract-supplement-v4.md)。下文路径相对 `/Users/ruyimg/Documents/Claude/sanguosha/noname-next/`。
+
+**v3 剩余 P1 已得到回答的部分**
+
+| 接缝 | 裁定与证据 |
+|---|---|
+| 原始 package bytes | P:9–17 明确保留原 UTF-8 文本及资产字节，不把 parse/stringify 产物当原文；与 `content-runtime/src/sign.rs:20`、`store.rs:224,281` 的原字节哈希口径一致。当前浏览器 `extensionStore.ts:200` 确实会丢失该原文，不能回填旧记录，v4 已明确处理。 |
+| 安装记录与保存信封 | P:11–19 区分 nativeFrozenVersions、canonical_locked_content、frozen_packages 与旧展示字段；验证后提交、同版不同字节拒绝、缺资产拒装均已写定。本地导入原有 `signature:"unsigned"` 政策也明确保留，没有把哈希验证升级成验签。 |
+| Browser/WASM/Desktop | P:35–38、44 以五个新显式请求传递内容，同一 NativeSession 原子导出 hex/context；不复用旧请求让旧 reader 忽略新字段。Desktop 当前 `native_engine_host.rs:119,311` 的请求与候选恢复接缝已被覆盖。 |
+| server、HTTP、WS、WAL | P:39–43 覆盖冻结、from_saved、落盘恢复、REST、WS Recover、WAL base 与最终再 restore；服务器会话不接受客户端锁替换。原局集合限定为所选 slot 的依赖闭包，不从当前 active 补包。 |
+| 唯一校验职责 | P:23–27 复用现有 ContentLock 算法、原包/资产校验与依赖排序；把 `native/frozen.rs:11,38` 的现有形状及纯验证下移共享职责可行。没有要求 kernel 读文件或重建包仓库。 |
+| 标准空锁与 legacy | P:48–63 明确缺字段、null、空对象和合法空锁不同；旧扩展档不自动补过去的 content_hash，拒绝/迁移仍是待批候选。未发现新的降级兜底承诺。 |
+
+**Finding：P1，验证上下文与实际 Engine packs 之间仍可分离（P:25、42）。**
+
+P:25 保护了 `VerifiedLockedContent` 的构造，也要求 bridge 只读取验证结果；但 P:42 的拟议 API 仍同时接受 `snapshot, packs, verified_content`，并只明确检查 **packs provenance==verified 集合**。这验证的是来源标签，未保证传入 packs 的规则字段仍是验证结果的派生产物。
+
+现有 `ExtensionPack.cards/host_skills/vm_skills` 均为可修改的公开字段（`crates/engine-native-content/src/content/extension.rs:104`）；`CardDef.range/rank` 同样公开（`crates/engine-native-kernel/src/catalog.rs:578`）。`standard_catalog_with_extensions` 直接复制这些规则字段构目录（`content/standard.rs:481`），当前恢复门则比较 Catalog 版本并校验状态/引用（`engine-native/src/engine/snapshot.rs:45,60`）。
+
+具体反例：从合法验证上下文桥接 packs 后，修改一张装备的合法 range，保留其 provenance、包身份及验证上下文，再调用拟议恢复 API。按 P:42 已写明的条件，身份集合仍相等，牌数量和所有权引用也可全部合法，但恢复后的攻击范围已不对应被锁定的原始资产。改进原字节保存不能单独消除这个分离点。
+
+**最小修订是收紧一个接口，而非再算一份哈希：**
+
+- 新 locked 路径只接受验证上下文，由受控接缝从其中的已验证包/资产构建 Catalog；不再另收可替换的裸 `ExtensionPack` 集合。
+- 或明确规定 bridge 返回不可伪造、不可独立修改规则内容的派生包句柄，Engine 只接受该句柄；provenance 检查是辅助检查，不能单独成为内容绑定证明。
+- 新局、恢复和 WAL 使用同一种绑定保证；普通手建 packs 入口不能携一个来源标签就进入 locked 路径。
+
+若 v4 原意已经是后一种封闭句柄，只需把该约束写进 P:25/42，消除当前三参 API 对裸 packs 的歧义。无需新增 core 字段、R05 指纹、锁算法或权限框架，也不必为了这一点扩大其余审查范围。
+
+除此之外，本次未发现最后 P1 范围内新的具体设计问题。原始字节、资产、完整锁及保存上下文的数据流已具备可审批的细节；补上上述 Engine 绑定后即可再裁定“契约可提交用户审批”。
+
+未运行构建、测试、网络、解析实验或 SHA 重算；未修改任何文件。
+风险：本报告不批准任何新请求、字段、旧档拒绝策略或版本分配；R05 仍未实现，实际331→实际332前置关系及所有定向验收保持 pending。

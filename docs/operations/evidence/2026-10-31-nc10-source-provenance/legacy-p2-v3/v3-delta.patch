@@ -1,0 +1,474 @@
+--- a/crates/engine-core/src/snapshot/legacy_choice.rs
++++ b/crates/engine-core/src/snapshot/legacy_choice.rs
+@@ -1,9 +1,6 @@
+ //! Archive-only source stripping; wire ChoiceRequest keeps its strict validator.
+-use engine_api::ChoiceRequest;
+-use serde::{
+-    de::{self, DeserializeSeed, IgnoredAny, MapAccess, SeqAccess, Visitor},
+-    Deserialize, Deserializer, Serialize, Serializer,
+-};
++use engine_api::{ChoiceId, ChoiceKind, ChoiceOption, ChoiceRequest, PlayerId, TimeoutPolicy};
++use serde::{de::Visitor, Deserialize, Deserializer, Serialize, Serializer};
+ use std::fmt;
+ 
+ pub(crate) fn without_source(choice: &Option<ChoiceRequest>) -> Option<ChoiceRequest> {
+@@ -25,85 +22,58 @@
+     impl<'de> Visitor<'de> for Optional {
+         type Value = Option<ChoiceRequest>;
+         fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
+-            f.write_str("an optional legacy choice")
++            f.write_str("option")
+         }
+-        fn visit_none<E: de::Error>(self) -> Result<Self::Value, E> {
++        fn visit_none<E: serde::de::Error>(self) -> Result<Self::Value, E> {
+             Ok(None)
+         }
+-        fn visit_unit<E: de::Error>(self) -> Result<Self::Value, E> {
++        fn visit_unit<E: serde::de::Error>(self) -> Result<Self::Value, E> {
+             Ok(None)
+         }
+         fn visit_some<D: Deserializer<'de>>(
+             self,
+             deserializer: D,
+         ) -> Result<Self::Value, D::Error> {
+-            deserializer
+-                .deserialize_struct("ChoiceRequest", &[], Choice)
+-                .map(Some)
++            ArchiveChoice::deserialize(deserializer).map(Some)
+         }
+     }
+     deserializer.deserialize_option(Optional)
+ }
+-struct Choice;
+-impl<'de> Visitor<'de> for Choice {
+-    type Value = ChoiceRequest;
+-    fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
+-        f.write_str("a legacy choice map")
+-    }
+-    fn visit_seq<S: SeqAccess<'de>>(self, sequence: S) -> Result<Self::Value, S::Error> {
+-        ChoiceRequest::deserialize(de::value::SeqAccessDeserializer::new(LegacySequence {
+-            sequence,
+-            remaining: 13,
+-        }))
+-    }
+-    fn visit_map<M: MapAccess<'de>>(self, map: M) -> Result<Self::Value, M::Error> {
+-        ChoiceRequest::deserialize(de::value::MapAccessDeserializer::new(WithoutSource(map)))
+-    }
+-}
+-struct WithoutSource<M>(M);
+-impl<'de, M: MapAccess<'de>> MapAccess<'de> for WithoutSource<M> {
+-    type Error = M::Error;
+-    fn next_key_seed<K: DeserializeSeed<'de>>(
+-        &mut self,
+-        seed: K,
+-    ) -> Result<Option<K::Value>, Self::Error> {
+-        loop {
+-            let Some(key) = self.0.next_key::<String>()? else {
+-                return Ok(None);
+-            };
+-            if key == "source_skill" {
+-                // Discard before the shared String validator; retain all other duplicate keys.
+-                self.0.next_value::<IgnoredAny>()?;
+-            } else {
+-                return seed
+-                    .deserialize(de::value::StringDeserializer::<M::Error>::new(key))
+-                    .map(Some);
+-            }
+-        }
+-    }
+-    fn next_value_seed<V: DeserializeSeed<'de>>(
+-        &mut self,
+-        seed: V,
+-    ) -> Result<V::Value, Self::Error> {
+-        self.0.next_value_seed(seed)
+-    }
++
++// Keep the old 13-field visitor and diagnostics; skipped source is an unknown JSON key.
++#[allow(dead_code)]
++#[derive(Deserialize)]
++#[serde(remote = "ChoiceRequest", rename = "ChoiceRequest")]
++struct ArchiveChoice {
++    choice_id: ChoiceId,
++    observer: PlayerId,
++    options: Vec<ChoiceOption>,
++    min_count: u8,
++    max_count: u8,
++    allow_cancel: bool,
++    timeout_policy: TimeoutPolicy,
++    #[serde(default)]
++    deadline_unix_ms: Option<u64>,
++    revision: u64,
++    continuation_id: u64,
++    kind: ChoiceKind,
++    #[serde(default)]
++    prompt: Option<String>,
++    #[serde(default, deserialize_with = "deserialize_native_kind")]
++    native_kind: Option<String>,
++    #[serde(skip)]
++    source_skill: Option<String>,
+ }
+ 
+-// Serde also accepts positional structs; retain the original 13-field length.
+-struct LegacySequence<S> {
+-    sequence: S,
+-    remaining: usize,
++fn deserialize_native_kind<'de, D: Deserializer<'de>>(
++    deserializer: D,
++) -> Result<Option<String>, D::Error> {
++    let value = Option::<String>::deserialize(deserializer)?;
++    if value
++        .as_deref()
++        .is_some_and(|kind| engine_api::choice_kind_from_native(kind).is_none())
++    {
++        return Err(serde::de::Error::custom("invalid native_kind"));
++    }
++    Ok(value)
+ }
+-impl<'de, S: SeqAccess<'de>> SeqAccess<'de> for LegacySequence<S> {
+-    type Error = S::Error;
+-    fn next_element_seed<T: DeserializeSeed<'de>>(
+-        &mut self,
+-        seed: T,
+-    ) -> Result<Option<T::Value>, Self::Error> {
+-        if self.remaining == 0 {
+-            return Ok(None);
+-        }
+-        self.remaining -= 1;
+-        self.sequence.next_element_seed(seed)
+-    }
+-}
+--- a/crates/engine-core/src/engine/source_tests.rs
++++ b/crates/engine-core/src/engine/source_tests.rs
+@@ -270,3 +270,6 @@
+         error
+     );
+ }
++
++#[path = "source_tests/legacy_choice_errors.rs"]
++mod legacy_choice_errors;
+--- /dev/null
++++ b/crates/engine-core/src/engine/source_tests/legacy_choice_errors.rs
+@@ -0,0 +1,222 @@
++//! Exact old archive diagnostics, including serde_json's original location.
++use crate::{Snapshot, SnapshotError};
++use serde::Deserialize;
++
++#[path = "choice_request_4dd.rs"]
++mod old;
++
++// Same envelope field names, order and defaults as 4dd; only the choice uses its frozen DTO.
++#[allow(dead_code)]
++#[derive(Deserialize)]
++#[serde(rename = "Snapshot")]
++struct OldSnapshot {
++    schema_version: u32,
++    versions: engine_api::VersionBundle,
++    revision: u64,
++    state_hash: [u8; 32],
++    #[serde(default)]
++    manifest_hash: engine_api::MatchManifestHash,
++    #[serde(default)]
++    pending_choice: Option<old::ChoiceRequest>,
++    state: crate::state::GameState,
++}
++
++fn fields() -> Vec<(&'static str, String)> {
++    [
++        ("choice_id", "7"),
++        ("observer", "2"),
++        ("options", r#"[{"token":42,"label_key":"keep"}]"#),
++        ("min_count", "1"),
++        ("max_count", "1"),
++        ("allow_cancel", "true"),
++        ("timeout_policy", r#""Standard""#),
++        ("deadline_unix_ms", "123456"),
++        ("revision", "1"),
++        ("continuation_id", "19"),
++        ("kind", r#""Confirm""#),
++        ("prompt", r#""trigger_confirm""#),
++        ("native_kind", r#""confirm""#),
++    ]
++    .map(|(name, value)| (name, value.to_owned()))
++    .to_vec()
++}
++
++fn object(fields: &[(&str, String)]) -> String {
++    format!(
++        "{{{}}}",
++        fields
++            .iter()
++            .map(|(name, value)| format!("\"{name}\":{value}"))
++            .collect::<Vec<_>>()
++            .join(",")
++    )
++}
++
++fn envelope(pending: &str) -> String {
++    let plain =
++        serde_json::to_string(&Snapshot::capture(&crate::state::GameState::empty())).unwrap();
++    // Multiline input makes loss of source positions observable as well.
++    plain.replacen(
++        "\"pending_choice\":null",
++        &format!("\"pending_choice\":\n  {pending}"),
++        1,
++    )
++}
++
++#[test]
++fn legacy_choice_errors_match_4dd_oracle() {
++    let fields = fields();
++    let valid = object(&fields);
++    let mut cases: Vec<(String, String)> = Vec::new();
++    for pending in [
++        "null", "0", "-1", "1.5", "true", "false", "\"text\"", "\"\"", "{}",
++    ] {
++        cases.push((format!("pending/{pending}"), envelope(pending)));
++    }
++    for length in 0..=14 {
++        let mut values = fields
++            .iter()
++            .map(|(_, value)| value.as_str())
++            .take(length)
++            .collect::<Vec<_>>();
++        if length == 14 {
++            values.push("null");
++        }
++        cases.push((
++            format!("sequence/{length}"),
++            envelope(&format!("[{}]", values.join(","))),
++        ));
++    }
++    let source_values = [
++        "null",
++        "\"遗计\"",
++        "\"\"",
++        "123",
++        "{}",
++        "[]",
++        "true",
++        r#"{"source_skill":[{},null,{"choice_id":9}],"min_count":"untouched"}"#,
++    ];
++    for (index, value) in source_values.iter().enumerate() {
++        for key in ["source_skill", r"source_\u0073kill"] {
++            let with_source = format!(r#"{{"{key}":{value},{}"#, &valid[1..]);
++            cases.push((format!("source/{index}/{key}"), envelope(&with_source)));
++            let duplicate = format!(r#"{{"{key}":{value},"source_skill":{{}},{}"#, &valid[1..]);
++            cases.push((
++                format!("source-duplicate/{index}/{key}"),
++                envelope(&duplicate),
++            ));
++        }
++    }
++    for index in 0..fields.len() {
++        let (name, value) = &fields[index];
++        let mut missing = fields.clone();
++        missing.remove(index);
++        cases.push((format!("missing/{name}"), envelope(&object(&missing))));
++        for duplicate_value in [value.as_str(), "null", "{}"] {
++            let raw = format!(r#"{{"{name}":{duplicate_value},{}"#, &valid[1..]);
++            cases.push((
++                format!("duplicate/{name}/{duplicate_value}"),
++                envelope(&raw),
++            ));
++            cases.push((
++                format!("duplicate-with-source/{name}/{duplicate_value}"),
++                envelope(&format!(r#"{{"source_skill":{{}},{}"#, &raw[1..])),
++            ));
++        }
++        for bad in [
++            "null",
++            "false",
++            "0",
++            "-1",
++            "1.25",
++            "18446744073709551616",
++            "\"\"",
++            "\"bad\"",
++            "[]",
++            "{}",
++            "[null]",
++        ] {
++            let mut changed = fields.clone();
++            changed[index].1 = bad.into();
++            let raw = object(&changed);
++            cases.push((format!("type/{name}/{bad}"), envelope(&raw)));
++            cases.push((
++                format!("type-with-source/{name}/{bad}"),
++                envelope(&format!(r#"{{"source_skill":[{{}}],{}"#, &raw[1..])),
++            ));
++        }
++    }
++    for pending in [
++        r#"{"source_skill":,"choice_id":7}"#,
++        r#"{"source_skill":[1,],"choice_id":7}"#,
++        r#"{"source_skill":{"x":},"choice_id":7}"#,
++        r#"{"source_skill":"\uZZZZ"}"#,
++        r#"{"source_skill":tru}"#,
++        r#"{"source_skill":{]"#,
++        r#"{"choice_id":7,"source_skill":["#,
++    ] {
++        cases.push((format!("malformed/{pending}"), envelope(pending)));
++    }
++    cases.push((
++        "trailing/full-snapshot".into(),
++        format!("{} true", envelope(&valid)),
++    ));
++    cases.push((
++        "trailing/pending".into(),
++        envelope(&format!("{valid} false")),
++    ));
++    cases.push((
++        "nested-option-unknown".into(),
++        envelope(&valid.replace(
++            r#""label_key":"keep""#,
++            r#""label_key":"keep","source_skill":{"token":"untouched"}"#,
++        )),
++    ));
++    cases.push((
++        "nested-option-duplicate".into(),
++        envelope(&valid.replace(
++            r#""token":42"#,
++            r#""token":42,"token":42,"source_skill":{}"#,
++        )),
++    ));
++    // The original reader also ignored other unknown fields and repeated unknown keys.
++    cases.push((
++        "unknown-duplicate".into(),
++        envelope(&format!(r#"{{"future":{{}},"future":[],{}"#, &valid[1..])),
++    ));
++
++    let mut results = Vec::new();
++    let mut differences = Vec::new();
++    for (label, raw) in cases {
++        let expected = serde_json::from_str::<OldSnapshot>(&raw)
++            .map(|_| ())
++            .map_err(|error| SnapshotError::Deserialize(error.to_string()));
++        let actual = Snapshot::from_bytes(raw.as_bytes()).map(|_| ());
++        let direct = serde_json::from_str::<Snapshot>(&raw)
++            .map(|_| ())
++            .map_err(|error| SnapshotError::Deserialize(error.to_string()));
++        if actual != expected || direct != expected {
++            differences.push(format!(
++                "{label}: old={expected:?}; bytes={actual:?}; direct={direct:?}"
++            ));
++        }
++        results.push(serde_json::json!({"case":label,"raw":raw,"old":format!("{expected:?}"),"bytes":format!("{actual:?}"),"direct":format!("{direct:?}"),"equal":actual==expected&&direct==expected}));
++    }
++    eprintln!(
++        "LEGACY_ERROR_ORACLE cases={} differences={}",
++        results.len(),
++        differences.len()
++    );
++    for difference in &differences {
++        eprintln!("{difference}");
++    }
++    if let Ok(path) = std::env::var("NC27_ERROR_MATRIX_OUT") {
++        std::fs::write(path, serde_json::to_vec_pretty(&results).unwrap()).unwrap();
++    }
++    assert!(
++        differences.is_empty(),
++        "full old/new error differences: {}",
++        differences.join("\n")
++    );
++}
+--- /dev/null
++++ b/crates/engine-core/src/engine/source_tests/choice_request_4dd.rs
+@@ -0,0 +1,98 @@
++// Frozen 4dd0b286 DTO oracle; only its ids import path is redirected.
++//! ChoiceRequest: rule-state input barrier (not a UI Promise).
++
++use engine_api::{ChoiceId, PlayerId};
++use serde::{Deserialize, Serialize};
++
++/// A pending choice the engine cannot continue past until resolved.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++pub struct ChoiceRequest {
++    /// Unique choice id for this match.
++    pub choice_id: ChoiceId,
++    /// Observer who must answer (usually a player).
++    pub observer: PlayerId,
++    /// Options the player may select (or empty if constraint-only).
++    pub options: Vec<ChoiceOption>,
++    /// Minimum number of selections.
++    pub min_count: u8,
++    /// Maximum number of selections.
++    pub max_count: u8,
++    /// Whether cancel is allowed.
++    pub allow_cancel: bool,
++    /// Timeout policy identifier (ruleset-defined).
++    pub timeout_policy: TimeoutPolicy,
++    /// Server Unix deadline; absent for offline and legacy rules.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub deadline_unix_ms: Option<u64>,
++    /// Associated state revision when the choice was published.
++    pub revision: u64,
++    /// VM / effect continuation handle (opaque to clients).
++    pub continuation_id: u64,
++    /// Human-oriented choice kind for UI (not hashed into rules).
++    pub kind: ChoiceKind,
++    /// Static prompt key for presentation; absent in older payloads.
++    #[serde(default, skip_serializing_if = "Option::is_none")]
++    pub prompt: Option<String>,
++    /// Precise native choice kind, restricted to the five canonical names.
++    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_native_kind")]
++    pub native_kind: Option<String>,
++}
++
++/// Preserve the existing wire enum while retaining precise native choice metadata.
++pub fn choice_kind_from_native(kind: &str) -> Option<ChoiceKind> {
++    Some(match kind {
++        "confirm" => ChoiceKind::Confirm,
++        "select_cards" => ChoiceKind::SelectCards,
++        "select_players" => ChoiceKind::SelectTargets,
++        "respond_card" | "pick_tag" => ChoiceKind::Custom,
++        _ => return None,
++    })
++}
++
++fn deserialize_native_kind<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {
++    let value = Option::<String>::deserialize(deserializer)?;
++    if value.as_deref().is_some_and(|kind| choice_kind_from_native(kind).is_none()) {
++        return Err(serde::de::Error::custom("invalid native_kind"));
++    }
++    Ok(value)
++}
++
++/// Single selectable option.
++#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++pub struct ChoiceOption {
++    /// Option index / token returned in ResolveChoice.
++    pub token: u32,
++    /// Optional display key (localization id); empty if pure entity target.
++    pub label_key: String,
++}
++
++/// Timeout policy tag (concrete durations live outside the core rules clock).
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
++pub enum TimeoutPolicy {
++    /// No automatic timeout (offline / debug).
++    #[default]
++    None,
++    /// Standard multiplayer response window.
++    Standard,
++    /// Short response (confirm / yes-no).
++    Short,
++    /// Tournament policy.
++    Tournament,
++}
++
++/// Semantic kind of choice (for projection / UI routing).
++#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
++pub enum ChoiceKind {
++    /// Select targets for a card or skill.
++    SelectTargets,
++    /// Select cards from a known set.
++    SelectCards,
++    /// Yes / no confirm.
++    Confirm,
++    /// Order simultaneous triggers.
++    OrderTriggers,
++    /// Discard down to hand limit.
++    DiscardToLimit,
++    /// Generic / content-defined.
++    Custom,
++}

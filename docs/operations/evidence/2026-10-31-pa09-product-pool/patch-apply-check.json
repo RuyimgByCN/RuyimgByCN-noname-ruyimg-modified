@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "base": "4dd0b286b995fe414128b6c52eb83a4d0d85f6cd",
+  "patch_sha256": "692e2a3bffd5610d7b1bccb7775409375f79b9492cc1e4c0d8dbfffc964fc498",
+  "files_matched": 9,
+  "method": "Applied exact patch to isolated copies of4dd files; all resulting source SHA256 values match final manifest; no index used."
+}

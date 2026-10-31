@@ -1,0 +1,26 @@
+{
+  "name": "worker-smoke",
+  "argv": [
+    "pnpm",
+    "smoke:native"
+  ],
+  "serialized_argv": [
+    "python3",
+    "-B",
+    "/tmp/noname-run-serialized.py",
+    "pnpm",
+    "smoke:native"
+  ],
+  "cwd": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client",
+  "exit": 0,
+  "wall_seconds": 1.0112378330086358,
+  "minimum_free_bytes": 47809912832,
+  "disk_stop": false,
+  "environment": {
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_BUILD_JOBS": "2",
+    "CARGO_TARGET_DIR": "/tmp/nc27-main-functional-458ed333/cargo-target"
+  },
+  "stdout_sha256": "164a81b3f64692f1946dc31207802d2a174fc81f93b5b4b735941c98c6dd29be",
+  "stderr_sha256": "1cb131c1897e7c9913db4a70e61227ede508c1454704ad8d299b0cf88446720d"
+}

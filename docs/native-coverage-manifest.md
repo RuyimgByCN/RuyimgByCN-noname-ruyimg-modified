@@ -223,3 +223,9 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 5. 2026-09-22 历史复核：当时规则版本 **24**，14 golden 通过；版本 6–24 的分批语义与编码变化见
    [规则基准](architecture/native-rules-baseline.md) 和 ADR 0720–0763。
    本轮未重录 golden、未改代码；新增反例及内容缺口不会因现有摘要一致而自动关闭。
+
+## 2026-10-31询问来源单字段场景登记
+
+裁决27的新场景注册在既有`nc_rounds`组的`nc10_source_provenance`及engine内部`choice_source`测试：已知native Own来源、全catalog重名／未拥有／错误producer／深度／多ask／inner委托、VM／Host未知、Other／Referee／AI投影与私有牌堆／RNG／计数反事实。独立P/Q byte restore场景保留“初始来源相同而下一个Pending不同”的反例，不把字段当执行证书。
+
+legacy场景注册在既有core `engine::source_tests`：typed capture／两restore／state-only／直接serde／bytes、严格wire分离、旧13位置字段及完整错误差分；真实WS6／桌面Host／NativeSession和安全文本UI另有对应入口。场景存在、定向／全量／产品资格及当前Main接纳阶段分开见[字段证据](operations/evidence/2026-10-31-nc10-source-provenance/README.md)。原19 NoCert、质量、上游及平台完成条件仍保留。

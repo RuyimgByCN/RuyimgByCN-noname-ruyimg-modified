@@ -15,11 +15,12 @@ export function generalSlots(value: unknown): [GeneralSlotView | null, GeneralSl
   return value as [GeneralSlotView | null, GeneralSlotView | null];
 }
 
-export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown; kind?: string }): Pick<ChoiceRequest, "prompt" | "native_kind" | "kind"> {
+export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown; source_skill?: unknown; kind?: string }): Pick<ChoiceRequest, "prompt" | "native_kind" | "source_skill" | "kind"> {
   if (value.prompt != null && typeof value.prompt !== "string") throw new Error("native: prompt metadata invalid");
   if (value.native_kind != null && (typeof value.native_kind !== "string" || !Object.hasOwn(CHOICE_KINDS, value.native_kind))) throw new Error("native: native_kind metadata invalid");
+  if (value.source_skill != null && (typeof value.source_skill !== "string" || value.source_skill.length === 0)) throw new Error("native: source_skill metadata invalid");
   const native_kind = value.native_kind as NativeChoiceKind | undefined;
-  return { ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
+  return { ...(value.source_skill == null ? {} : {source_skill: value.source_skill as string}), ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
 }
 
 const KIND_LABELS: Record<string, string> = {
@@ -42,6 +43,7 @@ export function choiceKindLabel(choice: ChoiceRequest): string {
 }
 
 export function choicePromptLabel(choice: ChoiceRequest): string {
+  if (choice.prompt === "trigger_confirm" && choice.source_skill) return `是否发动【${choice.source_skill}】？`;
   if (!choice.prompt) return choiceKindLabel(choice);
   return Object.hasOwn(PROMPTS, choice.prompt) ? PROMPTS[choice.prompt] : choiceKindLabel(choice);
 }
