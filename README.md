@@ -10,6 +10,7 @@
 |---|---|
 | [架构索引](docs/architecture/overview.md) | 当前模块路径与阅读顺序 |
 | [重写进度](docs/architecture/native-progress.md) | 最新源码/测试快照、已完成范围、失败项和待办 |
+| [剩余工作台账](docs/architecture/native-remaining-ledger.md) | NC01–NC12、UP37、PA01–PA12 逐项剩余与完成条件 |
 | [原生架构收敛执行方案](docs/architecture/native-convergence-plan.md) | 已采纳的完整目标、NC01–NC12 与六阶段验收门槛 |
 | [Agent 完整执行提示词](docs/operations/native-convergence-agent-prompt.md) | 交接整个方案，按主稿记录实施状态与证据 |
 | [原生覆盖清单](docs/native-coverage-manifest.md) | 机制、场景与 golden 登记 |
@@ -24,7 +25,7 @@
 
 | 路径 | 职责 |
 |---|---|
-| crates/engine-native、engine-native-wasm | 原生规则内核与 WebAssembly 边界；入口关系见架构索引，验收状态见主稿 |
+| crates/engine-native-kernel、engine-native-content、engine-native、engine-native-wasm | 原生规则内核、内置内容行为、兼容门面与 WebAssembly 边界（2026-10-30 F7 拆分；分层由 `scripts/check-native-layering.py` 守护）；验收状态见主稿 |
 | crates/content-native-loader、content-runtime | 原生内容装配与 PackageStore 包生命周期 |
 | packages/extensions | 已转换的独立包样本与卡牌子包 |
 | crates/engine-core、engine-api | 旧产品规则和接口、迁移对照 |
@@ -35,7 +36,7 @@
 
 ## 常用验证
 
-    cargo test --offline -p engine-native
+    cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native
     cargo test --workspace
     cargo run -p conformance
     bash scripts/cross-target-hash.sh

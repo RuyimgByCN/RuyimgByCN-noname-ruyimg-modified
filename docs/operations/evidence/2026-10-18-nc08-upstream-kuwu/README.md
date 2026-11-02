@@ -64,8 +64,9 @@ kuwu: { type: "equip", subtype: "equip1", skills: ["kuwu"], nomod: true,
   `player(t).hand.first()` 弃置；
 - `crates/engine-native-kernel/src/vocabulary/host/tags.rs:303,549` 与 `vocabulary/host/keys.rs:315`：
   tag 0 ↔ `host:sha_damage_force_discard`（包 `cards.json` 的映射名）；
-- `crates/engine-native-kernel/src/kernel/damage.rs:988-1015`：铁索传导伤害以
-  `from_chain:true` + 原 `source`/`card` 再入伤害结算。
+- `crates/engine-native-kernel/src/kernel/damage_flow.rs:99-131`：铁索传导伤害以
+  `from_chain:true` + 原 `source`/`card` 再入伤害结算（2026-11-02 C331 拆分后位置；原引用为拆分前
+  `damage.rs:988-1015`，C331 起按上游逐个目标先解链再传导）。
 
 ## 3 差异登记（差异 + 影响分析 + 待办）
 

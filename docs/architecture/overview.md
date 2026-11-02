@@ -5,16 +5,18 @@
 ## 阅读顺序
 
 1. [重写进度](native-progress.md)：当前通过、失败、扩展整包状态与下一步；按批次的历史流水与 2026-10-10 事故恢复记录在[批次流水存档](native-progress-history.md)。
-2. [原生架构收敛执行方案](native-convergence-plan.md)：已采纳的 NC01–NC12、依赖和验收门槛；方案本身不表示交付完成。
-3. [覆盖清单](../native-coverage-manifest.md)和[玩法规则基准](native-rules-baseline.md)：原生机制、规则版本、上游语义差异。
-4. [扩展宿主契约](native-extensions.md)和[两仓 37 来源台账](../migration/upstream-extension-reconstruction.md)：独立扩展能力与逐来源验收。
-5. [测试与性能证据](../operations/phase17-test-perf-infrastructure.md)和[原生基准](../operations/phase19-native-baseline.md)：分清旧线、原生线和历史负载。
-6. [架构演进提案](architecture-evolution-plan.md)：保留历史论证和未采纳的技术候选，不另设执行清单。
-7. [ADR 索引](../adr/INDEX.md)和[旧实现参考](legacy-reference.md)：按日期读取历史，勿把旧轮次的“当前”当作现状。
+2. [剩余工作台账](native-remaining-ledger.md)：NC01–NC12、UP37、PA01–PA12 的逐项剩余与完成条件；当前数字仍以进度主稿为准。
+3. [原生架构收敛执行方案](native-convergence-plan.md)：已采纳的 NC01–NC12、依赖和验收门槛；方案本身不表示交付完成。
+4. [覆盖清单](../native-coverage-manifest.md)和[玩法规则基准](native-rules-baseline.md)：原生机制、规则版本、上游语义差异。
+5. [扩展宿主契约](native-extensions.md)和[两仓 37 来源台账](../migration/upstream-extension-reconstruction.md)：独立扩展能力与逐来源验收。
+6. [测试与性能证据](../operations/phase17-test-perf-infrastructure.md)和[原生基准](../operations/phase19-native-baseline.md)：分清旧线、原生线和历史负载。
+7. [架构演进提案](architecture-evolution-plan.md)：保留历史论证和未采纳的技术候选，不另设执行清单。
+8. [ADR 索引](../adr/INDEX.md)和[旧实现参考](legacy-reference.md)：按日期读取历史，勿把旧轮次的“当前”当作现状。
 
 ## 执行路径
 
     本地原生：Vue / Tauri → engine.native.worker → engine-native-wasm → engine-native
+              engine-native（门面）→ engine-native-content（内置内容行为）→ engine-native-kernel（内核）
     原生联机：Vue → networkClient → WebSocket → game-server 原生房间 actor → engine-native
     原生 HTTP：game-server /native 端点 → 原生内容装配与会话
 
