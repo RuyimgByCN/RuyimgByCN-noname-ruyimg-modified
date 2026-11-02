@@ -8,7 +8,7 @@
 一、先读（按顺序），并遵守 /Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md：
 1. docs/architecture/native-progress.md 顶部「状态扫描（2026-11-02）」及其后最近几条带日期记录
 2. docs/architecture/native-remaining-ledger.md（NC01–NC12、UP37-R/N/I、PA01–PA12 逐项剩余与完成条件；B1–B9 已全部关闭）
-3. docs/operations/evidence/2026-10-28-user-decisions/README.md（裁决 1–31；授权≠实现≠验收）以及其中链接的 24、27–31 号具体合同
+3. docs/operations/evidence/2026-10-28-user-decisions/README.md（裁决 1–32；授权≠实现≠验收）以及其中链接的 24、27–32 号具体合同
 4. docs/architecture/native-convergence-plan.md（NC01–NC12、六阶段与验收门槛）
 5. docs/migration/upstream-extension-reconstruction.md（37 来源、E01–E06/G0–G5、八项验收）
 6. docs/architecture/native-rules-baseline.md、docs/native-coverage-manifest.md、docs/architecture/native-extensions.md、noname-performance-architecture.md
@@ -18,7 +18,7 @@
 - main 在最近的代码提交之后只有文档提交；最近的代码提交 `f5e560db`＝C331 phase7 合并提交（父 `a4483b64`＋`6d36f47a`）：规则 331／NGSA 106／content schema 5／ABI 758／WS7。WS7 已由裁决 31 追认。本地无远端跟踪，未见发布与 exact-head CI 登记。
 - 合并树已实跑：三 crate 1903/0/75、workspace 7154/0/77、行数门禁、preflight 全过；前端／WASM 重建／Worker smoke／跨目标／Tauri IPC 只有合并提交说明的自报数字，原始日志未入库；需 331／106 夹具的 7 个浏览器案例与 legacy WASM 重建未跑。
 - `stash@{0}`：合并前搁置的 I02／NC10 未提交工作（35 文件），尚未恢复；`/private/tmp/noname-main-wip-backup-20261102T205333Z` 为同一份备份。
-- `git worktree list` 中大量 prunable 临时工作树。
+- 失效的 20 个 prunable 工作树登记已于 2026-11-02 清除；仍存在 11 个临时工作树（1 个 locked、`c331-phase7` 干净且已并入，其余 9 个有未提交改动），按第七节第 3 项处理。
 先用 git status／git log／git stash show／git worktree list 复核，再动手。若发现其他 agent 正在同一工作树写入，先停下协调，不抢写。
 
 三、第 0 步：收口 C331 入库
@@ -54,14 +54,14 @@
 - 产品面：cargo test --offline --workspace --no-fail-fast；cargo run -p conformance；apps/web-client 的 pnpm test／typecheck／build:native／smoke:native；python3 -B scripts/check-native-wasm-cross-target.py；bash scripts/cross-target-hash.sh；cargo test -p desktop-client；涉及 UI／Worker 的改动跑真实 headless Chrome 产品路径。
 - 收口：python3 -B scripts/preflight.py 全部通过。首次失败与补跑分开记录，不以补跑抹去失败。
 
-七、需要用户决定的事项（2026-11-02 扫描时的建议；以用户在对话中的明确答复为准，未答复前不执行对应的不可逆步骤）：
-1. stash@{0}：建议在 331 之上恢复并单独验收入库，不丢弃。
-2. 进度主稿瘦身：主稿约 830 KB、单行最长 5 万字，建议把 2026-10-31 以前的条目原样移入 native-progress-history.md（保留锚点），主稿只留顶部扫描、近期条目与待办；需用户同意后执行。
-3. 临时工作树：建议只对 `git worktree list` 标为 prunable 的执行 git worktree prune，locked 与仍有未登记产物的保留；需用户同意。
+七、已定事项（裁决 32，2026-11-02 由 Claude 代定，直接执行，不再询问）：
+1. stash@{0}：必须恢复。在 main 最新提交上开隔离工作树执行 git stash apply（不用 pop），逐文件解决与 331／106 的冲突；已被 C331 等价实现取代的片段可舍弃，但须在证据中逐项写明理由；按原证据重跑定向与全量门禁后入库；入库并核验后才可 drop 该 stash 并删除 /private/tmp 备份。
+2. 进度主稿瘦身：在第 0 步补跑完成、且无其他会话写该文件时，由单一写者把 2026-10-31 以前的条目逐字节原样移入 native-progress-history.md 的新日期章节，不改写、不压缩；主稿保留原 <a id> 锚点并在旧位置留一行指向历史稿，现有 46 处 native-progress.md#… 入链必须全部可达；本地链接、file:line 与 preflight 通过后单独提交。
+3. 临时工作树：locked 的 observer-metadata 保留；干净且已并入的 c331-phase7 可 git worktree remove；其余 9 个有未提交改动的，先把 git diff 与未跟踪清单导出到 /private/tmp 备份，再与 main 比对，只有改动已全部在 main 或已在进度主稿登记为放弃的才删除，其余保留并在进度主稿列明。
 
 七之二、协作：可用子 agent 并行处理互不冲突的实现或验证，先划清文件所有权和接口，主 agent 负责整合与最终验收；公共文档写入前重读；不要同时抢写核心文件。在授权范围内自主推进，不反复询问是否继续；缺少设备、凭据、权限或产品语义时，写明所需输入与未验收门槛，继续做不受阻的部分。
 
 八、记录：当前状态只更新进度主稿顶部扫描与剩余台账对应行；来源状态只更新扩展台账；规则差异只更新规则基准；原始命令与输出写入有日期的 evidence 目录。文档统一用简体中文，每条记录写明日期、HEAD 与是否 dirty、规则/存档/ABI/WS 版本、命令、通过/失败/忽略和证据链接；区分已实现、已修反例、已加回归、定向通过、全量通过、上游等价。不得在提交前写“已合入／已提交”。
 
-最终逐项报告：第 0 步、C331、332、R05、NC01–NC12、UP37 各项、PA01–PA12、I02、37 来源、六阶段的结果与证据，列出仍未完成/未验证项。只有全部门槛真实通过才可声明“全部完成”；否则明确整体尚未完成。现在先核对工作区，然后从第三节第 2 项开始执行，并行准备第 4 项的冲突分析和 C9e 证据补录。
+最终逐项报告：第 0 步、C331、332、R05、NC01–NC12、UP37 各项、PA01–PA12、I02、37 来源、六阶段的结果与证据，列出仍未完成/未验证项。只有全部门槛真实通过才可声明“全部完成”；否则明确整体尚未完成。现在先核对工作区，然后从第三节第 2 项开始执行，并行准备第三节第 4 项的冲突分析、C9e 证据补录和第七节第 3 项的工作树比对；第七节第 2 项排在第 0 步之后。
 ```

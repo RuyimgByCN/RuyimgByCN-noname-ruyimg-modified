@@ -91,6 +91,10 @@
 
 **31. C331追认WS7，R05改WS8**：C331合并提交`f5e560db`把`ChoiceRequest`计数由u8放宽为u32（ADR 0788“第257项可达”所需）并把网络协议6→7，事先未按第22／29项另报边界。补报[精确边界](../2026-11-02-c331-ws7-boundary/README.md)后，用户对“批准 C331 佔用 WS7、R05 改用 WS8 嗎？”明确选择“批准，R05 改 WS8”。版本排布改为C规则331／NGSA106／ABI758／**WS7**→改命规则332／NGSA106／ABI758／WS7（不另升协议号）→R05规则333／NGSA107／ABI759／**WS8**，仅替代第28／29项中R05的WS7；其余合同、先后与条件不变。见[记录](../2026-11-02-c331-ws7-boundary/user-decision31.json)。本项只登记号码，不表示332、R05已实施或`f5e560db`已发布。
 
+## 补充裁决（2026-11-02，收尾三项）
+
+**32. 收尾三项由 Claude 代定（2026-11-02）**：用户要求“给出你的建议决定，不要全等我决定”，以下三项按 Claude 建议定案。①`stash@{0}`（合并前搁置的 I02／NC10 工作，35 文件）必须恢复：在 main 最新提交上开隔离工作树执行 `git stash apply`（不用 pop），逐文件解决与 331／106 的冲突；已被 C331 等价实现取代的片段可舍弃，但须在证据中逐项写明理由；按原证据重跑定向与全量门禁后按第 18 项入库；入库并核验后才可 drop 该 stash 与删除 `/private/tmp/noname-main-wip-backup-20261102T205333Z`。②进度主稿瘦身执行：在第 0 步补跑完成、且无其他会话写该文件时，由单一写者把 2026-10-31 以前的条目逐字节原样移入 `native-progress-history.md` 的新日期章节，不改写、不压缩；主稿保留原 `<a id>` 锚点并在旧位置留一行指向历史稿，46 处 `native-progress.md#…` 入链须全部可达；本地链接、file:line 与 preflight 通过后单独提交。③临时工作树：目录已不存在的 20 个 prunable 登记已于 2026-11-02 由 `git worktree prune` 清除（只删 Git 管理数据）；locked 的 observer-metadata 保留；干净且已并入 main 的 `c331-phase7` 工作树可 `git worktree remove`；其余 9 个有未提交改动的工作树先把 `git diff`、未跟踪清单导出到 `/private/tmp` 备份，再与 main 比对，只有改动已全部在 main 或已在进度主稿登记为放弃的才删除，其余保留并在进度主稿列明。全部按第 23 项控制磁盘，不清共享 target。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。
