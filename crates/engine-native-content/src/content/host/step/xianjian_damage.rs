@@ -372,7 +372,7 @@ impl HostMachine {
             HostBehavior::XianjianHushaCount => {
                 // 虎煞·集（U05 xianjian 王小虎，规则 v169）：+伤害量标记
                 //（≤3；上游 husha_count forced 同口径）。
-                let amount = match ctx.res.frame(ctx.current_frame_id()) {
+                let amount = match ctx.res.frame(ctx.current_event_frame_id()) {
                     Some(f) => match &f.data {
                         EventData::Damage(d) => d.amount,
                         _ => 0,
@@ -401,7 +401,10 @@ impl HostMachine {
                 ctx.discard_from_hand(self.owner, shan);
                 // 当前帧=杀伤害前置窗口：直写 prevented（诚信同款）
                 {
-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
                     if let EventData::Damage(d) = &mut frame.data {
                         d.prevented = true;
                     }
@@ -414,9 +417,17 @@ impl HostMachine {
                 // 流；DamageBefore 帧直写 amount=张目 prevented 同款机
                 // 制）；每目标独立 roll（filter 已过=载体锚定成立）。
                 if ctx.core.rng.gen_range(100) < 50 {
-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
                     if let EventData::Damage(dm) = &mut frame.data {
-                        dm.amount += 1;
+                        if let Some(amount) = dm.amount.checked_add(1) {
+                            dm.amount = amount;
+                        } else {
+                            ctx.fail_damage_amount();
+                            return Flow::Done;
+                        }
                     }
                 }
                 Flow::Done

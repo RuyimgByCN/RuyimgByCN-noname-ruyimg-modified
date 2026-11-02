@@ -74,6 +74,13 @@ fn boss_guojia_yuance_judge_branches() {
     e.debug_clear_hand(2);
     e.debug_set_deck_top_by(|def| def.suit.is_spade());
     e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert_eq!(prompt_of(&e), "c331_yuance");
+    answer_sel(
+        &mut e,
+        vec![ChoiceOption::Control(
+            engine_native::event::YuanceOption::LoseHp,
+        )],
+    );
     drain_choices(&mut e);
     assert_eq!(hp(&e, 2), 2, "黑：受伤者 1+1");
     assert_eq!(hp(&e, 0), 4, "来源不动");
@@ -82,6 +89,13 @@ fn boss_guojia_yuance_judge_branches() {
     e.debug_set_hp(2, 4);
     e.debug_set_deck_top_by(|def| def.suit.is_heart());
     e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert_eq!(prompt_of(&e), "c331_yuance");
+    answer_sel(
+        &mut e,
+        vec![ChoiceOption::Control(
+            engine_native::event::YuanceOption::LoseHp,
+        )],
+    );
     drain_choices(&mut e);
     assert_eq!(hp(&e, 2), 3, "红：受伤者仅伤害 1");
     assert_eq!(hp(&e, 0), 3, "红：来源失 1");
@@ -137,8 +151,16 @@ fn boss_guojia_qizuo_trick_reuse() {
     e.debug_set_deck_top_by(|def| def.suit.is_spade());
     assert!(matches!(
         play(&mut e, sha, vec![0]),
-        engine_native::CommandOutcome::Accepted { .. }
+        engine_native::CommandOutcome::Pending { .. }
     ));
+    assert_eq!(prompt_of(&e), "c331_yuance");
+    answer_sel(
+        &mut e,
+        vec![ChoiceOption::Control(
+            engine_native::event::YuanceOption::LoseHp,
+        )],
+    );
+    drain_choices(&mut e);
     assert!(
         e.state_core().turn.qizuo_copy.is_none(),
         "非锦囊提交清载体槽"

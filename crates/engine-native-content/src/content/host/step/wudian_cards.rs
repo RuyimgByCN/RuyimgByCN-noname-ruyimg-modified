@@ -225,7 +225,7 @@ impl HostMachine {
                                 ctx.core.table.retain(|x| *x != c);
                                 ctx.core.player_mut(attacker).hand.push(c);
                             }
-                            let fid = ctx.current_frame_id();
+                            let fid = ctx.current_event_frame_id();
                             if let Some(f) = ctx.res.frame_mut(fid) {
                                 if let EventData::CardUsed(u) = &mut f.data {
                                     u.cancelled = true;

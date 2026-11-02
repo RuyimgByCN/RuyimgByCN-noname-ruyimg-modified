@@ -4,6 +4,10 @@ use super::*;
 
 pub(super) fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
     match o {
+        ChoiceOption::HiddenCard(slot) => {
+            w.u8(8);
+            w.u32(*slot);
+        }
         ChoiceOption::Confirm => w.u8(0),
         ChoiceOption::Pass => w.u8(1),
         ChoiceOption::Card(c) => {
@@ -18,6 +22,14 @@ pub(super) fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
             w.u8(4);
             w.u8(*t);
         }
+        ChoiceOption::Control(option) => {
+            w.u8(7);
+            w.u8(option.tag());
+        }
+        ChoiceOption::Skill(s) => {
+            w.u8(6);
+            w.u16(*s);
+        }
         ChoiceOption::Kind(k) => {
             w.u8(5);
             w.u32(u32::from(*k));
@@ -27,11 +39,17 @@ pub(super) fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
 
 pub(super) fn dec_choice_option(r: &mut R<'_>) -> Result<ChoiceOption, ArchiveError> {
     Ok(match r.u8()? {
+        8 => ChoiceOption::HiddenCard(r.u32()?),
         0 => ChoiceOption::Confirm,
         1 => ChoiceOption::Pass,
         2 => ChoiceOption::Card(r.u32()?),
         3 => ChoiceOption::Player(r.u8()?),
         4 => ChoiceOption::Tag(r.u8()?),
+        7 => ChoiceOption::Control(
+            crate::event::YuanceOption::from_tag(r.u8()?)
+                .ok_or(ArchiveError::BadTag("yuance_control", 0))?,
+        ),
+        6 => ChoiceOption::Skill(r.u16()?),
         5 => {
             let code = r.u32()?;
             // 码位必须能反解为目录牌种（未知码=坏档）
@@ -61,6 +79,8 @@ pub(super) fn enc_open_choice(w: &mut W, o: &OpenChoice) {
 /// N11-b（ADR 0774）：固定提示词注册表——零分配，未知 prompt
 /// 直接拒绝。所有引擎生成的 prompt 均为编译期常量。
 pub(super) const KNOWN_PROMPTS: &[&str] = &[
+    "zhenlie_discard",
+    "yihua_discard",
     "discard_to_limit",
     "respond_shan",
     "dying_save",
@@ -142,6 +162,14 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "rvm_fenghe_card",
     "rvm_fenghe_destination",
     "rvm_pingkou_targets",
+    "trigger_order",
+    "c331_yuance",
+    "c331_jidian_target",
+    "c331_zhangwu_holder",
+    "c331_zhangwu_source",
+    "xuanying_target",
+    "c331_qinglong_card",
+    "judge_rewrite_provider",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {
@@ -188,6 +216,7 @@ pub(super) fn enc_choice_kind(w: &mut W, k: ChoiceKind) {
         ChoiceKind::SelectPlayers => 2,
         ChoiceKind::RespondCard => 3,
         ChoiceKind::PickTag => 4,
+        ChoiceKind::Control => 5,
     });
 }
 
@@ -198,6 +227,7 @@ pub(super) fn dec_choice_kind(r: &mut R<'_>) -> Result<ChoiceKind, ArchiveError>
         2 => Ok(ChoiceKind::SelectPlayers),
         3 => Ok(ChoiceKind::RespondCard),
         4 => Ok(ChoiceKind::PickTag),
+        5 => Ok(ChoiceKind::Control),
         t => Err(ArchiveError::BadTag("choice_kind", t)),
     }
 }

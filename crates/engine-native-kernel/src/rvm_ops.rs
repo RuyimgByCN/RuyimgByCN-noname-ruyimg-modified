@@ -79,7 +79,7 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             ..
         } => {
             ok_player(*target, "DealDamage")?;
-            if *amount == 0 || *nature > 2 {
+            if *amount == 0 || *amount > i32::MAX as u32 || *nature > 2 {
                 return Err(reject("DealDamage 越界"));
             }
         }
@@ -305,7 +305,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     _ => DamageNature::Normal,
                 };
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    src, t, amount, nature, None,
+                    src, t, amount as i32, nature, None,
                 )));
             }
         }
@@ -402,7 +402,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             let raw = skill_def.raw();
             if let Ok(def) = u16::try_from(raw) {
                 if (def as usize) < ctx.catalog.skills.len() {
-                    ctx.core.skills.entry((p, def)).or_insert(SkillInstance {
+                    ctx.ensure_skill((p, def), SkillInstance {
                         owner: p,
                         enabled: true,
                         once_used: false,
@@ -595,7 +595,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
         } => {
             if let Ok(d) = ctx.current_damage() {
                 if d.amount > 0 && delta != 0 {
-                    let next = (d.amount as i32).saturating_add(delta).max(0) as u32;
+                    let Some(next) = d.amount.checked_add(delta) else {
+                        ctx.res.fault=Some(crate::machine::VmFault{skill:"modify_current_damage".into(),owner:0,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"canonical i32 overflow".into()});return;
+                    };
                     ctx.current_damage_mut().amount = next;
                 }
             }

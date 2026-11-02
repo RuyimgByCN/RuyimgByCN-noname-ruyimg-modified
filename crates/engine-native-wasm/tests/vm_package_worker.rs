@@ -57,10 +57,7 @@ fn vm_only_npack_loads_skills_and_generals() {
     let payload = json!([npack]).to_string();
     let mut engine = engine_from_packs(4, 42, &payload).expect("Worker 应接受完整 npack");
     assert!(
-        engine
-            .catalog()
-            .skill_by_name("worker_phase_end_phase_end")
-            .is_some(),
+        engine.catalog().skill_by_name("worker_phase_end").is_some(),
         "VM 技能应进入 Worker 目录"
     );
     assert!(
@@ -68,7 +65,9 @@ fn vm_only_npack_loads_skills_and_generals() {
         "characters 资产应进入 Worker 选将目录"
     );
     assign_general_for(&mut engine, 0, "worker_vm_probe").expect("assign VM general");
-    assert!(engine.view_for(0).players[0].skills.contains(&vm_skill.as_str()));
+    assert!(engine.view_for(0).players[0]
+        .skills
+        .contains(&package.skill_index[0].name.as_str()));
     engine.debug_set_hp(0, 3);
     let hex = hex_encode(&engine_native::archive::encode_archive(&engine.save()));
     let mut restored = engine_from_archive(&hex, &payload).expect("按原包恢复");
@@ -104,7 +103,10 @@ fn advance_until_vm_recovery(engine: &mut engine_native::Engine) {
                     selection,
                 },
             });
-            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
+            assert!(
+                !matches!(result, engine_native::CommandOutcome::Rejected(_)),
+                "{result:?}"
+            );
         } else {
             let actor = engine.turn().current;
             let result = engine.submit(engine_native::GameCommand {
@@ -113,7 +115,10 @@ fn advance_until_vm_recovery(engine: &mut engine_native::Engine) {
                 dedup_id: 20_000 + step,
                 action: engine_native::GameAction::NextPhase,
             });
-            assert!(!matches!(result, engine_native::CommandOutcome::Rejected(_)), "{result:?}");
+            assert!(
+                !matches!(result, engine_native::CommandOutcome::Rejected(_)),
+                "{result:?}"
+            );
         }
     }
     panic!("Worker 安装载荷的 VM 技能未在结束阶段回复 1 点体力");
@@ -139,9 +144,13 @@ fn npack_without_payload_or_modules_still_refused() {
 
 #[test]
 fn onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore() {
-    let old = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/onlyOL-0.1.4.npack.json");
+    let old = include_bytes!(
+        "../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/onlyOL-0.1.4.npack.json"
+    );
     let new = include_bytes!("../../../content/original/ported/onlyOL/onlyOL.npack.json");
-    let old_archive = include_bytes!("../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/native-v322.ngsa");
+    let old_archive = include_bytes!(
+        "../../../docs/operations/evidence/2026-10-27-pa12-tag656-fix/native-v322.ngsa"
+    );
     for (bytes, expected) in [
         (old.as_slice(), "ambiguous effect 656"),
         (new.as_slice(), "phase_prepare"),
@@ -153,7 +162,9 @@ fn onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore()
         let payload = json!([package]).to_string();
         let start_error = engine_from_packs(4, 42, &payload).err().unwrap();
         assert!(start_error.contains(expected), "{start_error}");
-        let restore_error = engine_from_archive(&hex_encode(old_archive), &payload).err().unwrap();
+        let restore_error = engine_from_archive(&hex_encode(old_archive), &payload)
+            .err()
+            .unwrap();
         assert!(restore_error.contains(expected), "{restore_error}");
     }
 }
@@ -191,9 +202,7 @@ fn characters_only_payload_still_loads_general_with_builtin_skill() {
     let mut engine = engine_from_packs(2, 7, &payload).expect("characters-only payload");
     assert!(general_candidates_json_for(&engine).contains("worker_char_only"));
     assign_general_for(&mut engine, 0, "worker_char_only").expect("assign");
-    assert!(engine
-        .view_for(0)
-        .players[0]
+    assert!(engine.view_for(0).players[0]
         .skills
         .iter()
         .any(|skill| *skill == "护驾"));

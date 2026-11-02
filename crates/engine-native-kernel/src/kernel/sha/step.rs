@@ -72,10 +72,12 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 焚天（Boss 朱雀，规则 v236）：红色杀 directHit 无视防具
         //（上游 boss_fentian2 directHit 全场同口径——原生防具=八卦阵）
         let fentian_direct_hit = {
-            let red = matches!(
-                ctx.catalog.cards[self.card as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
+            let red = self.card.is_some_and(|c| {
+                matches!(
+                    ctx.catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            });
             red && ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::names::BOSS_FENTIAN)
@@ -136,10 +138,12 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         // 反击·红杀直伤（U08 批 1，`yxs_fanji2`）：持技者使用的**红色**【杀】
         // 不可被闪避（上游 yxs_fanji2 shaBegin → trigger.directHit 同口径）
         let yxs_fanji2_direct_hit = {
-            let red = matches!(
-                ctx.catalog.cards[self.card as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
+            let red = self.card.is_some_and(|c| {
+                matches!(
+                    ctx.catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            });
             red && ctx
                 .catalog
                 .skill_by_name(crate::vocabulary::host::U08_YXS_FANJI2_KEY)
@@ -158,10 +162,12 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 ctx.core.turn.cards_used_play_phase <= lost
             };
         let poyue_direct_hit = {
-            let red = matches!(
-                ctx.catalog.cards[self.card as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
+            let red = self.card.is_some_and(|c| {
+                matches!(
+                    ctx.catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            });
             red && (ctx
                     .catalog
                     .skill_by_name("poyue")
@@ -208,7 +214,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 if success {
                     let card = self.card;
                     ctx.to_discard(card);
-                    ctx.core.table.retain(|c| *c != card);
+                    ctx.core.table.retain(|c| Some(*c) != card);
                     return Flow::Done;
                 }
             }
@@ -227,7 +233,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
         if self.dodges_used >= needed {
             let card = self.card;
             ctx.to_discard(card);
-            ctx.core.table.retain(|c| *c != card);
+            ctx.core.table.retain(|c| Some(*c) != card);
             // 燎原结束清零（上游 liaoyuan3 shaEnd 同口径）
             ctx.core.turn.liaoyuan_count = 0;
             return Flow::Done;
@@ -252,7 +258,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         if self.dodges_used >= needed {
                             let card = self.card;
                             ctx.to_discard(card);
-                            ctx.core.table.retain(|c| *c != card);
+                            ctx.core.table.retain(|c| Some(*c) != card);
                             return Flow::Done;
                         }
                         // 无双还需第二张：新响应窗口——重开逐人询问
@@ -353,10 +359,12 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             // 仁王盾（防具槽空=不被青釭/铡刀外的牌区分；青釭穿透已在
             // !qinggang_pierce 门内天然覆盖铁面）。
             let renwang_blocks = !qinggang_pierce && {
-                let black = matches!(
-                    ctx.catalog.cards[self.card as usize].suit,
-                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                );
+                let black = self.card.is_some_and(|c| {
+                    matches!(
+                        ctx.catalog.cards[c as usize].suit,
+                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    )
+                });
                 black && {
                     let equips = &ctx.core.player(self.target).equips;
                     let has_renwang = equips
@@ -377,7 +385,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             if renwang_blocks {
                 let card = self.card;
                 ctx.to_discard(card);
-                ctx.core.table.retain(|c| *c != card);
+                ctx.core.table.retain(|c| Some(*c) != card);
                 return Flow::Done;
             }
             // 堡垒哨卫（U05 ow，规则 v125）：哨卫模式的杀不可闪避/无视
@@ -728,8 +736,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
 
             // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
             // 「无闪直接命中」判定之前纳入
-            let shengong_borrow =
-                (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
+            let shengong_borrow = (ctx.catalog.hooks.borrow_options)(ctx, self.target, true);
             if (shans.is_empty() && shengong_borrow.is_empty())
                 || !ctx.core.player(self.target).alive
             {
@@ -864,7 +871,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
                 let card = self.card;
                 ctx.to_discard(card);
-                ctx.core.table.retain(|c| *c != card);
+                ctx.core.table.retain(|c| Some(*c) != card);
                 return Flow::Done;
             }
         }
@@ -879,9 +886,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     .equips
                     .retain(|x| *x != shan);
                 ctx.to_discard(shan);
-            } else if let Some(owner) =
-                (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan)
-            {
+            } else if let Some(owner) = (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan) {
                 // 神弓借用（swd 批 148）：从所有者装备区取走并撤技
                 ctx.core.player_mut(owner).equips.retain(|x| *x != shan);
                 revoke_equip_skills(ctx.core, ctx.catalog, owner, shan);

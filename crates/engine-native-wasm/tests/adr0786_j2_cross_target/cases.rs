@@ -180,7 +180,7 @@ fn fenghe(output: &mut Vec<Value>) {
         let yingba = t
             .engine
             .catalog()
-            .skill_by_name("j2_yingba_identity_phase_play")
+            .skill_by_name("j2_yingba_identity")
             .unwrap();
         if mode == 1 {
             t.engine.state_core_mut().skills.remove(&(0, yingba));

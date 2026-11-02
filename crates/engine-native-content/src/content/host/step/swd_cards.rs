@@ -12,13 +12,18 @@ impl HostMachine {
                     let cur = ctx.core.turn.current;
                     self.target = Some(cur);
                     let suit = match ctx.current_card_use() {
-                        Ok(u) => ctx.catalog.cards[u.card as usize].suit,
-                        Err(_) => match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
-                            Some(crate::event::EventData::CardResponded { card, .. }) => {
-                                ctx.catalog.cards[*card as usize].suit
-                            }
-                            _ => return Flow::Done,
+                        Ok(u) => match u.suit(ctx.catalog) {
+                            Some(s) => s,
+                            None => return Flow::Done,
                         },
+                        Err(_) => {
+                            match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                                Some(crate::event::EventData::CardResponded { card, .. }) => {
+                                    ctx.catalog.cards[*card as usize].suit
+                                }
+                                _ => return Flow::Done,
+                            }
+                        }
                     };
                     self.card = None;
                     // 花色锚存 cards[0]（哨兵实体不可得——以 suit 编码入
@@ -128,7 +133,7 @@ impl HostMachine {
                         cards: vec![c],
                     });
                     if let Some(def) = ctx.catalog.skill_by_name(SWD_HUAJIN2_KEY) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -150,7 +155,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let target = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::CardUsed(u) => u.targets.first().copied(),
@@ -433,7 +438,8 @@ impl HostMachine {
             HostBehavior::SwdRumeng => match self.stage {
                 HostStage::Act => {
                     // 触发帧即回合角色的出牌阶段开始帧——目标在此取定
-                    let target = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    let target = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                    {
                         Some(EventData::Phase { player, .. }) => *player,
                         _ => return Flow::Done,
                     };

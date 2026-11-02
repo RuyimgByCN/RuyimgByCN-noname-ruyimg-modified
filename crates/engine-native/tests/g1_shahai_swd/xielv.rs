@@ -174,6 +174,8 @@ fn swd_generals_b25_xielv_zhuyu() {
     assert_eq!(e.debug_hp(1), 6, "朱羽：横置目标伤害 +1（8-2）");
     assert_eq!(hand_len_w(&e, 0), 0, "朱羽：红牌已弃");
 
+    // 反例 ②b 是独立的 linked-only 条件；前例 fire/changeHp 已解除横置。
+    e.state_core_mut().player_mut(1).linked = true;
     // 反例 ②b：取消 → 1 伤
     {
         let mut snap = e.save();

@@ -1,7 +1,61 @@
+use super::damage::enc_native_damage_skill;
 use super::*;
 
 pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
     match m {
+        MachineSnapshot::JudgeContinuation { .. } | MachineSnapshot::JudgePhase { .. } => {
+            super::judge::enc_judge_machine(w, m)
+        }
+
+        MachineSnapshot::NativeInvocation {
+            owner,
+            def,
+            window,
+            progress,
+        } => {
+            w.u8(86);
+            w.u8(*owner);
+            w.u16(*def);
+            w.u8(window.tag());
+            super::invocation::enc_progress(w, progress);
+        }
+        MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+            enc_native_damage_skill(w, *owner, *def, *window)
+        }
+        MachineSnapshot::DamageFlow { root } => {
+            w.u8(84);
+            w.u32(*root);
+        }
+        MachineSnapshot::TriggerOrder {
+            frame,
+            owner,
+            candidates,
+            asked,
+            cursor,
+            done,
+            owners,
+            normal_owners,
+        } => {
+            w.u8(83);
+            w.u32(*frame);
+            enc_pid(w, owner);
+            w.len(candidates.len());
+            for def in candidates {
+                w.u16(*def);
+            }
+            w.boolean(*asked);
+            w.u16(*cursor);
+            w.len(done.len());
+            for (owner, def) in done {
+                enc_pid(w, owner);
+                w.u16(*def);
+            }
+            w.len(owners.len());
+            for owner in owners {
+                enc_pid(w, owner);
+            }
+            w.u16(*normal_owners);
+        }
         MachineSnapshot::Sha {
             card,
             source,
@@ -41,7 +95,7 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
             fuchou_card,
         } => {
             w.u8(0);
-            w.u32(*card);
+            w.u32(card.unwrap_or(u32::MAX));
             enc_pid(w, source);
             enc_pid(w, target);
             enc_damage_nature(w, nature);
@@ -367,25 +421,7 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 None => w.u8(0),
             }
         }
-        MachineSnapshot::JudgePhase {
-            owner,
-            queue,
-            current,
-        } => {
-            w.u8(4);
-            enc_pid(w, owner);
-            w.len(queue.len());
-            for c in queue {
-                w.u32(*c);
-            }
-            match current {
-                Some(c) => {
-                    w.u8(1);
-                    enc_judgement_progress(w, c);
-                }
-                None => w.u8(0),
-            }
-        }
+
         MachineSnapshot::Noop => w.u8(5),
         MachineSnapshot::PlaceDelayed {
             card,

@@ -8,7 +8,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(EventData::Damage(d)) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| f.data.clone())
                     else {
                         return Flow::Done;
@@ -19,7 +19,7 @@ impl HostMachine {
                     self.target = Some(source);
                     // 授予临时「反击·红杀直伤」
                     if let Some(def) = ctx.catalog.skill_by_name(U08_YXS_FANJI2_KEY) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -85,7 +85,7 @@ impl HostMachine {
             HostBehavior::HlssXiangxing => {
                 let damage_num = ctx
                     .current_damage()
-                    .map(|d| d.amount)
+                    .map(|d| d.amount.max(0) as u32)
                     .or_else(|_| ctx.current_lose_hp())
                     .unwrap_or(0);
                 let p = ctx.core.player_mut(self.owner);
@@ -157,7 +157,7 @@ impl HostMachine {
                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                         Some(self.owner),
                         target,
-                        num,
+                        num as i32,
                         crate::event::DamageNature::Thunder,
                         None,
                     )));
@@ -298,6 +298,7 @@ impl HostMachine {
                     let target = self.targets.remove(0);
                     if ctx.core.player(target).alive {
                         ctx.emit(EventData::Damage(crate::event::DamageData {
+                            settlement: Default::default(),
                             source: Some(self.owner),
                             target,
                             amount: 1,
@@ -318,10 +319,15 @@ impl HostMachine {
             },
             // 轩辕剑·伤增：帧内 +1 并转雷属性、置标记
             HostBehavior::XuanyuanjianDamage => {
-                let frame = ctx.current_frame_id();
+                let frame = ctx.current_event_frame_id();
                 if let Some(f) = ctx.res.frame_mut(frame) {
                     if let EventData::Damage(d) = &mut f.data {
-                        d.amount = d.amount.saturating_add(1);
+                        if let Some(amount) = d.amount.checked_add(1) {
+                            d.amount = amount;
+                        } else {
+                            ctx.fail_damage_amount();
+                            return Flow::Done;
+                        }
                         if d.nature == crate::event::DamageNature::Normal {
                             d.nature = crate::event::DamageNature::Thunder;
                         }
@@ -414,7 +420,10 @@ impl HostMachine {
                     ctx.discard_from_hand(self.owner, card);
                     // 伤害转移（帧 target 改写 + 转移链记录）
                     {
-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                        let frame = ctx
+                            .res
+                            .frame_mut(ctx.current_event_frame_id())
+                            .expect("frame");
                         if let EventData::Damage(d) = &mut frame.data {
                             d.redirect_chain.push(d.target);
                             d.target = target;
@@ -423,7 +432,7 @@ impl HostMachine {
                     // 授予「天香·受」（运行时实例；承受后按其失去体力摸牌）
                     if let Some(def) = ctx.catalog.skill_by_name(SWD_TIANXIANG2_KEY) {
                         if !ctx.core.skills.contains_key(&(target, def)) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (target, def),
                                 crate::state::SkillInstance {
                                     owner: target,
@@ -873,13 +882,15 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::D3Moyan => {
-                let frame_id = ctx.current_frame_id();
+                let frame_id = ctx.current_event_frame_id();
                 let is_damage = ctx
                     .res
                     .frame(frame_id)
                     .is_some_and(|frame| matches!(frame.data, EventData::Damage(_)));
                 if is_damage {
-                    ctx.current_damage_mut().amount += 1;
+                    if !ctx.modify_damage_amount(1) {
+                        return Flow::Done;
+                    }
                     Flow::Done
                 } else {
                     moyan_round_step(self, ctx)

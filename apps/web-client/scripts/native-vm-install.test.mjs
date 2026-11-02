@@ -232,3 +232,41 @@ test("validated import re-checks preconditions at commit time (store may change 
   setMatchFrozen(false);
   assert.equal(record(), undefined, "nothing committed when the match froze during validation");
 });
+
+test("schema5 SDK preserves defaults and rejects downgrade presence before local-store mutation", () => {
+  for (const [table, field, value] of [["skill_index", "charlotte", false], ["skill_index", "group_children", []], ["trigger_index", "force_die", false]]) {
+    const p = structuredClone(v1); p[table][0][field] = value;
+    for (const schema of [3, 4]) { p.manifest.content_schema_version = schema; rejects(p, /schema5/); }
+    p.manifest.content_schema_version = 5;
+    assert.equal(validateNativePackage(p), p);
+    assert.deepEqual(p[table][0][field], value);
+    p[table][0][field] = null;
+    rejects(p, /schema5/);
+  }
+});
+test("schema5 SDK native binding has one authority and defers real factory capabilities to Rust", () => {
+  const p = structuredClone(v1); p.manifest.content_schema_version = 5;
+  p.trigger_index[0].host_key = "host:sanjian_weapon";
+  assert.throws(() => validateNativePackage(p), /conflict/);
+  p.trigger_index[0].module = ""; p.trigger_index[0].entry_pc = 0;
+  assert.equal(validateNativePackage(p), p);
+});
+
+test("repair: omitted modules cannot discard declarations in validated import", async () => {
+  const manifest = structuredClone(v1.manifest);
+  for (const [schema, value] of [[5, true], [3, false], [4, null]]) {
+    const partial = { manifest: { ...manifest, content_schema_version: schema }, characters: { generals: [] }, skill_index: [{ skill_def_id: 99108020, name: "repair_draw", charlotte: value }] };
+    const before = storage.get(storeKey);
+    await assert.rejects(() => importExtensionPackageValidated(JSON.stringify(partial), async () => {}), /schema5|modules|declaration/);
+    assert.equal(storage.get(storeKey), before);
+  }
+});
+test("repair: validated import delivers original text to native typed reader", async () => {
+  const raw = JSON.stringify(v1, null, 2);
+  await importExtensionPackageValidated(raw, async (received) => assert.equal(received, raw));
+});
+test("repair: active native and VM executor conflicts reject in SDK", () => {
+  const p = structuredClone(v1); p.manifest.content_schema_version = 5;
+  p.active_index = [{ skill_def_id: p.skill_index[0].skill_def_id, window: "play_phase", host_key: "host:sanjian_weapon", module: p.modules[0].name, entry_pc: 0 }];
+  assert.throws(() => validateNativePackage(p), /conflict/);
+});

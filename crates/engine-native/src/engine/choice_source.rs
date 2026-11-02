@@ -6,10 +6,7 @@ impl Engine {
         open: &crate::choice::OpenChoice,
     ) -> Option<&'static str> {
         let resolution = &self.state.resolution;
-        let consumer = resolution
-            .parks
-            .iter()
-            .position(|park| park.resume_depth == resolution.stack.len())?;
+        let consumer = crate::resolution::ready_park_index(resolution)?;
         let mut producer = None;
         for (index, park) in resolution.parks.iter().enumerate() {
             let snapshot = park.machine.snapshot();
@@ -73,7 +70,7 @@ mod tests {
         .unwrap()
     }
     #[test]
-    fn source_requires_first_depth_consumer_not_just_a_unique_active_ask() {
+    fn source_requires_actual_ready_consumer_not_just_a_unique_active_ask() {
         let engine = fixture();
         assert_eq!(source(&engine), Some("遗计"));
         let mut saved = engine.save();
@@ -115,10 +112,19 @@ mod tests {
                 panic!("gate")
             };
             *def = engine.catalog.skill_by_name(name).unwrap();
-            assert_eq!(source(&restored(saved)), None);
+            // C binds the parked trigger to its window; this forged snapshot now rejects.
+            assert!(Engine::restore(&saved).is_err());
+            let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
+            let mut probe = fixture();
+            probe.state.resolution.parks[index].machine = saved.resolution.parks[index]
+                .machine
+                .restore(&probe.catalog)
+                .unwrap();
+            assert_eq!(source(&probe), None);
         }
         let mut engine = fixture();
-        let p = &engine.state.resolution.parks[0];
+        let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
+        let p = &engine.state.resolution.parks[index];
         let duplicate = crate::resolution::Park {
             resume_depth: p.resume_depth,
             slot: p.slot,
@@ -132,11 +138,12 @@ mod tests {
     fn source_uses_only_the_actual_direct_inner_ask() {
         let engine = fixture();
         let mut saved = engine.save();
-        let inner = saved.resolution.parks[0].machine.clone();
+        let index = crate::resolution::ready_park_index(&engine.state.resolution).unwrap();
+        let inner = saved.resolution.parks[index].machine.clone();
         let MachineSnapshot::OptionalGate { event, .. } = &inner else {
             panic!("gate")
         };
-        saved.resolution.parks[0].machine = MachineSnapshot::OptionalGate {
+        saved.resolution.parks[index].machine = MachineSnapshot::OptionalGate {
             owner: 1,
             def: engine.catalog.skill_by_name("刚烈").unwrap(),
             event: event.clone(),
@@ -149,7 +156,8 @@ mod tests {
             "outer unowned name cannot replace inner source"
         );
         let mut saved = engine.save();
-        let MachineSnapshot::OptionalGate { inner, .. } = &mut saved.resolution.parks[0].machine
+        let MachineSnapshot::OptionalGate { inner, .. } =
+            &mut saved.resolution.parks[index].machine
         else {
             panic!("gate")
         };
@@ -160,7 +168,7 @@ mod tests {
             given: 0,
         }));
         let mut engine = engine;
-        engine.state.resolution.parks[0].machine = saved.resolution.parks[0]
+        engine.state.resolution.parks[index].machine = saved.resolution.parks[index]
             .machine
             .restore(&engine.catalog)
             .unwrap();

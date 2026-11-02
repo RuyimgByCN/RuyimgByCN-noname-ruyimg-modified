@@ -11,7 +11,7 @@ impl HostMachine {
             HostBehavior::SwdXielei => match self.stage {
                 HostStage::Act => {
                     // 记录排除面：use=原目标列表；respond=载荷无来源不排除
-                    match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
                         Some(crate::event::EventData::CardUsed(u)) => {
                             self.targets = u.targets.clone();
                         }
@@ -568,7 +568,7 @@ impl HostMachine {
                     // 受害者=触发帧伤害目标（上游 trigger.player 同口径）
                     self.target = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some(d.target),

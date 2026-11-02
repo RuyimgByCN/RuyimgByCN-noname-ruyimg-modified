@@ -187,13 +187,29 @@ fn propagated_damage_is_full_resolution() {
             _ => break,
         }
     }
+    // changeHp 以最终承受者为准；3 必须真的横置才有传播资格。
+    e.state_core_mut().player_mut(3).linked = true;
     // 火杀先在 1 处结算 → 移伤确认 → 转移给 3
     assert_eq!(prompt_of(&e), "trigger_confirm");
     answer(&mut e, ChoiceOption::Confirm);
     assert_eq!(prompt_of(&e), "yishang_target");
     answer(&mut e, ChoiceOption::Player(3));
-    // 转移后的 1 不掉血；传导以 3 为中心 → 2（仍链）掉血
-    assert_eq!(hp(&e, 1), 4);
+    // 1 仍横置，因此会再次成为真实 chain root；拒绝该 child 的移伤后再检查 2。
+    while let Some(c) = e.open_choice().cloned() {
+        if c.spec.prompt != "trigger_confirm" {
+            break;
+        }
+        submit_cmd(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![],
+            },
+        );
+    }
+    // 转移后的 1 会作为独立传播承受者受伤；以最终目标3的 changeHp 资格传播。
+    assert_eq!(hp(&e, 1), 3);
     assert_eq!(hp(&e, 3), 3);
     assert_eq!(hp(&e, 2), 3);
 }

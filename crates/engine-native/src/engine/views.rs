@@ -92,20 +92,36 @@ impl Engine {
             players,
             cards: {
                 let mut held = Vec::new();
-                if full_info {
-                    for park in &self.state.resolution.parks {
-                        crate::snap::machine_held_cards(&park.machine.snapshot(), &mut held);
+                for park in &self.state.resolution.parks {
+                    let machine = park.machine.snapshot();
+                    if full_info {
+                        crate::snap::machine_held_cards(&machine, &mut held);
+                    } else if let crate::snap::MachineSnapshot::NativeInvocation {
+                        owner,
+                        progress:
+                            crate::event::NativeInvocationProgress::QinglongLoss {
+                                target,
+                                card,
+                                public,
+                            },
+                        ..
+                    } = machine
+                    {
+                        if public || seat == Some(owner) || seat == Some(target) {
+                            held.push(card);
+                        }
                     }
                 }
                 crate::snap::physical_cards(core, &held)
                     .into_iter()
                     .filter(|card| {
                         use crate::snap::PhysicalCardZone::*;
-                        full_info || match card.zone {
-                            Hand => seat.is_some() && card.owner == seat,
-                            Equip | Judge | DiscardPile | Processing => true,
-                            DrawPile | Removed | Expansion => false,
-                        }
+                        full_info
+                            || match card.zone {
+                                Hand => seat.is_some() && card.owner == seat,
+                                Equip | Judge | DiscardPile | Processing => true,
+                                DrawPile | Removed | Expansion => false,
+                            }
                     })
                     .collect()
             },
@@ -131,7 +147,11 @@ impl Engine {
         self.build_choice_view(None, true)
     }
 
-    fn build_choice_view(&self, seat: Option<PlayerId>, full_info: bool) -> Option<crate::view::ChoiceView> {
+    fn build_choice_view(
+        &self,
+        seat: Option<PlayerId>,
+        full_info: bool,
+    ) -> Option<crate::view::ChoiceView> {
         let open = self.state.resolution.open_choice.as_ref()?;
         Some(if full_info || seat == Some(open.observer) {
             crate::view::ChoiceView::Own {
@@ -180,6 +200,21 @@ impl Engine {
                         }
                         _ => Some(crate::view::EventView::ChoiceAnsweredHidden { id: *id }),
                     }
+                }
+                crate::machine::LogEvent::CardsTaken {
+                    from,
+                    to,
+                    cards,
+                    public: false,
+                }
+                | crate::machine::LogEvent::CardsGiven { from, to, cards }
+                    if *from != seat && *to != seat =>
+                {
+                    Some(crate::view::EventView::CardsGivenHidden {
+                        from: *from,
+                        to: *to,
+                        count: cards.len(),
+                    })
                 }
                 other => Some(crate::view::EventView::Public(other.clone())),
             })

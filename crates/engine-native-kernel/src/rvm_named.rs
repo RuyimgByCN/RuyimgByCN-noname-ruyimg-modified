@@ -8,6 +8,7 @@ use crate::vocabulary::generals::Gender;
 use crate::event::{DamageNature, Phase};
 use crate::ids::PlayerId;
 use crate::state::Role;
+mod identity;
 
 /// 触发帧上 filter 能看见的字段（由桥从 `EventData` 填）。
 #[derive(Debug, Clone)]

@@ -377,3 +377,8 @@ test("visible general definition reaches the existing seat view", () => {
   assert.equal(snapshot.seats[0].character_def, 17);
   assert.equal(snapshot.seats[1].character_def, 0);
 });
+
+test("Skill options keep stable names and use index tokens without truncation", () => {
+  assert.equal(optionValue({ skill: "c331_heal" }), "c331_heal");
+  assert.equal(optionLabel({ skill: "c331_heal" }), "skill:c331_heal");
+});

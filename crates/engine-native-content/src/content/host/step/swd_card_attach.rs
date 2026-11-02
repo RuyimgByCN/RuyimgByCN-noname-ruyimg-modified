@@ -96,7 +96,7 @@ impl HostMachine {
                         ctx.core.player_mut(t).off_court.push(c);
                         // 授予触发面实例（其准备阶段取回+回复后自清）
                         if let Some(def) = ctx.catalog.skill_by_name(SWD_ZHENJIU2_KEY) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (t, def),
                                 crate::state::SkillInstance {
                                     owner: t,
@@ -202,7 +202,7 @@ impl HostMachine {
                         ctx.core.player_mut(t).off_court.push(c);
                         // 授予触发面实例（其伤害前置返还+降 1 后自清）
                         if let Some(def) = ctx.catalog.skill_by_name(SWD_LMAZUI2_KEY) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (t, def),
                                 crate::state::SkillInstance {
                                     owner: t,

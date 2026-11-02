@@ -160,7 +160,7 @@ use crate::snap::{
 /// v329: ADR0786 J2 active bridge and content-owned effect choices (ABI758); v328 archives reject.
 /// Archive v105 keeps the existing Rvm tail mechanism and command/choice variants.
 /// v330: ADR0787 explicit host timeout answers; v329 archives reject.
-pub const STANDARD_RULESET_VERSION: u64 = 330;
+pub const STANDARD_RULESET_VERSION: u64 = 331;
 
 pub use crate::vocabulary::generals::*;
 pub use crate::vocabulary::names::*;
@@ -457,7 +457,8 @@ pub fn restore_content_machine(
 
 /// 标准测试目录：基础牌 × 各 12 张 + 五个代表技能。
 pub fn standard_catalog() -> Catalog {
-    let (cards, skills) = standard_catalog_parts();
+    let (cards, mut skills) = standard_catalog_parts();
+    native_damage::append_invocation_helpers(&mut skills);
     let mut catalog = Catalog::build(cards, skills);
     catalog.hooks = super::hooks::CONTENT_HOOKS;
     catalog.ruleset_version = STANDARD_RULESET_VERSION;
@@ -476,7 +477,13 @@ pub fn standard_catalog_with_extensions(
     let (cards, skills) = standard_catalog_parts();
     let mut ext_cards: Vec<CardDef> = Vec::new();
     let mut base_names: std::collections::BTreeSet<&str> = skills.iter().map(|s| s.name).collect();
+    base_names.insert(
+        crate::event::NativeDamageEffect::JidingRecover
+            .helper_name()
+            .unwrap(),
+    );
     let mut host_names: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
+    base_names.insert("native:liuli/guozhan/jubao");
     let mut ext_skills: Vec<crate::catalog::SkillDef> = Vec::new();
     for pack in packs.iter().filter(|p| p.enabled) {
         ext_cards.extend(pack.cards.iter().cloned());
@@ -526,6 +533,7 @@ pub fn standard_catalog_with_extensions(
     let cards = merge_extension_cards(cards, &ext_cards)?;
     let mut skills = skills;
     skills.extend(ext_skills);
+    native_damage::append_invocation_helpers(&mut skills);
     let mut catalog = Catalog::build(cards, skills);
     catalog.hooks = super::hooks::CONTENT_HOOKS;
     catalog.extension_generals = packs
@@ -564,5 +572,8 @@ fn standard_catalog_parts() -> (Vec<CardDef>, Vec<SkillDef>) {
     // Append in the original order: SkillDefId values enter snapshots and hashes.
     let mut skills = standard_skills::skills();
     skills.extend(boss_skills::skills());
+    native_damage::configure(&mut skills);
     (cards, skills)
 }
+
+mod native_damage;

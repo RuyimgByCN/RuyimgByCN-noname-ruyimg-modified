@@ -461,6 +461,7 @@ impl crate::catalog::SkillMachine for SnatchMachine {
                 .copied()
                 .or_else(|| t.equips.first().copied());
             if let Some(c) = pick {
+                let public_material = ctx.core.player(self.target).equips.contains(&c);
                 {
                     let was_equip = ctx.catalog.card_kind(c).is_equip();
                     let p = ctx.core.player_mut(self.target);
@@ -476,10 +477,11 @@ impl crate::catalog::SkillMachine for SnatchMachine {
                     from: self.target,
                     to: self.source,
                 });
-                ctx.log(LogEvent::CardsGiven {
+                ctx.log(LogEvent::CardsTaken {
                     from: self.target,
                     to: self.source,
                     cards: vec![c],
+                    public: public_material,
                 });
             }
             let card = self.card;

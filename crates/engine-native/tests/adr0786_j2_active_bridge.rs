@@ -146,7 +146,7 @@ fn current_gate_rejects_native_rules328_archive_without_migration() {
         Engine::restore(&decoded),
         Err(engine_native::snap::SnapshotError::RuleVersionMismatch {
             snapshot: 328,
-            catalog: 330
+            catalog: 331
         })
     ));
 }

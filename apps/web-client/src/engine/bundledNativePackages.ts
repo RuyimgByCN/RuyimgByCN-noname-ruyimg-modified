@@ -38,6 +38,7 @@ export interface NativePackagePayload {
     package_id: string;
     version: string;
     logic_hash: number[];
+    content_schema_version?: number;
     dependencies?: Array<{ namespace: string; package_id: string; version: string; logic_hash?: number[] }>;
   };
   cards?: unknown;
@@ -46,6 +47,7 @@ export interface NativePackagePayload {
   modules?: unknown;
   skill_index?: unknown;
   trigger_index?: unknown;
+  active_index?: unknown;
 }
 
 const bundled: Record<string, { package: { modules: unknown[] }; payload: unknown }> = {
@@ -98,6 +100,14 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
       }
       seen.add(key);
     }
+  }
+  validateNativeMechanismFields(payload);
+  if (payload.modules === undefined && [payload.skill_index, payload.trigger_index, payload.active_index,
+    (payload as unknown as Record<string, unknown>).modifier_index, (payload as unknown as Record<string, unknown>).view_as_index].some((entry) => entry !== undefined)) {
+    throw new Error("扩展包缺少 modules: declaration-bearing partial npack requires modules");
+  }
+  if (payload.modules === undefined && payload.manifest.content_schema_version === 5) {
+    throw new Error("schema5 declaration package requires modules");
   }
   if (payload?.modules !== undefined && !Array.isArray(payload.modules)) {
     throw new Error("扩展包 VM 模块格式无效");
@@ -153,17 +163,51 @@ function validateVmModules(payload: NativePackagePayload): void {
       skills.add(e.skill_def_id);
     }
   }
-  const triggerIndex = payload.trigger_index;
-  if (triggerIndex !== undefined) {
-    if (!Array.isArray(triggerIndex)) throw new Error("扩展包触发索引格式无效");
-    for (const entry of triggerIndex) {
+  for (const [index, label] of [[payload.trigger_index, "触发"], [payload.active_index, "主动"]] as const) {
+    if (index === undefined) continue;
+    if (!Array.isArray(index)) throw new Error(`扩展包${label}索引格式无效`);
+    for (const entry of index) {
       const e = entry as Record<string, unknown> | null;
-      if (!e || typeof e !== "object" || typeof e.module !== "string" || !codeLength.has(e.module)) {
-        throw new Error("扩展包触发索引引用了不存在的 VM 模块");
+      const native = e?.host_key !== undefined;
+      if (native && (payload.manifest.content_schema_version !== 5 || typeof e?.host_key !== "string"
+        || !e.host_key.startsWith("host:") || (e.module !== undefined && e.module !== "") || e.entry_pc !== 0)) {
+        throw new Error("schema5 native executor conflict or invalid host_key");
       }
-      if (!nonNegativeInt(e.entry_pc) || e.entry_pc >= codeLength.get(e.module)!
+      if (!e || typeof e !== "object" || (!native && (typeof e.module !== "string" || !codeLength.has(e.module)))) {
+        throw new Error(`扩展包${label}索引引用了不存在的 VM 模块`);
+      }
+      if (!nonNegativeInt(e.entry_pc) || (!native && e.entry_pc >= codeLength.get(e.module as string)!)
         || !nonNegativeInt(e.skill_def_id) || (skillIndex !== undefined && !skills.has(e.skill_def_id))) {
-        throw new Error(`扩展包触发索引入口或技能引用无效: ${e.module}`);
+        throw new Error(`扩展包${label}索引入口或技能引用无效: ${e.module}`);
+      }
+    }
+  }
+}
+
+
+function validateNativeMechanismFields(payload: NativePackagePayload): void {
+  const schema = payload.manifest.content_schema_version;
+  if (schema !== undefined && ![3, 4, 5].includes(schema)) throw new Error("unsupported content schema");
+  const fields: Array<[unknown, string[], string]> = [
+    [payload.skill_index, ["charlotte", "persevere", "forever", "temporary", "group_children", "reveal", "onremove"], "技能"],
+    [payload.trigger_index, ["host_key", "force_die", "force_out", "repeat", "hidden", "event_skill"], "触发"],
+    [payload.active_index, ["host_key"], "主动"],
+  ];
+  for (const [entries, names, label] of fields) {
+    if (entries === undefined) continue;
+    if (!Array.isArray(entries)) throw new Error(`扩展包${label}索引格式无效`);
+    for (const entry of entries) {
+      if (!entry || typeof entry !== "object") continue;
+      for (const name of names) {
+        if (!Object.hasOwn(entry, name)) continue;
+        if (schema !== 5 || entry[name] == null) throw new Error(`schema5 field requires schema5: ${name}`);
+        if (["charlotte", "persevere", "forever", "temporary", "force_die", "force_out"].includes(name)
+          && typeof entry[name] !== "boolean") throw new Error(`schema5 literal boolean required: ${name}`);
+        if (name === "group_children" && (!Array.isArray(entry[name]) || !entry[name].every(nonNegativeInt))) {
+          throw new Error("invalid schema5 group_children");
+        }
+        if (name === "repeat" && !["once", "damage_amount", "damage_amount_else_one"].includes(entry[name])) throw new Error("invalid schema5 repeat");
+        if (name === "hidden" && !["public_only", "ask_reveal", "run_hidden"].includes(entry[name])) throw new Error("invalid schema5 hidden");
       }
     }
   }

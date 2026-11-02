@@ -85,20 +85,33 @@ fn same_depth_pair_hex() -> String {
     engine_native_wasm::hex_encode(&engine_native::archive::encode_archive(&snapshot))
 }
 
-/// `NativeSession::auto_step` 的 byte 路径等价物（同一规划器与同一提交入口）。
+/// `NativeSession::auto_step` 的 byte 路径等价物：与 C331 的 `session.rs`
+/// 同一动作选择（开放选择取前 N 个牌选项，否则前 N 个选项；无选择时用
+/// `BoundedPlanner::new(64)` 规划）与同一提交入口／去重键。
 fn byte_auto_step(engine: &mut Engine) -> GameAction {
-    if let Some(choice) = engine.open_choice() {
-        let observer = choice.observer;
-        let action = engine_native::ai::projected_choice_action(
-            engine
-                .ai_session(observer)
-                .choice()
-                .expect("open observer choice"),
-        )
-        .expect("observer owns the choice");
+    if let Some(c) = engine.open_choice() {
+        let take = c.spec.min.max(1).min(c.spec.max).min(c.spec.options.len());
+        let sel: Vec<_> = c
+            .spec
+            .options
+            .iter()
+            .filter(|o| matches!(o, engine_native::ChoiceOption::Card(_)))
+            .take(take)
+            .cloned()
+            .collect();
+        let sel = if sel.len() == take {
+            sel
+        } else {
+            c.spec.options.iter().take(take).cloned().collect()
+        };
+        let (cid, obs) = (c.id, c.observer);
+        let action = GameAction::Answer {
+            choice_id: cid,
+            selection: sel,
+        };
         // 与 `NativeSession::auto_step` 同一去重键策略（逐字节对比的前提）。
         let outcome = engine.submit(engine_native::GameCommand {
-            actor: observer,
+            actor: obs,
             expected_revision: engine.revision(),
             dedup_id: engine.revision().wrapping_mul(2).max(1),
             action: action.clone(),

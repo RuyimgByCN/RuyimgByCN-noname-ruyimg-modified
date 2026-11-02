@@ -111,3 +111,6 @@ mod adr0786_j2_package_versions;
 
 #[path = "../adr0786_j2_review_regressions.rs"]
 mod adr0786_j2_review_regressions;
+
+#[path = "../c331_package_schema.rs"]
+mod c331_package_schema;

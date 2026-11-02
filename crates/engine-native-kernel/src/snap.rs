@@ -12,14 +12,14 @@
 
 use crate::catalog::{CardKind, Catalog, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, OpenChoice, Selection};
-use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
-use crate::vocabulary::host::HostBehavior;
-use crate::vocabulary::generals::{general_gender, Gender};
-use crate::vocabulary::names::{GUI_CAI, JI_JIU, LONG_DAN, QING_GUO};
 use crate::event::{DamageNature, EventData, Frame};
 use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::resolution::{Slot, NO_FRAME};
 use crate::state::{GameMode, GameStateCore, Outcome, Winner};
+use crate::vocabulary::generals::{general_gender, Gender};
+use crate::vocabulary::host::HostBehavior;
+use crate::vocabulary::host::GJ_FOOD_MIZHLIANOU_KEY;
+use crate::vocabulary::names::{JI_JIU, LONG_DAN, QING_GUO};
 
 mod types;
 pub use types::*;
@@ -32,3 +32,5 @@ use machine_validation::*;
 mod asks;
 pub use asks::*;
 mod restore;
+
+mod damage_validation;

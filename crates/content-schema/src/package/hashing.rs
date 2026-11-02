@@ -14,6 +14,10 @@ impl ContentPackage {
         h.update(self.manifest.package_id.as_bytes());
         h.update(self.manifest.version.as_bytes());
         h.update(self.compiler_version.as_bytes());
+        if self.has_native_mechanisms() {
+            h.update(b"npack-native-mechanisms/1");
+            h.update(&self.native_mechanisms_hash());
+        }
         if !self.manifest.dependencies.is_empty() {
             h.update(b"dependencies/v1");
             let mut dependencies = self.manifest.dependencies.clone();
@@ -99,7 +103,7 @@ impl ContentPackage {
             h.update(&card.distance_to.to_le_bytes());
             h.update(&card.on_leave_equip_skill_def.to_le_bytes());
         }
-        for t in &self.trigger_index {
+        for (position, t) in self.trigger_index.iter().enumerate() {
             h.update(&t.trigger_def_id.to_le_bytes());
             h.update(&t.skill_def_id.to_le_bytes());
             h.update(t.event.as_bytes());
@@ -111,6 +115,20 @@ impl ContentPackage {
             }
             h.update(t.module.as_bytes());
             h.update(&t.entry_pc.to_le_bytes());
+            if t.has_nondefault_order() {
+                h.update(b"trigger-order/v1");
+                h.update(&(position as u64).to_le_bytes());
+                h.update(&t.trigger_def_id.to_le_bytes());
+                h.update(&t.skill_def_id.to_le_bytes());
+                for value in [&t.event, &t.module] {
+                    h.update(&(value.len() as u64).to_le_bytes());
+                    h.update(value.as_bytes());
+                }
+                h.update(&t.entry_pc.to_le_bytes());
+                h.update(&[t.timing.tag()]);
+                h.update(&t.priority.to_le_bytes());
+                h.update(&[u8::from(t.order_selectable)]);
+            }
         }
         for m in &self.modifier_index {
             h.update(&m.skill_def_id.to_le_bytes());

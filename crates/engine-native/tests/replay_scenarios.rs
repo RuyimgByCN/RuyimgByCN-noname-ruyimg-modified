@@ -22,12 +22,15 @@ fn fresh_dedup() -> u64 {
 
 fn submit_cmd(e: &mut Engine, actor: u8, action: GameAction) -> CommandOutcome {
     let expected_revision = e.revision();
-    e.submit(GameCommand {
-        actor,
-        expected_revision,
-        dedup_id: fresh_dedup(),
-        action,
-    })
+    observed_submit(
+        e,
+        GameCommand {
+            actor,
+            expected_revision,
+            dedup_id: fresh_dedup(),
+            action,
+        },
+    )
 }
 
 fn next_phase(e: &mut Engine) -> CommandOutcome {
@@ -123,7 +126,7 @@ fn scenario_sha_dodge_then_damage() -> [u8; 32] {
     e.debug_clear_hand(1);
     e.debug_place(1, "sha");
     play_sha_at(&mut e, 1, 0);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 濒死/无人救援/死亡/终局条件（单挑终局）。
@@ -137,7 +140,7 @@ fn scenario_death_terminal_single() -> [u8; 32] {
     let _sha = e.debug_place(1, "sha");
     play_sha_at(&mut e, 1, 0);
     assert!(e.outcome().is_some(), "single mode must end after kill");
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 嵌套选择链（散财：确认→摸牌→目标→牌）。
@@ -155,7 +158,7 @@ fn scenario_sancai_nested_chain() -> [u8; 32] {
         _ => panic!("first option must be a card"),
     };
     answer(&mut e, ChoiceOption::Card(card));
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 伤害转移（移伤：前置窗口改写载荷）。
@@ -168,7 +171,7 @@ fn scenario_yishang_redirect() -> [u8; 32] {
     play_sha_at(&mut e, 1, 0);
     answer(&mut e, ChoiceOption::Confirm);
     answer(&mut e, ChoiceOption::Player(2));
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 防止/每回合限一次/窗口内禁用（碎盾×肃清矩阵）。
@@ -188,7 +191,7 @@ fn scenario_suidun_window_matrix() -> [u8; 32] {
     e.debug_clear_hand(0);
     e.debug_place(1, "sha");
     play_sha_at(&mut e, 1, 0); // 肃清禁用已入队碎盾 → 生效
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 动态获得/到期（授艺→移伤→回合结束移除）。
@@ -221,7 +224,7 @@ fn scenario_shouyi_dynamic_skill() -> [u8; 32] {
         }
     }
     assert!(!e.debug_has_skill(0, "移伤"));
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 弃牌上限。
@@ -239,7 +242,7 @@ fn scenario_discard_to_limit() -> [u8; 32] {
         }
     }
     assert_eq!(e.debug_hand(0).len(), 2);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 拒绝整段回滚（非法应答 + 预算耗尽后哈希不变）。
@@ -256,15 +259,18 @@ fn scenario_rollback_invariants() -> [u8; 32] {
     };
     let before = e.state_hash();
     assert!(matches!(
-        e.submit(GameCommand {
-            actor: e.open_choice().unwrap().observer,
-            expected_revision: e.revision(),
-            dedup_id: fresh_dedup(),
-            action: GameAction::Answer {
-                choice_id: id,
-                selection: vec![ChoiceOption::Card(9999)],
+        observed_submit_command_first(
+            GameCommand {
+                actor: e.open_choice().unwrap().observer,
+                expected_revision: e.revision(),
+                dedup_id: fresh_dedup(),
+                action: GameAction::Answer {
+                    choice_id: id,
+                    selection: vec![ChoiceOption::Card(9999)],
+                },
             },
-        }),
+            &mut e
+        ),
         CommandOutcome::Rejected(engine_native::RejectReason::InvalidChoice)
     ));
     assert_eq!(e.state_hash(), before);
@@ -272,21 +278,24 @@ fn scenario_rollback_invariants() -> [u8; 32] {
     e.debug_set_budget(2);
     let before_small_budget = e.state_hash();
     assert!(matches!(
-        e.submit(GameCommand {
-            actor: e.open_choice().unwrap().observer,
-            expected_revision: e.revision(),
-            dedup_id: fresh_dedup(),
-            action: GameAction::Answer {
-                choice_id: id,
-                selection: vec![ChoiceOption::Confirm],
+        observed_submit_command_first(
+            GameCommand {
+                actor: e.open_choice().unwrap().observer,
+                expected_revision: e.revision(),
+                dedup_id: fresh_dedup(),
+                action: GameAction::Answer {
+                    choice_id: id,
+                    selection: vec![ChoiceOption::Confirm],
+                },
             },
-        }),
+            &mut e
+        ),
         CommandOutcome::Rejected(engine_native::RejectReason::BudgetExhausted)
     ));
     assert_eq!(e.state_hash(), before_small_budget);
     e.debug_set_budget(4096);
     answer(&mut e, ChoiceOption::Confirm);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 装备栏与距离/攻击范围：±马修饰、武器射程、同栏替换、跨回合打击。
@@ -318,7 +327,7 @@ fn scenario_equip_distance_matrix() -> [u8; 32] {
     e.debug_clear_hand(0);
     let w3 = e.debug_place(0, "weapon3");
     play(&mut e, w3, vec![]);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 铁索连环与属性伤害：横置 → 火杀传导 → 解链；普通杀不传导。
@@ -332,17 +341,12 @@ fn scenario_chain_fire_propagation() -> [u8; 32] {
     play(&mut e, chain, vec![1, 2]);
     let fsha = e.debug_place(0, "fire_sha");
     play(&mut e, fsha, vec![1]); // 传导给 2，随后解链
-    // 普通杀不再传导
+                                 // 普通杀不再传导
     let sha = e.debug_place(0, "sha");
     play(&mut e, sha, vec![1]);
     // 雷伤验证（无链者不再传导）
-    e.debug_deal_damage(
-        None,
-        2,
-        1,
-        engine_native::event::DamageNature::Thunder,
-    );
-    e.state_hash()
+    e.debug_deal_damage(None, 2, 1, engine_native::event::DamageNature::Thunder);
+    traced_state_hash(&e)
 }
 
 /// AOE 多目标响应队列：南蛮（免伤/跳过/Pass）→ 万箭（全 Pass 受伤）。
@@ -359,13 +363,13 @@ fn scenario_aoe_response_queue() -> [u8; 32] {
     play(&mut e, savage, vec![]);
     answer(&mut e, ChoiceOption::Card(sha1)); // 1 免伤；2 跳过；询问 3
     answer(&mut e, ChoiceOption::Pass); // 3 受伤 → 南蛮完结
-    // 万箭：仅 1 持闪（Pass 受伤），2/3 无闪直接跳过受伤
+                                        // 万箭：仅 1 持闪（Pass 受伤），2/3 无闪直接跳过受伤
     e.debug_clear_hand(1);
     let _shan1 = e.debug_place(1, "shan");
     let archery = e.debug_place(0, "archery");
     play(&mut e, archery, vec![]);
     answer(&mut e, ChoiceOption::Pass);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 决斗交替出杀：目标先出、来源出、目标无杀即败；无距离限制（0→2）。
@@ -382,7 +386,7 @@ fn scenario_duel_alternating_response() -> [u8; 32] {
     answer(&mut e, ChoiceOption::Card(sha_t1));
     answer(&mut e, ChoiceOption::Card(sha_s));
     // 目标再无杀：不询问直接受伤，决斗结束
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 无懈响应链：南蛮被无懈抵消 → 反无懈恢复生效（含交替询问）。
@@ -400,9 +404,9 @@ fn scenario_nullify_chain_on_savage() -> [u8; 32] {
     play(&mut e, savage, vec![]);
     answer(&mut e, ChoiceOption::Card(nul1)); // 抵消
     answer(&mut e, ChoiceOption::Card(nul2)); // 反无懈 → 恢复
-    // 南蛮生效：1 出杀免伤；2、3 跳过受伤
+                                              // 南蛮生效：1 出杀免伤；2、3 跳过受伤
     answer(&mut e, ChoiceOption::Card(sha1));
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 /// 判定区与延时锦囊：乐跳过出牌阶段（黑桃判定）、判定牌入弃堆。
@@ -431,7 +435,7 @@ fn scenario_judge_phase_delayed_tricks() -> [u8; 32] {
         }
     }
     next_phase(&mut e);
-    e.state_hash()
+    traced_state_hash(&e)
 }
 
 // ---------------------------------------------------------------------------
@@ -1067,86 +1071,97 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
     (
         "sha_dodge_then_damage",
         scenario_sha_dodge_then_damage,
-        &["card_use", "sha_respond", "damage_commit", "sha_limit", "seat_range"],
-        "4c55a24cd723e9e0a70c48c6365f48e72ab2ce523d23f2cf061513e340e8464d",
+        &[
+            "card_use",
+            "sha_respond",
+            "damage_commit",
+            "sha_limit",
+            "seat_range",
+        ],
+        "9fc6441957420c956cf82259a1a40c68248e8b80ca83c0ea3ae588b01dfd9dd7",
     ),
     (
         "death_terminal_single",
         scenario_death_terminal_single,
         &["dying", "death", "victory"],
-        "c5ebff318a06ae79edfadaf34ec736a1553a733a44a967b7f5bfed257a0fab1b",
+        "5f779317f21b11fb4d8b9d597de690aa44078762b91cb62ce6cc3f72c630e096",
     ),
     (
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "07a8bcaa3069bd5c3e1d328c67134f26e529f369a81f1d210fe1c79d208dcd42",
+        "1d68fde253b34a6b710651b1712bc1ce4e593d0a188849e6ca8b4b00fd666a86",
     ),
     (
         "yishang_redirect",
         scenario_yishang_redirect,
         &["damage_before_window", "payload_rewrite_redirect"],
-        "40241d4d77e826961dd163cb6062443aca34060d533c327b5133fec974fd8b08",
+        "ccf6be0a3525adeb638dc84a7933f44adc24c83ec49c312ad75ec98fdcd830f8",
     ),
     (
         "suidun_window_matrix",
         scenario_suidun_window_matrix,
         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
-        "d024720053a574e693a2c5fcf4f29afa0b3a15019a29776444a25223dfd9cfae",
+        "dcc8cd5da4acc766992143db3616689f16c8c382cc32564a5c49a44de4dd1077",
     ),
     (
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "a24b76e73715df8f0b71a1e040303267d90def735714addcc6daddde6c68a2c0",
+        "629a42f86e0f33b2e830d2410120017aa2694ec8c242a396fae685857e80c741",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "0aa29818f5989f456f45fa3d3a6a1f9b57242f43531b4904ef683b3709f7c2ff",
+        "6fa2b8b06d79d4fdf37fef5e73c7ca057569433a5f04a6182c94bc79fca6eeec",
     ),
     (
         "rollback_invariants",
         scenario_rollback_invariants,
         &["reject_rollback", "budget_rollback"],
-        "fced3429840a0e8e95c21f6c312f5c13e0dea48660a0cba54db3640b06576216",
+        "86d7d9931da6133e23970ea0fbf9358065fe0b3dbfe528f9cae6f4340ed4300e",
     ),
     (
         "equip_distance_matrix",
         scenario_equip_distance_matrix,
-        &["equip_slots", "distance_modifier", "attack_range", "equip_replace"],
-        "b87531c4e2a330aafa9c5c99094b5a576600928092a4a50dab52636959e3efb5",
+        &[
+            "equip_slots",
+            "distance_modifier",
+            "attack_range",
+            "equip_replace",
+        ],
+        "9e79881f85bfe17faedde1474361213d6ca05ed7f115f09ca9b0e062fdc6e5bb",
     ),
     (
         "chain_fire_propagation",
         scenario_chain_fire_propagation,
         &["chain_state", "damage_nature", "chain_propagation"],
-        "0514a55b18e3c5dc688e9204182182051c20e9aa3419e8496743585720f96860",
+        "f1eb4cda86bc1795a8b9dc510bfec402f3b3af7f3ed4c6ca36c04f9d179f2a16",
     ),
     (
         "aoe_response_queue",
         scenario_aoe_response_queue,
         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
-        "ede20f66cb1a459c40fc4f37267d60f228d090325812fefa5a9885f95644d758",
+        "98abbd720f9f6dc599131b9b5c4a5cf5319d40a7b70703dffc957502c33f5869",
     ),
     (
         "duel_alternating_response",
         scenario_duel_alternating_response,
         &["duel_alternating", "duel_no_distance_limit"],
-        "567cb95bc80f2ec7b97e24a9837c21c01e1401cd76099a6998bf09c343b29d16",
+        "804483da6ea7c1f2313fb9854a22bb153643e9950f824102c39a4b484b4a015c",
     ),
     (
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "35cc4f8e89da01a0692b63e9b4ef49daf82ed145beb85c82e21e35f67f73e4ab",
+        "d58d260b032c7a136c2610722bfdea231ed5da72fc29902caa2e7e3c5bc7e080",
     ),
     (
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "86e1fd156ceea951ae52b671d80422081c274e2601944eda9732db5ba446cf8f",
+        "8b7f6bfa72b8bf5eca13b86d577dfdd775586da7f145a583ca7466d54c121daf",
     ),
 ];
 
@@ -1204,6 +1219,8 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
 fn replay_scenarios_match_golden() {
     let mut bad = Vec::new();
     for (name, run, _mechs, golden) in SCENARIOS {
+        SEMANTIC_NAME.with(|n| *n.borrow_mut() = name.to_string());
+        SEMANTIC_STEP.store(0, Ordering::SeqCst);
         let hex = hex(&run());
         if hex != *golden {
             bad.push(format!("{name} actual={hex} expected={golden}"));
@@ -1232,6 +1249,51 @@ fn scenarios_are_registered_in_coverage_manifest() {
     }
 }
 
+// Opt-in evidence captures complete rule state and observable trajectories without changing expectations.
+fn traced_state_hash(engine: &Engine) -> [u8; 32] {
+    semantic_capture(engine, "final", "", "");
+    static INDEX: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+    if let Ok(directory) = std::env::var("C331_GOLDEN_TRACE_DIR") {
+        let index = INDEX.fetch_add(1, Ordering::SeqCst);
+        let name = SCENARIOS[index].0;
+        let path = std::path::Path::new(&directory);
+        std::fs::create_dir_all(path).unwrap();
+        let snap = engine.save();
+        std::fs::write(
+            path.join(format!("{name}.snapshot.txt")),
+            format!("{snap:#?}"),
+        )
+        .unwrap();
+        std::fs::write(
+            path.join(format!("{name}.archive.ngsa")),
+            engine_native::archive::encode_archive(&snap),
+        )
+        .unwrap();
+        std::fs::write(
+            path.join(format!("{name}.events.txt")),
+            format!("{:#?}", engine.log()),
+        )
+        .unwrap();
+        let views: Vec<_> = (0..engine.state_core().players.len() as u8)
+            .map(|seat| engine.view_for(seat))
+            .collect();
+        std::fs::write(
+            path.join(format!("{name}.views.txt")),
+            format!("{views:#?}"),
+        )
+        .unwrap();
+        let choices: Vec<_> = (0..engine.state_core().players.len() as u8)
+            .map(|seat| engine.choice_view_for(Some(seat)))
+            .collect();
+        std::fs::write(
+            path.join(format!("{name}.choices.txt")),
+            format!("{choices:#?}\nreferee={:#?}", engine.choice_view_referee()),
+        )
+        .unwrap();
+    }
+    engine.state_hash()
+}
+
 fn hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
@@ -1241,4 +1303,34 @@ fn pa12_print_golden_hex() {
     for (name, run, _mechs, _golden) in SCENARIOS {
         eprintln!("GOLDEN_HEX {name} {}", hex(&run()));
     }
+}
+
+// Opt-in pure observation at the existing command seam; no scheduler or RNG calls.
+thread_local! {static SEMANTIC_NAME:std::cell::RefCell<String>=const {std::cell::RefCell::new(String::new())};}
+static SEMANTIC_STEP: std::sync::atomic::AtomicUsize = std::sync::atomic::AtomicUsize::new(0);
+fn observed_submit(e: &mut Engine, command: GameCommand) -> CommandOutcome {
+    let command_text = format!("{command:?}");
+    semantic_capture(e, "before", &command_text, "");
+    let out = e.submit(command);
+    semantic_capture(e, "after", &command_text, &format!("{out:?}"));
+    out
+}
+fn semantic_capture(e: &Engine, phase: &str, command: &str, outcome: &str) {
+    let Ok(directory) = std::env::var("C331_SEMANTIC_TRACE_DIR") else {
+        return;
+    };
+    SEMANTIC_NAME.with(|name| {
+        let directory=std::path::Path::new(&directory).join(name.borrow().as_str());std::fs::create_dir_all(&directory).unwrap();
+        let index=SEMANTIC_STEP.fetch_add(1,Ordering::SeqCst);let stem=format!("{index:04}-{phase}");let s=e.save();
+        let views:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.view_for(p)).collect();
+        let choices:Vec<_>=(0..s.core.players.len()as u8).map(|p|e.choice_view_for(Some(p))).collect();
+        let value=serde_json::json!({"command":command,"phase":phase,"outcome_raw":outcome,"core":format!("{:#?}",s.core),"events":format!("{:#?}",e.log()),"rng":format!("{:?}",s.core.rng),"views":format!("{views:#?}"),"choices":format!("{choices:#?}"),"referee":format!("{:#?}",e.choice_view_referee()),"ruleset_version":s.ruleset_version,"resolution":format!("{:#?}",s.resolution)});
+        std::fs::write(directory.join(format!("{stem}.json")),serde_json::to_vec_pretty(&value).unwrap()).unwrap();
+        std::fs::write(directory.join(format!("{stem}.snapshot.txt")),format!("{s:#?}")).unwrap();
+        std::fs::write(directory.join(format!("{stem}.archive.ngsa")),engine_native::archive::encode_archive(&s)).unwrap();
+    });
+}
+
+fn observed_submit_command_first(command: GameCommand, e: &mut Engine) -> CommandOutcome {
+    observed_submit(e, command)
 }

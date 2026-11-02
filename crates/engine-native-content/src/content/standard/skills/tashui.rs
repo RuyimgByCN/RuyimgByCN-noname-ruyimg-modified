@@ -18,7 +18,8 @@ impl SkillBehavior for TashuiBehavior {
                 if u.player != owner || u.cancelled {
                     return false;
                 }
-                u.card
+                let Some(card) = u.card else { return false };
+                card
             }
             _ => return false,
         };

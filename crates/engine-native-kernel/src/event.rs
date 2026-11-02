@@ -5,6 +5,12 @@
 //! 技能可以在结算窗口内改写帧载荷（如伤害转移）。
 
 use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
+mod damage;
+pub use damage::*;
+mod native_damage;
+pub use native_damage::*;
+mod invocation;
+pub use invocation::*;
 
 /// 触发唤醒用的事件类别。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -41,6 +47,25 @@ pub enum EventKind {
     /// 手牌直接给予另一角色（NC04 未映射事件批）：`give_hand_card` 共享
     /// 原语发射；DSL `cards_given` 触发窗（旧线 EventKind 同名同义）。
     CardsGiven,
+    DamageSource,
+    DamageEnd,
+    DamageAfter,
+    DamageZero,
+    DamageCancelled,
+    DamageBegin,
+    DamageBegin1,
+    DamageBegin2,
+    DamageBegin3,
+    DamageBegin4,
+    SkillBefore,
+    SkillBegin,
+    SkillInvocation,
+    SkillEnd,
+    SkillAfter,
+    SkillOmitted,
+    SkillLogBegin,
+    SkillLogAfter,
+    OrdinaryJudge,
 }
 
 /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
@@ -65,7 +90,9 @@ pub struct DamageData {
     pub source: Option<PlayerId>,
     /// 当前承受者——转移技能改写此字段。
     pub target: PlayerId,
-    pub amount: u32,
+    pub amount: i32,
+    /// One canonical submission and continuation authority.
+    pub settlement: DamageSettlement,
     pub nature: DamageNature,
     /// 防止类技能改写此字段；提交阶段读到 true 则不扣血。
     pub prevented: bool,
@@ -80,7 +107,8 @@ pub struct DamageData {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct CardUseData {
-    pub card: CardId,
+    /// None denotes a genuinely virtual use, with its meaning in use_as.
+    pub card: Option<CardId>,
     pub player: PlayerId,
     pub targets: Vec<PlayerId>,
     /// 杀的属性（仅 Sha/FireSha 有意义）。
@@ -96,6 +124,16 @@ pub struct CardUseData {
 /// 类型化事件载荷。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum EventData {
+    SkillInvocation(InvocationData),
+    SkillLog {
+        owner: PlayerId,
+        def: SkillDefId,
+        begin: bool,
+    },
+    OrdinaryJudge {
+        owner: PlayerId,
+        invocation: EventId,
+    },
     /// E03 翻面前置窗口（漩涡面具等锁定技可取消）。
     TurnOverBefore {
         player: PlayerId,
@@ -107,6 +145,11 @@ pub enum EventData {
         face_down: bool,
     },
     Damage(DamageData),
+    /// A real child window referencing its canonical damage ancestor.
+    DamageWindow {
+        root: EventId,
+        window: DamageWindowKind,
+    },
     Recover {
         player: PlayerId,
         amount: u32,
@@ -176,7 +219,7 @@ pub enum EventData {
     /// 杀被闪避（swd 批 141）：`card` = 被闪的【杀】，`source` = 使用者，
     /// `target` = 闪避者（上游 `shaMiss` 的 trigger.card/player）。
     ShaDodged {
-        card: CardId,
+        card: Option<CardId>,
         source: PlayerId,
         target: PlayerId,
     },
@@ -206,7 +249,17 @@ pub enum EventData {
 impl EventData {
     pub fn kind(&self) -> EventKind {
         match self {
+            EventData::OrdinaryJudge { .. } => EventKind::OrdinaryJudge,
+            EventData::SkillInvocation(data) => data.phase.kind(),
+            EventData::SkillLog { begin, .. } => {
+                if *begin {
+                    EventKind::SkillLogBegin
+                } else {
+                    EventKind::SkillLogAfter
+                }
+            }
             EventData::Damage(_) => EventKind::Damage,
+            EventData::DamageWindow { window, .. } => window.event_kind(),
             EventData::Recover { .. } => EventKind::Recover,
             EventData::CardsDrawn { .. } => EventKind::CardsDrawn,
             EventData::CardsMoved { .. } => EventKind::CardsMoved,
@@ -293,7 +346,7 @@ pub enum Timing {
 pub struct QueuedTrigger {
     pub def: SkillDefId,
     pub owner: PlayerId,
-    /// 完全序键：Timing -> Priority 降 -> 可选后置 -> 座位相对 -> 定义号。
+    /// Canonical timing / effective priority / reserved zero / relative seat / definition.
     pub order: (u8, i32, u8, u8, u16),
 }
 
@@ -363,5 +416,16 @@ impl Frame {
             EventData::CardUsed(u) => Some(u),
             _ => None,
         }
+    }
+}
+
+impl CardUseData {
+    pub fn effective_kind(&self, catalog: &crate::catalog::Catalog) -> crate::catalog::CardKind {
+        self.use_as
+            .or_else(|| self.card.map(|c| catalog.card_kind(c)))
+            .expect("validated card use meaning")
+    }
+    pub fn suit(&self, catalog: &crate::catalog::Catalog) -> Option<crate::catalog::Suit> {
+        self.card.map(|c| catalog.cards[c as usize].suit)
     }
 }

@@ -7,6 +7,7 @@ authors.workspace = true
 description = "Built-in native content and resolution machines"
 
 [dependencies]
+blake3 = { workspace = true }
 engine-native-kernel = { path = "../engine-native-kernel" }
 rule-vm = { workspace = true }
 rule-api = { workspace = true }

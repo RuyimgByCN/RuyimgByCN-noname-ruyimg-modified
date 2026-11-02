@@ -31,13 +31,17 @@ impl Peer {
     }
 
     pub(super) async fn send(&mut self, message: ClientMessage) {
+        record_wire("client", &encode_c2s(&message).unwrap());
         self.ws
             .send(Message::Text(encode_c2s(&message).unwrap().into()))
             .await
             .unwrap();
     }
 
-    pub(super) async fn until(&mut self, matches: impl Fn(&ServerMessage) -> bool) -> ServerMessage {
+    pub(super) async fn until(
+        &mut self,
+        matches: impl Fn(&ServerMessage) -> bool,
+    ) -> ServerMessage {
         for _ in 0..40 {
             let frame = tokio::time::timeout(Duration::from_secs(10), self.ws.next())
                 .await
@@ -45,6 +49,7 @@ impl Peer {
                 .expect("WS remains open")
                 .unwrap();
             if let Message::Text(text) = frame {
+                record_wire("server", text.as_ref());
                 let message = decode_s2c(text.as_ref()).expect("valid server protocol");
                 if matches(&message) {
                     return message;
@@ -211,5 +216,24 @@ impl Peer {
 
     pub(super) async fn close(mut self) {
         self.ws.close(None).await.unwrap();
+    }
+}
+
+fn record_wire(direction: &str, wire: &str) {
+    if let Ok(root) = std::env::var("C331_PHASE3_EVIDENCE") {
+        use std::io::Write;
+        static WIRE_LOCK: std::sync::Mutex<()> = std::sync::Mutex::new(());
+        let _serial = WIRE_LOCK
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner);
+        let mut line =
+            serde_json::to_vec(&serde_json::json!({"direction":direction,"wire":wire})).unwrap();
+        line.push(b'\n');
+        let mut file = std::fs::OpenOptions::new()
+            .create(true)
+            .append(true)
+            .open(std::path::Path::new(&root).join("server-ws-wire.jsonl"))
+            .unwrap();
+        file.write_all(&line).unwrap();
     }
 }

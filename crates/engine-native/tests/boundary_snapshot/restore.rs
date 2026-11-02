@@ -327,17 +327,25 @@ fn restore_rejects_choice_id_overrun() {
 fn restore_rejects_tampered_gate_event_payload() {
     let e = setup_sancai_pending();
     let mut snap = e.save();
+    let mut invalid = snap
+        .resolution
+        .stack
+        .iter()
+        .find_map(|f| match &f.data {
+            EventData::Damage(d) => Some(d.clone()),
+            _ => None,
+        })
+        .unwrap();
+    invalid.target = 255;
     let mut patched = false;
     for park in &mut snap.resolution.parks {
         if let MachineSnapshot::OptionalGate { event, .. } = &mut park.machine {
-            // 散财确认闸门挂在伤害帧上：载荷为 Damage
-            if let EventData::Damage(d) = event {
-                d.target = 255;
-                patched = true;
-            }
+            // 新闸门携带 window/root 引用；伪造带越界ID的旧payload仍先过信任边界校验。
+            *event = EventData::Damage(invalid.clone());
+            patched = true;
         }
     }
-    assert!(patched, "挂起的闸门机器应携带 Damage 事件载荷");
+    assert!(patched, "实际 OptionalGate 应已被篡改");
     assert!(matches!(
         Engine::restore(&snap),
         Err(SnapshotError::IdOutOfBounds { what: "player", .. })
@@ -396,13 +404,29 @@ fn restore_rejects_choice_without_machine() {
 /// 先行结算）——此类快照必须可恢复。
 #[test]
 fn restore_accepts_park_depth_below_stack() {
-    let e = setup_sancai_pending();
-    let mut snap = e.save();
-    let depth = snap.resolution.stack.len();
-    assert!(depth >= 1);
-    snap.resolution.parks[0].resume_depth = depth - 1;
-    // 深度参与摘要：篡改后哈希不同但仍必须可恢复（合法形态）
-    let _r = Engine::restore(&snap).expect("深度低于栈深且存在承接机器的快照应合法");
+    let mut e = setup_sancai_pending();
+    e.set_time_slice(Some(1));
+    for _ in 0..100 {
+        let snap = e.save();
+        if snap
+            .resolution
+            .parks
+            .iter()
+            .any(|park| park.resume_depth < snap.resolution.stack.len())
+        {
+            Engine::restore(&snap).expect("a real child frame above its parent park must restore");
+            return;
+        }
+        if let Some(choice) = e.open_choice() {
+            let selection = answer_for(&choice.spec);
+            answer_sel(&mut e, selection);
+        } else if e.is_suspended() {
+            e.resume();
+        } else {
+            break;
+        }
+    }
+    panic!("the real continuation must yield with a child above its parent park");
 }
 
 /// N04 补充：身份局主公不在座位 0 → 拒绝。

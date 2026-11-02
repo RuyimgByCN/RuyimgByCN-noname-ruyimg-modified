@@ -1,0 +1,40 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/groups/nc08.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T//noname-c331-phase7-ktqqj1fb/target-c9j-native/debug/deps/nc08-d7fa325f73a93fd6)
+
+running 1 test
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 126 filtered out; finished in 0.03s
+
+{"steps":40,"final_hash":"28d964f201e6a98618c6ee0cff0d239a3e73ebeaa1f9468b57ba63babdbaf972","wasm":"/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"}
+{
+  "direct_steps": 40,
+  "restore_before_steps": 20,
+  "restore_after_steps": 20,
+  "final_revision": 40,
+  "final_hash": "28d964f201e6a98618c6ee0cff0d239a3e73ebeaa1f9468b57ba63babdbaf972",
+  "native_wasm_match": true
+}
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.73s
+     Running tests/cross_target_package.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T//noname-c331-phase7-ktqqj1fb/target-c9j-native/debug/deps/cross_target_package-c3c93621da72c1b0)
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+{"steps":20,"final_hash":"59e0d98cfb395bfdfa3d98002a39e6b42dd5dc0c62f8a16b58289efa2c8cefd5"}
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "59e0d98cfb395bfdfa3d98002a39e6b42dd5dc0c62f8a16b58289efa2c8cefd5",
+  "native_wasm_match": true
+}
+EXIT=0

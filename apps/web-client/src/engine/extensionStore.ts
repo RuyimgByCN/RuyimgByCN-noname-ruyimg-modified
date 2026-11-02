@@ -172,16 +172,16 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
 }
 
 /**
- * 导入期深层校验入口（GT-014，裁决第 12 项）：结构层通过后，把规范化载荷交
+ * 导入期深层校验入口（GT-014，裁决第 12 项）：结构层通过后，把原始 JSON 文本交
  * `deepValidate`（产品路径为 Worker 内的 Rust 校验器）裁决；拒绝即抛出且
  * **不改写存储**；通过才提交。`deepValidate` 抛出的错误原样透传。
  */
 export async function importExtensionPackageValidated(
   json: string,
-  deepValidate: (canonicalPackJson: string) => Promise<void>,
+  deepValidate: (rawPackJson: string) => Promise<void>,
 ): Promise<ExtensionStoreSnapshot> {
   const prepared = prepareImport(json);
-  await deepValidate(prepared.canonical);
+  await deepValidate(json);
   return commitImport(prepared);
 }
 

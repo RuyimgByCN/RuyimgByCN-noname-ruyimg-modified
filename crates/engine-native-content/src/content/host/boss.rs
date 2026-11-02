@@ -68,7 +68,7 @@ pub(super) fn grant_named_skill(ctx: &mut Ctx<'_>, seat: PlayerId, name: &str) {
     let Some(def) = ctx.catalog.skill_by_name(name) else {
         return;
     };
-    ctx.core.skills.insert(
+    ctx.insert_skill(
         (seat, def),
         crate::state::SkillInstance {
             owner: seat,

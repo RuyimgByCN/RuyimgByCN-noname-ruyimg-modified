@@ -7,6 +7,24 @@ pub fn intrinsic_machine(
 ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
     match data {
+        EventData::OrdinaryJudge { owner, invocation } => {
+            let mut m = JudgePhaseMachine::new(owner, Vec::new(), None);
+            m.ordinary = Some(invocation);
+            Some(Box::new(m))
+        }
+        EventData::SkillInvocation(data) if data.phase == crate::event::InvocationPhase::Body => {
+            let window = match ctx.res.frame(data.window)?.data {
+                EventData::DamageWindow { window, .. } => window,
+                _ => return None,
+            };
+            Some(Box::new(NativeInvocation {
+                owner: data.owner,
+                def: data.def,
+                window,
+                progress: crate::event::NativeInvocationProgress::Body,
+            }))
+        }
+        EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
         EventData::LoseHp { .. } => None,
         EventData::DyingSaved { .. } => None,
         EventData::Dying { player, source } => Some(Box::new(DyingSaveMachine {
@@ -23,7 +41,7 @@ pub fn intrinsic_machine(
             if u.cancelled {
                 return None;
             }
-            let effective_kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+            let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
             // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
             // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
             // 空目标越界）；无目标/群体牌种照常（其机器自行处理空列表）
@@ -44,6 +62,10 @@ pub fn intrinsic_machine(
             {
                 return None;
             }
+            if effective_kind.is_sha_like() {
+                return sha_intrinsic(ctx, &u);
+            }
+            let card = u.card.expect("validated non-Sha physical use");
             // 内容卡牌（G1 宿主牌等）的固有结算机器由内容层提供（目录回调）；
             // 内容牌种与下方内核牌种互斥，且均无 aoe_need，先问内容层不改变分派结果。
             if let Some(machine) = (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind) {
@@ -52,14 +74,14 @@ pub fn intrinsic_machine(
             match effective_kind {
                 CardKind::Dismantle => {
                     let effect = DismantleMachine {
-                        card: u.card,
+                        card: card,
                         source: u.player,
                         target: *u.targets.first().expect("dismantle has one target"),
                         asked: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
@@ -67,29 +89,29 @@ pub fn intrinsic_machine(
                 // 无中生有（P2/N08 缺牌种批①）：使用后摸 2（无懈窗口包装）。
                 CardKind::Wuzhong => Some(Box::new(wrap_nullify_window(
                     ctx,
-                    u.card,
+                    card,
                     u.player,
                     Box::new(WuzhongMachine {
                         owner: u.player,
-                        card: Some(u.card),
+                        card: Some(card),
                     }),
                 ))),
                 // 桃园结义（P2/N08 缺牌种批①）：所有其他存活角色回复 1 点
                 // 体力（无懈窗口包装）。
                 CardKind::Taoyuan => Some(Box::new(wrap_nullify_window(
                     ctx,
-                    u.card,
+                    card,
                     u.player,
                     Box::new(TaoyuanMachine {
                         owner: u.player,
-                        card: Some(u.card),
+                        card: Some(card),
                     }),
                 ))),
                 // 五谷丰登（批①-2）：亮存活角色数的牌，从使用者起按座位序
                 // 逐人择一（无懈窗口包装）。
                 CardKind::Wugu => Some(Box::new(wrap_nullify_window(
                     ctx,
-                    u.card,
+                    card,
                     u.player,
                     Box::new(WuguMachine {
                         owner: u.player,
@@ -105,89 +127,44 @@ pub fn intrinsic_machine(
                     let victim = *u.targets.get(1).expect("jiedao two targets");
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(JiedaoMachine {
                             owner: u.player,
                             holder,
                             victim,
-                            card: Some(u.card),
+                            card: Some(card),
                             stage: JiedaoStage::Ask,
                         }),
                     )))
                 }
                 CardKind::Snatch => {
                     let effect = SnatchMachine {
-                        card: u.card,
+                        card: card,
                         source: u.player,
                         target: *u.targets.first().expect("snatch has one target"),
                         asked: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
                 }
-                CardKind::Sha | CardKind::FireSha | CardKind::LeiSha => {
-                    // 方天画戟（批③-b 第九把）：多目标队列（首目标即期结算，
-                    // 其余入队列逐目标推进）。
-                    let mut it = u.targets.iter().copied();
-                    let first = it.next().expect("sha has one target");
-                    let extra: Vec<PlayerId> = it.collect();
-                    Some(Box::new(ShaResolveMachine {
-                        card: u.card,
-                        source: u.player,
-                        target: first,
-                        nature: u.nature,
-                        asked: false,
-                        armor_judged: false,
-                        dodges_used: 0,
-                        tieji_red: None,
-                        liuli_done: false,
-                        liuli_stage: 0,
-                        liuli_card: None,
-                        asking_qilin: false,
-                        qilin_horse: None,
-                        asking_hanbing: false,
-                        asking_fengxueren: false,
-                        asking_guanshi: false,
-                        guanshi_cards: Vec::new(),
-                        asking_qinglong: false,
-                        asking_cixiong: false,
-                        cixiong_done: false,
-                        hanbing_pending: 0,
-                        asking_xiandan: false,
-                        xiandan_done: false,
-                        xiandan_bonus: false,
-                        asking_lueying: false,
-                        lueying_victim: None,
-                        lueying_declined: false,
-                        asking_fuchou: false,
-                        fuchou_card: None,
-                        asking_sadeng: false,
-                        asking_sadeng_shan: false,
-                        shoulie_direct: false,
-                        extra_targets: extra,
-                        hujia_queue: None,
-                        hujia_holder: None,
-                        // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
-                        jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
-                    }))
-                }
+
                 CardKind::Dizaizhen => {
                     // 地载阵（U05 zhenfa 首切片，规则 v110）：无懈窗口包装
                     // + 所有非大势力存活角色各摸一张
                     let effect = Box::new(DizaizhenMachine { owner: u.player });
-                    Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+                    Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
                 }
                 kind if kind.aoe_need().is_some() => {
                     // AOE 的无懈窗口为**逐目标**（由 AoeResolveMachine 对每个目标
                     // 自行开窗），外层不再包整牌级窗口——旧包裹会吞掉应答并把
                     // 整张牌作废（本批修复，ADR 0705）。
                     Some(Box::new(AoeResolveMachine {
-                        card: u.card,
+                        card: card,
                         source: u.player,
                         need: kind.aoe_need().expect("checked"),
                         targets: u.targets,
@@ -201,12 +178,12 @@ pub fn intrinsic_machine(
                     // （对齐上游 useCardToBegin 逐目标窗口），外层不再包整牌级
                     // 窗口——旧包裹在任一无懈生效时令**全部**目标不横置。
                     Some(Box::new(ChainMachine::dispatcher(
-                        u.card, u.player, u.targets,
+                        card, u.player, u.targets,
                     )))
                 }
                 CardKind::Duel => {
                     let effect = DuelMachine {
-                        card: u.card,
+                        card: card,
                         source: u.player,
                         target: *u.targets.first().expect("duel has one target"),
                         on_target: true,
@@ -215,7 +192,7 @@ pub fn intrinsic_machine(
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
@@ -231,13 +208,13 @@ pub fn intrinsic_machine(
                     // 则失去 1 点体力 + 随机弃一张牌（上游 loseHp+randomDiscard）
                     let target = *u.targets.first().expect("guiyoujie has one target");
                     let effect = PlaceDelayedMachine {
-                        card: u.card,
+                        card: card,
                         target,
                         placed: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
@@ -248,26 +225,26 @@ pub fn intrinsic_machine(
                     // PlaceDelayedMachine 置入目标判定区。
                     let target = *u.targets.first().expect("delayed trick has one target");
                     let effect = PlaceDelayedMachine {
-                        card: u.card,
+                        card: card,
                         target,
                         placed: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
                 }
                 CardKind::ShanDian => {
                     let effect = PlaceDelayedMachine {
-                        card: u.card,
+                        card: card,
                         target: u.player,
                         placed: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
@@ -275,13 +252,13 @@ pub fn intrinsic_machine(
                 CardKind::HongShui => {
                     // 洪水：自-target 延时锦囊（判定：梅花 2–9 → 3 点雷伤）
                     let effect = PlaceDelayedMachine {
-                        card: u.card,
+                        card: card,
                         target: u.player,
                         placed: false,
                     };
                     Some(Box::new(wrap_nullify_window(
                         ctx,
-                        u.card,
+                        card,
                         u.player,
                         Box::new(effect),
                     )))
@@ -315,6 +292,9 @@ pub fn intrinsic_machine(
                     owner: player,
                     queue,
                     current: None,
+                    ordinary: None,
+                    started: false,
+                    payment: None,
                 }))
             }
         }
@@ -470,8 +450,9 @@ pub fn intrinsic_machine(
                             .hand
                             .iter()
                             .filter(|c| {
-                                crate::vocabulary::card_skills::yangpijuan_class(ctx.catalog.card_kind(**c))
-                                    != Some(0)
+                                crate::vocabulary::card_skills::yangpijuan_class(
+                                    ctx.catalog.card_kind(**c),
+                                ) != Some(0)
                             })
                             .count()
                     } else if honglianx {
@@ -504,4 +485,54 @@ pub fn intrinsic_machine(
         EventData::Death { player, killer } => Some(Box::new(DeathMachine { player, killer })),
         _ => None,
     }
+}
+
+fn sha_intrinsic(
+    ctx: &mut Ctx<'_>,
+    u: &crate::event::CardUseData,
+) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+    // 方天画戟（批③-b 第九把）：多目标队列（首目标即期结算，
+    // 其余入队列逐目标推进）。
+    let mut it = u.targets.iter().copied();
+    let first = it.next().expect("sha has one target");
+    let extra: Vec<PlayerId> = it.collect();
+    Some(Box::new(ShaResolveMachine {
+        card: u.card,
+        source: u.player,
+        target: first,
+        nature: u.nature,
+        asked: false,
+        armor_judged: false,
+        dodges_used: 0,
+        tieji_red: None,
+        liuli_done: false,
+        liuli_stage: 0,
+        liuli_card: None,
+        asking_qilin: false,
+        qilin_horse: None,
+        asking_hanbing: false,
+        asking_fengxueren: false,
+        asking_guanshi: false,
+        guanshi_cards: Vec::new(),
+        asking_qinglong: false,
+        asking_cixiong: false,
+        cixiong_done: false,
+        hanbing_pending: 0,
+        asking_xiandan: false,
+        xiandan_done: false,
+        xiandan_bonus: false,
+        asking_lueying: false,
+        lueying_victim: None,
+        lueying_declined: false,
+        asking_fuchou: false,
+        fuchou_card: None,
+        asking_sadeng: false,
+        asking_sadeng_shan: false,
+        shoulie_direct: false,
+        extra_targets: extra,
+        hujia_queue: None,
+        hujia_holder: None,
+        // 酒效果在杀派发（=使用）时捕获并消耗——「下一张杀」
+        jiu_bonus: std::mem::take(&mut ctx.core.turn.jiu_active),
+    }))
 }

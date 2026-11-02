@@ -46,7 +46,7 @@ impl SkillMachine for WangZunMachine {
         if ctx.core.is_lord(self.target) {
             ctx.draw_cards(self.owner, 1);
             if let Some(mark) = ctx.catalog.skill_by_name(WANG_ZUN_MARK) {
-                ctx.core.skills.insert(
+                ctx.insert_skill(
                     (self.target, mark),
                     crate::state::SkillInstance {
                         owner: self.target,

@@ -351,8 +351,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdHuanxing => self.filter_swd(ctx, owner, event),
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => self.filter_swd(ctx, owner, event),
-            // 玄影·端蒙面：自己受伤（真实）、已横置、来源存活
+            // 玄影·端蒙面：父技主动面（无受伤 filter）
             HostBehavior::SwdXuanying => self.filter_swd(ctx, owner, event),
+            // 玄影伤害子技：自己受伤（真实）、已横置、来源存活
+            HostBehavior::SwdXuanyingDamage => self.filter_swd(ctx, owner, event),
             // 极谋·姬良面：自己受伤（真实）且回合非自己
             HostBehavior::SwdJqimou => self.filter_swd(ctx, owner, event),
             // 剑击·少微面：出牌主动技（activate 通道），无触发 filter

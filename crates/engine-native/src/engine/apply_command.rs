@@ -42,9 +42,21 @@ pub(super) fn apply_command(
                 return Err(RejectReason::AlreadyRevealed);
             }
             p.revealed_generals[slot as usize] = true;
+            state.core.declare_revealed_kingdom(catalog, actor);
             // N11 将领装配（ADR 0769）：明置实际授予该武将技能集；
             // 首次明置主将时配置体力上限（副将明置不改体力）。
+            let prior: std::collections::BTreeSet<_> = state.core.skills.keys().copied().collect();
             apply_general_assembly(&mut state.core, catalog, actor, slot as usize);
+            for &(owner, def) in state.core.skills.keys().filter(|key| !prior.contains(key)) {
+                crate::resolution::register_added(
+                    &state.core,
+                    &mut state.resolution,
+                    catalog,
+                    owner,
+                    def,
+                );
+            }
+            crate::resolution::refresh_order_choice(&state.core, &mut state.resolution, catalog);
             // 明置是公开行为：状态与视图即时可见（无隐藏事件载荷）。
             Ok(())
         }

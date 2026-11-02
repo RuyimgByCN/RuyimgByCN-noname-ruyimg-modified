@@ -4,8 +4,22 @@ import { nativeEnvelope, nativeObserverToSnapshot } from '../src/worker/nativeBa
 const general = { def: 0, name: '曹操', faction: 'wei', revealed: false };
 const view = { seat: 0, players: [{ seat: 0, characterDef: 0, generals: [general, null], hp: 4, maxHp: 4, alive: true, hand: { own: [] }, handCount: 0, equips: [], judge: [], skills: [] }], discard: [], table: [], phase: 'play', turn: 0, round: 1 };
 function envelope(choice) {
- return nativeEnvelope({ observer: 0, engine: { view_json: () => JSON.stringify(view), open_choice_json: () => JSON.stringify(choice), revision: () => 7, is_finished: () => false, legal_actions_json: () => JSON.stringify({seat: 0, revision: 7, actions: []}), activate_skill() {} } });
+ return nativeEnvelope({ observer: 0, engine: { view_json: () => JSON.stringify(view), open_choice_json: () => JSON.stringify(choice == null ? choice : {min:0,max:0,...choice}), revision: () => 7, is_finished: () => false, legal_actions_json: () => JSON.stringify({seat: 0, revision: 7, actions: []}), activate_skill() {} } });
 }
+test('u32 choice counts reject malformed fields before host acceptance', async () => {
+ const {validateChoiceCounts}=await import('../src/engine/observerMetadata.ts');
+ for(const count of [0,255,256,257,0xffffffff]) {
+  assert.equal(envelope({id:9,min:0,max:count,options:[]}).choice.max_count,count);
+  validateChoiceCounts({min_count:0,max_count:count});
+ }
+ for(const count of [-1,1.5,Infinity,NaN,0x100000000,'256',null]) {
+  assert.throws(()=>envelope({id:9,min:0,max:count,options:[]}),/choice/);
+  assert.throws(()=>validateChoiceCounts({min_count:0,max_count:count}),/choice/);
+ }
+ assert.throws(()=>validateChoiceCounts({min_count:257,max_count:256}),/choice/);
+ assert.throws(()=>envelope({id:9,min:257,max:256,options:[]}),/choice/);
+});
+
 test('two slots preserve def zero and defaults accept old payloads', () => {
  assert.deepEqual(nativeObserverToSnapshot(view).seats[0].generals, [general, null]);
  const old = structuredClone(view); delete old.players[0].generals;

@@ -74,6 +74,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
         modules: vec![],
         skill_index: vec![
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 0,
                 name: "yxs_fanji".into(),
                 locked: false,
@@ -82,6 +90,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 1,
                 name: "yxs_fanji2".into(),
                 locked: false,
@@ -90,6 +106,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 2,
                 name: "yxs_menshen".into(),
                 locked: false,
@@ -98,6 +122,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 3,
                 name: "yxs_menshen3".into(),
                 locked: false,
@@ -106,6 +138,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 4,
                 name: "yxs_menshen2".into(),
                 locked: false,

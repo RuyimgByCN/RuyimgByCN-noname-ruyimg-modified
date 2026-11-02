@@ -186,7 +186,7 @@ impl HostMachine {
                         crate::catalog::Suit::Spade => WUDIAN_GUANGSHU_SPADE_KEY,
                     };
                     if let Some(def) = ctx.catalog.skill_by_name(key) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (t, def),
                             crate::state::SkillInstance {
                                 owner: t,

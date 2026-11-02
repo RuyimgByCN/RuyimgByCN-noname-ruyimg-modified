@@ -248,5 +248,9 @@ fn yuanshi_feiren_chain_damage_not_bonused() {
         );
     }
     assert_eq!(e.debug_hp(1), 2, "主伤害 +1（4→2）");
-    assert_eq!(e.debug_hp(2), 3, "传导伤害不加成（4→3）");
+    assert_eq!(
+        e.debug_hp(2),
+        2,
+        "传导携带主事件 num2；notLink 防止再次施加飞刃，不能降回基础 num1"
+    );
 }

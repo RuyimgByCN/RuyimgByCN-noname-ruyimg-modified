@@ -13,7 +13,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::ShengkeCheck => match event {
-                EventData::CardUsed(u) => (None, Some(u.card)),
+                EventData::CardUsed(u) => (None, u.card),
                 _ => (None, None),
             },
             HostBehavior::MaxRangeWeaponDamage => match event {
@@ -21,7 +21,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::WangmeiZhikeCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             // 每步：出牌阶段开始者（被止息者）
@@ -35,7 +35,7 @@ impl HostSkillBehavior {
             },
             // 迅影：同一目标（杀结算后对同目标再杀）
             HostBehavior::XianjianXunying => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             // 破云：受伤者（被弃者自选弃牌）
@@ -56,43 +56,43 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::ShuigongCard => match event {
-                EventData::CardUsed(u) => (None, Some(u.card)),
+                EventData::CardUsed(u) => (None, u.card),
                 _ => (None, None),
             },
             HostBehavior::FudichouxinCompare => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::ChenhuodajieCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::TouliangSwap => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::LinghunzhihuoCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::ZhaomingdanCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::JihuocardDraw => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::GeanguanhuoCompare => match event {
-                EventData::CardUsed(u) => (None, Some(u.card)),
+                EventData::CardUsed(u) => (None, u.card),
                 _ => (None, None),
             },
             HostBehavior::CaochuanCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             HostBehavior::ShezhanqunruCompare => match event {
-                EventData::CardUsed(u) => (None, Some(u.card)),
+                EventData::CardUsed(u) => (None, u.card),
                 _ => (None, None),
             },
             HostBehavior::JinlianzhuCancel => match event {
@@ -104,11 +104,11 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::WudianZhuchengGuard => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::WudianMujing => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::WudianGuangshuHeart => match event {
@@ -128,7 +128,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::WudianQiangguGuard => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::WudianPingzhang => match event {
@@ -185,7 +185,7 @@ impl HostSkillBehavior {
                 _ => (None, None),
             },
             HostBehavior::SwdGouhunluoCard => match event {
-                EventData::CardUsed(u) => (u.targets.first().copied(), Some(u.card)),
+                EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
                 _ => (None, None),
             },
             // 雄姿：自身（补摸量在效果内按装备数计算）
@@ -237,7 +237,7 @@ impl HostSkillBehavior {
             },
             // 幻音：牌的使用者为关联目标，牌为关联卡
             HostBehavior::SwdHuanyin => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::SwdLingxian => (None, None),
@@ -253,7 +253,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdPozhou2 => (None, None),
             // 陷阱·触发：牌的使用者为关联目标、牌为关联卡
             HostBehavior::SwdSxianjingGain => match event {
-                EventData::CardUsed(u) => (Some(u.player), Some(u.card)),
+                EventData::CardUsed(u) => (Some(u.player), u.card),
                 _ => (None, None),
             },
             HostBehavior::SwdSxianjing => (None, None),
@@ -476,7 +476,7 @@ impl HostSkillBehavior {
             },
             // 摄灵：本次事件入弃堆的牌（回收候选）
             HostBehavior::XianjianSheling => match event {
-                EventData::CardUsed(u) => vec![u.card],
+                EventData::CardUsed(u) => u.card.into_iter().collect(),
                 EventData::CardResponded { card, .. } => vec![*card],
                 EventData::CardsDiscarded { cards, .. } => cards.clone(),
                 _ => Vec::new(),

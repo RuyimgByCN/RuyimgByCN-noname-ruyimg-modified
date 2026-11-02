@@ -199,7 +199,7 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::BossChiyiMark => {
-                ctx.current_damage_mut().amount += 1;
+                if !ctx.modify_damage_amount(1) { return Flow::Done; }
                 Flow::Done
             }
             HostBehavior::BossBaiyi => {

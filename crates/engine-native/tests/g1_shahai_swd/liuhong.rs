@@ -84,6 +84,11 @@ fn swd_generals_b21_liuhong_mojian_daofa() {
             targets: vec![1],
         },
     );
+    if e.open_choice().is_some_and(|c| c.spec.prompt == "trigger_order") {
+        let c = e.open_choice().unwrap().clone();
+        let def = e.catalog().skill_by_name("mojian").unwrap();
+        submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: vec![ChoiceOption::Skill(def)] });
+    }
     let (cid, obs) = e
         .open_choice()
         .map(|c| (c.id, c.observer))
@@ -130,6 +135,11 @@ fn swd_generals_b21_liuhong_mojian_daofa() {
             targets: vec![1],
         },
     );
+    if e.open_choice().is_some_and(|c| c.spec.prompt == "trigger_order") {
+        let c = e.open_choice().unwrap().clone();
+        let def = e.catalog().skill_by_name("mojian").unwrap();
+        submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: vec![ChoiceOption::Skill(def)] });
+    }
     let (cid, obs) = e
         .open_choice()
         .map(|c| (c.id, c.observer))

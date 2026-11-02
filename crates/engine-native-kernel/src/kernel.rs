@@ -19,7 +19,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
     };
     record_vm_history(ctx, &data);
     match data {
-        EventData::Damage(d) => commit_damage(ctx, frame_id, d),
+        EventData::DamageWindow { .. } => {}
         EventData::LoseHp { player, amount } => commit_lose_hp(ctx, player, amount),
         EventData::CardUsed(u) => commit_card_used(ctx, u),
         EventData::Equipped { player, card, .. } => commit_equip(ctx, frame_id, player, card),
@@ -44,17 +44,31 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
 }
 
 mod damage;
+mod damage_after;
+mod damage_change_hp;
+mod damage_flow;
+mod damage_skill;
+mod invocation_receipts;
+mod jiding_card_changes;
+pub use jiding_card_changes::{jiding_card_is_bound, record_jiding_card_change};
+mod invocation_validation;
+mod native_invocation;
+pub use native_invocation::jiding_recovery_origin;
+pub use native_invocation::{advance_invocation, NativeInvocation};
+mod damage_windows;
 use damage::*;
+pub use damage_flow::DamageFlow;
+pub use damage_skill::NativeDamageSkill;
 mod events;
 use events::*;
 mod equipment;
-pub use equipment::{grant_equip_skills, revoke_equip_skills};
 use equipment::commit_equip;
+pub use equipment::{grant_equip_skills, revoke_equip_skills};
 mod intrinsic;
 pub use intrinsic::*;
 mod combat_rules;
-pub(crate) use combat_rules::*;
 pub use combat_rules::tao_futai2_banned;
+pub(crate) use combat_rules::*;
 mod sha;
 pub use sha::*;
 mod dying;

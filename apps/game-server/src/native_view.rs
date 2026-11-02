@@ -135,12 +135,16 @@ pub fn observer_snapshot_for(
             player: ApiPlayerId::new(cell.seat as u32 + 1),
             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
             character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
-            generals: std::array::from_fn(|slot| cell.generals[slot].as_ref().map(|general| engine_api::GeneralSlotView {
-                def: general.def as u32,
-                name: general.name.to_owned(),
-                faction: format!("{:?}", general.faction).to_lowercase(),
-                revealed: cell.revealed_generals[slot],
-            })),
+            generals: std::array::from_fn(|slot| {
+                cell.generals[slot]
+                    .as_ref()
+                    .map(|general| engine_api::GeneralSlotView {
+                        def: general.def as u32,
+                        name: general.name.to_owned(),
+                        faction: format!("{:?}", general.faction).to_lowercase(),
+                        revealed: cell.revealed_generals[slot],
+                    })
+            }),
             seat: engine_api::SeatIndex::new(cell.seat),
             hp: cell.hp,
             max_hp: cell.max_hp,
@@ -282,11 +286,16 @@ pub fn choice_for(
         .map(|(idx, opt)| engine_api::ChoiceOption {
             token: idx as u32,
             label_key: match opt {
+                engine_native::ChoiceOption::HiddenCard(_) => "hand".to_owned(),
+                engine_native::ChoiceOption::Control(option) => option.label().to_owned(),
                 engine_native::ChoiceOption::Confirm => "confirm".to_string(),
                 engine_native::ChoiceOption::Pass => "pass".to_string(),
                 engine_native::ChoiceOption::Card(c) => format!("card:{c}"),
                 engine_native::ChoiceOption::Player(p) => format!("player:{}", *p as u32 + 1),
                 engine_native::ChoiceOption::Tag(t) => format!("tag:{t}"),
+                engine_native::ChoiceOption::Skill(s) => {
+                    format!("skill:{}", engine.catalog().skill_name(*s))
+                }
                 engine_native::ChoiceOption::Kind(k) => format!("kind:{k}"),
             },
         })
@@ -296,12 +305,23 @@ pub fn choice_for(
         observer,
         options,
         continuation_id: id,
-        kind: engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
-        native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
+        kind: if kind == engine_native::ChoiceKind::Control {
+            engine_api::ChoiceKind::Custom
+        } else if prompt == "trigger_order" {
+            engine_api::ChoiceKind::OrderTriggers
+        } else {
+            engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind))
+                .expect("canonical native choice kind")
+        },
+        native_kind: if kind == engine_native::ChoiceKind::Control {
+            None
+        } else {
+            Some(engine_native::view::choice_kind_name(kind).to_owned())
+        },
         source_skill: source_skill.map(str::to_owned),
         prompt: Some(prompt.to_owned()),
-        min_count: min as u8,
-        max_count: max as u8,
+        min_count: u32::try_from(min).expect("native choice minimum fits u32"),
+        max_count: u32::try_from(max).expect("native choice maximum fits u32"),
         allow_cancel,
         timeout_policy: engine_api::TimeoutPolicy::None,
         deadline_unix_ms: None,
@@ -355,4 +375,148 @@ pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<LegalAction>
             GameAction::RevealGeneral { .. } | GameAction::TimeoutAction { .. } => None,
         })
         .collect()
+}
+
+#[cfg(test)]
+mod c9i_wide_boundary {
+    use super::*;
+    #[test]
+    fn c9i_supported_wide_zhangwu_preserves_host_cardinality() {
+        use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
+        let p = ExtensionPack {
+            def: ExtensionDef {
+                name: "c9i-real-wide",
+                version: 1,
+                description: "unique actual cards",
+            },
+            generals: vec![],
+            host_skills: vec![],
+            vm_skills: vec![],
+            cards: (0..300)
+                .map(|i| {
+                    engine_native::catalog::CardDef::basic(
+                        Box::leak(format!("c9i-real-sha-{i}").into_boxed_str()),
+                        engine_native::CardKind::Sha,
+                    )
+                })
+                .collect(),
+            init_hook: InitHook::None,
+            enabled: true,
+        };
+        let mut e = Engine::new_with_extensions(17001, 4, &[&p]).unwrap();
+        for seat in 0..4 {
+            e.debug_clear_hand(seat);
+        }
+        e.debug_grant(1, "章武");
+        let names: Vec<_> = e
+            .catalog()
+            .cards
+            .iter()
+            .filter(|c| c.name.starts_with("c9i-real-sha-"))
+            .take(256)
+            .map(|c| c.name)
+            .collect();
+        for name in names {
+            e.debug_move_named_card_to_hand(1, name);
+        }
+        let saved = e.save();
+        let bytes = engine_native::archive::encode_archive(&saved);
+        let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
+        let _ = Engine::restore_with_extensions(&decoded, &[&p]).unwrap();
+        e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+        assert_eq!(e.open_choice().unwrap().spec.max, 256);
+        let request = choice_for(&e, RoomRole::Player, Some(ApiPlayerId::new(2))).unwrap();
+        let raw = serde_json::to_string(&request).unwrap();
+        if let Ok(dir) = std::env::var("C9I_BOUNDARY_OUT") {
+            std::fs::write(
+                std::path::Path::new(&dir).join("actual-server-wide256.json"),
+                &raw,
+            )
+            .unwrap();
+        }
+        let mut required: serde_json::Value = serde_json::from_str(&raw).unwrap();
+        required["max_count"] = serde_json::json!(256);
+        let accepted = serde_json::from_value::<engine_api::ChoiceRequest>(required.clone()).unwrap();
+        assert_eq!(accepted.max_count, 256);
+        let rejection = serde_json::from_value::<super::c9j_ws6::ChoiceRequest>(required.clone())
+            .unwrap_err()
+            .to_string();
+        if let Ok(dir) = std::env::var("C9I_BOUNDARY_OUT") {
+            std::fs::write(
+                std::path::Path::new(&dir).join("required-native-wide256.json"),
+                serde_json::to_vec_pretty(&required).unwrap(),
+            )
+            .unwrap();
+            std::fs::write(
+                std::path::Path::new(&dir).join("current-unchanged-api1-reader-rejection.txt"),
+                &rejection,
+            )
+            .unwrap();
+        }
+        assert_eq!(
+            request.max_count as usize, 256,
+            "supported native max256 must not wrap in actual host projection: {raw}"
+        );
+    }
+}
+
+#[cfg(test)]
+#[path = "../tests/support/ws6_choice_before_source.rs"]
+mod c9j_ws6;
+
+#[cfg(test)]
+mod c9i_frozen_positive {
+    use super::*;
+    #[test]
+    fn c9i_actual_private_choice_existing_host_tokens() {
+        let raw = std::fs::read_to_string(
+            std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                .join("../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json"),
+        )
+        .unwrap();
+        let pack = content_native_loader::bridge_pack(&raw).unwrap().pack;
+        let mut e = Engine::new_with_extensions(17002, 4, &[&pack]).unwrap();
+        for p in 0..4 {
+            e.debug_clear_hand(p);
+        }
+        let name = e
+            .catalog()
+            .cards
+            .iter()
+            .find(|c| c.kind == engine_native::CardKind::Qinglonglingzhu)
+            .unwrap()
+            .name;
+        let eq = e.debug_place(0, name);
+        e.state_core_mut().player_mut(0).hand.retain(|c| *c != eq);
+        e.state_core_mut().player_mut(0).equips.push(eq);
+        e.debug_place(1, "tao");
+        e.debug_place(1, "sha");
+        e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Fire);
+        let choice = choice_for(&e, RoomRole::Player, Some(ApiPlayerId::new(1))).unwrap();
+        assert_eq!(choice.max_count, 1);
+        assert_eq!(
+            choice
+                .options
+                .iter()
+                .map(|o| (&o.token, &o.label_key))
+                .collect::<Vec<_>>(),
+            vec![(&0, &"hand".to_string()), (&1, &"hand".to_string())]
+        );
+        assert!(choice.source_skill.is_none());
+        if let Ok(dir) = std::env::var("C9I_BOUNDARY_OUT") {
+            std::fs::write(
+                std::path::Path::new(&dir).join("actual-server-qinglong-small.json"),
+                serde_json::to_vec_pretty(&choice).unwrap(),
+            )
+            .unwrap();
+            let mut omitted = serde_json::to_value(&choice).unwrap();
+            omitted.as_object_mut().unwrap().remove("native_kind");
+            omitted.as_object_mut().unwrap().remove("source_skill");
+            std::fs::write(
+                std::path::Path::new(&dir).join("actual-server-qinglong-omission.json"),
+                serde_json::to_vec_pretty(&omitted).unwrap(),
+            )
+            .unwrap();
+        }
+    }
 }

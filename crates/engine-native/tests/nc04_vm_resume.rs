@@ -62,12 +62,14 @@ fn choice_then_bad_effect() -> Vec<u8> {
 
 fn pack(name: &str, code: Vec<u8>, skill: &str) -> ExtensionPack {
     let decl = VmSkillDecl {
+            declaration_hash: None,
         name: skill.to_string(),
         module: module(name, code),
         trigger: engine_native::catalog::TriggerMeta {
             event: engine_native::event::EventKind::PhaseEnd,
             timing: engine_native::event::Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -445,12 +447,14 @@ fn nc04_vm_restore_preserves_once_consume() {
         engine_native::rvm_named::compile_named("owner_alive_once_per_round").expect("滤名编译"),
     ));
     let decl = VmSkillDecl {
+            declaration_hash: None,
         name: "nc04_once_skill".to_string(),
         module: module("nc04-once-module", choice_then_halt()),
         trigger: engine_native::catalog::TriggerMeta {
             event: engine_native::event::EventKind::PhaseEnd,
             timing: engine_native::event::Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -534,12 +538,14 @@ fn nc04_vm_restore_preserves_hit_counting() {
         engine_native::rvm_named::compile_named("owner_alive_first").expect("滤名编译"),
     ));
     let decl = VmSkillDecl {
+            declaration_hash: None,
         name: "nc04_hits_skill".to_string(),
         module: module("nc04-hits-module", choice_then_halt()),
         trigger: engine_native::catalog::TriggerMeta {
             event: engine_native::event::EventKind::Damage,
             timing: engine_native::event::Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -592,16 +598,11 @@ fn nc04_vm_restore_preserves_hit_counting() {
 
 /// 旧档拒绝（版本策略）：v323 普通档解码成功但按规则版本拒绝恢复。
 #[test]
-fn b7_plain_v323_archive_is_rejected_by_rule_version() {
+fn b7_plain_v323_archive_is_rejected_by_archive_format() {
     let old = include_bytes!(
         "../../../docs/operations/evidence/2026-10-28-b7-vm-suspend-restore/native-v323.ngsa"
     );
-    let snapshot = engine_native::archive::decode_archive(old).unwrap();
-    assert_eq!(snapshot.ruleset_version, 323);
-    assert!(matches!(
-        Engine::restore(&snapshot),
-        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { snapshot: 323, catalog: 330 })
-    ));
+    assert!(matches!(engine_native::archive::decode_archive(old), Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
 }
 
 /// 旧档拒绝（不可靠恢复）：v323 含挂起 VM 机的档用旧 Rvm 编码，新解码

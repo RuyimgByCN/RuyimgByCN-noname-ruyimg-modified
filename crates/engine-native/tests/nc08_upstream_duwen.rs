@@ -24,10 +24,9 @@
 //! 原生实现引用：`kernel/damage.rs:227`（`hand.len()` 相等 → `amount += 1`；
 //! 技能键 `WUDIAN_DUWEN_KEY`）、`content/host/step/wudian_status.rs:201`（宿主无机器步骤）。
 //!
-//! 未覆盖（登记）：`check`/`ai` 策略面；`event.notLink()`（铁索连环传导事件**不**加成——
-//! 原生按「传导为独立事件照常判定」实现，见 `damage.rs` 注释 → **登记为口径差异**）。
+//! `event.notLink()` is enforced by the shared source predicate; AI policy remains separate.
 
-use engine_native::{CommandOutcome, Engine, GameCommand, Phase};
+use engine_native::{CommandOutcome, Engine, GameCommand};
 use std::sync::atomic::{AtomicU64, Ordering};
 
 static DEDUP: AtomicU64 = AtomicU64::new(1);
@@ -39,10 +38,11 @@ fn next_dedup() -> u64 {
 fn ow_engine(seed: u64) -> Engine {
     let root =
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
-    let json =
-        std::fs::read_to_string(root.join("shaai-ow-upstream-noname/assets/cards.json"))
-            .expect("读 ow 包");
-    let mut pack = content_native_loader::bridge_pack(&json).expect("桥接 pack 段").pack;
+    let json = std::fs::read_to_string(root.join("shaai-ow-upstream-noname/assets/cards.json"))
+        .expect("读 ow 包");
+    let mut pack = content_native_loader::bridge_pack(&json)
+        .expect("桥接 pack 段")
+        .pack;
     let bridged = content_native_loader::bridge_generals(&json).expect("桥接 generals 段");
     pack.generals = bridged.generals;
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
@@ -50,20 +50,30 @@ fn ow_engine(seed: u64) -> Engine {
 
 fn drain(e: &mut Engine) {
     for _ in 0..64 {
-        let Some(c) = e.open_choice().cloned() else { break };
+        let Some(c) = e.open_choice().cloned() else {
+            break;
+        };
         let sel: Vec<engine_native::ChoiceOption> =
             if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
                 vec![engine_native::ChoiceOption::Pass]
             } else if c.spec.allow_cancel {
                 Vec::new()
             } else {
-                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+                c.spec
+                    .options
+                    .iter()
+                    .take(c.spec.min.max(1))
+                    .copied()
+                    .collect()
             };
         let _ = e.submit(GameCommand {
             actor: c.observer,
             expected_revision: e.revision(),
             dedup_id: next_dedup(),
-            action: engine_native::GameAction::Answer { choice_id: c.id, selection: sel },
+            action: engine_native::GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
         });
     }
 }
@@ -89,7 +99,10 @@ fn upstream_duwen_equal_hands_adds_one_damage() {
     let hp_before = e.debug_hp(1);
     let out = e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
     assert!(
-        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
         "{out:?}"
     );
     assert!(
@@ -124,7 +137,11 @@ fn upstream_duwen_unequal_hands_no_bonus() {
     let hp_before = e.debug_hp(1);
     let _ = e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
     drain(&mut e);
-    assert_eq!(e.debug_hp(1), hp_before - 1, "手牌不等 → 伤害不加成（1 点）");
+    assert_eq!(
+        e.debug_hp(1),
+        hp_before - 1,
+        "手牌不等 → 伤害不加成（1 点）"
+    );
 }
 
 /// 上游点 1（技能门槛）：**未持技**者手牌相等也不加成。
@@ -149,25 +166,32 @@ fn upstream_duwen_requires_the_skill() {
     assert_eq!(e.debug_hp(1), hp_before - 1, "未持毒吻 → 不加成");
 }
 
-/// 上游点 2 的**登记差异**：`event.notLink()`（铁索传导）上游**不**加成，
-/// 原生注释为「传导为独立事件照常判定」→ 以源码事实固定。
+/// Actual notLink qualification distinguishes a linked direct victim from a propagated root.
 #[test]
 fn upstream_duwen_notlink_difference_is_fixed() {
-    let src = std::fs::read_to_string(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/kernel/damage.rs"
-    ))
-    .expect("读 damage 源码");
-    let idx = src.find("毒瘟（U07 ow").expect("毒瘟分支");
-    let seg: String = src[idx..].chars().take(1200).collect();
-    // 注释按行折行，逐片段检查（避免整句跨行匹配失败）
-    assert!(
-        seg.contains("铁索传") && seg.contains("导为独立事件照常判定"),
-        "差异固定：原生对铁索传导事件照常判定（上游 event.notLink() 排除）：{seg}"
+    let mut e = ow_engine(20264504);
+    e.debug_grant(0, "duwen");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    for p in [1, 2] {
+        e.state_core_mut().player_mut(p).linked = true;
+    }
+    e.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Fire);
+    drain(&mut e);
+    assert_eq!(e.debug_hp(1), 2, "direct linked victim qualifies");
+    assert_eq!(
+        e.debug_hp(2),
+        2,
+        "propagated child carries2 without another bonus"
     );
-    assert!(
-        seg.contains("amount += 1"),
-        "效果固定：伤害 +1：{seg}"
-    );
-    let _ = Phase::Play;
+    let amounts: Vec<_> = e
+        .log()
+        .iter()
+        .filter_map(|event| match event {
+            engine_native::LogEvent::DamageDealt { target, amount, .. } => Some((*target, *amount)),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(amounts, vec![(1, 2), (2, 2)]);
 }

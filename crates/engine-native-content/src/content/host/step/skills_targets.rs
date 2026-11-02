@@ -38,7 +38,7 @@ impl HostMachine {
                     let Some(def) = ctx.catalog.skill_by_name(U08_YXS_MENSHEN2_KEY) else {
                         return Flow::Done;
                     };
-                    ctx.core.skills.insert(
+                    ctx.insert_skill(
                         (target, def),
                         crate::state::SkillInstance {
                             owner: target,
@@ -186,7 +186,7 @@ impl HostMachine {
                     if let Some(def) = ctx.catalog.skill_by_name(SWD_BINGFENG2_KEY) {
                         for h in holders {
                             if !ctx.core.skills.contains_key(&(h, def)) {
-                                ctx.core.skills.insert(
+                                ctx.insert_skill(
                                     (h, def),
                                     crate::state::SkillInstance {
                                         owner: h,

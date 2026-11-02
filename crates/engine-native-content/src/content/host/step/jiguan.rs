@@ -224,7 +224,7 @@ impl HostMachine {
                         ctx.core.player_mut(t).equips.retain(|x| *x != c);
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
                         ctx.core.player_mut(self.owner).hand.push(c);
-                        ctx.log(LogEvent::CardsGiven {
+                        ctx.log(LogEvent::CardsGivenPublic {
                             from: t,
                             to: self.owner,
                             cards: vec![c],

@@ -42,6 +42,7 @@ import {
   withSeatProjection,
 } from "../engine/generalSelectModel";
 import BattleBoard from "../components/battle/BattleBoard.vue";
+import TriggerOrderChoice from "../components/battle/TriggerOrderChoice.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
@@ -518,6 +519,12 @@ async function resolveLegalChoice(action: Extract<LegalAction, { ResolveChoice: 
   });
 }
 
+async function resolveTriggerOrder(token: number) {
+  const choice = store.choice;
+  if (!choice || choice.observer !== selfId.value || store.busy || !store.connected || isSpectator.value) return;
+  await resolveLegalChoice({ ResolveChoice: { choice_id: choice.choice_id, selections: [token], cancelled: false } });
+}
+
 const choiceActions = computed(() =>
   store.legalActions.filter(
     (action): action is Extract<LegalAction, { ResolveChoice: unknown }> =>
@@ -792,7 +799,11 @@ const turnInfo = computed(() => {
         choice #{{ store.choice.choice_id }} · 玩家
         {{ store.choice.observer }} · {{ choiceKindLabel(store.choice) }}
       </p>
-      <div v-if="choiceActions.length" class="row">
+      <TriggerOrderChoice v-if="store.choice.prompt === 'trigger_order'"
+        :choice="store.choice" :busy="store.busy"
+        :enabled="store.connected && !isSpectator && store.choice.observer === selfId"
+        @select="resolveTriggerOrder" />
+      <div v-else-if="choiceActions.length" class="row">
         <button
           v-for="(action, index) in choiceActions"
           :key="index"

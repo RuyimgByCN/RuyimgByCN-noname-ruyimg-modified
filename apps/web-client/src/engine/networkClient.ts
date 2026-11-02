@@ -9,7 +9,7 @@ import type {
   ObserverSnapshot,
 } from "../types/engine";
 
-const NETWORK_PROTOCOL_VERSION = 6;
+const NETWORK_PROTOCOL_VERSION = 7;
 
 type CommandKind =
   | "EndPhase"
@@ -547,7 +547,7 @@ export class NetworkEngineClient {
     switch (message.type) {
       case "Welcome":
         if (payload.protocol_version !== NETWORK_PROTOCOL_VERSION || (payload.versions as { network_protocol?: number } | undefined)?.network_protocol !== NETWORK_PROTOCOL_VERSION) {
-          this.rejectOutstanding(new Error("服务端协议版本不兼容：需要 WS6"));
+          this.rejectOutstanding(new Error(`服务端协议版本不兼容：需要 WS${NETWORK_PROTOCOL_VERSION}`));
           this.socket?.close();
           return;
         }

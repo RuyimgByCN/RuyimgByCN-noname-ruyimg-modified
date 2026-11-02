@@ -243,7 +243,7 @@ impl SkillMachine for JijiangMachine {
                 // asking_cixiong, cixiong_done, extra_targets,
                 // hanbing_pending
                 let machine = crate::kernel::ShaResolveMachine::new(
-                    sha,
+                    Some(sha),
                     self.owner,
                     target,
                     crate::event::DamageNature::Normal,

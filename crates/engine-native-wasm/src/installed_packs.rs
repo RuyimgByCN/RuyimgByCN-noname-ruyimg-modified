@@ -24,6 +24,35 @@ fn json(value: &Value) -> String {
     value.to_string()
 }
 
+// Validate original declaration text before Value can normalize duplicate keys.
+fn parse_pack_json(pack_json: &str) -> Result<Value, String> {
+    let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
+    let declarations = [
+        "skill_index",
+        "trigger_index",
+        "active_index",
+        "modifier_index",
+        "view_as_index",
+    ]
+    .iter()
+    .any(|key| item.get(*key).is_some());
+    if item.get("modules").is_some() {
+        let package = content_schema::ContentPackage::from_json_bytes(pack_json.as_bytes())
+            .map_err(|e| format!("npack: {e}"))?;
+        package.validate().map_err(|e| format!("npack: {e}"))?;
+    } else if declarations {
+        return Err("declaration-bearing partial npack requires modules".into());
+    } else if let Some(schema) = item
+        .get("manifest")
+        .and_then(|m| m.get("content_schema_version"))
+    {
+        if !matches!(schema.as_u64(), Some(3 | 4)) {
+            return Err("unsupported asset-only content_schema; schema5 declaration package requires modules".into());
+        }
+    }
+    Ok(item)
+}
+
 fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     let manifest = &item["manifest"];
     let namespace = required(manifest, "namespace")?;
@@ -48,7 +77,6 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
     } else {
         Vec::new()
     };
-    let vm_names: BTreeSet<String> = vm_decls.iter().map(|decl| decl.name.clone()).collect();
     let mut pack = if let Some(cards) = item.get("cards") {
         content_native_loader::bridge_pack(&json(cards))
             .map_err(|e| e.to_string())?
@@ -75,7 +103,10 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
             .and_then(Value::as_array)
             .is_some_and(|v| !v.is_empty());
         let generals = if vm_modules {
-            content_native_loader::bridge_generals_with_known(&json(characters), &vm_names)
+            content_native_loader::bridge_generals_with_vm_package(
+                &json(characters),
+                &serde_json::from_value(item.clone()).map_err(|e| format!("npack: {e}"))?,
+            )
         } else {
             content_native_loader::bridge_generals(&json(characters))
         }
@@ -118,7 +149,7 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
 /// 依赖解析仍在开局（`packs_from_json`）执行。与 `packs_from_json` 的单项
 /// 分派保持一致（含无 manifest 的旧 cards.json 元素）。
 pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
-    let item: Value = serde_json::from_str(pack_json).map_err(|e| format!("pack JSON: {e}"))?;
+    let item = parse_pack_json(pack_json)?;
     if item.get("manifest").is_some() {
         installed_pack(&item).map(|_| ())
     } else {
@@ -129,10 +160,13 @@ pub(super) fn validate_pack_json(pack_json: &str) -> Result<(), String> {
 }
 
 pub(super) fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, String> {
-    let value: Value = serde_json::from_str(packs_json).map_err(|e| format!("packs JSON: {e}"))?;
-    let arr = value
-        .as_array()
-        .ok_or_else(|| "packs 须为 JSON 数组".to_string())?;
+    let raw: Vec<&serde_json::value::RawValue> =
+        serde_json::from_str(packs_json).map_err(|e| format!("packs 须为 JSON 数组: {e}"))?;
+    let items: Vec<Value> = raw
+        .iter()
+        .map(|item| parse_pack_json(item.get()))
+        .collect::<Result<_, _>>()?;
+    let arr = &items;
     let mut slots = BTreeMap::new();
     for (index, item) in arr.iter().enumerate() {
         if let Some(manifest) = item.get("manifest") {

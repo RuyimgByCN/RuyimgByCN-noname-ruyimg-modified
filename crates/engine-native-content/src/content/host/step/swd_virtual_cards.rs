@@ -211,7 +211,8 @@ impl HostMachine {
             // 诛害：选一张手中的【杀】→ 对结束阶段角色使用（实体牌）
             HostBehavior::SwdZhuhai => match self.stage {
                 HostStage::Act => {
-                    let target = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    let target = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                    {
                         Some(EventData::Phase { player, .. }) => *player,
                         _ => return Flow::Done,
                     };

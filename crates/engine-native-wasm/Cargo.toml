@@ -13,7 +13,7 @@ engine-native = { path = "../engine-native" }
 content-native-loader = { path = "../content-native-loader" }
 content-schema = { workspace = true }
 wasm-bindgen = { workspace = true }
-serde_json = { workspace = true }
+serde_json = { workspace = true, features = ["raw_value"] }
 blake3 = { workspace = true }
 
 [dev-dependencies]

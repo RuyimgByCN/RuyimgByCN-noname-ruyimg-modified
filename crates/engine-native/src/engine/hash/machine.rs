@@ -1,11 +1,93 @@
 //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
 
+use super::native_invocation::push_native_invocation;
 use super::*;
 
 /// 机器规范快照的摘要编码：判别符 + 全字段；嵌套机器递归。
 pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
     use crate::snap::MachineSnapshot as M;
     match s {
+        M::JudgeContinuation {
+            owner,
+            queue,
+            current,
+            ordinary,
+            started,
+            payment,
+        } => {
+            push_u8(h, 87);
+            push_machine(
+                h,
+                &M::JudgePhase {
+                    owner: *owner,
+                    queue: queue.clone(),
+                    current: current.clone(),
+                },
+            );
+            push_u32(h, ordinary.unwrap_or(u32::MAX));
+            push_u8(h, u8::from(*started));
+            if let Some(p) = payment {
+                push_u8(h, 1);
+                push_u8(h, p.player);
+                push_u32(h, p.old);
+                push_u8(h, u8::from(p.discard_old));
+                push_u16(h, p.provider);
+            } else {
+                push_u8(h, 0);
+            }
+        }
+        M::NativeInvocation {
+            owner,
+            def,
+            window,
+            progress,
+        } => {
+            push_u8(h, 86);
+            push_u8(h, *owner);
+            push_u16(h, *def);
+            push_u8(h, window.tag());
+            push_native_invocation(h, progress);
+        }
+        M::NativeDamageSkill { owner, def, window } => {
+            push_u8(h, 85);
+            push_u8(h, *owner);
+            push_u16(h, *def);
+            push_u8(h, window.tag());
+        }
+        M::DamageFlow { root } => {
+            push_u8(h, 84);
+            push_u32(h, *root);
+        }
+        M::TriggerOrder {
+            frame,
+            owner,
+            candidates,
+            asked,
+            cursor,
+            done,
+            owners,
+            normal_owners,
+        } => {
+            push_u8(h, 83);
+            push_u32(h, *frame);
+            push_u8(h, *owner);
+            push_u64(h, candidates.len() as u64);
+            for def in candidates {
+                push_u32(h, u32::from(*def));
+            }
+            push_u8(h, u8::from(*asked));
+            push_u32(h, u32::from(*cursor));
+            push_u64(h, done.len() as u64);
+            for (owner, def) in done {
+                push_u8(h, *owner);
+                push_u32(h, u32::from(*def));
+            }
+            push_u32(h, owners.len() as u32);
+            for owner in owners {
+                push_u8(h, *owner);
+            }
+            push_u32(h, u32::from(*normal_owners));
+        }
         M::Sha {
             card,
             source,
@@ -45,7 +127,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
             shoulie_direct: _,
         } => {
             push_u8(h, 1);
-            push_u32(h, *card);
+            push_u32(h, card.unwrap_or(u32::MAX));
             push_u8(h, *source);
             push_u8(h, *target);
             push_u8(h, *nature as u8);
@@ -390,9 +472,17 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
                 None => push_u8(h, 0),
                 Some(c) => {
                     push_u8(h, 1);
-                    push_u32(h, c.trick);
+                    push_u32(h, c.trick.unwrap_or(u32::MAX));
                     push_u32(h, c.judge_card);
                     push_players(h, &c.rewriters);
+                    if c.rewrite_provider.is_some() || !c.used_rewrite_providers.is_empty() {
+                        push_u8(h, 255);
+                        push_u16(h, c.rewrite_provider.unwrap_or(u16::MAX));
+                        for (p, d) in &c.used_rewrite_providers {
+                            push_u8(h, *p);
+                            push_u16(h, *d);
+                        }
+                    }
                     push_u8(h, c.asked as u8);
                     push_players(h, &c.tian_du);
                     push_u8(h, c.gained as u8);

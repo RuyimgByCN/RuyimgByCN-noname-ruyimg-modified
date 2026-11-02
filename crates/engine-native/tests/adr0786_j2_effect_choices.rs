@@ -514,7 +514,7 @@ fn fenghe_rewards_only_actual_give_with_owned_yingba_and_living_damage_source() 
         }
         let pack = pack(&source, "j2-fenghe-reward");
         let mut e = engine(&pack);
-        let yingba = e.catalog().skill_by_name("j2_yingba_phase_play").unwrap();
+        let yingba = e.catalog().skill_by_name("j2_yingba").unwrap();
         if mode == 1 {
             e.state_core_mut().skills.remove(&(0, yingba));
         } else {
@@ -584,7 +584,7 @@ fn actual_pinghe_source_keeps_max_hp_hand_limit_and_prevention_timing() {
         4,
         "actual declared modifier uses max HP"
     );
-    let def = e.catalog().skill_by_name("pinghe_damage_before").unwrap();
+    let def = e.catalog().skill_by_name("pinghe").unwrap();
     for source in [None, Some(0), Some(2)] {
         e.state_core_mut().player_mut(2).alive = false;
         let event = engine_native::event::EventData::Damage(engine_native::machine::damage_data(

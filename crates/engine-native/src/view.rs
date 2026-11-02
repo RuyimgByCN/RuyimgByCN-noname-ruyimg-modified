@@ -7,10 +7,10 @@
 
 use crate::event::Phase;
 use crate::ids::{CardId, PlayerId};
-use crate::state::Role;
-use crate::GameAction;
-use crate::state::{Winner};
 use crate::machine::LogEvent;
+use crate::state::Role;
+use crate::state::Winner;
+use crate::GameAction;
 
 /// 手牌可见性：本人或可信裁判可见具体牌，普通他人只见数量。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -113,6 +113,12 @@ pub enum EventView {
     Public(crate::machine::LogEvent),
     /// 他人摸牌：牌 id 隐藏，仅数量。
     CardsDrawnHidden { player: PlayerId, count: usize },
+    /// Transfer identities are known only to giver and recipient.
+    CardsGivenHidden {
+        from: PlayerId,
+        to: PlayerId,
+        count: usize,
+    },
     /// 他人的私有选择应答（N10-a）：仅保留询问 id，
     /// 选项内容（含牌/目标 id）对非观察者不透明。
     ChoiceAnsweredHidden { id: u64 },
@@ -162,7 +168,10 @@ impl<'a> AiSession<'a> {
     /// 组装策略输入（视图 + 询问 + 协议数据 + 自己手牌类别）。
     pub fn input(&self) -> PolicyInput {
         let view = self.view();
-        let own_hand_kinds = match (&view.players[self.seat as usize].hand, self.engine.catalog()) {
+        let own_hand_kinds = match (
+            &view.players[self.seat as usize].hand,
+            self.engine.catalog(),
+        ) {
             (HandView::Own(hand), cat) => hand
                 .iter()
                 .map(|c| (*c, cat.cards[*c as usize].kind))
@@ -206,7 +215,9 @@ impl<'a> AiSession<'a> {
 pub fn public_event_code(event: &LogEvent) -> Option<u16> {
     match event {
         LogEvent::CardsDrawn { .. } => Some(2),
-        LogEvent::CardPlayed { .. } | LogEvent::CardResponded { .. } => Some(3),
+        LogEvent::VirtualCardPlayed { .. }
+        | LogEvent::CardPlayed { .. }
+        | LogEvent::CardResponded { .. } => Some(3),
         LogEvent::DamageDealt { .. } | LogEvent::DamagePrevented { .. } => Some(4),
         LogEvent::HpRecovered { .. } => Some(5),
         LogEvent::DyingEntered { .. } | LogEvent::DyingSaved { .. } => Some(6),
@@ -220,6 +231,7 @@ pub fn public_event_code(event: &LogEvent) -> Option<u16> {
 /// Canonical presentation name shared by server, WASM and native session adapters.
 pub fn choice_kind_name(kind: crate::ChoiceKind) -> &'static str {
     match kind {
+        crate::ChoiceKind::Control => "control",
         crate::ChoiceKind::Confirm => "confirm",
         crate::ChoiceKind::SelectCards => "select_cards",
         crate::ChoiceKind::SelectPlayers => "select_players",

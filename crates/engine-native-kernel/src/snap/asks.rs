@@ -1,4 +1,5 @@
 use super::*;
+mod judge;
 mod shapes;
 pub use shapes::*;
 
@@ -17,6 +18,32 @@ pub fn active_ask(
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
     match machine {
+        MachineSnapshot::NativeInvocation {
+            owner, progress, ..
+        } => crate::kernel::NativeInvocation::expected_ask(*owner, progress, core),
+        MachineSnapshot::TriggerOrder {
+            owner,
+            candidates,
+            asked,
+            ..
+        } => {
+            if !asked {
+                return None;
+            }
+            Some(ask(
+                *owner,
+                "trigger_order",
+                ChoiceKind::PickTag,
+                candidates
+                    .iter()
+                    .copied()
+                    .map(ChoiceOption::Skill)
+                    .collect(),
+                1,
+                1,
+                false,
+            ))
+        }
         // ---- 内核机器 ----
         MachineSnapshot::MonkeySteal { holders, asked, .. } => {
             if !*asked {
@@ -278,74 +305,9 @@ pub fn active_ask(
                 active_ask(e, core, catalog)
             }
         }
-        MachineSnapshot::JudgePhase { owner, current, .. } => {
-            let c = current.as_deref()?;
-            if !c.finalized && c.judge_held {
-                if let Some(cards) = &c.gaiming_cards {
-                    return Some(ask(
-                        *owner,
-                        "gaiming_pick",
-                        ChoiceKind::SelectCards,
-                        hand_card_options(cards),
-                        1,
-                        1,
-                        true,
-                    ));
-                }
-                if let (Some(holder), Some(other)) = (c.haotian_holder, c.haotian_other) {
-                    return Some(ask(
-                        holder,
-                        "haotianta_pick",
-                        ChoiceKind::SelectCards,
-                        vec![ChoiceOption::Card(c.judge_card), ChoiceOption::Card(other)],
-                        1,
-                        1,
-                        false,
-                    ));
-                }
-            }
-            if c.in_rewrite {
-                if !c.asked {
-                    return None;
-                }
-                let rewriter = *c.rewriters.first()?;
-                // 黑色手牌 + 黑色装备；鬼才持有者全部手牌可打
-                let gui_cai = catalog
-                    .skill_by_name(GUI_CAI)
-                    .map(|d| core.has_skill(rewriter, d))
-                    .unwrap_or(false);
-                let is_black = |id: CardId| {
-                    matches!(
-                        catalog.cards[id as usize].suit,
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
-                    )
-                };
-                let mut options = vec![ChoiceOption::Pass];
-                for c in core.player(rewriter).hand.iter().copied() {
-                    if gui_cai || is_black(c) {
-                        options.push(ChoiceOption::Card(c));
-                    }
-                }
-                for c in core.player(rewriter).equips.iter().copied() {
-                    if is_black(c) {
-                        options.push(ChoiceOption::Card(c));
-                    }
-                }
-                return Some(ask(
-                    rewriter,
-                    "gui_dao_rewrite",
-                    ChoiceKind::RespondCard,
-                    options,
-                    1,
-                    1,
-                    false,
-                ));
-            }
-            // 天妒询问（判定确定后、获得前、判定牌仍由机器持有）
-            if c.finalized && !c.tian_du.is_empty() && c.asked && !c.gained && c.judge_held {
-                return Some(confirm_ask(c.tian_du[0], "tian_du_gain"));
-            }
-            None
+        MachineSnapshot::JudgePhase { owner, current, .. }
+        | MachineSnapshot::JudgeContinuation { owner, current, .. } => {
+            judge::active_judge_ask(owner, current, core, catalog)
         }
         MachineSnapshot::PlaceDelayed { .. } => None,
         MachineSnapshot::Aoe { inner, .. } => {
@@ -406,13 +368,20 @@ pub fn active_ask(
             ))
         }
         MachineSnapshot::Death { .. } => None,
-        MachineSnapshot::OptionalGate { owner, asked, inner, .. } => {
+        MachineSnapshot::OptionalGate {
+            owner,
+            asked,
+            inner,
+            ..
+        } => {
             if let Some(e) = inner {
                 let mut ask = active_ask(e, core, catalog)?;
                 ask.source_skill = optional_source(e, catalog);
                 return Some(ask);
             }
-            if !*asked { return None; }
+            if !*asked {
+                return None;
+            }
             let mut ask = confirm_ask(*owner, "trigger_confirm");
             ask.source_skill = optional_source(machine, catalog);
             Some(ask)
@@ -652,7 +621,11 @@ pub fn active_ask(
             // 望乡：直写一步机，恢复无询问
             None
         }
-        MachineSnapshot::Rvm { commit_pending, commit_state, .. } if !commit_state.is_empty() => {
+        MachineSnapshot::Rvm {
+            commit_pending,
+            commit_state,
+            ..
+        } if !commit_state.is_empty() => {
             let effects = crate::rvm_ops::dec_effects(commit_pending)?;
             (catalog.hooks.vm_ask)(effects.first()?, commit_state, core, catalog)
         }
@@ -889,7 +862,11 @@ pub fn active_ask(
                 _ => None,
             }
         }
-        MachineSnapshot::XunXun { owner, stage: XunXunStageSnap::Arrange, top } => Some(ask(
+        MachineSnapshot::XunXun {
+            owner,
+            stage: XunXunStageSnap::Arrange,
+            top,
+        } => Some(ask(
             *owner,
             "xunxun_arrange",
             ChoiceKind::SelectCards,
@@ -898,7 +875,11 @@ pub fn active_ask(
             2,
             false,
         )),
-        MachineSnapshot::JiJie { owner, stage: JiJieStageSnap::Read, .. } => Some(ask(
+        MachineSnapshot::JiJie {
+            owner,
+            stage: JiJieStageSnap::Read,
+            ..
+        } => Some(ask(
             *owner,
             "jijie_give_target",
             ChoiceKind::SelectPlayers,

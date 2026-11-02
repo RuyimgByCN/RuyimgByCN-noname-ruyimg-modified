@@ -153,10 +153,12 @@ pub enum LiJianStageSnap {
 /// 单次判定的进行态快照（与 kernel `JudgementProgress` 字段一一对应）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct JudgementProgressSnap {
-    pub trick: CardId,
+    pub trick: Option<CardId>,
     pub judge_card: CardId,
     /// 鬼道/鬼才改判询问队列（座位序）。
     pub rewriters: Vec<PlayerId>,
+    pub rewrite_provider: Option<crate::ids::SkillDefId>,
+    pub used_rewrite_providers: Vec<(PlayerId, crate::ids::SkillDefId)>,
     /// 当前改判者（或天妒询问）是否已被询问。
     pub asked: bool,
     /// 天妒持有人队列。
@@ -202,8 +204,30 @@ pub struct RvmPaused {
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum MachineSnapshot {
+    DamageFlow {
+        root: crate::ids::EventId,
+    },
+    JudgeContinuation {
+        owner: PlayerId,
+        queue: Vec<CardId>,
+        current: Option<Box<JudgementProgressSnap>>,
+        ordinary: Option<crate::ids::EventId>,
+        started: bool,
+        payment: Option<JudgeReplacementSnap>,
+    },
+    NativeInvocation {
+        owner: PlayerId,
+        def: SkillDefId,
+        window: crate::event::DamageWindowKind,
+        progress: crate::event::NativeInvocationProgress,
+    },
+    NativeDamageSkill {
+        owner: PlayerId,
+        def: SkillDefId,
+        window: crate::event::DamageWindowKind,
+    },
     Sha {
-        card: CardId,
+        card: Option<CardId>,
         source: PlayerId,
         target: PlayerId,
         nature: DamageNature,
@@ -339,6 +363,16 @@ pub enum MachineSnapshot {
     Death {
         player: PlayerId,
         killer: Option<PlayerId>,
+    },
+    TriggerOrder {
+        frame: crate::ids::EventId,
+        owner: PlayerId,
+        candidates: Vec<SkillDefId>,
+        asked: bool,
+        cursor: u16,
+        done: Vec<(PlayerId, SkillDefId)>,
+        owners: Vec<PlayerId>,
+        normal_owners: u16,
     },
     OptionalGate {
         owner: PlayerId,
@@ -776,4 +810,12 @@ pub struct RestoreBounds {
     pub skills: usize,
     pub generals: usize,
     pub ruleset_version: u64,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct JudgeReplacementSnap {
+    pub provider: crate::ids::SkillDefId,
+    pub player: PlayerId,
+    pub old: CardId,
+    pub discard_old: bool,
 }

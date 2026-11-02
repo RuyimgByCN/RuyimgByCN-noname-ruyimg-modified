@@ -86,6 +86,7 @@ pub(super) fn order_packages(packages: Vec<ContentPackage>) -> Result<Vec<Conten
             );
         }
     }
+    ContentPackage::validate_native_mechanism_graph(&ordered).map_err(RuntimeError::Package)?;
     Ok(ordered)
 }
 

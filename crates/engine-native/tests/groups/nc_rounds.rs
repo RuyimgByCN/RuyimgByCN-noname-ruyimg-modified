@@ -108,3 +108,32 @@ mod nc10_source_provenance;
 
 #[path = "../nc10_answer_routing.rs"]
 mod nc10_answer_routing;
+
+#[path = "../c331_source33_integration.rs"]
+mod c331_source33_integration;
+
+#[path = "../c331_schema5_datachain.rs"]
+mod c331_schema5_datachain;
+
+#[path = "../c331_atomic_source_repair.rs"]
+mod c331_atomic_source_repair;
+#[path = "../c331_canonical_damage.rs"]
+mod c331_canonical_damage;
+#[path = "../c331_prehp_damage.rs"]
+mod c331_prehp_damage;
+#[path = "../c331_source_predicates.rs"]
+mod c331_source_predicates;
+
+#[path = "../c331_genuine_invocations.rs"]
+mod c331_genuine_invocations;
+
+#[path = "../c331_invocation_boundaries.rs"]
+mod c331_invocation_boundaries;
+
+#[path = "../c331_review_roots.rs"]
+mod c331_review_roots;
+#[path = "../c331_review_continuations.rs"]
+mod c331_review_continuations;
+
+#[path = "../c331_jiding_proofs.rs"]
+mod c331_jiding_proofs;

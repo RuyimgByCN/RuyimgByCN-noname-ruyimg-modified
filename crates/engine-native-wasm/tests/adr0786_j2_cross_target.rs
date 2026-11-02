@@ -96,7 +96,10 @@ fn choice(engine: &Engine) -> Value {
             O::Card(c) => json!({"card":c}),
             O::Player(p) => json!({"player":p}),
             O::Tag(t) => json!({"tag":t}),
+            O::Skill(def) => json!({"skill":engine.catalog().skill_name(*def)}),
             O::Kind(k) => json!({"kind":k}),
+            O::Control(option) => json!(option.label()),
+            O::HiddenCard(_) => json!("hand"),
             O::Confirm => json!("confirm"),
             O::Pass => json!("pass"),
         })

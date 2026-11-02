@@ -24,7 +24,7 @@ function fixture(t) {
     open(id = sockets.length) {
       this.readyState = 1;
       this.onopen?.();
-      this.receive("Welcome", { connection_id: id, protocol_version: 6, versions: { network_protocol: 6 } });
+      this.receive("Welcome", { connection_id: id, protocol_version: 7, versions: { network_protocol: 7 } });
     }
     receive(type, payload) { this.onmessage?.({ data: JSON.stringify({ type, payload }) }); }
     close() { this.readyState = 3; this.onclose?.(); }
@@ -535,17 +535,17 @@ test("B metadata is preserved on real network consumer messages and malformed me
   await assert.rejects(rejected, /元数据无效/);
 });
 
-test("WS6 rejects an old Welcome before creating rooms", async (t) => {
+test("WS7 rejects an old Welcome before creating rooms", async (t) => {
   const { client, sockets } = fixture(t);
   const pending = client.connect("ws://localhost:7700/ws", "old-server");
   const socket = sockets.at(-1);
   socket.readyState = 1;
   socket.onopen?.();
   socket.receive("Welcome", { connection_id: 1, protocol_version: 5, versions: { network_protocol: 5 } });
-  await assert.rejects(pending, /WS6/);
+  await assert.rejects(pending, /WS7/);
 });
 
-test("WS6 room configuration and deadline reach the actual network consumer", async (t) => {
+test("WS7 room configuration and deadline reach the actual network consumer", async (t) => {
   const { client, connect } = fixture(t);
   const socket = await connect();
   const pending = client.createRoom(4, 42, "", 10);
@@ -583,7 +583,7 @@ for (const skew of [60_000, -60_000]) {
     const f = fixture(t);
     const socket = await f.connect();
     const probe = socket.sent.find(message => message.type === 'Heartbeat');
-    socket.receive('Pong', {header:probe?.payload.header ?? {protocol_version:6,room_id:0,conn_seq:1,revision:0},server_time_ms:1_000_000});
+    socket.receive('Pong', {header:probe?.payload.header ?? {protocol_version:7,room_id:0,conn_seq:1,revision:0},server_time_ms:1_000_000});
     const countdown = battleCountdown(f.client, 1_010_000);
     assert.equal(countdown.value.value, 10, 'actual BattleView calculation must use the server anchor');
     assert.ok(probe, 'connect immediately samples the existing Heartbeat/Pong protocol');

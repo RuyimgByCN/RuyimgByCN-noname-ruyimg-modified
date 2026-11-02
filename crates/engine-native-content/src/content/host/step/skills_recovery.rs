@@ -84,7 +84,7 @@ impl HostMachine {
                         continue;
                     };
                     if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,

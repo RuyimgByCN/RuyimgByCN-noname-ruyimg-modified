@@ -320,7 +320,7 @@ mod tests {
                     resume_depth: 0,
                     slot: crate::resolution::Slot::Intrinsic { frame: 1 },
                     machine: Box::new(ShaResolveMachine::new(
-                        0,
+                        Some(0),
                         0,
                         1,
                         DamageNature::Normal,

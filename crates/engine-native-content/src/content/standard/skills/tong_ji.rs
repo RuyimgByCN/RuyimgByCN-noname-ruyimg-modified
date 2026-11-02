@@ -11,7 +11,7 @@ impl SkillBehavior for TongJiBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         let matches_sha = matches!(event, EventData::CardUsed(u)
         if {
-            let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+            let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
             matches!(kind, crate::catalog::CardKind::Sha | crate::catalog::CardKind::FireSha | crate::catalog::CardKind::LeiSha)
                 && u.targets.len() == 1
                 && u.player != owner
@@ -112,30 +112,57 @@ impl SkillMachine for TongJiMachine {
                     return Flow::Done;
                 };
                 let target = u.targets[0];
+                let before_player = u.player;
+                let frame = ctx.current_event_frame_id();
                 // 空应答 = 目标取消（不弃牌不转移）。
-                if let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() {
-                    let hand = ctx.core.player(target).hand.contains(&card);
-                    if hand {
-                        ctx.discard_from_hand(target, card);
-                    } else if let Some(pos) = ctx
-                        .core
-                        .player(target)
-                        .equips
-                        .iter()
-                        .position(|c| *c == card)
-                    {
-                        let equip = ctx.core.player_mut(target).equips.remove(pos);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, target, equip);
-                        ctx.to_discard(equip);
-                    } else {
-                        return Flow::Done;
+                let Some(ChoiceOption::Card(card)) = ctx.answer().first().copied() else {
+                    return Flow::Done;
+                };
+                // 手牌/装备两条路径都必须留下 CardsLost 收据：装备分支此前直接
+                // to_discard，收据被抹掉，存档可伪造未付代价的转移。
+                let Some(loss) = pay_tongji_cost(ctx, target, card) else {
+                    return Flow::Done;
+                };
+                // 来源绑定：只有真实既定牌帧才记收据；记录先于转移，避免
+                // 「转移已发生但档案里没有来源绑定/收据」。
+                if crate::kernel::jiding_card_is_bound(ctx, frame) {
+                    let def = ctx.catalog.skill_by_name(TONG_JI);
+                    if let Some(def) = def {
+                        debug_assert!(crate::kernel::record_jiding_card_change(ctx, crate::event::JidingCardChange {
+                            card: frame, def, actor: self.owner, before_player, before_target: target,
+                            cost: crate::event::JidingCardCost::TongJi { card, loss: Some(loss) },
+                        }));
                     }
-                    // 转移：改写 CardUsed 帧载荷目标（sha 结算尚未开始）。
-                    let u = ctx.current_card_use_mut();
-                    u.targets[0] = self.owner;
                 }
+                // 转移：改写 CardUsed 帧载荷目标（sha 结算尚未开始）。
+                ctx.current_card_use_mut().targets[0] = self.owner;
                 Flow::Done
             }
         }
     }
+}
+
+/// 支付同疾代价：手牌/装备两条路径都发 `CardsLost` 收据并返回其事件号。
+/// 返回 `None` 表示该牌不在付款者的任何牌区（调用方已判定过选项）。
+fn pay_tongji_cost(
+    ctx: &mut Ctx<'_>,
+    payer: PlayerId,
+    card: crate::ids::CardId,
+) -> Option<crate::ids::EventId> {
+    let receipt = ctx.res.next_event_id;
+    if ctx.core.player(payer).hand.contains(&card) {
+        ctx.discard_from_hand(payer, card);
+        return Some(receipt);
+    }
+    let pos = ctx.core.player(payer).equips.iter().position(|c| *c == card)?;
+    let equip = ctx.core.player_mut(payer).equips.remove(pos);
+    crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, payer, equip);
+    ctx.to_discard(equip);
+    ctx.note_cards_lost(payer, &[equip]);
+    ctx.emit(crate::event::EventData::CardsLost {
+        player: payer,
+        cards: vec![equip],
+        origins: vec![crate::event::LostOrigin::Equip],
+    });
+    Some(receipt)
 }

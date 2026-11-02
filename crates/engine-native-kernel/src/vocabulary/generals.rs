@@ -1,5 +1,5 @@
-use crate::catalog::Faction;
 use super::names::*;
+use crate::catalog::Faction;
 
 /// 完整武将授予（N08 内容扩面）：武将名 → 技能集。
 /// 授予武将即同时授予其全部技能。「张角」为官方技能迁移；
@@ -97,6 +97,29 @@ pub const STANDARD_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
 
 /// Boss 模式内置武将（上游 mode/boss.js characterPack.mode_boss 首批：
 /// 规则 v208 烛阴；追加于 STANDARD 索引空间尾——既有将索引不受扰动）。
+/// Actual Liuli mode/boss.js boss_mushengoumang declaration in the append-only boss roster.
+pub const BOSS_MUSHENGOUMANG: (usize, (&str, Faction, &[&str], u32, Gender)) = (
+    16,
+    (
+        "勾芒",
+        Faction::Qun,
+        &[BOSS_SHENYI, BOSS_BUCHUN, BOSS_QINGMU3, BOSS_QINGMU3X],
+        5,
+        Gender::Male,
+    ),
+);
+
+/// Immutable Liuli boss_jinshenrushou declaration.
+pub const BOSS_JINSHENRUSHOU: (usize, (&str, Faction, &[&str], u32, Gender)) = (
+    15,
+    (
+        "蓐收",
+        Faction::Qun,
+        &[BOSS_SHENYI, BOSS_XINGQIU, BOSS_BAIMANG3, BOSS_BAIMANG3X],
+        5,
+        Gender::Male,
+    ),
+);
 pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ("烛阴", Faction::Qun, &[BOSS_XIONGSHOU], 4, Gender::Male),
     // 混沌（上游 boss_hundun hp25）：隐贼以「体力≤一半条件内生效」近似
@@ -222,22 +245,10 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
     ),
     // 蓐收（v239 星囚；神裔共用 v233；v294 白芒3/白芒3·转阶隐藏链；
     // 上游 names 嬴|该、shen→群目录近似）
-    (
-        "蓐收",
-        Faction::Qun,
-        &[BOSS_SHENYI, BOSS_XINGQIU, BOSS_BAIMANG3, BOSS_BAIMANG3X],
-        5,
-        Gender::Male,
-    ),
+    BOSS_JINSHENRUSHOU.1,
     // 勾芒（v240 不臣；神裔共用 v233；v292 青木3/青木3·转阶隐藏链；
     // 上游 names 姬|重、shen→群目录近似）
-    (
-        "勾芒",
-        Faction::Qun,
-        &[BOSS_SHENYI, BOSS_BUCHUN, BOSS_QINGMU3, BOSS_QINGMU3X],
-        5,
-        Gender::Male,
-    ),
+    BOSS_MUSHENGOUMANG.1,
     // 焰灵（v241 回火+复燃；上游技能表无神裔——陪将不在神裔名单；
     // shen→群目录近似）
     (

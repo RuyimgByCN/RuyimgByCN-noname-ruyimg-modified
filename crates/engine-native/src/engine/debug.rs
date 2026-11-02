@@ -715,12 +715,14 @@ impl Engine {
         if self.state.resolution.open_choice.is_some() {
             return CommandOutcome::Rejected(RejectReason::ChoicePending);
         }
+        let Ok(amount)=i32::try_from(amount) else {return CommandOutcome::Rejected(RejectReason::IllegalTargets);};
         let log_mark = self.log.len();
         let mut work = self.state.clone();
         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         crate::resolution::push_frame(
             &mut work.resolution,
             EventData::Damage(crate::event::DamageData {
+                    settlement: Default::default(),
                 source,
                 target,
                 amount,
@@ -750,12 +752,14 @@ impl Engine {
         if self.state.resolution.open_choice.is_some() {
             return CommandOutcome::Rejected(RejectReason::ChoicePending);
         }
+        let Ok(amount)=i32::try_from(amount) else {return CommandOutcome::Rejected(RejectReason::IllegalTargets);};
         let log_mark = self.log.len();
         let mut work = self.state.clone();
         work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         crate::resolution::push_frame(
             &mut work.resolution,
             EventData::Damage(crate::event::DamageData {
+                    settlement: Default::default(),
                 source,
                 target,
                 amount,

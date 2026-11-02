@@ -1,12 +1,17 @@
 //! Reproducible content package (.npack logical layout as JSON for Phase 4).
 
-use crate::{CONTENT_SCHEMA_VERSION, PACKAGE_FORMAT_VERSION};
+use crate::PACKAGE_FORMAT_VERSION;
 use rule_api::CapabilitySet;
 use rule_vm::{BytecodeModule, RULE_VM_ABI_VERSION};
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
 use std::path::{Component, Path};
 mod hashing;
+mod trigger_order;
+mod mechanisms;
+pub use mechanisms::{TriggerRepeat, HiddenTriggerPolicy, RevealBinding};
+pub use trigger_order::TriggerTiming;
+use trigger_order::{default_order_selectable, is_true, is_zero_priority};
 
 /// Exact dependency required by a package and pinned by [`crate::ContentLock`].
 #[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
@@ -192,7 +197,7 @@ impl PackageManifest {
             namespace: namespace.into(),
             package_id: package_id.into(),
             version: version.into(),
-            content_schema_version: CONTENT_SCHEMA_VERSION,
+            content_schema_version: 3,
             rule_vm_abi_version: RULE_VM_ABI_VERSION,
             min_engine_api: 1,
             max_engine_api: 1,
@@ -239,7 +244,26 @@ impl TriggerChoiceActor {
 
 /// Trigger index entry for package (static).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PackageTriggerEntry {
+    /// Schema5 host key; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub host_key: Option<String>,
+    /// Schema5 force die; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub force_die: Option<bool>,
+    /// Schema5 force out; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub force_out: Option<bool>,
+    /// Schema5 repeat; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub repeat: Option<TriggerRepeat>,
+    /// Schema5 hidden; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub hidden: Option<HiddenTriggerPolicy>,
+    /// Schema5 event skill; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub event_skill: Option<u32>,
     /// Trigger def id.
     pub trigger_def_id: u32,
     /// Skill def id.
@@ -254,7 +278,17 @@ pub struct PackageTriggerEntry {
     /// Player who confirms an optional trigger.
     #[serde(default, skip_serializing_if = "TriggerChoiceActor::is_owner")]
     pub choice_actor: TriggerChoiceActor,
+    /// Timing band; priority is compared within its band and owner bucket.
+    #[serde(default, skip_serializing_if = "TriggerTiming::is_normal")]
+    pub timing: TriggerTiming,
+    /// Effective priority, with larger values resolved first.
+    #[serde(default, skip_serializing_if = "is_zero_priority")]
+    pub priority: i32,
+    /// Fixed source metadata: false for silent or unnamed triggers.
+    #[serde(default = "default_order_selectable", skip_serializing_if = "is_true")]
+    pub order_selectable: bool,
     /// Module name containing handler.
+    #[serde(default)]
     pub module: String,
     /// Entry PC in module.
     pub entry_pc: u32,
@@ -262,7 +296,29 @@ pub struct PackageTriggerEntry {
 
 /// Skill-level metadata independent of any one handler module.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PackageSkillEntry {
+    /// Schema5 charlotte; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub charlotte: Option<bool>,
+    /// Schema5 persevere; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub persevere: Option<bool>,
+    /// Schema5 forever; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub forever: Option<bool>,
+    /// Schema5 temporary; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub temporary: Option<bool>,
+    /// Schema5 group children; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub group_children: Option<Vec<u32>>,
+    /// Schema5 reveal; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub reveal: Option<RevealBinding>,
+    /// Schema5 onremove; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub onremove: Option<String>,
     /// Skill definition id.
     pub skill_def_id: u32,
     /// Source-level stable name.
@@ -557,12 +613,17 @@ fn default_true() -> bool {
 
 /// Active skill index entry (player-activated).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct PackageActiveEntry {
+    /// Schema5 host key; presence is execution metadata.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "mechanisms::deserialize_present")]
+    pub host_key: Option<String>,
     /// Skill def id.
     pub skill_def_id: u32,
     /// Window: play_phase | any
     pub window: String,
     /// Module name.
+    #[serde(default)]
     pub module: String,
     /// Entry PC.
     pub entry_pc: u32,
@@ -801,6 +862,7 @@ impl ContentPackage {
 
     /// Validate package identity, hashes, dependencies, and presentation references.
     pub fn validate(&self) -> Result<(), String> {
+        self.validate_trigger_order_schema()?;
         self.validate_vm_effect_abi()?;
         for (label, value) in [
             ("namespace", self.manifest.namespace.as_str()),
@@ -1052,6 +1114,8 @@ impl ContentPackage {
 
     /// Deserialize.
     pub fn from_json_bytes(data: &[u8]) -> Result<Self, String> {
+        let value: serde_json::Value = serde_json::from_slice(data).map_err(|e| e.to_string())?;
+        mechanisms::validate_wire_presence(&value)?;
         serde_json::from_slice(data).map_err(|e| e.to_string())
     }
 }

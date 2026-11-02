@@ -7,6 +7,72 @@ pub(super) fn check_machine(
     core: &GameStateCore,
 ) -> Result<(), SnapshotError> {
     match m {
+        MachineSnapshot::NativeInvocation {
+            owner,
+            def,
+            progress,
+            ..
+        } => {
+            check_pid(*owner, b)?;
+            check_def(*def, b)?;
+            use crate::event::NativeInvocationProgress as P;
+            match progress {
+                P::AwaitJudge { target, .. } | P::JidianAfterLog { target } => {
+                    check_pid(*target, b)?
+                }
+                P::HolderLoss { count } | P::HolderAfterLog { count } => {
+                    if *count == 0 || i32::try_from(*count).is_err() {
+                        return Err(oob("native_payment_count", u64::from(*count)));
+                    }
+                }
+                P::BeforeInvocation { context }
+                | P::AwaitInvocation {
+                    admission: context, ..
+                } => check_event_data(&EventData::SkillInvocation(context.clone()), b)?,
+                P::HolderAsk { candidates } | P::HolderPay { cards: candidates } => {
+                    check_cards(candidates, b)?;
+                    let unique: std::collections::BTreeSet<_> = candidates.iter().collect();
+                    if candidates.is_empty() || unique.len() != candidates.len() {
+                        return Err(oob("native_payment_candidates", 0));
+                    }
+                }
+                P::SourceAsk {
+                    player, candidates, ..
+                } => {
+                    check_pid(*player, b)?;
+                    check_cards(candidates, b)?;
+                }
+                _ => {}
+            }
+        }
+        MachineSnapshot::NativeDamageSkill { owner, def, .. } => {
+            check_pid(*owner, b)?;
+            check_def(*def, b)?;
+        }
+        MachineSnapshot::DamageFlow { .. } => {}
+        MachineSnapshot::TriggerOrder {
+            owner,
+            candidates,
+            asked,
+            cursor,
+            done,
+            ..
+        } => {
+            check_pid(*owner, b)?;
+            for def in candidates {
+                check_def(*def, b)?;
+            }
+            for (pid, def) in done {
+                check_pid(*pid, b)?;
+                check_def(*def, b)?;
+            }
+            if (*asked && candidates.len() < 2)
+                || candidates.windows(2).any(|ds| ds[0] >= ds[1])
+                || *cursor > b.seats as u16 + 1
+            {
+                return Err(SnapshotError::BadTag("trigger_order_candidates", 0));
+            }
+        }
         MachineSnapshot::Sha {
             card,
             source,
@@ -19,7 +85,7 @@ pub(super) fn check_machine(
             extra_targets,
             ..
         } => {
-            check_card(*card, b)?;
+            check_opt_card(*card, b)?;
             check_pid(*source, b)?;
             check_pid(*target, b)?;
             if let Some(q) = hujia_queue {
@@ -72,7 +138,13 @@ pub(super) fn check_machine(
                 check_machine(e, b, core)?;
             }
         }
-        MachineSnapshot::JudgePhase {
+        MachineSnapshot::JudgeContinuation {
+            owner,
+            queue,
+            current,
+            ..
+        }
+        | MachineSnapshot::JudgePhase {
             owner,
             queue,
             current,
@@ -80,9 +152,30 @@ pub(super) fn check_machine(
             check_pid(*owner, b)?;
             check_cards(queue, b)?;
             if let Some(c) = current {
-                check_card(c.trick, b)?;
+                check_opt_card(c.trick, b)?;
                 check_card(c.judge_card, b)?;
                 check_pids(&c.rewriters, b)?;
+                if c.in_rewrite && c.asked && c.rewriters.is_empty() {
+                    return Err(oob("rewrite_asked_without_rewriter", 0));
+                }
+                if let Some(def) = c.rewrite_provider {
+                    check_def(def, b)?;
+                    if c.rewriters
+                        .first()
+                        .is_none_or(|p| c.used_rewrite_providers.contains(&(*p, def)))
+                    {
+                        return Err(oob("judge_selected_provider", 0));
+                    }
+                }
+                let mut used = std::collections::BTreeSet::new();
+                for (p, d) in &c.used_rewrite_providers {
+                    check_pid(*p, b)?;
+                    check_def(*d, b)?;
+                    if !used.insert((*p, *d)) {
+                        return Err(oob("judge_used_provider", 0));
+                    }
+                }
+
                 check_pids(&c.tian_du, b)?;
                 // N04-d：改判阶段 asked 与非空队列同置——asked=true 而队列
                 // 已空会在恢复后应答时 panic，属非法快照。

@@ -86,7 +86,13 @@ pub(super) fn bridge_active_entries(
         {
             let index = decls
                 .iter()
-                .position(|d| d.name == trigger.module)
+                .enumerate()
+                .find(|(index, d)| {
+                    !remove.contains(index)
+                        && d.name == skill.name
+                        && d.module.name == trigger.module
+                })
+                .map(|(index, _)| index)
                 .ok_or_else(|| invalid("trigger_index", "missing bridged handler"))?;
             let decl = &decls[index];
             if decl.trigger.event == engine_native::event::EventKind::DamageBefore {
@@ -95,13 +101,22 @@ pub(super) fn bridge_active_entries(
                     "active skill with damage_before handler is unsupported",
                 ));
             }
-            if triggers
-                .first()
-                .is_some_and(|t: &VmTriggerProgram| t.meta.optional != decl.trigger.optional)
-            {
+            if triggers.first().is_some_and(|t: &VmTriggerProgram| {
+                (
+                    t.meta.optional,
+                    t.meta.timing,
+                    t.meta.priority,
+                    t.meta.order_selectable,
+                ) != (
+                    decl.trigger.optional,
+                    decl.trigger.timing,
+                    decl.trigger.priority,
+                    decl.trigger.order_selectable,
+                )
+            }) {
                 return Err(invalid(
                     "trigger_index.optional",
-                    "mixed optional handlers are unsupported",
+                    "mixed trigger ordering/confirmation tuples are unsupported",
                 ));
             }
             triggers.push(VmTriggerProgram {
@@ -123,6 +138,7 @@ pub(super) fn bridge_active_entries(
                 event: engine_native::event::EventKind::SkillToggled,
                 timing: engine_native::event::Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             },
@@ -145,12 +161,13 @@ pub(super) fn bridge_active_entries(
             mark_at_least: active.mark_at_least,
         };
         decls.push(engine_native::content::extension::VmSkillDecl {
+            declaration_hash: None,
             name: skill.name.clone(),
             module: module.clone(),
             trigger: meta,
             filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
                 skill_def_id: active.skill_def_id,
-                active: program,
+                active: Some(program),
                 limits,
                 triggers,
             })),
@@ -169,5 +186,90 @@ pub(super) fn validate_entry(
     }
     VmSkillProgram::new(module.clone(), module.name.clone())
         .map_err(|e| invalid(field, e.to_string()))?;
+    Ok(())
+}
+
+/// Trigger-only skills share the same stable logical identity as active+trigger skills.
+pub(super) fn join_trigger_only_entries(
+    pkg: &content_schema::ContentPackage,
+    decls: &mut Vec<engine_native::content::extension::VmSkillDecl>,
+) -> Result<(), BridgeError> {
+    for skill in &pkg.skill_index {
+        if pkg
+            .active_index
+            .iter()
+            .any(|a| a.skill_def_id == skill.skill_def_id)
+        {
+            continue;
+        }
+        let indices: Vec<_> = decls
+            .iter()
+            .enumerate()
+            .filter(|(_, d)| d.name == skill.name)
+            .map(|(i, _)| i)
+            .collect();
+        if indices.len() <= 1 {
+            continue;
+        }
+        let mut triggers = Vec::new();
+        for index in &indices {
+            let decl = &decls[*index];
+            if let Some(first) = triggers.first() {
+                let first: &VmTriggerProgram = first;
+                if (
+                    first.meta.timing,
+                    first.meta.priority,
+                    first.meta.order_selectable,
+                    first.meta.optional,
+                ) != (
+                    decl.trigger.timing,
+                    decl.trigger.priority,
+                    decl.trigger.order_selectable,
+                    decl.trigger.optional,
+                ) {
+                    return Err(invalid(
+                        "trigger_index",
+                        "mixed trigger ordering/confirmation tuples are unsupported",
+                    ));
+                }
+            }
+            triggers.push(VmTriggerProgram {
+                program: Arc::new(
+                    VmSkillProgram::new(decl.module.clone(), skill.name.clone())
+                        .map_err(|e| invalid("trigger_index.module", e.to_string()))?,
+                ),
+                meta: decl.trigger.clone(),
+                filter: decl.filter.clone(),
+            });
+        }
+        let mut decl = decls[indices[0]].clone();
+        for t in &triggers {
+            if t.meta.event != decl.trigger.event
+                && !decl.trigger.extra_events.contains(&t.meta.event)
+            {
+                decl.trigger.extra_events.push(t.meta.event);
+            }
+        }
+        decl.filter = VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
+            skill_def_id: skill.skill_def_id,
+            active: None,
+            limits: VmActiveLimits {
+                once_per_turn: false,
+                once_per_play_phase: false,
+                hand_nonempty: false,
+                equip_nonempty: false,
+                hand_gt_hp: false,
+                hand_gt_max_hp: false,
+                face_up: false,
+                owner_unlinked: false,
+                mark_at_least: None,
+            },
+            triggers,
+        }));
+        for index in indices.into_iter().rev() {
+            decls.remove(index);
+        }
+        decls.push(decl);
+    }
     Ok(())
 }

@@ -20,7 +20,10 @@ impl HostMachine {
                     if revealed.is_empty() {
                         return Flow::Done;
                     }
-                    ctx.core.player_mut(self.owner).off_court.extend(revealed.iter().copied());
+                    ctx.core
+                        .player_mut(self.owner)
+                        .off_court
+                        .extend(revealed.iter().copied());
                     self.cards = revealed;
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
@@ -46,16 +49,33 @@ impl HostMachine {
                             return Flow::Done;
                         }
                     };
-                    let rest: Vec<_> = self.cards.iter().copied().filter(|&c| c != picked).collect();
+                    let rest: Vec<_> = self
+                        .cards
+                        .iter()
+                        .copied()
+                        .filter(|&c| c != picked)
+                        .collect();
                     self.cards.clear();
                     // 未选的入弃堆
                     for c in rest {
-                        if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == c) {
+                        if let Some(pos) = ctx
+                            .core
+                            .player(self.owner)
+                            .off_court
+                            .iter()
+                            .position(|x| *x == c)
+                        {
                             ctx.core.player_mut(self.owner).off_court.remove(pos);
                         }
                         ctx.to_discard(c);
                     }
-                    if let Some(pos) = ctx.core.player(self.owner).off_court.iter().position(|x| *x == picked) {
+                    if let Some(pos) = ctx
+                        .core
+                        .player(self.owner)
+                        .off_court
+                        .iter()
+                        .position(|x| *x == picked)
+                    {
                         ctx.core.player_mut(self.owner).off_court.remove(pos);
                     }
                     ctx.core.player_mut(self.owner).hand.push(picked);
@@ -340,7 +360,7 @@ impl HostMachine {
             // 逆攻积攒：标记 +amount（上限 4）
             HostBehavior::SwdNigongAccumulate => {
                 if let Some(EventData::Damage(d)) =
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                 {
                     let lv = ctx.core.player(self.owner).nigong_lv;
                     ctx.core.player_mut(self.owner).nigong_lv = (lv + d.amount as u8).min(4);
@@ -411,7 +431,7 @@ impl HostMachine {
             // 朱雀之璋：来源火 1 伤（上游 fire；native 火属性同壳）
             HostBehavior::SwdZhuquezhizhangHeld => {
                 if let Some(EventData::Damage(d)) =
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                 {
                     if let Some(src) = d.source {
                         if ctx.core.player(src).alive {
@@ -495,11 +515,11 @@ impl HostMachine {
             // 玄武之璜：回复等量体力（伤害结算帧读 amount，hp<max 门在 filter）
             HostBehavior::SwdXuanwuzhihuangHeld => {
                 if let Some(EventData::Damage(d)) =
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                 {
                     let p = ctx.core.player(self.owner);
                     if p.alive && p.hp < p.max_hp as i32 {
-                        ctx.recover(self.owner, d.amount, None);
+                        ctx.recover(self.owner, d.amount.max(0) as u32, None);
                     }
                 }
                 Flow::Done
@@ -513,7 +533,7 @@ impl HostMachine {
             // 造成则伤+1
             HostBehavior::SwdShencaojieGuard => {
                 if let Some(EventData::Damage(dm)) =
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                 {
                     let toward_self = dm.target == self.owner;
                     if let Some(pos) = ctx
@@ -529,7 +549,10 @@ impl HostMachine {
                             player: self.owner,
                             cards: vec![c],
                         });
-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                        let frame = ctx
+                            .res
+                            .frame_mut(ctx.current_event_frame_id())
+                            .expect("frame");
                         if let EventData::Damage(d2) = &mut frame.data {
                             if toward_self {
                                 d2.amount = d2.amount.saturating_sub(1);
@@ -589,7 +612,7 @@ impl HostMachine {
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                             Some(self.owner),
                             t,
-                            dmg as u32,
+                            i32::from(dmg),
                             crate::event::DamageNature::Normal,
                             None,
                         )));

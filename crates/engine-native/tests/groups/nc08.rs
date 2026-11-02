@@ -105,3 +105,15 @@ mod nc08_upgrade_skill_mapping;
 
 #[path = "../nc08_zhenfa_mode_gate_survey.rs"]
 mod nc08_zhenfa_mode_gate_survey;
+
+#[path = "../c331_damage_windows.rs"]
+mod c331_damage_windows;
+
+#[path = "../c331_fellow_windows.rs"]
+mod c331_fellow_windows;
+
+#[path = "../c331_host_source_metadata.rs"]
+mod c331_host_source_metadata;
+
+#[path = "../c331_source_order_phase5.rs"]
+mod c331_source_order_phase5;

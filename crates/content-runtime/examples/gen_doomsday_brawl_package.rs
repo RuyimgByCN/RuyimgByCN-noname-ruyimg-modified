@@ -72,6 +72,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
         modules: vec![],
         skill_index: vec![
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 0,
                 name: "shishi".into(),
                 locked: false,
@@ -80,6 +88,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 1,
                 name: "xunmeng".into(),
                 locked: false,
@@ -88,6 +104,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 2,
                 name: "zaibian".into(),
                 locked: false,

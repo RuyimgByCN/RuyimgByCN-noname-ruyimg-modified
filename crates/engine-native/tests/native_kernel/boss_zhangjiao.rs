@@ -144,8 +144,10 @@ fn boss_zhangjiao_leiji_shan_thunder() {
     assert_eq!(prompt_of(&e), "respond_shan");
     assert!(matches!(
         answer(&mut e, ChoiceOption::Card(shan)),
-        engine_native::CommandOutcome::Accepted { .. }
+        engine_native::CommandOutcome::Pending { .. }
     ));
+    assert_eq!(prompt_of(&e), "c331_jidian_target");
+    drain_choices(&mut e);
     assert_eq!(hp(&e, 0), 3, "雷击：判定黑 → 0 号 1 雷伤");
     assert_eq!(e.debug_hand(1).len(), 1, "雷击：张角摸 1");
     assert_zone_conservation(&e);
@@ -154,10 +156,10 @@ fn boss_zhangjiao_leiji_shan_thunder() {
     assert_zone_conservation(&r);
 }
 
-/// 极点：张角造成伤害后，距受伤者 ≤1 的首个其他存活判定黑→1 雷伤；
-/// 链挡：极点雷伤不再触发极点（嵌套后 hp 稳定）。
+/// 极点：选择距受伤者 ≤1 的合法角色，目标判定黑→1 雷伤；
+/// 雷伤可以继续触发极点；明确取消嵌套目标选择后完成。
 #[test]
-fn boss_zhangjiao_jidian_chain_guard() {
+fn boss_zhangjiao_jidian_nested_target_can_decline() {
     let mut e = engine_native::Engine::new_boss_stage(85003, 4, 1, 3, 6, 4, 0);
     let zj_def = zhangjiao_def_of(&e);
     e.debug_set_general_def(1, zj_def);
@@ -168,24 +170,42 @@ fn boss_zhangjiao_jidian_chain_guard() {
     //（座位序=0 号）判定黑 → 0 号 1 雷伤
     e.debug_set_deck_top_by(|def| def.suit.is_spade() && def.kind != CardKind::Sha);
     e.debug_deal_damage(Some(1), 3, 1, DamageNature::Normal);
-    drain_choices(&mut e);
+    assert_eq!(prompt_of(&e), "c331_jidian_target");
+    answer_sel(&mut e, vec![ChoiceOption::Player(0)]);
+    drain_jidian_judge(&mut e);
     assert_eq!(hp(&e, 3), 3, "原伤害 1");
     assert_eq!(hp(&e, 0), 3, "极点：判定黑 → 0 号 1 雷伤");
 
-    // 链挡：极点雷伤（源=张角）不再触发极点——hp 稳定（0 号不再被链式
-    // 追加；旗标已在嵌套臂清除）
-    assert!(!e.state_core().turn.jidian_chain, "链挡已清除");
+    // 黑判定后的雷伤再次开启极点；测试明确取消该嵌套选择。
+    assert!(e.open_choice().is_none(), "明确拒绝嵌套极点后完成");
 
-    // 再触发：张角对 2 号伤害 → 极点再次触发（距 2 号 ≤1 首个=1 号自身）
-    // ——判定黑 → 张角自己 1 雷伤（上游 filter 仅排除受伤者，自身合法
-    // 候选；AI 态度面不选己方=登记差异）
+    // 再触发：选择距 2 号 ≤1 的张角自身，黑判定后承受雷伤，再取消嵌套。
+    e.debug_set_deck_top_by(|def| def.suit.is_spade());
     e.debug_deal_damage(Some(1), 2, 1, DamageNature::Normal);
-    drain_choices(&mut e);
+    assert_eq!(prompt_of(&e), "c331_jidian_target");
+    answer_sel(&mut e, vec![ChoiceOption::Player(1)]);
+    drain_jidian_judge(&mut e);
     assert_eq!(hp(&e, 2), 3, "原伤害 1");
     assert_eq!(hp(&e, 1), 7, "极点：距 2 号 ≤1 首个=张角自身判定黑自雷伤");
-    assert!(!e.state_core().turn.jidian_chain);
+    assert!(e.open_choice().is_none());
     assert_zone_conservation(&e);
     let snap = e.save();
     let r = engine_native::Engine::restore(&snap).expect("往返");
     assert_zone_conservation(&r);
+}
+
+fn drain_jidian_judge(e: &mut Engine) {
+    for _ in 0..32 {
+        let Some(c) = e.open_choice().cloned() else {
+            return;
+        };
+        let selection = if c.spec.prompt == "gui_dao_rewrite" {
+            vec![ChoiceOption::Pass]
+        } else {
+            vec![]
+        };
+        let out = answer_sel(e, selection);
+        assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
+    }
+    panic!("judge subtree did not finish");
 }

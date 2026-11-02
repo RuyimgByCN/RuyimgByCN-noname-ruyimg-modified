@@ -1,5 +1,30 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**规则 331／NGSA 106／WS7 已合入 Main（2026-11-02）**：本批来自私有 C331 phase7（原基底 `5fc0f774`），
+合併提交见 `native-progress.md` 顶部同日期段落；Main 由 330／105／WS6 升为 **331／106／WS7**，
+全局原生 ABI 保持 **758**（不改）。
+
+- **C9L 审查修复**：同疾未付费改道／收据剥除（手牌与装备两路都发 `CardsLost` 回执、`loss: Some(id)`）、
+  同疾／移花 origin 绑定（`jiding_card_is_bound` 先绑定再记录／付款）、`jiding_changes` 边界与验证、
+  WS7 错误文字（`WS${NETWORK_PROTOCOL_VERSION}`，两个 game-server 断言改 7）。
+  回归 `crates/engine-native/tests/c331_jiding_proofs.rs`（2 项，还原旧验证器时红）。
+- **golden 重录（裁决：11 场 business-equal 照提案）**：11 场仅规范化杂凑位移（业务面逐命令相同）；
+  `chain_fire_propagation` 改为**上游「先解链、后传导」**（`damage_flow.rs` 的 `P::Chain` 先
+  `linked=false`＋`Linked{false}` 再发 `Damage`），事件序与 C8 基线纪录一致，杂凑随之重录。
+  `replay_scenarios_match_golden` 12／12 通过；旧序两支断言（`c9b`／`c9c`）改为上游序。
+- **玄影（`SwdXuanying`）parent-group grant**：新增行为 `SwdXuanyingDamage`（tag 537、
+  `host:xuanying_damage`、`HostBehavior::ALL` 532→533）；装载器按 `group_children()` 在授与父技时
+  追加子技声明与授与（**不改转换包资料**），父技只留主动面；伤害面仅在子技被授与时可达。
+  `report_event_arms` 回到 88；回归含正面（反击＋byte 还原）与负面（移除授与→不可达）。
+- **Main 的 park 应答路由修复已移入**：`Park::awaiting_answer` 只加在 `run` 的唤醒段
+  （`ready_park_index`／`choice_source` 唯读投影语义不变），新增约束 `answer_without_ask`；
+  回归 `nc10_answer_routing`（2）与 wasm `nc10_park_answer_routing`（2，typed＋byte 逐字节一致）。
+- **核验（合併后 Main 实测）**：三 crate **1903／0**；workspace **172 二进位／7154 passed／0 failed／77 ignored**；
+  strict（5 crate `-D warnings` all-targets）、wasm32、conformance、Worker smoke、前端与行数门禁见进度主稿；
+  未跑：331 专属浏览器 7 案例（需 331／106 夹具）、legacy WASM 重建。
+- **边界**：注册仍 **262／290（剩 28＝16 译名＋12 机制）**未推进；规则 332（改命）与 R05（333／759）仍排在 331 验收后；
+  本批不主张上游全等价。
+
 **2026-10-31新增源码／实际反例待修（Main5fc，330/105/758/WS6）**：seed8211第61步公开`dying_save`向seat1提供Jiu85救P0，正式提交Accepted，P0回1；旧策略Pass则P0死。现有runtime `is_tao_like`对Jiu返回true，restore helper亦把Jiu并入通用桃；已采纳`card/extra.js`的savable限定self或明确`jiuOther`能力。v30/v89自救意图不能证明当前实现等价。见[原输入／两实际结果与源码SHA](../operations/evidence/2026-10-31-nc10-public-own-plan/dying-wine-source-audit/parent-source-audit.json)。这是现存规则缺口的待修记录，不是新增允许差异、不变更既有20/54台账计数；酒变体及两个helper其余资格差异仍须逐源核对。Own规划修复不得用AI特殊禁酒掩盖；正式修复需在真实rescue阶段按实际源及授权边界建立直接／恢复正负控、保留原330证据，不在本次纯规划切片修改规则／restore。
 
 

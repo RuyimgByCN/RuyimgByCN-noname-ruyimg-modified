@@ -6,7 +6,7 @@ mod step;
 
 #[derive(Clone)]
 pub struct ShaResolveMachine {
-    pub(super) card: crate::ids::CardId,
+    pub(super) card: Option<crate::ids::CardId>,
     pub(super) source: PlayerId,
     pub(super) target: PlayerId,
     pub(super) nature: crate::event::DamageNature,
@@ -85,7 +85,7 @@ pub struct ShaResolveMachine {
 impl ShaResolveMachine {
     #[allow(clippy::too_many_arguments)]
     pub fn new(
-        card: crate::ids::CardId,
+        card: Option<crate::ids::CardId>,
         source: PlayerId,
         target: PlayerId,
         nature: crate::event::DamageNature,
@@ -213,7 +213,7 @@ impl ShaResolveMachine {
         }
         let card = self.card;
         ctx.to_discard(card);
-        ctx.core.table.retain(|c| *c != card);
+        ctx.core.table.retain(|c| Some(*c) != card);
         Flow::Done
     }
 
@@ -262,13 +262,13 @@ impl ShaResolveMachine {
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
                 self.target,
-                1 + luoyi_bonus(ctx, Some(self.source))
+                (1 + luoyi_bonus(ctx, Some(self.source))
                     + xiongshou_bonus(ctx, self.source, self.target)
                     + self.jiu_damage_bonus()
                     + u32::from(self.xiandan_bonus)
-                    + liaoyuan,
+                    + liaoyuan) as i32,
                 self.nature,
-                Some(self.card),
+                self.card,
             )));
         }
         self.xiandan_bonus = false;

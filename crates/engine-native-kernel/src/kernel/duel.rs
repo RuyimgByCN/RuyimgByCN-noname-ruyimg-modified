@@ -77,7 +77,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
                     ctx.emit(EventData::Damage(damage_data(
                         Some(opponent),
                         responder,
-                        1 + luoyi_bonus(ctx, Some(opponent)),
+                        (1 + luoyi_bonus(ctx, Some(opponent))) as i32,
                     )));
                     return self.finish(ctx);
                 }
@@ -136,7 +136,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
             ctx.emit(EventData::Damage(damage_data(
                 Some(opponent),
                 responder,
-                1 + luoyi_bonus(ctx, Some(opponent)),
+                (1 + luoyi_bonus(ctx, Some(opponent))) as i32,
             )));
             return self.finish(ctx);
         }

@@ -332,6 +332,10 @@ function resolveAsset(asset: ContentAssetRef): Promise<string | null> {
   return request;
 }
 
+export function skillDisplayName(name: string): string {
+  return translated(name);
+}
+
 function translated(key: string): string {
   const locale =
     typeof navigator === "undefined" ? "" : navigator.language;

@@ -137,7 +137,7 @@ impl HostMachine {
                             ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                                 Some(self.owner),
                                 t,
-                                dmg,
+                                dmg as i32,
                                 crate::event::DamageNature::Thunder,
                                 self.card,
                             )));

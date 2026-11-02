@@ -1,6 +1,7 @@
 //! Production native rooms over loopback TCP/WebSocket, including restart and content locks.
 
 mod authority;
+mod c331;
 mod commit_crash;
 mod double_failure;
 mod durability;

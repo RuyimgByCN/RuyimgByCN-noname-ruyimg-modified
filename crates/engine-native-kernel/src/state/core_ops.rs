@@ -3,6 +3,135 @@
 use super::*;
 
 impl GameStateCore {
+    /// Pinned isEnemyOf/isFriendOf semantics for mode facts represented by this kernel.
+    pub fn source_is_enemy_of(
+        &self,
+        _catalog: &crate::catalog::Catalog,
+        a: PlayerId,
+        b: PlayerId,
+    ) -> Option<bool> {
+        if a == b {
+            return Some(false);
+        }
+        match &self.mode {
+            GameMode::Boss { .. } => Some(self.is_boss_side(a) != self.is_boss_side(b)),
+            GameMode::Versus { teams, .. } if teams.len() == 2 => {
+                let a = teams.iter().position(|t| t.contains(&a))?;
+                let b = teams.iter().position(|t| t.contains(&b))?;
+                Some(a != b)
+            }
+            GameMode::Doudizhu { lord } => Some((a == *lord) != (b == *lord)),
+            // Source has no side boolean in standard Identity: friendship falls back to self.
+            GameMode::Identity { .. } => Some(true),
+            GameMode::Kingdoms => Some(!self.kingdom_friends(a, b)),
+            _ => None,
+        }
+    }
+
+    pub fn kingdom_friends(&self, a: PlayerId, b: PlayerId) -> bool {
+        if a == b
+            || self.player(a).yexinjia_friends.contains(&b)
+            || self.player(b).yexinjia_friends.contains(&a)
+        {
+            return true;
+        }
+        matches!((&self.player(a).kingdom_identity,&self.player(b).kingdom_identity),(KingdomIdentity::Declared(x),KingdomIdentity::Declared(y))if x==y)
+    }
+    pub fn set_kingdom_identity(
+        &mut self,
+        player: PlayerId,
+        identity: KingdomIdentity,
+    ) -> Result<(), &'static str> {
+        if !matches!(self.mode, GameMode::Kingdoms) || player as usize >= self.players.len() {
+            return Err("kingdom_identity_context");
+        }
+        if matches!(&identity,KingdomIdentity::Declared(name)if name.is_empty()||name=="unknown"||name=="ye")
+        {
+            return Err("kingdom_identity_name");
+        }
+        self.player_mut(player).kingdom_identity = identity;
+        Ok(())
+    }
+    pub fn set_yexinjia_friends(
+        &mut self,
+        player: PlayerId,
+        friends: Vec<PlayerId>,
+    ) -> Result<(), &'static str> {
+        if !matches!(self.mode, GameMode::Kingdoms) || player as usize >= self.players.len() {
+            return Err("kingdom_friend_context");
+        }
+        let unique: std::collections::BTreeSet<_> = friends.iter().copied().collect();
+        if unique.len() != friends.len()
+            || friends.contains(&player)
+            || friends.iter().any(|p| *p as usize >= self.players.len())
+        {
+            return Err("kingdom_friend_targets");
+        }
+        self.player_mut(player).yexinjia_friends = friends;
+        Ok(())
+    }
+    pub fn declare_revealed_kingdom(
+        &mut self,
+        catalog: &crate::catalog::Catalog,
+        player: PlayerId,
+    ) {
+        if !matches!(self.mode, GameMode::Kingdoms)
+            || self.player(player).kingdom_identity != KingdomIdentity::Unknown
+        {
+            return;
+        }
+        let Some(faction) = self.declared_faction(catalog, player) else {
+            return;
+        };
+        let name = match faction {
+            crate::catalog::Faction::Wei => "wei",
+            crate::catalog::Faction::Shu => "shu",
+            crate::catalog::Faction::Wu => "wu",
+            crate::catalog::Faction::Qun => "qun",
+        };
+        let population = self
+            .players
+            .iter()
+            .filter(|p| matches!(&p.kingdom_identity,KingdomIdentity::Declared(n)if n==name))
+            .count();
+        let identity = if (population + 1) * 2 <= self.players.len() {
+            KingdomIdentity::Declared(name.into())
+        } else {
+            KingdomIdentity::Ye
+        };
+        self.set_kingdom_identity(player, identity)
+            .expect("native reveal identity context");
+    }
+    pub fn can_gain_card(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        source: PlayerId,
+        target: PlayerId,
+        card: crate::ids::CardId,
+    ) -> bool {
+        if source as usize >= self.players.len()
+            || target as usize >= self.players.len()
+            || card as usize >= catalog.cards.len()
+        {
+            return false;
+        }
+        let p = self.player(target);
+        if !p.hand.contains(&card) && !p.equips.contains(&card) {
+            return false;
+        }
+        let ctx = crate::catalog::QueryCtx {
+            state: self,
+            catalog,
+        };
+        !self.skills.iter().any(|((owner, def), inst)| {
+            *owner == target
+                && inst.enabled
+                && catalog.skills[*def as usize]
+                    .behavior
+                    .can_be_gained(&ctx, *owner, card, source, target)
+                    == Some(false)
+        })
+    }
     pub fn player(&self, p: PlayerId) -> &PlayerState {
         &self.players[p as usize]
     }
@@ -709,6 +838,9 @@ impl GameStateCore {
     ) -> bool {
         if a == b {
             return true;
+        }
+        if matches!(self.mode, GameMode::Kingdoms) {
+            return self.kingdom_friends(a, b);
         }
         match (
             self.effective_faction(catalog, a),

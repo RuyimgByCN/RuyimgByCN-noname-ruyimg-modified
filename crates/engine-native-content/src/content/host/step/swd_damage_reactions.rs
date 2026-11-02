@@ -8,7 +8,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(d) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some(d.target),
@@ -92,7 +92,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(d) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some(d.target),
@@ -175,7 +175,7 @@ impl HostMachine {
                     ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                         Some(self.owner),
                         v,
-                        n,
+                        n as i32,
                         crate::event::DamageNature::Fire,
                         None,
                     )));
@@ -184,10 +184,12 @@ impl HostMachine {
             }
             // 化金触发面：伤害前置 +1；准备阶段开始移除实例
             HostBehavior::SwdHuajin2 => {
-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+                let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
                 match frame {
                     Some(EventData::Damage(d)) if d.source == Some(self.owner) && !d.prevented => {
-                        ctx.current_damage_mut().amount += 1;
+                        if !ctx.modify_damage_amount(1) {
+                            return Flow::Done;
+                        }
                         Flow::Done
                     }
                     Some(EventData::Phase {
@@ -257,7 +259,10 @@ impl HostMachine {
                     });
                     // 帧 source/target 对调（redirect_chain 不动——上游仅换
                     // 两字段）
-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
                     if let crate::event::EventData::Damage(d) = &mut frame.data {
                         let t = d.target;
                         d.target = d.source.expect("filter guarantees source");
@@ -276,7 +281,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(d) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some((d.target, d.source)),
@@ -475,7 +480,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let victim = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some(d.target),
@@ -625,7 +630,10 @@ impl HostMachine {
                         .retain(|x| *x != c);
                     ctx.core.player_mut(self.owner).hand.push(c);
                 }
-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                let frame = ctx
+                    .res
+                    .frame_mut(ctx.current_event_frame_id())
+                    .expect("frame");
                 if let crate::event::EventData::Damage(d) = &mut frame.data {
                     d.amount = d.amount.saturating_sub(1);
                 }
@@ -637,7 +645,10 @@ impl HostMachine {
             // 血裔·Miles 面：锁定——伤害前置取消+失去 1 点体力（无条件；
             // Boss 绝情同窗）
             HostBehavior::SwdMilesXueyi => {
-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                let frame = ctx
+                    .res
+                    .frame_mut(ctx.current_event_frame_id())
+                    .expect("frame");
                 if let crate::event::EventData::Damage(d) = &mut frame.data {
                     d.prevented = true;
                 }
@@ -653,7 +664,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(d) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Damage(d) => Some(d.target),
@@ -719,15 +730,19 @@ impl HostMachine {
             // 乖戾：Before 帧 +1（缚斧同款直写）；After 帧弃两张手牌
             //（手牌不足弃全部）
             HostBehavior::SwdGuaili => {
-                let frame = ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data);
+                let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
                 match frame {
                     Some(crate::event::EventData::Damage(d))
                         if !d.prevented && d.source == Some(self.owner) =>
                     {
-                        // Before/After 同载荷同 kind——按帧 stage 区分：
-                        // BeforeTriggers 面直写 +1；AfterTriggers 面弃两张
-                        let stage = ctx.res.frame(ctx.current_frame_id()).expect("frame").stage;
-                        if stage == crate::event::Stage::AfterTriggers {
+                        // Canonical payload stays on the root; persisted progress identifies this window.
+                        let after = !ctx
+                            .current_damage()
+                            .expect("damage root")
+                            .settlement
+                            .progress
+                            .is_pre_hp();
+                        if after {
                             let hand: Vec<CardId> =
                                 ctx.core.player(self.owner).hand.iter().copied().collect();
                             let n = hand.len().min(2);
@@ -736,9 +751,17 @@ impl HostMachine {
                             }
                             Flow::Done
                         } else {
-                            let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                            let frame = ctx
+                                .res
+                                .frame_mut(ctx.current_event_frame_id())
+                                .expect("frame");
                             if let crate::event::EventData::Damage(d) = &mut frame.data {
-                                d.amount += 1;
+                                if let Some(amount) = d.amount.checked_add(1) {
+                                    d.amount = amount;
+                                } else {
+                                    ctx.fail_damage_amount();
+                                    return Flow::Done;
+                                }
                             }
                             Flow::Done
                         }
@@ -749,7 +772,10 @@ impl HostMachine {
             // 虚影：锁定——伤害前置取消 + 手牌非空则失去 1 点体力（Boss
             // 绝情同窗：帧 cancelled 写回+LoseHp 发射）
             HostBehavior::SwdXuying => {
-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                let frame = ctx
+                    .res
+                    .frame_mut(ctx.current_event_frame_id())
+                    .expect("frame");
                 if let crate::event::EventData::Damage(d) = &mut frame.data {
                     d.prevented = true;
                 }
@@ -823,9 +849,17 @@ impl HostMachine {
                         player: self.owner,
                         cards: vec![discarded],
                     });
-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
                     if let EventData::Damage(dm) = &mut frame.data {
-                        dm.amount += 1;
+                        if let Some(amount) = dm.amount.checked_add(1) {
+                            dm.amount = amount;
+                        } else {
+                            ctx.fail_damage_amount();
+                            return Flow::Done;
+                        }
                         dm.nature = crate::event::DamageNature::Fire;
                     }
                     Flow::Done
@@ -834,9 +868,17 @@ impl HostMachine {
             },
             // 缚斧：DamageBefore 帧直写 num+1（乱剑先例）
             HostBehavior::SwdJufu => {
-                let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                let frame = ctx
+                    .res
+                    .frame_mut(ctx.current_event_frame_id())
+                    .expect("frame");
                 if let EventData::Damage(dm) = &mut frame.data {
-                    dm.amount += 1;
+                    if let Some(amount) = dm.amount.checked_add(1) {
+                        dm.amount = amount;
+                    } else {
+                        ctx.fail_damage_amount();
+                        return Flow::Done;
+                    }
                 }
                 Flow::Done
             }
@@ -844,9 +886,17 @@ impl HostMachine {
             HostBehavior::SwdPoxing => {
                 if let Some(t) = self.target {
                     if ctx.core.player(t).hp > ctx.core.player(self.owner).hp {
-                        let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                        let frame = ctx
+                            .res
+                            .frame_mut(ctx.current_event_frame_id())
+                            .expect("frame");
                         if let EventData::Damage(dm) = &mut frame.data {
-                            dm.amount += 1;
+                            if let Some(amount) = dm.amount.checked_add(1) {
+                                dm.amount = amount;
+                            } else {
+                                ctx.fail_damage_amount();
+                                return Flow::Done;
+                            }
                         }
                     }
                 }

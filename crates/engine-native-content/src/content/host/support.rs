@@ -4,7 +4,7 @@ pub(super) fn u_matches_lw2(event: &EventData, owner: u8, ctx: &QueryCtx<'_>) ->
     matches!(event,
         EventData::CardUsed(u)
         if u.player == owner
-            && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card))
+            && u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog))
                 == crate::catalog::CardKind::Shuigong
             && !u.targets.is_empty())
 }
@@ -384,7 +384,7 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
                     continue;
                 };
                 if !ctx.core.skills.contains_key(&(owner, sd)) {
-                    ctx.core.skills.insert(
+                    ctx.insert_skill(
                         (owner, sd),
                         crate::state::SkillInstance {
                             owner,
@@ -431,7 +431,7 @@ pub(super) fn mbqianlong_refresh(ctx: &mut Ctx<'_>, owner: PlayerId) {
         let granted = marks >= threshold;
         let has = ctx.core.skills.contains_key(&(owner, def));
         if granted && !has {
-            ctx.core.skills.insert(
+            ctx.insert_skill(
                 (owner, def),
                 crate::state::SkillInstance {
                     owner,
@@ -652,10 +652,11 @@ impl HostMachine {
             }
         }
         ctx.core.player_mut(self.owner).hand.push(c);
-        ctx.log(LogEvent::CardsGiven {
+        ctx.log(LogEvent::CardsTaken {
             from: t,
             to: self.owner,
             cards: vec![c],
+            public: !in_hand,
         });
         Flow::Done
     }
@@ -670,7 +671,8 @@ impl HostMachine {
         }
         let j = ctx.core.rng.gen_range(pool.len() as u32) as usize;
         let c = pool[j];
-        if ctx.core.player(t).hand.contains(&c) {
+        let in_hand = ctx.core.player(t).hand.contains(&c);
+        if in_hand {
             ctx.take_hand_card(t, c);
         } else {
             ctx.core.player_mut(t).equips.retain(|x| *x != c);
@@ -679,10 +681,11 @@ impl HostMachine {
             }
         }
         ctx.core.player_mut(self.owner).hand.push(c);
-        ctx.log(LogEvent::CardsGiven {
+        ctx.log(LogEvent::CardsTaken {
             from: t,
             to: self.owner,
             cards: vec![c],
+            public: !in_hand,
         });
         Flow::Done
     }
@@ -722,7 +725,7 @@ impl HostMachine {
             .find(|c| ctx.catalog.card_kind(*c).is_sha_like())
             .expect("loop head checked sha presence");
         ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-            card: sha,
+            card: Some(sha),
             player: self.owner,
             targets: vec![target],
             nature: match ctx.catalog.card_kind(sha) {
@@ -818,7 +821,7 @@ pub(super) fn moyan_give_shown(ctx: &mut Ctx<'_>, owner: PlayerId, to: PlayerId,
     for card in cards {
         ctx.core.player_mut(to).hand.push(*card);
     }
-    ctx.log(LogEvent::CardsGiven {
+    ctx.log(LogEvent::CardsGivenPublic {
         from: owner,
         to,
         cards: cards.to_vec(),
@@ -952,7 +955,7 @@ impl HostMachine {
                     inst.enabled = false;
                 }
             }
-            ctx.core.skills.insert(
+            ctx.insert_skill(
                 (t, fdef),
                 crate::state::SkillInstance {
                     owner: t,
@@ -975,7 +978,7 @@ impl HostMachine {
     /// expires_end_of_turn 于其回合结束清除）。
     pub(super) fn grant_shihuifen_ban(&mut self, ctx: &mut Ctx<'_>, target: PlayerId) {
         if let Some(def) = ctx.catalog.skill_by_name(GJ_FOOD_SHIHUIFEN_BAN_KEY) {
-            ctx.core.skills.insert(
+            ctx.insert_skill(
                 (target, def),
                 crate::state::SkillInstance {
                     owner: target,
@@ -1036,7 +1039,7 @@ pub(crate) fn sync_land_skill(ctx: &mut Ctx<'_>, owner: PlayerId, new_kind: Card
     }
     if let Some(k) = new_key {
         if let Some(d) = ctx.catalog.skill_by_name(k) {
-            ctx.core.skills.insert(
+            ctx.insert_skill(
                 (owner, d),
                 crate::state::SkillInstance {
                     owner,

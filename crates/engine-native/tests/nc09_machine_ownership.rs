@@ -55,7 +55,7 @@ fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
                 engine_native::ChoiceKind::Confirm => "Confirm",
                 engine_native::ChoiceKind::SelectCards => "SelectCards",
                 engine_native::ChoiceKind::SelectPlayers => "SelectTargets",
-                engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
+                engine_native::ChoiceKind::Control | engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
             },
             "min": open.spec.min, "max": open.spec.max, "allowCancel": open.spec.allow_cancel,
             "options": open.spec.options.iter().map(|option| match option {
@@ -64,6 +64,9 @@ fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
                 engine_native::ChoiceOption::Card(id) => serde_json::json!({"card": id}),
                 engine_native::ChoiceOption::Player(id) => serde_json::json!({"player": id}),
                 engine_native::ChoiceOption::Tag(id) => serde_json::json!({"tag": id}),
+                engine_native::ChoiceOption::Skill(id) => serde_json::json!({"skill": engine.catalog().skill_name(*id)}),
+                engine_native::ChoiceOption::HiddenCard(_)=>serde_json::json!("hand"),
+                engine_native::ChoiceOption::Control(option)=>serde_json::json!(option.label()),
                 engine_native::ChoiceOption::Kind(id) => serde_json::json!({"kind": id}),
             }).collect::<Vec<_>>(),
         })
@@ -419,7 +422,7 @@ fn parked_card_collection_and_expected_asks_recurse_through_all_existing_wrapper
         } = &machine
         {
             expected.extend(queue);
-            expected.push(current.trick);
+            expected.extend(current.trick);
         }
         expected.sort_unstable();
         let open = fixture.engine.open_choice().unwrap();
@@ -508,7 +511,7 @@ fn archive_encoding_rejects_unknown_prompts_without_changing_existing_layout() {
         let fixture = fixture(window);
         let original = fixture.engine.save();
         let bytes = engine_native::archive::encode_archive(&original);
-        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 105);
+        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 106);
         if let Some(directory) = std::env::var_os("NC09_MACHINE_ARCHIVE_OUT") {
             let directory = std::path::PathBuf::from(directory);
             std::fs::create_dir_all(&directory).unwrap();

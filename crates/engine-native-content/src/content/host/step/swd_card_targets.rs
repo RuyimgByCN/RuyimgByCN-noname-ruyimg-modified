@@ -97,7 +97,7 @@ impl HostMachine {
                         // 复活面实例授予（上游 group guiyan2 随用随挂；
                         // def 名=cards.json 顶层技能名 swd_guiyan2）
                         if let Some(g2) = ctx.catalog.skill_by_name("swd_guiyan2") {
-                            ctx.core.skills.entry((self.owner, g2)).or_insert(
+                            ctx.ensure_skill((self.owner, g2),
                                 crate::state::SkillInstance {
                                     owner: self.owner,
                                     enabled: true,
@@ -305,7 +305,7 @@ impl HostMachine {
                         return Flow::Done;
                     }
                     for def in granted {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -319,7 +319,7 @@ impl HostMachine {
                     // 在位旗标=内部状态技能实例（免存档字段批——
                     // 已启用技能随内容锁/快照自然往返）
                     if let Some(sdef) = ctx.catalog.skill_by_name(SWD_HUANXING_STATE_KEY) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, sdef),
                             crate::state::SkillInstance {
                                 owner: self.owner,

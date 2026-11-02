@@ -36,10 +36,10 @@ impl SkillBehavior for QizuoBehavior {
             return false;
         }
         // 副本载体自身的使用不再触发（上游 event.parent name 守卫同口径）
-        if ctx.state.turn.qizuo_copy == Some(u.card) {
+        if u.card.is_some() && ctx.state.turn.qizuo_copy == u.card {
             return false;
         }
-        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
         if !qizuo_copyable(kind) {
             return false;
         }
@@ -96,7 +96,7 @@ impl SkillMachine for QizuoMachine {
         let u = ctx
             .current_card_use()
             .expect("qizuo machine: card use frame");
-        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
         let carrier = ctx.use_virtual_card(self.owner, kind, self.targets.clone());
         ctx.core.turn.qizuo_copy = Some(carrier);
         Flow::Done

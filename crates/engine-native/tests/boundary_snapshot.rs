@@ -197,7 +197,7 @@ fn assert_pause_roundtrip(
                     // finalized（效果已套用）后锦囊已离机（弃置/转移/判定区），
                     // current.trick 仅为簿记，不再计入机器持牌。
                     if !c.finalized {
-                        out.push(c.trick);
+                        out.extend(c.trick);
                     }
                     if c.judge_held {
                         out.push(c.judge_card);
@@ -604,7 +604,7 @@ fn assert_multiset_conservation_named(e: &Engine, at: &str) {
                 out.extend(queue.iter().copied());
                 if let Some(c) = current.as_ref() {
                     if !c.finalized {
-                        out.push(c.trick);
+                        out.extend(c.trick);
                     }
                     if c.judge_held {
                         out.push(c.judge_card);

@@ -57,8 +57,9 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                         return false;
                     }
                     !shamolvzhou
-                        || crate::vocabulary::card_skills::yangpijuan_class(ctx.catalog.card_kind(*c))
-                            != Some(0)
+                        || crate::vocabulary::card_skills::yangpijuan_class(
+                            ctx.catalog.card_kind(*c),
+                        ) != Some(0)
                 })
                 .map(ChoiceOption::Card)
                 .collect();
@@ -124,7 +125,7 @@ impl crate::catalog::SkillMachine for DiscardToLimitMachine {
                                 .player_mut(*holder)
                                 .hand
                                 .extend(gain.iter().copied());
-                            ctx.log(LogEvent::CardsGiven {
+                            ctx.log(LogEvent::CardsGivenPublic {
                                 from: self.player,
                                 to: *holder,
                                 cards: gain,

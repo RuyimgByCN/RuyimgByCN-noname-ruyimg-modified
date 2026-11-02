@@ -16,7 +16,10 @@ impl HostSkillBehavior {
                     ctx.catalog.card_kind(card) == crate::catalog::CardKind::Shan
                 };
                 match event {
-                    EventData::CardUsed(u) => u.player == owner && is_shan(u.card),
+                    EventData::CardUsed(u) => {
+                        u.player == owner
+                            && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Shan
+                    }
                     EventData::CardResponded { card, player } => *player == owner && is_shan(*card),
                     _ => false,
                 }
@@ -57,8 +60,7 @@ impl HostSkillBehavior {
                 && u.targets.contains(&owner)
                 && !u.cancelled
                 && ctx.state.player(owner).sxianjing_traps.iter().any(|c| {
-                    ctx.catalog.cards[*c as usize].suit
-                        == ctx.catalog.cards[u.card as usize].suit
+                    Some(ctx.catalog.cards[*c as usize].suit) == u.suit(ctx.catalog)
                 })),
             // 陷阱·取回：自己受伤后且陷阱表非空
             HostBehavior::SwdSxianjingDamage => matches!(event,
@@ -233,7 +235,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdTiebi => {
                 let hit = matches!(event,
                 EventData::CardUsed(u)
-                if ctx.catalog.card_kind(u.card).is_sha_like()
+                if u.effective_kind(ctx.catalog).is_sha_like()
                     && u.targets.iter().any(|&t| {
                         t != owner
                             && ctx.state.player(t).alive
@@ -302,12 +304,12 @@ impl HostSkillBehavior {
             HostBehavior::SwdLiuhong => matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
-                    && ctx.catalog.card_kind(u.card).is_sha_like()),
+                    && u.effective_kind(ctx.catalog).is_sha_like()),
             // 墨剑：持有者使用杀且指定了目标（上游 shaBegin=自己用杀）
             HostBehavior::SwdMojian => matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
-                    && ctx.catalog.card_kind(u.card).is_sha_like()
+                    && u.effective_kind(ctx.catalog).is_sha_like()
                     && !u.targets.is_empty()),
             // 道法：其他角色受伤且来源有牌
             HostBehavior::SwdDaofa => matches!(event,
@@ -473,12 +475,12 @@ impl HostSkillBehavior {
             HostBehavior::SwdShenmiguoWindow => matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
-                    && u.use_as.map(|k| k == ctx.catalog.card_kind(u.card)).unwrap_or(true)
+                    && u.card.is_some_and(|c|u.use_as.is_none_or(|k|k==ctx.catalog.card_kind(c)))
                     && ctx.state.turn.phase == crate::event::Phase::Play
                     && ctx.state.turn.current == owner
                     && !ctx.state.turn.shenmiguo_used
                     && {
-                        let k = ctx.catalog.card_kind(u.card);
+                        let k = u.effective_kind(ctx.catalog);
                         if matches!(
                             k,
                             CardKind::Shenmiguo
@@ -502,7 +504,7 @@ impl HostSkillBehavior {
                     EventData::CardUsed(u)
                     if u.player == owner
                         && ctx.state.turn.current != owner
-                        && is_black_suit(&ctx.catalog.cards[u.card as usize].suit)
+                        && u.suit(ctx.catalog).is_some_and(|s|is_black_suit(&s))
                 ) || matches!(event,
                 EventData::CardResponded { card, player }
                 if *player == owner
@@ -516,7 +518,7 @@ impl HostSkillBehavior {
                     EventData::CardUsed(u)
                     if u.player == owner
                         && ctx.state.players.len() > 2
-                        && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)).is_sha_like()
+                        && u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)).is_sha_like()
                 ) || matches!(event,
                 EventData::CardResponded { card, player }
                 if *player == owner
@@ -528,7 +530,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if u.player == owner
                     && !ctx.state.turn.lianda_used
-                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)).is_sha_like()
+                    && u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)).is_sha_like()
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())
                     && u.targets.iter().all(|t| ctx.state.player(*t).alive)),
@@ -601,7 +603,7 @@ impl HostSkillBehavior {
                 ) || matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
-                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)) == CardKind::Shan)
+                    && u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)) == CardKind::Shan)
             }
             // 血裔·Miles 面：自己受到伤害前置
             HostBehavior::SwdMilesXueyi => matches!(event,
@@ -700,8 +702,10 @@ impl HostSkillBehavior {
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
-            // 玄影·端蒙面：自己受伤（真实）、已横置、来源存活
-            HostBehavior::SwdXuanying => matches!(event,
+            // 玄影父技只有主动面（未横置出杀）；伤害面是 group 子技。
+            HostBehavior::SwdXuanying => false,
+            // 玄影伤害子技：自己受伤（真实）、已横置、来源存活（父技授予才可达）
+            HostBehavior::SwdXuanyingDamage => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner
                     && !d.prevented
@@ -834,7 +838,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if u.player == owner
                     && !u.cancelled
-                    && ctx.catalog.cards[u.card as usize].suit == crate::catalog::Suit::Club),
+                    && u.suit(ctx.catalog)==Some(crate::catalog::Suit::Club)),
             // 烈刃：自己以杀造成真实伤害且受害者存活有牌
             HostBehavior::SwdLieren => matches!(event,
                 EventData::Damage(d)
@@ -910,11 +914,11 @@ impl HostSkillBehavior {
                         // 自己使用面：红杀/决斗且唯一目标
                         (u.player == owner
                             && u.targets.len() == 1
-                            && red_sha_or_duel(u.card))
+                            && (u.effective_kind(ctx.catalog)==CardKind::Duel||u.card.is_some_and(red_sha_or_duel)))
                         // 成为目标面：他人使用红杀/决斗且自己在其目标中
                         || (u.player != owner
                             && u.targets.contains(&owner)
-                            && red_sha_or_duel(u.card))
+                            && (u.effective_kind(ctx.catalog)==CardKind::Duel||u.card.is_some_and(red_sha_or_duel)))
                     }
                     _ => false,
                 }
@@ -1013,10 +1017,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdLuomei => match event {
                 EventData::CardUsed(u) => {
                     u.player == owner
-                        && matches!(
-                            ctx.catalog.cards[u.card as usize].suit,
-                            crate::catalog::Suit::Club
-                        )
+                        && u.suit(ctx.catalog)
+                            .is_some_and(|s| matches!(s, crate::catalog::Suit::Club))
                 }
                 EventData::CardResponded { card, player } => {
                     *player == owner
@@ -1034,8 +1036,7 @@ impl HostSkillBehavior {
                 if u.player != owner
                     && u.targets.contains(&owner)
                     && !u.cancelled
-                    && matches!(ctx.catalog.cards[u.card as usize].suit,
-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club)
+                    && u.suit(ctx.catalog).is_some_and(|s|matches!(s,crate::catalog::Suit::Spade | crate::catalog::Suit::Club))
                     && !(ctx.state.player(u.player).linked
                         && ctx.state.player(u.player).face_down)
                     && ctx.state.player(owner).hand.iter()
@@ -1050,7 +1051,7 @@ impl HostSkillBehavior {
                 && !u.cancelled
                 && !u.targets.is_empty()
                 && {
-                    let k = ctx.catalog.card_kind(u.card);
+                    let k = u.effective_kind(ctx.catalog);
                     k.is_basic_kind()
                         || (k.is_basic_trick_or_equip() && k.equip_slot().is_none())
                 }

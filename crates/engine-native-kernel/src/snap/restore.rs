@@ -12,6 +12,76 @@ impl MachineSnapshot {
             return m;
         }
         match self {
+            MachineSnapshot::JudgeContinuation {
+                owner,
+                queue,
+                current,
+                ordinary,
+                started,
+                payment,
+            } => {
+                let mut m = crate::kernel::JudgePhaseMachine::new(
+                    *owner,
+                    queue.clone(),
+                    current
+                        .as_deref()
+                        .map(crate::kernel::JudgementProgress::from_snap),
+                );
+                m.ordinary = *ordinary;
+                m.started = *started;
+                m.payment = payment.clone();
+                Ok(Box::new(m))
+            }
+            MachineSnapshot::NativeInvocation {
+                owner,
+                def,
+                window,
+                progress,
+            } => Ok(Box::new(crate::kernel::NativeInvocation {
+                owner: *owner,
+                def: *def,
+                window: *window,
+                progress: progress.clone(),
+            })),
+            MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+                if catalog
+                    .skills
+                    .get(*def as usize)
+                    .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
+                    .is_none_or(|e| {
+                        e.window() != *window || crate::event::uses_native_invocation(e)
+                    })
+                {
+                    return Err(SnapshotError::UnknownMachine);
+                }
+                Ok(Box::new(crate::kernel::NativeDamageSkill {
+                    owner: *owner,
+                    def: *def,
+                    window: *window,
+                }))
+            }
+            MachineSnapshot::DamageFlow { root } => {
+                Ok(Box::new(crate::kernel::DamageFlow { root: *root }))
+            }
+            MachineSnapshot::TriggerOrder {
+                frame,
+                owner,
+                candidates,
+                asked,
+                cursor,
+                done,
+                owners,
+                normal_owners,
+            } => Ok(Box::new(crate::resolution::TriggerOrder {
+                frame: *frame,
+                owner: *owner,
+                candidates: candidates.clone(),
+                asked: *asked,
+                cursor: *cursor,
+                done: done.clone(),
+                owners: owners.clone(),
+                normal_owners: *normal_owners,
+            })),
             MachineSnapshot::Sha {
                 card,
                 source,
@@ -277,6 +347,7 @@ impl MachineSnapshot {
                             ..
                         } if next_owner == owner
                             && next_name == skill_name
+                            && next_event == event
                             && nested.is_empty()
                             && catalog.skills[def as usize]
                                 .behavior

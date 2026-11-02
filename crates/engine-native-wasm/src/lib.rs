@@ -77,10 +77,6 @@ mod restore_boundary {
     }
 }
 
-fn err<E: std::fmt::Debug>(e: E) -> JsValue {
-    JsValue::from_str(&format!("{e:?}"))
-}
-
 fn js_error(message: String) -> JsValue {
     JsValue::from_str(&message)
 }
@@ -233,6 +229,7 @@ impl NativeEngine {
 ///
 /// `translations_json` 是译名对象。`hidden_csv` 是逗号分隔的暗牌实例号。
 /// 命中暗牌实例号时返回 `error:hidden`，不返回该牌。
+#[cfg(test)]
 fn omnisearch_query(
     cards_json: &str,
     package_id: &str,
@@ -294,6 +291,7 @@ fn omnisearch_query(
 /// L23 目标平台：应用电脑适配预设并分类一次指针。
 ///
 /// `layout_override` 为空时用配置里的布局。不创建 DOM。
+#[cfg(test)]
 fn desktop_adapt_apply(
     config_json: &str,
     host: &str,
@@ -356,6 +354,7 @@ fn desktop_adapt_apply(
 }
 
 /// L23 导出：返回净化后的文件名和字节长度，不写磁盘。
+#[cfg(test)]
 fn desktop_adapt_export(text: &str, name: &str) -> String {
     match content_native_loader::export_download(text, name) {
         Ok(download) => format!("file:{}:{}", download.filename, download.bytes.len()),
@@ -365,6 +364,7 @@ fn desktop_adapt_export(text: &str, name: &str) -> String {
 }
 
 /// U03 目标平台：对已安装的 pile.json 套倍率公式。不生成随机点数。
+#[cfg(test)]
 fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String {
     let spec = match content_native_loader::bridge_pile(pile_json) {
         Ok(spec) => spec,
@@ -391,6 +391,7 @@ fn cardpile_scale(pile_json: &str, factors_json: &str, deck_len: u32) -> String 
 }
 
 /// L23 抛表情：拒绝。
+#[cfg(test)]
 fn desktop_adapt_invoke() -> String {
     match content_native_loader::invoke_emoji("player-2") {
         Err(content_native_loader::DesktopError::DomRefused) => "dom_refused".into(),
@@ -400,6 +401,7 @@ fn desktop_adapt_invoke() -> String {
 }
 
 /// U04 目标平台：跑金币命令。不创建画布，效果一律拒绝。
+#[cfg(test)]
 fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> String {
     let play = content_native_loader::CoinGate {
         mode: content_native_loader::CoinMode::Other,
@@ -439,6 +441,7 @@ fn coin_apply(config_json: &str, gate: &str, mode: &str, commands: &str) -> Stri
 }
 
 /// L22 目标平台：跑段位制裁命令。负数段位表示没有排位函数。不延迟，不说话，不筛将池。
+#[cfg(test)]
 fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: &str) -> String {
     let level = if level < 0 { None } else { Some(level) };
     match content_native_loader::apply_elo_commands(config_json, online, mode, level, commands) {
@@ -448,6 +451,7 @@ fn elo_apply(config_json: &str, online: bool, mode: &str, level: i32, commands: 
 }
 
 /// L02 目标平台：跑 SJ Settings 命令。不下载，不执行脚本，不打开 PDF，不启动 eruda。
+#[cfg(test)]
 fn sj_apply(config_json: &str, commands: &str) -> String {
     match content_native_loader::apply_sj_commands(config_json, commands) {
         Ok(text) => text,
@@ -456,6 +460,7 @@ fn sj_apply(config_json: &str, commands: &str) -> String {
 }
 
 /// L15 目标平台：跑手杀全扩。不播放奶龙音频，不改界面。
+#[cfg(test)]
 fn shousha_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_shousha_line(config_json, request_json) {
         Ok(text) => text,
@@ -464,6 +469,7 @@ fn shousha_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L13 目标平台：跑手杀MVP 结算统计。不画界面，不播音，不检测作弊输入。
+#[cfg(test)]
 fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_mvp_line(config_json, request_json) {
         Ok(text) => text,
@@ -472,6 +478,7 @@ fn shousha_mvp_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L17 目标平台：跑斗转星移。不打开菜单，不播放音频，不重启，不执行文本。
+#[cfg(test)]
 fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_douzhuan_line(config_json, request_json) {
         Ok(text) => text,
@@ -480,6 +487,7 @@ fn douzhuan_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L18 目标平台：跑更新保护。不请求网络，不写盘，不执行文本，不睡眠。
+#[cfg(test)]
 fn update_guard_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_update_guard_line(config_json, request_json) {
         Ok(text) => text,
@@ -488,6 +496,7 @@ fn update_guard_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L16 目标平台：跑拖拽读取的拖入决策。不 eval、不读写文件、不请求网络、不启 Electron。
+#[cfg(test)]
 fn drag_read_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_drag_read_line(config_json, request_json) {
         Ok(text) => text,
@@ -496,6 +505,7 @@ fn drag_read_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// U02/L03 目标平台：跑 boss play 包的装配决策。不读写 localStorage、不加载模式。
+#[cfg(test)]
 fn boss_play_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_boss_play_line(config_json, request_json) {
         Ok(text) => text,
@@ -504,6 +514,7 @@ fn boss_play_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L26 目标平台：跑笨蛋插件的仍在执行的决策。不画界面，不播放，不睡眠。
+#[cfg(test)]
 fn fool_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_fool_line(config_json, request_json) {
         Ok(text) => text,
@@ -512,6 +523,7 @@ fn fool_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L21 目标平台：跑武皇争霸的仍在执行的决策。不画界面，不采样，不睡眠。
+#[cfg(test)]
 fn martial_apply(config_json: &str, request_json: &str) -> String {
     match content_native_loader::apply_martial_line(config_json, request_json) {
         Ok(text) => text,
@@ -520,6 +532,7 @@ fn martial_apply(config_json: &str, request_json: &str) -> String {
 }
 
 /// L07 调试入口：不执行脚本。
+#[cfg(test)]
 fn omnisearch_debug(source: &str) -> String {
     match content_native_loader::debug_execute(source) {
         Err(content_native_loader::SearchError::EvalRefused) => "eval_refused".into(),
@@ -963,8 +976,6 @@ mod pack_roundtrip {
         .starts_with("error:BadName"));
     }
 
-    /// L17 目标平台：真实 config.json 的禁将方案、导入和描述。不播放音频，不重启。
-    #[test]
     /// L13 目标平台：真实 config.json 的 MVP 计分与结算分组。不画界面。
     #[test]
     fn shousha_mvp_pack_json_enters_wasm_helper() {

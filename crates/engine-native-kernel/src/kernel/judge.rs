@@ -20,15 +20,20 @@ pub struct JudgePhaseMachine {
     pub(super) queue: Vec<crate::ids::CardId>,
     /// 当前判定的进行态（翻牌后到生效/获得前）。
     pub(super) current: Option<JudgementProgress>,
+    pub(crate) ordinary: Option<EventId>,
+    pub(crate) started: bool,
+    pub(crate) payment: Option<crate::snap::JudgeReplacementSnap>,
 }
 
 /// 单次判定的进行态。
 #[derive(Clone)]
 pub struct JudgementProgress {
-    pub(super) trick: crate::ids::CardId,
+    pub(super) trick: Option<crate::ids::CardId>,
     pub(super) judge_card: crate::ids::CardId,
     /// 鬼道改判询问队列（座位序，自拥有者起含本人）。
     pub(super) rewriters: Vec<PlayerId>,
+    pub(super) rewrite_provider: Option<crate::ids::SkillDefId>,
+    pub(super) used_rewrite_providers: Vec<(PlayerId, crate::ids::SkillDefId)>,
     /// 当前改判者是否已被询问（等待应答）。
     pub(super) asked: bool,
     /// 天妒持有人队列（座位序）。
@@ -57,6 +62,9 @@ impl Clone for JudgePhaseMachine {
             owner: self.owner,
             queue: self.queue.clone(),
             current: self.current.clone(),
+            ordinary: self.ordinary,
+            started: self.started,
+            payment: self.payment.clone(),
         }
     }
 }
@@ -71,6 +79,9 @@ impl JudgePhaseMachine {
             owner,
             queue,
             current,
+            ordinary: None,
+            started: false,
+            payment: None,
         }
     }
 }
@@ -81,6 +92,8 @@ impl JudgementProgress {
             trick: s.trick,
             judge_card: s.judge_card,
             rewriters: s.rewriters.clone(),
+            rewrite_provider: s.rewrite_provider,
+            used_rewrite_providers: s.used_rewrite_providers.clone(),
             asked: s.asked,
             tian_du: s.tian_du.clone(),
             gained: s.gained,
@@ -103,28 +116,42 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
     }
 
     fn snapshot(&self) -> crate::snap::MachineSnapshot {
-        crate::snap::MachineSnapshot::JudgePhase {
-            owner: self.owner,
-            queue: self.queue.clone(),
-            current: self.current.as_ref().map(|c| {
-                Box::new(crate::snap::JudgementProgressSnap {
-                    trick: c.trick,
-                    judge_card: c.judge_card,
-                    rewriters: c.rewriters.clone(),
-                    asked: c.asked,
-                    tian_du: c.tian_du.clone(),
-                    gained: c.gained,
-                    in_rewrite: c.in_rewrite,
-                    finalized: c.finalized,
-                    judge_held: c.judge_held,
-                    haotian_holder: c.haotian_holder,
-                    haotian_other: c.haotian_other.map(|x| x as u32),
-                    gaiming_cards: c
-                        .gaiming_cards
-                        .as_ref()
-                        .map(|v| v.iter().map(|x| *x as u32).collect()),
-                })
-            }),
+        let current = self.current.as_ref().map(|c| {
+            Box::new(crate::snap::JudgementProgressSnap {
+                trick: c.trick,
+                judge_card: c.judge_card,
+                rewriters: c.rewriters.clone(),
+                rewrite_provider: c.rewrite_provider,
+                used_rewrite_providers: c.used_rewrite_providers.clone(),
+                asked: c.asked,
+                tian_du: c.tian_du.clone(),
+                gained: c.gained,
+                in_rewrite: c.in_rewrite,
+                finalized: c.finalized,
+                judge_held: c.judge_held,
+                haotian_holder: c.haotian_holder,
+                haotian_other: c.haotian_other.map(|x| x as u32),
+                gaiming_cards: c
+                    .gaiming_cards
+                    .as_ref()
+                    .map(|v| v.iter().map(|x| *x as u32).collect()),
+            })
+        });
+        if self.ordinary.is_some() || self.payment.is_some() || self.started {
+            crate::snap::MachineSnapshot::JudgeContinuation {
+                owner: self.owner,
+                queue: self.queue.clone(),
+                current,
+                ordinary: self.ordinary,
+                started: self.started,
+                payment: self.payment.clone(),
+            }
+        } else {
+            crate::snap::MachineSnapshot::JudgePhase {
+                owner: self.owner,
+                queue: self.queue.clone(),
+                current,
+            }
         }
     }
 
@@ -133,14 +160,11 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             // 拥有者死亡（防御路径：对齐排序下能致死的闪电在队尾）：
             // 待判队列与进行中的判定牌逐张弃置。
             if !ctx.core.player(self.owner).alive {
-                let mut leftover = std::mem::take(&mut self.queue);
-                if let Some(cur) = self.current.take() {
-                    // 仅机器仍持有的判定牌需要随死亡清理弃置；
-                    // 已被天妒获得（手牌）或已随效果弃置的不重复入弃牌堆。
-                    if cur.judge_held {
-                        leftover.push(cur.judge_card);
-                    }
-                }
+                let mut leftover = Vec::new();
+                crate::snap::machine_held_cards(&self.snapshot(), &mut leftover);
+                self.queue.clear();
+                self.current = None;
+                self.payment = None;
                 if !leftover.is_empty() {
                     ctx.core.discard.extend(leftover.iter().copied());
                     ctx.log(LogEvent::CardDiscarded {
@@ -151,6 +175,26 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 return Flow::Done;
             }
 
+            if let Some(payment) = self.payment.take() {
+                if payment.discard_old || !ctx.core.player(payment.player).alive {
+                    ctx.to_discard(payment.old);
+                } else {
+                    ctx.core.player_mut(payment.player).hand.push(payment.old);
+                    ctx.emit(EventData::CardsMoved {
+                        cards: vec![payment.old],
+                        from: self.owner,
+                        to: payment.player,
+                    });
+                }
+                if let Some(cur) = &self.current {
+                    ctx.log(LogEvent::JudgementRewritten {
+                        player: payment.player,
+                        card: cur.judge_card,
+                        replaced: payment.old,
+                    });
+                }
+                return Flow::Yield;
+            }
             // 当前判定的进行态
             if let Some(cur) = &mut self.current {
                 // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
@@ -221,16 +265,32 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             cur.in_rewrite = false;
                             continue;
                         }
-                        let rewriter = cur.rewriters.remove(0);
+                        let rewriter = cur.rewriters[0];
                         let answer = ctx.answer().clone();
+                        if cur.rewrite_provider.is_none() {
+                            if let Some(ChoiceOption::Skill(def)) = answer.first().copied() {
+                                if judge_rewrite_providers(
+                                    ctx.core,
+                                    ctx.catalog,
+                                    rewriter,
+                                    &cur.used_rewrite_providers,
+                                )
+                                .contains(&def)
+                                {
+                                    cur.rewrite_provider = Some(def);
+                                    continue;
+                                }
+                            }
+                            cur.rewriters.remove(0);
+                            continue;
+                        }
+                        let provider = cur.rewrite_provider.take().expect("selected provider");
+                        cur.used_rewrite_providers.push((rewriter, provider));
                         // 天伦（swd 批 138）：从判定区取牌替换判定牌，旧判定
                         // 牌**弃置**（上游 `judging[0].discard()` 同口径——与
                         // 鬼道/鬼才「旧牌归改判者」不同）
-                        let tianlun = ctx
-                            .catalog
-                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
-                            .map(|d| ctx.core.has_skill(rewriter, d))
-                            .unwrap_or(false);
+                        let tianlun = ctx.catalog.skill_name(provider)
+                            == crate::vocabulary::host::SWD_TIANLUN_KEY;
                         if tianlun {
                             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                                 if c != cur.judge_card {
@@ -270,16 +330,22 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         }
                         if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                             // 打出的牌离开手牌或装备区、由判定流程持有（成为新判定牌）；
-                            // 被替换的旧判定牌由改判者**获得**（对齐上游，ADR 0714）。
+                            // 旧判定牌按已支付的改判能力弃置或获得，跨失牌子树持有。
                             ctx.take_owned_card(rewriter, c);
                             let old = cur.judge_card;
-                            ctx.core.player_mut(rewriter).hand.push(old);
                             cur.judge_card = c;
-                            ctx.log(LogEvent::JudgementRewritten {
+                            let discard_old = ctx.catalog.skill_name(provider)
+                                == crate::vocabulary::names::GUI_CAI;
+                            self.payment = Some(crate::snap::JudgeReplacementSnap {
                                 player: rewriter,
-                                card: c,
-                                replaced: old,
+                                old,
+                                discard_old,
+                                provider,
                             });
+                            if cur.rewriters.is_empty() {
+                                cur.in_rewrite = false;
+                            }
+                            return Flow::Yield;
                         }
                         if cur.rewriters.is_empty() {
                             cur.in_rewrite = false;
@@ -289,42 +355,17 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     // 询问下一个可用改判者（跳过死亡/无黑色牌者——手牌与
                     // 装备区均可，N08-c：仅装备区黑牌者也保持询问资格）
                     while let Some(r) = cur.rewriters.first().copied() {
-                        if !ctx.core.player(r).alive {
-                            cur.rewriters.remove(0);
-                            continue;
-                        }
-                        let is_black_card = |c: crate::ids::CardId| {
-                            matches!(
-                                ctx.catalog.cards[c as usize].suit,
-                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                        if !ctx.core.player(r).alive
+                            || judge_rewrite_providers(
+                                ctx.core,
+                                ctx.catalog,
+                                r,
+                                &cur.used_rewrite_providers,
                             )
-                        };
-                        let p = ctx.core.player(r);
-                        // 鬼才：任意手牌可改判（不依赖黑色）
-                        let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
-                        let has_gui_cai =
-                            gui_cai.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
-                        let has_any_hand = has_gui_cai && !p.hand.is_empty();
-                        // 天道：任意手牌或装备牌可改判（hes 全量，规则 v263）
-                        let tian_dao = ctx
-                            .catalog
-                            .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
-                        let has_tian_dao =
-                            tian_dao.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
-                        // 改天道（swd 孤月）：同天道——hes 全量可改判
-                        let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
-                        let has_g_tiandao =
-                            g_tiandao.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
-                        let has_any_hes = (has_tian_dao || has_g_tiandao)
-                            && (!p.hand.is_empty() || !p.equips.is_empty());
-                        let has_black = p
-                            .hand
-                            .iter()
-                            .chain(p.equips.iter())
-                            .copied()
-                            .any(is_black_card);
-                        if !has_black && !has_any_hand && !has_any_hes {
+                            .is_empty()
+                        {
                             cur.rewriters.remove(0);
+                            cur.rewrite_provider = None;
                             continue;
                         }
                         break;
@@ -334,15 +375,37 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         continue;
                     }
                     let rewriter = cur.rewriters[0];
+                    let providers = judge_rewrite_providers(
+                        ctx.core,
+                        ctx.catalog,
+                        rewriter,
+                        &cur.used_rewrite_providers,
+                    );
+                    if cur.rewrite_provider.is_none() {
+                        if providers.len() > 1 {
+                            cur.asked = true;
+                            return Flow::WaitChoice {
+                                observer: rewriter,
+                                spec: ChoiceSpec {
+                                    kind: ChoiceKind::RespondCard,
+                                    prompt: "judge_rewrite_provider",
+                                    options: std::iter::once(ChoiceOption::Pass)
+                                        .chain(providers.into_iter().map(ChoiceOption::Skill))
+                                        .collect(),
+                                    min: 1,
+                                    max: 1,
+                                    allow_cancel: false,
+                                },
+                            };
+                        }
+                        cur.rewrite_provider = providers.first().copied();
+                    }
                     cur.asked = true;
                     // 天伦（swd 批 138，规则 v316 同批）：候选=本次判定牌 +
                     // 全场判定区牌（上游 tianlun 的 dialog list 同口径）
-                    if ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
-                        .map(|d| ctx.core.has_skill(rewriter, d))
-                        .unwrap_or(false)
-                    {
+                    if cur.rewrite_provider.is_some_and(|d| {
+                        ctx.catalog.skill_name(d) == crate::vocabulary::host::SWD_TIANLUN_KEY
+                    }) {
                         let mut options = vec![ChoiceOption::Pass];
                         if cur.judge_held {
                             options.push(ChoiceOption::Card(cur.judge_card));
@@ -360,7 +423,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         for c in self.queue.iter().copied() {
                             // 正在结算的延时锦囊已离开判定区（上游
                             // `judging[0]` 之外的判定区牌才可被选）
-                            if c == cur.trick {
+                            if Some(c) == cur.trick {
                                 continue;
                             }
                             if !options.contains(&ChoiceOption::Card(c)) {
@@ -383,47 +446,17 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             },
                         };
                     }
-                    // 黑色手牌 + 黑色装备牌均可改判（对齐旧线
-                    // `judgment_black_rewrite_cards`：hand + equip）。
                     let mut options = vec![ChoiceOption::Pass];
-                    let is_black = |id: crate::ids::CardId| {
-                        matches!(
-                            ctx.catalog.cards[id as usize].suit,
-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                    options.extend(
+                        judge_provider_cards(
+                            ctx.core,
+                            ctx.catalog,
+                            rewriter,
+                            cur.rewrite_provider.expect("provider selected"),
                         )
-                    };
-                    // 鬼才持有者：全部手牌可打（不限花色）
-                    let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
-                    let gui_cai_holders_any = gui_cai
-                        .map(|d| ctx.core.has_skill(rewriter, d))
-                        .unwrap_or(false);
-                    // 天道持有者：全部手牌与装备牌可打（hes 全量，规则 v263）
-                    let tian_dao = ctx
-                        .catalog
-                        .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
-                    let tian_dao_holders_any = tian_dao
-                        .map(|d| ctx.core.has_skill(rewriter, d))
-                        .unwrap_or(false);
-                    // 改天道持有者（swd 孤月）：同天道——hes 全量可打
-                    let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
-                    let g_tiandao_holders_any = g_tiandao
-                        .map(|d| ctx.core.has_skill(rewriter, d))
-                        .unwrap_or(false);
-                    for c in ctx.core.player(rewriter).hand.iter().copied() {
-                        if tian_dao_holders_any
-                            || g_tiandao_holders_any
-                            || gui_cai_holders_any
-                            || is_black(c)
-                        {
-                            options.push(ChoiceOption::Card(c));
-                        }
-                    }
-                    // 装备区：黑色牌（鬼道路径）或天道/改天道持有者任意装备
-                    for c in ctx.core.player(rewriter).equips.iter().copied() {
-                        if tian_dao_holders_any || g_tiandao_holders_any || is_black(c) {
-                            options.push(ChoiceOption::Card(c));
-                        }
-                    }
+                        .into_iter()
+                        .map(ChoiceOption::Card),
+                    );
                     return Flow::WaitChoice {
                         observer: rewriter,
                         spec: ChoiceSpec {
@@ -452,8 +485,22 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         player: self.owner,
                         card: judge_card,
                     });
-                    Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
-                    continue;
+                    if let Some(trick) = trick {
+                        Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
+                    } else {
+                        if !machine_holds {
+                            ctx.to_discard(judge_card);
+                        }
+                        if let Some(invocation) = self.ordinary {
+                            if let Some(frame) = ctx.res.frame_mut(invocation) {
+                                if let EventData::SkillInvocation(data) = &mut frame.data {
+                                    data.judgement =
+                                        Some(ctx.catalog.cards[judge_card as usize].suit);
+                                }
+                            }
+                        }
+                    }
+                    return Flow::Yield;
                 }
                 // 天妒阶段（效果生效后）：跳过死亡持有者；有人获得后不再询问
                 while let Some(h) = cur.tian_du.first().copied() {
@@ -504,10 +551,21 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
             }
 
             // 取下一锦囊并翻判定牌
-            if self.queue.is_empty() {
-                return Flow::Done;
-            }
-            let trick = self.queue.remove(0);
+            let trick = if self.ordinary.is_some() {
+                if self.started {
+                    return Flow::Done;
+                }
+                self.started = true;
+                if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
+                    return Flow::Done;
+                }
+                None
+            } else {
+                if self.queue.is_empty() {
+                    return Flow::Done;
+                }
+                Some(self.queue.remove(0))
+            };
             // 改命（T11 Boss 诸葛亮族批 116，规则 v303 同批）：判定前——拥有
             // 者持技时亮牌堆顶 7 张，由其选 1 作为判定结果（其余弃置、改判/
             // 天妒窗跳过；上游 judgeBefore chooseCardButton + trigger.cancel
@@ -536,6 +594,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         trick,
                         judge_card: cards[0],
                         rewriters: Vec::new(),
+                        rewrite_provider: None,
+                        used_rewrite_providers: Vec::new(),
                         asked: false,
                         tian_du: Vec::new(),
                         gained: false,
@@ -596,6 +656,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                         trick,
                         judge_card,
                         rewriters: Vec::new(),
+                        rewrite_provider: None,
+                        used_rewrite_providers: Vec::new(),
                         asked: false,
                         tian_du: Vec::new(),
                         gained: false,
@@ -661,6 +723,8 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 trick,
                 judge_card,
                 rewriters,
+                rewrite_provider: None,
+                used_rewrite_providers: Vec::new(),
                 asked: false,
                 tian_du: if tian_du_self {
                     vec![self.owner]
@@ -840,4 +904,70 @@ impl JudgePhaseMachine {
             }
         }
     }
+}
+
+/// Source GuiCai is hs outside guozhan, hes inside; GuiDao is black he, Tiandao is any he.
+pub fn judge_rewrite_cards(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+) -> Vec<crate::ids::CardId> {
+    let mut cards = Vec::new();
+    for def in judge_rewrite_providers(core, catalog, player, &[]) {
+        for card in judge_provider_cards(core, catalog, player, def) {
+            if !cards.contains(&card) {
+                cards.push(card);
+            }
+        }
+    }
+    cards
+}
+pub fn judge_rewrite_providers(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    used: &[(PlayerId, crate::ids::SkillDefId)],
+) -> Vec<crate::ids::SkillDefId> {
+    [
+        crate::vocabulary::names::GUI_CAI,
+        crate::vocabulary::names::GUI_DAO,
+        crate::vocabulary::names::BOSS_TIANDAO,
+        "gtiandao",
+        crate::vocabulary::host::SWD_TIANLUN_KEY,
+    ]
+    .into_iter()
+    .filter_map(|name| catalog.skill_by_name(name))
+    .filter(|d| {
+        core.has_skill(player, *d)
+            && !used.contains(&(player, *d))
+            && (catalog.skill_name(*d) == crate::vocabulary::host::SWD_TIANLUN_KEY
+                || !judge_provider_cards(core, catalog, player, *d).is_empty())
+    })
+    .collect()
+}
+pub fn judge_provider_cards(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    player: PlayerId,
+    provider: crate::ids::SkillDefId,
+) -> Vec<crate::ids::CardId> {
+    let name = catalog.skill_name(provider);
+    let cai = name == crate::vocabulary::names::GUI_CAI;
+    let dao = name == crate::vocabulary::names::GUI_DAO;
+    let any = name == crate::vocabulary::names::BOSS_TIANDAO || name == "gtiandao";
+    let black = |c: &crate::ids::CardId| {
+        matches!(
+            catalog.cards[*c as usize].suit,
+            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+        )
+    };
+    let p = core.player(player);
+    p.hand
+        .iter()
+        .filter(|c| any || cai || dao && black(c))
+        .chain(p.equips.iter().filter(|c| {
+            any || cai && matches!(core.mode, crate::state::GameMode::Kingdoms) || dao && black(c)
+        }))
+        .copied()
+        .collect()
 }

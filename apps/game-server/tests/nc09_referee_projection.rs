@@ -159,7 +159,7 @@ fn assert_choice_kind(engine: &Engine, kind: engine_api::ChoiceKind) {
     else {
         panic!("snapshot")
     };
-    assert_eq!(header.protocol_version, 6);
+    assert_eq!(header.protocol_version, 7);
     assert_eq!(decoded, Some(choice));
 }
 

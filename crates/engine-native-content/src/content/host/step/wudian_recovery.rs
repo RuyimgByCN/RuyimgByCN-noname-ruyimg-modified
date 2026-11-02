@@ -279,7 +279,7 @@ impl HostMachine {
                         (d.amount, d.target)
                     };
                     if num > 0 && ctx.core.player(hurt).alive {
-                        ctx.recover(hurt, num, None);
+                        ctx.recover(hurt, num.max(0) as u32, None);
                     }
                     Flow::Done
                 }

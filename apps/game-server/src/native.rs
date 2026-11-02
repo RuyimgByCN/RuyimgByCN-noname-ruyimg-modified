@@ -229,8 +229,6 @@ impl NativeContent {
         let outcome =
             content_native_loader::bridge_vm_skill_decls(&parsed).map_err(|e| e.to_string())?;
         let vm_skills = outcome.decls;
-        let vm_names: std::collections::BTreeSet<String> =
-            vm_skills.iter().map(|decl| decl.name.clone()).collect();
         let (mut pack, deferred) = if let Some(json) = cards.as_ref() {
             let b: BridgedPack =
                 content_native_loader::bridge_pack(json).map_err(|e| e.to_string())?;
@@ -267,7 +265,7 @@ impl NativeContent {
             let generals = if parsed.modules.is_empty() {
                 content_native_loader::bridge_generals(&json)
             } else {
-                content_native_loader::bridge_generals_with_known(&json, &vm_names)
+                content_native_loader::bridge_generals_with_vm_package(&json, &parsed)
             }.map_err(|e| e.to_string())?;
             pack.generals.extend(generals.generals);
             for decl in generals.host_skills {

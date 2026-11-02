@@ -32,6 +32,9 @@ pub(super) fn active_ask(core: &GameStateCore, owner: u8, state: &[u32]) -> Opti
 }
 
 pub(super) fn step(ctx: &mut Ctx<'_>, owner: u8, amount: u32, state: &mut Vec<u32>) -> Flow {
+    let Ok(amount)=i32::try_from(amount) else {
+        ctx.res.fault=Some(crate::machine::VmFault{skill:"pingkou".into(),owner,event:"Damage".into(),kind:"DamageAmountOverflow".into(),detail:"source amount exceeds i32".into()});return Flow::Done;
+    };
     if state.is_empty() {
         *state = vec![1, 0, 0, 0];
         return active_ask(ctx.core, owner, state)

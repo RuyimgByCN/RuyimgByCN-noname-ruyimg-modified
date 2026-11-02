@@ -2,6 +2,9 @@ use super::super::*;
 
 pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
     if !ctx.core.turn.turn_opened {
+        for state in &mut ctx.core.players {
+            state.zlfanshi_terra = false;
+        }
         ctx.reset_turn_limits(player);
         ctx.core.turn.turn_opened = true;
         // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零

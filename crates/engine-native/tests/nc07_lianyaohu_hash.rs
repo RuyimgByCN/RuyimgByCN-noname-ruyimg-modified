@@ -3,9 +3,7 @@
 //! 按壶序生成、结算丢弃序也随之不同——同摘要不同语义。修复后摘要必须
 //! 区分，且归档往返、炼化结算与日志轨迹同步区分；v324 及更早旧档按
 //! 版本门禁拒绝（存档 v105、全局原生 ABI 不变）。
-use engine_native::archive::decode_archive;
 use engine_native::content::extension::ExtensionPack;
-use engine_native::snap::SnapshotError;
 use engine_native::{
     ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase,
 };
@@ -125,33 +123,11 @@ fn different_jar_orders_have_different_hashes_and_trajectories() {
 }
 
 #[test]
-fn v324_and_earlier_archives_are_rejected_by_rule_version() {
-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../docs/operations/evidence/2026-10-28-nc07-lianyaohu-hash");
-    // 普通档：标准目录版本直接拒绝。
-    for (name, version) in [("native-v323.ngsa", 323u64), ("native-v324.ngsa", 324u64)] {
-        let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
-        assert_eq!(snap.ruleset_version, version);
-        assert!(matches!(
-            Engine::restore(&snap),
-            Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
-                if snapshot == version && catalog == 330
-        ));
-    }
-    // 壶仓档：目录版本 = 标准版本 ^（内容锁 | 高位）。v324 壶仓档正是
-    // 「壶序未入摘要」时代的产物，升号后不能被静默接受。
-    let pack = load_pack();
-    let catalog_version = Engine::new_with_extensions(3504, 4, &[&pack])
-        .unwrap()
-        .ruleset_version();
-    for (name, version) in [("lianyaohu-v323.ngsa", 323u64), ("lianyaohu-v324.ngsa", 324u64)] {
-        let snap = decode_archive(&std::fs::read(ev.join(name)).unwrap()).unwrap();
-        // 壶仓档与当前目录的差异只来自标准版本位（内容锁互相抵消）。
-        assert_eq!(snap.ruleset_version ^ catalog_version, version ^ 330);
-        assert!(matches!(
-            Engine::restore_with_extensions(&snap, &[&pack]),
-            Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
-                if snapshot == snap.ruleset_version && catalog == catalog_version
-        ));
+fn v324_and_earlier_archives_are_rejected_by_archive_format() {
+    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
+    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-28-nc07-lianyaohu-hash");
+    for name in ["native-v323.ngsa", "native-v324.ngsa", "lianyaohu-v323.ngsa", "lianyaohu-v324.ngsa"] {
+        let raw=std::fs::read(ev.join(name)).unwrap();
+        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
     }
 }

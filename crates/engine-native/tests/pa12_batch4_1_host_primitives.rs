@@ -273,7 +273,9 @@ fn pa12_batch5_fenli_bridges_with_skip_wiring() {
     }
     assert_eq!(pkg.trigger_index.len(), 3, "奋励三窗口");
     let out = content_native_loader::bridge_vm_skill_decls(&pkg).expect("桥接");
-    assert_eq!(out.decls.len(), 3, "三模块全部可承载（skip_current_phase 已接允许面）");
+    assert_eq!(out.decls.len(), 1, "三个阶段handler共用一个稳定逻辑技能身份");
+    let engine_native::rvm_bridge::VmFilterPolicy::Handlers(set) = &out.decls[0].filter else { panic!("handler set"); };
+    assert_eq!(set.triggers.len(), 3);
     let pack = ExtensionPack {
         def: ExtensionDef { name: "onlyol-fenli", version: 1, description: "批⑤-2 奋励" },
         generals: Vec::new(),
@@ -404,8 +406,11 @@ fn pa12_batch5_4_dichou_predicates() {
     assert_eq!(filtered.trigger_index.len(), 2, "两个 card_targeted 段");
     // This fixture exercises predicates only; the native VM does not implement these modifiers.
     filtered.modifier_index.clear();
+    filtered.manifest.logic_hash = filtered.compute_logic_hash();
     let out = content_native_loader::bridge_vm_skill_decls(&filtered).expect("桥接");
-    assert_eq!(out.decls.len(), 2, "两个谓词触发段全部可承载");
+    assert_eq!(out.decls.len(), 1, "同逻辑技能保留两个handler");
+    let engine_native::rvm_bridge::VmFilterPolicy::Handlers(set) = &out.decls[0].filter else { panic!("handler set"); };
+    assert_eq!(set.triggers.len(), 2);
 
     let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect_err("unsupported modifiers must reject the full package");
     assert!(matches!(full, content_native_loader::BridgeError::InvalidField { field: "modifier_index", .. }));

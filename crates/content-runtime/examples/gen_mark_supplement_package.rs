@@ -77,6 +77,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
         modules: vec![],
         skill_index: vec![
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 0,
                 name: "xigua_mopaifanbei".into(),
                 locked: false,
@@ -85,6 +93,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 1,
                 name: "xigua_xueliangfanbei".into(),
                 locked: false,
@@ -93,6 +109,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 2,
                 name: "kurou".into(),
                 locked: false,
@@ -101,6 +125,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 3,
                 name: "zhuwanzhongji".into(),
                 locked: false,
@@ -109,6 +141,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 4,
                 name: "fz_liegong".into(),
                 locked: false,
@@ -117,6 +157,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
                 conversion: false,
             },
             content_schema::PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
                 skill_def_id: 5,
                 name: "fz_xinkuanggu".into(),
                 locked: false,

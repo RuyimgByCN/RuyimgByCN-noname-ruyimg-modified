@@ -1,7 +1,8 @@
 use super::*;
+mod boss_host;
 
 pub(super) fn skills() -> Vec<SkillDef> {
-    vec![
+    let mut skills = vec![
         SkillDef {
             name: BOSS_XIONGSHOU,
             // 权限型能力三面：杀伤条件臂（kernel emit_sha_damage）、
@@ -24,9 +25,10 @@ pub(super) fn skills() -> Vec<SkillDef> {
             // 伤害前置触发：来源有武器对持有者伤害 +1（机器一步直改
             // 载荷，YiShang 同款窗口）
             trigger: Some(TriggerMeta {
-                event: EventKind::DamageBefore,
+                event: EventKind::DamageBegin3,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -58,6 +60,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -116,6 +119,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -191,6 +195,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -229,9 +234,10 @@ pub(super) fn skills() -> Vec<SkillDef> {
             // ——相德同款窗口）；免疫火伤（commit_damage 入口直读——拟
             // 态回合内免伤同位）
             trigger: Some(TriggerMeta {
-                event: EventKind::DamageBefore,
+                event: EventKind::DamageBegin1,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -320,6 +326,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::DamageBefore,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -555,9 +562,19 @@ pub(super) fn skills() -> Vec<SkillDef> {
         SkillDef {
             name: BOSS_ZUIJIU,
             // 查询型单面：commit_damage 臂——source sha 伤害 +1
-            trigger: None,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBegin1,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             limits: SkillLimits::default(),
-            behavior: Box::new(NoopBehavior),
+            behavior: Box::new(native_damage::NativeDamageBehavior {
+                name: BOSS_ZUIJIU,
+                effects: &[crate::event::NativeDamageEffect::Zuijiu],
+            }),
         },
         SkillDef {
             name: BOSS_XIAOSHOU,
@@ -645,6 +662,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -655,17 +673,37 @@ pub(super) fn skills() -> Vec<SkillDef> {
             name: JUE_QING,
             // 查询型单面：commit_damage 入口直读臂（急冻前——上游
             // damageBefore 层）——来源伤害改为目标失去等量体力
-            trigger: None,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             limits: SkillLimits::default(),
-            behavior: Box::new(NoopBehavior),
+            behavior: Box::new(native_damage::NativeDamageBehavior {
+                name: JUE_QING,
+                effects: &[crate::event::NativeDamageEffect::Jueqing],
+            }),
         },
         SkillDef {
             name: BOSS_WUXIN,
             // 查询型双面：commit_damage 入口直读臂（受伤→失 1）+
             // PlayCard 校验臂（乐/兵拒——延时禁指定他人）
-            trigger: None,
+            trigger: Some(TriggerMeta {
+                event: EventKind::DamageBefore,
+                timing: Timing::Normal,
+                priority: 10,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             limits: SkillLimits::default(),
-            behavior: Box::new(NoopBehavior),
+            behavior: Box::new(native_damage::NativeDamageBehavior {
+                name: BOSS_WUXIN,
+                effects: &[crate::event::NativeDamageEffect::Wuxin],
+            }),
         },
         SkillDef {
             name: BOSS_SHANGSHIX,
@@ -683,6 +721,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::CardUsed,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -704,6 +743,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::CardResponded,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: vec![EventKind::CardUsed],
             }),
@@ -731,6 +771,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::CardResponded,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: vec![EventKind::CardUsed],
             }),
@@ -776,6 +817,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::CardResponded,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: vec![EventKind::CardUsed],
             }),
@@ -820,6 +862,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -854,6 +897,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -882,6 +926,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -923,6 +968,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -958,6 +1004,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -985,6 +1032,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -1013,6 +1061,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -1054,6 +1103,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -1081,6 +1131,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 event: EventKind::Death,
                 timing: Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: Vec::new(),
             }),
@@ -1101,132 +1152,7 @@ pub(super) fn skills() -> Vec<SkillDef> {
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
         },
-        // D4/B1 四象隐藏链青木打样（HostBehavior tag 411–414）
-        crate::content::host::host_skill_def(
-            BOSS_QINGMU2.to_string(),
-            crate::content::host::HostBehavior::BossQingmu2,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_QINGMU2X.to_string(),
-            crate::content::host::HostBehavior::BossQingmu2x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_QINGMU3.to_string(),
-            crate::content::host::HostBehavior::BossQingmu3,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_QINGMU3X.to_string(),
-            crate::content::host::HostBehavior::BossQingmu3x,
-        ),
-        // D4/B2 白芒/赤炎/玄麟 2/2x（HostBehavior tag 415–420）
-        crate::content::host::host_skill_def(
-            BOSS_BAIMANG2.to_string(),
-            crate::content::host::HostBehavior::BossBaimang2,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BAIMANG2X.to_string(),
-            crate::content::host::HostBehavior::BossBaimang2x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYAN2.to_string(),
-            crate::content::host::HostBehavior::BossChiyan2,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYAN2X.to_string(),
-            crate::content::host::HostBehavior::BossChiyan2x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_XUANLIN2.to_string(),
-            crate::content::host::HostBehavior::BossXuanlin2,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_XUANLIN2X.to_string(),
-            crate::content::host::HostBehavior::BossXuanlin2x,
-        ),
-        // D4/B3 白芒/赤炎/玄麟 3/3x（HostBehavior tag 421–426）
-        crate::content::host::host_skill_def(
-            BOSS_BAIMANG3.to_string(),
-            crate::content::host::HostBehavior::BossBaimang3,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BAIMANG3X.to_string(),
-            crate::content::host::HostBehavior::BossBaimang3x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYAN3.to_string(),
-            crate::content::host::HostBehavior::BossChiyan3,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYAN3X.to_string(),
-            crate::content::host::HostBehavior::BossChiyan3x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_XUANLIN3.to_string(),
-            crate::content::host::HostBehavior::BossXuanlin3,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_XUANLIN3X.to_string(),
-            crate::content::host::HostBehavior::BossXuanlin3x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BIANSHEN3.to_string(),
-            crate::content::host::HostBehavior::BossBianshen3,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BIANSHEN3X.to_string(),
-            crate::content::host::HostBehavior::BossBianshen3x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BIANSHEN4.to_string(),
-            crate::content::host::HostBehavior::BossBianshen4,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BIANSHEN4X.to_string(),
-            crate::content::host::HostBehavior::BossBianshen4x,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_HUANREN.to_string(),
-            crate::content::host::HostBehavior::BossHuanren,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_HUANREN_DIE.to_string(),
-            crate::content::host::HostBehavior::BossHuanrenDie,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_QINGYI.to_string(),
-            crate::content::host::HostBehavior::BossQingyi,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYI.to_string(),
-            crate::content::host::HostBehavior::BossChiyi,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_CHIYI2.to_string(),
-            crate::content::host::HostBehavior::BossChiyiMark,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BAIYI.to_string(),
-            crate::content::host::HostBehavior::BossBaiyi,
-        ),
-        crate::content::host::host_skill_def(
-            BOSS_BAIYI_THUNDER.to_string(),
-            crate::content::host::HostBehavior::BossBaiyiThunder,
-        ),
-        // T11 Boss 庞统族批 118（规则 v306）：涅槃/浴火/神威——尾部追加
-        // 涅槃（濒死面可选触发 + 出牌阶段主动面；trigger 由行为元数据给出）
-        crate::content::host::host_skill_def(
-            BOSS_NIEPAN.to_string(),
-            crate::content::host::HostBehavior::Niepan,
-        ),
-        // 浴火（涅槃后链式授予，无触发时机）
-        crate::content::host::host_skill_def(
-            BOSS_YUHOU.to_string(),
-            crate::content::host::HostBehavior::Yuhuo,
-        ),
-        // 神威（锁定查询型：摸牌 +N / 手牌上限 +N，kernel 臂）
-        crate::content::host::host_skill_def(
-            BOSS_SHENWEI.to_string(),
-            crate::content::host::HostBehavior::Shenwei,
-        ),
-    ]
+    ];
+    skills.extend(boss_host::skills());
+    skills
 }

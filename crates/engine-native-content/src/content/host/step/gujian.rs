@@ -225,7 +225,7 @@ impl HostMachine {
                 let Some(def) = ctx.catalog.skill_by_name(listener) else {
                     return Flow::Done;
                 };
-                ctx.core.skills.insert(
+                ctx.insert_skill(
                     (t, def),
                     crate::state::SkillInstance {
                         owner: t,

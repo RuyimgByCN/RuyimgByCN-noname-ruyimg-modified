@@ -47,34 +47,36 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
 pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
     // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
     //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
-    if ctx.core.turn.qizuo_copy != Some(u.card) {
+    if ctx.core.turn.qizuo_copy != u.card {
         ctx.core.turn.qizuo_copy = None;
     }
     if u.cancelled {
         // 取消痕迹已在猴子机器的 CardsGiven/CardsDiscarded 中观测。
         return;
     }
-    if ctx.core.player(u.player).hand.contains(&u.card) {
-        ctx.take_hand_card(u.player, u.card);
-    } else if ctx.core.table.contains(&u.card) {
-        // 神秘果再结算（swd 卡牌面窗口机批）：原体自弃堆直上桌面（处理
-        // 区暂存）后重发射——提交段自桌面取，不经手牌（AfterTriggers 窗
-        // 口内手牌数无扰动）；随后按牌种臂照常置桌面/弃置。
-        ctx.core.table.retain(|c| *c != u.card);
-    } else {
-        // 保持原 panic 语义（调用方先验证）。
-        ctx.take_hand_card(u.player, u.card);
+    if let Some(card) = u.card {
+        if ctx.core.player(u.player).hand.contains(&card) {
+            ctx.take_hand_card(u.player, card);
+        } else if ctx.core.table.contains(&card) {
+            // 神秘果再结算（swd 卡牌面窗口机批）：原体自弃堆直上桌面（处理
+            // 区暂存）后重发射——提交段自桌面取，不经手牌（AfterTriggers 窗
+            // 口内手牌数无扰动）；随后按牌种臂照常置桌面/弃置。
+            ctx.core.table.retain(|c| *c != card);
+        } else {
+            // 保持原 panic 语义（调用方先验证）。
+            ctx.take_hand_card(u.player, card);
+        }
     }
     // 全局用牌计数（U05 xianjian 小蛮，规则 v163 灵泉门控；上游
     // getHistory("useCard") 同口径——未被取消的使用全计）
     ctx.core.player_mut(u.player).total_used += 1;
     // 沐风（swd 桓远之，批㉑）：本回合已使用基本牌（TurnState 旗，换回合清）
-    if ctx.catalog.card_kind(u.card).is_basic_kind() {
+    if u.effective_kind(ctx.catalog).is_basic_kind() {
         ctx.core.turn.mufeng_used_basic = true;
     }
     // 邪酬（Boss 相柳，规则 v223）：激活态下其他角色使用【桃】/【酒】
     // → 相柳获 1 蛇毒标记（上游 boss_echou global useCard 同口径）
-    let effective_kind = ctx.catalog.card_kind(u.card);
+    let effective_kind = u.effective_kind(ctx.catalog);
     if matches!(
         u.use_as.unwrap_or(effective_kind),
         CardKind::Tao | CardKind::Jiu
@@ -153,10 +155,9 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
         .catalog
         .skill_by_name(crate::vocabulary::names::BOSS_QIWU)
     {
-        let club = matches!(
-            ctx.catalog.cards[u.card as usize].suit,
-            crate::catalog::Suit::Club
-        );
+        let club = u
+            .suit(ctx.catalog)
+            .is_some_and(|s| matches!(s, crate::catalog::Suit::Club));
         if club
             && ctx.core.has_skill(u.player, qwdef)
             && ctx.core.player(u.player).alive
@@ -182,10 +183,12 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             .filter(|o| ctx.core.player(*o).alive)
             .collect();
         if let Some(holder) = holders.first() {
-            let red = matches!(
-                ctx.catalog.cards[u.card as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            );
+            let red = u.suit(ctx.catalog).is_some_and(|s| {
+                matches!(
+                    s,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            });
             // 显式目标面：targets 含持有者；闪电自置：targets 空（隐式
             // 自目标，上游 useCardToTargeted target=使用者同口径）
             let is_self_shandian =
@@ -195,22 +198,30 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             }
         }
     }
-    ctx.log(LogEvent::CardPlayed {
-        card: u.card,
-        player: u.player,
-        targets: u.targets.clone(),
-    });
+    if let Some(card) = u.card {
+        ctx.log(LogEvent::CardPlayed {
+            card,
+            player: u.player,
+            targets: u.targets.clone(),
+        });
+    } else {
+        ctx.log(LogEvent::VirtualCardPlayed {
+            kind: u.effective_kind(ctx.catalog),
+            player: u.player,
+            targets: u.targets.clone(),
+        });
+    }
     // view-as 声明持久化：延时锦囊转化（国色）需跨阶段保存声明牌种，
     // 判定生效时按声明牌种执行（目录牌种不再可靠）。
-    if let Some(as_kind) = u.use_as {
-        ctx.core.declared_kinds.insert(u.card, as_kind);
+    if let (Some(card), Some(as_kind)) = (u.card, u.use_as) {
+        ctx.core.declared_kinds.insert(card, as_kind);
     }
     // view-as 转化（武圣/龙胆）：以声明牌种结算，而非目录牌种
-    let effective = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+    let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
     match effective {
         CardKind::Tao => {
             ctx.to_discard(u.card);
-            ctx.recover(u.player, 1, Some(u.card));
+            ctx.recover(u.player, 1, u.card);
         }
         CardKind::Zhufangshenshi => {
             // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定
@@ -226,7 +237,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             //（目标合法性在 PlayCard 门控：距离 1 + hp<maxHp）
             ctx.to_discard(u.card);
             let t = *u.targets.first().expect("caoyao has one target");
-            ctx.recover(t, 1, Some(u.card));
+            ctx.recover(t, 1, u.card);
         }
         CardKind::Xuejibingbao => {
             // 雪霁冰雹（swd 卡牌面补切批②）：目标标记 2 个摸牌阶段摸牌
@@ -262,10 +273,12 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             // 加成额外杀则置 land_sha_used，否则置常规已用
             // 破月（拓跋玉儿，swd 武将面批 28）：红杀不计入限一次（上
             // 游 stat 回退同口径）
-            let poyue_red_free = matches!(
-                ctx.catalog.cards[u.card as usize].suit,
-                crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-            ) && ctx
+            let poyue_red_free = u.suit(ctx.catalog).is_some_and(|s| {
+                matches!(
+                    s,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                )
+            }) && ctx
                 .catalog
                 .skill_by_name("poyue")
                 .map(|def| ctx.core.has_skill(u.player, def))
@@ -275,7 +288,8 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             // 判据=声明杀且实体非杀族（PlayCard 常态出杀也带 use_as=
             // 声明位，须按实体牌种区分——批 15 良策勘误同口径）
             let yudun_free = u.use_as == Some(crate::catalog::CardKind::Sha)
-                && !ctx.catalog.card_kind(u.card).is_sha_like()
+                && u.card
+                    .is_some_and(|c| !ctx.catalog.card_kind(c).is_sha_like())
                 && ctx
                     .catalog
                     .skill_by_name("yudun")
@@ -325,7 +339,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
                     }
                 }
             }
-            ctx.core.table.push(u.card);
+            ctx.core.table.extend(u.card);
         }
         CardKind::Jiu | CardKind::Tianxianjiu => {
             // 酒/天仙酒：命令边界已校验每回合一次——置本回合已用 + 待
@@ -344,7 +358,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
         // Le/Bing/ShanDian：先置桌面，经无懈窗口（使用时开窗，对齐旧线）
         // 由 PlaceDelayedMachine 放入判定区或弃置。
         _ => {
-            ctx.core.table.push(u.card);
+            ctx.core.table.extend(u.card);
         }
     }
     // 突击计数（U07 ow，规则 v118）：出牌阶段使用任意牌 +1（取消不计；
@@ -669,6 +683,9 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
     ctx.expire_temporary_skills(player);
+    for state in &mut ctx.core.players {
+        state.zlfanshi_terra = false;
+    }
     // 清残留跳阶段旗标（正常流程已被消费）
     ctx.core.turn.skip_draw_phase = false;
     ctx.core.turn.skip_play_phase = false;

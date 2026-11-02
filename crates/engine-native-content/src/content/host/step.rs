@@ -354,6 +354,8 @@ impl HostMachine {
             //（ActivateSkill 面走下方 stage 分支——两入口按触发帧区分：
             // 帧存在且为 Damage=反击面；无帧=主动面）
             HostBehavior::SwdXuanying => self.step_swd_damage_targets(ctx),
+            // 玄影伤害子技：与父技同一台受伤反击机（按触发帧区分面）。
+            HostBehavior::SwdXuanyingDamage => self.step_swd_damage_targets(ctx),
             // 烈刃：与受害者拼点——CompareTargetPick 目标选牌 →
             // ComparePlayerPick 己方选牌 → 赢者获得对方拼点牌+随机一张 he
             HostBehavior::SwdLieren => self.step_swd_damage_reactions(ctx),

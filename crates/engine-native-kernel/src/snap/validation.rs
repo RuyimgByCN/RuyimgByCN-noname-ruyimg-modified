@@ -1,4 +1,5 @@
 use super::*;
+use crate::event::Stage;
 
 /// 由目录与座位数导出恢复边界。
 pub fn bounds_from(catalog: &Catalog, seats: usize) -> RestoreBounds {
@@ -67,7 +68,20 @@ pub(super) fn check_cards(cs: &[CardId], b: &RestoreBounds) -> Result<(), Snapsh
 
 pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
     match data {
+        EventData::OrdinaryJudge { owner, .. } => check_pid(*owner, b)?,
+        EventData::SkillInvocation(d) => {
+            check_pid(d.owner, b)?;
+            check_def(d.def, b)?;
+            check_opt_pid(d.source, b)?;
+            check_pid(d.target, b)?;
+        }
+        EventData::SkillLog { owner, def, .. } => {
+            check_pid(*owner, b)?;
+            check_def(*def, b)?;
+        }
+        EventData::DamageWindow { .. } => {}
         EventData::Damage(d) => {
+            super::damage_validation::check_settlement(d, b)?;
             check_opt_pid(d.source, b)?;
             check_pid(d.target, b)?;
             check_pids(&d.redirect_chain, b)?;
@@ -78,7 +92,7 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
             source,
             target,
         } => {
-            check_card(*card, b)?;
+            check_opt_card(*card, b)?;
             check_pid(*source, b)?;
             check_pid(*target, b)?;
         }
@@ -124,7 +138,10 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
             check_pid(*to, b)?;
         }
         EventData::CardUsed(u) => {
-            check_card(u.card, b)?;
+            if u.card.is_none() && !u.use_as.is_some_and(|k| k.is_sha_like()) {
+                return Err(oob("virtual_card_use_kind", 0));
+            }
+            check_opt_card(u.card, b)?;
             check_pid(u.player, b)?;
             check_pids(&u.targets, b)?;
         }
@@ -178,6 +195,8 @@ pub(super) fn check_options(opts: &[ChoiceOption], b: &RestoreBounds) -> Result<
     for o in opts {
         match o {
             ChoiceOption::Card(c) => check_card(*c, b)?,
+            ChoiceOption::Control(_) | ChoiceOption::HiddenCard(_) => {}
+            ChoiceOption::Skill(d) => check_def(*d, b)?,
             ChoiceOption::Player(p) => check_pid(*p, b)?,
             _ => {}
         }
@@ -194,6 +213,16 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
             snapshot: core.ruleset_version,
             catalog: b.ruleset_version,
         });
+    }
+    for (seat, p) in core.players.iter().enumerate() {
+        check_pids(&p.yexinjia_friends, b)?;
+        let unique: std::collections::BTreeSet<_> = p.yexinjia_friends.iter().copied().collect();
+        if unique.len() != p.yexinjia_friends.len()
+            || p.yexinjia_friends.contains(&(seat as PlayerId))
+            || matches!(&p.kingdom_identity,crate::state::KingdomIdentity::Declared(name)if name.is_empty()||name=="unknown"||name=="ye")
+        {
+            return Err(oob("kingdom_identity_friends", seat as u64));
+        }
     }
     // NC07：座位环引用校验（长度须与玩家数一致，取值须为合法座位且构成排列）
     if !core.seat_ring.is_empty() {
@@ -341,13 +370,24 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
 
 /// 机器持牌收集（N04-f：判定进行态/观星顶牌由机器持有，不在任何牌区）。
 pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
+    if let MachineSnapshot::JudgeContinuation {
+        payment: Some(p), ..
+    } = m
+    {
+        out.push(p.old);
+    }
     match m {
-        MachineSnapshot::JudgePhase { queue, current, .. } => {
+        MachineSnapshot::NativeInvocation {
+            progress: crate::event::NativeInvocationProgress::QinglongLoss { card, .. },
+            ..
+        } => out.push(*card),
+        MachineSnapshot::JudgeContinuation { queue, current, .. }
+        | MachineSnapshot::JudgePhase { queue, current, .. } => {
             out.extend(queue.iter().copied());
             if let Some(c) = current {
                 // finalized（效果已套用）后锦囊已离机，trick 仅为簿记
                 if !c.finalized {
-                    out.push(c.trick);
+                    out.extend(c.trick);
                 }
                 if c.judge_held {
                     if !c.finalized {
@@ -369,10 +409,18 @@ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
                 }
             }
         }
-        MachineSnapshot::XunXun { stage: XunXunStageSnap::Arrange, top, .. } => {
+        MachineSnapshot::XunXun {
+            stage: XunXunStageSnap::Arrange,
+            top,
+            ..
+        } => {
             out.extend(top.iter().copied());
         }
-        MachineSnapshot::JiJie { stage: JiJieStageSnap::Read, card, .. } => {
+        MachineSnapshot::JiJie {
+            stage: JiJieStageSnap::Read,
+            card,
+            ..
+        } => {
             out.extend(card);
         }
         MachineSnapshot::GuanXing { top, .. } => out.extend(top.iter().copied()),
@@ -433,6 +481,9 @@ pub fn validate_resolution(
     b: &RestoreBounds,
     core: &GameStateCore,
 ) -> Result<(), SnapshotError> {
+    if resolution.open_choice.is_some() && resolution.parks.is_empty() {
+        return Err(oob("choice_without_machine", 0));
+    }
     // 栈帧：唯一性、水位、父子链（父必须存在且是更早的帧）
     let mut ids: std::collections::BTreeMap<u32, usize> = Default::default();
     for (i, f) in resolution.stack.iter().enumerate() {
@@ -449,6 +500,17 @@ pub fn validate_resolution(
             }
         }
         check_event_data(&f.data, b)?;
+        if matches!(
+            f.data,
+            EventData::Damage(_)
+                | EventData::DamageWindow { .. }
+                | EventData::SkillInvocation(_)
+                | EventData::SkillLog { .. }
+        ) && f.kind != f.data.kind()
+        {
+            return Err(SnapshotError::BadTag("damage_frame_kind", 0));
+        }
+        super::damage_validation::check_frame(f, resolution)?;
         for q in &f.queue {
             check_def(q.def, b)?;
             check_pid(q.owner, b)?;
@@ -468,6 +530,18 @@ pub fn validate_resolution(
             return Err(oob("park_frame", frame as u64));
         }
         check_machine(&p.machine, b, core)?;
+        if let MachineSnapshot::DamageFlow { root } = p.machine {
+            if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root)
+                || !resolution.stack.iter().enumerate().any(|(i, f)| {
+                    f.id == root
+                        && p.resume_depth == i + 1
+                        && f.stage == Stage::Intrinsic
+                        && matches!(f.data, EventData::Damage(_))
+                })
+            {
+                return Err(SnapshotError::BadTag("damage_flow_binding", root as u64));
+            }
+        }
     }
     // 应答选项 ID 界
     if let Some(ans) = &resolution.answer {

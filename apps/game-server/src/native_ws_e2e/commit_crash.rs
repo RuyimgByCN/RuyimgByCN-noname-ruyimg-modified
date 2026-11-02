@@ -6,7 +6,7 @@ use std::process::{Child, Command as ProcessCommand, Stdio};
 
 const CHILD_ROOT: &str = "NONAME_TEST_COMMIT_CRASH_ROOT";
 
-struct ChildServer(Child);
+pub(super) struct ChildServer(Child);
 
 impl Drop for ChildServer {
     fn drop(&mut self) {
@@ -15,7 +15,7 @@ impl Drop for ChildServer {
     }
 }
 
-async fn wait_for_file(path: &Path) -> String {
+pub(super) async fn wait_for_file(path: &Path) -> String {
     tokio::time::timeout(Duration::from_secs(20), async {
         loop {
             if let Ok(value) = std::fs::read_to_string(path) {
@@ -30,7 +30,7 @@ async fn wait_for_file(path: &Path) -> String {
     .expect("child process readiness")
 }
 
-async fn start_child(base: &Path, restored: usize) -> (ChildServer, String) {
+pub(super) async fn start_child(base: &Path, restored: usize) -> (ChildServer, String) {
     let ready = base.join("ready");
     let _ = std::fs::remove_file(&ready);
     let child = ProcessCommand::new(std::env::current_exe().unwrap())
@@ -51,7 +51,7 @@ async fn start_child(base: &Path, restored: usize) -> (ChildServer, String) {
     (server, url)
 }
 
-async fn wait_for_exit(child: &mut ChildServer, expected: i32) {
+pub(super) async fn wait_for_exit(child: &mut ChildServer, expected: i32) {
     let exit = tokio::time::timeout(Duration::from_secs(10), async {
         loop {
             if let Some(exit) = child.0.try_wait().unwrap() {

@@ -54,8 +54,29 @@ fn same_depth_pair() -> Engine {
     let depth = snapshot.resolution.stack.len();
     let open = snapshot.resolution.open_choice.as_ref().unwrap();
     assert_eq!(open.spec.prompt, "trigger_confirm");
-    assert_eq!(snapshot.resolution.parks.len(), 1);
-    assert_eq!(snapshot.resolution.parks[0].resume_depth, depth);
+    // C331 树的同一时点还停着 TriggerOrder 与 DamageFlow（主樹没有），
+    // 所以不能断言「只有一台」；要断言的是「同深度至少有一台非询问者在场」，
+    // 再加下面手动追加的机捷，才构成「同深度多台、只有提问者能收应答」的反例。
+    assert!(
+        snapshot
+            .resolution
+            .parks
+            .iter()
+            .any(|p| p.resume_depth == depth
+                && !matches!(p.machine, MachineSnapshot::OptionalGate { .. })),
+        "同深度需要另一台挂起机器陪跑：{:?}",
+        snapshot
+            .resolution
+            .parks
+            .iter()
+            .map(|p| (p.resume_depth, format!("{:?}", p.machine)))
+            .collect::<Vec<_>>()
+    );
+    assert!(
+        snapshot.resolution.parks.iter().any(|p| p.resume_depth == depth
+            && matches!(p.machine, MachineSnapshot::OptionalGate { .. })),
+        "遗计确认门必须停在同深度"
+    );
     // 追加第二台同深度机器：机捷尚未提问（修复前它会被当作第一台消费应答
     // 的候选位置之外的空转机器，修复后它与遗计内层互不串应答）。
     snapshot.resolution.parks.push(ParkSnapshot {

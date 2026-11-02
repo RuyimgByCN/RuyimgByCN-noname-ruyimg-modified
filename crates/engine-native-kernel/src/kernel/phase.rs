@@ -159,7 +159,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
             if let Some(pos) = ctx.core.discard.iter().position(|x| *x == card) {
                 let c = ctx.core.discard.remove(pos);
                 ctx.core.player_mut(player).hand.push(c);
-                ctx.log(LogEvent::CardsGiven {
+                ctx.log(LogEvent::CardsGivenPublic {
                     from: player,
                     to: player,
                     cards: vec![c],

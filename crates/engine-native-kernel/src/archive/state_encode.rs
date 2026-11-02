@@ -95,8 +95,20 @@ pub(super) fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
         for slot in 0..2 {
             w.opt_u16(p.general_slots[slot]);
         }
-        for slot in 0..2 {
-            w.boolean(p.revealed_generals[slot]);
+        let extended = p.kingdom_identity != crate::state::KingdomIdentity::Unknown
+            || !p.yexinjia_friends.is_empty();
+        w.u8(u8::from(p.revealed_generals[0]) | if extended { 2 } else { 0 });
+        w.boolean(p.revealed_generals[1]);
+        if extended {
+            match &p.kingdom_identity {
+                crate::state::KingdomIdentity::Unknown => w.u8(0),
+                crate::state::KingdomIdentity::Ye => w.u8(1),
+                crate::state::KingdomIdentity::Declared(name) => {
+                    w.u8(2);
+                    w.str(name);
+                }
+            }
+            enc_pids(w, &p.yexinjia_friends);
         }
         // 五行属性（G1 wuxing）
         w.opt_u8(p.wunature);

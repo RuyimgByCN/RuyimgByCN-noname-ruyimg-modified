@@ -342,18 +342,18 @@ pub(super) fn resolve_pending_choice(eng: &Engine) -> Command {
                                     st,
                                     observer,
                                     &group,
-                                    usize::from(choice.min_count),
-                                    usize::from(choice.max_count),
+                                    choice.min_count as usize,
+                                    choice.max_count as usize,
                                     sum,
                                     1,
                                 )
                                 .into_iter()
                                 .next()
-                            } else if group.len() >= usize::from(choice.min_count) {
+                            } else if group.len() >= choice.min_count as usize {
                                 Some(
                                     group
                                         .into_iter()
-                                        .take(usize::from(choice.min_count))
+                                        .take(choice.min_count as usize)
                                         .map(engine_api::CardId::raw)
                                         .collect(),
                                 )
@@ -369,8 +369,8 @@ pub(super) fn resolve_pending_choice(eng: &Engine) -> Command {
                         st,
                         observer,
                         &cards,
-                        usize::from(choice.min_count),
-                        usize::from(choice.max_count),
+                        choice.min_count as usize,
+                        choice.max_count as usize,
                         sum,
                         1,
                     )

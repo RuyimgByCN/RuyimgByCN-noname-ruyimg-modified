@@ -12,7 +12,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(p) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Death { player, .. } => Some(*player),
@@ -141,8 +141,8 @@ impl HostMachine {
                             (u.card, u.player)
                         };
                         ctx.current_card_use_mut().cancelled = true;
-                        ctx.core.table.retain(|x| *x != used);
-                        ctx.core.player_mut(user).hand.push(used);
+                        ctx.core.table.retain(|x| Some(*x) != used);
+                        ctx.core.player_mut(user).hand.extend(used);
                     }
                     Flow::Done
                 }
@@ -374,8 +374,8 @@ impl HostMachine {
                         ctx.current_card_use_mut().cancelled = true;
                         // 取消的使用：牌从桌面归还使用者手牌（上游
                         // trigger.cancel 同口径；提交段按 cancelled 跳过）
-                        ctx.core.table.retain(|x| *x != used);
-                        ctx.core.player_mut(user).hand.push(used);
+                        ctx.core.table.retain(|x| Some(*x) != used);
+                        ctx.core.player_mut(user).hand.extend(used);
                     }
                     Flow::Done
                 }
