@@ -1,0 +1,13 @@
+$ python3 -B scripts/check_local_links.py --all && python3 -B scripts/check_doc_line_refs.py --strict   # 追加第 17 行后，2026-11-02 22:55:58 +0800
+检查 1965 个文件，坏链 0
+exit=0
+
+找不到的文件（可能是文档里的示例路径）：
+  - path.rs（2 处）
+  - .../gujian/skill.js（1 处）
+  - character/offline/.../offline_piracyS.js（1 处）
+  - .../swd/skill.js（1 处）
+  - schema/package.rs（1 处）
+  - step_skills_status.rs（1 处）
+检查 1079 处 `file:line` 引用；文件不存在 6 种；越界 0 处
+exit=0

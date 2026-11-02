@@ -1,0 +1,4 @@
+# 重建前 native-pkg / wasm-pkg 产物指纹（2026-11-02 22:24:14 +0800）
+4289679 Nov  2 21:08:14 2026 1896724a67e5f3fda52c5a18ea93c68829f936dc25e663de45119d235dfe3b3e  apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm
+15413552 Nov  2 14:56:47 2026 2b42008d5df1fc287d8304df36b7efbd5fe41c6645e3d368c45cbffd4a1e66e4  apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm
+15413552 Nov  2 14:56:47 2026 2b42008d5df1fc287d8304df36b7efbd5fe41c6645e3d368c45cbffd4a1e66e4  apps/web-client/public/pkg/engine_wasm_bg.wasm

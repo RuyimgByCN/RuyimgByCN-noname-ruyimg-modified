@@ -1,0 +1,11 @@
+--- /private/tmp/noname-park-fix-20261102/seven-envelope-oracle.mjs	2026-11-02 14:55:11
++++ /private/tmp/noname-c331-product-surface-20261102/seven-envelope-oracle.mjs	2026-11-02 22:42:54
+@@ -22,7 +22,7 @@
+   const atomicBaseline=backend.nativeDispatch(handle,{type:'observer'}),postRestoreSaved=backend.nativeDispatch(handle,{type:'save'});
+   const before=Buffer.from(saved.hex,'hex'),after=Buffer.from(postRestoreSaved.hex,'hex');
+   assert.equal(before.length,after.length);assert.deepEqual(before.subarray(0,22),after.subarray(0,22));
+-  assert.equal(before.toString('ascii',0,4),'NGSA');assert.equal(before.readUInt16LE(4),105);assert.equal(before.readBigUInt64LE(6),330n);assert.equal(Number(before.readBigUInt64LE(14))+54,before.length);
++  assert.equal(before.toString('ascii',0,4),'NGSA');assert.equal(before.readUInt16LE(4),106);assert.equal(before.readBigUInt64LE(6),331n);assert.equal(Number(before.readBigUInt64LE(14))+54,before.length);
+   const generations=[...readFileSync(join(referenceRoot,'snapshot-'+name+'.txt'),'utf8').matchAll(/auth_generation: (\d+),/g)];assert.equal(generations.length,1);
+   const generation=BigInt(generations[0][1]);const changed=[];
+   for(let i=22;i<before.length-32;i++)if(before[i]!==after[i])changed.push(i);

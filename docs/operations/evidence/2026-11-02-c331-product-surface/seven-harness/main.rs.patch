@@ -1,0 +1,17 @@
+--- /private/tmp/noname-main36-products-20261101T062600Z/probe/src/main.rs	2026-11-01 14:46:08
++++ /private/tmp/noname-c331-product-surface-20261102/probe/src/main.rs	2026-11-02 22:40:09
+@@ -23,6 +23,14 @@
+   fs::write(out.join("identity-native.json"),serde_json::to_string_pretty(&serde_json::json!({"players":4,"seed":42,"steps":replies.len(),"frames":frames,"replies":replies,"finished":true,"hash":session.state_hash_hex()})).unwrap()).unwrap();
+   println!("identity native currentMain terminal steps={} hash={}",replies.len(),session.state_hash_hex());return;
+  }
++ if args.get(2).map(String::as_str)==Some("snapshots") {
++  let mut count=0;
++  for name in ["park-0","park-1","own-cancel","shan-auto","shan-direct","shan-cancel","shan-pass"] {
++   let a=engine_native::archive::decode_archive(&fs::read(out.join(format!("native-{name}.ngsa"))).unwrap()).unwrap();
++   fs::write(out.join(format!("snapshot-{name}.txt")),format!("{a:#?}")).unwrap();count+=1;
++  }
++  println!("native snapshots decoded={count}");return;
++ }
+  if args.get(2).map(String::as_str)==Some("compare") {
+   let mut count=0;
+   for name in ["park-0","park-1","own-cancel","shan-auto","shan-direct","shan-cancel","shan-pass"] {

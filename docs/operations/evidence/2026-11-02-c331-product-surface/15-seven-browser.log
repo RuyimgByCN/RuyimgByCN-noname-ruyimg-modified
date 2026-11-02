@@ -1,0 +1,3 @@
+$ node /private/tmp/noname-c331-product-surface-20261102/seven-archive-browser.mjs /private/tmp/noname-c331-product-surface-20261102/frontend-dist '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' /private/tmp/noname-c331-product-surface-20261102/seven   # cwd=/Users/ruyimg/Documents/Claude/sanguosha/noname-next, start 2026-11-02 22:43:29 +0800
+{"passed":true,"uiPositiveControls":5,"formalBrowserProtocolCases":7,"restoredContinuations":7,"malformedAtomicChecks":7,"exceptions":0,"expectedMalformedTransportRejections":7,"realVueCreatedWorker":true,"currentProductionDist":"/private/tmp/noname-c331-product-surface-20261102/frontend-dist"}
+exit=0 end 2026-11-02 22:43:31 +0800

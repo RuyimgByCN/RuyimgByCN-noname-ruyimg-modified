@@ -1,0 +1,29 @@
+$ CARGO_TARGET_DIR=/private/tmp/noname-c331-product-surface-20261102/probe-target CARGO_INCREMENTAL=0 cargo build --offline   # cwd=/private/tmp/noname-c331-product-surface-20261102/probe, start 2026-11-02 22:40:39 +0800
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+   Compiling c331-seven-probe v0.0.0 (/private/tmp/noname-c331-product-surface-20261102/probe)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 22.15s
+exit=0 end 2026-11-02 22:41:02 +0800
+Cargo.lock 与 main 有差异：6,5464c6,385
+< name = "accessibility-schema"
+< version = "0.1.0"
+< dependencies = [
+<  "serde",
+<  "serde_json",
+< ]
+< 
+< [[package]]
+< name = "adler2"
+< version = "2.0.1"
+< source = "registry+https://github.com/rust-lang/crates.io-index"
+< checksum = "320119579fcad9c21884f5c4861d16174d0e06250625266f50fe6898340abefa"
+< 
+< [[package]]
+< name = "aho-corasick"
+< version = "1.1.4"
+< source = "registry+https://github.com/rust-lang/crates.io-index"
+< checksum = "ddd31a130427c27518df266943a5308ed92d4b226cc639f5a8f1002816174301"
+< dependencies = [
+-- Cargo.lock 对照（probe 锁 ⊆ main 锁？）--
+probe packages: 43  main packages: 515  probe-only (excluding probe itself): []

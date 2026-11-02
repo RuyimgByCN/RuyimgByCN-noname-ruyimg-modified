@@ -1,0 +1,19 @@
+$ pnpm build:native   # cwd=apps/web-client, start 2026-11-02 22:24:38 +0800
+
+> noname-next-web-client@0.1.0 build:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node scripts/build-native.mjs
+
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+    Finished `release` profile [optimized] target(s) in 0.07s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+[INFO]: ✨   Done in 0.49s
+[INFO]: 📦   Your wasm pkg is ready to publish at /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/.native-pkg-tmp.
+native engine pkg (web) deployed to /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg
+real 1.10
+user 0.81
+sys 0.25
+exit=0 end 2026-11-02 22:24:39 +0800
+4289679 bytes
+1896724a67e5f3fda52c5a18ea93c68829f936dc25e663de45119d235dfe3b3e  src/worker/native-pkg/engine_native_wasm_bg.wasm

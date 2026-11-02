@@ -1,0 +1,26 @@
+$ NC10_OWN_EVIDENCE=/private/tmp/noname-c331-product-surface-20261102/seven/main-own-cases cargo test --offline -p engine-native --test nc_rounds nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park -- --exact   # start 2026-11-02 22:39:31 +0800
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running tests/groups/nc_rounds.rs (target/debug/deps/nc_rounds-3828795bce45b69d)
+
+running 1 test
+test nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 296 filtered out; finished in 0.03s
+
+exit=0 end 2026-11-02 22:39:32 +0800
+total 296
+drwxr-xr-x  39 ruyimg  wheel  1248 Nov  2 22:39 .
+drwxr-xr-x   3 ruyimg  wheel    96 Nov  2 22:39 ..
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-0.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-1.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-2.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-4.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-48.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-64.ngsa
+-rw-r--r--   1 ruyimg  wheel  1893 Nov  2 22:39 park-0-after-8.ngsa
+61548105dcff513515029bf6fcc9d8c7befd8edb38d62222a7cd941d96a45c70  /private/tmp/noname-c331-product-surface-20261102/seven/main-own-cases/park-0.ngsa
+00000000: 4e47 5341 6a00 4b01 0000 0000 0000 2b07  NGSAj.K.......+.
+00000010: 0000 0000 0000                           ......
+429b8560b80c93ac2ce417c1a9f01b71eb2f5cebf85fd685b533100eda7020fc  /private/tmp/noname-c331-product-surface-20261102/seven/main-own-cases/park-1.ngsa
+00000000: 4e47 5341 6a00 4b01 0000 0000 0000 3c07  NGSAj.K.......<.
+00000010: 0000 0000 0000                           ......

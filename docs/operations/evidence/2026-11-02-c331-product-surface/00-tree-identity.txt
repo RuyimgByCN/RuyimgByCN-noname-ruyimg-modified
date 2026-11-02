@@ -1,0 +1,25 @@
+# 树身份与工具链（2026-11-02 22:21:54 +0800）
+HEAD=6f98bfa86b370d4adbaef249b4793c5fba7a2750
+f5e560db=f5e560db1e8c648e2c34bc5d1e6286f12832db8d
+HEAD^{tree}=5ff49f1da332333a9bea4f97b2a69a84525b0ce0  f5e560db^{tree}=89543e2bf19e7fad076131d859bbda211a31a245
+-- git diff --name-only f5e560db HEAD 非 docs/ 路径 --
+README.md
+-- git status --porcelain（开始前）--
+?? docs/operations/evidence/2026-11-02-c331-product-surface/
+-- 版本常量 --
+zsh:13: no matches found: --include=*.rs
+-- 工具链 --
+rustc 1.95.0 (59807616e 2026-04-14)
+cargo 1.95.0 (f2d3ce0bd 2026-03-21)
+v26.4.0
+10.34.3
+wasm-pack 0.15.0
+Python 3.10.10
+Google Chrome 156.0.8078.74 
+ProductName:		macOS ProductVersion:		27.2 BuildVersion:		26B123 
+/dev/disk3s5   926Gi   862Gi    36Gi    96%    7.9M  378M    2%   /System/Volumes/Data
+-- 版本常量（补录，rg）--
+crates/engine-protocol/src/lib.rs:18:pub const NETWORK_PROTOCOL_VERSION: u32 = 7;
+crates/engine-api/src/version.rs:6:pub const CONTENT_SCHEMA_VERSION: u32 = 5;
+crates/engine-api/src/version.rs:17:pub const RULE_VM_ABI_VERSION: u32 = 758;
+crates/engine-native-kernel/src/archive.rs:115:pub const ARCHIVE_FORMAT_VERSION: u16 = 106;

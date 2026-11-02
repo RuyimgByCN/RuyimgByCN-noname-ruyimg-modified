@@ -1,0 +1,11 @@
+--- /private/tmp/noname-park-fix-20261102/seven-archive-browser.mjs	2026-11-02 14:55:11
++++ /private/tmp/noname-c331-product-surface-20261102/seven-archive-browser.mjs	2026-11-02 22:42:54
+@@ -16,7 +16,7 @@
+  const bytes=readFileSync(file);requested.push({path,sha256:sha(bytes),bytes:bytes.length});res.end(bytes);
+ });
+ await new Promise(r=>server.listen(0,'127.0.0.1',r));const origin=`http://127.0.0.1:${server.address().port}`;
+-const runDir=mkdtempSync(join('/private/tmp/noname-main36-product-host-20261101T070732Z-private','seven-legacy-'));
++const runDir=mkdtempSync(join('/private/tmp/noname-c331-product-surface-20261102/chrome-private','seven-c331-'));
+ const chromeLog=openSync(join(runDir,'chrome.log'),'w');
+ const chrome=spawn(chromeBin,['--headless=new','--disable-gpu','--no-sandbox',`--user-data-dir=${runDir}/profile`,'--remote-debugging-port=0','--window-size=1280,1000','about:blank'],{stdio:['ignore',chromeLog,chromeLog]});
+ writeFileSync(join(out,'seven-browser-launch.json'),JSON.stringify({pid:chrome.pid,privateRunDir:runDir,profileExcluded:true},null,2)+'\n');

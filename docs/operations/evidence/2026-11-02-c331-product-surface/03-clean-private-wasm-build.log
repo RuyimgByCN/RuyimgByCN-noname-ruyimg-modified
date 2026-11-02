@@ -1,0 +1,57 @@
+$ CARGO_TARGET_DIR=/private/tmp/noname-c331-product-surface-20261102/wasm-target CARGO_INCREMENTAL=0 wasm-pack build crates/engine-native-wasm --target web --release --no-opt --out-dir /private/tmp/noname-c331-product-surface-20261102/native-pkg-clean   # start 2026-11-02 22:25:58 +0800
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling proc-macro2 v1.0.106
+   Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.46
+   Compiling serde_core v1.0.228
+   Compiling shlex v2.0.1
+   Compiling find-msvc-tools v0.1.9
+   Compiling serde v1.0.228
+   Compiling cfg-if v1.0.4
+   Compiling arrayref v0.3.9
+   Compiling constant_time_eq v0.4.2
+   Compiling arrayvec v0.7.8
+   Compiling thiserror v2.0.18
+   Compiling zmij v1.0.21
+   Compiling wasm-bindgen-shared v0.2.126
+   Compiling serde_json v1.0.150
+   Compiling memchr v2.8.3
+   Compiling cc v1.2.66
+   Compiling itoa v1.0.18
+   Compiling rustversion v1.0.23
+   Compiling bumpalo v3.20.3
+   Compiling once_cell v1.21.4
+   Compiling blake3 v1.8.5
+   Compiling wasm-bindgen v0.2.126
+   Compiling syn v2.0.118
+   Compiling wasm-bindgen-macro-support v0.2.126
+   Compiling serde_derive v1.0.228
+   Compiling thiserror-impl v2.0.18
+   Compiling wasm-bindgen-macro v0.2.126
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling licensing-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/resource-schema)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+    Finished `release` profile [optimized] target(s) in 41.22s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+[INFO]: ✨   Done in 41.57s
+[INFO]: 📦   Your wasm pkg is ready to publish at /private/tmp/noname-c331-product-surface-20261102/native-pkg-clean.
+[WARN]: ⚠️   There's a newer version of wasm-pack available, the new version is: 0.15.1, you are using: 0.15.0. To update, navigate to: https://wasm-bindgen.github.io/wasm-pack/installer/
+real 42.10
+user 97.01
+sys 4.40
+exit=0 end 2026-11-02 22:26:40 +0800
+4289679 bytes
+1896724a67e5f3fda52c5a18ea93c68829f936dc25e663de45119d235dfe3b3e  /private/tmp/noname-c331-product-surface-20261102/native-pkg-clean/engine_native_wasm_bg.wasm
+1896724a67e5f3fda52c5a18ea93c68829f936dc25e663de45119d235dfe3b3e  apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm
+BYTE-IDENTICAL to shared-target build

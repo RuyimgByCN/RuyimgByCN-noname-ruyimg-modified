@@ -1,0 +1,21 @@
+$ /private/tmp/noname-c331-product-surface-20261102/probe-target/debug/c331-seven-probe /private/tmp/noname-c331-product-surface-20261102/seven   # start 2026-11-02 22:42:05 +0800
+native Shan card-first/direct/cancel and both park formal Pending generated
+exit=0
+$ /private/tmp/noname-c331-product-surface-20261102/probe-target/debug/c331-seven-probe /private/tmp/noname-c331-product-surface-20261102/seven snapshots
+native snapshots decoded=7
+exit=0 end 2026-11-02 22:42:05 +0800
+-- 生成文件 sha256 --
+ca13d1c4a13f40abec52003624a1a1c84b60200ff25923514199f5a9c55f2d74  native-own-cancel.ngsa
+52420ca75a93c8c64301c5b143949f2cbf1700fc0d3f2f3d71f9d424b7ed2c97  native-park-0.ngsa
+2b461ce5a79f8b8848ad99cf5c5aa5e02e6107b6e010e3e6aaa110044ef24ae3  native-park-1.ngsa
+0b6d259cff0469a882937ed10b3c27dba8371c382babd6049779c28955dff900  native-shan-auto.ngsa
+d53c702343fc816f23a8c8f86f1dcfca415d226e1d8edddb7848ac943b232768  native-shan-cancel.ngsa
+0b6d259cff0469a882937ed10b3c27dba8371c382babd6049779c28955dff900  native-shan-direct.ngsa
+fac242dc5056c440c0fe45746e07a1ad3652d57eb64301cf6eb761cf344bf458  native-shan-pass.ngsa
+61548105dcff513515029bf6fcc9d8c7befd8edb38d62222a7cd941d96a45c70  park-0.ngsa
+429b8560b80c93ac2ce417c1a9f01b71eb2f5cebf85fd685b533100eda7020fc  park-1.ngsa
+88248e3bafb49faf7066cb0f333395f501d65c22dca93512775376c981ff8be7  shan.ngsa
+c9874a1da374524c3ce0b279cb4caba158b23c394ba9c10066b6d3668c548eab  native-probe-results.json
+shan header: 4e4753416a004b01000000000000
+park-0 header: 4e4753416a004b01000000000000
+park-1 header: 4e4753416a004b01000000000000

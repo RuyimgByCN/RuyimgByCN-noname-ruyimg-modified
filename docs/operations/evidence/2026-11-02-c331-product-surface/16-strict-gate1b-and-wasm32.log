@@ -1,0 +1,13 @@
+$ CARGO_TARGET_DIR=/private/tmp/noname-c331-product-surface-20261102/strict-target CARGO_INCREMENTAL=0 RUSTFLAGS="-D warnings" cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets   # start 2026-11-02 22:45:13 +0800
+    Checking content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+    Checking content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Checking engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 20.34s
+exit=0 end 2026-11-02 22:45:33 +0800
+$ CARGO_TARGET_DIR=/private/tmp/noname-c331-product-surface-20261102/strict-target CARGO_INCREMENTAL=0 cargo check --offline --target wasm32-unknown-unknown -p engine-native-wasm   # start 2026-11-02 22:45:33 +0800
+    Checking content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+    Checking engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 18.65s
+exit=0 end 2026-11-02 22:45:52 +0800
+234M	/private/tmp/noname-c331-product-surface-20261102/strict-target

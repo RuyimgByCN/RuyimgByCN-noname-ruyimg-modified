@@ -1,0 +1,12 @@
+[package]
+name = "c331-seven-probe"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[dependencies]
+engine-native = { path = "<repo>/crates/engine-native" }
+engine-native-wasm = { path = "<repo>/crates/engine-native-wasm" }
+serde_json = "1"
+
+[profile.dev]
+debug = "line-tables-only"
