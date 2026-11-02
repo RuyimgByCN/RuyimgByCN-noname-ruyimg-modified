@@ -1,0 +1,9 @@
+$ x86_64（Rosetta）对照   # 2026-11-02 23:50:28 +0800
+== 当前工作树
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=85208 p99_ns=198666 total_us=18261
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=85750 p99_ns=203666 total_us=18569
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=85667 p99_ns=224042 total_us=18465
+== baseline 9f4b7423
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=89958 p99_ns=187709 total_us=19388
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=85208 p99_ns=166375 total_us=18111
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=84042 p99_ns=159791 total_us=17966

@@ -16,7 +16,9 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DOC = ROOT / "docs/architecture/native-progress.md"
+# 2026-11-03 起指向历史稿：轮次正文随裁决 32② 从主稿逐字节移存到
+# native-progress-history.md；主稿自 2026-10-31 起改用带日期条目，不再按轮次追加。
+DOC = ROOT / "docs/architecture/native-progress-history.md"
 N = 20
 BEGIN = "> ### **最近 20 轮索引**"
 END = "> **更早的内容**"

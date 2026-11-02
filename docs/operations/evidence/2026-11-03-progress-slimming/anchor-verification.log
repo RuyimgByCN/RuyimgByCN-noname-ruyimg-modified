@@ -1,0 +1,13 @@
+外部引用 native-progress.md#… 共 47 处、11 个唯一锚点：
+OK   delivery-2026-10-24 (17 处)
+OK   后续待做按阻塞关系 (11 处)
+OK   性能优化核验后的待办2026-09-24 (6 处)
+OK   native-convergence (4 处)
+OK   architecture-audit-2026-10-24 (2 处)
+OK   effect-split-2026-10-24 (2 处)
+OK   当前核验快照 (1 处)
+OK   native-ws-2026-10-24 (1 处)
+OK   native-room-commit-2026-10-24 (1 处)
+OK   native-room-double-fault-2026-10-24 (1 处)
+OK   effect-integration-2026-10-24 (1 处)
+MISS 总数 = 0
