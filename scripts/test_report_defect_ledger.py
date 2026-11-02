@@ -25,8 +25,9 @@ class LedgerTests(unittest.TestCase):
         cls.rows = cls.mod.build()
 
     def test_ledger_is_populated(self):
-        # 台账从 54 收敛到 26（复核后移入 FIXED/NON_DEFECT 注册表）。
-        self.assertGreaterEqual(len(self.rows), 1)
+        # 台账从 54 收敛到 26（复核后移入 FIXED/NON_DEFECT 注册表）；
+        # 2026-11-03 规则 332 修复 HlssGaiming 后收敛到 0（全部移出且留痕）。
+        self.assertGreaterEqual(len(self.rows), 0)
 
     def test_rows_have_all_columns(self):
         for row in self.rows:
@@ -53,9 +54,12 @@ class LedgerTests(unittest.TestCase):
 
     def test_known_defects_present(self):
         behaviors = {r[2] for r in self.rows}
-        # SwdTiebi/BossBaiyi 已复核移出；这里改挑仍在台账里的三行。
-        # Reguhuo 已于第 942 轮修复移出；改挑仍在台账里的三行。
-        for expected in ("HlssGaiming",):
+        # SwdTiebi/BossBaiyi 已复核移出；Reguhuo 已于第 942 轮修复移出；
+        # HlssGaiming 已于 2026-11-03（规则 332）修复移入 FIXED。台账为空时
+        # 只须确认最后移出的行为确在 FIXED 注册表（防「无声消失」）。
+        if not behaviors:
+            self.assertIn("HlssGaiming", self.mod.FIXED)
+        for expected in ():
             self.assertIn(expected, behaviors)
 
     def test_location_column_present(self):
@@ -63,17 +67,21 @@ class LedgerTests(unittest.TestCase):
         locations = {r[4] for r in self.rows}
         # 台账收敛到 3 行后，location 列可能全是模块名（filtering/* 等）；
         # 断言「非空」即可，file:line 不再是必要条件（第 996 轮）。
-        self.assertTrue(any(loc for loc in locations), "location 不得全为空")
-        self.assertTrue(all(loc for loc in locations), "location 不得为空")
+        # 2026-11-03 台账收敛到 0：空集时跳过（历史断言在非空时仍生效）。
+        if locations:
+            self.assertTrue(any(loc for loc in locations), "location 不得全为空")
+            self.assertTrue(all(loc for loc in locations), "location 不得为空")
 
     def test_source_column_present(self):
         # 第 744 轮新增：证据型归因（按上游文件路径匹配包的 upstream_path）
         # 台账收敛后 source 列可能只剩 L03/? 等；断言「列非空且为已知来源标识」
         sources = {r[3] for r in self.rows}
-        self.assertTrue(sources, "source 列不得全为空")
+        if self.rows:
+            self.assertTrue(sources, "source 列不得全为空")
 
     def test_permission_is_recorded_for_every_row(self):
-        self.assertEqual({r[9] for r in self.rows}, {"blocked"})
+        if self.rows:
+            self.assertEqual({r[9] for r in self.rows}, {"blocked"})
 
 
 if __name__ == "__main__":

@@ -160,7 +160,7 @@ use crate::snap::{
 /// v329: ADR0786 J2 active bridge and content-owned effect choices (ABI758); v328 archives reject.
 /// Archive v105 keeps the existing Rvm tail mechanism and command/choice variants.
 /// v330: ADR0787 explicit host timeout answers; v329 archives reject.
-pub const STANDARD_RULESET_VERSION: u64 = 331;
+pub const STANDARD_RULESET_VERSION: u64 = 332;
 
 pub use crate::vocabulary::generals::*;
 pub use crate::vocabulary::names::*;

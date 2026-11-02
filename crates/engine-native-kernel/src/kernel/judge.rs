@@ -70,6 +70,135 @@ impl Clone for JudgePhaseMachine {
 }
 
 impl JudgePhaseMachine {
+
+    /// 正常判定初始化（规则 332 起为共享段）：抽判定牌、Judged 日志、
+    /// 昊天塔候选窗、鬼道/鬼才/天道/改天道/天伦改判队列与本人天妒资格。
+    /// 返回 `Some(Flow)`（昊天塔开窗）时调用方直接返回；`None` 表示已设置
+    /// 正常进行态、调用方继续本机循环（与提取前的落空语义逐字相同）。
+    /// 改命取消分支在候选归还牌堆后复用本段，不重复询问改命。
+    fn begin_judgement(&mut self, ctx: &mut crate::machine::Ctx<'_>, trick: Option<crate::ids::CardId>) -> Option<Flow> {
+        let judge_card = ctx.draw_judge_card();
+        ctx.log(LogEvent::Judged {
+            player: self.owner,
+            card: judge_card,
+        });
+            // 昊天塔（swd 卡牌面窗口机批，equip5）：任意角色判定前，持有
+            // 者观看牌堆顶两张、强制选一张直接作为判定结果（锁定技无取
+            // 消；上游 trigger.cancel 手动定结果=改判/天妒窗一并绕过，
+            // 原生跳过改判/天妒队列登记差异同口径；次候选弃置）。
+            let haotian_holder = ctx.core.seat_order_from(self.owner).into_iter().find(|p| {
+                ctx.core.player(*p).alive
+                    && ctx
+                        .core
+                        .player(*p)
+                        .equips
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Haotianta)
+            });
+            if let Some(h) = haotian_holder {
+                // 次候选=牌堆顶第二张（draw_judge_card 已取顶张；堆空则
+                // 洗弃堆，堆弃双空则不开窗）
+                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+                    if ctx.core.deck.is_empty() {
+                        let mut cards = std::mem::take(&mut ctx.core.discard);
+                        ctx.core.rng.shuffle(&mut cards);
+                        ctx.core.deck = cards;
+                        ctx.log(LogEvent::DeckReshuffled);
+                    }
+                    let other = ctx
+                        .core
+                        .deck
+                        .pop()
+                        .expect("judge candidate: deck or discard non-empty");
+                    self.current = Some(JudgementProgress {
+                        trick,
+                        judge_card,
+                        rewriters: Vec::new(),
+                        rewrite_provider: None,
+                        used_rewrite_providers: Vec::new(),
+                        asked: false,
+                        tian_du: Vec::new(),
+                        gained: false,
+                        in_rewrite: false,
+                        finalized: false,
+                        judge_held: true,
+                        haotian_holder: Some(h),
+                        haotian_other: Some(other),
+                        gaiming_cards: None,
+                    });
+                    return Some(Flow::WaitChoice {
+                        observer: h,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: "haotianta_pick",
+                            options: vec![
+                                ChoiceOption::Card(judge_card),
+                                ChoiceOption::Card(other),
+                            ],
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
+                    });
+                }
+            }
+            let gui_dao = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_DAO);
+            let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+            let tian_du = ctx.catalog.skill_by_name(crate::vocabulary::names::TIAN_DU);
+            // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
+            // 仅判定阶段拥有者本人持有时由本人询问。
+            let tian_du_self = tian_du
+                .map(|d| ctx.core.has_skill(self.owner, d))
+                .unwrap_or(false);
+            // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
+            // 鬼道（黑色牌改判）或鬼才（任意手牌改判）持有者均入队（对齐旧线
+            // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
+            // 天道（Boss 张角，规则 v263）：hes 任意牌可改判——改判资格
+            // 与鬼道/鬼才并列（座位序同队）
+            let tian_dao = ctx
+                .catalog
+                .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
+            // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
+            let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+            let rewriters: Vec<PlayerId> = ctx
+                .core
+                .seat_order_from(self.owner)
+                .into_iter()
+                .filter(|p| {
+                    let has = |d: Option<crate::ids::SkillDefId>| {
+                        d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
+                    };
+                    has(gui_dao)
+                        || has(gui_cai)
+                        || has(tian_dao)
+                        || has(g_tiandao)
+                        || has(ctx
+                            .catalog
+                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY))
+                })
+                .collect();
+            self.current = Some(JudgementProgress {
+                trick,
+                judge_card,
+                rewriters,
+                rewrite_provider: None,
+                used_rewrite_providers: Vec::new(),
+                asked: false,
+                tian_du: if tian_du_self {
+                    vec![self.owner]
+                } else {
+                    Vec::new()
+                },
+                gained: false,
+                in_rewrite: true,
+                finalized: false,
+                judge_held: true,
+                haotian_holder: None,
+                haotian_other: None,
+                gaiming_cards: None,
+            });
+        None
+    }
     pub(crate) fn new(
         owner: PlayerId,
         queue: Vec<crate::ids::CardId>,
@@ -200,7 +329,15 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                 // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
                 // 天妒窗；放弃则 7 张按原序回牌堆顶、照常判定（登记差异：
                 // 上游取消后 7 张滞留处理区，原生归还牌堆）。
-                if let Some(cards) = cur.gaiming_cards.take() {
+                if cur.gaiming_cards.is_some() {
+                    // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
+                    // 天妒窗；放弃则 7 张按原序回牌堆顶、直接复用正常判定
+                    // 初始化（规则 332，裁决 24；登记差异：上游取消后 7 张
+                    // 滞留处理区，原生归还牌堆）。取消不得保留指向已归还
+                    // 候选的机器持有判定牌（旧实现同一实体既在牌堆又被
+                    // 结算弃置，物理多重集 +1 且恢复拒绝）。
+                    let mut cur = self.current.take().expect("gaiming in current");
+                    let cards = cur.gaiming_cards.take().expect("checked");
                     match ctx.answer().first().copied() {
                         Some(ChoiceOption::Card(c)) if cards.contains(&c) => {
                             cur.judge_card = c;
@@ -216,10 +353,14 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                                 player: self.owner,
                                 card: c,
                             });
+                            self.current = Some(cur);
                         }
                         _ => {
                             for c in cards.into_iter().rev() {
                                 ctx.core.deck.push(c);
+                            }
+                            if let Some(flow) = self.begin_judgement(ctx, cur.trick) {
+                                return flow;
                             }
                         }
                     }
@@ -619,128 +760,13 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                     };
                 }
             }
-            let judge_card = ctx.draw_judge_card();
-            ctx.log(LogEvent::Judged {
-                player: self.owner,
-                card: judge_card,
-            });
-            // 昊天塔（swd 卡牌面窗口机批，equip5）：任意角色判定前，持有
-            // 者观看牌堆顶两张、强制选一张直接作为判定结果（锁定技无取
-            // 消；上游 trigger.cancel 手动定结果=改判/天妒窗一并绕过，
-            // 原生跳过改判/天妒队列登记差异同口径；次候选弃置）。
-            let haotian_holder = ctx.core.seat_order_from(self.owner).into_iter().find(|p| {
-                ctx.core.player(*p).alive
-                    && ctx
-                        .core
-                        .player(*p)
-                        .equips
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Haotianta)
-            });
-            if let Some(h) = haotian_holder {
-                // 次候选=牌堆顶第二张（draw_judge_card 已取顶张；堆空则
-                // 洗弃堆，堆弃双空则不开窗）
-                if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
-                    if ctx.core.deck.is_empty() {
-                        let mut cards = std::mem::take(&mut ctx.core.discard);
-                        ctx.core.rng.shuffle(&mut cards);
-                        ctx.core.deck = cards;
-                        ctx.log(LogEvent::DeckReshuffled);
-                    }
-                    let other = ctx
-                        .core
-                        .deck
-                        .pop()
-                        .expect("judge candidate: deck or discard non-empty");
-                    self.current = Some(JudgementProgress {
-                        trick,
-                        judge_card,
-                        rewriters: Vec::new(),
-                        rewrite_provider: None,
-                        used_rewrite_providers: Vec::new(),
-                        asked: false,
-                        tian_du: Vec::new(),
-                        gained: false,
-                        in_rewrite: false,
-                        finalized: false,
-                        judge_held: true,
-                        haotian_holder: Some(h),
-                        haotian_other: Some(other),
-                        gaiming_cards: None,
-                    });
-                    return Flow::WaitChoice {
-                        observer: h,
-                        spec: ChoiceSpec {
-                            kind: ChoiceKind::SelectCards,
-                            prompt: "haotianta_pick",
-                            options: vec![
-                                ChoiceOption::Card(judge_card),
-                                ChoiceOption::Card(other),
-                            ],
-                            min: 1,
-                            max: 1,
-                            allow_cancel: false,
-                        },
-                    };
-                }
+            if let Some(flow) = self.begin_judgement(ctx, trick) {
+                return flow;
             }
-            let gui_dao = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_DAO);
-            let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
-            let tian_du = ctx.catalog.skill_by_name(crate::vocabulary::names::TIAN_DU);
-            // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
-            // 仅判定阶段拥有者本人持有时由本人询问。
-            let tian_du_self = tian_du
-                .map(|d| ctx.core.has_skill(self.owner, d))
-                .unwrap_or(false);
-            // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
-            // 鬼道（黑色牌改判）或鬼才（任意手牌改判）持有者均入队（对齐旧线
-            // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
-            // 天道（Boss 张角，规则 v263）：hes 任意牌可改判——改判资格
-            // 与鬼道/鬼才并列（座位序同队）
-            let tian_dao = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
-            // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
-            let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
-            let rewriters: Vec<PlayerId> = ctx
-                .core
-                .seat_order_from(self.owner)
-                .into_iter()
-                .filter(|p| {
-                    let has = |d: Option<crate::ids::SkillDefId>| {
-                        d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
-                    };
-                    has(gui_dao)
-                        || has(gui_cai)
-                        || has(tian_dao)
-                        || has(g_tiandao)
-                        || has(ctx
-                            .catalog
-                            .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY))
-                })
-                .collect();
-            self.current = Some(JudgementProgress {
-                trick,
-                judge_card,
-                rewriters,
-                rewrite_provider: None,
-                used_rewrite_providers: Vec::new(),
-                asked: false,
-                tian_du: if tian_du_self {
-                    vec![self.owner]
-                } else {
-                    Vec::new()
-                },
-                gained: false,
-                in_rewrite: true,
-                finalized: false,
-                judge_held: true,
-                haotian_holder: None,
-                haotian_other: None,
-                gaiming_cards: None,
-            });
+            continue;
         }
     }
+
 }
 
 impl JudgePhaseMachine {

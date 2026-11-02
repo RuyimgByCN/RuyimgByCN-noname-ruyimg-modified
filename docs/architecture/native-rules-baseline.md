@@ -57,6 +57,14 @@
 
 <a id="upstream-2026-10-24"></a>
 
+**规则 332（2026-11-03 合入）：改命取消归还后走正常判定初始化**（[裁决 24](../operations/evidence/2026-10-30-nc09-referee/gaiming-cancel-proposal.md)）。
+`kernel/judge.rs` 把正常判定初始化提取为共享段 `begin_judgement`（抽判定牌／Judged／昊天塔候选／改判队列／天妒资格，正常入口行为零变化）；
+改命取消分支归还 7 张候选后不再保留指向首候选的机器持有判定牌，直接复用正常初始化（不重复询问改命）。
+行为变化仅存在于取消路径：物理多重集守恒（修复前同实体既在牌堆又被结算弃置、恢复拒绝）、取消后恰一次 Judged 且抽走原首候选、
+hlss 放弃路径牌堆 −1（旧断言的「牌堆不变」即重复实体，已更正）。golden 14 场经三步探针（版本回退 331 保留修复全绿＝标准场景零足迹）重录。
+存档 NGSA 106／ABI 758／WS7 不变；v331 真实挂起档按版本门禁拒绝。证据见[规则 332 批](../operations/evidence/2026-11-03-rule332-gaiming-cancel/README.md)。
+缺陷台账 L03c（HlssGaiming）随之移入 FIXED，台账收敛到 0（A 0／B 0）。
+
 ## 2026-10-24 上游 37 提交差异台账
 
 核对范围为 noname **`df2682e66af9930fe02861a25cb6f2cd2ef6ae36..1a548c95acdf8ac1ef44d74473403eda2ac86cf0`**：37 个提交、167 个净变化路径；noname-next 为 `7e28a93799a9c01794085e911a72a4faa5673883` 加现有未提交修改。本节是该增量的规则差异主账；[逐提交映射及检查证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md)保存本次静态审查快照。编号 `UP37-*` 不混入旧批次缺陷计数。

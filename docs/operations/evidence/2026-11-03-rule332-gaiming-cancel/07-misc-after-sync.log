@@ -1,0 +1,2 @@
+$ [版本断言同步] cargo test --offline -p engine-native --test misc adr0786_j2_active_bridge::current_gate… + 全 misc 组   # 2026-11-03 01:25:49 +0800
+test result: ok. 231 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.75s

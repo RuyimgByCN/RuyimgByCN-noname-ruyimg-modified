@@ -1,0 +1,19 @@
+$ cargo test --offline -p engine-native --test misc nc09_gaiming_cancel::   # 升号后全套（含 v331 拒绝），2026-11-03 01:16:26 +0800
+test nc09_gaiming_cancel::genuine_331_pending_archive_is_version_rejected ... ok
+test nc09_gaiming_cancel::cancel_then_normal_judgement_and_pick_control ... ok
+test nc09_gaiming_cancel::cancel_preserves_physical_multiset_and_restores ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 228 filtered out; finished in 0.01s
+$ cargo test --offline -p engine-native --test rounds t11_boss_zhugeliang_hlss:: pa12_tag656_version（分组核对）
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 302 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 302 filtered out; finished in 0.00s
+$ cargo test --offline -p engine-native --test <组> t11_boss_zhugeliang_hlss::hlss_gaiming… / pa12_tag656_version::   # 2026-11-03 01:16:37 +0800
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 302 filtered out; finished in 0.00s
+test t11_boss_zhugeliang_hlss::hlss_fengqi_decline_does_nothing ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin2_blocks_turnover_and_voids_delayed_trick ... ok
+test t11_boss_zhugeliang_hlss::hlss_fengqi_picks_unused_trick_and_records ... ok
+test t11_boss_zhugeliang_hlss::hlss_gaiming_picks_judge_result_or_declines ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin_skip_prevents_star_loss ... ok
+test t11_boss_zhugeliang_hlss::hlss_assembly_initializes_stars_and_light_refill ... ok
+test t11_boss_zhugeliang_hlss::hlss_zero_stars_awakens_and_stops_refill ... ok
+test t11_boss_zhugeliang_hlss::hlss_with_infinite_hp_keeps_stars ... ok
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 223 filtered out; finished in 0.00s

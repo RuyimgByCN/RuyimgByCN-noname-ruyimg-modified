@@ -1,0 +1,2148 @@
+$ cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast  # start 2026-11-03 01:17:43 +0800
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+warning: variants `XunXun`, `JiJie`, `HaoTianTa`, and `Liaoyuan` are never constructed
+  --> crates/engine-native/tests/groups/../support/nc09_machine_windows.rs:9:5
+   |
+ 8 | pub enum Window {
+   |          ------ variants in this enum
+ 9 |     XunXun,
+   |     ^^^^^^
+10 |     JiJie,
+   |     ^^^^^
+11 |     GaiMing,
+12 |     HaoTianTa,
+   |     ^^^^^^^^^
+13 |     Liaoyuan,
+   |     ^^^^^^^^
+   |
+   = note: `Window` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `selection` is never read
+  --> crates/engine-native/tests/groups/../support/nc09_machine_windows.rs:21:9
+   |
+16 | pub struct Fixture {
+   |            ------- field in this struct
+...
+21 |     pub selection: Vec<ChoiceOption>,
+   |         ^^^^^^^^^
+
+warning: call to `.clone()` on a reference in this situation does nothing
+  --> crates/engine-native/tests/groups/../nc09_gaiming_cancel.rs:62:53
+   |
+62 |         f.engine.open_choice().map(|c| c.spec.prompt.clone()),
+   |                                                     ^^^^^^^^ help: remove this redundant call
+   |
+   = note: the type `str` does not implement `Clone`, so calling `clone` on `&str` copies the reference, which does not do anything and can be removed
+   = note: `#[warn(noop_method_call)]` on by default
+
+warning: `engine-native` (test "misc") generated 3 warnings (run `cargo fix --test "misc" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.33s
+     Running unittests src/lib.rs (target/debug/deps/engine_native-e62103a0d492e535)
+
+running 15 tests
+test ai::remap::tests::host_scalar_payloads_are_never_generic_card_references ... ok
+test a0_lib_tests::standard_skill_ids_append_only ... ok
+test ai::redact::active_candidate_tests::variant_one_does_not_include_active_skill_candidates ... ok
+test engine::tests::ruleset_version_changes_digest ... ok
+test ai::redact::active_candidate_tests::variant_two_weights_damage_by_enemy_skill_threat ... ok
+test ai::redact::active_candidate_tests::variant_zero_does_not_include_active_skill_candidates ... ok
+test engine::commands::pa02_simulation_tests::simulation_submit_skips_session_work_and_matches_authoritative_state ... ok
+test ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill ... ok
+test a0_lib_tests::host_behavior_keys_bijective ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+test engine::choice_source::tests::source_catalog_alias_is_not_resolved_by_first_match ... ok
+test ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates ... ok
+test engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask ... ok
+test engine::choice_source::tests::source_requires_actual_ready_consumer_not_just_a_unique_active_ask ... ok
+test engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/groups/g1.rs (target/debug/deps/g1-491b4656554afb1d)
+
+running 167 tests
+test g1_cardpile::pile_bridge_rejects_invalid_spec ... ok
+test g1_cardpile::converted_packages_match_generator ... ok
+test g1_hearth::hearth_content_lock_saverestore ... ok
+test g1_hearth::hearth_remaining_batch_b ... ok
+test g1_d3::g1_d3_install_bridge_and_metadata ... ok
+test g1_hearth::hearth_remaining_batch_a ... ok
+test g1_d3::g1_d3_content_lock_and_bounds ... ok
+test g1_hearth::jihuocard_self_draw ... ok
+test g1_huanle::flip::flip_primitive_toggles_facing_without_mask ... ok
+test g1_hearth::shijieshu_equips_two_different_slots ... ok
+test g1_cardpile::g1_cardpile_vertical_install_enable_newgame_saverestore ... ok
+test g1_hearth::linghunzhihuo_fire_damage_and_self_discard ... ok
+test g1_d3::g1_d3_vertical_reveal_jinggou_and_restore ... ok
+test g1_cardpile::cardpile_liuli_real_host_full_lifecycle ... ok
+test g1_cardpile::cardpile_real_host_full_lifecycle ... ok
+test g1_d3::d3_real_host_full_lifecycle ... ok
+test g1_hearth::hearth_real_host_full_lifecycle ... ok
+test g1_huanle::caoren::caoren_jushou_flips_and_mianju_cancels_flip ... ok
+test g1_hearth::zhaomingdan_forced_discard_and_draws ... ok
+test g1_huanle::flip::flip_frame_lifecycle_no_residue ... ok
+test g1_huanle::equip::equip_skill_lifecycle_grant_and_revoke ... ok
+test g1_huanle::huanle::huanle_bridge_builds_pack ... ok
+test g1_huanle::equip::equip_skill_snapshot_mismatch_rejected ... ok
+test g1_huanle::g1::g1_huanle_vertical_host_behaviors_and_restore ... ok
+test g1_huanle::huanle::huanle_combo_kuwu_sha_like_and_non_sha_damage ... ok
+test g1_huanle::huanle::huanle_combo_stolen_jushou_flip_cancelled_by_mask ... ok
+test g1_huanle::xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线
+test g1_huanle::host::host_skill_restore_rejects_without_pack ... ok
+test g1_huanle::huanle::huanle_combo_stolen_jushou_fires_for_thief ... ok
+test g1_huanle::huanle::huanle_jiuwei_optional_confirm_and_restore ... ok
+test g1_huanle::huanle::huanle_jiuwei_recovers_or_draws_at_turn_end ... ok
+test g1_huanle::huanle::huanle_mianju_blocks_flip_while_equipped ... ok
+test g1_huanle::huanle::huanle_monkey_cancels_peach_and_takes_it ... ok
+test g1_huanle::huanle::huanle_pack_payload_matches_upstream_list ... ok
+test g1_huanle::huanle::huanle_xuelunyang_steals_target_skill_until_turn_end ... ok
+test g1_wudian::ana::ana_zhiyuan_cancel_damage_and_equal_recover ... ok
+test g1_huanle::u06::u06_g2g4_channels_acceptance ... ok
+test g1_wudian::anu::anu_anwugu_afflict_and_limits ... ok
+test g1_huanle::huanle::huanle_xuelunyang_pass_declines_theft ... ok
+test g1_wudian::banzang::banzang_yinbo_random_discard_three ... ok
+test g1_wudian::baolei::baolei_mode_effects_on_sha ... ok
+test g1_wudian::baolei::baolei_switch_mode_cycle ... ok
+test g1_huanle::huanle::huanle_real_host_full_lifecycle ... ok
+test g1_huanle::u06::u06_eight_dimension_from_fresh_install ... ok
+test g1_wudian::changqing::changqing_ctianfu_attach_thunder_and_death_clear ... ok
+test g1_wudian::changqing::changqing_luanjian_dual_sha_viewas_multi_target ... ok
+test g1_wudian::chanyata::chanyata_ziyu_every_four_phases ... ok
+test g1_wudian::dva::dva_jijia_absorbs_damage_and_hand_limit ... ok
+test g1_wudian::falaozhiying::falaozhiying_feidan_splash_cancel_and_range ... ok
+test g1_wudian::g1::g1_wudian_content_lock_and_byte_restore ... ok
+test g1_wudian::feishi::feishi_shuaiyan_recover_trigger_two_choice ... ok
+test g1_wudian::feishi::feishi_moshou_declaration_wired_to_host_behavior ... ok
+test g1_wudian::g1::g1_wudian_generals_and_siji_discard_draw ... ok
+test g1_wudian::hanlingsha::hanlingsha_tannang_snatch_unlimited_range ... ok
+test g1_huanle::huanle::huanle_g5_cross_process_relay ... ok
+test g1_wudian::hanlong::hanlong_ciqiu_sha_healthy_bonus_and_dying_mark ... ok
+test g1_wudian::heibaihe::heibaihe_duwen_equal_hand_damage_bonus ... ok
+test g1_wudian::heiying::heiying_yinshen_untargetable_until_own_judge ... ok
+test g1_wudian::jiangcheng::jiangcheng_fenshi_awaken_once_on_rescue ... ok
+test g1_wudian::jiangcheng::jiangcheng_longhuo_fires_at_own_phase_end ... ok
+test g1_wudian::jiangyunfan::jiangyunfan_liefeng_grant_and_tianjian_aoe ... ok
+test g1_wudian::jiangyunfan::jiangyunfan_xunying_auto_second_sha ... ok
+test g1_wudian::jingtian::jingtian_jtjubao_gains_nonbasic_and_gates ... ok
+test g1_wudian::kuangshu::kuangshu_shihuo_fire_damage_draw ... ok
+test g1_wudian::jushifang::jushifang_xiepan_discard_and_discover_equip ... ok
+test g1_wudian::leiyuange::leiyuange_feng_ya_song_counters ... ok
+test g1_wudian::jingtian::jingtian_sajin_judge_color_recover_and_once ... ok
+test g1_wudian::laiyinhate::laiyinhate_mengji_no_armor_bonus ... ok
+test g1_wudian::linyueru::linyueru_guiyuan_discard_sha_recover_draw ... ok
+test g1_wudian::liumengli::liumengli_runxin_heart_use_and_respond ... ok
+test g1_wudian::liufu::liufu_zhucheng_filter_recheck_and_sha_guard ... ok
+test g1_wudian::liumengli::liumengli_changnian_death_bequest ... ok
+test g1_wudian::liumengli::liumengli_tianxian_range_targets_and_judge_cancel ... ok
+test g1_wudian::liuyan::liuyan_geju_out_of_range_counts ... ok
+test g1_wudian::liumengli::liumengli_xjzhimeng_darkmark_and_draw ... ok
+test g1_wudian::liuyan::liuyan_geju_out_of_range_faction_draw ... ok
+test g1_wudian::liuyan::liuyan_juedao_link_and_distance ... ok
+test g1_wudian::longyou::longyou_yuexing_distance_swap_and_clear ... ok
+test g1_wudian::lixiaoyao::lixiaoyao_xjyufeng_draw_to_two_twice_per_turn ... ok
+test g1_wudian::longyou::longyou_minsha_thunder_and_neighbor_discard ... ok
+test g1_wudian::longkui::longkui_diewu_give_and_lingyu_recover ... ok
+test g1_wudian::liuzan::liuzan_kangyin_losehp_discard_and_branch ... ok
+test g1_wudian::luba::luba_liangou_heart_fail_and_xiyang_flip_recover ... ok
+test g1_wudian::luozhaoyan::luozhaoyan_fenglue_auto_use_sha_duel ... ok
+test g1_wudian::luba::luba_liangou_hook_distance_and_damage ... ok
+test g1_wudian::luxiao::luxiao_huhuan_switches_yuedong_to_recover ... ok
+test g1_wudian::luxiao::luxiao_kuoyin_eff_and_double_full_gate ... ok
+test g1_wudian::luxiao::luxiao_kuoyin_num_extends_yuedong_draw ... ok
+test g1_wudian::luxiao::luxiao_yuedong_cancel_and_pending_ask_restores ... ok
+test g1_wudian::luxiao::luxiao_yuedong_storage_resets_next_turn ... ok
+test g1_wudian::maikelei::maikelei_shenqiang_sha_limit_refund ... ok
+test g1_wudian::mei::mei_baoxue_limited_discard_and_flips ... ok
+test g1_wudian::mei::mei_flip_face_down_turn_skipped_and_flipped_back ... ok
+test g1_wudian::mingxiu::mingxiu_guijin_deal_and_skip_draw ... ok
+test g1_wudian::mei::mei_jidong_freeze_damage_immune_and_untargetable ... ok
+test g1_wudian::mingxiu::mingxiu_chengxin_rescue_and_immunity ... ok
+test g1_wudian::mingxiu::mingxiu_linghuo_round_cooldown_and_fire ... ok
+test g1_wudian::muchanglan::muchanglan_lueying_decline_keeps_usable_for_next_sha ... ok
+test g1_wudian::muchanglan::muchanglan_lueying_gain_and_victim_discard ... ok
+test g1_wudian::moshou::moshou_blocks_delayed_trick_target ... ok
+test g1_wudian::muchanglan::muchanglan_lueying_no_third_party_never_fires ... ok
+test g1_wudian::murongziying::murongziying_poyun_discard_and_decrement ... ok
+test g1_wudian::murongziying::murongziying_qianfang_discard_and_aoe ... ok
+test g1_wudian::nangonghuang::nangonghuang_sheling_three_event_reclaim ... ok
+test g1_wudian::nangonghuang::nangonghuang_zhangmu_flash_discard_prevent ... ok
+test g1_wudian::nangonghuang::nangonghuang_zhaoyao_compare_and_top ... ok
+test g1_wudian::orisa::orisa_qianggu_armor_and_guard_nullify ... ok
+test g1_wudian::sanjian::sanjian_weapon_skill_two_stage_choice_with_restore ... ok
+test g1_wudian::ow::ow_shibing_tuji_and_mujing ... ok
+test g1_wudian::shenqishuang::shenqishuang_binxin_grants_hujia_at_low_hp ... ok
+test g1_wudian::sishen::sishen_xiandan_red_direct_black_bonus ... ok
+test g1_wudian::sumei::sumei_sheying_black_judge_reclaim ... ok
+test g1_wudian::sumei::sumei_huahu_sacrifice_multi_target ... ok
+test g1_wudian::swd::swd_gouhunluo_countdown_lose_hp_discard ... ok
+test g1_wudian::swd::swd_jiguantong_aoe_discard_or_fire ... ok
+test g1_wudian::ow::ow_real_host_full_lifecycle ... ok
+test g1_wudian::swd::swd_jiguantong_reverse_order_and_content_after_draw ... ok
+test g1_wudian::swd::swd_mujiaren_discard_nonbasic_discover_jiguan ... ok
+test g1_wudian::swd::swd_zhiluxiaohu_random_enemy_virtual_sha ... ok
+test g1_wudian::tangyurou::tangyurou_txianqu_prevent_and_replenish ... ok
+test g1_wudian::tianshi::tianshi_shouhu_discard_heal_and_sha_ban ... ok
+test g1_wudian::tianyu::tianyu_chezhen_distance_mod ... ok
+test g1_wudian::tuobiang::tuobiang_paotai_stack_fire_and_downgrade ... ok
+test g1_wudian::wangmeizhike::wangmeizhike_draws_min_hand_target ... ok
+test g1_wudian::wangmeizhike::wangmeizhike_recovers_min_hp_damaged_target ... ok
+test g1_wudian::wangxiaohu::wangxiaohu_husha_marks_and_virtual_cards ... ok
+test g1_wudian::wangpengxu::wangpengxu_feixu_shan_draw ... ok
+test g1_wudian::wangxiaohu::wangxiaohu_husha_virtual_nanman ... ok
+test g1_wudian::wenhui::wenhui_longxiang_random_discard_diff ... ok
+test g1_wudian::wudian::wudian_generals_batch10_diyjuntun_recast_and_jinyan ... ok
+test g1_wudian::wensidun::wensidun_feitiao_range_and_random_discard ... ok
+test g1_wudian::wudian::wudian_generals_batch12_liduan_gain_equip ... ok
+test g1_wudian::wudian::wudian_generals_batch13_jianbi_aoe_exclude ... ok
+test g1_wudian::wudian::wudian_generals_batch14_fuchou_cancel_and_settle ... ok
+test g1_wudian::wudian::wudian_generals_batch15_liangce_conversion_and_remain ... ok
+test g1_wudian::xia::xia_fanling_recover_on_others_hp_loss ... ok
+test g1_wudian::xiahoujinxuan::xiahoujinxuan_xuanmo_discover_same_class ... ok
+test g1_wudian::xianqing::xianqing_xtanxi_no_holder_cancel ... ok
+test g1_wudian::xianqing::xianqing_xtanxi_same_name_steal ... ok
+test g1_wudian::xiaoman::xiaoman_lingquan_awaken_grants_shuiyun ... ok
+test g1_wudian::xingxuan::xingxuan_lingxue_recover_grants_hujia ... ok
+test g1_wudian::xiaoman::xiaoman_shenwu_awaken_grants_huimeng ... ok
+test g1_wudian::xuanxiao::xuanxiao_xuanyan_ningbin_fire_thunder ... ok
+test g1_wudian::xuejian::xuejian_duci_equip_discard_damage ... ok
+test g1_wudian::wudian::wudian_real_host_full_lifecycle ... ok
+test g1_wudian::xuejian::xuejian_shenmu_red_discard_rescue ... ok
+test g1_wudian::xianjian::xianjian_real_host_full_lifecycle ... ok
+test g1_wudian::xuejian::xuejian_xshuangren_offcourt_and_death_discard ... ok
+test g1_wudian::youdishenru::youdishenru_cancels_sha_with_reprisal ... ok
+test g1_wudian::yuanshi::yuanshi_feiren_bonus_range_and_club_extra_target ... ok
+test g1_wudian::yuanshi::yuanshi_feiren_chain_damage_not_bonused ... ok
+test g1_wudian::yuejinzhao::yuejinzhao_xjyingfeng_random_virtual_sha ... ok
+test g1_wudian::yueqi::yueqi_liguang_discard_and_move_equip ... ok
+test g1_wudian::yueqi::yueqi_shiying_cancel_death_and_reset ... ok
+test g1_wudian::yuntianhe::yuntianhe_zhuyue_whitelist_and_clear ... ok
+test g1_wudian::yuntianhe::yuntianhe_guanri_once_fire_and_equip_strip ... ok
+test g1_wudian::zhaoliner::zhaoliner_huimeng_tianshe_family ... ok
+test g1_wudian::zhaliya::zhaliya_pingzhang_barrier_and_owliyong_draw ... ok
+test g1_wudian::zhixuzhiguang::zhixuzhiguang_guangshu_suit_marks ... ok
+test g1_wudian::zixuan::zixuan_shuiyun5_dying_rescue_channel ... ok
+test g1_wudian::zixuan::zixuan_shuiyun_off_court_and_type_dedup ... ok
+test g1_wuxing::g1_wuxing_vertical_natures_shengke_saverestore ... ok
+test g1_wudian::zixuan::zixuan_wangyou_roundstamp_and_draw ... ok
+test g1_wuxing::wuxingpan_skill_change_nature_with_restore ... ok
+test g1_wuxing::wuxingpan_card_equips_via_treasure_slot ... ok
+test g1_wuxing::l06_eight_dimension_from_fresh_install ... ok
+test g1_wuxing::wuxing_real_host_full_lifecycle ... ok
+
+test result: ok. 166 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.73s
+
+     Running tests/groups/g1_shahai.rs (target/debug/deps/g1_shahai-402e3d0005368dfb)
+
+running 177 tests
+test g1_shahai_gujian::g1::g1_gujian_vertical_existing_kinds_and_lock ... ok
+test g1_shahai_gujian::jinlianzhu::jinlianzhu_cancels_damage_with_holder_confirm ... ok
+test g1_shahai_gujian::jiguan::jiguan_batch_four_kinds ... ok
+test g1_shahai_gujian::feibiao::feibiao_discard_black_or_damage ... ok
+test g1_shahai_gujian::hujia::hujia_primitive_and_food_batch_three ... ok
+test g1_shahai_gujian::shujinsan::shujinsan_discard_any_draws_equal_with_restore ... ok
+test g1_shahai_gujian::lifecycle::final_batch_shatang_heilong_liutouge_mutou ... ok
+test g1_shahai_gujian::remaining::remaining_clusters_batch ... ok
+test g1_shahai_gujian::gujian::gujian_rejects_illegal_targets ... ok
+test g1_shahai_gujian::food::food_effects_batch_two ... ok
+test g1_shahai_gujian::food::food_state_grant_tick_and_expire ... ok
+test g1_shahai_gujian::mizhilianou::mizhilianou_viewas_and_luyugeng_discover ... ok
+test g1_shahai_gujian::dinvxuanshuang::dinvxuanshuang_and_gjyuheng_closeout ... ok
+test g1_shahai_gujian::gujian::gujian_real_host_full_lifecycle ... ok
+test g1_shahai_gwent::gwent_closeout_kunen_shanbeng_poxiao ... ok
+test g1_shahai_gwent::gwent_fengyin_disables_target_skills ... ok
+test g1_shahai_mtg::mtg_feixu_land_effect ... ok
+test g1_shahai_mtg::mtg_bingheyaosai_land_effect ... ok
+test g1_shahai_mtg::mtg_haidao_land_effect ... ok
+test g1_shahai_gwent::gwent_spells_zhihuan_baoxue ... ok
+test g1_shahai_mtg::mtg_linzhongjianta_land_and_strike ... ok
+test g1_shahai_gwent::gwent_spells_yanzhi_aozu_wenyi ... ok
+test g1_shahai_mtg::mtg_longshanfeng_land_flow ... ok
+test g1_shahai_mtg::mtg_lindixiliu_land_effect ... ok
+test g1_shahai_gwent::gwent_real_host_full_lifecycle ... ok
+test g1_shahai_gwent::g1_gwent_vertical_and_lock ... ok
+test g1_shahai_mtg::mtg_shamolvzhou_land_effect ... ok
+test g1_shahai_mtg::mtg_shuimomuxue_land_effect ... ok
+test g1_shahai_mtg::mtg_real_host_full_lifecycle ... ok
+test g1_shahai_mtg::mtg_youlin_land_and_discover ... ok
+test g1_shahai_mtg::mtg_yixialan_land_and_recast ... ok
+test g1_shahai_swd::cyxianjiang::swd_cyxianjiang_compares_card_name_not_kind ... ok
+test g1_shahai_swd::bingjian::swd_generals_b74_bingjian_shending_guiyan ... ok
+test g1_shahai_swd::cyxianjiang::swd_generals_b89_cyxianjiang ... ok
+test g1_shahai_swd::datong::swd_generals_b18_datong_draw ... ok
+test g1_shahai_swd::daixing::swd_deferred_daixing_hujia_cycle ... ok
+test g1_shahai_swd::duanyue::swd_generals_b24_duanyue_tuzhen_luomei_xingdian ... ok
+test g1_shahai_swd::fengming::swd_generals_b73_fengming_xiaomoyu_touxi ... ok
+test g1_shahai_swd::five::swd_generals_b19_five_damage_line_skills ... ok
+test g1_shahai_swd::funiao::swd_deferred_b93_funiao_ningxian_yaotong ... ok
+test g1_shahai_swd::gtiandao::swd_deferred_gtiandao_rewrites_judge_with_any_he ... ok
+test g1_shahai_swd::guaili::swd_generals_b71_guaili_fuyan_wuxie_guanhu ... ok
+test g1_shahai_gwent::gwent_weather_states ... ok
+test g1_shahai_swd::guxing::swd_deferred_guxing_all_hand_sha_and_draw ... ok
+test g1_shahai_swd::heihuo::swd_deferred_b92_heihuo_fzhenwei_dunxing ... ok
+test g1_shahai_swd::hlingbo::swd_generals_b72_hlingbo_miles_xueyi ... ok
+test g1_shahai_swd::huajin::swd_deferred_b99_huajin_minjing ... ok
+test g1_shahai_swd::huanhun::swd_deferred_b96_huanhun_lqingcheng ... ok
+test g1_shahai_swd::huanjian::swd_generals_b70_huanjian_weida_xuying ... ok
+test g1_shahai_swd::huangyu::swd_generals_b76_huangyu_xianyin_pojian ... ok
+test g1_shahai_swd::huanxia::swd_generals_b27_huanxia_viewas_reclaim ... ok
+test g1_shahai_swd::huanxing::swd_generals_b87_huanxing ... ok
+test g1_shahai_swd::huanyin::swd_deferred_huanyin_judge_cancel_or_draw ... ok
+test g1_shahai_swd::huodan::swd_generals_b85_huodan ... ok
+test g1_shahai_swd::hwendao::swd_generals_b77_hwendao_lingfeng_tianhuo ... ok
+test g1_shahai_swd::hyunshen::swd_deferred_hyunshen_counter_draw_and_distance ... ok
+test g1_shahai_swd::jiefen::swd_generals_b20_jiefen_multistep ... ok
+test g1_shahai_swd::jiefen::swd_jiefen_is_once_per_play_phase ... ok
+test g1_shahai_swd::jinlin::swd_deferred_jinlin_limited_hujia_and_phase_ticks ... ok
+test g1_shahai_swd::jiying::swd_generals_b61_jiying_mufeng_wangchen ... ok
+test g1_shahai_swd::juxi::swd_deferred_juxi_damage_or_recover ... ok
+test g1_shahai_swd::jiying::swd_mufeng_uses_discover_not_draw ... ok
+test g1_shahai_swd::lanzhi::swd_deferred_lanzhi_heals_le_own_hp_damaged ... ok
+test g1_shahai_swd::jqimou::swd_generals_b91_jqimou_jianji_toudan ... ok
+test g1_shahai_swd::kbolan::swd_deferred_b98_kbolan_aojian ... ok
+test g1_shahai_swd::lexue::swd_generals_b83_lexue_zhenjiu_lmazui ... ok
+test g1_shahai_swd::lianda::swd_generals_b64_lianda_suiyan_duanxing_polang_youyin ... ok
+test g1_shahai_swd::lianwu::swd_generals_b63_lianwu_yuchen_duishi_xielei ... ok
+test g1_shahai_swd::lingshi::swd_deferred_lingshi_range_direct_hit_draw_and_sha_limit ... ok
+test g1_shahai_swd::lingxian::swd_deferred_lingxian_draws_with_far_target ... ok
+test g1_shahai_swd::lingxin::swd_generals_b69_lingxin_yueren ... ok
+test g1_shahai_swd::liuhong::swd_generals_b21_liuhong_mojian_daofa ... ok
+test g1_shahai_swd::ljifeng::swd_generals_b68_ljifeng_duanyi_yinyue ... ok
+test g1_shahai_swd::luanji::swd_generals_b81_luanji_guozao_reyingzi ... ok
+test g1_shahai_swd::nlianji::swd_deferred_nlianji_compare_reward_and_damage ... ok
+test g1_shahai_swd::mingfu::swd_generals_b88_mingfu ... ok
+test g1_shahai_swd::pingxu::swd_generals_b23_pingxu_huanling_builtin_four_full ... ok
+test g1_shahai_swd::poyue::swd_generals_b28_poyue_black_range_red_free_direct ... ok
+test g1_shahai_swd::poxiao::swd_generals_b79_poxiao ... ok
+test g1_shahai_swd::pozhen::swd_deferred_b94_pozhen_guiyan2 ... ok
+test g1_shahai_swd::rexue::swd_deferred_rexue_and_liuli ... ok
+test g1_shahai_swd::pozhou::swd_deferred_pozhou_seal_cycle ... ok
+test g1_shahai_swd::shangxi::swd_generals_b75_shangxi_huajian_xingzhui ... ok
+test g1_shahai_swd::shengshou::swd_generals_b84_shengshou_jiang ... ok
+test g1_shahai_swd::shehun::swd_deferred_shehun_suit_match_damage ... ok
+test g1_shahai_swd::shoulie::swd_deferred_b95_shoulie_busi ... ok
+test g1_shahai_swd::sliufeng::swd_generals_b80_sliufeng ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b34_qiankundai_shennongding_nvwashi ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b33_lianyaohu_hujing ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b35_kunlunjingc_donghuangzhong ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b36_kongdongyin_death_cancel ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_extra_cards_disposition_guard ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b39_sifeizhenmian_yiluan ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_equip5_b38_guilingzhitao_nigong ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_jiqi_b40_five_held_treasures ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b42_yuchan_autoviewas ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b37_jingleishan_chiyuxi_guisheqi_xianluhui ... ok
+test g1_shahai_swd::swd_cards_equip5_b33_lianyaohu_hujing::swd_cards_trick_b43_shencaojie_guard ... ok
+test g1_shahai_swd::swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_equip5_b44_yuruyi_draw_window ... ok
+test g1_shahai_swd::swd_cards_equip5_b44_yuruyi_draw_window::swd_cards_yuchan_b45_swap_rotation ... ok
+test g1_shahai_swd::swd_cards_equip5_b44_yuruyi_draw_window::swd_window_machines_b62 ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_caoyao_heals_wounded_in_range ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_chilongya_amplifies_fire_damage ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_daihuo_xiayun_distance_pair ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_fengxueren_flip_or_damage ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_liuxinghuoyu_discard2_or_fire ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_guiyoujie_delayed_black_loss ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_hufu_self_dying_only ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_shentou_active_steal_with_club_judge ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_tianxianjiu_ameisha_and_self_rescue ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_xingjunyan_amp_and_qinglonglingzhu_steal ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_xixue_lifesteal_on_sha_damage ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_yangpijuan_discover_from_deck ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_zhufangshenshi_distance_waiver ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_yufulu_give_weapon_and_damage ... ok
+test g1_shahai_swd::swd_extra_cards_disposition_guard::swd_real_host_full_lifecycle ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_cards_alignment_guard_b29 ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_cards_basic_b32_xuejibingbao_fengyinzhidan ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_no_shan_seal_then_unseal_at_phase_begin ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanfeng_shan_respond_no_damage ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanshu_attaches_card_mods_and_roundtrips ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_discovers_equip_and_marks_target ... ok
+test g1_shahai_swd::xuanying::source_parent_active_restore_rejects_wrong_choice_fields ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_full_slots_rejected ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanyaoshu_gain_compensates_lost_equip ... ok
+test g1_shahai_swd::xuanying::source_parent_group_grants_damage_child_counterattack_and_requires_the_grant ... ok
+test g1_shahai_swd::xuanying::source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_pending_then_gain_at_phase_end ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_jiguanyuan_same_target_rejected_while_pending ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_langeguaiyi_longfan_suit_branches ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_lingjian_jinjilengdong_freeze_and_unfreeze ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_lingjian_chaofeng_yinmi_xingtigaizao ... ok
+test g1_shahai_swd::swd_langeguaiyi_longfan_suit_branches::swd_lingjian_xuanfeng_and_shijianhuisu ... ok
+test g1_shahai_swd::tiebi::swd_generals_b18_tiebi_and_datong ... ok
+test g1_shahai_swd::sxianjing::swd_deferred_sxianjing_trap_cycle ... ok
+test g1_shahai_swd::wanjun::swd_generals_b66_wanjun_senluo_huopu ... ok
+test g1_shahai_swd::xuanying::swd_generals_b90_xuanying_lieren ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch17_guihan_dying_limited ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch18_beige_judge_branches ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch1_bridge_and_behaviors ... ok
+test g1_shahai_swd::xielv::swd_generals_b25_xielv_zhuyu ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch3_zonghuo_shaoying ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch2_xiongzi_yaliang ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch5_full_roster_metadata ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch4_guhuo_jiaoxia_honglian ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch6_luweiyan_conversion_and_chain ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch8_builtin_skill_refs ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch7_active_skills_jieyan_yiesheng ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch8_builtin_whitelist_rejects ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_generals_batch9_diychanyuan_max_hp_loss ... ok
+test g1_shahai_swd::xuanzhou::swd_deferred_b97_xuanzhou_yinguo ... ok
+test g1_shahai_swd::yeying::swd_generals_b67_yeying_guiying_fengze_lingyue_anlianying ... ok
+test g1_shahai_swd::xuehuang::swd_generals_b26_xuehuang_limited_virtual_firesha ... ok
+test g1_shahai_swd::yijue::swd_generals_b86_yijue_dangping ... ok
+test g1_shahai_swd::yudun::swd_generals_b82_yudun_zhanxing ... ok
+test g1_shahai_yunchou::caochuan::caochuan_branch_zero_gives_shas_and_reprisal ... ok
+test g1_shahai_swd::yunchou::swd_generals_b78_yunchou ... ok
+test g1_shahai_swd::zhanlu::swd_generals_b65_zhanlu_susheng_xianghui_huiqi ... ok
+test g1_shahai_swd::yulin::swd_generals_b22_yulin_ningshuang_gongshen ... ok
+test g1_shahai_yunchou::caochuan::caochuan_no_sha_branch_shows_and_discards ... ok
+test g1_shahai_yunchou::chenhuodajie::chenhuodajie_gains_target_hand_card ... ok
+test g1_shahai_yunchou::fudichouxin::fudichouxin_compare_two_stage_with_restore ... ok
+test g1_shahai_yunchou::geanguanhuo::geanguanhuo_rejects_wrong_target_count ... ok
+test g1_shahai_yunchou::shezhanqunru::shezhanqunru_compares_all_responders ... ok
+test g1_shahai_yunchou::g1::g1_yunchou_vertical_existing_kinds_and_lock ... ok
+test g1_shahai_yunchou::hongshui::hongshui_self_delayed_trick_thunder_damage ... ok
+test g1_shahai_yunchou::geanguanhuo::geanguanhuo_two_target_compare_chain ... ok
+test g1_shahai_yunchou::suolianjia::suolianjia_links_on_equip_resets_on_leave ... ok
+test g1_shahai_yunchou::shuigong::shuigong_multi_target_forced_equip_discard ... ok
+test g1_shahai_yunchou::touliang::touliang_swap_two_stage_with_restore ... ok
+test g1_shahai_zhenfa::zf_changshe_pozhen_swap_seat ... ok
+test g1_shahai_zhenfa::zf_dizaizhen_major_faction_draw ... ok
+test g1_shahai_zhenfa::zf_niaoxiangzhen_respond_shan_or_damage ... ok
+test g1_shahai_zhenfa::zf_qixingzhen_siege_discard_and_virtual_sha ... ok
+test g1_shahai_zhenfa::zf_tianfuzhen_major_aoe_discard ... ok
+test g1_shahai_yunchou::yunchou::yunchou_real_host_full_lifecycle ... ok
+test g1_shahai_zhenfa::zf_real_host_full_lifecycle ... ok
+
+test result: ok. 177 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.66s
+
+     Running tests/groups/kernel.rs (target/debug/deps/kernel-8617800203b828c0)
+
+running 435 tests
+test adr0786_j1_commit_window::j1_zero_count_first_launch_remains_rejected ... ok
+test a0_tag_registry::host_behavior_tags_unique ... ok
+test boundary_snapshot::answer::answer_without_open_choice_rejected ... ok
+test auth_archive::auth_token_reissue_revokes_old ... ok
+test boundary_snapshot::abort::abort_segment_truncates_log ... ok
+test auth_archive::authed_submit_rejects_impersonation_and_unknown_token ... ok
+test auth_archive::archive_detects_tampering_and_version ... ok
+test auth_archive::auth_tokens_do_not_survive_archive ... ok
+test boundary_snapshot::archive::archive_choice_kind_discard_to_limit_roundtrip ... ok
+test boundary_snapshot::answer::answer_by_wrong_player_rejected ... ok
+test boundary_snapshot::archive::archive_choice_kind_duel_sha_roundtrip ... ok
+test boundary_snapshot::archive::archive_choice_kind_nullify_window_roundtrip ... ok
+test boundary_snapshot::duplicate::duplicate_selection_rejected_by_spec ... ok
+test adr0786_j1_commit_window::j1_real_choice_window_discards_picked_cards_and_resumes_queue ... ok
+test boundary_snapshot::archive::archive_rejects_unknown_prompt_and_v1_bytes ... ok
+test boundary_snapshot::archive::archive_choice_kind_tian_du_gain_roundtrip ... ok
+test boundary_snapshot::duplicate::duplicate_and_zero_dedup_rejected ... ok
+test adr0786_j1_commit_window::j1_window_caps_to_available_and_skips_when_empty ... ok
+test boundary_snapshot::commands::commands_by_non_current_player_rejected ... ok
+test boundary_snapshot::archive::archive_hardening_rejects_unknown_kind_and_trailing_bytes ... ok
+test auth_archive::snapshot_archive_roundtrip_rest_and_window ... ok
+test adr0786_j1_commit_window::j1_commit_window_saves_and_restores_across_archive ... ok
+test boundary_snapshot::archive::archive_choice_kind_jiji_target_roundtrip ... ok
+test boundary_snapshot::out::out_of_bounds_actor_rejected ... ok
+test boundary_snapshot::open::open_segment_checkpoint_association_positive ... ok
+test boundary_snapshot::out::out_of_bounds_ids_rejected_not_panic ... ok
+test boundary_snapshot::guidao::guidao_rewrite_mixed_hand_and_equip_options ... ok
+test auth_archive::session_layer_reconnect_out_of_order_and_dedup ... ok
+test boundary_snapshot::pause::pause_roundtrip_discard_to_limit ... ok
+test boundary_snapshot::guidao::guidao_rewrite_with_real_black_equip_only ... ok
+test boundary_snapshot::pause::pause_roundtrip_duel_respond ... ok
+test boundary_snapshot::pause::pause_roundtrip_guidao_pass ... ok
+test boundary_snapshot::pause::pause_roundtrip_chain_target_window ... ok
+test boundary_snapshot::pause::pause_roundtrip_guidao_active_rewrite ... ok
+test boundary_snapshot::pause::pause_roundtrip_guidao_rewrite ... ok
+test boundary_snapshot::pause::pause_roundtrip_dying_save ... ok
+test boundary_snapshot::pause::pause_roundtrip_active_nullify_chain ... ok
+test boundary_snapshot::pause::pause_roundtrip_judge_lightning_dying_save ... ok
+test boundary_snapshot::pause::pause_roundtrip_judge_window ... ok
+test boundary_snapshot::pause::pause_roundtrip_aoe_mid_queue ... ok
+test boundary_snapshot::pause::pause_roundtrip_nullify_reshuffle_chain ... ok
+test boundary_snapshot::pause::pause_roundtrip_tiandu_decline ... ok
+test boundary_snapshot::pause::pause_roundtrip_sha_respond ... ok
+test boundary_snapshot::restore::restore_accepts_park_depth_below_stack ... ok
+test boundary_snapshot::pending::pending_state_hash_stable_across_save_restore ... ok
+test boundary_snapshot::pause::pause_roundtrip_rewrite_then_tiandu_combo ... ok
+test boundary_snapshot::restore::restore_carries_dedup_high_water ... ok
+test boundary_snapshot::restore::restore_rejects_all_cards_missing ... ok
+test boundary_snapshot::pause::pause_roundtrip_tiandu_confirm ... ok
+test boundary_snapshot::restore::restore_rejects_choice_without_machine ... ok
+test boundary_snapshot::restore::restore_guidao_rewrite_equips_options ... ok
+test boundary_snapshot::restore::restore_rejects_dangling_park_frame ... ok
+test boundary_snapshot::restore::restore_rejects_lord_not_at_first_seat ... ok
+test boundary_snapshot::restore::restore_rejects_forward_referencing_frame_parent ... ok
+test boundary_snapshot::restore::restore_rejects_choice_id_overrun ... ok
+test boundary_snapshot::restore::restore_rejects_middle_card_missing ... ok
+test boundary_snapshot::restore::restore_rejects_duplicate_frame_id ... ok
+test boundary_snapshot::restore::restore_guidao_rewrite_mid_window ... ok
+test boundary_snapshot::restore::restore_rejects_broken_frame_parent_chain ... ok
+test boundary_snapshot::pause::pause_roundtrip_negative_hp_multi_tao_rescue ... ok
+test boundary_snapshot::restore::restore_rejects_inconsistent_skill_instance_owner ... ok
+test boundary_snapshot::pause::pause_roundtrip_yishang_chain ... ok
+test boundary_snapshot::restore::restore_rejects_sha_asked_tamper ... ok
+test boundary_snapshot::restore::restore_at_every_choice_point_continues_identically ... ok
+test boundary_snapshot::restore::restore_rejects_oob_queue_trigger ... ok
+test boundary_snapshot::restore::restore_rejects_park_depth_overrun ... ok
+test boundary_snapshot::restore::restore_rejects_rewrite_asked_with_empty_rewriters ... ok
+test boundary_snapshot::restore::restore_rejects_rule_version_mismatch ... ok
+test boundary_snapshot::restore::restore_rejects_nested_checkpoint ... ok
+test boundary_snapshot::restore::restore_rejects_oob_event_payload ... ok
+test boundary_snapshot::restore::restore_rejects_self_referencing_frame_parent ... ok
+test boundary_snapshot::stale::stale_revision_rejected_then_retry_same_dedup ... ok
+test boundary_snapshot::restore::restore_rejects_outcome_mode_mismatch ... ok
+test boundary_snapshot::restore::restore_rejects_out_of_bounds_ids ... ok
+test boundary_snapshot::save::save_restore_at_rest_continues_identically ... ok
+test boundary_snapshot::restore::restore_rejects_tampered_gate_event_payload ... ok
+test boundary_snapshot::restore::restore_rejects_tampered_core_ruleset_version ... ok
+test native_kernel::activate::activate_skill_without_grant_rejected ... ok
+test boundary_snapshot::restore::restore_rejects_trailing_card_missing ... ok
+test boundary_snapshot::xiaoji::xiaoji_machine_byte_roundtrip_and_rejects ... ok
+test boundary_snapshot::restore::restore_rejects_tampered_identity_roles ... ok
+test native_kernel::activate::activate_skill_rejected_outside_play_phase ... ok
+test boundary_snapshot::restore::restore_rejects_segment_checkpoint_mismatches ... ok
+test native_kernel::area_attacks::aoe_continues_after_midqueue_death ... ok
+test native_kernel::area_attacks::savage_attack_response_skip_and_pass ... ok
+test native_kernel::area_attacks::archery_attack_all_pass_takes_damage ... ok
+test native_kernel::area_attacks::aoe_target_freeze_at_commit ... ok
+test native_kernel::area_attacks::savage_nullified_target_discards_once ... ok
+test native_kernel::area_attacks::savage_per_target_nullify ... ok
+test boundary_snapshot::savage::savage_multi_nullify_judge_reshuffle_restore ... ok
+test native_kernel::boss_bianchengwang::boss_bianchengwang_leizhou_leifu_phase_arms ... ok
+test native_kernel::boss_chujiangwang::boss_chujiangwang_fankui_reuse_gain ... ok
+test native_kernel::boss_chujiangwang::boss_chujiangwang_bingfeng_death_flip_source ... ok
+test native_kernel::boss_bifang::boss_bifang_honglianx_red_excluded_and_judge_gain ... ok
+test native_kernel::boss_bianchengwang::boss_bianchengwang_leizhu_death_thunder_sequential ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_bufo_damage_cap ... ok
+test native_kernel::boss_chujiangwang::boss_chujiangwang_weimu_black_trick_block ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_bufo_prepare_range1_fire ... ok
+test native_kernel::boss_dongzhuo::boss_dongzhuo_jiuchi_viewas ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_huoxing_death_fire_all ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_diting_distance_both_ways ... ok
+test native_kernel::boss_bifang::boss_bifang_zhaohuo_fire_nature_and_immune ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_remen_aoe_skip ... ok
+test native_kernel::boss_baihu::boss_baihu_kuangxiao_sha_range_and_targets ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_remen_sha_reject_then_armor ... ok
+test native_kernel::boss_dushiwang::boss_dushiwang_zhifen_prepare_steal_and_fire ... ok
+test native_kernel::boss_dizangwang::boss_dizangwang_wuliang_prepare_recover_end_draw ... ok
+test native_kernel::boss_futai2::boss_futai2_tao_banned_both_sides ... ok
+test native_kernel::boss_guojia::boss_guojia_yuance_judge_branches ... ok
+test native_kernel::boss_guojia::boss_guojia_guimou_mad_lifecycle ... ok
+test native_kernel::boss_bifang::boss_bifang_yanyu_judge_fire_max_three ... ok
+test native_kernel::boss_guojia::boss_guojia_qizuo_trick_reuse ... ok
+test native_kernel::boss_hundun::boss_hundun_wuzang_draw_and_hand_limit ... ok
+test native_kernel::boss_liubei::boss_liubei_zhangwu_discard_or_damage ... ok
+test native_kernel::boss_heiwuchang::boss_heiwuchang_guiji_taiping_suoming_xixing ... ok
+test native_kernel::boss_liubei::boss_liubei_xiaoxiong_gain_and_damage ... ok
+test native_kernel::boss_mamian::boss_mamian_lianyu_fire_all ... ok
+test native_kernel::boss_hundun::boss_hundun_xiangde_yinzei ... ok
+test native_kernel::boss_mamian::boss_mamian_juece_last_hand_damage ... ok
+test native_kernel::boss_huoshenzhurong::boss_huoshenzhurong_xingxia_yanling_burn ... ok
+test native_kernel::boss_jinshenrushou::boss_jinshenrushou_xingqiu_link_toggle ... ok
+test native_kernel::boss_mengpo::boss_mengpo_shiyou_distinct_suit_gain ... ok
+test native_kernel::boss_luocha::boss_luocha_yushou_moyany ... ok
+test native_kernel::boss_mode::boss_mode_add_fellow_seat_expansion ... ok
+test native_kernel::boss_mengpo::boss_mengpo_wanghun_death_clear_and_disable ... ok
+test native_kernel::boss_mengpo::boss_mengpo_wangshi_basic_ban_turn_clear ... ok
+test native_kernel::boss_nianshou::boss_nianshou_jingjue_danshu_recover ... ok
+test native_kernel::boss_nianshou::boss_nianshou_ruizhi_prune ... ok
+test native_kernel::boss_mode::boss_mode_chongzheng_revival_and_victory ... ok
+test native_kernel::boss_nianshou::boss_nianshou_shouyi_range_free ... ok
+test native_kernel::boss_mushengoumang::boss_mushengoumang_buchun_revive_and_recover ... ok
+test native_kernel::boss_nianshou::boss_nianshou_nianrui_mengtai ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_pingdeng_death_two_wave_fire ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_abi_source_fire_no_source_skip ... ok
+test native_kernel::boss_pingdengwang::boss_pingdengwang_suozu_link_all_others ... ok
+test native_kernel::boss_pangtong::boss_pangtong_qiwu_club_recover ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_panguan_delay_reject ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_futai_recover_wounded ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_juhun_end_flip_first ... ok
+test native_kernel::boss_qinguangwang::boss_qinguangwang_wangxiang_death_strip_equips ... ok
+test native_kernel::boss_pangtong::boss_pangtong_tianyu_end_link_all ... ok
+test native_kernel::boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding ... ok
+test native_kernel::boss_shuishengonggong::boss_shuishengonggong_juehong_strip_enemies ... ok
+test native_kernel::boss_stage::boss_stage_opening_and_first_actor ... ok
+test native_kernel::boss_nianshou::boss_nianshou_nbianshen_rotation_renxing ... ok
+test native_kernel::boss_songdiwang::boss_songdiwang_heisheng_death_link_shengfu ... ok
+test native_kernel::area_attacks::savage_nullify_after_deck_drain_conserves ... ok
+test native_kernel::boss_taishanwang::boss_taishanwang_fudu_kujiu_arms ... ok
+test native_kernel::boss_taishanwang::boss_taishanwang_renao_death_fire ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_yandu_gain_at_end_phase ... ok
+test native_kernel::boss_qinglong::boss_qinglong_shenyi_judge_void_and_never_flipped ... ok
+test native_kernel::boss_shujing::boss_shujing_cuidui_poison_cycle ... ok
+test native_kernel::boss_qiongqi::boss_qiongqi_zhue_dual_draw ... ok
+test native_kernel::boss_shuishenxuanming::boss_shuishenxuanming_zirun_draw_all ... ok
+test native_kernel::boss_taowu::boss_taowu_luanchang_virtual_aoe ... ok
+test native_kernel::boss_taotie::boss_taotie_tanyu_skip_discard_and_max_hand_lose_hp ... ok
+test native_kernel::boss_taihao::boss_taihao_shenen_aura ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_yaoshou_distance_minus_two ... ok
+test native_kernel::boss_taowu::boss_taowu_nitai_in_shield_out_fire ... ok
+test native_kernel::boss_taowu::boss_taowu_minwan_lockset_draw_and_target_mod ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_jiushou_limit_nine_and_refill ... ok
+test native_kernel::boss_xuanwu::boss_xuanwu_lingqu_damage_counter ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_zhadao_pierce_renwang ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_zhuxin_death_min_hp ... ok
+test native_kernel::boss_yanluowang::boss_yanluowang_tiemian_black_sha_block ... ok
+test native_kernel::boss_wuguanwang::boss_wuguanwang_zhiwang_gongzheng_xuechi ... ok
+test native_kernel::boss_yandi::boss_yandi_shaohao_pure_entries ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_fengdong_hand_ban ... ok
+test native_kernel::boss_xiangliu::boss_xiangliu_duqu_shedu_echou ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_wuxin_damage_only ... ok
+test native_kernel::boss_taotie::boss_taotie_cangmu_jicai ... ok
+test native_kernel::boss_qinglong::boss_qinglong_releiji_thunder_judge ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_xunyou_steal_and_equip ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_jueqing_wuxin_damage_faces ... ok
+test native_kernel::boss_yecha::boss_yecha_modao_mojian_danshu ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_jidian_nested_target_can_decline ... ok
+test native_kernel::boss_yanling::boss_yanling_huihuo_furan ... ok
+test native_kernel::boss_yinjian::boss_yinjian_baolian_qiangzheng_zuijiu_xiaoshou ... ok
+test native_kernel::boss_zhouyu::boss_zhouyu_huoshen_fire_immune_recover ... ok
+test native_kernel::boss_zhenji::boss_zhenji_lingbo_jiaoxia_draws ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_lunhui_swap_at_judge ... ok
+test native_kernel::boss_zhangchunhua::boss_zhangchunhua_wuxin_delay_and_shangshix ... ok
+test native_kernel::boss_zhenji::boss_zhenji_tashui_flip_and_fanghua ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_fanshi_damage_toggle ... ok
+test native_kernel::boss_zhuanlunwang::boss_zhuanlunwang_wangsheng_virtual_savage ... ok
+test native_kernel::boss_zhouyu::boss_zhouyu_honglian_end_and_xianyin ... ok
+test native_kernel::boss_yingzhao::boss_yingzhao_sipu_use_ban_first_two ... ok
+test native_kernel::catalog::catalog_shared_across_commands ... ok
+test native_kernel::chain::chain_card_toggles_link ... ok
+test native_kernel::boss_zhangjiao::boss_zhangjiao_tiandao_rewrite ... ok
+test native_kernel::chain::chain_nullify_is_per_target_second_only ... ok
+test native_kernel::chain::chain_double_nullify_leaves_nobody_linked ... ok
+test native_kernel::caocao::caocao_jianxiong_takes_damaging_card ... ok
+test native_kernel::chain::chain_nullify_is_per_target_first_only ... ok
+test native_kernel::chain::chain_propagation_preserves_source ... ok
+test native_kernel::boss_zhuyin::boss_zhuyin_xiongshou_semantics ... ok
+test native_kernel::boss_zhuanxu::boss_zhuanxu_zaoyi_grant_and_exec ... ok
+test native_kernel::combat::fire_sha_shares_sha_limit ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_juyuan_storage_and_extra_target ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_bingxian_virtual_sha_on_no_sha_turn ... ok
+test native_kernel::combat::sha_damage_dealt_carries_card ... ok
+test native_kernel::d4::d4_boss_b0_archive_format_v79_rejects_v78_without_migration ... ok
+test native_kernel::d4::d4_boss_b0_add_fellow_api_appends_and_marks_boss_side ... ok
+test native_kernel::combat::propagated_damage_is_full_resolution ... ok
+test native_kernel::d4::d4_boss_b0_change_boss_api_reinit_updates_pointer ... ok
+test native_kernel::d4::d4_boss_b0_ban_query_stub_always_false ... ok
+test native_kernel::combat::normal_damage_does_not_propagate ... ok
+test native_kernel::d4::d4_boss_b1_qingmu_host_tags ... ok
+test native_kernel::d4::d4_boss_b0_stage_state_default_none_roundtrip ... ok
+test native_kernel::combat::thunder_damage_propagates_and_unlinks_all ... ok
+test native_kernel::d4::d4_boss_b2_sixiang_host_tags ... ok
+test native_kernel::combat::sha_dodge_damage_limit_and_range ... ok
+test native_kernel::combat::fire_sha_propagates_through_chain ... ok
+test native_kernel::d4::d4_boss_b0_hash_includes_stage_fields ... ok
+test native_kernel::d4::d4_boss_b3_sixiang3_host_tags ... ok
+test native_kernel::d4::d4_boss_b1_qingmu3_chain_to_taihao_sides ... ok
+test native_kernel::cixiong::cixiong_opposite_gender_discard_or_draw ... ok
+test native_kernel::d4::d4_boss_b2_chiyan2_chain_to_zhurong ... ok
+test a0_tag_registry::machine_snapshot_tags_unique_and_roundtrip ... ok
+test native_kernel::d4::d4_boss_b4_host_tags ... ok
+test native_kernel::d4::d4_boss_b1_qingmu2_chain_to_goumang ... ok
+test native_kernel::d4::d4_boss_b3_chiyan3_chain_to_yandi_sides ... ok
+test native_kernel::d4::d4_boss_b2_baimang2_chain_to_rushou ... ok
+test native_kernel::boss_zhuque::boss_zhuque_fentian_red_cards ... ok
+test native_kernel::d4::d4_boss_b3_baimang3_chain_to_shaohao_sides ... ok
+test native_kernel::d4::d4_boss_b3_xuanlin3_chain_to_zhuanxu ... ok
+test native_kernel::d4::d4_boss_b4_baiyi_discard_thunder_and_draw ... ok
+test native_kernel::d4::d4_boss_b4_qingyi_rounds_change_hp ... ok
+test native_kernel::d4::d4_boss_b4_chiyi_mark_then_real_damage ... ok
+test native_kernel::d4::d4_boss_b2_xuanlin2_chain_to_gonggong ... ok
+test native_kernel::dead::dead_skill_holder_excluded_from_rewrite ... ok
+test native_kernel::death::death_clears_judge_zone ... ok
+test native_kernel::daqiao::daqiao_guose_diamond_as_le ... ok
+test native_kernel::d4::d4_boss_b4_bianshen4_changes_boss_seeded ... ok
+test native_kernel::d4::d4_boss_b4_huanren_dizang_and_zhuanlun_not_yingji ... ok
+test native_kernel::diaochan::diaochan_biyue_draws_at_end_phase ... ok
+test native_kernel::duel::duel_alternating_sha_until_pass ... ok
+test native_kernel::distance::distance_clamp_to_minimum_1 ... ok
+test native_kernel::duel::duel_damage_can_kill ... ok
+test native_kernel::discard::discard_phase_enforces_hand_limit ... ok
+test native_kernel::duel::duel_can_be_nullified ... ok
+test native_kernel::d4::d4_boss_b4_huanren_die_picks_successor_and_removes_mengpo ... ok
+test native_kernel::d4::d4_boss_b4_bianshen3_changes_boss_seeded ... ok
+test native_kernel::e01::e01_extension_registry_lifecycle ... ok
+test native_kernel::e02::e02_registry_rejects_uninstalled_operations ... ok
+test native_kernel::doudizhu::doudizhu_binglin_opening_draw ... ok
+test native_kernel::duel::duel_no_sha_immediate_loss ... ok
+test native_kernel::boss_zhuyan::boss_zhuyan_xushi_flip_and_aoe ... ok
+test native_kernel::e03::e03_extension_cards_in_catalog_and_game ... ok
+test native_kernel::e06::e06_extension_general_metadata ... ok
+test native_kernel::duel::duel_does_not_consume_sha_limit ... ok
+test native_kernel::e05::e05_extension_card_in_game ... ok
+test native_kernel::dying::dying_save_with_jiu_derivation_restores ... ok
+test native_kernel::e04::e04_extension_conflict_detection ... ok
+test native_kernel::doudizhu::doudizhu_mode_victory_and_roundtrip ... ok
+test native_kernel::ganning::ganning_qixi_black_card_as_dismantle ... ok
+test native_kernel::general::general_assembly_grants_and_remove_revokes_slot_skills ... ok
+test native_kernel::equipment::equip_distance_skips_dead_players ... ok
+test native_kernel::general::general_bundle_grant_full_skill_set ... ok
+test native_kernel::gongsunzan::gongsunzan_assembly_yicong_distance ... ok
+test native_kernel::e03::e03_extension_catalog_content_lock_in_game_and_restore ... ok
+test native_kernel::equipment::equip_horses_weapon_range_and_replacement ... ok
+test native_kernel::guanyu::guanyu_wusheng_red_card_as_sha ... ok
+test native_kernel::guidao::guidao_rewrite_replaces_judgment ... ok
+test native_kernel::fangtian::fangtian_multi_target_sha ... ok
+test native_kernel::guanshi::guanshi_forces_damage_after_dodge ... ok
+test native_kernel::dying::dying_rescue_and_death ... ok
+test native_kernel::ganfuren::ganfuren_assembly_shushen_shenzhi ... ok
+test native_kernel::guojia::guojia_jiji_draws_and_gives_one_card ... ok
+test native_kernel::guidao::guidao_tiandu_combo_final_card_gained ... ok
+test native_kernel::guozhan::guozhan_compensatory_reveal_during_targeting ... ok
+test native_kernel::guidao::guidao_two_holders_asked_in_seat_order ... ok
+test native_kernel::guozhan::guozhan_reveal_gating_view_isolation ... ok
+test native_kernel::huanggai::huanggai_kurou_lose_hp_draw_two ... ok
+test native_kernel::guozhan::guozhan_general_slots_roundtrip ... ok
+test native_kernel::hanbing::hanbing_prevents_damage_discards_two_cards ... ok
+test native_kernel::host::host_assembler_prototype_contract ... ok
+test native_kernel::huatuo::huatuo_qingnang_heals_wounded_player ... ok
+test native_kernel::hujia::hujia_pending_ask_byte_roundtrip_restores ... ok
+test native_kernel::huangyueying::huangyueying_jizhi_draws_on_trick ... ok
+test native_kernel::hujia::hujia_asks_wei_helpers_in_seat_order_and_continues_after_pass ... ok
+test native_kernel::equipment::armor_bagua_judgement_semantics ... ok
+test native_kernel::hujia::hujia_shan_counts_toward_wushuang_requirement ... ok
+test native_kernel::guozhan::guozhan_m3_faction_victory ... ok
+test native_kernel::hujia::hujia_public_asks_do_not_leak_hidden_shan ... ok
+test native_kernel::hujia::hujia_skips_non_wei_helpers ... ok
+test native_kernel::identity::identity_lord_killing_loyalist_discards_all ... ok
+test native_kernel::identity::identity_lord_penalty_discards_equips ... ok
+test native_kernel::identity::identity_lord_side_wins_when_rebels_and_traitor_dead ... ok
+test native_kernel::identity::identity_lord_death_decides_by_faction ... ok
+test native_kernel::identity::identity_rebel_death_rewards_killer ... ok
+test native_kernel::jiu::jiu_bonus_survives_byte_restore ... ok
+test native_kernel::jijiang::jijiang_activate_not_phase_locked ... ok
+test native_kernel::jijiang::jijiang_pending_ask_restore_continues ... ok
+test native_kernel::jiu::jiu_saves_dying_player ... ok
+test native_kernel::identity::identity_matrix_for_supported_seats ... ok
+test native_kernel::jiu::jiu_boosts_next_sha_once_per_turn ... ok
+test native_kernel::judgement::bing_judgement_skips_draw_phase ... ok
+test native_kernel::general::general_faction_mapping_complete ... ok
+test native_kernel::judgement::delayed_trick_bing_and_shandian_nullify_window ... ok
+test native_kernel::judgement::delayed_trick_play_time_nullify_window ... ok
+test native_kernel::judgement::judge_lightning_saved_by_enough_taos ... ok
+test native_kernel::judgement::judge_order_delayed_first_then_lightning_hit_kills ... ok
+test native_kernel::judgement::judge_zone_same_name_limit ... ok
+test native_kernel::judgement::judgement_event_order_rewrite_then_tiandu ... ok
+test native_kernel::judgement::judgement_no_rewrite_single_finalized ... ok
+test native_kernel::judgement::judge_owner_death_settles_zones_and_conservation ... ok
+test native_kernel::judgement::lightning_damage_has_no_card ... ok
+test native_kernel::judgement::lightning_miss_to_next_with_same_name_discards ... ok
+test native_kernel::identity::identity_full_match_replay_reaches_lord_side_victory ... ok
+test native_kernel::judgement::le_judgement_skips_play_phase ... ok
+test native_kernel::judgement::judge_order_grouping_multi_cards_and_restore ... ok
+test native_kernel::kof::kof_engine_mode_session_advance ... ok
+test native_kernel::distance::distance_range_reference_differential ... ok
+test native_kernel::last::last_rebel_reward_precedes_victory ... ok
+test native_kernel::judgement::lightning_miss_transfer_skips_dead_seat ... ok
+test native_kernel::leisha::leisha_pending_ask_byte_roundtrip ... ok
+test native_kernel::general::general_table_grants_all_bundles ... ok
+test native_kernel::leisha::leisha_resolves_as_sha_and_shares_limit ... ok
+test native_kernel::liubei::liubei_rende_gives_cards_and_heals ... ok
+test native_kernel::luxun::luxun_lianying_draws_after_losing_last_card ... ok
+test native_kernel::luoshen::luoshen_repeat_judgement_gains_black_cards ... ok
+test native_kernel::liubei::liubei_jijiang_borrows_sha_from_shu_helper ... ok
+test native_kernel::lidian::lidian_assembly_xunxun_wangxi ... ok
+test native_kernel::luxun::luxun_qianxun_blocks_le_target ... ok
+test native_kernel::luxun::luxun_lianying_triggers_on_forced_discard ... ok
+test native_kernel::kof::kof_m1_two_player_pure_command_endgame ... ok
+test native_kernel::lvbu::lvbu_wushuang_sha_needs_two_dodges ... ok
+test native_kernel::n04f::n04f_snapshot_association_validation ... ok
+test native_kernel::lvmeng::lvmeng_keji_skips_discard_without_sha ... ok
+test native_kernel::machao::machao_mashu_distance_minus_one ... ok
+test native_kernel::machao::machao_tieji_judgement_blocks_shan_on_red ... ok
+test native_kernel::lvbu::lvbu_wushuang_duel_needs_double_sha ... ok
+test native_kernel::n08::n08_lijian_forces_duel ... ok
+test native_kernel::n08::n08_jieyin_heals_both ... ok
+test native_kernel::n08::n08_hujia_borrows_shan_from_others ... ok
+test native_kernel::n08::n08_liuli_transfers_sha_target ... ok
+test native_kernel::n10::n10_planner_cancel_and_deadline ... ok
+test native_kernel::n08::n08_fanjian_give_and_damage ... ok
+test native_kernel::n08::n08_jijiu_red_card_as_tao ... ok
+test native_kernel::n10::n10_policy_input_isolation ... ok
+test native_kernel::n08::n08_qingguo_qicai_jiuyuan ... ok
+test native_kernel::n10::n10_planner_isolation_and_budget ... ok
+test native_kernel::identity::identity_pure_command_traitor_victory ... ok
+test native_kernel::n11::n11_kof_session_parse_negatives ... ok
+test native_kernel::no::no_nullify_window_for_basic_card ... ok
+test native_kernel::n10a::n10a_private_choice_answer_hidden_from_others ... ok
+test native_kernel::n10::n10_planner_stale_rejection ... ok
+test native_kernel::negative::negative_hp_rescued_by_three_taos ... ok
+test native_kernel::n11b::n11b_archive_header_and_length_validation ... ok
+test native_kernel::n11a::n11a_auth_token_instance_and_generation_binding ... ok
+test native_kernel::n11::n11_reveal_grants_skills_and_hp ... ok
+test native_kernel::no::no_paoxiao_second_sha_rejected ... ok
+test native_kernel::nullify::nullify_cancels_savage ... ok
+test native_kernel::d4::d4_boss_b4_huanren_boot_bans_and_may_spawn_mengpo ... ok
+test native_kernel::guozhan::guozhan_m3_victory_regression_matrix ... ok
+test native_kernel::nullify::nullify_on_nullify_reverses ... ok
+test native_kernel::nullify::nullify_rejected_when_played_actively ... ok
+test native_kernel::presentation::presentation_visibility_and_render_determinism ... ok
+test native_kernel::probe::probe_tashui2_tmp ... ok
+test native_kernel::p2::p2_death_with_machine_held_cards ... ok
+test native_kernel::qilin::qilin_bow_discards_target_horse_on_sha_damage ... ok
+test native_kernel::p2::p2_new_choice_points_per_submission_conservation ... ok
+test maintenance_guards::production_sources_have_no_debug_output_or_env_switches ... ok
+test native_kernel::qinggang::qinggang_pierces_armor ... ok
+test native_kernel::qinglong::qinglong_replays_sha_after_dodge ... ok
+test native_kernel::render::render_frame_guozhan_generals_isolation ... ok
+test native_kernel::rende::rende_cumulative_crosses_two_across_activations ... ok
+test native_kernel::rejections::rejections_leave_state_unchanged ... ok
+test native_kernel::renwang::renwang_blocks_black_sha_only ... ok
+test native_kernel::identity::identity_pure_command_match_reaches_outcome ... ok
+test native_kernel::replay::replay_different_seed_diverges ... ok
+test native_kernel::replay::replay_determinism_same_seed_identical ... ok
+test native_kernel::rollback::abort_requires_open_segment_and_nonsliced_rollback_unchanged ... ok
+test native_kernel::rollback::abort_after_restore_restores_segment_start ... ok
+test native_kernel::rollback::aborted_segment_restores_pre_command_state ... ok
+test native_kernel::rollback::budget_exhaustion_rolls_back ... ok
+test native_kernel::rollback::abort_contract_direct_vs_restored_identical ... ok
+test native_kernel::sancai::sancai_nested_choice_chain_and_decline ... ok
+test native_kernel::simayi::simayi_fankui_steals_from_damage_source ... ok
+test native_kernel::simayi::simayi_fankui_decline_takes_nothing ... ok
+test native_kernel::simayi::simayi_guicai_rewrites_with_any_suit_card ... ok
+test native_kernel::seat::seat_quota_bounds_commands_and_resets_per_round ... ok
+test native_kernel::shouyi::shouyi_grants_temporary_yishang_until_owner_turn_end ... ok
+test native_kernel::sun::sun_xiangxiang_jixiang_draws_on_equip_loss ... ok
+test native_kernel::shandian::shandian_hits_and_transfers ... ok
+test native_kernel::snatch::snatch_steals_card_within_distance ... ok
+test native_kernel::suidun::suidun_prevents_once_per_turn ... ok
+test native_kernel::sunquan::sunquan_zhiheng_discard_n_draw_n ... ok
+test native_kernel::suqing::suqing_disables_queued_suidun_mid_resolution ... ok
+test native_kernel::suspension::suspended_segment_rejects_commands_and_resume_requires_open_segment ... ok
+test native_kernel::tiandu::tiandu_other_holder_not_asked ... ok
+test native_kernel::tiandu::tiandu_gain_own_judge_card_only ... ok
+test native_kernel::skill::skill_disabled_gate_excludes_rewriter ... ok
+test native_kernel::n10::n10_planner_baseline_completes_games ... ok
+test native_kernel::versus::versus_4v4_eight_seats_team_victory ... ok
+test native_kernel::wuzhong::wuzhong_taoyuan_trick_behaviors ... ok
+test native_kernel::xiahoudun::xiahoudun_ganglie_non_heart_reflects ... ok
+test native_kernel::snapshot::snapshot_roundtrip_while_suspended ... ok
+test native_kernel::weapon::weapon_replacement_terminates_old_range ... ok
+test native_kernel::versus::versus_mode_team_victory_and_rewards ... ok
+test native_kernel::wugu::wugu_jiedao_trick_behaviors ... ok
+test native_kernel::zhangba::zhangba_two_cards_as_sha ... ok
+test native_kernel::versus::versus_substitute_revive_on_death ... ok
+test native_kernel::zhangfei::zhangfei_paoxiao_removes_sha_limit ... ok
+test native_kernel::yiji::yiji_assembly_jijie_jiyuan ... ok
+test native_kernel::zhiheng::zhiheng_decline_draws_nothing ... ok
+test native_kernel::yishang::yishang_redirects_damage_in_before_window ... ok
+test native_kernel::zhaoyun::zhaoyun_longdan_sha_as_dodge ... ok
+test native_kernel::replay::replay_and_restore_per_command_parity ... ok
+test native_kernel::yuanshu::yuanshu_assembly_wangzun_tongji ... ok
+test native_kernel::reshuffle::reshuffle_conserves_every_card_exactly_once ... ok
+test native_kernel::xuchu::xuchu_luoyi_boosts_sha_damage ... ok
+test native_kernel::zhugeliang::zhugeliang_kongcheng_blocks_sha_and_duel_targets ... ok
+test native_kernel::zhuge::zhuge_crossbow_unlimited_sha ... ok
+test native_kernel::standard::standard_missing_generals_assembly_and_behaviors ... ok
+test native_kernel::zhouyu::zhouyu_yingzi_extra_draw_at_draw_phase ... ok
+test view_isolation::ai_session_is_seat_bound_readonly_projection ... ok
+test native_kernel::suspension::time_slice_resumes_to_identical_result ... ok
+test view_isolation::ai_session_non_observer_sees_limited_choice ... ok
+test native_kernel::zhangliao::zhangliao_tuxi_replaces_draw ... ok
+test native_kernel::zhugeliang::zhugeliang_guanxing_reorders_deck_top ... ok
+test view_isolation::choice_options_visible_only_to_observer ... ok
+test view_isolation::seat_views_hide_opponent_hands_and_deck ... ok
+test view_isolation::view_public_fields_match_authoritative_state ... ok
+test replay_scenarios::scenarios_are_registered_in_coverage_manifest ... ok
+test view_isolation::event_view_hides_other_players_drawn_cards ... ok
+test native_kernel::zhu::zhu_skills_require_lord_role_in_identity_mode ... ok
+test view_isolation::isolation_holds_across_game_progress ... ok
+test replay_scenarios::pa12_print_golden_hex ... ok
+test replay_scenarios::replay_scenarios_match_golden ... ok
+test native_kernel::p2::p2_identity_endgame_per_submission_parity ... ok
+test native_kernel::kof::kof_session_consistency_and_midrestore ... ok
+test native_kernel::identity::identity_versus_boss_replay_restore_parity ... ok
+
+test result: ok. 435 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+
+     Running tests/groups/l_rounds.rs (target/debug/deps/l_rounds-a92a20e91eea3b74)
+
+running 43 tests
+test l19_brawl_batch1::shishi_gains_max_hp_and_recovers ... ok
+test l19_brawl_batch1::xunmeng_absent_normal ... ok
+test l19_zaibian_batch2::zaibian_absent_no_draw ... ok
+test l19_brawl_batch1::xunmeng_adds_damage_and_loses_hp ... ok
+test l19_zaibian_batch2::zaibian_draws_by_identity_counts ... ok
+test l20_config_mods_batch1::absent_no_mods ... ok
+test l20_config_mods_batch1::mopai_doubles_draw ... ok
+test l20_config_mods_batch1::xueliang_doubles_hp ... ok
+test l20_kurou_batch2::kurou_absent_rejected ... ok
+test l20_kurou_batch2::kurou_loses_hp_and_draws ... ok
+test l20_kurou_batch2::zhuwanzhongji_succession ... ok
+test l20_liegong_batch3::liegong_direct_hit_when_hand_ge_hp ... ok
+test l20_liegong_batch3::xinkuanggu_draws_or_recovers ... ok
+test l09_qhly_eight::l09_eight_dimension_from_fresh_install ... ok
+test l04_cardpile_eight::l04_eight_dimension_from_fresh_install ... ok
+test l17_douzhuan_eight::l17_eight_dimension_from_fresh_install ... ok
+test l07_omnisearch::l07_eight_dimension_from_fresh_install ... ok
+test l27_jishe_batch5::jishe_absent_rejected ... ok
+test l27_jishe_batch5::jishe_draws_and_marks ... ok
+test l27_new_meibu_batch3::new_meibu_absent_no_window ... ok
+test l27_new_meibu_batch3::new_meibu_locks_target_for_play_phase ... ok
+test l27_new_zhixi_batch2::new_zhixi_absent_no_lock ... ok
+test l27_new_zhixi_batch2::new_zhixi_locks_after_trick ... ok
+test l27_sbzhaxiang_batch4::sbzhaxiang_absent_normal_draw ... ok
+test l27_sbzhaxiang_batch4::sbzhaxiang_absent_sha_limited ... ok
+test l27_sbzhaxiang_batch4::sbzhaxiang_extra_draw ... ok
+test l27_sbzhaxiang_batch4::sbzhaxiang_unlimited_sha ... ok
+test l05_coin_eight::l05_eight_dimension_from_fresh_install ... ok
+test l27_xiefang_batch1::xiefang_absent_no_effect ... ok
+test l27_xiefang_batch1::xiefang_reduces_distance_by_alive_females ... ok
+test l22_elo_eight::l22_eight_dimension_from_fresh_install ... ok
+test l10_epic_cards_eight::l10_eight_dimension_from_fresh_install ... ok
+test l18_update_guard_eight::l18_eight_dimension_from_fresh_install ... ok
+test l13_shousha_mvp_eight::l13_eight_dimension_from_fresh_install ... ok
+test l02_sj_eight::l02_eight_dimension_from_fresh_install ... ok
+test l16_drag_read_eight::l16_eight_dimension_from_fresh_install ... ok
+test l01_ai_tuning_eight::l01_eight_dimension_from_fresh_install ... ok
+test l21_martial_eight::l21_eight_dimension_from_fresh_install ... ok
+test l15_shousha_eight::l15_eight_dimension_from_fresh_install ... ok
+test l24_skin_switch_eight::l24_eight_dimension_from_fresh_install ... ok
+test l23_desktop_adapt::l23_eight_dimension_from_fresh_install ... ok
+test l26_fool_eight::l26_eight_dimension_from_fresh_install ... ok
+test l29_longxue_eight::l29_eight_dimension_from_fresh_install ... ok
+
+test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.51s
+
+     Running tests/groups/misc.rs (target/debug/deps/misc-3277563faac06506)
+
+running 231 tests
+test adr0786_j2_active_bridge::author_active_index_is_available_after_formal_bridge ... ok
+test adr0786_j2_active_bridge::unsupported_active_contracts_and_entry_pc_reject_explicitly ... ok
+test adr0786_j2_active_bridge::active_skill_retains_every_trigger_handler ... ok
+test adr0786_j2_active_bridge::author_active_and_trigger_share_skill_identity_and_storage ... ok
+test adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration ... FAILED
+test adr0786_j2_effect_choices::content_callbacks_and_effect_codec_work_before_host_abi_is_advertised ... ok
+test adr0786_j2_effect_choices::pingkou_counts_real_skips_and_settles_each_damage_before_drawing ... ok
+test adr0786_j2_review_regressions::active_body_with_preceding_draw_or_unreachable_danshou_is_not_pre_rejected ... ok
+test adr0786_j2_effect_choices::actual_pinghe_source_keeps_max_hp_hand_limit_and_prevention_timing ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_can_kill_target_before_its_draw_is_started ... ok
+test adr0786_j2_review_regressions::grouped_following_handler_rechecks_owner_and_instance_after_first_handler ... ok
+test adr0786_j2_effect_choices::fenghe_actual_give_and_filtered_recast_keep_damage_prevented_across_checkpoints ... ok
+test adr0786_j2_effect_choices::danshou_insufficient_discard_cancel_and_next_play_phase_reset ... ok
+test adr0786_j2_review_regressions::danshou_hand_theft_is_movement_without_gift_benefits_after_byte_restore ... ok
+test ai_content_tuning::content_tuning_defaults_and_helpers ... ok
+test adr0786_j2_review_regressions::fenghe_genuine_gift_keeps_cards_given_and_giver_benefit ... ok
+test adr0786_j2_review_regressions::grouped_following_waits_for_last_discard_subtree_before_rechecking_owner ... ok
+test adr0786_j2_review_regressions::fenghe_forged_deck_reference_rejects_byte_restore_without_double_ownership ... ok
+test adr0786_j2_review_regressions::danshou_equipment_theft_preserves_loss_and_revokes_equipment_skills ... ok
+test ai_planner::plan_enumerates_single_choice_fallbacks ... ok
+test adr0786_j2_review_regressions::trigger_to_active_storage_reads_share_logical_identity_and_are_owner_scoped ... ok
+test adr0786_j2_effect_choices::pingkou_prevention_and_nested_dying_save_or_death_resume_without_duplicate_draw ... ok
+test ai_planner::plan_enumerates_confirm_and_cancel_fallbacks ... ok
+test adr0786_j2_review_regressions::danshou_owner_draw_subtree_finishes_before_target_draw_and_ordinal_discard ... ok
+test ai_planner::plan_pipeline_works_with_hidden_opponent_cards ... ok
+test ai_planner::redact_preserves_card_ownership_and_multiset ... ok
+test ai_planner::plan_apply_roundtrip_at_high_water ... ok
+test ai_planner::policy_v2_plays_value_card_and_is_deterministic ... ok
+test ai_planner::redact_deterministic_with_empty_deck_fallback ... ok
+test ai_content_tuning::content_tuning_is_deterministic ... ok
+test ai_planner::policy_and_plan_reject_cleanly_at_dedup_exhaustion ... ok
+test ai_content_tuning::content_tuning_prefers_high_weight_enemy ... ok
+test ai_planner::redact_shuffles_unknown_pool_when_deck_present ... ok
+test ai_planner::t13_plan_cancel_mid_run_cross_thread ... ok
+test c331_package_schema::immutable_schema3_character_module_alias_resolves_without_rewriting_package ... ok
+test c331_package_schema::malformed_order_json_is_rejected ... ok
+test ai_planner::plan_sim_uses_session_high_water ... ok
+test ai_planner::t13_plan_pool_parallel_matches_sequential ... ok
+test ai_planner::t13_plan_pool_more_seats_than_workers_keeps_order ... ok
+test c331_package_schema::nondefault_schema3_is_rejected_even_after_rehash ... ok
+test c331_package_schema::order_segment_binds_each_original_position_and_handler_even_with_duplicate_trigger_ids ... ok
+test c331_package_schema::public_bridge_validates_whole_package ... ok
+test c331_package_schema::schema_matrix_and_native_metadata_use_real_valid_dsl_module ... ok
+test c331_package_schema::real_old_default_bytes_and_logic_hash_remain_identical ... ok
+test ai_planner::two_ply_lookahead_deterministic_and_bounded ... ok
+test d5_longxue_mbqianlong::longxue_package_maps_host_and_defers_external ... ok
+test d5_longxue_mbqianlong::longxue_threshold_grants_when_skill_exists ... ok
+test d5_longxue_mbqianlong::longxue_opening_marks_twenty_or_sixty ... ok
+test d5_longxue_mbqianlong::longxue_marks_accumulate_and_cap ... ok
+test d5_longxue_mbqianlong::qingzheng_no_damage_when_target_discards_enough ... ok
+test d5_longxue_mbqianlong::qingzheng_discards_both_sides_and_punishes_fewer ... ok
+test adr0786_j2_effect_choices::fenghe_rewards_only_actual_give_with_owned_yingba_and_living_damage_source ... ok
+test d5_longxue_mbqianlong::longxue_weitong_registration_only ... ok
+test epic_rangjie_after_damage::rangjie_gains_basic_card ... ok
+test adr0786_j2_review_regressions::danshou_option_four_every_continuation_stage_roundtrips_and_matches_uninterrupted ... ok
+test adr0786_j2_review_regressions::grouped_handler_checkpoint_before_following_preserves_death_and_disabled_gate ... ok
+test epic_reguhuo_viewas::reguhuo_absent_rejected ... ok
+test epic_rangjie_after_damage::rangjie_moves_card_between_players ... ok
+test epic_rangjie_after_damage::rangjie_decline_and_absent ... ok
+test epic_reguhuo_viewas::reguhuo_declares_sha_with_target ... ok
+test epic_reguhuo_viewas::reguhuo_declares_tao_from_hand ... ok
+test c331_package_schema::formal_install_keeps_old_lock_bytes_and_rejects_tampered_same_version_before_idempotency ... ok
+test epic_reguhuo_viewas::reguhuo_is_once_per_turn ... ok
+test fuzz_corpus_replay::replay_bytecode_verify_on_decoded_corpus ... ok
+test fuzz_corpus_replay::replay_fuzz_bytecode_module_corpus ... ok
+test nc09_gaiming_cancel::cancel_preserves_physical_multiset_and_restores ... ok
+test nc09_gaiming_cancel::genuine_331_pending_archive_is_version_rejected ... ok
+test nc09_machine_ownership::gaiming_projects_seven_candidates_once ... ok
+test nc09_gaiming_cancel::cancel_then_normal_judgement_and_pick_control ... ok
+test adr0786_j2_effect_choices::danshou_all_four_options_settle_then_discard_ordinal_with_every_choice_checkpoint ... ok
+test nc09_machine_ownership::gaiming_only_first_candidate_aliases_judge_card ... ok
+test nc09_machine_ownership::jijie_projects_bottom_card ... ok
+test e02_c3_lifecycle::e03_c3_uninstall_during_active_game_lock_pinned ... ok
+test nc09_machine_ownership::gaiming_archive_restores_and_resumes ... ok
+test e02_c3_lifecycle::e02_c3_upgrade_rebinds_lock_and_rollback_restores_v1 ... ok
+test nc09_machine_ownership::jijie_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::haotianta_projects_both_candidates ... ok
+test nc09_machine_ownership::inactive_storage_and_finalized_judge_references_are_not_owned ... ok
+test nc09_machine_ownership::xunxun_archive_restores_and_resumes ... ok
+test nc09_machine_ownership::xunxun_projects_four_held_cards ... ok
+test nc09_machine_ownership::parked_card_collection_and_expected_asks_recurse_through_all_existing_wrappers ... ok
+test nc09_machine_ownership::liaoyuan_real_suit_scalar_snapshot_derives_its_ask_and_restores ... ok
+test nc09_referee_projection::full_info_entry_cannot_escape_to_ordinary_views_or_ai_sessions ... ok
+test pa01_catalog_index_equivalence::dispatch_candidates_match_trigger_meta_membership ... ok
+test nc09_referee_projection::referee_reveals_both_dark_generals_and_identities_without_mutating_authority ... ok
+test pa01_catalog_index_equivalence::synthetic_catalog_membership_and_first_match_name ... ok
+test nc09_referee_projection::referee_includes_machine_held_cards_and_private_choice_after_archive ... ok
+test pa12_batch1_vocabulary::pa12_batch1_owner_alive_triggers_on_others_end_phase ... ok
+test pa12_batch1_vocabulary::pa12_batch1_vocabulary_mapping_and_strict_reject ... ok
+test nc09_machine_ownership::archive_encoding_rejects_unknown_prompts_without_changing_existing_layout ... ok
+test pa12_batch1_vocabulary::pa12_batch1_owner_is_source_after_own_card_used ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_filter_mapping ... ok
+test pa08_fullhand_dump::pa08_fullhand_dump ... ok
+test pa12_batch2_phase_events::pa12_batch2_sha_dodged_owner_is_source ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_is_source_or_target ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_source_ordinary_trick ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_alive_not_target ... ok
+test pa12_batch3_filter_predicates::pa12_batch3_owner_source_sha ... ok
+test nc09_machine_ownership::liaoyuan_invalid_scalar_stage_and_candidate_still_reject ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_2_accept_rejects_zero_count ... ok
+test pa12_batch3b_once_limits::pa12_batch3b_once_per_turn_window ... ok
+test pa12_batch3b_once_limits::pa12_batch3b_once_per_round_window ... ok
+test pa12_batch2_phase_events::pa12_batch2_phase_begin_is_turn_start_of_owner_only ... ok
+test ai_planner::policy_v2_drives_all_seats_without_answer_routing_panic ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_2_discard_hand_equip_count ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_1_turn_over_toggles_face ... ok
+test pa12_batch4_1_host_primitives::pa12_batch4_3_damage_rewrite_window ... ok
+test pa12_dsl_native_prototype::pa12_dsl_choice_max_hp_branch ... ok
+test pa12_dsl_native_prototype::pa12_dsl_choice_recover_branch ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_4_dichou_predicates ... ok
+test nc09_machine_ownership::liaoyuan_privacy_candidates_and_equipment_history_survive_byte_restores ... ok
+test pa12_tag656_version::v322_archive_is_rejected_and_current_archive_round_trips ... ok
+test standard_catalog_inventory::defective_kinds_hold_declared_counts ... ok
+test pa12_dsl_native_prototype::pa12_dsl_fires_once_per_turn_at_end_phase_and_first_answer_lands ... ok
+test standard_catalog_inventory::standard_catalog_matches_declared_inventory ... ok
+test t11_boss_pangtong_niepan::niepan_dying_save_or_decline ... ok
+test pa12_dsl_native_prototype::pa12_dsl_pause_save_restore_resume_both_branches ... ok
+test t11_boss_pangtong_niepan::niepan_play_phase_effect_and_yuhuo_chain ... ok
+test nc09_machine_ownership::machine_ownership_still_rejects_duplicate_missing_and_out_of_range_cards ... ok
+test t11_boss_pangtong_niepan::shenwei_draw_and_hand_limit_bonus ... ok
+test t11_boss_pangtong_niepan::niepan_state_roundtrip ... ok
+test t11_boss_zhugeliang_hlss::hlss_fengqi_decline_does_nothing ... ok
+test t11_boss_zhugeliang_hlss::hlss_assembly_initializes_stars_and_light_refill ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_3_storage_set_clears_on_phase_play ... ok
+test t11_boss_zhugeliang_hlss::hlss_fengqi_picks_unused_trick_and_records ... ok
+test t11_boss_zhugeliang_hlss::hlss_gaiming_picks_judge_result_or_declines ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin2_blocks_turnover_and_voids_delayed_trick ... ok
+test nc09_machine_ownership::haotianta_archive_restores_and_resumes ... ok
+test pa12_batch4_1_host_primitives::pa12_batch5_fenli_bridges_with_skip_wiring ... ok
+test t11_boss_zhugeliang_hlss::hlss_yueyin_skip_prevents_star_loss ... ok
+test t11_boss_zhugeliang_hlss::hlss_with_infinite_hp_keeps_stars ... ok
+test nc09_machine_ownership::liaoyuan_byte_archive_restores_and_resumes ... ok
+test t11_boss_zhugeliang_hlss::hlss_zero_stars_awakens_and_stops_refill ... ok
+test nc09_machine_ownership::pending_choice_metadata_must_match_the_machine_after_byte_decode ... ok
+test pa12_dsl_native_prototype::pa12_dsl_filter_not_fired_when_unique_max ... ok
+test boss_play_eight::u02_eight_dimension_from_fresh_install ... ok
+test boss_play_eight::l03_eight_dimension_from_fresh_install ... ok
+test t12_g2g4_channels::g2g4_shaai_xianjian ... ok
+test t12_g2g4_channels::g2g4_cardpile_noname ... ok
+test t12_g2g4_channels::g2g4_cardpile_liuli ... ok
+test t12_dual_diag::diag_dual_namespace_hang_point ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_dual_namespace_worker ... ok
+test t12_g2g4_channels::g2g4_d3_select ... ok
+test t12_g2g4_channels::g2g4_shahai_gujian ... ok
+test t12_g5_relays::t12_g5_relay_d3_generals_worker ... ok
+test t12_g2g4_channels::g2g4_shahai_mtg ... ok
+test t12_g2g4_channels::g2g4_shahai_gwent ... ok
+test t12_g2g4_channels::g2g4_shahai_hearth ... ok
+test t12_g2g4_channels::g2g4_shaai_ow ... ok
+test t12_g2g4_channels::g2g4_shahai_swd ... ok
+test t12_g2g4_channels::g2g4_shahai_yunchou ... ok
+test t12_g2g4_channels::g2g4_shahai_zhenfa ... ok
+test t12_g2g4_channels::g2g4_wuxing ... ok
+test t12_g2g4_channels::g2g4_wudian ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_liuli ... ok
+test t12_g5_relays::t12_g5_relay_d3_generals ... ok
+test t13_info_isolation::deep_fields_turned_over_and_skills ... ok
+test t13_info_isolation::identity_role_visibility_and_death_reveal ... ok
+test t13_info_isolation::isolation_boss_stage_hidden ... ok
+test t13_info_isolation::isolation_doudizhu_two_sides ... ok
+test t12_g5_relays::t12_g5_relay_cardpile_dual_namespace ... ok
+test t13_info_isolation::isolation_generals_public_in_non_kingdoms_modes ... ok
+test t13_info_isolation::isolation_identity_roles_hidden ... ok
+test t13_info_isolation::isolation_kingdoms_seat_matrix ... ok
+test t13_info_isolation::isolation_kof_two_player ... ok
+test t13_info_isolation::isolation_planner_redaction_leaves_authority_intact ... ok
+test t13_info_isolation::isolation_prototype_seat_matrix ... ok
+test t13_info_isolation::isolation_versus_teammates_hidden ... ok
+test t8_rvm_bridge::t8_bte_kind_classification ... ok
+test t8_rvm_bridge::t8_bte_play_phase_filter_dual_gate_and_phase_kind ... ok
+test t12_g5_relays::t12_g5_relay_shaai_xianjian ... ok
+test t8_rvm_bridge::t8_bte_zero_count_negative ... ok
+test t8_rvm_bridge::t8_filter_damage_before_hand_empty_elemental_or_trick ... ok
+test t8_rvm_bridge::t8_filter_damage_source_movable_field_card ... ok
+test t8_rvm_bridge::t8_filter_param_hp_below_dual_gate_and_threshold ... ok
+test t12_g5_relays::t12_g5_relay_shaai_ow ... ok
+test t8_rvm_bridge::t8_filter_param_play_count_and_at_least_hp ... ok
+test t8_rvm_bridge::t8_filter_targeted_by_other_sha ... ok
+test t8_rvm_bridge::t8_filter_family_owner_gate_and_predicates ... ok
+test t8_rvm_bridge::t8_loader_maps_all_carried_named_filters ... ok
+test t8_rvm_bridge::t8_loader_maps_parameterized_filters ... ok
+test t8_rvm_bridge::t8_filter_tied_max_family ... ok
+test t8_rvm_bridge::t8_named_sha_once_dual_gate ... ok
+test t8_rvm_bridge::t8_rejection_caps_escalation_denied ... ok
+test t12_g5_relays::t12_g5_relay_shahai_hearth ... ok
+test t8_rvm_bridge::t8_named_wounded_sha_dual_gate ... ok
+test t8_rvm_bridge::t8_rejection_corrupted_bytecode_rejected_at_load ... ok
+test t8_rvm_bridge::t8_rejection_tampered_snapshot_module_rejected ... ok
+test t8_rvm_bridge::t8_rejection_unmapped_effect_rolls_back ... ok
+test t8_rvm_bridge::t8_skill_pile_then_nonempty_filter ... ok
+test t8_rvm_bridge::t8_vm_skill_content_lock_rejects_pack_drift ... ok
+test t8_rvm_bridge::t8_vm_skill_choice_suspend_resume_midrestore ... ok
+test t8_rvm_bridge::t8_vm_skill_filter_always ... ok
+test t8_rvm_bridge::t8_vm_skill_draw_branch_end_to_end ... ok
+test t8_rvm_bridge::t8_vm_skill_filter_owner_is_source ... ok
+test t8_rvm_bridge::t8_vm_skill_id_reverse_lookup_wired ... ok
+test t8_rvm_bridge::t8_vm_skill_fuel_exhaustion_rolls_back ... ok
+test t8_rvm_bridge::t8_vm_skill_loader_rejects_unsupported_filters ... ok
+test t8_rvm_bridge::t8_vm_skill_loader_bridge_end_to_end ... ok
+test t8_rvm_bridge::t8_named_filter_vocabulary_maps ... ok
+test t8_rvm_bridge::t8_vm_skill_recover_branch_end_to_end ... ok
+test t8_rvm_bridge::t8_vm_skill_save_restore_roundtrip ... ok
+test t8_rvm_bridge::vm_state_effects::t8_add_mark_writes ... ok
+test t8_rvm_bridge::vm_state_effects::t8_change_max_hp_writes ... ok
+test t8_rvm_bridge::vm_state_effects::t8_hand_count_query_gates_draw ... ok
+test t8_rvm_bridge::vm_state_effects::t8_lost_history_dual_gate ... ok
+test t8_rvm_bridge::vm_state_effects::t8_move_batch_dual_gate ... ok
+test t8_rvm_bridge::vm_state_effects::t8_skill_uses_remaining_dual_gate ... ok
+test t9_d5_surface::t9_infinity_hp_maps_to_sentinel ... ok
+test t9_d5_surface::t9_invalid_hp_values_are_rejected ... ok
+test t9_d5_surface::infinite_hp_survives_damage_and_recovery ... ok
+test t9_d5_surface::t9_unknown_mapping_is_not_a_noop ... ok
+test t9_d5_surface::t9_zhuge_and_ylyg_skills_stay_unmapped ... ok
+test t8_rvm_bridge::t8_vm_skill_cross_process_resume ... ok
+test t12_g5_relays::t12_g5_relay_shahai_mtg ... ok
+test u08_hero_kill_batch1::yxs_fanji_absent_no_window ... ok
+test t12_g5_relays::t12_g5_relay_shahai_gwent ... ok
+test u08_hero_kill_batch1::yxs_fanji_counterattacks_source ... ok
+test u08_menshen_batch2::menshen3_clears_marker ... ok
+test u08_menshen_batch2::menshen_marks_target ... ok
+test t12_g5_relays::t12_g5_relay_shahai_gujian ... ok
+test t12_g5_relays::t12_g5_relay_shahai_swd ... ok
+test t12_g5_relays::t12_g5_relay_shahai_yunchou ... ok
+test t13_info_isolation::isolation_extension_cards_hidden_like_standard ... ok
+test u01_d3_moyan::u01_moyan_from_real_install ... ok
+test t12_g5_relays::t12_g5_relay_shahai_zhenfa ... ok
+test t12_g5_relays::t12_g5_relay_wudian ... ok
+test u04_coin_eight::u04_eight_dimension_from_fresh_install ... ok
+test u03_cardpile_eight::u03_eight_dimension_from_fresh_install ... ok
+test t12_g5_relays::t12_g5_relay_wuxing ... ok
+test adr0786_j2_package_versions::shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_native_declarations ... ok
+
+failures:
+
+---- adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration stdout ----
+
+thread 'adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration' (40496430) panicked at crates/engine-native/tests/groups/../adr0786_j2_active_bridge.rs:145:5:
+assertion failed: matches!(Engine::restore(&decoded),
+    Err(engine_native::snap::SnapshotError::RuleVersionMismatch
+    { snapshot: 328, catalog: 331 }))
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    adr0786_j2_active_bridge::current_gate_rejects_native_rules328_archive_without_migration
+
+test result: FAILED. 230 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.00s
+
+error: test failed, to rerun pass `-p engine-native --test misc`
+     Running tests/groups/nc08.rs (target/debug/deps/nc08-d7fa325f73a93fd6)
+
+running 127 tests
+test c331_host_source_metadata::direct_source_profiles_keep_priority_silent_and_translated_choice_qualification ... ok
+test c331_damage_windows::gujian_food_ordering_matches_the_actual_liuli_add_list_formula ... ok
+test c331_source_order_phase5::phase5_all44_source_tuples_match_the_current_native_bindings ... ok
+test c331_damage_windows::trigger_only_intrinsic_slot_cannot_hide_wrong_window ... ok
+test c331_damage_windows::actual_active_catalog_module_keeps_its_intrinsic_resume_path ... ok
+test c331_damage_windows::trigger_only_no_frame_sentinel_cannot_hide_wrong_window ... ok
+test c331_host_source_metadata::actual_silent_first_handler_runs_before_the_normal_order_choice_and_restores ... ok
+test nc08_config_acceptance::config_invalid_data_rejected ... ok
+test c331_source_order_phase5::phase5_yuchan_normal_swaps_real_card_before_the_next_owner_instead_of_waiting_last ... ok
+test c331_source_order_phase5::phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first ... ok
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+test c331_damage_windows::before_storage_and_after_draw_once_survive_both_commit_pauses ... ok
+test nc08_card_ownership_partition::card_ownership_partition_roundtrip ... ok
+test nc08_config_acceptance::config_init_hook_parses ... ok
+test nc08_composition_acceptance::composition_duplicate_card_names_report ... ok
+test nc08_loader_card_skills::card_skills_declare_host_skill ... ok
+test nc08_loader_card_skills::card_skills_deduplicated ... ok
+test nc08_config_acceptance::config_metadata_complete ... ok
+test nc08_loader_card_skills::unknown_card_skill_key_rejected ... ok
+test nc08_conversion_gap_regression::conversion_gap_inventory_is_still_absent ... ok
+test nc08_loader_card_skills::real_pack_still_bridges ... ok
+test nc08_config_acceptance::config_enabled_flag_gates_cards ... ok
+test nc08_prepare_phase_mapping::prepare_phase_triggers_are_folded_into_judge_begin ... ok
+test nc08_prepare_phase_mapping::xiuluo_filter_requires_hand_which_upstream_does_not ... ok
+test nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger ... ignored, 登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::cap_card_targeted ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_damage_begin_second ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_death_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_game_start ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_judge_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_after ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_before ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::cap_sha_begin ... ignored, 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档
+test nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner ... ignored, 登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::g20_jiuwei_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_liyutang_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_paotai2_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_zhucheng_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g20_ziyu_turn_end ... ignored, 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_registered_defect_guards::g23_binxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_donghuangzhong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_guangshu_spade_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_huanling_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_jidong_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lingxin_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lingyu_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_lqingcheng_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_menshen_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::g23_xuanyuan_turn_end ... ignored, 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs
+test nc08_registered_defect_guards::guard_chengxin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_cigu_pre_draw ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_fenglue_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_fuchou2_before ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_gaiming_judge_before ... ignored, 补 `judgeBefore` 幕并挂上后转绿
+test nc08_registered_defect_guards::guard_hutian_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted ... ignored, 补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）
+test nc08_registered_defect_guards::guard_mb_phase_before_enter_game ... ignored, 补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿
+test nc08_registered_defect_guards::guard_mopaifanbei_second_draw ... ignored, 补「第 2 次」档或摸牌前幕后转绿
+test nc08_registered_defect_guards::guard_mufeng_pin_end ... ignored, 把过滤臂钉到该阶段后本守卫转绿
+test nc08_registered_defect_guards::guard_niepan_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_prepare_phase_exists ... ignored, 补 `Phase::Prepare` 后转绿
+test nc08_registered_defect_guards::guard_rangjie_branch1_draws ... ignored, 补 `draw_cards` 后转绿（分支 1 应摸牌）
+test nc08_registered_defect_guards::guard_shouyin_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_shuiyun5_dying ... ignored, 把 TriggerMeta 事件改对后本守卫转绿
+test nc08_registered_defect_guards::guard_xiangxing_lose_hp_end ... ignored, 补 LoseHpEnd 幕并挂上后转绿
+test nc08_registered_defect_guards::guard_yueyin_fourth_damage ... ignored, 补「第 4 次」档后转绿
+test nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase ... ignored, 补 dieBegin 幕 / 改事件种类后转绿
+test nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch ... ignored, 登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage ... ignored, 登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs
+test nc08_registered_defect_guards::lexue_any_phase_of_owner_only ... ignored, 登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs
+test nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker ... ignored, 登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs
+test nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase ... ignored, 登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；修复需改未跟踪的 content/host/filtering/common.rs
+test nc08_manifest_matrix::manifest_matrix_over_package_dirs ... ok
+test c331_fellow_windows::actual_fellow_inventory_and_grants_use_only_existing_normal_and_global_maps ... ok
+test nc08_dead_host_keys::dead_host_keys_are_absent_from_catalog ... ok
+test nc08_card_name_prefix_regression::card_name_double_prefix_regression ... ok
+test nc08_phase_end_dispatch_probe::probe_phase_end_skills_and_candidates ... ok
+test nc08_save_restore_pile::save_restore_roundtrip_pile_packages ... ok
+test nc08_skill_mapping_inventory::skill_mapping_inventory_matches_baseline ... ok
+test nc08_composition_acceptance::composition_all_card_packs_together ... ok
+test nc08_standard_deck_coverage::standard_deck_kind_instance_coverage ... ok
+test nc08_trigger_order_counterexample::actual_vm_add_skill_enters_current_bucket_and_done_identity_does_not_repeat ... ok
+test nc08_trigger_order_counterexample::c331_huanle_equipment_priority_waits_for_normal_owner_peers ... ok
+test nc08_pile_pair_matrix::pile_pair_matrix_over_card_packs ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_requires_one_window_for_nonasking_optional_continuation ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_window_authority_cannot_hide_in_vm_following ... ok
+test nc08_identity_gate_matrix::identity_version_gate_over_all_packages ... ok
+test nc08_acceptance_sweep_small_packages::acceptance_sweep_small_packages ... ok
+test nc08_trigger_order_counterexample::c331_review_k2_swapped_seats_nested_grant_rejoins_the_frozen_ancestor ... ok
+test nc08_trigger_order_counterexample::c331_review_k4_active_damage_before_remains_explicitly_unsupported ... ok
+test nc08_trigger_order_counterexample::c331_review_k2_window_survives_real_set_turn_state_and_seat_change ... ok
+test nc08_swd_yuchan_family_probe::swd_yuchan_family_active_use_probe ... ok
+test nc08_trigger_order_counterexample::c331_review_s2_grouped_handlers_keep_max_hp_hand_limit ... ok
+test nc08_trigger_order_counterexample::c331_review_owner_ring_cannot_omit_a_seat_without_current_candidates ... ok
+test nc08_trigger_order_counterexample::invalid_order_answers_do_not_change_state_or_rng ... ok
+test nc08_trigger_order_counterexample::c331_review_k3_real_pending_reveal_injects_same_and_future_owner_once ... ok
+test nc08_trigger_order_counterexample::direct_extension_metadata_and_filter_identity_bind_restore ... ok
+test nc08_trigger_order_counterexample::optional_confirmation_rechecks_existence_enabled_alive_and_filter ... ok
+test nc08_trigger_order_counterexample::owner_buckets_precede_priority_and_first_last_are_automatic ... ok
+test nc08_trigger_order_counterexample::nc08_same_priority_pair_asks_player_for_next_skill ... ok
+test nc08_trigger_order_counterexample::priority_extremes_never_negate_or_overflow ... ok
+test nc08_trigger_order_counterexample::machine_fields_and_queue_alias_mutations_are_rejected ... ok
+test nc08_save_restore_four_sources::save_restore_roundtrip_four_sources ... ok
+test nc08_trigger_order_counterexample::silent_and_unnamed_metadata_runs_before_any_selectable_sibling ... ok
+test nc08_trigger_order_counterexample::same_priority_temporarily_false_filter_revives_but_passed_priority_does_not ... ok
+test nc08_trigger_order_counterexample::c331_review_k1_every_window_slice_restores_without_a_lifecycle_gap ... ok
+test nc08_save_restore_matrix::save_restore_matrix_over_packages ... ok
+test nc08_trigger_order_counterexample::pending_and_optional_byte_restart_preserve_full_continuation ... ok
+test nc08_trigger_order_counterexample::three_skills_choose_next_then_rebuild_and_optional_can_decline ... ok
+test nc08_rescue_card_set_survey::rescue_card_set_survey ... ok
+test nc08_general_pair_matrix::general_pair_matrix_with_card_packs ... ok
+test nc08_upgrade_acceptance::upgrade_downgrade_still_bridges ... ok
+test nc08_zhenfa_mode_gate_survey::zhenfa_mode_gate_survey ... ok
+test nc08_replay_determinism_five_sources::replay_determinism_per_pack ... ok
+test nc08_u08_reachability::u08_skills_are_declared_but_have_no_carrier ... ok
+test nc08_upgrade_skill_mapping::upgrade_skill_mapping_change_is_detected ... ok
+test nc08_upgrade_acceptance::upgrade_version_bump_keeps_content ... ok
+test nc08_upgrade_acceptance::upgrade_card_addition_is_additive ... ok
+test nc08_global_cards_active_use_probe::global_cards_active_use_probe ... ok
+test nc08_upgrade_acceptance::upgrade_old_and_new_coexist ... ok
+test nc08_upgrade_five_sources::upgrade_per_source_five_sources ... ok
+test nc08_composition_pair_matrix::composition_pair_matrix_all_pairs ... ok
+test nc08_upgrade_matrix::upgrade_matrix_over_packages ... ok
+test nc08_skill_pair_matrix::skill_pair_matrix_over_general_packs ... ok
+test nc08_acceptance_sweep_all_packages::acceptance_sweep_all_packages ... ok
+
+test result: ok. 77 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.56s
+
+     Running tests/groups/nc08_upstream_a_k.rs (target/debug/deps/nc08_upstream_a_k-7e98065c971180ab)
+
+running 139 tests
+test nc08_upstream_chunbing::upstream_chunbing_modeling_difference_is_fixed ... ok
+test nc08_upstream_boss_zhugeliang::upstream_boss_zhugeliang_pack_mapping ... ok
+test nc08_upstream_biyue_yingzi::upstream_yingzi_numfixed_difference_is_fixed ... ok
+test nc08_upstream_boss_zhugeliang::upstream_xiangxing_differences_are_fixed ... ok
+test nc08_upstream_fanjian::upstream_fanjian_flow_matches ... ok
+test nc08_upstream_boss_zhugeliang::upstream_xiangxing_three_stars_state ... ok
+test nc08_upstream_biyue_yingzi::upstream_biyue_draws_at_end_phase_begin ... ok
+test nc08_upstream_biyue_yingzi::upstream_biyue_requires_the_skill ... ok
+test nc08_upstream_fankui::upstream_fankui_differences_are_fixed ... ok
+test nc08_upstream_biyue_yingzi::upstream_yingzi_draws_one_extra ... ok
+test nc08_upstream_fanjian::upstream_fanjian_matching_suit_no_damage ... ok
+test nc08_upstream_ciqiu::upstream_ciqiu_requires_sha_card ... ok
+test nc08_upstream_ciqiu::upstream_ciqiu_dying_is_turn_scoped ... ok
+test nc08_upstream_chunbing::upstream_chunbing_target_filter_rejects_existing_holder ... ok
+test nc08_upstream_ganglie::upstream_ganglie_discard_branch_difference_is_fixed ... ok
+test nc08_upstream_chunbing::upstream_chunbing_grants_listener_with_count_five ... ok
+test nc08_upstream_guanxing::upstream_guanxing_differences_are_fixed ... ok
+test nc08_upstream_guicai::upstream_guicai_positions_are_mode_specific ... ok
+test nc08_upstream_ganglie::upstream_ganglie_requires_the_skill ... ok
+test nc08_upstream_gujian_dinvxuanshuang::upstream_dinvxuanshuang_recovers ... ignored, 帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项
+test nc08_upstream_fanjian::upstream_fanjian_mismatched_suit_deals_damage ... ok
+test nc08_upstream_ciqiu::upstream_ciqiu_bonus_and_one_shot_removal ... ok
+test nc08_upstream_ganglie::upstream_ganglie_non_heart_hits_source_directly ... ok
+test nc08_upstream_fankui::upstream_fankui_gains_card_from_source ... ok
+test nc08_upstream_guicai::upstream_guicai_rewrites_others_judgement_with_any_hand_card ... ok
+test nc08_upstream_duwen::upstream_duwen_equal_hands_adds_one_damage ... ok
+test nc08_upstream_duwen::upstream_duwen_notlink_difference_is_fixed ... ok
+test nc08_upstream_guicai::guidao_is_not_in_the_standard_face ... ok
+test nc08_upstream_duwen::upstream_duwen_requires_the_skill ... ok
+test nc08_upstream_gujian_liutouge::upstream_liutouge_random_pool_difference_is_registered ... ok
+test nc08_upstream_gujian_liyutang::upstream_liyutang_target_gains_the_card ... ignored, 鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项
+test nc08_upstream_gujian_longxugou::upstream_longxugou_steals_and_equips ... ignored, 龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项
+test nc08_upstream_gujian_bingpotong::upstream_bingpotong_hp_loss_ignores_hujia ... ok
+test nc08_upstream_duwen::upstream_duwen_unequal_hands_no_bonus ... ok
+test nc08_upstream_gujian_mapodoufu::upstream_mapodoufu_target_gains_the_card ... ignored, 麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项
+test nc08_upstream_gujian_heilonglinpian::upstream_heilonglinpian_grants_hujia ... ok
+test nc08_upstream_gujian_gjyuheng::upstream_gjyuheng_steals_spade ... ok
+test nc08_upstream_gujian_mizhilianou::upstream_mizhilianou_heart_as_tao ... ignored, 蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项
+test nc08_upstream_gujian_liufengsan::upstream_liufengsan_grants_two_shan ... ok
+test nc08_upstream_gujian_liyutang::upstream_liyutang_gate_on_already_marked ... ok
+test nc08_upstream_gujian_gudonggeng::upstream_gudonggeng_reduces_once ... ok
+test nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_target_needs_he_cards ... ignored, 乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项
+test nc08_upstream_gujian_longxugou::upstream_longxugou_target_needs_equips ... ok
+test nc08_upstream_gujian_jinlianzhu::upstream_jinlianzhu_interrupts_and_source_draws ... ok
+test nc08_upstream_gujian_mianlijinzhen::upstream_mianlijinzhen_draws_then_loses_hp ... ok
+test nc08_upstream_gujian_mianlijinzhen::upstream_mianlijinzhen_target_hp_gate ... ok
+test nc08_upstream_gujian_bingpotong::upstream_bingpotong_same_color_branch ... ok
+test nc08_upstream_gujian_luyugeng::upstream_luyugeng_discards_basic_and_gains_deck_top ... ok
+test nc08_upstream_gujian_shihuifen::upstream_shihuifen_blocks_cards_on_others ... ignored, 石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项
+test nc08_upstream_gujian_mutoumianju::upstream_mutoumianju_grants_skill_on_equip ... ok
+test nc08_upstream_gujian_liutouge::upstream_liutouge_two_branches ... ok
+test nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_discards_target_and_neighbor ... ok
+test nc08_upstream_gujian_qingtuan::upstream_qingtuan_first_sha_draws_once_per_turn ... ok
+test nc08_upstream_gujian_shatang::upstream_shatang_damages_then_grants_hujia ... ok
+test nc08_upstream_gujian_shenhuofeiya::upstream_shenhuofeiya_burns_who_cannot_dodge ... ok
+test nc08_upstream_gujian_feibiao::upstream_feibiao_two_branches ... ok
+test nc08_upstream_gujian_shujinsan::upstream_shujinsan_target_needs_he_cards ... ok
+test nc08_upstream_gujian_shenhuofeiya::upstream_shenhuofeiya_target_without_he_is_legal ... ok
+test nc08_upstream_gujian_tanhuadong::upstream_tanhuadong_draws_at_play_phase_end ... ok
+test nc08_upstream_guose::upstream_guose_non_diamond_rejected ... ok
+test nc08_upstream_gujian_shujinsan::upstream_shujinsan_discards_and_draws_equal ... ok
+test nc08_upstream_guose::upstream_guose_diamond_used_as_le ... ok
+test nc08_upstream_guose::upstream_guose_zone_and_priority_differences_are_fixed ... ok
+test nc08_upstream_guose::upstream_guose_requires_the_skill ... ok
+test nc08_upstream_gujian_molicha::upstream_molicha_blocks_black_cards ... ok
+test nc08_upstream_gujian_yunvyuanshen::upstream_yunvyuanshen_grants_skill ... ok
+test nc08_upstream_gujian_yuanbaorou::upstream_yuanbaorou_extra_sha_and_qingtuan_gate ... ok
+test nc08_upstream_gujian_ziyangdan::upstream_ziyangdan_grants_hujia ... ok
+test nc08_upstream_hearth_shenenshu::upstream_shenenshu_replaces_hand_with_basics ... ignored, 神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项
+test nc08_upstream_haidao::upstream_haidao_damaged_discard_recovers ... ok
+test nc08_upstream_haidao::upstream_haidao_healthy_grants_hujia_without_prompt ... ok
+test nc08_upstream_hearth_dunpaigedang::upstream_dunpaigedang_hujia_draw_discard ... ok
+test nc08_upstream_hearth_chuansongmen::upstream_chuansongmen_gains_deck_top ... ok
+test nc08_upstream_haidao::upstream_haidao_is_once_per_turn ... ok
+test nc08_upstream_hearth_shijieshu::upstream_shijieshu_equips_and_discards ... ok
+test nc08_upstream_hearth_jihuocard::upstream_jihuocard_draws_and_grants_temp_skill ... ok
+test nc08_upstream_haidao::upstream_haidao_damaged_cancel_grants_hujia ... ok
+test nc08_upstream_hearth_linghunzhihuo::upstream_linghunzhihuo_damages_and_user_discards ... ok
+test nc08_upstream_hearth_shijieshu::upstream_shijieshu_target_must_not_be_min ... ok
+test nc08_upstream_hearth_xingjiegoutong::upstream_xingjiegoutong_three_steps ... ok
+test nc08_upstream_hujia::upstream_hujia_only_for_shan ... ok
+test nc08_upstream_hujia::upstream_hujia_queue_is_wei_and_seat_ordered ... ok
+test nc08_upstream_hearth_yuansuhuimie::upstream_yuansuhuimie_discard_shortfall_damage ... ok
+test nc08_upstream_hearth_tanshezhiren::upstream_tanshezhiren_chain_discards ... ok
+test nc08_upstream_hujia::upstream_hujia_borrows_shan_from_wei_ally ... ok
+test nc08_upstream_hearth_zhaomingdan::upstream_zhaomingdan_discard_and_both_draw ... ok
+test nc08_upstream_hujia::upstream_hujia_lord_qualification_difference_is_fixed ... ok
+test nc08_upstream_identity_start::upstream_identity_start_prepare_phase_absent_is_registered ... ok
+test nc08_upstream_identity_start::upstream_identity_start_lord_first_and_four_cards_each ... ok
+test nc08_upstream_hearth_shandianjian::upstream_shandianjian_record_acceptance ... ok
+test nc08_upstream_jianxiong::upstream_jianxiong_standard_face_has_no_mark_face ... ok
+test nc08_upstream_hearth_zhiliaobo::upstream_zhiliaobo_target_must_be_wounded ... ok
+test nc08_upstream_jijiang::upstream_jijiang_shu_ally_plays_sha_for_lord ... ignored, 激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收
+test nc08_upstream_identity_start::upstream_identity_draw_is_uniform_four ... ok
+test nc08_upstream_jijiang::upstream_jijiang_uses_helpers_not_own_cards ... ok
+test nc08_upstream_jianxiong::upstream_jianxiong_position_difference_is_fixed ... ok
+test nc08_upstream_jieyin::upstream_jieyin_target_gates ... ok
+test nc08_upstream_jianxiong::upstream_jianxiong_gains_damage_card ... ok
+test nc08_upstream_jieyin::upstream_jieyin_heals_both ... ok
+test nc08_upstream_jijiang::upstream_jijiang_lord_gate_is_design_difference ... ok
+test nc08_upstream_jijie::upstream_jijie_moves_bottom_card_to_target ... ok
+test nc08_upstream_jijie::upstream_jijie_takes_bottom_card ... ok
+test nc08_upstream_jijiang::upstream_jijiang_qualification_matches ... ok
+test nc08_upstream_jijiu::upstream_jijiu_red_card_is_tao_like ... ok
+test nc08_upstream_jijiu::upstream_jijiu_turn_restriction_difference_is_fixed ... ok
+test nc08_upstream_jijiu::upstream_jijiu_requires_the_skill ... ok
+test nc08_upstream_jiuyuan::upstream_jiuyuan_qualification_and_bonus ... ok
+test nc08_upstream_jiyuan::upstream_jiyuan_effect_is_draw_one ... ok
+test nc08_upstream_jizhi::upstream_jizhi_standard_face_has_no_gaintag ... ok
+test nc08_upstream_jiyuan::upstream_jiyuan_missing_arms_are_registered ... ok
+test nc08_upstream_jijie::upstream_jijie_allows_self_target ... ok
+test nc08_upstream_jiuyuan::upstream_jiuyuan_lord_gate_is_same_family ... ok
+test nc08_upstream_keji::upstream_keji_respond_history_difference_is_fixed ... ok
+test nc08_upstream_hearth_zhiliaobo::upstream_zhiliaobo_two_branches ... ok
+test nc08_upstream_jizhi::upstream_jizhi_scope_difference_is_registered ... ok
+test nc08_upstream_kongcheng::upstream_kongcheng_coverage_difference_is_fixed ... ok
+test nc08_upstream_jizhi::upstream_jizhi_draws_on_covered_trick ... ok
+test nc08_upstream_kongcheng::upstream_kongcheng_blocks_sha_when_hand_empty ... ok
+test nc08_upstream_kuangfu::upstream_kuangfu_once_per_phase_difference_is_fixed ... ok
+test nc08_upstream_keji::upstream_keji_no_sha_means_no_discard ... ok
+test nc08_upstream_kuangfu::upstream_kuangfu_loses_hp_when_target_not_lower ... ok
+test nc08_upstream_kongcheng::upstream_kongcheng_allows_sha_when_hand_not_empty ... ok
+test nc08_upstream_kuangfu::upstream_kuangfu_draws_two_when_target_lower_hp ... ok
+test nc08_upstream_kurou::upstream_kurou_has_no_hp_filter ... ok
+test nc08_upstream_kurou::upstream_kurou_effect_order_is_recorded ... ok
+test nc08_upstream_keji::upstream_keji_after_using_sha_must_discard ... ok
+test nc08_upstream_kurou::upstream_kurou_is_not_limited_per_phase ... ok
+test nc08_upstream_jiuyuan::upstream_jiuyuan_wu_tao_recovers_two ... ok
+test nc08_upstream_kurou::upstream_kurou_loses_hp_not_damage ... ok
+test nc08_upstream_kuwu::upstream_kuwu_is_equip_skill ... ok
+test nc08_upstream_kuwu::upstream_kuwu_filter_gaps ... ok
+test nc08_upstream_kuwu::upstream_kuwu_forces_target_discard ... ok
+test nc08_upstream_kuwu::upstream_kuwu_chain_damage_difference ... ok
+test nc08_upstream_kuwu::upstream_kuwu_requires_sha_damage_and_is_forced ... ok
+test nc08_upstream_jiyuan::upstream_jiyuan_dying_arm_draws_one ... ok
+test nc08_upstream_gujian_food_survey::food_cards_body_ownership_survey ... ok
+test nc08_upstream_guanxing::upstream_guanxing_offers_arrange_choice ... ok
+test nc08_upstream_gujian_xiajiao::upstream_xiajiao_extra_draw_then_discard ... ok
+test nc08_upstream_gujian_yougeng::upstream_yougeng_recovers_when_lowest_and_wounded ... ok
+
+test result: ok. 130 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/groups/nc08_upstream_l_z.rs (target/debug/deps/nc08_upstream_l_z-14be3efffc093bd4)
+
+running 207 tests
+test nc08_upstream_lijian::upstream_lijian_zone_difference_is_registered ... ok
+test nc08_upstream_lingxue::upstream_lingxue_effect_is_fixed_by_source ... ok
+test nc08_upstream_lianying::upstream_lianying_coverage_differences_are_fixed ... ok
+test nc08_upstream_linghunzhihuo::upstream_linghunzhihuo_random_discard_difference_is_fixed ... ok
+test nc08_upstream_linghunzhihuo::upstream_linghunzhihuo_requires_a_target ... ok
+test nc08_upstream_lijian::upstream_lijian_targets_must_be_male ... ok
+test nc08_upstream_lijian::upstream_lijian_makes_two_males_duel ... ok
+test nc08_upstream_liuli::upstream_liuli_excludes_kongcheng_target ... ok
+test nc08_upstream_longdan::upstream_longdan_requires_the_skill ... ok
+test nc08_upstream_liegong_xinkuanggu::upstream_xinkuanggu_requires_distance_le_one ... ok
+test nc08_upstream_liegong_xinkuanggu::upstream_liegong_condition_not_met_allows_shan ... ok
+test nc08_upstream_linghunzhihuo::upstream_linghunzhihuo_fire_damage_and_self_discard ... ok
+test nc08_upstream_lianying::upstream_lianying_threshold_off_by_one_is_registered ... ok
+test nc08_upstream_lianying::upstream_lianying_draws_after_losing_last_hand_card ... ok
+test nc08_upstream_liuli::upstream_liuli_redirects_sha ... ok
+test nc08_upstream_liegong_xinkuanggu::upstream_liegong_second_branch_by_attack_range ... ok
+test nc08_upstream_longxue::longxue_pack_mapping ... ok
+test nc08_upstream_longdan::upstream_longdan_sha_as_shan_in_response ... ok
+test nc08_upstream_longdan::upstream_longdan_shouyue_draw_difference_is_fixed ... ok
+test nc08_upstream_luoshen::upstream_luoshen_loop_prompt_difference_is_fixed ... ok
+test nc08_upstream_luoshen::upstream_luoshen_timing_anchor_difference_is_fixed ... ok
+test nc08_upstream_luoshen::upstream_luoshen_black_gains_and_red_stops ... ok
+test nc08_upstream_luoyi::upstream_luoyi_differences_are_fixed ... ok
+test nc08_upstream_longdan::upstream_longdan_shan_used_as_sha ... ok
+test nc08_upstream_mashu::upstream_mashu_implemented_as_minus ... ok
+test nc08_upstream_luoshen::upstream_luoshen_requires_the_skill ... ok
+test nc08_upstream_longxue::native_matches_its_documented_upstream_semantics ... ok
+test nc08_upstream_liegong_xinkuanggu::upstream_xinkuanggu_choice_branches ... ok
+test nc08_upstream_luoyi::upstream_luoyi_sha_damage_plus_one ... ok
+test nc08_upstream_mashu::upstream_feiying_difference_is_registered ... ok
+test nc08_upstream_luoyi::upstream_luoyi_draws_one_less ... ok
+test nc08_upstream_mashu::upstream_mashu_distance_floor_is_one ... ok
+test nc08_upstream_longxue::longxue_upstream_is_obfuscated_so_reference_is_weak ... ok
+test nc08_upstream_paoxiao::upstream_paoxiao_bypass_difference_is_fixed ... ok
+test nc08_upstream_mtg_feixu::upstream_mtg_feixu_discovers_from_discard ... ok
+test nc08_upstream_mtg_bingheyaosai::upstream_mtg_bingheyaosai_draw2_discard2 ... ok
+test nc08_upstream_mtg_lindixiliu::upstream_mtg_lindixiliu_gains_heart ... ok
+test nc08_upstream_qianxun::upstream_qianxun_coverage_difference_is_fixed ... ok
+test nc08_upstream_mtg_linzhongjianta::upstream_mtg_linzhongjianta_discover_and_equip ... ok
+test nc08_upstream_lingxue::upstream_lingxue_gains_hujia_on_real_recover ... ok
+test nc08_upstream_mtg_shamolvzhou::upstream_mtg_shamolvzhou_discovers_basic ... ok
+test nc08_upstream_qianxun::upstream_qianxun_blocks_lebu ... ok
+test nc08_upstream_qianxun::upstream_qianxun_blocks_snatch ... ok
+test nc08_upstream_qicai::upstream_qicai_coverage_differences_are_fixed ... ok
+test nc08_upstream_qianxun::upstream_qianxun_allows_other_tricks ... ok
+test nc08_upstream_paoxiao::upstream_paoxiao_requires_the_skill ... ok
+test nc08_upstream_mtg_youlin::upstream_mtg_youlin_uses_a_trick ... ok
+test nc08_upstream_paoxiao::upstream_paoxiao_allows_multiple_sha ... ok
+test nc08_upstream_qicai::upstream_qicai_requires_the_skill ... ok
+test nc08_upstream_lingxue::upstream_lingxue_requires_the_skill ... ok
+test nc08_upstream_qingguo::upstream_qingguo_in_shan_options ... ok
+test nc08_upstream_qicai::upstream_qicai_ignores_distance_for_snatch ... ok
+test nc08_upstream_qingguo::upstream_qingguo_black_hand_card_responds_as_shan ... ok
+test nc08_upstream_qingguo::upstream_qingguo_zone_difference_is_registered ... ok
+test nc08_upstream_qingnang::upstream_qingnang_full_hp_target_excluded ... ok
+test nc08_upstream_rangjie::upstream_rangjie_move_branch_must_draw_one ... ignored, 登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；修复需改未跟踪的 content/host/step/skills_cards.rs，待 host 拆分落定
+test nc08_upstream_qingnang::upstream_qingnang_once_per_turn ... ok
+test nc08_upstream_mtg_shuimomuxue::upstream_mtg_shuimomuxue_two_branches ... ok
+test nc08_upstream_qicai::upstream_qicai_snatch_within_range_ok ... ok
+test nc08_upstream_qixi::upstream_qixi_black_card_used_as_dismantle ... ok
+test nc08_upstream_qingnang::upstream_qingnang_discard_heals_wounded_other ... ok
+test nc08_upstream_qingguo::upstream_qingguo_equip_zone_absent_from_options ... ok
+test nc08_upstream_qingnang::upstream_qingnang_self_target_difference_is_registered ... ok
+test nc08_upstream_rende::upstream_rende_doc_inconsistency_is_fixed ... ok
+test nc08_upstream_qixi::upstream_qixi_priority_difference_is_fixed ... ok
+test nc08_upstream_qixi::upstream_qixi_red_card_rejected ... ok
+test nc08_upstream_mtg_longlushanfeng::upstream_mtg_longlushanfeng_two_choices ... ok
+test nc08_upstream_qixi::upstream_qixi_requires_the_skill ... ok
+test nc08_upstream_shushen::upstream_shushen_per_point_index_difference_is_fixed ... ok
+test nc08_upstream_mtg_haidao::upstream_mtg_haidao_three_branches ... ok
+test nc08_upstream_rende::upstream_rende_two_cards_once_recovers ... ok
+test nc08_upstream_rende::upstream_rende_cumulative_recovers_once ... ok
+test nc08_upstream_shengke::upstream_shengke_is_global_and_natures_initialized ... ok
+test nc08_upstream_swd_baishouzhihu::upstream_baishouzhihu_opens_target_window ... ignored, 第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs
+test nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_target_discards ... ignored, 苍螭之璧属转换缺口（未交付）——转换后启用本用例，见台账第 117 行
+test nc08_upstream_standard_tricks::upstream_taoyuan_order_difference_is_registered ... ok
+test nc08_upstream_rangjie::upstream_rangjie_gain_branch_draws_then_takes_card ... ok
+test nc08_upstream_rangjie::upstream_rangjie_triggers_after_damage_and_cancel_draws_nothing ... ok
+test nc08_upstream_standard_tricks::upstream_taoyuan_excludes_owner_and_skips_healthy ... ok
+test nc08_upstream_shushen::upstream_shushen_target_without_hand_draws_two ... ok
+test nc08_upstream_shushen::upstream_shushen_target_with_hand_draws_one ... ok
+test nc08_upstream_standard_tricks::upstream_wuzhong_targets_self_only_and_draws_two ... ok
+test nc08_upstream_shengke::upstream_shengke_he_range_difference ... ok
+test nc08_upstream_swd_gouhunluo::upstream_gouhunluo_target_gate_is_enforced ... ok
+test nc08_upstream_shengke::upstream_shengke_ke_forces_discard ... ok
+test nc08_upstream_shengke::upstream_shengke_sheng_draws ... ok
+test nc08_upstream_swd_hufu::upstream_swd_hufu_dying_only ... ignored, 虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项
+test nc08_upstream_shengke::upstream_shengke_requires_both_natures_and_relation ... ok
+test nc08_upstream_swd_mujiaren::upstream_mujiaren_differences_are_fixed ... ok
+test nc08_upstream_swd_gouhunluo::upstream_gouhunluo_rejects_already_marked_target ... ok
+test nc08_upstream_swd_gouhunluo::upstream_gouhunluo_marks_target ... ok
+test nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_is_a_known_conversion_gap ... ok
+test nc08_upstream_swd_huanglin::probe_hand_has_kind_matches_catalog_kind ... ok
+test nc08_upstream_swd_huanglin::upstream_huanglinzhicong_no_gain_when_armored ... ok
+test nc08_upstream_swd_jiguantong::upstream_jiguantong_discard_avoids_damage ... ok
+test nc08_upstream_swd_shijianhuisu::upstream_shijianhuisu_target_gate_note ... ok
+test nc08_upstream_swd_huanglin::probe_instance_and_candidates ... ok
+test nc08_upstream_swd_yangpijuan::upstream_yangpijuan_differences_are_fixed ... ok
+test nc08_upstream_swd_huanglin::probe_huanglin_at_judge_phase ... ok
+test nc08_upstream_swd_baishouzhihu::probe_baishouzhihu_hand_persists ... ok
+test nc08_upstream_swd_huanglin::probe_huanglin_at_next_round_judge ... ok
+test nc08_upstream_swd_jiguantong::upstream_jiguantong_empty_hand_takes_fire_damage ... ok
+test nc08_upstream_swd_huanglin::upstream_huanglinzhicong_gains_hujia_on_phase_begin ... ok
+test nc08_upstream_tiandu::upstream_tiandu_du_exclusion_difference_is_fixed ... ok
+test nc08_upstream_tiandu::upstream_tiandu_requires_the_skill ... ok
+test nc08_upstream_tiandu::upstream_tiandu_gains_judge_card ... ok
+test nc08_upstream_swd_mujiaren::upstream_mujiaren_trades_nonbasic_for_jiguan ... ok
+test nc08_upstream_tianfuzhen::upstream_tianfuzhen_enable_gate_difference_is_fixed ... ok
+test nc08_upstream_tieji::upstream_tieji_differences_are_fixed ... ok
+test nc08_upstream_tianfuzhen::upstream_tianfuzhen_forces_one_discard_per_target ... ok
+test nc08_upstream_tuxi::upstream_tuxi_differences_are_fixed ... ok
+test nc08_upstream_tianfuzhen::upstream_tianfuzhen_target_set_must_match_major_with_cards ... ok
+test nc08_upstream_tieji::upstream_tieji_red_judge_blocks_shan ... ok
+test nc08_upstream_tuxi::upstream_tuxi_requires_the_skill ... ok
+test nc08_upstream_tuxi::upstream_tuxi_takes_cards_and_skips_draw ... ok
+test nc08_upstream_wusheng::upstream_wusheng_black_card_rejected ... ok
+test nc08_upstream_wudian_youdishenru::upstream_youdishenru_cancels_sha_and_source_takes_damage ... ok
+test nc08_upstream_wusheng::upstream_wusheng_entry_and_shouyue_differences_are_fixed ... ok
+test nc08_upstream_wusheng::upstream_wusheng_red_card_used_as_sha ... ok
+test nc08_upstream_wusheng::upstream_wusheng_red_trick_convertible_note ... ok
+test nc08_upstream_wusheng::upstream_wusheng_requires_the_skill ... ok
+test nc08_upstream_wudian_wangmeizhike::upstream_wangmeizhike_two_branches ... ok
+test nc08_upstream_wushuang::upstream_wushuang_covers_both_directions ... ok
+test nc08_upstream_wusheng::upstream_wusheng_respond_path_not_covered ... ok
+test nc08_upstream_wushuang::upstream_wushuang_direct_hit_difference_is_fixed ... ok
+test nc08_upstream_wushuang::upstream_wushuang_duel_needs_two_sha ... ok
+test nc08_upstream_wuxing_shengke_branches::upstream_wuxing_shengke_three_branches ... ignored, 五行生克两支未能在行为面复现（三次均 −1）——见第 51 项
+test nc08_upstream_wuxing_shengke::upstream_wuxing_shengke_resolves ... ok
+test nc08_upstream_wushuang::upstream_wushuang_sha_needs_two_shan ... ok
+test nc08_upstream_wuxing_wuxingpan::upstream_wuxingpan_equips_and_grants_skill ... ok
+test nc08_upstream_xiaoji::upstream_xiaoji_replace_draws_two ... ok
+test nc08_upstream_xiaoji::upstream_xiaoji_discard_loss_difference_is_registered ... ok
+test nc08_upstream_xiaoji::upstream_xiaoji_requires_the_skill ... ok
+test nc08_upstream_swd_qinglong::upstream_qinglongzhigui_draw2_discard1 ... ok
+test nc08_upstream_swd_shencaojie_window::upstream_shencaojie_window_on_trick_damage ... ok
+test nc08_upstream_swd_shenmiguo::upstream_shenmiguo_copies_card_after_use ... ok
+test nc08_upstream_xicai::upstream_xicai_gains_damage_card ... ok
+test nc08_upstream_swd_shencaojie_reverse::upstream_shencaojie_reverse_branch_reduces_damage ... ok
+test nc08_upstream_xicai::upstream_xicai_position_difference_is_registered ... ok
+test nc08_upstream_swd_hufu::upstream_rescue_contrast_tao_vs_hufu ... ok
+test nc08_upstream_swd_yangpijuan::upstream_yangpijuan_two_stage_choice ... ok
+test nc08_upstream_yanziyaoshui::upstream_yanziyaoshui_draws_one_otherwise ... ok
+test nc08_upstream_yaowu::upstream_yaowu_note_may_be_stale ... ok
+test nc08_upstream_yaowu::upstream_yaowu_black_sha_does_not_trigger ... ok
+test nc08_upstream_yiji::upstream_yiji_differences_are_fixed ... ok
+test nc08_upstream_swd_xuanwu::upstream_xuanwuzhihuang_heals_after_damage ... ok
+test nc08_upstream_yanziyaoshui::upstream_yanziyaoshui_requires_exactly_one_target ... ok
+test nc08_upstream_yaowu::upstream_yaowu_red_sha_triggers_choice ... ok
+test nc08_upstream_swd_shijianhuisu::upstream_shijianhuisu_recalls_equips ... ok
+test nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_after_damage ... ignored, 趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项
+test nc08_upstream_yunchou_chanyuan::upstream_chanyuan_source_matches ... ok
+test nc08_upstream_yanziyaoshui::upstream_yanziyaoshui_draws_two_for_min_hand ... ok
+test nc08_upstream_yunchou_guhuo::upstream_guhuo_choice_difference_is_registered ... ok
+test nc08_upstream_yunchou_beige::upstream_beige_club_choice_difference_is_registered ... ok
+test nc08_upstream_yiji::upstream_yiji_draws_two_after_damage ... ok
+test nc08_upstream_yunchou_guihan::upstream_defines_guihan ... ok
+test nc08_upstream_yunchou_guihan::native_guihan_effect_is_empty ... ok
+test nc08_upstream_swd_zhufangshenshi::upstream_zhufangshenshi_draws_after_use ... ok
+test nc08_upstream_yunchou_honglian::upstream_honglian_source_matches ... ok
+test nc08_upstream_swd_zhuque::upstream_zhuquezhizhang_retaliates_on_source ... ok
+test nc08_upstream_yunchou_jiaoxia::upstream_jiaoxia_source_matches ... ok
+test nc08_upstream_yunchou_chenhuodajie::upstream_chenhuodajie_gains_target_card ... ok
+test nc08_upstream_yunchou_jieyan::upstream_jieyan_owner_exclusion_is_registered ... ok
+test nc08_upstream_yunchou_chanyuan::upstream_chanyuan_killer_loses_max_hp ... ok
+test nc08_upstream_yunchou_kuanggu::upstream_kuanggu_source_matches ... ok
+test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_chain_kill_fires_on_first_target ... ignored, 链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查
+test nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_damaged_player_holds_it ... ok
+test nc08_upstream_yunchou_beige::upstream_beige_heart_branch_recovers ... ok
+test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_zone_difference_is_registered ... ok
+test nc08_upstream_yunchou_honglian::upstream_honglian_no_red_no_trigger ... ok
+test nc08_upstream_yunchou_huoshan::upstream_huoshan_record_acceptance ... ok
+test nc08_upstream_yunchou_honglian::upstream_honglian_source_discards_all_red ... ok
+test nc08_upstream_yunchou_shaoying::upstream_shaoying_source_matches ... ok
+test nc08_upstream_yunchou_jieyan::upstream_jieyan_discards_red_and_damages_others ... ok
+test nc08_upstream_yunchou_unimplemented::upstream_defines_the_three_skills ... ok
+test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_nonbasic_as_shuigong ... ok
+test nc08_upstream_yunchou_luweiyan::upstream_luweiyan_shuigong_target_needs_equip ... ok
+test nc08_upstream_yunchou_shaoying::upstream_shaoying_black_reveal_no_burn ... ok
+test nc08_upstream_yunchou_xiongzi::upstream_xiongzi_source_matches ... ok
+test nc08_upstream_yunchou_yaliang::upstream_yaliang_source_matches ... ok
+test nc08_upstream_yunchou_unimplemented::native_lacks_the_three_skills ... ok
+test nc08_upstream_yunchou_zonghuo::upstream_zonghuo_discards_one_without_asking ... ignored, 纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项
+test nc08_upstream_yunchou_yiesheng::upstream_yiesheng_source_matches ... ok
+test nc08_upstream_yunchou_zonghuo::upstream_zonghuo_source_matches ... ok
+test nc08_upstream_yunchou_shaoying::upstream_shaoying_reveals_deck_top_and_burns_red ... ok
+test nc08_upstream_yunchou_toulianghuanzhu::upstream_toulianghuanzhu_with_proper_answers ... ok
+test nc08_upstream_yunchou_jiaoxia::upstream_jiaoxia_red_triggers_black_does_not ... ok
+test nc08_upstream_zhiheng::upstream_zhiheng_equip_zone_difference_is_registered ... ok
+test nc08_upstream_zhenfa_dizaizhen::upstream_dizaizhen_draws_and_mode_gate ... ok
+test nc08_upstream_zhiheng::upstream_zhiheng_discard_two_draw_two ... ok
+test nc08_upstream_zhiheng::upstream_zhiheng_once_per_turn ... ok
+test nc08_upstream_yunchou_yiesheng::upstream_yiesheng_discards_black_only_and_draws_equal ... ok
+test nc08_upstream_yunchou_yaliang::upstream_yaliang_both_draw_one ... ok
+test nc08_upstream_xiuluo::upstream_xiuluo_filter_difference_is_registered ... ok
+test nc08_upstream_xiuluo::upstream_xiuluo_timing_is_folded_into_judge_begin ... ok
+test nc08_upstream_zhiyuan::upstream_zhiyuan_prevents_damage_and_recovers_equal ... ok
+test nc08_upstream_yunchou_kuanggu::upstream_kuanggu_three_branches ... ok
+test nc08_upstream_zhiyuan::upstream_zhiyuan_declined_damage_resolves_normally ... ok
+test nc08_upstream_ziyu::upstream_ziyu_damaged_offers_recover_and_applies ... ok
+test nc08_upstream_ziyu::upstream_ziyu_draw_option_draws_one ... ok
+test nc08_upstream_zhiyuan::upstream_zhiyuan_requires_self_as_source ... ok
+test nc08_upstream_yunchou_xiongzi::upstream_xiongzi_draw_bonus_with_floor ... ok
+test nc08_upstream_ziyu::upstream_ziyu_full_hp_has_no_recover_option ... ok
+test nc08_upstream_ziyu::upstream_ziyu_opens_every_fourth_phase ... ok
+test nc08_upstream_swd_zhongxinghujia::upstream_zhongxinghujia_target_gate ... ok
+test nc08_upstream_xiuluo::upstream_xiuluo_discards_matching_suit_judge_card ... ok
+test nc08_upstream_yunchou_guhuo::upstream_guhuo_draws_two_and_discards_two ... ok
+
+test result: ok. 199 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+     Running tests/groups/nc_rounds.rs (target/debug/deps/nc_rounds-3828795bce45b69d)
+
+running 302 tests
+test c331_atomic_source_repair::c9f_actual_mode_enemy_relations_do_not_use_hidden_roles_or_seats ... ok
+test c331_atomic_source_repair::c9f_jueqing_self_source_replaces_damage_before_armor ... ok
+test c331_atomic_source_repair::c9f_cuidui_does_not_poison_actual_boss_ally ... ok
+test c331_atomic_source_repair::c9f_cuidui_grants_only_the_actual_poison_definition ... ok
+test c331_atomic_source_repair::c9f_duqu_other_enabled_holder_is_excluded ... ok
+test c331_atomic_source_repair::c9f_minwan_self_source_initializes_real_lock_set ... ok
+test c331_atomic_source_repair::c9f_terra_expires_at_actual_global_turn_boundary ... ok
+test c331_atomic_source_repair::c9f_shuchui_already_hit_never_readmits ... ok
+test c331_atomic_source_repair::c9f_paotai_full_width_quantity_not_u8 ... ok
+test c331_atomic_source_repair::c9f_zhaohuo_self_cancel_precedes_begin2 ... ok
+test c331_atomic_source_repair::c9f_abi_nature_draw_and_source_are_real ... ok
+test c331_atomic_source_repair::c9f_zlfanshi_terra_is_retained_and_target_uses_rng ... ok
+test c331_canonical_damage::c9_cancelled_root_does_not_dispatch_target_damage ... ok
+test c331_canonical_damage::c9_chain_child_does_not_overtake_parent_dying ... ok
+test c331_atomic_source_repair::c9f_chain_birth_rejects_a_still_queued_recipient ... ok
+test c331_canonical_damage::c9_changed_root_amount_matches_damage_log_and_later_vm_context ... ok
+test c331_canonical_damage::c9_full_armor_retains_source_quantity_positive_receipt_and_zero_hp_loss ... ok
+test c331_canonical_damage::c9_infinite_hp_keeps_positive_source_receipt ... ok
+test c331_canonical_damage::c9_lose_hp_replacement_has_no_damage_receipt_or_target_trigger ... ok
+test c331_canonical_damage::c9_target_damage_runs_before_dying_subtree ... ok
+test c331_canonical_damage::c9b_before_is_an_actual_child_with_root_continuation_before_hp ... ok
+test c331_canonical_damage::c9_zero_window_runs_once_and_signed_overflow_is_atomic ... ok
+test c331_canonical_damage::c9_real_vm_source_window_uses_qualified_root_and_byte_restore ... ok
+test c331_genuine_invocations::c9g_jidian_opens_actual_target_choice ... ok
+test c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition ... ok
+test c331_genuine_invocations::c9g_jidian_red_does_not_mute_next_unrelated_reaction ... ok
+test c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou ... ok
+test c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies ... ok
+test c331_atomic_source_repair::c9f_xixue_self_source_recovers_once ... ok
+test c331_atomic_source_repair::c9f_yinzei_uses_ordinary_discard_and_loss_children ... ok
+test c331_genuine_invocations::c9g_yuance_opens_two_real_options_without_activation_log ... ok
+test c331_atomic_source_repair::c9f_yinzei_equipment_only_source_is_discarded_with_rng ... ok
+test c331_genuine_invocations::c9g_ordinary_tiandao_nonfirst_equipment_flips_colour_and_restores ... ok
+test c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card ... ok
+test c331_atomic_source_repair::c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge ... ok
+test c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log ... ok
+test c331_genuine_invocations::c9g_zhangwu_actual_two_card_equipment_cost_and_source_cancel ... ok
+test c331_invocation_boundaries::c9h_guicai_kingdoms_accepts_equipment_while_nonkingdoms_excludes_it ... ok
+test c331_invocation_boundaries::c9h_admitted_participant_mutations_rejected ... ok
+test c331_invocation_boundaries::c9h_jidian_black_waits_for_judge_then_logs_and_can_decline_nested ... ok
+test c331_invocation_boundaries::c9h_original_native_helper_ids_remain_stable ... ok
+test c331_atomic_source_repair::c9f_cuidui_named_source_draw_and_foreign_name_negative ... ok
+test c331_invocation_boundaries::c9h_cross_effect_body_progress_rejected ... ok
+test c331_invocation_boundaries::c9h_jiding_empty_deck_is_genuine_virtual_sha ... ok
+test c331_invocation_boundaries::c9h_paid_count_mutation_rejected_typed_and_bytes ... ok
+test c331_invocation_boundaries::c9h_paired_context_and_admission_cannot_retarget_canonical_cause ... ok
+test c331_genuine_invocations::c9g_yuance_four_colours_options_and_cancel ... ok
+test c331_invocation_boundaries::c9h_sole_guicai_outside_kingdoms_cannot_pay_equipment ... ok
+test c331_invocation_boundaries::c9h_qinglong_private_transfer_masks_other_seat_events ... ok
+test c331_invocation_boundaries::c9h_qinglong_opens_optional_private_card_choice ... ok
+test c331_prehp_damage::c9b_damage_constructor_sharing_preserves_existing_equipped_emit_entry ... ok
+test c331_prehp_damage::c9b_dead_parent_keeps_chain_eligibility_and_siblings_unlink_on_their_own_submission ... ok
+test c331_invocation_boundaries::c9h_qinglong_paid_loss_restores_after_provider_removal ... ok
+test c331_prehp_damage::c9b_notrigger_suppresses_windows_without_suppressing_submission ... ok
+test c331_jiding_proofs::c9l_yihua_payment_proof_and_origin_are_required ... ok
+test c331_prehp_damage::c9b_post_submit_cancel_has_a_real_cancelled_child_without_zero_or_end ... ok
+test c331_invocation_boundaries::c9h_qinglong_selected_public_equipment_revokes_grant_after_loss ... ok
+test c331_invocation_boundaries::c9h_qinglong_self_source_uses_owned_cards_and_cancel_is_atomic ... ok
+test c331_prehp_damage::c9b_replacement_waits_for_real_lose_hp_and_dying_children_across_restore ... ok
+test c331_prehp_damage::c9b_post_submit_zero_stops_source_end_after_but_keeps_receipt ... ok
+test c331_prehp_damage::c9c_damage_record_precedes_each_recipients_change_hp_unlink ... ok
+test c331_prehp_damage::c9b_source_death_is_cleared_before_end_and_restore ... ok
+test c331_prehp_damage::c9c_first_prevention_competes_before_native_jueqing_replacement ... ok
+test c331_prehp_damage::c9c_first_quantity_change_is_seen_by_native_zuijiu ... ok
+test c331_prehp_damage::c9d_applied_helper_uses_recipient_lifetime_without_parent_ownership ... ok
+test c331_prehp_damage::c9d_first_zero_precedes_applied_mailun_quantity_bonus ... ok
+test c331_prehp_damage::c9d_first_zero_precedes_huoshen_cancel_and_recover ... ok
+test c331_prehp_damage::c9c_window_intrinsic_and_before_stages_are_rejected_on_byte_restore ... ok
+test c331_prehp_damage::c9c_native_admitted_body_roundtrips_and_cannot_forge_another_definition ... ok
+test c331_prehp_damage::c9d_huoshen_real_boss_general_uses_the_same_queue ... ok
+test c331_prehp_damage::c9d_huoshen_body_finishes_before_recover_child_restore ... ok
+test c331_prehp_damage::c9b_every_pre_hp_window_roundtrips_and_modifies_one_canonical_root ... ok
+test c331_jiding_proofs::c9l_tongji_payment_proof_is_required_on_both_paths ... ok
+test c331_prehp_damage::c9d_native_helper_order_choice_and_qualified_restore_execute_once ... ok
+test c331_review_continuations::c9j_jiding_genuine_zhenlie_removed_target_restores_and_continues ... ok
+test c331_review_continuations::c9j_jiding_tongji_and_yihua_restored_continuations ... ok
+test c331_review_roots::c9i_jiding_child_payload_is_admitted_operation ... ok
+test c331_atomic_source_repair::c9f_paotai_signed_zero_negative_and_overflow_rollback ... ok
+test c331_invocation_boundaries::c9h_qinglong_hidden_selection_cancel_restore_and_forgery ... ok
+test c331_review_roots::c9i_kingdoms_real_reveal_declares_distinct_enemy_facts ... ok
+test c331_review_roots::c9i_kingdom_identity_and_mutual_friend_facts_are_authoritative ... ok
+test c331_review_roots::c9i_mixed_judge_red_replacement_pays_guicai_route ... ok
+test c331_review_roots::c9i_nested_source_death_preserves_captured_identity ... ok
+test c331_prehp_damage::c9b_submission_slice_restore_does_not_commit_twice_and_rejects_completed_progress ... ok
+test c331_review_continuations::c9j_nested_source_death_sixiang_revival_restores ... ok
+test c331_review_continuations::c9j_hwendao_hand_and_equipment_origin_visibility_survives_restore ... ok
+test c331_review_continuations::c9j_duishi_actual_hand_and_equipment_acquisitions_keep_visibility ... ok
+test c331_review_roots::c9i_overlapping_judge_provider_is_selected_and_paid_route_survives_loss ... ok
+test c331_review_roots::c9i_qinglong_public_equipment_occurrence_remains_public_after_gain ... ok
+test c331_review_roots::c9i_same_effect_terminal_forgery_rejected ... ok
+test c331_review_roots::c9i_qinglong_private_custody_at_loss_pause ... ok
+test c331_review_roots::c9i_qinglong_cancel_no_log_success_exactly_one ... ok
+test c331_schema5_datachain::schema5_compiler_declaration_selects_schema5 ... ok
+test c331_review_roots::c9i_qinglong_theft_does_not_trigger_genuine_gift ... ok
+test c331_schema5_datachain::schema5_explicit_default_is_data_and_runtime_compatible ... ok
+test c331_schema5_datachain::schema5_default_declaration_lock_is_bound_and_public_sdk_native_vm_conflict_rejects ... ok
+test c331_schema5_datachain::schema5_fields_present_in_old_schema_reject_even_defaults ... ok
+test c331_review_roots::c9i_supported_unique_extension_cards_prove_wide_f09_eligibility ... ok
+test c331_schema5_datachain::schema5_hash_binds_positions_traits_tuple_keys_edges_and_cleanup ... ok
+test c331_schema5_datachain::schema5_false_empty_none_presence_downgrade_and_unknown_fields ... ok
+test c331_schema5_datachain::schema5_known_native_key_is_not_a_cleanup_or_window_permission ... ok
+test c331_schema5_datachain::schema5_old3_and_genuine4_bytes_hashes_and_readers_stay_positive ... ok
+test c331_schema5_datachain::schema5_invalid_data_install_is_atomic_and_default_vm_body_still_executes ... ok
+test c331_review_roots::c9i_source_jubao_gainability_filters_actual_treasure_before_choice ... ok
+test c331_schema5_datachain::schema5_runtime_rejects_unimplemented_mechanisms_before_engine_mutation ... ok
+test c331_schema5_datachain::schema5_windows_policy_combinations_and_real_child_cycle_reject ... ok
+test c331_review_roots::c9i_shenmiguo_excludes_transformed_material_but_replays_physical_sha ... ok
+test c331_source33_integration::phase7_genuine105_is_rejected_without_migration ... ok
+test c331_schema5_datachain::schema5_group_and_named_event_edges_resolve_genuine_dependency_handlers ... ok
+test c331_review_roots::c9i_yudun_transformed_material_does_not_consume_regular_sha ... ok
+test c331_source33_integration::phase7_actual_order_park_does_not_hide_optional_gate_consumer_source ... ok
+test c331_source33_integration::phase7_private106_header_and_full_state_roundtrip ... ok
+test c331_source_predicates::c9e_chain_cause_cannot_be_forged_into_ancestor_sha_admission ... ok
+test c331_review_roots::c9i_qinglong_successful_same_index_worlds_are_private_at_every_pause ... ok
+test c331_source_predicates::c9e_chilongya_direct_linked_victim_differs_from_real_chain_child ... ok
+test c331_source_predicates::c9e_ciqiu_elemental_sha_executes_admitted_quantity_and_removal ... ok
+test c331_source_predicates::c9e_ciqiu_and_zuijiu_share_real_begin1_order_choice_and_restore ... ok
+test c331_source_predicates::c9e_ciqiu_first_begin1_zero_keeps_skill_and_target_health ... ok
+test c331_source_predicates::c9e_hutian_negative_cap_is_persisted_before_zero_transition ... ok
+test c331_source_predicates::c9e_chilongya_equipment_removal_rejects_unexecuted_body_restore ... ok
+test c331_source_predicates::c9e_cancelled_damage_never_enters_hutian_or_zero_receipt_path ... ok
+test c331_atomic_source_repair::c9f_atomic_self_source_bodies_restore_every_suspension ... ok
+test c331_review_continuations::c9j_qinglong_custody_redaction_preserves_full_physical_ownership ... ok
+test c331_source_predicates::c9e_zuijiu_admitted_parent_and_source_forgeries_reject_atomically ... ok
+test c331_source_predicates::c9e_xixue_elemental_sha_executes_admitted_recovery ... ok
+test c331_source_predicates::c9e_zuijiu_card_without_immediate_sha_parent_does_not_qualify ... ok
+test nc01_seat_semantics::alive_ring_ignores_dead_seats ... ok
+test nc01_seat_semantics::audit_counterexamples_are_fixed ... ok
+test nc01_seat_semantics::seat_distance_all_pairs_for_supported_counts ... ok
+test nc01_seat_semantics::seat_ring_swap_changes_order ... ok
+test nc01_seat_semantics::seat_distance_is_rotation_invariant ... ok
+test nc03_ai_consistency::forged_action_is_rejected_by_authoritative_validation ... ok
+test nc01_seat_semantics::seat_steps_and_distance_are_distinct_concepts ... ok
+test nc03_legal_actions::legal_actions_cover_open_choice ... ok
+test nc03_legal_actions::legal_actions_do_not_mutate_engine ... ok
+test nc03_legal_actions::legal_actions_empty_for_other_seat ... ok
+test nc03_ai_consistency::planner_actions_pass_authoritative_validation ... ok
+test nc03_legal_actions::legal_actions_respect_attack_range ... ok
+test nc04_cards_given_event::cards_given_dsl_package_bridges_to_native_event ... ok
+test nc04_cards_given_event::giving_two_cards_at_once_triggers_cards_given_once ... ok
+test nc04_cards_given_event::optional_probe_confirms_and_restores_across_save ... ok
+test nc04_cards_given_event::probe_on_recipient_side_does_not_trigger ... ok
+test nc04_cards_given_event::rende_give_triggers_cards_given_probe_for_recipient ... ok
+test nc04_cards_given_event::v325_and_earlier_archives_are_rejected_by_archive_format ... ok
+test nc04_cards_given_event::single_cards_given_frame_carries_all_cards ... ok
+test nc04_vm_fault::nc04_duplicate_submission_after_fault ... ok
+test nc04_vm_fault::nc04_fuel_exhaustion_rolls_back_and_rejects ... ok
+test nc04_vm_fault::nc04_pause_and_resume ... ignored, NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖
+test nc04_vm_resume::b7_plain_v323_archive_is_rejected_by_archive_format ... ok
+test nc04_vm_resume::b7_suspended_vm_v323_archive_is_rejected ... ok
+test nc04_vm_fault::nc04_normal_completion ... ok
+test nc04_vm_resume::nc04_invalid_vm_answers_preserve_retry_across_archive ... ok
+test nc04_vm_resume::nc04_pause_resume_completes ... ok
+test nc04_vm_resume::nc04_fault_after_resume_rolls_back ... ok
+test nc04_vm_resume::nc04_vm_restore_preserves_hit_counting ... ok
+test nc04_vm_resume::nc04_vm_restore_preserves_once_consume ... ok
+test nc04_vm_resume::nc04_vm_fault_after_archive_restores_choice_and_allows_retry ... ok
+test nc04_vm_resume::nc04_vm_restore_uses_declared_skill_for_storage ... ok
+test nc05_general_select::assign_general_validates_inputs ... ok
+test nc05_general_select::assign_general_grants_pack_skills ... ok
+test nc05_general_select::identity_lord_selection_preserves_infinite_hp_sentinel ... ok
+test nc05_general_select::general_candidates_include_pack_generals ... ok
+test nc05_general_select::reselect_keeps_equipment_skill_shared_with_old_general ... ok
+test nc05_general_select::reselect_keeps_global_skill_shared_with_old_general_and_restore ... ok
+test nc06_generic_content_state::nc06_generic_turn_scoped_state_clears_on_turn_change ... ok
+test nc06_generic_content_state::nc06_shape_flags_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_hits_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_marks_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_once_is_same_sourced ... ok
+test nc06_generic_content_state::nc06_shape_piles_is_same_sourced ... ok
+test nc05_general_select::match_continues_after_selection ... ok
+test nc06_zhucheng_restore::ai_redaction_preserves_actual_zhucheng_pile ... ok
+test nc06_zhucheng_restore::non_owning_card_references_are_not_counted_twice ... ok
+test nc06_zhucheng_restore::skill_pile_archive_restores_and_continues ... ok
+test nc06_zhucheng_restore::all_owned_piles_are_counted_once ... ok
+test nc07_archive_hash_fields::card_mods_enters_hash ... ok
+test nc06_zhucheng_restore::skill_pile_rejects_duplicate_missing_and_unknown_cards ... ok
+test nc07_archive_hash_fields::chaofeng_active_enters_hash ... ok
+test nc07_archive_hash_fields::jiguanyuan_cards_enters_hash ... ok
+test nc07_archive_hash_fields::jileng_active_enters_hash ... ok
+test nc07_archive_hash_fields::minwan_targets_enters_hash ... ok
+test nc07_archive_hash_fields::nigong_lv_enters_hash ... ok
+test nc07_archive_hash_fields::v326_and_earlier_archives_are_rejected_by_archive_format ... ok
+test nc07_archive_hash_fields::xingtigaizao_count_enters_hash ... ok
+test nc07_archive_hash_fields::xuehuang_used_enters_hash ... ok
+test nc07_archive_hash_fields::xuejibingbao_enters_hash ... ok
+test nc07_archive_hash_fields::yinmi_active_enters_hash ... ok
+test nc07_archive_hash_guard::archived_state_fields_are_hashed_or_excluded ... ok
+test c331_source_predicates::c9e_ciqiu_alias_removes_the_actual_admitted_definition ... ok
+test nc07_lianyaohu_hash::v324_and_earlier_archives_are_rejected_by_archive_format ... ok
+test nc07_state_same_source::nc07_boss_stage_is_same_sourced ... ok
+test nc07_state_same_source::nc07_counters_are_same_sourced ... ok
+test nc07_state_same_source::nc07_equip_zone_is_same_sourced ... ok
+test nc07_state_same_source::nc07_face_down_is_same_sourced ... ok
+test nc07_state_same_source::nc07_hp_is_same_sourced ... ok
+test nc07_state_same_source::nc07_identity_roles_are_same_sourced ... ok
+test nc07_state_same_source::nc07_judge_zone_is_same_sourced ... ok
+test nc07_state_same_source::nc07_max_hp_is_same_sourced ... ok
+test nc07_state_same_source::nc07_restore_rejects_out_of_range_references ... ok
+test nc07_state_same_source::nc07_seat_ring_is_same_sourced ... ok
+test nc07_state_same_source::nc07_skill_instances_are_same_sourced ... ok
+test nc07_state_same_source::nc07_turn_state_is_same_sourced ... ok
+test c331_genuine_invocations::c9g_invocation_every_phase_and_dodge_restore ... ok
+test c331_atomic_source_repair::c9f_paotai_wide_real_command_restore_controls ... ok
+test nc07_discard_duplicate_probe::swd_discard_has_no_duplicates_and_restores ... ok
+test nc07_lianyaohu_hash::different_jar_orders_have_different_hashes_and_trajectories ... ok
+test nc09_projection_and_errors::nc09_choice_options_are_observer_only ... ok
+test nc09_identity_end_to_end::identity_game_is_stable_after_terminal ... ok
+test c331_source_predicates::c9e_real_duel_immediate_parent_and_target_only_zuijiu_are_negative_controls ... ok
+test nc09_projection_and_errors::nc09_illegal_commands_are_visibly_rejected ... ok
+test nc09_identity_end_to_end::identity_game_reaches_terminal_outcome ... ok
+test nc09_projection_and_errors::nc09_seat_projection_hides_others_cards ... ok
+test nc10_ai_boundary_and_cancel::cancelled_planner_marks_plan_cancelled ... ok
+test nc09_identity_end_to_end::identity_outcome_traitor ... ok
+test nc09_projection_and_errors::nc09_projection_survives_archive_roundtrip ... ok
+test c331_source_predicates::c9e_hutian_signed_zero_host_amount_and_later_filters_roundtrip ... ok
+test nc10_ai_bounds::content_tuning_rejects_non_finite_values ... ok
+test nc09_identity_end_to_end::identity_outcome_lord_side ... ok
+test nc10_ai_boundary_and_cancel::policy_variants_are_deterministic ... ok
+test nc10_ai_boundary_and_cancel::tiny_budget_marks_exhausted ... ok
+test nc10_ai_boundary_and_cancel::stale_plan_is_rejected ... ok
+test nc10_ai_boundary_and_cancel::hidden_other_hands_do_not_change_seat_input ... ok
+test nc10_ai_bounds::zero_deadline_returns_timed_out_plan_without_blocking ... ok
+test nc10_ai_bounds::nc10_planner_is_deterministic ... ok
+test nc10_ai_bounds::nc10_stale_plan_is_rejected ... ok
+test nc10_ai_boundary_and_cancel::pool_parallel_matches_sequential_and_records_tail ... ok
+test nc10_answer_routing::answer_without_open_ask_is_rejected_and_keeps_the_archive_atomic ... ok
+test nc10_answer_routing::restored_same_depth_answer_reaches_the_asking_machine ... ok
+test nc10_duel_nullify_privacy::both_answers_can_resume_redacted_window_after_restore ... ok
+test nc10_duel_nullify_privacy::nullify_timing ... ignored, manual same-machine latency sampling
+test nc10_duel_nullify_privacy::planning_uses_only_observers_information ... ok
+test nc10_duel_nullify_privacy::public_special_zones_allow_safe_redaction ... ok
+test nc10_duel_nullify_privacy::redaction_preserves_window_and_produces_restorable_equal_hidden_zones ... ok
+test nc10_ai_information_boundary::legal_action_set_is_invariant_under_hidden_information ... ok
+test nc10_live_hidden_cards::dead_current_actor_does_not_probe_attacks ... ok
+test nc10_ai_bounds::nc10_tiny_budget_still_legal ... ok
+test nc10_j2_vm_privacy::cached_private_damage_cannot_change_j2_public_choice_plan ... ok
+test nc10_live_hidden_cards::empty_zero_minimum_choice_has_a_legal_plan_even_without_cancellation ... ok
+test nc10_live_hidden_cards::real_guanxing_machine_held_cards_are_not_duplicated ... ok
+test nc10_live_hidden_cards::real_liaoyuan_suit_scalar_is_preserved_in_conservative_host_path ... ok
+test nc10_live_hidden_cards::real_moyan_public_machine_held_cards_survive_both_windows ... ok
+test c331_source_predicates::c9e_admitted_host_alias_quantity_bodies_do_not_requery_canonical_names ... ok
+test c331_atomic_source_repair::c9f_random_bodies_restore_rng_and_child_suffix ... ok
+test nc10_live_hidden_cards::live_sha_window_hides_opponent_hand_identity ... ok
+test nc10_ai_information_boundary::planner_is_invariant_under_hidden_information ... ok
+test nc10_ai_information_boundary::planner_detects_own_hand_change ... ok
+test nc10_multiple_hidden_traps::multiple_traps_stay_physical_from_each_observer ... ok
+test nc10_opaque_vm_privacy::author_dsl_private_query_in_pending_effects_is_a_public_search_leaf ... ok
+test nc10_opaque_vm_privacy::opaque_vm_private_local_does_not_change_choice ... ok
+test nc10_multiple_hidden_traps::real_skill_places_two_traps_and_simulation_remains_restorable ... ok
+test nc10_pending_duel_privacy::pending_duel_timing ... ignored, manual same-machine latency sampling
+test nc10_multiple_hidden_traps::scarce_suits_are_shared_across_trap_holders ... ok
+test nc10_multiple_hidden_traps::references_follow_multiple_synthetic_traps ... ok
+test nc10_live_hidden_cards::real_vm_commit_window_uses_equal_public_plans_with_conservative_helper ... ok
+test nc10_pending_duel_privacy::public_special_zones_are_preserved_during_redaction ... ok
+test nc10_live_hidden_cards::private_vm_piles_are_physical_and_counterfactually_equal ... ok
+test nc10_pending_duel_privacy::duel_planning_does_not_depend_on_opponent_hidden_card ... ok
+test nc10_planner_pool::nc10_pool_full_degrades_without_losing_plans ... ok
+test nc10_pending_duel_privacy::redaction_preserves_duel_machine_and_referenced_cards ... ok
+test nc10_planner_pool::nc10_pool_plans_are_revision_guarded ... ok
+test nc10_planner_pool::nc10_pool_respects_cancellation ... ok
+test nc10_planner_pool::nc10_pool_reuses_workers_and_returns_legal_plans ... ok
+test nc10_public_own_plan::changed_public_options_are_rejected_without_a_hidden_fallback ... ok
+test nc10_public_other_plan::other_idle_keeps_explicit_parallel_reveals_and_owner_answers ... ok
+test nc10_public_other_plan::own_answer_and_no_choice_search_still_advance_authority ... ok
+test nc10_public_own_plan::shared_public_selector_obeys_order_card_preference_and_bounds ... ok
+test nc10_public_own_plan::own_advice_cancelled_before_apply_does_not_submit ... ok
+test nc10_redaction_helper_contract::nonobserver_shan_window_retains_restorable_filtered_options ... ok
+test nc10_redaction_helper_contract::pending_move_preserves_vm_nonzero_card_contract ... ok
+test nc10_redaction_helper_contract::pending_store_preserves_vm_nonzero_card_contract ... ok
+test nc10_public_own_plan::complete_own_plan_cannot_depend_on_an_unseen_later_park ... ok
+test nc10_ai_bounds::nc10_planner_is_invariant_under_deck_order ... ok
+test nc10_single_hidden_trap::references_follow_their_synthetic_cards ... ok
+test nc10_single_hidden_trap::real_single_opponent_trap_redacts_without_duplicate_cards ... ok
+test nc10_skill_pile_conservation::fixed_piles_keep_hidden_hand_permutations_equivalent ... ok
+test nc10_skill_pile_conservation::opponent_private_pile_identity_does_not_change_synthetic_hands ... ok
+test nc10_single_hidden_trap::vm_opaque_storage_keeps_its_trap_reference ... ok
+test nc10_source_provenance::actual_vm_ask_and_restored_vm_gate_sources_stay_unknown ... ok
+test nc10_source_provenance::native_known_optional_families_publish_their_exact_names ... ok
+test nc10_source_provenance::native_optional_confirm_publishes_own_source_only ... ok
+test nc10_skill_pile_conservation::redaction_preserves_owned_skill_cards_for_self_and_opponents ... ok
+test nc10_source_provenance::native_source_is_stable_across_private_deck_rng_and_counters ... ok
+test nc12_ai_strength_baseline::nc10_quality_matrix ... ignored, manual fixed-seed quality and latency matrix
+test nc12_ai_strength_baseline::nc10_quality_matrix_production ... ignored, manual production-budget quality and latency matrix
+test nc10_source_provenance::source_initial_binding_does_not_certify_the_next_pending_prompt ... ok
+test nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference ... ignored, 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过
+test nc12_dangling_reference_repro::nc12_repro_seed_44170_step_10 ... ignored, 登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过
+test nc12_swd_authoritative_stability::combo_tier_variant1_is_panic_free ... ok
+test nc10_public_other_plan::dead_other_actor_returns_before_simulation ... ok
+test nc10_public_other_plan::ordinary_other_choice_returns_before_simulation ... ok
+test nc10_public_other_plan::ordinary_other_choice_over_real_cached_vm_effects_is_public_idle ... ok
+test nc10_single_hidden_trap::single_opponent_trap_identity_cannot_change_planning ... ok
+test nc10_ai_bounds::nc10_leak_surface_quantified ... ok
+test c331_source_predicates::c9e_chilongya_equipment_qualified_chain_roundtrips ... ok
+test nc12_swd_authoritative_stability::swd_authoritative_path_is_panic_free ... ok
+test c331_atomic_source_repair::c9f_discard_and_named_draw_restore_actual_children ... ok
+test c331_source_predicates::c9e_elemental_ciqiu_and_xixue_roundtrip_before_body_and_children ... ok
+test c331_source_predicates::c9e_real_sha_chain_and_alias_parent_roundtrip_at_every_slice ... ok
+test nc10_multiple_hidden_traps::multiple_hidden_traps_do_not_change_simulation_or_plans ... ok
+test nc10_single_hidden_trap::hidden_trap_sampling_is_invariant_across_seeds ... ok
+test c331_atomic_source_repair::c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore ... ok
+test nc12_ai_strength_baseline::nc12_ai_strength_baseline_statistics ... ok
+
+test result: ok. 295 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 25.42s
+
+     Running tests/groups/swd.rs (target/debug/deps/swd-fd47962b8bd3de2b)
+
+running 134 tests
+test swd_bingfeng_lock::bingfeng_lock_removed_on_turn_over ... ok
+test swd_gongxin_hand_peek::gongxin_absent_and_once_per_turn ... ok
+test swd_cyqiaoxie_jiguan::cyqiaoxie_no_window_without_equip_loss ... ok
+test swd_cyqiaoxie_jiguan::cyqiaoxie_uses_jiguan_card_after_equip_loss ... ok
+test swd_gongxin_hand_peek::gongxin_discards_target_heart ... ok
+test swd_bingfeng_lock::bingfeng_unlocked_player_dodges ... ok
+test swd_cyqiaoxie_jiguan::cyqiaoxie_cancel_stops_loop ... ok
+test swd_gaizao_slot::gaizao_decline_replaces_normally ... ok
+test swd_gaizao_slot::gaizao_moves_equip_to_empty_slot ... ok
+test swd_bingfeng_lock::bingfeng_flips_loses_max_hp_and_locks_cards ... ok
+test swd_gaizao_slot::gaizao_no_window_when_slot_free ... ok
+test swd_cyqiaoxie_jiguan::cyqiaoxie_absent_no_window ... ok
+test swd_bingfeng_lock::bingfeng_locked_player_cannot_dodge ... ok
+test swd_gaizao_slot::gaizao_state_roundtrip ... ok
+test swd_gongxin_hand_peek::gongxin_places_heart_on_deck_top ... ok
+test swd_gxianyin_suit_swap::gxianyin_phase_gate_and_limit ... ok
+test swd_gongxin_hand_peek::gongxin_is_once_per_play_phase ... ok
+test swd_gxianyin_suit_swap::gxianyin_swaps_suit_cards ... ok
+test swd_hxunzhi_wanjian::hxunzhi_without_marker_survives_phase_end ... ok
+test swd_hutian_deposit::hutian_target_filter_and_decline ... ok
+test swd_hutian_deposit::hutian_returns_on_owner_death ... ok
+test swd_hxunzhi_wanjian::hxunzhi_wanjian_grants_and_death ... ok
+test swd_jikong_thunder_sha::jikong_absent_no_window ... ok
+test swd_hutian_deposit::hutian_state_roundtrip ... ok
+test swd_gxianyin_suit_swap::gxianyin_absent_and_empty_hand ... ok
+test swd_jifeng_multishot::jifeng_allows_multi_target_sha ... ok
+test swd_jikong_thunder_sha::jikong_cancel_refunds_use ... ok
+test swd_jikong_thunder_sha::jikong_lose_face_requires_empty_hand ... ok
+test swd_hutian_deposit::hutian_deposits_shields_and_returns ... ok
+test swd_hxunzhi_wanjian::hxunzhi_phase_gate_and_absent ... ok
+test swd_jilve_top3::jilve_phase_gate_and_three_use_cap ... ok
+test swd_jilve_top3::jilve_uses_top_card_and_counts_three ... ok
+test swd_jikong_thunder_sha::jikong_phase_face_virtual_thunder_sha_once_per_turn ... ok
+test swd_lingwu_extra_phase::lingwu_absent_no_insert ... ok
+test swd_jilve_top3::legal_targets_helper_rules ... ok
+test swd_jilve_top3::jilve_absent_and_no_candidate ... ok
+test swd_kunlunjing_rewind::kunlunjing_no_rewind_when_hp_not_lower ... ok
+test swd_kunlunjing_rewind::kunlunjing_snapshot_and_rewind ... ok
+test swd_liaoyuan_extra_shan::liaoyuan_no_window_without_same_suit ... ok
+test swd_lingwu_extra_phase::cards_used_turn_resets_next_turn ... ok
+test swd_liaoyuan_extra_shan::liaoyuan_decline_normal_damage ... ok
+test swd_liaoyuan_extra_shan::liaoyuan_direct_hit_with_bonus ... ok
+test swd_lingwu_extra_phase::lingwu_inserts_extra_play_phase_when_used_reaches_hp ... ok
+test swd_jifeng_multishot::jifeng_multi_target_may_fizzle ... ok
+test swd_lingwu_extra_phase::lingwu_no_insert_below_hp ... ok
+test swd_kunlunjing_rewind::kunlunjing_state_roundtrip ... ok
+test swd_linyun_two_cards_sha::linyun_requires_play_phase ... ok
+test swd_linyun_two_cards_sha::linyun_equip_material_allowed ... ok
+test swd_liaoyuan_extra_shan::liaoyuan_state_roundtrip ... ok
+test swd_lingwu_extra_phase::lingwu_extra_phase_state_roundtrip ... ok
+test swd_lxianglong_sha_miss::lxianglong_no_window_when_sha_hits ... ok
+test swd_lxianglong_sha_miss::lxianglong_absent_no_window ... ok
+test swd_lxianglong_sha_miss::lxianglong_decline_no_extra_sha ... ok
+test swd_linyun_two_cards_sha::linyun_requires_two_cards ... ok
+test swd_linyun_two_cards_sha::linyun_two_hand_cards_as_sha_hits ... ok
+test swd_lxianglong_sha_miss::lxianglong_counterattacks_after_sha_miss ... ok
+test swd_mailun_modes::mailun_mode7_distance_minus ... ok
+test swd_mailun_modes::mailun_mode3_first_damage_minus ... ok
+test swd_meihuo_cards_lost::meihuo_no_window_when_still_equipped ... ok
+test swd_miedao_draw_discard::miedao_absent_no_extra_draw ... ok
+test swd_mailun_modes::mailun_mode5_draw_minus_and_limit_plus ... ok
+test swd_meihuo_cards_lost::meihuo_takes_and_equips_when_equip_card ... ok
+test swd_meihuo_cards_lost::meihuo_negative_faces ... ok
+test swd_meihuo_cards_lost::meihuo_takes_hand_card_into_hand ... ok
+test swd_miedao_draw_discard::miedao_draw_extra_and_forced_discard ... ok
+test swd_mailun_modes::mailun_mode1_hp_shift_and_gate ... ok
+test swd_mailun_modes::mailun_state_roundtrip ... ok
+test swd_mailun_modes::mailun_absent_and_decline ... ok
+test swd_mohua2_transform::mohua2_absent_no_transform ... ok
+test swd_miedao_draw_discard::miedao_no_effect_at_full_hp ... ok
+test swd_meihuo_cards_lost::cards_lost_event_roundtrip ... ok
+test swd_moyan_multi_fire::moyan_is_once_per_play_phase ... ok
+test swd_mohua2_transform::mohua2_fires_once ... ok
+test swd_niepan_ref::swd_niepan_package_mapping_is_host ... ok
+test swd_mohua2_transform::mohua2_transforms_on_dying ... ok
+test swd_moyan_multi_fire::moyan_absent_rejected ... ok
+test swd_moyan_multi_fire::moyan_requires_wounded_and_red_card ... ok
+test swd_niepan_ref::swd_niepan_granted_and_usable ... ok
+test swd_moyan_multi_fire::moyan_two_red_two_targets_fire_damage ... ok
+test swd_rumeng_phase_skip::rumeng_target_discards_basic_card_no_skip ... ok
+test swd_rumeng_phase_skip::rumeng_no_window_without_non_basic ... ok
+test swd_rumeng_phase_skip::rumeng_skip_play_and_discard_when_target_declines ... ok
+test swd_shengong_borrow::shengong_absent_no_borrow_option ... ok
+test swd_shengong_borrow::shengong_borrows_armor_to_dodge ... ok
+test swd_shengong_borrow::shengong_own_equip_still_usable ... ok
+test swd_shenyan_spread::shenyan_ignores_non_fire_damage ... ok
+test swd_shenyan_spread::shenyan_only_own_fire_damage ... ok
+test swd_shouyin_full_heal::shouyin_absent_no_window ... ok
+test swd_shenyan_spread::shenyan_boosts_fire_and_spreads_to_neighbors ... ok
+test swd_shenyan_spread::shenyan_limited_once ... ok
+test swd_rumeng_phase_skip::rumeng_skip_flag_one_shot ... ok
+test swd_shouyin_full_heal::shouyin_no_window_when_flipped ... ok
+test swd_shouyin_full_heal::shouyin_flips_self_and_heals_everyone_once ... ok
+test swd_songci_targets::songci_forces_discard_when_hand_over_hp ... ok
+test swd_songci_targets::songci_draws_two_and_records_target ... ok
+test swd_swdtianshu_gain::swdtianshu_absent_and_phase_gate ... ok
+test swd_swdtianshu_gain::swdtianshu_requires_trick_card ... ok
+test swd_shenyan_spread::shenyan_state_roundtrip ... ok
+test swd_swdtianshu_gain::swdtianshu_gains_skill_and_removes_on_source_death ... ok
+test swd_shouyin_full_heal::shouyin_state_roundtrip ... ok
+test swd_tianlun_judge::tianlun_absent_no_window ... ok
+test swd_songci_targets::songci_draw_group_skill_when_all_recorded ... ok
+test swd_tianlun_judge::tianlun_decline_keeps_judge_zone ... ok
+test swd_songci_targets::songci_phase_gate_and_roundtrip ... ok
+test swd_tianlun_judge::tianlun_replaces_judge_card_from_judge_zone ... ok
+test swd_tianxiang_redirect::tianxiang_no_window_without_heart ... ok
+test swd_tianxiang_redirect::tianxiang_decline_keeps_damage ... ok
+test swd_tianxiang_redirect::tianxiang_redirects_damage_and_target_draws ... ok
+test swd_xiuluo_judge_clear::xiuluo_absent_no_window ... ok
+test swd_swdtianshu_gain::swdtianshu_state_roundtrip ... ok
+test swd_xiuluo_judge_clear::xiuluo_discards_same_suit_judge_card ... ok
+test swd_xiuluo_judge_clear::xiuluo_no_window_without_judge_card ... ok
+test swd_xuanyuanjian_card::xuanyuanjian_equip_grants_hujia ... ok
+test swd_xuanyuanjian_card::xuanyuan_retrieves_sword_from_discard ... ok
+test swd_xuanyuanjian_card::xuanyuanjian_no_backlash_with_xuanyuan ... ok
+test swd_yihua_bounce::yihua_absent_no_window ... ok
+test swd_tianxiang_redirect::tianxiang_absent_and_grant_roundtrip ... ok
+test swd_yihua_bounce::yihua_bounces_single_target_card ... ok
+test swd_yihua_bounce::yihua_no_window_with_one_card ... ok
+test swd_yihua_bounce::yihua_decline_resolves_normally ... ok
+test swd_yishan_recover::yishan_records_only_for_holder ... ok
+test swd_yishan_recover::yishan_no_window_when_nothing_recoverable ... ok
+test swd_yishan_recover::yishan_recovers_two_recent_lost_cards ... ok
+test swd_xuanyuanjian_card::xuanyuanjian_state_roundtrip ... ok
+test swd_zhenlie_target_exclude::zhenlie_absent_no_window ... ok
+test swd_zhenlie_target_exclude::zhenlie_decline_takes_damage ... ok
+test swd_zhenlie_target_exclude::zhenlie_excludes_self_from_sha_and_discards_user_card ... ok
+test swd_zhenlie_target_exclude::zhenlie_no_window_when_not_targeted ... ok
+test swd_zhuhai_end_phase_sha::zhuhai_no_window_without_damage ... ok
+test swd_yishan_recover::yishan_recovers_from_other_equip_and_roundtrips ... ok
+test swd_jifeng_multishot::jifeng_single_target_never_fizzles ... ok
+test swd_zhuhai_end_phase_sha::zhuhai_absent_no_window ... ok
+test swd_zhuhai_end_phase_sha::zhuhai_no_window_without_sha ... ok
+test swd_zhuhai_end_phase_sha::zhuhai_uses_sha_on_damaging_player ... ok
+
+test result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+
+     Running tests/groups/test_registry.rs (target/debug/deps/test_registry-36ff000c28160b2f)
+
+running 1 test
+test every_test_file_is_registered_in_exactly_one_group ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_native_content-623333cc07d80f31)
+
+running 4 tests
+test content::pile::tests::pile_spec_rejects_invalid_entries ... ok
+test content::extension::tests::extension_registry_lifecycle ... ok
+test content::pile::tests::scale_plan_follows_upstream_formula ... ok
+test content::pile::tests::pile_spec_builds_unique_cards ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/lib.rs (target/debug/deps/engine_native_kernel-5393bbf26ad01bb1)
+
+running 4 tests
+test archive::a0_rebuilt_tests::card_kind_encoding_roundtrip_all_variants ... ok
+test archive::a0_rebuilt_tests::card_kind_companion_skills_consistent ... ok
+test rvm_bridge::damage_context_tests::negative_canonical_damage_reaches_filter_and_signed_vm_host_unchanged ... ok
+test archive::a0_rebuilt_tests::card_kind_keys_bijective ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native_content
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests engine_native_kernel
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: 1 target failed:
+    `-p engine-native --test misc`
+exit=101

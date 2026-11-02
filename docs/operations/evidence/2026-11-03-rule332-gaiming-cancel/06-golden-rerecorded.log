@@ -1,0 +1,5 @@
+$ cargo test --offline -p engine-native --test kernel replay_scenarios::   # 重录后，2026-11-03 01:17:31 +0800
+test replay_scenarios::scenarios_are_registered_in_coverage_manifest ... ok
+test replay_scenarios::replay_scenarios_match_golden ... ok
+test replay_scenarios::pa12_print_golden_hex ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 432 filtered out; finished in 0.02s

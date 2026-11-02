@@ -1,0 +1,4 @@
+$ cargo test --offline -p engine-native --test misc nc09_gaiming_cancel::cancel_preserves… 与 cancel_then…（修复后、升号前），2026-11-03 01:15:19 +0800
+test nc09_gaiming_cancel::cancel_then_normal_judgement_and_pick_control ... ok
+test nc09_gaiming_cancel::cancel_preserves_physical_multiset_and_restores ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 229 filtered out; finished in 0.01s

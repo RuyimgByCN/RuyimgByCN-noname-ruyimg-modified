@@ -1,0 +1,4 @@
+$ [补跑：10/12 的唯一失败是断言同步竞态（adr0786 catalog 331→332 在后台全量启动后才落盘），同步后重跑] cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast   # 2026-11-03 01:34:41 +0800
+three-crates: segments 17 passed 1911 failed 0 ignored 75
+$ cargo test --offline --workspace --no-fail-fast   # 2026-11-03 01:35:18 +0800
+workspace: segments 173 passed 7170 failed 0 ignored 77

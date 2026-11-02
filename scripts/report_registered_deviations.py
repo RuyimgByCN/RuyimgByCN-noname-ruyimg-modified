@@ -67,11 +67,12 @@ def main(argv: list[str] | None = None) -> int:
     yes, no = registered()
     print(f"台账 {len(yes) + len(no)} 行；已登记差异 {len(yes)} 行；未登记 {len(no)} 行")
     if "--check" in args:
-        # 门禁口径：总数必须为 54，已登记数必须为 20（否则文档口径需同步更新）
-        if len(yes) + len(no) != 1 or len(yes) != 0:
-            print(f"❌ 口径漂移：总 {len(yes) + len(no)}（应 1）、已登记 {len(yes)}（应 0）")
+        # 门禁口径（2026-11-03 起台账收敛到 0：HlssGaiming 随规则 332 移入 FIXED）；
+        # 历史口径 54/20、1/0 见 README 轮次记录。
+        if len(yes) + len(no) != 0 or len(yes) != 0:
+            print(f"❌ 口径漂移：总 {len(yes) + len(no)}（应 0）、已登记 {len(yes)}（应 0）")
             return 1
-        print("✅ 口径一致：1 行 / 已登记 0 行")
+        print("✅ 口径一致：0 行 / 已登记 0 行")
         return 0
     for behavior in yes:
         print(f"  [差异] {behavior}")

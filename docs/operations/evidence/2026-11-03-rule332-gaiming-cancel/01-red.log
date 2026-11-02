@@ -1,0 +1,13 @@
+$ cargo test --offline -p engine-native --test misc nc09_gaiming_cancel::   # 修复前（应红），2026-11-03 01:13:27 +0800
+test nc09_gaiming_cancel::genuine_331_pending_archive_is_version_rejected ... FAILED
+test nc09_gaiming_cancel::cancel_then_normal_judgement_and_pick_control ... FAILED
+test nc09_gaiming_cancel::cancel_preserves_physical_multiset_and_restores ... FAILED
+thread 'nc09_gaiming_cancel::genuine_331_pending_archive_is_version_rejected' (40479854) panicked at crates/engine-native/tests/groups/../nc09_gaiming_cancel.rs:101:5:
+thread 'nc09_gaiming_cancel::cancel_then_normal_judgement_and_pick_control' (40479853) panicked at crates/engine-native/tests/groups/../nc09_gaiming_cancel.rs:72:5:
+assertion `left == right` failed: 取消后恰有一次正常判定：[]
+  left: 0
+ right: 1
+thread 'nc09_gaiming_cancel::cancel_preserves_physical_multiset_and_restores' (40479852) panicked at crates/engine-native/tests/groups/../nc09_gaiming_cancel.rs:40:5:
+取消后出现重复实体：[65]
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 228 filtered out; finished in 0.01s
+exit=101

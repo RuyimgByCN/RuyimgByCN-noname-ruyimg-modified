@@ -504,10 +504,13 @@ fn hlss_gaiming_picks_judge_result_or_declines() {
         "改命窗（放弃）"
     );
     drain(&mut e);
+    // 规则 332（裁决 24）：放弃后 7 张回牌堆顶，再由正常判定初始化抽走
+    // 恰一张（原首候选）。修复前此处断言 deck_before 并把重复实体锁成
+    // 期望（牌 65 既在牌堆又被结算弃置）；见 2026-11-03 红→绿证据。
     assert_eq!(
         e.state_core().deck.len(),
-        deck_before,
-        "放弃：7 张回牌堆顶（登记差异：上游滞留处理区）"
+        deck_before - 1,
+        "放弃：7 张回牌堆顶后正常判定消耗一张（登记差异：上游滞留处理区）"
     );
     assert!(e.debug_judge(0).is_empty(), "判定区已结算（照常判定）");
     assert!(

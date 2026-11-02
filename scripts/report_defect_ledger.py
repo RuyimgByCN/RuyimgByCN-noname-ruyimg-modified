@@ -245,6 +245,7 @@ def build() -> list[list[str]]:
 #: 上游描述的可观察结果，故在规则差异层面不是缺陷。
 #: **真正修掉的行**（行为已改、全量测试通过）。
 FIXED: dict[str, str] = {
+    "HlssGaiming": "规则 332（2026-11-03，裁决 24）：改命自 v303 已实现为真实判定前窗口机；「取消归还后未走正常判定」缺陷修复并验收——取消后物理多重集守恒、状态可恢复、正常判定恰抽走原首候选、不重复询问改命（nc09_gaiming_cancel 3 测红→绿；hlss 放弃路径 deck−1 断言更正）；证据 docs/operations/evidence/2026-11-03-rule332-gaiming-cancel/",
     "ShengkeCheck": "`nc08_upstream_shengke.rs` 断言「杀命中 1 点」（克）/「被生 ⇒ 摸一张」等分支结果 ⇒ 目标面判定发生在结算前，与上游 `target:'useCardToBegin'` 一致",
     "SwdMojian": "`g1_shahai_swd/liuhong.rs` 断言「墨剑：目标摸 1」「墨剑：自己回 1 至满」⇒ 效果发生在杀结算前，与上游 `player:'shaBegin'` 一致",
     "YunchouJiaoxia": "`nc08_upstream_yunchou_jiaoxia.rs` 断言「成为**红色**牌目标应摸 1」「**黑色**牌不触发」⇒ 正是上游 `target:'useCardToTargeted'` 的红/黑分支",

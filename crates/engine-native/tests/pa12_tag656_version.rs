@@ -8,6 +8,6 @@ fn v322_archive_is_rejected_and_current_archive_round_trips() {
     assert_eq!(ARCHIVE_FORMAT_VERSION, 106);
     let engine = Engine::new(65101, 4);
     let snapshot = decode_archive(&encode_archive(&engine.save())).unwrap();
-    assert_eq!(snapshot.ruleset_version, 331);
+    assert_eq!(snapshot.ruleset_version, 332);
     assert_eq!(Engine::restore(&snapshot).unwrap().state_hash(), engine.state_hash());
 }

@@ -99,6 +99,8 @@ mod nc09_referee_projection;
 
 #[path = "../nc09_machine_ownership.rs"]
 mod nc09_machine_ownership;
+#[path = "../nc09_gaiming_cancel.rs"]
+mod nc09_gaiming_cancel;
 
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
