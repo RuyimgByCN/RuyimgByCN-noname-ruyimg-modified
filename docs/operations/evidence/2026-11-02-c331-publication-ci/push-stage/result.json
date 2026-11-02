@@ -1,0 +1,212 @@
+{
+  "started_utc": "2026-11-02T15:00:06.946933+00:00",
+  "sha": "96236c963bde6e12323297acf523d3899789e5d1",
+  "expected_old_remote": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "expected_remote_main": "47347c6608d651660ae9459e59eb529b3cef277f",
+  "repository": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "branch": "refs/heads/native-convergence",
+  "push_attempts": 1,
+  "commands": [
+    {
+      "name": "remote-before",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication-20261102/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "ls-remote",
+        "--heads",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "refs/heads/native-convergence",
+        "refs/heads/main"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "push",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication-20261102/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "push",
+        "--progress",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "96236c963bde6e12323297acf523d3899789e5d1:refs/heads/native-convergence"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "remote-after",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication-20261102/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "ls-remote",
+        "--heads",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "refs/heads/native-convergence",
+        "refs/heads/main"
+      ],
+      "exit": 0
+    }
+  ],
+  "before": {
+    "head": "96236c963bde6e12323297acf523d3899789e5d1",
+    "branch": "main",
+    "index_sha256": "61df0763e31bbe206bd25548e3a75c57d1a32fa5a1153f671b2b1dcfe5f3067f",
+    "logical_index_sha256": "b1ac9717d7d96af77252c3fac37fbc5796f4c71bb7fea0858a7ba2da78b70f26",
+    "untracked_paths_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "elapsed_seconds": 21.16450887499377,
+  "original_hook_text": "#!/bin/sh\n# noname-next 仓库仅在本地使用（基线/检查点/回退），按约定不推送到任何远端。\necho \"noname-next: 本仓库仅本地使用，已阻止 push。\" >&2\nexit 1\n",
+  "commits": [
+    "a4483b64cc8b4c14bf3575a8a38bd8df0fc23d56 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 fix(native): route validated choices to the asking park",
+    "6d36f47a4bf55ea7811031587f58ea17cde814fb 5fc0f77403d90fa4555156bf01722450cbe7bf3b feat(native): rule 331 invocation phase7 — semantics, NGSA 106, WS7",
+    "f5e560db1e8c648e2c34bc5d1e6286f12832db8d a4483b64cc8b4c14bf3575a8a38bd8df0fc23d56 6d36f47a4bf55ea7811031587f58ea17cde814fb merge: C331 phase7 (rule 331 / NGSA 106 / WS7) into main",
+    "6efcba608dd37c40475c4e48d4c97652cdc87e28 f5e560db1e8c648e2c34bc5d1e6286f12832db8d docs(native): correct post-C331 progress state and rewrite handoff prompt",
+    "f6cf6414f1e5dd9b7c6aec124e8c2c2e4f22d151 6efcba608dd37c40475c4e48d4c97652cdc87e28 docs(native): record decision 31 ratifying C331 WS7 and moving R05 to WS8",
+    "90f508fd0f563bdd019b27766a2cee7bd1c62c8b f6cf6414f1e5dd9b7c6aec124e8c2c2e4f22d151 docs(native): refresh handoff prompt after decision 31",
+    "6f98bfa86b370d4adbaef249b4793c5fba7a2750 90f508fd0f563bdd019b27766a2cee7bd1c62c8b docs(native): record decision 32 on stash, progress slimming and worktrees",
+    "96236c963bde6e12323297acf523d3899789e5d1 6f98bfa86b370d4adbaef249b4793c5fba7a2750 docs(native): record C331 merge-tree product surface rerun"
+  ],
+  "changed_path_count": 502,
+  "binary_paths": [],
+  "forbidden_paths": [],
+  "profile_paths": [],
+  "dist_paths": [],
+  "pi_lens_in_tree": false,
+  "tree_path_count": 61473,
+  "new_objects": {
+    "count": 493,
+    "uncompressed_bytes_not_wire": 18202892,
+    "commits": 8,
+    "max_blob_bytes": 983132
+  },
+  "scoped_hook_sha256": "fec10d65e27a160965964839db29a29e67ef9a8bdd24379a78e7137d2efbcbef",
+  "selftests": [
+    {
+      "name": "accepted",
+      "exit": 0,
+      "expected": 0,
+      "stderr": ""
+    },
+    {
+      "name": "wrong-repository",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "wrong-ref-main",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 96236c96:native-convergence fast-forward from 9f4b7423 is allowed\n"
+    },
+    {
+      "name": "wrong-new-sha",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 96236c96:native-convergence fast-forward from 9f4b7423 is allowed\n"
+    },
+    {
+      "name": "wrong-old",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 96236c96:native-convergence fast-forward from 9f4b7423 is allowed\n"
+    },
+    {
+      "name": "delete",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 96236c96:native-convergence fast-forward from 9f4b7423 is allowed\n"
+    },
+    {
+      "name": "two-refs",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "empty",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "original-local-only-hook-still-rejects",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "noname-next: 本仓库仅本地使用，已阻止 push。\n"
+    }
+  ],
+  "remote_before": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64"
+  },
+  "immediately_before_push": {
+    "head": "96236c963bde6e12323297acf523d3899789e5d1",
+    "branch": "main",
+    "index_sha256": "61df0763e31bbe206bd25548e3a75c57d1a32fa5a1153f671b2b1dcfe5f3067f",
+    "logical_index_sha256": "b1ac9717d7d96af77252c3fac37fbc5796f4c71bb7fea0858a7ba2da78b70f26",
+    "untracked_paths_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "push_command": [
+    "git",
+    "--no-optional-locks",
+    "-c",
+    "core.hooksPath=/private/tmp/noname-c331-publication-20261102/push-stage/hooks",
+    "-c",
+    "credential.helper=",
+    "-c",
+    "credential.helper=!gh auth git-credential",
+    "push",
+    "--progress",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "96236c963bde6e12323297acf523d3899789e5d1:refs/heads/native-convergence"
+  ],
+  "push_exit": 0,
+  "push_seconds": 11.860602000029758,
+  "remote_after": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "96236c963bde6e12323297acf523d3899789e5d1"
+  },
+  "remote_verified": true,
+  "after": {
+    "head": "96236c963bde6e12323297acf523d3899789e5d1",
+    "branch": "main",
+    "index_sha256": "61df0763e31bbe206bd25548e3a75c57d1a32fa5a1153f671b2b1dcfe5f3067f",
+    "logical_index_sha256": "b1ac9717d7d96af77252c3fac37fbc5796f4c71bb7fea0858a7ba2da78b70f26",
+    "untracked_paths_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "before_equals_after": true,
+  "finished_utc": "2026-11-02T15:00:28.111461+00:00"
+}
