@@ -8,17 +8,17 @@
 一、先读（按顺序），并遵守 /Users/ruyimg/Documents/Claude/sanguosha/AGENTS.md：
 1. docs/architecture/native-progress.md 顶部「状态扫描（2026-11-02）」及其后最近几条带日期记录
 2. docs/architecture/native-remaining-ledger.md（NC01–NC12、UP37-R/N/I、PA01–PA12 逐项剩余与完成条件；B1–B9 已全部关闭）
-3. docs/operations/evidence/2026-10-28-user-decisions/README.md（裁决 1–30；授权≠实现≠验收）以及其中链接的 24、27–30 号具体合同
+3. docs/operations/evidence/2026-10-28-user-decisions/README.md（裁决 1–31；授权≠实现≠验收）以及其中链接的 24、27–31 号具体合同
 4. docs/architecture/native-convergence-plan.md（NC01–NC12、六阶段与验收门槛）
 5. docs/migration/upstream-extension-reconstruction.md（37 来源、E01–E06/G0–G5、八项验收）
 6. docs/architecture/native-rules-baseline.md、docs/native-coverage-manifest.md、docs/architecture/native-extensions.md、noname-performance-architecture.md
 7. /Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md（实施约束；位于 Git 仓库外）
 
-二、开工前核对工作区（2026-11-02 21:20 扫描时的状态，开工时以实际为准）：
-- main HEAD `f5e560db`＝C331 phase7 合并提交（父 `a4483b64`＋`6d36f47a`）：规则 331／NGSA 106／content schema 5／ABI 758／WS7。WS7 已由裁决 31 追认。本地无远端跟踪，未见发布与 exact-head CI 登记。
+二、开工前核对工作区（2026-11-02 扫描时的状态，开工时以实际为准）：
+- main 在最近的代码提交之后只有文档提交；最近的代码提交 `f5e560db`＝C331 phase7 合并提交（父 `a4483b64`＋`6d36f47a`）：规则 331／NGSA 106／content schema 5／ABI 758／WS7。WS7 已由裁决 31 追认。本地无远端跟踪，未见发布与 exact-head CI 登记。
 - 合并树已实跑：三 crate 1903/0/75、workspace 7154/0/77、行数门禁、preflight 全过；前端／WASM 重建／Worker smoke／跨目标／Tauri IPC 只有合并提交说明的自报数字，原始日志未入库；需 331／106 夹具的 7 个浏览器案例与 legacy WASM 重建未跑。
 - `stash@{0}`：合并前搁置的 I02／NC10 未提交工作（35 文件），尚未恢复；`/private/tmp/noname-main-wip-backup-20261102T205333Z` 为同一份备份。
-- 未跟踪 `target-strict/`（构建产物，不入库）；`git worktree list` 中大量 prunable 临时工作树。
+- `git worktree list` 中大量 prunable 临时工作树。
 先用 git status／git log／git stash show／git worktree list 复核，再动手。若发现其他 agent 正在同一工作树写入，先停下协调，不抢写。
 
 三、第 0 步：收口 C331 入库
