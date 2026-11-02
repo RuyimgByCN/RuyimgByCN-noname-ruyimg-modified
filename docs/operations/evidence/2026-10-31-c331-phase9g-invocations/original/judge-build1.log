@@ -1,0 +1,29 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0063]: missing fields `ordinary`, `payment` and `started` in initializer of `kernel::judge::JudgePhaseMachine`
+   --> crates/engine-native-kernel/src/kernel/intrinsic.rs:320:31
+    |
+320 |                 Some(Box::new(JudgePhaseMachine {
+    |                               ^^^^^^^^^^^^^^^^^ missing `ordinary`, `payment` and `started`
+
+error[E0616]: field `ordinary` of struct `kernel::judge::JudgePhaseMachine` is private
+  --> crates/engine-native-kernel/src/snap/restore.rs:15:236
+   |
+15 | ....map(crate::kernel::JudgementProgress::from_snap));m.ordinary=*ordinary;m.started=*started;m.payment=payment.clone();Ok(Box::new(...
+   |                                                         ^^^^^^^^ private field
+
+error[E0616]: field `started` of struct `kernel::judge::JudgePhaseMachine` is private
+  --> crates/engine-native-kernel/src/snap/restore.rs:15:257
+   |
+15 | ...JudgementProgress::from_snap));m.ordinary=*ordinary;m.started=*started;m.payment=payment.clone();Ok(Box::new(m))},
+   |                                                          ^^^^^^^ private field
+
+error[E0616]: field `payment` of struct `kernel::judge::JudgePhaseMachine` is private
+  --> crates/engine-native-kernel/src/snap/restore.rs:15:276
+   |
+15 | ...from_snap));m.ordinary=*ordinary;m.started=*started;m.payment=payment.clone();Ok(Box::new(m))},
+   |                                                          ^^^^^^^ private field
+
+Some errors have detailed explanations: E0063, E0616.
+For more information about an error, try `rustc --explain E0063`.
+error: could not compile `engine-native-kernel` (lib) due to 4 previous errors
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.7610269589931704, "disk_free_bytes": 132669624320}

@@ -1,0 +1,21 @@
+{
+  "sealed_utc": "2026-10-31T18:29:12.383576+00:00",
+  "head_sha": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "run_id": 41227614131,
+  "run_conclusion": "success",
+  "manifest_path": "copy-manifest.json",
+  "manifest_bytes": 32040,
+  "manifest_sha256": "46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050",
+  "summary_path": "verified-publication-ci-summary.json",
+  "summary_bytes": 2015577,
+  "summary_sha256": "fa79655afb78b6de645957fe34c97a6c7b7d279b2bed336337536a5a45caa82c",
+  "listed_current_files_verified": 126,
+  "primary_copy_files_including_manifest_and_seal": 128,
+  "private_originals_excluded": 10,
+  "raw_log_bytes": 4848793,
+  "step_count": 130,
+  "current_copy_authority": "Copylistedfiles+manifest+thisseal. Exactgzipbytes; nevernormalize originals. Datedinitial/checkpoint envelopes bindimmutable API/pushfiles. No fullsession/profile/cache included.",
+  "prelaunch_failure_provenance": "Exactfailedtoolcommand/result bounduniquetoolCallId, invalidcandidate reconstruction explicitlylabelled; supervisorauthorizedprivatecorrection, AST/compile/checkpointbodyunchanged/launchcount0controls passed beforeONEobserver/watch. No fallback/restart.",
+  "prelease_index_history": "fb->626 UNKNOWN beforeparentintentional9905gitadd/commit; nooldfbraw, notctimeonly. Pushwindowcfc raw/logical/flags/stagingstable; no Mainreads afterrelease.",
+  "source_scope": "9905docs/evidenceonly; source37+root46 unchanged atnew/parent/workingpushwindow. Cprivateblocked/source/golden/tarsunderdocs areevidence, notproductionimports ornewtestinventory."
+}

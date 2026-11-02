@@ -1,0 +1,23 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+error[E0609]: no field `faction` on type `(&str, engine_native::catalog::Faction, Vec<&str>, u32, Gender)`
+  --> crates/engine-native/tests/groups/../c331_genuine_invocations.rs:43:135
+   |
+43 | ...e.catalog().general_meta(*id as u16).is_some_and(|g|g.faction==engine_native::catalog::Faction::Wei)).unwrap()as u16;let b=(0..e....
+   |                                                          ^^^^^^^ unknown field
+   |
+   = note: available fields are: `0`, `1`, `2`, `3`, `4`
+
+error[E0609]: no field `faction` on type `(&str, engine_native::catalog::Faction, Vec<&str>, u32, Gender)`
+  --> crates/engine-native/tests/groups/../c331_genuine_invocations.rs:43:300
+   |
+43 | ...e.catalog().general_meta(*id as u16).is_some_and(|g|g.faction==engine_native::catalog::Faction::Shu)).unwrap()as u16;
+   |                                                          ^^^^^^^ unknown field
+   |
+   = note: available fields are: `0`, `1`, `2`, `3`, `4`
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `engine-native` (test "nc_rounds") due to 2 previous errors
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 7.789814749965444, "disk_free_bytes": 133597904896}

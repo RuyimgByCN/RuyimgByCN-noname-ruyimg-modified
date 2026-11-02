@@ -1,0 +1,12 @@
+{
+  "session_reference": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/2026-10-29T12-17-50-921Z_01a18798-5949-73c1-8642-9d0f55dc485a/35197128-a94b-4ec3-87e9-5b14c6688a4b/run-0/session.jsonl",
+  "timestamp": "2026-10-31T18:06:06.322Z",
+  "toolCallId": "call_b0abad2701584718920a3fba4bddf5fa|fc_08953b9c9c42609e016ae62e020e448191a33a915845adcc2d",
+  "tool": "bash",
+  "matched_commands": 1,
+  "extraction": "Onlyexactfailedtoolcommand, no privateassistant/sessionrecord copied",
+  "result_timestamp": "2026-10-31T18:06:07.602Z",
+  "result_toolCallId": "call_b0abad2701584718920a3fba4bddf5fa|fc_08953b9c9c42609e016ae62e020e448191a33a915845adcc2d",
+  "original_command_sha256": "ed207a2654490ded6d6172957c780785978be5a1393de1326025d2dd5f596a6e",
+  "original_result_sha256": "fd7541238f59486ec0c1adc94d65ab0952aeab499ec78d6355a77f01128df66b"
+}

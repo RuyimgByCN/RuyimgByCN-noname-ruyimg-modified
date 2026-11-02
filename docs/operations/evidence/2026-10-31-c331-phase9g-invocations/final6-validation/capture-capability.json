@@ -1,0 +1,7 @@
+{
+  "C9g_control_source": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native/tests/c331_genuine_invocations.rs",
+  "sha256": "82476a5adbfedb5c580e3e748afe8496a8938257cddecf6f62a1492351fb0975",
+  "has_capture_call": false,
+  "existing_capture_hook": "C331_PREDICATE_TRACE_DIR is consumed by source_predicates::capture; C9g controls call restore/same_final but never capture",
+  "policy": "Original bytes retained; no source/test instrumentation added. Existing C9e/C9f captures plus complete C9g test statuses retained; standalone C9g snapshot export remains unavailable in this validation-only step."
+}

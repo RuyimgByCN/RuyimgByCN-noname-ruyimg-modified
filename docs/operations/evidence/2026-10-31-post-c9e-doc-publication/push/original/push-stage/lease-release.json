@@ -1,0 +1,14 @@
+{
+  "at_utc": "2026-10-31T18:04:45.794689+00:00",
+  "lease": "READONLY publication lease RELEASED; no Main writes; all further work onlyprivate CI/API/logs",
+  "head_sha": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "push_exit": 0,
+  "push_attempts": 1,
+  "remote_refs": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64"
+  },
+  "error": null,
+  "preservation_error": null,
+  "push_completed_utc": "2026-10-31T18:04:45.786763+00:00"
+}

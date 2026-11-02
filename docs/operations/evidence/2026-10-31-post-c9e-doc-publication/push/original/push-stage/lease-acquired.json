@@ -1,0 +1,11 @@
+{
+  "acquired_utc": "2026-10-31T18:01:46.926040+00:00",
+  "status": "READONLY_PUBLICATION_LEASE_ACQUIRED",
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "tree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "parent_expected_old": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "fresh_staged_diff": "",
+  "fresh_tracked_diff": "",
+  "main_writes_authorized": false,
+  "release_boundary": "Immediatelyafterpush+guard/ref/index preservation seal, beforeCIwatch; no postreleaseMainbaseline"
+}

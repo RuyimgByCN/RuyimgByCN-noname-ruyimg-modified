@@ -1,0 +1,10 @@
+{
+  "scope": "Read-only source-derived cardinality boundary; no new runtime test and no claim about live C9g implementation",
+  "source_api": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api/src/choice.rs:15",
+  "source_adapter": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9f-final-mghukxvr/snapshot/apps/game-server/src/native_view.rs:297",
+  "fact": "API ChoiceRequest min_count/max_count are u8. Native ChoiceSpec bounds are usize and the adapter casts them as u8. The source Zhangwu holder cost ranges over current HE count and the subsequent source payment must contain exactly the chosen n cards.",
+  "conditional_counterexample": "First verify actual supported card-state bounds. If 256+ HE cards are legal, choosing n=256 creates an exact-count source payment whose projected 256 bound wraps to zero. Do not truncate, cap at255, or claim all F09 paths from n=2 tests.",
+  "required": "Audit all shared native adapter casts. Preserve Decision29 existing WS6/API1 semantics. A finite selection accumulation in the existing invocation/ask machine may represent a wide cost through existing bounded requests, with no actual cost/log/RNG changes before final commit and atomic cancel of the whole selection, only if source behavior and visibility are preserved. Otherwise provide the exact payload/old reader failure and concrete boundary before an unapproved public count-width or protocol change. Do not allocate a new version.",
+  "controls": "Actual legal 255/256 holder selection, source exact256 payment or decline, nonfirst equipment, cancel during accumulation, uninterrupted/byte-restored suffixes and all actor views. Separate unsupported-state facts from unexecuted tests.",
+  "writes": "No Main/source/index/HEAD/staging/producer/network/device changes. An initial private Python note generator had an apostrophe SyntaxError before writing this note; no product failure or mutation. This JSON is the corrected owned note."
+}

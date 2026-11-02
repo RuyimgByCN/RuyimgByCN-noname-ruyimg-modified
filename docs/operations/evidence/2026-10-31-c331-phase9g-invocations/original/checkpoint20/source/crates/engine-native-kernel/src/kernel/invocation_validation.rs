@@ -1,0 +1,43 @@
+//! Bind admitted continuations to their real trigger and invocation, independently of provider renewal.
+use super::*;
+use crate::event::{NativeInvocationProgress as P,InvocationPhase};
+use crate::snap::{MachineSnapshot as M,SnapshotError,ResolutionSnapshot,ExpectedAsk};
+use crate::resolution::Slot;
+impl NativeInvocation{
+ pub fn expected_ask(owner:PlayerId,progress:&P,_core:&crate::state::GameStateCore)->Option<ExpectedAsk>{
+  let (actor,prompt,candidates,min,max)=match progress{P::HolderAsk{candidates}=>(owner,"c331_zhangwu_holder",candidates,1,candidates.len()),P::SourceAsk{player,count,candidates}=>(*player,"c331_zhangwu_source",candidates,*count as usize,*count as usize),_=>return None};
+  Some(crate::snap::ask(actor,prompt,ChoiceKind::SelectCards,candidates.iter().copied().map(ChoiceOption::Card).collect(),min,max,true))
+ }
+ pub fn validate_bindings(core:&crate::state::GameStateCore,catalog:&crate::catalog::Catalog,res:&ResolutionSnapshot)->Result<(),SnapshotError>{
+  let bad=||SnapshotError::IdOutOfBounds{what:"native_invocation_binding",got:0};
+  for f in &res.stack {
+   if let EventData::SkillInvocation(context)=&f.data{
+    let index=res.stack.iter().position(|g|g.id==f.id).ok_or_else(bad)?;
+    let parent=index.checked_sub(1).and_then(|n|res.stack.get(n)).ok_or_else(bad)?;
+    if f.parent!=Some(context.window)||parent.id!=context.window||!matches!(parent.data,EventData::DamageWindow{..})||!res.parks.iter().any(|p|matches!(&p.machine,M::NativeInvocation{owner,def,progress:P::AwaitInvocation{child},..}if *child==f.id&&*owner==context.owner&&*def==context.def)&&p.slot==Slot::Trigger{frame:context.window}){return Err(bad());}
+   }
+  }
+  for park in &res.parks {
+   let M::NativeInvocation{owner,def,window,progress}=&park.machine else{continue};
+   let effect=catalog.skills.get(*def as usize).and_then(|s|s.behavior.native_damage_effect(window.event_kind())).ok_or_else(bad)?;
+   if effect.window()!=*window||!crate::event::uses_native_invocation(effect){return Err(bad());}
+   let frame_id=match park.slot{Slot::Trigger{frame}|Slot::Intrinsic{frame}=>frame};
+   let index=res.stack.iter().position(|f|f.id==frame_id).ok_or_else(bad)?;let f=&res.stack[index];if park.resume_depth!=index+1{return Err(bad());}
+   if let Slot::Trigger{..}=park.slot {
+    if !matches!(f.data,EventData::DamageWindow{window:w,..}if w==*window)||f.stage!=crate::event::Stage::AfterTriggers||!res.parks.iter().any(|p|matches!(&p.machine,M::TriggerOrder{frame,done,..}if *frame==f.id&&done.contains(&(*owner,*def)))){return Err(bad());}
+    match progress{
+     P::Ready=>{if !core.player(*owner).alive{return Err(bad());}},
+     P::BeforeInvocation{context}=>if context.owner!=*owner||context.def!=*def||context.window!=f.id||context.phase!=InvocationPhase::Before||context.cancelled{return Err(bad());},
+     P::AwaitInvocation{child}=>{if *child<=f.id||*child>=res.next_event_id{return Err(bad());}if let Some(child)=res.stack.iter().find(|g|g.id==*child){if !matches!(&child.data,EventData::SkillInvocation(c)if c.owner==*owner&&c.def==*def&&c.window==f.id){return Err(bad());}}},
+     P::Finished=>{},_=>return Err(bad())
+    }
+   }else{
+    let EventData::SkillInvocation(context)=&f.data else{return Err(bad())};if context.owner!=*owner||context.def!=*def||context.phase!=InvocationPhase::Body||f.stage!=crate::event::Stage::Intrinsic{return Err(bad());}
+    let (actor,cards)=match progress{P::HolderAsk{candidates}=>(*owner,Some(candidates)),P::SourceAsk{player,count,candidates}=>{if Some(*player)!=context.source||*count==0||*count as usize>candidates.len(){return Err(bad());}(*player,Some(candidates))},P::HolderPay{cards}=>{if cards.is_empty(){return Err(bad());}(*owner,None)},P::Body|P::HolderLoss{..}|P::HolderAfterLog{..}|P::SourceLoss|P::JidingCard{..}=>(*owner,None),_=>return Err(bad())};
+    if let Some(cards)=cards{let p=core.player(actor);let actual:Vec<_>=p.hand.iter().chain(p.equips.iter()).copied().collect();if actual!=*cards||!core.player(actor).alive{return Err(bad());}}
+    if let P::JidingCard{child}=progress {if effect!=crate::event::NativeDamageEffect::Jiding||*child<=f.id||*child>=res.next_event_id{return Err(bad());}if let Some(c)=res.stack.iter().find(|g|g.id==*child){if c.parent!=Some(f.id)||!matches!(&c.data,EventData::CardUsed(u)if u.player==*owner&&u.use_as==Some(CardKind::LeiSha)){return Err(bad());}}}
+   }
+  }
+  Ok(())
+ }
+}

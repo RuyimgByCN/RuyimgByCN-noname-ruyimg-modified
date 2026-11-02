@@ -1,0 +1,27 @@
+{
+  "utc": "2026-10-31T17:34:36.201275+00:00",
+  "increment_files": 19,
+  "composed_files": 225,
+  "increment_manifest_sha256": "f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da",
+  "increment_tar_sha256": "27128d4f91ad31a438ea1bbf762c29dba4714b6011c0e0a967d704aa907d1444",
+  "increment_patch_sha256": "7fa4bf02db442222562121be0c454a581a61d1f0f6eb81b1fd6c23d59d3630da",
+  "composed_manifest_sha256": "ab88c526c5cb4e807a29c5bdaaa70393b4515375303980d153403047f479be96",
+  "composed_tar_sha256": "d01150de4c8e44950c61ca20ce93f4afa8e9a6fa9dbb7a4246e3bef7b07fc0df",
+  "composed_patch_sha256": "db0d65526d852e770c7382c841c0a89efadb60015f04dadd68d4f0412ab919bf",
+  "full_native": {
+    "passed": 1845,
+    "failed": 1,
+    "ignored": 75,
+    "failed_names": [
+      "replay_scenarios::replay_scenarios_match_golden"
+    ],
+    "exit": 101
+  },
+  "strict_exit": 0,
+  "source_caps_exit": 0,
+  "layering_exit": 0,
+  "c9e_artifacts_unchanged": 7333,
+  "no_staged_files": true,
+  "whole_c331": "BLOCK;262/290 remaining28 +0",
+  "review_required": true
+}

@@ -746,6 +746,7 @@ fn gzsuishi2_loses_hp_only_when_the_dead_player_has_the_same_group() {
         roster.character_index = [(9_215_001, "wei"), (9_215_002, "wei"), (9_215_003, "shu")]
             .into_iter()
             .map(|(id, group)| PackageCharacterEntry {
+                voice_assets: Default::default(),
                 id,
                 name_key: format!("group_{id}"),
                 max_hp: 5,
@@ -826,6 +827,7 @@ fn jylijun_only_offers_to_draw_for_a_living_wei_damage_target() {
         roster.character_index = [(9_217_001, "wei"), (9_217_002, target_group)]
             .into_iter()
             .map(|(id, group)| PackageCharacterEntry {
+                voice_assets: Default::default(),
                 id,
                 name_key: format!("lijun_group_{id}"),
                 max_hp: 5,
@@ -932,6 +934,7 @@ fn gzsuishi_uses_the_damage_source_group_when_another_player_enters_dying() {
         ]
         .into_iter()
         .map(|(id, group)| PackageCharacterEntry {
+            voice_assets: Default::default(),
             id,
             name_key: format!("suishi_group_{id}"),
             max_hp: 5,
@@ -1054,6 +1057,7 @@ fn eu_jiquan_only_fires_for_a_living_western_turn_owner() {
         roster.character_index = [(9_219_001, "wei"), (9_219_002, group)]
             .into_iter()
             .map(|(id, group)| PackageCharacterEntry {
+                voice_assets: Default::default(),
                 id,
                 name_key: format!("jiquan_group_{id}"),
                 max_hp: 5,

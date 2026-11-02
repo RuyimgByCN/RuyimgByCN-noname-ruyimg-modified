@@ -1,0 +1,2308 @@
+{
+  "commands": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "status": "failed",
+      "exit": 101,
+      "start_utc": "2026-10-31T19:17:09.323112+00:00",
+      "end_utc": "2026-10-31T19:18:06.370721+00:00",
+      "seconds": 57.047281457984354,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "b961283734fb90402c2c2ef7d492b1e627e278925eafb52bc5dae230e670a18b",
+      "source_after_sha256": "e7bac83f4934f50d6bc402f0c03733053c97ffd7ba76ca1ea284345656532877",
+      "log_sha256": "b3c4b042cfb1c60022bfbc4e0c738bb19dfdc0fa999e390feca51c096dd7f011",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native-kernel",
+          "-p",
+          "engine-native-content",
+          "-p",
+          "engine-native",
+          "--no-fail-fast"
+        ],
+        "exit": 101,
+        "locked_seconds": 56.98725891596405,
+        "disk_free_bytes": 132032782336
+      },
+      "test_results": [
+        {
+          "passed": 14,
+          "failed": 1,
+          "ignored": 0
+        },
+        {
+          "passed": 166,
+          "failed": 0,
+          "ignored": 1
+        },
+        {
+          "passed": 177,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 427,
+          "failed": 8,
+          "ignored": 0
+        },
+        {
+          "passed": 43,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 228,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 77,
+          "failed": 0,
+          "ignored": 50
+        },
+        {
+          "passed": 130,
+          "failed": 0,
+          "ignored": 9
+        },
+        {
+          "passed": 199,
+          "failed": 0,
+          "ignored": 8
+        },
+        {
+          "passed": 244,
+          "failed": 0,
+          "ignored": 8
+        },
+        {
+          "passed": 134,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 4,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        },
+        {
+          "passed": 0,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "failed_names": [
+        "a0_lib_tests::standard_skill_ids_append_only",
+        "native_kernel::boss_guojia::boss_guojia_qizuo_trick_reuse",
+        "native_kernel::boss_guojia::boss_guojia_yuance_judge_branches",
+        "native_kernel::boss_liubei::boss_liubei_zhangwu_discard_or_damage",
+        "native_kernel::boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding",
+        "native_kernel::boss_zhangjiao::boss_zhangjiao_jidian_chain_guard",
+        "native_kernel::boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder",
+        "native_kernel::simayi::simayi_guicai_rewrites_with_any_suit_card",
+        "replay_scenarios::replay_scenarios_match_golden"
+      ],
+      "ignored_tests": [
+        {
+          "name": "g1_huanle::xly::xly_state_growth_probe",
+          "detail": ", 诊断探针：手动运行观察规模曲线"
+        },
+        {
+          "name": "nc08_registered_defect_guards::baiyi_must_not_invent_a_phase_trigger",
+          "detail": ", 登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_card_targeted",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_damage_begin_second",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_death_before",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_game_start",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_judge_before",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_sha_after",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_sha_before",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::cap_sha_begin",
+          "detail": ", 缺失能力：补上枚举槽位后本守卫转绿；解锁的缺陷族见函数文档"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g19_rexue_filter_must_not_exclude_owner",
+          "detail": ", 登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；修复需改未跟踪的 content/host/filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g19_tiebi_filter_must_not_exclude_owner",
+          "detail": ", 登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g19_zhuhai_filter_must_not_exclude_owner",
+          "detail": ", 登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；修复需改未跟踪的 content/host/filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g20_jiuwei_turn_end",
+          "detail": ", 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g20_liyutang_turn_end",
+          "detail": ", 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g20_paotai2_turn_end",
+          "detail": ", 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g20_zhucheng_turn_end",
+          "detail": ", 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g20_ziyu_turn_end",
+          "detail": ", 登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_binxin_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_donghuangzhong_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_guangshu_spade_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_huanling_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_jidong_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_lingxin_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_lingyu_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_lqingcheng_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_menshen_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::g23_xuanyuan_turn_end",
+          "detail": ", 登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；修复需改未跟踪的 content/host/filtering/{common,swd}.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_chengxin_dying",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_cigu_pre_draw",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_fenglue_before",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_fuchou2_before",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_gaiming_judge_before",
+          "detail": ", 补 `judgeBefore` 幕并挂上后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_hutian_pin_end",
+          "detail": ", 把过滤臂钉到该阶段后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_kuwu_and_shengke_card_targeted",
+          "detail": ", 补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_mb_phase_before_enter_game",
+          "detail": ", 补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_mopaifanbei_second_draw",
+          "detail": ", 补「第 2 次」档或摸牌前幕后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_mufeng_pin_end",
+          "detail": ", 把过滤臂钉到该阶段后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_niepan_dying",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_prepare_phase_exists",
+          "detail": ", 补 `Phase::Prepare` 后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_rangjie_branch1_draws",
+          "detail": ", 补 `draw_cards` 后转绿（分支 1 应摸牌）"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_shouyin_dying",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_shuiyun5_dying",
+          "detail": ", 把 TriggerMeta 事件改对后本守卫转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_xiangxing_lose_hp_end",
+          "detail": ", 补 LoseHpEnd 幕并挂上后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_yueyin_fourth_damage",
+          "detail": ", 补「第 4 次」档后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::guard_yxs_menshen3_extra_phase",
+          "detail": ", 补 dieBegin 幕 / 改事件种类后转绿"
+        },
+        {
+          "name": "nc08_registered_defect_guards::huajin2_must_not_add_a_phase_branch",
+          "detail": ", 登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；修复需改未跟踪的 content/host/filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::jiguanyuan_gain_must_trigger_on_damage",
+          "detail": ", 登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::lexue_any_phase_of_owner_only",
+          "detail": ", 登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::reguhuo_must_record_a_per_turn_use_marker",
+          "detail": ", 登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs"
+        },
+        {
+          "name": "nc08_registered_defect_guards::ziyangdan_must_not_pin_the_end_phase",
+          "detail": ", 登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；修复需改未跟踪的 content/host/filtering/common.rs"
+        },
+        {
+          "name": "nc08_upstream_gujian_dinvxuanshuang::upstream_dinvxuanshuang_recovers",
+          "detail": ", 帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_liyutang::upstream_liyutang_target_gains_the_card",
+          "detail": ", 鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_longxugou::upstream_longxugou_steals_and_equips",
+          "detail": ", 龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_mapodoufu::upstream_mapodoufu_target_gains_the_card",
+          "detail": ", 麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_mizhilianou::upstream_mizhilianou_heart_as_tao",
+          "detail": ", 蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_qiankunbiao::upstream_qiankunbiao_target_needs_he_cards",
+          "detail": ", 乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项"
+        },
+        {
+          "name": "nc08_upstream_gujian_shihuifen::upstream_shihuifen_blocks_cards_on_others",
+          "detail": ", 石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项"
+        },
+        {
+          "name": "nc08_upstream_hearth_shenenshu::upstream_shenenshu_replaces_hand_with_basics",
+          "detail": ", 神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项"
+        },
+        {
+          "name": "nc08_upstream_jijiang::upstream_jijiang_shu_ally_plays_sha_for_lord",
+          "detail": ", 激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收"
+        },
+        {
+          "name": "nc08_upstream_rangjie::upstream_rangjie_move_branch_must_draw_one",
+          "detail": ", 登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；修复需改未跟踪的 content/host/step/skills_cards.rs，待 host 拆分落定"
+        },
+        {
+          "name": "nc08_upstream_swd_baishouzhihu::upstream_baishouzhihu_opens_target_window",
+          "detail": ", 第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs"
+        },
+        {
+          "name": "nc08_upstream_swd_cangchizhibi::upstream_cangchizhibi_target_discards",
+          "detail": ", 苍螭之璧属转换缺口（未交付）——转换后启用本用例，见台账第 117 行"
+        },
+        {
+          "name": "nc08_upstream_swd_hufu::upstream_swd_hufu_dying_only",
+          "detail": ", 虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项"
+        },
+        {
+          "name": "nc08_upstream_wuxing_shengke_branches::upstream_wuxing_shengke_three_branches",
+          "detail": ", 五行生克两支未能在行为面复现（三次均 −1）——见第 51 项"
+        },
+        {
+          "name": "nc08_upstream_yunchou_chenhuodajie_window::upstream_chenhuodajie_window_after_damage",
+          "detail": ", 趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项"
+        },
+        {
+          "name": "nc08_upstream_yunchou_luweiyan::upstream_luweiyan_chain_kill_fires_on_first_target",
+          "detail": ", 链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查"
+        },
+        {
+          "name": "nc08_upstream_yunchou_zonghuo::upstream_zonghuo_discards_one_without_asking",
+          "detail": ", 纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项"
+        },
+        {
+          "name": "c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies",
+          "detail": ", F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers"
+        },
+        {
+          "name": "nc04_vm_fault::nc04_pause_and_resume",
+          "detail": ", NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖"
+        },
+        {
+          "name": "nc10_duel_nullify_privacy::nullify_timing",
+          "detail": ", manual same-machine latency sampling"
+        },
+        {
+          "name": "nc10_pending_duel_privacy::pending_duel_timing",
+          "detail": ", manual same-machine latency sampling"
+        },
+        {
+          "name": "nc12_ai_strength_baseline::nc10_quality_matrix",
+          "detail": ", manual fixed-seed quality and latency matrix"
+        },
+        {
+          "name": "nc12_ai_strength_baseline::nc10_quality_matrix_production",
+          "detail": ", manual production-budget quality and latency matrix"
+        },
+        {
+          "name": "nc12_dangling_reference_probe::nc12_probe_scans_seeds_for_dangling_reference",
+          "detail": ", 登记缺陷守护：命中内核悬空引用故障即失败（当前 seed 44170 命中）；修复后应转为通过"
+        },
+        {
+          "name": "nc12_dangling_reference_repro::nc12_repro_seed_44170_step_10",
+          "detail": ", 登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过"
+        }
+      ],
+      "warning_occurrences": [],
+      "error_occurrences": [
+        {
+          "line": 41,
+          "text": "error: test failed, to rerun pass `-p engine-native --lib`"
+        },
+        {
+          "line": 912,
+          "text": "error: test failed, to rerun pass `-p engine-native --test kernel`"
+        },
+        {
+          "line": 2130,
+          "text": "error: 2 targets failed:"
+        }
+      ],
+      "totals_within_this_command": {
+        "passed": 1848,
+        "failed": 9,
+        "ignored": 76
+      }
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:06.378752+00:00",
+      "end_utc": "2026-10-31T19:18:14.078964+00:00",
+      "seconds": 7.7001683749840595,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "source_before_sha256": "843ec8b7d42603a59b750b5adb27964223684d664bc2d0e02f1317bb315cf441",
+      "source_after_sha256": "191b95e3c37387c5b8fcb793922512ef7fe353f1a924c48e2013e9d75fd3c217",
+      "log_sha256": "fdbae505965457d4cd551877686acc2d753c2c71575d61407573fc4e346cc2ce",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "check",
+          "--offline",
+          "-p",
+          "engine-native",
+          "--all-targets"
+        ],
+        "exit": 0,
+        "locked_seconds": 7.6614220420015045,
+        "disk_free_bytes": 132031422464
+      },
+      "test_results": [],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [],
+      "error_occurrences": []
+    },
+    {
+      "name": "server-check",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "game-server",
+        "--all-targets"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:14.085993+00:00",
+      "end_utc": "2026-10-31T19:18:22.987342+00:00",
+      "seconds": 8.901300332974643,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "1e95d7caff49df683190d0cf0b72d7cbee169f42ba7cfa5358e5691fbfbf16da",
+      "source_after_sha256": "27f6808f0e88afb6f048627ad404d1b2f8ac179a03299b67af363caa8eb38889",
+      "log_sha256": "95099559d9889be4edc36832a5f8a3733679306e3a644f2326f5626e78f5463b",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "check",
+          "--offline",
+          "-p",
+          "game-server",
+          "--all-targets"
+        ],
+        "exit": 0,
+        "locked_seconds": 8.850891083013266,
+        "disk_free_bytes": 132028248064
+      },
+      "test_results": [],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [
+        {
+          "line": 2,
+          "text": "warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`"
+        },
+        {
+          "line": 12,
+          "text": "warning: unused import: `primitives::enable_equip_slot`"
+        },
+        {
+          "line": 18,
+          "text": "warning: unused import: `primitives::resolve_xinfu_qiai`"
+        },
+        {
+          "line": 24,
+          "text": "warning: unused import: `primitives::resolve_twxiongjun`"
+        },
+        {
+          "line": 30,
+          "text": "warning: unused import: `primitives::resolve_yixiang`"
+        },
+        {
+          "line": 36,
+          "text": "warning: unused import: `primitives::resolve_qiangyong`"
+        },
+        {
+          "line": 42,
+          "text": "warning: unused import: `primitives::resolve_duoduan`"
+        },
+        {
+          "line": 48,
+          "text": "warning: unused import: `primitives::resolve_reliangyin`"
+        },
+        {
+          "line": 54,
+          "text": "warning: unused import: `commit_hand_compare`"
+        },
+        {
+          "line": 60,
+          "text": "warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`"
+        },
+        {
+          "line": 69,
+          "text": "warning: unused import: `Serialize`"
+        },
+        {
+          "line": 75,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 83,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 89,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 95,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 101,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 111,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 117,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 123,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 129,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 135,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 141,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 147,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 153,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 159,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 165,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 171,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 177,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 183,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 189,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 195,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 201,
+          "text": "warning: unused variable: `pile_zone`"
+        },
+        {
+          "line": 207,
+          "text": "warning: unused variable: `phase`"
+        },
+        {
+          "line": 213,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 219,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 227,
+          "text": "warning: unused variable: `count`"
+        },
+        {
+          "line": 233,
+          "text": "warning: unused variable: `draw`"
+        },
+        {
+          "line": 239,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 245,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 251,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 257,
+          "text": "warning: unused variable: `kind`"
+        },
+        {
+          "line": 263,
+          "text": "warning: unused variable: `mode`"
+        },
+        {
+          "line": 269,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 275,
+          "text": "warning: unused variable: `actor`"
+        },
+        {
+          "line": 281,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 292,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 298,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 306,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 312,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 318,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 324,
+          "text": "warning: unused variable: `count`"
+        },
+        {
+          "line": 330,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 338,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 346,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 352,
+          "text": "warning: unused variable: `dodger`"
+        },
+        {
+          "line": 358,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 366,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 372,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 380,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 386,
+          "text": "warning: unused variable: `card`"
+        },
+        {
+          "line": 392,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 400,
+          "text": "warning: unused variable: `view`"
+        },
+        {
+          "line": 406,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 412,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 418,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 426,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 432,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 438,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 444,
+          "text": "warning: unused variable: `target`"
+        },
+        {
+          "line": 450,
+          "text": "warning: unused variable: `targets`"
+        },
+        {
+          "line": 456,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 462,
+          "text": "warning: unused variable: `value`"
+        },
+        {
+          "line": 468,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 476,
+          "text": "warning: unused variable: `kongsheng_def`"
+        },
+        {
+          "line": 482,
+          "text": "warning: unused variable: `source`"
+        },
+        {
+          "line": 488,
+          "text": "warning: variable does not need to be mutable"
+        },
+        {
+          "line": 496,
+          "text": "warning: unused variable: `action`"
+        },
+        {
+          "line": 502,
+          "text": "warning: unused variable: `card`"
+        },
+        {
+          "line": 508,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 514,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 520,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 526,
+          "text": "warning: unused variable: `player`"
+        },
+        {
+          "line": 532,
+          "text": "warning: unused variable: `skill`"
+        },
+        {
+          "line": 538,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 552,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 576,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 585,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 594,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 603,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 611,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 625,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 639,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 654,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 669,
+          "text": "warning: unreachable pattern"
+        },
+        {
+          "line": 686,
+          "text": "warning: unused variable: `flipped`"
+        },
+        {
+          "line": 692,
+          "text": "warning: function `validate_sha_target` is never used"
+        },
+        {
+          "line": 700,
+          "text": "warning: function `wuxie_tokens` is never used"
+        },
+        {
+          "line": 706,
+          "text": "warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used"
+        },
+        {
+          "line": 712,
+          "text": "warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used"
+        },
+        {
+          "line": 718,
+          "text": "warning: constant `RESOLVE_DCNIJI_MAGIC` is never used"
+        },
+        {
+          "line": 724,
+          "text": "warning: constant `RESOLVE_QINMIAN_MAGIC` is never used"
+        },
+        {
+          "line": 730,
+          "text": "warning: function `suit_from_tag` is never used"
+        },
+        {
+          "line": 736,
+          "text": "warning: function `mingren_color_mask` is never used"
+        },
+        {
+          "line": 742,
+          "text": "warning: function `kongsheng_pile_cards_by_def` is never used"
+        },
+        {
+          "line": 748,
+          "text": "warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used"
+        },
+        {
+          "line": 754,
+          "text": "warning: function `resolve_rechuhai_choice` is never used"
+        },
+        {
+          "line": 760,
+          "text": "warning: unused `Result` that must be used"
+        },
+        {
+          "line": 773,
+          "text": "warning: `engine-core` (lib) generated 107 warnings (run `cargo fix --lib -p engine-core` to apply 83 suggestions)"
+        },
+        {
+          "line": 774,
+          "text": "warning: unused variable: `c`"
+        },
+        {
+          "line": 782,
+          "text": "warning: struct `ForkMeta` is never constructed"
+        },
+        {
+          "line": 790,
+          "text": "warning: function `assert_no_foreign_hand_faces` is never used"
+        },
+        {
+          "line": 796,
+          "text": "warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)"
+        },
+        {
+          "line": 802,
+          "text": "warning: function `err` is never used"
+        },
+        {
+          "line": 810,
+          "text": "warning: function `omnisearch_query` is never used"
+        },
+        {
+          "line": 816,
+          "text": "warning: function `desktop_adapt_apply` is never used"
+        },
+        {
+          "line": 822,
+          "text": "warning: function `desktop_adapt_export` is never used"
+        },
+        {
+          "line": 828,
+          "text": "warning: function `cardpile_scale` is never used"
+        },
+        {
+          "line": 834,
+          "text": "warning: function `desktop_adapt_invoke` is never used"
+        },
+        {
+          "line": 840,
+          "text": "warning: function `coin_apply` is never used"
+        },
+        {
+          "line": 846,
+          "text": "warning: function `elo_apply` is never used"
+        },
+        {
+          "line": 852,
+          "text": "warning: function `sj_apply` is never used"
+        },
+        {
+          "line": 858,
+          "text": "warning: function `shousha_apply` is never used"
+        },
+        {
+          "line": 864,
+          "text": "warning: function `shousha_mvp_apply` is never used"
+        },
+        {
+          "line": 870,
+          "text": "warning: function `douzhuan_apply` is never used"
+        },
+        {
+          "line": 876,
+          "text": "warning: function `update_guard_apply` is never used"
+        },
+        {
+          "line": 882,
+          "text": "warning: function `drag_read_apply` is never used"
+        },
+        {
+          "line": 888,
+          "text": "warning: function `boss_play_apply` is never used"
+        },
+        {
+          "line": 894,
+          "text": "warning: function `fool_apply` is never used"
+        },
+        {
+          "line": 900,
+          "text": "warning: function `martial_apply` is never used"
+        },
+        {
+          "line": 906,
+          "text": "warning: function `omnisearch_debug` is never used"
+        },
+        {
+          "line": 912,
+          "text": "warning: `engine-native-wasm` (lib) generated 18 warnings"
+        },
+        {
+          "line": 913,
+          "text": "warning: unused import: `NativeChoiceDeadline`"
+        },
+        {
+          "line": 921,
+          "text": "warning: constant `WAL_BLOCK_DOMAIN` is never used"
+        },
+        {
+          "line": 929,
+          "text": "warning: method `compute_hash` is never used"
+        },
+        {
+          "line": 938,
+          "text": "warning: fields `blocks`, `block_signatures`, and `result_record` are never read"
+        },
+        {
+          "line": 955,
+          "text": "warning: constant `DEFAULT_BLOCK_SIZE` is never used"
+        },
+        {
+          "line": 961,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 994,
+          "text": "warning: function `sign_block_hash` is never used"
+        },
+        {
+          "line": 1000,
+          "text": "warning: function `key_bytes` is never used"
+        },
+        {
+          "line": 1006,
+          "text": "warning: `game-server` (test \"fault_injection\") generated 7 warnings"
+        },
+        {
+          "line": 1007,
+          "text": "warning: unused import: `lock::StoreWriterLock`"
+        },
+        {
+          "line": 1015,
+          "text": "warning: unused imports: `NativeChoiceDeadline` and `validate_timeout_secs`"
+        },
+        {
+          "line": 1021,
+          "text": "warning: unused variable: `skip_state_file_sync`"
+        },
+        {
+          "line": 1029,
+          "text": "warning: unused variable: `skip_state_dir_sync`"
+        },
+        {
+          "line": 1035,
+          "text": "warning: function `bootstrap` is never used"
+        },
+        {
+          "line": 1043,
+          "text": "warning: field `max_cmds_per_sec` is never read"
+        },
+        {
+          "line": 1054,
+          "text": "warning: methods `enable_package`, `revoke_package`, `rollback`, and `load_reference` are never used"
+        },
+        {
+          "line": 1072,
+          "text": "warning: methods `dir`, `load_all`, and `by_id` are never used"
+        },
+        {
+          "line": 1087,
+          "text": "warning: field `path` is never read"
+        },
+        {
+          "line": 1097,
+          "text": "warning: method `path` is never used"
+        },
+        {
+          "line": 1106,
+          "text": "warning: struct `OutboxMessage` is never constructed"
+        },
+        {
+          "line": 1112,
+          "text": "warning: enum `OutboxKind` is never used"
+        },
+        {
+          "line": 1118,
+          "text": "warning: struct `DurableOutbox` is never constructed"
+        },
+        {
+          "line": 1124,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 1160,
+          "text": "warning: constant `WAL_BLOCK_DOMAIN` is never used"
+        },
+        {
+          "line": 1166,
+          "text": "warning: method `compute_hash` is never used"
+        },
+        {
+          "line": 1175,
+          "text": "warning: fields `blocks`, `block_signatures`, and `result_record` are never read"
+        },
+        {
+          "line": 1192,
+          "text": "warning: constant `DEFAULT_BLOCK_SIZE` is never used"
+        },
+        {
+          "line": 1198,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 1231,
+          "text": "warning: function `sign_block_hash` is never used"
+        },
+        {
+          "line": 1237,
+          "text": "warning: function `key_bytes` is never used"
+        },
+        {
+          "line": 1243,
+          "text": "warning: function `recover_engine` is never used"
+        },
+        {
+          "line": 1249,
+          "text": "warning: variant `ChooseGeneral` is never constructed"
+        },
+        {
+          "line": 1260,
+          "text": "warning: field `id` is never read"
+        },
+        {
+          "line": 1271,
+          "text": "warning: function `spawn_room` is never used"
+        },
+        {
+          "line": 1277,
+          "text": "warning: associated function `new` is never used"
+        },
+        {
+          "line": 1286,
+          "text": "warning: function `set_seat_timeout_secs` is never used"
+        },
+        {
+          "line": 1292,
+          "text": "warning: function `spawn_room_native` is never used"
+        },
+        {
+          "line": 1298,
+          "text": "warning: function `spawn_room_native_with_password` is never used"
+        },
+        {
+          "line": 1304,
+          "text": "warning: function `restore_room_from_disk` is never used"
+        },
+        {
+          "line": 1310,
+          "text": "warning: function `join_reply_channel` is never used"
+        },
+        {
+          "line": 1316,
+          "text": "warning: function `submit_reply_channel` is never used"
+        },
+        {
+          "line": 1322,
+          "text": "warning: function `idem` is never used"
+        },
+        {
+          "line": 1328,
+          "text": "warning: function `expected` is never used"
+        },
+        {
+          "line": 1334,
+          "text": "warning: `game-server` (bin \"game-server\") generated 31 warnings (run `cargo fix --bin \"game-server\" -p game-server` to apply 1 suggestion)"
+        },
+        {
+          "line": 1335,
+          "text": "warning: function `legal_actions_for` is never used"
+        },
+        {
+          "line": 1343,
+          "text": "warning: field `selection` is never read"
+        },
+        {
+          "line": 1352,
+          "text": "warning: `game-server` (test \"nc09_machine_projection\") generated 2 warnings"
+        },
+        {
+          "line": 1353,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 1388,
+          "text": "warning: fields `package_id`, `deferred`, and `frozen` are never read"
+        },
+        {
+          "line": 1402,
+          "text": "warning: struct `NativeGameRequest` is never constructed"
+        },
+        {
+          "line": 1408,
+          "text": "warning: function `default_planner_nodes` is never used"
+        },
+        {
+          "line": 1414,
+          "text": "warning: function `default_planner_lookahead` is never used"
+        },
+        {
+          "line": 1420,
+          "text": "warning: function `default_max_steps` is never used"
+        },
+        {
+          "line": 1426,
+          "text": "warning: struct `NativeGameSummary` is never constructed"
+        },
+        {
+          "line": 1432,
+          "text": "warning: function `create_native_game` is never used"
+        },
+        {
+          "line": 1438,
+          "text": "warning: function `load_refs` is never used"
+        },
+        {
+          "line": 1444,
+          "text": "warning: struct `NativeMatchArchive` is never constructed"
+        },
+        {
+          "line": 1450,
+          "text": "warning: struct `NativeRestoreRequest` is never constructed"
+        },
+        {
+          "line": 1456,
+          "text": "warning: struct `NativeRestoreSummary` is never constructed"
+        },
+        {
+          "line": 1462,
+          "text": "warning: function `hex_encode` is never used"
+        },
+        {
+          "line": 1468,
+          "text": "warning: function `hex_decode` is never used"
+        },
+        {
+          "line": 1474,
+          "text": "warning: function `save_fresh_match` is never used"
+        },
+        {
+          "line": 1480,
+          "text": "warning: function `restore_match` is never used"
+        },
+        {
+          "line": 1486,
+          "text": "warning: function `open_native_match` is never used"
+        },
+        {
+          "line": 1492,
+          "text": "warning: function `restore_native_match` is never used"
+        },
+        {
+          "line": 1498,
+          "text": "warning: function `reference_binding` is never used"
+        },
+        {
+          "line": 1504,
+          "text": "warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used"
+        },
+        {
+          "line": 1519,
+          "text": "warning: field `room_id` is never read"
+        },
+        {
+          "line": 1530,
+          "text": "warning: method `dir` is never used"
+        },
+        {
+          "line": 1539,
+          "text": "warning: constant `WAL_BLOCK_DOMAIN` is never used"
+        },
+        {
+          "line": 1545,
+          "text": "warning: variants `ChooseGeneral` and `Disconnect` are never constructed"
+        },
+        {
+          "line": 1559,
+          "text": "warning: fields `player_id`, `view`, and `choice` are never read"
+        },
+        {
+          "line": 1576,
+          "text": "warning: struct `Member` is never constructed"
+        },
+        {
+          "line": 1582,
+          "text": "warning: field `id` is never read"
+        },
+        {
+          "line": 1593,
+          "text": "warning: function `spawn_room` is never used"
+        },
+        {
+          "line": 1599,
+          "text": "warning: function `spawn_room_with_engine` is never used"
+        },
+        {
+          "line": 1605,
+          "text": "warning: function `room_loop` is never used"
+        },
+        {
+          "line": 1611,
+          "text": "warning: function `project_for` is never used"
+        },
+        {
+          "line": 1617,
+          "text": "warning: function `legal_for` is never used"
+        },
+        {
+          "line": 1623,
+          "text": "warning: function `choice_for` is never used"
+        },
+        {
+          "line": 1629,
+          "text": "warning: function `public_codes` is never used"
+        },
+        {
+          "line": 1635,
+          "text": "warning: function `fanout_after_command` is never used"
+        },
+        {
+          "line": 1641,
+          "text": "warning: function `broadcast_roster` is never used"
+        },
+        {
+          "line": 1647,
+          "text": "warning: function `hex_manifest` is never used"
+        },
+        {
+          "line": 1653,
+          "text": "warning: method `set_frozen_packages` is never used"
+        },
+        {
+          "line": 1662,
+          "text": "warning: method `set_choice_timeout_secs` is never used"
+        },
+        {
+          "line": 1670,
+          "text": "warning: function `set_seat_timeout_secs` is never used"
+        },
+        {
+          "line": 1676,
+          "text": "warning: function `restore_room_from_disk` is never used"
+        },
+        {
+          "line": 1682,
+          "text": "warning: function `spawn_native_room_if_configured` is never used"
+        },
+        {
+          "line": 1688,
+          "text": "warning: function `join_reply_channel` is never used"
+        },
+        {
+          "line": 1694,
+          "text": "warning: function `submit_reply_channel` is never used"
+        },
+        {
+          "line": 1700,
+          "text": "warning: function `idem` is never used"
+        },
+        {
+          "line": 1706,
+          "text": "warning: function `expected` is never used"
+        },
+        {
+          "line": 1712,
+          "text": "warning: methods `slow_marker` and `send` are never used"
+        },
+        {
+          "line": 1724,
+          "text": "warning: struct `Session` is never constructed"
+        },
+        {
+          "line": 1730,
+          "text": "warning: struct `HandlerError` is never constructed"
+        },
+        {
+          "line": 1736,
+          "text": "warning: associated function `new` is never used"
+        },
+        {
+          "line": 1745,
+          "text": "warning: `game-server` (test \"nc09_dual_backend\") generated 60 warnings (6 duplicates) (run `cargo fix --test \"nc09_dual_backend\" -p game-server` to apply 4 suggestions)"
+        },
+        {
+          "line": 1746,
+          "text": "warning: struct `NativePackageInfo` is never constructed"
+        },
+        {
+          "line": 1754,
+          "text": "warning: struct `NativeContent` is never constructed"
+        },
+        {
+          "line": 1760,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 1811,
+          "text": "warning: struct `LoadedPack` is never constructed"
+        },
+        {
+          "line": 1817,
+          "text": "warning: struct `NativeGameRequest` is never constructed"
+        },
+        {
+          "line": 1823,
+          "text": "warning: function `default_planner_nodes` is never used"
+        },
+        {
+          "line": 1829,
+          "text": "warning: function `default_planner_lookahead` is never used"
+        },
+        {
+          "line": 1835,
+          "text": "warning: function `default_max_steps` is never used"
+        },
+        {
+          "line": 1841,
+          "text": "warning: struct `NativeGameSummary` is never constructed"
+        },
+        {
+          "line": 1847,
+          "text": "warning: function `create_native_game` is never used"
+        },
+        {
+          "line": 1853,
+          "text": "warning: function `load_refs` is never used"
+        },
+        {
+          "line": 1859,
+          "text": "warning: struct `NativeMatchArchive` is never constructed"
+        },
+        {
+          "line": 1865,
+          "text": "warning: struct `NativeRestoreRequest` is never constructed"
+        },
+        {
+          "line": 1871,
+          "text": "warning: struct `NativeRestoreSummary` is never constructed"
+        },
+        {
+          "line": 1877,
+          "text": "warning: function `hex_encode` is never used"
+        },
+        {
+          "line": 1883,
+          "text": "warning: function `hex_decode` is never used"
+        },
+        {
+          "line": 1889,
+          "text": "warning: function `save_fresh_match` is never used"
+        },
+        {
+          "line": 1895,
+          "text": "warning: function `restore_match` is never used"
+        },
+        {
+          "line": 1901,
+          "text": "warning: function `open_native_match` is never used"
+        },
+        {
+          "line": 1907,
+          "text": "warning: function `restore_native_match` is never used"
+        },
+        {
+          "line": 1913,
+          "text": "warning: struct `FrozenNativePackage` is never constructed"
+        },
+        {
+          "line": 1919,
+          "text": "warning: function `reference_binding` is never used"
+        },
+        {
+          "line": 1925,
+          "text": "warning: methods `parsed_package`, `package`, and `text_asset` are never used"
+        },
+        {
+          "line": 1939,
+          "text": "warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used"
+        },
+        {
+          "line": 1959,
+          "text": "warning: `game-server` (example \"policy_head2head\") generated 24 warnings"
+        },
+        {
+          "line": 1960,
+          "text": "warning: function `legal_actions_for` is never used"
+        },
+        {
+          "line": 1968,
+          "text": "warning: fields `packs`, `physical_ids`, `held`, and `selection` are never read"
+        },
+        {
+          "line": 1983,
+          "text": "warning: method `restore` is never used"
+        },
+        {
+          "line": 1991,
+          "text": "warning: `game-server` (example \"emit_approved_b_metadata\") generated 3 warnings"
+        },
+        {
+          "line": 1992,
+          "text": "warning: struct `ServerConfig` is never constructed"
+        },
+        {
+          "line": 2000,
+          "text": "warning: associated function `from_env` is never used"
+        },
+        {
+          "line": 2009,
+          "text": "warning: field `replay` is never read"
+        },
+        {
+          "line": 2020,
+          "text": "warning: variants `Spectate`, `ChooseGeneral`, and `Disconnect` are never constructed"
+        },
+        {
+          "line": 2037,
+          "text": "warning: fields `seat`, `role`, `reconnect_token`, `view`, `choice`, and `legal_actions` are never read"
+        },
+        {
+          "line": 2063,
+          "text": "warning: associated function `new` is never used"
+        },
+        {
+          "line": 2072,
+          "text": "warning: method `slow_marker` is never used"
+        },
+        {
+          "line": 2081,
+          "text": "warning: `game-server` (test \"long_run_bot\") generated 18 warnings (11 duplicates)"
+        },
+        {
+          "line": 2082,
+          "text": "warning: unused import: `ClientRole`"
+        },
+        {
+          "line": 2090,
+          "text": "warning: struct `NativePackageInfo` is never constructed"
+        },
+        {
+          "line": 2098,
+          "text": "warning: struct `NativeContent` is never constructed"
+        },
+        {
+          "line": 2104,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 2155,
+          "text": "warning: struct `LoadedPack` is never constructed"
+        },
+        {
+          "line": 2161,
+          "text": "warning: struct `FrozenNativePackage` is never constructed"
+        },
+        {
+          "line": 2167,
+          "text": "warning: methods `parsed_package`, `package`, and `text_asset` are never used"
+        },
+        {
+          "line": 2181,
+          "text": "warning: methods `check_not_revoked`, `freeze_binding`, `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used"
+        },
+        {
+          "line": 2201,
+          "text": "warning: `game-server` (test \"nc08_cross_line\") generated 24 warnings (17 duplicates)"
+        },
+        {
+          "line": 2202,
+          "text": "warning: variants `Spectate`, `Snapshot`, `ChooseGeneral`, and `Disconnect` are never constructed"
+        },
+        {
+          "line": 2222,
+          "text": "warning: `game-server` (test \"m8_rolling_upgrade\") generated 20 warnings (18 duplicates) (run `cargo fix --test \"m8_rolling_upgrade\" -p game-server` to apply 1 suggestion)"
+        },
+        {
+          "line": 2223,
+          "text": "warning: `game-server` (test \"approved_b_metadata\") generated 1 warning (1 duplicate)"
+        },
+        {
+          "line": 2224,
+          "text": "warning: method `load_reference` is never used"
+        },
+        {
+          "line": 2235,
+          "text": "warning: fields `package_id` and `deferred` are never read"
+        },
+        {
+          "line": 2246,
+          "text": "warning: `game-server` (test \"native_upgrade_rollback\") generated 17 warnings (15 duplicates)"
+        },
+        {
+          "line": 2247,
+          "text": "warning: fields `reconnect_token`, `choice`, and `legal_actions` are never read"
+        },
+        {
+          "line": 2264,
+          "text": "warning: `game-server` (test \"room_flow\") generated 18 warnings (17 duplicates)"
+        },
+        {
+          "line": 2265,
+          "text": "warning: `game-server` (test \"nc09_referee_projection\") generated 1 warning (1 duplicate)"
+        },
+        {
+          "line": 2266,
+          "text": "warning: fields `package_id`, `pack`, `deferred`, and `frozen` are never read"
+        },
+        {
+          "line": 2281,
+          "text": "warning: `game-server` (test \"native_onlyol_general\") generated 20 warnings (19 duplicates)"
+        },
+        {
+          "line": 2282,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 2314,
+          "text": "warning: `game-server` (test \"nc05_skin_ui\") generated 20 warnings (19 duplicates)"
+        },
+        {
+          "line": 2315,
+          "text": "warning: `game-server` (test \"multi_room_stress\") generated 18 warnings (18 duplicates)"
+        },
+        {
+          "line": 2316,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 2348,
+          "text": "warning: method `load_room_packages` is never used"
+        },
+        {
+          "line": 2357,
+          "text": "warning: fields `choice` and `legal_actions` are never read"
+        },
+        {
+          "line": 2371,
+          "text": "warning: methods `activate_version`, `disable_package`, `enable_package`, `revoke_package`, and `installed` are never used"
+        },
+        {
+          "line": 2394,
+          "text": "warning: `game-server` (test \"native_frozen_packages\") generated 18 warnings (17 duplicates)"
+        },
+        {
+          "line": 2395,
+          "text": "warning: `game-server` (test \"nc09_native_actor\") generated 53 warnings (50 duplicates)"
+        },
+        {
+          "line": 2396,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 2434,
+          "text": "warning: `game-server` (test \"nc08_install_matrix\") generated 22 warnings (21 duplicates)"
+        },
+        {
+          "line": 2435,
+          "text": "warning: function `choice_for` is never used"
+        },
+        {
+          "line": 2441,
+          "text": "warning: `game-server` (test \"nc09_native_view_bridge\") generated 21 warnings (20 duplicates)"
+        },
+        {
+          "line": 2442,
+          "text": "warning: constant `DEFAULT_BLOCK_SIZE` is never used"
+        },
+        {
+          "line": 2450,
+          "text": "warning: method `result_record` is never used"
+        },
+        {
+          "line": 2459,
+          "text": "warning: `game-server` (test \"tournament_wal_signing\") generated 2 warnings"
+        },
+        {
+          "line": 2460,
+          "text": "warning: constant `PACK` is never used"
+        },
+        {
+          "line": 2468,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 2498,
+          "text": "warning: field `frozen` is never read"
+        },
+        {
+          "line": 2507,
+          "text": "warning: `game-server` (test \"nc05_lifecycle_heavy\") generated 12 warnings (9 duplicates)"
+        },
+        {
+          "line": 2508,
+          "text": "warning: `game-server` (test \"long_run_soak\") generated 18 warnings (18 duplicates)"
+        },
+        {
+          "line": 2509,
+          "text": "warning: unused import: `StreamExt`"
+        },
+        {
+          "line": 2515,
+          "text": "warning: unused imports: `CommandKind`, `Command`, and `ExpectedRevision`"
+        },
+        {
+          "line": 2521,
+          "text": "warning: unused import: `choice_for`"
+        },
+        {
+          "line": 2527,
+          "text": "warning: multiple methods are never used"
+        },
+        {
+          "line": 2559,
+          "text": "warning: field `frozen` is never read"
+        },
+        {
+          "line": 2568,
+          "text": "warning: methods `freeze_reference`, `load_frozen_reference`, and `load_room_packages` are never used"
+        },
+        {
+          "line": 2583,
+          "text": "warning: `game-server` (example \"policy_eval\") generated 14 warnings (11 duplicates)"
+        },
+        {
+          "line": 2584,
+          "text": "warning: unused import: `StreamExt`"
+        },
+        {
+          "line": 2590,
+          "text": "warning: unused variable: `skip_state_file_sync`"
+        },
+        {
+          "line": 2598,
+          "text": "warning: unused variable: `skip_state_dir_sync`"
+        },
+        {
+          "line": 2604,
+          "text": "warning: unused variable: `state_hash`"
+        },
+        {
+          "line": 2610,
+          "text": "warning: variants `Submit`, `Snapshot`, and `Disconnect` are never constructed"
+        },
+        {
+          "line": 2627,
+          "text": "warning: fields `player_id`, `reconnect_token`, `view`, and `legal_actions` are never read"
+        },
+        {
+          "line": 2647,
+          "text": "warning: `game-server` (test \"nc09_native_room_session\") generated 46 warnings (43 duplicates) (run `cargo fix --test \"nc09_native_room_session\" -p game-server` to apply 1 suggestion)"
+        },
+        {
+          "line": 2648,
+          "text": "warning: `game-server` (test \"nc05_campaign_profile\") generated 20 warnings (20 duplicates)"
+        },
+        {
+          "line": 2649,
+          "text": "warning: value assigned to `rev` is never read"
+        },
+        {
+          "line": 2658,
+          "text": "warning: value assigned to `legal` is never read"
+        },
+        {
+          "line": 2666,
+          "text": "warning: methods `enable_package`, `revoke_package`, `rollback`, and `load_reference` are never used"
+        },
+        {
+          "line": 2686,
+          "text": "warning: method `dir` is never used"
+        },
+        {
+          "line": 2695,
+          "text": "warning: method `retry_failed` is never used"
+        },
+        {
+          "line": 2704,
+          "text": "warning: `game-server` (bin \"game-server\" test) generated 29 warnings (18 duplicates) (run `cargo fix --bin \"game-server\" -p game-server --tests` to apply 5 suggestions)"
+        },
+        {
+          "line": 2705,
+          "text": "warning: `game-server` (test \"long_run_memory\") generated 18 warnings (18 duplicates)"
+        },
+        {
+          "line": 2706,
+          "text": "warning: methods `activate_version`, `disable_package`, `enable_package`, `uninstall_package`, `revoke_package`, and `rollback` are never used"
+        },
+        {
+          "line": 2732,
+          "text": "warning: `game-server` (test \"native_product_path\") generated 10 warnings (9 duplicates)"
+        },
+        {
+          "line": 2733,
+          "text": "warning: field `root` is never read"
+        },
+        {
+          "line": 2742,
+          "text": "warning: multiple associated items are never used"
+        },
+        {
+          "line": 2784,
+          "text": "warning: fields `player_id`, `choice`, and `legal_actions` are never read"
+        },
+        {
+          "line": 2801,
+          "text": "warning: function `spawn_room_native` is never used"
+        },
+        {
+          "line": 2807,
+          "text": "warning: function `spawn_room_native_with_password` is never used"
+        },
+        {
+          "line": 2813,
+          "text": "warning: `game-server` (test \"nc09_native_durability\") generated 58 warnings (53 duplicates)"
+        },
+        {
+          "line": 2814,
+          "text": "warning: fields `deferred` and `frozen` are never read"
+        },
+        {
+          "line": 2826,
+          "text": "warning: `game-server` (test \"nc02_install_identity\") generated 20 warnings (19 duplicates)"
+        },
+        {
+          "line": 2827,
+          "text": "warning: function `choice_for` is never used"
+        },
+        {
+          "line": 2835,
+          "text": "warning: function `legal_actions_for` is never used"
+        },
+        {
+          "line": 2841,
+          "text": "warning: `game-server` (example \"emit_projection_fixture\") generated 2 warnings"
+        },
+        {
+          "line": 2842,
+          "text": "warning: variants `Spectate`, `Submit`, `ChooseGeneral`, and `Disconnect` are never constructed"
+        },
+        {
+          "line": 2862,
+          "text": "warning: fields `player_id`, `seat`, `role`, and `reconnect_token` are never read"
+        },
+        {
+          "line": 2882,
+          "text": "warning: `game-server` (test \"adr0787_timeout\") generated 61 warnings (59 duplicates)"
+        }
+      ],
+      "error_occurrences": []
+    },
+    {
+      "name": "wasm-controls",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "--test",
+        "c331_invocation_controls",
+        "--",
+        "--nocapture"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:22.994462+00:00",
+      "end_utc": "2026-10-31T19:18:30.698145+00:00",
+      "seconds": 7.703639000013936,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "5c32ec0cd4d3c9fa24baf89625a83a24ad927177683105f3dd6c10862bcda839",
+      "source_after_sha256": "75f083fcbaa865143cc1b285077a3227c7d2c9c09e2b14b674de6671a3b77d16",
+      "log_sha256": "93ce2e529ae0773edaf94c77b04dba1edafd3a94b0f189bdda177fd3c68b1603",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native-wasm",
+          "--test",
+          "c331_invocation_controls",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 0,
+        "locked_seconds": 7.66079512500437,
+        "disk_free_bytes": 132012929024
+      },
+      "test_results": [
+        {
+          "passed": 1,
+          "failed": 0,
+          "ignored": 0
+        }
+      ],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [
+        {
+          "line": 6,
+          "text": "warning: function `err` is never used"
+        },
+        {
+          "line": 14,
+          "text": "warning: function `omnisearch_query` is never used"
+        },
+        {
+          "line": 20,
+          "text": "warning: function `desktop_adapt_apply` is never used"
+        },
+        {
+          "line": 26,
+          "text": "warning: function `desktop_adapt_export` is never used"
+        },
+        {
+          "line": 32,
+          "text": "warning: function `cardpile_scale` is never used"
+        },
+        {
+          "line": 38,
+          "text": "warning: function `desktop_adapt_invoke` is never used"
+        },
+        {
+          "line": 44,
+          "text": "warning: function `coin_apply` is never used"
+        },
+        {
+          "line": 50,
+          "text": "warning: function `elo_apply` is never used"
+        },
+        {
+          "line": 56,
+          "text": "warning: function `sj_apply` is never used"
+        },
+        {
+          "line": 62,
+          "text": "warning: function `shousha_apply` is never used"
+        },
+        {
+          "line": 68,
+          "text": "warning: function `shousha_mvp_apply` is never used"
+        },
+        {
+          "line": 74,
+          "text": "warning: function `douzhuan_apply` is never used"
+        },
+        {
+          "line": 80,
+          "text": "warning: function `update_guard_apply` is never used"
+        },
+        {
+          "line": 86,
+          "text": "warning: function `drag_read_apply` is never used"
+        },
+        {
+          "line": 92,
+          "text": "warning: function `boss_play_apply` is never used"
+        },
+        {
+          "line": 98,
+          "text": "warning: function `fool_apply` is never used"
+        },
+        {
+          "line": 104,
+          "text": "warning: function `martial_apply` is never used"
+        },
+        {
+          "line": 110,
+          "text": "warning: function `omnisearch_debug` is never used"
+        },
+        {
+          "line": 116,
+          "text": "warning: `engine-native-wasm` (lib) generated 18 warnings"
+        }
+      ],
+      "error_occurrences": [],
+      "totals_within_this_command": {
+        "passed": 1,
+        "failed": 0,
+        "ignored": 0
+      }
+    },
+    {
+      "name": "focused",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "c331_",
+        "--",
+        "--nocapture"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:30.705612+00:00",
+      "end_utc": "2026-10-31T19:18:34.192008+00:00",
+      "seconds": 3.4863781250314787,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "d06f5993feb73204fa654d1a508a362f189ae1fdd467feac7d5406a43aac9325",
+      "source_after_sha256": "20d11ba13ed13496d3ca4e506e9110dae5c15e803517cd608d0f73fb7f473f65",
+      "log_sha256": "05110352a2372ea4edb73175547578b01be2d97a5596491f56ed0e8ee1ec77b1",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native",
+          "--test",
+          "nc_rounds",
+          "c331_",
+          "--",
+          "--nocapture"
+        ],
+        "exit": 0,
+        "locked_seconds": 3.4423317090258934,
+        "disk_free_bytes": 131990872064
+      },
+      "test_results": [
+        {
+          "passed": 98,
+          "failed": 0,
+          "ignored": 1
+        }
+      ],
+      "failed_names": [],
+      "ignored_tests": [
+        {
+          "name": "c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies",
+          "detail": ", F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers"
+        }
+      ],
+      "warning_occurrences": [],
+      "error_occurrences": [],
+      "totals_within_this_command": {
+        "passed": 98,
+        "failed": 0,
+        "ignored": 1
+      }
+    },
+    {
+      "name": "golden",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "status": "failed",
+      "exit": 101,
+      "start_utc": "2026-10-31T19:18:34.198822+00:00",
+      "end_utc": "2026-10-31T19:18:34.864811+00:00",
+      "seconds": 0.665986584033817,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "12695a38031cd465ada47508d03076f21ddc973fe2cbf8a91b9319e3c0628fd2",
+      "source_after_sha256": "254ada70a4cfcdd88911682d04a8590db21933f20ee6e605ee1dfc8f9f07801d",
+      "log_sha256": "871b1d88f79c5e9a77aa47f16559c9be019af365f76915a99b6915754203623e",
+      "runner_summary": {
+        "command": [
+          "cargo",
+          "test",
+          "--offline",
+          "-p",
+          "engine-native",
+          "--test",
+          "kernel",
+          "replay_scenarios_match_golden",
+          "--",
+          "--test-threads=1"
+        ],
+        "exit": 101,
+        "locked_seconds": 0.6293184169917367,
+        "disk_free_bytes": 131961143296
+      },
+      "test_results": [
+        {
+          "passed": 0,
+          "failed": 1,
+          "ignored": 0
+        }
+      ],
+      "failed_names": [
+        "replay_scenarios::replay_scenarios_match_golden"
+      ],
+      "ignored_tests": [],
+      "warning_occurrences": [],
+      "error_occurrences": [
+        {
+          "line": 33,
+          "text": "error: test failed, to rerun pass `-p engine-native --test kernel`"
+        }
+      ],
+      "totals_within_this_command": {
+        "passed": 0,
+        "failed": 1,
+        "ignored": 0
+      }
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:34.871331+00:00",
+      "end_utc": "2026-10-31T19:18:34.969939+00:00",
+      "seconds": 0.09860983298858628,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "a673ec641fb964cbb4effa67341f0ffe59a6849fcb3ae1e011b1fbef5278e9a0",
+      "source_after_sha256": "940d531601f285727a27e1f8fecd4277f437c2f8038d749ffb991b2215c2c035",
+      "log_sha256": "ce9bf24f4da8649736651bc51a4e9bef734c5fd2bdf5e6a7408007b69655ca5e",
+      "runner_summary": {
+        "command": [
+          "python3",
+          "-B",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts",
+          "-p",
+          "test_check_source_lines.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 0.06286820897366852,
+        "disk_free_bytes": 131961696256
+      },
+      "test_results": [],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [],
+      "error_occurrences": []
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:34.976827+00:00",
+      "end_utc": "2026-10-31T19:18:39.761255+00:00",
+      "seconds": 4.784401833021548,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "c4bd9fde38b2309e6d3ca020c528877b6d8e61002dd1cedcfc96957f7804af27",
+      "source_after_sha256": "ee3451771faa6243818d873b0309ceef2b29fc62111a9f94afb5d0db899e7f2d",
+      "log_sha256": "cfde515581395dde84117fc2534e7a36ca3e702b2b80312c200039c8a671be19",
+      "runner_summary": {
+        "command": [
+          "python3",
+          "-B",
+          "scripts/check-source-lines.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 4.748993084009271,
+        "disk_free_bytes": 131978047488
+      },
+      "test_results": [],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [],
+      "error_occurrences": []
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "status": "passed",
+      "exit": 0,
+      "start_utc": "2026-10-31T19:18:39.767775+00:00",
+      "end_utc": "2026-10-31T19:18:39.929096+00:00",
+      "seconds": 0.16132229199865833,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_before_sha256": "5f8f05a9acc30cf11486776a2ec3b0fa244cb0bf70014abb99e0f31d40c80b2c",
+      "source_after_sha256": "e0f1f82fca6d7f3ecf0b60c1e234d9ca864c1726836c0c6ca03a37c6bad6939f",
+      "log_sha256": "8d3dcfaaba624a3690b4d7585acfd2e48e1c5f210d425897efcf851e2131e32b",
+      "runner_summary": {
+        "command": [
+          "python3",
+          "-B",
+          "scripts/check-native-layering.py"
+        ],
+        "exit": 0,
+        "locked_seconds": 0.12524658301845193,
+        "disk_free_bytes": 131977928704
+      },
+      "test_results": [],
+      "failed_names": [],
+      "ignored_tests": [],
+      "warning_occurrences": [],
+      "error_occurrences": []
+    }
+  ],
+  "native_full_only": {
+    "passed": 1848,
+    "failed": 9,
+    "ignored": 76
+  },
+  "totals_scope": "Only the single requested kernel/content/facade full-native command; focused, server, WASM and Python results are separate, not added into a unique grand total.",
+  "requested_not_run": []
+}

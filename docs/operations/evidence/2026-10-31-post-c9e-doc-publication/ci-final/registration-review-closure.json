@@ -1,0 +1,13 @@
+{
+  "utc": "2026-10-31T18:40:47.141804+00:00",
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "run": 41227614131,
+  "attempt": 1,
+  "verdict": "OKwithnotes/noissues exactDOCSpublicationandCIregistrationONLY",
+  "reviewer": "d05bb4cc-fd36-4d95-8267-779ef7cd9bf5",
+  "reviewSHA256": "194f6e5900d634627f025be7723dc2a19907c322219dd80f0a3af5fd1f3607e3",
+  "manifestSHA256": "46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050",
+  "summarySHA256": "fa79655afb78b6de645957fe34c97a6c7b7d279b2bed336337536a5a45caa82c",
+  "ParentAudit": "parent/noname-parent-ci41227614131-audit.json",
+  "scope": "Parent126SHA/CRC/10originalgziplogs/sixliveAPI allPASS; reviewerselectiveactualrawread+provenance/controlreview, notindependentall128body/hashrecompute. Originalcheckpoint3/7,7/3andParent6/4/source34e/d07historicalimmutable. No Cproduction/full331/37/Goal/audio/device/install/thermalacceptance. Main330105758WS6/defaultWASM unchanged; unknownpreleaseindexwriterpreserved. Thisappendixdoesnotrewriteoriginalci-final/archive-map.jsonorpublishersealed128files."
+}

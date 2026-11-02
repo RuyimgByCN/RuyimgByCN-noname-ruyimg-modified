@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/checks-final3/run.py", line 5, in <module>
+    if args[0]=='cargo':assert time.time()<1793472295.361409, 'No new heavy producer after17:31:36Z'
+AssertionError: No new heavy producer after17:31:36Z

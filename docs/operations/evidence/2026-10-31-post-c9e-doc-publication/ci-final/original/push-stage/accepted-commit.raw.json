@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-31T17:58:27.976410+00:00",
+  "status": "ACCEPTED_LOCAL_DOCS_ONLY_COMMIT_NOT_YET_PUSHED",
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "tree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "parent": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "files": 9905,
+  "bytes": 257498242,
+  "scope": "ParentDecision18normalcommitonlyenumeratedreviewedDocs/evidence. No Cproduction/runtime/config/source/lock/default/version changes. Maincode330/105/758/WS6, source37freshsameas34e; actualnewDocheadCIunexecuted. Existingexact34eCI10/10historicalcodeacceptancekeptseparate.",
+  "authorization": "Decisions18/25persist; no newpermissionneeded. Publicationonlynormalguardednative-convergencetowhitelistedrepo expectedOld34e; no pushyet.",
+  "source37Unchanged": true,
+  "stageAndWorkingTrackedEmpty": true,
+  "unexpectedPriorRawIndexFact": "fb->626unknownwriterretainedraw+logicalauditbeforeintentional9905add, notrestored/notclaimedctime-only",
+  "stageAudit": "/tmp/noname-post-c9e-doc-stage-audit.json",
+  "plan": "/tmp/noname-post-c9e-doc-stage-plan.json",
+  "review": "9775e7b6 NoissuesboundedDocs/archive",
+  "c9f": "private225/19full1845/1/75reviewa3BLOCKF14+fiveFSM; no Cmainimport",
+  "localBadLeafProtection": "refs/heads/local-evidence/i02-bdaf-unpublished-profilepreserved; notnewheadancestor"
+}

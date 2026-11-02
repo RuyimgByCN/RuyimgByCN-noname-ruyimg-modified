@@ -18,6 +18,7 @@ const SOURCE: &str = include_str!("../../../../content/original/ported/shenhua/z
 
 fn character(id: u32, group: &str) -> PackageCharacterEntry {
     PackageCharacterEntry {
+        voice_assets: Default::default(),
         id,
         name_key: format!("zhiba_test_{id}"),
         max_hp: 4,

@@ -399,3 +399,122 @@ fn freezing_installed_assets_rejects_symlinks_outside_package_root() {
         .unwrap_err()
         .contains("越界"));
 }
+
+#[test]
+fn definition_voices_survive_frozen_export_and_keep_semantic_bridge_rule_hash() {
+    let (temp, content, _reference, mut frozen) = fixture();
+    let mut base =
+        content_schema::ContentPackage::from_json_bytes(frozen.package_json.as_bytes()).unwrap();
+    base.asset_manifest.as_mut().unwrap().entries[0].kind =
+        serde_json::from_value(serde_json::json!("Audio")).unwrap();
+    let mut value = serde_json::to_value(&base).unwrap();
+    value["character_index"] = serde_json::json!([{
+        "id": 990201, "name_key": "frozen_probe", "max_hp": 4, "skills": [990201]
+    }]);
+    value["card_index"] = serde_json::json!([{
+        "card_def_id": 990201, "name": "frozen_card", "kind": "weapon"
+    }]);
+    base = serde_json::from_value(value).unwrap();
+    base.manifest.logic_hash = base.compute_logic_hash();
+    base.manifest.asset_hash = base.compute_asset_hash();
+    base.validate().unwrap();
+    let mut voiced = base.clone();
+    for voices in [
+        &mut voiced.character_index[0].voice_assets,
+        &mut voiced.skill_index[0].voice_assets,
+        &mut voiced.card_index[0].voice_assets,
+    ] {
+        voices.insert("activate".into(), "frozen-vm:resource".into());
+    }
+    voiced.manifest.asset_hash = voiced.compute_asset_hash();
+    voiced.validate().unwrap();
+    assert_eq!(voiced.compute_logic_hash(), base.compute_logic_hash());
+    assert_ne!(voiced.compute_asset_hash(), base.compute_asset_hash());
+
+    let semantic_pack = |package: &content_schema::ContentPackage| {
+        let mut pack = content_native_loader::bridge_pack(
+            r#"{"pack":{"name":"voice-semantics","version":1,"card_prefix":"vs_"},"cards":[]}"#,
+        )
+        .unwrap()
+        .pack;
+        pack.vm_skills = content_native_loader::bridge_vm_skill_decls(package)
+            .unwrap()
+            .decls;
+        assert_eq!(pack.vm_skills.len(), 1);
+        pack
+    };
+    let base_pack = semantic_pack(&base);
+    let voiced_pack = semantic_pack(&voiced);
+    let baseline_engine =
+        engine_native::Engine::new_with_extensions(4242, 2, &[&base_pack]).unwrap();
+    let voiced_engine =
+        engine_native::Engine::new_with_extensions(4242, 2, &[&voiced_pack]).unwrap();
+    assert_eq!(baseline_engine.state_hash(), voiced_engine.state_hash());
+    assert_eq!(baseline_engine.save(), voiced_engine.save());
+
+    let mut base_frozen = frozen.clone();
+    base_frozen.package_json = String::from_utf8(base.to_json_bytes().unwrap()).unwrap();
+    base_frozen.binding.logic_hash = blake3::Hash::from(base.manifest.logic_hash)
+        .to_hex()
+        .to_string();
+    base_frozen.binding.content_hash =
+        content_runtime::content_hash_hex(base_frozen.package_json.as_bytes());
+    let base_reference = copy_reference(&base_frozen);
+    let base_locked_pack = content
+        .load_frozen_reference(&base_reference, &base_frozen)
+        .unwrap();
+    let base_locked_engine =
+        engine_native::Engine::new_with_extensions(4242, 2, &[&base_locked_pack]).unwrap();
+
+    let mut raw = voiced.to_json_bytes().unwrap();
+    raw.extend_from_slice(b"\n  \n");
+    frozen.package_json = String::from_utf8(raw.clone()).unwrap();
+    frozen.binding.logic_hash = blake3::Hash::from(voiced.manifest.logic_hash)
+        .to_hex()
+        .to_string();
+    frozen.binding.content_hash = content_runtime::content_hash_hex(&raw);
+    let reference = copy_reference(&frozen);
+    let exported = serde_json::to_vec(&frozen).unwrap();
+    let frozen: FrozenNativePackage = serde_json::from_slice(&exported).unwrap();
+    let pack = content.load_frozen_reference(&reference, &frozen).unwrap();
+    let engine = engine_native::Engine::new_with_extensions(4242, 2, &[&pack]).unwrap();
+    assert_ne!(
+        base_frozen.binding.content_hash,
+        frozen.binding.content_hash
+    );
+    assert_ne!(
+        base_locked_engine.ruleset_version(),
+        engine.ruleset_version()
+    );
+    let snapshot = engine.save();
+    std::fs::remove_dir_all(temp.path().join("sources")).unwrap();
+    std::fs::remove_dir_all(temp.path().join("store/packages")).unwrap();
+    let (packs, retained) = content
+        .load_room_packages(&[reference], Some(&[frozen.clone()]))
+        .unwrap();
+    let restored = engine_native::Engine::restore_with_extensions(&snapshot, &[&packs[0]]).unwrap();
+    assert_eq!(restored.state_hash(), engine.state_hash());
+    assert_eq!(retained[0].package_json.as_bytes(), raw);
+    assert_eq!(retained[0].assets, frozen.assets);
+    let restored_package =
+        content_schema::ContentPackage::from_json_bytes(retained[0].package_json.as_bytes())
+            .unwrap();
+    restored_package.validate().unwrap();
+    assert_eq!(
+        restored_package.character_index[0].voice_assets["activate"],
+        "frozen-vm:resource"
+    );
+    assert_eq!(
+        restored_package.skill_index[0].voice_assets["activate"],
+        "frozen-vm:resource"
+    );
+    assert_eq!(
+        restored_package.card_index[0].voice_assets["activate"],
+        "frozen-vm:resource"
+    );
+    let mut corrupt = frozen.clone();
+    corrupt.assets.get_mut("assets/resource.bin").unwrap()[0] ^= 1;
+    assert!(content
+        .load_frozen_reference(&copy_reference(&corrupt), &corrupt)
+        .is_err());
+}

@@ -1,0 +1,12 @@
+$ [变异：ai.rs 回退到 HEAD 的 Other 臂] cargo test --offline -p engine-native --test nc_rounds nc10_public_other_plan::   # 2026-11-02 23:12:43 +0800
+test nc10_public_other_plan::ordinary_other_choice_returns_before_simulation ... FAILED
+test nc10_public_other_plan::other_idle_keeps_explicit_parallel_reveals_and_owner_answers ... ok
+test nc10_public_other_plan::dead_other_actor_returns_before_simulation ... FAILED
+test nc10_public_other_plan::own_answer_and_no_choice_search_still_advance_authority ... ok
+test nc10_public_other_plan::ordinary_other_choice_over_real_cached_vm_effects_is_public_idle ... FAILED
+thread 'nc10_public_other_plan::ordinary_other_choice_returns_before_simulation' (40261798) panicked at crates/engine-native/tests/groups/../nc10_public_other_plan.rs:185:5:
+thread 'nc10_public_other_plan::dead_other_actor_returns_before_simulation' (40261796) panicked at crates/engine-native/tests/groups/../nc10_public_other_plan.rs:141:13:
+thread 'nc10_public_other_plan::ordinary_other_choice_over_real_cached_vm_effects_is_public_idle' (40261797) panicked at crates/engine-native/tests/groups/../nc10_public_other_plan.rs:141:13:
+test result: FAILED. 2 passed; 3 failed; 0 ignored; 0 measured; 297 filtered out; finished in 0.01s
+exit=101
+ai.rs restored to stash version

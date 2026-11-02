@@ -83,6 +83,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 0,
                 name: "xiefang".into(),
                 locked: false,
@@ -99,6 +100,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 1,
                 name: "new_zhixi".into(),
                 locked: false,
@@ -115,6 +117,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 2,
                 name: "new_zhixi_mark2".into(),
                 locked: false,
@@ -131,6 +134,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 3,
                 name: "new_meibu".into(),
                 locked: false,
@@ -147,6 +151,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 4,
                 name: "new_meibu_range".into(),
                 locked: false,
@@ -163,6 +168,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 5,
                 name: "sbzhaxiang".into(),
                 locked: false,
@@ -179,6 +185,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+                voice_assets: Default::default(),
                 skill_def_id: 6,
                 name: "jishe".into(),
                 locked: false,

@@ -24,6 +24,7 @@ fn setup() -> (GameState, PlayerId, PlayerId) {
     )
     .unwrap();
     package.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: 90_272,
         name_key: "unused_lord".into(),
         max_hp: 4,

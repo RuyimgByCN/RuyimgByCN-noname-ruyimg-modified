@@ -1,0 +1,4373 @@
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/kernel/damage_skill.rs SHA256 01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0
+1: //! One admitted, atomic native source unit; children complete after this body has finished.
+2: use super::*;
+3: use crate::event::{DamageWindowKind, NativeDamageEffect};
+4: #[derive(Clone)]
+5: pub struct NativeDamageSkill {
+6:     pub owner: PlayerId,
+7:     pub def: crate::ids::SkillDefId,
+8:     pub window: DamageWindowKind,
+9: }
+10: impl SkillMachine for NativeDamageSkill {
+11:     fn fork(&self) -> Box<dyn SkillMachine> {
+12:         Box::new(self.clone())
+13:     }
+14:     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+15:         crate::snap::MachineSnapshot::NativeDamageSkill {
+16:             owner: self.owner,
+17:             def: self.def,
+18:             window: self.window,
+19:         }
+20:     }
+21:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+22:         let Some(effect) = ctx
+23:             .catalog
+24:             .skills
+25:             .get(self.def as usize)
+26:             .and_then(|s| s.behavior.native_damage_effect(self.window.event_kind()))
+27:         else {
+28:             return Flow::Done;
+29:         };
+30:         let d = ctx.current_damage().expect("checked window root").clone();
+31:         match effect {
+32:             NativeDamageEffect::Jueqing | NativeDamageEffect::Wuxin => {
+33:                 let root = ctx.current_event_frame_id();
+34:                 let amount = if effect == NativeDamageEffect::Jueqing {
+35:                     d.amount as u32
+36:                 } else {
+37:                     1
+38:                 };
+39:                 finish_damage(
+40:                     ctx,
+41:                     root,
+42:                     d.clone(),
+43:                     crate::event::DamageOutcome::ReplacedByLoseHp,
+44:                 );
+45:                 ctx.emit(EventData::LoseHp {
+46:                     player: d.target,
+47:                     amount,
+48:                 });
+49:             }
+50:             NativeDamageEffect::Zuijiu => {
+51:                 ctx.modify_damage_amount(1);
+52:             }
+53:             NativeDamageEffect::ZhaohuoSource => {
+54:                 let root = ctx.current_event_frame_id();
+55:                 let mut d = d;
+56:                 d.nature = crate::event::DamageNature::Fire;
+57:                 ctx.res.frame_mut(root).unwrap().data = EventData::Damage(d);
+58:             }
+59:             effect => {
+60:                 let root = ctx.current_event_frame_id();
+61:                 match self.window {
+62:                     DamageWindowKind::End => post_damage(ctx, d, effect, self.owner),
+63:                     DamageWindowKind::After => {
+64:                         damage_after::post_damage_after(ctx, d, effect, self.owner)
+65:                     }
+66:                     _ => damage_windows::apply_native_damage(
+67:                         ctx,
+68:                         root,
+69:                         self.window,
+70:                         effect,
+71:                         self.def,
+72:                     ),
+73:                 }
+74:             }
+75:         }
+76:         Flow::Done
+77:     }
+78: }
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/machine.rs SHA256 cd7a54a0c778b9031ff0e7f1e28d1b9a56d504b11ef4674ced2a22fa6bfa7b2c
+191:     /// 错误类别（`VmError` 变体名）。
+192:     pub kind: String,
+193:     /// 错误详情（`VmError` 的显示文本）。
+194:     pub detail: String,
+195: }
+196: 
+197: /// 机器推进上下文。
+198: pub struct Ctx<'a> {
+199:     pub core: &'a mut GameStateCore,
+200:     pub res: &'a mut Resolution,
+201:     pub catalog: &'a Catalog,
+202:     pub out: &'a mut Vec<LogEvent>,
+203: }
+204: 
+205: impl<'a> Ctx<'a> {
+206:     /// 只读视图（传给目录中的过滤器）。
+207:     pub fn query(&self) -> QueryCtx<'_> {
+208:         QueryCtx {
+209:             state: self.core,
+210:             catalog: self.catalog,
+211:         }
+212:     }
+213: 
+214:     // ---- 事件栈 ----
+215: 
+216:     /// 当前事件帧号：机器只在自己的恢复深度上运行，栈顶即触发帧；但机器
+217:     /// 在一步内可能发射**失去牌子帧**（`CardsLost`——仅用于触发失去牌类
+218:     /// 技能，不改变调用方正在处理的事件），此访问器跳过它，保证「我正处理
+219:     /// 的那个事件」语义稳定。需要裸栈顶时用 `top_frame_id`。
+220:     pub fn current_frame_id(&self) -> crate::ids::EventId {
+221:         self.res
+222:             .stack
+223:             .iter()
+224:             .rev()
+225:             .find(|f| f.kind != crate::event::EventKind::CardsLost)
+226:             .or_else(|| self.res.stack.last())
+227:             .expect("machine runs with a frame on stack")
+228:             .id
+229:     }
+230: 
+231:     /// 裸栈顶帧号（含失去牌子帧）。
+232:     pub fn top_frame_id(&self) -> crate::ids::EventId {
+233:         self.res
+234:             .stack
+235:             .last()
+236:             .expect("machine runs with a frame on stack")
+237:             .id
+238:     }
+239: 
+240:     /// 当前帧的 CardUsed 载荷只读访问（同疾读目标等）。
+241:     pub fn current_card_use(&self) -> Result<&CardUseData, ()> {
+242:         let id = self.current_frame_id();
+243:         self.res
+244:             .frame(id)
+245:             .ok_or(())
+246:             .and_then(|f| f.card_use().ok_or(()))
+247:     }
+248: 
+249:     /// 当前帧的 CardUsed 载荷可变访问（猴子偷桃等使用前取消写回）。
+250:     pub fn current_card_use_mut(&mut self) -> &mut CardUseData {
+251:         let id = self.current_frame_id();
+252:         self.res
+253:             .frame_mut(id)
+254:             .expect("current frame exists")
+255:             .card_use_mut()
+256:     }
+257: 
+258:     /// 当前帧的 TurnOverBefore 载荷可变访问（面具取消写回）。
+259:     pub fn current_turn_over_before_mut(&mut self) -> (&mut PlayerId, &mut bool) {
+260:         let id = self.current_frame_id();
+261:         self.res
+262:             .frame_mut(id)
+263:             .expect("current frame exists")
+264:             .turn_over_before_mut()
+265:     }
+266: 
+267:     /// Damage handlers read their checked root payload while their queue retains the child frame.
+268:     pub fn current_event_frame_id(&self) -> crate::ids::EventId {
+269:         let id = self.current_frame_id();
+270:         match &self.res.frame(id).expect("current frame").data {
+271:             EventData::DamageWindow { root, .. } => *root,
+272:             _ => id,
+273:         }
+274:     }
+275: 
+276:     /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
+277:     pub fn current_damage(&self) -> Result<&DamageData, ()> {
+278:         let root = self.current_event_frame_id();
+279:         match self.res.frame(root).map(|f| &f.data) {
+280:             Some(crate::event::EventData::Damage(d)) => Ok(d),
+281:             _ => Err(()),
+282:         }
+283:     }
+284: 
+285:     /// 当前帧的失去体力载荷（hlss 禳星计数；非 LoseHp 帧 Err）。
+286:     pub fn current_lose_hp(&self) -> Result<u32, ()> {
+287:         let id = self.current_frame_id();
+288:         match self.res.frame(id).map(|f| &f.data) {
+289:             Some(crate::event::EventData::LoseHp { amount, .. }) => Ok(*amount),
+290:             _ => Err(()),
+291:         }
+292:     }
+293: 
+294:     pub fn current_damage_mut(&mut self) -> &mut DamageData {
+295:         let id = self.current_event_frame_id();
+296:         self.res
+297:             .frame_mut(id)
+298:             .expect("current frame exists")
+299:             .damage_mut()
+300:     }
+301: 
+302:     /// Reject signed source-quantity overflow through the existing atomic command fault path.
+303:     pub fn fail_damage_amount(&mut self) {
+304:         self.res.fault = Some(VmFault {
+305:             skill: "native_damage_modifier".into(),
+306:             owner: 0,
+307:             event: "Damage".into(),
+308:             kind: "DamageAmountOverflow".into(),
+309:             detail: "canonical source amount exceeds i32".into(),
+310:         });
+311:     }
+312:     pub fn modify_damage_amount(&mut self, delta: i32) -> bool {
+313:         let Ok(d) = self.current_damage() else {
+314:             return false;
+315:         };
+316:         let Some(amount) = d.amount.checked_add(delta) else {
+317:             self.fail_damage_amount();
+318:             return false;
+319:         };
+320:         self.current_damage_mut().amount = amount;
+321:         true
+322:     }
+323: 
+324:     /// Request a durable result for one emitted damage frame; nested damage has a different id.
+325:     pub fn damage_with_receipt(
+326:         &mut self,
+327:         observer: PlayerId,
+328:         damage: DamageData,
+329:     ) -> crate::ids::EventId {
+330:         let id = self.res.next_event_id;
+331:         self.core
+332:             .vm_aux
+333:             .flags
+334:             .insert((observer, format!("vm_damage_receipt:{id}")), 0);
+335:         self.emit(EventData::Damage(damage));
+336:         id
+337:     }
+338: 
+339:     pub fn record_phase_skipped(&mut self, player: PlayerId) {
+340:         if self.catalog.vm_card_history {
+341:             *self
+342:                 .core
+343:                 .vm_aux
+344:                 .flags
+345:                 .entry((player, "vm_skipped_phase_count".to_string()))
+346:                 .or_default() += 1;
+347:         }
+348:     }
+349: 
+350:     /// 压入子事件帧；调用方随后应返回 `Flow::Yield`。
+351:     /// 机器挂起深度在启动时已记录，子事件弹栈后自动恢复。
+352:     /// 伤害帧以「前置触发窗口」为初始阶段，其余帧先提交。
+353:     pub fn emit(&mut self, data: EventData) {
+354:         if matches!(data, EventData::Damage(_) | EventData::DamageWindow { .. }) {
+355:             crate::resolution::push_frame(self.res, data);
+356:             return;
+370:                 // 死亡前置窗口（规则 v170）：机器发射的 Death 同样从
+371:                 // BeforeTriggers 起步（遗言/拦截技在 DeathMachine 前）。
+372:                 // PhaseBegin 前置窗口（PA12 批⑤-2，§2 K）：阶段开始类
+373:                 // 技能（奋励 skip 系）须在入场行为 begin_* 之前执行。
+374:                 crate::event::Stage::BeforeTriggers
+375:             }
+376:             _ => crate::event::Stage::Commit,
+377:         };
+378:         self.res.stack.push(crate::event::Frame {
+379:             id,
+380:             parent,
+381:             kind,
+382:             data,
+383:             stage,
+384:             queue: Vec::new(),
+385:             planned: false,
+386:             intrinsic_done: false,
+387:         });
+388:     }
+389: 
+390:     // ---- 选择 ----
+391: 
+392:     /// 机器读取已校验的应答。只在 `Flow::WaitChoice` 恢复后存在。
+393:     pub fn answer(&self) -> &Selection {
+394:         self.res.answer.as_ref().expect("answer present on resume")
+395:     }
+396: 
+397:     pub fn answer_first(&self) -> ChoiceOption {
+398:         *self.answer().first().expect("non-empty selection")
+399:     }
+400: 
+401:     // ---- 牌区操作 ----
+402: 
+403:     /// 摸 n 张；牌库不足时先以弃牌堆洗回（规则随机流）。
+404:     pub fn draw_cards(&mut self, player: PlayerId, n: usize) -> Vec<CardId> {
+405:         let mut drawn = Vec::with_capacity(n);
+406:         for _ in 0..n {
+407:             if self.core.deck.is_empty() {
+408:                 if self.core.discard.is_empty() {
+409:                     break;
+410:                 }
+411:                 let mut cards = std::mem::take(&mut self.core.discard);
+412:                 self.core.rng.shuffle(&mut cards);
+413:                 self.core.deck = cards;
+414:                 self.out.push(LogEvent::DeckReshuffled);
+415:             }
+416:             let card = self.core.deck.pop().expect("deck non-empty");
+417:             self.core.player_mut(player).hand.push(card);
+418:             drawn.push(card);
+419:         }
+420:         if !drawn.is_empty() {
+421:             self.emit(EventData::CardsDrawn {
+422:                 player,
+423:                 cards: drawn.clone(),
+424:             });
+425:             self.out.push(LogEvent::CardsDrawn {
+426:                 player,
+427:                 cards: drawn.clone(),
+428:             });
+429:         }
+430:         drawn
+431:     }
+432: 
+433:     /// 翻判定牌：牌库顶；牌库不足时先洗回弃牌堆。不进入任何玩家手牌。
+434:     pub fn draw_judge_card(&mut self) -> CardId {
+435:         if self.core.deck.is_empty() {
+436:             let mut cards = std::mem::take(&mut self.core.discard);
+437:             self.core.rng.shuffle(&mut cards);
+438:             self.core.deck = cards;
+439:             self.out.push(LogEvent::DeckReshuffled);
+440:         }
+441:         self.core
+442:             .deck
+443:             .pop()
+444:             .expect("judge draw: deck or discard non-empty")
+445:     }
+446: 
+447:     /// 从手牌或装备区移除一张（鬼道改判用：装备区黑牌可打出）。
+448:     /// 不存在则 panic：调用方先验证。
+449:     pub fn take_owned_card(&mut self, player: PlayerId, card: CardId) {
+450:         let is_equip = self.catalog.card_kind(card).is_equip();
+451:         let in_hand = self
+452:             .core
+453:             .player(player)
+454:             .hand
+455:             .iter()
+456:             .position(|c| *c == card);
+457:         if let Some(pos) = in_hand {
+458:             self.core.player_mut(player).hand.remove(pos);
+459:             self.note_cards_lost(player, &[card]);
+460:             self.emit(EventData::CardsLost {
+461:                 player,
+462:                 cards: vec![card],
+463:                 origins: vec![crate::event::LostOrigin::Hand],
+464:             });
+465:             return;
+466:         }
+467:         let in_equips = self
+468:             .core
+469:             .player(player)
+470:             .equips
+471:             .iter()
+472:             .position(|c| *c == card);
+473:         if let Some(pos) = in_equips {
+474:             self.core.player_mut(player).equips.remove(pos);
+475:             if is_equip {
+476:                 crate::kernel::revoke_equip_skills(self.core, self.catalog, player, card);
+477:             }
+478:             self.note_cards_lost(player, &[card]);
+479:             self.emit(EventData::CardsLost {
+480:                 player,
+481:                 cards: vec![card],
+482:                 origins: vec![crate::event::LostOrigin::Equip],
+483:             });
+484:             return;
+485:         }
+486:         panic!("card {card} not in hand or equips of {player}");
+487:     }
+488: 
+489:     /// 从手牌移除一张（不存在则 panic：调用方先验证）。
+490:     pub fn take_hand_card(&mut self, player: PlayerId, card: CardId) {
+491:         let hand = &mut self.core.player_mut(player).hand;
+492:         let pos = hand
+493:             .iter()
+494:             .position(|c| *c == card)
+495:             .unwrap_or_else(|| panic!("card {card} not in hand of {player}"));
+496:         hand.remove(pos);
+497:     }
+498: 
+499:     /// 入弃牌堆（**牌区唯一性**：同一张牌不得同时属于两个区域）。
+500:     ///
+501:     /// NC07 修正（NC12 基线 §5.1 缺陷根因）：旧实现是无条件 `push`，当技能在
+502:     /// 一张牌「正在被使用/结算」期间把它换出（如 swd 玉蝉换形）或某条路径重复
+503:     /// 入堆时，同一张牌会在弃牌堆出现两次——引擎允许的活状态随即被自己的所有权
+504:     /// 校验（`card_in_multiple_zones`）判非法，读档 30/30 被拒。现在：
+505:     /// - 已在弃牌堆 → 幂等返回（不重复入堆）；
+506:     /// - 从其它区域移出仍由调用方负责（`discard_from_hand`/`take_hand_card` 等），
+507:     ///   本原语只保证**不重复入堆**——不改变既有调用方的区域语义。
+508:     pub fn to_discard(&mut self, card: CardId) {
+509:         if self.core.discard.contains(&card) {
+510:             return;
+511:         }
+512:         self.core.discard.push(card);
+513:     }
+514: 
+515:     pub fn discard_from_hand(&mut self, player: PlayerId, card: CardId) {
+516:         self.take_hand_card(player, card);
+517:         self.to_discard(card);
+518:         self.note_cards_lost(player, &[card]);
+519:         self.emit(EventData::CardsLost {
+520:             player,
+521:             cards: vec![card],
+522:             origins: vec![crate::event::LostOrigin::Hand],
+523:         });
+524:         self.out.push(LogEvent::CardDiscarded {
+525:             player,
+526:             cards: vec![card],
+527:         });
+528:     }
+529: 
+530:     /// 义山记录（swd 批 123，规则 v310）：持有者失去牌时登记（上游
+531:     /// `yishan2` loseEnd `storage.yishan.unshift` 同口径，新在前）。
+532:     /// 覆盖原生三类丢失路径：弃置/交出/装备离场（登记差异：其余丢失路径
+533:     /// 如移出游戏不记）。
+534:     pub fn note_cards_lost(&mut self, player: PlayerId, cards: &[CardId]) {
+535:         note_cards_lost(self.core, self.catalog, player, cards);
+536:     }
+537: 
+538:     /// 手牌置武将牌上（离场区，规则 v162 基建）：实体牌守恒——离开全部
+539:     /// 正常区、随所有者存放（死亡清理由 DeathMachine leftover 之外的
+540:     /// off_court 消费技自理，此处不做）。
+541:     pub fn hand_to_off_court(&mut self, player: PlayerId, card: CardId) {
+542:         self.take_hand_card(player, card);
+543:         self.core.player_mut(player).off_court.push(card);
+544:     }
+545: 
+546:     /// 离场区牌弃置（消费技用）：出区入弃堆。
+547:     pub fn off_court_discard(&mut self, player: PlayerId, card: CardId) {
+548:         self.core
+549:             .player_mut(player)
+550:             .off_court
+551:             .retain(|x| *x != card);
+552:         self.to_discard(card);
+553:     }
+554: 
+555:     /// 虚拟用牌原语（规则 v169 基建，上游 game.useCard({name}) 同族）：
+556:     /// 以牌堆底一张实体为载体、use_as 声明牌种发起一次完整使用管线
+557:     /// （响应/伤害/弃置全走 use_as 分派）。载体经使用者手牌通道取出、
+558:     /// 结算后入弃堆（登记差异：上游凭空造牌无实体不入弃堆）。返回载体。
+559:     pub fn use_virtual_card(
+560:         &mut self,
+561:         source: PlayerId,
+562:         as_kind: crate::catalog::CardKind,
+563:         targets: Vec<PlayerId>,
+564:     ) -> CardId {
+565:         let carrier = self
+566:             .core
+567:             .deck
+568:             .first()
+569:             .copied()
+570:             .expect("virtual use: deck empty");
+571:         self.core.deck.remove(0);
+572:         self.core.player_mut(source).hand.push(carrier);
+573:         self.emit(EventData::CardUsed(crate::event::CardUseData {
+574:             card: carrier,
+575:             player: source,
+576:             targets,
+577:             nature: crate::event::DamageNature::Normal,
+578:             use_as: Some(as_kind),
+579:             cancelled: false,
+580:         }));
+670:     }
+671: 
+672:     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
+673:         let p = self.core.player_mut(player);
+674:         if !p.alive {
+675:             return 0;
+676:         }
+677:         let before = p.hp;
+678:         // 无限体力（上游 Infinity）：回复不改变体力（Infinity + n = Infinity）。
+679:         if !p.infinite_hp() {
+680:             p.hp = before.saturating_add(amount as i32).min(p.max_hp as i32);
+681:         }
+682:         let gained = (p.hp - before).max(0) as u32;
+683:         if p.hp > 0 {
+684:             p.dying = false;
+685:         }
+686:         if gained > 0 {
+687:             self.emit(EventData::Recover {
+688:                 player,
+689:                 amount: gained,
+690:                 by_card,
+691:             });
+692:             self.out.push(LogEvent::HpRecovered {
+693:                 player,
+694:                 amount: gained,
+695:             });
+696:         }
+697:         gained
+698:     }
+699: 
+700:     // ---- 技能实例 ----
+701: 
+702:     /// Preserve native instance overwrite semantics and register a genuinely new subscription.
+703:     pub fn insert_skill(
+704:         &mut self,
+705:         key: (PlayerId, crate::ids::SkillDefId),
+706:         instance: crate::state::SkillInstance,
+707:     ) -> Option<crate::state::SkillInstance> {
+708:         let old = self.core.skills.insert(key, instance);
+709:         if old.is_none() {
+710:             crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
+711:         }
+712:         old
+713:     }
+714: 
+715:     /// Insert only if absent; existing instances retain their limits and lifetime.
+716:     pub fn ensure_skill(
+717:         &mut self,
+718:         key: (PlayerId, crate::ids::SkillDefId),
+719:         instance: crate::state::SkillInstance,
+720:     ) {
+721:         if !self.core.skills.contains_key(&key) {
+722:             self.insert_skill(key, instance);
+723:         }
+724:     }
+725: 
+726:     pub fn skill_enabled(&self, owner: PlayerId, def: SkillDefId) -> bool {
+727:         self.core.has_skill(owner, def)
+728:     }
+729: 
+730:     pub fn set_skill_enabled(&mut self, owner: PlayerId, def: SkillDefId, enabled: bool) {
+731:         let key = (owner, def);
+732:         if let Some(inst) = self.core.skills.get_mut(&key) {
+733:             if inst.enabled != enabled {
+734:                 inst.enabled = enabled;
+735:                 let name = self.catalog.skill_name(def);
+736:                 self.emit(EventData::SkillToggled {
+737:                     player: owner,
+738:                     skill: def,
+739:                     enabled,
+740:                     temporary: false,
+741:                 });
+742:                 self.out.push(LogEvent::SkillToggled {
+743:                     player: owner,
+744:                     skill: name,
+745:                     enabled,
+746:                 });
+747:             }
+748:         }
+749:     }
+750: 
+751:     /// 动态获得技能，至拥有者回合结束移除。
+752:     pub fn add_skill_until_turn_end(&mut self, owner: PlayerId, def: SkillDefId) {
+753:         let key = (owner, def);
+754:         if let Some(inst) = self.core.skills.get_mut(&key) {
+755:             inst.enabled = true;
+756:             inst.expires_end_of_turn = true;
+757:         } else {
+758:             self.insert_skill(
+759:                 key,
+760:                 crate::state::SkillInstance {
+761:                     owner,
+762:                     enabled: true,
+763:                     once_used: false,
+764:                     expires_end_of_turn: true,
+765:                     rounds: 0,
+766:                 },
+767:             );
+768:         }
+769:         let name = self.catalog.skill_name(def);
+770:         self.emit(EventData::SkillToggled {
+771:             player: owner,
+772:             skill: def,
+773:             enabled: true,
+774:             temporary: true,
+775:         });
+776:         self.out.push(LogEvent::SkillToggled {
+777:             player: owner,
+778:             skill: name,
+779:             enabled: true,
+780:         });
+781:     }
+782: 
+783:     /// 移除到期临时技能（回合结束提交时调用）。
+784:     pub fn expire_temporary_skills(&mut self, owner: PlayerId) {
+785:         let expired: Vec<SkillDefId> = self
+786:             .core
+787:             .skills
+788:             .iter()
+789:             .filter(|((o, _), i)| *o == owner && i.enabled && i.expires_end_of_turn)
+790:             .map(|((_, d), _)| *d)
+791:             .collect();
+792:         for def in expired {
+793:             if let Some(inst) = self.core.skills.get_mut(&(owner, def)) {
+794:                 inst.enabled = false;
+795:                 inst.expires_end_of_turn = false;
+796:             }
+797:             let name = self.catalog.skill_name(def);
+798:             self.emit(EventData::SkillToggled {
+799:                 player: owner,
+800:                 skill: def,
+801:                 enabled: false,
+802:                 temporary: true,
+803:             });
+804:             self.out.push(LogEvent::SkillToggled {
+805:                 player: owner,
+806:                 skill: name,
+807:                 enabled: false,
+808:             });
+809:         }
+810:     }
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/choice.rs SHA256 586ec7ce766576b9163bdeee71fa654ab7a0b3841107e0a22e99dfc5276d0014
+1: //! 选择请求与应答：内核唯一的选择通道，类型化选项（无 `Vec<u32>` 裸载荷）。
+2: 
+3: use crate::ids::{CardId, PlayerId, SkillDefId};
+4: 
+5: /// 选择种类（供宿主 UI 渲染分类用，不参与规则分支）。
+6: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+7: pub enum ChoiceKind {
+8:     /// 确认/放弃。
+9:     Confirm,
+10:     /// 从选项中选牌。
+11:     SelectCards,
+12:     /// 从选项中选玩家。
+13:     SelectPlayers,
+14:     /// 出牌响应（含放弃）。
+15:     RespondCard,
+16:     /// 从定界标签集中选择（G1 五行：金/木/水/火/土）。
+17:     PickTag,
+18: }
+19: 
+20: /// 单个可选项。
+21: #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+22: pub enum ChoiceOption {
+23:     /// 确认/使用。
+24:     Confirm,
+25:     /// 放弃/跳过（等价 cancel 的显式选项）。
+26:     Pass,
+27:     Card(CardId),
+28:     Player(PlayerId),
+29:     /// 定界标签（G1 五行属性 0..=4：金/木/水/火/土）。
+30:     Tag(u8),
+31:     /// 目录牌种码（`catalog::kind_code`）——「按牌名选择」类询问
+32:     /// （T11 Boss 诸葛亮族批 116 起风：从可用锦囊牌名中选一张并使用）。
+33:     Kind(u16),
+34:     /// Stable skill definition selected as the next trigger.
+35:     Skill(SkillDefId),
+36: }
+37: 
+38: impl ChoiceOption {
+39:     pub fn describe(&self) -> String {
+40:         match self {
+41:             ChoiceOption::Confirm => "confirm".into(),
+42:             ChoiceOption::Pass => "pass".into(),
+43:             ChoiceOption::Card(c) => format!("card:{c}"),
+44:             ChoiceOption::Player(p) => format!("player:{p}"),
+45:             ChoiceOption::Tag(t) => format!("nature:{t}"),
+46:             ChoiceOption::Kind(k) => format!("kind:{k}"),
+47:             ChoiceOption::Skill(s) => format!("skill:{s}"),
+48:         }
+49:     }
+50: }
+51: 
+52: /// 选择请求规格。内核负责校验应答是规格的子集且数量合规。
+53: #[derive(Debug, Clone, PartialEq, Eq)]
+54: pub struct ChoiceSpec {
+55:     pub kind: ChoiceKind,
+56:     /// 内容侧提示文本（静态串，进目录不进状态——状态只存目录引用编号）。
+57:     pub prompt: &'static str,
+58:     pub options: Vec<ChoiceOption>,
+59:     pub min: usize,
+60:     pub max: usize,
+61:     /// 允许空应答表示放弃。可选触发的「放弃」即空应答 + allow_cancel。
+62:     pub allow_cancel: bool,
+63: }
+64: 
+65: impl ChoiceSpec {
+66:     pub fn confirm(prompt: &'static str) -> Self {
+67:         Self {
+68:             kind: ChoiceKind::Confirm,
+69:             prompt,
+70:             options: vec![ChoiceOption::Confirm],
+71:             min: 1,
+72:             max: 1,
+73:             allow_cancel: true,
+74:         }
+75:     }
+76: 
+77:     /// 校验应答：全部选项都在规格内、数量在 [min, max]、无重复、或合法的空放弃。
+78:     ///
+79:     /// 重复守卫是信任边界的一部分：同一张牌/玩家选两次会让下游
+80:     /// 「从手牌移除」类结算二次移除同一实例而 panic。
+81:     pub fn accepts(&self, selection: &[ChoiceOption]) -> bool {
+82:         if selection.is_empty() {
+83:             return self.allow_cancel || self.min == 0;
+84:         }
+85:         if selection.len() < self.min || selection.len() > self.max {
+86:             return false;
+87:         }
+88:         selection.iter().all(|s| self.options.contains(s))
+89:             && (0..selection.len()).all(|i| !selection[i + 1..].contains(&selection[i]))
+90:     }
+91: }
+92: 
+93: /// 已开启、等待应答的选择（宿主可见视图 + 挂起的机器一并保存）。
+94: #[derive(Debug, Clone, PartialEq, Eq)]
+95: pub struct OpenChoice {
+96:     pub id: u64,
+97:     pub observer: PlayerId,
+98:     pub spec: ChoiceSpec,
+99: }
+100: 
+101: /// 应答结果（内核校验通过后写回，供机器读取一次）。
+102: pub type Selection = Vec<ChoiceOption>;
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/event.rs SHA256 78ceed437b294390ad9bccfac46a6bba905e73cd167397471167c90354531381
+14: #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+15: pub enum EventKind {
+16:     DamageBefore,
+17:     Damage,
+18:     Recover,
+19:     CardsDrawn,
+20:     CardsMoved,
+21:     CardUsed,
+22:     CardResponded,
+23:     Dying,
+24:     Death,
+25:     PhaseBegin,
+26:     PhaseEnd,
+27:     TurnEnded,
+28:     SkillToggled,
+29:     Equipped,
+30:     Linked,
+31:     CardsDiscarded,
+32:     TurnOverBefore,
+33:     TurnOvered,
+34:     LoseHp,
+35:     /// 濒死救回（U05 xianjian 焚逝挂点，规则 v157）：固有救援机在
+36:     /// 体力>0 且脱离濒死时发射（上游 dyingAfter 时序等价）。
+37:     DyingSaved,
+38:     /// 失去牌（swd 批 125，规则 v312）：手牌被弃置/交出或装备被取走时
+39:     /// 发射（上游 `loseEnd` 触发窗；装备替换过程不发——上游 `equiping`
+40:     /// 期过滤同口径）。
+41:     CardsLost,
+42:     /// 杀被闪避（swd 批 141，规则 v316 同批）：目标成功闪避【杀】时发射
+43:     /// （上游 `shaMiss` 触发窗；用于李香龙等「杀被闪后反击」类技能）。
+44:     ShaDodged,
+45:     /// 手牌直接给予另一角色（NC04 未映射事件批）：`give_hand_card` 共享
+46:     /// 原语发射；DSL `cards_given` 触发窗（旧线 EventKind 同名同义）。
+47:     CardsGiven,
+48:     DamageSource,
+49:     DamageEnd,
+50:     DamageAfter,
+51:     DamageZero,
+52:     DamageCancelled,
+53:     DamageBegin,
+54:     DamageBegin1,
+55:     DamageBegin2,
+56:     DamageBegin3,
+57:     DamageBegin4,
+58: }
+59: 
+60: /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+61: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+62: pub enum LostOrigin {
+63:     Hand,
+64:     Equip,
+65:     Judge,
+66: }
+67: 
+68: /// 伤害属性：普通 / 火 / 雷。属性伤害触发铁索连环传导。
+69: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+70: pub enum DamageNature {
+71:     Normal,
+72:     Fire,
+73:     Thunder,
+74: }
+75: 
+76: /// 伤害事件载荷：结算窗口内可被技能改写（转移/防止）。
+77: #[derive(Debug, Clone, PartialEq, Eq)]
+78: pub struct DamageData {
+79:     pub source: Option<PlayerId>,
+80:     /// 当前承受者——转移技能改写此字段。
+81:     pub target: PlayerId,
+82:     pub amount: i32,
+83:     /// One canonical submission and continuation authority.
+84:     pub settlement: DamageSettlement,
+85:     pub nature: DamageNature,
+86:     /// 防止类技能改写此字段；提交阶段读到 true 则不扣血。
+87:     pub prevented: bool,
+88:     /// 转移链记录：原始承受者 -> …… -> 最终承受者。
+89:     pub redirect_chain: Vec<PlayerId>,
+90:     /// 造成伤害的牌（奸雄/遗计类技能依赖；非牌类伤害为 None）。
+91:     pub card: Option<CardId>,
+92:     /// 铁索连环传导伤害（ow 源氏飞刃 notLink 过滤依赖；主伤害为
+93:     /// false——上游 event.notLink() 同口径，规则 v129）。
+94:     pub from_chain: bool,
+95: }
+96: 
+97: #[derive(Debug, Clone, PartialEq, Eq)]
+98: pub struct CardUseData {
+99:     pub card: CardId,
+100:     pub player: PlayerId,
+101:     pub targets: Vec<PlayerId>,
+102:     /// 杀的属性（仅 Sha/FireSha 有意义）。
+103:     pub nature: DamageNature,
+104:     /// view-as 转化声明（武圣/龙胆）：以此牌种结算而非目录牌种。
+105:     pub use_as: Option<crate::catalog::CardKind>,
+106:     /// E03 使用前取消（猴子偷桃）：确认后由窗口机器执行夺桃并把本位
+107:     /// 置真；提交阶段读到真值即跳过结算。不入 canonical_hash（取消的
+108:     /// 最终状态——牌的位置与体力——已可观测）。
+109:     pub cancelled: bool,
+110: }
+111: 
+112: /// 类型化事件载荷。
+113: #[derive(Debug, Clone, PartialEq, Eq)]
+114: pub enum EventData {
+115:     /// E03 翻面前置窗口（漩涡面具等锁定技可取消）。
+116:     TurnOverBefore {
+117:         player: PlayerId,
+118:         cancelled: bool,
+119:     },
+120:     /// E03 翻面完成。
+339: pub struct Frame {
+340:     pub id: EventId,
+341:     pub parent: Option<EventId>,
+342:     pub kind: EventKind,
+343:     pub data: EventData,
+344:     pub stage: Stage,
+345:     pub queue: Vec<QueuedTrigger>,
+346:     /// 当前阶段的触发队列是否已收集。
+347:     pub planned: bool,
+348:     pub intrinsic_done: bool,
+349: }
+350: 
+351: impl Frame {
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/event/native_damage.rs SHA256 56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327
+86:     pub fn helper_name(self) -> Option<&'static str> {
+87:         match self {
+88:             Self::Jidong => Some("native:liuli/ow/jidong2"),
+89:             Self::Chengxin => Some("native:liuli/xianjian/chengxin2"),
+90:             Self::Chilongya => Some("native:liuli/card-swd/chilongya"),
+91:             Self::Xingjunyan => Some("native:liuli/card-swd/xingjunyan"),
+92:             Self::Liangou => Some("native:liuli/ow/liangou2"),
+93:             Self::MailunOut3 => Some("native:liuli/swd/mailun31"),
+94:             Self::MailunIn3 => Some("native:liuli/swd/mailun32"),
+95:             Self::MailunOut4 => Some("native:liuli/swd/mailun41"),
+96:             Self::MailunIn4 => Some("native:liuli/swd/mailun42"),
+97:             Self::Hutian => Some("native:liuli/swd/hutian2"),
+98:             Self::Shuchui => Some("native:liuli/card-swd/shuchui2"),
+99:             Self::Paotai => Some("native:liuli/ow/paotai3"),
+100:             Self::Xixue => Some("native:liuli/card-swd/xixue"),
+101:             Self::Qinglong => Some("native:liuli/card-swd/qinglonglingzhu"),
+102:             Self::Huanxia => Some("native:liuli/swd/huanxia_expire"),
+103:             _ => None,
+104:         }
+105:     }
+106:     pub fn meta(self) -> TriggerMeta {
+107:         TriggerMeta {
+108:             event: self.window().event_kind(),
+109:             timing: Timing::Normal,
+110:             priority: match self {
+111:                 Self::Wuxin => 10,
+112:                 Self::Hutian => -55,
+113:                 Self::LingquCancel => -11,
+114:                 _ => 0,
+115:             },
+116:             order_selectable: !matches!(
+117:                 self,
+118:                 Self::Liangou | Self::Shuchui | Self::Huanxia | Self::Paotai
+119:             ),
+120:             optional: false,
+121:             extra_events: vec![],
+122:         }
+123:     }
+124:     pub fn from_host(host: crate::vocabulary::host::HostBehavior) -> Option<Self> {
+210:                 source
+211:                     && !target
+212:                     && sha
+213:                     && p.hp < p.max_hp as i32
+214:                     && equip(CardKind::Xixueguizhihuan)
+215:             }
+216:             Self::Qinglong => {
+217:                 source
+218:                     && !target
+219:                     && d.nature != DamageNature::Normal
+220:                     && core.player(d.target).alive
+221:                     && equip(CardKind::Qinglonglingzhu)
+222:                     && (!core.player(d.target).hand.is_empty()
+223:                         || !core.player(d.target).equips.is_empty())
+224:             }
+225:             Self::Yinzei => {
+226:                 target
+227:                     && p.hand.is_empty()
+228:                     && p.hp > 0
+229:                     && d.source.is_some_and(|s| {
+230:                         s != owner && core.player(s).alive && !core.player(s).hand.is_empty()
+231:                     })
+232:             }
+233:             Self::Zhangwu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
+234:             Self::Zlfanshi | Self::Lingqu => target,
+235:             Self::Zhue => d.source.is_some_and(|s| s != owner && core.player(s).alive),
+236:             Self::Abi => target && d.source.is_some_and(|s| core.player(s).alive),
+237:             Self::Yuance => {
+238:                 d.source
+239:                     .is_some_and(|s| s != d.target && core.player(s).alive && core.player(s).hp > 0)
+240:                     && core.player(d.target).alive
+241:                     && core.player(d.target).hp > 0
+242:             }
+243:             Self::Jiding => {
+244:                 !target
+245:                     && core.is_boss_side(owner) == core.is_boss_side(d.target)
+246:                     && d.source.is_some_and(|s| {
+247:                         s != owner
+248:                             && core.player(s).alive
+249:                             && core.is_boss_side(s) != core.is_boss_side(owner)
+250:                     })
+251:             }
+252:             Self::Renxing => core.turn.current != owner,
+253:             Self::Cuidui => {
+254:                 source
+255:                     && !target
+256:                     && core.player(d.target).alive
+257:                     && catalog
+258:                         .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU)
+259:                         .is_some_and(|def| !core.has_skill_any_state(d.target, def))
+260:             }
+261:             Self::Duqu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
+262:             Self::Huanxia => {
+263:                 source
+264:                     && d.card.is_some_and(|card| {
+265:                         core.turn
+266:                             .huanxia_track
+267:                             .last()
+268:                             .is_some_and(|(c, _)| *c == card)
+269:                     })
+270:             }
+271:             Self::Jidian => source,
+272:             Self::Minwan => source && !target && core.turn.current == owner,
+273:         }
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/resolution.rs SHA256 af087eb566ce2c6e97bc29861cf512301c442b929eb0258d55cbaeb73df9e229
+23: /// 挂起的机器与其归属槽位。
+24: /// 无帧哨兵（N11 主动技等会话级挂起）：槽不关联任何栈帧时使用，
+25: /// 恢复校验对其豁免帧存在性检查（真实帧 id 从事件号单调递增，不会撞上）。
+26: pub const NO_FRAME: u32 = u32::MAX;
+27: 
+28: pub struct Park {
+29:     /// 栈深回到该值时恢复。
+30:     pub resume_depth: usize,
+31:     pub slot: Slot,
+32:     pub machine: Box<dyn SkillMachine>,
+33: }
+34: 
+35: impl Clone for Park {
+36:     fn clone(&self) -> Self {
+37:         Self {
+38:             resume_depth: self.resume_depth,
+39:             slot: self.slot,
+40:             machine: self.machine.fork(),
+41:         }
+42:     }
+43: }
+44: 
+45: /// The formal ready consumer: effect/admission parks precede their suspended order park.
+46: /// This read-only selection conveys neither answer nor execution authority.
+47: pub fn ready_park_index(res: &Resolution) -> Option<usize> {
+48:     res.parks
+49:         .iter()
+50:         .position(|park| {
+51:             park.resume_depth == res.stack.len() && park.machine.trigger_order().is_none()
+52:         })
+53:         .or_else(|| {
+54:             res.parks
+55:                 .iter()
+56:                 .position(|park| park.resume_depth == res.stack.len())
+57:         })
+58: }
+59: 
+60: /// 机器归属：帧固有流程，或某帧上的一次触发。
+61: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+62: pub enum Slot {
+63:     Intrinsic { frame: EventId },
+64:     Trigger { frame: EventId },
+65: }
+66: 
+67: /// 执行位置：事件栈 + 挂起机器 + 开放选择。
+68: #[derive(Clone)]
+69: pub struct Resolution {
+70:     pub next_event_id: EventId,
+71:     pub next_choice_id: u64,
+72:     pub stack: Vec<Frame>,
+73:     pub parks: Vec<Park>,
+74:     pub open_choice: Option<OpenChoice>,
+75:     /// 已校验、待机器读取的应答。
+76:     pub answer: Option<Selection>,
+77:     pub budget: u32,
+78:     /// VM 执行故障（NC04，瞬态：命令结束时清空，不入快照/哈希）。
+79:     pub fault: Option<crate::machine::VmFault>,
+80: }
+81: 
+82: impl Resolution {
+83:     pub fn new(budget: u32) -> Self {
+84:         Self {
+85:             next_event_id: 1,
+86:             next_choice_id: 1,
+87:             stack: Vec::new(),
+88:             parks: Vec::new(),
+89:             open_choice: None,
+90:             answer: None,
+91:             budget,
+92:             fault: None,
+93:         }
+94:     }
+95: 
+96:     pub fn frame(&self, id: EventId) -> Option<&Frame> {
+97:         self.stack.iter().find(|f| f.id == id)
+98:     }
+99: 
+100:     pub fn frame_mut(&mut self, id: EventId) -> Option<&mut Frame> {
+210: /// 可选触发的确认闸门：确认后才启动真正的技能机器。
+211: pub struct OptionalGate {
+212:     owner: PlayerId,
+213:     def: SkillDefId,
+214:     /// 计划时的事件载荷（触发语义以进入时为准）。
+215:     event: crate::event::EventData,
+216:     asked: bool,
+217:     inner: Option<Box<dyn SkillMachine>>,
+218: }
+219: 
+220: impl OptionalGate {
+221:     /// 运行时构造（触发入队时）与快照恢复共用。
+222:     pub(crate) fn new(
+223:         owner: PlayerId,
+224:         def: SkillDefId,
+225:         event: crate::event::EventData,
+226:         asked: bool,
+227:         inner: Option<Box<dyn SkillMachine>>,
+228:     ) -> Self {
+229:         Self {
+230:             owner,
+231:             def,
+232:             event,
+233:             asked,
+234:             inner,
+235:         }
+236:     }
+237: }
+238: 
+239: impl SkillMachine for OptionalGate {
+240:     fn fork(&self) -> Box<dyn SkillMachine> {
+241:         Box::new(Self {
+242:             owner: self.owner,
+243:             def: self.def,
+244:             event: self.event.clone(),
+245:             asked: self.asked,
+246:             inner: self.inner.as_ref().map(|m| m.fork()),
+247:         })
+248:     }
+249: 
+250:     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+251:         crate::snap::MachineSnapshot::OptionalGate {
+252:             owner: self.owner,
+253:             def: self.def,
+254:             event: self.event.clone(),
+255:             asked: self.asked,
+256:             inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+257:         }
+258:     }
+259: 
+260:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+261:         // 内层机器存在即全权委托（其后续选择由内层自行发起）
+262:         if let Some(inner) = self.inner.as_mut() {
+263:             let flow = inner.step(ctx);
+264:             if matches!(flow, Flow::Done) {
+265:                 self.inner = None;
+266:                 return Flow::Done;
+267:             }
+268:             return flow;
+269:         }
+270:         let Some(frame) = ctx.res.stack.last() else {
+271:             return Flow::Done;
+272:         };
+273:         let qt = QueuedTrigger {
+274:             owner: self.owner,
+275:             def: self.def,
+276:             order: (0, 0, 0, 0, self.def),
+277:         };
+278:         if !trigger_order::eligible(ctx.core, ctx.catalog, &qt, &ctx.res.stack, frame) {
+279:             return Flow::Done;
+280:         }
+281:         let kind = trigger_order::event_kind(frame);
+282:         self.event = frame.data.clone();
+283:         if !self.asked {
+284:             self.asked = true;
+285:             return Flow::WaitChoice {
+286:                 observer: self.owner,
+287:                 spec: crate::choice::ChoiceSpec::confirm("trigger_confirm"),
+288:             };
+289:         }
+290:         if !ctx.answer().contains(&ChoiceOption::Confirm) {
+291:             return Flow::Done;
+292:         }
+293:         {
+294:             let def = &ctx.catalog.skills[self.def as usize];
+295:             if def.limits.once_per_turn {
+296:                 if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, self.def)) {
+297:                     if inst.once_used {
+298:                         return Flow::Done;
+299:                     }
+300:                     inst.once_used = true;
+301:                 }
+302:             }
+303:             ctx.log(LogEvent::SkillTriggered {
+304:                 skill: def.name,
+305:                 owner: self.owner,
+306:             });
+307:             let event =
+308:                 crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
+309:                     .clone();
+310:             self.inner = Some(
+311:                 def.behavior
+312:                     .start_in_window(&ctx.query(), self.owner, &event, kind),
+313:             );
+314:         }
+315:         let flow = self.inner.as_mut().expect("inner started").step(ctx);
+316:         if matches!(flow, Flow::Done) {
+317:             self.inner = None;
+318:             Flow::Done
+319:         } else {
+320:             flow
+321:         }
+322:     }
+323: }
+324: 
+325: /// 收集当前阶段的触发队列。
+447: pub fn run(
+448:     core: &mut GameStateCore,
+449:     res: &mut Resolution,
+450:     catalog: &crate::catalog::Catalog,
+451:     out: &mut Vec<LogEvent>,
+452:     slice: Option<u32>,
+453: ) -> StepOutcome {
+454:     let mut steps: u32 = 0;
+455:     loop {
+456:         if let Some(fault) = res.fault.take() {
+457:             res.fault = Some(fault);
+458:             return StepOutcome::Fault;
+459:         }
+460:         if res.budget == 0 {
+461:             return StepOutcome::BudgetExhausted;
+462:         }
+463:         if let Some(limit) = slice {
+464:             if steps >= limit {
+465:                 return StepOutcome::Yielded;
+466:             }
+467:         }
+468:         steps += 1;
+469:         res.budget -= 1;
+470: 
+471:         // Canonical source liveness is refreshed before every collector/choice/confirmation/start.
+472:         for frame in &mut res.stack {
+473:             if let EventData::Damage(d) = &mut frame.data {
+474:                 if d.source.is_some_and(|source| !core.player(source).alive) {
+475:                     d.source = None;
+476:                 }
+477:             }
+478:         }
+479: 
+480:         // A) 恢复深度匹配的挂起机器
+481:         if res.open_choice.is_none() {
+482:             if let Some(idx) = ready_park_index(res) {
+483:                 let mut park = res.parks.remove(idx);
+484:                 let prior_skills: std::collections::BTreeSet<_> =
+485:                     core.skills.keys().copied().collect();
+486:                 let flow = {
+487:                     let mut ctx = Ctx {
+488:                         core,
+489:                         res,
+490:                         catalog,
+491:                         out,
+492:                     };
+493:                     park.machine.step(&mut ctx)
+494:                 };
+495:                 notify_new_skills(core, res, catalog, &prior_skills);
+496:                 res.answer = None; // 应答只消费一次
+497:                 match flow {
+498:                     Flow::Done => finish_slot(res, park.slot),
+499:                     Flow::Yield => {
+500:                         if park.machine.trigger_order().is_some() {
+501:                             res.parks.insert(0, park);
+502:                         } else {
+503:                             res.parks.push(park);
+504:                         }
+505:                     }
+506:                     Flow::WaitChoice { observer, spec } => {
+507:                         let id = res.next_choice_id;
+508:                         res.next_choice_id += 1;
+509:                         out.push(LogEvent::ChoiceOpened {
+510:                             id,
+511:                             observer,
+512:                             prompt: spec.prompt,
+513:                         });
+514:                         res.open_choice = Some(OpenChoice { id, observer, spec });
+515:                         // 应答恢复点＝**开窗时刻**的栈深。机器可能在挂起期间
+516:                         // 发射过子帧（如 AOE 逐目标派发：前一目标的伤害帧
+517:                         // 尚未结算就为下一目标开响应窗），此时沿用创建时的
+518:                         // 旧深度会与其它挂起机器错配——应答被深度恰好相等
+519:                         // 的**别的**机器消费（AOE→昏迷应答错配：目标机器
+520:                         // 恢复时 answer 已空，panic 实证）。开窗后对局暂停
+521:                         // （open_choice 存在时不推进栈），故开窗时刻的栈深
+522:                         // 即恢复点。
+523:                         park.resume_depth = res.stack.len();
+524:                         res.parks.push(park);
+525:                         return StepOutcome::Pending;
+526:                     }
+527:                 }
+528:                 continue;
+529:             }
+530:         }
+609: fn start_queued_trigger(
+610:     core: &mut GameStateCore,
+611:     res: &mut Resolution,
+612:     catalog: &crate::catalog::Catalog,
+613:     out: &mut Vec<LogEvent>,
+614:     frame_id: EventId,
+615:     def_id: SkillDefId,
+616:     owner: PlayerId,
+617: ) {
+618:     let Some(index) = res.frame(frame_id).and_then(|f| {
+619:         f.queue
+620:             .iter()
+621:             .position(|q| q.def == def_id && q.owner == owner)
+622:     }) else {
+623:         return;
+624:     };
+625:     let qt = res.frame_mut(frame_id).expect("frame").queue.remove(index);
+626:     let event = res.frame(frame_id).expect("frame").data.clone();
+627:     let actual_event =
+628:         crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
+629:     if !trigger_order::eligible(
+630:         core,
+631:         catalog,
+632:         &qt,
+633:         &res.stack,
+634:         res.frame(frame_id).expect("frame"),
+635:     ) {
+636:         return;
+637:     }
+638:     let def = &catalog.skills[qt.def as usize];
+639:     let kind = trigger_order::event_kind(res.frame(frame_id).expect("frame"));
+640:     let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
+641:     let meta = native_meta
+642:         .as_ref()
+643:         .or(def.trigger.as_ref())
+644:         .expect("eligible meta");
+645:     let machine: Box<dyn SkillMachine> = if meta.optional {
+646:         Box::new(OptionalGate {
+647:             owner: qt.owner,
+648:             def: qt.def,
+649:             event,
+650:             asked: false,
+651:             inner: None,
+652:         })
+653:     } else {
+654:         if def.limits.once_per_turn {
+655:             let inst = core.skills.get_mut(&(qt.owner, qt.def)).expect("instance");
+656:             if inst.once_used {
+657:                 return;
+658:             }
+659:             inst.once_used = true;
+660:         }
+661:         out.push(LogEvent::SkillTriggered {
+662:             skill: def.name,
+663:             owner: qt.owner,
+664:         });
+665:         def.behavior.start_in_window(
+666:             &QueryCtx {
+667:                 state: core,
+668:                 catalog,
+669:             },
+670:             qt.owner,
+671:             &actual_event,
+672:             trigger_order::event_kind(res.frame(frame_id).expect("frame")),
+673:         )
+674:     };
+675:     res.parks.push(Park {
+676:         resume_depth: res.stack.len(),
+677:         slot: Slot::Trigger { frame: frame_id },
+678:         machine,
+679:     });
+680: }
+681: 
+682: fn finish_slot(res: &mut Resolution, slot: Slot) {
+683:     if let Slot::Intrinsic { frame } = slot {
+684:         if frame == NO_FRAME {
+685:             return; // 会话级挂起槽无关联帧
+686:         }
+687:         if let Some(f) = res.frame_mut(frame) {
+688:             f.intrinsic_done = true;
+689:         }
+690:     }
+691: }
+692: 
+693: // Core equipment/general assembly has no Resolution dependency; observe new keys at its step boundary.
+694: fn notify_new_skills(
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/resolution/trigger_order.rs SHA256 c5d4385efb5a023f7ee62108c413f8dfb7f64cd8290d5ede2f2d8d420f6910c3
+53: pub(super) fn eligible(
+54:     core: &GameStateCore,
+55:     catalog: &Catalog,
+56:     q: &QueuedTrigger,
+57:     frames: &[Frame],
+58:     frame: &Frame,
+59: ) -> bool {
+60:     let event = crate::event::damage_event(frames, frame);
+61:     let kind = event_kind(frame);
+62:     if let EventData::Damage(d) = event {
+63:         let terminal = matches!(
+64:             (kind, d.settlement.outcome),
+65:             (EventKind::DamageZero, crate::event::DamageOutcome::Zero)
+66:                 | (
+67:                     EventKind::DamageCancelled,
+68:                     crate::event::DamageOutcome::Cancelled
+69:                 )
+70:         );
+71:         if d.settlement.notrigger {
+72:             return false;
+73:         }
+74:         if !terminal
+75:             && (d.amount <= 0
+76:                 || d.prevented
+77:                 || d.settlement.notrigger
+78:                 || d.settlement.outcome != crate::event::DamageOutcome::Running)
+79:         {
+80:             return false;
+81:         }
+82:     }
+83:     if matches!(event, EventData::Death { player, .. } if core.player(*player).death_cancelled) {
+84:         return false;
+85:     }
+86:     let inst = core.skills.get(&(q.owner, q.def));
+87:     let Some(def) = catalog.skills.get(q.def as usize) else {
+88:         return false;
+89:     };
+90:     let Some(meta) = &def.trigger else {
+91:         return false;
+92:     };
+93:     let helper = def
+94:         .behavior
+95:         .native_damage_effect(kind)
+96:         .is_some_and(|e| e.helper_name() == Some(def.name));
+97:     (helper || inst.is_some_and(|i| i.enabled && (!def.limits.once_per_turn || !i.once_used)))
+98:         && core.player(q.owner).alive
+99:         && (meta.event == kind || meta.extra_events.contains(&kind))
+100:         && if let (Some(effect), EventData::Damage(d)) =
+101:             (def.behavior.native_damage_effect(kind), event)
+102:         {
+103:             let root = match frame.data {
+104:                 EventData::DamageWindow { root, .. } => frames.iter().find(|f| f.id == root),
+105:                 EventData::Damage(_) => Some(frame),
+106:                 _ => None,
+107:             };
+108:             let parent = root.and_then(|root| {
+109:                 root.parent.and_then(|id| {
+110:                     let index = frames.iter().position(|f| f.id == root.id)?;
+111:                     index
+112:                         .checked_sub(1)
+113:                         .and_then(|i| frames.get(i))
+114:                         .filter(|p| p.id == id)
+115:                 })
+116:             });
+117:             effect.matches(
+118:                 q.owner,
+119:                 d,
+120:                 &QueryCtx {
+121:                     state: core,
+122:                     catalog,
+123:                 },
+124:                 parent,
+125:             )
+126:         } else {
+127:             def.behavior.filter_in_window(
+128:                 &QueryCtx {
+129:                     state: core,
+130:                     catalog,
+131:                 },
+132:                 q.owner,
+133:                 event,
+134:                 kind,
+135:             )
+136:         }
+137: }
+525:                 || !subscribes(catalog, q.def, frame)
+526:             {
+527:                 return Err(bad());
+528:             }
+529:         }
+530:         if frame
+531:             .queue
+532:             .windows(2)
+533:             .any(|qs| compare(&qs[0], &qs[1]) == Ordering::Greater)
+534:         {
+535:             return Err(bad());
+536:         }
+537:     }
+538:     for park in &res.parks {
+539:         if !matches!(park.machine, MachineSnapshot::NativeDamageSkill { .. })
+540:             && contains_native_damage(&park.machine)
+541:         {
+542:             return Err(bad());
+543:         }
+544:     }
+545:     for park in &res.parks {
+546:         if let MachineSnapshot::NativeDamageSkill { owner, def, window } = &park.machine {
+547:             let Slot::Trigger { frame } = park.slot else {
+548:                 return Err(bad());
+549:             };
+550:             let f = res.stack.iter().find(|f| f.id == frame).ok_or_else(bad)?;
+551:             let effect = catalog
+552:                 .skills
+553:                 .get(*def as usize)
+554:                 .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
+555:                 .ok_or_else(bad)?;
+556:             let admitted=res.parks.iter().any(|p|matches!(&p.machine,MachineSnapshot::TriggerOrder{frame:order_frame,done,..}if *order_frame==frame&&done.contains(&(*owner,*def))));
+557:             let q = QueuedTrigger {
+558:                 owner: *owner,
+559:                 def: *def,
+560:                 order: (0, 0, 0, 0, *def),
+561:             };
+562:             if !matches!(f.data,EventData::DamageWindow{window:w,..}if w==*window)
+563:                 || f.stage != Stage::AfterTriggers
+564:                 || park.resume_depth
+565:                     != res.stack.iter().position(|frame| frame.id == f.id).unwrap() + 1
+566:                 || effect.window() != *window
+567:                 || !admitted
+568:                 || !eligible(core, catalog, &q, &res.stack, f)
+569:             {
+570:                 return Err(bad());
+571:             }
+572:         }
+573:     }
+574:     for park in &res.parks {
+575:         if requires_trigger_frame(&park.machine, catalog) {
+576:             let Slot::Trigger { frame } = park.slot else {
+577:                 return Err(bad());
+578:             };
+579:             let (depth, frame) = res
+580:                 .stack
+581:                 .iter()
+582:                 .enumerate()
+583:                 .find(|(_, f)| f.id == frame && frame != NO_FRAME)
+584:                 .ok_or_else(bad)?;
+585:             if park.resume_depth != depth + 1 {
+586:                 return Err(bad());
+587:             }
+588:             validate_vm_window(&park.machine, frame, catalog)?;
+589:         } else if let Slot::Trigger { frame } = park.slot {
+590:             if frame != NO_FRAME {
+591:                 let frame = res.stack.iter().find(|f| f.id == frame).ok_or_else(bad)?;
+592:                 validate_vm_window(&park.machine, frame, catalog)?;
+593:             }
+594:         }
+595:         if !matches!(park.machine, MachineSnapshot::TriggerOrder { .. })
+596:             && contains_window(&park.machine)
+597:         {
+598:             return Err(bad());
+599:         }
+600:         if let MachineSnapshot::OptionalGate {
+601:             owner,
+602:             def,
+603:             event,
+604:             inner: None,
+605:             ..
+606:         } = &park.machine
+607:         {
+608:             let id = match park.slot {
+609:                 Slot::Trigger { frame } => frame,
+610:                 _ => return Err(bad()),
+611:             };
+612:             let frame = if id == NO_FRAME {
+613:                 park.resume_depth
+614:                     .checked_sub(1)
+615:                     .and_then(|i| res.stack.get(i))
+616:             } else {
+617:                 res.stack.iter().find(|f| f.id == id)
+618:             }
+619:             .ok_or_else(bad)?;
+620:             let q = QueuedTrigger {
+621:                 owner: *owner,
+622:                 def: *def,
+623:                 order: (0, 0, 0, 0, *def),
+624:             };
+625:             if *event != frame.data || !eligible(core, catalog, &q, &res.stack, frame) {
+626:                 return Err(bad());
+627:             }
+628:         }
+629:         if let MachineSnapshot::TriggerOrder {
+630:             frame,
+631:             owner,
+632:             candidates,
+633:             asked,
+634:             cursor,
+635:             done,
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/kernel/damage.rs SHA256 9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f
+136:     if effect == crate::event::NativeDamageEffect::Qinglong {
+137:         // 青龙令珠（U05 swd 第九批，规则 v93）：你对其他角色造成属性伤害
+138:         // 后（目标存活），获得其一张牌（上游 damageEnd hasNature + alive →
+139:         // gainPlayerCard he；RNG 口径同批四代抽）
+140:         if d.nature != crate::event::DamageNature::Normal {
+141:             if let Some(src) = d.source {
+142:                 let t = d.target;
+143:                 if src != t
+144:                     && ctx.core.player(src).alive
+145:                     && ctx.core.player(t).alive
+146:                     && ctx
+147:                         .core
+148:                         .player(src)
+149:                         .equips
+150:                         .iter()
+151:                         .any(|c| ctx.catalog.card_kind(*c) == CardKind::Qinglonglingzhu)
+152:                 {
+153:                     let he_len = ctx.core.player(t).hand.len() + ctx.core.player(t).equips.len();
+154:                     if he_len > 0 {
+155:                         let pick = ctx.core.rng.gen_range(he_len as u32) as usize;
+156:                         let hand_n = ctx.core.player(t).hand.len();
+157:                         let c = if pick < hand_n {
+158:                             ctx.core.player(t).hand[pick]
+159:                         } else {
+160:                             ctx.core.player(t).equips[pick - hand_n]
+161:                         };
+162:                         if ctx.core.player(t).hand.contains(&c) {
+163:                             ctx.core.player_mut(t).hand.retain(|x| *x != c);
+164:                         } else {
+165:                             ctx.core.player_mut(t).equips.retain(|x| *x != c);
+166:                             crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
+167:                         }
+168:                         ctx.core.player_mut(src).hand.push(c);
+169:                         ctx.log(LogEvent::CardsGiven {
+170:                             from: t,
+171:                             to: src,
+172:                             cards: vec![c],
+173:                         });
+174:                     }
+175:                 }
+176:             }
+177:         }
+178:     }
+179:     if effect == crate::event::NativeDamageEffect::Yinzei {
+180:         // 隐贼 damageEnd discard; its changeHp activation already completed before TargetDamage.
+181:         if let Some(ydef) = ctx
+182:             .catalog
+183:             .skill_by_name(crate::vocabulary::names::BOSS_YINZEI)
+184:         {
+185:             let holder = d.target;
+186:             if ctx.core.has_skill(holder, ydef)
+187:                 && ctx.core.player(holder).hand.is_empty()
+188:                 && ctx.core.player(holder).hp > 0
+189:             {
+190:                 if let Some(src) = d.source {
+191:                     if src != holder && ctx.core.player(src).alive {
+192:                         if let Some(c) = ctx.core.player(src).hand.first().copied() {
+193:                             ctx.discard_from_hand(src, c);
+194:                         }
+195:                     }
+196:                 }
+197:             }
+198:         }
+199:     }
+200:     if effect == crate::event::NativeDamageEffect::Zhangwu {
+201:         // 章武（Boss 刘备，规则 v261）：你受到伤害后（来源存活且非自己）——
+202:         // 你弃置一张牌，来源弃置一张牌，或来源受到 1 点伤害（上游 [1,∞] 自
+203:         // 选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃首张确定性近似
+204:         // 登记；num=刘备弃牌数可多张登记；弃牌面=手牌首张，两手皆空跳过）
+205:         if let Some(zwdef) = ctx
+206:             .catalog
+207:             .skill_by_name(crate::vocabulary::names::BOSS_ZHANGWU)
+208:         {
+209:             if ctx.core.has_skill(d.target, zwdef) && ctx.core.player(d.target).alive {
+210:                 if let Some(src) = d.source {
+211:                     if src != d.target && ctx.core.player(src).alive {
+212:                         let hold = ctx.core.player(d.target).hand.first().copied();
+213:                         if let Some(c) = hold {
+214:                             ctx.discard_from_hand(d.target, c);
+215:                         }
+216:                         let src_card = ctx.core.player(src).hand.first().copied();
+217:                         if let Some(c) = src_card {
+218:                             ctx.discard_from_hand(src, c);
+219:                         } else {
+220:                             // 来源无牌可弃 → 受 1 点伤害（上游取消分支同口径；
+221:                             // 来源亦空手牌时装备面不弃登记差异）
+222:                             ctx.emit(EventData::Damage(crate::machine::damage_data(
+223:                                 Some(d.target),
+224:                                 src,
+225:                                 1,
+226:                             )));
+227:                         }
+228:                     }
+229:                 }
+230:             }
+231:         }
+232:     }
+233:     if effect == crate::event::NativeDamageEffect::Zlfanshi {
+234:         // 反噬（十殿阎罗转轮王，规则 v269）：每回合第一次受伤后置 terra 旗，
+235:         // 同回合再次受伤 → 随机一名其他角色受 1 点伤害（上游 boss_zlfanshi
+307:     if effect == crate::event::NativeDamageEffect::Yuance {
+308:         // 远策（Boss 郭嘉，规则 v259）：global damageEnd——其他角色对另一
+309:         // 其他角色造成伤害后（双方存活），判定：黑→受伤角色失 1 体力 / 红→
+310:         // 来源失 1 体力（chooseControl 选项一恒定确定性近似登记——上游 AI
+311:         // 态度选面+rejudge stop 检查+判定修正回调不落；hp>0 门=濒死未决者
+312:         // 跳过登记差异）
+313:         if let Some(_ycdef) = ctx
+314:             .catalog
+315:             .skill_by_name(crate::vocabulary::names::BOSS_YUANCE)
+316:         {
+317:             let holders: Vec<PlayerId> = vec![owner];
+318:             if let Some(holder) = holders.first() {
+319:                 if let Some(src) = d.source {
+320:                     if ctx.core.player(*holder).alive
+321:                         && src != d.target
+322:                         && ctx.core.player(src).alive
+323:                         && ctx.core.player(d.target).alive
+324:                         && ctx.core.player(src).hp > 0
+325:                         && ctx.core.player(d.target).hp > 0
+326:                     {
+327:                         let judged = ctx.draw_judge_card();
+328:                         let black = matches!(
+329:                             ctx.catalog.cards[judged as usize].suit,
+330:                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+331:                         );
+332:                         ctx.to_discard(judged);
+333:                         let loser = if black { d.target } else { src };
+334:                         ctx.emit(EventData::LoseHp {
+335:                             player: loser,
+336:                             amount: 1,
+337:                         });
+338:                     }
+339:                 }
+340:             }
+341:         }
+342:     }
+343:     if effect == crate::event::NativeDamageEffect::Lingqu {
+344:         // 灵渠（Boss 玄武，规则 v237）：每次受到伤害后摸 1 张牌且受击计数
+345:         // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；零量由 Zero/Stopped 截断；
+346:         // 计数=PlayerState.lingqu_count 跨回合持久，手牌上限 +X）
+347:         if let Some(ldef) = ctx
+348:             .catalog
+349:             .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
+350:         {
+351:             if ctx.core.has_skill(d.target, ldef) && ctx.core.player(d.target).alive {
+352:                 ctx.draw_cards(d.target, 1);
+353:                 let p = ctx.core.player_mut(d.target);
+354:                 p.lingqu_count = p.lingqu_count.saturating_add(1);
+355:             }
+356:         }
+357:     }
+358:     if effect == crate::event::NativeDamageEffect::Jiding {
+359:         // 急叮（Boss 明星，规则 v245）：global damageEnd——友方（同侧非己）
+360:         // 受敌方来源伤害后，对来源用虚拟雷杀（LeiSha kind 载体——机器直发不
+361:         // 经 PlayCard 校验；蓐收加成尾面登记差异未建模）
+362:         if let Some(_jddef) = ctx
+363:             .catalog
+364:             .skill_by_name(crate::vocabulary::names::BOSS_JIDING)
+365:         {
+366:             let holders: Vec<PlayerId> = vec![owner];
+367:             if let Some(holder) = holders.first() {
+368:                 if let Some(src) = d.source {
+369:                     if src != *holder
+370:                         && ctx.core.player(src).alive
+371:                         && ctx.core.is_boss_side(src) != ctx.core.is_boss_side(*holder)
+372:                     {
+373:                         ctx.use_virtual_card(*holder, CardKind::LeiSha, vec![src]);
+374:                     }
+375:                 }
+376:             }
+377:         }
+378:     }
+379:     if effect == crate::event::NativeDamageEffect::Renxing {
+380:         // 忍性（年兽形态，规则 v249）：global damageEnd——持有者非当前回
+381:         // 合角色时，任意角色受到伤害后其摸 1（上游 boss_renxing damageEnd
+382:         // global `_status.currentPhase != player` 同口径）
+383:         if let Some(_rxdef) = ctx
+384:             .catalog
+385:             .skill_by_name(crate::vocabulary::names::BOSS_RENXING)
+386:         {
+387:             let holders: Vec<PlayerId> = vec![owner];
+388:             for holder in holders {
+389:                 ctx.draw_cards(holder, 1);
+390:             }
+391:         }
+392:     }
+393:     if effect == crate::event::NativeDamageEffect::Cuidui {
+394:         // 催毒（Boss 书精，规则 v220）：来源持催毒且目标非己、无中毒 →
+395:         // 目标授中毒实例（运行时授技=skills.insert；木神勾芒不在目录跳过
+510: pub(crate) fn commit_lose_hp(ctx: &mut Ctx<'_>, player: PlayerId, mut amount: u32) {
+511:     if amount == 0 {
+512:         return;
+513:     }
+514:     // 护天护体（swd 批 131，规则 v314）：失去体力同样以「体力降至寄存数」
+515:     // 为上限（上游 hutian2 loseHpBegin 同口径）
+516:     {
+517:         let hold = ctx.core.player(player).hutian_hold.len() as i32;
+518:         if hold > 0 {
+519:             let hp = ctx.core.player(player).hp;
+520:             let cap = hp - hold;
+521:             if cap < amount as i32 {
+522:                 amount = cap.max(0) as u32;
+523:             }
+524:         }
+525:     }
+526:     if amount == 0 {
+527:         ctx.log(LogEvent::HpLost { player, amount: 0 });
+528:         return;
+529:     }
+530:     let p = ctx.core.player_mut(player);
+531:     if !p.infinite_hp() {
+532:         p.hp -= amount as i32;
+533:     }
+534:     hlss_light_refill(ctx, player);
+535:     ctx.log(LogEvent::HpLost { player, amount });
+536:     let entering = ctx.core.player(player).hp <= 0 && !ctx.core.player(player).dying;
+537:     if entering {
+538:         ctx.core.player_mut(player).dying = true;
+539:         ctx.log(LogEvent::DyingEntered { player });
+540:         ctx.emit(EventData::Dying {
+541:             player,
+542:             source: None,
+543:         });
+544:     }
+545:     // 伤逝（规则 v260）：体力变化（失去）后补牌
+546:     shangshix_draw(ctx, player);
+547: }
+548: 
+549: /// 伤逝（Boss 张春华，规则 v260）补牌半：
+550: pub(super) fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/kernel/damage_after.rs SHA256 7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71
+1: //! Source-qualified damageAfter callbacks, after the entire Dying/Source/End subtrees.
+2: use super::*;
+3: pub(super) fn post_damage_after(
+4:     ctx: &mut Ctx<'_>,
+5:     d: crate::event::DamageData,
+6:     effect: crate::event::NativeDamageEffect,
+7:     _owner: PlayerId,
+8: ) {
+9:     if effect == crate::event::NativeDamageEffect::Huanxia {
+10:         // 还侠跟踪（swd 屈娴，批 27）：还侠转化杀造成真实伤害 → 置位（上
+11:         // 游 expire 子技 source damageAfter 同口径；牌 id 匹配最后提交者）
+12:         if let Some(dcard) = d.card.filter(|_| d.source.is_some()) {
+13:             if let Some((card, caused)) = ctx.core.turn.huanxia_track.last_mut() {
+14:                 if *card == dcard {
+15:                     *caused = true;
+16:                 }
+17:             }
+18:         }
+19:     }
+20:     if effect == crate::event::NativeDamageEffect::Jidian {
+21:         // 极点（Boss 张角，规则 v263）：你造成伤害后——距离受伤者 1 以内的
+22:         // 一名其他角色判定：黑则其受到 1 点雷伤（上游 source damageAfter
+23:         // chooseTarget get.distance(trigger.player,target)<=1 + judge 黑 →
+24:         // damage("thunder") 同口径；chooseTarget AI→座位序首个确定性近似；
+25:         // 链挡旗标=极点雷伤不自我递归，登记差异：上游 damageAfter 真递归；
+26:         // 判定为内联确定性口径，无改判窗）
+27:         if let Some(jddef) = ctx
+28:             .catalog
+29:             .skill_by_name(crate::vocabulary::names::BOSS_JIDIAN)
+30:         {
+31:             if let Some(src) = d.source {
+32:                 if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
+33:                     // 链挡：极点造成的雷伤不再触发极点
+34:                     if !ctx.core.turn.jidian_chain {
+35:                         let seats = ctx.core.players.len() as PlayerId;
+36:                         if let Some(t) = (0..seats).find(|&t| {
+37:                             t != d.target
+38:                                 && ctx.core.player(t).alive
+39:                                 && ctx.core.computed_distance(ctx.catalog, d.target, t) <= 1
+40:                         }) {
+41:                             // 置链挡后 emit：嵌套 Damage 帧的极点臂见旗标清除
+42:                             // 并跳过（挡恰一层=极点雷伤不链式，登记差异）
+43:                             ctx.core.turn.jidian_chain = true;
+44:                             let judged = ctx.draw_judge_card();
+45:                             let black = matches!(
+46:                                 ctx.catalog.cards[judged as usize].suit,
+47:                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+48:                             );
+49:                             ctx.to_discard(judged);
+50:                             if black {
+51:                                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+52:                                     Some(src),
+53:                                     t,
+54:                                     1,
+55:                                     crate::event::DamageNature::Thunder,
+56:                                     None,
+57:                                 )));
+58:                             }
+59:                         }
+60:                     } else {
+61:                         // 嵌套极点雷伤到达：清链挡（仅挡一层）
+62:                         ctx.core.turn.jidian_chain = false;
+63:                     }
+64:                 }
+65:             }
+66:         }
+67:     }
+68:     if effect == crate::event::NativeDamageEffect::Minwan {
+69:         // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
+70:         // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
+71:         // boss_minwan=[player]+add(target) 同口径；回合更替自然清零）
+72:         if let Some(mdef) = ctx
+73:             .catalog
+74:             .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
+75:         {
+76:             if let Some(src) = d.source {
+77:                 if src != d.target
+78:                     && ctx.core.turn.current == src
+79:                     && ctx.core.has_skill(src, mdef)
+80:                     && ctx.core.player(src).alive
+81:                 {
+82:                     let turn = &mut ctx.core.turn;
+83:                     if turn.minwan_targets.is_empty() {
+84:                         turn.minwan_targets.push(src);
+85:                     }
+86:                     if !turn.minwan_targets.contains(&d.target) {
+87:                         turn.minwan_targets.push(d.target);
+88:                     }
+89:                 }
+90:             }
+91:         }
+92:     }
+93: }
+
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native-kernel/src/kernel/judge.rs SHA256 3c3af9caff49f0deecc917027ee885f10cb0995002d9a57086e5951f3e525221
+1: use super::*;
+2: 
+3: /// 判定阶段机器：对判定区延时锦囊逐张判定。
+4: /// 排序对齐旧线 `pending_delayed_cards`（ADR 0711）：非闪电延时锦囊按
+5: /// 放置序在前、闪电在后，**队首先消费**（先放入先判）。
+6: ///
+7: /// 单次判定的流程（N08 首组官方技能，ADR 0712）：
+8: /// 1. 翻判定牌；
+9: /// 2. **改判询问**（张角「鬼道」）：持有者自判定阶段拥有者起按座位顺序
+10: ///    （含本人）逐人询问一次，可打出一张**黑色手牌**代替当前判定牌
+11: ///    （旧线含装备区牌，原生本批仅手牌，差异登记）；被替换的判定牌弃置；
+12: /// 3. 判定牌生效（乐/兵/闪电）；
+13: /// 4. **天妒询问**（郭嘉「天妒」）：持有者按座位顺序逐人询问，
+14: ///    可将最终判定牌收入手牌（一人获得后不再询问）。
+15: ///
+16: /// 拥有者判定中途死亡：队列与当前判定牌逐张弃置（防御路径）。
+17: pub struct JudgePhaseMachine {
+18:     pub(super) owner: PlayerId,
+19:     /// 待判锦囊队列（已排序：非闪电放置序在前、闪电在后；队首先消费）。
+20:     pub(super) queue: Vec<crate::ids::CardId>,
+21:     /// 当前判定的进行态（翻牌后到生效/获得前）。
+22:     pub(super) current: Option<JudgementProgress>,
+23: }
+24: 
+25: /// 单次判定的进行态。
+26: #[derive(Clone)]
+27: pub struct JudgementProgress {
+28:     pub(super) trick: crate::ids::CardId,
+29:     pub(super) judge_card: crate::ids::CardId,
+30:     /// 鬼道改判询问队列（座位序，自拥有者起含本人）。
+31:     pub(super) rewriters: Vec<PlayerId>,
+32:     /// 当前改判者是否已被询问（等待应答）。
+33:     pub(super) asked: bool,
+34:     /// 天妒持有人队列（座位序）。
+35:     pub(super) tian_du: Vec<PlayerId>,
+36:     /// 判定牌是否已被天妒获得。
+37:     pub(super) gained: bool,
+38:     /// 是否处于改判询问阶段（false = 天妒阶段）。
+39:     pub(super) in_rewrite: bool,
+40:     /// Finalized 是否已记（恰好一次，效果生效前，N08-d）。
+41:     pub(super) finalized: bool,
+42:     /// 判定牌是否仍由机器持有（未弃置、未进入手牌）。
+43:     pub(super) judge_held: bool,
+44:     /// 昊天塔（swd 卡牌面窗口机批）：插窗持有者（Some = 等待其从两张
+45:     /// 候选强制选一为判定结果；改判/天妒窗随插窗跳过）。
+46:     pub(super) haotian_holder: Option<PlayerId>,
+47:     /// 昊天塔：未被选中的候选牌（选中另一张后弃置）。
+48:     pub(super) haotian_other: Option<crate::ids::CardId>,
+49:     /// 改命（T11 Boss 诸葛亮族批 116）：亮出的牌堆顶 7 张候选（Some =
+50:     /// 等待拥有者选 1 作为判定结果；其余弃置，改判/天妒窗跳过）。
+51:     pub(super) gaiming_cards: Option<Vec<crate::ids::CardId>>,
+52: }
+53: 
+54: impl Clone for JudgePhaseMachine {
+55:     fn clone(&self) -> Self {
+56:         Self {
+57:             owner: self.owner,
+58:             queue: self.queue.clone(),
+59:             current: self.current.clone(),
+60:         }
+61:     }
+62: }
+63: 
+64: impl JudgePhaseMachine {
+65:     pub(crate) fn new(
+66:         owner: PlayerId,
+67:         queue: Vec<crate::ids::CardId>,
+68:         current: Option<JudgementProgress>,
+69:     ) -> Self {
+70:         Self {
+71:             owner,
+72:             queue,
+73:             current,
+74:         }
+75:     }
+76: }
+77: 
+78: impl JudgementProgress {
+79:     pub(crate) fn from_snap(s: &crate::snap::JudgementProgressSnap) -> Self {
+80:         Self {
+81:             trick: s.trick,
+82:             judge_card: s.judge_card,
+83:             rewriters: s.rewriters.clone(),
+84:             asked: s.asked,
+85:             tian_du: s.tian_du.clone(),
+86:             gained: s.gained,
+87:             in_rewrite: s.in_rewrite,
+88:             finalized: s.finalized,
+89:             judge_held: s.judge_held,
+90:             haotian_holder: s.haotian_holder,
+91:             haotian_other: s.haotian_other.map(|c| c as crate::ids::CardId),
+92:             gaiming_cards: s
+93:                 .gaiming_cards
+94:                 .as_ref()
+95:                 .map(|v| v.iter().map(|c| *c as crate::ids::CardId).collect()),
+96:         }
+97:     }
+98: }
+99: 
+100: impl crate::catalog::SkillMachine for JudgePhaseMachine {
+101:     fn fork(&self) -> Box<dyn SkillMachine> {
+102:         Box::new(self.clone())
+103:     }
+104: 
+105:     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+106:         crate::snap::MachineSnapshot::JudgePhase {
+107:             owner: self.owner,
+108:             queue: self.queue.clone(),
+109:             current: self.current.as_ref().map(|c| {
+110:                 Box::new(crate::snap::JudgementProgressSnap {
+111:                     trick: c.trick,
+112:                     judge_card: c.judge_card,
+113:                     rewriters: c.rewriters.clone(),
+114:                     asked: c.asked,
+115:                     tian_du: c.tian_du.clone(),
+116:                     gained: c.gained,
+117:                     in_rewrite: c.in_rewrite,
+118:                     finalized: c.finalized,
+119:                     judge_held: c.judge_held,
+120:                     haotian_holder: c.haotian_holder,
+121:                     haotian_other: c.haotian_other.map(|x| x as u32),
+122:                     gaiming_cards: c
+123:                         .gaiming_cards
+124:                         .as_ref()
+125:                         .map(|v| v.iter().map(|x| *x as u32).collect()),
+126:                 })
+127:             }),
+128:         }
+129:     }
+130: 
+131:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+132:         loop {
+133:             // 拥有者死亡（防御路径：对齐排序下能致死的闪电在队尾）：
+134:             // 待判队列与进行中的判定牌逐张弃置。
+135:             if !ctx.core.player(self.owner).alive {
+136:                 let mut leftover = std::mem::take(&mut self.queue);
+137:                 if let Some(cur) = self.current.take() {
+138:                     // 仅机器仍持有的判定牌需要随死亡清理弃置；
+139:                     // 已被天妒获得（手牌）或已随效果弃置的不重复入弃牌堆。
+140:                     if cur.judge_held {
+141:                         leftover.push(cur.judge_card);
+142:                     }
+143:                 }
+144:                 if !leftover.is_empty() {
+145:                     ctx.core.discard.extend(leftover.iter().copied());
+146:                     ctx.log(LogEvent::CardDiscarded {
+147:                         player: self.owner,
+148:                         cards: std::mem::take(&mut leftover),
+149:                     });
+150:                 }
+151:                 return Flow::Done;
+152:             }
+153: 
+154:             // 当前判定的进行态
+155:             if let Some(cur) = &mut self.current {
+156:                 // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
+157:                 // 天妒窗；放弃则 7 张按原序回牌堆顶、照常判定（登记差异：
+158:                 // 上游取消后 7 张滞留处理区，原生归还牌堆）。
+159:                 if let Some(cards) = cur.gaiming_cards.take() {
+160:                     match ctx.answer().first().copied() {
+161:                         Some(ChoiceOption::Card(c)) if cards.contains(&c) => {
+162:                             cur.judge_card = c;
+163:                             for other in cards.iter().copied() {
+164:                                 if other != c {
+165:                                     ctx.to_discard(other);
+166:                                 }
+167:                             }
+168:                             cur.rewriters.clear();
+169:                             cur.in_rewrite = false;
+170:                             cur.tian_du.clear();
+171:                             ctx.log(LogEvent::Judged {
+172:                                 player: self.owner,
+173:                                 card: c,
+174:                             });
+175:                         }
+176:                         _ => {
+177:                             for c in cards.into_iter().rev() {
+178:                                 ctx.core.deck.push(c);
+179:                             }
+180:                         }
+181:                     }
+182:                     continue;
+183:                 }
+184:                 // 昊天塔（swd 卡牌面窗口机批）：插窗应答消费——强制选一
+185:                 // 张候选为判定结果，未选中的弃置。锁定技无取消（上游
+186:                 // chooseCardButton(true) 同口径）；登记差异：多持有者仅
+187:                 // 座序首位开窗（上游逐人触发 chaos 未定义时序）。
+188:                 if cur.haotian_holder.is_some() && cur.haotian_other.is_some() {
+189:                     let holder = cur.haotian_holder.take().expect("checked");
+190:                     let other = cur.haotian_other.take().expect("checked");
+191:                     let picked = match ctx.answer().first().copied() {
+192:                         Some(ChoiceOption::Card(c)) => Some(c),
+193:                         _ => None,
+194:                     };
+195:                     match picked {
+196:                         // 选中另一候选：判定牌换牌，原判定牌弃置
+197:                         Some(c) if c != cur.judge_card => {
+198:                             let old = cur.judge_card;
+199:                             cur.judge_card = c;
+200:                             ctx.to_discard(old);
+201:                             ctx.log(LogEvent::JudgementRewritten {
+202:                                 player: holder,
+203:                                 card: c,
+204:                                 replaced: old,
+205:                             });
+206:                         }
+207:                         // 选中原判定牌：候选弃置
+208:                         Some(_) => ctx.to_discard(other),
+209:                         // 防御（强制选一不应出现）：候选弃置
+210:                         None => ctx.to_discard(other),
+211:                     }
+212:                     continue;
+213:                 }
+214:                 if cur.in_rewrite {
+215:                     // 应答消费：当前改判者出黑色手牌替换或放弃
+216:                     if cur.asked {
+217:                         cur.asked = false;
+218:                         // 运行时防御：改判队列已空（正常不会出现——asked 与
+219:                         // 非空队列同置）则跳过改判直接进入后续阶段（N04-d）。
+220:                         if cur.rewriters.is_empty() {
+221:                             cur.in_rewrite = false;
+222:                             continue;
+223:                         }
+224:                         let rewriter = cur.rewriters.remove(0);
+225:                         let answer = ctx.answer().clone();
+226:                         // 天伦（swd 批 138）：从判定区取牌替换判定牌，旧判定
+227:                         // 牌**弃置**（上游 `judging[0].discard()` 同口径——与
+228:                         // 鬼道/鬼才「旧牌归改判者」不同）
+229:                         let tianlun = ctx
+230:                             .catalog
+231:                             .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
+232:                             .map(|d| ctx.core.has_skill(rewriter, d))
+233:                             .unwrap_or(false);
+234:                         if tianlun {
+235:                             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+236:                                 if c != cur.judge_card {
+237:                                     let mut moved = false;
+238:                                     for p in 0..ctx.core.players.len() as PlayerId {
+239:                                         if ctx.core.player(p).judge.contains(&c) {
+240:                                             ctx.core.player_mut(p).judge.retain(|x| *x != c);
+241:                                             moved = true;
+242:                                             break;
+243:                                         }
+244:                                     }
+245:                                     if !moved && self.queue.contains(&c) {
+246:                                         self.queue.retain(|x| *x != c);
+247:                                         moved = true;
+248:                                     }
+249:                                     if !moved {
+250:                                         // 非判定区牌（异常路径）：忽略
+251:                                         if cur.rewriters.is_empty() {
+252:                                             cur.in_rewrite = false;
+253:                                         }
+254:                                         continue;
+255:                                     }
+256:                                     let old = cur.judge_card;
+257:                                     ctx.to_discard(old);
+258:                                     cur.judge_card = c;
+259:                                     ctx.log(LogEvent::JudgementRewritten {
+260:                                         player: rewriter,
+261:                                         card: c,
+262:                                         replaced: old,
+263:                                     });
+264:                                 }
+265:                             }
+266:                             if cur.rewriters.is_empty() {
+267:                                 cur.in_rewrite = false;
+268:                             }
+269:                             continue;
+270:                         }
+271:                         if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+272:                             // 打出的牌离开手牌或装备区、由判定流程持有（成为新判定牌）；
+273:                             // 被替换的旧判定牌由改判者**获得**（对齐上游，ADR 0714）。
+274:                             ctx.take_owned_card(rewriter, c);
+275:                             let old = cur.judge_card;
+276:                             ctx.core.player_mut(rewriter).hand.push(old);
+277:                             cur.judge_card = c;
+278:                             ctx.log(LogEvent::JudgementRewritten {
+279:                                 player: rewriter,
+280:                                 card: c,
+281:                                 replaced: old,
+282:                             });
+283:                         }
+284:                         if cur.rewriters.is_empty() {
+285:                             cur.in_rewrite = false;
+286:                         }
+287:                         continue;
+288:                     }
+289:                     // 询问下一个可用改判者（跳过死亡/无黑色牌者——手牌与
+290:                     // 装备区均可，N08-c：仅装备区黑牌者也保持询问资格）
+291:                     while let Some(r) = cur.rewriters.first().copied() {
+292:                         if !ctx.core.player(r).alive {
+293:                             cur.rewriters.remove(0);
+294:                             continue;
+295:                         }
+296:                         let is_black_card = |c: crate::ids::CardId| {
+297:                             matches!(
+298:                                 ctx.catalog.cards[c as usize].suit,
+299:                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+300:                             )
+301:                         };
+302:                         let p = ctx.core.player(r);
+303:                         // 鬼才：任意手牌可改判（不依赖黑色）
+304:                         let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+305:                         let has_gui_cai =
+306:                             gui_cai.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
+307:                         let has_any_hand = has_gui_cai && !p.hand.is_empty();
+308:                         // 天道：任意手牌或装备牌可改判（hes 全量，规则 v263）
+309:                         let tian_dao = ctx
+310:                             .catalog
+311:                             .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
+312:                         let has_tian_dao =
+313:                             tian_dao.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
+314:                         // 改天道（swd 孤月）：同天道——hes 全量可改判
+315:                         let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+316:                         let has_g_tiandao =
+317:                             g_tiandao.map(|d| ctx.core.has_skill(r, d)).unwrap_or(false);
+318:                         let has_any_hes = (has_tian_dao || has_g_tiandao)
+319:                             && (!p.hand.is_empty() || !p.equips.is_empty());
+320:                         let has_black = p
+321:                             .hand
+322:                             .iter()
+323:                             .chain(p.equips.iter())
+324:                             .copied()
+325:                             .any(is_black_card);
+326:                         if !has_black && !has_any_hand && !has_any_hes {
+327:                             cur.rewriters.remove(0);
+328:                             continue;
+329:                         }
+330:                         break;
+331:                     }
+332:                     if cur.rewriters.is_empty() {
+333:                         cur.in_rewrite = false;
+334:                         continue;
+335:                     }
+336:                     let rewriter = cur.rewriters[0];
+337:                     cur.asked = true;
+338:                     // 天伦（swd 批 138，规则 v316 同批）：候选=本次判定牌 +
+339:                     // 全场判定区牌（上游 tianlun 的 dialog list 同口径）
+340:                     if ctx
+341:                         .catalog
+342:                         .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY)
+343:                         .map(|d| ctx.core.has_skill(rewriter, d))
+344:                         .unwrap_or(false)
+345:                     {
+346:                         let mut options = vec![ChoiceOption::Pass];
+347:                         if cur.judge_held {
+348:                             options.push(ChoiceOption::Card(cur.judge_card));
+349:                         }
+350:                         for p in 0..ctx.core.players.len() as PlayerId {
+351:                             for c in ctx.core.player(p).judge.iter().copied() {
+352:                                 if !options.contains(&ChoiceOption::Card(c)) {
+353:                                     options.push(ChoiceOption::Card(c));
+354:                                 }
+355:                             }
+356:                         }
+357:                         // 判定机待结算队列（原生在判定阶段开始即把判定区
+358:                         // 整体取入队列，见 JudgePhaseMachine::new——同口径
+359:                         // 视为「判定区牌」）
+360:                         for c in self.queue.iter().copied() {
+361:                             // 正在结算的延时锦囊已离开判定区（上游
+362:                             // `judging[0]` 之外的判定区牌才可被选）
+363:                             if c == cur.trick {
+364:                                 continue;
+365:                             }
+366:                             if !options.contains(&ChoiceOption::Card(c)) {
+367:                                 options.push(ChoiceOption::Card(c));
+368:                             }
+369:                         }
+370:                         if options.len() == 1 {
+371:                             cur.rewriters.remove(0);
+372:                             continue;
+373:                         }
+374:                         return Flow::WaitChoice {
+375:                             observer: rewriter,
+376:                             spec: ChoiceSpec {
+377:                                 kind: ChoiceKind::RespondCard,
+378:                                 prompt: "tianlun_rewrite",
+379:                                 options,
+380:                                 min: 1,
+381:                                 max: 1,
+382:                                 allow_cancel: false,
+383:                             },
+384:                         };
+385:                     }
+386:                     // 黑色手牌 + 黑色装备牌均可改判（对齐旧线
+387:                     // `judgment_black_rewrite_cards`：hand + equip）。
+388:                     let mut options = vec![ChoiceOption::Pass];
+389:                     let is_black = |id: crate::ids::CardId| {
+390:                         matches!(
+391:                             ctx.catalog.cards[id as usize].suit,
+392:                             crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+393:                         )
+394:                     };
+395:                     // 鬼才持有者：全部手牌可打（不限花色）
+396:                     let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+397:                     let gui_cai_holders_any = gui_cai
+398:                         .map(|d| ctx.core.has_skill(rewriter, d))
+399:                         .unwrap_or(false);
+400:                     // 天道持有者：全部手牌与装备牌可打（hes 全量，规则 v263）
+401:                     let tian_dao = ctx
+402:                         .catalog
+403:                         .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
+404:                     let tian_dao_holders_any = tian_dao
+405:                         .map(|d| ctx.core.has_skill(rewriter, d))
+406:                         .unwrap_or(false);
+407:                     // 改天道持有者（swd 孤月）：同天道——hes 全量可打
+408:                     let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+409:                     let g_tiandao_holders_any = g_tiandao
+410:                         .map(|d| ctx.core.has_skill(rewriter, d))
+411:                         .unwrap_or(false);
+412:                     for c in ctx.core.player(rewriter).hand.iter().copied() {
+413:                         if tian_dao_holders_any
+414:                             || g_tiandao_holders_any
+415:                             || gui_cai_holders_any
+416:                             || is_black(c)
+417:                         {
+418:                             options.push(ChoiceOption::Card(c));
+419:                         }
+420:                     }
+421:                     // 装备区：黑色牌（鬼道路径）或天道/改天道持有者任意装备
+422:                     for c in ctx.core.player(rewriter).equips.iter().copied() {
+423:                         if tian_dao_holders_any || g_tiandao_holders_any || is_black(c) {
+424:                             options.push(ChoiceOption::Card(c));
+425:                         }
+426:                     }
+427:                     return Flow::WaitChoice {
+428:                         observer: rewriter,
+429:                         spec: ChoiceSpec {
+430:                             kind: ChoiceKind::RespondCard,
+431:                             prompt: "gui_dao_rewrite",
+432:                             options,
+433:                             min: 1,
+434:                             max: 1,
+435:                             allow_cancel: false,
+436:                         },
+437:                     };
+438:                 }
+439:                 // 判定牌确定（N08-d 顺序：Rewritten×N → Finalized → 效果 →
+440:                 // 天妒 Gained）：Finalized 恰好记一次、在效果与天妒询问前。
+441:                 if !cur.finalized {
+442:                     cur.finalized = true;
+443:                     let trick = cur.trick;
+444:                     let judge_card = cur.judge_card;
+445:                     // 天妒待询问时判定牌由机器持有，不在此弃置；
+446:                     // 否则随效果弃置（judge_held 置否）。
+447:                     if cur.gained || cur.tian_du.is_empty() {
+448:                         cur.judge_held = false;
+449:                     }
+450:                     let machine_holds = cur.judge_held;
+451:                     ctx.log(LogEvent::JudgementFinalized {
+452:                         player: self.owner,
+453:                         card: judge_card,
+454:                     });
+455:                     Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
+456:                     continue;
+457:                 }
+458:                 // 天妒阶段（效果生效后）：跳过死亡持有者；有人获得后不再询问
+459:                 while let Some(h) = cur.tian_du.first().copied() {
+460:                     if !ctx.core.player(h).alive || cur.gained {
+461:                         cur.tian_du.remove(0);
+462:                     } else {
+463:                         break;
+464:                     }
+465:                 }
+466:                 // 天妒应答消费
+467:                 if !cur.tian_du.is_empty() && cur.asked && !cur.gained && cur.judge_held {
+468:                     cur.asked = false;
+469:                     cur.judge_held = false;
+470:                     let holder = cur.tian_du.remove(0);
+471:                     if let ChoiceOption::Confirm =
+472:                         ctx.answer().first().copied().unwrap_or(ChoiceOption::Pass)
+473:                     {
+474:                         let card = cur.judge_card;
+475:                         ctx.core.player_mut(holder).hand.push(card);
+476:                         cur.gained = true;
+477:                         ctx.log(LogEvent::JudgementGained {
+478:                             player: holder,
+479:                             card,
+480:                         });
+481:                     } else {
+482:                         // 放弃获得：机器持有的判定牌弃置
+483:                         ctx.to_discard(cur.judge_card);
+484:                     }
+485:                     self.current = None;
+486:                     continue;
+487:                 }
+488:                 if cur.tian_du.is_empty() || cur.gained || !cur.judge_held {
+489:                     // 完结：机器仍持有的判定牌（天妒者死亡等防御路径）弃置
+490:                     if cur.judge_held && !cur.gained {
+491:                         cur.judge_held = false;
+492:                         ctx.to_discard(cur.judge_card);
+493:                     }
+494:                     self.current = None;
+495:                     continue;
+496:                 }
+497:                 // 询问天妒持有者
+498:                 let holder = cur.tian_du[0];
+499:                 cur.asked = true;
+500:                 return Flow::WaitChoice {
+501:                     observer: holder,
+502:                     spec: ChoiceSpec::confirm("tian_du_gain"),
+503:                 };
+504:             }
+505: 
+506:             // 取下一锦囊并翻判定牌
+507:             if self.queue.is_empty() {
+508:                 return Flow::Done;
+509:             }
+510:             let trick = self.queue.remove(0);
+511:             // 改命（T11 Boss 诸葛亮族批 116，规则 v303 同批）：判定前——拥有
+512:             // 者持技时亮牌堆顶 7 张，由其选 1 作为判定结果（其余弃置、改判/
+513:             // 天妒窗跳过；上游 judgeBefore chooseCardButton + trigger.cancel
+514:             // + trigger.direct 同口径）。
+515:             let has_gaiming = ctx
+516:                 .catalog
+517:                 .skill_by_name(crate::vocabulary::host::HLSS_GAIMING_KEY)
+518:                 .map(|def| ctx.core.has_skill(self.owner, def))
+519:                 .unwrap_or(false);
+520:             if has_gaiming {
+521:                 let mut cards: Vec<crate::ids::CardId> = Vec::new();
+522:                 for _ in 0..7 {
+523:                     if ctx.core.deck.is_empty() {
+524:                         if ctx.core.discard.is_empty() {
+525:                             break;
+526:                         }
+527:                         let mut d = std::mem::take(&mut ctx.core.discard);
+528:                         ctx.core.rng.shuffle(&mut d);
+529:                         ctx.core.deck = d;
+530:                         ctx.log(LogEvent::DeckReshuffled);
+531:                     }
+532:                     cards.push(ctx.core.deck.pop().expect("deck non-empty"));
+533:                 }
+534:                 if !cards.is_empty() {
+535:                     self.current = Some(JudgementProgress {
+536:                         trick,
+537:                         judge_card: cards[0],
+538:                         rewriters: Vec::new(),
+539:                         asked: false,
+540:                         tian_du: Vec::new(),
+541:                         gained: false,
+542:                         in_rewrite: false,
+543:                         finalized: false,
+544:                         judge_held: true,
+545:                         haotian_holder: None,
+546:                         haotian_other: None,
+547:                         gaiming_cards: Some(cards.clone()),
+548:                     });
+549:                     return Flow::WaitChoice {
+550:                         observer: self.owner,
+551:                         spec: ChoiceSpec {
+552:                             kind: ChoiceKind::SelectCards,
+553:                             prompt: "gaiming_pick",
+554:                             options: cards.into_iter().map(ChoiceOption::Card).collect(),
+555:                             min: 1,
+556:                             max: 1,
+557:                             allow_cancel: true,
+558:                         },
+559:                     };
+560:                 }
+561:             }
+562:             let judge_card = ctx.draw_judge_card();
+563:             ctx.log(LogEvent::Judged {
+564:                 player: self.owner,
+565:                 card: judge_card,
+566:             });
+567:             // 昊天塔（swd 卡牌面窗口机批，equip5）：任意角色判定前，持有
+568:             // 者观看牌堆顶两张、强制选一张直接作为判定结果（锁定技无取
+569:             // 消；上游 trigger.cancel 手动定结果=改判/天妒窗一并绕过，
+570:             // 原生跳过改判/天妒队列登记差异同口径；次候选弃置）。
+571:             let haotian_holder = ctx.core.seat_order_from(self.owner).into_iter().find(|p| {
+572:                 ctx.core.player(*p).alive
+573:                     && ctx
+574:                         .core
+575:                         .player(*p)
+576:                         .equips
+577:                         .iter()
+578:                         .any(|c| ctx.catalog.card_kind(*c) == CardKind::Haotianta)
+579:             });
+580:             if let Some(h) = haotian_holder {
+581:                 // 次候选=牌堆顶第二张（draw_judge_card 已取顶张；堆空则
+582:                 // 洗弃堆，堆弃双空则不开窗）
+583:                 if !ctx.core.deck.is_empty() || !ctx.core.discard.is_empty() {
+584:                     if ctx.core.deck.is_empty() {
+585:                         let mut cards = std::mem::take(&mut ctx.core.discard);
+586:                         ctx.core.rng.shuffle(&mut cards);
+587:                         ctx.core.deck = cards;
+588:                         ctx.log(LogEvent::DeckReshuffled);
+589:                     }
+590:                     let other = ctx
+591:                         .core
+592:                         .deck
+593:                         .pop()
+594:                         .expect("judge candidate: deck or discard non-empty");
+595:                     self.current = Some(JudgementProgress {
+596:                         trick,
+597:                         judge_card,
+598:                         rewriters: Vec::new(),
+599:                         asked: false,
+600:                         tian_du: Vec::new(),
+601:                         gained: false,
+602:                         in_rewrite: false,
+603:                         finalized: false,
+604:                         judge_held: true,
+605:                         haotian_holder: Some(h),
+606:                         haotian_other: Some(other),
+607:                         gaiming_cards: None,
+608:                     });
+609:                     return Flow::WaitChoice {
+610:                         observer: h,
+611:                         spec: ChoiceSpec {
+612:                             kind: ChoiceKind::SelectCards,
+613:                             prompt: "haotianta_pick",
+614:                             options: vec![
+615:                                 ChoiceOption::Card(judge_card),
+616:                                 ChoiceOption::Card(other),
+617:                             ],
+618:                             min: 1,
+619:                             max: 1,
+620:                             allow_cancel: false,
+621:                         },
+622:                     };
+623:                 }
+624:             }
+625:             let gui_dao = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_DAO);
+626:             let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+627:             let tian_du = ctx.catalog.skill_by_name(crate::vocabulary::names::TIAN_DU);
+628:             // 天妒（owner_is_target，对齐旧线内容定义/标准包文本「你的判定牌」）：
+629:             // 仅判定阶段拥有者本人持有时由本人询问。
+630:             let tian_du_self = tian_du
+631:                 .map(|d| ctx.core.has_skill(self.owner, d))
+632:                 .unwrap_or(false);
+633:             // 改判者：自判定阶段拥有者起按座位序（含本人），逐人一次——
+634:             // 鬼道（黑色牌改判）或鬼才（任意手牌改判）持有者均入队（对齐旧线
+635:             // judgment_rewriters(tx, owner)；同座位双技能只入队一次）。
+636:             // 天道（Boss 张角，规则 v263）：hes 任意牌可改判——改判资格
+637:             // 与鬼道/鬼才并列（座位序同队）
+638:             let tian_dao = ctx
+639:                 .catalog
+640:                 .skill_by_name(crate::vocabulary::names::BOSS_TIANDAO);
+641:             // 改天道（swd 孤月）：hes 任意牌改判——与天道/鬼道/鬼才并列入队
+642:             let g_tiandao = ctx.catalog.skill_by_name("gtiandao");
+643:             let rewriters: Vec<PlayerId> = ctx
+644:                 .core
+645:                 .seat_order_from(self.owner)
+646:                 .into_iter()
+647:                 .filter(|p| {
+648:                     let has = |d: Option<crate::ids::SkillDefId>| {
+649:                         d.map(|d| ctx.core.has_skill(*p, d)).unwrap_or(false)
+650:                     };
+651:                     has(gui_dao)
+652:                         || has(gui_cai)
+653:                         || has(tian_dao)
+654:                         || has(g_tiandao)
+655:                         || has(ctx
+656:                             .catalog
+657:                             .skill_by_name(crate::vocabulary::host::SWD_TIANLUN_KEY))
+658:                 })
+659:                 .collect();
+660:             self.current = Some(JudgementProgress {
+661:                 trick,
+662:                 judge_card,
+663:                 rewriters,
+664:                 asked: false,
+665:                 tian_du: if tian_du_self {
+666:                     vec![self.owner]
+667:                 } else {
+668:                     Vec::new()
+669:                 },
+670:                 gained: false,
+671:                 in_rewrite: true,
+672:                 finalized: false,
+673:                 judge_held: true,
+674:                 haotian_holder: None,
+675:                 haotian_other: None,
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/types.rs SHA256 8ee5e55391e47ede8aabc21dae0538f8ea3972703f3f2ed5286c1b9ba348aff5
+153: /// 单次判定的进行态快照（与 kernel `JudgementProgress` 字段一一对应）。
+154: #[derive(Debug, Clone, PartialEq, Eq)]
+155: pub struct JudgementProgressSnap {
+156:     pub trick: CardId,
+157:     pub judge_card: CardId,
+158:     /// 鬼道/鬼才改判询问队列（座位序）。
+159:     pub rewriters: Vec<PlayerId>,
+160:     /// 当前改判者（或天妒询问）是否已被询问。
+161:     pub asked: bool,
+162:     /// 天妒持有人队列。
+163:     pub tian_du: Vec<PlayerId>,
+164:     /// 判定牌是否已被天妒获得。
+165:     pub gained: bool,
+166:     /// 是否处于改判询问阶段（false = 天妒阶段）。
+167:     pub in_rewrite: bool,
+168:     /// 判定确定已记（效果生效前恰好一次）。
+169:     pub finalized: bool,
+170:     /// 判定牌是否仍由机器持有。
+171:     pub judge_held: bool,
+172:     /// 昊天塔（swd 卡牌面窗口机批）：插窗持有者（Some=等待强选）。
+173:     pub haotian_holder: Option<PlayerId>,
+174:     /// 昊天塔：未选中的候选牌（选中另一张后弃置）。
+175:     pub haotian_other: Option<u32>,
+176:     /// 改命（T11 Boss 诸葛亮族批 116）：亮出的 7 张候选（Some=等待选一）。
+177:     pub gaiming_cards: Option<Vec<u32>>,
+178: }
+179: 
+180: // ---------------------------------------------------------------------------
+181: // 机器规范快照：判别符 + 全字段（字节存档 / 摘要 / 恢复共用）
+182: // ---------------------------------------------------------------------------
+183: 
+184: /// 挂起机器的规范快照。字段清单与 kernel / content 机器结构一一对应；
+185: /// 编解码（archive.rs）与摘要（engine.rs canonical_hash）按同一字段集。
+186: /// T8 增量 2：VM 机挂起态快照（continuation 帧 + 选项 + 排队效果）。
+187: #[derive(Debug, Clone, PartialEq, Eq)]
+188: pub struct RvmPaused {
+189:     /// Serialized operand stack + locals。
+190:     pub frames: Vec<u8>,
+191:     pub pc: u32,
+192:     pub fuel_remaining: u32,
+193:     /// Continuation identity within a match.
+194:     pub id: u64,
+195:     /// Module logic hash（内容锁：续跑时与模块哈希核对）。
+196:     pub module_hash: [u8; 32],
+197:     /// 选项 tokens（emission 序）。
+198:     pub options: Vec<u32>,
+199:     /// 排队未落账效果（rvm_bridge 自定义编码；映射面仅三种）。
+200:     pub pending: Vec<u8>,
+201: }
+202: 
+203: #[derive(Debug, Clone, PartialEq, Eq)]
+204: pub enum MachineSnapshot {
+205:     DamageFlow {
+206:         root: crate::ids::EventId,
+207:     },
+208:     NativeDamageSkill {
+209:         owner: PlayerId,
+210:         def: SkillDefId,
+211:         window: crate::event::DamageWindowKind,
+212:     },
+213:     Sha {
+214:         card: CardId,
+215:         source: PlayerId,
+216:         target: PlayerId,
+217:         nature: DamageNature,
+218:         asked: bool,
+219:         /// 八卦阵判定是否已做（每杀至多一次）。
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/restore.rs SHA256 3c29a5deeb74facfa8c450e8b1d50d575eab283fce147d439d3a0ce333eaa558
+1: use super::*;
+2: 
+3: // ---------------------------------------------------------------------------
+4: // 机器重建（MachineSnapshot → Box<dyn SkillMachine>）
+5: // ---------------------------------------------------------------------------
+6: 
+7: impl MachineSnapshot {
+8:     /// 由机器快照重建机器实例（内核机器就地分派；内容机器——标准内容、
+9:     /// Boss、宿主机器——经目录回调 `hooks.restore_machine` 先行重建）。
+10:     pub fn restore(&self, catalog: &Catalog) -> Result<Box<dyn SkillMachine>, SnapshotError> {
+11:         if let Some(m) = (catalog.hooks.restore_machine)(self, catalog) {
+12:             return m;
+13:         }
+14:         match self {
+15:             MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+16:                 if catalog
+17:                     .skills
+18:                     .get(*def as usize)
+19:                     .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
+20:                     .is_none_or(|e| e.window() != *window)
+21:                 {
+22:                     return Err(SnapshotError::UnknownMachine);
+23:                 }
+24:                 Ok(Box::new(crate::kernel::NativeDamageSkill {
+25:                     owner: *owner,
+26:                     def: *def,
+27:                     window: *window,
+28:                 }))
+29:             }
+30:             MachineSnapshot::DamageFlow { root } => {
+31:                 Ok(Box::new(crate::kernel::DamageFlow { root: *root }))
+32:             }
+33:             MachineSnapshot::TriggerOrder {
+34:                 frame,
+35:                 owner,
+192:             MachineSnapshot::JudgePhase {
+193:                 owner,
+194:                 queue,
+195:                 current,
+196:             } => Ok(Box::new(crate::kernel::JudgePhaseMachine::new(
+197:                 *owner,
+198:                 queue.clone(),
+199:                 current
+200:                     .as_deref()
+201:                     .map(crate::kernel::JudgementProgress::from_snap),
+202:             ))),
+203:             MachineSnapshot::Noop => Ok(Box::new(crate::kernel::NoopMachine::new())),
+204:             MachineSnapshot::PlaceDelayed {
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/validation.rs SHA256 5b7bf5e430ddeca95aea436d859be12565d5a2b93c64e8179c32ecb5a84f03da
+450:     }
+451:     // 栈帧：唯一性、水位、父子链（父必须存在且是更早的帧）
+452:     let mut ids: std::collections::BTreeMap<u32, usize> = Default::default();
+453:     for (i, f) in resolution.stack.iter().enumerate() {
+454:         if f.id as u64 >= resolution.next_event_id as u64 {
+455:             return Err(oob("event_id", f.id as u64));
+456:         }
+457:         if ids.insert(f.id, i).is_some() {
+458:             return Err(oob("event_id_dup", f.id as u64));
+459:         }
+460:         if let Some(p) = f.parent {
+461:             match ids.get(&p) {
+462:                 Some(&pi) if pi < i => {}
+463:                 _ => return Err(oob("frame_parent", p as u64)),
+464:             }
+465:         }
+466:         check_event_data(&f.data, b)?;
+467:         if matches!(
+468:             f.data,
+469:             EventData::Damage(_) | EventData::DamageWindow { .. }
+470:         ) && f.kind != f.data.kind()
+471:         {
+472:             return Err(SnapshotError::BadTag("damage_frame_kind", 0));
+473:         }
+474:         super::damage_validation::check_frame(f, resolution)?;
+475:         for q in &f.queue {
+476:             check_def(q.def, b)?;
+477:             check_pid(q.owner, b)?;
+478:         }
+479:     }
+480:     // 挂起：深度与槽位帧引用、机器树 ID 界
+481:     for p in &resolution.parks {
+482:         if p.resume_depth > resolution.stack.len() {
+483:             return Err(oob("resume_depth", p.resume_depth as u64));
+484:         }
+485:         let frame = match p.slot {
+486:             Slot::Intrinsic { frame } => frame,
+487:             Slot::Trigger { frame } => frame,
+488:         };
+489:         // 会话级挂起槽（NO_FRAME 哨兵）豁免帧存在性检查
+490:         if frame != NO_FRAME && !ids.contains_key(&frame) {
+491:             return Err(oob("park_frame", frame as u64));
+492:         }
+493:         check_machine(&p.machine, b, core)?;
+494:         if let MachineSnapshot::DamageFlow { root } = p.machine {
+495:             if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root)
+496:                 || !resolution.stack.iter().enumerate().any(|(i, f)| {
+497:                     f.id == root
+498:                         && p.resume_depth == i + 1
+499:                         && f.stage == Stage::Intrinsic
+500:                         && matches!(f.data, EventData::Damage(_))
+501:                 })
+502:             {
+503:                 return Err(SnapshotError::BadTag("damage_flow_binding", root as u64));
+504:             }
+505:         }
+506:     }
+507:     // 应答选项 ID 界
+508:     if let Some(ans) = &resolution.answer {
+509:         check_options(ans, b)?;
+510:     }
+511:     // 开放选择：观察者/选项在界、ID 水位、必须有承接机器
+512:     if let Some(open) = &resolution.open_choice {
+513:         check_pid(open.observer, b)?;
+514:         check_options(&open.spec.options, b)?;
+515:         if open.id == 0 || open.id >= resolution.next_choice_id {
+516:             return Err(oob("choice_id", open.id));
+517:         }
+518:         if resolution.parks.is_empty() {
+519:             return Err(oob("choice_without_machine", 0));
+520:         }
+521:     }
+522:     Ok(())
+523: }
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/machine_validation.rs SHA256 f5cb58e60e3f0bf1f40a670b1ef7087b0f8bbf716a4d64ccecaa284514b9c65b
+1: use super::*;
+2: 
+3: /// 机器快照树内全部 ID 的边界校验（含嵌套机器与判定进行态关系）。
+4: pub(super) fn check_machine(
+5:     m: &MachineSnapshot,
+6:     b: &RestoreBounds,
+7:     core: &GameStateCore,
+8: ) -> Result<(), SnapshotError> {
+9:     match m {
+10:         MachineSnapshot::NativeDamageSkill { owner, def, .. } => {
+11:             check_pid(*owner, b)?;
+12:             check_def(*def, b)?;
+13:         }
+14:         MachineSnapshot::DamageFlow { .. } => {}
+15:         MachineSnapshot::TriggerOrder {
+16:             owner,
+17:             candidates,
+18:             asked,
+19:             cursor,
+20:             done,
+21:             ..
+22:         } => {
+23:             check_pid(*owner, b)?;
+24:             for def in candidates {
+25:                 check_def(*def, b)?;
+26:             }
+27:             for (pid, def) in done {
+28:                 check_pid(*pid, b)?;
+29:                 check_def(*def, b)?;
+30:             }
+31:             if (*asked && candidates.len() < 2)
+32:                 || candidates.windows(2).any(|ds| ds[0] >= ds[1])
+33:                 || *cursor > b.seats as u16 + 1
+34:             {
+35:                 return Err(SnapshotError::BadTag("trigger_order_candidates", 0));
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/asks.rs SHA256 db8644db9845d3c85eb99d381bb17985cd6b257595e3c1cf2f3ab82751247bce
+1: use super::*;
+2: mod shapes;
+3: pub use shapes::*;
+4: 
+5: // ---------------------------------------------------------------------------
+6: // 开放选择承接派生（N04-e）
+7: // ---------------------------------------------------------------------------
+8: 
+9: /// 从挂起机器派生当前应有的开放选择询问。
+10: ///
+11: /// 返回 `Some` 当且仅当机器处于「已发出询问、等待应答」的静止状态；
+12: /// 派生形状与机器创建该询问时的 `ChoiceSpec` 逐字段一致（选项含顺序）。
+13: /// 恢复期以本函数核对 `open_choice` 的承接关系（N04-e）。
+14: pub fn active_ask(
+15:     machine: &MachineSnapshot,
+16:     core: &GameStateCore,
+17:     catalog: &Catalog,
+18: ) -> Option<ExpectedAsk> {
+19:     match machine {
+20:         MachineSnapshot::TriggerOrder { owner, candidates, asked, .. } => {
+21:             if !asked { return None; }
+22:             Some(ask(*owner, "trigger_order", ChoiceKind::PickTag, candidates.iter().copied().map(ChoiceOption::Skill).collect(), 1, 1, false))
+23:         }
+24:         // ---- 内核机器 ----
+25:         MachineSnapshot::MonkeySteal { holders, asked, .. } => {
+26:             if !*asked {
+27:                 return None;
+28:             }
+29:             let holder = *holders.first()?;
+30:             Some(ask(
+31:                 holder,
+32:                 "huanle_monkey_confirm",
+33:                 ChoiceKind::RespondCard,
+34:                 vec![ChoiceOption::Confirm, ChoiceOption::Pass],
+35:                 1,
+36:                 1,
+37:                 false,
+38:             ))
+39:         }
+40:         MachineSnapshot::Sha {
+41:             target,
+42:             source,
+43:             asked,
+44:             tieji_red,
+45:             liuli_stage,
+46:             hujia_holder,
+47:             ..
+48:         } => {
+49:             if *liuli_stage == 1 {
+50:                 // 流离弃牌自选（逐技对照批二 v76）：手牌+装备选一张，可取消
+51:                 let mut options: Vec<ChoiceOption> = core
+52:                     .player(*target)
+53:                     .hand
+54:                     .iter()
+55:                     .copied()
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/damage_validation.rs SHA256 a33cded5917251c7c26447ca5cf561e5a10cc72cb93dcef2b45ebbf50536b32b
+107:         if let Some(parent) = f
+108:             .parent
+109:             .and_then(|id| res.stack.iter().find(|parent| parent.id == id))
+110:         {
+111:             if let EventData::Damage(d) = &parent.data {
+112:                 if *player != d.target || !matches!(d.settlement.progress, P::DyingPending { .. }) {
+113:                     return Err(SnapshotError::BadTag("damage_dying_binding", 0));
+114:                 }
+115:             }
+116:         }
+117:     }
+118:     if let EventData::Damage(d) = &f.data {
+119:         let index = res
+120:             .stack
+121:             .iter()
+122:             .position(|p| p.id == f.id)
+123:             .expect("current frame");
+124:         let immediate = index.checked_sub(1).and_then(|i| res.stack.get(i));
+125:         if f.parent != immediate.map(|p| p.id) {
+126:             return Err(SnapshotError::BadTag("damage_immediate_parent", 0));
+127:         }
+128:         let chain = immediate.is_some_and(|p| {
+129:             matches!(&p.data,EventData::Damage(parent)
+130:             if p.stage==Stage::Intrinsic && matches!(parent.settlement.progress,P::Chain{..}))
+131:         });
+132:         if d.from_chain != chain {
+133:             return Err(SnapshotError::BadTag("damage_chain_cause", 0));
+134:         }
+135:         if chain {
+136:             let parent = immediate.unwrap().damage();
+137:             if parent.from_chain
+138:                 || parent.nature == crate::event::DamageNature::Normal
+139:                 || parent.amount <= 0
+140:                 || parent.settlement.committed_damage.is_none()
+141:                 || parent.settlement.outcome != O::Running
+142:             {
+143:                 return Err(SnapshotError::BadTag("damage_chain_parent", 0));
+144:             }
+145:             if d.settlement.progress == P::Start
+146:                 && (d.amount != parent.amount
+147:                     || d.nature != parent.nature
+148:                     || d.source != parent.source
+149:                     || d.card != parent.card
+150:                     || d.target == parent.target)
+151:             {
+152:                 return Err(SnapshotError::BadTag("damage_chain_birth", 0));
+153:             }
+154:         }
+155:         if !matches!(f.stage, Stage::Intrinsic | Stage::Done) || !f.queue.is_empty() || f.planned {
+156:             return Err(SnapshotError::BadTag("damage_root_stage", 0));
+157:         }
+158:         let drivers = res
+159:             .parks
+160:             .iter()
+161:             .filter(|p| matches!(p.machine,MachineSnapshot::DamageFlow{root}if root==f.id))
+162:             .count();
+163:         let terminal = matches!(d.settlement.progress, P::Done | P::Stopped);
+164:         if drivers > 1
+165:             || (d.settlement.progress != P::Start && !f.intrinsic_done && drivers != 1)
+166:             || (f.intrinsic_done && !terminal)
+167:         {
+168:             return Err(SnapshotError::BadTag("damage_root_continuation", 0));
+169:         }
+170:         if f.stage == Stage::Done && (!terminal || !f.intrinsic_done || drivers != 0) {
+171:             return Err(SnapshotError::BadTag("damage_finished_continuation", 0));
+172:         }
+173:     }
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/archive/machine_encode.rs SHA256 43c6ae0b880af6e16029633a1f04707dc5329201ca10e230da887d575187b82d
+1: use super::damage::enc_native_damage_skill;
+2: use super::*;
+3: 
+4: pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+5:     match m {
+6:         MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+7:             enc_native_damage_skill(w, *owner, *def, *window)
+8:         }
+9:         MachineSnapshot::DamageFlow { root } => {
+10:             w.u8(84);
+11:             w.u32(*root);
+12:         }
+13:         MachineSnapshot::TriggerOrder {
+14:             frame,
+15:             owner,
+16:             candidates,
+17:             asked,
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/archive/machine_decode.rs SHA256 9a0ab21640d468758e0c501ddfaddbfb5d2663bebda8868c61ed4711bd3b6665
+1: use super::*;
+2: 
+3: pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
+4:     Ok(match r.u8()? {
+5:         85 => MachineSnapshot::NativeDamageSkill {
+6:             owner: r.u8()?,
+7:             def: r.u16()?,
+8:             window: crate::event::DamageWindowKind::from_tag(r.u8()?)
+9:                 .ok_or(ArchiveError::BadTag("native_damage_window", 0))?,
+10:         },
+11:         84 => MachineSnapshot::DamageFlow { root: r.u32()? },
+12:         83 => MachineSnapshot::TriggerOrder {
+13:             frame: r.u32()?,
+14:             owner: dec_pid(r)?,
+15:             candidates: r.vec(|r| r.u16())?,
+16:             asked: r.boolean()?,
+17:             cursor: r.u16()?,
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/archive/resolution.rs SHA256 989d4527cb101245c8cb659c5f0a3382326cc5c3864b7df3878a4baf50ab578c
+1: use super::*;
+2: 
+3: // ---- 选择 ----
+4: 
+5: pub(super) fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
+6:     match o {
+7:         ChoiceOption::Confirm => w.u8(0),
+8:         ChoiceOption::Pass => w.u8(1),
+9:         ChoiceOption::Card(c) => {
+10:             w.u8(2);
+11:             w.u32(*c);
+12:         }
+13:         ChoiceOption::Player(p) => {
+14:             w.u8(3);
+15:             w.u8(*p);
+16:         }
+17:         ChoiceOption::Tag(t) => {
+18:             w.u8(4);
+19:             w.u8(*t);
+20:         }
+21:         ChoiceOption::Skill(s) => { w.u8(6); w.u16(*s); }
+22:         ChoiceOption::Kind(k) => {
+23:             w.u8(5);
+24:             w.u32(u32::from(*k));
+25:         }
+26:     }
+27: }
+28: 
+29: pub(super) fn dec_choice_option(r: &mut R<'_>) -> Result<ChoiceOption, ArchiveError> {
+30:     Ok(match r.u8()? {
+31:         0 => ChoiceOption::Confirm,
+32:         1 => ChoiceOption::Pass,
+33:         2 => ChoiceOption::Card(r.u32()?),
+34:         3 => ChoiceOption::Player(r.u8()?),
+35:         4 => ChoiceOption::Tag(r.u8()?),
+36:         6 => ChoiceOption::Skill(r.u16()?),
+37:         5 => {
+38:             let code = r.u32()?;
+39:             // 码位必须能反解为目录牌种（未知码=坏档）
+40:             card_kind_from_num(code)?;
+41:             ChoiceOption::Kind(code as u16)
+42:         }
+43:         t => return Err(ArchiveError::BadTag("choice_option", t)),
+44:     })
+45: }
+46: 
+47: pub(super) fn enc_open_choice(w: &mut W, o: &OpenChoice) {
+48:     w.u64(o.id);
+49:     enc_pid(w, &o.observer);
+50:     let spec = &o.spec;
+51:     // v2：kind 显式编码（内核机器的种类是权威，不再由提示词静态推导）。
+52:     enc_choice_kind(w, spec.kind);
+53:     w.str(spec.prompt);
+54:     w.len(spec.options.len());
+55:     for o in &spec.options {
+56:         enc_choice_option(w, o);
+57:     }
+58:     w.u64(spec.min as u64);
+59:     w.u64(spec.max as u64);
+60:     w.boolean(spec.allow_cancel);
+61: }
+62: 
+63: /// N11-b（ADR 0774）：固定提示词注册表——零分配，未知 prompt
+64: /// 直接拒绝。所有引擎生成的 prompt 均为编译期常量。
+65: pub(super) const KNOWN_PROMPTS: &[&str] = &[
+66:     "discard_to_limit",
+67:     "respond_shan",
+68:     "dying_save",
+69:     "gui_dao_rewrite",
+70:     "wudian_fuchou_cancel",
+71:     "wudian_diyjuntun_recast",
+72:     "guanxing_arrange",
+73:     "tuxi_target",
+74:     "rende_cards",
+75:     "rende_target",
+76:     "jieyin_cards",
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/hash/machine.rs SHA256 eb703669943691e1f47f80f4a9fdd8c30e5040af66eae3d1519a1506e0942c12
+1: //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
+2: 
+3: use super::*;
+4: 
+5: /// 机器规范快照的摘要编码：判别符 + 全字段；嵌套机器递归。
+6: pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+7:     use crate::snap::MachineSnapshot as M;
+8:     match s {
+9:         M::NativeDamageSkill { owner, def, window } => {
+10:             push_u8(h, 85);
+11:             push_u8(h, *owner);
+12:             push_u16(h, *def);
+13:             push_u8(h, window.tag());
+14:         }
+15:         M::DamageFlow { root } => {
+16:             push_u8(h, 84);
+17:             push_u32(h, *root);
+18:         }
+19:         M::TriggerOrder {
+20:             frame,
+21:             owner,
+421:         M::JudgePhase {
+422:             owner,
+423:             queue,
+424:             current,
+425:         } => {
+426:             push_u8(h, 5);
+427:             push_u8(h, *owner);
+428:             push_cards(h, queue);
+429:             match current {
+430:                 None => push_u8(h, 0),
+431:                 Some(c) => {
+432:                     push_u8(h, 1);
+433:                     push_u32(h, c.trick);
+434:                     push_u32(h, c.judge_card);
+435:                     push_players(h, &c.rewriters);
+436:                     push_u8(h, c.asked as u8);
+437:                     push_players(h, &c.tian_du);
+438:                     push_u8(h, c.gained as u8);
+439:                     push_u8(h, c.in_rewrite as u8);
+440:                     // 判定确定/机器持牌标志入哈希：防篡改完整性（N08-d）。
+441:                     push_u8(h, c.finalized as u8);
+442:                     push_u8(h, c.judge_held as u8);
+443:                 }
+444:             }
+445:         }
+446:         M::Noop => push_u8(h, 18),
+447:         M::Aoe {
+448:             card,
+449:             source,
+450:             need,
+451:             targets,
+452:             idx,
+453:             inner,
+454:             nature,
+455:         } => {
+456:             push_u8(h, 6);
+457:             push_u32(h, *card);
+458:             push_u8(h, *source);
+459:             push_u8(h, *need as u8);
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/hash.rs SHA256 102f1f1c68fafff4b93826dd1a86a14f933d45f1f38ec7a1e7871dea767988ea
+900:         push_u8(h, *p);
+901:     }
+902: }
+903: pub(super) fn push_options(h: &mut HashSink, opts: &[ChoiceOption]) {
+904:     push_u32(h, opts.len() as u32);
+905:     for o in opts {
+906:         match o {
+907:             ChoiceOption::Confirm => push_u8(h, 1),
+908:             ChoiceOption::Pass => push_u8(h, 2),
+909:             ChoiceOption::Card(c) => {
+910:                 push_u8(h, 3);
+911:                 push_u32(h, *c);
+912:             }
+913:             ChoiceOption::Player(p) => {
+914:                 push_u8(h, 4);
+915:                 push_u8(h, *p);
+916:             }
+917:             ChoiceOption::Tag(t) => {
+918:                 push_u8(h, 5);
+919:                 push_u8(h, *t);
+920:             }
+921:             ChoiceOption::Skill(s) => { push_u8(h, 7); push_u32(h, u32::from(*s)); }
+922:             ChoiceOption::Kind(k) => {
+923:                 push_u8(h, 6);
+924:                 push_u32(h, u32::from(*k));
+925:             }
+926:         }
+927:     }
+928: }
+929: pub(super) fn push_static(h: &mut HashSink, s: &'static str) {
+930:     push_u32(h, s.len() as u32);
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/choice_source.rs SHA256 aeddb1fcc4e250cea041849ec8988a218c0483bca9eb6234c6ee86b2f2eb9f01
+1: //! Owner-visible ask identity, not a root certificate or permission to resume.
+2: use super::*;
+3: impl Engine {
+4:     pub(super) fn choice_source_skill(
+5:         &self,
+6:         open: &crate::choice::OpenChoice,
+7:     ) -> Option<&'static str> {
+8:         let resolution = &self.state.resolution;
+9:         let consumer = crate::resolution::ready_park_index(resolution)?;
+10:         let mut producer = None;
+11:         for (index, park) in resolution.parks.iter().enumerate() {
+12:             let snapshot = park.machine.snapshot();
+13:             if let Some(ask) = crate::snap::active_ask(&snapshot, &self.state.core, &self.catalog) {
+14:                 if producer.is_some()
+15:                     || ask.observer != open.observer
+16:                     || ask.prompt != open.spec.prompt
+17:                     || ask.kind != open.spec.kind
+18:                     || ask.options != open.spec.options
+19:                     || ask.min != open.spec.min
+20:                     || ask.max != open.spec.max
+21:                     || ask.allow_cancel != open.spec.allow_cancel
+22:                 {
+23:                     return None;
+24:                 }
+25:                 let source =
+26:                     if matches!(snapshot, crate::snap::MachineSnapshot::OptionalGate { .. }) {
+27:                         ask.source_skill
+28:                     } else {
+29:                         None
+30:                     };
+31:                 producer = Some((index, source));
+32:             }
+33:         }
+34:         let (index, source) = producer?;
+35:         if index != consumer {
+36:             return None;
+37:         }
+38:         let name = source?;
+39:         self.view_for(open.observer).players[open.observer as usize]
+40:             .skills
+41:             .contains(&name)
+42:             .then_some(name)
+43:     }
+44: }
+45: 
+46: #[cfg(test)]
+
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native/src/view.rs SHA256 b0e41367f862b128d5d696eb5fe1ed9111fffa16cf4c43b01cd10d61bae6efe6
+90:         id: u64,
+91:         kind: crate::choice::ChoiceKind,
+92:         prompt: &'static str,
+93:         options: Vec<crate::choice::ChoiceOption>,
+94:         min: usize,
+95:         max: usize,
+96:         allow_cancel: bool,
+97:         /// Known native skill producing this exact owner-visible ask.
+98:         source_skill: Option<&'static str>,
+99:     },
+100:     /// 他人/观战者：仅知道询问的存在、观察者与类型，**不含任何选项**。
+101:     Other {
+102:         id: u64,
+103:         observer: PlayerId,
+104:         prompt: &'static str,
+105:     },
+106: }
+107: 
+108: /// 日志事件的座位可见性（N10 第二批）：
+109: /// 摸牌为暗置信息——他人摸到的牌 id 不可见（仅数量）；其余事件公开。
+110: #[derive(Debug, Clone, PartialEq, Eq)]
+111: pub enum EventView {
+112:     /// 公开事件原样。
+113:     Public(crate::machine::LogEvent),
+114:     /// 他人摸牌：牌 id 隐藏，仅数量。
+115:     CardsDrawnHidden { player: PlayerId, count: usize },
+116:     /// 他人的私有选择应答（N10-a）：仅保留询问 id，
+117:     /// 选项内容（含牌/目标 id）对非观察者不透明。
+118:     ChoiceAnsweredHidden { id: u64 },
+119: }
+120: 
+121: impl PlayerView {
+122:     /// 收集视图中出现的全部牌 id（用于信息隔离验收：与隐藏集合求交）。
+123:     pub fn visible_card_ids(&self) -> Vec<CardId> {
+124:         self.cards.iter().map(|card| card.id).collect()
+125:     }
+126: }
+127: 
+128: /// 座位策略（P2/N10，ADR 0772）：类型上只能看到 [`PolicyInput`]——
+129: /// 权威状态入口（`&Engine`）不可达。返回 `None` 表示无动作
+130: /// （驱动器回退为推进阶段）。
+131: pub trait SeatPolicy {
+132:     fn act(&mut self, input: &PolicyInput) -> Option<GameAction>;
+133: }
+134: 
+135: /// AI 只读视角会话（N10）：座位固定的可见性投影入口——
+
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native/src/engine/views.rs SHA256 df6f0895163f614ccb65e994e5686449adbc944fe1cf2fe7b93b7a9583d6e3d2
+125:     pub fn choice_view_for(&self, seat: Option<PlayerId>) -> Option<crate::view::ChoiceView> {
+126:         self.build_choice_view(seat, false)
+127:     }
+128: 
+129:     /// Trusted referee sees the current choice without becoming its owner.
+130:     pub fn choice_view_referee(&self) -> Option<crate::view::ChoiceView> {
+131:         self.build_choice_view(None, true)
+132:     }
+133: 
+134:     fn build_choice_view(&self, seat: Option<PlayerId>, full_info: bool) -> Option<crate::view::ChoiceView> {
+135:         let open = self.state.resolution.open_choice.as_ref()?;
+136:         Some(if full_info || seat == Some(open.observer) {
+137:             crate::view::ChoiceView::Own {
+138:                 id: open.id,
+139:                 kind: open.spec.kind,
+140:                 prompt: open.spec.prompt,
+141:                 options: open.spec.options.clone(),
+142:                 min: open.spec.min,
+143:                 max: open.spec.max,
+144:                 allow_cancel: open.spec.allow_cancel,
+145:                 source_skill: self.choice_source_skill(open),
+146:             }
+147:         } else {
+148:             crate::view::ChoiceView::Other {
+149:                 id: open.id,
+150:                 observer: open.observer,
+151:                 prompt: open.spec.prompt,
+152:             }
+153:         })
+154:     }
+155: 
+156:     /// N10 第二批：日志事件的座位可见性——他人摸牌仅数量（牌 id 隐藏），
+157:     /// 其余事件公开；自己的摸牌完整可见。
+158:     pub fn event_view_for(&self, seat: PlayerId) -> Vec<crate::view::EventView> {
+159:         // N10-a（ADR 0768）：私有选择应答仅观察者可见——沿日志维护
+160:         // 询问 id → 观察者映射，非观察者收到内容不透明的脱敏事件。
+161:         let mut choice_observers: std::collections::HashMap<u64, PlayerId> =
+162:             std::collections::HashMap::new();
+163:         self.log
+164:             .iter()
+165:             .filter_map(|l| match l {
+166:                 crate::machine::LogEvent::CardsDrawn { player, cards } if *player != seat => {
+167:                     Some(crate::view::EventView::CardsDrawnHidden {
+168:                         player: *player,
+169:                         count: cards.len(),
+170:                     })
+171:                 }
+172:                 crate::machine::LogEvent::ChoiceOpened { id, observer, .. } => {
+173:                     choice_observers.insert(*id, *observer);
+174:                     Some(crate::view::EventView::Public(l.clone()))
+175:                 }
+176:                 crate::machine::LogEvent::ChoiceAnswered { id, .. } => {
+177:                     match choice_observers.get(id) {
+178:                         Some(&observer) if observer == seat => {
+179:                             Some(crate::view::EventView::Public(l.clone()))
+180:                         }
+181:                         _ => Some(crate::view::EventView::ChoiceAnsweredHidden { id: *id }),
+182:                     }
+183:                 }
+184:                 other => Some(crate::view::EventView::Public(other.clone())),
+185:             })
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/apply_command.rs SHA256 961d4db71ecfd21b560961e21951b5203e7a07d49722f2d5fcb56dc7b8b6dff4
+106:                 resume_depth: state.resolution.stack.len(),
+107:                 slot: crate::resolution::Slot::Intrinsic {
+108:                     frame: crate::resolution::NO_FRAME,
+109:                 },
+110:                 machine,
+111:             });
+112:             Ok(())
+113:         }
+114:         GameAction::Answer {
+115:             choice_id,
+116:             selection,
+117:         }
+118:         | GameAction::TimeoutAction {
+119:             choice_id,
+120:             selection,
+121:         } => {
+122:             let Some(open) = state.resolution.open_choice.as_ref() else {
+123:                 return Err(RejectReason::NoSuchChoice);
+124:             };
+125:             if open.id != choice_id {
+126:                 return Err(RejectReason::NoSuchChoice);
+127:             }
+128:             // 授权：只有选择观察者本人可以应答（不能替别人决策）。
+129:             if actor != open.observer {
+130:                 return Err(RejectReason::WrongPlayer);
+131:             }
+132:             if !open.spec.accepts(&selection) {
+133:                 return Err(RejectReason::InvalidChoice);
+134:             }
+135:             let open = state.resolution.open_choice.take().expect("checked");
+136:             log.push(LogEvent::ChoiceAnswered {
+137:                 id: open.id,
+138:                 options: selection.iter().map(|o| o.describe()).collect(),
+
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native-kernel/src/state/core_ops.rs SHA256 15a4e9c0507d6abaa3763dcbebd59254ce14a86bb6f08477f68c66138f562822
+49:         match &self.mode {
+50:             GameMode::Boss {
+51:                 boss, chongzheng, ..
+52:             } => Some((*boss, *chongzheng)),
+53:             _ => None,
+54:         }
+55:     }
+56: 
+57:     /// Boss 模式阵营：boss 座位与助战 fellow 为 boss 方，其余为挑战者
+58:     /// 方（非 Boss 模式一律 false——神恩光环仅 Boss 场生效）。
+59:     pub fn is_boss_side(&self, p: PlayerId) -> bool {
+60:         match &self.mode {
+61:             GameMode::Boss { boss, fellows, .. } => p == *boss || fellows.contains(&p),
+62:             _ => false,
+63:         }
+64:     }
+65: 
+66:     /// Boss 模式助战座位表（非 Boss 为 None）。
+67:     pub fn boss_fellows(&self) -> Option<&[PlayerId]> {
+68:         match &self.mode {
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-content/src/content/standard/native_damage.rs SHA256 cdca4fbd165d6a828022e30f27e19cec68eeb7c9fc7e4cdc91f073c2c6fe86f6
+1: //! Native declarations enter the ordinary source-window competition.
+2: use super::*;
+3: use crate::event::NativeDamageEffect;
+4: pub(super) struct NativeDamageBehavior {
+5:     pub name: &'static str,
+6:     pub effects: &'static [NativeDamageEffect],
+7: }
+8: impl SkillBehavior for NativeDamageBehavior {
+9:     fn native_damage_effect(&self, kind: EventKind) -> Option<NativeDamageEffect> {
+10:         self.effects
+11:             .iter()
+12:             .copied()
+13:             .find(|e| e.window().event_kind() == kind)
+14:     }
+15:     fn filter(&self, _ctx: &QueryCtx<'_>, _owner: PlayerId, _event: &EventData) -> bool {
+16:         false
+17:     }
+18:     fn filter_in_window(
+19:         &self,
+20:         ctx: &QueryCtx<'_>,
+21:         owner: PlayerId,
+22:         event: &EventData,
+23:         kind: EventKind,
+24:     ) -> bool {
+25:         matches!(event, EventData::Damage(d) if self.native_damage_effect(kind).is_some_and(|effect|effect.matches(owner,d,ctx,None)))
+26:     }
+27:     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+28:         NoopBehavior.start(owner, event)
+29:     }
+30:     fn start_in_window(
+31:         &self,
+32:         ctx: &QueryCtx<'_>,
+33:         owner: PlayerId,
+34:         _event: &EventData,
+35:         kind: EventKind,
+36:     ) -> Box<dyn SkillMachine> {
+37:         Box::new(crate::kernel::NativeDamageSkill {
+38:             owner,
+39:             def: ctx
+40:                 .catalog
+41:                 .skill_by_name(self.name)
+42:                 .expect("immutable declaration"),
+43:             window: self
+44:                 .native_damage_effect(kind)
+45:                 .expect("declared window")
+46:                 .window(),
+47:         })
+48:     }
+49: }
+50: pub(super) fn configure(skills: &mut Vec<SkillDef>) {
+51:     use NativeDamageEffect as E;
+52:     for skill in skills.iter_mut() {
+53:         let effects: &'static [E] = match skill.name {
+54:             JUE_QING => &[E::Jueqing],
+55:             BOSS_WUXIN => &[E::Wuxin],
+56:             BOSS_ZUIJIU => &[E::Zuijiu],
+57:             BOSS_HUOSHEN => &[E::Huoshen],
+58:             BOSS_NITAI => &[E::NitaiOut, E::NitaiIn],
+59:             BOSS_ZHAOHUO => &[E::ZhaohuoSource, E::Zhaohuo],
+60:             BOSS_BUFO => &[E::Bufo],
+61:             BOSS_LINGQU => &[E::Lingqu, E::LingquCancel],
+62:             BOSS_YINZEI => &[E::Yinzei],
+63:             BOSS_ZHANGWU => &[E::Zhangwu],
+64:             BOSS_ZLFANSHI => &[E::Zlfanshi],
+65:             BOSS_ZHUE => &[E::Zhue],
+66:             BOSS_ABI => &[E::Abi],
+67:             BOSS_YUANCE => &[E::Yuance],
+68:             BOSS_JIDING => &[E::Jiding],
+69:             BOSS_RENXING => &[E::Renxing],
+70:             BOSS_CUIDUI => &[E::Cuidui],
+71:             BOSS_DUQU => &[E::Duqu],
+72:             BOSS_JIDIAN => &[E::Jidian],
+73:             BOSS_MINWAN => &[E::Minwan],
+74:             _ => continue,
+75:         };
+76:         let mut meta = effects[0].meta();
+77:         meta.extra_events = effects[1..]
+78:             .iter()
+79:             .map(|e| e.window().event_kind())
+80:             .collect();
+81:         skill.trigger = Some(meta);
+82:         skill.behavior = Box::new(NativeDamageBehavior {
+83:             name: skill.name,
+84:             effects,
+85:         });
+86:     }
+87:     {
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-content/src/content/host.rs SHA256 38e1c21ad13847bdfd600ad2f99fc94165f12ae93335b1a9638f398818e18f94
+140: impl SkillBehavior for HostSkillBehavior {
+141:     fn native_damage_effect(
+142:         &self,
+143:         kind: crate::event::EventKind,
+144:     ) -> Option<crate::event::NativeDamageEffect> {
+145:         crate::event::NativeDamageEffect::from_host(self.behavior)
+146:             .filter(|e| e.window().event_kind() == kind)
+147:     }
+148:     fn filter_in_window(
+149:         &self,
+150:         ctx: &QueryCtx<'_>,
+151:         owner: PlayerId,
+152:         event: &EventData,
+153:         kind: crate::event::EventKind,
+154:     ) -> bool {
+155:         if let Some(effect) = self.native_damage_effect(kind) {
+156:             return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx,None));
+157:         }
+158:         self.filter(ctx, owner, event)
+159:     }
+160:     fn start_in_window(
+161:         &self,
+162:         ctx: &QueryCtx<'_>,
+163:         owner: PlayerId,
+164:         event: &EventData,
+165:         kind: crate::event::EventKind,
+166:     ) -> Box<dyn crate::catalog::SkillMachine> {
+167:         if let Some(effect) = self.native_damage_effect(kind) {
+168:             return Box::new(crate::kernel::NativeDamageSkill {
+169:                 owner,
+170:                 def: ctx
+171:                     .catalog
+172:                     .skill_by_name(&self.name)
+173:                     .expect("host declaration"),
+174:                 window: effect.window(),
+175:             });
+176:         }
+177:         self.start(owner, event)
+178:     }
+179: 
+180:     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
+181:         self.filter_behavior(ctx, owner, event)
+182:     }
+183:     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn crate::catalog::SkillMachine> {
+184:         Box::new(self.machine(owner, event))
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-content/src/content/standard/boss_skills.rs SHA256 e39cd5e8fc43674f1c841524867d341da7866d2c1f121e985e47fe271a6180ff
+422:         SkillDef {
+423:             name: BOSS_JIDING,
+424:             // 查询型单面：damageEnd 臂（友方受伤→对敌方来源虚拟雷杀，
+425:             // LeiSha kind 载体；蓐收加成尾面登记差异）
+426:             trigger: None,
+427:             limits: SkillLimits::default(),
+428:             behavior: Box::new(NoopBehavior),
+429:         },
+430:         SkillDef {
+649:             name: BOSS_YUANCE,
+650:             // 查询型单面：Damage commit 尾臂——来源≠受伤者且双方存活 →
+651:             // 判定（选项一恒定：黑→受伤者失 1 / 红→来源失 1；chooseControl
+652:             // AI 态度面→恒选项一确定性近似登记）
+653:             trigger: None,
+654:             limits: SkillLimits::default(),
+655:             behavior: Box::new(NoopBehavior),
+656:         },
+657:         SkillDef {
+658:             name: BOSS_QIZUO,
+659:             // CardUsed AfterTriggers 触发：锦囊复用一步机（QizuoBehavior
+660:             // 门=无懈/铁索排除+延时同名去重+原目标存活；载体槽守卫递归）
+800:             trigger: None,
+801:             limits: SkillLimits::default(),
+802:             behavior: Box::new(NoopBehavior),
+803:         },
+804:         SkillDef {
+805:             name: BOSS_TIANDAO,
+806:             // 查询型单面：改判机 rewriters 扩展（hes 任意牌改判+获得原判
+807:             // 定牌）——JudgePhase 机器内联，无独立触发
+808:             trigger: None,
+809:             limits: SkillLimits::default(),
+810:             behavior: Box::new(NoopBehavior),
+811:         },
+812:         SkillDef {
+813:             name: BOSS_ZJLEIJI,
+814:             // CardResponded+CardUsed 触发：打出/使用【闪】后一步机（首个
+815:             // 其他存活判定黑→1 雷伤+摸 1）
+816:             trigger: Some(TriggerMeta {
+817:                 event: EventKind::CardResponded,
+818:                 timing: Timing::Normal,
+819:                 priority: 0,
+820:                 order_selectable: true,
+821:                 optional: false,
+822:                 extra_events: vec![EventKind::CardUsed],
+823:             }),
+824:             limits: SkillLimits::default(),
+825:             behavior: Box::new(ZjLeijiBehavior),
+826:         },
+827:         SkillDef {
+828:             name: BOSS_JIDIAN,
+829:             // 查询型单面：Damage commit 尾臂——距受伤者 ≤1 的首个其他存
+830:             // 活判定黑→1 雷伤（链挡旗标不自我递归=登记差异）
+831:             trigger: None,
+832:             limits: SkillLimits::default(),
+833:             behavior: Box::new(NoopBehavior),
+834:         },
+835:         SkillDef {
+836:             name: BOSS_ZHIWANG,
+837:             // 查询型单面：CardsMoved commit 臂——其他角色获得牌（非摸牌
+838:             // 阶段摸牌，CardsDrawn 天然隔离）→其弃首张手牌
+839:             trigger: None,
+840:             limits: SkillLimits::default(),
+841:             behavior: Box::new(NoopBehavior),
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/kernel/intrinsic.rs SHA256 13c5bfbabf7cb3e1b6f32e542def8c2820fa5ec4a005d1b5ed2e8323b87057db
+1: use super::*;
+2: 
+3: /// 帧固有流程机器（`Intrinsic` 阶段启动）。
+4: pub fn intrinsic_machine(
+5:     ctx: &mut Ctx<'_>,
+6:     frame_id: EventId,
+7: ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+8:     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
+9:     match data {
+10:         EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
+11:         EventData::LoseHp { .. } => None,
+12:         EventData::DyingSaved { .. } => None,
+13:         EventData::Dying { player, source } => Some(Box::new(DyingSaveMachine {
+14:             dying: player,
+15:             source,
+16:             responders: ctx.core.seat_order_from(ctx.core.turn.current),
+17:             asked: false,
+18:             round_used: false,
+19:             guihan_asked: false,
+20:         })),
+21:         EventData::CardUsed(u) => {
+22:             // 筑城守卫（U07 批三，规则 v113）等 AfterTriggers 机器写回的
+23:             // 取消：跳过结算（杀已由守卫归还手牌）
+24:             if u.cancelled {
+25:                 return None;
+26:             }
+27:             let effective_kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+28:             // 目标被结算窗全部移出（贞烈等「移出目标」类，swd 批 139）：
+29:             // 需要「恰一名目标」的牌种在目标清空后不结算（避免机器对
+30:             // 空目标越界）；无目标/群体牌种照常（其机器自行处理空列表）
+31:             if u.targets.is_empty()
+32:                 && matches!(
+33:                     effective_kind,
+34:                     CardKind::Sha
+35:                         | CardKind::FireSha
+36:                         | CardKind::LeiSha
+37:                         | CardKind::Duel
+38:                         | CardKind::Dismantle
+39:                         | CardKind::Snatch
+40:                         | CardKind::Le
+41:                         | CardKind::Bing
+42:                         | CardKind::Jiedao
+43:                         | CardKind::Chain
+44:                 )
+45:             {
+46:                 return None;
+47:             }
+48:             // 内容卡牌（G1 宿主牌等）的固有结算机器由内容层提供（目录回调）；
+49:             // 内容牌种与下方内核牌种互斥，且均无 aoe_need，先问内容层不改变分派结果。
+50:             if let Some(machine) = (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind) {
+51:                 return machine;
+52:             }
+53:             match effective_kind {
+54:                 CardKind::Dismantle => {
+55:                     let effect = DismantleMachine {
+56:                         card: u.card,
+57:                         source: u.player,
+58:                         target: *u.targets.first().expect("dismantle has one target"),
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/tests/a0_tag_registry.rs SHA256 a3578a71d797e805c2298d1aa252a7d2a14780b75009adf4e3ae990dc34d15e5
+1: //! A0 注册表不变量检查（演进提案 §3.A0 第 1/4 点，挂靠主稿 P0 N11）。
+2: //!
+3: //! 1. `MachineSnapshot` 每个变体构造样例，字节编码后机器 tag 互不相同，
+4: //!    且编码→解码往返相等。变体清单经 `variant_index` 的 match 穷尽性
+5: //!    锁定：新增变体而漏登记样例时编译失败；tag 冲突/漏 tag 时本测试
+6: //!    失败（历史实例：tag 29 曾同时分配给 Dismantle 与 XiaoJi，枭姬分支
+7: //!    不可达，2026-09-24 修复为 XiaoJi=43）。
+8: //! 2. `HostBehavior::tag()` 全变体唯一（标签与键一一对应）。
+9: //! 3. `CardKind` 编码双射（archive.rs 的 `card_kind_to_num`/`num_to_card_kind`
+10: //!    为私有函数，双射以本文件同轮的静态核查记录进证据，不在此重复）。
+11: //! 4. 扩展包数据键表（ADR 0778）：`CardKind::key`、`HostBehavior::key` 双射，
+12: //!    牌种伴随技能表键唯一且覆盖固有装备技。
+13: 
+14: use std::collections::BTreeMap;
+15: 
+16: use engine_native::archive::{decode_archive, encode_archive};
+17: use engine_native::content::host::HostBehavior;
+18: use engine_native::event::{DamageData, DamageNature, EventData};
+19: use engine_native::resolution::Slot;
+20: use engine_native::snap::{
+21:     FanJianStageSnap, GuanXingStageSnap, JiJiStageSnap, JieYinStageSnap, JijiangStageSnap,
+22:     JudgementProgressSnap, KuRouStageSnap, LiJianStageSnap, MachineSnapshot, ParkSnapshot,
+23:     QingNangStageSnap, RendeStageSnap, SanCaiStageSnap, StateSnapshot, TuXiStageSnap,
+24:     YiShangStageSnap, ZhiHengStageSnap,
+25: };
+26: use engine_native::{Engine, SkillDefId};
+27: 
+28: /// 每变体一个样例（名称仅用于报错）。字段取最小合法值，嵌套 inner 用
+29: /// `Some(Box::new(Noop))` 验证嵌套编码；OptionalGate 的事件载荷用伤害。
+30: fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+31:     let damage = EventData::Damage(DamageData {
+32:         settlement: Default::default(),
+33:         source: Some(1),
+34:         target: 0,
+35:         amount: 1,
+36:         nature: DamageNature::Normal,
+37:         prevented: false,
+38:         redirect_chain: Vec::new(),
+39:         card: None,
+40:         from_chain: false,
+41:     });
+42:     vec![
+43:         ("DamageFlow", MachineSnapshot::DamageFlow { root: 1 }),
+44:         (
+45:             "NativeDamageSkill",
+46:             MachineSnapshot::NativeDamageSkill {
+47:                 owner: 0,
+48:                 def: 0,
+49:                 window: engine_native::event::DamageWindowKind::Before,
+50:             },
+51:         ),
+52:         (
+53:             "Sha",
+54:             MachineSnapshot::Sha {
+55:                 card: 1,
+56:                 source: 0,
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/game-server/src/native_view.rs SHA256 f6baf8667a67f6e6d8b6b2e48af8e791e4c7b766161c384c1ee0893ffdb0fbfe
+265:         options,
+266:         min,
+267:         max,
+268:         allow_cancel,
+269:         prompt,
+270:         source_skill,
+271:     } = view
+272:     else {
+273:         return None;
+274:     };
+275:     let observer = ApiPlayerId::new(engine.open_choice()?.observer as u32 + 1);
+276:     // 协议 `ChoiceOption` 是 `{token, label_key}` 二元组（token 即 ResolveChoice 的
+277:     // 选择值；label_key 只用于本地化/显示，不参与规则）。token 与原生选项一一对应：
+278:     // 使用**候选下标**（与前端适配层/`answer()` 同口径），label_key 保留语义标签。
+279:     let options: Vec<engine_api::ChoiceOption> = options
+280:         .iter()
+281:         .enumerate()
+282:         .map(|(idx, opt)| engine_api::ChoiceOption {
+283:             token: idx as u32,
+284:             label_key: match opt {
+285:                 engine_native::ChoiceOption::Confirm => "confirm".to_string(),
+286:                 engine_native::ChoiceOption::Pass => "pass".to_string(),
+287:                 engine_native::ChoiceOption::Card(c) => format!("card:{c}"),
+288:                 engine_native::ChoiceOption::Player(p) => format!("player:{}", *p as u32 + 1),
+289:                 engine_native::ChoiceOption::Tag(t) => format!("tag:{t}"),
+290:                 engine_native::ChoiceOption::Skill(s) => format!("skill:{}", engine.catalog().skill_name(*s)),
+291:                 engine_native::ChoiceOption::Kind(k) => format!("kind:{k}"),
+292:             },
+293:         })
+294:         .collect();
+295:     Some(engine_api::ChoiceRequest {
+296:         choice_id: engine_api::ChoiceId::new(id as u32),
+297:         observer,
+298:         options,
+299:         continuation_id: id,
+300:         kind: if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+301:         native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
+302:         source_skill: source_skill.map(str::to_owned),
+303:         prompt: Some(prompt.to_owned()),
+304:         min_count: min as u8,
+305:         max_count: max as u8,
+306:         allow_cancel,
+307:         timeout_policy: engine_api::TimeoutPolicy::None,
+308:         deadline_unix_ms: None,
+309:         revision: engine.revision(),
+
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-wasm/src/session.rs SHA256 f71a7d9dd4d12d993559948bdbdc3f3a471a7b4216204a8d5a9d834dfe47c8f6
+425:             }) => {
+426:                 let mut choice = serde_json::json!({
+427:                 "id": id,
+428:                 "observer": seat,
+429:                 "prompt": prompt,
+430:                 "native_kind": engine_native::view::choice_kind_name(kind),
+431:                 "kind": if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+432:                 "min": min,
+433:                 "max": max,
+434:                 "allowCancel": allow_cancel,
+435:                 "options": options.iter().map(|o| match o {
+436:                     engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
+437:                     engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
+438:                     engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
+439:                     engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
+440:                     engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
+441:                     engine_native::ChoiceOption::Skill(s) => serde_json::json!({ "skill": self.inner.catalog().skill_name(*s) }),
+442:                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
+443:                 }).collect::<Vec<_>>(),
+444:                 });
+445:                 if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
+446:                 choice.to_string()
+447:             },
+448:             Some(ChoiceView::Other {
+449:                 id,
+450:                 observer,
+451:                 prompt,
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js
+4439: 			qinglonglingzhu:{
+4440: 				trigger:{source:'damageEnd'},
+4441: 				direct:true,
+4442: 				filter:function(event,player){
+4443: 					if(event._notrigger.contains(event.player)) return false;
+4444: 					return event.nature&&event.player&&event.player.isAlive();
+4445: 				},
+4446: 				content:function(){
+4447: 					player.gainPlayerCard(get.prompt('qinglonglingzhu',trigger.player),trigger.player,function(button){
+4448: 						if(get.attitude(player,trigger.player)<=0){
+4449: 							return get.buttonValue(button);
+4450: 						}
+4451: 						return 0;
+4452: 					},'he').logSkill=['qinglonglingzhu',trigger.player];
+4453: 				},
+4454: 			},
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/mode/boss.js
+4546: 			boss_jiding:{
+4547: 				trigger:{global:'damageEnd'},
+4548: 				forced:true,
+4549: 				mark:true,
+4550: 				intro:{
+4551: 					content:'info'
+4552: 				},
+4553: 				filter:function(event,player){
+4554: 					return event.player!=player&&event.player.isFriendOf(player)&&
+4555: 						event.source&&event.source.isIn()&&event.source.isEnemyOf(player);
+4556: 				},
+4557: 				logTarget:'source',
+4558: 				content:function(){
+4559: 					'step 0'
+4560: 					player.useCard({name:'sha',nature:'thunder'},trigger.source);
+4561: 					'step 1'
+4562: 					player.removeSkill('boss_jiding');
+4563: 				},
+4564: 				group:'boss_jiding_recover',
+4565: 				subSkill:{
+4566: 					recover:{
+4567: 						trigger:{source:'damageEnd'},
+4568: 						silent:true,
+4569: 						filter:function(event,player){
+4570: 							return event.getParent(3).name=='boss_jiding';
+4571: 						},
+4572: 						content:function(){
+4573: 							for(var i=0;i<game.players.length;i++){
+4574: 								if(game.players[i].name=='boss_jinshenrushou'){
+4575: 									game.players[i].recover();
+4576: 									player.line(game.players[i],'green');
+4577: 								}
+4578: 							}
+4579: 						}
+4580: 					}
+4581: 				}
+4582: 			},
+6392: 			boss_yuance:{
+6393: 				trigger:{global:'damageEnd'},
+6394: 				filter:function(event){
+6395: 					return event.source&&event.source!=event.player&&event.source.isAlive()&&event.player.isAlive();
+6396: 				},
+6397: 				direct:true,
+6398: 				content:function(){
+6399: 					'step 0'
+6400: 					var att1=get.attitude(player,trigger.player);
+6401: 					var att2=get.attitude(player,trigger.source);
+6402: 					var targets=player.getEnemies();
+6403: 					var stop=false;
+6404: 					for(var i=0;i<targets.length;i++){
+6405: 						var skills=targets[i].getSkills();
+6406: 						for(var j=0;j<skills.length;j++){
+6407: 							if(get.tag(skills[j],'rejudge',targets[i])){
+6408: 								stop=true;break;
+6409: 							}
+6410: 						}
+6411: 					}
+6412: 					var rand=Math.random()<0.5?'选项一':'选项二';
+6413: 					var sourcename=get.translation(trigger.source);
+6414: 					var playername=get.translation(trigger.player);
+6415: 					player.chooseControl('选项一','选项二','cancel2',function(){
+6416: 						if(att1==0&&att2==0) return rand;
+6417: 						if(att1*att2>=0){
+6418: 							if(att1+att2>0){
+6419: 								return '选项二';
+6420: 							}
+6421: 							else{
+6422: 								return '选项一';
+6423: 							}
+6424: 						}
+6425: 						else{
+6426: 							if(trigger.player.isHealthy()&&trigger.source.isHealthy()) return rand;
+6427: 							if(trigger.player.isHealthy()){
+6428: 								if(att1<0) return '选项二';
+6429: 								if(att1>0&&!stop) return '选项一';
+6430: 							}
+6431: 							if(trigger.source.isHealthy()){
+6432: 								if(att2<0) return '选项二';
+6433: 								if(att2>0&&!stop) return '选项一';
+6434: 							}
+6435: 							if(stop) return 'cancel2';
+6436: 							return rand;
+6437: 						}
+6438: 					}).set('prompt',get.prompt('boss_yuance')).set('choiceList',[
+6439: 						'若判定结果为黑色，'+playername+'失去一点体力，否则'+sourcename+'失去一点体力',
+6440: 						'若判定结果为红色，'+playername+'回复一点体力，否则'+sourcename+'回复一点体力'
+6441: 					]);
+6442: 					'step 1'
+6443: 					var att1=get.attitude(player,trigger.player);
+6444: 					var att2=get.attitude(player,trigger.source);
+6445: 					if(result.control=='选项一'){
+6446: 						event.type=1;
+6447: 						player.judge(function(card){
+6448: 							if(get.color(card)=='black'){
+6449: 								if(att1>0) return -1;
+6450: 								if(att1<0) return 1;
+6451: 							}
+6452: 							else{
+6453: 								if(att2>0) return -1;
+6454: 								if(att2<0) return 1;
+6455: 							}
+6456: 							return 0;
+6457: 						});
+6458: 					}
+6459: 					else if(result.control=='选项二'){
+6460: 						event.type=2;
+6461: 						player.judge(function(card){
+6462: 							if(get.color(card)=='red'){
+6463: 								if(trigger.player.isDamaged()){
+6464: 									if(att1>0) return 1;
+6465: 									if(att1<0) return -1;
+6466: 								}
+6467: 							}
+6468: 							else{
+6469: 								if(trigger.source.isDamaged()){
+6470: 									if(att2>0) return 1;
+6471: 									if(att2<0) return -1;
+6472: 								}
+6473: 							}
+6474: 							return 0;
+6475: 						});
+6476: 					}
+6477: 					else{
+6478: 						event.finish();
+6479: 					}
+6480: 					'step 2'
+6481: 					if(event.type==1){
+6482: 						if(result.color=='black'){
+6483: 							trigger.player.loseHp();
+6484: 						}
+6485: 						else{
+6486: 							trigger.source.loseHp();
+6487: 						}
+6488: 					}
+6489: 					else{
+6490: 						if(result.color=='red'){
+6491: 							trigger.player.recover();
+6492: 						}
+6493: 						else{
+6494: 							trigger.source.recover();
+6495: 						}
+6496: 					}
+6497: 				}
+6498: 			},
+6499: 			boss_guixin:{
+6500: 				trigger:{global:'drawAfter'},
+6596: 			boss_zhangwu:{
+6597: 				global:'boss_zhangwu_ai',
+6598: 				trigger:{player:'damageEnd'},
+6599: 				check:function(event,player){
+6600: 					return event.source&&event.source.isIn()&&get.damageEffect(event.source,player,player)>0;
+6601: 				},
+6602: 				filter:function(event){
+6603: 					return event.source&&event.source.isAlive();
+6604: 				},
+6605: 				direct:true,
+6606: 				logTarget:'source',
+6607: 				content:function(){
+6608: 					'step 0'
+6609: 					player.chooseToDiscard(get.prompt('boss_zhangwu',trigger.source),'he',[1,Infinity]).set('ai',function(card){
+6610: 						if(get.attitude(player,target)<0) return 8-get.value(card);
+6611: 						return 0;
+6612: 					}).set('logSkill',['boss_zhangwu',trigger.source]);
+6613: 					'step 1'
+6614: 					if(result.bool){
+6615: 						var num=result.cards.length;
+6616: 						var cnum=get.cnNumber(num);
+6617: 						event.num=num;
+6618: 						trigger.source.chooseToDiscard('he','章武：弃置'+cnum+'张牌，或取消并受到'+cnum+'点伤害',num).set('ai',function(card){
+6619: 							if(!trigger.source.hasSkillTag('nodamage')) return 10-get.value(card);
+6620: 							return 0;
+6621: 						});
+6622: 					}
+6623: 					else{
+6624: 						event.finish();
+6625: 					}
+6626: 					'step 2'
+6627: 					if(!result.bool){
+6628: 						trigger.source.damage(event.num);
+6629: 					}
+6630: 				},
+6631: 				ai:{
+6632: 					maixie:true,
+6633: 					maixie_hp:true,
+6634: 					effect:{
+6635: 						target:function(card,player,target){
+6636: 							if(get.tag(card,'damage')&&get.attitude(target,player)<0&&player.countCards('he')<target.countCards('he')){
+6637: 								return [0,2];
+6638: 							}
+6639: 						}
+6640: 					}
+6641: 				}
+6642: 			},
+6643: 			boss_zhangwu_ai:{
+6644: 				ai:{
+6912: 			tiandao:{
+6913: 				audio:true,
+6914: 				trigger:{global:'judge'},
+6915: 				direct:true,
+6916: 				filter:function(event,player){
+6917: 					return player.countCards('he')>0;
+6918: 				},
+6919: 				content:function(){
+6920: 					"step 0"
+6921: 					player.chooseCard(get.translation(trigger.player)+'的'+(trigger.judgestr||'')+'判定为'+
+6922: 					get.translation(trigger.player.judging[0])+'，'+get.prompt('tiandao'),'he').ai=function(card){
+6923: 						var trigger=_status.event.parent._trigger;
+6924: 						var player=_status.event.player;
+6925: 						var result=trigger.judge(card)-trigger.judge(trigger.player.judging[0]);
+6926: 						var attitude=get.attitude(player,trigger.player);
+6927: 						if(attitude==0||result==0) return 0;
+6928: 						if(attitude>0){
+6929: 							return result;
+6930: 						}
+6931: 						else{
+6932: 							return -result;
+6933: 						}
+6934: 					};
+6935: 					"step 1"
+6936: 					if(result.bool){
+6937: 						player.respond(result.cards,'highlight');
+6938: 					}
+6939: 					else{
+6940: 						event.finish();
+6941: 					}
+6942: 					"step 2"
+6943: 					if(result.bool){
+6944: 						player.logSkill('tiandao');
+6945: 						player.$gain2(trigger.player.judging[0]);
+6946: 						player.gain(trigger.player.judging[0]);
+6947: 						trigger.player.judging[0]=result.cards[0];
+6948: 						trigger.position.appendChild(result.cards[0]);
+6949: 						game.log(trigger.player,'的判定牌改为',result.cards[0]);
+6950: 					}
+6951: 					"step 3"
+6952: 					game.delay(2);
+6953: 				},
+6954: 				ai:{
+6955: 					tag:{
+6956: 						rejudge:1
+6957: 					},
+6958: 					threaten:1.5
+6959: 				}
+6960: 			},
+8275: 			jidian:{
+8276: 				audio:2,
+8277: 				trigger:{source:'damageAfter'},
+8278: 				direct:true,
+8279: 				unique:true,
+8280: 				content:function(){
+8281: 					"step 0"
+8282: 					player.chooseTarget(get.prompt('jidian'),function(card,player,target){
+8283: 						return get.distance(trigger.player,target)<=1&&trigger.player!=target;
+8284: 					}).ai=function(target){
+8285: 						return get.damageEffect(target,player,player,'thunder')+0.1;
+8286: 					}
+8287: 					"step 1"
+8288: 					if(result.bool){
+8289: 						event.target=result.targets[0];
+8290: 						event.target.judge(function(card){
+8291: 							return get.color(card)=='red'?0:-1;
+8292: 						})
+8293: 						player.logSkill('jidian',event.target,false);
+8294: 						trigger.player.line(event.target,'thunder');
+8295: 					}
+8296: 					else{
+8297: 						event.finish();
+8298: 					}
+8299: 					"step 2"
+8300: 					if(result.color=='black'){
+8301: 						event.target.damage('thunder');
+8302: 					}
+8303: 				}
+8304: 			},
+8305: 			tinqin:{
+8306: 				audio:false,
+8307: 				inherit:'manjuan'
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js
+18710: 				gainPlayerCard:function(){
+18711: 					"step 0"
+18712: 					if(event.directresult){
+18713: 						event.result={
+18714: 							buttons:[],
+18715: 							cards:event.directresult.slice(0),
+18716: 							links:event.directresult.slice(0),
+18717: 							targets:[],
+18718: 							confirm:'ok',
+18719: 							bool:true
+18720: 						};
+18721: 						event.cards=event.directresult.slice(0);
+18722: 						event.goto(2);
+18723: 						return;
+18724: 					}
+18725: 					if(!event.dialog) event.dialog=ui.create.dialog('hidden');
+18726: 					else if(!event.isMine()){
+18727: 						event.dialog.style.display='none';
+18728: 					}
+18729: 					if(event.prompt==undefined){
+18730: 						var str='获得'+get.translation(target);
+18731: 						var range=get.select(event.selectButton);
+18732: 						if(range[0]==range[1]) str+=get.cnNumber(range[0]);
+18733: 						else if(range[1]==Infinity) str+='至少'+get.cnNumber(range[0]);
+18734: 						else str+=get.cnNumber(range[0])+'至'+get.cnNumber(range[1]);
+18735: 						str+='张';
+18736: 						if(event.position=='h'||event.position==undefined) str+='手';
+18737: 						if(event.position=='e') str+='装备';
+18738: 						str+='牌';
+18739: 						event.prompt=str;
+18740: 					}
+18741: 					if(event.prompt){
+18742: 						event.dialog.add(event.prompt);
+18743: 					}
+18744: 					if(event.prompt2){
+18745: 						event.dialog.addText(event.prompt2);
+18746: 					}
+18747: 					var expand_length=0;
+18748: 					var directh=(!lib.config.unauto_choose&&!event.complexSelect);
+18749: 					for(var i=0;i<event.position.length;i++){
+18750: 						if(event.position[i]=='h'){
+18751: 							var hs=target.getGainableCards(player,'h');
+18752: 							if(hs.length){
+18753: 								expand_length+=Math.ceil(hs.length/6);
+18754: 								var title=event.dialog.add('<div class="text center" style="margin: 0px;">手牌区</div>');
+18755: 								title.style.margin='0px';
+18756: 								title.style.padding='0px';
+18757: 								hs.randomSort();
+18758: 								if(event.visible||target.isUnderControl(true)||player.hasSkillTag('viewHandcard',null,target,true)){
+18759: 									event.dialog.add(hs);
+18760: 									directh=false;
+18761: 								}
+18762: 								else{
+18763: 									var shown=hs.filter(card=>get.is.shownCard(card));
+18764: 									if(shown.length){
+18765: 										var hidden=hs.filter(card=>!shown.includes(card));
+18766: 										var buttons=ui.create.div('.buttons',event.dialog.content);
+18767: 										event.dialog.buttons=event.dialog.buttons.concat(ui.create.buttons(shown,'card',buttons));
+18768: 										event.dialog.buttons=event.dialog.buttons.concat(ui.create.buttons(hidden,'blank',buttons));
+18769: 										if(event.dialog.forcebutton!==false) event.dialog.forcebutton=true;
+18770: 										if(event.dialog.buttons.length>3||(zoom&&event.dialog.buttons.length>5)){
+18771: 											event.dialog.classList.remove('forcebutton-auto');
+18772: 										}
+18773: 										else if(!event.dialog.noforcebutton){
+18774: 											event.dialog.classList.add('forcebutton-auto');
+18775: 										}
+18776: 									}
+18777: 									else{
+18778: 										event.dialog.add([hs,'blank']);
+18779: 									}
+18780: 								}
+18781: 							}
+18782: 						}
+18783: 						else if(event.position[i]=='e'){
+18784: 							var es=target.getGainableCards(player,'e');
+18785: 							if(es.length){
+18786: 								expand_length+=Math.ceil(es.length/6);
+18787: 								var title=event.dialog.add('<div class="text center" style="margin: 0px;">装备区</div>');
+18788: 								title.style.margin='0px';
+18789: 								title.style.padding='0px';
+18790: 								event.dialog.add(es);
+18791: 								directh=false;
+18792: 							}
+18793: 						}
+18794: 						else if(event.position[i]=='j'){
+18795: 							var js=target.getGainableCards(player,'j');
+18796: 							if(js.length){
+18797: 								expand_length+=Math.ceil(js.length/6);
+18798: 								var title=event.dialog.add('<div class="text center" style="margin: 0px;">判定区</div>');
+18799: 								title.style.margin='0px';
+18800: 								title.style.padding='0px';
+18801: 								event.dialog.add(js);
+18802: 								directh=false;
+18803: 							}
+18804: 						}
+18805: 					}
+18806: 					if(event.dialog.buttons.length==0){
+18807: 						event.dialog.close();
+18808: 						event.finish();
+18809: 						return;
+18810: 					}
+18811: 					var cs=target.getCards(event.position);
+18812: 					var select=get.select(event.selectButton);
+18813: 					if(event.forced&&select[0]>=cs.length){
+18814: 						event.result={
+18815: 							bool:true,
+18816: 							buttons:event.dialog.buttons,
+18817: 							links:cs
+18818: 						}
+18819: 					}
+18820: 					else if(event.forced&&directh&&!event.isOnline()&&select[0]==select[1]){
+18821: 						event.result={
+18822: 							bool:true,
+18823: 							buttons:event.dialog.buttons.randomGets(select[0]),
+18824: 							links:[]
+18825: 						}
+18826: 						for(var i=0;i<event.result.buttons.length;i++){
+18827: 							event.result.links[i]=event.result.buttons[i].link;
+18828: 						}
+18829: 					}
+18830: 					else{
+18831: 						if(event.isMine()){
+18832: 							event.dialog.open();
+18833: 							game.check();
+18834: 							game.pause();
+18835: 							if(expand_length>2){
+18836: 								ui.arena.classList.add('gain-player-card');
+18837: 								event.dialog.classList.add('fullheight');
+18838: 							}
+18839: 						}
+18840: 						else if(event.isOnline()){
+18841: 							event.send();
+18842: 						}
+18843: 						else{
+18844: 							event.result='ai';
+18845: 						}
+18846: 					}
+18847: 					"step 1"
+18848: 					if(event.result=='ai'){
+18849: 						game.check();
+18850: 						if((ai.basic.chooseButton(event.ai)||forced)&&(!event.filterOk||event.filterOk())) ui.click.ok();
+18851: 						else ui.click.cancel();
+18852: 					}
+18853: 					event.dialog.close();
+18854: 					"step 2"
+18855: 					event.resume();
+18856: 					setTimeout(function(){
+18857: 						ui.arena.classList.remove('gain-player-card');
+18858: 					},500);
+18859: 					if(game.online||!event.result.bool){
+18860: 						event.finish();
+18861: 					}
+18862: 					"step 3"
+18863: 					if(event.logSkill&&event.result.bool&&!game.online){
+18864: 						if(typeof event.logSkill=='string'){
+18865: 							player.logSkill(event.logSkill);
+18866: 						}
+18867: 						else if(Array.isArray(event.logSkill)){
+18868: 							player.logSkill.apply(player,event.logSkill);
+18869: 						}
+18870: 					}
+18871: 					var cards=[];
+18872: 					for(var i=0;i<event.result.links.length;i++){
+18873: 						cards.push(event.result.links[i]);
+18874: 					}
+18875: 					event.result.cards=event.result.links.slice(0);
+18876: 					event.cards=cards;
+18877: 					event.trigger("rewriteGainResult");
+18878: 					"step 4"
+18879: 					if(event.boolline){
+18880: 						player.line(target,'green');
+18881: 					}
+18882: 					if(!event.chooseonly){
+18883: 						if(event.delay!==false){
+18884: 							var next=player.gain(event.cards,target,event.visibleMove?'give':'giveAuto','bySelf');
+18885: 							event.done=next;
+18886: 						}
+18887: 						else{
+18888: 							var next=player.gain(event.cards,target,'bySelf');
+18889: 							event.done=next;
+18890: 							target[event.visibleMove?'$give':'$giveAuto'](cards,player);
+18891: 							if(event.visibleMove) next.visible=true;
+18892: 						}
+18893: 					}
+18894: 					else target[event.visibleMove?'$give':'$giveAuto'](cards,player);
+18895: 				},
+18896: 				showHandcards:function(){
+18897: 					"step 0"
+18898: 					if(player.countCards('h')==0){
+18899: 						event.finish();
+18900: 						return;
+25365: 				gainPlayerCard:function(){
+25366: 					var next=game.createEvent('gainPlayerCard');
+25367: 					next.player=this;
+25368: 					for(var i=0;i<arguments.length;i++){
+25369: 						if(get.itemtype(arguments[i])=='player'){
+25370: 							next.target=arguments[i];
+25371: 						}
+25372: 						else if(typeof arguments[i]=='number'){
+25373: 							next.selectButton=[arguments[i],arguments[i]];
+25374: 						}
+25375: 						else if(get.itemtype(arguments[i])=='select'){
+25376: 							next.selectButton=arguments[i];
+25377: 						}
+25378: 						else if(typeof arguments[i]=='boolean'){
+25379: 							next.forced=arguments[i];
+25380: 						}
+25381: 						else if(get.itemtype(arguments[i])=='position'){
+25382: 							next.position=arguments[i];
+25383: 						}
+25384: 						else if(arguments[i]=='visible'){
+25385: 							next.visible=true;
+25386: 						}
+25387: 						else if(arguments[i]=='visibleMove'){
+25388: 							next.visibleMove=true;
+25389: 						}
+25390: 						else if(typeof arguments[i]=='function'){
+25391: 							if(next.ai) next.filterButton=arguments[i];
+25392: 							else next.ai=arguments[i];
+25393: 						}
+25394: 						else if(typeof arguments[i]=='object'&&arguments[i]){
+25395: 							next.filterButton=get.filter(arguments[i]);
+25396: 						}
+25397: 						else if(typeof arguments[i]=='string'){
+25398: 							next.prompt=arguments[i];
+25399: 						}
+25400: 					}
+25401: 					if(next.filterButton==undefined) next.filterButton=lib.filter.all;
+25402: 					if(next.position==undefined) next.position='he';
+25403: 					if(next.selectButton==undefined) next.selectButton=[1,1];
+25404: 					if(next.ai==undefined) next.ai=function(button){
+25405: 						var val=get.buttonValue(button);
+25406: 						if(get.attitude(_status.event.player,get.owner(button.link))>0) return -val;
+25407: 						return val;
+25408: 					};
+25409: 					next.setContent('gainPlayerCard');
+25410: 					next._args=Array.from(arguments);
+25411: 					return next;
+25412: 				},
+26302: 				damage:function(){
+26303: 					var next=game.createEvent('damage');
+26304: 					//next.forceDie=true;
+26305: 					next.player=this;
+26306: 					var nocard,nosource;
+26307: 					var event=_status.event;
+26308: 					for(var i=0;i<arguments.length;i++){
+26309: 						if(get.itemtype(arguments[i])=='cards'){
+26310: 							next.cards=arguments[i].slice(0);
+26311: 						}
+26312: 						else if(get.itemtype(arguments[i])=='card'){
+26313: 							next.card=arguments[i];
+26314: 						}
+26315: 						else if(typeof arguments[i]=='number'){
+26316: 							next.num=arguments[i];
+26317: 						}
+26318: 						else if(get.itemtype(arguments[i])=='player'){
+26319: 							next.source=arguments[i];
+26320: 						}
+26321: 						else if(typeof arguments[i]=='object'&&arguments[i]&&arguments[i].name){
+26322: 							next.card=arguments[i];
+26323: 						}
+26324: 						else if(arguments[i]=='nocard'){
+26325: 							nocard=true;
+26326: 						}
+26327: 						else if(arguments[i]=='nosource'){
+26328: 							nosource=true;
+26329: 						}
+26330: 						else if(arguments[i]=='notrigger'){
+26331: 							next._triggered=null;
+26332: 							next.notrigger=true;
+26333: 						}
+26334: 						else if(arguments[i]=='unreal'){
+26335: 							next.unreal=true
+26336: 						}
+26337: 						else if(get.itemtype(arguments[i])=='nature'&&arguments[i]!='stab'){
+26338: 							next.nature=arguments[i];
+26339: 						}
+26340: 					}
+26341: 					if(next.card==undefined&&!nocard) next.card=event.card;
+26342: 					if(next.cards==undefined&&!nocard) next.cards=event.cards;
+26343: 					if(next.source==undefined&&!nosource) next.source=event.player;
+26344: 					if(next.source&&next.source.isDead()) delete next.source;
+26345: 					if(next.unreal==undefined) next.unreal=false;
+26346: 					if(next.num==undefined) next.num=1;
+26347: 					next.original_num=next.num;
+26348: 					next.change_history=[];
+26349: 					if(next.nature=='poison') delete next._triggered;
+26350: 					next.setContent('damage');
+26351: 					next.filterStop=function(){
+26352: 						if(this.source&&this.source.isDead()) delete this.source;
+26353: 						var num=this.original_num;
+26354: 						for(var i of this.change_history) num+=i;
+26355: 						if(num!=this.num) this.change_history.push(this.num-num);
+26356: 						if(this.num<=0){
+26357: 							delete this.filterStop;
+26358: 							this.trigger('damageZero');
+26359: 							this.finish();
+26360: 							this._triggered=null;
+26361: 							return true;
+26362: 						}
+26363: 					};
+26364: 					return next;
+29222: 				isEnemyOf:function(){
+29223: 					return !this.isFriendOf.apply(this,arguments);
+29224: 				},
+29225: 				isFriendOf:function(player){
+29226: 					if(get.mode()=='guozhan'){
+29227: 						if(this==player) return true;
+29228: 						//修复
+29229: 						if(this.getStorage('yexinjia_friend').contains(player)||player.getStorage('yexinjia_friend').contains(this)) return true;
+29230: 						//if(this.getStorage('yexinjia_friend').includes(player)||player.getStorage('yexinjia_friend').includes(this)) return true;
+29231: 						if(this.identity=='unknown'||this.identity=='ye') return false;
+29232: 						if(player.identity=='unknown'||player.identity=='ye') return false;
+29233: 						return this.identity==player.identity;
+29234: 					}
+29235: 					if(get.mode()=='doudizhu'){
+29236: 						return this.identity==player.identity;
+29237: 					}
+29238: 					if(this.side!=undefined&&typeof player.side=='boolean'){
+29239: 						return this.side==player.side;
+29240: 					}
+29241: 					return this==player;
+29242: 				},
+29243: 				isFriendsOf:function(player){
+29244: 					return player.getFriends(true).contains(this);
+29245: 				},
+29246: 				isEnemiesOf:function(player){
+29247: 					return player.getEnemies().contains(this);
+29248: 				},
+29249: 				isAlive:function(){
+29250: 					return this.classList.contains('dead')==false;
+29251: 				},
+29252: 				isDead:function(){
+
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/character/standard.js
+347: 			guicai:{
+348: 				audio:2,
+349: 				trigger:{global:'judge'},
+350: 				direct:true,
+351: 				preHidden:true,
+352: 				filter:function(event,player){
+353: 					return player.countCards(get.mode()=='guozhan'?'hes':'hs')>0;
+354: 				},
+355: 				content:function(){
+356: 					"step 0"
+357: 					player.chooseCard(get.translation(trigger.player)+'的'+(trigger.judgestr||'')+'判定为'+
+358: 					get.translation(trigger.player.judging[0])+'，'+get.prompt('guicai'),get.mode()=='guozhan'?'hes':'hs',function(card){
+359: 						var player=_status.event.player;
+360: 						var mod2=game.checkMod(card,player,'unchanged','cardEnabled2',player);
+361: 						if(mod2!='unchanged') return mod2;
+362: 						var mod=game.checkMod(card,player,'unchanged','cardRespondable',player);
+363: 						if(mod!='unchanged') return mod;
+364: 						return true;
+365: 					}).set('ai',function(card){
+366: 						var trigger=_status.event.getTrigger();
+367: 						var player=_status.event.player;
+368: 						var judging=_status.event.judging;
+369: 						var result=trigger.judge(card)-trigger.judge(judging);
+370: 						var attitude=get.attitude(player,trigger.player);
+371: 						if(attitude==0||result==0) return 0;
+372: 						if(attitude>0){
+373: 							return result-get.value(card)/2;
+374: 						}
+375: 						else{
+376: 							return -result-get.value(card)/2;
+377: 						}
+378: 					}).set('judging',trigger.player.judging[0]).setHiddenSkill('guicai');
+379: 					"step 1"
+380: 					if(result.bool){
+381: 						player.respond(result.cards,'guicai','highlight','noOrdering');
+382: 					}
+383: 					else{
+384: 						event.finish();
+385: 					}
+386: 					"step 2"
+387: 					if(result.bool){
+388: 						if(trigger.player.judging[0].clone){
+389: 							trigger.player.judging[0].clone.classList.remove('thrownhighlight');
+390: 							game.broadcast(function(card){
+391: 								if(card.clone){
+392: 									card.clone.classList.remove('thrownhighlight');
+393: 								}
+394: 							},trigger.player.judging[0]);
+395: 							game.addVideo('deletenode',player,get.cardsInfo([trigger.player.judging[0].clone]));
+396: 						}
+397: 						game.cardsDiscard(trigger.player.judging[0]);
+398: 						trigger.player.judging[0]=result.cards[0];
+399: 						trigger.orderingCards.addArray(result.cards);
+400: 						game.log(trigger.player,'的判定牌改为',result.cards[0]);
+401: 						game.delay(2);
+402: 					}
+403: 				},
+404: 				ai:{
+405: 					rejudge:true,
+406: 					tag:{

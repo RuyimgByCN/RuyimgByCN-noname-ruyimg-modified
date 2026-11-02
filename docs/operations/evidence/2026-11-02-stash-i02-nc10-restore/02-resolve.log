@@ -1,0 +1,19 @@
+base-equal crates/content-compiler/src/lib.rs
+  conflict-markers-in-resolved=0
+base-equal crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+  conflict-markers-in-resolved=0
+base-equal crates/content-runtime/examples/gen_epic_cards_package.rs
+  conflict-markers-in-resolved=0
+base-equal crates/content-runtime/examples/gen_hero_kill_package.rs
+  conflict-markers-in-resolved=0
+base-equal crates/content-runtime/examples/gen_mark_supplement_package.rs
+  conflict-markers-in-resolved=0
+base-equal crates/content-runtime/examples/gen_select_beautify_package.rs
+  conflict-markers-in-resolved=0
+-- 其余路径：main 工作区 vs 隔离树（应仅 native-progress.md 不同）--
+DIFF docs/architecture/native-progress.md
+-- 未跟踪：main vs 隔离树 --
+untracked sets identical
+    8871
+ docs/architecture/native-progress.md               |  10 +-
+ 35 files changed, 304 insertions(+), 17 deletions(-)

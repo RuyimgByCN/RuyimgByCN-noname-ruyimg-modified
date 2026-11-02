@@ -1,0 +1,56 @@
+# C331 phase9f bounded atomic source repair — BLOCK / review required
+Verified2026-10-31; same exclusive private C writer, base5fc0f77403d90fa4555156bf01722450cbe7bf3b.
+Start16:51:36Z; checkpoint17:10:28Z met17:11:36; heavy cutoff17:31:36; no new cargo after cutoff.
+Evidence root: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f`. Source frozen; no active or queued owned producer.
+Whole Damage/C331/Main remains BLOCK: source262/290, remaining28, +0. This is private partial rule repair.
+
+## Source and preservation
+Authoritative increment `final-freeze2`:19files; composition225 (219sealed source overlay plus actual newly affected base files/new test).
+Increment manifest `f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da`.
+Increment tar `27128d4f91ad31a438ea1bbf762c29dba4714b6011c0e0a967d704aa907d1444`; patch `7fa4bf02db442222562121be0c454a581a61d1f0f6eb81b1fd6c23d59d3630da`.
+Composed manifest `ab88c526c5cb4e807a29c5bdaaa70393b4515375303980d153403047f479be96`.
+Composed tar `d01150de4c8e44950c61ca20ce93f4afa8e9a6fa9dbb7a4246e3bef7b07fc0df`; patch `db0d65526d852e770c7382c841c0a89efadb60015f04dadd68d4f0412ab919bf`.
+`final-freeze2/vs-c9e.patch` and `full-source/vs-main5fc.patch` reverse-check; materialized final sources write-protected.
+Original C9e7333artifacts,219source seal,51-line report and separate41row audit remain unchanged; earlier indexes/reds/goldens preserved.
+`protected-after.json` checks original Main31867 protection, exact Own6/I02/CI, generated18/dist37/schema4, original C6/hooks/reader.
+Parent exact9903docs/evidence receipt and intentional2540docs stage retained separately in `parent-receipts/`; no blanket baseline refresh.
+Main HEAD34e unchanged; C private index empty. No staging/commit/push/import, device changes, public format/API1/version changes.
+
+## Implemented atomic corrections
+Chain child Start rejects a still-queued immediate-parent recipient; actual valid and forged typed/byte controls; later mutable stages preserved.
+F01 Jueqing permits self-source replacement/loseHp without armor consumption; F05 Xixue permits self-source recovery.
+F02 effective Sha meaning follows actual adjacent authenticated chain edges to immediate CardUsed/use_as; no arbitrary ancestor/name inference.
+Actual non-Sha virtual carrier→direct→chain cases cover Xingjunyan/Ciqiu/Xixue, order choice, signed payload, every-suspension typed/byte restore.
+F03 Zhaohuo self-cancels in Begin1 before Begin2; F04 Shuchui excludes already-hit status and consumes admitted qualification.
+F06 Paotai uses full-width subtraction;255/256/257, zero/negative exclusion and actual overflowing VM command rollback controls.
+F08 Yinzei samples hand+equipment with RuleRng, uses owned-card removal/revoke/loss and ordinary CardsDiscarded callback children.
+F10 Zlfanshi retains terra across later hits, chooses actual living other recipient with RuleRng, expires at existing global turn boundaries.
+F11 Abi consumes Fire/Thunder RNG and attributes child to victim owner; F15 excludes another enabled qualified Duqu source.
+F17 Minwan initializes actual lock set for self-source; admitted bodies finish before emitted children using existing queue/park/slot machinery.
+F14 source relations cover Boss/two-teamVersus/Doudizhu/standardIdentity fallback; actual poison-only grant and normal named-source draw.
+Mushengoumang uses immutable builtin declaration/id, with alive primary-slot and foreign same-name controls; no display-name ownership guess.
+F14 remains PARTIAL: different revealed Kingdoms Wei/Shu, unknown/ye and yexinjia_friend storage/identity semantics are mandatory gaps.
+No global negation of faction heuristic or invented relation state was added. Global/grouped provider/lifetime parity remains unproved.
+
+## Evidence and validation
+Sixteen meaningful original failing assertions retained:12atomic/birth + ally qualification + expiry + extraShedu grant + missing discard callback.
+Setup/compiler/prompt/debug-entry failures also remain raw; debug entry lacks real command checkpoint, so restored cases use actual ActivateSkill.
+Old boss_xiangliu expected wrong poison+Shedu grant; source boss.js6223-6240 proves poison only; corrected non-golden assertion, raw red retained.
+Final `checks-final2/run.py`:87targeted C331 tests PASS, including24new atomic cases;202raw JSON/snapshot/archive capture triples.
+Full `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast`:1845passed/1failed/75ignored.
+Sole failure `replay_scenarios::replay_scenarios_match_golden`, original12mismatches; expected constants unchanged.
+Independent `RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets` PASS in owned independent strict target.
+Source-unit2 PASS; caps9036 PASS (physical2000/Rust effective1000); native layering/F7 zero.
+Final cargo launch log times17:31:17.738/19.036/24.012/24.739Z all precede17:31:36; in-flight full finished naturally afterward.
+`command-source-bindings.json` binds all225current source hashes before/after every producer and raw logs; producer completion recorded.
+C8 original positive14producer reused, never rerun; current362pairs preserve full six business fields and complete command outcomes.
+Eleven observed business trajectories equal; chain0007-after retains source-explained damage-before-own-unlink difference, no normalization.
+Accepted disputed32-byte hash separated only;187no-outcome/139Accepted/32Pending/4Rejected payloads/reasons retained and compared.
+
+## Mandatory remaining work
+`all17-findings-and12-unproved-dispositions.json` preserves every original finding/source binding and all12unproved rows explicitly.
+F07 Qinglong/F09 Zhangwu/F12 Yuance/F13 Jiding/F16 Jidian require next persisted invocation/choice/cost/judge/card-subtree FSM slice.
+F13 removal must await complete card subtree including dodge, exact admitted def and grouped recovery; no early-removal shortcut implemented.
+F14 mode gap remains a blocker; mixed-zone RNG sampling and both Abi nature branches are not independently exhaustive runtime proofs.
+All provider renewal/expiry/grouped/async boundaries, genuine ChangeHp, DeathFlow, SDK/37source parity remain mandatory; no whole-equivalence claim.
+Review19/225 source plus machine dispositions before next same-writer slice. No golden rerecord or Main merge acceptance follows.

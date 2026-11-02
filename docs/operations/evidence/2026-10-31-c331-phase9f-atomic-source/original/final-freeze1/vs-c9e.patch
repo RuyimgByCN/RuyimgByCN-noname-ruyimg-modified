@@ -1,0 +1,1328 @@
+diff --git a/crates/engine-native-content/src/content/host.rs b/crates/engine-native-content/src/content/host.rs
+index cdbff151..e00b6015 100644
+--- a/crates/engine-native-content/src/content/host.rs
++++ b/crates/engine-native-content/src/content/host.rs
+@@ -153,7 +153,7 @@ impl SkillBehavior for HostSkillBehavior {
+         kind: crate::event::EventKind,
+     ) -> bool {
+         if let Some(effect) = self.native_damage_effect(kind) {
+-            return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx,None));
++            return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx,None,None));
+         }
+         self.filter(ctx, owner, event)
+     }
+diff --git a/crates/engine-native-content/src/content/standard/native_damage.rs b/crates/engine-native-content/src/content/standard/native_damage.rs
+index 906cbd0e..36edd723 100644
+--- a/crates/engine-native-content/src/content/standard/native_damage.rs
++++ b/crates/engine-native-content/src/content/standard/native_damage.rs
+@@ -22,7 +22,7 @@ impl SkillBehavior for NativeDamageBehavior {
+         event: &EventData,
+         kind: EventKind,
+     ) -> bool {
+-        matches!(event, EventData::Damage(d) if self.native_damage_effect(kind).is_some_and(|effect|effect.matches(owner,d,ctx,None)))
++        matches!(event, EventData::Damage(d) if self.native_damage_effect(kind).is_some_and(|effect|effect.matches(owner,d,ctx,None,None)))
+     }
+     fn start(&self, owner: PlayerId, event: &EventData) -> Box<dyn SkillMachine> {
+         NoopBehavior.start(owner, event)
+diff --git a/crates/engine-native-kernel/src/catalog.rs b/crates/engine-native-kernel/src/catalog.rs
+index 41c31285..0c5e7309 100644
+--- a/crates/engine-native-kernel/src/catalog.rs
++++ b/crates/engine-native-kernel/src/catalog.rs
+@@ -1046,6 +1046,21 @@ impl Catalog {
+     }
+ 
+     /// 武将下标的元数据（基础表优先，扩展表接续；越界 None）。
++    /// Typed identity of the immutable boss_mushengoumang source declaration.
++    pub fn mushengoumang_general_id(&self) -> u16 {
++        let source = crate::vocabulary::generals::BOSS_MUSHENGOUMANG;
++        assert_eq!(
++            crate::vocabulary::generals::BOSS_GENERALS[source.0],
++            source.1
++        );
++        u16::try_from(
++            crate::vocabulary::generals::STANDARD_GENERALS.len()
++                + self.extension_generals.len()
++                + source.0,
++        )
++        .expect("catalog general bound")
++    }
++
+     pub fn general_meta(
+         &self,
+         g: u16,
+diff --git a/crates/engine-native-kernel/src/event/damage.rs b/crates/engine-native-kernel/src/event/damage.rs
+index 5f6dcf11..8af2aae9 100644
+--- a/crates/engine-native-kernel/src/event/damage.rs
++++ b/crates/engine-native-kernel/src/event/damage.rs
+@@ -233,3 +233,44 @@ impl DamageProgress {
+         })
+     }
+ }
++
++/// Effective damage-card meaning through the real immediate propagation lineage.
++pub fn damage_card_kind(
++    frames: &[Frame],
++    root: &Frame,
++    catalog: &crate::catalog::Catalog,
++) -> Option<crate::catalog::CardKind> {
++    let EventData::Damage(original) = &root.data else {
++        return None;
++    };
++    let card = original.card?;
++    let mut current = root;
++    for _ in 0..frames.len() {
++        let EventData::Damage(d) = &current.data else {
++            return None;
++        };
++        if d.card != Some(card) {
++            return None;
++        }
++        let index = frames.iter().position(|f| f.id == current.id)?;
++        let parent = index
++            .checked_sub(1)
++            .and_then(|i| frames.get(i))
++            .filter(|p| current.parent == Some(p.id));
++        if !d.from_chain {
++            return Some(match parent.map(|p| &p.data) {
++                Some(EventData::CardUsed(u)) if u.card == card => {
++                    u.use_as.unwrap_or_else(|| catalog.card_kind(card))
++                }
++                _ => catalog.card_kind(card),
++            });
++        }
++        let parent = parent?;
++        if !matches!(&parent.data,EventData::Damage(p)if p.card==Some(card)&&parent.stage==Stage::Intrinsic&&matches!(p.settlement.progress,DamageProgress::Chain{..}))
++        {
++            return None;
++        }
++        current = parent;
++    }
++    None
++}
+diff --git a/crates/engine-native-kernel/src/event/native_damage.rs b/crates/engine-native-kernel/src/event/native_damage.rs
+index 342334bb..2ee684bc 100644
+--- a/crates/engine-native-kernel/src/event/native_damage.rs
++++ b/crates/engine-native-kernel/src/event/native_damage.rs
+@@ -136,6 +136,7 @@ impl NativeDamageEffect {
+         d: &DamageData,
+         ctx: &QueryCtx<'_>,
+         parent: Option<&Frame>,
++        card_kind: Option<CardKind>,
+     ) -> bool {
+         let core = ctx.state;
+         let catalog = ctx.catalog;
+@@ -144,10 +145,12 @@ impl NativeDamageEffect {
+         let target = d.target == owner;
+         let fire = d.nature == DamageNature::Fire;
+         let sha = d.card.is_some_and(|card| {
+-            let kind = parent
+-                .and_then(|p| match &p.data {
+-                    EventData::CardUsed(u) if u.card == card => u.use_as,
+-                    _ => None,
++            let kind = card_kind
++                .or_else(|| {
++                    parent.and_then(|p| match &p.data {
++                        EventData::CardUsed(u) if u.card == card => u.use_as,
++                        _ => None,
++                    })
+                 })
+                 .unwrap_or_else(|| catalog.card_kind(card));
+             kind.is_sha_like()
+@@ -157,7 +160,7 @@ impl NativeDamageEffect {
+             return false;
+         }
+         match self {
+-            Self::Jueqing => source && !target,
++            Self::Jueqing => source,
+             Self::Wuxin => target,
+             Self::Zuijiu => {
+                 source
+@@ -201,17 +204,19 @@ impl NativeDamageEffect {
+             Self::Huoshen => target && fire,
+             Self::NitaiOut => target && fire && core.turn.current != owner,
+             Self::NitaiIn => target && core.turn.current == owner,
+-            Self::Zhaohuo => target && fire,
++            Self::Zhaohuo => target && (fire || source),
+             Self::ZhaohuoSource => source,
+             Self::Bufo | Self::LingquCancel => target && d.amount > 1,
+-            Self::Shuchui => source && core.turn.current == owner && core.turn.shuchui_armed && sha,
+-            Self::Paotai => target && p.paotai_lv > 0,
+-            Self::Xixue => {
++            Self::Shuchui => {
+                 source
+-                    && !target
++                    && core.turn.current == owner
++                    && core.turn.shuchui_armed
++                    && !core.turn.shuchui_hit
+                     && sha
+-                    && p.hp < p.max_hp as i32
+-                    && equip(CardKind::Xixueguizhihuan)
++            }
++            Self::Paotai => target && p.paotai_lv > 0,
++            Self::Xixue => {
++                source && sha && p.hp < p.max_hp as i32 && equip(CardKind::Xixueguizhihuan)
+             }
+             Self::Qinglong => {
+                 source
+@@ -227,7 +232,10 @@ impl NativeDamageEffect {
+                     && p.hand.is_empty()
+                     && p.hp > 0
+                     && d.source.is_some_and(|s| {
+-                        s != owner && core.player(s).alive && !core.player(s).hand.is_empty()
++                        s != owner
++                            && core.player(s).alive
++                            && (!core.player(s).hand.is_empty()
++                                || !core.player(s).equips.is_empty())
+                     })
+             }
+             Self::Zhangwu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
+@@ -252,13 +260,26 @@ impl NativeDamageEffect {
+             Self::Renxing => core.turn.current != owner,
+             Self::Cuidui => {
+                 source
+-                    && !target
++                    && core.source_is_enemy_of(catalog, owner, d.target) == Some(true)
+                     && core.player(d.target).alive
+                     && catalog
+                         .skill_by_name(crate::vocabulary::names::BOSS_ZHONGDU)
+                         .is_some_and(|def| !core.has_skill_any_state(d.target, def))
+             }
+-            Self::Duqu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
++            Self::Duqu => {
++                target
++                    && d.source.is_some_and(|source| {
++                        core.player(source).alive
++                            && !core.skills.iter().any(|((holder, def), inst)| {
++                                *holder == source
++                                    && inst.enabled
++                                    && catalog.skills[*def as usize]
++                                        .behavior
++                                        .native_damage_effect(EventKind::DamageEnd)
++                                        == Some(Self::Duqu)
++                            })
++                    })
++            }
+             Self::Huanxia => {
+                 source
+                     && d.card.is_some_and(|card| {
+@@ -269,7 +290,7 @@ impl NativeDamageEffect {
+                     })
+             }
+             Self::Jidian => source,
+-            Self::Minwan => source && !target && core.turn.current == owner,
++            Self::Minwan => source && core.turn.current == owner,
+         }
+     }
+ }
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index d532cb93..512bfd22 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -109,25 +109,13 @@ pub(super) fn post_damage(
+     owner: PlayerId,
+ ) {
+     if effect == crate::event::NativeDamageEffect::Shuchui {
+-        // 鼠槌（swd 卡牌面窗口机批）：多杀循环链武装中，任一杀造成真实伤害
+-        // → 置位（上游 shuchui2 charlotte source damageEnd filter card=sha
+-        // 同口径；武装=当前回合玩家=链主）
+-        if ctx.core.turn.shuchui_armed
+-            && d.source == Some(ctx.core.turn.current)
+-            && d.card
+-                .map(|c| ctx.catalog.card_kind(c).is_sha_like())
+-                .unwrap_or(false)
+-        {
+-            ctx.core.turn.shuchui_hit = true;
+-        }
++        ctx.core.turn.shuchui_hit = true;
+     }
+     if effect == crate::event::NativeDamageEffect::Paotai {
+-        // 炮台降级（U05 ow，规则 v123）：炮台持有者受伤 1 点降 1 级（上游
+-        // paotai3 damageEnd forced：storage -= trigger.num；下限 0）
+-        if ctx.core.player(d.target).paotai_lv > 0 && d.amount > 0 && !d.prevented {
+-            let lv = ctx.core.player(d.target).paotai_lv;
+-            ctx.core.player_mut(d.target).paotai_lv = lv.saturating_sub(d.amount as u8);
+-        }
++        let level = u32::from(ctx.core.player(d.target).paotai_lv);
++        let amount = u32::try_from(d.amount).expect("positive admitted quantity");
++        ctx.core.player_mut(d.target).paotai_lv =
++            u8::try_from(level.saturating_sub(amount)).expect("bounded level");
+     }
+     if effect == crate::event::NativeDamageEffect::Xixue {
+         let source = d.source.expect("admitted source role");
+@@ -177,25 +165,26 @@ pub(super) fn post_damage(
+         }
+     }
+     if effect == crate::event::NativeDamageEffect::Yinzei {
+-        // 隐贼 damageEnd discard; its changeHp activation already completed before TargetDamage.
+-        if let Some(ydef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_YINZEI)
+-        {
+-            let holder = d.target;
+-            if ctx.core.has_skill(holder, ydef)
+-                && ctx.core.player(holder).hand.is_empty()
+-                && ctx.core.player(holder).hp > 0
+-            {
+-                if let Some(src) = d.source {
+-                    if src != holder && ctx.core.player(src).alive {
+-                        if let Some(c) = ctx.core.player(src).hand.first().copied() {
+-                            ctx.discard_from_hand(src, c);
+-                        }
+-                    }
+-                }
+-            }
+-        }
++        let source = d.source.expect("admitted source");
++        let pool: Vec<_> = ctx
++            .core
++            .player(source)
++            .hand
++            .iter()
++            .chain(ctx.core.player(source).equips.iter())
++            .copied()
++            .collect();
++        let selected = pool[ctx.core.rng.gen_range(pool.len() as u32) as usize];
++        ctx.take_owned_card(source, selected);
++        ctx.to_discard(selected);
++        ctx.log(LogEvent::CardDiscarded {
++            player: source,
++            cards: vec![selected],
++        });
++        ctx.emit(EventData::CardsDiscarded {
++            player: source,
++            cards: vec![selected],
++        });
+     }
+     if effect == crate::event::NativeDamageEffect::Zhangwu {
+         // 章武（Boss 刘备，规则 v261）：你受到伤害后（来源存活且非自己）——
+@@ -231,30 +220,24 @@ pub(super) fn post_damage(
+         }
+     }
+     if effect == crate::event::NativeDamageEffect::Zlfanshi {
+-        // 反噬（十殿阎罗转轮王，规则 v269）：每回合第一次受伤后置 terra 旗，
+-        // 同回合再次受伤 → 随机一名其他角色受 1 点伤害（上游 boss_zlfanshi
+-        // damageEnd addTempSkill boss_zlfanshi_terra 交替同口径；随机→座位序
+-        // 首个确定性近似登记；旗清零=回合结束全清，封印解除同位）
+-        if let Some(fsdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_ZLFANSHI)
+-        {
+-            if ctx.core.has_skill(d.target, fsdef) && ctx.core.player(d.target).alive {
+-                if ctx.core.player(d.target).zlfanshi_terra {
+-                    ctx.core.player_mut(d.target).zlfanshi_terra = false;
+-                    let seats = ctx.core.players.len() as PlayerId;
+-                    if let Some(t) = (0..seats).find(|&t| t != d.target && ctx.core.player(t).alive)
+-                    {
+-                        ctx.emit(EventData::Damage(crate::machine::damage_data(
+-                            Some(d.target),
+-                            t,
+-                            1,
+-                        )));
+-                    }
+-                } else {
+-                    ctx.core.player_mut(d.target).zlfanshi_terra = true;
+-                }
++        if ctx.core.player(owner).zlfanshi_terra {
++            let targets: Vec<_> = ctx
++                .core
++                .seat_ring
++                .iter()
++                .copied()
++                .filter(|p| *p != owner && ctx.core.player(*p).alive)
++                .collect();
++            if !targets.is_empty() {
++                let target = targets[ctx.core.rng.gen_range(targets.len() as u32) as usize];
++                ctx.emit(EventData::Damage(crate::machine::damage_data(
++                    Some(owner),
++                    target,
++                    1,
++                )));
+             }
++        } else {
++            ctx.core.player_mut(owner).zlfanshi_terra = true;
+         }
+     }
+     if effect == crate::event::NativeDamageEffect::Zhue {
+@@ -281,28 +264,18 @@ pub(super) fn post_damage(
+         }
+     }
+     if effect == crate::event::NativeDamageEffect::Abi {
+-        // 阿鼻（Boss 平等王，规则 v272）：受到有来源的伤害后——来源受 1
+-        // 点火焰伤害（上游 randomGet fire/thunder→恒定火确定性近似登记；
+-        // 无来源伤害不触发；新伤害无来源→天然无递归）
+-        if let Some(abdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_ABI)
+-        {
+-            if let Some(src) = d.source {
+-                if ctx.core.has_skill(d.target, abdef)
+-                    && ctx.core.player(d.target).alive
+-                    && ctx.core.player(src).alive
+-                {
+-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+-                        None,
+-                        src,
+-                        1,
+-                        crate::event::DamageNature::Fire,
+-                        None,
+-                    )));
+-                }
+-            }
+-        }
++        let source = d.source.expect("admitted source");
++        let nature = [
++            crate::event::DamageNature::Fire,
++            crate::event::DamageNature::Thunder,
++        ][ctx.core.rng.gen_range(2) as usize];
++        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
++            Some(owner),
++            source,
++            1,
++            nature,
++            None,
++        )));
+     }
+     if effect == crate::event::NativeDamageEffect::Yuance {
+         // 远策（Boss 郭嘉，规则 v259）：global damageEnd——其他角色对另一
+@@ -408,14 +381,7 @@ pub(super) fn post_damage(
+                     && ctx.core.player(d.target).alive
+                     && !ctx.core.has_skill_any_state(d.target, zd)
+                 {
+-                    // 中毒标记技+蛇毒结算触发技一并授（上游 temp boss_zhongdu
+-                    // +global boss_shedu 组合同批生效）
+-                    for skdef in [
+-                        zd,
+-                        ctx.catalog
+-                            .skill_by_name(crate::vocabulary::names::BOSS_SHEDU)
+-                            .expect("蛇毒 def"),
+-                    ] {
++                    for skdef in [zd] {
+                         ctx.core.skills.insert(
+                             (d.target, skdef),
+                             crate::state::SkillInstance {
+@@ -435,23 +401,17 @@ pub(super) fn post_damage(
+                 }
+             }
+         }
++        let named = ctx.catalog.mushengoumang_general_id();
++        if let Some(holder) = ctx.core.seat_ring.iter().copied().find(|p| {
++            ctx.core.player(*p).alive && ctx.core.player(*p).general_slots[0] == Some(named)
++        }) {
++            ctx.draw_cards(holder, 1);
++        }
+     }
+     if effect == crate::event::NativeDamageEffect::Duqu {
+-        // 毒妒（Boss 相柳，规则 v223）：你受到伤害时来源获 1 蛇毒标记（自
+-        // 身不获；上游 boss_duqu damageEnd storage++ 同口径）
+-        if let Some(dddef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_DUQU)
+-        {
+-            if ctx.core.has_skill(d.target, dddef) {
+-                if let Some(src) = d.source {
+-                    if src != d.target && ctx.core.player(src).alive {
+-                        let p = ctx.core.player_mut(src);
+-                        p.shedu = p.shedu.saturating_add(1);
+-                    }
+-                }
+-            }
+-        }
++        let source = d.source.expect("admitted source");
++        let player = ctx.core.player_mut(source);
++        player.shedu = player.shedu.saturating_add(1);
+     }
+ }
+ 
+diff --git a/crates/engine-native-kernel/src/kernel/damage_after.rs b/crates/engine-native-kernel/src/kernel/damage_after.rs
+index 2461e1f0..0a6850cf 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_after.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_after.rs
+@@ -74,8 +74,7 @@ pub(super) fn post_damage_after(
+             .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
+         {
+             if let Some(src) = d.source {
+-                if src != d.target
+-                    && ctx.core.turn.current == src
++                if ctx.core.turn.current == src
+                     && ctx.core.has_skill(src, mdef)
+                     && ctx.core.player(src).alive
+                 {
+diff --git a/crates/engine-native-kernel/src/kernel/damage_skill.rs b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+index 90ab7fcd..77b2ebc7 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_skill.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+@@ -52,9 +52,14 @@ impl SkillMachine for NativeDamageSkill {
+             }
+             NativeDamageEffect::ZhaohuoSource => {
+                 let root = ctx.current_event_frame_id();
+-                let mut d = d;
+-                d.nature = crate::event::DamageNature::Fire;
+-                ctx.res.frame_mut(root).unwrap().data = EventData::Damage(d);
++                if d.target == self.owner {
++                    ctx.log(LogEvent::DamagePrevented { target: d.target });
++                    finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
++                } else {
++                    let mut d = d;
++                    d.nature = crate::event::DamageNature::Fire;
++                    ctx.res.frame_mut(root).unwrap().data = EventData::Damage(d);
++                }
+             }
+             effect => {
+                 let root = ctx.current_event_frame_id();
+diff --git a/crates/engine-native-kernel/src/kernel/damage_windows.rs b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+index 35f25880..745999a3 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_windows.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_windows.rs
+@@ -176,7 +176,7 @@ pub(super) fn apply_native_damage(
+                 // 招祸（Boss 毕方，规则 v227）：锁定——你免疫所有火属性伤害（上游
+                 // boss_zhaohuo damageBegin4 trigger.cancel 的火伤分支同口径；诚信免
+                 // 伤同位）
+-                if d.nature == crate::event::DamageNature::Fire {
++                if d.nature == crate::event::DamageNature::Fire || d.source == Some(d.target) {
+                     if let Some(zdef) = ctx
+                         .catalog
+                         .skill_by_name(crate::vocabulary::names::BOSS_ZHAOHUO)
+diff --git a/crates/engine-native-kernel/src/kernel/events.rs b/crates/engine-native-kernel/src/kernel/events.rs
+index 18bda5d7..246b5ad9 100644
+--- a/crates/engine-native-kernel/src/kernel/events.rs
++++ b/crates/engine-native-kernel/src/kernel/events.rs
+@@ -669,6 +669,9 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+     ctx.core.vm_aux.clear_turn();
+     ctx.log(LogEvent::TurnEnded { player });
+     ctx.expire_temporary_skills(player);
++    for state in &mut ctx.core.players {
++        state.zlfanshi_terra = false;
++    }
+     // 清残留跳阶段旗标（正常流程已被消费）
+     ctx.core.turn.skip_draw_phase = false;
+     ctx.core.turn.skip_play_phase = false;
+diff --git a/crates/engine-native-kernel/src/kernel/phase/judge.rs b/crates/engine-native-kernel/src/kernel/phase/judge.rs
+index 71d48412..2f4cea73 100644
+--- a/crates/engine-native-kernel/src/kernel/phase/judge.rs
++++ b/crates/engine-native-kernel/src/kernel/phase/judge.rs
+@@ -2,6 +2,9 @@ use super::super::*;
+ 
+ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
+     if !ctx.core.turn.turn_opened {
++        for state in &mut ctx.core.players {
++            state.zlfanshi_terra = false;
++        }
+         ctx.reset_turn_limits(player);
+         ctx.core.turn.turn_opened = true;
+         // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 032ce87f..487f4f4c 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -122,6 +122,7 @@ pub(super) fn eligible(
+                     catalog,
+                 },
+                 parent,
++                root.and_then(|root| crate::event::damage_card_kind(frames, root, catalog)),
+             )
+         } else {
+             def.behavior.filter_in_window(
+diff --git a/crates/engine-native-kernel/src/snap/damage_validation.rs b/crates/engine-native-kernel/src/snap/damage_validation.rs
+index 73c50d42..e7143fc0 100644
+--- a/crates/engine-native-kernel/src/snap/damage_validation.rs
++++ b/crates/engine-native-kernel/src/snap/damage_validation.rs
+@@ -147,7 +147,8 @@ pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), Sna
+                     || d.nature != parent.nature
+                     || d.source != parent.source
+                     || d.card != parent.card
+-                    || d.target == parent.target)
++                    || d.target == parent.target
++                    || matches!(&parent.settlement.progress,P::Chain{remaining}if remaining.contains(&d.target)))
+             {
+                 return Err(SnapshotError::BadTag("damage_chain_birth", 0));
+             }
+diff --git a/crates/engine-native-kernel/src/state/core_ops.rs b/crates/engine-native-kernel/src/state/core_ops.rs
+index 66f071bb..64598f30 100644
+--- a/crates/engine-native-kernel/src/state/core_ops.rs
++++ b/crates/engine-native-kernel/src/state/core_ops.rs
+@@ -3,6 +3,31 @@
+ use super::*;
+ 
+ impl GameStateCore {
++    /// Pinned isEnemyOf/isFriendOf semantics for mode facts represented by this kernel.
++    pub fn source_is_enemy_of(
++        &self,
++        catalog: &crate::catalog::Catalog,
++        a: PlayerId,
++        b: PlayerId,
++    ) -> Option<bool> {
++        if a == b {
++            return Some(false);
++        }
++        match &self.mode {
++            GameMode::Boss { .. } => Some(self.is_boss_side(a) != self.is_boss_side(b)),
++            GameMode::Versus { teams, .. } if teams.len() == 2 => {
++                let a = teams.iter().position(|t| t.contains(&a))?;
++                let b = teams.iter().position(|t| t.contains(&b))?;
++                Some(a != b)
++            }
++            GameMode::Doudizhu { lord } => Some((a == *lord) != (b == *lord)),
++            // Source has no side boolean in standard Identity: friendship falls back to self.
++            GameMode::Identity { .. } => Some(true),
++            GameMode::Kingdoms if self.is_friend_of(catalog, a, b) => Some(false),
++            _ => None,
++        }
++    }
++
+     pub fn player(&self, p: PlayerId) -> &PlayerState {
+         &self.players[p as usize]
+     }
+diff --git a/crates/engine-native-kernel/src/vocabulary/generals.rs b/crates/engine-native-kernel/src/vocabulary/generals.rs
+index b9fb4fa9..525f97b4 100644
+--- a/crates/engine-native-kernel/src/vocabulary/generals.rs
++++ b/crates/engine-native-kernel/src/vocabulary/generals.rs
+@@ -1,5 +1,5 @@
+-use crate::catalog::Faction;
+ use super::names::*;
++use crate::catalog::Faction;
+ 
+ /// 完整武将授予（N08 内容扩面）：武将名 → 技能集。
+ /// 授予武将即同时授予其全部技能。「张角」为官方技能迁移；
+@@ -97,6 +97,18 @@ pub const STANDARD_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+ 
+ /// Boss 模式内置武将（上游 mode/boss.js characterPack.mode_boss 首批：
+ /// 规则 v208 烛阴；追加于 STANDARD 索引空间尾——既有将索引不受扰动）。
++/// Actual Liuli mode/boss.js boss_mushengoumang declaration in the append-only boss roster.
++pub const BOSS_MUSHENGOUMANG: (usize, (&str, Faction, &[&str], u32, Gender)) = (
++    16,
++    (
++        "勾芒",
++        Faction::Qun,
++        &[BOSS_SHENYI, BOSS_BUCHUN, BOSS_QINGMU3, BOSS_QINGMU3X],
++        5,
++        Gender::Male,
++    ),
++);
++
+ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+     ("烛阴", Faction::Qun, &[BOSS_XIONGSHOU], 4, Gender::Male),
+     // 混沌（上游 boss_hundun hp25）：隐贼以「体力≤一半条件内生效」近似
+@@ -231,13 +243,7 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+     ),
+     // 勾芒（v240 不臣；神裔共用 v233；v292 青木3/青木3·转阶隐藏链；
+     // 上游 names 姬|重、shen→群目录近似）
+-    (
+-        "勾芒",
+-        Faction::Qun,
+-        &[BOSS_SHENYI, BOSS_BUCHUN, BOSS_QINGMU3, BOSS_QINGMU3X],
+-        5,
+-        Gender::Male,
+-    ),
++    BOSS_MUSHENGOUMANG.1,
+     // 焰灵（v241 回火+复燃；上游技能表无神裔——陪将不在神裔名单；
+     // shen→群目录近似）
+     (
+diff --git a/crates/engine-native/tests/c331_atomic_source_repair.rs b/crates/engine-native/tests/c331_atomic_source_repair.rs
+new file mode 100644
+index 00000000..770fe1ea
+--- /dev/null
++++ b/crates/engine-native/tests/c331_atomic_source_repair.rs
+@@ -0,0 +1,543 @@
++use super::c331_source_predicates::{
++    capture, card, equip, finish, play, reject_restore_atomic, restore, same_final, source_pack,
++    vm_pack,
++};
++use engine_native::event::{DamageNature, DamageProgress, EventData, EventKind};
++use engine_native::state::{BossStageState, GameMode};
++use engine_native::{CardKind, Engine, Phase, Timing};
++fn durable(e: &mut Engine) {
++    for p in 0..e.state_core().players.len() as u8 {
++        e.debug_set_max_hp(p, 1000);
++        e.debug_set_hp(p, 1000);
++        e.debug_clear_hand(p);
++    }
++}
++#[test]
++fn c9f_chain_birth_rejects_a_still_queued_recipient() {
++    let mut e = Engine::new(14001, 4);
++    e.debug_set_turn(0, Phase::Play, 1);
++    durable(&mut e);
++    for p in [1, 2, 3] {
++        e.state_core_mut().player_mut(p).linked = true;
++    }
++    let c = e.debug_place(0, "fire_sha");
++    e.set_time_slice(Some(1));
++    play(&mut e, c);
++    let mut found = false;
++    for _ in 0..500 {
++        let s = e.save();
++        if let Some(i)=s.resolution.stack.iter().position(|f|matches!(&f.data,EventData::Damage(d)if d.from_chain&&d.target==2&&d.settlement.progress==DamageProgress::Start)) {
++ found=true;let valid=restore(&e,&[]);let mut bad=s.clone();if let EventData::Damage(d)=&mut bad.resolution.stack[i].data{d.target=3;}
++ reject_restore_atomic(&e,&[],&bad);let mut restored=valid;finish(&mut restored);finish(&mut e);same_final(&e,&restored);break;}
++        e.resume();
++    }
++    assert!(found);
++}
++#[test]
++fn c9f_jueqing_self_source_replaces_damage_before_armor() {
++    let mut e = Engine::new(14002, 3);
++    e.debug_grant(0, "绝情");
++    e.state_core_mut().player_mut(0).hujia = 3;
++    e.debug_deal_damage(Some(0), 0, 2, DamageNature::Normal);
++    assert_eq!(e.debug_hp(0), 2);
++    assert_eq!(e.state_core().player(0).hujia, 3);
++}
++#[test]
++fn c9f_zhaohuo_self_cancel_precedes_begin2() {
++    let vm=vm_pack("skill c9f_begin2(99109501) { trigger damage_before owner_is_target { effect draw_cards(self,1); } }",EventKind::DamageBegin2,Timing::First);
++    let mut e = Engine::new_with_extensions(14003, 3, &[&vm]).unwrap();
++    e.debug_grant(0, "招祸");
++    e.debug_grant(0, "c9f_begin2");
++    let hand = e.debug_hand(0).len();
++    e.debug_deal_damage(Some(0), 0, 1, DamageNature::Normal);
++    assert_eq!(e.debug_hand(0).len(), hand);
++    assert_eq!(e.debug_hp(0), 4);
++}
++#[test]
++fn c9f_shuchui_already_hit_never_readmits() {
++    let mut e = Engine::new(14004, 3);
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.state_core_mut().turn.shuchui_armed = true;
++    e.state_core_mut().turn.shuchui_hit = true;
++    let c = card(&e, CardKind::Sha);
++    e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, c);
++    assert!(!e.log().iter().any(|x| matches!(
++        x,
++        engine_native::LogEvent::SkillTriggered {
++            skill: "native:liuli/card-swd/shuchui2",
++            ..
++        }
++    )));
++}
++#[test]
++fn c9f_xixue_self_source_recovers_once() {
++    let p = source_pack("shahai-swd-upstream-noname");
++    let mut e = Engine::new_with_extensions(14005, 3, &[&p]).unwrap();
++    equip(&mut e, CardKind::Xixueguizhihuan);
++    e.debug_set_hp(0, 2);
++    let c = card(&e, CardKind::Sha);
++    e.debug_deal_damage_with_card(Some(0), 0, 1, DamageNature::Normal, c);
++    assert_eq!(e.debug_hp(0), 2);
++}
++#[test]
++fn c9f_paotai_full_width_quantity_not_u8() {
++    for amount in [255, 256, 257] {
++        let mut e = Engine::new(14006, 3);
++        durable(&mut e);
++        e.state_core_mut().player_mut(1).paotai_lv = 3;
++        e.debug_deal_damage(Some(0), 1, amount, DamageNature::Normal);
++        assert_eq!(e.state_core().player(1).paotai_lv, 0, "damage {amount}");
++        assert_eq!(e.debug_hp(1), 1000 - amount as i32);
++    }
++}
++#[test]
++fn c9f_yinzei_equipment_only_source_is_discarded_with_rng() {
++    let p = source_pack("shahai-swd-upstream-noname");
++    let mut e = Engine::new_with_extensions(14007, 3, &[&p]).unwrap();
++    durable(&mut e);
++    equip(&mut e, CardKind::Xixueguizhihuan);
++    e.debug_grant(1, "隐贼");
++    let mut rng = e.state_core().rng.clone();
++    rng.gen_range(1);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert!(e.debug_equips(0).is_empty());
++    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
++}
++#[test]
++fn c9f_zlfanshi_terra_is_retained_and_target_uses_rng() {
++    let mut e = Engine::new(14008, 4);
++    durable(&mut e);
++    e.debug_grant(1, "反噬");
++    e.state_core_mut().player_mut(1).zlfanshi_terra = true;
++    let mut rng = e.state_core().rng.clone();
++    let pool = [0, 2, 3];
++    let target = pool[rng.gen_range(3) as usize];
++    e.debug_deal_damage(None, 1, 1, DamageNature::Normal);
++    assert!(e.state_core().player(1).zlfanshi_terra);
++    assert_eq!(e.debug_hp(target), 999);
++    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
++}
++#[test]
++fn c9f_abi_nature_draw_and_source_are_real() {
++    let mut e = Engine::new(14009, 3);
++    durable(&mut e);
++    e.debug_grant(1, "阿鼻");
++    let mut rng = e.state_core().rng.clone();
++    let _nature = [DamageNature::Fire, DamageNature::Thunder][rng.gen_range(2) as usize];
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
++    assert!(e.log().iter().any(|x| matches!(
++        x,
++        engine_native::LogEvent::DamageDealt {
++            source: Some(1),
++            target: 0,
++            ..
++        }
++    )));
++}
++#[test]
++fn c9f_duqu_other_enabled_holder_is_excluded() {
++    let mut e = Engine::new(14010, 3);
++    e.debug_grant(0, "毒妒");
++    e.debug_grant(1, "毒妒");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().player(0).shedu, 0);
++}
++#[test]
++fn c9f_minwan_self_source_initializes_real_lock_set() {
++    let mut e = Engine::new(14011, 3);
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.debug_grant(0, "冥顽");
++    e.debug_deal_damage(Some(0), 0, 1, DamageNature::Normal);
++    assert_eq!(e.state_core().turn.minwan_targets, vec![0]);
++}
++#[test]
++fn c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge() {
++    let p = source_pack("shahai-swd-upstream-noname");
++    let mut e = Engine::new_with_extensions(14012, 4, &[&p]).unwrap();
++    durable(&mut e);
++    e.state_core_mut().mode = GameMode::Boss {
++        boss: 0,
++        chongzheng: 3,
++        fellows: vec![1],
++        stage: BossStageState::default_none(),
++    };
++    e.debug_grant(0, "急叮");
++    e.debug_grant(0, "招祸");
++    equip(&mut e, CardKind::Xingjunyan);
++    for p in [2, 3] {
++        e.state_core_mut().player_mut(p).linked = true;
++    }
++    let c = e.debug_place(0, "shan");
++    e.state_core_mut().player_mut(0).hand.retain(|id| *id != c);
++    e.state_core_mut().deck.insert(0, c);
++    e.debug_deal_damage(Some(2), 1, 1, DamageNature::Normal);
++    finish(&mut e);
++    assert_eq!(e.debug_hp(2), 998);
++    assert_eq!(e.debug_hp(3), 997);
++}
++#[test]
++fn c9f_cuidui_does_not_poison_actual_boss_ally() {
++    let mut e = Engine::new(14013, 4);
++    durable(&mut e);
++    e.state_core_mut().mode = GameMode::Boss {
++        boss: 0,
++        chongzheng: 3,
++        fellows: vec![1],
++        stage: BossStageState::default_none(),
++    };
++    e.debug_grant(0, "催毒");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert!(!e
++        .state_core()
++        .has_skill_any_state(1, e.catalog().skill_by_name("中毒").unwrap()));
++}
++#[test]
++fn c9f_terra_expires_at_actual_global_turn_boundary() {
++    let mut e = Engine::new(14014, 3);
++    durable(&mut e);
++    e.debug_set_turn(0, Phase::End, 1);
++    e.state_core_mut().player_mut(1).zlfanshi_terra = true;
++    let out = e.submit(engine_native::GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.revision() + 1,
++        action: engine_native::GameAction::NextPhase,
++    });
++    assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
++    finish(&mut e);
++    assert!(!e.state_core().player(1).zlfanshi_terra);
++}
++#[test]
++fn c9f_cuidui_named_source_draw_and_foreign_name_negative() {
++    for actual in [true, false] {
++        let mut p = source_pack("shahai-swd-upstream-noname");
++        p.generals
++            .push(engine_native::vocabulary::generals::ExtensionGeneral {
++                name: "勾芒",
++                faction: engine_native::catalog::Faction::Qun,
++                skills: &[],
++                max_hp: 5,
++                gender: engine_native::vocabulary::generals::Gender::Male,
++            });
++        let mut e = Engine::new_with_extensions(14015, 4, &[&p]).unwrap();
++        let id = if actual {
++            e.catalog().mushengoumang_general_id()
++        } else {
++            engine_native::vocabulary::generals::STANDARD_GENERALS.len() as u16
++        };
++        e.debug_set_general_def(3, id);
++        durable(&mut e);
++        e.state_core_mut().mode = GameMode::Boss {
++            boss: 0,
++            chongzheng: 3,
++            fellows: vec![1],
++            stage: BossStageState::default_none(),
++        };
++        e.debug_grant(0, "催毒");
++        e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++        assert!(e
++            .state_core()
++            .has_skill_any_state(2, e.catalog().skill_by_name("中毒").unwrap()));
++        assert_eq!(e.debug_hand(3).len(), usize::from(actual));
++    }
++}
++#[test]
++fn c9f_actual_mode_enemy_relations_do_not_use_hidden_roles_or_seats() {
++    use engine_native::state::Role;
++    let mut e = Engine::new(14016, 4);
++    let c = e.catalog().clone();
++    assert_eq!(e.state_core().source_is_enemy_of(&c, 0, 1), None);
++    e.state_core_mut().mode = GameMode::Versus {
++        teams: vec![vec![0, 2], vec![1, 3]],
++        substitutes: vec![vec![], vec![]],
++    };
++    assert_eq!(e.state_core().source_is_enemy_of(&c, 0, 2), Some(false));
++    assert_eq!(e.state_core().source_is_enemy_of(&c, 0, 1), Some(true));
++    e.state_core_mut().mode = GameMode::Doudizhu { lord: 2 };
++    assert_eq!(e.state_core().source_is_enemy_of(&c, 0, 1), Some(false));
++    assert_eq!(e.state_core().source_is_enemy_of(&c, 0, 2), Some(true));
++    e.state_core_mut().mode = GameMode::Identity {
++        roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
++    };
++    assert_eq!(e.state_core().source_is_enemy_of(&c,0,1),Some(true),"source isFriendOf has no side boolean in standard identity and falls back to self, not hidden-role AI");
++}
++fn emission_pack(
++    source: u8,
++    target: u8,
++    amount: u32,
++) -> engine_native::content::extension::ExtensionPack {
++    use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++    let text=format!("skill c9f_emit(99109502) {{ active play_phase targets 0 0 {{ effect deal_damage({},{},{}); }} }}",source+1,target+1,amount);
++    let raw = content_compiler::compile_source_named("c9f-real-command", &text).unwrap();
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9f-real-command",
++            version: 1,
++            description: "actual active command damage cause",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&raw)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++fn sliced_active(
++    mut e: Engine,
++    packs: &[&engine_native::content::extension::ExtensionPack],
++    name: &str,
++) -> Engine {
++    let fire = |engine: &mut Engine| {
++        let skill = engine.catalog().skill_by_name("c9f_emit").unwrap();
++        let out = engine.submit(engine_native::GameCommand {
++            actor: 0,
++            expected_revision: engine.revision(),
++            dedup_id: engine.save().last_dedup + 1,
++            action: engine_native::GameAction::ActivateSkill { skill },
++        });
++        assert!(
++            !matches!(out, engine_native::CommandOutcome::Rejected(_)),
++            "{out:?}"
++        );
++    };
++    let mut expected = e.clone();
++    fire(&mut expected);
++    finish(&mut expected);
++    e.set_time_slice(Some(1));
++    fire(&mut e);
++    let mut checked = 0;
++    for _ in 0..1000 {
++        if e.save().resolution.stack.is_empty() && !e.save().segment_open {
++            break;
++        }
++
++        let mut branch = restore(&e, packs);
++        finish(&mut branch);
++        same_final(&expected, &branch);
++        if e.save().resolution.parks.iter().any(|p| {
++            matches!(
++                p.machine,
++                engine_native::snap::MachineSnapshot::NativeDamageSkill { .. }
++            )
++        }) {
++            capture(&e, &format!("{name}-native-{checked}"));
++        }
++        checked += 1;
++        if let Some(c) = e.open_choice().cloned() {
++            assert_eq!(c.spec.prompt, "c331_trigger_order");
++            let out = e.submit(engine_native::GameCommand {
++                actor: c.observer,
++                expected_revision: e.revision(),
++                dedup_id: e.save().last_dedup + 1,
++                action: engine_native::GameAction::Answer {
++                    choice_id: c.id,
++                    selection: c
++                        .spec
++                        .options
++                        .iter()
++                        .take(c.spec.min as usize)
++                        .copied()
++                        .collect(),
++                },
++            });
++            assert!(
++                !matches!(out, engine_native::CommandOutcome::Rejected(_)),
++                "{out:?}"
++            );
++        } else {
++            e.resume();
++        }
++    }
++    assert!(checked > 0);
++    same_final(&expected, &e);
++    capture(&e, &format!("{name}-final"));
++    e
++}
++#[test]
++fn c9f_atomic_self_source_bodies_restore_every_suspension() {
++    for name in ["绝情", "招祸", "冥顽"] {
++        let vm = emission_pack(0, 0, 2);
++        let mut e = Engine::new_with_extensions(14017, 3, &[&vm]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(0, "c9f_emit");
++        e.debug_grant(0, name);
++        e.state_core_mut().player_mut(0).hujia = 3;
++        sliced_active(e, &[&vm], &format!("self-{name}"));
++    }
++}
++#[test]
++fn c9f_random_bodies_restore_rng_and_child_suffix() {
++    for name in ["反噬", "阿鼻"] {
++        let vm = emission_pack(0, 1, 1);
++        let mut e = Engine::new_with_extensions(14018, 4, &[&vm]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(0, "c9f_emit");
++        e.debug_grant(1, name);
++        if name == "反噬" {
++            e.state_core_mut().player_mut(1).zlfanshi_terra = true;
++        }
++        sliced_active(e, &[&vm], &format!("rng-{name}"));
++    }
++}
++#[test]
++fn c9f_cuidui_grants_only_the_actual_poison_definition() {
++    let mut e = Engine::new(14019, 4);
++    durable(&mut e);
++    e.state_core_mut().mode = GameMode::Boss {
++        boss: 0,
++        chongzheng: 3,
++        fellows: vec![1],
++        stage: BossStageState::default_none(),
++    };
++    e.debug_grant(0, "催毒");
++    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
++    assert!(!e
++        .state_core()
++        .has_skill_any_state(2, e.catalog().skill_by_name("蛇毒").unwrap()));
++}
++#[test]
++fn c9f_yinzei_uses_ordinary_discard_and_loss_children() {
++    let p = source_pack("shahai-swd-upstream-noname");
++    let vm=vm_pack("skill c9f_discard(99109503) { trigger damage_before owner_is_target { effect draw_cards(self,1); } }",EventKind::CardsDiscarded,Timing::Normal);
++    let mut e = Engine::new_with_extensions(14020, 3, &[&p, &vm]).unwrap();
++    durable(&mut e);
++    equip(&mut e, CardKind::Xixueguizhihuan);
++    e.debug_grant(1, "隐贼");
++    e.debug_grant(0, "c9f_discard");
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    assert_eq!(e.debug_hand(0).len(), 1);
++}
++#[test]
++fn c9f_paotai_wide_real_command_restore_controls() {
++    for amount in [255, 256, 257] {
++        let vm = emission_pack(0, 1, amount);
++        let mut e = Engine::new_with_extensions(14021, 3, &[&vm]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(0, "c9f_emit");
++        e.state_core_mut().player_mut(1).paotai_lv = 3;
++        let e = sliced_active(e, &[&vm], &format!("paotai-{amount}"));
++        assert_eq!(e.state_core().player(1).paotai_lv, 0);
++    }
++}
++#[test]
++fn c9f_paotai_signed_zero_negative_and_overflow_rollback() {
++    for delta in [-2, -1, 1] {
++        let amount = if delta == 1 { i32::MAX as u32 } else { 1 };
++        let vm = emission_pack(0, 1, amount);
++        let modifier=vm_pack(&format!("skill c9f_adjust(99109504) {{ trigger damage_before owner_is_target {{ effect modify_current_damage(self,{delta}); }} }}"),EventKind::DamageBefore,Timing::First);
++        let mut e = Engine::new_with_extensions(14022, 3, &[&vm, &modifier]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(0, "c9f_emit");
++        e.debug_grant(1, "c9f_adjust");
++        e.state_core_mut().player_mut(1).paotai_lv = 3;
++        if delta == 1 {
++            let before = e.clone();
++            let skill = e.catalog().skill_by_name("c9f_emit").unwrap();
++            let out = e.submit(engine_native::GameCommand {
++                actor: 0,
++                expected_revision: e.revision(),
++                dedup_id: 1,
++                action: engine_native::GameAction::ActivateSkill { skill },
++            });
++            assert!(
++                matches!(out, engine_native::CommandOutcome::Rejected(_)),
++                "{out:?}"
++            );
++            assert!(format!("{out:?}").contains("VmFault"));
++            same_final(&before, &e);
++        } else {
++            let e = sliced_active(e, &[&vm, &modifier], &format!("paotai-signed-{delta}"));
++            assert_eq!(e.state_core().player(1).paotai_lv, 3);
++            assert_eq!(e.debug_hp(1), 1000);
++        }
++    }
++}
++#[test]
++fn c9f_discard_and_named_draw_restore_actual_children() {
++    for named in [false, true] {
++        let p = source_pack("shahai-swd-upstream-noname");
++        let vm = emission_pack(0, if named { 2 } else { 1 }, 1);
++        let mut e = Engine::new_with_extensions(14023, 4, &[&p, &vm]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.debug_grant(0, "c9f_emit");
++        if named {
++            e.state_core_mut().mode = GameMode::Boss {
++                boss: 0,
++                chongzheng: 3,
++                fellows: vec![1],
++                stage: BossStageState::default_none(),
++            };
++            let id = e.catalog().mushengoumang_general_id();
++            e.debug_set_general_def(3, id);
++            e.debug_clear_hand(3);
++            e.debug_grant(0, "催毒");
++        } else {
++            equip(&mut e, CardKind::Xixueguizhihuan);
++            e.debug_grant(1, "隐贼");
++        }
++        sliced_active(e, &[&p, &vm], if named { "named-draw" } else { "discard" });
++    }
++}
++#[test]
++fn c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore() {
++    for kind in [
++        CardKind::Xingjunyan,
++        CardKind::Xixueguizhihuan,
++        CardKind::Sha,
++    ] {
++        let p = source_pack("shahai-swd-upstream-noname");
++        let ciqiu = source_pack("wudian-upstream-noname");
++        let vm = emission_pack(2, 1, 1);
++        let mut e = Engine::new_with_extensions(14024, 4, &[&p, &ciqiu, &vm]).unwrap();
++        durable(&mut e);
++        e.debug_set_turn(0, Phase::Play, 1);
++        e.state_core_mut().mode = GameMode::Boss {
++            boss: 0,
++            chongzheng: 3,
++            fellows: vec![1],
++            stage: BossStageState::default_none(),
++        };
++        e.debug_grant(0, "c9f_emit");
++        e.debug_grant(0, "急叮");
++        e.debug_grant(0, "招祸");
++        if kind == CardKind::Sha {
++            e.debug_grant(0, "ciqiu");
++        } else {
++            equip(&mut e, kind);
++        }
++        e.debug_set_hp(0, 200);
++        for target in [2, 3] {
++            e.state_core_mut().player_mut(target).linked = true;
++        }
++        e.debug_set_deck_top_by(|d| d.kind == CardKind::Shan);
++        let e = sliced_active(e, &[&p, &ciqiu, &vm], &format!("virtual-{kind:?}"));
++        assert_eq!(
++            e.debug_hp(2),
++            if kind == CardKind::Xixueguizhihuan {
++                999
++            } else {
++                998
++            }
++        );
++        assert_eq!(
++            e.debug_hp(3),
++            if kind == CardKind::Xixueguizhihuan {
++                999
++            } else {
++                997
++            }
++        );
++        if kind == CardKind::Xixueguizhihuan {
++            assert_eq!(e.debug_hp(0), 202);
++        }
++    }
++}
+diff --git a/crates/engine-native/tests/c331_source_predicates.rs b/crates/engine-native/tests/c331_source_predicates.rs
+index 99c44473..41d06723 100644
+--- a/crates/engine-native/tests/c331_source_predicates.rs
++++ b/crates/engine-native/tests/c331_source_predicates.rs
+@@ -2,7 +2,7 @@ use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
+ use engine_native::event::{DamageNature, DamageProgress, EventData, EventKind};
+ use engine_native::{CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand};
+ 
+-fn source_pack(name: &str) -> ExtensionPack {
++pub(super) fn source_pack(name: &str) -> ExtensionPack {
+     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+         .join("../../packages/extensions")
+         .join(name)
+@@ -11,7 +11,7 @@ fn source_pack(name: &str) -> ExtensionPack {
+         .unwrap()
+         .pack
+ }
+-fn vm_pack(source: &str, kind: EventKind, timing: engine_native::Timing) -> ExtensionPack {
++pub(super) fn vm_pack(source: &str, kind: EventKind, timing: engine_native::Timing) -> ExtensionPack {
+     let raw = content_compiler::compile_source_named("c9e", source).unwrap();
+     let mut vm_skills = content_native_loader::bridge_vm_skill_decls(&raw)
+         .unwrap()
+@@ -32,7 +32,7 @@ fn vm_pack(source: &str, kind: EventKind, timing: engine_native::Timing) -> Exte
+         enabled: true,
+     }
+ }
+-fn equip(e: &mut Engine, kind: CardKind) {
++pub(super) fn equip(e: &mut Engine, kind: CardKind) {
+     let card = (0..e.catalog().cards.len() as u32)
+         .find(|&card| e.catalog().card_kind(card) == kind)
+         .unwrap();
+@@ -41,12 +41,12 @@ fn equip(e: &mut Engine, kind: CardKind) {
+     e.state_core_mut().player_mut(0).hand.retain(|c| *c != card);
+     e.state_core_mut().player_mut(0).equips.push(card);
+ }
+-fn card(e: &Engine, kind: CardKind) -> u32 {
++pub(super) fn card(e: &Engine, kind: CardKind) -> u32 {
+     (0..e.catalog().cards.len() as u32)
+         .find(|&c| e.catalog().card_kind(c) == kind)
+         .unwrap()
+ }
+-fn play(e: &mut Engine, card: u32) {
++pub(super) fn play(e: &mut Engine, card: u32) {
+     let out = e.submit(GameCommand {
+         actor: 0,
+         expected_revision: e.revision(),
+@@ -202,7 +202,7 @@ fn c9e_hutian_negative_cap_is_persisted_before_zero_transition() {
+     assert!(found, "actual native Hutian body was observed");
+ }
+ 
+-fn capture(e: &Engine, name: &str) {
++pub(super) fn capture(e: &Engine, name: &str) {
+     let Ok(directory) = std::env::var("C331_PREDICATE_TRACE_DIR") else {
+         return;
+     };
+@@ -228,7 +228,7 @@ fn capture(e: &Engine, name: &str) {
+     )
+     .unwrap();
+ }
+-fn restore(e: &Engine, packs: &[&ExtensionPack]) -> Engine {
++pub(super) fn restore(e: &Engine, packs: &[&ExtensionPack]) -> Engine {
+     let saved = e.save();
+     let bytes = engine_native::archive::encode_archive(&saved);
+     let decoded = engine_native::archive::decode_archive(&bytes).unwrap();
+@@ -241,7 +241,7 @@ fn restore(e: &Engine, packs: &[&ExtensionPack]) -> Engine {
+     assert_eq!(typed.state_hash(), restored.state_hash());
+     restored
+ }
+-fn finish(e: &mut Engine) {
++pub(super) fn finish(e: &mut Engine) {
+     e.set_time_slice(None);
+     for _ in 0..500 {
+         if let Some(c) = e.open_choice().cloned() {
+@@ -275,7 +275,7 @@ fn finish(e: &mut Engine) {
+     }
+     panic!("continuation did not finish");
+ }
+-fn same_final(expected: &Engine, restored: &Engine) {
++pub(super) fn same_final(expected: &Engine, restored: &Engine) {
+     let mut a = expected.save();
+     let mut b = restored.save();
+     a.auth_generation = 0;
+@@ -287,7 +287,7 @@ fn same_final(expected: &Engine, restored: &Engine) {
+         "full log/RNG/cost/child suffix must agree"
+     );
+ }
+-fn sliced(mut e: Engine, packs: &[&ExtensionPack], card: u32, name: &str) -> Engine {
++pub(super) fn sliced(mut e: Engine, packs: &[&ExtensionPack], card: u32, name: &str) -> Engine {
+     let mut expected = e.clone();
+     play(&mut expected, card);
+     finish(&mut expected);
+@@ -405,7 +405,7 @@ fn c9e_chilongya_equipment_qualified_chain_roundtrips() {
+     assert_eq!(e.debug_hp(2), 2);
+ }
+ 
+-fn reject_restore_atomic(
++pub(super) fn reject_restore_atomic(
+     e: &Engine,
+     packs: &[&ExtensionPack],
+     bad: &engine_native::snap::StateSnapshot,
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index a75edcea..e73c3876 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -115,3 +115,5 @@ mod c331_canonical_damage;
+ mod c331_prehp_damage;
+ #[path = "../c331_source_predicates.rs"]
+ mod c331_source_predicates;
++#[path = "../c331_atomic_source_repair.rs"]
++mod c331_atomic_source_repair;
+diff --git a/crates/engine-native/tests/native_kernel/boss_xiangliu.rs b/crates/engine-native/tests/native_kernel/boss_xiangliu.rs
+index 559ce264..215290ad 100644
+--- a/crates/engine-native/tests/native_kernel/boss_xiangliu.rs
++++ b/crates/engine-native/tests/native_kernel/boss_xiangliu.rs
+@@ -18,7 +18,7 @@ fn boss_xiangliu_duqu_shedu_echou() {
+     assert!(e.state_core().skills.contains_key(&(1, cdef)));
+     assert!(!e.state_core().has_skill(1, edef), "邪酬装配即未激活");
+ 
+-    // ① 书精（1 号）杀 2 号 → 2 号获中毒+蛇毒双实例
++    // ① 书精（1 号）杀 2 号 → 2 号只获源 boss_zhongdu
+     advance_to_play(&mut e, 1);
+     e.debug_clear_hand(1);
+     e.debug_clear_hand(2);
+@@ -27,9 +27,9 @@ fn boss_xiangliu_duqu_shedu_echou() {
+     play(&mut e, sha, vec![2]);
+     drain_choices(&mut e);
+     assert!(e.state_core().has_skill_any_state(2, zdef), "中毒实例");
+-    assert!(e.state_core().has_skill_any_state(2, sdef), "蛇毒实例");
++    assert!(!e.state_core().has_skill_any_state(2, sdef), "催毒不授蛇毒");
+ 
+-    // ② 中毒判定（方片）：伤 1+失去中毒；蛇毒实例保留
++    // ② 中毒判定（方片）：伤 1+失去中毒；不生成蛇毒实例
+     e.debug_set_deck_top_by(|d| d.suit == engine_native::catalog::Suit::Diamond);
+     let hp2 = e.debug_hp(2);
+     advance_to_play(&mut e, 2); // 判定后推进（自动应答）
+@@ -39,17 +39,20 @@ fn boss_xiangliu_duqu_shedu_echou() {
+         !e.state_core().has_skill_any_state(2, zdef),
+         "非黑桃失去中毒"
+     );
+-    assert!(e.state_core().has_skill_any_state(2, sdef), "蛇毒实例保留");
++    assert!(
++        !e.state_core().has_skill_any_state(2, sdef),
++        "不生成蛇毒实例"
++    );
+ 
+-    // ③ 再授毒：蛇毒实例仍在
++    // ③ 再授毒：仍仅授中毒
+     advance_to_play(&mut e, 1);
+     e.debug_clear_hand(1);
+     let sha2 = e.debug_place(1, "sha");
+     play(&mut e, sha2, vec![2]);
+     drain_choices(&mut e);
+     assert!(
+-        e.state_core().has_skill_any_state(2, sdef),
+-        "再授毒后蛇毒在"
++        !e.state_core().has_skill_any_state(2, sdef),
++        "再授毒不授蛇毒"
+     );
+ 
+     // ④ 邪酬（独立局）：相柳持邪酬——hp≤半线伤害窗激活；他人用桃获标记

@@ -1,0 +1,154 @@
+//! Internal invocation receipts; existing machine85 bytes are unchanged.
+use super::*;
+use crate::event::{InvocationData, InvocationPhase, NativeInvocationProgress as P};
+pub(super) fn enc_context(w: &mut W, d: &InvocationData) {
+    w.u8(d.owner);
+    w.u16(d.def);
+    w.u32(d.window);
+    enc_opt_pid(w, &d.source);
+    w.u8(d.target);
+    w.u8(d.phase.tag());
+    w.boolean(d.cancelled);
+    enc_opt_u32(w, d.jiding_card);
+    enc_opt_u32(w, d.judgement.map(|s| s as u32));
+    w.boolean(d.deferred_log);
+}
+pub(super) fn dec_context(r: &mut R<'_>) -> Result<InvocationData, ArchiveError> {
+    Ok(InvocationData {
+        owner: r.u8()?,
+        def: r.u16()?,
+        window: r.u32()?,
+        source: dec_opt_pid(r)?,
+        target: r.u8()?,
+        phase: InvocationPhase::from_tag(r.u8()?)
+            .ok_or(ArchiveError::BadTag("invocation_phase", 0))?,
+        cancelled: r.boolean()?,
+        jiding_card: dec_opt_u32(r)?,
+        judgement: match dec_opt_u32(r)? {
+            None => None,
+            Some(0) => Some(crate::catalog::Suit::Spade),
+            Some(1) => Some(crate::catalog::Suit::Heart),
+            Some(2) => Some(crate::catalog::Suit::Club),
+            Some(3) => Some(crate::catalog::Suit::Diamond),
+            Some(t) => return Err(ArchiveError::BadTag("judge_suit", t as u8)),
+        },
+        deferred_log: r.boolean()?,
+    })
+}
+pub(super) fn enc_progress(w: &mut W, p: &P) {
+    match p {
+        P::YuanceAsk => w.u8(12),
+        P::JidianAsk { targets } => {
+            w.u8(13);
+            enc_pids(w, targets);
+        }
+        P::AwaitJudge {
+            child,
+            target,
+            purpose,
+        } => {
+            w.u8(14);
+            w.u32(*child);
+            w.u8(*target);
+            w.u8(match purpose {
+                crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::LoseHp) => 0,
+                crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::Recover) => 1,
+                crate::event::JudgePurpose::Jidian => 2,
+            });
+        }
+        P::BodyDone => w.u8(15),
+        P::Ready => w.u8(0),
+        P::BeforeInvocation { context } => {
+            w.u8(1);
+            enc_context(w, context)
+        }
+        P::AwaitInvocation { child } => {
+            w.u8(2);
+            w.u32(*child)
+        }
+        P::Finished => w.u8(3),
+        P::Body => w.u8(4),
+        P::HolderAsk { candidates } => {
+            w.u8(5);
+            w.len(candidates.len());
+            for c in candidates {
+                w.u32(*c)
+            }
+        }
+        P::HolderPay { cards } => {
+            w.u8(6);
+            w.len(cards.len());
+            for c in cards {
+                w.u32(*c)
+            }
+        }
+        P::HolderLoss { count } => {
+            w.u8(7);
+            w.u32(*count)
+        }
+        P::HolderAfterLog { count } => {
+            w.u8(8);
+            w.u32(*count)
+        }
+        P::SourceAsk {
+            player,
+            count,
+            candidates,
+        } => {
+            w.u8(9);
+            w.u8(*player);
+            w.u32(*count);
+            w.len(candidates.len());
+            for c in candidates {
+                w.u32(*c)
+            }
+        }
+        P::SourceLoss => w.u8(10),
+        P::JidingCard { child } => {
+            w.u8(11);
+            w.u32(*child)
+        }
+    }
+}
+pub(super) fn dec_progress(r: &mut R<'_>) -> Result<P, ArchiveError> {
+    Ok(match r.u8()? {
+        12 => P::YuanceAsk,
+        13 => P::JidianAsk {
+            targets: dec_pids(r)?,
+        },
+        14 => P::AwaitJudge {
+            child: r.u32()?,
+            target: r.u8()?,
+            purpose: match r.u8()? {
+                0 => crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::LoseHp),
+                1 => crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::Recover),
+                2 => crate::event::JudgePurpose::Jidian,
+                t => return Err(ArchiveError::BadTag("judge_purpose", t)),
+            },
+        },
+        15 => P::BodyDone,
+        0 => P::Ready,
+        1 => P::BeforeInvocation {
+            context: dec_context(r)?,
+        },
+        2 => P::AwaitInvocation { child: r.u32()? },
+        3 => P::Finished,
+        4 => P::Body,
+        5 => P::HolderAsk {
+            candidates: r.vec(|r| r.u32())?,
+        },
+        6 => P::HolderPay {
+            cards: r.vec(|r| r.u32())?,
+        },
+        7 => P::HolderLoss { count: r.u32()? },
+        8 => P::HolderAfterLog { count: r.u32()? },
+        9 => P::SourceAsk {
+            player: r.u8()?,
+            count: r.u32()?,
+            candidates: r.vec(|r| r.u32())?,
+        },
+        10 => P::SourceLoss,
+        11 => P::JidingCard { child: r.u32()? },
+        t => return Err(ArchiveError::BadTag("native_invocation_progress", t)),
+    })
+}

@@ -1,0 +1,703 @@
+{
+  "utc": "2026-10-31T15:18:34.393063+00:00",
+  "goal": "mvtiifg9-z5ez1k",
+  "milestones_complete": 4,
+  "milestones_total": 27,
+  "accepted_head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "accepted_tree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+  "published_head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "ci": {
+    "run": 41214274772,
+    "attempt": 1,
+    "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "jobs": "10success",
+    "steps": "128success2skip0failure0null/130",
+    "created": "15:19:08Z",
+    "updated": "15:42:09Z",
+    "parentFresh": "/tmp/noname-parent-ci41214274772-audit.json",
+    "parentLiveAPIReads": 6,
+    "manifestEntries": 119,
+    "primaryFiles": 121,
+    "rawGzipLogs": 10,
+    "rawBytes": 4846646,
+    "review": "a9ffdca1-748c-4fdd-a6aa-9557487f68df OKnotesindependentregistration",
+    "archive": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/publication-ci",
+    "Windows": "bothcheckoutstep2andfullbuild/desktopProduceinstallerUploadactuallysuccess;3installerAPIrecordsnotdownload/install/deviceproof",
+    "counts": "workspace6929/0/77;nativeweb1830/0/75;OSlib853each;API12/frontend441/Worker82/resource17/conformance19/crosshash overlap",
+    "warnings": "3628matchedloglinesincludingrepeats,CRLFbuild3844desktop2221preserved",
+    "parser": "firstlatestheaderAPI5wrong/runningN174vs167failedcontrolretained; v2FIFO167headers/resultsAPI4+1+4+3=12 currentauthority",
+    "oldRun": "d0741202703042still8/2Windowscheckoutfailure neverrewrittengreen"
+  },
+  "current_main_versions": "330/105/758/WS6; nativebackend anddesktopWASMtransport distinct",
+  "main_source33_generated18_dist37": "Source36 exact MainOwn6+I0230; source31batchI02+CI. Current18=7c/846, dist37fixed. InitialQAraw147->f4c ONLY33ctime independentparser; gateentry/exit/seal rawsame. Laterpostfreeze raw f698 observed beforestage causeunknown/notwhole-sessionstability. Intentionalstage3913 changedrawtoc3af; allblobs/modes audited, commitclean.",
+  "index_empty": true,
+  "active": {
+    "C9d": {
+      "status": "completed_sealed_PARENT_INTEGRITY_PASS_REVIEW_ACTIVE",
+      "native": [
+        1802,
+        1,
+        75
+      ],
+      "strict": 0,
+      "full217": "0d4583771720f7eeb3bf87a84dc3fc52fc7d471105830d99e894b81446214053",
+      "increment18": "487bb40008d8a9be8aff5bce97df8e3fbbb63b63cad7751cdb703db5aa1564b9",
+      "audit": "/tmp/noname-parent-c9d-final-audit.json",
+      "immutableSnapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9d-final-nzl_pk88/snapshot",
+      "artifacts": 2319,
+      "sourceAndTar217_18Verified": true,
+      "outcomes": "362pairs:187NoOutcome139Accepted32Pending4Rejected; independentParentfullpayloadNonAcceptedexact; onlyAccepted32bytehashretainedseparate;11businesssameseenasbefore1chainlogeventorderchange",
+      "unfixed": "ChilongyanotLink,ZuijiuactualimmediateShaancestry/QueryCtx,Hutiansigned; actualChangeHp/DeathFlow absent; no goldenrerecord/noMainmerge"
+    },
+    "ChangeHp_plan": {
+      "status": "v2_PLAN_P1_CLOSED_READY_FUTURE_IMPL_NO_CODE",
+      "review": "O/ddce875b-54d5-4cfd-8d3c-120aa83142f2/reviews/c29-change-hp-shared-consumer-plan-v2.md",
+      "v2": "O/06933b8b-0d67-4c35-ba93-36d22bdb2b34/proposals/c29-change-hp-shared-consumer-plan-v2.md",
+      "parentAudit": "/tmp/noname-parent-change-hp-plan-v2-audit.json",
+      "criticalSemantics": "Positive submitteddamage.notriggerSTILLexplicitordinaryChangeHpeligiblecallbacksincludingarmor0; onlysourcegenericlifecycle/damagewindows suppressed. Oldv1wrongstatement+BLOCKreview immutable."
+    },
+    "publication_corrected34e": {
+      "run": "70026df3-10d2-4219-8055-1125830715c1",
+      "scope": "newnormal25guard/push34eexpectedOldd07 thenexact-headCI, one watch; no backuprefpush, nocode/sourcewrites. Explicitread-onlyleaseuntilpushrelease only.",
+      "output": "publication/i02-corrected-phase1-accepted-push-and-ci.md",
+      "checkpointSteer": "97e3e391 at20min15:35:43 requested usable currentpointer /tmp/noname-i02-34e-publication-current.json withEroot/release/run; no nativeearlyprogressreceivedmaydeliverylimitationNOTclaimedfailure. DoNOTordinarypoll; awaitnativeupdate/final. Mainreadonlylease stillactive untilactualrelease read.",
+      "status": "COMPLETED10_OF_10_SUCCESS_PARENT119HASH_CRC6LIVEAPI_AND_REVIEW_ACCEPTED"
+    },
+    "C9e_pipeline": {
+      "workflow": "0b7ce162-d228-460e-a9c9-7fb28e076018",
+      "script": "/tmp/noname-c9d-review-and-predicate-repair.js",
+      "first": "readonlyC9d217/41units15helperslifecycle/admission/restorepriorityreview bab55resume atmost10min",
+      "then": "samewriter1fdresume50min threepredicate/contextrepair+reviewfindings first, no genuineChangeHp yet, no goldenrerecord. checkpoint20/noNEWheavyafter40/seal50.",
+      "output": "implementation/c331-c9d-review-and-source-predicate-repair.md",
+      "reviewRun": "6f0f7289-0e49-4884-ba94-6ac282df00ce",
+      "reviewStatus": "BLOCK2P1 beyond3declareddefects, queueCommitprecedence mechanismfixedbutboundedmigrationnotaccepted",
+      "reviewOutput": "O/0b7ce162-d228-460e-a9c9-7fb28e076018/reviews/c331-phase9d-existing-window-priority.md",
+      "writerRun": "09d656a4-2540-4760-9a0a-ae709780724c",
+      "writerStart": "2026-10-31T15:32:25.896Z",
+      "newDefects": [
+        "Ciqiu declaration/body mappedBegin butpinnedsourceBegin1; FirstBegin1zero mustprecedeincrement/removal",
+        "Ciqiu/Xixueadmitis_sha_likebutbodiesexactSha causeFireSha/LeiShaadmittednoop; unifyactualsourcefamily, dontnarrowadmission"
+      ],
+      "parentSteer": "c2476246 all41actualsource tuple/role/admission-bodyconcordanceinventory+fix2P1+3mandatorypredicates, no mirror41tests/newframework, actualwindowrootparentnotwrapper orcardguess"
+    }
+  },
+  "decision29": {
+    "recorded": "2026-10-31T08:53:26.801749+00:00",
+    "scope": "C331106→GaiMing332106→R05333107; Cschema5/genericDamage/provider/expiry/death/reveal/out/phase/skill/Rangjie; old105strictrejectpreserveoriginal; ABI758WS6conditional; R05ABI759WS7unchanged",
+    "path": "docs/operations/evidence/2026-10-31-c331-runtime-contract/user-decision29.json"
+  },
+  "PA09release": "NEGATIVEbothwholeand135eligiblematchedsubset, no integration/defaultswitch;97rawbundlearchivedrelease-pilot; parentfresh92+2bin/1687rowsEachPASS",
+  "physical": "Usephysical_latest15:31 and /tmp/noname-physical-readiness-latest.json; older13:58countsamehistorical",
+  "next": "AwaitC9e09d actualfinal/checkpoint; boundsfromstart15:32:25 +40(noNEWheavy16:12approx)/+50seal16:22approx. MustrepairCiqiuBegin1+elementalShaP1 andChilongyanotLink/ZuijiuactualimmediateshaQueryCtx/Hutiansigned; all41sourceconcordanceaudit. Independentreviewbefore genuineChangeHp(v1+v2P1closedddce)/DeathFlow29. MainDocs/evidence currentlyuncommitted canbatchreview/commit18+publish25 afterC9eseal ornextacceptedsource avoidingnewHEADrace, no newpermission. WholeGoal4/27, devices0/DModeexternal notallGoalblock whilecodeactive. Nativeasyncnopoll/bgwait.",
+  "PA_retirement": {
+    "status": "completed parent fresh bounded PASS",
+    "allocated_bytes_removed": 5200220160,
+    "exact_two_paths_absent": true,
+    "retained_binaries": "/tmp/pa09-target-retirement-cdb76be8/retained-binaries",
+    "relocation": "docs/operations/evidence/2026-10-31-pa09-product-pool/release-pilot/target-retirement/binary-relocation-manifest.json",
+    "no_other_cleanup": true
+  },
+  "goal_contract_retrieved": "Full3144charobjectiveandall27tasks reread currentturn; no separateCImilestone,final-acceptance includesallplatform;stay4/27",
+  "orchestration_notes": "Invalidoptions.view compact statusqueries rejectedbeforeexecution; retriedwithoutview, workersrunning. Nativeasyncno bgwait/poll. ReviewerCrequesteduntar; parentmaterialized148readonlyprovided. Checkpoints createdontimebutparentnotificationlate, doNOTcallmissing.",
+  "C7": "PRIVATEfoundationreviewaccepted1761/0/75 final148SHA0d7a18 archived README",
+  "C8": "PRIVATEfoundationaccepted after7repair,170source/91evidence+6nodeWASM freshPASS/reviewNoissues. OriginalC8BLOCK historical remains; CoreC9nowactive, wholeC331 notaccepted.",
+  "NC_publicOwn": "Accepted/published d07 bounded publicOwn6; formalquality219544success656restore descriptiveonly; no fullNC10/NoCert/strength closure. Original dependencydrift exactlock correction f9 andoriginalfailures preserved.",
+  "NC_quality": "200+200selfplay actualsubmits135200 accepted/pending0reject/400finalrestores;fixedreferencepilotnextindependentaudit not statisticalacceptance",
+  "serialization": "RestoredexactarchivedhelperSHA d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34; global lock inode620205209; mutuallyexclusive/exit7selftestsPASS; originalmissingcauseunknown; oldFDnonebeforemutate",
+  "new_rule_gap": "Wine-othernative330accepted contraryupstreamself/jiuOther, recordedbaseline+sourceaudit; notfixed, noAIheuristic mask",
+  "docs_evidence": "1665copies~99.77MB, rawNCsubmits861MB losslessgz, unchangedproducts retainedprivate;docslinks8/strict1065/source9003pass",
+  "decision30": {
+    "recorded": "2026-10-31T10:48:10.643227+00:00",
+    "answer": "批准限定合同（推荐）",
+    "page_sha256": "301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d",
+    "record": "docs/operations/evidence/2026-10-31-i02-public-presentation-contract/user-decision30.json",
+    "scope": "v3 optionalS→C/puretake/producerpublic/qualifieddefinitionbinding/EnginevolatileoneRange, no autoaxes/VMdeathformalrepair"
+  },
+  "NC_fixed_reference_parent": "PASSallmanifest/84344rows/256archive/whole5fc-normalized/sourcehelper/binary/routing/24calibration4Own/restoration;299copies15.88MBarchived; count3→4erratum separate",
+  "NC_quality_disposition": "f7d9ea86 supportsboundedprivacyfix, not demonstratedstrengthblock; 484policytrajectorypin replacewithsemantic900step/P3/formalsuccess/nofault/immutableplan/finalrestore, reviewandfinalchecksrequired",
+  "source_followup": "Canonicalrefresh decadechunlao.ai.jiuOther true bothrepos, nativeboundedregisterednone; LiuliTianxianjiu savableSTRICTself. recordedqualified-jiuother-and-variant-followup.json, no codefix.",
+  "Main_current": "HEADaccepted/published34e tree22e6parentd07. NoCproductionMainimport; same37code/config+Own6/Mainlock/18generated/dist37/4schemasstable. ParentpostreleaseDocs3trackedchanges+newC9d/ChangeHpplan/pubcheckpoint/finalCIevidenceuntracked; stagingempty. ExactParentreceipt /tmp/noname-parent-post34e-main-write-receipt.json capturespaths/SHA, no blanketbaseline refresh. No furthercommit/pushafter34e. Wrongbdafprotectedlocalrefnotancestor/552localexclusionspreserved.",
+  "NC_final": "private final6 source1719/0/75 10commands/Gate1b/session6/semanticseed119successful/fullrestore PASS parentaudit /tmp/noname-parent-nc10-final-regression-audit.json; 034f7214Noissues semanticdelta source review. Mainfunctional notyetaccepted.",
+  "I02_phase1": "Acceptedandcommittedbdaf boundedtypedDTO/strictingress/8retainedintents/omissioncompat. Main12APIprotocol/native1719/workspace6929/frontend441/strict/Worker82/conformance19/realUI12/currentIPC+SAB+WS+7archives40+20 PASSED;1054artifacts37cmd36sources freshparent. None9constructors, no producer/range/resourcefactory/audio/fullI02.",
+  "physical_latest": "2026-10-31T15:31:55.196341Z actualreadonlyadb0authorized; ApplevalidJSON1physicaliPhone0available, deviceprepcode-27DeveloperModeRequired. No install/pair/TCC/window/game/hearing/thermalactions. RawIDsprivate.",
+  "main_lsp6": "active6checked,5clean+1expectedwasm32inactivehint ai580, noerrors/warnings; source6bindingbeforeproductbuild.",
+  "parent_docs": "Post34e Mainprogress top nowtruepublished34e/CI10of10/C9dBLOCK2newP1+3sourcepredicates/ChangeHpv2planclosed/notcode/physicalDeveloperMode. All7updatednewnarrative821localreferencesbad0, strict1065outofrange0. CurrentC9d217source/2319artifacts andCI121primary archivalplusParentread-onlyproof kept. No source/runtimeproducers rerun.",
+  "NC_final_source_review": "034f7214Noissues, parentfresh6/overlay/10commands/native1719/0/75/session6/old484+119rawpreserved PASS. No productionchanges sinceauditedv2; currenttestsemanticdisposition acceptedprivate; Mainfunctionalpending.",
+  "archives_latest": "C8repair94copies15.56MB includesrawSDK4oldharnessfails+auth_generationonlydiff, privateWASM6notcopiedretained; NCfinal+I02phase1snapshot196copies7.52MB; phase1reviewP1raw archived. Alloriginaldigests unchanged.",
+  "updated_utc": "2026-10-31T16:18:16.660957+00:00",
+  "accepted_main": {
+    "utc": "2026-10-31T15:14:33.415602+00:00",
+    "status": "CORRECTED_LOCAL_ACCEPTANCE_COMMITTED_NOT_YET_PUBLISHED",
+    "commit": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "tree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+    "parent": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+    "withdrawnLeaf": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+    "withdrawnLeafProtectedLocalRef": "refs/heads/local-evidence/i02-bdaf-unpublished-profile",
+    "withdrawnLeafNotAncestor": true,
+    "publishedD07FullAncestryPreserved": true,
+    "normalCommitHooksNotBypassed": true,
+    "files": 3433,
+    "bytes": 105988114,
+    "productionPaths": 31,
+    "excludedLocalAliasesRetained": 552,
+    "trackingRemovedOnly": 495,
+    "trackedAndStagingClean": true,
+    "stageAudit": "/tmp/noname-i02-corrected-stage-audit.json",
+    "review": "2353a0eb-d8c7-40c1-96da-76a6ba367e7c",
+    "publication": "Needsfreshguard/normal25pushproposedthisSHAexpectedOldd07; earlierbdafproposalwithdrawnbeforeanypushnetwork",
+    "qualification": "No reset/clean/stash/force/broadfilter/physicaldeletion; onlyowninvalidunpublishedleafamendedwithprotectedoldref. Source31/runtimechecksunchanged, no audio/fullI02/Core331/Windowsgreen claim."
+  },
+  "published_main_last_confirmed": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+  "main_write_freeze": {
+    "kind": "ALL Main source/docs/evidence during I02 Main verification",
+    "owner": "33d21ba5-8777-4019-8cfd-eb9a3d17176a",
+    "until": "final sealed gates AND explicit release",
+    "source30_receipt": "/tmp/noname-parent-i02-main-integration-current.json",
+    "scope": "Parent applied30 at13:02:52 afternormalpushlease; sourceOwn6/mainCargo.lock/indexapplyunchanged; four dateddocs updated then ALL writes frozen beforeMainQA launch. Main18 generatedoutputs exclusivelyverifier, defaultdist37protected. NoC/I02 privatewrongbaselineimports.",
+    "extra_generation_authorization": "Supervisor72897211... permits ONLY4 precise ignored apps/desktop-client/gen/schemas paths captured/backedbyverifier viaoriginaltauri-buildwrite_if_changed. Sourcepermissions/capabilities/tauri.conf unchanged; TAURI_CONFIG onlycommandlocalprivatewindowidentifier. No handrestore/forceadd; differences requirefielddisposition, beyondfour/permissionchange stopsubstage. Requestactualfourpathsreceiptfromfinalreport."
+  },
+  "active_now": {
+    "Main_I02_verifier": "33d21ba5-8777-4019-8cfd-eb9a3d17176a",
+    "C9c_workflow": "e2746e76-3e4f-4313-b531-8b5880608c2d",
+    "C9c_writer": "7555ab8a-3f8d-4fea-a38d-ce5512c6eb9d"
+  },
+  "new_evidence": {
+    "main_original": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/nc10-main-own-sfobj6i8",
+    "main_lock_repair": "/tmp/nc10-main-lock-repair-0425dc78",
+    "main_original_parent_audit": "/tmp/noname-parent-nc10-main-final-audit.json",
+    "main_lock_parent_audit": "/tmp/noname-parent-nc10-main-lock-audit.json",
+    "stage_plan": "/tmp/noname-own-stage-plan.json",
+    "stage_audit": "/tmp/noname-own-stage-audit.json",
+    "i02_audit": "/tmp/noname-parent-i02-ingress-repair-audit.json",
+    "c9_audit": "/tmp/noname-parent-c9-final-audit.json",
+    "c9_snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9-final-a_fz1xyd/snapshot"
+  },
+  "important_addenda": [
+    "Main714/26 all fresh verified; originalprivateprobe21externaldeps differedMain plus unrecordedflycheck Updatingindex, exactlauncherunknown. Originalsource/report/index retained; newprobe30externalexactMain and7fullarchivesall==actualMainWasm, father+review8ab PASS. Do notclaimwholesessionoffline.",
+    "Parentstage3618files204625141B blob/modeall exact; codeonlyOwn6; approved29/30 pagesSHAexact. OriginalMDreports3withprivateabsolute links retaineduntracked locally, identical.raw.txtstaged; rawflychecklogs archived outsideignoredtarget. Stageportablelinks0newbad; 3unchanged siblingarchive/instructionlinks recorded. Rawwhitespace2 vsmaintained0 preserved.",
+    "Mainoriginalarchivecopyaccidentallycopiedstrict-target552files75MB then removedONLYnewuntrackedparentcopies after matchingoriginalprivateSHA; originaltargetuntouched, correctionmapreceiptcommitted. Currentcopymap1018files47MB(notinitial1570/122MB); fullacceptedcommit3618/204MB includespriorprivatefoundations/evidence.",
+    "C9final42/191 and261artifactfresh hashes; native1774/8/75 original8reds and12goldenscenarios unresolved; review3P1 beforeHPdriver/chaineligibilityunlink/settlementprogressrestore. WorkflowreviewBLOCKb369feeds89fadwriter implementingpreHP/chain/validation; noMainCcode. SubmitHpclarification cb0f...answered atomicrootprogress notinvented damageSubmitHp event.",
+    "I02final30+11repair and441frontend/12Rust/type checks parentparsed andreviewf85Noissues; onlyprivatefoundation,9productionconstructorsNone. NoMainI02integration/producer/audio/versions.",
+    "C9mustreceiveacceptedMain d07 receipt as explicitauthorized parentHEAD/index/docs change, neverblanket sourcebaseline refresh; MainOwn6/nativeWASM30e exceptions unchanged."
+  ],
+  "publication": {
+    "worker": "97773363-63cd-4746-befd-1f27484f497a",
+    "E": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-d07b35f9-own-br49nqpd",
+    "lease_release": "push-stage/lease-release.json",
+    "lease_released_utc": "2026-10-31T12:48:05.496863+00:00",
+    "push_exit": 0,
+    "remote_main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "run_id": 41202703042,
+    "attempt": 1,
+    "status": "FINAL failure 8success/2Windows checkoutfailure; parentfresh101SHA/CRC/10gzip+5liveAPIs andreview23b OKwithnotesfailure-registrationonly",
+    "parent_audit": "/tmp/noname-parent-ci41202703042-audit.json",
+    "review": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/23b66b15-8ffe-4199-99f9-b66c59335651/reviews/nc10-ci41202703042-independent-registration.md"
+  },
+  "short_slot_coordination": {
+    "state": "RELEASED GO sent33d; bothC9finalrunnerPIDs gone parentps verified",
+    "note": "Finalscopefixed1791/1/75 strict0 completed13:30. Do notre-runproducer orleaveMainQApaused."
+  },
+  "C9b_checkpoint": {
+    "utc": "2026-10-31T13:14:37.778104+00:00",
+    "status": "27_CHECKPOINT_SOURCE_SHA_TAR_PASS_ONLY",
+    "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-checkpoint-x4gyi6ll",
+    "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-checkpoint-x4gyi6ll/increment",
+    "manifest": "7b05dc499dc317c8999d58bad69ed7287351d0cc63528324325f598da0867f98",
+    "qualification": "No final tests/runtime acceptance implied; C9b active and may differ from checkpoint."
+  },
+  "target_retirement": {
+    "E": "/tmp/nc10-main-owned-target-retirement-f463dd87",
+    "parent_audit": "/tmp/noname-parent-nc10-target-retirement-audit.json",
+    "status": "fresh973SHA/926receipts/672preserved PASS; ONLYoldEprobe/target374files211907866B andstrict-target55275443424B absentauthorized; Mainwarm target retained and nowownedMainQA",
+    "old_original_714_audit": "PASS historical12:09; afterretire374indexedcacheabsent/340remainingverified, DO NOTblindlyrerunold714parserassumingallfilesstillpresent. Mainrawlog/source/index originalbytesunchanged. NoMaincleanup."
+  },
+  "death_plan": {
+    "proposal": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/ea42b092-88ff-4701-affa-cad6e1642d33/proposals/c29-vm-death-shared-authority-plan.md",
+    "inventory": "/tmp/c29-vm-death-ea42/source-inventory.json",
+    "review": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/8791f981-fc44-495e-a32d-f9f0f9383dca/reviews/c29-vm-death-shared-authority-plan.md",
+    "status": "Readfull52lineplan+23linereviewNoissues. AlreadyC29authorizedCoreDeath/provider/lifetime semantics, I02exclusionnotrevoke29; no newuserpermission neededunlessactualuncoveredopcode/context/unconditionalkill. Implement ONLYafterC9b seal+review, sameexclusiveCwriter, realproviders/LossEnd needednotDeathDTOwrapper. NoMain/archivewhilefreeze."
+  },
+  "next_required": [
+    "HonorALLMainDoc/sourcefreezeowner33d untilfinalgatessealedandexplicitrelease; verifierexclusive18+captured4ignoredtaurischemas, noParentMainwrites.",
+    "MainQA33d continuingcurrent30afterGO, actualserver/IPC/GUIplusmatchedWasm/strict/full/preflightresults pending; do notreuseprivate441/12orold225f asMainproof.",
+    "C9c workflowe274 readonlyfinalreviewBLOCK2P1 feedswriter: fixtrueorderingcompetitionandreachablechildstage then12baselinefirstsemanticdiffs. No goldenrerecorduntilconcretedispositionsreviewed; noDeath/provider/versions/Mainmergeyet.",
+    "CI41202703042 FINAL8/2 record only. WindowsGitcheckoutFilename too long, Windowsruntime/installersunexecuted. Parentaudit101/tenfullgzip/5livePASS+indep23bready; archive103primary+auditsAFTERMainfreeze. Do notrerunoldCI.",
+    "CIlongpathsprivatecandidateb46...reviewfc385Noissues+localconfigcount0false/count1true/YAMLpassed. ApplyoneworkflowfileAFTERfreeze/sourceacceptance; keepold8/2, nextnormalguardedpushneedsactualWindowscheckoutacceptance. No persistentconfig/newremote oruserpermission.",
+    "Retirementf463973SHA926receipts672preservationPASS; oldprobe+strictcache pathsauthorizedabsent, mainwarm retainednow33downer. Neverrerunold714parserblindlywithoutretirementmap.",
+    "Deathplan+review8791NoissuesalreadyC29authorizedonlyplan, notruntime; nextexclusiveCoreDeath/provider/LossEndafterC9b/c fixesreviewed, no unnecessarynewuserapproval.",
+    "AfterMainQAexplicitrelease archiveCI/targetretirement/C9b+review/Deathplan/currentreceipts withcopy-map/portable.raw reports; updatecurrentstatuswithtrue8/2 andpending fixes. Do notclaimpostsealmetadatawasoldfrozengateinput."
+  ],
+  "windows_checkout_fix": {
+    "utc": "2026-10-31T13:24:59.601476+00:00",
+    "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-windows-checkout-fix-14l3a00c",
+    "base": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+    "base_workflow_sha256": "354f123194b7ede1fe3f5131a9edb0a26d5b85b75f7c076cd994c7488ffabe30",
+    "candidate_sha256": "b46fd58a50fe5a74c537929d66919fca694163588c19600226426d48f43c45e8",
+    "patch_sha256": "a53b2361568f200058e183d112dbfddc8b1addc7c646fe9441d4486414c4995d",
+    "command_local_config_selfchecks": [
+      {
+        "GIT_CONFIG_COUNT": "0",
+        "expected": "false",
+        "actual": "false",
+        "exit": 0
+      },
+      {
+        "GIT_CONFIG_COUNT": "1",
+        "expected": "true",
+        "actual": "true",
+        "exit": 0
+      }
+    ],
+    "local_config_after": "false",
+    "yaml_exit": 0,
+    "qualification": "PRIVATE ONLY, no Main edits/commit/push/global config. Existing two Windows checkout failures are the red; macOS Git env precedence/YAML are setup controls, not a real Windows filesystem checkout green. Real Windows next CI still required.",
+    "review": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/fc3857f8-ad6f-4af2-bcce-94cad5cb01ec/reviews/windows-checkout-longpaths.md",
+    "status": "PRIVATE reviewedNoissues Git-env/YAMLcontrolsPASS NOTrealWindowsgreen; applyonlyAFTERMainQAfreezeexplicitrelease. Changesonly2checkoutstepenv, noMain/globalconfig/permission changes. No newapprovalneeded."
+  },
+  "C9b_final": {
+    "utc": "2026-10-31T13:35:55.995783+00:00",
+    "status": "INTEGRITY_PASS_FINAL_GOLDEN_STILL_RED_NOT_RUNTIME_ACCEPTANCE",
+    "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw",
+    "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw/snapshot",
+    "increment": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9b-final-nrwrephw/increment",
+    "artifact_hashes": 490,
+    "full_sources": 212,
+    "increment_sources": 46,
+    "manifest": "d1c89c4cd195e0dc6847bcffbfb3d01f52f6aa6e086ad7649451f14329ded049",
+    "increment_manifest": "e0ef75ea3d3c0a7a77bb2103db36e5b9e23e1f2d146286716d4c971a62c3a174",
+    "final_native_counts": [
+      1791,
+      1,
+      75
+    ],
+    "strict_exit": 0,
+    "parent_owned_validation_files_sealed": 12,
+    "parent_owned_runner_complete": [
+      {
+        "pid": "82177",
+        "exit": 1,
+        "ps": ""
+      },
+      {
+        "pid": "82179",
+        "exit": 1,
+        "ps": ""
+      }
+    ],
+    "source_live_all212_equal_tar": true,
+    "qualification": "Finale0ef scope-fixed source has1791/1/75, distinct frompreFix751427 source1790/1. Onegolden group/12scenario mismatches retained, no goldenrerecord or Main import. 46hashes assertedbeforeeachqueuedcommand andfull212freshafter; global lock queuewall notperformancemeasure.",
+    "review": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/e2746e76-3e4f-4313-b531-8b5880608c2d/reviews/c331-phase9b-final-runtime.md",
+    "review_status": "BLOCK2P1: nativeinlinewindoweffects runbeforeFirstVMordering (Jueqing replacement vsFirstprevent), childwindow ownstage forgeIntrinsic stalls/BeforeTriggers reopenspreHP; C9c mustfixbeforegoldendisposition. Original3P1structure/chain mostlyfixed, noMainmerge."
+  },
+  "main_lsp_typescript": {
+    "utc": "2026-10-31T13:46:53.229900+00:00",
+    "source": "active lsp primary",
+    "files": 7,
+    "errors_warnings": 0,
+    "coverage": "presentationMetadata/client/desktopEngineTransport/networkClient/viewStore/types.presentation/types.engine",
+    "not_proof": "DoesnotreplaceactualMaintype/full/GUI/IPC/WSchecks. NoRustLSPclaim."
+  },
+  "main_I02_latest": {
+    "status": "worker reportsallfunctional/products+single21preflightPASS, all13gatefieldsentryexit equal; parentfinalaudit/reviewpending",
+    "index_provenance": "initialraw147da505... vs gateentry/exitf4c050aa...; bothrawcopiesretained, logical/HEAD/tree/stage/status/source36/11337maintained+docs/hooksequal. Firstsealexit1 preserved. Supervisor e2f... approvedread-onlyboundedparseincludingOID/mode/path/stage/flags/extensions beforeclassifyingonlystat/cache; noattribution/indexrepair/testrerun. Awaitactualparsedfinalreport+explicitrelease.",
+    "pending_clarification": "IPC actualcurrentMainJS chunk/moduleSHA (notolddefaultdist37), fourignoredtauri schemasactualpaths+beforeafter; legacyengine-api inputchanged so cannotclaimwholelegacyRustinputsunchanged—recordactualbuild/crosshashorqualifiedfrozenlegacyinput, necessarysource-built supplementonly ifrequired, no broad repeats.",
+    "legacy_provenance_request": "Steer6f461c28... says engine-api is also legacy dependency: cannotcallentirelegacyRustinputsunchanged. Record actual currentlegacybuild ifalreadyexecuted; otherwisequalifiedoldfrozencompatinput/currentCorebodyunchanged, only necessaryoriginallegacybuild+crosshash supplement ifcontractrequires; preserveoldgatesnapshot vs later18artifactseal, no blindbroad rerun."
+  },
+  "C9c_latest": {
+    "start_reported": "2026-10-31T13:44Z",
+    "scope": "FixtwoP1 before12firstsemanticgoldendispositionsagainstactualisolatedacceptedC8baseline; no goldenrerecord orDeath/providerstart.",
+    "baseline": "C8isolatedgitarchive5fc+exact170overlay /14goldengroup started, ownprivatebaseline target only.",
+    "internal_body_authorization": "Supervisor c168... repliednecessaryfiniteNativeDamageSkill(owner,def,window) internalmachine/tag85withinC29 Core allowed iftagcollisionchecked+realimmutableSkillDef/source/role+samequeue/TriggerOrder/stophelpers+exactlyonce+restoreadmissionbindings. No secondregistry/scheduler/ABI/providerframework. GenuineNoopqueryskills mayrealizebodies; unownedstatus/equipmentbranchesmustremainexplicitresidualnotfakeidentities; P1partialifstillorderwrong.",
+    "review": "C9b e0ef/d1c89 final1791/1strict0 BLOCK2P1 runtimeordering+childforgedstages, original3structuralfindingsmostlyfixed. Parent490+12source212freshPASSnotruntimeacceptance."
+  },
+  "pending_main_after_release": [
+    "Private127fileCI/parentlive/review+checkoutfixpacket ready at /tmp/noname-ci41202703042-ready-current.json; copy only after MainDOCFREEZE explicitrelease, preserve103primary originalhashes andold8/2. No Mainwritten forpacket.",
+    "Receive/readfinalI02Mainreport+manifests/rawindexparse+actualJS/WASM/IPC/WS/source36binding, parentfreshartifactsparse+combinedreview beforecommit.",
+    "Apply reviewedPRIVATEonefileWindowscheckoutenvpatch onlyAFTERexplicitMainfreeze release, verifyoriginal354f.../candidateb46fd...; YAML/Gitlocalcontrols alreadyPASSnotWindowsgreen. Source31thencontainsI02_30+CIyml, no semanticRuleversionchange. SourcegateoldfrozenproofandpostfreezeCIconfigvalidation separate, no fullrerunwithoutcause.",
+    "ArchiveCI41202703042 exactd07 FINAL8/2 +parent101SHA/10gzip5APIs+review23b; originalWindowsruntime skipped noWindowsartifact. NewnormalguardedpublishneedsrealWindowscheckout/jobgreen, neverrerunoriginalrun.",
+    "Archivetargetretirement973/926/672/privatecachemap, C9b final212/46+review2P1, Deathplanapproved29Noissues8791 onlyreadyafterC9c, noMainCsourceimport.",
+    "CurrentMainsourcebeforeCIpatch=exact30I02 overpublishedd07; parentsource36allstatic, fourdateddocsdirty frompreQA. Main18+4capturedignoredgen owned33d; .pi-lens/unrelateduntracked/private.md originals preserved, indexemptystaging."
+  ],
+  "physical_readiness_latest": {
+    "utc": "2026-10-31T13:58:53.516510+00:00",
+    "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-physical-readiness-d07-cxctxr8e",
+    "source": "published d07 plus uncommitted exact reviewed I02_30; MainQA source/doc freeze remains active",
+    "commands": {
+      "android": {
+        "argv": [
+          "adb",
+          "devices",
+          "-l"
+        ],
+        "exit": 0,
+        "seconds": 0.02578115463256836
+      },
+      "apple": {
+        "argv": [
+          "xcrun",
+          "xcdevice",
+          "list",
+          "--timeout",
+          "10"
+        ],
+        "exit": 0,
+        "seconds": 11.579331159591675
+      }
+    },
+    "authorized_Android_devices": 0,
+    "Apple_valid_JSON": true,
+    "physical_iPhone_count": 1,
+    "available_physical_iPhone_count": 0,
+    "qualification": "Readiness only, no app installation, pairing, permissions/TCC/window changes, game, hearing or power/thermal acceptance. Raw device identifiers retained privately, not echoed."
+  },
+  "current_constraints_note": "All Main writes remain frozen by33d, no CI patch/archives applied. Windowsfixprivateb46fc385review only, CI41202703042 historical8/2 actualfailure independentregistered; pendingnewWindowsacceptance. No signalprocesses orother-ownedtargetcleanup. C9c7555 continues Bodytag85 bounded underC29 per supervisorc168; no newuserpermission/versions.",
+  "CI_private_archive_packet": {
+    "utc": "2026-10-31T14:04:11.250914+00:00",
+    "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci41202703042-ready-uf1cp9us",
+    "copied_files": 127,
+    "status": "PRIVATE_ARCHIVE_PACKET_READY_NOT_APPLIED_TO_MAIN",
+    "qualification": "Exact103primaryCI files plusparentaudit/liveAPIs/review andprivatecheckoutfix. Mainfreeze respected; oldd07CI remains8/2. No product/build/cache files copied; freshWindowsacceptancestillpending."
+  },
+  "C9c": {
+    "status": "BLOCK nativepriorityonlypartiallyfixed +goldenred",
+    "native": [
+      1796,
+      1,
+      75
+    ],
+    "strict": 0,
+    "source214": "0ab2b44eac80e7c1d591ebe560e8be69ab4ff72a4ac35b7db92edc5c4f4925ae",
+    "parent_audit": "/tmp/noname-parent-c9c-final-audit.json",
+    "immutableSnapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9c-final-ld22eim7/snapshot",
+    "review": "O/3456ee20-6fdf-49f9-b543-42e753de1f7e/reviews/c331-phase9c-damage-and-dispositions.md",
+    "golden": "12rows362pairedcaptures11businessobservedequal1chainlogeventorderchange; outcomes_rawretainednotcompared steeredC9dparse separately fromstatehash. Noexpectedrerecord beforeorderingfix+review. 5215artifacts parenthash;3.215GBbaselinegitarchiveprivate, finalsources/logs/capturesselectedpublic."
+  },
+  "I02_acceptance_audits": {
+    "main": "/tmp/noname-parent-i02-main-final-audit.json",
+    "p2": "/tmp/noname-parent-i02-index-command-supplement-audit.json",
+    "scope": "P2 miscapturedindexcommandfiles remainsealed; trueexecuteddefcommands recovereduniquely toolonlyexcerpts; privatefullassistantrecords notpublished. Original13gatecategorieserratum12, unknownindexwriter.",
+    "reviews": [
+      "c271f25c",
+      "8e8f2f39",
+      "374e9e83"
+    ],
+    "stage": "/tmp/noname-i02-stage-audit.json",
+    "files": 3433,
+    "bytes": 105988114,
+    "plan": "/tmp/noname-i02-stage-plan.json",
+    "docs": "10Markdown831referencesbad0 at14:44 +oneexplicitpublication-exclusionlink subsequentlyexists; rootnav7bad0; strict1065outofrange0; source9018/unit2; originalfrozen21 notrerun.",
+    "correctedStage": "/tmp/noname-i02-corrected-stage-audit.json",
+    "correctedPlan": "/tmp/noname-i02-corrected-stage-plan.json",
+    "scopeCorrection": "Original3913scopeWITHDRAWN due491profile/cache11.74MB; publisherSTOPbeforenetwork, generatedschemabackup4alsoexcluded. All552physicallocalaliasesretain. Corrected3428stageindependentreview2353OKnotes+5onlyreview/auditor/doclinkmetadataaddenda final3433reaudited thennormalamend+parent/ancestrychecks.",
+    "correctedReview": "2353a0eb-d8c7-40c1-96da-76a6ba367e7c",
+    "postAmendReceipt": "/tmp/noname-i02-corrected-accepted-commit.json"
+  },
+  "main_freeze": "NONE. QA33d released14:03:47; wrongbdafpublicationbb72released14:57; corrected34epublication700leaseactualreleased15:19:09.396745 verifiedParent. ParentexclusiveMainDocs/evidencewriter, noMainproductwrites orstaging/commitafter34e. C9e09d ownsisolatedCtree only.",
+  "historical_previous_continuation": "/tmp/noname-parent-continuation-before-bdaf-2026-10-31.json",
+  "authoritative_note": "Current top-level fields and latest active/I02_acceptance_audits/C9c override historical earlier snapshot narratives retained in other old keys and previouscontinuation. No original evidence removed.",
+  "withdrawn_unpublished_bdaf": {
+    "head": "bdaf9868ef49de08dc66127eb82b05d922cc9eba",
+    "status": "PRESERVED_LOCAL_REF_NOT_ANCESTOR_OF_CORRECTED34E_NEVER_PUSHED",
+    "currentMainHeadStillBdaf": false,
+    "reason": "Publisherdetectedprofilecachemissedbyparentarchiver; no push/guard/networkwrite. Withdrawal does not change runtime sourceacceptance. Parentpreparingcorrectedacceptedtree rootedatd07 preservingbadcommitaslocalprotectedreference, no reset/clean/stash/force/filterpublishedhistory/filedeletion.",
+    "receipt": "/tmp/noname-i02-browser-profile-scope-defect.json",
+    "protectedRef": "refs/heads/local-evidence/i02-bdaf-unpublished-profile"
+  },
+  "historical_ci41202703042": {
+    "run": 41202703042,
+    "attempt": 1,
+    "head": "d07b35f94a42b282222dda4ab7bbc5c39ab8fddb",
+    "jobs": "8success2WindowscheckoutFilenameTooLongfailure",
+    "steps": "110success2failure14skip0null",
+    "parent_fresh": "/tmp/noname-parent-ci41202703042-audit.json",
+    "archive": "docs/operations/evidence/2026-10-31-nc10-public-own-plan/publication-ci",
+    "independent": "23b66b15 OKnotesfailure-registration only",
+    "next": "bdafnormalnewpushCI pending; checkoutCIb46haslocalprecedence/YAML/reviews butnotactualWindowsgreen"
+  },
+  "post34eDocsReceipt": "/tmp/noname-parent-post34e-main-write-receipt.json",
+  "post34eDocsChecks": [
+    "/tmp/noname-post34e-final-doc-links.json",
+    "/tmp/noname-post34e-final-strict-doc-lines.raw.txt"
+  ],
+  "diskCoordination": "16:10read-onlyfreeDISK134163804160bytes; originalhelperd7f andlockdev16777231inode620205209exact, no memoryconstraints/cleanup/signals",
+  "post34eDocScopeReview": {
+    "run": "35b4947f-c195-4a8b-8616-853d62d77c4e",
+    "status": "OKnotes/P2oldWindows-pendingclausefixedParentbeforefuturecommit",
+    "originalReview": "O/35b4947f-c195-4a8b-8616-853d62d77c4e/reviews/post34e-evidence-docs-scope.md",
+    "fixReceipt": "docs/operations/evidence/2026-10-31-i02-main-typed-wire/post-publication-checks/stale-windows-P2-fix.json",
+    "currentOwnerReceipt": "/tmp/noname-parent-post34e-main-write-receipt.json",
+    "docStagePlan": "/tmp/noname-post34e-doc-stage-plan.json",
+    "files": 2540,
+    "bytes": 81591760,
+    "staged": false,
+    "scope": "All docs/evidence only, zero source/config/generated changes. MainHEAD34e andindexempty untilC9eseal toavoidnewHEADguardrace."
+  },
+  "C9eCheckpoint": {
+    "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9e/checkpoint20",
+    "createdUtc": "2026-10-31T15:50:01.643241+00:00",
+    "files": 12,
+    "manifest": "ab978c3b1a7bca260522f6accf1ceafcdfce4a24f84c23054ed62f717a298dee",
+    "parentAudit": "/tmp/noname-parent-c9e-checkpoint-audit.json",
+    "qualification": "Checkpointcreatedontimeexists, Parentfresh12tar/manifest/patchidentityonly, notfinaltests orfivefixesaccepted. Final09d stillawaited."
+  },
+  "updatedUtc": "2026-10-31T18:47:24.527995+00:00",
+  "currentAuthorityAfterC9e": {
+    "utc": "2026-10-31T17:06:20.365429+00:00",
+    "mainHead": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "mainTree": "22e6eab72d104baf7a658d5ff2d832128ac32e4a",
+    "mainVersion": "rules330NGSA105ABI758WS6",
+    "currentMainCI": "41214274772/attempt1 exact34e10/10 independentlyregistered; d07CI8/2remainsfailure",
+    "staging": "2540Parentdocs/evidenceexactlystaged16:36, rawindexfb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7; no newMaincommit/push. Since stageParentupdatednativeprogressWORKINGandnewC9erootuntracked, notyetrestaged. Old16:18receipt/stageplanhistoricalvalidnotcurrentallpaths.",
+    "newOwnerReceipt": "/tmp/noname-parent-post-c9e-main-write-receipt.json",
+    "newOwnerPathCount": 9903,
+    "source37Products18Dist37Schemas4LockOwn6ApprovalPagesHook": "freshreceiptchecksallunchanged. OnlyParentDOCS/evidencewrites; no CproductionMainimport. No baselineblanketrefreshorGitindexrestoration.",
+    "noMainHeadChangeUntilCurrentC9fSourceSeal": true,
+    "goal": "4/27still, pa12inprogress; all17sourcegroups/fiveFSMgroups/12unproved/ChangeHp/DeathFlow/C331/all37/platformthermalmandatory. No allGoal acceptance.",
+    "laterParentOwnedAddendum": "After9903receipt, onlytwoadditionalnewC9eDocs reviewraw/closureJSON; exactcurrent9905file candidatePlan enumeratesbytes. No additionalstaging/Sourcewrites. MainHEAD34e/indexfb unchanged.",
+    "candidatePreviewOnly": "9905paths257498242B/2558uniqueGitblobs exactpath/blob/mode verified through NEWtemporaryindex outsideMain; candidatetree88dfb549ab937d23b3632371eb77f387a566cb7c. NEVERcopiedback; Mainrealindexfb7832andactual2540staged paths/HEAD34e/source37 unchanged. NormalGitobjectscreated, no commit/ref/push. Laterrealstage+freshauditstillrequiredafterC9fguardseal.",
+    "supersededBy": "currentAuthorityAfterC9gStart; oldMain34e/stage2540 ishistoricalNOTcurrent"
+  },
+  "phase9eCurrent": {
+    "status": "PRIVATE219/14fiveboundedcounterexamplesrepairedandreviewedbutwholeBLOCK17sourcefindinggroups+additionalchainbirthP1",
+    "sourceFullSHA": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+    "incrementSHA": "7e22da5716d417150e058c6f94695bffc78a64bf67f02b6a08e98deec384b8b7",
+    "artifactCount": 7333,
+    "tests": "18focused/162fulltriples, full1821/1/75soleGoldenexit101,strict0,caps9035unit2layering0",
+    "parentFreshAudit": "/tmp/noname-parent-c9e-final-audit.json",
+    "immutableParentSource": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot",
+    "readOnlyConcordance": "evidence/phase9e-concordance-supplement start16:24:55 auditdone16:34:30 seal16:35:14; originalsource/index/reportunchanged.41rows10agree19defect12unproved17groups. Noexecution.",
+    "concordanceAudits": [
+      "/tmp/noname-parent-c9e-concordance-supplement-audit.json",
+      "/tmp/noname-parent-c9e-concordance-source-bindings-audit.json"
+    ],
+    "review": "903f66c4-afa4-435d-9d03-44c96436b2d9 O/4fbbc6a5-9caa-452b-97d2-644fefd75611/reviews/c331-phase9e-predicates-and-concordance.md BLOCK confirms17groups+chainbirthtargetstillparent.remaining atStart. Fiveoriginalboundedfixescorrect, generalpropagatedvirtualShaF02stillopen.",
+    "archive": "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/ initial7351files170935878B+laterparentcommand/checkaddenda, MainDOCSonly. Original7333allcopiedSHAverified/profilecachefullassistantbinariesexcluded7controlselfchecks; rootartifact-index.json lossless.gz."
+  },
+  "phase9fActive": {
+    "workflow": "4fbbc6a5-9caa-452b-97d2-644fefd75611",
+    "script": "/tmp/noname-c9e-review-and-atomic-source-repair.js",
+    "writer": "badfcfd0-ce6f-4c9f-91b1-557a7fea55e6",
+    "resumedFrom": "09d656a4-2540-4760-9a0a-ae709780724c",
+    "start": "2026-10-31T16:51:36Z",
+    "checkpoint": "2026-10-31T17:11:36Z",
+    "noNewHeavyAfter": "2026-10-31T17:31:36Z",
+    "seal": "2026-10-31T17:41:36Z",
+    "scope": "12atomicgroupsF01/02/03/04/05/06/08/10/11/14/15/17andchainbirthP1; fiveFSMgroupsF07/09/12/13/16nextmandatory, thenChangeHp/DeathFlow. No goldenrerecord/fullsourceparity/numberallocation.",
+    "F13Decision": "replye34a0ce1: correctpost-cardremoval+actualadmitteddef/groupedrecoveryprovenancerequiresnextrealinvocationFSM, notatomicnow. Originalprovisionalatomic13listcorrectedto12; no scopeexclusion/userpermission.",
+    "F14Decision": "reply254aca29: boundedinternalactualmodeisEnemyOfconsumerfromactualpinnedsources/storedfactsONLYassourced(nohiddenidentity/seat/factionheuristics), sourcequalifiedbuiltinMushengoumangdeclaration/idpredicate no displayname/newregistry. Exactdrawrecipient/liveness/transformidentityfollowactualsource, unsupportedmodesexplicitunprovednotacceptedvariants.",
+    "out": "O/4fbbc6a5-9caa-452b-97d2-644fefd75611/implementation/c331-phase9f-atomic-source-repair.md",
+    "heavy": "samepinnedd7fhelper/lockinode620205209offlinejobs2incremental0DISK3GiB; nopoll/sleep/signals/cleanup/noheavyaftercut.",
+    "latestSteer": "3a94d2ac-b0d1-4978-bb6a-5abf1f628668 queuedbadfc exact9903ParentDocownership/core37unchanged, no MainHEADchangebefore9fseal. No statuspoll/nativecompletiononly.",
+    "status": "COMPLETEDbadfcSEALED; supersededbyphase9fFinal"
+  },
+  "postC9eDocsReviewActive": {
+    "workflow": "be66100a-6b0f-456d-88b9-7004c6a9468a",
+    "script": "/tmp/noname-review-post-c9e-docs.js",
+    "resumedFrom": "35b4947f-c195-4a8b-8616-853d62d77c4e",
+    "out": "O/be66100a-6b0f-456d-88b9-7004c6a9468a/reviews/post-c9e-evidence-docs-scope.md",
+    "scope": "Readonly<=6min newC9eREADME/nativeprogressandarchivefidelity; no Main/sourcewrites",
+    "checks": "8narratives861localrefsbad0;1065linerefsoutofrange0sixexamplemissingcategories;Main9018sourcecap/unit2pass. InitialREADME.gzlinkfixedandfirstbadrecordpreserved. Parentdocstagingstillold2540; afterreviewrebuildenumeratedstageplanandfreshblob/modeauditbeforeDecision18commit/25publication, deferMainHEADuntilC9fseals.",
+    "status": "COMPLETED9775e7b6NoissuesOKnotesboundedDocs/archiveonly",
+    "reviewRun": "9775e7b6-d971-4a07-b7ad-0346f1534f65",
+    "reviewSHA256": "94b2a13bbc1a00075f902f4a672bc7cbe129c487ec633dc66e140dcd0001d4ba",
+    "archiveRaw": "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/docs-scope-review.raw.txt",
+    "closure": "docs/operations/evidence/2026-10-31-c331-phase9e-source-predicates/docs-review-closure.json",
+    "candidatePlan": "/tmp/noname-post-c9e-doc-stage-plan.json",
+    "candidateFiles": 9905,
+    "candidateBytes": 257498242,
+    "candidateNotStagedYet": false,
+    "currentActualStage": "StillONLYold2540docs exactfb7832... from16:36, nativeprogress newerworking/C9erootuntracked. No newMaincommit/push.",
+    "nextParentSteps": "AfterC9fsource/protectionseal(orclearlyownedguard-safeboundary) updateexact9905paths stage+allblob/mode/exclusionaudit. Source37/products unchanged. No redundantuserpermission18/25; never claimreviewcertifiedfuturestage. Preserveold2540stageaudit/16:18and17:03receipts ratherthanoverwritingthem. ReuseMain cheapchecks passed unlessnewnarrativechange.",
+    "actualOutcome": "9905exactstage/tree88df+Parentnormalcommit9f4;stagingnowempty. Original2540stage/previewstateshistorical."
+  },
+  "mobile34eReadOnlyLatest": {
+    "prerequisites": "/tmp/noname-mobile34e-prerequisites-current.json",
+    "sourceReadiness": "/tmp/noname-mobile34e-source-readiness-audit.json",
+    "facts": "Toolchains/targetsSDKNDKJavaTauriCLIavailable. Desktopcrateinspectednomobile_entry_point/explicitmobilecrate-types, genonlyschemas; mobilemodulewebviewplaceholder/checklists notrunningnativeapp. Notexhaustiveotherplatformimplementationinventory. AdoptednativearchitecturetableAndroidRustActivity/input/audio/framepacing,iOSlifecycle/input/audio/Metal; oldADR0702historicalnotnewimplementationauthority. No build/projectgeneration/sign/install/pair/device/TCCwrites. Androidauthorized0/iPhoneavailable0DeveloperModeRequiredlast15:31proof, realdevice/thermalstillunverified."
+  },
+  "docCandidatePreview": {
+    "utc": "2026-10-31T17:12:27.302148+00:00",
+    "status": "PASS_9905_DOC_CANDIDATE_ALTERNATE_INDEX_PREVIEW_ONLY",
+    "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "candidateTree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+    "candidatePaths": 9905,
+    "candidateBytes": 257498242,
+    "uniqueVerifiedBlobs": 2558,
+    "allPathBlobModeStageExact": true,
+    "previewRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-post-c9e-doc-preview-l1tmauz8",
+    "previewIndex": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-post-c9e-doc-preview-l1tmauz8/preview.index",
+    "source37Unchanged": true,
+    "realIndexBeforeAfterExact": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+    "realStagedPathCountUnchanged": 2540,
+    "noMainHeadOrRealIndexMutation": true,
+    "scope": "ParentDOCScandidatepreviewafter9775scopeReviewonly. TemporaryindexwascreatedoutsideMainandNEVERcopiedback; realindexnotrestored/normalized. Gitobjectscreatednormallybyalternateadd/write-tree, no commit/ref/push. PrivateC9fsource/producersunaffected. No candidateC331productionorGoalacceptance. ActualfutureMainstagewillneedfreshblob/modeauditandownedsourceguardboundary."
+  },
+  "phase9fCheckpoint": {
+    "utc": "2026-10-31T17:18:02.163176+00:00",
+    "status": "PASS_C9F_CHECKPOINT18_SOURCE_TAR_PATCH_BASELINE_IDENTITY_ONLY",
+    "checkpointUTC": "2026-10-31T17:10:28.572807+00:00",
+    "requiredCheckpoint": "2026-10-31T17:11:36Z",
+    "actualBeforeDeadline": true,
+    "files": 18,
+    "manifest": "ab7c0d5be1cb753aa122107a94eae2e6f4245abc31293ef7eb6a889c4e4e1968",
+    "tar": "3010560f43bf040b4464497dfde163def77fe8cb364f92e05d0b4a4e13eade9a",
+    "patch": "c63a71d61965a1aedf62e4c4f8f7e2f553d564c6f99cdac2d00e55c3fe706cc6",
+    "parentRetainedRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9f-checkpoint-lm2pjcp2",
+    "reverseCheckExit": 0,
+    "baseline219OverlayPlusImmutable5fcExact": true,
+    "baseFallback": [
+      {
+        "path": "crates/engine-native-kernel/src/kernel/events.rs",
+        "baseLookupExit": 0
+      },
+      {
+        "path": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+        "baseLookupExit": 0
+      },
+      {
+        "path": "crates/engine-native-kernel/src/state/core_ops.rs",
+        "baseLookupExit": 0
+      },
+      {
+        "path": "crates/engine-native-kernel/src/vocabulary/generals.rs",
+        "baseLookupExit": 0
+      },
+      {
+        "path": "crates/engine-native/tests/c331_atomic_source_repair.rs",
+        "baseLookupExit": 128
+      }
+    ],
+    "qualification": "Frozenintermediatecheckpointonly, no final/nativegreen/12atomicfixacceptancefromhashes. C9fwritercontinues. No liveSource/Main/index/HEAD/producersmutated. Parentfirstoverlay-as-full-base/None-as-empty assumptionfailedandretained, correctedwithactualbaseobjectsandnewpathNoneidentity. OriginalC9e219/7333remainimmutable.",
+    "parentInitialFailure": "/tmp/noname-parent-c9f-checkpoint-audit.attempt1.json"
+  },
+  "fiveInvocationPlanActive": {
+    "workflow": "5fd06095-0461-4ad4-972f-40cfebfd0f5d",
+    "script": "/tmp/noname-five-invocation-plan-and-review.js",
+    "scope": "Readonlysource-derivedconcretefiveFSMdesign<=10min thenindependentreview<=7min; no sourcewrites/heavy/Main/devicechanges, notcompletion/permission. ImmutableC9e219overlay+5fcbase, pinnedupstreamactualfivebodies. MustreconcileguidewithactualfinalC9fsourcebeforecoding.",
+    "out": "O/5fd06095-0461-4ad4-972f-40cfebfd0f5d/proposals/c29-five-native-invocation-continuations.md",
+    "review": "O/5fd06095-0461-4ad4-972f-40cfebfd0f5d/reviews/c29-five-native-invocation-continuations.md",
+    "required": "F07hiddenforeignHEopaquechoice/privacypositive+cancel/transfer,F09twoplayervariableHEcostawaitloss,F12realoptions/cancel/judge/rejudge/liveness,F13wholecardthenactualdefremove/genuinegrouprecoverprovenance,F16actualtarget/judge/rejudge/naturalrecursionwithoutmute. ExistingFrame/ChoiceSpec/tag85FSMcodec/hash/restore/sourceadmission,no secondqueue/newpublicABI, no GaiMing332prematurefix/newversion.",
+    "status": "COMPLETEDdesign7554+reviewac678NoissuesBOUNDEDPLANONLY",
+    "designRun": "7554b5f0-2f68-4f40-84d9-ec9f5a8365e6",
+    "reviewRun": "ac6782d4-e868-46a1-89d8-636fb3df1ff4",
+    "sourceAudit": "/tmp/noname-parent-five-fsm-plan-source-audit.json",
+    "inventoryRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c29-five-continuations-_2ejx3qq",
+    "guideSHA": "70ec50f535fc37d8ab620e61066ca244208fc8d29a6259ba67537218904686ac",
+    "ordinaryJudge": "NoordinaryJudgeeventexisting. ExtractactualJudgePhaseJudgementProgress/realrewritequeue/heldcard/finalizationwithoptionaldelayedcontext. RealTiandaoprovider,awaitCardsLost beforecontinue/heldcardunique/restore. No fakeDelayedTrick/inlineflip/newregistry/newABI/GaiMing332prematurefix."
+  },
+  "currentAuthorityAfterC9gStart": {
+    "utc": "2026-10-31T18:47:24.527995+00:00",
+    "mainHead": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+    "mainTree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+    "parent": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "scope": "Accepted18 DOCS-ONLY9905paths257498242B; code37/Own6/I02/CI/lock/default/runtime unchanged330105758WS6. No C production imported. Parentnormalgitadd+commit, actualstage/workingtrackedempty. Old2540stage/previews/9903receipts historical, superseded ONLY by exact newDocs receipts, not workerbaselineblanketrefresh.",
+    "receipt": "/tmp/noname-post-c9e-doc-accepted-commit.json",
+    "stageAudit": "/tmp/noname-post-c9e-doc-stage-audit.json",
+    "sourceCI": "Exact9f4 run41227614131attempt1/push/native-convergence FINAL10of10success,130steps128success2skip0fail0null. Parent126SHA/CRC+128primary/10rawgzip4848793B/FIFO167workspace6929/0/77/API12/native1830/0/75/37sourcefields+6freshliveAPI0 PASS. Independentd05OKnotesforDOCSpublication/CIonly; privateC331notaccepted. Old34e10green/d078/2historical unchanged.",
+    "publication": "PUBLISHEDnormal9f4push0; ParentindependentpushQA36files/8guardreplays/rawlogicalflags/untrackedwindowequal+freshremote9f4/main4734 PASS. LeaseRELEASED18:04:45.794689Z.",
+    "MainFreeze": "No publicationleaseactive. ParentnowvoluntarilyHOLDSfurtherMainDoc/HEAD/indexwritesafter18:42exactreceiptuntilC9gfinalsourceguardseal. Onlytrackednative-progressmodified+new3evidencerootsuntracked, stagingEMPTY. HEAD9f4/code330same; no newcommit/push.",
+    "rawIndexFact": "Unexpectedfb7832->626e19 at17:34:34 writerUNKNOWN. No oldfbraw, cannot claimctime-only. Actual53864allHEAD+old2540logical/path/OID/blob/mode/stage/normalflags exact. Currentraw preserved+logical audit, guard stopped BEFORE mutation. Authorizednormal9905Docadd626->cfc+normalcommit separately audited. No indexrestore/hiding.",
+    "rawIndexEvidence": [
+      "/tmp/noname-parent-doc-index-guard-observed.json",
+      "/tmp/noname-parent-doc-index-logical-audit.json",
+      "/tmp/noname-post-c9e-doc-stage-audit.attempt1.raw.txt"
+    ],
+    "goal": "4/27still, allsource17/fiveFSM/F14/provider12/ChangeHp/DeathFlow/331332R05/all37/mobile/thermal remain required. No complete/pause/block.",
+    "latestVersionedOwnerReceipt": "/tmp/noname-parent-post9f4-main-write-receipt-at-184200.json",
+    "latestOwnerSHA": "600343a4a29252f5a71b5edb5dc5cd91011fc4294991baf0d90b330f19b61564",
+    "latestOwnerPaths": 4406,
+    "latestOwnerBytes": 143909122,
+    "ownerReceiptLimit": "Earlier18:32mutablealias4258paths124959262B wasregenerated18:42to4406; priorfullJSON/rawstdoutnotseparatelysnapshotted. DoNOTclaimold4258bytesretained orcurrentaliasasoldCIbaseline. Scope/count/UTCobserved; sealedCI128/source37/sourceC9fpacks unaffected. Newdated1842snapshot/rawsaved; note /tmp/noname-parent-post9f4-receipt-versioning-note.json. No source/indexrestore/workerdrift."
+  },
+  "phase9fFinal": {
+    "status": "SEALEDPRIVATE225/19_PARENTINTEGRITYPASS_REVIEWa3BLOCK",
+    "report": "O/4fbbc6a5-9caa-452b-97d2-644fefd75611/implementation/c331-phase9f-atomic-source-repair.md",
+    "fullSHA": "ab88c526c5cb4e807a29c5bdaaa70393b4515375303980d153403047f479be96",
+    "incrementSHA": "f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da",
+    "sourceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f",
+    "sourceSnapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9f-final-mghukxvr/snapshot",
+    "parentAudit": "/tmp/noname-parent-c9f-final-audit.json",
+    "counts": "4167artifacts, oldC9e7333artifactsunchanged,225full/19inc,7commandsboundALL225,bothhash/tar/patch/live matching,no trackedoutside225. 87focused(24new)/202fulltriples,full1845/1/75soleGoldenexit101,strict0,source9036unit2layering0.362C8pairs11businesssame+chainlogorder, outcomes187none139Accepted32Pending4Rejected,Acceptedhashseparate. No C8 rerun/golden rerecord.",
+    "review": "a3f0f4f8-bdac-4c44-8fcd-bae960743701 O/7017b4ab-78bf-497f-85ce-f54dbe430bd6/reviews/c331-phase9f-atomic-source-repair.md",
+    "boundedAcceptedByReview": "chainbirth+11atomicgroupscorrectinspectedscope. F14partial4modes+namedMushengprimaryalive/foreignsamename/poisononlycorrect, Kingdoms actualenemy/state gap remains P1. Mixed-zoneYinzei/bothAbinature/otherboundarycoverage notexhaustive.",
+    "newP2": "golden-business-and-outcome-dispositions rows/compare-traces template incorrectlyrefer nonexistent final-freeze4 insteadactualfinal-freeze2. Source225bindings/captures valid. Add SEPARATELYINDEXED correction linking225/19, fixnexttemplate; DO NOT rewriteold4167/report/sealedrows.",
+    "remainingTests": "Later-modifiedchainrestore; fullfirst-second-thirdZlfanshi+expiryrenew; AbiFireANDThunderactualnatureassert; mixedHEYinzei/revoke/lossordering; enabled-disabledDuqualias; dead/secondaryslotMusheng; directvirtualShaShuchui+secondhit. No extra runtimeP1establishedinchangedatomiccode.",
+    "noProducerOwned": true
+  },
+  "fiveInvocationSupplementFinal": {
+    "workflow": "c35bcf27-e9c6-4766-badf-c63dfff448a3",
+    "status": "COMPLETED031design/e67reviewOKnotesPLANONLY",
+    "designRun": "031bc876-2e4a-4af6-9fc7-e75cbcbbb3ee",
+    "reviewRun": "e67c84f1-d67c-4915-8f31-1387ad695959",
+    "proposal": "O/c35bcf27-e9c6-4766-badf-c63dfff448a3/proposals/c29-five-native-invocation-wire-source-lifecycle-supplement.md",
+    "review": "O/c35bcf27-e9c6-4766-badf-c63dfff448a3/reviews/c29-five-native-invocation-wire-source-lifecycle-supplement.md",
+    "inventoryRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c29-wire-source-lifecycle-d6bev5pm",
+    "wire": "INTERNALHiddenCard+privatemap onlyprivate106codec. ExistingWS6/APIChoiceOption{token:index,label_key};WASM existing string hidden_card;desktop arbitrarystrings+indexanswer. No newpublicwiretag/requiredfield/VMcontext/TagKindCardopaqueescape. Need actualfrozenoldreaderpositive+sameindexformalask/omission/currentIPCWSWASMUIprivacytests. Compatibleinternal direction already27/29authority, no newuserquestion unless actualuncoveredpublicboundaryfails with concretepayload/error.",
+    "Source27": "OnlyordinaryOptionalGateOwn/refereesource_skill. ALLnewhidden/card/cost/judge/OtherinnerasksprivateproducerboundbutpublicNone/generic; no expandedOwn/certificate.",
+    "lifecycle": "Body-only5FSMinsufficient29clause5: existingC7prelogsSkillTriggered/once_used beforemachine. Actualdirectinvocations Before/BeginevenifinbodycancelthenEnd/After; genericdirectautologsuppressed. F07logBeginafterselectionbeforegain;F09holderselectionsuccesslogbeforeloss,sourcecancelretainlog+ndamage;F12noexplicitactivationlog;F16queuejudgeTHENlogBeginaftertargetsuccess. NeedrealpersistedInvocationFrame/phase/source-specificlogchildren/Omitted/cancel/death/fault inEXISTINGstackqueue, no universalCostBeforeBegin/no secondauthority. JidingprovenancemustbindrealInvocation/CardUsed, notoldwindow-only. No currentruntimeacceptance.",
+    "ParentReadErratum": "/tmp/noname-parent-five-fsm-choice-read-correction.json: enumkindfilterread_symbolnotfounddidNOTmeanmissingfile. Actual219choice.rs586ec7...withSkill;oldbase3dc...realbutnotcurrent,Tagu8natureunchanged. Originaldesignerreadcorrect219. Latest e67follow-upfinalreport6lines incorporatescorrection, useactualfinalhash, do notclaimearliermanagedreportsealed. No sourceproductchange."
+  },
+  "phase9gActive": {
+    "workflow": "7017b4ab-78bf-497f-85ce-f54dbe430bd6",
+    "script": "/tmp/noname-c9f-review-and-genuine-invocations.js",
+    "writer": "ce1ea615-9215-44b6-addf-d5a925d6cb6c",
+    "resumedFrom": "badfcfd0-ce6f-4c9f-91b1-557a7fea55e6",
+    "startedObserved": "2026-10-31T17:54:37.798Z",
+    "bound": "60min/checkpoint20/noNEWheavyafter50/seal60 from actualwriterstart; approx18:14:38/18:44:38/18:54:38, deferactualtimes toworkerreceipt",
+    "scope": "FirstfixreviewP1/P2sourcefacts+F14genuinefacts/noheuristics;thenrealInvocationBeforeBeginBodyEndAfter/logchildren+all5FSM/ordinaryJudge/Tiandao/opaqueprivacy/existingwirecompat/source27preserved. RequiredHP/DeathFlow/providers/37after, no goalshrink/newversion/golden rerecord.",
+    "out": "O/7017b4ab-78bf-497f-85ce-f54dbe430bd6/implementation/c331-phase9g-genuine-invocations.md",
+    "latestSteer": "3f6c5e41queued18:45:versioned4406ParentDocreceipt/no furtherMainwrites beforeseal; actual9f4CI10greenonlyDOCS/no Cacceptance; noNEWheavyafter18:44:38, keepqueuedownership/no signals.",
+    "sourceWriterExclusive": true,
+    "checkpoint": "27filesdff784970d51d7588e5610c78e8f4b3deba67c293a2429ca19dcc73771358e45 actual18:14:04.411beforedeadline, Parenthash/tar/patch/225overlay+5fc/reversecheckPASS /tmp/noname-parent-c9g-checkpoint-audit.json; retainedT/noname-parent-c9g-checkpoint-bm1233oc. No runtime/fiveFSMclaim.",
+    "wideCountBoundaryNote": "88bc09ba queued /tmp/noname-parent-wide-choice-count-source-note.json. APIChoiceRequest min/maxu8 vsnativeusizecasts; FIRSTverifyactualsupportedHEbound. Iflegal256cost/exact256sourcepayment cannottruncate/cap. CompatibleexistingfiniteFSMaccumulationonlyifsource/visibility/no costlogRNGbeforecomplete/cancelatomic preserved; otherwiseexactpayload/oldreaderfailurebeforeunapprovednewpublicwidth/version. No newcaseexecutedbyParent."
+  },
+  "docsPublicationActive": {
+    "workflow": "0b952d22-7ad4-4e57-9160-b226c36b735f",
+    "script": "/tmp/noname-publish-post-c9e-docs.js",
+    "resumedFrom": "70026df3-10d2-4219-8055-1125830715c1",
+    "out": "O/0b952d22-7ad4-4e57-9160-b226c36b735f/publication/post-c9e-docs-accepted-push-and-ci.md",
+    "expectedOld": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+    "newHead": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+    "target": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git refs/heads/native-convergence ONLY",
+    "remoteMain": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "rules": "Freshcommandlocalguard8controls/originale349hookunchanged/normalonefullhistorypush/no backupref/force/filter/settings. ShortMainreadonlylease releaseimmediatelyafterpushwindow, singleCIwatch+checkpoint/finalactuallogs/gzipCRC/parsertruthful. No installerdownload/install/deviceproof. Waitnativecompletion/progresslease receipt, no polling.",
+    "status": "COMPLETED6be0eb18published/newCI10green/ParentindependentQA+reviewd05accepted",
+    "publisherRun": "6be0eb18-aa78-4e08-b4f4-88a0b67285d9",
+    "releaseUTC": "2026-10-31T18:04:45.794689+00:00",
+    "pushRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq",
+    "parentPushAudit": "/tmp/noname-parent-9f4-publication-push-audit.json",
+    "guardSHA": "e6b7ef4a6296448042b9b60db30bcdfc86f1874f5a96428e061163b9c4003fbe",
+    "pack": "2965objects/1695deltas/12.26MiBrounded;2152newreachablerevsetobjects56806619Bdifferentmeasure, noexactwireclaim. Wall12.637631s/locked12.597970s differencequeue+startupnotpurequeue.",
+    "prelaunchError": "18:06:06SyntaxErrorast.parseBEFOREobserverfile/process/watch; supervisorreplyb067authorizedownedgeneratorrepair/uniqueoutertryASTcompile/checkpointunchanged/launchcount0controls. No launch/runtimefailurefallback, ONEoriginalwatch18:10:04exit0. Exacttoolcommand/result+explicitlyreconstructedinvalidcandidate labelled, nofullsessionpublished.",
+    "CIResult": "41227614131attempt1new9f4 created18:04:45 finalupdated18:27:46 collection18:28:49 seal18:29:12.10success130steps128success2nonLinuxdependency-skips0failure0null. Producer30CIAPI0/noerrors/retries/rerun/dispatch/secondwatch. Parent6independentAPIseparate.",
+    "checkpointHistory": "Producer18:10:04 3success7running-null;Producer18:18:49 7success3running-null/oneartifact;Parent18:15:24 6success4running;allkeptseparate/notrewrittenbyfinalgreen.",
+    "manifestSHA": "46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050",
+    "summarySHA": "fa79655afb78b6de645957fe34c97a6c7b7d279b2bed336337536a5a45caa82c",
+    "sealSHA": "da6a17d8ca167058538f50e87c17603ca48682cecbeb22862ab52695d4631471"
+  },
+  "ci41227614131Independent": {
+    "parentAudit": "/tmp/noname-parent-ci41227614131-audit.json",
+    "parentRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74",
+    "reviewWorkflow": "833dbe5e-d822-445c-ae59-068d18a3b41f",
+    "reviewer": "d05bb4cc-fd36-4d95-8267-779ef7cd9bf5",
+    "reviewSHA": "194f6e5900d634627f025be7723dc2a19907c322219dd80f0a3af5fd1f3607e3",
+    "reviewOutput": "O/833dbe5e-d822-445c-ae59-068d18a3b41f/reviews/docs9f4-ci41227614131-independent-registration.md",
+    "verdict": "OKnotes/Noissues exactDOCSpublish+CIonly, reviewerselectivereadnotindependentall128hashes; Parentfullhash/CRC/APIauditseparate.",
+    "evidenceArchive": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/128primary+report/Parent6API+review/closure, notcommitted9f4inputs.",
+    "rawEvidence": "4848793originalB/10gzip/Windowsbuild3850desktop2225CRLF/3628warningsinclrepeats, ignorednamesretained. Workspace6929/0/77/API12=4+1+4+3 within167FIFO;native1830/0/75/49summaries,3OSlibs853each,front441/Worker82/resource17/conformance19/crosshash/Own4+session1 overlapnotgrandtotal.",
+    "artifacts": "APIonlymac13053380022/32815681B/digested1e0ed8...,win13053151489/26286929B/bf083a...,ubuntu13052493129/266389977B/678594...; no download/install/sign/device/thermalproof."
+  },
+  "post9f4DocWork": {
+    "scope": "ParentONLYafterlease release. ArchivedC9f4167+reviewa3/ParentQA, fiveFSMoriginal+compat/lifecycleplans+sourcehashaudits, push36+raw626prestageproof, CI18:15checkpoint+final128/Parent6API+reviewd05. NativeprogressnewtopseparatesMainDOCS9f4fromcodebaseline34e330, C9f11atomic+chainboundedcorrect/F14partial/5FSMremaining, C9g27sourcecheckpointNOTgreen. Originals/copy-maps/sealsnotrewritten; initialarchive-mapstatuspendinghistoric, closureadditive.",
+    "newRoots": [
+      "docs/operations/evidence/2026-10-31-c331-phase9f-atomic-source",
+      "docs/operations/evidence/2026-10-31-c331-invocation-plan",
+      "docs/operations/evidence/2026-10-31-post-c9e-doc-publication"
+    ],
+    "archiver": "/tmp/noname-parent-archive-c9f-plans-9f4push.py",
+    "CIArchiver": "/tmp/noname-parent-archive-ci41227614131.py",
+    "writeReceipt": "/tmp/noname-parent-post9f4-main-write-receipt-at-184200.json",
+    "checks": "11narratives924localrefsbad0 /tmp/noname-post9f4-final-doc-links.json; strictdoclinerefsoutput /tmp/noname-post9f4-final-doc-lines.raw.txt exit0. Firstresultlink.jsonvs.gz redfixedandpreserved /tmp/noname-post9f4-doc-links.attempt1.json. Maincode9018sourcegatepreviouslypass/unit2 unchangedsince34e, no newproductrerun.",
+    "next": "HOLDMainwritesuntil9gseal; thenarchiveactual9gsource/evidence+review, performDocscope/freshchecksandexactenumeratednextstageonlywhenacceptedconcrete. DoNOTcommitnewdocsnow/stealMainCIasC331evidence."
+  }
+}

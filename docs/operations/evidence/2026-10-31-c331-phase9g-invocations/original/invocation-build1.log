@@ -1,0 +1,65 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/kernel/native_invocation.rs:43:142
+    |
+ 43 | ...it(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,count)));Flow::Yield}else{self.progress=P::SourceAsk{pl...
+    |                         ---------------------------                         ^^^^^ expected `i32`, found `u32`
+    |                         |
+    |                         arguments to this function are incorrect
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:829:8
+    |
+829 | pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+    |        ^^^^^^^^^^^                                             -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+ 43 |     if cards.len()<count as usize{self.progress=P::SourceLoss;ctx.emit(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,count.try_into().unwrap())));Flow::Yield}else{self.progress=P::SourceAsk{player:source,count,candidates:cards.clone()};Self::choice(source,&cards,Some(count))}
+    |                                                                                                                                                   ++++++++++++++++++++
+
+error[E0308]: mismatched types
+   --> crates/engine-native-kernel/src/kernel/native_invocation.rs:45:354
+    |
+ 45 | ...it(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,count)));}else{Self::discard(ctx,source,&cards);}Flow::...
+    |                         ---------------------------                         ^^^^^ expected `i32`, found `u32`
+    |                         |
+    |                         arguments to this function are incorrect
+    |
+note: function defined here
+   --> crates/engine-native-kernel/src/machine.rs:829:8
+    |
+829 | pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
+    |        ^^^^^^^^^^^                                             -----------
+help: you can convert a `u32` to an `i32` and panic if the converted value doesn't fit
+    |
+ 45 |    P::SourceAsk{count,candidates,..}=>{let Some(source)=context.source else{return Flow::Done};self.progress=P::SourceLoss;if !ctx.core.player(self.owner).alive||!ctx.core.player(source).alive{return Flow::Done;}let cards=Self::selected(ctx,&candidates);if cards.is_empty(){ctx.emit(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,count.try_into().unwrap())));}else{Self::discard(ctx,source,&cards);}Flow::Yield},
+    |                                                                                                                                                                                                                                                                                                                                                                       ++++++++++++++++++++
+
+error[E0599]: no method named `remove_skill` found for mutable reference `&mut machine::Ctx<'_>` in the current scope
+  --> crates/engine-native-kernel/src/kernel/native_invocation.rs:47:93
+   |
+47 | ...x.core.player(self.owner).alive{ctx.remove_skill(self.owner,self.def);}Flow::Yield},
+   |                                        ^^^^^^^^^^^^ method not found in `&mut machine::Ctx<'_>`
+
+error[E0425]: cannot find function `check_skill` in this scope
+  --> crates/engine-native-kernel/src/snap/validation.rs:71:63
+   |
+71 | ...   EventData::SkillInvocation(d)=>{check_pid(d.owner,b)?;check_skill(d.def,b)?;check_opt_pid(d.source,b)?;check_pid(d.target,b)?;},
+   |                                                             ^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `check_skill` in this scope
+  --> crates/engine-native-kernel/src/snap/validation.rs:72:66
+   |
+72 |         EventData::SkillLog{owner,def,..}=>{check_pid(*owner,b)?;check_skill(*def,b)?;},
+   |                                                                  ^^^^^^^^^^^ not found in this scope
+
+error[E0425]: cannot find function `check_skill` in this scope
+  --> crates/engine-native-kernel/src/snap/machine_validation.rs:10:89
+   |
+10 | ...   MachineSnapshot::NativeInvocation{owner,def,progress,..}=>{check_pid(*owner,b)?;check_skill(*def,b)?;use crate::event::NativeI...
+   |                                                                                       ^^^^^^^^^^^ not found in this scope
+
+Some errors have detailed explanations: E0308, E0425, E0599.
+For more information about an error, try `rustc --explain E0308`.
+error: could not compile `engine-native-kernel` (lib) due to 6 previous errors
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.40984733303776, "disk_free_bytes": 133241282560}

@@ -1,0 +1,101 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+warning: unused imports: `capture` and `sliced`
+ --> crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:1:73
+  |
+1 | use super::c331_source_predicates::{source_pack,vm_pack,equip,card,play,capture,restore,finish,same_final,sliced,reject_restore_atomic};
+  |                                                                         ^^^^^^^                           ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc_rounds") generated 1 warning (run `cargo fix --test "nc_rounds" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.98s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 12 tests
+
+thread 'c331_atomic_source_repair::c9f_jueqing_self_source_replaces_damage_before_armor' (27967824) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:18:56:
+assertion `left == right` failed
+  left: 4
+ right: 2
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'c331_atomic_source_repair::c9f_minwan_self_source_initializes_real_lock_set' (27967825) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:65:145:
+assertion `left == right` failed
+  left: []
+ right: [0]
+
+thread 'c331_atomic_source_repair::c9f_duqu_other_enabled_holder_is_excluded' (27967823) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:61:135:
+assertion `left == right` failed
+  left: 1
+ right: 0
+
+thread 'c331_atomic_source_repair::c9f_shuchui_already_hit_never_readmits' (27967827) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:30:2:
+assertion failed: !e.log().iter().any(|x|
+            matches!(x,engine_native::LogEvent::SkillTriggered{skill:"native:liuli/card-swd/shuchui2",..}))
+
+thread 'c331_atomic_source_repair::c9f_zlfanshi_terra_is_retained_and_target_uses_rng' (27967832) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:51:53:
+assertion failed: e.state_core().player(1).zlfanshi_terra
+
+thread 'c331_atomic_source_repair::c9f_abi_nature_draw_and_source_are_real' (27967821) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:56:56:
+assertion `left == right` failed
+  left: "RuleRng { state: 11759943582731541303, calls: 123 }"
+ right: "RuleRng { state: 1626645012657868373, calls: 124 }"
+
+thread 'c331_atomic_source_repair::c9f_zhaohuo_self_cancel_precedes_begin2' (27967831) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:24:56:
+assertion `left == right` failed
+  left: 5
+ right: 4
+
+thread 'c331_atomic_source_repair::c9f_paotai_full_width_quantity_not_u8' (27967826) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:40:61:
+assertion `left == right` failed: damage 256
+  left: 3
+ right: 0
+test c331_atomic_source_repair::c9f_zhaohuo_self_cancel_precedes_begin2 ... FAILED
+test c331_atomic_source_repair::c9f_zlfanshi_terra_is_retained_and_target_uses_rng ... FAILED
+test c331_atomic_source_repair::c9f_duqu_other_enabled_holder_is_excluded ... FAILED
+test c331_atomic_source_repair::c9f_shuchui_already_hit_never_readmits ... FAILED
+test c331_atomic_source_repair::c9f_jueqing_self_source_replaces_damage_before_armor ... FAILED
+test c331_atomic_source_repair::c9f_abi_nature_draw_and_source_are_real ... FAILED
+test c331_atomic_source_repair::c9f_minwan_self_source_initializes_real_lock_set ... FAILED
+test c331_atomic_source_repair::c9f_paotai_full_width_quantity_not_u8 ... FAILED
+
+thread 'c331_atomic_source_repair::c9f_chain_birth_rejects_a_still_queued_recipient' (27967822) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:416:5:
+assertion failed: Engine::restore_with_extensions(bad, packs).is_err()
+test c331_atomic_source_repair::c9f_chain_birth_rejects_a_still_queued_recipient ... FAILED
+
+thread 'c331_atomic_source_repair::c9f_xixue_self_source_recovers_once' (27967829) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:35:97:
+assertion `left == right` failed
+  left: 1
+ right: 2
+
+thread 'c331_atomic_source_repair::c9f_yinzei_equipment_only_source_is_discarded_with_rng' (27967830) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:45:56:
+assertion failed: e.debug_equips(0).is_empty()
+test c331_atomic_source_repair::c9f_yinzei_equipment_only_source_is_discarded_with_rng ... FAILED
+test c331_atomic_source_repair::c9f_xixue_self_source_recovers_once ... FAILED
+
+thread 'c331_atomic_source_repair::c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge' (27967828) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:74:101:
+assertion `left == right` failed
+  left: 998
+ right: 997
+test c331_atomic_source_repair::c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge ... FAILED
+
+failures:
+
+failures:
+    c331_atomic_source_repair::c9f_abi_nature_draw_and_source_are_real
+    c331_atomic_source_repair::c9f_chain_birth_rejects_a_still_queued_recipient
+    c331_atomic_source_repair::c9f_duqu_other_enabled_holder_is_excluded
+    c331_atomic_source_repair::c9f_jueqing_self_source_replaces_damage_before_armor
+    c331_atomic_source_repair::c9f_minwan_self_source_initializes_real_lock_set
+    c331_atomic_source_repair::c9f_paotai_full_width_quantity_not_u8
+    c331_atomic_source_repair::c9f_shuchui_already_hit_never_readmits
+    c331_atomic_source_repair::c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge
+    c331_atomic_source_repair::c9f_xixue_self_source_recovers_once
+    c331_atomic_source_repair::c9f_yinzei_equipment_only_source_is_discarded_with_rng
+    c331_atomic_source_repair::c9f_zhaohuo_self_cancel_precedes_begin2
+    c331_atomic_source_repair::c9f_zlfanshi_terra_is_retained_and_target_uses_rng
+
+test result: FAILED. 0 passed; 12 failed; 0 ignored; 0 measured; 216 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_atomic_source_repair", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.0216278749867342, "disk_free_bytes": 132705898496}

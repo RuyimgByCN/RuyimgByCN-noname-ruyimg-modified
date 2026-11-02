@@ -1,0 +1,1664 @@
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/game-server/src/native_view.rs SHA256 f6baf8667a67f6e6d8b6b2e48af8e791e4c7b766161c384c1ee0893ffdb0fbfe
+252: pub fn choice_for(
+253:     engine: &Engine,
+254:     role: RoomRole,
+255:     seat: Option<ApiPlayerId>,
+256: ) -> Option<engine_api::ChoiceRequest> {
+257:     let view = match role {
+258:         RoomRole::Player => engine.choice_view_for(Some(native_seat(engine, seat)?)),
+259:         RoomRole::Referee => engine.choice_view_referee(),
+260:         RoomRole::Spectator => return None,
+261:     }?;
+262:     let engine_native::view::ChoiceView::Own {
+263:         id,
+264:         kind,
+265:         options,
+266:         min,
+267:         max,
+268:         allow_cancel,
+269:         prompt,
+270:         source_skill,
+271:     } = view
+272:     else {
+273:         return None;
+274:     };
+275:     let observer = ApiPlayerId::new(engine.open_choice()?.observer as u32 + 1);
+276:     // 协议 `ChoiceOption` 是 `{token, label_key}` 二元组（token 即 ResolveChoice 的
+277:     // 选择值；label_key 只用于本地化/显示，不参与规则）。token 与原生选项一一对应：
+278:     // 使用**候选下标**（与前端适配层/`answer()` 同口径），label_key 保留语义标签。
+279:     let options: Vec<engine_api::ChoiceOption> = options
+280:         .iter()
+281:         .enumerate()
+282:         .map(|(idx, opt)| engine_api::ChoiceOption {
+283:             token: idx as u32,
+284:             label_key: match opt {
+285:                 engine_native::ChoiceOption::Confirm => "confirm".to_string(),
+286:                 engine_native::ChoiceOption::Pass => "pass".to_string(),
+287:                 engine_native::ChoiceOption::Card(c) => format!("card:{c}"),
+288:                 engine_native::ChoiceOption::Player(p) => format!("player:{}", *p as u32 + 1),
+289:                 engine_native::ChoiceOption::Tag(t) => format!("tag:{t}"),
+290:                 engine_native::ChoiceOption::Skill(s) => format!("skill:{}", engine.catalog().skill_name(*s)),
+291:                 engine_native::ChoiceOption::Kind(k) => format!("kind:{k}"),
+292:             },
+293:         })
+294:         .collect();
+295:     Some(engine_api::ChoiceRequest {
+296:         choice_id: engine_api::ChoiceId::new(id as u32),
+297:         observer,
+298:         options,
+299:         continuation_id: id,
+300:         kind: if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+301:         native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
+302:         source_skill: source_skill.map(str::to_owned),
+303:         prompt: Some(prompt.to_owned()),
+304:         min_count: min as u8,
+305:         max_count: max as u8,
+306:         allow_cancel,
+307:         timeout_policy: engine_api::TimeoutPolicy::None,
+308:         deadline_unix_ms: None,
+309:         revision: engine.revision(),
+310:     })
+311: }
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:apps/game-server/src/room_native.rs SHA256 3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55
+580:             CommandKind::EndPhase => GameAction::NextPhase,
+581:             CommandKind::ActivateSkill {
+582:                 skill,
+583:                 targets,
+584:                 card_targets,
+585:             } if targets.is_empty() && card_targets.is_empty() => GameAction::ActivateSkill {
+586:                 skill: u16::try_from(skill.raw()).map_err(|_| "技能编号越界")?,
+587:             },
+588:             CommandKind::RevealGeneral { slot } => GameAction::RevealGeneral { slot: *slot },
+589:             CommandKind::ResolveChoice {
+590:                 choice_id,
+591:                 selections,
+592:                 cancelled,
+593:             } => {
+594:                 let open = self.engine.open_choice().ok_or("没有待应答的选择")?;
+595:                 if open.id != choice_id.raw() as u64 || (*cancelled && !selections.is_empty()) {
+596:                     return Err("选择编号或取消载荷无效".into());
+597:                 }
+598:                 GameAction::Answer {
+599:                     choice_id: choice_id.raw() as u64,
+600:                     selection: if *cancelled {
+601:                         Vec::new()
+602:                     } else {
+603:                         selections
+604:                             .iter()
+605:                             .map(|s| {
+606:                                 open.spec
+607:                                     .options
+608:                                     .get(*s as usize)
+609:                                     .copied()
+610:                                     .ok_or_else(|| format!("选择 token 越界: {s}"))
+611:                             })
+612:                             .collect::<Result<Vec<_>, _>>()?
+613:                     },
+614:                 }
+615:             }
+616:             other => {
+617:                 return Err(format!(
+618:                     "unsupported command kind for native authority: {other:?}"
+619:                 ))
+620:             }
+621:         })
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-wasm/src/session.rs SHA256 f71a7d9dd4d12d993559948bdbdc3f3a471a7b4216204a8d5a9d834dfe47c8f6
+164: /// 拿到的 `selections` 就是可直接回传的 token。
+165: ///
+166: /// 找不到候选下标的应答（理论不可达：候选即由同一 `spec.options` 生成）
+167: /// 与当前查询不枚举的国战明置一律不入列，避免给出**不可提交**的动作。
+168: fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Value> {
+169:     match action {
+170:         GameAction::NextPhase => Some(serde_json::json!("EndPhase")),
+171:         GameAction::PlayCard { card, targets } => Some(serde_json::json!({
+172:             "PlayCard": { "card": card, "targets": targets },
+173:         })),
+174:         GameAction::ActivateSkill { skill } => Some(serde_json::json!({
+175:             "ActivateSkill": { "skill": skill, "targets": [], "card_targets": [] },
+176:         })),
+177:         GameAction::Answer {
+178:             choice_id,
+179:             selection,
+180:         } => {
+181:             let spec = engine.open_choice().map(|c| c.spec.clone())?;
+182:             let mut selections = Vec::with_capacity(selection.len());
+183:             for option in selection {
+184:                 selections.push(spec.options.iter().position(|o| o == option)? as u32);
+185:             }
+186:             Some(serde_json::json!({
+187:                 "ResolveChoice": {
+188:                     "choice_id": choice_id,
+189:                     "selections": selections,
+190:                     "cancelled": selection.is_empty(),
+191:                 },
+192:             }))
+193:         }
+411:     /// 当前开放选择的座位可见 JSON（N10 选择可见性口径：观察者本人含
+412:     /// 选项；他人/观战仅存在面）。无询问返回 null。
+413:     pub fn open_choice_json(&self, seat: u8) -> Result<String, String> {
+414:         use engine_native::view::ChoiceView;
+415:         Ok(match self.inner.choice_view_for(Some(seat)) {
+416:             Some(ChoiceView::Own {
+417:                 id,
+418:                 kind,
+419:                 prompt,
+420:                 options,
+421:                 min,
+422:                 max,
+423:                 allow_cancel,
+424:                 source_skill,
+425:             }) => {
+426:                 let mut choice = serde_json::json!({
+427:                 "id": id,
+428:                 "observer": seat,
+429:                 "prompt": prompt,
+430:                 "native_kind": engine_native::view::choice_kind_name(kind),
+431:                 "kind": if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+432:                 "min": min,
+433:                 "max": max,
+434:                 "allowCancel": allow_cancel,
+435:                 "options": options.iter().map(|o| match o {
+436:                     engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
+437:                     engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
+438:                     engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
+439:                     engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
+440:                     engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
+441:                     engine_native::ChoiceOption::Skill(s) => serde_json::json!({ "skill": self.inner.catalog().skill_name(*s) }),
+442:                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
+443:                 }).collect::<Vec<_>>(),
+444:                 });
+445:                 if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
+446:                 choice.to_string()
+447:             },
+448:             Some(ChoiceView::Other {
+449:                 id,
+450:                 observer,
+451:                 prompt,
+452:             }) => serde_json::json!({
+453:                 "id": id,
+454:                 "observer": observer,
+455:                 "prompt": prompt,
+456:                 "hidden": true,
+457:             })
+458:             .to_string(),
+459:             None => "null".to_string(),
+460:         })
+528:     /// 选择应答（`selection` 是**候选下标**，直取 `spec.options[idx]`：与
+529:     /// [`NativeSession::legal_actions_json`] 的 `ResolveChoice.selections` 同口径；
+530:     /// 空数组 = 取消）。
+531:     pub fn answer(
+532:         &mut self,
+533:         observer: u32,
+534:         choice_id: u64,
+535:         selection: Vec<u32>,
+536:     ) -> Result<String, String> {
+537:         let Ok(actor) = u8::try_from(observer) else {
+538:             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+539:         };
+540:         if actor as usize >= self.inner.state_core().players.len() {
+541:             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
+542:         }
+543:         let Some(c) = self.inner.open_choice() else {
+544:             return Err(String::from("answer: 无开放选择"));
+545:         };
+546:         if c.observer != actor {
+547:             return Ok(rejected(&self.inner, RejectReason::WrongPlayer));
+548:         }
+549:         if c.id != choice_id {
+550:             return Err(String::from("answer: choice_id 不匹配"));
+551:         }
+552:         let mut sel = Vec::new();
+553:         for (idx, v) in selection.iter().enumerate() {
+554:             let Some(o) = c.spec.options.get(*v as usize) else {
+555:                 return Err(String::from("answer: 选项索引越界"));
+556:             };
+557:             let _ = idx;
+558:             sel.push(o.clone());
+559:         }
+560:         let out = self.inner.submit(engine_native::GameCommand {
+561:             actor,
+562:             expected_revision: self.inner.revision(),
+563:             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
+564:             action: GameAction::Answer {
+565:                 choice_id: c.id,
+566:                 selection: sel,
+567:             },
+568:         });
+569:         Ok(outcome_json(&self.inner, &out))
+570:     }
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/desktop-client/src/native_envelope.rs SHA256 0b05026ccde5a44a59beb288cfff0751d0fb84fc7b8f9b12a9bd1f4c375b9305
+65: fn option_label(option: &Value) -> String {
+66:     if let Some(text) = option.as_str() {
+67:         return text.into();
+68:     }
+69:     if option.is_number() {
+70:         return option.to_string();
+71:     }
+72:     if let Some(skill) = option["skill"].as_str() { return format!("skill:{skill}"); }
+73:     for key in ["card", "player", "tag", "kind"] {
+74:         if !option[key].is_null() {
+75:             return format!("{key}:{}", option[key]);
+76:         }
+77:     }
+78:     "unknown".into()
+79: }
+80: 
+81: fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
+82:     let raw = parse(session.open_choice_json(observer)?)?;
+83:     if raw.is_null() || raw["hidden"] == true {
+84:         return Ok(Value::Null);
+85:     }
+86:     let native_kind = raw.get("native_kind").filter(|value| !value.is_null()).map(|value| {
+87:         value.as_str().and_then(engine_api::choice_kind_from_native).ok_or("invalid native_kind")
+88:     }).transpose()?;
+89:     let kind = if raw["prompt"] == "trigger_order" && raw["native_kind"] == "pick_tag" { json!(engine_api::ChoiceKind::OrderTriggers) } else { native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom"))) };
+90:     if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
+91:     if raw.get("source_skill").is_some_and(|value| !value.is_null() && value.as_str().is_none_or(str::is_empty)) { return Err("invalid source_skill".into()); }
+92:     let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,
+93:         "options": raw["options"].as_array().into_iter().flatten().enumerate().map(|(index, option)| {
+94:             json!({"token": index, "label_key": option_label(option)})
+95:         }).collect::<Vec<_>>()});
+96:     for (source, target) in [
+97:         ("prompt", "prompt"),
+98:         ("native_kind", "native_kind"),
+99:         ("source_skill", "source_skill"),
+100:         ("min", "min_count"),
+101:         ("max", "max_count"),
+102:         ("allowCancel", "allow_cancel"),
+103:     ] {
+104:         if let Some(value) = raw.get(source) {
+105:             result[target] = value.clone();
+106:         }
+107:     }
+108:     Ok(result)
+109: }
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:apps/desktop-client/src/native_engine_host.rs SHA256 8c04b7e351c4e894741f9c784cf449096ec74589d1ccbb20ce5eb596aa0855dc
+273:             Request::ResolveChoice {
+274:                 actor,
+275:                 choice_id,
+276:                 selections,
+277:                 cancelled,
+278:             } => {
+279:                 if choice_id > MAX_SAFE_INTEGER {
+280:                     return Err("native: invalid choiceId".into());
+281:                 }
+282:                 let choice = parsed(session.open_choice_json(actor)?)?;
+283:                 if choice["id"].as_u64() != Some(choice_id) {
+284:                     return Err(format!("native: choice {choice_id} 不匹配/不存在"));
+285:                 }
+286:                 let count = choice["options"].as_array().map_or(0, Vec::len);
+287:                 if !cancelled && selections.iter().any(|index| *index as usize >= count) {
+288:                     return Err("native: 选项 token 不在候选".into());
+289:                 }
+290:                 parsed(session.answer(
+291:                     actor as u32,
+292:                     choice_id,
+293:                     if cancelled { Vec::new() } else { selections },
+294:                 )?)?
+295:             }
+296:             Request::AutoStep => parsed(session.auto_step()?)?,
+297:             Request::Observer => Value::Null,
+298:             Request::Status => {
+299:                 return Ok(
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/web-client/src/worker/nativeBackend.ts SHA256 bc2d055bb6d443ba3702087a45b89fdfc71d415a29a90a92c9ef652392b558fc
+288: /**
+289:  * 选择候选 JSON，与 engine-native-wasm `open_choice_json` 同口径：
+290:  * `"confirm"`、`"pass"`、`{card}`、`{player}`、`{tag}`、`{kind}`。
+291:  */
+292: export type ChoiceOptionJson = number | string | ChoiceOptionPayload;
+293: 
+294: /** 载荷型候选（每项恰有一个键）。 */
+295: export interface ChoiceOptionPayload {
+296:   card?: number;
+297:   player?: number;
+298:   tag?: number;
+299:   kind?: number;
+300:   skill?: string;
+301: }
+302: 
+303: /** observer 本人可见的开放选择 JSON（他人视图只有 `{id, observer, hidden}`）。 */
+304: interface NativeChoiceJson {
+305:   id: number;
+306:   prompt?: string;
+307:   options?: ChoiceOptionJson[];
+333: export function optionValue(o: ChoiceOptionJson): number | string {
+334:   if (typeof o === "number" || typeof o === "string") return o;
+335:   return o.card ?? o.player ?? o.tag ?? o.kind ?? o.skill ?? 0;
+336: }
+337: 
+338: /**
+339:  * 候选展示标注：带上字段名，避免 `Kind(105)` 与裸卡牌值都退化成同一个数字
+340:  * （旧实现 `String(optionValue(o))` 对 `{kind: 105}` 给出 `"0"`）。
+341:  */
+342: export function optionLabel(o: ChoiceOptionJson): string {
+343:   if (typeof o === "string") return o;
+344:   if (typeof o === "number") return String(o);
+345:   if (o.card !== undefined) return `card:${o.card}`;
+346:   if (o.player !== undefined) return `player:${o.player}`;
+347:   if (o.tag !== undefined) return `tag:${o.tag}`;
+348:   if (o.kind !== undefined) return `kind:${o.kind}`;
+349:   if (o.skill !== undefined) return `skill:${o.skill}`;
+350:   return "unknown";
+351: }
+352: 
+790: function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
+791:   const choice = readChoiceJson(handle);
+792:   if (!choice || choice.hidden) return null;
+793:   const options = choice.options ?? [];
+794:   return {
+795:     choice_id: Number(choice.id),
+796:     observer: handle.observer,
+797:     min_count: choice.min,
+798:     max_count: choice.max,
+799:     allow_cancel: choice.allowCancel,
+800:     ...choiceMetadata(choice),
+801:     revision: Number(handle.engine.revision()),
+802:     // token = 候选下标（回传即 `answer()` 的索引）；候选值只进 label_key。
+803:     options: options.map((o, index) => ({
+804:       token: index,
+805:       label_key: optionLabel(o),
+806:     })),
+807:   };
+808: }
+926:         throw new Error(`native: choice ${req.choiceId} 不匹配/不存在`);
+927:       }
+928:       const options = choice.options ?? [];
+929:       if (req.cancelled) {
+930:         // 窄壳无显式 cancel：传空选择索引；若不允许取消则由引擎拒
+931:         const out = handle.engine.answer(
+932:           req.actor,
+933:           BigInt(choice.id),
+934:           new Uint32Array([]),
+935:         );
+936:         return nativeEnvelope(handle, parseCommandResult(out));
+937:       }
+938:       // selections 是 token（= 候选下标），不是候选值：值只用于选择，
+939:       // 回传必须能按下标回查候选，否则 `{card:42}` 一类载荷永远失配。
+940:       const idxs = req.selections.map((token) => {
+941:         if (!Number.isInteger(token) || token < 0 || token >= options.length) {
+942:           throw new Error(
+943:             `native: 选项 token ${token} 不在候选（0..${options.length - 1}）`,
+944:           );
+945:         }
+946:         return token;
+947:       });
+948:       const out = handle.engine.answer(
+949:         req.actor,
+950:         BigInt(choice.id),
+951:         new Uint32Array(idxs),
+952:       );
+953:       return nativeEnvelope(handle, parseCommandResult(out));
+954:     }
+955:     case "autoStep": {
+956:       const out = handle.engine.auto_step();
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-api/src/choice.rs SHA256 a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6
+61: 
+62: /// Single selectable option.
+63: #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+64: pub struct ChoiceOption {
+65:     /// Option index / token returned in ResolveChoice.
+66:     pub token: u32,
+67:     /// Optional display key (localization id); empty if pure entity target.
+68:     pub label_key: String,
+69: }
+70: 
+71: /// Timeout policy tag (concrete durations live outside the core rules clock).
+72: #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+73: pub enum TimeoutPolicy {
+74:     /// No automatic timeout (offline / debug).
+75:     #[default]
+76:     None,
+77:     /// Standard multiplayer response window.
+78:     Standard,
+79:     /// Short response (confirm / yes-no).
+80:     Short,
+81:     /// Tournament policy.
+82:     Tournament,
+83: }
+84: 
+85: /// Semantic kind of choice (for projection / UI routing).
+86: #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+87: pub enum ChoiceKind {
+88:     /// Select targets for a card or skill.
+89:     SelectTargets,
+90:     /// Select cards from a known set.
+91:     SelectCards,
+92:     /// Yes / no confirm.
+93:     Confirm,
+94:     /// Order simultaneous triggers.
+95:     OrderTriggers,
+96:     /// Discard down to hand limit.
+97:     DiscardToLimit,
+98:     /// Generic / content-defined.
+99:     Custom,
+100: }
+101: 
+102: fn deserialize_source_skill<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {
+103:     let value = Option::<String>::deserialize(deserializer)?;
+104:     if value.as_deref().is_some_and(str::is_empty) {
+105:         return Err(serde::de::Error::custom("empty source_skill"));
+106:     }
+107:     Ok(value)
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/choice.rs SHA256 586ec7ce766576b9163bdeee71fa654ab7a0b3841107e0a22e99dfc5276d0014
+1: //! 选择请求与应答：内核唯一的选择通道，类型化选项（无 `Vec<u32>` 裸载荷）。
+2: 
+3: use crate::ids::{CardId, PlayerId, SkillDefId};
+4: 
+5: /// 选择种类（供宿主 UI 渲染分类用，不参与规则分支）。
+6: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+7: pub enum ChoiceKind {
+8:     /// 确认/放弃。
+9:     Confirm,
+10:     /// 从选项中选牌。
+11:     SelectCards,
+12:     /// 从选项中选玩家。
+13:     SelectPlayers,
+14:     /// 出牌响应（含放弃）。
+15:     RespondCard,
+16:     /// 从定界标签集中选择（G1 五行：金/木/水/火/土）。
+17:     PickTag,
+18: }
+19: 
+20: /// 单个可选项。
+21: #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+22: pub enum ChoiceOption {
+23:     /// 确认/使用。
+24:     Confirm,
+25:     /// 放弃/跳过（等价 cancel 的显式选项）。
+26:     Pass,
+27:     Card(CardId),
+28:     Player(PlayerId),
+29:     /// 定界标签（G1 五行属性 0..=4：金/木/水/火/土）。
+30:     Tag(u8),
+31:     /// 目录牌种码（`catalog::kind_code`）——「按牌名选择」类询问
+32:     /// （T11 Boss 诸葛亮族批 116 起风：从可用锦囊牌名中选一张并使用）。
+33:     Kind(u16),
+34:     /// Stable skill definition selected as the next trigger.
+35:     Skill(SkillDefId),
+36: }
+37: 
+38: impl ChoiceOption {
+39:     pub fn describe(&self) -> String {
+40:         match self {
+41:             ChoiceOption::Confirm => "confirm".into(),
+42:             ChoiceOption::Pass => "pass".into(),
+43:             ChoiceOption::Card(c) => format!("card:{c}"),
+44:             ChoiceOption::Player(p) => format!("player:{p}"),
+45:             ChoiceOption::Tag(t) => format!("nature:{t}"),
+46:             ChoiceOption::Kind(k) => format!("kind:{k}"),
+47:             ChoiceOption::Skill(s) => format!("skill:{s}"),
+48:         }
+49:     }
+50: }
+51: 
+52: /// 选择请求规格。内核负责校验应答是规格的子集且数量合规。
+53: #[derive(Debug, Clone, PartialEq, Eq)]
+54: pub struct ChoiceSpec {
+55:     pub kind: ChoiceKind,
+56:     /// 内容侧提示文本（静态串，进目录不进状态——状态只存目录引用编号）。
+57:     pub prompt: &'static str,
+58:     pub options: Vec<ChoiceOption>,
+59:     pub min: usize,
+60:     pub max: usize,
+61:     /// 允许空应答表示放弃。可选触发的「放弃」即空应答 + allow_cancel。
+62:     pub allow_cancel: bool,
+63: }
+64: 
+65: impl ChoiceSpec {
+66:     pub fn confirm(prompt: &'static str) -> Self {
+67:         Self {
+68:             kind: ChoiceKind::Confirm,
+69:             prompt,
+70:             options: vec![ChoiceOption::Confirm],
+71:             min: 1,
+72:             max: 1,
+73:             allow_cancel: true,
+74:         }
+75:     }
+76: 
+77:     /// 校验应答：全部选项都在规格内、数量在 [min, max]、无重复、或合法的空放弃。
+78:     ///
+79:     /// 重复守卫是信任边界的一部分：同一张牌/玩家选两次会让下游
+80:     /// 「从手牌移除」类结算二次移除同一实例而 panic。
+81:     pub fn accepts(&self, selection: &[ChoiceOption]) -> bool {
+82:         if selection.is_empty() {
+83:             return self.allow_cancel || self.min == 0;
+84:         }
+85:         if selection.len() < self.min || selection.len() > self.max {
+86:             return false;
+87:         }
+88:         selection.iter().all(|s| self.options.contains(s))
+89:             && (0..selection.len()).all(|i| !selection[i + 1..].contains(&selection[i]))
+90:     }
+91: }
+92: 
+93: /// 已开启、等待应答的选择（宿主可见视图 + 挂起的机器一并保存）。
+94: #[derive(Debug, Clone, PartialEq, Eq)]
+95: pub struct OpenChoice {
+96:     pub id: u64,
+97:     pub observer: PlayerId,
+98:     pub spec: ChoiceSpec,
+99: }
+100: 
+101: /// 应答结果（内核校验通过后写回，供机器读取一次）。
+102: pub type Selection = Vec<ChoiceOption>;
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/choice_source.rs SHA256 aeddb1fcc4e250cea041849ec8988a218c0483bca9eb6234c6ee86b2f2eb9f01
+1: //! Owner-visible ask identity, not a root certificate or permission to resume.
+2: use super::*;
+3: impl Engine {
+4:     pub(super) fn choice_source_skill(
+5:         &self,
+6:         open: &crate::choice::OpenChoice,
+7:     ) -> Option<&'static str> {
+8:         let resolution = &self.state.resolution;
+9:         let consumer = crate::resolution::ready_park_index(resolution)?;
+10:         let mut producer = None;
+11:         for (index, park) in resolution.parks.iter().enumerate() {
+12:             let snapshot = park.machine.snapshot();
+13:             if let Some(ask) = crate::snap::active_ask(&snapshot, &self.state.core, &self.catalog) {
+14:                 if producer.is_some()
+15:                     || ask.observer != open.observer
+16:                     || ask.prompt != open.spec.prompt
+17:                     || ask.kind != open.spec.kind
+18:                     || ask.options != open.spec.options
+19:                     || ask.min != open.spec.min
+20:                     || ask.max != open.spec.max
+21:                     || ask.allow_cancel != open.spec.allow_cancel
+22:                 {
+23:                     return None;
+24:                 }
+25:                 let source =
+26:                     if matches!(snapshot, crate::snap::MachineSnapshot::OptionalGate { .. }) {
+27:                         ask.source_skill
+28:                     } else {
+29:                         None
+30:                     };
+31:                 producer = Some((index, source));
+32:             }
+33:         }
+34:         let (index, source) = producer?;
+35:         if index != consumer {
+36:             return None;
+37:         }
+38:         let name = source?;
+39:         self.view_for(open.observer).players[open.observer as usize]
+40:             .skills
+41:             .contains(&name)
+42:             .then_some(name)
+43:     }
+44: }
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/asks.rs SHA256 db8644db9845d3c85eb99d381bb17985cd6b257595e3c1cf2f3ab82751247bce
+413:         MachineSnapshot::OptionalGate { owner, asked, inner, .. } => {
+414:             if let Some(e) = inner {
+415:                 let mut ask = active_ask(e, core, catalog)?;
+416:                 ask.source_skill = optional_source(e, catalog);
+417:                 return Some(ask);
+418:             }
+419:             if !*asked { return None; }
+420:             let mut ask = confirm_ask(*owner, "trigger_confirm");
+421:             ask.source_skill = optional_source(machine, catalog);
+422:             Some(ask)
+423:         }
+1025: // Only OptionalGate::step has the direct delegation contract used by this source.
+1026: fn optional_source(machine: &MachineSnapshot, catalog: &Catalog) -> Option<&'static str> {
+1027:     let MachineSnapshot::OptionalGate {
+1028:         def, asked, inner, ..
+1029:     } = machine
+1030:     else {
+1031:         return None;
+1032:     };
+1033:     if let Some(inner) = inner {
+1034:         return optional_source(inner, catalog);
+1035:     }
+1036:     if !asked {
+1037:         return None;
+1038:     }
+1039:     let declared = catalog.skills.get(*def as usize)?;
+1040:     if declared.name.is_empty()
+1041:         || declared.behavior.is_vm_skill()
+1042:         || !declared.trigger.as_ref().is_some_and(|meta| meta.optional)
+1043:         || catalog
+1044:             .skills
+1045:             .iter()
+1046:             .filter(|entry| entry.name == declared.name)
+1047:             .count()
+1048:             != 1
+1049:     {
+1050:         return None;
+1051:     }
+1052:     Some(declared.name)
+1053: }
+FILE git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native-kernel/src/snap/asks/shapes.rs SHA256 894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91
+1: //! 开放选择期望形状（ExpectedAsk）与通用选项构造。
+2: 
+3: use super::*;
+4: 
+5: /// 开放选择的期望形状（由挂起机器的 stage/asked 派生）。
+6: #[derive(Debug, Clone, PartialEq, Eq)]
+7: pub struct ExpectedAsk {
+8:     pub observer: PlayerId,
+9:     pub prompt: &'static str,
+10:     pub kind: ChoiceKind,
+11:     pub options: Vec<ChoiceOption>,
+12:     pub min: usize,
+13:     pub max: usize,
+14:     pub allow_cancel: bool,
+15:     /// Derived ask metadata, excluded from snapshots and formal shape validation.
+16:     pub source_skill: Option<&'static str>,
+17: }
+18: 
+19: pub fn ask(
+20:     observer: PlayerId,
+21:     prompt: &'static str,
+22:     kind: ChoiceKind,
+23:     options: Vec<ChoiceOption>,
+24:     min: usize,
+25:     max: usize,
+26:     allow_cancel: bool,
+27: ) -> ExpectedAsk {
+28:     ExpectedAsk {
+29:         observer,
+30:         prompt,
+31:         kind,
+32:         options,
+33:         min,
+34:         max,
+35:         allow_cancel,
+36:         source_skill: None,
+37:     }
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/resolution.rs SHA256 af087eb566ce2c6e97bc29861cf512301c442b929eb0258d55cbaeb73df9e229
+210: /// 可选触发的确认闸门：确认后才启动真正的技能机器。
+211: pub struct OptionalGate {
+212:     owner: PlayerId,
+213:     def: SkillDefId,
+214:     /// 计划时的事件载荷（触发语义以进入时为准）。
+215:     event: crate::event::EventData,
+216:     asked: bool,
+217:     inner: Option<Box<dyn SkillMachine>>,
+218: }
+219: 
+220: impl OptionalGate {
+221:     /// 运行时构造（触发入队时）与快照恢复共用。
+222:     pub(crate) fn new(
+223:         owner: PlayerId,
+224:         def: SkillDefId,
+225:         event: crate::event::EventData,
+226:         asked: bool,
+227:         inner: Option<Box<dyn SkillMachine>>,
+228:     ) -> Self {
+229:         Self {
+230:             owner,
+231:             def,
+232:             event,
+233:             asked,
+234:             inner,
+235:         }
+236:     }
+237: }
+238: 
+239: impl SkillMachine for OptionalGate {
+240:     fn fork(&self) -> Box<dyn SkillMachine> {
+241:         Box::new(Self {
+242:             owner: self.owner,
+243:             def: self.def,
+244:             event: self.event.clone(),
+245:             asked: self.asked,
+246:             inner: self.inner.as_ref().map(|m| m.fork()),
+247:         })
+248:     }
+249: 
+250:     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+251:         crate::snap::MachineSnapshot::OptionalGate {
+252:             owner: self.owner,
+253:             def: self.def,
+254:             event: self.event.clone(),
+255:             asked: self.asked,
+256:             inner: self.inner.as_ref().map(|m| Box::new(m.snapshot())),
+257:         }
+258:     }
+259: 
+260:     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+261:         // 内层机器存在即全权委托（其后续选择由内层自行发起）
+262:         if let Some(inner) = self.inner.as_mut() {
+263:             let flow = inner.step(ctx);
+264:             if matches!(flow, Flow::Done) {
+265:                 self.inner = None;
+266:                 return Flow::Done;
+267:             }
+268:             return flow;
+269:         }
+270:         let Some(frame) = ctx.res.stack.last() else {
+271:             return Flow::Done;
+272:         };
+273:         let qt = QueuedTrigger {
+274:             owner: self.owner,
+275:             def: self.def,
+276:             order: (0, 0, 0, 0, self.def),
+277:         };
+278:         if !trigger_order::eligible(ctx.core, ctx.catalog, &qt, &ctx.res.stack, frame) {
+279:             return Flow::Done;
+280:         }
+281:         let kind = trigger_order::event_kind(frame);
+282:         self.event = frame.data.clone();
+283:         if !self.asked {
+284:             self.asked = true;
+285:             return Flow::WaitChoice {
+286:                 observer: self.owner,
+287:                 spec: crate::choice::ChoiceSpec::confirm("trigger_confirm"),
+288:             };
+289:         }
+290:         if !ctx.answer().contains(&ChoiceOption::Confirm) {
+291:             return Flow::Done;
+292:         }
+293:         {
+294:             let def = &ctx.catalog.skills[self.def as usize];
+295:             if def.limits.once_per_turn {
+296:                 if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, self.def)) {
+297:                     if inst.once_used {
+298:                         return Flow::Done;
+299:                     }
+300:                     inst.once_used = true;
+301:                 }
+302:             }
+303:             ctx.log(LogEvent::SkillTriggered {
+304:                 skill: def.name,
+305:                 owner: self.owner,
+306:             });
+307:             let event =
+308:                 crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
+309:                     .clone();
+310:             self.inner = Some(
+311:                 def.behavior
+312:                     .start_in_window(&ctx.query(), self.owner, &event, kind),
+313:             );
+314:         }
+315:         let flow = self.inner.as_mut().expect("inner started").step(ctx);
+316:         if matches!(flow, Flow::Done) {
+317:             self.inner = None;
+318:             Flow::Done
+319:         } else {
+320:             flow
+321:         }
+322:     }
+323: }
+324: 
+325: /// 收集当前阶段的触发队列。
+609: fn start_queued_trigger(
+610:     core: &mut GameStateCore,
+611:     res: &mut Resolution,
+612:     catalog: &crate::catalog::Catalog,
+613:     out: &mut Vec<LogEvent>,
+614:     frame_id: EventId,
+615:     def_id: SkillDefId,
+616:     owner: PlayerId,
+617: ) {
+618:     let Some(index) = res.frame(frame_id).and_then(|f| {
+619:         f.queue
+620:             .iter()
+621:             .position(|q| q.def == def_id && q.owner == owner)
+622:     }) else {
+623:         return;
+624:     };
+625:     let qt = res.frame_mut(frame_id).expect("frame").queue.remove(index);
+626:     let event = res.frame(frame_id).expect("frame").data.clone();
+627:     let actual_event =
+628:         crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
+629:     if !trigger_order::eligible(
+630:         core,
+631:         catalog,
+632:         &qt,
+633:         &res.stack,
+634:         res.frame(frame_id).expect("frame"),
+635:     ) {
+636:         return;
+637:     }
+638:     let def = &catalog.skills[qt.def as usize];
+639:     let kind = trigger_order::event_kind(res.frame(frame_id).expect("frame"));
+640:     let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
+641:     let meta = native_meta
+642:         .as_ref()
+643:         .or(def.trigger.as_ref())
+644:         .expect("eligible meta");
+645:     let machine: Box<dyn SkillMachine> = if meta.optional {
+646:         Box::new(OptionalGate {
+647:             owner: qt.owner,
+648:             def: qt.def,
+649:             event,
+650:             asked: false,
+651:             inner: None,
+652:         })
+653:     } else {
+654:         if def.limits.once_per_turn {
+655:             let inst = core.skills.get_mut(&(qt.owner, qt.def)).expect("instance");
+656:             if inst.once_used {
+657:                 return;
+658:             }
+659:             inst.once_used = true;
+660:         }
+661:         out.push(LogEvent::SkillTriggered {
+662:             skill: def.name,
+663:             owner: qt.owner,
+664:         });
+665:         def.behavior.start_in_window(
+666:             &QueryCtx {
+667:                 state: core,
+668:                 catalog,
+669:             },
+670:             qt.owner,
+671:             &actual_event,
+672:             trigger_order::event_kind(res.frame(frame_id).expect("frame")),
+673:         )
+674:     };
+675:     res.parks.push(Park {
+676:         resume_depth: res.stack.len(),
+677:         slot: Slot::Trigger { frame: frame_id },
+678:         machine,
+679:     });
+680: }
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/event.rs SHA256 78ceed437b294390ad9bccfac46a6bba905e73cd167397471167c90354531381
+14: #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+15: pub enum EventKind {
+16:     DamageBefore,
+17:     Damage,
+18:     Recover,
+19:     CardsDrawn,
+20:     CardsMoved,
+21:     CardUsed,
+22:     CardResponded,
+23:     Dying,
+24:     Death,
+25:     PhaseBegin,
+26:     PhaseEnd,
+27:     TurnEnded,
+28:     SkillToggled,
+29:     Equipped,
+30:     Linked,
+31:     CardsDiscarded,
+32:     TurnOverBefore,
+33:     TurnOvered,
+34:     LoseHp,
+35:     /// 濒死救回（U05 xianjian 焚逝挂点，规则 v157）：固有救援机在
+36:     /// 体力>0 且脱离濒死时发射（上游 dyingAfter 时序等价）。
+37:     DyingSaved,
+38:     /// 失去牌（swd 批 125，规则 v312）：手牌被弃置/交出或装备被取走时
+39:     /// 发射（上游 `loseEnd` 触发窗；装备替换过程不发——上游 `equiping`
+40:     /// 期过滤同口径）。
+41:     CardsLost,
+42:     /// 杀被闪避（swd 批 141，规则 v316 同批）：目标成功闪避【杀】时发射
+43:     /// （上游 `shaMiss` 触发窗；用于李香龙等「杀被闪后反击」类技能）。
+44:     ShaDodged,
+45:     /// 手牌直接给予另一角色（NC04 未映射事件批）：`give_hand_card` 共享
+46:     /// 原语发射；DSL `cards_given` 触发窗（旧线 EventKind 同名同义）。
+47:     CardsGiven,
+48:     DamageSource,
+49:     DamageEnd,
+50:     DamageAfter,
+51:     DamageZero,
+52:     DamageCancelled,
+53:     DamageBegin,
+54:     DamageBegin1,
+55:     DamageBegin2,
+56:     DamageBegin3,
+57:     DamageBegin4,
+58: }
+59: 
+60: /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+61: #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+62: pub enum LostOrigin {
+63:     Hand,
+64:     Equip,
+65:     Judge,
+339: pub struct Frame {
+340:     pub id: EventId,
+341:     pub parent: Option<EventId>,
+342:     pub kind: EventKind,
+343:     pub data: EventData,
+344:     pub stage: Stage,
+345:     pub queue: Vec<QueuedTrigger>,
+346:     /// 当前阶段的触发队列是否已收集。
+347:     pub planned: bool,
+348:     pub intrinsic_done: bool,
+349: }
+350: 
+351: impl Frame {
+FILE /var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/machine.rs SHA256 cd7a54a0c778b9031ff0e7f1e28d1b9a56d504b11ef4674ced2a22fa6bfa7b2c
+95:     ChoiceAnswered {
+96:         id: u64,
+97:         options: Vec<String>,
+98:     },
+99:     SkillTriggered {
+100:         skill: &'static str,
+101:         owner: PlayerId,
+102:     },
+103:     SkillToggled {
+104:         player: PlayerId,
+105:         skill: &'static str,
+106:         enabled: bool,
+107:     },
+108:     PhaseChanged {
+109:         player: PlayerId,
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js SHA256 28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5
+15369: 				createTrigger:function(){
+15370: 					"step 0"
+15371: 					//console.log('triggering: ' + player.name+ ' \'s skill: ' + event.skill+' in ' + event.triggername)
+15372: 					if(lib.filter.filterTrigger(trigger,player,event.triggername,event.skill)){
+15373: 						var fullskills=game.expandSkills(player.getSkills().concat(lib.skill.global));
+15374: 						if(!fullskills.contains(event.skill)){
+15375: 							var info=get.info(event.skill);
+15376: 							var hidden=player.hiddenSkills.slice(0);
+15377: 							var invisible=player.invisibleSkills.slice(0);
+15378: 							game.expandSkills(hidden);
+15379: 							game.expandSkills(invisible);
+15380: 							if(hidden.contains(event.skill)){
+15381: 								if(!info.silent&&player.hasSkillTag('nomingzhi',false,null,true)){
+15382: 									event.finish();
+15383: 								}
+15384: 								else if(!info.direct){
+15385: 									event.trigger('triggerHidden');
+15386: 								}
+15387: 								else{
+15388: 									event.skillHidden=true;
+15389: 								}
+15390: 							}
+15391: 							else if(invisible.contains(event.skill)){
+15392: 								event.trigger('triggerInvisible');
+15393: 							}
+15394: 							else{
+15395: 								var keep=false;
+15396: 								for(var i in player.additionalSkills){
+15397: 									if(i.indexOf('hidden:')==0&&game.expandSkills(player.additionalSkills[i]).contains(event.skill)){
+15398: 										keep=true;break;
+15399: 									}
+15400: 								}
+15401: 								if(!keep){
+15402: 									event.finish();
+15403: 								}
+15404: 							}
+15405: 						}
+15406: 					}
+15407: 					else{
+15408: 						event.finish();
+15409: 					}
+15410: 					"step 1"
+15411: 					if(event.cancelled){
+15412: 						event.finish();
+15413: 						return;
+15414: 					}
+15415: 					var info=get.info(event.skill);
+15416: 					if(!event.revealed&&!info.forced){
+15417: 						var checkFrequent=function(info){
+15418: 							if(player.hasSkillTag('nofrequent',false,event.skill)) return false;
+15419: 							if(typeof info.frequent=='boolean') return info.frequent;
+15420: 							if(typeof info.frequent=='function') return info.frequent(trigger,player);
+15421: 							if(info.frequent=='check'&&typeof info.check=='function') return info.check(trigger,player);
+15422: 							return false;
+15423: 						}
+15424: 						if(info.direct&&player.isUnderControl()){
+15425: 							game.swapPlayerAuto(player);
+15426: 							event._result={bool:true};
+15427: 							event._direct=true;
+15428: 						}
+15429: 						else if(info.direct){
+15430: 							event._result={bool:true};
+15431: 							event._direct=true;
+15432: 						}
+15433: 						else if(info.direct&&player.isOnline()){
+15434: 							event._result={bool:true};
+15435: 							event._direct=true;
+15436: 						}
+15437: 						else{
+15438: 							if(checkFrequent(info)){
+15439: 								event.frequentSkill=true;
+15440: 							}
+15441: 							var str;
+15442: 							var check=info.check;
+15443: 							if(info.prompt) str=info.prompt;
+15444: 							else{
+15445: 								if(typeof info.logTarget=='string'){
+15446: 									str=get.prompt(event.skill,trigger[info.logTarget],player);
+15447: 								}
+15448: 								else if(typeof info.logTarget=='function'){
+15449: 									var logTarget=info.logTarget(trigger,player);
+15450: 									if(get.itemtype(logTarget).indexOf('player')==0) str=get.prompt(event.skill,logTarget,player);
+15451: 								}
+15452: 								else{
+15453: 									str=get.prompt(event.skill,null,player);
+15454: 								}
+15455: 							}
+15456: 							if(typeof str=='function'){str=str(trigger,player)}
+15457: 							var next=player.chooseBool(str);
+15458: 							if(event.frequentSkill) next.set('frequentSkill',event.skill);
+15459: 							next.set('forceDie',true);
+15460: 							next.set('includeOut',true);
+15461: 							next.ai=function(){
+15462: 								//Helasisy修，未知的问题导致info.check不是函数
+15463: 								if(check==false) return false;
+15464: 								return typeof check!='function'||check(trigger,player);
+15465: 							};
+15466: 							if(typeof info.prompt2=='function'){
+15467: 								next.set('prompt2',info.prompt2(trigger,player));
+15468: 							}
+15469: 							else if(typeof info.prompt2=='string'){
+15470: 								next.set('prompt2',info.prompt2);
+15471: 							}
+15472: 							else if(info.prompt2!=false){
+15473: 								if(lib.dynamicTranslate[event.skill]) next.set('prompt2',lib.dynamicTranslate[event.skill](player,event.skill));
+15474: 								else if(lib.translate[event.skill+'_info']) next.set('prompt2',lib.translate[event.skill+'_info']);
+15475: 							}
+15476: 							if(trigger.skillwarn){
+15477: 								if(next.prompt2){
+15478: 									next.set('prompt2','<span class="thundertext">'+trigger.skillwarn+'。</span>'+next.prompt2);
+15479: 								}
+15480: 								else{
+15481: 									next.set('prompt2',trigger.skillwarn);
+15482: 								}
+15483: 							}
+15484: 						}
+15485: 					}
+15486: 					"step 2"
+15487: 					var info=get.info(event.skill);
+15488: 					if(result&&result.bool!=false){
+15489: 						var autodelay=info.autodelay;
+15490: 						if(typeof autodelay=='function'){
+15491: 							autodelay=autodelay(trigger,player);
+15492: 						}
+15493: 						if(autodelay&&(info.forced||!event.isMine())){
+15494: 							if(typeof autodelay=='number'){
+15495: 								game.delayx(autodelay);
+15496: 							}
+15497: 							else{
+15498: 								game.delayx();
+15499: 							}
+15500: 						}
+15501: 					}
+15502: 					"step 3"
+15503: 					var info=get.info(event.skill);
+15504: 					if(result&&result.bool==false){
+15505: 						if(info.oncancel) info.oncancel(trigger,player);
+15506: 						event.finish();
+15507: 						return;
+15508: 					}
+15509: 					if(info.popup!=false&&!info.direct){
+15510: 						if(info.popup){
+15511: 							player.popup(info.popup);
+15512: 							game.log(player,'发动了','【'+get.skillTranslation(event.skill,player)+'】');
+15513: 						}
+15514: 						else{
+15515: 							if(info.logTarget&&info.logLine!==false){
+15516: 								if(typeof info.logTarget=='string'){
+15517: 									player.logSkill(event.skill,trigger[info.logTarget],info.line);
+15518: 								}
+15519: 								else if(typeof info.logTarget=='function'){
+15520: 									player.logSkill(event.skill,info.logTarget(trigger,player),info.line);
+15521: 								}
+15522: 							}
+15523: 							else{
+15524: 								player.logSkill(event.skill,false,info.line);
+15525: 							}
+15526: 						}
+15527: 					}
+15528: 					var next=game.createEvent(event.skill);
+15529: 					if(typeof info.usable=='number'){
+15530: 						player.addSkill('counttrigger');
+15531: 						if(!player.storage.counttrigger){
+15532: 							player.storage.counttrigger={};
+15533: 						}
+15534: 						if(!player.storage.counttrigger[event.skill]){
+15535: 							player.storage.counttrigger[event.skill]=1;
+15536: 						}
+15537: 						else{
+15538: 							player.storage.counttrigger[event.skill]++;
+15539: 						}
+15540: 					}
+15541: 					if(typeof info.roundUsable=='number'){
+15542: 						player.addSkill('roundCounttrigger');
+15543: 						if(!player.storage.roundCounttrigger){
+15544: 							player.storage.roundCounttrigger={};
+15545: 						}
+15546: 						if(!player.storage.roundCounttrigger[event.skill]){
+15547: 							player.storage.roundCounttrigger[event.skill]=1;
+15548: 						}
+15549: 						else{
+15550: 							player.storage.roundCounttrigger[event.skill]++;
+15551: 						}
+15552: 					}
+15553: 					next.player=player;
+15554: 					next._trigger=trigger;
+15555: 					next.triggername=event.triggername;
+15556: 					next.setContent(info.content);
+15557: 					next.skillHidden=event.skillHidden;
+15558: 					if(info.forceDie) next.forceDie=true;
+15559: 					if(info.forceOut||event.skill=='_turnover') next.includeOut=true;
+15560: 					"step 4"
+15561: 					if(player._hookTrigger){
+15562: 						for(var i=0;i<player._hookTrigger.length;i++){
+15563: 							var info=lib.skill[player._hookTrigger[i]].hookTrigger;
+15564: 							if(info){
+15565: 								if(info.after&&info.after(event,player,event.triggername)){
+15566: 									event.trigger('triggerAfter');
+15567: 									break;
+15568: 								}
+15569: 							}
+15570: 						}
+15571: 					}
+15572: 				},
+15573: 				playVideoContent:function(){
+15574: 					'step 0'
+16682: 				chooseToDiscard:function(){
+16683: 					"step 0"
+16684: 					if(event.autochoose()){
+16685: 						event.result={
+16686: 							bool:true,
+16687: 							autochoose:true,
+16688: 							cards:player.getCards(event.position),
+16689: 							rawcards:player.getCards(event.position),
+16690: 						}
+16691: 						for(var i=0;i<event.result.cards.length;i++){
+16692: 							if(!lib.filter.cardDiscardable(event.result.cards[i],player,event)){
+16693: 								event.result.cards.splice(i--,1);
+16694: 							}
+16695: 						}
+16696: 					}
+16697: 					else{
+16698: 						// &&!lib.filter.wuxieSwap(trigger)
+16699: 						if(game.modeSwapPlayer&&!_status.auto&&player.isUnderControl()){
+16700: 							game.modeSwapPlayer(player);
+16701: 						}
+16702: 						event.rangecards=player.getCards(event.position);
+16703: 						for(var i=0;i<event.rangecards.length;i++){
+16704: 							if(lib.filter.cardDiscardable(event.rangecards[i],player,event)){
+16705: 								event.rangecards.splice(i--,1);
+16706: 							}
+16707: 							else{
+16708: 								event.rangecards[i].uncheck('chooseToDiscard');
+16709: 							}
+16710: 						}
+16711: 						var range=get.select(event.selectCard);
+16712: 						if(event.isMine()){
+16713: 							game.check();
+16714: 							if(event.hsskill&&!event.forced&&_status.prehidden_skills.contains(event.hsskill)){
+16715: 								ui.click.cancel();
+16716: 								return;
+16717: 							}
+16718: 							game.pause();
+16719: 							if(range[1]>1&&typeof event.selectCard!='function'){
+16720: 								event.promptdiscard=ui.create.control('AI代选',function(){
+16721: 									ai.basic.chooseCard(event.ai);
+16722: 									if(_status.event.custom&&_status.event.custom.add.card){
+16723: 										_status.event.custom.add.card();
+16724: 									}
+16725: 									for(var i=0;i<ui.selected.cards.length;i++){
+16726: 										ui.selected.cards[i].updateTransform(true);
+16727: 									}
+16728: 								});
+16729: 							}
+16730: 							if(Array.isArray(event.dialog)){
+16731: 								event.dialog=ui.create.dialog.apply(this,event.dialog);
+16732: 								event.dialog.open();
+16733: 								event.dialog.classList.add('noselect');
+16734: 							}
+16735: 							else if(event.prompt!=false){
+16736: 								var str;
+16737: 								if(typeof(event.prompt)=='string') str=event.prompt;
+16738: 								else{
+16739: 									str='请弃置';
+16740: 									if(range[0]==range[1]) str+=get.cnNumber(range[0]);
+16741: 									else if(range[1]==Infinity) str+='至少'+get.cnNumber(range[0]);
+16742: 									else str+=get.cnNumber(range[0])+'至'+get.cnNumber(range[1]);
+16743: 									str+='张';
+16744: 									if(event.position=='h'||event.position==undefined) str+='手';
+16745: 									if(event.position=='e') str+='装备';
+16746: 									str+='牌';
+16747: 								}
+16748: 								event.dialog=ui.create.dialog(str);
+16749: 								if(event.prompt2){
+16750: 									event.dialog.addText(event.prompt2,event.prompt2.length<=20);
+16751: 								}
+16752: 								if(Array.isArray(event.selectCard)){
+16753: 									event.promptbar=event.dialog.add('0/'+get.numStr(event.selectCard[1],'card'));
+16754: 									event.custom.add.card=function(){
+16755: 										_status.event.promptbar.innerHTML=
+16756: 										ui.selected.cards.length+'/'+get.numStr(_status.event.selectCard[1],'card');
+16757: 									}
+16758: 								}
+16759: 							}
+16760: 							else if(get.itemtype(event.dialog)=='dialog'){
+16761: 								event.dialog.style.display='';
+16762: 								event.dialog.open();
+16763: 							}
+16764: 						}
+16765: 						else if(event.isOnline()){
+16766: 							event.send();
+16767: 						}
+16768: 						else{
+16769: 							event.result='ai';
+16770: 						}
+16771: 					}
+16772: 					"step 1"
+16773: 					if(event.result=='ai'){
+16774: 						game.check();
+16775: 						if((ai.basic.chooseCard(event.ai)||forced)&&(!event.filterOk||event.filterOk())){
+16776: 							ui.click.ok();
+16777: 						}
+16778: 						else if(event.skill){
+16779: 							var skill=event.skill;
+16780: 							ui.click.cancel();
+16781: 							event._aiexclude.add(skill);
+16782: 							event.redo();
+16783: 							game.resume();
+16784: 						}
+16785: 						else{
+16786: 							ui.click.cancel();
+16787: 						}
+16788: 					}
+16789: 					if(event.rangecards){
+16790: 						for(var i=0;i<event.rangecards.length;i++){
+16791: 							event.rangecards[i].recheck('chooseToDiscard');
+16792: 						}
+16793: 					}
+16794: 					"step 2"
+16795: 					event.resume();
+16796: 					if(event.promptdiscard){
+16797: 						event.promptdiscard.close();
+16798: 					}
+16799: 					"step 3"
+16800: 					if(event.result.bool&&event.result.cards&&event.result.cards.length&&
+16801: 						!game.online&&event.autodelay&&!event.isMine()){
+16802: 						if(typeof event.autodelay=='number'){
+16803: 							game.delayx(event.autodelay);
+16804: 						}
+16805: 						else{
+16806: 							game.delayx();
+16807: 						}
+16808: 					}
+16809: 					"step 4"
+16810: 					if(event.logSkill&&event.result.bool&&!game.online){
+16811: 						if(typeof event.logSkill=='string'){
+16812: 							player.logSkill(event.logSkill);
+16813: 						}
+16814: 						else if(Array.isArray(event.logSkill)){
+16815: 							player.logSkill.apply(player,event.logSkill);
+16816: 						}
+16817: 					}
+16818: 					if(!game.online){
+16819: 						if(typeof event.delay=='boolean'){
+16820: 							event.done=player.discard(event.result.cards).set('delay',event.delay);
+16821: 						}
+16822: 						else{
+16823: 							event.done=player.discard(event.result.cards);
+16824: 						}
+16825: 						event.done.discarder=player;
+16826: 					}
+16827: 					if(event.dialog&&event.dialog.close) event.dialog.close();
+16828: 				},
+16829: 				gaincardMultiple:function(){
+16830: 					'step 0'
+18854: 					"step 2"
+18855: 					event.resume();
+18856: 					setTimeout(function(){
+18857: 						ui.arena.classList.remove('gain-player-card');
+18858: 					},500);
+18859: 					if(game.online||!event.result.bool){
+18860: 						event.finish();
+18861: 					}
+18862: 					"step 3"
+18863: 					if(event.logSkill&&event.result.bool&&!game.online){
+18864: 						if(typeof event.logSkill=='string'){
+18865: 							player.logSkill(event.logSkill);
+18866: 						}
+18867: 						else if(Array.isArray(event.logSkill)){
+18868: 							player.logSkill.apply(player,event.logSkill);
+18869: 						}
+18870: 					}
+18871: 					var cards=[];
+18872: 					for(var i=0;i<event.result.links.length;i++){
+18873: 						cards.push(event.result.links[i]);
+18874: 					}
+18875: 					event.result.cards=event.result.links.slice(0);
+18876: 					event.cards=cards;
+18877: 					event.trigger("rewriteGainResult");
+18878: 					"step 4"
+18879: 					if(event.boolline){
+18880: 						player.line(target,'green');
+18881: 					}
+18882: 					if(!event.chooseonly){
+18883: 						if(event.delay!==false){
+18884: 							var next=player.gain(event.cards,target,event.visibleMove?'give':'giveAuto','bySelf');
+18885: 							event.done=next;
+18886: 						}
+18887: 						else{
+18888: 							var next=player.gain(event.cards,target,'bySelf');
+18889: 							event.done=next;
+18890: 							target[event.visibleMove?'$give':'$giveAuto'](cards,player);
+18891: 							if(event.visibleMove) next.visible=true;
+18892: 						}
+18893: 					}
+18894: 					else target[event.visibleMove?'$give':'$giveAuto'](cards,player);
+18895: 				},
+18896: 				showHandcards:function(){
+27175: 									}
+27176: 								}
+27177: 							}
+27178: 						}
+27179: 						var next=game.createEvent('logSkill',false),evt=_status.event;
+27180: 						next.player=player;
+27181: 						next.forceDie=true;
+27182: 						next.includeOut=true;
+27183: 						evt.next.remove(next);
+27184: 						if(evt.logSkill) evt=evt.getParent();
+27185: 						for(var i in logInfo){
+27186: 							if(i=='event') next.log_event=logInfo[i];
+27187: 							else next[i]=logInfo[i];
+27188: 						}
+27189: 						evt.after.push(next);
+27190: 						next.setContent('emptyEvent');
+27191: 						player.getHistory('useSkill').push(logInfo);
+27192: 						//尽可能别往这写插入结算
+27193: 						//不能用来终止技能发动！！！
+27194: 						var next2=game.createEvent('logSkillBegin',false);
+27195: 						next2.player=player;
+27196: 						next2.forceDie=true;
+27197: 						next2.includeOut=true;
+27198: 						for(var i in logInfo){
+27199: 							if(i=='event') next2.log_event=logInfo[i];
+27200: 							else next2[i]=logInfo[i];
+27201: 						}
+27202: 						next2.setContent('emptyEvent');
+27203: 					}
+27204: 					if(this._hookTrigger){
+27205: 						for(var i=0;i<this._hookTrigger.length;i++){
+27206: 							var info=lib.skill[this._hookTrigger[i]].hookTrigger;
+27207: 							if(info&&info.log){
+27208: 								info.log(this,name,targets);
+41694: 				if(event.next.length>0){
+41695: 					var next=event.next.shift();
+41696: 					if(next.player&&next.player.skipList.contains(next.name)){
+41697: 						event.trigger(next.name+'Skipped');
+41698: 						next.player.skipList.remove(next.name);
+41699: 						if(lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name);
+41700: 					}
+41701: 					else{
+41702: 						next.parent=event;
+41703: 						_status.event=next;
+41704: 						game.getGlobalHistory('everything').push(next);
+41705: 					}
+41706: 				}
+41707: 				else if(event.finished){
+41708: 					if(event._triggered==1){
+41709: 						if(event.type=='card') event.trigger('useCardToOmitted');
+41710: 						event.trigger(event.name+'Omitted');
+41711: 						event._triggered=4;
+41712: 					}
+41713: 					else if(event._triggered==2){
+41714: 						if(event.type=='card') event.trigger('useCardToEnd');
+41715: 						event.trigger(event.name+'End');
+41716: 						event._triggered=3;
+41717: 					}
+41718: 					else if(event._triggered==3){
+41719: 						if(event.type=='card') event.trigger('useCardToAfter');
+41720: 						event.trigger(event.name+'After');
+41721: 						event._triggered++;
+41722: 					}
+41723: 					else if(event.after&&event.after.length){
+41724: 						var next=event.after.shift();
+41725: 						if(next.player&&next.player.skipList.contains(next.name)){
+41726: 							event.trigger(next.name+'Skipped');
+41727: 							next.player.skipList.remove(next.name);
+41728: 							if(lib.phaseName.contains(next.name)) next.player.getHistory('skipped').add(next.name)
+41729: 						}
+41730: 						else{
+41731: 							next.parent=event;
+41732: 							_status.event=next;
+41733: 						}
+41734: 					}
+41735: 					else{
+41736: 						if(event.parent){
+41737: 							if(event.result){
+41738: 								event.parent._result=event.result;
+41739: 							}
+41740: 							_status.event=event.parent;
+41741: 						}
+41742: 						else{
+41743: 							return;
+41744: 						}
+41745: 					}
+41746: 				}
+41747: 				else{
+41748: 					if(event._triggered==0){
+41749: 						if(event.type=='card') event.trigger('useCardToBefore');
+41750: 						event.trigger(event.name+'Before');
+41751: 						event._triggered++;
+41752: 					}
+41753: 					else if(event._triggered==1){
+41754: 						if(event.type=='card') event.trigger('useCardToBegin');
+41755: 						if(event.name=='phase'&&!event._begun){
+41756: 							var next=game.createEvent('phasing',false,event);
+41757: 							next.player=event.player;
+41758: 							next.skill=event.skill;
+41759: 							next.setContent('phasing');
+41760: 							event._begun=true;
+41761: 						}
+41762: 						else{
+41763: 							event.trigger(event.name+'Begin');
+41764: 							event._triggered++;
+41765: 						}
+41766: 					}
+41767: 					else{
+41768: 						if(player&&player.classList.contains('dead')&&!event.forceDie&&event.name!='phaseLoop'){
+41769: 							game.broadcastAll(function(){
+41770: 								while(_status.dieClose.length){
+41771: 									_status.dieClose.shift().close();
+41772: 								}
+41773: 							});
+41774: 							if(event._oncancel){
+41775: 								event._oncancel();
+41776: 							}
+41777: 							event.finish();
+41778: 						}
+41779: 						else if(player&&player.removed&&event.name!='phaseLoop'){
+41780: 							event.finish();
+41781: 						}
+41782: 						else if(player&&player.isOut()&&event.name!='phaseLoop'&&!event.includeOut){
+41783: 							if(event.name=='phase'&&player==_status.roundStart&&!event.skill){
+41784: 								_status.roundSkipped=true;
+41785: 							}
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js SHA256 e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238
+4439: 			qinglonglingzhu:{
+4440: 				trigger:{source:'damageEnd'},
+4441: 				direct:true,
+4442: 				filter:function(event,player){
+4443: 					if(event._notrigger.contains(event.player)) return false;
+4444: 					return event.nature&&event.player&&event.player.isAlive();
+4445: 				},
+4446: 				content:function(){
+4447: 					player.gainPlayerCard(get.prompt('qinglonglingzhu',trigger.player),trigger.player,function(button){
+4448: 						if(get.attitude(player,trigger.player)<=0){
+4449: 							return get.buttonValue(button);
+4450: 						}
+4451: 						return 0;
+4452: 					},'he').logSkill=['qinglonglingzhu',trigger.player];
+4453: 				},
+4454: 			},
+FILE /Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/mode/boss.js SHA256 61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169
+6392: 			boss_yuance:{
+6393: 				trigger:{global:'damageEnd'},
+6394: 				filter:function(event){
+6395: 					return event.source&&event.source!=event.player&&event.source.isAlive()&&event.player.isAlive();
+6396: 				},
+6397: 				direct:true,
+6398: 				content:function(){
+6399: 					'step 0'
+6400: 					var att1=get.attitude(player,trigger.player);
+6401: 					var att2=get.attitude(player,trigger.source);
+6402: 					var targets=player.getEnemies();
+6403: 					var stop=false;
+6404: 					for(var i=0;i<targets.length;i++){
+6405: 						var skills=targets[i].getSkills();
+6406: 						for(var j=0;j<skills.length;j++){
+6407: 							if(get.tag(skills[j],'rejudge',targets[i])){
+6408: 								stop=true;break;
+6409: 							}
+6410: 						}
+6411: 					}
+6412: 					var rand=Math.random()<0.5?'选项一':'选项二';
+6413: 					var sourcename=get.translation(trigger.source);
+6414: 					var playername=get.translation(trigger.player);
+6415: 					player.chooseControl('选项一','选项二','cancel2',function(){
+6416: 						if(att1==0&&att2==0) return rand;
+6417: 						if(att1*att2>=0){
+6418: 							if(att1+att2>0){
+6419: 								return '选项二';
+6420: 							}
+6421: 							else{
+6422: 								return '选项一';
+6423: 							}
+6424: 						}
+6425: 						else{
+6426: 							if(trigger.player.isHealthy()&&trigger.source.isHealthy()) return rand;
+6427: 							if(trigger.player.isHealthy()){
+6428: 								if(att1<0) return '选项二';
+6429: 								if(att1>0&&!stop) return '选项一';
+6430: 							}
+6431: 							if(trigger.source.isHealthy()){
+6432: 								if(att2<0) return '选项二';
+6433: 								if(att2>0&&!stop) return '选项一';
+6434: 							}
+6435: 							if(stop) return 'cancel2';
+6436: 							return rand;
+6437: 						}
+6438: 					}).set('prompt',get.prompt('boss_yuance')).set('choiceList',[
+6439: 						'若判定结果为黑色，'+playername+'失去一点体力，否则'+sourcename+'失去一点体力',
+6440: 						'若判定结果为红色，'+playername+'回复一点体力，否则'+sourcename+'回复一点体力'
+6441: 					]);
+6442: 					'step 1'
+6443: 					var att1=get.attitude(player,trigger.player);
+6444: 					var att2=get.attitude(player,trigger.source);
+6445: 					if(result.control=='选项一'){
+6446: 						event.type=1;
+6447: 						player.judge(function(card){
+6448: 							if(get.color(card)=='black'){
+6449: 								if(att1>0) return -1;
+6450: 								if(att1<0) return 1;
+6451: 							}
+6452: 							else{
+6453: 								if(att2>0) return -1;
+6454: 								if(att2<0) return 1;
+6455: 							}
+6456: 							return 0;
+6457: 						});
+6458: 					}
+6459: 					else if(result.control=='选项二'){
+6460: 						event.type=2;
+6461: 						player.judge(function(card){
+6462: 							if(get.color(card)=='red'){
+6463: 								if(trigger.player.isDamaged()){
+6464: 									if(att1>0) return 1;
+6465: 									if(att1<0) return -1;
+6466: 								}
+6467: 							}
+6468: 							else{
+6469: 								if(trigger.source.isDamaged()){
+6470: 									if(att2>0) return 1;
+6471: 									if(att2<0) return -1;
+6472: 								}
+6473: 							}
+6474: 							return 0;
+6475: 						});
+6476: 					}
+6477: 					else{
+6478: 						event.finish();
+6479: 					}
+6480: 					'step 2'
+6481: 					if(event.type==1){
+6482: 						if(result.color=='black'){
+6483: 							trigger.player.loseHp();
+6484: 						}
+6485: 						else{
+6486: 							trigger.source.loseHp();
+6487: 						}
+6488: 					}
+6489: 					else{
+6490: 						if(result.color=='red'){
+6491: 							trigger.player.recover();
+6492: 						}
+6493: 						else{
+6494: 							trigger.source.recover();
+6495: 						}
+6496: 					}
+6497: 				}
+6498: 			},
+6596: 			boss_zhangwu:{
+6597: 				global:'boss_zhangwu_ai',
+6598: 				trigger:{player:'damageEnd'},
+6599: 				check:function(event,player){
+6600: 					return event.source&&event.source.isIn()&&get.damageEffect(event.source,player,player)>0;
+6601: 				},
+6602: 				filter:function(event){
+6603: 					return event.source&&event.source.isAlive();
+6604: 				},
+6605: 				direct:true,
+6606: 				logTarget:'source',
+6607: 				content:function(){
+6608: 					'step 0'
+6609: 					player.chooseToDiscard(get.prompt('boss_zhangwu',trigger.source),'he',[1,Infinity]).set('ai',function(card){
+6610: 						if(get.attitude(player,target)<0) return 8-get.value(card);
+6611: 						return 0;
+6612: 					}).set('logSkill',['boss_zhangwu',trigger.source]);
+6613: 					'step 1'
+6614: 					if(result.bool){
+6615: 						var num=result.cards.length;
+6616: 						var cnum=get.cnNumber(num);
+6617: 						event.num=num;
+6618: 						trigger.source.chooseToDiscard('he','章武：弃置'+cnum+'张牌，或取消并受到'+cnum+'点伤害',num).set('ai',function(card){
+6619: 							if(!trigger.source.hasSkillTag('nodamage')) return 10-get.value(card);
+6620: 							return 0;
+6621: 						});
+6622: 					}
+6623: 					else{
+6624: 						event.finish();
+6625: 					}
+6626: 					'step 2'
+6627: 					if(!result.bool){
+6628: 						trigger.source.damage(event.num);
+6629: 					}
+6630: 				},
+6631: 				ai:{
+6632: 					maixie:true,
+6633: 					maixie_hp:true,
+6634: 					effect:{
+6635: 						target:function(card,player,target){
+6636: 							if(get.tag(card,'damage')&&get.attitude(target,player)<0&&player.countCards('he')<target.countCards('he')){
+6637: 								return [0,2];
+8275: 			jidian:{
+8276: 				audio:2,
+8277: 				trigger:{source:'damageAfter'},
+8278: 				direct:true,
+8279: 				unique:true,
+8280: 				content:function(){
+8281: 					"step 0"
+8282: 					player.chooseTarget(get.prompt('jidian'),function(card,player,target){
+8283: 						return get.distance(trigger.player,target)<=1&&trigger.player!=target;
+8284: 					}).ai=function(target){
+8285: 						return get.damageEffect(target,player,player,'thunder')+0.1;
+8286: 					}
+8287: 					"step 1"
+8288: 					if(result.bool){
+8289: 						event.target=result.targets[0];
+8290: 						event.target.judge(function(card){
+8291: 							return get.color(card)=='red'?0:-1;
+8292: 						})
+8293: 						player.logSkill('jidian',event.target,false);
+8294: 						trigger.player.line(event.target,'thunder');
+8295: 					}
+8296: 					else{
+8297: 						event.finish();
+8298: 					}
+8299: 					"step 2"
+8300: 					if(result.color=='black'){
+8301: 						event.target.damage('thunder');
+8302: 					}
+8303: 				}
+8304: 			},
+8305: 			tinqin:{
+8306: 				audio:false,
+8307: 				inherit:'manjuan'

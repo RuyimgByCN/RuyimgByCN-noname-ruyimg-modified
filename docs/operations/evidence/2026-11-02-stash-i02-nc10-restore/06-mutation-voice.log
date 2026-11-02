@@ -1,0 +1,22 @@
+$ [变异1：去掉 validate_definition_voice_assets 调用] cargo test --offline -p content-runtime --test definition_voice_assets   # 2026-11-02 23:13:38 +0800
+test voice_definition_ids_must_be_nonzero_and_unambiguous ... FAILED
+test absent_and_empty_voices_keep_legacy_zero_asset_hash ... FAILED
+test definition_voices_require_safe_keys_and_local_audio_membership ... FAILED
+test definition_voice_hash_cannot_be_absorbed_by_legacy_sort_key ... ok
+test voice_hash_uses_category_and_stable_id_and_normalized_map_order ... ok
+test genuine_definition_voices_roundtrip_and_change_only_asset_hash ... ok
+test sdk_voice_package_installs_and_restores_exact_locked_bytes_and_assets ... ok
+test result: FAILED. 4 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+exit=101
+$ [变异2：compute_asset_hash 直接返回 legacy 摘要] cargo test --offline -p content-runtime --test definition_voice_assets   # 2026-11-02 23:13:42 +0800
+test genuine_definition_voices_roundtrip_and_change_only_asset_hash ... FAILED
+test absent_and_empty_voices_keep_legacy_zero_asset_hash ... FAILED
+test voice_hash_uses_category_and_stable_id_and_normalized_map_order ... FAILED
+test definition_voice_hash_cannot_be_absorbed_by_legacy_sort_key ... ok
+test voice_definition_ids_must_be_nonzero_and_unambiguous ... ok
+test sdk_voice_package_installs_and_restores_exact_locked_bytes_and_assets ... ok
+test definition_voices_require_safe_keys_and_local_audio_membership ... ok
+test result: FAILED. 4 passed; 3 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+error: test failed, to rerun pass `-p content-runtime --test definition_voice_assets`
+exit=101
+package.rs/hashing.rs restored to stash version

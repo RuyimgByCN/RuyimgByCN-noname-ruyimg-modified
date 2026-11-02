@@ -20,6 +20,7 @@ const PACKAGE: &[u8] =
 
 fn character(id: u32, group: &str) -> PackageCharacterEntry {
     PackageCharacterEntry {
+        voice_assets: Default::default(),
         id,
         name_key: format!("songwei_test_{id}"),
         max_hp: 4,

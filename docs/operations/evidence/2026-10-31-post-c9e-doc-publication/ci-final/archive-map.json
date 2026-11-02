@@ -1,0 +1,1318 @@
+{
+  "utc": "2026-10-31T18:38:33.717899+00:00",
+  "mainHead": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "run": 41227614131,
+  "attempt": 1,
+  "status": "10jobsSUCCESS_PARENTFRESHAUDITPASS_INDEPENDENTREVIEWPENDING",
+  "files": 145,
+  "archiveBytes": 18859109,
+  "sourceBytes": 27680115,
+  "copies": [
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/check-parser-offline.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/check-parser-offline.py",
+      "sourceSHA256": "f218ee184d846165f5a212aac75ac88e2633658abe8dc967de6a011311535a4e",
+      "archiveSHA256": "f218ee184d846165f5a212aac75ac88e2633658abe8dc967de6a011311535a4e",
+      "sourceBytes": 1883,
+      "archiveBytes": 1883,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/artifacts-final.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/artifacts-final.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/artifacts-final.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/artifacts-final.stdout",
+      "sourceSHA256": "736eb1b2592fc08fcf54396916b66ee4d3e7d714f8fd8e967ed539f7bca98bac",
+      "archiveSHA256": "736eb1b2592fc08fcf54396916b66ee4d3e7d714f8fd8e967ed539f7bca98bac",
+      "sourceBytes": 2300,
+      "archiveBytes": 2300,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-artifacts.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-artifacts.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-artifacts.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-artifacts.stdout",
+      "sourceSHA256": "0260cb793091cc25849e25b3804d499cde41019f68f1c90d92252f9dfa63af11",
+      "archiveSHA256": "0260cb793091cc25849e25b3804d499cde41019f68f1c90d92252f9dfa63af11",
+      "sourceBytes": 788,
+      "archiveBytes": 788,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-envelope.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-envelope.json",
+      "sourceSHA256": "ac8be3e3f3172d5f98a2e4f9a96d4a2be0e2885a1696f9e1cb42d4b0316a0b43",
+      "archiveSHA256": "ac8be3e3f3172d5f98a2e4f9a96d4a2be0e2885a1696f9e1cb42d4b0316a0b43",
+      "sourceBytes": 4664,
+      "archiveBytes": 4664,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-jobs.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-jobs.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-jobs.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-jobs.stdout",
+      "sourceSHA256": "fc7b07b3729cd54997ea3bde0d294e5b9bc4ab90d93b4171caa803654b48a856",
+      "archiveSHA256": "fc7b07b3729cd54997ea3bde0d294e5b9bc4ab90d93b4171caa803654b48a856",
+      "sourceBytes": 30743,
+      "archiveBytes": 30743,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-run.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-run.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/checkpoint-run.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/checkpoint-run.stdout",
+      "sourceSHA256": "8c1e39d71eb95e9341d255e9ab2e5940f9fdafef67ab566a8a23fb31f834d889",
+      "archiveSHA256": "8c1e39d71eb95e9341d255e9ab2e5940f9fdafef67ab566a8a23fb31f834d889",
+      "sourceBytes": 15326,
+      "archiveBytes": 15326,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/discovery-command.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/discovery-command.json",
+      "sourceSHA256": "646f66ab35871c1f680bc58ace21f3e4d389756734a452abd763fd44a7c9781c",
+      "archiveSHA256": "646f66ab35871c1f680bc58ace21f3e4d389756734a452abd763fd44a7c9781c",
+      "sourceBytes": 243,
+      "archiveBytes": 243,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/discovery.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/discovery.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/discovery.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/discovery.stdout",
+      "sourceSHA256": "49449d7168468a916cc219c1072f52bbc84d84f43d2584dc1b8f48df69bcf38d",
+      "archiveSHA256": "49449d7168468a916cc219c1072f52bbc84d84f43d2584dc1b8f48df69bcf38d",
+      "sourceBytes": 15362,
+      "archiveBytes": 15362,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/exact-run.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/exact-run.json",
+      "sourceSHA256": "22bb5254008b3c5e08cc5752e25af75fa59fcb3a7eae2599889aac70747c1e68",
+      "archiveSHA256": "22bb5254008b3c5e08cc5752e25af75fa59fcb3a7eae2599889aac70747c1e68",
+      "sourceBytes": 16655,
+      "archiveBytes": 16655,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-artifacts.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-artifacts.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-artifacts.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-artifacts.stdout",
+      "sourceSHA256": "244563f989470892c537c9a4622920af0d228ee4528f7d00c64a06d6cd95856c",
+      "archiveSHA256": "244563f989470892c537c9a4622920af0d228ee4528f7d00c64a06d6cd95856c",
+      "sourceBytes": 32,
+      "archiveBytes": 32,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-envelope.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-envelope.json",
+      "sourceSHA256": "e7e7977dd9e8939a3e20faf2adcea44fa5e058e8050c422539ff598316a0df8d",
+      "archiveSHA256": "e7e7977dd9e8939a3e20faf2adcea44fa5e058e8050c422539ff598316a0df8d",
+      "sourceBytes": 4561,
+      "archiveBytes": 4561,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-jobs.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-jobs.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-jobs.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-jobs.stdout",
+      "sourceSHA256": "aabf208a6ff7443fc2d3d603eb1c7aad46962354ac2d53ace2c8625ee78680ef",
+      "archiveSHA256": "aabf208a6ff7443fc2d3d603eb1c7aad46962354ac2d53ace2c8625ee78680ef",
+      "sourceBytes": 29185,
+      "archiveBytes": 29185,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-run.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-run.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-run.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/initial-run.stdout",
+      "sourceSHA256": "8c1e39d71eb95e9341d255e9ab2e5940f9fdafef67ab566a8a23fb31f834d889",
+      "archiveSHA256": "8c1e39d71eb95e9341d255e9ab2e5940f9fdafef67ab566a8a23fb31f834d889",
+      "sourceBytes": 15326,
+      "archiveBytes": 15326,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943211-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943211-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943211-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943211-detail.stdout",
+      "sourceSHA256": "0a7cdef8ad21a862eef2a3b7a04c6ceac23209d5402d9c5faafb709ce915c26f",
+      "archiveSHA256": "0a7cdef8ad21a862eef2a3b7a04c6ceac23209d5402d9c5faafb709ce915c26f",
+      "sourceBytes": 4110,
+      "archiveBytes": 4110,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943211-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943211-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943211-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943211-raw-log.stdout.gz",
+      "sourceSHA256": "79db216e9018b65221fd3027092edce16ee4a1cb50bf6be6f359dd16b37237df",
+      "archiveSHA256": "79db216e9018b65221fd3027092edce16ee4a1cb50bf6be6f359dd16b37237df",
+      "sourceBytes": 112178,
+      "archiveBytes": 112178,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943380-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943380-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943380-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943380-detail.stdout",
+      "sourceSHA256": "54b85c42b34af5189113f80d4a1c04eec88c94d999f0c70e3ce64d5b07741cda",
+      "archiveSHA256": "54b85c42b34af5189113f80d4a1c04eec88c94d999f0c70e3ce64d5b07741cda",
+      "sourceBytes": 2462,
+      "archiveBytes": 2462,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943380-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943380-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943380-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943380-raw-log.stdout.gz",
+      "sourceSHA256": "2da527c2c136f79f7d10a2e99484619fadf01e8b0b93941695bec344adbfd03f",
+      "archiveSHA256": "2da527c2c136f79f7d10a2e99484619fadf01e8b0b93941695bec344adbfd03f",
+      "sourceBytes": 59880,
+      "archiveBytes": 59880,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943392-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943392-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943392-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943392-detail.stdout",
+      "sourceSHA256": "f16ad4223beac3581b4b5832753347bb976d00c67572ffb6790fb5b7c2a3e63f",
+      "archiveSHA256": "f16ad4223beac3581b4b5832753347bb976d00c67572ffb6790fb5b7c2a3e63f",
+      "sourceBytes": 2479,
+      "archiveBytes": 2479,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943392-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943392-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943392-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943392-raw-log.stdout.gz",
+      "sourceSHA256": "8673862be770e708d2aac98811b54a62725cd1aec93357c64becbf1a02873791",
+      "archiveSHA256": "8673862be770e708d2aac98811b54a62725cd1aec93357c64becbf1a02873791",
+      "sourceBytes": 29538,
+      "archiveBytes": 29538,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943460-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943460-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943460-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943460-detail.stdout",
+      "sourceSHA256": "5c0cdcdc1909262387ee73f411fc312443b6b0e1455209999bd01fcb287836fe",
+      "archiveSHA256": "5c0cdcdc1909262387ee73f411fc312443b6b0e1455209999bd01fcb287836fe",
+      "sourceBytes": 2458,
+      "archiveBytes": 2458,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943460-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943460-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943460-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943460-raw-log.stdout.gz",
+      "sourceSHA256": "c463794324c210f993049f8d05ba74d5330ee904115003b413cd14adea0482cd",
+      "archiveSHA256": "c463794324c210f993049f8d05ba74d5330ee904115003b413cd14adea0482cd",
+      "sourceBytes": 57459,
+      "archiveBytes": 57459,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943464-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943464-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943464-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943464-detail.stdout",
+      "sourceSHA256": "ec247ad2236a750dc8529373ff9a7a97a482b6c62b0aec9786743036eb83e292",
+      "archiveSHA256": "ec247ad2236a750dc8529373ff9a7a97a482b6c62b0aec9786743036eb83e292",
+      "sourceBytes": 3761,
+      "archiveBytes": 3761,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943464-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943464-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943464-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943464-raw-log.stdout.gz",
+      "sourceSHA256": "cddf4e372790674afc048fb7fda30b17d26298c875b6593d21d19876e1d74a47",
+      "archiveSHA256": "cddf4e372790674afc048fb7fda30b17d26298c875b6593d21d19876e1d74a47",
+      "sourceBytes": 52789,
+      "archiveBytes": 52789,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943471-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943471-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943471-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943471-detail.stdout",
+      "sourceSHA256": "7b4153c2ff4639d5da3ae37fe10ced70b83cfa6c2f69b5a43911438559037352",
+      "archiveSHA256": "7b4153c2ff4639d5da3ae37fe10ced70b83cfa6c2f69b5a43911438559037352",
+      "sourceBytes": 3759,
+      "archiveBytes": 3759,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943471-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943471-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943471-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943471-raw-log.stdout.gz",
+      "sourceSHA256": "95cd02e6d3726756a19a4ff4b0b3462290207853875e539f8ead8acc91ebccea",
+      "archiveSHA256": "95cd02e6d3726756a19a4ff4b0b3462290207853875e539f8ead8acc91ebccea",
+      "sourceBytes": 35083,
+      "archiveBytes": 35083,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943472-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943472-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943472-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943472-detail.stdout",
+      "sourceSHA256": "9f3d804ff8a3f1f918ce527b2ebcd96a20253561ab882faf48793a991023f81b",
+      "archiveSHA256": "9f3d804ff8a3f1f918ce527b2ebcd96a20253561ab882faf48793a991023f81b",
+      "sourceBytes": 2460,
+      "archiveBytes": 2460,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943472-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943472-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943472-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943472-raw-log.stdout.gz",
+      "sourceSHA256": "e193fed69f81b64ec650293c99e1b7efd1d27afa96a94578011e49f4ea2c4326",
+      "archiveSHA256": "e193fed69f81b64ec650293c99e1b7efd1d27afa96a94578011e49f4ea2c4326",
+      "sourceBytes": 58772,
+      "archiveBytes": 58772,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943484-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943484-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943484-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943484-detail.stdout",
+      "sourceSHA256": "a2ce53539f1377516055386026a82a27e90f24c6ba3da5fd2e7d694e07503e93",
+      "archiveSHA256": "a2ce53539f1377516055386026a82a27e90f24c6ba3da5fd2e7d694e07503e93",
+      "sourceBytes": 4382,
+      "archiveBytes": 4382,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943484-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943484-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943484-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943484-raw-log.stdout.gz",
+      "sourceSHA256": "078c76708520a6c09986610204ffaf0f8839de12aa1ac6480e52b1f1ff09272b",
+      "archiveSHA256": "078c76708520a6c09986610204ffaf0f8839de12aa1ac6480e52b1f1ff09272b",
+      "sourceBytes": 356553,
+      "archiveBytes": 356553,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943507-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943507-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943507-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943507-detail.stdout",
+      "sourceSHA256": "8adc2f9b4c8cabe7c4bd90230f29c3122646624f1781c576cef75d64d19057c5",
+      "archiveSHA256": "8adc2f9b4c8cabe7c4bd90230f29c3122646624f1781c576cef75d64d19057c5",
+      "sourceBytes": 2477,
+      "archiveBytes": 2477,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943507-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943507-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943507-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943507-raw-log.stdout.gz",
+      "sourceSHA256": "4eb65966214ab3c811a1aa60fd653d2f4a8bb8c4d2691e1df3f3a35e47137106",
+      "archiveSHA256": "4eb65966214ab3c811a1aa60fd653d2f4a8bb8c4d2691e1df3f3a35e47137106",
+      "sourceBytes": 29273,
+      "archiveBytes": 29273,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943539-detail.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943539-detail.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943539-detail.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943539-detail.stdout",
+      "sourceSHA256": "950d34f2217449d3ba6e8cba3c17269b1de6ac9a5b8ca030a042fda3c3ee610c",
+      "archiveSHA256": "950d34f2217449d3ba6e8cba3c17269b1de6ac9a5b8ca030a042fda3c3ee610c",
+      "sourceBytes": 3763,
+      "archiveBytes": 3763,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943539-raw-log.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943539-raw-log.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-124614943539-raw-log.stdout.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-124614943539-raw-log.stdout.gz",
+      "sourceSHA256": "39efd0ddfd0e05943fdb3d011d5edef3b782b38b8f7b06e732d5625929c88c09",
+      "archiveSHA256": "39efd0ddfd0e05943fdb3d011d5edef3b782b38b8f7b06e732d5625929c88c09",
+      "sourceBytes": 32908,
+      "archiveBytes": 32908,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/job-analyzer.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/job-analyzer.json",
+      "sourceSHA256": "356b41083c84baadecc8e313e1a9661aa47fdb61391bbfde079d6f949f312e95",
+      "archiveSHA256": "356b41083c84baadecc8e313e1a9661aa47fdb61391bbfde079d6f949f312e95",
+      "sourceBytes": 128417,
+      "archiveBytes": 128417,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/jobs-final.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/jobs-final.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/jobs-final.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/jobs-final.stdout",
+      "sourceSHA256": "c2c2755a1a610536c9446a3acadd2804b4ed141386b3975c92645d5d0a5094e4",
+      "archiveSHA256": "c2c2755a1a610536c9446a3acadd2804b4ed141386b3975c92645d5d0a5094e4",
+      "sourceBytes": 32148,
+      "archiveBytes": 32148,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observation-state.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observation-state.json",
+      "sourceSHA256": "2d2ab58217767d012f1bad4768b343454dfa9410012b4b22f2593efa78d5fc7c",
+      "archiveSHA256": "2d2ab58217767d012f1bad4768b343454dfa9410012b4b22f2593efa78d5fc7c",
+      "sourceBytes": 148771,
+      "archiveBytes": 148771,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observe-ci.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observe-ci.py",
+      "sourceSHA256": "1d42ce6f9e3bdf4fe6349e407da3ddd077b92a3c4bd07d7f6c4e5fe74fbbb965",
+      "archiveSHA256": "1d42ce6f9e3bdf4fe6349e407da3ddd077b92a3c4bd07d7f6c4e5fe74fbbb965",
+      "sourceBytes": 9922,
+      "archiveBytes": 9922,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-launch.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-launch.json",
+      "sourceSHA256": "a140631f7897e6ef5730c28fbd8368fd2b288c0828f2174e731e6386ab571f1d",
+      "archiveSHA256": "a140631f7897e6ef5730c28fbd8368fd2b288c0828f2174e731e6386ab571f1d",
+      "sourceBytes": 236,
+      "archiveBytes": 236,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-exact-provenance.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-exact-provenance.json",
+      "sourceSHA256": "53bb48923c51f2cb8d91e255910575919e227ccfaaaf0288ab32c37900b716d5",
+      "archiveSHA256": "53bb48923c51f2cb8d91e255910575919e227ccfaaaf0288ab32c37900b716d5",
+      "sourceBytes": 871,
+      "archiveBytes": 871,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-failure.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-failure.json",
+      "sourceSHA256": "979acdab60e71e05417c982e80e5c5e46ae100f38cbf9f4d9e9a9844d5291fbb",
+      "archiveSHA256": "979acdab60e71e05417c982e80e5c5e46ae100f38cbf9f4d9e9a9844d5291fbb",
+      "sourceBytes": 890,
+      "archiveBytes": 890,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-invalid.py.raw",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-invalid.py.raw",
+      "sourceSHA256": "c1dd21841c91bf30b59a35b74dde31f2d9775f543f0556e2a6eef30ad6d7f3f3",
+      "archiveSHA256": "c1dd21841c91bf30b59a35b74dde31f2d9775f543f0556e2a6eef30ad6d7f3f3",
+      "sourceBytes": 7030,
+      "archiveBytes": 7030,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-original-command.raw.sh",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-original-command.raw.sh",
+      "sourceSHA256": "ed207a2654490ded6d6172957c780785978be5a1393de1326025d2dd5f596a6e",
+      "archiveSHA256": "ed207a2654490ded6d6172957c780785978be5a1393de1326025d2dd5f596a6e",
+      "sourceBytes": 5720,
+      "archiveBytes": 5720,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-original-result.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-original-result.raw.json",
+      "sourceSHA256": "fd7541238f59486ec0c1adc94d65ab0952aeab499ec78d6355a77f01128df66b",
+      "archiveSHA256": "fd7541238f59486ec0c1adc94d65ab0952aeab499ec78d6355a77f01128df66b",
+      "sourceBytes": 752,
+      "archiveBytes": 752,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-tool-binding.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-tool-binding.json",
+      "sourceSHA256": "3318e3a37d6762ddfe9a19356b6671d25efa22a5a4a21546405ed9fb63db25e7",
+      "archiveSHA256": "3318e3a37d6762ddfe9a19356b6671d25efa22a5a4a21546405ed9fb63db25e7",
+      "sourceBytes": 510,
+      "archiveBytes": 510,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-validation.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer-prelaunch-validation.json",
+      "sourceSHA256": "16a700e1ad8e8304d7ed40a185e02069d87e0f4b8202ce4ebe649e9a6901d09b",
+      "archiveSHA256": "16a700e1ad8e8304d7ed40a185e02069d87e0f4b8202ce4ebe649e9a6901d09b",
+      "sourceBytes": 493,
+      "archiveBytes": 493,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/observer.stdout",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/prepare-observer.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/prepare-observer.py",
+      "sourceSHA256": "2524c687ed2d6f2741cc6766dbb0b66d5a00fd8e6c14ea63f06ea5b6bca94669",
+      "archiveSHA256": "2524c687ed2d6f2741cc6766dbb0b66d5a00fd8e6c14ea63f06ea5b6bca94669",
+      "sourceBytes": 8176,
+      "archiveBytes": 8176,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/run-final.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/run-final.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/run-final.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/run-final.stdout",
+      "sourceSHA256": "c3277595843adb0773169d6ec54b1a4d1be0021e8e861daf4c09cde01ef097a4",
+      "archiveSHA256": "c3277595843adb0773169d6ec54b1a4d1be0021e8e861daf4c09cde01ef097a4",
+      "sourceBytes": 15329,
+      "archiveBytes": 15329,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/watch.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/watch.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/watch.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/ci-stage/watch.stdout",
+      "sourceSHA256": "6f5a5bd9c6ffe881dec42620dd4548a6ea09778e443e844da416609000134159",
+      "archiveSHA256": "6f5a5bd9c6ffe881dec42620dd4548a6ea09778e443e844da416609000134159",
+      "sourceBytes": 215081,
+      "archiveBytes": 215081,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/initial-current-packet.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/initial-current-packet.json",
+      "sourceSHA256": "bdfaab3167e9c5a5217546276d67a757752565ba51e4e81584cc02366a16a0c9",
+      "archiveSHA256": "bdfaab3167e9c5a5217546276d67a757752565ba51e4e81584cc02366a16a0c9",
+      "sourceBytes": 2547,
+      "archiveBytes": 2547,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/parser-offline-controls.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/parser-offline-controls.json",
+      "sourceSHA256": "c0015e41e033ca0e0781108229ae3dc320a0c191347f4fc3628143f5d1e654c9",
+      "archiveSHA256": "c0015e41e033ca0e0781108229ae3dc320a0c191347f4fc3628143f5d1e654c9",
+      "sourceBytes": 333,
+      "archiveBytes": 333,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/pointer-beforewatch.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/pointer-beforewatch.raw.json",
+      "sourceSHA256": "614305aa46f4250377c7d8d8967d06eefc9e2d3d2f4d5ec6151fc22ab4ec3edc",
+      "archiveSHA256": "614305aa46f4250377c7d8d8967d06eefc9e2d3d2f4d5ec6151fc22ab4ec3edc",
+      "sourceBytes": 1459,
+      "archiveBytes": 1459,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/accepted-commit.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/accepted-commit.raw.json",
+      "sourceSHA256": "29e4ce1465999f2c478bc67a0bde110f79a95f2665eeede5b65e71b0a38bc2d7",
+      "archiveSHA256": "29e4ce1465999f2c478bc67a0bde110f79a95f2665eeede5b65e71b0a38bc2d7",
+      "sourceBytes": 1328,
+      "archiveBytes": 1328,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/accepted9905-tree-stat.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/accepted9905-tree-stat.json.gz",
+      "sourceSHA256": "1839316604cf616d68daef25cecf4730e5a5447444fbfbcd7dbf60910e2e0ea7",
+      "archiveSHA256": "82e1b35a0c7cb15fe4fc73a635eabe10b76138ad3ce055e72c996fb9a75bd28b",
+      "sourceBytes": 3003794,
+      "archiveBytes": 287852,
+      "losslessGzip": true
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/after-index-flags.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/after-index-flags.gz",
+      "sourceSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "archiveSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "sourceBytes": 317975,
+      "archiveBytes": 317975,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/after-logical-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/after-logical-index.gz",
+      "sourceSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "archiveSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "sourceBytes": 1771199,
+      "archiveBytes": 1771199,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/after-raw-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/after-raw-index.gz",
+      "sourceSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "archiveSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "sourceBytes": 2656313,
+      "archiveBytes": 2656313,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/after-untracked-paths.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/after-untracked-paths.gz",
+      "sourceSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "archiveSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "sourceBytes": 5191,
+      "archiveBytes": 5191,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/before-index-flags.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/before-index-flags.gz",
+      "sourceSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "archiveSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "sourceBytes": 317975,
+      "archiveBytes": 317975,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/before-logical-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/before-logical-index.gz",
+      "sourceSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "archiveSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "sourceBytes": 1771199,
+      "archiveBytes": 1771199,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/before-raw-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/before-raw-index.gz",
+      "sourceSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "archiveSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "sourceBytes": 2656313,
+      "archiveBytes": 2656313,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/before-untracked-paths.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/before-untracked-paths.gz",
+      "sourceSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "archiveSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "sourceBytes": 5191,
+      "archiveBytes": 5191,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/driver.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/driver.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/driver.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/driver.stdout",
+      "sourceSHA256": "32e80f59ea3004a10307a3a12ca7cf1823b33ee7c13af18896e6524ff034b40a",
+      "archiveSHA256": "32e80f59ea3004a10307a3a12ca7cf1823b33ee7c13af18896e6524ff034b40a",
+      "sourceBytes": 649,
+      "archiveBytes": 649,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/exclusions552-path-stat.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/exclusions552-path-stat.json",
+      "sourceSHA256": "a5fc0c1c7b969cccbc3c1e2e440615d682f856b80311e7274946eb47a05d9ad9",
+      "archiveSHA256": "a5fc0c1c7b969cccbc3c1e2e440615d682f856b80311e7274946eb47a05d9ad9",
+      "sourceBytes": 174137,
+      "archiveBytes": 174137,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/hooks/pre-push",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/hooks/pre-push",
+      "sourceSHA256": "e6b7ef4a6296448042b9b60db30bcdfc86f1874f5a96428e061163b9c4003fbe",
+      "archiveSHA256": "e6b7ef4a6296448042b9b60db30bcdfc86f1874f5a96428e061163b9c4003fbe",
+      "sourceBytes": 1603,
+      "archiveBytes": 1603,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/immediately_before_push-index-flags.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/immediately_before_push-index-flags.gz",
+      "sourceSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "archiveSHA256": "43c21cd273e0675aa5cb0007221487a576029c0551bde5bd94e4363f3ae94162",
+      "sourceBytes": 317975,
+      "archiveBytes": 317975,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/immediately_before_push-logical-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/immediately_before_push-logical-index.gz",
+      "sourceSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "archiveSHA256": "23a6d0056982caa3da93a8c284c7b429b8e1bd583531f4c20e9fa194891f1981",
+      "sourceBytes": 1771199,
+      "archiveBytes": 1771199,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/immediately_before_push-raw-index.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/immediately_before_push-raw-index.gz",
+      "sourceSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "archiveSHA256": "0c19cfb376a8298580e2b423bb9d211065c75c261e0a1d8670f014becb450d21",
+      "sourceBytes": 2656313,
+      "archiveBytes": 2656313,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/immediately_before_push-untracked-paths.gz",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/immediately_before_push-untracked-paths.gz",
+      "sourceSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "archiveSHA256": "d142891d44dded8dee2ef605ec55c1e4cc5a6484c73cc57454c530b0d3871c1e",
+      "sourceBytes": 5191,
+      "archiveBytes": 5191,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/launch.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/launch.json",
+      "sourceSHA256": "32aa417b813c19e0cb1cc0b239cd4a06196fd1347bf10f1a159be2745790688e",
+      "archiveSHA256": "32aa417b813c19e0cb1cc0b239cd4a06196fd1347bf10f1a159be2745790688e",
+      "sourceBytes": 73,
+      "archiveBytes": 73,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/lease-acquired.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/lease-acquired.json",
+      "sourceSHA256": "9e118b39d8d1a7b216add08f671e6d7dd2b7072225a9b31dd80440b827d167c9",
+      "archiveSHA256": "9e118b39d8d1a7b216add08f671e6d7dd2b7072225a9b31dd80440b827d167c9",
+      "sourceBytes": 498,
+      "archiveBytes": 498,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/lease-release.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/lease-release.json",
+      "sourceSHA256": "23f755c6eba0ff2f680f8de4ee89e69aaaa4f2e7be2a6f0aeb4f1aff467cce7b",
+      "archiveSHA256": "23f755c6eba0ff2f680f8de4ee89e69aaaa4f2e7be2a6f0aeb4f1aff467cce7b",
+      "sourceBytes": 535,
+      "archiveBytes": 535,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/new-objects-audit.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/new-objects-audit.json",
+      "sourceSHA256": "610b824d501237e3fdf6e586af5c5849f6fed2c577f22651ca6c13326a1934d2",
+      "archiveSHA256": "610b824d501237e3fdf6e586af5c5849f6fed2c577f22651ca6c13326a1934d2",
+      "sourceBytes": 564466,
+      "archiveBytes": 564466,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/noname-parent-doc-index-guard-observed.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/noname-parent-doc-index-guard-observed.raw.json",
+      "sourceSHA256": "e96313fb8a6bb9abfebd1522940548e67cc057ff270377cf147b0c06e22e474c",
+      "archiveSHA256": "e96313fb8a6bb9abfebd1522940548e67cc057ff270377cf147b0c06e22e474c",
+      "sourceBytes": 824,
+      "archiveBytes": 824,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/noname-parent-doc-index-logical-audit.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/noname-parent-doc-index-logical-audit.raw.json",
+      "sourceSHA256": "7b35a5ae4f37220426eb1cb3b877cdf07a492e22a1b741b6c72b27364e501259",
+      "archiveSHA256": "7b35a5ae4f37220426eb1cb3b877cdf07a492e22a1b741b6c72b27364e501259",
+      "sourceBytes": 1469,
+      "archiveBytes": 1469,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/protected-admission.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/protected-admission.json",
+      "sourceSHA256": "ac8cd9fbaba04e790871c8781e4c2f35247802f09ab072196c7ceb4a9c4b5d77",
+      "archiveSHA256": "ac8cd9fbaba04e790871c8781e4c2f35247802f09ab072196c7ceb4a9c4b5d77",
+      "sourceBytes": 10110,
+      "archiveBytes": 10110,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/publication-driver.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/publication-driver.py",
+      "sourceSHA256": "137713eff3274e2f6d6c1d5b0a646edc380fa5227d0c96d385c3e8608bbb91ee",
+      "archiveSHA256": "137713eff3274e2f6d6c1d5b0a646edc380fa5227d0c96d385c3e8608bbb91ee",
+      "sourceBytes": 15091,
+      "archiveBytes": 15091,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/push-copy-manifest.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/push-copy-manifest.json",
+      "sourceSHA256": "545271687022d304ee2890ddf6de97aa8e93a7a1921638acf3dadca84c0abc94",
+      "archiveSHA256": "545271687022d304ee2890ddf6de97aa8e93a7a1921638acf3dadca84c0abc94",
+      "sourceBytes": 6165,
+      "archiveBytes": 6165,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/push.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/push.stderr",
+      "sourceSHA256": "aaf49e948fe479d5233550cb96e9f654d5168b50cfbe71415587d2303ead77aa",
+      "archiveSHA256": "aaf49e948fe479d5233550cb96e9f654d5168b50cfbe71415587d2303ead77aa",
+      "sourceBytes": 18759,
+      "archiveBytes": 18759,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/push.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/push.stdout",
+      "sourceSHA256": "b7c89eb67b911a484df92e5bc44c22a9bfea41230a3d0c5ee1f60b17025be728",
+      "archiveSHA256": "b7c89eb67b911a484df92e5bc44c22a9bfea41230a3d0c5ee1f60b17025be728",
+      "sourceBytes": 526,
+      "archiveBytes": 526,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/remote-after.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/remote-after.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/remote-after.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/remote-after.stdout",
+      "sourceSHA256": "d362aabf9ec23d221b233d243dc567a7403467cd2736b12ace41a96f471128ef",
+      "archiveSHA256": "d362aabf9ec23d221b233d243dc567a7403467cd2736b12ace41a96f471128ef",
+      "sourceBytes": 128,
+      "archiveBytes": 128,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/remote-before.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/remote-before.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/remote-before.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/remote-before.stdout",
+      "sourceSHA256": "80c27b26df7f07159ca783075c55b5fce71724f19cfb47b79894cd381b37ed22",
+      "archiveSHA256": "80c27b26df7f07159ca783075c55b5fce71724f19cfb47b79894cd381b37ed22",
+      "sourceBytes": 128,
+      "archiveBytes": 128,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/result.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/result.json.gz",
+      "sourceSHA256": "46ba7e669e3842c2ead8f011b511608c73cf542e67a5e9428be1bc5fdd0f4a86",
+      "archiveSHA256": "8e3230ff27773f2bee0b170d23327452cf3fd84c1583c4ac710ad415e46e809a",
+      "sourceBytes": 1585252,
+      "archiveBytes": 53560,
+      "losslessGzip": true
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/scope.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/scope.json",
+      "sourceSHA256": "70afbf9df3bb0dd3e8abd4ce42fd00ea53bfeeb94f9c24cfa65cb2297c29b8f8",
+      "archiveSHA256": "70afbf9df3bb0dd3e8abd4ce42fd00ea53bfeeb94f9c24cfa65cb2297c29b8f8",
+      "sourceBytes": 3671,
+      "archiveBytes": 3671,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/stage-audit.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/stage-audit.raw.json",
+      "sourceSHA256": "8bf82f94e7bc439d2b2889f5e74cec6af8bf5dad77d79668261a5a96eb307d24",
+      "archiveSHA256": "8bf82f94e7bc439d2b2889f5e74cec6af8bf5dad77d79668261a5a96eb307d24",
+      "sourceBytes": 1565,
+      "archiveBytes": 1565,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/stage-plan.raw.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/push-stage/stage-plan.raw.json.gz",
+      "sourceSHA256": "012a7977906b6f81a6fc19cb93de32a15ce0441b53654aacb38430bab59bde51",
+      "archiveSHA256": "fbe03095cfad4fc23e66cec86efd6ee22d5d8f1fb2747b318ac592bbe522da54",
+      "sourceBytes": 3053503,
+      "archiveBytes": 401065,
+      "losslessGzip": true
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/seal-publication-ci.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/seal-publication-ci.py",
+      "sourceSHA256": "e7ba2e3a81fbba13a57a70d5ffddc54d5d80cef2dba4b4834fdfe6fb26394133",
+      "archiveSHA256": "e7ba2e3a81fbba13a57a70d5ffddc54d5d80cef2dba4b4834fdfe6fb26394133",
+      "sourceBytes": 4419,
+      "archiveBytes": 4419,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/source37-commit-bindings.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/source37-commit-bindings.json",
+      "sourceSHA256": "5bac0ab657cf534acb76f8fa22ef0f5ef0526cb1d07d2d62dfa942f1c655e2bf",
+      "archiveSHA256": "5bac0ab657cf534acb76f8fa22ef0f5ef0526cb1d07d2d62dfa942f1c655e2bf",
+      "sourceBytes": 22796,
+      "archiveBytes": 22796,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/timed-current-packet.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/timed-current-packet.json",
+      "sourceSHA256": "886823e93b2e14cc1438c70db56369254019c1f87323e24ef839641470e51269",
+      "archiveSHA256": "886823e93b2e14cc1438c70db56369254019c1f87323e24ef839641470e51269",
+      "sourceBytes": 3054,
+      "archiveBytes": 3054,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/verified-publication-ci-summary.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/verified-publication-ci-summary.json.gz",
+      "sourceSHA256": "fa79655afb78b6de645957fe34c97a6c7b7d279b2bed336337536a5a45caa82c",
+      "archiveSHA256": "e9f34f061e8acb4d7b1c11f3d8add8d8603698b538bfdbda669fb14e38934df5",
+      "sourceBytes": 2015577,
+      "archiveBytes": 94643,
+      "losslessGzip": true
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/verify-publication-ci.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/original/verify-publication-ci.py",
+      "sourceSHA256": "07e11532f8d1f0f3e0cdc4989d2471312a1aa2bcfafabc0ef94db6bce9046ff7",
+      "archiveSHA256": "07e11532f8d1f0f3e0cdc4989d2471312a1aa2bcfafabc0ef94db6bce9046ff7",
+      "sourceBytes": 14237,
+      "archiveBytes": 14237,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/copy-manifest.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/copy-manifest.json",
+      "sourceSHA256": "46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050",
+      "archiveSHA256": "46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050",
+      "sourceBytes": 32040,
+      "archiveBytes": 32040,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/artifact-index-seal.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/artifact-index-seal.json",
+      "sourceSHA256": "da6a17d8ca167058538f50e87c17603ca48682cecbeb22862ab52695d4631471",
+      "archiveSHA256": "da6a17d8ca167058538f50e87c17603ca48682cecbeb22862ab52695d4631471",
+      "sourceBytes": 1572,
+      "archiveBytes": 1572,
+      "losslessGzip": false
+    },
+    {
+      "source": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/0b952d22-7ad4-4e57-9160-b226c36b735f/publication/post-c9e-docs-accepted-push-and-ci.md",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/publication.raw.txt",
+      "sourceSHA256": "0d225a0c3cf2b2bb37b736937d71e8837a75d1d0e7725769982eb64befb2504c",
+      "archiveSHA256": "0d225a0c3cf2b2bb37b736937d71e8837a75d1d0e7725769982eb64befb2504c",
+      "sourceBytes": 16177,
+      "archiveBytes": 16177,
+      "losslessGzip": false
+    },
+    {
+      "source": "/tmp/noname-parent-ci41227614131-audit.py",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent/noname-parent-ci41227614131-audit.py",
+      "sourceSHA256": "19917f1df7174091325b6e5b7e1afb0775082b922f3dd9aaa546fb7f6de91c9e",
+      "archiveSHA256": "19917f1df7174091325b6e5b7e1afb0775082b922f3dd9aaa546fb7f6de91c9e",
+      "sourceBytes": 8917,
+      "archiveBytes": 8917,
+      "losslessGzip": false
+    },
+    {
+      "source": "/tmp/noname-parent-ci41227614131-audit.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent/noname-parent-ci41227614131-audit.json",
+      "sourceSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "archiveSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "sourceBytes": 4355,
+      "archiveBytes": 4355,
+      "losslessGzip": false
+    },
+    {
+      "source": "/tmp/noname-parent-ci41227614131-audit.raw.txt",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent/noname-parent-ci41227614131-audit.raw.txt",
+      "sourceSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "archiveSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "sourceBytes": 4355,
+      "archiveBytes": 4355,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/run.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/run.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/summary.json",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/summary.json",
+      "sourceSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "archiveSHA256": "616ef2fe1610789e50525b42e7296e57ba26a56559f4d5325e406020c891e3f3",
+      "sourceBytes": 4355,
+      "archiveBytes": 4355,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/artifacts.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/artifacts.stdout",
+      "sourceSHA256": "736eb1b2592fc08fcf54396916b66ee4d3e7d714f8fd8e967ed539f7bca98bac",
+      "archiveSHA256": "736eb1b2592fc08fcf54396916b66ee4d3e7d714f8fd8e967ed539f7bca98bac",
+      "sourceBytes": 2300,
+      "archiveBytes": 2300,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/main_ref.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/main_ref.stdout",
+      "sourceSHA256": "c24f78b69d8d1a4e37c5e010dc81eb7265d5d6cb39f7c9530f53d2053fb1b1b7",
+      "archiveSHA256": "c24f78b69d8d1a4e37c5e010dc81eb7265d5d6cb39f7c9530f53d2053fb1b1b7",
+      "sourceBytes": 386,
+      "archiveBytes": 386,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/main_ref.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/main_ref.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/artifacts.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/artifacts.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/run.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/run.stdout",
+      "sourceSHA256": "c3277595843adb0773169d6ec54b1a4d1be0021e8e861daf4c09cde01ef097a4",
+      "archiveSHA256": "c3277595843adb0773169d6ec54b1a4d1be0021e8e861daf4c09cde01ef097a4",
+      "sourceBytes": 15329,
+      "archiveBytes": 15329,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/native_ref.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/native_ref.stdout",
+      "sourceSHA256": "69bfc87e4929a0e2076dd058ecb814c03dc86a065314568017e2f231065051ff",
+      "archiveSHA256": "69bfc87e4929a0e2076dd058ecb814c03dc86a065314568017e2f231065051ff",
+      "sourceBytes": 433,
+      "archiveBytes": 433,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/jobs.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/jobs.stdout",
+      "sourceSHA256": "c2c2755a1a610536c9446a3acadd2804b4ed141386b3975c92645d5d0a5094e4",
+      "archiveSHA256": "c2c2755a1a610536c9446a3acadd2804b4ed141386b3975c92645d5d0a5094e4",
+      "sourceBytes": 32148,
+      "archiveBytes": 32148,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/commit.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/commit.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/jobs.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/jobs.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/commit.stdout",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/commit.stdout",
+      "sourceSHA256": "5c9e66a454bff4bbcea75dd6ee16c65d750405c5f163e6f948e6619b75e4e8e6",
+      "archiveSHA256": "5c9e66a454bff4bbcea75dd6ee16c65d750405c5f163e6f948e6619b75e4e8e6",
+      "sourceBytes": 1229060,
+      "archiveBytes": 1229060,
+      "losslessGzip": false
+    },
+    {
+      "source": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/native_ref.stderr",
+      "destination": "docs/operations/evidence/2026-10-31-post-c9e-doc-publication/ci-final/parent-live-API/native_ref.stderr",
+      "sourceSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "archiveSHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceBytes": 0,
+      "archiveBytes": 0,
+      "losslessGzip": false
+    }
+  ],
+  "qualification": "PostreleaseParentDocsevidencecopyONLY, notCIinputs9f4.126listed+manifest+seal128primary +publisherreport/Parentaudit6liveAPIprovenance. Private10rawdownloads excluded,byte-identicalgzip kept. InstallerAPIonly,noinstallerarchive/download/install/sign/device/perfclaim. Original3/7,7/3andParent6/4checkpointsretained, no rewrite. Prelaunchsyntaxerror/correction/tool-onlyprovenancepreserved, nofullassistantrecord/profile/cache. NewCI330codeunchanged, private9f/9g/Source37wholeGoalNOTaccepted."
+}

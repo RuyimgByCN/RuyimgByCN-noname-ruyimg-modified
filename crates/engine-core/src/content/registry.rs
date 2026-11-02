@@ -374,6 +374,7 @@ mod tests {
         let mut package =
             content_compiler::compile_source_named("closure", "skill present(1) {}").unwrap();
         package.character_index.push(PackageCharacterEntry {
+            voice_assets: Default::default(),
             id: 1,
             name_key: "incomplete".into(),
             max_hp: 4,
@@ -599,6 +600,7 @@ mod tests {
             logic_hash: [0; 32],
         });
         package.character_index.push(PackageCharacterEntry {
+            voice_assets: Default::default(),
             id: 1,
             name_key: "dependent".into(),
             max_hp: 4,

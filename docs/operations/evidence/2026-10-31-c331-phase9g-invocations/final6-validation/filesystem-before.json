@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T19:17:53.354317+00:00",
+  "private_index": {
+    "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/.git/worktrees/worktree24/index",
+    "sha256": "b1071e5051b056db9de2a2c53e638fe3d1ee3129dca45bd4d5f6d0fce9b68551",
+    "mtime_ns": 1793458491684752278,
+    "bytes": 5807331
+  },
+  "private_lock": {
+    "path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/Cargo.lock",
+    "sha256": "25b1f2cf1cdec0ce9c2ba7595b59726fb6ed193fdd247893c717ea0b4156fb13"
+  },
+  "original_protected_baseline_sha256": "b23355a6c4f30310eddd4fe38003ff031348188cdc34146adcc7ba544aca1a7b"
+}

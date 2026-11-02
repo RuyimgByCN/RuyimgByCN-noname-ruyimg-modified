@@ -26,6 +26,7 @@ const PACKAGE: &[u8] =
 
 fn character(id: u32, group: &str) -> PackageCharacterEntry {
     PackageCharacterEntry {
+        voice_assets: Default::default(),
         id,
         name_key: format!("stdcanshi_{id}"),
         max_hp: 5,

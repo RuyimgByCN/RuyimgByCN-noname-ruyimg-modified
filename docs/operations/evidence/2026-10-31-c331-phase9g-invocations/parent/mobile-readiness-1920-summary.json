@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-31T19:20:10.389575+00:00",
+  "source": "publishedDOCS9f4b74236f97b0b9dc72388b6e08d310d2f26f64/codebaseline34e330105758WS6; Main no writes since1842dated4406receipt",
+  "commands": {
+    "android": {
+      "argv": [
+        "adb",
+        "devices",
+        "-l"
+      ],
+      "exit": 0,
+      "seconds": 0.013105208054184914,
+      "timedOut": false,
+      "stdoutSha256": "36f15c2fe32964a6fbe902e914a47739d4e6304b0d3e812bf08096ff0419b7ae",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "apple": {
+      "argv": [
+        "xcrun",
+        "xcdevice",
+        "list",
+        "--timeout",
+        "10"
+      ],
+      "exit": 0,
+      "seconds": 11.496561124979053,
+      "timedOut": false,
+      "stdoutSha256": "7e070dcfa17ac77714b2f4bb31eb5581eb9d8f3414f0bcaf99340cd481faeea4",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "authorized_Android_physical_devices": 0,
+  "Android_discovered_states": [],
+  "Apple_valid_JSON": true,
+  "physical_iPhone_count": 1,
+  "available_physical_iPhone_count": 0,
+  "physical_iPhone_unavailability_errors": [
+    {
+      "domain": "com.apple.dt.deviceprep",
+      "code": -27
+    }
+  ],
+  "qualification": "Readonlyinventory19:20,Androidphysicalauthorized0/iPhonephysicalavailable0. Bothprobesexit0. Rawdeviceidentifiers/namesanddescriptionkeptinprivate0700evidenceroot, omittedhere; publishedonlycounts/domain-code/command-outputSHA. No pairing/devmode/TCC/window/globalinput/appbuild/install/sign/hearing/game/thermalaction orplatformacceptance."
+}

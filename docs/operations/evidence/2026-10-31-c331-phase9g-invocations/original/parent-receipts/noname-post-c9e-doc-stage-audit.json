@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-31T17:57:19.247411+00:00",
+  "status": "PASS_EXACT_9905_POST_C9E_DOCS_EVIDENCE_STAGED_ONLY_NO_COMMIT",
+  "parent": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "candidateTree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "matchesPriorPreviewTree": true,
+  "unexpectedPreStageRawIndex": {
+    "oldHash": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+    "observedHash": "626e19e68c1a830ff7ef12e0a0859d2cf564f2f8c27949137846eed4d6f3d894",
+    "logicalAudit": "/tmp/noname-parent-doc-index-logical-audit.json",
+    "writer": "UNKNOWN",
+    "rawPreserved": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-doc-index-guard-vcr3roke/observed-index.raw",
+    "notClassifiedAsCtimeOnly": true
+  },
+  "files": 9905,
+  "bytes": 257498242,
+  "allBlobsModesExact": true,
+  "nonDocPaths": [],
+  "source37Unchanged": true,
+  "indexBefore": "626e19e68c1a830ff7ef12e0a0859d2cf564f2f8c27949137846eed4d6f3d894",
+  "indexAfter": "cfc32175630f66127ae261bec92271be92fdf9b3b1620796d402945962080f09",
+  "intentionalIndexMutation": "gitadd exact9905ParentownedDocs/evidence afterprivateC9fsourceguardseal; no sourcechange/indexrestore",
+  "headUnchanged": true,
+  "review": "9775e7b6 Noissues; boundedDocs/archiveonly; old35bP2fixedpreserved",
+  "scope": "No profile/cache/privateassistantbody/binary/source/config/default/version paths. All552localexclusionsoutsideplanretained, no forceadd/deletion. C9ffinalsourceguardsealdelivered/badfcinactivebeforethisrealstage. No Cprod; commit/pushonlyalreadyapproved18/25boundaries."
+}

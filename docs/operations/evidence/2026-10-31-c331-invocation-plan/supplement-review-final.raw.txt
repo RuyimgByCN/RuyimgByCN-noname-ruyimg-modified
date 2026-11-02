@@ -1,0 +1,6 @@
+Incorporated. The actual 219 overlay contains `choice.rs`, SHA `586ec7ce766576b9163bdeee71fa654ab7a0b3841107e0a22e99dfc5276d0014`, including `Skill`. The `3dc40e6…` hash identifies the older 5fc base; its unchanged Tag nature semantics remain valid evidence.
+
+The verdict remains **OK with notes — plan only**: internal HiddenCard lowering fits the existing index/label routes; frozen-reader positive submission and metadata-omission tests remain required. Source27 stays limited to qualifying ordinary OptionalGate Own asks, and direct-choice cancellation retains the real invocation lifecycle. No new user decision is indicated by this compatible direction.
+
+Skipped: further tools, tests and artifact changes; the original guide, inventory and reviews remain immutable.
+Risk: neither the early C9f checkpoint nor the provenance audit proves final9f runtime, privacy, compatibility or restore correctness.

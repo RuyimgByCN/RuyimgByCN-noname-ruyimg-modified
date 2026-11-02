@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-31T17:12:27.302148+00:00",
+  "status": "PASS_9905_DOC_CANDIDATE_ALTERNATE_INDEX_PREVIEW_ONLY",
+  "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "candidateTree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "candidatePaths": 9905,
+  "candidateBytes": 257498242,
+  "uniqueVerifiedBlobs": 2558,
+  "allPathBlobModeStageExact": true,
+  "previewRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-post-c9e-doc-preview-l1tmauz8",
+  "previewIndex": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-post-c9e-doc-preview-l1tmauz8/preview.index",
+  "source37Unchanged": true,
+  "realIndexBeforeAfterExact": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+  "realStagedPathCountUnchanged": 2540,
+  "noMainHeadOrRealIndexMutation": true,
+  "scope": "ParentDOCScandidatepreviewafter9775scopeReviewonly. TemporaryindexwascreatedoutsideMainandNEVERcopiedback; realindexnotrestored/normalized. Gitobjectscreatednormallybyalternateadd/write-tree, no commit/ref/push. PrivateC9fsource/producersunaffected. No candidateC331productionorGoalacceptance. ActualfutureMainstagewillneedfreshblob/modeauditandownedsourceguardboundary."
+}

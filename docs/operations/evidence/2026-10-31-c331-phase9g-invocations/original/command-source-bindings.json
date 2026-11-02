@@ -1,0 +1,378 @@
+{
+  "final_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/full-source6/source-manifest.json",
+  "commands": [
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 13.18967866897583,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-full1",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/pre-full2/complete-source-manifest.json",
+      "manifest_sha256": "7d2c032d7a7cabeb3676cf495c450a3132fa2643dd3298101be4e5d95e2571c8",
+      "before_after_assertions": true,
+      "log_sha256": "77a008ffbeb6a18715cdc13cfc37b8cbb737faca186e60f95122ad0c71783b82",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/invocation_validation.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native/tests/nc09_machine_ownership.rs"
+      ]
+    },
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 14.425864219665527,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "7f16297cf96df3ca134ee667d454b157d256a2e812aeef9823fdb3d641785cf5",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 101,
+      "seconds": 5.871701955795288,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "42903357ad036b473118694b284866959e2ed52b71681805bf29fa23e6ec2d22",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "adapters",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "--test",
+        "c331_invocation_controls",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 101,
+      "seconds": 20.809967756271362,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "ac7e4b1b4030b8f98055491100ec8dd284c4b5258e25fb303ba42486271a8841",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "server-check",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "game-server",
+        "--all-targets"
+      ],
+      "exit": 101,
+      "seconds": 24.290016889572144,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "7d84289432769c74a7de3557db7c63a8cfac88483c37b7ae96fde60b91d8d89e",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "predicate-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "c331_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 3.6472420692443848,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "f19de251195e7dacdb39aaa3f46063cc7d383f8ecb162d67ed8b4cbdd5e172a2",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 1.494065761566162,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "2901569a8be58f5a08d57ce316c2406fd3551738d4d1b92c91cc1b3c471e004a",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.08957600593566895,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "ddb29498eba564361533c42b429dae293441b6c3111a13e64b725b487288aeaa",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 1,
+      "seconds": 4.291599988937378,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "e2312b444fecdd25aca563e4d97e5b914fad3d24f1c8e232bb53390a5efc14c8",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.1513991355895996,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final2",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze2/complete-source-manifest.json",
+      "manifest_sha256": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "before_after_assertions": true,
+      "log_sha256": "758a4bab81df77b4a77301512729cb57a1662967dff94f2c9ff2a91e34313ed6",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ]
+    },
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 7.9456870555877686,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "producer": "checks-final3",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze3/complete-source-manifest.json",
+      "manifest_sha256": "bac205e8faeaa1124da9bb0ef5606025f46be5429c4ae2dc33ba182b21735ec3",
+      "before_after_assertions": true,
+      "log_sha256": "d2353a934b68a3128c166f17cc2d29a368c1f72f770ffe3dc92b789d7653eb1e",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs"
+      ]
+    },
+    {
+      "name": "adapters",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "--test",
+        "c331_invocation_controls",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 7.897146701812744,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "producer": "checks-final3",
+      "manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/final-freeze3/complete-source-manifest.json",
+      "manifest_sha256": "bac205e8faeaa1124da9bb0ef5606025f46be5429c4ae2dc33ba182b21735ec3",
+      "before_after_assertions": true,
+      "log_sha256": "8270f210484d1d4688313c7c6f26b7774d72481bd8271f698cade7bb36b224bb",
+      "current_source_mismatches": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs"
+      ]
+    }
+  ],
+  "qualification": "Final-freeze3 strict+NativeSession passed; later server-private WAL control arm and native fault/count guards are NOT compiled/runtime checked after cutoff; full native remains unexecuted on final bytes."
+}

@@ -99,6 +99,7 @@ fn rejected_content_lock_leaves_engine_fresh_for_retry() {
         logic_hash: valid.manifest.logic_hash,
     });
     invalid.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: 8103,
         name_key: "missing-skill".into(),
         max_hp: 4,

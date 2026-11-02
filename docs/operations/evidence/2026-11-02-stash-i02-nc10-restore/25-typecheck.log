@@ -1,0 +1,6 @@
+$ pnpm --dir apps/web-client typecheck  # start 2026-11-02 23:30:20 +0800
+
+> noname-next-web-client@0.1.0 typecheck /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> vue-tsc --noEmit
+
+exit=0

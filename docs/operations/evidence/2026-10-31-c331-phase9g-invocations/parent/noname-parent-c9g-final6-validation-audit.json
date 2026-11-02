@@ -1,0 +1,166 @@
+{
+  "utc": "2026-10-31T19:33:17.770764+00:00",
+  "status": "PASS_INDEPENDENT_FINAL6_VALIDATION_REGISTRATION_COMPILED_FULL_NATIVE_FAILED_9",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9h-baseline-validation",
+  "artifactFiles": 1917,
+  "artifactIndexSHA": "249a22d71a298e4d6007ea9a6aa84947256f5c35c37664c5f5561b96d4254dff",
+  "reportSHA": "bf53d89c21774ab69c0bab877cffb07d21df0a2331b1ee38f274c75281b1d17c",
+  "source239ManifestSHA": "69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b",
+  "sourceComparedAgainst": "ImmutableParentC9g239snapshot, NOT liveCwhichnextwriter maynowedit",
+  "commands": [
+    {
+      "name": "full-native",
+      "exit": 101,
+      "counts": [
+        1848,
+        9,
+        76
+      ],
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 57.047281457984354
+    },
+    {
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null,
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 7.7001683749840595
+    },
+    {
+      "name": "server-check",
+      "exit": 0,
+      "counts": null,
+      "warningLineOccurrences": 345,
+      "beforeAfter239Match": true,
+      "seconds": 8.901300332974643
+    },
+    {
+      "name": "wasm-controls",
+      "exit": 0,
+      "counts": [
+        1,
+        0,
+        0
+      ],
+      "warningLineOccurrences": 19,
+      "beforeAfter239Match": true,
+      "seconds": 7.703639000013936
+    },
+    {
+      "name": "focused",
+      "exit": 0,
+      "counts": [
+        98,
+        0,
+        1
+      ],
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 3.4863781250314787
+    },
+    {
+      "name": "golden",
+      "exit": 101,
+      "counts": [
+        0,
+        1,
+        0
+      ],
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 0.665986584033817
+    },
+    {
+      "name": "source-cap-unit",
+      "exit": 0,
+      "counts": null,
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 0.09860983298858628
+    },
+    {
+      "name": "source-caps",
+      "exit": 0,
+      "counts": null,
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 4.784401833021548
+    },
+    {
+      "name": "layering",
+      "exit": 0,
+      "counts": null,
+      "warningLineOccurrences": 0,
+      "beforeAfter239Match": true,
+      "seconds": 0.16132229199865833
+    }
+  ],
+  "fullNativeFailureNames": [
+    "a0_lib_tests::standard_skill_ids_append_only",
+    "native_kernel::boss_guojia::boss_guojia_qizuo_trick_reuse",
+    "native_kernel::boss_guojia::boss_guojia_yuance_judge_branches",
+    "native_kernel::boss_liubei::boss_liubei_zhangwu_discard_or_damage",
+    "native_kernel::boss_mingxingzhu::boss_mingxingzhu_qingzhu_jiazu_jiding",
+    "native_kernel::boss_zhangjiao::boss_zhangjiao_jidian_chain_guard",
+    "native_kernel::boss_zhangjiao::boss_zhangjiao_leiji_shan_thunder",
+    "native_kernel::simayi::simayi_guicai_rewrites_with_any_suit_card",
+    "replay_scenarios::replay_scenarios_match_golden"
+  ],
+  "final6Compiled": true,
+  "final6FullNativePassed": false,
+  "fullNative": [
+    1848,
+    9,
+    76
+  ],
+  "sourceEditsInValidation": false,
+  "goldenPairs": 362,
+  "outcomes": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "AcceptedHash32ByteRetainedSeparate": true,
+  "businessDiffs": [
+    {
+      "scenario": "chain_fire_propagation",
+      "differences": [
+        {
+          "step": "0007-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0008-before",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0009-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0010-final",
+          "fields": [
+            "events"
+          ]
+        }
+      ]
+    }
+  ],
+  "old12ExpectedActualHashesIdenticalToC9f": true,
+  "predicateCaptureTriples": 202,
+  "snapshotsWithInvocation": 15,
+  "completeNewC9gBranchCaptureExport": false,
+  "MainProtectedReportedPostGuard": "2026-10-31T19:23:22.542606+00:00",
+  "MainRawIndexAtPostGuard": "e0deac543f16e8df506194713f48f140605935c3c503ff27e7ce057d26ab8f82",
+  "preMainAuthorityQualification": "Parent-supplied versioned18:42 receipt plus explicit write hold; direct post-producer guard below, not a fabricated fresh pre-command Main read",
+  "qualification": "Original final6 now actually compiles/strict/server/NativeSession pass; full regression remainsFAILED9 with explicit assertion sections. Earlier9gclaimUNCOMPILEDstillhistoricalaccurateatsealtime; do notrewriteoldreport. Newrepair57owns live C: no livehclaimsfromthisaudit. No compiler/source/test edits, reruns, builds, Main/index/stage/HEAD/publicationchanges from Parent audit. Sourcecode reviewee6BLOCKfournewP1+F07F14, stableIDs/forgedpayments/GuiCai/virtualJiding notfixedbygreencargo. Old12goldenredunchanged/no rerecord;11observedbusinesssame+chaineventorder notgeneralprivacy/fuel/37proof."
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Read-only follow-up to the conditional F09 wide-count boundary; no source edits or new runtime tests",
+  "source": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel/src/snap/validation.rs",
+  "observations": [
+    "bounds_from lines4-13 derives the allowed card ID range from catalog.cards.len(), not a fixed u8 cardinality.",
+    "validate_core lines190-340 checks hand/equip/judge/off_court card IDs and other state invariants; the inspected function does not impose a hand length <=255 cap.",
+    "validate_card_ownership separately enforces unique zone ownership. A valid >=256 HE case therefore still requires an actual supported catalog containing enough distinct physical card IDs; a repeated-ID synthetic hand would not prove it."
+  ],
+  "qualification": "This narrows what remains to check. It does not independently establish the current supported catalog card count, a legitimate 256-card trajectory, old-reader failure at runtime, or a defect in live C9g. The current API u8 bound and native usize cast are source-verified; no truncate/cap or unapproved widening is authorized by this note.",
+  "next": "Use actual catalog/restore bounds and a legitimate unique-card fixture when implementing the 255/256 control. Keep this as a source observation for the next accepted slice if current C9g producers are already past their heavy-command cutoff."
+}

@@ -1,0 +1,21 @@
+[
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "exit": 101,
+    "seconds": 52.473485708236694,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  }
+]

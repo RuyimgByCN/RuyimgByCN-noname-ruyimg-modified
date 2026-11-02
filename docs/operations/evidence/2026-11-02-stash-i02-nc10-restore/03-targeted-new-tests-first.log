@@ -1,0 +1,47 @@
+$ cargo test --offline -p content-runtime --test definition_voice_assets   # start 2026-11-02 23:07:15 +0800
+
+thread 'voice_hash_uses_category_and_stable_id_and_normalized_map_order' (40249045) panicked at crates/content-runtime/tests/definition_voice_assets.rs:177:28:
+called `Result::unwrap()` on an `Err` value: "conflicting logical skill identity"
+
+
+failures:
+    voice_definition_ids_must_be_nonzero_and_unambiguous
+    voice_hash_uses_category_and_stable_id_and_normalized_map_order
+
+test result: FAILED. 5 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p content-runtime --test definition_voice_assets`
+exit=101
+
+$ cargo test --offline -p game-server --test native_frozen_packages   # start 2026-11-02 23:07:20 +0800
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `idem` is never used
+   --> apps/game-server/src/room_native_actor.rs:892:8
+    |
+892 | pub fn idem(key: u64) -> IdempotencyKey {
+    |        ^^^^
+
+warning: function `expected` is never used
+   --> apps/game-server/src/room_native_actor.rs:897:8
+    |
+897 | pub fn expected(revision: u64) -> ExpectedRevision {
+    |        ^^^^^^^^
+
+warning: `game-server` (bin "game-server") generated 31 warnings (run `cargo fix --bin "game-server" -p game-server` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 19.86s
+     Running tests/native_frozen_packages.rs (target/debug/deps/native_frozen_packages-7ef369c7488a9bfc)
+
+running 8 tests
+test room_packages_are_exact_ordered_and_do_not_fallback_to_active_packages ... ok
+test freezing_installed_assets_rejects_symlinks_outside_package_root ... ok
+test frozen_copy_rejects_tampering_missing_extra_assets_and_invalid_manifest ... ok
+test frozen_vm_and_binary_assets_restore_without_sources_or_installed_versions ... ok
+test definition_voices_survive_frozen_export_and_keep_semantic_bridge_rule_hash ... ok
+test frozen_copies_obey_current_hash_and_slot_revocations ... ok
+test legacy_exact_reference_migrates_disabled_old_version_and_upgrade_leaves_original_copy ... ok
+test vm_character_survives_upgrade_rollback_and_uninstall_via_frozen_copy ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+
+exit=0 end 2026-11-02 23:07:40 +0800

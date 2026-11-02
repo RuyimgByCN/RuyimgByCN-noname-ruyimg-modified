@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-parent-9f4-publication-push-audit.py", line 10, in <module>
+    repo=URL+'-wrong' if row['name']=='wrong-repository' else URL;p=subprocess.run([str(D/'hooks/pre-push'),repo,repo],input=row['stdin'].encode(),capture_output=True,env=env);assert p.returncode==row['expected']==row['exit'],row['name'];control.append({'name':row['name'],'exit':p.returncode})
+AssertionError: accepted

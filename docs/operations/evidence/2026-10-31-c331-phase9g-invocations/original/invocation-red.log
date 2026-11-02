@@ -1,0 +1,30 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.82s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 3 tests
+
+thread 'c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition' (29106352) panicked at crates/engine-native/tests/groups/../c331_genuine_invocations.rs:20:571:
+remove after complete dodged card subtree
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log' (29106354) panicked at crates/engine-native/tests/groups/../c331_genuine_invocations.rs:15:105:
+actual optional holder cost
+test c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition ... FAILED
+test c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log ... FAILED
+
+thread 'c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card' (29106353) panicked at crates/engine-native/tests/groups/../c331_genuine_invocations.rs:24:276:
+actual invocation frame, not scalar activation log
+test c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card ... FAILED
+
+failures:
+
+failures:
+    c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition
+    c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card
+    c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 240 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.8929890419822186, "disk_free_bytes": 135918858240}

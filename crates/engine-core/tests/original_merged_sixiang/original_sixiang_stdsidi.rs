@@ -1115,6 +1115,7 @@ fn death_recovery_case(
         [(9_216_001, "wei"), (9_216_002, "qun"), (9_216_003, "shu")]
             .into_iter()
             .map(|(id, group)| PackageCharacterEntry {
+                voice_assets: Default::default(),
                 id,
                 name_key: format!("death_group_{id}"),
                 max_hp: 4,

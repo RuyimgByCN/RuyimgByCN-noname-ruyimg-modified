@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_atomic_source_repair::c9f_yinzei_uses_ordinary_discard_and_loss_children' (28293097) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:374:56:
+assertion `left == right` failed
+  left: 0
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_atomic_source_repair::c9f_yinzei_uses_ordinary_discard_and_loss_children ... FAILED
+
+failures:
+
+failures:
+    c331_atomic_source_repair::c9f_yinzei_uses_ordinary_discard_and_loss_children
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 235 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9f_yinzei_uses", "--", "--nocapture"], "exit": 101, "locked_seconds": 0.11290041694883257, "disk_free_bytes": 131763568640}

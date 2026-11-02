@@ -1,0 +1,22 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.75s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou' (29468119) panicked at crates/engine-native/tests/groups/../c331_genuine_invocations.rs:51:286:
+assertion `left == right` failed: one genuine invocation/CardUsed damageEnd heals actual living boss_jinshenrushou
+  left: 2
+ right: 3
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou ... FAILED
+
+failures:
+
+failures:
+    c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 248 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9g_jiding_genuine_card", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.799464333045762, "disk_free_bytes": 131421368320}

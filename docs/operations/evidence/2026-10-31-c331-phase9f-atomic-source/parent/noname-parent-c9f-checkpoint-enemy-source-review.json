@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-31T17:23:59.173307+00:00",
+  "scope": "Readonlypreliminaryreviewofimmutablecheckpoint18,notliverevision/final9fverdict",
+  "checkpointSHA256": "152bb49bdfe27efa83c20a72b8d7f1a8a2f5054506245cd70977173110bb6071",
+  "native": "source_is_enemy_of core_ops.rs7-29: IdentitySome(true)agreesstandardnosidefallback, KingdomsonlySome(false)iffriendelsereturnsNone.",
+  "pinnedSources": [
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname/apps/core/noname/library/element/player.js",
+      "sha256": "fc34249bcfeb48e676ecff6c973892e5d9affe039201d537237c08a294546bcd"
+    }
+  ],
+  "sourceProof": "Liuli game.js29222-29251 andCoreplayer.js13020-13046: isEnemyOf exactly !isFriendOf. Kingdomsfriendself ormutualyexinjia_friend; unknown/yeotherwisefalse; equalknownidentityfriends, differentknownidentitynonfriend.",
+  "counterexample": "DistinctalivebothrevealedKingdomsWei/Shu,noexplicitfriendship, Cuiduiholderdamagesother: sourceisEnemyOftrue, checkpointnativeNonepotentialnoadmission. Unknown/yemayalsoenemyunlessearlierexplicitfriendship.",
+  "required": "Checkactualcurrentwriterrevisionbeforeclaimingstillopen. Reuseauthenticmodefacts, sourcekeyedfriendstorageifalreadyexists; no faction/seatheuristicanddonotclaimfullF14ifgenuineyexinjia_friendstateabsent. Addknownenemy/ally/bothunknown/ye/explicitfriendasapplicablequalifications; incompletefactsstaymandatorynotacceptedvariants. No Main/sourcecodewritesornewtestexecution."
+}

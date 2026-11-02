@@ -1,0 +1,18 @@
+error: unexpected closing delimiter: `}`
+   --> /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel/src/event/native_damage.rs:274:5
+    |
+ 48 | impl NativeDamageEffect {
+    |                         - the nearest open delimiter
+...
+147 |         let sha = d.card.is_some_and(|card| {
+    |                                             - the nearest open delimiter
+...
+153 |                 )).unwrap_or_else(|| catalog.card_kind(card));
+    |                  - missing open `(` for this delimiter
+154 |             kind.is_sha_like()
+155 |         });
+    |          - missing open `(` for this delimiter
+...
+274 |     }
+    |     ^ unexpected closing delimiter
+

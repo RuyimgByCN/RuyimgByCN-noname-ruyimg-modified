@@ -1,0 +1,31 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.59s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 12 tests
+test c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies ... ignored, F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers
+test c331_genuine_invocations::c9g_jidian_opens_actual_target_choice ... ok
+test c331_genuine_invocations::c9g_yuance_opens_two_real_options_without_activation_log ... ok
+test c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition ... ok
+test c331_genuine_invocations::c9g_jidian_red_does_not_mute_next_unrelated_reaction ... ok
+
+thread 'c331_genuine_invocations::c9g_ordinary_tiandao_nonfirst_equipment_flips_colour_and_restores' (29484088) panicked at crates/engine-native/tests/groups/../c331_source_predicates.rs:236:64:
+called `Result::unwrap()` on an `Err` value: OpenChoiceMismatch { observer: 3 }
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou ... ok
+test c331_genuine_invocations::c9g_ordinary_tiandao_nonfirst_equipment_flips_colour_and_restores ... FAILED
+test c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log ... ok
+test c331_genuine_invocations::c9g_zhangwu_actual_two_card_equipment_cost_and_source_cancel ... ok
+test c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card ... ok
+test c331_genuine_invocations::c9g_yuance_four_colours_options_and_cancel ... ok
+test c331_genuine_invocations::c9g_invocation_every_phase_and_dodge_restore ... ok
+
+failures:
+
+failures:
+    c331_genuine_invocations::c9g_ordinary_tiandao_nonfirst_equipment_flips_colour_and_restores
+
+test result: FAILED. 10 passed; 1 failed; 1 ignored; 0 measured; 240 filtered out; finished in 0.22s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 2.8699464999954216, "disk_free_bytes": 131411550208}

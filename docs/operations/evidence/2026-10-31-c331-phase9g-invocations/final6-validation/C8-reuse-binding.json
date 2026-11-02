@@ -1,0 +1,10 @@
+{
+  "baseline_pairs_rebound_to_immutable9f_bindings": 362,
+  "baseline_producer_log": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-observed3.log",
+  "producer_log_sha256": "62ca202f8803e781909daa3210f7314d0aafc0b94fab2b2a5380d31343f7abab",
+  "producer_result_lines": [
+    "test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 434 filtered out; finished in 0.53s"
+  ],
+  "all12_expected_and_actual_golden_hashes_identical_to_retained9f": true,
+  "producer_rerun": false
+}

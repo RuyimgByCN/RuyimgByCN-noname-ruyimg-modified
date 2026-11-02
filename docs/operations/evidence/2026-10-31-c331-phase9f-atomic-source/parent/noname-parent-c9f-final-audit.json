@@ -1,0 +1,106 @@
+{
+  "utc": "2026-10-31T17:46:42.085017+00:00",
+  "status": "PASS_ATOMIC_SOURCE_REPAIR_INTEGRITY_REVIEW_PENDING_F14_AND_FIVE_FSM_BLOCK",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9f-final-mghukxvr",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9f-final-mghukxvr/snapshot",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f",
+  "artifactFiles": 4167,
+  "preservedC9eArtifactsVerified": 7333,
+  "fullFiles": 225,
+  "incrementFiles": 19,
+  "sourceManifest": "ab88c526c5cb4e807a29c5bdaaa70393b4515375303980d153403047f479be96",
+  "incrementManifest": "f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da",
+  "trackedDiffOutside225": [],
+  "commands": [
+    {
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "predicate-traces",
+      "exit": 0,
+      "counts": [
+        87,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "golden-traces",
+      "exit": 101,
+      "counts": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "name": "full-native",
+      "exit": 101,
+      "counts": [
+        1845,
+        1,
+        75
+      ]
+    },
+    {
+      "name": "source-cap-unit",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "source-caps",
+      "exit": 0,
+      "counts": null
+    },
+    {
+      "name": "layering",
+      "exit": 0,
+      "counts": null
+    }
+  ],
+  "predicateFullCaptureTriples": 202,
+  "pairedCaptures": 362,
+  "actualOutcomeCounts": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "nonAcceptedEntirePayloadEqual": true,
+  "AcceptedExact32ByteHashRetainedNotCompared": true,
+  "observedEqualScenarios": 11,
+  "observedBusinessDifferences": [
+    {
+      "scenario": "chain_fire_propagation",
+      "differences": [
+        {
+          "step": "0007-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0008-before",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0009-after",
+          "fields": [
+            "events"
+          ]
+        },
+        {
+          "step": "0010-final",
+          "fields": [
+            "events"
+          ]
+        }
+      ]
+    }
+  ],
+  "qualification": "No product/golden/C331/Main acceptance. Needs connected-source review of12atomicgroups+chainbirthrepair/sourcealias/RNG/loss/expiry. F14Kingdomsfriendstorage/unknown-ye/knownenemy gap explicitlymandatory, fiveFSM genuineinvocation/choice/judge/cardafter andChangeHp/DeathFlow stillabsent. No golden expected changed."
+}

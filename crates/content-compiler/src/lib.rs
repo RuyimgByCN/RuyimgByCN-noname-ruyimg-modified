@@ -262,6 +262,7 @@ pub fn compile_source_named(
             reveal: None,
             onremove: None,
 
+            voice_assets: Default::default(),
             skill_def_id: skill.def_id,
             name: skill.name.clone(),
             locked: skill.locked,

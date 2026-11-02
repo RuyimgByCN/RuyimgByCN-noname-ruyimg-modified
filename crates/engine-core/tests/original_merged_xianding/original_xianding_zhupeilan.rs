@@ -31,6 +31,7 @@ fn setup() -> (
     )
     .unwrap();
     package.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: CHARACTER,
         name_key: "tongdao_target".into(),
         max_hp: 3,

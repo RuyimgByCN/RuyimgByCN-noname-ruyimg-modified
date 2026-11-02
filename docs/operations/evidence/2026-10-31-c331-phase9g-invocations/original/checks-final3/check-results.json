@@ -1,0 +1,35 @@
+[
+  {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "exit": 0,
+    "seconds": 7.9456870555877686,
+    "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings"
+  },
+  {
+    "name": "adapters",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "c331_invocation_controls",
+      "--",
+      "--nocapture"
+    ],
+    "exit": 0,
+    "seconds": 7.897146701812744,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null
+  }
+]

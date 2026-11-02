@@ -335,9 +335,12 @@ pub struct PackageSkillEntry {
     /// Conversion skill whose branch can be toggled by generic rules.
     #[serde(default, skip_serializing_if = "is_false")]
     pub conversion: bool,
+    /// Logical voice key → package-local audio asset id.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub voice_assets: BTreeMap<String, String>,
 }
 
-/// Rules-only character definition carried by a content package.
+/// Character definition and optional presentation assets carried by a content package.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub struct PackageCharacterEntry {
     /// Stable character definition id.
@@ -376,6 +379,9 @@ pub struct PackageCharacterEntry {
     /// Logical skin asset ids from `asset_paths`.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skin_assets: Vec<String>,
+    /// Logical voice key → package-local audio asset id.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub voice_assets: BTreeMap<String, String>,
 }
 
 /// Immutable card definition shipped by a content package.
@@ -408,6 +414,9 @@ pub struct PackageCardEntry {
     /// Skill installed on equip to resolve this card leaving the equipment zone.
     #[serde(default, skip_serializing_if = "is_zero")]
     pub on_leave_equip_skill_def: u32,
+    /// Logical voice key → package-local audio asset id.
+    #[serde(default, skip_serializing_if = "BTreeMap::is_empty")]
+    pub voice_assets: BTreeMap<String, String>,
 }
 
 fn is_zero(value: &u32) -> bool {
@@ -844,7 +853,10 @@ impl ContentPackage {
             )
             .map_err(|e| format!("module {}: {e}", module.name))?;
             if abi < 758 && uses_772 {
-                return Err(format!("module {} uses effect 772 below ABI 758", module.name));
+                return Err(format!(
+                    "module {} uses effect 772 below ABI 758",
+                    module.name
+                ));
             }
         }
         Ok(())
@@ -976,6 +988,7 @@ impl ContentPackage {
                 }
             }
         }
+        self.validate_definition_voice_assets(&asset_kinds)?;
         self.validate_skin_index(&asset_kinds)?;
         let mut card_defs = std::collections::BTreeSet::new();
         for card in &self.card_index {
@@ -1013,6 +1026,61 @@ impl ContentPackage {
         Ok(())
     }
 
+    fn definition_voice_assets(&self) -> Vec<(&str, u32, &BTreeMap<String, String>)> {
+        let mut entries: Vec<_> = self
+            .character_index
+            .iter()
+            .map(|entry| ("character", entry.id, &entry.voice_assets))
+            .chain(
+                self.skill_index
+                    .iter()
+                    .map(|entry| ("skill", entry.skill_def_id, &entry.voice_assets)),
+            )
+            .chain(
+                self.card_index
+                    .iter()
+                    .map(|entry| ("card", entry.card_def_id, &entry.voice_assets)),
+            )
+            .collect();
+        entries.sort_by_key(|(kind, id, _)| (*kind, *id));
+        entries
+    }
+
+    fn validate_definition_voice_assets(
+        &self,
+        asset_kinds: &BTreeMap<&str, resource_schema::AssetKind>,
+    ) -> Result<(), String> {
+        let entries = self.definition_voice_assets();
+        for pair in entries.windows(2) {
+            if pair[0].0 == pair[1].0
+                && pair[0].1 == pair[1].1
+                && (!pair[0].2.is_empty() || !pair[1].2.is_empty())
+            {
+                return Err(format!(
+                    "ambiguous {} voice definition {}",
+                    pair[0].0, pair[0].1
+                ));
+            }
+        }
+        for (kind, id, voices) in entries {
+            if id == 0 && !voices.is_empty() {
+                return Err(format!("{kind} has invalid voice definition id"));
+            }
+            for (key, asset_id) in voices {
+                if !is_safe_presentation_token(key) {
+                    return Err(format!("{kind} {id} has invalid voice key"));
+                }
+                require_presentation_asset(
+                    asset_kinds,
+                    (kind, id),
+                    asset_id,
+                    resource_schema::AssetKind::Audio,
+                )?;
+            }
+        }
+        Ok(())
+    }
+
     fn validate_skin_index(
         &self,
         asset_kinds: &BTreeMap<&str, resource_schema::AssetKind>,
@@ -1034,11 +1102,21 @@ impl ContentPackage {
                 if !is_safe_presentation_token(voice_key) {
                     return Err(format!("skin {} has invalid voice key", skin.id));
                 }
-                require_skin_asset(asset_kinds, skin.id, asset_id, AssetKind::Audio)?;
+                require_presentation_asset(
+                    asset_kinds,
+                    ("skin", skin.id),
+                    asset_id,
+                    AssetKind::Audio,
+                )?;
             }
             match &skin.presentation {
                 PackageSkinPresentation::Static { asset } => {
-                    require_skin_asset(asset_kinds, skin.id, asset, AssetKind::Image)?;
+                    require_presentation_asset(
+                        asset_kinds,
+                        ("skin", skin.id),
+                        asset,
+                        AssetKind::Image,
+                    )?;
                 }
                 PackageSkinPresentation::Spine {
                     bundle,
@@ -1046,7 +1124,12 @@ impl ContentPackage {
                     layout,
                     dependencies,
                 } => {
-                    require_skin_asset(asset_kinds, skin.id, bundle, AssetKind::Data)?;
+                    require_presentation_asset(
+                        asset_kinds,
+                        ("skin", skin.id),
+                        bundle,
+                        AssetKind::Data,
+                    )?;
                     if actions.len() > 64 {
                         return Err(format!("skin {} has too many Spine actions", skin.id));
                     }
@@ -1078,7 +1161,12 @@ impl ContentPackage {
                     if !is_safe_presentation_token(rule) {
                         return Err(format!("skin {} has unsafe substitute rule", skin.id));
                     }
-                    require_skin_asset(asset_kinds, skin.id, asset, AssetKind::Image)?;
+                    require_presentation_asset(
+                        asset_kinds,
+                        ("skin", skin.id),
+                        asset,
+                        AssetKind::Image,
+                    )?;
                 }
             }
         }
@@ -1120,20 +1208,19 @@ impl ContentPackage {
     }
 }
 
-fn require_skin_asset(
+fn require_presentation_asset(
     asset_kinds: &BTreeMap<&str, resource_schema::AssetKind>,
-    skin_id: u32,
+    owner: (&str, u32),
     asset_id: &str,
     expected: resource_schema::AssetKind,
 ) -> Result<(), String> {
+    let (kind, id) = owner;
     match asset_kinds.get(asset_id) {
-        Some(kind) if *kind == expected => Ok(()),
-        Some(kind) => Err(format!(
-            "skin {skin_id} asset {asset_id} has kind {kind:?}, expected {expected:?}"
+        Some(actual) if *actual == expected => Ok(()),
+        Some(actual) => Err(format!(
+            "{kind} {id} asset {asset_id} has kind {actual:?}, expected {expected:?}"
         )),
-        None => Err(format!(
-            "skin {skin_id} references unknown asset {asset_id}"
-        )),
+        None => Err(format!("{kind} {id} references unknown asset {asset_id}")),
     }
 }
 

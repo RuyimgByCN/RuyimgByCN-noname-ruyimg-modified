@@ -1,0 +1,16 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0599]: no method named `recover_hp` found for mutable reference `&mut machine::Ctx<'_>` in the current scope
+   --> crates/engine-native-kernel/src/kernel/native_invocation.rs:58:349
+    |
+ 58 | ...actor,amount:1}),crate::event::YuanceOption::Recover=>{ctx.recover_hp(actor,1);}}}
+    |                                                               ^^^^^^^^^^
+    |
+help: there is a method `recover` with a similar name, but with different arguments
+   --> crates/engine-native-kernel/src/machine.rs:672:5
+    |
+672 |     pub fn recover(&mut self, player: PlayerId, amount: u32, by_card: Option<CardId>) -> u32 {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0599`.
+error: could not compile `engine-native-kernel` (lib) due to 1 previous error
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.7824327079579234, "disk_free_bytes": 131536986112}

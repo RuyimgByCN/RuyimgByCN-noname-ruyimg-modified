@@ -1,0 +1,65 @@
+{
+  "utc": "2026-10-31T18:13:53.330414+00:00",
+  "status": "PASS_NORMAL_9F4_DOC_PUBLICATION_PUSH_INDEPENDENT_AUDIT_CI_PENDING",
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "parent": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "tree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "manifestFilesVerified": 36,
+  "replayedGuardControls": [
+    {
+      "name": "accepted",
+      "exit": 0
+    },
+    {
+      "name": "wrong-repository",
+      "exit": 1
+    },
+    {
+      "name": "wrong-ref-main",
+      "exit": 1
+    },
+    {
+      "name": "wrong-new-bdaf",
+      "exit": 1
+    },
+    {
+      "name": "wrong-old-d07",
+      "exit": 1
+    },
+    {
+      "name": "delete-zero",
+      "exit": 1
+    },
+    {
+      "name": "second-ref-multiline",
+      "exit": 1
+    },
+    {
+      "name": "missing-tuple",
+      "exit": 1
+    }
+  ],
+  "originalHookUnchanged": true,
+  "pushExit": 0,
+  "normalAttempts": 1,
+  "leaseReleasedUTC": "2026-10-31T18:04:45.794689+00:00",
+  "pushWindowRawLogicalFlagsUntrackedEqual": true,
+  "source37CurrentNewCommitParentExact": true,
+  "incrementPaths": 9905,
+  "incrementBytes": 257498242,
+  "newObjectCount": 2152,
+  "newObjectUncompressedBytesNotWire": 56806619,
+  "roundedGitPackOutput": [
+    "Writing objects: 100% (2965/2965), 12.26 MiB | 1.91 MiB/s, done."
+  ],
+  "pushElapsedIncludingQueue": 12.637631167017389,
+  "parentIndependentRemote": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64"
+  },
+  "parentRemoteRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-9f4-push-nbr10vgx",
+  "badLeafPreservedNotAncestor": true,
+  "excluded552VerifiedBySealedProducer": true,
+  "unexpectedRawIndexPreLease": "Unknownfb->626beforeParentnormal9905stage/commit retainedseparately, notpushwindowmutation/notctimeonlyclaimed.",
+  "qualification": "ActualnormalDoc-onlypublishverified. NewCI41227614131notfinal/independentlyregisteredbythisaudit. No Cprod/Mainruntime/default/version/37/Goalclosure. No installerdownload/install/device/hearing/thermalproof; no Mainwrites fromaudit."
+}

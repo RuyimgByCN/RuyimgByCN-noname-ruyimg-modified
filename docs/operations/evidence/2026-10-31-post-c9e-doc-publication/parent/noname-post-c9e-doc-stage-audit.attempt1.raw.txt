@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/tmp/noname-post-c9e-stage-docs-and-audit.py", line 3, in <module>
+    M=Path('/Users/ruyimg/Documents/Claude/sanguosha/noname-next');P=json.loads(Path('/tmp/noname-post-c9e-doc-stage-plan.json').read_bytes());env={**os.environ,'GIT_OPTIONAL_LOCKS':'0'};g=lambda *a:subprocess.check_output(['git','--no-optional-locks','-C',str(M),*a],env=env);h=lambda b:hashlib.sha256(b).hexdigest();old=json.loads(Path('/tmp/noname-post34e-doc-stage-audit.json').read_bytes());oldplan=json.loads(Path('/tmp/noname-post34e-doc-stage-plan.json').read_bytes());assert h((M/'.git/index').read_bytes())==old['indexAfter'];assert {p.decode() for p in g('diff','--cached','--name-only','-z').split(b'\0') if p}=={r['path'] for r in oldplan['files']};assert g('rev-parse','HEAD').decode().strip()==P['parent'];expected={r['path']:r for r in P['files']}
+AssertionError

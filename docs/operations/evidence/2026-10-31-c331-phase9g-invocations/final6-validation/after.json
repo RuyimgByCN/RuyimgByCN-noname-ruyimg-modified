@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T19:28:33.985891+00:00",
+  "final_source_manifest_sha256": "69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b",
+  "all239_source_bytes_unchanged": true,
+  "g1858_entries_and_external_report_unchanged": true,
+  "private_index_sha256": "b1071e5051b056db9de2a2c53e638fe3d1ee3129dca45bd4d5f6d0fce9b68551",
+  "private_index_mtime_ns": 1793458491684752278,
+  "private_lock_sha256": "25b1f2cf1cdec0ce9c2ba7595b59726fb6ed193fdd247893c717ea0b4156fb13",
+  "private_staged_empty": true,
+  "all9_commands_before_after239_bound": true,
+  "source_test_fixture_catalog_edits": false,
+  "old_baseline_not_refreshed": true,
+  "active_owned_producers": 0,
+  "queued_owned_producers": 0
+}

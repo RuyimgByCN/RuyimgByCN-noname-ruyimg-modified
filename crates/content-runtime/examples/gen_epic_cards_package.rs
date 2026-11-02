@@ -89,6 +89,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+            voice_assets: Default::default(),
             skill_def_id: 0,
             name: "reguhuo".into(),
             locked: false,
@@ -105,6 +106,7 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             reveal: None,
             onremove: None,
 
+            voice_assets: Default::default(),
             skill_def_id: 1,
             name: "rangjie".into(),
             locked: false,

@@ -1,0 +1,43 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.62s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 24 tests
+test c331_atomic_source_repair::c9f_actual_mode_enemy_relations_do_not_use_hidden_roles_or_seats ... ok
+test c331_atomic_source_repair::c9f_jueqing_self_source_replaces_damage_before_armor ... ok
+test c331_atomic_source_repair::c9f_duqu_other_enabled_holder_is_excluded ... ok
+test c331_atomic_source_repair::c9f_cuidui_does_not_poison_actual_boss_ally ... ok
+test c331_atomic_source_repair::c9f_cuidui_grants_only_the_actual_poison_definition ... ok
+test c331_atomic_source_repair::c9f_minwan_self_source_initializes_real_lock_set ... ok
+test c331_atomic_source_repair::c9f_abi_nature_draw_and_source_are_real ... ok
+test c331_atomic_source_repair::c9f_terra_expires_at_actual_global_turn_boundary ... ok
+test c331_atomic_source_repair::c9f_shuchui_already_hit_never_readmits ... ok
+test c331_atomic_source_repair::c9f_paotai_full_width_quantity_not_u8 ... ok
+test c331_atomic_source_repair::c9f_zhaohuo_self_cancel_precedes_begin2 ... ok
+test c331_atomic_source_repair::c9f_zlfanshi_terra_is_retained_and_target_uses_rng ... ok
+test c331_atomic_source_repair::c9f_chain_birth_rejects_a_still_queued_recipient ... ok
+test c331_atomic_source_repair::c9f_yinzei_equipment_only_source_is_discarded_with_rng ... ok
+test c331_atomic_source_repair::c9f_yinzei_uses_ordinary_discard_and_loss_children ... ok
+test c331_atomic_source_repair::c9f_xixue_self_source_recovers_once ... ok
+test c331_atomic_source_repair::c9f_virtual_sha_chain_keeps_effective_kind_through_actual_edge ... ok
+test c331_atomic_source_repair::c9f_cuidui_named_source_draw_and_foreign_name_negative ... ok
+test c331_atomic_source_repair::c9f_paotai_signed_zero_negative_and_overflow_rollback ... ok
+test c331_atomic_source_repair::c9f_atomic_self_source_bodies_restore_every_suspension ... ok
+test c331_atomic_source_repair::c9f_paotai_wide_real_command_restore_controls ... ok
+test c331_atomic_source_repair::c9f_random_bodies_restore_rng_and_child_suffix ... ok
+test c331_atomic_source_repair::c9f_discard_and_named_draw_restore_actual_children ... ok
+
+thread 'c331_atomic_source_repair::c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore' (28513104) panicked at crates/engine-native/src/engine/debug.rs:362:32:
+unknown skill 刺裘
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_atomic_source_repair::c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore ... FAILED
+
+failures:
+
+failures:
+    c331_atomic_source_repair::c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore
+
+test result: FAILED. 23 passed; 1 failed; 0 ignored; 0 measured; 216 filtered out; finished in 1.52s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_atomic_source_repair", "--", "--nocapture"], "exit": 101, "locked_seconds": 4.204399374953937, "disk_free_bytes": 133296254976}

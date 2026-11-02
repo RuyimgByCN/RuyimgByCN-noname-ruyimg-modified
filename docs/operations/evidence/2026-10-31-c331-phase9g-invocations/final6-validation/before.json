@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T19:16:31.253321+00:00",
+  "source_manifest_sha256": "69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b",
+  "source_files": 239,
+  "increment_files": 46,
+  "original_g_artifacts_verified": 1858,
+  "g_index_sha256": "0ea6e4254dff56593edd6bf87f5ca1a7c26b7b2afcc9b1d1f329afb04604be92",
+  "g_report_sha256": "d86f4b25eb06e8b325e4d4dbf91cccd0cf2ecfd03b8e78b2d4264f79d45f0cc2",
+  "private_index_empty": true,
+  "private_head": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "helper_sha256": "d7f246f1fdbd4ec6d85deb22643d7ca8137be62539ebd5e75d49c779febb8e34",
+  "lock_device": 16777231,
+  "lock_inode": 620205209,
+  "free_disk_bytes": 132035407872
+}

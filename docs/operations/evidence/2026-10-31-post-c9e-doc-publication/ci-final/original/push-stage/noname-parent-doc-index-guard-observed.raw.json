@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-31T17:52:53.278827+00:00",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-doc-index-guard-vcr3roke",
+  "head": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "indexObservedSHA256": "626e19e68c1a830ff7ef12e0a0859d2cf564f2f8c27949137846eed4d6f3d894",
+  "indexExpectedAt1636": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+  "indexStat": {
+    "size": 7724464,
+    "mtimeNs": 1793468074601601228
+  },
+  "stagedActualCount": 2540,
+  "stagedExpectedCount": 2540,
+  "missingStaged": [],
+  "extraStaged": [],
+  "stagedPathsetSame": true,
+  "guardFailedBeforeAnyMutation": true,
+  "writer": "UNKNOWN; do notattributeorrestore",
+  "notes": "Currentrawindex/logicalstage/flags preserved outsideMain; no Mainrealindex/HEAD/source/stage mutation by thisdiagnostic."
+}

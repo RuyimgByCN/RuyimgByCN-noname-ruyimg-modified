@@ -1,0 +1,18 @@
+$ cargo test --offline -p content-runtime --test definition_voice_assets   # 适配 C331 身份规则后，start 2026-11-02 23:11:28 +0800
+test absent_and_empty_voices_keep_legacy_zero_asset_hash ... ok
+test definition_voice_hash_cannot_be_absorbed_by_legacy_sort_key ... ok
+test voice_hash_uses_category_and_stable_id_and_normalized_map_order ... ok
+test genuine_definition_voices_roundtrip_and_change_only_asset_hash ... ok
+test voice_definition_ids_must_be_nonzero_and_unambiguous ... ok
+test sdk_voice_package_installs_and_restores_exact_locked_bytes_and_assets ... ok
+test definition_voices_require_safe_keys_and_local_audio_membership ... ok
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+exit=0
+$ cargo test --offline -p engine-native --test nc_rounds nc10_public_other_plan::   # start 2026-11-02 23:11:28 +0800
+test nc10_public_other_plan::other_idle_keeps_explicit_parallel_reveals_and_owner_answers ... ok
+test nc10_public_other_plan::own_answer_and_no_choice_search_still_advance_authority ... ok
+test nc10_public_other_plan::dead_other_actor_returns_before_simulation ... ok
+test nc10_public_other_plan::ordinary_other_choice_returns_before_simulation ... ok
+test nc10_public_other_plan::ordinary_other_choice_over_real_cached_vm_effects_is_public_idle ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 297 filtered out; finished in 0.10s
+exit=0 end 2026-11-02 23:11:32 +0800

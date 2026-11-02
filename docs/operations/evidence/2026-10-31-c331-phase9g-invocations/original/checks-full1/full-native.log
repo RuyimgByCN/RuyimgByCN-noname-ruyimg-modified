@@ -1,0 +1,71 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+error[E0308]: mismatched types
+   --> crates/engine-native/tests/groups/../nc09_machine_ownership.rs:423:27
+    |
+423 |             expected.push(current.trick);
+    |                      ---- ^^^^^^^^^^^^^ expected `u32`, found `Option<u32>`
+    |                      |
+    |                      arguments to this method are incorrect
+    |
+    = note: expected type `u32`
+               found enum `Option<u32>`
+note: method defined here
+   --> /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:991:12
+    |
+991 |     pub fn push(&mut self, value: T) {
+    |            ^^^^
+help: consider using `Option::expect` to unwrap the `Option<u32>` value, panicking if the value is an `Option::None`
+    |
+423 |             expected.push(current.trick.expect("REASON"));
+    |                                        +++++++++++++++++
+
+error[E0004]: non-exhaustive patterns: `ChoiceKind::Control` not covered
+  --> crates/engine-native/tests/groups/../nc09_machine_ownership.rs:54:27
+   |
+54 |             "kind": match open.spec.kind {
+   |                           ^^^^^^^^^^^^^^ pattern `ChoiceKind::Control` not covered
+   |
+note: `ChoiceKind` defined here
+  --> crates/engine-native-kernel/src/choice.rs:7:1
+   |
+ 7 | pub enum ChoiceKind {
+   | ^^^^^^^^^^^^^^^^^^^
+...
+11 |     Control,
+   |     ------- not covered
+   = note: the matched value is of type `ChoiceKind`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
+   |
+58 ~                 engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
+59 ~                 ChoiceKind::Control => todo!(),
+   |
+
+error[E0004]: non-exhaustive patterns: `&ChoiceOption::Control(_)` not covered
+  --> crates/engine-native/tests/groups/../nc09_machine_ownership.rs:61:68
+   |
+61 |             "options": open.spec.options.iter().map(|option| match option {
+   |                                                                    ^^^^^^ pattern `&ChoiceOption::Control(_)` not covered
+   |
+note: `ChoiceOption` defined here
+  --> crates/engine-native-kernel/src/choice.rs:24:1
+   |
+24 | pub enum ChoiceOption {
+   | ^^^^^^^^^^^^^^^^^^^^^
+...
+38 |     Control(crate::event::YuanceOption),
+   |     ------- not covered
+   = note: the matched value is of type `&ChoiceOption`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern or an explicit pattern as shown
+   |
+68 ~                 engine_native::ChoiceOption::Kind(id) => serde_json::json!({"kind": id}),
+69 ~                 &ChoiceOption::Control(_) => todo!(),
+   |
+
+Some errors have detailed explanations: E0004, E0308.
+For more information about an error, try `rustc --explain E0004`.
+error: could not compile `engine-native` (test "misc") due to 3 previous errors
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "test", "--offline", "-p", "engine-native-kernel", "-p", "engine-native-content", "-p", "engine-native", "--no-fail-fast"], "exit": 101, "locked_seconds": 13.130630458996166, "disk_free_bytes": 131392331776}

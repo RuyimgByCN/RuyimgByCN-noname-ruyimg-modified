@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T19:24:30.974683+00:00",
+  "owned_runners": [
+    {
+      "pid": 27679,
+      "active": false
+    }
+  ],
+  "requested_commands": 9,
+  "all_completed": true,
+  "not_run": [],
+  "owned_active_or_queued": false,
+  "no_signals_or_alternate_runner": true
+}

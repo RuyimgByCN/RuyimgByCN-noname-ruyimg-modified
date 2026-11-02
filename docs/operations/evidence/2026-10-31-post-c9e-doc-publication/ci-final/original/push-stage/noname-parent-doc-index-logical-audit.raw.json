@@ -1,0 +1,29 @@
+{
+  "utc": "2026-10-31T17:56:04.261769+00:00",
+  "status": "PASS_INDEX_LOGICAL_OLD2540_EXACT_RAW_CHANGE_RETAINED",
+  "observedSHA256": "626e19e68c1a830ff7ef12e0a0859d2cf564f2f8c27949137846eed4d6f3d894",
+  "expectedOldSHA256": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+  "rawBaselineOldFbAvailable": false,
+  "indexVersion": 2,
+  "entries": 53864,
+  "gitSHA1FooterValid": true,
+  "extensions": [
+    {
+      "signature": "TREE",
+      "size": 141968,
+      "sha256": "d3a85b50c123f8ffca4b237f0ba5ffc98ea63fe3b257de86e48e600a5e188194",
+      "start": 7582468,
+      "end": 7724444
+    }
+  ],
+  "allPathOidModeStageEqualHEADPlusOld2540Plan": true,
+  "all2540StagedBlobSHA256AndBytesExact": true,
+  "flags": "Counter({(0, False, 0): 53864})",
+  "unknownStatOrCacheWriter": "UNKNOWN; cannotclaimexactctime-onlywithoutoldfbraw",
+  "removeTREECandidateSHA256": "6cd749e4ac4bfbae582ef9c789c91cdc8fdcfcaed08ef509310f49dfcad838d3",
+  "removeTREEEqualsOldFb": false,
+  "retainedCurrentRaw": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-doc-index-guard-vcr3roke/observed-index.raw",
+  "guardBeforeStageFailedSafely": true,
+  "noIndexRestoreOrMutation": true,
+  "authorizationForNextStep": "Normalgitaddonlyenumerated9905Docsunder18/25canproceedafterretainingthisdiagnostic; notrestorationandnotbaselineblanketrefresh. Freshactualstageblob/modeauditandrecordraw626->newintentionaldelta. Preserveunexpectedrawhash+unknownwriterasfact."
+}

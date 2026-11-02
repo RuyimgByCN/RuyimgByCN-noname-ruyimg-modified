@@ -1,0 +1,77 @@
+{
+  "created_utc": "2026-10-31T18:01:46.926040+00:00",
+  "repository": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "branch": "refs/heads/native-convergence",
+  "accepted_commit": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "accepted_tree": "88dfb549ab937d23b3632371eb77f387a566cb7c",
+  "expected_old_remote": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+  "scoped_hooks_path": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/push-stage/hooks",
+  "scoped_hook_sha256": "e6b7ef4a6296448042b9b60db30bcdfc86f1874f5a96428e061163b9c4003fbe",
+  "selftests": [
+    {
+      "name": "accepted",
+      "exit": 0,
+      "expected": 0,
+      "stdin": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/native-convergence 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped check accepted exact repository, existing branch, expected base and accepted increment\n"
+    },
+    {
+      "name": "wrong-repository",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/native-convergence 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: repository does not match explicit approval\n"
+    },
+    {
+      "name": "wrong-ref-main",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/main 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "wrong-new-bdaf",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "bdaf9868ef49de08dc66127eb82b05d922cc9eba bdaf9868ef49de08dc66127eb82b05d922cc9eba refs/heads/native-convergence 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "wrong-old-d07",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/native-convergence d07b35f94a42b282222dda4ab7bbc5c39ab8fddb\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: remote branch differs from the expected accepted base\n"
+    },
+    {
+      "name": "delete-zero",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "(delete) 0000000000000000000000000000000000000000 refs/heads/native-convergence 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: commit or branch does not match explicit approval\n"
+    },
+    {
+      "name": "second-ref-multiline",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/native-convergence 34e83f0550bb70ef4af6083697428de7be2f02f8\n9f4b74236f97b0b9dc72388b6e08d310d2f26f64 9f4b74236f97b0b9dc72388b6e08d310d2f26f64 refs/heads/main 34e83f0550bb70ef4af6083697428de7be2f02f8\n",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: expected exactly one ref update\n"
+    },
+    {
+      "name": "missing-tuple",
+      "exit": 1,
+      "expected": 1,
+      "stdin": "",
+      "stdout": "",
+      "stderr": "decision25 scoped push refused: expected exactly one ref update\n"
+    }
+  ]
+}

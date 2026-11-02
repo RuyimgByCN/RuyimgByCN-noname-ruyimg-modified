@@ -563,8 +563,8 @@ impl Engine {
         let submitted_revision = self.revision();
         let public_action = match self.ai_session(seat).choice() {
             Some(choice @ ChoiceView::Own { .. }) => projected_choice_action(choice),
-            // Preserve the existing non-owner VM leaf without treating it as an answer.
-            Some(choice @ ChoiceView::Other { .. }) if vm_choice_leaf(&choice) => Some(GameAction::NextPhase),
+            // Non-owner advice is idle; do not inspect another seat's private continuation.
+            Some(ChoiceView::Other { .. }) => Some(GameAction::NextPhase),
             _ => None,
         };
         if let Some(action) = public_action {

@@ -1,0 +1,57 @@
+# C331 phase9g — PARTIAL, BLOCK, independent review required
+Verified2026-10-31; exclusive private writer/base5fc; source262/290 remaining28 +0 unchanged.
+Start17:54:55.361409Z; checkpoint18:14:04 before18:14:55; no NEW heavy after18:44:55; seal due18:54:55.
+Evidence `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g`; no active/queued owned producer, signals, staging/commit/push or Main code import.
+
+## Authoritative source and preservation
+Final **final-freeze6/full-source6**,46increment/239composed; prior checkpoints/freezes remain immutable historical results.
+Increment manifest `9557423705b52ebdfa158004bdeee9e2ab54398f3fa13696cf43249cc225ea00`.
+Increment tar `ea0bf8477a1b0748f3bc51c60ded82f2848693d8b4009025548ea7ef1496adfd`; patch `7420bfe62caa415c71b670a02b54a8a4c487ddc6169f2edd1387364d19459157`.
+Full manifest `69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b`.
+Full tar `f24a92ba43ce193f33d03a381945e57fd0686fff8ff8fd9b501a5136a886f02d`; patch `d4c87a0d7ad2637fc1a83ad1eeb16d2e58dada00256c5cb05f964e292d01ad97`.
+Both patches reverse-check; materialized final snapshots read-only; C private index empty.
+All original9f4167,9e7333 and separate41audit entries rehashed unchanged, including reds/expected/goldens/old readers.
+P2 fixed additively in `golden-dispositions-c9f-reference-correction.json`:12bad references point to actual9f19/225 manifests.
+Original sealed9f report/index/comparator unchanged; next comparator points to existing final6 manifest.
+`protected-after.json` preserves original31867 Main protection, Own6/I02/CI/source37, generated18/dist37/schema4/hooks/C6/old readers.
+Exact Parent DOCS-only9f4b74236f97b0b9dc72388b6e08d310d2f26f64/tree88dfb549...9905paths receipt verified separately.
+Main runtime remains330/105/758/WS6; historical34eCI is not C validation; no blanket baseline refresh.
+Private331/106/758/WS6, public format/API1 remain; no VM operand/context reinterpretation or public number allocation.
+
+## Implemented finite mechanisms; completion is not claimed
+Real named InvocationData frame and persisted finite machine use existing stack/queue/parks/slots and actual admitted owner/def/window.
+Before→Begin→Body→End→After and Before-cancel→Omitted are structural phases; logBegin/after are actual children.
+C7 both native starts preserve selected def; direct units suppress generic scalar prelog; source-specific costs/logs stay inside body.
+Zhangwu optional variable HE holder payment awaits log/loss/trailing log, then recomputes exact source payment or n holder-source damage.
+Jiding awaits full virtual CardUsed/Dodge/damage subtree before exact-def removal; named Rushou recovery requires actual Invocation/CardUsed receipt.
+Yuance has two semantic controls/cancel, actual ordinary Judge and four color HP branches; no activation log.
+Jidian has actual distance target/cancel, ordinary Judge before logBegin and deferred after-log, black owner Thunder, no recursion mute.
+Ordinary Judge reuses JudgementProgress with optional delayed-trick context, real Tiandao queue, held-card receipt and awaited loss.
+Sole GuiCai old-card discard correction is narrow; mixed-provider/other variants and GaiMing332 are not accepted/fixed by assertion.
+Internal Control lowers existing public Custom/string options with native_kind omitted; no new public enum/object/required field.
+**F07 is unimplemented:** old forced random acquisition remains a mandatory source defect; no hidden-card/privacy/wire completion claim.
+**F14 remains P1:** actual revealed Wei/Shu runtime counterexample returnsNone versus sourceSome(true); explicit ignored regression retained.
+Native declared unknown/ye identity and mutual yexinjia_friend storage/writers are absent; faction heuristic was not negated.
+
+## Executed evidence and material limits
+Original three invocation counterexamples and two Judge-consumer counterexamples plus named-recovery red retained before fixes.
+Earlier source passes11new cases/1explicitF14ignore: phase typed/byte restores, Dodge/removal, n2+equipment/source-cancel,
+Yuance four colors/cancel and genuine Tiandao nonfirst equipment flipping color/gaining old card, Jidian owner-target/red/unrelated, Rushou heal.
+Final-freeze3 independent `RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets` PASS.
+Final-freeze3 real NativeSession archive→Custom/string controls→normal index1 answer PASS, with18existing WASM warnings retained.
+**Final-freeze6 is NOT compiled/full-runtime checked.** Postcut fixes: server-private WAL semantic controls, virtual-carrier fault guard,
+forged payment-count bound, and append-only internal Control discriminant to retain old ChoiceKind hash/ordinal meanings.
+Two full-native attempts failed compilation at optional-trick test callers; corrected in final3 but no final full test executed.
+Server all-target attempt failed missing private WAL Control match; later exhaustive fix is uncompiled. No false all-green claim.
+Final3 runner stopped naturally at cutoff; server/focused/golden/full commands after guard did not run or queue.
+Final cheap caps9045 PASS, source unit2 PASS, layering/F7 zero; source binding files distinguish every tested snapshot from final deltas.
+No fresh9g golden comparison was produced after compilation failure; original362C8/9f pairs and complete outcomes remain preserved.
+No golden rerecord/C8 producer rerun or normalization;12original disputed cases remain red historical evidence, not refreshed acceptance.
+
+## Mandatory continuation
+`all17-12-five-fsm-lifecycle-judge-privacy-compat.json` separates implemented/runtime-checked/unchecked for every finding and12unproved rows.
+F07 hidden-slot/private-binding/gainability/event privacy/PQ actual index submissions and frozen WS6/current WASM/web/IPC/WS remain mandatory.
+Four other FSMs still need all cancel/payment-success/self-source/death/removal/forgery/fault/alias/recursive-child/exhausted-deck controls.
+Lifecycle Omitted/forceDie/includeOut/hook cleanup and Judge paid-loss/held-card/death/provider-removal/TianDu cases remain mandatory.
+ABI758/WS6 compatibility, all37/source equivalence, true ChangeHp(nottrigger armor0), DeathFlow/provider/LossEnd remain unaccepted.
+Next same-writer slice must compile/test final6 first, then close these source/privacy/lifecycle boundaries; no Main merge follows.

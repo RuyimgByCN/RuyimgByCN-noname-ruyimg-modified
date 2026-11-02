@@ -1,0 +1,8 @@
+{
+  "session_reference": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/2026-10-29T12-17-50-921Z_01a18798-5949-73c1-8642-9d0f55dc485a/35197128-a94b-4ec3-87e9-5b14c6688a4b/run-0/session.jsonl",
+  "timestamp": "2026-10-31T18:06:06.322Z",
+  "toolCallId": "call_b0abad2701584718920a3fba4bddf5fa|fc_08953b9c9c42609e016ae62e020e448191a33a915845adcc2d",
+  "tool": "bash",
+  "matched_commands": 1,
+  "extraction": "Onlyexactfailedtoolcommand, no privateassistant/sessionrecord copied"
+}

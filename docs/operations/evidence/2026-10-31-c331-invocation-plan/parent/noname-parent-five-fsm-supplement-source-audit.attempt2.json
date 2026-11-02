@@ -1,0 +1,4 @@
+{
+  "failure": "Parentvalidator treated descriptive origin=explicitly supplied immutable approval artifact as filesystem path. Actualrow.pathisapprovalfile. FileNotFoundbeforePASSreceipt, no Main/source/producer writes. Correction resolvesactualpathandverifiesexactSHA, ratherthantrustoriginlabel.",
+  "type": "Parentmetadata-shapeassumption, notproposalorproductfailure."
+}

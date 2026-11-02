@@ -62,6 +62,7 @@ fn base_package() -> ContentPackage {
     add_asset(&mut base, "portrait", AssetKind::Image);
     add_asset(&mut base, "legacy", AssetKind::Image);
     base.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: 1,
         name_key: "hero.one".into(),
         max_hp: 4,
@@ -77,6 +78,7 @@ fn base_package() -> ContentPackage {
         skin_assets: vec!["legacy".into()],
     });
     base.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: 2,
         name_key: "hero.two".into(),
         max_hp: 3,

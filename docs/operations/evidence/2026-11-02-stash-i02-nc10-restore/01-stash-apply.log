@@ -1,0 +1,136 @@
+$ git stash apply stash@{0}   # main 96236c96, 2026-11-02 23:06:13 +0800
+Auto-merging apps/game-server/tests/native_frozen_packages.rs
+Auto-merging crates/content-compiler/src/lib.rs
+CONFLICT (content): Merge conflict in crates/content-compiler/src/lib.rs
+Auto-merging crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+CONFLICT (content): Merge conflict in crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+Auto-merging crates/content-runtime/examples/gen_epic_cards_package.rs
+CONFLICT (content): Merge conflict in crates/content-runtime/examples/gen_epic_cards_package.rs
+Auto-merging crates/content-runtime/examples/gen_hero_kill_package.rs
+CONFLICT (content): Merge conflict in crates/content-runtime/examples/gen_hero_kill_package.rs
+Auto-merging crates/content-runtime/examples/gen_mark_supplement_package.rs
+CONFLICT (content): Merge conflict in crates/content-runtime/examples/gen_mark_supplement_package.rs
+Auto-merging crates/content-runtime/examples/gen_select_beautify_package.rs
+CONFLICT (content): Merge conflict in crates/content-runtime/examples/gen_select_beautify_package.rs
+Auto-merging crates/content-schema/src/package.rs
+Auto-merging crates/content-schema/src/package/hashing.rs
+Auto-merging crates/engine-native/src/ai.rs
+Auto-merging crates/engine-native/tests/groups/nc_rounds.rs
+Auto-merging docs/architecture/native-progress.md
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   apps/game-server/tests/native_frozen_packages.rs
+	modified:   crates/content-runtime/tests/active_catalog.rs
+	modified:   crates/content-runtime/tests/extension_import.rs
+	modified:   crates/content-schema/src/package.rs
+	modified:   crates/content-schema/src/package/hashing.rs
+	modified:   crates/engine-core/src/content/registry.rs
+	modified:   crates/engine-core/tests/content_lock_extensions.rs
+	modified:   crates/engine-core/tests/original_merged_key/original_key_riki_nvzhuang.rs
+	modified:   crates/engine-core/tests/original_merged_offline/original_offline_pshuoluan.rs
+	modified:   crates/engine-core/tests/original_merged_offline/original_offline_zj_guluo.rs
+	modified:   crates/engine-core/tests/original_merged_old/original_old_junkguixin.rs
+	modified:   crates/engine-core/tests/original_merged_old/original_old_yao_yuanshu.rs
+	modified:   crates/engine-core/tests/original_merged_refresh/original_refresh_re_caocao.rs
+	modified:   crates/engine-core/tests/original_merged_refresh/original_refresh_rebeige_mobile_re_caiwenji.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_baonue.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_caiwenji.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_dongzhuo.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_drlt_yongsi.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_songwei.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_xueyi.rs
+	modified:   crates/engine-core/tests/original_merged_shenhua/original_shenhua_zhiba.rs
+	modified:   crates/engine-core/tests/original_merged_sixiang/original_sixiang_stdcanshi.rs
+	modified:   crates/engine-core/tests/original_merged_sixiang/original_sixiang_stdsidi.rs
+	modified:   crates/engine-core/tests/original_merged_sp/original_sp_recanshi_sunhao.rs
+	modified:   crates/engine-core/tests/original_merged_sp2/original_sp2_juntun.rs
+	modified:   crates/engine-core/tests/original_merged_xianding/original_xianding_zhupeilan.rs
+	modified:   crates/engine-native/src/ai.rs
+	modified:   crates/engine-native/tests/groups/nc_rounds.rs
+	modified:   docs/architecture/native-progress.md
+
+Unmerged paths:
+  (use "git restore --staged <file>..." to unstage)
+  (use "git add <file>..." to mark resolution)
+	both modified:   crates/content-compiler/src/lib.rs
+	both modified:   crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+	both modified:   crates/content-runtime/examples/gen_epic_cards_package.rs
+	both modified:   crates/content-runtime/examples/gen_hero_kill_package.rs
+	both modified:   crates/content-runtime/examples/gen_mark_supplement_package.rs
+	both modified:   crates/content-runtime/examples/gen_select_beautify_package.rs
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	.pi-lens.json
+	crates/content-runtime/tests/definition_voice_assets.rs
+	crates/engine-native/tests/nc10_public_other_plan.rs
+	docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/artifacts/
+	docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-before-B-choice-adaptation/archives/
+	docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine-phase-B/archives/
+	docs/operations/evidence/2026-10-30-j2-main-integration/combined-acceptance/machine/archives/
+	docs/operations/evidence/2026-10-30-native-ci-corrections/publication/command-scoped-pre-push.raw.txt
+	docs/operations/evidence/2026-10-30-native-ci-corrections/publication/parent-publication-scope.json
+	docs/operations/evidence/2026-10-30-nc10-continuations/isolated/liaoyuan-restore-repro.archive
+	docs/operations/evidence/2026-10-30-nc10-continuations/main-integration/artifacts/
+	docs/operations/evidence/2026-10-30-pa09-desktop-native/github-related-repositories-readonly.json
+	docs/operations/evidence/2026-10-30-pa09-desktop-native/physical-devices-recheck.json
+	docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-artifacts/
+	docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-machine/archives/
+	docs/operations/evidence/2026-10-30-pa09-desktop-native/recovery-production-frontend.tar.gz
+	docs/operations/evidence/2026-10-30-up37-i02-audio-aliases/main-acceptance/validated-dist/
+	docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/happy/collection-audio.png
+	docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/collection-audio.png
+	docs/operations/evidence/2026-10-30-up37-i02-resources/main-integration/retry-real-http/happy/validated-dist/
+	docs/operations/evidence/2026-10-30-up37-i02-resources/parent-discovery/liuli-official-release-assets-readonly.json
+	docs/operations/evidence/2026-10-30-up37-i02-resources/parent-discovery/parent-official-resources/hm_yudu.jpg
+	docs/operations/evidence/2026-10-31-c331-invocation-plan/
+	docs/operations/evidence/2026-10-31-c331-phase9f-atomic-source/
+	docs/operations/evidence/2026-10-31-c331-phase9g-invocations/
+	docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/chrome-ingress-profile-ahhy89/
+	docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/frontend-dist-before-legacy/
+	docs/operations/evidence/2026-10-31-i02-main-typed-wire/original/tauri-preexisting-schemas/
+	docs/operations/evidence/2026-10-31-i02-public-presentation-contract/phase1-ingress-repair/original/pre-unicode-repair-report.md
+	docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/orchestration/36992565-9a6d-49bd-9192-6377f3f0251d_worker_output.md
+	docs/operations/evidence/2026-10-31-nc10-public-own-plan/implementation/report-before-v2.md
+	docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/original/probe/target/
+	docs/operations/evidence/2026-10-31-post-c9e-doc-publication/
+
+exit=1
+M  apps/game-server/tests/native_frozen_packages.rs
+UU crates/content-compiler/src/lib.rs
+UU crates/content-runtime/examples/gen_doomsday_brawl_package.rs
+UU crates/content-runtime/examples/gen_epic_cards_package.rs
+UU crates/content-runtime/examples/gen_hero_kill_package.rs
+UU crates/content-runtime/examples/gen_mark_supplement_package.rs
+UU crates/content-runtime/examples/gen_select_beautify_package.rs
+M  crates/content-runtime/tests/active_catalog.rs
+M  crates/content-runtime/tests/extension_import.rs
+M  crates/content-schema/src/package.rs
+M  crates/content-schema/src/package/hashing.rs
+M  crates/engine-core/src/content/registry.rs
+M  crates/engine-core/tests/content_lock_extensions.rs
+M  crates/engine-core/tests/original_merged_key/original_key_riki_nvzhuang.rs
+M  crates/engine-core/tests/original_merged_offline/original_offline_pshuoluan.rs
+M  crates/engine-core/tests/original_merged_offline/original_offline_zj_guluo.rs
+M  crates/engine-core/tests/original_merged_old/original_old_junkguixin.rs
+M  crates/engine-core/tests/original_merged_old/original_old_yao_yuanshu.rs
+M  crates/engine-core/tests/original_merged_refresh/original_refresh_re_caocao.rs
+M  crates/engine-core/tests/original_merged_refresh/original_refresh_rebeige_mobile_re_caiwenji.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_baonue.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_caiwenji.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_dongzhuo.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_drlt_yongsi.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_songwei.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_xueyi.rs
+M  crates/engine-core/tests/original_merged_shenhua/original_shenhua_zhiba.rs
+M  crates/engine-core/tests/original_merged_sixiang/original_sixiang_stdcanshi.rs
+M  crates/engine-core/tests/original_merged_sixiang/original_sixiang_stdsidi.rs
+M  crates/engine-core/tests/original_merged_sp/original_sp_recanshi_sunhao.rs
+M  crates/engine-core/tests/original_merged_sp2/original_sp2_juntun.rs
+M  crates/engine-core/tests/original_merged_xianding/original_xianding_zhupeilan.rs
+M  crates/engine-native/src/ai.rs
+M  crates/engine-native/tests/groups/nc_rounds.rs
+M  docs/architecture/native-progress.md
+untracked top-level:
+      33

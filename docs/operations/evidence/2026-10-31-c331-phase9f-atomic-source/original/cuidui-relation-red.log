@@ -1,0 +1,30 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+warning: unused imports: `capture` and `sliced`
+ --> crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:1:73
+  |
+1 | use super::c331_source_predicates::{source_pack,vm_pack,equip,card,play,capture,restore,finish,same_final,sliced,reject_restore_atomic};
+  |                                                                         ^^^^^^^                           ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (test "nc_rounds") generated 1 warning (run `cargo fix --test "nc_rounds" -p engine-native` to apply 1 suggestion)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.06s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_atomic_source_repair::c9f_cuidui_does_not_poison_actual_boss_ally' (27986734) panicked at crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:79:80:
+assertion failed: !e.state_core().has_skill_any_state(1,
+        e.catalog().skill_by_name("中毒").unwrap())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_atomic_source_repair::c9f_cuidui_does_not_poison_actual_boss_ally ... FAILED
+
+failures:
+
+failures:
+    c331_atomic_source_repair::c9f_cuidui_does_not_poison_actual_boss_ally
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 228 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9f_cuidui", "--", "--nocapture"], "exit": 101, "locked_seconds": 3.122538874973543, "disk_free_bytes": 132702232576}

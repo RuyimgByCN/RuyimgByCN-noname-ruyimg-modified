@@ -1,0 +1,29 @@
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+warning: unused imports: `capture` and `sliced`
+ --> crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:1:73
+  |
+1 | use super::c331_source_predicates::{source_pack,vm_pack,equip,card,play,capture,restore,finish,same_final,sliced,reject_restore_atomic};
+  |                                                                         ^^^^^^^                           ^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0599]: no function or associated item named `default` found for struct `BossStageState` in the current scope
+   --> crates/engine-native/tests/groups/../c331_atomic_source_repair.rs:70:99
+    |
+ 70 |  e.state_core_mut().mode=GameMode::Boss{boss:0,chongzheng:3,fellows:vec![1],stage:BossStageState::default()};
+    |                                                                                                   ^^^^^^^ function or associated item not found in `BossStageState`
+    |
+note: if you're trying to build a new `BossStageState`, consider using `BossStageState::default_none` which returns `BossStageState`
+   --> crates/engine-native-kernel/src/state.rs:719:5
+    |
+719 |     pub fn default_none() -> Self {
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+help: there is an associated function `default_none` with a similar name
+    |
+ 70 |  e.state_core_mut().mode=GameMode::Boss{boss:0,chongzheng:3,fellows:vec![1],stage:BossStageState::default_none()};
+    |                                                                                                          +++++
+
+For more information about this error, try `rustc --explain E0599`.
+warning: `engine-native` (test "nc_rounds") generated 1 warning
+error: could not compile `engine-native` (test "nc_rounds") due to 1 previous error; 1 warning emitted
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_atomic_source_repair", "--", "--nocapture"], "exit": 101, "locked_seconds": 1.2486331249820068, "disk_free_bytes": 132707168256}

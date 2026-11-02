@@ -1,0 +1,38 @@
+{
+  "utc": "2026-10-31T17:38:29.236655+00:00",
+  "supplement_index_sha256": "abb59477b0f3290729e8e98e0fd25933f8c733b4fff9ccdbf9881c8fe8038108",
+  "supplement_entries_verified": 5,
+  "all41_pinned_source_sha_verified": true,
+  "original_report_sha256": "8a576676e38e5c04f56d45cba004ed3abece45236a7544f5e7309d49e2ebda74",
+  "parent_exact_receipts": [
+    {
+      "path": "/tmp/noname-parent-post-c9e-main-write-receipt.json",
+      "sha256": "a7bb1fec36296e730c8fbd2b442fd487cc89051e6300734f94e5ae612d808886"
+    },
+    {
+      "path": "/tmp/noname-post34e-doc-stage-audit.json",
+      "sha256": "d5f19f3b9e168e3b7f3af8cd8888b8f8cd4ab05992d8f65dd3bea5ffcc7ab080"
+    },
+    {
+      "path": "/tmp/noname-parent-c9e-concordance-source-bindings-audit.json",
+      "sha256": "89a7dd773a2ca67e9250b6bbd7b2a82077b06ed19d279cc5b83444c1f8cc42fd"
+    },
+    {
+      "path": "/tmp/noname-parent-c9f-checkpoint-enemy-source-review.json",
+      "sha256": "0ed278b6136473feedbbda003e4dd87c79c4599d97bcb052e69e712a933c08da"
+    },
+    {
+      "path": "/tmp/noname-parent-c9f-checkpoint-audit.json",
+      "sha256": "d38a1f0f39a2032729225e376e229fdb81176a214f9fa17ae9b1ea4239f871f5"
+    },
+    {
+      "path": "/tmp/noname-post-c9e-doc-preview-audit.json",
+      "sha256": "718ceeb62e8e0441eae8ea155b91a621d0a73a562e49b0b824cdf80d0076ed0a"
+    },
+    {
+      "path": "/tmp/noname-parent-continuation-2026-10-31.json",
+      "sha256": "4fe3cc8c64e1b91504cb2a9f06287017b6b68342514451a36ec689e081464279"
+    }
+  ],
+  "Main_docs_and_intentional2540_stage": "Parent owned; exact receipts retained separately, no C baseline refresh/import; source37/Own6/I02/CI/lock/hooks/approvals/generated18/dist37/schema4 are independently protected in protected-after.json"
+}

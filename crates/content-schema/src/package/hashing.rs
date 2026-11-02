@@ -417,6 +417,24 @@ impl ContentPackage {
 
     /// Compute the presentation/resource hash; empty presentation data keeps the legacy zero hash.
     pub fn compute_asset_hash(&self) -> [u8; 32] {
+        let legacy_digest = self.compute_legacy_asset_hash();
+        let voices: Vec<_> = self
+            .definition_voice_assets()
+            .into_iter()
+            .filter(|(_, _, voices)| !voices.is_empty())
+            .collect();
+        if voices.is_empty() {
+            return legacy_digest;
+        }
+        // A fixed-size digest prevents legacy strings from absorbing voice declarations.
+        let mut h = blake3::Hasher::new();
+        h.update(b"noname-next/npack-definition-voice-assets/v1");
+        h.update(&legacy_digest);
+        h.update(&serde_json::to_vec(&voices).expect("definition voices are serializable"));
+        *h.finalize().as_bytes()
+    }
+
+    fn compute_legacy_asset_hash(&self) -> [u8; 32] {
         let has_character_assets = self.character_index.iter().any(|character| {
             !character.sort_key.is_empty()
                 || character.portrait_asset.is_some()

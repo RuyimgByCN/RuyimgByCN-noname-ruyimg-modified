@@ -1,0 +1,3985 @@
+diff --git a/apps/game-server/src/native_view.rs b/apps/game-server/src/native_view.rs
+index 7e6eba99..3e81958e 100644
+--- a/apps/game-server/src/native_view.rs
++++ b/apps/game-server/src/native_view.rs
+@@ -135,12 +135,16 @@ pub fn observer_snapshot_for(
+             player: ApiPlayerId::new(cell.seat as u32 + 1),
+             // 主将槽的武将 def（无将 = 0）——客户端据此显示立绘/名字
+             character_def: cell.generals[0].as_ref().map(|g| g.def as u32).unwrap_or(0),
+-            generals: std::array::from_fn(|slot| cell.generals[slot].as_ref().map(|general| engine_api::GeneralSlotView {
+-                def: general.def as u32,
+-                name: general.name.to_owned(),
+-                faction: format!("{:?}", general.faction).to_lowercase(),
+-                revealed: cell.revealed_generals[slot],
+-            })),
++            generals: std::array::from_fn(|slot| {
++                cell.generals[slot]
++                    .as_ref()
++                    .map(|general| engine_api::GeneralSlotView {
++                        def: general.def as u32,
++                        name: general.name.to_owned(),
++                        faction: format!("{:?}", general.faction).to_lowercase(),
++                        revealed: cell.revealed_generals[slot],
++                    })
++            }),
+             seat: engine_api::SeatIndex::new(cell.seat),
+             hp: cell.hp,
+             max_hp: cell.max_hp,
+@@ -282,12 +286,15 @@ pub fn choice_for(
+         .map(|(idx, opt)| engine_api::ChoiceOption {
+             token: idx as u32,
+             label_key: match opt {
++                engine_native::ChoiceOption::Control(option) => option.label().to_owned(),
+                 engine_native::ChoiceOption::Confirm => "confirm".to_string(),
+                 engine_native::ChoiceOption::Pass => "pass".to_string(),
+                 engine_native::ChoiceOption::Card(c) => format!("card:{c}"),
+                 engine_native::ChoiceOption::Player(p) => format!("player:{}", *p as u32 + 1),
+                 engine_native::ChoiceOption::Tag(t) => format!("tag:{t}"),
+-                engine_native::ChoiceOption::Skill(s) => format!("skill:{}", engine.catalog().skill_name(*s)),
++                engine_native::ChoiceOption::Skill(s) => {
++                    format!("skill:{}", engine.catalog().skill_name(*s))
++                }
+                 engine_native::ChoiceOption::Kind(k) => format!("kind:{k}"),
+             },
+         })
+@@ -297,8 +304,19 @@ pub fn choice_for(
+         observer,
+         options,
+         continuation_id: id,
+-        kind: if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+-        native_kind: Some(engine_native::view::choice_kind_name(kind).to_owned()),
++        kind: if kind == engine_native::ChoiceKind::Control {
++            engine_api::ChoiceKind::Custom
++        } else if prompt == "trigger_order" {
++            engine_api::ChoiceKind::OrderTriggers
++        } else {
++            engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind))
++                .expect("canonical native choice kind")
++        },
++        native_kind: if kind == engine_native::ChoiceKind::Control {
++            None
++        } else {
++            Some(engine_native::view::choice_kind_name(kind).to_owned())
++        },
+         source_skill: source_skill.map(str::to_owned),
+         prompt: Some(prompt.to_owned()),
+         min_count: min as u8,
+diff --git a/apps/game-server/tests/nc09_native_actor.rs b/apps/game-server/tests/nc09_native_actor.rs
+index 05c25ad1..c99a9496 100644
+--- a/apps/game-server/tests/nc09_native_actor.rs
++++ b/apps/game-server/tests/nc09_native_actor.rs
+@@ -240,7 +240,10 @@ async fn nc09_native_actor_join_command_snapshot() {
+     assert_eq!(joined.seat, 0);
+     assert_eq!(joined.player_id, 1);
+     assert_eq!(joined.role, ClientRole::Player);
+-    assert_eq!(joined.view.observer, engine_api::ObserverKind::Player(PlayerId::new(1)));
++    assert_eq!(
++        joined.view.observer,
++        engine_api::ObserverKind::Player(PlayerId::new(1))
++    );
+     assert!(!joined.reconnect_token.is_empty());
+     // Successful Join enqueues the connected member's roster before replying.
+     let text = tokio::time::timeout(std::time::Duration::from_secs(3), rx1.recv())
+@@ -248,8 +251,13 @@ async fn nc09_native_actor_join_command_snapshot() {
+         .expect("join must broadcast a roster within the response deadline")
+         .expect("joined member's outbound must remain open");
+     let ServerMessage::RoomRoster {
+-        room_id, seats, started, finished, choice_timeout_secs,
+-    } = decode_s2c(&text).expect("valid server protocol") else {
++        room_id,
++        seats,
++        started,
++        finished,
++        choice_timeout_secs,
++    } = decode_s2c(&text).expect("valid server protocol")
++    else {
+         panic!("expected RoomRoster, got {text}");
+     };
+     assert_eq!(room_id, handle.id);
+@@ -276,8 +284,14 @@ async fn nc09_native_actor_join_command_snapshot() {
+         match reply_rx2.await.expect("reply").expect("snapshot ok") {
+             ServerMessage::Snapshot { header, view, .. } => {
+                 assert_eq!(header.room_id, handle.id);
+-                assert_eq!(view, joined.view, "snapshot must preserve the joined player's projection");
+-                assert!(view.seats.iter().any(|seat| seat.player.raw() == joined.player_id));
++                assert_eq!(
++                    view, joined.view,
++                    "snapshot must preserve the joined player's projection"
++                );
++                assert!(view
++                    .seats
++                    .iter()
++                    .any(|seat| seat.player.raw() == joined.player_id));
+                 view.current_player
+             }
+             other => panic!("应返回快照: {other:?}"),
+@@ -614,10 +628,7 @@ async fn native_command_outcome_carries_public_event_codes() {
+         matches!(result, CommandResult::Accepted { .. }),
+         "命令应接受：{result:?}"
+     );
+-    assert!(
+-        !public_event_codes.is_empty(),
+-        "原生命令应带真实公开事件码"
+-    );
++    assert!(!public_event_codes.is_empty(), "原生命令应带真实公开事件码");
+     assert!(
+         public_event_codes
+             .iter()
+diff --git a/crates/engine-native-content/src/content/standard/native_damage.rs b/crates/engine-native-content/src/content/standard/native_damage.rs
+index 36edd723..51ced5e8 100644
+--- a/crates/engine-native-content/src/content/standard/native_damage.rs
++++ b/crates/engine-native-content/src/content/standard/native_damage.rs
+@@ -84,6 +84,15 @@ pub(super) fn configure(skills: &mut Vec<SkillDef>) {
+             effects,
+         });
+     }
++    skills.push(SkillDef {
++        name: E::JidingRecover.helper_name().unwrap(),
++        trigger: Some(E::JidingRecover.meta()),
++        limits: Default::default(),
++        behavior: Box::new(NativeDamageBehavior {
++            name: E::JidingRecover.helper_name().unwrap(),
++            effects: &[E::JidingRecover],
++        }),
++    });
+     {
+         let effect = E::Jidong;
+         skills.push(SkillDef {
+diff --git a/crates/engine-native-kernel/src/archive.rs b/crates/engine-native-kernel/src/archive.rs
+index 9b1c599d..93034cad 100644
+--- a/crates/engine-native-kernel/src/archive.rs
++++ b/crates/engine-native-kernel/src/archive.rs
+@@ -286,8 +286,10 @@ mod io;
+ use io::*;
+ mod values;
+ use values::*;
+-mod events;
+ mod damage;
++mod events;
++mod invocation;
++mod judge;
+ use events::*;
+ mod machine_encode;
+ use machine_encode::*;
+diff --git a/crates/engine-native-kernel/src/archive/events.rs b/crates/engine-native-kernel/src/archive/events.rs
+index 43736ebb..e2ee760b 100644
+--- a/crates/engine-native-kernel/src/archive/events.rs
++++ b/crates/engine-native-kernel/src/archive/events.rs
+@@ -4,6 +4,21 @@ use super::*;
+ 
+ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+     match v {
++        EventData::OrdinaryJudge { owner, invocation } => {
++            w.u8(25);
++            w.u8(*owner);
++            w.u32(*invocation);
++        }
++        EventData::SkillInvocation(d) => {
++            w.u8(23);
++            super::invocation::enc_context(w, d);
++        }
++        EventData::SkillLog { owner, def, begin } => {
++            w.u8(24);
++            w.u8(*owner);
++            w.u16(*def);
++            w.boolean(*begin);
++        }
+         EventData::Damage(d) => {
+             w.u8(22);
+             enc_opt_pid(w, &d.source);
+@@ -19,7 +34,11 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+             w.boolean(d.from_chain);
+             super::damage::enc_settlement(w, &d.settlement);
+         }
+-        EventData::DamageWindow { root, window } => { w.u8(21);w.u32(*root);w.u8(window.tag()); },
++        EventData::DamageWindow { root, window } => {
++            w.u8(21);
++            w.u32(*root);
++            w.u8(window.tag());
++        }
+         EventData::Recover {
+             player,
+             amount,
+@@ -206,7 +225,11 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+             let chain = r.vec(|r| r.u8())?;
+             let card = dec_opt_u32(r)?;
+             let from_chain = r.boolean()?;
+-            let settlement = if tag == 22 { super::damage::dec_settlement(r)? } else { Default::default() };
++            let settlement = if tag == 22 {
++                super::damage::dec_settlement(r)?
++            } else {
++                Default::default()
++            };
+             EventData::Damage(DamageData {
+                 settlement,
+                 source,
+@@ -219,7 +242,23 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+                 from_chain,
+             })
+         }
+-        21 => { let root=r.u32()?;let tag=r.u8()?;let window=crate::event::DamageWindowKind::from_tag(tag).ok_or(ArchiveError::BadTag("damage_window",tag))?;EventData::DamageWindow{root,window} },
++        25 => EventData::OrdinaryJudge {
++            owner: r.u8()?,
++            invocation: r.u32()?,
++        },
++        23 => EventData::SkillInvocation(super::invocation::dec_context(r)?),
++        24 => EventData::SkillLog {
++            owner: r.u8()?,
++            def: r.u16()?,
++            begin: r.boolean()?,
++        },
++        21 => {
++            let root = r.u32()?;
++            let tag = r.u8()?;
++            let window = crate::event::DamageWindowKind::from_tag(tag)
++                .ok_or(ArchiveError::BadTag("damage_window", tag))?;
++            EventData::DamageWindow { root, window }
++        }
+         1 => {
+             let player = dec_pid(r)?;
+             let amount = r.u32()?;
+@@ -387,7 +426,7 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+ // ---- 机器快照 ----
+ 
+ pub(super) fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
+-    w.u32(c.trick);
++    w.u32(c.trick.unwrap_or(u32::MAX));
+     w.u32(c.judge_card);
+     enc_pids(w, &c.rewriters);
+     w.boolean(c.asked);
+@@ -419,7 +458,10 @@ pub(super) fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
+ }
+ 
+ pub(super) fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, ArchiveError> {
+-    let trick = r.u32()?;
++    let trick = match r.u32()? {
++        u32::MAX => None,
++        c => Some(c),
++    };
+     let judge_card = r.u32()?;
+     let rewriters = dec_pids(r)?;
+     let asked = r.boolean()?;
+diff --git a/crates/engine-native-kernel/src/archive/invocation.rs b/crates/engine-native-kernel/src/archive/invocation.rs
+new file mode 100644
+index 00000000..cc0bbcb1
+--- /dev/null
++++ b/crates/engine-native-kernel/src/archive/invocation.rs
+@@ -0,0 +1,154 @@
++//! Internal invocation receipts; existing machine85 bytes are unchanged.
++use super::*;
++use crate::event::{InvocationData, InvocationPhase, NativeInvocationProgress as P};
++pub(super) fn enc_context(w: &mut W, d: &InvocationData) {
++    w.u8(d.owner);
++    w.u16(d.def);
++    w.u32(d.window);
++    enc_opt_pid(w, &d.source);
++    w.u8(d.target);
++    w.u8(d.phase.tag());
++    w.boolean(d.cancelled);
++    enc_opt_u32(w, d.jiding_card);
++    enc_opt_u32(w, d.judgement.map(|s| s as u32));
++    w.boolean(d.deferred_log);
++}
++pub(super) fn dec_context(r: &mut R<'_>) -> Result<InvocationData, ArchiveError> {
++    Ok(InvocationData {
++        owner: r.u8()?,
++        def: r.u16()?,
++        window: r.u32()?,
++        source: dec_opt_pid(r)?,
++        target: r.u8()?,
++        phase: InvocationPhase::from_tag(r.u8()?)
++            .ok_or(ArchiveError::BadTag("invocation_phase", 0))?,
++        cancelled: r.boolean()?,
++        jiding_card: dec_opt_u32(r)?,
++        judgement: match dec_opt_u32(r)? {
++            None => None,
++            Some(0) => Some(crate::catalog::Suit::Spade),
++            Some(1) => Some(crate::catalog::Suit::Heart),
++            Some(2) => Some(crate::catalog::Suit::Club),
++            Some(3) => Some(crate::catalog::Suit::Diamond),
++            Some(t) => return Err(ArchiveError::BadTag("judge_suit", t as u8)),
++        },
++        deferred_log: r.boolean()?,
++    })
++}
++pub(super) fn enc_progress(w: &mut W, p: &P) {
++    match p {
++        P::YuanceAsk => w.u8(12),
++        P::JidianAsk { targets } => {
++            w.u8(13);
++            enc_pids(w, targets);
++        }
++        P::AwaitJudge {
++            child,
++            target,
++            purpose,
++        } => {
++            w.u8(14);
++            w.u32(*child);
++            w.u8(*target);
++            w.u8(match purpose {
++                crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::LoseHp) => 0,
++                crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::Recover) => 1,
++                crate::event::JudgePurpose::Jidian => 2,
++            });
++        }
++        P::BodyDone => w.u8(15),
++        P::Ready => w.u8(0),
++        P::BeforeInvocation { context } => {
++            w.u8(1);
++            enc_context(w, context)
++        }
++        P::AwaitInvocation { child } => {
++            w.u8(2);
++            w.u32(*child)
++        }
++        P::Finished => w.u8(3),
++        P::Body => w.u8(4),
++        P::HolderAsk { candidates } => {
++            w.u8(5);
++            w.len(candidates.len());
++            for c in candidates {
++                w.u32(*c)
++            }
++        }
++        P::HolderPay { cards } => {
++            w.u8(6);
++            w.len(cards.len());
++            for c in cards {
++                w.u32(*c)
++            }
++        }
++        P::HolderLoss { count } => {
++            w.u8(7);
++            w.u32(*count)
++        }
++        P::HolderAfterLog { count } => {
++            w.u8(8);
++            w.u32(*count)
++        }
++        P::SourceAsk {
++            player,
++            count,
++            candidates,
++        } => {
++            w.u8(9);
++            w.u8(*player);
++            w.u32(*count);
++            w.len(candidates.len());
++            for c in candidates {
++                w.u32(*c)
++            }
++        }
++        P::SourceLoss => w.u8(10),
++        P::JidingCard { child } => {
++            w.u8(11);
++            w.u32(*child)
++        }
++    }
++}
++pub(super) fn dec_progress(r: &mut R<'_>) -> Result<P, ArchiveError> {
++    Ok(match r.u8()? {
++        12 => P::YuanceAsk,
++        13 => P::JidianAsk {
++            targets: dec_pids(r)?,
++        },
++        14 => P::AwaitJudge {
++            child: r.u32()?,
++            target: r.u8()?,
++            purpose: match r.u8()? {
++                0 => crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::LoseHp),
++                1 => crate::event::JudgePurpose::Yuance(crate::event::YuanceOption::Recover),
++                2 => crate::event::JudgePurpose::Jidian,
++                t => return Err(ArchiveError::BadTag("judge_purpose", t)),
++            },
++        },
++        15 => P::BodyDone,
++        0 => P::Ready,
++        1 => P::BeforeInvocation {
++            context: dec_context(r)?,
++        },
++        2 => P::AwaitInvocation { child: r.u32()? },
++        3 => P::Finished,
++        4 => P::Body,
++        5 => P::HolderAsk {
++            candidates: r.vec(|r| r.u32())?,
++        },
++        6 => P::HolderPay {
++            cards: r.vec(|r| r.u32())?,
++        },
++        7 => P::HolderLoss { count: r.u32()? },
++        8 => P::HolderAfterLog { count: r.u32()? },
++        9 => P::SourceAsk {
++            player: r.u8()?,
++            count: r.u32()?,
++            candidates: r.vec(|r| r.u32())?,
++        },
++        10 => P::SourceLoss,
++        11 => P::JidingCard { child: r.u32()? },
++        t => return Err(ArchiveError::BadTag("native_invocation_progress", t)),
++    })
++}
+diff --git a/crates/engine-native-kernel/src/archive/judge.rs b/crates/engine-native-kernel/src/archive/judge.rs
+new file mode 100644
+index 00000000..d341a2ab
+--- /dev/null
++++ b/crates/engine-native-kernel/src/archive/judge.rs
+@@ -0,0 +1,52 @@
++use super::*;
++pub(super) fn enc_judge_machine(w: &mut W, m: &MachineSnapshot) {
++    match m {
++        MachineSnapshot::JudgeContinuation {
++            owner,
++            queue,
++            current,
++            ordinary,
++            started,
++            payment,
++        } => {
++            w.u8(87);
++            w.u8(*owner);
++            w.len(queue.len());
++            for c in queue {
++                w.u32(*c)
++            }
++            enc_opt_u32(w, *ordinary);
++            w.boolean(*started);
++            w.boolean(current.is_some());
++            if let Some(c) = current {
++                enc_judgement_progress(w, c)
++            };
++            w.boolean(payment.is_some());
++            if let Some(p) = payment {
++                w.u8(p.player);
++                w.u32(p.old);
++                w.boolean(p.discard_old);
++            }
++        }
++        MachineSnapshot::JudgePhase {
++            owner,
++            queue,
++            current,
++        } => {
++            w.u8(4);
++            enc_pid(w, owner);
++            w.len(queue.len());
++            for c in queue {
++                w.u32(*c);
++            }
++            match current {
++                Some(c) => {
++                    w.u8(1);
++                    enc_judgement_progress(w, c);
++                }
++                None => w.u8(0),
++            }
++        }
++        _ => unreachable!("judgement encoder caller"),
++    }
++}
+diff --git a/crates/engine-native-kernel/src/archive/machine_decode.rs b/crates/engine-native-kernel/src/archive/machine_decode.rs
+index 63d8e005..7328fe31 100644
+--- a/crates/engine-native-kernel/src/archive/machine_decode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_decode.rs
+@@ -2,6 +2,33 @@ use super::*;
+ 
+ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
+     Ok(match r.u8()? {
++        87 => MachineSnapshot::JudgeContinuation {
++            owner: r.u8()?,
++            queue: r.vec(|r| r.u32())?,
++            ordinary: dec_opt_u32(r)?,
++            started: r.boolean()?,
++            current: if r.boolean()? {
++                Some(Box::new(dec_judgement_progress(r)?))
++            } else {
++                None
++            },
++            payment: if r.boolean()? {
++                Some(crate::snap::JudgeReplacementSnap {
++                    player: r.u8()?,
++                    old: r.u32()?,
++                    discard_old: r.boolean()?,
++                })
++            } else {
++                None
++            },
++        },
++        86 => MachineSnapshot::NativeInvocation {
++            owner: r.u8()?,
++            def: r.u16()?,
++            window: crate::event::DamageWindowKind::from_tag(r.u8()?)
++                .ok_or(ArchiveError::BadTag("invocation_window", 0))?,
++            progress: super::invocation::dec_progress(r)?,
++        },
+         85 => MachineSnapshot::NativeDamageSkill {
+             owner: r.u8()?,
+             def: r.u16()?,
+diff --git a/crates/engine-native-kernel/src/archive/machine_encode.rs b/crates/engine-native-kernel/src/archive/machine_encode.rs
+index 80e03599..244f31b2 100644
+--- a/crates/engine-native-kernel/src/archive/machine_encode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_encode.rs
+@@ -3,6 +3,22 @@ use super::*;
+ 
+ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+     match m {
++        MachineSnapshot::JudgeContinuation { .. } | MachineSnapshot::JudgePhase { .. } => {
++            super::judge::enc_judge_machine(w, m)
++        }
++
++        MachineSnapshot::NativeInvocation {
++            owner,
++            def,
++            window,
++            progress,
++        } => {
++            w.u8(86);
++            w.u8(*owner);
++            w.u16(*def);
++            w.u8(window.tag());
++            super::invocation::enc_progress(w, progress);
++        }
+         MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+             enc_native_damage_skill(w, *owner, *def, *window)
+         }
+@@ -405,25 +421,7 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+                 None => w.u8(0),
+             }
+         }
+-        MachineSnapshot::JudgePhase {
+-            owner,
+-            queue,
+-            current,
+-        } => {
+-            w.u8(4);
+-            enc_pid(w, owner);
+-            w.len(queue.len());
+-            for c in queue {
+-                w.u32(*c);
+-            }
+-            match current {
+-                Some(c) => {
+-                    w.u8(1);
+-                    enc_judgement_progress(w, c);
+-                }
+-                None => w.u8(0),
+-            }
+-        }
++
+         MachineSnapshot::Noop => w.u8(5),
+         MachineSnapshot::PlaceDelayed {
+             card,
+diff --git a/crates/engine-native-kernel/src/archive/resolution.rs b/crates/engine-native-kernel/src/archive/resolution.rs
+index afc3f090..b3fbfbc8 100644
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -18,7 +18,14 @@ pub(super) fn enc_choice_option(w: &mut W, o: &ChoiceOption) {
+             w.u8(4);
+             w.u8(*t);
+         }
+-        ChoiceOption::Skill(s) => { w.u8(6); w.u16(*s); }
++        ChoiceOption::Control(option) => {
++            w.u8(7);
++            w.u8(option.tag());
++        }
++        ChoiceOption::Skill(s) => {
++            w.u8(6);
++            w.u16(*s);
++        }
+         ChoiceOption::Kind(k) => {
+             w.u8(5);
+             w.u32(u32::from(*k));
+@@ -33,6 +40,10 @@ pub(super) fn dec_choice_option(r: &mut R<'_>) -> Result<ChoiceOption, ArchiveEr
+         2 => ChoiceOption::Card(r.u32()?),
+         3 => ChoiceOption::Player(r.u8()?),
+         4 => ChoiceOption::Tag(r.u8()?),
++        7 => ChoiceOption::Control(
++            crate::event::YuanceOption::from_tag(r.u8()?)
++                .ok_or(ArchiveError::BadTag("yuance_control", 0))?,
++        ),
+         6 => ChoiceOption::Skill(r.u16()?),
+         5 => {
+             let code = r.u32()?;
+@@ -145,6 +156,10 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
+     "rvm_fenghe_destination",
+     "rvm_pingkou_targets",
+     "trigger_order",
++    "c331_yuance",
++    "c331_jidian_target",
++    "c331_zhangwu_holder",
++    "c331_zhangwu_source",
+     "xuanying_target",
+ ];
+ 
+@@ -192,6 +207,7 @@ pub(super) fn enc_choice_kind(w: &mut W, k: ChoiceKind) {
+         ChoiceKind::SelectPlayers => 2,
+         ChoiceKind::RespondCard => 3,
+         ChoiceKind::PickTag => 4,
++        ChoiceKind::Control => 5,
+     });
+ }
+ 
+@@ -202,6 +218,7 @@ pub(super) fn dec_choice_kind(r: &mut R<'_>) -> Result<ChoiceKind, ArchiveError>
+         2 => Ok(ChoiceKind::SelectPlayers),
+         3 => Ok(ChoiceKind::RespondCard),
+         4 => Ok(ChoiceKind::PickTag),
++        5 => Ok(ChoiceKind::Control),
+         t => Err(ArchiveError::BadTag("choice_kind", t)),
+     }
+ }
+diff --git a/crates/engine-native-kernel/src/archive/values.rs b/crates/engine-native-kernel/src/archive/values.rs
+index bfd3843b..04b6e3cb 100644
+--- a/crates/engine-native-kernel/src/archive/values.rs
++++ b/crates/engine-native-kernel/src/archive/values.rs
+@@ -143,6 +143,15 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
+         DamageBegin2 => 30,
+         DamageBegin3 => 31,
+         DamageBegin4 => 32,
++        SkillBefore => 33,
++        SkillBegin => 34,
++        SkillInvocation => 35,
++        SkillEnd => 36,
++        SkillAfter => 37,
++        SkillOmitted => 38,
++        SkillLogBegin => 39,
++        SkillLogAfter => 40,
++        OrdinaryJudge => 41,
+     };
+     w.u8(t);
+ }
+@@ -183,6 +192,15 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
+         30 => DamageBegin2,
+         31 => DamageBegin3,
+         32 => DamageBegin4,
++        33 => SkillBefore,
++        34 => SkillBegin,
++        35 => SkillInvocation,
++        36 => SkillEnd,
++        37 => SkillAfter,
++        38 => SkillOmitted,
++        39 => SkillLogBegin,
++        40 => SkillLogAfter,
++        41 => OrdinaryJudge,
+         t => return Err(ArchiveError::BadTag("event_kind", t)),
+     })
+ }
+diff --git a/crates/engine-native-kernel/src/catalog.rs b/crates/engine-native-kernel/src/catalog.rs
+index 0c5e7309..89444485 100644
+--- a/crates/engine-native-kernel/src/catalog.rs
++++ b/crates/engine-native-kernel/src/catalog.rs
+@@ -1047,6 +1047,19 @@ impl Catalog {
+ 
+     /// 武将下标的元数据（基础表优先，扩展表接续；越界 None）。
+     /// Typed identity of the immutable boss_mushengoumang source declaration.
++    pub fn jinshenrushou_general_id(&self) -> u16 {
++        let source = crate::vocabulary::generals::BOSS_JINSHENRUSHOU;
++        assert_eq!(
++            crate::vocabulary::generals::BOSS_GENERALS[source.0],
++            source.1
++        );
++        u16::try_from(
++            crate::vocabulary::generals::STANDARD_GENERALS.len()
++                + self.extension_generals.len()
++                + source.0,
++        )
++        .expect("catalog general bound")
++    }
+     pub fn mushengoumang_general_id(&self) -> u16 {
+         let source = crate::vocabulary::generals::BOSS_MUSHENGOUMANG;
+         assert_eq!(
+diff --git a/crates/engine-native-kernel/src/choice.rs b/crates/engine-native-kernel/src/choice.rs
+index 3552d6c8..68f55710 100644
+--- a/crates/engine-native-kernel/src/choice.rs
++++ b/crates/engine-native-kernel/src/choice.rs
+@@ -7,6 +7,8 @@ use crate::ids::{CardId, PlayerId, SkillDefId};
+ pub enum ChoiceKind {
+     /// 确认/放弃。
+     Confirm,
++    /// Native semantic controls; hosts lower to existing Custom with omitted native_kind.
++    Control,
+     /// 从选项中选牌。
+     SelectCards,
+     /// 从选项中选玩家。
+@@ -33,11 +35,13 @@ pub enum ChoiceOption {
+     Kind(u16),
+     /// Stable skill definition selected as the next trigger.
+     Skill(SkillDefId),
++    Control(crate::event::YuanceOption),
+ }
+ 
+ impl ChoiceOption {
+     pub fn describe(&self) -> String {
+         match self {
++            ChoiceOption::Control(option) => option.label().into(),
+             ChoiceOption::Confirm => "confirm".into(),
+             ChoiceOption::Pass => "pass".into(),
+             ChoiceOption::Card(c) => format!("card:{c}"),
+diff --git a/crates/engine-native-kernel/src/event.rs b/crates/engine-native-kernel/src/event.rs
+index 12f270f7..a4adc8ec 100644
+--- a/crates/engine-native-kernel/src/event.rs
++++ b/crates/engine-native-kernel/src/event.rs
+@@ -9,6 +9,8 @@ mod damage;
+ pub use damage::*;
+ mod native_damage;
+ pub use native_damage::*;
++mod invocation;
++pub use invocation::*;
+ 
+ /// 触发唤醒用的事件类别。
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+@@ -55,6 +57,15 @@ pub enum EventKind {
+     DamageBegin2,
+     DamageBegin3,
+     DamageBegin4,
++    SkillBefore,
++    SkillBegin,
++    SkillInvocation,
++    SkillEnd,
++    SkillAfter,
++    SkillOmitted,
++    SkillLogBegin,
++    SkillLogAfter,
++    OrdinaryJudge,
+ }
+ 
+ /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+@@ -112,6 +123,16 @@ pub struct CardUseData {
+ /// 类型化事件载荷。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum EventData {
++    SkillInvocation(InvocationData),
++    SkillLog {
++        owner: PlayerId,
++        def: SkillDefId,
++        begin: bool,
++    },
++    OrdinaryJudge {
++        owner: PlayerId,
++        invocation: EventId,
++    },
+     /// E03 翻面前置窗口（漩涡面具等锁定技可取消）。
+     TurnOverBefore {
+         player: PlayerId,
+@@ -227,6 +248,15 @@ pub enum EventData {
+ impl EventData {
+     pub fn kind(&self) -> EventKind {
+         match self {
++            EventData::OrdinaryJudge { .. } => EventKind::OrdinaryJudge,
++            EventData::SkillInvocation(data) => data.phase.kind(),
++            EventData::SkillLog { begin, .. } => {
++                if *begin {
++                    EventKind::SkillLogBegin
++                } else {
++                    EventKind::SkillLogAfter
++                }
++            }
+             EventData::Damage(_) => EventKind::Damage,
+             EventData::DamageWindow { window, .. } => window.event_kind(),
+             EventData::Recover { .. } => EventKind::Recover,
+diff --git a/crates/engine-native-kernel/src/event/invocation.rs b/crates/engine-native-kernel/src/event/invocation.rs
+new file mode 100644
+index 00000000..79347c82
+--- /dev/null
++++ b/crates/engine-native-kernel/src/event/invocation.rs
+@@ -0,0 +1,141 @@
++//! A named invocation owns its lifecycle; continuation stages own only operation receipts.
++use super::*;
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum InvocationPhase {
++    Before,
++    Begin,
++    Body,
++    End,
++    After,
++    Omitted,
++}
++impl InvocationPhase {
++    pub fn tag(self) -> u8 {
++        match self {
++            Self::Before => 0,
++            Self::Begin => 1,
++            Self::Body => 2,
++            Self::End => 3,
++            Self::After => 4,
++            Self::Omitted => 5,
++        }
++    }
++    pub fn from_tag(t: u8) -> Option<Self> {
++        Some(match t {
++            0 => Self::Before,
++            1 => Self::Begin,
++            2 => Self::Body,
++            3 => Self::End,
++            4 => Self::After,
++            5 => Self::Omitted,
++            _ => return None,
++        })
++    }
++    pub fn kind(self) -> EventKind {
++        match self {
++            Self::Before => EventKind::SkillBefore,
++            Self::Begin => EventKind::SkillBegin,
++            Self::Body => EventKind::SkillInvocation,
++            Self::End => EventKind::SkillEnd,
++            Self::After => EventKind::SkillAfter,
++            Self::Omitted => EventKind::SkillOmitted,
++        }
++    }
++}
++#[derive(Debug, Clone, PartialEq, Eq)]
++pub struct InvocationData {
++    pub owner: PlayerId,
++    pub def: SkillDefId,
++    pub window: EventId,
++    pub source: Option<PlayerId>,
++    pub target: PlayerId,
++    pub phase: InvocationPhase,
++    pub cancelled: bool,
++    pub jiding_card: Option<EventId>,
++    pub judgement: Option<crate::catalog::Suit>,
++    pub deferred_log: bool,
++}
++#[derive(Debug, Clone, PartialEq, Eq)]
++pub enum NativeInvocationProgress {
++    Ready,
++    BeforeInvocation {
++        context: InvocationData,
++    },
++    AwaitInvocation {
++        child: EventId,
++    },
++    Finished,
++    Body,
++    HolderAsk {
++        candidates: Vec<CardId>,
++    },
++    HolderPay {
++        cards: Vec<CardId>,
++    },
++    HolderLoss {
++        count: u32,
++    },
++    HolderAfterLog {
++        count: u32,
++    },
++    SourceAsk {
++        player: PlayerId,
++        count: u32,
++        candidates: Vec<CardId>,
++    },
++    SourceLoss,
++    JidingCard {
++        child: EventId,
++    },
++    YuanceAsk,
++    JidianAsk {
++        targets: Vec<PlayerId>,
++    },
++    AwaitJudge {
++        child: EventId,
++        target: PlayerId,
++        purpose: JudgePurpose,
++    },
++    BodyDone,
++}
++pub fn uses_native_invocation(effect: NativeDamageEffect) -> bool {
++    matches!(
++        effect,
++        NativeDamageEffect::Zhangwu
++            | NativeDamageEffect::Jiding
++            | NativeDamageEffect::Yuance
++            | NativeDamageEffect::Jidian
++    )
++}
++
++#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
++pub enum YuanceOption {
++    LoseHp,
++    Recover,
++}
++impl YuanceOption {
++    pub fn tag(self) -> u8 {
++        match self {
++            Self::LoseHp => 0,
++            Self::Recover => 1,
++        }
++    }
++    pub fn from_tag(t: u8) -> Option<Self> {
++        match t {
++            0 => Some(Self::LoseHp),
++            1 => Some(Self::Recover),
++            _ => None,
++        }
++    }
++    pub fn label(self) -> &'static str {
++        match self {
++            Self::LoseHp => "yuance_lose_hp",
++            Self::Recover => "yuance_recover",
++        }
++    }
++}
++#[derive(Debug, Clone, Copy, PartialEq, Eq)]
++pub enum JudgePurpose {
++    Yuance(YuanceOption),
++    Jidian,
++}
+diff --git a/crates/engine-native-kernel/src/event/native_damage.rs b/crates/engine-native-kernel/src/event/native_damage.rs
+index 2ee684bc..296a405e 100644
+--- a/crates/engine-native-kernel/src/event/native_damage.rs
++++ b/crates/engine-native-kernel/src/event/native_damage.rs
+@@ -44,6 +44,7 @@ pub enum NativeDamageEffect {
+     Huanxia,
+     Jidian,
+     Minwan,
++    JidingRecover,
+ }
+ impl NativeDamageEffect {
+     pub fn window(self) -> DamageWindowKind {
+@@ -77,6 +78,7 @@ impl NativeDamageEffect {
+             | Self::Yuance
+             | Self::Lingqu
+             | Self::Jiding
++            | Self::JidingRecover
+             | Self::Renxing
+             | Self::Cuidui
+             | Self::Duqu => DamageWindowKind::End,
+@@ -85,6 +87,7 @@ impl NativeDamageEffect {
+     }
+     pub fn helper_name(self) -> Option<&'static str> {
+         match self {
++            Self::JidingRecover => Some("native:liuli/boss/jiding_recover"),
+             Self::Jidong => Some("native:liuli/ow/jidong2"),
+             Self::Chengxin => Some("native:liuli/xianjian/chengxin2"),
+             Self::Chilongya => Some("native:liuli/card-swd/chilongya"),
+@@ -160,6 +163,7 @@ impl NativeDamageEffect {
+             return false;
+         }
+         match self {
++            Self::JidingRecover => source,
+             Self::Jueqing => source,
+             Self::Wuxin => target,
+             Self::Zuijiu => {
+@@ -238,15 +242,14 @@ impl NativeDamageEffect {
+                                 || !core.player(s).equips.is_empty())
+                     })
+             }
+-            Self::Zhangwu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
++            Self::Zhangwu => target && d.source.is_some_and(|s| core.player(s).alive),
+             Self::Zlfanshi | Self::Lingqu => target,
+             Self::Zhue => d.source.is_some_and(|s| s != owner && core.player(s).alive),
+             Self::Abi => target && d.source.is_some_and(|s| core.player(s).alive),
+             Self::Yuance => {
+                 d.source
+-                    .is_some_and(|s| s != d.target && core.player(s).alive && core.player(s).hp > 0)
++                    .is_some_and(|s| s != d.target && core.player(s).alive)
+                     && core.player(d.target).alive
+-                    && core.player(d.target).hp > 0
+             }
+             Self::Jiding => {
+                 !target
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index 9c555138..b9528cd1 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -48,6 +48,10 @@ mod damage_after;
+ mod damage_change_hp;
+ mod damage_flow;
+ mod damage_skill;
++mod invocation_validation;
++mod native_invocation;
++pub use native_invocation::jiding_recovery_origin;
++pub use native_invocation::{advance_invocation, NativeInvocation};
+ mod damage_windows;
+ use damage::*;
+ pub use damage_flow::DamageFlow;
+diff --git a/crates/engine-native-kernel/src/kernel/damage.rs b/crates/engine-native-kernel/src/kernel/damage.rs
+index 512bfd22..d2ab00d7 100644
+--- a/crates/engine-native-kernel/src/kernel/damage.rs
++++ b/crates/engine-native-kernel/src/kernel/damage.rs
+@@ -186,39 +186,7 @@ pub(super) fn post_damage(
+             cards: vec![selected],
+         });
+     }
+-    if effect == crate::event::NativeDamageEffect::Zhangwu {
+-        // 章武（Boss 刘备，规则 v261）：你受到伤害后（来源存活且非自己）——
+-        // 你弃置一张牌，来源弃置一张牌，或来源受到 1 点伤害（上游 [1,∞] 自
+-        // 选+来源 chooseToDiscard/取消双 AI 态度面→双方恒弃首张确定性近似
+-        // 登记；num=刘备弃牌数可多张登记；弃牌面=手牌首张，两手皆空跳过）
+-        if let Some(zwdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_ZHANGWU)
+-        {
+-            if ctx.core.has_skill(d.target, zwdef) && ctx.core.player(d.target).alive {
+-                if let Some(src) = d.source {
+-                    if src != d.target && ctx.core.player(src).alive {
+-                        let hold = ctx.core.player(d.target).hand.first().copied();
+-                        if let Some(c) = hold {
+-                            ctx.discard_from_hand(d.target, c);
+-                        }
+-                        let src_card = ctx.core.player(src).hand.first().copied();
+-                        if let Some(c) = src_card {
+-                            ctx.discard_from_hand(src, c);
+-                        } else {
+-                            // 来源无牌可弃 → 受 1 点伤害（上游取消分支同口径；
+-                            // 来源亦空手牌时装备面不弃登记差异）
+-                            ctx.emit(EventData::Damage(crate::machine::damage_data(
+-                                Some(d.target),
+-                                src,
+-                                1,
+-                            )));
+-                        }
+-                    }
+-                }
+-            }
+-        }
+-    }
++
+     if effect == crate::event::NativeDamageEffect::Zlfanshi {
+         if ctx.core.player(owner).zlfanshi_terra {
+             let targets: Vec<_> = ctx
+@@ -277,42 +245,7 @@ pub(super) fn post_damage(
+             None,
+         )));
+     }
+-    if effect == crate::event::NativeDamageEffect::Yuance {
+-        // 远策（Boss 郭嘉，规则 v259）：global damageEnd——其他角色对另一
+-        // 其他角色造成伤害后（双方存活），判定：黑→受伤角色失 1 体力 / 红→
+-        // 来源失 1 体力（chooseControl 选项一恒定确定性近似登记——上游 AI
+-        // 态度选面+rejudge stop 检查+判定修正回调不落；hp>0 门=濒死未决者
+-        // 跳过登记差异）
+-        if let Some(_ycdef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_YUANCE)
+-        {
+-            let holders: Vec<PlayerId> = vec![owner];
+-            if let Some(holder) = holders.first() {
+-                if let Some(src) = d.source {
+-                    if ctx.core.player(*holder).alive
+-                        && src != d.target
+-                        && ctx.core.player(src).alive
+-                        && ctx.core.player(d.target).alive
+-                        && ctx.core.player(src).hp > 0
+-                        && ctx.core.player(d.target).hp > 0
+-                    {
+-                        let judged = ctx.draw_judge_card();
+-                        let black = matches!(
+-                            ctx.catalog.cards[judged as usize].suit,
+-                            crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+-                        );
+-                        ctx.to_discard(judged);
+-                        let loser = if black { d.target } else { src };
+-                        ctx.emit(EventData::LoseHp {
+-                            player: loser,
+-                            amount: 1,
+-                        });
+-                    }
+-                }
+-            }
+-        }
+-    }
++
+     if effect == crate::event::NativeDamageEffect::Lingqu {
+         // 灵渠（Boss 玄武，规则 v237）：每次受到伤害后摸 1 张牌且受击计数
+         // +1（上游 boss_lingqu damageEnd draw+storage++ 同口径；零量由 Zero/Stopped 截断；
+@@ -328,27 +261,7 @@ pub(super) fn post_damage(
+             }
+         }
+     }
+-    if effect == crate::event::NativeDamageEffect::Jiding {
+-        // 急叮（Boss 明星，规则 v245）：global damageEnd——友方（同侧非己）
+-        // 受敌方来源伤害后，对来源用虚拟雷杀（LeiSha kind 载体——机器直发不
+-        // 经 PlayCard 校验；蓐收加成尾面登记差异未建模）
+-        if let Some(_jddef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_JIDING)
+-        {
+-            let holders: Vec<PlayerId> = vec![owner];
+-            if let Some(holder) = holders.first() {
+-                if let Some(src) = d.source {
+-                    if src != *holder
+-                        && ctx.core.player(src).alive
+-                        && ctx.core.is_boss_side(src) != ctx.core.is_boss_side(*holder)
+-                    {
+-                        ctx.use_virtual_card(*holder, CardKind::LeiSha, vec![src]);
+-                    }
+-                }
+-            }
+-        }
+-    }
++
+     if effect == crate::event::NativeDamageEffect::Renxing {
+         // 忍性（年兽形态，规则 v249）：global damageEnd——持有者非当前回
+         // 合角色时，任意角色受到伤害后其摸 1（上游 boss_renxing damageEnd
+diff --git a/crates/engine-native-kernel/src/kernel/damage_after.rs b/crates/engine-native-kernel/src/kernel/damage_after.rs
+index 0a6850cf..121f6a21 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_after.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_after.rs
+@@ -17,54 +17,7 @@ pub(super) fn post_damage_after(
+             }
+         }
+     }
+-    if effect == crate::event::NativeDamageEffect::Jidian {
+-        // 极点（Boss 张角，规则 v263）：你造成伤害后——距离受伤者 1 以内的
+-        // 一名其他角色判定：黑则其受到 1 点雷伤（上游 source damageAfter
+-        // chooseTarget get.distance(trigger.player,target)<=1 + judge 黑 →
+-        // damage("thunder") 同口径；chooseTarget AI→座位序首个确定性近似；
+-        // 链挡旗标=极点雷伤不自我递归，登记差异：上游 damageAfter 真递归；
+-        // 判定为内联确定性口径，无改判窗）
+-        if let Some(jddef) = ctx
+-            .catalog
+-            .skill_by_name(crate::vocabulary::names::BOSS_JIDIAN)
+-        {
+-            if let Some(src) = d.source {
+-                if ctx.core.player(src).alive && ctx.core.has_skill(src, jddef) {
+-                    // 链挡：极点造成的雷伤不再触发极点
+-                    if !ctx.core.turn.jidian_chain {
+-                        let seats = ctx.core.players.len() as PlayerId;
+-                        if let Some(t) = (0..seats).find(|&t| {
+-                            t != d.target
+-                                && ctx.core.player(t).alive
+-                                && ctx.core.computed_distance(ctx.catalog, d.target, t) <= 1
+-                        }) {
+-                            // 置链挡后 emit：嵌套 Damage 帧的极点臂见旗标清除
+-                            // 并跳过（挡恰一层=极点雷伤不链式，登记差异）
+-                            ctx.core.turn.jidian_chain = true;
+-                            let judged = ctx.draw_judge_card();
+-                            let black = matches!(
+-                                ctx.catalog.cards[judged as usize].suit,
+-                                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+-                            );
+-                            ctx.to_discard(judged);
+-                            if black {
+-                                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+-                                    Some(src),
+-                                    t,
+-                                    1,
+-                                    crate::event::DamageNature::Thunder,
+-                                    None,
+-                                )));
+-                            }
+-                        }
+-                    } else {
+-                        // 嵌套极点雷伤到达：清链挡（仅挡一层）
+-                        ctx.core.turn.jidian_chain = false;
+-                    }
+-                }
+-            }
+-        }
+-    }
++
+     if effect == crate::event::NativeDamageEffect::Minwan {
+         // 冥顽锁定集（Boss 梼杌，规则 v219）：回合内自己使用牌对其他角色
+         // 造成伤害后，受伤者入锁定集（首次同时记自己——上游 storage
+diff --git a/crates/engine-native-kernel/src/kernel/damage_skill.rs b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+index 77b2ebc7..400831cc 100644
+--- a/crates/engine-native-kernel/src/kernel/damage_skill.rs
++++ b/crates/engine-native-kernel/src/kernel/damage_skill.rs
+@@ -47,6 +47,16 @@ impl SkillMachine for NativeDamageSkill {
+                     amount,
+                 });
+             }
++            NativeDamageEffect::JidingRecover => {
++                let named = ctx.catalog.jinshenrushou_general_id();
++                for player in ctx.core.seat_ring.clone() {
++                    if ctx.core.player(player).alive
++                        && ctx.core.player(player).general_slots[0] == Some(named)
++                    {
++                        ctx.recover(player, 1, None);
++                    }
++                }
++            }
+             NativeDamageEffect::Zuijiu => {
+                 ctx.modify_damage_amount(1);
+             }
+diff --git a/crates/engine-native-kernel/src/kernel/intrinsic.rs b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+index 5f07a7cd..05de8d5f 100644
+--- a/crates/engine-native-kernel/src/kernel/intrinsic.rs
++++ b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+@@ -7,6 +7,23 @@ pub fn intrinsic_machine(
+ ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
+     match data {
++        EventData::OrdinaryJudge { owner, invocation } => {
++            let mut m = JudgePhaseMachine::new(owner, Vec::new(), None);
++            m.ordinary = Some(invocation);
++            Some(Box::new(m))
++        }
++        EventData::SkillInvocation(data) if data.phase == crate::event::InvocationPhase::Body => {
++            let window = match ctx.res.frame(data.window)?.data {
++                EventData::DamageWindow { window, .. } => window,
++                _ => return None,
++            };
++            Some(Box::new(NativeInvocation {
++                owner: data.owner,
++                def: data.def,
++                window,
++                progress: crate::event::NativeInvocationProgress::Body,
++            }))
++        }
+         EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
+         EventData::LoseHp { .. } => None,
+         EventData::DyingSaved { .. } => None,
+@@ -316,6 +333,9 @@ pub fn intrinsic_machine(
+                     owner: player,
+                     queue,
+                     current: None,
++                    ordinary: None,
++                    started: false,
++                    payment: None,
+                 }))
+             }
+         }
+@@ -471,8 +491,9 @@ pub fn intrinsic_machine(
+                             .hand
+                             .iter()
+                             .filter(|c| {
+-                                crate::vocabulary::card_skills::yangpijuan_class(ctx.catalog.card_kind(**c))
+-                                    != Some(0)
++                                crate::vocabulary::card_skills::yangpijuan_class(
++                                    ctx.catalog.card_kind(**c),
++                                ) != Some(0)
+                             })
+                             .count()
+                     } else if honglianx {
+diff --git a/crates/engine-native-kernel/src/kernel/invocation_validation.rs b/crates/engine-native-kernel/src/kernel/invocation_validation.rs
+new file mode 100644
+index 00000000..c51000fe
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/invocation_validation.rs
+@@ -0,0 +1,264 @@
++//! Bind admitted continuations to their real trigger and invocation, independently of provider renewal.
++use super::*;
++use crate::event::{InvocationPhase, NativeInvocationProgress as P};
++use crate::resolution::Slot;
++use crate::snap::{ExpectedAsk, MachineSnapshot as M, ResolutionSnapshot, SnapshotError};
++impl NativeInvocation {
++    pub fn expected_ask(
++        owner: PlayerId,
++        progress: &P,
++        _core: &crate::state::GameStateCore,
++    ) -> Option<ExpectedAsk> {
++        if matches!(progress, P::YuanceAsk) {
++            return Some(crate::snap::ask(
++                owner,
++                "c331_yuance",
++                ChoiceKind::Control,
++                vec![
++                    ChoiceOption::Control(crate::event::YuanceOption::LoseHp),
++                    ChoiceOption::Control(crate::event::YuanceOption::Recover),
++                ],
++                1,
++                1,
++                true,
++            ));
++        }
++        if let P::JidianAsk { targets } = progress {
++            return Some(crate::snap::ask(
++                owner,
++                "c331_jidian_target",
++                ChoiceKind::SelectPlayers,
++                targets.iter().copied().map(ChoiceOption::Player).collect(),
++                1,
++                1,
++                true,
++            ));
++        }
++        let (actor, prompt, candidates, min, max) = match progress {
++            P::HolderAsk { candidates } => (
++                owner,
++                "c331_zhangwu_holder",
++                candidates,
++                1,
++                candidates.len(),
++            ),
++            P::SourceAsk {
++                player,
++                count,
++                candidates,
++            } => (
++                *player,
++                "c331_zhangwu_source",
++                candidates,
++                *count as usize,
++                *count as usize,
++            ),
++            _ => return None,
++        };
++        Some(crate::snap::ask(
++            actor,
++            prompt,
++            ChoiceKind::SelectCards,
++            candidates.iter().copied().map(ChoiceOption::Card).collect(),
++            min,
++            max,
++            true,
++        ))
++    }
++    pub fn validate_bindings(
++        core: &crate::state::GameStateCore,
++        catalog: &crate::catalog::Catalog,
++        res: &ResolutionSnapshot,
++    ) -> Result<(), SnapshotError> {
++        let bad = || SnapshotError::IdOutOfBounds {
++            what: "native_invocation_binding",
++            got: 0,
++        };
++        for park in &res.parks {
++            if let M::JudgeContinuation {
++                owner,
++                queue,
++                current,
++                ordinary,
++                started,
++                payment,
++            } = &park.machine
++            {
++                if let Some(pay) = payment {
++                    if usize::from(pay.player) >= core.players.len()
++                        || pay.old as usize >= catalog.cards.len()
++                        || current
++                            .as_ref()
++                            .is_none_or(|c| c.judge_card == pay.old || c.finalized || c.asked)
++                    {
++                        return Err(bad());
++                    }
++                }
++                if let Some(invocation) = ordinary {
++                    let Slot::Intrinsic { frame } = park.slot else {
++                        return Err(bad());
++                    };
++                    let judge = res.stack.iter().find(|f| f.id == frame).ok_or_else(bad)?;
++                    if !matches!(judge.data,EventData::OrdinaryJudge{owner:p,invocation:i}if p==*owner&&i==*invocation)||judge.parent!=Some(*invocation)||!queue.is_empty()||current.as_ref().is_some_and(|c|c.trick.is_some()||!*started)||!res.parks.iter().any(|p|p.slot==Slot::Intrinsic{frame:*invocation}&&matches!(&p.machine,M::NativeInvocation{progress:P::AwaitJudge{child,target,..},..}if *child==frame&&*target==*owner)){return Err(bad());}
++                } else if current.as_ref().is_some_and(|c| c.trick.is_none()) {
++                    return Err(bad());
++                }
++            }
++        }
++        for f in &res.stack {
++            if let EventData::SkillInvocation(context) = &f.data {
++                if context.phase == InvocationPhase::Before
++                    && (context.judgement.is_some()
++                        || context.jiding_card.is_some()
++                        || context.deferred_log)
++                {
++                    return Err(bad());
++                }
++                if let Some(card) = context.jiding_card {
++                    if res.stack.iter().any(|child|child.id==card)&&!res.parks.iter().any(|p|p.slot==Slot::Intrinsic{frame:f.id}&&matches!(&p.machine,M::NativeInvocation{progress:P::JidingCard{child},owner,def,..}if *child==card&&*owner==context.owner&&*def==context.def)){return Err(bad());}
++                }
++
++                let index = res
++                    .stack
++                    .iter()
++                    .position(|g| g.id == f.id)
++                    .ok_or_else(bad)?;
++                let parent = index
++                    .checked_sub(1)
++                    .and_then(|n| res.stack.get(n))
++                    .ok_or_else(bad)?;
++                if f.parent!=Some(context.window)||parent.id!=context.window||!matches!(parent.data,EventData::DamageWindow{..})||!res.parks.iter().any(|p|matches!(&p.machine,M::NativeInvocation{owner,def,progress:P::AwaitInvocation{child},..}if *child==f.id&&*owner==context.owner&&*def==context.def)&&p.slot==Slot::Trigger{frame:context.window}){return Err(bad());}
++            }
++        }
++        for park in &res.parks {
++            let M::NativeInvocation {
++                owner,
++                def,
++                window,
++                progress,
++            } = &park.machine
++            else {
++                continue;
++            };
++            let effect = catalog
++                .skills
++                .get(*def as usize)
++                .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
++                .ok_or_else(bad)?;
++            if effect.window() != *window || !crate::event::uses_native_invocation(effect) {
++                return Err(bad());
++            }
++            let frame_id = match park.slot {
++                Slot::Trigger { frame } | Slot::Intrinsic { frame } => frame,
++            };
++            let index = res
++                .stack
++                .iter()
++                .position(|f| f.id == frame_id)
++                .ok_or_else(bad)?;
++            let f = &res.stack[index];
++            if park.resume_depth != index + 1 {
++                return Err(bad());
++            }
++            if let Slot::Trigger { .. } = park.slot {
++                if !matches!(f.data,EventData::DamageWindow{window:w,..}if w==*window)||f.stage!=crate::event::Stage::AfterTriggers||!res.parks.iter().any(|p|matches!(&p.machine,M::TriggerOrder{frame,done,..}if *frame==f.id&&done.contains(&(*owner,*def)))){return Err(bad());}
++                match progress {
++                    P::Ready => {
++                        if !core.player(*owner).alive {
++                            return Err(bad());
++                        }
++                    }
++                    P::BeforeInvocation { context } => {
++                        if context.owner != *owner
++                            || context.def != *def
++                            || context.window != f.id
++                            || context.phase != InvocationPhase::Before
++                            || context.cancelled
++                        {
++                            return Err(bad());
++                        }
++                    }
++                    P::AwaitInvocation { child } => {
++                        if *child <= f.id || *child >= res.next_event_id {
++                            return Err(bad());
++                        }
++                        if let Some(child) = res.stack.iter().find(|g| g.id == *child) {
++                            if !matches!(&child.data,EventData::SkillInvocation(c)if c.owner==*owner&&c.def==*def&&c.window==f.id)
++                            {
++                                return Err(bad());
++                            }
++                        }
++                    }
++                    P::Finished => {}
++                    _ => return Err(bad()),
++                }
++            } else {
++                let EventData::SkillInvocation(context) = &f.data else {
++                    return Err(bad());
++                };
++                if context.owner != *owner
++                    || context.def != *def
++                    || context.phase != InvocationPhase::Body
++                    || f.stage != crate::event::Stage::Intrinsic
++                {
++                    return Err(bad());
++                }
++                let (actor, cards) = match progress {
++                    P::HolderAsk { candidates } => (*owner, Some(candidates)),
++                    P::SourceAsk {
++                        player,
++                        count,
++                        candidates,
++                    } => {
++                        if Some(*player) != context.source
++                            || *count == 0
++                            || *count as usize > candidates.len()
++                        {
++                            return Err(bad());
++                        }
++                        (*player, Some(candidates))
++                    }
++                    P::HolderPay { cards } => {
++                        if cards.is_empty() {
++                            return Err(bad());
++                        }
++                        (*owner, None)
++                    }
++                    P::Body
++                    | P::HolderLoss { .. }
++                    | P::HolderAfterLog { .. }
++                    | P::SourceLoss
++                    | P::JidingCard { .. }
++                    | P::BodyDone
++                    | P::YuanceAsk
++                    | P::JidianAsk { .. }
++                    | P::AwaitJudge { .. } => (*owner, None),
++                    _ => return Err(bad()),
++                };
++                if let Some(cards) = cards {
++                    let p = core.player(actor);
++                    let actual: Vec<_> = p.hand.iter().chain(p.equips.iter()).copied().collect();
++                    if actual != *cards || !core.player(actor).alive {
++                        return Err(bad());
++                    }
++                }
++                if let P::JidingCard { child } = progress {
++                    if effect != crate::event::NativeDamageEffect::Jiding
++                        || *child <= f.id
++                        || *child >= res.next_event_id
++                    {
++                        return Err(bad());
++                    }
++                    if let Some(c) = res.stack.iter().find(|g| g.id == *child) {
++                        if c.parent != Some(f.id)
++                            || !matches!(&c.data,EventData::CardUsed(u)if u.player==*owner&&u.use_as==Some(CardKind::LeiSha))
++                        {
++                            return Err(bad());
++                        }
++                    }
++                }
++            }
++        }
++        Ok(())
++    }
++}
+diff --git a/crates/engine-native-kernel/src/kernel/judge.rs b/crates/engine-native-kernel/src/kernel/judge.rs
+index 65fe0abb..88dd8dae 100644
+--- a/crates/engine-native-kernel/src/kernel/judge.rs
++++ b/crates/engine-native-kernel/src/kernel/judge.rs
+@@ -20,12 +20,15 @@ pub struct JudgePhaseMachine {
+     pub(super) queue: Vec<crate::ids::CardId>,
+     /// 当前判定的进行态（翻牌后到生效/获得前）。
+     pub(super) current: Option<JudgementProgress>,
++    pub(crate) ordinary: Option<EventId>,
++    pub(crate) started: bool,
++    pub(crate) payment: Option<crate::snap::JudgeReplacementSnap>,
+ }
+ 
+ /// 单次判定的进行态。
+ #[derive(Clone)]
+ pub struct JudgementProgress {
+-    pub(super) trick: crate::ids::CardId,
++    pub(super) trick: Option<crate::ids::CardId>,
+     pub(super) judge_card: crate::ids::CardId,
+     /// 鬼道改判询问队列（座位序，自拥有者起含本人）。
+     pub(super) rewriters: Vec<PlayerId>,
+@@ -57,6 +60,9 @@ impl Clone for JudgePhaseMachine {
+             owner: self.owner,
+             queue: self.queue.clone(),
+             current: self.current.clone(),
++            ordinary: self.ordinary,
++            started: self.started,
++            payment: self.payment.clone(),
+         }
+     }
+ }
+@@ -71,6 +77,9 @@ impl JudgePhaseMachine {
+             owner,
+             queue,
+             current,
++            ordinary: None,
++            started: false,
++            payment: None,
+         }
+     }
+ }
+@@ -103,28 +112,40 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+     }
+ 
+     fn snapshot(&self) -> crate::snap::MachineSnapshot {
+-        crate::snap::MachineSnapshot::JudgePhase {
+-            owner: self.owner,
+-            queue: self.queue.clone(),
+-            current: self.current.as_ref().map(|c| {
+-                Box::new(crate::snap::JudgementProgressSnap {
+-                    trick: c.trick,
+-                    judge_card: c.judge_card,
+-                    rewriters: c.rewriters.clone(),
+-                    asked: c.asked,
+-                    tian_du: c.tian_du.clone(),
+-                    gained: c.gained,
+-                    in_rewrite: c.in_rewrite,
+-                    finalized: c.finalized,
+-                    judge_held: c.judge_held,
+-                    haotian_holder: c.haotian_holder,
+-                    haotian_other: c.haotian_other.map(|x| x as u32),
+-                    gaiming_cards: c
+-                        .gaiming_cards
+-                        .as_ref()
+-                        .map(|v| v.iter().map(|x| *x as u32).collect()),
+-                })
+-            }),
++        let current = self.current.as_ref().map(|c| {
++            Box::new(crate::snap::JudgementProgressSnap {
++                trick: c.trick,
++                judge_card: c.judge_card,
++                rewriters: c.rewriters.clone(),
++                asked: c.asked,
++                tian_du: c.tian_du.clone(),
++                gained: c.gained,
++                in_rewrite: c.in_rewrite,
++                finalized: c.finalized,
++                judge_held: c.judge_held,
++                haotian_holder: c.haotian_holder,
++                haotian_other: c.haotian_other.map(|x| x as u32),
++                gaiming_cards: c
++                    .gaiming_cards
++                    .as_ref()
++                    .map(|v| v.iter().map(|x| *x as u32).collect()),
++            })
++        });
++        if self.ordinary.is_some() || self.payment.is_some() || self.started {
++            crate::snap::MachineSnapshot::JudgeContinuation {
++                owner: self.owner,
++                queue: self.queue.clone(),
++                current,
++                ordinary: self.ordinary,
++                started: self.started,
++                payment: self.payment.clone(),
++            }
++        } else {
++            crate::snap::MachineSnapshot::JudgePhase {
++                owner: self.owner,
++                queue: self.queue.clone(),
++                current,
++            }
+         }
+     }
+ 
+@@ -133,14 +154,11 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+             // 拥有者死亡（防御路径：对齐排序下能致死的闪电在队尾）：
+             // 待判队列与进行中的判定牌逐张弃置。
+             if !ctx.core.player(self.owner).alive {
+-                let mut leftover = std::mem::take(&mut self.queue);
+-                if let Some(cur) = self.current.take() {
+-                    // 仅机器仍持有的判定牌需要随死亡清理弃置；
+-                    // 已被天妒获得（手牌）或已随效果弃置的不重复入弃牌堆。
+-                    if cur.judge_held {
+-                        leftover.push(cur.judge_card);
+-                    }
+-                }
++                let mut leftover = Vec::new();
++                crate::snap::machine_held_cards(&self.snapshot(), &mut leftover);
++                self.queue.clear();
++                self.current = None;
++                self.payment = None;
+                 if !leftover.is_empty() {
+                     ctx.core.discard.extend(leftover.iter().copied());
+                     ctx.log(LogEvent::CardDiscarded {
+@@ -151,6 +169,26 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                 return Flow::Done;
+             }
+ 
++            if let Some(payment) = self.payment.take() {
++                if payment.discard_old || !ctx.core.player(payment.player).alive {
++                    ctx.to_discard(payment.old);
++                } else {
++                    ctx.core.player_mut(payment.player).hand.push(payment.old);
++                    ctx.emit(EventData::CardsMoved {
++                        cards: vec![payment.old],
++                        from: self.owner,
++                        to: payment.player,
++                    });
++                }
++                if let Some(cur) = &self.current {
++                    ctx.log(LogEvent::JudgementRewritten {
++                        player: payment.player,
++                        card: cur.judge_card,
++                        replaced: payment.old,
++                    });
++                }
++                return Flow::Yield;
++            }
+             // 当前判定的进行态
+             if let Some(cur) = &mut self.current {
+                 // 改命应答消费：选中牌成为判定结果、其余弃置并跳过改判/
+@@ -273,13 +311,25 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                             // 被替换的旧判定牌由改判者**获得**（对齐上游，ADR 0714）。
+                             ctx.take_owned_card(rewriter, c);
+                             let old = cur.judge_card;
+-                            ctx.core.player_mut(rewriter).hand.push(old);
+                             cur.judge_card = c;
+-                            ctx.log(LogEvent::JudgementRewritten {
++                            let has = |name: &str| {
++                                ctx.catalog
++                                    .skill_by_name(name)
++                                    .is_some_and(|d| ctx.core.has_skill(rewriter, d))
++                            };
++                            let discard_old = has(crate::vocabulary::names::GUI_CAI)
++                                && !has(crate::vocabulary::names::GUI_DAO)
++                                && !has(crate::vocabulary::names::BOSS_TIANDAO)
++                                && !has("gtiandao");
++                            self.payment = Some(crate::snap::JudgeReplacementSnap {
+                                 player: rewriter,
+-                                card: c,
+-                                replaced: old,
++                                old,
++                                discard_old,
+                             });
++                            if cur.rewriters.is_empty() {
++                                cur.in_rewrite = false;
++                            }
++                            return Flow::Yield;
+                         }
+                         if cur.rewriters.is_empty() {
+                             cur.in_rewrite = false;
+@@ -299,6 +349,21 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                                 crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+                             )
+                         };
++                        let providers = [
++                            crate::vocabulary::names::GUI_DAO,
++                            crate::vocabulary::names::GUI_CAI,
++                            crate::vocabulary::names::BOSS_TIANDAO,
++                            "gtiandao",
++                            crate::vocabulary::host::SWD_TIANLUN_KEY,
++                        ];
++                        if !providers.iter().any(|name| {
++                            ctx.catalog
++                                .skill_by_name(name)
++                                .is_some_and(|d| ctx.core.has_skill(r, d))
++                        }) {
++                            cur.rewriters.remove(0);
++                            continue;
++                        }
+                         let p = ctx.core.player(r);
+                         // 鬼才：任意手牌可改判（不依赖黑色）
+                         let gui_cai = ctx.catalog.skill_by_name(crate::vocabulary::names::GUI_CAI);
+@@ -360,7 +425,7 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                         for c in self.queue.iter().copied() {
+                             // 正在结算的延时锦囊已离开判定区（上游
+                             // `judging[0]` 之外的判定区牌才可被选）
+-                            if c == cur.trick {
++                            if Some(c) == cur.trick {
+                                 continue;
+                             }
+                             if !options.contains(&ChoiceOption::Card(c)) {
+@@ -452,8 +517,22 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+                         player: self.owner,
+                         card: judge_card,
+                     });
+-                    Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
+-                    continue;
++                    if let Some(trick) = trick {
++                        Self::apply_judgement(self.owner, ctx, trick, judge_card, machine_holds);
++                    } else {
++                        if !machine_holds {
++                            ctx.to_discard(judge_card);
++                        }
++                        if let Some(invocation) = self.ordinary {
++                            if let Some(frame) = ctx.res.frame_mut(invocation) {
++                                if let EventData::SkillInvocation(data) = &mut frame.data {
++                                    data.judgement =
++                                        Some(ctx.catalog.cards[judge_card as usize].suit);
++                                }
++                            }
++                        }
++                    }
++                    return Flow::Yield;
+                 }
+                 // 天妒阶段（效果生效后）：跳过死亡持有者；有人获得后不再询问
+                 while let Some(h) = cur.tian_du.first().copied() {
+@@ -504,10 +583,21 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
+             }
+ 
+             // 取下一锦囊并翻判定牌
+-            if self.queue.is_empty() {
+-                return Flow::Done;
+-            }
+-            let trick = self.queue.remove(0);
++            let trick = if self.ordinary.is_some() {
++                if self.started {
++                    return Flow::Done;
++                }
++                self.started = true;
++                if ctx.core.deck.is_empty() && ctx.core.discard.is_empty() {
++                    return Flow::Done;
++                }
++                None
++            } else {
++                if self.queue.is_empty() {
++                    return Flow::Done;
++                }
++                Some(self.queue.remove(0))
++            };
+             // 改命（T11 Boss 诸葛亮族批 116，规则 v303 同批）：判定前——拥有
+             // 者持技时亮牌堆顶 7 张，由其选 1 作为判定结果（其余弃置、改判/
+             // 天妒窗跳过；上游 judgeBefore chooseCardButton + trigger.cancel
+diff --git a/crates/engine-native-kernel/src/kernel/native_invocation.rs b/crates/engine-native-kernel/src/kernel/native_invocation.rs
+new file mode 100644
+index 00000000..cb8454ff
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/native_invocation.rs
+@@ -0,0 +1,497 @@
++//! Finite native bodies run inside an actual named invocation in the ordinary stack.
++use super::*;
++use crate::event::{
++    InvocationData, InvocationPhase as PhaseOfSkill, NativeDamageEffect as Effect,
++    NativeInvocationProgress as P,
++};
++#[derive(Clone)]
++pub struct NativeInvocation {
++    pub owner: PlayerId,
++    pub def: crate::ids::SkillDefId,
++    pub window: crate::event::DamageWindowKind,
++    pub progress: P,
++}
++pub fn advance_invocation(frame: &mut crate::event::Frame) {
++    let EventData::SkillInvocation(data) = &mut frame.data else {
++        return;
++    };
++    let next = match data.phase {
++        PhaseOfSkill::Before if data.cancelled => Some(PhaseOfSkill::Omitted),
++        PhaseOfSkill::Before => Some(PhaseOfSkill::Begin),
++        PhaseOfSkill::Begin if data.cancelled => Some(PhaseOfSkill::End),
++        PhaseOfSkill::Begin => Some(PhaseOfSkill::Body),
++        PhaseOfSkill::Body => Some(PhaseOfSkill::End),
++        PhaseOfSkill::End => Some(PhaseOfSkill::After),
++        PhaseOfSkill::After | PhaseOfSkill::Omitted => None,
++    };
++    if let Some(phase) = next {
++        data.phase = phase;
++        frame.kind = data.phase.kind();
++        frame.stage = if phase == PhaseOfSkill::Body {
++            crate::event::Stage::Intrinsic
++        } else {
++            crate::event::Stage::Commit
++        };
++        frame.planned = false;
++        frame.intrinsic_done = false;
++    } else {
++        frame.stage = crate::event::Stage::Done;
++    }
++}
++impl NativeInvocation {
++    fn effect(&self, ctx: &Ctx<'_>) -> Effect {
++        ctx.catalog.skills[self.def as usize]
++            .behavior
++            .native_damage_effect(self.window.event_kind())
++            .expect("validated admitted definition")
++    }
++    fn emit_invocation(&mut self, ctx: &mut Ctx<'_>, context: InvocationData) -> Flow {
++        self.progress = P::AwaitInvocation {
++            child: ctx.res.next_event_id,
++        };
++        ctx.emit(EventData::SkillInvocation(context));
++        Flow::Yield
++    }
++    fn log_child(&self, ctx: &mut Ctx<'_>, begin: bool) {
++        ctx.emit(EventData::SkillLog {
++            owner: self.owner,
++            def: self.def,
++            begin,
++        });
++    }
++    fn he(ctx: &Ctx<'_>, player: PlayerId) -> Vec<crate::ids::CardId> {
++        let p = ctx.core.player(player);
++        p.hand.iter().chain(p.equips.iter()).copied().collect()
++    }
++    fn choice(player: PlayerId, cards: &[crate::ids::CardId], count: Option<u32>) -> Flow {
++        Flow::WaitChoice {
++            observer: player,
++            spec: ChoiceSpec {
++                kind: ChoiceKind::SelectCards,
++                prompt: if count.is_some() {
++                    "c331_zhangwu_source"
++                } else {
++                    "c331_zhangwu_holder"
++                },
++                options: cards.iter().copied().map(ChoiceOption::Card).collect(),
++                min: count.map(|n| n as usize).unwrap_or(1),
++                max: count.map(|n| n as usize).unwrap_or(cards.len()),
++                allow_cancel: true,
++            },
++        }
++    }
++    fn selected(ctx: &Ctx<'_>, candidates: &[crate::ids::CardId]) -> Vec<crate::ids::CardId> {
++        ctx.answer()
++            .iter()
++            .filter_map(|a| match a {
++                ChoiceOption::Card(c) if candidates.contains(c) => Some(*c),
++                _ => None,
++            })
++            .collect()
++    }
++    fn discard(ctx: &mut Ctx<'_>, player: PlayerId, cards: &[crate::ids::CardId]) {
++        let mut discarded = Vec::new();
++        for &card in cards {
++            let p = ctx.core.player(player);
++            if p.hand.contains(&card) || p.equips.contains(&card) {
++                ctx.take_owned_card(player, card);
++                ctx.to_discard(card);
++                discarded.push(card);
++            }
++        }
++        if !discarded.is_empty() {
++            ctx.log(LogEvent::CardDiscarded {
++                player,
++                cards: discarded.clone(),
++            });
++            ctx.emit(EventData::CardsDiscarded {
++                player,
++                cards: discarded,
++            });
++        }
++    }
++    fn start_judge(
++        &mut self,
++        ctx: &mut Ctx<'_>,
++        target: PlayerId,
++        purpose: crate::event::JudgePurpose,
++        log: bool,
++    ) -> Flow {
++        let parent = ctx.current_frame_id();
++        let child = ctx.res.next_event_id;
++        self.progress = P::AwaitJudge {
++            child,
++            target,
++            purpose,
++        };
++        ctx.emit(EventData::OrdinaryJudge {
++            owner: target,
++            invocation: parent,
++        });
++        if log {
++            let judge = ctx.res.stack.pop().expect("just emitted judge");
++            ctx.log(LogEvent::SkillTriggered {
++                skill: ctx.catalog.skill_name(self.def),
++                owner: self.owner,
++            });
++            self.log_child(ctx, true);
++            ctx.res.stack.push(judge);
++            if let EventData::SkillInvocation(d) = &mut ctx.res.frame_mut(parent).unwrap().data {
++                d.deferred_log = true;
++            }
++        }
++        Flow::Yield
++    }
++    fn body(&mut self, ctx: &mut Ctx<'_>) -> Flow {
++        let id = ctx.current_frame_id();
++        let EventData::SkillInvocation(context) =
++            ctx.res.frame(id).expect("invocation").data.clone()
++        else {
++            return Flow::Done;
++        };
++        match self.progress.clone() {
++            P::Body => {
++                if !ctx.core.player(self.owner).alive {
++                    return Flow::Done;
++                }
++                match self.effect(ctx) {
++                    Effect::Zhangwu => {
++                        let cards = Self::he(ctx, self.owner);
++                        if cards.is_empty() {
++                            return Flow::Done;
++                        }
++                        self.progress = P::HolderAsk {
++                            candidates: cards.clone(),
++                        };
++                        Self::choice(self.owner, &cards, None)
++                    }
++                    Effect::Jiding => {
++                        let Some(source) = context.source.filter(|p| ctx.core.player(*p).alive)
++                        else {
++                            return Flow::Done;
++                        };
++                        if ctx.core.deck.is_empty() {
++                            return Flow::Done;
++                        }
++                        let child = ctx.res.next_event_id;
++                        if let EventData::SkillInvocation(d) =
++                            &mut ctx.res.frame_mut(id).unwrap().data
++                        {
++                            d.jiding_card = Some(child);
++                        }
++                        self.progress = P::JidingCard { child };
++                        ctx.use_virtual_card(self.owner, CardKind::LeiSha, vec![source]);
++                        Flow::Yield
++                    }
++                    Effect::Yuance => {
++                        let _ = ctx.core.rng.gen_range(2);
++                        self.progress = P::YuanceAsk;
++                        Flow::WaitChoice {
++                            observer: self.owner,
++                            spec: ChoiceSpec {
++                                kind: ChoiceKind::Control,
++                                prompt: "c331_yuance",
++                                options: vec![
++                                    ChoiceOption::Control(crate::event::YuanceOption::LoseHp),
++                                    ChoiceOption::Control(crate::event::YuanceOption::Recover),
++                                ],
++                                min: 1,
++                                max: 1,
++                                allow_cancel: true,
++                            },
++                        }
++                    }
++                    Effect::Jidian => {
++                        let targets: Vec<_> = ctx
++                            .core
++                            .alive_players()
++                            .filter(|p| {
++                                *p != context.target
++                                    && ctx.core.computed_distance(ctx.catalog, context.target, *p)
++                                        <= 1
++                            })
++                            .collect();
++                        if targets.is_empty() {
++                            return Flow::Done;
++                        }
++                        self.progress = P::JidianAsk {
++                            targets: targets.clone(),
++                        };
++                        Flow::WaitChoice {
++                            observer: self.owner,
++                            spec: ChoiceSpec {
++                                kind: ChoiceKind::SelectPlayers,
++                                prompt: "c331_jidian_target",
++                                options: targets.into_iter().map(ChoiceOption::Player).collect(),
++                                min: 1,
++                                max: 1,
++                                allow_cancel: true,
++                            },
++                        }
++                    }
++                    _ => unreachable!("only finite implemented invocation bodies"),
++                }
++            }
++            P::HolderAsk { candidates } => {
++                let cards = Self::selected(ctx, &candidates);
++                if cards.is_empty() {
++                    return Flow::Done;
++                }
++                self.progress = P::HolderPay { cards };
++                ctx.log(LogEvent::SkillTriggered {
++                    skill: ctx.catalog.skill_name(self.def),
++                    owner: self.owner,
++                });
++                self.log_child(ctx, true);
++                Flow::Yield
++            }
++            P::HolderPay { cards } => {
++                self.progress = P::HolderLoss {
++                    count: cards.len() as u32,
++                };
++                if ctx.core.player(self.owner).alive {
++                    Self::discard(ctx, self.owner, &cards);
++                }
++                Flow::Yield
++            }
++            P::HolderLoss { count } => {
++                self.progress = P::HolderAfterLog { count };
++                self.log_child(ctx, false);
++                Flow::Yield
++            }
++            P::HolderAfterLog { count } => {
++                if !ctx.core.player(self.owner).alive {
++                    return Flow::Done;
++                }
++                let Some(source) = context.source.filter(|p| ctx.core.player(*p).alive) else {
++                    return Flow::Done;
++                };
++                let cards = Self::he(ctx, source);
++                if cards.len() < count as usize {
++                    self.progress = P::SourceLoss;
++                    ctx.emit(EventData::Damage(crate::machine::damage_data(
++                        Some(self.owner),
++                        source,
++                        i32::try_from(count).expect("validated bounded card payment"),
++                    )));
++                    Flow::Yield
++                } else {
++                    self.progress = P::SourceAsk {
++                        player: source,
++                        count,
++                        candidates: cards.clone(),
++                    };
++                    Self::choice(source, &cards, Some(count))
++                }
++            }
++            P::SourceAsk {
++                count, candidates, ..
++            } => {
++                let Some(source) = context.source else {
++                    return Flow::Done;
++                };
++                self.progress = P::SourceLoss;
++                if !ctx.core.player(self.owner).alive || !ctx.core.player(source).alive {
++                    return Flow::Done;
++                }
++                let cards = Self::selected(ctx, &candidates);
++                if cards.is_empty() {
++                    ctx.emit(EventData::Damage(crate::machine::damage_data(
++                        Some(self.owner),
++                        source,
++                        i32::try_from(count).expect("validated bounded card payment"),
++                    )));
++                } else {
++                    Self::discard(ctx, source, &cards);
++                }
++                Flow::Yield
++            }
++            P::YuanceAsk => {
++                let Some(ChoiceOption::Control(option)) = ctx.answer().first().copied() else {
++                    return Flow::Done;
++                };
++                self.start_judge(
++                    ctx,
++                    self.owner,
++                    crate::event::JudgePurpose::Yuance(option),
++                    false,
++                )
++            }
++            P::JidianAsk { targets } => {
++                let Some(ChoiceOption::Player(target)) = ctx
++                    .answer()
++                    .first()
++                    .copied()
++                    .filter(|p| matches!(p,ChoiceOption::Player(t)if targets.contains(t)))
++                else {
++                    return Flow::Done;
++                };
++                self.start_judge(ctx, target, crate::event::JudgePurpose::Jidian, true)
++            }
++            P::AwaitJudge {
++                target, purpose, ..
++            } => {
++                self.progress = P::BodyDone;
++                let colour = context.judgement;
++                if let EventData::SkillInvocation(d) = &mut ctx.res.frame_mut(id).unwrap().data {
++                    d.judgement = None;
++                }
++                if !ctx.core.player(self.owner).alive {
++                    return Flow::Done;
++                }
++                let Some(suit) = colour else {
++                    return Flow::Done;
++                };
++                let black = matches!(
++                    suit,
++                    crate::catalog::Suit::Spade | crate::catalog::Suit::Club
++                );
++                match purpose {
++                    crate::event::JudgePurpose::Jidian => {
++                        if black && ctx.core.player(target).alive {
++                            let mut d = crate::machine::damage_data(Some(self.owner), target, 1);
++                            d.nature = crate::event::DamageNature::Thunder;
++                            ctx.emit(EventData::Damage(d));
++                        }
++                    }
++                    crate::event::JudgePurpose::Yuance(option) => {
++                        let Some(source) = context.source else {
++                            return Flow::Done;
++                        };
++                        let actor = if matches!(option, crate::event::YuanceOption::LoseHp) == black
++                        {
++                            context.target
++                        } else {
++                            source
++                        };
++                        match option {
++                            crate::event::YuanceOption::LoseHp => ctx.emit(EventData::LoseHp {
++                                player: actor,
++                                amount: 1,
++                            }),
++                            crate::event::YuanceOption::Recover => {
++                                ctx.recover(actor, 1, None);
++                            }
++                        }
++                    }
++                }
++                Flow::Yield
++            }
++            P::BodyDone | P::SourceLoss => Flow::Done,
++            P::JidingCard { .. } => {
++                self.progress = P::SourceLoss;
++                if ctx.core.player(self.owner).alive {
++                    if ctx.core.skills.remove(&(self.owner, self.def)).is_some() {
++                        ctx.log(LogEvent::SkillToggled {
++                            player: self.owner,
++                            skill: ctx.catalog.skill_name(self.def),
++                            enabled: false,
++                        });
++                        ctx.emit(EventData::SkillToggled {
++                            player: self.owner,
++                            skill: self.def,
++                            enabled: false,
++                            temporary: false,
++                        });
++                    }
++                }
++                Flow::Yield
++            }
++            _ => Flow::Done,
++        }
++    }
++}
++impl SkillMachine for NativeInvocation {
++    fn fork(&self) -> Box<dyn SkillMachine> {
++        Box::new(self.clone())
++    }
++    fn snapshot(&self) -> crate::snap::MachineSnapshot {
++        crate::snap::MachineSnapshot::NativeInvocation {
++            owner: self.owner,
++            def: self.def,
++            window: self.window,
++            progress: self.progress.clone(),
++        }
++    }
++    fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
++        match self.progress.clone() {
++            P::Ready => {
++                let EventData::DamageWindow { root, .. } = ctx
++                    .res
++                    .frame(ctx.current_frame_id())
++                    .expect("trigger window")
++                    .data
++                else {
++                    return Flow::Done;
++                };
++                let d = ctx.res.frame(root).expect("damage root").damage();
++                let context = InvocationData {
++                    owner: self.owner,
++                    def: self.def,
++                    window: ctx.current_frame_id(),
++                    source: d.source,
++                    target: d.target,
++                    phase: PhaseOfSkill::Before,
++                    cancelled: false,
++                    jiding_card: None,
++                    judgement: None,
++                    deferred_log: false,
++                };
++                if self.effect(ctx) == Effect::Jiding {
++                    self.progress = P::BeforeInvocation { context };
++                    self.log_child(ctx, true);
++                    Flow::Yield
++                } else {
++                    self.emit_invocation(ctx, context)
++                }
++            }
++            P::BeforeInvocation { context } => self.emit_invocation(ctx, context),
++            P::AwaitInvocation { .. } => {
++                self.progress = P::Finished;
++                if self.effect(ctx) == Effect::Jiding {
++                    self.log_child(ctx, false);
++                    Flow::Yield
++                } else {
++                    Flow::Done
++                }
++            }
++            P::Finished => Flow::Done,
++            _ => self.body(ctx),
++        }
++    }
++}
++
++pub fn jiding_recovery_origin(
++    frames: &[crate::event::Frame],
++    root: &crate::event::Frame,
++    catalog: &crate::catalog::Catalog,
++    owner: PlayerId,
++) -> bool {
++    let Some(card_frame) = root
++        .parent
++        .and_then(|id| frames.iter().find(|f| f.id == id))
++    else {
++        return false;
++    };
++    let EventData::CardUsed(card) = &card_frame.data else {
++        return false;
++    };
++    let Some(inv) = card_frame
++        .parent
++        .and_then(|id| frames.iter().find(|f| f.id == id))
++    else {
++        return false;
++    };
++    let EventData::SkillInvocation(context) = &inv.data else {
++        return false;
++    };
++    context.owner == owner
++        && card.player == owner
++        && card.use_as == Some(CardKind::LeiSha)
++        && context.phase == PhaseOfSkill::Body
++        && context.jiding_card == Some(card_frame.id)
++        && catalog.skills.get(context.def as usize).and_then(|s| {
++            s.behavior
++                .native_damage_effect(crate::event::EventKind::DamageEnd)
++        }) == Some(Effect::Jiding)
++}
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index ff7c4f14..1fc74152 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -201,6 +201,16 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
+         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
+         (EventKind::PhaseEnd, Stage::AfterTriggers) => Stage::Intrinsic,
+         (EventKind::PhaseEnd, Stage::Intrinsic) => Stage::Done,
++        (
++            EventKind::SkillBefore
++            | EventKind::SkillBegin
++            | EventKind::SkillEnd
++            | EventKind::SkillAfter
++            | EventKind::SkillOmitted,
++            Stage::AfterTriggers,
++        ) => Stage::Intrinsic,
++        (EventKind::OrdinaryJudge, Stage::AfterTriggers) => Stage::Intrinsic,
++        (EventKind::OrdinaryJudge, Stage::Intrinsic) => Stage::Done,
+         (_, Stage::Commit) => Stage::AfterTriggers,
+         (_, Stage::AfterTriggers) => Stage::Done,
+         (_, cur) => cur,
+@@ -308,8 +318,12 @@ impl SkillMachine for OptionalGate {
+                 crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
+                     .clone();
+             self.inner = Some(
+-                def.behavior
+-                    .start_in_window(&ctx.query(), self.owner, &event, kind),
++                if let Some(effect) = def.behavior.native_damage_effect(kind) {
++                    native_machine(self.owner, self.def, effect)
++                } else {
++                    def.behavior
++                        .start_in_window(&ctx.query(), self.owner, &event, kind)
++                },
+             );
+         }
+         let flow = self.inner.as_mut().expect("inner started").step(ctx);
+@@ -576,6 +590,37 @@ pub fn run(
+             }
+             Stage::Intrinsic => {
+                 if intrinsic_done {
++                    if matches!(
++                        res.frame(top).expect("frame").data,
++                        EventData::SkillInvocation(_)
++                    ) {
++                        let deferred = match &mut res.frame_mut(top).expect("frame").data {
++                            EventData::SkillInvocation(d)
++                                if d.phase == crate::event::InvocationPhase::After
++                                    && d.deferred_log =>
++                            {
++                                d.deferred_log = false;
++                                Some((d.owner, d.def))
++                            }
++                            _ => None,
++                        };
++                        if let Some((owner, def)) = deferred {
++                            let mut ctx = Ctx {
++                                core,
++                                res,
++                                catalog,
++                                out,
++                            };
++                            ctx.emit(EventData::SkillLog {
++                                owner,
++                                def,
++                                begin: false,
++                            });
++                        } else {
++                            kernel::advance_invocation(res.frame_mut(top).expect("frame"));
++                        }
++                        continue;
++                    }
+                     let kind = res.frame(top).expect("frame").kind;
+                     let next = next_stage(kind, Stage::Intrinsic);
+                     res.frame_mut(top).expect("frame").stage = next;
+@@ -606,6 +651,27 @@ pub fn run(
+     }
+ }
+ 
++fn native_machine(
++    owner: PlayerId,
++    def: SkillDefId,
++    effect: crate::event::NativeDamageEffect,
++) -> Box<dyn SkillMachine> {
++    if crate::event::uses_native_invocation(effect) {
++        Box::new(kernel::NativeInvocation {
++            owner,
++            def,
++            window: effect.window(),
++            progress: crate::event::NativeInvocationProgress::Ready,
++        })
++    } else {
++        Box::new(kernel::NativeDamageSkill {
++            owner,
++            def,
++            window: effect.window(),
++        })
++    }
++}
++
+ fn start_queued_trigger(
+     core: &mut GameStateCore,
+     res: &mut Resolution,
+@@ -658,10 +724,29 @@ fn start_queued_trigger(
+             }
+             inst.once_used = true;
+         }
+-        out.push(LogEvent::SkillTriggered {
+-            skill: def.name,
+-            owner: qt.owner,
+-        });
++        let native = def.behavior.native_damage_effect(kind);
++        if !matches!(
++            native,
++            Some(
++                crate::event::NativeDamageEffect::Zhangwu
++                    | crate::event::NativeDamageEffect::Yuance
++                    | crate::event::NativeDamageEffect::Jidian
++                    | crate::event::NativeDamageEffect::JidingRecover
++            )
++        ) {
++            out.push(LogEvent::SkillTriggered {
++                skill: def.name,
++                owner: qt.owner,
++            });
++        }
++        if let Some(effect) = native {
++            res.parks.push(Park {
++                resume_depth: res.stack.len(),
++                slot: Slot::Trigger { frame: frame_id },
++                machine: native_machine(qt.owner, qt.def, effect),
++            });
++            return;
++        }
+         def.behavior.start_in_window(
+             &QueryCtx {
+                 state: core,
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 487f4f4c..7cc924b9 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -114,16 +114,20 @@ pub(super) fn eligible(
+                         .filter(|p| p.id == id)
+                 })
+             });
+-            effect.matches(
+-                q.owner,
+-                d,
+-                &QueryCtx {
+-                    state: core,
+-                    catalog,
+-                },
+-                parent,
+-                root.and_then(|root| crate::event::damage_card_kind(frames, root, catalog)),
+-            )
++            (effect != crate::event::NativeDamageEffect::JidingRecover
++                || root.is_some_and(|root| {
++                    crate::kernel::jiding_recovery_origin(frames, root, catalog, q.owner)
++                }))
++                && effect.matches(
++                    q.owner,
++                    d,
++                    &QueryCtx {
++                        state: core,
++                        catalog,
++                    },
++                    parent,
++                    root.and_then(|root| crate::event::damage_card_kind(frames, root, catalog)),
++                )
+         } else {
+             def.behavior.filter_in_window(
+                 &QueryCtx {
+@@ -536,9 +540,12 @@ pub fn validate_trigger_bindings(
+             return Err(bad());
+         }
+     }
++    crate::kernel::NativeInvocation::validate_bindings(core, catalog, res)?;
+     for park in &res.parks {
+-        if !matches!(park.machine, MachineSnapshot::NativeDamageSkill { .. })
+-            && contains_native_damage(&park.machine)
++        if !matches!(
++            park.machine,
++            MachineSnapshot::NativeDamageSkill { .. } | MachineSnapshot::NativeInvocation { .. }
++        ) && contains_native_damage(&park.machine)
+         {
+             return Err(bad());
+         }
+@@ -565,6 +572,7 @@ pub fn validate_trigger_bindings(
+                 || park.resume_depth
+                     != res.stack.iter().position(|frame| frame.id == f.id).unwrap() + 1
+                 || effect.window() != *window
++                || crate::event::uses_native_invocation(effect)
+                 || !admitted
+                 || !eligible(core, catalog, &q, &res.stack, f)
+             {
+@@ -736,7 +744,9 @@ fn contains_window(machine: &MachineSnapshot) -> bool {
+ 
+ fn contains_native_damage(machine: &MachineSnapshot) -> bool {
+     match machine {
+-        MachineSnapshot::NativeDamageSkill { .. } => true,
++        MachineSnapshot::NativeInvocation { .. } | MachineSnapshot::NativeDamageSkill { .. } => {
++            true
++        }
+         MachineSnapshot::OptionalGate { inner, .. }
+         | MachineSnapshot::Aoe { inner, .. }
+         | MachineSnapshot::Chain { inner, .. }
+diff --git a/crates/engine-native-kernel/src/snap/asks.rs b/crates/engine-native-kernel/src/snap/asks.rs
+index e3d386d6..07d83128 100644
+--- a/crates/engine-native-kernel/src/snap/asks.rs
++++ b/crates/engine-native-kernel/src/snap/asks.rs
+@@ -1,4 +1,5 @@
+ use super::*;
++mod judge;
+ mod shapes;
+ pub use shapes::*;
+ 
+@@ -17,9 +18,31 @@ pub fn active_ask(
+     catalog: &Catalog,
+ ) -> Option<ExpectedAsk> {
+     match machine {
+-        MachineSnapshot::TriggerOrder { owner, candidates, asked, .. } => {
+-            if !asked { return None; }
+-            Some(ask(*owner, "trigger_order", ChoiceKind::PickTag, candidates.iter().copied().map(ChoiceOption::Skill).collect(), 1, 1, false))
++        MachineSnapshot::NativeInvocation {
++            owner, progress, ..
++        } => crate::kernel::NativeInvocation::expected_ask(*owner, progress, core),
++        MachineSnapshot::TriggerOrder {
++            owner,
++            candidates,
++            asked,
++            ..
++        } => {
++            if !asked {
++                return None;
++            }
++            Some(ask(
++                *owner,
++                "trigger_order",
++                ChoiceKind::PickTag,
++                candidates
++                    .iter()
++                    .copied()
++                    .map(ChoiceOption::Skill)
++                    .collect(),
++                1,
++                1,
++                false,
++            ))
+         }
+         // ---- 内核机器 ----
+         MachineSnapshot::MonkeySteal { holders, asked, .. } => {
+@@ -282,74 +305,9 @@ pub fn active_ask(
+                 active_ask(e, core, catalog)
+             }
+         }
+-        MachineSnapshot::JudgePhase { owner, current, .. } => {
+-            let c = current.as_deref()?;
+-            if !c.finalized && c.judge_held {
+-                if let Some(cards) = &c.gaiming_cards {
+-                    return Some(ask(
+-                        *owner,
+-                        "gaiming_pick",
+-                        ChoiceKind::SelectCards,
+-                        hand_card_options(cards),
+-                        1,
+-                        1,
+-                        true,
+-                    ));
+-                }
+-                if let (Some(holder), Some(other)) = (c.haotian_holder, c.haotian_other) {
+-                    return Some(ask(
+-                        holder,
+-                        "haotianta_pick",
+-                        ChoiceKind::SelectCards,
+-                        vec![ChoiceOption::Card(c.judge_card), ChoiceOption::Card(other)],
+-                        1,
+-                        1,
+-                        false,
+-                    ));
+-                }
+-            }
+-            if c.in_rewrite {
+-                if !c.asked {
+-                    return None;
+-                }
+-                let rewriter = *c.rewriters.first()?;
+-                // 黑色手牌 + 黑色装备；鬼才持有者全部手牌可打
+-                let gui_cai = catalog
+-                    .skill_by_name(GUI_CAI)
+-                    .map(|d| core.has_skill(rewriter, d))
+-                    .unwrap_or(false);
+-                let is_black = |id: CardId| {
+-                    matches!(
+-                        catalog.cards[id as usize].suit,
+-                        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+-                    )
+-                };
+-                let mut options = vec![ChoiceOption::Pass];
+-                for c in core.player(rewriter).hand.iter().copied() {
+-                    if gui_cai || is_black(c) {
+-                        options.push(ChoiceOption::Card(c));
+-                    }
+-                }
+-                for c in core.player(rewriter).equips.iter().copied() {
+-                    if is_black(c) {
+-                        options.push(ChoiceOption::Card(c));
+-                    }
+-                }
+-                return Some(ask(
+-                    rewriter,
+-                    "gui_dao_rewrite",
+-                    ChoiceKind::RespondCard,
+-                    options,
+-                    1,
+-                    1,
+-                    false,
+-                ));
+-            }
+-            // 天妒询问（判定确定后、获得前、判定牌仍由机器持有）
+-            if c.finalized && !c.tian_du.is_empty() && c.asked && !c.gained && c.judge_held {
+-                return Some(confirm_ask(c.tian_du[0], "tian_du_gain"));
+-            }
+-            None
++        MachineSnapshot::JudgePhase { owner, current, .. }
++        | MachineSnapshot::JudgeContinuation { owner, current, .. } => {
++            judge::active_judge_ask(owner, current, core, catalog)
+         }
+         MachineSnapshot::PlaceDelayed { .. } => None,
+         MachineSnapshot::Aoe { inner, .. } => {
+@@ -410,13 +368,20 @@ pub fn active_ask(
+             ))
+         }
+         MachineSnapshot::Death { .. } => None,
+-        MachineSnapshot::OptionalGate { owner, asked, inner, .. } => {
++        MachineSnapshot::OptionalGate {
++            owner,
++            asked,
++            inner,
++            ..
++        } => {
+             if let Some(e) = inner {
+                 let mut ask = active_ask(e, core, catalog)?;
+                 ask.source_skill = optional_source(e, catalog);
+                 return Some(ask);
+             }
+-            if !*asked { return None; }
++            if !*asked {
++                return None;
++            }
+             let mut ask = confirm_ask(*owner, "trigger_confirm");
+             ask.source_skill = optional_source(machine, catalog);
+             Some(ask)
+@@ -656,7 +621,11 @@ pub fn active_ask(
+             // 望乡：直写一步机，恢复无询问
+             None
+         }
+-        MachineSnapshot::Rvm { commit_pending, commit_state, .. } if !commit_state.is_empty() => {
++        MachineSnapshot::Rvm {
++            commit_pending,
++            commit_state,
++            ..
++        } if !commit_state.is_empty() => {
+             let effects = crate::rvm_ops::dec_effects(commit_pending)?;
+             (catalog.hooks.vm_ask)(effects.first()?, commit_state, core, catalog)
+         }
+@@ -893,7 +862,11 @@ pub fn active_ask(
+                 _ => None,
+             }
+         }
+-        MachineSnapshot::XunXun { owner, stage: XunXunStageSnap::Arrange, top } => Some(ask(
++        MachineSnapshot::XunXun {
++            owner,
++            stage: XunXunStageSnap::Arrange,
++            top,
++        } => Some(ask(
+             *owner,
+             "xunxun_arrange",
+             ChoiceKind::SelectCards,
+@@ -902,7 +875,11 @@ pub fn active_ask(
+             2,
+             false,
+         )),
+-        MachineSnapshot::JiJie { owner, stage: JiJieStageSnap::Read, .. } => Some(ask(
++        MachineSnapshot::JiJie {
++            owner,
++            stage: JiJieStageSnap::Read,
++            ..
++        } => Some(ask(
+             *owner,
+             "jijie_give_target",
+             ChoiceKind::SelectPlayers,
+diff --git a/crates/engine-native-kernel/src/snap/asks/judge.rs b/crates/engine-native-kernel/src/snap/asks/judge.rs
+new file mode 100644
+index 00000000..b331c2eb
+--- /dev/null
++++ b/crates/engine-native-kernel/src/snap/asks/judge.rs
+@@ -0,0 +1,82 @@
++use super::*;
++pub(super) fn active_judge_ask(
++    owner: &PlayerId,
++    current: &Option<Box<JudgementProgressSnap>>,
++    core: &GameStateCore,
++    catalog: &Catalog,
++) -> Option<ExpectedAsk> {
++    let c = current.as_deref()?;
++    if !c.finalized && c.judge_held {
++        if let Some(cards) = &c.gaiming_cards {
++            return Some(ask(
++                *owner,
++                "gaiming_pick",
++                ChoiceKind::SelectCards,
++                hand_card_options(cards),
++                1,
++                1,
++                true,
++            ));
++        }
++        if let (Some(holder), Some(other)) = (c.haotian_holder, c.haotian_other) {
++            return Some(ask(
++                holder,
++                "haotianta_pick",
++                ChoiceKind::SelectCards,
++                vec![ChoiceOption::Card(c.judge_card), ChoiceOption::Card(other)],
++                1,
++                1,
++                false,
++            ));
++        }
++    }
++    if c.in_rewrite {
++        if !c.asked {
++            return None;
++        }
++        let rewriter = *c.rewriters.first()?;
++        // 黑色手牌 + 黑色装备；鬼才持有者全部手牌可打
++        let gui_cai = catalog
++            .skill_by_name(GUI_CAI)
++            .map(|d| core.has_skill(rewriter, d))
++            .unwrap_or(false);
++        let any_he = [crate::vocabulary::names::BOSS_TIANDAO, "gtiandao"]
++            .iter()
++            .any(|name| {
++                catalog
++                    .skill_by_name(name)
++                    .is_some_and(|d| core.has_skill(rewriter, d))
++            });
++        let is_black = |id: CardId| {
++            matches!(
++                catalog.cards[id as usize].suit,
++                crate::catalog::Suit::Spade | crate::catalog::Suit::Club
++            )
++        };
++        let mut options = vec![ChoiceOption::Pass];
++        for c in core.player(rewriter).hand.iter().copied() {
++            if any_he || gui_cai || is_black(c) {
++                options.push(ChoiceOption::Card(c));
++            }
++        }
++        for c in core.player(rewriter).equips.iter().copied() {
++            if any_he || is_black(c) {
++                options.push(ChoiceOption::Card(c));
++            }
++        }
++        return Some(ask(
++            rewriter,
++            "gui_dao_rewrite",
++            ChoiceKind::RespondCard,
++            options,
++            1,
++            1,
++            false,
++        ));
++    }
++    // 天妒询问（判定确定后、获得前、判定牌仍由机器持有）
++    if c.finalized && !c.tian_du.is_empty() && c.asked && !c.gained && c.judge_held {
++        return Some(confirm_ask(c.tian_du[0], "tian_du_gain"));
++    }
++    None
++}
+diff --git a/crates/engine-native-kernel/src/snap/machine_validation.rs b/crates/engine-native-kernel/src/snap/machine_validation.rs
+index 084d8542..d659cb54 100644
+--- a/crates/engine-native-kernel/src/snap/machine_validation.rs
++++ b/crates/engine-native-kernel/src/snap/machine_validation.rs
+@@ -7,6 +7,35 @@ pub(super) fn check_machine(
+     core: &GameStateCore,
+ ) -> Result<(), SnapshotError> {
+     match m {
++        MachineSnapshot::NativeInvocation {
++            owner,
++            def,
++            progress,
++            ..
++        } => {
++            check_pid(*owner, b)?;
++            check_def(*def, b)?;
++            use crate::event::NativeInvocationProgress as P;
++            match progress {
++                P::BeforeInvocation { context } => {
++                    check_event_data(&EventData::SkillInvocation(context.clone()), b)?
++                }
++                P::HolderAsk { candidates } | P::HolderPay { cards: candidates } => {
++                    check_cards(candidates, b)?;
++                    let unique: std::collections::BTreeSet<_> = candidates.iter().collect();
++                    if candidates.is_empty() || unique.len() != candidates.len() {
++                        return Err(oob("native_payment_candidates", 0));
++                    }
++                }
++                P::SourceAsk {
++                    player, candidates, ..
++                } => {
++                    check_pid(*player, b)?;
++                    check_cards(candidates, b)?;
++                }
++                _ => {}
++            }
++        }
+         MachineSnapshot::NativeDamageSkill { owner, def, .. } => {
+             check_pid(*owner, b)?;
+             check_def(*def, b)?;
+@@ -100,7 +129,13 @@ pub(super) fn check_machine(
+                 check_machine(e, b, core)?;
+             }
+         }
+-        MachineSnapshot::JudgePhase {
++        MachineSnapshot::JudgeContinuation {
++            owner,
++            queue,
++            current,
++            ..
++        }
++        | MachineSnapshot::JudgePhase {
+             owner,
+             queue,
+             current,
+@@ -108,7 +143,7 @@ pub(super) fn check_machine(
+             check_pid(*owner, b)?;
+             check_cards(queue, b)?;
+             if let Some(c) = current {
+-                check_card(c.trick, b)?;
++                check_opt_card(c.trick, b)?;
+                 check_card(c.judge_card, b)?;
+                 check_pids(&c.rewriters, b)?;
+                 check_pids(&c.tian_du, b)?;
+diff --git a/crates/engine-native-kernel/src/snap/restore.rs b/crates/engine-native-kernel/src/snap/restore.rs
+index 75ac8d04..2be96951 100644
+--- a/crates/engine-native-kernel/src/snap/restore.rs
++++ b/crates/engine-native-kernel/src/snap/restore.rs
+@@ -12,12 +12,45 @@ impl MachineSnapshot {
+             return m;
+         }
+         match self {
++            MachineSnapshot::JudgeContinuation {
++                owner,
++                queue,
++                current,
++                ordinary,
++                started,
++                payment,
++            } => {
++                let mut m = crate::kernel::JudgePhaseMachine::new(
++                    *owner,
++                    queue.clone(),
++                    current
++                        .as_deref()
++                        .map(crate::kernel::JudgementProgress::from_snap),
++                );
++                m.ordinary = *ordinary;
++                m.started = *started;
++                m.payment = payment.clone();
++                Ok(Box::new(m))
++            }
++            MachineSnapshot::NativeInvocation {
++                owner,
++                def,
++                window,
++                progress,
++            } => Ok(Box::new(crate::kernel::NativeInvocation {
++                owner: *owner,
++                def: *def,
++                window: *window,
++                progress: progress.clone(),
++            })),
+             MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+                 if catalog
+                     .skills
+                     .get(*def as usize)
+                     .and_then(|s| s.behavior.native_damage_effect(window.event_kind()))
+-                    .is_none_or(|e| e.window() != *window)
++                    .is_none_or(|e| {
++                        e.window() != *window || crate::event::uses_native_invocation(e)
++                    })
+                 {
+                     return Err(SnapshotError::UnknownMachine);
+                 }
+diff --git a/crates/engine-native-kernel/src/snap/types.rs b/crates/engine-native-kernel/src/snap/types.rs
+index 841a3fa4..246126ed 100644
+--- a/crates/engine-native-kernel/src/snap/types.rs
++++ b/crates/engine-native-kernel/src/snap/types.rs
+@@ -153,7 +153,7 @@ pub enum LiJianStageSnap {
+ /// 单次判定的进行态快照（与 kernel `JudgementProgress` 字段一一对应）。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub struct JudgementProgressSnap {
+-    pub trick: CardId,
++    pub trick: Option<CardId>,
+     pub judge_card: CardId,
+     /// 鬼道/鬼才改判询问队列（座位序）。
+     pub rewriters: Vec<PlayerId>,
+@@ -205,6 +205,20 @@ pub enum MachineSnapshot {
+     DamageFlow {
+         root: crate::ids::EventId,
+     },
++    JudgeContinuation {
++        owner: PlayerId,
++        queue: Vec<CardId>,
++        current: Option<Box<JudgementProgressSnap>>,
++        ordinary: Option<crate::ids::EventId>,
++        started: bool,
++        payment: Option<JudgeReplacementSnap>,
++    },
++    NativeInvocation {
++        owner: PlayerId,
++        def: SkillDefId,
++        window: crate::event::DamageWindowKind,
++        progress: crate::event::NativeInvocationProgress,
++    },
+     NativeDamageSkill {
+         owner: PlayerId,
+         def: SkillDefId,
+@@ -795,3 +809,10 @@ pub struct RestoreBounds {
+     pub generals: usize,
+     pub ruleset_version: u64,
+ }
++
++#[derive(Debug, Clone, PartialEq, Eq)]
++pub struct JudgeReplacementSnap {
++    pub player: PlayerId,
++    pub old: CardId,
++    pub discard_old: bool,
++}
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index 0047733a..89aa028b 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -68,6 +68,17 @@ pub(super) fn check_cards(cs: &[CardId], b: &RestoreBounds) -> Result<(), Snapsh
+ 
+ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+     match data {
++        EventData::OrdinaryJudge { owner, .. } => check_pid(*owner, b)?,
++        EventData::SkillInvocation(d) => {
++            check_pid(d.owner, b)?;
++            check_def(d.def, b)?;
++            check_opt_pid(d.source, b)?;
++            check_pid(d.target, b)?;
++        }
++        EventData::SkillLog { owner, def, .. } => {
++            check_pid(*owner, b)?;
++            check_def(*def, b)?;
++        }
+         EventData::DamageWindow { .. } => {}
+         EventData::Damage(d) => {
+             super::damage_validation::check_settlement(d, b)?;
+@@ -181,6 +192,7 @@ pub(super) fn check_options(opts: &[ChoiceOption], b: &RestoreBounds) -> Result<
+     for o in opts {
+         match o {
+             ChoiceOption::Card(c) => check_card(*c, b)?,
++            ChoiceOption::Control(_) => {}
+             ChoiceOption::Skill(d) => check_def(*d, b)?,
+             ChoiceOption::Player(p) => check_pid(*p, b)?,
+             _ => {}
+@@ -345,13 +357,20 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
+ 
+ /// 机器持牌收集（N04-f：判定进行态/观星顶牌由机器持有，不在任何牌区）。
+ pub fn machine_held_cards(m: &MachineSnapshot, out: &mut Vec<CardId>) {
++    if let MachineSnapshot::JudgeContinuation {
++        payment: Some(p), ..
++    } = m
++    {
++        out.push(p.old);
++    }
+     match m {
+-        MachineSnapshot::JudgePhase { queue, current, .. } => {
++        MachineSnapshot::JudgeContinuation { queue, current, .. }
++        | MachineSnapshot::JudgePhase { queue, current, .. } => {
+             out.extend(queue.iter().copied());
+             if let Some(c) = current {
+                 // finalized（效果已套用）后锦囊已离机，trick 仅为簿记
+                 if !c.finalized {
+-                    out.push(c.trick);
++                    out.extend(c.trick);
+                 }
+                 if c.judge_held {
+                     if !c.finalized {
+@@ -466,7 +485,10 @@ pub fn validate_resolution(
+         check_event_data(&f.data, b)?;
+         if matches!(
+             f.data,
+-            EventData::Damage(_) | EventData::DamageWindow { .. }
++            EventData::Damage(_)
++                | EventData::DamageWindow { .. }
++                | EventData::SkillInvocation(_)
++                | EventData::SkillLog { .. }
+         ) && f.kind != f.data.kind()
+         {
+             return Err(SnapshotError::BadTag("damage_frame_kind", 0));
+diff --git a/crates/engine-native-kernel/src/vocabulary/generals.rs b/crates/engine-native-kernel/src/vocabulary/generals.rs
+index 525f97b4..d8d3ad35 100644
+--- a/crates/engine-native-kernel/src/vocabulary/generals.rs
++++ b/crates/engine-native-kernel/src/vocabulary/generals.rs
+@@ -109,6 +109,17 @@ pub const BOSS_MUSHENGOUMANG: (usize, (&str, Faction, &[&str], u32, Gender)) = (
+     ),
+ );
+ 
++/// Immutable Liuli boss_jinshenrushou declaration.
++pub const BOSS_JINSHENRUSHOU: (usize, (&str, Faction, &[&str], u32, Gender)) = (
++    15,
++    (
++        "蓐收",
++        Faction::Qun,
++        &[BOSS_SHENYI, BOSS_XINGQIU, BOSS_BAIMANG3, BOSS_BAIMANG3X],
++        5,
++        Gender::Male,
++    ),
++);
+ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+     ("烛阴", Faction::Qun, &[BOSS_XIONGSHOU], 4, Gender::Male),
+     // 混沌（上游 boss_hundun hp25）：隐贼以「体力≤一半条件内生效」近似
+@@ -234,13 +245,7 @@ pub const BOSS_GENERALS: &[(&str, Faction, &[&str], u32, Gender)] = &[
+     ),
+     // 蓐收（v239 星囚；神裔共用 v233；v294 白芒3/白芒3·转阶隐藏链；
+     // 上游 names 嬴|该、shen→群目录近似）
+-    (
+-        "蓐收",
+-        Faction::Qun,
+-        &[BOSS_SHENYI, BOSS_XINGQIU, BOSS_BAIMANG3, BOSS_BAIMANG3X],
+-        5,
+-        Gender::Male,
+-    ),
++    BOSS_JINSHENRUSHOU.1,
+     // 勾芒（v240 不臣；神裔共用 v233；v292 青木3/青木3·转阶隐藏链；
+     // 上游 names 姬|重、shen→群目录近似）
+     BOSS_MUSHENGOUMANG.1,
+diff --git a/crates/engine-native-wasm/src/session.rs b/crates/engine-native-wasm/src/session.rs
+index 5e7c6266..507174b7 100644
+--- a/crates/engine-native-wasm/src/session.rs
++++ b/crates/engine-native-wasm/src/session.rs
+@@ -427,12 +427,13 @@ impl NativeSession {
+                 "id": id,
+                 "observer": seat,
+                 "prompt": prompt,
+-                "native_kind": engine_native::view::choice_kind_name(kind),
+-                "kind": if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
++                "native_kind": if kind==engine_native::ChoiceKind::Control {None}else{Some(engine_native::view::choice_kind_name(kind))},
++                "kind": if kind==engine_native::ChoiceKind::Control{engine_api::ChoiceKind::Custom}else if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
+                 "min": min,
+                 "max": max,
+                 "allowCancel": allow_cancel,
+                 "options": options.iter().map(|o| match o {
++                    engine_native::ChoiceOption::Control(option)=>serde_json::json!(option.label()),
+                     engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
+                     engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
+                     engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
+@@ -442,9 +443,11 @@ impl NativeSession {
+                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
+                 }).collect::<Vec<_>>(),
+                 });
+-                if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
++                if let Some(source) = source_skill {
++                    choice["source_skill"] = serde_json::json!(source);
++                }
+                 choice.to_string()
+-            },
++            }
+             Some(ChoiceView::Other {
+                 id,
+                 observer,
+diff --git a/crates/engine-native-wasm/tests/c331_invocation_controls.rs b/crates/engine-native-wasm/tests/c331_invocation_controls.rs
+new file mode 100644
+index 00000000..7c9e47e7
+--- /dev/null
++++ b/crates/engine-native-wasm/tests/c331_invocation_controls.rs
+@@ -0,0 +1,32 @@
++use engine_native::event::DamageNature;
++use engine_native::Engine;
++use engine_native_wasm::{hex_encode, NativeSession};
++use serde_json::Value;
++#[test]
++fn actual_control_uses_existing_string_custom_and_index_answer() {
++    let mut e = Engine::new(15101, 3);
++    for p in 0..3 {
++        e.debug_clear_hand(p);
++    }
++    e.debug_grant(2, "远策");
++    e.debug_set_deck_top_by(|c| c.suit == engine_native::catalog::Suit::Heart);
++    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
++    let bytes = engine_native::archive::encode_archive(&e.save());
++    let mut session = NativeSession::new(3, 15101).unwrap();
++    session.restore_hex_checked(&hex_encode(&bytes)).unwrap();
++    let raw = session.open_choice_json(2).unwrap();
++    let v: Value = serde_json::from_str(&raw).unwrap();
++    assert_eq!(v["kind"], "Custom");
++    assert!(v["native_kind"].is_null());
++    assert_eq!(
++        v["options"],
++        serde_json::json!(["yuance_lose_hp", "yuance_recover"])
++    );
++    let id = v["id"].as_u64().unwrap();
++    let out = session.answer(2, id, vec![1]).unwrap();
++    assert!(!out.contains("Rejected"), "{out}");
++    assert_eq!(
++        serde_json::from_str::<Value>(&session.open_choice_json(2).unwrap()).unwrap(),
++        Value::Null
++    );
++}
+diff --git a/crates/engine-native/src/ai/remap.rs b/crates/engine-native/src/ai/remap.rs
+index b4ce219d..4d650a1e 100644
+--- a/crates/engine-native/src/ai/remap.rs
++++ b/crates/engine-native/src/ai/remap.rs
+@@ -49,6 +49,21 @@ fn effects(bytes: &mut Vec<u8>, map: &impl Fn(&mut u32)) {
+ 
+ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u32)) {
+     use MachineSnapshot::*;
++    if let JudgeContinuation {
++        payment: Some(p), ..
++    } = machine
++    {
++        map(&mut p.old);
++    }
++    if let NativeInvocation { progress, .. } = machine {
++        use engine_native_kernel::event::NativeInvocationProgress as P;
++        match progress {
++            P::HolderAsk { candidates }
++            | P::SourceAsk { candidates, .. }
++            | P::HolderPay { cards: candidates } => candidates.iter_mut().for_each(map),
++            _ => {}
++        }
++    }
+     match machine {
+         Sha {
+             card,
+@@ -91,10 +106,12 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
+                 machine_cards(inner, map);
+             }
+         }
+-        JudgePhase { queue, current, .. } => {
++        JudgeContinuation { queue, current, .. } | JudgePhase { queue, current, .. } => {
+             queue.iter_mut().for_each(map);
+             if let Some(c) = current {
+-                map(&mut c.trick);
++                if let Some(trick) = &mut c.trick {
++                    map(trick);
++                }
+                 map(&mut c.judge_card);
+                 c.haotian_other.iter_mut().for_each(map);
+                 if let Some(cards) = &mut c.gaiming_cards {
+@@ -140,9 +157,19 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
+ pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool {
+     use MachineSnapshot::*;
+     match machine {
+-        Rvm { paused, commit_pick, committing, commit_state, following, .. } => {
+-            paused.is_some() || commit_pick.is_some() || *committing
+-                || !commit_state.is_empty() || !following.is_empty()
++        Rvm {
++            paused,
++            commit_pick,
++            committing,
++            commit_state,
++            following,
++            ..
++        } => {
++            paused.is_some()
++                || commit_pick.is_some()
++                || *committing
++                || !commit_state.is_empty()
++                || !following.is_empty()
+         }
+         // Preserve these pending owners until their sampling semantics are audited.
+         XunXun { .. } | JiJie { .. } => true,
+@@ -167,11 +194,11 @@ pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool
+ pub(super) fn held_cards(machine: &MachineSnapshot, out: &mut Vec<u32>) {
+     use MachineSnapshot::*;
+     match machine {
+-        JudgePhase { queue, current, .. } => {
++        JudgeContinuation { queue, current, .. } | JudgePhase { queue, current, .. } => {
+             out.extend(queue);
+             if let Some(c) = current {
+                 if !c.finalized {
+-                    out.push(c.trick);
++                    out.extend(c.trick);
+                 }
+                 if c.judge_held {
+                     out.push(c.judge_card);
+diff --git a/crates/engine-native/src/engine/hash.rs b/crates/engine-native/src/engine/hash.rs
+index dc14585c..7b18854f 100644
+--- a/crates/engine-native/src/engine/hash.rs
++++ b/crates/engine-native/src/engine/hash.rs
+@@ -1,5 +1,6 @@
+ use super::*;
+ mod machine;
++mod native_invocation;
+ use machine::*;
+ 
+ /// PA03 缓冲摘要写入器：先拼缓冲再一次 blake3 update。blake3 流式与
+@@ -701,18 +702,47 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
+ 
+ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
+     match data {
++        EventData::OrdinaryJudge { owner, invocation } => {
++            push_u8(h, 26);
++            push_u8(h, *owner);
++            push_u32(h, *invocation);
++        }
++        EventData::SkillInvocation(d) => {
++            push_u8(h, 24);
++            push_u8(h, d.owner);
++            push_u16(h, d.def);
++            push_u32(h, d.window);
++            push_u8(h, d.source.map(|p| p + 1).unwrap_or(0));
++            push_u8(h, d.target);
++            push_u8(h, d.phase.tag());
++            push_u8(h, u8::from(d.cancelled));
++            push_u32(h, d.jiding_card.unwrap_or(u32::MAX));
++            push_u8(h, d.judgement.map(|s| s as u8 + 1).unwrap_or(0));
++            push_u8(h, u8::from(d.deferred_log));
++        }
++        EventData::SkillLog { owner, def, begin } => {
++            push_u8(h, 25);
++            push_u8(h, *owner);
++            push_u16(h, *def);
++            push_u8(h, u8::from(*begin));
++        }
+         EventData::Damage(d) => {
+             push_u8(h, 1);
+             push_u8(h, d.source.map(|s| s + 1).unwrap_or(0));
+             push_u8(h, d.target);
+             push_i32(h, d.amount);
+             h.buf.extend_from_slice(&d.settlement.canonical_bytes());
+-            push_u32(h,d.card.unwrap_or(u32::MAX));push_u8(h,u8::from(d.from_chain));
++            push_u32(h, d.card.unwrap_or(u32::MAX));
++            push_u8(h, u8::from(d.from_chain));
+             push_players(h, &d.redirect_chain);
+             push_u8(h, d.prevented as u8);
+             push_u8(h, d.nature as u8);
+         }
+-        EventData::DamageWindow { root, window } => { push_u8(h,23);push_u32(h,*root);push_u8(h,window.tag()); },
++        EventData::DamageWindow { root, window } => {
++            push_u8(h, 23);
++            push_u32(h, *root);
++            push_u8(h, window.tag());
++        }
+         EventData::Recover {
+             player,
+             amount,
+@@ -918,7 +948,14 @@ pub(super) fn push_options(h: &mut HashSink, opts: &[ChoiceOption]) {
+                 push_u8(h, 5);
+                 push_u8(h, *t);
+             }
+-            ChoiceOption::Skill(s) => { push_u8(h, 7); push_u32(h, u32::from(*s)); }
++            ChoiceOption::Control(option) => {
++                push_u8(h, 8);
++                push_u8(h, option.tag());
++            }
++            ChoiceOption::Skill(s) => {
++                push_u8(h, 7);
++                push_u32(h, u32::from(*s));
++            }
+             ChoiceOption::Kind(k) => {
+                 push_u8(h, 6);
+                 push_u32(h, u32::from(*k));
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index 8f82993e..4f7881c0 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -1,11 +1,52 @@
+ //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
+ 
++use super::native_invocation::push_native_invocation;
+ use super::*;
+ 
+ /// 机器规范快照的摘要编码：判别符 + 全字段；嵌套机器递归。
+ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+     use crate::snap::MachineSnapshot as M;
+     match s {
++        M::JudgeContinuation {
++            owner,
++            queue,
++            current,
++            ordinary,
++            started,
++            payment,
++        } => {
++            push_u8(h, 87);
++            push_machine(
++                h,
++                &M::JudgePhase {
++                    owner: *owner,
++                    queue: queue.clone(),
++                    current: current.clone(),
++                },
++            );
++            push_u32(h, ordinary.unwrap_or(u32::MAX));
++            push_u8(h, u8::from(*started));
++            if let Some(p) = payment {
++                push_u8(h, 1);
++                push_u8(h, p.player);
++                push_u32(h, p.old);
++                push_u8(h, u8::from(p.discard_old));
++            } else {
++                push_u8(h, 0);
++            }
++        }
++        M::NativeInvocation {
++            owner,
++            def,
++            window,
++            progress,
++        } => {
++            push_u8(h, 86);
++            push_u8(h, *owner);
++            push_u16(h, *def);
++            push_u8(h, window.tag());
++            push_native_invocation(h, progress);
++        }
+         M::NativeDamageSkill { owner, def, window } => {
+             push_u8(h, 85);
+             push_u8(h, *owner);
+@@ -430,7 +471,7 @@ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+                 None => push_u8(h, 0),
+                 Some(c) => {
+                     push_u8(h, 1);
+-                    push_u32(h, c.trick);
++                    push_u32(h, c.trick.unwrap_or(u32::MAX));
+                     push_u32(h, c.judge_card);
+                     push_players(h, &c.rewriters);
+                     push_u8(h, c.asked as u8);
+diff --git a/crates/engine-native/src/engine/hash/native_invocation.rs b/crates/engine-native/src/engine/hash/native_invocation.rs
+new file mode 100644
+index 00000000..7075b282
+--- /dev/null
++++ b/crates/engine-native/src/engine/hash/native_invocation.rs
+@@ -0,0 +1,73 @@
++use super::*;
++pub(super) fn push_native_invocation(
++    h: &mut HashSink,
++    p: &engine_native_kernel::event::NativeInvocationProgress,
++) {
++    use engine_native_kernel::event::NativeInvocationProgress as P;
++    match p {
++        P::YuanceAsk => push_u8(h, 12),
++        P::JidianAsk { targets } => {
++            push_u8(h, 13);
++            push_players(h, targets);
++        }
++        P::AwaitJudge {
++            child,
++            target,
++            purpose,
++        } => {
++            push_u8(h, 14);
++            push_u32(h, *child);
++            push_u8(h, *target);
++            push_u8(
++                h,
++                match purpose {
++                    engine_native_kernel::event::JudgePurpose::Yuance(option) => option.tag(),
++                    engine_native_kernel::event::JudgePurpose::Jidian => 2,
++                },
++            );
++        }
++        P::BodyDone => push_u8(h, 15),
++        P::Ready => push_u8(h, 0),
++        P::BeforeInvocation { context } => {
++            push_u8(h, 1);
++            push_event_data(h, &EventData::SkillInvocation(context.clone()));
++        }
++        P::AwaitInvocation { child } => {
++            push_u8(h, 2);
++            push_u32(h, *child);
++        }
++        P::Finished => push_u8(h, 3),
++        P::Body => push_u8(h, 4),
++        P::HolderAsk { candidates } => {
++            push_u8(h, 5);
++            push_cards(h, candidates);
++        }
++        P::HolderPay { cards } => {
++            push_u8(h, 6);
++            push_cards(h, cards);
++        }
++        P::HolderLoss { count } => {
++            push_u8(h, 7);
++            push_u32(h, *count);
++        }
++        P::HolderAfterLog { count } => {
++            push_u8(h, 8);
++            push_u32(h, *count);
++        }
++        P::SourceAsk {
++            player,
++            count,
++            candidates,
++        } => {
++            push_u8(h, 9);
++            push_u8(h, *player);
++            push_u32(h, *count);
++            push_cards(h, candidates);
++        }
++        P::SourceLoss => push_u8(h, 10),
++        P::JidingCard { child } => {
++            push_u8(h, 11);
++            push_u32(h, *child);
++        }
++    }
++}
+diff --git a/crates/engine-native/src/view.rs b/crates/engine-native/src/view.rs
+index 0336b856..6f656203 100644
+--- a/crates/engine-native/src/view.rs
++++ b/crates/engine-native/src/view.rs
+@@ -7,10 +7,10 @@
+ 
+ use crate::event::Phase;
+ use crate::ids::{CardId, PlayerId};
++use crate::machine::LogEvent;
+ use crate::state::Role;
++use crate::state::Winner;
+ use crate::GameAction;
+-use crate::state::{Winner};
+-use crate::machine::LogEvent;
+ 
+ /// 手牌可见性：本人或可信裁判可见具体牌，普通他人只见数量。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+@@ -162,7 +162,10 @@ impl<'a> AiSession<'a> {
+     /// 组装策略输入（视图 + 询问 + 协议数据 + 自己手牌类别）。
+     pub fn input(&self) -> PolicyInput {
+         let view = self.view();
+-        let own_hand_kinds = match (&view.players[self.seat as usize].hand, self.engine.catalog()) {
++        let own_hand_kinds = match (
++            &view.players[self.seat as usize].hand,
++            self.engine.catalog(),
++        ) {
+             (HandView::Own(hand), cat) => hand
+                 .iter()
+                 .map(|c| (*c, cat.cards[*c as usize].kind))
+@@ -220,6 +223,7 @@ pub fn public_event_code(event: &LogEvent) -> Option<u16> {
+ /// Canonical presentation name shared by server, WASM and native session adapters.
+ pub fn choice_kind_name(kind: crate::ChoiceKind) -> &'static str {
+     match kind {
++        crate::ChoiceKind::Control => "control",
+         crate::ChoiceKind::Confirm => "confirm",
+         crate::ChoiceKind::SelectCards => "select_cards",
+         crate::ChoiceKind::SelectPlayers => "select_players",
+diff --git a/crates/engine-native/tests/a0_tag_registry.rs b/crates/engine-native/tests/a0_tag_registry.rs
+index 5c8a8bde..01e8084c 100644
+--- a/crates/engine-native/tests/a0_tag_registry.rs
++++ b/crates/engine-native/tests/a0_tag_registry.rs
+@@ -40,6 +40,26 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+         from_chain: false,
+     });
+     vec![
++        (
++            "JudgeContinuation",
++            MachineSnapshot::JudgeContinuation {
++                owner: 0,
++                queue: vec![],
++                current: None,
++                ordinary: None,
++                started: false,
++                payment: None,
++            },
++        ),
++        (
++            "NativeInvocation",
++            MachineSnapshot::NativeInvocation {
++                owner: 0,
++                def: 0,
++                window: engine_native::event::DamageWindowKind::End,
++                progress: engine_native::event::NativeInvocationProgress::Ready,
++            },
++        ),
+         ("DamageFlow", MachineSnapshot::DamageFlow { root: 1 }),
+         (
+             "NativeDamageSkill",
+@@ -131,7 +151,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+                 owner: 0,
+                 queue: vec![1],
+                 current: Some(Box::new(JudgementProgressSnap {
+-                    trick: 1,
++                    trick: Some(1),
+                     judge_card: 2,
+                     rewriters: vec![1],
+                     asked: true,
+@@ -674,6 +694,8 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
+         M::Rvm { .. } => 80,
+         M::TriggerOrder { .. } => 81,
+         M::DamageFlow { .. } => 82,
++        M::JudgeContinuation { .. } => 85,
++        M::NativeInvocation { .. } => 84,
+         M::NativeDamageSkill { .. } => 83,
+     }
+ }
+diff --git a/crates/engine-native/tests/boundary_snapshot.rs b/crates/engine-native/tests/boundary_snapshot.rs
+index 854ebf24..fc870ac5 100644
+--- a/crates/engine-native/tests/boundary_snapshot.rs
++++ b/crates/engine-native/tests/boundary_snapshot.rs
+@@ -197,7 +197,7 @@ fn assert_pause_roundtrip(
+                     // finalized（效果已套用）后锦囊已离机（弃置/转移/判定区），
+                     // current.trick 仅为簿记，不再计入机器持牌。
+                     if !c.finalized {
+-                        out.push(c.trick);
++                        out.extend(c.trick);
+                     }
+                     if c.judge_held {
+                         out.push(c.judge_card);
+@@ -604,7 +604,7 @@ fn assert_multiset_conservation_named(e: &Engine, at: &str) {
+                 out.extend(queue.iter().copied());
+                 if let Some(c) = current.as_ref() {
+                     if !c.finalized {
+-                        out.push(c.trick);
++                        out.extend(c.trick);
+                     }
+                     if c.judge_held {
+                         out.push(c.judge_card);
+diff --git a/crates/engine-native/tests/c331_genuine_invocations.rs b/crates/engine-native/tests/c331_genuine_invocations.rs
+new file mode 100644
+index 00000000..a3b81d04
+--- /dev/null
++++ b/crates/engine-native/tests/c331_genuine_invocations.rs
+@@ -0,0 +1,429 @@
++use super::c331_source_predicates::{finish, restore, same_final};
++use engine_native::content::extension::{ExtensionDef, ExtensionPack, InitHook};
++use engine_native::state::{BossStageState, GameMode};
++use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
++fn emitter() -> ExtensionPack {
++    let p = content_compiler::compile_source_named(
++        "c9g-emission",
++        "skill c9g_emit(99109601) { active play_phase targets 0 0 { effect deal_damage(3,2,1); } }",
++    )
++    .unwrap();
++    ExtensionPack {
++        def: ExtensionDef {
++            name: "c9g-emission",
++            version: 1,
++            description: "real command cause",
++        },
++        generals: vec![],
++        cards: vec![],
++        host_skills: vec![],
++        vm_skills: content_native_loader::bridge_vm_skill_decls(&p)
++            .unwrap()
++            .decls,
++        init_hook: InitHook::None,
++        enabled: true,
++    }
++}
++fn fixture(p: &ExtensionPack, name: &str) -> Engine {
++    let mut e = Engine::new_with_extensions(15001, 4, &[p]).unwrap();
++    for id in 0..4 {
++        e.debug_clear_hand(id);
++        e.debug_set_hp(id, 4);
++    }
++    e.debug_set_turn(0, Phase::Play, 1);
++    e.state_core_mut().mode = GameMode::Boss {
++        boss: 0,
++        chongzheng: 3,
++        fellows: vec![1],
++        stage: BossStageState::default_none(),
++    };
++    e.debug_grant(0, "c9g_emit");
++    e.debug_grant(if name == "章武" { 1 } else { 0 }, name);
++    e
++}
++fn fire(e: &mut Engine) {
++    let skill = e.catalog().skill_by_name("c9g_emit").unwrap();
++    let out = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::ActivateSkill { skill },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++#[test]
++fn c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log() {
++    let p = emitter();
++    let mut e = fixture(&p, "章武");
++    e.debug_place(1, "sha");
++    fire(&mut e);
++    let c = e
++        .open_choice()
++        .expect("actual optional holder cost")
++        .clone();
++    assert_eq!(c.spec.prompt, "c331_zhangwu_holder");
++    assert!(!e.log().iter().any(|x| matches!(
++        x,
++        engine_native::LogEvent::SkillTriggered {
++            skill: "章武", ..
++        }
++    )));
++    let mut copy = restore(&e, &[&p]);
++    for branch in [&mut e, &mut copy] {
++        let out = branch.submit(GameCommand {
++            actor: c.observer,
++            expected_revision: branch.revision(),
++            dedup_id: branch.save().last_dedup + 1,
++            action: GameAction::Answer {
++                choice_id: c.id,
++                selection: vec![],
++            },
++        });
++        assert!(!matches!(out, CommandOutcome::Rejected(_)));
++        finish(branch);
++    }
++    same_final(&e, &copy);
++    assert_eq!(e.debug_hand(1).len(), 1);
++}
++#[test]
++fn c9g_jiding_dodge_finishes_card_then_removes_actual_definition() {
++    let p = emitter();
++    let mut e = fixture(&p, "急叮");
++    e.debug_place(2, "shan");
++    let def = e.catalog().skill_by_name("急叮").unwrap();
++    fire(&mut e);
++    let c = e.open_choice().expect("real virtual Sha Dodge").clone();
++    let card = c
++        .spec
++        .options
++        .iter()
++        .find(|o| matches!(o, ChoiceOption::Card(_)))
++        .copied()
++        .unwrap();
++    assert!(e.state_core().has_skill(0, def));
++    let out = e.submit(GameCommand {
++        actor: c.observer,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection: vec![card],
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)));
++    finish(&mut e);
++    assert!(
++        !e.state_core().has_skill_any_state(0, def),
++        "remove after complete dodged card subtree"
++    );
++}
++#[test]
++fn c9g_jiding_has_persisted_named_invocation_before_card() {
++    let p = emitter();
++    let mut e = fixture(&p, "急叮");
++    e.set_time_slice(Some(1));
++    fire(&mut e);
++    let mut found = false;
++    for _ in 0..500 {
++        let s = e.save();
++        found |= format!("{:?}", s.resolution.stack).contains("SkillInvocation");
++        if s.resolution.stack.is_empty() && !s.segment_open {
++            break;
++        }
++        e.resume();
++    }
++    assert!(found, "actual invocation frame, not scalar activation log");
++}
++#[test]
++fn c9g_invocation_every_phase_and_dodge_restore() {
++    let p = emitter();
++    let mut e = fixture(&p, "急叮");
++    e.debug_place(2, "shan");
++    e.set_time_slice(Some(1));
++    fire(&mut e);
++    let mut phases = std::collections::BTreeSet::new();
++    let mut checked = 0;
++    for _ in 0..800 {
++        let s = e.save();
++        for f in &s.resolution.stack {
++            if let engine_native::event::EventData::SkillInvocation(d) = &f.data {
++                phases.insert(d.phase.tag());
++            }
++        }
++        if s.resolution.stack.is_empty() && !s.segment_open {
++            break;
++        }
++        let mut copy = restore(&e, &[&p]);
++        finish(&mut copy);
++        let mut control = e.clone();
++        finish(&mut control);
++        same_final(&control, &copy);
++        checked += 1;
++        if let Some(c) = e.open_choice().cloned() {
++            let card = c
++                .spec
++                .options
++                .iter()
++                .find(|x| matches!(x, ChoiceOption::Card(_)))
++                .copied();
++            let selection = card.map(|v| vec![v]).unwrap_or_default();
++            let out = e.submit(GameCommand {
++                actor: c.observer,
++                expected_revision: e.revision(),
++                dedup_id: e.save().last_dedup + 1,
++                action: GameAction::Answer {
++                    choice_id: c.id,
++                    selection,
++                },
++            });
++            assert!(!matches!(out, CommandOutcome::Rejected(_)));
++        } else {
++            e.resume();
++        }
++    }
++    assert!(checked > 10);
++    assert!(phases.is_superset(&[0, 1, 2, 3, 4].into_iter().collect()));
++}
++#[test]
++fn c9g_zhangwu_actual_two_card_equipment_cost_and_source_cancel() {
++    let p = emitter();
++    let mut e = fixture(&p, "章武");
++    e.debug_set_max_hp(2, 20);
++    e.debug_set_hp(2, 20);
++    let hand = e.debug_place(1, "sha");
++    let equip = e.debug_place(1, "zhuge");
++    e.state_core_mut()
++        .player_mut(1)
++        .hand
++        .retain(|c| *c != equip);
++    e.state_core_mut().player_mut(1).equips.push(equip);
++    e.debug_place(2, "tao");
++    e.debug_place(2, "shan");
++    fire(&mut e);
++    let c = e.open_choice().unwrap().clone();
++    let out = e.submit(GameCommand {
++        actor: 1,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection: vec![ChoiceOption::Card(hand), ChoiceOption::Card(equip)],
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)));
++    let c = e.open_choice().unwrap().clone();
++    assert_eq!(c.spec.prompt, "c331_zhangwu_source");
++    assert_eq!((c.spec.min, c.spec.max), (2, 2));
++    let mut copy = restore(&e, &[&p]);
++    for branch in [&mut e, &mut copy] {
++        let out = branch.submit(GameCommand {
++            actor: 2,
++            expected_revision: branch.revision(),
++            dedup_id: branch.save().last_dedup + 1,
++            action: GameAction::Answer {
++                choice_id: c.id,
++                selection: vec![],
++            },
++        });
++        assert!(!matches!(out, CommandOutcome::Rejected(_)));
++        finish(branch);
++    }
++    same_final(&e, &copy);
++    assert_eq!(e.debug_hp(2), 18);
++    assert!(e.state_core().discard.contains(&equip));
++    assert_eq!(
++        e.log()
++            .iter()
++            .filter(|x| matches!(
++                x,
++                engine_native::LogEvent::SkillTriggered {
++                    skill: "章武", ..
++                }
++            ))
++            .count(),
++        1
++    );
++}
++#[test]
++#[ignore = "F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers"]
++fn c9g_kingdoms_revealed_wei_shu_are_source_enemies() {
++    let mut e = Engine::new(15004, 3);
++    let a = (0..e.catalog().general_count())
++        .find(|id| {
++            e.catalog()
++                .general_meta(*id as u16)
++                .is_some_and(|g| g.1 == engine_native::catalog::Faction::Wei)
++        })
++        .unwrap() as u16;
++    let b = (0..e.catalog().general_count())
++        .find(|id| {
++            e.catalog()
++                .general_meta(*id as u16)
++                .is_some_and(|g| g.1 == engine_native::catalog::Faction::Shu)
++        })
++        .unwrap() as u16;
++    e.debug_set_general_def(0, a);
++    e.debug_set_general_def(1, b);
++    e.state_core_mut().player_mut(0).revealed_generals[0] = true;
++    e.state_core_mut().player_mut(1).revealed_generals[0] = true;
++    e.state_core_mut().mode = GameMode::Kingdoms;
++    assert_eq!(
++        e.state_core().source_is_enemy_of(e.catalog(), 0, 1),
++        Some(true)
++    );
++}
++#[test]
++fn c9g_yuance_opens_two_real_options_without_activation_log() {
++    let p = emitter();
++    let mut e = fixture(&p, "远策");
++    fire(&mut e);
++    let c = e.open_choice().expect("actual options1/2/cancel");
++    assert_eq!(c.spec.prompt, "c331_yuance");
++    assert_eq!(c.spec.options.len(), 2);
++    assert!(!e.log().iter().any(|x| matches!(
++        x,
++        engine_native::LogEvent::SkillTriggered {
++            skill: "远策", ..
++        }
++    )));
++}
++#[test]
++fn c9g_jidian_opens_actual_target_choice() {
++    let p = emitter();
++    let mut e = fixture(&p, "极点");
++    e.debug_grant(2, "极点");
++    fire(&mut e);
++    let c = e.open_choice().expect("actual optional target");
++    assert_eq!(c.spec.prompt, "c331_jidian_target");
++    assert!(
++        c.spec.options.contains(&ChoiceOption::Player(2)),
++        "source allows owner when distance from damaged actor permits"
++    );
++}
++#[test]
++fn c9g_jiding_genuine_card_damage_heals_actual_named_rushou() {
++    let p = emitter();
++    let mut e = fixture(&p, "急叮");
++    let id = (e.catalog().general_count() - engine_native::content::standard::BOSS_GENERALS.len()
++        + 15) as u16;
++    e.debug_set_general_def(3, id);
++    e.debug_set_hp(3, 2);
++    fire(&mut e);
++    finish(&mut e);
++    assert_eq!(
++        e.debug_hp(3),
++        3,
++        "one genuine invocation/CardUsed damageEnd heals actual living boss_jinshenrushou"
++    );
++}
++fn answer(e: &mut Engine, selection: Vec<ChoiceOption>) {
++    let c = e.open_choice().unwrap().clone();
++    let out = e.submit(GameCommand {
++        actor: c.observer,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::Answer {
++            choice_id: c.id,
++            selection,
++        },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)), "{out:?}");
++}
++#[test]
++fn c9g_yuance_four_colours_options_and_cancel() {
++    use engine_native::catalog::Suit;
++    use engine_native::event::YuanceOption as O;
++    for (option, suit, expected) in [
++        (O::LoseHp, Suit::Spade, (2, 3)),
++        (O::LoseHp, Suit::Heart, (3, 2)),
++        (O::Recover, Suit::Spade, (3, 4)),
++        (O::Recover, Suit::Heart, (4, 3)),
++    ] {
++        let p = emitter();
++        let mut e = fixture(&p, "远策");
++        e.debug_set_hp(2, 3);
++        e.debug_set_deck_top_by(|c| c.suit == suit);
++        fire(&mut e);
++        let mut copy = restore(&e, &[&p]);
++        for branch in [&mut e, &mut copy] {
++            answer(branch, vec![ChoiceOption::Control(option)]);
++            finish(branch);
++        }
++        same_final(&e, &copy);
++        assert_eq!((e.debug_hp(1), e.debug_hp(2)), expected);
++    }
++    let p = emitter();
++    let mut e = fixture(&p, "远策");
++    fire(&mut e);
++    let before = e.state_core().rng.clone();
++    answer(&mut e, vec![]);
++    finish(&mut e);
++    assert_eq!(e.debug_hp(1), 3);
++    assert_eq!(format!("{:?}", e.state_core().rng), format!("{before:?}"));
++}
++#[test]
++fn c9g_ordinary_tiandao_nonfirst_equipment_flips_colour_and_restores() {
++    use engine_native::catalog::Suit;
++    let p = emitter();
++    let mut e = fixture(&p, "远策");
++    e.debug_grant(3, "天道");
++    e.debug_place(3, "tao");
++    let equip = e.debug_place(3, "armor");
++    assert!(matches!(
++        e.catalog().cards[equip as usize].suit,
++        Suit::Spade | Suit::Club
++    ));
++    e.state_core_mut()
++        .player_mut(3)
++        .hand
++        .retain(|c| *c != equip);
++    e.state_core_mut().player_mut(3).equips.push(equip);
++    e.debug_set_deck_top_by(|c| c.suit == Suit::Heart);
++    let old = *e.state_core().deck.last().unwrap();
++    fire(&mut e);
++    answer(
++        &mut e,
++        vec![ChoiceOption::Control(
++            engine_native::event::YuanceOption::LoseHp,
++        )],
++    );
++    let c = e.open_choice().expect("genuine Tiandao rewriter");
++    assert_eq!(c.observer, 3);
++    assert_ne!(
++        c.spec
++            .options
++            .iter()
++            .position(|o| *o == ChoiceOption::Card(equip)),
++        Some(1)
++    );
++    let mut copy = restore(&e, &[&p]);
++    for branch in [&mut e, &mut copy] {
++        answer(branch, vec![ChoiceOption::Card(equip)]);
++        finish(branch);
++    }
++    same_final(&e, &copy);
++    assert_eq!(e.debug_hp(1), 2);
++    assert_eq!(e.debug_hp(2), 4);
++    assert!(e.debug_hand(3).contains(&old));
++    assert!(e.state_core().discard.contains(&equip));
++}
++#[test]
++fn c9g_jidian_red_does_not_mute_next_unrelated_reaction() {
++    let p = emitter();
++    let mut e = fixture(&p, "极点");
++    e.debug_grant(2, "极点");
++    e.debug_set_deck_top_by(|c| c.suit == engine_native::catalog::Suit::Heart);
++    fire(&mut e);
++    answer(&mut e, vec![ChoiceOption::Player(2)]);
++    finish(&mut e);
++    assert!(!e.state_core().turn.jidian_chain);
++    let skill = e.catalog().skill_by_name("c9g_emit").unwrap();
++    let out = e.submit(GameCommand {
++        actor: 0,
++        expected_revision: e.revision(),
++        dedup_id: e.save().last_dedup + 1,
++        action: GameAction::ActivateSkill { skill },
++    });
++    assert!(!matches!(out, CommandOutcome::Rejected(_)));
++    assert_eq!(e.open_choice().unwrap().spec.prompt, "c331_jidian_target");
++}
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index e73c3876..846ba657 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -109,11 +109,14 @@ mod c331_source33_integration;
+ #[path = "../c331_schema5_datachain.rs"]
+ mod c331_schema5_datachain;
+ 
++#[path = "../c331_atomic_source_repair.rs"]
++mod c331_atomic_source_repair;
+ #[path = "../c331_canonical_damage.rs"]
+ mod c331_canonical_damage;
+ #[path = "../c331_prehp_damage.rs"]
+ mod c331_prehp_damage;
+ #[path = "../c331_source_predicates.rs"]
+ mod c331_source_predicates;
+-#[path = "../c331_atomic_source_repair.rs"]
+-mod c331_atomic_source_repair;
++
++#[path = "../c331_genuine_invocations.rs"]
++mod c331_genuine_invocations;
+diff --git a/crates/engine-native/tests/nc09_machine_ownership.rs b/crates/engine-native/tests/nc09_machine_ownership.rs
+index 9a8ef3a4..1c9545b4 100644
+--- a/crates/engine-native/tests/nc09_machine_ownership.rs
++++ b/crates/engine-native/tests/nc09_machine_ownership.rs
+@@ -55,7 +55,7 @@ fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
+                 engine_native::ChoiceKind::Confirm => "Confirm",
+                 engine_native::ChoiceKind::SelectCards => "SelectCards",
+                 engine_native::ChoiceKind::SelectPlayers => "SelectTargets",
+-                engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
++                engine_native::ChoiceKind::Control | engine_native::ChoiceKind::RespondCard | engine_native::ChoiceKind::PickTag => "Custom",
+             },
+             "min": open.spec.min, "max": open.spec.max, "allowCancel": open.spec.allow_cancel,
+             "options": open.spec.options.iter().map(|option| match option {
+@@ -65,6 +65,7 @@ fn trace_frame(engine: &engine_native::Engine) -> serde_json::Value {
+                 engine_native::ChoiceOption::Player(id) => serde_json::json!({"player": id}),
+                 engine_native::ChoiceOption::Tag(id) => serde_json::json!({"tag": id}),
+                 engine_native::ChoiceOption::Skill(id) => serde_json::json!({"skill": engine.catalog().skill_name(*id)}),
++                engine_native::ChoiceOption::Control(option)=>serde_json::json!(option.label()),
+                 engine_native::ChoiceOption::Kind(id) => serde_json::json!({"kind": id}),
+             }).collect::<Vec<_>>(),
+         })
+@@ -420,7 +421,7 @@ fn parked_card_collection_and_expected_asks_recurse_through_all_existing_wrapper
+         } = &machine
+         {
+             expected.extend(queue);
+-            expected.push(current.trick);
++            expected.extend(current.trick);
+         }
+         expected.sort_unstable();
+         let open = fixture.engine.open_choice().unwrap();

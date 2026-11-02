@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T18:53:36.528522+00:00",
+  "status": "PASS_ADDITIVE_C9F_MANIFEST_REFERENCE_CORRECTION_OBJECT_SEAL_PENDING",
+  "correctionPath": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g/golden-dispositions-c9f-reference-correction.json",
+  "observedCorrectionSHA256": "cca39c225e186a0e1c2a85d24e9a5f52bc6e4accda798f980836bdeeaa33710a",
+  "originalSHA256": "e3703abf03ea245881c752508056ba8bdb0acc87ea59eff90b6280427f58382b",
+  "correctedOnlyRows": 12,
+  "actual19Manifest": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/final-freeze2/source-manifest.json",
+  "actual19SHA256": "f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da",
+  "actual225Manifest": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/full-source/source-manifest.json",
+  "actual225SHA256": "ab88c526c5cb4e807a29c5bdaaa70393b4515375303980d153403047f479be96",
+  "allOtherRawComparisonFieldsAndCapturedResultsUnchanged": true,
+  "qualification": "Readonlyobjectidentityaudit only. Awaitactualfinal9gartifactindexbinding/connectedreviewbeforeP2closure; no oldC9frow/index/reportrewrite, no C8producer/currenttests/golden rerecord/no Mainwrite. Correctionfileprivatewriterownedmaynotbesealedyet, thisrecordsobservedbytes—notgenuine5FSMorGoalacceptance."
+}

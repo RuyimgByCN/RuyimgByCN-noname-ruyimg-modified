@@ -1,0 +1,17 @@
+{
+  "recorded_utc": "2026-10-31T18:10:01.544750+00:00",
+  "phase": "Prelaunchast validation; observerlaunchcount0/watchlaunchcount0",
+  "argv": [
+    "python3",
+    "-B",
+    "- (generator through bash heredoc)"
+  ],
+  "candidate_provenance": "Byte reconstruction using the same owned generator transformations and erroneous search from original tool call; original tool error remains in tool transcript, not a fullsession export",
+  "exception_type": "SyntaxError",
+  "message": "invalid syntax",
+  "line": 121,
+  "offset": 1,
+  "text": "except Exception as exc:\n",
+  "formatted_exception": "  File \"<unknown>\", line 121\n    except Exception as exc:\n    ^^^^^^\nSyntaxError: invalid syntax\n",
+  "supervisor_direction": "Correct private generator, preserve failure, unique outertry match +compile/selfcheck before ONEoriginalwatch; actuallaunch/runtimefailure muststop, nofallback"
+}

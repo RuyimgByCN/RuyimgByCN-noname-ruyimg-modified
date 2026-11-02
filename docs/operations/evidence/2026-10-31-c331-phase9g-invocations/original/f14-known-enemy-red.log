@@ -1,0 +1,21 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 1 test
+
+thread 'c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies' (29165190) panicked at crates/engine-native/tests/groups/../c331_genuine_invocations.rs:44:221:
+assertion `left == right` failed
+  left: None
+ right: Some(true)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies ... FAILED
+
+failures:
+
+failures:
+    c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 245 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test nc_rounds`
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c9g_kingdoms_revealed", "--", "--ignored", "--nocapture"], "exit": 101, "locked_seconds": 0.0971939999726601, "disk_free_bytes": 133612130304}

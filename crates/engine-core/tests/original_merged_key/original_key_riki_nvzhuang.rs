@@ -201,6 +201,7 @@ fn mio_tuifu_draws_for_same_or_double_sex_damage_only() {
     ]
     .into_iter()
     .map(|(id, sex)| PackageCharacterEntry {
+        voice_assets: Default::default(),
         id,
         name_key: format!("sex_{id}"),
         max_hp: 10,

@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T17:38:51.140233+00:00",
+  "status": "PASS_FIVE_FSM_PLAN_SOURCE_IDENTITY_NOT_IMPLEMENTATION_OR_WIRE_COMPAT_ACCEPTANCE",
+  "overlay219": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "verifiedOverlayFiles": 219,
+  "verifiedBaseFallbacks": 6,
+  "verifiedUpstreamFiles": 4,
+  "verifiedReadBindings": 37,
+  "guideSHA256": "70ec50f535fc37d8ab620e61066ca244208fc8d29a6259ba67537218904686ac",
+  "reviewSHA256": "f49f3e5e3dc1a4f0bf0f0153cdd1c70895a43853f3d5e945247fa8de638ab7c0",
+  "inventorySHA256": "e9f598bedb05e3c55108eda1a7aa166f910c4269d4df837af9e4395c31151080",
+  "excerptsSHA256": "d1e7e93a7e45dcd69a0ef2101e056dd777789fcf60698c88eaa2045f55705024",
+  "qualification": "Originalguide+ac678Noissuesboundedplanonly, NOTcode/runtime/privacy/current9f/wholeGoalacceptance. Supplementworkflowc35bcf27activeclarifiesinternalHiddenCardonlyWS6tokenlabel/nopublicshapechange,27OptionalGateOwnsourceonly,cost/log/lifecycleprebodyreceipts. Actualcompat/frozenoldreader/IPCWSWASMUItestsrequiredbefore331acceptance. Parentoptionalmetadata-keyfailureandincorrectenum-kind/missingfileassumptionretainedandcorrected. Allactual219+6base+4upstream+37readscheckedagainstbytes. No tests/build/Main/index/HEAD/source/devicewrites."
+}

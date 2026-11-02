@@ -415,6 +415,7 @@ fn starzhonggu_is_lord_only_and_compares_round_to_alive_qun_count() {
     package.character_index = [9_211_001, 9_211_002]
         .into_iter()
         .map(|id| PackageCharacterEntry {
+            voice_assets: Default::default(),
             id,
             name_key: format!("qun_{id}"),
             max_hp: 4,

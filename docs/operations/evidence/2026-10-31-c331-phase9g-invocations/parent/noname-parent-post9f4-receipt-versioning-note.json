@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-31T18:44:55.587548+00:00",
+  "currentVersionedReceipt": "/tmp/noname-parent-post9f4-main-write-receipt-at-184200.json",
+  "currentSHA256": "600343a4a29252f5a71b5edb5dc5cd91011fc4294991baf0d90b330f19b61564",
+  "receiptUTC": "2026-10-31T18:42:02.027964+00:00",
+  "paths": 4406,
+  "bytes": 143909122,
+  "currentAliasSemantics": "Theunversionedpost9f4receiptwasregeneratedafterfinalCIadditionsat18:42; itiscurrentworkingownership,notanimutableCIbaseline. Fromthispointusedatedsnapshotpathsforconsumersandpreservebeforeanynewrefresh.",
+  "earlier4258Scope": "Earlier18:32:48currentreceipt4258paths124959262BwasreadbyCIreviewerbeforefinalCIfiles/updates. Itsfullenumeration/rawstdoutwasnotseparatelysnapshottedbeforealiasrefresh; cannotclaimthoseoldbytesretainedorusecurrentaliasasthatoldartifact. Oldscope/count/UTCobservedinsessionandParenthandoff; underlyingsealedC9f/CI128/code37sourceproofsunaffected.",
+  "scope": "VersioninglimitationinParentmutableworkingreceipt, notCIinput/index/sourcewriterdriftorproductfailure. No Main/source/index/HEAD/stagewritesfromthispreservation."
+}

@@ -1,0 +1,128 @@
+{
+  "utc": "2026-10-31T18:15:24.609124+00:00",
+  "run": 41227614131,
+  "attempt": 1,
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "status": "in_progress",
+  "conclusion": null,
+  "jobStatuses": {
+    "success": 6,
+    "in_progress": 4
+  },
+  "jobs": [
+    {
+      "id": 124614943211,
+      "name": "native-web",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943380,
+      "name": "build-windows-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943392,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943460,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943464,
+      "name": "desktop-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943471,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943472,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943484,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null,
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943507,
+      "name": "perf-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    },
+    {
+      "id": 124614943539,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "checkout": {
+        "number": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    }
+  ],
+  "parentReadRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-checkpoint-h1mclg56",
+  "APICommands": 2,
+  "noWatchOrRerunStarted": true,
+  "qualification": "ReadonlyindependentcheckpointONLYnotfinalregistration. Nullconclusionsunknown/running, notfailure. Metadata/job/checkoutsnotactualinstaller/device/hearing/thermalproof. No Main/source/index/HEAD writes."
+}

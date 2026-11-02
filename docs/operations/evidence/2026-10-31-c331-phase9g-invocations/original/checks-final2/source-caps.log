@@ -1,0 +1,3 @@
+crates/engine-native-kernel/src/archive/machine_encode.rs: 1038 effective Rust lines (limit 1000)
+crates/engine-native-kernel/src/snap/asks.rs: 1043 effective Rust lines (limit 1000)
+{"command": ["python3", "-B", "scripts/check-source-lines.py"], "exit": 1, "locked_seconds": 4.257266125001479, "disk_free_bytes": 131353157632}

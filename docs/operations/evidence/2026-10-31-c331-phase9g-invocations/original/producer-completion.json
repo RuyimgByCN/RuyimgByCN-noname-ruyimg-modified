@@ -1,0 +1,22 @@
+{
+  "utc": "2026-10-31T18:54:21.946099+00:00",
+  "owned_runners": [
+    {
+      "pid": 7699,
+      "active": false
+    },
+    {
+      "pid": 11278,
+      "active": false
+    },
+    {
+      "pid": 9681,
+      "active": false
+    }
+  ],
+  "no_active_or_queued_owned_work": true,
+  "cutoff_guard_stopped_future_commands": "actual18:44:55.361409Z; copied assertion text mentions old17:31:36 but numeric guard is correct and raw retained",
+  "no_new_heavy_after_cutoff": true,
+  "signals_sent": false,
+  "final_source_runtime_missing": true
+}

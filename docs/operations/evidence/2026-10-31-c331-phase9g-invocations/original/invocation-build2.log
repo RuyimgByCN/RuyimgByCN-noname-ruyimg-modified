@@ -1,0 +1,22 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+error[E0753]: expected outer doc comment
+ --> crates/engine-native/src/engine/hash/machine.rs:2:1
+  |
+2 | //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
+  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+3 |
+4 | use super::*;
+  | ------------- the inner doc comment doesn't annotate this `use` import
+  |
+help: to annotate the `use` import, change the doc comment from inner to outer style
+  |
+2 - //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
+2 + /// 挂起机器快照（MachineSnapshot）的规范哈希编码。
+  |
+
+For more information about this error, try `rustc --explain E0753`.
+error: could not compile `engine-native` (lib) due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 5.735671499976888, "disk_free_bytes": 133284671488}

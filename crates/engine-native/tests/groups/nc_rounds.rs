@@ -106,6 +106,9 @@ mod nc10_public_own_plan;
 #[path = "../nc10_source_provenance.rs"]
 mod nc10_source_provenance;
 
+#[path = "../nc10_public_other_plan.rs"]
+mod nc10_public_other_plan;
+
 #[path = "../nc10_answer_routing.rs"]
 mod nc10_answer_routing;
 

@@ -1,0 +1,189 @@
+{
+  "source_manifest": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/final-freeze2/complete-source-manifest.json",
+  "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+  "increment_manifest_sha256": "f19c2f6209f1eb9719cb13884e601b8a680a0bc2d66dd4e4715bdf73d4cca7da",
+  "before_and_after_each_producer_asserted": true,
+  "all_current_source_bytes_equal": true,
+  "commands": [
+    {
+      "name": "gate1b",
+      "argv": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "seconds": 1.2912518978118896,
+      "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+      "RUSTFLAGS": "-Dwarnings",
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "62f34f09b75071aa483758b12dbbdf13f89e43d969bc69ffdebc2cc997f5b14e"
+    },
+    {
+      "name": "predicate-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "c331_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "seconds": 4.970387935638428,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "962e55140f14517d48124a474cfce6f7555534ba64194ca8f81ede3a45c59898"
+    },
+    {
+      "name": "golden-traces",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "seconds": 0.7204890251159668,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "9b217a1f7ff80d59095562c822f2aa9a81bdf623258ff8c0b30a74700dada319"
+    },
+    {
+      "name": "full-native",
+      "argv": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "seconds": 36.45801901817322,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "45af19e66f6dbba6c71bcf079aab934e1d9ca4b7ce4a5ded9426078cc8b3b6e4"
+    },
+    {
+      "name": "source-cap-unit",
+      "argv": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "seconds": 0.12028074264526367,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "6f13435916a9c18cbcabc7a85f42c995f521bd8be38f7183b2461daccc8f7ea3"
+    },
+    {
+      "name": "source-caps",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "seconds": 4.727567911148071,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "b6badd77b106675a3546a5a276233738e474a2a63755781ab65c65c62fed3d11"
+    },
+    {
+      "name": "layering",
+      "argv": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "seconds": 0.17679429054260254,
+      "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+      "RUSTFLAGS": null,
+      "source_manifest_sha256": "2309e25d214a3fc9c4958558284426b3a4da7231a717f4b9840bebafdc610610",
+      "log_sha256": "f44c63f8c51a9aab193e5197dba193ab5ea10f9143d5842b008ecf995653aab8"
+    }
+  ],
+  "producer_timing": [
+    {
+      "name": "gate1b",
+      "log_open_utc": "2026-10-31T17:31:17.738261+00:00",
+      "wall_seconds": 1.2912518978118896,
+      "heavy": true,
+      "log_sha256": "62f34f09b75071aa483758b12dbbdf13f89e43d969bc69ffdebc2cc997f5b14e"
+    },
+    {
+      "name": "predicate-traces",
+      "log_open_utc": "2026-10-31T17:31:19.035660+00:00",
+      "wall_seconds": 4.970387935638428,
+      "heavy": true,
+      "log_sha256": "962e55140f14517d48124a474cfce6f7555534ba64194ca8f81ede3a45c59898"
+    },
+    {
+      "name": "golden-traces",
+      "log_open_utc": "2026-10-31T17:31:24.012223+00:00",
+      "wall_seconds": 0.7204890251159668,
+      "heavy": true,
+      "log_sha256": "9b217a1f7ff80d59095562c822f2aa9a81bdf623258ff8c0b30a74700dada319"
+    },
+    {
+      "name": "full-native",
+      "log_open_utc": "2026-10-31T17:31:24.739305+00:00",
+      "wall_seconds": 36.45801901817322,
+      "heavy": true,
+      "log_sha256": "45af19e66f6dbba6c71bcf079aab934e1d9ca4b7ce4a5ded9426078cc8b3b6e4"
+    },
+    {
+      "name": "source-cap-unit",
+      "log_open_utc": "2026-10-31T17:32:01.203873+00:00",
+      "wall_seconds": 0.12028074264526367,
+      "heavy": false,
+      "log_sha256": "6f13435916a9c18cbcabc7a85f42c995f521bd8be38f7183b2461daccc8f7ea3"
+    },
+    {
+      "name": "source-caps",
+      "log_open_utc": "2026-10-31T17:32:01.329813+00:00",
+      "wall_seconds": 4.727567911148071,
+      "heavy": false,
+      "log_sha256": "b6badd77b106675a3546a5a276233738e474a2a63755781ab65c65c62fed3d11"
+    },
+    {
+      "name": "layering",
+      "log_open_utc": "2026-10-31T17:32:06.064474+00:00",
+      "wall_seconds": 0.17679429054260254,
+      "heavy": false,
+      "log_sha256": "f44c63f8c51a9aab193e5197dba193ab5ea10f9143d5842b008ecf995653aab8"
+    }
+  ],
+  "timing_note": "Log opened immediately before serialized helper launch; cargo launches explicitly guarded against cutoff. Final full-native launched17:31:24.739305Z before17:31:36 and completed naturally afterward; no new cargo after cutoff."
+}

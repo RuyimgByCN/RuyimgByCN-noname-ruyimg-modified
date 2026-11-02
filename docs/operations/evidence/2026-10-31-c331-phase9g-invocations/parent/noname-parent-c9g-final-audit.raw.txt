@@ -1,0 +1,364 @@
+{
+  "utc": "2026-10-31T19:11:25.217619+00:00",
+  "status": "PASS_FINAL6_SOURCE_EVIDENCE_INTEGRITY_PARTIAL_BLOCK_NOT_RUNTIME_CHECKED_REVIEW_PENDING",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9g-final-pakwy5rq",
+  "snapshot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9g-final-pakwy5rq/snapshot",
+  "evidenceRoot": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9g",
+  "artifactFiles": 1858,
+  "artifactIndexSHA256": "0ea6e4254dff56593edd6bf87f5ca1a7c26b7b2afcc9b1d1f329afb04604be92",
+  "fullFiles": 239,
+  "incrementFiles": 46,
+  "fullManifest": "69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b",
+  "incrementManifest": "9557423705b52ebdfa158004bdeee9e2ab54398f3fa13696cf43249cc225ea00",
+  "reportSHA256": "d86f4b25eb06e8b325e4d4dbf91cccd0cf2ecfd03b8e78b2d4264f79d45f0cc2",
+  "reverseChecksBothExit0": true,
+  "baseline225plusIncrement46equalsFull239": true,
+  "baselineC9fAndImmutable5fcFallbackChecked": true,
+  "liveTrackedDiffOutside239": [],
+  "commands": [
+    {
+      "producer": "checks-full1",
+      "name": "full-native",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "7d2c032d7a7cabeb3676cf495c450a3132fa2643dd3298101be4e5d95e2571c8",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/invocation_validation.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native/tests/nc09_machine_ownership.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "full-native",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "gate1b",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "adapters",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "server-check",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "predicate-traces",
+      "exit": 0,
+      "counts": [
+        98,
+        0,
+        1
+      ],
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": false
+    },
+    {
+      "producer": "checks-final2",
+      "name": "golden-traces",
+      "exit": 101,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": true
+    },
+    {
+      "producer": "checks-final2",
+      "name": "source-cap-unit",
+      "exit": 0,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": false
+    },
+    {
+      "producer": "checks-final2",
+      "name": "source-caps",
+      "exit": 1,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": false
+    },
+    {
+      "producer": "checks-final2",
+      "name": "layering",
+      "exit": 0,
+      "counts": null,
+      "sourceManifest": "9736b6b73f3c26b364de9efab51e48dce20982dc2212edf4e0ddfb3ab7b53cbc",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/archive.rs",
+        "crates/engine-native-kernel/src/archive/machine_encode.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/asks.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs",
+        "crates/engine-native-wasm/tests/c331_invocation_controls.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [
+        "apps/game-server/tests/nc09_native_actor.rs",
+        "crates/engine-native-kernel/src/archive/judge.rs",
+        "crates/engine-native-kernel/src/snap/asks/judge.rs",
+        "crates/engine-native/tests/boundary_snapshot.rs"
+      ],
+      "compilationError": false
+    },
+    {
+      "producer": "checks-final3",
+      "name": "gate1b",
+      "exit": 0,
+      "counts": null,
+      "sourceManifest": "bac205e8faeaa1124da9bb0ef5606025f46be5429c4ae2dc33ba182b21735ec3",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [],
+      "compilationError": false
+    },
+    {
+      "producer": "checks-final3",
+      "name": "adapters",
+      "exit": 0,
+      "counts": [
+        1,
+        0,
+        0
+      ],
+      "sourceManifest": "bac205e8faeaa1124da9bb0ef5606025f46be5429c4ae2dc33ba182b21735ec3",
+      "differentFromFinal": [
+        "apps/game-server/src/room_native/wal.rs",
+        "crates/engine-native-kernel/src/choice.rs",
+        "crates/engine-native-kernel/src/kernel/native_invocation.rs",
+        "crates/engine-native-kernel/src/snap/machine_validation.rs"
+      ],
+      "finalPathsNotCoveredByTestManifest": [],
+      "compilationError": false
+    }
+  ],
+  "preservedOldArtifactCounts": {
+    "phase9e": 7333,
+    "phase9f": 4167
+  },
+  "P2OriginalPreservedCorrectionOnly12References": true,
+  "sourceCapsFinal6": 9045,
+  "unitTestsFinal3": 2,
+  "final6RuntimeCompiled": false,
+  "fullNativeExecutedOnFinal6": false,
+  "noFresh9gGoldenRuntimeComparison": true,
+  "clock": {
+    "start_utc": "2026-10-31T17:54:55.361409+00:00",
+    "checkpoint_utc": "2026-10-31T18:14:55.361409+00:00",
+    "no_new_heavy_utc": "2026-10-31T18:44:55.361409+00:00",
+    "seal_due_utc": "2026-10-31T18:54:55.361409+00:00"
+  },
+  "noOwnedProducerClaim": {
+    "utc": "2026-10-31T18:54:21.946099+00:00",
+    "owned_runners": [
+      {
+        "pid": 7699,
+        "active": false
+      },
+      {
+        "pid": 11278,
+        "active": false
+      },
+      {
+        "pid": 9681,
+        "active": false
+      }
+    ],
+    "no_active_or_queued_owned_work": true,
+    "cutoff_guard_stopped_future_commands": "actual18:44:55.361409Z; copied assertion text mentions old17:31:36 but numeric guard is correct and raw retained",
+    "no_new_heavy_after_cutoff": true,
+    "signals_sent": false,
+    "final_source_runtime_missing": true
+  },
+  "protectedSnapshotReported": {
+    "utc": "2026-10-31T18:52:50.780313+00:00",
+    "unauthorizedMainDeltas": [],
+    "MainHead": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+    "MainTrackedWorkingPaths": [
+      "docs/architecture/native-progress.md"
+    ],
+    "generatedHistoricalDeltas": [
+      {
+        "path": "apps/web-client/public/pkg/engine_wasm_bg.wasm",
+        "original": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+        "current": "846351a9b844989c04d868dfb57b829abe5320ef452cf3da49494dd611e4cab5"
+      },
+      {
+        "path": "apps/web-client/src/wasm-pkg/engine_wasm_bg.wasm",
+        "original": "c7ce3198cfc39463c84aafb78a171839c7a3ebc884a031a3a91cf3476632f164",
+        "current": "846351a9b844989c04d868dfb57b829abe5320ef452cf3da49494dd611e4cab5"
+      },
+      {
+        "path": "apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm",
+        "original": "225f8627a32e9917c664966fb6de1965389302ce59a6dca1fa63fc8499797ed1",
+        "current": "7c2a9f266c88e73e720a7b4e4073d28100eb2b6b3a18f087f721a57d881460da"
+      }
+    ]
+  },
+  "qualification": "Integrity only. Earlier strict/NativeSession greens belong to final3 and differ from final6 by four listed files. Two full-native attempts compiled red; no passing full6. Await connected source review and next same-writer compile/full tests before accepting implementation. F07/F14/lifecycle/Judge/privacy/host/missing controls and trueHP/Death/37 remain mandatory. Main330105758WS6 unchanged. No tests/build/source/index/HEAD/commit/push from this audit."
+}

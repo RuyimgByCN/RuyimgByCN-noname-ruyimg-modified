@@ -33,6 +33,7 @@ struct Setup {
 
 fn character(id: u32) -> PackageCharacterEntry {
     PackageCharacterEntry {
+        voice_assets: Default::default(),
         id,
         name_key: format!("rebeige_test_{id}"),
         max_hp: 4,

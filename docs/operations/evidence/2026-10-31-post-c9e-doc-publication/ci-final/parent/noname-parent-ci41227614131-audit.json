@@ -1,0 +1,187 @@
+{
+  "utc": "2026-10-31T18:35:03.414267+00:00",
+  "status": "PASS_INDEPENDENT_EXACT_HEAD_CI_REGISTRATION_10_OF_10",
+  "root": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74",
+  "sourceE": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq",
+  "head": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "run": 41227614131,
+  "attempt": 1,
+  "manifestEntriesFreshSHA_CRC": 126,
+  "primaryFiles": 128,
+  "fullOriginalGzipLogs": 10,
+  "decompressedBytes": 4848793,
+  "jobs": {
+    "success": 10,
+    "failure": 0
+  },
+  "steps": {
+    "success": 128,
+    "skipped": 2,
+    "failure": 0,
+    "null": 0
+  },
+  "rustCounts": {
+    "native-web": [
+      1830,
+      0,
+      75
+    ],
+    "build-windows-latest": [
+      853,
+      0,
+      0
+    ],
+    "build-macos-latest": [
+      853,
+      0,
+      0
+    ],
+    "build-ubuntu-latest": [
+      853,
+      0,
+      0
+    ],
+    "gates-ubuntu": [
+      6929,
+      0,
+      77
+    ]
+  },
+  "apiProtocolFIFO167HeaderResultSuites": [
+    {
+      "header": "Running unittests src/lib.rs (target/debug/deps/engine_api-efd9a32d52522d2e)",
+      "counts": [
+        4,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "header": "Running unittests src/lib.rs (target/debug/deps/engine_protocol-9ca8605041b1afb1)",
+      "counts": [
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "header": "Running tests/presentation.rs (target/debug/deps/presentation-0f4d24f7aab95a2a)",
+      "counts": [
+        4,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "header": "Running tests/presentation_main5fc_reader.rs (target/debug/deps/presentation_main5fc_reader-35e3375e5d04b5df)",
+      "counts": [
+        3,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "header": "Doc-tests engine_api",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "header": "Doc-tests engine_protocol",
+      "counts": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "WindowsActualCheckoutSuccess": {
+    "build-windows-latest": {
+      "checkout": {
+        "name": "Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-31T18:04:50Z",
+        "completed_at": "2026-10-31T18:06:17Z"
+      },
+      "CRLF": 3850
+    },
+    "desktop-windows-latest": {
+      "checkout": {
+        "name": "Run actions/checkout@v4",
+        "status": "completed",
+        "conclusion": "success",
+        "number": 2,
+        "started_at": "2026-10-31T18:04:49Z",
+        "completed_at": "2026-10-31T18:05:53Z"
+      },
+      "CRLF": 2225
+    }
+  },
+  "source37CommittedAndWorkingExact": true,
+  "freshIndependentAPIReads": [
+    [
+      "run",
+      0
+    ],
+    [
+      "jobs",
+      0
+    ],
+    [
+      "artifacts",
+      0
+    ],
+    [
+      "commit",
+      0
+    ],
+    [
+      "native_ref",
+      0
+    ],
+    [
+      "main_ref",
+      0
+    ]
+  ],
+  "installerArtifactsMetadata": [
+    {
+      "id": 13053380022,
+      "name": "installer-macos-latest",
+      "size_in_bytes": 32815681,
+      "digest": "sha256:ed1e0ed8df44511789abc3e8eafc19a2ad0e03d234d1a9fcd338bcebdaf13cc8",
+      "expired": false
+    },
+    {
+      "id": 13053151489,
+      "name": "installer-windows-latest",
+      "size_in_bytes": 26286929,
+      "digest": "sha256:bf083a03ac7d3dbe4da33dafdd7aa4989030dca09cdb07bd06c7d006d770b236",
+      "expired": false
+    },
+    {
+      "id": 13052493129,
+      "name": "installer-ubuntu-latest",
+      "size_in_bytes": 266389977,
+      "digest": "sha256:678594033a69a395e6f6808b2b3e148f95cc2276405e7bbce706dc458ba7eb2c",
+      "expired": false
+    }
+  ],
+  "qualification": "Onlyexact9f4DOCSHEADCI evidence; sourcecode37sameas34e, overlappingtestsnotuniquetotal. Earlier34eten-green/d07CI8/2andwithdrawnbdafscopefailure retained. PrelaunchobserverSyntaxErrorpreserved/correctedbeforeONEoriginalwatch; no fallback/restart. FIFO167actualheaders/results used, nolatestheader/runningNassumption. Installermetadata notdownload/install/device/signing/performancebenefit/fullI02/Core331/wholeGoal acceptance. No watch/rerun/dispatch/newpush/Mainwrites or product producer rerun; ParentpostleaseDocsoutsideCIinputs."
+}

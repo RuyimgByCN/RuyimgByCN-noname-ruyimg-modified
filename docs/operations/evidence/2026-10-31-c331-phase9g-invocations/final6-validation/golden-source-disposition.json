@@ -1,0 +1,34 @@
+{
+  "pairs": 362,
+  "observed_equal_scenarios": 11,
+  "first_difference": {
+    "step": "0007-after",
+    "command": "GameCommand { actor: 0, expected_revision: 3, dedup_id: 163, action: PlayCard { card: 95, targets: [1] } }",
+    "fields": [
+      "events"
+    ],
+    "differences": {
+      "events": {
+        "character": 1058,
+        "old": "            95,\n        ),\n    },\n    Linked {\n        player: 1,\n        linked: false,\n    },\n    Linked {\n        player: 2,\n        linked: false,\n    },\n    DamageDealt {\n        source: Some(\n            0,\n        ),\n        target: 2,\n        amount: 1,\n        redirected_from: [],\n        card: Some(\n            95,\n        ),\n  ",
+        "new": "            95,\n        ),\n    },\n    Linked {\n        player: 1,\n        linked: false,\n    },\n    DamageDealt {\n        source: Some(\n            0,\n        ),\n        target: 2,\n        amount: 1,\n        redirected_from: [],\n        card: Some(\n            95,\n        ),\n    },\n    Linked {\n        player: 2,\n        linked: false,\n  "
+      }
+    },
+    "old_json": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9c/c8-command-traces-v3/chain_fire_propagation/0007-after.json",
+    "new_json": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9h-baseline-validation/current-command-traces/chain_fire_propagation/0007-after.json"
+  },
+  "prior_disposition": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/golden-business-and-outcome-dispositions.json",
+  "prior_disposition_sha256": "e3703abf03ea245881c752508056ba8bdb0acc87ea59eff90b6280427f58382b",
+  "difference_identical_to_prior_reviewed_source_disposition": true,
+  "pinned_source_cause": "Existing per-recipient chain driver logs own DamageDealt before own unlink/changeHp; Core content.ts12092-12120 and Liuli game.js34767-34810, retained C9c/C9f disposition; no new difference normalized away",
+  "outcome_counts": {
+    "NoCommandOutcome": 187,
+    "Accepted": 139,
+    "Pending": 32,
+    "Rejected": 4
+  },
+  "comparison": "six complete business fields; discriminants and full Pending/Rejected payloads compared; only Accepted exact32-byte hash retained separately",
+  "golden_expected_constants_unchanged": true,
+  "C8_producer_rerun": false,
+  "limits": "No arbitrary internal/fuel/global37-source equivalence or privacy proof from matching errors."
+}

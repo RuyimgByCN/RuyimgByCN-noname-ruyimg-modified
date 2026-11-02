@@ -1,0 +1,103 @@
+{
+  "utc": "2026-10-31T17:29:52.105145+00:00",
+  "base_c9e_manifest_sha256": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "files": [
+    {
+      "path": "crates/engine-native-content/src/content/host.rs",
+      "baseline_c9e_sha256": "38e1c21ad13847bdfd600ad2f99fc94165f12ae93335b1a9638f398818e18f94",
+      "sha256": "06e674caf03bef5bcc30b34d0ed2f3bbcf4312b8e36e3537ac6656dc8d4c3813"
+    },
+    {
+      "path": "crates/engine-native-content/src/content/standard/native_damage.rs",
+      "baseline_c9e_sha256": "cdca4fbd165d6a828022e30f27e19cec68eeb7c9fc7e4cdc91f073c2c6fe86f6",
+      "sha256": "a6c4f41b2012ff6e5861b7f0d581a451de5ebb73044561da747b944f18320da3"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/catalog.rs",
+      "baseline_c9e_sha256": "4cfbb7b19785542e6508b4ba922149fb3f575219a45e84a3fd2337b82023492a",
+      "sha256": "1c9ea3593e32203f260b4820d5fb40d6f61572053a89f53383b598e4a4ba2999"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event/damage.rs",
+      "baseline_c9e_sha256": "c7937cef28feb13886790f91e582745ce0995deb182660e9e22fd6fa47d68150",
+      "sha256": "4c493b2070e178f0245a8ad5273d36e286c6ed86e35d61c832aaa4134ded459d"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event/native_damage.rs",
+      "baseline_c9e_sha256": "56b49bf96b742e6db54bdb6a1237b33db0c14f0da232550f5182d9b361c59327",
+      "sha256": "9972bc9f95d5aa7718ecab220f200a74f39825bb189eb8a57a46aaa38f1925c8"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage.rs",
+      "baseline_c9e_sha256": "9a01736cf36acb78dfe94275d7a36e81dc5745ee83371d5ead78ef11b694b37f",
+      "sha256": "90fb5262df3c0851f4aa0ff14c167081c389df25b91c4888c557f48b7a5c1aef"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_after.rs",
+      "baseline_c9e_sha256": "7c4dcf62671915bc52ab88d415f8713f8d6987e79591b31f0284b6afcb502f71",
+      "sha256": "4376cd8af1edaed41f34ee5388627e98ba2bf2db2c5eb1e5f37394771347fb56"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_skill.rs",
+      "baseline_c9e_sha256": "01e846d5ae37df6b6a4cf71c25785f4516b84d4f7d5d4656ec56352aadb8c4b0",
+      "sha256": "2a3bcbaf007ac3a581c8ba7525ce305364d856c92e76d91b68de08f9a3816090"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/damage_windows.rs",
+      "baseline_c9e_sha256": "77f628521c52db10c30bd84bf532b17b30466b914aef8fcb176385dc47f2b35f",
+      "sha256": "d60b3e8ea5afc6fb8091193069411c22030ee768e5f2643708359d1254275580"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/events.rs",
+      "baseline_c9e_sha256": "3fcb028e0712c05ede1a6f662ab038c6d9885265d002dc83932a0a69b8d46707",
+      "sha256": "da86543410ae8a8ac4a0a532e3da129dd8b34e02c374621935a1ad6d656858a2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/kernel/phase/judge.rs",
+      "baseline_c9e_sha256": "fed735ba1a0fa722980aa4cdb53d93b47158611148b19952f0c99e2b609012d8",
+      "sha256": "73ed8c94552153f3828a63ee2046be621c523d8e13d71d614d56ce1a856b5052"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution/trigger_order.rs",
+      "baseline_c9e_sha256": "c5d4385efb5a023f7ee62108c413f8dfb7f64cd8290d5ede2f2d8d420f6910c3",
+      "sha256": "df62c1a837d5a81e489bb8c34f8adf08721e151624a13b4c0e43561c9cfd89a2"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/damage_validation.rs",
+      "baseline_c9e_sha256": "a33cded5917251c7c26447ca5cf561e5a10cc72cb93dcef2b45ebbf50536b32b",
+      "sha256": "da1ecd617c3e34e8451e184f3169d29e25e1a9969997574b2bd1292cb7438c04"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/state/core_ops.rs",
+      "baseline_c9e_sha256": "15a4e9c0507d6abaa3763dcbebd59254ce14a86bb6f08477f68c66138f562822",
+      "sha256": "152bb49bdfe27efa83c20a72b8d7f1a8a2f5054506245cd70977173110bb6071"
+    },
+    {
+      "path": "crates/engine-native-kernel/src/vocabulary/generals.rs",
+      "baseline_c9e_sha256": "e040883bd2a6301efc15380ce49776c9b9c9b5afb30502588eea9e6b1c8ab10f",
+      "sha256": "515f65994fc9c6f632b89c8d60a038f93ea3df37dd0eab24a0f38dba934f3c98"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_atomic_source_repair.rs",
+      "baseline_c9e_sha256": null,
+      "sha256": "7ae063b5acd6e5ea775aa34215e7df62f99822e1b3316d9b378d4ae2d11801ff"
+    },
+    {
+      "path": "crates/engine-native/tests/c331_source_predicates.rs",
+      "baseline_c9e_sha256": "b14de321325f23e3ef0b90b3bf4e61499eb70603a1409fc7bf1c373cac302c11",
+      "sha256": "32573d775586305906bc0d155452ffab7bfe1bca0a5b502b6b6c3cbedea54f1e"
+    },
+    {
+      "path": "crates/engine-native/tests/groups/nc_rounds.rs",
+      "baseline_c9e_sha256": "64e9d27afb9304b69c503b508f7714bedc99d8eb999865c97d2093e5d34e9a8d",
+      "sha256": "a6df356f834e933fef47f70492c8989744251dd5c76e9ad4483a0fd5f3092ddd"
+    },
+    {
+      "path": "crates/engine-native/tests/native_kernel/boss_xiangliu.rs",
+      "baseline_c9e_sha256": "2620d2368346c879b990397705ae5d7b8210783bddf32f1a7a00bcba63364600",
+      "sha256": "b60937d4cba277e22a14b0ef060e3bf2e66ba8e817440310c680100173e862f9"
+    }
+  ],
+  "scope": "Atomic source/qualification/RNG repair checkpoint; invocation/choice and ChangeHp remain mandatory",
+  "whole_c331": "BLOCK;262/290 remaining28 +0"
+}

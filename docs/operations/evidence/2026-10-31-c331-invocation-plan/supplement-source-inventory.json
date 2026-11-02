@@ -1,0 +1,458 @@
+{
+  "scope": "Additive read-only supplement; no implementation, tests, builds, staging operations, network or device writes",
+  "base": "5fc0f77403d90fa4555156bf01722450cbe7bf3b",
+  "overlay_manifest_sha256": "578175e22f8bca7c303fcc1d4333ceaa5c680359b2f3e1d7ea52403e1e96b753",
+  "snapshot_files_verified": 219,
+  "source_reads": [
+    {
+      "path": "apps/game-server/src/native_view.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/game-server/src/native_view.rs",
+      "sha256": "f6baf8667a67f6e6d8b6b2e48af8e791e4c7b766161c384c1ee0893ffdb0fbfe",
+      "ranges": [
+        [
+          252,
+          311
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 252,
+          "signature": "pub fn choice_for("
+        }
+      ]
+    },
+    {
+      "path": "apps/game-server/src/room_native.rs",
+      "origin": "git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:apps/game-server/src/room_native.rs",
+      "sha256": "3e9bda74aff4ded41fd5286d7c563619690bf222a0c3e520c42c45984d402f55",
+      "ranges": [
+        [
+          580,
+          621
+        ]
+      ],
+      "definitions": []
+    },
+    {
+      "path": "crates/engine-native-wasm/src/session.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-wasm/src/session.rs",
+      "sha256": "f71a7d9dd4d12d993559948bdbdc3f3a471a7b4216204a8d5a9d834dfe47c8f6",
+      "ranges": [
+        [
+          164,
+          193
+        ],
+        [
+          411,
+          460
+        ],
+        [
+          528,
+          570
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 168,
+          "signature": "fn action_to_json(engine: &Engine, action: &GameAction) -> Option<serde_json::Value> {"
+        },
+        {
+          "line": 413,
+          "signature": "pub fn open_choice_json(&self, seat: u8) -> Result<String, String> {"
+        },
+        {
+          "line": 531,
+          "signature": "pub fn answer("
+        }
+      ]
+    },
+    {
+      "path": "apps/desktop-client/src/native_envelope.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/desktop-client/src/native_envelope.rs",
+      "sha256": "0b05026ccde5a44a59beb288cfff0751d0fb84fc7b8f9b12a9bd1f4c375b9305",
+      "ranges": [
+        [
+          65,
+          109
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 65,
+          "signature": "fn option_label(option: &Value) -> String {"
+        },
+        {
+          "line": 81,
+          "signature": "fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {"
+        }
+      ]
+    },
+    {
+      "path": "apps/desktop-client/src/native_engine_host.rs",
+      "origin": "git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:apps/desktop-client/src/native_engine_host.rs",
+      "sha256": "8c04b7e351c4e894741f9c784cf449096ec74589d1ccbb20ce5eb596aa0855dc",
+      "ranges": [
+        [
+          273,
+          299
+        ]
+      ],
+      "definitions": []
+    },
+    {
+      "path": "apps/web-client/src/worker/nativeBackend.ts",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/apps/web-client/src/worker/nativeBackend.ts",
+      "sha256": "bc2d055bb6d443ba3702087a45b89fdfc71d415a29a90a92c9ef652392b558fc",
+      "ranges": [
+        [
+          288,
+          307
+        ],
+        [
+          333,
+          352
+        ],
+        [
+          790,
+          808
+        ],
+        [
+          926,
+          956
+        ]
+      ],
+      "definitions": []
+    },
+    {
+      "path": "crates/engine-api/src/choice.rs",
+      "origin": "git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-api/src/choice.rs",
+      "sha256": "a242d66f0ffb48744d7183a6b5e00e73067bb16ddc72df2c0e65b151f73302a6",
+      "ranges": [
+        [
+          61,
+          107
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 64,
+          "signature": "pub struct ChoiceOption {"
+        },
+        {
+          "line": 73,
+          "signature": "pub enum TimeoutPolicy {"
+        },
+        {
+          "line": 87,
+          "signature": "pub enum ChoiceKind {"
+        },
+        {
+          "line": 102,
+          "signature": "fn deserialize_source_skill<'de, D: serde::Deserializer<'de>>(deserializer: D) -> Result<Option<String>, D::Error> {"
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/choice.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/choice.rs",
+      "sha256": "586ec7ce766576b9163bdeee71fa654ab7a0b3841107e0a22e99dfc5276d0014",
+      "ranges": [
+        [
+          1,
+          107
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 7,
+          "signature": "pub enum ChoiceKind {"
+        },
+        {
+          "line": 22,
+          "signature": "pub enum ChoiceOption {"
+        },
+        {
+          "line": 39,
+          "signature": "pub fn describe(&self) -> String {"
+        },
+        {
+          "line": 54,
+          "signature": "pub struct ChoiceSpec {"
+        },
+        {
+          "line": 66,
+          "signature": "pub fn confirm(prompt: &'static str) -> Self {"
+        },
+        {
+          "line": 81,
+          "signature": "pub fn accepts(&self, selection: &[ChoiceOption]) -> bool {"
+        },
+        {
+          "line": 95,
+          "signature": "pub struct OpenChoice {"
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native/src/engine/choice_source.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native/src/engine/choice_source.rs",
+      "sha256": "aeddb1fcc4e250cea041849ec8988a218c0483bca9eb6234c6ee86b2f2eb9f01",
+      "ranges": [
+        [
+          1,
+          44
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 4,
+          "signature": "pub(super) fn choice_source_skill("
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/snap/asks.rs",
+      "sha256": "db8644db9845d3c85eb99d381bb17985cd6b257595e3c1cf2f3ab82751247bce",
+      "ranges": [
+        [
+          413,
+          423
+        ],
+        [
+          1025,
+          1060
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 1026,
+          "signature": "fn optional_source(machine: &MachineSnapshot, catalog: &Catalog) -> Option<&'static str> {"
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "origin": "git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native-kernel/src/snap/asks/shapes.rs",
+      "sha256": "894e2c592c565876fc1717fab53804b26239d9c24ece12b86f72ba615b71ae91",
+      "ranges": [
+        [
+          1,
+          37
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 7,
+          "signature": "pub struct ExpectedAsk {"
+        },
+        {
+          "line": 19,
+          "signature": "pub fn ask("
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/resolution.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/resolution.rs",
+      "sha256": "af087eb566ce2c6e97bc29861cf512301c442b929eb0258d55cbaeb73df9e229",
+      "ranges": [
+        [
+          210,
+          325
+        ],
+        [
+          609,
+          680
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 211,
+          "signature": "pub struct OptionalGate {"
+        },
+        {
+          "line": 222,
+          "signature": "pub(crate) fn new("
+        },
+        {
+          "line": 240,
+          "signature": "fn fork(&self) -> Box<dyn SkillMachine> {"
+        },
+        {
+          "line": 250,
+          "signature": "fn snapshot(&self) -> crate::snap::MachineSnapshot {"
+        },
+        {
+          "line": 260,
+          "signature": "fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {"
+        },
+        {
+          "line": 609,
+          "signature": "fn start_queued_trigger("
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/event.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/event.rs",
+      "sha256": "78ceed437b294390ad9bccfac46a6bba905e73cd167397471167c90354531381",
+      "ranges": [
+        [
+          14,
+          65
+        ],
+        [
+          339,
+          351
+        ]
+      ],
+      "definitions": [
+        {
+          "line": 15,
+          "signature": "pub enum EventKind {"
+        },
+        {
+          "line": 62,
+          "signature": "pub enum LostOrigin {"
+        },
+        {
+          "line": 339,
+          "signature": "pub struct Frame {"
+        }
+      ]
+    },
+    {
+      "path": "crates/engine-native-kernel/src/machine.rs",
+      "origin": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-c9e-final-8s2rgovs/snapshot/crates/engine-native-kernel/src/machine.rs",
+      "sha256": "cd7a54a0c778b9031ff0e7f1e28d1b9a56d504b11ef4674ced2a22fa6bfa7b2c",
+      "ranges": [
+        [
+          95,
+          109
+        ]
+      ],
+      "definitions": []
+    },
+    {
+      "path": "crates/engine-native-kernel/src/choice.rs",
+      "origin": "git:5fc0f77403d90fa4555156bf01722450cbe7bf3b:crates/engine-native-kernel/src/choice.rs",
+      "sha256": "3dc40e6c661844e6ddce7fc4f9593abfef6a4f28828917681673302a77178448",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "note": "Tag u8 means bounded G1 nature; describe nature:t; no opaque meaning."
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/game/game.js",
+      "pin": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "sha256": "28437fa338ae4c4630929ac535365b508f7068b7f4a1cb393a9568491abb2ea5",
+      "ranges": [
+        [
+          15369,
+          15574
+        ],
+        [
+          16682,
+          16830
+        ],
+        [
+          18854,
+          18896
+        ],
+        [
+          27175,
+          27208
+        ],
+        [
+          41694,
+          41785
+        ]
+      ],
+      "pinned_blob_equal": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/card/swd.js",
+      "pin": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "sha256": "e4eaf2323f7d223dc7ced559583aa44a39e367bcf092c21bfd1ca4ba03325238",
+      "ranges": [
+        [
+          4439,
+          4454
+        ]
+      ],
+      "pinned_blob_equal": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/archive/upstream/noname-liuli/noname/mode/boss.js",
+      "pin": "8485dbb29ff16f9b258a766b1a17ef75f883aade",
+      "sha256": "61133e2916b33712771cf9d2964262a7e111dd89b37cfb87301e58f7589b9169",
+      "ranges": [
+        [
+          6392,
+          6498
+        ],
+        [
+          6596,
+          6637
+        ],
+        [
+          8275,
+          8307
+        ]
+      ],
+      "pinned_blob_equal": true
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-c331-runtime-contract/approval-request.md",
+      "sha256": "2859f6f07b188b2353a40d1138aa5b69e6c92ca67723e66016a189a8c78c5a0d",
+      "ranges": [
+        [
+          1,
+          27
+        ]
+      ],
+      "origin": "explicitly supplied immutable approval artifact"
+    },
+    {
+      "path": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-10-31-nc10-source-provenance/user-decision27.json",
+      "sha256": "2b9eed59670bf3c5b3d92244934b692ab8c2be1d609b380f8f4810e5f8ddf0a3",
+      "ranges": [
+        [
+          1,
+          55
+        ]
+      ],
+      "origin": "explicitly supplied immutable approval artifact"
+    }
+  ],
+  "original_artifacts_unchanged": [
+    {
+      "path": "/Users/ruyimg/.pi/agent/sessions/--Users-ruyimg-Documents-Claude-sanguosha--/subagent-artifacts/outputs/5fd06095-0461-4ad4-972f-40cfebfd0f5d/proposals/c29-five-native-invocation-continuations.md",
+      "sha256": "70ec50f535fc37d8ab620e61066ca244208fc8d29a6259ba67537218904686ac"
+    },
+    {
+      "path": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/c29-five-continuations-_2ejx3qq/source-inventory.json",
+      "sha256": "e9f598bedb05e3c55108eda1a7aa166f910c4269d4df837af9e4395c31151080"
+    }
+  ],
+  "validation": {
+    "runtime_tests_run": false,
+    "frozen_old_ws6_reader_test_run": false,
+    "source_writes": false,
+    "staging_touched": false,
+    "supplement_lines": 38,
+    "supplement_sha256": "429b6156b43d43612e21d831f7d0c936df058975a0392c947c9521b836cb7dd7",
+    "original_guide_inventory_unchanged": true,
+    "staging_inspection_run": false,
+    "review_status": "Independent review required; no compatibility/runtime acceptance claimed"
+  },
+  "residual_risks": [
+    "No ABI758/WS6 compatibility acceptance until frozen-old positive/index submission/omission and current-host roundtrips run.",
+    "Final9f remains uninspected and requires sealed reconciliation.",
+    "C7 lacks genuine invocation/log lifecycle; proposed extension is not implemented."
+  ]
+}

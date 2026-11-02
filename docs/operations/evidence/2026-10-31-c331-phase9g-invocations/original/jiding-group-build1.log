@@ -1,0 +1,21 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.91s
+     Running tests/groups/nc_rounds.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target/debug/deps/nc_rounds-e5c11b5ede2cc866)
+
+running 9 tests
+test c331_genuine_invocations::c9g_kingdoms_revealed_wei_shu_are_source_enemies ... ignored, F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers
+test c331_genuine_invocations::c9g_jidian_opens_actual_target_choice ... ok
+test c331_genuine_invocations::c9g_yuance_opens_two_real_options_without_activation_log ... ok
+test c331_genuine_invocations::c9g_jiding_dodge_finishes_card_then_removes_actual_definition ... ok
+test c331_genuine_invocations::c9g_jiding_genuine_card_damage_heals_actual_named_rushou ... ok
+test c331_genuine_invocations::c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log ... ok
+test c331_genuine_invocations::c9g_zhangwu_actual_two_card_equipment_cost_and_source_cancel ... ok
+test c331_genuine_invocations::c9g_jiding_has_persisted_named_invocation_before_card ... ok
+test c331_genuine_invocations::c9g_invocation_every_phase_and_dodge_restore ... ok
+
+test result: ok. 8 passed; 0 failed; 1 ignored; 0 measured; 240 filtered out; finished in 0.22s
+
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 0, "locked_seconds": 8.159806750016287, "disk_free_bytes": 131408748544}

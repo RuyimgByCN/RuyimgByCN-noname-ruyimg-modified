@@ -1,0 +1,41 @@
+## Review
+
+- **Correct：可接受本次文档发布与新 CI 登记，结论为 OK with notes。** [run41227614131](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41227614131)、attempt **1**、push/native-convergence、exact **`9f4b74236f97b0b9dc72388b6e08d310d2f26f64`**，tree **`88dfb549ab937d23b3632371eb77f387a566cb7c`**、parent34e，最终 **10/10 success**。
+- 已读 producer 人类正文、父 fresh 脚本/完整结果、push audit、汇总定位字段、seal、prelaunch原命令/结果与修正版源码、控制记录、checkpoint及选定原日志；**没有独立全文检查128份文件，也未执行脚本或重算哈希**。
+- [父 fresh audit](/tmp/noname-parent-ci41227614131-audit.json:1) 已核 **126项SHA/CRC、十gzip与private原字节4,848,793B、37个source committed/current hashes**；父六次独立live API均exit0。本review抽读run/artifacts/native_ref/main_ref原响应，确认exact9f4及远端main仍 **`47347c6608d651660ae9459e59eb529b3cef277f`**；完整job/commit对照引用父核验。
+- 新run created **18:04:45Z**、final updated **18:27:46Z**、collection完成 **18:28:49Z**、seal **18:29:12Z**；旧34e十绿、d07八成功两失败及更早失败均不替代本次结果。
+
+- **Prelaunch错误有具体来源绑定。** [exact provenance](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-exact-provenance.json:1) 的原命令/结果toolCallId一致，时间分别 **18:06:06.322Z / 18:06:07.602Z**；错误为 `ast.parse` 的SyntaxError、line121。
+- 独立阅读原命令确认：`ast.parse(src)`位于本次observer脚本写入及进程启动之前。故此错误是**采集器生成前校验失败**，不是GitHub产品测试失败，也不是已启动watch的失败或重启。
+- [修正版generator](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/prepare-observer.py:1) 明确将invalid candidate标为按原转换重建，未冒称精确保留了当时失败文件；另保存原tool命令/结果，二者来源不混淆。
+- 修正版源码包含唯一outer-try匹配、AST/compile、checkpoint函数AST不变、启动前文件不存在及无sleep/poll/signal断言；[validation](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/observer-prelaunch-validation.json:1) 与launch记录的corrected SHA一致，先记录 **observer/watch count0**，后于 **18:10:01.550416Z** 启动一次observer。
+- 修复授权依据父本次明确提供的内部回复 **b067**；保留包的`supervisor_direction`是转述，本review未读取原授权会话或完整assistant私有正文。原错误、明确标注的重建件、修正与启动控制足以区分本次校验错误和产品CI失败。
+- 最终仅**一个原始watch exit0**；30次producer CI API exit0、无transport错误/重试/rerun/dispatch。父后续六次独立live读取另列，不计入producer30次。
+
+- **历史checkpoint保留：**[initial envelope](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/ci-stage/initial-envelope.json:1) 为 **18:10:04：3success/7running-null**；timed envelope为 **18:18:49：7success/3running-null、1artifact**。父另有 **18:15:24：6success/4running** 记录，后者引用父说明；均不被最终绿回填。
+- **最终steps单独成立：130 = 128success / 2skipped / 0failure / 0null**。仅macOS/Windows desktop Linux dependencies step6为skip，保留API状态/名称，不编造正式原因文本。
+- Windows build **124614943380**、desktop **124614943539** checkout2均实际success；原日志54–58行可见COUNT1/core.longpaths/true。desktop prepare、installer10、upload11均实际success，Windows build/tests成功由父全日志核验支持。
+- **Rust汇总引用父独立raw regex：**workspace **6929/0/77、167 summaries**；native **1830/0/75、49 summaries**；三OS library各 **853/0/0**。范围重叠，不能相加为unique tests。
+- 父独立按167对header/result FIFO核得API/protocol **4+1+4+3=12**；本review抽读[协议/旧reader上下文](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-ci-9f4b7423-docs-x8m47ghq/private-raw-downloads/job-124614943484-raw-log.stdout:13915)，与1/4/3结果一致，不采用latest-header或running-N边界。
+- 独立核native-web日志：**Worker82/0、frontend441/0/0skip**；资源17、crosshash PASS有原日志。另直接读native conformance段的19个OK及ALL PASS；父按该段边界解析19，未依赖旧summary缺失字段。
+- 四OwnPlan+一session通过及完整Rust汇总引用父核验；未把私有C9f **1845/1/75、225/19**等计入Main CI库存。
+- Hosted legacy预算通过仅支持本次预算：producer记录Ubuntu **48/0/46/19μs**、macOS **70/1/66/28μs** 对预算 **100/300/200/100μs**；本review未逐项重读性能段，不据此宣native收益、强度、功耗或热表现。
+
+[父live artifact API](/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-parent-ci41227614131-rro0fo74/artifacts.stdout:1) 绑定exact run/head，三者采集时未过期：
+
+| Artifact | ID / API bytes | API SHA256 |
+| --- | --- | --- |
+| macOS | 13053380022 / 32815681 | `ed1e0ed8df44511789abc3e8eafc19a2ad0e03d234d1a9fcd338bcebdaf13cc8` |
+| Windows | 13053151489 / 26286929 | `bf083a03ac7d3dbe4da33dafdd7aa4989030dca09cdb07bd06c7d006d770b236` |
+| Ubuntu | 13052493129 / 266389977 | `678594033a69a395e6f6808b2b3e148f95cc2276405e7bbce706dc458ba7eb2c` |
+
+- **发布范围：**[父push audit](/tmp/noname-parent-9f4-publication-push-audit.json:1) 支持单次正常push0、36份push文件、八guard replays及独立ls-remote；source37与34e相同，9905项docs/evidence不是新增生产代码。bdaf保留且非祖先、552项本地排除保留，不读其正文。
+- **Index边界：**prelease **fb→626 writer仍UNKNOWN**，旧fb raw不可用，不能称ctime-only或指认作者；父后来正常9905 add/commit与旧2540逻辑证明分列。push窗口 **cfc** raw/logical/flags/untracked三时点相等有父独立证明，无index恢复。
+- Lease于 **18:04:45.794689Z**明确释放；[父post-release receipt](/tmp/noname-parent-post9f4-main-write-receipt.json:1)列出的native-progress及新证据属于授权后续工作，不是CI输入或worker drift。本review未执行当前Main Git状态检查。
+- **归档：**126项+manifest+seal共 **128 primary**，十private originals排除；manifest SHA **`46eadca20d6d89530d49b74d70af2d9e32ee292959096841027bfb5b285a2050`**，summary SHA **`fa79655afb78b6de645957fe34c97a6c7b7d279b2bed336337536a5a45caa82c`**。
+- 父已核gzip保留原字节 **4,848,793B**、Windows build/desktop **3850/2225 CRLF**；**3628 warning loglines含重复**及ignored名称保留。历史checkpoint流索引不作最终复制authority。
+- **Fixed：**本review无修改。No issues found.
+- **Merge verdict：OK with notes，仅接受exact9f4文档发布/CI证据登记。** 不产生Source27、I02 producer/audio、Core331/full37或Goal4/27闭环；私有C331未导入，330/105/758/WS6及desktop WASM default保持发布边界。
+
+未执行network/tests/build、Main/source/staging/device写入，未读完整私有会话或旧cache正文；未验下载、安装、签名、听觉或设备表现。
+风险：保存128份primary及父audit/checkpoint补充；新文档CI绿不解除未知index writer、私有C阻塞或既有整体Goal边界。

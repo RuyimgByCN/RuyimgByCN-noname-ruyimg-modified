@@ -1,0 +1,156 @@
+{
+  "at_utc": "2026-10-31T18:10:04.042339+00:00",
+  "run_id": 41227614131,
+  "head_sha": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+  "run_status": "in_progress",
+  "run_conclusion": null,
+  "job_statuses": [
+    {
+      "id": 124614943211,
+      "name": "native-web",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943380,
+      "name": "build-windows-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943392,
+      "name": "perf-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": "2026-10-31T18:08:21Z"
+    },
+    {
+      "id": 124614943460,
+      "name": "build-macos-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T18:04:48Z",
+      "completed_at": "2026-10-31T18:09:33Z"
+    },
+    {
+      "id": 124614943464,
+      "name": "desktop-ubuntu-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943471,
+      "name": "desktop-macos-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:48Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943472,
+      "name": "build-ubuntu-latest",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-31T18:04:54Z",
+      "completed_at": "2026-10-31T18:08:16Z"
+    },
+    {
+      "id": 124614943484,
+      "name": "gates-ubuntu",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943507,
+      "name": "perf-macos-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    },
+    {
+      "id": 124614943539,
+      "name": "desktop-windows-latest",
+      "status": "in_progress",
+      "conclusion": null,
+      "started_at": "2026-10-31T18:04:47Z",
+      "completed_at": null
+    }
+  ],
+  "lease_release": {
+    "at_utc": "2026-10-31T18:04:45.794689+00:00",
+    "lease": "READONLY publication lease RELEASED; no Main writes; all further work onlyprivate CI/API/logs",
+    "head_sha": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64",
+    "push_exit": 0,
+    "push_attempts": 1,
+    "remote_refs": {
+      "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+      "refs/heads/native-convergence": "9f4b74236f97b0b9dc72388b6e08d310d2f26f64"
+    },
+    "error": null,
+    "preservation_error": null,
+    "push_completed_utc": "2026-10-31T18:04:45.786763+00:00"
+  },
+  "artifact_count": 0,
+  "immutable_files": [
+    {
+      "path": "ci-stage/initial-run.stdout",
+      "bytes": 15326,
+      "sha256": "8c1e39d71eb95e9341d255e9ab2e5940f9fdafef67ab566a8a23fb31f834d889"
+    },
+    {
+      "path": "ci-stage/initial-run.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ci-stage/initial-jobs.stdout",
+      "bytes": 29185,
+      "sha256": "aabf208a6ff7443fc2d3d603eb1c7aad46962354ac2d53ace2c8625ee78680ef"
+    },
+    {
+      "path": "ci-stage/initial-jobs.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "ci-stage/initial-artifacts.stdout",
+      "bytes": 32,
+      "sha256": "244563f989470892c537c9a4622920af0d228ee4528f7d00c64a06d6cd95856c"
+    },
+    {
+      "path": "ci-stage/initial-artifacts.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "push-stage/result.json",
+      "bytes": 1585252,
+      "sha256": "46ba7e669e3842c2ead8f011b511608c73cf542e67a5e9428be1bc5fdd0f4a86"
+    },
+    {
+      "path": "push-stage/lease-release.json",
+      "bytes": 535,
+      "sha256": "23f755c6eba0ff2f680f8de4ee89e69aaaa4f2e7be2a6f0aeb4f1aff467cce7b"
+    },
+    {
+      "path": "push-stage/scope.json",
+      "bytes": 3671,
+      "sha256": "70afbf9df3bb0dd3e8abd4ce42fd00ea53bfeeb94f9c24cfa65cb2297c29b8f8"
+    },
+    {
+      "path": "push-stage/push-copy-manifest.json",
+      "bytes": 6165,
+      "sha256": "545271687022d304ee2890ddf6de97aa8e93a7a1921638acf3dadca84c0abc94"
+    }
+  ]
+}

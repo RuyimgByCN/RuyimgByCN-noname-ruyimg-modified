@@ -36,6 +36,7 @@ fn setup() -> Setup {
     .unwrap();
     assert_eq!(package.manifest.rule_vm_abi_version, 275);
     package.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: YAO_CHARACTER,
         name_key: "x_yao_yuanshu".into(),
         max_hp: 4,

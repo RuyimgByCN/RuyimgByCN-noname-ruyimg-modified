@@ -1,0 +1,632 @@
+diff --git a/crates/engine-native-kernel/src/archive.rs b/crates/engine-native-kernel/src/archive.rs
+index 9b1c599d..3c8cd1a6 100644
+--- a/crates/engine-native-kernel/src/archive.rs
++++ b/crates/engine-native-kernel/src/archive.rs
+@@ -288,6 +288,7 @@ mod values;
+ use values::*;
+ mod events;
+ mod damage;
++mod invocation;
+ use events::*;
+ mod machine_encode;
+ use machine_encode::*;
+diff --git a/crates/engine-native-kernel/src/archive/events.rs b/crates/engine-native-kernel/src/archive/events.rs
+index 43736ebb..4edb3015 100644
+--- a/crates/engine-native-kernel/src/archive/events.rs
++++ b/crates/engine-native-kernel/src/archive/events.rs
+@@ -4,6 +4,8 @@ use super::*;
+ 
+ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
+     match v {
++        EventData::SkillInvocation(d)=>{w.u8(23);super::invocation::enc_context(w,d);},
++        EventData::SkillLog{owner,def,begin}=>{w.u8(24);w.u8(*owner);w.u16(*def);w.boolean(*begin);},
+         EventData::Damage(d) => {
+             w.u8(22);
+             enc_opt_pid(w, &d.source);
+@@ -219,6 +221,8 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
+                 from_chain,
+             })
+         }
++        23=>EventData::SkillInvocation(super::invocation::dec_context(r)?),
++        24=>EventData::SkillLog{owner:r.u8()?,def:r.u16()?,begin:r.boolean()?},
+         21 => { let root=r.u32()?;let tag=r.u8()?;let window=crate::event::DamageWindowKind::from_tag(tag).ok_or(ArchiveError::BadTag("damage_window",tag))?;EventData::DamageWindow{root,window} },
+         1 => {
+             let player = dec_pid(r)?;
+diff --git a/crates/engine-native-kernel/src/archive/invocation.rs b/crates/engine-native-kernel/src/archive/invocation.rs
+new file mode 100644
+index 00000000..b3397b87
+--- /dev/null
++++ b/crates/engine-native-kernel/src/archive/invocation.rs
+@@ -0,0 +1,11 @@
++//! Internal invocation receipts; existing machine85 bytes are unchanged.
++use super::*;
++use crate::event::{InvocationData,InvocationPhase,NativeInvocationProgress as P};
++pub(super)fn enc_context(w:&mut W,d:&InvocationData){w.u8(d.owner);w.u16(d.def);w.u32(d.window);enc_opt_pid(w,&d.source);w.u8(d.target);w.u8(d.phase.tag());w.boolean(d.cancelled);}
++pub(super)fn dec_context(r:&mut R<'_>)->Result<InvocationData,ArchiveError>{Ok(InvocationData{owner:r.u8()?,def:r.u16()?,window:r.u32()?,source:dec_opt_pid(r)?,target:r.u8()?,phase:InvocationPhase::from_tag(r.u8()?).ok_or(ArchiveError::BadTag("invocation_phase",0))?,cancelled:r.boolean()?})}
++pub(super)fn enc_progress(w:&mut W,p:&P){match p{
++ P::Ready=>w.u8(0),P::BeforeInvocation{context}=>{w.u8(1);enc_context(w,context)},P::AwaitInvocation{child}=>{w.u8(2);w.u32(*child)},P::Finished=>w.u8(3),P::Body=>w.u8(4),
++ P::HolderAsk{candidates}=>{w.u8(5);w.len(candidates.len());for c in candidates{w.u32(*c)}},P::HolderPay{cards}=>{w.u8(6);w.len(cards.len());for c in cards{w.u32(*c)}},P::HolderLoss{count}=>{w.u8(7);w.u32(*count)},P::HolderAfterLog{count}=>{w.u8(8);w.u32(*count)},P::SourceAsk{player,count,candidates}=>{w.u8(9);w.u8(*player);w.u32(*count);w.len(candidates.len());for c in candidates{w.u32(*c)}},P::SourceLoss=>w.u8(10),P::JidingCard{child}=>{w.u8(11);w.u32(*child)}
++}}
++pub(super)fn dec_progress(r:&mut R<'_>)->Result<P,ArchiveError>{Ok(match r.u8()?{
++0=>P::Ready,1=>P::BeforeInvocation{context:dec_context(r)?},2=>P::AwaitInvocation{child:r.u32()?},3=>P::Finished,4=>P::Body,5=>P::HolderAsk{candidates:r.vec(|r|r.u32())?},6=>P::HolderPay{cards:r.vec(|r|r.u32())?},7=>P::HolderLoss{count:r.u32()?},8=>P::HolderAfterLog{count:r.u32()?},9=>P::SourceAsk{player:r.u8()?,count:r.u32()?,candidates:r.vec(|r|r.u32())?},10=>P::SourceLoss,11=>P::JidingCard{child:r.u32()?},t=>return Err(ArchiveError::BadTag("native_invocation_progress",t))})}
+diff --git a/crates/engine-native-kernel/src/archive/machine_decode.rs b/crates/engine-native-kernel/src/archive/machine_decode.rs
+index 63d8e005..369f466e 100644
+--- a/crates/engine-native-kernel/src/archive/machine_decode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_decode.rs
+@@ -2,6 +2,7 @@ use super::*;
+ 
+ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
+     Ok(match r.u8()? {
++        86=>MachineSnapshot::NativeInvocation{owner:r.u8()?,def:r.u16()?,window:crate::event::DamageWindowKind::from_tag(r.u8()?).ok_or(ArchiveError::BadTag("invocation_window",0))?,progress:super::invocation::dec_progress(r)?},
+         85 => MachineSnapshot::NativeDamageSkill {
+             owner: r.u8()?,
+             def: r.u16()?,
+diff --git a/crates/engine-native-kernel/src/archive/machine_encode.rs b/crates/engine-native-kernel/src/archive/machine_encode.rs
+index 80e03599..af2fbd28 100644
+--- a/crates/engine-native-kernel/src/archive/machine_encode.rs
++++ b/crates/engine-native-kernel/src/archive/machine_encode.rs
+@@ -3,6 +3,7 @@ use super::*;
+ 
+ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
+     match m {
++        MachineSnapshot::NativeInvocation{owner,def,window,progress}=>{w.u8(86);w.u8(*owner);w.u16(*def);w.u8(window.tag());super::invocation::enc_progress(w,progress);},
+         MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+             enc_native_damage_skill(w, *owner, *def, *window)
+         }
+diff --git a/crates/engine-native-kernel/src/archive/resolution.rs b/crates/engine-native-kernel/src/archive/resolution.rs
+index afc3f090..ec249dce 100644
+--- a/crates/engine-native-kernel/src/archive/resolution.rs
++++ b/crates/engine-native-kernel/src/archive/resolution.rs
+@@ -145,6 +145,8 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
+     "rvm_fenghe_destination",
+     "rvm_pingkou_targets",
+     "trigger_order",
++    "c331_zhangwu_holder",
++    "c331_zhangwu_source",
+     "xuanying_target",
+ ];
+ 
+diff --git a/crates/engine-native-kernel/src/archive/values.rs b/crates/engine-native-kernel/src/archive/values.rs
+index bfd3843b..20337ef6 100644
+--- a/crates/engine-native-kernel/src/archive/values.rs
++++ b/crates/engine-native-kernel/src/archive/values.rs
+@@ -143,6 +143,7 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
+         DamageBegin2 => 30,
+         DamageBegin3 => 31,
+         DamageBegin4 => 32,
++        SkillBefore=>33, SkillBegin=>34, SkillInvocation=>35, SkillEnd=>36, SkillAfter=>37, SkillOmitted=>38, SkillLogBegin=>39, SkillLogAfter=>40,
+     };
+     w.u8(t);
+ }
+@@ -183,6 +184,7 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
+         30 => DamageBegin2,
+         31 => DamageBegin3,
+         32 => DamageBegin4,
++        33=>SkillBefore,34=>SkillBegin,35=>SkillInvocation,36=>SkillEnd,37=>SkillAfter,38=>SkillOmitted,39=>SkillLogBegin,40=>SkillLogAfter,
+         t => return Err(ArchiveError::BadTag("event_kind", t)),
+     })
+ }
+diff --git a/crates/engine-native-kernel/src/event.rs b/crates/engine-native-kernel/src/event.rs
+index 12f270f7..760c0bd9 100644
+--- a/crates/engine-native-kernel/src/event.rs
++++ b/crates/engine-native-kernel/src/event.rs
+@@ -9,6 +9,8 @@ mod damage;
+ pub use damage::*;
+ mod native_damage;
+ pub use native_damage::*;
++mod invocation;
++pub use invocation::*;
+ 
+ /// 触发唤醒用的事件类别。
+ #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+@@ -55,6 +57,7 @@ pub enum EventKind {
+     DamageBegin2,
+     DamageBegin3,
+     DamageBegin4,
++    SkillBefore, SkillBegin, SkillInvocation, SkillEnd, SkillAfter, SkillOmitted, SkillLogBegin, SkillLogAfter,
+ }
+ 
+ /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
+@@ -112,6 +115,8 @@ pub struct CardUseData {
+ /// 类型化事件载荷。
+ #[derive(Debug, Clone, PartialEq, Eq)]
+ pub enum EventData {
++    SkillInvocation(InvocationData),
++    SkillLog {owner:PlayerId,def:SkillDefId,begin:bool},
+     /// E03 翻面前置窗口（漩涡面具等锁定技可取消）。
+     TurnOverBefore {
+         player: PlayerId,
+@@ -227,6 +232,8 @@ pub enum EventData {
+ impl EventData {
+     pub fn kind(&self) -> EventKind {
+         match self {
++            EventData::SkillInvocation(data)=>data.phase.kind(),
++            EventData::SkillLog{begin,..}=>if *begin{EventKind::SkillLogBegin}else{EventKind::SkillLogAfter},
+             EventData::Damage(_) => EventKind::Damage,
+             EventData::DamageWindow { window, .. } => window.event_kind(),
+             EventData::Recover { .. } => EventKind::Recover,
+diff --git a/crates/engine-native-kernel/src/event/invocation.rs b/crates/engine-native-kernel/src/event/invocation.rs
+new file mode 100644
+index 00000000..ee64d4aa
+--- /dev/null
++++ b/crates/engine-native-kernel/src/event/invocation.rs
+@@ -0,0 +1,18 @@
++//! A named invocation owns its lifecycle; continuation stages own only operation receipts.
++use super::*;
++#[derive(Debug,Clone,Copy,PartialEq,Eq)]
++pub enum InvocationPhase {Before,Begin,Body,End,After,Omitted}
++impl InvocationPhase {
++ pub fn tag(self)->u8{match self{Self::Before=>0,Self::Begin=>1,Self::Body=>2,Self::End=>3,Self::After=>4,Self::Omitted=>5}}
++ pub fn from_tag(t:u8)->Option<Self>{Some(match t{0=>Self::Before,1=>Self::Begin,2=>Self::Body,3=>Self::End,4=>Self::After,5=>Self::Omitted,_=>return None})}
++ pub fn kind(self)->EventKind{match self{Self::Before=>EventKind::SkillBefore,Self::Begin=>EventKind::SkillBegin,Self::Body=>EventKind::SkillInvocation,Self::End=>EventKind::SkillEnd,Self::After=>EventKind::SkillAfter,Self::Omitted=>EventKind::SkillOmitted}}
++}
++#[derive(Debug,Clone,PartialEq,Eq)]
++pub struct InvocationData {pub owner:PlayerId,pub def:SkillDefId,pub window:EventId,pub source:Option<PlayerId>,pub target:PlayerId,pub phase:InvocationPhase,pub cancelled:bool}
++#[derive(Debug,Clone,PartialEq,Eq)]
++pub enum NativeInvocationProgress {
++ Ready, BeforeInvocation{context:InvocationData}, AwaitInvocation{child:EventId}, Finished,
++ Body, HolderAsk{candidates:Vec<CardId>}, HolderPay{cards:Vec<CardId>}, HolderLoss{count:u32}, HolderAfterLog{count:u32},
++ SourceAsk{player:PlayerId,count:u32,candidates:Vec<CardId>}, SourceLoss, JidingCard{child:EventId},
++}
++pub fn uses_native_invocation(effect:NativeDamageEffect)->bool {matches!(effect,NativeDamageEffect::Zhangwu|NativeDamageEffect::Jiding)}
+diff --git a/crates/engine-native-kernel/src/event/native_damage.rs b/crates/engine-native-kernel/src/event/native_damage.rs
+index 2ee684bc..bdfbbdd8 100644
+--- a/crates/engine-native-kernel/src/event/native_damage.rs
++++ b/crates/engine-native-kernel/src/event/native_damage.rs
+@@ -238,7 +238,7 @@ impl NativeDamageEffect {
+                                 || !core.player(s).equips.is_empty())
+                     })
+             }
+-            Self::Zhangwu => target && d.source.is_some_and(|s| s != owner && core.player(s).alive),
++            Self::Zhangwu => target && d.source.is_some_and(|s| core.player(s).alive),
+             Self::Zlfanshi | Self::Lingqu => target,
+             Self::Zhue => d.source.is_some_and(|s| s != owner && core.player(s).alive),
+             Self::Abi => target && d.source.is_some_and(|s| core.player(s).alive),
+diff --git a/crates/engine-native-kernel/src/kernel.rs b/crates/engine-native-kernel/src/kernel.rs
+index 9c555138..ebd4d4aa 100644
+--- a/crates/engine-native-kernel/src/kernel.rs
++++ b/crates/engine-native-kernel/src/kernel.rs
+@@ -48,6 +48,9 @@ mod damage_after;
+ mod damage_change_hp;
+ mod damage_flow;
+ mod damage_skill;
++mod native_invocation;
++mod invocation_validation;
++pub use native_invocation::{NativeInvocation,advance_invocation};
+ mod damage_windows;
+ use damage::*;
+ pub use damage_flow::DamageFlow;
+diff --git a/crates/engine-native-kernel/src/kernel/intrinsic.rs b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+index 5f07a7cd..c74aea6f 100644
+--- a/crates/engine-native-kernel/src/kernel/intrinsic.rs
++++ b/crates/engine-native-kernel/src/kernel/intrinsic.rs
+@@ -7,6 +7,10 @@ pub fn intrinsic_machine(
+ ) -> Option<Box<dyn crate::catalog::SkillMachine>> {
+     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
+     match data {
++        EventData::SkillInvocation(data) if data.phase==crate::event::InvocationPhase::Body=>{
++            let window=match ctx.res.frame(data.window)?.data {EventData::DamageWindow{window,..}=>window,_=>return None};
++            Some(Box::new(NativeInvocation{owner:data.owner,def:data.def,window,progress:crate::event::NativeInvocationProgress::Body}))
++        }
+         EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
+         EventData::LoseHp { .. } => None,
+         EventData::DyingSaved { .. } => None,
+diff --git a/crates/engine-native-kernel/src/kernel/invocation_validation.rs b/crates/engine-native-kernel/src/kernel/invocation_validation.rs
+new file mode 100644
+index 00000000..4110ecee
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/invocation_validation.rs
+@@ -0,0 +1,43 @@
++//! Bind admitted continuations to their real trigger and invocation, independently of provider renewal.
++use super::*;
++use crate::event::{NativeInvocationProgress as P,InvocationPhase};
++use crate::snap::{MachineSnapshot as M,SnapshotError,ResolutionSnapshot,ExpectedAsk};
++use crate::resolution::Slot;
++impl NativeInvocation{
++ pub fn expected_ask(owner:PlayerId,progress:&P,_core:&crate::state::GameStateCore)->Option<ExpectedAsk>{
++  let (actor,prompt,candidates,min,max)=match progress{P::HolderAsk{candidates}=>(owner,"c331_zhangwu_holder",candidates,1,candidates.len()),P::SourceAsk{player,count,candidates}=>(*player,"c331_zhangwu_source",candidates,*count as usize,*count as usize),_=>return None};
++  Some(crate::snap::ask(actor,prompt,ChoiceKind::SelectCards,candidates.iter().copied().map(ChoiceOption::Card).collect(),min,max,true))
++ }
++ pub fn validate_bindings(core:&crate::state::GameStateCore,catalog:&crate::catalog::Catalog,res:&ResolutionSnapshot)->Result<(),SnapshotError>{
++  let bad=||SnapshotError::IdOutOfBounds{what:"native_invocation_binding",got:0};
++  for f in &res.stack {
++   if let EventData::SkillInvocation(context)=&f.data{
++    let index=res.stack.iter().position(|g|g.id==f.id).ok_or_else(bad)?;
++    let parent=index.checked_sub(1).and_then(|n|res.stack.get(n)).ok_or_else(bad)?;
++    if f.parent!=Some(context.window)||parent.id!=context.window||!matches!(parent.data,EventData::DamageWindow{..})||!res.parks.iter().any(|p|matches!(&p.machine,M::NativeInvocation{owner,def,progress:P::AwaitInvocation{child},..}if *child==f.id&&*owner==context.owner&&*def==context.def)&&p.slot==Slot::Trigger{frame:context.window}){return Err(bad());}
++   }
++  }
++  for park in &res.parks {
++   let M::NativeInvocation{owner,def,window,progress}=&park.machine else{continue};
++   let effect=catalog.skills.get(*def as usize).and_then(|s|s.behavior.native_damage_effect(window.event_kind())).ok_or_else(bad)?;
++   if effect.window()!=*window||!crate::event::uses_native_invocation(effect){return Err(bad());}
++   let frame_id=match park.slot{Slot::Trigger{frame}|Slot::Intrinsic{frame}=>frame};
++   let index=res.stack.iter().position(|f|f.id==frame_id).ok_or_else(bad)?;let f=&res.stack[index];if park.resume_depth!=index+1{return Err(bad());}
++   if let Slot::Trigger{..}=park.slot {
++    if !matches!(f.data,EventData::DamageWindow{window:w,..}if w==*window)||f.stage!=crate::event::Stage::AfterTriggers||!res.parks.iter().any(|p|matches!(&p.machine,M::TriggerOrder{frame,done,..}if *frame==f.id&&done.contains(&(*owner,*def)))){return Err(bad());}
++    match progress{
++     P::Ready=>{if !core.player(*owner).alive{return Err(bad());}},
++     P::BeforeInvocation{context}=>if context.owner!=*owner||context.def!=*def||context.window!=f.id||context.phase!=InvocationPhase::Before||context.cancelled{return Err(bad());},
++     P::AwaitInvocation{child}=>{if *child<=f.id||*child>=res.next_event_id{return Err(bad());}if let Some(child)=res.stack.iter().find(|g|g.id==*child){if !matches!(&child.data,EventData::SkillInvocation(c)if c.owner==*owner&&c.def==*def&&c.window==f.id){return Err(bad());}}},
++     P::Finished=>{},_=>return Err(bad())
++    }
++   }else{
++    let EventData::SkillInvocation(context)=&f.data else{return Err(bad())};if context.owner!=*owner||context.def!=*def||context.phase!=InvocationPhase::Body||f.stage!=crate::event::Stage::Intrinsic{return Err(bad());}
++    let (actor,cards)=match progress{P::HolderAsk{candidates}=>(*owner,Some(candidates)),P::SourceAsk{player,count,candidates}=>{if Some(*player)!=context.source||*count==0||*count as usize>candidates.len(){return Err(bad());}(*player,Some(candidates))},P::HolderPay{cards}=>{if cards.is_empty(){return Err(bad());}(*owner,None)},P::Body|P::HolderLoss{..}|P::HolderAfterLog{..}|P::SourceLoss|P::JidingCard{..}=>(*owner,None),_=>return Err(bad())};
++    if let Some(cards)=cards{let p=core.player(actor);let actual:Vec<_>=p.hand.iter().chain(p.equips.iter()).copied().collect();if actual!=*cards||!core.player(actor).alive{return Err(bad());}}
++    if let P::JidingCard{child}=progress {if effect!=crate::event::NativeDamageEffect::Jiding||*child<=f.id||*child>=res.next_event_id{return Err(bad());}if let Some(c)=res.stack.iter().find(|g|g.id==*child){if c.parent!=Some(f.id)||!matches!(&c.data,EventData::CardUsed(u)if u.player==*owner&&u.use_as==Some(CardKind::LeiSha)){return Err(bad());}}}
++   }
++  }
++  Ok(())
++ }
++}
+diff --git a/crates/engine-native-kernel/src/kernel/native_invocation.rs b/crates/engine-native-kernel/src/kernel/native_invocation.rs
+new file mode 100644
+index 00000000..858006ef
+--- /dev/null
++++ b/crates/engine-native-kernel/src/kernel/native_invocation.rs
+@@ -0,0 +1,67 @@
++//! Finite native bodies run inside an actual named invocation in the ordinary stack.
++use super::*;
++use crate::event::{InvocationData,InvocationPhase as PhaseOfSkill,NativeInvocationProgress as P,NativeDamageEffect as Effect};
++#[derive(Clone)]
++pub struct NativeInvocation {pub owner:PlayerId,pub def:crate::ids::SkillDefId,pub window:crate::event::DamageWindowKind,pub progress:P}
++pub fn advance_invocation(frame:&mut crate::event::Frame){
++ let EventData::SkillInvocation(data)=&mut frame.data else{return};
++ let next=match data.phase{
++ PhaseOfSkill::Before if data.cancelled=>Some(PhaseOfSkill::Omitted),
++ PhaseOfSkill::Before=>Some(PhaseOfSkill::Begin),
++ PhaseOfSkill::Begin if data.cancelled=>Some(PhaseOfSkill::End),
++ PhaseOfSkill::Begin=>Some(PhaseOfSkill::Body),PhaseOfSkill::Body=>Some(PhaseOfSkill::End),PhaseOfSkill::End=>Some(PhaseOfSkill::After),PhaseOfSkill::After|PhaseOfSkill::Omitted=>None};
++ if let Some(phase)=next{data.phase=phase;frame.kind=data.phase.kind();frame.stage=if phase==PhaseOfSkill::Body{crate::event::Stage::Intrinsic}else{crate::event::Stage::Commit};frame.planned=false;frame.intrinsic_done=false;}else{frame.stage=crate::event::Stage::Done;}
++}
++impl NativeInvocation {
++ fn effect(&self,ctx:&Ctx<'_>)->Effect{ctx.catalog.skills[self.def as usize].behavior.native_damage_effect(self.window.event_kind()).expect("validated admitted definition")}
++ fn emit_invocation(&mut self,ctx:&mut Ctx<'_>,context:InvocationData)->Flow{self.progress=P::AwaitInvocation{child:ctx.res.next_event_id};ctx.emit(EventData::SkillInvocation(context));Flow::Yield}
++ fn log_child(&self,ctx:&mut Ctx<'_>,begin:bool){ctx.emit(EventData::SkillLog{owner:self.owner,def:self.def,begin});}
++ fn he(ctx:&Ctx<'_>,player:PlayerId)->Vec<crate::ids::CardId>{let p=ctx.core.player(player);p.hand.iter().chain(p.equips.iter()).copied().collect()}
++ fn choice(player:PlayerId,cards:&[crate::ids::CardId],count:Option<u32>)->Flow{Flow::WaitChoice{observer:player,spec:ChoiceSpec{kind:ChoiceKind::SelectCards,prompt:if count.is_some(){"c331_zhangwu_source"}else{"c331_zhangwu_holder"},options:cards.iter().copied().map(ChoiceOption::Card).collect(),min:count.map(|n|n as usize).unwrap_or(1),max:count.map(|n|n as usize).unwrap_or(cards.len()),allow_cancel:true}}}
++ fn selected(ctx:&Ctx<'_>,candidates:&[crate::ids::CardId])->Vec<crate::ids::CardId>{ctx.answer().iter().filter_map(|a|match a{ChoiceOption::Card(c)if candidates.contains(c)=>Some(*c),_=>None}).collect()}
++ fn discard(ctx:&mut Ctx<'_>,player:PlayerId,cards:&[crate::ids::CardId]){
++  let mut discarded=Vec::new();for &card in cards{let p=ctx.core.player(player);if p.hand.contains(&card)||p.equips.contains(&card){ctx.take_owned_card(player,card);ctx.to_discard(card);discarded.push(card);}}
++  if !discarded.is_empty(){ctx.log(LogEvent::CardDiscarded{player,cards:discarded.clone()});ctx.emit(EventData::CardsDiscarded{player,cards:discarded});}
++ }
++ fn body(&mut self,ctx:&mut Ctx<'_>)->Flow{
++  let id=ctx.current_frame_id();let EventData::SkillInvocation(context)=ctx.res.frame(id).expect("invocation").data.clone()else{return Flow::Done};
++  match self.progress.clone(){
++   P::Body=>{
++    if !ctx.core.player(self.owner).alive{return Flow::Done;}
++    match self.effect(ctx){
++     Effect::Zhangwu=>{let cards=Self::he(ctx,self.owner);if cards.is_empty(){return Flow::Done;}self.progress=P::HolderAsk{candidates:cards.clone()};Self::choice(self.owner,&cards,None)},
++     Effect::Jiding=>{let Some(source)=context.source.filter(|p|ctx.core.player(*p).alive)else{return Flow::Done};if ctx.core.deck.is_empty(){return Flow::Done;}
++      self.progress=P::JidingCard{child:ctx.res.next_event_id};ctx.use_virtual_card(self.owner,CardKind::LeiSha,vec![source]);Flow::Yield},
++     _=>unreachable!("only finite implemented invocation bodies")
++    }
++   },
++   P::HolderAsk{candidates}=>{let cards=Self::selected(ctx,&candidates);if cards.is_empty(){return Flow::Done;}self.progress=P::HolderPay{cards};ctx.log(LogEvent::SkillTriggered{skill:ctx.catalog.skill_name(self.def),owner:self.owner});self.log_child(ctx,true);Flow::Yield},
++   P::HolderPay{cards}=>{self.progress=P::HolderLoss{count:cards.len()as u32};if ctx.core.player(self.owner).alive{Self::discard(ctx,self.owner,&cards);}Flow::Yield},
++   P::HolderLoss{count}=>{self.progress=P::HolderAfterLog{count};self.log_child(ctx,false);Flow::Yield},
++   P::HolderAfterLog{count}=>{
++    if !ctx.core.player(self.owner).alive{return Flow::Done;}let Some(source)=context.source.filter(|p|ctx.core.player(*p).alive)else{return Flow::Done};let cards=Self::he(ctx,source);
++    if cards.len()<count as usize{self.progress=P::SourceLoss;ctx.emit(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,i32::try_from(count).expect("validated bounded card payment"))));Flow::Yield}else{self.progress=P::SourceAsk{player:source,count,candidates:cards.clone()};Self::choice(source,&cards,Some(count))}
++   },
++   P::SourceAsk{count,candidates,..}=>{let Some(source)=context.source else{return Flow::Done};self.progress=P::SourceLoss;if !ctx.core.player(self.owner).alive||!ctx.core.player(source).alive{return Flow::Done;}let cards=Self::selected(ctx,&candidates);if cards.is_empty(){ctx.emit(EventData::Damage(crate::machine::damage_data(Some(self.owner),source,i32::try_from(count).expect("validated bounded card payment"))));}else{Self::discard(ctx,source,&cards);}Flow::Yield},
++   P::SourceLoss=>Flow::Done,
++   P::JidingCard{..}=>{self.progress=P::SourceLoss;if ctx.core.player(self.owner).alive{if ctx.core.skills.remove(&(self.owner,self.def)).is_some(){
++ ctx.log(LogEvent::SkillToggled{player:self.owner,skill:ctx.catalog.skill_name(self.def),enabled:false});
++ ctx.emit(EventData::SkillToggled{player:self.owner,skill:self.def,enabled:false,temporary:false});
++}}Flow::Yield},
++   _=>Flow::Done,
++  }
++ }
++}
++impl SkillMachine for NativeInvocation{
++ fn fork(&self)->Box<dyn SkillMachine>{Box::new(self.clone())}
++ fn snapshot(&self)->crate::snap::MachineSnapshot{crate::snap::MachineSnapshot::NativeInvocation{owner:self.owner,def:self.def,window:self.window,progress:self.progress.clone()}}
++ fn step(&mut self,ctx:&mut Ctx<'_>)->Flow{
++  match self.progress.clone(){
++   P::Ready=>{let EventData::DamageWindow{root,..}=ctx.res.frame(ctx.current_frame_id()).expect("trigger window").data else{return Flow::Done};let d=ctx.res.frame(root).expect("damage root").damage();let context=InvocationData{owner:self.owner,def:self.def,window:ctx.current_frame_id(),source:d.source,target:d.target,phase:PhaseOfSkill::Before,cancelled:false};if self.effect(ctx)==Effect::Jiding{self.progress=P::BeforeInvocation{context};self.log_child(ctx,true);Flow::Yield}else{self.emit_invocation(ctx,context)}},
++   P::BeforeInvocation{context}=>self.emit_invocation(ctx,context),
++   P::AwaitInvocation{..}=>{self.progress=P::Finished;if self.effect(ctx)==Effect::Jiding{self.log_child(ctx,false);Flow::Yield}else{Flow::Done}},
++   P::Finished=>Flow::Done,
++   _=>self.body(ctx),
++  }
++ }
++}
+diff --git a/crates/engine-native-kernel/src/resolution.rs b/crates/engine-native-kernel/src/resolution.rs
+index ff7c4f14..cc960927 100644
+--- a/crates/engine-native-kernel/src/resolution.rs
++++ b/crates/engine-native-kernel/src/resolution.rs
+@@ -201,6 +201,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
+         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
+         (EventKind::PhaseEnd, Stage::AfterTriggers) => Stage::Intrinsic,
+         (EventKind::PhaseEnd, Stage::Intrinsic) => Stage::Done,
++        (EventKind::SkillBefore|EventKind::SkillBegin|EventKind::SkillEnd|EventKind::SkillAfter|EventKind::SkillOmitted,Stage::AfterTriggers)=>Stage::Intrinsic,
+         (_, Stage::Commit) => Stage::AfterTriggers,
+         (_, Stage::AfterTriggers) => Stage::Done,
+         (_, cur) => cur,
+@@ -307,10 +308,9 @@ impl SkillMachine for OptionalGate {
+             let event =
+                 crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
+                     .clone();
+-            self.inner = Some(
+-                def.behavior
+-                    .start_in_window(&ctx.query(), self.owner, &event, kind),
+-            );
++            self.inner = Some(if let Some(effect)=def.behavior.native_damage_effect(kind){
++                native_machine(self.owner,self.def,effect)
++            }else{def.behavior.start_in_window(&ctx.query(), self.owner, &event, kind)});
+         }
+         let flow = self.inner.as_mut().expect("inner started").step(ctx);
+         if matches!(flow, Flow::Done) {
+@@ -576,6 +576,10 @@ pub fn run(
+             }
+             Stage::Intrinsic => {
+                 if intrinsic_done {
++                    if matches!(res.frame(top).expect("frame").data,EventData::SkillInvocation(_)) {
++                        kernel::advance_invocation(res.frame_mut(top).expect("frame"));
++                        continue;
++                    }
+                     let kind = res.frame(top).expect("frame").kind;
+                     let next = next_stage(kind, Stage::Intrinsic);
+                     res.frame_mut(top).expect("frame").stage = next;
+@@ -606,6 +610,10 @@ pub fn run(
+     }
+ }
+ 
++fn native_machine(owner:PlayerId,def:SkillDefId,effect:crate::event::NativeDamageEffect)->Box<dyn SkillMachine>{
++ if crate::event::uses_native_invocation(effect){Box::new(kernel::NativeInvocation{owner,def,window:effect.window(),progress:crate::event::NativeInvocationProgress::Ready})}else{Box::new(kernel::NativeDamageSkill{owner,def,window:effect.window()})}
++}
++
+ fn start_queued_trigger(
+     core: &mut GameStateCore,
+     res: &mut Resolution,
+@@ -658,10 +666,14 @@ fn start_queued_trigger(
+             }
+             inst.once_used = true;
+         }
+-        out.push(LogEvent::SkillTriggered {
+-            skill: def.name,
+-            owner: qt.owner,
+-        });
++        let native=def.behavior.native_damage_effect(kind);
++        if native!=Some(crate::event::NativeDamageEffect::Zhangwu){
++            out.push(LogEvent::SkillTriggered {skill:def.name,owner:qt.owner});
++        }
++        if let Some(effect)=native {
++            res.parks.push(Park{resume_depth:res.stack.len(),slot:Slot::Trigger{frame:frame_id},machine:native_machine(qt.owner,qt.def,effect)});
++            return;
++        }
+         def.behavior.start_in_window(
+             &QueryCtx {
+                 state: core,
+diff --git a/crates/engine-native-kernel/src/resolution/trigger_order.rs b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+index 487f4f4c..7bfa530b 100644
+--- a/crates/engine-native-kernel/src/resolution/trigger_order.rs
++++ b/crates/engine-native-kernel/src/resolution/trigger_order.rs
+@@ -536,8 +536,9 @@ pub fn validate_trigger_bindings(
+             return Err(bad());
+         }
+     }
++    crate::kernel::NativeInvocation::validate_bindings(core,catalog,res)?;
+     for park in &res.parks {
+-        if !matches!(park.machine, MachineSnapshot::NativeDamageSkill { .. })
++        if !matches!(park.machine, MachineSnapshot::NativeDamageSkill { .. }|MachineSnapshot::NativeInvocation{..})
+             && contains_native_damage(&park.machine)
+         {
+             return Err(bad());
+@@ -736,7 +737,7 @@ fn contains_window(machine: &MachineSnapshot) -> bool {
+ 
+ fn contains_native_damage(machine: &MachineSnapshot) -> bool {
+     match machine {
+-        MachineSnapshot::NativeDamageSkill { .. } => true,
++        MachineSnapshot::NativeInvocation{..}|MachineSnapshot::NativeDamageSkill { .. } => true,
+         MachineSnapshot::OptionalGate { inner, .. }
+         | MachineSnapshot::Aoe { inner, .. }
+         | MachineSnapshot::Chain { inner, .. }
+diff --git a/crates/engine-native-kernel/src/snap/asks.rs b/crates/engine-native-kernel/src/snap/asks.rs
+index e3d386d6..f53cdfdd 100644
+--- a/crates/engine-native-kernel/src/snap/asks.rs
++++ b/crates/engine-native-kernel/src/snap/asks.rs
+@@ -17,6 +17,7 @@ pub fn active_ask(
+     catalog: &Catalog,
+ ) -> Option<ExpectedAsk> {
+     match machine {
++        MachineSnapshot::NativeInvocation{owner,progress,..}=>crate::kernel::NativeInvocation::expected_ask(*owner,progress,core),
+         MachineSnapshot::TriggerOrder { owner, candidates, asked, .. } => {
+             if !asked { return None; }
+             Some(ask(*owner, "trigger_order", ChoiceKind::PickTag, candidates.iter().copied().map(ChoiceOption::Skill).collect(), 1, 1, false))
+diff --git a/crates/engine-native-kernel/src/snap/machine_validation.rs b/crates/engine-native-kernel/src/snap/machine_validation.rs
+index 084d8542..a0366e76 100644
+--- a/crates/engine-native-kernel/src/snap/machine_validation.rs
++++ b/crates/engine-native-kernel/src/snap/machine_validation.rs
+@@ -7,6 +7,8 @@ pub(super) fn check_machine(
+     core: &GameStateCore,
+ ) -> Result<(), SnapshotError> {
+     match m {
++        MachineSnapshot::NativeInvocation{owner,def,progress,..}=>{check_pid(*owner,b)?;check_def(*def,b)?;use crate::event::NativeInvocationProgress as P;
++match progress{P::BeforeInvocation{context}=>check_event_data(&EventData::SkillInvocation(context.clone()),b)?,P::HolderAsk{candidates}|P::HolderPay{cards:candidates}=>check_cards(candidates,b)?,P::SourceAsk{player,candidates,..}=>{check_pid(*player,b)?;check_cards(candidates,b)?;},_=>{}}},
+         MachineSnapshot::NativeDamageSkill { owner, def, .. } => {
+             check_pid(*owner, b)?;
+             check_def(*def, b)?;
+diff --git a/crates/engine-native-kernel/src/snap/restore.rs b/crates/engine-native-kernel/src/snap/restore.rs
+index 75ac8d04..cb0b5d86 100644
+--- a/crates/engine-native-kernel/src/snap/restore.rs
++++ b/crates/engine-native-kernel/src/snap/restore.rs
+@@ -12,6 +12,7 @@ impl MachineSnapshot {
+             return m;
+         }
+         match self {
++            MachineSnapshot::NativeInvocation{owner,def,window,progress}=>Ok(Box::new(crate::kernel::NativeInvocation{owner:*owner,def:*def,window:*window,progress:progress.clone()})),
+             MachineSnapshot::NativeDamageSkill { owner, def, window } => {
+                 if catalog
+                     .skills
+diff --git a/crates/engine-native-kernel/src/snap/types.rs b/crates/engine-native-kernel/src/snap/types.rs
+index 841a3fa4..69a1c287 100644
+--- a/crates/engine-native-kernel/src/snap/types.rs
++++ b/crates/engine-native-kernel/src/snap/types.rs
+@@ -205,6 +205,7 @@ pub enum MachineSnapshot {
+     DamageFlow {
+         root: crate::ids::EventId,
+     },
++    NativeInvocation {owner:PlayerId,def:SkillDefId,window:crate::event::DamageWindowKind,progress:crate::event::NativeInvocationProgress},
+     NativeDamageSkill {
+         owner: PlayerId,
+         def: SkillDefId,
+diff --git a/crates/engine-native-kernel/src/snap/validation.rs b/crates/engine-native-kernel/src/snap/validation.rs
+index 0047733a..057f9690 100644
+--- a/crates/engine-native-kernel/src/snap/validation.rs
++++ b/crates/engine-native-kernel/src/snap/validation.rs
+@@ -68,6 +68,8 @@ pub(super) fn check_cards(cs: &[CardId], b: &RestoreBounds) -> Result<(), Snapsh
+ 
+ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<(), SnapshotError> {
+     match data {
++        EventData::SkillInvocation(d)=>{check_pid(d.owner,b)?;check_def(d.def,b)?;check_opt_pid(d.source,b)?;check_pid(d.target,b)?;},
++        EventData::SkillLog{owner,def,..}=>{check_pid(*owner,b)?;check_def(*def,b)?;},
+         EventData::DamageWindow { .. } => {}
+         EventData::Damage(d) => {
+             super::damage_validation::check_settlement(d, b)?;
+@@ -466,7 +468,7 @@ pub fn validate_resolution(
+         check_event_data(&f.data, b)?;
+         if matches!(
+             f.data,
+-            EventData::Damage(_) | EventData::DamageWindow { .. }
++            EventData::Damage(_) | EventData::DamageWindow { .. } | EventData::SkillInvocation(_) | EventData::SkillLog{..}
+         ) && f.kind != f.data.kind()
+         {
+             return Err(SnapshotError::BadTag("damage_frame_kind", 0));
+diff --git a/crates/engine-native/src/engine/hash.rs b/crates/engine-native/src/engine/hash.rs
+index dc14585c..857c65b5 100644
+--- a/crates/engine-native/src/engine/hash.rs
++++ b/crates/engine-native/src/engine/hash.rs
+@@ -1,5 +1,6 @@
+ use super::*;
+ mod machine;
++mod native_invocation;
+ use machine::*;
+ 
+ /// PA03 缓冲摘要写入器：先拼缓冲再一次 blake3 update。blake3 流式与
+@@ -701,6 +702,8 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
+ 
+ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
+     match data {
++        EventData::SkillInvocation(d)=>{push_u8(h,24);push_u8(h,d.owner);push_u16(h,d.def);push_u32(h,d.window);push_u8(h,d.source.map(|p|p+1).unwrap_or(0));push_u8(h,d.target);push_u8(h,d.phase.tag());push_u8(h,u8::from(d.cancelled));},
++        EventData::SkillLog{owner,def,begin}=>{push_u8(h,25);push_u8(h,*owner);push_u16(h,*def);push_u8(h,u8::from(*begin));},
+         EventData::Damage(d) => {
+             push_u8(h, 1);
+             push_u8(h, d.source.map(|s| s + 1).unwrap_or(0));
+diff --git a/crates/engine-native/src/engine/hash/machine.rs b/crates/engine-native/src/engine/hash/machine.rs
+index 8f82993e..0953047f 100644
+--- a/crates/engine-native/src/engine/hash/machine.rs
++++ b/crates/engine-native/src/engine/hash/machine.rs
+@@ -1,11 +1,13 @@
+ //! 挂起机器快照（MachineSnapshot）的规范哈希编码。
+ 
+ use super::*;
++use super::native_invocation::push_native_invocation;
+ 
+ /// 机器规范快照的摘要编码：判别符 + 全字段；嵌套机器递归。
+ pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
+     use crate::snap::MachineSnapshot as M;
+     match s {
++        M::NativeInvocation{owner,def,window,progress}=>{push_u8(h,86);push_u8(h,*owner);push_u16(h,*def);push_u8(h,window.tag());push_native_invocation(h,progress);},
+         M::NativeDamageSkill { owner, def, window } => {
+             push_u8(h, 85);
+             push_u8(h, *owner);
+diff --git a/crates/engine-native/src/engine/hash/native_invocation.rs b/crates/engine-native/src/engine/hash/native_invocation.rs
+new file mode 100644
+index 00000000..7ecd699f
+--- /dev/null
++++ b/crates/engine-native/src/engine/hash/native_invocation.rs
+@@ -0,0 +1,8 @@
++use super::*;
++pub(super) fn push_native_invocation(h:&mut HashSink,p:&engine_native_kernel::event::NativeInvocationProgress){
++ use engine_native_kernel::event::NativeInvocationProgress as P;
++ match p{
++ P::Ready=>push_u8(h,0),P::BeforeInvocation{context}=>{push_u8(h,1);push_event_data(h,&EventData::SkillInvocation(context.clone()));},P::AwaitInvocation{child}=>{push_u8(h,2);push_u32(h,*child);},P::Finished=>push_u8(h,3),P::Body=>push_u8(h,4),
++ P::HolderAsk{candidates}=>{push_u8(h,5);push_cards(h,candidates);},P::HolderPay{cards}=>{push_u8(h,6);push_cards(h,cards);},P::HolderLoss{count}=>{push_u8(h,7);push_u32(h,*count);},P::HolderAfterLog{count}=>{push_u8(h,8);push_u32(h,*count);},P::SourceAsk{player,count,candidates}=>{push_u8(h,9);push_u8(h,*player);push_u32(h,*count);push_cards(h,candidates);},P::SourceLoss=>push_u8(h,10),P::JidingCard{child}=>{push_u8(h,11);push_u32(h,*child);}
++ }
++}
+diff --git a/crates/engine-native/tests/a0_tag_registry.rs b/crates/engine-native/tests/a0_tag_registry.rs
+index 5c8a8bde..cc97d6bd 100644
+--- a/crates/engine-native/tests/a0_tag_registry.rs
++++ b/crates/engine-native/tests/a0_tag_registry.rs
+@@ -39,7 +39,7 @@ fn all_samples() -> Vec<(&'static str, MachineSnapshot)> {
+         card: None,
+         from_chain: false,
+     });
+-    vec![
++    vec![("NativeInvocation",MachineSnapshot::NativeInvocation{owner:0,def:0,window:engine_native::event::DamageWindowKind::End,progress:engine_native::event::NativeInvocationProgress::Ready}),
+         ("DamageFlow", MachineSnapshot::DamageFlow { root: 1 }),
+         (
+             "NativeDamageSkill",
+@@ -674,6 +674,7 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
+         M::Rvm { .. } => 80,
+         M::TriggerOrder { .. } => 81,
+         M::DamageFlow { .. } => 82,
++        M::NativeInvocation{..}=>84,
+         M::NativeDamageSkill { .. } => 83,
+     }
+ }
+diff --git a/crates/engine-native/tests/c331_genuine_invocations.rs b/crates/engine-native/tests/c331_genuine_invocations.rs
+new file mode 100644
+index 00000000..8c560fbd
+--- /dev/null
++++ b/crates/engine-native/tests/c331_genuine_invocations.rs
+@@ -0,0 +1,45 @@
++use super::c331_source_predicates::{finish,restore,same_final};
++use engine_native::{Engine,GameAction,GameCommand,CommandOutcome,Phase,ChoiceOption};
++use engine_native::state::{GameMode,BossStageState};
++use engine_native::content::extension::{ExtensionPack,ExtensionDef,InitHook};
++fn emitter()->ExtensionPack {
++ let p=content_compiler::compile_source_named("c9g-emission","skill c9g_emit(99109601) { active play_phase targets 0 0 { effect deal_damage(3,2,1); } }").unwrap();
++ ExtensionPack{def:ExtensionDef{name:"c9g-emission",version:1,description:"real command cause"},generals:vec![],cards:vec![],host_skills:vec![],vm_skills:content_native_loader::bridge_vm_skill_decls(&p).unwrap().decls,init_hook:InitHook::None,enabled:true}
++}
++fn fixture(p:&ExtensionPack,name:&str)->Engine {
++ let mut e=Engine::new_with_extensions(15001,4,&[p]).unwrap();for id in 0..4{e.debug_clear_hand(id);e.debug_set_hp(id,4);}e.debug_set_turn(0,Phase::Play,1);e.state_core_mut().mode=GameMode::Boss{boss:0,chongzheng:3,fellows:vec![1],stage:BossStageState::default_none()};e.debug_grant(0,"c9g_emit");e.debug_grant(if name=="章武"{1}else{0},name);e
++}
++fn fire(e:&mut Engine){let skill=e.catalog().skill_by_name("c9g_emit").unwrap();let out=e.submit(GameCommand{actor:0,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action:GameAction::ActivateSkill{skill}});assert!(!matches!(out,CommandOutcome::Rejected(_)),"{out:?}");}
++#[test]
++fn c9g_zhangwu_holder_cancel_has_real_invocation_without_activation_log(){
++ let p=emitter();let mut e=fixture(&p,"章武");e.debug_place(1,"sha");fire(&mut e);let c=e.open_choice().expect("actual optional holder cost").clone();assert_eq!(c.spec.prompt,"c331_zhangwu_holder");assert!(!e.log().iter().any(|x|matches!(x,engine_native::LogEvent::SkillTriggered{skill:"章武",..})));let mut copy=restore(&e,&[&p]);
++ for branch in [&mut e,&mut copy]{let out=branch.submit(GameCommand{actor:c.observer,expected_revision:branch.revision(),dedup_id:branch.save().last_dedup+1,action:GameAction::Answer{choice_id:c.id,selection:vec![]}});assert!(!matches!(out,CommandOutcome::Rejected(_)));finish(branch);}same_final(&e,&copy);assert_eq!(e.debug_hand(1).len(),1);
++}
++#[test]
++fn c9g_jiding_dodge_finishes_card_then_removes_actual_definition(){
++ let p=emitter();let mut e=fixture(&p,"急叮");e.debug_place(2,"shan");let def=e.catalog().skill_by_name("急叮").unwrap();fire(&mut e);let c=e.open_choice().expect("real virtual Sha Dodge").clone();let card=c.spec.options.iter().find(|o|matches!(o,ChoiceOption::Card(_))).copied().unwrap();assert!(e.state_core().has_skill(0,def));let out=e.submit(GameCommand{actor:c.observer,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action:GameAction::Answer{choice_id:c.id,selection:vec![card]}});assert!(!matches!(out,CommandOutcome::Rejected(_)));finish(&mut e);assert!(!e.state_core().has_skill_any_state(0,def),"remove after complete dodged card subtree");
++}
++#[test]
++fn c9g_jiding_has_persisted_named_invocation_before_card(){
++ let p=emitter();let mut e=fixture(&p,"急叮");e.set_time_slice(Some(1));fire(&mut e);let mut found=false;for _ in 0..500{let s=e.save();found|=format!("{:?}",s.resolution.stack).contains("SkillInvocation");if s.resolution.stack.is_empty()&&!s.segment_open{break;}e.resume();}assert!(found,"actual invocation frame, not scalar activation log");
++}
++#[test]
++fn c9g_invocation_every_phase_and_dodge_restore(){
++ let p=emitter();let mut e=fixture(&p,"急叮");e.debug_place(2,"shan");e.set_time_slice(Some(1));fire(&mut e);let mut phases=std::collections::BTreeSet::new();let mut checked=0;
++ for _ in 0..800{let s=e.save();for f in &s.resolution.stack{if let engine_native::event::EventData::SkillInvocation(d)=&f.data{phases.insert(d.phase.tag());}}
++ if s.resolution.stack.is_empty()&&!s.segment_open{break;}
++ let mut copy=restore(&e,&[&p]);finish(&mut copy);let mut control=e.clone();finish(&mut control);same_final(&control,&copy);checked+=1;
++ if let Some(c)=e.open_choice().cloned(){let card=c.spec.options.iter().find(|x|matches!(x,ChoiceOption::Card(_))).copied();let selection=card.map(|v|vec![v]).unwrap_or_default();let out=e.submit(GameCommand{actor:c.observer,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action:GameAction::Answer{choice_id:c.id,selection}});assert!(!matches!(out,CommandOutcome::Rejected(_)));}else{e.resume();}}
++ assert!(checked>10);assert!(phases.is_superset(&[0,1,2,3,4].into_iter().collect()));
++}
++#[test]
++fn c9g_zhangwu_actual_two_card_equipment_cost_and_source_cancel(){
++ let p=emitter();let mut e=fixture(&p,"章武");e.debug_set_max_hp(2,20);e.debug_set_hp(2,20);let hand=e.debug_place(1,"sha");let equip=e.debug_place(1,"zhuge");e.state_core_mut().player_mut(1).hand.retain(|c|*c!=equip);e.state_core_mut().player_mut(1).equips.push(equip);e.debug_place(2,"tao");e.debug_place(2,"shan");fire(&mut e);let c=e.open_choice().unwrap().clone();let out=e.submit(GameCommand{actor:1,expected_revision:e.revision(),dedup_id:e.save().last_dedup+1,action:GameAction::Answer{choice_id:c.id,selection:vec![ChoiceOption::Card(hand),ChoiceOption::Card(equip)]}});assert!(!matches!(out,CommandOutcome::Rejected(_)));let c=e.open_choice().unwrap().clone();assert_eq!(c.spec.prompt,"c331_zhangwu_source");assert_eq!((c.spec.min,c.spec.max),(2,2));let mut copy=restore(&e,&[&p]);
++ for branch in [&mut e,&mut copy]{let out=branch.submit(GameCommand{actor:2,expected_revision:branch.revision(),dedup_id:branch.save().last_dedup+1,action:GameAction::Answer{choice_id:c.id,selection:vec![]}});assert!(!matches!(out,CommandOutcome::Rejected(_)));finish(branch);}same_final(&e,&copy);assert_eq!(e.debug_hp(2),18);assert!(e.state_core().discard.contains(&equip));assert_eq!(e.log().iter().filter(|x|matches!(x,engine_native::LogEvent::SkillTriggered{skill:"章武",..})).count(),1);
++}
++#[test]
++#[ignore="F14 mandatory: native Kingdoms lacks declared unknown/ye identity and mutual yexinjia_friend storage/writers"]
++fn c9g_kingdoms_revealed_wei_shu_are_source_enemies(){
++ let mut e=Engine::new(15004,3);let a=(0..e.catalog().general_count()).find(|id|e.catalog().general_meta(*id as u16).is_some_and(|g|g.1==engine_native::catalog::Faction::Wei)).unwrap()as u16;let b=(0..e.catalog().general_count()).find(|id|e.catalog().general_meta(*id as u16).is_some_and(|g|g.1==engine_native::catalog::Faction::Shu)).unwrap()as u16;
++ e.debug_set_general_def(0,a);e.debug_set_general_def(1,b);e.state_core_mut().player_mut(0).revealed_generals[0]=true;e.state_core_mut().player_mut(1).revealed_generals[0]=true;e.state_core_mut().mode=GameMode::Kingdoms;assert_eq!(e.state_core().source_is_enemy_of(e.catalog(),0,1),Some(true));
++}
+diff --git a/crates/engine-native/tests/groups/nc_rounds.rs b/crates/engine-native/tests/groups/nc_rounds.rs
+index e73c3876..416ac6c8 100644
+--- a/crates/engine-native/tests/groups/nc_rounds.rs
++++ b/crates/engine-native/tests/groups/nc_rounds.rs
+@@ -117,3 +117,6 @@ mod c331_prehp_damage;
+ mod c331_source_predicates;
+ #[path = "../c331_atomic_source_repair.rs"]
+ mod c331_atomic_source_repair;
++
++#[path = "../c331_genuine_invocations.rs"]
++mod c331_genuine_invocations;

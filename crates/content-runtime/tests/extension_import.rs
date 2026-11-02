@@ -73,6 +73,7 @@ fn drop_in_directories_import_dependencies_metadata_and_assets() {
     let mut hero = package("hero");
     hero.manifest.dependencies.push(dependency("base"));
     hero.character_index.push(PackageCharacterEntry {
+        voice_assets: Default::default(),
         id: 9001,
         name_key: "hero".into(),
         max_hp: 4,

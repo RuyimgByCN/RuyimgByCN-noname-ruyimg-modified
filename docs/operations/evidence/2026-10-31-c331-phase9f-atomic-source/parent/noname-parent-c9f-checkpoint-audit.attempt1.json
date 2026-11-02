@@ -1,0 +1,4 @@
+{
+  "failure": "Parentcheckpointvalidator incorrectlytreatedabsent219-overlayfilesasnewemptyfiles.219snapshotisoverlay, notfull5fcbase. Assertionstoppedatbaselineidentitybeforecopy/reverse; no product/tests/source/index changes. Retryusesimmutablegit5fcfornonoverlaypaths, acceptsnewemptyonlywhenbasepathactuallyabsent.",
+  "original": "Tool17:16ish pythonstdin AssertionError line5 retainedinsession; notworkerfailure."
+}

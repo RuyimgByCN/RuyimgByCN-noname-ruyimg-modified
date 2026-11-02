@@ -1,0 +1,24 @@
+{
+  "utc": "2026-10-31T17:38:29.253876+00:00",
+  "owned_runners": [
+    {
+      "pid_file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/checks-final1/runner.pid",
+      "pid": 83005,
+      "active": false
+    },
+    {
+      "pid_file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/checks-full1/runner.pid",
+      "pid": 51409,
+      "active": false
+    },
+    {
+      "pid_file": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9f/checks-final2/runner.pid",
+      "pid": 84126,
+      "active": false
+    }
+  ],
+  "all_final_commands_completed": true,
+  "no_owned_producer_queued_or_active": true,
+  "no_signals_or_cleanup": true,
+  "no_new_heavy_after_cutoff": true
+}

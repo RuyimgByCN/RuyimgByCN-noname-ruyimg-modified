@@ -1,0 +1,58 @@
+# C9g final6 before repair — validation-only, BLOCK
+Verified2026-10-31 on original final6 bytes; no source/test/fixture/catalog/lock/index/Main edits or repairs.
+New phase start19:16:31.253321Z; heavy cutoff19:36:31.253321Z; seal due19:41:31.253321Z.
+All nine requested producers completed19:18:39.929424Z; no active/queued owned work, no signals, fallback or reruns.
+Evidence root: `/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/evidence/phase9h-baseline-validation`.
+
+## Authoritative source and protection
+Full239manifest `69eeebab43d3ccea5f0b48e003cecd8a339f2fe1df8cf8e8d75e118a5309087b`.
+Increment46manifest `9557423705b52ebdfa158004bdeee9e2ab54398f3fa13696cf43249cc225ea00`.
+Every producer has complete239hash manifests before AND after; all equal original source; HEAD5fc/private staging empty.
+Pinned helperd7f/global lock dev16777231 inode620205209; offline/jobs2/incremental0/default profiles/free disk>3GiB.
+Warm target is private originalT/noname-c331-efhmbq7e/target; strict uses separate owned target-strict/-Dwarnings.
+`protected-after.json` rechecks original31867 baseline with exact Own6/I02/CI/generated exceptions, source37/products/schema4/hooks/C6/old reader.
+Parent prephase4406docs/143909122B receiptSHA600343... plus explicit write hold; fresh post-producer4406hashes verified separately.
+Main HEAD9f4, staging empty/rawindexe0de unchanged; privateindexb107 bytes+mtime and Cargo.lock unchanged.
+C9g1858/index/report, C9f4167, C9e7333 and separate41audit5 entries rehashed unchanged; no old bytes overwritten.
+Older4258 receipt enumeration was not separately retained; this is not C drift or a CI input baseline.
+Parent docs-only CI ten-green remains separate from C runtime acceptance.
+
+## Actual command results
+`cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast`: **1848passed/9failed/76ignored**, exit101.
+This full native result remains FAILED despite subsequent focused passes; all test binaries compiled on actual final6.
+Independent `RUSTFLAGS=-Dwarnings cargo check --offline -p engine-native --all-targets`: PASS.
+`cargo check --offline -p game-server --all-targets`: PASS;345warning-line occurrences including repeated diagnostics/summaries retained.
+`cargo test --offline -p engine-native-wasm --test c331_invocation_controls -- --nocapture`:1PASS;18diagnostics plus warning-summary retained.
+`cargo test --offline -p engine-native --test nc_rounds c331_ -- --nocapture`:98PASS/1ignoredF14/153filtered.
+Separate original-expectation golden test: FAIL, exit101, same12disputed cases; no expected hashes changed.
+Source-cap unit2 PASS; caps9045 PASS (physical2000/Rust effective1000); layering/F7 zero.
+Counts above are separate command scopes; focused/WASM/server/Python are not added to a unique native grand total.
+`diagnostics-and-counts.json` retains every warning/error occurrence and ignored name; all nine requested commands ran.
+
+## Nine full-native failures — observed assertions, no repair classification assumed
+1. `a0_lib_tests::standard_skill_ids_append_only` — lib.rs67: frozen count230 versus actual231.
+2. `boss_guojia_qizuo_trick_reuse` — boss_guojia.rs138: play result did not match Accepted.
+3. `boss_guojia_yuance_judge_branches` — boss_guojia.rs78: targetHP3 versus expected2.
+4. `boss_liubei_zhangwu_discard_or_damage` — boss_liubei.rs97: play result did not match Accepted.
+5. `boss_mingxingzhu_qingzhu_jiazu_jiding` — boss_mingxingzhu.rs118: Rejected(IllegalTargets).
+6. `boss_zhangjiao_jidian_chain_guard` — boss_zhangjiao.rs173: HP4 versus expected3.
+7. `boss_zhangjiao_leiji_shan_thunder` — boss_zhangjiao.rs145: answer result did not match Accepted.
+8. `simayi_guicai_rewrites_with_any_suit_card` — simayi.rs60: old judgment not owned by rewriter as asserted.
+9. `replay_scenarios_match_golden` — replay_scenarios.rs1229: original12hash mismatches.
+Full exact failure sections and names are in `full-native-failures.json` and raw full-native.log.
+
+## Fresh observations and capture limits
+Current golden producer captured actual inputs/outcomes/state; original positive C8 producer/data reused WITHOUT redrive.
+All362baseline JSON/snapshot/archive bindings match immutable9f bindings; all12actual/expected hashes are identical to retained9f.
+Six complete business fields compared:11trajectories equal; chain0007-after differs only events, own DamageDealt before own unlink.
+Difference exactly matches prior pinned Core content.ts12092–12120/Liuli game.js34767–34810 disposition, retained without normalization.
+Outcomes187none/139Accepted/32Pending/4Rejected: discriminants/full Pending/reasons exact; only Accepted32-byte hash separated and retained.
+Existing focused hooks emitted202JSON/snapshot/archive triples;15snapshots contain new invocation frames.
+**Export limitation:** C9g control tests call in-memory restore/same_final but no capture function; separate complete C9g branch dumps unavailable.
+No forbidden instrumentation/test edit was introduced to manufacture those exports; actual test statuses and existing captures are retained.
+
+## Remaining gate
+Final6 now compiles, but full regression is red; concurrent source review must classify failures before the next repair workflow.
+F14 ignored P1, F07 old random/unimplemented, lifecycle/Judge/opaque privacy/compatibility/persistence and conditional wide-cost controls remain mandatory.
+No all37/ABI/WS6/privacy/fuel/archive equivalence from these passes or equal errors; no golden rerecord or new protocol/version.
+Whole C331/Main remains BLOCK: source262/290 remaining28 +0; true ChangeHp/DeathFlow still next, not relabelled DamageEnd.

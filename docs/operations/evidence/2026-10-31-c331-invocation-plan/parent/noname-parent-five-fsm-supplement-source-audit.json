@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-31T18:09:52.291932+00:00",
+  "status": "PASS_SOURCE_BOUND_COMPAT_SOURCE27_LIFECYCLE_SUPPLEMENT_PLAN_ONLY",
+  "overlayFiles": 219,
+  "readBindings": 20,
+  "baseFallbackReads": 5,
+  "originalGuideInventoryUnchanged": true,
+  "contractAndDecision27Exact": true,
+  "proposalSHA256": "429b6156b43d43612e21d831f7d0c936df058975a0392c947c9521b836cb7dd7",
+  "reviewFinalSHA256": "93cb3e2afb7356e1525d69716885dbb71a86853db4c0bdf7c592b9f22899a930",
+  "inventorySHA256": "62cf718ea1de4c54f16a86c02e20f4ed0bb51de5ae127b21d7cc3fb1a3b4c6db",
+  "excerptsSHA256": "cd5af53d0bf2c0c6c0d562f3e577d3b89e6bee8a2c8bcb2249b771572c98e8dc",
+  "qualification": "e67OKnotesplanonly, no runtime/frozenreader/IPCWSWASMUI/privacy/restoregreen. InternalHiddenCardexistingwirestring/indexlabelonly;27ordinaryOptionalGateOwnsourceonly;genuinelifecycle/source-specificlogchildren/cancelstillrequired. Parenttwoorigin-key/pathassumptionfailurespreservedthenfixed; actualall20sourcebytes+pins/contractsverified, originalsource/artifactsunchanged. No Main/source/index/HEAD/stage/device/networkwrites."
+}

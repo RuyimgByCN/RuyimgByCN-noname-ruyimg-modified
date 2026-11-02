@@ -1,0 +1,11 @@
+{
+  "validated_utc": "2026-10-31T18:10:01.548150+00:00",
+  "compile_ast_passed": true,
+  "unique_outertry_match": true,
+  "checkpoint_body_ast_unchanged": true,
+  "observer_launch_count_before_validation": 0,
+  "watch_launch_count_before_validation": 0,
+  "invalid_candidate_sha256": "c1dd21841c91bf30b59a35b74dde31f2d9775f543f0556e2a6eef30ad6d7f3f3",
+  "corrected_candidate_sha256": "1d42ce6f9e3bdf4fe6349e407da3ddd077b92a3c4bd07d7f6c4e5fe74fbbb965",
+  "no_sleep_poll_loop_or_signal": true
+}

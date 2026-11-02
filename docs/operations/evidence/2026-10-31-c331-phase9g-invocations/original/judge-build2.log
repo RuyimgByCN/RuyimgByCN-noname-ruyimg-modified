@@ -1,0 +1,43 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+error[E0308]: mismatched types
+  --> crates/engine-native/src/ai/remap.rs:97:21
+   |
+97 |                 map(&mut c.trick);
+   |                 --- ^^^^^^^^^^^^ expected `&mut u32`, found `&mut Option<u32>`
+   |                 |
+   |                 arguments to this function are incorrect
+   |
+   = note: expected mutable reference `&mut u32`
+              found mutable reference `&mut Option<u32>`
+note: type parameter defined here
+  --> crates/engine-native/src/ai/remap.rs:50:66
+   |
+50 | pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u32)) {
+   |                                                                  ^^^^^^^^^^^^^^^^^
+
+error[E0308]: mismatched types
+   --> crates/engine-native/src/ai/remap.rs:174:30
+    |
+174 |                     out.push(c.trick);
+    |                         ---- ^^^^^^^ expected `u32`, found `Option<u32>`
+    |                         |
+    |                         arguments to this method are incorrect
+    |
+    = note: expected type `u32`
+               found enum `Option<u32>`
+note: method defined here
+   --> /Users/ruyimg/.rustup/toolchains/stable-aarch64-apple-darwin/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs:991:12
+    |
+991 |     pub fn push(&mut self, value: T) {
+    |            ^^^^
+help: consider using `Option::expect` to unwrap the `Option<u32>` value, panicking if the value is an `Option::None`
+    |
+174 |                     out.push(c.trick.expect("REASON"));
+    |                                     +++++++++++++++++
+
+For more information about this error, try `rustc --explain E0308`.
+error: could not compile `engine-native` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+{"command": ["cargo", "test", "--offline", "-p", "engine-native", "--test", "nc_rounds", "c331_genuine_invocations", "--", "--nocapture"], "exit": 101, "locked_seconds": 5.3981399170006625, "disk_free_bytes": 131546890240}

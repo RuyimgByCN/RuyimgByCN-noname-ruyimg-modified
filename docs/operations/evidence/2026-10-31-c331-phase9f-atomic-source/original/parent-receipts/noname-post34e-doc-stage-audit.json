@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-31T16:36:04.160218+00:00",
+  "status": "PASS_EXACT_POST34E_DOCS_EVIDENCE_STAGED_ONLY_NO_COMMIT",
+  "parent": "34e83f0550bb70ef4af6083697428de7be2f02f8",
+  "files": 2540,
+  "bytes": 81591760,
+  "allBlobsModesExact": true,
+  "nonDocPaths": [],
+  "source37Unchanged": true,
+  "indexBefore": "38b98518003684be99b9f72ed492935a2f93c5bb18aa9de579f0e63aa621ac74",
+  "indexAfter": "fb7832d4509515e4e6ed27b7e11289141eccebfe8336b117f5e0196b7f7242e7",
+  "intentionalIndexMutation": "gitadd exact2540ParentownedDocs/evidence only afterreleasedpublicationlease",
+  "headUnchanged": true,
+  "review": "35b4947f OKnotes; staleWindowsP2fixed withrawreview/fixreceipt retained",
+  "scope": "No profile/cache/privateassistantbody/binary/source/config/default/version paths. All552localexclusionsoutsideplanretained, no forceadd/deletion. No newcommit/push until C9esupplement/sourceguardseals."
+}

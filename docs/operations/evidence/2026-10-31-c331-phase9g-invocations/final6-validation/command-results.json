@@ -1,0 +1,332 @@
+[
+  {
+    "name": "full-native",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-kernel",
+      "-p",
+      "engine-native-content",
+      "-p",
+      "engine-native",
+      "--no-fail-fast"
+    ],
+    "status": "failed",
+    "exit": 101,
+    "start_utc": "2026-10-31T19:17:09.323112+00:00",
+    "end_utc": "2026-10-31T19:18:06.370721+00:00",
+    "seconds": 57.047281457984354,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "b961283734fb90402c2c2ef7d492b1e627e278925eafb52bc5dae230e670a18b",
+    "source_after_sha256": "e7bac83f4934f50d6bc402f0c03733053c97ffd7ba76ca1ea284345656532877",
+    "log_sha256": "b3c4b042cfb1c60022bfbc4e0c738bb19dfdc0fa999e390feca51c096dd7f011",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-kernel",
+        "-p",
+        "engine-native-content",
+        "-p",
+        "engine-native",
+        "--no-fail-fast"
+      ],
+      "exit": 101,
+      "locked_seconds": 56.98725891596405,
+      "disk_free_bytes": 132032782336
+    }
+  },
+  {
+    "name": "gate1b",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--all-targets"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:06.378752+00:00",
+    "end_utc": "2026-10-31T19:18:14.078964+00:00",
+    "seconds": 7.7001683749840595,
+    "target": "/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/target-strict",
+    "RUSTFLAGS": "-Dwarnings",
+    "source_before_sha256": "843ec8b7d42603a59b750b5adb27964223684d664bc2d0e02f1317bb315cf441",
+    "source_after_sha256": "191b95e3c37387c5b8fcb793922512ef7fe353f1a924c48e2013e9d75fd3c217",
+    "log_sha256": "fdbae505965457d4cd551877686acc2d753c2c71575d61407573fc4e346cc2ce",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.6614220420015045,
+      "disk_free_bytes": 132031422464
+    }
+  },
+  {
+    "name": "server-check",
+    "argv": [
+      "cargo",
+      "check",
+      "--offline",
+      "-p",
+      "game-server",
+      "--all-targets"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:14.085993+00:00",
+    "end_utc": "2026-10-31T19:18:22.987342+00:00",
+    "seconds": 8.901300332974643,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "1e95d7caff49df683190d0cf0b72d7cbee169f42ba7cfa5358e5691fbfbf16da",
+    "source_after_sha256": "27f6808f0e88afb6f048627ad404d1b2f8ac179a03299b67af363caa8eb38889",
+    "log_sha256": "95099559d9889be4edc36832a5f8a3733679306e3a644f2326f5626e78f5463b",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "check",
+        "--offline",
+        "-p",
+        "game-server",
+        "--all-targets"
+      ],
+      "exit": 0,
+      "locked_seconds": 8.850891083013266,
+      "disk_free_bytes": 132028248064
+    }
+  },
+  {
+    "name": "wasm-controls",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native-wasm",
+      "--test",
+      "c331_invocation_controls",
+      "--",
+      "--nocapture"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:22.994462+00:00",
+    "end_utc": "2026-10-31T19:18:30.698145+00:00",
+    "seconds": 7.703639000013936,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "5c32ec0cd4d3c9fa24baf89625a83a24ad927177683105f3dd6c10862bcda839",
+    "source_after_sha256": "75f083fcbaa865143cc1b285077a3227c7d2c9c09e2b14b674de6671a3b77d16",
+    "log_sha256": "93ce2e529ae0773edaf94c77b04dba1edafd3a94b0f189bdda177fd3c68b1603",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native-wasm",
+        "--test",
+        "c331_invocation_controls",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "locked_seconds": 7.66079512500437,
+      "disk_free_bytes": 132012929024
+    }
+  },
+  {
+    "name": "focused",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "nc_rounds",
+      "c331_",
+      "--",
+      "--nocapture"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:30.705612+00:00",
+    "end_utc": "2026-10-31T19:18:34.192008+00:00",
+    "seconds": 3.4863781250314787,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "d06f5993feb73204fa654d1a508a362f189ae1fdd467feac7d5406a43aac9325",
+    "source_after_sha256": "20d11ba13ed13496d3ca4e506e9110dae5c15e803517cd608d0f73fb7f473f65",
+    "log_sha256": "05110352a2372ea4edb73175547578b01be2d97a5596491f56ed0e8ee1ec77b1",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "nc_rounds",
+        "c331_",
+        "--",
+        "--nocapture"
+      ],
+      "exit": 0,
+      "locked_seconds": 3.4423317090258934,
+      "disk_free_bytes": 131990872064
+    }
+  },
+  {
+    "name": "golden",
+    "argv": [
+      "cargo",
+      "test",
+      "--offline",
+      "-p",
+      "engine-native",
+      "--test",
+      "kernel",
+      "replay_scenarios_match_golden",
+      "--",
+      "--test-threads=1"
+    ],
+    "status": "failed",
+    "exit": 101,
+    "start_utc": "2026-10-31T19:18:34.198822+00:00",
+    "end_utc": "2026-10-31T19:18:34.864811+00:00",
+    "seconds": 0.665986584033817,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "12695a38031cd465ada47508d03076f21ddc973fe2cbf8a91b9319e3c0628fd2",
+    "source_after_sha256": "254ada70a4cfcdd88911682d04a8590db21933f20ee6e605ee1dfc8f9f07801d",
+    "log_sha256": "871b1d88f79c5e9a77aa47f16559c9be019af365f76915a99b6915754203623e",
+    "runner_summary": {
+      "command": [
+        "cargo",
+        "test",
+        "--offline",
+        "-p",
+        "engine-native",
+        "--test",
+        "kernel",
+        "replay_scenarios_match_golden",
+        "--",
+        "--test-threads=1"
+      ],
+      "exit": 101,
+      "locked_seconds": 0.6293184169917367,
+      "disk_free_bytes": 131961143296
+    }
+  },
+  {
+    "name": "source-cap-unit",
+    "argv": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts",
+      "-p",
+      "test_check_source_lines.py"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:34.871331+00:00",
+    "end_utc": "2026-10-31T19:18:34.969939+00:00",
+    "seconds": 0.09860983298858628,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "a673ec641fb964cbb4effa67341f0ffe59a6849fcb3ae1e011b1fbef5278e9a0",
+    "source_after_sha256": "940d531601f285727a27e1f8fecd4277f437c2f8038d749ffb991b2215c2c035",
+    "log_sha256": "ce9bf24f4da8649736651bc51a4e9bef734c5fd2bdf5e6a7408007b69655ca5e",
+    "runner_summary": {
+      "command": [
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_check_source_lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.06286820897366852,
+      "disk_free_bytes": 131961696256
+    }
+  },
+  {
+    "name": "source-caps",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-source-lines.py"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:34.976827+00:00",
+    "end_utc": "2026-10-31T19:18:39.761255+00:00",
+    "seconds": 4.784401833021548,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "c4bd9fde38b2309e6d3ca020c528877b6d8e61002dd1cedcfc96957f7804af27",
+    "source_after_sha256": "ee3451771faa6243818d873b0309ceef2b29fc62111a9f94afb5d0db899e7f2d",
+    "log_sha256": "cfde515581395dde84117fc2534e7a36ca3e702b2b80312c200039c8a671be19",
+    "runner_summary": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-source-lines.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 4.748993084009271,
+      "disk_free_bytes": 131978047488
+    }
+  },
+  {
+    "name": "layering",
+    "argv": [
+      "python3",
+      "-B",
+      "scripts/check-native-layering.py"
+    ],
+    "status": "passed",
+    "exit": 0,
+    "start_utc": "2026-10-31T19:18:39.767775+00:00",
+    "end_utc": "2026-10-31T19:18:39.929096+00:00",
+    "seconds": 0.16132229199865833,
+    "target": "/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-efhmbq7e/target",
+    "RUSTFLAGS": null,
+    "source_before_sha256": "5f8f05a9acc30cf11486776a2ec3b0fa244cb0bf70014abb99e0f31d40c80b2c",
+    "source_after_sha256": "e0f1f82fca6d7f3ecf0b60c1e234d9ca864c1726836c0c6ca03a37c6bad6939f",
+    "log_sha256": "8d3dcfaaba624a3690b4d7585acfd2e48e1c5f210d425897efcf851e2131e32b",
+    "runner_summary": {
+      "command": [
+        "python3",
+        "-B",
+        "scripts/check-native-layering.py"
+      ],
+      "exit": 0,
+      "locked_seconds": 0.12524658301845193,
+      "disk_free_bytes": 131977928704
+    }
+  }
+]
