@@ -907,7 +907,7 @@ fn swd_xingjunyan_amp_and_qinglonglingzhu_steal() {
         snap.core.players[0].equips.push(qlz);
         e = Engine::restore_with_extensions(&snap, &[&pack]).expect("注入青龙令珠");
     }
-    // 目标手牌 2 张（RNG 抽 1）
+    // 目标手牌 2 张；实际私密选牌，取消不移动牌。
     let _d1 = e.debug_place(1, "shan");
     let _d2 = e.debug_place(1, "tao");
     let fire_src = e.debug_place(0, "sha"); // 占位：火伤来源任意
@@ -922,7 +922,25 @@ fn swd_xingjunyan_amp_and_qinglonglingzhu_steal() {
         ),
         "{out:?}"
     );
-    // 青龙令珠：属性伤害后偷 1 张（从手牌/装备 he 合集；目标仅手牌 2）
+    let choice = e.open_choice().expect("实际 gainPlayerCard 询问").clone();
+    assert_eq!(choice.spec.prompt, "c331_qinglong_card");
+    let selected = choice.spec.options[1];
+    let chosen = e.debug_hand(1)[1];
+    let out = e.submit(GameCommand {
+        actor: choice.observer,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: GameAction::Answer {
+            choice_id: choice.id,
+            selection: vec![selected],
+        },
+    });
+    assert!(matches!(out, CommandOutcome::Accepted { .. }), "{out:?}");
+    assert!(
+        e.debug_hand(0).contains(&chosen),
+        "选定第二张暗牌，非强制随机获取"
+    );
+    // 从真实 private slot 绑定获得选定 he 牌。
     let h1_after = e.debug_hand(1).len();
     assert_eq!(h1_after, h1_before - 1, "青龙令珠：目标失去一张 he 牌");
     assert_eq!(e.debug_hand(0).len(), h0_before + 1, "使用者获得该牌");

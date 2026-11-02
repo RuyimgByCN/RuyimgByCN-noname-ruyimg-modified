@@ -339,6 +339,12 @@ fn swd_generals_b64_lianda_suiyan_duanxing_polang_youyin() {
     // 连打→隳延→破浪三确认窗按触发序排队（同形 trigger_confirm）——
     // 拒前二（连打/隳延），确认第三（破浪）
     for i in 0..3 {
+        if e.open_choice().is_some_and(|c| c.spec.prompt == "trigger_order") {
+            let def = e.catalog().skill_by_name(["lianda", "suiyan", "polang"][i]).unwrap();
+            let c = e.open_choice().unwrap().clone();
+            assert!(c.spec.options.contains(&ChoiceOption::Skill(def)));
+            submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: vec![ChoiceOption::Skill(def)] });
+        }
         let c = e.open_choice().expect("确认窗序列");
         assert_eq!(c.spec.prompt, "trigger_confirm", "第 {i} 窗");
         let (cid, obs) = (c.id, c.observer);

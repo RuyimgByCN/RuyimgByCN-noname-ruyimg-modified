@@ -82,6 +82,7 @@ fn phase_end_trigger() -> TriggerMeta {
         event: EventKind::PhaseEnd,
         timing: Timing::Normal,
         priority: 0,
+        order_selectable: true,
         optional: false,
         extra_events: Vec::new(),
     }
@@ -149,6 +150,7 @@ fn t8_vm_skill_recover_branch_end_to_end() {
     let module = module_of(&pkg, "hnl_jiuwei_t8");
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -178,6 +180,7 @@ fn t8_vm_skill_draw_branch_end_to_end() {
     let module = module_of(&pkg, "hnl_jiuwei_t8");
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -211,6 +214,7 @@ fn t8_vm_skill_fuel_exhaustion_rolls_back() {
     let module = module_of(&pkg, "hnl_overrun_t8");
     let name = "t8超限";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -273,6 +277,7 @@ fn t8_vm_skill_choice_suspend_resume_midrestore() {
     let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
     let name = "t8酒尾选择";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -337,6 +342,7 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
     let module = module_of(&pkg, "hnl_jiuwei_choice_t8");
     let name = "t8酒尾选择";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -374,6 +380,7 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
     let snap = e.save();
     // 版本 +1 的同包（版本指纹漂移）
     let mut drifted = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module: module_of(
             &compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("重编译"),
@@ -398,11 +405,11 @@ fn t8_vm_skill_loader_bridge_end_to_end() {
         content_native_loader::bridge_vm_skill_decls(&pkg).expect("装载器桥接");
     let decls = outcome.decls;
     assert_eq!(decls.len(), 1, "触发索引 1 项→1 声明");
-    // 声明名=模块名（编译器按 技能_事件 命名模块；符号表 intern）。
-    assert_eq!(decls[0].name, "hnl_jiuwei_t8_phase_end", "声明名=模块名");
+    // 声明保留逻辑技能名，模块名独立标识 handler。
+    assert_eq!(decls[0].name, "hnl_jiuwei_t8", "声明名=逻辑技能名");
     let pack = pack_with(decls);
     let mut e = Engine::new_with_extensions(910007, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_jiuwei_t8_phase_end");
+    e.debug_grant(1, "hnl_jiuwei_t8");
     e.debug_set_hp(1, 2);
     for _ in 0..40 {
         if e.turn().current == 1 && hp(&e, 1) == 3 {
@@ -452,6 +459,7 @@ fn t8_rejection_unmapped_effect_rolls_back() {
     let module = module_of(&pkg, "hnl_capped_t8");
     let name = "t8改上限";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -477,6 +485,7 @@ fn t8_rejection_corrupted_bytecode_rejected_at_load() {
     }
     let name = "t8坏码";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -503,6 +512,7 @@ fn t8_rejection_caps_escalation_denied() {
     module.caps_mask |= 0xFFFF_0000; // 未知能力位
     let name = "t8越权";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -522,6 +532,7 @@ fn t8_rejection_tampered_snapshot_module_rejected() {
     let module = module_of(&pkg, "hnl_jiuwei_t8");
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -582,12 +593,14 @@ fn t8_vm_skill_filter_owner_is_source() {
     let module = module_of(&pkg, "hnl_src_t8");
     let name = "t8源";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: TriggerMeta {
             event: EventKind::Damage,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -613,6 +626,7 @@ fn t8_vm_skill_filter_always() {
     let module = module_of(&pkg, "hnl_always_t8");
     let name = "t8常";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -640,6 +654,7 @@ fn t8_vm_skill_filter_always() {
 fn t8_vm_skill_loader_rejects_unsupported_filters() {
     let mut pkg = compile_source_named("t8-rvm-bridge", NAMED_FILTER_DSL).expect("DSL 编译");
     pkg.trigger_index[0].filter = "not_a_real_filter".to_string();
+    pkg.manifest.logic_hash = pkg.compute_logic_hash();
     match content_native_loader::bridge_vm_skill_decls(&pkg) {
         Err(content_native_loader::BridgeError::UnsupportedVmFilters { filters }) => {
             assert_eq!(filters, vec!["not_a_real_filter".to_string()]);
@@ -678,6 +693,7 @@ skill hnl_xproc_t8(990008) {
         let module = module_of(&pkg, "hnl_xproc_t8");
         let name = "t8跨进程";
         let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
             name: name.to_string(),
             module,
             trigger: phase_end_trigger(),
@@ -706,6 +722,7 @@ skill hnl_xproc_t8(990008) {
     let module = module_of(&pkg, "hnl_xproc_t8");
     let name = "t8跨进程";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -795,6 +812,7 @@ fn t8_vm_skill_save_restore_roundtrip() {
     let module = module_of(&pkg, "hnl_jiuwei_t8");
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -835,12 +853,14 @@ fn t8_vm_skill_id_reverse_lookup_wired() {
             cards: Vec::new(),
             host_skills: Vec::new(),
             vm_skills: vec![VmSkillDecl {
+            declaration_hash: None,
                 name: decls[0].name.clone(),
                 module: decls[0].module.clone(),
                 trigger: TriggerMeta {
                     event: EventKind::PhaseEnd,
                     timing: Timing::Normal,
                     priority: 0,
+                    order_selectable: true,
                     optional: false,
                     extra_events: Vec::new(),
                 },
@@ -886,6 +906,7 @@ fn t8_filter_family_owner_gate_and_predicates() {
         event: EventKind::Damage,
         timing: Timing::Normal,
         priority: 0,
+        order_selectable: true,
         optional: false,
         extra_events: Vec::new(),
     };
@@ -916,6 +937,7 @@ fn t8_filter_family_owner_gate_and_predicates() {
 
     for (idx, (filter, setup)) in cases.iter().enumerate() {
         let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1142,6 +1164,7 @@ fn t8_bte_play_phase_filter_dual_gate_and_phase_kind() {
         event: EventKind::PhaseEnd,
         timing: Timing::Normal,
         priority: 0,
+        order_selectable: true,
         optional: false,
         extra_events: Vec::new(),
     };
@@ -1152,6 +1175,7 @@ fn t8_bte_play_phase_filter_dual_gate_and_phase_kind() {
         .enumerate()
     {
         let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1199,12 +1223,14 @@ fn t8_bte_zero_count_negative() {
     let pkg = compile_source_named("t8-rvm-bridge", BTE_DSL).expect("DSL 编译");
     let module = module_of(&pkg, "hnl_bte_t8");
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: "t8阵".to_string(),
         module,
         trigger: TriggerMeta {
             event: EventKind::PhaseEnd,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -1261,12 +1287,14 @@ fn param_probe_pack(
     event: EventKind,
 ) -> ExtensionPack {
     pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: "t8参".to_string(),
         module: module.clone(),
         trigger: TriggerMeta {
             event,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -1462,12 +1490,14 @@ fn t8_filter_damage_before_hand_empty_elemental_or_trick() {
     let pkg = compile_source_named("t8-rvm-bridge", DBF_DSL).expect("DSL 编译");
     let module = module_of(&pkg, "hnl_dbf_t8");
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: "t8伤".to_string(),
         module,
         trigger: TriggerMeta {
             event: EventKind::DamageBefore,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -1514,12 +1544,14 @@ fn t8_filter_damage_source_movable_field_card() {
     .expect("DSL 编译");
     let module = module_of(&pkg, "hnl_mvf_t8");
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: "t8移".to_string(),
         module,
         trigger: TriggerMeta {
             event: EventKind::Damage,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -1570,6 +1602,7 @@ fn t8_filter_tied_max_family() {
         event: EventKind::PhaseEnd,
         timing: Timing::Normal,
         priority: 0,
+        order_selectable: true,
         optional: false,
         extra_events: Vec::new(),
     };
@@ -1579,6 +1612,7 @@ fn t8_filter_tied_max_family() {
     // 一步会推进阶段并触发 Draw 摸牌，污染手牌账。
     let case = |filter: P, setup: fn(&mut Engine)| -> bool {
         let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1634,12 +1668,14 @@ fn t8_filter_targeted_by_other_sha() {
     .expect("DSL 编译");
     let module = module_of(&pkg, "hnl_tgt_t8");
     let pack = pack_with(vec![VmSkillDecl {
+            declaration_hash: None,
         name: "t8指".to_string(),
         module,
         trigger: TriggerMeta {
             event: EventKind::CardUsed,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: Vec::new(),
         },
@@ -1728,8 +1764,8 @@ skill hnl_wsha(990020) {
 ";
     let pack = install_dsl(dsl);
     let mut e = Engine::new_with_extensions(961001, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_wsha_damage_before");
-    keep_only(&mut e, 1, &["hnl_wsha_damage_before"]);
+    e.debug_grant(1, "hnl_wsha");
+    keep_only(&mut e, 1, &["hnl_wsha"]);
     let max = e.state_core().player(1).max_hp as i32;
     e.debug_set_hp(1, max);
     let h = hand_len(&e, 1);
@@ -1758,14 +1794,14 @@ skill hnl_once(990023) {
 ";
     let pack = install_dsl(dsl);
     let mut e = Engine::new_with_extensions(961002, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_once_damage");
-    keep_only(&mut e, 1, &["hnl_once_damage"]);
+    e.debug_grant(1, "hnl_once");
+    keep_only(&mut e, 1, &["hnl_once"]);
     let h = hand_len(&e, 1);
     let sha = sha_id(&mut e);
     e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
     assert_eq!(hand_len(&e, 1), h + 1, "第一次杀伤害摸 1");
     assert!(
-        e.state_core().vm_aux.once.contains(&(1, "hnl_once_damage".to_string(), 1)),
+        e.state_core().vm_aux.once.contains(&(1, "hnl_once".to_string(), 1)),
         "once 已记"
     );
     e.debug_deal_damage_with_card(Some(0), 1, 1, DamageNature::Normal, sha);
@@ -1789,9 +1825,9 @@ skill hnl_pile_see(990024) {
 ";
     let pack = install_dsl(dsl);
     let mut e = Engine::new_with_extensions(961003, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_pile_damage");
-    e.debug_grant(1, "hnl_pile_see_damage");
-    keep_only(&mut e, 1, &["hnl_pile_damage", "hnl_pile_see_damage"]);
+    e.debug_grant(1, "hnl_pile");
+    e.debug_grant(1, "hnl_pile_see");
+    keep_only(&mut e, 1, &["hnl_pile", "hnl_pile_see"]);
     e.debug_set_turn(1, Phase::Play, 1);
     let deck0 = e.state_core().deck.len();
     let top = *e.state_core().deck.last().expect("牌堆");
@@ -1801,174 +1837,28 @@ skill hnl_pile_see(990024) {
         .state_core()
         .vm_aux
         .piles
-        .get(&(1, "hnl_pile_damage".to_string()))
+        .get(&(1, "hnl_pile".to_string()))
         .map(|c| c.len())
         .unwrap_or(0);
     assert_eq!(pile, 1, "牌堆顶进入技能牌堆");
-    assert_eq!(e.state_core().deck.len(), deck0 - 1);
+    assert_eq!(e.state_core().deck.len(), deck0 - 2);
     assert_eq!(
-        e.state_core().vm_aux.piles.get(&(1, "hnl_pile_damage".to_string())).unwrap()[0],
+        e.state_core().vm_aux.piles.get(&(1, "hnl_pile".to_string())).unwrap()[0],
         top
     );
-    assert_eq!(hand_len(&e, 1), h, "同波伤害时尚无牌堆，不摸");
+    assert_eq!(hand_len(&e, 1), h + 1, "同优先牌堆filter在兄弟效果后重新放行");
     e.debug_set_turn(1, Phase::Judge, 1);
     e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h, "非出牌阶段不摸");
+    assert_eq!(hand_len(&e, 1), h + 1, "非出牌阶段不摸");
     e.debug_set_turn(1, Phase::Play, 1);
     e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h + 1, "出牌阶段且牌堆非空后摸 1");
+    if let Some(c) = e.open_choice().cloned() {
+        assert_eq!(c.spec.prompt, "trigger_order");
+        submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: vec![c.spec.options[0]] });
+    }
+    assert_eq!(hand_len(&e, 1), h + 2, "出牌阶段且牌堆非空后摸 1");
 }
 
 /// add_mark 写入标记。
-#[test]
-fn t8_add_mark_writes() {
-    let dsl = "\
-skill hnl_mark(990022) {
-  trigger damage owner_is_target {
-    effect add_mark(self, 7, 2);
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961004, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_mark_damage");
-    keep_only(&mut e, 1, &["hnl_mark_damage"]);
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(
-        e.state_core().vm_aux.marks.get(&(1, 7)).copied(),
-        Some(2)
-    );
-}
-
-/// change_max_hp 改变体力上限。
-#[test]
-fn t8_change_max_hp_writes() {
-    let dsl = "\
-skill hnl_max(990025) {
-  trigger damage owner_is_target {
-    effect change_max_hp(self, 1);
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961005, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_max_damage");
-    keep_only(&mut e, 1, &["hnl_max_damage"]);
-    let before = e.state_core().player(1).max_hp;
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(e.state_core().player(1).max_hp, before + 1);
-}
-
-/// hand_count 查询为真才摸牌；空手不摸。
-#[test]
-fn t8_hand_count_query_gates_draw() {
-    let dsl = "\
-skill hnl_hc(990030) {
-  trigger damage owner_is_target {
-    if hand_count(self) > 0 {
-      effect draw_cards(self, 1);
-    }
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961006, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_hc_damage");
-    keep_only(&mut e, 1, &["hnl_hc_damage"]);
-    let h = hand_len(&e, 1);
-    assert!(h > 0);
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h + 1, "有手牌时查询放行摸 1");
-    let gone: Vec<_> = e.state_core_mut().player_mut(1).hand.drain(..).collect();
-    e.state_core_mut().discard.extend(gone);
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), 0, "空手查询为假，不摸");
-}
-
-/// 本回合丢失史：同一波弃牌尚不可见；下一事件才放行。他人事件不放行。
-#[test]
-fn t8_lost_history_dual_gate() {
-    let dsl = "\
-skill hnl_lost(990040) {
-  trigger damage owner_alive_lost_hand_this_turn {
-    effect draw_cards(self, 1);
-  }
-}
-skill hnl_drop(990041) {
-  trigger damage owner_is_target {
-    effect discard_hand(self, 1);
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961007, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_lost_damage");
-    e.debug_grant(1, "hnl_drop_damage");
-    keep_only(&mut e, 1, &["hnl_lost_damage", "hnl_drop_damage"]);
-    let h = hand_len(&e, 1);
-    assert!(h > 0);
-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h, "尚无丢失史，不摸");
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h - 1, "同波只弃牌，丢失史尚未放行");
-    assert!(
-        e.state_core().vm_aux.lost.get(&1).is_some_and(|c| !c.is_empty()),
-        "弃牌写入丢失史"
-    );
-    e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h, "下一事件看见丢失史后摸回 1");
-}
-
-/// 移牌批次：真实 CardsMoved 放行；关掉技能后同一路径不再摸。
-#[test]
-fn t8_move_batch_dual_gate() {
-    let dsl = "\
-skill hnl_batch(990042) {
-  trigger cards_moved owner_alive_discard_batch {
-    effect draw_cards(self, 1);
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961008, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_batch_cards_moved");
-    keep_only(&mut e, 1, &["hnl_batch_cards_moved"]);
-    let h = hand_len(&e, 1);
-    let card = e.debug_place(0, "sha");
-    e.debug_give_hand_card(0, 2, card);
-    assert_eq!(hand_len(&e, 1), h + 1, "移牌批次摸 1");
-    e.debug_set_skill_enabled(1, "hnl_batch_cards_moved", false);
-    let card2 = e.debug_place(0, "shan");
-    e.debug_give_hand_card(0, 2, card2);
-    assert_eq!(hand_len(&e, 1), h + 1, "技能关闭后不再摸");
-}
-
-/// 技能实例剩余次数：once_used 之前摸 1，置位后不摸。
-#[test]
-fn t8_skill_uses_remaining_dual_gate() {
-    let dsl = "\
-skill hnl_uses(990050) {
-  trigger damage owner_is_target {
-    let remaining = skill_uses_remaining(self_skill);
-    if remaining > 0 {
-      effect draw_cards(self, 1);
-    }
-  }
-}
-";
-    let pack = install_dsl(dsl);
-    let mut e = Engine::new_with_extensions(961009, 4, &[&pack]).expect("建局");
-    e.debug_grant(1, "hnl_uses_damage");
-    keep_only(&mut e, 1, &["hnl_uses_damage"]);
-    let h = hand_len(&e, 1);
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h + 1, "剩余次数为正时摸 1");
-    let def = e.catalog().skill_by_name("hnl_uses_damage").expect("技能");
-    e.state_core_mut()
-        .skills
-        .get_mut(&(1, def))
-        .expect("实例")
-        .once_used = true;
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(hand_len(&e, 1), h + 1, "次数用尽后不摸");
-}
+#[path = "t8_rvm_bridge/state_effects.rs"]
+mod vm_state_effects;

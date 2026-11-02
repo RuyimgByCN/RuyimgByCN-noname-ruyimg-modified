@@ -240,7 +240,10 @@ async fn nc09_native_actor_join_command_snapshot() {
     assert_eq!(joined.seat, 0);
     assert_eq!(joined.player_id, 1);
     assert_eq!(joined.role, ClientRole::Player);
-    assert_eq!(joined.view.observer, engine_api::ObserverKind::Player(PlayerId::new(1)));
+    assert_eq!(
+        joined.view.observer,
+        engine_api::ObserverKind::Player(PlayerId::new(1))
+    );
     assert!(!joined.reconnect_token.is_empty());
     // Successful Join enqueues the connected member's roster before replying.
     let text = tokio::time::timeout(std::time::Duration::from_secs(3), rx1.recv())
@@ -248,8 +251,13 @@ async fn nc09_native_actor_join_command_snapshot() {
         .expect("join must broadcast a roster within the response deadline")
         .expect("joined member's outbound must remain open");
     let ServerMessage::RoomRoster {
-        room_id, seats, started, finished, choice_timeout_secs,
-    } = decode_s2c(&text).expect("valid server protocol") else {
+        room_id,
+        seats,
+        started,
+        finished,
+        choice_timeout_secs,
+    } = decode_s2c(&text).expect("valid server protocol")
+    else {
         panic!("expected RoomRoster, got {text}");
     };
     assert_eq!(room_id, handle.id);
@@ -276,8 +284,14 @@ async fn nc09_native_actor_join_command_snapshot() {
         match reply_rx2.await.expect("reply").expect("snapshot ok") {
             ServerMessage::Snapshot { header, view, .. } => {
                 assert_eq!(header.room_id, handle.id);
-                assert_eq!(view, joined.view, "snapshot must preserve the joined player's projection");
-                assert!(view.seats.iter().any(|seat| seat.player.raw() == joined.player_id));
+                assert_eq!(
+                    view, joined.view,
+                    "snapshot must preserve the joined player's projection"
+                );
+                assert!(view
+                    .seats
+                    .iter()
+                    .any(|seat| seat.player.raw() == joined.player_id));
                 view.current_player
             }
             other => panic!("应返回快照: {other:?}"),
@@ -614,10 +628,7 @@ async fn native_command_outcome_carries_public_event_codes() {
         matches!(result, CommandResult::Accepted { .. }),
         "命令应接受：{result:?}"
     );
-    assert!(
-        !public_event_codes.is_empty(),
-        "原生命令应带真实公开事件码"
-    );
+    assert!(!public_event_codes.is_empty(), "原生命令应带真实公开事件码");
     assert!(
         public_event_codes
             .iter()

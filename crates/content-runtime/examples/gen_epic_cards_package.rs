@@ -81,6 +81,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
         manifest,
         modules: vec![],
         skill_index: vec![PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
             skill_def_id: 0,
             name: "reguhuo".into(),
             locked: false,
@@ -89,6 +97,14 @@ fn build_package(cards: &str, config: &str) -> ContentPackage {
             conversion: false,
         },
         PackageSkillEntry {
+            charlotte: None,
+            persevere: None,
+            forever: None,
+            temporary: None,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
             skill_def_id: 1,
             name: "rangjie".into(),
             locked: false,

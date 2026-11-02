@@ -91,6 +91,11 @@ impl Parser {
         let mut lord_only = false;
         let mut non_gainable = false;
         let mut conversion = false;
+        let mut charlotte = None;
+        let mut persevere = None;
+        let mut forever = None;
+        let mut temporary = None;
+
         loop {
             match &self.peek().kind {
                 TokenKind::Ident(value) if value == "locked" && !locked => {
@@ -109,6 +114,10 @@ impl Parser {
                     conversion = true;
                     self.bump();
                 }
+                TokenKind::Ident(value) if value == "charlotte" && charlotte.is_none() => { charlotte = Some(true); self.bump(); }
+                TokenKind::Ident(value) if value == "persevere" && persevere.is_none() => { persevere = Some(true); self.bump(); }
+                TokenKind::Ident(value) if value == "forever" && forever.is_none() => { forever = Some(true); self.bump(); }
+                TokenKind::Ident(value) if value == "temporary" && temporary.is_none() => { temporary = Some(true); self.bump(); }
                 _ => break,
             }
         }
@@ -125,6 +134,7 @@ impl Parser {
             lord_only,
             non_gainable,
             conversion,
+            charlotte, persevere, forever, temporary,
             items,
             span: Span {
                 start,

@@ -138,6 +138,45 @@ pub struct HostSkillBehavior {
 }
 
 impl SkillBehavior for HostSkillBehavior {
+    fn native_damage_effect(
+        &self,
+        kind: crate::event::EventKind,
+    ) -> Option<crate::event::NativeDamageEffect> {
+        crate::event::NativeDamageEffect::from_host(self.behavior)
+            .filter(|e| e.window().event_kind() == kind)
+    }
+    fn filter_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+        kind: crate::event::EventKind,
+    ) -> bool {
+        if let Some(effect) = self.native_damage_effect(kind) {
+            return matches!(event, EventData::Damage(d) if effect.matches(owner,d,ctx,None,None));
+        }
+        self.filter(ctx, owner, event)
+    }
+    fn start_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+        kind: crate::event::EventKind,
+    ) -> Box<dyn crate::catalog::SkillMachine> {
+        if let Some(effect) = self.native_damage_effect(kind) {
+            return Box::new(crate::kernel::NativeDamageSkill {
+                owner,
+                def: ctx
+                    .catalog
+                    .skill_by_name(&self.name)
+                    .expect("host declaration"),
+                window: effect.window(),
+            });
+        }
+        self.start(owner, event)
+    }
+
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         self.filter_behavior(ctx, owner, event)
     }
@@ -293,7 +332,9 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
     };
     crate::catalog::SkillDef {
         name,
-        trigger: behavior.trigger_meta(),
+        trigger: crate::event::NativeDamageEffect::from_host(behavior)
+            .map(|e| e.meta())
+            .or_else(|| behavior.trigger_meta()),
         limits,
         behavior: Box::new(HostSkillBehavior {
             name: name.to_string(),
@@ -302,4 +343,4 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
     }
 }
 
-pub use crate::vocabulary::card_skills::{card_kind_host_skills, card_kind_equip_skills};
+pub use crate::vocabulary::card_skills::{card_kind_equip_skills, card_kind_host_skills};

@@ -130,7 +130,7 @@ pub(super) fn step(
                 if grant_skill != 0 {
                     for (def, entry) in ctx.catalog.skills.iter().enumerate() {
                         if entry.behavior.package_skill_id() == Some(grant_skill) {
-                            ctx.core.skills.entry((source, def as u16)).or_insert(
+                            ctx.ensure_skill((source, def as u16),
                                 crate::state::SkillInstance {
                                     owner: source,
                                     enabled: true,

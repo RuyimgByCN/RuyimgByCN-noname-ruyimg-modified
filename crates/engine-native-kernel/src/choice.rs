@@ -1,6 +1,6 @@
 //! 选择请求与应答：内核唯一的选择通道，类型化选项（无 `Vec<u32>` 裸载荷）。
 
-use crate::ids::{CardId, PlayerId};
+use crate::ids::{CardId, PlayerId, SkillDefId};
 
 /// 选择种类（供宿主 UI 渲染分类用，不参与规则分支）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -15,6 +15,8 @@ pub enum ChoiceKind {
     RespondCard,
     /// 从定界标签集中选择（G1 五行：金/木/水/火/土）。
     PickTag,
+    /// Native semantic controls; hosts lower to existing Custom with omitted native_kind.
+    Control,
 }
 
 /// 单个可选项。
@@ -31,17 +33,25 @@ pub enum ChoiceOption {
     /// 目录牌种码（`catalog::kind_code`）——「按牌名选择」类询问
     /// （T11 Boss 诸葛亮族批 116 起风：从可用锦囊牌名中选一张并使用）。
     Kind(u16),
+    /// Stable skill definition selected as the next trigger.
+    Skill(SkillDefId),
+    Control(crate::event::YuanceOption),
+    /// Private foreign-hand slot; the physical candidate is held by the invocation.
+    HiddenCard(u32),
 }
 
 impl ChoiceOption {
     pub fn describe(&self) -> String {
         match self {
+            ChoiceOption::Control(option) => option.label().into(),
+            ChoiceOption::HiddenCard(slot) => format!("hand:{slot}"),
             ChoiceOption::Confirm => "confirm".into(),
             ChoiceOption::Pass => "pass".into(),
             ChoiceOption::Card(c) => format!("card:{c}"),
             ChoiceOption::Player(p) => format!("player:{p}"),
             ChoiceOption::Tag(t) => format!("nature:{t}"),
             ChoiceOption::Kind(k) => format!("kind:{k}"),
+            ChoiceOption::Skill(s) => format!("skill:{s}"),
         }
     }
 }

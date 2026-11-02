@@ -28,11 +28,14 @@ impl HostMachine {
                         return Flow::Done;
                     };
                     self.card = Some(fruit);
+                    let Some(x_card) = x_card else {
+                        return Flow::Done;
+                    };
                     self.cards = vec![x_card];
                     self.targets = x_targets;
                     ctx.core.turn.shenmiguo_used = true;
                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                        card: fruit,
+                        card: Some(fruit),
                         player: self.owner,
                         targets: Vec::new(),
                         nature: crate::event::DamageNature::Normal,
@@ -60,7 +63,7 @@ impl HostMachine {
                         _ => crate::event::DamageNature::Normal,
                     };
                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                        card: x_card,
+                        card: Some(x_card),
                         player: self.owner,
                         targets: self.targets.clone(),
                         nature,

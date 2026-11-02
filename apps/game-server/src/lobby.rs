@@ -319,7 +319,7 @@ impl Lobby {
         if !matches!(&msg, ClientMessage::Hello { .. }) && !session.handshake_complete {
             return Err(HandlerError::new(
                 ErrorCode::VersionMismatch,
-                "WS6 Hello required",
+                "WS7 Hello required",
             ));
         }
         let header = match &msg {

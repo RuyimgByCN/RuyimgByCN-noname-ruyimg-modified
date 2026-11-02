@@ -240,7 +240,7 @@ impl HostSkillBehavior {
                     if u.player != owner || u.cancelled || u.targets.len() <= 1 {
                         return false;
                     }
-                    let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                    let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                     kind.is_sha_like() || jifeng_single_target_trick(kind)
                 }
                 _ => false,
@@ -293,11 +293,13 @@ impl HostSkillBehavior {
                     if u.player != owner || u.cancelled {
                         return false;
                     }
-                    let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                    let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                     if !kind.is_sha_like() {
                         return false;
                     }
-                    let suit = ctx.catalog.cards[u.card as usize].suit;
+                    let Some(suit) = u.suit(ctx.catalog) else {
+                        return false;
+                    };
                     ctx.state
                         .player(owner)
                         .hand
@@ -357,7 +359,7 @@ impl HostSkillBehavior {
                     if u.player == owner || u.cancelled || !u.targets.contains(&owner) {
                         return false;
                     }
-                    let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                    let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                     kind.is_sha_like() || (!kind.is_basic_kind() && !kind.is_equip())
                 }
                 _ => false,
@@ -482,10 +484,7 @@ impl HostSkillBehavior {
             HostBehavior::YunchouJiaoxia => matches!(event,
             EventData::CardUsed(u)
             if u.targets.contains(&owner)
-                && matches!(
-                    ctx.catalog.cards[u.card as usize].suit,
-                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                )),
+                && u.suit(ctx.catalog).is_some_and(|s|matches!(s,crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond))),
             // 红莲：受到来源为其他角色的伤害且来源有红牌
             HostBehavior::YunchouHonglian => matches!(event,
             EventData::Damage(d)
@@ -547,7 +546,7 @@ impl HostSkillBehavior {
             HostBehavior::ShengkeCheck => matches!(event,
                 EventData::CardUsed(u)
                 if u.targets.contains(&owner)
-                    && ctx.state.card_natures.contains_key(&u.card)
+                    && u.card.is_some_and(|c|ctx.state.card_natures.contains_key(&c))
                     && ctx.state.player(owner).wunature.is_some()),
             HostBehavior::ChangeCardNature => false,
             HostBehavior::WangmeiZhikeCard => false,
@@ -594,7 +593,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if u.player == owner
                     && !u.cancelled
-                    && u.use_as.unwrap_or(ctx.catalog.card_kind(u.card)) == CardKind::Sha
+                    && u.use_as.unwrap_or(u.effective_kind(ctx.catalog)) == CardKind::Sha
                     && ctx.state.player(owner).baolei_mode == 2),
             HostBehavior::WudianZiyu => matches!(event,
                 EventData::Phase { begin: false, .. }
@@ -618,7 +617,7 @@ impl HostSkillBehavior {
             HostBehavior::GujianFoodQingtuan => matches!(event,
                 EventData::CardUsed(u)
                 if u.player == owner
-                    && ctx.catalog.card_kind(u.card).is_sha_like()
+                    && u.effective_kind(ctx.catalog).is_sha_like()
                     && ctx.state.turn.current == owner
                     && ctx.state.turn.phase == crate::event::Phase::Play),
             HostBehavior::GujianFoodTanhuadong => matches!(event,
@@ -627,7 +626,7 @@ impl HostSkillBehavior {
             HostBehavior::GujianFoodYougeng => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
                 if *player == owner),
-                        HostBehavior::GujianFoodZiyangdan => matches!(event,
+            HostBehavior::GujianFoodZiyangdan => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
                 if *player == owner),
             HostBehavior::GujianYunvyuanshen => matches!(event,
@@ -652,7 +651,7 @@ impl HostSkillBehavior {
             EventData::CardUsed(u)
             if u.player != owner
                 && !u.cancelled
-                && ctx.catalog.card_kind(u.card) == crate::catalog::CardKind::Tao
+                && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Tao
                 && ctx.state.player(owner).equips.iter().any(|c| {
                     ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey
                 })),
@@ -741,7 +740,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if !u.cancelled
                     && {
-                        let k = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                        let k = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                         k == CardKind::Sha
                     }
                     && u.targets.contains(&owner)
@@ -780,7 +779,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if !u.cancelled
                     && {
-                        let k = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                        let k = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                         k == CardKind::Sha
                     }
                     && u.targets.contains(&owner)

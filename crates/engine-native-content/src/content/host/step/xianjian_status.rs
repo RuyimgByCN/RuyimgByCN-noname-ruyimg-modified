@@ -106,7 +106,9 @@ impl HostMachine {
                         ctx.core.player_mut(self.owner).song_count = c + 1;
                     } else {
                         ctx.core.player_mut(self.owner).song_count = 0;
-                        ctx.current_damage_mut().amount += 1;
+                        if !ctx.modify_damage_amount(1) {
+                            return Flow::Done;
+                        }
                     }
                     Flow::Done
                 }
@@ -130,7 +132,9 @@ impl HostMachine {
                 // 玄炎·燃（U05 xianjian 玄霄，规则 v152）：火伤 +1（前置
                 // 窗口直写帧量=猛击同机制）。
                 HostStage::Act => {
-                    ctx.current_damage_mut().amount += 1;
+                    if !ctx.modify_damage_amount(1) {
+                        return Flow::Done;
+                    }
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -362,7 +366,7 @@ impl HostMachine {
                 if let Some(name) = skill_name {
                     if let Some(def) = ctx.catalog.skill_by_name(name) {
                         if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (self.owner, def),
                                 crate::state::SkillInstance {
                                     owner: self.owner,
@@ -430,7 +434,7 @@ impl HostMachine {
                     return Flow::Done;
                 };
                 ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                    card: sha,
+                    card: Some(sha),
                     player: self.owner,
                     targets: vec![t],
                     nature: crate::event::DamageNature::Normal,

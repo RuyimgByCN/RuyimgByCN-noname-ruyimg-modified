@@ -73,7 +73,7 @@ impl crate::catalog::SkillMachine for MonkeyStealMachine {
                         .expect("被拦截的桃应在使用者手牌");
                     let peach = user_hand.remove(pos);
                     ctx.core.players[holder as usize].hand.push(peach);
-                    ctx.log(LogEvent::CardsGiven {
+                    ctx.log(LogEvent::CardsGivenPublic {
                         from: self.user,
                         to: holder,
                         cards: vec![peach],

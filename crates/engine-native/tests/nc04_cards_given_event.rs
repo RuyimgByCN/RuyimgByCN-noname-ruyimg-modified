@@ -63,12 +63,14 @@ fn draw_event_player_module(name: &str) -> BytecodeModule {
 
 fn cards_given_pack(optional: bool) -> ExtensionPack {
     let decl = VmSkillDecl {
+            declaration_hash: None,
         name: "cg_probe".to_string(),
         module: draw_event_player_module("cg_probe"),
         trigger: engine_native::catalog::TriggerMeta {
             event: engine_native::event::EventKind::CardsGiven,
             timing: engine_native::event::Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional,
             extra_events: Vec::new(),
         },
@@ -339,35 +341,11 @@ fn single_cards_given_frame_carries_all_cards() {
 /// 逐张口径的**两个各含 1 张的 CardsGiven 帧**——升号后不得被静默接受并按
 /// v326 的单帧语义续行。
 #[test]
-fn v325_and_earlier_archives_are_rejected_by_rule_version() {
-    use engine_native::archive::decode_archive;
-    use engine_native::snap::SnapshotError;
-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../docs/operations/evidence/2026-10-29-nc04-cards-given-v326");
-    let snap = decode_archive(&std::fs::read(ev.join("native-v325.ngsa")).unwrap()).unwrap();
-    assert_eq!(snap.ruleset_version, 325);
-    assert!(matches!(
-        Engine::restore(&snap),
-        Err(SnapshotError::RuleVersionMismatch { snapshot: 325, catalog: 330 })
-    ));
-    // 挂起档：目录版本 = 标准版本 ^ 内容锁；与当前目录的差异只来自标准版本位。
-    let pack = cards_given_pack(true);
-    let catalog_version = Engine::new_with_extensions(23005, 4, &[&pack])
-        .unwrap()
-        .ruleset_version();
-    let snap =
-        decode_archive(&std::fs::read(ev.join("cards-given-v325.ngsa")).unwrap()).unwrap();
-    assert_eq!(snap.ruleset_version ^ catalog_version, 325 ^ 330);
-    let given_frames = snap
-        .resolution
-        .stack
-        .iter()
-        .filter(|f| matches!(f.data, engine_native::event::EventData::CardsGiven { .. }))
-        .count();
-    assert_eq!(given_frames, 2, "夹具保留 v325 逐张口径的两个 CardsGiven 帧");
-    assert!(matches!(
-        Engine::restore_with_extensions(&snap, &[&pack]),
-        Err(SnapshotError::RuleVersionMismatch { snapshot, catalog })
-            if snapshot == snap.ruleset_version && catalog == catalog_version
-    ));
+fn v325_and_earlier_archives_are_rejected_by_archive_format() {
+    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
+    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-29-nc04-cards-given-v326");
+    for name in ["native-v325.ngsa", "cards-given-v325.ngsa"] {
+        let raw=std::fs::read(ev.join(name)).unwrap();
+        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
+    }
 }

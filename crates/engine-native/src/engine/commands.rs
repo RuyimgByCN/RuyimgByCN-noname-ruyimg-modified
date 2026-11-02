@@ -60,10 +60,12 @@ impl Engine {
         }
         // 无检查点的开放段不可静默关闭（N07-b：仅改标志并报成功是被
         // 禁止的契约违反）；检查点随快照延续，开放段必然携带。
-        let Some((snapshot, log_mark)) = self.segment_checkpoint.take() else {
+        let Some((snapshot, log_mark)) = self.segment_checkpoint.as_ref() else {
             return Err(RejectReason::NotSuspended);
         };
-        let restored = Engine::restore(&snapshot).map_err(|_| RejectReason::NotSuspended)?;
+        let restored = Engine::restore_with_catalog(snapshot, self.catalog.clone()).map_err(|_| RejectReason::NotSuspended)?;
+        let log_mark = *log_mark;
+        self.segment_checkpoint = None;
         self.state = restored.state;
         self.last_dedup = restored.last_dedup;
         self.log.truncate(log_mark);
@@ -137,24 +139,28 @@ impl Engine {
                 self.log.truncate(log_mark);
                 return CommandOutcome::Rejected(reason);
             }
-            work.core.revision += 1;
-            let choice = work
-                .resolution
-                .open_choice
-                .clone()
-                .expect("parallel reveal keeps open choice");
-            self.state = work;
-            self.segment_open = false;
-            self.segment_checkpoint = None;
-            self.last_dedup = cmd.dedup_id;
-            if self.seat_quota.is_some() {
-                let entry = self
-                    .seat_cmd_counts
-                    .entry(cmd.actor)
-                    .or_insert((self.state.core.turn.round, 0));
-                entry.1 += 1;
+            if work.resolution.open_choice.is_some() {
+                work.core.revision += 1;
+                let choice = work
+                    .resolution
+                    .open_choice
+                    .clone()
+                    .expect("parallel reveal keeps open choice");
+                self.state = work;
+                self.segment_open = false;
+                self.segment_checkpoint = None;
+                self.last_dedup = cmd.dedup_id;
+                if self.seat_quota.is_some() {
+                    let entry = self
+                        .seat_cmd_counts
+                        .entry(cmd.actor)
+                        .or_insert((self.state.core.turn.round, 0));
+                    entry.1 += 1;
+                }
+                return CommandOutcome::Pending { choice };
             }
-            return CommandOutcome::Pending { choice };
+            // A changed order group must resume through the normal transaction and publish a fresh ask.
+            self.log.truncate(log_mark);
         }
         let log_mark = self.log.len();
         let submit_round = self.state.core.turn.round;

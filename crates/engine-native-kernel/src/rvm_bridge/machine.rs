@@ -314,6 +314,7 @@ impl VmMachine {
         f: impl FnOnce(&mut RuleVm, &mut EngineVmHost<'_>) -> Result<ExecResult, rule_vm::VmError>,
     ) -> Flow {
         let seats = ctx.core.players.len() as u8;
+        let damage = ctx.current_damage().ok().cloned();
         let outcome = {
             let targets = self
                 .trig
@@ -331,20 +332,16 @@ impl VmMachine {
                         .map(|d| d as u32)
                         .unwrap_or(0),
                     self_id: to_rule_pid(self.owner).raw(),
-                    event_player: self
-                        .trig
-                        .event_player
+                    event_player: damage.as_ref().map(|d|d.target).or(self.trig.event_player)
                         .map(to_rule_pid)
                         .map(|p| p.raw())
                         .unwrap_or(0),
-                    event_source: self
-                        .trig
-                        .event_source
+                    event_source: damage.as_ref().map(|d|d.source).unwrap_or(self.trig.event_source)
                         .map(to_rule_pid)
                         .map(|p| p.raw())
                         .unwrap_or(0),
-                    event_card: self.trig.event_card.map(|c| c as u32).unwrap_or(0),
-                    event_amount: self.trig.event_amount,
+                    event_card: damage.as_ref().map(|d|d.card).unwrap_or(self.trig.event_card).unwrap_or(0),
+                    event_amount: damage.as_ref().map(|d|d.amount as u32).unwrap_or(self.trig.event_amount),
                 },
                 seats,
                 core: ctx.core,
@@ -505,7 +502,7 @@ impl VmMachine {
             }
             if !ctx.catalog.skills[def as usize]
                 .behavior
-                .vm_trigger_still_matches(&module, &ctx.query(), owner, &event)
+                .vm_trigger_still_matches(&module, &ctx.query(), owner, &event, ctx.res.stack.last().map(crate::resolution::trigger_window_kind).unwrap_or_else(|| event.kind()))
             {
                 return self.pump_commit(ctx);
             }

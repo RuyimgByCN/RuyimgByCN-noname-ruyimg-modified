@@ -342,7 +342,7 @@ fn real_moyan_public_machine_held_cards_survive_both_windows() {
             assert_eq!(a.open_choice().unwrap().spec.prompt, "d3_moyan_gain");
         }
         let observer = a.open_choice().unwrap().observer;
-        let shown = match &a.save().resolution.parks[0].machine {
+        let shown = match &a.save().resolution.parks.iter().find(|park| matches!(park.machine, engine_native::MachineSnapshot::Host { .. })).expect("host owner machine").machine {
             engine_native::MachineSnapshot::Host {
                 behavior, cards, ..
             } if *behavior == engine_native::content::host::HostBehavior::D3Moyan.tag() => {

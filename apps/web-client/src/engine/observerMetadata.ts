@@ -20,14 +20,15 @@ export function choiceMetadata(value: { prompt?: unknown; native_kind?: unknown;
   if (value.native_kind != null && (typeof value.native_kind !== "string" || !Object.hasOwn(CHOICE_KINDS, value.native_kind))) throw new Error("native: native_kind metadata invalid");
   if (value.source_skill != null && (typeof value.source_skill !== "string" || value.source_skill.length === 0)) throw new Error("native: source_skill metadata invalid");
   const native_kind = value.native_kind as NativeChoiceKind | undefined;
-  return { ...(value.source_skill == null ? {} : {source_skill: value.source_skill as string}), ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
+  return { ...(value.source_skill == null ? {} : {source_skill: value.source_skill as string}), ...(value.prompt == null ? {} : {prompt: value.prompt as string}), ...(native_kind == null ? {} : {native_kind}), kind: native_kind === "pick_tag" && value.prompt === "trigger_order" ? "OrderTriggers" : native_kind ? CHOICE_KINDS[native_kind] : value.kind ?? "Custom" };
 }
 
 const KIND_LABELS: Record<string, string> = {
   confirm: "确认", select_cards: "选择卡牌", select_players: "选择角色", respond_card: "响应出牌", pick_tag: "选择选项",
-  Confirm: "确认", SelectCards: "选择卡牌", SelectTargets: "选择角色", Custom: "选择选项", OrderTriggers: "排列技能", DiscardToLimit: "弃牌至手牌上限",
+  Confirm: "确认", SelectCards: "选择卡牌", SelectTargets: "选择角色", Custom: "选择选项", OrderTriggers: "选择下一个技能", DiscardToLimit: "弃牌至手牌上限",
 };
 const PROMPTS: Record<string, string> = {
+  trigger_order: "请选择下一个发动的技能",
   trigger_confirm: "是否发动技能？", respond_shan: "请打出闪", respond_sha: "请打出杀", aoe_response: "请响应群体锦囊",
   dying_save: "请选择救援牌", discard_to_limit: "请弃牌至手牌上限",
   tuxi_target: "突袭：选择获得手牌的角色", guanxing_arrange: "观星：排列牌堆顶的卡牌",
@@ -48,10 +49,18 @@ export function choicePromptLabel(choice: ChoiceRequest): string {
   return Object.hasOwn(PROMPTS, choice.prompt) ? PROMPTS[choice.prompt] : choiceKindLabel(choice);
 }
 
+export function validateChoiceCounts(choice: Pick<ChoiceRequest, "min_count" | "max_count">): void {
+  for (const value of [choice.min_count, choice.max_count]) {
+    if (value !== undefined && (!Number.isInteger(value) || value < 0 || value > 0xffffffff)) throw new Error("native: choice counts invalid");
+  }
+  if (choice.min_count !== undefined && choice.max_count !== undefined && choice.min_count > choice.max_count) throw new Error("native: choice counts invalid");
+}
+
 /** Check optional metadata before an IPC/network payload enters the view store. */
 export function validateObserverMetadata(view: ObserverSnapshot, choice: ChoiceRequest | null): void {
   for (const seat of view.seats ?? []) generalSlots(seat.generals);
   if (choice) {
+    validateChoiceCounts(choice);
     choiceMetadata(choice);
     if (choice.deadline_unix_ms != null && (!Number.isSafeInteger(choice.deadline_unix_ms) || choice.deadline_unix_ms <= 0)) throw new Error("native: choice deadline invalid");
   }

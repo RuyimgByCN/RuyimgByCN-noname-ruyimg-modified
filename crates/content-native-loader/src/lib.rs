@@ -256,23 +256,16 @@ pub struct VmBridgeOutcome {
 }
 
 mod vm_active;
+mod mechanisms;
+mod vm_generals;
+pub use vm_generals::bridge_generals_with_vm_package;
 
 pub fn bridge_vm_skill_decls(
     pkg: &content_schema::ContentPackage,
 ) -> Result<VmBridgeOutcome, BridgeError> {
     use engine_native::event::{EventKind, Timing};
-    pkg.validate_vm_effect_abi()
-        .map_err(|reason| BridgeError::InvalidField {
-            field: "manifest.rule_vm_abi_version",
-            reason,
-        })?;
-    pkg.modules
-        .iter()
-        .try_for_each(content_schema::validate_vm_module_hash)
-        .map_err(|reason| BridgeError::InvalidField {
-            field: "modules[].logic_hash",
-            reason,
-        })?;
+    pkg.validate().map_err(|reason| invalid("package", reason))?;
+    mechanisms::validate_runtime_mechanisms(pkg)?;
     content_runtime::check_engine_compat(&pkg.manifest, &content_runtime::tooling_host_versions())
         .map_err(|error| BridgeError::InvalidField {
             field: "manifest.rule_vm_abi_version",
@@ -385,12 +378,15 @@ pub fn bridge_vm_skill_decls(
             None => filter,
         };
         out.push(engine_native::content::extension::VmSkillDecl {
-            name: names::intern(t.module.clone()).to_string(),
+            declaration_hash: None,
+            name: pkg.skill_index.iter().find(|skill| skill.skill_def_id == t.skill_def_id)
+                .ok_or_else(|| invalid("trigger_index.skill_def_id", "missing logical skill"))?.name.clone(),
             module: module.clone(),
             trigger: engine_native::catalog::TriggerMeta {
                 event,
-                timing: Timing::Normal,
-                priority: 0,
+                timing: match t.timing { content_schema::TriggerTiming::First => Timing::First, content_schema::TriggerTiming::Normal => Timing::Normal, content_schema::TriggerTiming::Last => Timing::Last },
+                priority: t.priority,
+                order_selectable: t.order_selectable,
                 optional: t.optional,
                 extra_events: Vec::new(),
             },
@@ -410,6 +406,7 @@ pub fn bridge_vm_skill_decls(
         });
     }
     vm_active::bridge_active_entries(pkg, &mut out)?;
+    vm_active::join_trigger_only_entries(pkg, &mut out)?;
     if !pkg.view_as_index.is_empty() {
         return Err(invalid(
             "view_as_index",
@@ -435,6 +432,9 @@ pub fn bridge_vm_skill_decls(
             "modifier_index",
             "native VM modifier declarations are unsupported",
         ));
+    }
+    if pkg.has_native_mechanisms() {
+        for decl in &mut out { decl.declaration_hash = Some(pkg.compute_logic_hash()); }
     }
     Ok(VmBridgeOutcome { decls: out })
 }
@@ -789,7 +789,7 @@ pub fn bridge_generals(json: &str) -> Result<BridgedGenerals, BridgeError> {
     bridge_generals_inner(&parsed, true, &BTreeSet::new(), false)
 }
 
-/// 与 [`bridge_generals`] 相同，但把 `known_vm_skills` 中的 VM 模块名视为
+/// 与 [`bridge_generals`] 相同，但把 `known_vm_skills` 中的 VM 逻辑技能名视为
 /// 已解析技能：它们不产生 host 行为，只进入武将技能列表。用于完整 npack
 /// （模块 + characters 资产）的 Worker／服务端安装路径。含 VM 技能的包
 /// 必须拒绝无法解析的武将技能，避免安装成功后静默丢失技能。
@@ -840,6 +840,26 @@ fn bridge_generals_inner(
                     }
                     skills.push(interned);
                     mapped_skill_keys.push(interned);
+                    // 父技 group：上游把伤害子技登记在父技 group 里，授予父技即授予
+                    // 子技；转换包曾漏掉这层关系，导致「父技所有权就让伤害面可达」
+                    // 或「子技永不可达」两种错误。此处按 behavior 表补回声明与授予。
+                    for &(child_key, child_behavior) in behavior.group_children() {
+                        let child = names::intern(child_key.to_string());
+                        match host_skills.iter().find(|d| d.name == child) {
+                            Some(d) if d.behavior != child_behavior => {
+                                return Err(BridgeError::DuplicateSkill(child_key.to_string()));
+                            }
+                            Some(_) => {}
+                            None => host_skills.push(HostSkillDecl {
+                                name: child,
+                                behavior: child_behavior,
+                            }),
+                        }
+                        if !skills.contains(&child) {
+                            skills.push(child);
+                        }
+                        mapped_skill_keys.push(child);
+                    }
                 }
                 // 内置引用：技能 def 已在标准目录（白名单保证实现存在）
                 // ——只 intern 进武将技能列表，不产出 host 行为。

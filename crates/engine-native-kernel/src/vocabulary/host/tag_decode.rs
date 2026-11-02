@@ -386,6 +386,7 @@ impl HostBehavior {
             385 => HostBehavior::SwdMingfu,
             386 => HostBehavior::SwdCyxianjiang,
             387 => HostBehavior::SwdXuanying,
+            537 => HostBehavior::SwdXuanyingDamage,
             388 => HostBehavior::SwdLieren,
             389 => HostBehavior::SwdJqimou,
             390 => HostBehavior::SwdJianji,

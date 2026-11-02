@@ -9,6 +9,17 @@ use crate::state::GameStateCore;
 use super::asks_mtg::active_ask_mtg;
 use super::asks_wudian::active_ask_wudian;
 
+pub(super) fn xuanying_target_spec(core: &GameStateCore, owner: PlayerId) -> ChoiceSpec {
+    ChoiceSpec {
+        kind: ChoiceKind::SelectPlayers,
+        prompt: "xuanying_target",
+        options: core.alive_players().filter(|p| *p != owner).map(ChoiceOption::Player).collect(),
+        min: 1,
+        max: 1,
+        allow_cancel: true,
+    }
+}
+
 /// 宿主机器的询问派生：按行为 + 阶段还原 host.rs 各 step 中
 /// 创建该 `WaitChoice` 时的 `ChoiceSpec`（挂起时 stage 已前移到下一阶段）。
 #[allow(clippy::too_many_arguments)]
@@ -29,6 +40,20 @@ pub(crate) fn active_ask_host(
     let behavior = HostBehavior::from_tag(behavior)?; // behavior: u16
     let stage = HostStage::from_tag(stage)?;
     match behavior {
+        HostBehavior::Zhenlie if stage == HostStage::SelectCard => Some(ask(
+            owner, "zhenlie_discard", ChoiceKind::SelectCards,
+            cards.iter().copied().map(ChoiceOption::Card).collect(), 1, 1, false,
+        )),
+        HostBehavior::Yihua if stage == HostStage::SelectCard => Some(ask(
+            owner, "yihua_discard", ChoiceKind::SelectCards,
+            hand_card_options(&core.player(owner).hand), 2, 2, true,
+        )),
+        HostBehavior::SwdXuanying => {
+            if stage != HostStage::TargetChoice { return None; }
+            let spec = xuanying_target_spec(core, owner);
+            if spec.options.is_empty() { return None; }
+            Some(ask(owner, spec.prompt, spec.kind, spec.options, spec.min, spec.max, spec.allow_cancel))
+        }
         HostBehavior::Liaoyuan => {
             if stage != HostStage::SelectCard {
                 return None;

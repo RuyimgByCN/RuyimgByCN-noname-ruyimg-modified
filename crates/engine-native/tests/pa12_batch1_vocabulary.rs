@@ -95,6 +95,7 @@ fn pa12_batch1_vocabulary_mapping_and_strict_reject() {
     // 拒装：装载器对不承载滤名报错并列出（不再静默跳过）。
     let mut pkg = compile_source_named("pa12-batch1-reject", DCWUDAO).expect("编译");
     pkg.trigger_index[0].filter = "pa12_not_a_native_filter".to_string();
+    pkg.manifest.logic_hash = pkg.compute_logic_hash();
     match content_native_loader::bridge_vm_skill_decls(&pkg) {
         Err(content_native_loader::BridgeError::UnsupportedVmFilters { filters }) => {
             assert_eq!(filters, vec!["pa12_not_a_native_filter".to_string()]);

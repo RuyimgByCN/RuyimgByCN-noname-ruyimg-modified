@@ -2,8 +2,37 @@ use super::*;
 
 pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError> {
     Ok(match r.u8()? {
+        87 => super::judge::dec_judge_continuation(r)?,
+
+        86 => MachineSnapshot::NativeInvocation {
+            owner: r.u8()?,
+            def: r.u16()?,
+            window: crate::event::DamageWindowKind::from_tag(r.u8()?)
+                .ok_or(ArchiveError::BadTag("invocation_window", 0))?,
+            progress: super::invocation::dec_progress(r)?,
+        },
+        85 => MachineSnapshot::NativeDamageSkill {
+            owner: r.u8()?,
+            def: r.u16()?,
+            window: crate::event::DamageWindowKind::from_tag(r.u8()?)
+                .ok_or(ArchiveError::BadTag("native_damage_window", 0))?,
+        },
+        84 => MachineSnapshot::DamageFlow { root: r.u32()? },
+        83 => MachineSnapshot::TriggerOrder {
+            frame: r.u32()?,
+            owner: dec_pid(r)?,
+            candidates: r.vec(|r| r.u16())?,
+            asked: r.boolean()?,
+            cursor: r.u16()?,
+            done: r.vec(|r| Ok((dec_pid(r)?, r.u16()?)))?,
+            owners: r.vec(dec_pid)?,
+            normal_owners: r.u16()?,
+        },
         0 => {
-            let card = r.u32()?;
+            let card = match r.u32()? {
+                u32::MAX => None,
+                c => Some(c),
+            };
             let source = dec_pid(r)?;
             let target = dec_pid(r)?;
             let nature = dec_damage_nature(r)?;

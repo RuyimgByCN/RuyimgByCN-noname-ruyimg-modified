@@ -64,8 +64,19 @@ fn dying_rescue_and_death() {
     let discard_before = e.debug_discard_len();
     let dead_hand = e.debug_hand(0).len();
     play(&mut e, sha, vec![0]);
-    // 无人持桃：全部跳过询问，直接死亡
-    assert!(!e.debug_alive(0));
+    // 散财的真实 targetDamage admission 先于 Dying，拒绝后无人持桃才死亡。
+    if prompt_of(&e) == "trigger_confirm" {
+        let c = e.open_choice().unwrap().clone();
+        submit_cmd(
+            &mut e,
+            c.observer,
+            GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![],
+            },
+        );
+    }
+    assert!(!e.debug_alive(0), "pending={:?}", e.open_choice());
     assert!(!e.debug_has_skill(0, "散财"));
     assert_eq!(
         e.debug_discard_len(),

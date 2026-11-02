@@ -1105,11 +1105,11 @@ pub enum HostBehavior {
     /// equip 同口径；登记差异：实体发现替代 createCard；巧械 cyqiaoxie
     /// 挂后续批）。
     SwdCyxianjiang,
-    /// 玄影·端蒙面（tag 387，武将面批 90 端蒙）：锁定 marker——未横置
-    /// 时可横置自身视为使用无视距离【杀】；已横置时可横置自身视为出
-    /// 【闪】/受伤后反击来源/回合外失去牌时反击目标（上游 xuanying
-    /// 四子技同口径；登记差异：响应面收敛为标记面+出闪窗扩展臂）。
+    /// 旋影·端蒙面（tag 387）：父技授予 sha/use，不授予 shan/damage。
+    /// 原生保留未横置时的主动虚拟杀；loseEnd-use 的完整时机仍待接线。
     SwdXuanying,
+    /// 玄影伤害子技（`xuanying_damage`）：父技 group 的子定义，只在父技授予时可达。
+    SwdXuanyingDamage,
     /// 烈刃（tag 388，武将面批 90 端蒙）：杀造成伤害后（每触发与目标
     /// 拼点，赢则获得其一张 he；上游 lieren chooseToCompare+gainPlayerCard
     /// 同口径）。

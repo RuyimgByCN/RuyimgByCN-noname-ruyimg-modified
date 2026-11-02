@@ -36,7 +36,7 @@ fn start(players: u8, packs: &str) -> Engine {
     assign_general_for(&mut engine, 0, "vm_fixture").expect("assign VM general");
     assert!(engine.view_for(0).players[0]
         .skills
-        .contains(&"vm_fixture_phase_end_phase_end"));
+        .contains(&"vm_fixture_phase_end"));
     engine
 }
 

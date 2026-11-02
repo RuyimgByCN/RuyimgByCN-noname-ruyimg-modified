@@ -75,7 +75,7 @@ fn boss_liubei_xiaoxiong_gain_and_damage() {
     assert_zone_conservation(&r);
 }
 
-/// 章武：刘备受伤后——刘备弃首张+来源弃首张；来源无手牌→受 1 反伤。
+/// 章武：持有者选付一张，来源选付等量；来源不足时受持有者归因的伤害。
 #[test]
 fn boss_liubei_zhangwu_discard_or_damage() {
     // 场景 A：双方有手牌——各弃 1，无反伤
@@ -96,12 +96,16 @@ fn boss_liubei_zhangwu_discard_or_damage() {
     let n1 = e.debug_hand(1).len();
     assert!(matches!(
         play(&mut e, sha, vec![1]),
-        engine_native::CommandOutcome::Accepted { .. }
+        engine_native::CommandOutcome::Pending { .. }
     ));
+    assert_eq!(prompt_of(&e), "c331_zhangwu_holder");
+    answer_sel(&mut e, vec![ChoiceOption::Card(lb_card)]);
+    assert_eq!(prompt_of(&e), "c331_zhangwu_source");
+    answer_sel(&mut e, vec![ChoiceOption::Card(extra)]);
     drain_choices(&mut e);
     assert_eq!(hp(&e, 1), 7, "伤害 1 扣血");
     assert_eq!(e.debug_hand(0).len(), n0 - 2, "0 号：杀+章武弃 1");
-    // 1 号：章武弃 1（Damage commit 内）先于枭雄入手 1（CardUsed
+    // 1 号：章武弃 1（DamageEnd invocation 子树）先于枭雄入手 1（CardUsed
     // AfterTriggers）→ 相抵不变
     assert_eq!(e.debug_hand(1).len(), n1, "章武弃 1+枭雄入手 1 相抵");
 
@@ -113,10 +117,13 @@ fn boss_liubei_zhangwu_discard_or_damage() {
     e2.debug_clear_hand(0);
     e2.debug_clear_hand(1);
     let sha2 = e2.debug_place(0, "sha");
+    let paid = e2.debug_place(1, "tao");
     assert!(matches!(
         play(&mut e2, sha2, vec![1]),
-        engine_native::CommandOutcome::Accepted { .. }
+        engine_native::CommandOutcome::Pending { .. }
     ));
+    assert_eq!(prompt_of(&e2), "c331_zhangwu_holder");
+    answer_sel(&mut e2, vec![ChoiceOption::Card(paid)]);
     drain_choices(&mut e2);
     assert_eq!(hp(&e2, 1), 7, "伤害 1");
     assert_eq!(hp(&e2, 0), 3, "章武反伤 1（0 先手无子技前置伤）");

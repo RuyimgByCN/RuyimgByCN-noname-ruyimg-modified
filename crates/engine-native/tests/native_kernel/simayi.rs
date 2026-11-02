@@ -57,7 +57,11 @@ fn simayi_guicai_rewrites_with_any_suit_card() {
     assert!(log_has(&e, |l| matches!(l,
         LE::JudgementRewritten { player: 2, card, replaced }
         if *card == heart_card && *replaced == old_judge)));
-    assert!(e.debug_hand(2).contains(&old_judge), "旧判定牌归改判者");
+    assert!(!e.debug_hand(2).contains(&old_judge), "鬼才不获得旧判定牌");
+    assert!(
+        e.state_core().discard.contains(&old_judge),
+        "鬼才旧判定牌弃置；鬼道/天道获得路径另测"
+    );
     assert_eq!(
         log_count(&e, |l| matches!(l, LE::JudgementFinalized { .. })),
         1

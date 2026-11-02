@@ -61,10 +61,27 @@ pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError>
         for slot in 0..2 {
             general_slots[slot] = r.opt_u16()?;
         }
-        let mut revealed_generals = [false, false];
-        for slot in 0..2 {
-            revealed_generals[slot] = r.boolean()?;
+        let flags = r.u8()?;
+        if flags > 3 {
+            return Err(ArchiveError::BadTag("kingdom_identity_flags", flags));
         }
+        let revealed_generals = [flags & 1 != 0, r.boolean()?];
+        let (kingdom_identity, yexinjia_friends) = if flags & 2 != 0 {
+            (
+                match r.u8()? {
+                    0 => crate::state::KingdomIdentity::Unknown,
+                    1 => crate::state::KingdomIdentity::Ye,
+                    2 => crate::state::KingdomIdentity::Declared(
+                        String::from_utf8(r.bytes()?.to_vec())
+                            .map_err(|_| ArchiveError::BadTag("kingdom_identity_utf8", 0))?,
+                    ),
+                    tag => return Err(ArchiveError::BadTag("kingdom_identity", tag)),
+                },
+                dec_pids(r)?,
+            )
+        } else {
+            (crate::state::KingdomIdentity::Unknown, Vec::new())
+        };
         let wunature = r.opt_u8()?;
         let ctianfu_source = r.opt_u8()?;
         let ctianfu_card = match r.u8()? {
@@ -225,6 +242,8 @@ pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError>
             linked,
             general_slots,
             revealed_generals,
+            kingdom_identity,
+            yexinjia_friends,
             wunature,
             ctianfu_source,
             ctianfu_card,

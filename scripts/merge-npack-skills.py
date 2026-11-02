@@ -88,6 +88,13 @@ def main() -> None:
             else:
                 used.add(tid)
 
+    host["manifest"]["content_schema_version"] = 4 if any(
+        t.get("timing", "normal") != "normal"
+        or t.get("priority", 0) != 0
+        or t.get("order_selectable", True) is not True
+        for t in host.get("trigger_index", [])
+    ) else 3
+
     Path(args.out).write_text(json.dumps(host, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     print(
         f"merged {sorted(ids)} into {args.out}: "

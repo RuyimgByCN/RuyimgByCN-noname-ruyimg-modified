@@ -1,12 +1,14 @@
 use super::*;
 
 mod common;
+mod wudian;
 mod swd;
 mod xianjian;
+mod source_order;
 
 impl HostBehavior {
     pub fn trigger_meta(&self) -> Option<TriggerMeta> {
-        match self {
+        let mut meta = match self {
             HostBehavior::ShaDamageForceDiscard => self.trigger_meta_common(),
             HostBehavior::PhaseEndRecoverOrDraw => self.trigger_meta_common(),
             HostBehavior::YunchouXicai => self.trigger_meta_common(),
@@ -19,18 +21,18 @@ impl HostBehavior {
             HostBehavior::YunchouLuweiyan => self.trigger_meta_common(),
             HostBehavior::YunchouJieyan => self.trigger_meta_common(),
             HostBehavior::YunchouYiesheng => self.trigger_meta_common(),
-            HostBehavior::WudianDiyjuntun => self.trigger_meta_common(),
-            HostBehavior::WudianJinyan => self.trigger_meta_common(),
+            HostBehavior::WudianDiyjuntun => self.trigger_meta_wudian(),
+            HostBehavior::WudianJinyan => self.trigger_meta_wudian(),
             // 理断：获得结算后（CardsMoved after）
-            HostBehavior::WudianLiduan => self.trigger_meta_common(),
+            HostBehavior::WudianLiduan => self.trigger_meta_wudian(),
             // 坚壁：锁定查询面（AOE 目标段查询，无触发帧）
-            HostBehavior::WudianJianbi => self.trigger_meta_common(),
+            HostBehavior::WudianJianbi => self.trigger_meta_wudian(),
             // 复仇：目录锚（取消逻辑在 ShaResolveMachine 内联）
-            HostBehavior::WudianFuchou => self.trigger_meta_common(),
+            HostBehavior::WudianFuchou => self.trigger_meta_wudian(),
             // 良策·余获：锁定查询面（五谷机器内联查询，无触发帧）
-            HostBehavior::WudianLiangceRemain => self.trigger_meta_common(),
+            HostBehavior::WudianLiangceRemain => self.trigger_meta_wudian(),
             // 归汉：目录锚（limited 确认逻辑在 DyingSaveMachine 内联）
-            HostBehavior::WudianGuihan => self.trigger_meta_common(),
+            HostBehavior::WudianGuihan => self.trigger_meta_wudian(),
             HostBehavior::SwdGTiandao => self.trigger_meta_swd(),
             // 魂身：自己使用/打出闪（上游 respond/useCard，frequent）
             HostBehavior::SwdHyunshen => self.trigger_meta_swd(),
@@ -470,6 +472,7 @@ impl HostBehavior {
             // 玄影·端蒙面：自己受伤结算后（damageEnd 反击面——已横置且
             // 来源存活可反击；sha 面经 ActivateSkill）
             HostBehavior::SwdXuanying => self.trigger_meta_swd(),
+            HostBehavior::SwdXuanyingDamage => self.trigger_meta_swd(),
             // 烈刃：自己杀造成伤害结算后（每触发与目标拼点，optional）
             HostBehavior::SwdLieren => self.trigger_meta_swd(),
             // 极谋·姬良面：自己受伤结算后（回合外门在 filter；frequent=非
@@ -564,7 +567,7 @@ impl HostBehavior {
             // 悲歌：任意角色受伤结算后（global；确认门=optional）
             HostBehavior::YunchouBeige => self.trigger_meta_common(),
             // 复仇·清算：自己回合结束（标记逐个结算）
-            HostBehavior::WudianFuchou2 => self.trigger_meta_common(),
+            HostBehavior::WudianFuchou2 => self.trigger_meta_wudian(),
             // 蝉缘·变体：死亡结算后（来源减上限）
             HostBehavior::YunchouDiychanyuan => self.trigger_meta_common(),
             HostBehavior::YunchouLuweiyan2 => self.trigger_meta_common(),
@@ -694,57 +697,57 @@ impl HostBehavior {
             HostBehavior::MtgYoulinLand => self.trigger_meta_common(),
             HostBehavior::MtgYoulinDiscard => self.trigger_meta_common(),
             HostBehavior::MtgLindixiliuLand => self.trigger_meta_common(),
-            HostBehavior::WudianCiqiu => self.trigger_meta_common(),
-            HostBehavior::WudianShuaiyan => self.trigger_meta_common(),
-            HostBehavior::WudianZhucheng => self.trigger_meta_common(),
-            HostBehavior::WudianZhuchengGuard => self.trigger_meta_common(),
-            HostBehavior::WudianKangyin => self.trigger_meta_common(),
-            HostBehavior::WudianChezhen => self.trigger_meta_common(),
-            HostBehavior::WudianJuedao => self.trigger_meta_common(),
-            HostBehavior::WudianGeju => self.trigger_meta_common(),
-            HostBehavior::WudianTuji => self.trigger_meta_common(),
-            HostBehavior::WudianMujing => self.trigger_meta_common(),
-            HostBehavior::WudianGuangshu => self.trigger_meta_common(),
-            HostBehavior::WudianGuangshuHeart => self.trigger_meta_common(),
-            HostBehavior::WudianGuangshuDiamond => self.trigger_meta_common(),
-            HostBehavior::WudianGuangshuClub => self.trigger_meta_common(),
-            HostBehavior::WudianGuangshuSpade => self.trigger_meta_common(),
-            HostBehavior::WudianZiyu => self.trigger_meta_common(),
-            HostBehavior::WudianShouhu => self.trigger_meta_common(),
-            HostBehavior::WudianDuwen => self.trigger_meta_common(),
-            HostBehavior::WudianPaotai => self.trigger_meta_common(),
-            HostBehavior::WudianPaotaiFire => self.trigger_meta_common(),
-            HostBehavior::WudianBaoleiSwitch => self.trigger_meta_common(),
-            HostBehavior::WudianZhenchaDraw => self.trigger_meta_common(),
-            HostBehavior::WudianYuedong => self.trigger_meta_common(),
-            HostBehavior::WudianKuoyin => self.trigger_meta_common(),
-            HostBehavior::WudianHuhuan => self.trigger_meta_common(),
-            HostBehavior::WudianJidong => self.trigger_meta_common(),
-            HostBehavior::WudianBaoxue => self.trigger_meta_common(),
-            HostBehavior::WudianLiangou => self.trigger_meta_common(),
-            HostBehavior::WudianXiyang => self.trigger_meta_common(),
-            HostBehavior::WudianFeiren => self.trigger_meta_common(),
-            HostBehavior::WudianFeidan => self.trigger_meta_common(),
-            HostBehavior::WudianZhiyuan => self.trigger_meta_common(),
-            HostBehavior::WudianShenqiang => self.trigger_meta_common(),
-            HostBehavior::WudianShihuo => self.trigger_meta_common(),
-            HostBehavior::WudianMengji => self.trigger_meta_common(),
-            HostBehavior::WudianYinbo => self.trigger_meta_common(),
-            HostBehavior::WudianQianggu => self.trigger_meta_common(),
-            HostBehavior::WudianQiangguGuard => self.trigger_meta_common(),
-            HostBehavior::WudianFeitiao => self.trigger_meta_common(),
-            HostBehavior::WudianPingzhang => self.trigger_meta_common(),
-            HostBehavior::WudianOwliyong => self.trigger_meta_common(),
-            HostBehavior::WudianYinshen => self.trigger_meta_common(),
-            HostBehavior::WudianXiandan => self.trigger_meta_common(),
-            HostBehavior::WudianJijia => self.trigger_meta_common(),
+            HostBehavior::WudianCiqiu => self.trigger_meta_wudian(),
+            HostBehavior::WudianShuaiyan => self.trigger_meta_wudian(),
+            HostBehavior::WudianZhucheng => self.trigger_meta_wudian(),
+            HostBehavior::WudianZhuchengGuard => self.trigger_meta_wudian(),
+            HostBehavior::WudianKangyin => self.trigger_meta_wudian(),
+            HostBehavior::WudianChezhen => self.trigger_meta_wudian(),
+            HostBehavior::WudianJuedao => self.trigger_meta_wudian(),
+            HostBehavior::WudianGeju => self.trigger_meta_wudian(),
+            HostBehavior::WudianTuji => self.trigger_meta_wudian(),
+            HostBehavior::WudianMujing => self.trigger_meta_wudian(),
+            HostBehavior::WudianGuangshu => self.trigger_meta_wudian(),
+            HostBehavior::WudianGuangshuHeart => self.trigger_meta_wudian(),
+            HostBehavior::WudianGuangshuDiamond => self.trigger_meta_wudian(),
+            HostBehavior::WudianGuangshuClub => self.trigger_meta_wudian(),
+            HostBehavior::WudianGuangshuSpade => self.trigger_meta_wudian(),
+            HostBehavior::WudianZiyu => self.trigger_meta_wudian(),
+            HostBehavior::WudianShouhu => self.trigger_meta_wudian(),
+            HostBehavior::WudianDuwen => self.trigger_meta_wudian(),
+            HostBehavior::WudianPaotai => self.trigger_meta_wudian(),
+            HostBehavior::WudianPaotaiFire => self.trigger_meta_wudian(),
+            HostBehavior::WudianBaoleiSwitch => self.trigger_meta_wudian(),
+            HostBehavior::WudianZhenchaDraw => self.trigger_meta_wudian(),
+            HostBehavior::WudianYuedong => self.trigger_meta_wudian(),
+            HostBehavior::WudianKuoyin => self.trigger_meta_wudian(),
+            HostBehavior::WudianHuhuan => self.trigger_meta_wudian(),
+            HostBehavior::WudianJidong => self.trigger_meta_wudian(),
+            HostBehavior::WudianBaoxue => self.trigger_meta_wudian(),
+            HostBehavior::WudianLiangou => self.trigger_meta_wudian(),
+            HostBehavior::WudianXiyang => self.trigger_meta_wudian(),
+            HostBehavior::WudianFeiren => self.trigger_meta_wudian(),
+            HostBehavior::WudianFeidan => self.trigger_meta_wudian(),
+            HostBehavior::WudianZhiyuan => self.trigger_meta_wudian(),
+            HostBehavior::WudianShenqiang => self.trigger_meta_wudian(),
+            HostBehavior::WudianShihuo => self.trigger_meta_wudian(),
+            HostBehavior::WudianMengji => self.trigger_meta_wudian(),
+            HostBehavior::WudianYinbo => self.trigger_meta_wudian(),
+            HostBehavior::WudianQianggu => self.trigger_meta_wudian(),
+            HostBehavior::WudianQiangguGuard => self.trigger_meta_wudian(),
+            HostBehavior::WudianFeitiao => self.trigger_meta_wudian(),
+            HostBehavior::WudianPingzhang => self.trigger_meta_wudian(),
+            HostBehavior::WudianOwliyong => self.trigger_meta_wudian(),
+            HostBehavior::WudianYinshen => self.trigger_meta_wudian(),
+            HostBehavior::WudianXiandan => self.trigger_meta_wudian(),
+            HostBehavior::WudianJijia => self.trigger_meta_wudian(),
             HostBehavior::XianjianLingxue => self.trigger_meta_xianjian(),
             HostBehavior::XianjianBinxin => self.trigger_meta_xianjian(),
             HostBehavior::XianjianHuimeng => self.trigger_meta_xianjian(),
             HostBehavior::XianjianTianshe => self.trigger_meta_xianjian(),
             HostBehavior::XianjianTianshe2 => self.trigger_meta_xianjian(),
             HostBehavior::XianjianFanling => self.trigger_meta_xianjian(),
-            HostBehavior::WudianLongxiang => self.trigger_meta_common(),
+            HostBehavior::WudianLongxiang => self.trigger_meta_wudian(),
             HostBehavior::XianjianGuiyuan => self.trigger_meta_xianjian(),
             HostBehavior::XianjianTannang => self.trigger_meta_xianjian(),
             HostBehavior::XianjianFeixu => self.trigger_meta_xianjian(),
@@ -758,7 +761,7 @@ impl HostBehavior {
             HostBehavior::XianjianXuanyan => self.trigger_meta_xianjian(),
             HostBehavior::XianjianDiewu => self.trigger_meta_xianjian(),
             HostBehavior::XianjianLingyu => self.trigger_meta_xianjian(),
-            HostBehavior::WudianLueying => self.trigger_meta_common(),
+            HostBehavior::WudianLueying => self.trigger_meta_wudian(),
             HostBehavior::XianjianAnwugu => self.trigger_meta_xianjian(),
             HostBehavior::XianjianAnwugu2 => self.trigger_meta_xianjian(),
             // 甜香去：伤害前置窗口（上游 source damageBefore check 询问式）
@@ -826,6 +829,12 @@ impl HostBehavior {
             // 勾魂锣·倒计时：来源回合开始（global phaseBegin 由 filter 定向）
             HostBehavior::SwdGouhunluoSub => self.trigger_meta_swd(),
             HostBehavior::SwdJiguantongCard => self.trigger_meta_swd(),
+        };
+        if let (Some(meta), Some((timing, priority, selectable))) = (&mut meta, self.source_order()) {
+            meta.timing = timing;
+            meta.priority = priority;
+            meta.order_selectable = selectable;
         }
+        meta
     }
 }

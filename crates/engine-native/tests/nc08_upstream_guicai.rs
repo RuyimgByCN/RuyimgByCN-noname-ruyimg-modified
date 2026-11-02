@@ -7,7 +7,7 @@
 //!     trigger: { global: "judge" },                 // **任何角色**的判定
 //!     preHidden: true,
 //!     filter(event, player) {
-//!         return player.hasCards(get.mode() === "guozhan" ? "hes" : "hs");   // 非国战：手牌+装备
+//!         return player.hasCards(get.mode() === "guozhan" ? "hes" : "hs");   // 非国战：手牌+特殊区
 //!     },
 //!     async cost(event, trigger, player) {
 //!         event.result = await player.chooseCard({ … }).forResult();         // 打出一张牌替换判定牌
@@ -18,14 +18,11 @@
 //!
 //! 由 JS 推导的规则点：
 //! 1. **时机 = 任何角色的判定**（`global: "judge"`，不只自己）；
-//! 2. **可打出的牌**：非国战为 **`hs`（手牌 + 装备区）**，**不限花色**（与鬼道的「黑色牌」不同）；
+//! 2. **可打出的牌**：非国战为 **`hs`（手牌 + 特殊区）**，**不限花色**（与鬼道的「黑色牌」不同）；
 //! 3. **效果**：以打出的牌**替换**当前判定牌。
 //!
-//! 原生实现引用：`kernel/judge.rs:395–415`（`gui_cai_holders_any` → **手牌全量**入候选；
-//! 装备区仅在「天道/改天道持有者」或**黑色**牌时入候选）。
-//!
-//! **登记差异（本文件固定，牌区族第 5 例）**：**装备区**——上游 `hs` 含装备区且**不限花色**；
-//! 原生装备区候选仅在天道/改天道或**黑色**时纳入 → **鬼才持有者的非黑装备牌不能用于改判**。
+//! 原生使用共享 Judge 改判候选函数；鬼才非国战仅手牌，国战再含装备。
+//! Native 特殊区/修饰器与其来源完整流程仍未覆盖。
 //!
 //! **同类登记**：`guidao`（鬼道）**不在 `character/standard/skill.js`**（仅见于 `character/sb/`）
 //! → 与「据守」同属**非标准面技能**，本样本**不**为它建样本（登记）。
@@ -104,13 +101,21 @@ fn upstream_guicai_rewrites_others_judgement_with_any_hand_card() {
         } else if c.spec.allow_cancel {
             Vec::new()
         } else {
-            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+            c.spec
+                .options
+                .iter()
+                .take(c.spec.min.max(1))
+                .copied()
+                .collect()
         };
         let _ = e.submit(GameCommand {
             actor: c.observer,
             expected_revision: e.revision(),
             dedup_id: next_dedup(),
-            action: GameAction::Answer { choice_id: c.id, selection: sel },
+            action: GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
         });
     }
     drain(&mut e);
@@ -121,20 +126,9 @@ fn upstream_guicai_rewrites_others_judgement_with_any_hand_card() {
     );
 }
 
-/// 上游点 2 的**登记差异（牌区族第 5 例）**：装备区候选仅在天道/改天道或**黑色**时纳入。
+/// Source uses hand/special outside Kingdoms, and additionally equipment in Kingdoms.
 #[test]
-fn upstream_guicai_equip_zone_difference_is_registered() {
-    let src = std::fs::read_to_string(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/kernel/judge.rs"
-    ))
-    .expect("读 judge 源码");
-    let idx = src.find("装备区：黑色牌（鬼道路径）").expect("装备区注释");
-    let seg: String = src[idx..].chars().take(240).collect();
-    assert!(
-        seg.contains("is_black(c)"),
-        "差异固定：原生装备区候选受 is_black 限制（上游鬼才 hs 不限花色）：{seg}"
-    );
+fn upstream_guicai_positions_are_mode_specific() {
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
             .join("../../../archive/upstream/noname/apps/core/character/standard/skill.js"),

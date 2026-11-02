@@ -96,22 +96,28 @@ EventData::Phase { player, phase, timing: PhaseTiming }
 
 ### ✅ 已查（第 703 轮）：`Dying` 是**内联**发射的 ⇒ `Damage` 确实早于「结算完成」
 
-`crates/engine-native-kernel/src/kernel/damage.rs:977-987`：
+`crates/engine-native-kernel/src/kernel/damage_flow.rs:78-90`（规则 v331 后 damage.rs 已按职责拆分）：
 
 ```rust
-// 内联濒死检查：体力 ≤ 0 且尚未处于濒死。
-let entering = ctx.core.player(d.target).hp <= 0 && !ctx.core.player(d.target).dying;
-if entering {
-    ctx.core.player_mut(d.target).dying = true;
-    ctx.log(LogEvent::DyingEntered { player: d.target });
-    ctx.emit(EventData::Dying { player: d.target, source: d.source });   // ← 内联
+P::TargetDamage { chain_eligible } => {
+    d.settlement.progress = P::DyingPending { chain_eligible };
+    if ctx.core.player(d.target).alive
+        && ctx.core.player(d.target).hp <= 0
+        && !ctx.core.player(d.target).dying
+    {
+        ctx.core.player_mut(d.target).dying = true;
+        ctx.log(LogEvent::DyingEntered { player: d.target });
+        child = Some(EventData::Dying { player: d.target, source: d.source });   // ← 内联
+    }
 }
-// 铁索连环传导：属性伤害结算后…
 ```
 
 ⇒ **濒死是在「伤害结算函数的中途」内联发射的**，**不是独立阶段** ✅
-**并且行号也证实了顺序**：`EventData::Damage` 的发射点在 **`damage.rs:518 / 558 / 587 / 637`**，
-而濒死内联在 **`:977`** ⇒ **`Damage` 必然早于濒死** ✅（**518 < 977**）
+**并且结构也证实了顺序**：`EventData::Damage` 帧在进入伤害结算机器之前就已入栈（发射点分散在
+**`aoe.rs:103/123`、`sha.rs:262`、`duel.rs:77/136`、`death.rs:234`、`phase.rs:188`、
+`native_invocation.rs:420/447/513/555`、`damage.rs:159/198`**，v331 拆分后不再集中在一个文件），
+而濒死是在该帧的 **`P::TargetDamage`** 步内联发射（`damage_flow.rs:78-90`）
+⇒ **`Damage` 必然早于濒死** ✅（同一结算机器内先 Damage 帧、后 Dying 子事件）
 
 ⇒ **所以 `EventKind::Damage` 必然早于「濒死救援完成」** ❗
 ⇒ **「`damageEnd`（全部结算完成后）」这一档确实不存在** ⚠️

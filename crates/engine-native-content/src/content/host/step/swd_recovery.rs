@@ -398,7 +398,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let Some(dp) = ctx
                         .res
-                        .frame(ctx.current_frame_id())
+                        .frame(ctx.current_event_frame_id())
                         .map(|f| &f.data)
                         .and_then(|data| match data {
                             crate::event::EventData::Dying { player, .. } => Some(*player),

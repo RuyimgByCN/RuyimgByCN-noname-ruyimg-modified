@@ -3,10 +3,12 @@ use crate::{Engine, EventData, MachineSnapshot};
 
 pub(super) fn event_cards(event: &mut EventData, map: &impl Fn(&mut u32)) {
     match event {
+        EventData::SkillInvocation(d) => invocation_cards(d, map),
         EventData::Damage(d) => d.card.iter_mut().for_each(map),
         EventData::Recover { by_card, .. } => by_card.iter_mut().for_each(map),
-        EventData::CardUsed(u) => map(&mut u.card),
-        EventData::CardResponded { card, .. } | EventData::ShaDodged { card, .. } => map(card),
+        EventData::CardUsed(u) => u.card.iter_mut().for_each(map),
+        EventData::CardResponded { card, .. } => map(card),
+        EventData::ShaDodged { card, .. } => card.iter_mut().for_each(map),
         EventData::Equipped { card, replaced, .. } => {
             map(card);
             replaced.iter_mut().for_each(map);
@@ -17,6 +19,17 @@ pub(super) fn event_cards(event: &mut EventData, map: &impl Fn(&mut u32)) {
         | EventData::CardsLost { cards, .. }
         | EventData::CardsGiven { cards, .. } => cards.iter_mut().for_each(map),
         _ => {}
+    }
+}
+
+fn invocation_cards(d: &mut engine_native_kernel::event::InvocationData, map: &impl Fn(&mut u32)) {
+    if let Some(payment) = &mut d.payment { payment.selected.iter_mut().for_each(map); }
+    for change in &mut d.jiding_changes {
+        match &mut change.cost {
+            engine_native_kernel::event::JidingCardCost::TongJi { card, .. } => map(card),
+            engine_native_kernel::event::JidingCardCost::Yihua { cards, .. } => cards.iter_mut().for_each(map),
+            _ => {}
+        }
     }
 }
 
@@ -49,6 +62,28 @@ fn effects(bytes: &mut Vec<u8>, map: &impl Fn(&mut u32)) {
 
 pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u32)) {
     use MachineSnapshot::*;
+    if let JudgeContinuation {
+        payment: Some(p), ..
+    } = machine
+    {
+        map(&mut p.old);
+    }
+    if let NativeInvocation { progress, .. } = machine {
+        use engine_native_kernel::event::NativeInvocationProgress as P;
+        match progress {
+            P::BeforeInvocation { context } => invocation_cards(context, map),
+            P::AwaitInvocation { admission, .. } => invocation_cards(admission, map),
+            P::QinglongAsk { hand, equip, .. } => {
+                hand.iter_mut().for_each(map);
+                equip.iter_mut().for_each(map);
+            }
+            P::QinglongLog { card, .. } | P::QinglongLoss { card, .. } => map(card),
+            P::HolderAsk { candidates }
+            | P::SourceAsk { candidates, .. }
+            | P::HolderPay { cards: candidates } => candidates.iter_mut().for_each(map),
+            _ => {}
+        }
+    }
     match machine {
         Sha {
             card,
@@ -58,7 +93,7 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
             fuchou_card,
             ..
         } => {
-            map(card);
+            card.iter_mut().for_each(map);
             liuli_card
                 .iter_mut()
                 .chain(qilin_horse)
@@ -91,10 +126,12 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
                 machine_cards(inner, map);
             }
         }
-        JudgePhase { queue, current, .. } => {
+        JudgeContinuation { queue, current, .. } | JudgePhase { queue, current, .. } => {
             queue.iter_mut().for_each(map);
             if let Some(c) = current {
-                map(&mut c.trick);
+                if let Some(trick) = &mut c.trick {
+                    map(trick);
+                }
                 map(&mut c.judge_card);
                 c.haotian_other.iter_mut().for_each(map);
                 if let Some(cards) = &mut c.gaiming_cards {
@@ -140,9 +177,19 @@ pub(super) fn machine_cards(machine: &mut MachineSnapshot, map: &impl Fn(&mut u3
 pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool {
     use MachineSnapshot::*;
     match machine {
-        Rvm { paused, commit_pick, committing, commit_state, following, .. } => {
-            paused.is_some() || commit_pick.is_some() || *committing
-                || !commit_state.is_empty() || !following.is_empty()
+        Rvm {
+            paused,
+            commit_pick,
+            committing,
+            commit_state,
+            following,
+            ..
+        } => {
+            paused.is_some()
+                || commit_pick.is_some()
+                || *committing
+                || !commit_state.is_empty()
+                || !following.is_empty()
         }
         // Preserve these pending owners until their sampling semantics are audited.
         XunXun { .. } | JiJie { .. } => true,
@@ -164,14 +211,17 @@ pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool
 }
 
 /// These are physical owners in the current restore validator, not historical references.
-pub(super) fn held_cards(machine: &MachineSnapshot, out: &mut Vec<u32>) {
+pub(super) fn held_cards(machine: &MachineSnapshot, seat: u8, out: &mut Vec<u32>, hidden: &mut Vec<u32>) {
     use MachineSnapshot::*;
     match machine {
-        JudgePhase { queue, current, .. } => {
+        NativeInvocation { owner, progress: engine_native_kernel::event::NativeInvocationProgress::QinglongLoss { target, card, public }, .. } => {
+            if *public || seat == *owner || seat == *target { out.push(*card); } else { hidden.push(*card); }
+        }
+        JudgeContinuation { queue, current, .. } | JudgePhase { queue, current, .. } => {
             out.extend(queue);
             if let Some(c) = current {
                 if !c.finalized {
-                    out.push(c.trick);
+                    out.extend(c.trick);
                 }
                 if c.judge_held {
                     out.push(c.judge_card);
@@ -189,7 +239,7 @@ pub(super) fn held_cards(machine: &MachineSnapshot, out: &mut Vec<u32>) {
         | Jijiang { inner, .. }
         | LiJian { inner, .. } => {
             if let Some(inner) = inner {
-                held_cards(inner, out);
+                held_cards(inner, seat, out, hidden);
             }
         }
         _ => {}

@@ -93,7 +93,7 @@ fn valid_fixture_imports_activates_loads_vm_skill_and_upgrades_then_rolls_back()
     let (version, code, skills) = loaded_module_code(&s.content);
     assert_eq!(version, "0.1.0");
     assert_eq!(code, vec![83, 16, 1, 0, 0, 0, 80, 1, 1]);
-    assert_eq!(skills, vec!["vm_fixture_phase_end_phase_end".to_string()]);
+    assert_eq!(skills, vec!["vm_fixture_phase_end".to_string()]);
 
     // 升级：服务端 drop-in 一包一目录，新版本覆盖同目录后再导入即自动激活；
     // 旧版本安装副本仍在存储中（阶段结束摸 2 张的字节码成为装载副本）。

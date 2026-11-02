@@ -626,7 +626,7 @@ impl HostMachine {
                 pl.gouhunluo_rounds = 3;
                 pl.gouhunluo_source = Some(self.owner);
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_GOUHUNLUO_SUB_KEY) {
-                    ctx.core.skills.insert(
+                    ctx.insert_skill(
                         (t, def),
                         crate::state::SkillInstance {
                             owner: t,

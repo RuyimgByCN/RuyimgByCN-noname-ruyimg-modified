@@ -679,7 +679,13 @@ try {
         after.ok === true && after.data?.hex === beforeBadRestore.data?.hex,
       JSON.stringify(replies.map((reply) => reply.error)));
   }
-  const vmSkill = vmPackage.trigger_index[0].module;
+  // C331 起 VM 觸發技能的**邏輯名**來自 skill_index；characters 宣告的模組 id
+  // 只作為不可變 schema3 資產的別名（content-native-loader/vm_generals.rs 會
+  // 正規化為邏輯名）。舊腳本直接比對模組 id，等於把別名當成技能名。
+  const vmTrigger = vmPackage.trigger_index[0];
+  const vmSkill = (vmPackage.skill_index ?? []).find(
+    (entry) => entry.skill_def_id === vmTrigger.skill_def_id,
+  )?.name ?? vmTrigger.module;
   /**
    * 以安装副本开局、装配夹具武将，推进到 P0 弃牌→结束阶段：返回阶段结束时的
    * 手牌增量（v0.1.0 摸 1、v0.1.1 摸 2）、弃牌阶段存档与结束时哈希，供恢复重放对照。
@@ -736,8 +742,11 @@ try {
     ["corrupt_module_local_count", mutateVm((p) => { p.modules[0].local_count += 1; }), /logic_hash mismatch/],
     ["tampered_trigger_event", mutateVm((p) => { p.trigger_index[0].event = "phase_draw"; }), /logic_hash mismatch/],
     ["entry_pc_out_of_range", mutateVm((p) => { p.modules[0].entry_pc = p.modules[0].code.length; }), /entry_pc out of range/],
-    ["trigger_unknown_module", mutateVm((p) => { p.trigger_index[0].module = "ghost"; }), /logic_hash mismatch/],
-    ["invalid_identity", mutateVm((p) => { p.manifest.package_id = "../x"; }), /身份字段/],
+    // C331 的載入器把這兩類變異的拒絕理由說得更精確（拒絕本身不變）：
+    // 未知模組 → 「trigger references unknown skill/module identity」；
+    // 非法包身份 → 「invalid package_id」。
+    ["trigger_unknown_module", mutateVm((p) => { p.trigger_index[0].module = "ghost"; }), /unknown skill\/module identity|logic_hash mismatch/],
+    ["invalid_identity", mutateVm((p) => { p.manifest.package_id = "../x"; }), /invalid package_id|身份字段/],
     ["same_version_different_content", mutateVm((p) => { p.modules[0].caps_mask += 1; }), /logic_hash mismatch/],
   ];
   for (const [i, [name, bad, pattern]] of validateCases.entries()) {

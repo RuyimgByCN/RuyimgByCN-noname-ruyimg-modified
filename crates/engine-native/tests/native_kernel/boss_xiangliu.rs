@@ -18,7 +18,7 @@ fn boss_xiangliu_duqu_shedu_echou() {
     assert!(e.state_core().skills.contains_key(&(1, cdef)));
     assert!(!e.state_core().has_skill(1, edef), "邪酬装配即未激活");
 
-    // ① 书精（1 号）杀 2 号 → 2 号获中毒+蛇毒双实例
+    // ① 书精（1 号）杀 2 号 → 2 号只获源 boss_zhongdu
     advance_to_play(&mut e, 1);
     e.debug_clear_hand(1);
     e.debug_clear_hand(2);
@@ -27,9 +27,9 @@ fn boss_xiangliu_duqu_shedu_echou() {
     play(&mut e, sha, vec![2]);
     drain_choices(&mut e);
     assert!(e.state_core().has_skill_any_state(2, zdef), "中毒实例");
-    assert!(e.state_core().has_skill_any_state(2, sdef), "蛇毒实例");
+    assert!(!e.state_core().has_skill_any_state(2, sdef), "催毒不授蛇毒");
 
-    // ② 中毒判定（方片）：伤 1+失去中毒；蛇毒实例保留
+    // ② 中毒判定（方片）：伤 1+失去中毒；不生成蛇毒实例
     e.debug_set_deck_top_by(|d| d.suit == engine_native::catalog::Suit::Diamond);
     let hp2 = e.debug_hp(2);
     advance_to_play(&mut e, 2); // 判定后推进（自动应答）
@@ -39,17 +39,20 @@ fn boss_xiangliu_duqu_shedu_echou() {
         !e.state_core().has_skill_any_state(2, zdef),
         "非黑桃失去中毒"
     );
-    assert!(e.state_core().has_skill_any_state(2, sdef), "蛇毒实例保留");
+    assert!(
+        !e.state_core().has_skill_any_state(2, sdef),
+        "不生成蛇毒实例"
+    );
 
-    // ③ 再授毒：蛇毒实例仍在
+    // ③ 再授毒：仍仅授中毒
     advance_to_play(&mut e, 1);
     e.debug_clear_hand(1);
     let sha2 = e.debug_place(1, "sha");
     play(&mut e, sha2, vec![2]);
     drain_choices(&mut e);
     assert!(
-        e.state_core().has_skill_any_state(2, sdef),
-        "再授毒后蛇毒在"
+        !e.state_core().has_skill_any_state(2, sdef),
+        "再授毒不授蛇毒"
     );
 
     // ④ 邪酬（独立局）：相柳持邪酬——hp≤半线伤害窗激活；他人用桃获标记

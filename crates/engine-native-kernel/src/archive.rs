@@ -110,7 +110,9 @@ use crate::state::{
 /// `xuanyuanjian_marked`。v103 字节被拒绝。
 /// v105（2026-10-17，swd 昆仑镜批 149）：`TurnState` 追加昆仑镜快照
 /// （`kunlunjing_snapshot`/`kunlunjing_hp`）。v104 字节被拒绝。
-pub const ARCHIVE_FORMAT_VERSION: u16 = 105;
+/// v106: Decision29 private C331 integration. Strict105 rejection; unpublished while
+/// approved later C Core layouts are still pending in this intermediate format.
+pub const ARCHIVE_FORMAT_VERSION: u16 = 106;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";
@@ -284,7 +286,10 @@ mod io;
 use io::*;
 mod values;
 use values::*;
+mod damage;
 mod events;
+mod invocation;
+mod judge;
 use events::*;
 mod machine_encode;
 use machine_encode::*;

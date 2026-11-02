@@ -1,0 +1,35 @@
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-wasm)
+error[E0603]: function `projected_choice_action` is private
+   --> crates/engine-native-wasm/tests/nc10_park_answer_routing.rs:92:41
+    |
+ 92 |         let action = engine_native::ai::projected_choice_action(
+    |                                         ^^^^^^^^^^^^^^^^^^^^^^^ private function
+    |
+note: the function `projected_choice_action` is defined here
+   --> crates/engine-native/src/ai.rs:533:1
+    |
+533 | fn projected_choice_action(choice: ChoiceView) -> GameAction {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error[E0599]: no method named `expect` found for enum `GameAction` in the current scope
+  --> crates/engine-native-wasm/tests/nc10_park_answer_routing.rs:98:10
+   |
+92 |           let action = engine_native::ai::projected_choice_action(
+   |  ______________________-
+93 | |             engine
+94 | |                 .ai_session(observer)
+95 | |                 .choice()
+...  |
+98 | |         .expect("observer owns the choice");
+   | |         -^^^^^^ method not found in `GameAction`
+   | |_________|
+   |
+
+Some errors have detailed explanations: E0599, E0603.
+For more information about an error, try `rustc --explain E0599`.
+error: could not compile `engine-native-wasm` (test "nc10_park_answer_routing") due to 2 previous errors
+EXIT1=101

@@ -231,12 +231,14 @@ impl HostMachine {
                 HostStage::Act => {
                     // 花色仅首次捕获（弃牌会发射帧，之后当前帧不再是 CardUsed）
                     if self.card.is_none() {
-                        let suit = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
-                            Some(EventData::CardUsed(u)) => {
-                                ctx.catalog.cards[u.card as usize].suit as u8
-                            }
-                            _ => return Flow::Done,
-                        };
+                        let suit =
+                            match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                                Some(EventData::CardUsed(u)) => match u.suit(ctx.catalog) {
+                                    Some(s) => s as u8,
+                                    None => return Flow::Done,
+                                },
+                                _ => return Flow::Done,
+                            };
                         self.card = Some(u32::from(suit));
                     }
                     let suit = self.card.unwrap_or(0) as u8;
@@ -305,7 +307,7 @@ impl HostMachine {
             // 移花：弃 2 张手牌 → 帧「使用者/目标」对调（反弹）
             HostBehavior::Yihua => match self.stage {
                 HostStage::Act => {
-                    let frame = ctx.current_frame_id();
+                    let frame = ctx.current_event_frame_id();
                     let user = match ctx.res.frame(frame).map(|f| &f.data) {
                         Some(EventData::CardUsed(u)) => u.player,
                         _ => return Flow::Done,
@@ -351,9 +353,18 @@ impl HostMachine {
                     let Some(user) = self.target else {
                         return Flow::Done;
                     };
-                    let frame = self.card.unwrap_or(0) as crate::ids::EventId;
+                    // 来源绑定：帧号必须已知（不再 unwrap_or(0) 落到伪帧）。
+                    let Some(frame) = self.card.map(|c| c as crate::ids::EventId) else {
+                        return Flow::Done;
+                    };
+                    let bound = crate::kernel::jiding_card_is_bound(ctx, frame);
+                    let before_player = user;
+                    let before_target = self.owner;
+                    let mut losses = Vec::new();
+                    let paid = picked.clone();
                     for c in picked {
                         if ctx.core.player(self.owner).hand.contains(&c) {
+                            losses.push(ctx.res.next_event_id);
                             ctx.discard_from_hand(self.owner, c);
                         } else {
                             return Flow::Done;
@@ -363,6 +374,15 @@ impl HostMachine {
                         skill: "移花",
                         owner: self.owner,
                     });
+                    // 收据先记、再反弹：只有真实既定牌帧才记来源绑定。
+                    if bound {
+                        if let Some(def) = ctx.catalog.skill_by_name(&self.def_key) {
+                            debug_assert!(crate::kernel::record_jiding_card_change(ctx, crate::event::JidingCardChange {
+                                card: frame, def, actor: self.owner, before_player, before_target,
+                                cost: crate::event::JidingCardCost::Yihua { cards: paid, losses },
+                            }));
+                        }
+                    }
                     // 帧改写：使用者=自己、目标=原使用者（反弹）
                     if let Some(f) = ctx.res.frame_mut(frame) {
                         if let EventData::CardUsed(u) = &mut f.data {
@@ -377,7 +397,7 @@ impl HostMachine {
             // 贞烈：失去 1 体力 → 移出目标 → 弃置使用者一张牌（手/装备）
             HostBehavior::Zhenlie => match self.stage {
                 HostStage::Act => {
-                    let user = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    let user = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
                         Some(EventData::CardUsed(u)) => u.player,
                         _ => return Flow::Done,
                     };
@@ -387,14 +407,27 @@ impl HostMachine {
                     });
                     // ① 移出目标（结算前写回帧 targets——Intrinsic 阶段读取；
                     // 必须先于任何帧发射，否则当前帧不再是 CardUsed）
+                    let card_frame = ctx.current_event_frame_id();
+                    let before = ctx.current_card_use().ok().filter(|u| u.targets.as_slice() == [self.owner]).map(|u| (u.player, u.targets[0]));
                     ctx.current_card_use_mut()
                         .targets
                         .retain(|t| *t != self.owner);
                     // ② 失去 1 点体力
+                    let lose_hp = ctx.res.next_event_id;
                     ctx.emit(EventData::LoseHp {
                         player: self.owner,
                         amount: 1,
                     });
+                    if let Some((before_player, before_target)) = before {
+                        if matches!(ctx.res.frame(lose_hp).map(|f| (&f.data,f.parent)), Some((EventData::LoseHp{player,amount:1},Some(parent))) if *player==self.owner && parent==card_frame) {
+                            if let Some(def) = ctx.catalog.skill_by_name(&self.def_key) {
+                                crate::kernel::record_jiding_card_change(ctx, crate::event::JidingCardChange {
+                                    card: card_frame, def, actor: self.owner, before_player, before_target,
+                                    cost: crate::event::JidingCardCost::Zhenlie { lose_hp },
+                                });
+                            }
+                        }
+                    }
                     // ③ 弃置使用者一张牌（手/装备；强制）
                     let cards: Vec<CardId> = ctx
                         .core

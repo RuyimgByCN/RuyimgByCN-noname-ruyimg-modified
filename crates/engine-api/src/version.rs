@@ -2,8 +2,8 @@
 
 use serde::{Deserialize, Serialize};
 
-/// Current content schema version shared by hosts and package tooling.
-pub const CONTENT_SCHEMA_VERSION: u32 = 3;
+/// Highest content schema version readable by current native hosts.
+pub const CONTENT_SCHEMA_VERSION: u32 = 5;
 
 /// Current installable package format version.
 pub const PACKAGE_FORMAT_VERSION: u32 = 1;
@@ -44,7 +44,7 @@ impl VersionBundle {
             engine_api: 1,
             rule_vm_abi: RULE_VM_ABI_VERSION,
             content_schema: CONTENT_SCHEMA_VERSION,
-            network_protocol: 6,
+            network_protocol: 7,
             replay_schema: crate::REPLAY_SCHEMA_VERSION,
             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
             package_format: PACKAGE_FORMAT_VERSION,

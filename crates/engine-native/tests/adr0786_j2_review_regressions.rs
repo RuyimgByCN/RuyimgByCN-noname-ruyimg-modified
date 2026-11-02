@@ -483,7 +483,7 @@ fn theft_with_gift_watcher(equipped: bool) {
     if equipped {
         p.cards.push(
             engine_native::catalog::CardDef::weapon("j2-theft-gear", 2)
-                .with_equip_skills(&["j2_gear_phase_end"]),
+                .with_equip_skills(&["j2_gear"]),
         );
     }
     let mut e = start(&p);
@@ -502,7 +502,7 @@ fn theft_with_gift_watcher(equipped: bool) {
             ),
             CommandOutcome::Accepted { .. }
         ));
-        let def = e.catalog().skill_by_name("j2_gear_phase_end").unwrap();
+        let def = e.catalog().skill_by_name("j2_gear").unwrap();
         assert!(e.state_core().has_skill(1, def));
         Some((card, def))
     } else {

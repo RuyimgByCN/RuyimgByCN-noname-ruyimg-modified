@@ -101,11 +101,21 @@ pub fn compile_source_named(
     let trigger_index: Vec<PackageTriggerEntry> = triggers
         .into_iter()
         .map(|t| PackageTriggerEntry {
+            host_key: None,
+            force_die: None,
+            force_out: None,
+            repeat: None,
+            hidden: None,
+            event_skill: None,
+
             trigger_def_id: t.trigger_def_id,
             skill_def_id: t.skill_def_id,
             event: t.event,
             filter: t.filter,
             optional: t.optional,
+            timing: Default::default(),
+            priority: 0,
+            order_selectable: true,
             choice_actor: t.choice_actor,
             module: t.module,
             entry_pc: t.entry_pc,
@@ -127,6 +137,8 @@ pub fn compile_source_named(
     let active_index: Vec<PackageActiveEntry> = actives
         .into_iter()
         .map(|a| PackageActiveEntry {
+            host_key: None,
+
             skill_def_id: a.skill_def_id,
             window: a.window,
             module: a.module,
@@ -242,6 +254,14 @@ pub fn compile_source_named(
         .skills
         .iter()
         .map(|skill| PackageSkillEntry {
+            charlotte: skill.charlotte,
+            persevere: skill.persevere,
+            forever: skill.forever,
+            temporary: skill.temporary,
+            group_children: None,
+            reveal: None,
+            onremove: None,
+
             skill_def_id: skill.def_id,
             name: skill.name.clone(),
             locked: skill.locked,
@@ -267,6 +287,7 @@ pub fn compile_source_named(
         asset_paths: Default::default(),
         compiler_version: COMPILER_VERSION.into(),
     };
+    pkg.manifest.content_schema_version = pkg.required_content_schema();
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     let _ = maps; // source maps available for debugger tooling
     Ok(pkg)

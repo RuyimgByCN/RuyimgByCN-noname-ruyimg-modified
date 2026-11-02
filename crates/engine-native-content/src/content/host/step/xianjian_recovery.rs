@@ -309,7 +309,7 @@ impl HostMachine {
                 ctx.core.player_mut(self.owner).max_hp += 1;
                 ctx.recover(self.owner, 1, None);
                 if let Some(def) = ctx.catalog.skill_by_name("huimeng") {
-                    ctx.core.skills.insert(
+                    ctx.insert_skill(
                         (self.owner, def),
                         crate::state::SkillInstance {
                             owner: self.owner,

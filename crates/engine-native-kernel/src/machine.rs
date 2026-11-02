@@ -30,6 +30,11 @@ pub enum LogEvent {
         player: PlayerId,
         cards: Vec<CardId>,
     },
+    VirtualCardPlayed {
+        kind: crate::catalog::CardKind,
+        player: PlayerId,
+        targets: Vec<PlayerId>,
+    },
     CardPlayed {
         card: CardId,
         player: PlayerId,
@@ -46,6 +51,17 @@ pub enum LogEvent {
     },
     CardDiscarded {
         player: PlayerId,
+        cards: Vec<CardId>,
+    },
+    CardsTaken {
+        from: PlayerId,
+        to: PlayerId,
+        cards: Vec<CardId>,
+        public: bool,
+    },
+    CardsGivenPublic {
+        from: PlayerId,
+        to: PlayerId,
         cards: Vec<CardId>,
     },
     CardsGiven {
@@ -264,10 +280,19 @@ impl<'a> Ctx<'a> {
             .turn_over_before_mut()
     }
 
+    /// Damage handlers read their checked root payload while their queue retains the child frame.
+    pub fn current_event_frame_id(&self) -> crate::ids::EventId {
+        let id = self.current_frame_id();
+        match &self.res.frame(id).expect("current frame").data {
+            EventData::DamageWindow { root, .. } => *root,
+            _ => id,
+        }
+    }
+
     /// 当前帧的伤害载荷只读访问（hlss 隐月记录/禳星计数等；非伤害帧 Err）。
     pub fn current_damage(&self) -> Result<&DamageData, ()> {
-        let id = self.current_frame_id();
-        match self.res.frame(id).map(|f| &f.data) {
+        let root = self.current_event_frame_id();
+        match self.res.frame(root).map(|f| &f.data) {
             Some(crate::event::EventData::Damage(d)) => Ok(d),
             _ => Err(()),
         }
@@ -283,11 +308,33 @@ impl<'a> Ctx<'a> {
     }
 
     pub fn current_damage_mut(&mut self) -> &mut DamageData {
-        let id = self.current_frame_id();
+        let id = self.current_event_frame_id();
         self.res
             .frame_mut(id)
             .expect("current frame exists")
             .damage_mut()
+    }
+
+    /// Reject signed source-quantity overflow through the existing atomic command fault path.
+    pub fn fail_damage_amount(&mut self) {
+        self.res.fault = Some(VmFault {
+            skill: "native_damage_modifier".into(),
+            owner: 0,
+            event: "Damage".into(),
+            kind: "DamageAmountOverflow".into(),
+            detail: "canonical source amount exceeds i32".into(),
+        });
+    }
+    pub fn modify_damage_amount(&mut self, delta: i32) -> bool {
+        let Ok(d) = self.current_damage() else {
+            return false;
+        };
+        let Some(amount) = d.amount.checked_add(delta) else {
+            self.fail_damage_amount();
+            return false;
+        };
+        self.current_damage_mut().amount = amount;
+        true
     }
 
     /// Request a durable result for one emitted damage frame; nested damage has a different id.
@@ -320,6 +367,10 @@ impl<'a> Ctx<'a> {
     /// 机器挂起深度在启动时已记录，子事件弹栈后自动恢复。
     /// 伤害帧以「前置触发窗口」为初始阶段，其余帧先提交。
     pub fn emit(&mut self, data: EventData) {
+        if matches!(data, EventData::Damage(_) | EventData::DamageWindow { .. }) {
+            crate::resolution::push_frame(self.res, data);
+            return;
+        }
         let id = self.res.next_event_id;
         self.res.next_event_id += 1;
         let parent = self.res.stack.last().map(|f| f.id);
@@ -470,7 +521,8 @@ impl<'a> Ctx<'a> {
     /// - 已在弃牌堆 → 幂等返回（不重复入堆）；
     /// - 从其它区域移出仍由调用方负责（`discard_from_hand`/`take_hand_card` 等），
     ///   本原语只保证**不重复入堆**——不改变既有调用方的区域语义。
-    pub fn to_discard(&mut self, card: CardId) {
+    pub fn to_discard(&mut self, card: impl Into<Option<CardId>>) {
+        let Some(card) = card.into() else { return };
         if self.core.discard.contains(&card) {
             return;
         }
@@ -536,7 +588,7 @@ impl<'a> Ctx<'a> {
         self.core.deck.remove(0);
         self.core.player_mut(source).hand.push(carrier);
         self.emit(EventData::CardUsed(crate::event::CardUseData {
-            card: carrier,
+            card: Some(carrier),
             player: source,
             targets,
             nature: crate::event::DamageNature::Normal,
@@ -664,6 +716,30 @@ impl<'a> Ctx<'a> {
 
     // ---- 技能实例 ----
 
+    /// Preserve native instance overwrite semantics and register a genuinely new subscription.
+    pub fn insert_skill(
+        &mut self,
+        key: (PlayerId, crate::ids::SkillDefId),
+        instance: crate::state::SkillInstance,
+    ) -> Option<crate::state::SkillInstance> {
+        let old = self.core.skills.insert(key, instance);
+        if old.is_none() {
+            crate::resolution::register_added(self.core, self.res, self.catalog, key.0, key.1);
+        }
+        old
+    }
+
+    /// Insert only if absent; existing instances retain their limits and lifetime.
+    pub fn ensure_skill(
+        &mut self,
+        key: (PlayerId, crate::ids::SkillDefId),
+        instance: crate::state::SkillInstance,
+    ) {
+        if !self.core.skills.contains_key(&key) {
+            self.insert_skill(key, instance);
+        }
+    }
+
     pub fn skill_enabled(&self, owner: PlayerId, def: SkillDefId) -> bool {
         self.core.has_skill(owner, def)
     }
@@ -696,7 +772,7 @@ impl<'a> Ctx<'a> {
             inst.enabled = true;
             inst.expires_end_of_turn = true;
         } else {
-            self.core.skills.insert(
+            self.insert_skill(
                 key,
                 crate::state::SkillInstance {
                     owner,
@@ -767,7 +843,7 @@ impl<'a> Ctx<'a> {
 }
 
 /// 便捷构造：普通伤害载荷。
-pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> DamageData {
+pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: i32) -> DamageData {
     damage_data_with(source, target, amount, DamageNature::Normal, None)
 }
 
@@ -775,11 +851,12 @@ pub fn damage_data(source: Option<PlayerId>, target: PlayerId, amount: u32) -> D
 pub fn damage_data_with(
     source: Option<PlayerId>,
     target: PlayerId,
-    amount: u32,
+    amount: i32,
     nature: DamageNature,
     card: Option<CardId>,
 ) -> DamageData {
     DamageData {
+        settlement: Default::default(),
         source,
         target,
         amount,
@@ -804,7 +881,7 @@ pub fn card_use_as(
     as_kind: Option<CardKind>,
 ) -> CardUseData {
     CardUseData {
-        card,
+        card: Some(card),
         player,
         targets,
         nature: DamageNature::Normal,
@@ -822,7 +899,7 @@ pub fn card_use_with_nature(
     use_as: Option<CardKind>,
 ) -> CardUseData {
     CardUseData {
-        card,
+        card: Some(card),
         player,
         targets,
         nature,

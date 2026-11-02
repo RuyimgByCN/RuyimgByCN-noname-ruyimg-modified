@@ -32,7 +32,7 @@ impl HostMachine {
             HostBehavior::ZhuWanzhongJi => {
                 let Some(EventData::Death { player, .. }) = ctx
                     .res
-                    .frame(ctx.current_frame_id())
+                    .frame(ctx.current_event_frame_id())
                     .map(|f| f.data.clone())
                 else {
                     return Flow::Done;
@@ -105,7 +105,9 @@ impl HostMachine {
             }
             // 循梦：伤害 +1；体力 >1 时失去 1 点体力
             HostBehavior::Xunmeng => {
-                ctx.current_damage_mut().amount += 1;
+                if !ctx.modify_damage_amount(1) {
+                    return Flow::Done;
+                }
                 if ctx.core.player(self.owner).hp > 1 {
                     // 失去体力（上游 loseHp）：无来源、不可防止
                     ctx.emit(EventData::LoseHp {
@@ -167,7 +169,12 @@ impl HostMachine {
             HostBehavior::HlssYueyin => {
                 let (nature, card) = {
                     let d = ctx.current_damage_mut();
-                    d.amount += 1;
+                    if let Some(amount) = d.amount.checked_add(1) {
+                        d.amount = amount;
+                    } else {
+                        ctx.fail_damage_amount();
+                        return Flow::Done;
+                    }
                     (d.nature, d.card)
                 };
                 let mut bits = 0u8;
@@ -193,7 +200,7 @@ impl HostMachine {
             // 潜龙：按触发面累加道心值（上限 99），随后按阈值刷新解锁
             HostBehavior::MbQianlong => {
                 let is_phase = matches!(
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data),
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
                     Some(crate::event::EventData::Phase { begin: true, .. })
                 );
                 let inc: u32 = if is_phase {
@@ -215,8 +222,10 @@ impl HostMachine {
                     }
                 } else {
                     match ctx.current_damage() {
-                        Ok(d) if d.target == self.owner => d.amount.saturating_mul(10),
-                        Ok(d) => d.amount.saturating_mul(15),
+                        Ok(d) if d.target == self.owner => {
+                            (d.amount.max(0) as u32).saturating_mul(10)
+                        }
+                        Ok(d) => (d.amount.max(0) as u32).saturating_mul(15),
                         Err(_) => 5,
                     }
                 };
@@ -239,9 +248,10 @@ impl HostMachine {
             HostBehavior::Shenwei => Flow::Done,
             // 止息：标记 +1；锦囊 → 置锦囊记录；显示标记 = 体力 - 计数
             HostBehavior::NewZhixi => {
-                let used_trick = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                let used_trick = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
+                {
                     Some(EventData::CardUsed(u)) => {
-                        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+                        let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
                         !kind.is_basic_kind() && kind.equip_slot().is_none()
                     }
                     _ => false,
@@ -292,7 +302,7 @@ impl HostMachine {
             }
             // 疾风：多目标使用 → 按概率整牌取消（上游 `trigger.cancel()`）
             HostBehavior::Jifeng => {
-                let n = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                let n = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
                     Some(EventData::CardUsed(u)) => u.targets.len() as u32,
                     _ => return Flow::Done,
                 };
@@ -313,7 +323,7 @@ impl HostMachine {
             // 昆仑镜：阶段收束记录快照 / 阶段开始（机器内确认门）回滚
             HostBehavior::Kunlunjing => {
                 let begin = matches!(
-                    ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data),
+                    ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
                     Some(EventData::Phase { begin: true, .. })
                 );
                 if !begin {
@@ -376,7 +386,7 @@ impl HostMachine {
             // 改造：选一个空栏位 → 写入 declared_slots（提交按新栏位入槽）
             HostBehavior::Gaizao => match self.stage {
                 HostStage::Act => {
-                    let card = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
+                    let card = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
                         Some(EventData::Equipped { card, .. }) => *card,
                         _ => return Flow::Done,
                     };
@@ -606,7 +616,7 @@ impl HostMachine {
                         continue;
                     };
                     if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -625,7 +635,7 @@ impl HostMachine {
                 }
                 if let Some(def) = ctx.catalog.skill_by_name(SWD_HXUNZHI2_KEY) {
                     if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -889,7 +899,7 @@ impl HostMachine {
                 // （离场撤销装备技）；③ 写回取消位，提交阶段跳过结算。
                 let (used_card, user) = {
                     let u = ctx.current_card_use_mut();
-                    (u.card, u.player)
+                    (u.card.expect("physical Peach source"), u.player)
                 };
                 // ① 夺桃：使用者手牌 → 自己手牌。
                 let user_hand = &mut ctx.core.players[user as usize].hand;

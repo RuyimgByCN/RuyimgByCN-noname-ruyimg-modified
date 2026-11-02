@@ -28,8 +28,7 @@ pub fn check_engine_compat(
             host.rule_vm_abi, manifest.rule_vm_abi_version
         )));
     }
-    if host.content_schema != 0 && host.content_schema != manifest.content_schema_version {
-        // host may still report 0 historically; only enforce when host advertises a non-zero axis
+    if !matches!((host.content_schema, manifest.content_schema_version), (5, 3 | 4 | 5) | (4, 3 | 4) | (3, 3)) {
         return Err(RuntimeError::Incompatible(format!(
             "content_schema host={} package={}",
             host.content_schema, manifest.content_schema_version

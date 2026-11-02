@@ -13,7 +13,9 @@ pub(super) fn serialize<S: Serializer>(
     choice: &Option<ChoiceRequest>,
     serializer: S,
 ) -> Result<S::Ok, S::Error> {
-    without_source(choice).serialize(serializer)
+    #[derive(Serialize)]
+    struct Legacy(#[serde(with = "ArchiveChoice")] ChoiceRequest);
+    without_source(choice).map(Legacy).serialize(serializer)
 }
 pub(super) fn deserialize<'de, D: Deserializer<'de>>(
     deserializer: D,
@@ -42,27 +44,37 @@ pub(super) fn deserialize<'de, D: Deserializer<'de>>(
 
 // Keep the old 13-field visitor and diagnostics; skipped source is an unknown JSON key.
 #[allow(dead_code)]
-#[derive(Deserialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(remote = "ChoiceRequest", rename = "ChoiceRequest")]
 struct ArchiveChoice {
     choice_id: ChoiceId,
     observer: PlayerId,
     options: Vec<ChoiceOption>,
-    min_count: u8,
-    max_count: u8,
+    #[serde(serialize_with = "serialize_count", deserialize_with = "deserialize_count")]
+    min_count: u32,
+    #[serde(serialize_with = "serialize_count", deserialize_with = "deserialize_count")]
+    max_count: u32,
     allow_cancel: bool,
     timeout_policy: TimeoutPolicy,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     deadline_unix_ms: Option<u64>,
     revision: u64,
     continuation_id: u64,
     kind: ChoiceKind,
-    #[serde(default)]
+    #[serde(default, skip_serializing_if = "Option::is_none")]
     prompt: Option<String>,
-    #[serde(default, deserialize_with = "deserialize_native_kind")]
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_native_kind")]
     native_kind: Option<String>,
     #[serde(skip)]
     source_skill: Option<String>,
+}
+
+fn serialize_count<S: Serializer>(value: &u32, serializer: S) -> Result<S::Ok, S::Error> {
+    let count = u8::try_from(*value).map_err(serde::ser::Error::custom)?;
+    serializer.serialize_u8(count)
+}
+fn deserialize_count<'de, D: Deserializer<'de>>(deserializer: D) -> Result<u32, D::Error> {
+    u8::deserialize(deserializer).map(u32::from)
 }
 
 fn deserialize_native_kind<'de, D: Deserializer<'de>>(

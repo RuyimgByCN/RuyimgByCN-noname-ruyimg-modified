@@ -23,11 +23,13 @@ use rule_vm::{Continuation, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUE
 use crate::catalog::QueryCtx;
 use crate::catalog::{SkillBehavior, SkillMachine};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
-use crate::event::EventData;
+use crate::event::{EventData, EventKind};
 use crate::ids::{CardId, PlayerId};
 use crate::machine::{Ctx, Flow};
 use crate::snap::MachineSnapshot;
 mod handlers;
+mod identity;
+pub use identity::hash_trigger_meta;
 mod machine;
 pub use handlers::{VmActiveLimits, VmHandlerSet, VmTriggerProgram};
 
@@ -102,7 +104,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_player: Some(d.target),
             event_source: d.source,
             event_card: d.card,
-            event_amount: d.amount,
+            event_amount: d.amount as u32,
             nature: Some(d.nature),
             from_chain: d.from_chain,
             kind: 1,
@@ -127,7 +129,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         } => VmTriggerCtx {
             event_player: Some(*target),
             event_source: Some(*source),
-            event_card: Some(*card),
+            event_card: *card,
             kind: 8,
             ..VmTriggerCtx::default()
         },
@@ -149,7 +151,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             // 旧线 CardUsed 的 TriggerContext.source = 用牌者；原生此前未填
             // 导致 `owner_is_source` 对用牌事件恒假（PA12 批①）。
             event_source: Some(u.player),
-            event_card: Some(u.card),
+            event_card: u.card,
             targets: u.targets.clone(),
             use_as: u.use_as,
             nature: Some(u.nature),
@@ -453,7 +455,9 @@ impl SkillBehavior for VmSkillBehavior {
         }
         match &self.filter {
             VmFilterPolicy::Handlers(set) => {
-                set.active.module.to_bytes() == bytes
+                set.active
+                    .as_ref()
+                    .is_some_and(|active| active.module.to_bytes() == bytes)
                     || set
                         .triggers
                         .iter()
@@ -463,12 +467,34 @@ impl SkillBehavior for VmSkillBehavior {
         }
     }
 
+    fn vm_module_requires_trigger_frame(&self, bytes: &[u8]) -> bool {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => {
+                !set.active
+                    .as_ref()
+                    .is_some_and(|active| active.module.to_bytes() == bytes)
+                    && set
+                        .triggers
+                        .iter()
+                        .any(|entry| entry.program.module.to_bytes() == bytes)
+            }
+            _ => self.vm_module_is_authorized(bytes),
+        }
+    }
+
     fn vm_trigger_module_is_authorized(&self, bytes: &[u8], event: &EventData) -> bool {
         let VmFilterPolicy::Handlers(set) = &self.filter else {
             return false;
         };
         set.triggers.iter().any(|entry| {
-            entry.meta.event == event.kind() && entry.program.module.to_bytes() == bytes
+            (entry.meta.event == event.kind()
+                // The saved payload is canonical damage; the owning frame validates the exact window.
+                || (matches!(event, EventData::Damage(_)) && matches!(entry.meta.event,
+                    EventKind::DamageBefore|EventKind::Damage|EventKind::DamageBegin|
+                    EventKind::DamageBegin1|EventKind::DamageBegin2|EventKind::DamageBegin3|
+                    EventKind::DamageBegin4|EventKind::DamageSource|EventKind::DamageEnd|
+                    EventKind::DamageAfter|EventKind::DamageZero|EventKind::DamageCancelled)))
+                && entry.program.module.to_bytes() == bytes
         })
     }
 
@@ -478,13 +504,36 @@ impl SkillBehavior for VmSkillBehavior {
         ctx: &QueryCtx<'_>,
         owner: PlayerId,
         event: &EventData,
+        kind: EventKind,
     ) -> bool {
         let VmFilterPolicy::Handlers(set) = &self.filter else {
             return false;
         };
-        set.matching(ctx, owner, event)
+        set.matching(ctx, owner, event, kind)
             .iter()
             .any(|entry| entry.program.module.to_bytes() == bytes)
+    }
+
+    fn vm_trigger_window_is_authorized(&self, bytes: &[u8], kind: EventKind) -> bool {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => set
+                .triggers
+                .iter()
+                .any(|entry| entry.meta.event == kind && entry.program.module.to_bytes() == bytes),
+            _ => self.vm_module_is_authorized(bytes),
+        }
+    }
+    fn filter_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+        kind: EventKind,
+    ) -> bool {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => !set.matching(ctx, owner, event, kind).is_empty(),
+            _ => self.filter(ctx, owner, event),
+        }
     }
 
     fn hand_limit_base(
@@ -497,6 +546,19 @@ impl SkillBehavior for VmSkillBehavior {
                 hand_limit_base_max_hp: true,
                 ..
             } => Some(core.player(owner).max_hp as usize),
+            VmFilterPolicy::Handlers(set)
+                if set.triggers.iter().any(|entry| {
+                    matches!(
+                        entry.filter,
+                        VmFilterPolicy::Declared {
+                            hand_limit_base_max_hp: true,
+                            ..
+                        }
+                    )
+                }) =>
+            {
+                Some(core.player(owner).max_hp as usize)
+            }
             _ => None,
         }
     }
@@ -541,7 +603,9 @@ impl SkillBehavior for VmSkillBehavior {
         let is_event_player = trig.event_player == Some(owner);
         let holder_state = |s: u8| ctx.state.player(s);
         match self.filter.clone() {
-            VmFilterPolicy::Handlers(set) => !set.matching(ctx, owner, event).is_empty(),
+            VmFilterPolicy::Handlers(set) => {
+                !set.matching(ctx, owner, event, event.kind()).is_empty()
+            }
             VmFilterPolicy::OwnerIsTarget => is_event_player,
             VmFilterPolicy::OwnerAlive => ctx.state.player(owner).alive,
             VmFilterPolicy::OwnerSourceSha => {
@@ -825,10 +889,19 @@ impl SkillBehavior for VmSkillBehavior {
         owner: PlayerId,
         event: &EventData,
     ) -> Box<dyn SkillMachine> {
+        self.start_in_window(ctx, owner, event, event.kind())
+    }
+    fn start_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+        kind: EventKind,
+    ) -> Box<dyn SkillMachine> {
         let VmFilterPolicy::Handlers(set) = &self.filter else {
             return self.start(owner, event);
         };
-        let mut matching = set.matching(ctx, owner, event).into_iter();
+        let mut matching = set.matching(ctx, owner, event, kind).into_iter();
         let Some(first) = matching.next() else {
             return self.start(owner, event);
         };
@@ -845,13 +918,9 @@ impl SkillBehavior for VmSkillBehavior {
         let VmFilterPolicy::Handlers(set) = &self.filter else {
             return None;
         };
+        let active = set.active.as_ref()?;
         if !set.available(ctx, owner)
-            || !(ctx.catalog.hooks.vm_active)(
-                &set.active.module,
-                &set.active.skill_name,
-                owner,
-                ctx.state,
-            )
+            || !(ctx.catalog.hooks.vm_active)(&active.module, &active.skill_name, owner, ctx.state)
         {
             return None;
         }
@@ -860,8 +929,7 @@ impl SkillBehavior for VmSkillBehavior {
             phase: crate::event::Phase::Play,
             begin: true,
         };
-        let mut machine =
-            handlers::machine(set.active.clone(), &VmFilterPolicy::Always, owner, &event);
+        let mut machine = handlers::machine(active.clone(), &VmFilterPolicy::Always, owner, &event);
         if set.limits.once_per_turn {
             machine.consume.push((String::new(), 1));
         }
@@ -1005,3 +1073,6 @@ impl VmHost for EngineVmHost<'_> {
         )
     }
 }
+
+#[cfg(test)]
+mod damage_context_tests;

@@ -80,13 +80,12 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            // 玄影·端蒙面（受伤反击面）：解除横置 + 对来源虚拟杀
-            //（ActivateSkill 面走下方 stage 分支——两入口按触发帧区分：
-            // 帧存在且为 Damage=反击面；无帧=主动面）
-            HostBehavior::SwdXuanying => {
+            // 玄影伤害子技（`xuanying_damage`，父技 group 授予才可达）：
+            // 受伤反击面——解除横置 + 对来源虚拟杀。
+            HostBehavior::SwdXuanyingDamage => {
                 let frame_dmg = ctx
                     .res
-                    .frame(ctx.current_frame_id())
+                    .frame(ctx.current_event_frame_id())
                     .map(|f| &f.data)
                     .and_then(|data| match data {
                         crate::event::EventData::Damage(d) => Some(d.source),
@@ -104,32 +103,21 @@ impl HostMachine {
                     if !ctx.core.deck.is_empty() {
                         ctx.use_virtual_card(self.owner, CardKind::Sha, vec![src]);
                     }
-                    return Flow::Done;
                 }
-                // 主动面（ActivateSkill）：TargetChoice 任一其他存活 →
-                // 横置自身 + 虚拟杀
+                Flow::Done
+            }
+            // 旋影父技的已授予主动 sha 面；伤害面由子技承担。
+            HostBehavior::SwdXuanying => {
                 match self.stage {
                     HostStage::Act => {
-                        let options: Vec<ChoiceOption> = ctx
-                            .core
-                            .alive_players()
-                            .filter(|p| *p != self.owner)
-                            .map(ChoiceOption::Player)
-                            .collect();
-                        if options.is_empty() {
+                        let spec = asks::xuanying_target_spec(ctx.core, self.owner);
+                        if spec.options.is_empty() {
                             return Flow::Done;
                         }
                         self.stage = HostStage::TargetChoice;
                         Flow::WaitChoice {
                             observer: self.owner,
-                            spec: ChoiceSpec {
-                                kind: ChoiceKind::SelectPlayers,
-                                prompt: "xuanying_target",
-                                options,
-                                min: 1,
-                                max: 1,
-                                allow_cancel: true,
-                            },
+                            spec,
                         }
                     }
                     HostStage::TargetChoice => {

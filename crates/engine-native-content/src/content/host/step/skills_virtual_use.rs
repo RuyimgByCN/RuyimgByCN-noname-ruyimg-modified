@@ -164,7 +164,7 @@ impl HostMachine {
                         owner: self.owner,
                     });
                     if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_ZHIXI_KEY) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (target, def),
                             crate::state::SkillInstance {
                                 owner: target,
@@ -179,7 +179,7 @@ impl HostMachine {
                     }
                     if !is_sha && !is_trick && !is_black {
                         if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_MEIBU_RANGE_KEY) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (target, def),
                                 crate::state::SkillInstance {
                                     owner: target,
@@ -439,13 +439,14 @@ impl HostMachine {
             // 此桥邪：失去装备后逐次使用机关牌（自目标/单目标/AOE）
             HostBehavior::Cyqiaoxie => match self.stage {
                 HostStage::Act => {
-                    let lost_equips = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data) {
-                        Some(EventData::CardsLost { origins, .. }) => origins
-                            .iter()
-                            .filter(|o| **o == crate::event::LostOrigin::Equip)
-                            .count(),
-                        _ => 0,
-                    };
+                    let lost_equips =
+                        match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                            Some(EventData::CardsLost { origins, .. }) => origins
+                                .iter()
+                                .filter(|o| **o == crate::event::LostOrigin::Equip)
+                                .count(),
+                            _ => 0,
+                        };
                     if lost_equips == 0 {
                         return Flow::Done;
                     }

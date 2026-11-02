@@ -4,11 +4,26 @@ use super::*;
 
 pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
     match v {
+        EventData::OrdinaryJudge { owner, invocation } => {
+            w.u8(25);
+            w.u8(*owner);
+            w.u32(*invocation);
+        }
+        EventData::SkillInvocation(d) => {
+            w.u8(23);
+            super::invocation::enc_context(w, d);
+        }
+        EventData::SkillLog { owner, def, begin } => {
+            w.u8(24);
+            w.u8(*owner);
+            w.u16(*def);
+            w.boolean(*begin);
+        }
         EventData::Damage(d) => {
-            w.u8(0);
+            w.u8(22);
             enc_opt_pid(w, &d.source);
             enc_pid(w, &d.target);
-            w.u32(d.amount);
+            w.i32(d.amount);
             enc_damage_nature(w, &d.nature);
             w.boolean(d.prevented);
             w.len(d.redirect_chain.len());
@@ -17,6 +32,12 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             }
             enc_opt_u32(w, d.card);
             w.boolean(d.from_chain);
+            super::damage::enc_settlement(w, &d.settlement);
+        }
+        EventData::DamageWindow { root, window } => {
+            w.u8(21);
+            w.u32(*root);
+            w.u8(window.tag());
         }
         EventData::Recover {
             player,
@@ -47,7 +68,7 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
         }
         EventData::CardUsed(u) => {
             w.u8(4);
-            w.u32(u.card);
+            w.u32(u.card.unwrap_or(u32::MAX));
             enc_pid(w, &u.player);
             w.len(u.targets.len());
             for t in &u.targets {
@@ -166,7 +187,7 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
         } => {
             // swd 批 141（判别 19，表尾追加）
             w.u8(19);
-            w.u32(*card);
+            w.u32(card.unwrap_or(u32::MAX));
             enc_pid(w, source);
             enc_pid(w, target);
         }
@@ -195,16 +216,22 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
 
 pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
     Ok(match r.u8()? {
-        0 => {
+        tag @ (0 | 22) => {
             let source = dec_opt_pid(r)?;
             let target = dec_pid(r)?;
-            let amount = r.u32()?;
+            let amount = r.i32()?;
             let nature = dec_damage_nature(r)?;
             let prevented = r.boolean()?;
             let chain = r.vec(|r| r.u8())?;
             let card = dec_opt_u32(r)?;
             let from_chain = r.boolean()?;
+            let settlement = if tag == 22 {
+                super::damage::dec_settlement(r)?
+            } else {
+                Default::default()
+            };
             EventData::Damage(DamageData {
+                settlement,
                 source,
                 target,
                 amount,
@@ -214,6 +241,23 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
                 card,
                 from_chain,
             })
+        }
+        25 => EventData::OrdinaryJudge {
+            owner: r.u8()?,
+            invocation: r.u32()?,
+        },
+        23 => EventData::SkillInvocation(super::invocation::dec_context(r)?),
+        24 => EventData::SkillLog {
+            owner: r.u8()?,
+            def: r.u16()?,
+            begin: r.boolean()?,
+        },
+        21 => {
+            let root = r.u32()?;
+            let tag = r.u8()?;
+            let window = crate::event::DamageWindowKind::from_tag(tag)
+                .ok_or(ArchiveError::BadTag("damage_window", tag))?;
+            EventData::DamageWindow { root, window }
         }
         1 => {
             let player = dec_pid(r)?;
@@ -237,7 +281,10 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
             EventData::CardsMoved { cards, from, to }
         }
         4 => {
-            let card = r.u32()?;
+            let card = match r.u32()? {
+                u32::MAX => None,
+                c => Some(c),
+            };
             let player = dec_pid(r)?;
             let targets = r.vec(|r| r.u8())?;
             let nature = dec_damage_nature(r)?;
@@ -356,7 +403,10 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
             }
         }
         19 => {
-            let card = r.u32()?;
+            let card = match r.u32()? {
+                u32::MAX => None,
+                c => Some(c),
+            };
             let source = dec_pid(r)?;
             let target = dec_pid(r)?;
             EventData::ShaDodged {
@@ -382,10 +432,19 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
 // ---- 机器快照 ----
 
 pub(super) fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
-    w.u32(c.trick);
+    w.u32(c.trick.unwrap_or(u32::MAX));
     w.u32(c.judge_card);
     enc_pids(w, &c.rewriters);
-    w.boolean(c.asked);
+    let extended = c.rewrite_provider.is_some() || !c.used_rewrite_providers.is_empty();
+    w.u8(u8::from(c.asked) | if extended { 2 } else { 0 });
+    if extended {
+        w.opt_u16(c.rewrite_provider);
+        w.len(c.used_rewrite_providers.len());
+        for (p, d) in &c.used_rewrite_providers {
+            w.u8(*p);
+            w.u16(*d);
+        }
+    }
     enc_pids(w, &c.tian_du);
     w.boolean(c.gained);
     w.boolean(c.in_rewrite);
@@ -414,10 +473,22 @@ pub(super) fn enc_judgement_progress(w: &mut W, c: &JudgementProgressSnap) {
 }
 
 pub(super) fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressSnap, ArchiveError> {
-    let trick = r.u32()?;
+    let trick = match r.u32()? {
+        u32::MAX => None,
+        c => Some(c),
+    };
     let judge_card = r.u32()?;
     let rewriters = dec_pids(r)?;
-    let asked = r.boolean()?;
+    let flags = r.u8()?;
+    if flags > 3 {
+        return Err(ArchiveError::BadTag("judge_rewrite_flags", flags));
+    }
+    let asked = flags & 1 != 0;
+    let (rewrite_provider, used_rewrite_providers) = if flags & 2 != 0 {
+        (r.opt_u16()?, r.vec(|r| Ok((r.u8()?, r.u16()?)))?)
+    } else {
+        (None, Vec::new())
+    };
     let tian_du = dec_pids(r)?;
     let gained = r.boolean()?;
     let in_rewrite = r.boolean()?;
@@ -447,6 +518,8 @@ pub(super) fn dec_judgement_progress(r: &mut R<'_>) -> Result<JudgementProgressS
         trick,
         judge_card,
         rewriters,
+        rewrite_provider,
+        used_rewrite_providers,
         asked,
         tian_du,
         gained,

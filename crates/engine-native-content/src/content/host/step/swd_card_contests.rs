@@ -251,7 +251,7 @@ impl HostMachine {
                     }
                     // 永久获取（附加技实例）
                     if !ctx.core.skills.contains_key(&(self.owner, def)) {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,

@@ -90,6 +90,7 @@ fn synthetic_catalog_membership_and_first_match_name() {
             event,
             timing: Timing::Normal,
             priority: 0,
+            order_selectable: true,
             optional: false,
             extra_events: extra,
         }),

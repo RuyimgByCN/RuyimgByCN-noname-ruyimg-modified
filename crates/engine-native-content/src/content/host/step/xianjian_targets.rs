@@ -78,7 +78,7 @@ impl HostMachine {
                                 ctx.core.player_mut(t).off_court.push(c);
                             }
                             if let Some(def) = ctx.catalog.skill_by_name("xjzhimeng2") {
-                                ctx.core.skills.insert(
+                                ctx.insert_skill(
                                     (t, def),
                                     crate::state::SkillInstance {
                                         owner: t,
@@ -240,7 +240,7 @@ impl HostMachine {
                         ctx.core.player_mut(t).hand.push(c);
                     }
                     if let Some(def) = ctx.catalog.skill_by_name("changnian2") {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (t, def),
                             crate::state::SkillInstance {
                                 owner: t,
@@ -332,7 +332,7 @@ impl HostMachine {
                     self.cards.remove(0);
                     let t = self.target.expect("checked");
                     ctx.emit(EventData::CardUsed(crate::event::CardUseData {
-                        card: c,
+                        card: Some(c),
                         player: self.owner,
                         targets: vec![t],
                         nature: crate::event::DamageNature::Normal,

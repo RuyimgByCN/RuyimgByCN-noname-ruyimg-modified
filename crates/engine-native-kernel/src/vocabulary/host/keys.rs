@@ -5,6 +5,18 @@ impl HostBehavior {
         HostBehavior::ALL.into_iter().find(|b| b.key() == key)
     }
 
+    /// 父技 group 的子定义表（`(技能名, 行为)`）：授予父技即授予子技。
+    ///
+    /// 上游把「伤害子技」登记在父技 group 里，转换包曾把它丢掉，导致原生父技
+    /// 所有權就讓傷害面可達（C331 審查第 4 項）；由装载器按此表补回子技声明与
+    /// 授予，内核 filter 只认子技是否已授予。
+    pub const fn group_children(self) -> &'static [(&'static str, HostBehavior)] {
+        match self {
+            HostBehavior::SwdXuanying => &[("xuanying_damage", HostBehavior::SwdXuanyingDamage)],
+            _ => &[],
+        }
+    }
+
     /// AOE 目标排除语义标记（目标排除原语首例——坚壁；catalog 通用查询
     /// `aoe_excludes_target` 消费，内核不点名扩展技能）。
     pub const fn aoe_exclude(self) -> bool {
@@ -160,6 +172,7 @@ impl HostBehavior {
             HostBehavior::SwdMingfu => "host:mingfu",
             HostBehavior::SwdCyxianjiang => "host:cyxianjiang",
             HostBehavior::SwdXuanying => "host:xuanying",
+            HostBehavior::SwdXuanyingDamage => "host:xuanying_damage",
             HostBehavior::SwdLieren => "host:lieren",
             HostBehavior::SwdJqimou => "host:jqimou",
             HostBehavior::SwdJianji => "host:jianji",

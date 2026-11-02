@@ -40,7 +40,7 @@ impl SkillBehavior for XiaoxiongBehavior {
         if u.cancelled || u.player == owner {
             return false;
         }
-        let kind = u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card));
+        let kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
         xiaoxiong_copyable(kind)
     }
 

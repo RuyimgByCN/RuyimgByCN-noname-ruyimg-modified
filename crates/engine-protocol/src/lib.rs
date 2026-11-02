@@ -14,7 +14,7 @@ pub use messages::*;
 pub use wire::{decode_c2s, decode_s2c, encode_c2s, encode_s2c};
 
 /// Network protocol version axis (bump on breaking wire changes).
-pub const NETWORK_PROTOCOL_VERSION: u32 = 6;
+pub const NETWORK_PROTOCOL_VERSION: u32 = 7;
 
 /// Maximum JSON message size (bytes) accepted by server.
 pub const MAX_MESSAGE_BYTES: usize = 256 * 1024;

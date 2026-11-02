@@ -1,0 +1,19 @@
+
+> noname-next-web-client@0.1.0 build:native /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client
+> node scripts/build-native.mjs
+
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-wasm)
+    Finished `release` profile [optimized] target(s) in 22.81s
+[INFO]: ⬇️  Installing wasm-bindgen...
+[INFO]: Optional fields missing from Cargo.toml: 'repository', 'license'. These are not necessary, but recommended
+[INFO]: ✨   Done in 23.15s
+[INFO]: 📦   Your wasm pkg is ready to publish at /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/worker/.native-pkg-tmp.
+[WARN]: ⚠️   There's a newer version of wasm-pack available, the new version is: 0.15.1, you are using: 0.15.0. To update, navigate to: https://wasm-bindgen.github.io/wasm-pack/installer/
+native engine pkg (web) deployed to /private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/web-client/src/worker/native-pkg
+EXIT=0

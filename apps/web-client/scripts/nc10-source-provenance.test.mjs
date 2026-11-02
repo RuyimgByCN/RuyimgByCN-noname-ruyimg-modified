@@ -30,3 +30,10 @@ test("frozen WS6 TypeScript reader ignores source while current reader preserves
  assert.equal(old.choicePromptLabel(choice),"是否发动技能？");
  assert.equal(choiceMetadata(choice).source_skill,"遗计");
 });
+
+test("C order mapping and strict source forwarding coexist",()=>{
+ const result=choiceMetadata({native_kind:"pick_tag",prompt:"trigger_order",source_skill:"遗计"});
+ assert.equal(result.kind,"OrderTriggers");assert.equal(result.source_skill,"遗计");
+ assert.equal(choiceMetadata({native_kind:"pick_tag",prompt:"other"}).kind,"Custom");
+ assert.throws(()=>choiceMetadata({native_kind:"pick_tag",prompt:"trigger_order",source_skill:""}),/source_skill/);
+});

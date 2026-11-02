@@ -69,6 +69,7 @@ fn option_label(option: &Value) -> String {
     if option.is_number() {
         return option.to_string();
     }
+    if let Some(skill) = option["skill"].as_str() { return format!("skill:{skill}"); }
     for key in ["card", "player", "tag", "kind"] {
         if !option[key].is_null() {
             return format!("{key}:{}", option[key]);
@@ -82,10 +83,13 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
     if raw.is_null() || raw["hidden"] == true {
         return Ok(Value::Null);
     }
+    let min = raw["min"].as_u64().and_then(|n| u32::try_from(n).ok()).ok_or("invalid choice minimum")?;
+    let max = raw["max"].as_u64().and_then(|n| u32::try_from(n).ok()).ok_or("invalid choice maximum")?;
+    if min > max { return Err("choice minimum exceeds maximum".into()); }
     let native_kind = raw.get("native_kind").filter(|value| !value.is_null()).map(|value| {
         value.as_str().and_then(engine_api::choice_kind_from_native).ok_or("invalid native_kind")
     }).transpose()?;
-    let kind = native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom")));
+    let kind = if raw["prompt"] == "trigger_order" && raw["native_kind"] == "pick_tag" { json!(engine_api::ChoiceKind::OrderTriggers) } else { native_kind.map(|kind| json!(kind)).unwrap_or_else(|| json!(raw["kind"].as_str().unwrap_or("Custom"))) };
     if raw.get("prompt").is_some_and(|value| !value.is_null() && !value.is_string()) { return Err("invalid prompt".into()); }
     if raw.get("source_skill").is_some_and(|value| !value.is_null() && value.as_str().is_none_or(str::is_empty)) { return Err("invalid source_skill".into()); }
     let mut result = json!({"choice_id": raw["id"], "revision": session.revision(), "observer": observer, "kind": kind,

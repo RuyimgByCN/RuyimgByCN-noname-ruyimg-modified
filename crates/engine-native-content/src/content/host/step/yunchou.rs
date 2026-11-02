@@ -177,7 +177,7 @@ impl HostMachine {
                             .player_mut(self.owner)
                             .hand
                             .extend(gains.iter().copied());
-                        ctx.log(LogEvent::CardsGiven {
+                        ctx.log(LogEvent::CardsGivenPublic {
                             from: self.owner,
                             to: self.owner,
                             cards: gains,
@@ -362,7 +362,10 @@ impl HostMachine {
                         player: self.owner,
                         cards: vec![c],
                     });
-                    let frame = ctx.res.frame_mut(ctx.current_frame_id()).expect("frame");
+                    let frame = ctx
+                        .res
+                        .frame_mut(ctx.current_event_frame_id())
+                        .expect("frame");
                     if let EventData::Damage(dm) = &mut frame.data {
                         dm.nature = crate::event::DamageNature::Fire;
                     }
@@ -423,7 +426,7 @@ impl HostMachine {
                     };
                     if taken {
                         ctx.core.player_mut(self.owner).hand.push(c);
-                        ctx.log(LogEvent::CardsGiven {
+                        ctx.log(LogEvent::CardsGivenPublic {
                             from: self.owner,
                             to: self.owner,
                             cards: vec![c],

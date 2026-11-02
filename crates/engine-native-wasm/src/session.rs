@@ -427,23 +427,28 @@ impl NativeSession {
                 "id": id,
                 "observer": seat,
                 "prompt": prompt,
-                "native_kind": engine_native::view::choice_kind_name(kind),
-                "kind": engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind"),
+                "native_kind": if kind==engine_native::ChoiceKind::Control {None}else{Some(engine_native::view::choice_kind_name(kind))},
+                "kind": if kind==engine_native::ChoiceKind::Control{engine_api::ChoiceKind::Custom}else if prompt == "trigger_order" { engine_api::ChoiceKind::OrderTriggers } else { engine_api::choice_kind_from_native(engine_native::view::choice_kind_name(kind)).expect("canonical native choice kind") },
                 "min": min,
                 "max": max,
                 "allowCancel": allow_cancel,
                 "options": options.iter().map(|o| match o {
+                    engine_native::ChoiceOption::HiddenCard(_)=>serde_json::json!("hand"),
+                    engine_native::ChoiceOption::Control(option)=>serde_json::json!(option.label()),
                     engine_native::ChoiceOption::Confirm => serde_json::json!("confirm"),
                     engine_native::ChoiceOption::Pass => serde_json::json!("pass"),
                     engine_native::ChoiceOption::Card(id) => serde_json::json!({ "card": id }),
                     engine_native::ChoiceOption::Player(p) => serde_json::json!({ "player": p }),
                     engine_native::ChoiceOption::Tag(t) => serde_json::json!({ "tag": t }),
+                    engine_native::ChoiceOption::Skill(s) => serde_json::json!({ "skill": self.inner.catalog().skill_name(*s) }),
                     engine_native::ChoiceOption::Kind(k) => serde_json::json!({ "kind": k }),
                 }).collect::<Vec<_>>(),
                 });
-                if let Some(source) = source_skill { choice["source_skill"] = serde_json::json!(source); }
+                if let Some(source) = source_skill {
+                    choice["source_skill"] = serde_json::json!(source);
+                }
                 choice.to_string()
-            },
+            }
             Some(ChoiceView::Other {
                 id,
                 observer,

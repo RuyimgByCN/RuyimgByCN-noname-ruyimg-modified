@@ -329,7 +329,7 @@ impl HostMachine {
             HostBehavior::SwdYinyue => {
                 let Some(r) = ctx
                     .res
-                    .frame(ctx.current_frame_id())
+                    .frame(ctx.current_event_frame_id())
                     .map(|f| &f.data)
                     .and_then(|data| match data {
                         crate::event::EventData::Recover { player, .. } => Some(*player),
@@ -747,11 +747,11 @@ impl HostMachine {
             // 凭空造）。状态不移除（持久防重面不变）。
             HostBehavior::SwdJiguanyaoGain => {
                 // 触发帧即弃牌事件帧（栈顶）：读取其 CardsDiscarded 载荷
-                let lost: Vec<CardId> = match ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
-                {
-                    Some(EventData::CardsDiscarded { cards, .. }) => cards.clone(),
-                    _ => Vec::new(),
-                };
+                let lost: Vec<CardId> =
+                    match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data) {
+                        Some(EventData::CardsDiscarded { cards, .. }) => cards.clone(),
+                        _ => Vec::new(),
+                    };
                 let num = lost
                     .iter()
                     .filter(|c| matches!(ctx.catalog.card_slot_of(ctx.core, **c), Some(_)))

@@ -294,7 +294,13 @@ fn real_329_archive_rejects_without_rewriting_its_original_room_checksum() {
         Ok(_) => panic!("329 must reject"),
         Err(e) => e,
     };
-    assert!(error.contains("RuleVersionMismatch"), "{error}");
+    // 存档格式已由 105 升到 106：这份真实 329 档在格式门就先被拒
+    // （UnsupportedFormatVersion(105)），早于规则版本比较。两者都表示
+    // 「旧档必须被拒且不得改写房间校验和」，本测试的意图不变。
+    assert!(
+        error.contains("RuleVersionMismatch") || error.contains("UnsupportedFormatVersion(105)"),
+        "{error}"
+    );
     assert!(record.state.timeout.is_none());
     assert!(record.state.wal.is_none());
 }

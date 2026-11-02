@@ -77,6 +77,7 @@ fn pending_pack(card: u32, move_card: bool) -> ExtensionPack {
         init_hook: InitHook::None,
         enabled: true,
         vm_skills: vec![VmSkillDecl {
+            declaration_hash: None,
             name: "nc10_pending_card".into(),
             module: rule_vm::BytecodeModule {
                 name: "nc10-pending-card".into(),
@@ -91,6 +92,7 @@ fn pending_pack(card: u32, move_card: bool) -> ExtensionPack {
                 event: engine_native::EventKind::PhaseEnd,
                 timing: engine_native::Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: vec![],
             },
@@ -145,7 +147,8 @@ fn pending_card_survives_redaction(move_card: bool) {
         0,
         "the same unrestricted physical pool would assign nonzero card to native zero"
     );
-    let machine = &original.save().resolution.parks[0].machine;
+    let snapshot = original.save();
+    let machine = &snapshot.resolution.parks.iter().find(|p| matches!(p.machine, engine_native::MachineSnapshot::Rvm { .. })).expect("VM owner machine").machine;
     let engine_native::MachineSnapshot::Rvm { commit_pending, .. } = machine else {
         panic!("Rvm commit pause")
     };

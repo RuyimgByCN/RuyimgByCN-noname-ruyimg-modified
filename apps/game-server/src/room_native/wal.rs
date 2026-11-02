@@ -52,29 +52,47 @@ enum StoredChoiceOption {
     Player(u8),
     Tag(u8),
     Kind(u16),
+    Skill(u16),
+    YuanceLoseHp,
+    YuanceRecover,
+    HiddenCard(u32),
 }
 
 impl From<ChoiceOption> for StoredChoiceOption {
     fn from(value: ChoiceOption) -> Self {
         match value {
+            ChoiceOption::Control(engine_native::event::YuanceOption::LoseHp) => Self::YuanceLoseHp,
+            ChoiceOption::Control(engine_native::event::YuanceOption::Recover) => {
+                Self::YuanceRecover
+            }
+            ChoiceOption::HiddenCard(slot) => Self::HiddenCard(slot),
             ChoiceOption::Confirm => Self::Confirm,
             ChoiceOption::Pass => Self::Pass,
             ChoiceOption::Card(v) => Self::Card(v),
             ChoiceOption::Player(v) => Self::Player(v),
             ChoiceOption::Tag(v) => Self::Tag(v),
             ChoiceOption::Kind(v) => Self::Kind(v),
+            ChoiceOption::Skill(v) => Self::Skill(v),
         }
     }
 }
 impl From<StoredChoiceOption> for ChoiceOption {
     fn from(value: StoredChoiceOption) -> Self {
         match value {
+            StoredChoiceOption::YuanceLoseHp => {
+                Self::Control(engine_native::event::YuanceOption::LoseHp)
+            }
+            StoredChoiceOption::YuanceRecover => {
+                Self::Control(engine_native::event::YuanceOption::Recover)
+            }
+            StoredChoiceOption::HiddenCard(slot) => Self::HiddenCard(slot),
             StoredChoiceOption::Confirm => Self::Confirm,
             StoredChoiceOption::Pass => Self::Pass,
             StoredChoiceOption::Card(v) => Self::Card(v),
             StoredChoiceOption::Player(v) => Self::Player(v),
             StoredChoiceOption::Tag(v) => Self::Tag(v),
             StoredChoiceOption::Kind(v) => Self::Kind(v),
+            StoredChoiceOption::Skill(v) => Self::Skill(v),
         }
     }
 }
@@ -211,8 +229,12 @@ impl NativeRoomSession {
     pub(crate) fn recover_wal(&mut self) -> Result<(), String> {
         let snapshot = self.validate_wal()?;
         let packs = self.pack_refs();
-        let engine = if packs.is_empty() { Engine::restore(&snapshot) }
-            else { Engine::restore_with_extensions(&snapshot, &packs) }.map_err(|e| format!("{e:?}"))?;
+        let engine = if packs.is_empty() {
+            Engine::restore(&snapshot)
+        } else {
+            Engine::restore_with_extensions(&snapshot, &packs)
+        }
+        .map_err(|e| format!("{e:?}"))?;
         self.replace_engine(engine);
         Ok(())
     }
@@ -223,18 +245,44 @@ mod tests {
     use super::*;
 
     #[test]
-    fn stored_actions_and_all_six_choice_values_round_trip_without_debug_encoding() {
-        let selection = vec![ChoiceOption::Confirm, ChoiceOption::Pass, ChoiceOption::Card(42),
-            ChoiceOption::Player(3), ChoiceOption::Tag(4), ChoiceOption::Kind(0)];
-        for action in [GameAction::PlayCard { card: 42, targets: vec![1, 3] }, GameAction::NextPhase,
-            GameAction::ActivateSkill { skill: 65535 }, GameAction::RevealGeneral { slot: 1 },
-            GameAction::Answer { choice_id: u64::MAX, selection: selection.clone() },
-            GameAction::TimeoutAction { choice_id: u64::MAX, selection }] {
+    fn stored_actions_and_all_seven_choice_values_round_trip_without_debug_encoding() {
+        let selection = vec![
+            ChoiceOption::Confirm,
+            ChoiceOption::Pass,
+            ChoiceOption::Card(42),
+            ChoiceOption::Player(3),
+            ChoiceOption::Tag(4),
+            ChoiceOption::Kind(0),
+            ChoiceOption::Skill(65535),
+        ];
+        for action in [
+            GameAction::PlayCard {
+                card: 42,
+                targets: vec![1, 3],
+            },
+            GameAction::NextPhase,
+            GameAction::ActivateSkill { skill: 65535 },
+            GameAction::RevealGeneral { slot: 1 },
+            GameAction::Answer {
+                choice_id: u64::MAX,
+                selection: selection.clone(),
+            },
+            GameAction::TimeoutAction {
+                choice_id: u64::MAX,
+                selection,
+            },
+        ] {
             let encoded = serde_json::to_vec(&StoredNativeAction::from(action.clone())).unwrap();
             let decoded: StoredNativeAction = serde_json::from_slice(&encoded).unwrap();
             assert_eq!(GameAction::from(decoded), action);
         }
-        assert!(serde_json::from_str::<StoredNativeAction>(r#"{"TimeoutAction":{"choice_id":1,"selection":[{"Skill":1}]}}"#).is_err());
-        assert!(serde_json::from_str::<StoredNativeAction>(r#"{"TimeoutAction":{"choice_id":1,"selection":[],"managed":true}}"#).is_err());
+        assert!(serde_json::from_str::<StoredNativeAction>(
+            r#"{"TimeoutAction":{"choice_id":1,"selection":[{"Skill":65536}]}}"#
+        )
+        .is_err());
+        assert!(serde_json::from_str::<StoredNativeAction>(
+            r#"{"TimeoutAction":{"choice_id":1,"selection":[],"managed":true}}"#
+        )
+        .is_err());
     }
 }

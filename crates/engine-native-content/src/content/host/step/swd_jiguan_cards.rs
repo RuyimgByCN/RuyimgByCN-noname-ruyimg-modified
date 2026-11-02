@@ -252,7 +252,7 @@ impl HostMachine {
                             ctx.core.player(t).off_court.iter().copied().collect();
                         ctx.core.player_mut(t).jiguanyuan_cards = moved;
                         if let Some(gdef) = ctx.catalog.skill_by_name(SWD_JIGUANYUAN_GAIN_KEY) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (t, gdef),
                                 crate::state::SkillInstance {
                                     owner: t,
@@ -360,7 +360,7 @@ impl HostMachine {
                         }
                         for gkey in [SWD_JIGUANYAOSHU_STATE_KEY, SWD_JIGUANYAO_GAIN_KEY] {
                             if let Some(sdef) = ctx.catalog.skill_by_name(gkey) {
-                                ctx.core.skills.insert(
+                                ctx.insert_skill(
                                     (t, sdef),
                                     crate::state::SkillInstance {
                                         owner: t,

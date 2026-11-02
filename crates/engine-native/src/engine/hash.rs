@@ -1,5 +1,6 @@
 use super::*;
 mod machine;
+mod native_invocation;
 use machine::*;
 
 /// PA03 缓冲摘要写入器：先拼缓冲再一次 blake3 update。blake3 流式与
@@ -205,6 +206,22 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
         }
         push_u8(&mut h, p.revealed_generals[0] as u8);
         push_u8(&mut h, p.revealed_generals[1] as u8);
+        if p.kingdom_identity != crate::state::KingdomIdentity::Unknown
+            || !p.yexinjia_friends.is_empty()
+        {
+            push_u8(&mut h, 255);
+            match &p.kingdom_identity {
+                crate::state::KingdomIdentity::Unknown => push_u8(&mut h, 0),
+                crate::state::KingdomIdentity::Ye => push_u8(&mut h, 1),
+                crate::state::KingdomIdentity::Declared(name) => {
+                    push_u8(&mut h, 2);
+                    push_u32(&mut h, name.len() as u32);
+                    h.update(name.as_bytes());
+                }
+            }
+            push_players(&mut h, &p.yexinjia_friends);
+        }
+
         push_u8(&mut h, p.wunature.unwrap_or(255));
         // 天符挂附（规则 v188）
         push_u8(&mut h, p.ctianfu_source.unwrap_or(255));
@@ -655,6 +672,7 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
             push_i32(&mut h, q.order.1);
             push_u8(&mut h, q.order.2);
             push_u8(&mut h, q.order.3);
+            push_u32(&mut h, u32::from(q.order.4));
         }
         push_event_data(&mut h, &f.data);
     }
@@ -700,14 +718,84 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
 
 pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
     match data {
+        EventData::OrdinaryJudge { owner, invocation } => {
+            push_u8(h, 26);
+            push_u8(h, *owner);
+            push_u32(h, *invocation);
+        }
+        EventData::SkillInvocation(d) => {
+            push_u8(h, 24);
+            push_u8(h, d.owner);
+            push_u16(h, d.def);
+            push_u32(h, d.window);
+            push_u8(h, d.source.map(|p| p + 1).unwrap_or(0));
+            push_u8(h, d.target);
+            push_u8(h, d.phase.tag());
+            push_u8(h, u8::from(d.cancelled));
+            push_u32(h, d.jiding_card.unwrap_or(u32::MAX));
+            push_u64(h, d.jiding_changes.len() as u64);
+            for c in &d.jiding_changes {
+                push_u32(h,c.card); push_u16(h,c.def); push_u8(h,c.actor);
+                push_u8(h,c.before_player); push_u8(h,c.before_target);
+                match &c.cost {
+                    engine_native_kernel::event::JidingCardCost::Zhenlie { lose_hp } => { push_u8(h,0); push_u32(h,*lose_hp); }
+                    engine_native_kernel::event::JidingCardCost::TongJi { card,loss } => { push_u8(h,1); push_u32(h,*card); push_u32(h,loss.unwrap_or(u32::MAX)); }
+                    engine_native_kernel::event::JidingCardCost::Yihua { cards,losses } => {
+                        push_u8(h,2); push_cards(h,cards); push_u64(h,losses.len() as u64);
+                        for child in losses { push_u32(h,*child); }
+                    }
+                }
+            }
+            push_u8(h, d.judgement.map(|s| s as u8 + 1).unwrap_or(0));
+            push_u8(h, u8::from(d.deferred_log));
+            push_u8(h, u8::from(d.effect_applied));
+            if let Some(p) = &d.judge_receipt {
+                push_u32(h, p.child);
+                push_u8(h, p.target);
+                push_u8(
+                    h,
+                    match p.purpose {
+                        engine_native_kernel::event::JudgePurpose::Yuance(o) => o.tag(),
+                        engine_native_kernel::event::JudgePurpose::Jidian => 2,
+                    },
+                );
+            } else {
+                push_u32(h, u32::MAX);
+            }
+            push_u8(h, u8::from(d.payment.is_some()));
+            if let Some(p) = &d.payment {
+                push_cards(h, &p.selected);
+                push_u32(h, p.log_begin);
+                push_u8(h, u8::from(p.committed));
+                push_u64(h, p.loss_children.len() as u64);
+                for id in &p.loss_children {
+                    push_u32(h, *id)
+                }
+                push_u32(h, p.after_log.unwrap_or(u32::MAX));
+            }
+        }
+        EventData::SkillLog { owner, def, begin } => {
+            push_u8(h, 25);
+            push_u8(h, *owner);
+            push_u16(h, *def);
+            push_u8(h, u8::from(*begin));
+        }
         EventData::Damage(d) => {
             push_u8(h, 1);
             push_u8(h, d.source.map(|s| s + 1).unwrap_or(0));
             push_u8(h, d.target);
-            push_u32(h, d.amount);
+            push_i32(h, d.amount);
+            h.buf.extend_from_slice(&d.settlement.canonical_bytes());
+            push_u32(h, d.card.unwrap_or(u32::MAX));
+            push_u8(h, u8::from(d.from_chain));
             push_players(h, &d.redirect_chain);
             push_u8(h, d.prevented as u8);
             push_u8(h, d.nature as u8);
+        }
+        EventData::DamageWindow { root, window } => {
+            push_u8(h, 23);
+            push_u32(h, *root);
+            push_u8(h, window.tag());
         }
         EventData::Recover {
             player,
@@ -732,7 +820,7 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
         }
         EventData::CardUsed(u) => {
             push_u8(h, 5);
-            push_u32(h, u.card);
+            push_u32(h, u.card.unwrap_or(u32::MAX));
             push_u8(h, u.player);
             push_players(h, &u.targets);
             push_u8(h, u.nature as u8);
@@ -788,7 +876,7 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
         } => {
             // swd 批 141（判别 16）
             push_u8(h, 16);
-            push_u32(h, *card);
+            push_u32(h, card.unwrap_or(u32::MAX));
             push_u8(h, *source);
             push_u8(h, *target);
         }
@@ -913,6 +1001,18 @@ pub(super) fn push_options(h: &mut HashSink, opts: &[ChoiceOption]) {
             ChoiceOption::Tag(t) => {
                 push_u8(h, 5);
                 push_u8(h, *t);
+            }
+            ChoiceOption::HiddenCard(slot) => {
+                push_u8(h, 8);
+                push_u32(h, *slot);
+            }
+            ChoiceOption::Control(option) => {
+                push_u8(h, 8);
+                push_u8(h, option.tag());
+            }
+            ChoiceOption::Skill(s) => {
+                push_u8(h, 7);
+                push_u32(h, u32::from(*s));
             }
             ChoiceOption::Kind(k) => {
                 push_u8(h, 6);

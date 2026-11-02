@@ -17,7 +17,7 @@
  * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
-import { generalSlots, choiceMetadata } from "../engine/observerMetadata";
+import { generalSlots, choiceMetadata, validateChoiceCounts } from "../engine/observerMetadata";
 import { publicEventLabel } from "../engine/publicEvents";
 import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
@@ -56,8 +56,10 @@ export function nativeValidatePack(packJson: string): void {
 }
 
 /** wasm-bindgen 会截断整数；必须先在 JS 边界拒绝不可表示的值。 */
-function unsigned(value: number, max: number, field: string): number {
-  if (!Number.isInteger(value) || value < 0 || value > max) {
+function unsigned(value: number | undefined, max: number, field: string): number {
+  // `undefined` 与其它非整数同样视为非法：窄壳的选择 JSON 可选字段缺失时
+  // 不能静默当成 0（C9L：typecheck 曾因缺省字段与 `number` 形参不匹配而红）。
+  if (value === undefined || !Number.isInteger(value) || value < 0 || value > max) {
     throw new Error(`native: ${field} 非法整数 ${value}`);
   }
   return value;
@@ -297,6 +299,7 @@ export interface ChoiceOptionPayload {
   player?: number;
   tag?: number;
   kind?: number;
+  skill?: string;
 }
 
 /** observer 本人可见的开放选择 JSON（他人视图只有 `{id, observer, hidden}`）。 */
@@ -331,7 +334,7 @@ export interface NativeCommandOutcome {
  */
 export function optionValue(o: ChoiceOptionJson): number | string {
   if (typeof o === "number" || typeof o === "string") return o;
-  return o.card ?? o.player ?? o.tag ?? o.kind ?? 0;
+  return o.card ?? o.player ?? o.tag ?? o.kind ?? o.skill ?? 0;
 }
 
 /**
@@ -345,6 +348,7 @@ export function optionLabel(o: ChoiceOptionJson): string {
   if (o.player !== undefined) return `player:${o.player}`;
   if (o.tag !== undefined) return `tag:${o.tag}`;
   if (o.kind !== undefined) return `kind:${o.kind}`;
+  if (o.skill !== undefined) return `skill:${o.skill}`;
   return "unknown";
 }
 
@@ -355,7 +359,13 @@ function readChoiceJson(
 ): NativeChoiceJson | null {
   try {
     const raw = handle.engine.open_choice_json(seat);
-    return (JSON.parse(raw) as NativeChoiceJson | null) ?? null;
+    const value = (JSON.parse(raw) as NativeChoiceJson | null) ?? null;
+    if (value && !value.hidden) {
+      unsigned(value.min, 0xffffffff, "choice.min");
+      unsigned(value.max, 0xffffffff, "choice.max");
+      validateChoiceCounts({ min_count: value.min, max_count: value.max });
+    }
+    return value;
   } catch (error) {
     throw new Error(`native: choice JSON invalid: ${errorText(error)}`);
   }

@@ -121,15 +121,11 @@ fn minwan_targets_enters_hash() {
 /// v326 及更早存档按版本门禁拒绝（裁决第 11 项）。夹具为 v326 版本号上采集的
 /// 普通档（仁德前的出牌阶段静止态，见证据目录 capture-v326）。
 #[test]
-fn v326_and_earlier_archives_are_rejected_by_rule_version() {
-    use engine_native::archive::decode_archive;
-    use engine_native::snap::SnapshotError;
-    let ev = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-        .join("../../docs/operations/evidence/2026-10-29-nc07-archive-hash-fields");
-    let snap = decode_archive(&std::fs::read(ev.join("native-v326.ngsa")).unwrap()).unwrap();
-    assert_eq!(snap.ruleset_version, 326);
-    assert!(matches!(
-        Engine::restore(&snap),
-        Err(SnapshotError::RuleVersionMismatch { snapshot: 326, catalog: 330 })
-    ));
+fn v326_and_earlier_archives_are_rejected_by_archive_format() {
+    // Decision29: preserve genuine old bytes; reject105 before historical rule/layout checks.
+    let ev=std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../docs/operations/evidence/2026-10-29-nc07-archive-hash-fields");
+    for name in ["native-v326.ngsa"] {
+        let raw=std::fs::read(ev.join(name)).unwrap();
+        assert!(matches!(engine_native::archive::decode_archive(&raw),Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(105))));
+    }
 }

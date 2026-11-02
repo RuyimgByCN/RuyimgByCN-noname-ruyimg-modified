@@ -323,15 +323,15 @@ fn legal_choices(engine: &Engine, actor: PlayerId) -> Vec<LegalAction> {
                             st,
                             actor,
                             &group,
-                            usize::from(request.min_count),
-                            usize::from(request.max_count),
+                            request.min_count as usize,
+                            request.max_count as usize,
                             sum,
                             64 - selections.len(),
                         ));
                     } else {
                         let tokens: Vec<_> = group.into_iter().map(CardId::raw).collect();
-                        let max = usize::from(request.max_count).min(tokens.len());
-                        for count in usize::from(request.min_count)..=max {
+                        let max = (request.max_count as usize).min(tokens.len());
+                        for count in request.min_count as usize..=max {
                             collect_combinations(
                                 &tokens,
                                 count,
@@ -375,8 +375,8 @@ fn legal_choices(engine: &Engine, actor: PlayerId) -> Vec<LegalAction> {
                     st,
                     actor,
                     &cards,
-                    usize::from(request.min_count),
-                    usize::from(request.max_count),
+                    request.min_count as usize,
+                    request.max_count as usize,
                     sum,
                     64,
                 )
@@ -398,8 +398,8 @@ fn legal_choices(engine: &Engine, actor: PlayerId) -> Vec<LegalAction> {
             }
         }
         let mut selections = Vec::new();
-        let max = usize::from(request.max_count).min(tokens.len());
-        for count in usize::from(request.min_count)..=max {
+        let max = (request.max_count as usize).min(tokens.len());
+        for count in request.min_count as usize..=max {
             collect_combinations(&tokens, count, 0, &mut Vec::new(), &mut selections);
             if selections.len() >= 64 {
                 break;

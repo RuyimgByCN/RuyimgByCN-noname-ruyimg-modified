@@ -156,14 +156,43 @@ fn actual_vm_ask_and_restored_vm_gate_sources_stay_unknown() {
         panic!("native gate")
     };
     *def = native.catalog().skill_by_name(&name).unwrap();
-    let restored = Engine::restore_with_extensions(&saved, &[&pack]).unwrap();
-    assert!(matches!(
-        restored.choice_view_for(Some(1)),
-        Some(engine_native::ChoiceView::Own {
-            source_skill: None,
-            ..
-        })
-    ));
+    // C rejects rebinding a native parked trigger to an unrelated VM-active definition.
+    assert!(Engine::restore_with_extensions(&saved, &[&pack]).is_err());
+    let optional = content_compiler::compile_source_named("source-vm-optional", "skill source_vm_optional(99107928) { trigger damage owner_is_target optional { effect draw_cards(self,1); } }").unwrap();
+    let optional_pack = engine_native::content::extension::ExtensionPack {
+        def: engine_native::content::extension::ExtensionDef {
+            name: "source-vm-optional",
+            version: 1,
+            description: "actual optional VM provenance",
+        },
+        generals: vec![],
+        cards: vec![],
+        host_skills: vec![],
+        vm_skills: content_native_loader::bridge_vm_skill_decls(&optional)
+            .unwrap()
+            .decls,
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut actual = Engine::new_with_extensions(2306, 3, &[&optional_pack]).unwrap();
+    actual.debug_set_turn(0, Phase::Play, 1);
+    actual.debug_grant(1, "source_vm_optional");
+    actual.debug_deal_damage(Some(0), 1, 1, engine_native::event::DamageNature::Normal);
+    assert_eq!(actual.open_choice().unwrap().spec.prompt, "trigger_confirm");
+    let snapshot = engine_native::archive::decode_archive(&engine_native::archive::encode_archive(
+        &actual.save(),
+    ))
+    .unwrap();
+    let restored = Engine::restore_with_extensions(&snapshot, &[&optional_pack]).unwrap();
+    for engine in [&actual, &restored] {
+        assert!(matches!(
+            engine.choice_view_for(Some(1)),
+            Some(engine_native::ChoiceView::Own {
+                source_skill: None,
+                ..
+            })
+        ));
+    }
 }
 
 #[test]
@@ -249,7 +278,11 @@ fn source_initial_binding_does_not_certify_the_next_pending_prompt() {
                 &input,
             )
             .unwrap();
-            std::fs::write(path.join(format!("source-prefix-{label}-events.txt")), &pre_events).unwrap();
+            std::fs::write(
+                path.join(format!("source-prefix-{label}-events.txt")),
+                &pre_events,
+            )
+            .unwrap();
             std::fs::write(
                 path.join(format!("source-prefix-{label}-after.ngsa")),
                 engine_native::archive::encode_archive(&candidate.save()),

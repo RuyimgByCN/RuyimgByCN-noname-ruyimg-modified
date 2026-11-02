@@ -9,7 +9,7 @@ impl SkillBehavior for JiZhiBehavior {
         matches!(event, EventData::CardUsed(u)
         if u.player == owner
             && matches!(
-                u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)),
+                u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)),
                 crate::catalog::CardKind::SavageAttack
                     | crate::catalog::CardKind::ArcheryAttack
                     | crate::catalog::CardKind::Duel

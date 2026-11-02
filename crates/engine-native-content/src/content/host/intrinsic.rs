@@ -12,6 +12,7 @@ pub(crate) fn card_intrinsic(
     u: &CardUseData,
     effective_kind: CardKind,
 ) -> Option<Option<Box<dyn SkillMachine>>> {
+    let card = u.card?;
     Some(match effective_kind {
         CardKind::Shuigong => {
             // 水攻（G1 运筹帷幄，锦囊）：无懈窗口 + 多目标强制弃装备
@@ -20,12 +21,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::ShuigongCard,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: u.targets.clone(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Shezhanqunru => {
             // 舌战群儒（G1 运筹帷幄，锦囊）：与所有有手牌的其他角色拼点
@@ -40,12 +41,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::ShezhanqunruCompare,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Shujinsan => {
             // 舒筋散（G1 古剑，锦囊）：目标弃任意张手牌（可取消）摸等量
@@ -54,12 +55,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GujianShujinsanCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("shujinsan has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::SelectCard,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Tanhuadong
         | CardKind::Yougeng
@@ -103,7 +104,7 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("food has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -117,7 +118,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::JiguanDinvCard,
                 owner: u.player,
                 target: Some(u.player),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -153,12 +154,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: q,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Zumoshoukao => {
             // 祖墨手铠（G1 gwent）：无懈窗口 + 封印授予机
@@ -167,12 +168,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GwentZumoCard,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Kunenfayin | CardKind::Shanbengshu | CardKind::Poxiao => {
             // gwent 收官（G1）：无懈窗口包装 + 各自机器
@@ -195,12 +196,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: Some(u.player),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Yanziyaoshui
         | CardKind::Aozuzhilei
@@ -241,12 +242,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Shatang | CardKind::Heilonglinpian | CardKind::Liutouge => {
             // 古剑最后机关/锦囊（G1）
@@ -272,12 +273,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Dunpaigedang
         | CardKind::Zhiliaobo
@@ -339,12 +340,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Shihuifen | CardKind::Liufengsan => {
             // 古剑锦囊（G1）：石会粉（响应拒绝）/六风散（获得闪）
@@ -363,12 +364,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Bingpotong
         | CardKind::Qiankunbiao
@@ -411,8 +412,7 @@ pub(crate) fn card_intrinsic(
                 }
             };
             // 冰魄通先开使用者展示询问（逐技对照批五 v79），其余直接执行
-            let stage = if behavior == crate::content::host::HostBehavior::JiguanBingpoCard
-            {
+            let stage = if behavior == crate::content::host::HostBehavior::JiguanBingpoCard {
                 crate::content::host::HostStage::ComparePlayerPick
             } else if behavior == crate::content::host::HostBehavior::JiguanLongxuCard {
                 crate::content::host::HostStage::SelectCard
@@ -424,12 +424,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: u.targets.first().copied(),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets,
                 stage,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Liuxinghuoyu => {
             // 流星火雨（U05 swd 首批，规则 v86）：无懈窗口包装 + 目标
@@ -439,17 +439,17 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::SwdLiuxinghuoyuCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("liuxinghuoyu has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Hslingjian => {
             // 灵剑（swd 机关术批，规则 v198）：七卡按名分流；无懈窗
             // 包装共享（上游 wuxieable 同口径）。
-            let name = &ctx.catalog.cards[u.card as usize].name;
+            let name = &ctx.catalog.cards[card as usize].name;
             let (behavior, def_key, target) = if name.contains("xuanfengzhiren") {
                 (
                     crate::content::host::HostBehavior::SwdXuanfengzhirenCard,
@@ -498,17 +498,17 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Changshezhen | CardKind::Pozhenjue => {
             // 长蛇阵/破阵诀（U05 zhenfa，规则 v201/T19b）：座位重排类
             //（swapSeat 原语 ADR 0781）；无懈窗口包装（dizaizhen 同款）
-            let kind = ctx.catalog.card_kind(u.card);
+            let kind = u.effective_kind(ctx.catalog);
             let (behavior, def_key) = if kind == CardKind::Changshezhen {
                 (
                     crate::content::host::HostBehavior::SwdChangshezhenCard,
@@ -525,24 +525,20 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Tianfuzhen | CardKind::Qixingzhen | CardKind::Niaoxiangzhen => {
             // 阵法三张（U05 zhenfa，规则 v200/T19a）：AOE/自目标机器
             // + 无懈窗口包装（dizaizhen 同款）
-            let kind = ctx.catalog.card_kind(u.card);
+            let kind = u.effective_kind(ctx.catalog);
             let behavior = match kind {
-                CardKind::Tianfuzhen => {
-                    crate::content::host::HostBehavior::SwdTianfuzhenCard
-                }
-                CardKind::Qixingzhen => {
-                    crate::content::host::HostBehavior::SwdQixingzhenCard
-                }
+                CardKind::Tianfuzhen => crate::content::host::HostBehavior::SwdTianfuzhenCard,
+                CardKind::Qixingzhen => crate::content::host::HostBehavior::SwdQixingzhenCard,
                 _ => crate::content::host::HostBehavior::SwdNiaoxiangzhenCard,
             };
             let def_key = match kind {
@@ -579,18 +575,16 @@ pub(crate) fn card_intrinsic(
                     ctx.core
                         .alive_players()
                         .filter(|t| {
-                            *t != u.player
-                                && !ctx.core.is_friend_of(ctx.catalog, u.player, *t)
-                                && {
-                                    let (n, pv) = ctx.core.alive_neighbors(*t);
-                                    n.is_some_and(|q| {
-                                        ctx.core.effective_faction(ctx.catalog, *t)
-                                            == ctx.core.effective_faction(ctx.catalog, q)
-                                    }) || pv.is_some_and(|q| {
-                                        ctx.core.effective_faction(ctx.catalog, *t)
-                                            == ctx.core.effective_faction(ctx.catalog, q)
-                                    })
-                                }
+                            *t != u.player && !ctx.core.is_friend_of(ctx.catalog, u.player, *t) && {
+                                let (n, pv) = ctx.core.alive_neighbors(*t);
+                                n.is_some_and(|q| {
+                                    ctx.core.effective_faction(ctx.catalog, *t)
+                                        == ctx.core.effective_faction(ctx.catalog, q)
+                                }) || pv.is_some_and(|q| {
+                                    ctx.core.effective_faction(ctx.catalog, *t)
+                                        == ctx.core.effective_faction(ctx.catalog, q)
+                                })
+                            }
                         })
                         .collect()
                 }
@@ -600,18 +594,18 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: phase2_queue,
                 targets: targets_for_machine,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Jiguan => {
             // 机关牌（swd 第十六/十七批，规则 v189/v190）：同 kind
             // 异行为按目录名分流（指路小虎=随机敌虚拟杀；木甲人=
             // 弃非基本换随机机关牌）——无懈窗口包装共享。
-            let name = &ctx.catalog.cards[u.card as usize].name;
+            let name = &ctx.catalog.cards[card as usize].name;
             let (behavior, def_key, target) = if name.contains("mujiaren") {
                 (
                     crate::content::host::HostBehavior::SwdMujiarenCard,
@@ -676,12 +670,12 @@ pub(crate) fn card_intrinsic(
                 behavior,
                 owner: u.player,
                 target,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: targets_for_machine,
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Yangpijuan => {
             // 羊皮卷（U05 swd 第十三批，规则 v97）：无懈窗口包装 +
@@ -691,12 +685,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::SwdYangpijuanCard,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Longlushanfeng => {
             // 龙颅山峰（U05 mtg 首切片，规则 v100）：换地 + 二选一
@@ -707,7 +701,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgLongshanfengLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -722,7 +716,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgHaidaoLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -737,7 +731,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgShuimomuxueLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -752,7 +746,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgFeixuLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -767,7 +761,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgYixialanLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -782,7 +776,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgShamolvzhouLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -797,7 +791,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgLinzhongjiantaLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -812,7 +806,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgBingheyaosaiLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -828,7 +822,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgYoulinLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -844,7 +838,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::MtgLindixiliuLand,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -859,7 +853,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GujianMianliCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("mianlijinzhen has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -873,12 +867,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GujianFeibiaoCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("feibiao has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::SelectCard,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Chenhuodajie => {
             // 趁火打劫（G1 运筹帷幄，锦囊）：获得目标一张手牌
@@ -888,12 +882,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::ChenhuodajieCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("chenhuodajie has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Fudichouxin => {
             // 釜底抽薪（G1 运筹帷幄，锦囊）：无懈窗口 + 拼点（两段选择）
@@ -902,12 +896,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::FudichouxinCompare,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("fudichouxin has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::CompareTargetPick,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::WangmeiZhike => {
             // 望梅止渴（G1 玩点论杀，锦囊）：无懈窗口 + 目标最小体力/
@@ -917,12 +911,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::WangmeiZhikeCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("wangmeizhike has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::ShouLiJian => {
             // 手里剑（G1 欢乐卡牌）：目标弃 1 张装备或受 1 点伤害
@@ -932,7 +926,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::TargetDiscardEquipOrDamage,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("shoulijian has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::TargetChoice,
@@ -946,7 +940,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GuisheqiCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("guisheqi target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
@@ -959,7 +953,7 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::XianluhuiCard,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: u.targets.clone(),
                 stage: crate::content::host::HostStage::Act,
@@ -972,12 +966,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::CaochuanCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("caochuan has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::SelectNature,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Geanguanhuo => {
             // 隔岸观火（G1 运筹帷幄，锦囊）：双目标拼点链
@@ -986,12 +980,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::GeanguanhuoCompare,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: u.targets.clone(),
                 stage: crate::content::host::HostStage::CompareTargetPick,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Linghunzhihuo => {
             // 灵魂之火（G1 炉石，锦囊）：目标 1 点火焰伤害，使用者弃一张手牌
@@ -1000,12 +994,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::LinghunzhihuoCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("linghunzhihuo has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Zhaomingdan => {
             // 照明弹（G1 炉石，锦囊）：弃目标一张手牌，双方各摸 1
@@ -1014,12 +1008,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::ZhaomingdanCard,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("zhaomingdan has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Jihuocard => {
             // 急耗卡（G1 炉石，锦囊）：自-target 摸 1（临时技暂缓）
@@ -1028,12 +1022,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::JihuocardDraw,
                 owner: u.player,
                 target: None,
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::Act,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         CardKind::Toulianghuanzhu => {
             // 偷梁换柱（G1 运筹帷幄，锦囊）：无懈窗口 + 换牌双选
@@ -1042,12 +1036,12 @@ pub(crate) fn card_intrinsic(
                 behavior: crate::content::host::HostBehavior::TouliangSwap,
                 owner: u.player,
                 target: Some(*u.targets.first().expect("touliang has one target")),
-                card: Some(u.card),
+                card: Some(card),
                 cards: Vec::new(),
                 targets: Vec::new(),
                 stage: crate::content::host::HostStage::SelectCard,
             });
-            Some(Box::new(wrap_nullify_window(ctx, u.card, u.player, effect)))
+            Some(Box::new(wrap_nullify_window(ctx, card, u.player, effect)))
         }
         _ => return None,
     })

@@ -5,7 +5,7 @@ use super::*;
 /// 卫（zhucheng2 显式化）：成为杀目标且标记非空→使用者选择：弃 n 张
 /// （首张自选+余随机代抽，登记差异）或杀无效（跳过结算+杀回手）。
 #[test]
-fn liufu_zhucheng_toggle_and_sha_guard() {
+fn liufu_zhucheng_filter_recheck_and_sha_guard() {
     let (mut e, _pack) = setup();
     advance_loop(&mut e, 0);
     e.debug_clear_hand(0);
@@ -145,27 +145,19 @@ fn liufu_zhucheng_toggle_and_sha_guard() {
         let _ = submit(&mut e, actor, GameAction::NextPhase);
     }
     e.debug_set_hp(0, 2);
+    let marks = e.state_core().player(0).zhucheng.clone();
+    // C331: the actual filter requires an empty mark pile; an inline gate cannot bypass it.
     for _ in 0..8 {
-        if let Some(c) = e.open_choice() {
-            assert_eq!(c.spec.prompt, "trigger_confirm", "收回确认挂起");
-            let (cid, obs) = (c.id, c.observer);
-            submit(
-                &mut e,
-                obs,
-                GameAction::Answer {
-                    choice_id: cid,
-                    selection: vec![ChoiceOption::Confirm],
-                },
-            );
-            break;
+        if let Some(c) = e.open_choice().cloned() {
+            assert_ne!(c.spec.prompt, "trigger_confirm", "ineligible zhucheng must not ask");
+            let selection = c.spec.options.iter().take(c.spec.min).copied().collect();
+            submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection });
+        } else {
+            let actor = e.turn().current;
+            let _ = submit(&mut e, actor, GameAction::NextPhase);
         }
-        let actor = e.turn().current;
-        let _ = submit(&mut e, actor, GameAction::NextPhase);
     }
-    assert!(e.state_core().player(0).zhucheng.is_empty(), "标记收回清空");
+    assert_eq!(e.state_core().player(0).zhucheng, marks, "failed current filter preserves the marks");
     let h0 = e.debug_hand(0);
-    assert!(
-        h0.contains(&37) && h0.contains(&5),
-        "收回的 2 张标记入手（37/5）"
-    );
+    assert!(marks.iter().all(|card| !h0.contains(card)), "confirmation cannot recover marks through a false filter");
 }

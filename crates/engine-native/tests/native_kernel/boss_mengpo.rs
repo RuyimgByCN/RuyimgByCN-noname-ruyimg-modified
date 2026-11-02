@@ -143,7 +143,7 @@ fn boss_mengpo_shiyou_distinct_suit_gain() {
     assert!(
         log_has(&e, |l| matches!(
             l,
-            LogEvent::CardsGiven { from: 2, to: 1, .. }
+            LogEvent::CardsGivenPublic { from: 2, to: 1, .. }
         )),
         "拾忧：获得日志"
     );

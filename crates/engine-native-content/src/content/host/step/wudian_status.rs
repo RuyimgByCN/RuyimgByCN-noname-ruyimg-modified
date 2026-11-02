@@ -250,7 +250,7 @@ impl HostMachine {
                 // 猛击（U05 ow 莱因哈特，规则 v134）：伤害 +1（前置窗口
                 // 直写帧量——伊籍改目标同机制；上游 trigger.num++ 同口径）。
                 HostStage::Act => {
-                    ctx.current_damage_mut().amount += 1;
+                    if !ctx.modify_damage_amount(1) { return Flow::Done; }
                     Flow::Done
                 }
                 _ => Flow::Done,

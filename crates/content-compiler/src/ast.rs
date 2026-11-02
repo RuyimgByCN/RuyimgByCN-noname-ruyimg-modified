@@ -24,6 +24,14 @@ pub struct SkillAst {
     pub non_gainable: bool,
     /// Conversion skill whose branch can be toggled by generic rules.
     pub conversion: bool,
+    /// Explicit schema5 charlotte trait.
+    pub charlotte: Option<bool>,
+    /// Explicit schema5 persevere trait.
+    pub persevere: Option<bool>,
+    /// Explicit schema5 forever trait.
+    pub forever: Option<bool>,
+    /// Explicit schema5 temporary trait.
+    pub temporary: Option<bool>,
     /// Items.
     pub items: Vec<SkillItemAst>,
     /// Span.

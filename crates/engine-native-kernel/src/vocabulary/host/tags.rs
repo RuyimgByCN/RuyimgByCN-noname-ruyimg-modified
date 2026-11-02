@@ -150,6 +150,7 @@ impl HostBehavior {
             HostBehavior::SwdMingfu => 385,
             HostBehavior::SwdCyxianjiang => 386,
             HostBehavior::SwdXuanying => 387,
+            HostBehavior::SwdXuanyingDamage => 537,
             HostBehavior::SwdLieren => 388,
             HostBehavior::SwdJqimou => 389,
             HostBehavior::SwdJianji => 390,

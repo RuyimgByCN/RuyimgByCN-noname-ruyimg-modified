@@ -209,7 +209,7 @@ impl HostMachine {
                     if !ctx.core.player(t).alive || ctx.core.skills.contains_key(&(t, def)) {
                         continue;
                     }
-                    ctx.core.skills.insert(
+                    ctx.insert_skill(
                         (t, def),
                         crate::state::SkillInstance {
                             owner: t,
@@ -241,7 +241,7 @@ impl HostMachine {
                     return Flow::Done;
                 };
                 let rounds = (ctx.core.alive_count() as u8).min(5);
-                ctx.core.skills.insert(
+                ctx.insert_skill(
                     (t, def),
                     crate::state::SkillInstance {
                         owner: t,
@@ -412,7 +412,7 @@ impl HostMachine {
                         inst.enabled = false;
                     }
                 }
-                ctx.core.skills.insert(
+                ctx.insert_skill(
                     (t, fdef),
                     crate::state::SkillInstance {
                         owner: t,

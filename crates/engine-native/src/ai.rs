@@ -518,7 +518,7 @@ fn vm_choice_leaf(choice: &ChoiceView) -> bool {
     };
     matches!(
         *prompt,
-        "rvm_choice"
+        "trigger_order" | "rvm_choice"
             | "rvm_discard_pick"
             | "rvm_danshou_option"
             | "rvm_danshou_target"

@@ -278,7 +278,7 @@ impl HostMachine {
             HostBehavior::SwdFzhenwei => match self.stage {
                 HostStage::Act => {
                     let Some(crate::event::EventData::CardResponded { card, player }) =
-                        ctx.res.frame(ctx.current_frame_id()).map(|f| &f.data)
+                        ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                     else {
                         return Flow::Done;
                     };
@@ -440,7 +440,7 @@ impl HostMachine {
                                 inst.enabled = false;
                             }
                         }
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (t, fdef),
                             crate::state::SkillInstance {
                                 owner: t,
@@ -559,7 +559,7 @@ impl HostMachine {
                             continue;
                         }
                         ctx.change_hujia(*t, 3);
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (*t, def),
                             crate::state::SkillInstance {
                                 owner: *t,

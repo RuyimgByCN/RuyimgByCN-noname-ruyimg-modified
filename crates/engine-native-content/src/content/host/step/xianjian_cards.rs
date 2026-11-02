@@ -338,7 +338,7 @@ impl HostMachine {
                     ctx.core.player_mut(self.owner).lingquan_awakened = true;
                     ctx.draw_cards(self.owner, 3);
                     if let Some(def) = ctx.catalog.skill_by_name("shuiyun") {
-                        ctx.core.skills.insert(
+                        ctx.insert_skill(
                             (self.owner, def),
                             crate::state::SkillInstance {
                                 owner: self.owner,
@@ -853,7 +853,7 @@ impl HostMachine {
                     ctx.core.player_mut(t).off_court.push(c);
                     for sub in ["ctianfu2", "ctianfu3"] {
                         if let Some(def) = ctx.catalog.skill_by_name(sub) {
-                            ctx.core.skills.insert(
+                            ctx.insert_skill(
                                 (t, def),
                                 crate::state::SkillInstance {
                                     owner: t,

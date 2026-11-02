@@ -145,12 +145,12 @@ skill hnl_jiuwei_t8(990001) {
 
     let loaded = content.load("t8-disk-vm").expect("装载");
     assert_eq!(loaded.pack.vm_skills.len(), 1, "VM 声明经磁盘装载入包");
-    assert_eq!(loaded.pack.vm_skills[0].name, "hnl_jiuwei_t8_phase_end");
+    assert_eq!(loaded.pack.vm_skills[0].name, "hnl_jiuwei_t8");
 
     // 建局 → 授技 → 推进到持有者阶段结束：VM 效果落账（hp 2→3）
     let mut e =
         engine_native::Engine::new_with_extensions(920001, 4, &[&loaded.pack]).expect("建局");
-    e.debug_grant(1, "hnl_jiuwei_t8_phase_end");
+    e.debug_grant(1, "hnl_jiuwei_t8");
     e.debug_set_hp(1, 2);
     let mut converged = false;
     for _ in 0..40 {
@@ -474,7 +474,7 @@ skill vm_probe(990003) {
     assert_eq!(loaded.pack.generals.len(), 1);
     assert_eq!(
         loaded.pack.generals[0].skills,
-        vec![engine_native::content::names::intern("vm_probe_phase_end".to_string())]
+        vec![engine_native::content::names::intern("vm_probe".to_string())]
     );
 
     let mut engine =
@@ -482,7 +482,7 @@ skill vm_probe(990003) {
     engine
         .assign_general_named(0, "vm_probe")
         .expect("选将");
-    assert!(engine.view_for(0).players[0].skills.contains(&"vm_probe_phase_end"));
+    assert!(engine.view_for(0).players[0].skills.contains(&"vm_probe"));
     engine.debug_set_hp(0, 3);
     let mut restored = engine_native::Engine::restore_with_extensions(&engine.save(), &[&loaded.pack])
         .expect("按原包恢复");

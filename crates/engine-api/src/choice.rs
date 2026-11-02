@@ -4,7 +4,7 @@ use crate::ids::{ChoiceId, PlayerId};
 use serde::{Deserialize, Serialize};
 
 /// A pending choice the engine cannot continue past until resolved.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct ChoiceRequest {
     /// Unique choice id for this match.
     pub choice_id: ChoiceId,
@@ -13,9 +13,9 @@ pub struct ChoiceRequest {
     /// Options the player may select (or empty if constraint-only).
     pub options: Vec<ChoiceOption>,
     /// Minimum number of selections.
-    pub min_count: u8,
+    pub min_count: u32,
     /// Maximum number of selections.
-    pub max_count: u8,
+    pub max_count: u32,
     /// Whether cancel is allowed.
     pub allow_cancel: bool,
     /// Timeout policy identifier (ruleset-defined).
@@ -38,6 +38,39 @@ pub struct ChoiceRequest {
     /// Known native skill producing this owner-visible ask; never command authority.
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_source_skill")]
     pub source_skill: Option<String>,
+}
+
+impl<'de> Deserialize<'de> for ChoiceRequest {
+    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        let choice = ChoiceRequestFields::deserialize(deserializer)?;
+        if choice.min_count > choice.max_count {
+            return Err(serde::de::Error::custom("choice min_count exceeds max_count"));
+        }
+        Ok(choice)
+    }
+}
+#[allow(dead_code)]
+#[derive(Deserialize)]
+#[serde(remote = "ChoiceRequest", rename = "ChoiceRequest")]
+struct ChoiceRequestFields {
+    choice_id: ChoiceId,
+    observer: PlayerId,
+    options: Vec<ChoiceOption>,
+    min_count: u32,
+    max_count: u32,
+    allow_cancel: bool,
+    timeout_policy: TimeoutPolicy,
+    #[serde(default)]
+    deadline_unix_ms: Option<u64>,
+    revision: u64,
+    continuation_id: u64,
+    kind: ChoiceKind,
+    #[serde(default)]
+    prompt: Option<String>,
+    #[serde(default, deserialize_with = "deserialize_native_kind")]
+    native_kind: Option<String>,
+    #[serde(default, deserialize_with = "deserialize_source_skill")]
+    source_skill: Option<String>,
 }
 
 /// Preserve the existing wire enum while retaining precise native choice metadata.

@@ -13,7 +13,7 @@ impl SkillBehavior for LingboBehavior {
             crate::event::EventData::CardUsed(u) => {
                 u.player == owner
                     && !u.cancelled
-                    && u.use_as.unwrap_or_else(|| ctx.catalog.card_kind(u.card)) == CardKind::Shan
+                    && u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)) == CardKind::Shan
             }
             _ => false,
         }

@@ -110,6 +110,7 @@ impl Engine {
         if let GameMode::Boss { fellows, .. } = &mut self.state.core.mode {
             fellows.push(pid);
         }
+        crate::resolution::sync_trigger_owners(&self.state.core, &mut self.state.resolution);
         Some(pid)
     }
 

@@ -1,0 +1,18 @@
+   Compiling wasm-bindgen v0.2.126
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+error[E0063]: missing field `awaiting_answer` in initializer of `Park`
+   --> crates/engine-native-kernel/src/resolution.rs:580:36
+    |
+580 |                     res.parks.push(Park {
+    |                                    ^^^^ missing `awaiting_answer`
+
+error[E0063]: missing field `awaiting_answer` in initializer of `Park`
+   --> crates/engine-native-kernel/src/resolution.rs:767:28
+    |
+767 |             res.parks.push(Park {
+    |                            ^^^^ missing `awaiting_answer`
+
+For more information about this error, try `rustc --explain E0063`.
+error: could not compile `engine-native-kernel` (lib) due to 2 previous errors
+warning: build failed, waiting for other jobs to finish...
+EXIT=101

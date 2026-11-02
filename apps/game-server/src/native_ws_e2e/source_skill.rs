@@ -1,9 +1,28 @@
-//! Approved27 metadata over the production WS6 handshake, actor and reconnect path.
+//! Approved27 metadata over the production WS7 handshake, actor and reconnect path.
 use super::*;
 use crate::native_room_store::{NativeRoomStore, StoredRoom};
 use crate::room_native::NativeRoomSession;
 #[path = "../../tests/support/ws6_choice_before_source.rs"]
 mod old;
+
+#[test]
+fn c9j_ws6_hello_and_room_admission_are_refused() {
+    let temp=tempfile::tempdir().unwrap();let cfg=local_config(temp.path());
+    runtime().block_on(async {
+        let server=Server::start(&cfg,0).await;
+        let (mut ws,_)=tokio_tungstenite::connect_async(&server.url).await.unwrap();
+        ws.next().await.unwrap().unwrap();
+        // Deliberately stale Hello: a WS6 client must be rejected by the WS7 server.
+        let mut versions=engine_api::VersionBundle::current();versions.network_protocol=6;
+        for message in [ClientMessage::Hello{versions,display_name:"old-ws6".into()},ClientMessage::CreateRoom{players:3,seed:19001,password:String::new(),choice_timeout_secs:None}] {
+            ws.send(Message::Text(encode_c2s(&message).unwrap().into())).await.unwrap();
+            let frame=tokio::time::timeout(Duration::from_secs(10),ws.next()).await.unwrap().unwrap().unwrap();
+            let Message::Text(text)=frame else {panic!("expected explicit version refusal")};
+            assert!(matches!(decode_s2c(&text).unwrap(),ServerMessage::Error{code:ErrorCode::VersionMismatch,..}));
+        }
+        ws.close(None).await.unwrap();server.stop().await;
+    });
+}
 
 async fn raw_snapshot(peer: &mut Peer, label: &str) -> serde_json::Value {
     peer.seq += 1;
@@ -22,7 +41,7 @@ async fn raw_snapshot(peer: &mut Peer, label: &str) -> serde_json::Value {
         if let Message::Text(text) = frame {
             let value: serde_json::Value = serde_json::from_str(&text).unwrap();
             if value["type"] == "Snapshot" && value["payload"]["header"]["conn_seq"] == seq {
-                assert_eq!(value["payload"]["header"]["protocol_version"], 6);
+                assert_eq!(value["payload"]["header"]["protocol_version"], 7);
                 if let Ok(directory) = std::env::var("SOURCE27_EVIDENCE") {
                     std::fs::create_dir_all(&directory).unwrap();
                     std::fs::write(
@@ -105,7 +124,7 @@ fn source_actual_ws_roles_reconnect_deadline_and_wire_compatibility() {
             raw_snapshot(&mut reconnect, "reconnect").await["choice"],
             own["choice"]
         );
-        // Freeze the exact WS6 DTO before this one field, including its deadline.
+        // Freeze the exact WS7 DTO before this one field, including its deadline.
         let old: old::ChoiceRequest = serde_json::from_value(own["choice"].clone()).unwrap();
         let mut expected_old = own["choice"].clone();
         expected_old.as_object_mut().unwrap().remove("source_skill");

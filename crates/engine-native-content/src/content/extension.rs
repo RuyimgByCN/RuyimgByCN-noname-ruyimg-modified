@@ -90,6 +90,8 @@ impl InitHook {
 /// 物携带，`logic_hash` 为内容锁锚）。
 #[derive(Debug, Clone)]
 pub struct VmSkillDecl {
+    /// Validated schema5 package declaration identity; never an execution permission.
+    pub declaration_hash: Option<[u8; 32]>,
     /// 技能名（目录内唯一；intern 进全局符号表）。
     pub name: String,
     /// 已验证字节码模块。
@@ -191,34 +193,31 @@ impl ExtensionRegistry {
     }
 }
 
-/// 内容锁标识：启用扩展集合的确定性指纹（FNV-1a over 排序后的
-/// `name:version;` 串）。空集合 = 0（与纯标准目录一致）。
+/// Content lock for direct extensions, including ordered VM handlers and source trigger metadata.
+/// Empty extensions retain the standard catalog identity.
 pub fn content_lock_id(packs: &[&ExtensionPack]) -> u64 {
-    let mut names: Vec<(&str, u32)> = packs
-        .iter()
-        .filter(|p| p.enabled)
-        .map(|p| (p.def.name, p.def.version))
-        .collect();
-    names.sort_unstable();
-    if names.is_empty() {
-        return 0; // 空集合 = 纯标准目录
-    }
-    let mut h: u64 = 0xcbf2_9ce4_8422_2325;
-    for (n, v) in names {
-        for b in n.as_bytes() {
-            h ^= *b as u64;
-            h = h.wrapping_mul(0x1000_0000_01b3);
+    let mut enabled: Vec<_> = packs.iter().copied().filter(|p| p.enabled).collect();
+    enabled.sort_by_key(|p| (p.def.name, p.def.version));
+    if enabled.is_empty() { return 0; }
+    let mut h = blake3::Hasher::new();
+    h.update(b"native-extension-lock/331");
+    for pack in enabled {
+        let mut value = |bytes: &[u8]| { h.update(&(bytes.len() as u64).to_le_bytes()); h.update(bytes); };
+        value(pack.def.name.as_bytes()); value(&pack.def.version.to_le_bytes()); value(pack.init_hook.key().as_bytes());
+        h.update(&(pack.host_skills.len() as u64).to_le_bytes());
+        for skill in &pack.host_skills {
+            h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes()); h.update(&skill.behavior.tag().to_le_bytes());
+            if let Some(meta) = skill.behavior.trigger_meta() { crate::rvm_bridge::hash_trigger_meta(&mut h, &meta); }
         }
-        h ^= b':' as u64;
-        h = h.wrapping_mul(0x1000_0000_01b3);
-        for b in v.to_string().as_bytes() {
-            h ^= *b as u64;
-            h = h.wrapping_mul(0x1000_0000_01b3);
+        h.update(&(pack.vm_skills.len() as u64).to_le_bytes());
+        for skill in &pack.vm_skills {
+            h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes());
+            let module = skill.module.to_bytes(); h.update(&(module.len() as u64).to_le_bytes()); h.update(&module);
+            crate::rvm_bridge::hash_trigger_meta(&mut h, &skill.trigger); skill.filter.hash_semantics(&mut h);
+            if let Some(hash) = skill.declaration_hash { h.update(b"native-extension-mechanisms/1"); h.update(&hash); }
         }
-        h ^= b';' as u64;
-        h = h.wrapping_mul(0x1000_0000_01b3);
     }
-    h
+    u64::from_le_bytes(h.finalize().as_bytes()[..8].try_into().expect("eight bytes"))
 }
 
 /// 将扩展包内容合并到基础目录数据中。

@@ -116,8 +116,23 @@ fn boss_mingxingzhu_qingzhu_jiazu_jiding() {
     let sha2 = e.debug_place(1, "sha");
     let out = play(&mut e, sha2, vec![2]);
     assert!(
-        matches!(out, CommandOutcome::Accepted { .. }),
-        "获急叮后杀解除（{out:?}）"
+        !e.state_core().has_skill_any_state(1, jd),
+        "真正急叮结算后移除定义"
+    );
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Rejected(engine_native::RejectReason::IllegalTargets)
+        ),
+        "急叮已消耗，庆祝再次禁杀：{out:?}"
+    );
+    e.debug_grant(1, "急叮");
+    assert!(
+        matches!(
+            play(&mut e, sha2, vec![2]),
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "重新获得急叮才解除禁杀"
     );
     drain_choices(&mut e);
     let _ = h3_before;

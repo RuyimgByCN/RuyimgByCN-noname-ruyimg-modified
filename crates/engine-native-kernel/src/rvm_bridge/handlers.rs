@@ -25,7 +25,7 @@ pub struct VmTriggerProgram {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct VmHandlerSet {
     pub skill_def_id: u32,
-    pub active: Arc<VmSkillProgram>,
+    pub active: Option<Arc<VmSkillProgram>>,
     pub limits: VmActiveLimits,
     pub triggers: Vec<VmTriggerProgram>,
 }
@@ -33,7 +33,10 @@ pub struct VmHandlerSet {
 impl VmHandlerSet {
     pub(super) fn available(&self, ctx: &QueryCtx<'_>, owner: PlayerId) -> bool {
         let p = ctx.state.player(owner);
-        let name = &self.active.skill_name;
+        let Some(active) = &self.active else {
+            return false;
+        };
+        let name = &active.skill_name;
         p.alive
             && ctx.state.turn.current == owner
             && ctx.state.turn.phase == crate::event::Phase::Play
@@ -63,11 +66,12 @@ impl VmHandlerSet {
         ctx: &QueryCtx<'_>,
         owner: PlayerId,
         event: &EventData,
+        kind: EventKind,
     ) -> Vec<&'a VmTriggerProgram> {
         self.triggers
             .iter()
             .filter(|entry| {
-                entry.meta.event == event.kind()
+                entry.meta.event == kind
                     && VmSkillBehavior {
                         program: entry.program.clone(),
                         filter: entry.filter.clone(),

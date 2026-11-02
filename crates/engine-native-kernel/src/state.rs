@@ -30,6 +30,8 @@ pub struct PlayerState {
     pub general_slots: [Option<u16>; 2],
     /// 国战明置状态（主将/副将各自）。
     pub revealed_generals: [bool; 2],
+    pub kingdom_identity: KingdomIdentity,
+    pub yexinjia_friends: Vec<PlayerId>,
     /// 五行属性（G1 wuxing：0=金 1=木 2=水 3=火 4=土；None = 未启用）。
     pub wunature: Option<u8>,
     /// 护甲（G1 古剑等扩展；受到伤害时 1:1 抵扣，先于体力扣减）。
@@ -404,6 +406,8 @@ impl PlayerState {
             card_mods: Default::default(),
             general_slots: [None, None],
             revealed_generals: [false, false],
+            kingdom_identity: KingdomIdentity::Unknown,
+            yexinjia_friends: Vec::new(),
             wunature: None,
             boss_chongzheng: 0,
             boss_mad: false,
@@ -876,3 +880,11 @@ pub struct GameState {
 
 mod general_assembly;
 pub use general_assembly::apply_general_assembly;
+
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+pub enum KingdomIdentity {
+    #[default]
+    Unknown,
+    Ye,
+    Declared(String),
+}

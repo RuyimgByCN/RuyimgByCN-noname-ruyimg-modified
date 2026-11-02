@@ -44,6 +44,11 @@ pub(super) fn check_skill(sk: &SkillAst) -> Result<SkillIr, CompileError> {
         lord_only: sk.lord_only,
         non_gainable: sk.non_gainable,
         conversion: sk.conversion,
+        charlotte: sk.charlotte,
+        persevere: sk.persevere,
+        forever: sk.forever,
+        temporary: sk.temporary,
+
         triggers,
         actives,
         view_as,

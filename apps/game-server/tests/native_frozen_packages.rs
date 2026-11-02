@@ -119,7 +119,7 @@ fn vm_character_survives_upgrade_rollback_and_uninstall_via_frozen_copy() {
     engine.assign_general_named(0, "frozen_probe").unwrap();
     assert!(engine.view_for(0).players[0]
         .skills
-        .contains(&"frozen_vm_phase_end"));
+        .contains(&"frozen_vm"));
     engine.debug_set_hp(0, 2);
     let snapshot = engine.save();
 

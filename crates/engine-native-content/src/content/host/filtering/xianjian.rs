@@ -31,7 +31,7 @@ impl HostSkillBehavior {
                 // canUse 的登记差异等价。
                 if let EventData::CardUsed(u) = event {
                     u.player == owner
-                        && ctx.catalog.card_kind(u.card) == crate::catalog::CardKind::Sha
+                        && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Sha
                         && !ctx.state.turn.yingfeng_chain
                         && ctx.state.seat_order_from(owner).into_iter().any(|t| {
                             t != owner
@@ -47,7 +47,7 @@ impl HostSkillBehavior {
             HostBehavior::XianjianXjzhimeng2 => {
                 if let EventData::CardUsed(u) = event {
                     u.player == owner && {
-                        let k = yangpijuan_class(ctx.catalog.card_kind(u.card));
+                        let k = yangpijuan_class(u.effective_kind(ctx.catalog));
                         ctx.state
                             .player(owner)
                             .off_court
@@ -70,7 +70,9 @@ impl HostSkillBehavior {
                     && others
                     && ctx.state.turn.sheling_used < 3
                     && match event {
-                        EventData::CardUsed(u) => ctx.state.discard.contains(&u.card),
+                        EventData::CardUsed(u) => {
+                            u.card.is_some_and(|c| ctx.state.discard.contains(&c))
+                        }
                         EventData::CardResponded { card, .. } => ctx.state.discard.contains(card),
                         EventData::CardsDiscarded { cards, .. } => {
                             cards.iter().any(|c| ctx.state.discard.contains(c))
@@ -245,7 +247,7 @@ impl HostSkillBehavior {
                 let heart = match event {
                     EventData::CardUsed(u) => {
                         u.player == owner && {
-                            ctx.catalog.cards[u.card as usize].suit == crate::catalog::Suit::Heart
+                            u.suit(ctx.catalog) == Some(crate::catalog::Suit::Heart)
                         }
                     }
                     EventData::CardResponded { card, player } => {
@@ -300,7 +302,7 @@ impl HostSkillBehavior {
                     && !ctx.state.player(owner).off_court.is_empty()
             }
             // 忘忧：他人阶段末+自己有牌+本回合存在受伤标记者,
-                        HostBehavior::XianjianWangyou => matches!(event,
+            HostBehavior::XianjianWangyou => matches!(event,
                 // 上游 `wangyou`: `{global:'phaseEnd'}` + ①自己有牌 ②非自己阶段 ③场上有人持 wangyou3
                 EventData::Phase { player, begin: false, .. }
                 if *player != owner
@@ -334,7 +336,7 @@ impl HostSkillBehavior {
             HostBehavior::XianjianXunying => {
                 if let EventData::CardUsed(u) = event {
                     u.player == owner
-                        && ctx.catalog.card_kind(u.card) == crate::catalog::CardKind::Sha
+                        && u.effective_kind(ctx.catalog) == crate::catalog::CardKind::Sha
                         && !u.targets.is_empty()
                         && u.targets.iter().all(|t| {
                             ctx.state.player(*t).alive
@@ -397,7 +399,7 @@ impl HostSkillBehavior {
             HostBehavior::XianjianFeixu => {
                 matches!(event,
                 EventData::CardUsed(u)
-                    if ctx.catalog.card_kind(u.card) == CardKind::Shan)
+                    if u.effective_kind(ctx.catalog) == CardKind::Shan)
                     || matches!(event,
                 EventData::CardResponded { card, .. }
                     if ctx.catalog.card_kind(*card) == CardKind::Shan)

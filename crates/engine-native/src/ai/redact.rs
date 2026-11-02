@@ -77,6 +77,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
+    let mut hidden_held = Vec::new();
     let mut visible: std::collections::BTreeSet<crate::ids::CardId> =
         std::collections::BTreeSet::new();
     {
@@ -113,7 +114,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         visible.extend(core.table.iter().copied());
         let mut held = Vec::new();
         for park in &e.resolution().parks {
-            super::remap::held_cards(&park.machine.snapshot(), &mut held);
+            super::remap::held_cards(&park.machine.snapshot(), seat, &mut held, &mut hidden_held);
         }
         visible.extend(held);
     }
@@ -156,7 +157,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     let vm_piles: Vec<_> = e.state_core().vm_aux.piles.keys()
         .filter(|(owner, _)| *owner != seat).cloned().collect();
     let vm_count: usize = vm_piles.iter().map(|key| e.state_core().vm_aux.piles[key].len()).sum();
-    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count + vm_count;
+    let need = hand_lens.iter().sum::<usize>() + deck_len + trap_count + vm_count + hidden_held.len();
     assert!(
         pool.len() >= need,
         "目录牌数不足以填充隐藏区（need={need}, pool={}）",
@@ -202,7 +203,8 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
                     .flat_map(|i| e.state_core().players[*i].hand.iter().copied()),
             )
             .chain(e.state_core().deck.iter().copied())
-            .chain(vm_piles.iter().flat_map(|key| e.state_core().vm_aux.piles[key].iter().copied()));
+            .chain(vm_piles.iter().flat_map(|key| e.state_core().vm_aux.piles[key].iter().copied()))
+            .chain(hidden_held.iter().copied());
         for (before, after) in old.zip(pool.iter().copied()) {
             remap[before as usize] = after;
         }

@@ -13,6 +13,12 @@ use crate::ids::{EventId, PlayerId, SkillDefId};
 use crate::kernel;
 use crate::machine::{Ctx, Flow, LogEvent};
 use crate::state::GameStateCore;
+mod trigger_order;
+pub(crate) use trigger_order::event_kind as trigger_window_kind;
+pub use trigger_order::{
+    refresh_order_choice, register_added, sync_trigger_owners, validate_trigger_bindings,
+    TriggerOrder,
+};
 
 /// 挂起的机器与其归属槽位。
 /// 无帧哨兵（N11 主动技等会话级挂起）：槽不关联任何栈帧时使用，
@@ -24,6 +30,16 @@ pub struct Park {
     pub resume_depth: usize,
     pub slot: Slot,
     pub machine: Box<dyn SkillMachine>,
+    /// 本机是否在等待「已开窗询问」的应答（运行时标记，不入快照/哈希）。
+    ///
+    /// 同一栈深可以同时停着多台机器（嵌套触发/AOE 逐目标派发/恢复后的
+    /// 追加挂起）：应答只属于**提出询问的那一台**，按栈深顺序取第一台会
+    /// 把应答交给没有提问的机器，被真实提问者随后读 `ctx.answer` 时
+    /// panic（恢复后继续 `autoStep` 的 `expect_failed` 根因）。`run` 在机器
+    /// 返回 `Flow::WaitChoice` 时置真、恢复该机时清除；读档时由
+    /// `snap::active_ask` 与开放选择逐字段匹配唯一重建（见
+    /// `Engine::restore_with_catalog`）。
+    pub awaiting_answer: bool,
 }
 
 impl Clone for Park {
@@ -32,8 +48,24 @@ impl Clone for Park {
             resume_depth: self.resume_depth,
             slot: self.slot,
             machine: self.machine.fork(),
+            awaiting_answer: self.awaiting_answer,
         }
     }
+}
+
+/// The formal ready consumer: effect/admission parks precede their suspended order park.
+/// This read-only selection conveys neither answer nor execution authority.
+pub fn ready_park_index(res: &Resolution) -> Option<usize> {
+    res.parks
+        .iter()
+        .position(|park| {
+            park.resume_depth == res.stack.len() && park.machine.trigger_order().is_none()
+        })
+        .or_else(|| {
+            res.parks
+                .iter()
+                .position(|park| park.resume_depth == res.stack.len())
+        })
 }
 
 /// 机器归属：帧固有流程，或某帧上的一次触发。
@@ -100,23 +132,25 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
     res.next_event_id += 1;
     let parent = res.stack.last().map(|f| f.id);
     let kind = data.kind();
-    let stage = match kind {
-        EventKind::Damage => Stage::BeforeTriggers,
-        // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
-        EventKind::TurnOverBefore => Stage::BeforeTriggers,
-        // 装备前置窗口（swd 批 143 改造，规则 v318）：BeforeTriggers 派发
-        // useCardToBegin 类技（改造改写装备栏后再入槽）
-        EventKind::Equipped => Stage::BeforeTriggers,
-        // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
-        // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
-        EventKind::Death => Stage::BeforeTriggers,
-        // 阶段开始前置窗口（PA12 批⑤-2，计划 §2 K）：PhaseBegin 触发的
-        // 技能（VM/宿主）须在阶段入场行为（commit_phase→begin_*：摸牌等）
-        // **之前**执行——「阶段开始时可跳过/改写本阶段」类技能（奋励
-        // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
-        // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
-        EventKind::PhaseBegin => Stage::BeforeTriggers,
-        _ => Stage::Commit,
+    let stage = match &data {
+        EventData::Damage(_) => Stage::Intrinsic,
+        _ => match kind {
+            // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
+            EventKind::TurnOverBefore => Stage::BeforeTriggers,
+            // 装备前置窗口（swd 批 143 改造，规则 v318）：BeforeTriggers 派发
+            // useCardToBegin 类技（改造改写装备栏后再入槽）
+            EventKind::Equipped => Stage::BeforeTriggers,
+            // 死亡前置窗口（规则 v170）：BeforeTriggers 收集 dieBegin 类遗
+            // 言/拦截技（changan 氏），Intrinsic 仍为 DeathMachine。
+            EventKind::Death => Stage::BeforeTriggers,
+            // 阶段开始前置窗口（PA12 批⑤-2，计划 §2 K）：PhaseBegin 触发的
+            // 技能（VM/宿主）须在阶段入场行为（commit_phase→begin_*：摸牌等）
+            // **之前**执行——「阶段开始时可跳过/改写本阶段」类技能（奋励
+            // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
+            // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
+            EventKind::PhaseBegin => Stage::BeforeTriggers,
+            _ => Stage::Commit,
+        },
     };
     res.stack.push(Frame {
         id,
@@ -154,6 +188,7 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::Damage, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::Damage, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::Damage, Stage::AfterTriggers) => Stage::Done,
+        (EventKind::Damage, Stage::Intrinsic) => Stage::Done,
         // E03 翻面：BeforeTriggers 派发前置取消（漩涡面具写回 cancelled）
         // → AfterTriggers 静默（无 after 触发）→ Commit 执行翻转。
         (EventKind::TurnOverBefore, Stage::BeforeTriggers) => Stage::AfterTriggers,
@@ -177,6 +212,16 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
         (EventKind::PhaseEnd, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::PhaseEnd, Stage::Intrinsic) => Stage::Done,
+        (
+            EventKind::SkillBefore
+            | EventKind::SkillBegin
+            | EventKind::SkillEnd
+            | EventKind::SkillAfter
+            | EventKind::SkillOmitted,
+            Stage::AfterTriggers,
+        ) => Stage::Intrinsic,
+        (EventKind::OrdinaryJudge, Stage::AfterTriggers) => Stage::Intrinsic,
+        (EventKind::OrdinaryJudge, Stage::Intrinsic) => Stage::Done,
         (_, Stage::Commit) => Stage::AfterTriggers,
         (_, Stage::AfterTriggers) => Stage::Done,
         (_, cur) => cur,
@@ -243,6 +288,19 @@ impl SkillMachine for OptionalGate {
             }
             return flow;
         }
+        let Some(frame) = ctx.res.stack.last() else {
+            return Flow::Done;
+        };
+        let qt = QueuedTrigger {
+            owner: self.owner,
+            def: self.def,
+            order: (0, 0, 0, 0, self.def),
+        };
+        if !trigger_order::eligible(ctx.core, ctx.catalog, &qt, &ctx.res.stack, frame) {
+            return Flow::Done;
+        }
+        let kind = trigger_order::event_kind(frame);
+        self.event = frame.data.clone();
         if !self.asked {
             self.asked = true;
             return Flow::WaitChoice {
@@ -267,9 +325,16 @@ impl SkillMachine for OptionalGate {
                 skill: def.name,
                 owner: self.owner,
             });
+            let event =
+                crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
+                    .clone();
             self.inner = Some(
-                def.behavior
-                    .start_in_context(&ctx.query(), self.owner, &self.event),
+                if let Some(effect) = def.behavior.native_damage_effect(kind) {
+                    native_machine(self.owner, self.def, effect)
+                } else {
+                    def.behavior
+                        .start_in_window(&ctx.query(), self.owner, &event, kind)
+                },
             );
         }
         let flow = self.inner.as_mut().expect("inner started").step(ctx);
@@ -290,7 +355,7 @@ fn plan_triggers(
     frame_id: EventId,
     before: bool,
 ) {
-    let (event, kind) = {
+    let kind = {
         let f = res.frame(frame_id).expect("frame");
         // before 阶段：伤害帧查 DamageBefore（伤害前置窗口）；翻面帧查
         // TurnOverBefore（E03 翻面前置取消窗口，漩涡面具等锁定技）；
@@ -319,8 +384,25 @@ fn plan_triggers(
             EventData::Phase { begin: true, .. } => EventKind::PhaseBegin,
             _ => EventKind::DamageBefore,
         };
-        (f.data.clone(), if before { before_kind } else { f.kind })
+        if before {
+            before_kind
+        } else {
+            f.kind
+        }
     };
+    if let EventData::Damage(d) = &res.frame(frame_id).expect("frame").data {
+        if !before
+            && (d.settlement.committed_damage.is_none()
+                || d.settlement.outcome != crate::event::DamageOutcome::Running
+                || d.settlement.notrigger
+                || d.amount <= 0)
+        {
+            let f = res.frame_mut(frame_id).unwrap();
+            f.queue.clear();
+            f.planned = true;
+            return;
+        }
+    }
     let mut entries: Vec<QueuedTrigger> = Vec::new();
     let turn_current = core.turn.current;
     // PA01 活跃触发索引：候选遍历的代价与本局是否持有无关（目录 6215 技能
@@ -328,21 +410,27 @@ fn plan_triggers(
     // 触发元数据——dispatch 列表即由 event/extra_events 构建，成员关系
     // 严格等价。入队集合不变；最终顺序由下方含 def_id 的全序键决定，
     // 与遍历序无关。
-    for ((owner, def_id), inst) in core.skills.range(..) {
-        if !inst.enabled || !core.player(*owner).alive {
-            continue;
+    let mut providers: Vec<_> = core.skills.keys().copied().collect();
+    for &def in catalog.candidates(kind) {
+        if catalog.skills[def as usize]
+            .behavior
+            .native_damage_effect(kind)
+            .is_some_and(|e| e.helper_name() == Some(catalog.skills[def as usize].name))
+        {
+            providers.extend((0..core.players.len() as PlayerId).map(|owner| (owner, def)));
         }
+    }
+    providers.sort_unstable();
+    providers.dedup();
+    for (owner, def_id) in &providers {
         let def = &catalog.skills[*def_id as usize];
-        let Some(meta) = def.trigger.as_ref() else {
+        let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
+        let Some(meta) = native_meta.as_ref().or(def.trigger.as_ref()) else {
             continue;
         };
         if meta.event != kind && !meta.extra_events.contains(&kind) {
             continue;
         }
-        let qctx = QueryCtx {
-            state: core,
-            catalog,
-        };
         // PA12 批⑤-2：PhaseBegin 前置窗只前移 VM 技能——宿主技保持在
         // 入场行为之后的原执行点（61 个宿主 PhaseBegin 技能与 golden 的
         // 行为不变；全量回归实测：不过滤时 16 个宿主技能/golden 失败）。
@@ -351,9 +439,6 @@ fn plan_triggers(
         // 不过滤时 16 项失败）；after 段（before=false）：VM 技能已在前置
         // 窗跑过，跳过防重复入队，宿主技照常派发。
         if kind == EventKind::PhaseBegin && def.behavior.is_vm_skill() != before {
-            continue;
-        }
-        if !def.behavior.filter(&qctx, *owner, &event) {
             continue;
         }
         // NC01：触发结算顺序按**顺座次序**（不是最短距离）
@@ -367,14 +452,14 @@ fn plan_triggers(
                     Timing::Normal => 1,
                     Timing::Last => 2,
                 },
-                -meta.priority,
-                u8::from(meta.optional),
+                meta.priority,
+                0,
                 seat_rel,
                 *def_id,
             ),
         });
     }
-    entries.sort_by_key(|e| e.order);
+    entries.sort_by(trigger_order::compare);
     let f = res.frame_mut(frame_id).expect("frame");
     f.queue = entries;
     f.planned = true;
@@ -408,14 +493,36 @@ pub fn run(
         steps += 1;
         res.budget -= 1;
 
+        // Canonical source liveness is refreshed before every collector/choice/confirmation/start.
+        for frame in &mut res.stack {
+            if let EventData::Damage(d) = &mut frame.data {
+                if d.source.is_some_and(|source| !core.player(source).alive) {
+                    d.settlement.cleared_source = d.source;
+                    d.source = None;
+                }
+            }
+        }
+
         // A) 恢复深度匹配的挂起机器
         if res.open_choice.is_none() {
-            if let Some(idx) = res
-                .parks
-                .iter()
-                .position(|p| p.resume_depth == res.stack.len())
-            {
+            // 有已校验应答时只唤醒**提出询问的那台**机器：同一栈深可能停着
+            // 多台（嵌套触发/AOE 逐目标派发/恢复件里的追加挂起），按顺序取
+            // 第一台会把应答交给没有提问的机器，真实提问者随后读
+            // `ctx.answer` 即 panic（恢复后继续 autoStep 的 expect_failed
+            // 根因）。无应答时保持原语义：同深度按挂起顺序恢复。
+            let wake = if res.answer.is_some() {
+                res.parks
+                    .iter()
+                    .position(|p| p.resume_depth == res.stack.len() && p.awaiting_answer)
+            } else {
+                ready_park_index(res)
+            };
+            if let Some(idx) = wake {
                 let mut park = res.parks.remove(idx);
+                // 恢复即消费该标记：下一次提问会重新置真。
+                park.awaiting_answer = false;
+                let prior_skills: std::collections::BTreeSet<_> =
+                    core.skills.keys().copied().collect();
                 let flow = {
                     let mut ctx = Ctx {
                         core,
@@ -425,10 +532,17 @@ pub fn run(
                     };
                     park.machine.step(&mut ctx)
                 };
+                notify_new_skills(core, res, catalog, &prior_skills);
                 res.answer = None; // 应答只消费一次
                 match flow {
                     Flow::Done => finish_slot(res, park.slot),
-                    Flow::Yield => res.parks.push(park),
+                    Flow::Yield => {
+                        if park.machine.trigger_order().is_some() {
+                            res.parks.insert(0, park);
+                        } else {
+                            res.parks.push(park);
+                        }
+                    }
                     Flow::WaitChoice { observer, spec } => {
                         let id = res.next_choice_id;
                         res.next_choice_id += 1;
@@ -447,12 +561,18 @@ pub fn run(
                         // （open_choice 存在时不推进栈），故开窗时刻的栈深
                         // 即恢复点。
                         park.resume_depth = res.stack.len();
+                        // 本机提出询问 → 应答归本机（同深度多机时唯一定位）。
+                        park.awaiting_answer = true;
                         res.parks.push(park);
                         return StepOutcome::Pending;
                     }
                 }
                 continue;
             }
+            // 应答在场却无可交付的挂起机器（如 VM 提交钩子自行消费应答、
+            // 或承接关系已损坏）：**不转交**给没有提问的机器，照常推进栈顶。
+            // 合法读档不会走到这里——`validate_resolution` 拒绝「有应答、
+            // 无开放选择」的档，恢复件因此总有唯一认领者。
         }
 
         // B) 栈顶帧推进
@@ -467,12 +587,15 @@ pub fn run(
             Stage::BeforeTriggers | Stage::AfterTriggers => {
                 if !planned {
                     plan_triggers(core, res, catalog, top, stage == Stage::BeforeTriggers);
+                    res.parks.push(Park {
+                        resume_depth: res.stack.len(),
+                        slot: Slot::Trigger { frame: top },
+                        awaiting_answer: false,
+                        machine: Box::new(TriggerOrder::new(top, core)),
+                    });
                     continue;
                 }
-                if queue_len > 0 {
-                    run_queued_trigger(core, res, catalog, out, top);
-                    continue;
-                }
+                assert_eq!(queue_len, 0, "window machine drains its frame queue");
                 let kind = res.frame(top).expect("frame").kind;
                 let next = next_stage(kind, stage);
                 let f = res.frame_mut(top).expect("frame");
@@ -480,6 +603,8 @@ pub fn run(
                 f.planned = false;
             }
             Stage::Commit => {
+                let prior_skills: std::collections::BTreeSet<_> =
+                    core.skills.keys().copied().collect();
                 {
                     let mut ctx = Ctx {
                         core,
@@ -489,6 +614,7 @@ pub fn run(
                     };
                     kernel::commit_frame(&mut ctx, top);
                 }
+                notify_new_skills(core, res, catalog, &prior_skills);
                 let kind = res.frame(top).expect("frame").kind;
                 let next = next_stage(kind, Stage::Commit);
                 let f = res.frame_mut(top).expect("frame");
@@ -497,6 +623,37 @@ pub fn run(
             }
             Stage::Intrinsic => {
                 if intrinsic_done {
+                    if matches!(
+                        res.frame(top).expect("frame").data,
+                        EventData::SkillInvocation(_)
+                    ) {
+                        let deferred = match &mut res.frame_mut(top).expect("frame").data {
+                            EventData::SkillInvocation(d)
+                                if d.phase == crate::event::InvocationPhase::After
+                                    && d.deferred_log =>
+                            {
+                                d.deferred_log = false;
+                                Some((d.owner, d.def))
+                            }
+                            _ => None,
+                        };
+                        if let Some((owner, def)) = deferred {
+                            let mut ctx = Ctx {
+                                core,
+                                res,
+                                catalog,
+                                out,
+                            };
+                            ctx.emit(EventData::SkillLog {
+                                owner,
+                                def,
+                                begin: false,
+                            });
+                        } else {
+                            kernel::advance_invocation(res.frame_mut(top).expect("frame"));
+                        }
+                        continue;
+                    }
                     let kind = res.frame(top).expect("frame").kind;
                     let next = next_stage(kind, Stage::Intrinsic);
                     res.frame_mut(top).expect("frame").stage = next;
@@ -516,6 +673,7 @@ pub fn run(
                         resume_depth: res.stack.len(),
                         slot: Slot::Intrinsic { frame: top },
                         machine: m,
+                        awaiting_answer: false,
                     }),
                     None => res.frame_mut(top).expect("frame").intrinsic_done = true,
                 }
@@ -527,39 +685,63 @@ pub fn run(
     }
 }
 
-/// 弹出并运行队列中的下一个触发（运行前重查实例有效性与过滤器）。
-fn run_queued_trigger(
+fn native_machine(
+    owner: PlayerId,
+    def: SkillDefId,
+    effect: crate::event::NativeDamageEffect,
+) -> Box<dyn SkillMachine> {
+    if crate::event::uses_native_invocation(effect) {
+        Box::new(kernel::NativeInvocation {
+            owner,
+            def,
+            window: effect.window(),
+            progress: crate::event::NativeInvocationProgress::Ready,
+        })
+    } else {
+        Box::new(kernel::NativeDamageSkill {
+            owner,
+            def,
+            window: effect.window(),
+        })
+    }
+}
+
+fn start_queued_trigger(
     core: &mut GameStateCore,
     res: &mut Resolution,
     catalog: &crate::catalog::Catalog,
     out: &mut Vec<LogEvent>,
     frame_id: EventId,
+    def_id: SkillDefId,
+    owner: PlayerId,
 ) {
-    let qt = {
-        let f = res.frame_mut(frame_id).expect("frame");
-        f.queue.remove(0)
+    let Some(index) = res.frame(frame_id).and_then(|f| {
+        f.queue
+            .iter()
+            .position(|q| q.def == def_id && q.owner == owner)
+    }) else {
+        return;
     };
-    let instance_ok = core
-        .skills
-        .get(&(qt.owner, qt.def))
-        .map(|i| i.enabled)
-        .unwrap_or(false)
-        && core.player(qt.owner).alive;
-    if !instance_ok {
-        return; // 结算中途被禁用/死亡的技能不再生效
+    let qt = res.frame_mut(frame_id).expect("frame").queue.remove(index);
+    let event = res.frame(frame_id).expect("frame").data.clone();
+    let actual_event =
+        crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
+    if !trigger_order::eligible(
+        core,
+        catalog,
+        &qt,
+        &res.stack,
+        res.frame(frame_id).expect("frame"),
+    ) {
+        return;
     }
     let def = &catalog.skills[qt.def as usize];
-    let Some(meta) = def.trigger.as_ref() else {
-        return;
-    };
-    let event = res.frame(frame_id).expect("frame").data.clone();
-    let qctx = QueryCtx {
-        state: core,
-        catalog,
-    };
-    if !def.behavior.filter(&qctx, qt.owner, &event) {
-        return;
-    }
+    let kind = trigger_order::event_kind(res.frame(frame_id).expect("frame"));
+    let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
+    let meta = native_meta
+        .as_ref()
+        .or(def.trigger.as_ref())
+        .expect("eligible meta");
     let machine: Box<dyn SkillMachine> = if meta.optional {
         Box::new(OptionalGate {
             owner: qt.owner,
@@ -576,23 +758,46 @@ fn run_queued_trigger(
             }
             inst.once_used = true;
         }
-        out.push(LogEvent::SkillTriggered {
-            skill: def.name,
-            owner: qt.owner,
-        });
-        def.behavior.start_in_context(
+        let native = def.behavior.native_damage_effect(kind);
+        if !matches!(
+            native,
+            Some(
+                crate::event::NativeDamageEffect::Qinglong
+                    | crate::event::NativeDamageEffect::Zhangwu
+                    | crate::event::NativeDamageEffect::Yuance
+                    | crate::event::NativeDamageEffect::Jidian
+                    | crate::event::NativeDamageEffect::JidingRecover
+            )
+        ) {
+            out.push(LogEvent::SkillTriggered {
+                skill: def.name,
+                owner: qt.owner,
+            });
+        }
+        if let Some(effect) = native {
+            res.parks.push(Park {
+                resume_depth: res.stack.len(),
+                slot: Slot::Trigger { frame: frame_id },
+                awaiting_answer: false,
+                machine: native_machine(qt.owner, qt.def, effect),
+            });
+            return;
+        }
+        def.behavior.start_in_window(
             &QueryCtx {
                 state: core,
                 catalog,
             },
             qt.owner,
-            &event,
+            &actual_event,
+            trigger_order::event_kind(res.frame(frame_id).expect("frame")),
         )
     };
     res.parks.push(Park {
         resume_depth: res.stack.len(),
         slot: Slot::Trigger { frame: frame_id },
         machine,
+        awaiting_answer: false,
     });
 }
 
@@ -604,5 +809,50 @@ fn finish_slot(res: &mut Resolution, slot: Slot) {
         if let Some(f) = res.frame_mut(frame) {
             f.intrinsic_done = true;
         }
+    }
+}
+
+// Core equipment/general assembly has no Resolution dependency; observe new keys at its step boundary.
+fn notify_new_skills(
+    core: &GameStateCore,
+    res: &mut Resolution,
+    catalog: &crate::catalog::Catalog,
+    prior: &std::collections::BTreeSet<(PlayerId, SkillDefId)>,
+) {
+    sync_trigger_owners(core, res);
+    for &(owner, def) in core.skills.keys().filter(|key| !prior.contains(key)) {
+        register_added(core, res, catalog, owner, def);
+    }
+    let mut helpers = Vec::new();
+    for frame in &res.stack {
+        if !matches!(frame.data, EventData::DamageWindow { .. }) {
+            continue;
+        }
+        let kind = trigger_order::event_kind(frame);
+        for &def in catalog.candidates(kind) {
+            let skill = &catalog.skills[def as usize];
+            if !skill
+                .behavior
+                .native_damage_effect(kind)
+                .is_some_and(|e| e.helper_name() == Some(skill.name))
+            {
+                continue;
+            }
+            for owner in 0..core.players.len() as PlayerId {
+                let q = QueuedTrigger {
+                    owner,
+                    def,
+                    order: (0, 0, 0, 0, def),
+                };
+                if trigger_order::eligible(core, catalog, &q, &res.stack, frame) {
+                    helpers.push((owner, def));
+                }
+            }
+        }
+    }
+    helpers.sort_unstable();
+    helpers.dedup();
+    for (owner, def) in helpers {
+        register_added(core, res, catalog, owner, def);
     }
 }

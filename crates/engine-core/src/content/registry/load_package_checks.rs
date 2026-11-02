@@ -5,8 +5,19 @@ use super::*;
 impl ContentRegistry {
     /// 装载前校验：逻辑哈希、重复装载、VM ABI 门槛与依赖闭包（只读）。
     /// 返回 `Ok(false)` 表示同一逻辑哈希的包已装载，调用方应直接成功返回（幂等）。
-    pub(super) fn validate_package_for_load(&self, pkg: &ContentPackage) -> Result<bool, ContentLoadError> {
-        pkg.validate_vm_effect_abi().map_err(ContentLoadError::Invalid)?;
+    pub(super) fn validate_package_for_load(
+        &self,
+        pkg: &ContentPackage,
+    ) -> Result<bool, ContentLoadError> {
+        pkg.validate_vm_effect_abi()
+            .map_err(ContentLoadError::Invalid)?;
+        pkg.validate_trigger_order_schema()
+            .map_err(ContentLoadError::Invalid)?;
+        if pkg.manifest.content_schema_version != 3 {
+            return Err(ContentLoadError::Invalid(
+                "legacy execution requires schema3 default ordering".into(),
+            ));
+        }
         if pkg.manifest.logic_hash != pkg.compute_logic_hash() {
             return Err(ContentLoadError::Invalid(format!(
                 "logic hash mismatch for {}/{}@{}",
@@ -512,5 +523,42 @@ impl ContentRegistry {
         }) {
             self.track_damaged_by_player_bitset = true;
         }
+    }
+}
+
+#[cfg(test)]
+mod c331_schema_tests {
+    use super::*;
+    #[test]
+    fn legacy_only_executes_schema3_default_and_validates_before_idempotency() {
+        let mut p = content_compiler::compile_source("skill c331_legacy(4200000011) locked { trigger phase_end always { effect draw_cards(self, 1); } }").unwrap();
+        let mut registry = ContentRegistry::new();
+        registry.load_package(&p).unwrap();
+        p.trigger_index[0].priority = 17;
+        assert!(registry.load_package(&p).is_err());
+        p.manifest.logic_hash = p.compute_logic_hash();
+        assert!(ContentRegistry::new().load_package(&p).is_err());
+        p.manifest.content_schema_version = 4;
+        p.manifest.logic_hash = p.compute_logic_hash();
+        p.validate().unwrap();
+        assert!(ContentRegistry::new().load_package(&p).is_err());
+        p.trigger_index[0].priority = 0;
+        p.skill_index[0].charlotte = Some(false);
+        p.manifest.content_schema_version = 5;
+        p.manifest.logic_hash = p.compute_logic_hash();
+        p.validate().unwrap();
+        let error = ContentRegistry::new().load_package(&p).unwrap_err();
+        assert!(error.to_string().contains("legacy execution requires schema3"));
+    }
+    #[test]
+    fn legacy_effect_abi_validation_is_preserved_before_execution() {
+        let mut p = content_compiler::compile_source("skill c331_abi(4200000012) locked { trigger phase_end always { effect choose_other_targets_by_skipped_phase_count_damage_draw(self, 1); } }").unwrap();
+        ContentRegistry::new().load_package(&p).unwrap();
+        p.manifest.rule_vm_abi_version = 757;
+        p.manifest.logic_hash = p.compute_logic_hash();
+        let error = ContentRegistry::new()
+            .load_package(&p)
+            .expect_err("effect 772 requires ABI758");
+        assert!(error.to_string().contains("effect 772"), "{error}");
     }
 }

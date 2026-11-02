@@ -39,7 +39,7 @@ impl SkillMachine for XiangDeMachine {
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         let d = ctx.current_damage_mut();
-        d.amount += 1;
+        if let Some(amount) = d.amount.checked_add(1) { d.amount = amount; } else { ctx.fail_damage_amount(); return Flow::Done; }
         Flow::Done
     }
 }

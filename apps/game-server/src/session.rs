@@ -90,7 +90,7 @@ pub struct Session {
     pub reconnect_token: Option<String>,
     /// Last accepted conn_seq from client.
     pub last_conn_seq: u64,
-    /// Only an exact WS6 Hello enables public room operations.
+    /// Only an exact WS7 Hello enables public room operations.
     pub handshake_complete: bool,
     /// Outbound.
     pub outbound: Outbound,

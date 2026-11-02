@@ -39,6 +39,18 @@ pub struct SkillIr {
     /// Conversion skill whose branch can be toggled by generic rules.
     #[serde(default)]
     pub conversion: bool,
+    /// Explicit schema5 charlotte trait.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub charlotte: Option<bool>,
+    /// Explicit schema5 persevere trait.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub persevere: Option<bool>,
+    /// Explicit schema5 forever trait.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub forever: Option<bool>,
+    /// Explicit schema5 temporary trait.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub temporary: Option<bool>,
     /// Triggers.
     pub triggers: Vec<TriggerIr>,
     /// Active (on-demand) skills.

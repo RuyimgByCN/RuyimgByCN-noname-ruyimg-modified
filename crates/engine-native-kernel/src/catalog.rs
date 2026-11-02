@@ -638,6 +638,8 @@ pub struct TriggerMeta {
     pub timing: Timing,
     /// 数值大者先结。
     pub priority: i32,
+    /// Fixed source metadata; false for silent or unnamed triggers.
+    pub order_selectable: bool,
     /// 可选触发：需目标玩家确认，确认前不出现在强制队列。
     pub optional: bool,
     /// 额外分发的事件类别（一个技能响应多种事件，如连营）。
@@ -676,6 +678,24 @@ impl std::fmt::Debug for SkillDef {
 /// 原生技能行为接口。触发过滤在 collect 与运行前各做一次，
 /// 运行前重查使「结算中途被禁用」的技能不再生效。
 pub trait SkillBehavior: Send + Sync {
+    fn can_be_gained(
+        &self,
+        _ctx: &QueryCtx<'_>,
+        _owner: crate::ids::PlayerId,
+        _card: CardId,
+        _source: crate::ids::PlayerId,
+        _target: crate::ids::PlayerId,
+    ) -> Option<bool> {
+        None
+    }
+
+    fn native_damage_effect(
+        &self,
+        _kind: crate::event::EventKind,
+    ) -> Option<crate::event::NativeDamageEffect> {
+        None
+    }
+
     /// 该技能所有者是否在给定事件上触发（只读查询）。
     fn filter(
         &self,
@@ -699,6 +719,38 @@ pub trait SkillBehavior: Send + Sync {
         event: &crate::event::EventData,
     ) -> Box<dyn SkillMachine> {
         self.start(owner, event)
+    }
+
+    /// Trigger dispatch uses the effective kind of its existing frame window.
+    fn filter_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: crate::ids::PlayerId,
+        event: &crate::event::EventData,
+        _kind: crate::event::EventKind,
+    ) -> bool {
+        self.filter(ctx, owner, event)
+    }
+    fn start_in_window(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: crate::ids::PlayerId,
+        event: &crate::event::EventData,
+        _kind: crate::event::EventKind,
+    ) -> Box<dyn SkillMachine> {
+        self.start_in_context(ctx, owner, event)
+    }
+    fn vm_trigger_window_is_authorized(
+        &self,
+        bytes: &[u8],
+        _kind: crate::event::EventKind,
+    ) -> bool {
+        self.vm_module_is_authorized(bytes)
+    }
+
+    /// Catalog module roles distinguish trigger continuations from active Intrinsic work.
+    fn vm_module_requires_trigger_frame(&self, _bytes: &[u8]) -> bool {
+        false
     }
 
     /// 主动技（N11）：经 GameAction::ActivateSkill 发动时由引擎调用；
@@ -741,6 +793,7 @@ pub trait SkillBehavior: Send + Sync {
         _ctx: &QueryCtx<'_>,
         _owner: crate::ids::PlayerId,
         _event: &crate::event::EventData,
+        _kind: crate::event::EventKind,
     ) -> bool {
         false
     }
@@ -804,6 +857,13 @@ pub struct QueryCtx<'a> {
 /// 线程安全（T13 工作池）：机器为纯数据状态——Send 既有，补 Sync 使
 /// 引擎可跨线程共享（多座并行规划；实现体均为普通结构体）。
 pub trait SkillMachine: Send + Sync {
+    /// Window identity used solely for dynamic subscription injection into ancestor queues.
+    fn trigger_order(&self) -> Option<&crate::resolution::TriggerOrder> {
+        None
+    }
+    fn trigger_order_mut(&mut self) -> Option<&mut crate::resolution::TriggerOrder> {
+        None
+    }
     fn step(&mut self, ctx: &mut crate::machine::Ctx<'_>) -> crate::machine::Flow;
     fn fork(&self) -> Box<dyn SkillMachine>;
     fn snapshot(&self) -> crate::snap::MachineSnapshot;
@@ -997,6 +1057,34 @@ impl Catalog {
     }
 
     /// 武将下标的元数据（基础表优先，扩展表接续；越界 None）。
+    /// Typed identity of the immutable boss_mushengoumang source declaration.
+    pub fn jinshenrushou_general_id(&self) -> u16 {
+        let source = crate::vocabulary::generals::BOSS_JINSHENRUSHOU;
+        assert_eq!(
+            crate::vocabulary::generals::BOSS_GENERALS[source.0],
+            source.1
+        );
+        u16::try_from(
+            crate::vocabulary::generals::STANDARD_GENERALS.len()
+                + self.extension_generals.len()
+                + source.0,
+        )
+        .expect("catalog general bound")
+    }
+    pub fn mushengoumang_general_id(&self) -> u16 {
+        let source = crate::vocabulary::generals::BOSS_MUSHENGOUMANG;
+        assert_eq!(
+            crate::vocabulary::generals::BOSS_GENERALS[source.0],
+            source.1
+        );
+        u16::try_from(
+            crate::vocabulary::generals::STANDARD_GENERALS.len()
+                + self.extension_generals.len()
+                + source.0,
+        )
+        .expect("catalog general bound")
+    }
+
     pub fn general_meta(
         &self,
         g: u16,

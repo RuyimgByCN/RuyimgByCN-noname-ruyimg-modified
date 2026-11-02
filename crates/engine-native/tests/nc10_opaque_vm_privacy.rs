@@ -54,6 +54,7 @@ fn pack() -> ExtensionPack {
         init_hook: InitHook::None,
         enabled: true,
         vm_skills: vec![VmSkillDecl {
+            declaration_hash: None,
             name: "nc10_opaque".into(),
             module: rule_vm::BytecodeModule {
                 name: "nc10-opaque".into(),
@@ -68,6 +69,7 @@ fn pack() -> ExtensionPack {
                 event: engine_native::EventKind::PhaseEnd,
                 timing: engine_native::Timing::Normal,
                 priority: 0,
+                order_selectable: true,
                 optional: false,
                 extra_events: vec![],
             },
@@ -130,7 +132,7 @@ fn opaque_vm_private_local_does_not_change_choice() {
             paused: Some(paused),
             owner,
             ..
-        } = &snapshot.resolution.parks[0].machine
+        } = &snapshot.resolution.parks.iter().find(|p| matches!(p.machine, engine_native::MachineSnapshot::Rvm { .. })).expect("VM owner machine").machine
         else {
             panic!("VM paused")
         };

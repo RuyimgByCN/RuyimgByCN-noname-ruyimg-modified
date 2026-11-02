@@ -149,23 +149,32 @@ fn boss_chujiangwang_bingfeng_death_flip_source() {
     advance_to_play(&mut e, 0);
     let out = e.debug_deal_damage(Some(0), 1, 10, DamageNature::Normal);
     let _ = out;
-    for _ in 0..3 {
+    for _ in 0..8 {
         match e.open_choice() {
-            Some(c) if c.spec.prompt == "dying_save" => {
+            Some(c) if matches!(c.spec.prompt, "dying_save" | "trigger_confirm") => {
                 let (cid, obs) = (c.id, c.observer);
+                let selection = if c.spec.prompt == "trigger_confirm" {
+                    vec![]
+                } else {
+                    vec![ChoiceOption::Pass]
+                };
                 submit_cmd(
                     &mut e,
                     obs,
                     GameAction::Answer {
                         choice_id: cid,
-                        selection: vec![ChoiceOption::Pass],
+                        selection,
                     },
                 );
             }
             _ => break,
         }
     }
-    assert!(!e.state_core().player(1).alive, "楚江王已死亡");
+    assert!(
+        !e.state_core().player(1).alive,
+        "楚江王已死亡; pending={:?}",
+        e.open_choice()
+    );
     assert!(e.debug_face_down(0), "冰封：来源 0 号被翻面");
     let snap = e.save();
     let r = engine_native::Engine::restore(&snap).expect("往返");

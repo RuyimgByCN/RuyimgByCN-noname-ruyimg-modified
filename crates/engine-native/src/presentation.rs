@@ -157,6 +157,15 @@ pub fn project(
                     cards: own.then(|| names(cards)),
                 }]
             }
+            LogEvent::VirtualCardPlayed {
+                kind,
+                player,
+                targets,
+            } => vec![PresentationEvent::Played {
+                player: *player,
+                card: kind.key().into(),
+                targets: targets.clone(),
+            }],
             LogEvent::CardPlayed {
                 card,
                 player,
@@ -174,7 +183,30 @@ pub fn project(
                 player: *player,
                 cards: names(cards),
             }],
+            LogEvent::CardsTaken {
+                from,
+                to,
+                cards,
+                public,
+            } => vec![PresentationEvent::Given {
+                from: *from,
+                to: *to,
+                cards: if *public || viewer == Some(*from) || viewer == Some(*to) {
+                    names(cards)
+                } else {
+                    vec!["hand".into(); cards.len()]
+                },
+            }],
             LogEvent::CardsGiven { from, to, cards } => vec![PresentationEvent::Given {
+                from: *from,
+                to: *to,
+                cards: if viewer == Some(*from) || viewer == Some(*to) {
+                    names(cards)
+                } else {
+                    vec!["hand".into(); cards.len()]
+                },
+            }],
+            LogEvent::CardsGivenPublic { from, to, cards } => vec![PresentationEvent::Given {
                 from: *from,
                 to: *to,
                 cards: names(cards),
@@ -194,9 +226,15 @@ pub fn project(
                 amount: *amount,
             }],
             LogEvent::BossChongzhengTick { player, count: _ } => {
-                vec![PresentationEvent::Recovered { player: *player, amount: 0 }]
+                vec![PresentationEvent::Recovered {
+                    player: *player,
+                    amount: 0,
+                }]
             }
-            LogEvent::BossRevived { player } => vec![PresentationEvent::Recovered { player: *player, amount: 0 }],
+            LogEvent::BossRevived { player } => vec![PresentationEvent::Recovered {
+                player: *player,
+                amount: 0,
+            }],
             LogEvent::DyingEntered { player } => {
                 vec![PresentationEvent::DyingEntered { player: *player }]
             }
@@ -208,7 +246,11 @@ pub fn project(
                 player: *player,
                 killer: *killer,
             }],
-            LogEvent::ChoiceOpened { id, observer, prompt } => {
+            LogEvent::ChoiceOpened {
+                id,
+                observer,
+                prompt,
+            } => {
                 vec![PresentationEvent::ChoiceOpened {
                     id: *id,
                     observer: *observer,
@@ -401,7 +443,10 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
                 "座位{} 使用{} → {:?}",
                 player,
                 card,
-                targets.iter().map(|t| format!("座位{}", t)).collect::<Vec<_>>()
+                targets
+                    .iter()
+                    .map(|t| format!("座位{}", t))
+                    .collect::<Vec<_>>()
             ),
             PresentationEvent::Responded { player, card } => {
                 format!("座位{} 打出{}", player, card)
@@ -421,7 +466,9 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
                 "座位{} 受 {} 点伤害（来源：{}，牌：{}）",
                 target,
                 amount,
-                source.map(|s| format!("座位{}", s)).unwrap_or_else(|| "无".into()),
+                source
+                    .map(|s| format!("座位{}", s))
+                    .unwrap_or_else(|| "无".into()),
                 by_card.clone().unwrap_or_else(|| "无".into())
             ),
             PresentationEvent::DamagePrevented { target } => {
@@ -437,7 +484,9 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
             PresentationEvent::Died { player, killer } => format!(
                 "座位{} 阵亡（凶手：{}）",
                 player,
-                killer.map(|s| format!("座位{}", s)).unwrap_or_else(|| "无".into())
+                killer
+                    .map(|s| format!("座位{}", s))
+                    .unwrap_or_else(|| "无".into())
             ),
             PresentationEvent::Equipped {
                 player,
@@ -475,9 +524,15 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
                 format!("座位{} 判定 {}", player, card)
             }
             PresentationEvent::ArmorJudged { player, success } => {
-                format!("座位{} 八卦阵判定{}", player, if *success { "成功" } else { "失败" })
+                format!(
+                    "座位{} 八卦阵判定{}",
+                    player,
+                    if *success { "成功" } else { "失败" }
+                )
             }
-            PresentationEvent::ChoiceOpened { observer, prompt, .. } => {
+            PresentationEvent::ChoiceOpened {
+                observer, prompt, ..
+            } => {
                 format!("座位{} 待选择（{}）", observer, prompt)
             }
         };
@@ -493,10 +548,18 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
             crate::state::Winner::Faction(f) => format!("{:?}", f),
             crate::state::Winner::Versus(t) => format!("{}队", if *t == 0 { "一" } else { "二" }),
             crate::state::Winner::Doudizhu { lord_won } => {
-                if *lord_won { "地主".to_string() } else { "农民".to_string() }
+                if *lord_won {
+                    "地主".to_string()
+                } else {
+                    "农民".to_string()
+                }
             }
             crate::state::Winner::Boss { boss_won } => {
-                if *boss_won { "Boss".to_string() } else { "挑战者".to_string() }
+                if *boss_won {
+                    "Boss".to_string()
+                } else {
+                    "挑战者".to_string()
+                }
             }
         };
         line(&format!("终局：{} 胜", who), &mut s);

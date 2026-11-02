@@ -222,3 +222,215 @@ fn swd_generals_b90_xuanying_lieren() {
     assert_eq!(e.debug_hp(1), 7, "烈刃前序：p1 受 1 伤（8→7）");
     assert!(hand_len_w(&e, 0) >= 1, "烈刃赢：获得 p1 一张牌（手牌≥1）");
 }
+
+// Load the actual selected producer asset; general assignment, not debug_grant, owns the parent.
+fn source_parent_pack() -> ExtensionPack {
+    let asset = repo_extensions_root().join("shahai-swd-upstream-noname/assets/cards.json");
+    bridge(&std::fs::read_to_string(asset).unwrap())
+}
+fn source_parent_engine(pack: &ExtensionPack) -> Engine {
+    let mut e = Engine::new_with_extensions(331801, 4, &[pack]).unwrap();
+    e.assign_general_named(0, "swd_duanmeng").unwrap();
+    for owner in 0..4 {
+        e.debug_clear_hand(owner);
+    }
+    let def = e.catalog().skill_by_name("xuanying").unwrap();
+    assert!(e.state_core().skills.contains_key(&(0, def)));
+    // 父技 group 現在把傷害子技一併授予（C331 審查第 4 項的修法）。
+    let child = e
+        .catalog()
+        .skill_by_name("xuanying_damage")
+        .expect("damage child registered by the parent group");
+    assert!(
+        e.state_core().skills.contains_key(&(0, child)),
+        "parent group grants the damage child"
+    );
+    e
+}
+fn source_answer(e: &mut Engine, selection: Vec<ChoiceOption>) {
+    let c = e.open_choice().unwrap().clone();
+    let result = e.submit(GameCommand {
+        actor: c.observer,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: GameAction::Answer {
+            choice_id: c.id,
+            selection,
+        },
+    });
+    assert!(!matches!(result, CommandOutcome::Rejected(_)), "{result:?}");
+}
+fn source_settle(e: &mut Engine) {
+    for _ in 0..16 {
+        let Some(c) = e.open_choice() else {
+            return;
+        };
+        let selection = if c.spec.options.contains(&ChoiceOption::Confirm) {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else {
+            c.spec.options.iter().take(c.spec.min).copied().collect()
+        };
+        source_answer(e, selection);
+    }
+    panic!("source fixture did not settle");
+}
+#[test]
+fn source_parent_group_grants_damage_child_counterattack_and_requires_the_grant() {
+    let pack = source_parent_pack();
+    let mut e = source_parent_engine(&pack);
+    e.debug_set_turn(1, Phase::Play, 1);
+    e.state_core_mut().players[0].linked = true;
+    let attacker_hp = e.debug_hp(1);
+    let owner_hp = e.debug_hp(0);
+    let cursor = e.log().len();
+    e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    source_settle(&mut e);
+    assert_eq!(e.debug_hp(0), owner_hp - 1);
+    assert_eq!(
+        e.debug_hp(1),
+        attacker_hp - 1,
+        "granted damage child counterattacks the source"
+    );
+    assert!(
+        !e.state_core().player(0).linked,
+        "counterattack unlinks the owner"
+    );
+    assert!(
+        e.log()[cursor..]
+            .iter()
+            .any(|event| matches!(event, engine_native::LogEvent::CardPlayed { player: 0, .. })),
+        "counterattack plays a virtual Sha"
+    );
+    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
+    let r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
+    let expected = e.save();
+    let mut actual = r.save();
+    actual.auth_generation = expected.auth_generation;
+    assert_eq!(actual, expected);
+
+    // 只有父技、沒有子技授予 → 傷害面不可達（不解除橫置、不反擊）。
+    let mut no_child = source_parent_engine(&pack);
+    let child = no_child.catalog().skill_by_name("xuanying_damage").unwrap();
+    no_child.state_core_mut().skills.remove(&(0, child));
+    no_child.debug_set_turn(1, Phase::Play, 1);
+    no_child.state_core_mut().players[0].linked = true;
+    let attacker_hp = no_child.debug_hp(1);
+    let owner_hp = no_child.debug_hp(0);
+    let cursor = no_child.log().len();
+    no_child.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    source_settle(&mut no_child);
+    assert_eq!(no_child.debug_hp(0), owner_hp - 1);
+    assert_eq!(
+        no_child.debug_hp(1),
+        attacker_hp,
+        "ungranted damage child must not counterattack"
+    );
+    assert!(
+        no_child.state_core().player(0).linked,
+        "ungranted damage child cannot unlink the owner"
+    );
+    assert!(
+        !no_child.log()[cursor..]
+            .iter()
+            .any(|event| matches!(event, engine_native::LogEvent::CardPlayed { player: 0, .. })),
+        "ungranted child must not manufacture a Sha"
+    );
+}
+#[test]
+fn source_parent_grant_keeps_active_sha_and_cancel_across_byte_restore() {
+    for target in [Some(2), None] {
+        let pack = source_parent_pack();
+        let mut e = source_parent_engine(&pack);
+        e.debug_set_turn(0, Phase::Play, 1);
+        let def = e.catalog().skill_by_name("xuanying").unwrap();
+        let result = e.submit(GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: e.save().last_dedup + 1,
+            action: GameAction::ActivateSkill { skill: def },
+        });
+        assert!(!matches!(result, CommandOutcome::Rejected(_)), "{result:?}");
+        assert_eq!(e.open_choice().unwrap().spec.prompt, "xuanying_target");
+        let snap = decode_archive(&encode_archive(&e.save())).unwrap();
+        let mut r = Engine::restore_with_extensions(&snap, &[&pack]).unwrap();
+        let cursor = e.log().len();
+        for engine in [&mut e, &mut r] {
+            source_answer(
+                engine,
+                target.map(ChoiceOption::Player).into_iter().collect(),
+            );
+            source_settle(engine);
+        }
+        let expected = e.save();
+        let mut actual = r.save();
+        actual.auth_generation = expected.auth_generation;
+        assert_eq!(actual, expected);
+        assert_eq!(e.state_hash(), r.state_hash());
+        assert_eq!(&e.log()[cursor..], r.log());
+        assert_eq!(e.state_core().player(0).linked, target.is_some());
+        assert_eq!(
+            e.debug_hp(2),
+            if target.is_some() { 3 } else { 4 },
+            "granted sha keeps its out-of-range target branch; cancellation spends nothing"
+        );
+    }
+}
+
+#[test]
+fn source_parent_active_restore_rejects_wrong_choice_fields() {
+    let pack = source_parent_pack();
+    let mut e = source_parent_engine(&pack);
+    e.debug_set_turn(0, Phase::Play, 1);
+    let def = e.catalog().skill_by_name("xuanying").unwrap();
+    let result = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: GameAction::ActivateSkill { skill: def },
+    });
+    assert!(!matches!(result, CommandOutcome::Rejected(_)));
+    let snap = decode_archive(&encode_archive(&e.save())).unwrap();
+    assert!(Engine::restore_with_extensions(&snap, &[&pack]).is_ok());
+    let mut unknown = snap.clone();
+    unknown.resolution.open_choice.as_mut().unwrap().spec.prompt = "c331_unknown_xuanying";
+    assert!(matches!(
+        decode_archive(&encode_archive(&unknown)),
+        Err(engine_native::archive::ArchiveError::BadTag(
+            "prompt_unknown",
+            0
+        ))
+    ));
+    for case in 0..8 {
+        let mut bad = snap.clone();
+        let c = bad.resolution.open_choice.as_mut().unwrap();
+        match case {
+            0 => c.spec.options.push(ChoiceOption::Player(0)),
+            1 => c.observer = 1,
+            2 => c.spec.prompt = "rende_target",
+            3 => c.spec.allow_cancel = false,
+            4 => c.spec.min = 0,
+            5 => c.spec.kind = engine_native::choice::ChoiceKind::SelectCards,
+            6 => c.spec.max = 2,
+            7 => {
+                let stage = bad
+                    .resolution
+                    .parks
+                    .iter_mut()
+                    .find_map(|p| match &mut p.machine {
+                        engine_native::snap::MachineSnapshot::Host { stage, .. } => Some(stage),
+                        _ => None,
+                    })
+                    .unwrap();
+                *stage = 0;
+            }
+            _ => unreachable!(),
+        }
+        let decoded = decode_archive(&encode_archive(&bad)).unwrap();
+        assert!(
+            Engine::restore_with_extensions(&decoded, &[&pack]).is_err(),
+            "case{case} must not relax the existing exact ask contract"
+        );
+    }
+}
