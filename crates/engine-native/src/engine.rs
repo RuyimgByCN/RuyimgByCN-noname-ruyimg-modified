@@ -357,6 +357,7 @@ mod tests {
                         false,
                         false,
                     )),
+                    awaiting_answer: false,
                 }],
                 ..Resolution::new(64)
             };

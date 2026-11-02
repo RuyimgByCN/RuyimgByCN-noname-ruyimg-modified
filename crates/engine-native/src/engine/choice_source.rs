@@ -123,6 +123,7 @@ mod tests {
             resume_depth: p.resume_depth,
             slot: p.slot,
             machine: p.machine.fork(),
+            awaiting_answer: p.awaiting_answer,
         };
         engine.state.resolution.parks.push(duplicate);
         assert_eq!(source(&engine), None);

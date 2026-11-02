@@ -694,6 +694,7 @@ pub(super) fn play_card(
                             machine: Box::new(crate::kernel::MonkeyStealMachine::new(
                                 card, user, holders,
                             )),
+                            awaiting_answer: false,
                         });
                         return Ok(());
                     }

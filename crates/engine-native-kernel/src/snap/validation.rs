@@ -472,6 +472,12 @@ pub fn validate_resolution(
     // 应答选项 ID 界
     if let Some(ans) = &resolution.answer {
         check_options(ans, b)?;
+        // 应答必须有承接询问：没有开放选择的待应答无人认领，`run` 不得把它
+        // 转交给没有提问的机器（否则真实提问者随后读应答即 panic）。合法
+        // 静止点不会留下这种档——应答与询问在同一段内被消费。
+        if resolution.open_choice.is_none() {
+            return Err(oob("answer_without_ask", 0));
+        }
     }
     // 开放选择：观察者/选项在界、ID 水位、必须有承接机器
     if let Some(open) = &resolution.open_choice {

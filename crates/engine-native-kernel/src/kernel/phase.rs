@@ -143,6 +143,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
                 machine: Box::new(crate::resolution::OptionalGate::new(
                     player, def, event, false, None,
                 )),
+                awaiting_answer: false,
             });
         }
     }

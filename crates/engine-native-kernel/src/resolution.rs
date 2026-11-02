@@ -24,6 +24,16 @@ pub struct Park {
     pub resume_depth: usize,
     pub slot: Slot,
     pub machine: Box<dyn SkillMachine>,
+    /// 本机是否在等待「已开窗询问」的应答（运行时标记，不入快照/哈希）。
+    ///
+    /// 同一栈深可以同时停着多台机器（嵌套触发/AOE 逐目标派发/恢复后的
+    /// 追加挂起）：应答只属于**提出询问的那一台**，按栈深顺序取第一台会
+    /// 把应答交给没有提问的机器，被真实提问者随后读 `ctx.answer` 时
+    /// panic（恢复后继续 `autoStep` 的 `expect_failed` 根因）。`run` 在机器
+    /// 返回 `Flow::WaitChoice` 时置真、恢复该机时清除；读档时由
+    /// `snap::active_ask` 与开放选择逐字段匹配唯一重建（见
+    /// `Engine::restore_with_catalog`）。
+    pub awaiting_answer: bool,
 }
 
 impl Clone for Park {
@@ -32,6 +42,7 @@ impl Clone for Park {
             resume_depth: self.resume_depth,
             slot: self.slot,
             machine: self.machine.fork(),
+            awaiting_answer: self.awaiting_answer,
         }
     }
 }
@@ -410,12 +421,21 @@ pub fn run(
 
         // A) 恢复深度匹配的挂起机器
         if res.open_choice.is_none() {
-            if let Some(idx) = res
+            let depth = res.stack.len();
+            // 有已校验应答时只唤醒**提出询问的那台**机器：同一栈深可能停着
+            // 多台（嵌套触发/AOE 逐目标派发/恢复件里的追加挂起），按顺序取
+            // 第一台会把应答交给没有提问的机器，真实提问者随后读
+            // `ctx.answer` 即 panic（恢复后继续 autoStep 的 expect_failed
+            // 根因）。无应答时保持原语义：同深度按挂起顺序恢复。
+            let answered = res.answer.is_some();
+            let wake = res
                 .parks
                 .iter()
-                .position(|p| p.resume_depth == res.stack.len())
-            {
+                .position(|p| p.resume_depth == depth && (!answered || p.awaiting_answer));
+            if let Some(idx) = wake {
                 let mut park = res.parks.remove(idx);
+                // 恢复即消费该标记：下一次提问会重新置真。
+                park.awaiting_answer = false;
                 let flow = {
                     let mut ctx = Ctx {
                         core,
@@ -447,12 +467,18 @@ pub fn run(
                         // （open_choice 存在时不推进栈），故开窗时刻的栈深
                         // 即恢复点。
                         park.resume_depth = res.stack.len();
+                        // 本机提出询问 → 应答归本机（同深度多机时唯一定位）。
+                        park.awaiting_answer = true;
                         res.parks.push(park);
                         return StepOutcome::Pending;
                     }
                 }
                 continue;
             }
+            // 应答在场却无可交付的挂起机器（如 VM 提交钩子自行消费应答、
+            // 或承接关系已损坏）：**不转交**给没有提问的机器，照常推进栈顶。
+            // 合法读档不会走到这里——`validate_resolution` 拒绝「有应答、
+            // 无开放选择」的档，恢复件因此总有唯一认领者。
         }
 
         // B) 栈顶帧推进
@@ -516,6 +542,7 @@ pub fn run(
                         resume_depth: res.stack.len(),
                         slot: Slot::Intrinsic { frame: top },
                         machine: m,
+                        awaiting_answer: false,
                     }),
                     None => res.frame_mut(top).expect("frame").intrinsic_done = true,
                 }
@@ -593,6 +620,7 @@ fn run_queued_trigger(
         resume_depth: res.stack.len(),
         slot: Slot::Trigger { frame: frame_id },
         machine,
+        awaiting_answer: false,
     });
 }
 

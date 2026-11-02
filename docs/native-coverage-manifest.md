@@ -229,3 +229,7 @@ N01 重复弃牌、N02 判定中死亡丢牌、N03 同名堆叠均已关闭，�
 裁决27的新场景注册在既有`nc_rounds`组的`nc10_source_provenance`及engine内部`choice_source`测试：已知native Own来源、全catalog重名／未拥有／错误producer／深度／多ask／inner委托、VM／Host未知、Other／Referee／AI投影与私有牌堆／RNG／计数反事实。独立P/Q byte restore场景保留“初始来源相同而下一个Pending不同”的反例，不把字段当执行证书。
 
 legacy场景注册在既有core `engine::source_tests`：typed capture／两restore／state-only／直接serde／bytes、严格wire分离、旧13位置字段及完整错误差分；真实WS6／桌面Host／NativeSession和安全文本UI另有对应入口。场景存在、定向／全量／产品资格及当前Main接纳阶段分开见[字段证据](operations/evidence/2026-10-31-nc10-source-provenance/README.md)。原19 NoCert、质量、上游及平台完成条件仍保留。
+
+## 2026-11-02恢复承接场景登记（同栈深多机应答）
+
+裁决27的字段口径不变（测量树＝9f4b7423＋既有未提交 I02／NC10 工作树）；本次登记的是**执行位置**反例与回归：同一栈深停下多台机器时，已校验应答只交给提出询问的那台（`Park::awaiting_answer`），不再按栈深顺序取第一台。场景注册在既有`nc_rounds`组的`nc10_answer_routing`（确认门+同深度追加机捷挂起：应答归提问者、内层不被串答、探测零故障、坏档原子拒绝）与`engine-native-wasm`的`nc10_park_answer_routing`（typed `NativeSession` 与 byte `decode_archive`+`restore` 双路径逐步存档逐字节一致、malformed 原子控制）。产品面在真实 headless Chrome + 生产 `nativeBackend.ts` + 重建 WASM 上补跑七案例（UI 正向控制 5／正式协议 7／恢复后继续 7／malformed 原子 7，exceptions 0），`park-1` 继续摘要与 native Rust 路径一致。场景存在、定向／全量／产品结果分开，见[修复证据](operations/evidence/2026-11-02-park-answer-routing/README.md)；规则 330／存档 105／ABI 758／WS6 与既有 golden 未变，`source_skill` 门控仍按裁决27。

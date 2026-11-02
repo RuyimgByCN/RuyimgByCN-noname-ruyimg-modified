@@ -103,6 +103,7 @@ pub(super) fn apply_command(
                     frame: crate::resolution::NO_FRAME,
                 },
                 machine,
+                awaiting_answer: false,
             });
             Ok(())
         }

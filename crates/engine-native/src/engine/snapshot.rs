@@ -131,13 +131,22 @@ impl Engine {
         // 选择承接关系（N04-e）：开放选择必须恰好与某个续行机器的
         // 待答询问一致（观察者/提示/种类/选项含顺序/数量/放弃许可）；
         // 无开放选择时任何挂起机器都不得处于待询问状态。
-        let asks: Vec<crate::snap::ExpectedAsk> = snapshot
+        //
+        // 命中的那台机器就是「提出询问者」：`run` 只把已校验应答交给它，
+        // 同栈深多机时不会把应答转交给没有提问的机器。该身份是运行时
+        // 标记（`Park::awaiting_answer`），不入快照/哈希——读档由本段
+        // 唯一匹配重建（同深度多机因此不会在恢复后错配应答）。
+        let asks: Vec<(usize, crate::snap::ExpectedAsk)> = snapshot
             .resolution
             .parks
             .iter()
-            .filter_map(|p| crate::snap::active_ask(&p.machine, &snapshot.core, &catalog))
+            .enumerate()
+            .filter_map(|(i, p)| {
+                crate::snap::active_ask(&p.machine, &snapshot.core, &catalog).map(|a| (i, a))
+            })
             .collect();
-        let ask_refs: Vec<&crate::snap::ExpectedAsk> = asks.iter().collect();
+        let mut asker: Option<usize> = None;
+        let ask_refs: Vec<&crate::snap::ExpectedAsk> = asks.iter().map(|(_, a)| a).collect();
         match (&snapshot.resolution.open_choice, ask_refs.as_slice()) {
             (Some(open), [exp]) => {
                 if open.observer != exp.observer
@@ -152,6 +161,7 @@ impl Engine {
                         observer: open.observer,
                     });
                 }
+                asker = Some(asks[0].0);
             }
             (Some(open), _) => {
                 return Err(SnapshotError::OpenChoiceMismatch {
@@ -508,11 +518,13 @@ impl Engine {
             }
         }
         let mut parks = Vec::with_capacity(snapshot.resolution.parks.len());
-        for park in &snapshot.resolution.parks {
+        for (index, park) in snapshot.resolution.parks.iter().enumerate() {
             parks.push(crate::resolution::Park {
                 resume_depth: park.resume_depth,
                 slot: park.slot,
                 machine: park.machine.restore(&catalog)?,
+                // 提出询问的机器才认领已校验应答（见上段唯一匹配）。
+                awaiting_answer: asker == Some(index),
             });
         }
         Ok(Self {

@@ -1,0 +1,132 @@
+{
+  "source": "seven-envelope-oracle.mjs against rebuilt native-pkg",
+  "wasm_sha256": "21d7d18ff7cd97c9f83372de0f148fbd369f71917f0ad7b599d7a234872d7ab7",
+  "cases": {
+    "park-0": {
+      "next_revision": 2,
+      "next_hash": "8453394783299c92f9fca2bf0ebdd9dd865bb2828727a754d5723f21137bb5bc",
+      "saved_bytes": 1795,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "pending",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "727ef2b657ee6a7d7f7ee2a971c4bc5ad01ee7a659e925e5af98eecfc9cb4354",
+      "generation_before": "2",
+      "generation_after": "3"
+    },
+    "park-1": {
+      "next_revision": 2,
+      "next_hash": "dfbd294ef2ecf9d19d85322dc11fdf6fae2557ded3dce3cc1ab6c8fd2acc65d3",
+      "saved_bytes": 1820,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "pending",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "26b4d25b614ed2272532f8aed2370746a1e2f1b57050323af90307e0cc0c009c",
+      "generation_before": "2",
+      "generation_after": "3"
+    },
+    "own-cancel": {
+      "next_revision": 2,
+      "next_hash": "a87aba219bb41e7c6eb68741824612308ec369954a08ecc25a182f9f63726ef6",
+      "saved_bytes": 1656,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "6b681f9d56210b1dde5ed53ba095b2311520eb5ec8c055b6b952eb5c28d9306a",
+      "generation_before": "2",
+      "generation_after": "3"
+    },
+    "shan-auto": {
+      "next_revision": 2,
+      "next_hash": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+      "saved_bytes": 1653,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "ad27965201821b0a9613c8fc48397997e560d801bf890322b65ceea73de6ba32",
+      "generation_before": "1",
+      "generation_after": "2"
+    },
+    "shan-direct": {
+      "next_revision": 2,
+      "next_hash": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+      "saved_bytes": 1653,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "ad27965201821b0a9613c8fc48397997e560d801bf890322b65ceea73de6ba32",
+      "generation_before": "1",
+      "generation_after": "2"
+    },
+    "shan-cancel": {
+      "next_revision": 1,
+      "next_hash": "c71e913702b9d82b60d5239396732e0bb7c776569ebe7b6fe17ae62bb4c129f2",
+      "saved_bytes": 1820,
+      "restored_revision": 1,
+      "atomic_baseline_revision": 1,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 2,
+      "continued_result": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 2
+      },
+      "continued_hash": "e900e24985956ead1d4ad3f8135c09783052ec0b3b425a69c9a989b22d959eda",
+      "generation_before": "1",
+      "generation_after": "2"
+    },
+    "shan-pass": {
+      "next_revision": 2,
+      "next_hash": "3db2ec3986dfe95b34c6086f3e7bf2edff0bfdaf4807fbc67e96d533e905aefb",
+      "saved_bytes": 1653,
+      "restored_revision": 2,
+      "atomic_baseline_revision": 2,
+      "malformed_error": "UnexpectedEof",
+      "continued_revision": 3,
+      "continued_result": {
+        "finished": false,
+        "outcome": "accepted",
+        "reason": null,
+        "revision": 3
+      },
+      "continued_hash": "6cb77dfba6e3f3bb596202407393cf668c597972f01113adfc4f4b8bc09aea7e",
+      "generation_before": "1",
+      "generation_after": "2"
+    }
+  }
+}

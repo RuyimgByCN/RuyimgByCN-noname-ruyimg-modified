@@ -1,0 +1,95 @@
+{
+  "passed": true,
+  "uiPositiveControls": 5,
+  "formalProtocolCases": 7,
+  "restoredContinuations": 7,
+  "malformedAtomicChecks": 7,
+  "exceptions": [],
+  "rejected": [
+    "UnexpectedEof",
+    "UnexpectedEof",
+    "UnexpectedEof",
+    "UnexpectedEof",
+    "UnexpectedEof",
+    "UnexpectedEof",
+    "UnexpectedEof"
+  ],
+  "workerName": "/assets/engine.native.worker-CRF5WMOX.js",
+  "dist": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/dist",
+  "cases": [
+    "UI-own-confirm",
+    "UI-optional-cancel",
+    "UI-Shan-card",
+    "UI-Shan-auto-once",
+    "UI-Other-hidden",
+    "Vue-worker-protocol-park-0",
+    "Vue-worker-protocol-park-1",
+    "Vue-worker-protocol-own-cancel",
+    "Vue-worker-protocol-shan-auto",
+    "Vue-worker-protocol-shan-direct",
+    "Vue-worker-protocol-shan-cancel",
+    "Vue-worker-protocol-shan-pass"
+  ],
+  "archive_sha256": [
+    {
+      "case": "UI-own-confirm",
+      "fullArchiveSha256": null,
+      "continuedArchiveSha256": null
+    },
+    {
+      "case": "UI-optional-cancel",
+      "fullArchiveSha256": null,
+      "continuedArchiveSha256": null
+    },
+    {
+      "case": "UI-Shan-card",
+      "fullArchiveSha256": null,
+      "continuedArchiveSha256": null
+    },
+    {
+      "case": "UI-Shan-auto-once",
+      "fullArchiveSha256": null,
+      "continuedArchiveSha256": null
+    },
+    {
+      "case": "UI-Other-hidden",
+      "fullArchiveSha256": null,
+      "continuedArchiveSha256": null
+    },
+    {
+      "case": "Vue-worker-protocol-park-0",
+      "fullArchiveSha256": "5f8e55d3b5825cee44ea233e5918a1a8dd3879031e4d74f3b1d36e48e756812c",
+      "continuedArchiveSha256": "ff0ce6ecad8a10cfeac13350692a5f0c9147af7464a970386921a1430104899c"
+    },
+    {
+      "case": "Vue-worker-protocol-park-1",
+      "fullArchiveSha256": "6f21141851f413440f255d1a284cda52ca0ddd3de8b183a07bc156541610b730",
+      "continuedArchiveSha256": "6163885d4e387538020ef165d4b1a874860292c678601fa009152b5e6581c48c"
+    },
+    {
+      "case": "Vue-worker-protocol-own-cancel",
+      "fullArchiveSha256": "ae1d1cf5e33be26f8bbb12c724d960e8e1045e2437b0e99b93529fb397555b0e",
+      "continuedArchiveSha256": "7b85ac49b9599bda9935b712d05324bfa5085a891577553d5e48a1172bc018e8"
+    },
+    {
+      "case": "Vue-worker-protocol-shan-auto",
+      "fullArchiveSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "continuedArchiveSha256": "b6d3e2469d1c6af37c9e025525d33bc10dae73c7a1c64e3e60c7f2c7e0410546"
+    },
+    {
+      "case": "Vue-worker-protocol-shan-direct",
+      "fullArchiveSha256": "cb59eb0a73f2f85e60ae56ba73414308ae30ea57c539e5ff19864231980c3f25",
+      "continuedArchiveSha256": "b6d3e2469d1c6af37c9e025525d33bc10dae73c7a1c64e3e60c7f2c7e0410546"
+    },
+    {
+      "case": "Vue-worker-protocol-shan-cancel",
+      "fullArchiveSha256": "21251529a08e5500edbc24964cdbacecf0c294ca554539123862d12b071d7987",
+      "continuedArchiveSha256": "2bd4652cb2bd9592815d16ce5e60f4ceba595f506ac371b4a1a9466347bf97cd"
+    },
+    {
+      "case": "Vue-worker-protocol-shan-pass",
+      "fullArchiveSha256": "31bedbf62eaeaf3f700dcba3af3d7912ea8baf97a5dbdbe703fef490c4039944",
+      "continuedArchiveSha256": "67f3b5fab4892caf030dbe255ec811671e38cea11825655eb6dc13a2cc51500e"
+    }
+  ]
+}

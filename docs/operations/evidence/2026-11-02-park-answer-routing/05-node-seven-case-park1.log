@@ -1,0 +1,18 @@
+restore-fixture | OK | undefined
+autoStep-1 | OK | {"kind":"answer","outcome":"{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":2}"}
+save | OK | 4e47534169004a01000000000000e6060000000000004a0100000000000002000000000000004a01000000000000000300000000000000000102030000000000000001040000
+saved==native-park-1 | true
+restore-saved | OK | undefined
+view | OK | {"cards":{"102":{"def":10,"kind":"Other","rank":1,"suit":"Heart"},"107":{"def":90,"kind":"Other","rank":11,"suit":"Heart"},"110":{"def":92,"
+legal | OK | {"actions":[],"revision":2,"seat":1}
+choice | OK | {"allowCancel":false,"id":2,"kind":"SelectTargets","max":1,"min":1,"native_kind":"select_players","observer":0,"options":[{"player":0},{"pla
+hash | OK | dfbd294ef2ecf9d19d85322dc11fdf6fae2557ded3dce3cc1ab6c8fd2acc65d3
+save2 | OK | 4e47534169004a01000000000000e6060000000000004a0100000000000002000000000000004a01000000000000000300000000000000000102030000000000000001040000
+autoStep-2 | OK | {"kind":"answer","outcome":"{\"finished\":false,\"outcome\":\"pending\",\"reason\":null,\"revision\":3}"}
+view2 | OK | {"cards":{"102":{"def":10,"kind":"Other","rank":1,"suit":"Heart"},"107":{"def":90,"kind":"Other","rank":11,"suit":"Heart"},"110":{"def":92,"
+legal2 | OK | {"actions":[{"ResolveChoice":{"cancelled":false,"choice_id":3,"selections":[0]}},{"ResolveChoice":{"cancelled":false,"choice_id":3,"selectio
+legal2-actions | 3
+choice2 | OK | {"allowCancel":true,"id":3,"kind":"SelectTargets","max":1,"min":0,"native_kind":"select_players","observer":1,"options":[{"player":0},{"play
+hash2 | OK | 26b4d25b614ed2272532f8aed2370746a1e2f1b57050323af90307e0cc0c009c
+free | OK
+EXIT=0
