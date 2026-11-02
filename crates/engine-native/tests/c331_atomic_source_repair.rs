@@ -119,21 +119,57 @@ fn c9f_zlfanshi_terra_is_retained_and_target_uses_rng() {
 }
 #[test]
 fn c9f_abi_nature_draw_and_source_are_real() {
-    let mut e = Engine::new(14009, 3);
-    durable(&mut e);
-    e.debug_grant(1, "阿鼻");
-    let mut rng = e.state_core().rng.clone();
-    let _nature = [DamageNature::Fire, DamageNature::Thunder][rng.gen_range(2) as usize];
-    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
-    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
-    assert!(e.log().iter().any(|x| matches!(
-        x,
-        engine_native::LogEvent::DamageDealt {
-            source: Some(1),
-            target: 0,
-            ..
+    // 复审追加：仅证「消耗一次同型随机」不够——火／雷两个分支都必须在发出的
+    // 子伤害帧上逐分支断言（nature 由同型抽样预测，帧内 nature 必须与之一致）。
+    let mut seen_fire = false;
+    let mut seen_thunder = false;
+    for seed in 14009..14041 {
+        let mut e = Engine::new(seed, 3);
+        durable(&mut e);
+        e.debug_grant(1, "阿鼻");
+        e.debug_grant(0, "火神");
+        let mut rng = e.state_core().rng.clone();
+        let nature = [DamageNature::Fire, DamageNature::Thunder][rng.gen_range(2) as usize];
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+        assert_eq!(
+            format!("{:?}", e.state_core().rng),
+            format!("{rng:?}"),
+            "seed {seed}: 阿鼻恰好消耗一次同型随机"
+        );
+        // 分支真实性的行为锚点：给目标 0 挂「火神」（免疫火伤＋回复）。
+        // 火 → DamagePrevented{target:0} 且 HP 不降；雷 → 子伤害 DamageDealt 且 HP −1。
+        let prevented = e
+            .log()
+            .iter()
+            .any(|x| matches!(x, engine_native::LogEvent::DamagePrevented { target: 0 }));
+        let dealt = e.log().iter().any(|x| matches!(
+            x,
+            engine_native::LogEvent::DamageDealt {
+                source: Some(1),
+                target: 0,
+                ..
+            }
+        ));
+        match nature {
+            DamageNature::Fire => {
+                assert!(prevented, "seed {seed}: 火分支必须被火神免疫");
+                assert!(!dealt, "seed {seed}: 被免疫的火伤不得记 DamageDealt");
+                assert_eq!(e.debug_hp(0), 1000, "seed {seed}: 火分支不扣 HP");
+                seen_fire = true;
+            }
+            DamageNature::Thunder => {
+                assert!(!prevented, "seed {seed}: 雷分支不得被火神免疫");
+                assert!(dealt, "seed {seed}: 雷分支子伤害必须真实结算");
+                assert_eq!(e.debug_hp(0), 999, "seed {seed}: 雷分支扣 1 HP");
+                seen_thunder = true;
+            }
+            _ => unreachable!("阿鼻只抽样火／雷"),
         }
-    )));
+        if seen_fire && seen_thunder {
+            break;
+        }
+    }
+    assert!(seen_fire && seen_thunder, "两个分支都必须被真实覆盖");
 }
 #[test]
 fn c9f_duqu_other_enabled_holder_is_excluded() {

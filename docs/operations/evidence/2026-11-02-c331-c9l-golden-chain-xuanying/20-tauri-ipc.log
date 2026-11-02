@@ -1,0 +1,139 @@
+   Compiling memchr v2.8.3
+   Compiling serde_core v1.0.228
+   Compiling libc v0.2.186
+   Compiling writeable v0.6.3
+   Compiling litemap v0.8.2
+   Compiling utf8_iter v1.0.4
+   Compiling parking_lot_core v0.9.12
+   Compiling icu_properties_data v2.2.0
+   Compiling serde v1.0.228
+   Compiling icu_normalizer_data v2.2.0
+   Compiling zerofrom v0.1.8
+   Compiling scopeguard v1.2.0
+   Compiling strsim v0.11.1
+   Compiling regex-syntax v0.8.11
+   Compiling fnv v1.0.7
+   Compiling lock_api v0.4.14
+   Compiling yoke v0.8.3
+   Compiling bit-set v0.8.0
+   Compiling base64 v0.22.1
+   Compiling bytes v1.12.1
+   Compiling wasm-bindgen v0.2.126
+   Compiling tokio v1.52.3
+   Compiling darling_core v0.23.0
+   Compiling aho-corasick v1.1.4
+   Compiling quick-xml v0.41.0
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling engine-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-api)
+   Compiling dirs-sys v0.5.0
+   Compiling licensing-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/licensing-schema)
+   Compiling resource-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/resource-schema)
+   Compiling parking_lot v0.12.5
+   Compiling http v1.4.2
+   Compiling dirs v6.0.0
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling string_cache v0.9.0
+   Compiling icu_collections v2.2.0
+   Compiling icu_locale_core v2.2.0
+   Compiling regex-automata v0.4.15
+   Compiling web_atoms v0.2.5
+   Compiling serde_json v1.0.150
+   Compiling serde_spanned v1.1.1
+   Compiling semver v1.0.28
+   Compiling uuid v1.23.4
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling erased-serde v0.4.10
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling camino v1.2.4
+   Compiling markup5ever v0.38.0
+   Compiling rustc_version v0.4.1
+   Compiling toml v1.1.2+spec-1.1.0
+   Compiling cfb v0.7.3
+   Compiling indexmap v1.9.3
+   Compiling icu_provider v2.2.0
+   Compiling html5ever v0.38.0
+   Compiling cargo-platform v0.1.9
+   Compiling serde-untagged v0.1.9
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling jsonptr v0.6.3
+   Compiling plist v1.10.0
+   Compiling icu_normalizer v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling rule-api v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-api)
+   Compiling darling_macro v0.23.0
+   Compiling swift-rs v1.0.7
+   Compiling cargo_metadata v0.19.2
+   Compiling json-patch v3.0.1
+   Compiling infer v0.19.0
+   Compiling embed-resource v3.0.11
+   Compiling regex v1.13.0
+   Compiling darling v0.23.0
+   Compiling dom_query v0.27.0
+   Compiling cargo_toml v0.22.3
+   Compiling tauri-winres v0.3.6
+   Compiling diagnostics v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/diagnostics)
+   Compiling serde_with_macros v3.21.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+   Compiling serde_with v3.21.0
+   Compiling urlpattern v0.3.0
+   Compiling schemars v0.8.22
+   Compiling tauri-utils v2.9.3
+   Compiling tauri-build v2.6.3
+   Compiling desktop-client v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/apps/desktop-client)
+   Compiling rule-vm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T/noname-c331-phase7-ktqqj1fb/worktree/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 25.61s
+     Running unittests src/lib.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T//noname-c331-phase7-ktqqj1fb/target-c9j-native/debug/deps/desktop_client-bad28e9339815bec)
+
+running 12 tests
+test mobile::tests::background_policy_actions ... ok
+test mobile::tests::touch_target_minimum ... ok
+test mobile::tests::user_agent_detection ... ok
+test mobile::tests::android_checklist_has_6_items ... ok
+test mobile::tests::ios_checklist_has_6_items ... ok
+test mobile::tests::safe_area_css_vars ... ok
+test mobile::tests::shell_config_css_vars ... ok
+test mobile::tests::checklist_all_passed ... ok
+test mobile::tests::checklist_has_failure ... ok
+test native_engine_host::tests::close_allows_the_executing_command_but_rejects_queued_commands ... ok
+test tests::freeze_blocks_install ... ok
+test tests::signed_install_via_host ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/native_engine_host.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T//noname-c331-phase7-ktqqj1fb/target-c9j-native/debug/deps/native_engine_host-044ad9555b049bd1)
+
+running 6 tests
+test independent_clients_do_not_reset_each_others_sessions_and_close_is_controlled ... ok
+test host_owns_a_single_ordered_command_stream_and_is_send_sync ... ok
+test host_projects_authority_candidates_and_observer_privacy ... ok
+test source_actual_native_choice_reaches_desktop_host_only_for_owner ... ok
+test host_requests_initialize_and_reject_invalid_input_without_losing_state ... ok
+test host_full_identity_trajectory_matches_session_and_existing_binding_and_cross_restores ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/native_planner_measurement.rs (/var/folders/b5/2mh_j5tj7m71xhcjsk2z1t4c0000gn/T//noname-c331-phase7-ktqqj1fb/target-c9j-native/debug/deps/native_planner_measurement-23169097b1d4fedd)
+
+running 1 test
+test actual_single_seat_planning_compares_existing_pools_and_native_clock ... ignored, native wall-clock measurement; run explicitly with --ignored --nocapture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests desktop_client
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+EXIT=0

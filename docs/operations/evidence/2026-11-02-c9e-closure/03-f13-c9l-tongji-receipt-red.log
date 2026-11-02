@@ -1,0 +1,11 @@
+$ [变异：还原 C9L 前的旧同疾付款验证器（不查收据）] cargo test --offline -p engine-native --test nc_rounds c331_jiding_proofs:: --exact 不适用→整文件   # 2026-11-03 00:04:32 +0800
+test c331_jiding_proofs::c9l_tongji_payment_proof_is_required_on_both_paths ... FAILED
+test c331_jiding_proofs::c9l_yihua_payment_proof_and_origin_are_required ... ok
+thread 'c331_jiding_proofs::c9l_tongji_payment_proof_is_required_on_both_paths' (40387944) panicked at crates/engine-native/tests/groups/../c331_jiding_proofs.rs:91:67:
+test result: FAILED. 1 passed; 1 failed; 0 ignored; 0 measured; 300 filtered out; finished in 0.01s
+exit=101
+$ [恢复] 复跑
+test c331_jiding_proofs::c9l_yihua_payment_proof_and_origin_are_required ... ok
+test c331_jiding_proofs::c9l_tongji_payment_proof_is_required_on_both_paths ... ok
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 300 filtered out; finished in 0.02s
+exit=0

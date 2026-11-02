@@ -1,0 +1,9 @@
+$ cargo test --offline -p engine-native --test nc_rounds c331_atomic_source_repair:: c331_jiding_proofs::   # 本批定向（整两文件），2026-11-03 00:29:53 +0800
+test result: ok. 24 passed; 0 failed; 0 ignored; 0 measured; 278 filtered out; finished in 3.02s
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 300 filtered out; finished in 0.02s
+$ cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast   # 全量三 crate，2026-11-03 00:29:56 +0800
+17
+segments 17 passed 1908 failed 0 ignored 75
+$ python3 -B scripts/check-source-lines.py && python3 -B scripts/check_local_links.py
+Source line limit passed: 9077 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+检查 7 个文件，坏链 0

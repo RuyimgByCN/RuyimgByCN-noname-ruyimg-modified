@@ -1,0 +1,87 @@
+--- a/crates/engine-native/tests/replay_scenarios.rs
++++ b/crates/engine-native/tests/replay_scenarios.rs
+@@ -1078,37 +1078,37 @@
+             "sha_limit",
+             "seat_range",
+         ],
+-        "2300271a75e41264b3ee6190e992f60a5514a72a8078f8539198a9331bdc82c1",
++        "9fc6441957420c956cf82259a1a40c68248e8b80ca83c0ea3ae588b01dfd9dd7",
+     ),
+     (
+         "death_terminal_single",
+         scenario_death_terminal_single,
+         &["dying", "death", "victory"],
+-        "985e3fd95363d7daef2ede88e5d9f8d55eaad80ca61aa9ea0bf9a63d744e0dcc",
++        "5f779317f21b11fb4d8b9d597de690aa44078762b91cb62ce6cc3f72c630e096",
+     ),
+     (
+         "sancai_nested_chain",
+         scenario_sancai_nested_chain,
+         &["optional_trigger", "nested_choice", "draw", "give_cards"],
+-        "fd79ad5aeb71119e6ff87a298ba097ab0b055bac8926604dc40525c2e337dac6",
++        "1d68fde253b34a6b710651b1712bc1ce4e593d0a188849e6ca8b4b00fd666a86",
+     ),
+     (
+         "yishang_redirect",
+         scenario_yishang_redirect,
+         &["damage_before_window", "payload_rewrite_redirect"],
+-        "d4805d2b990ecc63fdc40ae754d30dccb7307d1e9a373a6836809fea444934ba",
++        "ccf6be0a3525adeb638dc84a7933f44adc24c83ec49c312ad75ec98fdcd830f8",
+     ),
+     (
+         "suidun_window_matrix",
+         scenario_suidun_window_matrix,
+         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
+-        "61bada7c584729c89881994f6847e4f960c7c6bd3519bd248bf99e30397380b8",
++        "dcc8cd5da4acc766992143db3616689f16c8c382cc32564a5c49a44de4dd1077",
+     ),
+     (
+         "shouyi_dynamic_skill",
+         scenario_shouyi_dynamic_skill,
+         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
+-        "c680a9073b41c0a899ef7f2528dcda5b9d3c457624b3d40ce4deb709017d0543",
++        "629a42f86e0f33b2e830d2410120017aa2694ec8c242a396fae685857e80c741",
+     ),
+     (
+         "discard_to_limit",
+@@ -1120,7 +1120,7 @@
+         "rollback_invariants",
+         scenario_rollback_invariants,
+         &["reject_rollback", "budget_rollback"],
+-        "0de72d7f6aeabe19fcb7580a834f549cad585c09d2b9d0709cc9c9326ebdb568",
++        "86d7d9931da6133e23970ea0fbf9358065fe0b3dbfe528f9cae6f4340ed4300e",
+     ),
+     (
+         "equip_distance_matrix",
+@@ -1131,7 +1131,7 @@
+             "attack_range",
+             "equip_replace",
+         ],
+-        "297ad69be0e8f5bd99169f9c736199e0967cbb1285859b2840325e37cd2bb0ac",
++        "9e79881f85bfe17faedde1474361213d6ca05ed7f115f09ca9b0e062fdc6e5bb",
+     ),
+     (
+         "chain_fire_propagation",
+@@ -1143,19 +1143,19 @@
+         "aoe_response_queue",
+         scenario_aoe_response_queue,
+         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
+-        "242a4e3004017ff39c934525fb5809b1cca6f78a1e4291b2656f3f20f2144b29",
++        "98abbd720f9f6dc599131b9b5c4a5cf5319d40a7b70703dffc957502c33f5869",
+     ),
+     (
+         "duel_alternating_response",
+         scenario_duel_alternating_response,
+         &["duel_alternating", "duel_no_distance_limit"],
+-        "4e9dad356c0f51cee6cfd761c9284b95d515cfa345c6b7db86c04c74a621db55",
++        "804483da6ea7c1f2313fb9854a22bb153643e9950f824102c39a4b484b4a015c",
+     ),
+     (
+         "nullify_chain_on_savage",
+         scenario_nullify_chain_on_savage,
+         &["nullify_window", "nullify_chain", "nullify_scope"],
+-        "7c45c45d1c41be7531e25727f8d9e10b70a82fd6e22f9c1c4ac96b72ea3fbaae",
++        "d58d260b032c7a136c2610722bfdea231ed5da72fc29902caa2e7e3c5bc7e080",
+     ),
+     (
+         "judge_phase_delayed_tricks",

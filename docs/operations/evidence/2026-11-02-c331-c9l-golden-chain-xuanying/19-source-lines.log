@@ -1,0 +1,8 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.013s
+
+OK
+EXIT1=0
+Source line limit passed: 9052 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+EXIT2=0
