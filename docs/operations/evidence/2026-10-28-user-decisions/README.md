@@ -87,6 +87,10 @@
 
 **30. 限定I02响应、资源绑定及提交消费合同**：用户对已三轮复审、审批页窄复审通过的[具体审批页](../2026-10-31-i02-public-presentation-contract/approval-request.md)明确选择“批准限定合同（推荐）”，批准稿SHA `301496743727ca57d14eb9979f4519a6597a5e1b744125bb9383b7a40992250d`。允许一个可缺省S→C `presentation`、实际提交且公开的Rust投影、真实定义的不可变qualified来源／资源binding、现有日志上的单一易失范围、NativeSession只release而Worker／桌面composer一次take、服务器耐久后一次take及无参数WASM读取；保留旧命令／结果字符串、粗事件码文案及真实响应增加code3条数的明确验证。允许桥接definition_id与必要真实PackageCharacter／Skill／CardEntry可缺省voice_assets，复用现有资源／skin系统，按原字节／可信pin／完整锁构造，禁中文名／运行时索引猜身份、第二registry／包仓库。新字段缺省中性与资源hash／锁／catalog版本影响须实证，任何须额外schema／规则／档／ABI／WS号码或迁移另报，不自动分配、不借R05号码、不回退届时已接受版本。C29真实成本／provider与R05原字节factory沿既有批准顺序实施；VM KillPlayer／DeathMachine真正死亡语义仍需另有具体方案／授权，不能以声音修复夹带。全37、234动态、2487缺backing、18其他资源与SDK作者生命周期保持；仅合同实施获批，不表示I02、平台／听感或整体Goal验收。见[原选择及SHA](../2026-10-31-i02-public-presentation-contract/user-decision30.json)。
 
+## 补充裁决（2026-11-02，C331协议号）
+
+**31. C331追认WS7，R05改WS8**：C331合并提交`f5e560db`把`ChoiceRequest`计数由u8放宽为u32（ADR 0788“第257项可达”所需）并把网络协议6→7，事先未按第22／29项另报边界。补报[精确边界](../2026-11-02-c331-ws7-boundary/README.md)后，用户对“批准 C331 佔用 WS7、R05 改用 WS8 嗎？”明确选择“批准，R05 改 WS8”。版本排布改为C规则331／NGSA106／ABI758／**WS7**→改命规则332／NGSA106／ABI758／WS7（不另升协议号）→R05规则333／NGSA107／ABI759／**WS8**，仅替代第28／29项中R05的WS7；其余合同、先后与条件不变。见[记录](../2026-11-02-c331-ws7-boundary/user-decision31.json)。本项只登记号码，不表示332、R05已实施或`f5e560db`已发布。
+
 ## 文档验证
 
 本批只登记裁决，不改变代码或上述事项的验收状态。执行仓库文档链接、ADR 索引和源码行数检查及行数脚本自检，结果见[链接](local-links.log)、[ADR](adr-index.log)、[行数](source-lines.log)、[自检](source-line-tests.log)、[暂存差异](staged-check.log)。第 9 项补登后的同类检查见 [v325 补登检查](addendum-v325-checks.log)，第 10–15 项见[补登检查](addendum-10-15-checks.log)。

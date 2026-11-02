@@ -1,0 +1,187 @@
+diff --git a/apps/game-server/src/lobby.rs b/apps/game-server/src/lobby.rs
+index a41ea7ec..43025d5c 100644
+--- a/apps/game-server/src/lobby.rs
++++ b/apps/game-server/src/lobby.rs
+@@ -319,7 +319,7 @@ impl Lobby {
+         if !matches!(&msg, ClientMessage::Hello { .. }) && !session.handshake_complete {
+             return Err(HandlerError::new(
+                 ErrorCode::VersionMismatch,
+-                "WS6 Hello required",
++                "WS7 Hello required",
+             ));
+         }
+         let header = match &msg {
+diff --git a/apps/game-server/src/session.rs b/apps/game-server/src/session.rs
+index c77d1a2c..86b53c64 100644
+--- a/apps/game-server/src/session.rs
++++ b/apps/game-server/src/session.rs
+@@ -90,7 +90,7 @@ pub struct Session {
+     pub reconnect_token: Option<String>,
+     /// Last accepted conn_seq from client.
+     pub last_conn_seq: u64,
+-    /// Only an exact WS6 Hello enables public room operations.
++    /// Only an exact WS7 Hello enables public room operations.
+     pub handshake_complete: bool,
+     /// Outbound.
+     pub outbound: Outbound,
+diff --git a/apps/web-client/src/engine/networkClient.ts b/apps/web-client/src/engine/networkClient.ts
+index ffd48d89..48a3c115 100644
+--- a/apps/web-client/src/engine/networkClient.ts
++++ b/apps/web-client/src/engine/networkClient.ts
+@@ -9,7 +9,7 @@ import type {
+   ObserverSnapshot,
+ } from "../types/engine";
+ 
+-const NETWORK_PROTOCOL_VERSION = 6;
++const NETWORK_PROTOCOL_VERSION = 7;
+ 
+ type CommandKind =
+   | "EndPhase"
+@@ -547,7 +547,7 @@ export class NetworkEngineClient {
+     switch (message.type) {
+       case "Welcome":
+         if (payload.protocol_version !== NETWORK_PROTOCOL_VERSION || (payload.versions as { network_protocol?: number } | undefined)?.network_protocol !== NETWORK_PROTOCOL_VERSION) {
+-          this.rejectOutstanding(new Error("服务端协议版本不兼容：需要 WS6"));
++          this.rejectOutstanding(new Error(`服务端协议版本不兼容：需要 WS${NETWORK_PROTOCOL_VERSION}`));
+           this.socket?.close();
+           return;
+         }
+diff --git a/crates/engine-api/src/choice.rs b/crates/engine-api/src/choice.rs
+index e1347333..91e3ec12 100644
+--- a/crates/engine-api/src/choice.rs
++++ b/crates/engine-api/src/choice.rs
+@@ -4,7 +4,7 @@ use crate::ids::{ChoiceId, PlayerId};
+ use serde::{Deserialize, Serialize};
+ 
+ /// A pending choice the engine cannot continue past until resolved.
+-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
++#[derive(Debug, Clone, PartialEq, Eq, Serialize)]
+ pub struct ChoiceRequest {
+     /// Unique choice id for this match.
+     pub choice_id: ChoiceId,
+@@ -13,9 +13,9 @@ pub struct ChoiceRequest {
+     /// Options the player may select (or empty if constraint-only).
+     pub options: Vec<ChoiceOption>,
+     /// Minimum number of selections.
+-    pub min_count: u8,
++    pub min_count: u32,
+     /// Maximum number of selections.
+-    pub max_count: u8,
++    pub max_count: u32,
+     /// Whether cancel is allowed.
+     pub allow_cancel: bool,
+     /// Timeout policy identifier (ruleset-defined).
+@@ -40,6 +40,39 @@ pub struct ChoiceRequest {
+     pub source_skill: Option<String>,
+ }
+ 
++impl<'de> Deserialize<'de> for ChoiceRequest {
++    fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
++        let choice = ChoiceRequestFields::deserialize(deserializer)?;
++        if choice.min_count > choice.max_count {
++            return Err(serde::de::Error::custom("choice min_count exceeds max_count"));
++        }
++        Ok(choice)
++    }
++}
++#[allow(dead_code)]
++#[derive(Deserialize)]
++#[serde(remote = "ChoiceRequest", rename = "ChoiceRequest")]
++struct ChoiceRequestFields {
++    choice_id: ChoiceId,
++    observer: PlayerId,
++    options: Vec<ChoiceOption>,
++    min_count: u32,
++    max_count: u32,
++    allow_cancel: bool,
++    timeout_policy: TimeoutPolicy,
++    #[serde(default)]
++    deadline_unix_ms: Option<u64>,
++    revision: u64,
++    continuation_id: u64,
++    kind: ChoiceKind,
++    #[serde(default)]
++    prompt: Option<String>,
++    #[serde(default, deserialize_with = "deserialize_native_kind")]
++    native_kind: Option<String>,
++    #[serde(default, deserialize_with = "deserialize_source_skill")]
++    source_skill: Option<String>,
++}
++
+ /// Preserve the existing wire enum while retaining precise native choice metadata.
+ pub fn choice_kind_from_native(kind: &str) -> Option<ChoiceKind> {
+     Some(match kind {
+diff --git a/crates/engine-api/src/version.rs b/crates/engine-api/src/version.rs
+index 6afcbb8e..7f3e6f20 100644
+--- a/crates/engine-api/src/version.rs
++++ b/crates/engine-api/src/version.rs
+@@ -2,8 +2,8 @@
+ 
+ use serde::{Deserialize, Serialize};
+ 
+-/// Current content schema version shared by hosts and package tooling.
+-pub const CONTENT_SCHEMA_VERSION: u32 = 3;
++/// Highest content schema version readable by current native hosts.
++pub const CONTENT_SCHEMA_VERSION: u32 = 5;
+ 
+ /// Current installable package format version.
+ pub const PACKAGE_FORMAT_VERSION: u32 = 1;
+@@ -44,7 +44,7 @@ impl VersionBundle {
+             engine_api: 1,
+             rule_vm_abi: RULE_VM_ABI_VERSION,
+             content_schema: CONTENT_SCHEMA_VERSION,
+-            network_protocol: 6,
++            network_protocol: 7,
+             replay_schema: crate::REPLAY_SCHEMA_VERSION,
+             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
+             package_format: PACKAGE_FORMAT_VERSION,
+diff --git a/crates/engine-protocol/src/lib.rs b/crates/engine-protocol/src/lib.rs
+index ac256aca..5d3a96ba 100644
+--- a/crates/engine-protocol/src/lib.rs
++++ b/crates/engine-protocol/src/lib.rs
+@@ -15,7 +15,7 @@ pub use messages::*;
+ pub use wire::{decode_c2s, decode_s2c, encode_c2s, encode_s2c};
+ 
+ /// Network protocol version axis (bump on breaking wire changes).
+-pub const NETWORK_PROTOCOL_VERSION: u32 = 6;
++pub const NETWORK_PROTOCOL_VERSION: u32 = 7;
+ 
+ /// Maximum JSON message size (bytes) accepted by server.
+ pub const MAX_MESSAGE_BYTES: usize = 256 * 1024;
+diff --git a/crates/engine-protocol/src/wire.rs b/crates/engine-protocol/src/wire.rs
+index 99d7aedd..3ef4f9a9 100644
+--- a/crates/engine-protocol/src/wire.rs
++++ b/crates/engine-protocol/src/wire.rs
+@@ -58,6 +58,32 @@ mod tests {
+     use crate::messages::ClientMessage;
+     use engine_api::VersionBundle;
+ 
++    #[test]
++    fn choice_counts_are_u32_and_ordered() {
++        let base = serde_json::json!({"choice_id":1,"observer":1,"options":[],"min_count":0,"max_count":1,"allow_cancel":true,"timeout_policy":"None","revision":0,"continuation_id":1,"kind":"SelectCards"});
++        for count in [0,255,256,257,u32::MAX] {
++            let mut raw=base.clone(); raw["max_count"]=count.into();
++            let choice: engine_api::ChoiceRequest=serde_json::from_value(raw).unwrap();
++            assert_eq!(choice.max_count,count);
++        }
++        for invalid in [serde_json::json!(-1),serde_json::json!(4294967296u64),serde_json::json!(1.5),serde_json::json!("256"),serde_json::Value::Null] {
++            let mut raw=base.clone();raw["max_count"]=invalid;
++            assert!(serde_json::from_value::<engine_api::ChoiceRequest>(raw).is_err());
++        }
++        let mut raw=base;raw["min_count"]=2.into();
++        assert!(serde_json::from_value::<engine_api::ChoiceRequest>(raw).is_err());
++        assert_eq!(VersionBundle::current().network_protocol,crate::NETWORK_PROTOCOL_VERSION);
++    }
++
++    #[test]
++    fn existing_wire_size_guard_rejects_before_decoding() {
++        let oversized=" ".repeat(MAX_MESSAGE_BYTES+1);
++        assert!(matches!(decode_c2s(&oversized),Err(WireError::TooLarge(_))));
++        assert!(matches!(decode_s2c(&oversized),Err(WireError::TooLarge(_))));
++        let m=ClientMessage::Hello{versions:VersionBundle::current(),display_name:oversized};
++        assert!(matches!(encode_c2s(&m),Err(WireError::TooLarge(_))));
++    }
++
+     #[test]
+     fn roundtrip_hello() {
+         let m = ClientMessage::Hello {

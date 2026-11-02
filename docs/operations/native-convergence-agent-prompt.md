@@ -15,22 +15,22 @@
 7. /Users/ruyimg/Documents/Claude/sanguosha/NONAME_NEXT_AGENT_SPEC.md（实施约束；位于 Git 仓库外）
 
 二、开工前核对工作区（2026-11-02 21:20 扫描时的状态，开工时以实际为准）：
-- main HEAD `f5e560db`＝C331 phase7 合并提交（父 `a4483b64`＋`6d36f47a`）：规则 331／NGSA 106／content schema 5／ABI 758／WS7。本地无远端跟踪，未见发布与 exact-head CI 登记。
+- main HEAD `f5e560db`＝C331 phase7 合并提交（父 `a4483b64`＋`6d36f47a`）：规则 331／NGSA 106／content schema 5／ABI 758／WS7。WS7 已由裁决 31 追认。本地无远端跟踪，未见发布与 exact-head CI 登记。
 - 合并树已实跑：三 crate 1903/0/75、workspace 7154/0/77、行数门禁、preflight 全过；前端／WASM 重建／Worker smoke／跨目标／Tauri IPC 只有合并提交说明的自报数字，原始日志未入库；需 331／106 夹具的 7 个浏览器案例与 legacy WASM 重建未跑。
 - `stash@{0}`：合并前搁置的 I02／NC10 未提交工作（35 文件），尚未恢复；`/private/tmp/noname-main-wip-backup-20261102T205333Z` 为同一份备份。
 - 未跟踪 `target-strict/`（构建产物，不入库）；`git worktree list` 中大量 prunable 临时工作树。
 先用 git status／git log／git stash show／git worktree list 复核，再动手。若发现其他 agent 正在同一工作树写入，先停下协调，不抢写。
 
 三、第 0 步：收口 C331 入库
-1. WS7 与裁决冲突：裁决 22／29 要求 C331 保持届时 WS6，若必须改协议须另报精确边界，且不得借用 R05 预约的 WS7。合并已把 ChoiceRequest 计数改为 u32 并升 WS7，未见授权。先写精确边界报告（改了哪些 wire 字段、旧 WS6 客户端／服务端如何被拒、能否在 WS6 内兼容），按用户答复执行：经批准由 C331 占 WS7、R05 顺延 WS8（同步更新裁决 28／29 的 R05 版本元组），或改回 WS6 兼容。答复前不发布（不 push）。
+1. WS7 已处理：用户于 2026-11-02 以裁决 31 追认 C331 占用 WS7（ChoiceRequest 计数 u8→u32），改命 332 沿用 WS7，R05 改为 333／107／759／WS8；边界见 docs/operations/evidence/2026-11-02-c331-ws7-boundary/README.md。
 2. 在 `f5e560db` 上补跑并入库原始日志：pnpm test／typecheck／build:native、Worker smoke、check-native-wasm-cross-target.py、cross-target-hash.sh、cargo test -p desktop-client、需 331／106 夹具的 7 个浏览器案例；golden 或 conformance 变化先解释原因。
-3. 第 1、2 项完成后按裁决 25 正常发布并独立登记 exact-head CI；本地通过与 CI 实跑分开记。
+3. 第 2 项完成后按裁决 25 正常发布并独立登记 exact-head CI；本地通过与 CI 实跑分开记。
 4. 在 331 之上恢复 stash@{0}（先在隔离工作树做冲突分析），逐文件处理与 331／106 的冲突，按其原证据重跑定向与全量门禁后再入库；不能整体丢弃。
 
 四、剩余工作（按依赖先后；各项完成条件以台账对应行为准，完成后在台账行内更新）：
 1. C331 闭环（裁决 22／26／29）：C9e 登记的 17 组反例与 chain 出生 P1 在 C9f–C9K 轮次的逐项关闭证据未入库——逐项补齐红绿证据或重新验证；实现共享 DeathFlow、PhaseBegin、死亡压窗、救援到期桥、indexed、forceDie/out/hidden/filterStop、rescue／operation LossEnd 等裁决 29 列明机制；注册 262/290 剩 28（16 译名上下文＋12 机制）全部完成，不得把缺失功能改记为登记差异。
 2. 规则 332 改命取消（裁决 24），仅在实际 331 入库后。
-3. R05 涕泣/宝梳/避祸：规则 333／NGSA 107／ABI 759／WS 按第三节结果（裁决 28／29），仅在实际 332 入库后。
+3. R05 涕泣/宝梳/避祸：规则 333／NGSA 107／ABI 759／WS8（裁决 28／29／31），仅在实际 332 入库后。
 4. NC10：19 项 NoCertifiedRoot、root／Confirm-prefix／Cancel-tail／VM 续行门禁、旧 park Q 先于 P 的前缀反例、AI 质量基线；不放宽裁决 27 的限定范围。
 5. I02（裁决 30）：生产 presentation constructor 仍为 None，需接通真实公开投影、资源 binding、一次消费与自动语音；VM KillPlayer／DeathMachine 真实死亡语义需另报方案；其余皮肤／18 类资源／2487 缺 backing 继续。
 6. UP37：R01 剩余（resolve_dcdichou 选择状态机、dcdichou_eff）、R02、R04、R06–R09、R10、N01 剩余、N02–N07、I01–I05，全部直接进原生（优先 DSL→rule-vm 包，缺 ABI／事件先补原生并按授权升号）。
@@ -55,14 +55,13 @@
 - 收口：python3 -B scripts/preflight.py 全部通过。首次失败与补跑分开记录，不以补跑抹去失败。
 
 七、需要用户决定的事项（2026-11-02 扫描时的建议；以用户在对话中的明确答复为准，未答复前不执行对应的不可逆步骤）：
-1. C331 的 WS7：建议先出边界报告；若 u32 计数确为真实宽选择所需且无法在 WS6 内兼容，请用户批准 C331 占 WS7、R05 顺延 WS8；在此之前不发布 `f5e560db`。
-2. stash@{0}：建议在 331 之上恢复并单独验收入库，不丢弃。
-3. 进度主稿瘦身：主稿约 830 KB、单行最长 5 万字，建议把 2026-10-31 以前的条目原样移入 native-progress-history.md（保留锚点），主稿只留顶部扫描、近期条目与待办；需用户同意后执行。
-4. 临时工作树：建议只对 `git worktree list` 标为 prunable 的执行 git worktree prune，locked 与仍有未登记产物的保留；需用户同意。
+1. stash@{0}：建议在 331 之上恢复并单独验收入库，不丢弃。
+2. 进度主稿瘦身：主稿约 830 KB、单行最长 5 万字，建议把 2026-10-31 以前的条目原样移入 native-progress-history.md（保留锚点），主稿只留顶部扫描、近期条目与待办；需用户同意后执行。
+3. 临时工作树：建议只对 `git worktree list` 标为 prunable 的执行 git worktree prune，locked 与仍有未登记产物的保留；需用户同意。
 
 七之二、协作：可用子 agent 并行处理互不冲突的实现或验证，先划清文件所有权和接口，主 agent 负责整合与最终验收；公共文档写入前重读；不要同时抢写核心文件。在授权范围内自主推进，不反复询问是否继续；缺少设备、凭据、权限或产品语义时，写明所需输入与未验收门槛，继续做不受阻的部分。
 
 八、记录：当前状态只更新进度主稿顶部扫描与剩余台账对应行；来源状态只更新扩展台账；规则差异只更新规则基准；原始命令与输出写入有日期的 evidence 目录。文档统一用简体中文，每条记录写明日期、HEAD 与是否 dirty、规则/存档/ABI/WS 版本、命令、通过/失败/忽略和证据链接；区分已实现、已修反例、已加回归、定向通过、全量通过、上游等价。不得在提交前写“已合入／已提交”。
 
-最终逐项报告：第 0 步、C331、332、R05、NC01–NC12、UP37 各项、PA01–PA12、I02、37 来源、六阶段的结果与证据，列出仍未完成/未验证项。只有全部门槛真实通过才可声明“全部完成”；否则明确整体尚未完成。现在先核对工作区，就第七节第 1 项提交边界报告并询问用户，同时开始不受该决定阻塞的工作（第三节第 2、4 项、C9e 证据补录）。
+最终逐项报告：第 0 步、C331、332、R05、NC01–NC12、UP37 各项、PA01–PA12、I02、37 来源、六阶段的结果与证据，列出仍未完成/未验证项。只有全部门槛真实通过才可声明“全部完成”；否则明确整体尚未完成。现在先核对工作区，然后从第三节第 2 项开始执行，并行准备第 4 项的冲突分析和 C9e 证据补录。
 ```

@@ -1,0 +1,36 @@
+{
+  "decision": 31,
+  "recorded_utc": "2026-11-02T13:59:09.406316+00:00",
+  "source": "Explicit answer in current Claude Code session; recording time is not a separately observed click timestamp",
+  "question": "批准 C331 佔用 WS7、R05 改用 WS8 嗎？",
+  "answer": "批准，R05 改 WS8",
+  "boundary_evidence": {
+    "wire-diff.patch": "d80b1d6d6cd0293b0857573a8f8f03f4ba9d7bf97ec8b45c2e7b3ce72cbf13bd",
+    "merge_commit": "f5e560db1e8c648e2c34bc5d1e6286f12832db8d"
+  },
+  "version_sequence": [
+    {
+      "batch": "C",
+      "rules": 331,
+      "archive": 106,
+      "abi": 758,
+      "ws": 7
+    },
+    {
+      "batch": "GaiMing cancel",
+      "rules": 332,
+      "archive": 106,
+      "abi": 758,
+      "ws": 7
+    },
+    {
+      "batch": "R05",
+      "rules": 333,
+      "archive": 107,
+      "abi": 759,
+      "ws": 8
+    }
+  ],
+  "effect": "Ratifies C331 WS6->WS7 (ChoiceRequest counts u8->u32, exact-version Hello rejection); supersedes Decision28/29 R05 WS7 with WS8; GaiMing332 inherits WS7 without a new protocol bump; all other Decision28/29 contracts and conditions unchanged",
+  "implementation_status": "C331 merged in f5e560db, not yet published; 332 and R05 not implemented"
+}
