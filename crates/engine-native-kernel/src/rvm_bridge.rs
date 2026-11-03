@@ -1057,6 +1057,10 @@ impl VmHost for EngineVmHost<'_> {
         match &req {
             EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
             | EffectRequest::ResolveOlJieDanshou { player, skill }
+            // R05-E：三 compound 同款 owner/skill 绑定检查。
+            | EffectRequest::ResolveTiqi { player, skill }
+            | EffectRequest::ResolveBaoshu { player, skill }
+            | EffectRequest::ResolveDcbihuo { player, skill }
             | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
                 player,
                 skill,

@@ -43,6 +43,22 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, player.raw());
                 push_u32(w, skill.raw());
             }
+            // R05-E（ABI 759）：三 compound 与胆守同形（player, skill）。
+            EffectRequest::ResolveTiqi { player, skill } => {
+                w.push(33);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::ResolveBaoshu { player, skill } => {
+                w.push(34);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::ResolveDcbihuo { player, skill } => {
+                w.push(35);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
             EffectRequest::RecoverHp {
                 source,
                 player,
@@ -295,6 +311,18 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 skill: rule_api::SkillId::new(rd.u32()?),
             },
             30 => EffectRequest::ResolveOlJieDanshou {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            33 => EffectRequest::ResolveTiqi {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            34 => EffectRequest::ResolveBaoshu {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            35 => EffectRequest::ResolveDcbihuo {
                 player: rule_api::PlayerId::new(rd.u32()?),
                 skill: rule_api::SkillId::new(rd.u32()?),
             },

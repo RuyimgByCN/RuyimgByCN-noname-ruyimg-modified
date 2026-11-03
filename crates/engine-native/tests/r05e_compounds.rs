@@ -834,3 +834,38 @@ fn r05e_loader_derives_roles_deterministically() {
         assert!(plain_out.decls.iter().all(|d| !d.name.contains("#r05:")));
     }
 }
+
+
+/// R05-E codec 挂起往返回归：三 compound 效果在挂起队列中编码→解码→
+/// 逐字段相等（修复前 `enc_effects` 对新变体命中 `unreachable!()`，
+/// 挂起存档/AI 规划会 panic）。
+#[test]
+fn r05e_compound_effects_roundtrip_through_suspended_codec() {
+    use engine_native::rvm_ops::{dec_effects, enc_effects};
+    use rule_api::{EffectRequest, PlayerId, SkillId};
+    let cases = [
+        EffectRequest::ResolveTiqi {
+            player: PlayerId::new(2),
+            skill: SkillId::new(77),
+        },
+        EffectRequest::ResolveBaoshu {
+            player: PlayerId::new(1),
+            skill: SkillId::new(88),
+        },
+        EffectRequest::ResolveDcbihuo {
+            player: PlayerId::new(0),
+            skill: SkillId::new(99),
+        },
+    ];
+    let mut bytes = Vec::new();
+    enc_effects(&mut bytes, &cases);
+    let decoded = dec_effects(&bytes).expect("三 compound 挂起效果可解码");
+    assert_eq!(decoded.len(), cases.len());
+    for (want, got) in cases.iter().zip(&decoded) {
+        assert_eq!(
+            format!("{want:?}"),
+            format!("{got:?}"),
+            "挂起效果编解码后逐字段相等"
+        );
+    }
+}
