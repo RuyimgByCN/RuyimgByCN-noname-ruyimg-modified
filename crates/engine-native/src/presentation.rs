@@ -285,6 +285,10 @@ pub fn project(
             LogEvent::TurnEnded { player } => {
                 vec![PresentationEvent::TurnEnded { player: *player }]
             }
+            // R05（K21）：整回合结束窗两段（交接前）——中性文案。
+            LogEvent::TurnPhaseEnded { player } | LogEvent::TurnPhaseAfter { player } => {
+                vec![PresentationEvent::TurnEnded { player: *player }]
+            }
             LogEvent::DeckReshuffled => vec![PresentationEvent::DeckReshuffled],
             LogEvent::Equipped {
                 player,

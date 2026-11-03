@@ -685,6 +685,23 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
 /// 开始窗（含其 BeforeTriggers 触发与入场）先完整结算，随后结束帧把
 /// `turn.phase` 推进到判定阶段并进入 Judge 入场；整个回合开始流程对
 /// 调用方是单次 emit 的子树，不额外消耗一次 NextPhase 命令。
+/// R05（K21）：整回合结束窗 phaseEnd 段的 Commit——记日志并压 after 段。
+pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after: bool) {
+    if after {
+        ctx.log(LogEvent::TurnPhaseAfter { player });
+        // phaseAfter 段 Commit＝回合交接（K25：回合重置已在 handoff 内、
+        // 先于 TurnBegin）。boss 重整 tick 在窗前已由 commit_turn_ended
+        /// 处理（与存活者选取耦合），此处不再重复。
+        turn_handoff(ctx, player, ctx.core.next_alive(player));
+    } else {
+        ctx.log(LogEvent::TurnPhaseEnded { player });
+        ctx.emit(EventData::TurnEndWindow {
+            player,
+            after: true,
+        });
+    }
+}
+
 pub(super) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.phase = Phase::Prepare;
     ctx.emit(EventData::Phase {
@@ -702,6 +719,13 @@ pub(super) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
 pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
+    // R05（K21）：先发整回合结束窗（phaseEnd 段 → phaseAfter 段 → 交接），
+    // 期间 turn.current 仍是刚结束回合的角色；换人移至 phaseAfter 段的
+    // Commit（turn_handoff）。
+    ctx.emit(EventData::TurnEndWindow {
+        player,
+        after: false,
+    });
     ctx.expire_temporary_skills(player);
     for state in &mut ctx.core.players {
         state.zlfanshi_terra = false;
@@ -759,40 +783,20 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
                 break; // 全场死亡（终局判负已在死亡结算处理）
             }
         }
-        if next <= player {
-            ctx.core.turn.round += 1;
-            ctx.core.vm_aux.clear_round();
-        }
-        ctx.core.turn.current = next;
-        ctx.core.turn.phase = Phase::Judge;
-        ctx.core.turn.sha_used_play_phase = false;
-        ctx.core.turn.land_used = false;
-        ctx.core.turn.land_sha_used = false;
-        ctx.core.turn.turn_opened = false;
-        // 回合级存量清零（v128 修复 v126 遗留：TurnState 换回合为原地
-        // 改字段而非重建——乐动三角/链钩必须显式复位）
-        ctx.core.turn.yuedong_num = 0;
-        ctx.core.turn.yuedong_eff = 0;
-        ctx.core.turn.yuedong_recover = false;
-        ctx.core.turn.liangou_hook = None;
-        ctx.core.turn.liangou_bonus_used = false;
-        ctx.core.turn.feitiao_target = None;
-        ctx.core.turn.fanling_used = false;
-        ctx.core.turn.xjyufeng_used = 0;
-        ctx.core.turn.diewu_draw_used = false;
-        ctx.core.turn.lueying_used = false;
-        // 冥顽锁定集（Boss 梼杌，规则 v219）：回合更替清零（上游 phaseAfter
-        // clear 同窗）
-        ctx.core.turn.minwan_targets.clear();
-        ctx.core.turn.yanyu_count = 0;
-        ctx.core.turn.txianqu_used = false;
-        ctx.core.turn.jtjubao_used = false;
-        // R05：回合开始改发 TurnBegin 窗（Commit 内自动接准备阶段→判定）。
-        ctx.emit(EventData::TurnBegin { player: next });
-        return;
+        // R05（K21）：boss 重整 tick 已运行（复活者已被 next_alive 视为
+        // 存活）；交接统一由 phaseAfter 段的 Commit 执行。
+        let _ = next;
     }
-    let next = ctx.core.next_alive(player);
-    if next <= player {
+    // 交接由整回合结束窗 phaseAfter 段的 Commit（commit_turn_end_window）
+    // 统一执行——本函数不再直接换人。
+}
+
+/// R05（K21／K25）：回合交接——在整回合结束窗 phaseAfter 段的 Commit 中
+/// 执行：轮次推进、换人、回合级存量清零、**新回合玩家的回合重置**
+/// （`begin_judge` 原 `!turn_opened` 门整体前移至此，使回合开始窗与准备
+/// 阶段读到本回合的新值），最后发 TurnBegin（自动接准备阶段→判定）。
+pub(super) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
+    if next <= prev {
         ctx.core.turn.round += 1;
         ctx.core.vm_aux.clear_round();
     }
@@ -820,8 +824,85 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.yanyu_count = 0;
     ctx.core.turn.txianqu_used = false;
     ctx.core.turn.jtjubao_used = false;
-    // R05：回合开始改发 TurnBegin 窗（Commit 内自动接准备阶段→判定）。
+    reset_new_turn_state(ctx, next);
     ctx.emit(EventData::TurnBegin { player: next });
+}
+
+/// 新回合玩家的回合重置（K25：原 `begin_judge` 的 `!turn_opened` 门整体
+/// 前移；`turn_opened` 置真保留字段语义）。含红莲回合开始效果（原判定
+/// 开始执行——时点前移属 A2 审计 K25 项，行为面等价：仍先于回合开始窗
+/// 与准备阶段）。
+pub(super) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
+    if ctx.core.turn.turn_opened {
+        return;
+    }
+    ctx.core.turn.turn_opened = true;
+    ctx.reset_turn_limits(player);
+    // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
+    ctx.core.turn.cards_used_turn = 0;
+    // 回合伤害统计清零（U05 xianjian 明绣，规则 v160）
+    ctx.core.player_mut(player).turn_damage = 0;
+    // 忘忧戳清零（U05 xianjian 紫萱，规则 v162；登记差异：保留期延长）
+    ctx.core.player_mut(player).wangyou3_round = 0;
+    // 摄灵回合次数清零（U05 xianjian 南宫煌，规则 v168）
+    ctx.core.turn.sheling_used = 0;
+    // 射影回合清零（U05 xianjian 苏媚，规则 v175）
+    ctx.core.turn.sheying_used = false;
+    // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
+    ctx.core.turn.zhangmu_used = false;
+    // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌堆前缀红牌至多
+    // 3 张，并对座位序前至多 3 名其他角色各造成 1 点火伤
+    if let Some(hdef) = ctx
+        .catalog
+        .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
+    {
+        if ctx.core.has_skill(player, hdef) {
+            let mut gained = 0usize;
+            while gained < 3 && !ctx.core.deck.is_empty() {
+                let c = ctx.core.deck[ctx.core.deck.len() - 1];
+                if matches!(
+                    ctx.catalog.cards[c as usize].suit,
+                    crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                ) {
+                    ctx.core.deck.pop();
+                    ctx.core.player_mut(player).hand.push(c);
+                    gained += 1;
+                } else {
+                    break;
+                }
+            }
+            if gained > 0 {
+                ctx.log(LogEvent::CardsDrawn {
+                    player,
+                    cards: ctx
+                        .core
+                        .player(player)
+                        .hand
+                        .iter()
+                        .rev()
+                        .take(gained)
+                        .copied()
+                        .collect::<Vec<_>>(),
+                });
+            }
+            let targets: Vec<PlayerId> = ctx
+                .core
+                .seat_order_from(player)
+                .into_iter()
+                .filter(|t| *t != player && ctx.core.player(*t).alive)
+                .take(3)
+                .collect();
+            for t in targets {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(player),
+                    t,
+                    1,
+                    crate::event::DamageNature::Fire,
+                    None,
+                )));
+            }
+        }
+    }
 }
 
 /// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有

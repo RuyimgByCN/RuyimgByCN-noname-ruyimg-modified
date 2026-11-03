@@ -1,84 +1,25 @@
 use super::super::*;
 
-pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
-    if !ctx.core.turn.turn_opened {
-        for state in &mut ctx.core.players {
-            state.zlfanshi_terra = false;
-        }
-        ctx.reset_turn_limits(player);
-        ctx.core.turn.turn_opened = true;
-        // 本回合已用牌数（swd 灵武批 120，规则 v307）：回合开始清零
-        ctx.core.turn.cards_used_turn = 0;
-        // 回合伤害统计清零（U05 xianjian 明绣，规则 v160 灵火
-        // 门控；上游 getStat 每回合重置同口径）——在本人回合
-        // 开始清（PhaseEnd 触发晚于收束提交，见规则基准）
-        ctx.core.player_mut(player).turn_damage = 0;
-        // 忘忧戳清零（U05 xianjian 紫萱，规则 v162）：存活至
-        // 标记者自己下回合开始（上游 addTempSkill 当前回合结
-        // 束——登记差异：保留期延长）
-        ctx.core.player_mut(player).wangyou3_round = 0;
-        // 摄灵回合次数清零（U05 xianjian 南宫煌，规则 v168）
-        ctx.core.turn.sheling_used = 0;
-        // 射影回合清零（U05 xianjian 苏媚，规则 v175）
-        ctx.core.turn.sheying_used = false;
-        // 张目回合清零（U05 xianjian 南宫煌，规则 v181）
-        ctx.core.turn.zhangmu_used = false;
-        // 红莲（Boss 毕方，规则 v228）：回合开始——顺序获牌
-        // 堆前缀红牌至多 3 张（上游随机 0-3 确定性近似），并对
-        // 座位序前至多 3 名其他角色各造成 1 点火伤（上游随机
-        // 3-0 名确定性近似）
-        if let Some(hdef) = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::names::BOSS_HONGLIANX)
-        {
-            if ctx.core.has_skill(player, hdef) {
-                let mut gained = 0usize;
-                while gained < 3 && !ctx.core.deck.is_empty() {
-                    let c = ctx.core.deck[ctx.core.deck.len() - 1];
-                    if matches!(
-                        ctx.catalog.cards[c as usize].suit,
-                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
-                    ) {
-                        ctx.core.deck.pop();
-                        ctx.core.player_mut(player).hand.push(c);
-                        gained += 1;
-                    } else {
-                        break;
-                    }
-                }
-                if gained > 0 {
-                    ctx.log(LogEvent::CardsDrawn {
-                        player,
-                        cards: ctx
-                            .core
-                            .player(player)
-                            .hand
-                            .iter()
-                            .rev()
-                            .take(gained)
-                            .copied()
-                            .collect::<Vec<_>>(),
-                    });
-                }
-                let targets: Vec<PlayerId> = ctx
-                    .core
-                    .seat_order_from(player)
-                    .into_iter()
-                    .filter(|t| *t != player && ctx.core.player(*t).alive)
-                    .take(3)
-                    .collect();
-                for t in targets {
-                    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                        Some(player),
-                        t,
-                        1,
-                        crate::event::DamageNature::Fire,
-                        None,
-                    )));
-                }
-            }
-        }
-        // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
+pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {    // R05（K25/A2）：本函数原 `!turn_opened` 门两段拆分——重置段前移
+    // `turn_handoff`（kernel/events.rs `reset_new_turn_state`），准备阶
+    // 段 Boss 技段迁 `begin_prepare`（上游 phaseZhunbeiBegin）。
+    // 废墟地图效果（mtg 第四批，规则 v103）：锁定全局——回合
+    // 开始（准备阶段）随机将弃牌堆一张置于牌堆顶（上游
+    // phaseBegin silent 同口径；RNG 真消除口径）
+    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
+        && !ctx.core.discard.is_empty()
+    {
+        let n = ctx.core.discard.len() as u32;
+        let i = ctx.core.rng.gen_range(n) as usize;
+        let c = ctx.core.discard.remove(i);
+        ctx.core.deck.push(c);
+    }
+}
+
+/// R05（A2 审计 K26–K45 族）：准备阶段开始入场效果——原锚判定开始
+/// （`begin_judge` 的 `!turn_opened` 门内后半段），按上游 phaseZhunbeiBegin
+/// 语义迁至 Phase{Prepare, begin} 入场。
+pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝红（Boss 共工，规则 v244）：准备阶段——敌方全
         // 体逐个：有牌者，有装备 → 装备全弃（撤技能+入弃堆）；
         // 无装备 → 随机弃一张手牌（随机→手牌首张确定性近似
         // 登记先例族）
@@ -742,16 +683,5 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
         ctx.core.turn.yingfeng_chain = false;
         ctx.core.turn.luanjian_card = None;
         ctx.core.turn.mujiaren_used = false;
-    }
-    // 废墟地图效果（mtg 第四批，规则 v103）：锁定全局——回合
-    // 开始（准备阶段）随机将弃牌堆一张置于牌堆顶（上游
-    // phaseBegin silent 同口径；RNG 真消除口径）
-    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
-        && !ctx.core.discard.is_empty()
-    {
-        let n = ctx.core.discard.len() as u32;
-        let i = ctx.core.rng.gen_range(n) as usize;
-        let c = ctx.core.discard.remove(i);
-        ctx.core.deck.push(c);
-    }
 }
+

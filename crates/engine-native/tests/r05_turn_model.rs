@@ -103,6 +103,58 @@ fn whole_turn_still_takes_five_next_phase_commands() {
     assert_eq!(next_phases, 5, "准备阶段不改变每回合 5 次 NextPhase");
 }
 
+/// K21：整回合结束窗（phaseEnd 段→phaseAfter 段）在交接前派发——两段
+/// 日志都出现，且都先于下一位玩家的准备阶段开始；期间事件玩家＝刚结束
+/// 回合的角色。修复前（无此窗）本测试红。
+#[test]
+fn turn_end_windows_fire_before_handoff() {
+    let mut e = Engine::new(33401, 3);
+    let log = run_until_next_turn(&mut e);
+    let next = e.turn().current;
+    let prev = (next + 2) % 3; // 3 人局上一手
+    let idx = |pred: &dyn Fn(&LogEvent) -> bool| -> Option<usize> {
+        log.iter().position(pred)
+    };
+    let end_win = idx(&|x| matches!(x, LogEvent::TurnPhaseEnded { player } if *player == prev))
+        .expect("phaseEnd 段日志（交接前）");
+    let after_win = idx(&|x| matches!(x, LogEvent::TurnPhaseAfter { player } if *player == prev))
+        .expect("phaseAfter 段日志（交接前）");
+    let next_prepare = idx(&|x| matches!(
+        x,
+        LogEvent::PhaseChanged { player, phase: Phase::Prepare, begin: true } if *player == next
+    ))
+    .expect("下一位准备阶段开始");
+    assert!(end_win < after_win, "phaseEnd 段先于 phaseAfter 段");
+    assert!(
+        after_win < next_prepare,
+        "两段结束窗都先于下一位回合开始（交接在 phaseAfter 段 Commit）"
+    );
+}
+
+/// K25：回合重置（红莲回合开始效果为可观测锚）先于下一位准备阶段开始。
+/// 修复前红莲在判定开始执行（晚于 TurnBegin 与准备阶段）。
+#[test]
+fn turn_reset_precedes_turn_begin_window() {
+    let mut e = Engine::new(33402, 3);
+    let log = run_until_next_turn(&mut e);
+    let next = e.turn().current;
+    // 无红莲持有者时 K25 的直接可观测面：cards_used_turn 在交接内清零。
+    assert_eq!(e.state_core().turn.cards_used_turn, 0);
+    // 交接窗（phaseAfter 段）先于下一位准备阶段——与 K21 测试同一序。
+    let after_win = log
+        .iter()
+        .position(|x| matches!(x, LogEvent::TurnPhaseAfter { .. }))
+        .expect("phaseAfter 段");
+    let next_prepare = log
+        .iter()
+        .position(|x| matches!(
+            x,
+            LogEvent::PhaseChanged { phase: Phase::Prepare, begin: true, player } if *player == next
+        ))
+        .expect("准备阶段");
+    assert!(after_win < next_prepare);
+}
+
 #[test]
 fn prepare_phase_archive_round_trip_keeps_new_phase_tag() {
     let mut e = Engine::new(33303, 3);

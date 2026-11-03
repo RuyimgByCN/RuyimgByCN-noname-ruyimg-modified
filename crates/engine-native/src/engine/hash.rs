@@ -915,6 +915,12 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
             push_u8(h, *history_recorded as u8);
             push_u8(h, *cancelled as u8);
         }
+        EventData::TurnEndWindow { player, after } => {
+            // R05（K21）：判别值 32。
+            push_u8(h, 32);
+            push_u8(h, *player);
+            push_u8(h, *after as u8);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             push_u8(h, 20);
             push_u8(h, *player);

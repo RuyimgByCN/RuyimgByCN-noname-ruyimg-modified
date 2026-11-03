@@ -167,6 +167,9 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
         DrawPhaseAfter => 49,
         Draw => 50,
         DrawGain => 51,
+        // R05（K21）：整回合结束窗两段，表尾追加。
+        TurnPhaseEnd => 52,
+        TurnPhaseAfter => 53,
     };
     w.u8(t);
 }
@@ -226,6 +229,8 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         49 => DrawPhaseAfter,
         50 => Draw,
         51 => DrawGain,
+        52 => TurnPhaseEnd,
+        53 => TurnPhaseAfter,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }

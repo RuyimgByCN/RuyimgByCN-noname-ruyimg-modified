@@ -1,0 +1,9 @@
+$ cargo test -p engine-native --test misc r05_turn_model::   # K21/K25 实施后首跑，2026-11-03 15:09:40 +0800
+test r05_turn_model::next_turn_runs_prepare_begin_and_end_before_judge ... ok
+test r05_turn_model::prepare_phase_archive_round_trip_keeps_new_phase_tag ... ok
+test r05_turn_model::whole_turn_still_takes_five_next_phase_commands ... ok
+test r05_turn_model::turn_reset_precedes_turn_begin_window ... FAILED
+test r05_turn_model::turn_end_windows_fire_before_handoff ... FAILED
+thread 'r05_turn_model::turn_reset_precedes_turn_begin_window' (44380996) panicked at crates/engine-native/tests/groups/../r05_turn_model.rs:155:5:
+thread 'r05_turn_model::turn_end_windows_fire_before_handoff' (44380995) panicked at crates/engine-native/tests/groups/../r05_turn_model.rs:128:5:
+test result: FAILED. 3 passed; 2 failed; 0 ignored; 0 measured; 231 filtered out; finished in 0.00s

@@ -155,6 +155,8 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
             EventKind::PhaseBegin => Stage::BeforeTriggers,
             // R05（规则 333）：回合开始窗——触发在 Commit（压准备阶段）之前。
             EventKind::TurnBegin => Stage::BeforeTriggers,
+            // R05（K21）：整回合结束窗两段——BeforeTriggers 派发，after 段静默。
+            EventKind::TurnPhaseEnd | EventKind::TurnPhaseAfter => Stage::BeforeTriggers,
             _ => Stage::Commit,
         },
     };
@@ -215,6 +217,9 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         (EventKind::PhaseBegin, Stage::BeforeTriggers) => Stage::Commit,
         // R05：回合开始窗 BeforeTriggers → Commit（压准备阶段帧）→ 静默 after → Done。
         (EventKind::TurnBegin, Stage::BeforeTriggers) => Stage::Commit,
+        (EventKind::TurnPhaseEnd | EventKind::TurnPhaseAfter, Stage::BeforeTriggers) => {
+            Stage::Commit
+        }
         (EventKind::PhaseBegin, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::PhaseBegin, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
@@ -378,7 +383,11 @@ fn plan_triggers(
         if !before
             && (matches!(f.data, EventData::TurnOverBefore { .. })
                 || matches!(f.data, EventData::Death { .. })
-                || matches!(f.data, EventData::TurnBegin { .. }))
+                || matches!(f.data, EventData::TurnBegin { .. })
+                || matches!(
+                    f.data,
+                    EventData::TurnEndWindow { .. }
+                ))
         {
             // E03 翻面 / 死亡前置窗口（规则 v170）：目录无「翻面后/死亡
             // 后」触发种类，且 after 再查会令取消/遗言技重复入队。
@@ -398,6 +407,13 @@ fn plan_triggers(
             EventData::Phase { begin: true, .. } => EventKind::PhaseBegin,
             // R05：回合开始窗只有前置段（after 静默，见上）。
             EventData::TurnBegin { .. } => EventKind::TurnBegin,
+            EventData::TurnEndWindow { after, .. } => {
+                if *after {
+                    EventKind::TurnPhaseAfter
+                } else {
+                    EventKind::TurnPhaseEnd
+                }
+            }
             _ => EventKind::DamageBefore,
         };
         if before {

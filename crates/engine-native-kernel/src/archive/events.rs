@@ -171,6 +171,12 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             w.boolean(*history_recorded);
             w.boolean(*cancelled);
         }
+        EventData::TurnEndWindow { player, after } => {
+            // R05（K21）：整回合结束窗，tag 31（after 位单编）。
+            w.u8(31);
+            enc_pid(w, player);
+            w.boolean(*after);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             // E03 翻面原语（tag 14，表尾追加）
             w.u8(14);
@@ -455,6 +461,11 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
                 history_recorded,
                 cancelled,
             }
+        }
+        31 => {
+            let player = dec_pid(r)?;
+            let after = r.boolean()?;
+            EventData::TurnEndWindow { player, after }
         }
         14 => {
             let player = dec_pid(r)?;

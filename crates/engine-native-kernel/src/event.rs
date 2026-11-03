@@ -42,6 +42,11 @@ pub enum EventKind {
     DrawPhaseAfter,
     Draw,
     DrawGain,
+    /// R05（K21）：回合交接前的整回合结束窗——上游 phaseEnd 段。
+    TurnPhaseEnd,
+    /// R05（K21）：回合交接前的整回合结束窗——上游 phaseAfter 段（交接
+    /// 在本段 Commit 中执行）。
+    TurnPhaseAfter,
     SkillToggled,
     Equipped,
     Linked,
@@ -238,6 +243,13 @@ pub enum EventData {
         history_recorded: bool,
         cancelled: bool,
     },
+    /// R05（K21）：整回合结束窗（交接前）。`after=false`＝phaseEnd 段，
+    /// `after=true`＝phaseAfter 段（其 Commit 执行换人／回合重置／发
+    /// TurnBegin）。
+    TurnEndWindow {
+        player: PlayerId,
+        after: bool,
+    },
     SkillToggled {
         player: PlayerId,
         skill: SkillDefId,
@@ -328,6 +340,13 @@ impl EventData {
             EventData::DrawWindow { window, .. } => window.event_kind(),
             EventData::Draw { .. } => EventKind::Draw,
             EventData::DrawGain { .. } => EventKind::DrawGain,
+            EventData::TurnEndWindow { after, .. } => {
+                if *after {
+                    EventKind::TurnPhaseAfter
+                } else {
+                    EventKind::TurnPhaseEnd
+                }
+            }
             EventData::SkillToggled { .. } => EventKind::SkillToggled,
             EventData::Equipped { .. } => EventKind::Equipped,
             EventData::Linked { .. } => EventKind::Linked,

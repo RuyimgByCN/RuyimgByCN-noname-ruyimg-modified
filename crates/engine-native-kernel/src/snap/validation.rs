@@ -176,6 +176,7 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
             check_pid(*recipient, b)?;
             check_cards(eligible, b)?;
         }
+        EventData::TurnEndWindow { player, .. } => check_pid(*player, b)?,
         EventData::SkillToggled { player, skill, .. } => {
             check_pid(*player, b)?;
             check_def(*skill, b)?;

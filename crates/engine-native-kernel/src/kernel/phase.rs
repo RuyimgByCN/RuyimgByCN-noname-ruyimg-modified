@@ -1,7 +1,7 @@
 use super::*;
 
 mod judge;
-use judge::begin_judge;
+use judge::{begin_judge, begin_prepare};
 mod draw;
 use draw::begin_draw;
 mod play;
@@ -115,7 +115,9 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     if begin {
         match phase {
             // 准备阶段无固有入场行为；开始/结束触发窗由���生命周期提供。
-            Phase::Prepare => {}
+            // R05（A2）：准备阶段入场＝原判定开始 `!turn_opened` 门内的
+            // 准备阶段 Boss 技段（上游 phaseZhunbeiBegin）。
+            Phase::Prepare => begin_prepare(ctx, player),
             Phase::Judge => begin_judge(ctx, player),
             Phase::Draw => begin_draw(ctx, player),
             Phase::Play => begin_play(ctx, player),

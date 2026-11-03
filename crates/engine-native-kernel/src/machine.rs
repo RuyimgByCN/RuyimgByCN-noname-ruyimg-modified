@@ -129,6 +129,13 @@ pub enum LogEvent {
     TurnEnded {
         player: PlayerId,
     },
+    /// R05（K21）：整回合结束窗两段（交接前，player＝刚结束回合的角色）。
+    TurnPhaseEnded {
+        player: PlayerId,
+    },
+    TurnPhaseAfter {
+        player: PlayerId,
+    },
     DeckReshuffled,
     Equipped {
         player: PlayerId,
@@ -374,6 +381,7 @@ impl<'a> Ctx<'a> {
                 | EventData::DrawPhase { .. }
                 | EventData::Draw { .. }
                 | EventData::DrawGain { .. }
+                | EventData::TurnEndWindow { .. }
         ) {
             // R05：D/R/G 与伤害族同走 push_frame（起步 Intrinsic）。
             crate::resolution::push_frame(self.res, data);
