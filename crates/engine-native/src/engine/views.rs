@@ -120,9 +120,9 @@ impl Engine {
                             || match card.zone {
                                 Hand => seat.is_some() && card.owner == seat,
                                 Equip | Judge | DiscardPile | Processing => true,
-                                // R05：R 帧 held 对席位/观战隐藏牌面（Referee
-                                // 经全信息路径另行可见）。
-                                DrawPile | Removed | Expansion | DrawHeld => false,
+                                // R05：R 帧 held 与 detached 实体区对席位/
+                                // 观战隐藏牌面（Referee 经全信息路径另行可见）。
+                                DrawPile | Removed | Expansion | DrawHeld | Detached => false,
                             }
                     })
                     .collect()

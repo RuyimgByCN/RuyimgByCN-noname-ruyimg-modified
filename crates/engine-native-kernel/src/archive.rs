@@ -113,7 +113,11 @@ use crate::state::{
 /// （`kunlunjing_snapshot`/`kunlunjing_hp`）。v104 字节被拒绝。
 /// v106: Decision29 private C331 integration. Strict105 rejection; unpublished while
 /// approved later C Core layouts are still pending in this intermediate format.
-pub const ARCHIVE_FORMAT_VERSION: u16 = 106;
+/// v107（2026-11-04，R05-G 真实回合/摸牌事件族存档收口）：`GameStateCore`
+/// 在 table 之后、rng 之前追加 detached 实体区 `detached_cards`
+/// （`(CardId, DetachedKind)` 逐条 u32+u8；双枯竭/抽后 gain 取消时实体
+/// 去处，106 布局会静默丢弃整区）。v106 字节被版本门禁拒绝（无迁移）。
+pub const ARCHIVE_FORMAT_VERSION: u16 = 107;
 
 /// 存档魔数（"NGSA" = noname-game snapshot archive）。
 pub const ARCHIVE_MAGIC: &[u8; 4] = b"NGSA";

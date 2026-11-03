@@ -88,7 +88,8 @@ fn phase7_genuine105_is_rejected_without_migration() {
 fn phase7_private106_header_and_full_state_roundtrip() {
     let e = Engine::new(2907106, 3);
     let raw = engine_native::archive::encode_archive(&e.save());
-    assert_eq!(u16::from_le_bytes([raw[4], raw[5]]), 106);
+    // R05-G 批（2026-11-04）：106→107——detached 实体区入档。
+    assert_eq!(u16::from_le_bytes([raw[4], raw[5]]), 107);
     let decoded = engine_native::archive::decode_archive(&raw).unwrap();
     assert_eq!(decoded, e.save());
     let r = Engine::restore(&decoded).unwrap();

@@ -14,6 +14,9 @@ pub enum PhysicalCardZone {
     Expansion,
     /// R05：R 帧已抽未获牌（唯一 owner；对席位/观战隐藏牌面）。
     DrawHeld,
+    /// R05（G 批，存档 107）：detached 实体区——双枯竭/抽后 gain 取消
+    /// 时实体的去处；不可洗回，对席位/观战隐藏牌面（Referee 全信息可见）。
+    Detached,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -82,6 +85,11 @@ pub fn physical_cards(
         for id in draw_held_cards(res) {
             cards.push(PhysicalCard { id, owner: None, zone: PhysicalCardZone::DrawHeld });
         }
+    }
+    // R05（G 批）：detached 实体区计为独立牌区（N04-f 牌归属多重集——
+    // 入档后恢复校验须把该区牌算作「恰在一区」，否则 card_missing_from_all_zones）。
+    for (id, _) in &core.detached_cards {
+        cards.push(PhysicalCard { id: *id, owner: None, zone: PhysicalCardZone::Detached });
     }
     cards
 }

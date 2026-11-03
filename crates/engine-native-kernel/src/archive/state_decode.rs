@@ -1,6 +1,6 @@
 use super::*;
 
-#[allow(dead_code)] // R05：存档 107 启用
+/// R05（存档 107，G 批接线）：detached 实体区（table 之后、rng 之前）。
 pub(super) fn dec_detached(r: &mut R<'_>) -> Result<Vec<(CardId, DetachedKind)>, ArchiveError> {
     let len = r.len()? as usize;
     let mut out = Vec::with_capacity(len);
@@ -354,6 +354,8 @@ pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError>
     let deck = r.vec(|r| r.u32())?;
     let discard = r.vec(|r| r.u32())?;
     let table = r.vec(|r| r.u32())?;
+    // R05（存档 107，G 批）：table 之后、rng 之前——与编码序严格对应。
+    let detached_cards = dec_detached(r)?;
     let rng_state = r.u64()?;
     let rng_calls = r.u64()?;
     let current = dec_pid(r)?;
@@ -530,8 +532,8 @@ pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError>
             deck,
             discard,
             table,
-            // R05：随存档 107 与 D 机接入同批解码（当前恒空）。
-            detached_cards: Vec::new(),
+            // R05（存档 107，G 批）：detached 实体区随批解码。
+            detached_cards,
             rng: crate::rng::RuleRng::from_raw_parts(rng_state, rng_calls),
             turn: crate::state::TurnState {
                 current,

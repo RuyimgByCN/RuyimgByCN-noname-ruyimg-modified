@@ -433,6 +433,13 @@ pub(super) fn canonical_hash(state: &GameState) -> [u8; 32] {
     push_cards(&mut h, &c.deck);
     push_cards(&mut h, &c.discard);
     push_cards(&mut h, &c.table);
+    // R05（G 批）：detached 实体区入哈希域（b27 先例：新语义状态字段
+    // 随批入档＋入摘要；golden 位移随 J 批三步探针统一重录）。
+    push_u32(&mut h, c.detached_cards.len() as u32);
+    for (card, kind) in &c.detached_cards {
+        push_u32(&mut h, *card);
+        push_u8(&mut h, kind.tag());
+    }
     let (rs, rc) = c.rng.state();
     push_u64(&mut h, rs);
     push_u64(&mut h, rc);

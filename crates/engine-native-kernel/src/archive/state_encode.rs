@@ -342,8 +342,13 @@ pub(super) fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     for c in &s.core.table {
         w.u32(*c);
     }
-    // R05：detached 实体区暂不入档——随存档 107 与 D 机接入同批尾追
-    // （此时尚无生产者，106 布局保持逐字节不变）。
+    // R05（存档 107，G 批）：detached 实体区——双枯竭/抽后 gain 取消时
+    // 实体的去处（table 之后、rng 之前尾追；v106 字节被版本门禁拒绝）。
+    w.len(s.core.detached_cards.len());
+    for (card, kind) in &s.core.detached_cards {
+        w.u32(*card);
+        w.u8(kind.tag());
+    }
     // rng
     let (rng_state, rng_calls) = s.core.rng.raw_parts();
     w.u64(rng_state);

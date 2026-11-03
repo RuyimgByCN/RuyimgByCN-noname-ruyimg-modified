@@ -511,7 +511,8 @@ fn archive_encoding_rejects_unknown_prompts_without_changing_existing_layout() {
         let fixture = fixture(window);
         let original = fixture.engine.save();
         let bytes = engine_native::archive::encode_archive(&original);
-        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 106);
+        // R05-G 批（2026-11-04）：106→107——detached 实体区入档。
+        assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 107);
         if let Some(directory) = std::env::var_os("NC09_MACHINE_ARCHIVE_OUT") {
             let directory = std::path::PathBuf::from(directory);
             std::fs::create_dir_all(&directory).unwrap();

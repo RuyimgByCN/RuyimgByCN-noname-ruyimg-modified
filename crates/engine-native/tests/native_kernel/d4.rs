@@ -44,7 +44,8 @@ fn d4_boss_b0_archive_format_v79_rejects_v78_without_migration() {
         decode_archive, encode_archive, ArchiveError, ARCHIVE_FORMAT_VERSION, ARCHIVE_MAGIC,
     };
 
-    assert_eq!(ARCHIVE_FORMAT_VERSION, 106);
+    // R05-G 批（2026-11-04）：106→107——detached 实体区入档，v106 拒收无迁移。
+    assert_eq!(ARCHIVE_FORMAT_VERSION, 107);
     let e = Engine::new_boss(29102, 3, 0, 0);
     let mut bytes = encode_archive(&e.save());
     // 伪造头格式版本 84（载荷仍为 v86 布局）——门禁应拒收。

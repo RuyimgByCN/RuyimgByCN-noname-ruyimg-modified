@@ -91,15 +91,18 @@ fn cancel_then_normal_judgement_and_pick_control() {
     assert!(judged2.contains(&held[6]), "选中候选成为判定结果");
 }
 
-/// 旧规则档（331 真实挂起夹具）在新版本下按版本门禁拒绝，原件不动。
+/// 旧规则档（331 真实挂起夹具，106 字节）在新版本下按版本门禁拒绝，
+/// 原件不动、无迁移。R05-G 批（2026-11-04）106→107 升号前该档可解码、
+/// 由 restore 侧规则版本门拒绝；升号后与所有 v106 字节一样在解码入口
+/// 拒收（restore 侧 RuleVersionMismatch 语义另由 g1_d3/e02 等快照级
+/// 测试覆盖）。
 #[test]
 fn genuine_331_pending_archive_is_version_rejected() {
     let bytes = include_bytes!("fixtures/gaiming-window-331.ngsa");
-    let snap = engine_native::archive::decode_archive(bytes).expect("106 可解码");
-    let f = fixture(Window::GaiMing);
-    let packs: Vec<_> = f.packs.iter().collect();
-    assert!(matches!(
-        engine_native::Engine::restore_with_extensions(&snap, &packs),
-        Err(engine_native::snap::SnapshotError::RuleVersionMismatch { .. })
-    ));
+    assert_eq!(&bytes[0..4], b"NGSA");
+    assert_eq!(u16::from_le_bytes([bytes[4], bytes[5]]), 106);
+    match engine_native::archive::decode_archive(bytes) {
+        Err(engine_native::archive::ArchiveError::UnsupportedFormatVersion(106)) => {}
+        other => panic!("期望 107 门禁拒收 106，得到 {other:?}"),
+    }
 }
