@@ -768,6 +768,129 @@ pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after:
 }
 
 pub(super) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
+    // K46/K47/K48（A2）：封冻／巡游／炎狱＝上游 player/global phaseBegin
+    // 内联效果——置于 TurnBegin 窗 Commit 步（BeforeTriggers 已跑、准备
+    // 阶段帧未压），严格落在 phaseBegin 窗内（原锚判定开始→prepare 入场）。
+        // 封冻（Boss 应昭，规则 v228）：回合开始——所有其他
+        // 存活角色获「封印」（本回合无法使用手牌；回合结束解
+        // 除。上游 boss_fengdong phaseBegin addTempSkill fengyin
+        // 同口径）
+        if let Some(fddef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_FENGDONG)
+        {
+            if ctx.core.has_skill(player, fddef) {
+                for t in ctx.core.seat_order_from(player) {
+                    if t != player && ctx.core.player(t).alive {
+                        ctx.core.player_mut(t).fengyin_active = true;
+                    }
+                }
+            }
+        }
+
+        // 巡游（Boss 应昭，规则 v231）：其他角色回合开始——
+        // 获得座位序首名有手牌的其他角色的一张手牌（确定性近
+        // 似：hej 全区域/随机以座位序+手牌首张近似登记）；装
+        // 备牌自动使用（直接装上，v180 双刃系 grant 先例）
+        if let Some(xdef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_XUNYOU)
+        {
+            // global phaseBegin：任意 enabled 持有者（≠当前回
+            // 合玩家）在场即触发（炎狱 holders 先例同构）
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == xdef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .filter(|o| *o != player && ctx.core.player(*o).alive)
+                .collect();
+            if !holders.is_empty() {
+                let holder = holders[0];
+                let mut victim: Option<PlayerId> = None;
+                for t in ctx.core.seat_order_from(holder) {
+                    if t != holder
+                        && ctx.core.player(t).alive
+                        && !ctx.core.player(t).hand.is_empty()
+                    {
+                        victim = Some(t);
+                        break;
+                    }
+                }
+                if let Some(v) = victim {
+                    let c = ctx.core.player(v).hand[0];
+                    let kind = ctx.catalog.card_kind(c);
+                    ctx.core.player_mut(v).hand.retain(|x| *x != c);
+                    if let Some(slot) = kind.equip_slot() {
+                        // 装备牌自动使用：同栏替换（旧装备入弃
+                        // 堆并撤销技能——931 区 play 装备先例）
+                        if let Some(old) = ctx
+                            .core
+                            .player(player)
+                            .equips
+                            .iter()
+                            .copied()
+                            .find(|e| ctx.catalog.card_slot_of(ctx.core, *e) == Some(slot))
+                        {
+                            ctx.core.player_mut(holder).equips.retain(|x| *x != old);
+                            revoke_equip_skills(ctx.core, ctx.catalog, holder, old);
+                            ctx.to_discard(old);
+                        }
+                        ctx.core.player_mut(holder).equips.push(c);
+                        grant_equip_skills(ctx, holder, c);
+                    } else {
+                        ctx.core.player_mut(holder).hand.push(c);
+                    }
+                    ctx.log(LogEvent::CardsGiven {
+                        from: v,
+                        to: player,
+                        cards: vec![c],
+                    });
+                }
+            }
+        }
+
+        // 炎狱（Boss 毕方，规则 v229）：global phaseBegin——
+        // 其他角色的回合开始判定（确定性判定铁骑先例），红色 →
+        // 该角色受 1 点来自毕方的火伤；每回合至多 3 次（TurnState
+        // 计数器，回合更替清零；上游 getIndex 3 同口径）
+        if let Some(ydef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_YANYU)
+        {
+            let holders: Vec<PlayerId> = ctx
+                .core
+                .skills
+                .iter()
+                .filter(|((_, dd), i)| *dd == ydef && i.enabled)
+                .map(|((o, _), _)| *o)
+                .filter(|o| *o != player && ctx.core.player(*o).alive)
+                .collect();
+            if ctx.core.turn.yanyu_count < 3 {
+                for holder in holders {
+                    let judged = ctx.draw_judge_card();
+                    let red = matches!(
+                        ctx.catalog.cards[judged as usize].suit,
+                        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+                    );
+                    ctx.to_discard(judged);
+                    if red {
+                        ctx.core.turn.yanyu_count += 1;
+                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                            Some(holder),
+                            player,
+                            1,
+                            crate::event::DamageNature::Fire,
+                            None,
+                        )));
+                    }
+                    break; // 每次判定至多一持技者结算（单 Boss 场景）
+                }
+            }
+        }
+
+
     ctx.core.turn.phase = Phase::Prepare;
     ctx.emit(EventData::Phase {
         player,
