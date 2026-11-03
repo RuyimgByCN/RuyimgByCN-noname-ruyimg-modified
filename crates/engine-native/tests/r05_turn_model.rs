@@ -155,6 +155,32 @@ fn turn_reset_precedes_turn_begin_window() {
     assert!(after_win < next_prepare);
 }
 
+/// K10：翻面角色的整回合跳过发生在回合开始窗**之前**——翻面者不出现
+/// 任何阶段帧（含准备阶段），翻回后轮到下一位。修复前（判定开始检测）
+/// 翻面者会先跑完 TurnBegin 窗＋准备阶段再被跳过。
+#[test]
+fn face_down_turn_is_skipped_before_turn_begin() {
+    let mut e = Engine::new(33403, 3);
+    // 1 号翻面（0 号回合进行中）
+    e.state_core_mut().player_mut(1).face_down = true;
+    let start = e.log().len();
+    let log = run_until_next_turn(&mut e);
+    // 0 号回合结束后应直接落到 2 号（1 号整回合被消耗）
+    assert_eq!(e.turn().current, 2, "翻面者回合槽被消耗，轮到 2 号");
+    assert!(
+        !e.state_core().player(1).face_down,
+        "翻面者已翻回"
+    );
+    let p1_phases: Vec<_> = log[start..]
+        .iter()
+        .filter(|x| matches!(x, LogEvent::PhaseChanged { player: 1, .. }))
+        .collect();
+    assert!(
+        p1_phases.is_empty(),
+        "翻面者不得出现任何阶段帧（含准备阶段）：{p1_phases:?}"
+    );
+}
+
 #[test]
 fn prepare_phase_archive_round_trip_keeps_new_phase_tag() {
     let mut e = Engine::new(33303, 3);

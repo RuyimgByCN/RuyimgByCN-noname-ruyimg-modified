@@ -13,24 +13,8 @@ use end::begin_end;
 
 /// 阶段帧提交：PhaseEnd 推进阶段或转入回合收束；PhaseBegin 执行入场效果。
 pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, begin: bool) {
-    // 翻面角色回合跳过（E03 翻面 + U05 ow 美，规则 v127）：翻面者回合
-    // 的首个阶段帧改为「先经翻面前置取消窗口翻回（上游 _turnover
-    // phaseBefore 强制取消 + turnOver 翻回同口径），再直达回合收束」
-    // ——整回合无任何阶段帧（摸牌/出牌/弃牌全跳过），座位/轮次计数
-    // 不变（回合槽照常消耗）。
-    if begin && phase == Phase::Judge && ctx.core.player(player).face_down {
-        // 紧急冷冻解除（U05 swd 灵剑，规则 v198）：翻回即解（上游
-        // addTempSkill {player:'turnOverAfter'} 同口径）
-        ctx.core.player_mut(player).jileng_active = false;
-        ctx.emit(EventData::TurnOverBefore {
-            player,
-            cancelled: false,
-        });
-        // 混乱解除（规则 v259）：整回合跳过路径同口径（回合收束=解除）
-        ctx.core.player_mut(player).boss_mad = false;
-        ctx.emit(EventData::TurnEnded { player });
-        return;
-    }
+    // R05（K10）：翻面整回合跳过已前移 `turn_handoff`（回合开始窗之前，
+    // 上游 phaseBefore 检测时点）；本函数不再承担翻面检测。
     // 强固解除（U05 ow 奥丽莎，规则 v136）：自己回合判定阶段开始——
     // 上游 addTempSkill("qianggu2") 至 phaseBegin 同口径
     if begin && phase == Phase::Judge && ctx.core.player(player).qianggu_active {

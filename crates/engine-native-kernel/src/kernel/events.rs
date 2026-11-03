@@ -796,6 +796,19 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
 /// （`begin_judge` 原 `!turn_opened` 门整体前移至此，使回合开始窗与准备
 /// 阶段读到本回合的新值），最后发 TurnBegin（自动接准备阶段→判定）。
 pub(super) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
+    // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
+    // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
+    // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
+    if ctx.core.player(next).face_down {
+        ctx.core.player_mut(next).jileng_active = false;
+        ctx.emit(EventData::TurnOverBefore {
+            player: next,
+            cancelled: false,
+        });
+        ctx.core.player_mut(next).boss_mad = false;
+        ctx.emit(EventData::TurnEnded { player: next });
+        return;
+    }
     if next <= prev {
         ctx.core.turn.round += 1;
         ctx.core.vm_aux.clear_round();
