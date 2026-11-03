@@ -1,6 +1,6 @@
 # A2 审计：原生阶段/回合触发 vs 上游 noname 触发名语义
 
-> 只读审计产物。未改动仓库文件，未编译、未运行测试。机器可读版本：同目录 `audit.json`（167 条，字段与本表一致）。
+> 只读审计产物。未改动仓库文件，未编译、未运行测试。机器可读版本：同目录 `audit.json`（168 条，字段与本表一致）。
 
 ## 0. 核验信息
 
@@ -61,9 +61,9 @@ NextPhase@End → PhaseEnd(End) [Commit: commit_phase(End,false) → emit TurnEn
 |---|---:|---:|---:|---:|
 | 宿主技元数据（PhaseBegin 48＋PhaseEnd 43 条，按行为拆为 91） | 91 | 52 | 39 | 0 |
 | 标准技能 | 14 | 7 | 7 | 0 |
-| 内核直写效果／生命周期 | 55 | 44 | 11 | 0 |
+| 内核直写效果／生命周期 | 56 | 45 | 11 | 0 |
 | DSL 装载器映射 | 7 | 3 | 3 | 1 |
-| **合计** | **167** | **106** | **60** | **1** |
+| **合计** | **168** | **107** | **60** | **1** |
 
 宿主元数据口径：metadata 中 `event: EventKind::PhaseBegin` 47 个分支（`BossQingyi`、`BossChiyi` 合为一个分支，按行为计 48）＋ `SwdHuajin2` 的 extra_events PhaseBegin；`event: EventKind::PhaseEnd` 42 个分支＋`Kunlunjing` 的 extra_events PhaseEnd。按行为去重后为 91 条（Kunlunjing 计一次）。内核一节把 judge.rs turn_opened 块里的 24 个 Boss 技逐条列出；end.rs 中 22 个与上游 phaseJieshuBegin 相符的效果合为 K54 一条。
 
@@ -78,7 +78,7 @@ NextPhase@End → PhaseEnd(End) [Commit: commit_phase(End,false) → emit TurnEn
 | TURN_AFTER | 2 | 0 | 7 | 1 | 10 |
 | DRAW_BEGIN | 5 | 4 | 0 | 0 | 9 |
 | JIESHU_BEGIN | 2 | 3 | 1 | 1 | 7 |
-| PLAY_END | 2 | 0 | 2 | 0 | 4 |
+| PLAY_END | 2 | 0 | 3 | 0 | 5 |
 | DISCARD_END | 2 | 0 | 2 | 0 | 4 |
 | PLAY_BEGIN | 4 | 0 | 0 | 0 | 4 |
 | TURN_BEGIN+TURN_END | 1 | 0 | 0 | 0 | 1 |
@@ -121,6 +121,7 @@ NextPhase@End → PhaseEnd(End) [Commit: commit_phase(End,false) → emit TurnEn
 | 改挂整回合结束窗·phaseAfter 段（需新建） | 8 | 4 | 0 | 4 |
 | 两面分别改挂 TurnBegin 窗＋phaseAfter 段 | 1 | 1 | 0 | 0 |
 | 两面分别改挂 TurnBegin 窗＋phaseEnd 段 | 1 | 0 | 1 | 0 |
+| 改挂 Phase{Play,end}（精确锚） | 1 | 0 | 0 | 1 |
 | 内核生命周期／口径（前置依赖） | 4 | 1 | 2 | 1 |
 | DSL 装载器重映射 | 3 | 0 | 3 | 0 |
 | 待决策 | 1 | 0 | 1 | 0 |
@@ -249,6 +250,10 @@ NextPhase@End → PhaseEnd(End) [Commit: commit_phase(End,false) → emit TurnEn
 ### 两面分别改挂 TurnBegin 窗＋phaseEnd 段（1）
 
 - H38 SwdLexue（乐学） [P1]｜lexue1: { player: "phaseBegin" } @杀海/character/swd/skill.js:5954｜任意（自己）判定阶段开始（钉死 Judge）｜TurnBegin 窗（EventKind::TurnBegin，BeforeTriggers 段；过滤改匹配 EventData::TurnBegin{player}）（lexue1 面，限本人回合）；lexue2 面（上游 phaseEnd）→ 整回合结束窗·phaseEnd 段（需新建：在回合交接前派发；现有 TurnEnded 帧不等价，见 L1=K21）
+
+### 改挂 Phase{Play,end}（精确锚）（1）
+
+- K56 BOSS_XUSHI 虚失·自翻面 [P2]｜{ player: ["phaseUseEnd","turnOverEnd"] } @liuli/mode/boss.js:4068（本条只覆盖 phaseUseEnd 面；turnOverEnd 面在 commit_turn_over_before 尾内联，不涉阶段锚）｜弃牌阶段开始自翻面（begin_discard 首臂 @kern/phase/discard.rs:15-26；注释所据『原生无 PhaseEnd 帧』在 R05 后已不成立）｜改挂 Phase{Play,begin:false}。迁移需复核两条路径：跳过出牌阶段（乐不思蜀/贪欲类）时上游 phaseUse 以 Skipped 收场、phaseUseEnd 是否仍触发需对齐；现锚在 begin_discard 内，跳过弃牌阶段（入梦/贪欲/庆祝）时虚失不翻面——改挂后该行为变化需登记
 
 ### 内核生命周期／口径（前置依赖）（4）
 
@@ -443,6 +448,7 @@ NextPhase@End → PhaseEnd(End) [Commit: commit_phase(End,false) → emit TurnEn
 | K53 | 巨源记体力（end.rs） | kernel 直写（无触发窗） @kern/phase/end.rs:363-373 | core/mode/boss.js:4594｜{ player: "phaseAfter" } | TURN_AFTER | 结束阶段开始记 hp | 是→整回合结束窗·phaseAfter 段（需新建，同上；TurnEnded 的 Commit 动作位置≈phaseAfter 后，但其触发窗过晚） [P2] | 结束阶段内的体力变化不计入记录 |
 | K54 | 结束阶段开始族（end.rs 22 项：爆敛/强征/枭首/索命/天狱/拘魂/无量·结束面/炼狱/血池/胜负/雷斧/红莲·周瑜/芳华/枭雄·伤/伤逝·失/鬼谋/猛态·终/兵先/兽九·补/贪欲·失/乱常·万箭/延妒） | kernel 直写（无触发窗） @kern/phase/end.rs:4-348,374-494 | 均为 phaseJieshuBegin：boss.js 8589/8958/8596/8560/9451/3351/4222/8677/3690/3632/3758/9422/9523/7320(global)/9685/7108/8195/4581(global)/4524/5550/5459/5405(global) | JIESHU_BEGIN | 结束阶段开始 | 否→保持 [P2] | 无（兵先原生注释「回合结束时」实为结束阶段开始，与上游相符） |
 | K55 | L2 PhaseEnd 帧触发窗时序（PhaseEnd 帧触发窗时序） [L2] | PhaseEnd 帧起步 Commit：commit_phase 先压下一阶段开始帧（或 TurnEnded→TurnBegin），其 AfterTriggers 要等子树结算完 @nk/resolution.rs:610-630（a605379c 行号；Commit 后才进 AfterTriggers）+ kernel/phase.rs:301-317（收束提交即压下一阶段 begin / TurnEnded） | core/noname/library/element/content.ts:4913｜上游 phaseXEnd 在本阶段事件内结算完毕后才进入下一阶段；phaseEnd/phaseAfter 在全部阶段之后、交接之前 | ZHUNBEI_END/JIESHU_END/TURN_END（结构性） | PhaseEnd 触发晚于下一阶段开始子树：Prepare,end 的触发在判定开始（含判定区结算）之后；End,end 的触发在下一位角色 TurnBegin→准备→判定开始之后 | 是→A2 若要把任何技能落到 Phase{Prepare,end} 或整回合结束窗，须先让 PhaseEnd 帧「先触发后提交」（或另开前置窗），否则 ZHUNBEI_END 技会晚于判定阶段 [P1] | 既有结构（非 A1 新增），但 A1 新增的准备阶段结束与 TurnBegin 窗使「晚到」的跨度变大 |
+| K56 | BOSS_XUSHI 虚失·自翻面（出牌阶段结束面） | kernel 直写（无触发窗）：begin_discard 首臂发射 TurnOverBefore @kern/phase/discard.rs:15-26（注释自认『上游 phaseUseEnd turnOver 同口径；锚=弃牌阶段开始[原生无 PhaseEnd 帧]』） | liuli/mode/boss.js:4068｜{ player: ["phaseUseEnd","turnOverEnd"] } forced（turnOverEnd 面=翻回正面全场伤，原生在 commit_turn_over_before 尾内联，非本条范围） | PLAY_END | 弃牌阶段开始自翻面（相邻阶段近似；跳过弃牌阶段路径不翻面） | 是→改挂 Phase{Play,begin:false}（R05 已有该帧）；复核跳过出牌/跳过弃牌两条路径的行为变化并登记 [P2] | 无（具体阶段锚） |
 
 ### 5.4 DSL 装载器映射
 

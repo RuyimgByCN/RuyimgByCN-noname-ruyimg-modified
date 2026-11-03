@@ -7,7 +7,7 @@
   "upstream_root": "/Users/ruyimg/Documents/Claude/sanguosha/（路径前缀 archive/upstream/...）",
   "method": "读源码对照（rg/sed/python 解析），未编译、未运行测试；测试失败引用自他人证据 /private/tmp/noname-r05/evidence/b-10.log",
   "semantics": "上游 phase=整回合：phaseBefore→phaseBeginStart→phaseBegin→[phaseZhunbei/Judge/Draw/Use/Discard/Jieshu 各自 Before/Begin/End/After]→phaseEnd→phaseAfter（content.ts:4663-4924）",
-  "count": 167
+  "count": 168
  },
  "items": [
   {
@@ -3551,6 +3551,31 @@
    "prepare_phase_risk": "既有结构（非 A1 新增），但 A1 新增的准备阶段结束与 TurnBegin 窗使「晚到」的跨度变大",
    "coupled_sites": [],
    "alias": "L2"
+  },
+  {
+   "id": "K56",
+   "section": "kernel",
+   "native_name": "BOSS_XUSHI 虚失·自翻面（出牌阶段结束面向）",
+   "native_cn": "虚失·自翻面",
+   "native_trigger_event": null,
+   "native_trigger_meta_loc": null,
+   "native_filter_loc": "crates/engine-native-kernel/src/kernel/phase/discard.rs:15-26（begin_discard 首臂，锚=弃牌阶段开始；注释自认『上游 phaseUseEnd turnOver 同口径；锚=弃牌阶段开始[原生无 PhaseEnd 帧]』）",
+   "native_filter_phase_constraint": "自己弃牌阶段开始时发射 TurnOverBefore（跳过弃牌阶段路径不执行）",
+   "upstream_loc": "archive/upstream/noname-liuli/noname/mode/boss.js:4068",
+   "upstream_trigger": "{ player: ['phaseUseEnd','turnOverEnd'] } forced（另一面 turnOverEnd=翻回正面全场伤，原生在 commit_turn_over_before 尾内联，非本条范围）",
+   "upstream_class": "PLAY_END",
+   "upstream_class_detail": "USE_END（出牌阶段结束）",
+   "native_current_semantics": "弃牌阶段开始自翻面（对上游 phaseUseEnd 的相邻阶段近似；注释所据『原生无 PhaseEnd 帧』在 R05 后已不成立）",
+   "needs_change": true,
+   "needs_change_note": "是",
+   "change_group": "PLAY_END_EXACT",
+   "change_to": "改挂 Phase{Play,begin:false}（出牌阶段结束；R05 已有该帧）。迁移时复核两条路径：①跳过出牌阶段（乐不思蜀/贪欲类跳过）时上游 phaseUse 事件以 Skipped 收场、phaseUseEnd 是否仍触发需对齐；②现锚在 begin_discard 内，跳过弃牌阶段（入梦/贪欲/庆祝）时虚失不翻面，改挂后行为变化需登记",
+   "priority": "P2",
+   "prepare_phase_risk": "无（具体阶段锚）",
+   "coupled_sites": [
+    "boss_skills.rs BOSS_XUSHI 权限面注释（翻回正面全场伤在 commit_turn_over_before 尾）"
+   ],
+   "alias": null
   },
   {
    "id": "D01",
