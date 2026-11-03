@@ -83,7 +83,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 let t = self.dying;
                 ctx.core.player_mut(t).guihan_used = true;
                 ctx.recover(t, 1, None);
-                ctx.draw_cards(t, 2);
+                ctx.start_draw(t, 2);
                 // 座位序首男性其他存活
                 let male = (0..ctx.core.players.len() as u8).find(|&i| {
                     i != t
@@ -92,7 +92,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 });
                 if let Some(m) = male {
                     ctx.recover(m, 1, None);
-                    ctx.draw_cards(m, 2);
+                    ctx.start_draw(m, 2);
                 }
                 // 回血后 hp>0 → 循环顶自然发出 DyingSaved
             }

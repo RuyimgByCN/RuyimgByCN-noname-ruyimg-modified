@@ -5,6 +5,9 @@ use super::*;
 pub struct WuzhongMachine {
     pub owner: PlayerId,
     pub card: Option<crate::ids::CardId>,
+    /// R05（C 批）：draw→本体入弃堆的续行位（快照沿用既有 Wuzhong 形态，
+    /// 恢复后由本字段缺省 false 重发 start_draw——R 帧幂等续行）。
+    pub draw_done: bool,
 }
 
 impl crate::catalog::SkillMachine for WuzhongMachine {
@@ -15,7 +18,12 @@ impl crate::catalog::SkillMachine for WuzhongMachine {
         crate::snap::MachineSnapshot::Wuzhong { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        ctx.draw_cards(self.owner, 2);
+        if !self.draw_done {
+            // R05：真实 R 帧（先摸 2）——Yield 等 R 子树完成后续行弃本体。
+            self.draw_done = true;
+            ctx.start_draw(self.owner, 2);
+            return Flow::Yield;
+        }
         // 弃置锦囊本体（按牌种扫表：恢复期安全，不依赖快照携带 card）。
         if let Some(pos) = ctx
             .core
@@ -88,13 +96,15 @@ impl crate::catalog::SkillMachine for DizaizhenMachine {
         crate::snap::MachineSnapshot::Noop
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
+        // R05（C 批）：逐目标真实 R 帧（按座位序叠栈＝后发先执行）；
+        // 一次 Yield 后 R 子树完成，再续行本体入弃堆。
         let targets: Vec<PlayerId> = ctx
             .core
             .alive_players()
             .filter(|p| !ctx.core.is_major_faction(ctx.catalog, *p))
             .collect();
         for t in targets {
-            ctx.draw_cards(t, 1);
+            ctx.start_draw(t, 1);
         }
         // 本体牌离结算区入弃堆（Wugu 同款收尾）
         if let Some(pos) = ctx

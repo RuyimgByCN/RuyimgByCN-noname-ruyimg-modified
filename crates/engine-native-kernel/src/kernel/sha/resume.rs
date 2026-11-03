@@ -225,7 +225,7 @@ impl ShaResolveMachine {
                     player: self.target,
                     face_down: flipped,
                 });
-                ctx.draw_cards(self.target, 1);
+                ctx.start_draw(self.target, 1);
                 return Some(self.advance_target(ctx));
             }
             return Some(self.emit_sha_damage(ctx));
@@ -402,7 +402,10 @@ impl ShaResolveMachine {
             if let Some(c) = pick.filter(|c| ctx.core.player(self.target).hand.contains(c)) {
                 ctx.discard_from_hand(self.target, c);
             } else if ctx.core.player(self.source).alive {
-                ctx.draw_cards(self.source, 1);
+                // R05：取消=摸 1 走真实 R 帧——先 Yield 让调度器完成 R 子树
+                //（开放询问会暂停调度），再由 !asked 分支重开出闪询问。
+                ctx.start_draw(self.source, 1);
+                return Some(Flow::Yield);
             }
             // 落入下方 !asked 分支重开出闪询问（防具判定已由
             // armor_judged 标记幂等）。

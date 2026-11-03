@@ -277,8 +277,10 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             }
         }
         EffectRequest::DrawCards { player, count } => {
+            // R05（C 批）：VM 摸牌效果走真实 R 帧（后续步不读所抽牌；
+            // 需要结果的 VM 技能经后续查询原语读取）。
             if let Some(p) = seat_of(player, seats) {
-                ctx.draw_cards(p, count as usize);
+                ctx.start_draw(p, count);
             }
         }
         EffectRequest::DealDamage {

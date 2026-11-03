@@ -1,6 +1,6 @@
 use super::super::*;
 
-pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {    // R05（K25/A2）：本函数原 `!turn_opened` 门两段拆分——重置段前移
+pub(super) fn begin_judge(_ctx: &mut Ctx<'_>, _player: PlayerId) {    // R05（K25/A2）：本函数原 `!turn_opened` 门两段拆分——重置段前移
     // `turn_handoff`（kernel/events.rs `reset_new_turn_state`），准备阶
     // 段 Boss 技段迁 `begin_prepare`（上游 phaseZhunbeiBegin）。
     // 废墟地图（K23，A2）：已迁 TurnBegin 窗 Commit（kernel/events.rs

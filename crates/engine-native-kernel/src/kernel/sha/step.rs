@@ -555,8 +555,8 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         },
                     };
                 }
-                // 无手牌：唯一可选 = 令使用者摸 1。
-                ctx.draw_cards(self.source, 1);
+                // 无手牌：唯一可选 = 令使用者摸 1（R05：真实 R 帧）。
+                ctx.start_draw(self.source, 1);
             }
             // 狩猎（swd deferred 消解批 子达书）：可选——弃一张手牌令此
             // 杀不可闪避（整杀有效；每杀一次=!asked 门+机器旗标）
@@ -637,7 +637,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                             });
                         }
                     } else if ctx.core.player(self.source).alive {
-                        ctx.draw_cards(self.source, 1);
+                        ctx.start_draw(self.source, 1);
                     }
                 }
             }

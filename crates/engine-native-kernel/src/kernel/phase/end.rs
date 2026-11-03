@@ -230,7 +230,8 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         .skill_by_name(crate::vocabulary::names::BOSS_ZYHONGLIAN)
     {
         if ctx.core.has_skill(player, hldef) {
-            ctx.draw_cards(player, 2);
+            // R05（C 批）：真实 R 帧驱动——先压伤害帧、后 start_draw，
+            // 栈顶先执行＝先摸 2 后逐个火伤（上游 phaseJieshuBegin 同序）。
             let seats = ctx.core.players.len() as PlayerId;
             for t in 0..seats {
                 if t != player && ctx.core.player(t).alive {
@@ -243,6 +244,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
                     )));
                 }
             }
+            ctx.start_draw(player, 2);
         }
     }
     // 芳华（Boss 甄姬，规则 v262）：结束阶段若存在翻面角色，

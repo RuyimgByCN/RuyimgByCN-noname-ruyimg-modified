@@ -201,7 +201,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                             .filter(|o| ctx.core.player(*o).alive)
                             .collect();
                         for holder in holders {
-                            ctx.draw_cards(holder, 4);
+                            ctx.start_draw(holder, 4);
                             ctx.core.skills.insert(
                                 (holder, zhp_def(ctx)),
                                 crate::state::SkillInstance {
@@ -248,7 +248,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 if k != self.player && ctx.core.player(k).alive {
                     match dead_role {
                         crate::state::Role::Rebel => {
-                            ctx.draw_cards(k, 3);
+                            ctx.start_draw(k, 3);
                         }
                         crate::state::Role::Loyalist
                             if roles[k as usize] == crate::state::Role::Lord =>
@@ -281,7 +281,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     let killer_team = ctx.core.versus_team_of(k);
                     if let (Some(dt), Some(kt)) = (dead_team, killer_team) {
                         if dt != kt {
-                            ctx.draw_cards(k, 3);
+                            ctx.start_draw(k, 3);
                         } else {
                             // 杀友方：弃掉自己全部手牌与装备
                             let killer = ctx.core.player_mut(k);

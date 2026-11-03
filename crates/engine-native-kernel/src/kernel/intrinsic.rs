@@ -103,6 +103,7 @@ pub fn intrinsic_machine(
                     Box::new(WuzhongMachine {
                         owner: u.player,
                         card: Some(card),
+                        draw_done: false,
                     }),
                 ))),
                 // 桃园结义（P2/N08 缺牌种批①）：所有其他存活角色回复 1 点
