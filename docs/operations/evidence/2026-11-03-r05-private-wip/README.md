@@ -33,6 +33,14 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 
 测试：`crates/engine-native/tests/r05f2_semantic_gaps.rs`（登记 groups/misc.rs）7 测先红后绿；定向 r05 38/38。红／全量证据 `/private/tmp/noname-r05/evidence/f2-01.log`＋`f2-02.log`＋`f2-report.md`。
 
+## G 存档 107（2026-11-04，057967b3）
+
+| 提交 | 内容 | 核验 |
+| --- | --- | --- |
+| `057967b3` G 存档 107 | detached_cards 入档（state_encode table 后 rng 前 len+id+kind.tag；dec 接 dec_detached）；ARCHIVE_FORMAT_VERSION 106→107＋版本门禁断言 5 处同步；golden 哈希域补 detached（hash.rs table 后 len+id+tag，b27 先例）；勘察外必要补充：ownership 新增 PhysicalCardZone::Detached（否则 restore 判 card_missing_from_all_zones）＋views 可见性 false | 红 3 测（解码 detached 空/哈希两维相同/106 档可解）→绿；三 crate 1951/1/75（唯余 golden，stash 复核本批零行为变化仅哈希位移）；门禁 exit 0；真实 106 夹具 detached-106.ngsa（1644B，sha256 d4883fc5…）升号后 UnsupportedFormatVersion 拒收——106 布局实证丢牌 103 |
+
+规则 332／ABI 758／WS7 未动（J 批统一升号）。Cancelled 面（D 无生产者）登记差异留待有生产者时接（F2 批）。
+
 ## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
 
 审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：
