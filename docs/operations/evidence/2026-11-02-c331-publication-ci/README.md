@@ -31,7 +31,7 @@
 | CI macOS（同 job） | 70 µs | 74 µs | +6%，预算内 |
 | CI Ubuntu（同 job） | 48 µs（9f4；历史 48–78） | **111／142 µs** | 两 attempt 均超预算 |
 
-原始数据：[perf-probe/](perf-probe/)。CI 两次 attempt 同 runner image（ubuntu-26.04）同 rustc（1.99.1），排除工具链漂移；benchmark-runner 与预算自 `2b9f8266` 未改。本机双架构均无代码回归，CI Ubuntu 独有 2–3× 劣化——Linux x86_64 特异或宿主噪声二选一未定，Linux 容器复现实验进行中（docker 镜像拉取受限）。**该失败按原样登记，不据此宣称发布 CI 绿；后续修复／结论另批登记。**
+原始数据：[perf-probe/](perf-probe/)。CI 两次 attempt 同 runner image（ubuntu-26.04）同 rustc（1.99.1），排除工具链漂移；benchmark-runner 与预算自 `2b9f8266` 未改。本机双架构均无代码回归；**后续 Linux amd64 容器 A/B（glibc＋同 CI 的 rustc 1.99.1）两树持平（≈65.0 vs ≈66.3µs，+2%）**——判定为宿主噪声／runner 池漂移，非代码回归，四环境矩阵见[决定性 A/B](linux-amd64-ab/README.md)。两次失败按原样登记；收口采用带证据的 CI 测量稳健性方案（同批 ci.yml）。**
 
 ## 边界
 

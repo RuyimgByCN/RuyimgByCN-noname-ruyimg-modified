@@ -1,0 +1,48 @@
++ uname -m
+x86_64
++ rustc -vV
++ head -2
+rustc 1.99.1 (58cf8f9c3 2026-10-13)
+binary: rustc
++ cd /head
++ tail -5
++ CARGO_TARGET_DIR=/targets/head CARGO_INCREMENTAL=0 CARGO_NET_OFFLINE=true cargo build --offline --locked --release -p benchmark-runner
+
+warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)
+warning: `engine-core` (lib) generated 107 warnings (run `cargo fix --lib -p engine-core` to apply 83 suggestions)
+   Compiling benchmark-runner v0.1.0 (/head/apps/benchmark-runner)
+    Finished `release` profile [optimized] target(s) in 3m 44s
++ echo build head exit=0
+build head exit=0
++ cd /base
++ tail -5
++ CARGO_TARGET_DIR=/targets/base CARGO_INCREMENTAL=0 CARGO_NET_OFFLINE=true cargo build --offline --locked --release -p benchmark-runner
+
+warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)
+warning: `engine-core` (lib) generated 107 warnings (run `cargo fix --lib -p engine-core` to apply 83 suggestions)
+   Compiling benchmark-runner v0.1.0 (/base/apps/benchmark-runner)
+    Finished `release` profile [optimized] target(s) in 3m 30s
++ echo build base exit=0
++ echo === HEAD (a33e96d8; engine-core == 96236c96) ===
++ /targets/head/release/benchmark-runner start-hash
+build base exit=0
+=== HEAD (a33e96d8; engine-core == 96236c96) ===
+{"scenario":"start-hash","samples":200,"total_us":13858,"p50_ns":66459,"p99_ns":74001,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=66459 p99_ns=74001 total_us=13858
++ /targets/head/release/benchmark-runner start-hash
+{"scenario":"start-hash","samples":200,"total_us":13771,"p50_ns":66083,"p99_ns":73625,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=66083 p99_ns=73625 total_us=13771
++ /targets/head/release/benchmark-runner start-hash
+{"scenario":"start-hash","samples":200,"total_us":13869,"p50_ns":66292,"p99_ns":73042,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=66292 p99_ns=73042 total_us=13869
+=== BASELINE (9f4b7423) ===
++ echo === BASELINE (9f4b7423) ===
++ /targets/base/release/benchmark-runner start-hash
+{"scenario":"start-hash","samples":200,"total_us":13455,"p50_ns":65126,"p99_ns":71500,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=65126 p99_ns=71500 total_us=13455
++ /targets/base/release/benchmark-runner start-hash
+{"scenario":"start-hash","samples":200,"total_us":13391,"p50_ns":64959,"p99_ns":69042,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=64959 p99_ns=69042 total_us=13391
++ /targets/base/release/benchmark-runner start-hash
+{"scenario":"start-hash","samples":200,"total_us":13371,"p50_ns":64834,"p99_ns":68959,"cpu":"x86_64","build":"noname-next-0.1.0-m2"}
+scenario=start-hash players=4 seed=42 samples=200 p50_ns=64834 p99_ns=68959 total_us=13371
