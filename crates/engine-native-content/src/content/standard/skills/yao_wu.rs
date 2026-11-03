@@ -92,7 +92,7 @@ impl SkillMachine for YaoWuMachine {
                         ctx.recover(self.source, 1, None);
                     }
                     _ => {
-                        ctx.draw_cards(self.source, 1);
+                        ctx.start_draw(self.source, 1);
                     }
                 }
                 Flow::Done

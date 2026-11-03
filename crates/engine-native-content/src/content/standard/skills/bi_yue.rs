@@ -31,7 +31,7 @@ impl SkillMachine for BiYueMachine {
         MachineSnapshot::BiYue { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        ctx.draw_cards(self.owner, 1);
+        ctx.start_draw(self.owner, 1);
         Flow::Done
     }
 }

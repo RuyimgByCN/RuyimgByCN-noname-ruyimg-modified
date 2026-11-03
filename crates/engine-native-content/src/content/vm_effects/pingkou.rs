@@ -94,7 +94,7 @@ pub(super) fn step(ctx: &mut Ctx<'_>, owner: u8, amount: u32, state: &mut Vec<u3
                 if state[3] & bit == 0 {
                     state[3] |= bit;
                     if ctx.core.player(owner).alive {
-                        ctx.draw_cards(owner, 1);
+                        ctx.start_draw(owner, 1);
                     }
                 }
             }

@@ -54,7 +54,7 @@ impl SkillMachine for WangXiMachine {
         order.dedup();
         for p in order {
             if ctx.core.player(p).alive {
-                ctx.draw_cards(p, 1);
+                ctx.start_draw(p, 1);
             }
         }
         Flow::Done

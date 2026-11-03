@@ -49,7 +49,7 @@ impl SkillMachine for KuangFuMachine {
             return Flow::Done;
         }
         if ctx.core.player(self.target).hp < ctx.core.player(self.owner).hp {
-            ctx.draw_cards(self.owner, 2);
+            ctx.start_draw(self.owner, 2);
         } else {
             // 失去 1 点体力（苦肉同款：濒死检查 + Dying 子事件）。
             let p = ctx.core.player_mut(self.owner);

@@ -43,9 +43,9 @@ impl SkillMachine for WangZunMachine {
         }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        ctx.draw_cards(self.owner, 1);
+        ctx.start_draw(self.owner, 1);
         if ctx.core.is_lord(self.target) {
-            ctx.draw_cards(self.owner, 1);
+            ctx.start_draw(self.owner, 1);
             if let Some(mark) = ctx.catalog.skill_by_name(WANG_ZUN_MARK) {
                 ctx.insert_skill(
                     (self.target, mark),

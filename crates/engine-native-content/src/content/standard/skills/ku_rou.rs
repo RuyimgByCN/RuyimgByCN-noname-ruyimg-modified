@@ -73,7 +73,7 @@ impl SkillMachine for KuRouMachine {
                 Flow::Yield
             }
             KuRouStage::Draw => {
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 Flow::Done
             }
         }

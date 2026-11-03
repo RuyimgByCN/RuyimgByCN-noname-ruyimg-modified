@@ -83,7 +83,7 @@ impl SkillMachine for ShuShenMachine {
                         } else {
                             1
                         };
-                        ctx.draw_cards(target, n);
+                        ctx.start_draw(target, n as u32);
                     }
                 }
                 Flow::Done

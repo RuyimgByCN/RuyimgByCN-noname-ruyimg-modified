@@ -146,7 +146,7 @@ pub(super) fn step(
             Flow::Done
         }
         4 => {
-            ctx.draw_cards(owner, 1);
+            ctx.start_draw(owner, 1);
             state[0] = 5;
             Flow::Yield
         }

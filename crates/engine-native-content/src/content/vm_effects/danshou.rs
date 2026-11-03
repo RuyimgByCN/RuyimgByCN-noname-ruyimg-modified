@@ -136,7 +136,7 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
                 ));
             } else {
                 state[0] = 7;
-                ctx.draw_cards(owner, 2);
+                ctx.start_draw(owner, 2);
             }
             Flow::Yield
         }
@@ -164,7 +164,7 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
             state[0] = 4;
             let target = state[2] as u8;
             if ctx.core.player(target).alive {
-                ctx.draw_cards(target, 2);
+                ctx.start_draw(target, 2);
                 Flow::Yield
             } else {
                 self::step(ctx, skill, owner, state)

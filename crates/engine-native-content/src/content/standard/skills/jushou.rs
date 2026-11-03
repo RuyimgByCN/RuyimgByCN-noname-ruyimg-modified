@@ -40,7 +40,7 @@ impl SkillMachine for JushouMachine {
             player: self.owner,
             cancelled: false,
         });
-        ctx.draw_cards(self.owner, 1);
+        ctx.start_draw(self.owner, 1);
         Flow::Done
     }
 }

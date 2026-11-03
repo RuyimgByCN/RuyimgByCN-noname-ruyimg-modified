@@ -101,7 +101,7 @@ impl SkillMachine for XunXunMachine {
                 for c in chosen.iter().rev() {
                     ctx.core.deck.push(*c);
                 }
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 Flow::Done
             }
         }

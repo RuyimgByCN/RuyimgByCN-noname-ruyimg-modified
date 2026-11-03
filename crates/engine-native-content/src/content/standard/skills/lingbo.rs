@@ -38,7 +38,7 @@ impl SkillMachine for LingboMachine {
         MachineSnapshot::BossLingbo { owner: self.owner }
     }
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
-        ctx.draw_cards(self.owner, 2);
+        ctx.start_draw(self.owner, 2);
         Flow::Done
     }
 }

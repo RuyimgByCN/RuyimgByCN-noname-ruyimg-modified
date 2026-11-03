@@ -91,7 +91,7 @@ impl SkillMachine for ZhiHengMachine {
                     }
                 }
                 if n > 0 {
-                    ctx.draw_cards(self.owner, n);
+                    ctx.start_draw(self.owner, n as u32);
                 }
                 Flow::Done
             }

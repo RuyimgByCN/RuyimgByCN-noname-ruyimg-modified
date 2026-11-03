@@ -115,7 +115,7 @@ impl SkillMachine for BuchunMachine {
                         p.boss_chongzheng = 0;
                     }
                     ctx.log(LogEvent::BossRevived { player: t });
-                    ctx.draw_cards(t, 2);
+                    ctx.start_draw(t, 2);
                     ctx.core.player_mut(self.owner).buchun_used_round = ctx.core.turn.round;
                     return Flow::Yield;
                 }

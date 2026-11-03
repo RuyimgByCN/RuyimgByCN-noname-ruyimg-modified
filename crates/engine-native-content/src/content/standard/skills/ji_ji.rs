@@ -67,7 +67,7 @@ impl SkillMachine for JiJiMachine {
     fn step(&mut self, ctx: &mut Ctx<'_>) -> Flow {
         match self.stage {
             JiJiStage::Draw => {
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 self.stage = JiJiStage::Target;
                 Flow::Yield
             }

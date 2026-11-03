@@ -56,7 +56,7 @@ impl SkillMachine for ZjLeijiMachine {
                     crate::event::DamageNature::Thunder,
                     None,
                 )));
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
             }
         }
         Flow::Done

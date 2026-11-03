@@ -31,7 +31,7 @@ impl SkillMachine for JiYuanMachine {
         // 濒死者为事件目标（任一角色濒死时其摸 1）。
         if let EventData::Dying { player, .. } = ctx.res.stack.last().expect("dying frame").data {
             if ctx.core.player(player).dying {
-                ctx.draw_cards(player, 1);
+                ctx.start_draw(player, 1);
             }
         }
         Flow::Done

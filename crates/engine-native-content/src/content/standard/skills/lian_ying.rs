@@ -45,7 +45,7 @@ impl SkillMachine for LianYingMachine {
         if !self.asked {
             self.asked = true;
             if ctx.core.player(self.owner).alive && ctx.core.player(self.owner).hand.is_empty() {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
             }
         }
         Flow::Done
