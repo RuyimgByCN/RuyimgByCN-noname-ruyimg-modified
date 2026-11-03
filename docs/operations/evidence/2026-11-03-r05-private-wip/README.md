@@ -41,6 +41,15 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 
 规则 332／ABI 758／WS7 未动（J 批统一升号）。Cancelled 面（D 无生产者）登记差异留待有生产者时接（F2 批）。
 
+## F2/C 批（2026-11-04，dba05fe3→e4465d281）
+
+| 提交 | 内容 | 核验 |
+| --- | --- | --- |
+| `dba05fe3` F2 语义闭合 | ① Current 槽 Begin2 有符号消费（门=!num_fixed，存在即消费含0/负，上游 hasStorage 谓词；对齐 sp2/skill.js:7828）；② 跳过路径补恒发射终窗（兵粮寸断真实路径，tiqi 收询问；Ended/Skipped 都落 After，outcome 载荷区分；Cancelled 无生产者→登记差异）；③ dcbihuo owner 双面门（Source 面 owner==source、End 面 owner==victim；旁观零询问）；④ machine_encode.rs 1007→552（拆 boss.rs 113/skills.rs 453）＋kernel/events.rs 1070→737（拆 events/turn.rs 592），字节序零变化 | r05f2_semantic_gaps 6红→绿＋1守卫；三 crate 1948/1/75；门禁 exit 0 |
+| `33ee4c12→e4465d28` C 异步迁移 wave0-3 | 147 处中 **105 处/44 文件**机械替换 `ctx.start_draw`；**42 处/11 文件**摸牌后即时依赖（boss 孟婆回滚/Diyguhuo 手牌首张/Xiajiao 空手翻转/Fuchou2 枯竭前置/Zhaoyao/Lingquan min2max2/Bingheyaosai 恒≥2/rangjie WaitChoice 恢复扫堆/Heihuo ≥8 等）整文件保留交 C2 续行位批；machine.rs draw_cards 留防新增注释（kernel/apps/tests Rust 调用已为 0） | r05c_async_draw 3 守卫（苦肉枯竭 detach/矿鼓日志先序/森罗弃置先序）红→绿；三 crate 1954/1/75；六 caller 族全绿（xianjian_card_use 5/mtg 22/yunchou 64/phase_draw 53/tricks 27/wang_xi 5）；分流 a=1（yiji 源码字面锁更新）b=c=0；golden 两场 actual 位移（散财场景 R/G 帧改事件流＝预期，未重录） |
+
+C 批教训：抽样式勘察（top3 文件 3 行窗口「无同 step 手牌读」）低估跨调用链依赖——42 处阻塞里 3 处是 R05 合同 review-v1 独立点名的；逐处人工核实不可省。
+
 ## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
 
 审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：
