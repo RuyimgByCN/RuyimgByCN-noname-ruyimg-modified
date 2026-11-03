@@ -1,0 +1,16 @@
+$ python3 -B /private/tmp/noname-c331-publication2-20261103/publication-driver.py cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3 96236c963bde6e12323297acf523d3899789e5d1 47347c6608d651660ae9459e59eb529b3cef277f   # 2026-11-03 09:09:49 +0800
+{
+  "push_exit": 0,
+  "remote_before": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "96236c963bde6e12323297acf523d3899789e5d1"
+  },
+  "remote_after": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3"
+  },
+  "error": null,
+  "preservation_error": null,
+  "before_equals_after": true
+}
+exit=0

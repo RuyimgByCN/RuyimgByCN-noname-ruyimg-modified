@@ -37,3 +37,12 @@
 
 - 本批只发布到 `96236c96`；其后的 `14ee4b63`（stash 恢复）与 `cf38bd0d`（C9e 收口）尚未推送，待下一轮验收批次发布。
 - 安装器 artifact 仅 API 元数据（[ci/artifacts.json](ci/artifacts.json)），无下载／实体安装／签名验证。
+
+## 后续发布与 exact-head CI（2026-11-03）
+
+| 发布 | 推送（快进，守卫/审计同上，远端 main `47347c66` 不变） | exact-head CI | 结果 |
+| --- | --- | --- | --- |
+| 2 | `96236c96 → cbfb38cf`（stash 恢复、C9e 收口、瘦身、规则 332、CI 稳健性；[publication-2/](publication-2/)） | [run 41557912595](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41557912595) attempt 1 | **9/10**：perf-ubuntu **首 attempt 78µs 通过**（无需重试）；**gates-ubuntu Gate 1b 失败**——本批新增 `nc09_gaiming_cancel` 再包含共享支撑文件后，CI rustc 1.99.1 报未构造变体/未读字段与 `&str` 上 no-op `.clone()`（本地 1.95 未报，本人漏检）。原样登记 |
+| 3 | `cbfb38cf → 5c908a67`（上述 lint 修正；先在 amd64 容器以与 CI 相同的 rustc 1.99.1 `-D warnings --all-targets` 复验 exit 0；[publication-3/](publication-3/)） | [run 41561031384](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/41561031384) attempt 1 | **10/10 success**；130 steps＝128 success／2 skipped；perf-ubuntu 首 attempt **79µs** 通过、perf-macos **62µs**；三平台安装器 artifact（macOS 33,646,924 B／Windows 27,070,377 B／Ubuntu 268,979,035 B，仅 API 元数据，无下载安装或签名验证） |
+
+`gh run view --log` 对 run 41561031384 返回传输 EOF（未重试该命令），完整日志改由 API `runs/{id}/logs` 归档为 [run-logs.zip](publication-3/ci/run-logs.zip)。三次 run（41467336967 两 attempt、41557912595、41561031384）各自结论均保留，不以后续全绿改写前序失败。**exact-head CI 在 `5c908a67` 首次全绿**；其后的登记提交（本 README 更新）属文档增量，随下一轮验收批次发布。

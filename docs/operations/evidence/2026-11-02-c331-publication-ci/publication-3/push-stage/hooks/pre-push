@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+import sys
+URL='https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git'; COMMIT='5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1'; OLD='cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3'; BRANCH='refs/heads/native-convergence'
+remote_url = sys.argv[2] if len(sys.argv) > 2 else ''
+lines = [l for l in sys.stdin.read().splitlines() if l.strip()]
+if remote_url != URL or len(lines) != 1:
+    sys.stderr.write('scoped guard: wrong repository or not exactly one ref update\n'); sys.exit(1)
+parts = lines[0].split()
+if len(parts) != 4:
+    sys.stderr.write('scoped guard: malformed ref line\n'); sys.exit(1)
+local_ref, local_oid, remote_ref, remote_oid = parts
+if local_ref != COMMIT or local_oid != COMMIT or remote_ref != BRANCH or remote_oid != OLD:
+    sys.stderr.write('scoped guard: only 5c908a67:native-convergence fast-forward from cbfb38cf is allowed\n'); sys.exit(1)
+sys.exit(0)

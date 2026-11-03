@@ -1,0 +1,205 @@
+{
+  "started_utc": "2026-11-03T01:38:14.739659+00:00",
+  "sha": "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1",
+  "expected_old_remote": "cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3",
+  "expected_remote_main": "47347c6608d651660ae9459e59eb529b3cef277f",
+  "repository": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+  "branch": "refs/heads/native-convergence",
+  "push_attempts": 1,
+  "commands": [
+    {
+      "name": "remote-before",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication3-20261103/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "ls-remote",
+        "--heads",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "refs/heads/native-convergence",
+        "refs/heads/main"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "push",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication3-20261103/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "push",
+        "--progress",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1:refs/heads/native-convergence"
+      ],
+      "exit": 0
+    },
+    {
+      "name": "remote-after",
+      "command": [
+        "git",
+        "--no-optional-locks",
+        "-c",
+        "core.hooksPath=/private/tmp/noname-c331-publication3-20261103/push-stage/hooks",
+        "-c",
+        "credential.helper=",
+        "-c",
+        "credential.helper=!gh auth git-credential",
+        "ls-remote",
+        "--heads",
+        "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+        "refs/heads/native-convergence",
+        "refs/heads/main"
+      ],
+      "exit": 0
+    }
+  ],
+  "before": {
+    "head": "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1",
+    "branch": "main",
+    "index_sha256": "f1577ae5ba4ad6c2dbb8f7d0d83dbed1ae7d4a2ebc3ad1b57c21e683c9f34e72",
+    "logical_index_sha256": "75180cafe368c0b9f97efe2a3a599dce38bb77d6ffb88fe689feadf8ae65a0ca",
+    "untracked_paths_sha256": "81198984f7b0afd007efcb90f1f940e94b9b1c6a5868ae834f305b6cef1ab561",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "elapsed_seconds": 8.637609333032742,
+  "original_hook_text": "#!/bin/sh\n# noname-next 仓库仅在本地使用（基线/检查点/回退），按约定不推送到任何远端。\necho \"noname-next: 本仓库仅本地使用，已阻止 push。\" >&2\nexit 1\n",
+  "commits": [
+    "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1 cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3 fix(tests): satisfy CI rustc 1.99 strict lints in gaiming support"
+  ],
+  "changed_path_count": 2,
+  "binary_paths": [],
+  "forbidden_paths": [],
+  "profile_paths": [],
+  "dist_paths": [],
+  "pi_lens_in_tree": false,
+  "tree_path_count": 69776,
+  "new_objects": {
+    "count": 8,
+    "uncompressed_bytes_not_wire": 37956,
+    "commits": 1,
+    "max_blob_bytes": 10847
+  },
+  "scoped_hook_sha256": "3fa259680ca698fe3cd3a381893c86f48b942cade5ea8bd02b69c4c1b2366ba6",
+  "selftests": [
+    {
+      "name": "accepted",
+      "exit": 0,
+      "expected": 0,
+      "stderr": ""
+    },
+    {
+      "name": "wrong-repository",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "wrong-ref-main",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 5c908a67:native-convergence fast-forward from cbfb38cf is allowed\n"
+    },
+    {
+      "name": "wrong-new-sha",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 5c908a67:native-convergence fast-forward from cbfb38cf is allowed\n"
+    },
+    {
+      "name": "wrong-old",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 5c908a67:native-convergence fast-forward from cbfb38cf is allowed\n"
+    },
+    {
+      "name": "delete",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: only 5c908a67:native-convergence fast-forward from cbfb38cf is allowed\n"
+    },
+    {
+      "name": "two-refs",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "empty",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "scoped guard: wrong repository or not exactly one ref update\n"
+    },
+    {
+      "name": "original-local-only-hook-still-rejects",
+      "exit": 1,
+      "expected": 1,
+      "stderr": "noname-next: 本仓库仅本地使用，已阻止 push。\n"
+    }
+  ],
+  "remote_before": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "cbfb38cf28c62a2eeaf327e1bb30a8e91c7c37e3"
+  },
+  "immediately_before_push": {
+    "head": "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1",
+    "branch": "main",
+    "index_sha256": "f1577ae5ba4ad6c2dbb8f7d0d83dbed1ae7d4a2ebc3ad1b57c21e683c9f34e72",
+    "logical_index_sha256": "75180cafe368c0b9f97efe2a3a599dce38bb77d6ffb88fe689feadf8ae65a0ca",
+    "untracked_paths_sha256": "81198984f7b0afd007efcb90f1f940e94b9b1c6a5868ae834f305b6cef1ab561",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "push_command": [
+    "git",
+    "--no-optional-locks",
+    "-c",
+    "core.hooksPath=/private/tmp/noname-c331-publication3-20261103/push-stage/hooks",
+    "-c",
+    "credential.helper=",
+    "-c",
+    "credential.helper=!gh auth git-credential",
+    "push",
+    "--progress",
+    "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
+    "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1:refs/heads/native-convergence"
+  ],
+  "push_exit": 0,
+  "push_seconds": 3.0489344160305336,
+  "remote_after": {
+    "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
+    "refs/heads/native-convergence": "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1"
+  },
+  "remote_verified": true,
+  "after": {
+    "head": "5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1",
+    "branch": "main",
+    "index_sha256": "f1577ae5ba4ad6c2dbb8f7d0d83dbed1ae7d4a2ebc3ad1b57c21e683c9f34e72",
+    "logical_index_sha256": "75180cafe368c0b9f97efe2a3a599dce38bb77d6ffb88fe689feadf8ae65a0ca",
+    "untracked_paths_sha256": "81198984f7b0afd007efcb90f1f940e94b9b1c6a5868ae834f305b6cef1ab561",
+    "tracked_diff": "",
+    "staged_diff": "",
+    "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
+    "core_hooksPath_exit": 1,
+    "core_hooksPath_stdout": ""
+  },
+  "before_equals_after": true,
+  "finished_utc": "2026-11-03T01:38:23.377274+00:00"
+}
