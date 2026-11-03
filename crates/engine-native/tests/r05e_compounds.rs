@@ -439,6 +439,8 @@ fn r05e_baoshu_m_zero_and_negative_via_inter_window_max_hp_change() {
     // 反例面（合同 v3 §5 Finding 4）：成本与 content 之间经 SkillLog 窗
     // 改写 maxHp——m 不能在选择时冻结。主技＝宝梳；同包副技两个
     // skill_log_begin handler 各 −1 maxHp（真实 change_max_hp 提交）。
+    // 轮序（F 批 Begin2 消费后）：先 m=−1 轮（负条目不被目标自己的
+    // Begin2 消费），后 m=0→+1 轮——+1 与保留的 −1 抵消成 Some0。
     let source = "skill r05e_baoshu_c(998002003) {\n  trigger phase_prepare owner_is_target {\n    effect emit_note(0);\n  }\n}\nskill r05e_drop_c(998002004) {\n  trigger hp_lost owner_alive {\n    effect emit_note(0);\n  }\n  trigger hp_lost owner_alive {\n    effect emit_note(0);\n  }\n}\n";
     let mut pkg = content_compiler::compile_source_named("r05e-baoshu-c", source).unwrap();
     // 主技模块 → 宝梳 compound；副技两个 handler → change_max_hp(−1)。
@@ -494,10 +496,29 @@ fn r05e_baoshu_m_zero_and_negative_via_inter_window_max_hp_change() {
     // delta=−1：与上一轮 +1 抵消成 Some0 保留。
     e.debug_set_max_hp(0, 3);
     e.debug_set_hp(0, 3);
+    // 第一轮（m<0 面）：k=3 → SkillLog 窗 −2 → content maxHp=1 →
+    // m=1+1−3=−1 → delta=−1。负条目不消费（§5「stored≤0 不触发、不
+    // 消费」）：中间两轮 pumping 经过 seat1/seat2 自己的摸牌 Begin2，
+    // −1 槽原样保留（下轮断言兼证）。
     run_until(
         &mut e,
         |c| match c.spec.prompt {
             "rvm_baoshu_cost" => Some(vec![O::Player(1), O::Player(2), O::Player(0)]),
+            other => panic!("意外询问 {other}"),
+        },
+        |e| mark(e, 1, def) == Some(-1),
+    );
+    assert_eq!(mark(&e, 1, def), Some(-1), "m<0：负条目保留");
+    assert_eq!(mark(&e, 2, def), Some(-1));
+    assert_eq!(e.state_core().players[0].max_hp, 1, "窗口间 maxHp 已改写");
+    // 第二轮（m==0 面）：maxHp 重置 3、k=2 → −2 → content maxHp=1 →
+    // m=0 → delta=+1：与保留的 −1 抵消成 Some0 保留（含 0 不删）。
+    e.debug_set_max_hp(0, 3);
+    e.debug_set_hp(0, 3);
+    run_until(
+        &mut e,
+        |c| match c.spec.prompt {
+            "rvm_baoshu_cost" => Some(vec![O::Player(1), O::Player(2)]),
             other => panic!("意外询问 {other}"),
         },
         |e| mark(e, 1, def) == Some(0),
@@ -549,7 +570,12 @@ fn r05e_baoshu_two_packages_do_not_share_slots() {
     let def_a = helper_def(&e, "r05e_baoshu_ax#r05:combs");
     assert_ne!(def_a, def_b);
     assert_eq!(mark(&e, 2, def_a), Some(4), "A 包独立写自己的槽");
-    assert_eq!(mark(&e, 2, def_b), Some(4), "A 的发动不串 B 的槽");
+    // F 批（§5）生命周期：B 写入 seat2 的 +4 在 seat2 自己的摸牌
+    // Begin2 被消费清槽（正值→pending、槽清、helper 移除）——发生在
+    // A 发动（seat0 下一轮 Prepare）之前的 pumping 里。隔离性不受影响：
+    // A/B 各写各的 def；消费只作用于目标本人的正 Combs 槽，A 后写的
+    // 槽（写于 seat2 该次摸牌之后）原样保留。
+    assert_eq!(mark(&e, 2, def_b), None, "B 的 +4 已被 seat2 自己的 Begin2 消费");
 }
 
 // ---- 避祸 ----
