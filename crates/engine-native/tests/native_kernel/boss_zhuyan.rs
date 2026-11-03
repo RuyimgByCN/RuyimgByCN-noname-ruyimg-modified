@@ -23,7 +23,9 @@ fn boss_zhuyan_juyuan_storage_and_extra_target() {
     e.debug_clear_hand(1);
     next_phase(&mut e); // Play→Discard（虚失未激活不翻面）
     drain_choices(&mut e);
-    next_phase(&mut e); // Discard→End（巨源记录臂）
+    next_phase(&mut e); // Discard→End
+    drain_choices(&mut e);
+    next_phase(&mut e); // End→收束→phaseAfter（K53 巨源记录臂）
     drain_choices(&mut e);
     assert_eq!(
         e.state_core().player(1).juyuan_storage,
@@ -52,7 +54,10 @@ fn boss_zhuyan_juyuan_storage_and_extra_target() {
     );
     drain_choices(&mut e);
 
-    // ③ 记录刷新：回合结束后 juyuan=当前体力
+    // ③ 记录刷新：回合结束后 juyuan=当前体力（K53：phaseAfter 段记录，
+    // 多推一次收束）
+    next_phase(&mut e);
+    drain_choices(&mut e);
     next_phase(&mut e);
     drain_choices(&mut e);
     next_phase(&mut e);

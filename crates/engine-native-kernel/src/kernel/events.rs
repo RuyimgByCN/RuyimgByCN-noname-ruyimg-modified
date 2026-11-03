@@ -689,6 +689,24 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
 pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after: bool) {
     if after {
         ctx.log(LogEvent::TurnPhaseAfter { player });
+        // K50：封冻解除（Boss 应昭）——回合结束全清封印。
+        for p in ctx.core.players.iter_mut() {
+            p.fengyin_active = false;
+        }
+        // K52：往事封禁清零（十殿阎罗孟婆）。
+        for p in ctx.core.players.iter_mut() {
+            p.wangshi_ban = false;
+        }
+        // K53：巨源记体力（Boss 朱厌；上游 phaseAfter storage=hp）。
+        if let Some(jdef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_JUYUAN)
+        {
+            if ctx.core.has_skill(player, jdef) {
+                let hp = ctx.core.player(player).hp;
+                ctx.core.player_mut(player).juyuan_storage = hp;
+            }
+        }
         // 蛊舞递减（A2 审计 K01；上游 anwugu2 player:'phaseAfter'）：
         // 本人整回合结束后 -1，归 0 移除（出牌受限/手牌上限随之解除）。
         if ctx.core.player(player).anwugu_count > 0 {

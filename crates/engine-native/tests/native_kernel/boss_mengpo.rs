@@ -62,9 +62,11 @@ fn boss_mengpo_wangshi_basic_ban_turn_clear() {
     );
     pass_nullify_windows(&mut e);
     drain_choices(&mut e);
-    // 推进到回合结束：封禁全清
+    // 推进到回合结束：封禁全清（K52：清零时点＝整回合结束 phaseAfter 段，
+    // 原结束阶段开始锚早一拍——多推一次收束）
     next_phase_settled(&mut e);
     next_phase_settled(&mut e);
+    next_phase_settled(&mut e); // End→收束→phaseAfter 全清
     assert!(!e.state_core().player(2).wangshi_ban, "回合结束封禁全清");
 }
 

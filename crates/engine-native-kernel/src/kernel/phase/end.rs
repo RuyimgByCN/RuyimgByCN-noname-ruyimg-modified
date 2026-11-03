@@ -346,31 +346,10 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
             ctx.start_draw(player, 3);
         }
     }
-    // 封冻解除（Boss 应昭，规则 v228）：回合结束全清封印
-    for p in ctx.core.players.iter_mut() {
-        p.fengyin_active = false;
-    }
-    // 反噬 terra 清零（十殿阎罗转轮王，规则 v269）：回合结束
-    // 全清（上游 addTempSkill 当前回合结束同口径）
-    for p in ctx.core.players.iter_mut() {
-        p.zlfanshi_terra = false;
-    }
-    // 往事封禁清零（十殿阎罗孟婆，规则 v270）：回合结束全清
-    //（上游 addTempSkill boss_wangshi2 当前回合结束同口径）
-    for p in ctx.core.players.iter_mut() {
-        p.wangshi_ban = false;
-    }
-    // 巨源（Boss 朱厌，规则 v226）：回合结束记录体力（上游
-    // phaseAfter storage=hp 同口径；跨回合持久）
-    if let Some(jdef) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::names::BOSS_JUYUAN)
-    {
-        if ctx.core.has_skill(player, jdef) {
-            let hp = ctx.core.player(player).hp;
-            ctx.core.player_mut(player).juyuan_storage = hp;
-        }
-    }
+    // K50–K53（A2）：封冻解除／反噬 terra 清零／往事封禁清零／巨源记体力
+    // 已迁整回合结束窗 phaseAfter 段（kernel/events.rs
+    // commit_turn_end_window——上游均为「当前回合结束」phaseAfter 语义，
+    // 原结束阶段开始锚早于真正的回合结束）。
     // 兵先（Boss 朱厌，规则 v224）：其他角色的回合结束时，若
     // 其本回合未使用【杀】（出牌阶段口径=turn.sha_used_play_
     // phase，登记差异）→ 视为对其使用一张【杀】（use_virtual_
