@@ -293,9 +293,8 @@ pub fn bridge_vm_skill_decls(
         // 阶段事件（PA12④ 对齐旧线语义）：旧线 `phase_X` = TurnStateChanged
         // 进入 X 阶段（`phase_end` = 进入结束阶段），`phase_X_end` =
         // PhaseEnded 离开 X 阶段；原生阶段帧按阶段逐一发 begin/end，故
-        // 落为 PhaseBegin/PhaseEnd + `AtPhase` 阶段门。`phase_prepare`
-        // 原生无准备阶段帧（登记差异，拒装）；`phase_begin`（旧线通用
-        // 阶段开始）暂保持原映射，待逐一核对。
+        // 落为 PhaseBegin/PhaseEnd + `AtPhase` 阶段门（D01/D02/D06 见各臂
+        // 注释：回合开始/准备阶段/整回合结束已接 R05 真实窗）。
         let mut phase_gate: Option<engine_native::event::Phase> = None;
         let event = match t.event.as_str() {
             "phase_end" => {
@@ -330,12 +329,16 @@ pub fn bridge_vm_skill_decls(
                 phase_gate = Some(engine_native::event::Phase::Discard);
                 EventKind::PhaseEnd
             }
-            // 旧线 `phase_begin` = DomainEvent::TurnBegan（回合开始，每回合一次）；
-            // 原生以首个阶段 Judge 的 begin 帧表示回合开始（宿主技能同惯例，
-            // kernel/phase.rs）。登记差异：construction 置 turn_opened=true，
-            // 第一个回合的 Judge begin 帧不发出——首回合不触发（PA12 批②）。
-            "phase_begin" => {
-                phase_gate = Some(engine_native::event::Phase::Judge);
+            // D01（A2，规则 333）：旧线 `phase_begin`＝DomainEvent::TurnBegan
+            // （回合开始，每回合一次）→ 原生 TurnBegin 窗（无阶段门）。原映射
+            // Judge-begin 每回合一次近似，准备阶段加入后语义漂移（判定前多一
+            // 阶段）；trigger_ctx_of 已补 TurnBegin 臂（0f04ba8f）。首回合缺帧
+            // 仍登记（K22b 搁置，随迁移波合并）。
+            "phase_begin" => EventKind::TurnBegin,
+            // D02（A2，规则 333）：`phase_prepare`＝准备阶段开始——原生已有
+            // 真实 Phase{Prepare, begin} 帧，解除拒装（73 包 732 处可用）。
+            "phase_prepare" => {
+                phase_gate = Some(engine_native::event::Phase::Prepare);
                 EventKind::PhaseBegin
             }
             // 杀被目标闪避（原生有独立帧 EventData::ShaDodged{card,source,target}）。
@@ -354,7 +357,10 @@ pub fn bridge_vm_skill_decls(
             "dying" => EventKind::Dying,
             "dying_after" => EventKind::DyingSaved,
             "death" => EventKind::Death,
-            "turn_ended" => EventKind::TurnEnded,
+            // D06（A2，规则 333）：`turn_ended`＝整回合结束后（phaseAfter）
+            // → 整回合结束窗 phaseAfter 段（交接前派发；现有 TurnEnded 帧触
+            // 发窗晚于下一位回合开始子树，不等价）。
+            "turn_ended" => EventKind::TurnPhaseAfter,
             "hp_lost" => EventKind::LoseHp,
             "hp_recovered" => EventKind::Recover,
             other => {
