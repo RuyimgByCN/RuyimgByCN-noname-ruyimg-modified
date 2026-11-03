@@ -182,7 +182,8 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 化金触发面：伤害前置 +1；准备阶段开始移除实例
+            // 化金触发面（A2 H41）：伤害前置 +1；自己回合开始移除实例
+            //（原锚自己判定阶段开始）
             HostBehavior::SwdHuajin2 => {
                 let frame = ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data);
                 match frame {
@@ -192,11 +193,7 @@ impl HostMachine {
                         }
                         Flow::Done
                     }
-                    Some(EventData::Phase {
-                        player,
-                        phase: crate::event::Phase::Judge,
-                        begin: true,
-                    }) if *player == self.owner => {
+                    Some(EventData::TurnBegin { player }) if *player == self.owner => {
                         if let Some(def) = ctx.catalog.skill_by_name(SWD_HUAJIN2_KEY) {
                             ctx.core.skills.remove(&(self.owner, def));
                         }

@@ -102,7 +102,8 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 起风：准备阶段开始（Judge 阶段 = 上游 phaseZhunbei），可选
+            // 起风（A2 H02）：上游 player phaseZhunbeiBegin＝自己准备阶段
+            // 开始（过滤收紧 Phase::Prepare；原锚自己判定阶段开始），可选
             HostBehavior::HlssFengqi => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -187,9 +188,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 门神·清除：任意阶段开始 + 任意角色死亡（锁定）
+            // 门神·清除（A2 H06）：上游 player [phaseBegin, dieBegin]＝
+            // 自己回合开始＋本人濒死（原锚任意阶段开始＝每回合 5→6 次）
             HostBehavior::YxsMenshen3 => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -292,7 +294,8 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 修罗：自己准备阶段开始（可选）
+            // 修罗（A2 H09）：上游 player phaseZhunbeiBegin＝自己准备阶段
+            // 开始（过滤收紧 Phase::Prepare；原锚自己判定阶段开始），可选
             HostBehavior::Xiuluo => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -408,9 +411,10 @@ impl HostBehavior {
             }),
             // 天伦：判定机改判窗驱动（无触发时机）
             HostBehavior::Tianlun => None,
-            // 脉轮：任意阶段开始（可选）
+            // 脉轮（A2 H12）：上游 player phaseBegin＝自己回合开始（每回合
+            // 一次；原锚任意自己阶段开始＝每回合 6 次）（可选）
             HostBehavior::Mailun => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -582,7 +586,8 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 青翼/赤翼：准备阶段锚 = 判定阶段开始
+            // 青翼/赤翼（A2 H14/H15）：上游 player phaseZhunbeiBegin＝
+            // 自己准备阶段开始（过滤收紧 Phase::Prepare；原锚判定阶段开始）
             HostBehavior::BossQingyi | HostBehavior::BossChiyi => Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -645,9 +650,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 蛊惑·变体：回合（判定阶段）开始
+            // 蛊惑·变体（A2 H17）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）
             HostBehavior::YunchouDiyguhuo => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -746,8 +752,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 酉羹（A2 H19）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）
             HostBehavior::GujianFoodYougeng => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -806,8 +814,10 @@ impl HostBehavior {
             HostBehavior::JiguanQiankunCard => None,
             HostBehavior::JiguanLongxuCard => None,
             HostBehavior::JiguanShenhuoCard => None,
+            // 紫阳丹（A2 H22）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己结束阶段开始）
             HostBehavior::GujianFoodZiyangdan => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -897,8 +907,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
+            // 雪轮羊（A2 H24）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）（可选）
             HostBehavior::HuanleXuelunyangCard => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

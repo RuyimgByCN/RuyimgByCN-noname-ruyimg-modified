@@ -221,9 +221,10 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
-            // 蛊惑·变体：自身
+            // 蛊惑·变体（A2 H17）：自身（上游 player phaseBegin＝自己回合
+            // 开始；原 Phase 帧提取臂同步迁 TurnBegin）
             HostBehavior::YunchouDiyguhuo => match event {
-                EventData::Phase { player, .. } => (Some(*player), None),
+                EventData::TurnBegin { player } => (Some(*player), None),
                 _ => (None, None),
             },
             // 狡黠：自身（摸 1）

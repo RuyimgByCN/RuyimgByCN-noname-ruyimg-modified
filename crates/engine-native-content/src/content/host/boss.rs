@@ -20,6 +20,8 @@ pub(super) fn wing_bit(base: u8, round: u32) -> Option<u8> {
     Some(1u8 << (base + shift))
 }
 
+/// 青翼/赤翼轮次门（A2 H14/H15）：上游 player phaseZhunbeiBegin＝Boss
+/// 本人**准备阶段开始**（原锚判定阶段开始）＋轮次 3/5/7＋armed 位未置。
 pub(super) fn wing_round_gate(
     ctx: &QueryCtx<'_>,
     owner: PlayerId,
@@ -28,7 +30,7 @@ pub(super) fn wing_round_gate(
 ) -> bool {
     let EventData::Phase {
         player,
-        phase: crate::event::Phase::Judge,
+        phase: crate::event::Phase::Prepare,
         begin: true,
     } = event
     else {

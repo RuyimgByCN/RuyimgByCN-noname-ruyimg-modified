@@ -257,14 +257,14 @@ fn probe_instance_and_candidates() {
             }
         }
     }
-    // ② candidates
+    // ② candidates（A2 H33：事件迁 TurnBegin——原探 PhaseBegin 候选表）
     let cand = e
         .catalog()
-        .candidates(engine_native::event::EventKind::PhaseBegin);
+        .candidates(engine_native::event::EventKind::TurnBegin);
     let in_cand = cand.contains(&def_id);
     eprintln!(
         "DBG 探针：core.skills 实例 {instances}/4（enabled {enabled_true}）；\
-         candidates(PhaseBegin) 共 {} 项，包含该 def = {in_cand}",
+         candidates(TurnBegin) 共 {} 项，包含该 def = {in_cand}",
         cand.len()
     );
     assert!(
@@ -273,7 +273,7 @@ fn probe_instance_and_candidates() {
     );
     assert!(
         in_cand,
-        "catalog.candidates(PhaseBegin) 应包含该 def（否则入队阶段就被跳过）"
+        "catalog.candidates(TurnBegin) 应包含该 def（否则入队阶段就被跳过）"
     );
 }
 

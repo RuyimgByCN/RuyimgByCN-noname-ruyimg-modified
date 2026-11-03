@@ -1,13 +1,14 @@
 use super::*;
 
-/// 蛇毒标记结算（Boss 相柳毒妒授予，规则 v223）：持有标记>0 的角色回
-/// 合开始——「弃置 X 张牌，或失去 X 点体力」（挂起 SelectCards；取消/
-/// 空选=失 X）→ 标记-1；X=当前标记数。
+/// 蛇毒标记结算（Boss 相柳毒妒授予，规则 v223；A2 S14）：持有标记>0
+/// 的角色**回合开始**（上游 `{player:'phaseBegin'}`＝TurnBegin 窗；原锚
+/// 判定阶段开始）——「弃置 X 张牌，或失去 X 点体力」（挂起 SelectCards；
+/// 取消/空选=失 X）→ 标记-1；X=当前标记数。
 pub(in super::super) struct ShedUBehavior;
 
 impl SkillBehavior for ShedUBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+        matches!(event, EventData::TurnBegin { player }
             if *player == owner
                 && ctx.state.player(owner).shedu > 0)
     }

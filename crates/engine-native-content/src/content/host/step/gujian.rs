@@ -422,8 +422,8 @@ impl HostMachine {
                 _ => Flow::Done,
             },
             HostBehavior::GujianFoodZiyangdan => {
-                // 结束阶段：护甲 -1（登记差异：上游每阶段开始衰减）；
-                // 倒计时扣减，归零移除状态
+                // A2 H22：上游 player phaseBegin＝自己回合开始护甲 -1（原锚
+                // 自己结束阶段开始＝登记差异对齐收紧）；倒计时扣减，归零移除
                 ctx.change_hujia(self.owner, -1);
                 food_tick(ctx, self.owner, &self.def_key);
                 Flow::Done

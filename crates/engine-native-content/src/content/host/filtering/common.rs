@@ -40,8 +40,10 @@ impl HostSkillBehavior {
             // 隐月：自己受到未防止伤害（前置窗）
             HostBehavior::HlssYueyin => matches!(event,
                 EventData::Damage(d) if d.target == owner && !d.prevented),
+            // 起风（A2 H02）：上游 player phaseZhunbeiBegin＝自己准备阶段
+            // 开始（原锚自己判定阶段开始）
             HostBehavior::HlssFengqi => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::Phase { player, phase: crate::event::Phase::Prepare, begin: true }
                 if *player == owner),
             HostBehavior::HlssFengqi2 => false,
             HostBehavior::HlssGaiming => false,
@@ -126,10 +128,10 @@ impl HostSkillBehavior {
                 EventData::TurnEndWindow { player, after: false } if *player == owner)
                     && ctx.state.alive_players().count() > 1
             }
-            // 门神·清除（A2 H51 配套）：上游 trigger `player:["phaseBegin",
-            // "dieBegin"]`＝**门神持有者自己**的回合开始——标记从其整回合
-            // 结束授予存活续到其下一回合开始（原「任意阶段开始」全局清会在
-            // H51 迁整回合结束窗后立即清掉刚授予的标记）。
+            // 门神·清除（A2 H06/H51 配套）：上游 trigger `player:["phaseBegin",
+            // "dieBegin"]`＝**门神持有者自己**的回合开始＋本人濒死——标记从
+            // 其整回合结束授予存活续到其下一回合开始（原「任意阶段开始＋
+            // 任意死亡」清会在 H51 迁整回合结束窗后立即清掉刚授予的标记）。
             HostBehavior::YxsMenshen3 => {
                 let has_marker = ctx.state.alive_players().any(|p| {
                     ctx.catalog
@@ -139,12 +141,10 @@ impl HostSkillBehavior {
                 });
                 has_marker
                     && match event {
-                        EventData::Phase {
-                            player,
-                            begin: true,
-                            ..
-                        } => *player == owner,
-                        EventData::Death { .. } => true,
+                        // A2 H06：phaseBegin＝持有者自己回合开始（每回合一次）。
+                        EventData::TurnBegin { player } => *player == owner,
+                        // A2 H06：dieBegin＝持有者本人濒死（原任意死亡过宽）。
+                        EventData::Death { player, .. } => *player == owner,
                         _ => false,
                     }
             }
@@ -225,10 +225,11 @@ impl HostSkillBehavior {
             // 魔化：自己进入濒死
             HostBehavior::Mohua2 => matches!(event,
                 EventData::Dying { player, .. } if *player == owner),
-            // 修罗：自己准备阶段开始、判定区有牌且手牌非空
+            // 修罗（A2 H09）：上游 player phaseZhunbeiBegin＝自己准备阶段
+            // 开始、判定区有牌且手牌非空（原锚自己判定阶段开始）
             HostBehavior::Xiuluo => {
                 matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::Phase { player, phase: crate::event::Phase::Prepare, begin: true }
                     if *player == owner)
                     && !ctx.state.player(owner).judge.is_empty()
                     && !ctx.state.player(owner).hand.is_empty()
@@ -373,9 +374,10 @@ impl HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::Tianlun => false,
-            // 脉轮：自己的任意阶段开始
+            // 脉轮（A2 H12）：上游 player phaseBegin＝自己回合开始（每回合
+            // 一次；原「任意自己阶段开始」＝每回合 6 次）
             HostBehavior::Mailun => matches!(event,
-                EventData::Phase { player, begin: true, .. } if *player == owner),
+                EventData::TurnBegin { player } if *player == owner),
 
             // 冰封·封：自己已翻回正面（移除自身）
             HostBehavior::Bingfeng2 => {
@@ -481,9 +483,10 @@ impl HostSkillBehavior {
                     ..
                 }
             ),
-            // 蛊惑·变体：自己回合开始且区域有牌
+            // 蛊惑·变体（A2 H17）：上游 player phaseBegin＝自己回合开始且
+            // 区域有牌（原锚自己判定阶段开始）
             HostBehavior::YunchouDiyguhuo => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty()
@@ -637,11 +640,15 @@ impl HostSkillBehavior {
             HostBehavior::GujianFoodTanhuadong => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::Play, begin: false }
                 if *player == owner),
+            // 酉羹（A2 H19）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）
             HostBehavior::GujianFoodYougeng => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner),
+            // 紫阳丹（A2 H22）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己结束阶段开始）
             HostBehavior::GujianFoodZiyangdan => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner),
             HostBehavior::GujianYunvyuanshen => matches!(event,
                 EventData::Dying { player, .. } if *player == owner),
@@ -669,9 +676,11 @@ impl HostSkillBehavior {
                 && ctx.state.player(owner).equips.iter().any(|c| {
                     ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Monkey
                 })),
+            // 雪轮羊（A2 H24）：上游 player phaseBegin＝自己回合开始且
+            // 装备雪轮羊＋场上有其他持技角色（原锚自己判定阶段开始）
             HostBehavior::HuanleXuelunyangCard => {
                 let armed_and_targets = matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner
                     && ctx.state.player(owner).equips.iter().any(|c| {
                         ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Xuelunyang
@@ -702,8 +711,10 @@ impl HostSkillBehavior {
                 if *player != owner
                     && ctx.state.turn.current != owner
                     && ctx.state.player(*player).alive),
+            // 割据（A2 H45）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）
             HostBehavior::WudianGeju => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner),
             HostBehavior::WudianFeidan => matches!(event,
             EventData::Damage(d)

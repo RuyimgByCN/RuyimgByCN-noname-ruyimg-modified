@@ -236,15 +236,17 @@ impl HostSkillBehavior {
                     && ctx.state.player(owner).xuanning_mark > 0
                     && (!ctx.state.player(d.target).hand.is_empty()
                         || !ctx.state.player(d.target).equips.is_empty())),
+            // 千方（A2 H49）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）
             HostBehavior::XianjianQianfang => {
                 matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner)
                     && ctx.state.player(owner).xuanning_mark > 0
                     && ((ctx.state.player(owner).hand.len() + ctx.state.player(owner).equips.len())
                         as u32)
                         + ctx.state.player(owner).xuanning_mark
-                        >= 3
+                    >= 3
             }
             HostBehavior::XianjianRunxin => {
                 let heart = match event {

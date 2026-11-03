@@ -24,9 +24,10 @@ impl HostSkillBehavior {
                     _ => false,
                 }
             }
-            // 魂身·收束：自己准备阶段开始且计数 >0
+            // 魂身·收束（A2 H25）：上游 player phaseBegin＝自己回合开始且
+            // 计数 >0（原锚自己判定阶段开始）
             HostBehavior::SwdHyunshen2 => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner && ctx.state.player(owner).hyunshen_count > 0),
             // 待行：自己结束阶段且有 he 牌
             HostBehavior::SwdDaixing => matches!(event,
@@ -34,9 +35,10 @@ impl HostSkillBehavior {
                 if *player == owner
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())),
-            // 待行·清甲：自己准备阶段开始且计数 >0
+            // 待行·清甲（A2 H26）：上游 player phaseBegin＝自己回合开始且
+            // 计数 >0（原锚自己判定阶段开始）
             HostBehavior::SwdDaixing2 => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner && ctx.state.player(owner).daixing_count > 0),
             // 待行·吸收：自己受伤后且计数 >0
             HostBehavior::SwdDaixing3 => matches!(event,
@@ -70,9 +72,10 @@ impl HostSkillBehavior {
             // 灵矢：锁定旗标（无触发；四臂内联）
             HostBehavior::SwdLingshi => false,
             HostBehavior::SwdJinlin => false,
-            // 锦鳞·退：持有者阶段开始
+            // 锦鳞·退（A2 H30）：上游 player phaseBegin＝持有者回合开始
+            //（原锚任意自己阶段开始＝每回合 5→6 次）
             HostBehavior::SwdJinlin2 => matches!(event,
-                EventData::Phase { player, begin: true, .. } if *player == owner),
+                EventData::TurnBegin { player } if *player == owner),
             HostBehavior::SwdTianshu => false,
             // 诛害：他人结束阶段开始、其本回合造成过伤害、自己有杀且在射程内
             HostBehavior::SwdZhuhai => match event {
@@ -97,6 +100,8 @@ impl HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::SwdLinyun => false,
+            // 集控（A2 H28）：上游 player phaseBegin＝自己回合开始 或
+            // 自己失去手牌（原锚任意自己阶段开始）
             HostBehavior::SwdJikong => {
                 // 每回合限一次（上游 usable:1）：**使用时**消费——取消目标窗
                 // 不消耗（上游 counttrigger-- 返还同口径）
@@ -107,11 +112,7 @@ impl HostSkillBehavior {
                     .unwrap_or(false);
                 available
                     && match event {
-                        EventData::Phase {
-                            player,
-                            begin: true,
-                            ..
-                        } => *player == owner,
+                        EventData::TurnBegin { player } => *player == owner,
                         EventData::CardsLost {
                             player, origins, ..
                         } => {
@@ -381,12 +382,11 @@ impl HostSkillBehavior {
             // 昆仑镜：无触发面
             HostBehavior::SwdKunlunjingcCard => false,
             // 手持门控 helper（四象五件共用）：持有者手牌含对应器族实体
-            // 青龙之圭：自己准备阶段且手持
+            // 青龙之圭（A2 H32）：上游 player phaseBegin＝自己回合开始且
+            // 手持（原锚自己判定阶段开始）
             HostBehavior::SwdQinglongzhiguiHeld => matches!(event,
-                EventData::Phase { player, phase, begin }
+                EventData::TurnBegin { player }
                 if *player == owner
-                    && *phase == crate::event::Phase::Judge
-                    && *begin
                     && hand_has_kind(ctx, owner, CardKind::Qinglongzhigui)),
             // 逆攻积攒：自己受到真实伤害
             HostBehavior::SwdNigongAccumulate => matches!(event,
@@ -453,12 +453,11 @@ impl HostSkillBehavior {
                     .unwrap_or(false)
                     && (d.target == owner || d.source == Some(owner))
                     && hand_has_kind(ctx, owner, CardKind::Shencaojie)),
-            // 黄麟之琮：自己准备阶段无护甲且手持
+            // 黄麟之琮（A2 H33）：上游 player phaseBegin＝自己回合开始、
+            // 无护甲且手持（原锚自己判定阶段开始）
             HostBehavior::SwdHuanglinzhicongHeld => matches!(event,
-                EventData::Phase { player, phase, begin }
+                EventData::TurnBegin { player }
                 if *player == owner
-                    && *phase == crate::event::Phase::Judge
-                    && *begin
                     && ctx.state.player(owner).hujia == 0
                     && hand_has_kind(ctx, owner, CardKind::Huanglinzhicong)),
             // 空洞印：自己死亡（maxHp>0 gate 恒真登记）
@@ -664,9 +663,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdLexue => matches!(event,
                 EventData::Phase { phase: crate::event::Phase::Judge, begin: true, .. }
                 if ctx.state.player(owner).alive),
-            // 枕流触发面：自己准备阶段开始且 off_court 有牌
+            // 枕流触发面（A2 H39）：上游 player phaseBegin＝自己回合开始且
+            // off_court 有牌（原锚自己判定阶段开始）
             HostBehavior::SwdZhenjiu2 => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner && !ctx.state.player(owner).off_court.is_empty()),
             // 麻醉触发面：自己造成伤害前置（source 面——上游
             // trigger: {source: "damageBegin"} 同口径）且 off_court 有牌
@@ -690,9 +690,10 @@ impl HostSkillBehavior {
                     && !d.prevented
                     && d.amount > 0
                     && ctx.state.player(d.target).alive),
-            // 幻形：自己准备阶段开始（有可弃牌与男性其他存活）
+            // 幻形（A2 H40）：上游 player phaseBegin＝自己回合开始（可弃牌
+            // 与男性其他存活门在步内；原锚自己判定阶段开始）
             HostBehavior::SwdHuanxing => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner),
             // 命符·姜子牙面：出牌主动技（activate 通道），无触发 filter
             HostBehavior::SwdMingfu => matches!(event,
@@ -808,13 +809,14 @@ impl HostSkillBehavior {
             // 化金：出牌主动技，无触发 filter
             HostBehavior::SwdHuajin => matches!(event,
                 EventData::Phase { player, begin, .. } if *player == owner && false),
-            // 化金触发面：自己造成伤害前置，或自己准备阶段开始（自清）
+            // 化金触发面（A2 H41）：自己造成伤害前置，或自己回合开始
+            //（自清；原锚自己判定阶段开始）
             HostBehavior::SwdHuajin2 => {
                 matches!(event,
                     EventData::Damage(d)
                     if d.source == Some(owner) && !d.prevented
                 ) || matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
+                EventData::TurnBegin { player }
                 if *player == owner)
             }
             // 明镜：自己受伤前置 + 无防具（1/3 在机器步掷；登记差异：上游
@@ -985,12 +987,11 @@ impl HostSkillBehavior {
                             | crate::catalog::Suit::Diamond
                     )
                 })),
-            // 壶境：自己准备阶段入场且弃牌堆有炼妖壶
+            // 壶境（A2 H35）：上游 player phaseBegin＝自己回合开始入场且
+            // 弃牌堆有炼妖壶（原锚自己判定阶段开始）
             HostBehavior::SwdHujing => matches!(event,
-            EventData::Phase { player, phase, begin }
+            EventData::TurnBegin { player }
             if *player == owner
-                && *phase == crate::event::Phase::Judge
-                && *begin
                 && ctx.state.discard.iter().any(|c| {
                     ctx.catalog.card_kind(*c) == CardKind::Lianyaohu
                 })),
@@ -1055,10 +1056,11 @@ impl HostSkillBehavior {
                     || ctx.state.player(owner).hand.iter().any(|c| {
                         ctx.catalog.card_slot_of(ctx.state, *c).is_some()
                     }))),
-            // 机关凤封印：拥有者任一阶段开始即解除（上游
-            // {player:'phaseBegin'} 同口径）
+            // 机关凤封印（A2 H43）：拥有者下一回合开始解除（上游
+            // addTempSkill {player:'phaseBegin'}＝回合开始；原锚任意自己
+            // 阶段开始）
             HostBehavior::SwdFengyinState => matches!(event,
-                EventData::Phase { player, begin: true, .. } if *player == owner),
+                EventData::TurnBegin { player } if *player == owner),
             HostBehavior::SwdJiguanyuanGain => matches!(event,
                 // A2 H71：自己整回合结束（上游 jiguanyuan player phaseEnd）
                 EventData::TurnEndWindow { player, after: false }
@@ -1093,8 +1095,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdJinjilengdongCard => false,
             HostBehavior::SwdShengxiuhaojiaoCard => false,
             HostBehavior::SwdYinmilichangCard => false,
+            // 勾魂锣·倒计时（A2 H44）：上游 global phaseBegin 定向＝仅来源
+            // player 的回合开始（原锚任意阶段开始）
             HostBehavior::SwdGouhunluoSub => matches!(event,
-                EventData::Phase { player, begin: true, .. }
+                EventData::TurnBegin { player }
                 if ctx.state.player(owner).gouhunluo_source == Some(*player)),
             _ => unreachable!("behavior routed to the wrong filter module"),
         }

@@ -105,13 +105,15 @@ fn ganfuren_assembly_shushen_shenzhi() {
     );
     assert_eq!(e.debug_hand(2).len(), 2, "无手牌目标摸 2");
 
-    // ③ 神智：下回合判定阶段开始 → 确认 → 弃全部手牌；数量≥体力 → 回复 1。
-    // 当前 0 号 hp 3 / 手牌 4（桃吃剩 + 摸牌）——先推进到 0 号下回合开始。
+    // ③ 神智（A2 S09）：下回合**准备阶段开始**（上游 phaseZhunbeiBegin；
+    // 原锚判定阶段开始）→ 确认 → 弃全部手牌；数量≥体力 → 回复 1。
+    // 当前 0 号 hp 3 / 手牌 4（桃吃剩 + 摸牌）——先推进到 0 号下回合开始
+    //（确认门在 Prepare 帧挂起，auto-advance 前停）。
     let mut left_play = false;
     for _ in 0..96 {
         if left_play
             && e.turn().current == 0
-            && e.turn().phase == Phase::Judge
+            && e.turn().phase == Phase::Prepare
             && e.open_choice().is_some()
         {
             break;
@@ -165,12 +167,12 @@ fn ganfuren_assembly_shushen_shenzhi() {
     if hand0 as i32 >= hp0 {
         assert_eq!(e.debug_hp(0), hp0 + 1, "手牌数≥体力 → 回复 1");
     }
-    // ④ 神智放弃路径：再下回合确认门放弃 → 手牌保留。
+    // ④ 神智放弃路径：再下回合（准备阶段开始，A2 S09）确认门放弃 → 手牌保留。
     let mut left_play = false;
     for _ in 0..96 {
         if left_play
             && e.turn().current == 0
-            && e.turn().phase == Phase::Judge
+            && e.turn().phase == Phase::Prepare
             && e.open_choice().is_some()
         {
             break;

@@ -54,8 +54,9 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: BOSS_FUTAI,
-            // 准备阶段触发（判定阶段开始锚点，神智同口径）：全体受伤
-            // 者按座位序各回 1（机器一步，无挂起；锁定=forced 无确认）
+            // 准备阶段触发（A2 S12：过滤收紧 Phase::Prepare；原锚判定
+            // 阶段开始，神智同口径）：全体受伤者按座位序各回 1（机器一
+            // 步，无挂起；锁定=forced 无确认）
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -111,10 +112,10 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: BOSS_LUANCHANG,
-            // 两面：准备阶段（判定阶段开始锚点）视为用【南蛮入侵】（触
-            // 发机一步 use_virtual_card）；结束阶段视为用【万箭齐发】
-            // （kernel Phase::End 臂查询式）；激活门控同隐贼/延妒/积财
-            // 先例（装配即未启用）
+            // 两面：准备阶段（A2 S13：过滤收紧 Phase::Prepare；原锚判定
+            // 阶段开始）视为用【南蛮入侵】（触发机一步 use_virtual_card）；
+            // 结束阶段视为用【万箭齐发】（kernel Phase::End 臂查询式）；
+            // 激活门控同隐贼/延妒/积财先例（装配即未启用）
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -188,11 +189,12 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: BOSS_SHEDU,
-            // 蛇毒标记结算（运行时触发技）：Judge begin 持有标记>0 →
+            // 蛇毒标记结算（运行时触发技，A2 S14）：上游 player
+            // phaseBegin＝自己回合开始（原锚 Judge begin）持有标记>0 →
             // 「弃 X 张牌或失去 X 体力」（挂起选择；取消/空选=失 X）→
             // 标记-1；X=当前标记数
             trigger: Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

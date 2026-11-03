@@ -82,7 +82,11 @@ fn remaining_clusters_batch() {
         );
     }
     submit(&mut e, 0, GameAction::NextPhase); // Discard→End
-    assert_eq!(e.save().core.players[0].hujia, 2, "结束阶段衰减 -1");
+    // A2 H22：上游 player phaseBegin＝自己回合开始——End 帧不再衰减，
+    // 护甲保持 3；推进到 0 号下一回合开始（advance_to_play 途经 TurnBegin）
+    assert_eq!(e.save().core.players[0].hujia, 3, "结束帧不衰减（A2 H22）");
+    advance_to_play(&mut e);
+    assert_eq!(e.save().core.players[0].hujia, 2, "回合开始衰减 -1（A2 H22）");
     assert_zone_conservation(&e);
 
     // —— 玉女元神：濒死一次性回复 ——

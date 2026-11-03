@@ -1,9 +1,10 @@
-//! swd deferred 消解批 137：脉轮（`mailun`）——阶段开始 8 选 1 效果。
+//! swd deferred 消解批 137：脉轮（`mailun`）——回合开始 8 选 1 效果。
 //!
 //! 上游 `character/swd.js`：`trigger {player:'phaseBegin'}`，`direct:true`——
-//! 每阶段开始从 8 种效果中选一种（旧效果清除）：1 换体力上限、2 反向、
-//! 3 首次造成/受到伤害 -1、4 首次伤害 +1、5 少摸一张且上限 +1、
-//! 6 多摸一张且上限 -1、7 双向距离 -1、8 双向距离 +1。
+//! 每回合开始（A2 H12：phaseBegin＝TurnBegin 窗，每回合一次；原锚任意
+//! 自己阶段开始＝每回合 5→6 次）从 8 种效果中选一种（旧效果清除）：
+//! 1 换体力上限、2 反向、3 首次造成/受到伤害 -1、4 首次伤害 +1、
+//! 5 少摸一张且上限 +1、6 多摸一张且上限 -1、7 双向距离 -1、8 双向距离 +1。
 
 use engine_native::event::DamageNature;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
@@ -62,6 +63,23 @@ fn next_phase(e: &mut Engine) {
     );
 }
 
+
+/// A2 H12：前进到 seat 下一回合开始（TurnBegin 窗挂起，脉轮确认窗/
+/// 选择窗留给调用方；到达时不 drain）。
+fn advance_to_turn_begin(e: &mut Engine, seat: u8) {
+    while e.turn().current == seat {
+        drain(e);
+        next_phase(e);
+    }
+    for _ in 0..60 {
+        if e.turn().current == seat && e.turn().phase == Phase::Judge {
+            return;
+        }
+        drain(e);
+        next_phase(e);
+    }
+    panic!("60 步内未到达 {seat} 号下一回合开始");
+}
 
 /// 打开脉轮窗并读取候选（先过确认门；不 drain 触发窗）。
 fn mailun_options(e: &mut Engine) -> Option<Vec<ChoiceOption>> {
@@ -137,32 +155,23 @@ fn mailun_mode5_draw_minus_and_limit_plus() {
     let mut e = swd_engine(114001);
     e.debug_grant(0, "mailun");
     assert!(e.catalog().skill_by_name("mailun").is_some());
-    // 推进到 0 号出牌阶段开始（该阶段触发脉轮窗——确认后选效果 5）
-    for _ in 0..12 {
-        if e.turn().current == 0 && e.turn().phase == Phase::Play {
-            break;
-        }
-        next_phase(&mut e);
-        drain(&mut e);
-    }
-    assert_eq!(e.turn().phase, Phase::Play);
+    // A2 H12：推进到 0 号下一回合开始（TurnBegin 窗触发脉轮——确认后
+    // 选效果 5），随后推进到本回合摸牌阶段验证少摸
+    advance_to_turn_begin(&mut e, 0);
     let opts = mailun_options(&mut e).expect("脉轮选择窗");
     assert_eq!(opts.len(), 8, "8 种效果");
     assert!(pick_mailun(&mut e, 5), "选效果 5");
     assert_eq!(e.state_core().player(0).mailun_mode, 5);
     let limit = e.state_core().hand_limit(e.catalog(), 0);
     assert_eq!(limit, e.debug_hp(0).max(0) as usize + 1, "手牌上限 +1");
-    // 记录手牌，推进到 0 号**下一回合**的摸牌阶段（阶段开始即摸牌）
+    // 记录手牌，推进到 0 号本回合的摸牌阶段（阶段开始即摸牌）
     let before = e.debug_hand(0).len();
-    let mut guard = 0;
-    loop {
-        assert!(guard < 24, "未到下一回合摸牌阶段");
-        guard += 1;
-        next_phase(&mut e);
-        drain(&mut e);
-        if e.turn().current == 0 && e.turn().phase == Phase::Draw && guard > 5 {
+    for _ in 0..6 {
+        if e.turn().current == 0 && e.turn().phase == Phase::Draw {
             break;
         }
+        next_phase(&mut e);
+        drain(&mut e);
     }
     assert_eq!(e.turn().phase, Phase::Draw);
     assert_eq!(e.debug_hand(0).len(), before + 1, "少摸一张：摸 1");
@@ -171,11 +180,13 @@ fn mailun_mode5_draw_minus_and_limit_plus() {
 /// 选效果 3：首次造成伤害 -1（一次性）；重选后清除。
 #[test]
 fn mailun_mode3_first_damage_minus() {
+    // A2 H12：回合开始（TurnBegin 窗）选效果。同种子对照局分离脉轮
+    // 的 -1（第二轮起其他随机将的修正可能叠加，断言差值而非绝对值）。
     let mut e = swd_engine(114002);
     e.debug_grant(0, "mailun");
+    advance_to_turn_begin(&mut e, 0);
     assert!(pick_mailun(&mut e, 3), "选效果 3");
     assert_eq!(e.state_core().player(0).mailun_mode, 3);
-    // 0 号造成 3 点伤害 → 首次 -1 → 实际 2
     let hp2 = e.debug_hp(2);
     let out = e.debug_deal_damage(Some(0), 2, 3, DamageNature::Normal);
     assert!(
@@ -183,17 +194,41 @@ fn mailun_mode3_first_damage_minus() {
         "{out:?}"
     );
     drain(&mut e);
-    assert_eq!(e.debug_hp(2), hp2 - 2, "首次造成伤害 -1");
+    let with_mode = hp2 - e.debug_hp(2);
     assert!(e.state_core().player(0).mailun_out_used, "一次性已用");
-    // 第二次伤害不再减免
-    let hp2b = e.debug_hp(2);
+    // 对照局：同种子、同推进，回合开始**放弃**脉轮（不置模式）
+    let mut e2 = swd_engine(114002);
+    e2.debug_grant(0, "mailun");
+    advance_to_turn_begin(&mut e2, 0);
+    drain(&mut e2); // 取消确认门＝放弃
+    assert_eq!(e2.state_core().player(0).mailun_mode, 0, "对照局未置模式");
+    let hp2b = e2.debug_hp(2);
+    let out = e2.debug_deal_damage(Some(0), 2, 3, DamageNature::Normal);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    drain(&mut e2);
+    let without_mode = hp2b - e2.debug_hp(2);
+    assert_eq!(with_mode, without_mode - 1, "首次造成伤害 -1（仅脉轮贡献）");
+    // 第二次伤害不再减免（脉轮一次性已用）
+    let hp2c = e.debug_hp(2);
     let out = e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
     assert!(
         matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
         "{out:?}"
     );
     drain(&mut e);
-    assert_eq!(e.debug_hp(2), hp2b - 1, "第二次全额");
+    let second = hp2c - e.debug_hp(2);
+    let hp2d = e2.debug_hp(2);
+    let out = e2.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "{out:?}"
+    );
+    drain(&mut e2);
+    let second_ctrl = hp2d - e2.debug_hp(2);
+    assert_eq!(second, second_ctrl, "第二次不再减免（差值归零）");
 }
 
 /// 选效果 7：双向距离 -1（攻击范围与受击距离同变）。
@@ -203,6 +238,8 @@ fn mailun_mode7_distance_minus() {
     e.debug_grant(0, "mailun");
     let base_to1 = e.state_core().computed_distance(e.catalog(), 0, 1);
     let base_from1 = e.state_core().computed_distance(e.catalog(), 1, 0);
+    // A2 H12：回合开始（TurnBegin 窗）选效果
+    advance_to_turn_begin(&mut e, 0);
     assert!(pick_mailun(&mut e, 7), "选效果 7");
     assert_eq!(e.state_core().player(0).mailun_mode, 7);
     let d01 = e.state_core().computed_distance(e.catalog(), 0, 1);
@@ -216,6 +253,8 @@ fn mailun_mode7_distance_minus() {
 fn mailun_mode1_hp_shift_and_gate() {
     let mut e = swd_engine(114004);
     e.debug_grant(0, "mailun");
+    // A2 H12：回合开始（TurnBegin 窗）选效果
+    advance_to_turn_begin(&mut e, 0);
     let opts = mailun_options(&mut e).expect("脉轮选择窗");
     assert!(
         opts.contains(&ChoiceOption::Tag(1)),
@@ -230,6 +269,8 @@ fn mailun_mode1_hp_shift_and_gate() {
     let mut e2 = swd_engine(114005);
     e2.debug_grant(0, "mailun");
     e2.debug_set_max_hp(0, 6);
+    // A2 H12：同样推进到回合开始再开窗
+    advance_to_turn_begin(&mut e2, 0);
     let opts = mailun_options(&mut e2).expect("脉轮窗（上限 6）");
     assert!(!opts.contains(&ChoiceOption::Tag(1)), "上限 6 时效果 1 不可选");
     assert_eq!(opts.len(), 7, "其余 7 种可选");

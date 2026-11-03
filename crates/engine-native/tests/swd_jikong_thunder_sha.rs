@@ -1,7 +1,8 @@
-//! swd deferred 消解批 126：集控（`jikong`）——阶段开始/失去手牌后虚拟雷杀。
+//! swd deferred 消解批 126：集控（`jikong`）——回合开始/失去手牌后虚拟雷杀。
 //!
 //! 上游 `character/swd.js`：`trigger {player:['loseEnd','phaseBegin']}`，
-//! `direct:true`，`usable:1`——自己阶段开始，或自己失去手牌致手牌为空时，
+//! `direct:true`，`usable:1`——自己回合开始（A2 H28：phaseBegin＝TurnBegin
+//! 窗，原锚任意自己阶段开始＝每回合 5→6 次），或自己失去手牌致手牌为空时，
 //! 可对攻击距离内一名其他角色使用虚拟【雷杀】；取消不消耗次数。
 
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
@@ -95,8 +96,25 @@ fn answer(e: &mut Engine, prompt: &str, sel: Vec<ChoiceOption>) -> bool {
     false
 }
 
-/// 集控（阶段开始面）：自己阶段开始 → 确认 → 选攻击距离内目标 → 虚拟雷杀
-/// 造成 1 点雷伤（无闪）；每回合限一次（第二次阶段开始不再开窗）。
+/// A2 H28：前进到 seat 下一回合开始（TurnBegin 窗挂起时 current 已换人、
+/// phase 停在 Judge；不 drain——回合开始确认窗留给调用方应答）。
+fn advance_to_turn_begin(e: &mut Engine, seat: u8) {
+    while e.turn().current == seat {
+        drain(e);
+        next_phase(e);
+    }
+    for _ in 0..60 {
+        if e.turn().current == seat && e.turn().phase == Phase::Judge {
+            return;
+        }
+        drain(e);
+        next_phase(e);
+    }
+    panic!("60 步内未到达 {seat} 号下一回合开始");
+}
+
+/// 集控（回合开始面，A2 H28）：自己回合开始 → 确认 → 选攻击距离内目标 →
+/// 虚拟雷杀造成 1 点雷伤（无闪）；每回合限一次（同回合阶段推进不再开窗）。
 #[test]
 fn jikong_phase_face_virtual_thunder_sha_once_per_turn() {
     let mut e = swd_engine(103001);
@@ -105,17 +123,9 @@ fn jikong_phase_face_virtual_thunder_sha_once_per_turn() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 推进到 0 号某个阶段开始（入梦等无——直接 NextPhase 触发 PhaseBegin）
-    for _ in 0..10 {
-        if e.turn().current == 0 && e.turn().phase == Phase::Draw {
-            break;
-        }
-        next_phase(&mut e);
-        drain(&mut e);
-    }
-    assert_eq!(e.turn().current, 0);
+    // A2 H28：推进到 0 号下一回合开始（原锚「任一阶段开始」改为 TurnBegin）
+    advance_to_turn_begin(&mut e, 0);
     let hp1 = e.debug_hp(1);
-    next_phase(&mut e); // Draw → Play begin（PhaseBegin 触发集控）
     assert!(
         answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),
         "集控确认窗"
@@ -126,7 +136,8 @@ fn jikong_phase_face_virtual_thunder_sha_once_per_turn() {
     );
     drain(&mut e);
     assert_eq!(e.debug_hp(1), hp1 - 1, "虚拟雷杀 1 点雷伤");
-    // 每回合限一次：本回合内再次阶段开始不再开窗
+    // 每回合限一次：本回合内阶段推进不再开窗
+    next_phase(&mut e);
     let c = e.open_choice().cloned();
     assert!(
         c.as_ref().map(|c| c.spec.prompt != "trigger_confirm").unwrap_or(true),
@@ -172,7 +183,10 @@ fn jikong_lose_face_requires_empty_hand() {
     assert_eq!(e.debug_hp(1), hp1 - 1, "失去手牌面虚拟雷杀命中");
 }
 
-/// 集控（对照）：取消目标窗 → 不消耗每回合次数（随后阶段开始仍可发动）。
+/// 集控（对照，A2 H28）：取消目标窗 → 不消耗每回合次数（usable:1 的
+/// 消费点在选定目标步——取消后 once_used 仍 false；完成后置 true）。
+/// 原用例的「同回合下一阶段开始」二次窗随 TurnBegin 锚消失（每回合唯
+/// 一回合开始点已过），改以实例状态断言消费点。
 #[test]
 fn jikong_cancel_refunds_use() {
     let mut e = swd_engine(103003);
@@ -180,14 +194,16 @@ fn jikong_cancel_refunds_use() {
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    for _ in 0..10 {
-        if e.turn().current == 0 && e.turn().phase == Phase::Draw {
-            break;
-        }
-        next_phase(&mut e);
-        drain(&mut e);
-    }
-    next_phase(&mut e);
+    let jdef = e.catalog().skill_by_name("jikong").expect("jikong");
+    let once_used = |e: &Engine| {
+        e.state_core()
+            .skills
+            .get(&(0, jdef))
+            .map(|i| i.once_used)
+            .expect("实例在")
+    };
+    // A2 H28：回合开始面——0 号下一回合开始开窗后取消目标
+    advance_to_turn_begin(&mut e, 0);
     assert!(
         answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),
         "首次确认窗"
@@ -197,17 +213,19 @@ fn jikong_cancel_refunds_use() {
         "取消目标窗"
     );
     drain(&mut e);
-    // 取消后同回合内下一个阶段开始仍可开窗（未消耗次数）
-    next_phase(&mut e);
+    assert!(!once_used(&e), "取消不消费 usable:1（once_used 仍 false）");
+    // 对照：完整发动（确认+选目标）→ 消费置位
+    advance_to_turn_begin(&mut e, 0);
     assert!(
         answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),
-        "取消后仍可发动"
+        "下回合确认窗（未因上次取消被封锁）"
     );
     assert!(
         answer(&mut e, "jikong_target", vec![ChoiceOption::Player(1)]),
         "目标窗"
     );
     drain(&mut e);
+    assert!(once_used(&e), "选定目标后消费 usable:1（once_used 置位）");
 }
 
 /// 集控（对照）：未持技者阶段开始不开窗。

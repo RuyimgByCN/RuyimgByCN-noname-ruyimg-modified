@@ -1,14 +1,15 @@
 use super::*;
 
-/// 乱常（Boss 梼杌，规则 v218）：准备阶段（判定阶段开始锚点）视为使
-/// 用【南蛮入侵】（虚拟牌，目标=全部其他存活角色）；结束阶段视为用
-/// 【万箭齐发】（kernel Phase::End 臂查询式）。触发计划层过滤 disabled，
+/// 乱常（Boss 梼杌，规则 v218；A2 S13）：自己准备阶段开始（上游子技
+/// player phaseZhunbeiBegin；原锚判定阶段开始）视为使用【南蛮入侵】
+/// （虚拟牌，目标=全部其他存活角色）；结束阶段视为用【万箭齐发】
+/// （kernel Phase::End 臂查询式）。触发计划层过滤 disabled，
 /// 激活门控=SkillInstance.enabled 翻转。
 pub(in super::super) struct LuanChangBehavior;
 
 impl SkillBehavior for LuanChangBehavior {
     fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true } if *player == owner)
+        matches!(event, EventData::Phase { player, phase: Phase::Prepare, begin: true } if *player == owner)
     }
 
     fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {

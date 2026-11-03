@@ -75,8 +75,10 @@ fn shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_n
     let error = content_native_loader::bridge_vm_skill_decls(&new)
         .unwrap_err()
         .to_string();
+    // A2 D02（R05 准备阶段真实化）：`phase_prepare` 已可装（Phase::Prepare
+    // 门），完整包的拒装锚改为首个仍未映射的 `game_started`。
     assert!(
-        error.contains("phase_prepare"),
+        error.contains("game_started"),
         "the complete package remains explicitly unsupported: {error}"
     );
 }

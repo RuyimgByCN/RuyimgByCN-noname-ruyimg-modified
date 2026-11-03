@@ -1,14 +1,15 @@
 use super::*;
 
-// 神智（甘夫人，P2/N08 标准缺失将第二批 2026-10-07）：准备阶段可弃置
-// 全部手牌，若数量不少于体力值则回复 1 点体力（登记差异：原生无准备
-// 阶段，以判定阶段开始为回合开始锚点——先于一切阶段结算）。
+// 神智（甘夫人，P2/N08 标准缺失将第二批 2026-10-07；A2 S09）：自己
+// 准备阶段开始（上游 player phaseZhunbeiBegin；原差异锚＝判定阶段开
+// 始，R05 后准备阶段真实存在、过滤收紧 Phase::Prepare）可弃置全部手
+// 牌，若数量不少于体力值则回复 1 点体力。
 #[derive(Clone)]
 pub(in super::super) struct ShenZhiBehavior;
 
 impl SkillBehavior for ShenZhiBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+        matches!(event, EventData::Phase { player, phase: Phase::Prepare, begin: true }
             if *player == owner && !ctx.state.player(owner).hand.is_empty())
     }
 

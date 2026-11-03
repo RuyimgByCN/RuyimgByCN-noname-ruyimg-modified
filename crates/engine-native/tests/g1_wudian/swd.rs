@@ -196,8 +196,10 @@ fn swd_mujiaren_discard_nonbasic_discover_jiguan() {
     );
 }
 
-/// 勾魂锣（机关牌第三切片）：挂 3 轮倒计时（来源回合开始逐阶段-1）
-/// →归 0 失去 1 体力+弃全部手牌+清挂附；重复挂同目标拒。
+/// 勾魂锣（机关牌第三切片）：挂 3 轮倒计时（**来源回合开始**逐回合-1；
+/// A2 H44：上游 global phaseBegin 定向来源 player＝TurnBegin 窗，原锚
+/// 任意阶段开始会在挂出当回合就多扣）→归 0 失去 1 体力+弃全部手牌+清挂
+/// 附；重复挂同目标拒。
 #[test]
 fn swd_gouhunluo_countdown_lose_hp_discard() {
     let root = repo_extensions_root();
@@ -302,19 +304,34 @@ fn swd_gouhunluo_countdown_lose_hp_discard() {
     );
     e.state_core();
 
-    // 倒计时导航：循环推进（当前玩家 NP+排空询问）直到挂附者计数归 0
-    for _ in 0..60 {
+    // 倒计时导航（A2 H44）：来源 0 号回合开始逐回合 -1，归 0 需跨约三轮
+    // ——循环推进（当前玩家 NP+排空询问；三轮内角色摸牌累积会触发强制
+    // discard_to_limit，Pass 不被接受，按 min 取首项应答）直到挂附者计
+    // 数归 0。
+    for _ in 0..120 {
         if e.state_core().player(1).gouhunluo_rounds == 0 {
             break;
         }
         while let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
+            let selection = if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec
+                    .options
+                    .iter()
+                    .take(c.spec.min.max(1))
+                    .copied()
+                    .collect()
+            };
             submit(
                 &mut e,
                 obs,
                 GameAction::Answer {
                     choice_id: cid,
-                    selection: vec![ChoiceOption::Pass],
+                    selection,
                 },
             );
         }

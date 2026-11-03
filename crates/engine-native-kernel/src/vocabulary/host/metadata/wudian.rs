@@ -55,8 +55,10 @@ impl HostBehavior {
             HostBehavior::WudianKangyin => None,
             HostBehavior::WudianChezhen => None,
             HostBehavior::WudianJuedao => None,
+            // 割据（A2 H45）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）
             HostBehavior::WudianGeju => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

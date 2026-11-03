@@ -74,47 +74,57 @@ fn swd_deferred_jinlin_limited_hujia_and_phase_ticks() {
         "锦鳞反例：已发动不可再发动 {out:?}"
     );
 
-    // 0 号阶段开始递减；他人阶段不递减
-    drain_choices(&mut e);
-    let _ = submit(&mut e, 0, GameAction::NextPhase);
-    drain_choices(&mut e);
-    assert_eq!(e.state_core().player(0).hujia, 2, "阶段开始 -1 护甲");
-    assert_eq!(rounds(&e, 0), Some(2), "阶段开始 -1 计数");
-    assert_eq!(e.state_core().player(1).hujia, 3, "他人阶段不递减");
-
-    // 1 号自己的阶段开始才递减
-    e.debug_set_turn(1, Phase::Judge, e.turn().round);
-    drain_choices(&mut e);
-    let _ = submit(&mut e, 1, GameAction::NextPhase);
-    for _ in 0..6 {
-        let Some(c) = e.open_choice() else { break };
-        let (cid, obs) = (c.id, c.observer);
-        let _ = submit(
-            &mut e,
-            obs,
-            GameAction::Answer {
-                choice_id: cid,
-                selection: vec![ChoiceOption::Pass],
-            },
-        );
+    // A2 H30：锦鳞·退上游 player phaseBegin＝持有者**回合开始**（每回合
+    // 一次；原锚任意自己阶段开始＝每回合 5→6 次）——阶段推进不再递减，
+    // 须经真实回合交接（debug_set_turn 不发 TurnBegin，改自然导航）。
+    // 前进到 seat 下一回合开始（引擎停在 Judge 帧；TurnBegin 窗已派发）。
+    fn advance_to_next_turn_of(e: &mut Engine, seat: u8) {
+        // 先离开 seat 当前回合
+        while e.turn().current == seat {
+            drain_choices(e);
+            let actor = e.turn().current;
+            let _ = submit(e, actor, GameAction::NextPhase);
+        }
+        for _ in 0..40 {
+            drain_choices(e);
+            if e.turn().current == seat && e.turn().phase == Phase::Judge {
+                return;
+            }
+            let actor = e.turn().current;
+            let _ = submit(e, actor, GameAction::NextPhase);
+        }
+        panic!("40 步内未到达 {seat} 号下一回合开始");
     }
-    drain_choices(&mut e);
-    assert_eq!(e.state_core().player(1).hujia, 2, "1 号阶段开始 -1");
-    assert_eq!(rounds(&e, 1), Some(2));
 
-    // 0 号两次阶段开始 → 计数与护甲同时归零、实例移除
-    e.debug_set_turn(0, Phase::Judge, e.turn().round);
+    // 同回合阶段推进不递减；他人回合开始不递减
     drain_choices(&mut e);
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // → Draw
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
+    drain_choices(&mut e);
+    assert_eq!(e.state_core().player(0).hujia, 3, "同回合阶段不再递减（A2 H30）");
+    assert_eq!(rounds(&e, 0), Some(3), "计数不变");
+
+    // 1 号自己的回合开始才递减
+    advance_to_next_turn_of(&mut e, 1);
+    drain_choices(&mut e);
+    assert_eq!(e.state_core().player(1).hujia, 2, "1 号回合开始 -1");
+    assert_eq!(rounds(&e, 1), Some(2));
+    assert_eq!(e.state_core().player(0).hujia, 3, "他人回合不递减");
+
+    // 0 号每回合开始 -1，三次归零：计数与护甲同时归零、实例移除
+    advance_to_next_turn_of(&mut e, 0);
+    drain_choices(&mut e);
+    assert_eq!(e.state_core().player(0).hujia, 2);
+    assert_eq!(rounds(&e, 0), Some(2));
+    advance_to_next_turn_of(&mut e, 0);
     drain_choices(&mut e);
     assert_eq!(e.state_core().player(0).hujia, 1);
     assert_eq!(rounds(&e, 0), Some(1));
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // → Play
+    advance_to_next_turn_of(&mut e, 0);
     drain_choices(&mut e);
     assert_eq!(e.state_core().player(0).hujia, 0, "护甲归零");
     assert_eq!(rounds(&e, 0), None, "计数归零移除实例");
     // 反例：移除后继续推进不再递减（护甲不下溢）
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // → Discard
+    advance_to_next_turn_of(&mut e, 0);
     drain_choices(&mut e);
     assert_eq!(e.state_core().player(0).hujia, 0, "移除后不再递减");
 }

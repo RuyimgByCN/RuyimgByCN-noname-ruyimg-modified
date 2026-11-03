@@ -410,8 +410,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 千方（A2 H49）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）
             HostBehavior::XianjianQianfang => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

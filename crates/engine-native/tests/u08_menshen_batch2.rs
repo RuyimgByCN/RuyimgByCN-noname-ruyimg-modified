@@ -178,8 +178,10 @@ fn menshen3_clears_marker() {
         );
         core.vm_aux.marks.insert((1, u32::from(def)), 0);
     }
-    // 推进若干阶段（任意阶段开始触发清除）
-    for _ in 0..6 {
+    // A2 H06：上游 player phaseBegin＝持有者自己回合开始——推进到 0 号
+    // 下一回合开始（约三轮）触发清除；中途他人回合/阶段不再清（原任意
+    // 阶段开始当回合即清）。
+    for _ in 0..48 {
         next_phase(&mut e);
         drain(&mut e);
         if !e.state_core().skills.contains_key(&(1, def)) {

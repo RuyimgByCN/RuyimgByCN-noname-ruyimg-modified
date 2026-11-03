@@ -266,7 +266,9 @@ fn upstream_xiuluo_filter_difference_is_registered() {
     );
 }
 
-/// 上游点 1（**登记差异**）：触发时机——上游 `phaseZhunbeiBegin`，原生并入**判定阶段起点**。
+/// 上游点 1（**差异已消除，A2 H09**）：触发时机——上游
+/// `phaseZhunbeiBegin`＝准备阶段开始；R05 准备阶段真实化后原生锚同步
+/// 收紧 `Phase::Prepare`（原登记差异：并入判定阶段起点）。
 #[test]
 fn upstream_xiuluo_timing_is_folded_into_judge_begin() {
     let src = std::fs::read_to_string(concat!(
@@ -277,10 +279,10 @@ fn upstream_xiuluo_timing_is_folded_into_judge_begin() {
     let idx = src.find("HostBehavior::Xiuluo =>").expect("修罗过滤分支");
     let seg: String = src[idx..].chars().take(600).collect();
     assert!(
-        seg.contains("Phase::Judge") && seg.contains("begin: true"),
-        "原生修罗挂在判定阶段起点（上游为准备阶段开始）——差异已登记：{seg}"
+        seg.contains("Phase::Prepare") && seg.contains("begin: true"),
+        "原生修罗挂在准备阶段开始（与上游 phaseZhunbeiBegin 一致，A2 H09）：{seg}"
     );
-    // 行为面：判定阶段开始时确实进入询问（同花色场景见上一个用例）
+    // 行为面：准备阶段开始时确实进入询问（同花色场景见上一个用例）
     let mut e = swd_engine(20262903);
     e.debug_grant(0, "swd_xiuluo");
     advance_to_judge_of(&mut e, 0);
@@ -290,10 +292,10 @@ fn upstream_xiuluo_timing_is_folded_into_judge_begin() {
     let hand = e.debug_place(0, "sha");
     e.debug_give_hand_card(0, 0, hand);
     let _judge = e.debug_place_judge(0, "le");
-    // 触发一次以确认时机可用（再次推进到判定阶段会重新触发）
+    // 触发一次以确认时机可用（再次推进到下回合准备阶段会重新触发）
     let triggered = e.open_choice().cloned().map(|c| c.spec.prompt);
     assert!(
         triggered.is_none() || triggered.as_deref() == Some("xiuluo_hand"),
-        "判定阶段起点应可触发修罗：{triggered:?}"
+        "准备阶段起点应可触发修罗：{triggered:?}"
     );
 }

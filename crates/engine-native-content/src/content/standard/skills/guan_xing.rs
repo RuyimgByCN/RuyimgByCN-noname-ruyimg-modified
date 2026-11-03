@@ -1,6 +1,7 @@
 use super::*;
 
-// 观星（诸葛亮）：回合开始（判定阶段占位）时，可观看牌库顶 X 张
+// 观星（诸葛亮；A2 S03）：自己准备阶段开始（上游 player
+// phaseZhunbeiBegin；原锚判定阶段开始）时，可观看牌库顶 X 张
 // （X = 存活角色数且至多 5）：所选牌按应答顺序置于牌库顶（先选先摸），
 // 未选牌按原序置于牌库底。
 #[derive(Clone)]
@@ -10,7 +11,7 @@ impl SkillBehavior for GuanXingBehavior {
     fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         matches!(event, EventData::Phase {
             player,
-            phase: Phase::Judge,
+            phase: Phase::Prepare,
             begin: true,
         } if *player == owner)
     }

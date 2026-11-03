@@ -94,7 +94,8 @@ fn upstream_luoshen_black_gains_and_red_stops() {
     );
 }
 
-/// 上游点 1（时机锚点）+ **登记差异①**：原生锚在**判定阶段**（无准备阶段）。
+/// 上游点 1（时机锚点）+ **差异①（A2 S05 已消除）**：R05 准备阶段真实
+/// 化后锚点对齐上游 phaseZhunbeiBegin（原差异：无准备阶段、锚判定阶段）。
 #[test]
 fn upstream_luoshen_timing_anchor_difference_is_fixed() {
     let src = std::fs::read_to_string(concat!(
@@ -104,8 +105,8 @@ fn upstream_luoshen_timing_anchor_difference_is_fixed() {
     .expect("读洛神源码");
     let seg: String = src.chars().take(700).collect();
     assert!(
-        seg.contains("phase: Phase::Judge"),
-        "差异①固定：原生锚点在判定阶段（上游为准备阶段）：{seg}"
+        seg.contains("A2 S05") && src.contains("phase: Phase::Prepare"),
+        "差异①消除（A2 S05）：原生锚点在准备阶段开始（与上游一致）：{seg}"
     );
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))

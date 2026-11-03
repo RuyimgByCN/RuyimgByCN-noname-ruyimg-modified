@@ -156,6 +156,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: GUAN_XING,
+            // A2 S03：上游 player phaseZhunbeiBegin——过滤在 skills/
+            // guan_xing.rs 收紧 Phase::Prepare（原锚判定阶段开始）。
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -385,6 +387,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: LUO_SHEN,
+            // A2 S05：上游 player phaseZhunbeiBegin——过滤在 skills/
+            // luo_shen.rs 收紧 Phase::Prepare（原锚判定阶段开始）。
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -542,6 +546,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: SHEN_ZHI,
+            // A2 S09：上游 player phaseZhunbeiBegin——过滤在 skills/
+            // shen_zhi.rs 收紧 Phase::Prepare（原锚判定阶段开始）。
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
@@ -610,6 +616,9 @@ pub(super) fn skills() -> Vec<SkillDef> {
         },
         SkillDef {
             name: WANG_ZUN,
+            // A2 S11：上游 global phaseZhunbeiBegin＝他人回合——过滤在
+            // skills/wang_zun.rs 收紧 Phase::Prepare＋player≠owner（原锚
+            // 他人判定阶段开始）。
             trigger: Some(TriggerMeta {
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,

@@ -110,9 +110,11 @@ fn upstream_guanxing_differences_are_fixed() {
     ))
     .expect("读观星源码");
     let head: String = src.chars().take(900).collect();
+    // A2 S03：锚点对齐上游 phaseZhunbeiBegin——R05 准备阶段真实化后，
+    // 原「判定阶段占位」差异已消除（过滤收紧 Phase::Prepare）。
     assert!(
-        head.contains("判定阶段占位") && src.contains("phase: Phase::Judge"),
-        "差异①固定：原生锚在判定阶段（占位）：{head}"
+        head.contains("A2 S03") && src.contains("phase: Phase::Prepare"),
+        "差异①消除（A2 S03）：原生锚在准备阶段开始（与上游一致）：{head}"
     );
     assert!(
         !src.contains("yizhi") && !src.contains("遗志"),

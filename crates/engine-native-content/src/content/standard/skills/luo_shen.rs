@@ -1,6 +1,7 @@
 use super::*;
 
-// 洛神（甄姬）：判定阶段开始时可进行判定——黑色则获得此判定牌并再次判定
+// 洛神（甄姬；A2 S05）：自己准备阶段开始（上游 player phaseZhunbeiBegin；
+// 原锚判定阶段开始）时可进行判定——黑色则获得此判定牌并再次判定
 // （循环至翻出红色；简化契约：整链一次确认，不分次放弃）。
 #[derive(Clone)]
 pub(in super::super) struct LuoShenBehavior;
@@ -9,7 +10,7 @@ impl SkillBehavior for LuoShenBehavior {
     fn filter(&self, _ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         matches!(event, EventData::Phase {
             player,
-            phase: Phase::Judge,
+            phase: Phase::Prepare,
             begin: true,
         } if *player == owner)
     }

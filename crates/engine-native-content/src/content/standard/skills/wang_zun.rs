@@ -1,7 +1,8 @@
 use super::*;
 
-// 妄尊（袁术，P2/N08 标准缺失将收尾批 2026-10-07）：锁定技——其他
-// 角色的回合开始（判定阶段开始锚点）时，若其体力值大于你，你摸一张；
+// 妄尊（袁术，P2/N08 标准缺失将收尾批 2026-10-07；A2 S11）：锁定技——
+// 其他角色的准备阶段开始（上游 global phaseZhunbeiBegin＝他人回合；
+// 原锚判定阶段开始）时，若其体力值大于你，你摸一张；
 // 该角色为主公时再摸一张并给其「妄尊印」（手牌上限 -1 到其回合结束）。
 // 主公资格沿激将 ADR 0776 惯例（原型模式视为真）。
 #[derive(Clone)]
@@ -9,7 +10,7 @@ pub(in super::super) struct WangZunBehavior;
 
 impl SkillBehavior for WangZunBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
-        matches!(event, EventData::Phase { player, phase: Phase::Judge, begin: true }
+        matches!(event, EventData::Phase { player, phase: Phase::Prepare, begin: true }
             if *player != owner
                 && ctx.state.player(*player).alive
                 && ctx.state.player(owner).alive

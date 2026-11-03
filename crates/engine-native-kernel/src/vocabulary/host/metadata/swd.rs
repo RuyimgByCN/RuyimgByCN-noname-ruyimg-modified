@@ -13,9 +13,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: vec![EventKind::CardResponded],
             }),
-            // 魂身·收束：自己准备阶段开始
+            // 魂身·收束（A2 H25）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）
             HostBehavior::SwdHyunshen2 => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -31,9 +32,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 待行·清甲：自己准备阶段开始（silent）
+            // 待行·清甲（A2 H26）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始）（silent）
             HostBehavior::SwdDaixing2 => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -120,9 +122,10 @@ impl HostBehavior {
             }),
             // 林韵：出牌阶段主动（activate 分支；无触发时机）
             HostBehavior::SwdLinyun => None,
-            // 集控：自己阶段开始 或 自己失去手牌（可用：每回合一次）
+            // 集控（A2 H28）：上游 player phaseBegin＝自己回合开始 或
+            // 自己失去手牌（可用：每回合一次；原锚任意自己阶段开始）
             HostBehavior::SwdJikong => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -177,9 +180,10 @@ impl HostBehavior {
             }),
             // 灵武：无触发时机（效果内联于阶段收束）
             HostBehavior::SwdLingwu => None,
-            // 锦鳞·退：持有者阶段开始（silent）
+            // 锦鳞·退（A2 H30）：上游 player phaseBegin＝持有者回合开始
+            //（原锚任意自己阶段开始＝每回合 5→6 次）（silent）
             HostBehavior::SwdJinlin2 => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -373,9 +377,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 青龙之圭/黄麟之琮：准备阶段（Judge 帧入场 forced）
+            // 青龙之圭/黄麟之琮（A2 H32/H33）：上游 player phaseBegin＝
+            // 自己回合开始（原锚自己判定阶段开始）forced
             HostBehavior::SwdQinglongzhiguiHeld => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -383,7 +388,7 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::SwdHuanglinzhicongHeld => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -487,9 +492,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 壶境：准备阶段（Judge 帧入场 forced；上游 phaseBegin 锁定）
+            // 壶境（A2 H35）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）forced
             HostBehavior::SwdHujing => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -837,9 +843,10 @@ impl HostBehavior {
             }),
             // 枕流·临月面：出牌主动技（usable:1 走 limits）
             HostBehavior::SwdZhenjiu => None,
-            // 枕流触发面：自己准备阶段开始（off_court 红牌入手+回 1）
+            // 枕流触发面（A2 H39）：上游 player phaseBegin＝自己回合开始
+            //（原锚自己判定阶段开始；off_court 红牌入手+回 1）
             HostBehavior::SwdZhenjiu2 => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -883,9 +890,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 幻形：自己准备阶段开始（direct 非 optional）
+            // 幻形（A2 H40）：上游 player phaseBegin＝自己回合开始（原锚
+            // 自己判定阶段开始）direct 非 optional
             HostBehavior::SwdHuanxing => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -988,14 +996,15 @@ impl HostBehavior {
             HostBehavior::SwdAojian => None,
             // 化金：出牌主动技（ActivateSkill 通道，usable:1 走 limits）
             HostBehavior::SwdHuajin => None,
-            // 化金触发面：伤害前置 +1；准备阶段开始自清（extra PhaseBegin）
+            // 化金触发面（A2 H41）：伤害前置 +1；自己回合开始自清
+            //（extra PhaseBegin→TurnBegin；原锚自己判定阶段开始）
             HostBehavior::SwdHuajin2 => Some(TriggerMeta {
                 event: EventKind::DamageBefore,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: vec![EventKind::PhaseBegin],
+                extra_events: vec![EventKind::TurnBegin],
             }),
             // 明镜：自己受到伤害前置（无防具 + 1/3）
             HostBehavior::SwdMinjing => Some(TriggerMeta {
@@ -1102,10 +1111,11 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 机关凤封印：拥有者下一阶段开始解除（上游 addTempSkill
-            // {player:'phaseBegin'} 同口径）
+            // 机关凤封印（A2 H43）：拥有者下一回合开始解除（上游
+            // addTempSkill {player:'phaseBegin'}＝回合开始；原锚任意自己
+            // 阶段开始）
             HostBehavior::SwdFengyinState => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -1158,9 +1168,10 @@ impl HostBehavior {
             HostBehavior::SwdZhiluxiaohuCard => None,
             HostBehavior::SwdMujiarenCard => None,
             HostBehavior::SwdGouhunluoCard => None,
-            // 勾魂锣·倒计时：来源回合开始（global phaseBegin 由 filter 定向）
+            // 勾魂锣·倒计时（A2 H44）：来源回合开始（global phaseBegin＝
+            // 仅来源 player 的回合；原锚任意阶段开始）
             HostBehavior::SwdGouhunluoSub => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
