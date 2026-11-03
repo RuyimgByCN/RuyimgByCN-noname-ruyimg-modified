@@ -921,6 +921,82 @@ pub(super) fn reset_new_turn_state(ctx: &mut Ctx<'_>, player: PlayerId) {
             }
         }
     }
+    // K02/K03/K04：三个「至 phaseBegin」到期解除（先于回合开始窗）。
+    if ctx.core.player(player).qianggu_active {
+        ctx.core.player_mut(player).qianggu_active = false;
+    }
+    if ctx.core.player(player).yinshen_active {
+        ctx.core.player_mut(player).yinshen_active = false;
+    }
+    if ctx.core.player(player).chaofeng_active {
+        ctx.core.player_mut(player).chaofeng_active = false;
+    }
+    // K09：屏障标志转计数（上游 pingzhang_count phaseBegin silent）。
+    {
+        let used = u8::from(ctx.core.player(player).pingzhang_self_used)
+            + u8::from(ctx.core.player(player).pingzhang_other_used);
+        let p = ctx.core.player_mut(player);
+        p.pingzhang_count = used;
+        p.pingzhang_self_used = false;
+        p.pingzhang_other_used = false;
+    }
+    // K30：形态轮换（Boss 年兽系，规则 v249）——上游 phaseBefore 换将，
+    // 须先于 TurnBegin 使新形态的回合开始技生效。
+        // 形态轮换（Boss 年兽系，规则 v249）：回合开始——
+        // 交替旗标首次置位不换将（初始形态即条目形态），此后
+        // 每回合轮换至另一「形态轮换」携带将（assembly 重挂+
+        // hp 保留——versus 替补换将先例同构；随机序列→确定性
+        // 互斥轮转登记）
+        if let Some(nbdef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_NBIANSHEN)
+        {
+            if ctx.core.has_skill(player, nbdef) {
+                let armed = ctx.core.player(player).nbianshen_toggle;
+                if armed {
+                    // 启动后每回合轮换（上游 storage 存在后每
+                    // 次 phaseBefore 均换同口径）
+                    // 轮换：找另一携带「形态轮换」的 BOSS 段将
+                    let base = (ctx.catalog.general_count()
+                        - crate::vocabulary::generals::BOSS_GENERALS.len())
+                        as u16;
+                    let cur = ctx.core.player(player).general_slots[0];
+                    let other = (base..ctx.catalog.general_count() as u16).find(|&d| {
+                        Some(d) != cur
+                            && ctx
+                                .catalog
+                                .general_meta(d)
+                                .map(|m| m.2.contains(&crate::vocabulary::names::BOSS_NBIANSHEN))
+                                .unwrap_or(false)
+                    });
+                    if let (Some(other), Some(cur)) = (other, cur) {
+                        let _ = cur;
+                        // 技能实例清空+重挂（区域保留）
+                        let removed: Vec<crate::ids::SkillDefId> = ctx
+                            .core
+                            .skills
+                            .keys()
+                            .filter(|(o, _)| *o == player)
+                            .map(|(_, d)| *d)
+                            .collect();
+                        for d in removed {
+                            ctx.core.skills.remove(&(player, d));
+                        }
+                        ctx.core.player_mut(player).general_slots[0] = Some(other);
+                        crate::state::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
+                        // hp/手牌/装备/判定区保留（上游 init 保
+                        // 留 hp/maxHp/hujia 同口径）
+                        ctx.log(LogEvent::SkillToggled {
+                            player,
+                            skill: "形态轮换",
+                            enabled: true,
+                        });
+                    }
+                }
+                ctx.core.player_mut(player).nbianshen_toggle = true;
+            }
+        }
+
 }
 
 /// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有

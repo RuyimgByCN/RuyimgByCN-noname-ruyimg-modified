@@ -17,19 +17,14 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 上游 phaseBefore 检测时点）；本函数不再承担翻面检测。
     // 强固解除（U05 ow 奥丽莎，规则 v136）：自己回合判定阶段开始——
     // 上游 addTempSkill("qianggu2") 至 phaseBegin 同口径
-    if begin && phase == Phase::Judge && ctx.core.player(player).qianggu_active {
-        ctx.core.player_mut(player).qianggu_active = false;
-    }
+    // 强固解除（K02）：已迁 reset_new_turn_state（TurnBegin 前）。
     // 潜行解除（U05 ow 黑影，规则 v139）：自己回合判定阶段开始——上游
     // tempHide 至 phaseBeginStart 同口径
-    if begin && phase == Phase::Judge && ctx.core.player(player).yinshen_active {
-        ctx.core.player_mut(player).yinshen_active = false;
-    }
+    // 潜行解除（K03）：已迁 reset_new_turn_state（上游 tempHide 至
+    // phaseBeginStart，先于 phaseBegin）。
     // 嘲讽解除（U05 swd 灵剑圣休号角，规则 v198）：自己回合判定阶段开始
     // ——上游 addTempSkill {player:'phaseBegin'} 同口径
-    if begin && phase == Phase::Judge && ctx.core.player(player).chaofeng_active {
-        ctx.core.player_mut(player).chaofeng_active = false;
-    }
+    // 嘲讽解除（K04）：已迁 reset_new_turn_state（上游 {player:'phaseBegin'}）。
     // 星体改造重置（U05 swd 灵剑，规则 v198）：自己回合判定阶段开始——
     // 上游 phaseEnd 移除+清零在「其下一结束阶段」生效；原生以本回合开始
     // 重置近似（差一夜，登记差异：重置时点=下一回合开始而非上一结束）
@@ -64,14 +59,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 屏障标志转计数（U05 ow 查莉娅，规则 v138）：自己回合判定阶段开
     // 始——上回合两标志各计一次并清除（上游 pingzhang_count phaseBegin
     // silent 同口径；应用技在随后摸牌阶段读计数）
-    if begin && phase == Phase::Judge {
-        let used = u8::from(ctx.core.player(player).pingzhang_self_used)
-            + u8::from(ctx.core.player(player).pingzhang_other_used);
-        let p = ctx.core.player_mut(player);
-        p.pingzhang_count = used;
-        p.pingzhang_self_used = false;
-        p.pingzhang_other_used = false;
-    }
+    // 屏障转计数（K09）：已迁 reset_new_turn_state（phaseBegin silent）。
     if begin && phase == Phase::Play && ctx.core.turn.skip_play_phase {
         ctx.core.turn.skip_play_phase = false;
         ctx.record_phase_skipped(player);

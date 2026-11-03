@@ -122,60 +122,6 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝
                 }
             }
         }
-        // 形态轮换（Boss 年兽系，规则 v249）：回合开始——
-        // 交替旗标首次置位不换将（初始形态即条目形态），此后
-        // 每回合轮换至另一「形态轮换」携带将（assembly 重挂+
-        // hp 保留——versus 替补换将先例同构；随机序列→确定性
-        // 互斥轮转登记）
-        if let Some(nbdef) = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::names::BOSS_NBIANSHEN)
-        {
-            if ctx.core.has_skill(player, nbdef) {
-                let armed = ctx.core.player(player).nbianshen_toggle;
-                if armed {
-                    // 启动后每回合轮换（上游 storage 存在后每
-                    // 次 phaseBefore 均换同口径）
-                    // 轮换：找另一携带「形态轮换」的 BOSS 段将
-                    let base = (ctx.catalog.general_count()
-                        - crate::vocabulary::generals::BOSS_GENERALS.len())
-                        as u16;
-                    let cur = ctx.core.player(player).general_slots[0];
-                    let other = (base..ctx.catalog.general_count() as u16).find(|&d| {
-                        Some(d) != cur
-                            && ctx
-                                .catalog
-                                .general_meta(d)
-                                .map(|m| m.2.contains(&crate::vocabulary::names::BOSS_NBIANSHEN))
-                                .unwrap_or(false)
-                    });
-                    if let (Some(other), Some(cur)) = (other, cur) {
-                        let _ = cur;
-                        // 技能实例清空+重挂（区域保留）
-                        let removed: Vec<crate::ids::SkillDefId> = ctx
-                            .core
-                            .skills
-                            .keys()
-                            .filter(|(o, _)| *o == player)
-                            .map(|(_, d)| *d)
-                            .collect();
-                        for d in removed {
-                            ctx.core.skills.remove(&(player, d));
-                        }
-                        ctx.core.player_mut(player).general_slots[0] = Some(other);
-                        crate::state::apply_general_assembly(ctx.core, ctx.catalog, player, 0);
-                        // hp/手牌/装备/判定区保留（上游 init 保
-                        // 留 hp/maxHp/hujia 同口径）
-                        ctx.log(LogEvent::SkillToggled {
-                            player,
-                            skill: "形态轮换",
-                            enabled: true,
-                        });
-                    }
-                }
-                ctx.core.player_mut(player).nbianshen_toggle = true;
-            }
-        }
         // 自润（Boss 玄冥，规则 v247）：准备阶段——全体角色
         // 按座位序各摸牌：有装备者摸 2、无装备者摸 1（上游
         // boss_zirun phaseZhunbeiBegin asyncDraw 同口径）
