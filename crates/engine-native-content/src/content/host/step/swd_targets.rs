@@ -109,7 +109,7 @@ impl HostMachine {
                     if ctx.core.player(t).alive {
                         let x = self.card.take().unwrap_or(0);
                         if x > 0 {
-                            ctx.draw_cards(t, x as usize);
+                            ctx.start_draw(t, x);
                         }
                     }
                     Flow::Done
@@ -509,7 +509,7 @@ impl HostMachine {
                 HostStage::SelectCard => {
                     let n = ctx.core.turn.guxing_count;
                     if n > 0 {
-                        ctx.draw_cards(self.owner, n as usize);
+                        ctx.start_draw(self.owner, n as u32);
                     }
                     ctx.core.turn.guxing_count = 0;
                     ctx.core.turn.guxing_armed = false;

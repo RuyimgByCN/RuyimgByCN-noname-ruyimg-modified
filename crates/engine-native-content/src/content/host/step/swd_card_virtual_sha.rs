@@ -185,7 +185,7 @@ impl HostMachine {
                     };
                     if ctx.core.player(t).alive && !ctx.core.deck.is_empty() {
                         ctx.use_virtual_card(self.owner, CardKind::Sha, vec![t]);
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     Flow::Done
                 }

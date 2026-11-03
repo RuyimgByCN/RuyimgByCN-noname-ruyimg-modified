@@ -27,7 +27,7 @@ impl HostMachine {
                     if choice == 0 {
                         ctx.recover(self.owner, 1, None);
                     } else {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "狂骨",
@@ -114,7 +114,7 @@ impl HostMachine {
                     owner: self.owner,
                 });
                 ctx.recover(self.owner, 2, None);
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 Flow::Done
             }
             // 脉轮：选 1..8 效果 → 立即结算（1/2）或置模式位（3..8）
@@ -295,7 +295,7 @@ impl HostMachine {
                 if p.hp < p.max_hp as i32 {
                     ctx.recover(self.owner, 1, None);
                 } else {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
                 Flow::Done
             }
@@ -325,7 +325,7 @@ impl HostMachine {
                     rec = true;
                 }
                 if is_min_hand {
-                    ctx.draw_cards(t, if rec { 1 } else { 2 });
+                    ctx.start_draw(t, if rec { 1 } else { 2 });
                 }
                 if let Some(c) = self.card {
                     ctx.to_discard(c);

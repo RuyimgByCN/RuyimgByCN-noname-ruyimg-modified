@@ -40,7 +40,7 @@ impl HostMachine {
                         Flow::Done
                     }
                     Some(ChoiceOption::Tag(0)) => {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                         Flow::Done
                     }
                     _ => Flow::Done,
@@ -158,7 +158,7 @@ impl HostMachine {
                         Flow::Done
                     }
                     Some(ChoiceOption::Tag(0)) => {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                         Flow::Done
                     }
                     _ => Flow::Done,
@@ -219,7 +219,7 @@ impl HostMachine {
                         }
                     } else {
                         for p in targets {
-                            ctx.draw_cards(p, eff);
+                            ctx.start_draw(p, eff as u32);
                         }
                     }
                     Flow::Done

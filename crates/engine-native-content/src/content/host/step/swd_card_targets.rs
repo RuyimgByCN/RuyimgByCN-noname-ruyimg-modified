@@ -191,7 +191,7 @@ impl HostMachine {
                             to: t,
                             cards: vec![c],
                         });
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     self.card = None;
                     Flow::Done
@@ -424,9 +424,9 @@ impl HostMachine {
                     };
                     ctx.discard_from_hand(t, c);
                     if same {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     } else {
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                     self.card = None;
                     Flow::Done

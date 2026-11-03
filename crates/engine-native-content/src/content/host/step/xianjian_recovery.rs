@@ -68,7 +68,7 @@ impl HostMachine {
                         cards: vec![c],
                     });
                     ctx.recover(self.owner, 1, None);
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -130,7 +130,7 @@ impl HostMachine {
                 HostStage::Act => {
                     ctx.current_damage_mut().prevented = true;
                     ctx.core.turn.txianqu_used = true;
-                    ctx.draw_cards(self.owner, 2);
+                    ctx.start_draw(self.owner, 2);
                     ctx.recover(self.owner, 1, None);
                     Flow::Done
                 }
@@ -361,7 +361,7 @@ impl HostMachine {
                 if let Some(t) = self.target {
                     if ctx.core.player(t).hp <= 0 {
                         ctx.recover(t, 1, None);
-                        ctx.draw_cards(t, n);
+                        ctx.start_draw(t, n as u32);
                     }
                 }
                 Flow::Done
@@ -474,7 +474,7 @@ impl HostMachine {
                     if ctx.core.player(t).alive {
                         ctx.recover(t, 1, None);
                         ctx.change_hujia(t, 1);
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                     Flow::Yield
                 }

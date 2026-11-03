@@ -226,7 +226,7 @@ impl HostMachine {
                     ctx.core.player_mut(self.owner).hand.push(target_card);
                     // 同色 → 摸 1
                     if own_card.is_some() && own_color == Some(t_color) {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     if let Some(c) = self.card {
                         ctx.to_discard(c);

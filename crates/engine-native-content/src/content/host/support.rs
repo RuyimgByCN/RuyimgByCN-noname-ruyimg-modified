@@ -365,7 +365,7 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
     ctx.core.player_mut(owner).linked = false;
     ctx.core.player_mut(owner).face_down = false;
     // 摸 3 + 回复至 3
-    ctx.draw_cards(owner, 3);
+    ctx.start_draw(owner, 3);
     let hp = ctx.core.player(owner).hp;
     if hp < 3 {
         ctx.recover(owner, (3 - hp) as u32, None);
@@ -708,7 +708,7 @@ impl HostMachine {
             if ctx.core.turn.shuchui_hit {
                 ctx.core.turn.shuchui_hit = false;
                 if ctx.core.player(self.owner).alive {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
             }
             self.cards.clear();

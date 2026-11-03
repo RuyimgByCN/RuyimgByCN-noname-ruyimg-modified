@@ -106,7 +106,7 @@ impl HostMachine {
             HostBehavior::SwdXingtigaizaoCard => {
                 let p = ctx.core.player_mut(self.owner);
                 p.xingtigaizao_count = p.xingtigaizao_count.saturating_add(1);
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);

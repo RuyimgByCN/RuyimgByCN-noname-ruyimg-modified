@@ -30,7 +30,7 @@ impl HostMachine {
             HostBehavior::XianjianHuimeng => match self.stage {
                 // 回梦（U05 xianjian 赵灵儿，规则 v144）：摸两张牌。
                 HostStage::Act => {
-                    ctx.draw_cards(self.owner, 2);
+                    ctx.start_draw(self.owner, 2);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -58,7 +58,7 @@ impl HostMachine {
                 HostStage::Act => {
                     if let Some(t) = self.target {
                         if ctx.core.player(t).alive {
-                            ctx.draw_cards(t, 1);
+                            ctx.start_draw(t, 1);
                         }
                     }
                     Flow::Done
@@ -75,7 +75,7 @@ impl HostMachine {
                         ctx.core.player_mut(self.owner).feng_count = c + 1;
                     } else {
                         ctx.core.player_mut(self.owner).feng_count = 0;
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     Flow::Done
                 }
@@ -122,7 +122,7 @@ impl HostMachine {
                     ctx.core.turn.xjyufeng_used = used + 1;
                     let hand = ctx.core.player(self.owner).hand.len();
                     if hand < 2 {
-                        ctx.draw_cards(self.owner, 2 - hand);
+                        ctx.start_draw(self.owner, (2 - hand) as u32);
                     }
                     Flow::Done
                 }
@@ -191,7 +191,7 @@ impl HostMachine {
                 HostStage::Act => {
                     ctx.core.player_mut(self.owner).jiangcheng_longhuo = true;
                     ctx.change_hujia(self.owner, 2);
-                    ctx.draw_cards(self.owner, 2);
+                    ctx.start_draw(self.owner, 2);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -239,7 +239,7 @@ impl HostMachine {
                 // 织梦·梦（U05 xianjian 柳梦璃，规则 v167）：被使用同类型
                 // 牌时摸 1（frequent silent 自动；暗牌保留=上游 storage
                 // 不清除同口径）。
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             HostBehavior::XianjianSheling => {
@@ -262,7 +262,7 @@ impl HostMachine {
             HostBehavior::XianjianChangnian2 => {
                 // 长念·思（U05 xianjian 柳梦璃，规则 v170）：结束阶段摸
                 // 1（forced；runtime 授技实例持有者）。
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             HostBehavior::XianjianShiying => {
@@ -318,7 +318,7 @@ impl HostMachine {
                         ctx.core.player_mut(owner).judge.retain(|x| *x != c);
                         ctx.to_discard(c);
                     }
-                    ctx.draw_cards(owner, 3);
+                    ctx.start_draw(owner, 3);
                 }
                 Flow::Done
             }

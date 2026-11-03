@@ -120,8 +120,11 @@ fn upstream_yiji_differences_are_fixed() {
     ))
     .expect("读遗计源码");
     assert!(
-        src.contains("draw_cards(self.owner, 2)"),
-        "差异②固定：原生为『摸进手牌』（draw_cards）：{src}"
+        // R05-C（2026-11-04）：content 摸牌迁 `start_draw`（真实 R 帧），
+        // 差异②的语义不变——摸牌仍入 own 手牌、给出仍从手牌选（异步交付
+        // 后 Target 阶段经 Yield 恢复，读到的已是摸后手牌）。
+        src.contains("start_draw(self.owner, 2)"),
+        "差异②固定：原生为『摸进手牌』（R05-C 起 start_draw）：{src}"
     );
     assert!(
         src.contains("amount > 0") && !src.contains("getIndex") && !src.contains("for _ in 0..d.amount"),

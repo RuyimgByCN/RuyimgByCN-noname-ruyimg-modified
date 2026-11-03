@@ -24,7 +24,7 @@ impl HostMachine {
                         ctx.discard_from_hand(t, c);
                     }
                     if ctx.core.player(t).alive {
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                 }
                 Flow::Done
@@ -32,7 +32,7 @@ impl HostMachine {
             // 诱引：frequent 锁定式——直摸 1（无确认窗）
             HostBehavior::SwdYouyin => {
                 if ctx.core.player(self.owner).alive {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
                 Flow::Done
             }
@@ -54,7 +54,7 @@ impl HostMachine {
             // 暗莲映：frequent 锁定式——直摸 2
             HostBehavior::SwdAnlianying => {
                 if ctx.core.player(self.owner).alive {
-                    ctx.draw_cards(self.owner, 2);
+                    ctx.start_draw(self.owner, 2);
                 }
                 Flow::Done
             }
@@ -136,7 +136,7 @@ impl HostMachine {
             // 英姿·刷新面：自己摸牌阶段额外摸 1（手牌上限查询在
             // state.hand_limit；此处只补摸牌面）
             HostBehavior::SwdReyingzi => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 乐学·久悠面：回合开始授技——自己回合授{制衡/集智}之一，
@@ -223,7 +223,7 @@ impl HostMachine {
             // 极谋·姬良面：回合外受伤后摸 1（上游 jqimou draw 同口径；
             // 使用牌续段=主动选择面登记差异不收）
             HostBehavior::SwdJqimou => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 幻形·移除面：移除幻形授予的技能实例（在位旗标=内部状态技能
@@ -269,13 +269,13 @@ impl HostMachine {
             // 激昂·凤天凌面：摸 1（frequent 非 optional，无效果步以外的
             // 状态变化）
             HostBehavior::SwdJiang => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 凌波·恒爱面：frequent——闪响应/使用后摸 2
             HostBehavior::SwdHlingbo => {
                 if ctx.core.player(self.owner).alive {
-                    ctx.draw_cards(self.owner, 2);
+                    ctx.start_draw(self.owner, 2);
                 }
                 Flow::Done
             }
@@ -341,12 +341,12 @@ impl HostMachine {
                 if r != self.owner
                     && ctx.core.player(r).hand.len() >= ctx.core.player(self.owner).hand.len()
                 {
-                    ctx.draw_cards(r, 1);
+                    ctx.start_draw(r, 1);
                     if ctx.core.player(self.owner).alive {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                 } else if ctx.core.player(r).alive {
-                    ctx.draw_cards(r, 1);
+                    ctx.start_draw(r, 1);
                 }
                 Flow::Done
             }
@@ -373,7 +373,7 @@ impl HostMachine {
             }
             // 流虹：使用杀后摸 1
             HostBehavior::SwdLiuhong => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 道法：来源弃首张手牌（登记差异：上游玩家自选）
@@ -413,7 +413,7 @@ impl HostMachine {
             }
             // 落梅：使用或打出梅花牌摸 1
             HostBehavior::SwdLuomei => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 雪煌：limited 置位 → 弃全部手牌 → 逐张视为对（至多）两名
@@ -447,14 +447,14 @@ impl HostMachine {
             }
             // 大同：全场极差 ≤1 → 摸 2
             HostBehavior::SwdDatong => {
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 Flow::Done
             }
             // 承剑：来源摸 1
             HostBehavior::SwdChengjian => {
                 if let Some(src) = self.target {
                     if ctx.core.player(src).alive {
-                        ctx.draw_cards(src, 1);
+                        ctx.start_draw(src, 1);
                     }
                 }
                 Flow::Done
@@ -472,7 +472,7 @@ impl HostMachine {
             HostBehavior::SwdRexue => {
                 if let Some(actor) = self.target {
                     ctx.use_virtual_card(self.owner, CardKind::Sha, vec![actor]);
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
                 Flow::Done
             }
@@ -486,7 +486,7 @@ impl HostMachine {
                         ctx.current_card_use_mut().cancelled = true;
                     }
                     crate::catalog::Suit::Heart => {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     _ => {}
                 }
@@ -501,8 +501,8 @@ impl HostMachine {
                         && ctx.core.player(*t).alive
                         && ctx.core.computed_distance(ctx.catalog, self.owner, *t) > 1
                 }) {
-                    ctx.draw_cards(self.owner, 1);
-                    ctx.draw_cards(t, 1);
+                    ctx.start_draw(self.owner, 1);
+                    ctx.start_draw(t, 1);
                 }
                 Flow::Done
             }
@@ -516,7 +516,7 @@ impl HostMachine {
             HostBehavior::SwdHyunshen2 => {
                 let n = ctx.core.player(self.owner).hyunshen_count;
                 if n > 0 {
-                    ctx.draw_cards(self.owner, n as usize);
+                    ctx.start_draw(self.owner, n as u32);
                     ctx.core.player_mut(self.owner).hyunshen_count = 0;
                 }
                 Flow::Done

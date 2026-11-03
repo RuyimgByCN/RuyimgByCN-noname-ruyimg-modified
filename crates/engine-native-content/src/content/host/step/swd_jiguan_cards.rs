@@ -27,7 +27,7 @@ impl HostMachine {
                             matches!(l, LogEvent::DamageDealt { card: Some(c), .. } if *c == body)
                         });
                         if !damaged {
-                            ctx.draw_cards(self.owner, 1);
+                            ctx.start_draw(self.owner, 1);
                         }
                         // 本体弃置（卡牌机器惯例）
                         ctx.to_discard(body);
@@ -268,7 +268,7 @@ impl HostMachine {
                             to: t,
                             cards: ctx.core.player(t).jiguanyuan_cards.clone(),
                         });
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     Flow::Done
                 }

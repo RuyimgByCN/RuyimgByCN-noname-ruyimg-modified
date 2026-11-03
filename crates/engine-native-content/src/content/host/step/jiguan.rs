@@ -366,7 +366,7 @@ impl HostMachine {
                 };
                 if ctx.core.player(t).alive {
                     if t == self.owner {
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     } else if let Some(c) = ctx.core.player(t).hand.first().copied() {
                         ctx.discard_from_hand(t, c);
                         ctx.log(LogEvent::CardDiscarded {
@@ -431,7 +431,7 @@ impl HostMachine {
                             player: self.owner,
                             cards: picked.clone(),
                         });
-                        ctx.draw_cards(self.owner, picked.len());
+                        ctx.start_draw(self.owner, picked.len() as u32);
                     }
                     if let Some(c) = self.card {
                         ctx.to_discard(c);

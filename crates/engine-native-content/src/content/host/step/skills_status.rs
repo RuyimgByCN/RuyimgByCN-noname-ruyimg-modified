@@ -25,7 +25,7 @@ impl HostMachine {
                     player: self.owner,
                     amount: 1,
                 });
-                ctx.draw_cards(self.owner, 2);
+                ctx.start_draw(self.owner, 2);
                 Flow::Done
             }
             // 主亡忠继：忠臣继位为主公（身份互换）
@@ -95,7 +95,7 @@ impl HostMachine {
                 }
                 let n = (loyal as i64 + 2 - rebel as i64 - renegade as i64).max(0) as usize;
                 if n > 0 {
-                    ctx.draw_cards(self.owner, n);
+                    ctx.start_draw(self.owner, n as u32);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "灾变",
                         owner: self.owner,
@@ -123,7 +123,7 @@ impl HostMachine {
             }
             // 集舍：摸 1 + 累计标记（上游 jishe2 的手牌上限削减不生效）
             HostBehavior::Jishe => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 let def = ctx
                     .catalog
                     .skill_by_name(L27_JISHE_KEY)
@@ -658,7 +658,7 @@ impl HostMachine {
                     ctx.core.skills.remove(&(self.owner, def));
                 }
                 if amount > 0 {
-                    ctx.draw_cards(self.owner, amount as usize);
+                    ctx.start_draw(self.owner, amount as u32);
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "天香·受",
@@ -712,7 +712,7 @@ impl HostMachine {
                         });
                     }
                 } else if SHENG[cnat as usize] == onat as u8 {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
                 Flow::Done
             }
@@ -723,7 +723,7 @@ impl HostMachine {
                     .filter(|c| ctx.catalog.card_kind(**c).is_sha_like())
                     .count() as u32;
                 if n > 0 {
-                    ctx.draw_cards(self.owner, 2 * n as usize);
+                    ctx.start_draw(self.owner, 2 * n);
                 }
                 Flow::Done
             }
@@ -790,8 +790,8 @@ impl HostMachine {
                         cards: vec![c],
                     });
                 }
-                ctx.draw_cards(t, 1);
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(t, 1);
+                ctx.start_draw(self.owner, 1);
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);
@@ -799,7 +799,7 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::JihuocardDraw => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);
@@ -824,9 +824,9 @@ impl HostMachine {
                     };
                     let t_r = ctx.catalog.cards[t_card as usize].rank;
                     if t_r > own_r {
-                        ctx.draw_cards(*t, 1);
+                        ctx.start_draw(*t, 1);
                     } else {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                 }
                 if let Some(c) = self.card {
@@ -886,7 +886,7 @@ impl HostMachine {
                         let source = self.targets.first().copied();
                         if let Some(src) = source {
                             if ctx.core.player(src).alive {
-                                ctx.draw_cards(src, 1);
+                                ctx.start_draw(src, 1);
                             }
                         }
                     }

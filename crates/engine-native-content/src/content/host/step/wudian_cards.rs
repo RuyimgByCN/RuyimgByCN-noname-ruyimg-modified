@@ -107,7 +107,7 @@ impl HostMachine {
                     };
                     match ctx.answer().first() {
                         Some(ChoiceOption::Tag(0)) => {
-                            ctx.draw_cards(self.owner, 1);
+                            ctx.start_draw(self.owner, 1);
                             Flow::Done
                         }
                         Some(ChoiceOption::Tag(1)) => {
@@ -371,7 +371,7 @@ impl HostMachine {
                         })
                         .collect();
                     for p in picked {
-                        ctx.draw_cards(p, 1);
+                        ctx.start_draw(p, 1);
                     }
                     Flow::Done
                 }

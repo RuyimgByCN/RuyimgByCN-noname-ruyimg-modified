@@ -445,7 +445,7 @@ impl HostMachine {
                             ctx.recover(self.owner, 1, None);
                         }
                         Suit::Diamond => {
-                            ctx.draw_cards(self.owner, 1);
+                            ctx.start_draw(self.owner, 1);
                         }
                         Suit::Club => {
                             // 候选=其他存活且（手牌∪装备区）非空（上游

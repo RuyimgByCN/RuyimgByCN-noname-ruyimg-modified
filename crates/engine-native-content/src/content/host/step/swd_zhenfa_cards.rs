@@ -257,7 +257,7 @@ impl HostMachine {
                 if inline_now {
                     for q in 0..ctx.core.players.len() as u8 {
                         if ctx.core.inline_with(ctx.catalog, self.owner, q) {
-                            ctx.draw_cards(q, 1);
+                            ctx.start_draw(q, 1);
                         }
                     }
                 } else if prev_of_owner.is_some() {

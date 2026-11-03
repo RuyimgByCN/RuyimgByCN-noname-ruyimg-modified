@@ -270,7 +270,7 @@ impl HostMachine {
                         if pl.hp < pl.max_hp as i32 {
                             ctx.recover(t, 1, None);
                         }
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                     Flow::Done
                 }
@@ -290,7 +290,7 @@ impl HostMachine {
                         }
                     }
                     crate::catalog::Suit::Diamond => {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     }
                     crate::catalog::Suit::Club => {
                         let mut pool: Vec<PlayerId> = ctx
@@ -342,7 +342,7 @@ impl HostMachine {
                 if pl.hp < pl.max_hp as i32 {
                     ctx.recover(self.owner, 1, None);
                 } else {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                 }
                 Flow::Done
             }
@@ -523,7 +523,7 @@ impl HostMachine {
             HostBehavior::SwdMojian => {
                 if let Some(t) = self.target {
                     if ctx.core.player(t).alive {
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                 }
                 let p = ctx.core.player(self.owner);
@@ -563,7 +563,7 @@ impl HostMachine {
                 if p.hp < p.max_hp as i32 {
                     ctx.recover(self.owner, 1, None);
                 }
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 守印：置限定位 + 自翻面 + 全员回复至满（座位序）

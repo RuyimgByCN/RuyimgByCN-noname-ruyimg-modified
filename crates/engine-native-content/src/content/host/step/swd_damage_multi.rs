@@ -417,7 +417,7 @@ impl HostMachine {
                     use crate::catalog::Suit;
                     // 方块：摸 2
                     if suits.contains(&Suit::Diamond) {
-                        ctx.draw_cards(self.owner, 2);
+                        ctx.start_draw(self.owner, 2);
                     }
                     // 红桃：已受伤回 1，否则 +1 护甲
                     if suits.contains(&Suit::Heart) {

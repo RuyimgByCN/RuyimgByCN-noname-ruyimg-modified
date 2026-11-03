@@ -14,7 +14,7 @@ impl HostMachine {
                         .alive_players()
                         .all(|p| ctx.core.player(p).hand.len() >= ctx.core.player(t).hand.len());
                     let n = if min_hand { 2 } else { 1 };
-                    ctx.draw_cards(t, n);
+                    ctx.start_draw(t, n as u32);
                 }
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
@@ -36,7 +36,7 @@ impl HostMachine {
                         self.card,
                     )));
                     if ctx.core.player(t).alive {
-                        ctx.draw_cards(t, 1);
+                        ctx.start_draw(t, 1);
                     }
                 }
                 if let Some(c) = self.card {
@@ -113,7 +113,7 @@ impl HostMachine {
                     if n == 0 || !ctx.core.player(t).alive {
                         // 无手牌：跳过弃牌；上游 step1 draw 恒执行
                         if ctx.core.player(t).alive {
-                            ctx.draw_cards(t, 1);
+                            ctx.start_draw(t, 1);
                         }
                         if let Some(c) = self.card {
                             ctx.to_discard(c);
@@ -167,7 +167,7 @@ impl HostMachine {
                             cards: discarded,
                         });
                     }
-                    ctx.draw_cards(t, 1);
+                    ctx.start_draw(t, 1);
                     if let Some(c) = self.card {
                         ctx.to_discard(c);
                         ctx.core.table.retain(|x| *x != c);
@@ -360,7 +360,7 @@ impl HostMachine {
                                 .map(|(i, _)| i)
                                 .collect();
                             if positions.is_empty() {
-                                ctx.draw_cards(self.owner, 1);
+                                ctx.start_draw(self.owner, 1);
                             } else {
                                 let i = positions
                                     [ctx.core.rng.gen_range(positions.len() as u32) as usize];
