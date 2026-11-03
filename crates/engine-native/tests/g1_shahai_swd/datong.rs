@@ -47,7 +47,8 @@ fn swd_generals_b18_datong_draw() {
         core.players[3].hand.push(s4);
     }
     let h0 = hand_len_w(&e, 0);
-    // 任意玩家阶段结束触发（global）——推进 p0 到 End 再过
+    // 任意玩家整回合结束触发（A2 H62：global phaseEnd＝任意玩家整回合
+    // 结束）——推进 p0 到 End 再收束整回合
     for _ in 0..4 {
         if e.turn().phase == engine_native::event::Phase::End {
             break;
@@ -56,13 +57,8 @@ fn swd_generals_b18_datong_draw() {
         submit(&mut e, actor, GameAction::NextPhase);
         settle_optional_confirm(&mut e);
     }
-    // phaseEnd 帧触发后大同摸 2
-    eprintln!(
-        "DBG datong hands={:?} phase={:?} choice={:?}",
-        [0, 1, 2, 3].map(|p| e.state_core().player(p).hand.len()),
-        e.turn().phase,
-        e.open_choice()
-            .map(|ch| (ch.id, ch.observer, ch.spec.prompt)),
-    );
+    submit(&mut e, 0, GameAction::NextPhase); // End 收束 → 整回合结束窗
+    settle_optional_confirm(&mut e);
+    // 整回合结束窗 phaseEnd 段触发后大同摸 2
     assert_eq!(hand_len_w(&e, 0), h0 + 2, "大同：极差 ≤1 摸 2");
 }

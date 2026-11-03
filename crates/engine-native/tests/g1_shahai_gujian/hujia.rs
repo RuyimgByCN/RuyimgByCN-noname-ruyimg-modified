@@ -174,12 +174,14 @@ fn hujia_primitive_and_food_batch_three() {
         );
     }
     submit(&mut e, 0, GameAction::NextPhase); // Discard 结束 → End 开始
-    // 第 991 轮：上游子技 `liyutang` 是 `trigger:{player:'phaseEnd'}`（**每个阶段结束**）+ 「剩余 2 次」
-    // ⇒ 本回合 Play 结束与 Discard 结束各授予 1 点护甲，合计 2 点（此前钉在 End 开始只授 1 点）。
+    submit(&mut e, 0, GameAction::NextPhase); // End 收束 → 整回合结束窗
+    // A2 H57（第 991 轮登记随迁）：上游子技 `liyutang` 是
+    // `trigger:{player:'phaseEnd'}`＝**整回合结束**（每回合一次）+ 「剩余 2 次」
+    // ⇒ 本回合整回合结束授予 1 点护甲（原「每阶段结束」两度授予为错位）。
     assert_eq!(
         e.save().core.players[0].hujia,
-        2,
-        "体力最少：本回合两个阶段结束各得 1 护甲（共 2）"
+        1,
+        "体力最少：整回合结束得 1 护甲（A2 H57 每回合一次）"
     );
     // 护甲抵扣：1 号回合出杀打 0 号 → 护甲 -1、体力不变
     let mut steps = 0;
@@ -226,8 +228,8 @@ fn hujia_primitive_and_food_batch_three() {
     ));
     pass_nullify_window(&mut e);
     drain_choices(&mut e);
-    // 第 991 轮：本回合共得 2 点护甲，一次 1 点伤害只消耗 1 点 ⇒ 剩 1 点
-    assert_eq!(e.save().core.players[0].hujia, 1, "护甲被消耗 1 点（2→1）");
+    // A2 H57：本回合共得 1 点护甲，一次 1 点伤害消耗 ⇒ 剩 0 点
+    assert_eq!(e.save().core.players[0].hujia, 0, "护甲被消耗 1 点（1→0）");
     assert_eq!(e.debug_hp(0), hp0, "护甲抵扣后体力不变");
     assert_zone_conservation(&e);
 

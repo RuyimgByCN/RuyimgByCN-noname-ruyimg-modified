@@ -1043,6 +1043,28 @@ fn c331_huanle_equipment_priority_waits_for_normal_owner_peers() {
     let cursor = e.log().len();
     choose(&mut e, "c331_heal");
     choose(&mut r, "c331_heal");
+    // A2 H50：九尾（PhaseEndRecoverOrDraw）已迁整回合结束窗 phaseEnd 段
+    //（上游 player phaseEnd＝每回合一次）——出牌阶段结束窗不再含其确认
+    // 门；推进到整回合结束窗再验 OptionalGate 确认与恢复。
+    let to_turn_end_confirm = |e: &mut Engine| {
+        loop {
+            if let Some(c) = e.open_choice() {
+                if c.spec.prompt == "trigger_confirm" {
+                    return;
+                }
+                let c = c.clone();
+                answer(
+                    e,
+                    c.spec.options.iter().take(c.spec.min).copied().collect(),
+                );
+            } else {
+                let actor = e.turn().current;
+                submit(e, actor, GameAction::NextPhase);
+            }
+        }
+    };
+    to_turn_end_confirm(&mut e);
+    to_turn_end_confirm(&mut r);
     assert_eq!(e.open_choice().unwrap().spec.prompt, "trigger_confirm");
     answer(&mut e, vec![ChoiceOption::Confirm]);
     answer(&mut r, vec![ChoiceOption::Confirm]);

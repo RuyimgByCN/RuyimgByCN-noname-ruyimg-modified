@@ -31,8 +31,9 @@ fn shenqishuang_binxin_grants_hujia_at_low_hp() {
     e.debug_set_hp(1, 4); // 先满血（避免早期阶段结束触发）
 
     // 0 号收束（体力 4 不触发）→ 1 号 Judge/Draw/Play——进入弃牌阶段
-    // 前把 1 号压到 1 血 → Discard 结束触发确认门（observer=0）→Confirm
-    // →1 号 +1 甲
+    // 前把 1 号压到 1 血。A2 H80：冰心已迁整回合结束窗 phaseEnd 段（上游
+    // global phaseEnd＝任意玩家整回合结束）——确认门在 1 号整回合结束时
+    // 挂起（observer=0）→Confirm →1 号 +1 甲
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End
     let _ = submit(&mut e, 0, GameAction::NextPhase); // 0 收束→1 Judge
@@ -49,7 +50,9 @@ fn shenqishuang_binxin_grants_hujia_at_low_hp() {
         ),
         "{out:?}"
     );
-    // 弃牌结算后阶段收束，冰心确认门直接挂起（Discard→End 自动链）
+    // 弃牌结算后推进 Discard→End→整回合结束窗，冰心确认门在窗内挂起
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // Discard→End
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // End→整回合结束窗
     let c = e.open_choice().cloned();
     let c = c.expect("冰心确认门");
     assert_eq!(c.observer, 0, "确认门 observer=持有者");

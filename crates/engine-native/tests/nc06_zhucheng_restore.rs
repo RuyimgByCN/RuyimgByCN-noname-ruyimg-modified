@@ -22,22 +22,40 @@ fn fixture() -> (Engine, ExtensionPack) {
     let pack = content_native_loader::bridge_pack(&json).unwrap().pack;
     let mut e = Engine::new_with_extensions(3501, 3, &[&pack]).unwrap();
     e.assign_general_named(0, "刘馥").unwrap();
-    for _ in 0..32 {
+    // A2 H73：筑城确认门在整回合结束窗 phaseEnd 段（K14 直推）——推进
+    // p0 各阶段（途中的弃牌等窗口按最小集合作答）到窗内确认门。
+    for _ in 0..64 {
         if let Some(choice) = e.open_choice().cloned() {
-            assert_eq!(
-                (choice.observer, choice.spec.prompt),
-                (0, "trigger_confirm")
-            );
-            assert!(choice.spec.options.contains(&ChoiceOption::Confirm));
+            if choice.spec.prompt == "trigger_confirm" {
+                assert_eq!(choice.observer, 0);
+                assert!(choice.spec.options.contains(&ChoiceOption::Confirm));
+                submit(
+                    &mut e,
+                    0,
+                    GameAction::Answer {
+                        choice_id: choice.id,
+                        selection: vec![ChoiceOption::Confirm],
+                    },
+                );
+                break;
+            }
+            let observer = choice.observer;
+            let sel: Vec<ChoiceOption> = choice
+                .spec
+                .options
+                .iter()
+                .take(choice.spec.min.max(1))
+                .copied()
+                .collect();
             submit(
                 &mut e,
-                0,
+                observer,
                 GameAction::Answer {
                     choice_id: choice.id,
-                    selection: vec![ChoiceOption::Confirm],
+                    selection: sel,
                 },
             );
-            break;
+            continue;
         }
         let actor = e.turn().current;
         submit(&mut e, actor, GameAction::NextPhase);

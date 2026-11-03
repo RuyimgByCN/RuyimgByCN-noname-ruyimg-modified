@@ -120,13 +120,16 @@ impl HostSkillBehavior {
                 _ => false,
             },
             HostBehavior::YxsFanji2 => false,
-            // 门神：自己结束阶段且存活角色 >1
+            // 门神（A2 H51）：自己整回合结束且存活角色 >1（上游 player phaseEnd）
             HostBehavior::YxsMenshen => {
                 matches!(event,
-                EventData::Phase { player, begin: false, .. } if *player == owner)
+                EventData::TurnEndWindow { player, after: false } if *player == owner)
                     && ctx.state.alive_players().count() > 1
             }
-            // 门神·清除：任意阶段开始 / 任意死亡，且场上存在门神标记
+            // 门神·清除（A2 H51 配套）：上游 trigger `player:["phaseBegin",
+            // "dieBegin"]`＝**门神持有者自己**的回合开始——标记从其整回合
+            // 结束授予存活续到其下一回合开始（原「任意阶段开始」全局清会在
+            // H51 迁整回合结束窗后立即清掉刚授予的标记）。
             HostBehavior::YxsMenshen3 => {
                 let has_marker = ctx.state.alive_players().any(|p| {
                     ctx.catalog
@@ -136,7 +139,11 @@ impl HostSkillBehavior {
                 });
                 has_marker
                     && match event {
-                        EventData::Phase { begin: true, .. } => true,
+                        EventData::Phase {
+                            player,
+                            begin: true,
+                            ..
+                        } => *player == owner,
                         EventData::Death { .. } => true,
                         _ => false,
                     }
@@ -271,10 +278,11 @@ impl HostSkillBehavior {
             // 轩辕剑·反噬：自己是伤害来源且本次加伤生效（标记位）
             HostBehavior::XuanyuanjianBacklash => matches!(event,
                 EventData::Damage(d) if d.source == Some(owner) && ctx.state.turn.xuanyuanjian_marked),
-            // 轩辕：**自己回合**的阶段结束、有黑桃牌且弃牌堆有【轩辕剑】
-            //（上游 trigger 为 `{ player: 'phaseEnd' }` ⇒ 只在自己回合的每个阶段结束触发）
+            // 轩辕（A2 H53）：**自己回合**的整回合结束、有黑桃牌且弃牌堆有
+            //【轩辕剑】（上游 trigger `{ player: 'phaseEnd' }`＝每回合一次）
             HostBehavior::Xuanyuan => {
-                matches!(event, EventData::Phase { player, begin: false, .. } if *player == owner)
+                matches!(event,
+                    EventData::TurnEndWindow { player, after: false } if *player == owner)
                     && ctx
                         .state
                         .player(owner)
@@ -388,12 +396,12 @@ impl HostSkillBehavior {
                 }
                 _ => false,
             },
-            // 护天：**自己回合**的阶段结束、手牌非空且当前无寄存
-            //（上游 trigger 为 `{ player: 'phaseEnd' }` ⇒ 只在自己回合的**每个**阶段结束触发；
-            //  原先未限定 `player == owner`，会在他人的阶段结束也触发）
+            // 护天（A2 H54）：**自己回合**的整回合结束、手牌非空且当前无寄存
+            //（上游 trigger `{ player: 'phaseEnd' }`＝每回合一次；寄存主面在此，
+            //  取回面在内核阶段收束，跨一个阶段边界）
             HostBehavior::Hutian => {
                 matches!(event,
-                    EventData::Phase { player, begin: false, .. } if *player == owner)
+                EventData::TurnEndWindow { player, after: false } if *player == owner)
                     && !ctx.state.player(owner).hand.is_empty()
                     && ctx.state.player(owner).hutian_deposit.is_none()
             }
@@ -541,7 +549,8 @@ impl HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && d.card.map(|c| ctx.catalog.card_kind(c).is_sha_like()).unwrap_or(false)),
             HostBehavior::PhaseEndRecoverOrDraw => matches!(event,
-                EventData::Phase { player, begin: false, .. } if *player == owner),
+                // A2 H50：整回合结束窗 phaseEnd 段（上游 player phaseEnd）。
+                EventData::TurnEndWindow { player, after: false } if *player == owner),
             HostBehavior::TargetDiscardEquipOrDamage => false,
             HostBehavior::ShengkeCheck => matches!(event,
                 EventData::CardUsed(u)
@@ -596,10 +605,14 @@ impl HostSkillBehavior {
                     && u.use_as.unwrap_or(u.effective_kind(ctx.catalog)) == CardKind::Sha
                     && ctx.state.player(owner).baolei_mode == 2),
             HostBehavior::WudianZiyu => matches!(event,
-                EventData::Phase { begin: false, .. }
+                // A2 H75：任意玩家整回合结束＋phase_number%4 门（上游 global
+                // phaseEnd；phaseNumber 口径差异登记规则基准）
+                EventData::TurnEndWindow { after: false, .. }
                 if ctx.state.turn.phase_number % 4 == 0),
             HostBehavior::WudianGuangshuSpade => matches!(event,
-                EventData::Phase { player, begin: false, .. } if *player == owner),
+                // A2 H74：自己整回合结束（上游 guangshu_spade player phaseEnd；
+                // 雷伤+移除在内核 K13 直推，宿主无机器步骤）
+                EventData::TurnEndWindow { player, after: false } if *player == owner),
             HostBehavior::GujianFoodGudonggeng => matches!(event,
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented && d.amount > 0
@@ -608,8 +621,9 @@ impl HostSkillBehavior {
                 EventData::Phase { player, phase: crate::event::Phase::Draw, begin: true }
                 if *player == owner),
             HostBehavior::GujianFoodLiyutang => matches!(event,
-                // 上游子技 `liyutang`: `{player:'phaseEnd'}` ⇒ 自己每个阶段结束（第 991 轮）
-                EventData::Phase { player, begin: false, .. }
+                // A2 H57：整回合结束窗 phaseEnd 段（上游 liyutang player
+                // phaseEnd＝每回合一次；第 991 轮登记）
+                EventData::TurnEndWindow { player, after: false }
                 if *player == owner),
             HostBehavior::GujianFoodMapodoufu => matches!(event,
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: true }
@@ -709,7 +723,8 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented && d.amount > 0),
             HostBehavior::WudianJidong => matches!(event,
-                EventData::Phase { begin: false, .. }
+                // A2 H78：任意玩家整回合结束（上游 global phaseEnd）
+                EventData::TurnEndWindow { after: false, .. }
                 if ctx.state.player(owner).hp == 1
                     && !ctx.state.player(owner).face_down),
             HostBehavior::WudianMengji => matches!(event,
@@ -771,9 +786,10 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.source == Some(owner) && !d.prevented && d.amount > 0),
             HostBehavior::WudianZhucheng => matches!(event,
-                // 筑城（第 934 轮）：park 直推 `begin:false`；上游 filter 还要
-                // 「无标记」（`!storage.zhucheng || !storage.zhucheng.length`）
-                EventData::Phase { player, begin: false, .. }
+                // 筑城（A2 H73，第 934 轮）：K14 在整回合结束窗 phaseEnd 段
+                // 直推确认门；上游 filter 还要「无标记」
+                //（`!storage.zhucheng || !storage.zhucheng.length`）
+                EventData::TurnEndWindow { player, after: false }
                 if *player == owner && ctx.state.player(owner).zhucheng.is_empty()),
             HostBehavior::WudianZhuchengGuard => matches!(event,
                 EventData::CardUsed(u)
@@ -802,7 +818,9 @@ impl HostSkillBehavior {
                     )
                 })),
             HostBehavior::WudianPaotaiFire => matches!(event,
-                EventData::Phase { player, begin: false, .. } if *player == owner && ctx.state.player(owner).paotai_lv > 0),
+                // A2 H76：自己整回合结束（上游 paotai2 player phaseEnd）
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner && ctx.state.player(owner).paotai_lv > 0),
             // 四象隐藏链 2/3 + 后援3/4：本人死亡且本人是 Boss
             HostBehavior::BossQingmu2
             | HostBehavior::BossQingmu3

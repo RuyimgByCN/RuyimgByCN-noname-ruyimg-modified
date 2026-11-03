@@ -61,8 +61,11 @@ fn swd_generals_b61_jiying_mufeng_wangchen() {
     );
     settle_optional_confirm(&mut e);
     assert!(e.state_core().turn.mufeng_used_basic, "沐风旗置位");
-    // Play 末（Phase{Play,begin:false}）沐风确认窗
-    submit(&mut e, 0, GameAction::NextPhase);
+    // A2 H66：上游 player phaseEnd＝整回合结束——推进 Play→Discard→End→
+    // 整回合结束窗（Phase{Play,begin:false} 已不再触发），窗内沐风确认窗
+    submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
+    submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    submit(&mut e, 0, GameAction::NextPhase); // End→整回合结束窗
     let h0 = hand_len_w(&e, 0);
     let (cid, obs) = e
         .open_choice()

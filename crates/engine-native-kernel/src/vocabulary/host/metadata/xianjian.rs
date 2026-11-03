@@ -12,7 +12,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::XianjianBinxin => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H80：上游 global phaseEnd＝任意玩家整回合结束（可选）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -120,7 +121,8 @@ impl HostBehavior {
             HostBehavior::XianjianXuanyan => None,
             HostBehavior::XianjianDiewu => None,
             HostBehavior::XianjianLingyu => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H81：上游 player phaseEnd＝自己整回合结束
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -175,7 +177,8 @@ impl HostBehavior {
             HostBehavior::XianjianMinsha => None,
             // 聚宝：global 弃牌（上游 discardAfter frequent=自动无确认）
             HostBehavior::XianjianLinghuo => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H83：上游 global phaseEnd（filter 限他人）＝他人整回合结束
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -202,7 +205,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::XianjianWangyou => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H85：上游 global phaseEnd（filter 限他人）＝他人整回合结束
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -226,7 +230,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::XianjianShenwu => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H87：上游 global phaseEnd＝任意玩家整回合结束（觉醒）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

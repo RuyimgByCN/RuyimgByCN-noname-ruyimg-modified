@@ -72,10 +72,13 @@ fn swd_generals_b69_lingxin_yueren() {
         e.state_core_mut().deck.push(h);
         h
     };
-    // 推进 p0 任一阶段结束（Play→Discard 触发 Play 阶段末灵心）
+    // A2 H67：上游 player phaseEnd＝整回合结束——推进 Play→Discard→End→
+    // 整回合结束窗，窗内灵心取牌堆顶三张
     let h0 = e.debug_hand(0).len();
-    submit(&mut e, 0, GameAction::NextPhase);
-    settle_optional_confirm(&mut e);
+    for _ in 0..3 {
+        submit(&mut e, 0, GameAction::NextPhase);
+        settle_optional_confirm(&mut e);
+    }
     assert!(
         e.debug_hand(0).contains(&h2)
             && e.debug_hand(0).contains(&h1)

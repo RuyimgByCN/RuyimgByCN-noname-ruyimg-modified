@@ -180,11 +180,13 @@ fn mei_jidong_freeze_damage_immune_and_untargetable() {
     e.debug_grant(0, "jidong");
     e.debug_set_hp(0, 1);
 
-    // 0 出牌→弃牌：弃牌阶段结束（hp=1）触发急冻——翻面+回复 2+冰封，
-    // 随后 End 阶段照常开局（回合中翻面不跳过剩余阶段——上游
-    // phaseBefore 仅回合开始判定）
+    // 0 出牌→弃牌→End。A2 H78：急冻已迁整回合结束窗 phaseEnd 段（上游
+    // global phaseEnd＝任意玩家整回合结束）——0 号整回合结束时（hp=1）
+    // 触发：翻面+回复 2+冰封，随后回合交接轮至 1（翻面在回合末＝下一
+    // 轮到 0 时跳过）
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
-    let out = submit(&mut e, 0, GameAction::NextPhase); // Discard 结束→急冻→End
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    let out = submit(&mut e, 0, GameAction::NextPhase); // End→整回合结束窗→急冻→交接
     assert!(
         matches!(
             out,
@@ -196,10 +198,9 @@ fn mei_jidong_freeze_damage_immune_and_untargetable() {
     assert_eq!(e.debug_hp(0), 3, "回复 2（1→3）");
     assert!(e.state_core().player(0).jidong_active, "冰封中");
     let t = e.turn();
-    assert_eq!(t.phase, Phase::End, "回合中翻面不跳过剩余阶段");
+    assert_eq!(t.current, 1, "整回合结束窗后交接轮至 1");
 
-    // End 结束→1 回合：Judge→Draw→Play
-    let _ = submit(&mut e, 0, GameAction::NextPhase);
+    // 1 回合：Judge→Draw→Play
     advance_loop(&mut e, 1);
     let sha = e.debug_place(1, "sha");
     // ①冰封者不可被指定为目标

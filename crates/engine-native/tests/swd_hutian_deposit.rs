@@ -1,9 +1,10 @@
-//! swd deferred 消解批 131：护天（`hutian`）——阶段结束寄存牌作护体。
+//! swd deferred 消解批 131：护天（`hutian`）——整回合结束寄存牌作护体
+//!（A2 H54：上游 player phaseEnd＝整回合结束）。
 //!
 //! 上游 `character/swd.js`：`phaseEnd` 可选——选任意张牌（手/装备）寄存于
 //! 一名体力上限不低于张数的其他角色处；其体力低于寄存数时回复至该数；
-//! 寄存期间其受到的伤害/失去体力以「体力降至寄存数」为上限；寄存只跨一个
-//! 阶段边界，随后（或寄存方死亡时）归还。
+//! 寄存期间其受到的伤害/失去体力以「体力降至寄存数」为上限；寄存至寄存方
+//! 自己的下一阶段收束（或寄存方死亡时）归还。
 
 use engine_native::event::DamageNature;
 use engine_native::{ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, Phase};
@@ -123,7 +124,11 @@ fn hutian_deposits_shields_and_returns() {
     }
     assert_eq!(e.turn().current, 0);
     assert_eq!(e.turn().phase, Phase::Play);
-    next_phase(&mut e); // Play 收束（护天窗）
+    // A2 H54：上游 player phaseEnd＝整回合结束——推进 Play→Discard→End
+    // 到整回合结束窗（护天寄存主面在此触发；取回面仍在内核阶段收束）
+    next_phase(&mut e); // Play→Discard
+    next_phase(&mut e); // Discard→End
+    next_phase(&mut e); // End 收束 → 整回合结束窗（护天窗）
     let hand_before = e.debug_hand(0).len();
     assert!(hand_before >= 2, "手牌足够：{hand_before}");
     assert!(
@@ -164,16 +169,21 @@ fn hutian_deposits_shields_and_returns() {
     );
     drain(&mut e);
     assert_eq!(e.debug_hp(1), hp1, "护体上限：体力不降至寄存数以下");
-    // 下一阶段收束（寄存只跨一个阶段边界）→ 归还
+    // 下一整回合的首次（准备）阶段收束 → 归还（A2 H54：寄存点在整回合
+    // 结束窗，归还仍在寄存方自己的下一阶段收束——跨一个完整轮次）
     let mut guard = 0;
-    while e.state_core().player(0).hutian_deposit.is_some() && guard < 4 {
+    while e.state_core().player(0).hutian_deposit.is_some() && guard < 40 {
         next_phase(&mut e);
         drain(&mut e);
         guard += 1;
     }
     assert_eq!(e.state_core().player(0).hutian_deposit, None, "寄存已清");
     assert!(e.state_core().player(1).hutian_hold.is_empty(), "寄存区已清");
-    assert_eq!(e.debug_hand(1).len(), 2, "牌归还目标");
+    // 归还点在 p0 下一回合准备阶段收束（其间 p1 已摸 2）——验牌不验数
+    assert!(
+        e.debug_hand(1).contains(&c1) && e.debug_hand(1).contains(&c2),
+        "寄存的两张牌归还目标"
+    );
 }
 
 /// 护天（对照）：目标体力上限低于张数 → 不可选；放弃选择不寄存。
@@ -196,6 +206,9 @@ fn hutian_target_filter_and_decline() {
         next_phase(&mut e);
         drain(&mut e);
     }
+    // A2 H54：护天窗在整回合结束窗（Play→Discard→End 收束）
+    next_phase(&mut e);
+    next_phase(&mut e);
     next_phase(&mut e);
     assert!(
         answer(&mut e, "trigger_confirm", vec![ChoiceOption::Confirm]),

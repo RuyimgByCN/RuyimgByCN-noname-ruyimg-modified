@@ -444,11 +444,10 @@ fn swd_jiguanyuan_pending_then_gain_at_phase_end() {
     assert_eq!(e.debug_hand(0).len(), 1, "使用者摸 1");
     assert_eq!(e.debug_hand(1).len(), 0, "目标尚未获得");
 
-    // 推进到 1 号回合开始（Judge 阶段）——Judge 收束（phaseEnd begin:false）
-    // 即触发待获得（上游 phaseEnd forced 同口径：下一结束阶段=其回合内首个
-    // 阶段结束）
+    // A2 H71：上游 jiguanyuan player phaseEnd＝整回合结束——待获得在 1 号
+    // 整回合结束窗（forced）获得；推进其各阶段到 End 收束
     loop {
-        if e.turn().current == 1 && e.turn().phase == Phase::Judge {
+        if e.turn().current == 1 && e.turn().phase == Phase::End {
             break;
         }
         match e.open_choice() {
@@ -472,12 +471,12 @@ fn swd_jiguanyuan_pending_then_gain_at_phase_end() {
             }
         }
     }
-    let _ = submit(&mut e, 1, GameAction::NextPhase); // Judge→Draw（Judge 收束触发获得）
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // End 收束→整回合结束窗（窗内获得）
     let snap2 = e.save();
     assert_eq!(
         snap2.core.players[1].hand.len(),
         4,
-        "Judge 收束获得 2 张 + 摸牌阶段正常摸 2"
+        "整回合结束窗获得 2 张 + 摸牌阶段正常摸 2"
     );
     assert!(
         snap2.core.players[1].jiguanyuan_cards.is_empty(),

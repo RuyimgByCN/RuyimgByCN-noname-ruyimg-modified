@@ -56,10 +56,11 @@ fn longkui_diewu_give_and_lingyu_recover() {
     assert!(e.debug_hand(1).contains(&sha), "杀转移到 1 号手牌");
     assert!(e.state_core().turn.diewu_draw_used, "首次摸牌已消耗");
 
-    // ② 灵愈：0 号 Discard→End 阶段结束即触发（owner phaseEnd 任意阶
-    // 段）——确认门挂起，令 1 号（2/3）回复 1
+    // ② 灵愈（A2 H81）：上游 player phaseEnd＝整回合结束——0 号整回合
+    // 结束窗 phaseEnd 段确认门挂起，令 1 号（2/3）回复 1
     let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
-    let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End（灵愈挂起）
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // End→整回合结束窗（灵愈挂起）
     let out = answer_open(&mut e, vec![ChoiceOption::Player(1)]);
     assert!(
         matches!(

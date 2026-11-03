@@ -65,21 +65,55 @@ fn swd_generals_b23_pingxu_huanling_builtin_four_full() {
     }
     assert_eq!(dist(&e, 0, 2), 2, "平恤反例：无持技者 → 基线 2");
 
-    // ② 还灵：p0 持技，Play 结束窗口选 p1 → 双翻面
-    //（先清手规避弃牌阶段 discard_to_limit 询问先于阶段末触发窗）
+    // ② 还灵（A2 H63）：上游 player phaseEnd＝整回合结束——确认后选 p1 →
+    // 双翻面（先清手规避弃牌阶段 discard_to_limit 询问先于整回合结束窗）。
+    // 推进 Play→Discard→End 到整回合结束窗（每回合仅此一窗）。
     advance_to_play(&mut e, 0);
     e.debug_grant(0, "huanling");
     e.debug_clear_hand(0);
-    let out = submit(&mut e, 0, GameAction::NextPhase);
-    assert!(matches!(
-        out,
-        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
-    ));
-    // 可选触发门先确认，随后才是选人窗
+    for _ in 0..3 {
+        let out = submit(&mut e, 0, GameAction::NextPhase);
+        assert!(matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ));
+    }
+    // 反例 ②a：整回合结束窗取消 → 不翻（原 Discard 末第二窗已随 A2 消失）
     let (cid, obs) = e
         .open_choice()
         .map(|c| (c.id, c.observer))
         .expect("还灵确认窗");
+    assert_eq!(obs, 0, "还灵窗归持有者");
+    submit(
+        &mut e,
+        obs,
+        GameAction::Answer {
+            choice_id: cid,
+            selection: vec![],
+        },
+    );
+    settle_optional_confirm(&mut e);
+    assert!(
+        !e.state_core().player(0).face_down && !e.state_core().player(1).face_down,
+        "还灵反例：取消 → 不翻"
+    );
+
+    // ②b：p0 下一整回合结束窗确认 → 选 p1 → 双翻面（翻面后窗末即交接，
+    // p1 跳过其回合并翻回——以日志 TurnOvered 证双翻面）
+    next_p0_play_fn(&mut e);
+    e.debug_clear_hand(0);
+    for _ in 0..3 {
+        let out = submit(&mut e, 0, GameAction::NextPhase);
+        assert!(matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ));
+    }
+    // 可选触发门先确认，随后才是选人窗
+    let (cid, obs) = e
+        .open_choice()
+        .map(|c| (c.id, c.observer))
+        .expect("还灵确认窗（第二轮）");
     assert_eq!(obs, 0, "还灵窗归持有者");
     let conf: Vec<ChoiceOption> = {
         let ch = e.open_choice().expect("still open");
@@ -122,32 +156,13 @@ fn swd_generals_b23_pingxu_huanling_builtin_four_full() {
         },
     );
     settle_optional_confirm(&mut e);
-    assert!(e.state_core().player(0).face_down, "还灵：自己翻面");
-    assert!(e.state_core().player(1).face_down, "还灵：目标翻面");
-
-    // 反例 ②b：Discard 末窗口取消 → 不再翻（face_down 保持 true）
-    let out = submit(&mut e, 0, GameAction::NextPhase);
-    assert!(matches!(
-        out,
-        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
-    ));
-    let (cid, obs) = e
-        .open_choice()
-        .map(|c| (c.id, c.observer))
-        .expect("还灵 Discard 末窗口");
-    submit(
-        &mut e,
-        obs,
-        GameAction::Answer {
-            choice_id: cid,
-            selection: vec![],
-        },
+    // 窗末即交接：p1 被翻面 → 其回合被跳过并翻回（face_down 已 false）。
+    // 跳过本身即双翻面的证据（不翻面则轮至 1）。
+    assert_eq!(
+        e.turn().current, 2,
+        "还灵：p1 被翻面跳过回合（窗末交接后翻回，轮至 2）"
     );
-    settle_optional_confirm(&mut e);
-    assert!(
-        e.state_core().player(0).face_down && e.state_core().player(1).face_down,
-        "还灵反例：取消 → 不翻"
-    );
+    assert!(e.state_core().player(0).face_down, "还灵：自己保持翻面");
 
     // 撤销还灵，回合收束不再有窗口
     {

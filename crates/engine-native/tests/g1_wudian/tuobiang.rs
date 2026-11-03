@@ -69,9 +69,9 @@ fn tuobiang_paotai_stack_fire_and_downgrade() {
         "满级应拒: {out:?}"
     );
 
-    // ② 结束阶段射击：lv=3 → 概率 100%（roll<100 恒真）→ 必中随机敌
-    // 推进到 End 阶段开始（fire 在 End 阶段开始帧触发——自愈/割据同款
-    // PhaseBegin 通道）；进入 End 后随机敌掉血
+    // ② 整回合结束射击（A2 H76：上游 paotai2 player phaseEnd＝整回合结
+    // 束）：lv=3 → 概率 100%（roll<100 恒真）→ 必中随机敌。推进到 End
+    // 阶段再收束整回合，窗内射击随机敌掉血
     let hp1 = e.debug_hp(1);
     let hp2 = e.debug_hp(2);
     for _ in 0..8 {
@@ -93,6 +93,7 @@ fn tuobiang_paotai_stack_fire_and_downgrade() {
         let _ = submit(&mut e, actor, GameAction::NextPhase);
     }
     assert_eq!(e.turn().phase, Phase::End);
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // End→整回合结束窗→射击
     assert!(
         e.debug_hp(1) == hp1 - 1 || e.debug_hp(2) == hp2 - 1,
         "lv=3 概率 100%：随机敌受 1 火伤"

@@ -35,7 +35,9 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::WudianZhucheng => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H73：上游 player phaseEnd＝整回合结束（K14 确认门在
+                // 内核 commit_turn_end_window phaseEnd 段直推）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -82,7 +84,9 @@ impl HostBehavior {
             }),
             HostBehavior::WudianGuangshuClub => None,
             HostBehavior::WudianGuangshuSpade => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H74：上游 guangshu_spade player phaseEnd＝下一次整回合
+                // 结束（雷伤+移除在内核 K13；宿主机器无步骤）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -90,9 +94,10 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::WudianZiyu => Some(TriggerMeta {
-                // 上游 `{global:'phaseEnd'}` + `phaseNumber%4==0`（第 929 轮：
-                // 元数据与过滤臂必须同时改，否则永不派发）
-                event: EventKind::PhaseEnd,
+                // A2 H75：上游 `{global:'phaseEnd'}` + `phaseNumber%4==0`＝
+                // 任意玩家整回合结束（第 929 轮：元数据与过滤臂必须同时改，
+                // 否则永不派发；phaseNumber 口径差异已登记规则基准）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -103,8 +108,8 @@ impl HostBehavior {
             HostBehavior::WudianDuwen => None,
             HostBehavior::WudianPaotai => None,
             HostBehavior::WudianPaotaiFire => Some(TriggerMeta {
-                // 上游 `player:'phaseEnd'`（自己每个阶段结束）
-                event: EventKind::PhaseEnd,
+                // A2 H76：上游 `paotai2` player phaseEnd＝自己整回合结束
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -131,7 +136,8 @@ impl HostBehavior {
             HostBehavior::WudianKuoyin => None,
             HostBehavior::WudianHuhuan => None,
             HostBehavior::WudianJidong => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H78：上游 `{global:'phaseEnd'}`＝任意玩家整回合结束
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

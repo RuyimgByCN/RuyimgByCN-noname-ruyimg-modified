@@ -89,7 +89,11 @@ fn menshen_marks_target() {
         drain(&mut e);
     }
     assert_eq!(e.turn().phase, Phase::Discard);
-    next_phase(&mut e); // Discard 收束 → 结束阶段（门神触发）
+    next_phase(&mut e); // Discard 收束 → 结束阶段
+    drain(&mut e);
+    // A2 H51：上游 player phaseEnd＝整回合结束——门神在整回合结束窗触发
+    //（此后不 drain：确认门与目标窗由下方循环显式应答）
+    next_phase(&mut e); // End 收束 → 整回合结束窗（门神触发）
     // 门神确认门 → 目标窗
     let mut picked = false;
     for _ in 0..12 {

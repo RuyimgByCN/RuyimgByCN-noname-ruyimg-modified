@@ -12,8 +12,8 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::PhaseEndRecoverOrDraw => Some(TriggerMeta {
-                // 上游 `player:'phaseEnd'`（自己每个阶段结束）
-                event: EventKind::PhaseEnd,
+                // A2 H50：上游 player phaseEnd＝整回合结束（每回合一次）。
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -178,9 +178,9 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 门神：自己结束阶段（可选）
+            // 门神（A2 H51）：上游 player phaseEnd＝自己整回合结束（可选）。
             HostBehavior::YxsMenshen => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -352,9 +352,9 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 轩辕：自己结束阶段（限定；可选）
+            // 轩辕（A2 H53）：上游 player phaseEnd＝自己整回合结束（限定；可选）。
             HostBehavior::Xuanyuan => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -444,9 +444,10 @@ impl HostBehavior {
             // 魂殉志 / 殉：无触发时机（主动面 + 内联臂）
             HostBehavior::Hxunzhi => None,
             HostBehavior::Hxunzhi2 => None,
-            // 护天：自己阶段结束（可选）
+            // 护天（A2 H54）：上游 player phaseEnd＝自己整回合结束（可选；
+            // 寄存主面——取回面在内核阶段收束，跨一个阶段边界）
             HostBehavior::Hutian => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -781,8 +782,9 @@ impl HostBehavior {
             }),
             HostBehavior::GujianFoodChunbing => None,
             HostBehavior::GujianFoodLiyutang => Some(TriggerMeta {
-                // 上游子技 `liyutang`: `trigger:{player:'phaseEnd'}`（第 991 轮）
-                event: EventKind::PhaseEnd,
+                // A2 H57：上游子技 `liyutang` player phaseEnd＝整回合结束
+                //（intro：结束阶段获得护甲；第 991 轮登记）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

@@ -93,8 +93,9 @@ impl HostSkillBehavior {
                     && d.amount > 0
                     && d.nature == crate::event::DamageNature::Thunder),
             HostBehavior::XianjianLingyu => {
+                // A2 H81：自己整回合结束（上游 player phaseEnd）＋有人已受伤
                 matches!(event,
-                    EventData::Phase { player, begin: false, .. }
+                    EventData::TurnEndWindow { player, after: false }
                     if *player == owner)
                     && ctx.state.alive_players().any(|p| {
                         p != owner && (ctx.state.player(p).hp as u32) < ctx.state.player(p).max_hp
@@ -207,7 +208,9 @@ impl HostSkillBehavior {
                     })
             }
             HostBehavior::XianjianLinghuo => matches!(event,
-                EventData::Phase { player, begin: false, .. }
+                // A2 H83：他人整回合结束（上游 global phaseEnd＋filter 限
+                // event.player!==player）＋本回合受伤＋冷却已过
+                EventData::TurnEndWindow { player, after: false }
                 if *player != owner
                     && ctx.state.player(*player).turn_damage > 0
                     && ctx.state.turn.round >= ctx.state.player(owner).linghuo_ready_round),
@@ -275,10 +278,10 @@ impl HostSkillBehavior {
             // 毒刺：自己弃牌含装备 kind+距离 1 内有其他存活角色（登记差
             // 异：仅弃置路径；被获得/替换不触发）,
             HostBehavior::XianjianShenwu => {
-                // 上游 `{global:'phaseEnd'}`：**任何玩家的任何阶段**结束（第 939 轮：
-                // 原臂钉在自己 End 阶段，过窄）
+                // A2 H87：上游 `{global:'phaseEnd'}`＝任意玩家整回合结束
+                //（第 939 轮：原臂钉在自己 End 阶段，过窄；觉醒门不变）
                 matches!(event,
-                EventData::Phase { begin: false, .. }
+                EventData::TurnEndWindow { after: false, .. }
                 if ctx.state.player(owner).shuiyun_count >= 3)
                     && !ctx.state.player(owner).shenwu_awakened
             }
@@ -301,10 +304,10 @@ impl HostSkillBehavior {
                 EventData::Dying { player, .. } if *player != owner)
                     && !ctx.state.player(owner).off_court.is_empty()
             }
-            // 忘忧：他人阶段末+自己有牌+本回合存在受伤标记者,
+            // 忘忧（A2 H85）：他人整回合结束＋自己有牌＋本回合存在受伤标记者
             HostBehavior::XianjianWangyou => matches!(event,
-                // 上游 `wangyou`: `{global:'phaseEnd'}` + ①自己有牌 ②非自己阶段 ③场上有人持 wangyou3
-                EventData::Phase { player, begin: false, .. }
+                // 上游 `wangyou`: `{global:'phaseEnd'}` + ①自己有牌 ②非自己回合 ③场上有人持 wangyou3
+                EventData::TurnEndWindow { player, after: false }
                 if *player != owner
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())
@@ -392,7 +395,9 @@ impl HostSkillBehavior {
                     && ctx.state.player(d.target).alive
                     && ctx.state.player(d.target).anwugu_count == 0),
             HostBehavior::XianjianBinxin => matches!(event,
-                EventData::Phase { player, begin: false, .. }
+                // A2 H80：任意玩家整回合结束（上游 global phaseEnd），
+                // 目标＝回合结束者（factory 按 TurnEndWindow 提取）
+                EventData::TurnEndWindow { player, after: false }
                 if ctx.state.player(*player).alive
                     && ctx.state.player(*player).hp == 1),
             // 回梦：你回复体力（灵雪同款 filter）,

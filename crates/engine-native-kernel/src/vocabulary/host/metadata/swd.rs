@@ -198,9 +198,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 大同：任意玩家阶段结束（global；frequent 自动无门）
+            // 大同（A2 H62）：上游 global phaseEnd＝任意玩家整回合结束
+            //（global；frequent 自动无门）
             HostBehavior::SwdDatong => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -308,9 +309,10 @@ impl HostBehavior {
             }),
             // 平恤：无触发面（computed_distance 字段消费）
             HostBehavior::SwdPingxu => None,
-            // 还灵：自己阶段结束（可选确认门；上游 player phaseEnd）
+            // 还灵（A2 H63）：上游 player phaseEnd＝自己整回合结束
+            //（可选确认门）
             HostBehavior::SwdHuanling => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -363,7 +365,8 @@ impl HostBehavior {
             // 昆仑镜/东皇钟：出牌主动技/阶段末触发（东皇钟 direct forced）
             HostBehavior::SwdKunlunjingcCard => None,
             HostBehavior::SwdDonghuangzhongCard => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                // A2 H64：上游 player phaseEnd＝自己整回合结束（direct forced）
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -416,9 +419,10 @@ impl HostBehavior {
             }),
             // 疾影：锁定 mod 无触发面（sha_range_free 链查询）
             HostBehavior::SwdJiyingHeld => None,
-            // 沐风：结束阶段确认门（frequent 上游→确认近似）
+            // 沐风（A2 H66）：上游 player phaseEnd＝自己整回合结束
+            //（frequent 上游→确认近似）
             HostBehavior::SwdMufengHeld => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -643,9 +647,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 灵心：自己阶段结束（frequent 锁定式=非 optional）
+            // 灵心（A2 H67）：上游 player phaseEnd＝自己整回合结束
+            //（frequent 锁定式=非 optional）
             HostBehavior::SwdLingxin => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -774,9 +779,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: vec![EventKind::CardResponded],
             }),
-            // 凌锋：自己阶段结束（frequent 锁定式=非 optional）
+            // 凌锋（A2 H69）：上游 player phaseEnd＝自己整回合结束
+            //（frequent 锁定式=非 optional；原钉出牌阶段结束＝错位族随迁）
             HostBehavior::SwdLingfeng => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -1057,9 +1063,10 @@ impl HostBehavior {
                 optional: true,
                 extra_events: Vec::new(),
             }),
-            // 倾城：自己结束阶段（frequent 锁定式=非 optional）
+            // 倾城（A2 H70）：上游 player phaseEnd＝自己整回合结束
+            //（frequent 锁定式=非 optional）
             HostBehavior::SwdLqingcheng => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
@@ -1105,9 +1112,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 机关怨待获得：拥有者结束阶段强制获得置牌
+            // 机关怨待获得（A2 H71）：上游 jiguanyuan player phaseEnd＝
+            // 拥有者整回合结束强制获得置牌
             HostBehavior::SwdJiguanyuanGain => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

@@ -153,9 +153,12 @@ fn swd_deferred_b96_huanhun_lqingcheng() {
         r
     };
     let h0 = e.debug_hand(0).len();
-    // 推进过出牌阶段结束（Phase{Play,begin:false} 触发倾城）
-    submit(&mut e, 0, GameAction::NextPhase);
-    settle_optional_confirm(&mut e);
+    // A2 H70：上游 player phaseEnd＝整回合结束——推进 Play→Discard→End→
+    // 整回合结束窗，窗内触发倾城判定循环
+    for _ in 0..3 {
+        submit(&mut e, 0, GameAction::NextPhase);
+        settle_optional_confirm(&mut e);
+    }
     assert!(
         e.debug_hand(0).contains(&red_c2) && e.debug_hand(0).contains(&red_c1),
         "倾城：两红判定牌入手"

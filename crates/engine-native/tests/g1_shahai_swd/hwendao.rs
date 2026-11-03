@@ -136,8 +136,12 @@ fn swd_generals_b77_hwendao_lingfeng_tianhuo() {
         },
     );
     settle_optional_confirm(&mut e);
-    // 出牌阶段结束（Play→Discard）触发凌锋：目标窗
-    submit(&mut e, 0, GameAction::NextPhase);
+    // A2 H69：上游 player phaseEnd＝整回合结束（原钉出牌阶段结束＝错位
+    // 族随迁）——推进 Play→Discard→End→整回合结束窗，窗内触发凌锋：目标窗
+    submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
+    submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    settle_optional_confirm(&mut e);
+    submit(&mut e, 0, GameAction::NextPhase); // End→整回合结束窗
     let c = e.open_choice().expect("凌锋目标窗");
     assert_eq!(c.spec.prompt, "lingfeng_target");
     let (cid, obs) = (c.id, c.observer);

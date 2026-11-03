@@ -246,9 +246,9 @@ impl HostSkillBehavior {
                     }));
                 hit
             }
-            // 大同：任意角色任意阶段结束（global phaseEnd）全场极差 ≤1
+            // 大同（A2 H62）：任意玩家整回合结束（global phaseEnd）全场极差 ≤1
             HostBehavior::SwdDatong => matches!(event,
-            EventData::Phase { begin: false, .. }
+            EventData::TurnEndWindow { after: false, .. }
             if {
                 let counts: Vec<usize> = ctx.state.players.iter()
                     .filter(|p| p.alive)
@@ -324,10 +324,10 @@ impl HostSkillBehavior {
                     }))),
             // 平恤：无触发面
             HostBehavior::SwdPingxu => false,
-            // 还灵：自己任一阶段结束（上游 player phaseEnd 逐阶段均触发）
+            // 还灵（A2 H63）：自己整回合结束（上游 player phaseEnd＝每回合一次）
             HostBehavior::SwdHuanling => matches!(event,
-                EventData::Phase { player, begin, .. }
-                if *player == owner && !*begin),
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner),
             // 屠阵：自己伤害他人结算后且其有非基本手牌
             HostBehavior::SwdTuzhen => matches!(event,
             EventData::Damage(d)
@@ -430,10 +430,10 @@ impl HostSkillBehavior {
                 })),
             // 疾影：无触发面
             HostBehavior::SwdJiyingHeld => false,
-            // 沐风：结束阶段且本回合用过基本牌
+            // 沐风（A2 H66）：自己整回合结束且本回合用过基本牌
             HostBehavior::SwdMufengHeld => matches!(event,
-                EventData::Phase { player, begin, .. }
-                if *player == owner && !*begin
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner
                     && ctx.state.turn.mufeng_used_basic),
             // 望尘：弃牌阶段结束（End 入场）且弃置过基本牌
             HostBehavior::SwdWangchenHeld => matches!(event,
@@ -570,11 +570,10 @@ impl HostSkillBehavior {
             HostBehavior::SwdYinyue => matches!(event,
                 EventData::Recover { player, .. }
                     if ctx.state.player(*player).alive),
-            // 灵心：自己阶段结束帧（End/收束入场——PhaseEnd 语义由 filter
-            // 验 begin=false 且 phase==owner 当前阶段末）
+            // 灵心（A2 H67）：自己整回合结束（上游 player phaseEnd）
             HostBehavior::SwdLingxin => matches!(event,
-                EventData::Phase { player, begin, .. }
-                if *player == owner && !*begin),
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner),
             // 虚影：自己受到伤害前置（DamageBefore 帧共用 Damage 载荷——
             // 取消+失去体力在机器步写回）
             HostBehavior::SwdXuying => matches!(event,
@@ -789,10 +788,10 @@ impl HostSkillBehavior {
                 if ctx.state.player(*player).hp <= 0
                     && (!ctx.state.player(owner).hand.is_empty()
                         || !ctx.state.player(owner).equips.is_empty())),
-            // 倾城：自己结束阶段（End/收束帧）
+            // 倾城（A2 H70）：自己整回合结束（上游 player phaseEnd）
             HostBehavior::SwdLqingcheng => matches!(event,
-                EventData::Phase { player, begin, .. }
-                if *player == owner && !*begin),
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner),
             // 因果：他人受到有来源伤害前置（来源≠自己、自己 he 有牌）
             HostBehavior::SwdYinguo => matches!(event,
                 EventData::Damage(d)
@@ -934,10 +933,11 @@ impl HostSkillBehavior {
                     if *player == owner && cur != owner && he_has
                 )
             }
-            // 凌锋：自己出牌阶段结束（出牌数门在机器步求取）
+            // 凌锋（A2 H69）：自己整回合结束（上游 player phaseEnd；原钉
+            // 出牌阶段结束＝错位族随迁；出牌数门在机器步求取）
             HostBehavior::SwdLingfeng => matches!(event,
-                EventData::Phase { player, phase: crate::event::Phase::Play, begin }
-                if *player == owner && !*begin),
+                EventData::TurnEndWindow { player, after: false }
+                if *player == owner),
             // 冰箭/神鼎/鬼眼：出牌主动技（ActivateSkill 通道），无触发面
             // 袭西·凤钰面：自己出牌阶段开始且 he 有牌（候选面机器步求取）
             HostBehavior::SwdShangxi => matches!(event,
@@ -974,10 +974,10 @@ impl HostSkillBehavior {
                     && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
                     && ctx.state.alive_players().any(|p| p != owner)),
 
-            // 东皇钟：自己任一阶段结束且手牌有红牌（蝶舞口径）
+            // 东皇钟（A2 H64）：自己整回合结束且手牌有红牌（蝶舞口径）
             HostBehavior::SwdDonghuangzhongCard => matches!(event,
-            EventData::Phase { player, begin, .. }
-            if *player == owner && !*begin
+            EventData::TurnEndWindow { player, after: false }
+            if *player == owner
                 && ctx.state.player(owner).hand.iter().any(|c| {
                     matches!(
                         ctx.catalog.cards[*c as usize].suit,
@@ -1060,7 +1060,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdFengyinState => matches!(event,
                 EventData::Phase { player, begin: true, .. } if *player == owner),
             HostBehavior::SwdJiguanyuanGain => matches!(event,
-                EventData::Phase { player, begin: false, .. }
+                // A2 H71：自己整回合结束（上游 jiguanyuan player phaseEnd）
+                EventData::TurnEndWindow { player, after: false }
                     if *player == owner && ctx.state.player(owner).alive
                         && !ctx.state.player(owner).jiguanyuan_cards.is_empty()),
             HostBehavior::SwdJiguanfengCard => false,

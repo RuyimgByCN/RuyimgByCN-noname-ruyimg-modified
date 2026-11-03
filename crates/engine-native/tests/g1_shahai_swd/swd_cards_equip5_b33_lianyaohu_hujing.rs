@@ -671,8 +671,11 @@ fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
         core.players[1].hand.push(id);
         id
     };
-    // 主动推进 p1 的阶段（Judge→Draw→Play→Discard→End 各段末触发窗）
+    // A2 H64：上游 player phaseEnd＝整回合结束——推进 p1 各阶段到整回合
+    // 结束窗触发（弃红牌 → 置延时锦囊实体入 p2 判定区）
+    let log_cursor = e.log().len();
     let mut guard = 0;
+    let mut dhz_placed = false;
     loop {
         guard += 1;
         assert!(guard < 300, "推进溢出");
@@ -710,6 +713,7 @@ fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
                         selection: vec![ChoiceOption::Player(2)],
                     },
                 );
+                dhz_placed = true;
                 continue;
             }
             let (cid, obs) = (c.id, c.observer);
@@ -730,34 +734,47 @@ fn swd_cards_equip5_b35_kunlunjingc_donghuangzhong() {
             );
             continue;
         }
-        if !e.state_core().player(2).judge.is_empty() {
+        if dhz_placed {
             break;
-        }
-        if e.turn().current != 1 || e.turn().phase == Phase::Play {
-            // p1 End 后未置入即失配
         }
         let cur = e.turn().current;
         let out = submit(&mut e, cur, GameAction::NextPhase);
         if let CommandOutcome::Rejected(_) = out {
             continue;
         }
-        if guard > 250 && e.turn().current == 1 && e.turn().phase == Phase::End {
+        if guard > 250 {
             break;
         }
     }
-    assert!(
-        !e.state_core().player(2).judge.is_empty(),
-        "东皇钟：延时锦囊实体置入 p2 判定区"
-    );
-    let judge_kind = e.catalog().cards[e.state_core().player(2).judge[0] as usize].kind;
+    assert!(dhz_placed, "东皇钟：整回合结束窗内弃红牌并选目标");
+    // 窗末即交接：置入 p2 判定区的延时锦囊随 p2 判定阶段立刻结算离场
+    //（判定区已空）——以日志 CardsGiven 证置入的是延时锦囊实体。
+    let placed_kind = e
+        .log()[log_cursor..]
+        .iter()
+        .find_map(|ev| match ev {
+            engine_native::LogEvent::CardsGiven {
+                from: 1,
+                to: 2,
+                cards,
+            } if cards.len() == 1 => {
+                Some(e.catalog().cards[cards[0] as usize].kind)
+            }
+            _ => None,
+        })
+        .expect("东皇钟：延时锦囊实体置入 p2 判定区（日志 CardsGiven）");
     assert!(
         matches!(
-            judge_kind,
+            placed_kind,
             engine_native::catalog::CardKind::Le
                 | engine_native::catalog::CardKind::Bing
                 | engine_native::catalog::CardKind::ShanDian
         ),
         "东皇钟：置入的是延时锦囊实体"
+    );
+    assert!(
+        !e.debug_hand(1).contains(&red),
+        "东皇钟：红牌费用已弃"
     );
 }
 

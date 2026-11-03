@@ -135,8 +135,9 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 冰心（A2 H80）：整回合结束者为 +1 护甲目标（global phaseEnd）。
             HostBehavior::XianjianBinxin => match event {
-                EventData::Phase { player, .. } => (Some(*player), None),
+                EventData::TurnEndWindow { player, after: false } => (Some(*player), None),
                 _ => (None, None),
             },
             HostBehavior::XianjianFeixu => match event {
@@ -148,8 +149,10 @@ impl HostSkillBehavior {
                 EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
+            // 灵火（A2 H83）：整回合结束者为 1 火伤目标（global phaseEnd，
+            // filter 限他人）。
             HostBehavior::XianjianLinghuo => match event {
-                EventData::Phase { player, .. } => (Some(*player), None),
+                EventData::TurnEndWindow { player, after: false } => (Some(*player), None),
                 _ => (None, None),
             },
             HostBehavior::XianjianShuiyun5 => match event {
