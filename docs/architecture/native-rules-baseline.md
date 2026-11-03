@@ -65,6 +65,18 @@ hlss 放弃路径牌堆 −1（旧断言的「牌堆不变」即重复实体，�
 存档 NGSA 106／ABI 758／WS7 不变；v331 真实挂起档按版本门禁拒绝。证据见[规则 332 批](../operations/evidence/2026-11-03-rule332-gaiming-cancel/README.md)。
 缺陷台账 L03c（HlssGaiming）随之移入 FIXED，台账收敛到 0（A 0／B 0）。
 
+**R05-A2 阶段/回合触发迁移（2026-11-03，私有分支 r05-private，未合入 Main）**：按 A2 审计（168 条对照表见
+`docs/operations/evidence/2026-11-03-r05-private-wip/audit.json`）分五波把原生阶段/回合触发对齐上游 noname 触发名语义——
+新增真实准备阶段 `Phase::Prepare` 与三窗 `TurnBegin`（回合开始）、`TurnPhaseEnd`／`TurnPhaseAfter`（交接前整回合结束两段，
+交接移至 phaseAfter 段 Commit）；回合重置/翻面跳过/到期解除前移 TurnBegin 前；60 条宿主/标准技迁移；DSL `phase_begin`
+→TurnBegin、`phase_prepare`→Phase{Prepare,begin} 解除拒装、`turn_ended`→TurnPhaseAfter。**登记差异**：
+① **K24 阶段计数**：原生 `phase_number` 每回合五阶段 +5（准备阶段不计入），上游 `game.phaseNumber` 每回合 +1——
+WudianZiyu %4 门依赖此数，本批维持原生口径并在此登记（对齐需迁移自愈门读数并重录 golden，随 R05-J 评估）；
+② **K18 灵武额外阶段**：上游 phaseAfter `insertPhase`＝额外回合，原生以额外出牌阶段承载（本人不交接直接再入 Play），
+防递归同 `extra_phase_lingwu`；③ **光塔（H74/K13）**：上游 trigger 写 phaseEnd（整回合结束）、intro 写「下个结束阶段」，
+按 trigger 记并在此登记取舍；④ Boss 准备阶段 19 技整体迁 `begin_prepare`（上游 phaseZhunbeiBegin），逐条差异随 R05-J 场景批核；
+⑤ K22 首回合缺 TurnBegin 序列帧（K22b 三方案均不可收口，搁置随波合并）。
+
 ## 2026-10-24 上游 37 提交差异台账
 
 核对范围为 noname **`df2682e66af9930fe02861a25cb6f2cd2ef6ae36..1a548c95acdf8ac1ef44d74473403eda2ac86cf0`**：37 个提交、167 个净变化路径；noname-next 为 `7e28a93799a9c01794085e911a72a4faa5673883` 加现有未提交修改。本节是该增量的规则差异主账；[逐提交映射及检查证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md)保存本次静态审查快照。编号 `UP37-*` 不混入旧批次缺陷计数。
