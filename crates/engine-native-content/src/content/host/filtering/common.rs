@@ -21,9 +21,9 @@ impl HostSkillBehavior {
             // 复仇·清算：自己 End 阶段结束（登记差异：上游 global
             // phaseAfter，原生自己回合结束）
             HostBehavior::WudianFuchou2 => matches!(event,
-                // 上游 `{global:'phaseAfter'}` + filter「`storage.fuchou2` 里有存活者」
-                //（第 986 轮：原臂钉在自己 End 结束，且漏了标记非空条件）
-                EventData::Phase { begin: false, .. }
+                // A2 H72：上游 `{global:'phaseAfter'}`＝任意角色整回合结束后
+                //（每轮 N 次）＋filter「标记里有存活者」（第 986 轮补非空条件）
+                EventData::TurnEndWindow { after: true, .. }
                 if ctx.state.player(owner)
                     .fuchou_marked
                     .iter()
@@ -253,18 +253,11 @@ impl HostSkillBehavior {
                 }
                 _ => false,
             },
-            // 昆仑镜：自己的阶段收束（快照）或阶段开始（体力低于快照值）
+            // 幻镜（A2 H11）：快照＝本人整回合结束后（phaseAfter 段）；
+            // 比对＝本人回合开始（TurnBegin 窗）且体力低于快照值。
             HostBehavior::Kunlunjing => match event {
-                EventData::Phase {
-                    player,
-                    begin: false,
-                    ..
-                } => *player == owner,
-                EventData::Phase {
-                    player,
-                    begin: true,
-                    ..
-                } => {
+                EventData::TurnEndWindow { player, after: true } => *player == owner,
+                EventData::TurnBegin { player } => {
                     *player == owner
                         && !ctx.state.turn.kunlunjing_snapshot.is_empty()
                         && ctx.state.player(owner).hp < ctx.state.turn.kunlunjing_hp
@@ -698,8 +691,10 @@ impl HostSkillBehavior {
                 armed_and_targets
             }
             // 双刃·殁：自己死亡帧,
+            // 阻魔手铐·封印（A2 H60）：本人整回合结束后到期（原「任意
+            // 阶段结束」在准备阶段加入后每回合 6 次）。
             HostBehavior::GwentFengyinState => matches!(event,
-                EventData::Phase { player, begin: false, .. } if *player == owner),
+                EventData::TurnEndWindow { player, after: true } if *player == owner),
             HostBehavior::HuanleMianjuCard => matches!(event,
             EventData::TurnOverBefore { player, .. }
             if ctx.state.player(*player).equips.iter().any(|c| {

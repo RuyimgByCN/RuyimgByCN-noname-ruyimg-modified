@@ -90,8 +90,13 @@ fn kunlunjing_snapshot_and_rewind() {
         core.players[2].hand.retain(|c| *c != armor);
         core.players[2].equips.push(armor);
     }
-    // 出牌阶段收束 → 记录快照
-    next_phase(&mut e);
+    // A2 H11：快照点＝整回合结束 phaseAfter 段（原任意阶段收束）——
+    // 推进到本回合整结束（Play→Discard→End→收束）。
+    next_phase(&mut e); // Play→Discard
+    drain(&mut e);
+    next_phase(&mut e); // Discard→End
+    drain(&mut e);
+    next_phase(&mut e); // End→收束→结束窗
     drain(&mut e);
     assert!(
         !e.state_core().turn.kunlunjing_snapshot.is_empty(),
@@ -169,7 +174,12 @@ fn kunlunjing_no_rewind_when_hp_not_lower() {
     let mut e = swd_engine(125002);
     e.debug_grant(0, "kunlunjing");
     advance_to_play(&mut e, 0);
-    next_phase(&mut e);
+    // A2 H11：快照点＝整回合结束 phaseAfter 段。
+    next_phase(&mut e); // Play→Discard
+    drain(&mut e);
+    next_phase(&mut e); // Discard→End
+    drain(&mut e);
+    next_phase(&mut e); // End→收束→结束窗
     drain(&mut e);
     assert!(!e.state_core().turn.kunlunjing_snapshot.is_empty(), "已记录快照");
     // 体力保持 → 下一次阶段开始不回滚

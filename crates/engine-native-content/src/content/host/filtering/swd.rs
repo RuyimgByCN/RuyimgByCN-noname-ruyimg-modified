@@ -660,9 +660,10 @@ impl HostSkillBehavior {
             // 自己回合=回合内池，他人回合=回合外池；上游 lexue1/lexue2
             // 分别挂 phaseBegin/phaseEnd 的双池面收敛为回合开始单窗，
             // PhaseBegin 授至本回合结束由 expires_end_of_turn 承担）
+            // A2 H38：上游 lexue1 player phaseBegin＝回合开始（原锚判定
+            // 开始；lexue2 phaseEnd 双池收敛语义保持，见上注释）。
             HostBehavior::SwdLexue => matches!(event,
-                EventData::Phase { phase: crate::event::Phase::Judge, begin: true, .. }
-                if ctx.state.player(owner).alive),
+                EventData::TurnBegin { .. } if ctx.state.player(owner).alive),
             // 枕流触发面（A2 H39）：上游 player phaseBegin＝自己回合开始且
             // off_court 有牌（原锚自己判定阶段开始）
             HostBehavior::SwdZhenjiu2 => matches!(event,

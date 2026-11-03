@@ -322,9 +322,10 @@ impl HostMachine {
             }
             // 昆仑镜：阶段收束记录快照 / 阶段开始（机器内确认门）回滚
             HostBehavior::Kunlunjing => {
+                // A2 H11：快照面＝整回合结束 phaseAfter 段；比对面＝TurnBegin 窗。
                 let begin = matches!(
                     ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data),
-                    Some(EventData::Phase { begin: true, .. })
+                    Some(EventData::TurnBegin { .. })
                 );
                 if !begin {
                     let mut snap = Vec::new();

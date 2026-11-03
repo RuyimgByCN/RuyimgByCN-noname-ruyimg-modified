@@ -833,8 +833,9 @@ impl HostBehavior {
             // 乐学·久悠面：自己回合开始（授技在机器步按当前回合分流——
             // 自己回合授{制衡/集智}、他人回合授{遗计/急救/鬼道/反馈}；
             // 回合结束清候选在 PhaseEnd 面另入 filter 分流）
+            // 乐学（A2 H38）：上游 lexue1 player phaseBegin＝回合开始。
             HostBehavior::SwdLexue => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

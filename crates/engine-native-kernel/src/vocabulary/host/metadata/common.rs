@@ -327,13 +327,15 @@ impl HostBehavior {
             // 昆仑镜：阶段收束（锁定记录快照）+ 阶段开始（体力低于快照值
             // 时**机器内确认门**回滚——上游两面可选性不同，故不用
             // TriggerMeta.optional）
+            // 幻镜（A2 H11）两面：比对＝player phaseBegin（TurnBegin 窗）、
+            // 快照＝player phaseAfter（整回合结束 phaseAfter 段）。
             HostBehavior::Kunlunjing => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,
                 optional: false,
-                extra_events: vec![EventKind::PhaseEnd],
+                extra_events: vec![EventKind::TurnPhaseAfter],
             }),
             // 神弓：被动修饰（无触发时机；响应窗内联候选）
             HostBehavior::Shengong => None,
@@ -890,8 +892,10 @@ impl HostBehavior {
             HostBehavior::GwentKunenCard => None,
             HostBehavior::GwentShanbengCard => None,
             HostBehavior::GwentPoxiaoCard => None,
+            // 阻魔手铐·封印（A2 H60）：上游持续至 player phaseAfter＝本人
+            // 整回合结束后到期。
             HostBehavior::GwentFengyinState => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseAfter,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

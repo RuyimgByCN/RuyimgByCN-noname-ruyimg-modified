@@ -17,8 +17,9 @@ impl HostBehavior {
             HostBehavior::WudianFuchou => None,
             HostBehavior::WudianLiangceRemain => None,
             HostBehavior::WudianGuihan => None,
+            // 负仇（A2 H72）：上游 global phaseAfter。
             HostBehavior::WudianFuchou2 => Some(TriggerMeta {
-                event: EventKind::PhaseEnd,
+                event: EventKind::TurnPhaseAfter,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

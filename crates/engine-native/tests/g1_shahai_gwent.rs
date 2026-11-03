@@ -646,7 +646,11 @@ fn gwent_fengyin_disables_target_skills() {
         submit(&mut e, actor, GameAction::NextPhase);
     }
     let h_after = e.debug_hand(1).len();
-    submit(&mut e, 1, GameAction::NextPhase); // Draw→Judge（Draw end 触发解除）
+    submit(&mut e, 1, GameAction::NextPhase); // Draw→Judge
+    submit(&mut e, 1, GameAction::NextPhase); // Judge→Play
+    submit(&mut e, 1, GameAction::NextPhase); // Play→Discard
+    submit(&mut e, 1, GameAction::NextPhase); // Discard→End
+    submit(&mut e, 1, GameAction::NextPhase); // End→收束→phaseAfter 段（A2 H60：封印到期）
     let qpen_inst2 = e.save().core.skills.get(&(1, qpen_def)).cloned();
     assert_eq!(
         qpen_inst2.as_ref().map(|i| i.enabled),
