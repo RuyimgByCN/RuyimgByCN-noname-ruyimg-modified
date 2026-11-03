@@ -7,7 +7,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         .skill_by_name(crate::vocabulary::names::BOSS_BAOLIAN)
     {
         if ctx.core.has_skill(player, bldef) {
-            ctx.draw_cards(player, 2);
+            ctx.start_draw(player, 2);
         }
     }
     // 强征（Boss 白无常，规则 v255）：结束阶段从每名其他有手
@@ -134,7 +134,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         .skill_by_name(crate::vocabulary::names::BOSS_WULIANG)
     {
         if ctx.core.has_skill(player, wldef) {
-            ctx.draw_cards(player, 2);
+            ctx.start_draw(player, 2);
         }
     }
     // 炼狱（Boss 马面，规则 v257）：结束阶段对全部其他存活
@@ -343,7 +343,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
     {
         if ctx.core.has_skill(player, mtdef) && ctx.core.turn.mengtai_draw_pending {
             ctx.core.turn.mengtai_draw_pending = false;
-            ctx.draw_cards(player, 3);
+            ctx.start_draw(player, 3);
         }
     }
     // 封冻解除（Boss 应昭，规则 v228）：回合结束全清封印
@@ -406,7 +406,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
         if ctx.core.has_skill(player, jdef) {
             let n = ctx.core.player(player).hand.len();
             if n < 9 {
-                ctx.draw_cards(player, 9 - n);
+                ctx.start_draw(player, (9 - n) as u32);
             }
         }
     }

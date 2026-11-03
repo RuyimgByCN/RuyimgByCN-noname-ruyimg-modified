@@ -182,8 +182,8 @@ pub(super) fn post_damage(
                 }
                 if let Some(src) = d.source {
                     if src != holder && ctx.core.player(src).alive {
-                        ctx.draw_cards(holder, 1);
-                        ctx.draw_cards(src, 1);
+                        ctx.start_draw(holder, 1);
+                        ctx.start_draw(src, 1);
                     }
                 }
             }
@@ -213,7 +213,7 @@ pub(super) fn post_damage(
             .skill_by_name(crate::vocabulary::names::BOSS_LINGQU)
         {
             if ctx.core.has_skill(d.target, ldef) && ctx.core.player(d.target).alive {
-                ctx.draw_cards(d.target, 1);
+                ctx.start_draw(d.target, 1);
                 let p = ctx.core.player_mut(d.target);
                 p.lingqu_count = p.lingqu_count.saturating_add(1);
             }
@@ -230,7 +230,7 @@ pub(super) fn post_damage(
         {
             let holders: Vec<PlayerId> = vec![owner];
             for holder in holders {
-                ctx.draw_cards(holder, 1);
+                ctx.start_draw(holder, 1);
             }
         }
     }
@@ -276,7 +276,7 @@ pub(super) fn post_damage(
         if let Some(holder) = ctx.core.seat_ring.iter().copied().find(|p| {
             ctx.core.player(*p).alive && ctx.core.player(*p).general_slots[0] == Some(named)
         }) {
-            ctx.draw_cards(holder, 1);
+            ctx.start_draw(holder, 1);
         }
     }
     if effect == crate::event::NativeDamageEffect::Duqu {
@@ -386,7 +386,7 @@ pub(super) fn shangshix_draw(ctx: &mut Ctx<'_>, player: PlayerId) {
         if ctx.core.player(player).alive && ctx.core.has_skill(player, ssdef) {
             let n = ctx.core.player(player).hand.len();
             if n < 4 {
-                ctx.draw_cards(player, 4 - n);
+                ctx.start_draw(player, (4 - n) as u32);
             }
         }
     }

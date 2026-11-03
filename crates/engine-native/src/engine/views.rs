@@ -112,7 +112,7 @@ impl Engine {
                         }
                     }
                 }
-                crate::snap::physical_cards(core, &held)
+                crate::snap::physical_cards(core, &held, None)
                     .into_iter()
                     .filter(|card| {
                         use crate::snap::PhysicalCardZone::*;
@@ -120,7 +120,9 @@ impl Engine {
                             || match card.zone {
                                 Hand => seat.is_some() && card.owner == seat,
                                 Equip | Judge | DiscardPile | Processing => true,
-                                DrawPile | Removed | Expansion => false,
+                                // R05：R 帧 held 对席位/观战隐藏牌面（Referee
+                                // 经全信息路径另行可见）。
+                                DrawPile | Removed | Expansion | DrawHeld => false,
                             }
                     })
                     .collect()
