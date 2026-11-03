@@ -25,12 +25,8 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 嘲讽解除（U05 swd 灵剑圣休号角，规则 v198）：自己回合判定阶段开始
     // ——上游 addTempSkill {player:'phaseBegin'} 同口径
     // 嘲讽解除（K04）：已迁 reset_new_turn_state（上游 {player:'phaseBegin'}）。
-    // 星体改造重置（U05 swd 灵剑，规则 v198）：自己回合判定阶段开始——
-    // 上游 phaseEnd 移除+清零在「其下一结束阶段」生效；原生以本回合开始
-    // 重置近似（差一夜，登记差异：重置时点=下一回合开始而非上一结束）
-    if begin && phase == Phase::Judge && ctx.core.player(player).xingtigaizao_count > 0 {
-        ctx.core.player_mut(player).xingtigaizao_count = 0;
-    }
+    // 星体改造重置（K05，A2）：已迁整回合结束窗 phaseEnd 段（上游
+    // phaseEnd 移除+清零）——原判定开始重置的「差一夜」登记差异随迁对齐。
     // 蛊舞递减（U05 xianjian 阿奴，规则 v154）：已迁整回合结束窗
     // phaseAfter 段（kernel/events.rs commit_turn_end_window）——上游
     // anwugu2 trigger {player:'phaseAfter'} 每回合递减一次，原「每阶段
@@ -97,31 +93,9 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         return;
     }
     // PhaseEnd
-    // 筑城开关（U07 批三，规则 v113）：刘馥自己每阶段结束确认翻转（上
-    // 游 player:"phaseEnd" optional 同口径；原生无 begin:false 帧，直推
-    // OptionalGate）
-    if let Some(def) = ctx
-        .catalog
-        .skill_by_name(crate::vocabulary::host::WUDIAN_ZHUCHENG_KEY)
-    {
-        if ctx.core.has_skill(player, def) {
-            let event = EventData::Phase {
-                player,
-                phase,
-                begin: false,
-            };
-            ctx.res.parks.push(crate::resolution::Park {
-                resume_depth: ctx.res.stack.len(),
-                slot: crate::resolution::Slot::Trigger {
-                    frame: crate::resolution::NO_FRAME,
-                },
-                machine: Box::new(crate::resolution::OptionalGate::new(
-                    player, def, event, false, None,
-                )),
-                awaiting_answer: false,
-            });
-        }
-    }
+    // 筑城开关（K14，A2；规则 v113→333）：上游 player:"phaseEnd"＝本人
+    // 整回合结束（每回合一次）——原「每阶段结束」在准备阶段加入后每回合
+    // 6 次询问；已迁 kernel/events.rs commit_turn_end_window phaseEnd 段。
     // 还侠回收（swd 屈娴，批 27）：持有者每阶段结束收回未造成伤害的还
     // 侠转化杀（上游 gain 子技 player phaseEnd；登记差异上游经特殊区暂
     // 存，原生从弃牌堆取回——牌若已离开弃牌堆则不收回）
@@ -152,25 +126,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         }
         ctx.core.turn.discard_phase_discarded = 0;
     }
-    // 光塔（U07 ow，规则 v119）：♠子技持有者于下阶段结束受 1 无源雷伤
-    //（一次性移除；原生无 PhaseEnd 帧——直推同水没墓穴口径）
-    {
-        if let Some(def) = ctx
-            .catalog
-            .skill_by_name(crate::vocabulary::host::WUDIAN_GUANGSHU_SPADE_KEY)
-        {
-            if ctx.core.has_skill(player, def) {
-                ctx.core.skills.remove(&(player, def));
-                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                    None,
-                    player,
-                    1,
-                    crate::event::DamageNature::Thunder,
-                    None,
-                )));
-            }
-        }
-    }
+    // 光塔（K13，A2；规则 v119→333）：♠子技持有者于**下一次整回合结束**
+    // 受 1 无源雷伤（上游 trigger phaseEnd；intro 写「下个结束阶段」与
+    // trigger 矛盾——按 trigger 记，规则基准登记取舍）。已迁 kernel/
+    // events.rs commit_turn_end_window phaseEnd 段。
     // 魂殉志·殉（swd 批 132）：出牌阶段**收束**时持有「殉」者死亡（上游
     // hxunzhi2 phaseUseEnd forced player.die() 同口径——直接死亡，非伤害）
     if !begin && phase == Phase::Play {

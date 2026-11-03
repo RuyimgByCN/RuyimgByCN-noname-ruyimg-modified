@@ -700,6 +700,48 @@ pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after:
         turn_handoff(ctx, player, ctx.core.next_alive(player));
     } else {
         ctx.log(LogEvent::TurnPhaseEnded { player });
+        // 星体改造重置（K05；上游 phaseEnd 移除+清零）。
+        if ctx.core.player(player).xingtigaizao_count > 0 {
+            ctx.core.player_mut(player).xingtigaizao_count = 0;
+        }
+        // 光塔（K13）：♠子技持有者受 1 无源雷伤并移除（一次性）。
+        if let Some(def) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_GUANGSHU_SPADE_KEY)
+        {
+            if ctx.core.skills.remove(&(player, def)).is_some() {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    None,
+                    player,
+                    1,
+                    crate::event::DamageNature::Thunder,
+                    None,
+                )));
+            }
+        }
+        // 筑城确认门（K14）：本人整回合结束确认翻转（上游 phaseEnd
+        // optional）——直推 OptionalGate，同款公园机制。
+        if let Some(def) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::host::WUDIAN_ZHUCHENG_KEY)
+        {
+            if ctx.core.has_skill(player, def) {
+                let event = EventData::TurnEndWindow {
+                    player,
+                    after: false,
+                };
+                ctx.res.parks.push(crate::resolution::Park {
+                    resume_depth: ctx.res.stack.len(),
+                    slot: crate::resolution::Slot::Trigger {
+                        frame: crate::resolution::NO_FRAME,
+                    },
+                    machine: Box::new(crate::resolution::OptionalGate::new(
+                        player, def, event, false, None,
+                    )),
+                    awaiting_answer: false,
+                });
+            }
+        }
         ctx.emit(EventData::TurnEndWindow {
             player,
             after: true,
