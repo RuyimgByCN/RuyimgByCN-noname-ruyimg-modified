@@ -124,6 +124,19 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
                 return Err(reject("ResolveOlJieDanshou skill"));
             }
         }
+        // R05-E（裁决 28 合同 v3 §2）：三固定 compound 的入队校验——
+        // player 在座、skill 非 NONE。触发窗口资格（D 终窗/Prepare/
+        // Source/End/回合开始）由内容机在执行时按当前帧核验；语义槽
+        // （I,role,target）经 VmAux.marks 隔离，通用 AddMark/RemoveMark
+        // 碰派生 helper 键由内容提交钩（vm_effects::step）复检拒绝。
+        EffectRequest::ResolveTiqi { player, skill }
+        | EffectRequest::ResolveBaoshu { player, skill }
+        | EffectRequest::ResolveDcbihuo { player, skill } => {
+            ok_player(*player, "R05 compound")?;
+            if !skill.is_some() {
+                return Err(reject("R05 compound skill"));
+            }
+        }
         // PA12 批④-2：DSL `discard_hand_equip_count(player, N)`（N 为字面
         // 正数）。`count == 0` 是 VM 首发（打开选牌）——选择挂起链未接，
         // 拒绝。

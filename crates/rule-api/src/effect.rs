@@ -700,5 +700,8 @@ collect_variants! { [
     (choices, ChooseOthersAddMark),
     (damage_and_recovery, ChooseOtherTargetsBySkippedPhaseCountDamageDraw),
     (choices, ChooseGiveOrRecastOneHand),
-    (choices, ResolveOlJieDanshou)
+    (choices, ResolveOlJieDanshou),
+    (choices, ResolveTiqi),
+    (choices, ResolveBaoshu),
+    (choices, ResolveDcbihuo)
 ] [] }

@@ -1617,3 +1617,14 @@ pub const CHOOSE_GIVE_OR_RECAST_ONE_HAND: u16 = 770;
 
 /// OL界朱然「胆守」复合效果（ABI 757）。
 pub const RESOLVE_OL_JIE_DANSHOU: u16 = 771;
+/// R05-E（裁决 28 合同 v3 §2/§5）「涕泣」复合：D 终窗 live 读 n，
+/// n≠2 可选确认后真实摸 |n−2| 并给 D 角色的 Limit 槽累加 ±d（ABI 759）。
+pub const RESOLVE_TIQI: u16 = 781;
+/// R05-E「宝梳」复合：Prepare 窗成本（1..=maxHp 名在场角色）→既有
+/// SkillLog 通道子结算→逐目标 link(false)/turnOver(false) 并对 Combs 槽
+/// checked 加 delta=(m==0?1:m)（含负数与 0 均保留条目）（ABI 759）。
+pub const RESOLVE_BAOSHU: u16 = 782;
+/// R05-E「避祸」复合：合格 Source 窗 −1／End 窗 +1 写 Next 槽（可取消，
+/// 抵消 Some0 不删）；目标真实回合开始窗原子 take（含 0）→移除 Next→
+/// 写 Current（ABI 759）。
+pub const RESOLVE_DCBIHUO: u16 = 783;

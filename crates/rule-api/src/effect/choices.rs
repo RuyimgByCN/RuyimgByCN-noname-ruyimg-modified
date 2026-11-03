@@ -1514,5 +1514,49 @@ macro_rules! variants {
     },
         ] }
     };
+    (ResolveTiqi [$($tail:tt)*] [$($variants:tt)*]) => {
+        collect_variants! { [$($tail)*] [
+            $($variants)*
+    /// R05-E「涕泣」：D 终窗 live 统计本 D 的 n（≠2 可选确认）→真实摸
+    /// d=|n−2|→目标仍在场则选 +d/−d/取消，对本逻辑身份的 Limit 槽
+    /// 累加有符号值（Some0 保留；取消不撤已摸牌）。
+    ResolveTiqi {
+        /// Skill owner（奖励摸牌与符号选择者）。
+        player: PlayerId,
+        /// Originating skill instance（身份隔离：逻辑身份派生 Limit helper）。
+        skill: SkillId,
+    },
+        ] }
+    };
+    (ResolveBaoshu [$($tail:tt)*] [$($variants:tt)*]) => {
+        collect_variants! { [$($tail)*] [
+            $($variants)*
+    /// R05-E「宝梳」：成本窗选 1..=当前 maxHp 名在场角色（含自己、
+    /// 不重复、可取消）→既有 SkillLog 通道子结算→读 maxHp、按座次
+    /// 逐目标仅当前 linked 才 link(false)、仅当前 face_down 才
+    /// turnOver(false)，装 helper 并对 Combs 槽 checked 加
+    /// delta=(m==0?1:m)（含负数与 0 均保留条目）。
+    ResolveBaoshu {
+        /// Skill owner（成本选择者与 content 主体）。
+        player: PlayerId,
+        /// Originating skill instance（身份隔离：逻辑身份派生 Combs helper）。
+        skill: SkillId,
+    },
+        ] }
+    };
+    (ResolveDcbihuo [$($tail:tt)*] [$($variants:tt)*]) => {
+        collect_variants! { [$($tail)*] [
+            $($variants)*
+    /// R05-E「避祸」：每个合格 Source 窗 −1／End 窗 +1（每事件一次、
+    /// 可取消）写 Next 槽（抵消 Some0 不删）；目标真实回合开始窗若
+    /// Next 存在则原子 take（含 0）→移除 Next→写 Current。
+    ResolveDcbihuo {
+        /// Skill owner（窗口目标选择者）。
+        player: PlayerId,
+        /// Originating skill instance（身份隔离：逻辑身份派生 Next/Current helper）。
+        skill: SkillId,
+    },
+        ] }
+    };
 }
 pub(super) use variants;

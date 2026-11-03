@@ -361,6 +361,17 @@ pub fn bridge_vm_skill_decls(
             // → 整回合结束窗 phaseAfter 段（交接前派发；现有 TurnEnded 帧触
             // 发窗晚于下一位回合开始子树，不等价）。
             "turn_ended" => EventKind::TurnPhaseAfter,
+            // R05-E（裁决 28 合同 v3 §7）：三固定 compound 的包声明触发面
+            // 事件名（npack 数据面；DSL 词汇表随后续批次接入）——
+            // `damage_source`/`damage_end`＝避祸的认证 Source/End 窗；
+            // `draw_phase_after`＝涕泣的 D 终窗（主 draw 张数>0 时 D 机以
+            // R 子帧替代 End 窗发射，After 窗是恒发射的终窗）。
+            "damage_source" => EventKind::DamageSource,
+            "damage_end" => EventKind::DamageEnd,
+            "draw_phase_after" => EventKind::DrawPhaseAfter,
+            // 既有 SkillLog 通道的 begin 段（宝梳子结算近似面的可声明触发
+            // 窗——maxHp 改写类反例的落点，合同 v3 §5 Finding 4）。
+            "skill_log_begin" => EventKind::SkillLogBegin,
             "hp_lost" => EventKind::LoseHp,
             "hp_recovered" => EventKind::Recover,
             other => {
@@ -413,6 +424,7 @@ pub fn bridge_vm_skill_decls(
     }
     vm_active::bridge_active_entries(pkg, &mut out)?;
     vm_active::join_trigger_only_entries(pkg, &mut out)?;
+    derive_r05_helpers(pkg, &mut out)?;
     if !pkg.view_as_index.is_empty() {
         return Err(invalid(
             "view_as_index",
@@ -449,6 +461,151 @@ fn ensure_symbol_capacity() -> Result<(), BridgeError> {
     let limit = engine_native::content::names::SYMBOL_TABLE_LIMIT;
     if names::interned_count() >= limit {
         return Err(BridgeError::SymbolTableLimit { limit });
+    }
+    Ok(())
+}
+
+// ---- R05-E（裁决 28 合同 v3 §2）：三固定 compound 的四角色私有 helper 派生 ----
+
+/// 调用包可用的三 compound 效果标签（rule-vm `effect_tag`，ABI 759）。
+const R05_COMPOUND_TIQI: u16 = 781;
+const R05_COMPOUND_BAOSHU: u16 = 782;
+const R05_COMPOUND_DCBIHUO: u16 = 783;
+/// 角色顺序固定（Limit/Combs/Next/Current；`vm_effects::R05_ROLES` 同序）。
+const R05_ROLE_TAGS: [&str; 4] = ["limit", "combs", "next", "current"];
+
+/// compound → 它在该逻辑身份下需要的角色下标（§2：角色固定为
+/// Limit（Tiqi）、Combs（Baoshu）、Next/Current（Dcbihuo））。
+fn r05_roles_of(compound: u16) -> &'static [usize] {
+    match compound {
+        R05_COMPOUND_TIQI => &[0],
+        R05_COMPOUND_BAOSHU => &[1],
+        R05_COMPOUND_DCBIHUO => &[2, 3],
+        _ => &[],
+    }
+}
+
+/// 在模块代码段按指令边界扫描 `HOST_EFFECT_EXT`（0x5A）立即数标签。
+/// 模块装载期已经 `VmSkillProgram::new` 静态校验（PA06），指令流可安全
+/// 线性解码；装载器不依赖 rule-vm，故按稳定 ABI 字节自扫。
+fn r05_module_compounds(code: &[u8], found: &mut Vec<u16>) {
+    let mut i = 0usize;
+    while i < code.len() {
+        let opc = code[i];
+        i += 1;
+        match opc {
+            // CONST_I32 / CONST_U32 / CONST_BOOL：4 字节立即数。
+            0x10 | 0x11 | 0x12 => i += 4,
+            // LOAD / STORE / HOST_EFFECT / HOST_QUERY / HOST_CHOICE：1 字节。
+            0x20 | 0x21 | 0x50 | 0x51 | 0x52 => i += 1,
+            // JUMP / JUMP_IF_FALSE：2 字节相对位移。
+            0x40 | 0x41 => i += 2,
+            0x5A => {
+                // HOST_EFFECT_EXT：小端 u16 标签。
+                if i + 2 <= code.len() {
+                    let tag = u16::from_le_bytes([code[i], code[i + 1]]);
+                    if !r05_roles_of(tag).is_empty() && !found.contains(&tag) {
+                        found.push(tag);
+                    }
+                }
+                i += 2;
+            }
+            // 其余（NOP/HALT/DUP/POP/算术/HOST_* 无立即数/TRAP）：0。
+            _ => {}
+        }
+    }
+}
+
+/// 固定模板派生：验证调用包声明的 compound 后，为每个逻辑身份 I=
+/// (namespace, package_id, logical_skill_def_id) 在同一 Catalog 追加
+/// 私有 helper 定义——名称 `{逻辑技能名}#r05:{role}`（包/逻辑技能下
+/// 限定），每个 (I,role) 恰一（多 handler 复用同一 compound 幂等）；
+/// 行为面为惰性 `Handlers`（无 active、无 trigger），语义只由
+/// `VmAux.marks[(target, helper_catalog_def)]` 承载；派生顺序按
+/// skill_index 序 × 角色固定序，确定性合并（§2：输入数组顺序无关）。
+fn derive_r05_helpers(
+    pkg: &content_schema::ContentPackage,
+    out: &mut Vec<engine_native::content::extension::VmSkillDecl>,
+) -> Result<(), BridgeError> {
+    use engine_native::rvm_bridge::{
+        BytecodeModule, VmActiveLimits, VmFilterPolicy, VmHandlerSet,
+    };
+    use std::sync::Arc;
+    for skill in &pkg.skill_index {
+        let mut compounds: Vec<u16> = Vec::new();
+        let module_names: Vec<&str> = pkg
+            .trigger_index
+            .iter()
+            .filter(|t| t.skill_def_id == skill.skill_def_id)
+            .map(|t| t.module.as_str())
+            .collect();
+        let active_module = pkg
+            .active_index
+            .iter()
+            .find(|a| a.skill_def_id == skill.skill_def_id)
+            .map(|a| a.module.as_str());
+        for name in active_module.into_iter().chain(module_names) {
+            if let Some(module) = pkg.modules.iter().find(|m| m.name == name) {
+                r05_module_compounds(&module.code, &mut compounds);
+            }
+        }
+        compounds.sort_unstable();
+        for compound in compounds {
+            for &role in r05_roles_of(compound) {
+                let name = format!("{}#r05:{}", skill.name, R05_ROLE_TAGS[role]);
+                if out.iter().any(|d| d.name == name) {
+                    return Err(invalid(
+                        "skill_index",
+                        format!("重复身份/角色：派生 helper {name} 已存在"),
+                    ));
+                }
+                // 惰性模块：单 HALT（0x01，稳定 ABI 字节）——装载器无
+                // rule-vm 依赖，按 rule-vm `op::HALT` 字节值内联。
+                let code = vec![0x01u8];
+                let helper = BytecodeModule {
+                    logic_hash: BytecodeModule::compute_logic_hash(&name, &code, 0, 0, 0),
+                    name: name.clone(),
+                    code,
+                    local_count: 0,
+                    max_stack: 1,
+                    entry_pc: 0,
+                    caps_mask: 0,
+                };
+                // 装载期校验与桥接一致性（畸形模板即拒）。
+                engine_native::rvm_bridge::VmSkillProgram::new(helper.clone(), name.clone())
+                    .map_err(|e| invalid("r05_helper", e.to_string()))?;
+                out.push(engine_native::content::extension::VmSkillDecl {
+                    declaration_hash: None,
+                    name,
+                    module: helper,
+                    trigger: engine_native::catalog::TriggerMeta {
+                        // 惰性面：filter 永假，事件种不参与调度。
+                        event: engine_native::event::EventKind::SkillToggled,
+                        timing: engine_native::event::Timing::Normal,
+                        priority: 0,
+                        order_selectable: true,
+                        optional: false,
+                        extra_events: Vec::new(),
+                    },
+                    filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
+                        skill_def_id: skill.skill_def_id,
+                        active: None,
+                        limits: VmActiveLimits {
+                            once_per_turn: false,
+                            once_per_play_phase: false,
+                            hand_nonempty: false,
+                            equip_nonempty: false,
+                            hand_gt_hp: false,
+                            hand_gt_max_hp: false,
+                            face_up: false,
+                            owner_unlinked: false,
+                            mark_at_least: None,
+                        },
+                        triggers: Vec::new(),
+                    })),
+                });
+            }
+        }
     }
     Ok(())
 }

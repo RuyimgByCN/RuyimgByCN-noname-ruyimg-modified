@@ -104,6 +104,9 @@ mod nc09_gaiming_cancel;
 #[path = "../r05_turn_model.rs"]
 mod r05_turn_model;
 
+#[path = "../r05e_compounds.rs"]
+mod r05e_compounds;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 

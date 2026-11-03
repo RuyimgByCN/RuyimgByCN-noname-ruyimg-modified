@@ -358,6 +358,30 @@ pub(in super::super) fn decode_request(
                 skill: engine_api::SkillId::new(skill),
             }
         }
+        effect_tag::RESOLVE_TIQI => {
+            let skill = pop(frame)?.0.max(0) as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ResolveTiqi {
+                player: PlayerId::new(player),
+                skill: engine_api::SkillId::new(skill),
+            }
+        }
+        effect_tag::RESOLVE_BAOSHU => {
+            let skill = pop(frame)?.0.max(0) as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ResolveBaoshu {
+                player: PlayerId::new(player),
+                skill: engine_api::SkillId::new(skill),
+            }
+        }
+        effect_tag::RESOLVE_DCBIHUO => {
+            let skill = pop(frame)?.0.max(0) as u32;
+            let player = pop(frame)?.0.max(0) as u32;
+            EffectRequest::ResolveDcbihuo {
+                player: PlayerId::new(player),
+                skill: engine_api::SkillId::new(skill),
+            }
+        }
         _ => {
             return Err(VmError::Host(format!("unknown effect tag {tag}")));
         }
