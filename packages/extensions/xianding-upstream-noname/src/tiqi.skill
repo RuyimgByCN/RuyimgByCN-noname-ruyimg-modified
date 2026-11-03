@@ -1,0 +1,21 @@
+// 涕泣（冯妤 re_fengfangnv）：上游 trigger { global: ["phaseDrawEnd","phaseDrawSkipped","phaseDrawCancelled"] }，
+// filter＝自己不是该摸牌阶段玩家且该阶段 gain 总数≠2；frequent（可选确认）；content＝draw(|n−2|)
+// →目标仍在场→chooseControl(+num/-num/cancel2) 改目标本回合手牌上限。
+// 来源：archive/upstream/noname/apps/core/character/xianding/skill.js:41912。
+//
+// 原生装载面（R05-F 真包数据）：`draw_phase_after`。主 draw 张数>0 时 D 机以 R 子帧替代
+// End 窗发射（kernel/draw.rs MainWaiting→End），恒发射的终窗是 After——上游 phaseDrawEnd
+// 的语义落 After 窗（E 批登记差异 7 同口径）。phaseDrawSkipped／phaseDrawCancelled 两面
+// 当前无原生触发载体（跳过路径 D 帧直接 Intrinsic→Done 不发窗、Cancelled 无发射点），
+// 登记为语义缺口（见 f-real 报告），故本壳不声明。
+//
+// 本 DSL 壳用词汇表内 `phase_draw_end` 编译占位；生成期（R05-E retrigger 模式）把
+// trigger_index 事件名改写为 `draw_phase_after`，模块体替换为 tag 781（RESOLVE_TIQI）
+// 单 resolver——装载器 derive_r05_helpers 扫模块字节里的 HOST_EFFECT_EXT(781) 派生
+// `tiqi#r05:limit` 私有 helper。上游 filter 语义（非自己 D、n≠2）由 compound 机内
+// live 读 D 帧承担（current_draw_phase）。
+skill tiqi(998101001) {
+  trigger phase_draw_end owner_alive {
+    effect emit_note(0);
+  }
+}

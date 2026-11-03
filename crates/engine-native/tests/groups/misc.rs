@@ -107,6 +107,9 @@ mod r05_turn_model;
 #[path = "../r05e_compounds.rs"]
 mod r05e_compounds;
 
+#[path = "../r05f_real_packages.rs"]
+mod r05f_real_packages;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 

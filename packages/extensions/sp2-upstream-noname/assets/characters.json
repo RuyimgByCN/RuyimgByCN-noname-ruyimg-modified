@@ -1,0 +1,18 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/character/sp2/",
+  "upstream_commit": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+  "pack": { "name": "sp2-upstream-noname", "version": 1, "description": "SP2 包（R05-F 真包数据：dcbihuo）", "card_prefix": "sp2_" },
+  "generals": [
+    {
+      "id": "sp2_fengfang",
+      "name": "sp2冯方",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "male",
+      "skills": [
+        { "name": "dcbihuo", "title": "避祸" }
+      ]
+    }
+  ]
+}

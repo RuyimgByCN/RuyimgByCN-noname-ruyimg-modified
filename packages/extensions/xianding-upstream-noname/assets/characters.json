@@ -1,0 +1,19 @@
+{
+  "source": "noname",
+  "upstream_path": "apps/core/character/xianding/",
+  "upstream_commit": "1a548c95acdf8ac1ef44d74473403eda2ac86cf0",
+  "pack": { "name": "xianding-upstream-noname", "version": 1, "description": "限定包（R05-F 真包数据：tiqi/baoshu）", "card_prefix": "xnd_" },
+  "generals": [
+    {
+      "id": "xnd_re_fengfangnv",
+      "name": "xnd冯妤",
+      "faction": "qun",
+      "hp": 3,
+      "gender": "female",
+      "skills": [
+        { "name": "tiqi", "title": "涕泣" },
+        { "name": "baoshu", "title": "宝梳" }
+      ]
+    }
+  ]
+}

@@ -366,6 +366,13 @@ pub fn bridge_vm_skill_decls(
             // `damage_source`/`damage_end`＝避祸的认证 Source/End 窗；
             // `draw_phase_after`＝涕泣的 D 终窗（主 draw 张数>0 时 D 机以
             // R 子帧替代 End 窗发射，After 窗是恒发射的终窗）。
+            // R05-F 真包数据定案（xianding tiqi，对照上游 trigger
+            // global:[phaseDrawEnd,phaseDrawSkipped,phaseDrawCancelled]）：
+            // 上游三面在原生仅 After 一面可承载（End 窗 0 张时才发射、
+            // 与 After 并存会双发；Skipped 路径 D 帧直接 Intrinsic→Done 不
+            // 发窗、Cancelled 无发射点——两面为已登记语义缺口），故真包
+            // 只声明 `draw_phase_after`（packages/extensions/
+            // xianding-upstream-noname，机器内 live 读 D 帧 n）。
             "damage_source" => EventKind::DamageSource,
             "damage_end" => EventKind::DamageEnd,
             "draw_phase_after" => EventKind::DrawPhaseAfter,

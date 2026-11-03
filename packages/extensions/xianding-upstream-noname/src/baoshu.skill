@@ -1,0 +1,14 @@
+// 宝梳（冯妤 re_fengfangnv）：上游 trigger { player: "phaseZhunbeiBegin" }（准备阶段开始），
+// filter＝maxHp>0；成本 chooseTarget 1..=maxHp（在场角色含自己）；content＝按座次逐目标
+// link(false)→turnOver(false)→装 helper→addMark（markCount=1+maxHp−k，m 可 0/负；m==0 取 1）。
+// 来源：archive/upstream/noname/apps/core/character/xianding/skill.js:41983。
+//
+// 原生装载面（R05-F 真包数据）：`phase_prepare`——装载器既有映射落 PhaseBegin+AtPhase{Prepare}
+//（D02 已解除拒装，原生有真实 Phase{Prepare,begin} 帧），无事件名改写。授权面（本人准备阶段
+// 开始）由 compound 机内 at_own_prepare 承担；模块体生成期替换为 tag 782（RESOLVE_BAOSHU）
+// 单 resolver，装载器派生 `baoshu#r05:combs` 私有 helper（摸牌 Begin2 消费面由内核承担）。
+skill baoshu(998101002) {
+  trigger phase_prepare owner_is_target {
+    effect emit_note(0);
+  }
+}

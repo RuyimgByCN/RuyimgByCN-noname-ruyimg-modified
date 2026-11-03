@@ -1,0 +1,27 @@
+// 避祸（冯方 fengfang）：上游 trigger { player: "damageEnd", source: "damageSource" }，
+// filter＝event.source 存在且 player≠source（damageEnd 面 player＝受害者、damageSource 面
+// player＝来源）；cost chooseTarget 一名；content＝damageEnd +1／damageSource −1 写目标的
+// dcbihuo_effect storage（含负/0）并 addSkill effect；subSkill effect＝player phaseBegin
+// silent（storage 移到 dcbihuo_sha、removeSkill effect）；subSkill sha＝phaseDrawBegin2
+// silent（!numFixed 且有 storage → trigger.num += storage、清 storage/移除）。
+// 来源：archive/upstream/noname/apps/core/character/sp2/skill.js:7743。
+//
+// 原生装载面（R05-F 真包数据）：三声明 `damage_source`＋`damage_end`＋`phase_begin`——
+// 前两面＝避祸的认证 Source/End 窗（装载器既有映射 DamageSource/DamageEnd），第三面
+// ＝Take 面（phase_begin→TurnBegin，Next→Current 原子 take）；装载器 join_trigger_only
+// 把三面并成一个 handler 集（extra_events）。上游 phaseDrawBegin2 的额定摸牌 ±（dcbihuo_sha）
+// 落 R05-F Current 槽——其内核消费点（Begin2 有符号 pending）尚未接线（语义缺口，见
+// f-real 报告）。本 DSL 壳用词汇表内 damage／hp_lost／phase_begin 编译占位；生成期把
+// 前两者事件名改写为 damage_source／damage_end，模块体替换为 tag 783（RESOLVE_DCBIHUO）
+// 单 resolver，装载器派生 `dcbihuo#r05:next`／`dcbihuo#r05:current` 两个私有 helper。
+skill dcbihuo(998102001) {
+  trigger damage owner_alive {
+    effect emit_note(0);
+  }
+  trigger hp_lost owner_alive {
+    effect emit_note(0);
+  }
+  trigger phase_begin owner_alive {
+    effect emit_note(0);
+  }
+}
