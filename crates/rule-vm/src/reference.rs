@@ -308,6 +308,9 @@ fn decode(code: &[u8], pc: u32) -> Result<Instruction, VmError> {
 
 fn check_caps(module: &BytecodeModule, host: &dyn VmHost) -> Result<(), VmError> {
     let required = module.caps_mask;
+    if required & !caps::KNOWN != 0 {
+        return Err(VmError::CapabilityDenied("unknown capability bits".into()));
+    }
     let granted = host.capabilities();
     if required & caps::EMIT_EFFECTS != 0 && !granted.emit_effects {
         return Err(VmError::CapabilityDenied("emit_effects".into()));

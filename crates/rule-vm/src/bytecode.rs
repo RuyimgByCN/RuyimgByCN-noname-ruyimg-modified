@@ -434,6 +434,10 @@ pub mod caps {
     pub const RUN_QUERIES: u32 = 1 << 1;
     /// request_choice
     pub const REQUEST_CHOICE: u32 = 1 << 2;
+    /// 已知能力位的全集——`check_caps` 拒绝任何未知位（t8 拒收③：能力
+    /// 越权不能靠「编译器不会发出」侥幸放行；此前该检查对未知位静默
+    /// 通过，R05 准备阶段令该测试的触发真实到达后暴露）。
+    pub const KNOWN: u32 = EMIT_EFFECTS | RUN_QUERIES | REQUEST_CHOICE;
 }
 
 /// Encode CapabilitySet into mask.

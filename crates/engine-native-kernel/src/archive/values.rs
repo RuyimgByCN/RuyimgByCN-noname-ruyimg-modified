@@ -157,6 +157,16 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
         OrdinaryJudge => 41,
         // R05（规则 333）：回合开始窗，表尾追加。
         TurnBegin => 42,
+        // R05 抽牌事件族：D/R/G 与窗口，表尾追加。
+        DrawPhase => 43,
+        DrawPhaseBefore => 44,
+        DrawPhaseBegin => 45,
+        DrawPhaseBegin1 => 46,
+        DrawPhaseBegin2 => 47,
+        DrawPhaseEnd => 48,
+        DrawPhaseAfter => 49,
+        Draw => 50,
+        DrawGain => 51,
     };
     w.u8(t);
 }
@@ -207,6 +217,15 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         40 => SkillLogAfter,
         41 => OrdinaryJudge,
         42 => TurnBegin,
+        43 => DrawPhase,
+        44 => DrawPhaseBefore,
+        45 => DrawPhaseBegin,
+        46 => DrawPhaseBegin1,
+        47 => DrawPhaseBegin2,
+        48 => DrawPhaseEnd,
+        49 => DrawPhaseAfter,
+        50 => Draw,
+        51 => DrawGain,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }

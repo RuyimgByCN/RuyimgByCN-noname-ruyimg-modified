@@ -337,10 +337,13 @@ pub(super) fn enc_snapshot(w: &mut W, s: &StateSnapshot) {
     for c in &s.core.discard {
         w.u32(*c);
     }
+
     w.len(s.core.table.len());
     for c in &s.core.table {
         w.u32(*c);
     }
+    // R05：detached 实体区暂不入档——随存档 107 与 D 机接入同批尾追
+    // （此时尚无生产者，106 布局保持逐字节不变）。
     // rng
     let (rng_state, rng_calls) = s.core.rng.raw_parts();
     w.u64(rng_state);

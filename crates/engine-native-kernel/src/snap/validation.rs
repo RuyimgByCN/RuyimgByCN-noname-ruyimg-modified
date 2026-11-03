@@ -164,6 +164,18 @@ pub(super) fn check_event_data(data: &EventData, b: &RestoreBounds) -> Result<()
         EventData::Phase { player, .. } => check_pid(*player, b)?,
         EventData::TurnEnded { player } => check_pid(*player, b)?,
         EventData::TurnBegin { player } => check_pid(*player, b)?,
+        EventData::DrawPhase { player, .. } => check_pid(*player, b)?,
+        EventData::DrawWindow { .. } => {}
+        EventData::Draw { player, held_cards, .. } => {
+            check_pid(*player, b)?;
+            check_cards(held_cards, b)?;
+        }
+        EventData::DrawGain {
+            recipient, eligible, ..
+        } => {
+            check_pid(*recipient, b)?;
+            check_cards(eligible, b)?;
+        }
         EventData::SkillToggled { player, skill, .. } => {
             check_pid(*player, b)?;
             check_def(*skill, b)?;

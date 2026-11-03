@@ -16,9 +16,10 @@
 use crate::catalog::CardKind;
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
 use crate::event::{
-    CardUseData, DamageData, DamageNature, EventData, EventKind, Phase, QueuedTrigger, Stage,
+    CardUseData, DamageData, DamageNature, DetachedKind, DrawGainProgress, DrawOutcome,
+    DrawTerminal, DrawWindowKind, EventData, EventKind, Phase, QueuedTrigger, Stage,
 };
-use crate::ids::{PlayerId, SkillDefId};
+use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::resolution::Slot;
 use crate::snap::{
     FanJianStageSnap, GuanXingStageSnap, JiJiStageSnap, JiJieStageSnap, JieYinStageSnap,

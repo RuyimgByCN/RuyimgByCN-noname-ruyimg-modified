@@ -780,6 +780,8 @@ pub enum GameMode {
     },
 }
 
+use crate::event::DetachedKind;
+
 /// 核心（无执行位置）的对局状态字段。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GameStateCore {
@@ -795,6 +797,9 @@ pub struct GameStateCore {
     pub seat_ring: Vec<PlayerId>,
     pub deck: Vec<CardId>,
     pub discard: Vec<CardId>,
+    /// R05（规则 333）：抽牌 gain 取消/死亡且源未指定返还时的实体去处；
+    /// `Unclaimed`/`Destroyed` 均不可洗回，`Destroyed` 不能普通 gain。
+    pub detached_cards: Vec<(CardId, DetachedKind)>,
     /// 结算中的牌（出牌阶段使用、尚未进弃牌堆）。
     pub table: Vec<CardId>,
     pub rng: RuleRng,

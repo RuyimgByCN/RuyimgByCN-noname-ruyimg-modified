@@ -276,6 +276,7 @@ impl Engine {
             deck: Vec::new(),
             discard: Vec::new(),
             table: Vec::new(),
+detached_cards: Vec::new(),
             rng: RuleRng::from_seed(seed),
             turn: TurnState {
                 current: 0,

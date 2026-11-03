@@ -112,6 +112,63 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             w.u8(26);
             enc_pid(w, player);
         }
+        EventData::DrawPhase {
+            player,
+            pending,
+            num_fixed,
+            actual_gain,
+            outcome,
+        } => {
+            // R05（存档 107）：D 根帧，tag 27。
+            w.u8(27);
+            enc_pid(w, player);
+            w.i32(*pending);
+            w.boolean(*num_fixed);
+            w.u32(*actual_gain);
+            w.u8(outcome.tag());
+        }
+        EventData::DrawWindow { root, window } => {
+            // R05：D 窗口帧，tag 28。
+            w.u8(28);
+            w.u32(*root);
+            w.u8(window.tag());
+        }
+        EventData::Draw {
+            player,
+            requested,
+            held_cards,
+            terminal,
+        } => {
+            // R05：R 抽牌帧，tag 29。
+            w.u8(29);
+            enc_pid(w, player);
+            w.u32(*requested);
+            w.len(held_cards.len());
+            for c in held_cards {
+                w.u32(*c);
+            }
+            w.u8(terminal.tag());
+        }
+        EventData::DrawGain {
+            draw,
+            recipient,
+            eligible,
+            progress,
+            history_recorded,
+            cancelled,
+        } => {
+            // R05：G 获得帧，tag 30。
+            w.u8(30);
+            w.u32(*draw);
+            enc_pid(w, recipient);
+            w.len(eligible.len());
+            for c in eligible {
+                w.u32(*c);
+            }
+            w.u8(progress.tag());
+            w.boolean(*history_recorded);
+            w.boolean(*cancelled);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             // E03 翻面原语（tag 14，表尾追加）
             w.u8(14);
@@ -339,6 +396,61 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
         26 => {
             let player = dec_pid(r)?;
             EventData::TurnBegin { player }
+        }
+        27 => {
+            let player = dec_pid(r)?;
+            let pending = r.i32()?;
+            let num_fixed = r.boolean()?;
+            let actual_gain = r.u32()?;
+            let outcome = DrawOutcome::from_tag(r.u8()?)?;
+            EventData::DrawPhase {
+                player,
+                pending,
+                num_fixed,
+                actual_gain,
+                outcome,
+            }
+        }
+        28 => {
+            let root = r.u32()?;
+            let window = DrawWindowKind::from_tag(r.u8()?)?;
+            EventData::DrawWindow { root, window }
+        }
+        29 => {
+            let player = dec_pid(r)?;
+            let requested = r.u32()?;
+            let n = r.len()? as usize;
+            let mut held_cards = Vec::with_capacity(n);
+            for _ in 0..n {
+                held_cards.push(r.u32()?);
+            }
+            let terminal = DrawTerminal::from_tag(r.u8()?)?;
+            EventData::Draw {
+                player,
+                requested,
+                held_cards,
+                terminal,
+            }
+        }
+        30 => {
+            let draw = r.u32()?;
+            let recipient = dec_pid(r)?;
+            let n = r.len()? as usize;
+            let mut eligible = Vec::with_capacity(n);
+            for _ in 0..n {
+                eligible.push(r.u32()?);
+            }
+            let progress = DrawGainProgress::from_tag(r.u8()?)?;
+            let history_recorded = r.boolean()?;
+            let cancelled = r.boolean()?;
+            EventData::DrawGain {
+                draw,
+                recipient,
+                eligible,
+                progress,
+                history_recorded,
+                cancelled,
+            }
         }
         14 => {
             let player = dec_pid(r)?;

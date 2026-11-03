@@ -1,5 +1,17 @@
 use super::*;
 
+#[allow(dead_code)] // R05：存档 107 启用
+pub(super) fn dec_detached(r: &mut R<'_>) -> Result<Vec<(CardId, DetachedKind)>, ArchiveError> {
+    let len = r.len()? as usize;
+    let mut out = Vec::with_capacity(len);
+    for _ in 0..len {
+        let card = r.u32()?;
+        let kind = DetachedKind::from_tag(r.u8()?)?;
+        out.push((card, kind));
+    }
+    Ok(out)
+}
+
 pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError> {
     let revision = r.u64()?;
     let ruleset_version = r.u64()?;
@@ -518,6 +530,8 @@ pub(super) fn dec_snapshot(r: &mut R<'_>) -> Result<StateSnapshot, ArchiveError>
             deck,
             discard,
             table,
+            // R05：随存档 107 与 D 机接入同批解码（当前恒空）。
+            detached_cards: Vec::new(),
             rng: crate::rng::RuleRng::from_raw_parts(rng_state, rng_calls),
             turn: crate::state::TurnState {
                 current,

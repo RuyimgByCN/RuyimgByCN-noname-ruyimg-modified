@@ -157,6 +157,11 @@ impl RuleVm {
         use crate::bytecode::caps;
         let c = host.capabilities();
         let m = module.caps_mask;
+        // 未知能力位一律拒绝（t8 拒收③；与 reference.rs 的装载期检查同
+        // 口径——此前两条检查都只看已知的三个位，越权位被静默放行）。
+        if m & !caps::KNOWN != 0 {
+            return Err(VmError::CapabilityDenied("unknown capability bits".into()));
+        }
         if m & caps::EMIT_EFFECTS != 0 && !c.emit_effects {
             return Err(VmError::CapabilityDenied("emit_effects".into()));
         }

@@ -6,7 +6,9 @@
 
 use crate::ids::{CardId, EventId, PlayerId, SkillDefId};
 mod damage;
+mod draw;
 pub use damage::*;
+pub use draw::*;
 mod native_damage;
 pub use native_damage::*;
 mod invocation;
@@ -30,6 +32,16 @@ pub enum EventKind {
     /// 回合开始（R05，规则 333；上游 phaseBegin）：回合更替后、准备阶段前的
     /// 真实触发窗。
     TurnBegin,
+    /// R05 抽牌事件族（规则 333）。
+    DrawPhase,
+    DrawPhaseBefore,
+    DrawPhaseBegin,
+    DrawPhaseBegin1,
+    DrawPhaseBegin2,
+    DrawPhaseEnd,
+    DrawPhaseAfter,
+    Draw,
+    DrawGain,
     SkillToggled,
     Equipped,
     Linked,
@@ -193,6 +205,38 @@ pub enum EventData {
     TurnBegin {
         player: PlayerId,
     },
+    /// R05（规则 333）：一次真实摸牌阶段/额外摸牌阶段的根帧（D）。
+    /// 窗口序与 pending/actual_gain/outcome 由 `DrawPhaseMachine` 推进；
+    /// `pending` 允许有符号（执行入口取 max(0,·)）。
+    DrawPhase {
+        player: PlayerId,
+        pending: i32,
+        num_fixed: bool,
+        actual_gain: u32,
+        outcome: DrawOutcome,
+    },
+    /// D 的窗口帧（§3 六窗）。
+    DrawWindow {
+        root: EventId,
+        window: DrawWindowKind,
+    },
+    /// R05：一次真实抽牌（R）。`held_cards` 为已抽未获实体的唯一 owner。
+    Draw {
+        player: PlayerId,
+        requested: u32,
+        held_cards: Vec<crate::ids::CardId>,
+        terminal: DrawTerminal,
+    },
+    /// R05：一次获得（G）。`eligible` 为有序历史引用（Transfer 后保留）；
+    /// `progress` 的分阶段约束见合同 v3 §4 表。
+    DrawGain {
+        draw: EventId,
+        recipient: PlayerId,
+        eligible: Vec<crate::ids::CardId>,
+        progress: DrawGainProgress,
+        history_recorded: bool,
+        cancelled: bool,
+    },
     SkillToggled {
         player: PlayerId,
         skill: SkillDefId,
@@ -279,6 +323,10 @@ impl EventData {
             EventData::Phase { begin: false, .. } => EventKind::PhaseEnd,
             EventData::TurnEnded { .. } => EventKind::TurnEnded,
             EventData::TurnBegin { .. } => EventKind::TurnBegin,
+            EventData::DrawPhase { .. } => EventKind::DrawPhase,
+            EventData::DrawWindow { window, .. } => window.event_kind(),
+            EventData::Draw { .. } => EventKind::Draw,
+            EventData::DrawGain { .. } => EventKind::DrawGain,
             EventData::SkillToggled { .. } => EventKind::SkillToggled,
             EventData::Equipped { .. } => EventKind::Equipped,
             EventData::Linked { .. } => EventKind::Linked,

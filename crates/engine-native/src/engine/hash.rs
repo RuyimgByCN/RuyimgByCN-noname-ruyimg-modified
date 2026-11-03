@@ -859,6 +859,60 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
             push_u8(h, 27);
             push_u8(h, *player);
         }
+        EventData::DrawPhase {
+            player,
+            pending,
+            num_fixed,
+            actual_gain,
+            outcome,
+        } => {
+            // R05（规则 333）：抽牌族判别值表尾追加 28–31；D 载荷全量入域。
+            push_u8(h, 28);
+            push_u8(h, *player);
+            push_i32(h, *pending);
+            push_u8(h, *num_fixed as u8);
+            push_u32(h, *actual_gain);
+            push_u8(h, outcome.tag());
+        }
+        EventData::DrawWindow { root, window } => {
+            push_u8(h, 29);
+            push_u32(h, *root);
+            push_u8(h, window.tag());
+        }
+        EventData::Draw {
+            player,
+            requested,
+            held_cards,
+            terminal,
+        } => {
+            push_u8(h, 30);
+            push_u8(h, *player);
+            push_u32(h, *requested);
+            push_u32(h, held_cards.len() as u32);
+            for c in held_cards {
+                push_u32(h, *c);
+            }
+            push_u8(h, terminal.tag());
+        }
+        EventData::DrawGain {
+            draw,
+            recipient,
+            eligible,
+            progress,
+            history_recorded,
+            cancelled,
+        } => {
+            push_u8(h, 31);
+            push_u32(h, *draw);
+            push_u8(h, *recipient);
+            push_u32(h, eligible.len() as u32);
+            for c in eligible {
+                push_u32(h, *c);
+            }
+            push_u8(h, progress.tag());
+            push_u8(h, *history_recorded as u8);
+            push_u8(h, *cancelled as u8);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             push_u8(h, 20);
             push_u8(h, *player);
