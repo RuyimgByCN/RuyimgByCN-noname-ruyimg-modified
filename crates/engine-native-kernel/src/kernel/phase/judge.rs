@@ -253,7 +253,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
                     } else {
                         2
                     };
-                    ctx.draw_cards(t, n);
+                    ctx.start_draw(t, n as u32);
                 }
             }
         }
@@ -263,7 +263,7 @@ pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {
             .skill_by_name(crate::vocabulary::names::BOSS_MODAO)
         {
             if ctx.core.has_skill(player, mddef) {
-                ctx.draw_cards(player, 2);
+                ctx.start_draw(player, 2);
             }
         }
         // 轮回（十殿阎罗转轮王，规则 v269）：准备阶段，若体力

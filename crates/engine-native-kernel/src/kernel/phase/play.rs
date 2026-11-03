@@ -73,7 +73,7 @@ pub(super) fn begin_play(ctx: &mut Ctx<'_>, player: PlayerId) {
         if ctx.core.has_skill(player, def) {
             let n = ctx.core.player(player).hand.len();
             if n < 9 {
-                ctx.draw_cards(player, 9 - n);
+                ctx.start_draw(player, (9 - n) as u32);
             }
         }
     }

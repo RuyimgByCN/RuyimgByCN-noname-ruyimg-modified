@@ -114,7 +114,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                     crate::state::apply_general_assembly(ctx.core, ctx.catalog, self.player, 0);
                     let p = ctx.core.player_mut(self.player);
                     p.hp = p.max_hp as i32;
-                    ctx.draw_cards(self.player, 4);
+                    ctx.start_draw(self.player, 4);
                     return Flow::Done;
                 }
             }

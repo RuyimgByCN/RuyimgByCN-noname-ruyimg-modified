@@ -176,7 +176,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         if ctx.core.current_land == Some(crate::catalog::CardKind::Shuimomuxue)
             && ctx.core.turn.discard_phase_discarded > 0
         {
-            ctx.draw_cards(player, 1);
+            ctx.start_draw(player, 1);
         }
         ctx.core.turn.discard_phase_discarded = 0;
     }
@@ -240,7 +240,7 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
                         .all(|(idx, _)| p.songci_targets.contains(&(idx as PlayerId)))
                 };
                 if all_recorded {
-                    ctx.draw_cards(player, 1);
+                    ctx.start_draw(player, 1);
                 }
             }
         }
