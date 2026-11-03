@@ -144,7 +144,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             .skill_by_name(crate::vocabulary::names::BOSS_MINWAN)
         {
             if ctx.core.has_skill(u.player, mdef) {
-                ctx.draw_cards(u.player, 1);
+                ctx.start_draw(u.player, 1);
             }
         }
     }
@@ -194,7 +194,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             let is_self_shandian =
                 u.targets.is_empty() && u.player == *holder && effective_kind == CardKind::ShanDian;
             if red && (u.targets.contains(holder) || is_self_shandian) {
-                ctx.draw_cards(*holder, 1);
+                ctx.start_draw(*holder, 1);
             }
         }
     }
@@ -230,7 +230,7 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             let t = *u.targets.first().expect("zhufangshenshi has one target");
             ctx.core.turn.zhufangshenshi_target = Some(t);
             ctx.to_discard(u.card);
-            ctx.draw_cards(u.player, 1);
+            ctx.start_draw(u.player, 1);
         }
         CardKind::Caoyao => {
             // 草药（U05 swd 第三批，规则 v87）：为受伤目标回复 1 点体力
@@ -741,7 +741,7 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
             if (ctx.core.player(next).hp as u32) < ctx.core.player(next).max_hp {
                 ctx.core.player_mut(next).hp += 1;
             } else if ctx.core.player(next).hand.len() < 4 {
-                ctx.draw_cards(next, 1);
+                ctx.start_draw(next, 1);
             }
             ctx.log(LogEvent::BossChongzhengTick {
                 player: next,
@@ -844,7 +844,7 @@ pub(super) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
             .filter(|o| ctx.core.player(*o).alive && ctx.core.turn.current != *o)
             .collect();
         for holder in holders {
-            ctx.draw_cards(holder, 1);
+            ctx.start_draw(holder, 1);
         }
     }
     let Some(jdef) = ctx
@@ -863,11 +863,11 @@ pub(super) fn commit_recover_skills(ctx: &mut Ctx<'_>, recovered: PlayerId) {
         .collect();
     for holder in holders {
         if recovered == holder {
-            ctx.draw_cards(holder, 2);
+            ctx.start_draw(holder, 2);
         } else {
-            ctx.draw_cards(holder, 1);
+            ctx.start_draw(holder, 1);
             if ctx.core.player(recovered).alive {
-                ctx.draw_cards(recovered, 1);
+                ctx.start_draw(recovered, 1);
             }
         }
     }

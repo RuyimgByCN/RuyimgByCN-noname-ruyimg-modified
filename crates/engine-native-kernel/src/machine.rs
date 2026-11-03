@@ -426,6 +426,25 @@ impl<'a> Ctx<'a> {
     // ---- 牌区操作 ----
 
     /// 摸 n 张；牌库不足时先以弃牌堆洗回（规则随机流）。
+    /// R05（规则 333）：发射一次真实抽牌（R 帧）供「发射后不需立即读结果」
+    /// 的调用方使用——R/G 子树由调度器在当前机器/提交步让出后推进（§3：
+    /// caller 设后续 step 并 Yield；本助手不取牌、不入手、不动 RNG）。
+    /// `count == 0` 时不发射任何帧（§3：0 无事件无 RNG）。
+    pub fn start_draw(&mut self, player: PlayerId, count: u32) {
+        if count == 0 {
+            return;
+        }
+        crate::resolution::push_frame(
+            self.res,
+            EventData::Draw {
+                player,
+                requested: count,
+                held_cards: Vec::new(),
+                terminal: crate::event::DrawTerminal::Running,
+            },
+        );
+    }
+
     pub fn draw_cards(&mut self, player: PlayerId, n: usize) -> Vec<CardId> {
         let mut drawn = Vec::with_capacity(n);
         for _ in 0..n {
