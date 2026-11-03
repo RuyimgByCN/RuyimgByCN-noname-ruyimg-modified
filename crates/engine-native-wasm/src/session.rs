@@ -147,6 +147,8 @@ fn rejected(engine: &Engine, reason: RejectReason) -> String {
 
 fn phase_name(phase: Phase) -> &'static str {
     match phase {
+        // R05（规则 333／WS8）：准备阶段的公开阶段名。
+        Phase::Prepare => "prepare",
         Phase::Judge => "judge",
         Phase::Draw => "draw",
         Phase::Play => "play",

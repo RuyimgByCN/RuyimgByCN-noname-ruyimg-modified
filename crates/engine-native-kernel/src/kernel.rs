@@ -30,6 +30,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
             begin,
         } => commit_phase(ctx, player, phase, begin),
         EventData::TurnEnded { player } => commit_turn_ended(ctx, player),
+        EventData::TurnBegin { player } => commit_turn_begin(ctx, player),
         EventData::TurnOverBefore { player, cancelled } => {
             commit_turn_over_before(ctx, player, cancelled)
         }

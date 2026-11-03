@@ -93,6 +93,8 @@ pub(super) fn enc_phase(w: &mut W, v: &Phase) {
         Phase::Play => 2,
         Phase::Discard => 3,
         Phase::End => 4,
+        // R05（规则 333）：准备阶段追加编码位，既有 0–4 不移位。
+        Phase::Prepare => 5,
     });
 }
 
@@ -103,6 +105,7 @@ pub(super) fn dec_phase(r: &mut R<'_>) -> Result<Phase, ArchiveError> {
         2 => Phase::Play,
         3 => Phase::Discard,
         4 => Phase::End,
+        5 => Phase::Prepare,
         t => return Err(ArchiveError::BadTag("phase", t)),
     })
 }
@@ -152,6 +155,8 @@ pub(super) fn enc_event_kind(w: &mut W, v: &EventKind) {
         SkillLogBegin => 39,
         SkillLogAfter => 40,
         OrdinaryJudge => 41,
+        // R05（规则 333）：回合开始窗，表尾追加。
+        TurnBegin => 42,
     };
     w.u8(t);
 }
@@ -201,6 +206,7 @@ pub(super) fn dec_event_kind(r: &mut R<'_>) -> Result<EventKind, ArchiveError> {
         39 => SkillLogBegin,
         40 => SkillLogAfter,
         41 => OrdinaryJudge,
+        42 => TurnBegin,
         t => return Err(ArchiveError::BadTag("event_kind", t)),
     })
 }

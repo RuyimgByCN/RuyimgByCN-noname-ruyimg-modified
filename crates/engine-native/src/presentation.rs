@@ -355,6 +355,7 @@ pub fn render_table(view: &PlayerView, events: &[PresentationEvent], width: usiz
         s.push_str("+\n");
     };
     let phase_name = |p: crate::event::Phase| match p {
+        crate::event::Phase::Prepare => "准备",
         crate::event::Phase::Judge => "判定",
         crate::event::Phase::Draw => "摸牌",
         crate::event::Phase::Play => "出牌",

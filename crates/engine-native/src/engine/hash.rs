@@ -854,6 +854,11 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
             push_u8(h, 10);
             push_u8(h, *player);
         }
+        EventData::TurnBegin { player } => {
+            // R05（规则 333）：回合开始窗，判别值表尾追加 27。
+            push_u8(h, 27);
+            push_u8(h, *player);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             push_u8(h, 20);
             push_u8(h, *player);

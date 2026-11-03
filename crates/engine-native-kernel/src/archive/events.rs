@@ -107,6 +107,11 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             w.u8(9);
             enc_pid(w, player);
         }
+        EventData::TurnBegin { player } => {
+            // R05（规则 333）：回合开始窗，表尾追加 tag 26。
+            w.u8(26);
+            enc_pid(w, player);
+        }
         EventData::TurnOverBefore { player, cancelled } => {
             // E03 翻面原语（tag 14，表尾追加）
             w.u8(14);
@@ -330,6 +335,10 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
         9 => {
             let player = dec_pid(r)?;
             EventData::TurnEnded { player }
+        }
+        26 => {
+            let player = dec_pid(r)?;
+            EventData::TurnBegin { player }
         }
         14 => {
             let player = dec_pid(r)?;

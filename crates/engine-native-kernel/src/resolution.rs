@@ -149,6 +149,8 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
             // skip_current_phase）依赖此前置窗；此前起步 Commit 段导致 VM 机
             // 器在摸牌后才跑（批⑤首步实测：确认门打开时已摸 2）。
             EventKind::PhaseBegin => Stage::BeforeTriggers,
+            // R05（规则 333）：回合开始窗——触发在 Commit（压准备阶段）之前。
+            EventKind::TurnBegin => Stage::BeforeTriggers,
             _ => Stage::Commit,
         },
     };
@@ -207,6 +209,8 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         // PA12 批⑤-2：PhaseBegin 前置窗（技能跑位）→ Commit（入场行为
         // begin_*）→ AfterTriggers → Intrinsic → Done。
         (EventKind::PhaseBegin, Stage::BeforeTriggers) => Stage::Commit,
+        // R05：回合开始窗 BeforeTriggers → Commit（压准备阶段帧）→ 静默 after → Done。
+        (EventKind::TurnBegin, Stage::BeforeTriggers) => Stage::Commit,
         (EventKind::PhaseBegin, Stage::Commit) => Stage::AfterTriggers,
         (EventKind::PhaseBegin, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::PhaseBegin, Stage::Intrinsic) => Stage::Done,
@@ -364,7 +368,8 @@ fn plan_triggers(
         // 再查 TurnOverBefore 会让取消技重复入队重复写回。
         if !before
             && (matches!(f.data, EventData::TurnOverBefore { .. })
-                || matches!(f.data, EventData::Death { .. }))
+                || matches!(f.data, EventData::Death { .. })
+                || matches!(f.data, EventData::TurnBegin { .. }))
         {
             // E03 翻面 / 死亡前置窗口（规则 v170）：目录无「翻面后/死亡
             // 后」触发种类，且 after 再查会令取消/遗言技重复入队。
@@ -382,6 +387,8 @@ fn plan_triggers(
             // 点随此前移到 begin_* 之前（上游 phaseBegin 语义），全量回归
             // 把关、规则基准登记。
             EventData::Phase { begin: true, .. } => EventKind::PhaseBegin,
+            // R05：回合开始窗只有前置段（after 静默，见上）。
+            EventData::TurnBegin { .. } => EventKind::TurnBegin,
             _ => EventKind::DamageBefore,
         };
         if before {

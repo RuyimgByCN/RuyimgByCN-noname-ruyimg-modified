@@ -382,7 +382,8 @@ impl<'a> Ctx<'a> {
             crate::event::EventKind::Damage
             | crate::event::EventKind::TurnOverBefore
             | crate::event::EventKind::Death
-            | crate::event::EventKind::PhaseBegin => {
+            | crate::event::EventKind::PhaseBegin
+            | crate::event::EventKind::TurnBegin => {
                 // 死亡前置窗口（规则 v170）：机器发射的 Death 同样从
                 // BeforeTriggers 起步（遗言/拦截技在 DeathMachine 前）。
                 // PhaseBegin 前置窗口（PA12 批⑤-2，§2 K）：阶段开始类

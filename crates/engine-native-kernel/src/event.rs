@@ -27,6 +27,9 @@ pub enum EventKind {
     PhaseBegin,
     PhaseEnd,
     TurnEnded,
+    /// 回合开始（R05，规则 333；上游 phaseBegin）：回合更替后、准备阶段前的
+    /// 真实触发窗。
+    TurnBegin,
     SkillToggled,
     Equipped,
     Linked,
@@ -185,6 +188,11 @@ pub enum EventData {
     TurnEnded {
         player: PlayerId,
     },
+    /// 回合开始窗（R05）：BeforeTriggers→AfterTriggers→Commit，Commit 时
+    /// 依次压入准备阶段结束与开始帧（后进先出，开始窗先完整结算）。
+    TurnBegin {
+        player: PlayerId,
+    },
     SkillToggled {
         player: PlayerId,
         skill: SkillDefId,
@@ -270,6 +278,7 @@ impl EventData {
             EventData::Phase { begin: true, .. } => EventKind::PhaseBegin,
             EventData::Phase { begin: false, .. } => EventKind::PhaseEnd,
             EventData::TurnEnded { .. } => EventKind::TurnEnded,
+            EventData::TurnBegin { .. } => EventKind::TurnBegin,
             EventData::SkillToggled { .. } => EventKind::SkillToggled,
             EventData::Equipped { .. } => EventKind::Equipped,
             EventData::Linked { .. } => EventKind::Linked,
@@ -296,6 +305,10 @@ impl EventData {
 /// 回合阶段。
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
 pub enum Phase {
+    /// 准备阶段（R05，规则 333；上游 phaseZhunbei）：回合开始窗之后、判定
+    /// 阶段之前自动推进，不额外消耗 NextPhase。声明序居首使 `Ord` 与回合
+    /// 顺序一致；存档编码位与 VM 阶段索引另行追加（见 `ALL`）。
+    Prepare,
     Judge,
     Draw,
     Play,
@@ -304,16 +317,19 @@ pub enum Phase {
 }
 
 impl Phase {
-    pub const ALL: [Phase; 5] = [
+    /// VM／DSL 阶段索引表：既有 0–4 不移位，准备阶段追加为 5。
+    pub const ALL: [Phase; 6] = [
         Phase::Judge,
         Phase::Draw,
         Phase::Play,
         Phase::Discard,
         Phase::End,
+        Phase::Prepare,
     ];
 
     pub fn next(self) -> Option<Phase> {
         Some(match self {
+            Phase::Prepare => Phase::Judge,
             Phase::Judge => Phase::Draw,
             Phase::Draw => Phase::Play,
             Phase::Play => Phase::Discard,
@@ -324,6 +340,7 @@ impl Phase {
 
     pub fn name(&self) -> &'static str {
         match self {
+            Phase::Prepare => "prepare",
             Phase::Judge => "judge",
             Phase::Draw => "draw",
             Phase::Play => "play",

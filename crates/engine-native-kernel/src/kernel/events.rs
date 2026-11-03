@@ -679,6 +679,26 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
     }
 }
 
+/// 回合开始窗（R05，规则 333）的 Commit 步：压入准备阶段的结束与开始帧。
+///
+/// 帧栈按后进先出结算，因此先压「准备阶段结束」再压「准备阶段开始」——
+/// 开始窗（含其 BeforeTriggers 触发与入场）先完整结算，随后结束帧把
+/// `turn.phase` 推进到判定阶段并进入 Judge 入场；整个回合开始流程对
+/// 调用方是单次 emit 的子树，不额外消耗一次 NextPhase 命令。
+pub(super) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
+    ctx.core.turn.phase = Phase::Prepare;
+    ctx.emit(EventData::Phase {
+        player,
+        phase: Phase::Prepare,
+        begin: false,
+    });
+    ctx.emit(EventData::Phase {
+        player,
+        phase: Phase::Prepare,
+        begin: true,
+    });
+}
+
 pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
@@ -767,11 +787,8 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
         ctx.core.turn.yanyu_count = 0;
         ctx.core.turn.txianqu_used = false;
         ctx.core.turn.jtjubao_used = false;
-        ctx.emit(EventData::Phase {
-            player: next,
-            phase: Phase::Judge,
-            begin: true,
-        });
+        // R05：回合开始改发 TurnBegin 窗（Commit 内自动接准备阶段→判定）。
+        ctx.emit(EventData::TurnBegin { player: next });
         return;
     }
     let next = ctx.core.next_alive(player);
@@ -803,11 +820,8 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
     ctx.core.turn.yanyu_count = 0;
     ctx.core.turn.txianqu_used = false;
     ctx.core.turn.jtjubao_used = false;
-    ctx.emit(EventData::Phase {
-        player: next,
-        phase: Phase::Judge,
-        begin: true,
-    });
+    // R05：回合开始改发 TurnBegin 窗（Commit 内自动接准备阶段→判定）。
+    ctx.emit(EventData::TurnBegin { player: next });
 }
 
 /// 积财（Boss 饕餮，规则 v216）：回复结算后——回复者==持有者 → 持有

@@ -101,6 +101,8 @@ mod nc09_referee_projection;
 mod nc09_machine_ownership;
 #[path = "../nc09_gaiming_cancel.rs"]
 mod nc09_gaiming_cancel;
+#[path = "../r05_turn_model.rs"]
+mod r05_turn_model;
 
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;

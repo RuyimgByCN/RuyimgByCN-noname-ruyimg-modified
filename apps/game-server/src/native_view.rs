@@ -103,6 +103,8 @@ fn kind_code_u32(kind: engine_native::catalog::CardKind) -> u32 {
 /// 原生 `Phase` → 协议 `TurnPhaseTag`。
 fn phase_tag(p: engine_native::Phase) -> TurnPhaseTag {
     match p {
+        // R05：协议早有 TurnPhaseTag::Prepare，此前原生无对应阶段。
+        engine_native::Phase::Prepare => TurnPhaseTag::Prepare,
         engine_native::Phase::Judge => TurnPhaseTag::Judge,
         engine_native::Phase::Draw => TurnPhaseTag::Draw,
         engine_native::Phase::Play => TurnPhaseTag::Play,
