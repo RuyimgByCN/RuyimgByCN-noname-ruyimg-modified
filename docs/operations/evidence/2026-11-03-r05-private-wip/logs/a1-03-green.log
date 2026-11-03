@@ -1,0 +1,5 @@
+$ cargo test --offline -p engine-native --test misc r05_turn_model::   # 测试驱动按默认应答清询问后，2026-11-03 11:08:21 +0800
+test r05_turn_model::next_turn_runs_prepare_begin_and_end_before_judge ... ok
+test r05_turn_model::prepare_phase_archive_round_trip_keeps_new_phase_tag ... ok
+test r05_turn_model::whole_turn_still_takes_five_next_phase_commands ... ok
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 231 filtered out; finished in 0.00s

@@ -1,0 +1,36 @@
+$ [begin_draw 切换到 D 机后] cargo test 三 crate --no-fail-fast   # 2026-11-03 12:03:48 +0800
+   Compiling engine-native-kernel v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-kernel)
+   Compiling engine-native-content v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-native-loader)
+error[E0004]: non-exhaustive patterns: `&engine_native::MachineSnapshot::DrawPhase { .. }`, `&engine_native::MachineSnapshot::Draw { .. }` and `&engine_native::MachineSnapshot::Gain { .. }` not covered
+   --> crates/engine-native/tests/groups/../a0_tag_registry.rs:615:11
+    |
+615 |     match m {
+    |           ^ patterns `&engine_native::MachineSnapshot::DrawPhase { .. }`, `&engine_native::MachineSnapshot::Draw { .. }` and `&engine_native::MachineSnapshot::Gain { .. }` not covered
+    |
+note: `engine_native::MachineSnapshot` defined here
+   --> crates/engine-native-kernel/src/snap/types.rs:206:1
+    |
+206 | pub enum MachineSnapshot {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+211 |     DrawPhase {
+    |     --------- not covered
+...
+214 |     Draw {
+    |     ---- not covered
+...
+217 |     Gain {
+    |     ---- not covered
+    = note: the matched value is of type `&engine_native::MachineSnapshot`
+help: ensure that all possible cases are being handled by adding a match arm with a wildcard pattern, a match arm with multiple or-patterns as shown, or multiple match arms
+    |
+701 ~         M::NativeDamageSkill { .. } => 83,
+702 ~         &engine_native::MachineSnapshot::DrawPhase { .. } | &engine_native::MachineSnapshot::Draw { .. } | &engine_native::MachineSnapshot::Gain { .. } => todo!(),
+    |
+
+For more information about this error, try `rustc --explain E0004`.
+error: could not compile `engine-native` (test "kernel") due to 1 previous error
+warning: build failed, waiting for other jobs to finish...
+exit=101

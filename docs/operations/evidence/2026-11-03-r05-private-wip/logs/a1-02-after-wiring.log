@@ -1,0 +1,8 @@
+$ cargo test --offline -p engine-native --test misc r05_turn_model::   # 回合更替接线后，2026-11-03 11:05:22 +0800
+test r05_turn_model::next_turn_runs_prepare_begin_and_end_before_judge ... FAILED
+test r05_turn_model::prepare_phase_archive_round_trip_keeps_new_phase_tag ... FAILED
+test r05_turn_model::whole_turn_still_takes_five_next_phase_commands ... FAILED
+thread 'r05_turn_model::next_turn_runs_prepare_begin_and_end_before_judge' (42612977) panicked at crates/engine-native/tests/groups/../r05_turn_model.rs:17:5:
+thread 'r05_turn_model::prepare_phase_archive_round_trip_keeps_new_phase_tag' (42612978) panicked at crates/engine-native/tests/groups/../r05_turn_model.rs:17:5:
+thread 'r05_turn_model::whole_turn_still_takes_five_next_phase_commands' (42612979) panicked at crates/engine-native/tests/groups/../r05_turn_model.rs:17:5:
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 231 filtered out; finished in 0.00s

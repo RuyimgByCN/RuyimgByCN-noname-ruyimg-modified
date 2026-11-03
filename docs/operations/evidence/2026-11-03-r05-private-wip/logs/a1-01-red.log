@@ -1,0 +1,10 @@
+$ CARGO_TARGET_DIR=/private/tmp/noname-r05/target cargo test --offline -p engine-native --test misc r05_turn_model::   # 实现前（预期编译红：Phase::Prepare 不存在），2026-11-03 10:41:40 +0800
+error[E0599]: no variant or associated item named `Prepare` found for enum `engine_native::Phase` in the current scope
+54 |             (Phase::Prepare, true),
+error[E0599]: no variant or associated item named `Prepare` found for enum `engine_native::Phase` in the current scope
+55 |             (Phase::Prepare, false),
+error[E0599]: no variant or associated item named `Prepare` found for enum `engine_native::Phase` in the current scope
+80 |     snapshot.core.turn.phase = Phase::Prepare;
+error[E0599]: no variant or associated item named `Prepare` found for enum `engine_native::Phase` in the current scope
+85 |     assert_eq!(decoded.core.turn.phase, Phase::Prepare);
+exit=101
