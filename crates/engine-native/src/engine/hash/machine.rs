@@ -7,6 +7,19 @@ use super::*;
 pub(super) fn push_machine(h: &mut HashSink, s: &crate::snap::MachineSnapshot) {
     use crate::snap::MachineSnapshot as M;
     match s {
+        M::DrawPhase { root } => {
+            // R05：机器哈希判别值表尾追加 116–118。
+            push_u8(h, 116);
+            push_u32(h, *root);
+        }
+        M::Draw { root } => {
+            push_u8(h, 117);
+            push_u32(h, *root);
+        }
+        M::Gain { root } => {
+            push_u8(h, 118);
+            push_u32(h, *root);
+        }
         M::JudgeContinuation {
             owner,
             queue,

@@ -114,6 +114,7 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
         }
         EventData::DrawPhase {
             player,
+            progress,
             pending,
             num_fixed,
             actual_gain,
@@ -122,6 +123,7 @@ pub(super) fn enc_event_data(w: &mut W, v: &EventData) {
             // R05（存档 107）：D 根帧，tag 27。
             w.u8(27);
             enc_pid(w, player);
+            w.u8(progress.tag());
             w.i32(*pending);
             w.boolean(*num_fixed);
             w.u32(*actual_gain);
@@ -399,12 +401,14 @@ pub(super) fn dec_event_data(r: &mut R<'_>) -> Result<EventData, ArchiveError> {
         }
         27 => {
             let player = dec_pid(r)?;
+            let progress = DrawPhaseProgress::from_tag(r.u8()?)?;
             let pending = r.i32()?;
             let num_fixed = r.boolean()?;
             let actual_gain = r.u32()?;
             let outcome = DrawOutcome::from_tag(r.u8()?)?;
             EventData::DrawPhase {
                 player,
+                progress,
                 pending,
                 num_fixed,
                 actual_gain,

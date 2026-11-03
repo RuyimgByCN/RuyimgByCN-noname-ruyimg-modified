@@ -50,6 +50,7 @@ pub(super) fn check_machine(
             check_def(*def, b)?;
         }
         MachineSnapshot::DamageFlow { .. } => {}
+        MachineSnapshot::DrawPhase { .. } | MachineSnapshot::Draw { .. } | MachineSnapshot::Gain { .. } => {}
         MachineSnapshot::TriggerOrder {
             owner,
             candidates,

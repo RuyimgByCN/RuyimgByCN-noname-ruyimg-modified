@@ -63,6 +63,15 @@ impl MachineSnapshot {
             MachineSnapshot::DamageFlow { root } => {
                 Ok(Box::new(crate::kernel::DamageFlow { root: *root }))
             }
+            MachineSnapshot::DrawPhase { root } => Ok(Box::new(
+                crate::kernel::DrawPhaseMachine { root: *root },
+            )),
+            MachineSnapshot::Draw { root } => Ok(Box::new(crate::kernel::DrawMachine {
+                root: *root,
+            })),
+            MachineSnapshot::Gain { root } => Ok(Box::new(crate::kernel::GainMachine {
+                root: *root,
+            })),
             MachineSnapshot::TriggerOrder {
                 frame,
                 owner,

@@ -367,7 +367,15 @@ impl<'a> Ctx<'a> {
     /// 机器挂起深度在启动时已记录，子事件弹栈后自动恢复。
     /// 伤害帧以「前置触发窗口」为初始阶段，其余帧先提交。
     pub fn emit(&mut self, data: EventData) {
-        if matches!(data, EventData::Damage(_) | EventData::DamageWindow { .. }) {
+        if matches!(
+            data,
+            EventData::Damage(_)
+                | EventData::DamageWindow { .. }
+                | EventData::DrawPhase { .. }
+                | EventData::Draw { .. }
+                | EventData::DrawGain { .. }
+        ) {
+            // R05：D/R/G 与伤害族同走 push_frame（起步 Intrinsic）。
             crate::resolution::push_frame(self.res, data);
             return;
         }

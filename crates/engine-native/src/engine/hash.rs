@@ -861,6 +861,7 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
         }
         EventData::DrawPhase {
             player,
+            progress,
             pending,
             num_fixed,
             actual_gain,
@@ -869,6 +870,7 @@ pub(super) fn push_event_data(h: &mut HashSink, data: &EventData) {
             // R05（规则 333）：抽牌族判别值表尾追加 28–31；D 载荷全量入域。
             push_u8(h, 28);
             push_u8(h, *player);
+            push_u8(h, progress.tag());
             push_i32(h, *pending);
             push_u8(h, *num_fixed as u8);
             push_u32(h, *actual_gain);

@@ -153,6 +153,48 @@ impl DrawGainProgress {
     }
 }
 
+/// D 机推进位（机器态，随帧入档）。
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum DrawPhaseProgress {
+    Before,
+    Begin,
+    Begin1,
+    Begin2,
+    /// 等待主 draw（R）子树完成。
+    MainWaiting,
+    End,
+    After,
+    Done,
+}
+
+impl DrawPhaseProgress {
+    pub fn tag(self) -> u8 {
+        match self {
+            Self::Before => 0,
+            Self::Begin => 1,
+            Self::Begin1 => 2,
+            Self::Begin2 => 3,
+            Self::MainWaiting => 4,
+            Self::End => 5,
+            Self::After => 6,
+            Self::Done => 7,
+        }
+    }
+    pub fn from_tag(t: u8) -> Result<Self, crate::archive::ArchiveError> {
+        Ok(match t {
+            0 => Self::Before,
+            1 => Self::Begin,
+            2 => Self::Begin1,
+            3 => Self::Begin2,
+            4 => Self::MainWaiting,
+            5 => Self::End,
+            6 => Self::After,
+            7 => Self::Done,
+            _ => return Err(crate::archive::ArchiveError::BadTag("draw_phase_progress", t)),
+        })
+    }
+}
+
 /// detached 实体的种类（§4）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DetachedKind {

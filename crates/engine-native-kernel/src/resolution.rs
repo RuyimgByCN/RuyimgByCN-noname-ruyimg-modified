@@ -134,6 +134,10 @@ pub fn push_frame(res: &mut Resolution, data: crate::event::EventData) -> EventI
     let kind = data.kind();
     let stage = match &data {
         EventData::Damage(_) => Stage::Intrinsic,
+        // R05：D/R/G 均为纯机器帧，无 commit/after 触发段。
+        EventData::DrawPhase { .. } | EventData::Draw { .. } | EventData::DrawGain { .. } => {
+            Stage::Intrinsic
+        }
         _ => match kind {
             // E03 翻面：前置取消窗口（漩涡面具等锁定技在 Commit 前派发）
             EventKind::TurnOverBefore => Stage::BeforeTriggers,
@@ -226,6 +230,11 @@ fn next_stage(kind: EventKind, cur: Stage) -> Stage {
         ) => Stage::Intrinsic,
         (EventKind::OrdinaryJudge, Stage::AfterTriggers) => Stage::Intrinsic,
         (EventKind::OrdinaryJudge, Stage::Intrinsic) => Stage::Done,
+        // R05：D/R/G 由各自机器在 Intrinsic 段推进直至 Done。
+        (
+            EventKind::DrawPhase | EventKind::Draw | EventKind::DrawGain,
+            Stage::Intrinsic,
+        ) => Stage::Done,
         (_, Stage::Commit) => Stage::AfterTriggers,
         (_, Stage::AfterTriggers) => Stage::Done,
         (_, cur) => cur,

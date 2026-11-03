@@ -16,7 +16,7 @@
 use crate::catalog::CardKind;
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
 use crate::event::{
-    CardUseData, DamageData, DamageNature, DetachedKind, DrawGainProgress, DrawOutcome,
+    CardUseData, DamageData, DamageNature, DetachedKind, DrawGainProgress, DrawOutcome, DrawPhaseProgress,
     DrawTerminal, DrawWindowKind, EventData, EventKind, Phase, QueuedTrigger, Stage,
 };
 use crate::ids::{CardId, PlayerId, SkillDefId};

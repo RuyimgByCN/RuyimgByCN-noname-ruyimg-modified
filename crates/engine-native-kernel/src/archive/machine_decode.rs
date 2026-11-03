@@ -18,6 +18,9 @@ pub(super) fn dec_machine(r: &mut R<'_>) -> Result<MachineSnapshot, ArchiveError
                 .ok_or(ArchiveError::BadTag("native_damage_window", 0))?,
         },
         84 => MachineSnapshot::DamageFlow { root: r.u32()? },
+        90 => MachineSnapshot::DrawPhase { root: r.u32()? },
+        91 => MachineSnapshot::Draw { root: r.u32()? },
+        92 => MachineSnapshot::Gain { root: r.u32()? },
         83 => MachineSnapshot::TriggerOrder {
             frame: r.u32()?,
             owner: dec_pid(r)?,

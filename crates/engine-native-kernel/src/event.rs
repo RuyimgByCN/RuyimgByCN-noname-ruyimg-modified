@@ -210,6 +210,7 @@ pub enum EventData {
     /// `pending` 允许有符号（执行入口取 max(0,·)）。
     DrawPhase {
         player: PlayerId,
+        progress: DrawPhaseProgress,
         pending: i32,
         num_fixed: bool,
         actual_gain: u32,

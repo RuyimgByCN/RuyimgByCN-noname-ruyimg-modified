@@ -25,6 +25,15 @@ pub fn intrinsic_machine(
             }))
         }
         EventData::Damage(_) => Some(Box::new(DamageFlow { root: frame_id })),
+        EventData::DrawPhase { .. } => Some(Box::new(crate::kernel::DrawPhaseMachine {
+            root: frame_id,
+        })),
+        EventData::Draw { .. } => Some(Box::new(crate::kernel::DrawMachine {
+            root: frame_id,
+        })),
+        EventData::DrawGain { .. } => Some(Box::new(crate::kernel::GainMachine {
+            root: frame_id,
+        })),
         EventData::LoseHp { .. } => None,
         EventData::DyingSaved { .. } => None,
         EventData::Dying { player, source } => Some(Box::new(DyingSaveMachine {

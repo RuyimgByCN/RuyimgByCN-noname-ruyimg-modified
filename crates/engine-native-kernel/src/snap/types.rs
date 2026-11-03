@@ -207,6 +207,16 @@ pub enum MachineSnapshot {
     DamageFlow {
         root: crate::ids::EventId,
     },
+    /// R05：D/R/G 三机（tag 87–89）。
+    DrawPhase {
+        root: crate::ids::EventId,
+    },
+    Draw {
+        root: crate::ids::EventId,
+    },
+    Gain {
+        root: crate::ids::EventId,
+    },
     JudgeContinuation {
         owner: PlayerId,
         queue: Vec<CardId>,

@@ -22,6 +22,21 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
         MachineSnapshot::NativeDamageSkill { owner, def, window } => {
             enc_native_damage_skill(w, *owner, *def, *window)
         }
+        MachineSnapshot::DrawPhase { root } => {
+            // R05：tag 90。
+            w.u8(90);
+            w.u32(*root);
+        }
+        MachineSnapshot::Draw { root } => {
+            // R05：tag 91。
+            w.u8(91);
+            w.u32(*root);
+        }
+        MachineSnapshot::Gain { root } => {
+            // R05：tag 92。
+            w.u8(92);
+            w.u32(*root);
+        }
         MachineSnapshot::DamageFlow { root } => {
             w.u8(84);
             w.u32(*root);

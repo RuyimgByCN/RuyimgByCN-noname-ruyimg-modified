@@ -45,6 +45,8 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
 }
 
 mod damage;
+// R05 抽牌流程机（D/R/G）。
+mod draw;
 mod damage_after;
 mod damage_change_hp;
 mod damage_flow;
@@ -59,6 +61,7 @@ pub use native_invocation::{advance_invocation, NativeInvocation};
 mod damage_windows;
 use damage::*;
 pub use damage_flow::DamageFlow;
+pub use draw::{DrawMachine, DrawPhaseMachine, GainMachine};
 pub use damage_skill::NativeDamageSkill;
 mod events;
 use events::*;

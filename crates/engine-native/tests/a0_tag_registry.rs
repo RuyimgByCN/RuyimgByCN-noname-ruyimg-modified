@@ -699,6 +699,10 @@ fn variant_index(m: &MachineSnapshot) -> u32 {
         M::JudgeContinuation { .. } => 85,
         M::NativeInvocation { .. } => 84,
         M::NativeDamageSkill { .. } => 83,
+        // R05：D/R/G 三机（与 archive/machine_encode 的 90–92 同步）。
+        M::DrawPhase { .. } => 90,
+        M::Draw { .. } => 91,
+        M::Gain { .. } => 92,
     }
 }
 
