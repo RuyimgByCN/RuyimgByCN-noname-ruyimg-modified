@@ -1,7 +1,8 @@
 //! R05 抽牌流程机（裁决 28／29；合同 v3 §3–§4）。
 //!
 //! - `DrawPhaseMachine`（D）：窗口序 Before→Begin（pending 修正）→Begin1→
-//!   Begin2→主 draw（R 子树）→End→After。Skipped/Cancelled 在 Before 前终止。
+//!   Begin2→主 draw（R 子树）→End→After。预置终态（Skipped/Cancelled）的
+//!   D 从 Before 只发恒发射终窗 After（R05-F2）。
 //! - `DrawMachine`（R）：逐张从牌堆取牌入 `held`（唯一 owner），完成后发一
 //!   个 G 子帧；牌堆弃堆双枯竭 → `Exhausted`，held 转 detached。
 //! - `GainMachine`（G）：Filter→RecordHistory（D.actual_gain 记账）→Transfer
@@ -46,8 +47,18 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
         let mut child = None;
         match progress {
             DP::Before => {
-                progress = DP::Begin;
-                child = Some(win(self.root, W::Before));
+                if outcome != O::Running {
+                    // R05-F2（缺口2）：预置终态 D（跳过路径 outcome=Skipped；
+                    // Cancelled/Omitted 生产者后续批次接入同口径）不走
+                    // Begin/主 draw，只发恒发射终窗 After——Ended/Skipped 都
+                    // 落 DrawPhaseAfter、D 载荷 outcome 字段区分，触发面读
+                    // ctx 可见（phaseDrawSkipped 类技能的载体）。
+                    progress = DP::Done;
+                    child = Some(win(self.root, W::After));
+                } else {
+                    progress = DP::Begin;
+                    child = Some(win(self.root, W::Before));
+                }
             }
             DP::Begin => {
                 // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
@@ -102,6 +113,19 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                         if stored > 0 {
                             pending += stored;
                             ctx.core.vm_aux.marks.remove(&key);
+                            ctx.core.skills.remove(&(player, def));
+                        }
+                    }
+                    // R05-F2（Current 消费，上游 dcbihuo_sha：sp2/skill.js
+                    // :7828-7838 `phaseDrawBegin2` filter hasStorage &&
+                    // !numFixed → trigger.num += num 有符号）：条目存在（含
+                    // 0／负）即消费——pending 有符号累加后清槽与 helper 实例
+                    //（与 Combs 同门同一步；hasStorage 是存在性谓词，与
+                    // Combs 的 stored>0 门不同）。
+                    for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "current") {
+                        let key = (player, def as u32);
+                        if let Some(value) = ctx.core.vm_aux.marks.remove(&key) {
+                            pending += value;
                             ctx.core.skills.remove(&(player, def));
                         }
                     }

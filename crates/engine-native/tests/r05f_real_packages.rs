@@ -373,22 +373,26 @@ fn sha_once(e: &mut Engine) {
 fn r05f_real_dcbihuo_source_minus_end_plus_take_current() {
     let pack = load_real_pack("sp2-upstream-noname");
     let mut e = Engine::new_with_extensions(34903, 3, &[&pack]).unwrap();
+    // R05-F2 owner 角色门（上游 player:/source: 声明）：来源持有者（seat0）
+    // 只在 Source 面、受害者持有者（seat1）只在 End 面被问——双持保留
+    // 两面各一问。
     e.assign_general_named(0, "sp2冯方").unwrap();
+    e.assign_general_named(1, "sp2冯方").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
-    let mut windows = 0;
+    let mut windows: Vec<u8> = Vec::new();
     run_until(
         &mut e,
         |c| match c.spec.prompt {
             "rvm_dcbihuo_target" => {
-                windows += 1;
+                windows.push(c.observer);
                 Some(vec![O::Player(1)])
             }
             other => panic!("意外询问 {other}"),
         },
         |e| !at_phase(e, 0, Phase::Play),
     );
-    assert_eq!(windows, 2, "Source 与 End 各一问");
+    assert_eq!(windows, vec![0, 1], "Source 问 seat0、End 问 seat1 各一问");
     let next = helper_def(&e, "dcbihuo#r05:next");
     let current = helper_def(&e, "dcbihuo#r05:current");
     assert_eq!(mark(&e, 1, next), Some(0), "−1+1 抵消：Some0 保留");
@@ -403,16 +407,17 @@ fn r05f_real_dcbihuo_source_minus_end_plus_take_current() {
 fn r05f_real_dcbihuo_cancel_end_keeps_minus_take_signed() {
     let pack = load_real_pack("sp2-upstream-noname");
     let mut e = Engine::new_with_extensions(34904, 3, &[&pack]).unwrap();
+    // R05-F2 owner 角色门：双持（seat0=来源、seat1=受害者）——Source 窗
+    // 选目标，受害者 End 窗取消。
     e.assign_general_named(0, "sp2冯方").unwrap();
+    e.assign_general_named(1, "sp2冯方").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
-    let mut first = true;
     run_until(
         &mut e,
         |c| match c.spec.prompt {
             "rvm_dcbihuo_target" => {
-                let answer = if first { vec![O::Player(1)] } else { vec![] };
-                first = false;
+                let answer = if c.observer == 0 { vec![O::Player(1)] } else { vec![] };
                 Some(answer)
             }
             other => panic!("意外询问 {other}"),

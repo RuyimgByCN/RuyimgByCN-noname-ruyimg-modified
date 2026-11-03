@@ -263,6 +263,34 @@ impl Engine {
         self.state.core.discard.extend(deck);
     }
 
+    /// 测试/工具（R05-F2）：以 `num_fixed=true` 发射一次真实固定张数摸牌
+    /// 阶段 D 帧（固定张数 D 的正式生产者随后续批次接入；Begin2 的 Current
+    /// 槽消费门 `!num_fixed` 需要真实 D 帧承载红测）。D/R/G 子树在本命令
+    /// 内同步结算（预算同其他 debug 命令）。
+    pub fn debug_start_draw_phase_fixed(&mut self, player: PlayerId, pending: u32) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        crate::resolution::push_frame(
+            &mut work.resolution,
+            EventData::DrawPhase {
+                player,
+                progress: crate::event::DrawPhaseProgress::Before,
+                pending: pending as i32,
+                num_fixed: true,
+                actual_gain: 0,
+                outcome: crate::event::DrawOutcome::Running,
+            },
+        );
+        self.finish_segment(work, log_mark)
+    }
+
     /// 上帝视角清场：全部玩家判定区移入弃牌堆（仅负载/测试布阵用，
     /// 防止闪电转移后同名锦囊滞留他区导致布阵无牌可回收）。
     pub fn debug_sweep_judge_zones(&mut self) {

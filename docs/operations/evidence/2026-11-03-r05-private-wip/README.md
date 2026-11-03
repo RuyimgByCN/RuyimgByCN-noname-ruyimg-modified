@@ -22,6 +22,17 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 
 四缺口：① tiqi phaseDrawSkipped/Cancelled 无原生触发载体（跳过路径不发窗）；② dcbihuo Current 槽无内核消费点（额定摸牌 ± 不生效）；③ dcbihuo 无 owner 角色门（旁观持有者也会被问）；④ 包 abi 按壳编译值 50/3（≤host 758，登记差异）。①-③ 由 F2 批闭。
 
+## F2 批：缺口①-③闭合＋两文件拆行（2026-11-04，r05f2_semantic_gaps 7 测）
+
+| 缺口 | 修法落点 | 核验 |
+| --- | --- | --- |
+| ② Current 消费（上游 sp2 sha `phaseDrawBegin2` `!numFixed → num+=storage`） | `kernel/draw.rs` DP::Begin2 增 `#r05:current` 消费循环（存在即消费含 0/负、pending 有符号、清槽＋helper；与 Combs 同门 `!num_fixed`）；num_fixed 守卫载体＝新 `Engine::debug_start_draw_phase_fixed` | 红 2（摸 2→1/3）＋守卫 1；见 /private/tmp/noname-r05/evidence/f2-report.md＋f2-01/02.log（红／全量同目录） |
+| ① 跳过终窗（上游 tiqi global 含 phaseDrawSkipped） | `kernel/phase/draw.rs` 跳过路径 D 以 Before＋Skipped 入机；`kernel/draw.rs` DP::Before 预置终态只发 After（DrawPhaseAfter 恒发射，outcome 载荷区分）。**Cancelled 登记差异：原生无摸牌阶段取消生产者，面留待有生产者时接** | 红 1（兵粮寸断真实生产者路径，tiqi 无询问→两问＋Limit+2）；End/After 双落 DrawPhaseAfter 与 F 批定案一致 |
+| ③ owner 角色门（上游 player:damageEnd＋source:damageSource） | `vm_effects/dcbihuo.rs` 凭据段：Source 面 owner==source、End 面 owner==victim（与 source 存在/存活/非自伤合取）；F/E 批 6 个既有 dcbihuo 测试改双持各答各面（End 取消路径仍覆盖） | 红 3（旁观被问→不问；受害者/来源各 [1,1]/[0,0]→[1]/[0]，±方向经摸牌数验证） |
+| 行数门禁（machine_encode 1007／events 1070） | machine_encode.rs 拆 `machine_encode/{boss,skills}.rs`（机族分派臂保穷尽检查）；events.rs 拆 `events/turn.rs`（回合帧族，`pub(super) use` 兼容 `use events::*`） | 门禁 exit 0（9081 文件）；三 crate 1948/1/75（唯一失败仍既有 replay_scenarios golden，与 HEAD 同） |
+
+测试：`crates/engine-native/tests/r05f2_semantic_gaps.rs`（登记 groups/misc.rs）7 测先红后绿；定向 r05 38/38。红／全量证据 `/private/tmp/noname-r05/evidence/f2-01.log`＋`f2-02.log`＋`f2-report.md`。
+
 ## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
 
 审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：

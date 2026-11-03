@@ -611,6 +611,9 @@ fn sha_once(e: &mut Engine) {
 #[test]
 fn r05e_dcbihuo_source_minus_end_plus_keeps_zero_then_take_moves_current() {
     let mut e = dcbihuo_engine("r05e-dcbihuo-a", "r05e_dcbihuo_a", 998003001, 33921);
+    // R05-F2 owner 角色门：来源持有者（seat0）只在 Source 面、受害者持有者
+    //（seat1）只在 End 面被问——双持武将保留两面各一问。
+    e.assign_general_named(1, "author").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
     let mut windows: Vec<&'static str> = Vec::new();
@@ -618,15 +621,14 @@ fn r05e_dcbihuo_source_minus_end_plus_keeps_zero_then_take_moves_current() {
         &mut e,
         |c| match c.spec.prompt {
             "rvm_dcbihuo_target" => {
-                assert_eq!(c.observer, 0);
-                windows.push("ask");
+                windows.push(if c.observer == 0 { "source" } else { "end" });
                 Some(vec![O::Player(1)])
             }
             other => panic!("意外询问 {other}"),
         },
         |e| !at_phase(e, 0, Phase::Play),
     );
-    assert_eq!(windows.len(), 2, "Source 与 End 各一问");
+    assert_eq!(windows, vec!["source", "end"], "Source 问来源持有者、End 问受害者持有者");
     let next_def = helper_def(&e, "r05e_dcbihuo_a#r05:next");
     assert_eq!(mark(&e, 1, next_def), Some(0), "−1+1 抵消：Some0 保留");
     // 推进到 seat1 回合开始：原子 take——Next 移除、Current 写入 0。
@@ -640,16 +642,16 @@ fn r05e_dcbihuo_source_minus_end_plus_keeps_zero_then_take_moves_current() {
 #[test]
 fn r05e_dcbihuo_cancel_end_window_keeps_minus_then_take_moves_minus() {
     let mut e = dcbihuo_engine("r05e-dcbihuo-b", "r05e_dcbihuo_b", 998003002, 33922);
+    // R05-F2 owner 角色门：双持（seat0=来源、seat1=受害者）——Source 窗选
+    // 目标，受害者 End 窗取消。
+    e.assign_general_named(1, "author").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
-    let mut first = true;
     run_until(
         &mut e,
         |c| match c.spec.prompt {
             "rvm_dcbihuo_target" => {
-                // Source 窗选目标，End 窗取消。
-                let answer = if first { vec![O::Player(1)] } else { vec![] };
-                first = false;
+                let answer = if c.observer == 0 { vec![O::Player(1)] } else { vec![] };
                 Some(answer)
             }
             other => panic!("意外询问 {other}"),
@@ -690,39 +692,41 @@ fn r05e_dcbihuo_two_packages_do_not_share_slots() {
     );
     let (pack_a, pack_b) = (pack_of("authorA", "r05e-dcbihuo-x", &pkg_a), pack_of("authorB", "r05e-dcbihuo-y", &pkg_b));
     let mut e = Engine::new_with_extensions(33923, 3, &[&pack_a, &pack_b]).unwrap();
+    // seat0=A（来源持有者）、seat1=B（受害者持有者）：R05-F2 owner 角色门
+    // 下 A 只在 Source 窗、B 只在 End 窗被问。
     e.assign_general_named(0, "authorA").unwrap();
     e.assign_general_named(1, "authorB").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
-    let mut by_owner: Vec<(u8, u8)> = Vec::new();
+    let mut by_owner: Vec<u8> = Vec::new();
     run_until(
         &mut e,
         |c| match c.spec.prompt {
             "rvm_dcbihuo_target" => {
-                by_owner.push((c.observer, 2));
+                by_owner.push(c.observer);
                 Some(vec![O::Player(2)])
             }
             other => panic!("意外询问 {other}"),
         },
         |e| !at_phase(e, 0, Phase::Play),
     );
-    // A（owner=0）与 B（owner=1）各在 Source/End 窗被问。
-    assert_eq!(by_owner.len(), 4, "两包 × 两窗");
+    // A（owner=0，Source 面 −1）与 B（owner=1，End 面 +1）各一问。
+    assert_eq!(by_owner, vec![0, 1], "两包 × 各自角色面一问");
     let (next_a, next_b) = (
         helper_def(&e, "r05e_dcbihuo_ax#r05:next"),
         helper_def(&e, "r05e_dcbihuo_by#r05:next"),
     );
     assert_ne!(next_a, next_b);
-    assert_eq!(mark(&e, 2, next_a), Some(0));
-    assert_eq!(mark(&e, 2, next_b), Some(0));
+    assert_eq!(mark(&e, 2, next_a), Some(-1), "A 只在 Source 面 −1");
+    assert_eq!(mark(&e, 2, next_b), Some(1), "B 只在 End 面 +1");
     // seat2 回合开始只 take 各自的 Next。
     run_until(&mut e, |_| None, |e| at_phase(e, 2, Phase::Judge));
     let (cur_a, cur_b) = (
         helper_def(&e, "r05e_dcbihuo_ax#r05:current"),
         helper_def(&e, "r05e_dcbihuo_by#r05:current"),
     );
-    assert_eq!(mark(&e, 2, cur_a), Some(0));
-    assert_eq!(mark(&e, 2, cur_b), Some(0));
+    assert_eq!(mark(&e, 2, cur_a), Some(-1));
+    assert_eq!(mark(&e, 2, cur_b), Some(1));
 }
 
 // ---- 通用 AddMark 拒绝 + 装载器派生 ----
@@ -1117,9 +1121,11 @@ fn r05f_combs_consumes_at_begin2_when_positive() {
 #[test]
 fn r05f_next_take_requires_enabled_helper_instance() {
     let mut e = dcbihuo_engine("r05f-next", "r05e_dcbihuo_n", 998004001, 33924);
+    // R05-F2 owner 角色门：双持（seat0=来源、seat1=受害者）——Source −1 与
+    // End +1 各由角色面对应持有者写入 → Some0 保留（首次写装实例）。
+    e.assign_general_named(1, "author").unwrap();
     run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
     sha_once(&mut e);
-    // Source 与 End 两窗各答 seat1 → −1+1 抵消 Some0 保留（首次写装实例）。
     run_until(
         &mut e,
         |c| match c.spec.prompt {

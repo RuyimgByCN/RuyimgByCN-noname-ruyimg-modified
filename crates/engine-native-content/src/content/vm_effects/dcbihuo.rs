@@ -2,7 +2,9 @@
 //! · 合格 Source 窗 −1／End 窗 +1（每事件一次；可取消）：owner 选一名
 //!   在场目标（含自己）→ 对 Next 槽有符号累加（抵消 Some0 不删）。
 //!   资格：source 存在且存活、非自伤、owner 在场（§7：victim 死亡不
-//!   取消存活 source 资格；每事件一次由触发面结构保证）。
+//!   取消存活 source 资格；每事件一次由触发面结构保证）＋R05-F2 owner
+//!   角色门（上游 player:/source: 声明）：Source 窗只问来源持有者、
+//!   End 窗只问受害者持有者。
 //! · 目标真实回合开始窗（TurnBegin）：Next 槽存在（含 0）且目标存活
 //!   → 原子 take：移除 Next → 写 Current（累加防御，含 0 保留）→ 装
 //!   默认 Current helper。
@@ -33,9 +35,20 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
                 }
             };
             // 凭据：source 存在、存活、非自伤（§7——与伤害是否已致 victim
-            // 死亡无关）。
+            // 死亡无关）＋R05-F2 owner 角色门（上游 trigger
+            // `{player:"damageEnd", source:"damageSource"}`，sp2/skill.js
+            // :7740-7743：damageEnd 面只问**受害者**持有者（+1）、
+            // damageSource 面只问**来源**持有者（−1）——旁观持有者两面都
+            // 不问）。
             let qualified = damage_root_data(ctx, root).is_some_and(|d| {
-                d.source.is_some_and(|s| s != d.target && ctx.core.player(s).alive)
+                let source_ok =
+                    d.source.is_some_and(|s| s != d.target && ctx.core.player(s).alive);
+                match window {
+                    crate::event::DamageWindowKind::Source => {
+                        source_ok && d.source == Some(owner)
+                    }
+                    _ => source_ok && d.target == owner,
+                }
             });
             if !qualified {
                 return Flow::Done;

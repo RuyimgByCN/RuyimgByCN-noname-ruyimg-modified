@@ -1,6 +1,11 @@
 use super::damage::enc_native_damage_skill;
 use super::*;
 
+// R05-F2 行数门禁拆分：按机族把编码臂外移子模块（字节序与公开接口零
+// 变化；分派臂在此保持编译期穷尽检查）。
+mod boss;
+mod skills;
+
 pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
     match m {
         MachineSnapshot::JudgeContinuation { .. } | MachineSnapshot::JudgePhase { .. } => {
@@ -211,106 +216,28 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 ZhangbaStageSnap::TargetRead => 2,
             });
         }
-        MachineSnapshot::BossXiangde { owner } => {
-            w.u8(61);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossFutai { owner } => {
-            w.u8(62);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossLuanchang { owner } => {
-            w.u8(63);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossZhaohuo { owner } => {
-            w.u8(65);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossBuchun {
-            owner,
-            stage,
-            targets,
-        } => {
-            w.u8(66);
-            enc_pid(w, owner);
-            w.u8(*stage);
-            w.u32(targets.len() as u32);
-            for t in targets {
-                w.u32(*t);
-            }
-        }
-        MachineSnapshot::BossXingxia {
-            owner,
-            stage,
-            actor,
-        } => {
-            w.u8(67);
-            enc_pid(w, owner);
-            w.u8(*stage);
-            w.u32(*actor);
-        }
-        MachineSnapshot::BossQizuo { owner } => {
-            w.u8(68);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossXiaoxiong { owner } => {
-            w.u8(69);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossLingbo { owner } => {
-            w.u8(70);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossTashui { owner } => {
-            w.u8(71);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossZjLeiji { owner } => {
-            w.u8(72);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossHeisheng { owner } => {
-            w.u8(73);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossLeizhu { owner, emitted } => {
-            w.u8(74);
-            enc_pid(w, owner);
-            w.u8(*emitted);
-        }
-        MachineSnapshot::BossRenao { owner, emitted } => {
-            w.u8(75);
-            enc_pid(w, owner);
-            w.u8(*emitted);
-        }
-        MachineSnapshot::BossWanghun { owner } => {
-            w.u8(76);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossZhuxin { owner, emitted } => {
-            w.u8(77);
-            enc_pid(w, owner);
-            w.u8(*emitted);
-        }
-        MachineSnapshot::BossPingdeng { owner, emitted } => {
-            w.u8(78);
-            enc_pid(w, owner);
-            w.u8(*emitted);
-        }
-        MachineSnapshot::BossHuoxing { owner, emitted } => {
-            w.u8(79);
-            enc_pid(w, owner);
-            w.u8(*emitted);
-        }
-        MachineSnapshot::BossBingfeng { owner } => {
-            w.u8(80);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::BossWangxiang { owner } => {
-            w.u8(81);
-            enc_pid(w, owner);
-        }
+        // Boss 机族（拆至 machine_encode/boss.rs；字节序零变化）
+        MachineSnapshot::BossXiangde { .. }
+            | MachineSnapshot::BossFutai { .. }
+            | MachineSnapshot::BossLuanchang { .. }
+            | MachineSnapshot::BossZhaohuo { .. }
+            | MachineSnapshot::BossBuchun { .. }
+            | MachineSnapshot::BossXingxia { .. }
+            | MachineSnapshot::BossQizuo { .. }
+            | MachineSnapshot::BossXiaoxiong { .. }
+            | MachineSnapshot::BossLingbo { .. }
+            | MachineSnapshot::BossTashui { .. }
+            | MachineSnapshot::BossZjLeiji { .. }
+            | MachineSnapshot::BossHeisheng { .. }
+            | MachineSnapshot::BossLeizhu { .. }
+            | MachineSnapshot::BossRenao { .. }
+            | MachineSnapshot::BossWanghun { .. }
+            | MachineSnapshot::BossZhuxin { .. }
+            | MachineSnapshot::BossPingdeng { .. }
+            | MachineSnapshot::BossHuoxing { .. }
+            | MachineSnapshot::BossBingfeng { .. }
+            | MachineSnapshot::BossWangxiang { .. }
+            | MachineSnapshot::Shedu { .. } => boss::enc(w, m),
         MachineSnapshot::Rvm {
             owner,
             module,
@@ -373,10 +300,6 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 w.u32(*value);
             }
             w.boolean(*committing);
-        }
-        MachineSnapshot::Shedu { owner } => {
-            w.u8(64);
-            enc_pid(w, owner);
         }
         MachineSnapshot::DyingSave {
             dying,
@@ -553,450 +476,51 @@ pub(super) fn enc_machine(w: &mut W, m: &MachineSnapshot) {
                 None => w.u8(0),
             }
         }
-        MachineSnapshot::SanCai {
-            owner,
-            stage,
-            target,
-        } => {
-            w.u8(13);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                SanCaiStageSnap::Draw => 0,
-                SanCaiStageSnap::Target => 1,
-                SanCaiStageSnap::GiveCard => 2,
-                SanCaiStageSnap::Finish => 3,
-            });
-            enc_opt_pid(w, target);
-        }
-        MachineSnapshot::YiShang { owner, stage } => {
-            w.u8(14);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                YiShangStageSnap::Target => 0,
-                YiShangStageSnap::Apply => 1,
-            });
-        }
-        MachineSnapshot::SuiDun => w.u8(15),
-        MachineSnapshot::SuQing { target } => {
-            w.u8(16);
-            enc_pid(w, target);
-        }
-        MachineSnapshot::ShouYi { owner } => {
-            w.u8(17);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::FanKui {
-            owner,
-            source,
-            asked,
-        } => {
-            w.u8(18);
-            enc_pid(w, owner);
-            enc_opt_pid(w, source);
-            w.boolean(*asked);
-        }
-        MachineSnapshot::JianXiong { owner, card, asked } => {
-            w.u8(19);
-            enc_pid(w, owner);
-            w.u32(*card);
-            w.boolean(*asked);
-        }
-        MachineSnapshot::BiYue { owner } => {
-            w.u8(21);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::JiZhi { owner } => {
-            w.u8(25);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::ZhiHeng { owner, stage } => {
-            w.u8(27);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                ZhiHengStageSnap::Select => 0,
-                ZhiHengStageSnap::Draw => 1,
-            });
-        }
-        MachineSnapshot::KuRou { owner, stage } => {
-            w.u8(26);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                KuRouStageSnap::Lose => 0,
-                KuRouStageSnap::Draw => 1,
-            });
-        }
-        MachineSnapshot::LuoShen { owner } => {
-            w.u8(22);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::YingZi { owner } => {
-            w.u8(28);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::Dismantle {
-            card,
-            source,
-            target,
-            asked,
-        } => {
-            w.u8(29);
-            w.u32(*card);
-            enc_pid(w, source);
-            enc_pid(w, target);
-            w.boolean(*asked);
-        }
-        MachineSnapshot::MonkeySteal {
-            card,
-            user,
-            holders,
-            asked,
-        } => {
-            // E03 猴子偷桃：使用前取消窗口（tag 44，表尾追加）
-            w.u8(44);
-            w.u32(*card);
-            enc_pid(w, user);
-            enc_pids(w, holders);
-            w.boolean(*asked);
-        }
-        MachineSnapshot::XiaoJi { owner } => {
-            // tag 43（表尾追加）：tag 29 曾与 Dismantle 冲突（解码分支
-            // 不可达，枭姬挂起无法恢复），2026-09-24 经 A0 唯一性检查
-            // 定位后修正；旧字节中 XiaoJi 挂起本就无法正确解码。
-            w.u8(43);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::QingNang {
-            owner,
-            stage,
-            healed,
-        } => {
-            w.u8(30);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                QingNangStageSnap::TargetAsk => 0,
-                QingNangStageSnap::TargetRead => 1,
-                QingNangStageSnap::CardRead => 2,
-            });
-            enc_opt_pid(w, healed);
-        }
-        MachineSnapshot::JiJi {
-            owner,
-            stage,
-            target,
-            given,
-        } => {
-            w.u8(20);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                JiJiStageSnap::Draw => 0,
-                JiJiStageSnap::Target => 1,
-                JiJiStageSnap::Retarget => 2,
-                JiJiStageSnap::GiveCard => 3,
-                JiJiStageSnap::GiveChooseCard => 4,
-            });
-            enc_opt_pid(w, target);
-            w.u8(*given);
-        }
-        MachineSnapshot::GangLie {
-            owner,
-            source,
-            asked,
-        } => {
-            w.u8(31);
-            enc_pid(w, owner);
-            enc_pid(w, source);
-            w.u8(*asked as u8);
-        }
-        MachineSnapshot::XiaoGuo {
-            owner,
-            target,
-            stage,
-        } => {
-            w.u8(45);
-            enc_pid(w, owner);
-            enc_pid(w, target);
-            w.u8(match stage {
-                crate::snap::XiaoGuoStageSnap::Ask => 0,
-                crate::snap::XiaoGuoStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::KuangFu { owner, target } => {
-            w.u8(46);
-            enc_pid(w, owner);
-            enc_pid(w, target);
-        }
-        MachineSnapshot::YaoWu {
-            owner,
-            source,
-            stage,
-        } => {
-            w.u8(47);
-            enc_pid(w, owner);
-            enc_pid(w, source);
-            w.u8(match stage {
-                crate::snap::YaoWuStageSnap::Ask => 0,
-                crate::snap::YaoWuStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::ShuShen {
-            owner,
-            target,
-            stage,
-        } => {
-            w.u8(48);
-            enc_pid(w, owner);
-            enc_opt_pid(w, target);
-            w.u8(match stage {
-                ShuShenStageSnap::Ask => 0,
-                ShuShenStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::ShenZhi { owner } => {
-            w.u8(49);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::XunXun { owner, stage, top } => {
-            w.u8(50);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                XunXunStageSnap::Undo => 0,
-                XunXunStageSnap::Arrange => 1,
-            });
-            w.len(top.len());
-            for c in top {
-                w.u32(*c);
-            }
-        }
-        MachineSnapshot::WangXi { owner, other } => {
-            w.u8(51);
-            enc_pid(w, owner);
-            enc_pid(w, other);
-        }
-        MachineSnapshot::JiJie { owner, card, stage } => {
-            w.u8(52);
-            enc_pid(w, owner);
-            match card {
-                None => w.u8(0),
-                Some(c) => {
-                    w.u8(1);
-                    w.u32(*c);
-                }
-            }
-            w.u8(match stage {
-                JiJieStageSnap::Ask => 0,
-                JiJieStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::JiYuan { owner } => {
-            w.u8(53);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::WangZun { owner, target } => {
-            w.u8(54);
-            enc_pid(w, owner);
-            enc_pid(w, target);
-        }
-        MachineSnapshot::TongJi { owner, stage } => {
-            w.u8(55);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                TongJiStageSnap::Ask => 0,
-                TongJiStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::Wuzhong { owner } => {
-            w.u8(56);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::Taoyuan { owner } => {
-            w.u8(57);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::Wugu {
-            owner,
-            cards,
-            pickers,
-        } => {
-            w.u8(58);
-            enc_pid(w, owner);
-            w.len(cards.len());
-            for c in cards {
-                w.u32(*c);
-            }
-            w.len(pickers.len());
-            for p in pickers {
-                enc_pid(w, p);
-            }
-        }
-        MachineSnapshot::Jiedao {
-            owner,
-            holder,
-            victim,
-            stage,
-        } => {
-            w.u8(59);
-            enc_pid(w, owner);
-            enc_pid(w, holder);
-            enc_pid(w, victim);
-            w.u8(match stage {
-                JiedaoStageSnap::Ask => 0,
-                JiedaoStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::TuXi { owner, stage } => {
-            w.u8(32);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                TuXiStageSnap::Ask => 0,
-                TuXiStageSnap::Read => 1,
-            });
-        }
-        MachineSnapshot::LuoYi { owner } => {
-            w.u8(33);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::GuanXing { owner, stage, top } => {
-            w.u8(34);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                GuanXingStageSnap::Arrange => 0,
-                GuanXingStageSnap::Place => 1,
-            });
-            w.len(top.len());
-            for c in top {
-                w.u32(*c);
-            }
-        }
-        MachineSnapshot::LianYing { owner } => {
-            w.u8(35);
-            enc_pid(w, owner);
-        }
-        MachineSnapshot::Rende {
-            owner,
-            stage,
-            cards,
-        } => {
-            w.u8(36);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                RendeStageSnap::SelectCardsAsk => 0,
-                RendeStageSnap::TargetAsk => 1,
-                RendeStageSnap::TargetRead => 2,
-            });
-            w.len(cards.len());
-            for c in cards {
-                w.u32(*c);
-            }
-        }
-        MachineSnapshot::Jijiang {
-            owner,
-            stage,
-            queue,
-            helper,
-            sha,
-            inner,
-        } => {
-            w.u8(37);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                JijiangStageSnap::HelperAsk => 0,
-                JijiangStageSnap::TargetAsk => 1,
-            });
-            // 逐人询问队列：None=0，Some=1+len+pid 序列
-            match queue {
-                None => w.u8(0),
-                Some(q) => {
-                    w.u8(1);
-                    w.len(q.len());
-                    for p in q {
-                        enc_pid(w, p);
-                    }
-                }
-            }
-            enc_opt_pid(w, helper);
-            enc_opt_u32(w, *sha);
-            match inner {
-                Some(m) => {
-                    w.u8(1);
-                    enc_machine(w, m);
-                }
-                None => w.u8(0),
-            }
-        }
-        MachineSnapshot::Snatch {
-            card,
-            source,
-            target,
-            asked,
-        } => {
-            w.u8(38);
-            w.u32(*card);
-            enc_pid(w, source);
-            enc_pid(w, target);
-            w.boolean(*asked);
-        }
-        MachineSnapshot::JieYin {
-            owner,
-            stage,
-            cards,
-        } => {
-            w.u8(39);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                JieYinStageSnap::CardsAsk => 0,
-                JieYinStageSnap::TargetAsk => 1,
-                JieYinStageSnap::TargetRead => 2,
-            });
-            w.len(cards.len());
-            for c in cards {
-                w.u32(*c);
-            }
-        }
-        MachineSnapshot::FanJian {
-            owner,
-            stage,
-            target,
-            chosen_suit,
-        } => {
-            w.u8(40);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                FanJianStageSnap::TargetAsk => 0,
-                FanJianStageSnap::SuitAsk => 1,
-                FanJianStageSnap::PickAsk => 2,
-                FanJianStageSnap::Consume => 3,
-            });
-            match *chosen_suit {
-                None => w.u8(0),
-                Some(t) => {
-                    w.u8(1);
-                    w.u8(t);
-                }
-            }
-            enc_opt_pid(w, target);
-        }
-        MachineSnapshot::LiJian {
-            owner,
-            stage,
-            card,
-            inner,
-        } => {
-            w.u8(41);
-            enc_pid(w, owner);
-            w.u8(match stage {
-                LiJianStageSnap::DiscardAsk => 0,
-                LiJianStageSnap::TargetsAsk => 1,
-                LiJianStageSnap::Launch => 2,
-            });
-            enc_opt_u32(w, *card);
-            match inner {
-                Some(m) => {
-                    w.u8(1);
-                    enc_machine(w, m);
-                }
-                None => w.u8(0),
-            }
-        }
+        // 经典技能机族（拆至 machine_encode/skills.rs；字节序零变化）
+        MachineSnapshot::SuiDun
+            | MachineSnapshot::SanCai { .. }
+            | MachineSnapshot::YiShang { .. }
+            | MachineSnapshot::SuQing { .. }
+            | MachineSnapshot::ShouYi { .. }
+            | MachineSnapshot::FanKui { .. }
+            | MachineSnapshot::JianXiong { .. }
+            | MachineSnapshot::BiYue { .. }
+            | MachineSnapshot::JiZhi { .. }
+            | MachineSnapshot::ZhiHeng { .. }
+            | MachineSnapshot::KuRou { .. }
+            | MachineSnapshot::LuoShen { .. }
+            | MachineSnapshot::YingZi { .. }
+            | MachineSnapshot::Dismantle { .. }
+            | MachineSnapshot::MonkeySteal { .. }
+            | MachineSnapshot::XiaoJi { .. }
+            | MachineSnapshot::QingNang { .. }
+            | MachineSnapshot::JiJi { .. }
+            | MachineSnapshot::GangLie { .. }
+            | MachineSnapshot::XiaoGuo { .. }
+            | MachineSnapshot::KuangFu { .. }
+            | MachineSnapshot::YaoWu { .. }
+            | MachineSnapshot::ShuShen { .. }
+            | MachineSnapshot::ShenZhi { .. }
+            | MachineSnapshot::XunXun { .. }
+            | MachineSnapshot::WangXi { .. }
+            | MachineSnapshot::JiJie { .. }
+            | MachineSnapshot::JiYuan { .. }
+            | MachineSnapshot::WangZun { .. }
+            | MachineSnapshot::TongJi { .. }
+            | MachineSnapshot::Wuzhong { .. }
+            | MachineSnapshot::Taoyuan { .. }
+            | MachineSnapshot::Wugu { .. }
+            | MachineSnapshot::Jiedao { .. }
+            | MachineSnapshot::TuXi { .. }
+            | MachineSnapshot::LuoYi { .. }
+            | MachineSnapshot::GuanXing { .. }
+            | MachineSnapshot::LianYing { .. }
+            | MachineSnapshot::Rende { .. }
+            | MachineSnapshot::Jijiang { .. }
+            | MachineSnapshot::Snatch { .. }
+            | MachineSnapshot::JieYin { .. }
+            | MachineSnapshot::FanJian { .. }
+            | MachineSnapshot::LiJian { .. } => skills::enc(w, m),
         MachineSnapshot::Host {
             def_key,
             behavior,

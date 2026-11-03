@@ -110,6 +110,9 @@ mod r05e_compounds;
 #[path = "../r05f_real_packages.rs"]
 mod r05f_real_packages;
 
+#[path = "../r05f2_semantic_gaps.rs"]
+mod r05f2_semantic_gaps;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 
