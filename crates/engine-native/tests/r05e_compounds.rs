@@ -869,3 +869,176 @@ fn r05e_compound_effects_roundtrip_through_suspended_codec() {
         );
     }
 }
+
+// ---- E 未尽项 3–7（F 批 kernel 回调）：真实行为红（接线前必失败） ----
+
+/// 三 compound 全声明壳（四角色 helper 齐派生；到期/死亡/上限回调测试用）。
+/// 不挂真实派发触发（事件名设为装载器接受但不派发的 `game_started`），
+/// 测试直接布 marks/实例，只测 kernel 回调。
+fn r05f_pack_all_roles() -> (Engine, u8) {
+    let pkg = compile_compound("r05f-all", "tiqi_f", 950001, 781,
+        &[("phase_end", "always", "hp_lost")]);
+    let pkg2 = compile_compound("r05f-all2", "baoshu_f", 950002, 782,
+        &[("phase_end", "always", "hp_lost")]);
+    let pkg3 = compile_compound("r05f-all3", "dcbihuo_f", 950003, 783,
+        &[("phase_end", "always", "hp_lost")]);
+    let pack1 = pack_of("f_holder", "r05f-all", &pkg);
+    let pack2 = pack_of("f_baoshu", "r05f-all2", &pkg2);
+    let pack3 = pack_of("f_dcbihuo", "r05f-all3", &pkg3);
+    let e = engine_native::Engine::new_with_extensions(96001, 3, &[&pack1, &pack2, &pack3])
+        .unwrap();
+    (e, 0)
+}
+
+fn role_def(e: &Engine, skill: &str, role: &str) -> u32 {
+    e.catalog()
+        .skill_by_name(&format!("{skill}#r05:{role}"))
+        .unwrap_or_else(|| panic!("装载器派生 {skill}#{role}")) as u32
+}
+
+/// 未尽项 3a：Limit/Current 到期——任意角色整回合结束（全局 phaseAfter）
+/// 后清 Limit，Next/Combs 保留（§6 全局 After expiry）。
+#[test]
+fn r05f_limit_current_expire_at_global_phase_after() {
+    // 直接布 marks：Limit=2、Combs=-1、Next=1、Current=3（绕过 compound 机，
+    // 只测到期回调——四角色到期是目录级回调，不是 compound 机行为）。
+    let (mut e, seat) = r05f_pack_all_roles();
+    let catalog = e.catalog().clone();
+    let limit_def = role_def(&e, "tiqi_f", "limit");
+    let (combs, next, current) = (
+        role_def(&e, "baoshu_f", "combs"),
+        role_def(&e, "dcbihuo_f", "next"),
+        role_def(&e, "dcbihuo_f", "current"),
+    );
+    {
+        let core = e.state_core_mut();
+        for def in [limit_def, combs, next, current] {
+            core.vm_aux.marks.insert((seat, def), 0);
+        }
+        core.vm_aux.marks.insert((seat, limit_def), 2);
+        core.vm_aux.marks.insert((seat, combs), -1);
+        core.vm_aux.marks.insert((seat, next), 1);
+        core.vm_aux.marks.insert((seat, current), 3);
+    }
+    let _ = catalog;
+    // 推进完整一回合＋下一人回合开始（全局 phaseAfter 在收束窗后）。
+    for _ in 0..24 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Judge {
+            break;
+        }
+        pump(&mut e, |_| None);
+    }
+    let core = e.state_core();
+    assert!(
+        !core.vm_aux.marks.contains_key(&(seat, limit_def)),
+        "Limit 到期清零（全局 phaseAfter 后）"
+    );
+    assert!(
+        !core.vm_aux.marks.contains_key(&(seat, current)),
+        "Current 到期清零"
+    );
+    assert_eq!(
+        core.vm_aux.marks.get(&(seat, combs)),
+        Some(&-1),
+        "Combs 保留（含负数）"
+    );
+    assert_eq!(core.vm_aux.marks.get(&(seat, next)), Some(&1), "Next 保留");
+}
+
+/// 未尽项 4：死亡清理——普通死亡清 Limit/Combs/Current 及 helper 实例，
+/// Next 条目/值/实例原样保留（§6）。
+#[test]
+fn r05f_death_clears_limit_combs_current_keeps_next() {
+    let (mut e, seat) = r05f_pack_all_roles();
+    let limit_def = role_def(&e, "tiqi_f", "limit");
+    let (combs, next, current) = (
+        role_def(&e, "baoshu_f", "combs"),
+        role_def(&e, "dcbihuo_f", "next"),
+        role_def(&e, "dcbihuo_f", "current"),
+    );
+    {
+        let core = e.state_core_mut();
+        core.vm_aux.marks.insert((seat, limit_def), 1);
+        core.vm_aux.marks.insert((seat, combs), 2);
+        core.vm_aux.marks.insert((seat, next), 1);
+        core.vm_aux.marks.insert((seat, current), 1);
+        for def in [limit_def, combs, next, current] {
+            if let Ok(id) = u16::try_from(def) {
+                core.skills.insert(
+                    (seat, id),
+                    engine_native::state::SkillInstance {
+                        owner: seat,
+                        enabled: true,
+                        once_used: false,
+                        expires_end_of_turn: false,
+                        rounds: 0,
+                    },
+                );
+            }
+        }
+        core.players[seat as usize].hp = 0;
+        core.players[seat as usize].dying = false;
+        core.players[seat as usize].alive = false;
+    }
+    // 死亡后的下一次收束触发清理回调（commit_death_skills 路径）。
+    for _ in 0..12 {
+        pump(&mut e, |_| None);
+    }
+    let core = e.state_core();
+    assert!(!core.vm_aux.marks.contains_key(&(seat, limit_def)), "死亡清 Limit");
+    assert!(!core.vm_aux.marks.contains_key(&(seat, combs)), "死亡清 Combs");
+    assert!(!core.vm_aux.marks.contains_key(&(seat, current)), "死亡清 Current");
+    assert_eq!(core.vm_aux.marks.get(&(seat, next)), Some(&1), "Next 值保留");
+    if let Ok(id) = u16::try_from(next) {
+        assert!(
+            core.skills.contains_key(&(seat, id)),
+            "Next 实例保留（仅 alive 门失效）"
+        );
+    }
+}
+
+/// 未尽项 5：手牌上限——弃牌阶段的最终上限在其他基数/修饰后加全部启用
+/// Limit（有符号 clamp 0）。
+#[test]
+fn r05f_hand_limit_applies_enabled_limit_signed_clamped() {
+    let (mut e, seat) = r05f_pack_all_roles();
+    let limit_def = role_def(&e, "tiqi_f", "limit");
+    {
+        let core = e.state_core_mut();
+        core.vm_aux.marks.insert((seat, limit_def), -3);
+        if let Ok(id) = u16::try_from(limit_def) {
+            core.skills.insert(
+                (seat, id),
+                engine_native::state::SkillInstance {
+                    owner: seat,
+                    enabled: true,
+                    once_used: false,
+                    expires_end_of_turn: false,
+                    rounds: 0,
+                },
+            );
+        }
+        // 手牌 4、体力上限 4：Limit=-3 → 最终上限 1（4-3）。
+        while core.player(seat).hand.len() < 4 {
+            let c = core.deck.pop().unwrap();
+            core.player_mut(seat).hand.push(c);
+        }
+    }
+    // 推进到本人弃牌阶段末（PhaseEnd(Discard) 的弃到上限按 Limit 收敛）。
+    let mut saw_discard = false;
+    for _ in 0..40 {
+        if e.turn().current == seat && e.turn().phase == Phase::Discard {
+            saw_discard = true;
+        }
+        if saw_discard && e.turn().phase == Phase::End {
+            break;
+        }
+        pump(&mut e, |_| None);
+    }
+    assert!(saw_discard, "到达本人弃牌阶段");
+    assert_eq!(
+        e.state_core().player(seat).hand.len(),
+        1,
+        "最终上限=基数-Limit（clamp 0）"
+    );
+}

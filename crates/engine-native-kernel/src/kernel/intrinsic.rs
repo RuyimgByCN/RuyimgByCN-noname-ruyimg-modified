@@ -370,6 +370,25 @@ pub fn intrinsic_machine(
                     if ctx.core.player(player).anwugu_count > 0 {
                         limit = limit.saturating_sub(1);
                     }
+                    // R05-F（§5 Limit）：最终上限在其他基数/修饰之后加全部
+                    // 启用 Limit 槽的有符号值并 clamp 0（负数不 cast usize；
+                    // disabled 的 Limit 不计入）。
+                    for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "limit") {
+                        if let Some(inst) = ctx.core.skills.get(&(player, def)) {
+                            if !inst.enabled {
+                                continue;
+                            }
+                            let delta = ctx
+                                .core
+                                .vm_aux
+                                .marks
+                                .get(&(player, def as u32))
+                                .copied()
+                                .unwrap_or(0);
+                            let next = (limit as i64) + delta as i64;
+                            limit = next.clamp(0, i32::MAX as i64) as usize;
+                        }
+                    }
                     // 春饼（G1 古剑食物）：手牌上限 +1（持有状态即生效）
                     if let Some(def) = ctx
                         .catalog

@@ -689,6 +689,18 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
 pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after: bool) {
     if after {
         ctx.log(LogEvent::TurnPhaseAfter { player });
+        // R05-F（§6 全局 phaseAfter 到期，收其他 trigger 前）：清全部角色的
+        // Limit/Current 语义槽与 helper 实例（含 disabled）；Next/Combs 保留；
+        // 边界中新授保留至下一边界，不二扫。
+        for role in ["limit", "current"] {
+            for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, role) {
+                let seats = ctx.core.players.len() as u8;
+                for seat in 0..seats {
+                    ctx.core.vm_aux.marks.remove(&(seat, def as u32));
+                    ctx.core.skills.remove(&(seat, def));
+                }
+            }
+        }
         // K50：封冻解除（Boss 应昭）——回合结束全清封印。
         for p in ctx.core.players.iter_mut() {
             p.fengyin_active = false;
@@ -735,7 +747,7 @@ pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after:
         }
         // phaseAfter 段 Commit＝回合交接（K25：回合重置已在 handoff 内、
         // 先于 TurnBegin）。boss 重整 tick 在窗前已由 commit_turn_ended
-        /// 处理（与存活者选取耦合），此处不再重复。
+        // 处理（与存活者选取耦合），此处不再重复。
         turn_handoff(ctx, player, ctx.core.next_alive(player));
     } else {
         ctx.log(LogEvent::TurnPhaseEnded { player });
@@ -1024,6 +1036,19 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
 /// （`begin_judge` 原 `!turn_opened` 门整体前移至此，使回合开始窗与准备
 /// 阶段读到本回合的新值），最后发 TurnBegin（自动接准备阶段→判定）。
 pub(super) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
+    // R05-F（§6 兜底位）：任何已死亡角色的 Limit/Combs/Current 语义槽与
+    // helper 实例在回合交接时清理（真实死亡经 DeathMachine 前置清理；此
+    // 处覆盖无死亡帧的跳过路径——Next 保留）。
+    for role in ["limit", "combs", "current"] {
+        for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, role) {
+            for seat in 0..ctx.core.players.len() as u8 {
+                if !ctx.core.player(seat).alive {
+                    ctx.core.vm_aux.marks.remove(&(seat, def as u32));
+                    ctx.core.skills.remove(&(seat, def));
+                }
+            }
+        }
+    }
     // K18：灵武在 phaseAfter 段插入的额外出牌阶段——回合不交接，本人
     // 直接再入出牌阶段（上游 insertPhase；extra_phase_lingwu 防递归，
     // 收束后队列空→正常交接）。

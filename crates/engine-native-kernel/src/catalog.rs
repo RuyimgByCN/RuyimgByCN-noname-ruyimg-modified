@@ -934,6 +934,10 @@ pub struct ContentHooks {
         crate::ids::PlayerId,
         crate::ids::CardId,
     ) -> Option<crate::ids::PlayerId>,
+    /// R05-F（§6 四角色生命周期）：按角色名（limit/combs/current）取目录
+    /// 中全部 R05 helper 定义号（装载器按 `#r05:{role}` 模板派生）。内核
+    /// 到期/死亡/上限回调经此识别语义槽；未装（标准目录）返回空。
+    pub r05_role_defs: fn(&Catalog, &'static str) -> Vec<crate::ids::SkillDefId>,
 }
 
 impl ContentHooks {
@@ -947,6 +951,7 @@ impl ContentHooks {
         restore_machine: |_, _| None,
         borrow_options: |_, _, _| Vec::new(),
         borrowed_owner: |_, _, _| None,
+        r05_role_defs: |_, _| Vec::new(),
     };
 }
 

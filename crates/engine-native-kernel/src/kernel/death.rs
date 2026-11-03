@@ -55,6 +55,15 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 pl.swdtianshu_granted = None;
             }
         }
+        // R05-F（§6 普通死亡四角色表）：清死者 Limit/Combs/Current 语义槽
+        // 与 helper 实例；**Next 条目/值/实例/enabled 原样保留**（仅 alive
+        // 门使入队/执行失效；revive 不改 enabled）。
+        for role in ["limit", "combs", "current"] {
+            for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, role) {
+                ctx.core.vm_aux.marks.remove(&(self.player, def as u32));
+                ctx.core.skills.remove(&(self.player, def));
+            }
+        }
         // 护天归还（swd 批 131，规则 v314）：持有者死亡前置（上游 hutian3
         // dieBegin forced）——把其寄存于目标处的牌归还目标并清理双方状态
         hutian_return_deposit(ctx, self.player);

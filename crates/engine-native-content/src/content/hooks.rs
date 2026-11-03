@@ -17,7 +17,16 @@ pub(crate) const CONTENT_HOOKS: ContentHooks = ContentHooks {
     restore_machine,
     borrow_options: crate::content::host::shengong_borrow_options,
     borrowed_owner: crate::content::host::shengong_borrowed_owner,
+    r05_role_defs,
 };
+
+/// R05-F：目录名含 `#r05:{role}` 的全部定义号（装载器派生模板独占 `#`）。
+fn r05_role_defs(catalog: &Catalog, role: &'static str) -> Vec<u16> {
+    let suffix = format!("#r05:{role}");
+    (0..catalog.skills.len() as u16)
+        .filter(|id| catalog.skills[*id as usize].name.ends_with(&suffix))
+        .collect()
+}
 
 /// 内容机器的快照重建（自 `MachineSnapshot::restore` 迁出的内容分支）：先走标准
 /// 内容分派，再按 Boss/宿主机器标签重建；其余快照返回 `None` 交回内核分派。
