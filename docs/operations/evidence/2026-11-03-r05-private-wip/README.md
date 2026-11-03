@@ -15,3 +15,16 @@
 A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbei/phaseAfter）→ 热血/蛊舞迁移＋两锁面更新；C 191 caller 迁 `start_draw`；D Damage 凭据对照；E ABI759 三 compound＋四角色 helper；F 三技能包；G 存档 107（detached/D/R/G 入档）；H 投影 r05_effects/WS8；I 原字节锁链工厂；J 12 类场景＋golden 三步探针重录＋全门禁＋升号合入。
 
 私有 target `/private/tmp/noname-r05/target`（裁决 23：批末退休）。
+
+## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
+
+审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：
+
+1. **K21**：新建「回合交接前」整回合结束窗（phaseEnd＋phaseAfter 两段；现有 TurnEnded 帧起步于 Commit 且 Commit 内先换人，触发窗晚于下一位整棵回合开始子树——不能复用）。落点 `kernel/events.rs::commit_turn_ended`（两处 `turn_opened = false` 前，825/798 行附近）。
+2. **K25**：回合重置块（`kernel/phase/judge.rs:4-75` 的 `!turn_opened` 门：reset_turn_limits／cards_used_turn／turn_damage／忘忧／摄灵／射影／张目／红莲等）整体前移到发 TurnBegin **之前**——否则迁移到准备阶段的每回合限一次技能会被上回合标记挡住。
+3. **K10**：翻面整回合跳过检测前移到发 TurnBegin 前（上游检测在 phaseBegin 前；A1 后翻面者会先跑完回合开始窗＋准备阶段才被跳过）。
+4. **K22**：TurnBegin 窗补首回合发帧与 VM trigger_ctx_of 事件玩家臂。
+5. 然后按审计分组迁移 107 条：TurnBegin 前 4／TurnBegin 窗 29＋两面 2／Phase{Prepare,begin} 29／整回合结束窗 phaseEnd 段 27＋phaseAfter 段 8／Play-end 精确锚 1（K56 虚失）／DSL 3（D01/D02/D06）。
+6. 待拍板（不阻塞主体）：光塔 trigger/intro 矛盾按 trigger 记并登记；K24 phase_number 对齐或登记；D07 phase_any_end 是否含准备阶段。
+
+三处 P0 与「任意阶段」过滤 6 次/回合问题修完后，热血（H42→TurnBegin 窗）与蛊舞（K01→phaseAfter 段）两个失败测试随迁移转绿。
