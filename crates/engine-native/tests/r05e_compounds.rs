@@ -1042,3 +1042,45 @@ fn r05f_hand_limit_applies_enabled_limit_signed_clamped() {
         "最终上限=基数-Limit（clamp 0）"
     );
 }
+
+/// 未尽项 3c：Combs 消费——目标本人的非 fixed D 到 Begin2 且 stored>0 才
+/// pending＋全部正值、归零清槽与 helper；≤0（负数/0）不触发不消费不删除。
+#[test]
+fn r05f_combs_consumes_at_begin2_when_positive() {
+    let (mut e, seat) = r05f_pack_all_roles();
+    let combs = role_def(&e, "baoshu_f", "combs");
+    {
+        let core = e.state_core_mut();
+        // 手工布一个 Combs=3 的槽；本人摸牌阶段的 Begin2 应消费为 pending+3。
+        core.vm_aux.marks.insert((seat, combs), 3);
+    }
+    // 推进到本人摸牌阶段完成（D 机 Begin2 消费）。
+    let mut consumed = false;
+    for _ in 0..40 {
+        if !e.state_core().vm_aux.marks.contains_key(&(seat, combs)) {
+            consumed = true;
+            break;
+        }
+        pump(&mut e, |_| None);
+    }
+    assert!(consumed, "Combs>0 在本人摸牌 Begin2 被消费");
+    // 摸牌阶段基础 2＋Combs 3＝手牌应至少 +5（起手 4 → ≥9）。
+    assert!(
+        e.state_core().player(seat).hand.len() >= 9,
+        "pending 加全部正值（手牌 {}）",
+        e.state_core().player(seat).hand.len()
+    );
+    // 负值对照：布 -2 槽，下一轮摸牌不消费不删除。
+    {
+        let core = e.state_core_mut();
+        core.vm_aux.marks.insert((seat, combs), -2);
+    }
+    for _ in 0..40 {
+        pump(&mut e, |_| None);
+    }
+    assert_eq!(
+        e.state_core().vm_aux.marks.get(&(seat, combs)),
+        Some(&-2),
+        "Combs ≤0 不消费不删除"
+    );
+}

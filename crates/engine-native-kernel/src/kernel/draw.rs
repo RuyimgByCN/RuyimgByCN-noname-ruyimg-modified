@@ -90,6 +90,22 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 child = Some(win(self.root, W::Begin1));
             }
             DP::Begin2 => {
+                // R05-F（§5 Combs 消费）：目标本人的非 fixed D 走到 Begin2 时，
+                // 已存 Combs 槽 stored>0 才消费——pending 加全部正值、槽减同
+                // 量、归零清槽与 helper（≤0 不触发不消费不删除；fixed 由
+                // num_fixed 侧跳过整窗）。窗口先派发（触发面可见消费前值），
+                // 消费在发窗的同一步完成（§5「pending 加全部正值→移除同量」）。
+                if !num_fixed {
+                    for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "combs") {
+                        let key = (player, def as u32);
+                        let stored = ctx.core.vm_aux.marks.get(&key).copied().unwrap_or(0);
+                        if stored > 0 {
+                            pending += stored;
+                            ctx.core.vm_aux.marks.remove(&key);
+                            ctx.core.skills.remove(&(player, def));
+                        }
+                    }
+                }
                 progress = DP::MainWaiting;
                 child = Some(win(self.root, W::Begin2));
             }
