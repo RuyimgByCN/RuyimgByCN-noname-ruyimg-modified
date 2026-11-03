@@ -110,11 +110,14 @@ fn lingwu_inserts_extra_play_phase_when_used_reaches_hp() {
     assert_eq!(e.state_core().player(0).hp, 1, "体力 1");
     e.debug_grant(0, "lingwu");
 
-    // 出牌阶段结束 → 灵武插入额外出牌阶段
-    next_phase(&mut e);
+    // 出牌阶段结束 → 灵武在整回合结束 phaseAfter 段插入额外出牌阶段
+    //（K18：上游 phaseAfter 每回合一次；推进过 Discard→End→收束）。
+    next_phase(&mut e); // Play→Discard
+    next_phase(&mut e); // Discard→End
+    next_phase(&mut e); // End→收束→phaseAfter 段（灵武插入）
     assert_eq!(e.turn().current, 0, "仍在 0 号回合");
     assert_eq!(e.turn().phase, Phase::Play, "插入额外出牌阶段");
-    // 插入阶段收束：不再插入（used 仍 ≥ hp），正常进入弃牌阶段
+    // 插入阶段收束：不再插入（extra_phase_lingwu 防递归），正常进入弃牌阶段
     next_phase(&mut e);
     assert_eq!(e.turn().phase, Phase::Discard, "插入阶段收束不再插入");
 }

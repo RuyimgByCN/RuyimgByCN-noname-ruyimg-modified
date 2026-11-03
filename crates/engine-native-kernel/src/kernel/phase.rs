@@ -204,28 +204,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
         });
         return;
     }
-    // 灵武（swd 妮可，批 120，规则 v307）：频繁技——阶段结束时若本回合
-    // 已用牌数 ≥ 体力则插入一个额外出牌阶段（上游 `insertPhase()` 同口径；
-    // 插入阶段的收束不再触发=上游 `event.skill != 'lingwu'` 防递归）。
-    {
-        let from_lingwu = ctx.core.turn.extra_phase_lingwu;
-        ctx.core.turn.extra_phase_lingwu = false;
-        if !from_lingwu {
-            if let Some(def) = ctx
-                .catalog
-                .skill_by_name(crate::vocabulary::host::SWD_LINGWU_KEY)
-            {
-                let hp = ctx.core.player(player).hp.max(0) as u32;
-                if ctx.core.has_skill(player, def)
-                    && ctx.core.player(player).alive
-                    && ctx.core.turn.cards_used_turn >= hp
-                {
-                    ctx.core.turn.extra_phases.push(2); // Phase::Play
-                    ctx.core.turn.extra_phase_lingwu = true;
-                }
-            }
-        }
-    }
+    // 灵武（K18，A2；规则 v307→333）：已迁整回合结束窗 phaseAfter 段
+    //（kernel/events.rs commit_turn_end_window——上游 phaseAfter 每回合一次；
+    // 原「任意阶段收束」在准备阶段加入后每回合 6 次判定）。额外阶段仍以
+    // 额外出牌阶段承载（上游 insertPhase=额外回合，既有登记差异保留）。
     // 额外阶段队列（insertPhase 原语）：非空则弹出为下一阶段
     if !ctx.core.turn.extra_phases.is_empty() {
         let code = ctx.core.turn.extra_phases.remove(0);

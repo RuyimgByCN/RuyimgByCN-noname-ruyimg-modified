@@ -707,6 +707,27 @@ pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after:
                 ctx.core.player_mut(player).juyuan_storage = hp;
             }
         }
+        // K18：灵武（swd 妮可）——整回合结束后若本回合已用牌数 ≥ 体力且
+        // 本回合非灵武插入的额外阶段，插入一个额外出牌阶段（上游
+        // insertPhase；cards_used_turn 尚未被新回合重置，reset 在 handoff；
+        // 额外出牌阶段 vs 上游额外回合＝既有登记差异保留）。
+        if !ctx.core.turn.extra_phase_lingwu {
+            if let Some(def) = ctx
+                .catalog
+                .skill_by_name(crate::vocabulary::host::SWD_LINGWU_KEY)
+            {
+                let hp = ctx.core.player(player).hp.max(0) as u32;
+                if ctx.core.has_skill(player, def)
+                    && ctx.core.player(player).alive
+                    && ctx.core.turn.cards_used_turn >= hp
+                {
+                    ctx.core.turn.extra_phases.push(2); // Phase::Play
+                    ctx.core.turn.extra_phase_lingwu = true;
+                }
+            }
+        } else {
+            ctx.core.turn.extra_phase_lingwu = false;
+        }
         // 蛊舞递减（A2 审计 K01；上游 anwugu2 player:'phaseAfter'）：
         // 本人整回合结束后 -1，归 0 移除（出牌受限/手牌上限随之解除）。
         if ctx.core.player(player).anwugu_count > 0 {
@@ -1003,6 +1024,26 @@ pub(super) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
 /// （`begin_judge` 原 `!turn_opened` 门整体前移至此，使回合开始窗与准备
 /// 阶段读到本回合的新值），最后发 TurnBegin（自动接准备阶段→判定）。
 pub(super) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: PlayerId) {
+    // K18：灵武在 phaseAfter 段插入的额外出牌阶段——回合不交接，本人
+    // 直接再入出牌阶段（上游 insertPhase；extra_phase_lingwu 防递归，
+    // 收束后队列空→正常交接）。
+    if !ctx.core.turn.extra_phases.is_empty() && ctx.core.turn.current == prev {
+        let code = ctx.core.turn.extra_phases.remove(0);
+        let phase = match code {
+            0 => Phase::Judge,
+            1 => Phase::Draw,
+            2 => Phase::Play,
+            3 => Phase::Discard,
+            _ => Phase::End,
+        };
+        ctx.core.turn.phase = phase;
+        ctx.emit(EventData::Phase {
+            player: prev,
+            phase,
+            begin: true,
+        });
+        return;
+    }
     // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
     // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
     // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
