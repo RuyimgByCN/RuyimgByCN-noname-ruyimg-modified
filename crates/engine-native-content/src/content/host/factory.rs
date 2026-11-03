@@ -230,9 +230,9 @@ impl HostSkillBehavior {
             // 归汉：目录锚（无提取）
             HostBehavior::WudianGuihan => (None, None),
             HostBehavior::SwdGTiandao => (None, None),
-            // 热血：阶段玩家为本次杀的目标
+            // 热血（A2 H42）：回合开始者为本次杀的目标（global phaseBegin）。
             HostBehavior::SwdRexue => match event {
-                EventData::Phase { player, .. } => (Some(*player), None),
+                EventData::TurnBegin { player } => (Some(*player), None),
                 _ => (None, None),
             },
             // 幻音：牌的使用者为关联目标，牌为关联卡

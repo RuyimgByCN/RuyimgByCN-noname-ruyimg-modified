@@ -18,20 +18,34 @@
 //! **相对次序**由 `Timing`/`priority` 决定，不再由相位顺序保证——需按技能逐条核对
 //! （登记为 NC08 待办）。
 
-/// 映射固定：修罗的触发事件为 `PhaseBegin`（相位由过滤条件限定为 Judge 起点）。
+//! R05（A2 审计，规则 333）：准备阶段作为独立相位真实存在（Phase::Prepare，
+//! 回合开始窗→准备阶段→判定……）。原「准备阶段并入判定起点」的登记差异
+//! 反转；修罗等 phaseZhunbeiBegin 技能按审计分批迁移到 Phase{Prepare,begin}。
+
+/// 锁面：原生相位集合现在**包含** Prepare（声明序首位；VM 索引表尾追加 5；
+/// 存档编码位 5），且每回合阶段序为 准备→判定→摸牌→出牌→弃牌→结束。
 #[test]
-fn prepare_phase_triggers_are_folded_into_judge_begin() {
-    // 该断言通过源码引用固定事实：原生没有独立 Prepare 相位（见 Phase::ALL），
-    // 准备阶段类行为以 `PhaseBegin` + Judge 过滤表达。
+fn prepare_phase_exists_as_real_phase() {
     let phases: Vec<String> = engine_native::Phase::ALL
         .iter()
         .map(|p| format!("{p:?}"))
         .collect();
     assert!(
-        !phases.iter().any(|p| p == "Prepare"),
-        "原生相位集合不含 Prepare（上游 phaseZhunbei 已并入 Judge 起点）：{phases:?}"
+        phases.iter().any(|p| p == "Prepare"),
+        "原生相位集合含 Prepare：{phases:?}"
     );
-    // 行为键名稳定（防止重命名导致映射失效）：以源码引用固定
+    assert_eq!(
+        engine_native::Phase::ALL[..5],
+        [
+            engine_native::Phase::Judge,
+            engine_native::Phase::Draw,
+            engine_native::Phase::Play,
+            engine_native::Phase::Discard,
+            engine_native::Phase::End
+        ],
+        "VM 阶段索引 0–4 不移位（Prepare 为表尾 5）"
+    );
+    // 行为键名稳定（防止重命名导致映射失效）
     let keys = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../engine-native-kernel/src/vocabulary/host/keys.rs"
@@ -47,21 +61,15 @@ fn prepare_phase_triggers_are_folded_into_judge_begin() {
 /// （弃一张手牌作为代价，无手牌则不可发动）——**登记为过滤差异**。
 #[test]
 fn xiuluo_filter_requires_hand_which_upstream_does_not() {
-    // 上游：`filter(event, player) { return player.countCards("j") > 0; }`
-    // 原生（filtering/common.rs）：`!judge.is_empty() && !hand.is_empty()`
-    // 差异影响：判定区有牌但**手牌为空**时，上游可发动（随后 discardPlayerCard 失败/取消），
-    // 原生直接不触发。此处只固定「原生要求手牌」这一事实，供上游判定。
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../engine-native-content/src/content/host/filtering/common.rs"
     ))
     .expect("读过滤源码");
     let idx = src.find("HostBehavior::Xiuluo =>").expect("修罗过滤分支");
-    // 按字符边界截取（源码含中文注释）
     let seg: String = src[idx..].chars().take(600).collect();
-    let seg = seg.as_str();
     assert!(
-        seg.contains("judge.is_empty()") && seg.contains("hand.is_empty()"),
-        "原生修罗过滤应同时要求判定区与手牌非空（差异登记）：{seg}"
+        seg.contains("hand.is_empty()"),
+        "修罗过滤仍要求手牌非空（登记差异锁面）：{seg}"
     );
 }

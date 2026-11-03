@@ -36,12 +36,10 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     if begin && phase == Phase::Judge && ctx.core.player(player).xingtigaizao_count > 0 {
         ctx.core.player_mut(player).xingtigaizao_count = 0;
     }
-    // 蛊舞递减（U05 xianjian 阿奴，规则 v154）：自己每阶段结束 -1（上游
-    // anwugu2 phaseAfter 递减同口径）；归 0 后移除（出牌受限/手牌上限随
-    // 之解除）。
-    if !begin && ctx.core.player(player).anwugu_count > 0 {
-        ctx.core.player_mut(player).anwugu_count -= 1;
-    }
+    // 蛊舞递减（U05 xianjian 阿奴，规则 v154）：已迁整回合结束窗
+    // phaseAfter 段（kernel/events.rs commit_turn_end_window）——上游
+    // anwugu2 trigger {player:'phaseAfter'} 每回合递减一次，原「每阶段
+    // 结束」臂在准备阶段加入后每回合递减 6 次（A2 审计 K01）。
     // 月行（U05 xianjian 龙幽，规则 v159）：出牌阶段结束解除距离基数交
     // 换（双向互指一并清除；上游 yuexing2 临时技 phaseUseAfter 同口径）
     if !begin && phase == Phase::Play {

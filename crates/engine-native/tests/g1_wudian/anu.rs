@@ -122,15 +122,27 @@ fn anu_anwugu_afflict_and_limits() {
         used += 1;
     }
     assert_eq!(used, 3, "蛊舞=每回合 3 张（第 4 张拒绝）");
-    // 阶段结束递减：0 的 Discard/End 阶段结束已递 3→1（蛊舞在 0 回合中
-    // 挂上，0 的后续阶段结束同样递减——上游 phaseAfter 每阶段同口径）
-    assert_eq!(e.state_core().player(1).anwugu_count, 1, "蛊舞阶段结束递减");
+    // 递减（A2 审计 K01，规则 333）：上游 anwugu2 trigger {player:
+    // 'phaseAfter'}＝挂标记者**本人**整回合结束后递减一次（intro「剩余
+    // $回合」）。0 回合尚未结束且标记挂在 1 身上 → 仍为 3；旧断言 1
+    // 来自「任意玩家任意阶段结束」的原生近似（含 0 的阶段结束，准备
+    // 阶段加入后还会 ×6）。
+    assert_eq!(e.state_core().player(1).anwugu_count, 3, "蛊舞只在本人的 phaseAfter 递减");
 
-    // ③ 阶段结束递减：1 号收束→蛊 2
+    // ③ 递减（K01 语义）：1 号整回合结束（phaseAfter 段）递一次 3→2。
+    // 弃牌到上限的选择窗按最少张应答（A1/K25 后 1 号摸牌与手牌数与旧
+    // 断言期不同——旧测试在此隐式跳过弃牌窗）。
     let _ = submit(&mut e, 1, GameAction::NextPhase); // Play→Discard
+    for _ in 0..16 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.spec.prompt != "discard_to_limit" {
+            break;
+        }
+        let take = c.spec.min.max(1).min(c.spec.options.len());
+        let sel: Vec<_> = c.spec.options.iter().take(take).copied().collect();
+        let _ = submit(&mut e, c.observer, GameAction::Answer { choice_id: c.id, selection: sel });
+    }
     let _ = submit(&mut e, 1, GameAction::NextPhase); // Discard→End
-    let _ = submit(&mut e, 1, GameAction::NextPhase); // End→收束→2 Judge
-                                                      // 0 的 Discard/End 阶段结束已递 2 次（3→1），1 的 Judge/Draw 阶段
-                                                      // 结束再递 2 次（1→0，归零解除）
-    assert_eq!(e.state_core().player(1).anwugu_count, 0, "蛊舞递减归零解除");
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // End→收束→phaseAfter 递减
+    assert_eq!(e.state_core().player(1).anwugu_count, 2, "蛊舞 phaseAfter 每回合递一次");
 }

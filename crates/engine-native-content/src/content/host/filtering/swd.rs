@@ -192,12 +192,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdNlianji => false,
             // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
-                if let EventData::Phase {
-                    player,
-                    begin: true,
-                    ..
-                } = event
-                {
+                // A2 H42：上游 global phaseBegin＝他人回合开始（每回合一次）。
+                if let EventData::TurnBegin { player } = event {
                     let actor = *player;
                     actor != owner
                         && ctx

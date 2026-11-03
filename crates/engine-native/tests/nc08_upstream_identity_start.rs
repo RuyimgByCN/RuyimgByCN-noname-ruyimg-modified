@@ -62,17 +62,19 @@ fn upstream_identity_start_lord_first_and_four_cards_each() {
     assert_eq!(e.turn().round, 1, "第 1 回合");
 }
 
-/// 上游判定 3（登记差异）：原生阶段集合**不含「准备阶段」**。
+/// R05（A2，规则 333）：登记差异反转——准备阶段已作为独立相位落地
+///（Phase::Prepare；回合序 准备→判定→…）。上游判定 3 的「不含准备阶段」
+/// 差异不再成立；本锁面改为固定**含** Prepare 且身份局起手仍在判定前
+/// 经历准备阶段序列（首个提交前帧待处理，见 K22b 搁置说明）。
 #[test]
-fn upstream_identity_start_prepare_phase_absent_is_registered() {
+fn upstream_identity_start_prepare_phase_now_present() {
     let phases: Vec<String> = Phase::ALL.iter().map(|p| format!("{p:?}")).collect();
     assert!(
-        !phases.iter().any(|p| p == "Prepare"),
-        "原生阶段集合不含 Prepare（上游 phaseZhunbei）——差异已登记，不得静默改变：{phases:?}"
+        phases.iter().any(|p| p == "Prepare"),
+        "原生阶段集合含 Prepare（R05 反转登记差异）：{phases:?}"
     );
-    // 原生起手阶段为 Judge（上游为 Prepare→Judge）
     let e = Engine::new_identity(20262402, 4);
-    assert_eq!(e.turn().phase, Phase::Judge, "原生起手阶段 Judge");
+    assert_eq!(e.turn().phase, Phase::Judge, "身份局起手阶段 Judge（准备阶段帧序列待 K22b）");
 }
 
 /// 上游判定 2 的反向对照：旧线的「主公多 2 张」**不符**上游 `gameDraw` 返回值 4。

@@ -1009,9 +1009,10 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
-            // 热血：任意角色阶段开始（global；目标在 machine() 提取）
+            // 热血（A2 审计 H42）：上游 trigger {global:'phaseBegin'}＝
+            // 他人回合开始，每回合一次（原锚任意阶段开始＝每回合 5→6 次）。
             HostBehavior::SwdRexue => Some(TriggerMeta {
-                event: EventKind::PhaseBegin,
+                event: EventKind::TurnBegin,
                 timing: Timing::Normal,
                 priority: 0,
                 order_selectable: true,

@@ -689,6 +689,11 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
 pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after: bool) {
     if after {
         ctx.log(LogEvent::TurnPhaseAfter { player });
+        // 蛊舞递减（A2 审计 K01；上游 anwugu2 player:'phaseAfter'）：
+        // 本人整回合结束后 -1，归 0 移除（出牌受限/手牌上限随之解除）。
+        if ctx.core.player(player).anwugu_count > 0 {
+            ctx.core.player_mut(player).anwugu_count -= 1;
+        }
         // phaseAfter 段 Commit＝回合交接（K25：回合重置已在 handoff 内、
         // 先于 TurnBegin）。boss 重整 tick 在窗前已由 commit_turn_ended
         /// 处理（与存活者选取耦合），此处不再重复。
