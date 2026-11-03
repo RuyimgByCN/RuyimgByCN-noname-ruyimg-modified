@@ -16,6 +16,12 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 
 私有 target `/private/tmp/noname-r05/target`（裁决 23：批末退休）。
 
+## F 真包数据（2026-11-04，cf7c44d1）
+
+| `cf7c44d1` F 真包数据 | xianding/sp2-upstream-noname 两包（tiqi/baoshu/dcbihuo 预编译模块 npack：DSL 壳→事件名改写→HOST_EFFECT_EXT(781/782/783) 体→logic_hash 重算；`r05f_real_packages` 5 测含 npack 再生回验）；映射定案：tiqi 只声明 `draw_phase_after`（主 draw>0 时 End 窗被 R 子帧替代、恒发射终窗=After；Skipped/Cancelled 留 F2） | 红 0/5（npack 移出）→绿 5/5；三 crate 1941/1/75（logs 见 /private/tmp/noname-r05/evidence/f-real-01.log＋f-real-report.md） |
+
+四缺口：① tiqi phaseDrawSkipped/Cancelled 无原生触发载体（跳过路径不发窗）；② dcbihuo Current 槽无内核消费点（额定摸牌 ± 不生效）；③ dcbihuo 无 owner 角色门（旁观持有者也会被问）；④ 包 abi 按壳编译值 50/3（≤host 758，登记差异）。①-③ 由 F2 批闭。
+
 ## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
 
 审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：
