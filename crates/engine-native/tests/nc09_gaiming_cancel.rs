@@ -59,7 +59,7 @@ fn cancel_then_normal_judgement_and_pick_control() {
     let first_candidate = f.held[0];
     answer(&mut f.engine, vec![]);
     assert_ne!(
-        f.engine.open_choice().map(|c| c.spec.prompt.clone()),
+        f.engine.open_choice().map(|c| c.spec.prompt),
         Some("gaiming_pick"),
         "取消后不得重复询问改命"
     );

@@ -5,6 +5,9 @@ use engine_native::{
 };
 
 #[derive(Debug, Clone, Copy)]
+// 共享支撑：单个用例只构造部分 Window 变体/字段；CI rustc（1.99）对每份
+// 模块实例分别做 dead_code 分析，显式放行（仅测试支撑文件）。
+#[allow(dead_code)]
 pub enum Window {
     XunXun,
     JiJie,
@@ -13,6 +16,7 @@ pub enum Window {
     Liaoyuan,
 }
 
+#[allow(dead_code)]
 pub struct Fixture {
     pub engine: Engine,
     pub packs: Vec<ExtensionPack>,
