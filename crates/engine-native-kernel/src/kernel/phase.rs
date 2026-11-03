@@ -42,6 +42,21 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
             }
         }
     }
+    // K56：虚失·自翻面（Boss 毕方系；上游 player ['phaseUseEnd',
+    // 'turnOverEnd']）——出牌阶段结束时经 TurnOverBefore 提交翻面。
+    if !begin && phase == Phase::Play {
+        if let Some(xdef) = ctx
+            .catalog
+            .skill_by_name(crate::vocabulary::names::BOSS_XUSHI)
+        {
+            if ctx.core.has_skill(player, xdef) && ctx.core.player(player).alive {
+                ctx.emit(EventData::TurnOverBefore {
+                    player,
+                    cancelled: false,
+                });
+            }
+        }
+    }
     // 逐月（U05 xianjian 云天河，规则 v161）：出牌阶段结束清白名单
     //（上游 zhuyue2 phaseUseEnd silent 同口径）
     if !begin && phase == Phase::Play {
@@ -149,9 +164,9 @@ pub(super) fn commit_phase(ctx: &mut Ctx<'_>, player: PlayerId, phase: Phase, be
     // 临时技在下一阶段边界移除 → `hutian3` 于下一次阶段收束归还）。原生
     // 阶段收束的 commit 先于该阶段的触发窗，故「寄存当次的收束」看不到
     // 寄存（just_given 尚未置位），**下一次阶段收束**即归还 ✓
-    if !begin && ctx.core.player(player).hutian_deposit.is_some() {
-        hutian_return_deposit(ctx, player);
-    }
+    // 护天寄存取回（K17，A2）：已迁整回合结束窗 phaseEnd 段（kernel/
+    // events.rs commit_turn_end_window——上游 hutian4 临时技下一次阶段
+    // 边界归还；原「任意阶段结束」在准备阶段加入后归还时点×6/回合）。
     // 颂词组技 songci_draw（swd 批 129，规则 v313）：弃牌阶段**收束**时若
     // 全部角色均已记录（无未记录者）→ 摸 1（上游 phaseDiscardEnd forced）
     if !begin && phase == Phase::Discard {

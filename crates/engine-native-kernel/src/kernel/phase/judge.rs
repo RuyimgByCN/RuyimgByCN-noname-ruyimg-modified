@@ -3,17 +3,9 @@ use super::super::*;
 pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {    // R05（K25/A2）：本函数原 `!turn_opened` 门两段拆分——重置段前移
     // `turn_handoff`（kernel/events.rs `reset_new_turn_state`），准备阶
     // 段 Boss 技段迁 `begin_prepare`（上游 phaseZhunbeiBegin）。
-    // 废墟地图效果（mtg 第四批，规则 v103）：锁定全局——回合
-    // 开始（准备阶段）随机将弃牌堆一张置于牌堆顶（上游
-    // phaseBegin silent 同口径；RNG 真消除口径）
-    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
-        && !ctx.core.discard.is_empty()
-    {
-        let n = ctx.core.discard.len() as u32;
-        let i = ctx.core.rng.gen_range(n) as usize;
-        let c = ctx.core.discard.remove(i);
-        ctx.core.deck.push(c);
-    }
+    // 废墟地图（K23，A2）：已迁 TurnBegin 窗 Commit（kernel/events.rs
+    // commit_turn_begin——上游 player phaseBegin silent；原锚判定开始会在
+    // 额外判定阶段重复执行）。
 }
 
 /// R05（A2 审计 K26–K45 族）：准备阶段开始入场效果——原锚判定开始

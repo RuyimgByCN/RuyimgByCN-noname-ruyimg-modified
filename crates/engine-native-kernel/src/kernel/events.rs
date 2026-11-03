@@ -718,6 +718,15 @@ pub(super) fn commit_turn_end_window(ctx: &mut Ctx<'_>, player: PlayerId, after:
         turn_handoff(ctx, player, ctx.core.next_alive(player));
     } else {
         ctx.log(LogEvent::TurnPhaseEnded { player });
+        // K17：护天寄存取回——寄存主面（H54）在本窗 BeforeTriggers 刚授
+        // 予（just_given=true），须跨一整轮：本窗不取回，仅清 just_given；
+        // 下一整回合结束窗取回（上游 hutian4 临时技下一阶段边界语义按
+        // 审计对齐为整回合结束）。
+        if ctx.core.player(player).hutian_just_given {
+            ctx.core.player_mut(player).hutian_just_given = false;
+        } else if ctx.core.player(player).hutian_deposit.is_some() {
+            hutian_return_deposit(ctx, player);
+        }
         // 星体改造重置（K05；上游 phaseEnd 移除+清零）。
         if ctx.core.player(player).xingtigaizao_count > 0 {
             ctx.core.player_mut(player).xingtigaizao_count = 0;
@@ -891,6 +900,16 @@ pub(super) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) {
         }
 
 
+    // K23：废墟地图（mtg v103）——回合开始随机弃堆一张置牌堆顶（上游
+    // phaseBegin silent；RNG 真消除口径）。
+    if ctx.core.current_land == Some(crate::catalog::CardKind::Feixu)
+        && !ctx.core.discard.is_empty()
+    {
+        let n = ctx.core.discard.len() as u32;
+        let i = ctx.core.rng.gen_range(n) as usize;
+        let c = ctx.core.discard.remove(i);
+        ctx.core.deck.push(c);
+    }
     ctx.core.turn.phase = Phase::Prepare;
     ctx.emit(EventData::Phase {
         player,
