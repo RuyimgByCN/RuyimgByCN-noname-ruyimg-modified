@@ -1110,3 +1110,51 @@ fn r05f_combs_consumes_at_begin2_when_positive() {
         "Combs ≤0 不消费不删除"
     );
 }
+
+/// 未尽项 7：Next take 以 helper 实例 enabled 为精确门——经真实伤害窗写入
+/// Next 并装实例后，disable 实例：目标 TurnBegin 不 take（条目保留）；重新
+/// 启用后下一轮 TurnBegin 正常 take 并转 Current。
+#[test]
+fn r05f_next_take_requires_enabled_helper_instance() {
+    let mut e = dcbihuo_engine("r05f-next", "r05e_dcbihuo_n", 998004001, 33924);
+    run_until(&mut e, |_| None, |e| at_phase(e, 0, Phase::Play));
+    sha_once(&mut e);
+    // Source 与 End 两窗各答 seat1 → −1+1 抵消 Some0 保留（首次写装实例）。
+    run_until(
+        &mut e,
+        |c| match c.spec.prompt {
+            "rvm_dcbihuo_target" => Some(vec![O::Player(1)]),
+            other => panic!("意外询问 {other}"),
+        },
+        |e| !at_phase(e, 0, Phase::Play),
+    );
+    let next = helper_def(&e, "r05e_dcbihuo_n#r05:next");
+    let current = helper_def(&e, "r05e_dcbihuo_n#r05:current");
+    assert_eq!(mark(&e, 1, next), Some(0), "−1+1 抵消：Some0 保留");
+    // 显式 disable 实例（§6：显式 disable 只改 enabled）。
+    if let Ok(id) = u16::try_from(next) {
+        if let Some(inst) = e.state_core_mut().skills.get_mut(&(1, id)) {
+            inst.enabled = false;
+        }
+    }
+    // 推进过 seat1 的整回合开始：disabled → 不 take、条目保留、Current 不写。
+    for _ in 0..40 {
+        if e.turn().current == 1 && e.turn().phase == Phase::Draw {
+            break;
+        }
+        pump(&mut e, |_| None);
+    }
+    assert_eq!(mark(&e, 1, next), Some(0), "disabled Next 不被 take");
+    assert!(!e.state_core().vm_aux.marks.contains_key(&(1, current)));
+    // 重新启用：再推一整轮到 seat1 下一次回合开始 → take、转 Current。
+    if let Ok(id) = u16::try_from(next) {
+        if let Some(inst) = e.state_core_mut().skills.get_mut(&(1, id)) {
+            inst.enabled = true;
+        }
+    }
+    run_until(&mut e, |_| None, |e| {
+        !e.state_core().vm_aux.marks.contains_key(&(1, next))
+    });
+    assert!(!e.state_core().vm_aux.marks.contains_key(&(1, next)), "重启用后 take");
+    assert_eq!(mark(&e, 1, current), Some(0), "值（含 0）转入 Current");
+}

@@ -78,7 +78,11 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
         };
         if r05_mark_add(ctx.core, target, def, delta).is_none() {
             r05_fault(ctx, skill, "R05MarkOverflow", "next slot i32 overflow");
+            return Flow::Done;
         }
+        // F 批（§6）：首次写 Next 即装目标实例（enabled）——take 门要求
+        // enabled 实例存在；实例随 Next 条目原样保留。
+        r05_install_helper(ctx, target, def);
         Flow::Done
     }
 }
@@ -94,6 +98,20 @@ fn take_next(ctx: &mut Ctx<'_>, skill: &str, turn_player: u8) -> Flow {
         return Flow::Done;
     };
     if !ctx.core.player(turn_player).alive {
+        return Flow::Done;
+    }
+    // 未尽项 7（F 批）：Next 的 take 以 helper 实例 enabled 为精确门（§6
+    // 「Next 读取还要求原 enabled 与 alive」）——条目存在但实例 disabled
+    //（显式 disable）或不存在实例（绕过装载器）都不 take；条目保留。
+    let enabled = u16::try_from(next_def)
+        .map(|id| {
+            ctx.core
+                .skills
+                .get(&(turn_player, id))
+                .is_some_and(|inst| inst.enabled)
+        })
+        .unwrap_or(false);
+    if !enabled {
         return Flow::Done;
     }
     if let Some(value) = ctx.core.vm_aux.marks.remove(&(turn_player, next_def)) {
