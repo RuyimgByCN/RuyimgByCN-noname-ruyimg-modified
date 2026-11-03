@@ -28,3 +28,15 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 6. 待拍板（不阻塞主体）：光塔 trigger/intro 矛盾按 trigger 记并登记；K24 phase_number 对齐或登记；D07 phase_any_end 是否含准备阶段。
 
 三处 P0 与「任意阶段」过滤 6 次/回合问题修完后，热血（H42→TurnBegin 窗）与蛊舞（K01→phaseAfter 段）两个失败测试随迁移转绿。
+
+## A2 生命周期 P0 实施状态（2026-11-03 18:50，K22 部分搁置）
+
+| 项 | 状态 | 提交 |
+| --- | --- | --- |
+| K21 交接前整回合结束窗（phaseEnd/phaseAfter 两段，交接移至 phaseAfter 段 Commit） | ✅ 红→绿 | `3a0f98ee` |
+| K25 回合重置前移 TurnBegin 前（含红莲效果与 reset 段；准备阶段 Boss 技段迁 `begin_prepare`） | ✅ 红→绿 | `3a0f98ee` |
+| K10 翻面整回合跳过前移 turn_handoff 顶部 | ✅ 红→绿 | `2aef5772` |
+| K22a `trigger_ctx_of` 补 TurnBegin/TurnEndWindow 事件玩家臂 | ✅ 保留（未提交，随下一波） | — |
+| K22b 首回合发帧＋submit 前排空 | **搁置**：三方案（构造期排空／submit 前无界排空／有界排空）分别导致 d5 选将后建局、挂询问机死循环、或 **168 项测试红**（ai::redact 样本 stash 对照确认由该改动引起——首回合窗/阶段计数变化改变开局轨迹）。搁置=保留旧语义（首回合无 TurnBegin 序列），与 106 条迁移波次合并实施时一并处理其广泛测试影响。 | 证据 logs/a2-k22-01..06 | — |
+
+三 crate 1912/5/75（余 5 已知：热血/蛊舞待 A2 迁移、golden 待 J、两准备阶段锁面待 A2 更新）。

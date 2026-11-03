@@ -61,6 +61,9 @@ fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
             Z::DrawPile => CardZoneTag::DrawPile,
             Z::Removed => CardZoneTag::Removed,
             Z::Expansion => CardZoneTag::Expansion,
+            // R05：R 帧 held（抽牌中转区）对外不暴露独立区——按处理区
+            // 投影（牌面本就隐藏）。
+            Z::DrawHeld => CardZoneTag::Processing,
         };
         push(
             card.id,

@@ -477,7 +477,6 @@ pub fn validate_card_ownership(
     for park in &resolution.parks {
         machine_held_cards(&park.machine, &mut held);
     }
-    let draw_held = crate::snap::draw_held_cards(resolution);
     for card in physical_cards(core, &held, Some(resolution)) {
         mark(&mut seen, b, card.id)?;
     }

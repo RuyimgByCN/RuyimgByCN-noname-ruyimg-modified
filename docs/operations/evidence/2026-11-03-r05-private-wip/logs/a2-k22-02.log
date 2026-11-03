@@ -1,0 +1,284 @@
+$ [K22 改 submit 前排空后] cargo test 三 crate --no-fail-fast   # 2026-11-03 15:31:25 +0800
+   Compiling engine-native-kernel v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-kernel)
+warning: unused doc comment
+   --> crates/engine-native-kernel/src/kernel/events.rs:694:9
+    |
+694 |         /// 处理（与存活者选取耦合），此处不再重复。
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+695 |         turn_handoff(ctx, player, ctx.core.next_alive(player));
+    |         ------------------------------------------------------ rustdoc does not generate documentation for expressions
+    |
+    = help: use `//` for a plain comment
+    = note: `#[warn(unused_doc_comments)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `player`
+ --> crates/engine-native-kernel/src/kernel/phase/judge.rs:3:46
+  |
+3 | pub(super) fn begin_judge(ctx: &mut Ctx<'_>, player: PlayerId) {    // R05（K25/A2）：本函数原 `!turn_opened` 门两段拆分——重置段前移
+  |                                              ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+  |
+  = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native-kernel` (lib test) generated 2 warnings (1 duplicate) (run `cargo fix --lib -p engine-native-kernel --tests` to apply 1 suggestion)
+   Compiling engine-native-content v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-content)
+warning: `engine-native-kernel` (lib) generated 2 warnings (1 duplicate)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+warning: variable does not need to be mutable
+  --> crates/engine-native/src/engine/commands.rs:94:17
+   |
+94 |             let mut boot_log: Vec<crate::LogEvent> = Vec::new();
+   |                 ----^^^^^^^^
+   |                 |
+   |                 help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `boot_log`
+  --> crates/engine-native/src/engine/commands.rs:94:17
+   |
+94 |             let mut boot_log: Vec<crate::LogEvent> = Vec::new();
+   |                 ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_boot_log`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> crates/engine-native/src/engine/construction.rs:407:13
+    |
+407 |         let mut e = Self {
+    |             ----^
+    |             |
+    |             help: remove this `mut`
+
+   Compiling content-native-loader v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-native-loader)
+warning: `engine-native` (lib) generated 3 warnings (run `cargo fix --lib -p engine-native` to apply 3 suggestions)
+warning: variable does not need to be mutable
+   --> crates/engine-native/tests/groups/../r05_turn_model.rs:198:9
+    |
+198 |     let mut e2 = Engine::new(33405, 3);
+    |         ----^^
+    |         |
+    |         help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `log_start`
+   --> crates/engine-native/tests/groups/../r05_turn_model.rs:194:9
+    |
+194 |     let log_start = e.log().len();
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_log_start`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `engine-native` (lib test) generated 3 warnings (3 duplicates)
+warning: `engine-native` (test "misc") generated 2 warnings (run `cargo fix --test "misc" -p engine-native` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.12s
+     Running unittests src/lib.rs (/private/tmp/noname-r05/target/debug/deps/engine_native-5e7d14102d429995)
+
+running 15 tests
+test ai::remap::tests::host_scalar_payloads_are_never_generic_card_references ... ok
+test a0_lib_tests::standard_skill_ids_append_only ... ok
+test ai::redact::active_candidate_tests::variant_one_does_not_include_active_skill_candidates ... ok
+test ai::redact::active_candidate_tests::variant_zero_does_not_include_active_skill_candidates ... ok
+test ai::redact::active_candidate_tests::variant_two_weights_damage_by_enemy_skill_threat ... ok
+test engine::tests::ruleset_version_changes_digest ... ok
+test engine::tests::park_machine_state_changes_digest ... ok
+test engine::commands::pa02_simulation_tests::simulation_submit_skips_session_work_and_matches_authoritative_state ... ok
+test engine::choice_source::tests::source_catalog_alias_is_not_resolved_by_first_match ... ok
+test a0_lib_tests::host_behavior_keys_bijective ... ok
+test ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill ... FAILED
+test ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates ... FAILED
+test engine::choice_source::tests::source_uses_only_the_actual_direct_inner_ask ... ok
+test engine::choice_source::tests::source_requires_actual_ready_consumer_not_just_a_unique_active_ask ... ok
+test engine::choice_source::tests::source_wrong_shape_multiple_asks_and_unowned_defs_stay_unknown ... ok
+
+failures:
+
+---- ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill stdout ----
+
+thread 'ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill' (44433626) panicked at crates/engine-native/src/ai/redact.rs:342:9:
+variant 2 should choose an available active skill: NextPhase
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates stdout ----
+
+thread 'ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates' (44433627) panicked at crates/engine-native/src/ai/redact.rs:391:9:
+active skill must be a variant-2 candidate: [PlayCard { card: 12, targets: [1] }, PlayCard { card: 26, targets: [1] }, PlayCard { card: 0, targets: [1] }, PlayCard { card: 79, targets: [] }, PlayCard { card: 79, targets: [1] }, PlayCard { card: 62, targets: [] }, PlayCard { card: 62, targets: [1] }, NextPhase]
+
+
+failures:
+    ai::redact::active_candidate_tests::variant_two_can_choose_granted_active_skill
+    ai::redact::active_candidate_tests::variant_two_includes_granted_active_skill_candidates
+
+test result: FAILED. 13 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --lib`
+     Running tests/groups/g1.rs (/private/tmp/noname-r05/target/debug/deps/g1-09668c3765db25db)
+
+running 167 tests
+test g1_cardpile::pile_bridge_rejects_invalid_spec ... ok
+test g1_cardpile::converted_packages_match_generator ... ok
+test g1_hearth::jihuocard_self_draw ... ok
+test g1_hearth::shijieshu_equips_two_different_slots ... ok
+test g1_d3::g1_d3_content_lock_and_bounds ... ok
+test g1_hearth::linghunzhihuo_fire_damage_and_self_discard ... ok
+test g1_cardpile::g1_cardpile_vertical_install_enable_newgame_saverestore ... ok
+test g1_hearth::hearth_content_lock_saverestore ... ok
+test g1_huanle::flip::flip_primitive_toggles_facing_without_mask ... ok
+test g1_d3::g1_d3_vertical_reveal_jinggou_and_restore ... FAILED
+test g1_d3::g1_d3_install_bridge_and_metadata ... ok
+test g1_hearth::hearth_remaining_batch_a ... ok
+test g1_cardpile::cardpile_liuli_real_host_full_lifecycle ... ok
+test g1_cardpile::cardpile_real_host_full_lifecycle ... ok
+test g1_d3::d3_real_host_full_lifecycle ... ok
+test g1_hearth::hearth_remaining_batch_b ... FAILED
+test g1_hearth::hearth_real_host_full_lifecycle ... ok
+test g1_huanle::flip::flip_frame_lifecycle_no_residue ... ok
+test g1_hearth::zhaomingdan_forced_discard_and_draws ... ok
+test g1_huanle::caoren::caoren_jushou_flips_and_mianju_cancels_flip ... FAILED
+test g1_huanle::equip::equip_skill_snapshot_mismatch_rejected ... ok
+test g1_huanle::equip::equip_skill_lifecycle_grant_and_revoke ... ok
+test g1_huanle::huanle::huanle_bridge_builds_pack ... ok
+test g1_huanle::g1::g1_huanle_vertical_host_behaviors_and_restore ... ok
+test g1_huanle::huanle::huanle_combo_kuwu_sha_like_and_non_sha_damage ... FAILED
+test g1_huanle::host::host_skill_restore_rejects_without_pack ... ok
+test g1_huanle::xly::xly_state_growth_probe ... ignored, 诊断探针：手动运行观察规模曲线
+test g1_huanle::huanle::huanle_combo_stolen_jushou_flip_cancelled_by_mask ... FAILED
+test g1_huanle::huanle::huanle_combo_stolen_jushou_fires_for_thief ... FAILED
+test g1_huanle::huanle::huanle_jiuwei_optional_confirm_and_restore ... FAILED
+test g1_huanle::huanle::huanle_jiuwei_recovers_or_draws_at_turn_end ... FAILED
+test g1_huanle::huanle::huanle_mianju_blocks_flip_while_equipped ... ok
+test g1_huanle::huanle::huanle_monkey_cancels_peach_and_takes_it ... ok
+test g1_huanle::huanle::huanle_pack_payload_matches_upstream_list ... ok
+test g1_huanle::huanle::huanle_xuelunyang_steals_target_skill_until_turn_end ... FAILED
+test g1_huanle::u06::u06_g2g4_channels_acceptance ... ok
+test g1_wudian::ana::ana_zhiyuan_cancel_damage_and_equal_recover ... FAILED
+test g1_huanle::huanle::huanle_xuelunyang_pass_declines_theft ... FAILED
+test g1_wudian::banzang::banzang_yinbo_random_discard_three ... FAILED
+test g1_wudian::baolei::baolei_mode_effects_on_sha ... ok
+test g1_huanle::huanle::huanle_real_host_full_lifecycle ... ok
+test g1_wudian::baolei::baolei_switch_mode_cycle ... ok
+test g1_huanle::u06::u06_eight_dimension_from_fresh_install ... ok
+test g1_wudian::changqing::changqing_ctianfu_attach_thunder_and_death_clear ... FAILED
+test g1_wudian::changqing::changqing_luanjian_dual_sha_viewas_multi_target ... FAILED
+test g1_wudian::chanyata::chanyata_ziyu_every_four_phases ... FAILED
+test g1_wudian::dva::dva_jijia_absorbs_damage_and_hand_limit ... ok
+test g1_wudian::feishi::feishi_moshou_declaration_wired_to_host_behavior ... ok
+test g1_wudian::feishi::feishi_shuaiyan_recover_trigger_two_choice ... FAILED
+test g1_wudian::g1::g1_wudian_content_lock_and_byte_restore ... ok
+test g1_wudian::g1::g1_wudian_generals_and_siji_discard_draw ... ok
+test g1_wudian::hanlong::hanlong_ciqiu_sha_healthy_bonus_and_dying_mark ... ok
+test g1_wudian::hanlingsha::hanlingsha_tannang_snatch_unlimited_range ... ok
+test g1_huanle::huanle::huanle_g5_cross_process_relay ... ok
+test g1_wudian::falaozhiying::falaozhiying_feidan_splash_cancel_and_range ... FAILED
+test g1_wudian::heibaihe::heibaihe_duwen_equal_hand_damage_bonus ... ok
+test g1_wudian::heiying::heiying_yinshen_untargetable_until_own_judge ... FAILED
+test g1_wudian::jiangyunfan::jiangyunfan_xunying_auto_second_sha ... ok
+test g1_wudian::jiangyunfan::jiangyunfan_liefeng_grant_and_tianjian_aoe ... FAILED
+test g1_wudian::jingtian::jingtian_jtjubao_gains_nonbasic_and_gates ... FAILED
+test g1_wudian::jingtian::jingtian_sajin_judge_color_recover_and_once ... FAILED
+test g1_wudian::jiangcheng::jiangcheng_fenshi_awaken_once_on_rescue ... FAILED
+test g1_wudian::jiangcheng::jiangcheng_longhuo_fires_at_own_phase_end ... FAILED
+test g1_wudian::laiyinhate::laiyinhate_mengji_no_armor_bonus ... ok
+test g1_wudian::jushifang::jushifang_xiepan_discard_and_discover_equip ... FAILED
+test g1_wudian::kuangshu::kuangshu_shihuo_fire_damage_draw ... ok
+test g1_wudian::liufu::liufu_zhucheng_filter_recheck_and_sha_guard ... FAILED
+test g1_wudian::linyueru::linyueru_guiyuan_discard_sha_recover_draw ... FAILED
+test g1_wudian::liumengli::liumengli_tianxian_range_targets_and_judge_cancel ... ok
+test g1_wudian::liumengli::liumengli_runxin_heart_use_and_respond ... FAILED
+test g1_wudian::liumengli::liumengli_xjzhimeng_darkmark_and_draw ... FAILED
+test g1_wudian::liuyan::liuyan_geju_out_of_range_counts ... ok
+test g1_wudian::liuyan::liuyan_geju_out_of_range_faction_draw ... ok
+test g1_wudian::liuzan::liuzan_kangyin_losehp_discard_and_branch ... FAILED
+test g1_wudian::leiyuange::leiyuange_feng_ya_song_counters ... FAILED
+test g1_wudian::liuyan::liuyan_juedao_link_and_distance ... FAILED
+test g1_wudian::longyou::longyou_yuexing_distance_swap_and_clear ... FAILED
+test g1_wudian::liumengli::liumengli_changnian_death_bequest ... FAILED
+test g1_wudian::longyou::longyou_minsha_thunder_and_neighbor_discard ... FAILED
+test g1_wudian::longkui::longkui_diewu_give_and_lingyu_recover ... FAILED
+test g1_wudian::lixiaoyao::lixiaoyao_xjyufeng_draw_to_two_twice_per_turn ... FAILED
+test g1_wudian::luba::luba_liangou_heart_fail_and_xiyang_flip_recover ... FAILED
+test g1_wudian::luba::luba_liangou_hook_distance_and_damage ... FAILED
+test g1_wudian::luozhaoyan::luozhaoyan_fenglue_auto_use_sha_duel ... FAILED
+test g1_wudian::luxiao::luxiao_huhuan_switches_yuedong_to_recover ... FAILED
+test g1_wudian::luxiao::luxiao_kuoyin_eff_and_double_full_gate ... FAILED
+test g1_wudian::luxiao::luxiao_yuedong_storage_resets_next_turn ... FAILED
+test g1_wudian::luxiao::luxiao_kuoyin_num_extends_yuedong_draw ... FAILED
+test g1_wudian::mei::mei_baoxue_limited_discard_and_flips ... FAILED
+test g1_wudian::mei::mei_jidong_freeze_damage_immune_and_untargetable ... ok
+test g1_wudian::luxiao::luxiao_yuedong_cancel_and_pending_ask_restores ... FAILED
+test g1_wudian::mei::mei_flip_face_down_turn_skipped_and_flipped_back ... ok
+test g1_wudian::maikelei::maikelei_shenqiang_sha_limit_refund ... ok
+test g1_wudian::mingxiu::mingxiu_guijin_deal_and_skip_draw ... FAILED
+test g1_wudian::mingxiu::mingxiu_linghuo_round_cooldown_and_fire ... FAILED
+test g1_wudian::moshou::moshou_blocks_delayed_trick_target ... ok
+test g1_wudian::mingxiu::mingxiu_chengxin_rescue_and_immunity ... FAILED
+test g1_wudian::muchanglan::muchanglan_lueying_no_third_party_never_fires ... ok
+test g1_wudian::murongziying::murongziying_qianfang_discard_and_aoe ... FAILED
+test g1_wudian::orisa::orisa_qianggu_armor_and_guard_nullify ... FAILED
+test g1_wudian::nangonghuang::nangonghuang_zhaoyao_compare_and_top ... FAILED
+test g1_wudian::nangonghuang::nangonghuang_sheling_three_event_reclaim ... FAILED
+test g1_wudian::murongziying::murongziying_poyun_discard_and_decrement ... FAILED
+test g1_wudian::ow::ow_shibing_tuji_and_mujing ... FAILED
+test g1_wudian::shenqishuang::shenqishuang_binxin_grants_hujia_at_low_hp ... FAILED
+test g1_wudian::muchanglan::muchanglan_lueying_gain_and_victim_discard ... FAILED
+test g1_wudian::ow::ow_real_host_full_lifecycle ... ok
+test g1_wudian::sishen::sishen_xiandan_red_direct_black_bonus ... FAILED
+test g1_wudian::sanjian::sanjian_weapon_skill_two_stage_choice_with_restore ... FAILED
+test g1_wudian::sumei::sumei_huahu_sacrifice_multi_target ... FAILED
+test g1_wudian::sumei::sumei_sheying_black_judge_reclaim ... ok
+test g1_wudian::swd::swd_gouhunluo_countdown_lose_hp_discard ... ok
+test g1_wudian::swd::swd_mujiaren_discard_nonbasic_discover_jiguan ... ok
+test g1_wudian::swd::swd_zhiluxiaohu_random_enemy_virtual_sha ... ok
+test g1_wudian::tangyurou::tangyurou_txianqu_prevent_and_replenish ... FAILED
+test g1_wudian::tianshi::tianshi_shouhu_discard_heal_and_sha_ban ... FAILED
+test g1_wudian::tuobiang::tuobiang_paotai_stack_fire_and_downgrade ... FAILED
+test g1_wudian::tianyu::tianyu_chezhen_distance_mod ... ok
+test g1_wudian::wangmeizhike::wangmeizhike_recovers_min_hp_damaged_target ... ok
+test g1_wudian::wangmeizhike::wangmeizhike_draws_min_hand_target ... ok
+test g1_wudian::wangpengxu::wangpengxu_feixu_shan_draw ... FAILED
+test g1_wudian::wangxiaohu::wangxiaohu_husha_marks_and_virtual_cards ... FAILED
+test g1_wudian::wangxiaohu::wangxiaohu_husha_virtual_nanman ... FAILED
+test g1_wudian::wensidun::wensidun_feitiao_range_and_random_discard ... FAILED
+test g1_wudian::wenhui::wenhui_longxiang_random_discard_diff ... ok
+test g1_wudian::wudian::wudian_generals_batch12_liduan_gain_equip ... FAILED
+test g1_wudian::wudian::wudian_generals_batch10_diyjuntun_recast_and_jinyan ... FAILED
+test g1_wudian::wudian::wudian_generals_batch13_jianbi_aoe_exclude ... ok
+test g1_wudian::wudian::wudian_generals_batch15_liangce_conversion_and_remain ... ok
+test g1_wudian::xiahoujinxuan::xiahoujinxuan_xuanmo_discover_same_class ... FAILED
+test g1_wudian::xia::xia_fanling_recover_on_others_hp_loss ... ok
+test g1_wudian::xianqing::xianqing_xtanxi_no_holder_cancel ... FAILED
+test g1_wudian::xianqing::xianqing_xtanxi_same_name_steal ... FAILED
+test g1_wudian::xiaoman::xiaoman_lingquan_awaken_grants_shuiyun ... FAILED
+test g1_wudian::wudian::wudian_real_host_full_lifecycle ... ok
+test g1_wudian::xianjian::xianjian_real_host_full_lifecycle ... ok
+test g1_wudian::xiaoman::xiaoman_shenwu_awaken_grants_huimeng ... ok
+test g1_wudian::xuanxiao::xuanxiao_xuanyan_ningbin_fire_thunder ... ok
+test g1_wudian::xingxuan::xingxuan_lingxue_recover_grants_hujia ... ok
+test g1_wudian::xuejian::xuejian_duci_equip_discard_damage ... FAILED
+test g1_wudian::xuejian::xuejian_xshuangren_offcourt_and_death_discard ... FAILED
+test g1_wudian::yuanshi::yuanshi_feiren_bonus_range_and_club_extra_target ... ok
+test g1_wudian::yuanshi::yuanshi_feiren_chain_damage_not_bonused ... ok
+test g1_wudian::youdishenru::youdishenru_cancels_sha_with_reprisal ... FAILED
+test g1_wudian::xuejian::xuejian_shenmu_red_discard_rescue ... FAILED
+test g1_wudian::yuejinzhao::yuejinzhao_xjyingfeng_random_virtual_sha ... ok
+test g1_wudian::yueqi::yueqi_liguang_discard_and_move_equip ... FAILED
+test g1_wudian::yueqi::yueqi_shiying_cancel_death_and_reset ... ok
+test g1_wudian::yuntianhe::yuntianhe_guanri_once_fire_and_equip_strip ... FAILED
+test g1_wudian::yuntianhe::yuntianhe_zhuyue_whitelist_and_clear ... FAILED
+test g1_wudian::zhaliya::zhaliya_pingzhang_barrier_and_owliyong_draw ... FAILED
+test g1_wudian::zixuan::zixuan_shuiyun_off_court_and_type_dedup ... FAILED
+test g1_wudian::zhixuzhiguang::zhixuzhiguang_guangshu_suit_marks ... FAILED
+test g1_wudian::zixuan::zixuan_wangyou_roundstamp_and_draw ... FAILED
+test g1_wuxing::g1_wuxing_vertical_natures_shengke_saverestore ... FAILED
+test g1_wuxing::wuxingpan_card_equips_via_treasure_slot ... ok
+test g1_wuxing::l06_eight_dimension_from_fresh_install ... ok
+test g1_wuxing::wuxingpan_skill_change_nature_with_restore ... FAILED
+test g1_wudian::zhaoliner::zhaoliner_huimeng_tianshe_family ... FAILED
+test g1_wuxing::wuxing_real_host_full_lifecycle ... ok
+test g1_wudian::zixuan::zixuan_shuiyun5_dying_rescue_channel ... FAILED
+test g1_wudian::wudian::wudian_generals_batch14_fuchou_cancel_and_settle ... FAILED
+test g1_wudian::anu::anu_anwugu_afflict_and_limits has been running for over 60 seconds
+test g1_wudian::muchanglan::muchanglan_lueying_decline_keeps_usable_for_next_sha has been running for over 60 seconds
+test g1_wudian::nangonghuang::nangonghuang_zhangmu_flash_discard_prevent has been running for over 60 seconds
+test g1_wudian::swd::swd_jiguantong_aoe_discard_or_fire has been running for over 60 seconds
+test g1_wudian::swd::swd_jiguantong_reverse_order_and_content_after_draw has been running for over 60 seconds

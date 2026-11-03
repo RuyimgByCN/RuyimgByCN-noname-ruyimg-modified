@@ -110,6 +110,16 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             kind: 1,
             ..VmTriggerCtx::default()
         },
+        EventData::TurnBegin { player } => VmTriggerCtx {
+            event_player: Some(*player),
+            kind: 3,
+            ..VmTriggerCtx::default()
+        },
+        EventData::TurnEndWindow { player, .. } => VmTriggerCtx {
+            event_player: Some(*player),
+            kind: 3,
+            ..VmTriggerCtx::default()
+        },
         EventData::Phase {
             player,
             phase,
