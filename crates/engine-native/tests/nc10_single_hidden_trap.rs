@@ -347,6 +347,7 @@ fn vm_opaque_storage_keeps_its_trap_reference() {
         init_hook: InitHook::None,
         enabled: true,
         vm_skills: vec![VmSkillDecl {
+            r05_identity: None,
             declaration_hash: None,
             name: "nc10_vm_probe".into(),
             module: rule_vm::BytecodeModule {

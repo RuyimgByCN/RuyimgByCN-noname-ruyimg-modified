@@ -421,6 +421,7 @@ pub fn bridge_vm_skill_decls(
                 }),
                 inner: Box::new(filter),
             },
+            r05_identity: None,
         });
     }
     if !unsupported.is_empty() {
@@ -610,6 +611,13 @@ fn derive_r05_helpers(
                         },
                         triggers: Vec::new(),
                     })),
+                    // R05-H（§8）：公开逻辑身份随派生 helper 下传——已验证
+                    // 包清单的 namespace/package_id + 技能索引的逻辑定义号。
+                    r05_identity: Some(engine_native::catalog::QualifiedSkillRef {
+                        namespace: pkg.manifest.namespace.clone(),
+                        package_id: pkg.manifest.package_id.clone(),
+                        logical_skill_def_id: skill.skill_def_id,
+                    }),
                 });
             }
         }

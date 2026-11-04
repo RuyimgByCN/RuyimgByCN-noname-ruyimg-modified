@@ -290,6 +290,7 @@ mod tests {
             prompt: None,
             native_kind: None,
             source_skill: None,
+            context: None,
         };
         let mut snapshot = Snapshot::capture(&state);
         snapshot.pending_choice = Some(choice.clone());

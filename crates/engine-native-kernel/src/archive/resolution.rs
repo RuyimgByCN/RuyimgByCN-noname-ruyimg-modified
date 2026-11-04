@@ -170,6 +170,10 @@ pub(super) const KNOWN_PROMPTS: &[&str] = &[
     "xuanying_target",
     "c331_qinglong_card",
     "judge_rewrite_provider",
+    "rvm_tiqi_confirm",
+    "rvm_tiqi_sign",
+    "rvm_baoshu_cost",
+    "rvm_dcbihuo_target",
 ];
 
 pub(super) fn intern_prompt(bytes: &[u8]) -> Result<&'static str, ArchiveError> {

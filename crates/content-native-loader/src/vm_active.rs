@@ -171,6 +171,7 @@ pub(super) fn bridge_active_entries(
                 limits,
                 triggers,
             })),
+            r05_identity: None,
         });
     }
     Ok(())

@@ -515,6 +515,24 @@ pub(super) fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
             put_u32(h, player.raw());
             put_u32(h, skill.raw());
         }
+        EffectRequest::ResolveTiqi { player, skill } => {
+            put_u8(h, 0);
+            h.update(&1008u16.to_le_bytes());
+            put_u32(h, player.raw());
+            put_u32(h, skill.raw());
+        }
+        EffectRequest::ResolveBaoshu { player, skill } => {
+            put_u8(h, 0);
+            h.update(&1009u16.to_le_bytes());
+            put_u32(h, player.raw());
+            put_u32(h, skill.raw());
+        }
+        EffectRequest::ResolveDcbihuo { player, skill } => {
+            put_u8(h, 0);
+            h.update(&1010u16.to_le_bytes());
+            put_u32(h, player.raw());
+            put_u32(h, skill.raw());
+        }
         _ => unreachable!("effect routed to a different hash group"),
     }
 }

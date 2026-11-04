@@ -21,7 +21,8 @@ pub mod presentation;
 pub mod view;
 
 pub use catalog::{
-    CardKind, Catalog, EquipSlot, SharedCatalog, SkillBehavior, SkillDef, SkillMachine,
+    CardKind, Catalog, EquipSlot, QualifiedSkillRef, SharedCatalog, SkillBehavior, SkillDef,
+    SkillMachine,
 };
 pub use choice::{ChoiceKind, ChoiceOption, ChoiceSpec, OpenChoice};
 pub use engine::{AuthToken, CommandOutcome, Engine, GameAction, GameCommand, RejectReason};
@@ -31,7 +32,9 @@ pub use machine::{Ctx, Flow, LogEvent};
 pub use resolution::Resolution;
 pub use snap::{MachineSnapshot, ParkSnapshot, ResolutionSnapshot, SnapshotError, StateSnapshot};
 pub use state::{BossStageKind, BossStagePending, BossStageState, GameMode, Outcome, Role, Winner};
-pub use view::{ChoiceView, EventView, HandView, PlayerCellView, PlayerView};
+pub use view::{
+    ChoiceContext, ChoiceView, EventView, HandView, PlayerCellView, PlayerView, R05EffectView,
+};
 
 // ---------------------------------------------------------------------------
 // A0 lib 单元测试（T17，2026-10-11 重建）：10-10 事故恢复中丢失的 5 个

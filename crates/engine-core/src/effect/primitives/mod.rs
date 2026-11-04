@@ -107,6 +107,11 @@ pub fn apply_effect(
                 tx, player, skill,
             )
         }
+        EffectRequest::ResolveTiqi { .. }
+        | EffectRequest::ResolveBaoshu { .. }
+        | EffectRequest::ResolveDcbihuo { .. } => {
+            Err(EffectError::Illegal("R05 compounds are native-only".into()))
+        }
         EffectRequest::DrawCards { .. }
         | EffectRequest::DrawCardsFromSkill { .. }
         | EffectRequest::DrawCardsFromBottom { .. }

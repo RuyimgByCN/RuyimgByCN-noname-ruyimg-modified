@@ -905,7 +905,10 @@ pub(super) fn hash_effect(h: &mut blake3::Hasher, effect: &EffectRequest) {
         | EffectRequest::ClanyuzhiRoundEnd { .. }
         | EffectRequest::QieyiPhaseStart { .. }
         | EffectRequest::QieyiUseAfter { .. }
-        | EffectRequest::JianzhiPhaseEnd { .. } => {
+        | EffectRequest::JianzhiPhaseEnd { .. }
+        | EffectRequest::ResolveTiqi { .. }
+        | EffectRequest::ResolveBaoshu { .. }
+        | EffectRequest::ResolveDcbihuo { .. } => {
             effects_resolve_dili_yuheng::hash_effect(h, effect)
         }
     }

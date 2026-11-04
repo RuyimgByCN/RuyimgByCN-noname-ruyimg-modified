@@ -341,7 +341,19 @@ fn view_to_json(engine: &Engine, v: &PlayerView) -> serde_json::Value {
             "equips": p.equips,
             "judge": p.judge,
             "turnedOver": p.turned_over,
+            "linked": p.linked,
             "skills": p.skills,
+            "r05Effects": p.r05_effects.iter().map(|effect| serde_json::json!({
+                "skill": {
+                    "namespace": effect.skill.namespace,
+                    "package_id": effect.skill.package_id,
+                    "logical_skill_def_id": effect.skill.logical_skill_def_id,
+                },
+                "tiqi_limit": effect.tiqi_limit,
+                "baoshu_combs": effect.baoshu_combs,
+                "dcbihuo_next": effect.dcbihuo_next,
+                "dcbihuo_current": effect.dcbihuo_current,
+            })).collect::<Vec<_>>(),
             "revealedGenerals": p.revealed_generals,
             "identity": identity_json(p.role),
         })).collect::<Vec<_>>(),
@@ -424,6 +436,7 @@ impl NativeSession {
                 max,
                 allow_cancel,
                 source_skill,
+                context,
             }) => {
                 let mut choice = serde_json::json!({
                 "id": id,
@@ -448,6 +461,23 @@ impl NativeSession {
                 });
                 if let Some(source) = source_skill {
                     choice["source_skill"] = serde_json::json!(source);
+                }
+                if let Some(engine_native::view::ChoiceContext::TiqiAdjustment {
+                    skill,
+                    target,
+                    delta,
+                }) = context
+                {
+                    choice["context"] = serde_json::json!({
+                        "kind": "tiqi_adjustment",
+                        "skill": {
+                            "namespace": skill.namespace,
+                            "package_id": skill.package_id,
+                            "logical_skill_def_id": skill.logical_skill_def_id,
+                        },
+                        "target": target,
+                        "delta": delta,
+                    });
                 }
                 choice.to_string()
             }

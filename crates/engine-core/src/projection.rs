@@ -61,6 +61,7 @@ pub fn project_observer(state: &GameState, observer: ObserverKind) -> ObserverSn
                 max_hp: p.max_hp,
                 alive: p.alive,
                 turned_over: p.turned_over,
+                linked: false,
                 hand_count: state.hand_count(p.id),
                 identity,
                 skills: p
@@ -81,6 +82,7 @@ pub fn project_observer(state: &GameState, observer: ObserverKind) -> ObserverSn
                             .unwrap_or(false),
                     })
                     .collect(),
+                r05_effects: Vec::new(),
             }
         })
         .collect();

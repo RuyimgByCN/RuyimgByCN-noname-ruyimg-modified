@@ -160,3 +160,49 @@ fn actual_ws5_snapshot_bytes_round_trip_old_and_new_rust_readers() {
     let choice = choice.unwrap();
     assert!(choice.prompt.is_none() && choice.native_kind.is_none());
 }
+
+#[test]
+fn r05h_choice_context_and_r05_effects_validate_across_rust_readers() {
+    let base_choice = json!({
+        "choice_id": 1,
+        "observer": 1,
+        "options": [],
+        "min_count": 0,
+        "max_count": 1,
+        "allow_cancel": true,
+        "timeout_policy": "None",
+        "revision": 7,
+        "continuation_id": 1,
+        "kind": "Custom"
+    });
+    let mut with_ctx = base_choice.clone();
+    with_ctx["context"] = json!({
+        "kind": "tiqi_adjustment",
+        "skill": {
+            "namespace": "official",
+            "package_id": "xianding",
+            "logical_skill_def_id": 1001
+        },
+        "target": 2,
+        "delta": 2
+    });
+    let parsed: engine_api::ChoiceRequest = serde_json::from_value(with_ctx.clone()).unwrap();
+    assert_eq!(serde_json::to_value(&parsed).unwrap(), with_ctx);
+    for invalid_ctx in [
+        json!({"kind": "unknown_ctx", "skill": {"namespace": "official", "package_id": "x", "logical_skill_def_id": 1}, "target": 2, "delta": 2}),
+        json!({"kind": "tiqi_adjustment", "skill": {"namespace": "", "package_id": "x", "logical_skill_def_id": 1}, "target": 2, "delta": 2}),
+        json!({"kind": "tiqi_adjustment", "skill": {"namespace": "official", "package_id": "", "logical_skill_def_id": 1}, "target": 2, "delta": 2}),
+        json!({"kind": "tiqi_adjustment", "skill": {"namespace": "official", "package_id": "x", "logical_skill_def_id": 1}, "target": 0, "delta": 2}),
+        json!({"kind": "tiqi_adjustment", "skill": {"namespace": "official", "package_id": "x", "logical_skill_def_id": 1}, "target": 2, "delta": 0}),
+    ] {
+        let mut bad = base_choice.clone();
+        bad["context"] = invalid_ctx;
+        assert!(serde_json::from_value::<engine_api::ChoiceRequest>(bad).is_err());
+    }
+    let mut engine = Engine::new(1, 2);
+    engine.state_core_mut().players[0].linked = true;
+    let snap = value(&engine, RoomRole::Player, 1);
+    assert_eq!(snap["seats"][0]["linked"], json!(true));
+    assert_eq!(snap["seats"][1]["linked"], json!(false));
+    assert_eq!(snap["seats"][0]["r05_effects"], json!([]));
+}

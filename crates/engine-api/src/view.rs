@@ -73,15 +73,51 @@ pub struct SeatView {
     /// Whether the character card is currently face-down.
     #[serde(default)]
     pub turned_over: bool,
+    /// Whether the character is currently linked (chain state).
+    #[serde(default)]
+    pub linked: bool,
     /// Hand count (not hand contents unless authorized).
     pub hand_count: u32,
     /// Known identity if revealed / authorized; otherwise unknown.
     pub identity: Option<IdentityTag>,
     /// Public skill instances owned by this player.
     pub skills: Vec<SkillView>,
+    /// Ordered per-logical-skill R05 effect slots present on this seat.
+    #[serde(default)]
+    pub r05_effects: Vec<R05EffectView>,
     /// Authorized primary and secondary general slots; hidden/unconfigured slots are absent.
     #[serde(default)]
     pub generals: [Option<GeneralSlotView>; 2],
+}
+
+/// Public logical skill identity (`namespace`, `package_id`, `logical_skill_def_id`).
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
+pub struct QualifiedSkillRef {
+    /// Content namespace owning the package.
+    pub namespace: String,
+    /// Package identifier within the namespace.
+    pub package_id: String,
+    /// Stable logical skill definition id within the package.
+    pub logical_skill_def_id: u32,
+}
+
+/// R05 four-role effect projection for a single logical skill identity.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct R05EffectView {
+    /// Public logical skill identity.
+    pub skill: QualifiedSkillRef,
+    /// Tiqi hand-limit delta (`None` when slot absent; `Some(0)` or signed when present).
+    #[serde(default)]
+    pub tiqi_limit: Option<i32>,
+    /// Baoshu comb count (`None` when slot absent; `Some(0)` or signed when present).
+    #[serde(default)]
+    pub baoshu_combs: Option<i32>,
+    /// Dcbihuo pending next-turn count (`None` when slot absent; `Some(0)` or signed when present).
+    #[serde(default)]
+    pub dcbihuo_next: Option<i32>,
+    /// Dcbihuo active current-turn count (`None` when slot absent; `Some(0)` or signed when present).
+    #[serde(default)]
+    pub dcbihuo_current: Option<i32>,
 }
 
 /// Observer-filtered general metadata; definition zero is a valid definition.

@@ -558,6 +558,19 @@ pub fn standard_catalog_with_extensions(
                 .then_some(id as crate::ids::SkillDefId)
         })
         .collect();
+    // R05-H（§8）：装载器随派生 helper 下传的公开逻辑身份并入目录
+    // （helper def → I）；非 helper 声明（`r05_identity=None`）不入表。
+    for decl in packs
+        .iter()
+        .filter(|p| p.enabled)
+        .flat_map(|p| p.vm_skills.iter())
+    {
+        if let Some(identity) = &decl.r05_identity {
+            if let Some(def) = catalog.skill_by_name(&decl.name) {
+                catalog.r05_identities.insert(def, identity.clone());
+            }
+        }
+    }
     let lock = content_lock_id(packs);
     catalog.ruleset_version = if lock == 0 {
         STANDARD_RULESET_VERSION

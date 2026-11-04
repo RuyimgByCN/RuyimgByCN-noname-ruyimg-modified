@@ -955,6 +955,17 @@ impl ContentHooks {
     };
 }
 
+/// 公开逻辑技能身份（R05-H，合同 v3 §8）：仅三字段——namespace、
+/// package_id 与包内逻辑技能定义号。目录/视图层的公开引用面；不含
+/// raw mark 名、helper id 或版本/哈希（版本语义由内容锁绑定）。
+/// `Ord` 按三字段字典序，即公开投影的稳定排序键。
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord)]
+pub struct QualifiedSkillRef {
+    pub namespace: String,
+    pub package_id: String,
+    pub logical_skill_def_id: u32,
+}
+
 /// 目录：卡牌表、技能表与事件分发索引。
 pub struct Catalog {
     pub cards: Vec<CardDef>,
@@ -963,6 +974,11 @@ pub struct Catalog {
     pub extension_generals: Vec<crate::vocabulary::generals::ExtensionGeneral>,
     /// 从启用扩展初始化声明派生的全局授技；恢复时随目录重建，不入存档。
     pub extension_global_skills: Vec<SkillDefId>,
+    /// R05-H（§8）：派生 helper 目录定义号 → 其逻辑身份 I。装载器派生
+    /// helper 时随声明传入；随目录重建、不入存档（不是第二份状态权威）。
+    /// 角色仍由 helper 名后缀（`#r05:{role}`）判定——与 hooks 的
+    /// `r05_role_defs` 同口径。标准目录为空。
+    pub r05_identities: BTreeMap<SkillDefId, QualifiedSkillRef>,
     /// 事件类别 -> 触发定义列表（静态，运行时按实例过滤）。
     dispatch: BTreeMap<EventKind, Vec<SkillDefId>>,
     /// 名称 -> 技能定义号（构建时生成，首个匹配，与线性扫描语义一致；
@@ -1046,6 +1062,7 @@ impl Catalog {
             skills,
             extension_generals: Vec::new(),
             extension_global_skills: Vec::new(),
+            r05_identities: BTreeMap::new(),
             dispatch,
             by_name,
             ruleset_version: 0,

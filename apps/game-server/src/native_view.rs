@@ -61,9 +61,9 @@ fn known_cards_for(engine: &Engine, view: &PlayerView) -> Vec<CardView> {
             Z::DrawPile => CardZoneTag::DrawPile,
             Z::Removed => CardZoneTag::Removed,
             Z::Expansion => CardZoneTag::Expansion,
-            // R05：R 帧 held（抽牌中转区）对外不暴露独立区——按处理区
-            // 投影（牌面本就隐藏）。
-            Z::DrawHeld => CardZoneTag::Processing,
+            // R05：R 帧 held（抽牌中转区）与 detached 实体区对外不暴露独立区——
+            // 按处理区投影（非裁判牌面本就隐藏）。
+            Z::DrawHeld | Z::Detached => CardZoneTag::Processing,
         };
         push(
             card.id,
@@ -155,6 +155,7 @@ pub fn observer_snapshot_for(
             max_hp: cell.max_hp,
             alive: cell.alive,
             turned_over: cell.turned_over,
+            linked: cell.linked,
             // 座位仅给手牌数量；授权牌面由 known_cards 提供。
             hand_count: match &cell.hand {
                 HandView::Own(cards) => cards.len() as u32,
@@ -192,6 +193,21 @@ pub fn observer_snapshot_for(
                         view_as: false,
                         locked,
                     })
+                })
+                .collect(),
+            r05_effects: cell
+                .r05_effects
+                .iter()
+                .map(|effect| engine_api::R05EffectView {
+                    skill: engine_api::QualifiedSkillRef {
+                        namespace: effect.skill.namespace.clone(),
+                        package_id: effect.skill.package_id.clone(),
+                        logical_skill_def_id: effect.skill.logical_skill_def_id,
+                    },
+                    tiqi_limit: effect.tiqi_limit,
+                    baoshu_combs: effect.baoshu_combs,
+                    dcbihuo_next: effect.dcbihuo_next,
+                    dcbihuo_current: effect.dcbihuo_current,
                 })
                 .collect(),
         })
@@ -277,6 +293,7 @@ pub fn choice_for(
         allow_cancel,
         prompt,
         source_skill,
+        context,
     } = view
     else {
         return None;
@@ -324,6 +341,21 @@ pub fn choice_for(
             Some(engine_native::view::choice_kind_name(kind).to_owned())
         },
         source_skill: source_skill.map(str::to_owned),
+        context: context.map(|ctx| match ctx {
+            engine_native::view::ChoiceContext::TiqiAdjustment {
+                skill,
+                target,
+                delta,
+            } => engine_api::ChoiceContext::TiqiAdjustment {
+                skill: engine_api::QualifiedSkillRef {
+                    namespace: skill.namespace,
+                    package_id: skill.package_id,
+                    logical_skill_def_id: skill.logical_skill_def_id,
+                },
+                target: ApiPlayerId::new(u32::from(target) + 1),
+                delta,
+            },
+        }),
         prompt: Some(prompt.to_owned()),
         min_count: u32::try_from(min).expect("native choice minimum fits u32"),
         max_count: u32::try_from(max).expect("native choice maximum fits u32"),

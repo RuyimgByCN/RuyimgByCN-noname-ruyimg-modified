@@ -22,11 +22,14 @@ fn snapshot(view: &Value, revision: u64) -> Result<Value, String> {
             }
         }
         let generals: [Option<engine_api::GeneralSlotView>; 2] = player.get("generals").map(|value| serde_json::from_value(value.clone())).transpose().map_err(|error| format!("generals: {error}"))?.unwrap_or_default();
+        let r05_effects: Vec<engine_api::R05EffectView> = player.get("r05Effects").or_else(|| player.get("r05_effects")).map(|value| serde_json::from_value(value.clone())).transpose().map_err(|error| format!("r05_effects: {error}"))?.unwrap_or_default();
         seats.push(json!({
             "player": player["seat"], "character_def": player["characterDef"].as_u64().unwrap_or(0),
             "generals": generals,
             "seat": player["seat"], "hp": player["hp"], "max_hp": player["maxHp"],
             "alive": player["alive"], "turned_over": player["turnedOver"],
+            "linked": player["linked"].as_bool().unwrap_or(false),
+            "r05_effects": r05_effects,
             "hand_count": player["handCount"], "identity": player["identity"],
             "skills": player["skills"].as_array().into_iter().flatten().map(|name| json!({
                 "id": 0, "def": 0, "enabled": true, "use_count": 0, "active": false,
@@ -50,6 +53,7 @@ fn snapshot(view: &Value, revision: u64) -> Result<Value, String> {
         }
     }
     let phase = match view["phase"].as_str() {
+        Some("prepare") => "Prepare",
         Some("judge") => "Judge",
         Some("draw") => "Draw",
         Some("play") => "Play",
@@ -100,6 +104,7 @@ fn choice(session: &NativeSession, observer: u8) -> Result<Value, String> {
         ("prompt", "prompt"),
         ("native_kind", "native_kind"),
         ("source_skill", "source_skill"),
+        ("context", "context"),
         ("min", "min_count"),
         ("max", "max_count"),
         ("allowCancel", "allow_cancel"),

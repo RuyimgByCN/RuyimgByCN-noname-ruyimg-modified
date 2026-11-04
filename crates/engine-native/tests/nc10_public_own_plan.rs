@@ -234,6 +234,7 @@ fn shared_public_selector_obeys_order_card_preference_and_bounds() {
             max,
             allow_cancel,
             source_skill: None,
+            context: None,
         };
         let action = projected_choice_action(choice).unwrap();
         assert!(
@@ -274,6 +275,7 @@ fn changed_public_options_are_rejected_without_a_hidden_fallback() {
         max: 1,
         allow_cancel: false,
         source_skill: None,
+        context: None,
     })
     .unwrap();
     assert_eq!((plan.nodes_used, plan.sim_faults), (0, 0));

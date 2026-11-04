@@ -30,7 +30,7 @@ try{
      const ipc=await request({type:'restore',hex:fixture.archiveHex,packsJson:fixture.packsJson});
      const raw=JSON.parse(engine.view_json(seat));
      const current=nativeObserverToSnapshot(raw);const legacy=oldReader(raw);
-     const withoutMetadata={...current,seats:current.seats.map(({generals,...seat})=>seat)};
+     const withoutMetadata={...current,seats:current.seats.map(({generals,linked,r05_effects,...seat})=>seat)};
      assert.deepEqual(legacy,withoutMetadata,`${fixture.name}/${seat}: functional old TS reader accepts actual new WASM payload`);
      const worker=nativeEnvelope({engine,observer:seat,eventCursor:0});
      const server=fixture.seats[seat];

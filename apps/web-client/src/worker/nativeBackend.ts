@@ -17,7 +17,7 @@
  * 导出面（`general_candidates_json` / `assign_general`，非 `debug_*`）；候选与
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
-import { generalSlots, choiceMetadata, validateChoiceCounts } from "../engine/observerMetadata";
+import { generalSlots, choiceMetadata, r05Effects, validateChoiceCounts } from "../engine/observerMetadata";
 import { publicEventLabel } from "../engine/publicEvents";
 import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
@@ -188,7 +188,10 @@ interface NativeView {
     equips: number[];
     judge: number[];
     turnedOver: boolean;
+    linked?: boolean;
     skills: string[];
+    r05Effects?: unknown;
+    r05_effects?: unknown;
     revealedGenerals: boolean[];
     // NC03/NC09 裁决⑥：观察者过滤后的身份（本人/主公/已死亡可见，其余 null）。
     identity?: "Lord" | "Loyalist" | "Rebel" | "Renegade" | null;
@@ -208,6 +211,7 @@ interface NativeView {
 }
 
 const PHASE_MAP: Record<string, ObserverSnapshot["phase"]> = {
+  prepare: "Prepare",
   judge: "Judge",
   draw: "Draw",
   play: "Play",
@@ -259,29 +263,34 @@ export function nativeObserverToSnapshot(view: NativeView): ObserverSnapshot {
     round: view.round,
     current_player: view.turn,
     phase: PHASE_MAP[view.phase] ?? "Idle",
-    seats: view.players.map((p) => ({
-      player: p.seat,
-      character_def: p.characterDef ?? 0,
-      generals: p.generals === undefined ? undefined : generalSlots(p.generals),
-      seat: p.seat,
-      hp: p.hp,
-      max_hp: p.maxHp,
-      alive: p.alive,
-      turned_over: !!p.turnedOver,
-      hand_count: p.handCount,
-      // 裁决⑥：复用 SeatView.identity——不再恒置 null。
-      identity: p.identity ?? null,
-      skills: (p.skills ?? []).map((name) => ({
-        id: 0,
-        def: 0,
-        enabled: true,
-        use_count: 0,
-        active: false,
-        view_as: false,
-        locked: false,
-        name,
-      })),
-    })),
+    seats: view.players.map((p) => {
+      const r05Raw = p.r05Effects !== undefined ? p.r05Effects : p.r05_effects;
+      return {
+        player: p.seat,
+        character_def: p.characterDef ?? 0,
+        generals: p.generals === undefined ? undefined : generalSlots(p.generals),
+        seat: p.seat,
+        hp: p.hp,
+        max_hp: p.maxHp,
+        alive: p.alive,
+        turned_over: !!p.turnedOver,
+        ...(p.linked === undefined ? {} : { linked: Boolean(p.linked) }),
+        hand_count: p.handCount,
+        // 裁决⑥：复用 SeatView.identity——不再恒置 null。
+        identity: p.identity ?? null,
+        skills: (p.skills ?? []).map((name) => ({
+          id: 0,
+          def: 0,
+          enabled: true,
+          use_count: 0,
+          active: false,
+          view_as: false,
+          locked: false,
+          name,
+        })),
+        ...(r05Raw === undefined ? {} : { r05_effects: r05Effects(r05Raw) }),
+      };
+    }),
     known_cards,
     outcome: normalizeNativeOutcome(view.outcome ?? null),
   };
@@ -314,6 +323,7 @@ interface NativeChoiceJson {
   kind?: string;
   native_kind?: unknown;
   source_skill?: unknown;
+  context?: unknown;
 }
 
 /** 窄壳命令结果，与 engine-native-wasm `outcome_json` 同口径。 */

@@ -281,6 +281,7 @@ pub(crate) fn request_choice(
         prompt: None,
         native_kind: None,
         source_skill: None,
+        context: None,
     };
     tx.set_choice(choice);
     Ok(vec![DomainEvent::ChoiceRequested {

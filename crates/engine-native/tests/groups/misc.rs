@@ -119,6 +119,9 @@ mod r05g_archive107;
 #[path = "../r05c_async_draw.rs"]
 mod r05c_async_draw;
 
+#[path = "../r05h_projection.rs"]
+mod r05h_projection;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 

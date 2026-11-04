@@ -100,6 +100,10 @@ pub struct VmSkillDecl {
     pub trigger: crate::catalog::TriggerMeta,
     /// DSL filter 映射（三基语义；具名组合 filter 装载器跳过）。
     pub filter: crate::rvm_bridge::VmFilterPolicy,
+    /// R05-H（§8）：派生 helper 的公开逻辑身份（仅 `#r05:{role}` helper
+    /// 有值；装载器自已验证包清单/技能索引传入，建目录时并入
+    /// `Catalog::r05_identities`）。普通 VM 技能为 `None`。
+    pub r05_identity: Option<crate::catalog::QualifiedSkillRef>,
 }
 
 /// 扩展包：元数据 + 额外内容。

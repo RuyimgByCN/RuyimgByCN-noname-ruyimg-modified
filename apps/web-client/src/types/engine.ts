@@ -25,6 +25,27 @@ export interface GeneralSlotView {
 
 export type NativeChoiceKind = "confirm" | "select_cards" | "select_players" | "respond_card" | "pick_tag";
 
+export interface QualifiedSkillRef {
+  namespace: string;
+  package_id: string;
+  logical_skill_def_id: number;
+}
+
+export interface R05EffectView {
+  skill: QualifiedSkillRef;
+  tiqi_limit: number | null;
+  baoshu_combs: number | null;
+  dcbihuo_next: number | null;
+  dcbihuo_current: number | null;
+}
+
+export interface ChoiceContext {
+  kind: "tiqi_adjustment";
+  skill: QualifiedSkillRef;
+  target: number;
+  delta: number;
+}
+
 export interface SeatView {
   player: number;
   character_def: number;
@@ -33,9 +54,11 @@ export interface SeatView {
   max_hp: number;
   alive: boolean;
   turned_over: boolean;
+  linked?: boolean;
   hand_count: number;
   identity: "Lord" | "Loyalist" | "Rebel" | "Renegade" | null;
   skills: SkillView[];
+  r05_effects?: R05EffectView[];
   generals?: [GeneralSlotView | null, GeneralSlotView | null];
 }
 
@@ -100,6 +123,7 @@ export interface ChoiceRequest {
   prompt?: string;
   native_kind?: NativeChoiceKind;
   source_skill?: string | null;
+  context?: ChoiceContext | null;
 }
 
 export interface EngineEnvelope {

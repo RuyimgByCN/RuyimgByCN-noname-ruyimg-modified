@@ -62,6 +62,7 @@ fn choice_then_bad_effect() -> Vec<u8> {
 
 fn pack(name: &str, code: Vec<u8>, skill: &str) -> ExtensionPack {
     let decl = VmSkillDecl {
+        r05_identity: None,
             declaration_hash: None,
         name: skill.to_string(),
         module: module(name, code),
@@ -447,6 +448,7 @@ fn nc04_vm_restore_preserves_once_consume() {
         engine_native::rvm_named::compile_named("owner_alive_once_per_round").expect("滤名编译"),
     ));
     let decl = VmSkillDecl {
+        r05_identity: None,
             declaration_hash: None,
         name: "nc04_once_skill".to_string(),
         module: module("nc04-once-module", choice_then_halt()),
@@ -538,6 +540,7 @@ fn nc04_vm_restore_preserves_hit_counting() {
         engine_native::rvm_named::compile_named("owner_alive_first").expect("滤名编译"),
     ));
     let decl = VmSkillDecl {
+        r05_identity: None,
             declaration_hash: None,
         name: "nc04_hits_skill".to_string(),
         module: module("nc04-hits-module", choice_then_halt()),

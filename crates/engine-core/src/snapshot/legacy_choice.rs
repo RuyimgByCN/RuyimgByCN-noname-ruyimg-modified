@@ -6,6 +6,7 @@ use std::fmt;
 pub(crate) fn without_source(choice: &Option<ChoiceRequest>) -> Option<ChoiceRequest> {
     choice.clone().map(|mut choice| {
         choice.source_skill = None;
+        choice.context = None;
         choice
     })
 }
@@ -67,6 +68,8 @@ struct ArchiveChoice {
     native_kind: Option<String>,
     #[serde(skip)]
     source_skill: Option<String>,
+    #[serde(skip)]
+    context: Option<engine_api::ChoiceContext>,
 }
 
 fn serialize_count<S: Serializer>(value: &u32, serializer: S) -> Result<S::Ok, S::Error> {

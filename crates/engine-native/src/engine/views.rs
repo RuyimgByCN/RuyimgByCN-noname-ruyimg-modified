@@ -66,6 +66,7 @@ impl Engine {
                     equips: p.equips.clone(),
                     judge: p.judge.clone(),
                     turned_over: p.face_down,
+                    linked: p.linked,
                     skills: {
                         let mut names: Vec<&'static str> = core
                             .skills
@@ -75,12 +76,18 @@ impl Engine {
                                 if !inst.enabled {
                                     return None;
                                 }
+                                // R05-H（§8）：派生 helper 是内部实现名，
+                                // 不进公开技能列表（分项走 r05_effects）。
+                                if self.catalog.skills[*def as usize].name.contains("#r05:") {
+                                    return None;
+                                }
                                 Some(self.catalog.skills[*def as usize].name)
                             })
                             .collect();
                         names.sort_unstable();
                         names
                     },
+                    r05_effects: self.r05_effects_for(i),
                     generals,
                     revealed_generals: p.revealed_generals,
                     role,
@@ -149,6 +156,115 @@ impl Engine {
         self.build_choice_view(None, true)
     }
 
+    /// R05-H（§8）：座位在四角色语义槽上的公开分项聚合——helper 定义号
+    /// 经 `Catalog::r05_identities` 归属到公开逻辑身份 I，`BTreeMap` 按 I
+    /// 稳定排序；marks 条目在即算槽存在（`Some(0)`/负 Combs 均非空项），
+    /// 仅至少一槽存在的身份输出。只读汇总，不改状态；对全部观察者同值。
+    fn r05_effects_for(&self, seat: u8) -> Vec<crate::view::R05EffectView> {
+        if self.catalog.r05_identities.is_empty() {
+            return Vec::new();
+        }
+        let mut by_identity: std::collections::BTreeMap<
+            &crate::catalog::QualifiedSkillRef,
+            [Option<i32>; 4],
+        > = std::collections::BTreeMap::new();
+        for (def, identity) in &self.catalog.r05_identities {
+            let Some(value) = self.state.core.vm_aux.marks.get(&(seat, *def as u32)) else {
+                continue;
+            };
+            // 角色由派生 helper 名后缀判定（与 hooks `r05_role_defs` 同口径）。
+            let slot = match self.catalog.skills[*def as usize].name.rsplit_once("#r05:") {
+                Some((_, "limit")) => 0,
+                Some((_, "combs")) => 1,
+                Some((_, "next")) => 2,
+                Some((_, "current")) => 3,
+                _ => continue,
+            };
+            by_identity.entry(identity).or_insert([None; 4])[slot] = Some(*value);
+        }
+        by_identity
+            .into_iter()
+            .map(|(skill, slots)| crate::view::R05EffectView {
+                skill: skill.clone(),
+                tiqi_limit: slots[0],
+                baoshu_combs: slots[1],
+                dcbihuo_next: slots[2],
+                dcbihuo_current: slots[3],
+            })
+            .collect()
+    }
+
+    /// R05-H（§8）：涕泣符号询问（`rvm_tiqi_sign`）的 Own context——沿
+    /// `choice_source_skill` 同款纪律定位唯一产生该询问的内容机器，从其
+    /// **已验证本次内容局部** `[stage=3, n, target+1]` 派生
+    /// `TiqiAdjustment{skill, target(0 基 PlayerId), delta=|n−2|}`；不从
+    /// history 重算 d。找不到唯一产生者/形状不符即 None（可见性不授予应答权限）。
+    fn tiqi_context(
+        &self,
+        open: &crate::choice::OpenChoice,
+    ) -> Option<crate::view::ChoiceContext> {
+        if open.spec.prompt != "rvm_tiqi_sign" {
+            return None;
+        }
+        let resolution = &self.state.resolution;
+        let consumer = crate::resolution::ready_park_index(resolution)?;
+        let mut producer = None;
+        for (index, park) in resolution.parks.iter().enumerate() {
+            let snapshot = park.machine.snapshot();
+            if let Some(a) = crate::snap::active_ask(&snapshot, &self.state.core, &self.catalog) {
+                if producer.is_some()
+                    || a.observer != open.observer
+                    || a.prompt != open.spec.prompt
+                    || a.kind != open.spec.kind
+                    || a.options != open.spec.options
+                    || a.min != open.spec.min
+                    || a.max != open.spec.max
+                    || a.allow_cancel != open.spec.allow_cancel
+                {
+                    return None;
+                }
+                producer = Some((index, snapshot));
+            }
+        }
+        let (index, snapshot) = producer?;
+        if index != consumer {
+            return None;
+        }
+        let crate::snap::MachineSnapshot::Rvm {
+            commit_state,
+            commit_pending,
+            skill_name,
+            ..
+        } = snapshot
+        else {
+            return None;
+        };
+        // 已验证内容局部形状：[stage=3（符号）, n, target+1]。
+        if commit_state.len() != 3 || commit_state.first() != Some(&3) {
+            return None;
+        }
+        let effects = crate::rvm_ops::dec_effects(&commit_pending)?;
+        if !matches!(
+            effects.first(),
+            Some(rule_api::EffectRequest::ResolveTiqi { .. })
+        ) {
+            return None;
+        }
+        let delta = (commit_state[1] as i32 - 2).unsigned_abs();
+        let target = u8::try_from(commit_state[2].checked_sub(1)?).ok()?;
+        if usize::from(target) >= self.state.core.players.len() {
+            return None;
+        }
+        let helper = format!("{skill_name}#r05:limit");
+        let def = self.catalog.skill_by_name(&helper)?;
+        let skill = self.catalog.r05_identities.get(&def)?.clone();
+        Some(crate::view::ChoiceContext::TiqiAdjustment {
+            skill,
+            target,
+            delta,
+        })
+    }
+
     fn build_choice_view(
         &self,
         seat: Option<PlayerId>,
@@ -165,6 +281,7 @@ impl Engine {
                 max: open.spec.max,
                 allow_cancel: open.spec.allow_cancel,
                 source_skill: self.choice_source_skill(open),
+                context: self.tiqi_context(open),
             }
         } else {
             crate::view::ChoiceView::Other {

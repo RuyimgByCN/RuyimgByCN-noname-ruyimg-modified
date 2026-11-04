@@ -38,6 +38,24 @@ pub struct ChoiceRequest {
     /// Known native skill producing this owner-visible ask; never command authority.
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_source_skill")]
     pub source_skill: Option<String>,
+    /// Owner/referee-visible structured choice context; omitted when absent or hidden.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "deserialize_choice_context")]
+    pub context: Option<ChoiceContext>,
+}
+
+/// Public context attached to an owner/referee-visible choice request.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(tag = "kind", rename_all = "snake_case")]
+pub enum ChoiceContext {
+    /// Tiqi sign choice adjustment context (`target` is 1-based API `PlayerId`, `delta = |n - 2|`).
+    TiqiAdjustment {
+        /// Logical skill identity producing this Tiqi adjustment.
+        skill: crate::view::QualifiedSkillRef,
+        /// Target seat receiving the hand-limit adjustment.
+        target: PlayerId,
+        /// Unsigned adjustment magnitude `|n - 2|`.
+        delta: u32,
+    },
 }
 
 impl<'de> Deserialize<'de> for ChoiceRequest {
@@ -71,6 +89,8 @@ struct ChoiceRequestFields {
     native_kind: Option<String>,
     #[serde(default, deserialize_with = "deserialize_source_skill")]
     source_skill: Option<String>,
+    #[serde(default, deserialize_with = "deserialize_choice_context")]
+    context: Option<ChoiceContext>,
 }
 
 /// Preserve the existing wire enum while retaining precise native choice metadata.
@@ -136,6 +156,27 @@ fn deserialize_source_skill<'de, D: serde::Deserializer<'de>>(deserializer: D) -
     let value = Option::<String>::deserialize(deserializer)?;
     if value.as_deref().is_some_and(str::is_empty) {
         return Err(serde::de::Error::custom("empty source_skill"));
+    }
+    Ok(value)
+}
+
+fn deserialize_choice_context<'de, D: serde::Deserializer<'de>>(
+    deserializer: D,
+) -> Result<Option<ChoiceContext>, D::Error> {
+    let value = Option::<ChoiceContext>::deserialize(deserializer)?;
+    if let Some(ChoiceContext::TiqiAdjustment {
+        skill,
+        target,
+        delta,
+    }) = &value
+    {
+        if skill.namespace.is_empty()
+            || skill.package_id.is_empty()
+            || *target == PlayerId::NONE
+            || *delta == 0
+        {
+            return Err(serde::de::Error::custom("invalid choice context"));
+        }
     }
     Ok(value)
 }

@@ -50,12 +50,32 @@ pub struct PlayerCellView {
     pub revealed_generals: [bool; 2],
     /// 翻面状态：公开信息（T13 客户端深字段，批 19 起投影）。
     pub turned_over: bool,
-    /// 已授技能名（公开信息；T13 起投影，排序稳定）。
+    /// 横置（连环）状态：公开信息（R05-H §8 起随座位投影，全观察者同值）。
+    pub linked: bool,
+    /// 已授技能名（公开信息；T13 起投影，排序稳定；不含 R05 派生
+    /// helper——内部实现名经 [`Self::r05_effects`] 分项公开）。
     pub skills: Vec<&'static str>,
+    /// R05-H（合同 v3 §8）：四角色语义槽按公开逻辑身份 I 的有序分项。
+    /// 每项只在至少一槽存在时输出；`Some(0)` 与负 Combs 都不是空项；
+    /// 不合并共享权威 slot；对全部观察者（本人/他人/观战/AI）同值，
+    /// 裁判另按既有权限见私牌。死亡席位 Next 照显、disabled 实例保值。
+    pub r05_effects: Vec<R05EffectView>,
     /// 身份（仅身份局有值）：裁判、本人、主公（公开）与已死亡（遗言公开，
     /// 上游 `dieAfter`）成员可见；其余存活非主公成员的他人身份为 `None`
     /// （信息隔离）。非身份局恒 `None`。
     pub role: Option<Role>,
+}
+
+/// R05-H（§8）单逻辑身份的四角色语义分项：`None`=槽不存在，
+/// `Some(v)`=marks 当前值（有符号；Combs 可为负或 0）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct R05EffectView {
+    /// 公开逻辑身份（仅 namespace/package_id/logical_skill_def_id）。
+    pub skill: crate::catalog::QualifiedSkillRef,
+    pub tiqi_limit: Option<i32>,
+    pub baoshu_combs: Option<i32>,
+    pub dcbihuo_next: Option<i32>,
+    pub dcbihuo_current: Option<i32>,
 }
 
 /// 单个座位的完整可见视图。
@@ -96,12 +116,28 @@ pub enum ChoiceView {
         allow_cancel: bool,
         /// Known native skill producing this exact owner-visible ask.
         source_skill: Option<&'static str>,
+        /// R05-H（§8）：询问关联的公开 context（仅随 Own 视图下发）；
+        /// 他人/观战仅见询问存在，不见任何 context 细节。可见性不授予
+        /// 应答权限。
+        context: Option<ChoiceContext>,
     },
     /// 他人/观战者：仅知道询问的存在、观察者与类型，**不含任何选项**。
     Other {
         id: u64,
         observer: PlayerId,
         prompt: &'static str,
+    },
+}
+
+/// R05-H（合同 v3 §8）：涕泣 Own 选择的询问 context——从已验证的本次
+/// 内容局部派生（不从 history 重算 d）；`target` 为 0 基 `PlayerId`
+///（服务端 `native_view` 边界归一为 API 1 基），`delta` 为本次调整量幅值（d=|n−2|）。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum ChoiceContext {
+    TiqiAdjustment {
+        skill: crate::catalog::QualifiedSkillRef,
+        target: PlayerId,
+        delta: u32,
     },
 }
 

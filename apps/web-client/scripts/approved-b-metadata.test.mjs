@@ -62,3 +62,39 @@ test('production prompt literals and extension keys have readable presentation w
  for(const prompt of new Set(prompts))assert(!choicePromptLabel({prompt,native_kind:'select_cards'}).includes(prompt),prompt);
  for(const key of ['<img src=x onerror=alert(1)>extension','__proto__','constructor','toString']) assert.equal(choicePromptLabel({prompt:key,native_kind:'respond_card'}),'响应出牌');
 });
+
+test('r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads', async () => {
+ const {validateObserverMetadata} = await import('../src/engine/observerMetadata.ts');
+ const r05 = [
+  { skill: { namespace: 'official', package_id: 'xianding', logical_skill_def_id: 101 }, tiqi_limit: 0, baoshu_combs: -2, dcbihuo_next: null, dcbihuo_current: null },
+  { skill: { namespace: 'official', package_id: 'sp2', logical_skill_def_id: 202 }, tiqi_limit: null, baoshu_combs: null, dcbihuo_next: 1, dcbihuo_current: 0 },
+ ];
+ const snap = nativeObserverToSnapshot({
+  ...view,
+  phase: 'prepare',
+  players: [{ ...view.players[0], linked: true, r05Effects: r05 }],
+ });
+ assert.equal(snap.phase, 'Prepare');
+ assert.equal(snap.seats[0].linked, true);
+ assert.deepEqual(snap.seats[0].r05_effects, r05);
+ const ctx = { kind: 'tiqi_adjustment', skill: { namespace: 'official', package_id: 'xianding', logical_skill_def_id: 101 }, target: 1, delta: 2 };
+ const env = envelope({ id: 12, min: 1, max: 1, allowCancel: true, native_kind: 'pick_tag', prompt: 'rvm_tiqi_sign', context: ctx, options: [{ tag: 1 }, { tag: 2 }] });
+ assert.deepEqual(env.choice.context, ctx);
+ validateObserverMetadata(snap, env.choice);
+ for (const badEffects of [
+  null,
+  [{}],
+  [{ skill: { namespace: '', package_id: 'x', logical_skill_def_id: 1 }, tiqi_limit: 0, baoshu_combs: null, dcbihuo_next: null, dcbihuo_current: null }],
+  [{ skill: { namespace: 'official', package_id: 'x', logical_skill_def_id: 1 }, tiqi_limit: null, baoshu_combs: null, dcbihuo_next: null, dcbihuo_current: null }],
+ ]) {
+  assert.throws(() => nativeObserverToSnapshot({ ...view, players: [{ ...view.players[0], r05Effects: badEffects }] }), /r05_effects/);
+ }
+ for (const badCtx of [
+  { kind: 'other', skill: ctx.skill, target: 1, delta: 2 },
+  { kind: 'tiqi_adjustment', skill: { ...ctx.skill, namespace: '' }, target: 1, delta: 2 },
+  { kind: 'tiqi_adjustment', skill: ctx.skill, target: -1, delta: 2 },
+  { kind: 'tiqi_adjustment', skill: ctx.skill, target: 1, delta: 0 },
+ ]) {
+  assert.throws(() => envelope({ id: 12, min: 1, max: 1, options: [], context: badCtx }), /context/);
+ }
+});
