@@ -58,8 +58,20 @@ impl HostMachine {
                             player: t,
                             cards: picked.clone(),
                         });
-                        ctx.draw_cards(t, picked.len());
+                        // R05-C2：弃所选→摸等量走 R 帧；本体入弃堆挪到续行段
+                        //（同步序＝摸先于本体入弃堆，洗牌边界下序敏感）。
+                        ctx.start_draw(t, picked.len() as u32);
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
                     }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
+                }
+                // R05-C2 续行位：舒筋散摸牌交付后本体入弃堆。
+                HostStage::DrawSettle => {
                     if let Some(c) = self.card {
                         ctx.to_discard(c);
                         ctx.core.table.retain(|x| *x != c);
@@ -68,25 +80,43 @@ impl HostMachine {
                 }
                 _ => Flow::Done,
             },
-            HostBehavior::GujianMianliCard => {
-                // 目标摸一张，然后受 1 点伤害（登记差异：上游为失去体力）
-                let Some(t) = self.target else {
-                    return Flow::Done;
-                };
-                if ctx.core.player(t).alive {
-                    ctx.draw_cards(t, 1);
+            HostBehavior::GujianMianliCard => match self.stage {
+                HostStage::Act => {
+                    // 目标摸一张，然后失去 1 点体力（登记差异：上游为失去体力）
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
+                    if ctx.core.player(t).alive {
+                        // R05-C2：摸 1 走 R 帧；失去体力帧与本体入弃堆在
+                        // 续行段发射（同步序＝摸→失去体力→本体，帧序保持）。
+                        ctx.start_draw(t, 1);
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
+                    }
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
+                }
+                // R05-C2 续行位：棉里摸 1 交付后失去体力+本体入弃堆。
+                HostStage::DrawSettle => {
+                    let Some(t) = self.target else {
+                        return Flow::Done;
+                    };
                     // 失去体力（逐技对照批三 v77 消除「伤害替代」登记差异）
                     ctx.emit(EventData::LoseHp {
                         player: t,
                         amount: 1,
                     });
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
                 }
-                if let Some(c) = self.card {
-                    ctx.to_discard(c);
-                    ctx.core.table.retain(|x| *x != c);
-                }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             HostBehavior::GujianFeibiaoCard => match self.stage {
                 HostStage::SelectCard => {
                     // 有黑色手牌 → 选一张弃置（可取消，取消则受伤）；
@@ -174,7 +204,9 @@ impl HostMachine {
             },
             HostBehavior::GujianFoodTanhuadong => {
                 // 出牌阶段结束：摸 1；倒计时扣减，归零移除状态
-                ctx.draw_cards(self.owner, 1);
+                // R05-C2：摸 1 走 R 帧；food_tick 纯状态翻转（无日志/帧），
+                // 与 R 交付次序不可观测。
+                ctx.start_draw(self.owner, 1);
                 food_tick(ctx, self.owner, &self.def_key);
                 Flow::Done
             }
@@ -246,7 +278,7 @@ impl HostMachine {
             }
             HostBehavior::GujianFoodQingtuan => {
                 // 回合内使用首张杀（once_per_turn 门控）：摸 1
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 food_tick(ctx, self.owner, &self.def_key);
                 Flow::Done
             }
@@ -331,8 +363,15 @@ impl HostMachine {
             HostBehavior::GujianFoodMolicha => Flow::Done,
             HostBehavior::GujianFoodXiajiao => match self.stage {
                 HostStage::Act => {
-                    // 摸牌阶段：额外摸 1（固定摸牌后），然后弃 1
-                    ctx.draw_cards(self.owner, 1);
+                    // 摸牌阶段：额外摸 1（固定摸牌后），然后弃 1——
+                    // R05-C2：摸 1 走 R 帧，弃牌选项含刚摸的牌 → 续行位
+                    // 发询问（同步序＝摸完再问）。
+                    ctx.start_draw(self.owner, 1);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：虾饺摸 1 交付后建弃牌询问。
+                HostStage::DrawSettle => {
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
@@ -414,7 +453,9 @@ impl HostMachine {
                             player: self.owner,
                             cards: vec![c],
                         });
-                        ctx.draw_cards(self.owner, 1);
+                        // R05-C2：弃后摸 1 走 R 帧（步末无后续读；food_tick
+                        // 纯状态翻转与交付次序不可观测）。
+                        ctx.start_draw(self.owner, 1);
                     }
                     food_tick(ctx, self.owner, &self.def_key);
                     Flow::Done
