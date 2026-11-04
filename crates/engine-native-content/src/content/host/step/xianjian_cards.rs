@@ -323,7 +323,9 @@ impl HostMachine {
                     };
                     self.targets.remove(0);
                     if ctx.core.player(t).alive {
-                        ctx.draw_cards(t, 1);
+                        // R05-C2：逐目标摸 1 走 R 帧；本步既有 Flow::Yield
+                        // 即续行位（R 弹栈后回本段取下一目标，凤略同型）。
+                        ctx.start_draw(t, 1);
                     }
                     Flow::Yield
                 }
@@ -336,7 +338,14 @@ impl HostMachine {
                 // 效）。首臂做效果并发问（类型去重选项，可放弃）。
                 HostStage::Act => {
                     ctx.core.player_mut(self.owner).lingquan_awakened = true;
-                    ctx.draw_cards(self.owner, 3);
+                    // R05-C2：摸 3 走 R 帧；水云授予+置牌选项（「摸 3 的
+                    // 牌含刚入手牌末——全部参与去重」）→ 续行段。
+                    ctx.start_draw(self.owner, 3);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：灵泉摸 3 交付后授水云+内置置牌询问。
+                HostStage::DrawSettle => {
                     if let Some(def) = ctx.catalog.skill_by_name("shuiyun") {
                         ctx.insert_skill(
                             (self.owner, def),
