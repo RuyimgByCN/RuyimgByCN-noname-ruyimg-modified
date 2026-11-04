@@ -41,8 +41,11 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
             // damageSource 面只问**来源**持有者（−1）——旁观持有者两面都
             // 不问）。
             let qualified = damage_root_data(ctx, root).is_some_and(|d| {
-                let source_ok =
-                    d.source.is_some_and(|s| s != d.target && ctx.core.player(s).alive);
+                let committed_ok = d.settlement.committed_damage.is_some_and(|n| n > 0)
+                    && !d.settlement.notrigger
+                    && d.amount > 0;
+                let source_ok = committed_ok
+                    && d.source.is_some_and(|s| s != d.target && ctx.core.player(s).alive);
                 match window {
                     crate::event::DamageWindowKind::Source => {
                         source_ok && d.source == Some(owner)
