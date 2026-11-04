@@ -282,3 +282,323 @@ fn r05c_kuanggu_trigger_log_precedes_async_draw_delivery() {
     );
     assert_eq!(e.debug_hand(0).len(), hand0 + 1, "摸 1 行为面不回归");
 }
+
+// ---------------------------------------------------------------------------
+// R05-C2 批红守卫：续行位（continuation-slot）迁移的 4 个代表 caller
+// （boss 孟婆 / 照妖 / 灵泉 / 扶仇·清算）。修前（同步路径）全部为红。
+// ---------------------------------------------------------------------------
+
+/// 仙剑包（照妖/灵泉宿主行为的承载包）。
+fn xianjian_pack() -> ExtensionPack {
+    let json = std::fs::read_to_string(
+        repo_extensions_root().join("shaai-xianjian-upstream-noname/assets/cards.json"),
+    )
+    .expect("读仙剑包");
+    content_native_loader::bridge_pack(&json).expect("桥接").pack
+}
+
+/// 玩点论杀包（扶仇·清算宿主行为的承载包）。
+fn wudian_pack() -> ExtensionPack {
+    let json = std::fs::read_to_string(
+        repo_extensions_root().join("wudian-upstream-noname/assets/cards.json"),
+    )
+    .expect("读玩点论杀包");
+    content_native_loader::bridge_pack(&json).expect("桥接").pack
+}
+
+/// 牌堆只留 `keep` 张（取原牌堆顶）、弃堆清空——制造「摸牌中途枯竭/
+/// 双枯竭」的确定性环境（苦肉守卫同款手法）。
+fn exhaust_deck(e: &mut Engine, keep: usize) {
+    let mut tops: Vec<u32> = Vec::new();
+    for _ in 0..keep {
+        if let Some(c) = e.state_core().deck.last().copied() {
+            tops.push(c);
+            e.state_core_mut().deck.pop();
+        }
+    }
+    e.debug_drain_deck_to_discard();
+    let core = e.state_core_mut();
+    core.discard.clear();
+    let mut deck = std::mem::take(&mut core.deck);
+    deck.clear();
+    for c in tops.into_iter().rev() {
+        deck.push(c);
+    }
+    core.deck = deck;
+}
+
+// ---- C2-1：boss 孟婆 level 0 乱入——上游对照「不摸牌」零扰动 ----
+
+/// 上游 boss.js:3439-3455（boss_newhuanren 开局）＝game.addFellow 只入座
+/// 不发牌；directgain(4) 仅 level!=0 转关臂（boss.js:3575-3577）。原生
+/// 旧实现「摸 4 再逐张取回压栈」虽恢复牌序/手牌，但** CardsDrawn 日志
+/// 已落**＝对日志面有扰动。正确迁移＝开局臂删摸牌整段（零日志零扰动）；
+/// 修前红（日志含孟婆座位 CardsDrawn），迁移后绿。
+#[test]
+fn r05c2_mengpo_level0_spawn_is_card_silent() {
+    fn general_first(e: &Engine, name: &str) -> u16 {
+        (0..e.catalog().general_count() as u16)
+            .find(|&d| e.catalog().general_meta(d).map(|g| g.0) == Some(name))
+            .unwrap_or_else(|| panic!("general {name}"))
+    }
+    fn boot(seed: u64) -> Option<(Engine, u8)> {
+        let mut e = Engine::new_boss_stage(seed, 4, 0, 0, 4, 4, 0);
+        let qinguang = general_first(&e, "秦广王");
+        e.debug_set_general_def(0, qinguang);
+        let luxun = general_first(&e, "陆逊");
+        e.debug_set_general_def(1, luxun);
+        let out = submit(&mut e, 0, GameAction::NextPhase);
+        drain(&mut e);
+        let _ = out;
+        if !e.state_core().boss_mengpo_spawned() {
+            return None;
+        }
+        let seat = (0..e.state_core().players.len() as u8)
+            .find(|&s| {
+                e.state_core().players[s as usize]
+                    .general_slots[0]
+                    .and_then(|id| e.catalog().general_meta(id).map(|g| g.0))
+                    == Some("孟婆")
+            })
+            .expect("乱入后应找到孟婆座位");
+        Some((e, seat))
+    }
+    let mut checked = 0;
+    for seed in 1..81u64 {
+        let Some((e, seat)) = boot(seed) else {
+            continue;
+        };
+        checked += 1;
+        assert!(
+            e.debug_hand(seat).is_empty(),
+            "seed {seed}：level 0 孟婆手牌为空（上游不摸牌）"
+        );
+        assert!(
+            !e.log()
+                .iter()
+                .any(|l| matches!(l, LogEvent::CardsDrawn { player, .. } if *player == seat)),
+            "seed {seed}：level 0 乱入零摸牌日志（上游 addFellow 无发牌；旧同步摸 4+回滚已落日志＝红）"
+        );
+        if checked >= 3 {
+            break;
+        }
+    }
+    assert!(checked >= 1, "1..80 应出现孟婆乱入（40% 门）");
+}
+
+// ---- C2-2：照妖——枯竭摸牌走 R 面（detached/不入手），询问仍开后置 ----
+
+/// 照妖拼点赢摸 2：牌堆仅 1 张、弃堆空。同步 draw_cards＝那张牌直接入
+/// 手（红：手牌 +1、有 CardsDrawn）；异步 R 帧＝held 1 张后双枯竭
+/// Exhausted、转 detached、不入手、无 CardsDrawn 日志。置顶询问（min2
+/// max2）仍正常打开（选项=预置 2 张）——摸后依赖逻辑不回归。
+#[test]
+fn r05c2_zhaoyao_exhausted_draw_detaches_ask_opens() {
+    let mut e = Engine::new_with_extensions(63201, 3, &[&xianjian_pack()]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+        e.debug_set_hp(p, 6);
+    }
+    e.debug_grant(0, "zhaoyao");
+    // 布阵保证拼点赢：0 号首张高点数 > 1 号首张低点数（直接从牌堆按点数
+    // 挑牌，避免 debug_place 依牌库序的随机性；拼点只看首张点数）
+    let rank_of = |e: &Engine, c: u32| e.catalog().cards[c as usize].rank;
+    let take_low = |e: &mut Engine| -> u32 {
+        let pos = e
+            .state_core()
+            .deck
+            .iter()
+            .position(|c| rank_of(e, *c) <= 5)
+            .expect("牌堆有点数≤5 的牌");
+        e.state_core_mut().deck.remove(pos)
+    };
+    let low = take_low(&mut e);
+    e.state_core_mut().player_mut(1).hand.push(low);
+    let low_rank = rank_of(&e, low);
+    let take_high = |e: &mut Engine| -> u32 {
+        let pos = e
+            .state_core()
+            .deck
+            .iter()
+            .position(|c| rank_of(e, *c) > low_rank)
+            .expect("牌堆有点数更高的牌");
+        e.state_core_mut().deck.remove(pos)
+    };
+    let high = take_high(&mut e);
+    e.state_core_mut().player_mut(0).hand.push(high);
+    // 0 号第二张（凑置顶询问的 2 个选项）
+    let second = e.debug_place(0, "tao");
+    let hand0 = e.debug_hand(0).len();
+    debug_assert_eq!(hand0, 2);
+    // 0 号出牌→弃→结束；1 号判定→摸牌阶段开始触发照妖。
+    // 照妖原生触发在 1 号主摸 R 之后（登记时序），故留 3 张：主摸 2 张
+    // 交付 1 号，照妖摸 2 时仅剩 1 张——同步＝第 3 张入手（红）；异步
+    // R＝held 1 后枯竭转 detached、不入手。
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    exhaust_deck(&mut e, 3);
+    let detached0 = e.state_core().detached_cards.len();
+    let log_from = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // End→1 Judge
+    let _ = submit(&mut e, 1, GameAction::NextPhase); // Judge→Draw：主摸+照妖
+    // 照妖询问挂起（min2max2，选项=预置 2 张——摸 2 已枯竭不入手）
+    let c = e
+        .open_choice()
+        .expect("照妖置顶询问仍打开（摸后依赖逻辑）")
+        .clone();
+    assert_eq!(
+        c.spec.prompt,
+        engine_native::content::host::WUDIAN_XJ_ZHAOYAO_CARDS
+    );
+    assert_eq!((c.spec.min, c.spec.max), (2, 2));
+    let opts: Vec<u32> = c
+        .spec
+        .options
+        .iter()
+        .filter_map(|o| match o {
+            ChoiceOption::Card(x) => Some(*x),
+            _ => None,
+        })
+        .collect();
+    assert!(
+        opts.contains(&high) && opts.contains(&second),
+        "选项含预置两张（枯竭摸牌未入手）"
+    );
+    assert_eq!(
+        e.debug_hand(0).len(),
+        hand0,
+        "双枯竭：R 帧 Exhausted、held 1 张转 detached、不入手（同步 +1＝红）"
+    );
+    assert!(
+        !e.log()[log_from..]
+            .iter()
+            .any(|l| matches!(l, LogEvent::CardsDrawn { player: 0, .. })),
+        "照妖枯竭摸牌无 CardsDrawn 日志（同步有＝红）"
+    );
+    assert_eq!(
+        e.state_core().detached_cards.len(),
+        detached0 + 1,
+        "照妖 R 帧 held 1 张转 detached（同步入手＝红）"
+    );
+    let _ = submit(
+        &mut e,
+        c.observer,
+        GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![ChoiceOption::Card(high), ChoiceOption::Card(second)],
+        },
+    );
+    drain(&mut e);
+}
+
+// ---- C2-3：灵泉——枯竭摸 3 走 R 面（detached），置牌询问仍打开 ----
+
+/// 灵泉觉醒摸 3+内置水云置牌：牌堆仅 1 张、弃堆空。同步＝那张牌入手
+/// （红：手牌 +1、CardsDrawn、无 detached）；异步 R＝held 1 后枯竭转
+/// detached、不入手、无日志。置牌询问（min1max1）仍以既有手牌打开。
+#[test]
+fn r05c2_lingquan_exhausted_detached_ask_opens() {
+    let mut e = Engine::new_with_extensions(63202, 3, &[&xianjian_pack()]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..3 {
+        e.debug_clear_hand(p);
+        e.debug_set_hp(p, 6);
+    }
+    e.debug_grant(0, "lingquan");
+    // 觉醒门槛：round≥3 且 total_used > hp（hp 压 1、用牌计数 2）
+    e.debug_set_hp(0, 1);
+    e.state_core_mut().player_mut(0).total_used = 2;
+    let keep = e.debug_place(0, "tao");
+    let hand0 = e.debug_hand(0).len();
+    let detached0 = e.state_core().detached_cards.len();
+    e.debug_set_turn(0, Phase::End, 3);
+    exhaust_deck(&mut e, 1);
+    let log_from = e.log().len();
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // End→收束：灵泉觉醒
+    assert!(
+        e.state_core().player(0).lingquan_awakened,
+        "觉醒标记已置（两路径一致）"
+    );
+    assert_eq!(
+        e.debug_hand(0).len(),
+        hand0,
+        "双枯竭：held 1 张转 detached、不入手（同步 +1＝红）"
+    );
+    assert!(
+        !e.log()[log_from..]
+            .iter()
+            .any(|l| matches!(l, LogEvent::CardsDrawn { player: 0, .. })),
+        "灵泉枯竭摸牌无 CardsDrawn 日志（同步有＝红）"
+    );
+    assert_eq!(
+        e.state_core().detached_cards.len(),
+        detached0 + 1,
+        "held 1 张转 detached（Unclaimed）"
+    );
+    // 内置水云置牌询问仍打开（选项=既有手牌，min1max1）
+    let c = e
+        .open_choice()
+        .expect("灵泉置牌询问仍打开（摸后依赖逻辑）")
+        .clone();
+    assert_eq!(
+        c.spec.prompt,
+        engine_native::content::host::WUDIAN_XJ_LINGQUAN_CARDS
+    );
+    assert_eq!((c.spec.min, c.spec.max), (1, 1));
+    assert!(c.spec.options.contains(&ChoiceOption::Card(keep)));
+    let _ = submit(
+        &mut e,
+        c.observer,
+        GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![ChoiceOption::Card(keep)],
+        },
+    );
+    drain(&mut e);
+}
+
+// ---- C2-4：扶仇·清算——双枯竭不 panic（虚拟杀跳过）、标记仍消耗 ----
+
+/// 清算对标记来源「摸 1+虚拟杀」：牌堆弃堆全空。同步 draw_cards 摸 0
+/// 后 use_virtual_card 取 deck.first() **panic**（红＝测试崩）；异步 R
+/// 双枯竭 Exhausted（0 held、无 detached），续行步守卫牌堆空跳过虚拟杀
+/// ——不 panic、不凭空造牌、标记照常消耗、无 CardsDrawn。
+#[test]
+fn r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped() {
+    let mut e = Engine::new_with_extensions(63203, 4, &[&wudian_pack()]).expect("建局");
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    e.debug_grant(1, "fuchou2");
+    // 直接置标记：0 号在 1 号的复仇标记里
+    e.state_core_mut().player_mut(1).fuchou_marked = vec![0];
+    exhaust_deck(&mut e, 0);
+    let hand1 = e.debug_hand(1).len();
+    let log_from = e.log().len();
+    // 结束 0 号整回合（TurnEndWindow after）→ 清算触发
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Play→Discard
+    let _ = submit(&mut e, 0, GameAction::NextPhase); // Discard→End
+    let out = submit(&mut e, 0, GameAction::NextPhase); // End→1 Judge：清算
+    assert!(
+        matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+        "清算双枯竭不得 panic（同步 use_virtual_card 空堆 panic＝红）：{out:?}"
+    );
+    drain(&mut e);
+    assert!(
+        e.state_core().player(1).fuchou_marked.is_empty(),
+        "清算：标记已消耗（死亡移除语义不回归）"
+    );
+    assert_eq!(
+        e.debug_hand(1).len(),
+        hand1,
+        "双枯竭摸 0：手牌不变（0 held 无 detached）"
+    );
+    assert!(
+        !e.log()[log_from..]
+            .iter()
+            .any(|l| matches!(l, LogEvent::CardsDrawn { player: 1, .. })),
+        "清算枯竭摸牌无 CardsDrawn 日志"
+    );
+}
