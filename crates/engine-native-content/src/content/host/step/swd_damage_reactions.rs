@@ -454,19 +454,20 @@ impl HostMachine {
                         player: self.owner,
                         cards: vec![picked],
                     });
+                    // R05-C2：摸「弃后手牌数」走 R 帧；「手牌 ≥8 自伤 3 火」
+                    // 读摸后手牌 → 续行段（同步序＝摸完再判）。
                     let draw_n = ctx.core.player(self.owner).hand.len();
                     if draw_n > 0 {
-                        ctx.draw_cards(self.owner, draw_n);
+                        ctx.start_draw(self.owner, draw_n as u32);
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
                     }
-                    if ctx.core.player(self.owner).hand.len() >= 8 {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            self.owner,
-                            3,
-                            crate::event::DamageNature::Fire,
-                            None,
-                        )));
-                    }
+                    heihuo_self_burn_check(ctx, self.owner);
+                    Flow::Done
+                }
+                // R05-C2 续行位：黑火摸牌交付后的 ≥8 自伤判定。
+                HostStage::DrawSettle => {
+                    heihuo_self_burn_check(ctx, self.owner);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -949,5 +950,18 @@ impl HostMachine {
             }
             _ => unreachable!("behavior routed to the wrong step module"),
         }
+    }
+}
+
+/// 黑火自伤判定（R05-C2 抽出）：手牌 ≥8 → 对自己 3 点火伤。
+fn heihuo_self_burn_check(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if ctx.core.player(owner).hand.len() >= 8 {
+        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+            Some(owner),
+            owner,
+            3,
+            crate::event::DamageNature::Fire,
+            None,
+        )));
     }
 }
