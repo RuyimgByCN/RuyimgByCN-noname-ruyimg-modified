@@ -80,7 +80,8 @@ impl HostMachine {
                         ctx.give_hand_cards(self.owner, t, &sel);
                         if !ctx.core.turn.diewu_draw_used {
                             ctx.core.turn.diewu_draw_used = true;
-                            ctx.draw_cards(self.owner, 1);
+                            // R05-C2：步末纯摸牌 → R 帧（给牌在前，行为面不变）。
+                            ctx.start_draw(self.owner, 1);
                         }
                         Flow::Done
                     }
@@ -107,27 +108,34 @@ impl HostMachine {
                     });
                     match (own_r, t_r) {
                         (Some(o), Some(t)) if o > t => {
-                            ctx.draw_cards(self.owner, 2);
-                            let hand: Vec<CardId> = ctx.core.player(self.owner).hand.clone();
-                            if hand.len() < 2 {
-                                return Flow::Done;
-                            }
-                            let options: Vec<ChoiceOption> =
-                                hand.iter().copied().map(ChoiceOption::Card).collect();
-                            self.stage = HostStage::SelectCard;
-                            Flow::WaitChoice {
-                                observer: self.owner,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::SelectCards,
-                                    prompt: WUDIAN_XJ_ZHAOYAO_CARDS,
-                                    options,
-                                    min: 2,
-                                    max: 2,
-                                    allow_cancel: false,
-                                },
-                            }
+                            // R05-C2：摸 2 走 R 帧；置顶两选须含刚摸的牌
+                            // （min2max2 全手牌）→ 续行位发询问。
+                            ctx.start_draw(self.owner, 2);
+                            self.stage = HostStage::DrawSettle;
+                            Flow::Yield
                         }
                         _ => Flow::Done,
+                    }
+                }
+                // R05-C2 续行位：照妖摸 2 交付后建置顶两选。
+                HostStage::DrawSettle => {
+                    let hand: Vec<CardId> = ctx.core.player(self.owner).hand.clone();
+                    if hand.len() < 2 {
+                        return Flow::Done;
+                    }
+                    let options: Vec<ChoiceOption> =
+                        hand.iter().copied().map(ChoiceOption::Card).collect();
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectCards,
+                            prompt: WUDIAN_XJ_ZHAOYAO_CARDS,
+                            options,
+                            min: 2,
+                            max: 2,
+                            allow_cancel: false,
+                        },
                     }
                 }
                 HostStage::SelectCard => {
@@ -320,7 +328,9 @@ impl HostMachine {
                         .filter(|p| ctx.core.player(*p).alive)
                         .collect();
                     let n = hurt.len();
-                    ctx.draw_cards(self.owner, n);
+                    // R05-C2：步末纯摸牌 → R 帧（杀帧在 R 帧之下、R 先解，
+                    // 与同步「摸牌先落、AOE 后结」次序一致）。
+                    ctx.start_draw(self.owner, n as u32);
                     Flow::Done
                 }
                 _ => Flow::Done,
