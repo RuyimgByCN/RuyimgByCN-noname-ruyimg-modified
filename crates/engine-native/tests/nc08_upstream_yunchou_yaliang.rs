@@ -111,8 +111,10 @@ fn upstream_yaliang_source_matches() {
     .expect("读 yunchou");
     let idx = src.find("YunchouYaliang =>").expect("雅量分支");
     let seg: String = src[idx..].chars().take(400).collect();
+    // R05-C2（2026-11-04）：draw_cards → start_draw（异步 R 帧，逆序压帧
+    // ＝同步升序取牌次序；行为面「座位序逐座位各摸 1」不变）。
     assert!(
-        seg.contains("sort_unstable") && seg.contains("draw_cards(s, 1)"),
+        seg.contains("sort_unstable") && seg.contains("start_draw(*s, 1)"),
         "原生依据：座位序 + 逐座位各摸 1：{seg}"
     );
     let up = std::fs::read_to_string(

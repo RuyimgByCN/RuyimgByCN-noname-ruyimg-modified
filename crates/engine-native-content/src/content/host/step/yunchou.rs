@@ -8,18 +8,18 @@ impl HostMachine {
             // 雄姿：补摸 1+⌊装备数/2⌋
             HostBehavior::YunchouXiongzi => {
                 let n = 1 + ctx.core.player(self.owner).equips.len() / 2;
-                ctx.draw_cards(self.owner, n);
+                ctx.start_draw(self.owner, n as u32);
                 Flow::Done
             }
-            // 雅量：伤害双方各摸 1（座位序逐个）
+            // 雅量：伤害双方各摸 1（座位序逐个；R05-C2 逆序压帧＝
+            // 同步升序执行/取牌次序）
             HostBehavior::YunchouYaliang => {
                 let mut seats = self.targets.clone();
                 seats.sort_unstable();
                 seats.dedup();
-                for s in seats {
-                    if ctx.core.player(s).alive {
-                        ctx.draw_cards(s, 1);
-                    }
+                seats.retain(|s| ctx.core.player(*s).alive);
+                for s in seats.iter().rev() {
+                    ctx.start_draw(*s, 1);
                 }
                 Flow::Done
             }
@@ -68,7 +68,6 @@ impl HostMachine {
                     let [src, target] = [self.targets[0], self.targets[1]];
                     let judged = self.cards[0];
                     let judged_suit = ctx.catalog.cards[judged as usize].suit;
-                    let judged_num = ctx.catalog.cards[judged as usize].rank;
                     let picked: Option<CardId> = ctx.answer().iter().find_map(|o| match o {
                         ChoiceOption::Card(c) => Some(*c),
                         _ => None,
@@ -77,8 +76,6 @@ impl HostMachine {
                         // 取消：判定牌已在弃堆，无效果
                         return Flow::Done;
                     };
-                    let disc_suit = ctx.catalog.cards[discarded as usize].suit;
-                    let disc_num = ctx.catalog.cards[discarded as usize].rank;
                     // 弃置所选（手/装备）
                     if ctx.core.player(self.owner).hand.contains(&discarded) {
                         ctx.discard_from_hand(self.owner, discarded);
@@ -100,6 +97,7 @@ impl HostMachine {
                         cards: vec![discarded],
                     });
                     // 按判定花色分支
+                    let mut diamond_drew = false;
                     match judged_suit {
                         crate::catalog::Suit::Heart => {
                             let p = ctx.core.player(target);
@@ -109,7 +107,10 @@ impl HostMachine {
                         }
                         crate::catalog::Suit::Diamond => {
                             if ctx.core.player(target).alive {
-                                ctx.draw_cards(target, 2);
+                                // R05-C2：方块摸 2 发 R 帧后续行（同步摸
+                                // 先于收回奖励读弃堆——洗牌边界下序敏感）。
+                                ctx.start_draw(target, 2);
+                                diamond_drew = true;
                             }
                         }
                         crate::catalog::Suit::Spade => {
@@ -158,31 +159,21 @@ impl HostMachine {
                             }
                         }
                     }
-                    // 收回奖励：花色相同→判定牌归持有者；点数相同→所弃牌归持有者
-                    let mut gains: Vec<CardId> = Vec::new();
-                    if disc_suit == judged_suit {
-                        if let Some(pos) = ctx.core.discard.iter().position(|x| *x == judged) {
-                            ctx.core.discard.remove(pos);
-                            gains.push(judged);
-                        }
+                    if diamond_drew {
+                        // 续行位：R 子树弹栈后做收回奖励（同步序＝摸先于奖励）。
+                        self.cards = vec![judged, discarded];
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
                     }
-                    if disc_num == judged_num && discarded != judged {
-                        if let Some(pos) = ctx.core.discard.iter().position(|x| *x == discarded) {
-                            ctx.core.discard.remove(pos);
-                            gains.push(discarded);
-                        }
-                    }
-                    if !gains.is_empty() {
-                        ctx.core
-                            .player_mut(self.owner)
-                            .hand
-                            .extend(gains.iter().copied());
-                        ctx.log(LogEvent::CardsGivenPublic {
-                            from: self.owner,
-                            to: self.owner,
-                            cards: gains,
-                        });
-                    }
+                    beige_gains(ctx, self.owner, judged, discarded);
+                    Flow::Done
+                }
+                // R05-C2 续行位：悲歌方块臂摸 2 交付后的收回奖励尾段。
+                HostStage::DrawSettle => {
+                    let &[judged, discarded] = &self.cards[..] else {
+                        return Flow::Done;
+                    };
+                    beige_gains(ctx, self.owner, judged, discarded);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -268,7 +259,10 @@ impl HostMachine {
                             player: self.owner,
                             cards: picked.clone(),
                         });
-                        ctx.draw_cards(self.owner, picked.len());
+                        // R05-C2：弃后摸等量——步末无后续读，R 帧直接续
+                        //（洗牌含刚弃牌的边界与同步一致：R 泵在步 Done 后
+                        //立即发生，中间无其他结算）。
+                        ctx.start_draw(self.owner, picked.len() as u32);
                     }
                     Flow::Done
                 }
@@ -289,33 +283,42 @@ impl HostMachine {
                 Flow::Done
             }
             // 蛊惑·变体：摸 2 然后弃自己区域 2 张（判定区→装备→手牌首张序）
-            HostBehavior::YunchouDiyguhuo => {
-                ctx.draw_cards(self.owner, 2);
-                for _ in 0..2 {
-                    let next = if let Some(c) = ctx.core.player(self.owner).judge.first().copied() {
-                        ctx.core.player_mut(self.owner).judge.retain(|x| *x != c);
-                        Some(c)
-                    } else if let Some(c) = ctx.core.player(self.owner).equips.first().copied() {
-                        ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
-                        Some(c)
-                    } else {
-                        ctx.core.player(self.owner).hand.first().copied()
-                    };
-                    if let Some(c) = next {
-                        ctx.core.player_mut(self.owner).hand.retain(|x| *x != c);
-                        ctx.to_discard(c);
-                        ctx.log(LogEvent::CardDiscarded {
-                            player: self.owner,
-                            cards: vec![c],
-                        });
-                    }
+            HostBehavior::YunchouDiyguhuo => match self.stage {
+                HostStage::Act => {
+                    // R05-C2：摸 2 走 R 帧；「判定区→装备→手牌首张」的
+                    // 退弃依赖摸后手牌（空手时同步会弃掉刚摸的牌）→ 续行位。
+                    ctx.start_draw(self.owner, 2);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
                 }
-                Flow::Done
-            }
+                HostStage::DrawSettle => {
+                    for _ in 0..2 {
+                        let next = if let Some(c) = ctx.core.player(self.owner).judge.first().copied() {
+                            ctx.core.player_mut(self.owner).judge.retain(|x| *x != c);
+                            Some(c)
+                        } else if let Some(c) = ctx.core.player(self.owner).equips.first().copied() {
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != c);
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, c);
+                            Some(c)
+                        } else {
+                            ctx.core.player(self.owner).hand.first().copied()
+                        };
+                        if let Some(c) = next {
+                            ctx.core.player_mut(self.owner).hand.retain(|x| *x != c);
+                            ctx.to_discard(c);
+                            ctx.log(LogEvent::CardDiscarded {
+                                player: self.owner,
+                                cards: vec![c],
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 狡黠：摸 1
             HostBehavior::YunchouJiaoxia => {
-                ctx.draw_cards(self.owner, 1);
+                ctx.start_draw(self.owner, 1);
                 Flow::Done
             }
             // 红莲：来源弃其手牌与装备区全部红牌（装备走 revoke 同款）
@@ -439,7 +442,7 @@ impl HostMachine {
             HostBehavior::YunchouDiykuanggu => {
                 if let Some(t) = self.target {
                     if ctx.core.seat_distance(t, self.owner) > 1 {
-                        ctx.draw_cards(self.owner, 1);
+                        ctx.start_draw(self.owner, 1);
                     } else {
                         let p = ctx.core.player(self.owner);
                         if p.hp < p.max_hp as i32 {
@@ -451,5 +454,35 @@ impl HostMachine {
             }
             _ => unreachable!("behavior routed to the wrong step module"),
         }
+    }
+}
+
+/// 悲歌收回奖励（R05-C2 抽出：花色相同→判定牌归持有者；点数相同→
+/// 所弃牌归持有者。SelectCard 即时段与 DrawSettle 续行段共用）。
+fn beige_gains(ctx: &mut Ctx<'_>, owner: PlayerId, judged: CardId, discarded: CardId) {
+    let judged_suit = ctx.catalog.cards[judged as usize].suit;
+    let judged_num = ctx.catalog.cards[judged as usize].rank;
+    let disc_suit = ctx.catalog.cards[discarded as usize].suit;
+    let disc_num = ctx.catalog.cards[discarded as usize].rank;
+    let mut gains: Vec<CardId> = Vec::new();
+    if disc_suit == judged_suit {
+        if let Some(pos) = ctx.core.discard.iter().position(|x| *x == judged) {
+            ctx.core.discard.remove(pos);
+            gains.push(judged);
+        }
+    }
+    if disc_num == judged_num && discarded != judged {
+        if let Some(pos) = ctx.core.discard.iter().position(|x| *x == discarded) {
+            ctx.core.discard.remove(pos);
+            gains.push(discarded);
+        }
+    }
+    if !gains.is_empty() {
+        ctx.core.player_mut(owner).hand.extend(gains.iter().copied());
+        ctx.log(LogEvent::CardsGivenPublic {
+            from: owner,
+            to: owner,
+            cards: gains,
+        });
     }
 }

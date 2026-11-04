@@ -131,8 +131,10 @@ fn upstream_kuanggu_source_matches() {
     .expect("读 yunchou");
     let idx = step.find("YunchouDiykuanggu =>").expect("狂骨变体效果");
     let seg: String = step[idx..].chars().take(420).collect();
+    // R05-C2（2026-11-04）：draw_cards → start_draw（异步 R 帧；行为面
+    // 「距离>1 摸 1、否则回复 1」不变——上游 yunchou/kuanggu 同口径）。
     assert!(
-        seg.contains("draw_cards(self.owner, 1)") && seg.contains("recover(self.owner, 1, None)"),
+        seg.contains("start_draw(self.owner, 1)") && seg.contains("recover(self.owner, 1, None)"),
         "原生依据：距离>1 摸 1、否则回复 1：{seg}"
     );
     let up = std::fs::read_to_string(

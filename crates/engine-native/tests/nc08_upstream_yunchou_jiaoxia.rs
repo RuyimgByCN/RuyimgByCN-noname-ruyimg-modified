@@ -144,7 +144,9 @@ fn upstream_jiaoxia_source_matches() {
     .expect("读 yunchou");
     let idx = step.find("YunchouJiaoxia =>").expect("狡黠效果");
     let seg: String = step[idx..].chars().take(160).collect();
-    assert!(seg.contains("draw_cards(self.owner, 1)"), "原生依据：摸 1：{seg}");
+    // R05-C2（2026-11-04）：draw_cards → start_draw（异步 R 帧；行为面
+    // 摸 1 不变）。
+    assert!(seg.contains("start_draw(self.owner, 1)"), "原生依据：摸 1：{seg}");
     let up = std::fs::read_to_string(
         std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join(
             "../../../archive/upstream/noname/apps/core/extension/杀海拾遗/character/yunchou/skill.js",

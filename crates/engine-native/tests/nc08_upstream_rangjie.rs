@@ -181,8 +181,9 @@ fn upstream_rangjie_move_branch_must_draw_one() {
     .expect("读 rangjie 源码");
     let idx = src.find("HostBehavior::Rangjie =>").expect("rangjie 分支");
     let seg: String = src[idx..].chars().take(2600).collect();
-    // 分支 0 有 draw_cards；分支 1 之前不应只有一次 draw（上游在分支前无条件 draw 一次）
-    let draws = seg.matches("draw_cards(self.owner, 1)").count();
+    // 分支 0 有 start_draw（R05-C2 异步迁移后字面）；分支 1 之前不应只有
+    // 一次 draw（上游在分支前无条件 draw 一次）
+    let draws = seg.matches("start_draw(self.owner, 1)").count();
     assert!(
         draws >= 2 || seg.contains("0 => {\n                            // 获得牌：摸 1"),
         "上游在分支前 draw()：非取消路径应恰好一次 draw（原生当前只在分支 0）——draws={draws}"
