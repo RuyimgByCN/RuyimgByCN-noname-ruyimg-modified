@@ -325,38 +325,48 @@ impl HostMachine {
             }
             // 空洞印：死亡取消——hp=1、摸 1、弃全部宝物（death_cancelled
             // 基建消费，DeathMachine 开头拦截跳过死亡执行）
-            HostBehavior::SwdKongdongyinGuard => {
-                ctx.core.player_mut(self.owner).death_cancelled = true;
-                ctx.core.player_mut(self.owner).hp = 1;
-                ctx.draw_cards(self.owner, 1);
-                let baowu: Vec<CardId> = ctx
-                    .core
-                    .player(self.owner)
-                    .equips
-                    .iter()
-                    .filter(|c| {
-                        ctx.catalog.card_slot_of(ctx.core, **c)
-                            == Some(crate::catalog::EquipSlot::Treasure)
-                    })
-                    .copied()
-                    .collect();
-                for c in baowu {
-                    if let Some(pos) = ctx
+            HostBehavior::SwdKongdongyinGuard => match self.stage {
+                HostStage::Act => {
+                    ctx.core.player_mut(self.owner).death_cancelled = true;
+                    ctx.core.player_mut(self.owner).hp = 1;
+                    // R05-C2：摸 1 走 R 帧；宝物入弃堆在续行段（同步序＝
+                    // 摸先于宝物入弃堆，洗牌边界下序敏感）。
+                    ctx.start_draw(self.owner, 1);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：空洞印摸 1 交付后弃全部宝物。
+                HostStage::DrawSettle => {
+                    let baowu: Vec<CardId> = ctx
                         .core
                         .player(self.owner)
                         .equips
                         .iter()
-                        .position(|x| *x == c)
-                    {
-                        let old = ctx.core.player_mut(self.owner).equips.remove(pos);
-                        // 弃宝物同步撤销装备技实例（上游 onLose 同口径——
-                        // 空洞印自身守卫技亦随之移除=一次性）
-                        crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, old);
-                        ctx.to_discard(old);
+                        .filter(|c| {
+                            ctx.catalog.card_slot_of(ctx.core, **c)
+                                == Some(crate::catalog::EquipSlot::Treasure)
+                        })
+                        .copied()
+                        .collect();
+                    for c in baowu {
+                        if let Some(pos) = ctx
+                            .core
+                            .player(self.owner)
+                            .equips
+                            .iter()
+                            .position(|x| *x == c)
+                        {
+                            let old = ctx.core.player_mut(self.owner).equips.remove(pos);
+                            // 弃宝物同步撤销装备技实例（上游 onLose 同口径——
+                            // 空洞印自身守卫技亦随之移除=一次性）
+                            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, self.owner, old);
+                            ctx.to_discard(old);
+                        }
                     }
+                    Flow::Done
                 }
-                Flow::Done
-            }
+                _ => Flow::Done,
+            },
             // 逆攻积攒：标记 +amount（上限 4）
             HostBehavior::SwdNigongAccumulate => {
                 if let Some(EventData::Damage(d)) =
@@ -370,7 +380,14 @@ impl HostMachine {
             // 青龙之圭：摸 2 → 弃 1 张 he（SelectCard min1）
             HostBehavior::SwdQinglongzhiguiHeld => match self.stage {
                 HostStage::Act => {
-                    ctx.draw_cards(self.owner, 2);
+                    // R05-C2：摸 2 走 R 帧；弃牌选项（he）须含刚摸的牌
+                    // → 续行位发询问。
+                    ctx.start_draw(self.owner, 2);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：青龙之圭摸 2 交付后建弃牌询问。
+                HostStage::DrawSettle => {
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
@@ -598,25 +615,21 @@ impl HostMachine {
                     let lv = ctx.core.player(self.owner).nigong_lv;
                     ctx.core.player_mut(self.owner).nigong_lv = 0;
                     if lv % 2 == 1 {
-                        ctx.draw_cards(self.owner, 1);
+                        // R05-C2：奇数层摸 1 走 R 帧；直伤帧在续行段发射
+                        // （同步序＝摸牌交付先于伤害帧解算）。层值经 cards 槽
+                        // 带入续行段（快照承载）。
+                        self.cards = vec![u32::from(lv)];
+                        ctx.start_draw(self.owner, 1);
+                        self.stage = HostStage::DrawSettle;
+                        return Flow::Yield;
                     }
-                    if self.target.is_none() {
-                        // lv==1 面：无目标仅摸 1 清零
-                        return Flow::Done;
-                    }
-                    let Some(t) = self.target else {
-                        return Flow::Done;
-                    };
-                    let dmg = lv / 2;
-                    if dmg > 0 && ctx.core.player(t).alive {
-                        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                            Some(self.owner),
-                            t,
-                            i32::from(dmg),
-                            crate::event::DamageNature::Normal,
-                            None,
-                        )));
-                    }
+                    nigong_strike(ctx, self.owner, self.target, lv);
+                    Flow::Done
+                }
+                // R05-C2 续行位：逆攻奇数层摸 1 交付后直伤。
+                HostStage::DrawSettle => {
+                    let lv = self.cards.first().copied().unwrap_or(1) as u8;
+                    nigong_strike(ctx, self.owner, self.target, lv);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -640,5 +653,23 @@ impl HostMachine {
             }
             _ => unreachable!("behavior routed to the wrong step module"),
         }
+    }
+}
+
+/// 逆攻直伤（R05-C2 抽出）：层值/2 点伤害指向所选目标（无目标或目标
+/// 阵亡则无事——「无目标仅摸 1 清零」与偶数层即时结算共用）。
+fn nigong_strike(ctx: &mut Ctx<'_>, owner: PlayerId, target: Option<PlayerId>, lv: u8) {
+    let Some(t) = target else {
+        return;
+    };
+    let dmg = lv / 2;
+    if dmg > 0 && ctx.core.player(t).alive {
+        ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+            Some(owner),
+            t,
+            i32::from(dmg),
+            crate::event::DamageNature::Normal,
+            None,
+        )));
     }
 }
