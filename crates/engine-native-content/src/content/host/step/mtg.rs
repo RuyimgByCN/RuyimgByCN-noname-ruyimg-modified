@@ -208,7 +208,8 @@ impl HostMachine {
                                 cards: vec![c],
                             });
                         }
-                        ctx.draw_cards(self.owner, 2);
+                        // R05-C2：弃后摸 2 走 R 帧（步末无后续读）。
+                        ctx.start_draw(self.owner, 2);
                     }
                     Flow::Done
                 }
@@ -386,7 +387,8 @@ impl HostMachine {
                             });
                         }
                         None => {
-                            ctx.draw_cards(self.owner, 1);
+                            // R05-C2：无锦囊补偿摸 1 走 R 帧（步末无后续读）。
+                            ctx.start_draw(self.owner, 1);
                         }
                     }
                     Flow::Done
@@ -614,7 +616,14 @@ impl HostMachine {
                     sync_land_skill(ctx, self.owner, CardKind::Bingheyaosai);
                     ctx.core.current_land = Some(CardKind::Bingheyaosai);
                     ctx.core.turn.land_used = true;
-                    ctx.draw_cards(self.owner, 2);
+                    // R05-C2：摸 2 走 R 帧；弃两选（he min2max2）须含刚摸
+                    // 的牌（「摸 2 保证手牌恒 ≥2」）→ 续行位发询问。
+                    ctx.start_draw(self.owner, 2);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：冰河要塞摸 2 交付后建弃两选。
+                HostStage::DrawSettle => {
                     let mut options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
