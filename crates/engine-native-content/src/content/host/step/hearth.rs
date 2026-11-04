@@ -5,9 +5,15 @@ impl HostMachine {
         match self.behavior {
             HostBehavior::HearthDunpaiCard => match self.stage {
                 HostStage::Act => {
-                    // +1 护甲、摸 1
+                    // +1 护甲、摸 1——R05-C2：摸 1 走 R 帧；「弃首张手牌」
+                    // 读摸后手牌（空手时同步会弃掉刚摸的牌）→ 续行段。
                     ctx.change_hujia(self.owner, 1);
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
+                }
+                // R05-C2 续行位：盾牌摸 1 交付后弃首张+本体入弃堆。
+                HostStage::DrawSettle => {
                     let options: Vec<ChoiceOption> = ctx
                         .core
                         .player(self.owner)
@@ -167,15 +173,25 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            HostBehavior::HearthChuansongCard => {
-                // 获得牌堆顶一张牌（登记差异：立即使用链暂缓）
-                ctx.draw_cards(self.owner, 1);
-                if let Some(c) = self.card {
-                    ctx.to_discard(c);
-                    ctx.core.table.retain(|x| *x != c);
+            HostBehavior::HearthChuansongCard => match self.stage {
+                HostStage::Act => {
+                    // 获得牌堆顶一张牌（登记差异：立即使用链暂缓）——
+                    // R05-C2：摸 1 走 R 帧；本体入弃堆在续行段（同步序＝
+                    // 摸先于本体入弃堆，洗牌边界下序敏感）。
+                    ctx.start_draw(self.owner, 1);
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
                 }
-                Flow::Done
-            }
+                // R05-C2 续行位：传送摸 1 交付后本体入弃堆。
+                HostStage::DrawSettle => {
+                    if let Some(c) = self.card {
+                        ctx.to_discard(c);
+                        ctx.core.table.retain(|x| *x != c);
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             HostBehavior::HearthTansheCard => {
                 // 座位序链式弃首张手牌，共「存活数取奇」次
                 //（登记差异：随机敌随机牌改确定性座位链）
