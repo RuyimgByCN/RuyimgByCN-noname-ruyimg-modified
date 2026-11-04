@@ -453,41 +453,6 @@ impl<'a> Ctx<'a> {
         );
     }
 
-    /// R05-C（2026-11-04）遗留同步原语：105 处 content caller 已迁
-    /// `start_draw`；剩余 42 处（11 个 host step 文件）因「调用点后同
-    /// step／恢复点读手牌·牌堆」需续行位（continuation-slot）设计，本批
-    /// 按合同**不做**自行改写、留待后续批——在那之前不得删除本方法，
-    /// 也不得新增调用（新摸牌一律 `start_draw`）。清单见
-    /// docs/operations/evidence R05-C c-async-report。
-    pub fn draw_cards(&mut self, player: PlayerId, n: usize) -> Vec<CardId> {
-        let mut drawn = Vec::with_capacity(n);
-        for _ in 0..n {
-            if self.core.deck.is_empty() {
-                if self.core.discard.is_empty() {
-                    break;
-                }
-                let mut cards = std::mem::take(&mut self.core.discard);
-                self.core.rng.shuffle(&mut cards);
-                self.core.deck = cards;
-                self.out.push(LogEvent::DeckReshuffled);
-            }
-            let card = self.core.deck.pop().expect("deck non-empty");
-            self.core.player_mut(player).hand.push(card);
-            drawn.push(card);
-        }
-        if !drawn.is_empty() {
-            self.emit(EventData::CardsDrawn {
-                player,
-                cards: drawn.clone(),
-            });
-            self.out.push(LogEvent::CardsDrawn {
-                player,
-                cards: drawn.clone(),
-            });
-        }
-        drawn
-    }
-
     /// 翻判定牌：牌库顶；牌库不足时先洗回弃牌堆。不进入任何玩家手牌。
     pub fn draw_judge_card(&mut self) -> CardId {
         if self.core.deck.is_empty() {
