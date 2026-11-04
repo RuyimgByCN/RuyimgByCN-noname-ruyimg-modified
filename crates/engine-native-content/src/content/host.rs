@@ -89,6 +89,10 @@ pub enum HostStage {
     ShuchuiTargetLoop,
     /// 还人：等待选下一关武将（PickTag 下标）。
     HuanrenPick,
+    /// R05-C2 续行位：本机已发 start_draw 并 Yield；R 子树弹栈后从本
+    /// 阶段恢复执行该行为的「摸后尾段」（每个行为各自的尾段，同一行为
+    /// 同时至多一张在飞 R 帧——阶段语义由 behavior 唯一确定）。
+    DrawSettle,
 }
 
 impl HostStage {
@@ -108,6 +112,7 @@ impl HostStage {
             HostStage::ShuchuiTargetLoop => 11,
             HostStage::ShuchuiTarget => 12,
             HostStage::HuanrenPick => 13,
+            HostStage::DrawSettle => 14,
         }
     }
     pub fn from_tag(t: u8) -> Option<Self> {
@@ -126,6 +131,7 @@ impl HostStage {
             11 => HostStage::ShuchuiTargetLoop,
             12 => HostStage::ShuchuiTarget,
             13 => HostStage::HuanrenPick,
+            14 => HostStage::DrawSettle,
             _ => return None,
         })
     }

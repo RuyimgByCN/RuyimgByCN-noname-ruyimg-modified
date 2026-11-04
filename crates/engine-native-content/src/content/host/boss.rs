@@ -126,21 +126,23 @@ pub(super) fn bianshen_run_change_boss(ctx: &mut Ctx<'_>, boss: PlayerId, pool: 
     let g = defs[j];
     sixiang_reinit_seat(ctx, boss, g, false);
     sixiang_discard_zone(ctx, boss);
-    ctx.draw_cards(boss, 4);
+    ctx.start_draw(boss, 4);
     ctx.core.turn.current = boss;
     ctx.core.turn.phase = crate::event::Phase::Judge;
 }
 
-pub(super) fn huanren_spawn_mengpo(ctx: &mut Ctx<'_>, draw4: bool) {
+/// R05-C2：孟婆乱入。上游 boss.js:3439-3455（开局）＝game.addFellow 只
+/// 入座**不发牌**；boss.js:3575-3577（转关，level 已 ≥1）＝fellow.
+/// directgain(get.cards(4))。原生按此对齐：开局（draw4=false）零摸牌零
+/// 扰动（旧「摸 4 再逐张取回压栈」已落 CardsDrawn 日志＝对日志面有扰
+/// 动，删除）；转关卡（draw4=true）登记 4 张到 `draws`（由调用方统一
+/// 逆序压 R 帧，保持与同步摸牌相同的执行次序）。
+pub(super) fn huanren_spawn_mengpo(ctx: &mut Ctx<'_>, draw4: bool, draws: &mut Vec<(PlayerId, u32)>) {
     let Some(pid) = sixiang_add_fellow(ctx, "孟婆") else {
         return;
     };
-    if !draw4 {
-        let hand = ctx.core.player(pid).hand.clone();
-        for c in hand.into_iter().rev() {
-            ctx.take_hand_card(pid, c);
-            ctx.core.deck.push(c);
-        }
+    if draw4 {
+        draws.push((pid, 4));
     }
     with_boss_stage(ctx, |stage| stage.mengpo_spawned = true);
 }
@@ -187,7 +189,9 @@ pub(super) fn huanren_on_game_start(ctx: &mut Ctx<'_>, boss: PlayerId) {
         }
     }
     if ctx.core.rng.gen_range(100) < 40 {
-        huanren_spawn_mengpo(ctx, false);
+        let mut draws = Vec::new();
+        huanren_spawn_mengpo(ctx, false, &mut draws);
+        // 开局臂上游不发牌（draws 恒空）——零 R 帧、零扰动。
     }
 }
 
@@ -218,9 +222,14 @@ pub(super) fn huanren_apply(ctx: &mut Ctx<'_>, boss: PlayerId, general: u16) {
     let is_dizang = boss_general_def(ctx.catalog, "地藏王") == Some(general);
     sixiang_reinit_seat(ctx, boss, general, false);
     sixiang_discard_zone(ctx, boss);
-    ctx.draw_cards(boss, 4);
+    // R05-C2：摸牌按同步执行序登记（换将 4 → 地藏 3 → 孟婆 4），步末
+    // 逆序压 R 帧＝后压先执行，保持与旧 draw_cards 相同的取牌次序与
+    // CardsDrawn 次序（上游 boss.js:3558 changeBoss directgain(4)、
+    // 3561-3563 地藏 draw(3)、3575-3577 孟婆 directgain(4) 同序）。
+    let mut draws: Vec<(PlayerId, u32)> = Vec::new();
+    draws.push((boss, 4));
     if is_dizang {
-        ctx.draw_cards(boss, 3);
+        draws.push((boss, 3));
     }
     grant_named_skill(ctx, boss, "还人");
     grant_named_skill(ctx, boss, "还人·转关");
@@ -234,13 +243,22 @@ pub(super) fn huanren_apply(ctx: &mut Ctx<'_>, boss: PlayerId, general: u16) {
     if !spawned {
         let roll = ctx.core.rng.gen_range(100);
         if roll < 50 || level == 2 {
-            huanren_spawn_mengpo(ctx, level != 0);
+            huanren_spawn_mengpo(ctx, level != 0, &mut draws);
         }
     } else {
         huanren_remove_mengpo(ctx);
     }
     ctx.core.turn.current = boss;
     ctx.core.turn.phase = crate::event::Phase::Judge;
+    push_draws_reversed(ctx, &draws);
+}
+
+/// R05-C2：把按同步执行序收集的摸牌请求逆序压成 R 帧（后压先执行＝
+/// 收集序执行），供 boss 转阶/四象链等多点摸牌保持同步取牌次序。
+pub(super) fn push_draws_reversed(ctx: &mut Ctx<'_>, draws: &[(PlayerId, u32)]) {
+    for &(p, n) in draws.iter().rev() {
+        ctx.start_draw(p, n);
+    }
 }
 
 pub(super) fn huanren_die_ask(ctx: &mut Ctx<'_>, mach: &mut HostMachine) -> Flow {
@@ -305,6 +323,7 @@ pub(super) fn wing_qing(ctx: &mut Ctx<'_>, _owner: PlayerId) {
     };
     wing_arm(ctx, bit);
     let seats = ctx.core.players.len() as u8;
+    let mut draws: Vec<(PlayerId, u32)> = Vec::new();
     match round {
         3 => {
             for t in 0..seats {
@@ -341,12 +360,13 @@ pub(super) fn wing_qing(ctx: &mut Ctx<'_>, _owner: PlayerId) {
                             p.hp = (p.hp + 3).min(p.max_hp as i32);
                         }
                     }
-                    ctx.draw_cards(seat, 3);
+                    draws.push((seat, 3));
                 }
             }
         }
         _ => {}
     }
+    push_draws_reversed(ctx, &draws);
 }
 
 pub(super) fn wing_chi(ctx: &mut Ctx<'_>, _owner: PlayerId) {
@@ -459,6 +479,9 @@ pub(super) fn sixiang_reinit_seat(
     // 保留调用方已置的 death_cancelled（隐藏链转阶需拦 DeathMachine）
 }
 
+/// R05-C2：入座不再自发牌——发牌由调用方决定（上游 addFellow 不发牌：
+/// apps/core/noname/game/index.js:9956-9968；addBossFellow 的
+/// directgain(4)（boss.js:1689-1696）由调用方登记到 draws）。
 pub(super) fn sixiang_add_fellow(ctx: &mut Ctx<'_>, name: &str) -> Option<PlayerId> {
     let g = boss_general_def(ctx.catalog, name)?;
     let hp = ctx.catalog.general_meta(g).map(|m| m.3).unwrap_or(2);
@@ -474,7 +497,6 @@ pub(super) fn sixiang_add_fellow(ctx: &mut Ctx<'_>, name: &str) -> Option<Player
     let p = ctx.core.player_mut(pid);
     p.hp = p.max_hp as i32;
     p.alive = true;
-    ctx.draw_cards(pid, 4);
     Some(pid)
 }
 
@@ -505,7 +527,7 @@ pub(super) fn sixiang_discard_zone(ctx: &mut Ctx<'_>, seat: PlayerId) {
     }
 }
 
-pub(super) fn sixiang_reset_challengers(ctx: &mut Ctx<'_>) {
+pub(super) fn sixiang_reset_challengers(ctx: &mut Ctx<'_>, draws: &mut Vec<(PlayerId, u32)>) {
     let seats = ctx.core.players.len() as u8;
     let mut dnum = 0u32;
     // 复活已死挑战者
@@ -523,7 +545,7 @@ pub(super) fn sixiang_reset_challengers(ctx: &mut Ctx<'_>) {
             dnum += 1;
         }
     }
-    let draw_n = 4u32.saturating_sub(dnum) as usize;
+    let draw_n = 4u32.saturating_sub(dnum);
     for t in 0..seats {
         if ctx.core.is_boss_side(t) || !ctx.core.player(t).alive {
             continue;
@@ -535,7 +557,7 @@ pub(super) fn sixiang_reset_challengers(ctx: &mut Ctx<'_>) {
         p.face_down = false;
         p.linked = false;
         if draw_n > 0 {
-            ctx.draw_cards(t, draw_n);
+            draws.push((t, draw_n));
         }
     }
 }
@@ -546,11 +568,14 @@ pub(super) fn sixiang_run_chain(ctx: &mut Ctx<'_>, boss: PlayerId, params: &Sixi
     let Some(next) = boss_general_def(ctx.catalog, params.next_boss) else {
         return;
     };
+    // R05-C2：全链摸牌按同步执行序登记（换将 4 → 侧座各 4 → 新随从
+    // 各 4 → 挑战者各 4-dnum），步末逆序压 R 帧保持同步取牌次序。
+    let mut draws: Vec<(PlayerId, u32)> = Vec::new();
     // 登记差异：上游八座 changeSeat 观战位移不建模（seat_ring 保持）
     sixiang_reinit_seat(ctx, boss, next, false);
     // 上游 changeBoss 删旧建新+directgain(4)；原生座位保留，清区后摸 4
     sixiang_discard_zone(ctx, boss);
-    ctx.draw_cards(boss, 4);
+    draws.push((boss, 4));
     if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
         stage.kind = crate::state::BossStageKind::SixiangChain;
         stage.level = params.chain_level;
@@ -578,16 +603,19 @@ pub(super) fn sixiang_run_chain(ctx: &mut Ctx<'_>, boss: PlayerId, params: &Sixi
         if let Some(g) = boss_general_def(ctx.catalog, name) {
             sixiang_reinit_seat(ctx, seat, g, false);
             sixiang_discard_zone(ctx, seat);
-            ctx.draw_cards(seat, 4);
+            draws.push((seat, 4));
             sixiang_mark_fellow(ctx, seat);
         }
     }
     for name in params.add_fellows {
-        let _ = sixiang_add_fellow(ctx, name);
+        if let Some(pid) = sixiang_add_fellow(ctx, name) {
+            draws.push((pid, 4));
+        }
     }
-    sixiang_reset_challengers(ctx);
+    sixiang_reset_challengers(ctx, &mut draws);
     // 回合环重置到 Boss（上游 phaseLoop 重锚定）
     ctx.core.turn.current = boss;
     ctx.core.turn.phase = crate::event::Phase::Judge;
     ctx.core.turn.round = 1;
+    push_draws_reversed(ctx, &draws);
 }
