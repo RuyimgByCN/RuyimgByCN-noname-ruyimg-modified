@@ -50,6 +50,16 @@ A2 阶段/回合触发审计（约 100 技能对照上游 phaseBegin/phaseZhunbe
 
 C 批教训：抽样式勘察（top3 文件 3 行窗口「无同 step 手牌读」）低估跨调用链依赖——42 处阻塞里 3 处是 R05 合同 review-v1 独立点名的；逐处人工核实不可省。
 
+## C2 续行位批（2026-11-04，0c8405bc0→566016366，13 提交）
+
+42/42 处迁移完成，machine.rs `draw_cards` 同步原语删除（rg 全 crates 零活调用）。
+
+- **决策一（boss 孟婆）**：上游开局乱入不摸牌（game/index.js:9956 addFellow 无发牌；boss.js:3439-3455 `level!==0` 门开局恒假；转关 level≥1 才 directgain(4)：boss.js:3575/1731/1691）——删除「摸 4＋回滚」整段而非续行；开局孟婆零摸牌零日志，level≥1 登记 4 张。
+- **决策二（wudian Fuchou2）**：上游逐源 draw→chooseToUse（玩点论杀 skill.js:548-578）；原生逐源 R 化＋杀帧统一续行段；双枯竭时跳过该次虚拟杀（旧同步路径空堆 panic＝无既定行为；R 机双枯竭转 detached 不 panic）。
+- 新增 `HostStage::DrawSettle` 通用续行位（tag 14 入快照；多点摸牌按同步执行序收集＋逆序压 R 帧＝收集序取牌）；16 处续行＋26 处直迁（步末无后续读）＋忘忧复用既有 Yield。
+- 红测 4（mengpo 牌序静默/zhaoyao/lingquan 枯竭 detach 后询问仍开/fuchou2 panic 红）→绿 7/7；三 crate **1958/1/75**（golden 14 场 actual 与 C 批末逐字节同，零新增漂移）；门禁 exit 0。分流 a=3（yunchou 源码字面锁更新）b=c=0。
+- 证据：/private/tmp/noname-r05/evidence/c2-{01,02-full-run,03-r05c-green}.log＋c2-report.md。
+
 ## A2 审计与下一步实施序（2026-11-03 14:55 更新，f81f1899）
 
 审计两份独立交叉验证后定稿：168 条／需改 107／保持 60／待决策 1（REPORT.md＋audit.json 已入本目录）。**实施顺序（依赖序，先做生命周期 P0）**：
