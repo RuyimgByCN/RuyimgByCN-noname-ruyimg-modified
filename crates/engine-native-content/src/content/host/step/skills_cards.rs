@@ -50,25 +50,13 @@ impl HostMachine {
                     self.cards.pop();
                     match choice {
                         0 => {
-                            // 获得牌：摸 1 → 选类型 → 牌堆取一张
-                            ctx.draw_cards(self.owner, 1);
-                            self.stage = HostStage::SelectCard;
-                            Flow::WaitChoice {
-                                observer: self.owner,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::PickTag,
-                                    prompt: "rangjie_type",
-                                    // 0=基本 1=锦囊 2=装备
-                                    options: vec![
-                                        ChoiceOption::Tag(0),
-                                        ChoiceOption::Tag(1),
-                                        ChoiceOption::Tag(2),
-                                    ],
-                                    min: 1,
-                                    max: 1,
-                                    allow_cancel: false,
-                                },
-                            }
+                            // 获得牌：摸 1 → 选类型 → 牌堆取一张。R05-C2：
+                            // 摸 1 走 R 帧，类型询问在续行段开（同步序＝
+                            // 先摸走牌堆顶、再扫描；WaitChoice 期间 R 帧不
+                            // 泵，若同步内开询问则恢复步扫到未摸走的顶牌）。
+                            ctx.start_draw(self.owner, 1);
+                            self.stage = HostStage::DrawSettle;
+                            Flow::Yield
                         }
                         1 => {
                             // 移动牌：选场上可见区一张牌
@@ -102,6 +90,26 @@ impl HostMachine {
                             }
                         }
                         _ => Flow::Done,
+                    }
+                }
+                // R05-C2 续行位：让节「获得牌」摸 1 交付后开类型询问。
+                HostStage::DrawSettle => {
+                    self.stage = HostStage::SelectCard;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::PickTag,
+                            prompt: "rangjie_type",
+                            // 0=基本 1=锦囊 2=装备
+                            options: vec![
+                                ChoiceOption::Tag(0),
+                                ChoiceOption::Tag(1),
+                                ChoiceOption::Tag(2),
+                            ],
+                            min: 1,
+                            max: 1,
+                            allow_cancel: false,
+                        },
                     }
                 }
                 HostStage::SelectCard => {
@@ -424,7 +432,9 @@ impl HostMachine {
                             };
                         }
                     } else {
-                        ctx.draw_cards(target, 2);
+                        // R05-C2：步末纯摸牌 → R 帧；songci_record 纯状态
+                        // 翻转（无日志/帧），次序不可观测。
+                        ctx.start_draw(target, 2);
                     }
                     songci_record(ctx, self.owner, target);
                     Flow::Done
