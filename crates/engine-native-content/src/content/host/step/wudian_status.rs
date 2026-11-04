@@ -66,16 +66,39 @@ impl HostMachine {
                 }
                 Flow::Done
             }
-            // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）
-            HostBehavior::WudianFuchou2 => {
-                let mut marked = std::mem::take(&mut ctx.core.player_mut(self.owner).fuchou_marked);
-                marked.retain(|src| ctx.core.player(*src).alive);
-                for src in marked {
-                    ctx.draw_cards(self.owner, 1);
-                    ctx.use_virtual_card(self.owner, crate::catalog::CardKind::Sha, vec![src]);
+            // 复仇·清算：标记来源逐个摸 1+虚拟杀强制指定（死亡移除）。
+            // R05-C2 续行位改写：①全部摸 1 先按标记序（逆序压 R 帧＝标记
+            // 序执行/取牌）异步交付；②R 弹栈后统一发虚拟杀（同步序＝杀帧
+            // 按标记序压栈、LIFO 解算＝逆标记序，两路径一致）；③牌堆空守
+            // 卫：use_virtual_card 取 deck.first() 空堆 panic——同步路径同
+            // 样 panic（无既定行为），异步续行段改为跳过该次虚拟杀（上游
+            // 玩点论杀 skill.js:548-578 player.draw() 后才 chooseToUse，无
+            // 凭空造牌语义），不 panic 不造牌、标记照常消耗。
+            HostBehavior::WudianFuchou2 => match self.stage {
+                HostStage::Act => {
+                    let mut marked = std::mem::take(&mut ctx.core.player_mut(self.owner).fuchou_marked);
+                    marked.retain(|src| ctx.core.player(*src).alive);
+                    self.targets = marked.clone();
+                    for _ in marked.iter().rev() {
+                        ctx.start_draw(self.owner, 1);
+                    }
+                    self.stage = HostStage::DrawSettle;
+                    Flow::Yield
                 }
-                Flow::Done
-            }
+                HostStage::DrawSettle => {
+                    for src in std::mem::take(&mut self.targets) {
+                        if !ctx.core.deck.is_empty() {
+                            ctx.use_virtual_card(
+                                self.owner,
+                                crate::catalog::CardKind::Sha,
+                                vec![src],
+                            );
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 良策·余获：锁定查询面（五谷机器内联查询），无独立效果步
             HostBehavior::WudianLiangceRemain => Flow::Done,
             // 归汉：目录锚（无独立效果步）
@@ -163,7 +186,8 @@ impl HostMachine {
                     }
                 }
                 if !factions.is_empty() {
-                    ctx.draw_cards(self.owner, factions.len());
+                    // R05-C2：步末纯摸牌 → R 帧（行为面不变）。
+                    ctx.start_draw(self.owner, factions.len() as u32);
                 }
                 Flow::Done
             }
@@ -175,7 +199,8 @@ impl HostMachine {
             }
             HostBehavior::WudianGuangshuDiamond => {
                 // ♦光书：造成伤害后摸 2 张牌（一次性移除实例）。
-                ctx.draw_cards(self.owner, 2);
+                // R05-C2：摸 2 走 R 帧；实例移除为纯状态翻转，次序不可观测。
+                ctx.start_draw(self.owner, 2);
                 if let Some(def) = ctx.catalog.skill_by_name(WUDIAN_GUANGSHU_DIAMOND_KEY) {
                     ctx.core.skills.remove(&(self.owner, def));
                 }
@@ -241,7 +266,7 @@ impl HostMachine {
                 // 拾火（U05 ow 狂鼠，规则 v133）：摸一张牌（每次火伤各
                 // 触发；铁索传导的独立火伤事件照常）。
                 HostStage::Act => {
-                    ctx.draw_cards(self.owner, 1);
+                    ctx.start_draw(self.owner, 1);
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -261,7 +286,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let n = ctx.core.player(self.owner).pingzhang_count;
                     if n > 0 {
-                        ctx.draw_cards(self.owner, n as usize);
+                        ctx.start_draw(self.owner, n as u32);
                     }
                     Flow::Done
                 }
