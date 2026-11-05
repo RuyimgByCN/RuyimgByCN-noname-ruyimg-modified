@@ -19,6 +19,7 @@ impl Engine {
             segment_open: self.segment_open,
             debug_budget: self.debug_budget,
             segment_checkpoint: None,
+            presentation_range: crate::presentation::PresentationRange::Idle,
             seat_quota: self.seat_quota,
             seat_cmd_counts: self.seat_cmd_counts.clone(),
             auth_tokens: self.auth_tokens.clone(),
@@ -55,6 +56,7 @@ impl Engine {
     /// 以新命令继续对局（例如提高预算或绕开导致失败的玩法）。
     /// 未处于暂停段时返回 `NotSuspended`。
     pub fn abort_segment(&mut self) -> Result<(), RejectReason> {
+        self.retire_public_presentation();
         if !self.segment_open {
             return Err(RejectReason::NotSuspended);
         }
@@ -70,11 +72,13 @@ impl Engine {
         self.last_dedup = restored.last_dedup;
         self.log.truncate(log_mark);
         self.segment_open = false;
+        self.discard_presentation_range();
         Ok(())
     }
 
     /// 续行时间片暂停的段：以新片继续推进，直至 Accepted/Pending/Rejected。
     pub fn resume(&mut self) -> CommandOutcome {
+        self.retire_public_presentation();
         if !self.segment_open {
             return CommandOutcome::Rejected(RejectReason::NotSuspended);
         }
@@ -84,6 +88,7 @@ impl Engine {
     }
 
     pub fn submit(&mut self, cmd: GameCommand) -> CommandOutcome {
+        self.retire_public_presentation();
         if self.segment_open {
             return CommandOutcome::Rejected(RejectReason::SegmentSuspended);
         }
@@ -133,10 +138,12 @@ impl Engine {
             && self.state.resolution.open_choice.is_some()
         {
             let log_mark = self.log.len();
+            self.begin_presentation_hold(log_mark);
             let mut work = self.state.clone();
             if let Err(reason) = apply_command(&mut work, cmd.clone(), &self.catalog, &mut self.log)
             {
                 self.log.truncate(log_mark);
+                self.discard_presentation_range();
                 return CommandOutcome::Rejected(reason);
             }
             if work.resolution.open_choice.is_some() {
@@ -149,6 +156,7 @@ impl Engine {
                 self.state = work;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
+                self.seal_presentation_range(log_mark);
                 self.last_dedup = cmd.dedup_id;
                 if self.seat_quota.is_some() {
                     let entry = self
@@ -161,8 +169,10 @@ impl Engine {
             }
             // A changed order group must resume through the normal transaction and publish a fresh ask.
             self.log.truncate(log_mark);
+            self.discard_presentation_range();
         }
         let log_mark = self.log.len();
+        self.begin_presentation_hold(log_mark);
         let submit_round = self.state.core.turn.round;
         let mut work = self.state.clone();
         // 每段重置预算：硬上限只约束本段，不跨段累计（ADR 0708 缺陷修复）。
@@ -185,6 +195,7 @@ impl Engine {
         };
         if let Err(reason) = apply_command(&mut work, cmd.clone(), &self.catalog, log) {
             self.log.truncate(log_mark);
+            self.discard_presentation_range();
             return CommandOutcome::Rejected(reason);
         }
         match self.finish_segment(work, log_mark) {
@@ -231,6 +242,7 @@ impl Engine {
         mut work: GameState,
         log_mark: usize,
     ) -> CommandOutcome {
+        self.ensure_presentation_hold(log_mark);
         // PA02：模拟会话的日志写进本段弃置缓冲，不进权威宿主日志。
         let mut sim_log = self.simulation.then(Vec::new);
         let log: &mut Vec<LogEvent> = match sim_log.as_mut() {
@@ -252,6 +264,7 @@ impl Engine {
                 } else {
                     self.log.truncate(log_mark);
                     self.segment_checkpoint = None;
+                    self.discard_presentation_range();
                 }
                 CommandOutcome::Rejected(RejectReason::BudgetExhausted)
             }
@@ -260,6 +273,7 @@ impl Engine {
                 self.state = work;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
+                self.seal_presentation_range(log_mark);
                 let choice = self
                     .state
                     .resolution
@@ -292,6 +306,7 @@ impl Engine {
                 }
                 self.segment_open = false;
                 self.segment_checkpoint = None;
+                self.discard_presentation_range();
                 let (skill, detail) = match &fault {
                     Some(f) => (
                         f.skill.clone(),
@@ -306,6 +321,7 @@ impl Engine {
                 self.state = work;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
+                self.seal_presentation_range(log_mark);
                 // PA02：模拟会话不算权威哈希——规划只判 Rejected 与评分
                 // 投影，不消费该值；正式引擎哈希语义不变。PA03：缓冲化
                 // 后的 canonical_hash 字节与原实现一致。

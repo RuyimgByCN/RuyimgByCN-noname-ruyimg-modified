@@ -612,8 +612,7 @@ impl HostMachine {
                     ctx.take_owned_card(target, card);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "魅惑",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     if is_equip {
                         // 装备牌：入手 → Equipped 帧（commit_equip 全托管）
                         ctx.core.player_mut(self.owner).hand.push(card);

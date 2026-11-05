@@ -488,8 +488,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "入梦",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     let Some(target) = self.target else {
                         return Flow::Done;
                     };

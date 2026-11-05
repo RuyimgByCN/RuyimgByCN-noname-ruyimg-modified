@@ -79,6 +79,7 @@ fn pending_pack(card: u32, move_card: bool) -> ExtensionPack {
         vm_skills: vec![VmSkillDecl {
             r05_identity: None,
             declaration_hash: None,
+            presentation_binding: None,
             name: "nc10_pending_card".into(),
             module: rule_vm::BytecodeModule {
                 name: "nc10-pending-card".into(),

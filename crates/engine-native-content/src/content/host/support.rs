@@ -234,8 +234,7 @@ pub(super) fn cyqiaoxie_use(
     ctx.core.player_mut(owner).hand.push(card);
     ctx.log(LogEvent::SkillTriggered {
         skill: "此桥邪",
-        owner,
-    });
+        owner, presentation: None });
     ctx.emit(crate::event::EventData::CardUsed(crate::machine::card_use(
         card, owner, targets,
     )));
@@ -372,8 +371,7 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
     ctx.log(LogEvent::SkillTriggered {
         skill: "涅槃",
-        owner,
-    });
+        owner, presentation: None });
     // 浴火：授予三技（存在才授予）+ 关卡循环型 1
     if let Some(def) = ctx.catalog.skill_by_name(BOSS_YUHOU_KEY) {
         if ctx.core.has_skill(owner, def) {
@@ -406,8 +404,7 @@ pub(crate) fn niepan_effect(ctx: &mut Ctx<'_>, owner: PlayerId) {
             }
             ctx.log(LogEvent::SkillTriggered {
                 skill: "浴火",
-                owner,
-            });
+                owner, presentation: None });
         }
     }
 }

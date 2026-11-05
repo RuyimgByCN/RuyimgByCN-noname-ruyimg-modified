@@ -156,6 +156,16 @@ pub struct PublicVoice {
     pub assets: Vec<BoundAudioAsset>,
 }
 
+/// Immutable verified presentation binding attached to a catalog definition.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct DefinitionPresentationBinding {
+    /// Qualified definition identity.
+    pub definition: QualifiedDefinitionKey,
+    /// Ordered audio payload candidates indexed by voice key (`"default"`, `"die"`, `"form:<skin>"`, etc.).
+    pub voice_assets: std::collections::BTreeMap<String, Vec<BoundAudioAsset>>,
+}
+
 /// Actual effective card identity after validation and view-as conversion.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]

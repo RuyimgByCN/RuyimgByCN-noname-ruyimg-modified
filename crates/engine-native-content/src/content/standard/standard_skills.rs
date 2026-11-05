@@ -1,4 +1,9 @@
 use super::*;
+use crate::vocabulary::generals::BuiltinOriginalKey;
+
+const fn orig(pack: &'static str, raw_symbol: &'static str) -> Option<BuiltinOriginalKey> {
+    Some(BuiltinOriginalKey { pack, raw_symbol })
+}
 
 pub(super) fn skills() -> Vec<SkillDef> {
     vec![
@@ -14,6 +19,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(SanCaiBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: YI_SHANG,
@@ -27,6 +34,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(YiShangBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: SUI_DUN,
@@ -43,6 +52,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(SuiDunBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: SU_QING,
@@ -56,6 +67,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(SuQingBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: SHOU_YI,
@@ -69,6 +82,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ShouYiBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: FAN_KUI,
@@ -82,6 +97,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(FanKuiBehavior { _p: () }),
+            original_source: orig("standard", "fankui"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JIAN_XIONG,
@@ -95,6 +112,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(JianXiongBehavior),
+            original_source: orig("standard", "jianxiong"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_JI,
@@ -108,6 +127,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(JiJiBehavior),
+            original_source: orig("standard", "yiji"),
+            presentation_binding: None,
         },
         SkillDef {
             name: GANG_LIE,
@@ -121,6 +142,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(GangLieBehavior),
+            original_source: orig("standard", "ganglie"),
+            presentation_binding: None,
         },
         SkillDef {
             name: TU_XI,
@@ -137,6 +160,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(TuXiBehavior),
+            original_source: orig("standard", "tuxi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: LUO_YI,
@@ -153,6 +178,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(LuoYiBehavior),
+            original_source: orig("standard", "luoyi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: GUAN_XING,
@@ -171,6 +198,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(GuanXingBehavior),
+            original_source: orig("standard", "guanxing"),
+            presentation_binding: None,
         },
         // 空城/谦逊为锁定门控：无触发机器，出牌校验侧经 skill_by_name 查询。
         SkillDef {
@@ -189,6 +218,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(LianYingBehavior),
+            original_source: orig("standard", "lianying"),
+            presentation_binding: None,
         },
         SkillDef {
             name: KONG_CHENG,
@@ -196,6 +227,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "kongcheng"),
+            presentation_binding: None,
         },
         SkillDef {
             name: QIAN_XUN,
@@ -203,6 +236,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "qianxun"),
+            presentation_binding: None,
         },
         SkillDef {
             name: REN_DE,
@@ -211,6 +246,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(RendeBehavior),
+            original_source: orig("standard", "rende"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_JIANG,
@@ -223,6 +260,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 active_outside_play: true,
             },
             behavior: Box::new(JijiangBehavior),
+            original_source: orig("standard", "jijiang"),
+            presentation_binding: None,
         },
         SkillDef {
             name: MA_SHU,
@@ -230,6 +269,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "mashu"),
+            presentation_binding: None,
         },
         SkillDef {
             name: QING_GUO,
@@ -237,6 +278,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "qingguo"),
+            presentation_binding: None,
         },
         SkillDef {
             name: QI_CAI,
@@ -244,6 +287,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "qicai"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JIU_YUAN,
@@ -251,6 +296,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "jiuyuan"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_JIU,
@@ -258,6 +305,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "jijiu"),
+            presentation_binding: None,
         },
         SkillDef {
             name: HU_JIA,
@@ -265,6 +314,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "hujia"),
+            presentation_binding: None,
         },
         SkillDef {
             name: LIU_LI,
@@ -272,6 +323,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "liuli"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JIE_YIN,
@@ -282,6 +335,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(JieYinBehavior),
+            original_source: orig("standard", "jieyin"),
+            presentation_binding: None,
         },
         SkillDef {
             name: FAN_JIAN,
@@ -292,6 +347,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(FanJianBehavior),
+            original_source: orig("standard", "fanjian"),
+            presentation_binding: None,
         },
         SkillDef {
             name: LI_JIAN,
@@ -302,6 +359,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(LiJianBehavior),
+            original_source: orig("standard", "lijian"),
+            presentation_binding: None,
         },
         SkillDef {
             name: TIE_JI,
@@ -309,6 +368,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "tieji"),
+            presentation_binding: None,
         },
         SkillDef {
             name: PAO_XIAO,
@@ -316,6 +377,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "paoxiao"),
+            presentation_binding: None,
         },
         SkillDef {
             name: QI_XI,
@@ -323,6 +386,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "qixi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: WU_SHUANG,
@@ -330,6 +395,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "wushuang"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_ZHI,
@@ -343,6 +410,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(JiZhiBehavior),
+            original_source: orig("standard", "jizhi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: KE_JI,
@@ -350,6 +419,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "keji"),
+            presentation_binding: None,
         },
         SkillDef {
             name: GUO_SE,
@@ -357,6 +428,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "guose"),
+            presentation_binding: None,
         },
         SkillDef {
             name: WU_SHENG,
@@ -364,6 +437,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "wusheng"),
+            presentation_binding: None,
         },
         SkillDef {
             name: LONG_DAN,
@@ -371,6 +446,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "longdan"),
+            presentation_binding: None,
         },
         SkillDef {
             name: BI_YUE,
@@ -384,6 +461,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(BiYueBehavior),
+            original_source: orig("standard", "biyue"),
+            presentation_binding: None,
         },
         SkillDef {
             name: LUO_SHEN,
@@ -399,6 +478,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(LuoShenBehavior),
+            original_source: orig("standard", "luoshen"),
+            presentation_binding: None,
         },
         SkillDef {
             name: KU_ROU,
@@ -409,6 +490,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(KuRouBehavior),
+            original_source: orig("standard", "kurou"),
+            presentation_binding: None,
         },
         SkillDef {
             name: ZHI_HENG,
@@ -419,6 +502,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(ZhiHengBehavior),
+            original_source: orig("standard", "zhiheng"),
+            presentation_binding: None,
         },
         SkillDef {
             name: YING_ZI,
@@ -432,6 +517,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(YingZiBehavior),
+            original_source: orig("standard", "yingzi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: XIAO_JI,
@@ -445,6 +532,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(XiaoJiBehavior),
+            original_source: orig("standard", "xiaoji"),
+            presentation_binding: None,
         },
         SkillDef {
             name: QING_NANG,
@@ -455,6 +544,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(QingNangBehavior),
+            original_source: orig("standard", "qingnang"),
+            presentation_binding: None,
         },
         SkillDef {
             name: GUI_CAI,
@@ -462,6 +553,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "guicai"),
+            presentation_binding: None,
         },
         SkillDef {
             name: GUI_DAO,
@@ -469,12 +562,16 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("shenhua", "guidao"),
+            presentation_binding: None,
         },
         SkillDef {
             name: TIAN_DU,
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("standard", "tiandu"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JU_SHOU,
@@ -488,6 +585,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(JushouBehavior),
+            original_source: orig("shenhua", "jushou"),
+            presentation_binding: None,
         },
         SkillDef {
             name: XIAO_GUO,
@@ -501,6 +600,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(XiaoGuoBehavior),
+            original_source: orig("standard", "stdxiaoguo"),
+            presentation_binding: None,
         },
         SkillDef {
             name: KUANG_FU,
@@ -517,6 +618,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(KuangFuBehavior),
+            original_source: orig("standard", "stdkuangfu"),
+            presentation_binding: None,
         },
         SkillDef {
             name: YAO_WU,
@@ -530,6 +633,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(YaoWuBehavior),
+            original_source: orig("standard", "yaowu"),
+            presentation_binding: None,
         },
         SkillDef {
             name: SHU_SHEN,
@@ -543,6 +648,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ShuShenBehavior),
+            original_source: orig("standard", "stdshushen"),
+            presentation_binding: None,
         },
         SkillDef {
             name: SHEN_ZHI,
@@ -558,6 +665,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(ShenZhiBehavior),
+            original_source: orig("sp", "shenzhi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: XUN_XUN,
@@ -571,6 +680,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(XunXunBehavior),
+            original_source: orig("refresh", "xunxun"),
+            presentation_binding: None,
         },
         SkillDef {
             name: WANG_XI,
@@ -584,6 +695,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(WangXiBehavior),
+            original_source: orig("refresh", "wangxi"),
+            presentation_binding: None,
         },
         SkillDef {
             name: YI_CONG,
@@ -591,6 +704,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: orig("refresh", "reyicong"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_JIE,
@@ -600,6 +715,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
                 ..SkillLimits::default()
             },
             behavior: Box::new(JiJieBehavior),
+            original_source: orig("standard", "xinfu_jijie"),
+            presentation_binding: None,
         },
         SkillDef {
             name: JI_YUAN,
@@ -613,6 +730,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(JiYuanBehavior),
+            original_source: orig("standard", "xinfu_jiyuan"),
+            presentation_binding: None,
         },
         SkillDef {
             name: WANG_ZUN,
@@ -629,6 +748,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(WangZunBehavior),
+            original_source: orig("standard", "rewangzun"),
+            presentation_binding: None,
         },
         SkillDef {
             name: WANG_ZUN_MARK,
@@ -636,6 +757,8 @@ pub(super) fn skills() -> Vec<SkillDef> {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(NoopBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
         SkillDef {
             name: TONG_JI,
@@ -649,12 +772,16 @@ pub(super) fn skills() -> Vec<SkillDef> {
             }),
             limits: SkillLimits::default(),
             behavior: Box::new(TongJiBehavior),
+            original_source: orig("standard", "retongji"),
+            presentation_binding: None,
         },
         SkillDef {
             name: ZHANGBA,
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(ZhangbaBehavior),
+            original_source: None,
+            presentation_binding: None,
         },
     ]
 }

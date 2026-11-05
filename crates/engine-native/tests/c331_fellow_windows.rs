@@ -121,8 +121,7 @@ fn actual_fellow_inventory_and_grants_use_only_existing_normal_and_global_maps()
                         l,
                         engine_native::LogEvent::SkillTriggered {
                             skill: "c331_fellow_new",
-                            owner: 4
-                        }
+                            owner: 4, .. }
                     )
                 })
                 .count();

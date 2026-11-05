@@ -96,6 +96,8 @@ fn synthetic_catalog_membership_and_first_match_name() {
         }),
         limits: Default::default(),
         behavior: Box::new(Noop),
+        original_source: None,
+        presentation_binding: None,
     };
     let skills = vec![
         mk("dup", EventKind::Damage, vec![EventKind::CardsDrawn]),
@@ -106,10 +108,10 @@ fn synthetic_catalog_membership_and_first_match_name() {
     // F7: a raw catalog keeps its default metadata, without content hooks.
     use engine_native::content::standard::{Gender, BOSS_GENERALS, STANDARD_GENERALS};
     assert_eq!(catalog.general_count(), STANDARD_GENERALS.len() + BOSS_GENERALS.len());
-    for (i, &(name, faction, skills, hp, gender)) in
+    for (i, g) in
         STANDARD_GENERALS.iter().chain(BOSS_GENERALS).enumerate()
     {
-        assert_eq!(catalog.general_meta(i as u16), Some((name, faction, skills.to_vec(), hp, gender)));
+        assert_eq!(catalog.general_meta(i as u16), Some((g.name, g.faction, g.skills.to_vec(), g.max_hp, g.gender)));
     }
     assert_eq!(catalog.general_meta(catalog.general_count() as u16), None);
     catalog.extension_generals.push(engine_native::content::extension::ExtensionGeneral {
@@ -118,12 +120,13 @@ fn synthetic_catalog_membership_and_first_match_name() {
         skills: &["dup"],
         max_hp: 3,
         gender: Gender::Female,
+        presentation_binding: None,
     });
     let ext = STANDARD_GENERALS.len() as u16;
     assert_eq!(catalog.general_meta(ext).unwrap().0, "F7 metadata probe");
     assert_eq!(catalog.general_meta(ext).unwrap().4, Gender::Female);
-    for (i, &(name, faction, skills, hp, gender)) in BOSS_GENERALS.iter().enumerate() {
-        assert_eq!(catalog.general_meta(ext + 1 + i as u16), Some((name, faction, skills.to_vec(), hp, gender)));
+    for (i, g) in BOSS_GENERALS.iter().enumerate() {
+        assert_eq!(catalog.general_meta(ext + 1 + i as u16), Some((g.name, g.faction, g.skills.to_vec(), g.max_hp, g.gender)));
     }
     assert_eq!(catalog.general_meta(catalog.general_count() as u16), None);
     // dispatch ⟺ 元数据成员（含 extra_events 路径；主事件不互串）

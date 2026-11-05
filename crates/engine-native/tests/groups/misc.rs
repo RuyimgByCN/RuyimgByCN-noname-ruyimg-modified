@@ -142,3 +142,6 @@ mod adr0786_j2_review_regressions;
 
 #[path = "../c331_package_schema.rs"]
 mod c331_package_schema;
+
+#[path = "../i02_public_presentation_closure.rs"]
+mod i02_public_presentation_closure;

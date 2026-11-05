@@ -56,6 +56,7 @@ fn pack() -> ExtensionPack {
         vm_skills: vec![VmSkillDecl {
             r05_identity: None,
             declaration_hash: None,
+            presentation_binding: None,
             name: "nc10_opaque".into(),
             module: rule_vm::BytecodeModule {
                 name: "nc10-opaque".into(),

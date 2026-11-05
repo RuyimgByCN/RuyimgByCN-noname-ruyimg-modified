@@ -570,6 +570,14 @@ impl Engine {
             // 检查点随快照延续（N07-b）；宿主日志水位重置为 0——
             // 恢复件的日志从空开始，中止时截断到 0。
             segment_checkpoint: snapshot.segment_checkpoint.clone().map(|b| (*b, 0)),
+            presentation_range: if snapshot.segment_open {
+                crate::presentation::PresentationRange::Held {
+                    start: 0,
+                    restored_prefix_unknown: true,
+                }
+            } else {
+                crate::presentation::PresentationRange::Idle
+            },
             simulation: false,
         })
     }

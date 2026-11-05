@@ -705,6 +705,7 @@ fn c9e_ciqiu_alias_removes_the_actual_admitted_definition() {
         .push(engine_native::content::host::HostSkillDecl {
             name: "c9e_ciqiu_alias",
             behavior: engine_native::content::host::HostBehavior::WudianCiqiu,
+            presentation_binding: None,
         });
     let mut e = Engine::new_with_extensions(13017, 3, &[&source]).unwrap();
     e.debug_set_turn(0, engine_native::Phase::Play, 1);
@@ -731,6 +732,7 @@ fn c9e_admitted_host_alias_quantity_bodies_do_not_requery_canonical_names() {
         source.host_skills.push(HostSkillDecl {
             name: "c9e_quantity_alias",
             behavior,
+            presentation_binding: None,
         });
         let mut e = Engine::new_with_extensions(13018, 3, &[&source]).unwrap();
         e.debug_set_turn(0, engine_native::Phase::Play, 1);

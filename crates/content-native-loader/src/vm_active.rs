@@ -162,6 +162,7 @@ pub(super) fn bridge_active_entries(
         };
         decls.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,
+            presentation_binding: None,
             name: skill.name.clone(),
             module: module.clone(),
             trigger: meta,
@@ -271,6 +272,133 @@ pub(super) fn join_trigger_only_entries(
             decls.remove(index);
         }
         decls.push(decl);
+    }
+    Ok(())
+}
+
+// ---- R05-E（裁决 28 合同 v3 §2）：三固定 compound 的四角色私有 helper 派生 ----
+
+/// 调用包可用的三 compound 效果标签（rule-vm `effect_tag`，ABI 759）。
+const R05_COMPOUND_TIQI: u16 = 781;
+const R05_COMPOUND_BAOSHU: u16 = 782;
+const R05_COMPOUND_DCBIHUO: u16 = 783;
+/// 角色顺序固定（Limit/Combs/Next/Current；`vm_effects::R05_ROLES` 同序）。
+const R05_ROLE_TAGS: [&str; 4] = ["limit", "combs", "next", "current"];
+
+fn r05_roles_of(compound: u16) -> &'static [usize] {
+    match compound {
+        R05_COMPOUND_TIQI => &[0],
+        R05_COMPOUND_BAOSHU => &[1],
+        R05_COMPOUND_DCBIHUO => &[2, 3],
+        _ => &[],
+    }
+}
+
+fn r05_module_compounds(code: &[u8], found: &mut Vec<u16>) {
+    let mut i = 0usize;
+    while i < code.len() {
+        let opc = code[i];
+        i += 1;
+        match opc {
+            0x10 | 0x11 | 0x12 => i += 4,
+            0x20 | 0x21 | 0x50 | 0x51 | 0x52 => i += 1,
+            0x40 | 0x41 => i += 2,
+            0x5A => {
+                if i + 2 <= code.len() {
+                    let tag = u16::from_le_bytes([code[i], code[i + 1]]);
+                    if !r05_roles_of(tag).is_empty() && !found.contains(&tag) {
+                        found.push(tag);
+                    }
+                }
+                i += 2;
+            }
+            _ => {}
+        }
+    }
+}
+
+pub(super) fn derive_r05_helpers(
+    pkg: &content_schema::ContentPackage,
+    out: &mut Vec<engine_native::content::extension::VmSkillDecl>,
+) -> Result<(), BridgeError> {
+    use engine_native::rvm_bridge::BytecodeModule;
+    for skill in &pkg.skill_index {
+        let mut compounds: Vec<u16> = Vec::new();
+        let module_names: Vec<&str> = pkg
+            .trigger_index
+            .iter()
+            .filter(|t| t.skill_def_id == skill.skill_def_id)
+            .map(|t| t.module.as_str())
+            .collect();
+        let active_module = pkg
+            .active_index
+            .iter()
+            .find(|a| a.skill_def_id == skill.skill_def_id)
+            .map(|a| a.module.as_str());
+        for name in active_module.into_iter().chain(module_names) {
+            if let Some(module) = pkg.modules.iter().find(|m| m.name == name) {
+                r05_module_compounds(&module.code, &mut compounds);
+            }
+        }
+        compounds.sort_unstable();
+        for compound in compounds {
+            for &role in r05_roles_of(compound) {
+                let name = format!("{}#r05:{}", skill.name, R05_ROLE_TAGS[role]);
+                if out.iter().any(|d| d.name == name) {
+                    return Err(invalid(
+                        "skill_index",
+                        format!("重复身份/角色：派生 helper {name} 已存在"),
+                    ));
+                }
+                let code = vec![0x01u8];
+                let helper = BytecodeModule {
+                    logic_hash: BytecodeModule::compute_logic_hash(&name, &code, 0, 0, 0),
+                    name: name.clone(),
+                    code,
+                    local_count: 0,
+                    max_stack: 1,
+                    entry_pc: 0,
+                    caps_mask: 0,
+                };
+                VmSkillProgram::new(helper.clone(), name.clone())
+                    .map_err(|e| invalid("r05_helper", e.to_string()))?;
+                out.push(engine_native::content::extension::VmSkillDecl {
+                    declaration_hash: None,
+                    presentation_binding: None,
+                    name,
+                    module: helper,
+                    trigger: engine_native::catalog::TriggerMeta {
+                        event: engine_native::event::EventKind::SkillToggled,
+                        timing: engine_native::event::Timing::Normal,
+                        priority: 0,
+                        order_selectable: true,
+                        optional: false,
+                        extra_events: Vec::new(),
+                    },
+                    filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
+                        skill_def_id: skill.skill_def_id,
+                        active: None,
+                        limits: VmActiveLimits {
+                            once_per_turn: false,
+                            once_per_play_phase: false,
+                            hand_nonempty: false,
+                            equip_nonempty: false,
+                            hand_gt_hp: false,
+                            hand_gt_max_hp: false,
+                            face_up: false,
+                            owner_unlinked: false,
+                            mark_at_least: None,
+                        },
+                        triggers: Vec::new(),
+                    })),
+                    r05_identity: Some(engine_native::catalog::QualifiedSkillRef {
+                        namespace: pkg.manifest.namespace.clone(),
+                        package_id: pkg.manifest.package_id.clone(),
+                        logical_skill_def_id: skill.skill_def_id,
+                    }),
+                });
+            }
+        }
     }
     Ok(())
 }

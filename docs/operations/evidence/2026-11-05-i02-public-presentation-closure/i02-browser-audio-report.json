@@ -1,0 +1,100 @@
+{
+  "initial_audio_owner": {
+    "sessionGeneration": 2,
+    "lastCommittedRevision": 0,
+    "baselineRevision": 0,
+    "muted": false,
+    "volume": 0.85,
+    "autoplayBlocked": false,
+    "gestureUnlocked": false,
+    "pendingQueueLength": 0,
+    "hasActiveAudio": false,
+    "overflowDrops": 0,
+    "diagnostic": "generation:new-match",
+    "erroredPathsCount": 0,
+    "playedCuesCount": 0
+  },
+  "chosen_general": "司马懿",
+  "after_choose_general": {
+    "sessionGeneration": 2,
+    "lastCommittedRevision": 0,
+    "baselineRevision": 0,
+    "muted": false,
+    "volume": 0.85,
+    "autoplayBlocked": false,
+    "gestureUnlocked": true,
+    "pendingQueueLength": 0,
+    "hasActiveAudio": false,
+    "overflowDrops": 0,
+    "diagnostic": "generation:new-match",
+    "erroredPathsCount": 0,
+    "playedCuesCount": 0
+  },
+  "after_steps_snapshot": {
+    "sessionGeneration": 2,
+    "lastCommittedRevision": 14,
+    "baselineRevision": 0,
+    "muted": false,
+    "volume": 0.85,
+    "autoplayBlocked": false,
+    "gestureUnlocked": true,
+    "pendingQueueLength": 0,
+    "hasActiveAudio": false,
+    "overflowDrops": 0,
+    "diagnostic": "media-error:audio/card/male/sha.mp3",
+    "erroredPathsCount": 1,
+    "playedCuesCount": 1
+  },
+  "mute_toggle": {
+    "found": true,
+    "mutedSnap": {
+      "sessionGeneration": 2,
+      "lastCommittedRevision": 14,
+      "baselineRevision": 0,
+      "muted": true,
+      "volume": 0.85,
+      "autoplayBlocked": false,
+      "gestureUnlocked": true,
+      "pendingQueueLength": 0,
+      "hasActiveAudio": false,
+      "overflowDrops": 0,
+      "diagnostic": "media-error:audio/card/male/sha.mp3",
+      "erroredPathsCount": 1,
+      "playedCuesCount": 1
+    },
+    "unmutedSnap": {
+      "sessionGeneration": 2,
+      "lastCommittedRevision": 14,
+      "baselineRevision": 0,
+      "muted": false,
+      "volume": 0.85,
+      "autoplayBlocked": false,
+      "gestureUnlocked": true,
+      "pendingQueueLength": 0,
+      "hasActiveAudio": false,
+      "overflowDrops": 0,
+      "diagnostic": "media-error:audio/card/male/sha.mp3",
+      "erroredPathsCount": 1,
+      "playedCuesCount": 1
+    }
+  },
+  "save_load_baseline": {
+    "genBeforeLoad": 2,
+    "snapAfterLoad": {
+      "sessionGeneration": 3,
+      "lastCommittedRevision": 14,
+      "baselineRevision": 14,
+      "muted": false,
+      "volume": 0.85,
+      "autoplayBlocked": false,
+      "gestureUnlocked": true,
+      "pendingQueueLength": 0,
+      "hasActiveAudio": false,
+      "overflowDrops": 0,
+      "diagnostic": "generation:restore",
+      "erroredPathsCount": 1,
+      "playedCuesCount": 1
+    }
+  },
+  "console_errors": []
+}

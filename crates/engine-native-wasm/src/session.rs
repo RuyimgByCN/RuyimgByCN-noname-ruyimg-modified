@@ -10,11 +10,13 @@ use engine_native::{CommandOutcome, Engine, GameAction, RejectReason};
 pub fn engine_from_packs(players: u8, seed: u64, packs_json: &str) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    if refs.is_empty() {
-        Ok(Engine::new(seed, players as usize))
+    let mut engine = if refs.is_empty() {
+        Engine::new(seed, players as usize)
     } else {
-        Engine::new_with_extensions(seed, players as usize, &refs).map_err(|e| format!("{e:?}"))
-    }
+        Engine::new_with_extensions(seed, players as usize, &refs).map_err(|e| format!("{e:?}"))?
+    };
+    content_native_loader::attach_embedded_original_presentation(&mut engine)?;
+    Ok(engine)
 }
 
 pub fn engine_identity_from_packs(
@@ -24,7 +26,9 @@ pub fn engine_identity_from_packs(
 ) -> Result<Engine, String> {
     let packs = packs_from_json(packs_json)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    Engine::try_new_identity_with_extensions(seed, players as usize, &refs)
+    let mut engine = Engine::try_new_identity_with_extensions(seed, players as usize, &refs)?;
+    content_native_loader::attach_embedded_original_presentation(&mut engine)?;
+    Ok(engine)
 }
 
 pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String> {
@@ -33,11 +37,13 @@ pub fn engine_from_archive(hex: &str, packs_json: &str) -> Result<Engine, String
     let bytes = hex_decode(hex)?;
     let snapshot =
         engine_native::archive::decode_archive(&bytes).map_err(|e| format!("解码失败: {e:?}"))?;
-    if refs.is_empty() {
-        Engine::restore(&snapshot).map_err(|e| format!("恢复失败: {e:?}"))
+    let mut engine = if refs.is_empty() {
+        Engine::restore(&snapshot).map_err(|e| format!("恢复失败: {e:?}"))?
     } else {
-        Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("恢复失败: {e:?}"))
-    }
+        Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("恢复失败: {e:?}"))?
+    };
+    content_native_loader::attach_embedded_original_presentation(&mut engine)?;
+    Ok(engine)
 }
 
 pub(super) fn prefix_count(engine: &Engine, prefix: &str) -> u32 {
@@ -223,6 +229,7 @@ pub fn general_candidates_json_for(engine: &Engine) -> String {
 
 /// NC05/NC09：按名字正式选将（宿主侧，非 wasm-bindgen）。
 pub fn assign_general_for(engine: &mut Engine, seat: u8, name: &str) -> Result<String, String> {
+    engine.retire_public_presentation();
     let seats = engine.view_for(0).players.len();
     if seat as usize >= seats {
         return Err(format!("assign_general: 座位越界（{seat} ≥ {seats}）"));
@@ -230,6 +237,7 @@ pub fn assign_general_for(engine: &mut Engine, seat: u8, name: &str) -> Result<S
     engine
         .assign_general_named(seat, name)
         .map_err(|e| format!("assign_general 被拒绝: {e:?}"))?;
+    engine.retire_public_presentation();
     Ok(serde_json::json!({
         "seat": seat,
         "name": name,
@@ -383,8 +391,10 @@ pub struct NativeSession {
 impl NativeSession {
     /// 标准目录建局（无扩展；players 为座位数，seed 为随机流种子）。
     pub fn new(players: u8, seed: u64) -> Result<NativeSession, String> {
+        let mut inner = Engine::new(seed, players as usize);
+        content_native_loader::attach_embedded_original_presentation(&mut inner)?;
         Ok(NativeSession {
-            inner: Engine::new(seed, players as usize),
+            inner,
             planner_nodes: 64,
             deadline_ms: 50,
             locked_content: Some(content_native_loader::VerifiedLockedContent::empty()),
@@ -500,6 +510,7 @@ impl NativeSession {
 
     /// 阶段推进（当前回合玩家）。
     pub fn next_phase(&mut self, actor: u32) -> Result<String, String> {
+        self.inner.retire_public_presentation();
         let Ok(actor) = u8::try_from(actor) else {
             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
         };
@@ -509,6 +520,12 @@ impl NativeSession {
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::NextPhase,
         });
+        if matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) {
+            self.inner.release_committed_presentation();
+        }
         Ok(outcome_json(&self.inner, &out))
     }
 
@@ -519,6 +536,7 @@ impl NativeSession {
         card: u32,
         targets: Vec<u32>,
     ) -> Result<String, String> {
+        self.inner.retire_public_presentation();
         let Ok(actor) = u8::try_from(actor) else {
             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
         };
@@ -531,6 +549,12 @@ impl NativeSession {
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::PlayCard { card, targets },
         });
+        if matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) {
+            self.inner.release_committed_presentation();
+        }
         Ok(outcome_json(&self.inner, &out))
     }
 
@@ -551,6 +575,7 @@ impl NativeSession {
     /// 内核 `GameAction::ActivateSkill` 不接受目标：技能内部的选择走开放
     /// 选择应答，因此窄壳也不接目标参数（前端传目标即协议误用）。
     pub fn activate_skill(&mut self, actor: u32, skill: u16) -> Result<String, String> {
+        self.inner.retire_public_presentation();
         let Ok(actor) = u8::try_from(actor) else {
             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
         };
@@ -560,6 +585,12 @@ impl NativeSession {
             dedup_id: self.inner.revision().wrapping_mul(2).max(1),
             action: GameAction::ActivateSkill { skill },
         });
+        if matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) {
+            self.inner.release_committed_presentation();
+        }
         Ok(outcome_json(&self.inner, &out))
     }
 
@@ -572,6 +603,7 @@ impl NativeSession {
         choice_id: u64,
         selection: Vec<u32>,
     ) -> Result<String, String> {
+        self.inner.retire_public_presentation();
         let Ok(actor) = u8::try_from(observer) else {
             return Ok(rejected(&self.inner, RejectReason::UnknownActor));
         };
@@ -604,6 +636,12 @@ impl NativeSession {
                 selection: sel,
             },
         });
+        if matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ) {
+            self.inner.release_committed_presentation();
+        }
         Ok(outcome_json(&self.inner, &out))
     }
 
@@ -611,6 +649,7 @@ impl NativeSession {
     /// `BoundedPlanner` 规划并应用（game-server `/native` 同款）。返回
     /// 一步摘要 JSON。
     pub fn auto_step(&mut self) -> Result<String, String> {
+        self.inner.retire_public_presentation();
         if self.inner.outcome().is_some() {
             return Ok(serde_json::json!({ "done": true }).to_string());
         }
@@ -625,6 +664,12 @@ impl NativeSession {
                 dedup_id: self.inner.revision().wrapping_mul(2).max(1),
                 action,
             });
+            if matches!(
+                out,
+                CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+            ) {
+                self.inner.release_committed_presentation();
+            }
             return Ok(serde_json::json!({
                 "kind": "answer",
                 "outcome": outcome_json(&self.inner, &out),
@@ -641,13 +686,21 @@ impl NativeSession {
         };
         let plan = self.inner.plan_action(seat, &planner);
         match self.inner.apply_plan(&plan) {
-            Ok(out) => Ok(serde_json::json!({
-                "kind": "plan",
-                "seat": seat,
-                "outcome": outcome_json(&self.inner, &out),
-                "finished": self.inner.outcome().is_some(),
-            })
-            .to_string()),
+            Ok(out) => {
+                if matches!(
+                    out,
+                    CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+                ) {
+                    self.inner.release_committed_presentation();
+                }
+                Ok(serde_json::json!({
+                    "kind": "plan",
+                    "seat": seat,
+                    "outcome": outcome_json(&self.inner, &out),
+                    "finished": self.inner.outcome().is_some(),
+                })
+                .to_string())
+            }
             Err(e) => Ok(serde_json::json!({
                 "kind": "plan",
                 "seat": seat,
@@ -676,6 +729,19 @@ impl NativeSession {
             .unwrap_or_else(|_| "[]".into())
     }
 
+    /// I02（裁决 30）：无参一次性消费当前已释放的公开展示批次 JSON（无已释放批次或二次读取返回 `"null"`）。
+    pub fn take_public_presentation_json(&mut self) -> Result<String, String> {
+        match self.inner.take_public_presentation() {
+            Some(batch) => serde_json::to_string(&batch).map_err(|e| e.to_string()),
+            None => Ok(String::from("null")),
+        }
+    }
+
+    /// I02（裁决 30）：基线响应路径显式退役未读的已封存/已释放展示区间（保留开放段 Held）。
+    pub fn retire_public_presentation(&mut self) {
+        self.inner.retire_public_presentation();
+    }
+
     /// 存档十六进制（NGSA v65 字节面）。
     pub fn save_hex(&self) -> String {
         hex_encode(&engine_native::archive::encode_archive(&self.inner.save()))
@@ -694,7 +760,8 @@ impl NativeSession {
         let bytes = hex_decode(hex)?;
         let snapshot =
             engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
-        let restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
+        let mut restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
+        content_native_loader::attach_embedded_original_presentation(&mut restored)?;
         self.inner = restored;
         self.locked_content = Some(content_native_loader::VerifiedLockedContent::empty());
         Ok(())

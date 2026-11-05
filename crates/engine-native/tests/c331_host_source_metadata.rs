@@ -48,6 +48,7 @@ fn actual_silent_first_handler_runs_before_the_normal_order_choice_and_restores(
         host_skills: vec![HostSkillDecl {
             name: "c331_source_yueyin",
             behavior: H::HlssYueyin,
+            presentation_binding: None,
         }],
         vm_skills: content_native_loader::bridge_vm_skill_decls(&pkg)
             .unwrap()

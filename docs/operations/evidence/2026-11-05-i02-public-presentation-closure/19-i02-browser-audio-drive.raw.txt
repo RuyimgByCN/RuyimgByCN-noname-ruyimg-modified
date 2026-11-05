@@ -1,0 +1,9 @@
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:80
+  if (r.exceptionDetails) throw new Error(r.exceptionDetails.text);
+                                ^
+
+Error: Uncaught
+    at evalJs (file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:80:33)
+    at async file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:99:21
+
+Node.js v26.4.0

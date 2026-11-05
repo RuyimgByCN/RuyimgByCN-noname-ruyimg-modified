@@ -13,9 +13,10 @@ mod metadata;
 mod constants;
 pub use constants::*;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct HostSkillDecl {
     /// 技能名（目录内唯一；桥接期固定为 'static）。
     pub name: &'static str,
     pub behavior: HostBehavior,
+    pub presentation_binding: Option<std::sync::Arc<engine_api::DefinitionPresentationBinding>>,
 }

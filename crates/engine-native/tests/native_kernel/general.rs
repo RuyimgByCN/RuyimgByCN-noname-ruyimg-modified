@@ -69,21 +69,21 @@ fn general_table_grants_all_bundles() {
     let catalog_general = |name: &str| -> Vec<&'static str> {
         engine_native::content::standard::STANDARD_GENERALS
             .iter()
-            .find(|(g, _, _, _, _)| *g == name)
-            .map(|(_, _, sk, _, _)| sk.to_vec())
+            .find(|g| g.name == name)
+            .map(|g| g.skills.to_vec())
             .unwrap_or_else(|| panic!("unknown general {name}"))
     };
     // 表完整性：武将名唯一、每个技能在目录中存在
     let mut names: Vec<&str> = engine_native::content::standard::STANDARD_GENERALS
         .iter()
-        .map(|(g, _, _, _, _)| *g)
+        .map(|g| g.name)
         .collect();
     let total = names.len();
     names.sort_unstable();
     names.dedup();
     assert_eq!(names.len(), total, "武将名不得重复");
-    for (_, _, skills, _, _) in engine_native::content::standard::STANDARD_GENERALS {
-        for sk in skills.iter() {
+    for g in engine_native::content::standard::STANDARD_GENERALS {
+        for sk in g.skills.iter() {
             assert!(
                 engine_native::Engine::new(1, 4)
                     .catalog()
@@ -116,9 +116,10 @@ fn general_faction_mapping_complete() {
     // 表非空且每名武将势力合法
     assert!(!generals.is_empty());
     let mut names: Vec<&str> = Vec::new();
-    for (name, faction, skills, hp, _) in generals {
+    for g in generals {
+        let (name, faction, skills, hp) = (g.name, g.faction, g.skills, g.max_hp);
         // 上游华雄 6 体力（standard/character.js），其余 3–4。
-        assert!(*hp >= 3 && *hp <= 6, "{name} 体力配置合法");
+        assert!(hp >= 3 && hp <= 6, "{name} 体力配置合法");
         assert!(
             matches!(
                 faction,
@@ -146,8 +147,8 @@ fn general_faction_mapping_complete() {
     let faction_of = |name: &str| {
         generals
             .iter()
-            .find(|(g, _, _, _, _)| *g == name)
-            .map(|(_, f, _, _, _)| *f)
+            .find(|def| def.name == name)
+            .map(|def| def.faction)
             .expect("武将存在")
     };
     assert!(matches!(faction_of("曹操"), Faction::Wei));

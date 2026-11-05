@@ -31,8 +31,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "狂骨",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -52,8 +51,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "血量翻倍",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 誓师：体力上限 +1 并回复 1
@@ -62,8 +60,7 @@ impl HostMachine {
                 ctx.recover(self.owner, 1, None);
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "誓师",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 魔化：移除旧三技 → 获得撒旦四技 → 上限 4 → 回复 2 → 摸 2
@@ -111,8 +108,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "魔化",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 ctx.recover(self.owner, 2, None);
                 ctx.start_draw(self.owner, 2);
                 Flow::Done
@@ -145,8 +141,7 @@ impl HostMachine {
                     };
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "脉轮",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 清除旧效果（上游 step0 移除 mailun31..8）
                     {
                         let p = ctx.core.player_mut(self.owner);
@@ -279,8 +274,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "护天",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 目标体力低于寄存数 → 回复至该数（上游 step2）
                     let hp = ctx.core.player(target).hp;
                     if hp < count {

@@ -421,6 +421,7 @@ detached_cards: Vec::new(),
             segment_open: false,
             debug_budget: None,
             segment_checkpoint: None,
+            presentation_range: crate::presentation::PresentationRange::Idle,
             simulation: false,
         }
     }

@@ -295,8 +295,7 @@ impl NativeInvocation {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: ctx.catalog.skill_name(self.def),
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 self.log_child(ctx, true);
                 Flow::Yield
             }
@@ -364,8 +363,7 @@ impl NativeInvocation {
                 self.progress = P::HolderPay { cards };
                 ctx.log(LogEvent::SkillTriggered {
                     skill: ctx.catalog.skill_name(self.def),
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 self.log_child(ctx, true);
                 Flow::Yield
             }
@@ -482,8 +480,7 @@ impl NativeInvocation {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: ctx.catalog.skill_name(self.def),
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     self.log_child(ctx, true);
                     return Flow::Yield;
                 }

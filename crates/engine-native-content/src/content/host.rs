@@ -346,6 +346,8 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
             name: name.to_string(),
             behavior,
         }),
+        original_source: None,
+        presentation_binding: None,
     }
 }
 

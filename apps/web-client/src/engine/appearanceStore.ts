@@ -336,6 +336,16 @@ export function skillDisplayName(name: string): string {
   return translated(name);
 }
 
+export function currentAppearanceBaseUrl(): string | null {
+  if (!source) return null;
+  if (source.kind === "http") return source.baseUrl;
+  return "http://127.0.0.1:7700";
+}
+
+export function currentAppearanceSourceKey(): string {
+  return source?.key ?? "";
+}
+
 function translated(key: string): string {
   const locale =
     typeof navigator === "undefined" ? "" : navigator.language;

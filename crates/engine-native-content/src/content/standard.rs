@@ -503,7 +503,9 @@ pub fn standard_catalog_with_extensions(
                     name: decl.name.to_string(),
                 });
             }
-            ext_skills.push(host_skill_def(decl.name.to_string(), decl.behavior));
+            let mut def = host_skill_def(decl.name.to_string(), decl.behavior);
+            def.presentation_binding = decl.presentation_binding.clone();
+            ext_skills.push(def);
         }
         for decl in &pack.vm_skills {
             let name = crate::content::names::intern(decl.name.clone());
@@ -532,15 +534,20 @@ pub fn standard_catalog_with_extensions(
                     program: std::sync::Arc::new(program),
                     filter: decl.filter.clone(),
                 }),
+                original_source: None,
+                presentation_binding: decl.presentation_binding.clone(),
             });
         }
     }
     let cards = merge_extension_cards(cards, &ext_cards)?;
     let mut skills = skills;
+    let ext_skill_start = skills.len();
+    let ext_skill_len = ext_skills.len();
     skills.extend(ext_skills);
     native_damage::append_invocation_helpers(&mut skills);
     let mut catalog = Catalog::build(cards, skills);
     catalog.hooks = super::hooks::CONTENT_HOOKS;
+    catalog.extension_skill_range = ext_skill_start..(ext_skill_start + ext_skill_len);
     catalog.extension_generals = packs
         .iter()
         .filter(|p| p.enabled)

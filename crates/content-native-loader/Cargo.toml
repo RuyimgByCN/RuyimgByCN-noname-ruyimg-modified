@@ -7,12 +7,14 @@ authors.workspace = true
 description = "C0 生产侧装载器：已安装扩展包 cards.json → engine-native ExtensionPack（ADR 0777）"
 
 [dependencies]
+blake3 = { workspace = true }
 content-schema = { path = "../content-schema" }
+engine-api = { workspace = true }
 engine-native = { path = "../engine-native" }
 content-runtime = { path = "../content-runtime" }
+resource-schema = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
 
 [dev-dependencies]
-blake3 = { workspace = true }
 tempfile = { workspace = true }

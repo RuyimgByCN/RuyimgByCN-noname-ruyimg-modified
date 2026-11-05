@@ -147,13 +147,13 @@ fn liuyan_geju_out_of_range_counts() {
     let (wei, shu) = {
         let wei = engine_native::content::standard::STANDARD_GENERALS
             .iter()
-            .find(|(_, f, ..)| *f == engine_native::catalog::Faction::Wei)
-            .map(|(n, ..)| n.to_string())
+            .find(|g| g.faction == engine_native::catalog::Faction::Wei)
+            .map(|g| g.name.to_string())
             .expect("魏将");
         let shu = engine_native::content::standard::STANDARD_GENERALS
             .iter()
-            .find(|(_, f, ..)| *f == engine_native::catalog::Faction::Shu)
-            .map(|(n, ..)| n.to_string())
+            .find(|g| g.faction == engine_native::catalog::Faction::Shu)
+            .map(|g| g.name.to_string())
             .expect("蜀将");
         (wei, shu)
     };

@@ -343,8 +343,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "攻心",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     if choice == 0 {
                         ctx.discard_from_hand(target, card);
                     } else {
@@ -396,8 +395,7 @@ impl HostMachine {
                     self.target = Some(target);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "颂词",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     let hand = ctx.core.player(target).hand.len();
                     let hp = ctx.core.player(target).hp.max(0) as usize;
                     if hand > hp {

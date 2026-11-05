@@ -1,0 +1,14 @@
+STEP initial_audio_owner {"sessionGeneration":2,"lastCommittedRevision":0,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":false,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}
+STEP after_choose_general {"chosenGeneral":"样例·张角组合","snapAfterChoose":{"sessionGeneration":2,"lastCommittedRevision":0,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":true,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}}
+STEP after_auto_steps {"sessionGeneration":2,"lastCommittedRevision":6,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":true,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}
+STEP mute_toggle {"found":true,"mutedSnap":{"sessionGeneration":2,"lastCommittedRevision":6,"baselineRevision":0,"muted":true,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":true,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0},"unmutedSnap":{"sessionGeneration":2,"lastCommittedRevision":6,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":true,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}}
+STEP after_save {"saveClicked":{"found":true,"disabled":false},"afterSaveStatus":{"status":"存档锁与当前对局内容锁不一致","error":"存档锁与当前对局内容锁不一致"}}
+STEP after_load {"loadClicked":{"found":true,"disabled":false},"afterLoadStatus":{"status":"无本地存档","error":"无本地存档"}}
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:186
+  throw new Error(`读档未递增 sessionGeneration: before=${genBeforeLoad}, after=${snapAfterLoad.sessionGeneration}`);
+        ^
+
+Error: 读档未递增 sessionGeneration: before=2, after=2
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:186:9
+
+Node.js v26.4.0

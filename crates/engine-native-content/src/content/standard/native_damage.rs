@@ -85,184 +85,32 @@ pub(super) fn configure(skills: &mut Vec<SkillDef>) {
         });
     }
 
-    {
-        let effect = E::Jidong;
+    for effects in [
+        &[E::Jidong][..],
+        &[E::Chengxin],
+        &[E::Chilongya],
+        &[E::Xingjunyan],
+        &[E::Liangou],
+        &[E::MailunOut3],
+        &[E::MailunIn3],
+        &[E::MailunOut4],
+        &[E::MailunIn4],
+        &[E::Hutian],
+        &[E::Shuchui],
+        &[E::Paotai],
+        &[E::Xixue],
+        &[E::Qinglong],
+        &[E::Huanxia],
+    ] {
+        let effect = effects[0];
+        let name = effect.helper_name().unwrap();
         skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
+            name,
             trigger: Some(effect.meta()),
             limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Jidong],
-            }),
-        });
-    }
-    {
-        let effect = E::Chengxin;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Chengxin],
-            }),
-        });
-    }
-    {
-        let effect = E::Chilongya;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Chilongya],
-            }),
-        });
-    }
-    {
-        let effect = E::Xingjunyan;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Xingjunyan],
-            }),
-        });
-    }
-    {
-        let effect = E::Liangou;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Liangou],
-            }),
-        });
-    }
-    {
-        let effect = E::MailunOut3;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::MailunOut3],
-            }),
-        });
-    }
-    {
-        let effect = E::MailunIn3;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::MailunIn3],
-            }),
-        });
-    }
-    {
-        let effect = E::MailunOut4;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::MailunOut4],
-            }),
-        });
-    }
-    {
-        let effect = E::MailunIn4;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::MailunIn4],
-            }),
-        });
-    }
-    {
-        let effect = E::Hutian;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Hutian],
-            }),
-        });
-    }
-    {
-        let effect = E::Shuchui;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Shuchui],
-            }),
-        });
-    }
-    {
-        let effect = E::Paotai;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Paotai],
-            }),
-        });
-    }
-    {
-        let effect = E::Xixue;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Xixue],
-            }),
-        });
-    }
-    {
-        let effect = E::Qinglong;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Qinglong],
-            }),
-        });
-    }
-    {
-        let effect = E::Huanxia;
-        skills.push(SkillDef {
-            name: effect.helper_name().unwrap(),
-            trigger: Some(effect.meta()),
-            limits: Default::default(),
-            behavior: Box::new(NativeDamageBehavior {
-                name: effect.helper_name().unwrap(),
-                effects: &[E::Huanxia],
-            }),
+            behavior: Box::new(NativeDamageBehavior { name, effects }),
+            original_source: None,
+            presentation_binding: None,
         });
     }
 }
@@ -277,12 +125,16 @@ pub(super) fn append_invocation_helpers(skills: &mut Vec<SkillDef>) {
             name: E::JidingRecover.helper_name().unwrap(),
             effects: &[E::JidingRecover],
         }),
+        original_source: None,
+        presentation_binding: None,
     });
     skills.push(SkillDef {
         name: "native:liuli/guozhan/jubao",
         trigger: None,
         limits: Default::default(),
         behavior: Box::new(GuozhanJubaoGain),
+        original_source: None,
+        presentation_binding: None,
     });
 }
 

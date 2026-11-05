@@ -409,7 +409,7 @@ impl HostMachine {
                         d.prevented = true;
                     }
                 }
-                ctx.log(LogEvent::DamagePrevented { target: self.owner });
+                ctx.log(LogEvent::DamagePrevented { target: self.owner, presentation: None });
                 Flow::Done
             }
             HostBehavior::XianjianLuanjian2 => {

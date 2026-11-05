@@ -575,8 +575,7 @@ impl HostMachine {
                 });
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "守印",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 for p in ctx.core.seat_order_from(self.owner) {
                     let (hp, max) = {
                         let pl = ctx.core.player(p);

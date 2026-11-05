@@ -63,7 +63,8 @@ fn choice_then_bad_effect() -> Vec<u8> {
 fn pack(name: &str, code: Vec<u8>, skill: &str) -> ExtensionPack {
     let decl = VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: skill.to_string(),
         module: module(name, code),
         trigger: engine_native::catalog::TriggerMeta {
@@ -449,7 +450,8 @@ fn nc04_vm_restore_preserves_once_consume() {
     ));
     let decl = VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "nc04_once_skill".to_string(),
         module: module("nc04-once-module", choice_then_halt()),
         trigger: engine_native::catalog::TriggerMeta {
@@ -541,7 +543,8 @@ fn nc04_vm_restore_preserves_hit_counting() {
     ));
     let decl = VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "nc04_hits_skill".to_string(),
         module: module("nc04-hits-module", choice_then_halt()),
         trigger: engine_native::catalog::TriggerMeta {

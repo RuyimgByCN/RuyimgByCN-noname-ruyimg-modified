@@ -161,8 +161,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "每步",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     if let Some(def) = ctx.catalog.skill_by_name(L27_NEW_ZHIXI_KEY) {
                         ctx.insert_skill(
                             (target, def),
@@ -270,8 +269,7 @@ impl HostMachine {
                     if min == 0 && max == 0 {
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "蛊惑",
-                            owner: self.owner,
-                        });
+                            owner: self.owner, presentation: None });
                         ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
                             card,
                             self.owner,
@@ -318,8 +316,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "蛊惑",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.emit(EventData::CardUsed(crate::machine::card_use_as(
                         card,
                         self.owner,
@@ -425,8 +422,7 @@ impl HostMachine {
                     ctx.core.player_mut(self.owner).jilve_used += 1;
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "极略",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.emit(EventData::CardUsed(crate::machine::card_use(
                         card, self.owner, targets,
                     )));

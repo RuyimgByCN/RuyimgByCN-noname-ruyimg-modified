@@ -62,13 +62,13 @@ fn play(e: &mut Engine, card: u32, targets: Vec<u8>) -> CommandOutcome {
 fn two_generals() -> (String, String) {
     let wei = engine_native::content::standard::STANDARD_GENERALS
         .iter()
-        .find(|(_, f, ..)| *f == Faction::Wei)
-        .map(|(n, ..)| n.to_string())
+        .find(|g| g.faction == Faction::Wei)
+        .map(|g| g.name.to_string())
         .expect("魏将");
     let shu = engine_native::content::standard::STANDARD_GENERALS
         .iter()
-        .find(|(_, f, ..)| *f == Faction::Shu)
-        .map(|(n, ..)| n.to_string())
+        .find(|g| g.faction == Faction::Shu)
+        .map(|g| g.name.to_string())
         .expect("蜀将");
     (wei, shu)
 }

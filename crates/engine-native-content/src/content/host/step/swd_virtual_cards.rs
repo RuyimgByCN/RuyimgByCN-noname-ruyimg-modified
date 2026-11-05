@@ -256,8 +256,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "诛害",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.emit(EventData::CardUsed(crate::machine::card_use(
                         card,
                         self.owner,

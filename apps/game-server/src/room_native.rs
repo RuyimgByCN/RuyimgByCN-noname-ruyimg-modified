@@ -156,6 +156,7 @@ impl NativeRoomSession {
 
     pub(crate) fn rollback(&mut self, before: NativeRoomCheckpoint) {
         self.engine = before.engine;
+        self.engine.clear_staged_presentation_on_rollback();
         self.members = before.members;
         self.by_token = before.by_token;
         self.started = before.started;
@@ -174,10 +175,17 @@ impl NativeRoomSession {
 
     /// 建会话并保存扩展包集合（`Recover` 重放需要）。
     pub fn new_with_packs(
-        engine: Engine,
+        mut engine: Engine,
         packs: Vec<engine_native::content::extension::ExtensionPack>,
         max_seats: u8,
     ) -> Self {
+        if std::sync::Arc::strong_count(engine.catalog()) == 1
+            || (engine.catalog().extension_skill_range.is_empty()
+                && engine.catalog().extension_generals.is_empty())
+        {
+            let _ = content_native_loader::attach_embedded_original_presentation(&mut engine);
+        }
+        engine.retire_public_presentation();
         let event_cursor = engine.log().len();
         let wal = NativeWalState::new(&engine);
         let next_dedup = engine.save().last_dedup.saturating_add(1);
@@ -243,13 +251,33 @@ impl NativeRoomSession {
     }
 
     /// 用恢复出的引擎替换当前引擎（`Recover` 接线；成员/令牌/座位保持不变）。
-    pub fn replace_engine(&mut self, engine: Engine) {
+    pub fn replace_engine(&mut self, mut engine: Engine) {
+        if std::sync::Arc::strong_count(engine.catalog()) == 1
+            || (engine.catalog().extension_skill_range.is_empty()
+                && engine.catalog().extension_generals.is_empty())
+        {
+            let _ = content_native_loader::attach_embedded_original_presentation(&mut engine);
+        }
+        engine.retire_public_presentation();
         // WAL 重放的去重高水位可高于实时计数，下一条命令不能撞到已重放的键。
         self.next_dedup = self
             .next_dedup
             .max(engine.save().last_dedup.saturating_add(1));
         self.event_cursor = engine.log().len();
         self.engine = engine;
+    }
+
+    /// I02（裁决 30）：基线响应路径显式退役未读的已封存/已释放展示区间（保留开放段 Held）。
+    pub(crate) fn retire_public_presentation(&mut self) {
+        self.engine.retire_public_presentation();
+    }
+
+    /// I02（裁决 30）：持久化提交成功后释放并一次性消费本次已封存的公开展示批次。
+    pub(crate) fn release_and_take_public_presentation(
+        &mut self,
+    ) -> Option<engine_api::PublicPresentationBatch> {
+        self.engine.release_committed_presentation();
+        self.engine.take_public_presentation()
     }
 
     /// 取自上一条命令以来新增的公开事件码（只码，不含牌 id/选项）。
@@ -369,9 +397,11 @@ impl NativeRoomSession {
         if m.role != ClientRole::Player {
             return Err("spectator cannot choose general".into());
         }
+        self.engine.retire_public_presentation();
         self.engine
             .assign_general_named(m.seat, name)
             .map_err(|e| format!("选将被拒绝: {e:?}"))?;
+        self.engine.retire_public_presentation();
         self.timeout.managed_seats.retain(|s| *s != m.seat);
         self.wal = NativeWalState::new(&self.engine);
         self.sync_deadline()?;
@@ -459,11 +489,13 @@ impl NativeRoomSession {
         } else {
             let refs: Vec<&engine_native::content::extension::ExtensionPack> =
                 packs.iter().collect();
-            if refs.is_empty() {
+            let mut e = if refs.is_empty() {
                 Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
             } else {
                 Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("{e:?}"))?
-            }
+            };
+            content_native_loader::attach_embedded_original_presentation(&mut e)?;
+            e
         };
         let mut members = HashMap::new();
         let mut by_token = HashMap::new();
@@ -551,6 +583,7 @@ impl NativeRoomSession {
         kind: &CommandKind,
         expected_revision: u64,
     ) -> Result<CommandResult, String> {
+        self.engine.retire_public_presentation();
         let m = self
             .members
             .get(&connection_id)

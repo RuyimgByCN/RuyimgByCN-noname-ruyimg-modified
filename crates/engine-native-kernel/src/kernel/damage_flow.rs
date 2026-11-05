@@ -25,7 +25,7 @@ impl crate::catalog::SkillMachine for DamageFlow {
         }
         if d.settlement.outcome == O::Running {
             if d.prevented {
-                ctx.log(LogEvent::DamagePrevented { target: d.target });
+                ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                 d.settlement.outcome = O::Cancelled;
                 d.settlement.progress = P::CancelledPending;
             } else if d.amount <= 0 {

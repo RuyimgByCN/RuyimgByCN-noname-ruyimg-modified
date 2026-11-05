@@ -199,6 +199,8 @@ mod tests {
             trigger: None,
             limits: SkillLimits::default(),
             behavior: Box::new(Alias),
+            original_source: None,
+            presentation_binding: None,
         });
         engine.catalog = std::sync::Arc::new(Catalog::build(catalog.cards, catalog.skills));
         assert_eq!(source(&engine), None);

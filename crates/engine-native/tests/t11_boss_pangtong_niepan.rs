@@ -59,7 +59,7 @@ fn next_phase(e: &mut Engine) {
 fn assemble_pangtong(e: &mut Engine) {
     let def = engine_native::content::standard::BOSS_GENERALS
         .iter()
-        .position(|(n, ..)| *n == "庞统")
+        .position(|g| g.name == "庞统")
         .expect("庞统在 Boss 目录") as u16;
     let idx = engine_native::content::standard::STANDARD_GENERALS.len() as u16 + def;
     e.debug_set_general_def(0, idx);

@@ -78,8 +78,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "修罗",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.discard_from_hand(self.owner, hand);
                     ctx.core
                         .player_mut(self.owner)
@@ -138,8 +137,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "灭道",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     for c in picked {
                         if ctx.core.player(self.owner).hand.contains(&c) {
                             ctx.discard_from_hand(self.owner, c);
@@ -212,8 +210,7 @@ impl HostMachine {
                         ctx.core.player_mut(self.owner).hand.push(sword);
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "轩辕",
-                            owner: self.owner,
-                        });
+                            owner: self.owner, presentation: None });
                         ctx.emit(EventData::Equipped {
                             player: self.owner,
                             card: sword,
@@ -258,8 +255,7 @@ impl HostMachine {
                         if count > 0 {
                             ctx.log(LogEvent::SkillTriggered {
                                 skill: "燎原",
-                                owner: self.owner,
-                            });
+                                owner: self.owner, presentation: None });
                         }
                         return Flow::Done;
                     }
@@ -284,8 +280,7 @@ impl HostMachine {
                         if count > 0 {
                             ctx.log(LogEvent::SkillTriggered {
                                 skill: "燎原",
-                                owner: self.owner,
-                            });
+                                owner: self.owner, presentation: None });
                         }
                         return Flow::Done;
                     };
@@ -372,8 +367,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "移花",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 收据先记、再反弹：只有真实既定牌帧才记来源绑定。
                     if bound {
                         if let Some(def) = ctx.catalog.skill_by_name(&self.def_key) {
@@ -403,8 +397,7 @@ impl HostMachine {
                     };
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "贞烈",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // ① 移出目标（结算前写回帧 targets——Intrinsic 阶段读取；
                     // 必须先于任何帧发射，否则当前帧不再是 CardUsed）
                     let card_frame = ctx.current_event_frame_id();

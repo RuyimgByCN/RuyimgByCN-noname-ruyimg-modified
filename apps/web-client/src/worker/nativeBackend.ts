@@ -18,6 +18,7 @@
  * 返回逐项结构校验、畸形即报错，旧产物缺导出给出 `build:native` 重建命令。
  */
 import { generalSlots, choiceMetadata, r05Effects, validateChoiceCounts } from "../engine/observerMetadata";
+import { presentationMetadata } from "../engine/presentationMetadata";
 import { publicEventLabel } from "../engine/publicEvents";
 import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
@@ -827,11 +828,21 @@ export function generalCandidates(
  * 前后 `revision()` 相同），缓存若按 `(revision, seat)` 记忆化会命中装配前的
  * 旧候选。
  */
+function retirePublicPresentation(engine: NativeEngine): void {
+  const maybe = engine as unknown as {
+    retire_public_presentation?: () => void;
+  };
+  if (typeof maybe.retire_public_presentation === "function") {
+    maybe.retire_public_presentation();
+  }
+}
+
 export function chooseGeneral(
   handle: NativeHandle,
   seat: number,
   name: string,
 ): GeneralAssignment {
+  retirePublicPresentation(handle.engine);
   unsigned(seat, 255, "seat");
   const exports = requireGeneralSelectExports(handle);
   let raw: string;
@@ -892,8 +903,21 @@ function readChoice(handle: NativeHandle): EngineEnvelope["choice"] {
 export function nativeEnvelope(
   handle: NativeHandle,
   result: unknown = null,
+  mode: "command" | "baseline" = "baseline",
 ): EngineEnvelope {
   stepMark("envelope_enter");
+  const presentationEngine = handle.engine as unknown as {
+    take_public_presentation_json?: () => string;
+    retire_public_presentation?: () => void;
+  };
+  let rawPresentation: string | null = null;
+  if (mode === "command") {
+    if (typeof presentationEngine.take_public_presentation_json === "function") {
+      rawPresentation = presentationEngine.take_public_presentation_json();
+    }
+  } else {
+    retirePublicPresentation(handle.engine);
+  }
   const raw = handle.engine.view_json(handle.observer);
   stepMark("view_json", raw.length);
   const view = JSON.parse(raw) as NativeView;
@@ -918,6 +942,24 @@ export function nativeEnvelope(
     revision,
     finished,
   };
+  if (rawPresentation !== null && rawPresentation !== "null") {
+    let parsedPresentation: unknown;
+    try {
+      parsedPresentation = JSON.parse(rawPresentation);
+    } catch (error) {
+      throw new Error(
+        `native: public presentation metadata invalid: ${errorText(error)}`,
+      );
+    }
+    const validated = presentationMetadata(
+      parsedPresentation,
+      revision,
+      snap.seats.length,
+    );
+    if (validated !== undefined) {
+      envelope.presentation = validated;
+    }
+  }
   stepMark("envelope_done");
   return envelope;
 }
@@ -977,18 +1019,21 @@ export function nativeDispatch(
   | { kind: "status"; revision: number; finished: boolean } {
   switch (req.type) {
     case "endPhase": {
+      retirePublicPresentation(handle.engine);
       const out = handle.engine.next_phase(unsigned(req.actor ?? handle.observer, 255, "actor"));
-      return nativeEnvelope(handle, parseCommandResult(out));
+      return nativeEnvelope(handle, parseCommandResult(out), "command");
     }
     case "playCard": {
+      retirePublicPresentation(handle.engine);
       const out = handle.engine.play_card(
         unsigned(req.actor, 255, "actor"),
         unsigned(req.card, 0xffffffff, "card"),
         new Uint32Array(req.targets.map((target) => unsigned(target, 255, "target"))),
       );
-      return nativeEnvelope(handle, parseCommandResult(out));
+      return nativeEnvelope(handle, parseCommandResult(out), "command");
     }
     case "activateSkill": {
+      retirePublicPresentation(handle.engine);
       unsigned(req.actor, 255, "actor");
       unsigned(req.skill, 0xffff, "skill");
       // 内核 `GameAction::ActivateSkill` 只有技能 id：技能内部的目标/牌选择走
@@ -1004,9 +1049,10 @@ export function nativeDispatch(
         req.actor,
         req.skill,
       );
-      return nativeEnvelope(handle, parseCommandResult(out));
+      return nativeEnvelope(handle, parseCommandResult(out), "command");
     }
     case "resolveChoice": {
+      retirePublicPresentation(handle.engine);
       unsigned(req.actor, 255, "actor");
       const choice = readChoiceJson(handle, req.actor);
       if (!choice || Number(choice.id) !== req.choiceId) {
@@ -1020,7 +1066,7 @@ export function nativeDispatch(
           BigInt(choice.id),
           new Uint32Array([]),
         );
-        return nativeEnvelope(handle, parseCommandResult(out));
+        return nativeEnvelope(handle, parseCommandResult(out), "command");
       }
       // selections 是 token（= 候选下标），不是候选值：值只用于选择，
       // 回传必须能按下标回查候选，否则 `{card:42}` 一类载荷永远失配。
@@ -1037,14 +1083,15 @@ export function nativeDispatch(
         BigInt(choice.id),
         new Uint32Array(idxs),
       );
-      return nativeEnvelope(handle, parseCommandResult(out));
+      return nativeEnvelope(handle, parseCommandResult(out), "command");
     }
     case "autoStep": {
+      retirePublicPresentation(handle.engine);
       const out = handle.engine.auto_step();
-      return nativeEnvelope(handle, parseCommandResult(out));
+      return nativeEnvelope(handle, parseCommandResult(out), "command");
     }
     case "observer":
-      return nativeEnvelope(handle);
+      return nativeEnvelope(handle, null, "baseline");
     case "save":
       return { kind: "save", hex: handle.engine.save_hex() };
     case "saveLocked": {
@@ -1057,6 +1104,7 @@ export function nativeDispatch(
       };
     }
     case "restore": {
+      retirePublicPresentation(handle.engine);
       const restore = (engine: NativeEngine) => {
         if (req.packsJson !== undefined) {
           engine.restore_hex_with_packs_json(req.hex, req.packsJson);
@@ -1070,7 +1118,7 @@ export function nativeDispatch(
       let envelope: EngineEnvelope;
       try {
         restore(candidate);
-        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 });
+        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 }, null, "baseline");
       } finally {
         candidate.free();
       }
@@ -1082,12 +1130,13 @@ export function nativeDispatch(
       return envelope;
     }
     case "restoreLocked": {
+      retirePublicPresentation(handle.engine);
       // 先在候选引擎校验完整 lockedContentJson 与 NGSA 存档，失败保留原句柄与原上下文不变。
       const candidate = new NativeEngine(1, 0n);
       let envelope: EngineEnvelope;
       try {
         candidate.restore_hex_with_locked_content_json(req.hex, req.lockedContentJson);
-        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 });
+        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 }, null, "baseline");
       } finally {
         candidate.free();
       }
@@ -1097,6 +1146,7 @@ export function nativeDispatch(
       return envelope;
     }
     case "status":
+      retirePublicPresentation(handle.engine);
       return {
         kind: "status",
         revision: Number(handle.engine.revision()),

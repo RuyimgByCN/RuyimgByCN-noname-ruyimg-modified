@@ -331,8 +331,7 @@ pub(super) fn begin_end(ctx: &mut Ctx<'_>, player: PlayerId) {
                 ctx.core.player_mut(t).boss_mad = true;
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "鬼谋",
-                    owner: player,
-                });
+                    owner: player, presentation: None });
             }
         }
     }

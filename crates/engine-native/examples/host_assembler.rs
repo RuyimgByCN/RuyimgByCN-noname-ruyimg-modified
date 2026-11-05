@@ -28,11 +28,11 @@ pub fn official_pool() -> Vec<PoolEntry> {
     STANDARD_GENERALS
         .iter()
         .enumerate()
-        .filter(|(_, (name, _, _, _, _))| !name.starts_with("样例"))
-        .map(|(i, (name, _, _, hp, _))| PoolEntry {
+        .filter(|(_, g)| !g.name.starts_with("样例"))
+        .map(|(i, g)| PoolEntry {
             index: i as u16,
-            name,
-            hp: *hp,
+            name: g.name,
+            hp: g.max_hp,
         })
         .collect()
 }

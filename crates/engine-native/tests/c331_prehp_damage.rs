@@ -809,7 +809,7 @@ fn c9d_native_helper_order_choice_and_qualified_restore_execute_once() {
             .iter()
             .filter(|event| matches!(
                 event,
-                engine_native::machine::LogEvent::DamagePrevented { target: 1 }
+                engine_native::machine::LogEvent::DamagePrevented { target: 1, .. }
             ))
             .count(),
         1
@@ -898,8 +898,7 @@ fn c9d_huoshen_body_finishes_before_recover_child_restore() {
                 event,
                 engine_native::machine::LogEvent::SkillTriggered {
                     skill: "火神",
-                    owner: 1
-                }
+                    owner: 1, .. }
             ))
             .count(),
         1

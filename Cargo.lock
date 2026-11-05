@@ -592,7 +592,9 @@ dependencies = [
  "blake3",
  "content-runtime",
  "content-schema",
+ "engine-api",
  "engine-native",
+ "resource-schema",
  "serde",
  "serde_json",
  "tempfile",
@@ -1136,6 +1138,7 @@ dependencies = [
  "content-native-loader",
  "content-runtime",
  "content-schema",
+ "engine-api",
  "engine-native-content",
  "engine-native-kernel",
  "resource-schema",
@@ -1151,6 +1154,7 @@ name = "engine-native-content"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "engine-api",
  "engine-native-kernel",
  "rule-api",
  "rule-vm",
@@ -1161,6 +1165,7 @@ name = "engine-native-kernel"
 version = "0.1.0"
 dependencies = [
  "blake3",
+ "engine-api",
  "rule-api",
  "rule-vm",
 ]

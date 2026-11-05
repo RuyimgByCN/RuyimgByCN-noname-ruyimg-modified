@@ -32,6 +32,7 @@ import {
   presentationDelay,
   pushLog,
 } from "../engine/viewStore";
+import { BattleAudioOwner } from "../engine/battleAudioOwner";
 import {
   applyCandidatePayload,
   failCandidateLoad,
@@ -91,6 +92,37 @@ const generalSelect = ref(initialGeneralSelectState(selfId.value));
 const showGeneralSelect = computed(
   () => !isOnline.value && store.connected && localClient.isNative(),
 );
+const audioOwner = new BattleAudioOwner({
+  allowRemotePackageFallback: () => isOnline.value,
+});
+(globalThis as unknown as { __battleAudioOwner?: BattleAudioOwner }).__battleAudioOwner =
+  audioOwner;
+const audioMuted = ref(audioOwner.isMuted);
+const audioVolume = ref(audioOwner.currentVolume);
+const autoplayBlocked = ref(audioOwner.isAutoplayBlocked);
+const audioErrorCount = ref(0);
+
+function syncAudioUiState() {
+  autoplayBlocked.value = audioOwner.isAutoplayBlocked;
+  audioErrorCount.value = audioOwner.erroredPaths.size;
+}
+
+function unlockAudioFromGesture() {
+  audioOwner.unlockFromUserGesture();
+  syncAudioUiState();
+}
+
+function onToggleMute() {
+  unlockAudioFromGesture();
+  audioOwner.setMuted(audioMuted.value);
+  syncAudioUiState();
+}
+
+function onVolumeChange() {
+  unlockAudioFromGesture();
+  audioOwner.setVolume(audioVolume.value);
+  syncAudioUiState();
+}
 
 interface OnlineIntent {
   action: "create" | "join" | "spectate";
@@ -129,6 +161,10 @@ async function handleEnvelope(env: EngineEnvelope) {
   // NC12 诊断：拆分「同步应用信封（视图状态重建）」与「刻意表现节流」
   const tA = performance.now();
   applyEnvelope(store, env);
+  if (typeof audioOwner !== "undefined") {
+    audioOwner.admitEnvelope(env);
+    syncAudioUiState();
+  }
   const tB = performance.now();
   nc12Mark("t5_apply_envelope");
   await presentationDelay(store, 120);
@@ -189,6 +225,7 @@ async function loadGeneralCandidates() {
 async function chooseGeneralCandidate(name: string) {
   if (isOnline.value || !localClient.isNative()) return;
   if (store.busy || generalSelect.value.selectionStatus === "pending") return;
+  unlockAudioFromGesture();
   const state = generalSelect.value;
   await withBusy(async () => {
     generalSelect.value = await submitGeneralSelection(
@@ -199,6 +236,8 @@ async function chooseGeneralCandidate(name: string) {
           localClient.chooseGeneral(seat, generalName),
         applyEnvelope: (env) => {
           applyEnvelope(store, env);
+          audioOwner.establishSilentBaseline(env.revision);
+          syncAudioUiState();
           pushLog(store, `选将 P${state.seat} → ${name}`);
         },
       },
@@ -220,6 +259,9 @@ async function chooseGeneralCandidate(name: string) {
 async function connectAndStart() {
   await withBusy(async () => {
     try {
+      audioOwner.resetGeneration("new-match", 0);
+      audioOwner.setFrozenPackages(undefined);
+      syncAudioUiState();
       await setDesktopMatchFrozen(true);
       setMatchFrozen(true);
       if (isOnline.value) {
@@ -278,6 +320,9 @@ async function connectAndStart() {
               mode,
             );
       matchContent = content;
+      audioOwner.setFrozenPackages(content.frozen_packages);
+      audioOwner.establishSilentBaseline(env.revision);
+      syncAudioUiState();
       nc12Mark("t2_start_done");
       // NC12 冷启动优化（2026-10-19，两处）：
       // ① 选将候选拉取与**开局信封处理并发**（此前在 `handleEnvelope` 之后才发起 → 被其
@@ -317,8 +362,10 @@ async function saveMatch() {
     const saved = await localClient.saveLocked();
     if (
       matchContent.canonical_locked_content &&
-      JSON.stringify(saved.canonical_locked_content) !==
-        JSON.stringify(matchContent.canonical_locked_content)
+      (saved.canonical_locked_content.lock_hash !==
+        matchContent.canonical_locked_content.lock_hash ||
+        saved.canonical_locked_content.packages.length !==
+          matchContent.canonical_locked_content.packages.length)
     ) {
       throw new Error("存档锁与当前对局内容锁不一致");
     }
@@ -357,6 +404,9 @@ async function loadLatestSave() {
       }),
     );
     matchContent = content;
+    audioOwner.resetGeneration("restore", env.revision);
+    audioOwner.setFrozenPackages(content.frozen_packages);
+    syncAudioUiState();
     players.value = slot.players;
     seed.value = slot.seed;
     // 读档替换了引擎状态：上一局的选将成功态不能留到读档后的界面。
@@ -376,6 +426,8 @@ async function connectOnline(intent: OnlineIntent) {
   });
   // NC09：断线可见——服务端中途崩溃时写入状态行与日志（不静默保持旧状态）
   networkClient.onClose(() => {
+    audioOwner.suspendPlaybackForReconnect();
+    syncAudioUiState();
     statusLine.value = "连接已断开（服务端不可达）";
     store.connected = false;
     pushLog(store, "连接已断开：服务端不可达或已停止");
@@ -383,6 +435,8 @@ async function connectOnline(intent: OnlineIntent) {
   // NC09：自动重连状态可见
   networkClient.onReconnect((state) => {
     if (state === "reconnecting") {
+      audioOwner.suspendPlaybackForReconnect();
+      syncAudioUiState();
       statusLine.value = "连接已断开，正在重连…";
       store.connected = false;
     } else if (state === "reconnected") {
@@ -395,6 +449,8 @@ async function connectOnline(intent: OnlineIntent) {
           rememberOnlineSession(intent, s);
           store.connected = true;
           statusLine.value = `房间 #${s.roomId} · 已重连`;
+          audioOwner.establishRejoinBaseline(s.envelope.revision);
+          syncAudioUiState();
           return handleEnvelope(s.envelope);
         })
         .catch((error: unknown) => {
@@ -404,6 +460,8 @@ async function connectOnline(intent: OnlineIntent) {
           pushLog(store, `重连后回房失败：${message}`);
         });
     } else {
+      audioOwner.resetGeneration("reconnect-failed", 0);
+      syncAudioUiState();
       statusLine.value = "重连失败（服务端不可达）";
       store.connected = false;
     }
@@ -445,6 +503,8 @@ async function connectOnline(intent: OnlineIntent) {
   players.value = session.view.seats.length;
   rememberOnlineSession(intent, session);
   store.connected = true;
+  audioOwner.resetGeneration("online-join", session.envelope.revision);
+  syncAudioUiState();
   await handleEnvelope(session.envelope);
   pushLog(
     store,
@@ -504,6 +564,7 @@ function commandClient() {
 }
 
 async function endPhase() {
+  unlockAudioFromGesture();
   await withBusy(async () => {
     const env = await commandClient().endPhase(selfId.value);
     await handleCommandEnvelope(env);
@@ -511,6 +572,7 @@ async function endPhase() {
 }
 
 async function autoStep() {
+  unlockAudioFromGesture();
   const succeeded = await withBusy(async () => {
     if (isOnline.value) throw new Error("联机模式不提供客户端自动步进");
     const env = await localClient.autoStep();
@@ -521,6 +583,7 @@ async function autoStep() {
 }
 
 async function playCard(cardId: number, targets: number[]) {
+  unlockAudioFromGesture();
   await withBusy(async () => {
     const env = await commandClient().playCard(selfId.value, cardId, targets);
     await handleCommandEnvelope(env);
@@ -529,6 +592,7 @@ async function playCard(cardId: number, targets: number[]) {
 }
 
 async function activateSkill(skillId: number, targets: number[], cardTargets: number[]) {
+  unlockAudioFromGesture();
   await withBusy(async () => {
     const env = await commandClient().activateSkill(
       selfId.value,
@@ -545,6 +609,7 @@ async function activateSkill(skillId: number, targets: number[], cardTargets: nu
 }
 
 async function resolveLegalChoice(action: Extract<LegalAction, { ResolveChoice: unknown }>) {
+  unlockAudioFromGesture();
   await withBusy(async () => {
     const env = await commandClient().resolveChoice(
       selfId.value,
@@ -633,6 +698,9 @@ function onKeydown(e: KeyboardEvent) {
 
 function releaseMatchLocks() {
   stopAuto();
+  audioOwner.resetGeneration("release-match-locks", 0);
+  audioOwner.setFrozenPackages(undefined);
+  syncAudioUiState();
   localClient.dispose();
   networkClient.dispose();
   matchContent = undefined;
@@ -798,6 +866,33 @@ const turnInfo = computed(() => {
           <input v-model="store.skipAnims" type="checkbox" />
           跳过动画
         </label>
+        <label class="check">
+          <input v-model="audioMuted" type="checkbox" aria-label="对局静音" @change="onToggleMute" />
+          静音
+        </label>
+        <label>
+          音量
+          <input
+            v-model.number="audioVolume"
+            type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            aria-label="语音音量"
+            @input="onVolumeChange"
+          />
+        </label>
+        <button
+          v-if="autoplayBlocked"
+          type="button"
+          class="audio-unlock"
+          @click="unlockAudioFromGesture"
+        >
+          启用语音
+        </button>
+        <span v-if="audioErrorCount > 0" class="muted" role="status">
+          语音异常 ×{{ audioErrorCount }}
+        </span>
         <span>{{ isSpectator ? "公共旁观投影" : `观察者 P${selfId}` }}</span>
       </div>
       <p class="status" role="status" aria-live="polite">{{ statusLine }}</p>

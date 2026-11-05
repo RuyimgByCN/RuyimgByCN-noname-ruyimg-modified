@@ -1,0 +1,45 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s
+     Running tests/groups/nc08.rs (target/debug/deps/nc08-3d4e2ce1583a3d9d)
+
+running 1 test
+test nc08_cross_target_real::native_standard_one_player_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 126 filtered out; finished in 0.02s
+
+{"steps":40,"final_hash":"6a59d996f801868eef0ddaa2ea08162f706811adcdea88a522780eac19edfcbd","wasm":"/Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/native-pkg/engine_native_wasm_bg.wasm"}
+{
+  "direct_steps": 40,
+  "restore_before_steps": 20,
+  "restore_after_steps": 20,
+  "final_revision": 40,
+  "final_hash": "6a59d996f801868eef0ddaa2ea08162f706811adcdea88a522780eac19edfcbd",
+  "native_wasm_match": true
+}
+   Compiling engine-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-api)
+   Compiling rule-api v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-api)
+   Compiling rule-vm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-runtime)
+   Compiling content-compiler v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-compiler)
+   Compiling content-native-loader v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 24.61s
+     Running tests/cross_target_package.rs (target/debug/deps/cross_target_package-bc603075b2fc2de6)
+
+running 1 test
+test native_huanle_package_trajectory ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.22s
+
+{"steps":20,"final_hash":"5e41ae8eed805cb60f257c7762b44739b68a0958d20174311fe95c89d723362a"}
+{
+  "direct_steps": 20,
+  "restore_before_steps": 10,
+  "restore_after_steps": 10,
+  "final_revision": 20,
+  "final_hash": "5e41ae8eed805cb60f257c7762b44739b68a0958d20174311fe95c89d723362a",
+  "native_wasm_match": true
+}

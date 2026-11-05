@@ -161,6 +161,7 @@ fn g1_d3_vertical_reveal_jinggou_and_restore() {
                 host_skills: vec![HostSkillDecl {
                     name: "huanle_kuwu",
                     behavior: HostBehavior::ShaDamageForceDiscard,
+                    presentation_binding: None,
                 }],
                 vm_skills: Vec::new(),
                 init_hook: engine_native::content::extension::InitHook::None,

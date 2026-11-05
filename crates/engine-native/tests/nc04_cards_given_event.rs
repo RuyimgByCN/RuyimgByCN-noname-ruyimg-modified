@@ -64,7 +64,8 @@ fn draw_event_player_module(name: &str) -> BytecodeModule {
 fn cards_given_pack(optional: bool) -> ExtensionPack {
     let decl = VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "cg_probe".to_string(),
         module: draw_event_player_module("cg_probe"),
         trigger: engine_native::catalog::TriggerMeta {

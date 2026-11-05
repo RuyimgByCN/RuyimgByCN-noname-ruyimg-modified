@@ -232,9 +232,13 @@ impl NativeContent {
         let outcome =
             content_native_loader::bridge_vm_skill_decls(&parsed).map_err(|e| e.to_string())?;
         let vm_skills = outcome.decls;
+        let mut definition_ids = content_native_loader::BridgedDefinitionIds::default();
         let (mut pack, deferred) = if let Some(json) = cards.as_ref() {
             let b: BridgedPack =
                 content_native_loader::bridge_pack(json).map_err(|e| e.to_string())?;
+            definition_ids
+                .merge(b.definition_ids)
+                .map_err(|e| e.to_string())?;
             (b.pack, b.deferred)
         } else {
             // vm-only / characters-only 包：元数据取自锁内 manifest。
@@ -270,6 +274,9 @@ impl NativeContent {
             } else {
                 content_native_loader::bridge_generals_with_vm_package(&json, &parsed)
             }.map_err(|e| e.to_string())?;
+            definition_ids
+                .merge(generals.definition_ids)
+                .map_err(|e| e.to_string())?;
             pack.generals.extend(generals.generals);
             for decl in generals.host_skills {
                 match pack.host_skills.iter().find(|d| d.name == decl.name) {
@@ -291,6 +298,18 @@ impl NativeContent {
             .map_err(|e| format!("pile: {e:?}"))?;
             pack.cards.extend(addition.cards);
         }
+        let runtime_frozen = content_runtime::FrozenPackage {
+            binding: frozen.binding.clone(),
+            package_json: frozen.package_json.clone(),
+            assets: frozen.assets.clone(),
+        };
+        content_native_loader::attach_frozen_package_presentation_bindings(
+            &mut pack,
+            &definition_ids,
+            &runtime_frozen,
+            &parsed,
+            &[(&runtime_frozen, &parsed)],
+        )?;
         // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
         pack.def.name = engine_native::content::names::intern(format!(
             "installed:{}",
@@ -411,6 +430,7 @@ pub fn create_native_game(
     let base_catalog_generals = Engine::new(1, req.seats as usize).catalog().general_count();
     let mut e = Engine::new_with_extensions(req.seed, req.seats as usize, &pack_refs)
         .map_err(|err| format!("原生建局失败: {err:?}"))?;
+    content_native_loader::attach_embedded_original_presentation(&mut e)?;
     let catalog_cards = e.catalog().cards.len();
     let catalog_generals = e.catalog().general_count();
 
@@ -592,12 +612,13 @@ pub fn restore_match(
     let refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
     let snapshot = engine_native::archive::decode_archive(bytes)
         .map_err(|err| format!("存档解码失败: {err:?}"))?;
-    let engine = if refs.is_empty() {
+    let mut engine = if refs.is_empty() {
         Engine::restore(&snapshot).map_err(|err| format!("恢复失败: {err:?}"))?
     } else {
         Engine::restore_with_extensions(&snapshot, &refs)
             .map_err(|err| format!("恢复失败: {err:?}"))?
     };
+    content_native_loader::attach_embedded_original_presentation(&mut engine)?;
     Ok(engine.catalog().cards.len())
 }
 

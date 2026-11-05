@@ -99,6 +99,7 @@ fn tongji_fixture(equip_payer: bool) -> (engine_native::content::extension::Exte
         .push(engine_native::content::host::HostSkillDecl {
             name: "yihua",
             behavior: engine_native::content::host::HostBehavior::Yihua,
+            presentation_binding: None,
         });
     let mut e = fixture(&pack, "急叮");
     e.debug_grant(3, "同疾");
@@ -189,6 +190,7 @@ fn c9l_yihua_payment_proof_and_origin_are_required() {
         .push(engine_native::content::host::HostSkillDecl {
             name: "yihua",
             behavior: engine_native::content::host::HostBehavior::Yihua,
+            presentation_binding: None,
         });
     let mut e = fixture(&pack, "急叮");
     e.debug_grant(2, "yihua");

@@ -151,7 +151,8 @@ fn t8_vm_skill_recover_branch_end_to_end() {
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -182,7 +183,8 @@ fn t8_vm_skill_draw_branch_end_to_end() {
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -217,7 +219,8 @@ fn t8_vm_skill_fuel_exhaustion_rolls_back() {
     let name = "t8超限";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -281,7 +284,8 @@ fn t8_vm_skill_choice_suspend_resume_midrestore() {
     let name = "t8酒尾选择";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -347,7 +351,8 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
     let name = "t8酒尾选择";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -386,7 +391,8 @@ fn t8_vm_skill_content_lock_rejects_pack_drift() {
     // 版本 +1 的同包（版本指纹漂移）
     let mut drifted = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module: module_of(
             &compile_source_named("t8-rvm-bridge", CHOICE_DSL).expect("重编译"),
@@ -466,7 +472,8 @@ fn t8_rejection_unmapped_effect_rolls_back() {
     let name = "t8改上限";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -493,7 +500,8 @@ fn t8_rejection_corrupted_bytecode_rejected_at_load() {
     let name = "t8坏码";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -521,7 +529,8 @@ fn t8_rejection_caps_escalation_denied() {
     let name = "t8越权";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -542,7 +551,8 @@ fn t8_rejection_tampered_snapshot_module_rejected() {
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -604,7 +614,8 @@ fn t8_vm_skill_filter_owner_is_source() {
     let name = "t8源";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: TriggerMeta {
@@ -638,7 +649,8 @@ fn t8_vm_skill_filter_always() {
     let name = "t8常";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -706,7 +718,8 @@ skill hnl_xproc_t8(990008) {
         let name = "t8跨进程";
         let pack = pack_with(vec![VmSkillDecl {
             r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
             name: name.to_string(),
             module,
             trigger: phase_end_trigger(),
@@ -736,7 +749,8 @@ skill hnl_xproc_t8(990008) {
     let name = "t8跨进程";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -827,7 +841,8 @@ fn t8_vm_skill_save_restore_roundtrip() {
     let name = "t8酒尾";
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: name.to_string(),
         module,
         trigger: phase_end_trigger(),
@@ -869,7 +884,8 @@ fn t8_vm_skill_id_reverse_lookup_wired() {
             host_skills: Vec::new(),
             vm_skills: vec![VmSkillDecl {
                 r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
                 name: decls[0].name.clone(),
                 module: decls[0].module.clone(),
                 trigger: TriggerMeta {
@@ -954,7 +970,8 @@ fn t8_filter_family_owner_gate_and_predicates() {
     for (idx, (filter, setup)) in cases.iter().enumerate() {
         let pack = pack_with(vec![VmSkillDecl {
             r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1193,7 +1210,8 @@ fn t8_bte_play_phase_filter_dual_gate_and_phase_kind() {
     {
         let pack = pack_with(vec![VmSkillDecl {
             r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1242,7 +1260,8 @@ fn t8_bte_zero_count_negative() {
     let module = module_of(&pkg, "hnl_bte_t8");
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "t8阵".to_string(),
         module,
         trigger: TriggerMeta {
@@ -1307,7 +1326,8 @@ fn param_probe_pack(
 ) -> ExtensionPack {
     pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "t8参".to_string(),
         module: module.clone(),
         trigger: TriggerMeta {
@@ -1511,7 +1531,8 @@ fn t8_filter_damage_before_hand_empty_elemental_or_trick() {
     let module = module_of(&pkg, "hnl_dbf_t8");
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "t8伤".to_string(),
         module,
         trigger: TriggerMeta {
@@ -1566,7 +1587,8 @@ fn t8_filter_damage_source_movable_field_card() {
     let module = module_of(&pkg, "hnl_mvf_t8");
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "t8移".to_string(),
         module,
         trigger: TriggerMeta {
@@ -1635,7 +1657,8 @@ fn t8_filter_tied_max_family() {
     let case = |filter: P, setup: fn(&mut Engine)| -> bool {
         let pack = pack_with(vec![VmSkillDecl {
             r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
             name: name.to_string(),
             module: module.clone(),
             trigger: trig.clone(),
@@ -1692,7 +1715,8 @@ fn t8_filter_targeted_by_other_sha() {
     let module = module_of(&pkg, "hnl_tgt_t8");
     let pack = pack_with(vec![VmSkillDecl {
         r05_identity: None,
-            declaration_hash: None,
+        declaration_hash: None,
+        presentation_binding: None,
         name: "t8指".to_string(),
         module,
         trigger: TriggerMeta {

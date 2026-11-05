@@ -11,7 +11,7 @@ fn suidun_prevents_once_per_turn() {
     assert_eq!(hp(&e, 0), 4, "碎盾防住第一段伤害");
     assert!(log_has(&e, |l| matches!(
         l,
-        LogEvent::DamagePrevented { target: 0 }
+        LogEvent::DamagePrevented { target: 0, .. }
     )));
     // 同回合不能再防：换 3（与 0 相邻）攻击
     advance_to_play(&mut e, 3);

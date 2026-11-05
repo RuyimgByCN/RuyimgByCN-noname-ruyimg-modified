@@ -54,8 +54,7 @@ impl HostMachine {
                         .insert((target, u32::from(def)), i32::from(self.owner));
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "门神",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -98,8 +97,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "李香龙",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.use_virtual_card(self.owner, crate::catalog::CardKind::Sha, vec![target]);
                     self.stage = HostStage::ShuchuiTargetLoop;
                     Flow::Yield
@@ -206,8 +204,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "冰封",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     Flow::Done
                 }
                 _ => Flow::Done,

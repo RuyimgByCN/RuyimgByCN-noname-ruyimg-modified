@@ -16,7 +16,7 @@
 //! content-runtime 也不能反向依赖 engine-native，故落在独立宿主层 crate，
 //! 供测试、客户端与服务端共用。
 
-use std::collections::{BTreeMap, BTreeSet};
+use std::collections::BTreeSet;
 use std::ops::RangeInclusive;
 
 use engine_native::catalog::{CardDef, CardKind, EquipSlot, Faction, Suit};
@@ -25,7 +25,6 @@ use engine_native::content::host::{
     card_kind_equip_skills, card_kind_host_skills, HostBehavior, HostSkillDecl,
 };
 use engine_native::content::names;
-use engine_native::content::pile::{PileEntry, PileSpec};
 use engine_native::content::standard::Gender;
 use serde_json::Value;
 
@@ -219,6 +218,8 @@ pub struct BridgedPack {
     pub pack: ExtensionPack,
     /// cards.json `deferred` 数组的牌名（登记暂缓，不阻断装载）。
     pub deferred: Vec<String>,
+    /// cards.json 声明的 definition_id。
+    pub definition_ids: BridgedDefinitionIds,
 }
 
 /// 武将技能装载产物。
@@ -230,6 +231,8 @@ pub struct BridgedGenerals {
     pub mapped_skill_keys: Vec<&'static str>,
     /// 未映射（暂缓）的技能计数。
     pub unmapped_skills: usize,
+    /// generals[].definition_id 与 generals[].skills[].definition_id。
+    pub definition_ids: BridgedDefinitionIds,
 }
 
 fn invalid(field: &'static str, reason: impl Into<String>) -> BridgeError {
@@ -259,11 +262,22 @@ mod vm_active;
 mod mechanisms;
 mod vm_generals;
 pub mod locked_content;
+pub mod presentation_binding;
 pub use locked_content::{
     deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
-    restore_locked_engine, start_locked_engine, validate_and_freeze_raw_package,
+    restore_locked_engine, restore_locked_engine_with_original_presentation, start_locked_engine,
+    start_locked_engine_with_original_presentation, validate_and_freeze_raw_package,
     validate_frozen_package, verify_locked_content, verify_locked_content_with_bridge, ContentLock,
     FrozenPackage, LockedContentEnvelope, LockedPackage, LockedStartMode, VerifiedLockedContent,
+};
+pub use presentation_binding::{
+    attach_embedded_original_presentation, attach_frozen_package_presentation_bindings,
+    attach_original_presentation_bindings, embedded_original_presentation_input,
+    frozen_package_owner_key, resolve_package_audio_asset, sha256_hex,
+    verify_original_presentation, verify_original_presentation_with_pins, BridgedDefinitionIds,
+    OriginalPresentationInput, VerifiedOriginalPresentation,
+    EXPECTED_ORIGINAL_ADOPTED_REVISION, EXPECTED_ORIGINAL_ASSET_MANIFEST_SHA256,
+    EXPECTED_ORIGINAL_CATALOG_SHA256, EXPECTED_ORIGINAL_REPOSITORY,
 };
 pub use vm_generals::bridge_generals_with_vm_package;
 
@@ -410,6 +424,7 @@ pub fn bridge_vm_skill_decls(
         };
         out.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,
+            presentation_binding: None,
             name: pkg.skill_index.iter().find(|skill| skill.skill_def_id == t.skill_def_id)
                 .ok_or_else(|| invalid("trigger_index.skill_def_id", "missing logical skill"))?.name.clone(),
             module: module.clone(),
@@ -439,7 +454,7 @@ pub fn bridge_vm_skill_decls(
     }
     vm_active::bridge_active_entries(pkg, &mut out)?;
     vm_active::join_trigger_only_entries(pkg, &mut out)?;
-    derive_r05_helpers(pkg, &mut out)?;
+    vm_active::derive_r05_helpers(pkg, &mut out)?;
     if !pkg.view_as_index.is_empty() {
         return Err(invalid(
             "view_as_index",
@@ -476,158 +491,6 @@ fn ensure_symbol_capacity() -> Result<(), BridgeError> {
     let limit = engine_native::content::names::SYMBOL_TABLE_LIMIT;
     if names::interned_count() >= limit {
         return Err(BridgeError::SymbolTableLimit { limit });
-    }
-    Ok(())
-}
-
-// ---- R05-E（裁决 28 合同 v3 §2）：三固定 compound 的四角色私有 helper 派生 ----
-
-/// 调用包可用的三 compound 效果标签（rule-vm `effect_tag`，ABI 759）。
-const R05_COMPOUND_TIQI: u16 = 781;
-const R05_COMPOUND_BAOSHU: u16 = 782;
-const R05_COMPOUND_DCBIHUO: u16 = 783;
-/// 角色顺序固定（Limit/Combs/Next/Current；`vm_effects::R05_ROLES` 同序）。
-const R05_ROLE_TAGS: [&str; 4] = ["limit", "combs", "next", "current"];
-
-/// compound → 它在该逻辑身份下需要的角色下标（§2：角色固定为
-/// Limit（Tiqi）、Combs（Baoshu）、Next/Current（Dcbihuo））。
-fn r05_roles_of(compound: u16) -> &'static [usize] {
-    match compound {
-        R05_COMPOUND_TIQI => &[0],
-        R05_COMPOUND_BAOSHU => &[1],
-        R05_COMPOUND_DCBIHUO => &[2, 3],
-        _ => &[],
-    }
-}
-
-/// 在模块代码段按指令边界扫描 `HOST_EFFECT_EXT`（0x5A）立即数标签。
-/// 模块装载期已经 `VmSkillProgram::new` 静态校验（PA06），指令流可安全
-/// 线性解码；装载器不依赖 rule-vm，故按稳定 ABI 字节自扫。
-fn r05_module_compounds(code: &[u8], found: &mut Vec<u16>) {
-    let mut i = 0usize;
-    while i < code.len() {
-        let opc = code[i];
-        i += 1;
-        match opc {
-            // CONST_I32 / CONST_U32 / CONST_BOOL：4 字节立即数。
-            0x10 | 0x11 | 0x12 => i += 4,
-            // LOAD / STORE / HOST_EFFECT / HOST_QUERY / HOST_CHOICE：1 字节。
-            0x20 | 0x21 | 0x50 | 0x51 | 0x52 => i += 1,
-            // JUMP / JUMP_IF_FALSE：2 字节相对位移。
-            0x40 | 0x41 => i += 2,
-            0x5A => {
-                // HOST_EFFECT_EXT：小端 u16 标签。
-                if i + 2 <= code.len() {
-                    let tag = u16::from_le_bytes([code[i], code[i + 1]]);
-                    if !r05_roles_of(tag).is_empty() && !found.contains(&tag) {
-                        found.push(tag);
-                    }
-                }
-                i += 2;
-            }
-            // 其余（NOP/HALT/DUP/POP/算术/HOST_* 无立即数/TRAP）：0。
-            _ => {}
-        }
-    }
-}
-
-/// 固定模板派生：验证调用包声明的 compound 后，为每个逻辑身份 I=
-/// (namespace, package_id, logical_skill_def_id) 在同一 Catalog 追加
-/// 私有 helper 定义——名称 `{逻辑技能名}#r05:{role}`（包/逻辑技能下
-/// 限定），每个 (I,role) 恰一（多 handler 复用同一 compound 幂等）；
-/// 行为面为惰性 `Handlers`（无 active、无 trigger），语义只由
-/// `VmAux.marks[(target, helper_catalog_def)]` 承载；派生顺序按
-/// skill_index 序 × 角色固定序，确定性合并（§2：输入数组顺序无关）。
-fn derive_r05_helpers(
-    pkg: &content_schema::ContentPackage,
-    out: &mut Vec<engine_native::content::extension::VmSkillDecl>,
-) -> Result<(), BridgeError> {
-    use engine_native::rvm_bridge::{
-        BytecodeModule, VmActiveLimits, VmFilterPolicy, VmHandlerSet,
-    };
-    use std::sync::Arc;
-    for skill in &pkg.skill_index {
-        let mut compounds: Vec<u16> = Vec::new();
-        let module_names: Vec<&str> = pkg
-            .trigger_index
-            .iter()
-            .filter(|t| t.skill_def_id == skill.skill_def_id)
-            .map(|t| t.module.as_str())
-            .collect();
-        let active_module = pkg
-            .active_index
-            .iter()
-            .find(|a| a.skill_def_id == skill.skill_def_id)
-            .map(|a| a.module.as_str());
-        for name in active_module.into_iter().chain(module_names) {
-            if let Some(module) = pkg.modules.iter().find(|m| m.name == name) {
-                r05_module_compounds(&module.code, &mut compounds);
-            }
-        }
-        compounds.sort_unstable();
-        for compound in compounds {
-            for &role in r05_roles_of(compound) {
-                let name = format!("{}#r05:{}", skill.name, R05_ROLE_TAGS[role]);
-                if out.iter().any(|d| d.name == name) {
-                    return Err(invalid(
-                        "skill_index",
-                        format!("重复身份/角色：派生 helper {name} 已存在"),
-                    ));
-                }
-                // 惰性模块：单 HALT（0x01，稳定 ABI 字节）——装载器无
-                // rule-vm 依赖，按 rule-vm `op::HALT` 字节值内联。
-                let code = vec![0x01u8];
-                let helper = BytecodeModule {
-                    logic_hash: BytecodeModule::compute_logic_hash(&name, &code, 0, 0, 0),
-                    name: name.clone(),
-                    code,
-                    local_count: 0,
-                    max_stack: 1,
-                    entry_pc: 0,
-                    caps_mask: 0,
-                };
-                // 装载期校验与桥接一致性（畸形模板即拒）。
-                engine_native::rvm_bridge::VmSkillProgram::new(helper.clone(), name.clone())
-                    .map_err(|e| invalid("r05_helper", e.to_string()))?;
-                out.push(engine_native::content::extension::VmSkillDecl {
-                    declaration_hash: None,
-                    name,
-                    module: helper,
-                    trigger: engine_native::catalog::TriggerMeta {
-                        // 惰性面：filter 永假，事件种不参与调度。
-                        event: engine_native::event::EventKind::SkillToggled,
-                        timing: engine_native::event::Timing::Normal,
-                        priority: 0,
-                        order_selectable: true,
-                        optional: false,
-                        extra_events: Vec::new(),
-                    },
-                    filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
-                        skill_def_id: skill.skill_def_id,
-                        active: None,
-                        limits: VmActiveLimits {
-                            once_per_turn: false,
-                            once_per_play_phase: false,
-                            hand_nonempty: false,
-                            equip_nonempty: false,
-                            hand_gt_hp: false,
-                            hand_gt_max_hp: false,
-                            face_up: false,
-                            owner_unlinked: false,
-                            mark_at_least: None,
-                        },
-                        triggers: Vec::new(),
-                    })),
-                    // R05-H（§8）：公开逻辑身份随派生 helper 下传——已验证
-                    // 包清单的 namespace/package_id + 技能索引的逻辑定义号。
-                    r05_identity: Some(engine_native::catalog::QualifiedSkillRef {
-                        namespace: pkg.manifest.namespace.clone(),
-                        package_id: pkg.manifest.package_id.clone(),
-                        logical_skill_def_id: skill.skill_def_id,
-                    }),
-                });
-            }
-        }
     }
     Ok(())
 }
@@ -847,9 +710,13 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
 
     let mut cards = Vec::new();
     let mut host_skills: Vec<HostSkillDecl> = Vec::new();
+    let mut definition_ids = BridgedDefinitionIds::default();
     // cards 缺省为空：纯武将包（角色包管线）合法。
     for (i, c) in opt_array(&parsed, "cards", "cards")?.iter().enumerate() {
         let name = req_str(c, "name", "cards[].name")?;
+        let card_def_id =
+            opt_int(c, "definition_id", "cards[].definition_id", 1..=u64::from(u32::MAX))?
+                .map(|n| n as u32);
         let kind_key = req_str(c, "kind", "cards[].kind")?;
         let kind = CardKind::from_key(kind_key)
             .ok_or_else(|| BridgeError::UnknownCardKind(kind_key.to_string()))?;
@@ -897,7 +764,11 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
                 .ok_or_else(|| invalid("cards[].skills", format!("未知宿主技能键 {s}")))?;
             let name = names::intern(s.to_string());
             if !host_skills.iter().any(|d| d.name == name) {
-                host_skills.push(HostSkillDecl { name, behavior });
+                host_skills.push(HostSkillDecl {
+                    name,
+                    behavior,
+                    presentation_binding: None,
+                });
             }
         }
         for decl in card_kind_host_skills(kind) {
@@ -906,16 +777,34 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             }
         }
         cards.push(def);
+        definition_ids.card_definition_ids.push(card_def_id);
     }
 
     for sk in opt_array(&parsed, "skills", "skills")? {
         let key = req_str(sk, "name", "skills[].name")?;
+        let sk_def_id =
+            opt_int(sk, "definition_id", "skills[].definition_id", 0..=u64::from(u32::MAX))?
+                .map(|n| n as u32);
         // cards.json 面暂无内置引用需求：Deferred/Builtin 均跳过
-        if let MappedSkill::Host(behavior) = mapping_of(sk, "skills[].mapping")? {
-            host_skills.push(HostSkillDecl {
-                name: names::intern(key.to_string()),
-                behavior,
-            });
+        match mapping_of(sk, "skills[].mapping")? {
+            MappedSkill::Host(behavior) => {
+                let interned = names::intern(key.to_string());
+                host_skills.push(HostSkillDecl {
+                    name: interned,
+                    behavior,
+                    presentation_binding: None,
+                });
+                definition_ids
+                    .host_skill_definition_ids
+                    .insert(interned, sk_def_id);
+            }
+            _ if sk_def_id.is_some() => {
+                return Err(invalid(
+                    "skills[].definition_id",
+                    format!("非宿主技能 {key} 不能绑定 definition_id"),
+                ));
+            }
+            _ => {}
         }
     }
 
@@ -951,6 +840,7 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
             None => host_skills.push(decl),
         }
     }
+    definition_ids.merge(generals_out.definition_ids)?;
     let pack = ExtensionPack {
         def: meta.def,
         generals: generals_out.generals,
@@ -962,7 +852,11 @@ pub fn bridge_pack(json: &str) -> Result<BridgedPack, BridgeError> {
         init_hook: meta.init_hook,
         enabled: true,
     };
-    Ok(BridgedPack { pack, deferred })
+    Ok(BridgedPack {
+        pack,
+        deferred,
+        definition_ids,
+    })
 }
 
 /// 武将装载（角色包管线）：generals 数组 → `ExtensionGeneral` + 命中宿主
@@ -1005,11 +899,22 @@ fn bridge_generals_inner(
     let mut mapped_skill_keys = Vec::new();
     let mut host_skills: Vec<HostSkillDecl> = Vec::new();
     let mut unmapped = 0usize;
+    let mut definition_ids = BridgedDefinitionIds::default();
     for g in generals_json {
         let name = req_str(g, "name", "generals[].name")?;
+        let gen_def_id =
+            opt_int(g, "definition_id", "generals[].definition_id", 0..=u64::from(u32::MAX))?
+                .map(|n| n as u32);
         let mut skills: Vec<&'static str> = Vec::new();
         for sk in req_array(g, "skills", "generals[].skills")? {
             let key = req_str(sk, "name", "generals[].skills[].name")?;
+            let sk_def_id = opt_int(
+                sk,
+                "definition_id",
+                "generals[].skills[].definition_id",
+                0..=u64::from(u32::MAX),
+            )?
+            .map(|n| n as u32);
             match mapping_of(sk, "generals[].skills[].mapping")? {
                 MappedSkill::Host(behavior) => {
                     let interned = names::intern(key.to_string());
@@ -1021,7 +926,35 @@ fn bridge_generals_inner(
                         None => host_skills.push(HostSkillDecl {
                             name: interned,
                             behavior,
+                            presentation_binding: None,
                         }),
+                    }
+                    match (
+                        definition_ids
+                            .host_skill_definition_ids
+                            .get(interned)
+                            .copied()
+                            .flatten(),
+                        sk_def_id,
+                    ) {
+                        (Some(existing), Some(incoming)) if existing != incoming => {
+                            return Err(invalid(
+                                "generals[].skills[].definition_id",
+                                format!("宿主技能 {key} 的 definition_id 冲突: {existing} vs {incoming}"),
+                            ));
+                        }
+                        (None, Some(incoming)) => {
+                            definition_ids
+                                .host_skill_definition_ids
+                                .insert(interned, Some(incoming));
+                        }
+                        (None, None) => {
+                            definition_ids
+                                .host_skill_definition_ids
+                                .entry(interned)
+                                .or_insert(None);
+                        }
+                        (Some(_), _) => {}
                     }
                     skills.push(interned);
                     mapped_skill_keys.push(interned);
@@ -1038,6 +971,7 @@ fn bridge_generals_inner(
                             None => host_skills.push(HostSkillDecl {
                                 name: child,
                                 behavior: child_behavior,
+                                presentation_binding: None,
                             }),
                         }
                         if !skills.contains(&child) {
@@ -1049,6 +983,12 @@ fn bridge_generals_inner(
                 // 内置引用：技能 def 已在标准目录（白名单保证实现存在）
                 // ——只 intern 进武将技能列表，不产出 host 行为。
                 MappedSkill::Builtin(builtin) => {
+                    if sk_def_id.is_some() {
+                        return Err(invalid(
+                            "generals[].skills[].definition_id",
+                            format!("builtin 技能引用 {builtin} 不能声明包内 definition_id"),
+                        ));
+                    }
                     skills.push(names::intern(builtin.to_string()));
                 }
                 MappedSkill::Deferred if known_vm_skills.contains(key) => {
@@ -1060,7 +1000,15 @@ fn bridge_generals_inner(
                         format!("VM 包的武将技能 {key} 未映射"),
                     ));
                 }
-                MappedSkill::Deferred => unmapped += 1,
+                MappedSkill::Deferred => {
+                    if sk_def_id.is_some() {
+                        return Err(invalid(
+                            "generals[].skills[].definition_id",
+                            format!("暂缓技能 {key} 不能声明 definition_id"),
+                        ));
+                    }
+                    unmapped += 1;
+                }
             }
         }
         let faction = faction_of(req_str(g, "faction", "generals[].faction")?)?;
@@ -1084,88 +1032,18 @@ fn bridge_generals_inner(
             skills: names::intern_list(skills),
             max_hp,
             gender,
+            presentation_binding: None,
         });
+        definition_ids.general_definition_ids.push(gen_def_id);
     }
     Ok(BridgedGenerals {
         generals,
         host_skills,
         mapped_skill_keys,
         unmapped_skills: unmapped,
+        definition_ids,
     })
 }
 
-/// 牌堆比例表装载（T6①）：已安装 cardpile 包的 `assets/pile.json` →
-/// `PileSpec`。字段缺失/类型非法给出明确原因；未知牌名/花色、空条目与
-/// 零张数由 [`engine_native::content::pile::extension_pack_from_pile`]
-/// 在构建期校验。`counts` 键经 `BTreeMap` 排序——生成卡牌序（目录编号、
-/// 发牌序的一部分）与解析器实现无关，仅由数据决定。
-pub fn bridge_pile(json: &str) -> Result<PileSpec, BridgeError> {
-    ensure_symbol_capacity()?;
-    let parsed = parse_json(json)?;
-    let source = req_str(&parsed, "source", "pile.json source")?.to_string();
-    let total = req_int(&parsed, "total", "pile.json total", 1..=u64::from(u32::MAX))? as u32;
-    let mut entries = Vec::new();
-    for e in req_array(&parsed, "entries", "pile.json entries")? {
-        let card = req_str(e, "card", "pile.json entries[].card")?.to_string();
-        let counts_json = match e.get("counts") {
-            None | Some(Value::Null) => {
-                return Err(BridgeError::MissingField("pile.json entries[].counts"))
-            }
-            Some(Value::Object(m)) => m,
-            Some(other) => {
-                return Err(invalid(
-                    "pile.json entries[].counts",
-                    format!("须为对象，实为 {other}"),
-                ))
-            }
-        };
-        let counts: BTreeMap<String, u32> = counts_json
-            .iter()
-            .map(|(suit, n)| {
-                let n = int_in(n, "pile.json entries[].counts", 1..=u64::from(u32::MAX))? as u32;
-                Ok((suit.clone(), n))
-            })
-            .collect::<Result<BTreeMap<_, _>, BridgeError>>()?;
-        entries.push(PileEntry {
-            card,
-            counts: counts.into_iter().collect(),
-        });
-    }
-    Ok(PileSpec {
-        source,
-        total,
-        entries,
-    })
-}
-
-const PILE_FACTOR_CARDS: &[&str] = &[
-    "guohe", "huosha", "jiu", "leisha", "nanman", "sha", "shan", "shunshou", "tao", "tiesuo",
-    "wanjian", "wuxie",
-];
-
-/// 解析牌堆倍率。键必须是比例表里的牌名，值必须是有限非负数。
-///
-/// 缺某个牌名不是这里的错误：[`engine_native::content::pile::scale_plan`]
-/// 会把它看成上游未配置，从而不追加牌。
-pub fn parse_pile_factors(json: &str) -> Result<BTreeMap<String, f64>, String> {
-    let value: Value = serde_json::from_str(json).map_err(|err| format!("factors: {err}"))?;
-    let obj = value
-        .as_object()
-        .ok_or_else(|| "factors: not an object".to_string())?;
-    let mut factors = BTreeMap::new();
-    for (key, raw) in obj {
-        if !PILE_FACTOR_CARDS.contains(&key.as_str()) {
-            return Err(format!("unknown pile factor {key}"));
-        }
-        let number = raw
-            .as_f64()
-            .ok_or_else(|| format!("pile factor {key} is not a number"))?;
-        if !number.is_finite() || number < 0.0 {
-            return Err(format!(
-                "pile factor {key} must be a finite non-negative number"
-            ));
-        }
-        factors.insert(key.clone(), number);
-    }
-    Ok(factors)
-}
+mod pile_bridge;
+pub use pile_bridge::{bridge_pile, parse_pile_factors};

@@ -19,8 +19,7 @@ impl HostMachine {
             HostBehavior::Kurou => {
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "苦肉",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 ctx.emit(EventData::LoseHp {
                     player: self.owner,
                     amount: 1,
@@ -47,8 +46,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "主亡忠继",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 门神·清除：移除全场门神实例与标记
@@ -68,8 +66,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "门神·清除",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 灾变：摸「忠 + 2 - 反 - 内」（下限 0）张
@@ -98,8 +95,7 @@ impl HostMachine {
                     ctx.start_draw(self.owner, n as u32);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "灾变",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                 }
                 Flow::Done
             }
@@ -117,8 +113,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "循梦",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 集舍：摸 1 + 累计标记（上游 jishe2 的手牌上限削减不生效）
@@ -133,8 +128,7 @@ impl HostMachine {
                 *entry += 1;
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "集舍",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 鬼蛇旗：目标 +1 护甲（change_hujia=受伤抵 1 伤语义）
@@ -275,8 +269,7 @@ impl HostMachine {
                 let _ = ctx.core.vm_aux.marks.get(&(self.owner, def)).copied();
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "止息",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 撷芳：刷新「存活女性数」标记（0 时清除）
@@ -315,8 +308,7 @@ impl HostMachine {
                     ctx.current_card_use_mut().cancelled = true;
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "疾风·失误",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                 }
                 Flow::Done
             }
@@ -350,8 +342,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "昆仑镜",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 // 回滚：把快照中的牌拉回各自原位（当前所在区任意）
                 let snap = std::mem::take(&mut ctx.core.turn.kunlunjing_snapshot);
                 for (p, hand, equips, judge) in snap {
@@ -444,8 +435,7 @@ impl HostMachine {
                     ctx.core.declared_slots.insert(card, slot);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "改造",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     Flow::Done
                 }
                 _ => Flow::Done,
@@ -504,8 +494,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "革新印",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 选另一花色（其余三色）
                     let rest: Vec<u8> = (0..=3u8).filter(|s| *s != suit).collect();
                     self.card = Some(count as CardId);
@@ -595,8 +584,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "魂殉志",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 // 视为对全部其他存活角色使用万箭齐发（座位序）
                 let targets: Vec<PlayerId> = ctx
                     .core
@@ -662,8 +650,7 @@ impl HostMachine {
                 }
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "天香·受",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 卫统：登记面（实际加成由潜龙内容按同条件判定）

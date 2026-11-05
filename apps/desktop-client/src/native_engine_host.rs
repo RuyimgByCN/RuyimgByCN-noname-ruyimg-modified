@@ -268,7 +268,7 @@ impl HostSession {
                 if players == 0 || observer >= players || seed > MAX_SAFE_INTEGER {
                     return Err("native: invalid players, observer or seed".into());
                 }
-                let candidate = match mode.as_deref() {
+                let mut candidate = match mode.as_deref() {
                     Some("identity") => NativeSession::new_identity_with_packs_json(
                         players,
                         seed,
@@ -281,7 +281,7 @@ impl HostSession {
                     )?,
                     _ => return Err("native: unknown match mode".into()),
                 };
-                let data = envelope(&candidate, observer, &mut 0, Value::Null)?;
+                let data = envelope(&mut candidate, observer, &mut 0, Value::Null, false)?;
                 *session = candidate;
                 self.observer = observer;
                 self.cursor = 0;
@@ -297,7 +297,7 @@ impl HostSession {
                 if players == 0 || observer >= players || seed > MAX_SAFE_INTEGER {
                     return Err("native: invalid players, observer or seed".into());
                 }
-                let candidate = match mode.as_deref() {
+                let mut candidate = match mode.as_deref() {
                     Some("identity") => NativeSession::new_identity_with_locked_content_json(
                         players,
                         seed,
@@ -308,7 +308,7 @@ impl HostSession {
                     }
                     _ => return Err("native: unknown match mode".into()),
                 };
-                let data = envelope(&candidate, observer, &mut 0, Value::Null)?;
+                let data = envelope(&mut candidate, observer, &mut 0, Value::Null, false)?;
                 *session = candidate;
                 self.observer = observer;
                 self.cursor = 0;
@@ -332,6 +332,7 @@ impl HostSession {
                 targets,
                 card_targets,
             } => {
+                session.retire_public_presentation();
                 if !targets.is_empty() || !card_targets.is_empty() {
                     return Err(
                         "native: activateSkill 不接受预选目标（目标由内核开放选择应答决定）".into(),
@@ -345,6 +346,7 @@ impl HostSession {
                 selections,
                 cancelled,
             } => {
+                session.retire_public_presentation();
                 if choice_id > MAX_SAFE_INTEGER {
                     return Err("native: invalid choiceId".into());
                 }
@@ -363,25 +365,30 @@ impl HostSession {
                 )?)?
             }
             Request::AutoStep => parsed(session.auto_step()?)?,
-            Request::Observer => Value::Null,
+            Request::Observer => {
+                return envelope(session, self.observer, &mut self.cursor, Value::Null, false);
+            }
             Request::Status => {
+                session.retire_public_presentation();
                 return Ok(
                     json!({"kind": "status", "revision": session.revision(), "finished": session.is_finished()}),
-                )
+                );
             }
             Request::GeneralCandidates => return parsed(session.general_candidates_json()),
             Request::ChooseGeneral { seat, name } => {
+                session.retire_public_presentation();
                 let assignment = parsed(session.assign_general(seat, &name)?)?;
                 return Ok(
-                    json!({"assignment": assignment, "envelope": envelope(session, self.observer, &mut self.cursor, Value::Null)?}),
+                    json!({"assignment": assignment, "envelope": envelope(session, self.observer, &mut self.cursor, Value::Null, false)?}),
                 );
             }
             Request::Save => return Ok(json!({"kind": "save", "hex": session.save_hex()})),
             Request::SaveLocked => return parsed(session.save_locked_json()?),
             Request::Restore { hex, packs } => {
+                session.retire_public_presentation();
                 let mut candidate = NativeSession::new(1, 0)?;
                 candidate.restore_hex_with_packs_json(&hex, packs.as_deref().unwrap_or("[]"))?;
-                let data = envelope(&candidate, self.observer, &mut 0, Value::Null)?;
+                let data = envelope(&mut candidate, self.observer, &mut 0, Value::Null, false)?;
                 // Preserve planner settings on the live session, as the Worker does.
                 session.restore_hex_with_packs_json(&hex, packs.as_deref().unwrap_or("[]"))?;
                 self.cursor = 0;
@@ -391,9 +398,10 @@ impl HostSession {
                 hex,
                 locked_content,
             } => {
+                session.retire_public_presentation();
                 let mut candidate = NativeSession::new(1, 0)?;
                 candidate.restore_hex_with_locked_content_json(&hex, &locked_content)?;
-                let data = envelope(&candidate, self.observer, &mut 0, Value::Null)?;
+                let data = envelope(&mut candidate, self.observer, &mut 0, Value::Null, false)?;
                 session.restore_hex_with_locked_content_json(&hex, &locked_content)?;
                 self.cursor = 0;
                 return Ok(data);
@@ -406,7 +414,7 @@ impl HostSession {
             | Request::ValidateFrozenPackage { .. }
             | Request::PrepareLockedContent { .. } => unreachable!(),
         };
-        envelope(session, self.observer, &mut self.cursor, result)
+        envelope(session, self.observer, &mut self.cursor, result, true)
     }
 }
 

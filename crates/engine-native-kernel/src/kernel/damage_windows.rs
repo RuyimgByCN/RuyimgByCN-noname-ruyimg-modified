@@ -25,7 +25,7 @@ pub(super) fn apply_native_damage(
                 // 的独立事件同门控）。置于各伤害增幅钩前：伤害已整体取消，
                 // damageBegin 类增幅同上游一样不再结算。
                 if ctx.core.player(d.target).jidong_active {
-                    ctx.log(LogEvent::DamagePrevented { target: d.target });
+                    ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                     finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
                     return;
                 }
@@ -34,7 +34,7 @@ pub(super) fn apply_native_damage(
                 // 诚信免伤（U05 xianjian 明绣，规则 v164）：锁定——免伤状态目标受
                 // 所有伤害无效（上游 chengxin2 damageBefore trigger.cancel 同口径）
                 if ctx.core.player(d.target).chengxin_active {
-                    ctx.log(LogEvent::DamagePrevented { target: d.target });
+                    ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                     finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
                     return;
                 }
@@ -143,7 +143,7 @@ pub(super) fn apply_native_damage(
                         .skill_by_name(crate::vocabulary::names::BOSS_HUOSHEN)
                     {
                         if ctx.core.player(d.target).alive && ctx.core.has_skill(d.target, hsdef) {
-                            ctx.log(LogEvent::DamagePrevented { target: d.target });
+                            ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                             finish_damage(
                                 ctx,
                                 root,
@@ -182,7 +182,7 @@ pub(super) fn apply_native_damage(
                         .skill_by_name(crate::vocabulary::names::BOSS_ZHAOHUO)
                     {
                         if ctx.core.has_skill(d.target, zdef) {
-                            ctx.log(LogEvent::DamagePrevented { target: d.target });
+                            ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                             finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
                             return;
                         }
@@ -198,7 +198,7 @@ pub(super) fn apply_native_damage(
                     .skill_by_name(crate::vocabulary::names::BOSS_NITAI)
                 {
                     if ctx.core.has_skill(d.target, ndef) && ctx.core.turn.current == d.target {
-                        ctx.log(LogEvent::DamagePrevented { target: d.target });
+                        ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                         finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
                         return;
                     }

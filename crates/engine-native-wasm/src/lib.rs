@@ -187,6 +187,14 @@ impl NativeEngine {
         self.inner.public_event_codes_json(start)
     }
 
+    pub fn take_public_presentation_json(&mut self) -> Result<String, JsValue> {
+        self.inner.take_public_presentation_json().map_err(js_error)
+    }
+
+    pub fn retire_public_presentation(&mut self) {
+        self.inner.retire_public_presentation();
+    }
+
     pub fn save_hex(&self) -> String {
         self.inner.save_hex()
     }

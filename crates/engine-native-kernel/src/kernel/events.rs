@@ -204,23 +204,25 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             }
         }
     }
+    // view-as 声明持久化：延时锦囊转化（国色）需跨阶段保存声明牌种，
+    // 判定生效时按声明牌种执行（目录牌种不再可靠）。
+    if let (Some(card), Some(as_kind)) = (u.card, u.use_as) {
+        ctx.core.declared_kinds.insert(card, as_kind);
+    }
     if let Some(card) = u.card {
         ctx.log(LogEvent::CardPlayed {
             card,
             player: u.player,
             targets: u.targets.clone(),
+            presentation: None,
         });
     } else {
         ctx.log(LogEvent::VirtualCardPlayed {
             kind: u.effective_kind(ctx.catalog),
             player: u.player,
             targets: u.targets.clone(),
+            presentation: None,
         });
-    }
-    // view-as 声明持久化：延时锦囊转化（国色）需跨阶段保存声明牌种，
-    // 判定生效时按声明牌种执行（目录牌种不再可靠）。
-    if let (Some(card), Some(as_kind)) = (u.card, u.use_as) {
-        ctx.core.declared_kinds.insert(card, as_kind);
     }
     // view-as 转化（武圣/龙胆）：以声明牌种结算，而非目录牌种
     let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));

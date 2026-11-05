@@ -40,7 +40,7 @@ pub fn commit_frame(ctx: &mut Ctx<'_>, frame_id: EventId) {
         EventData::CardsDiscarded { player, .. } => commit_cards_discarded(ctx, player),
         EventData::CardsMoved { to, .. } => commit_cards_moved(ctx, to),
         EventData::Recover { player, .. } => commit_recover_skills(ctx, player),
-        // CardsDrawn/Recover/CardsMoved 等在构造时已由助手完成区移动作。
+        // CardsDrawn/Recover/CardsMoved/CardResponded 等在构造或 emit 时已完成日志/区移动作。
         _ => {
             let _ = kind;
         }

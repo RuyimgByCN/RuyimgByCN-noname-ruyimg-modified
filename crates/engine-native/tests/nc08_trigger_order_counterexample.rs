@@ -428,7 +428,7 @@ fn owner_buckets_precede_priority_and_first_last_are_automatic() {
         .log()
         .iter()
         .filter_map(|l| match l {
-            engine_native::machine::LogEvent::SkillTriggered { skill, owner }
+            engine_native::machine::LogEvent::SkillTriggered { skill, owner, .. }
                 if skill.starts_with("c331_") =>
             {
                 Some((*skill, *owner))
@@ -748,6 +748,7 @@ fn c331_review_k3_real_pending_reveal_injects_same_and_future_owner_once() {
             skills: &["c331_heal"],
             max_hp: 4,
             gender: engine_native::content::standard::Gender::Male,
+            presentation_binding: None,
         });
         let mut e = Engine::new_with_extensions(33103, 4, &[&p]).unwrap();
         e.debug_set_turn(0, Phase::Play, 1);
@@ -824,7 +825,7 @@ fn c331_review_k3_real_pending_reveal_injects_same_and_future_owner_once() {
             answer(&mut e, selection.clone());
             answer(&mut r, selection);
         }
-        assert_eq!(e.log().iter().filter(|l|matches!(l,engine_native::LogEvent::SkillTriggered{skill:"c331_heal",owner:p} if *p==owner)).count(),usize::from(owner!=0));
+        assert_eq!(e.log().iter().filter(|l|matches!(l,engine_native::LogEvent::SkillTriggered{skill:"c331_heal",owner:p, .. } if *p==owner)).count(),usize::from(owner!=0));
         assert_eq!(&e.log()[event_cursor..], r.log());
         let expected = e.save();
         let mut actual = r.save();
@@ -1015,6 +1016,7 @@ fn c331_huanle_equipment_priority_waits_for_normal_owner_peers() {
     p.host_skills.push(HostSkillDecl {
         name: "c331_jiuwei",
         behavior: HostBehavior::PhaseEndRecoverOrDraw,
+        presentation_binding: None,
     });
     let mut e = ready(&p);
     e.debug_grant(1, "c331_jiuwei");

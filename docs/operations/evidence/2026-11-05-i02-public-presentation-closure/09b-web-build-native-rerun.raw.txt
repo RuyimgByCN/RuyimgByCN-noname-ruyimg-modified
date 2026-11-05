@@ -1,0 +1,87 @@
+
+> noname-next-web-client@0.1.0 build:native /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client
+> node scripts/build-native.mjs
+
+[INFO]: 🎯  Checking for the Wasm target...
+[INFO]: 🌀  Compiling to Wasm...
+   Compiling engine-native-wasm v0.1.0 (/Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm)
+error[E0433]: cannot find module or crate `serde` in this scope
+   --> crates/engine-native-wasm/src/session.rs:921:18
+    |
+921 |         #[derive(serde::Serialize)]
+    |                  ^^^^^ use of unresolved module or unlinked crate `serde`
+
+
+error[E0277]: the trait bound `SaveLockedOutput<'_>: serde::Serialize` is not satisfied
+    --> crates/engine-native-wasm/src/session.rs:932:31
+     |
+ 932 |           serde_json::to_string(&SaveLockedOutput {
+     |  _________---------------------_^
+     | |         |
+     | |         required by a bound introduced by this call
+ 933 | |             kind: "saveLocked",
+ 934 | |             hex: self.save_hex(),
+ 935 | |             canonical_locked_content: verified.lock(),
+ 936 | |             frozen_packages: verified.copies(),
+ 937 | |         })
+     | |_________^ unsatisfied trait bound
+     |
+help: the trait `serde_core::ser::Serialize` is not implemented for `SaveLockedOutput<'_>`
+    --> crates/engine-native-wasm/src/session.rs:922:9
+     |
+ 922 |         struct SaveLockedOutput<'a> {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     = note: for local types consider adding `#[derive(serde::Serialize)]` to your `SaveLockedOutput<'_>` type
+     = note: for types from other crates check whether the crate offers a `serde` feature flag
+     = help: the following other types implement trait `serde_core::ser::Serialize`:
+               &'a T
+               &'a mut T
+               ()
+               (T,)
+               (T0, T1)
+               (T0, T1, T2)
+               (T0, T1, T2, T3)
+               (T0, T1, T2, T3, T4)
+             and 238 others
+note: required by a bound in `serde_json::to_string`
+    --> /Users/ruyimg/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/serde_json-1.0.150/src/ser.rs:2247:17
+     |
+2245 | pub fn to_string<T>(value: &T) -> Result<String>
+     |        --------- required by a bound in this function
+2246 | where
+2247 |     T: ?Sized + Serialize,
+     |                 ^^^^^^^^^ required by this bound in `to_string`
+     = note: the full name for the type has been written to '/Users/ruyimg/Documents/Claude/sanguosha/noname-next/target/wasm32-unknown-unknown/release/deps/engine_native_wasm.long-type-17437605911593364783.txt'
+     = note: consider using `--verbose` to print the full type name to the console
+
+
+Some errors have detailed explanations: E0277, E0433.
+
+For more information about an error, try `rustc --explain E0277`.
+
+error: could not compile `engine-native-wasm` (lib) due to 2 previous errors
+Error: `cargo build` failed, see the output above for details
+Caused by: `cargo build` failed, see the output above for details
+node:internal/errors:998
+  const err = new Error(message);
+              ^
+
+Error: Command failed: wasm-pack build /Users/ruyimg/Documents/Claude/sanguosha/noname-next/crates/engine-native-wasm --target web --release --no-opt --out-dir /Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/src/worker/.native-pkg-tmp
+    at genericNodeError (node:internal/errors:998:15)
+    at wrappedFn (node:internal/errors:543:14)
+    at checkExecSyncError (node:child_process:926:11)
+    at execFileSync (node:child_process:962:15)
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/build-native.mjs:27:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:447:25)
+    at async node:internal/modules/esm/loader:646:26
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5) {
+  status: 1,
+  signal: null,
+  output: [ null, null, null ],
+  pid: 48155,
+  stdout: null,
+  stderr: null
+}
+
+Node.js v26.4.0
+ ELIFECYCLE  Command failed with exit code 1.

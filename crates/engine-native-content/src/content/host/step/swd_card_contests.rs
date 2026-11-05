@@ -243,8 +243,7 @@ impl HostMachine {
                     let def_id = u16::from(def);
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "天书",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 弃置锦囊手牌（上游 phaseUse 用牌消耗）
                     if ctx.core.player(self.owner).hand.contains(&card) {
                         ctx.discard_from_hand(self.owner, card);

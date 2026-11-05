@@ -141,7 +141,7 @@ fn c9f_abi_nature_draw_and_source_are_real() {
         let prevented = e
             .log()
             .iter()
-            .any(|x| matches!(x, engine_native::LogEvent::DamagePrevented { target: 0 }));
+            .any(|x| matches!(x, engine_native::LogEvent::DamagePrevented { target: 0, .. }));
         let dealt = e.log().iter().any(|x| matches!(
             x,
             engine_native::LogEvent::DamageDealt {
@@ -255,6 +255,7 @@ fn c9f_cuidui_named_source_draw_and_foreign_name_negative() {
                 skills: &[],
                 max_hp: 5,
                 gender: engine_native::vocabulary::generals::Gender::Male,
+                presentation_binding: None,
             });
         let mut e = Engine::new_with_extensions(14015, 4, &[&p]).unwrap();
         let id = if actual {

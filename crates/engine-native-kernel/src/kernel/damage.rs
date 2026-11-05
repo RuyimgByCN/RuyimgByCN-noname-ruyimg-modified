@@ -3,7 +3,7 @@ use super::*;
 /// Submit one canonical source amount; DamageFlow owns later callbacks and Dying.
 pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::event::DamageData) {
     if d.prevented {
-        ctx.log(LogEvent::DamagePrevented { target: d.target });
+        ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
         return;
     }
@@ -87,8 +87,7 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         target: d.target,
         amount: d.amount.max(0) as u32,
         redirected_from: d.redirect_chain.clone(),
-        card: d.card,
-    });
+        card: d.card, presentation: None });
     if d.nature != crate::event::DamageNature::Normal && ctx.core.player(d.target).linked {
         ctx.core.player_mut(d.target).linked = false;
         ctx.log(LogEvent::Linked {

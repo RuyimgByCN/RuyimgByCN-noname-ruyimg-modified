@@ -611,8 +611,7 @@ impl HostMachine {
                     };
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "集控",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     if let Some(def) = ctx.catalog.skill_by_name(SWD_JIKONG_KEY) {
                         if let Some(inst) = ctx.core.skills.get_mut(&(self.owner, def)) {
                             inst.once_used = true;

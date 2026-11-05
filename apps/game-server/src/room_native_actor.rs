@@ -532,7 +532,7 @@ async fn native_room_loop(
                         continue;
                     }
                 };
-                if let CommandResult::Accepted {
+                let presentation = if let CommandResult::Accepted {
                     new_revision,
                     state_hash: _,
                 } = &result
@@ -558,9 +558,13 @@ async fn native_room_loop(
                     if *new_revision > before {
                         last_revision = *new_revision;
                     }
-                } else if let Some(before) = checkpoint {
-                    session.rollback(before);
-                }
+                    session.release_and_take_public_presentation()
+                } else {
+                    if let Some(before) = checkpoint {
+                        session.rollback(before);
+                    }
+                    None
+                };
                 let public_event_codes = session.take_public_event_codes();
                 let view = session.snapshot(connection_id).unwrap_or_else(|_| {
                     observer_snapshot_for(session.engine(), RoomRole::Player, Some(m.player_id))
@@ -575,7 +579,7 @@ async fn native_room_loop(
                     legal_actions: legal,
                     choice,
                     public_event_codes: public_event_codes.clone(),
-                    presentation: None,
+                    presentation: presentation.clone(),
                 }));
                 // 命令后**个性化推送**：其余成员各收自己的视图/动作/选择（提交者走 oneshot）。
                 // 发送必须有界：慢客户端的队列满时立即标记/移出广播，绝不 await。
@@ -609,7 +613,7 @@ async fn native_room_loop(
                         },
                         choice: session.choice_for(role, seat),
                         public_event_codes: public_event_codes.clone(),
-                        presentation: None,
+                        presentation: presentation.clone(),
                     };
                     if out.try_send(&msg) == SendStatus::Full {
                         stalled.push(other.connection_id);
@@ -622,7 +626,9 @@ async fn native_room_loop(
                 connection_id,
                 header,
                 reply,
-            } => match session.snapshot(connection_id) {
+            } => {
+                session.retire_public_presentation();
+                match session.snapshot(connection_id) {
                 Ok(view) => {
                     let member = members.get(&connection_id);
                     let role = member.map(|m| m.role.into()).unwrap_or(RoomRole::Spectator);
@@ -648,7 +654,8 @@ async fn native_room_loop(
                 Err(e) => {
                     let _ = reply.send(Err(e));
                 }
-            },
+            }
+            }
             RoomMsg::ChooseGeneral {
                 connection_id,
                 name,

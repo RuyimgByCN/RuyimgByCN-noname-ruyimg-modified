@@ -110,7 +110,7 @@ pub(super) fn forced_discard_n(ctx: &mut Ctx<'_>, seat: PlayerId, mut left: usiz
 }
 
 pub(super) fn bianshen_mark_hide(ctx: &mut Ctx<'_>, boss: PlayerId, skill: &'static str) {
-    ctx.log(LogEvent::SkillTriggered { skill, owner: boss });
+    ctx.log(LogEvent::SkillTriggered { skill, owner: boss, presentation: None });
 }
 
 pub(super) fn bianshen_run_change_boss(ctx: &mut Ctx<'_>, boss: PlayerId, pool: &[&str]) {
@@ -432,13 +432,13 @@ pub(super) fn sixiang_mark_hide(
     if let crate::state::GameMode::Boss { stage, .. } = &mut ctx.core.mode {
         stage.kind = crate::state::BossStageKind::SixiangChain;
     }
-    ctx.log(crate::machine::LogEvent::SkillTriggered { skill, owner: boss });
+    ctx.log(crate::machine::LogEvent::SkillTriggered { skill, owner: boss, presentation: None });
     if three {
         let next = ctx.core.ring_next(boss);
         let prev = ctx.core.ring_prev(boss);
         for p in [next, prev] {
             if p != boss {
-                ctx.log(crate::machine::LogEvent::SkillTriggered { skill, owner: p });
+                ctx.log(crate::machine::LogEvent::SkillTriggered { skill, owner: p, presentation: None });
             }
         }
     }

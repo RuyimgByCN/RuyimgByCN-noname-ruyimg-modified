@@ -315,6 +315,7 @@ fn schema5_default_declaration_lock_is_bound_and_public_sdk_native_vm_conflict_r
         .push(engine_native::content::host::HostSkillDecl {
             name: "schema5_draw",
             behavior: engine_native::content::host::HostBehavior::SanjianWeaponDamage,
+            presentation_binding: None,
         });
     assert!(engine_native::Engine::new_with_extensions(10802, 3, &[&pack]).is_err());
 }

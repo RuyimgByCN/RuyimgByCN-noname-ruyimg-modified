@@ -104,6 +104,8 @@ pub struct VmSkillDecl {
     /// 有值；装载器自已验证包清单/技能索引传入，建目录时并入
     /// `Catalog::r05_identities`）。普通 VM 技能为 `None`。
     pub r05_identity: Option<crate::catalog::QualifiedSkillRef>,
+    /// I02（§2）：已验证定义级展示/语音绑定（helper 恒为 `None`）。
+    pub presentation_binding: Option<std::sync::Arc<engine_api::DefinitionPresentationBinding>>,
 }
 
 /// 扩展包：元数据 + 额外内容。
@@ -277,7 +279,7 @@ pub fn check_general_conflicts(
     extension_generals: &[ExtensionGeneral],
 ) -> Result<(), ExtensionError> {
     let base_names: std::collections::BTreeSet<&str> =
-        STANDARD_GENERALS.iter().map(|(g, _, _, _, _)| *g).collect();
+        STANDARD_GENERALS.iter().map(|g| g.name).collect();
     let mut seen: std::collections::BTreeSet<&str> = std::collections::BTreeSet::new();
     for ext in extension_generals {
         if base_names.contains(ext.name) {
@@ -336,6 +338,7 @@ pub fn example_extension() -> ExtensionPack {
                 skills: &["奸雄"],
                 max_hp: 4,
                 gender: Gender::Male,
+                presentation_binding: None,
             },
             ExtensionGeneral {
                 name: "样例·青将",
@@ -343,6 +346,7 @@ pub fn example_extension() -> ExtensionPack {
                 skills: &["克己"],
                 max_hp: 3,
                 gender: Gender::Female,
+                presentation_binding: None,
             },
         ],
         cards: vec![

@@ -63,7 +63,7 @@ impl SkillMachine for NativeDamageSkill {
             NativeDamageEffect::ZhaohuoSource => {
                 let root = ctx.current_event_frame_id();
                 if d.target == self.owner {
-                    ctx.log(LogEvent::DamagePrevented { target: d.target });
+                    ctx.log(LogEvent::DamagePrevented { target: d.target, presentation: None });
                     finish_damage(ctx, root, d, crate::event::DamageOutcome::Cancelled);
                 } else {
                     let mut d = d;

@@ -9,8 +9,8 @@ fn host_assembler_prototype_contract() {
     let pool: Vec<(u16, &'static str)> = engine_native::content::standard::STANDARD_GENERALS
         .iter()
         .enumerate()
-        .filter(|(_, (name, _, _, _, _))| !name.starts_with("样例"))
-        .map(|(i, (name, _, _, _, _))| (i as u16, *name))
+        .filter(|(_, g)| !g.name.starts_with("样例"))
+        .map(|(i, g)| (i as u16, g.name))
         .collect();
     assert!(
         pool.len() >= 25,

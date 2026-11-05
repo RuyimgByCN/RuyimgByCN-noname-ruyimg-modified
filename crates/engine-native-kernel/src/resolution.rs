@@ -339,10 +339,7 @@ impl SkillMachine for OptionalGate {
                     inst.once_used = true;
                 }
             }
-            ctx.log(LogEvent::SkillTriggered {
-                skill: def.name,
-                owner: self.owner,
-            });
+            ctx.log_skill_triggered(def.name, self.owner, self.def);
             let event =
                 crate::event::damage_event(&ctx.res.stack, ctx.res.stack.last().expect("frame"))
                     .clone();
@@ -801,10 +798,19 @@ fn start_queued_trigger(
                     | crate::event::NativeDamageEffect::JidingRecover
             )
         ) {
-            out.push(LogEvent::SkillTriggered {
+            let mut log_ev = LogEvent::SkillTriggered {
                 skill: def.name,
                 owner: qt.owner,
-            });
+                presentation: None,
+            };
+            crate::machine::presentation::attach_occurrence_presentation_with_skill_def(
+                core,
+                res,
+                catalog,
+                Some(qt.def),
+                &mut log_ev,
+            );
+            out.push(log_ev);
         }
         if let Some(effect) = native {
             res.parks.push(Park {

@@ -5,6 +5,25 @@ impl Engine {
         &self.catalog
     }
 
+    /// 在受控工厂内对目录挂载已验证的 `presentation_binding`（若当前共享标准目录被多处持有，则先构造独立副本再原子替换；若扩展目录被多处持有则拒绝修改）。
+    pub fn try_with_catalog_mutation(
+        &mut self,
+        f: impl FnOnce(&mut crate::catalog::Catalog) -> Result<(), String>,
+    ) -> Result<(), String> {
+        if let Some(cat) = std::sync::Arc::get_mut(&mut self.catalog) {
+            f(cat)
+        } else if self.catalog.extension_skill_range.is_empty()
+            && self.catalog.extension_generals.is_empty()
+        {
+            let mut cat = crate::content::standard::standard_catalog();
+            f(&mut cat)?;
+            self.catalog = std::sync::Arc::new(cat);
+            Ok(())
+        } else {
+            Err("cannot mutate shared extension catalog in-place".into())
+        }
+    }
+
     pub fn log(&self) -> &[LogEvent] {
         &self.log
     }

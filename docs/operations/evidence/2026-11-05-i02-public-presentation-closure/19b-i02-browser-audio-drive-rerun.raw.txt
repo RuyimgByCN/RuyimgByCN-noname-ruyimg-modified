@@ -1,0 +1,11 @@
+STEP initial_audio_owner {"sessionGeneration":2,"lastCommittedRevision":0,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":false,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}
+STEP after_choose_general {"chosenGeneral":null,"snapAfterChoose":{"sessionGeneration":2,"lastCommittedRevision":0,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":false,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}}
+STEP after_auto_steps {"sessionGeneration":2,"lastCommittedRevision":8,"baselineRevision":0,"muted":false,"volume":0.85,"autoplayBlocked":false,"gestureUnlocked":true,"pendingQueueLength":0,"hasActiveAudio":false,"overflowDrops":0,"diagnostic":"generation:new-match","erroredPathsCount":0,"playedCuesCount":0}
+file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:140
+  throw new Error(`静音按钮状态切换异常: ${JSON.stringify(muteToggleSnap)}`);
+        ^
+
+Error: 静音按钮状态切换异常: {"found":false}
+    at file:///Users/ruyimg/Documents/Claude/sanguosha/noname-next/apps/web-client/scripts/i02-browser-audio-drive.mjs:140:9
+
+Node.js v26.4.0

@@ -540,8 +540,7 @@ impl HostMachine {
                     ctx.log(LogEvent::CardPlayed {
                         card: c,
                         player: self.owner,
-                        targets: vec![],
-                    });
+                        targets: vec![], presentation: None });
                     // 实体发现：牌堆+弃堆中同类型实体（排除置顶牌）随机
                     // 2 张入手（RNG；不足给余量）
                     let mut pool: Vec<CardId> = ctx

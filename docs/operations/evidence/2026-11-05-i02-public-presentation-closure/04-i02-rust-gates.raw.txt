@@ -1,0 +1,13 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.28s
+     Running tests/groups/misc.rs (target/debug/deps/misc-0dff29147bd0ba75)
+
+running 6 tests
+test i02_public_presentation_closure::gate3_controlled_factory_rejects_tampered_original_or_package_inputs ... ok
+test i02_public_presentation_closure::gate4_volatile_range_lifecycle_and_single_take_semantics ... ok
+test i02_public_presentation_closure::gate5_card_responded_coarse_and_typed_count_matrix ... ok
+test i02_public_presentation_closure::gate6_semantic_hash_archive_rng_and_planner_invariance ... ok
+test i02_public_presentation_closure::gate1_producer_only_privacy_and_same_phase_rotation ... ok
+test i02_public_presentation_closure::gate2_verified_identity_isolates_builtin_and_boss_duplicates_and_sdk_packages ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 298 filtered out; finished in 1.34s
+

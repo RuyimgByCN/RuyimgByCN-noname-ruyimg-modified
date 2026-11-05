@@ -4,8 +4,10 @@
 //! accepting or returning bare `ExtensionPack` slices on the locked product path (`v5 §1/§3`).
 
 use crate::{
+    attach_frozen_package_presentation_bindings, attach_original_presentation_bindings,
     bridge_generals, bridge_generals_with_vm_package, bridge_pack, bridge_pile,
-    bridge_vm_skill_decls, BridgedPack,
+    bridge_vm_skill_decls, embedded_original_presentation_input, verify_original_presentation,
+    BridgedDefinitionIds, BridgedPack, OriginalPresentationInput,
 };
 pub use content_runtime::{
     prepare_locked_content, validate_frozen_package, verify_locked_content, ContentLock,
@@ -30,6 +32,7 @@ pub enum LockedStartMode {
 fn bridge_single_frozen(
     copy: &FrozenPackage,
     parsed: &ContentPackage,
+    all_packages: &[(&FrozenPackage, &ContentPackage)],
 ) -> Result<(ExtensionPack, Vec<String>), String> {
     let pid = parsed.manifest.package_id.clone();
     let ns = parsed.manifest.namespace.clone();
@@ -42,8 +45,12 @@ fn bridge_single_frozen(
 
     let outcome = bridge_vm_skill_decls(parsed).map_err(|e| e.to_string())?;
     let vm_skills = outcome.decls;
+    let mut definition_ids = BridgedDefinitionIds::default();
     let (mut pack, deferred) = if let Some(json) = cards.as_ref() {
         let b: BridgedPack = bridge_pack(json).map_err(|e| e.to_string())?;
+        definition_ids
+            .merge(b.definition_ids)
+            .map_err(|e| e.to_string())?;
         (b.pack, b.deferred)
     } else {
         (
@@ -77,6 +84,9 @@ fn bridge_single_frozen(
             bridge_generals_with_vm_package(&json, parsed)
         }
         .map_err(|e| e.to_string())?;
+        definition_ids
+            .merge(generals.definition_ids)
+            .map_err(|e| e.to_string())?;
         pack.generals.extend(generals.generals);
         for decl in generals.host_skills {
             match pack.host_skills.iter().find(|d| d.name == decl.name) {
@@ -94,6 +104,13 @@ fn bridge_single_frozen(
             .map_err(|e| format!("pile: {e:?}"))?;
         pack.cards.extend(addition.cards);
     }
+    attach_frozen_package_presentation_bindings(
+        &mut pack,
+        &definition_ids,
+        copy,
+        parsed,
+        all_packages,
+    )?;
     pack.def.name = names::intern(format!(
         "installed:{}",
         serde_json::to_string(&copy.binding).map_err(|e| e.to_string())?
@@ -104,10 +121,15 @@ fn bridge_single_frozen(
 fn bridge_verified_packs(
     verified: &VerifiedLockedContent,
 ) -> Result<(Vec<ExtensionPack>, Vec<String>), String> {
-    let mut packs = Vec::with_capacity(verified.copies().len());
+    let pairs: Vec<(&FrozenPackage, &ContentPackage)> = verified
+        .copies()
+        .iter()
+        .zip(verified.packages().iter())
+        .collect();
+    let mut packs = Vec::with_capacity(pairs.len());
     let mut deferred_all = Vec::new();
-    for (copy, parsed) in verified.copies().iter().zip(verified.packages().iter()) {
-        let (pack, deferred) = bridge_single_frozen(copy, parsed)?;
+    for &(copy, parsed) in &pairs {
+        let (pack, deferred) = bridge_single_frozen(copy, parsed, &pairs)?;
         packs.push(pack);
         deferred_all.extend(deferred);
     }
@@ -120,7 +142,7 @@ pub fn validate_and_freeze_raw_package(
     assets: BTreeMap<String, Vec<u8>>,
 ) -> Result<FrozenPackage, String> {
     let (frozen, parsed) = validate_frozen_package(package_json, assets)?;
-    let _ = bridge_single_frozen(&frozen, &parsed)?;
+    let _ = bridge_single_frozen(&frozen, &parsed, &[(&frozen, &parsed)])?;
     Ok(frozen)
 }
 
@@ -168,17 +190,42 @@ pub fn start_locked_engine(
     mode: LockedStartMode,
     verified: &VerifiedLockedContent,
 ) -> Result<Engine, String> {
+    start_locked_engine_with_original_presentation(
+        seed,
+        seats,
+        mode,
+        verified,
+        Some(&embedded_original_presentation_input()),
+    )
+}
+
+/// Controlled locked engine creation factory with optional verified original presentation inputs (`I02 §2`).
+pub fn start_locked_engine_with_original_presentation(
+    seed: u64,
+    seats: usize,
+    mode: LockedStartMode,
+    verified: &VerifiedLockedContent,
+    original_presentation: Option<&OriginalPresentationInput<'_>>,
+) -> Result<Engine, String> {
+    let verified_orig = match original_presentation {
+        Some(input) => Some(verify_original_presentation(input)?),
+        None => None,
+    };
     let (packs, _) = bridge_verified_packs(verified)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    match (mode, refs.is_empty()) {
-        (LockedStartMode::Prototype, true) => Ok(Engine::new(seed, seats)),
+    let mut engine = match (mode, refs.is_empty()) {
+        (LockedStartMode::Prototype, true) => Engine::new(seed, seats),
         (LockedStartMode::Prototype, false) => {
-            Engine::new_with_extensions(seed, seats, &refs).map_err(|e| format!("{e:?}"))
+            Engine::new_with_extensions(seed, seats, &refs).map_err(|e| format!("{e:?}"))?
         }
         (LockedStartMode::Identity, _) => {
-            Engine::try_new_identity_with_extensions(seed, seats, &refs)
+            Engine::try_new_identity_with_extensions(seed, seats, &refs)?
         }
+    };
+    if let Some(orig) = &verified_orig {
+        engine.try_with_catalog_mutation(|cat| attach_original_presentation_bindings(cat, orig))?;
     }
+    Ok(engine)
 }
 
 /// Controlled locked engine restore factory (`R05 v5 §1/§3`): accepts only [`VerifiedLockedContent`], never bare `packs`.
@@ -186,12 +233,37 @@ pub fn restore_locked_engine(
     snapshot: &StateSnapshot,
     verified: &VerifiedLockedContent,
 ) -> Result<Engine, SnapshotError> {
+    restore_locked_engine_with_original_presentation(
+        snapshot,
+        verified,
+        Some(&embedded_original_presentation_input()),
+    )
+}
+
+/// Controlled locked engine restore factory with optional verified original presentation inputs (`I02 §2`).
+pub fn restore_locked_engine_with_original_presentation(
+    snapshot: &StateSnapshot,
+    verified: &VerifiedLockedContent,
+    original_presentation: Option<&OriginalPresentationInput<'_>>,
+) -> Result<Engine, SnapshotError> {
+    let verified_orig = match original_presentation {
+        Some(input) => {
+            Some(verify_original_presentation(input).map_err(|_| SnapshotError::UnknownMachine)?)
+        }
+        None => None,
+    };
     let (packs, _) =
         bridge_verified_packs(verified).map_err(|_| SnapshotError::UnknownMachine)?;
     let refs: Vec<&ExtensionPack> = packs.iter().collect();
-    if refs.is_empty() {
-        Engine::restore(snapshot)
+    let mut engine = if refs.is_empty() {
+        Engine::restore(snapshot)?
     } else {
-        Engine::restore_with_extensions(snapshot, &refs)
+        Engine::restore_with_extensions(snapshot, &refs)?
+    };
+    if let Some(orig) = &verified_orig {
+        engine
+            .try_with_catalog_mutation(|cat| attach_original_presentation_bindings(cat, orig))
+            .map_err(|_| SnapshotError::UnknownMachine)?;
     }
+    Ok(engine)
 }

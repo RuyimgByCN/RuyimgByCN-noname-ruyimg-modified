@@ -166,7 +166,7 @@ fn kof_session_consistency_and_midrestore() {
     impl Session {
         fn new(seed: u64) -> Self {
             let mut pool: Vec<u16> = (0..STANDARD_GENERALS.len() as u16)
-                .filter(|i| !STANDARD_GENERALS[*i as usize].0.starts_with("样例"))
+                .filter(|i| !STANDARD_GENERALS[*i as usize].name.starts_with("样例"))
                 .collect();
             let mut s = seed | 1;
             for i in (1..pool.len()).rev() {

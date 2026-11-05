@@ -404,9 +404,9 @@ impl Engine {
     pub fn debug_grant_general(&mut self, player: PlayerId, name: &str) {
         let skills = content::standard::STANDARD_GENERALS
             .iter()
-            .find(|(g, _, _, _, _)| *g == name)
+            .find(|g| g.name == name)
             .unwrap_or_else(|| panic!("unknown general {name}"))
-            .2;
+            .skills;
         for s in skills {
             self.debug_grant(player, s);
         }
@@ -442,7 +442,7 @@ impl Engine {
     pub fn debug_set_general(&mut self, player: PlayerId, name: &str) {
         let idx = content::standard::STANDARD_GENERALS
             .iter()
-            .position(|(g, _, _, _, _)| *g == name)
+            .position(|g| g.name == name)
             .unwrap_or_else(|| panic!("unknown general {name}"));
         let p = self
             .state
@@ -460,7 +460,7 @@ impl Engine {
     pub fn debug_assemble_general(&mut self, player: PlayerId, name: &str) {
         let idx = content::standard::STANDARD_GENERALS
             .iter()
-            .position(|(g, _, _, _, _)| *g == name)
+            .position(|g| g.name == name)
             .unwrap_or_else(|| panic!("unknown general {name}"));
         self.state
             .core

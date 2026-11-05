@@ -585,6 +585,10 @@ pub struct CardDef {
     pub equip_skills: Vec<&'static str>,
     /// 装备时横置（索链甲：计入铁索）；离场时重置。
     pub link_on_equip: bool,
+    /// 内置原始来源键（扩展卡牌恒为 `None`）。
+    pub original_source: Option<crate::vocabulary::generals::BuiltinOriginalKey>,
+    /// 不可变已验证展示/语音绑定。
+    pub presentation_binding: Option<std::sync::Arc<engine_api::DefinitionPresentationBinding>>,
 }
 
 impl CardDef {
@@ -597,6 +601,8 @@ impl CardDef {
             rank: 1,
             equip_skills: Vec::new(),
             link_on_equip: false,
+            original_source: None,
+            presentation_binding: None,
         }
     }
 
@@ -609,7 +615,21 @@ impl CardDef {
             rank: 1,
             equip_skills: Vec::new(),
             link_on_equip: false,
+            original_source: None,
+            presentation_binding: None,
         }
+    }
+
+    pub fn with_original_source(
+        mut self,
+        pack: &'static str,
+        raw_symbol: &'static str,
+    ) -> Self {
+        self.original_source = Some(crate::vocabulary::generals::BuiltinOriginalKey {
+            pack,
+            raw_symbol,
+        });
+        self
     }
 
     /// 声明装备技能（G1 生命周期：装备时授予、离场撤销）。
@@ -663,6 +683,8 @@ pub struct SkillDef {
     pub trigger: Option<TriggerMeta>,
     pub limits: SkillLimits,
     pub behavior: Box<dyn SkillBehavior>,
+    pub original_source: Option<crate::vocabulary::generals::BuiltinOriginalKey>,
+    pub presentation_binding: Option<std::sync::Arc<engine_api::DefinitionPresentationBinding>>,
 }
 
 impl std::fmt::Debug for SkillDef {
@@ -970,10 +992,16 @@ pub struct QualifiedSkillRef {
 pub struct Catalog {
     pub cards: Vec<CardDef>,
     pub skills: Vec<SkillDef>,
+    /// 内置标准武将表（构建时自 `STANDARD_GENERALS` 克隆，供已验证工厂挂载 `presentation_binding`）。
+    pub standard_generals: Vec<crate::vocabulary::generals::GeneralDefinition>,
     /// 扩展武将（G1 角色包管线）：接在基础武将表之后的目录条目。
     pub extension_generals: Vec<crate::vocabulary::generals::ExtensionGeneral>,
+    /// 内置 Boss 武将表（构建时自 `BOSS_GENERALS` 克隆）。
+    pub boss_generals: Vec<crate::vocabulary::generals::GeneralDefinition>,
     /// 从启用扩展初始化声明派生的全局授技；恢复时随目录重建，不入存档。
     pub extension_global_skills: Vec<SkillDefId>,
+    /// 启用扩展技能在 `skills` 表中的下标范围（I02 §3 静态能力缺口统计用；不入对局摘要）。
+    pub extension_skill_range: std::ops::Range<usize>,
     /// R05-H（§8）：派生 helper 目录定义号 → 其逻辑身份 I。装载器派生
     /// helper 时随声明传入；随目录重建、不入存档（不是第二份状态权威）。
     /// 角色仍由 helper 名后缀（`#r05:{role}`）判定——与 hooks 的
@@ -1060,8 +1088,11 @@ impl Catalog {
         Catalog {
             cards,
             skills,
+            standard_generals: crate::vocabulary::generals::STANDARD_GENERALS.to_vec(),
             extension_generals: Vec::new(),
+            boss_generals: crate::vocabulary::generals::BOSS_GENERALS.to_vec(),
             extension_global_skills: Vec::new(),
+            extension_skill_range: 0..0,
             r05_identities: BTreeMap::new(),
             dispatch,
             by_name,
@@ -1073,9 +1104,7 @@ impl Catalog {
 
     /// 武将总数 = 基础表 + 扩展表（G1 角色包管线）。
     pub fn general_count(&self) -> usize {
-        crate::vocabulary::generals::STANDARD_GENERALS.len()
-            + crate::vocabulary::generals::BOSS_GENERALS.len()
-            + self.extension_generals.len()
+        self.standard_generals.len() + self.boss_generals.len() + self.extension_generals.len()
     }
 
     /// 武将下标的元数据（基础表优先，扩展表接续；越界 None）。
@@ -1087,7 +1116,7 @@ impl Catalog {
             source.1
         );
         u16::try_from(
-            crate::vocabulary::generals::STANDARD_GENERALS.len()
+            self.standard_generals.len()
                 + self.extension_generals.len()
                 + source.0,
         )
@@ -1100,7 +1129,7 @@ impl Catalog {
             source.1
         );
         u16::try_from(
-            crate::vocabulary::generals::STANDARD_GENERALS.len()
+            self.standard_generals.len()
                 + self.extension_generals.len()
                 + source.0,
         )
@@ -1117,10 +1146,10 @@ impl Catalog {
         u32,
         crate::vocabulary::generals::Gender,
     )> {
-        let base = crate::vocabulary::generals::STANDARD_GENERALS;
+        let base = &self.standard_generals;
         if (g as usize) < base.len() {
-            let (name, faction, skills, hp, gender) = base[g as usize];
-            return Some((name, faction, skills.to_vec(), hp, gender));
+            let def = &base[g as usize];
+            return Some((def.name, def.faction, def.skills.to_vec(), def.max_hp, def.gender));
         }
         // 扩展武将段：约定接在基础表之后（扩展将 def=base+i，g1_d3 等
         // 消费面 ABI）
@@ -1136,11 +1165,31 @@ impl Catalog {
         }
         // Boss 内置武将段（v208）：动态尾段（在全部启用扩展之后——扩展
         // 将 def 约定不受扰动；boss 将 def=base+ext_n+i 随启用集浮动）
-        let boss = crate::vocabulary::generals::BOSS_GENERALS;
+        let boss = &self.boss_generals;
         let boss_start = base.len() + self.extension_generals.len();
         if (g as usize) >= boss_start && (g as usize) < boss_start + boss.len() {
-            let (name, faction, skills, hp, gender) = boss[g as usize - boss_start];
-            return Some((name, faction, skills.to_vec(), hp, gender));
+            let def = &boss[g as usize - boss_start];
+            return Some((def.name, def.faction, def.skills.to_vec(), def.max_hp, def.gender));
+        }
+        None
+    }
+
+    /// 武将下标的已验证展示/语音绑定（I02 §2）。
+    pub fn general_presentation_binding(
+        &self,
+        g: u16,
+    ) -> Option<&std::sync::Arc<engine_api::DefinitionPresentationBinding>> {
+        let base = &self.standard_generals;
+        if (g as usize) < base.len() {
+            return base[g as usize].presentation_binding.as_ref();
+        }
+        if let Some(ext) = self.extension_generals.get(g as usize - base.len()) {
+            return ext.presentation_binding.as_ref();
+        }
+        let boss = &self.boss_generals;
+        let boss_start = base.len() + self.extension_generals.len();
+        if (g as usize) >= boss_start && (g as usize) < boss_start + boss.len() {
+            return boss[g as usize - boss_start].presentation_binding.as_ref();
         }
         None
     }

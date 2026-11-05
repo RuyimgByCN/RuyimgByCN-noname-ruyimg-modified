@@ -153,21 +153,24 @@ impl AuthToken {
 
 #[derive(Clone)]
 pub struct Engine {
-    catalog: SharedCatalog,
-    state: GameState,
-    log: Vec<LogEvent>,
+    pub(crate) catalog: SharedCatalog,
+    pub(crate) state: GameState,
+    pub(crate) log: Vec<LogEvent>,
     /// 命令去重高水位：已接受命令的最大 dedup_id（会话数据，不入状态/哈希）。
     pub(crate) last_dedup: u64,
     /// 宿主时间片（None = 不限）：每个命令段最多推进的调度步数，
     /// 用尽即 `Suspended` 暂停（状态已提交），`resume()` 无损续行。
     time_slice: Option<u32>,
     /// 段暂停中：段已部分结算并提交，须 `resume()` 完成后才能再提交命令。
-    segment_open: bool,
+    pub(crate) segment_open: bool,
     /// 调试预算覆盖（Some(b) = 下一段以 b 为硬上限；不入状态/哈希/快照）。
     debug_budget: Option<u32>,
     /// 段检查点：段启动时的（快照, 日志水位）。段开放期间保留，
     /// `abort_segment()` 据此回滚到段前；段关闭即清除。
     segment_checkpoint: Option<(StateSnapshot, usize)>,
+    /// I02（裁决 30）：单一受控已提交区间状态机（仅持有 `log` 下标与已提交
+    /// `revision`；不进快照、不进哈希、不进模拟克隆）。
+    pub(crate) presentation_range: crate::presentation::PresentationRange,
     /// N10 有界计算池：每座位每轮命令配额（None = 不限制；
     /// 会话策略数据，不入状态/哈希/快照）。
     seat_quota: Option<u32>,

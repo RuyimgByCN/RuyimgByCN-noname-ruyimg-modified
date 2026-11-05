@@ -893,8 +893,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 ctx.to_discard(shan);
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "神弓",
-                    owner: self.target,
-                });
+                    owner: self.target, presentation: None });
             } else {
                 ctx.to_discard(shan);
             }

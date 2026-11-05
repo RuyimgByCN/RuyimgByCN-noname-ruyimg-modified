@@ -1,0 +1,16 @@
+✔ blake3Hex matches Rust ContentLock empty seed and multi-chunk inputs (1.47275ms)
+✔ synchronous cue admission deduplicates same-revision batch, rejects conflicts, and ignores stale revisions (1.256916ms)
+✔ queue caps at 8 pending items, drops oldest overflow without replay, and plays compat m4a (0.472ms)
+✔ mute and volume 0 immediately stop active playback and discard queue without replaying on unmute (0.226875ms)
+✔ NotAllowedError clears queue without autoplay retry and gesture unlock enables future cues only (3.098583ms)
+✔ media errors are bounded per path, advance queue, and late callbacks from prior generation/reconnect are ignored (0.296958ms)
+✔ frozen SDK package audio verifies 5-field owner + BLAKE3 digest and resists store upgrade/tampering (0.682875ms)
+✔ source change via appearanceStore resets generation automatically (0.535542ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 293.476042

@@ -927,8 +927,7 @@ impl HostMachine {
                     p.shenyan_pending = pending;
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "神焰",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                 } else {
                     // 结算面：逐个蔓延（上游 shenyan2 global damageAfter 循环）
                     let pending: Vec<PlayerId> =

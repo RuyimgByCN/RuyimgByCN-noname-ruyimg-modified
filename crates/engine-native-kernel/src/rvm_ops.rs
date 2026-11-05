@@ -689,6 +689,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             ctx.out.push(LogEvent::PlayerDied {
                 player: p,
                 killer: src,
+                presentation: None,
             });
             ctx.emit(EventData::Death {
                 player: p,

@@ -17,6 +17,7 @@ pub(super) async fn automatic_step(
         Ok(result @ CommandResult::Accepted { .. }) => {
             session.compact_wal(snapshot_every);
             durability.commit(session, before)?;
+            let presentation = session.release_and_take_public_presentation();
             let public_event_codes = session.take_public_event_codes();
             let mut stalled = Vec::new();
             for member in members.values() {
@@ -36,7 +37,7 @@ pub(super) async fn automatic_step(
                         .map(|p| legal_actions_for(session.engine(), p))
                         .unwrap_or_default(),
                     public_event_codes: public_event_codes.clone(),
-                    presentation: None,
+                    presentation: presentation.clone(),
                 };
                 if out.try_send(&message) == SendStatus::Full {
                     stalled.push(member.connection_id);

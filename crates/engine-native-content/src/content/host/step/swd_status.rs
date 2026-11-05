@@ -633,8 +633,7 @@ impl HostMachine {
                 if taken > 0 {
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "义山",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                 }
                 Flow::Done
             }

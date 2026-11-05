@@ -69,8 +69,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "反击",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     ctx.emit(EventData::CardUsed(crate::machine::card_use(
                         card,
                         self.owner,
@@ -284,8 +283,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "魔焰",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     self.targets = targets;
                     self.stage = HostStage::ShuchuiTargetLoop;
                     Flow::Yield
@@ -336,8 +334,7 @@ impl HostMachine {
                 ctx.core.turn.xuanyuanjian_marked = true;
                 ctx.log(LogEvent::SkillTriggered {
                     skill: "轩辕剑",
-                    owner: self.owner,
-                });
+                    owner: self.owner, presentation: None });
                 Flow::Done
             }
             // 天香：选红桃手牌 → 选目标 → 弃牌 + 伤害转移 + 授予天香·受
@@ -414,8 +411,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "天香",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     // 弃红桃牌
                     ctx.discard_from_hand(self.owner, card);
                     // 伤害转移（帧 target 改写 + 转移链记录）
@@ -557,8 +553,7 @@ impl HostMachine {
                     }
                     ctx.log(LogEvent::SkillTriggered {
                         skill: "清正",
-                        owner: self.owner,
-                    });
+                        owner: self.owner, presentation: None });
                     if theirs_n < mine_n {
                         ctx.emit(EventData::Damage(crate::machine::damage_data_with(
                             None,

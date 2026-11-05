@@ -31,7 +31,7 @@ impl KofSession {
     /// 从官方将池确定性抽取两队各 3 将（互不重复）。
     fn new(host_seed: u64) -> Self {
         let mut pool: Vec<u16> = (0..STANDARD_GENERALS.len() as u16)
-            .filter(|i| !STANDARD_GENERALS[*i as usize].0.starts_with("样例"))
+            .filter(|i| !STANDARD_GENERALS[*i as usize].name.starts_with("样例"))
             .collect();
         let mut s = host_seed | 1;
         for i in (1..pool.len()).rev() {
@@ -45,7 +45,7 @@ impl KofSession {
     }
 
     fn name(g: u16) -> &'static str {
-        STANDARD_GENERALS[g as usize].0
+        STANDARD_GENERALS[g as usize].name
     }
 
     /// 会话存档（文本行格式，宿主可落盘；空池显式保留为空字段）。

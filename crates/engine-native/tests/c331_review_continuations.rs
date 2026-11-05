@@ -6,7 +6,7 @@ use engine_native::event::{EventData, NativeInvocationProgress as P};
 
 #[test]
 fn c9j_jiding_genuine_zhenlie_removed_target_restores_and_continues() {
-    let mut pack=emitter(); pack.host_skills.push(engine_native::content::host::HostSkillDecl{name:"zhenlie",behavior: engine_native::content::host::HostBehavior::Zhenlie}); let mut e=fixture(&pack,"急叮");
+    let mut pack=emitter(); pack.host_skills.push(engine_native::content::host::HostSkillDecl{name:"zhenlie",behavior: engine_native::content::host::HostBehavior::Zhenlie,presentation_binding:None}); let mut e=fixture(&pack,"急叮");
     e.debug_grant(2,"zhenlie"); e.debug_place(0,"sha");
     e.set_time_slice(Some(1)); fire(&mut e);
     for _ in 0..1600 {
@@ -172,7 +172,7 @@ fn c9j_duishi_actual_hand_and_equipment_acquisitions_keep_visibility() {
 fn c9j_jiding_tongji_and_yihua_restored_continuations() {
     for transfer in [false,true] {
         let mut pack=emitter();
-        pack.host_skills.push(engine_native::content::host::HostSkillDecl {name:"yihua",behavior:engine_native::content::host::HostBehavior::Yihua});
+        pack.host_skills.push(engine_native::content::host::HostSkillDecl {name:"yihua",behavior:engine_native::content::host::HostBehavior::Yihua,presentation_binding:None});
         let mut e=fixture(&pack,"急叮");
         let actor=if transfer {3} else {2};
         if transfer { e.debug_grant(3,"同疾"); e.debug_place(2,"sha"); }

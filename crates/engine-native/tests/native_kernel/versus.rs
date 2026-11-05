@@ -7,11 +7,11 @@ use super::*;
 fn versus_substitute_revive_on_death() {
     let xiahoudun = engine_native::content::standard::STANDARD_GENERALS
         .iter()
-        .position(|(g, ..)| *g == "夏侯惇")
+        .position(|g| g.name == "夏侯惇")
         .expect("夏侯惇在表") as u16;
     let zhangliao = engine_native::content::standard::STANDARD_GENERALS
         .iter()
-        .position(|(g, ..)| *g == "张辽")
+        .position(|g| g.name == "张辽")
         .expect("张辽在表") as u16;
     // 敌队（1 队）带替补池 [夏侯惇, 张辽]；己队空池
     let teams: [Vec<u8>; 2] = [vec![0, 1], vec![2, 3]];

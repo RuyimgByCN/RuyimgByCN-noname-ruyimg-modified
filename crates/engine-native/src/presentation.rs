@@ -9,6 +9,9 @@ use crate::ids::{CardId, PlayerId};
 use crate::machine::LogEvent;
 use crate::view::PlayerView;
 
+pub(crate) mod public_batch;
+pub(crate) use public_batch::PresentationRange;
+
 /// 座位可见的表现事件：UI/渲染消费的最小事件集（牌已解析为名称）。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PresentationEvent {
@@ -134,13 +137,14 @@ pub fn project(
                 amount,
                 redirected_from: _,
                 card,
+                ..
             } => vec![PresentationEvent::Damaged {
                 source: *source,
                 target: *target,
                 amount: *amount,
                 by_card: card.map(name),
             }],
-            LogEvent::DamagePrevented { target } => {
+            LogEvent::DamagePrevented { target, .. } => {
                 vec![PresentationEvent::DamagePrevented { target: *target }]
             }
             LogEvent::MaxHpLost { player, amount } => {
@@ -161,6 +165,7 @@ pub fn project(
                 kind,
                 player,
                 targets,
+                ..
             } => vec![PresentationEvent::Played {
                 player: *player,
                 card: kind.key().into(),
@@ -170,12 +175,13 @@ pub fn project(
                 card,
                 player,
                 targets,
+                ..
             } => vec![PresentationEvent::Played {
                 player: *player,
                 card: name(*card),
                 targets: targets.clone(),
             }],
-            LogEvent::CardResponded { card, player } => vec![PresentationEvent::Responded {
+            LogEvent::CardResponded { card, player, .. } => vec![PresentationEvent::Responded {
                 player: *player,
                 card: name(*card),
             }],
@@ -211,7 +217,7 @@ pub fn project(
                 to: *to,
                 cards: names(cards),
             }],
-            LogEvent::HpRecovered { player, amount } => vec![PresentationEvent::Recovered {
+            LogEvent::HpRecovered { player, amount, .. } => vec![PresentationEvent::Recovered {
                 player: *player,
                 amount: *amount,
             }],
@@ -242,7 +248,7 @@ pub fn project(
                 player: *player,
                 card: name(*by_card),
             }],
-            LogEvent::PlayerDied { player, killer } => vec![PresentationEvent::Died {
+            LogEvent::PlayerDied { player, killer, .. } => vec![PresentationEvent::Died {
                 player: *player,
                 killer: *killer,
             }],
@@ -260,7 +266,7 @@ pub fn project(
             // 应答内容仅进入询问者本人的权威日志语义；表现层统一
             // 不再重复展示选项内容（询问开启事件已足够渲染）。
             LogEvent::ChoiceAnswered { .. } => vec![],
-            LogEvent::SkillTriggered { skill, owner } => vec![PresentationEvent::SkillTriggered {
+            LogEvent::SkillTriggered { skill, owner, .. } => vec![PresentationEvent::SkillTriggered {
                 owner: *owner,
                 skill: (*skill).to_string(),
             }],

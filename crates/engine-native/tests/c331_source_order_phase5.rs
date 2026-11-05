@@ -72,7 +72,11 @@ fn pack(event: &str, behavior: H, name: &'static str) -> ExtensionPack {
         },
         generals: vec![],
         cards: vec![],
-        host_skills: vec![HostSkillDecl { name, behavior }],
+        host_skills: vec![HostSkillDecl {
+            name,
+            behavior,
+            presentation_binding: None,
+        }],
         vm_skills: content_native_loader::bridge_vm_skill_decls(&pkg)
             .unwrap()
             .decls,
@@ -167,8 +171,7 @@ fn phase5_boss_silent_normal_waits_for_earlier_owner_instead_of_running_first() 
         event,
         engine_native::LogEvent::SkillTriggered {
             skill: "白芒",
-            owner: 0
-        }
+            owner: 0, .. }
     )));
 }
 

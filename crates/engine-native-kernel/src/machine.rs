@@ -12,6 +12,8 @@ use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::resolution::Resolution;
 use crate::state::GameStateCore;
 
+pub mod presentation;
+
 /// 宿主展示/录像日志：引擎侧数据，不进状态、不进哈希。
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum LogEvent {
@@ -22,9 +24,11 @@ pub enum LogEvent {
         redirected_from: Vec<PlayerId>,
         /// 造成伤害的牌（无牌伤害为 None）。
         card: Option<CardId>,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     DamagePrevented {
         target: PlayerId,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     CardsDrawn {
         player: PlayerId,
@@ -34,15 +38,18 @@ pub enum LogEvent {
         kind: crate::catalog::CardKind,
         player: PlayerId,
         targets: Vec<PlayerId>,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     CardPlayed {
         card: CardId,
         player: PlayerId,
         targets: Vec<PlayerId>,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     CardResponded {
         card: CardId,
         player: PlayerId,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     /// 体力上限减少（蝉缘类——max_hp 减面，运筹武将面批 9 起承载）。
     MaxHpLost {
@@ -72,6 +79,7 @@ pub enum LogEvent {
     HpRecovered {
         player: PlayerId,
         amount: u32,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     /// 护甲抵扣伤害（G1 扩展）。
     HujiaAbsorbed {
@@ -102,6 +110,7 @@ pub enum LogEvent {
     PlayerDied {
         player: PlayerId,
         killer: Option<PlayerId>,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     ChoiceOpened {
         id: u64,
@@ -115,6 +124,7 @@ pub enum LogEvent {
     SkillTriggered {
         skill: &'static str,
         owner: PlayerId,
+        presentation: Option<Box<engine_api::PublicPresentationEvent>>,
     },
     SkillToggled {
         player: PlayerId,
@@ -183,6 +193,23 @@ pub enum LogEvent {
         cards: Vec<CardId>,
         to: Vec<PlayerId>,
     },
+}
+
+impl LogEvent {
+    /// Occurrence-time committed public presentation event, if any.
+    pub fn public_presentation(&self) -> Option<&engine_api::PublicPresentationEvent> {
+        match self {
+            LogEvent::DamageDealt { presentation, .. }
+            | LogEvent::DamagePrevented { presentation, .. }
+            | LogEvent::VirtualCardPlayed { presentation, .. }
+            | LogEvent::CardPlayed { presentation, .. }
+            | LogEvent::CardResponded { presentation, .. }
+            | LogEvent::HpRecovered { presentation, .. }
+            | LogEvent::PlayerDied { presentation, .. }
+            | LogEvent::SkillTriggered { presentation, .. } => presentation.as_deref(),
+            _ => None,
+        }
+    }
 }
 
 /// 机器单步结果。
@@ -374,6 +401,13 @@ impl<'a> Ctx<'a> {
     /// 机器挂起深度在启动时已记录，子事件弹栈后自动恢复。
     /// 伤害帧以「前置触发窗口」为初始阶段，其余帧先提交。
     pub fn emit(&mut self, data: EventData) {
+        if let EventData::CardResponded { card, player } = &data {
+            self.log(LogEvent::CardResponded {
+                card: *card,
+                player: *player,
+                presentation: None,
+            });
+        }
         if matches!(
             data,
             EventData::Damage(_)
@@ -713,9 +747,10 @@ impl<'a> Ctx<'a> {
                 amount: gained,
                 by_card,
             });
-            self.out.push(LogEvent::HpRecovered {
+            self.log(LogEvent::HpRecovered {
                 player,
                 amount: gained,
+                presentation: None,
             });
         }
         gained
@@ -853,7 +888,29 @@ impl<'a> Ctx<'a> {
 
     // ---- 日志 ----
 
-    pub fn log(&mut self, event: LogEvent) {
+    pub fn log(&mut self, mut event: LogEvent) {
+        presentation::attach_occurrence_presentation(
+            self.core,
+            self.res,
+            self.catalog,
+            &mut event,
+        );
+        self.out.push(event);
+    }
+
+    pub fn log_skill_triggered(&mut self, skill: &'static str, owner: PlayerId, def: SkillDefId) {
+        let mut event = LogEvent::SkillTriggered {
+            skill,
+            owner,
+            presentation: None,
+        };
+        presentation::attach_occurrence_presentation_with_skill_def(
+            self.core,
+            self.res,
+            self.catalog,
+            Some(def),
+            &mut event,
+        );
         self.out.push(event);
     }
 }

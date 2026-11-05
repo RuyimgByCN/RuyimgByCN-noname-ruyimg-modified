@@ -10,6 +10,7 @@ autotests = false
 
 [dependencies]
 blake3 = { workspace = true }
+engine-api = { workspace = true }
 engine-native-kernel = { path = "../engine-native-kernel" }
 engine-native-content = { path = "../engine-native-content" }
 rule-api = { workspace = true }

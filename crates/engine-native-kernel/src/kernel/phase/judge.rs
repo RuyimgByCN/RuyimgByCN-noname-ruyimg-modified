@@ -489,8 +489,7 @@ pub(super) fn begin_prepare(ctx: &mut Ctx<'_>, player: PlayerId) {        // 绝
                     crate::catalog::Suit::Spade => {
                         ctx.log(LogEvent::SkillTriggered {
                             skill: "中毒",
-                            owner: player,
-                        });
+                            owner: player, presentation: None });
                     }
                     _ => {
                         // 方片/梅花：伤 1 后失去此技

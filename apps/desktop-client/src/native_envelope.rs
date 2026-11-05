@@ -134,11 +134,18 @@ fn public_event(code: &Value) -> Value {
 }
 
 pub(super) fn envelope(
-    session: &NativeSession,
+    session: &mut NativeSession,
     observer: u8,
     cursor: &mut u32,
     result: Value,
+    drain_presentation: bool,
 ) -> Result<Value, String> {
+    let raw_presentation = if drain_presentation {
+        Some(session.take_public_presentation_json()?)
+    } else {
+        session.retire_public_presentation();
+        None
+    };
     let view = parse(session.view_json(observer)?)?;
     let legal = parse(session.legal_actions_json(observer)?)?;
     let choice = choice(session, observer)?;
@@ -154,7 +161,27 @@ pub(super) fn envelope(
             .collect();
         *cursor = end;
     }
-    Ok(json!({"result": result, "events": events, "choice": choice,
-        "view": snapshot(&view, session.revision())?, "legal_actions": legal["actions"],
-        "hash_hex": session.state_hash_hex(), "revision": session.revision(), "finished": session.is_finished()}))
+    let revision = session.revision();
+    let snap = snapshot(&view, revision)?;
+    let seat_count = snap["seats"].as_array().map_or(0, Vec::len);
+    let mut out = json!({"result": result, "events": events, "choice": choice,
+        "view": snap, "legal_actions": legal["actions"],
+        "hash_hex": session.state_hash_hex(), "revision": revision, "finished": session.is_finished()});
+    if let Some(raw_pres) = raw_presentation {
+        if raw_pres != "null" {
+            let batch: engine_api::PublicPresentationBatch = serde_json::from_str(&raw_pres)
+                .map_err(|e| format!("native: public presentation metadata invalid: {e}"))?;
+            if batch.revision != revision
+                || u32::try_from(seat_count)
+                    .ok()
+                    .and_then(|n| batch.validate_players(n).ok())
+                    .is_none()
+            {
+                return Err("native: public presentation metadata invalid".into());
+            }
+            out["presentation"] = serde_json::to_value(&batch)
+                .map_err(|e| format!("native: public presentation metadata invalid: {e}"))?;
+        }
+    }
+    Ok(out)
 }
