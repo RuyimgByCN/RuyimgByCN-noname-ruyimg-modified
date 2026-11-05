@@ -66,6 +66,7 @@ struct VmTriggerCtx {
     event_player: Option<PlayerId>,
     event_source: Option<PlayerId>,
     event_card: Option<CardId>,
+    event_cards: Vec<CardId>,
     event_amount: u32,
     /// 阶段事件携带（阶段种，begin 由 EventKind 区分；增量 14）。
     phase: Option<crate::event::Phase>,
@@ -112,11 +113,13 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         },
         EventData::TurnBegin { player } => VmTriggerCtx {
             event_player: Some(*player),
+            event_source: Some(*player),
             kind: 3,
             ..VmTriggerCtx::default()
         },
         EventData::TurnEndWindow { player, .. } => VmTriggerCtx {
             event_player: Some(*player),
+            event_source: Some(*player),
             kind: 3,
             ..VmTriggerCtx::default()
         },
@@ -126,6 +129,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             begin,
         } => VmTriggerCtx {
             event_player: Some(*player),
+            event_source: Some(*player),
             phase: Some(*phase),
             begin: Some(*begin),
             kind: 3,
@@ -152,8 +156,51 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         } => VmTriggerCtx {
             event_player: Some(*recipient),
             event_source: Some(*giver),
+            event_card: cards.first().copied(),
+            event_cards: cards.clone(),
             event_amount: cards.len() as u32,
+            batch_len: cards.len() as u32,
             kind: 9,
+            ..VmTriggerCtx::default()
+        },
+        // PA12 批⑥：摸牌（CardsDrawn）、体力恢复（Recover）、体力流失（LoseHp）、
+        // 脱离濒死（DyingSaved）四事件此前在装载器已映射 EventKind，但
+        // trigger_ctx_of 落入默认空臂（event_player=None、event_amount=0、
+        // event_cards=[]），导致 owner_is_target* / owner_gained_* 与模块体内
+        // event_player/event_amount/event_card_count 失真。
+        EventData::CardsDrawn { player, cards } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_card: cards.first().copied(),
+            event_cards: cards.clone(),
+            event_amount: cards.len() as u32,
+            batch_len: cards.len() as u32,
+            kind: 5,
+            ..VmTriggerCtx::default()
+        },
+        EventData::Recover {
+            player,
+            amount,
+            by_card,
+        } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_card: *by_card,
+            event_amount: *amount,
+            kind: 10,
+            ..VmTriggerCtx::default()
+        },
+        EventData::LoseHp { player, amount } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_amount: *amount,
+            kind: 11,
+            ..VmTriggerCtx::default()
+        },
+        EventData::DyingSaved { player, source } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: *source,
+            kind: 6,
             ..VmTriggerCtx::default()
         },
         EventData::CardUsed(u) => VmTriggerCtx {
@@ -162,6 +209,7 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             // 导致 `owner_is_source` 对用牌事件恒假（PA12 批①）。
             event_source: Some(u.player),
             event_card: u.card,
+            event_cards: u.card.into_iter().collect(),
             targets: u.targets.clone(),
             use_as: u.use_as,
             nature: Some(u.nature),
@@ -177,6 +225,8 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         EventData::CardsMoved { cards, from, to } => VmTriggerCtx {
             event_player: Some(*to),
             event_card: cards.first().copied(),
+            event_cards: cards.clone(),
+            event_amount: cards.len() as u32,
             moved_from: Some(*from),
             batch_len: cards.len() as u32,
             kind: 5,
@@ -185,6 +235,8 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         EventData::CardsDiscarded { player, cards } => VmTriggerCtx {
             event_player: Some(*player),
             event_card: cards.first().copied(),
+            event_cards: cards.clone(),
+            event_amount: cards.len() as u32,
             batch_len: cards.len() as u32,
             kind: 4,
             ..VmTriggerCtx::default()
@@ -197,7 +249,9 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
         },
         EventData::CardResponded { card, player } => VmTriggerCtx {
             event_player: Some(*player),
+            event_source: Some(*player),
             event_card: Some(*card),
+            event_cards: vec![*card],
             kind: 8,
             ..VmTriggerCtx::default()
         },
@@ -1023,6 +1077,10 @@ struct EngineVmHost<'a> {
     /// 事件目标集（CardUsed 载荷；PA12 批③：HOST_EVENT_TARGET_COUNT 此前恒读
     /// 默认空切片=0——旧线经 run_module_with_event_cards 传入同集）。
     targets: Vec<u32>,
+    /// 事件关联卡牌集（PA12 批⑥ §2 I：HOST_EVENT_CARD_COUNT 此前恒读默认空
+    /// 切片=0——现从 CardsDrawn/CardsMoved/CardsDiscarded/CardsGiven/CardUsed/
+    /// CardResponded 派生）。
+    cards: Vec<u32>,
     seats: u8,
     core: &'a crate::state::GameStateCore,
     catalog: &'a crate::catalog::Catalog,
@@ -1042,6 +1100,10 @@ impl VmHost for EngineVmHost<'_> {
 
     fn event_targets(&self) -> &[u32] {
         &self.targets
+    }
+
+    fn event_cards(&self) -> &[u32] {
+        &self.cards
     }
 
     fn emit_effect(&mut self, mut req: EffectRequest) -> Result<(), HostTrap> {

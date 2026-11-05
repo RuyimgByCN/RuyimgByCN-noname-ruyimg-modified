@@ -1,0 +1,12 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.25s
+     Running tests/groups/misc.rs (target/debug/deps/misc-0dff29147bd0ba75)
+
+running 5 tests
+test pa12_batch6_events_and_cards::pa12_batch6_cards_drawn_owner_is_target_and_gained_atom ... ok
+test pa12_batch6_events_and_cards::pa12_batch6_dying_after_xinjuxiang_damages_saved_player_and_removes_self ... ok
+test pa12_batch6_events_and_cards::pa12_batch6_event_card_count_mingzhe_outside_vs_inside_play_phase ... ok
+test pa12_batch6_events_and_cards::pa12_batch6_phase_any_end_owner_and_non_owner_gates ... ok
+test pa12_batch6_events_and_cards::pa12_batch6_hp_recovered_and_hp_lost_triggers ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 307 filtered out; finished in 0.03s
+

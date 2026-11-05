@@ -46,6 +46,9 @@ mod pa12_batch3b_once_limits;
 #[path = "../pa12_batch4_1_host_primitives.rs"]
 mod pa12_batch4_1_host_primitives;
 
+#[path = "../pa12_batch6_events_and_cards.rs"]
+mod pa12_batch6_events_and_cards;
+
 #[path = "../pa12_dsl_native_prototype.rs"]
 mod pa12_dsl_native_prototype;
 

@@ -324,6 +324,7 @@ impl VmMachine {
                 .collect::<Vec<_>>();
             let mut host = EngineVmHost {
                 targets,
+                cards: self.trig.event_cards.clone(),
                 ctx: HostContext {
                     // T8 增量 8：skill_id 经目录反查回填（查不到保持 0=NONE）。
                     skill_id: ctx

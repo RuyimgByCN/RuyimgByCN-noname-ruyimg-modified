@@ -350,6 +350,9 @@ pub fn bridge_vm_skill_decls(
                 phase_gate = Some(engine_native::event::Phase::Discard);
                 EventKind::PhaseEnd
             }
+            // PA12 批⑥（§2 B）：`phase_any_end`＝任一阶段结束（无阶段门，对应
+            // 原生 EventKind::PhaseEnd；ported/**/*.skill 80 处使用）。
+            "phase_any_end" => EventKind::PhaseEnd,
             // D01（A2，规则 333）：旧线 `phase_begin`＝DomainEvent::TurnBegan
             // （回合开始，每回合一次）→ 原生 TurnBegin 窗（无阶段门）。原映射
             // Judge-begin 每回合一次近似，准备阶段加入后语义漂移（判定前多一

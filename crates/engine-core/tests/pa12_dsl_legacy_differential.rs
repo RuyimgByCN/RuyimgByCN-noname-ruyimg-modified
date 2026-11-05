@@ -218,3 +218,152 @@ fn pa12_legacy_batch3_modules() {
         assert!(format!("{:?}", out.effects[0]).starts_with(want_prefix), "{id} {want_prefix}");
     }
 }
+
+/// PA12 批⑥差分（2026-11-05）：`dcmouli`（phase_any_end）、`dcgangjian`（phase_any_end）、
+/// `peersheng`（cards_drawn）、`haoxue`（cards_drawn）、`dcjiexing`（hp_recovered/hp_lost）、
+/// `dcgangu`（hp_lost）、`xinjuxiang`（dying_after）与 `mingzhe`（HOST_EVENT_CARD_COUNT）
+/// 在旧线 vm_host 的模块效果面——与原生整局（`pa12_batch6_events_and_cards.rs`）一致。
+#[test]
+fn pa12_legacy_batch6_modules_match_native() {
+    for (id, src, want_prefixes) in [
+        (
+            "huicui-dcmouli",
+            include_str!("../../../content/original/ported/huicui/dcmouli.skill"),
+            &["RecoverHp", "ChangeMaxHp"][..],
+        ),
+        (
+            "huicui-dcgangjian",
+            include_str!("../../../content/original/ported/huicui/dcgangjian.skill"),
+            &["DrawCards"][..],
+        ),
+        (
+            "offline-peersheng",
+            include_str!("../../../content/original/ported/offline/peersheng.skill"),
+            &["DrawCards"][..],
+        ),
+        (
+            "collab-haoxue",
+            include_str!("../../../content/original/ported/collab/haoxue.skill"),
+            &["RecoverHp"][..],
+        ),
+        (
+            "xianding-dcjiexing",
+            include_str!("../../../content/original/ported/xianding/dcjiexing.skill"),
+            &["DrawCards"][..],
+        ),
+        (
+            "huicui-dcgangu",
+            include_str!("../../../content/original/ported/huicui/dcgangu.skill"),
+            &["DrawCards", "DealDamage"][..],
+        ),
+        (
+            "shiji-xinjuxiang",
+            include_str!("../../../content/original/ported/shiji/xinjuxiang.skill"),
+            &["RemoveSkill", "DealDamage"][..],
+        ),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let name = pkg.trigger_index[0].module.clone();
+        let module = tx.state().content.module(&name).cloned().expect("模块");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let out = engine_core::vm_host::run_module(
+            tx.state(),
+            &module,
+            pkg.trigger_index[0].skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 0],
+            1,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+
+    // 明哲（HOST_EVENT_CARD_COUNT + InPlayPhase）：出牌阶段外有事件牌→摸 1；无事件牌或出牌阶段内→0 效果
+    let pkg = content_compiler::compile_source_named(
+        "sp-mingzhe",
+        include_str!("../../../content/original/ported/sp/mingzhe.skill"),
+    )
+    .expect("编译明哲");
+    let mut tx = Transaction::begin(GameState::empty());
+    bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+    std::sync::Arc::make_mut(&mut tx.state_mut().content)
+        .load_package(&pkg)
+        .expect("装载");
+    let module = tx
+        .state()
+        .content
+        .module(&pkg.trigger_index[0].module)
+        .cloned()
+        .expect("模块");
+    let owner = PlayerId::new(1);
+    tx.state_mut().turn.phase = engine_core::state::Phase::End;
+    let empty_cards = engine_core::vm_host::run_module_with_event_cards(
+        tx.state(),
+        &module,
+        pkg.trigger_index[0].skill_def_id,
+        [owner.raw(), owner.raw(), owner.raw(), 0],
+        0,
+        &[],
+        &[],
+        0,
+        0,
+        0,
+        PlayerId::NONE,
+        0,
+        10_000,
+    )
+    .expect("空事件牌执行");
+    assert!(empty_cards.effects.is_empty(), "event_card_count=0 时不摸牌");
+
+    let with_card = engine_core::vm_host::run_module_with_event_cards(
+        tx.state(),
+        &module,
+        pkg.trigger_index[0].skill_def_id,
+        [owner.raw(), owner.raw(), owner.raw(), 1],
+        1,
+        &[1],
+        &[],
+        0,
+        0,
+        0,
+        PlayerId::NONE,
+        0,
+        10_000,
+    )
+    .expect("非出牌阶段带事件牌执行");
+    assert_eq!(with_card.effects.len(), 1, "event_card_count=1 且非出牌阶段摸 1");
+    assert!(format!("{:?}", with_card.effects[0]).starts_with("DrawCards"));
+
+    tx.state_mut().turn.current = owner;
+    tx.state_mut().turn.phase = engine_core::state::Phase::Play;
+    let in_play = engine_core::vm_host::run_module_with_event_cards(
+        tx.state(),
+        &module,
+        pkg.trigger_index[0].skill_def_id,
+        [owner.raw(), owner.raw(), owner.raw(), 1],
+        1,
+        &[1],
+        &[],
+        0,
+        0,
+        0,
+        PlayerId::NONE,
+        0,
+        10_000,
+    )
+    .expect("出牌阶段带事件牌执行");
+    assert!(in_play.effects.is_empty(), "出牌阶段内不摸牌");
+}
