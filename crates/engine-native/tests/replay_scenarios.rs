@@ -1078,49 +1078,49 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
             "sha_limit",
             "seat_range",
         ],
-        "b29e7bb8cdf6590c906425b0d8d6dc8239cad6a6670e606ba8e45638846df7f5",
+        "d52004cdfbfc8afb10dfce81e10c540e17ac0ab2117b7c20ff94e8cca2fed561",
     ),
     (
         "death_terminal_single",
         scenario_death_terminal_single,
         &["dying", "death", "victory"],
-        "795b0c5187d3622d62a3752a505a8b1715ce8e04fd649650747ef42f390fcb5a",
+        "7d5d161c37a5c7c33536c5a23fc2ec9e6e43790118d77dc9182fb1b52d39d7f3",
     ),
     (
         "sancai_nested_chain",
         scenario_sancai_nested_chain,
         &["optional_trigger", "nested_choice", "draw", "give_cards"],
-        "db56903beff0ddcb26097d54f7ec043ae6babb43e9f3a9f48856905ba6190f4f",
+        "69b5c88f517aa8200f9591eab5e3033018f6db76796babe08634edf276a24035",
     ),
     (
         "yishang_redirect",
         scenario_yishang_redirect,
         &["damage_before_window", "payload_rewrite_redirect"],
-        "d0f265182de75e900376edce7b687c859cc1c4d80241c8a706ce3fb0c1779956",
+        "4127b9090b15f868fceb6901190a1459f1d7ddebddc5e37d4fa74d6d814bef71",
     ),
     (
         "suidun_window_matrix",
         scenario_suidun_window_matrix,
         &["damage_prevent", "once_per_turn", "mid_resolution_disable"],
-        "2765bc59107c97aa8791eec5f885ccf7a9a6c5421a513ea55b72353d5fc81244",
+        "cbb9b795c3ec1408dbd1fca30cbbcd8e6cd1dfd754958152f3058ea749a92805",
     ),
     (
         "shouyi_dynamic_skill",
         scenario_shouyi_dynamic_skill,
         &["dynamic_gain", "skill_expiry", "redirect_after_gain"],
-        "d13dccdd316ae9eb281d3b9736dcf4d6a3471d9e40942ac23f7c8ec687ea2f6e",
+        "eb3f63e81a75d6981b53b11630fbd70f7708a72d836dab6e9cd34c40c6840c90",
     ),
     (
         "discard_to_limit",
         scenario_discard_to_limit,
         &["hand_limit", "intrinsic_machine"],
-        "ed83e384af083b733730f6eb2d5b68ea47fa0575376fde2ec998b28f86acdb94",
+        "5f600731fd0aa495ae2520e41b5f8744f1604305006f27ea5ee8c02b65165421",
     ),
     (
         "rollback_invariants",
         scenario_rollback_invariants,
         &["reject_rollback", "budget_rollback"],
-        "d1e8bf09b749001180dabe2f302b29a82fa244f704289b21b52de46e8537af88",
+        "a36cdff4c3649f77605cbbb0030056418b0bc676c3dc568d52f64e16357609e0",
     ),
     (
         "equip_distance_matrix",
@@ -1131,39 +1131,48 @@ const SCENARIOS: &[(&str, ScenarioFn, &[&str], &str)] = &[
             "attack_range",
             "equip_replace",
         ],
-        "18c614ef26b1c59478846a68e2ae021d69e26a3a98ff0e6a1ab67a98a4f7c05b",
+        "9689e92df3b75d45455361c442145438c068641dd269ef8466a8871ab675f9a6",
     ),
     (
         "chain_fire_propagation",
         scenario_chain_fire_propagation,
         &["chain_state", "damage_nature", "chain_propagation"],
-        "84300d104adb7c65183943bebd10fc7cf2513d38e8d9fe912e510ca9a4ed8341",
+        "f507cc04af331039bb023e964bfacf22ff1edeff6dbd17a1445a5902a565c9b9",
     ),
     (
         "aoe_response_queue",
         scenario_aoe_response_queue,
         &["aoe_queue", "aoe_skip_no_card", "aoe_full_resolution"],
-        "a3cc48a6e2fc58fb97fcbcd148893323c090089eaf7ac60a65b79a78c9c17bdb",
+        "67fcb763b3fa874e17015bb3296c7e1ad6c1fd98f8a717443438397c13258f86",
     ),
     (
         "duel_alternating_response",
         scenario_duel_alternating_response,
         &["duel_alternating", "duel_no_distance_limit"],
-        "75f82cb96faee119bf7fff4f1b520ff372bf3c315056987772264118e5baab8c",
+        "6b12acc94788a9b607363eaf4b3e69fb370cdf91d8042b2eda7033dafc645423",
     ),
     (
         "nullify_chain_on_savage",
         scenario_nullify_chain_on_savage,
         &["nullify_window", "nullify_chain", "nullify_scope"],
-        "7cbbfdcdd64cd9535cf25559e8495ec39afda34c86d4f2ed9185aeb7d450be30",
+        "3501cda99198af8395905448800b16653fd726a5b97d20b4d53f91a2b51cf487",
     ),
     (
         "judge_phase_delayed_tricks",
         scenario_judge_phase_delayed_tricks,
         &["judge_zone", "delayed_trick", "phase_skip"],
-        "bfa1c43fe0c1c32fbc07c5201dccebc763f6df67aae7ae23ea2a096a19cf52b8",
+        "5e675d48cc3b3b5f58233223764376a91542f01e2bbdcbd8f608ce9b9c26f4cb",
     ),
 ];
+
+// R05 规则 333 重录（2026-11-05，涕泣/宝梳/避祸，裁决 28/29/31）：
+// 三步探针（j-03-golden-initial.log / j-03b-golden-probe-v332-no-detached-hash.log /
+// j-03c-golden-green.log）表明 14 场位移由三项预期权威状态变化叠加构成：
+// 1. 每次进入摸牌阶段（advance_to_play 等）或摸牌结算走真实 D/R/G 三段事件族
+//    （DrawPhase / Draw / DrawGain），以及换手新增 TurnBegin + Phase::Prepare
+//    阶段帧，使 `resolution.next_event_id` 按真实帧数推进；
+// 2. `GameStateCore.detached_cards` 长度无条件进入 `canonical_hash`（标准 14 场为 0）；
+// 3. `STANDARD_RULESET_VERSION` 332 → 333 进入 `canonical_hash`。
 
 // ADR0787 v330: only rolling the rules version back to329 preserves all14 prior goldens.
 // A330 evidence golden-version-probe-8; timeout policy stays outside the rule clock.

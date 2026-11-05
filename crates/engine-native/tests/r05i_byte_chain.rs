@@ -118,6 +118,7 @@ fn compile_compound(
         .unwrap_or_else(|e| panic!("编译 {skill} 失败: {e:?}"));
     let rewritten: Vec<&str> = triggers.iter().map(|(_, _, event)| *event).collect();
     retrigger(&mut pkg, tag, &rewritten);
+    pkg.manifest.rule_vm_abi_version = 759;
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     pkg
 }

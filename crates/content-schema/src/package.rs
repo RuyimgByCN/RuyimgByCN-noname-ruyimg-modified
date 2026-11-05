@@ -858,6 +858,20 @@ impl ContentPackage {
                     module.name
                 ));
             }
+            for (tag, code) in [
+                (effect_tag::RESOLVE_TIQI, 781u16),
+                (effect_tag::RESOLVE_BAOSHU, 782u16),
+                (effect_tag::RESOLVE_DCBIHUO, 783u16),
+            ] {
+                let uses_tag = rule_vm::module_uses_effect_tag(module, tag)
+                    .map_err(|e| format!("module {}: {e}", module.name))?;
+                if abi < 759 && uses_tag {
+                    return Err(format!(
+                        "module {} uses effect {code} below ABI 759",
+                        module.name
+                    ));
+                }
+            }
         }
         Ok(())
     }

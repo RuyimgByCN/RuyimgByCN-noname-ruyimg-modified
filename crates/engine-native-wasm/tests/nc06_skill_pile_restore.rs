@@ -16,18 +16,32 @@ fn installed_skill_pile_restores_and_corrupt_duplicate_is_rejected() {
     let packs = json!([{ "manifest": manifest["manifest"], "cards": cards }]).to_string();
     let mut engine = engine_from_packs(3, 3501, &packs).unwrap();
     assign_general_for(&mut engine, 0, "刘馥").unwrap();
-    for _ in 0..32 {
+    // R05-A2 H73：筑城确认门在整回合结束窗 phaseEnd 段（经过弃牌阶段 discard_to_limit 后到达 trigger_confirm）
+    for _ in 0..64 {
         let (actor, action) = match engine.open_choice().cloned() {
-            Some(choice) => {
-                assert_eq!(
-                    (choice.observer, choice.spec.prompt),
-                    (0, "trigger_confirm")
-                );
+            Some(choice) if choice.spec.prompt == "trigger_confirm" => {
+                assert_eq!(choice.observer, 0);
                 (
                     0,
                     GameAction::Answer {
                         choice_id: choice.id,
                         selection: vec![ChoiceOption::Confirm],
+                    },
+                )
+            }
+            Some(choice) => {
+                let sel: Vec<ChoiceOption> = choice
+                    .spec
+                    .options
+                    .iter()
+                    .take(choice.spec.min.max(1))
+                    .copied()
+                    .collect();
+                (
+                    choice.observer,
+                    GameAction::Answer {
+                        choice_id: choice.id,
+                        selection: sel,
                     },
                 )
             }

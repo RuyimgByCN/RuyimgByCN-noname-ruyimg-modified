@@ -160,7 +160,12 @@ use crate::snap::{
 /// v329: ADR0786 J2 active bridge and content-owned effect choices (ABI758); v328 archives reject.
 /// Archive v105 keeps the existing Rvm tail mechanism and command/choice variants.
 /// v330: ADR0787 explicit host timeout answers; v329 archives reject.
-pub const STANDARD_RULESET_VERSION: u64 = 332;
+/// v331: ADR0788 player trigger ordering, shared Damage window, and content schema 5 (NGSA 106 / WS7).
+/// v332: GaiMing cancel returns candidate card to draw pile before re-drawing (Decision 24).
+/// v333: R05 tiqi/baoshu/dcbihuo compounds, real TurnBegin/Phase::Prepare/TurnPhaseAfter windows,
+/// async D/R/G draw/gain family with detached_cards, and VerifiedLockedContent raw-byte lock chain
+/// (NGSA 107 / ABI 759 / WS8; Decisions 28/29/31).
+pub const STANDARD_RULESET_VERSION: u64 = 333;
 
 pub use crate::vocabulary::generals::*;
 pub use crate::vocabulary::names::*;

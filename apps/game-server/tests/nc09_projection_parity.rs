@@ -224,7 +224,7 @@ fn nc09_projection_uses_ws6_snapshot_and_existing_card_fields() {
         choice: native_view::choice_for(&engine, RoomRole::Player, Some(PlayerId::new(1))),
         legal_actions: native_view::legal_actions_for(&engine, PlayerId::new(1)),
     };
-    assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 7);
+    assert_eq!(engine_protocol::NETWORK_PROTOCOL_VERSION, 8);
     let wire = engine_protocol::encode_s2c(&message).unwrap();
     let engine_protocol::ServerMessage::Snapshot {
         header,
@@ -234,7 +234,7 @@ fn nc09_projection_uses_ws6_snapshot_and_existing_card_fields() {
     else {
         panic!("snapshot");
     };
-    assert_eq!(header.protocol_version, 7);
+    assert_eq!(header.protocol_version, 8);
     assert_eq!(decoded, view);
 }
 

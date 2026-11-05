@@ -747,6 +747,15 @@ impl<'a> Ctx<'a> {
         }
     }
 
+    /// R05-J（§6）：移除座位技能实例，若为 R05 helper 则一并清理对应 mark。
+    pub fn remove_skill(
+        &mut self,
+        owner: PlayerId,
+        def: SkillDefId,
+    ) -> Option<crate::state::SkillInstance> {
+        self.core.remove_skill_and_r05_mark(self.catalog, owner, def)
+    }
+
     pub fn skill_enabled(&self, owner: PlayerId, def: SkillDefId) -> bool {
         self.core.has_skill(owner, def)
     }

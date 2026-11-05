@@ -527,6 +527,10 @@ fn vm_choice_leaf(choice: &ChoiceView) -> bool {
             | "rvm_fenghe_card"
             | "rvm_fenghe_destination"
             | "rvm_pingkou_targets"
+            | "rvm_tiqi_confirm"
+            | "rvm_tiqi_sign"
+            | "rvm_baoshu_cost"
+            | "rvm_dcbihuo_target"
     )
 }
 

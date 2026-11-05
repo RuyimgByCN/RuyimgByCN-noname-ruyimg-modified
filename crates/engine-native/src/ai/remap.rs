@@ -18,6 +18,8 @@ pub(super) fn event_cards(event: &mut EventData, map: &impl Fn(&mut u32)) {
         | EventData::CardsDiscarded { cards, .. }
         | EventData::CardsLost { cards, .. }
         | EventData::CardsGiven { cards, .. } => cards.iter_mut().for_each(map),
+        EventData::Draw { held_cards, .. } => held_cards.iter_mut().for_each(map),
+        EventData::DrawGain { eligible, .. } => eligible.iter_mut().for_each(map),
         _ => {}
     }
 }

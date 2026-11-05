@@ -200,6 +200,7 @@ fn rebuild_package(dir: &str, package_id: &str, spec: &[SkillSpec]) -> content_s
             .expect("trigger 模块在包内");
         *module = compound_module(&entry.module, *tag);
     }
+    pkg.manifest.rule_vm_abi_version = 759;
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     pkg
 }
@@ -251,6 +252,17 @@ fn r05f_real_packages_regeneration_matches_committed_npack() {
     ] {
         let rebuilt = rebuild_package(dir, package_id, spec);
         let committed = committed_package(dir);
+        assert_eq!(committed.manifest.rule_vm_abi_version, 759);
+        // 低于 ABI 759 的包使用 R05 compound（781/782/783）必须被 validate() 与装载器明确拒绝。
+        let mut downgraded = committed.clone();
+        downgraded.manifest.rule_vm_abi_version = 758;
+        downgraded.manifest.logic_hash = downgraded.compute_logic_hash();
+        let err = downgraded.validate().unwrap_err();
+        assert!(
+            err.contains("below ABI 759"),
+            "{dir}: ABI 758 降级包应被拒绝: {err}"
+        );
+        assert!(content_native_loader::bridge_vm_skill_decls(&downgraded).is_err());
         // 聚合哈希与逐字段一致（数据来源＝壳再生成）。
         assert_eq!(
             rebuilt.manifest.logic_hash, committed.manifest.logic_hash,

@@ -431,7 +431,16 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
         }
         EffectRequest::RemoveSkill { skill } => {
             if let Ok(def) = u16::try_from(skill.raw()) {
-                ctx.core.skills.retain(|(_, d), _| *d != def);
+                let owners: Vec<PlayerId> = ctx
+                    .core
+                    .skills
+                    .keys()
+                    .filter(|(_, d)| *d == def)
+                    .map(|(o, _)| *o)
+                    .collect();
+                for owner in owners {
+                    ctx.remove_skill(owner, def);
+                }
             }
         }
         EffectRequest::GainTopCardToSkillPile { player, .. } => {

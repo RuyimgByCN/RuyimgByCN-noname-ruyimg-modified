@@ -147,7 +147,9 @@ impl Engine {
             .map(|(_, d)| *d)
             .collect();
         for d in removed {
-            self.state.core.skills.remove(&(seat, d));
+            self.state
+                .core
+                .remove_skill_and_r05_mark(&self.catalog, seat, d);
         }
         self.state.core.player_mut(seat).general_slots[0] = Some(general);
         self.state.core.player_mut(seat).general_slots[1] = None;

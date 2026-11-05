@@ -41,7 +41,7 @@ async fn raw_snapshot(peer: &mut Peer, label: &str) -> serde_json::Value {
         if let Message::Text(text) = frame {
             let value: serde_json::Value = serde_json::from_str(&text).unwrap();
             if value["type"] == "Snapshot" && value["payload"]["header"]["conn_seq"] == seq {
-                assert_eq!(value["payload"]["header"]["protocol_version"], 7);
+                assert_eq!(value["payload"]["header"]["protocol_version"], 8);
                 if let Ok(directory) = std::env::var("SOURCE27_EVIDENCE") {
                     std::fs::create_dir_all(&directory).unwrap();
                     std::fs::write(

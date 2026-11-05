@@ -85,10 +85,10 @@ fn package_requiring_newer_host_abi_is_rejected_at_import_time() {
         .join("../../content/original/ported/onlyOL/onlyOL.npack.json");
     let json = std::fs::read_to_string(&path).expect("onlyOL npack present");
     let err = engine_native_wasm::validate_pack_json(&json)
-        .expect_err("full onlyOL still needs unsupported phase_prepare");
+        .expect_err("full onlyOL still needs unsupported game_started");
     eprintln!("GT014_WASM_REJECT abi_window: {err}");
     assert!(
-        err.contains("phase_prepare"),
+        err.contains("game_started"),
         "expected unsupported declaration error, got: {err}"
     );
 }

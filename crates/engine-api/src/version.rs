@@ -14,7 +14,7 @@ pub const PACKAGE_FORMAT_VERSION: u32 = 1;
 /// `ABI-COORDINATION.md` (repo root). Bumping this constant requires first
 /// claiming the number there — the `abort_bump_without_claim` test below
 /// enforces that invariant.
-pub const RULE_VM_ABI_VERSION: u32 = 758;
+pub const RULE_VM_ABI_VERSION: u32 = 759;
 
 /// Bundle of version identifiers recorded in replays and packages.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -44,7 +44,7 @@ impl VersionBundle {
             engine_api: 1,
             rule_vm_abi: RULE_VM_ABI_VERSION,
             content_schema: CONTENT_SCHEMA_VERSION,
-            network_protocol: 7,
+            network_protocol: 8,
             replay_schema: crate::REPLAY_SCHEMA_VERSION,
             snapshot_schema: crate::SNAPSHOT_SCHEMA_VERSION,
             package_format: PACKAGE_FORMAT_VERSION,

@@ -756,7 +756,7 @@ try {
   const onlyOlNpack = readFileSync(join(root, "../../content/original/ported/onlyOL/onlyOL.npack.json"), "utf8");
   const abiWindow = await workerSend({ id: 12788, type: "validatePackage", packJson: onlyOlNpack });
   check("worker_validate_package_rejects_abi_window",
-    abiWindow.ok === false && /phase_prepare/.test(abiWindow.error ?? ""), abiWindow.error ?? "");
+    abiWindow.ok === false && /game_started/.test(abiWindow.error ?? ""), abiWindow.error ?? "");
   const afterValidate = await workerSend({ id: 12789, type: "status" });
   check("worker_validate_package_does_not_touch_current_match", afterValidate.ok === true, JSON.stringify(afterValidate).slice(0, 120));
 

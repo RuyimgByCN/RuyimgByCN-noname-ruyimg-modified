@@ -125,6 +125,9 @@ mod r05h_projection;
 #[path = "../r05i_byte_chain.rs"]
 mod r05i_byte_chain;
 
+#[path = "../r05j_acceptance_matrix.rs"]
+mod r05j_acceptance_matrix;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 

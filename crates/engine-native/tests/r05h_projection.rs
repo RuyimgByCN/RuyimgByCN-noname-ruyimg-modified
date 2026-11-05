@@ -88,6 +88,7 @@ fn compile_multi(
     let mut pkg = content_compiler::compile_source_named(package, &source)
         .unwrap_or_else(|e| panic!("编译 {skill} 失败: {e:?}"));
     retrigger_multi(&mut pkg, tags, events);
+    pkg.manifest.rule_vm_abi_version = 759;
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     pkg
 }

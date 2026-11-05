@@ -37,7 +37,9 @@
 | E 段 | 562–599 | 本 agent（Hermes 会话，负责 standard/newjiang/clan/onlyOL/key/extra/yijiang 等未认领包；559-561 已被其他 agent 占用） |
 | 第二溢出段 | 600–699 | 原编号段全部耗尽后，继续按本表逐号串行领取 |
 
-ABI-MAX: 758
+ABI-MAX: 759
+
+> 2026-11-05：R05（裁决 28/29/31）领取 ABI 759，落地涕泣/宝梳/避祸三固定 compound（`resolve_tiqi` 781 / `resolve_baoshu` 782 / `resolve_dcbihuo` 783）、四角色私有 helper 派生及 R05 触发面，并将全局原生宿主 `RULE_VM_ABI_VERSION` 升至 759。
 
 > 2026-10-27：用户授权将平寇效果编号改为 772，并要求包最低 ABI 758；此领取不提升全局原生宿主 ABI，宿主仍为 753。
 
@@ -55,6 +57,7 @@ ABI-MAX: 758
 
 | ABI | 原语 / 技能 | 领取者 | 日期 | 备注 |
 |---|---|---|---|---|
+| 759 | R05 涕泣/宝梳/避祸三固定 compound（`resolve_tiqi` 781 / `resolve_baoshu` 782 / `resolve_dcbihuo` 783）与四角色私有 helper 派生、真实 `phase_prepare`/`damage_source`/`damage_end`/`draw_phase_after`/`skill_log_begin` 触发面 | Claude | 2026-11-05 | 裁决 28/29/31；全局宿主 ABI 升至 759，低于 759 的包禁止使用效果 781–783 |
 | 758 | 平寇 `choose_other_targets_by_skipped_phase_count_damage_draw`：修复与英逝共用 tag 656 的冲突，改用 tag 772；754–757 且含 656 的包拒绝 | Codex | 2026-10-27 | 仅领取包最低 ABI；全局宿主 ABI 仍为 753 |
 | 353 | `zj_duanbing`：回合对历史 + 近距【闪】数（`choose_add_current_sha_target_within_distance` 等） | B (Codex) | 2026-08-01 | 已在 `version.rs` 与 content-compiler 落地 |
 | 354 | `spniluan`：转化【杀】未造成伤害时退还本次使用次数（`refund_use_count_if_no_damage`） | B (Codex) | 2026-08-01 | 复用既有单次【杀】伤害追踪与 `hand_equip_expansion` 来源区 |

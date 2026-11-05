@@ -112,6 +112,12 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
             }
         }
         visible.extend(core.table.iter().copied());
+        visible.extend(core.detached_cards.iter().map(|(c, _)| *c));
+        for frame in &e.resolution().stack {
+            if let crate::event::EventData::Draw { held_cards, .. } = &frame.data {
+                visible.extend(held_cards.iter().copied());
+            }
+        }
         let mut held = Vec::new();
         for park in &e.resolution().parks {
             super::remap::held_cards(&park.machine.snapshot(), seat, &mut held, &mut hidden_held);

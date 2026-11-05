@@ -294,7 +294,7 @@ impl HostMachine {
                         .map(|(_, d)| *d)
                         .collect();
                     for def in removed {
-                        ctx.core.skills.remove(&(owner, def));
+                        ctx.remove_skill(owner, def);
                         ctx.log(LogEvent::SkillToggled {
                             player: owner,
                             skill: ctx.catalog.skill_name(def),

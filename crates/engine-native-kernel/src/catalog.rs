@@ -1149,6 +1149,15 @@ impl Catalog {
         self.skills[id as usize].name
     }
 
+    /// R05-J（§6）：判断 `def` 是否为 R05 派生四角色 helper（`#r05:{role}`）。
+    pub fn is_r05_helper_def(&self, def: SkillDefId) -> bool {
+        self.r05_identities.contains_key(&def)
+            || self
+                .skills
+                .get(def as usize)
+                .is_some_and(|s| s.name.contains("#r05:"))
+    }
+
     /// 按名字查技能定义号（构建内容/测试用；O(1) 查表，首个匹配）。
     pub fn skill_by_name(&self, name: &str) -> Option<SkillDefId> {
         self.by_name.get(name).copied()

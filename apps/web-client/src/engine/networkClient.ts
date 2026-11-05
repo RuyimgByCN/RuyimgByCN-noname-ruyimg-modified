@@ -9,7 +9,7 @@ import type {
   ObserverSnapshot,
 } from "../types/engine";
 
-const NETWORK_PROTOCOL_VERSION = 7;
+const NETWORK_PROTOCOL_VERSION = 8;
 
 type CommandKind =
   | "EndPhase"

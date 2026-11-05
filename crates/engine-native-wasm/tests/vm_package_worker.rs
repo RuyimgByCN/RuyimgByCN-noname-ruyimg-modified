@@ -153,7 +153,7 @@ fn onlyol_effect_collision_and_future_abi_are_rejected_before_start_or_restore()
     );
     for (bytes, expected) in [
         (old.as_slice(), "ambiguous effect 656"),
-        (new.as_slice(), "phase_prepare"),
+        (new.as_slice(), "game_started"),
     ] {
         let mut package = content_schema::ContentPackage::from_json_bytes(bytes).unwrap();
         // Isolate the package check from unrelated dependency installation.

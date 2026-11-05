@@ -55,15 +55,6 @@ impl crate::catalog::SkillMachine for DeathMachine {
                 pl.swdtianshu_granted = None;
             }
         }
-        // R05-F（§6 普通死亡四角色表）：清死者 Limit/Combs/Current 语义槽
-        // 与 helper 实例；**Next 条目/值/实例/enabled 原样保留**（仅 alive
-        // 门使入队/执行失效；revive 不改 enabled）。
-        for role in ["limit", "combs", "current"] {
-            for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, role) {
-                ctx.core.vm_aux.marks.remove(&(self.player, def as u32));
-                ctx.core.skills.remove(&(self.player, def));
-            }
-        }
         // 护天归还（swd 批 131，规则 v314）：持有者死亡前置（上游 hutian3
         // dieBegin forced）——把其寄存于目标处的牌归还目标并清理双方状态
         hutian_return_deposit(ctx, self.player);
@@ -104,7 +95,7 @@ impl crate::catalog::SkillMachine for DeathMachine {
                         .map(|(_, d)| *d)
                         .collect();
                     for def in removed {
-                        ctx.core.skills.remove(&(self.player, def));
+                        ctx.core.remove_skill_and_r05_mark(ctx.catalog, self.player, def);
                     }
                     let leftover = {
                         let p = ctx.core.player_mut(self.player);
@@ -145,11 +136,21 @@ impl crate::catalog::SkillMachine for DeathMachine {
         for c in leftover {
             ctx.to_discard(c);
         }
+        // R05-F/J（§6 普通死亡四角色表）：清死者 Limit/Combs/Current 语义槽
+        // 与 helper 实例；**Next 条目/值/实例/enabled 原样保留**（仅 alive
+        // 门使入队/执行失效；revive 不改 enabled）。
+        for role in ["limit", "combs", "current"] {
+            for def in (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, role) {
+                ctx.core.vm_aux.marks.remove(&(self.player, def as u32));
+                ctx.core.skills.remove(&(self.player, def));
+            }
+        }
+        let next_defs = (ctx.catalog.hooks.r05_role_defs)(ctx.catalog, "next");
         let removed: Vec<crate::ids::SkillDefId> = ctx
             .core
             .skills
             .keys()
-            .filter(|(o, _)| *o == self.player)
+            .filter(|(o, d)| *o == self.player && !next_defs.contains(d))
             .map(|(_, d)| *d)
             .collect();
         for def in removed {

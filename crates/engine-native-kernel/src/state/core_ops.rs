@@ -1052,6 +1052,47 @@ impl GameStateCore {
             .unwrap_or(false)
     }
 
+    /// R05-J（§6）：显式移除技能或换将清理时，同步清理对应 R05 helper 的
+    /// `vm_aux.marks[(owner, def as u32)]`；若移除的是 `Limit` 槽，同逻辑
+    /// 技能在同一座位上的 `Current` 槽（实例与 mark）一并移除。
+    pub fn remove_skill_and_r05_mark(
+        &mut self,
+        catalog: &crate::catalog::Catalog,
+        owner: PlayerId,
+        def: SkillDefId,
+    ) -> Option<SkillInstance> {
+        let old = self.skills.remove(&(owner, def));
+        if catalog.is_r05_helper_def(def) {
+            self.vm_aux.marks.remove(&(owner, def as u32));
+            let name = catalog.skill_name(def);
+            if let Some(prefix) = name.strip_suffix("#r05:limit") {
+                if let Some(cur_def) = catalog.skill_by_name(&format!("{prefix}#r05:current")) {
+                    self.skills.remove(&(owner, cur_def));
+                    self.vm_aux.marks.remove(&(owner, cur_def as u32));
+                }
+            }
+        }
+        old
+    }
+
+    /// R05-J（§6）：换将（uninit/init）时清除目标座位上的全部 R05 四角色
+    /// helper 实例与对应 mark（含 Limit、Combs、Next、Current）。
+    pub fn clear_r05_helpers_on_seat(
+        &mut self,
+        catalog: &crate::catalog::Catalog,
+        seat: PlayerId,
+    ) {
+        let helpers: Vec<SkillDefId> = self
+            .skills
+            .keys()
+            .filter(|(o, d)| *o == seat && catalog.is_r05_helper_def(*d))
+            .map(|(_, d)| *d)
+            .collect();
+        for def in helpers {
+            self.remove_skill_and_r05_mark(catalog, seat, def);
+        }
+    }
+
     /// 当前玩家的下一位存活玩家（座位环顺时针）。
     pub fn next_alive(&self, from: PlayerId) -> PlayerId {
         let n = self.players.len() as PlayerId;

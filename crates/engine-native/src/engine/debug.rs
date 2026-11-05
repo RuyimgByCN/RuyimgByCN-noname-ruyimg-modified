@@ -477,6 +477,9 @@ impl Engine {
     pub fn debug_assemble_general_def(&mut self, player: PlayerId, def: u16) {
         self.state
             .core
+            .clear_r05_helpers_on_seat(&self.catalog, player);
+        self.state
+            .core
             .players
             .get_mut(player as usize)
             .expect("player")
@@ -506,8 +509,13 @@ impl Engine {
                 .catalog
                 .skill_by_name(skill)
                 .unwrap_or_else(|| panic!("catalog skill {skill}"));
-            self.state.core.skills.remove(&(player, def));
+            self.state
+                .core
+                .remove_skill_and_r05_mark(&self.catalog, player, def);
         }
+        self.state
+            .core
+            .clear_r05_helpers_on_seat(&self.catalog, player);
     }
 
     /// 测试/工具：切换已授予技能的启停（N08 动态技能资格）。

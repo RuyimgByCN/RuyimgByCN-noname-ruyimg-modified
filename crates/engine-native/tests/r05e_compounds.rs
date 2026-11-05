@@ -96,6 +96,7 @@ fn compile_compound(
         .unwrap_or_else(|e| panic!("编译 {skill} 失败: {e:?}"));
     let rewritten: Vec<&str> = triggers.iter().map(|(_, _, event)| *event).collect();
     retrigger(&mut pkg, tag, &rewritten);
+    pkg.manifest.rule_vm_abi_version = 759;
     // 模块替换后重算聚合 logic_hash（manifest 校验一致性）。
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     pkg
@@ -471,6 +472,7 @@ fn r05e_baoshu_m_zero_and_negative_via_inter_window_max_hp_change() {
             entry.event = "skill_log_begin".into();
         }
     }
+    pkg.manifest.rule_vm_abi_version = 759;
     pkg.manifest.logic_hash = pkg.compute_logic_hash();
     let pack = pack_of("author", "r05e-baoshu-c", &pkg);
     let mut e = Engine::new_with_extensions(33913, 3, &[&pack]).unwrap();

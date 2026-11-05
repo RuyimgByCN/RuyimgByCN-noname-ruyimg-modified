@@ -462,7 +462,7 @@ pub(super) fn sixiang_reinit_seat(
         .map(|(_, d)| *d)
         .collect();
     for d in removed {
-        ctx.core.skills.remove(&(seat, d));
+        ctx.remove_skill(seat, d);
     }
     ctx.core.player_mut(seat).general_slots[0] = Some(general);
     ctx.core.player_mut(seat).general_slots[1] = None;
