@@ -54,13 +54,13 @@
 | R07 举战/自固/荡尘 | noop/部分 | 取消付费、禁弃/禁获得、实体牌归属 | 同台账 |
 | R08 清势/神赋/顾曲/争功 | noop/近似 | 取消/空 cards/无 currentPhase、装备实际使用 | 同台账 |
 | R09 讨州/相谶/摧锋 | noop/占位 | 无实体牌、目标有效性、技能授予恢复 | 同台账 |
-| R10 AI/显示/元数据 | 元数据 5 测通过；AI 有限值已修；原生 AI 变体≥2 已纳入主动技候选、技能威胁度加权（含测试） | 应机/共护/自矜/勇剑/化伤估值、RNG、Planner、N01 旧线 AI | [R10](../operations/evidence/2026-10-24-up37-r10-metadata/README.md) |
+| R10 AI/显示/元数据 | **已完成并验收（2026-11-05）**：元数据与源码同步 7 测通过（覆盖 `c2c9ae0b`/`673bc921`/`90b58bb9`/`a44934c5`/`2492902c`/`19d86519`/`c8d29532` 全部武将/技能文案/卡牌翻译/`manualConfirm`/`prompt2`/`poptip`/有限 AI 价值 hunk）；旧线 `engine-ai`（`HeuristicSearch`/`BeamSearch`/`MctsSearch` 8 测）与原生 `BoundedPlanner`（`policy_variant=1/2` + `ContentTuning` 无限值钳制）可复现、节点有界、模拟 `RuleRng` 与权威 `state_hash` 零污染、N01 胆守/奋励/平寇双线 AI 覆盖齐备 | 无 | [R10](../operations/evidence/2026-10-24-up37-r10-metadata/README.md)、[2026-11-05 收口矩阵](../operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md) |
 
 ## UP37-N01–N07
 
 | 编号 | 状态 | 剩余 |
 |---|---|---|
-| N01 界朱然/界朱桓 | 部分：旧线规则已实现；原生奋励前置窗及J2胆守/平寇所测路径已在329/ABI758验收（`255bbfbd`），全N01未完成 | 真实作者DSL四分支、序号弃牌、主动/触发身份共享、每阶段重置、非法应答/字节恢复已有证据；仍需AI估值、完整组合/模式和目标平台、真实旧0.1.x内容锁矩阵及onlyOL整包。onlyOL0.1.5/ABI758；旧副本保留，不伪造迁移 |
+| N01 界朱然/界朱桓 | 部分：旧线规则已实现；原生奋励前置窗及J2胆守/平寇所测路径已在329/ABI758验收（`255bbfbd`）；**2026-11-05 补齐双线 AI 估值/RNG 隔离与真实旧 `0.1.0`/`0.1.2`/`0.1.4`/`0.1.5` 内容锁矩阵验收**（[证据](../operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md)） | 已有真实作者DSL四分支、序号弃牌、主动/触发身份共享、每阶段重置、非法应答/字节恢复、AI估值与旧 `0.1.x` 内容锁矩阵证据；**仍需**：完整组合/模式、目标平台与 `onlyOL` 整包未移植项。`onlyOL` 0.1.5/ABI758；旧副本保留，不伪造迁移 |
 | N02 唐棠 | 未实现 | `tt_zexing`/`tt_zhiyi` 摸牌事件、颜色、目标恢复 |
 | N03 TW魔张梁 | 未实现 | 技能/标记/随机/配置 |
 | N04 OL孙寒华 | 未实现 | 装备形态、花色、回合历史 |
@@ -68,16 +68,16 @@
 | N06 OL乐孟获 | 未实现 | 随机效果、保存恢复 |
 | N07 OL许劭 | 未实现 | 最终重写版动态技能、保存恢复 |
 
-N01当前宿主ABI为758，已关闭旧753对758的入口拒绝；旧ABI/tag656拒绝边界见[B6历史证据](../operations/evidence/2026-10-27-pa12-tag656-fix/README.md)，当前整合与尚缺范围见[J2证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)。
+N01当前宿主ABI为758，已关闭旧753对758的入口拒绝；旧ABI/tag656拒绝边界见[B6历史证据](../operations/evidence/2026-10-27-pa12-tag656-fix/README.md)，当前整合与尚缺范围见[J2证据](../operations/evidence/2026-10-30-j2-main-integration/README.md)与[2026-11-05 内容锁矩阵](../operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md)。
 
 ## UP37-I01–I05
 
 | 编号 | 状态 | 剩余 |
 |---|---|---|
-| I01 内容/目录同步 | 内容已同步；排序修复**定向通过（2026-10-27）**：多区域校验通过，画像清单只重排；[证据](../operations/evidence/2026-10-27-up37-i01-stable-order/README.md) | 分包差异审计、旧局内容锁反例；可选皮肤完整来源集成验证 |
+| I01 内容/目录同步 | 内容已同步；排序修复**定向通过（2026-10-27）**；**2026-11-05 完成 31 个 ported 包 + 2 个原始包分包差异审计与 `shiji`（`0.1.0`/`0.2.4`/`0.2.5`）、`onlyOL`（`0.1.0`..`0.1.5`）旧局内容锁恢复与跨版本拒绝反例**（[证据](../operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md)）；[排序证据](../operations/evidence/2026-10-27-up37-i01-stable-order/README.md) | 可选皮肤完整来源集成验证 |
 | I02 资源/画像 | 部分；2026-10-30已导入9652直接音频与声明别名；**2026-11-05（裁决30）公开表现投影、合格定义级语音绑定、WASM/Worker/Desktop/Server 全宿主生产构造器与前端 `BattleAudioOwner` 对局自动语音已完整实现并验收**（见[I02 公开表现与对局语音证据](../operations/evidence/2026-11-05-i02-public-presentation-closure/README.md)） | 已有4张新画像、23393别名／79替身／8跨包形态、真实Vue解码/试听与错误恢复（[切片证据](../operations/evidence/2026-10-30-up37-i02-audio-aliases/README.md)）及对局自动语音全端闭环（发生时点公开承诺、暗将零泄露、跨包同名技能隔离、一次消费与存读档/重连基线去重）；**仍留待**：C29 技能真实扣费/激活精细语义、VM `KillPlayer`/`DeathMachine` 共享 `DeathFlow`（需独立规则方案）、2487缺backing、234动态表达式、真实皮肤/作者包生命周期与18项其他资源 |
 | I03 配置/依赖 | 部分 | 新内容依赖/配置/交互未全 |
-| I04 兼容/旧锁 | 未完成 | 旧 0.1.x/0.2.x 存档拒绝与恢复矩阵 |
+| I04 兼容/旧锁 | **已完成并验收（2026-11-05）**：`shiji`（`0.1.0`/`0.2.4`/`0.2.5`）与 `onlyOL`（`0.1.0`/`0.1.2`/`0.1.4`/`0.1.5`）在 `PackageStore`、旧线 `Engine::from_content_lock`、原生 `VerifiedLockedContent` 锁内容工厂的精确锁恢复与跨版本拒绝全矩阵，以及原生 `NGSA 105`/`106` 格式门禁与规则 `322..=326, 330..=332` 版本拒绝矩阵全部通过（见[矩阵证据](../operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md)） | 无 |
 | I05 验收数据 | 部分 | 每批证据目录已有；37 来源 G0–G5 未逐项 |
 
 ## PA01–PA12 性能架构调整（2026-10-26）
