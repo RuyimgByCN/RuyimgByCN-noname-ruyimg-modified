@@ -11,7 +11,9 @@ use super::*;
 /// 2=SkillLog(begin) 子结算中、3=SkillLog(end) 子结算中、4=逐目标循环、
 /// 5=link 子事件后、6=turnOver 子事件后。m 以 i32 位模式存 u32。
 pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u32>) -> Flow {
-    if !ctx.core.player(owner).alive {
+    // 入口与 logSkillBegin 子结算后进入 content 前检 owner 存活；
+    // 一旦进入 content（stage >= 4），子事件中 owner 阵亡不中断剩余目标（§5）。
+    if (state.is_empty() || state[0] <= 3) && !ctx.core.player(owner).alive {
         return Flow::Done;
     }
     if state.is_empty() {
@@ -49,6 +51,8 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
                 .collect();
             picked.sort_unstable();
             picked.dedup();
+            let turn_cur = ctx.core.turn.current;
+            picked.sort_by_key(|p| ctx.core.seat_steps_from(turn_cur, *p));
             let alive = ctx.core.alive_players().collect::<Vec<_>>();
             if picked.is_empty()
                 || picked.len() > ctx.core.player(owner).max_hp as usize

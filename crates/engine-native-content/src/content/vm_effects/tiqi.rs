@@ -7,8 +7,8 @@ use super::*;
 /// 状态：`[stage, n, target+1]`；stage 1=确认询问、2=奖励 R 子树结算中、
 /// 3=符号询问。stage 1 前无状态（窗口资格未通过即静默结束）。
 pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u32>) -> Flow {
-    // 入口存活门（§5：进入单个 async content 后不再逐 await 重加拦截）。
-    if !ctx.core.player(owner).alive {
+    // 入口存活门（§5/§9.5：确认前检 owner 存活；进入 content 后奖励 draw 期间 owner 阵亡仍 forceDie 选符号）。
+    if (state.is_empty() || state.first() == Some(&1)) && !ctx.core.player(owner).alive {
         return Flow::Done;
     }
     if state.is_empty() {
@@ -83,7 +83,7 @@ pub(super) fn step(ctx: &mut Ctx<'_>, skill: &str, owner: u8, state: &mut Vec<u3
 }
 
 pub(super) fn active_ask(core: &GameStateCore, owner: u8, state: &[u32]) -> Option<ExpectedAsk> {
-    if !core.player(owner).alive {
+    if state.first() == Some(&1) && !core.player(owner).alive {
         return None;
     }
     Some(match state.first() {

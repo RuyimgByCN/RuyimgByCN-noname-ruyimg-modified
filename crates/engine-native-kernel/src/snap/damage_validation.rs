@@ -176,5 +176,107 @@ pub(super) fn check_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), Sna
             return Err(SnapshotError::BadTag("damage_finished_continuation", 0));
         }
     }
+    check_draw_frame(f, res)?;
+    Ok(())
+}
+
+fn check_draw_frame(f: &Frame, res: &ResolutionSnapshot) -> Result<(), SnapshotError> {
+    use crate::event::DrawGainProgress as GP;
+    if let EventData::DrawWindow { root, .. } = &f.data {
+        let parent = res
+            .stack
+            .iter()
+            .find(|p| p.id == *root)
+            .ok_or(SnapshotError::BadTag("draw_window_root", *root as u64))?;
+        if !matches!(parent.data, EventData::DrawPhase { .. })
+            || f.parent != Some(*root)
+            || *root == f.id
+            || parent.stage != Stage::Intrinsic
+        {
+            return Err(SnapshotError::BadTag("draw_window_ancestry", 0));
+        }
+    }
+    if let EventData::DrawGain {
+        draw,
+        eligible,
+        progress,
+        history_recorded,
+        cancelled,
+        ..
+    } = &f.data
+    {
+        let parent = res
+            .stack
+            .iter()
+            .find(|p| p.id == *draw)
+            .ok_or(SnapshotError::BadTag("draw_gain_root", *draw as u64))?;
+        let EventData::Draw { held_cards, .. } = &parent.data else {
+            return Err(SnapshotError::BadTag("draw_gain_root_type", 0));
+        };
+        if f.parent != Some(*draw) || *draw == f.id || parent.stage != Stage::Intrinsic {
+            return Err(SnapshotError::BadTag("draw_gain_ancestry", 0));
+        }
+        let unique: std::collections::BTreeSet<_> = eligible.iter().copied().collect();
+        if unique.len() != eligible.len() {
+            return Err(SnapshotError::BadTag("draw_gain_eligible_dup", 0));
+        }
+        let in_held = eligible.iter().all(|c| held_cards.contains(c));
+        let none_in_held = eligible.iter().all(|c| !held_cards.contains(c));
+        let valid = match progress {
+            GP::Filter | GP::RecordHistory => !*history_recorded && !*cancelled && in_held,
+            GP::Transfer => *history_recorded && !*cancelled && !eligible.is_empty() && in_held,
+            GP::After => *history_recorded && !*cancelled && !eligible.is_empty() && none_in_held,
+            GP::Done => {
+                held_cards.is_empty()
+                    && (*cancelled || eligible.is_empty() || (*history_recorded && none_in_held))
+            }
+        };
+        if !valid {
+            return Err(SnapshotError::BadTag("draw_gain_stage_invariant", 0));
+        }
+    }
+    Ok(())
+}
+
+pub(super) fn check_park_binding(
+    p: &ParkSnapshot,
+    res: &ResolutionSnapshot,
+) -> Result<(), SnapshotError> {
+    match p.machine {
+        MachineSnapshot::DrawPhase { root } => {
+            if !matches!(p.slot, crate::resolution::Slot::Intrinsic { frame } if frame == root)
+                || !res.stack.iter().any(|f| {
+                    f.id == root
+                        && f.stage == Stage::Intrinsic
+                        && matches!(f.data, EventData::DrawPhase { .. })
+                })
+            {
+                return Err(SnapshotError::BadTag("draw_phase_binding", root as u64));
+            }
+        }
+        MachineSnapshot::Draw { root } => {
+            if !matches!(p.slot, crate::resolution::Slot::Intrinsic { frame } if frame == root)
+                || !res.stack.iter().any(|f| {
+                    f.id == root
+                        && f.stage == Stage::Intrinsic
+                        && matches!(f.data, EventData::Draw { .. })
+                })
+            {
+                return Err(SnapshotError::BadTag("draw_binding", root as u64));
+            }
+        }
+        MachineSnapshot::Gain { root } => {
+            if !matches!(p.slot, crate::resolution::Slot::Intrinsic { frame } if frame == root)
+                || !res.stack.iter().any(|f| {
+                    f.id == root
+                        && f.stage == Stage::Intrinsic
+                        && matches!(f.data, EventData::DrawGain { .. })
+                })
+            {
+                return Err(SnapshotError::BadTag("draw_gain_binding", root as u64));
+            }
+        }
+        _ => {}
+    }
     Ok(())
 }

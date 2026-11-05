@@ -330,8 +330,8 @@ impl crate::catalog::SkillMachine for DrawMachine {
             if held_cards.len() < requested as usize {
                 if ctx.core.deck.is_empty() {
                     if ctx.core.discard.is_empty() {
-                        // 双枯竭：held 转 detached，本次无 gain（§4）。
-                        for (c, _) in held_cards.iter().map(|c| (*c, DetachedKind::Unclaimed)) {
+                        // 双枯竭：held 原子转入 detached_cards（唯一物理 owner），本次无 gain（§4）。
+                        for c in held_cards.drain(..) {
                             ctx.core.detached_cards.push((c, DetachedKind::Unclaimed));
                         }
                         terminal = T::Exhausted;
@@ -416,7 +416,14 @@ impl crate::catalog::SkillMachine for GainMachine {
             return Flow::Done;
         };
         if cancelled || eligible.is_empty() {
-            // 原子释放剩余 held（骨架：取消面由调用方批次接入）。
+            // 原子释放父 Draw 仍持有的剩余牌入 detached_cards（§4）。
+            if let Some(df) = ctx.res.frame_mut(draw) {
+                if let EventData::Draw { held_cards, .. } = &mut df.data {
+                    for c in held_cards.drain(..) {
+                        ctx.core.detached_cards.push((c, DetachedKind::Unclaimed));
+                    }
+                }
+            }
             ctx.res.frame_mut(self.root).unwrap().data = EventData::DrawGain {
                 draw,
                 recipient,

@@ -518,6 +518,10 @@ pub fn validate_resolution(
             f.data,
             EventData::Damage(_)
                 | EventData::DamageWindow { .. }
+                | EventData::DrawPhase { .. }
+                | EventData::DrawWindow { .. }
+                | EventData::Draw { .. }
+                | EventData::DrawGain { .. }
                 | EventData::SkillInvocation(_)
                 | EventData::SkillLog { .. }
         ) && f.kind != f.data.kind()
@@ -544,6 +548,7 @@ pub fn validate_resolution(
             return Err(oob("park_frame", frame as u64));
         }
         check_machine(&p.machine, b, core)?;
+        super::damage_validation::check_park_binding(p, resolution)?;
         if let MachineSnapshot::DamageFlow { root } = p.machine {
             if !matches!(p.slot,Slot::Intrinsic{frame}if frame==root)
                 || !resolution.stack.iter().enumerate().any(|(i, f)| {

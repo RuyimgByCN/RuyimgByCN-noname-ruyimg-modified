@@ -122,6 +122,9 @@ mod r05c_async_draw;
 #[path = "../r05h_projection.rs"]
 mod r05h_projection;
 
+#[path = "../r05i_byte_chain.rs"]
+mod r05i_byte_chain;
+
 #[path = "../adr0786_j2_active_bridge.rs"]
 mod adr0786_j2_active_bridge;
 

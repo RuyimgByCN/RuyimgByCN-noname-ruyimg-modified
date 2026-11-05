@@ -376,6 +376,33 @@ impl MachineSnapshot {
                             | rule_api::EffectRequest::ResolveOlJieDanshou { player, skill }
                             | rule_api::EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { player, skill, .. }
                                 if player.raw() != *owner as u32 + 1 || skill.raw() != def as u32 => return Err(SnapshotError::UnknownMachine),
+                            rule_api::EffectRequest::ResolveTiqi { player, skill }
+                                if player.raw() != *owner as u32 + 1
+                                    || skill.raw() != def as u32
+                                    || catalog
+                                        .skill_by_name(&format!("{skill_name}#r05:limit"))
+                                        .is_none() =>
+                            {
+                                return Err(SnapshotError::UnknownMachine)
+                            }
+                            rule_api::EffectRequest::ResolveBaoshu { player, skill }
+                                if player.raw() != *owner as u32 + 1
+                                    || skill.raw() != def as u32
+                                    || catalog
+                                        .skill_by_name(&format!("{skill_name}#r05:combs"))
+                                        .is_none() =>
+                            {
+                                return Err(SnapshotError::UnknownMachine)
+                            }
+                            rule_api::EffectRequest::ResolveDcbihuo { player, skill }
+                                if player.raw() != *owner as u32 + 1
+                                    || skill.raw() != def as u32
+                                    || catalog
+                                        .skill_by_name(&format!("{skill_name}#r05:next"))
+                                        .is_none() =>
+                            {
+                                return Err(SnapshotError::UnknownMachine)
+                            }
                             _ => {}
                         }
                     }

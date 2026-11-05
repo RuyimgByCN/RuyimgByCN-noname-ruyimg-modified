@@ -336,7 +336,9 @@ pub(crate) fn validate(
                 && player.raw() as usize <= seats
                 && state.len() == 3
                 && (1..=3).contains(&state[0])
-                && (state[0] == 1 || (state[2] >= 1 && (state[2] as usize) <= seats))
+                && state[1] != 2
+                && state[2] >= 1
+                && (state[2] as usize) <= seats
         }
         EffectRequest::ResolveBaoshu { player, .. } => {
             player.raw() > 0
@@ -344,7 +346,11 @@ pub(crate) fn validate(
                 && state.len() >= 4
                 && state.len() <= seats + 4
                 && (1..=6).contains(&state[0])
-                && (state[2] as usize) <= state.len() - 4
+                && ((state[0] == 1 && state.len() == 4 && state[2] == 0 && state[3] == 0)
+                    || (state[0] >= 2
+                        && state.len() > 4
+                        && state[2] as usize == state.len() - 4
+                        && (state[3] as usize) < state.len() - 4))
                 && (state[0] == 1 || state[4..].iter().all(|t| (1..=seats as u32).contains(t)))
                 && state[4..]
                     .iter()
