@@ -11,10 +11,13 @@ import {
   lastCandidateTimings,
   nativeCreate,
   nativeCreateIdentity,
+  nativeCreateLocked,
   nativeCreateWithPacks,
   nativeDispatch,
   nativeEnvelope,
+  nativePrepareLockedContent,
   nativeUnsupported,
+  nativeValidateFrozenPack,
   nativeValidatePack,
   type NativeHandle,
 } from "./nativeBackend";
@@ -54,6 +57,16 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
       reply({ id: msg.id, ok: true, data: { valid: true } as never });
       return;
     }
+    if (msg.type === "validateFrozenPackage") {
+      const frozen = nativeValidateFrozenPack(msg.packageJson, msg.assetsJson);
+      reply({ id: msg.id, ok: true, data: frozen });
+      return;
+    }
+    if (msg.type === "prepareLockedContent") {
+      const locked = nativePrepareLockedContent(msg.frozenPackagesJson);
+      reply({ id: msg.id, ok: true, data: locked });
+      return;
+    }
     if (!handle) throw new Error("native engine not initialized");
 
     switch (msg.type) {
@@ -65,6 +78,25 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
             : msg.packsJson
               ? nativeCreateWithPacks(msg.players, msg.seed, msg.observer, msg.packsJson)
               : nativeCreate(msg.players, msg.seed, msg.observer);
+        let data: ReturnType<typeof nativeEnvelope>;
+        try {
+          data = nativeEnvelope(next);
+        } catch (error) {
+          next.engine.free();
+          throw error;
+        }
+        handle = next;
+        reply({ id: msg.id, ok: true, data });
+        return;
+      }
+      case "startLocked": {
+        const next = nativeCreateLocked(
+          msg.players,
+          msg.seed,
+          msg.observer,
+          msg.lockedContentJson,
+          msg.mode,
+        );
         let data: ReturnType<typeof nativeEnvelope>;
         try {
           data = nativeEnvelope(next);
@@ -91,11 +123,25 @@ self.onmessage = async (ev: MessageEvent<WorkerRequest>) => {
         reply({ id: msg.id, ok: true, data: data as never });
         return;
       }
+      case "saveLocked": {
+        const data = nativeDispatch(handle, { type: "saveLocked" });
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
       case "restore": {
         const data = nativeDispatch(handle, {
           type: "restore",
           hex: msg.hex,
           packsJson: msg.packsJson,
+        });
+        reply({ id: msg.id, ok: true, data: data as never });
+        return;
+      }
+      case "restoreLocked": {
+        const data = nativeDispatch(handle, {
+          type: "restoreLocked",
+          hex: msg.hex,
+          lockedContentJson: msg.lockedContentJson,
         });
         reply({ id: msg.id, ok: true, data: data as never });
         return;

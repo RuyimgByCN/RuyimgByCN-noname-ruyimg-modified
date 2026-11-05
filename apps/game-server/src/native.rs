@@ -213,17 +213,20 @@ impl NativeContent {
         self.load_frozen(&frozen)
     }
 
-    fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
+    pub(crate) fn load_frozen(&self, frozen: &FrozenNativePackage) -> Result<LoadedPack, String> {
         use engine_native::content::extension::{ExtensionDef, ExtensionPack};
 
         self.check_not_revoked(&frozen.binding)?;
-        let parsed = frozen.package()?;
+        let parsed = frozen.validate_and_parse()?;
         let ns = parsed.manifest.namespace.clone();
         let pid = parsed.manifest.package_id.clone();
 
         // ② 统一从完整已验证副本读取数据（新局与恢复共用桥接）。
         let cards = frozen.text_asset("assets/cards.json")?;
-        let characters = frozen.text_asset("assets/character.json")?;
+        let characters = match frozen.text_asset("assets/character.json")? {
+            Some(c) => Some(c),
+            None => frozen.text_asset("assets/characters.json")?,
+        };
         let pile = frozen.text_asset("assets/pile.json")?;
 
         let outcome =
@@ -479,19 +482,25 @@ fn load_refs<'a>(
 }
 
 /// 新对局存档（HTTP `/native/matches`）。
-#[derive(Debug, Clone, serde::Serialize)]
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct NativeMatchArchive {
     pub packages: Vec<String>,
     pub catalog_cards: usize,
     pub archive_hex: String,
+    pub canonical_locked_content: content_runtime::ContentLock,
+    pub frozen_packages: Vec<FrozenNativePackage>,
 }
 
 /// 恢复请求（HTTP `/native/matches/restore`）。
-#[derive(Debug, Clone, Deserialize)]
+#[derive(Debug, Clone, serde::Serialize, Deserialize)]
 pub struct NativeRestoreRequest {
     #[serde(default)]
     pub packages: Vec<String>,
     pub archive_hex: String,
+    #[serde(default)]
+    pub canonical_locked_content: Option<content_runtime::ContentLock>,
+    #[serde(default)]
+    pub frozen_packages: Option<Vec<FrozenNativePackage>>,
 }
 
 /// 恢复结果。
@@ -526,6 +535,26 @@ fn hex_decode(s: &str) -> Result<Vec<u8>, String> {
         .collect()
 }
 
+/// R05 v4/v5：以冻结验证过的 `VerifiedLockedContent` 建局并返回存档字节、牌数与锁定上下文。
+pub fn save_fresh_match_locked(
+    content: &NativeContent,
+    packages: &[String],
+    seed: u64,
+    seats: u8,
+) -> Result<(Vec<u8>, usize, content_runtime::VerifiedLockedContent), String> {
+    let verified = content.freeze_room_selection(None, packages)?;
+    let engine = content_native_loader::start_locked_engine(
+        seed,
+        seats as usize,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified,
+    )
+    .map_err(|err| format!("原生建局失败: {err}"))?;
+    let cards = engine.catalog().cards.len();
+    let bytes = engine_native::archive::encode_archive(&engine.save());
+    Ok((bytes, cards, verified))
+}
+
 /// 安装包进入新对局，并交出 NGSA 字节。调用方用同一包 id 列表恢复。
 pub fn save_fresh_match(
     content: &NativeContent,
@@ -533,13 +562,23 @@ pub fn save_fresh_match(
     seed: u64,
     seats: u8,
 ) -> Result<(Vec<u8>, usize), String> {
-    let loaded = load_refs(content, packages)?;
-    let refs: Vec<&ExtensionPack> = loaded.iter().map(|l| &l.pack).collect();
-    let engine = Engine::new_with_extensions(seed, seats as usize, &refs)
-        .map_err(|err| format!("原生建局失败: {err:?}"))?;
-    let cards = engine.catalog().cards.len();
-    let bytes = engine_native::archive::encode_archive(&engine.save());
+    let (bytes, cards, _) = save_fresh_match_locked(content, packages, seed, seats)?;
     Ok((bytes, cards))
+}
+
+/// R05 v4/v5：严格以 `canonical_locked_content` + `frozen_packages` 恢复对局（不重读当前激活集）。
+pub fn restore_match_locked(
+    content: &NativeContent,
+    lock: &content_runtime::ContentLock,
+    frozen: &[FrozenNativePackage],
+    bytes: &[u8],
+) -> Result<usize, String> {
+    let verified = content.verify_room_locked_content(&[], Some(lock), Some(frozen))?;
+    let snapshot = engine_native::archive::decode_archive(bytes)
+        .map_err(|err| format!("存档解码失败: {err:?}"))?;
+    let engine = content_native_loader::restore_locked_engine(&snapshot, &verified)
+        .map_err(|err| format!("恢复失败: {err:?}"))?;
+    Ok(engine.catalog().cards.len())
 }
 
 /// 用已安装包恢复对局。缺包在装载阶段失败；错版或另一包集合在内容锁校验失败。
@@ -562,27 +601,37 @@ pub fn restore_match(
     Ok(engine.catalog().cards.len())
 }
 
-/// HTTP 建局：安装包进入新对局并返回存档十六进制。
+/// HTTP 建局：安装包进入新对局并返回存档十六进制与完整 `canonical_locked_content` / `frozen_packages`。
 pub fn open_native_match(
     content: &NativeContent,
     packages: &[String],
     seed: u64,
     seats: u8,
 ) -> Result<NativeMatchArchive, String> {
-    let (bytes, catalog_cards) = save_fresh_match(content, packages, seed, seats)?;
+    let (bytes, catalog_cards, verified) =
+        save_fresh_match_locked(content, packages, seed, seats)?;
     Ok(NativeMatchArchive {
         packages: packages.to_vec(),
         catalog_cards,
         archive_hex: hex_encode(&bytes),
+        canonical_locked_content: verified.lock().clone(),
+        frozen_packages: verified.copies().to_vec(),
     })
 }
 
-/// HTTP 恢复：同一安装集恢复；缺包或错版返回错误。
+/// HTTP 恢复：携带 `canonical_locked_content` / `frozen_packages` 时严格走原锁与原字节恢复；
+/// 单字段缺失即拒，不退回当前安装集。
 pub fn restore_native_match(
     content: &NativeContent,
     req: &NativeRestoreRequest,
 ) -> Result<NativeRestoreSummary, String> {
     let bytes = hex_decode(&req.archive_hex)?;
-    let catalog_cards = restore_match(content, &req.packages, &bytes)?;
+    let catalog_cards = match (&req.canonical_locked_content, &req.frozen_packages) {
+        (Some(lock), Some(frozen)) => restore_match_locked(content, lock, frozen, &bytes)?,
+        (Some(_), None) | (None, Some(_)) => {
+            return Err("restore 请求必须同时提供 canonical_locked_content 与 frozen_packages".into());
+        }
+        (None, None) => restore_match(content, &req.packages, &bytes)?,
+    };
     Ok(NativeRestoreSummary { catalog_cards })
 }

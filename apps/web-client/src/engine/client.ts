@@ -2,11 +2,14 @@ import { validatePresentationResponse } from "./presentationMetadata";
 import type {
   ChooseGeneralPayload,
   EngineEnvelope,
+  FrozenPackage,
   GeneralCandidatesPayload,
+  LockedContentEnvelope,
   ObserverSnapshot,
   ReplayFrame,
   ReplayMetadata,
   ReplayPrivacy,
+  SaveLockedPayload,
   StatusPayload,
   WorkerRequest,
   WorkerResponse,
@@ -432,6 +435,41 @@ export class EngineClient {
     });
   }
 
+  /** R05 v4/v5：以已验证的 `lockedContentJson` 建局（受控工厂，不传裸 `packsJson`）。 */
+  startLocked(
+    players: number,
+    seed: number,
+    observer: number,
+    lockedContentJson: string,
+    mode?: "identity",
+  ): Promise<EngineEnvelope> {
+    return this.request({
+      id: this.nextId(),
+      type: "startLocked",
+      players,
+      seed,
+      observer,
+      lockedContentJson,
+      mode,
+    }) as Promise<EngineEnvelope>;
+  }
+
+  /** R05 v4/v5：原子导出 `{ hex, canonical_locked_content, frozen_packages }`。 */
+  saveLocked(): Promise<SaveLockedPayload> {
+    return this.request({ id: this.nextId(), type: "saveLocked" }).then((data) => {
+      const payload = data as SaveLockedPayload | null;
+      if (
+        !payload ||
+        typeof payload.hex !== "string" ||
+        !payload.canonical_locked_content ||
+        !Array.isArray(payload.frozen_packages)
+      ) {
+        throw new Error("native saveLocked: 缺 hex 或锁定内容信封");
+      }
+      return payload;
+    });
+  }
+
   /** 从 NGSA 十六进制恢复。扩展局传入与开局相同的 packsJson。 */
   restoreHex(hex: string, packsJson?: string): Promise<EngineEnvelope> {
     return this.request({
@@ -442,6 +480,16 @@ export class EngineClient {
     }) as Promise<EngineEnvelope>;
   }
 
+  /** R05 v4/v5：严格以 `{ canonical_locked_content, frozen_packages }` 信封恢复对局。 */
+  restoreLocked(hex: string, lockedContentJson: string): Promise<EngineEnvelope> {
+    return this.request({
+      id: this.nextId(),
+      type: "restoreLocked",
+      hex,
+      lockedContentJson,
+    }) as Promise<EngineEnvelope>;
+  }
+
   /**
    * GT-014 导入期深层校验（裁决第 12 项）：把单个安装载荷交 Worker 内的
    * Rust 校验器裁决（包/模块 logic_hash、rule-vm verify、宿主 ABI 窗口）。
@@ -449,6 +497,28 @@ export class EngineClient {
    */
   async validatePackage(packJson: string): Promise<void> {
     await this.request({ id: this.nextId(), type: "validatePackage", packJson });
+  }
+
+  /** R05 v4/v5：导入期单包原始 `package.json` 字节与声明资产深层校验，返回 `FrozenPackage`。 */
+  validateFrozenPackage(
+    packageJson: string,
+    assetsJson?: string,
+  ): Promise<FrozenPackage> {
+    return this.request({
+      id: this.nextId(),
+      type: "validateFrozenPackage",
+      packageJson,
+      assetsJson,
+    }) as Promise<FrozenPackage>;
+  }
+
+  /** R05 v4/v5：开局前由共享 Rust 验证点生成 `{ canonical_locked_content, frozen_packages }`。 */
+  prepareLockedContent(frozenPackagesJson: string): Promise<LockedContentEnvelope> {
+    return this.request({
+      id: this.nextId(),
+      type: "prepareLockedContent",
+      frozenPackagesJson,
+    }) as Promise<LockedContentEnvelope>;
   }
 
   loadReplay(json: string): Promise<ReplayMetadata> {

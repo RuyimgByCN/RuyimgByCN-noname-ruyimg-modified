@@ -173,6 +173,18 @@ impl NativeWalState {
             entries: vec![],
         }
     }
+    pub(super) fn recover_locked(
+        &self,
+        verified: &content_runtime::VerifiedLockedContent,
+    ) -> Result<Engine, String> {
+        let bytes = hex_decode(&self.base_snapshot_hex).ok_or("WAL base hex invalid")?;
+        let snapshot =
+            engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
+        let mut engine = content_native_loader::restore_locked_engine(&snapshot, verified)
+            .map_err(|e| format!("{e:?}"))?;
+        self.replay_entries(&mut engine)?;
+        Ok(engine)
+    }
     pub(super) fn recover(
         &self,
         packs: &[&engine_native::content::extension::ExtensionPack],
@@ -186,6 +198,10 @@ impl NativeWalState {
             Engine::restore_with_extensions(&snapshot, packs)
         }
         .map_err(|e| format!("{e:?}"))?;
+        self.replay_entries(&mut engine)?;
+        Ok(engine)
+    }
+    fn replay_entries(&self, engine: &mut Engine) -> Result<(), String> {
         for entry in &self.entries {
             let command = entry.command();
             if let GameAction::Answer { selection, .. }
@@ -204,7 +220,7 @@ impl NativeWalState {
                 return Err("WAL command/revision/摘要不一致".into());
             }
         }
-        Ok(engine)
+        Ok(())
     }
 }
 
@@ -215,7 +231,11 @@ impl NativeRoomSession {
         }
     }
     pub(super) fn validate_wal(&self) -> Result<engine_native::snap::StateSnapshot, String> {
-        let engine = self.wal.recover(&self.pack_refs())?;
+        let engine = if let Some(ref verified) = self.verified_content {
+            self.wal.recover_locked(verified)?
+        } else {
+            self.wal.recover(&self.pack_refs())?
+        };
         let mut replayed = engine.save();
         // restore rotates authentication tokens; generation is session security, not rule state.
         replayed.auth_generation = self.engine.save().auth_generation;
@@ -228,13 +248,18 @@ impl NativeRoomSession {
     }
     pub(crate) fn recover_wal(&mut self) -> Result<(), String> {
         let snapshot = self.validate_wal()?;
-        let packs = self.pack_refs();
-        let engine = if packs.is_empty() {
-            Engine::restore(&snapshot)
+        let engine = if let Some(ref verified) = self.verified_content {
+            content_native_loader::restore_locked_engine(&snapshot, verified)
+                .map_err(|e| format!("{e:?}"))?
         } else {
-            Engine::restore_with_extensions(&snapshot, &packs)
-        }
-        .map_err(|e| format!("{e:?}"))?;
+            let packs = self.pack_refs();
+            if packs.is_empty() {
+                Engine::restore(&snapshot)
+            } else {
+                Engine::restore_with_extensions(&snapshot, &packs)
+            }
+            .map_err(|e| format!("{e:?}"))?
+        };
         self.replace_engine(engine);
         Ok(())
     }

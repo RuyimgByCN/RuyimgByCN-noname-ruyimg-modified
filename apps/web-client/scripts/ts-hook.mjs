@@ -23,6 +23,7 @@ function transpile(url) {
 
 /** 异步装载钩子（module.register 路径，Node ≥20.6）。 */
 export async function load(url, context, nextLoad) {
+  if (url.endsWith("?raw")) return rawModule(url);
   if (url.endsWith(".json")) return jsonModule(url);
   if (!url.endsWith(".ts")) return nextLoad(url, context);
   return { format: "module", source: transpile(url), shortCircuit: true };
@@ -30,9 +31,15 @@ export async function load(url, context, nextLoad) {
 
 /** 同步装载钩子（module.registerHooks 路径，Node ≥22.15/23.5）。 */
 export function loadSync(url, context, nextLoad) {
+  if (url.endsWith("?raw")) return rawModule(url);
   if (url.endsWith(".json")) return jsonModule(url);
   if (!url.endsWith(".ts")) return nextLoad(url, context);
   return { format: "module", source: transpile(url), shortCircuit: true };
+}
+
+function rawModule(url) {
+  const text = readFileSync(fileURLToPath(url.slice(0, -4)), "utf8");
+  return { format: "module", source: `export default ${JSON.stringify(text)};`, shortCircuit: true };
 }
 
 function jsonModule(url) {

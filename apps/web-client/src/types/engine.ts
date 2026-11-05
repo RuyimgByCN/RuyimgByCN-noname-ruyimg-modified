@@ -282,6 +282,42 @@ export interface ChooseGeneralPayload {
   envelope: EngineEnvelope;
 }
 
+/** R05 v4/v5 逐包内容锁绑定（与 Rust `content_runtime::LockedPackage` 同形）。 */
+export interface LockedPackage {
+  namespace: string;
+  package_id: string;
+  version: string;
+  logic_hash: string;
+  content_hash: string;
+}
+
+/** R05 v4/v5 聚合规范内容锁（与 Rust `content_runtime::ContentLock` 同形）。 */
+export interface ContentLock {
+  packages: LockedPackage[];
+  lock_hash: string;
+}
+
+/** R05 v4/v5 原始字节冻结包（与 Rust `content_runtime::FrozenPackage` 同形）。 */
+export interface FrozenPackage {
+  binding: LockedPackage;
+  package_json: string;
+  assets: Record<string, number[]>;
+}
+
+/** R05 v4/v5 传输与持久化锁信封（与 Rust `content_runtime::LockedContentEnvelope` 同形）。 */
+export interface LockedContentEnvelope {
+  canonical_locked_content: ContentLock;
+  frozen_packages: FrozenPackage[];
+}
+
+/** R05 v4/v5 原子锁定保存回包（`saveLocked`）。 */
+export interface SaveLockedPayload {
+  kind?: "saveLocked";
+  hex: string;
+  canonical_locked_content: ContentLock;
+  frozen_packages: FrozenPackage[];
+}
+
 export type WorkerRequest =
   | {
       id: number;
@@ -304,6 +340,15 @@ export type WorkerRequest =
       observer: number;
       packsJson?: string;
       /** 对局模式：`"identity"` = 身份局（NC09 身份局端到端）；缺省原型模式。 */
+      mode?: "identity";
+    }
+  | {
+      id: number;
+      type: "startLocked";
+      players: number;
+      seed: number;
+      observer: number;
+      lockedContentJson: string;
       mode?: "identity";
     }
   | { id: number; type: "endPhase"; actor?: number }
@@ -339,11 +384,15 @@ export type WorkerRequest =
   | { id: number; type: "generalCandidates" }
   | { id: number; type: "chooseGeneral"; seat: number; name: string }
   | { id: number; type: "save" }
+  | { id: number; type: "saveLocked" }
   | { id: number; type: "restore"; hex: string; packsJson?: string }
+  | { id: number; type: "restoreLocked"; hex: string; lockedContentJson: string }
   // GT-014 导入期深层校验（裁决第 12 项）：单个安装载荷交 Worker 内的 Rust
   // 校验器（包/模块 logic_hash、rule-vm 装载期 verify、宿主 ABI 窗口）裁决，
   // 只校验不建局；不需要已初始化的对局句柄。
   | { id: number; type: "validatePackage"; packJson: string }
+  | { id: number; type: "validateFrozenPackage"; packageJson: string; assetsJson?: string }
+  | { id: number; type: "prepareLockedContent"; frozenPackagesJson: string }
   | { id: number; type: "loadReplay"; json: string }
   | {
       id: number;
@@ -366,6 +415,9 @@ export type WorkerResponse =
         | StatusPayload
         | GeneralCandidatesPayload
         | ChooseGeneralPayload
+        | FrozenPackage
+        | LockedContentEnvelope
+        | SaveLockedPayload
         | string;
     }
   | { id: number; ok: false; error: string };

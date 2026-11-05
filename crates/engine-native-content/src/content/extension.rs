@@ -205,9 +205,35 @@ pub fn content_lock_id(packs: &[&ExtensionPack]) -> u64 {
     if enabled.is_empty() { return 0; }
     let mut h = blake3::Hasher::new();
     h.update(b"native-extension-lock/331");
+    fn value(h: &mut blake3::Hasher, bytes: &[u8]) {
+        h.update(&(bytes.len() as u64).to_le_bytes());
+        h.update(bytes);
+    }
     for pack in enabled {
-        let mut value = |bytes: &[u8]| { h.update(&(bytes.len() as u64).to_le_bytes()); h.update(bytes); };
-        value(pack.def.name.as_bytes()); value(&pack.def.version.to_le_bytes()); value(pack.init_hook.key().as_bytes());
+        value(&mut h, pack.def.name.as_bytes());
+        value(&mut h, &pack.def.version.to_le_bytes());
+        value(&mut h, pack.init_hook.key().as_bytes());
+        h.update(&(pack.cards.len() as u64).to_le_bytes());
+        for card in &pack.cards {
+            value(&mut h, card.name.as_bytes());
+            h.update(&(card.kind as u16).to_le_bytes());
+            h.update(&card.range.to_le_bytes());
+            h.update(&[card.suit as u8, card.rank, u8::from(card.link_on_equip)]);
+            h.update(&(card.equip_skills.len() as u64).to_le_bytes());
+            for eq in &card.equip_skills {
+                value(&mut h, eq.as_bytes());
+            }
+        }
+        h.update(&(pack.generals.len() as u64).to_le_bytes());
+        for gen in &pack.generals {
+            value(&mut h, gen.name.as_bytes());
+            h.update(&[gen.faction as u8, gen.gender as u8]);
+            h.update(&gen.max_hp.to_le_bytes());
+            h.update(&(gen.skills.len() as u64).to_le_bytes());
+            for sk in gen.skills {
+                value(&mut h, sk.as_bytes());
+            }
+        }
         h.update(&(pack.host_skills.len() as u64).to_le_bytes());
         for skill in &pack.host_skills {
             h.update(&(skill.name.len() as u64).to_le_bytes()); h.update(skill.name.as_bytes()); h.update(&skill.behavior.tag().to_le_bytes());

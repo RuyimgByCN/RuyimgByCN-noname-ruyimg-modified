@@ -258,6 +258,13 @@ pub struct VmBridgeOutcome {
 mod vm_active;
 mod mechanisms;
 mod vm_generals;
+pub mod locked_content;
+pub use locked_content::{
+    deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
+    restore_locked_engine, start_locked_engine, validate_and_freeze_raw_package,
+    validate_frozen_package, verify_locked_content, verify_locked_content_with_bridge, ContentLock,
+    FrozenPackage, LockedContentEnvelope, LockedPackage, LockedStartMode, VerifiedLockedContent,
+};
 pub use vm_generals::bridge_generals_with_vm_package;
 
 pub fn bridge_vm_skill_decls(

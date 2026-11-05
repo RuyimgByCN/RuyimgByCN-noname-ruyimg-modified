@@ -8,12 +8,19 @@
  * - 正式装载：安装副本（manifest/卡牌/武将/牌堆）经 WorkerRequest.packsJson 交给
  *   NativeEngine.new_with_packs_json / restore_hex_with_packs_json
  */
+import type { ContentLock, FrozenPackage } from "../types/engine";
 import {
   EXTENSION_CATALOG,
   extensionKey,
   type ExtensionCatalogEntry,
 } from "./extensionCatalog";
-import { bundledNativePackage, nativePackageFingerprint, nativePackageKey, validateNativePackage } from "./bundledNativePackages";
+import {
+  bundledFrozenPackage,
+  bundledNativePackage,
+  nativePackageFingerprint,
+  nativePackageKey,
+  validateNativePackage,
+} from "./bundledNativePackages";
 
 const STORAGE_KEY = "noname-next.extension-store.v1";
 const SAVE_SLOTS_KEY = "noname-next.native-saves.v1";
@@ -41,6 +48,8 @@ export interface InstalledExtensionRecord {
   logicFingerprint: string;
   /** 按版本保留安装时的包字节；不会在开局时回读分发源。 */
   nativeVersions?: Record<string, string>;
+  /** R05 v4/v5：按版本保留原始 `package.json` 文本、声明资产字节与完整 `LockedPackage` 绑定。 */
+  nativeFrozenVersions?: Record<string, FrozenPackage>;
   /**
    * 签名状态（裁决第 12 项）：本地正式导入的包一律 `"unsigned"`——本地验签
    * 暂缓，先定客户端信任模型；内置目录包不带此字段。UI 据此标示「未签名」。
@@ -52,6 +61,8 @@ export interface ExtensionStoreSnapshot {
   installed: InstalledExtensionRecord[];
   /** 撤销记录独立保留，卸载不能重新授权旧局或重装。 */
   revokedKeys?: string[];
+  /** 已撤销的原始包 content_hash 列表（卸载后仍阻止同 content_hash 旧局恢复或重装）。 */
+  revokedContentHashes?: string[];
   /** 开局内容锁：启用中的 key 有序列表 */
   contentLock: string[];
   /** 在局冻结：对局中不可卸载改锁（客户端闸） */
@@ -96,6 +107,22 @@ function checkVersionCopy(versions: Record<string, string> | undefined, version:
   if (canonical(existing) !== canonical(payload)) throw new Error(`同版本包内容冲突: ${version}`);
 }
 
+function checkFrozenVersionCopy(
+  frozenVersions: Record<string, FrozenPackage> | undefined,
+  version: string,
+  frozen: FrozenPackage,
+): void {
+  const existing = frozenVersions?.[version];
+  if (existing === undefined) return;
+  if (
+    existing.package_json !== frozen.package_json ||
+    JSON.stringify(existing.binding) !== JSON.stringify(frozen.binding) ||
+    JSON.stringify(existing.assets) !== JSON.stringify(frozen.assets)
+  ) {
+    throw new Error(`同版本包内容冲突: ${version}`);
+  }
+}
+
 export function listCatalog(): ExtensionCatalogEntry[] {
   return EXTENSION_CATALOG.slice();
 }
@@ -119,6 +146,10 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
   if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
   if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
   const payload = bundledNativePackage(cat);
+  const frozen = bundledFrozenPackage(cat);
+  if (snap.revokedContentHashes?.includes(frozen.binding.content_hash)) {
+    throw new Error(`已撤销包不可重装: ${key}`);
+  }
   const existing = snap.installed.find((r) => r.key === key);
   const t = nowIso();
   if (existing) {
@@ -126,10 +157,15 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
       throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
     }
     checkVersionCopy(existing.nativeVersions, cat.version, payload);
+    checkFrozenVersionCopy(existing.nativeFrozenVersions, cat.version, frozen);
     existing.updatedAt = t;
     existing.nativeVersions ??= {};
     if (existing.version === cat.version && !existing.nativeVersions[cat.version]) {
       existing.nativeVersions[cat.version] = payload;
+    }
+    existing.nativeFrozenVersions ??= {};
+    if (existing.version === cat.version && !existing.nativeFrozenVersions[cat.version]) {
+      existing.nativeFrozenVersions[cat.version] = frozen;
     }
     if (existing.lifecycle === "available") existing.lifecycle = "installed";
   } else {
@@ -145,6 +181,7 @@ export function installExtension(key: string): ExtensionStoreSnapshot {
       updatedAt: t,
       logicFingerprint: cat.logicFingerprint,
       nativeVersions: { [cat.version]: payload },
+      nativeFrozenVersions: { [cat.version]: frozen },
     });
   }
   saveRaw(snap);
@@ -178,10 +215,24 @@ export function importExtensionPackage(json: string): ExtensionStoreSnapshot {
  */
 export async function importExtensionPackageValidated(
   json: string,
-  deepValidate: (rawPackJson: string) => Promise<void>,
+  deepValidate: (rawPackJson: string) => Promise<FrozenPackage | void>,
 ): Promise<ExtensionStoreSnapshot> {
   const prepared = prepareImport(json);
-  await deepValidate(json);
+  const validated = await deepValidate(json);
+  if (validated) {
+    const fullLogicHash = nativePackageFingerprint(prepared.payload);
+    if (
+      validated.package_json !== prepared.originalPackageJson ||
+      validated.binding.namespace !== prepared.payload.manifest.namespace ||
+      validated.binding.package_id !== prepared.payload.manifest.package_id ||
+      validated.binding.version !== prepared.version ||
+      validated.binding.logic_hash !== fullLogicHash ||
+      !/^[a-f0-9]{64}$/.test(validated.binding.content_hash)
+    ) {
+      throw new Error("深层校验返回的 FrozenPackage 与原始包原文或身份不匹配");
+    }
+    prepared.frozen = validated;
+  }
   return commitImport(prepared);
 }
 
@@ -190,16 +241,22 @@ interface PreparedImport {
   key: string;
   version: string;
   canonical: string;
+  originalPackageJson: string;
   fingerprint: string;
+  frozen?: FrozenPackage;
 }
 
 /** 结构层解析 + 存储前置条件（不写存储）。 */
 function prepareImport(json: string): PreparedImport {
   const snap = loadRaw();
   if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
+  if (typeof json !== "string" || json.startsWith("\uFEFF")) {
+    throw new Error("扩展包不是合法 JSON（不接受 UTF-8 BOM）");
+  }
+  const originalPackageJson = json;
   let parsed: unknown;
   try {
-    parsed = JSON.parse(json);
+    parsed = JSON.parse(originalPackageJson);
   } catch {
     throw new Error("扩展包不是合法 JSON");
   }
@@ -207,8 +264,15 @@ function prepareImport(json: string): PreparedImport {
   const key = nativePackageKey(payload);
   const version = payload.manifest.version;
   const canonical = JSON.stringify(payload);
-  checkImportPreconditions(snap, key, version, canonical);
-  return { payload, key, version, canonical, fingerprint: nativePackageFingerprint(payload).slice(0, 8) };
+  checkImportPreconditions(snap, key, version, canonical, originalPackageJson);
+  return {
+    payload,
+    key,
+    version,
+    canonical,
+    originalPackageJson,
+    fingerprint: nativePackageFingerprint(payload).slice(0, 8),
+  };
 }
 
 /** 前置条件在准备与提交时各查一次（深层校验为异步，期间存储可能变化）。 */
@@ -217,26 +281,45 @@ function checkImportPreconditions(
   key: string,
   version: string,
   canonical: string,
+  originalPackageJson: string,
+  frozen?: FrozenPackage,
 ): void {
   if (snap.matchFrozen) throw new Error("对局中不可安装或替换包内容");
   if (snap.revokedKeys?.includes(key)) throw new Error(`已撤销包不可重装: ${key}`);
+  if (frozen && snap.revokedContentHashes?.includes(frozen.binding.content_hash)) {
+    throw new Error(`已撤销包不可重装: ${key}`);
+  }
   const existing = snap.installed.find((r) => r.key === key);
   if (existing?.lifecycle === "revoked") {
     throw new Error(`已撤销包不可重装: ${key}（需清除撤销记录）`);
   }
-  if (existing) checkVersionCopy(existing.nativeVersions, version, canonical);
+  if (existing) {
+    checkVersionCopy(existing.nativeVersions, version, canonical);
+    if (frozen) {
+      checkFrozenVersionCopy(existing.nativeFrozenVersions, version, frozen);
+    } else if (
+      existing.nativeFrozenVersions?.[version] &&
+      existing.nativeFrozenVersions[version].package_json !== originalPackageJson
+    ) {
+      throw new Error(`同版本包内容冲突: ${version}`);
+    }
+  }
 }
 
 /** 提交：重读存储并复核前置条件后写入记录。 */
 function commitImport(p: PreparedImport): ExtensionStoreSnapshot {
   const snap = loadRaw();
-  const { payload, key, version, canonical, fingerprint } = p;
-  checkImportPreconditions(snap, key, version, canonical);
+  const { payload, key, version, canonical, originalPackageJson, fingerprint, frozen } = p;
+  checkImportPreconditions(snap, key, version, canonical, originalPackageJson, frozen);
   const existing = snap.installed.find((r) => r.key === key);
   const t = nowIso();
   if (existing) {
     existing.nativeVersions ??= {};
     existing.nativeVersions[version] ??= canonical;
+    if (frozen) {
+      existing.nativeFrozenVersions ??= {};
+      existing.nativeFrozenVersions[version] ??= frozen;
+    }
     if (existing.version !== version) {
       if (!existing.history.includes(existing.version)) existing.history.push(existing.version);
       existing.version = version;
@@ -259,6 +342,7 @@ function commitImport(p: PreparedImport): ExtensionStoreSnapshot {
       updatedAt: t,
       logicFingerprint: fingerprint,
       nativeVersions: { [version]: canonical },
+      ...(frozen ? { nativeFrozenVersions: { [version]: frozen } } : {}),
       signature: "unsigned",
     });
   }
@@ -313,9 +397,13 @@ export function upgradeExtension(key: string, toVersion?: string): ExtensionStor
   const next = toVersion ?? cat.version;
   if (next !== cat.version) throw new Error(`无可安装的版本 ${next}`);
   const payload = bundledNativePackage(cat);
+  const frozen = bundledFrozenPackage(cat);
   checkVersionCopy(rec.nativeVersions, next, payload);
+  checkFrozenVersionCopy(rec.nativeFrozenVersions, next, frozen);
   rec.nativeVersions ??= {};
   rec.nativeVersions[next] ??= payload;
+  rec.nativeFrozenVersions ??= {};
+  rec.nativeFrozenVersions[next] ??= frozen;
   if (rec.version !== next) {
     if (!rec.history.includes(rec.version)) rec.history.push(rec.version);
     rec.version = next;
@@ -342,6 +430,14 @@ export function rollbackExtension(key: string, version: string): ExtensionStoreS
   if (nativePackageKey(payload) !== key || payload.manifest.version !== version) {
     throw new Error(`历史包身份或版本不匹配: ${key}`);
   }
+  const frozen = rec.nativeFrozenVersions?.[version];
+  if (
+    frozen &&
+    (`${frozen.binding.namespace}/${frozen.binding.package_id}` !== key ||
+      frozen.binding.version !== version)
+  ) {
+    throw new Error(`历史包身份或版本不匹配: ${key}`);
+  }
   rec.version = version;
   rec.logicFingerprint = nativePackageFingerprint(payload).slice(0, 8);
   rec.updatedAt = nowIso();
@@ -353,9 +449,18 @@ export function rollbackExtension(key: string, version: string): ExtensionStoreS
 export function uninstallExtension(key: string): ExtensionStoreSnapshot {
   const snap = loadRaw();
   if (snap.matchFrozen) throw new Error("对局中不可卸载");
-  if (snap.installed.some((r) => r.key === key && r.lifecycle === "revoked")) {
+  const revokedRec = snap.installed.find((r) => r.key === key && r.lifecycle === "revoked");
+  if (revokedRec) {
     snap.revokedKeys ??= [];
     if (!snap.revokedKeys.includes(key)) snap.revokedKeys.push(key);
+    if (revokedRec.nativeFrozenVersions) {
+      snap.revokedContentHashes ??= [];
+      for (const f of Object.values(revokedRec.nativeFrozenVersions)) {
+        if (!snap.revokedContentHashes.includes(f.binding.content_hash)) {
+          snap.revokedContentHashes.push(f.binding.content_hash);
+        }
+      }
+    }
   }
   snap.contentLock = snap.contentLock.filter((k) => k !== key);
   snap.installed = snap.installed.filter((r) => r.key !== key);
@@ -372,6 +477,14 @@ export function revokeExtension(key: string): ExtensionStoreSnapshot {
   rec.lifecycle = "revoked";
   snap.revokedKeys ??= [];
   if (!snap.revokedKeys.includes(key)) snap.revokedKeys.push(key);
+  if (rec.nativeFrozenVersions) {
+    snap.revokedContentHashes ??= [];
+    for (const f of Object.values(rec.nativeFrozenVersions)) {
+      if (!snap.revokedContentHashes.includes(f.binding.content_hash)) {
+        snap.revokedContentHashes.push(f.binding.content_hash);
+      }
+    }
+  }
   rec.updatedAt = nowIso();
   snap.contentLock = snap.contentLock.filter((k) => k !== key);
   saveRaw(snap);
@@ -422,6 +535,10 @@ export interface NativeSaveSlot {
   revision: number;
   /** 完整的固定包副本：当前启用集变化或卸载后仍可恢复旧局。 */
   packsJson?: string;
+  /** R05 v4/v5：规范聚合内容锁。 */
+  canonical_locked_content?: ContentLock;
+  /** R05 v4/v5：原始字节冻结包列表。 */
+  frozen_packages?: FrozenPackage[];
 }
 
 export function listNativeSaves(): NativeSaveSlot[] {

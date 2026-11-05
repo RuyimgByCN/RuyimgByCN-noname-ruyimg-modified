@@ -44,6 +44,9 @@ pub struct NativeRoomState {
     pub next_dedup: u64,
     /// 扩展包精确引用（`installed:内容锁@原生版本`；与原局副本逐一比对）。
     pub pack_refs: Vec<String>,
+    /// 原局规范内容锁（R05 v4/v5）；旧档缺省 None，新局 Some（标准局为空锁）。
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub canonical_locked_content: Option<content_runtime::ContentLock>,
     /// 原局包副本；旧档缺省 None，新局 Some（标准局为空集）。
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
@@ -94,6 +97,7 @@ pub struct NativeRoomSession {
     engine: Engine,
     /// 建局所用扩展包（Recover 重放需要同内容）。
     packs: Vec<engine_native::content::extension::ExtensionPack>,
+    verified_content: Option<content_runtime::VerifiedLockedContent>,
     frozen_packages: Option<Vec<crate::native::FrozenNativePackage>>,
     max_seats: u8,
     members: HashMap<u64, NativeMember>,
@@ -186,6 +190,7 @@ impl NativeRoomSession {
             wal,
             engine,
             packs,
+            verified_content: None,
             frozen_packages: None,
             max_seats,
             members: HashMap::new(),
@@ -198,8 +203,28 @@ impl NativeRoomSession {
         }
     }
 
+    /// R05 v4/v5：以已验证的 `VerifiedLockedContent` 建会话。
+    pub fn new_locked(
+        engine: Engine,
+        verified: content_runtime::VerifiedLockedContent,
+        packs: Vec<engine_native::content::extension::ExtensionPack>,
+        max_seats: u8,
+    ) -> Self {
+        let mut session = Self::new_with_packs(engine, packs, max_seats);
+        session.set_verified_content(verified);
+        session
+    }
+
+    /// 写入已验证的规范内容锁与原局完整包副本。
+    pub fn set_verified_content(&mut self, verified: content_runtime::VerifiedLockedContent) {
+        self.frozen_packages = Some(verified.copies().to_vec());
+        self.verified_content = Some(verified);
+    }
+
     /// 固定原局完整包副本；调用方已逐包校验后，在 spawn 前写入。
     pub fn set_frozen_packages(&mut self, packages: Vec<crate::native::FrozenNativePackage>) {
+        self.verified_content =
+            content_native_loader::prepare_locked_content_with_bridge(packages.clone()).ok();
         self.frozen_packages = Some(packages);
     }
 
@@ -376,12 +401,25 @@ impl NativeRoomSession {
                 .iter()
                 .map(|p| format!("{}@{}", p.def.name, p.def.version))
                 .collect(),
+            canonical_locked_content: self
+                .verified_content
+                .as_ref()
+                .map(|v| v.lock().clone()),
             frozen_packages: self.frozen_packages.clone(),
             members: self.members.values().cloned().collect(),
             command_receipts: self.command_receipts.entries(),
             timeout: Some(self.timeout.clone()),
             wal: Some(self.wal.clone()),
         }
+    }
+
+    /// R05 v4/v5：以已验证的 `VerifiedLockedContent` 从落盘状态恢复会话。
+    pub fn from_saved_locked(
+        state: &NativeRoomState,
+        verified: content_runtime::VerifiedLockedContent,
+        packs: Vec<engine_native::content::extension::ExtensionPack>,
+    ) -> Result<Self, String> {
+        Self::from_saved_inner(state, Some(verified), packs)
     }
 
     /// 从落盘状态恢复会话（引擎由归档字节重建；`packs` 必须与导出时同内容）。
@@ -392,14 +430,40 @@ impl NativeRoomSession {
         state: &NativeRoomState,
         packs: Vec<engine_native::content::extension::ExtensionPack>,
     ) -> Result<Self, String> {
+        let verified = match (&state.canonical_locked_content, &state.frozen_packages) {
+            (Some(lock), Some(frozen)) => {
+                Some(content_native_loader::verify_locked_content_with_bridge(lock, frozen)?)
+            }
+            (Some(_), None) => {
+                return Err("房间状态含 canonical_locked_content 但缺少 frozen_packages".into());
+            }
+            (None, Some(frozen)) if !frozen.is_empty() || packs.is_empty() => {
+                Some(content_native_loader::prepare_locked_content_with_bridge(frozen.clone())?)
+            }
+            (None, _) => None,
+        };
+        Self::from_saved_inner(state, verified, packs)
+    }
+
+    fn from_saved_inner(
+        state: &NativeRoomState,
+        verified: Option<content_runtime::VerifiedLockedContent>,
+        packs: Vec<engine_native::content::extension::ExtensionPack>,
+    ) -> Result<Self, String> {
         let bytes = hex_decode(&state.snapshot_hex).ok_or("快照 hex 解码失败")?;
         let snapshot =
             engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
-        let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
-        let engine = if refs.is_empty() {
-            Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
+        let engine = if let Some(ref verified) = verified {
+            content_native_loader::restore_locked_engine(&snapshot, verified)
+                .map_err(|e| format!("{e:?}"))?
         } else {
-            Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("{e:?}"))?
+            let refs: Vec<&engine_native::content::extension::ExtensionPack> =
+                packs.iter().collect();
+            if refs.is_empty() {
+                Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?
+            } else {
+                Engine::restore_with_extensions(&snapshot, &refs).map_err(|e| format!("{e:?}"))?
+            }
         };
         let mut members = HashMap::new();
         let mut by_token = HashMap::new();
@@ -431,12 +495,17 @@ impl NativeRoomSession {
             .clone()
             .ok_or("missing native timeout metadata")?;
         let wal = state.wal.clone().ok_or("missing native WAL")?;
+        let frozen_packages = verified
+            .as_ref()
+            .map(|v| v.copies().to_vec())
+            .or_else(|| state.frozen_packages.clone());
         let restored = Self {
             timeout,
             wal,
             engine,
             packs,
-            frozen_packages: state.frozen_packages.clone(),
+            verified_content: verified,
+            frozen_packages,
             max_seats: state.max_seats,
             members,
             by_token,

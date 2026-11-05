@@ -1,36 +1,68 @@
 // 安装时复制随应用分发的实际包数据；开局和读档只使用固定副本。
+import type { FrozenPackage } from "../types/engine";
 import type { ExtensionCatalogEntry } from "./extensionCatalog";
 import package0 from "../../../../packages/extensions/cardpile-upstream-liuli/package.npack.json";
+import package0_raw from "../../../../packages/extensions/cardpile-upstream-liuli/package.npack.json?raw";
 import data0_pile from "../../../../packages/extensions/cardpile-upstream-liuli/assets/pile.json";
+import data0_pile_raw from "../../../../packages/extensions/cardpile-upstream-liuli/assets/pile.json?raw";
 import package1 from "../../../../packages/extensions/cardpile-upstream-noname/package.npack.json";
+import package1_raw from "../../../../packages/extensions/cardpile-upstream-noname/package.npack.json?raw";
 import data1_pile from "../../../../packages/extensions/cardpile-upstream-noname/assets/pile.json";
+import data1_pile_raw from "../../../../packages/extensions/cardpile-upstream-noname/assets/pile.json?raw";
 import package2 from "../../../../packages/extensions/d3-upstream-noname/package.npack.json";
+import package2_raw from "../../../../packages/extensions/d3-upstream-noname/package.npack.json?raw";
 import data2_characters from "../../../../packages/extensions/d3-upstream-noname/assets/character.json";
+import data2_characters_raw from "../../../../packages/extensions/d3-upstream-noname/assets/character.json?raw";
 import package3 from "../../../../packages/extensions/huanle-upstream-noname/package.npack.json";
+import package3_raw from "../../../../packages/extensions/huanle-upstream-noname/package.npack.json?raw";
 import data3_cards from "../../../../packages/extensions/huanle-upstream-noname/assets/cards.json";
+import data3_cards_raw from "../../../../packages/extensions/huanle-upstream-noname/assets/cards.json?raw";
 import package4 from "../../../../packages/extensions/shaai-ow-upstream-noname/package.npack.json";
+import package4_raw from "../../../../packages/extensions/shaai-ow-upstream-noname/package.npack.json?raw";
 import data4_cards from "../../../../packages/extensions/shaai-ow-upstream-noname/assets/cards.json";
+import data4_cards_raw from "../../../../packages/extensions/shaai-ow-upstream-noname/assets/cards.json?raw";
 import package5 from "../../../../packages/extensions/shaai-xianjian-upstream-noname/package.npack.json";
+import package5_raw from "../../../../packages/extensions/shaai-xianjian-upstream-noname/package.npack.json?raw";
 import data5_cards from "../../../../packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json";
+import data5_cards_raw from "../../../../packages/extensions/shaai-xianjian-upstream-noname/assets/cards.json?raw";
 import package6 from "../../../../packages/extensions/shahai-gujian-upstream-noname/package.npack.json";
+import package6_raw from "../../../../packages/extensions/shahai-gujian-upstream-noname/package.npack.json?raw";
 import data6_cards from "../../../../packages/extensions/shahai-gujian-upstream-noname/assets/cards.json";
+import data6_cards_raw from "../../../../packages/extensions/shahai-gujian-upstream-noname/assets/cards.json?raw";
 import package7 from "../../../../packages/extensions/shahai-gwent-upstream-noname/package.npack.json";
+import package7_raw from "../../../../packages/extensions/shahai-gwent-upstream-noname/package.npack.json?raw";
 import data7_cards from "../../../../packages/extensions/shahai-gwent-upstream-noname/assets/cards.json";
+import data7_cards_raw from "../../../../packages/extensions/shahai-gwent-upstream-noname/assets/cards.json?raw";
 import package8 from "../../../../packages/extensions/shahai-hearth-upstream-noname/package.npack.json";
+import package8_raw from "../../../../packages/extensions/shahai-hearth-upstream-noname/package.npack.json?raw";
 import data8_cards from "../../../../packages/extensions/shahai-hearth-upstream-noname/assets/cards.json";
+import data8_cards_raw from "../../../../packages/extensions/shahai-hearth-upstream-noname/assets/cards.json?raw";
 import package9 from "../../../../packages/extensions/shahai-mtg-upstream-noname/package.npack.json";
+import package9_raw from "../../../../packages/extensions/shahai-mtg-upstream-noname/package.npack.json?raw";
 import data9_cards from "../../../../packages/extensions/shahai-mtg-upstream-noname/assets/cards.json";
+import data9_cards_raw from "../../../../packages/extensions/shahai-mtg-upstream-noname/assets/cards.json?raw";
 import package10 from "../../../../packages/extensions/shahai-swd-upstream-noname/package.npack.json";
+import package10_raw from "../../../../packages/extensions/shahai-swd-upstream-noname/package.npack.json?raw";
 import data10_cards from "../../../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json";
+import data10_cards_raw from "../../../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json?raw";
 import package11 from "../../../../packages/extensions/shahai-yunchou-upstream-noname/package.npack.json";
+import package11_raw from "../../../../packages/extensions/shahai-yunchou-upstream-noname/package.npack.json?raw";
 import data11_cards from "../../../../packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json";
+import data11_cards_raw from "../../../../packages/extensions/shahai-yunchou-upstream-noname/assets/cards.json?raw";
 import data11_characters from "../../../../packages/extensions/shahai-yunchou-upstream-noname/assets/character.json";
 import package12 from "../../../../packages/extensions/shahai-zhenfa-upstream-noname/package.npack.json";
+import package12_raw from "../../../../packages/extensions/shahai-zhenfa-upstream-noname/package.npack.json?raw";
 import data12_cards from "../../../../packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json";
+import data12_cards_raw from "../../../../packages/extensions/shahai-zhenfa-upstream-noname/assets/cards.json?raw";
 import package13 from "../../../../packages/extensions/wudian-upstream-noname/package.npack.json";
+import package13_raw from "../../../../packages/extensions/wudian-upstream-noname/package.npack.json?raw";
 import data13_cards from "../../../../packages/extensions/wudian-upstream-noname/assets/cards.json";
+import data13_cards_raw from "../../../../packages/extensions/wudian-upstream-noname/assets/cards.json?raw";
 import package14 from "../../../../packages/extensions/wuxing-upstream-liuli/package.npack.json";
+import package14_raw from "../../../../packages/extensions/wuxing-upstream-liuli/package.npack.json?raw";
 import data14_cards from "../../../../packages/extensions/wuxing-upstream-liuli/assets/cards.json";
+import data14_cards_raw from "../../../../packages/extensions/wuxing-upstream-liuli/assets/cards.json?raw";
+import data14_wuxing_raw from "../../../../packages/extensions/wuxing-upstream-liuli/assets/wuxing.json?raw";
 
 export interface NativePackagePayload {
   manifest: {
@@ -235,4 +267,129 @@ export function bundledNativePackage(entry: ExtensionCatalogEntry): string {
     throw new Error(`包目录与实际安装内容不一致: ${entry.dir}`);
   }
   return JSON.stringify(payload);
+}
+
+const bundledRaw: Record<
+  string,
+  {
+    packageJson: string;
+    contentHash: string;
+    assets: Record<string, string>;
+  }
+> = {
+  "cardpile-upstream-liuli": {
+    packageJson: package0_raw,
+    contentHash: "bf474f72dd77fed4207e767fa930dd1b05a37741f18b15132e4b21890d3e4765",
+    assets: { "assets/pile.json": data0_pile_raw },
+  },
+  "cardpile-upstream-noname": {
+    packageJson: package1_raw,
+    contentHash: "7b29ae3eb854b1a09c5a36a01ad1ea9a6df599a4bfd029a958933ea83f1f6397",
+    assets: { "assets/pile.json": data1_pile_raw },
+  },
+  "d3-upstream-noname": {
+    packageJson: package2_raw,
+    contentHash: "5872db7e0502c028e623eb1821df4d4c8fb53a6a56705cb140df178779a06a6b",
+    assets: { "assets/character.json": data2_characters_raw },
+  },
+  "huanle-upstream-noname": {
+    packageJson: package3_raw,
+    contentHash: "2d706d325bbcb6892c69dabb585e314a4898ca8f9f28bfc084330e21f3d6f128",
+    assets: { "assets/cards.json": data3_cards_raw },
+  },
+  "shaai-ow-upstream-noname": {
+    packageJson: package4_raw,
+    contentHash: "f261f410be4c9752c1f8fe4c58fe1810d25b7ced7cfc169838c50ec847cbd415",
+    assets: { "assets/cards.json": data4_cards_raw },
+  },
+  "shaai-xianjian-upstream-noname": {
+    packageJson: package5_raw,
+    contentHash: "794b7065bc9d385e1ea11ce3c89e971b072bbe0f9eb52423a0565a90f0fa135c",
+    assets: { "assets/cards.json": data5_cards_raw },
+  },
+  "shahai-gujian-upstream-noname": {
+    packageJson: package6_raw,
+    contentHash: "cd2d38ef1f552363074417c33fdc8f097d8d5a8f8af6c898cdb7e6d45c19c6a2",
+    assets: { "assets/cards.json": data6_cards_raw },
+  },
+  "shahai-gwent-upstream-noname": {
+    packageJson: package7_raw,
+    contentHash: "c86190db26abf2623fd62623f44cb7cf1de72b42d0dc59c65e1428e0b32921cd",
+    assets: { "assets/cards.json": data7_cards_raw },
+  },
+  "shahai-hearth-upstream-noname": {
+    packageJson: package8_raw,
+    contentHash: "5d355fc4a6bdbe39e020f293173737baf040f79d12c69de8f3713c0619257e9c",
+    assets: { "assets/cards.json": data8_cards_raw },
+  },
+  "shahai-mtg-upstream-noname": {
+    packageJson: package9_raw,
+    contentHash: "9fd5da88f750ae966760bc1dad9dd999c253b42d2f752c2fbbab577fc2e9e252",
+    assets: { "assets/cards.json": data9_cards_raw },
+  },
+  "shahai-swd-upstream-noname": {
+    packageJson: package10_raw,
+    contentHash: "6844852259fe5d6f7359363a905635312279a77e8522df9df2421e5f9472223e",
+    assets: { "assets/cards.json": data10_cards_raw },
+  },
+  "shahai-yunchou-upstream-noname": {
+    packageJson: package11_raw,
+    contentHash: "a1851cbe4fc540fb3cf90d3eac62cd8d14652658c38944d1477f089d210931a8",
+    assets: { "assets/cards.json": data11_cards_raw },
+  },
+  "shahai-zhenfa-upstream-noname": {
+    packageJson: package12_raw,
+    contentHash: "b07df94afef894c15e9aece8c5fc39fd07a1ce24f6430ac8c0f447602a86b3da",
+    assets: { "assets/cards.json": data12_cards_raw },
+  },
+  "wudian-upstream-noname": {
+    packageJson: package13_raw,
+    contentHash: "0be5dc96a54db0a36893835a791cd49cf55e65740269d108b3632846215e845e",
+    assets: { "assets/cards.json": data13_cards_raw },
+  },
+  "wuxing-upstream-liuli": {
+    packageJson: package14_raw,
+    contentHash: "ddd6043ed24ad8e18e4e57e16f311c792c803cc07b0f573296aadaa77b99d6c9",
+    assets: {
+      "assets/cards.json": data14_cards_raw,
+      "assets/wuxing.json": data14_wuxing_raw,
+    },
+  },
+};
+
+function utf8Bytes(text: string): number[] {
+  return Array.from(new TextEncoder().encode(text));
+}
+
+/** R05 v4/v5：随应用分发的原始 `package.npack.json` 文本与原始声明资产字节副本。 */
+export function bundledFrozenPackage(entry: ExtensionCatalogEntry): FrozenPackage {
+  const source = bundled[entry.dir];
+  const rawEntry = bundledRaw[entry.dir];
+  if (!source || !rawEntry) throw new Error(`无可安装包数据: ${entry.dir}`);
+  const payload = validateNativePackage(
+    source.package.modules.length ? { ...source.package, ...(source.payload as object) } : source.payload,
+  );
+  const logicHash = nativePackageFingerprint(payload);
+  if (
+    nativePackageKey(payload) !== `${entry.namespace}/${entry.packageId}` ||
+    payload.manifest.version !== entry.version ||
+    !logicHash.startsWith(entry.logicFingerprint)
+  ) {
+    throw new Error(`包目录与实际安装内容不一致: ${entry.dir}`);
+  }
+  const assets: Record<string, number[]> = {};
+  for (const [relPath, text] of Object.entries(rawEntry.assets)) {
+    assets[relPath] = utf8Bytes(text);
+  }
+  return {
+    binding: {
+      namespace: entry.namespace,
+      package_id: entry.packageId,
+      version: entry.version,
+      logic_hash: logicHash,
+      content_hash: rawEntry.contentHash,
+    },
+    package_json: rawEntry.packageJson,
+    assets,
+  };
 }

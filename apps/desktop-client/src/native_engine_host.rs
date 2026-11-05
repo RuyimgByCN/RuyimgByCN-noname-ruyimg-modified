@@ -1,6 +1,9 @@
 //! Serialized native execution of the existing frontend Worker request semantics.
 use crate::native_envelope::envelope;
-use engine_native_wasm::{validate_pack_json, NativeSession, MAX_ARCHIVE_HEX_CHARS};
+use engine_native_wasm::{
+    prepare_locked_content_json, validate_frozen_package_json, validate_pack_json, NativeSession,
+    MAX_ARCHIVE_HEX_CHARS,
+};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use std::sync::{
@@ -102,6 +105,10 @@ fn validate_payload_size(value: &Value) -> Result<(), String> {
         ("hex", MAX_ARCHIVE_HEX_CHARS),
         ("packsJson", MAX_PACK_JSON_BYTES),
         ("packJson", MAX_PACK_JSON_BYTES),
+        ("packageJson", MAX_PACK_JSON_BYTES),
+        ("assetsJson", MAX_PACK_JSON_BYTES),
+        ("frozenPackagesJson", MAX_PACK_JSON_BYTES),
+        ("lockedContentJson", MAX_PACK_JSON_BYTES),
         ("json", MAX_PACK_JSON_BYTES),
     ] {
         if value[field].as_str().is_some_and(|text| text.len() > limit) {
@@ -124,6 +131,14 @@ enum Request {
         observer: u8,
         #[serde(rename = "packsJson")]
         packs: Option<String>,
+        mode: Option<String>,
+    },
+    StartLocked {
+        players: u8,
+        seed: u64,
+        observer: u8,
+        #[serde(rename = "lockedContentJson")]
+        locked_content: String,
         mode: Option<String>,
     },
     EndPhase {
@@ -159,14 +174,30 @@ enum Request {
         name: String,
     },
     Save,
+    SaveLocked,
     Restore {
         hex: String,
         #[serde(rename = "packsJson")]
         packs: Option<String>,
     },
+    RestoreLocked {
+        hex: String,
+        #[serde(rename = "lockedContentJson")]
+        locked_content: String,
+    },
     ValidatePackage {
         #[serde(rename = "packJson")]
         pack: String,
+    },
+    ValidateFrozenPackage {
+        #[serde(rename = "packageJson")]
+        package_json: String,
+        #[serde(rename = "assetsJson")]
+        assets_json: String,
+    },
+    PrepareLockedContent {
+        #[serde(rename = "frozenPackagesJson")]
+        frozen_packages_json: String,
     },
     UseSkillCard,
     LoadReplay,
@@ -209,6 +240,17 @@ impl HostSession {
                 validate_pack_json(&pack)?;
                 return Ok(json!({"valid": true}));
             }
+            Request::ValidateFrozenPackage {
+                package_json,
+                assets_json,
+            } => {
+                return parsed(validate_frozen_package_json(&package_json, &assets_json)?);
+            }
+            Request::PrepareLockedContent {
+                frozen_packages_json,
+            } => {
+                return parsed(prepare_locked_content_json(&frozen_packages_json)?);
+            }
             _ => {}
         }
         let session = self
@@ -237,6 +279,33 @@ impl HostSession {
                         seed,
                         packs.as_deref().unwrap_or("[]"),
                     )?,
+                    _ => return Err("native: unknown match mode".into()),
+                };
+                let data = envelope(&candidate, observer, &mut 0, Value::Null)?;
+                *session = candidate;
+                self.observer = observer;
+                self.cursor = 0;
+                return Ok(data);
+            }
+            Request::StartLocked {
+                players,
+                seed,
+                observer,
+                locked_content,
+                mode,
+            } => {
+                if players == 0 || observer >= players || seed > MAX_SAFE_INTEGER {
+                    return Err("native: invalid players, observer or seed".into());
+                }
+                let candidate = match mode.as_deref() {
+                    Some("identity") => NativeSession::new_identity_with_locked_content_json(
+                        players,
+                        seed,
+                        &locked_content,
+                    )?,
+                    None => {
+                        NativeSession::new_with_locked_content_json(players, seed, &locked_content)?
+                    }
                     _ => return Err("native: unknown match mode".into()),
                 };
                 let data = envelope(&candidate, observer, &mut 0, Value::Null)?;
@@ -308,6 +377,7 @@ impl HostSession {
                 );
             }
             Request::Save => return Ok(json!({"kind": "save", "hex": session.save_hex()})),
+            Request::SaveLocked => return parsed(session.save_locked_json()?),
             Request::Restore { hex, packs } => {
                 let mut candidate = NativeSession::new(1, 0)?;
                 candidate.restore_hex_with_packs_json(&hex, packs.as_deref().unwrap_or("[]"))?;
@@ -317,10 +387,24 @@ impl HostSession {
                 self.cursor = 0;
                 return Ok(data);
             }
+            Request::RestoreLocked {
+                hex,
+                locked_content,
+            } => {
+                let mut candidate = NativeSession::new(1, 0)?;
+                candidate.restore_hex_with_locked_content_json(&hex, &locked_content)?;
+                let data = envelope(&candidate, self.observer, &mut 0, Value::Null)?;
+                session.restore_hex_with_locked_content_json(&hex, &locked_content)?;
+                self.cursor = 0;
+                return Ok(data);
+            }
             Request::UseSkillCard => return Err("native backend: useSkillCard 未映射".into()),
             Request::LoadReplay => return Err("native backend: loadReplay 未映射".into()),
             Request::SeekReplay => return Err("native backend: seekReplay 未映射".into()),
-            Request::Init { .. } | Request::ValidatePackage { .. } => unreachable!(),
+            Request::Init { .. }
+            | Request::ValidatePackage { .. }
+            | Request::ValidateFrozenPackage { .. }
+            | Request::PrepareLockedContent { .. } => unreachable!(),
         };
         envelope(session, self.observer, &mut self.cursor, result)
     }
@@ -402,5 +486,110 @@ mod tests {
             .unwrap_err()
             .contains("closed"));
         owner.join().unwrap();
+    }
+
+    #[test]
+    fn start_locked_save_locked_restore_locked_and_size_bounds() {
+        const HUANLE_RAW: &str =
+            include_str!("../../../packages/extensions/huanle-upstream-noname/package.npack.json");
+        const HUANLE_CARDS_RAW: &[u8] =
+            include_bytes!("../../../packages/extensions/huanle-upstream-noname/assets/cards.json");
+
+        let mut host = HostSession::default();
+        host.dispatch(json!({"id": 1, "type": "init"})).unwrap();
+
+        let assets_json = json!({"assets/cards.json": HUANLE_CARDS_RAW}).to_string();
+        let frozen = host
+            .dispatch(json!({
+                "id": 2,
+                "type": "validateFrozenPackage",
+                "packageJson": HUANLE_RAW,
+                "assetsJson": assets_json,
+            }))
+            .expect("validateFrozenPackage");
+        let frozen_packages_json = serde_json::to_string(&vec![frozen]).unwrap();
+        let prepared = host
+            .dispatch(json!({
+                "id": 3,
+                "type": "prepareLockedContent",
+                "frozenPackagesJson": frozen_packages_json,
+            }))
+            .expect("prepareLockedContent");
+        let locked_content_json = serde_json::to_string(&prepared).unwrap();
+
+        // startLocked 忽略任何额外传入的 packsJson，仅以 lockedContentJson 构建会话
+        let started = host
+            .dispatch(json!({
+                "id": 4,
+                "type": "startLocked",
+                "players": 2,
+                "seed": 777,
+                "observer": 0,
+                "lockedContentJson": locked_content_json,
+                "packsJson": "not-even-valid-json",
+            }))
+            .expect("startLocked");
+        let initial_rev = started["revision"].as_u64().unwrap();
+
+        let saved = host
+            .dispatch(json!({"id": 5, "type": "saveLocked"}))
+            .expect("saveLocked");
+        assert_eq!(saved["kind"], "saveLocked");
+        let hex = saved["hex"].as_str().unwrap().to_string();
+
+        // 推进一步改变状态
+        host.dispatch(json!({"id": 6, "type": "endPhase", "actor": 0}))
+            .expect("endPhase");
+        let mid_status = host
+            .dispatch(json!({"id": 7, "type": "status"}))
+            .expect("status");
+        assert!(mid_status["revision"].as_u64().unwrap() > initial_rev);
+
+        // 错误的 lockedContentJson 恢复失败，且保持当前会话状态与 revision 不变
+        let empty_prepared = host
+            .dispatch(json!({
+                "id": 8,
+                "type": "prepareLockedContent",
+                "frozenPackagesJson": "[]",
+            }))
+            .unwrap();
+        assert!(host
+            .dispatch(json!({
+                "id": 9,
+                "type": "restoreLocked",
+                "hex": hex,
+                "lockedContentJson": serde_json::to_string(&empty_prepared).unwrap(),
+            }))
+            .is_err());
+        let status_after_fail = host
+            .dispatch(json!({"id": 10, "type": "status"}))
+            .expect("status after failed restore");
+        assert_eq!(status_after_fail["revision"], mid_status["revision"]);
+
+        // 正确的 lockedContentJson 恢复成功
+        let restored = host
+            .dispatch(json!({
+                "id": 11,
+                "type": "restoreLocked",
+                "hex": hex,
+                "lockedContentJson": locked_content_json,
+                "packsJson": "ignored-garbage",
+            }))
+            .expect("restoreLocked");
+        assert_eq!(restored["revision"], initial_rev);
+
+        // 超长 lockedContentJson 被大小上限拒绝
+        let huge = "x".repeat(MAX_PACK_JSON_BYTES + 1);
+        let err = host
+            .dispatch(json!({
+                "id": 12,
+                "type": "startLocked",
+                "players": 2,
+                "seed": 1,
+                "observer": 0,
+                "lockedContentJson": huge,
+            }))
+            .unwrap_err();
+        assert!(err.contains("lockedContentJson exceeds"));
     }
 }

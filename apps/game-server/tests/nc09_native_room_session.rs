@@ -525,17 +525,9 @@ async fn nc09_room_store_roundtrip_and_restore() {
         "临时文件应已 rename"
     );
 
-    // 读回并按启动路径恢复（重新装载包）
-    let loaded = content
-        .load_scoped(Some("upstream-noname"), "shahai-swd")
-        .expect("重新装载");
-    let mut packs = vec![loaded.pack];
-    let mut load_pack =
-        |_ref: &str| -> Result<engine_native::content::extension::ExtensionPack, String> {
-            packs.pop().ok_or_else(|| "包只可装载一次".to_string())
-        };
+    // 读回并按启动路径恢复（经 NativeContent 核对并恢复）
     let handle =
-        room_native_actor::restore_room_from_disk(&record, &mut load_pack, 8, 4, store.clone())
+        room_native_actor::restore_room_from_disk(&record, &content, 8, 4, store.clone())
             .expect("恢复房间");
     assert_eq!(handle.id, 42);
 
@@ -583,6 +575,7 @@ async fn nc09_room_store_is_removed_on_match_end() {
             next_token: 3,
             next_dedup: 9,
             pack_refs: Vec::new(),
+            canonical_locked_content: None,
             frozen_packages: None,
             members: Vec::new(),
         },
@@ -630,6 +623,7 @@ fn nc09_room_store_hashes_password_and_verifies_checksum() {
             next_token: 1,
             next_dedup: 1,
             pack_refs: Vec::new(),
+            canonical_locked_content: None,
             frozen_packages: None,
             members: Vec::new(),
         },
@@ -680,13 +674,9 @@ async fn nc09_restore_does_not_publish_actor_when_migrated_save_cannot_be_writte
         state: room.export_state(&room.snapshot_hex()),
         checksum: String::new(),
     };
-    let result = room_native_actor::restore_room_from_disk(
-        &record,
-        &mut |_| Err("标准局不应装载包".into()),
-        8,
-        4,
-        store,
-    );
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    let result = room_native_actor::restore_room_from_disk(&record, &content, 8, 4, store);
     assert!(result.is_err());
     assert_eq!(std::fs::read(blocked).unwrap(), b"retain this file");
 }
@@ -805,4 +795,88 @@ async fn nc09_timeout_default_deadline_answers_pending_choice() {
         answer.is_ok(),
         "default 30-second room timeout must submit AI answer through ordinary actor command flow"
     );
+}
+
+#[test]
+fn r05_room_session_locked_roundtrip_wal_recovery_and_disk_restore() {
+    let dir = tempfile::tempdir().unwrap();
+    let content =
+        NativeContent::open(repo_packages_root(), dir.path().join("store")).expect("open");
+    content.import().expect("import");
+
+    let verified = content
+        .freeze_room_selection(Some("upstream-noname"), &["shahai-swd".to_string()])
+        .expect("freeze_room_selection");
+    assert_eq!(verified.copies().len(), 1);
+    let loaded = content
+        .load_scoped(Some("upstream-noname"), "shahai-swd")
+        .expect("load_scoped");
+    let engine = content_native_loader::start_locked_engine(
+        20261105,
+        2,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified,
+    )
+    .expect("start_locked_engine");
+
+    let mut room = NativeRoomSession::new_locked(engine, verified.clone(), vec![loaded.pack], 2);
+    let current = room.engine().turn().current;
+    let joined = room.join(1, Some(current), None).expect("join");
+    let rev0 = room.engine().revision();
+    let out = room
+        .submit(joined.member.connection_id, &CommandKind::EndPhase {}, rev0)
+        .expect("submit EndPhase");
+    assert!(matches!(out, CommandResult::Accepted { .. }));
+    let hash_after_cmd = room.engine().state_hash();
+
+    // WAL 恢复走 recover_locked(&VerifiedLockedContent) 并保持状态一致
+    room.recover_wal().expect("recover_wal with locked content");
+    assert_eq!(room.engine().state_hash(), hash_after_cmd);
+
+    // 导出 NativeRoomState 必须同时携带 canonical_locked_content 与 frozen_packages
+    let saved_state = room.export_state(&room.snapshot_hex());
+    assert_eq!(
+        saved_state.canonical_locked_content.as_ref(),
+        Some(verified.lock())
+    );
+    assert_eq!(
+        saved_state.frozen_packages.as_deref(),
+        Some(verified.copies())
+    );
+
+    // 落盘并经 restore_room_from_disk 恢复（即使已卸载 store 中该包，仍从冻结原副本恢复）
+    let room_store = native_room_store::NativeRoomStore::new(dir.path().join("rooms"));
+    let stored = native_room_store::StoredRoom {
+        room_id: 333,
+        password_hash: String::new(),
+        checksum: String::new(),
+        state: saved_state.clone(),
+    };
+    room_store.save(&stored).expect("save room 333");
+    let on_disk = room_store.load_all().expect("load_all");
+    assert_eq!(on_disk.len(), 1);
+
+    let rt = tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+        .unwrap();
+    rt.block_on(async {
+        let _handle = room_native_actor::restore_room_from_disk(
+            &on_disk[0],
+            &content,
+            8,
+            2,
+            room_store.clone(),
+        )
+        .expect("restore_room_from_disk with locked content");
+    });
+
+    // 篡改 saved_state 的 canonical_locked_content 时，from_saved 与 restore_room_from_disk 必拒
+    let mut tampered_state = saved_state;
+    tampered_state
+        .canonical_locked_content
+        .as_mut()
+        .unwrap()
+        .lock_hash = "00".repeat(32);
+    assert!(NativeRoomSession::from_saved(&tampered_state, Vec::new()).is_err());
 }

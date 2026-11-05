@@ -14,8 +14,9 @@ import {
   setMatchFrozen,
 } from "../engine/extensionStore";
 import {
+  prepareLockedNativeMatchContent,
   prepareNativeMatchContent,
-  restoreNativeMatchContent,
+  restoreLockedNativeMatchContent,
   type NativeMatchContent,
 } from "../engine/nativeMatchContent";
 import {
@@ -244,18 +245,38 @@ async function connectAndStart() {
         selfId.value = Math.max(0, Math.min(selfId.value, players.value - 1));
         generalSelect.value = setGeneralSelectSeat(generalSelect.value, selfId.value);
       }
-      const content = prepareNativeMatchContent();
+      const usePerfHarness =
+        typeof route.query.packsUrl === "string" || typeof route.query.hexUrl === "string";
+      const content =
+        localClient.isNative() && !usePerfHarness
+          ? await prepareLockedNativeMatchContent((frozenJson) =>
+              localClient.prepareLockedContent(frozenJson),
+            )
+          : prepareNativeMatchContent();
       if (!localClient.isNative() && content.contentLock.length) {
         throw new Error("已安装扩展的正式开局需要原生后端");
       }
       // mode=identity → 身份局（NC09 身份局端到端）；缺省原型模式
-      const env = await localClient.start(
-        players.value,
-        seed.value,
-        selfId.value,
-        content.packsJson,
-        route.query.mode === "identity" ? "identity" : undefined,
-      );
+      const mode = route.query.mode === "identity" ? "identity" : undefined;
+      const env =
+        localClient.isNative() && !usePerfHarness
+          ? await localClient.startLocked(
+              players.value,
+              seed.value,
+              selfId.value,
+              JSON.stringify({
+                canonical_locked_content: content.canonical_locked_content,
+                frozen_packages: content.frozen_packages,
+              }),
+              mode,
+            )
+          : await localClient.start(
+              players.value,
+              seed.value,
+              selfId.value,
+              content.packsJson,
+              mode,
+            );
       matchContent = content;
       nc12Mark("t2_start_done");
       // NC12 冷启动优化（2026-10-19，两处）：
@@ -293,7 +314,15 @@ async function saveMatch() {
     if (isOnline.value) throw new Error("联机模式请使用服务端存档");
     if (!localClient.isNative()) throw new Error("存档仅原生后端支持");
     if (!matchContent) throw new Error("尚未建立对局内容锁");
-    const hex = await localClient.saveHex();
+    const saved = await localClient.saveLocked();
+    if (
+      matchContent.canonical_locked_content &&
+      JSON.stringify(saved.canonical_locked_content) !==
+        JSON.stringify(matchContent.canonical_locked_content)
+    ) {
+      throw new Error("存档锁与当前对局内容锁不一致");
+    }
+    const hex = saved.hex;
     const id = `save-${Date.now()}`;
     putNativeSave({
       id,
@@ -302,6 +331,8 @@ async function saveMatch() {
       seed: seed.value,
       players: players.value,
       ...matchContent,
+      canonical_locked_content: saved.canonical_locked_content,
+      frozen_packages: saved.frozen_packages,
       savedAt: new Date().toISOString(),
       revision: store.revision,
     });
@@ -317,8 +348,14 @@ async function loadLatestSave() {
     const slots = listNativeSaves();
     const slot = slots[0];
     if (!slot) throw new Error("无本地存档");
-    const content = restoreNativeMatchContent(slot);
-    const env = await localClient.restoreHex(slot.hex, content.packsJson);
+    const content = restoreLockedNativeMatchContent(slot);
+    const env = await localClient.restoreLocked(
+      slot.hex,
+      JSON.stringify({
+        canonical_locked_content: content.canonical_locked_content,
+        frozen_packages: content.frozen_packages,
+      }),
+    );
     matchContent = content;
     players.value = slot.players;
     seed.value = slot.seed;

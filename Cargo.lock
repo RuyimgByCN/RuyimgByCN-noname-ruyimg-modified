@@ -589,6 +589,7 @@ dependencies = [
 name = "content-native-loader"
 version = "0.1.0"
 dependencies = [
+ "blake3",
  "content-runtime",
  "content-schema",
  "engine-native",

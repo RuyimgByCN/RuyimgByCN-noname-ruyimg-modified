@@ -262,3 +262,31 @@ pub(super) fn packs_from_json(packs_json: &str) -> Result<Vec<ExtensionPack>, St
         })
         .collect()
 }
+
+pub(super) fn validate_frozen_package_json(
+    package_json: &str,
+    assets_json: &str,
+) -> Result<String, String> {
+    if package_json.is_empty() {
+        return Err("validateFrozenPackage: packageJson 不能为空".into());
+    }
+    if assets_json.trim().is_empty() {
+        return Err("validateFrozenPackage: assetsJson 不能为空".into());
+    }
+    let assets: BTreeMap<String, Vec<u8>> = serde_json::from_str(assets_json)
+        .map_err(|e| format!("validateFrozenPackage: assetsJson 非法: {e}"))?;
+    let frozen =
+        content_native_loader::validate_and_freeze_raw_package(package_json.to_string(), assets)?;
+    serde_json::to_string(&frozen).map_err(|e| e.to_string())
+}
+
+pub(super) fn prepare_locked_content_json(frozen_packages_json: &str) -> Result<String, String> {
+    if frozen_packages_json.trim().is_empty() {
+        return Err("prepareLockedContent: frozenPackagesJson 不能为空".into());
+    }
+    let copies: Vec<content_native_loader::FrozenPackage> =
+        serde_json::from_str(frozen_packages_json)
+            .map_err(|e| format!("prepareLockedContent: frozenPackagesJson 非法: {e}"))?;
+    let verified = content_native_loader::prepare_locked_content_with_bridge(copies)?;
+    Ok(verified.to_envelope_json())
+}

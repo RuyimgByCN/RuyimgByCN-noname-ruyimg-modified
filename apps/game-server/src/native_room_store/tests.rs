@@ -12,6 +12,7 @@ pub(super) fn record(room_id: u64, snapshot: &str) -> StoredRoom {
             next_token: 1,
             next_dedup: 1,
             pack_refs: Vec::new(),
+            canonical_locked_content: None,
             frozen_packages: Some(Vec::new()),
             members: Vec::new(),
             command_receipts: Vec::new(),

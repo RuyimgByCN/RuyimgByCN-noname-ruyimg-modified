@@ -377,6 +377,7 @@ pub struct NativeSession {
     inner: Engine,
     planner_nodes: usize,
     deadline_ms: u64,
+    locked_content: Option<content_native_loader::VerifiedLockedContent>,
 }
 
 impl NativeSession {
@@ -386,6 +387,7 @@ impl NativeSession {
             inner: Engine::new(seed, players as usize),
             planner_nodes: 64,
             deadline_ms: 50,
+            locked_content: Some(content_native_loader::VerifiedLockedContent::empty()),
         })
     }
 
@@ -694,6 +696,7 @@ impl NativeSession {
             engine_native::archive::decode_archive(&bytes).map_err(|e| format!("{e:?}"))?;
         let restored = Engine::restore(&snapshot).map_err(|e| format!("{e:?}"))?;
         self.inner = restored;
+        self.locked_content = Some(content_native_loader::VerifiedLockedContent::empty());
         Ok(())
     }
 
@@ -711,10 +714,17 @@ impl NativeSession {
         seed: u64,
         packs_json: &str,
     ) -> Result<NativeSession, String> {
+        let inner = engine_identity_from_packs(players, seed, packs_json)?;
+        let locked_content = if packs_json.trim() == "[]" {
+            Some(content_native_loader::VerifiedLockedContent::empty())
+        } else {
+            None
+        };
         Ok(NativeSession {
-            inner: engine_identity_from_packs(players, seed, packs_json)?,
+            inner,
             planner_nodes: 64,
             deadline_ms: 50,
+            locked_content,
         })
     }
 
@@ -725,10 +735,16 @@ impl NativeSession {
         packs_json: &str,
     ) -> Result<NativeSession, String> {
         let inner = engine_from_packs(players, seed, packs_json)?;
+        let locked_content = if packs_json.trim() == "[]" {
+            Some(content_native_loader::VerifiedLockedContent::empty())
+        } else {
+            None
+        };
         Ok(NativeSession {
             inner,
             planner_nodes: 64,
             deadline_ms: 50,
+            locked_content,
         })
     }
 
@@ -739,7 +755,113 @@ impl NativeSession {
         packs_json: &str,
     ) -> Result<(), String> {
         self.inner = engine_from_archive(hex, packs_json)?;
+        self.locked_content = if packs_json.trim() == "[]" {
+            Some(content_native_loader::VerifiedLockedContent::empty())
+        } else {
+            None
+        };
         Ok(())
+    }
+
+    /// R05 v4/v5：以经验证的 `lockedContentJson` 建局（只受 `VerifiedLockedContent` 控制，不接受裸 packs）。
+    pub fn new_with_locked_content_json(
+        players: u8,
+        seed: u64,
+        locked_content_json: &str,
+    ) -> Result<NativeSession, String> {
+        let verified = content_native_loader::VerifiedLockedContent::from_envelope_json(
+            locked_content_json,
+        )?;
+        let verified = content_native_loader::verify_locked_content_with_bridge(
+            verified.lock(),
+            verified.copies(),
+        )?;
+        let inner = content_native_loader::start_locked_engine(
+            seed,
+            players as usize,
+            content_native_loader::LockedStartMode::Prototype,
+            &verified,
+        )?;
+        Ok(NativeSession {
+            inner,
+            planner_nodes: 64,
+            deadline_ms: 50,
+            locked_content: Some(verified),
+        })
+    }
+
+    /// R05 v4/v5：以经验证的 `lockedContentJson` 建身份局。
+    pub fn new_identity_with_locked_content_json(
+        players: u8,
+        seed: u64,
+        locked_content_json: &str,
+    ) -> Result<NativeSession, String> {
+        let verified = content_native_loader::VerifiedLockedContent::from_envelope_json(
+            locked_content_json,
+        )?;
+        let verified = content_native_loader::verify_locked_content_with_bridge(
+            verified.lock(),
+            verified.copies(),
+        )?;
+        let inner = content_native_loader::start_locked_engine(
+            seed,
+            players as usize,
+            content_native_loader::LockedStartMode::Identity,
+            &verified,
+        )?;
+        Ok(NativeSession {
+            inner,
+            planner_nodes: 64,
+            deadline_ms: 50,
+            locked_content: Some(verified),
+        })
+    }
+
+    /// R05 v4/v5：以经验证的 `lockedContentJson` 恢复对局（候选成功才原子交换，保留规划预算）。
+    pub fn restore_hex_with_locked_content_json(
+        &mut self,
+        hex: &str,
+        locked_content_json: &str,
+    ) -> Result<(), String> {
+        let verified = content_native_loader::VerifiedLockedContent::from_envelope_json(
+            locked_content_json,
+        )?;
+        let verified = content_native_loader::verify_locked_content_with_bridge(
+            verified.lock(),
+            verified.copies(),
+        )?;
+        let bytes = hex_decode(hex)?;
+        let snapshot = engine_native::archive::decode_archive(&bytes)
+            .map_err(|e| format!("解码失败: {e:?}"))?;
+        let restored = content_native_loader::restore_locked_engine(&snapshot, &verified)
+            .map_err(|e| format!("恢复失败: {e:?}"))?;
+        self.inner = restored;
+        self.locked_content = Some(verified);
+        Ok(())
+    }
+
+    /// R05 v4/v5：只读导出当前会话冻结的 `lockedContentJson`（无已验证锁时拒绝，不从目录反推）。
+    pub fn locked_content_json(&self) -> Result<String, String> {
+        let verified = self
+            .locked_content
+            .as_ref()
+            .ok_or_else(|| String::from("当前会话未绑定已验证的 locked content 上下文"))?;
+        Ok(verified.to_envelope_json())
+    }
+
+    /// R05 v4/v5：原子导出 `{ kind: "saveLocked", hex, canonical_locked_content, frozen_packages }`。
+    pub fn save_locked_json(&self) -> Result<String, String> {
+        let verified = self
+            .locked_content
+            .as_ref()
+            .ok_or_else(|| String::from("当前会话未绑定已验证的 locked content 上下文"))?;
+        Ok(serde_json::json!({
+            "kind": "saveLocked",
+            "hex": self.save_hex(),
+            "canonical_locked_content": verified.lock(),
+            "frozen_packages": verified.copies(),
+        })
+        .to_string())
     }
 
     /// 目录中牌名以前缀开头的张数（扩展牌并入对局的可观察计数）。

@@ -11,6 +11,7 @@ mod channel;
 mod compat;
 mod error;
 mod extension;
+mod frozen;
 mod lock;
 mod revoke;
 mod sign;
@@ -30,6 +31,10 @@ pub use error::RuntimeError;
 pub use extension::{
     discover_extensions, import_extensions, DiscoveredExtension, ExtensionDirectoryManifest,
     ExtensionImportReport,
+};
+pub use frozen::{
+    prepare_locked_content, validate_frozen_package, verify_locked_content, FrozenPackage,
+    LockedContentEnvelope, VerifiedLockedContent,
 };
 pub use lock::{ActiveSet, ContentLock, LockedPackage};
 pub use revoke::RevokeList;

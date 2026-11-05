@@ -1,18 +1,14 @@
 //! 原局包副本：保留原始内容锁与全部声明资产，恢复不依赖当前启用版本。
 
 use super::{ExtensionPack, NativeContent};
-use content_runtime::{content_hash_hex, LockedPackage};
+use content_native_loader::{prepare_locked_content_with_bridge, verify_locked_content_with_bridge};
+use content_runtime::{ContentLock, FrozenPackage, LockedPackage, VerifiedLockedContent};
 use content_schema::ContentPackage;
 use std::collections::{BTreeMap, BTreeSet};
 use std::path::{Component, Path};
 
-/// 已安装并验证的原局完整内容；VM 模块包含在原始 package JSON 中。
-#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
-pub struct FrozenNativePackage {
-    pub binding: LockedPackage,
-    pub package_json: String,
-    pub assets: BTreeMap<String, Vec<u8>>,
-}
+/// 已安装并验证的原局完整内容；共享 `content_runtime::FrozenPackage` 形状（R05 v4/v5）。
+pub type FrozenNativePackage = FrozenPackage;
 
 fn reference_binding(reference: &str) -> Result<LockedPackage, String> {
     let (name, version) = reference.rsplit_once('@').ok_or("无效的原生包引用")?;
@@ -33,73 +29,6 @@ fn reference_binding(reference: &str) -> Result<LockedPackage, String> {
         }
     }
     Ok(binding)
-}
-
-impl FrozenNativePackage {
-    fn parsed_package(&self) -> Result<ContentPackage, String> {
-        if content_hash_hex(self.package_json.as_bytes()) != self.binding.content_hash {
-            return Err("原局包 content hash 不匹配".into());
-        }
-        let package = ContentPackage::from_json_bytes(self.package_json.as_bytes())?;
-        package.validate()?;
-        content_runtime::check_engine_compat(
-            &package.manifest,
-            &content_runtime::tooling_host_versions(),
-        )
-        .map_err(|e| e.to_string())?;
-        let manifest = &package.manifest;
-        if manifest.namespace != self.binding.namespace
-            || manifest.package_id != self.binding.package_id
-            || manifest.version != self.binding.version
-            || blake3::Hash::from(manifest.logic_hash).to_hex().as_str() != self.binding.logic_hash
-        {
-            return Err("原局包身份或 logic hash 不匹配".into());
-        }
-        Ok(package)
-    }
-
-    pub(super) fn package(&self) -> Result<ContentPackage, String> {
-        let package = self.parsed_package()?;
-        let mut declared = BTreeMap::new();
-        if let Some(manifest) = &package.asset_manifest {
-            for entry in &manifest.entries {
-                let relative = package
-                    .asset_paths
-                    .get(&entry.asset_id)
-                    .ok_or("资产路径缺失")?;
-                if entry.source_hash == [0u8; 32] {
-                    return Err(format!("原局包资产 hash 为零: {relative}"));
-                }
-                if let Some((hash, kind)) =
-                    declared.insert(relative, (entry.source_hash, entry.kind))
-                {
-                    if hash != entry.source_hash || kind != entry.kind {
-                        return Err(format!("原局包资产路径冲突: {relative}"));
-                    }
-                }
-                let bytes = self
-                    .assets
-                    .get(relative)
-                    .ok_or_else(|| format!("原局包资产缺失: {relative}"))?;
-                if blake3::hash(bytes).as_bytes() != &entry.source_hash {
-                    return Err(format!("原局包资产 hash 不匹配: {relative}"));
-                }
-            }
-        }
-        if declared.len() != self.assets.len() {
-            return Err("原局包含未声明资产".into());
-        }
-        Ok(package)
-    }
-
-    pub(super) fn text_asset(&self, relative: &str) -> Result<Option<String>, String> {
-        self.assets
-            .get(relative)
-            .map(|bytes| {
-                String::from_utf8(bytes.clone()).map_err(|e| format!("原局包资产不是 UTF-8: {e}"))
-            })
-            .transpose()
-    }
 }
 
 impl NativeContent {
@@ -145,19 +74,19 @@ impl NativeContent {
             }
             std::fs::read(path).map_err(|e| e.to_string())
         };
-        let mut frozen = FrozenNativePackage {
-            binding: binding.clone(),
-            package_json: String::from_utf8(checked_read("package.json")?)
-                .map_err(|e| e.to_string())?,
-            assets: BTreeMap::new(),
-        };
-        let package = frozen.parsed_package()?;
-        for relative in package.asset_paths.values() {
-            frozen
-                .assets
-                .insert(relative.clone(), checked_read(relative)?);
+        let package_json =
+            String::from_utf8(checked_read("package.json")?).map_err(|e| e.to_string())?;
+        let raw_pkg = ContentPackage::from_json_bytes(package_json.as_bytes())?;
+        let mut assets = BTreeMap::new();
+        for relative in raw_pkg.asset_paths.values() {
+            assets.insert(relative.clone(), checked_read(relative)?);
         }
-        frozen.package()?;
+        let frozen = FrozenNativePackage {
+            binding: binding.clone(),
+            package_json,
+            assets,
+        };
+        frozen.validate_and_parse()?;
         Ok(frozen)
     }
 
@@ -185,30 +114,142 @@ impl NativeContent {
         Ok(loaded.pack)
     }
 
+    /// 新局唯一采集时刻（R05 v4 §2）：从一次一致的 `current_lock` 读取选定包及其完整依赖闭包，
+    /// 冻结原始 `package.json` 字节与声明资产并经共享 `prepare_locked_content_with_bridge` 验证。
+    pub fn freeze_room_selection(
+        &self,
+        namespace: Option<&str>,
+        package_ids: &[String],
+    ) -> Result<VerifiedLockedContent, String> {
+        if package_ids.is_empty() {
+            return Ok(VerifiedLockedContent::empty());
+        }
+        let lock = self.store.current_lock().map_err(|e| e.to_string())?;
+        let packages = self
+            .store
+            .load_locked_packages(&lock)
+            .map_err(|e| format!("装载安装副本失败: {e}"))?;
+        let mut needed_slots = BTreeSet::new();
+        let mut queue = Vec::new();
+        for pid in package_ids {
+            let matched: Vec<&ContentPackage> = packages
+                .iter()
+                .filter(|p| {
+                    p.manifest.package_id == *pid
+                        && namespace.map(|ns| p.manifest.namespace == ns).unwrap_or(true)
+                })
+                .collect();
+            let parsed = match matched.len() {
+                0 => return Err(format!("包未安装或未激活: {pid}")),
+                1 => matched[0],
+                n => {
+                    return Err(format!(
+                        "包 id 在 {n} 个命名空间下存在，请显式指定命名空间: {pid}"
+                    ))
+                }
+            };
+            let slot = (
+                parsed.manifest.namespace.clone(),
+                parsed.manifest.package_id.clone(),
+            );
+            if !needed_slots.insert(slot.clone()) {
+                return Err(format!("原局请求重复包槽位: {}/{}", slot.0, slot.1));
+            }
+            queue.push(parsed);
+        }
+        while let Some(pkg) = queue.pop() {
+            for dep in &pkg.manifest.dependencies {
+                let dep_slot = (dep.namespace.clone(), dep.package_id.clone());
+                if needed_slots.insert(dep_slot.clone()) {
+                    let dep_pkg = packages
+                        .iter()
+                        .find(|p| {
+                            p.manifest.namespace == dep.namespace
+                                && p.manifest.package_id == dep.package_id
+                                && p.manifest.version == dep.version
+                        })
+                        .ok_or_else(|| {
+                            format!(
+                                "缺少激活依赖: {}/{}@{}",
+                                dep.namespace, dep.package_id, dep.version
+                            )
+                        })?;
+                    queue.push(dep_pkg);
+                }
+            }
+        }
+        let mut copies = Vec::with_capacity(needed_slots.len());
+        for (ns, pid) in &needed_slots {
+            let binding = lock
+                .packages
+                .iter()
+                .find(|p| &p.namespace == ns && &p.package_id == pid)
+                .ok_or_else(|| format!("安装包不在内容锁中: {ns}/{pid}"))?;
+            copies.push(self.freeze_binding(binding)?);
+        }
+        prepare_locked_content_with_bridge(copies)
+    }
+
+    /// 房间/存档恢复的共享验证入口（R05 v4 §2/§3 & v5）：
+    /// - 若存在 `canonical_lock`，则必须同时存在匹配的 `frozen` 副本并通过 `verify_locked_content_with_bridge`；
+    /// - 若旧档缺 `canonical_lock`，仅允许按已验证 `frozen` 或精确 `installed:{LockedPackage}@v` 引用重冻并校验；
+    /// - 全部副本均须通过撤销表检查（`check_not_revoked`）。
+    pub fn verify_room_locked_content(
+        &self,
+        references: &[String],
+        canonical_lock: Option<&ContentLock>,
+        frozen: Option<&[FrozenNativePackage]>,
+    ) -> Result<VerifiedLockedContent, String> {
+        let copies = match (canonical_lock, frozen) {
+            (Some(_), None) => {
+                return Err("房间状态含 canonical_locked_content 但缺少 frozen_packages".into());
+            }
+            (_, Some(copies)) => copies.to_vec(),
+            (None, None) => references
+                .iter()
+                .map(|r| self.freeze_reference(r))
+                .collect::<Result<Vec<_>, _>>()?,
+        };
+        if !references.is_empty() && copies.len() != references.len() {
+            return Err("房间引用与原局包副本数量不一致".into());
+        }
+        let mut slots = BTreeSet::new();
+        for copy in &copies {
+            if !slots.insert((&copy.binding.namespace, &copy.binding.package_id)) {
+                return Err("原局包槽位重复".into());
+            }
+            self.check_not_revoked(&copy.binding)?;
+        }
+        if !references.is_empty() {
+            for (reference, copy) in references.iter().zip(&copies) {
+                if reference_binding(reference)? != copy.binding {
+                    return Err("房间引用与原局包内容锁不匹配".into());
+                }
+                let _ = self.load_frozen_reference(reference, copy)?;
+            }
+        }
+        match canonical_lock {
+            Some(lock) => verify_locked_content_with_bridge(lock, &copies),
+            None => prepare_locked_content_with_bridge(copies),
+        }
+    }
+
     /// 启动恢复统一入口：新档严格验副本，旧档只迁移精确可验证的安装版本。
     pub fn load_room_packages(
         &self,
         references: &[String],
         frozen: Option<&[FrozenNativePackage]>,
     ) -> Result<(Vec<ExtensionPack>, Vec<FrozenNativePackage>), String> {
-        let copies = match frozen {
-            Some(copies) => copies.to_vec(),
-            None => references
-                .iter()
-                .map(|r| self.freeze_reference(r))
-                .collect::<Result<Vec<_>, _>>()?,
-        };
-        if copies.len() != references.len() {
-            return Err("房间引用与原局包副本数量不一致".into());
-        }
-        let mut slots = BTreeSet::new();
-        let mut packs = Vec::with_capacity(copies.len());
-        for (reference, copy) in references.iter().zip(&copies) {
-            if !slots.insert((&copy.binding.namespace, &copy.binding.package_id)) {
-                return Err("原局包槽位重复".into());
+        if let Some(copies) = frozen {
+            if copies.len() != references.len() {
+                return Err("房间引用与原局包副本数量不一致".into());
             }
-            packs.push(self.load_frozen_reference(reference, copy)?);
         }
-        Ok((packs, copies))
+        let verified = self.verify_room_locked_content(references, None, frozen)?;
+        let mut packs = Vec::with_capacity(verified.copies().len());
+        for copy in verified.copies() {
+            packs.push(self.load_frozen(copy)?.pack);
+        }
+        Ok((packs, verified.copies().to_vec()))
     }
 }

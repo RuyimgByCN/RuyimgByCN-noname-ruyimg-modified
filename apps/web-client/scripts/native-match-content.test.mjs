@@ -4,10 +4,17 @@ import {
   activateExtension, deactivateExtension, installExtension, installAndActivateAll,
   readExtensionStore, revokeExtension, rollbackExtension, setMatchFrozen,
   uninstallExtension, upgradeExtension, putNativeSave, listNativeSaves,
+  importExtensionPackageValidated,
 } from "../src/engine/extensionStore.ts";
 import { EXTENSION_CATALOG, extensionKey } from "../src/engine/extensionCatalog.ts";
-import { validateNativePackage } from "../src/engine/bundledNativePackages.ts";
-import { prepareNativeMatchContent, restoreNativeMatchContent } from "../src/engine/nativeMatchContent.ts";
+import { bundledFrozenPackage, validateNativePackage } from "../src/engine/bundledNativePackages.ts";
+import {
+  EMPTY_CONTENT_LOCK_HASH,
+  prepareNativeMatchContent,
+  restoreNativeMatchContent,
+  selectFrozenPackagesForMatch,
+  restoreLockedNativeMatchContent,
+} from "../src/engine/nativeMatchContent.ts";
 
 const storage = new Map();
 globalThis.localStorage = {
@@ -264,4 +271,122 @@ test("package dependencies are checked for match start and frozen save restore",
     catch (error) { assert.match(String(error), /依赖/, label); }
   }
   assert.deepEqual(accepted, []);
+});
+
+test("R05 v4: bundledFrozenPackage provides raw package_json and declared assets for all 15 catalog packages", () => {
+  for (const entry of EXTENSION_CATALOG) {
+    const frozen = bundledFrozenPackage(entry);
+    assert.ok(frozen, `missing bundledFrozenPackage for ${entry.dir}`);
+    assert.equal(frozen.binding.namespace, entry.namespace);
+    assert.equal(frozen.binding.package_id, entry.packageId);
+    assert.equal(frozen.binding.version, entry.version);
+    assert.match(frozen.binding.logic_hash, /^[a-f0-9]{64}$/);
+    assert.match(frozen.binding.content_hash, /^[a-f0-9]{64}$/);
+    assert.ok(frozen.package_json.length > 0);
+    if (entry.dir === "wuxing-upstream-liuli") {
+      assert.ok(Array.isArray(frozen.assets["assets/cards.json"]));
+      assert.ok(Array.isArray(frozen.assets["assets/wuxing.json"]));
+    }
+  }
+});
+
+test("R05 v4: selectFrozenPackagesForMatch rejects legacy records without nativeFrozenVersions and import preserves raw text", async () => {
+  installActive();
+  const copies = selectFrozenPackagesForMatch();
+  assert.equal(copies.length, 1);
+  assert.equal(`${copies[0].binding.namespace}/${copies[0].binding.package_id}`, key);
+
+  // 删除 nativeFrozenVersions 保留旧 nativeVersions 时，selectFrozenPackagesForMatch 必须拒绝并提示重装
+  const snap = readExtensionStore();
+  delete snap.installed[0].nativeFrozenVersions;
+  assert.throws(() => selectFrozenPackagesForMatch(snap), /缺少原始字节锁副本/);
+
+  // importExtensionPackageValidated 保留原始 package_json 空白，同版空白变体因字节不同拒绝覆盖
+  storage.clear();
+  const sample = bundledFrozenPackage(EXTENSION_CATALOG.find((e) => e.dir === "d3-upstream-noname"));
+  const rawWithTrailing = `${sample.package_json}\r\n  \n`;
+  const frozenImported = {
+    ...sample,
+    package_json: rawWithTrailing,
+    binding: { ...sample.binding, content_hash: "a".repeat(64) },
+  };
+  const importedSnap = await importExtensionPackageValidated(
+    rawWithTrailing,
+    async () => frozenImported,
+  );
+  const importedRecord = importedSnap.installed[0];
+  assert.equal(
+    importedRecord.nativeFrozenVersions[importedRecord.version].package_json,
+    rawWithTrailing,
+  );
+  // 同版本但不同 content_hash / package_json 再次导入必须冲突拒绝
+  await assert.rejects(
+    () => importExtensionPackageValidated(sample.package_json, async () => sample),
+    /同版本.*冲突|同版本.*不匹配/,
+  );
+});
+
+test("R05 v4 §4: restoreLockedNativeMatchContent enforces the exact envelope policy table", () => {
+  // 1. {} 无扩展证据 -> legacy 标准候选（升级为合法空锁 L0）
+  const legacyStd = restoreLockedNativeMatchContent({});
+  assert.deepEqual(legacyStd.canonical_locked_content, {
+    packages: [],
+    lock_hash: EMPTY_CONTENT_LOCK_HASH,
+  });
+  assert.deepEqual(legacyStd.frozen_packages, []);
+
+  // 2. 缺新字段但带扩展证据 -> 拒绝
+  assert.throws(
+    () => restoreLockedNativeMatchContent({ contentLock: ["ns/pkg"], lockSeed: "old", packsJson: "[{}]" }),
+    /缺少 canonical_locked_content/,
+  );
+
+  // 3. 新字段出现但为 null 或 {} -> 拒绝
+  assert.throws(
+    () => restoreLockedNativeMatchContent({ canonical_locked_content: null, frozen_packages: null }),
+    /非空 ContentLock/,
+  );
+  assert.throws(
+    () => restoreLockedNativeMatchContent({ canonical_locked_content: {}, frozen_packages: [] }),
+    /packages/,
+  );
+
+  // 4. 合法标准空锁 L0 -> 接受
+  const validEmpty = restoreLockedNativeMatchContent({
+    canonical_locked_content: { packages: [], lock_hash: EMPTY_CONTENT_LOCK_HASH },
+    frozen_packages: [],
+  });
+  assert.equal(validEmpty.canonical_locked_content.lock_hash, EMPTY_CONTENT_LOCK_HASH);
+  assert.deepEqual(validEmpty.frozen_packages, []);
+
+  // 5. 空 lock_hash -> 拒绝
+  assert.throws(
+    () =>
+      restoreLockedNativeMatchContent({
+        canonical_locked_content: { packages: [], lock_hash: "" },
+        frozen_packages: [],
+      }),
+    /lock_hash/,
+  );
+
+  // 6. 错误类型（字符串代替对象）-> 拒绝
+  assert.throws(
+    () =>
+      restoreLockedNativeMatchContent({
+        canonical_locked_content: "bad",
+        frozen_packages: ["bad"],
+      }),
+    /对象/,
+  );
+
+  // 7. packages 非空但 frozen_packages 为空 -> 拒绝
+  const sample = bundledFrozenPackage(EXTENSION_CATALOG[0]);
+  assert.throws(
+    () =>
+      restoreLockedNativeMatchContent({
+        canonical_locked_content: { packages: [sample.binding], lock_hash: "b".repeat(64) },
+        frozen_packages: [],
+      }),
+    /数量不一致/,
+  );
 });

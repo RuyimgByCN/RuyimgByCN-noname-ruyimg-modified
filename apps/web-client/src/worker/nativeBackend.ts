@@ -23,13 +23,21 @@ import { normalizeNativeOutcome } from "../engine/nativeOutcome";
 import type {
   CardView,
   EngineEnvelope,
+  FrozenPackage,
   GeneralAssignment,
   GeneralCandidate,
   GeneralCandidatesPayload,
   LegalAction,
+  LockedContentEnvelope,
   ObserverSnapshot,
+  SaveLockedPayload,
 } from "../types/engine";
-import init, { NativeEngine, validate_pack_json } from "./native-pkg/engine_native_wasm.js";
+import init, {
+  NativeEngine,
+  prepare_locked_content_json,
+  validate_frozen_package_json,
+  validate_pack_json,
+} from "./native-pkg/engine_native_wasm.js";
 import { stepMark } from "./stepTimings";
 
 export interface NativeHandle {
@@ -53,6 +61,35 @@ export function nativeValidatePack(packJson: string): void {
     throw new Error("native: validatePackage 载荷须为非空 JSON 字符串");
   }
   validate_pack_json(packJson);
+}
+
+/**
+ * R05 v4/v5 导入期单包原始字节与声明资产深层校验：交 Rust `validate_frozen_package_json`
+ * 计算并返回 `FrozenPackage`（含 `content_hash` 与 `logic_hash`）。
+ */
+export function nativeValidateFrozenPack(
+  packageJson: string,
+  assetsJson?: string,
+): FrozenPackage {
+  if (typeof packageJson !== "string" || packageJson.length === 0) {
+    throw new Error("native: validateFrozenPackage packageJson 须为非空字符串");
+  }
+  const out = validate_frozen_package_json(packageJson, assetsJson ?? "{}");
+  return JSON.parse(out) as FrozenPackage;
+}
+
+/**
+ * R05 v4/v5 开局前聚合锁准备：交 Rust `prepare_locked_content_json` 校验 `FrozenPackage[]`
+ * 并生成规范 `LockedContentEnvelope`（`{ canonical_locked_content, frozen_packages }`）。
+ */
+export function nativePrepareLockedContent(
+  frozenPackagesJson: string,
+): LockedContentEnvelope {
+  if (typeof frozenPackagesJson !== "string" || frozenPackagesJson.length === 0) {
+    throw new Error("native: prepareLockedContent frozenPackagesJson 须为非空字符串");
+  }
+  const out = prepare_locked_content_json(frozenPackagesJson);
+  return JSON.parse(out) as LockedContentEnvelope;
 }
 
 /** wasm-bindgen 会截断整数；必须先在 JS 边界拒绝不可表示的值。 */
@@ -167,6 +204,32 @@ export function nativeCreateWithPacks(
   unsigned(observer, 255, "observer");
   return {
     engine: NativeEngine.new_with_packs_json(players, BigInt(seed), packsJson),
+    seed,
+    players,
+    eventCursor: 0,
+    observer,
+  };
+}
+
+/** R05 v4/v5 受控锁定上下文建局（只接受 `lockedContentJson`，不接受裸 `packsJson`）。 */
+export function nativeCreateLocked(
+  players: number,
+  seed: number,
+  observer: number,
+  lockedContentJson: string,
+  mode?: "identity",
+): NativeHandle {
+  unsigned(players, 255, "players");
+  unsigned(observer, 255, "observer");
+  return {
+    engine:
+      mode === "identity"
+        ? NativeEngine.new_identity_with_locked_content_json(
+            players,
+            BigInt(seed),
+            lockedContentJson,
+          )
+        : NativeEngine.new_with_locked_content_json(players, BigInt(seed), lockedContentJson),
     seed,
     players,
     eventCursor: 0,
@@ -898,14 +961,20 @@ export type NativeDispatchReq =
   | { type: "autoStep" }
   | { type: "observer" }
   | { type: "save" }
+  | { type: "saveLocked" }
   | { type: "restore"; hex: string; packsJson?: string }
+  | { type: "restoreLocked"; hex: string; lockedContentJson: string }
   | { type: "status" };
 
 /** 请求映射；返回信封或存档文本。 */
 export function nativeDispatch(
   handle: NativeHandle,
   req: NativeDispatchReq,
-): EngineEnvelope | { kind: "save"; hex: string } | { kind: "status"; revision: number; finished: boolean } {
+):
+  | EngineEnvelope
+  | { kind: "save"; hex: string }
+  | SaveLockedPayload
+  | { kind: "status"; revision: number; finished: boolean } {
   switch (req.type) {
     case "endPhase": {
       const out = handle.engine.next_phase(unsigned(req.actor ?? handle.observer, 255, "actor"));
@@ -978,6 +1047,15 @@ export function nativeDispatch(
       return nativeEnvelope(handle);
     case "save":
       return { kind: "save", hex: handle.engine.save_hex() };
+    case "saveLocked": {
+      const saved = JSON.parse(handle.engine.save_locked_json()) as SaveLockedPayload;
+      return {
+        kind: "saveLocked",
+        hex: saved.hex,
+        canonical_locked_content: saved.canonical_locked_content,
+        frozen_packages: saved.frozen_packages,
+      };
+    }
     case "restore": {
       const restore = (engine: NativeEngine) => {
         if (req.packsJson !== undefined) {
@@ -999,6 +1077,21 @@ export function nativeDispatch(
       restore(handle.engine);
       // 读档会把引擎换成另一份状态（修订号可能相同），候选缓存必须失效；
       // 恢复后的引擎从空日志开始，事件游标同步归零。
+      handle.eventCursor = 0;
+      invalidateLegalActions(handle);
+      return envelope;
+    }
+    case "restoreLocked": {
+      // 先在候选引擎校验完整 lockedContentJson 与 NGSA 存档，失败保留原句柄与原上下文不变。
+      const candidate = new NativeEngine(1, 0n);
+      let envelope: EngineEnvelope;
+      try {
+        candidate.restore_hex_with_locked_content_json(req.hex, req.lockedContentJson);
+        envelope = nativeEnvelope({ ...handle, engine: candidate, eventCursor: 0 });
+      } finally {
+        candidate.free();
+      }
+      handle.engine.restore_hex_with_locked_content_json(req.hex, req.lockedContentJson);
       handle.eventCursor = 0;
       invalidateLegalActions(handle);
       return envelope;

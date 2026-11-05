@@ -518,3 +518,50 @@ fn definition_voices_survive_frozen_export_and_keep_semantic_bridge_rule_hash() 
         .load_frozen_reference(&copy_reference(&corrupt), &corrupt)
         .is_err());
 }
+
+#[test]
+fn open_and_restore_native_match_preserve_canonical_lock_across_uninstall_and_reject_tamper() {
+    let (temp, content, _reference, frozen) = fixture();
+    let archive = native::open_native_match(&content, &["frozen-vm".to_string()], 8080, 2)
+        .expect("open_native_match");
+    assert_eq!(archive.canonical_locked_content.packages.len(), 1);
+    assert_eq!(archive.frozen_packages.len(), 1);
+    assert_eq!(archive.frozen_packages[0].binding, frozen.binding);
+    assert_eq!(archive.frozen_packages[0].package_json, frozen.package_json);
+
+    // 卸载已安装包后，带 canonical_locked_content + frozen_packages 的恢复仍须从冻结原副本成功
+    content
+        .uninstall_package(&frozen.binding.namespace, "frozen-vm")
+        .unwrap();
+    assert!(content.load("frozen-vm").is_err());
+
+    let req_ok = native::NativeRestoreRequest {
+        packages: archive.packages.clone(),
+        archive_hex: archive.archive_hex.clone(),
+        canonical_locked_content: Some(archive.canonical_locked_content.clone()),
+        frozen_packages: Some(archive.frozen_packages.clone()),
+    };
+    let summary = native::restore_native_match(&content, &req_ok).expect("restore locked match");
+    assert_eq!(summary.catalog_cards, archive.catalog_cards);
+
+    // 单字段缺失（有锁无 frozen 或有 frozen 无锁）必拒，不退回 packages 重载
+    let req_missing_frozen = native::NativeRestoreRequest {
+        packages: archive.packages.clone(),
+        archive_hex: archive.archive_hex.clone(),
+        canonical_locked_content: Some(archive.canonical_locked_content.clone()),
+        frozen_packages: None,
+    };
+    assert!(native::restore_native_match(&content, &req_missing_frozen).is_err());
+
+    // 篡改 frozen_packages 原文 1 字节必拒
+    let mut tampered_frozen = archive.frozen_packages.clone();
+    tampered_frozen[0].package_json.push(' ');
+    let req_tampered = native::NativeRestoreRequest {
+        packages: archive.packages,
+        archive_hex: archive.archive_hex,
+        canonical_locked_content: Some(archive.canonical_locked_content),
+        frozen_packages: Some(tampered_frozen),
+    };
+    assert!(native::restore_native_match(&content, &req_tampered).is_err());
+    drop(temp);
+}

@@ -35,6 +35,21 @@ pub fn validate_pack_json(pack_json: &str) -> Result<(), String> {
     installed_packs::validate_pack_json(pack_json)
 }
 
+/// R05 v4：单包原始 `package.json` UTF-8 字节与声明资产校验，返回计算好 binding 的 `FrozenPackage` JSON。
+#[wasm_bindgen]
+pub fn validate_frozen_package_json(
+    package_json: &str,
+    assets_json: &str,
+) -> Result<String, String> {
+    installed_packs::validate_frozen_package_json(package_json, assets_json)
+}
+
+/// R05 v4/v5：由选定的 `FrozenPackage` 数组生成并校验规范 `ContentLock` 与冻结副本信封 JSON。
+#[wasm_bindgen]
+pub fn prepare_locked_content_json(frozen_packages_json: &str) -> Result<String, String> {
+    installed_packs::prepare_locked_content_json(frozen_packages_json)
+}
+
 #[cfg(test)]
 mod restore_boundary {
     use super::*;
@@ -218,6 +233,44 @@ impl NativeEngine {
         self.inner
             .restore_hex_with_packs_json(hex, packs_json)
             .map_err(js_error)
+    }
+
+    pub fn new_with_locked_content_json(
+        players: u8,
+        seed: u64,
+        locked_content_json: &str,
+    ) -> Result<NativeEngine, JsValue> {
+        NativeSession::new_with_locked_content_json(players, seed, locked_content_json)
+            .map(|inner| NativeEngine { inner })
+            .map_err(js_error)
+    }
+
+    pub fn new_identity_with_locked_content_json(
+        players: u8,
+        seed: u64,
+        locked_content_json: &str,
+    ) -> Result<NativeEngine, JsValue> {
+        NativeSession::new_identity_with_locked_content_json(players, seed, locked_content_json)
+            .map(|inner| NativeEngine { inner })
+            .map_err(js_error)
+    }
+
+    pub fn restore_hex_with_locked_content_json(
+        &mut self,
+        hex: &str,
+        locked_content_json: &str,
+    ) -> Result<(), JsValue> {
+        self.inner
+            .restore_hex_with_locked_content_json(hex, locked_content_json)
+            .map_err(js_error)
+    }
+
+    pub fn locked_content_json(&self) -> Result<String, JsValue> {
+        self.inner.locked_content_json().map_err(js_error)
+    }
+
+    pub fn save_locked_json(&self) -> Result<String, JsValue> {
+        self.inner.save_locked_json().map_err(js_error)
     }
 
     pub fn cards_with_prefix(&self, prefix: &str) -> u32 {
@@ -1375,6 +1428,77 @@ mod winner_protocol_tests {
         assert_eq!(
             winner_to_protocol_json(&Some(Winner::Doudizhu { lord_won: true })),
             serde_json::json!("finished")
+        );
+    }
+}
+
+#[cfg(test)]
+mod r05_locked_session_tests {
+    use crate::installed_packs::{prepare_locked_content_json, validate_frozen_package_json};
+    use crate::session::NativeSession;
+
+    const HUANLE_RAW: &str =
+        include_str!("../../../packages/extensions/huanle-upstream-noname/package.npack.json");
+    const HUANLE_CARDS_RAW: &[u8] =
+        include_bytes!("../../../packages/extensions/huanle-upstream-noname/assets/cards.json");
+
+    #[test]
+    fn session_locked_roundtrip_and_candidate_failure_preserves_live_session() {
+        let assets_json = serde_json::json!({
+            "assets/cards.json": HUANLE_CARDS_RAW
+        })
+        .to_string();
+        let frozen_json =
+            validate_frozen_package_json(HUANLE_RAW, &assets_json).expect("validate frozen huanle");
+        let frozen_arr = format!("[{frozen_json}]");
+        let prepared_json =
+            prepare_locked_content_json(&frozen_arr).expect("prepare locked content");
+
+        let mut s1 = NativeSession::new_with_locked_content_json(2, 1001, &prepared_json)
+            .expect("start locked session");
+        assert!(s1.cards_with_prefix("hnl_") > 0);
+        s1.set_planner(99, 123);
+
+        let save_locked_str = s1.save_locked_json().expect("saveLocked");
+        let save_val: serde_json::Value = serde_json::from_str(&save_locked_str).unwrap();
+        assert_eq!(save_val["kind"], "saveLocked");
+        let hex = save_val["hex"].as_str().unwrap();
+        let envelope_str = serde_json::json!({
+            "canonical_locked_content": save_val["canonical_locked_content"],
+            "frozen_packages": save_val["frozen_packages"]
+        })
+        .to_string();
+        assert_eq!(
+            serde_json::from_str::<serde_json::Value>(
+                &s1.locked_content_json().expect("locked_content_json")
+            )
+            .unwrap(),
+            serde_json::from_str::<serde_json::Value>(&envelope_str).unwrap()
+        );
+
+        // 推进 s1 一步，制造与 save 时不同的状态
+        let _ = s1.next_phase(0);
+        let advanced_hash = s1.state_hash_hex();
+        let advanced_rev = s1.revision();
+
+        // 失败的 restore_hex_with_locked_content_json 绝不破坏当前 live 会话
+        let empty_prepared = prepare_locked_content_json("[]").expect("empty locked");
+        assert!(
+            s1.restore_hex_with_locked_content_json(hex, &empty_prepared)
+                .is_err(),
+            "标准空锁恢复扩展存档必拒"
+        );
+        assert_eq!(s1.state_hash_hex(), advanced_hash);
+        assert_eq!(s1.revision(), advanced_rev);
+
+        // 正确的 lockedContentJson 恢复成功，且保留 planner 预算
+        s1.restore_hex_with_locked_content_json(hex, &envelope_str)
+            .expect("restore locked session");
+        let saved_again: serde_json::Value =
+            serde_json::from_str(&s1.save_locked_json().unwrap()).unwrap();
+        assert_eq!(
+            saved_again["canonical_locked_content"],
+            save_val["canonical_locked_content"]
         );
     }
 }

@@ -130,20 +130,38 @@ impl Lobby {
                 self.next_conn
                     .fetch_max(last.saturating_add(1), Ordering::SeqCst);
             }
-            let (packs, frozen) = match self.native.load_room_packages(
+            let verified = match self.native.verify_room_locked_content(
                 &record.state.pack_refs,
+                record.state.canonical_locked_content.as_ref(),
                 record.state.frozen_packages.as_deref(),
             ) {
-                Ok(loaded) => loaded,
+                Ok(verified) => verified,
                 Err(e) => {
                     tracing::warn!(room = record.room_id, error = %e, "原生房间包恢复失败（保留落盘记录）");
                     continue;
                 }
             };
+            let mut packs = Vec::with_capacity(verified.copies().len());
+            let mut pack_err = None;
+            for copy in verified.copies() {
+                match self.native.load_frozen(copy) {
+                    Ok(loaded) => packs.push(loaded.pack),
+                    Err(e) => {
+                        pack_err = Some(e);
+                        break;
+                    }
+                }
+            }
+            if let Some(e) = pack_err {
+                tracing::warn!(room = record.room_id, error = %e, "原生房间包恢复失败（保留落盘记录）");
+                continue;
+            }
             let mut prepared = record.clone();
-            prepared.state.frozen_packages = Some(frozen);
-            let session = match crate::room_native::NativeRoomSession::from_saved(
+            prepared.state.canonical_locked_content = Some(verified.lock().clone());
+            prepared.state.frozen_packages = Some(verified.copies().to_vec());
+            let session = match crate::room_native::NativeRoomSession::from_saved_locked(
                 &prepared.state,
+                verified,
                 packs,
             ) {
                 Ok(session) => session,

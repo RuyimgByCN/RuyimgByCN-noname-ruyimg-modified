@@ -138,29 +138,34 @@ pub fn spawn_room_native_persisted_with_hash(
     RoomHandle::new(id, tx)
 }
 
-/// 从落盘记录恢复并启动房间（服务端启动时调用）。
+/// 从落盘记录恢复并启动房间（服务端启动时调用，R05 v4/v5）。
 ///
-/// `load_pack(ref)` 由调用方提供：按 `包名@版本` 重新装载同内容包（缺包/版本不符由
-/// `from_saved` 明确报错）。
+/// 统一经 `content.verify_room_locked_content` 核对 `canonical_locked_content` 与 `frozen_packages`
+/// （或迁移精确 `installed:{LockedPackage}@v` 引用），去掉任意 `load_pack(ref)` 旁路。
 pub fn restore_room_from_disk(
     record: &StoredRoom,
-    load_pack: &mut dyn FnMut(
-        &str,
-    )
-        -> Result<engine_native::content::extension::ExtensionPack, String>,
+    content: &crate::native::NativeContent,
     mailbox: usize,
     snapshot_every: u64,
     store: NativeRoomStore,
 ) -> Result<RoomHandle, String> {
-    let mut packs = Vec::new();
-    for r in &record.state.pack_refs {
-        packs.push(load_pack(r)?);
+    let verified = content.verify_room_locked_content(
+        &record.state.pack_refs,
+        record.state.canonical_locked_content.as_ref(),
+        record.state.frozen_packages.as_deref(),
+    )?;
+    let mut packs = Vec::with_capacity(verified.copies().len());
+    for copy in verified.copies() {
+        packs.push(content.load_frozen(copy)?.pack);
     }
-    let session = NativeRoomSession::from_saved(&record.state, packs)?;
+    let mut prepared = record.clone();
+    prepared.state.canonical_locked_content = Some(verified.lock().clone());
+    prepared.state.frozen_packages = Some(verified.copies().to_vec());
+    let session = NativeRoomSession::from_saved_locked(&prepared.state, verified, packs)?;
     if session.engine().outcome().is_some() {
         return Err("原生房间已结束，不恢复为运行中房间".into());
     }
-    store.save(record)?;
+    store.save(&prepared)?;
     // 恢复时把**哈希**带回运行期：入座校验用哈希比对（运行期不再持有明文）
     Ok(spawn_room_native_persisted_with_hash(
         record.room_id,
@@ -841,22 +846,19 @@ pub fn spawn_native_room_if_configured(
     if !native {
         return Ok(None);
     }
-    let mut packs = Vec::new();
-    let mut frozen = Vec::new();
-    for id in packages {
-        let loaded = content.load_scoped(Some(namespace), id)?;
-        packs.push(loaded.pack);
-        frozen.push(loaded.frozen);
+    let verified = content.freeze_room_selection(Some(namespace), packages)?;
+    let engine = content_native_loader::start_locked_engine(
+        seed,
+        players as usize,
+        content_native_loader::LockedStartMode::Prototype,
+        &verified,
+    )
+    .map_err(|e| format!("原生房间建局失败: {e}"))?;
+    let mut packs = Vec::with_capacity(verified.copies().len());
+    for copy in verified.copies() {
+        packs.push(content.load_frozen(copy)?.pack);
     }
-    let refs: Vec<&engine_native::content::extension::ExtensionPack> = packs.iter().collect();
-    let engine = if refs.is_empty() {
-        engine_native::Engine::new(seed, players as usize)
-    } else {
-        engine_native::Engine::new_with_extensions(seed, players as usize, &refs)
-            .map_err(|e| format!("原生房间建局失败: {e:?}"))?
-    };
-    let mut session = NativeRoomSession::new_with_packs(engine, packs, players);
-    session.set_frozen_packages(frozen);
+    let mut session = NativeRoomSession::new_locked(engine, verified, packs, players);
     session.set_choice_timeout_secs(choice_timeout_secs)?;
     session.sync_deadline()?;
     let hash = crate::native_room_store::password_hash(id, &password);

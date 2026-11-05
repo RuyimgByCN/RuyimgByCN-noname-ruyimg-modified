@@ -44,9 +44,9 @@ function validatorClient(): Promise<EngineClient> {
   });
   return validator;
 }
-async function deepValidate(canonicalPackJson: string): Promise<void> {
+async function deepValidate(rawPackJson: string) {
   const client = await validatorClient();
-  await client.validatePackage(canonicalPackJson);
+  return client.validateFrozenPackage(rawPackJson);
 }
 
 function refresh() {
@@ -70,17 +70,16 @@ function run(fn: () => void) {
  * 结构层 → Worker 深层校验（Rust）→ 提交；任一环节拒绝都不改写存储。
  * 本地导入的包记为未签名（本地验签暂缓）。
  */
-async function importFromText() {
+async function importRawText(text: string, clearTextarea: boolean) {
   if (importing.value) return;
   error.value = "";
   notice.value = "";
   importing.value = true;
   try {
-    const text = importText.value;
     await importExtensionPackageValidated(text, deepValidate);
     const manifest = (JSON.parse(text) as { manifest: { namespace: string; package_id: string; version: string } }).manifest;
     notice.value = `已导入 ${manifest.namespace}/${manifest.package_id} @ ${manifest.version}（未签名）`;
-    importText.value = "";
+    if (clearTextarea) importText.value = "";
     refresh();
   } catch (e) {
     error.value = e instanceof Error ? e.message : String(e);
@@ -89,13 +88,19 @@ async function importFromText() {
   }
 }
 
+async function importFromText() {
+  await importRawText(importText.value, true);
+}
+
 async function importFromFile(event: Event) {
   const input = event.target as HTMLInputElement;
   const file = input.files?.[0];
   if (!file) return;
   try {
-    importText.value = await file.text();
-    await importFromText();
+    const bytes = await file.arrayBuffer();
+    const decoder = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true });
+    const rawText = decoder.decode(bytes);
+    await importRawText(rawText, false);
   } catch (e) {
     error.value = e instanceof Error ? e.message : String(e);
   } finally {
