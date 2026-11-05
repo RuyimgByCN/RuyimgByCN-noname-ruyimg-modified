@@ -1,0 +1,12 @@
+
+running 7 tests
+test r05c_async_draw::r05c_kurou_exhausted_draw_detaches_instead_of_partial_hand ... ok
+test r05c_async_draw::r05c_kuanggu_trigger_log_precedes_async_draw_delivery ... ok
+test r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped ... ok
+test r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens ... ok
+test r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens ... ok
+test r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent ... ok
+test r05c_async_draw::r05c_senluo_discards_settle_before_async_draws ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 272 filtered out; finished in 0.09s
+

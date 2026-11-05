@@ -1,0 +1,1754 @@
+warning: unused imports: `choose_gain_other_skill`, `lose_gained_skill`, and `resolve_potheyun`
+  --> crates/engine-core/src/effect/mod.rs:12:5
+   |
+12 |     choose_gain_other_skill, lose_gained_skill, resolve_choose_gain_othe...
+   |     ^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^
+13 |     resolve_lose_gained_skill, resolve_potheyun, resolve_potheyun_pick,
+   |                                ^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `primitives::enable_equip_slot`
+  --> crates/engine-core/src/effect/mod.rs:21:16
+   |
+21 | pub(crate) use primitives::enable_equip_slot;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_xinfu_qiai`
+  --> crates/engine-core/src/effect/mod.rs:24:16
+   |
+24 | pub(crate) use primitives::resolve_xinfu_qiai;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_twxiongjun`
+  --> crates/engine-core/src/effect/mod.rs:62:16
+   |
+62 | pub(crate) use primitives::resolve_twxiongjun;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_yixiang`
+  --> crates/engine-core/src/effect/mod.rs:63:16
+   |
+63 | pub(crate) use primitives::resolve_yixiang;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_qiangyong`
+  --> crates/engine-core/src/effect/mod.rs:64:16
+   |
+64 | pub(crate) use primitives::resolve_qiangyong;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_duoduan`
+  --> crates/engine-core/src/effect/mod.rs:66:16
+   |
+66 | pub(crate) use primitives::resolve_duoduan;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `primitives::resolve_reliangyin`
+  --> crates/engine-core/src/effect/mod.rs:70:16
+   |
+70 | pub(crate) use primitives::resolve_reliangyin;
+   |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `commit_hand_compare`
+  --> crates/engine-core/src/effect/mod.rs:75:26
+   |
+75 |     commit_guanxing_top, commit_hand_compare, commit_hand_compare_between,
+   |                          ^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `RESOLVE_ZHENGSU_CHOICE` and `resolve_rechuhai_choice`
+   --> crates/engine-core/src/effect/mod.rs:145:31
+    |
+145 |     resolve_potzhouyu_choice, resolve_rechuhai_choice, skill_pile_def, ...
+    |                               ^^^^^^^^^^^^^^^^^^^^^^^
+...
+206 |     RESOLVE_ZHENGRONG_CUSTOM_CHOICE, RESOLVE_ZHENGSU_CHOICE, RESOLVE_ZH...
+    |                                      ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `Serialize`
+    --> crates/engine-core/src/state/turn.rs:1390:44
+     |
+1390 |     use serde::{Deserialize, Deserializer, Serialize, Serializer};
+     |                                            ^^^^^^^^^
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_tianxiang.rs:679:9
+    |
+679 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+  --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:90:9
+   |
+90 |     let skill = engine_api::SkillId::new(*skill);
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_3/resolve_resolve_lulve.rs:235:17
+    |
+235 |             let skill = engine_api::SkillId::new(*skill);
+    |                 ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_dctingxian.rs:199:13
+    |
+199 |         let target = PlayerId::new(payload[3]);
+    |             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: variable does not need to be mutable
+  --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_resolve_zhiba.rs:93:9
+   |
+93 |     let mut target = PlayerId::new(*payload.get(3).unwrap_or(&0));
+   |         ----^^^^^^
+   |         |
+   |         help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:103:9
+    |
+103 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:160:9
+    |
+160 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:344:5
+    |
+344 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:348:5
+    |
+348 |     skill: engine_api::SkillId,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:405:9
+    |
+405 |     let skill = engine_api::SkillId::new(*payload.get(5).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:575:9
+    |
+575 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:655:9
+    |
+655 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/settle_releiji_judgment.rs:702:9
+    |
+702 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:144:9
+    |
+144 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:198:9
+    |
+198 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:408:9
+    |
+408 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:596:9
+    |
+596 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:633:9
+    |
+633 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_qizhi_target.rs:710:9
+    |
+710 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+  --> crates/engine-core/src/command/resolve_choice/group_post_4/resolve_kuizhu_damage.rs:14:9
+   |
+14 |     let skill = engine_api::SkillId::new(*payload.get(3).unwrap_or(&0));
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `pile_zone`
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_twjuxiang_card.rs:726:9
+    |
+726 |     let pile_zone = tx
+    |         ^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_pile_zone`
+
+warning: unused variable: `phase`
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:352:9
+    |
+352 |     let phase = *payload.get(2).unwrap_or(&0);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_phase`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_qiaobian_discard.rs:354:9
+    |
+354 |     let skill = engine_api::SkillId::new(*payload.get(4).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/command/resolve_choice/group_post_5/resolve_resolve_xinkuangfu.rs:185:21
+    |
+185 |                 let mut next_payload = vec![
+    |                     ----^^^^^^^^^^^^
+    |                     |
+    |                     help: remove this `mut`
+
+warning: unused variable: `count`
+  --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_xinxingluan.rs:23:9
+   |
+23 |     let count = payload.get(6).copied().unwrap_or(0) as usize;
+   |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: unused variable: `draw`
+   --> crates/engine-core/src/command/resolve_choice/group_post_6/resolve_resolve_xinxingluan.rs:213:17
+    |
+213 |             let draw = tx
+    |                 ^^^^ help: if this is intentional, prefix it with an underscore: `_draw`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/open_equipment_pair_choice.rs:625:9
+    |
+625 |     let skill = engine_api::SkillId::new(payload[2]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:186:9
+    |
+186 |     let target = payload[5];
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:232:9
+    |
+232 |     let target = payload[6];
+    |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `kind`
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_biaozhao3.rs:292:9
+    |
+292 |     let kind = payload[4];
+    |         ^^^^ help: if this is intentional, prefix it with an underscore: `_kind`
+
+warning: unused variable: `mode`
+  --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_houfeng_choice.rs:19:9
+   |
+19 |     let mode = payload[3] as u8;
+   |         ^^^^ help: if this is intentional, prefix it with an underscore: `_mode`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/command/resolve_choice/group_post_9/resolve_tongduo_choice.rs:320:9
+    |
+320 |     let skill = engine_api::SkillId::new(payload[4]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `actor`
+   --> crates/engine-core/src/command/resolve_choice/group_pre_2/resolve_twniujin_custom.rs:513:9
+    |
+513 |     let actor = PlayerId::new(payload[1]);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_actor`
+
+warning: unreachable pattern
+   --> crates/engine-core/src/content/registry/default_view_as_card_count.rs:499:9
+    |
+474 |         ModifierValueSource::OwnerSkillPileCount => {
+    |         ---------------------------------------- matches all the relevant values
+...
+499 |         ModifierValueSource::OwnerSkillPileCount => "owner_skill_pile_c...
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+    = note: `#[warn(unreachable_patterns)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/begin_choose_compare_selected_hand_card.rs:496:5
+    |
+496 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_potzhouyu_choice.rs:442:9
+    |
+442 |     let mut options: Vec<_> = tx
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/zuozhan_distinct_basics_from_discard.rs:477:5
+    |
+477 |     skill: engine_api::SkillId,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:414:9
+    |
+414 |     let skill = engine_api::SkillId::new(skill_raw);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:633:9
+    |
+633 |     let skill = engine_api::SkillId::new(skill_raw);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `count`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/twmouzhi_card_color.rs:110:5
+    |
+110 |     count: u32,
+    |     ^^^^^ help: if this is intentional, prefix it with an underscore: `_count`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_yangming_round.rs:255:9
+    |
+255 |     let mut payload = vec![
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_yangming_round.rs:733:17
+    |
+733 |             let mut events = crate::effect::draw_cards(tx, player, 1)?;
+    |                 ----^^^^^^
+    |                 |
+    |                 help: remove this `mut`
+
+warning: unused variable: `player`
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:61:5
+   |
+61 |     player: PlayerId,
+   |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `dodger`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:553:5
+    |
+553 |     dodger: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_dodger`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcmoukui_stage.rs:615:17
+    |
+615 | ...   let mut drawn = crate::effect::draw_cards(tx, player, draw_n)?;
+    |           ----^^^^^
+    |           |
+    |           help: remove this `mut`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_olqiaozhi.rs:325:5
+    |
+325 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_mbzhenann.rs:124:9
+    |
+124 |     let mut events = crate::effect::draw_cards(tx, source, 2)?;
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_mbzhenann.rs:445:5
+    |
+445 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `card`
+  --> crates/engine-core/src/effect/primitives/pack_ddd_2/resolve_ddd_zhaoang.rs:11:5
+   |
+11 |     card: CardId,
+   |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:590:9
+    |
+590 |     let mut effects = vec![EffectRequest::RevealCards {
+    |         ----^^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `view`
+   --> crates/engine-core/src/effect/primitives/pack_huicui/resolve_dcchiying.rs:515:5
+    |
+515 |     view: Vec<CardId>,
+    |     ^^^^ help: if this is intentional, prefix it with an underscore: `_view`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_jsrg.rs:559:9
+    |
+559 |     let skill = engine_api::SkillId::new(*skill);
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_refresh/choose_gain_target_card_alternate_zone_then_target_draw.rs:534:9
+    |
+534 |     let skill = engine_api::SkillId::new(*payload.get(2).unwrap_or(&0));
+    |         ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:170:5
+    |
+170 |     mut targets: Vec<PlayerId>,
+    |     ----^^^^^^^
+    |     |
+    |     help: remove this `mut`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:587:5
+    |
+587 |     target: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_zhiba.rs:738:5
+    |
+738 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:500:5
+    |
+500 |     target: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `target`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_1/guanxing_top_by_falu_marks.rs:619:5
+    |
+619 |     target: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_target`
+
+warning: unused variable: `targets`
+  --> crates/engine-core/src/effect/primitives/pack_shenhua_1/resolve_haoshi.rs:85:5
+   |
+85 |     targets: &[PlayerId],
+   |     ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_targets`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:550:52
+    |
+550 | ..._count(tx: &Transaction, player: PlayerId) -> u32 {
+    |                             ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `value`
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/liangyin_mark.rs:194:23
+    |
+194 |                 .map(|value| vec![card])
+    |                       ^^^^^ help: if this is intentional, prefix it with an underscore: `_value`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/liangyin_mark.rs:532:9
+    |
+532 |     let mut events = run_effects(
+    |         ----^^^^^^
+    |         |
+    |         help: remove this `mut`
+
+warning: unused variable: `kongsheng_def`
+ --> crates/engine-core/src/effect/primitives/pack_shenhua_2/resolve_liangyin.rs:8:5
+  |
+8 |     kongsheng_def: engine_api::SkillDefId,
+  |     ^^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_kongsheng_def`
+
+warning: unused variable: `source`
+   --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_spchijie.rs:155:5
+    |
+155 |     source: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_source`
+
+warning: variable does not need to be mutable
+   --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xinyangjie.rs:612:17
+    |
+612 | ...   let mut events = add_skill(tx, target, engine_api::SkillDefId::ne...
+    |           ----^^^^^^
+    |           |
+    |           help: remove this `mut`
+
+warning: unused variable: `action`
+  --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:15:5
+   |
+15 |     action: u8,
+   |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_action`
+
+warning: unused variable: `card`
+    --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xiongshu.rs:1051:5
+     |
+1051 |     card: CardId,
+     |     ^^^^ help: if this is intentional, prefix it with an underscore: `_card`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/pack_tw_1/resolve_twtanfeng.rs:516:24
+    |
+516 |     let [player, _sub, skill] = payload else {
+    |                        ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+   --> crates/engine-core/src/effect/primitives/pack_xianding_2/continue_dcsbyingmou_spree.rs:685:5
+    |
+685 |     player: PlayerId,
+    |     ^^^^^^ help: if this is intentional, prefix it with an underscore: `_player`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/choose_others_add_mark.rs:587:18
+    |
+587 |     let [player, skill] = payload else {
+    |                  ^^^^^ help: if this is intentional, prefix it with an underscore: `_skill`
+
+warning: unused variable: `player`
+  --> crates/engine-core/src/effect/primitives/dispatch_draw_cards.rs:21:49
+   |
+21 |         EffectRequest::SetDrawPhaseFromBottom { player } => {
+   |                                                 ^^^^^^ help: try ignoring the field: `player: _`
+
+warning: unused variable: `skill`
+   --> crates/engine-core/src/effect/primitives/dispatch_resolve_twxiawei_resolvers.rs:883:13
+    |
+883 |             skill,
+    |             ^^^^^ help: try ignoring the field: `skill: _`
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:698:9
+    |
+691 | /         EffectRequest::ResolveQiaobian {
+692 | |             player,
+693 | |             phase,
+694 | |             stage,
+695 | |             skill,
+696 | |         } => resolve_qiaobian(tx, player, phase, stage, skill),
+    | |_________- matches all the relevant values
+697 |           // ponytail: 巧变（ABI 559）由 C 段（omp）实现中，st...
+698 |           EffectRequest::ResolveQiaobian { .. } => Ok(Vec::new()),
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:728:9
+    |
+728 | ...   EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } =>...
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+    |
+note: multiple earlier patterns match some of the same values
+   --> crates/engine-core/src/effect/primitives/dispatch_resolve_zhangjian_resolvers.rs:728:9
+    |
+717 |           EffectRequest::BanUseAgainst { user, target } => ban_use_against(tx, user, t...
+    |           --------------------------------------------- matches some of the same values
+718 |
+719 | /         EffectRequest::ResolveJuzhan {
+720 | |             player,
+721 | |             source,
+722 | |             card,
+...   |
+725 | |             skill,
+726 | |         } => resolve_juzhan(tx, player, source, card, &targets, stage, skill),
+    | |_________- matches some of the same values
+727 |           // ponytail: 并行会话中间态（ban-use-pairs / 拒战）stub 保持编译通过。
+728 |           EffectRequest::BanUseAgainst { .. } | EffectRequest::ResolveJuzhan { .. } =>...
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ collectively making this unreachable
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/source_skill.rs:462:11
+    |
+343 |         | EffectRequest::ResolveOllinjie { skill, .. }
+    |           -------------------------------------------- matches all the relevant values
+...
+462 |         | EffectRequest::ResolveOllinjie { skill, .. }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/source_skill.rs:463:11
+    |
+346 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+    |           -------------------------------------------------- matches all the relevant values
+...
+463 |         | EffectRequest::ChooseTargetGainMaxHp { skill, .. }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/source_skill.rs:464:11
+    |
+347 |         | EffectRequest::GainTargetHandCard { skill, .. }
+    |           ----------------------------------------------- matches all the relevant values
+...
+464 |         | EffectRequest::GainTargetHandCard { skill, .. } => skill.raw(),
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/effect/source_skill.rs:496:11
+    |
+495 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+    |           -------------------------------------------------------- matches all the relevant values
+496 |         | EffectRequest::GiveSelectedThenRecoverSelf { skill, .. }
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers.rs:336:9
+    |
+322 | /         EffectRequest::ResolveSpshanxi {
+323 | |             player,
+324 | |             target,
+325 | |             stage,
+326 | |             skill,
+327 | |         } => {
+    | |_________- matches all the relevant values
+...
+336 |           EffectRequest::ResolveSpshanxi { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers.rs:355:9
+    |
+341 | /         EffectRequest::ResolveSpshanxiSuoming {
+342 | |             player,
+343 | |             actor,
+344 | |             stage,
+345 | |             skill,
+346 | |         } => {
+    | |_________- matches all the relevant values
+...
+355 |           EffectRequest::ResolveSpshanxiSuoming { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:141:9
+    |
+123 | /         EffectRequest::ResolveRechuhai {
+124 | |             player,
+125 | |             target,
+126 | |             card,
+...   |
+129 | |             skill,
+130 | |         } => {
+    | |_________- matches all the relevant values
+...
+141 |           EffectRequest::ResolveRechuhai { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+   --> crates/engine-core/src/hash/effects_choose_gain_discard_card_by_kind_resolvers_r_z.rs:165:9
+    |
+147 | /         EffectRequest::ResolveXiongshu {
+148 | |             player,
+149 | |             target,
+150 | |             card,
+...   |
+153 | |             skill,
+154 | |         } => {
+    | |_________- matches all the relevant values
+...
+165 |           EffectRequest::ResolveXiongshu { .. } => {
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no value can reach this
+
+warning: unreachable pattern
+  --> crates/engine-core/src/hash/effects_draw_cards.rs:19:9
+   |
+ 7 | /         EffectRequest::ModifyCurrentDamage {
+ 8 | |             player,
+ 9 | |             delta,
+10 | |             skill,
+11 | |         } => {
+   | |_________- matches all the relevant values
+...
+19 | /         EffectRequest::ModifyCurrentDamage {
+20 | |             player,
+21 | |             delta,
+22 | |             skill,
+23 | |         } => {
+   | |_________^ no value can reach this
+
+warning: unused variable: `flipped`
+   --> crates/engine-core/src/hash/effects_draw_cards.rs:630:13
+    |
+630 |             flipped,
+    |             ^^^^^^^ help: try ignoring the field: `flipped: _`
+
+warning: function `validate_sha_target` is never used
+   --> crates/engine-core/src/command/play/play_as_kind_with_extra_damage_flags.rs:366:15
+    |
+366 | pub(crate) fn validate_sha_target(
+    |               ^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `wuxie_tokens` is never used
+   --> crates/engine-core/src/command/play/use_youdishenru_for_saved_sha.rs:291:15
+    |
+291 | pub(crate) fn wuxie_tokens(state: &crate::state::GameState, player: Pla...
+    |               ^^^^^^^^^^^^
+
+warning: constant `RESOLVE_TWMOUZHI_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:39:7
+   |
+39 | const RESOLVE_TWMOUZHI_MAGIC: u32 = 0x4D4F_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_BIAOZHAO2_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:61:7
+   |
+61 | const RESOLVE_BIAOZHAO2_MAGIC: u32 = 0x425A_0002;
+   |       ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_DCNIJI_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:63:7
+   |
+63 | const RESOLVE_DCNIJI_MAGIC: u32 = 0x4E4A_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_QINMIAN_MAGIC` is never used
+  --> crates/engine-core/src/effect/primitives/pack_bingshi_1.rs:77:7
+   |
+77 | const RESOLVE_QINMIAN_MAGIC: u32 = 0x514D_0001;
+   |       ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `suit_from_tag` is never used
+   --> crates/engine-core/src/effect/primitives/pack_bingshi_1/resolve_dcbingji.rs:140:15
+    |
+140 | pub(crate) fn suit_from_tag(tag: u32) -> engine_api::Suit {
+    |               ^^^^^^^^^^^^^
+
+warning: function `mingren_color_mask` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:353:15
+    |
+353 | pub(crate) fn mingren_color_mask(
+    |               ^^^^^^^^^^^^^^^^^^
+
+warning: function `kongsheng_pile_cards_by_def` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shenhua_2/qizhi_count.rs:779:15
+    |
+779 | pub(crate) fn kongsheng_pile_cards_by_def(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: constant `RESOLVE_ZHENGSU_CHOICE` is never used
+  --> crates/engine-core/src/effect/primitives/pack_shiji.rs:27:18
+   |
+27 | pub(crate) const RESOLVE_ZHENGSU_CHOICE: u32 = 0xDCDA_4320;
+   |                  ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `resolve_rechuhai_choice` is never used
+   --> crates/engine-core/src/effect/primitives/pack_shiji/resolve_xinyangjie.rs:672:15
+    |
+672 | pub(crate) fn resolve_rechuhai_choice(
+    |               ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused `Result` that must be used
+   --> crates/engine-core/src/command/resolve_choice/group_post_8/resolve_resolve_mbbeiming.rs:284:13
+    |
+284 | ...   crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+    |       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: this `Result` may be an `Err` variant, which should be handled
+    = note: `#[warn(unused_must_use)]` (part of `#[warn(unused)]`) on by default
+help: use `let _ = ...` to ignore the resulting value
+    |
+284 |             let _ = crate::command::play::make_saved_sha_target_unrespondable(tx, source, card, player);
+    |             +++++++
+
+warning: `engine-core` (lib) generated 107 warnings (run `cargo fix --lib -p engine-core` to apply 83 suggestions)
+warning: unused variable: `c`
+   --> crates/engine-ai/src/fork_strategy.rs:166:78
+    |
+166 | ...plied_commands.iter().map(|c| 100).sum::<u64>()
+    |                               ^ help: if this is intentional, prefix it with an underscore: `_c`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: struct `ForkMeta` is never constructed
+  --> crates/engine-ai/src/fork.rs:69:12
+   |
+69 | pub struct ForkMeta {
+   |            ^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `assert_no_foreign_hand_faces` is never used
+  --> crates/engine-ai/src/info_set.rs:56:8
+   |
+56 | pub fn assert_no_foreign_hand_faces(view: &InformationSetView) -> bool {
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `engine-ai` (lib) generated 3 warnings (run `cargo fix --lib -p engine-ai` to apply 1 suggestion)
+warning: unused import: `NativeChoiceDeadline`
+  --> apps/game-server/src/room_native.rs:30:42
+   |
+30 | pub use timeout::{validate_timeout_secs, NativeChoiceDeadline, NativeTim...
+   |                                          ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `bootstrap` is never used
+  --> apps/game-server/src/main.rs:77:4
+   |
+77 | fn bootstrap(cfg: &ServerConfig) -> Arc<Lobby> {
+   |    ^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: field `max_cmds_per_sec` is never read
+  --> apps/game-server/src/config.rs:17:9
+   |
+ 7 | pub struct ServerConfig {
+   |            ------------ field in this struct
+...
+17 |     pub max_cmds_per_sec: u32,
+   |         ^^^^^^^^^^^^^^^^
+   |
+   = note: `ServerConfig` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: methods `enable_package`, `revoke_package`, `rollback`, and `load_reference` are never used
+   --> apps/game-server/src/native.rs:109:12
+    |
+ 40 | impl NativeContent {
+    | ------------------ methods in this implementation
+...
+109 |     pub fn enable_package(
+    |            ^^^^^^^^^^^^^^
+...
+128 |     pub fn revoke_package(
+    |            ^^^^^^^^^^^^^^
+...
+140 |     pub fn rollback(&self) -> Result<Vec<NativePackageInfo>, String> {
+    |            ^^^^^^^^
+...
+305 |     pub fn load_reference(&self, reference: &str) -> Result<ExtensionPa...
+    |            ^^^^^^^^^^^^^^
+
+warning: methods `dir`, `load_all`, and `by_id` are never used
+   --> apps/game-server/src/native_room_store.rs:147:12
+    |
+136 | impl NativeRoomStore {
+    | -------------------- methods in this implementation
+...
+147 |     pub fn dir(&self) -> &Path {
+    |            ^^^
+...
+395 |     pub fn load_all(&self) -> Result<Vec<StoredRoom>, String> {
+    |            ^^^^^^^^
+...
+420 |     pub fn by_id(&self) -> Result<HashMap<u64, StoredRoom>, String> {
+    |            ^^^^^
+
+warning: field `path` is never read
+  --> apps/game-server/src/native_room_store/lock.rs:18:5
+   |
+17 | pub struct StoreWriterLock {
+   |            --------------- field in this struct
+18 |     path: PathBuf,
+   |     ^^^^
+   |
+   = note: `StoreWriterLock` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: method `path` is never used
+  --> apps/game-server/src/native_room_store/lock.rs:43:12
+   |
+22 | impl StoreWriterLock {
+   | -------------------- method in this implementation
+...
+43 |     pub fn path(&self) -> &Path {
+   |            ^^^^
+
+warning: struct `OutboxMessage` is never constructed
+  --> apps/game-server/src/outbox.rs:15:12
+   |
+15 | pub struct OutboxMessage {
+   |            ^^^^^^^^^^^^^
+
+warning: enum `OutboxKind` is never used
+  --> apps/game-server/src/outbox.rs:33:10
+   |
+33 | pub enum OutboxKind {
+   |          ^^^^^^^^^^
+
+warning: struct `DurableOutbox` is never constructed
+  --> apps/game-server/src/outbox.rs:48:12
+   |
+48 | pub struct DurableOutbox {
+   |            ^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/src/outbox.rs:61:12
+    |
+ 59 | impl DurableOutbox {
+    | ------------------ associated items in this implementation
+ 60 |     /// Create a new empty outbox.
+ 61 |     pub fn new() -> Self {
+    |            ^^^
+...
+ 66 |     pub fn enqueue(&mut self, match_id: u64, kind: OutboxKind, payload:...
+    |            ^^^^^^^
+...
+ 81 |     pub fn pending(&self) -> &[OutboxMessage] {
+    |            ^^^^^^^
+...
+ 86 |     pub fn mark_delivered(&mut self, message_id: u64) {
+    |            ^^^^^^^^^^^^^^
+...
+ 96 |     pub fn mark_failed(&mut self, message_id: u64) {
+    |            ^^^^^^^^^^^
+...
+103 |     pub fn retry_failed(&mut self) -> usize {
+    |            ^^^^^^^^^^^^
+...
+108 |     pub fn is_delivered(&self, message_id: u64) -> bool {
+    |            ^^^^^^^^^^^^
+...
+113 |     pub fn pending_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^
+...
+118 |     pub fn delivered_count(&self) -> usize {
+    |            ^^^^^^^^^^^^^^^
+...
+123 |     pub fn drain_delivered(&mut self) -> Vec<OutboxMessage> {
+    |            ^^^^^^^^^^^^^^^
+
+warning: constant `WAL_BLOCK_DOMAIN` is never used
+  --> apps/game-server/src/persist.rs:32:7
+   |
+32 | const WAL_BLOCK_DOMAIN: &[u8] = b"noname-next/wal-block/v1";
+   |       ^^^^^^^^^^^^^^^^
+
+warning: method `compute_hash` is never used
+  --> apps/game-server/src/persist.rs:58:12
+   |
+56 | impl WalBlock {
+   | ------------- method in this implementation
+57 |     /// Compute the canonical hash of a b...
+58 |     pub fn compute_hash(&self) -> [u8; 32] {
+   |            ^^^^^^^^^^^^
+
+warning: fields `blocks`, `block_signatures`, and `result_record` are never read
+   --> apps/game-server/src/persist.rs:124:5
+    |
+114 | pub struct RoomPersist {
+    |            ----------- fields in this struct
+...
+124 |     blocks: Vec<WalBlock>,
+    |     ^^^^^^
+125 |     /// Signatures for each block (parallel to `blocks`).
+126 |     block_signatures: Vec<WalBlockSignature>,
+    |     ^^^^^^^^^^^^^^^^
+127 |     /// Final result record (set when match completes).
+128 |     result_record: Option<MatchResultRecord>,
+    |     ^^^^^^^^^^^^^
+    |
+    = note: `RoomPersist` has derived impls for the traits `Clone` and `Debug`, but these are intentionally ignored during dead code analysis
+
+warning: constant `DEFAULT_BLOCK_SIZE` is never used
+   --> apps/game-server/src/persist.rs:132:11
+    |
+132 | pub const DEFAULT_BLOCK_SIZE: usize = 16;
+    |           ^^^^^^^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> apps/game-server/src/persist.rs:198:12
+    |
+134 | impl RoomPersist {
+    | ---------------- associated items in this implementation
+...
+198 |     pub fn build_blocks(&self, block_size: usize) -> Vec<WalBlock> {
+    |            ^^^^^^^^^^^^
+...
+224 |     pub fn seal_blocks(&mut self, blocks: Vec<WalBlock>, key: &str, key...
+    |            ^^^^^^^^^^^
+...
+236 |     pub fn wal_root_hash(&self) -> [u8; 32] {
+    |            ^^^^^^^^^^^^^
+...
+244 |     pub fn blocks(&self) -> &[WalBlock] {
+    |            ^^^^^^
+...
+249 |     pub fn block_signatures(&self) -> &[WalBlockSignature] {
+    |            ^^^^^^^^^^^^^^^^
+...
+257 |     pub fn finalize_result(
+    |            ^^^^^^^^^^^^^^^
+...
+284 |     pub fn result_record(&self) -> Option<&MatchResultRecord> {
+    |            ^^^^^^^^^^^^^
+...
+293 |     pub fn verify_block_chain(blocks: &[WalBlock]) -> Result<(), usize> {
+    |            ^^^^^^^^^^^^^^^^^^
+...
+308 |     pub fn verify_block_signatures(
+    |            ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `sign_block_hash` is never used
+   --> apps/game-server/src/persist.rs:331:4
+    |
+331 | fn sign_block_hash(block_hash: &[u8; 32], key_arr: &[u8; 32], key_id: &...
+    |    ^^^^^^^^^^^^^^^
+
+warning: function `key_bytes` is never used
+   --> apps/game-server/src/persist.rs:345:4
+    |
+345 | fn key_bytes(key: &str) -> [u8; 32] {
+    |    ^^^^^^^^^
+
+warning: function `recover_engine` is never used
+   --> apps/game-server/src/persist.rs:362:8
+    |
+362 | pub fn recover_engine(persist: &RoomPersist) -> Result<engine_core::Eng...
+    |        ^^^^^^^^^^^^^^
+
+warning: variant `ChooseGeneral` is never constructed
+  --> apps/game-server/src/room.rs:53:5
+   |
+17 | pub enum RoomMsg {
+   |          ------- variant in this enum
+...
+53 |     ChooseGeneral {
+   |     ^^^^^^^^^^^^^
+   |
+   = note: `RoomMsg` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+
+warning: field `id` is never read
+   --> apps/game-server/src/room.rs:101:9
+    |
+ 99 | pub struct RoomHandle {
+    |            ---------- field in this struct
+100 |     /// Room id.
+101 |     pub id: u64,
+    |         ^^
+    |
+    = note: `RoomHandle` has a derived impl for the trait `Clone`, but this is intentionally ignored during dead code analysis
+
+warning: function `spawn_room` is never used
+   --> apps/game-server/src/room.rs:121:8
+    |
+121 | pub fn spawn_room(
+    |        ^^^^^^^^^^
+
+warning: associated function `new` is never used
+   --> apps/game-server/src/room_native.rs:167:12
+    |
+137 | impl NativeRoomSession {
+    | ---------------------- associated function in this implementation
+...
+167 |     pub fn new(engine: Engine, max_seats: u8) -> Self {
+    |            ^^^
+
+warning: function `set_seat_timeout_secs` is never used
+  --> apps/game-server/src/room_native_actor.rs:29:8
+   |
+29 | pub fn set_seat_timeout_secs(secs: u64) {
+   |        ^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_room_native` is never used
+  --> apps/game-server/src/room_native_actor.rs:86:8
+   |
+86 | pub fn spawn_room_native(
+   |        ^^^^^^^^^^^^^^^^^
+
+warning: function `spawn_room_native_with_password` is never used
+  --> apps/game-server/src/room_native_actor.rs:96:8
+   |
+96 | pub fn spawn_room_native_with_password(
+   |        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `restore_room_from_disk` is never used
+   --> apps/game-server/src/room_native_actor.rs:145:8
+    |
+145 | pub fn restore_room_from_disk(
+    |        ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: function `join_reply_channel` is never used
+   --> apps/game-server/src/room_native_actor.rs:876:8
+    |
+876 | pub fn join_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^
+
+warning: function `submit_reply_channel` is never used
+   --> apps/game-server/src/room_native_actor.rs:884:8
+    |
+884 | pub fn submit_reply_channel() -> (
+    |        ^^^^^^^^^^^^^^^^^^^^
+
+warning: function `idem` is never used
+   --> apps/game-server/src/room_native_actor.rs:892:8
+    |
+892 | pub fn idem(key: u64) -> IdempotencyKey {
+    |        ^^^^
+
+warning: function `expected` is never used
+   --> apps/game-server/src/room_native_actor.rs:897:8
+    |
+897 | pub fn expected(revision: u64) -> ExpectedRevision {
+    |        ^^^^^^^^
+
+warning: `game-server` (bin "game-server") generated 31 warnings (run `cargo fix --bin "game-server" -p game-server` to apply 1 suggestion)
+warning: function `legal_actions_for` is never used
+   --> apps/game-server/tests/../src/native_view.rs:370:8
+    |
+370 | pub fn legal_actions_for(engine: &Engine, seat: ApiPlayerId) -> Vec<Leg...
+    |        ^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `game-server` (test "approved_b_metadata") generated 1 warning
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.11s
+     Running tests/approved_b_metadata.rs (/private/tmp/noname-r05/target/debug/deps/approved_b_metadata-36c74e33715fb803)
+
+running 7 tests
+test r05h_choice_context_and_r05_effects_validate_across_rust_readers ... ok
+test ws5_old_and_new_rust_readers_accept_both_payload_generations ... ok
+test both_slots_include_def_zero_only_when_authorized ... ok
+test actual_ws5_snapshot_bytes_round_trip_old_and_new_rust_readers ... ok
+test native_view::c9i_wide_boundary::c9i_supported_wide_zhangwu_preserves_host_cardinality ... ok
+test native_view::c9i_frozen_positive::c9i_actual_private_choice_existing_host_tokens ... ok
+test real_choices_keep_precise_kind_and_prompt_through_archive ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Compiling serde_core v1.0.228
+   Compiling libc v0.2.186
+   Compiling icu_normalizer_data v2.2.0
+   Compiling icu_properties_data v2.2.0
+   Compiling parking_lot_core v0.9.12
+   Compiling string_cache_codegen v0.6.1
+   Compiling phf_macros v0.13.1
+   Compiling darling_core v0.23.0
+   Compiling serde v1.0.228
+   Compiling zerofrom v0.1.8
+   Compiling serde_json v1.0.150
+   Compiling derive_more-impl v2.1.1
+   Compiling cssparser-macros v0.6.1
+   Compiling thiserror-impl v1.0.69
+   Compiling serde_derive_internals v0.29.1
+   Compiling http v1.4.2
+   Compiling yoke v0.8.3
+   Compiling wasm-bindgen v0.2.126
+   Compiling web_atoms v0.2.5
+   Compiling dirs-sys v0.5.0
+   Compiling zerovec v0.11.6
+   Compiling zerotrie v0.2.4
+   Compiling phf v0.13.1
+   Compiling engine-api v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-api)
+   Compiling schemars_derive v0.8.22
+   Compiling parking_lot v0.12.5
+   Compiling derive_more v2.1.1
+   Compiling cssparser v0.36.0
+   Compiling resource-schema v0.1.0 (/private/tmp/noname-r05/worktree/crates/resource-schema)
+   Compiling tinystr v0.8.3
+   Compiling potential_utf v0.1.5
+   Compiling thiserror v1.0.69
+   Compiling licensing-schema v0.1.0 (/private/tmp/noname-r05/worktree/crates/licensing-schema)
+   Compiling string_cache v0.9.0
+   Compiling dirs v6.0.0
+   Compiling tokio v1.52.3
+   Compiling icu_collections v2.2.0
+   Compiling icu_locale_core v2.2.0
+   Compiling serde_spanned v1.1.1
+   Compiling semver v1.0.28
+   Compiling uuid v1.23.4
+   Compiling darling_macro v0.23.0
+   Compiling toml_datetime v1.1.1+spec-1.1.0
+   Compiling selectors v0.36.1
+   Compiling toml_datetime v0.7.5+spec-1.1.0
+   Compiling erased-serde v0.4.10
+   Compiling rustc_version v0.4.1
+   Compiling cargo-platform v0.1.9
+   Compiling indexmap v1.9.3
+   Compiling icu_provider v2.2.0
+   Compiling darling v0.23.0
+   Compiling markup5ever v0.38.0
+   Compiling toml v1.1.2+spec-1.1.0
+   Compiling cfb v0.7.3
+   Compiling jsonptr v0.6.3
+   Compiling camino v1.2.4
+   Compiling serde-untagged v0.1.9
+   Compiling toml v0.9.12+spec-1.1.0
+   Compiling plist v1.10.0
+   Compiling swift-rs v1.0.7
+   Compiling serde_with_macros v3.21.0
+   Compiling icu_normalizer v2.2.0
+   Compiling icu_properties v2.2.0
+   Compiling rule-api v0.1.0 (/private/tmp/noname-r05/worktree/crates/rule-api)
+   Compiling html5ever v0.38.0
+   Compiling cargo_metadata v0.19.2
+   Compiling json-patch v3.0.1
+   Compiling diagnostics v0.1.0 (/private/tmp/noname-r05/worktree/crates/diagnostics)
+   Compiling infer v0.19.0
+   Compiling embed-resource v3.0.11
+   Compiling cargo_toml v0.22.3
+   Compiling tauri-winres v0.3.6
+   Compiling dom_query v0.27.0
+   Compiling serde_with v3.21.0
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+   Compiling schemars v0.8.22
+   Compiling urlpattern v0.3.0
+   Compiling tauri-utils v2.9.3
+   Compiling tauri-build v2.6.3
+   Compiling desktop-client v0.1.0 (/private/tmp/noname-r05/worktree/apps/desktop-client)
+   Compiling rule-vm v0.1.0 (/private/tmp/noname-r05/worktree/crates/rule-vm)
+   Compiling engine-native-kernel v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-kernel)
+   Compiling content-schema v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-schema)
+   Compiling engine-native-content v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+   Compiling content-runtime v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-runtime)
+   Compiling content-native-loader v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-native-loader)
+   Compiling engine-native-wasm v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-wasm)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 21.38s
+     Running unittests src/lib.rs (/private/tmp/noname-r05/target/debug/deps/desktop_client-708eb709015eaf47)
+
+running 12 tests
+test mobile::tests::touch_target_minimum ... ok
+test mobile::tests::background_policy_actions ... ok
+test mobile::tests::android_checklist_has_6_items ... ok
+test mobile::tests::safe_area_css_vars ... ok
+test mobile::tests::ios_checklist_has_6_items ... ok
+test mobile::tests::user_agent_detection ... ok
+test mobile::tests::shell_config_css_vars ... ok
+test mobile::tests::checklist_all_passed ... ok
+test mobile::tests::checklist_has_failure ... ok
+test native_engine_host::tests::close_allows_the_executing_command_but_rejects_queued_commands ... ok
+test tests::freeze_blocks_install ... ok
+test tests::signed_install_via_host ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+     Running tests/native_engine_host.rs (/private/tmp/noname-r05/target/debug/deps/native_engine_host-115bce6024f29dbe)
+
+running 6 tests
+test independent_clients_do_not_reset_each_others_sessions_and_close_is_controlled ... ok
+test host_owns_a_single_ordered_command_stream_and_is_send_sync ... ok
+test host_projects_authority_candidates_and_observer_privacy ... ok
+test source_actual_native_choice_reaches_desktop_host_only_for_owner ... ok
+test host_requests_initialize_and_reject_invalid_input_without_losing_state ... ok
+test host_full_identity_trajectory_matches_session_and_existing_binding_and_cross_restores ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.50s
+
+     Running tests/native_planner_measurement.rs (/private/tmp/noname-r05/target/debug/deps/native_planner_measurement-bd2a5a3f405bc811)
+
+running 1 test
+test actual_single_seat_planning_compares_existing_pools_and_native_clock ... ignored, native wall-clock measurement; run explicitly with --ignored --nocapture
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests desktop_client
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+> noname-next-web-client@0.1.0 typecheck /private/tmp/noname-r05/worktree/apps/web-client
+> vue-tsc --noEmit
+
+src/worker/engine.worker.ts(7,34): error TS2307: Cannot find module '../wasm-pkg/engine_wasm.js' or its corresponding type declarations.
+src/worker/nativeBackend.ts(32,56): error TS2307: Cannot find module './native-pkg/engine_native_wasm.js' or its corresponding type declarations.
+ ELIFECYCLE  Command failed with exit code 2.
+
+> noname-next-web-client@0.1.0 typecheck /private/tmp/noname-r05/worktree/apps/web-client
+> vue-tsc --noEmit
+
+
+> noname-next-web-client@0.1.0 test /private/tmp/noname-r05/worktree/apps/web-client
+> node --import ./scripts/ts-register.mjs --test
+
+✔ u32 choice counts reject malformed fields before host acceptance (1.373125ms)
+✔ two slots preserve def zero and defaults accept old payloads (0.404917ms)
+✔ canonical kinds and prompts reach real envelope conversion (0.300459ms)
+✔ metadata wrong types refuse explicitly at local JSON boundary (0.20475ms)
+✔ old functional TypeScript reader ignores extra metadata (21.100125ms)
+✔ production prompt literals and extension keys have readable presentation without internal keys (24.063291ms)
+✖ r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads (0.695083ms)
+✔ desktop builds both WASM engines before the frontend, forcing native web output (96.41875ms)
+✔ Windows desktop runs pnpm.cmd through a shell (43.047542ms)
+✔ a failed native build prevents publishing a frontend with a stale native package (53.863917ms)
+✔ native build creates a missing package from source with portable PATH and argument boundaries (42.588542ms)
+✔ native build failure preserves the previous usable package and clears temporary output (55.289917ms)
+✔ native Node smoke target remains available without shell interpolation (62.7675ms)
+✔ legacy build prepends rustup PATH even when the cargo executable has a Windows suffix (53.181875ms)
+✔ MSI keeps the Chinese product name with the matching WiX locale (0.195875ms)
+✔ Linux separates the package id from the Chinese window and launcher names (0.565958ms)
+✔ Tauri hooks resolve the actual sibling web client from the desktop crate (0.160041ms)
+✔ 实测仓库：包清单由实际数据推导，目录项全部可回查 (7.567125ms)
+✔ 目录项与包元数据不一致会被判失败 (3.150458ms)
+✔ 坏 npack、缺字段与重复包键会被判失败 (11.131542ms)
+✔ 候选回包 → 渲染行：名称、技能、稳定顺序（且不改写输入） (19.91275ms)
+✔ 空候选是显式空状态，不是错误也不是静默白屏 (4.175958ms)
+✔ 畸形候选：逐项报错并清空列表，不把坏数据过滤成更小候选集 (9.658333ms)
+✔ 候选拉取失败保留原始错误文本（含旧产物 rebuild 提示） (0.142583ms)
+✔ 重新加载中保留旧候选但清掉旧错误 (0.078625ms)
+✔ 座位投影：只取目标座位，提取原生技能名与 id (0.1975ms)
+✔ 绑定新对局座位：清掉最近装配与投影，但复用候选目录（同座位也清） (0.098542ms)
+✔ 点击候选：调用 chooseGeneral(seat,name)，成功后应用刷新信封并更新技能 (0.21325ms)
+✔ 选将失败：显示错误、不应用刷新信封、不留下成功态 (0.177959ms)
+✔ 失败后重试成功：清除错误并进入成功态 (0.161292ms)
+✔ 返回与请求不一致（错座位）不得显示成功 (0.088875ms)
+✔ 畸形返回（缺刷新信封）不得显示成功 (0.084291ms)
+✔ 装配已生效但主视图刷新抛错：保持 accepted，同时显示刷新错误 (0.121792ms)
+✔ 空候选名在发起请求前就被拒绝 (0.061667ms)
+✔ 反例 1：候选值 42/99 → token 是下标且能回查候选 (1.603291ms)
+✔ 反例 1 补充：裸数字/字符串候选的 token 同样是下标 (0.184167ms)
+✔ 反例 2：引擎 rejected 显式进入 envelope.result (0.1275ms)
+✔ 反例 2 补充：playCard 被拒同样暴露，observer 无命令时保持 null (0.125416ms)
+✔ 反例 3：ChoiceOption Kind(105) 不被归零 (3.409ms)
+✔ 命令结果解析：非 JSON 或无 outcome 字段不臆造判决 (0.141292ms)
+✔ choice_id 不匹配时拒绝应答，不触发引擎调用 (0.108875ms)
+✔ 原生公开事件按粗粒度展示，不把防止伤害或完成选择写成已造成伤害或等待选择 (0.9175ms)
+✔ identity 随座位透传（裁决⑥）：本人/主公非空，隐藏座位为 null，不再恒置 null (0.101791ms)
+✔ 可见牌面进入 known_cards（裁决⑦）：本人手牌/全场装备判定/弃牌/处理区带真实 face，不占位 (0.194166ms)
+✔ visible general definition reaches the existing seat view (0.070584ms)
+✔ Skill options keep stable names and use index tokens without truncation (0.043458ms)
+✔ 候选解析：内核形态通过，逐项结构化且不改写字段 (1.090333ms)
+✔ 候选解析：畸形返回逐项显式报错，不静默过滤成更小候选集 (0.419541ms)
+✔ 选将返回解析：与请求不一致即报错（错座位/错名字不算成功） (0.23625ms)
+✔ 旧 wasm 产物缺导出：显式报错 + build:native，不静默降级 (0.29425ms)
+✔ 选将失败：原始错误文本保留，且不改缓存（状态未变） (0.461083ms)
+✔ 选将成功：技能集可见变化，且 revision 不变时缓存必须失效 (0.264333ms)
+✔ 选将已生效但返回畸形：报错同时保持缓存失效（不放旧候选回界面） (0.160458ms)
+✔ 候选面逐项来自内核：适配层不裁剪、不排序、不补默认将 (0.084334ms)
+✔ 真实 WASM：候选来自内核目录，且逐项通过适配层结构校验 (33.363583ms)
+✔ 真实 WASM：装配不改 revision，状态变化只体现在 state_hash (0.899584ms)
+✔ 真实 WASM：未知武将与越界座位显式报错，且不改状态 (0.879416ms)
+✔ 真实 WASM：选将后权威候选重查（缓存不再命中） (7.147625ms)
+✔ 候选逐项等于内核返回：不按 hand.slice(0,8) 拼接 (1.341583ms)
+✔ 无合成：内核不给 EndPhase/应答候选就不出现 (0.408416ms)
+✔ 查询按 (handle, revision) 记忆化 (0.168667ms)
+✔ 旧 wasm 产物缺导出／畸形返回 → 显式报错，不回落拼接 (0.347292ms)
+✔ 内核候选逐项可提交：命令面覆盖每种候选，伪造动作的拒绝原因可见 (0.537083ms)
+✔ all discoverable packages install actual versioned data; active set reaches the match (30.932667ms)
+✔ same-version installation/upgrade preserves installed bytes and refuses invented versions (3.803ms)
+✔ all lifecycle content mutations are blocked during a match (8.226916ms)
+✔ save retains original package copy across disable, uninstall and later saves (0.453208ms)
+✔ revocation rejects a saved package even when its original bytes remain (0.295708ms)
+✔ missing installed payload, dangling lock and duplicate lock fail without fallback (0.219167ms)
+✔ legacy metadata-only installs are repaired explicitly by upgrade (0.183958ms)
+✔ changed version, fingerprint, missing package and malformed payload reject restore (0.400125ms)
+✔ old standard saves without packages remain compatible (0.165667ms)
+✔ same-version logic fingerprint conflict rejects installation atomically (1.017291ms)
+✔ same-version logic fingerprint conflict rejects upgrade atomically (0.978375ms)
+✔ same-version asset content conflict rejects installation atomically (0.816958ms)
+✔ same-version asset content conflict rejects upgrade atomically (0.641917ms)
+✔ same-version copies tolerate JSON formatting and object key order (2.122875ms)
+✔ unsafe identity fields cannot enter the browser content lock (1.348291ms)
+✔ package dependencies are checked for match start and frozen save restore (4.2585ms)
+✔ fixtures: v2 shares identity with v1 but has a new version, bytecode and fingerprint (1.142041ms)
+✔ formal import installs a VM package with its modules and reaches the match (1.331167ms)
+✔ import rejects malformed packages without touching installed content (1.376834ms)
+✔ import upgrades to a new version, keeps the old copy, and rolls back (0.747792ms)
+✔ disable, uninstall and revoke affect new matches and saved matches as the contract requires (0.596834ms)
+✔ import is blocked while a match is frozen (0.166625ms)
+✔ catalog packages without VM modules keep their manifest+asset payload (7.082125ms)
+✔ validated import commits only after the deep validator passes and marks the copy unsigned (1.860334ms)
+✔ validated import aborts without touching the store when the deep validator rejects (0.799875ms)
+✔ validated import never calls the deep validator when the structural layer or preconditions reject (0.449917ms)
+✔ validated import re-checks preconditions at commit time (store may change during async validation) (0.10025ms)
+✔ schema5 SDK preserves defaults and rejects downgrade presence before local-store mutation (0.374792ms)
+✔ schema5 SDK native binding has one authority and defers real factory capabilities to Rust (0.088625ms)
+✔ repair: omitted modules cannot discard declarations in validated import (0.21225ms)
+✔ repair: validated import delivers original text to native typed reader (0.103042ms)
+✔ repair: active native and VM executor conflicts reject in SDK (0.080167ms)
+✔ complete VM-only package survives match preparation and frozen save restoration (1.607708ms)
+✔ VM payload must have an array of modules and does not excuse malformed assets (0.424958ms)
+✔ 座位和人数在进入 WASM 及选将前拒绝整数截断 (0.876041ms)
+✔ 牌和技能 ID 在进入 WASM 前拒绝整数截断 (0.136709ms)
+✔ native SingleWin protocol players 1/4 become local seats 0/3 without mutating protocol data (1.09375ms)
+✔ native other outcome shapes and unknown detail pass through unchanged (0.160333ms)
+✔ actual BattleView computed and banner recognize a rebel observer's win and loss (4.382292ms)
+✔ identity victory follows each observer's own role, including loyalists losing to rebels (0.374417ms)
+✔ SingleWin zero and normalized last seat render a banner with the matching observer result (0.450959ms)
+✔ group, unknown, unmodeled, draw, abort and hidden identity render neutral banners (0.914125ms)
+✔ view outcome is authoritative; both MatchEnded event shapes use the same fallback presentation (0.186792ms)
+✔ MatchEnded timeline uses shared outcome wording (0.28425ms)
+✔ 原生零号座位的回合与结束阶段可见 (98.814958ms)
+✔ 非零座位与准备阶段保持可见 (19.84425ms)
+✔ 旧线无当前玩家的零哨兵仍使用事件回退或不显示 (5.054042ms)
+(node:13280) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ 本地命令将响应式数值数组原样交给可克隆的 Worker 消息 (38.757167ms)
+✔ postMessage 同步失败释放请求、性能记录和 SAB 唤醒，随后可重试 (11.387667ms)
+✔ 其他请求在途时发送失败不提前结束 SAB 唤醒 (14.011833ms)
+✔ 性能探针丢弃未发送请求，保留成功请求 (0.563875ms)
+✔ 读入较少座位时，投影视图失败不替换当前对局 (13.0315ms)
+✔ 投影故障保留原局、缓存和事件游标，并释放候选引擎 (4.242417ms)
+✔ 正式恢复失败时仍保留原局和游标 (0.866917ms)
+✔ 成功恢复保留原引擎引用并使权威动作缓存失效 (4.943292ms)
+✔ 新局视图失败时保留原局，合法新局仍可替换 (14.879959ms)
+✔ 其他新局信封错误也保留原局并释放新引擎 (0.844708ms)
+✔ Worker 错误拒绝所有等待请求、保留句柄并允许核对和新请求 (33.919083ms)
+✔ 回包无法解码时等待请求失败，原 Worker 保留 (47.152792ms)
+✔ 初始化错误有结果，后续可创建新 Worker (11.685375ms)
+✔ 释放时等待请求不悬挂，旧 Worker 错误不影响新连接 (9.94425ms)
+✔ 初始化被释放后立即重连，旧连接的失败不能终止新 Worker (10.940083ms)
+✔ 空闲 Worker 的错误或释放不会结束其他请求的共享等待 (9.474584ms)
+✔ desktop IPC uses the production client's sequence, pending, errors and disposal without Worker fallback (18.312417ms)
+✔ desktop burst keeps production EngineClient pending and unresolved promises at eight, rejects before IPC, and resumes without retry (10.613541ms)
+✔ disposing eight accepted desktop requests retires the old resource and reconnects independently (10.916542ms)
+✔ Worker bad present batch_unknown preserves pending until dispose (8.88125ms)
+✔ Worker bad present null_revision preserves pending until dispose (7.686708ms)
+✔ Worker bad present unsafe_revision preserves pending until dispose (8.6585ms)
+✔ Worker bad present mixed_revision preserves pending until dispose (7.627917ms)
+✔ Worker bad present string_revision preserves pending until dispose (7.1245ms)
+✔ Worker bad present bad_status preserves pending until dispose (8.1995ms)
+✔ Worker bad present overflow_nonempty preserves pending until dispose (7.850916ms)
+✔ Worker bad present invalid_domain preserves pending until dispose (7.366625ms)
+✔ Worker bad present invalid_reason preserves pending until dispose (8.936541ms)
+✔ Worker bad present scope_unknown preserves pending until dispose (7.028125ms)
+✔ Worker bad present duplicate_scope preserves pending until dispose (7.553ms)
+✔ Worker bad present duplicate_ordinal preserves pending until dispose (7.854667ms)
+✔ Worker bad present unknown_event preserves pending until dispose (7.5985ms)
+✔ Worker bad present event_unknown preserves pending until dispose (8.911292ms)
+✔ Worker bad present actor_zero preserves pending until dispose (7.298792ms)
+✔ Worker bad present actor_negative preserves pending until dispose (7.352ms)
+✔ Worker bad present actor_fraction preserves pending until dispose (6.432334ms)
+✔ Worker bad present actor_string preserves pending until dispose (6.507625ms)
+✔ Worker bad present actor_out_of_view preserves pending until dispose (11.674167ms)
+✔ Worker bad present actor_u32_over preserves pending until dispose (8.347959ms)
+✔ Worker bad present actor_null preserves pending until dispose (7.34325ms)
+✔ Worker bad present duplicate_target preserves pending until dispose (7.215916ms)
+✔ Worker bad present missing_nullable_voice preserves pending until dispose (7.030167ms)
+✔ Worker bad present amount_zero preserves pending until dispose (6.815375ms)
+✔ Worker bad present bad_nature preserves pending until dispose (6.988625ms)
+✔ Worker bad present bad_effective_kind preserves pending until dispose (7.685959ms)
+✔ Worker bad present token_traversal preserves pending until dispose (6.770375ms)
+✔ Worker bad present token_controls preserves pending until dispose (6.359667ms)
+✔ Worker bad present role_local_id_wrong preserves pending until dispose (6.385917ms)
+✔ Worker bad present role_kind_wrong preserves pending until dispose (8.085375ms)
+✔ Worker bad present owner_unknown preserves pending until dispose (6.375125ms)
+✔ Worker bad present digest_upper preserves pending until dispose (6.290125ms)
+✔ Worker bad present digest_algorithm preserves pending until dispose (6.111833ms)
+✔ Worker bad present size_zero preserves pending until dispose (6.793417ms)
+✔ Worker bad present source_kind preserves pending until dispose (8.17125ms)
+✔ Worker bad present reference_private preserves pending until dispose (6.676292ms)
+✔ Worker bad present path_escape preserves pending until dispose (7.626875ms)
+✔ Worker bad present invalid_category preserves pending until dispose (6.815042ms)
+✔ Worker bad present empty_assets preserves pending until dispose (6.305ms)
+✔ Worker bad present form_token preserves pending until dispose (7.485417ms)
+✔ Worker bad present owner_tag preserves pending until dispose (6.542625ms)
+✔ Worker bad present asset_unknown preserves pending until dispose (6.989416ms)
+✔ Worker bad present role_unknown preserves pending until dispose (6.302ms)
+✔ Worker bad present id_token_escape preserves pending until dispose (6.074708ms)
+✔ Worker bad present oversized_utf8 preserves pending until dispose (6.1345ms)
+✔ Worker bad present null_targets_bad preserves pending until dispose (7.675833ms)
+✔ Worker bad present missing_source preserves pending until dispose (6.343583ms)
+✔ Worker bad present repository_bom preserves pending until dispose (6.069958ms)
+✔ Worker bad present repository_whitespace_control_0000 preserves pending until dispose (6.246459ms)
+✔ Worker bad present repository_whitespace_control_0009 preserves pending until dispose (6.336208ms)
+✔ Worker bad present repository_whitespace_control_000a preserves pending until dispose (7.977084ms)
+✔ Worker bad present repository_whitespace_control_001c preserves pending until dispose (6.417625ms)
+✔ Worker bad present repository_whitespace_control_0020 preserves pending until dispose (6.072792ms)
+✔ Worker bad present repository_whitespace_control_007f preserves pending until dispose (5.909084ms)
+✔ Worker bad present repository_whitespace_control_0085 preserves pending until dispose (6.040292ms)
+✔ Worker bad present repository_whitespace_control_009f preserves pending until dispose (8.093292ms)
+✔ Worker bad present repository_whitespace_control_00a0 preserves pending until dispose (6.017791ms)
+✔ Worker bad present repository_whitespace_control_1680 preserves pending until dispose (5.973042ms)
+✔ Worker bad present repository_whitespace_control_2000 preserves pending until dispose (6.04975ms)
+✔ Worker bad present repository_whitespace_control_2001 preserves pending until dispose (5.947375ms)
+✔ Worker bad present repository_whitespace_control_2002 preserves pending until dispose (7.9815ms)
+✔ Worker bad present repository_whitespace_control_2003 preserves pending until dispose (6.316ms)
+✔ Worker bad present repository_whitespace_control_2004 preserves pending until dispose (6.211083ms)
+✔ Worker bad present repository_whitespace_control_2005 preserves pending until dispose (6.093333ms)
+✔ Worker bad present repository_whitespace_control_2006 preserves pending until dispose (6.002208ms)
+✔ Worker bad present repository_whitespace_control_2007 preserves pending until dispose (7.72125ms)
+✔ Worker bad present repository_whitespace_control_2008 preserves pending until dispose (6.130458ms)
+✔ Worker bad present repository_whitespace_control_2009 preserves pending until dispose (6.0575ms)
+✔ Worker bad present repository_whitespace_control_200a preserves pending until dispose (5.9905ms)
+✔ Worker bad present repository_whitespace_control_2028 preserves pending until dispose (5.864292ms)
+✔ Worker bad present repository_whitespace_control_2029 preserves pending until dispose (7.76875ms)
+✔ Worker bad present repository_whitespace_control_202f preserves pending until dispose (6.2185ms)
+✔ Worker bad present repository_whitespace_control_205f preserves pending until dispose (6.20175ms)
+✔ Worker bad present repository_whitespace_control_3000 preserves pending until dispose (6.117375ms)
+✔ Worker bad present repository_lone_high preserves pending until dispose (6.113708ms)
+✔ Worker bad present repository_lone_low preserves pending until dispose (7.544375ms)
+✔ Worker bad present token_lone_high preserves pending until dispose (6.138875ms)
+✔ Worker bad present token_lone_low preserves pending until dispose (6.140875ms)
+✔ Worker bad present path_lone_high preserves pending until dispose (5.997041ms)
+✔ Worker bad present path_lone_low preserves pending until dispose (5.773917ms)
+✔ actual IPC to EngineClient bad present batch_unknown preserves pending (7.694584ms)
+✔ actual IPC to EngineClient bad present null_revision preserves pending (6.000084ms)
+✔ actual IPC to EngineClient bad present unsafe_revision preserves pending (5.991ms)
+✔ actual IPC to EngineClient bad present mixed_revision preserves pending (5.780541ms)
+✔ actual IPC to EngineClient bad present string_revision preserves pending (5.884208ms)
+✔ actual IPC to EngineClient bad present bad_status preserves pending (7.371375ms)
+✔ actual IPC to EngineClient bad present overflow_nonempty preserves pending (6.050417ms)
+✔ actual IPC to EngineClient bad present invalid_domain preserves pending (6.159792ms)
+✔ actual IPC to EngineClient bad present invalid_reason preserves pending (6.566375ms)
+✔ actual IPC to EngineClient bad present scope_unknown preserves pending (6.141791ms)
+✔ actual IPC to EngineClient bad present duplicate_scope preserves pending (7.854916ms)
+✔ actual IPC to EngineClient bad present duplicate_ordinal preserves pending (6.818292ms)
+✔ actual IPC to EngineClient bad present unknown_event preserves pending (6.727584ms)
+✔ actual IPC to EngineClient bad present event_unknown preserves pending (6.422958ms)
+✔ actual IPC to EngineClient bad present actor_zero preserves pending (6.348875ms)
+✔ actual IPC to EngineClient bad present actor_negative preserves pending (7.827ms)
+✔ actual IPC to EngineClient bad present actor_fraction preserves pending (6.360167ms)
+✔ actual IPC to EngineClient bad present actor_string preserves pending (6.140583ms)
+✔ actual IPC to EngineClient bad present actor_out_of_view preserves pending (6.149375ms)
+✔ actual IPC to EngineClient bad present actor_u32_over preserves pending (6.339209ms)
+✔ actual IPC to EngineClient bad present actor_null preserves pending (8.411667ms)
+✔ actual IPC to EngineClient bad present duplicate_target preserves pending (6.704125ms)
+✔ actual IPC to EngineClient bad present missing_nullable_voice preserves pending (6.36325ms)
+✔ actual IPC to EngineClient bad present amount_zero preserves pending (6.35025ms)
+✔ actual IPC to EngineClient bad present bad_nature preserves pending (6.292875ms)
+✔ actual IPC to EngineClient bad present bad_effective_kind preserves pending (8.1735ms)
+✔ actual IPC to EngineClient bad present token_traversal preserves pending (6.782125ms)
+✔ actual IPC to EngineClient bad present token_controls preserves pending (6.7335ms)
+✔ actual IPC to EngineClient bad present role_local_id_wrong preserves pending (5.929542ms)
+✔ actual IPC to EngineClient bad present role_kind_wrong preserves pending (6.302292ms)
+✔ actual IPC to EngineClient bad present owner_unknown preserves pending (8.64725ms)
+✔ actual IPC to EngineClient bad present digest_upper preserves pending (7.914417ms)
+✔ actual IPC to EngineClient bad present digest_algorithm preserves pending (6.715667ms)
+✔ actual IPC to EngineClient bad present size_zero preserves pending (6.709125ms)
+✔ actual IPC to EngineClient bad present source_kind preserves pending (6.951792ms)
+✔ actual IPC to EngineClient bad present reference_private preserves pending (8.379833ms)
+✔ actual IPC to EngineClient bad present path_escape preserves pending (6.754625ms)
+✔ actual IPC to EngineClient bad present invalid_category preserves pending (6.318208ms)
+✔ actual IPC to EngineClient bad present empty_assets preserves pending (6.417416ms)
+✔ actual IPC to EngineClient bad present form_token preserves pending (7.023791ms)
+✔ actual IPC to EngineClient bad present owner_tag preserves pending (8.937334ms)
+✔ actual IPC to EngineClient bad present asset_unknown preserves pending (9.355917ms)
+✔ actual IPC to EngineClient bad present role_unknown preserves pending (6.422334ms)
+✔ actual IPC to EngineClient bad present id_token_escape preserves pending (6.138375ms)
+✔ actual IPC to EngineClient bad present oversized_utf8 preserves pending (6.517583ms)
+✔ actual IPC to EngineClient bad present null_targets_bad preserves pending (6.184166ms)
+✔ actual IPC to EngineClient bad present missing_source preserves pending (6.21325ms)
+✔ actual IPC to EngineClient bad present repository_bom preserves pending (7.408625ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_0000 preserves pending (7.813542ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_0009 preserves pending (6.800375ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_000a preserves pending (6.312333ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_001c preserves pending (6.2905ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_0020 preserves pending (8.3ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_007f preserves pending (6.248666ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_0085 preserves pending (5.934917ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_009f preserves pending (6.463583ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_00a0 preserves pending (6.834375ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_1680 preserves pending (8.847041ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2000 preserves pending (7.310416ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2001 preserves pending (7.079167ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2002 preserves pending (6.556375ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2003 preserves pending (6.473625ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2004 preserves pending (7.810083ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2005 preserves pending (6.410875ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2006 preserves pending (6.2445ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2007 preserves pending (6.021125ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2008 preserves pending (7.010333ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2009 preserves pending (8.01475ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_200a preserves pending (6.312833ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2028 preserves pending (6.898083ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_2029 preserves pending (6.355416ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_202f preserves pending (6.404667ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_205f preserves pending (7.828875ms)
+✔ actual IPC to EngineClient bad present repository_whitespace_control_3000 preserves pending (6.190041ms)
+✔ actual IPC to EngineClient bad present repository_lone_high preserves pending (6.037041ms)
+✔ actual IPC to EngineClient bad present repository_lone_low preserves pending (6.272167ms)
+✔ actual IPC to EngineClient bad present token_lone_high preserves pending (6.136416ms)
+✔ actual IPC to EngineClient bad present token_lone_low preserves pending (8.152083ms)
+✔ actual IPC to EngineClient bad present path_lone_high preserves pending (7.132334ms)
+✔ actual IPC to EngineClient bad present path_lone_low preserves pending (6.87825ms)
+✔ actual SAB poll rejects malformed presentation before settling or deleting pending (8.071166ms)
+✔ actual Worker and IPC nested chooseGeneral preserve mapping on bad presentation (15.40475ms)
+✔ shared Worker request guard sends eight and rejects ninth before map/postMessage (6.487792ms)
+✔ eight retained malformed responses keep capacity until explicit dispose (12.55375ms)
+✔ compound-invalid IPC autoStep preserves uncertain pending before observer normalization (6.414666ms)
+✔ compound-invalid IPC chooseGeneral preserves uncertain pending before observer normalization (8.055291ms)
+✔ compound IPC valid presentation keeps Source27 diagnostic and ordinary cleanup (24.530708ms)
+✔ IPC precheck preserves all malformed presentation before bad Source27, including missing view/context (1073.698333ms)
+✔ source metadata is optional but strict when present (0.704208ms)
+✔ desktop normal and chooseGeneral envelopes preserve source and deadline (0.325583ms)
+✔ frozen WS6 TypeScript reader ignores source while current reader preserves it (2.924542ms)
+✔ C order mapping and strict source forwarding coexist (0.091375ms)
+✔ JoinOk、推送与快照保留权威 choice 和合法答案，观战空选择不合成 (14.767375ms)
+✔ 拒绝提交仍同步最新投影与 choice，再向调用方显示拒绝 (1.024542ms)
+✔ 断线后复用房间密码与最新令牌，重新入房前禁止提交 (2.19975ms)
+✔ 旁观重连仍发送 Spectate，不取得玩家身份 (0.578791ms)
+✔ 入房/快照 send 失败释放 waiter，重复入房不多发请求 (0.420375ms)
+✔ dispose 后的旧 socket 关闭不影响新的连接，销毁不保留监听器 (0.232834ms)
+✔ 重连令牌按实际 WS origin 与房号隔离，HTTP 输入规范化为同一服务 (0.082708ms)
+✔ 表现延迟期间断线：旧信封不能覆盖重连提示 (5.346417ms)
+✔ 表现延迟期间新投影到达：旧信封不能覆盖新状态提示或清掉新效果 (4.066375ms)
+✔ 断线保留待确认命令，重连后用原 key 重放并由服务端回执结算 (1.415584ms)
+✔ 自动重连耗尽后，待确认命令明确标为结果不确定而不是已撤销 (0.813208ms)
+✔ 刷新后的新客户端用原 key 重放未确认命令 (0.443167ms)
+✔ 取消待确认命令会清除刷新持久化 (0.192541ms)
+✔ 过期刷新持久化不会重放陈旧命令 (0.141625ms)
+✔ 旧房间无回执的重放拒绝显示为结果不确定 (0.223792ms)
+✔ 联机公开事件与本地一致地展示粗粒度语义 (0.591709ms)
+✔ network SingleWin stays one-based with all authoritative projection fields unchanged (0.253542ms)
+✔ finished status shares the banner's view and MatchEnded fallback wording (4.786459ms)
+✔ B metadata is preserved on real network consumer messages and malformed metadata refuses join (0.262458ms)
+✔ WS7 rejects an old Welcome before creating rooms (0.142958ms)
+✔ WS7 room configuration and deadline reach the actual network consumer (0.163333ms)
+✔ server countdown ignores client wall clock skew 60000 and later jumps (4.654417ms)
+✔ server countdown ignores client wall clock skew -60000 and later jumps (3.933ms)
+✔ clock calibration requires matching Pong, measures RTT, and resets across reconnect (4.29425ms)
+✔ source skill and deadline survive JoinOk, outcome and snapshot (0.312375ms)
+✔ UP37 available voices resolve from the existing manifest and actual catalog identities (91.43475ms)
+✔ resource URL rejects traversal, absolute paths, encoded separators and invalid segments (0.09225ms)
+✔ N01 declaration reference and Zhouyu declared variants resolve actual source voices (17.606166ms)
+✔ declared aliases isolate exact numeric skill IDs, validate backing bytes and reject duplicates (0.472792ms)
+✔ B current character isolates unrelated shared-skill actors and retains declared substitute forms (22.604083ms)
+✔ B real tempname chooses its declared voice and missing actor bindings never borrow the skill pool (27.275708ms)
+✔ cross-pack substitute declaration binds to its global exact character owner (11.501584ms)
+✔ compat backing uses category and source identity while preserving role isolation (0.265958ms)
+✔ checked-in compat reaches actual role aliases and preserves original raw audio count (12.022083ms)
+✔ 身份局胜负类型映射 (0.411334ms)
+✔ 单挑/势力与未建模形态 (0.071333ms)
+✔ 未知形态如实显示原始 JSON（不猜测语义） (0.060583ms)
+✔ 原生命令的拒绝原因可显示，未知原因保留 (0.093ms)
+✔ 自动步进的嵌套拒绝和计划错误不可当作成功 (0.088541ms)
+✔ malformed and unmodeled outcome detail stays visible without inventing a winner (0.087291ms)
+✔ desktop IPC preserves request order, ids, errors and continues on the same engine (2.9485ms)
+(node:13291) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+✔ dispose suppresses late IPC replies and never submits queued operations (4.628917ms)
+✔ mismatched IPC response is an explicit unknown-result error, without retry (0.240541ms)
+✔ Wasm is the default and an explicit persistent/URL fallback remains available (0.264916ms)
+✔ dispose during resource allocation closes it once and submits no request (0.644458ms)
+✔ IPC and Worker convert native SingleWin seats exactly once without modifying raw projections (25.615792ms)
+✔ IPC refuses malformed B metadata before delivering a view envelope (0.179917ms)
+✔ desktop admission bounds 128 submissions while open is blocked, before extending the promise tail (2.342459ms)
+✔ desktop admission bounds 128 submissions while request is blocked, before extending the promise tail (0.649208ms)
+✔ IPC errors, normalization errors and a throwing listener release admission and leave the tail usable (0.63275ms)
+✔ a rejected resource open drains accepted slots without submitting requests (0.535167ms)
+✔ nearest-rank 分位与 NC12 口径一致；空输入为 null (0.394084ms)
+✔ 帧间隔统计：刷新周期估计与超预算比例 (0.167125ms)
+✔ 交互记录：有输入时端到端从输入起算，缺失段为 null (0.23625ms)
+✔ Worker 分段：关闭时只发原回包，开启时回包后追加分段 (0.489375ms)
+✔ actual frozen Main5fc TS network and desktop readers accept the optional response (19.940333ms)
+✔ new parser accepts all seven events and legacy absence without altering autoStep strings (1.937625ms)
+✔ bad present batch_unknown is atomic in actual network/store ingress and IPC pass-through (0.991416ms)
+✔ bad present null_revision is atomic in actual network/store ingress and IPC pass-through (0.30875ms)
+✔ bad present unsafe_revision is atomic in actual network/store ingress and IPC pass-through (0.284875ms)
+✔ bad present mixed_revision is atomic in actual network/store ingress and IPC pass-through (0.26225ms)
+✔ bad present string_revision is atomic in actual network/store ingress and IPC pass-through (0.228083ms)
+✔ bad present bad_status is atomic in actual network/store ingress and IPC pass-through (0.239542ms)
+✔ bad present overflow_nonempty is atomic in actual network/store ingress and IPC pass-through (0.285167ms)
+✔ bad present invalid_domain is atomic in actual network/store ingress and IPC pass-through (0.279208ms)
+✔ bad present invalid_reason is atomic in actual network/store ingress and IPC pass-through (0.247ms)
+✔ bad present scope_unknown is atomic in actual network/store ingress and IPC pass-through (0.202917ms)
+✔ bad present duplicate_scope is atomic in actual network/store ingress and IPC pass-through (0.308417ms)
+✔ bad present duplicate_ordinal is atomic in actual network/store ingress and IPC pass-through (0.452084ms)
+✔ bad present unknown_event is atomic in actual network/store ingress and IPC pass-through (0.247041ms)
+✔ bad present event_unknown is atomic in actual network/store ingress and IPC pass-through (0.232459ms)
+✔ bad present actor_zero is atomic in actual network/store ingress and IPC pass-through (0.198ms)
+✔ bad present actor_negative is atomic in actual network/store ingress and IPC pass-through (0.194834ms)
+✔ bad present actor_fraction is atomic in actual network/store ingress and IPC pass-through (0.198167ms)
+✔ bad present actor_string is atomic in actual network/store ingress and IPC pass-through (0.201ms)
+✔ bad present actor_out_of_view is atomic in actual network/store ingress and IPC pass-through (0.180292ms)
+✔ bad present actor_u32_over is atomic in actual network/store ingress and IPC pass-through (0.190084ms)
+✔ bad present actor_null is atomic in actual network/store ingress and IPC pass-through (0.18875ms)
+✔ bad present duplicate_target is atomic in actual network/store ingress and IPC pass-through (0.284041ms)
+✔ bad present missing_nullable_voice is atomic in actual network/store ingress and IPC pass-through (0.245959ms)
+✔ bad present amount_zero is atomic in actual network/store ingress and IPC pass-through (0.342917ms)
+✔ bad present bad_nature is atomic in actual network/store ingress and IPC pass-through (0.350125ms)
+✔ bad present bad_effective_kind is atomic in actual network/store ingress and IPC pass-through (1.232708ms)
+✔ bad present token_traversal is atomic in actual network/store ingress and IPC pass-through (0.225542ms)
+✔ bad present token_controls is atomic in actual network/store ingress and IPC pass-through (0.212417ms)
+✔ bad present role_local_id_wrong is atomic in actual network/store ingress and IPC pass-through (0.195375ms)
+✔ bad present role_kind_wrong is atomic in actual network/store ingress and IPC pass-through (0.169458ms)
+✔ bad present owner_unknown is atomic in actual network/store ingress and IPC pass-through (0.178ms)
+✔ bad present digest_upper is atomic in actual network/store ingress and IPC pass-through (0.192125ms)
+✔ bad present digest_algorithm is atomic in actual network/store ingress and IPC pass-through (0.234791ms)
+✔ bad present size_zero is atomic in actual network/store ingress and IPC pass-through (0.190041ms)
+✔ bad present source_kind is atomic in actual network/store ingress and IPC pass-through (0.20275ms)
+✔ bad present reference_private is atomic in actual network/store ingress and IPC pass-through (0.1985ms)
+✔ bad present path_escape is atomic in actual network/store ingress and IPC pass-through (0.186959ms)
+✔ bad present invalid_category is atomic in actual network/store ingress and IPC pass-through (0.196459ms)
+✔ bad present empty_assets is atomic in actual network/store ingress and IPC pass-through (0.169625ms)
+✔ bad present form_token is atomic in actual network/store ingress and IPC pass-through (0.17ms)
+✔ bad present owner_tag is atomic in actual network/store ingress and IPC pass-through (0.160833ms)
+✔ bad present asset_unknown is atomic in actual network/store ingress and IPC pass-through (0.178708ms)
+✔ bad present role_unknown is atomic in actual network/store ingress and IPC pass-through (0.162166ms)
+✔ bad present id_token_escape is atomic in actual network/store ingress and IPC pass-through (0.167ms)
+✔ bad present oversized_utf8 is atomic in actual network/store ingress and IPC pass-through (0.240416ms)
+✔ bad present null_targets_bad is atomic in actual network/store ingress and IPC pass-through (0.227458ms)
+✔ bad present missing_source is atomic in actual network/store ingress and IPC pass-through (0.319791ms)
+✔ bad present repository_bom is atomic in actual network/store ingress and IPC pass-through (0.246833ms)
+✔ bad present repository_whitespace_control_0000 is atomic in actual network/store ingress and IPC pass-through (0.16825ms)
+✔ bad present repository_whitespace_control_0009 is atomic in actual network/store ingress and IPC pass-through (0.159125ms)
+✔ bad present repository_whitespace_control_000a is atomic in actual network/store ingress and IPC pass-through (0.33625ms)
+✔ bad present repository_whitespace_control_001c is atomic in actual network/store ingress and IPC pass-through (0.2615ms)
+✔ bad present repository_whitespace_control_0020 is atomic in actual network/store ingress and IPC pass-through (0.23825ms)
+✔ bad present repository_whitespace_control_007f is atomic in actual network/store ingress and IPC pass-through (0.217542ms)
+✔ bad present repository_whitespace_control_0085 is atomic in actual network/store ingress and IPC pass-through (0.215292ms)
+✔ bad present repository_whitespace_control_009f is atomic in actual network/store ingress and IPC pass-through (0.210458ms)
+✔ bad present repository_whitespace_control_00a0 is atomic in actual network/store ingress and IPC pass-through (0.1945ms)
+✔ bad present repository_whitespace_control_1680 is atomic in actual network/store ingress and IPC pass-through (0.213042ms)
+✔ bad present repository_whitespace_control_2000 is atomic in actual network/store ingress and IPC pass-through (0.211583ms)
+✔ bad present repository_whitespace_control_2001 is atomic in actual network/store ingress and IPC pass-through (0.21475ms)
+✔ bad present repository_whitespace_control_2002 is atomic in actual network/store ingress and IPC pass-through (0.208ms)
+✔ bad present repository_whitespace_control_2003 is atomic in actual network/store ingress and IPC pass-through (0.221416ms)
+✔ bad present repository_whitespace_control_2004 is atomic in actual network/store ingress and IPC pass-through (0.242125ms)
+✔ bad present repository_whitespace_control_2005 is atomic in actual network/store ingress and IPC pass-through (0.219083ms)
+✔ bad present repository_whitespace_control_2006 is atomic in actual network/store ingress and IPC pass-through (0.207417ms)
+✔ bad present repository_whitespace_control_2007 is atomic in actual network/store ingress and IPC pass-through (0.204375ms)
+✔ bad present repository_whitespace_control_2008 is atomic in actual network/store ingress and IPC pass-through (0.215541ms)
+✔ bad present repository_whitespace_control_2009 is atomic in actual network/store ingress and IPC pass-through (0.219166ms)
+✔ bad present repository_whitespace_control_200a is atomic in actual network/store ingress and IPC pass-through (0.212917ms)
+✔ bad present repository_whitespace_control_2028 is atomic in actual network/store ingress and IPC pass-through (0.235542ms)
+✔ bad present repository_whitespace_control_2029 is atomic in actual network/store ingress and IPC pass-through (0.229083ms)
+✔ bad present repository_whitespace_control_202f is atomic in actual network/store ingress and IPC pass-through (0.203625ms)
+✔ bad present repository_whitespace_control_205f is atomic in actual network/store ingress and IPC pass-through (0.208625ms)
+✔ bad present repository_whitespace_control_3000 is atomic in actual network/store ingress and IPC pass-through (0.201958ms)
+✔ bad present repository_lone_high is atomic in actual network/store ingress and IPC pass-through (0.21575ms)
+✔ bad present repository_lone_low is atomic in actual network/store ingress and IPC pass-through (0.223667ms)
+✔ bad present token_lone_high is atomic in actual network/store ingress and IPC pass-through (0.304709ms)
+✔ bad present token_lone_low is atomic in actual network/store ingress and IPC pass-through (0.262208ms)
+✔ bad present path_lone_high is atomic in actual network/store ingress and IPC pass-through (0.252667ms)
+✔ bad present path_lone_low is atomic in actual network/store ingress and IPC pass-through (0.347416ms)
+✔ unmatched malformed broadcast does not reject another call or mutate receipt storage (0.186583ms)
+✔ bounds reject null, >1024 occurrences, >64KiB and typed binding mismatches (0.578417ms)
+✔ new metadata keeps the existing WS256KiB limit before receipt mutation (0.496209ms)
+✔ compat m4a and zero SDK general/skill ids retain concrete leaf semantics (0.252791ms)
+✔ malformed conn_seq0 broadcast with a colliding key cannot reject a pending call (0.166333ms)
+✔ network sequential malformed outcomes retain at most eight original intents and replay no fresh keys (0.57825ms)
+✔ network full retained map cannot admit a missing persisted recovery entry (0.108667ms)
+✔ network legacy successful absence releases capacity and creation does not allocate an intent (0.411458ms)
+✔ every network product command refuses ninth admission without allocating, sending or replacing storage (0.257958ms)
+✔ network rejoin replays exactly eight retained keys and legacy replies clear them (0.480458ms)
+✔ network malformed broadcast and wrong-room reply leave retained call unchanged (0.181292ms)
+✔ raw escaped surrogate cases reject at the actual TS leaf boundary while valid astral pairs pass (0.491709ms)
+ℹ tests 450
+ℹ suites 0
+ℹ pass 449
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3088.845916
+
+✖ failing tests:
+
+test at scripts/approved-b-metadata.test.mjs:66:1
+✖ r05h linked, r05_effects, and tiqi_adjustment context preserve signed/zero values and reject malformed payloads (0.695083ms)
+  AssertionError [ERR_ASSERTION]: Missing expected exception.
+      at TestContext.<anonymous> (file:///private/tmp/noname-r05/worktree/apps/web-client/scripts/approved-b-metadata.test.mjs:90:10)
+      at async Test.run (node:internal/test_runner/test:1389:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: undefined,
+    expected: /r05_effects/,
+    operator: 'throws',
+    diff: 'simple'
+  }
+ ELIFECYCLE  Test failed. See above for more details.

@@ -1,0 +1,27 @@
+   Compiling engine-native-content v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-content)
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+   Compiling content-native-loader v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-native-loader)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 5.54s
+     Running tests/groups/kernel.rs (/private/tmp/noname-r05/worktree/target/debug/deps/kernel-b09703a09ed5dfc8)
+
+running 3 tests
+test replay_scenarios::scenarios_are_registered_in_coverage_manifest ... ok
+GOLDEN_HEX sha_dodge_then_damage d52004cdfbfc8afb10dfce81e10c540e17ac0ab2117b7c20ff94e8cca2fed561
+GOLDEN_HEX death_terminal_single 7d5d161c37a5c7c33536c5a23fc2ec9e6e43790118d77dc9182fb1b52d39d7f3
+GOLDEN_HEX sancai_nested_chain 69b5c88f517aa8200f9591eab5e3033018f6db76796babe08634edf276a24035
+GOLDEN_HEX yishang_redirect 4127b9090b15f868fceb6901190a1459f1d7ddebddc5e37d4fa74d6d814bef71
+GOLDEN_HEX suidun_window_matrix cbb9b795c3ec1408dbd1fca30cbbcd8e6cd1dfd754958152f3058ea749a92805
+GOLDEN_HEX shouyi_dynamic_skill eb3f63e81a75d6981b53b11630fbd70f7708a72d836dab6e9cd34c40c6840c90
+GOLDEN_HEX discard_to_limit 5f600731fd0aa495ae2520e41b5f8744f1604305006f27ea5ee8c02b65165421
+GOLDEN_HEX rollback_invariants a36cdff4c3649f77605cbbb0030056418b0bc676c3dc568d52f64e16357609e0
+GOLDEN_HEX equip_distance_matrix 9689e92df3b75d45455361c442145438c068641dd269ef8466a8871ab675f9a6
+GOLDEN_HEX chain_fire_propagation f507cc04af331039bb023e964bfacf22ff1edeff6dbd17a1445a5902a565c9b9
+GOLDEN_HEX aoe_response_queue 67fcb763b3fa874e17015bb3296c7e1ad6c1fd98f8a717443438397c13258f86
+GOLDEN_HEX duel_alternating_response 6b12acc94788a9b607363eaf4b3e69fb370cdf91d8042b2eda7033dafc645423
+GOLDEN_HEX nullify_chain_on_savage 3501cda99198af8395905448800b16653fd726a5b97d20b4d53f91a2b51cf487
+GOLDEN_HEX judge_phase_delayed_tricks 5e675d48cc3b3b5f58233223764376a91542f01e2bbdcbd8f608ce9b9c26f4cb
+test replay_scenarios::replay_scenarios_match_golden ... ok
+test replay_scenarios::pa12_print_golden_hex ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 432 filtered out; finished in 0.02s
+

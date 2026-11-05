@@ -1,0 +1,44 @@
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.01s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 8 tests
+test r05i_byte_chain::r05i_negative_tamper_wrong_lock_and_version_rejected ... ok
+
+thread 'r05i_byte_chain::r05i_negative_tamper_forged_transfer_and_eligible_rejected' (48604259) panicked at crates/engine-native/tests/groups/../r05i_byte_chain.rs:589:5:
+把已转移的 G.After 篡改回 Transfer（牌已不在 R.held）必须拒档
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread 'r05i_byte_chain::r05i_negative_tamper_wrong_compound_skill_rejected' (48604260) panicked at crates/engine-native/tests/groups/../r05i_byte_chain.rs:647:5:
+compound 绑定错 skill ID（错 I）必须以 UnknownMachine 拒档
+
+thread 'r05i_byte_chain::r05i_baoshu_seat_order_from_turn_player_and_post_entry_owner_death' (48604255) panicked at crates/engine-native/tests/groups/../r05i_byte_chain.rs:774:21:
+assertion `left == right` failed: targets 必须按当前回合角色座次排序
+  left: [1, 2, 3]
+ right: [2, 3, 1]
+test r05i_byte_chain::r05i_negative_tamper_wrong_compound_skill_rejected ... FAILED
+test r05i_byte_chain::r05i_baoshu_seat_order_from_turn_player_and_post_entry_owner_death ... FAILED
+test r05i_byte_chain::r05i_negative_tamper_forged_transfer_and_eligible_rejected ... FAILED
+test r05i_byte_chain::r05i_gain_after_history_reference_not_counted_as_owner ... ok
+
+thread 'r05i_byte_chain::r05i_drg_skipped_and_dual_exhausted_detached_slice_byte_chain' (48604257) panicked at crates/engine-native/tests/groups/../r05i_byte_chain.rs:169:35:
+标准局恢复: IdOutOfBounds { what: "card_in_multiple_zones", got: 110 }
+test r05i_byte_chain::r05i_drg_skipped_and_dual_exhausted_detached_slice_byte_chain ... FAILED
+
+thread 'r05i_byte_chain::r05i_three_compounds_every_choice_and_force_die_byte_chain' (48604262) panicked at crates/engine-native/tests/groups/../r05i_byte_chain.rs:477:10:
+奖励 draw 后 owner 阵亡仍须 forceDie 打开 rvm_tiqi_sign
+test r05i_byte_chain::r05i_three_compounds_every_choice_and_force_die_byte_chain ... FAILED
+test r05i_byte_chain::r05i_drg_every_step_slice_byte_chain ... ok
+
+failures:
+
+failures:
+    r05i_byte_chain::r05i_baoshu_seat_order_from_turn_player_and_post_entry_owner_death
+    r05i_byte_chain::r05i_drg_skipped_and_dual_exhausted_detached_slice_byte_chain
+    r05i_byte_chain::r05i_negative_tamper_forged_transfer_and_eligible_rejected
+    r05i_byte_chain::r05i_negative_tamper_wrong_compound_skill_rejected
+    r05i_byte_chain::r05i_three_compounds_every_choice_and_force_die_byte_chain
+
+test result: FAILED. 3 passed; 5 failed; 0 ignored; 0 measured; 287 filtered out; finished in 0.03s
+
+error: test failed, to rerun pass `-p engine-native --test misc`

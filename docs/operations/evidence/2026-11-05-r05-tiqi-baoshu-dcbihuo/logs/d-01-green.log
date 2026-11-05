@@ -1,0 +1,17 @@
+
+running 12 tests
+test r05f2_semantic_gaps::r05f2_current_not_consumed_when_num_fixed ... ok
+test r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed ... ok
+test r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2 ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_victim_dies_alive_source_still_triggers_source_face ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_source_dies_in_damage_subevent_clears_source_before_end ... ok
+test r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_missing_source_self_zero_and_lose_hp_do_not_trigger ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_chain_damage_frames_independent ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_armor_full_absorption_and_infinite_hp_still_trigger_source_then_end ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 275 filtered out; finished in 0.01s
+

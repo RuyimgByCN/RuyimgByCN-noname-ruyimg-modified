@@ -11,25 +11,28 @@ import report_phase_filters as rp
 class ScanTest(unittest.TestCase):
     def test_scans_phase_filters(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 44, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
+        self.assertEqual(len(rows), 32, "阶段过滤条数变了 ⇒ 先核对是否有新增/删除")
 
     def test_rows_are_well_formed(self) -> None:
         for beh, key, phase, begin in rp.scan():
             self.assertRegex(beh, r"^\w+$")
-            self.assertIn(phase, {"Judge", "Draw", "Play", "Discard", "End"})
+            self.assertIn(phase, {"Prepare", "Judge", "Draw", "Play", "Discard", "End"})
             self.assertIn(begin, {"true", "false"})
 
     def test_begin_true_count(self) -> None:
-        # 实测值（不得凭记忆填）：begin=true 共 29 条（第 991 轮 liyutang 改 begin:false）
+        # 实测值（R05-A2 TurnBegin/Prepare 迁移后）：begin=true 共 17 条
         n = sum(1 for r in rp.scan() if r[3] == "true")
-        self.assertEqual(n, 29, "begin=true 的条数变了")
+        self.assertEqual(n, 17, "begin=true 的条数变了")
 
     def test_phase_distribution(self) -> None:
         from collections import Counter
 
         c = Counter(r[2] for r in rp.scan())
-        # 实测分布：End 13 / Judge 14 / Play 8 / Draw 7 / Discard 3 = 45
-        self.assertEqual(dict(c), {'Judge': 14, 'Play': 8, 'Draw': 7, 'Discard': 3, 'End': 12})
+        # 实测分布（R05-A2 迁移后）：End 11 / Play 8 / Draw 7 / Discard 3 / Prepare 2 / Judge 1 = 32
+        self.assertEqual(
+            dict(c),
+            {"Prepare": 2, "Judge": 1, "Draw": 7, "Play": 8, "Discard": 3, "End": 11},
+        )
 
 
 class RenderTest(unittest.TestCase):
@@ -37,7 +40,7 @@ class RenderTest(unittest.TestCase):
         text = rp.render(rp.scan())
         lines = text.strip().splitlines()
         self.assertEqual(lines[0], "行为\tkey\tPhase\tbegin\t状态\t依据")
-        self.assertEqual(len(lines), 45)
+        self.assertEqual(len(lines), 33)
         for line in lines[1:]:
             cells = line.split("\t")
             self.assertEqual(len(cells), 6)
@@ -47,7 +50,7 @@ class RenderTest(unittest.TestCase):
         from collections import Counter
 
         c = Counter(line.split("\t")[4] for line in rp.render(rp.scan()).strip().splitlines()[1:])
-        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 44)
+        self.assertEqual(c["已核"] + c["不适用"] + c["未核"], 32)
 
 
 if __name__ == "__main__":
@@ -55,11 +58,11 @@ if __name__ == "__main__":
 
 
 class ArmSlicingTest(unittest.TestCase):
-    """钉住「段切片」规则：45 条，且 `Xiefang` 的 Draw 分支必须在。"""
+    """钉住「段切片」规则：32 条，且 `Xiefang` 的 Draw 分支必须在。"""
 
     def test_arms_count_matches(self) -> None:
         rows = rp.scan()
-        self.assertEqual(len(rows), 44)
+        self.assertEqual(len(rows), 32)
 
     def test_xiefang_has_draw_branch(self) -> None:
         got = [(p, b) for beh, _key, p, b in rp.scan() if beh == "Xiefang"]

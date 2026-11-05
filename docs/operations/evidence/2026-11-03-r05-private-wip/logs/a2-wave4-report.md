@@ -58,5 +58,5 @@ metadata event 保持 `EventKind::PhaseBegin`（注释登记），过滤收紧 `
 
 - **adr0786_j2_package_versions.rs（shiji 锁）**：失败源于协调者同会话提交的 D02（`phase_prepare` 解锁，b1024db8）——完整包拒装锚从 `phase_prepare` 变为首个仍未映射的 `game_started`；按新行为更新断言并注明 A2 D02，测试意图（完整包仍拒装）不变。
 - **金哈希**：`replay_scenarios_match_golden` 失配清单（13+ 条 actual/expected）与 wave3-verify 日志逐字节一致——本轮与协调者 wave4a-c 均未进一步漂移，重录归协调者（J 步三步探针）。
-- **行数门禁**：`check-source-lines.py` 报 `kernel/events.rs:1017`、`archive/machine_encode.rs:1007` 超 1000 有效行——`git stash` 验证为 HEAD（协调者 wave4a-c）既有，非本轮引入；本轮 31 个文件无门禁违例。
+- **行数门禁**：`check-source-lines.py` 报 `kernel/events.rs`（1017 有效行）、`archive/machine_encode.rs`（1007 有效行）超 1000 有效行——`git stash` 验证为 HEAD（协调者 wave4a-c）既有，非本轮引入；本轮 31 个文件无门禁违例。
 - **cargo check**：三 crate 0 error；`--all-targets` 警告仅协调者 kernel 三处（events.rs:717、phase/judge.rs:3 两处，HEAD 既有），本轮文件零警告。

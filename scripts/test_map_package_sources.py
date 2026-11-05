@@ -16,6 +16,8 @@ class MappingTest(unittest.TestCase):
         by_source, unmapped = mps.mapping()
         self.assertEqual(unmapped, [])
         self.assertEqual(sum(len(v) for v in by_source.values()), 41)
+        for name in mps.CHARACTER_PACKAGES:
+            self.assertTrue((mps.PACKAGES / name / "package.npack.json").is_file())
 
     def test_32_sources_have_packages(self) -> None:
         by_source, _ = mps.mapping()

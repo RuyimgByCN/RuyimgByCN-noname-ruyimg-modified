@@ -1,0 +1,66 @@
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+error[E0432]: unresolved import `engine_native::catalog::QualifiedSkillRef`
+  --> crates/engine-native/tests/groups/../r05h_projection.rs:12:5
+   |
+12 | use engine_native::catalog::QualifiedSkillRef;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ no `QualifiedSkillRef` in `catalog`
+
+error[E0432]: unresolved imports `engine_native::view::ChoiceContext`, `engine_native::view::R05EffectView`
+  --> crates/engine-native/tests/groups/../r05h_projection.rs:15:27
+   |
+15 | use engine_native::view::{ChoiceContext, ChoiceView, R05EffectView};
+   |                           ^^^^^^^^^^^^^              ^^^^^^^^^^^^^ no `R05EffectView` in `view`
+   |                           |
+   |                           no `ChoiceContext` in `view`
+
+error[E0609]: no field `r05_effects` on type `&PlayerCellView`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:247:20
+    |
+247 |         .map(|p| p.r05_effects.clone())
+    |                    ^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `seat`, `alive`, `hp`, `max_hp`, `hand` ... and 8 others
+
+error[E0609]: no field `r05_effects` on type `&PlayerCellView`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:253:24
+    |
+253 |             .map(|p| p.r05_effects.clone())
+    |                        ^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `seat`, `alive`, `hp`, `max_hp`, `hand` ... and 8 others
+
+error[E0609]: no field `linked` on type `&PlayerCellView`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:258:22
+    |
+258 |                 cell.linked,
+    |                      ^^^^^^ unknown field
+    |
+    = note: available fields are: `seat`, `alive`, `hp`, `max_hp`, `hand` ... and 8 others
+
+error[E0026]: variant `engine_native::ChoiceView::Own` does not have a field named `context`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:328:32
+    |
+328 |         Some(ChoiceView::Own { context, .. }) => assert!(
+    |                                ^^^^^^^ variant `engine_native::ChoiceView::Own` does not have this field
+
+error[E0026]: variant `engine_native::ChoiceView::Own` does not have a field named `context`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:354:32
+    |
+354 |         Some(ChoiceView::Own { context, .. }) => {
+    |                                ^^^^^^^ variant `engine_native::ChoiceView::Own` does not have this field
+
+error[E0026]: variant `engine_native::ChoiceView::Own` does not have a field named `context`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:369:32
+    |
+369 |         Some(ChoiceView::Own { context, .. }) => {
+    |                                ^^^^^^^ variant `engine_native::ChoiceView::Own` does not have this field
+
+error[E0026]: variant `engine_native::ChoiceView::Own` does not have a field named `context`
+   --> crates/engine-native/tests/groups/../r05h_projection.rs:375:32
+    |
+375 |         Some(ChoiceView::Own { context, .. }) => {
+    |                                ^^^^^^^ variant `engine_native::ChoiceView::Own` does not have this field
+
+Some errors have detailed explanations: E0026, E0432, E0609.
+For more information about an error, try `rustc --explain E0026`.
+error: could not compile `engine-native` (test "misc") due to 9 previous errors

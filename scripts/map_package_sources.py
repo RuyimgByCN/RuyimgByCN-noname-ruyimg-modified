@@ -42,6 +42,11 @@ EXPLICIT = {
 }
 REQUIRED = 32
 NO_PACKAGE = {"L08", "L11", "L12", "L14", "L25"}
+# UP37 核心武将包（上游 `apps/core/character/*`，不属于两仓扩展台账的 37 个 extension/mode 来源）
+CHARACTER_PACKAGES = {
+    "sp2-upstream-noname",
+    "xianding-upstream-noname",
+}
 
 
 def ledger_sources() -> dict[str, tuple[str, str, str]]:
@@ -90,6 +95,8 @@ def mapping() -> tuple[dict[str, list[str]], list[str]]:
         if not pkg.is_dir():
             continue
         name = pkg.name
+        if name in CHARACTER_PACKAGES:
+            continue
         hit = EXPLICIT.get(name)
         if not hit:
             upstream = upstream_path(pkg)

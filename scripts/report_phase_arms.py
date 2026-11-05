@@ -114,7 +114,7 @@ def skill_names() -> dict[str, str]:
     out: dict[str, str] = {}
     for path in glob.glob(str(ROOT / "packages" / "extensions" / "*" / "assets" / "*.json")):
         try:
-            doc = json.load(open(path, encoding="utf-8"))
+            doc = json.loads(Path(path).read_text(encoding="utf-8"))
         except Exception:
             continue
         for skill in doc.get("skills") or []:

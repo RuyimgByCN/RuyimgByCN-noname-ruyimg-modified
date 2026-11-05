@@ -11,8 +11,8 @@ import report_g14 as g14
 
 class JudgeListTest(unittest.TestCase):
     def test_fourteen_judge_begin_true(self) -> None:
-        # 实测：Phase::Judge 且 begin=true 共 14 条
-        self.assertEqual(len(g14.judge_behaviors()), 14)
+        # R05-A2 迁移后：原 14 条中 13 条已迁至 TurnBegin / Phase::Prepare，仅剩 Baiyi 1 条
+        self.assertEqual(len(g14.judge_behaviors()), 1)
 
     def test_behavior_names_match_pattern(self) -> None:
         for beh in g14.judge_behaviors():

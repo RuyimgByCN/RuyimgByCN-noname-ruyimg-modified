@@ -1,0 +1,12 @@
+    Checking engine-api v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-api)
+    Checking rule-api v0.1.0 (/private/tmp/noname-r05/worktree/crates/rule-api)
+    Checking rule-vm v0.1.0 (/private/tmp/noname-r05/worktree/crates/rule-vm)
+    Checking engine-native-kernel v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-kernel)
+    Checking content-schema v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-schema)
+    Checking engine-native-content v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-content)
+    Checking engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Checking content-runtime v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-runtime)
+    Checking content-compiler v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-compiler)
+    Checking content-native-loader v0.1.0 (/private/tmp/noname-r05/worktree/crates/content-native-loader)
+    Checking engine-native-wasm v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native-wasm)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 19.40s

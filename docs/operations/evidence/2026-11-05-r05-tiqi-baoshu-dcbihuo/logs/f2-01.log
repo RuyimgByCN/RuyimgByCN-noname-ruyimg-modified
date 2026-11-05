@@ -1,0 +1,76 @@
+# R05-F2 red run (before implementation)
+# date: 2026-11-03T16:45:58Z
+# HEAD: 73ef44cb
+# cmd: CARGO_TARGET_DIR=/private/tmp/noname-r05/target CARGO_INCREMENTAL=0 cargo test --offline -p engine-native --test misc r05f2_semantic_gaps
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.06s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 7 tests
+test r05f2_semantic_gaps::r05f2_current_not_consumed_when_num_fixed ... ok
+test r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed ... FAILED
+test r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only ... FAILED
+test r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only ... FAILED
+test r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks ... FAILED
+test r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked ... FAILED
+test r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2 ... FAILED
+
+failures:
+
+---- r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed' (46236412) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:179:5:
+assertion `left == right` failed: Current=−1：额定摸牌 2−1=1（Begin2 有符号消费）
+  left: 2
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only' (46236416) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:348:5:
+assertion `left == right` failed: 仅 Source 面问来源持有者（一次）
+  left: [0, 0]
+ right: [0]
+
+---- r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only' (46236417) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:316:5:
+assertion `left == right` failed: 仅 End 面问受害者持有者（一次）
+  left: [1, 1]
+ right: [1]
+
+---- r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks' (46236418) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:263:5:
+assertion `left == right` failed: 跳过 D 的终窗 After 触发 tiqi 两问
+  left: []
+ right: ["confirm", "sign"]
+
+---- r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked' (46236415) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:286:13:
+旁观持有者（非受害者/来源）不应被问: rvm_dcbihuo_target
+
+---- r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2 stdout ----
+
+thread 'r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2' (46236414) panicked at crates/engine-native/tests/groups/../r05f2_semantic_gaps.rs:197:5:
+assertion `left == right` failed: Current=+1：额定摸牌 2+1=3
+  left: 2
+ right: 3
+
+
+failures:
+    r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed
+    r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2
+    r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked
+    r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only
+    r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only
+    r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks
+
+test result: FAILED. 1 passed; 6 failed; 0 ignored; 0 measured; 262 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test misc`
+
+# line gate (pre-split, expected 2 failures):
+crates/engine-native-kernel/src/archive/machine_encode.rs: 1007 effective Rust lines (limit 1000)
+crates/engine-native-kernel/src/kernel/events.rs: 1070 effective Rust lines (limit 1000)
+gate exit=1

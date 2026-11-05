@@ -1,0 +1,45 @@
+$ [R05-F 红：包数据未接入（npack 移出复现）] CARGO_TARGET_DIR=/private/tmp/noname-r05/target CARGO_INCREMENTAL=0 cargo test --offline -p engine-native --test misc r05f_real   # 2026-11-04
+running 5 tests
+test r05f_real_packages::r05f_real_dcbihuo_source_minus_end_plus_take_current ... FAILED
+test r05f_real_packages::r05f_real_dcbihuo_cancel_end_keeps_minus_take_signed ... FAILED
+test r05f_real_packages::r05f_real_baoshu_prepare_cost_resets_and_combs_marks ... FAILED
+test r05f_real_packages::r05f_real_tiqi_other_player_draw_confirm_sign_writes_limit ... FAILED
+test r05f_real_packages::r05f_real_packages_regeneration_matches_committed_npack ... FAILED
+各 panic：读 xianding-upstream-noname/package.npack.json 失败（包数据未接入）: No such file or directory (os error 2)
+         读 sp2-upstream-noname/package.npack.json 失败（包数据未接入）: No such file or directory (os error 2)
+test result: FAILED. 0 passed; 5 failed; 0 ignored; 0 measured; 257 filtered out
+
+$ [R05-F 绿：npack 接入后] 同命令
+running 5 tests
+test r05f_real_packages::r05f_real_packages_regeneration_matches_committed_npack ... ok
+test r05f_real_packages::r05f_real_tiqi_other_player_draw_confirm_sign_writes_limit ... ok
+test r05f_real_packages::r05f_real_dcbihuo_cancel_end_keeps_minus_take_signed ... ok
+test r05f_real_packages::r05f_real_dcbihuo_source_minus_end_plus_take_current ... ok
+test r05f_real_packages::r05f_real_baoshu_prepare_cost_resets_and_combs_marks ... ok
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 257 filtered out; finished in 0.00s
+
+$ [R05-F 三 crate 全量] CARGO_TARGET_DIR=/private/tmp/noname-r05/target CARGO_INCREMENTAL=0 timeout 1500 cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native --no-fail-fast
+     Running unittests src/lib.rs (/private/tmp/noname-r05/target/debug/deps/engine_native-5e7d14102d429995) -> test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running tests/groups/g1.rs (/private/tmp/noname-r05/target/debug/deps/g1-09668c3765db25db) -> test result: ok. 166 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 2.77s
+     Running tests/groups/g1_shahai.rs (/private/tmp/noname-r05/target/debug/deps/g1_shahai-c1181315dc2a39bd) -> test result: ok. 177 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.79s
+     Running tests/groups/kernel.rs (/private/tmp/noname-r05/target/debug/deps/kernel-b09703a09ed5dfc8) -> test result: FAILED. 434 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.46s
+     Running tests/groups/l_rounds.rs (/private/tmp/noname-r05/target/debug/deps/l_rounds-4baf10e88b844325) -> test result: ok. 43 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.53s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a) -> test result: ok. 262 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.90s
+     Running tests/groups/nc08.rs (/private/tmp/noname-r05/target/debug/deps/nc08-523977beb66ce5e1) -> test result: ok. 77 passed; 0 failed; 50 ignored; 0 measured; 0 filtered out; finished in 0.59s
+     Running tests/groups/nc08_upstream_a_k.rs (/private/tmp/noname-r05/target/debug/deps/nc08_upstream_a_k-3f10a832cbb13d19) -> test result: ok. 130 passed; 0 failed; 9 ignored; 0 measured; 0 filtered out; finished in 0.07s
+     Running tests/groups/nc08_upstream_l_z.rs (/private/tmp/noname-r05/target/debug/deps/nc08_upstream_l_z-73877665fa9d1c9e) -> test result: ok. 199 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out; finished in 0.07s
+     Running tests/groups/nc_rounds.rs (/private/tmp/noname-r05/target/debug/deps/nc_rounds-e5c11b5ede2cc866) -> test result: ok. 295 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out; finished in 34.20s
+     Running tests/groups/swd.rs (/private/tmp/noname-r05/target/debug/deps/swd-fa382bc82d8cd3d9) -> test result: ok. 134 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+     Running tests/groups/test_registry.rs (/private/tmp/noname-r05/target/debug/deps/test_registry-4973ba082e5933e4) -> test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src/lib.rs (/private/tmp/noname-r05/target/debug/deps/engine_native_content-b02c4115d9adb0f7) -> test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+     Running unittests src/lib.rs (/private/tmp/noname-r05/target/debug/deps/engine_native_kernel-d8af084864bb7b24) -> test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s -> test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s -> 
+
+汇总（各 target 相加）: passed 1941 / failed 1 / ignored 75
+唯一失败：replay_scenarios::replay_scenarios_match_golden（既有基线，与本批无关）
+
+$ python3 -B scripts/check-source-lines.py   # exit=1
+crates/engine-native-kernel/src/archive/machine_encode.rs: 1007 effective Rust lines (limit 1000)
+crates/engine-native-kernel/src/kernel/events.rs: 1070 effective Rust lines (limit 1000)
+两处超限（kernel/src/archive/machine_encode.rs 1007、kernel/src/kernel/events.rs 1070）在干净 HEAD 35218101 即存在（stash 后复跑同输出），非本批引入；本批新增/修改文件均在限内。

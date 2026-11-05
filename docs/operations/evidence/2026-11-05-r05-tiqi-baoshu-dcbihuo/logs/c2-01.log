@@ -1,0 +1,46 @@
+
+running 7 tests
+test r05c_async_draw::r05c_kurou_exhausted_draw_detaches_instead_of_partial_hand ... ok
+test r05c_async_draw::r05c_kuanggu_trigger_log_precedes_async_draw_delivery ... ok
+test r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped ... FAILED
+test r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent ... FAILED
+test r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens ... FAILED
+test r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens ... FAILED
+test r05c_async_draw::r05c_senluo_discards_settle_before_async_draws ... ok
+
+failures:
+
+---- r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped stdout ----
+
+thread 'r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped' (46720779) panicked at crates/engine-native-kernel/src/machine.rs:629:14:
+virtual use: deck empty
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent stdout ----
+
+thread 'r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent' (46720781) panicked at crates/engine-native/tests/groups/../r05c_async_draw.rs:376:9:
+seed 3：level 0 乱入零摸牌日志（上游 addFellow 无发牌；旧同步摸 4+回滚已落日志＝红）
+
+---- r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens stdout ----
+
+thread 'r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens' (46720780) panicked at crates/engine-native/tests/groups/../r05c_async_draw.rs:523:5:
+assertion `left == right` failed: 双枯竭：held 1 张转 detached、不入手（同步 +1＝红）
+  left: 2
+ right: 1
+
+---- r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens stdout ----
+
+thread 'r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens' (46720782) panicked at crates/engine-native/tests/groups/../r05c_async_draw.rs:468:5:
+assertion `left == right` failed: 双枯竭：R 帧 Exhausted、held 1 张转 detached、不入手（同步 +1＝红）
+  left: 3
+ right: 2
+
+
+failures:
+    r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped
+    r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens
+    r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent
+    r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens
+
+test result: FAILED. 3 passed; 4 failed; 0 ignored; 0 measured; 272 filtered out; finished in 0.09s
+

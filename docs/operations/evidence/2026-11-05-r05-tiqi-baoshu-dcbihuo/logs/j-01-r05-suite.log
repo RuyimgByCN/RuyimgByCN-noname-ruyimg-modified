@@ -1,0 +1,75 @@
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.98s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/worktree/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 67 tests
+test r05c_async_draw::r05c2_fuchou2_exhausted_no_panic_virtual_sha_skipped ... ok
+test r05_turn_model::turn_end_windows_fire_before_handoff ... ok
+test r05c_async_draw::r05c_kurou_exhausted_draw_detaches_instead_of_partial_hand ... ok
+test r05_turn_model::turn_reset_precedes_turn_begin_window ... ok
+test r05_turn_model::next_turn_runs_prepare_begin_and_end_before_judge ... ok
+test r05_turn_model::face_down_turn_is_skipped_before_turn_begin ... ok
+test r05_turn_model::whole_turn_still_takes_five_next_phase_commands ... ok
+test r05c_async_draw::r05c2_zhaoyao_exhausted_draw_detaches_ask_opens ... ok
+test r05c_async_draw::r05c2_lingquan_exhausted_detached_ask_opens ... ok
+test r05e_compounds::r05e_compound_effects_roundtrip_through_suspended_codec ... ok
+test r05c_async_draw::r05c_kuanggu_trigger_log_precedes_async_draw_delivery ... ok
+test r05_turn_model::prepare_phase_archive_round_trip_keeps_new_phase_tag ... ok
+test r05e_compounds::r05e_loader_derives_roles_deterministically ... ok
+test r05e_compounds::r05e_tiqi_n_equals_two_and_own_draw_are_noop ... ok
+test r05e_compounds::r05e_dcbihuo_source_minus_end_plus_keeps_zero_then_take_moves_current ... ok
+test r05e_compounds::r05e_tiqi_confirm_draw_and_negative_limit ... ok
+test r05e_compounds::r05e_generic_add_mark_on_helper_key_is_rejected ... ok
+test r05e_compounds::r05e_baoshu_cost_links_turns_over_and_combs_positive ... ok
+test r05c_async_draw::r05c2_mengpo_level0_spawn_is_card_silent ... ok
+test r05e_compounds::r05e_dcbihuo_cancel_end_window_keeps_minus_then_take_moves_minus ... ok
+test r05e_compounds::r05e_tiqi_sign_cancel_keeps_drawn_and_writes_nothing ... ok
+test r05e_compounds::r05e_baoshu_two_packages_do_not_share_slots ... ok
+test r05e_compounds::r05e_tiqi_cancel_confirm_and_cancel_sign_keep_no_slot ... ok
+test r05e_compounds::r05e_baoshu_cost_cancel_writes_nothing ... ok
+test r05e_compounds::r05e_dcbihuo_two_packages_do_not_share_slots ... ok
+test r05e_compounds::r05f_hand_limit_applies_enabled_limit_signed_clamped ... ok
+test r05e_compounds::r05f_death_clears_limit_combs_current_keeps_next ... ok
+test r05e_compounds::r05f_limit_current_expire_at_global_phase_after ... ok
+test r05e_compounds::r05e_tiqi_two_packages_do_not_share_slots ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_source_dies_in_damage_subevent_clears_source_before_end ... ok
+test r05f2_semantic_gaps::r05f2_current_not_consumed_when_num_fixed ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_armor_full_absorption_and_infinite_hp_still_trigger_source_then_end ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_missing_source_self_zero_and_lose_hp_do_not_trigger ... ok
+test r05f2_semantic_gaps::r05f2_current_minus_consumed_at_begin2_signed ... ok
+test r05f2_semantic_gaps::r05f2_current_plus_consumed_at_begin2 ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_victim_dies_alive_source_still_triggers_source_face ... ok
+test r05e_compounds::r05e_baoshu_m_zero_and_negative_via_inter_window_max_hp_change ... ok
+test r05f2_semantic_gaps::r05d_dcbihuo_chain_damage_frames_independent ... ok
+test r05e_compounds::r05f_combs_consumes_at_begin2_when_positive ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_bystander_holder_not_asked ... ok
+test r05g_archive107::r05g_genuine_106_archive_with_detached_is_version_rejected ... ok
+test r05e_compounds::r05f_next_take_requires_enabled_helper_instance ... ok
+test r05f2_semantic_gaps::r05f2_skipped_draw_phase_emits_after_and_tiqi_asks ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_source_holder_source_face_minus_only ... ok
+test r05f2_semantic_gaps::r05f2_dcbihuo_victim_holder_end_face_plus_only ... ok
+test r05f_real_packages::r05f_real_packages_regeneration_matches_committed_npack ... ok
+test r05g_archive107::r05g_detached_is_in_hash_domain ... ok
+test r05g_archive107::r05g_detached_zone_survives_archive_round_trip ... ok
+test r05f_real_packages::r05f_real_dcbihuo_cancel_end_keeps_minus_take_signed ... ok
+test r05h_projection::r05h_seat_view_r05_effects_ordered_and_uniform ... ok
+test r05f_real_packages::r05f_real_dcbihuo_source_minus_end_plus_take_current ... ok
+test r05f_real_packages::r05f_real_tiqi_other_player_draw_confirm_sign_writes_limit ... ok
+test r05h_projection::r05h_tiqi_adjustment_context_owner_full_other_existence_only ... ok
+test r05f_real_packages::r05f_real_baoshu_prepare_cost_resets_and_combs_marks ... ok
+test r05h_projection::r05h_projection_hides_internal_faces ... ok
+test r05i_byte_chain::r05i_baoshu_seat_order_from_turn_player_and_post_entry_owner_death ... ok
+test r05i_byte_chain::r05i_negative_tamper_wrong_compound_skill_rejected ... ok
+test r05i_byte_chain::r05i_negative_tamper_forged_transfer_and_eligible_rejected ... ok
+test r05i_byte_chain::r05i_gain_after_history_reference_not_counted_as_owner ... ok
+test r05i_byte_chain::r05i_negative_tamper_wrong_lock_and_version_rejected ... ok
+test r05j_acceptance_matrix::r05j_same_identity_two_owners_merge_target_slot_and_replacement_clears_roles ... ok
+test r05j_acceptance_matrix::r05j_next_enabled_true_and_false_across_death_archive_revive_and_turn_begin ... ok
+test r05j_acceptance_matrix::r05j_class12_counterfactual_privacy_plan_and_apply_invariance ... ok
+test r05i_byte_chain::r05i_three_compounds_every_choice_and_force_die_byte_chain ... ok
+test r05i_byte_chain::r05i_drg_every_step_slice_byte_chain ... ok
+test r05i_byte_chain::r05i_drg_skipped_and_dual_exhausted_detached_slice_byte_chain ... ok
+test r05c_async_draw::r05c_senluo_discards_settle_before_async_draws ... ok
+
+test result: ok. 67 passed; 0 failed; 0 ignored; 0 measured; 231 filtered out; finished in 0.10s
+

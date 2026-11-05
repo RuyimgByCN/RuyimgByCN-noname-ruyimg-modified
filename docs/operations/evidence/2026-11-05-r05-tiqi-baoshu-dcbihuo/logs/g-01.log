@@ -1,0 +1,75 @@
+===== R05-G g-01: 升号前探针（真实 106 挂起档生成，pristine tree @ dba05fe3）=====
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+error: couldn't read `crates/engine-native/tests/groups/../fixtures/detached-106.ngsa`: No such file or directory (os error 2)
+   --> crates/engine-native/tests/groups/../r05g_archive107.rs:104:17
+    |
+104 |     let bytes = include_bytes!("fixtures/detached-106.ngsa");
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: could not compile `engine-native` (test "misc") due to 1 previous error
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+error: this operation will panic at runtime
+   --> crates/engine-native/tests/groups/../r05g_archive107.rs:107:29
+    |
+107 |         u16::from_le_bytes([bytes[4], bytes[5]]),
+    |                             ^^^^^^^^ index out of bounds: the length is 0 but the index is 4
+    |
+    = note: `#[deny(unconditional_panic)]` on by default
+
+error: this operation will panic at runtime
+   --> crates/engine-native/tests/groups/../r05g_archive107.rs:107:39
+    |
+107 |         u16::from_le_bytes([bytes[4], bytes[5]]),
+    |                                       ^^^^^^^^ index out of bounds: the length is 0 but the index is 5
+
+error: could not compile `engine-native` (test "misc") due to 2 previous errors
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.63s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 1 test
+probe outcome: Accepted { state_hash: [125, 113, 174, 174, 58, 126, 12, 11, 99, 126, 34, 70, 169, 167, 117, 7, 126, 219, 137, 187, 159, 75, 118, 191, 95, 189, 96, 39, 138, 141, 213, 7] }
+probe detached: [(103, Unclaimed)]
+probe deck=0 discard=0
+probe fixture bytes: 1644
+test zz_r05g_probe::probe_write_detached_106_fixture ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 272 filtered out; finished in 0.00s
+
+00000000: 4e47 5341 6a00 4c01 0000 0000 0000 3606  NGSAj.L.......6.
+00000010: 0000 0000 0000 4c01 0000 0000 0000 0100  ......L.........
+
+===== R05-G g-01: 修前红（三测全红）=====
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.68s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 3 tests
+
+thread 'r05g_archive107::r05g_genuine_106_archive_with_detached_is_version_rejected' (46267347) panicked at crates/engine-native/tests/groups/../r05g_archive107.rs:113:18:
+期望 107 门禁拒收 106，得到 Ok(StateSnapshot { ruleset_version: 332, core: GameStateCore { revision: 1, ruleset_version: 332, mode: Prototype, players: [PlayerState { alive: true, hp: 4, max_hp: 4, hand: [8, 16, 56, 96, 1, 33, 110, 117, 0, 90, 82, 22, 89, 12, 36, 108, 35, 109, 54, 91, 28, 106, 92, 53, 45, 64, 29, 55, 102, 9, 50, 119, 122, 65, 107, 105, 23, 87, 112, 79, 104, 93, 94, 38, 120, 32, 42, 85, 2, 52, 61, 41, 40, 69, 26, 21, 25, 70, 4, 44, 6, 18, 75, 59, 51, 5, 113, 111, 81, 78, 39, 14, 34, 121, 43, 83, 80, 71, 116, 115, 66, 24, 11, 68, 20, 84, 57, 86, 19, 99, 31, 37, 27, 101, 58, 118, 46, 48, 95, 49, 63, 62, 123, 7, 97, 60, 13, 114, 72, 77, 10, 76, 47, 98, 67], equips: [], judge: [], dying: false, linked: false, general_slots: [None, None], revealed_generals: [false, false], kingdom_identity: Unknown, yexinjia_friends: [], wunature: None, hujia: 0, face_down: false, zhucheng: [], paotai_lv: 0, baolei_mode: 0, baoxue_used: false, guihan_used: false, xuehuang_used: false, xuejibingbao: 0, lianyaohu_store: [], nigong_lv: 0, jidong_active: false, qianggu_active: false, pingzhang_self_used: false, pingzhang_other_used: false, pingzhang_count: 0, yinshen_active: false, jijia_hp: 0, feng_count: 0, ya_count: 0, song_count: 0, anwugu_count: 0, jiangcheng_longhuo: false, yuexing_pair: None, turn_damage: 0, linghuo_ready_round: 0, guijin_ready_round: 0, skip_next_draw: false, guanri_used: false, off_court: [], shuiyun_count: 0, wangyou3_round: 0, total_used: 0, lingquan_awakened: false, shenwu_awakened: false, chengxin_active: false, chengxin_ready_round: 0, husha_mark: 0, hyunshen_count: 0, daixing_count: 0, juxi_count: 0, pozhou_count: 0, sxianjing_traps: [], death_cancelled: false, shiying_used: false, huahu_used: false, xuanning_mark: 0, shedu: 0, juyuan_storage: 0, fengyin_active: false, lingqu_count: 0, xingqiu_toggled: false, zlfanshi_terra: false, wangshi_ban: false, fuchou_marked: [], buchun_used_round: 0, xingxia_used_round: 0, nbianshen_toggle: false, ctianfu_source: None, ctianfu_card: None, gouhunluo_rounds: 0, gouhunluo_source: None, jiguanyuan_cards: [], jileng_active: false, chaofeng_active: false, xingtigaizao_count: 0, yinmi_active: false, card_mods: {}, boss_chongzheng: 0, boss_mad: false, jinlin_used: false, hlss_stars: 0, hlss_count: 0, hlss_damage: 0, hlss_fengqi_used: [], mbqianlong_marks: 0, niepan_used: false, shenyan_used: false, shenyan_pending: [], skip_discard_phase: false, yishan_lost: [], shouyin_used: false, swdtianshu_from: None, swdtianshu_granted: None, mailun_mode: 0, mailun_out_used: false, mailun_in_used: false, jilve_used: 0, songci_targets: [], hutian_deposit: None, hutian_just_given: false, hutian_hold: [], hutian_owner: None }, PlayerState { alive: true, hp: 4, max_hp: 4, hand: [3, 74, 100, 15], equips: [], judge: [], dying: false, linked: false, general_slots: [None, None], revealed_generals: [false, false], kingdom_identity: Unknown, yexinjia_friends: [], wunature: None, hujia: 0, face_down: false, zhucheng: [], paotai_lv: 0, baolei_mode: 0, baoxue_used: false, guihan_used: false, xuehuang_used: false, xuejibingbao: 0, lianyaohu_store: [], nigong_lv: 0, jidong_active: false, qianggu_active: false, pingzhang_self_used: false, pingzhang_other_used: false, pingzhang_count: 0, yinshen_active: false, jijia_hp: 0, feng_count: 0, ya_count: 0, song_count: 0, anwugu_count: 0, jiangcheng_longhuo: false, yuexing_pair: None, turn_damage: 0, linghuo_ready_round: 0, guijin_ready_round: 0, skip_next_draw: false, guanri_used: false, off_court: [], shuiyun_count: 0, wangyou3_round: 0, total_used: 0, lingquan_awakened: false, shenwu_awakened: false, chengxin_active: false, chengxin_ready_round: 0, husha_mark: 0, hyunshen_count: 0, daixing_count: 0, juxi_count: 0, pozhou_count: 0, sxianjing_traps: [], death_cancelled: false, shiying_used: false, huahu_used: false, xuanning_mark: 0, shedu: 0, juyuan_storage: 0, fengyin_active: false, lingqu_count: 0, xingqiu_toggled: false, zlfanshi_terra: false, wangshi_ban: false, fuchou_marked: [], buchun_used_round: 0, xingxia_used_round: 0, nbianshen_toggle: false, ctianfu_source: None, ctianfu_card: None, gouhunluo_rounds: 0, gouhunluo_source: None, jiguanyuan_cards: [], jileng_active: false, chaofeng_active: false, xingtigaizao_count: 0, yinmi_active: false, card_mods: {}, boss_chongzheng: 0, boss_mad: false, jinlin_used: false, hlss_stars: 0, hlss_count: 0, hlss_damage: 0, hlss_fengqi_used: [], mbqianlong_marks: 0, niepan_used: false, shenyan_used: false, shenyan_pending: [], skip_discard_phase: false, yishan_lost: [], shouyin_used: false, swdtianshu_from: None, swdtianshu_granted: None, mailun_mode: 0, mailun_out_used: false, mailun_in_used: false, jilve_used: 0, songci_targets: [], hutian_deposit: None, hutian_just_given: false, hutian_hold: [], hutian_owner: None }, PlayerState { alive: true, hp: 4, max_hp: 4, hand: [88, 73, 17, 30], equips: [], judge: [], dying: false, linked: false, general_slots: [None, None], revealed_generals: [false, false], kingdom_identity: Unknown, yexinjia_friends: [], wunature: None, hujia: 0, face_down: false, zhucheng: [], paotai_lv: 0, baolei_mode: 0, baoxue_used: false, guihan_used: false, xuehuang_used: false, xuejibingbao: 0, lianyaohu_store: [], nigong_lv: 0, jidong_active: false, qianggu_active: false, pingzhang_self_used: false, pingzhang_other_used: false, pingzhang_count: 0, yinshen_active: false, jijia_hp: 0, feng_count: 0, ya_count: 0, song_count: 0, anwugu_count: 0, jiangcheng_longhuo: false, yuexing_pair: None, turn_damage: 0, linghuo_ready_round: 0, guijin_ready_round: 0, skip_next_draw: false, guanri_used: false, off_court: [], shuiyun_count: 0, wangyou3_round: 0, total_used: 0, lingquan_awakened: false, shenwu_awakened: false, chengxin_active: false, chengxin_ready_round: 0, husha_mark: 0, hyunshen_count: 0, daixing_count: 0, juxi_count: 0, pozhou_count: 0, sxianjing_traps: [], death_cancelled: false, shiying_used: false, huahu_used: false, xuanning_mark: 0, shedu: 0, juyuan_storage: 0, fengyin_active: false, lingqu_count: 0, xingqiu_toggled: false, zlfanshi_terra: false, wangshi_ban: false, fuchou_marked: [], buchun_used_round: 0, xingxia_used_round: 0, nbianshen_toggle: false, ctianfu_source: None, ctianfu_card: None, gouhunluo_rounds: 0, gouhunluo_source: None, jiguanyuan_cards: [], jileng_active: false, chaofeng_active: false, xingtigaizao_count: 0, yinmi_active: false, card_mods: {}, boss_chongzheng: 0, boss_mad: false, jinlin_used: false, hlss_stars: 0, hlss_count: 0, hlss_damage: 0, hlss_fengqi_used: [], mbqianlong_marks: 0, niepan_used: false, shenyan_used: false, shenyan_pending: [], skip_discard_phase: false, yishan_lost: [], shouyin_used: false, swdtianshu_from: None, swdtianshu_granted: None, mailun_mode: 0, mailun_out_used: false, mailun_in_used: false, jilve_used: 0, songci_targets: [], hutian_deposit: None, hutian_just_given: false, hutian_hold: [], hutian_owner: None }], seat_ring: [0, 1, 2], deck: [], discard: [], detached_cards: [], table: [], rng: RuleRng { state: 7864861769256783028, calls: 123 }, turn: TurnState { current: 0, phase: Judge, round: 1, sha_used_play_phase: false, mufeng_used_basic: false, wangchen_discard_basic: false, shenmiguo_used: false, shuchui_armed: false, shuchui_hit: false, lianda_used: false, land_used: false, land_sha_used: false, discard_phase_discarded: 0, ciqiu_dying: [], kangyin2: None, huanxia_track: [], cards_used_play_phase: 0, cards_used_turn: 0, liaoyuan_count: 0, xuanyuanjian_marked: false, kunlunjing_snapshot: [], kunlunjing_hp: 0, extra_phases: [], extra_phase_lingwu: false, bte_used_play_phase: 0, phase_number: 0, rende_given: 0, jiu_used: false, mujiaren_used: false, jiu_active: false, turn_opened: true, skip_draw_phase: false, skip_play_phase: false, guxing_armed: false, guxing_count: 0, mengtai_draw_pending: false, mengtai_use_pending: false, zhufangshenshi_target: None, yuedong_num: 0, yuedong_eff: 0, yuedong_recover: false, liangou_hook: None, liangou_bonus_used: false, feitiao_target: None, fanling_used: false, diewu_draw_used: false, lueying_used: false, txianqu_used: false, jtjubao_used: false, zhuyue_targets: [], sheling_used: 0, sheying_used: false, zhangmu_used: false, yingfeng_chain: false, luanjian_card: None, minwan_targets: [], yanyu_count: 0, xjyufeng_used: 0, qizuo_copy: None, jidian_chain: false }, skills: {}, declared_kinds: {}, declared_slots: {}, card_natures: {}, current_land: None, outcome: None, vm_aux: VmAux { marks: {}, piles: {}, lost: {}, once: {}, flags: {}, hits: {}, storage: {}, drawn: {} } }, last_dedup: 0, auth_generation: 0, segment_open: false, segment_checkpoint: None, resolution: ResolutionSnapshot { next_event_id: 8, next_choice_id: 1, stack: [], parks: [], open_choice: None, answer: None, budget: 4059 } })
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test r05g_archive107::r05g_genuine_106_archive_with_detached_is_version_rejected ... FAILED
+
+thread 'r05g_archive107::r05g_detached_is_in_hash_domain' (46267345) panicked at crates/engine-native/tests/groups/../r05g_archive107.rs:87:5:
+assertion `left != right` failed: 修前红：哈希域不含 detached——kind 维度不可区分
+  left: [117, 90, 53, 52, 82, 128, 35, 225, 27, 148, 161, 169, 148, 240, 130, 179, 190, 71, 71, 135, 107, 107, 98, 4, 214, 147, 143, 202, 216, 226, 116, 212]
+ right: [117, 90, 53, 52, 82, 128, 35, 225, 27, 148, 161, 169, 148, 240, 130, 179, 190, 71, 71, 135, 107, 107, 98, 4, 214, 147, 143, 202, 216, 226, 116, 212]
+
+thread 'r05g_archive107::r05g_detached_zone_survives_archive_round_trip' (46267346) panicked at crates/engine-native/tests/groups/../r05g_archive107.rs:55:5:
+assertion `left == right` failed: 修前红：解码侧 detached 为 Vec::new() 默认（整区丢失）
+  left: []
+ right: [(103, Unclaimed)]
+test r05g_archive107::r05g_detached_is_in_hash_domain ... FAILED
+test r05g_archive107::r05g_detached_zone_survives_archive_round_trip ... FAILED
+
+failures:
+
+failures:
+    r05g_archive107::r05g_detached_is_in_hash_domain
+    r05g_archive107::r05g_detached_zone_survives_archive_round_trip
+    r05g_archive107::r05g_genuine_106_archive_with_detached_is_version_rejected
+
+test result: FAILED. 0 passed; 3 failed; 0 ignored; 0 measured; 269 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p engine-native --test misc`

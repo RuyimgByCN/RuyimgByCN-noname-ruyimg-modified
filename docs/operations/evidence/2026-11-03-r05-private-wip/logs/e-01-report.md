@@ -17,7 +17,7 @@
 
 | 环节 | 位置 |
 | --- | --- |
-| 标签常量 781/782/783 | `crates/rule-vm/src/bytecode/effect_tag.rs:1621-1634` |
+| 标签常量 781/782/783 | `crates/rule-vm/src/bytecode/effect_tag.rs:1617-1630` |
 | 弹栈解码臂（player, skill 双弹栈，同胆守形） | `crates/rule-vm/src/vm/effects/resolve_potjixi_packs.rs:361-386` |
 | EffectRequest 变体（choices 宏表尾追） | `crates/rule-api/src/effect/choices.rs:1517-1553`；注册表尾追 `crates/rule-api/src/effect.rs:703-707` |
 | 入队校验 gate 臂（player 在座＋skill 非 NONE） | `crates/engine-native-kernel/src/rvm_ops.rs:126-140` |

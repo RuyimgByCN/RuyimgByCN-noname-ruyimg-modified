@@ -1,0 +1,16 @@
+   Compiling engine-native v0.1.0 (/private/tmp/noname-r05/worktree/crates/engine-native)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.97s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-bb0dac5b82f90a1a)
+
+running 8 tests
+test r05i_byte_chain::r05i_negative_tamper_wrong_lock_and_version_rejected ... ok
+test r05i_byte_chain::r05i_negative_tamper_forged_transfer_and_eligible_rejected ... ok
+test r05i_byte_chain::r05i_baoshu_seat_order_from_turn_player_and_post_entry_owner_death ... ok
+test r05i_byte_chain::r05i_gain_after_history_reference_not_counted_as_owner ... ok
+test r05i_byte_chain::r05i_negative_tamper_wrong_compound_skill_rejected ... ok
+test r05i_byte_chain::r05i_three_compounds_every_choice_and_force_die_byte_chain ... ok
+test r05i_byte_chain::r05i_drg_every_step_slice_byte_chain ... ok
+test r05i_byte_chain::r05i_drg_skipped_and_dual_exhausted_detached_slice_byte_chain ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 287 filtered out; finished in 0.03s
+

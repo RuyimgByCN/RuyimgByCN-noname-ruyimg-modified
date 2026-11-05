@@ -49,7 +49,7 @@
 | R02 讲武 | 未实现 | 权威扣款/授予/重试/恢复；商店入口 | 进度主稿 |
 | R03 冯河/英霸 | 部分：J2原生冯河原语/主动桥已在329/ABI758验收（`255bbfbd`），不是整套英霸/平定或shiji整包验收 | 已有交牌/重铸、实际赠牌授标、防伤子事件和恢复路径；仍需英霸/平定完整链、跨技能组合/配置及来源级等价，已存在的DSL/修正器不再记成“原生同名缺失” | [J2整合](../operations/evidence/2026-10-30-j2-main-integration/README.md)、[R03历史](../operations/evidence/2026-10-24-up37-r03-recast/README.md) |
 | R04 弼士 | 旧线 noop | 额外阶段/受益者/来源绑定/首张不可响应 | [R04 旧证据](../operations/evidence/2026-10-24-upstream-37-impact/README.md) |
-| R05 涕泣/宝梳/避祸 | 三份noop，具体合同已获裁决28，尚未实施；版本按裁决29／31为333／107／759／WS8 | 实际331→332验收后按已审v3＋v4＋v5完成真实阶段／191异步Draw／gain、三compound／四角色、原字节完整锁及各端保存恢复和全部场景；版本／旧档政策详见裁决，不借NC10字段批准放宽执行门禁 | [裁决28合同与边界](../operations/evidence/2026-10-31-r05-runtime-contract/README.md) |
+| R05 涕泣/宝梳/避祸 | **已完成并验收（2026-11-05；规则 333／NGSA 107／ABI 759／WS8，裁决 28／29／31）**：按已审 v3＋v4＋v5 合同完成 `Phase::Prepare`＋`TurnBegin`/`TurnEndWindow`＋168 条阶段/回合触发审计与 106 条迁移、`D/R/G` 摸牌事件族＋`detached_cards`＋191 处同步 `draw_cards` 全量异步化（删除 `Ctx::draw_cards`）、ABI 759 三固定 compound（781/782/783）＋四角色私有 helper 派生（`#r05:{limit,combs,next,current}`）＋真包 `packages/extensions/{xianding,sp2}-upstream-noname`、NGSA 107 入档与所有权、公开投影 `SeatView.r05_effects`＋WS8、原字节校验恢复链与 `VerifiedLockedContent` 锁内容工厂、8 处离场/换将清理落点、12 类场景矩阵与 Native/WASM 跨目标步进存档等价、14 golden 三步探针重录及全量 21 项 preflight 门禁通过 | 无（Cancelled 摸牌阶段原生无生产者，已按 F2 登记边界留痕） | [R05 验收证据](../operations/evidence/2026-11-05-r05-tiqi-baoshu-dcbihuo/README.md)、[分批证据](../operations/evidence/2026-11-03-r05-private-wip/README.md)、[裁决28合同](../operations/evidence/2026-10-31-r05-runtime-contract/README.md) |
 | R06 纵害/明节/击戈 | noop/近似 | dying 祖先、一次性防伤、手牌外杀 | 同台账 |
 | R07 举战/自固/荡尘 | noop/部分 | 取消付费、禁弃/禁获得、实体牌归属 | 同台账 |
 | R08 清势/神赋/顾曲/争功 | noop/近似 | 取消/空 cards/无 currentPhase、装备实际使用 | 同台账 |

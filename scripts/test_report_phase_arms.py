@@ -27,7 +27,8 @@ class EnumerationTests(unittest.TestCase):
         cls.rows = cls.mod.arms()
 
     def test_counts_every_phase_pinned_arm(self):
-        self.assertEqual(len(self.rows), 45)
+        # R05-A2 迁移后：原 45 个相位钉死臂中有 17 个已迁移至 TurnBegin / TurnEnd / Prepare，剩余 28 个
+        self.assertEqual(len(self.rows), 28)
 
     def test_every_row_has_a_behavior(self):
         for behavior, *_ in self.rows:
@@ -52,9 +53,8 @@ class ClassificationTests(unittest.TestCase):
         ]
 
     def test_g14_count_matches_manual_audit(self):
-        # 14 = 11 + `SwdHujing`（相等比较写法）+ `Qinglongzhigui`/`Huanglinzhicong`
-        # （效果挂在卡片 `global: g_<name>` 技能上，第 737 轮补查）
-        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 1)
+        # R05-A2 迁移后：`GujianFoodZiyangdan` 已迁至 TurnBegin，G14 归零
+        self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G14")), 0)
 
     def test_g20_count_matches_manual_audit(self):
         self.assertEqual(sum(1 for v in self.verdicts if v.startswith("G20")), 0)  # 第 991 轮：G20 全部已修
@@ -86,11 +86,11 @@ class ClassificationTests(unittest.TestCase):
 
 class CliTests(unittest.TestCase):
     def test_check_passes_when_every_row_is_classified(self):
-        # 第 768 轮：`miedao` 作为复合技补进 MANUAL 后，53 条全部有判定 ⇒ --check 归零
+        # R05-A2 迁移后：28 条全部有判定 ⇒ --check 归零
         proc = subprocess.run([sys.executable, "-B", str(SCRIPT), "--check"],
                               capture_output=True, text=True, cwd=ROOT)
         self.assertEqual(proc.returncode, 0, proc.stderr)
-        self.assertIn("共 45 个相位钉死臂", proc.stderr)
+        self.assertIn("共 28 个相位钉死臂", proc.stderr)
 
 
 if __name__ == "__main__":

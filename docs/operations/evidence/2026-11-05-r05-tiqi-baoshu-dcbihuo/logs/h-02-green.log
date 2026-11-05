@@ -1,0 +1,10 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.05s
+     Running tests/groups/misc.rs (/private/tmp/noname-r05/target/debug/deps/misc-3277563faac06506)
+
+running 3 tests
+test r05h_projection::r05h_seat_view_r05_effects_ordered_and_uniform ... ok
+test r05h_projection::r05h_projection_hides_internal_faces ... ok
+test r05h_projection::r05h_tiqi_adjustment_context_owner_full_other_existence_only ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 279 filtered out; finished in 0.00s
+
