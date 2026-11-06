@@ -294,6 +294,63 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, *key);
                 push_u32(w, *value);
             }
+            // PA12 批⑧：10 种确定性非挂起效果编码（38..=48）。
+            EffectRequest::AddSkillUntilTurnEnd { player, skill_def } => {
+                w.push(38);
+                push_u32(w, player.raw());
+                push_u32(w, skill_def.raw());
+            }
+            EffectRequest::RemoveSkillByDef { player, skill_def } => {
+                w.push(39);
+                push_u32(w, player.raw());
+                push_u32(w, skill_def.raw());
+            }
+            EffectRequest::RevealHand { player } => {
+                w.push(40);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::RevealHandToPlayer { player, observer } => {
+                w.push(41);
+                push_u32(w, player.raw());
+                push_u32(w, observer.raw());
+            }
+            EffectRequest::GainCardByKind { player, kind } => {
+                w.push(42);
+                push_u32(w, player.raw());
+                w.push(*kind);
+            }
+            EffectRequest::GainDiscardCardByKind { player, kind } => {
+                w.push(43);
+                push_u32(w, player.raw());
+                w.push(*kind);
+            }
+            EffectRequest::GainEquipmentFromDrawPile { player } => {
+                w.push(44);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::GiveAllHand { player, target } => {
+                w.push(45);
+                push_u32(w, player.raw());
+                push_u32(w, target.raw());
+            }
+            EffectRequest::DiscardAllTargetEquipment { actor, target } => {
+                w.push(46);
+                push_u32(w, actor.raw());
+                push_u32(w, target.raw());
+            }
+            EffectRequest::GainEventCards { player, cards } => {
+                w.push(47);
+                push_u32(w, player.raw());
+                push_u32(w, cards.len() as u32);
+                for c in cards {
+                    push_u32(w, c.raw());
+                }
+            }
+            EffectRequest::GainCardIfDiscard { player, card } => {
+                w.push(48);
+                push_u32(w, player.raw());
+                push_u32(w, card.raw());
+            }
             _ => unreachable!("accept_effect 已拒绝未编码变体"),
         }
     }
@@ -511,6 +568,53 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 skill: rule_api::SkillId::new(rd.u32()?),
                 key: rd.u32()?,
                 value: rd.u32()?,
+            },
+            38 => EffectRequest::AddSkillUntilTurnEnd {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill_def: rule_api::SkillDefId::new(rd.u32()?),
+            },
+            39 => EffectRequest::RemoveSkillByDef {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill_def: rule_api::SkillDefId::new(rd.u32()?),
+            },
+            40 => EffectRequest::RevealHand {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            41 => EffectRequest::RevealHandToPlayer {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                observer: rule_api::PlayerId::new(rd.u32()?),
+            },
+            42 => EffectRequest::GainCardByKind {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                kind: rd.u8()?,
+            },
+            43 => EffectRequest::GainDiscardCardByKind {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                kind: rd.u8()?,
+            },
+            44 => EffectRequest::GainEquipmentFromDrawPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            45 => EffectRequest::GiveAllHand {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+            },
+            46 => EffectRequest::DiscardAllTargetEquipment {
+                actor: rule_api::PlayerId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+            },
+            47 => {
+                let player = rule_api::PlayerId::new(rd.u32()?);
+                let m = rd.u32()? as usize;
+                let mut cards = Vec::with_capacity(m);
+                for _ in 0..m {
+                    cards.push(rule_api::CardId::new(rd.u32()?));
+                }
+                EffectRequest::GainEventCards { player, cards }
+            }
+            48 => EffectRequest::GainCardIfDiscard {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
             },
             _ => return None,
         };

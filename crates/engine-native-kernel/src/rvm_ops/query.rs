@@ -328,7 +328,15 @@ pub fn run_query(
         }
         QueryRequest::HasSkill { player, skill_def } => {
             let p = seat(player, "HasSkill")?;
-            let has = u16::try_from(skill_def.raw()).is_ok_and(|d| core.has_skill(p, d));
+            let raw = skill_def.raw();
+            let has = resolve_skill_def(catalog, raw).is_some_and(|d| core.has_skill(p, d))
+                || core
+                    .vm_aux
+                    .flags
+                    .get(&(p, format!("skill:{raw}")))
+                    .copied()
+                    .unwrap_or(0)
+                    != 0;
             QueryResponse::Bool(has)
         }
         QueryRequest::CardNameLength { card, .. } => {

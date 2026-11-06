@@ -37,12 +37,58 @@ pub(crate) fn seat_of(p: rule_api::PlayerId, seats: u8) -> Option<PlayerId> {
 }
 
 fn kind_tag(kind: CardKind) -> u8 {
-    CardKind::ALL.iter().position(|k| *k == kind).unwrap_or(255) as u8
+    match kind {
+        CardKind::Sha => 1,
+        CardKind::Tao => 2,
+        CardKind::Shan => 3,
+        CardKind::Jiu => 4,
+        CardKind::FireSha => 5,
+        CardKind::LeiSha => 6,
+        CardKind::Wuzhong => 20,
+        CardKind::Dismantle => 21,
+        CardKind::Snatch => 22,
+        CardKind::Duel => 23,
+        CardKind::SavageAttack => 24,
+        CardKind::ArcheryAttack => 25,
+        CardKind::Taoyuan => 26,
+        CardKind::Wugu => 27,
+        CardKind::Le => 30,
+        CardKind::Bing => 31,
+        CardKind::ShanDian => 32,
+        CardKind::Jiedao => 33,
+        CardKind::Chain => 34,
+        CardKind::Nullify => 36,
+        CardKind::Youdishenru => 40,
+        CardKind::WangmeiZhike => 42,
+        other => match other.equip_slot() {
+            Some(crate::catalog::EquipSlot::Weapon) => 10,
+            Some(crate::catalog::EquipSlot::Armor) => 11,
+            Some(crate::catalog::EquipSlot::HorseMinus) => 12,
+            Some(crate::catalog::EquipSlot::HorsePlus) => 13,
+            Some(crate::catalog::EquipSlot::Treasure) => 14,
+            None => 255,
+        },
+    }
+}
+
+pub(crate) fn resolve_skill_def(catalog: &Catalog, raw: u32) -> Option<u16> {
+    if raw != 0 {
+        if let Some((i, _)) = catalog
+            .skills
+            .iter()
+            .enumerate()
+            .find(|(_, s)| s.behavior.package_skill_id() == Some(raw))
+        {
+            return u16::try_from(i).ok();
+        }
+    }
+    let id = u16::try_from(raw).ok()?;
+    ((id as usize) < catalog.skills.len()).then_some(id)
 }
 
 fn skill_label(catalog: &Catalog, def: u32) -> Option<String> {
-    let id = u16::try_from(def).ok()?;
-    ((id as usize) < catalog.skills.len()).then(|| catalog.skill_name(id).to_string())
+    let id = resolve_skill_def(catalog, def)?;
+    Some(catalog.skill_name(id).to_string())
 }
 
 fn pile_name(catalog: &Catalog, executing: &str, pile_def: u32) -> String {
@@ -147,6 +193,11 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             }
         }
         EffectRequest::AddSkill { player, .. }
+        | EffectRequest::AddSkillUntilTurnEnd { player, .. }
+        | EffectRequest::RemoveSkillByDef { player, .. }
+        | EffectRequest::RevealHand { player }
+        | EffectRequest::GainEquipmentFromDrawPile { player }
+        | EffectRequest::GainEventCards { player, .. }
         | EffectRequest::EnterDying { player }
         | EffectRequest::DiscardAllOwnJudge { player, .. }
         | EffectRequest::GainTopCardToSkillPile { player, .. }
@@ -157,6 +208,34 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         | EffectRequest::GainWholeSkillPile { player, .. }
         | EffectRequest::StoreEventCardInSkillPile { player, .. } => {
             ok_player(*player, "player")?;
+        }
+        EffectRequest::GainCardByKind { player, kind }
+        | EffectRequest::GainDiscardCardByKind { player, kind } => {
+            ok_player(*player, "GainCardByKind.player")?;
+            if *kind == 0 {
+                return Err(reject("GainCardByKind.kind"));
+            }
+        }
+        EffectRequest::GainCardIfDiscard { player, card } => {
+            ok_player(*player, "GainCardIfDiscard.player")?;
+            if !card.is_some() {
+                return Err(reject("GainCardIfDiscard.card"));
+            }
+        }
+        EffectRequest::RevealHandToPlayer { player, observer } => {
+            ok_player(*player, "RevealHandToPlayer.player")?;
+            ok_player(*observer, "RevealHandToPlayer.observer")?;
+        }
+        EffectRequest::GiveAllHand { player, target } => {
+            ok_player(*player, "GiveAllHand.player")?;
+            ok_player(*target, "GiveAllHand.target")?;
+            if player == target {
+                return Err(reject("GiveAllHand.self"));
+            }
+        }
+        EffectRequest::DiscardAllTargetEquipment { actor, target } => {
+            ok_player(*actor, "DiscardAllTargetEquipment.actor")?;
+            ok_player(*target, "DiscardAllTargetEquipment.target")?;
         }
         EffectRequest::GainOtherSkillPileCards { player, target, .. } => {
             ok_player(*player, "GainOther.player")?;
@@ -415,22 +494,54 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 return;
             };
             let raw = skill_def.raw();
-            if let Ok(def) = u16::try_from(raw) {
-                if (def as usize) < ctx.catalog.skills.len() {
-                    ctx.ensure_skill((p, def), SkillInstance {
+            if let Some(def) = resolve_skill_def(ctx.catalog, raw) {
+                ctx.ensure_skill(
+                    (p, def),
+                    SkillInstance {
                         owner: p,
                         enabled: true,
                         once_used: false,
                         expires_end_of_turn: false,
                         rounds: 0,
-                    });
-                    return;
-                }
+                    },
+                );
+                return;
             }
             ctx.core.vm_aux.flags.insert((p, format!("skill:{raw}")), 1);
         }
+        EffectRequest::AddSkillUntilTurnEnd { player, skill_def } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let raw = skill_def.raw();
+            if let Some(def) = resolve_skill_def(ctx.catalog, raw) {
+                if !ctx.core.has_skill(p, def) {
+                    ctx.add_skill_until_turn_end(p, def);
+                }
+                return;
+            }
+            ctx.core.vm_aux.flags.insert((p, format!("skill:{raw}")), 1);
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((p, format!("skill_turn:{raw}")), 1);
+        }
+        EffectRequest::RemoveSkillByDef { player, skill_def } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let raw = skill_def.raw();
+            if let Some(def) = resolve_skill_def(ctx.catalog, raw) {
+                ctx.remove_skill(p, def);
+            }
+            ctx.core.vm_aux.flags.remove(&(p, format!("skill:{raw}")));
+            ctx.core
+                .vm_aux
+                .flags
+                .remove(&(p, format!("skill_turn:{raw}")));
+        }
         EffectRequest::RemoveSkill { skill } => {
-            if let Ok(def) = u16::try_from(skill.raw()) {
+            if let Some(def) = resolve_skill_def(ctx.catalog, skill.raw()) {
                 let owners: Vec<PlayerId> = ctx
                     .core
                     .skills
@@ -758,6 +869,158 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     cards: shown,
                     to: who,
                 });
+            }
+        }
+        EffectRequest::RevealHand { player } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if !ctx.core.player(p).alive {
+                return;
+            }
+            let shown = ctx.core.player(p).hand.clone();
+            if !shown.is_empty() {
+                ctx.out.push(LogEvent::CardsRevealed {
+                    cards: shown,
+                    to: Vec::new(),
+                });
+            }
+        }
+        EffectRequest::RevealHandToPlayer { player, observer } => {
+            let (Some(p), Some(obs)) = (seat_of(player, seats), seat_of(observer, seats)) else {
+                return;
+            };
+            let shown = ctx.core.player(p).hand.clone();
+            if !shown.is_empty() {
+                ctx.out.push(LogEvent::CardsRevealed {
+                    cards: shown,
+                    to: vec![obs],
+                });
+            }
+        }
+        EffectRequest::GainCardByKind { player, kind } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let found = ctx
+                .core
+                .deck
+                .iter()
+                .rposition(|c| kind_tag(ctx.catalog.card_kind(*c)) == kind)
+                .map(|i| ctx.core.deck.remove(i))
+                .or_else(|| {
+                    ctx.core
+                        .discard
+                        .iter()
+                        .rposition(|c| kind_tag(ctx.catalog.card_kind(*c)) == kind)
+                        .map(|i| ctx.core.discard.remove(i))
+                });
+            if let Some(card) = found {
+                ctx.core.player_mut(p).hand.push(card);
+                ctx.out.push(LogEvent::CardsDrawn {
+                    player: p,
+                    cards: vec![card],
+                });
+            }
+        }
+        EffectRequest::GainDiscardCardByKind { player, kind } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if let Some(i) = ctx
+                .core
+                .discard
+                .iter()
+                .rposition(|c| kind_tag(ctx.catalog.card_kind(*c)) == kind)
+            {
+                let card = ctx.core.discard.remove(i);
+                ctx.core.player_mut(p).hand.push(card);
+                ctx.out.push(LogEvent::CardsDrawn {
+                    player: p,
+                    cards: vec![card],
+                });
+            }
+        }
+        EffectRequest::GainEquipmentFromDrawPile { player } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if let Some(i) = ctx
+                .core
+                .deck
+                .iter()
+                .rposition(|c| ctx.catalog.card_kind(*c).is_equip())
+            {
+                let card = ctx.core.deck.remove(i);
+                ctx.core.player_mut(p).hand.push(card);
+                ctx.out.push(LogEvent::CardsDrawn {
+                    player: p,
+                    cards: vec![card],
+                });
+            }
+        }
+        EffectRequest::GiveAllHand { player, target } => {
+            let (Some(a), Some(b)) = (seat_of(player, seats), seat_of(target, seats)) else {
+                return;
+            };
+            if a == b || !ctx.core.player(a).alive || !ctx.core.player(b).alive {
+                return;
+            }
+            let cards = ctx.core.player(a).hand.clone();
+            ctx.give_hand_cards(a, b, &cards);
+        }
+        EffectRequest::DiscardAllTargetEquipment { actor, target } => {
+            let (Some(a), Some(t)) = (seat_of(actor, seats), seat_of(target, seats)) else {
+                return;
+            };
+            if !ctx.core.player(a).alive || !ctx.core.player(t).alive {
+                return;
+            }
+            let cards = ctx.core.player(t).equips.clone();
+            for c in &cards {
+                ctx.take_owned_card(t, *c);
+            }
+            discard_some(ctx, t, cards);
+        }
+        EffectRequest::GainEventCards { player, cards } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if !ctx.core.player(p).alive {
+                return;
+            }
+            let mut gained = Vec::new();
+            for c in cards {
+                let id = c.raw();
+                if id != 0 {
+                    if let Some(pos) = ctx.core.discard.iter().position(|x| *x == id) {
+                        ctx.core.discard.remove(pos);
+                        ctx.core.player_mut(p).hand.push(id);
+                        gained.push(id);
+                    }
+                }
+            }
+            if !gained.is_empty() {
+                ctx.out.push(LogEvent::CardsDrawn {
+                    player: p,
+                    cards: gained,
+                });
+            }
+        }
+        EffectRequest::GainCardIfDiscard { player, card } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let id = card.raw();
+            if id != 0 && ctx.core.player(p).alive {
+                if let Some(pos) = ctx.core.discard.iter().position(|x| *x == id) {
+                    ctx.core.discard.remove(pos);
+                    ctx.core.player_mut(p).hand.push(id);
+                    ctx.out.push(LogEvent::CardsDrawn {
+                        player: p,
+                        cards: vec![id],
+                    });
+                }
             }
         }
         EffectRequest::SetTurnState { current, phase } => {

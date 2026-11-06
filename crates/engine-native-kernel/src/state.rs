@@ -866,8 +866,20 @@ impl VmAux {
         self.hits.clear();
         self.drawn.clear();
         self.once.retain(|(_, _, scope)| *scope != 1);
-        self.flags
-            .retain(|(_, key), _| key != "vm_skipped_phase_count");
+        let turn_skills: Vec<(u8, String)> = self
+            .flags
+            .keys()
+            .filter_map(|(p, k)| {
+                k.strip_prefix("skill_turn:")
+                    .map(|raw| (*p, format!("skill:{raw}")))
+            })
+            .collect();
+        for key in turn_skills {
+            self.flags.remove(&key);
+        }
+        self.flags.retain(|(_, key), _| {
+            key != "vm_skipped_phase_count" && !key.starts_with("skill_turn:")
+        });
     }
 
     /// 轮次推进：丢掉轮范围的 once。

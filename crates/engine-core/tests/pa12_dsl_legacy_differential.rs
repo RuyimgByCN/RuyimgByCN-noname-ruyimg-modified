@@ -465,3 +465,120 @@ fn pa12_legacy_batch7_codec_named_and_once_skills_match_native() {
         }
     }
 }
+
+/// PA12 批⑧ 旧线差分基线：验证 `sp/wuji`、`yijiang/zhichi`、`yijiang/jigong`、
+/// `collab/dcqiusuo`、`mobile/friendmanjuan`、`shiji/spshiji`、`mobile/ly_piliche`、
+/// `collab/dclonggong`、`yijiang/oldrenxin`、`sp/naman`、`collab/olhaizhu` 在旧线 VM 宿主上的
+/// 效果请求序与原生线 `pa12_batch8_deterministic_effects` 一致。
+#[test]
+fn pa12_legacy_batch8_deterministic_effects_skills_match_native() {
+    for (id, src, trig_idx, want_prefixes) in [
+        (
+            "sp-wuji",
+            include_str!("../../../content/original/ported/sp/wuji.skill"),
+            0usize,
+            &[
+                "RemoveSkillByDef",
+                "ChangeMaxHp",
+                "RecoverHp",
+                "RemoveSkill",
+            ][..],
+        ),
+        (
+            "yijiang-zhichi",
+            include_str!("../../../content/original/ported/yijiang/zhichi.skill"),
+            0,
+            &["AddSkillUntilTurnEnd"][..],
+        ),
+        (
+            "yijiang-jigong",
+            include_str!("../../../content/original/ported/yijiang/jigong.skill"),
+            0,
+            &["DrawCards", "AddSkillUntilTurnEnd"][..],
+        ),
+        (
+            "collab-dcqiusuo",
+            include_str!("../../../content/original/ported/collab/dcqiusuo.skill"),
+            0,
+            &["GainCardByKind"][..],
+        ),
+        (
+            "mobile-friendmanjuan",
+            include_str!("../../../content/original/ported/mobile/friendmanjuan.skill"),
+            0,
+            &["AddMark", "GainDiscardCardByKind"][..],
+        ),
+        (
+            "shiji-spshiji",
+            include_str!("../../../content/original/ported/shiji/spshiji.skill"),
+            0,
+            &["RevealHand"][..],
+        ),
+        (
+            "mobile-ly-piliche",
+            include_str!("../../../content/original/ported/mobile/ly_piliche.skill"),
+            0,
+            &["DiscardAllTargetEquipment"][..],
+        ),
+        (
+            "collab-dclonggong",
+            include_str!("../../../content/original/ported/collab/dclonggong.skill"),
+            0,
+            &["PreventDamage", "GainEquipmentFromDrawPile"][..],
+        ),
+        (
+            "yijiang-oldrenxin",
+            include_str!("../../../content/original/ported/yijiang/oldrenxin.skill"),
+            0,
+            &["TurnOver", "GiveAllHand", "RecoverHp"][..],
+        ),
+        (
+            "sp-naman",
+            include_str!("../../../content/original/ported/sp/naman.skill"),
+            0,
+            &["GainCardIfDiscard"][..],
+        ),
+        (
+            "collab-olhaizhu",
+            include_str!("../../../content/original/ported/collab/olhaizhu.skill"),
+            0,
+            &["GainEventCards"][..],
+        ),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 78, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+
+        let entry = &pkg.trigger_index[trig_idx];
+        let module = tx.state().content.module(&entry.module).cloned().expect("模块");
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[1],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}

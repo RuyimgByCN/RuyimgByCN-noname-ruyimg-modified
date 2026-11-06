@@ -431,7 +431,7 @@ fn parse_words(rest: &str) -> Vec<Clause> {
 }
 
 fn take_known(words: &[&str]) -> Option<(usize, Vec<Seed>)> {
-    let max = words.len().min(6);
+    let max = words.len().min(8);
     for n in (2..=max).rev() {
         let key = words[..n].join("_");
         if let Some(s) = phrase(&key) {
@@ -489,6 +489,29 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
             Seed::Atom(Atom::Direct),
             Seed::Atom(Atom::Damage),
         ],
+        "other_target_alive_has_discardable_hand_equip" => vec![
+            Seed::Not,
+            Seed::Atom(Atom::EvPlayer),
+            Seed::Atom(Atom::TargetAlive),
+            Seed::Atom(Atom::CanDiscard(0)),
+        ],
+        "target_alive_has_discardable_hand_equip" => vec![
+            Seed::Atom(Atom::TargetAlive),
+            Seed::Atom(Atom::CanDiscard(0)),
+        ],
+        "has_discardable_hand_equip" => atom(Atom::CanDiscard(0)),
+        "other_target_alive" => vec![
+            Seed::Not,
+            Seed::Atom(Atom::EvPlayer),
+            Seed::Atom(Atom::TargetAlive),
+        ],
+        "other_responded_sha_gainable" => vec![
+            Seed::Not,
+            Seed::Atom(Atom::EvPlayer),
+            Seed::Atom(Atom::Responded),
+            Seed::Atom(Atom::CardSha),
+        ],
+        "target_alive" => atom(Atom::TargetAlive),
         "source_alive" => atom(Atom::SourceAlive),
         "tied_max_hand" => atom(Atom::TiedHand),
         "tied_max_hp" => atom(Atom::TiedHp),
@@ -901,6 +924,12 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
         }),
         Atom::TargetHandEmpty => v.event_player.is_some_and(|p| {
             ctx.state.players.get(p as usize).is_some_and(|pl| pl.hand.is_empty())
+        }),
+        Atom::CanDiscard(0) => v.event_player.is_some_and(|p| {
+            ctx.state
+                .players
+                .get(p as usize)
+                .is_some_and(|pl| !pl.hand.is_empty() || !pl.equips.is_empty())
         }),
         Atom::CanDiscard(n) => me.hand.len() + me.equips.len() >= *n as usize,
         Atom::CountAtLeast(n) => {
