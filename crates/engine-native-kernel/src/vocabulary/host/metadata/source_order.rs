@@ -2,7 +2,7 @@
 use super::*;
 
 impl HostBehavior {
-    pub(super) fn source_order(&self) -> Option<(Timing, i32, bool)> {
+    pub fn source_order(&self) -> Option<(Timing, i32, bool)> {
         Some(match self {
             // Source flags determine these tuples; event/optional semantics stay in metadata.
             Self::BossBaimang2 => (Timing::Normal, 1, false),
@@ -22,6 +22,71 @@ impl HostBehavior {
             Self::SwdYuchanSwap => (Timing::Normal, -99, false),
             Self::Xiefang => (Timing::Normal, -99, false),
             Self::XiguaXueliangFanbei => (Timing::Normal, 1, false),
+            // Phase 5 default-matching source-order bindings
+            Self::BossBaiyi
+            | Self::BossBaiyiThunder
+            | Self::BossChiyi
+            | Self::BossChiyiMark
+            | Self::BossHuanren
+            | Self::BossQingyi
+            | Self::GujianFoodGudonggeng
+            | Self::GujianFoodLiyutang
+            | Self::GujianFoodMapodoufu
+            | Self::GujianFoodQingtuan
+            | Self::GujianFoodTanhuadong
+            | Self::GujianFoodXiajiao
+            | Self::GujianFoodYougeng
+            | Self::GwentCiguState
+            | Self::GwentKunenState
+            | Self::Miedao
+            | Self::Shishi
+            | Self::SwdBaishouzhihuHeld
+            | Self::SwdGouhunluoSub
+            | Self::SwdHuanglinzhicongHeld
+            | Self::SwdJiguanyaoGain
+            | Self::SwdJiguanyuanGain
+            | Self::SwdJuxiCount
+            | Self::SwdQinglongzhiguiHeld
+            | Self::SwdSxianjingDamage
+            | Self::SwdSxianjingGain
+            | Self::SwdXuanwuzhihuangHeld
+            | Self::SwdZhuquezhizhangHeld
+            | Self::WudianPaotaiFire
+            | Self::WudianQiangguGuard
+            | Self::WudianZhenchaDraw
+            | Self::XianjianHushaCount
+            | Self::Xunmeng
+            | Self::Zaibian => (Timing::Normal, 0, true),
+            // C331 16 translation-context source-order bindings (empty lib.translate context -> order_selectable = false)
+            Self::BossBaimang2x
+            | Self::BossBaimang3x
+            | Self::BossBianshen3x
+            | Self::BossBianshen4x
+            | Self::BossChiyan2x
+            | Self::BossChiyan3x
+            | Self::BossQingmu2x
+            | Self::BossQingmu3x
+            | Self::BossXuanlin2x
+            | Self::BossXuanlin3x => (Timing::Normal, -1000, false),
+            Self::JinlianzhuCancel
+            | Self::ShengkeCheck
+            | Self::SwdLexue
+            | Self::SwdShencaojieGuard
+            | Self::SwdShenmiguoWindow
+            | Self::ZhuWanzhongJi => (Timing::Normal, 0, false),
+            // C331 12 mechanism-coupled source-order bindings
+            Self::SanjianWeaponDamage => (Timing::Normal, -25, true),
+            Self::SwdNigongAccumulate => (Timing::Normal, -25, true),
+            Self::SwdXuanyingDamage => (Timing::Normal, 0, true),
+            Self::MbWeitong => (Timing::Normal, 1000, true),
+            Self::MbQianlong => (Timing::Normal, 600, true),
+            Self::Kunlunjing => (Timing::Normal, 1000, true),
+            Self::GwentFengyinState
+            | Self::SwdFengyinState
+            | Self::Niepan
+            | Self::SwdShouyin
+            | Self::XianjianChengxin
+            | Self::XianjianShuiyun5 => (Timing::Normal, 0, true),
             // noname-liuli/noname/character/extra.js:456
             Self::HlssFengqi => (Timing::Normal, 0, true),
             // noname-liuli/noname/character/extra.js:296

@@ -72,8 +72,7 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     // **多重集**，AI 仍可经模拟读到「对手手里有闪」这类事实（信息边界用例复现：
     // seed 42022 warm 9 seat 1）。现在改为：从目录中确定性抽取互不相同的牌填满
     // 隐藏区，只保留**张数**（公开信息），与真实隐藏内容无关。
-    let redact_traps = e.state_core().vm_aux.storage.is_empty()
-        || !e.catalog().skills.iter().any(|skill| skill.behavior.is_vm_skill());
+    let redact_traps = true;
     let n = e.state_core().players.len();
     let opponents: Vec<usize> = (0..n).filter(|&i| i as u8 != seat).collect();
     // 保留实体牌不代表其对 AI 可见；特殊牌区的隐藏身份仍需单独遮蔽。
@@ -216,6 +215,10 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         }
         remap
     };
+    let trap_cards: std::collections::BTreeSet<CardId> = trap_owners
+        .iter()
+        .flat_map(|i| e.state_core().players[*i].sxianjing_traps.iter().copied())
+        .collect();
     let core = e.core_mut();
     let mut cursor = 0usize;
     if redact_traps {
@@ -246,6 +249,35 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         };
         for card in core.vm_aux.lost.values_mut().flatten() {
             replace(card);
+        }
+        if quiescent {
+            let opp_flags: std::collections::BTreeSet<String> = core
+                .vm_aux
+                .flags
+                .keys()
+                .filter(|(owner, k)| {
+                    *owner != seat && !core.vm_aux.flags.contains_key(&(seat, k.clone()))
+                })
+                .map(|(_, k)| k.clone())
+                .collect();
+            core.vm_aux.storage.retain(|k, _| {
+                !opp_flags.contains(k)
+                    && k.split_once(':')
+                        .and_then(|(s, _)| s.parse::<u8>().ok())
+                        .is_none_or(|owner| owner == seat)
+            });
+            core.vm_aux.flags.retain(|(owner, _), _| *owner == seat);
+            core.vm_aux.drawn.retain(|owner, _| *owner == seat);
+        }
+        for card in core.vm_aux.storage.values_mut() {
+            if trap_cards.contains(card) {
+                replace(card);
+            }
+        }
+        for ((_, key), card) in &mut core.vm_aux.flags {
+            if key == "selected_card" || key.starts_with("selected_card:") {
+                replace(card);
+            }
         }
         for (card, _) in &mut core.turn.huanxia_track {
             replace(card);

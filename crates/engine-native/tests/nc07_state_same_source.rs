@@ -279,4 +279,163 @@ fn nc07_restore_rejects_out_of_range_references() {
 
     // ④ 正常快照仍可恢复（校验不是恒拒）
     assert!(Engine::restore(&snapshot).is_ok(), "原快照应可恢复");
+
+    // ⑤ PlayerState 扩展引用越界（座位 / 卡牌 / 技能定义）
+    let mut t = snapshot.clone();
+    t.core.players[0].yuexing_pair = Some(99);
+    assert!(Engine::restore(&t).is_err(), "yuexing_pair 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].fuchou_marked.push(99);
+    assert!(Engine::restore(&t).is_err(), "fuchou_marked 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].ctianfu_source = Some(99);
+    assert!(Engine::restore(&t).is_err(), "ctianfu_source 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].ctianfu_card = Some(u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "ctianfu_card 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].gouhunluo_source = Some(99);
+    assert!(Engine::restore(&t).is_err(), "gouhunluo_source 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].jiguanyuan_cards.push(u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "jiguanyuan_cards 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].card_mods.insert(u32::MAX, 0);
+    assert!(Engine::restore(&t).is_err(), "card_mods 键越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.players[0].card_mods.insert(0, u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "card_mods 值越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].shenyan_pending.push(99);
+    assert!(Engine::restore(&t).is_err(), "shenyan_pending 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].yishan_lost.push(u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "yishan_lost 卡牌越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].swdtianshu_from = Some(99);
+    assert!(Engine::restore(&t).is_err(), "swdtianshu_from 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].swdtianshu_granted = Some(u16::MAX);
+    assert!(Engine::restore(&t).is_err(), "swdtianshu_granted 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].songci_targets.push(99);
+    assert!(Engine::restore(&t).is_err(), "songci_targets 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].hutian_deposit = Some(99);
+    assert!(Engine::restore(&t).is_err(), "hutian_deposit 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.players[0].hutian_owner = Some(99);
+    assert!(Engine::restore(&t).is_err(), "hutian_owner 越界应拒绝");
+
+    // ⑥ TurnState 扩展引用越界（座位 / 卡牌 / 额外阶段）
+    let mut t = snapshot.clone();
+    t.core.turn.ciqiu_dying.push(99);
+    assert!(Engine::restore(&t).is_err(), "ciqiu_dying 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.kangyin2 = Some((99, 1));
+    assert!(Engine::restore(&t).is_err(), "kangyin2 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.huanxia_track.push((u32::MAX, false));
+    assert!(Engine::restore(&t).is_err(), "huanxia_track 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.kunlunjing_snapshot.push((99, vec![], vec![], vec![]));
+    assert!(Engine::restore(&t).is_err(), "kunlunjing_snapshot 座位越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.turn.kunlunjing_snapshot.push((0, vec![u32::MAX], vec![], vec![]));
+    assert!(Engine::restore(&t).is_err(), "kunlunjing_snapshot 手牌越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.turn.kunlunjing_snapshot.push((0, vec![], vec![u32::MAX], vec![]));
+    assert!(Engine::restore(&t).is_err(), "kunlunjing_snapshot 装备越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.turn.kunlunjing_snapshot.push((0, vec![], vec![], vec![u32::MAX]));
+    assert!(Engine::restore(&t).is_err(), "kunlunjing_snapshot 判定越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.extra_phases.push(99);
+    assert!(Engine::restore(&t).is_err(), "extra_phases 阶段越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.zhufangshenshi_target = Some(99);
+    assert!(Engine::restore(&t).is_err(), "zhufangshenshi_target 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.liangou_hook = Some(99);
+    assert!(Engine::restore(&t).is_err(), "liangou_hook 座位越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.feitiao_target = Some(99);
+    assert!(Engine::restore(&t).is_err(), "feitiao_target 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.zhuyue_targets.push(99);
+    assert!(Engine::restore(&t).is_err(), "zhuyue_targets 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.luanjian_card = Some(u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "luanjian_card 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.minwan_targets.push(99);
+    assert!(Engine::restore(&t).is_err(), "minwan_targets 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.turn.qizuo_copy = Some(u32::MAX);
+    assert!(Engine::restore(&t).is_err(), "qizuo_copy 越界应拒绝");
+
+    // ⑦ VmAux 扩展引用越界（座位 / 卡牌 / scope）
+    let mut t = snapshot.clone();
+    t.core.vm_aux.marks.insert((99, 1), 1);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.marks 座位越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.piles.insert((99, "p".to_string()), vec![]);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.piles 座位越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.vm_aux.piles.insert((0, "p".to_string()), vec![u32::MAX]);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.piles 卡牌越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.lost.insert(99, vec![]);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.lost 座位越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.vm_aux.lost.insert(0, vec![u32::MAX]);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.lost 卡牌越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.once.insert((99, "o".to_string(), 1));
+    assert!(Engine::restore(&t).is_err(), "vm_aux.once 座位越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.vm_aux.once.insert((0, "o".to_string(), 0));
+    assert!(Engine::restore(&t).is_err(), "vm_aux.once scope=0 越界应拒绝");
+    let mut t = snapshot.clone();
+    t.core.vm_aux.once.insert((0, "o".to_string(), 99));
+    assert!(Engine::restore(&t).is_err(), "vm_aux.once scope 越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.flags.insert((99, "f".to_string()), 1);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.flags 座位越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.hits.insert((99, "h".to_string()), 1);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.hits 座位越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.vm_aux.drawn.insert(99, 1);
+    assert!(Engine::restore(&t).is_err(), "vm_aux.drawn 座位越界应拒绝");
 }

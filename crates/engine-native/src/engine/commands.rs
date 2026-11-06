@@ -174,9 +174,6 @@ impl Engine {
         let log_mark = self.log.len();
         self.begin_presentation_hold(log_mark);
         let submit_round = self.state.core.turn.round;
-        let mut work = self.state.clone();
-        // 每段重置预算：硬上限只约束本段，不跨段累计（ADR 0708 缺陷修复）。
-        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         // 段检查点：供开放段失败时 `abort_segment` 回滚到段前（N07）。
         // PA02：模拟会话不存检查点——模拟段失败即弃置整个克隆，无需回滚。
         // PA05：`time_slice == None`（默认）时段不可能 Yielded 暂停，
@@ -187,18 +184,27 @@ impl Engine {
         } else {
             Some(self.save())
         };
+        // PA05：模拟会话（`self.simulation == true`）由调用方持有一次性试验克隆，
+        // 拒绝即整份丢弃——无需在 `submit` 内部二次克隆 `GameState`；正式会话
+        // 保留 `prev` 副本以保证拒绝/预算耗尽/故障时状态逐字节回滚。
+        let prev = (!self.simulation).then(|| self.state.clone());
+        // 每段重置预算：硬上限只约束本段，不跨段累计（ADR 0708 缺陷修复）。
+        self.state.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
         // PA02：模拟会话的日志写进本段弃置缓冲，不进权威宿主日志。
         let mut sim_log = self.simulation.then(Vec::new);
         let log: &mut Vec<LogEvent> = match sim_log.as_mut() {
             Some(v) => v,
             None => &mut self.log,
         };
-        if let Err(reason) = apply_command(&mut work, cmd.clone(), &self.catalog, log) {
+        if let Err(reason) = apply_command(&mut self.state, cmd.clone(), &self.catalog, log) {
+            if let Some(prev) = prev {
+                self.state = prev;
+            }
             self.log.truncate(log_mark);
             self.discard_presentation_range();
             return CommandOutcome::Rejected(reason);
         }
-        match self.finish_segment(work, log_mark) {
+        match self.finish_segment_in_place(prev, log_mark) {
             CommandOutcome::Rejected(reason) => {
                 self.segment_checkpoint = None;
                 CommandOutcome::Rejected(reason)
@@ -239,7 +245,16 @@ impl Engine {
     /// 段会确定性地重复耗尽，宿主应放弃该段（原型契约，见进度文档）。
     pub(super) fn finish_segment(
         &mut self,
-        mut work: GameState,
+        work: GameState,
+        log_mark: usize,
+    ) -> CommandOutcome {
+        let prev = std::mem::replace(&mut self.state, work);
+        self.finish_segment_in_place(Some(prev), log_mark)
+    }
+
+    fn finish_segment_in_place(
+        &mut self,
+        prev: Option<GameState>,
         log_mark: usize,
     ) -> CommandOutcome {
         self.ensure_presentation_hold(log_mark);
@@ -250,18 +265,18 @@ impl Engine {
             None => &mut self.log,
         };
         match run(
-            &mut work.core,
-            &mut work.resolution,
+            &mut self.state.core,
+            &mut self.state.resolution,
             &self.catalog,
             log,
             self.time_slice,
         ) {
             StepOutcome::BudgetExhausted => {
-                if self.segment_open {
-                    // 开放段（已分片提交过）：无法整段回滚，提交当前进度，
-                    // 段保持开放——宿主应 `abort_segment()` 回滚到段前。
-                    self.state = work;
-                } else {
+                if !self.segment_open {
+                    // 非开放段整段回滚；开放段（已分片提交过）保持当前进度待 `abort_segment()`。
+                    if let Some(prev) = prev {
+                        self.state = prev;
+                    }
                     self.log.truncate(log_mark);
                     self.segment_checkpoint = None;
                     self.discard_presentation_range();
@@ -269,8 +284,7 @@ impl Engine {
                 CommandOutcome::Rejected(RejectReason::BudgetExhausted)
             }
             StepOutcome::Pending => {
-                work.core.revision += 1;
-                self.state = work;
+                self.state.core.revision += 1;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
                 self.seal_presentation_range(log_mark);
@@ -286,14 +300,16 @@ impl Engine {
                 // 暂停不递增 revision：它是同一状态版本的执行延续，
                 // 保证「分片续行」与「连续运行」的摘要轨迹完全一致（N07）。
                 // （暂停态的内容仍随预算/执行位置变化而哈希不同。）
-                self.state = work;
                 self.segment_open = true;
                 CommandOutcome::Suspended
             }
             StepOutcome::Fault => {
                 // NC04：VM 故障——整段回滚（work 丢弃、日志截断、检查点清除），
                 // 命令以 VmFault 拒绝；开放段则回滚到段前检查点。
-                let fault = work.resolution.fault.take();
+                let fault = self.state.resolution.fault.take();
+                if let Some(prev) = prev {
+                    self.state = prev;
+                }
                 self.log.truncate(log_mark);
                 if self.segment_open {
                     if let Some((checkpoint, _)) = self.segment_checkpoint.take() {
@@ -317,8 +333,7 @@ impl Engine {
                 CommandOutcome::Rejected(RejectReason::VmFault { skill, detail })
             }
             StepOutcome::Done => {
-                work.core.revision += 1;
-                self.state = work;
+                self.state.core.revision += 1;
                 self.segment_open = false;
                 self.segment_checkpoint = None;
                 self.seal_presentation_range(log_mark);

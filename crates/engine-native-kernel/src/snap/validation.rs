@@ -255,12 +255,35 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
         }
     }
 
-    // 牌区 ID 界、国战武将槽界、五行属性界
+    // 牌区 ID 界、国战武将槽界、五行属性界与扩展引用界
     for p in &core.players {
         check_cards(&p.hand, b)?;
         check_cards(&p.equips, b)?;
         check_cards(&p.judge, b)?;
         check_cards(&p.off_court, b)?;
+        check_cards(&p.zhucheng, b)?;
+        check_cards(&p.lianyaohu_store, b)?;
+        check_cards(&p.sxianjing_traps, b)?;
+        check_cards(&p.hutian_hold, b)?;
+        check_opt_pid(p.yuexing_pair, b)?;
+        check_pids(&p.fuchou_marked, b)?;
+        check_opt_pid(p.ctianfu_source, b)?;
+        check_opt_card(p.ctianfu_card, b)?;
+        check_opt_pid(p.gouhunluo_source, b)?;
+        check_cards(&p.jiguanyuan_cards, b)?;
+        for (&k, &v) in &p.card_mods {
+            check_card(k, b)?;
+            check_card(v, b)?;
+        }
+        check_pids(&p.shenyan_pending, b)?;
+        check_cards(&p.yishan_lost, b)?;
+        check_opt_pid(p.swdtianshu_from, b)?;
+        if let Some(d) = p.swdtianshu_granted {
+            check_def(d, b)?;
+        }
+        check_pids(&p.songci_targets, b)?;
+        check_opt_pid(p.hutian_deposit, b)?;
+        check_opt_pid(p.hutian_owner, b)?;
         for g in p.general_slots.iter().flatten() {
             if *g as usize >= b.generals {
                 return Err(oob("general_slot_index", *g as u64));
@@ -278,9 +301,61 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
             }
         }
     }
-    // 回合当前玩家在界
+    // 回合当前玩家与 TurnState 扩展引用在界
     if core.turn.current as usize >= core.players.len() {
         return Err(oob("player", core.turn.current as u64));
+    }
+    check_pids(&core.turn.ciqiu_dying, b)?;
+    if let Some((p, _)) = core.turn.kangyin2 {
+        check_pid(p, b)?;
+    }
+    for &(c, _) in &core.turn.huanxia_track {
+        check_card(c, b)?;
+    }
+    for (p, hand, equips, judge) in &core.turn.kunlunjing_snapshot {
+        check_pid(*p, b)?;
+        check_cards(hand, b)?;
+        check_cards(equips, b)?;
+        check_cards(judge, b)?;
+    }
+    for &ph in &core.turn.extra_phases {
+        if ph > 4 {
+            return Err(oob("extra_phase", ph as u64));
+        }
+    }
+    check_opt_pid(core.turn.zhufangshenshi_target, b)?;
+    check_opt_pid(core.turn.liangou_hook, b)?;
+    check_opt_pid(core.turn.feitiao_target, b)?;
+    check_pids(&core.turn.zhuyue_targets, b)?;
+    check_opt_card(core.turn.luanjian_card, b)?;
+    check_pids(&core.turn.minwan_targets, b)?;
+    check_opt_card(core.turn.qizuo_copy, b)?;
+    // VmAux 引用界（座位/牌/范围）
+    for &(seat, _) in core.vm_aux.marks.keys() {
+        check_pid(seat, b)?;
+    }
+    for (&(seat, _), cards) in &core.vm_aux.piles {
+        check_pid(seat, b)?;
+        check_cards(cards, b)?;
+    }
+    for (&seat, cards) in &core.vm_aux.lost {
+        check_pid(seat, b)?;
+        check_cards(cards, b)?;
+    }
+    for &(seat, _, scope) in &core.vm_aux.once {
+        check_pid(seat, b)?;
+        if !(1..=3).contains(&scope) {
+            return Err(oob("vm_aux_once_scope", scope as u64));
+        }
+    }
+    for &(seat, _) in core.vm_aux.flags.keys() {
+        check_pid(seat, b)?;
+    }
+    for &(seat, _) in core.vm_aux.hits.keys() {
+        check_pid(seat, b)?;
+    }
+    for &seat in core.vm_aux.drawn.keys() {
+        check_pid(seat, b)?;
     }
     // 技能实例：键在界、值 owner 与键一致
     for ((owner, def), inst) in &core.skills {

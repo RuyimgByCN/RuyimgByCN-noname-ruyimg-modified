@@ -68,6 +68,12 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
             // 区暂存）后重发射——提交段自桌面取，不经手牌（AfterTriggers 窗
             // 口内手牌数无扰动）；随后按牌种臂照常置桌面/弃置。
             ctx.core.table.retain(|c| *c != card);
+        } else if u.use_as.is_some() && ctx.core.discard.contains(&card) {
+            ctx.core.discard.retain(|c| *c != card);
+        } else if let Some(holder) = u.use_as.and_then(|_| {
+            (0..ctx.core.players.len() as PlayerId).find(|&p| ctx.core.player(p).hand.contains(&card))
+        }) {
+            ctx.take_hand_card(holder, card);
         } else {
             // 保持原 panic 语义（调用方先验证）。
             ctx.take_hand_card(u.player, card);

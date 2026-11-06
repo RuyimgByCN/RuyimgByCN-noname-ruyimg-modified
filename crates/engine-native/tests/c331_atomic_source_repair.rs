@@ -155,12 +155,34 @@ fn c9f_abi_nature_draw_and_source_are_real() {
                 assert!(prevented, "seed {seed}: 火分支必须被火神免疫");
                 assert!(!dealt, "seed {seed}: 被免疫的火伤不得记 DamageDealt");
                 assert_eq!(e.debug_hp(0), 1000, "seed {seed}: 火分支不扣 HP");
+                if !seen_fire {
+                    let vm = emission_pack(0, 1, 1);
+                    let mut s = Engine::new_with_extensions(seed, 3, &[&vm]).unwrap();
+                    durable(&mut s);
+                    s.debug_set_turn(0, Phase::Play, 1);
+                    s.debug_grant(0, "c9f_emit");
+                    s.debug_grant(0, "火神");
+                    s.debug_grant(1, "阿鼻");
+                    let s = sliced_active(s, &[&vm], "abi-fire-branch");
+                    assert_eq!(s.debug_hp(0), 1000);
+                }
                 seen_fire = true;
             }
             DamageNature::Thunder => {
                 assert!(!prevented, "seed {seed}: 雷分支不得被火神免疫");
                 assert!(dealt, "seed {seed}: 雷分支子伤害必须真实结算");
                 assert_eq!(e.debug_hp(0), 999, "seed {seed}: 雷分支扣 1 HP");
+                if !seen_thunder {
+                    let vm = emission_pack(0, 1, 1);
+                    let mut s = Engine::new_with_extensions(seed, 3, &[&vm]).unwrap();
+                    durable(&mut s);
+                    s.debug_set_turn(0, Phase::Play, 1);
+                    s.debug_grant(0, "c9f_emit");
+                    s.debug_grant(0, "火神");
+                    s.debug_grant(1, "阿鼻");
+                    let s = sliced_active(s, &[&vm], "abi-thunder-branch");
+                    assert_eq!(s.debug_hp(0), 999);
+                }
                 seen_thunder = true;
             }
             _ => unreachable!("阿鼻只抽样火／雷"),
@@ -171,6 +193,26 @@ fn c9f_abi_nature_draw_and_source_are_real() {
     }
     assert!(seen_fire && seen_thunder, "两个分支都必须被真实覆盖");
 }
+struct DuquAliasBehavior;
+impl engine_native::SkillBehavior for DuquAliasBehavior {
+    fn native_damage_effect(
+        &self,
+        kind: EventKind,
+    ) -> Option<engine_native::event::NativeDamageEffect> {
+        (kind == EventKind::DamageEnd).then_some(engine_native::event::NativeDamageEffect::Duqu)
+    }
+    fn filter(
+        &self,
+        _ctx: &engine_native::catalog::QueryCtx<'_>,
+        _owner: u8,
+        _event: &EventData,
+    ) -> bool {
+        false
+    }
+    fn start(&self, _owner: u8, _event: &EventData) -> Box<dyn engine_native::SkillMachine> {
+        Box::new(engine_native::kernel::NoopMachine)
+    }
+}
 #[test]
 fn c9f_duqu_other_enabled_holder_is_excluded() {
     let mut e = Engine::new(14010, 3);
@@ -178,6 +220,41 @@ fn c9f_duqu_other_enabled_holder_is_excluded() {
     e.debug_grant(1, "毒妒");
     e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
     assert_eq!(e.state_core().player(0).shedu, 0);
+
+    // F15: disabled boss_duqu on source is not excluded -> shedu increments.
+    e.debug_set_skill_enabled(0, "毒妒", false);
+    e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(e.state_core().player(0).shedu, 1);
+
+    // F15: enabled alias SkillDef mapping to NativeDamageEffect::Duqu is excluded.
+    let mut e_alias = Engine::new(14010, 3);
+    let alias_def = e_alias.catalog().skills.len() as u16;
+    e_alias
+        .try_with_catalog_mutation(|cat| {
+            cat.skills.push(engine_native::SkillDef {
+                name: "c9f_duqu_alias",
+                trigger: Some(engine_native::event::NativeDamageEffect::Duqu.meta()),
+                limits: Default::default(),
+                behavior: Box::new(DuquAliasBehavior),
+                original_source: None,
+                presentation_binding: None,
+            });
+            Ok(())
+        })
+        .unwrap();
+    e_alias.state_core_mut().skills.insert(
+        (0, alias_def),
+        engine_native::state::SkillInstance {
+            owner: 0,
+            enabled: true,
+            once_used: false,
+            expires_end_of_turn: false,
+            rounds: 0,
+        },
+    );
+    e_alias.debug_grant(1, "毒妒");
+    e_alias.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    assert_eq!(e_alias.state_core().player(0).shedu, 0);
 }
 #[test]
 fn c9f_minwan_self_source_initializes_real_lock_set() {
@@ -578,3 +655,308 @@ fn c9f_all_sha_family_consumers_follow_real_virtual_chain_and_restore() {
         }
     }
 }
+#[test]
+fn c9f_f02_alias_host_definitions_and_modified_chain_child_restore() {
+    for kind in [
+        CardKind::Xingjunyan,
+        CardKind::Xixueguizhihuan,
+        CardKind::Sha,
+    ] {
+        let p = source_pack("shahai-swd-upstream-noname");
+        let mut ciqiu = source_pack("wudian-upstream-noname");
+        ciqiu
+            .host_skills
+            .push(engine_native::content::host::HostSkillDecl {
+                name: "c9f_ciqiu_alias",
+                behavior: engine_native::content::host::HostBehavior::WudianCiqiu,
+                presentation_binding: None,
+            });
+        let vm = emission_pack(2, 1, 1);
+        let chain_mod = vm_pack(
+            "skill c9f_chain_plus(99109505) { trigger damage_before owner_is_target { effect modify_current_damage(self,1); } }",
+            EventKind::DamageBefore,
+            Timing::First,
+        );
+        let mut e =
+            Engine::new_with_extensions(14025, 4, &[&p, &ciqiu, &vm, &chain_mod]).unwrap();
+        durable(&mut e);
+        e.debug_set_turn(0, Phase::Play, 1);
+        e.state_core_mut().mode = GameMode::Boss {
+            boss: 0,
+            chongzheng: 3,
+            fellows: vec![1],
+            stage: BossStageState::default_none(),
+        };
+        e.debug_grant(0, "c9f_emit");
+        e.debug_grant(0, "急叮");
+        e.debug_grant(0, "招祸");
+        e.debug_grant(3, "c9f_chain_plus");
+        if kind == CardKind::Sha {
+            e.debug_grant(0, "c9f_ciqiu_alias");
+        } else {
+            equip(&mut e, kind);
+        }
+        e.debug_set_hp(0, 200);
+        for target in [2, 3] {
+            e.state_core_mut().player_mut(target).linked = true;
+        }
+        e.debug_set_deck_top_by(|d| d.kind == CardKind::Shan);
+        let e = sliced_active(
+            e,
+            &[&p, &ciqiu, &vm, &chain_mod],
+            &format!("f02-alias-{kind:?}"),
+        );
+        assert_eq!(
+            e.debug_hp(2),
+            if kind == CardKind::Xixueguizhihuan {
+                999
+            } else {
+                998
+            }
+        );
+        assert_eq!(
+            e.debug_hp(3),
+            if kind == CardKind::Xixueguizhihuan {
+                998
+            } else {
+                996
+            }
+        );
+        if kind == CardKind::Xixueguizhihuan {
+            assert_eq!(e.debug_hp(0), 203);
+        }
+    }
+}
+#[test]
+fn c9f_f04_shuchui_direct_virtual_sha_first_hit_then_second_hit_excluded_and_turn_renewal() {
+    let vm = emission_pack(2, 1, 1);
+    let mut e = Engine::new_with_extensions(14026, 4, &[&vm]).unwrap();
+    durable(&mut e);
+    e.debug_set_turn(0, Phase::Play, 1);
+    e.state_core_mut().mode = GameMode::Boss {
+        boss: 0,
+        chongzheng: 3,
+        fellows: vec![1],
+        stage: BossStageState::default_none(),
+    };
+    e.debug_grant(0, "c9f_emit");
+    e.debug_grant(0, "急叮");
+    e.state_core_mut().turn.shuchui_armed = true;
+    e.state_core_mut().turn.shuchui_hit = false;
+    e.debug_set_deck_top_by(|d| d.kind == CardKind::Shan);
+    let mut e = sliced_active(e, &[&vm], "f04-shuchui-hit1");
+    let count_shuchui = |engine: &Engine| {
+        engine
+            .log()
+            .iter()
+            .filter(|x| {
+                matches!(
+                    x,
+                    engine_native::LogEvent::SkillTriggered {
+                        skill: "native:liuli/card-swd/shuchui2",
+                        ..
+                    }
+                )
+            })
+            .count()
+    };
+    assert!(e.state_core().turn.shuchui_hit);
+    assert_eq!(count_shuchui(&e), 1);
+
+    // 2nd direct virtual Sha hit in the same turn is excluded because shuchui_hit == true.
+    e.debug_grant(0, "急叮");
+    e.debug_set_deck_top_by(|d| d.kind == CardKind::Shan);
+    let skill = e.catalog().skill_by_name("c9f_emit").unwrap();
+    let out = e.submit(engine_native::GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: engine_native::GameAction::ActivateSkill { skill },
+    });
+    assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+    finish(&mut e);
+    assert_eq!(count_shuchui(&e), 1, "2nd hit in same turn excluded");
+
+    // Turn boundary resets shuchui_hit = false and shuchui_armed = false; re-arming re-admits.
+    e.debug_set_turn(0, Phase::End, 1);
+    let out = e.submit(engine_native::GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: engine_native::GameAction::NextPhase,
+    });
+    assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+    finish(&mut e);
+    assert!(!e.state_core().turn.shuchui_hit);
+    assert!(!e.state_core().turn.shuchui_armed);
+
+    e.debug_set_turn(0, Phase::Play, 2);
+    e.state_core_mut().turn.shuchui_armed = true;
+    e.debug_grant(0, "急叮");
+    e.debug_set_deck_top_by(|d| d.kind == CardKind::Shan);
+    let out = e.submit(engine_native::GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: engine_native::GameAction::ActivateSkill { skill },
+    });
+    assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+    finish(&mut e);
+    assert!(e.state_core().turn.shuchui_hit);
+    assert_eq!(count_shuchui(&e), 2, "turn renewal re-admits shuchui2");
+}
+#[test]
+fn c9f_f08_yinzei_mixed_hand_and_equip_rng_revokes_equip_skill_and_orders_children() {
+    let p = source_pack("shahai-swd-upstream-noname");
+    let vm = emission_pack(0, 1, 1);
+    let mut seen_hand = false;
+    let mut seen_equip = false;
+    for seed in 14030..14060 {
+        let mut e = Engine::new_with_extensions(seed, 3, &[&p, &vm]).unwrap();
+        durable(&mut e);
+        e.debug_set_turn(0, Phase::Play, 1);
+        let equip_name = e
+            .catalog()
+            .cards
+            .iter()
+            .find(|c| c.kind == CardKind::Shuchui)
+            .unwrap()
+            .name;
+        let eq = e.debug_place(0, equip_name);
+        let out = e.submit(engine_native::GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: e.save().last_dedup + 1,
+            action: engine_native::GameAction::PlayCard {
+                card: eq,
+                targets: vec![],
+            },
+        });
+        assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+        assert!(e.debug_has_skill(0, "shuchui"));
+        let hand_card = e.debug_place(0, "sha");
+        e.debug_grant(0, "c9f_emit");
+        e.debug_grant(1, "隐贼");
+        let mut rng = e.state_core().rng.clone();
+        let pick_idx = rng.gen_range(2);
+        let expected_card = if pick_idx == 0 { hand_card } else { eq };
+
+        // Step with fuel-1 and verify CardsLost -> CardsDiscarded child frame order and byte-restore.
+        let mut expected = e.clone();
+        let skill = expected.catalog().skill_by_name("c9f_emit").unwrap();
+        expected.submit(engine_native::GameCommand {
+            actor: 0,
+            expected_revision: expected.revision(),
+            dedup_id: expected.save().last_dedup + 1,
+            action: engine_native::GameAction::ActivateSkill { skill },
+        });
+        finish(&mut expected);
+
+        e.set_time_slice(Some(1));
+        e.submit(engine_native::GameCommand {
+            actor: 0,
+            expected_revision: e.revision(),
+            dedup_id: e.save().last_dedup + 1,
+            action: engine_native::GameAction::ActivateSkill { skill },
+        });
+        let mut saw_children_order = false;
+        for _ in 0..400 {
+            let s = e.save();
+            if s.resolution.stack.is_empty() && !s.segment_open {
+                break;
+            }
+            let lost_pos = s.resolution.stack.iter().position(|f| {
+                matches!(
+                    &f.data,
+                    EventData::CardsLost { player: 0, cards, .. } if cards == &[expected_card]
+                )
+            });
+            let disc_pos = s.resolution.stack.iter().position(|f| {
+                matches!(
+                    &f.data,
+                    EventData::CardsDiscarded { player: 0, cards } if cards == &[expected_card]
+                )
+            });
+            if let (Some(lp), Some(dp)) = (lost_pos, disc_pos) {
+                assert!(
+                    s.resolution.stack[lp].id < s.resolution.stack[dp].id && lp < dp,
+                    "CardsLost child must be emitted before CardsDiscarded child"
+                );
+                saw_children_order = true;
+            }
+            let mut branch = restore(&e, &[&p, &vm]);
+            finish(&mut branch);
+            same_final(&expected, &branch);
+            e.resume();
+        }
+        assert!(saw_children_order);
+        same_final(&expected, &e);
+        assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
+        if pick_idx == 0 {
+            assert!(e.debug_hand(0).is_empty());
+            assert_eq!(e.debug_equips(0), vec![eq]);
+            assert!(e.debug_has_skill(0, "shuchui"));
+            seen_hand = true;
+        } else {
+            assert_eq!(e.debug_hand(0), vec![hand_card]);
+            assert!(e.debug_equips(0).is_empty());
+            assert!(!e.debug_has_skill(0, "shuchui"), "equip skill revoked");
+            seen_equip = true;
+        }
+        if seen_hand && seen_equip {
+            break;
+        }
+    }
+    assert!(seen_hand && seen_equip);
+}
+#[test]
+fn c9f_f10_zlfanshi_first_second_third_hit_expiry_and_renewal() {
+    let mut e = Engine::new(14040, 4);
+    durable(&mut e);
+    e.debug_set_turn(0, Phase::Play, 1);
+    e.debug_grant(1, "反噬");
+    assert!(!e.state_core().player(1).zlfanshi_terra);
+
+    // Hit 1: arms zlfanshi_terra without retaliation or RNG consumption.
+    let rng0 = e.state_core().rng.clone();
+    e.debug_deal_damage(None, 1, 1, DamageNature::Normal);
+    assert!(e.state_core().player(1).zlfanshi_terra);
+    for p in [0, 2, 3] {
+        assert_eq!(e.debug_hp(p), 1000, "Hit 1 only arms without retaliation");
+    }
+    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng0:?}"));
+
+    // Hit 2 & Hit 3: retaliate and retain zlfanshi_terra.
+    let pool = [0u8, 2, 3];
+    for hit in [2, 3] {
+        let mut rng = e.state_core().rng.clone();
+        let target = pool[rng.gen_range(3) as usize];
+        let before_hp = e.debug_hp(target);
+        e.debug_deal_damage(None, 1, 1, DamageNature::Normal);
+        assert!(e.state_core().player(1).zlfanshi_terra, "hit {hit} retains terra");
+        assert_eq!(e.debug_hp(target), before_hp - 1, "hit {hit} retaliates");
+        assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng:?}"));
+    }
+
+    // Turn boundary expires zlfanshi_terra.
+    e.debug_set_turn(0, Phase::End, 1);
+    let out = e.submit(engine_native::GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: e.save().last_dedup + 1,
+        action: engine_native::GameAction::NextPhase,
+    });
+    assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+    finish(&mut e);
+    assert!(!e.state_core().player(1).zlfanshi_terra);
+
+    // Next turn Hit 1 re-arms without retaliation.
+    let hps_before: Vec<_> = [0, 2, 3].into_iter().map(|p| e.debug_hp(p)).collect();
+    let rng_next = e.state_core().rng.clone();
+    e.debug_deal_damage(None, 1, 1, DamageNature::Normal);
+    assert!(e.state_core().player(1).zlfanshi_terra);
+    let hps_after: Vec<_> = [0, 2, 3].into_iter().map(|p| e.debug_hp(p)).collect();
+    assert_eq!(hps_after, hps_before, "next turn Hit 1 re-arms without retaliation");
+    assert_eq!(format!("{:?}", e.state_core().rng), format!("{rng_next:?}"));
+}
+

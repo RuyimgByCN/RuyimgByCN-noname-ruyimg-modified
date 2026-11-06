@@ -175,20 +175,108 @@ impl Engine {
 /// 完全一致（单调：快拒只裁掉正式路径同样会拒的候选；其余一切拒绝面
 /// ——牌种分派校验与结算期失败——仍由探针兜底）。
 fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameAction) -> bool {
+    let core = engine.state_core();
+    let catalog = engine.catalog();
     match action {
         // NextPhase 唯一校验：当前回合玩家（apply_command 同款）。
         GameAction::NextPhase => seat != engine.turn().current,
-        // 出牌：共享校验前缀（play_card 同一段代码）。
-        GameAction::PlayCard { card, targets } => crate::engine::common_play_validation(
-            engine.state_core(),
-            engine.catalog(),
-            seat,
-            *card,
-            targets,
-        )
-        .is_err(),
+        // 主动技：与 apply_command 共用只读门控（回合/阶段/启用/限次/activate）。
+        GameAction::ActivateSkill { skill } => {
+            if seat != core.turn.current {
+                return true;
+            }
+            let Some(def) = catalog.skills.get(*skill as usize) else {
+                return true;
+            };
+            if core.turn.phase != crate::event::Phase::Play && !def.limits.active_outside_play {
+                return true;
+            }
+            let Some(inst) = core.skills.get(&(seat, *skill)) else {
+                return true;
+            };
+            if !inst.enabled || inst.once_used {
+                return true;
+            }
+            let qctx = crate::catalog::QueryCtx {
+                state: core,
+                catalog,
+            };
+            def.behavior.activate(&qctx, seat).is_none()
+        }
+        // 明置：与 apply_command 共用只读门控（国战模式/槽位/补偿窗口或出牌阶段/未明置）。
+        GameAction::RevealGeneral { slot } => {
+            if !matches!(core.mode, crate::state::GameMode::Kingdoms) || *slot > 1 {
+                return true;
+            }
+            let compensatory = engine.resolution().stack.iter().any(|f| match &f.data {
+                crate::event::EventData::CardUsed(u) => u.targets.contains(&seat),
+                _ => false,
+            });
+            if !compensatory
+                && (seat != core.turn.current || core.turn.phase != crate::event::Phase::Play)
+            {
+                return true;
+            }
+            let Some(p) = core.players.get(seat as usize) else {
+                return true;
+            };
+            p.general_slots[*slot as usize].is_none() || p.revealed_generals[*slot as usize]
+        }
+        // 出牌：共享校验前缀 + 牌种快拒（play_card 同一段代码）。
+        GameAction::PlayCard { card, targets } => {
+            if crate::engine::common_play_validation(core, catalog, seat, *card, targets).is_err() {
+                return true;
+            }
+            let (kind, _) = crate::engine::play_kind(core, catalog, *card);
+            if crate::engine::check_play_target_restrictions(core, catalog, *card, targets).is_err()
+            {
+                return true;
+            }
+            if kind.is_equip() {
+                return !targets.is_empty();
+            }
+            if crate::engine::check_play_use_restrictions(core, catalog, *card, kind, targets)
+                .is_err()
+            {
+                return true;
+            }
+            use crate::catalog::CardKind;
+            match kind {
+                CardKind::Shan
+                | CardKind::Nullify
+                | CardKind::Youdishenru
+                | CardKind::Jinlianzhu
+                | CardKind::Shenmiguo => true,
+                CardKind::Wuzhong
+                | CardKind::Wugu
+                | CardKind::Taoyuan
+                | CardKind::SavageAttack
+                | CardKind::ArcheryAttack => !targets.is_empty(),
+                CardKind::Duel
+                | CardKind::Dismantle
+                | CardKind::Snatch
+                | CardKind::Le
+                | CardKind::Bing => {
+                    targets.len() != 1 || targets[0] == seat || !core.player(targets[0]).alive
+                }
+                CardKind::Jiedao => {
+                    targets.len() != 2
+                        || targets[0] == seat
+                        || targets[1] == seat
+                        || targets[0] == targets[1]
+                }
+                _ => false,
+            }
+        }
         // 应答：三段校验均纯只读（apply_command 同款）。
-        GameAction::Answer { choice_id, selection } => match engine.open_choice() {
+        GameAction::Answer {
+            choice_id,
+            selection,
+        }
+        | GameAction::TimeoutAction {
+            choice_id,
+            selection,
+        } => match engine.open_choice() {
             None => true,
             Some(open) => {
                 open.id != *choice_id
@@ -196,9 +284,6 @@ fn certainly_illegal(engine: &Engine, seat: crate::ids::PlayerId, action: &GameA
                     || !open.spec.accepts(selection)
             }
         },
-        // ActivateSkill（激活门控）/RevealGeneral（明置窗口）校验面较深，
-        // 不做快拒——照旧探针。
-        _ => false,
     }
 }
 

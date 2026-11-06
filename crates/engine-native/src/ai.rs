@@ -723,13 +723,12 @@ impl Engine {
             );
             // 两层搜索（T13 更强候选）：再模拟对手最优应对，取最差结果
             //（对手最大化其收益）作为本候选得分。节点预算与时限仍受控。
-            if planner.lookahead_depth >= 2 && trial.outcome().is_none()
+            if planner.lookahead_depth >= 2
+                && trial.outcome().is_none()
+                && trial.open_choice().is_none()
                 && !trial.ai_session(seat).choice().as_ref().is_some_and(vm_choice_leaf)
             {
-                let opp = match trial.open_choice() {
-                    Some(open) => open.observer,
-                    None => trial.turn().current,
-                };
+                let opp = trial.turn().current;
                 if opp != seat {
                     let opp_candidates =
                         enumerate_candidates_variant(&trial, opp, planner.policy_variant);

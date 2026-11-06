@@ -95,3 +95,18 @@ fn phase7_private106_header_and_full_state_roundtrip() {
     let r = Engine::restore(&decoded).unwrap();
     assert_eq!(r.state_hash(), e.state_hash());
 }
+#[test]
+fn phase7_all_trigger_bearing_host_behaviors_have_bound_source_order() {
+    use engine_native::content::host::HostBehavior as H;
+    let trigger_bearing: Vec<_> = H::ALL
+        .iter()
+        .copied()
+        .filter(|h| h.trigger_meta().is_some())
+        .collect();
+    assert_eq!(trigger_bearing.len(), 290);
+    assert!(
+        trigger_bearing.iter().all(|h| h.source_order().is_some()),
+        "every trigger-bearing HostBehavior must have an explicit source_order tuple"
+    );
+}
+

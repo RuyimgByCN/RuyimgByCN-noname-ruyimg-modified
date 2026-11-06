@@ -656,3 +656,234 @@ fn c9i_source_jubao_gainability_filters_actual_treasure_before_choice() {
     assert!(e.debug_equips(1).contains(&eq));
     assert!(e.state_core().has_skill(1, def));
 }
+#[test]
+fn c9i_invocation_before_cancel_transitions_to_omitted_and_restores() {
+    use engine_native::event::{EventKind, InvocationPhase};
+    let p = emitter();
+    let mut e = fixture(&p, "急叮");
+    let jiding_def = e.catalog().skill_by_name("急叮").unwrap();
+    e.set_time_slice(Some(1));
+    fire(&mut e);
+    let mut cancelled_before = false;
+    let mut saw_omitted = false;
+    for _ in 0..400 {
+        let s = e.save();
+        if s.resolution.stack.is_empty() && !s.segment_open {
+            break;
+        }
+        if !cancelled_before
+            && s.resolution.stack.iter().any(|f| {
+                matches!(
+                    &f.data,
+                    EventData::SkillInvocation(d)
+                        if d.phase == InvocationPhase::Before && !d.cancelled
+                )
+            })
+        {
+            let mut snap = s.clone();
+            for f in &mut snap.resolution.stack {
+                if let EventData::SkillInvocation(d) = &mut f.data {
+                    if d.phase == InvocationPhase::Before {
+                        d.cancelled = true;
+                    }
+                }
+            }
+            e = Engine::restore_with_extensions(&snap, &[&p]).unwrap();
+            e.set_time_slice(Some(1));
+            let _ = restore(&e, &[&p]);
+            cancelled_before = true;
+        }
+        if e.save().resolution.stack.iter().any(|f| {
+            f.kind == EventKind::SkillOmitted
+                && matches!(
+                    &f.data,
+                    EventData::SkillInvocation(d) if d.phase == InvocationPhase::Omitted
+                )
+        }) {
+            let mut branch = restore(&e, &[&p]);
+            let mut control = e.clone();
+            finish(&mut branch);
+            finish(&mut control);
+            same_final(&control, &branch);
+            saw_omitted = true;
+        }
+        e.resume();
+    }
+    assert!(cancelled_before && saw_omitted, "Before(cancelled) must transition to Omitted");
+    assert_eq!(e.debug_hp(2), 4, "omitted Jiding must not emit virtual LeiSha");
+    assert!(e.state_core().has_skill(0, jiding_def));
+}
+#[test]
+fn c9i_kingdoms_jun_and_cross_mode_cuidui_matrix() {
+    use engine_native::catalog::Faction;
+    use engine_native::event::DamageNature;
+    use engine_native::state::{BossStageState, GameMode, KingdomIdentity as K, Role};
+    use engine_native::vocabulary::generals::{ExtensionGeneral, Gender};
+
+    // 1. Kingdoms Jun lords ally same-faction players even if previously KingdomIdentity::Ye.
+    for (jun_name, faction, group_str, enemy_faction) in [
+        ("jun_liubei", Faction::Shu, "shu", Faction::Wei),
+        ("jun_caocao", Faction::Wei, "wei", Faction::Shu),
+        ("jun_sunquan", Faction::Wu, "wu", Faction::Qun),
+        ("jun_zhangjiao", Faction::Qun, "qun", Faction::Wu),
+    ] {
+        let mut pack = emitter();
+        pack.generals.push(ExtensionGeneral {
+            name: jun_name,
+            faction,
+            skills: &[],
+            max_hp: 4,
+            gender: Gender::Male,
+            presentation_binding: None,
+        });
+        let mut e = Engine::new_with_extensions(16040, 4, &[&pack]).unwrap();
+        for seat in 0..4 {
+            e.debug_set_max_hp(seat, 100);
+            e.debug_set_hp(seat, 100);
+            e.debug_clear_hand(seat);
+        }
+        let jun_id = (0..e.catalog().general_count())
+            .find(|id| {
+                e.catalog()
+                    .general_meta(*id as u16)
+                    .is_some_and(|g| g.0 == jun_name)
+            })
+            .unwrap() as u16;
+        let same_id = (0..e.catalog().general_count())
+            .find(|id| {
+                *id as u16 != jun_id
+                    && e.catalog()
+                        .general_meta(*id as u16)
+                        .is_some_and(|g| g.1 == faction)
+            })
+            .unwrap() as u16;
+        let enemy_id = (0..e.catalog().general_count())
+            .find(|id| {
+                e.catalog()
+                    .general_meta(*id as u16)
+                    .is_some_and(|g| g.1 == enemy_faction)
+            })
+            .unwrap() as u16;
+
+        e.state_core_mut().mode = GameMode::Kingdoms;
+        e.debug_set_general_def(0, jun_id);
+        e.debug_set_general_def(1, same_id);
+        e.debug_set_general_def(2, enemy_id);
+
+        // Seat 1 reveals first and becomes Ye (careerist), Seat 2 reveals enemy faction.
+        e.debug_set_turn(1, Phase::Play, 1);
+        assert!(!matches!(
+            submit(&mut e, GameAction::RevealGeneral { slot: 0 }),
+            CommandOutcome::Rejected(_)
+        ));
+        e.state_core_mut().set_kingdom_identity(1, K::Ye).unwrap();
+        e.debug_set_turn(2, Phase::Play, 1);
+        assert!(!matches!(
+            submit(&mut e, GameAction::RevealGeneral { slot: 0 }),
+            CommandOutcome::Rejected(_)
+        ));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 0, 1), Some(true));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 1, 0), Some(true));
+
+        // Seat 0 reveals Jun lord -> allies same-faction Seat 1 even though Seat 1 was Ye!
+        e.debug_set_turn(0, Phase::Play, 1);
+        assert!(!matches!(
+            submit(&mut e, GameAction::RevealGeneral { slot: 0 }),
+            CommandOutcome::Rejected(_)
+        ));
+        assert_eq!(
+            e.state_core().player(1).kingdom_identity,
+            K::Declared(group_str.into())
+        );
+        assert!(e.state_core().kingdom_friends(0, 1));
+        assert!(e.state_core().kingdom_friends(1, 0));
+        assert!(!e.state_core().kingdom_friends(0, 2));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 0, 1), Some(false));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 1, 0), Some(false));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 0, 2), Some(true));
+
+        // Even if Seat 1 is explicitly set back to K::Ye while Seat 0 is a revealed Jun lord,
+        // kingdom_friends / source_is_enemy_of still treats same-faction Seat 1 as an ally.
+        e.state_core_mut().set_kingdom_identity(1, K::Ye).unwrap();
+        assert!(e.state_core().kingdom_friends(0, 1));
+        assert!(e.state_core().kingdom_friends(1, 0));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 0, 1), Some(false));
+        assert_eq!(e.state_core().source_is_enemy_of(e.catalog(), 1, 0), Some(false));
+
+        // Cuidui respects the Jun alliance: does not poison allied Seat 1, poisons enemy Seat 2.
+        let zhongdu = e.catalog().skill_by_name("中毒").unwrap();
+        e.debug_grant(0, "催毒");
+        e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+        assert!(!e.state_core().has_skill_any_state(1, zhongdu));
+        e.debug_deal_damage(Some(0), 2, 1, DamageNature::Normal);
+        assert!(e.state_core().has_skill_any_state(2, zhongdu));
+        let _ = restore(&e, &[&pack]);
+    }
+
+    // 2. Cross-mode Cuidui enemy/ally matrix.
+    for (mode, target, expect_poison) in [
+        (GameMode::Prototype, 1u8, false),
+        (
+            GameMode::Versus {
+                teams: vec![vec![0, 2], vec![1, 3]],
+                substitutes: vec![vec![], vec![]],
+            },
+            2,
+            false,
+        ),
+        (
+            GameMode::Versus {
+                teams: vec![vec![0, 2], vec![1, 3]],
+                substitutes: vec![vec![], vec![]],
+            },
+            1,
+            true,
+        ),
+        (GameMode::Doudizhu { lord: 2 }, 1, false),
+        (GameMode::Doudizhu { lord: 2 }, 2, true),
+        (
+            GameMode::Identity {
+                roles: vec![Role::Lord, Role::Loyalist, Role::Rebel, Role::Traitor],
+            },
+            1,
+            true,
+        ),
+        (
+            GameMode::Boss {
+                boss: 0,
+                chongzheng: 3,
+                fellows: vec![1],
+                stage: BossStageState::default_none(),
+            },
+            1,
+            false,
+        ),
+        (
+            GameMode::Boss {
+                boss: 0,
+                chongzheng: 3,
+                fellows: vec![1],
+                stage: BossStageState::default_none(),
+            },
+            2,
+            true,
+        ),
+    ] {
+        let mut e = Engine::new(16041, 4);
+        for seat in 0..4 {
+            e.debug_set_max_hp(seat, 100);
+            e.debug_set_hp(seat, 100);
+            e.debug_clear_hand(seat);
+        }
+        e.state_core_mut().mode = mode.clone();
+        e.debug_grant(0, "催毒");
+        let zhongdu = e.catalog().skill_by_name("中毒").unwrap();
+        e.debug_deal_damage(Some(0), target, 1, DamageNature::Normal);
+        assert_eq!(
+            e.state_core().has_skill_any_state(target, zhongdu),
+            expect_poison,
+            "mode {mode:?} target {target}"
+        );
+    }
+}
+

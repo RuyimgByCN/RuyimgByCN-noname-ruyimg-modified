@@ -120,8 +120,7 @@ impl HostSkillBehavior {
                 EventData::Phase { player, phase: crate::event::Phase::End, begin: false }
                 if *player == owner),
             HostBehavior::XianjianChengxin => {
-                matches!(event,
-                EventData::Dying { player, .. } if *player != owner)
+                matches!(event, EventData::Dying { .. })
                     && ctx.state.turn.round >= ctx.state.player(owner).chengxin_ready_round
             }
             HostBehavior::XianjianCtianfu2 => matches!(event,
@@ -302,8 +301,7 @@ impl HostSkillBehavior {
                     && !ctx.state.player(owner).shiying_used
             }
             HostBehavior::XianjianShuiyun5 => {
-                matches!(event,
-                EventData::Dying { player, .. } if *player != owner)
+                matches!(event, EventData::Dying { .. })
                     && !ctx.state.player(owner).off_court.is_empty()
             }
             // 忘忧（A2 H85）：他人整回合结束＋自己有牌＋本回合存在受伤标记者

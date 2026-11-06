@@ -6,7 +6,7 @@ impl GameStateCore {
     /// Pinned isEnemyOf/isFriendOf semantics for mode facts represented by this kernel.
     pub fn source_is_enemy_of(
         &self,
-        _catalog: &crate::catalog::Catalog,
+        catalog: &crate::catalog::Catalog,
         a: PlayerId,
         b: PlayerId,
     ) -> Option<bool> {
@@ -23,8 +23,27 @@ impl GameStateCore {
             GameMode::Doudizhu { lord } => Some((a == *lord) != (b == *lord)),
             // Source has no side boolean in standard Identity: friendship falls back to self.
             GameMode::Identity { .. } => Some(true),
-            GameMode::Kingdoms => Some(!self.kingdom_friends(a, b)),
+            GameMode::Kingdoms => Some(!self.is_friend_of(catalog, a, b)),
             _ => None,
+        }
+    }
+
+    fn jun_group(name: &str) -> Option<&'static str> {
+        match name {
+            "jun_liubei" | "gz_jun_liubei" | "pe_jun_liubei" | "jun_shu" | "君刘备" => Some("shu"),
+            "jun_zhangjiao" | "gz_jun_zhangjiao" | "pe_jun_zhangjiao" | "jun_qun" | "君张角" => Some("qun"),
+            "jun_sunquan" | "gz_jun_sunquan" | "pe_jun_sunquan" | "jun_wu" | "君孙权" => Some("wu"),
+            "jun_caocao" | "gz_jun_caocao" | "pe_jun_caocao" | "jun_wei" | "君曹操" => Some("wei"),
+            _ => None,
+        }
+    }
+
+    fn faction_name(faction: crate::catalog::Faction) -> &'static str {
+        match faction {
+            crate::catalog::Faction::Wei => "wei",
+            crate::catalog::Faction::Shu => "shu",
+            crate::catalog::Faction::Wu => "wu",
+            crate::catalog::Faction::Qun => "qun",
         }
     }
 
@@ -35,7 +54,17 @@ impl GameStateCore {
         {
             return true;
         }
-        matches!((&self.player(a).kingdom_identity,&self.player(b).kingdom_identity),(KingdomIdentity::Declared(x),KingdomIdentity::Declared(y))if x==y)
+        let resolve = |p: PlayerId| match &self.player(p).kingdom_identity {
+            KingdomIdentity::Declared(n) => Some(Self::jun_group(n).unwrap_or(n)),
+            KingdomIdentity::Ye => {
+                let pl = self.player(p);
+                let id = pl.revealed_generals[0].then_some(pl.general_slots[0]).flatten().or_else(|| pl.revealed_generals[1].then_some(pl.general_slots[1]).flatten()).or(pl.general_slots[0]).or(pl.general_slots[1])?;
+                let g = Self::faction_name(crate::vocabulary::generals::STANDARD_GENERALS.get(id as usize)?.faction);
+                self.players.iter().any(|q| q.alive && matches!(&q.kingdom_identity, KingdomIdentity::Declared(n) if Self::jun_group(n) == Some(g) || (n == g && q.revealed_generals[0] && q.general_slots[0].is_some_and(|j| j as usize >= crate::vocabulary::generals::STANDARD_GENERALS.len())))).then_some(g)
+            }
+            KingdomIdentity::Unknown => None,
+        };
+        matches!((resolve(a), resolve(b)), (Some(x), Some(y)) if x == y)
     }
     pub fn set_kingdom_identity(
         &mut self,
@@ -70,37 +99,49 @@ impl GameStateCore {
         self.player_mut(player).yexinjia_friends = friends;
         Ok(())
     }
+    fn is_revealed_jun(&self, catalog: &crate::catalog::Catalog, q: PlayerId) -> bool {
+        let pl = self.player(q);
+        pl.alive && pl.revealed_generals[0] && pl.general_slots[0].and_then(|g| catalog.general_meta(g)).is_some_and(|(n, ..)| Self::jun_group(n).is_some() || n.starts_with("jun_") || n.starts_with("gz_jun_"))
+    }
     pub fn declare_revealed_kingdom(
         &mut self,
         catalog: &crate::catalog::Catalog,
         player: PlayerId,
     ) {
+        let is_jun = self.is_revealed_jun(catalog, player);
         if !matches!(self.mode, GameMode::Kingdoms)
-            || self.player(player).kingdom_identity != KingdomIdentity::Unknown
+            || (self.player(player).kingdom_identity != KingdomIdentity::Unknown && !is_jun)
         {
             return;
         }
         let Some(faction) = self.declared_faction(catalog, player) else {
             return;
         };
-        let name = match faction {
-            crate::catalog::Faction::Wei => "wei",
-            crate::catalog::Faction::Shu => "shu",
-            crate::catalog::Faction::Wu => "wu",
-            crate::catalog::Faction::Qun => "qun",
-        };
+        let name = Self::faction_name(faction);
+        let has_jun = (0..self.players.len() as PlayerId)
+            .any(|q| self.is_revealed_jun(catalog, q) && self.declared_faction(catalog, q) == Some(faction));
         let population = self
             .players
             .iter()
-            .filter(|p| matches!(&p.kingdom_identity,KingdomIdentity::Declared(n)if n==name))
+            .filter(|p| matches!(&p.kingdom_identity, KingdomIdentity::Declared(n) if Self::jun_group(n).unwrap_or(n) == name))
             .count();
-        let identity = if (population + 1) * 2 <= self.players.len() {
+        let identity = if has_jun || (population + 1) * 2 <= self.players.len() {
             KingdomIdentity::Declared(name.into())
         } else {
             KingdomIdentity::Ye
         };
         self.set_kingdom_identity(player, identity)
             .expect("native reveal identity context");
+        if is_jun {
+            for q in 0..self.players.len() as PlayerId {
+                if self.player(q).kingdom_identity == KingdomIdentity::Ye
+                    && self.declared_faction(catalog, q) == Some(faction)
+                {
+                    self.set_kingdom_identity(q, KingdomIdentity::Declared(name.into()))
+                        .expect("native jun alliance upgrade");
+                }
+            }
+        }
     }
     pub fn can_gain_card(
         &self,
@@ -862,7 +903,18 @@ impl GameStateCore {
             return true;
         }
         if matches!(self.mode, GameMode::Kingdoms) {
-            return self.kingdom_friends(a, b);
+            if self.kingdom_friends(a, b) {
+                return true;
+            }
+            let group_of = |p: PlayerId| match &self.player(p).kingdom_identity {
+                KingdomIdentity::Declared(n) => Some(Self::jun_group(n).unwrap_or(n)),
+                KingdomIdentity::Ye => {
+                    let f = self.declared_faction(catalog, p)?;
+                    (0..self.players.len() as PlayerId).any(|q| self.is_revealed_jun(catalog, q) && self.declared_faction(catalog, q) == Some(f)).then(|| Self::faction_name(f))
+                }
+                KingdomIdentity::Unknown => self.is_revealed_jun(catalog, p).then(|| Self::faction_name(self.declared_faction(catalog, p).unwrap())),
+            };
+            return matches!((group_of(a), group_of(b)), (Some(x), Some(y)) if x == y);
         }
         match (
             self.effective_faction(catalog, a),

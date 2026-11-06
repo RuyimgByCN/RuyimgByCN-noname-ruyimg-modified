@@ -22,11 +22,44 @@ fn direct_source_profiles_keep_priority_silent_and_translated_choice_qualificati
         (H::YunchouBeige, Timing::Normal, 0, true),
         (H::YunchouJiaoxia, Timing::Normal, 0, true),
         (H::Zhenlie, Timing::Normal, 0, true),
+        (H::BossBaimang2x, Timing::Normal, -1000, false),
+        (H::BossBaimang3x, Timing::Normal, -1000, false),
+        (H::BossBianshen3x, Timing::Normal, -1000, false),
+        (H::BossBianshen4x, Timing::Normal, -1000, false),
+        (H::BossChiyan2x, Timing::Normal, -1000, false),
+        (H::BossChiyan3x, Timing::Normal, -1000, false),
+        (H::BossQingmu2x, Timing::Normal, -1000, false),
+        (H::BossQingmu3x, Timing::Normal, -1000, false),
+        (H::BossXuanlin2x, Timing::Normal, -1000, false),
+        (H::BossXuanlin3x, Timing::Normal, -1000, false),
+        (H::JinlianzhuCancel, Timing::Normal, 0, false),
+        (H::ShengkeCheck, Timing::Normal, 0, false),
+        (H::SwdLexue, Timing::Normal, 0, false),
+        (H::SwdShencaojieGuard, Timing::Normal, 0, false),
+        (H::SwdShenmiguoWindow, Timing::Normal, 0, false),
+        (H::ZhuWanzhongJi, Timing::Normal, 0, false),
+        (H::SanjianWeaponDamage, Timing::Normal, -25, true),
+        (H::SwdNigongAccumulate, Timing::Normal, -25, true),
+        (H::SwdXuanyingDamage, Timing::Normal, 0, true),
+        (H::MbWeitong, Timing::Normal, 1000, true),
+        (H::MbQianlong, Timing::Normal, 600, true),
+        (H::Kunlunjing, Timing::Normal, 1000, true),
+        (H::GwentFengyinState, Timing::Normal, 0, true),
+        (H::SwdFengyinState, Timing::Normal, 0, true),
+        (H::Niepan, Timing::Normal, 0, true),
+        (H::SwdShouyin, Timing::Normal, 0, true),
+        (H::XianjianChengxin, Timing::Normal, 0, true),
+        (H::XianjianShuiyun5, Timing::Normal, 0, true),
     ] {
         let meta = host.trigger_meta().unwrap();
         assert_eq!(
             (meta.timing, meta.priority, meta.order_selectable),
             (timing, priority, selectable),
+            "{host:?}"
+        );
+        assert_eq!(
+            host.source_order(),
+            Some((timing, priority, selectable)),
             "{host:?}"
         );
     }
