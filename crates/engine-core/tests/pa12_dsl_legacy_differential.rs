@@ -1139,3 +1139,257 @@ fn pa12_batch12_legacy_vm_effects_match_native_expectation() {
     }
 }
 
+/// PA12 批⑬ + UP37 差分：验证旧线 `engine_core::vm_host` 对批⑬真实 ported `.skill`
+/// 与 UP37 技能（`dcdichou`、`yingba`、`dcmingjie`、`dczigu`、`zzhenggong`）产出的
+/// `EffectRequest` 序列与原生批⑬新增原语（tags 109..=128）逐项一致。
+#[test]
+fn pa12_batch13_legacy_vm_effects_match_native_expectation() {
+    let active_cases: &[(&str, &str, &[&str])] = &[
+        (
+            "yingba",
+            include_str!("../../../content/original/ported/shiji/yingba.skill"),
+            &["DealDamage", "ChangeMaxHp", "AddSkill", "AddMark", "ChangeMaxHp"],
+        ),
+        (
+            "dczigu",
+            include_str!("../../../content/original/ported/huicui/dczigu.skill"),
+            &["ChooseTargetDraw"],
+        ),
+        (
+            "youyi",
+            include_str!("../../../content/original/ported/shiji/youyi.skill"),
+            &["ChooseOtherRecover"],
+        ),
+    ];
+    for (id, src, want_prefixes) in active_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 83, "identity-standard").expect("开局");
+        let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&pkg);
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let entry = &pkg.active_index[0];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .unwrap_or_else(|| {
+                rule_vm::VerifiedModule::verify(pkg.modules[0].clone()).expect("模块")
+            });
+        let out = engine_core::vm_host::run_module_with_selected_inputs(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[],
+            &[other.raw()],
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+
+    let trigger_cases: &[(&str, &str, usize, &[&str])] = &[
+        (
+            "dcdichou-t0",
+            include_str!("../../../content/original/ported/xianding/dcdichou.skill"),
+            0,
+            &["AddMark"],
+        ),
+        (
+            "dcdichou-t1",
+            include_str!("../../../content/original/ported/xianding/dcdichou.skill"),
+            1,
+            &["ResolveDcdichou"],
+        ),
+        (
+            "dcdichou-t2",
+            include_str!("../../../content/original/ported/xianding/dcdichou.skill"),
+            2,
+            &["DrawCards", "RemoveMark"],
+        ),
+        (
+            "dcdichou-t3",
+            include_str!("../../../content/original/ported/xianding/dcdichou.skill"),
+            3,
+            &["ResolveDcdichou"],
+        ),
+        (
+            "dcmingjie-t0",
+            include_str!("../../../content/original/ported/xianding/dcmingjie.skill"),
+            0,
+            &["DrawCards", "ChooseTargetDraw"],
+        ),
+        (
+            "dcmingjie-t1",
+            include_str!("../../../content/original/ported/xianding/dcmingjie.skill"),
+            1,
+            &["ChangeMaxHp"],
+        ),
+        (
+            "zzhenggong",
+            include_str!("../../../content/original/ported/yijiang/zzhenggong.skill"),
+            0,
+            &["TakeOneCard"],
+        ),
+        (
+            "take_one_scoped_card_probe",
+            "skill take_scoped_probe(91000123) { trigger damage owner_is_target { effect take_one_card(event_source, self, hand_equip_judge); } }",
+            0,
+            &["TakeOneScopedCard"],
+        ),
+        (
+            "anyong",
+            include_str!("../../../content/original/ported/huicui/anyong.skill"),
+            0,
+            &["ChooseOtherDamage"],
+        ),
+        (
+            "xinkuanggu",
+            include_str!("../../../content/original/ported/shenhua/xinkuanggu.skill"),
+            0,
+            &["ChooseDrawOrRecover"],
+        ),
+        (
+            "kuanshi",
+            include_str!("../../../content/original/ported/sp/kuanshi.skill"),
+            0,
+            &["ChooseOtherAddMark"],
+        ),
+        (
+            "hfjieying",
+            include_str!("../../../content/original/ported/sp2/hfjieying.skill"),
+            0,
+            &["ResolveHfjieying"],
+        ),
+        (
+            "spmingshi",
+            include_str!("../../../content/original/ported/shiji/spmingshi.skill"),
+            0,
+            &["ChooseDiscardOneHandOrEquip"],
+        ),
+        (
+            "xiaoxi",
+            include_str!("../../../content/original/ported/sp/xiaoxi.skill"),
+            0,
+            &["ChooseUseVirtualSha"],
+        ),
+        (
+            "sijian",
+            include_str!("../../../content/original/ported/sp/sijian.skill"),
+            0,
+            &["ChooseOtherDiscardTargetCard"],
+        ),
+        (
+            "mengjin",
+            include_str!("../../../content/original/ported/shenhua/mengjin.skill"),
+            0,
+            &["ChooseDiscardTargetCard"],
+        ),
+        (
+            "fengjie",
+            include_str!("../../../content/original/ported/shiji/fengjie.skill"),
+            0,
+            &["ChooseOtherGiveOneHandEquip"],
+        ),
+        (
+            "dcwushen",
+            include_str!("../../../content/original/ported/xianding/dcwushen.skill"),
+            0,
+            &["RecordCurrentShaAllTargets"],
+        ),
+        (
+            "clanxsyingxiang",
+            include_str!("../../../content/original/ported/clan/clanxsyingxiang.skill"),
+            0,
+            &["DrawAllEventTargets"],
+        ),
+        (
+            "clanzhongliu",
+            include_str!("../../../content/original/ported/clan/clanzhongliu.skill"),
+            0,
+            &["RefreshSkill"],
+        ),
+        (
+            "rebaobian",
+            include_str!("../../../content/original/ported/sp/rebaobian.skill"),
+            0,
+            &["AddFirstMissingSkill"],
+        ),
+        (
+            "zhanshen",
+            include_str!("../../../content/standard/zhanshen.skill"),
+            0,
+            &[
+                "DiscardEquipmentSlot",
+                "ChangeMaxHp",
+                "AddSkill",
+                "AddSkill",
+                "RemoveSkill",
+            ],
+        ),
+        (
+            "olddanshou",
+            include_str!("../../../content/original/ported/yijiang/olddanshou.skill"),
+            0,
+            &["DrawCards", "FinishCurrentPhaseAbortResolution"],
+        ),
+    ];
+    for (id, src, trig_idx, want_prefixes) in trigger_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 83, "identity-standard").expect("开局");
+        let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&pkg);
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let entry = &pkg.trigger_index[*trig_idx];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .unwrap_or_else(|| {
+                let m = pkg
+                    .modules
+                    .iter()
+                    .find(|m| m.name == entry.module)
+                    .expect("模块");
+                rule_vm::VerifiedModule::verify(m.clone()).expect("校验")
+            });
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[2],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}
+
+

@@ -877,6 +877,7 @@ impl VmAux {
         for key in turn_skills {
             self.flags.remove(&key);
         }
+        self.marks.retain(|(_, mark), _| *mark != 2_754_298_115);
         self.flags.retain(|(_, key), _| {
             key != "vm_skipped_phase_count"
                 && key != "draw_phase_bonus"
@@ -892,6 +893,9 @@ impl VmAux {
                 && key != "selected_card"
                 && key != "selected_targets_len"
                 && key != "selected_target"
+                && key != "dcdichou_mark_removed_this_turn"
+                && key != "dcdichou_eff_sha_used"
+                && key != "phase_aborted"
                 && !key.starts_with("selected_card:")
                 && !key.starts_with("selected_target:")
                 && !key.starts_with("card_policy:")
@@ -904,6 +908,9 @@ impl VmAux {
                 && !key.starts_with("card_damage_bonus:")
                 && !key.starts_with("sha_target_damage_bonus:")
                 && !key.starts_with("sha_unrespondable:")
+                && !key.starts_with("sha_skill_target:")
+                && !key.starts_with("sha_card_target:")
+                && !key.starts_with("sha_all_targets_recorded:")
         });
     }
 

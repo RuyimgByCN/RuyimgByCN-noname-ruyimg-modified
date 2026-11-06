@@ -162,10 +162,23 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
+            let prev = ctx
+                .core
+                .vm_aux
+                .marks
+                .get(&(p, mark.raw()))
+                .copied()
+                .unwrap_or(0);
             let e = ctx.core.vm_aux.marks.entry((p, mark.raw())).or_insert(0);
             *e += delta;
-            if *e == 0 {
+            if *e <= 0 {
                 ctx.core.vm_aux.marks.remove(&(p, mark.raw()));
+            }
+            if delta < 0 && prev > 0 && mark.raw() == 3_304_378_096 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((p, "dcdichou_mark_removed_this_turn".to_string()), 1);
             }
         }
         EffectRequest::RemoveMark {
@@ -177,6 +190,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 return;
             };
             let key = (p, mark.raw());
+            let prev = ctx.core.vm_aux.marks.get(&key).copied().unwrap_or(0);
             if amount == 0 {
                 ctx.core.vm_aux.marks.remove(&key);
             } else if let Some(v) = ctx.core.vm_aux.marks.get_mut(&key) {
@@ -184,6 +198,12 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 if *v <= 0 {
                     ctx.core.vm_aux.marks.remove(&key);
                 }
+            }
+            if prev > 0 && mark.raw() == 3_304_378_096 {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((p, "dcdichou_mark_removed_this_turn".to_string()), 1);
             }
         }
         EffectRequest::DiscardFromHand { player, count } => {

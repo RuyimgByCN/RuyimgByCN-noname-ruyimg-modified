@@ -41,13 +41,13 @@ impl VmFilterPolicy {
             Declared { .. } => 41, Handlers(_) => 42,
             OwnerSkillAddedSelf(_) => 43, OwnerTurnedOver => 44,
             OwnerBecameFaceUpOrLinked => 45, OwnerTurnChangedOrBecameLinked => 46,
-            DrawPhaseSkipped { .. } => 47,
+            DrawPhaseSkipped { .. } => 47, GameStarted { .. } => 48,
         };
         h.update(&[tag]);
         match self {
             OwnerHpBelow(n) | OwnerPlayCountEq(n) | OwnerSourceTargetMarkPositive(n) | OwnerSkillAddedSelf(n) => { h.update(&n.to_le_bytes()); }
             AtPhase { phase, inner } => { h.update(&[*phase as u8]); inner.hash_semantics(h); }
-            DrawPhaseSkipped { inner } => inner.hash_semantics(h),
+            DrawPhaseSkipped { inner } | GameStarted { inner } => inner.hash_semantics(h),
             Declared { skill_def_id, hand_limit_base_max_hp, inner } => {
                 h.update(&skill_def_id.to_le_bytes()); h.update(&[u8::from(*hand_limit_base_max_hp)]); inner.hash_semantics(h);
             }
@@ -57,7 +57,18 @@ impl VmFilterPolicy {
                 h.update(&[u8::from(set.active.is_some())]);
                 if let Some(active) = &set.active { program(h, active); }
                 let l = &set.limits;
-                h.update(&[u8::from(l.once_per_turn), u8::from(l.once_per_play_phase), u8::from(l.hand_nonempty), u8::from(l.equip_nonempty), u8::from(l.hand_gt_hp), u8::from(l.hand_gt_max_hp), u8::from(l.face_up), u8::from(l.owner_unlinked)]);
+                h.update(&[
+                    u8::from(l.once_per_turn),
+                    u8::from(l.once_per_play_phase),
+                    u8::from(l.hand_nonempty),
+                    u8::from(l.equip_nonempty),
+                    u8::from(l.hand_gt_hp),
+                    u8::from(l.hand_gt_max_hp),
+                    u8::from(l.face_up),
+                    u8::from(l.owner_unlinked),
+                    u8::from(l.target_other),
+                    l.target_max_hp_gt.unwrap_or(0),
+                ]);
                 h.update(&[u8::from(l.mark_at_least.is_some())]);
                 if let Some((mark, count)) = l.mark_at_least { h.update(&mark.to_le_bytes()); h.update(&count.to_le_bytes()); }
                 h.update(&(set.triggers.len() as u64).to_le_bytes());

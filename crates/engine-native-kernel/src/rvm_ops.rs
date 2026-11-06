@@ -23,6 +23,7 @@ mod commit;
 pub use commit::*;
 mod commit_combat;
 mod commit_ext;
+mod commit_batch13;
 mod query;
 pub use query::*;
 
@@ -109,7 +110,7 @@ fn kind_tag(kind: CardKind) -> u8 {
     }
 }
 
-pub(crate) fn resolve_skill_def(catalog: &Catalog, raw: u32) -> Option<u16> {
+pub fn resolve_skill_def(catalog: &Catalog, raw: u32) -> Option<u16> {
     if raw != 0 {
         if let Some((i, _)) = catalog
             .skills
@@ -584,6 +585,116 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             }
             for t in targets {
                 ok_player(*t, "UseVirtualCardOnSelectedTargets.target")?;
+            }
+        }
+        // PA12 批⑬：12 种高频交互式效果 + UP37-R01 敌仇 + 7 种确定性效果（tags 109..=128）。
+        EffectRequest::ChooseOtherDamage { player, amount, .. }
+        | EffectRequest::ChooseOtherRecover { player, amount } => {
+            ok_player(*player, "Batch13.player")?;
+            if *amount == 0 || *amount > i32::MAX as u32 {
+                return Err(reject("Batch13.amount"));
+            }
+        }
+        EffectRequest::ChooseTargetDraw { player, count, .. } => {
+            ok_player(*player, "ChooseTargetDraw.player")?;
+            if *count == 0 {
+                return Err(reject("ChooseTargetDraw.count"));
+            }
+        }
+        EffectRequest::ChooseDrawOrRecover {
+            player,
+            draw_count,
+            recover_count,
+            ..
+        } => {
+            ok_player(*player, "ChooseDrawOrRecover.player")?;
+            if *draw_count == 0 && *recover_count == 0 {
+                return Err(reject("ChooseDrawOrRecover.count"));
+            }
+        }
+        EffectRequest::ChooseOtherAddMark {
+            player,
+            mark,
+            delta,
+            ..
+        } => {
+            ok_player(*player, "ChooseOtherAddMark.player")?;
+            if *mark == 0 || *delta == 0 {
+                return Err(reject("ChooseOtherAddMark.mark_delta"));
+            }
+        }
+        EffectRequest::ResolveHfjieying {
+            player,
+            target,
+            grant_def,
+            ..
+        } => {
+            ok_player(*player, "ResolveHfjieying.player")?;
+            if target.is_some() {
+                ok_player(*target, "ResolveHfjieying.target")?;
+            }
+            if !grant_def.is_some() {
+                return Err(reject("ResolveHfjieying.grant_def"));
+            }
+        }
+        EffectRequest::ChooseDiscardOneHandOrEquip { player }
+        | EffectRequest::DiscardBasicDrawEqual { player, .. }
+        | EffectRequest::ChooseUseVirtualSha { player, .. }
+        | EffectRequest::ChooseOtherDiscardTargetCard { player, .. }
+        | EffectRequest::ChooseOtherGiveOneHandEquip { player, .. }
+        | EffectRequest::RecordCurrentShaAllTargets { player, .. }
+        | EffectRequest::FinishCurrentPhaseAbortResolution { player, .. } => {
+            ok_player(*player, "Batch13.player")?;
+        }
+        EffectRequest::ChooseDiscardTargetCard { player, target, .. } => {
+            ok_player(*player, "ChooseDiscardTargetCard.player")?;
+            ok_player(*target, "ChooseDiscardTargetCard.target")?;
+        }
+        EffectRequest::ResolveDcdichou {
+            player,
+            target,
+            action,
+            helper_skill_def,
+            ..
+        } => {
+            ok_player(*player, "ResolveDcdichou.player")?;
+            if target.is_some() {
+                ok_player(*target, "ResolveDcdichou.target")?;
+            }
+            if !matches!(*action, 0 | 1 | 2 | 3 | 10) {
+                return Err(reject("ResolveDcdichou.action"));
+            }
+            if !helper_skill_def.is_some() {
+                return Err(reject("ResolveDcdichou.helper_skill_def"));
+            }
+        }
+        EffectRequest::TakeOneScopedCard { from, to, .. } => {
+            if from.is_some() {
+                ok_player(*from, "TakeOneScopedCard.from")?;
+            }
+            ok_player(*to, "TakeOneScopedCard.to")?;
+        }
+        EffectRequest::DrawAllEventTargets { players, count } => {
+            if *count == 0 {
+                return Err(reject("DrawAllEventTargets.count"));
+            }
+            for p in players {
+                ok_player(*p, "DrawAllEventTargets.player")?;
+            }
+        }
+        EffectRequest::RefreshSkill { .. } => {}
+        EffectRequest::AddFirstMissingSkill {
+            player, skill_defs, ..
+        } => {
+            ok_player(*player, "AddFirstMissingSkill.player")?;
+            if skill_defs.iter().all(|d| !d.is_some()) {
+                return Err(reject("AddFirstMissingSkill.skill_defs"));
+            }
+        }
+        EffectRequest::DiscardEquipmentSlot { player, slot } => {
+            ok_player(*player, "DiscardEquipmentSlot.player")?;
+            if !matches!(*slot, 1..=5) {
+                return Err(reject("DiscardEquipmentSlot.slot"));
             }
         }
         other => {

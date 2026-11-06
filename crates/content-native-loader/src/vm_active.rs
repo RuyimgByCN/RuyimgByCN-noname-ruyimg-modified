@@ -30,10 +30,6 @@ pub(super) fn bridge_active_entries(
         }
         if active.window != "play_phase"
             || active.selection.is_some()
-            || active
-                .targets
-                .as_ref()
-                .is_some_and(|t| t.min != 0 || t.max != 0)
             || active.uses_per_turn.is_some_and(|n| n != 1)
             || active.uses_per_play_phase.is_some_and(|n| n != 1)
             || active.uses_per_turn_source.is_some()
@@ -50,23 +46,51 @@ pub(super) fn bridge_active_entries(
                 ),
             ));
         }
-        // A zero-target contract must not silently discard additional predicates.
-        if let Some(targets) = &active.targets {
-            let mut plain = targets.clone();
-            plain.min = 0;
-            plain.max = 0;
-            plain.allow_self = targets.allow_self;
-            let expected: content_schema::PackageTargetSpec = serde_json::from_value(
-                serde_json::json!({"min":0,"max":0,"allow_self":targets.allow_self}),
-            )
-            .map_err(|e| invalid("active_index.targets", e.to_string()))?;
-            if plain != expected {
+        // Validate zero-target or 1-target `other` (with optional `max_hp_gt`) contracts.
+        let (target_other, target_max_hp_gt) = match &active.targets {
+            None => (false, None),
+            Some(targets) if targets.min == 0 && targets.max == 0 => {
+                let mut plain = targets.clone();
+                plain.min = 0;
+                plain.max = 0;
+                plain.allow_self = targets.allow_self;
+                let expected: content_schema::PackageTargetSpec = serde_json::from_value(
+                    serde_json::json!({"min":0,"max":0,"allow_self":targets.allow_self}),
+                )
+                .map_err(|e| invalid("active_index.targets", e.to_string()))?;
+                if plain != expected {
+                    return Err(invalid(
+                        "active_index.targets",
+                        "unsupported target predicates",
+                    ));
+                }
+                (false, None)
+            }
+            Some(targets) if targets.min == 1 && targets.max == 1 && !targets.allow_self => {
+                let mut plain = targets.clone();
+                plain.max_hp_gt = None;
+                let expected: content_schema::PackageTargetSpec = serde_json::from_value(
+                    serde_json::json!({"min":1,"max":1,"allow_self":false}),
+                )
+                .map_err(|e| invalid("active_index.targets", e.to_string()))?;
+                if plain != expected {
+                    return Err(invalid(
+                        "active_index.targets",
+                        "unsupported target predicates",
+                    ));
+                }
+                (true, targets.max_hp_gt)
+            }
+            Some(_) => {
                 return Err(invalid(
-                    "active_index.targets",
-                    "unsupported target predicates",
+                    "active_index",
+                    format!(
+                        "unsupported active declaration for {}: {active:?}",
+                        skill.name
+                    ),
                 ));
             }
-        }
+        };
         let module = pkg
             .modules
             .iter()
@@ -85,14 +109,8 @@ pub(super) fn bridge_active_entries(
             .filter(|t| t.skill_def_id == active.skill_def_id)
         {
             let index = decls
-                .iter()
-                .enumerate()
-                .find(|(index, d)| {
-                    !remove.contains(index)
-                        && d.name == skill.name
-                        && d.module.name == trigger.module
-                })
-                .map(|(index, _)| index)
+                .as_slice()
+                .usize_index_of(&remove, &skill.name, &trigger.module)
                 .ok_or_else(|| invalid("trigger_index", "missing bridged handler"))?;
             let decl = &decls[index];
             if decl.trigger.event == engine_native::event::EventKind::DamageBefore {
@@ -164,6 +182,8 @@ pub(super) fn bridge_active_entries(
             face_up: active.face_up,
             owner_unlinked: active.owner_unlinked,
             mark_at_least: active.mark_at_least,
+            target_other,
+            target_max_hp_gt,
         };
         decls.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,
@@ -181,6 +201,21 @@ pub(super) fn bridge_active_entries(
         });
     }
     Ok(())
+}
+
+trait DeclIndexLookup {
+    fn usize_index_of(&self, remove: &[usize], skill_name: &str, module_name: &str) -> Option<usize>;
+}
+
+impl DeclIndexLookup for [engine_native::content::extension::VmSkillDecl] {
+    fn usize_index_of(&self, remove: &[usize], skill_name: &str, module_name: &str) -> Option<usize> {
+        self.iter()
+            .enumerate()
+            .find(|(index, d)| {
+                !remove.contains(index) && d.name == skill_name && d.module.name == module_name
+            })
+            .map(|(index, _)| index)
+    }
 }
 
 pub(super) fn validate_entry(
@@ -275,6 +310,8 @@ pub(super) fn join_trigger_only_entries(
                 face_up: false,
                 owner_unlinked: false,
                 mark_at_least: None,
+                target_other: false,
+                target_max_hp_gt: None,
             },
             triggers,
         }));
@@ -282,6 +319,126 @@ pub(super) fn join_trigger_only_entries(
             decls.remove(index);
         }
         decls.push(decl);
+    }
+    Ok(())
+}
+
+pub(super) fn is_supported_vm_modifier(
+    pkg: &content_schema::ContentPackage,
+    m: &content_schema::PackageModifierEntry,
+) -> bool {
+    let has_active = pkg
+        .active_index
+        .iter()
+        .any(|a| a.skill_def_id == m.skill_def_id);
+    let has_trigger = pkg
+        .trigger_index
+        .iter()
+        .any(|t| t.skill_def_id == m.skill_def_id);
+    if m.target == "hand_limit_base_max_hp" {
+        return m.mode == "override"
+            && m.selector.is_none()
+            && m.value_source.is_none()
+            && m.value == 1
+            && !has_active
+            && has_trigger;
+    }
+    if m.skill_def_id == 2_754_298_115
+        && matches!(m.target.as_str(), "attack_range" | "sha_use_limit")
+    {
+        return m.mode == "add"
+            && m.selector.is_none()
+            && m.value_source.as_deref() == Some("owner_skill_mark")
+            && m.value == 1
+            && !has_active
+            && !has_trigger;
+    }
+    if m.skill_def_id == 3_219_705_664
+        && m.target == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+    {
+        return m.mode == "override"
+            && m.selector.is_none()
+            && m.value_source.is_none()
+            && m.value == 1
+            && !has_active
+            && !has_trigger;
+    }
+    false
+}
+
+/// Bridge pure modifier skills (`dcdichou_eff`, `yingba_mark`) into catalog entries.
+pub(super) fn bridge_modifier_only_entries(
+    pkg: &content_schema::ContentPackage,
+    decls: &mut Vec<engine_native::content::extension::VmSkillDecl>,
+) -> Result<(), BridgeError> {
+    for skill in &pkg.skill_index {
+        let has_active = pkg
+            .active_index
+            .iter()
+            .any(|a| a.skill_def_id == skill.skill_def_id);
+        let has_trigger = pkg
+            .trigger_index
+            .iter()
+            .any(|t| t.skill_def_id == skill.skill_def_id);
+        let has_modifier = pkg
+            .modifier_index
+            .iter()
+            .any(|m| m.skill_def_id == skill.skill_def_id);
+        if has_active || has_trigger || !has_modifier {
+            continue;
+        }
+        if skill.lord_only || skill.conversion || skill.non_gainable {
+            return Err(invalid(
+                "skill_index",
+                "modifier-only skill metadata is unsupported",
+            ));
+        }
+        let mod_name = format!("{}#modifier", skill.name);
+        let code = vec![0x01u8];
+        let module = engine_native::rvm_bridge::BytecodeModule {
+            logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
+                &mod_name, &code, 0, 0, 0,
+            ),
+            name: mod_name,
+            code,
+            local_count: 0,
+            max_stack: 1,
+            entry_pc: 0,
+            caps_mask: 0,
+        };
+        decls.push(engine_native::content::extension::VmSkillDecl {
+            declaration_hash: None,
+            presentation_binding: None,
+            name: skill.name.clone(),
+            module,
+            trigger: engine_native::catalog::TriggerMeta {
+                event: engine_native::event::EventKind::SkillToggled,
+                timing: engine_native::event::Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            },
+            filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
+                skill_def_id: skill.skill_def_id,
+                active: None,
+                limits: VmActiveLimits {
+                    once_per_turn: false,
+                    once_per_play_phase: false,
+                    hand_nonempty: false,
+                    equip_nonempty: false,
+                    hand_gt_hp: false,
+                    hand_gt_max_hp: false,
+                    face_up: false,
+                    owner_unlinked: false,
+                    mark_at_least: None,
+                    target_other: false,
+                    target_max_hp_gt: None,
+                },
+                triggers: Vec::new(),
+            })),
+            r05_identity: None,
+        });
     }
     Ok(())
 }
@@ -398,6 +555,8 @@ pub(super) fn derive_r05_helpers(
                             face_up: false,
                             owner_unlinked: false,
                             mark_at_least: None,
+                            target_other: false,
+                            target_max_hp_gt: None,
                         },
                         triggers: Vec::new(),
                     })),

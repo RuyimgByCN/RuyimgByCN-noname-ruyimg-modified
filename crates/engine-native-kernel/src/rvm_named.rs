@@ -523,7 +523,7 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
             Seed::Atom(Atom::SourceNotTarget),
             Seed::Atom(Atom::Damage),
         ],
-        "has_discardable_hand_equip" => atom(Atom::CanDiscard(0)),
+        "has_discardable_hand_equip" | "other_discardable_hand_equip" => atom(Atom::CanDiscard(0)),
         "other_target_alive" => vec![
             Seed::Not,
             Seed::Atom(Atom::EvPlayer),

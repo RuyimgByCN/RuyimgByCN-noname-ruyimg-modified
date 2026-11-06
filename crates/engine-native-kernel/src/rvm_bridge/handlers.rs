@@ -13,6 +13,8 @@ pub struct VmActiveLimits {
     pub face_up: bool,
     pub owner_unlinked: bool,
     pub mark_at_least: Option<(u32, u32)>,
+    pub target_other: bool,
+    pub target_max_hp_gt: Option<u8>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -58,6 +60,15 @@ impl VmHandlerSet {
             && (!self.limits.hand_gt_max_hp || p.hand.len() > p.max_hp as usize)
             && (!self.limits.face_up || !p.face_down)
             && (!self.limits.owner_unlinked || !p.linked)
+            && (!self.limits.target_other
+                || ctx.state.players.iter().enumerate().any(|(idx, q)| {
+                    idx as u8 != owner
+                        && q.alive
+                        && self
+                            .limits
+                            .target_max_hp_gt
+                            .is_none_or(|min_exclusive| q.max_hp > min_exclusive as u32)
+                }))
             && self.limits.mark_at_least.is_none_or(|(mark, count)| {
                 ctx.state
                     .vm_aux
@@ -96,16 +107,37 @@ pub(super) fn machine(
     owner: PlayerId,
     event: &EventData,
 ) -> VmMachine {
-    fn named_meta(f: &VmFilterPolicy) -> (Vec<(String, u8)>, bool) {
+    fn named_meta(f: &VmFilterPolicy, skill_name: &str) -> (Vec<(String, u8)>, bool) {
         match f {
             VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
+            VmFilterPolicy::GameStarted { inner } => {
+                let (mut c, h) = named_meta(inner, skill_name);
+                c.push((format!("game_started:{skill_name}"), 3));
+                (c, h)
+            }
+            VmFilterPolicy::Handlers(set) => {
+                let mut c = Vec::new();
+                if set.limits.once_per_turn {
+                    c.push((String::new(), 1));
+                }
+                if set.limits.once_per_play_phase {
+                    c.push((String::new(), 4));
+                }
+                if set.limits.target_other {
+                    c.push((
+                        "__target_other".to_string(),
+                        set.limits.target_max_hp_gt.unwrap_or(0),
+                    ));
+                }
+                (c, false)
+            }
             VmFilterPolicy::AtPhase { inner, .. }
             | VmFilterPolicy::DrawPhaseSkipped { inner }
-            | VmFilterPolicy::Declared { inner, .. } => named_meta(inner),
+            | VmFilterPolicy::Declared { inner, .. } => named_meta(inner, skill_name),
             _ => (Vec::new(), false),
         }
     }
-    let (consume, count_hits) = named_meta(filter);
+    let (consume, count_hits) = named_meta(filter, &program.skill_name);
     VmMachine {
         owner,
         program,

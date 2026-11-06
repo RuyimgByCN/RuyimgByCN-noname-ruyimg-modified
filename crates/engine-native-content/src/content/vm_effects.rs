@@ -1,7 +1,10 @@
 //! Content-owned VM commit machines. The kernel only stores and pumps their continuations.
 mod baoshu;
+mod batch13_cards;
+mod batch13_targets;
 mod danshou;
 mod dcbihuo;
+mod dcdichou;
 mod fenghe;
 mod pingkou;
 mod tiqi;
@@ -20,6 +23,15 @@ pub(crate) fn step(
     effect: &EffectRequest,
     state: &mut Vec<u32>,
 ) -> Option<Flow> {
+    if let Some(flow) = batch13_targets::step(ctx, effect, state) {
+        return Some(flow);
+    }
+    if let Some(flow) = batch13_cards::step(ctx, effect, state) {
+        return Some(flow);
+    }
+    if let Some(flow) = dcdichou::step(ctx, effect, state) {
+        return Some(flow);
+    }
     match effect {
         EffectRequest::ChooseGiveOrRecastOneHand {
             player,
@@ -85,6 +97,15 @@ pub(crate) fn active_ask(
     core: &GameStateCore,
     catalog: &Catalog,
 ) -> Option<ExpectedAsk> {
+    if let Some(expected) = batch13_targets::active_ask(effect, state, core) {
+        return Some(expected);
+    }
+    if let Some(expected) = batch13_cards::active_ask(effect, state, core, catalog) {
+        return Some(expected);
+    }
+    if let Some(expected) = dcdichou::active_ask(effect, state, core) {
+        return Some(expected);
+    }
     match effect {
         EffectRequest::ChooseGiveOrRecastOneHand { player, .. } => {
             fenghe::active_ask(core, catalog, seat(*player, core)?, state)
@@ -365,6 +386,21 @@ pub(crate) fn validate(
                 && state[0] == 1
                 && state[1] <= 1
         }
+        EffectRequest::ChooseOtherDamage { .. }
+        | EffectRequest::ChooseTargetDraw { .. }
+        | EffectRequest::ChooseOtherRecover { .. }
+        | EffectRequest::ChooseDrawOrRecover { .. }
+        | EffectRequest::ChooseOtherAddMark { .. }
+        | EffectRequest::ResolveHfjieying { .. } => batch13_targets::validate(effect, state, core),
+        EffectRequest::ChooseDiscardOneHandOrEquip { .. }
+        | EffectRequest::DiscardBasicDrawEqual { .. }
+        | EffectRequest::ChooseUseVirtualSha { .. }
+        | EffectRequest::ChooseOtherDiscardTargetCard { .. }
+        | EffectRequest::ChooseDiscardTargetCard { .. }
+        | EffectRequest::ChooseOtherGiveOneHandEquip { .. } => {
+            batch13_cards::validate(effect, state, core, card_count)
+        }
+        EffectRequest::ResolveDcdichou { .. } => dcdichou::validate(effect, state, core),
         _ => false,
     }
 }

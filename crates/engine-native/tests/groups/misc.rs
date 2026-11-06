@@ -67,6 +67,9 @@ mod pa12_batch11_hand_draw_and_card_effects;
 #[path = "../pa12_batch12_selected_and_deterministic_effects.rs"]
 mod pa12_batch12_selected_and_deterministic_effects;
 
+#[path = "../pa12_batch13_interactive_and_up37_skills.rs"]
+mod pa12_batch13_interactive_and_up37_skills;
+
 #[path = "../pa12_dsl_native_prototype.rs"]
 mod pa12_dsl_native_prototype;
 

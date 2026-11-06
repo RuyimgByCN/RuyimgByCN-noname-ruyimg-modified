@@ -6,7 +6,7 @@ use super::*;
 pub(super) fn commit_ext_effect(
     ctx: &mut Ctx<'_>,
     executing: &str,
-    _owner: PlayerId,
+    owner: PlayerId,
     seats: u8,
     e: EffectRequest,
 ) {
@@ -801,6 +801,8 @@ pub(super) fn commit_ext_effect(
                 }));
             }
         }
-        _ => {}
+        other => {
+            super::commit_batch13::commit_batch13_effect(ctx, executing, owner, seats, other)
+        }
     }
 }

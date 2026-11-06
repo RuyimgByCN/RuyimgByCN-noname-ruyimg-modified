@@ -347,6 +347,178 @@ pub(super) fn enc_ext_effect(w: &mut Vec<u8>, e: &EffectRequest) {
                 push_u32(w, t.raw());
             }
         }
+        // PA12 批⑬：12 种高频交互式效果 + UP37-R01 敌仇 + 7 种确定性效果编码（109..=128）。
+        EffectRequest::ChooseOtherDamage {
+            player,
+            amount,
+            skill,
+        } => {
+            w.push(109);
+            push_u32(w, player.raw());
+            push_u32(w, *amount);
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ChooseTargetDraw {
+            player,
+            count,
+            scope,
+            skill,
+        } => {
+            w.push(110);
+            push_u32(w, player.raw());
+            push_u32(w, *count);
+            w.push(scope.tag());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ChooseOtherRecover { player, amount } => {
+            w.push(111);
+            push_u32(w, player.raw());
+            push_u32(w, *amount);
+        }
+        EffectRequest::ChooseDrawOrRecover {
+            player,
+            draw_count,
+            recover_count,
+            allow_cancel,
+        } => {
+            w.push(112);
+            push_u32(w, player.raw());
+            push_u32(w, *draw_count);
+            push_u32(w, *recover_count);
+            w.push(u8::from(*allow_cancel));
+        }
+        EffectRequest::ChooseOtherAddMark {
+            player,
+            mark,
+            delta,
+            skill,
+        } => {
+            w.push(113);
+            push_u32(w, player.raw());
+            push_u32(w, *mark);
+            push_u32(w, *delta as u32);
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ResolveHfjieying {
+            player,
+            target,
+            grant_def,
+            skill,
+        } => {
+            w.push(114);
+            push_u32(w, player.raw());
+            push_u32(w, target.raw());
+            push_u32(w, grant_def.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ChooseDiscardOneHandOrEquip { player } => {
+            w.push(115);
+            push_u32(w, player.raw());
+        }
+        EffectRequest::DiscardBasicDrawEqual { player, skill } => {
+            w.push(116);
+            push_u32(w, player.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ChooseUseVirtualSha {
+            player,
+            ignore_distance,
+        } => {
+            w.push(117);
+            push_u32(w, player.raw());
+            w.push(u8::from(*ignore_distance));
+        }
+        EffectRequest::ChooseOtherDiscardTargetCard {
+            player,
+            scope,
+            skill,
+        } => {
+            w.push(118);
+            push_u32(w, player.raw());
+            w.push(scope.tag());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ChooseDiscardTargetCard {
+            player,
+            target,
+            scope,
+        } => {
+            w.push(119);
+            push_u32(w, player.raw());
+            push_u32(w, target.raw());
+            w.push(scope.tag());
+        }
+        EffectRequest::ChooseOtherGiveOneHandEquip { player, skill } => {
+            w.push(120);
+            push_u32(w, player.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::ResolveDcdichou {
+            player,
+            target,
+            card,
+            action,
+            helper_skill_def,
+            skill,
+        } => {
+            w.push(121);
+            push_u32(w, player.raw());
+            push_u32(w, target.raw());
+            push_u32(w, card.raw());
+            w.push(*action);
+            push_u32(w, helper_skill_def.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::RecordCurrentShaAllTargets {
+            player,
+            card,
+            skill,
+        } => {
+            w.push(122);
+            push_u32(w, player.raw());
+            push_u32(w, card.raw());
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::TakeOneScopedCard { from, to, scope } => {
+            w.push(123);
+            push_u32(w, from.raw());
+            push_u32(w, to.raw());
+            w.push(scope.tag());
+        }
+        EffectRequest::DrawAllEventTargets { players, count } => {
+            w.push(124);
+            push_u32(w, players.len() as u32);
+            for p in players {
+                push_u32(w, p.raw());
+            }
+            push_u32(w, *count);
+        }
+        EffectRequest::RefreshSkill { skill } => {
+            w.push(125);
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::AddFirstMissingSkill {
+            player,
+            skill_defs,
+            skill,
+        } => {
+            w.push(126);
+            push_u32(w, player.raw());
+            for d in skill_defs {
+                push_u32(w, d.raw());
+            }
+            push_u32(w, skill.raw());
+        }
+        EffectRequest::DiscardEquipmentSlot { player, slot } => {
+            w.push(127);
+            push_u32(w, player.raw());
+            w.push(*slot);
+        }
+        EffectRequest::FinishCurrentPhaseAbortResolution { player, stage } => {
+            w.push(128);
+            push_u32(w, player.raw());
+            w.push(*stage);
+        }
         _ => unreachable!("accept_effect 已拒绝未编码变体"),
     }
 }
@@ -606,6 +778,111 @@ pub(super) fn dec_ext_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest> 
                 targets,
             }
         }
+        109 => EffectRequest::ChooseOtherDamage {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            amount: rd.u32()?,
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        110 => EffectRequest::ChooseTargetDraw {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            count: rd.u32()?,
+            scope: rule_api::DrawTargetScope::from_tag(rd.u8()?)?,
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        111 => EffectRequest::ChooseOtherRecover {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            amount: rd.u32()?,
+        },
+        112 => EffectRequest::ChooseDrawOrRecover {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            draw_count: rd.u32()?,
+            recover_count: rd.u32()?,
+            allow_cancel: rd.u8()? != 0,
+        },
+        113 => EffectRequest::ChooseOtherAddMark {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            mark: rd.u32()?,
+            delta: rd.i32()?,
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        114 => EffectRequest::ResolveHfjieying {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            target: rule_api::PlayerId::new(rd.u32()?),
+            grant_def: rule_api::SkillDefId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        115 => EffectRequest::ChooseDiscardOneHandOrEquip {
+            player: rule_api::PlayerId::new(rd.u32()?),
+        },
+        116 => EffectRequest::DiscardBasicDrawEqual {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        117 => EffectRequest::ChooseUseVirtualSha {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            ignore_distance: rd.u8()? != 0,
+        },
+        118 => EffectRequest::ChooseOtherDiscardTargetCard {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            scope: rule_api::TargetCardScope::from_tag(rd.u8()?)?,
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        119 => EffectRequest::ChooseDiscardTargetCard {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            target: rule_api::PlayerId::new(rd.u32()?),
+            scope: rule_api::TargetCardScope::from_tag(rd.u8()?)?,
+        },
+        120 => EffectRequest::ChooseOtherGiveOneHandEquip {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        121 => EffectRequest::ResolveDcdichou {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            target: rule_api::PlayerId::new(rd.u32()?),
+            card: rule_api::CardId::new(rd.u32()?),
+            action: rd.u8()?,
+            helper_skill_def: rule_api::SkillDefId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        122 => EffectRequest::RecordCurrentShaAllTargets {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            card: rule_api::CardId::new(rd.u32()?),
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        123 => EffectRequest::TakeOneScopedCard {
+            from: rule_api::PlayerId::new(rd.u32()?),
+            to: rule_api::PlayerId::new(rd.u32()?),
+            scope: rule_api::TargetCardScope::from_tag(rd.u8()?)?,
+        },
+        124 => {
+            let m = rd.u32()? as usize;
+            let mut players = Vec::with_capacity(m);
+            for _ in 0..m {
+                players.push(rule_api::PlayerId::new(rd.u32()?));
+            }
+            let count = rd.u32()?;
+            EffectRequest::DrawAllEventTargets { players, count }
+        }
+        125 => EffectRequest::RefreshSkill {
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        126 => EffectRequest::AddFirstMissingSkill {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            skill_defs: [
+                rule_api::SkillDefId::new(rd.u32()?),
+                rule_api::SkillDefId::new(rd.u32()?),
+                rule_api::SkillDefId::new(rd.u32()?),
+            ],
+            skill: rule_api::SkillId::new(rd.u32()?),
+        },
+        127 => EffectRequest::DiscardEquipmentSlot {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            slot: rd.u8()?,
+        },
+        128 => EffectRequest::FinishCurrentPhaseAbortResolution {
+            player: rule_api::PlayerId::new(rd.u32()?),
+            stage: rd.u8()?,
+        },
         _ => return None,
     })
 }

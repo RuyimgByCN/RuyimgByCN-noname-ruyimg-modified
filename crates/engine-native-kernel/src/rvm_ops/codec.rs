@@ -516,7 +516,7 @@ impl Rd<'_> {
         self.r = rest;
         Some(u32::from_le_bytes(a.try_into().ok()?))
     }
-    fn i32(&mut self) -> Option<i32> {
+    pub(super) fn i32(&mut self) -> Option<i32> {
         self.u32().map(|v| v as i32)
     }
     pub(super) fn u8(&mut self) -> Option<u8> {
@@ -849,7 +849,7 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 card: rule_api::CardId::new(rd.u32()?),
                 target: rule_api::PlayerId::new(rd.u32()?),
             },
-            71..=108 => super::codec_ext::dec_ext_effect(tag, &mut rd)?,
+            71..=128 => super::codec_ext::dec_ext_effect(tag, &mut rd)?,
             _ => return None,
         };
         out.push(e);

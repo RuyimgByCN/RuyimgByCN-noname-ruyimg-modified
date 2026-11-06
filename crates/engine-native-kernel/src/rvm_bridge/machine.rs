@@ -345,6 +345,48 @@ impl VmMachine {
                     }
                 }
             }
+            if matches!(
+                self.event,
+                EventData::Phase {
+                    phase: crate::event::Phase::Play,
+                    begin: true,
+                    ..
+                }
+            ) {
+                let max_hp_gt = self
+                    .consume
+                    .iter()
+                    .find(|(k, _)| k == "__target_other")
+                    .map(|(_, v)| (*v > 0).then_some(*v))
+                    .or_else(|| {
+                        (self.program.skill_name == "yingba")
+                            .then_some(Some(1))
+                            .or_else(|| (self.program.skill_name == "dczigu").then_some(None))
+                    });
+                if let Some(min_exclusive) = max_hp_gt {
+                    selected_targets.retain(|&raw| {
+                        crate::rvm_ops::seat_of(rule_api::PlayerId::new(raw), seats).is_some_and(
+                            |q| {
+                                let ps = ctx.core.player(q);
+                                q != self.owner
+                                    && ps.alive
+                                    && min_exclusive.is_none_or(|m| ps.max_hp > m as u32)
+                            },
+                        )
+                    });
+                    if selected_targets.is_empty() {
+                        let n = ctx.core.players.len();
+                        for step in 1..n {
+                            let q = ((self.owner as usize + step) % n) as u8;
+                            let ps = ctx.core.player(q);
+                            if ps.alive && min_exclusive.is_none_or(|m| ps.max_hp > m as u32) {
+                                selected_targets.push(to_rule_pid(q).raw());
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
             let event_source = if let Some(d) = damage.as_ref() {
                 d.source.map(|p| to_rule_pid(p).raw()).unwrap_or(0)
             } else if matches!(
@@ -377,6 +419,35 @@ impl VmMachine {
                     cards.push(c);
                 }
             }
+            let marked_card_target = if self.trig.kind == 2
+                && self.trig.event_source == Some(self.owner)
+            {
+                self.trig
+                    .targets
+                    .iter()
+                    .copied()
+                    .find(|&t| {
+                        ctx.core
+                            .vm_aux
+                            .marks
+                            .get(&(t, 3_304_378_096))
+                            .copied()
+                            .unwrap_or(0)
+                            > 0
+                    })
+            } else if matches!(
+                self.event,
+                EventData::Phase {
+                    phase: crate::event::Phase::Play,
+                    begin: true,
+                    ..
+                }
+            ) && !selected_targets.is_empty()
+            {
+                crate::rvm_ops::seat_of(rule_api::PlayerId::new(selected_targets[0]), seats)
+            } else {
+                None
+            };
             let mut host = EngineVmHost {
                 targets,
                 cards,
@@ -393,6 +464,7 @@ impl VmMachine {
                     event_player: damage
                         .as_ref()
                         .map(|d| d.target)
+                        .or(marked_card_target)
                         .or(self.trig.event_player)
                         .map(to_rule_pid)
                         .map(|p| p.raw())
@@ -420,6 +492,9 @@ impl VmMachine {
             Ok(ExecResult::Halted { .. }) => {
                 self.committing = true;
                 for (key, scope) in &self.consume {
+                    if key == "__target_other" {
+                        continue;
+                    }
                     let k = if key.is_empty() {
                         self.program.skill_name.clone()
                     } else {

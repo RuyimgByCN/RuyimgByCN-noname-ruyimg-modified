@@ -14,6 +14,7 @@ pub(super) fn play_sha(
     let mut mark_yuanbaorou = false;
     let mut mark_huihuo = false;
     let mut mark_lingshi = false;
+    let mut mark_dcdichou_eff = false;
     let player_id = core.turn.current;
     // 焚天（Boss 朱雀，规则 v236）：锁定——红色牌使用无
     // 次数限制且无距离限制（上游 mod cardUsable Infinity
@@ -170,10 +171,45 @@ pub(super) fn play_sha(
                     .map(|def| core.has_skill(core.turn.current, def))
                     .unwrap_or(false)
                     && crate::content::host::sbzhaxiang_active(core, core.turn.current);
-                if !lingshi_extra && !sbzhaxiang_extra {
+                // 敌仇效果（UP37 R01 dcdichou_eff，哈希 2754298115）：
+                // 出杀上限 +X（X = 2754298115 印记值）
+                let dcdichou_eff_extra = {
+                    let has_eff = catalog
+                        .skill_by_name("dcdichou_eff")
+                        .or_else(|| {
+                            crate::rvm_ops::resolve_skill_def(catalog, 2_754_298_115)
+                        })
+                        .map(|def| core.has_skill(core.turn.current, def))
+                        .unwrap_or(false)
+                        || core
+                            .vm_aux
+                            .flags
+                            .get(&(core.turn.current, "skill:2754298115".to_string()))
+                            .copied()
+                            .unwrap_or(0)
+                            != 0;
+                    let bonus = core
+                        .vm_aux
+                        .marks
+                        .get(&(core.turn.current, 2_754_298_115))
+                        .copied()
+                        .unwrap_or(0);
+                    let used = core
+                        .vm_aux
+                        .flags
+                        .get(&(core.turn.current, "dcdichou_eff_sha_used".to_string()))
+                        .copied()
+                        .unwrap_or(0) as i32;
+                    has_eff && bonus > used
+                };
+                if !lingshi_extra && !sbzhaxiang_extra && !dcdichou_eff_extra {
                     return Err(RejectReason::ShaLimit);
                 }
-                mark_lingshi = true;
+                if lingshi_extra {
+                    mark_lingshi = true;
+                } else if !sbzhaxiang_extra && dcdichou_eff_extra {
+                    mark_dcdichou_eff = true;
+                }
             } else {
                 mark_huihuo = true;
             }
@@ -485,6 +521,11 @@ pub(super) fn play_sha(
                 inst.once_used = true;
             }
         }
+    }
+    if mark_dcdichou_eff {
+        let key = (player_id, "dcdichou_eff_sha_used".to_string());
+        let next = state.core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
+        state.core.vm_aux.flags.insert(key, next);
     }
     // 良策转化（玩点论杀批 15）：基本牌当五谷时按五谷
     // 机器路由（use_as 声明）。

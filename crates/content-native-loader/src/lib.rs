@@ -419,6 +419,10 @@ pub fn bridge_vm_skill_decls(
                 EventKind::TurnOvered
             }
             "skill_added" => EventKind::SkillToggled,
+            "game_started" => {
+                extra_events.push(EventKind::PhaseBegin);
+                EventKind::TurnBegin
+            }
             other => {
                 return Err(BridgeError::InvalidField {
                     field: "trigger_index.event",
@@ -441,6 +445,10 @@ pub fn bridge_vm_skill_decls(
         };
         let filter = if t.event == "phase_draw_skipped" {
             engine_native::rvm_bridge::VmFilterPolicy::DrawPhaseSkipped {
+                inner: Box::new(filter),
+            }
+        } else if t.event == "game_started" {
+            engine_native::rvm_bridge::VmFilterPolicy::GameStarted {
                 inner: Box::new(filter),
             }
         } else {
@@ -478,6 +486,7 @@ pub fn bridge_vm_skill_decls(
     }
     vm_active::bridge_active_entries(pkg, &mut out)?;
     vm_active::join_trigger_only_entries(pkg, &mut out)?;
+    vm_active::bridge_modifier_only_entries(pkg, &mut out)?;
     vm_active::derive_r05_helpers(pkg, &mut out)?;
     if !pkg.view_as_index.is_empty() {
         return Err(invalid(
@@ -485,21 +494,11 @@ pub fn bridge_vm_skill_decls(
             "native VM view-as declarations are unsupported",
         ));
     }
-    if pkg.modifier_index.iter().any(|m| {
-        m.target != "hand_limit_base_max_hp"
-            || m.mode != "override"
-            || m.selector.is_some()
-            || m.value_source.is_some()
-            || m.value != 1
-            || pkg
-                .active_index
-                .iter()
-                .any(|a| a.skill_def_id == m.skill_def_id)
-            || !pkg
-                .trigger_index
-                .iter()
-                .any(|t| t.skill_def_id == m.skill_def_id)
-    }) {
+    if pkg
+        .modifier_index
+        .iter()
+        .any(|m| !vm_active::is_supported_vm_modifier(pkg, m))
+    {
         return Err(invalid(
             "modifier_index",
             "native VM modifier declarations are unsupported",

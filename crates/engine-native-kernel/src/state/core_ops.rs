@@ -788,10 +788,11 @@ impl GameStateCore {
     }
 
     /// 攻击范围：武器射程（泛型 Weapon 走 CardDef.range，命名武器走
-    /// 牌种固定射程），无武器为 1。
+    /// 牌种固定射程），无武器为 1；叠算 `dcdichou_eff`（UP37 R01）标记加成。
     pub fn attack_range(&self, catalog: &crate::catalog::Catalog, p: PlayerId) -> u32 {
         use crate::catalog::CardKind;
-        self.player(p)
+        let base = self
+            .player(p)
             .equips
             .iter()
             .filter_map(|c| {
@@ -803,7 +804,28 @@ impl GameStateCore {
                 }
             })
             .max()
-            .unwrap_or(1)
+            .unwrap_or(1);
+        let dcdichou_eff_bonus = if catalog
+            .skill_by_name("dcdichou_eff")
+            .is_some_and(|def| self.has_skill(p, def))
+            || self
+                .vm_aux
+                .flags
+                .get(&(p, "skill:2754298115".to_string()))
+                .copied()
+                .unwrap_or(0)
+                != 0
+        {
+            self.vm_aux
+                .marks
+                .get(&(p, 2_754_298_115))
+                .copied()
+                .unwrap_or(0)
+                .max(0) as u32
+        } else {
+            0
+        };
+        base + dcdichou_eff_bonus
     }
 
     /// 存活玩家间的座位最短距离（死亡玩家的座位不计数）。

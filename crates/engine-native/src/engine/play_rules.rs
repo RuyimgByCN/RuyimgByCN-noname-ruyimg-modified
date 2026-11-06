@@ -425,6 +425,64 @@ pub(super) fn check_play_target_restrictions(
             }
         }
     }
+    // 盈霸印记（UP37 R03 yingba_mark，哈希 3219705664）：
+    // card_target_cancel_if_other_user_card_use_count_lt_owner_mark
+    {
+        const YINGBA_MARK_RAW: u32 = 3_219_705_664;
+        const YINGBA_RAW: u32 = 2_187_983_153;
+        let used = core.turn.cards_used_turn as i32;
+        let user = core.turn.current;
+        let has_mark_skill = |p: PlayerId| {
+            catalog
+                .skill_by_name("yingba_mark")
+                .or_else(|| crate::rvm_ops::resolve_skill_def(catalog, YINGBA_MARK_RAW))
+                .map(|def| core.has_skill(p, def))
+                .unwrap_or(false)
+                || core
+                    .vm_aux
+                    .flags
+                    .get(&(p, format!("skill:{YINGBA_MARK_RAW}")))
+                    .copied()
+                    .unwrap_or(0)
+                    != 0
+        };
+        let has_yingba_skill = |p: PlayerId| {
+            catalog
+                .skill_by_name("yingba")
+                .or_else(|| crate::rvm_ops::resolve_skill_def(catalog, YINGBA_RAW))
+                .map(|def| core.has_skill(p, def))
+                .unwrap_or(false)
+                || core
+                    .vm_aux
+                    .flags
+                    .get(&(p, format!("skill:{YINGBA_RAW}")))
+                    .copied()
+                    .unwrap_or(0)
+                    != 0
+        };
+        for &t in targets {
+            if t != user {
+                let target_mark = core
+                    .vm_aux
+                    .marks
+                    .get(&(t, YINGBA_MARK_RAW))
+                    .copied()
+                    .unwrap_or(0);
+                if has_mark_skill(t) && target_mark > used {
+                    return Err(RejectReason::IllegalTargets);
+                }
+                let user_mark = core
+                    .vm_aux
+                    .marks
+                    .get(&(user, YINGBA_MARK_RAW))
+                    .copied()
+                    .unwrap_or(0);
+                if has_mark_skill(user) && has_yingba_skill(t) && user_mark > used {
+                    return Err(RejectReason::IllegalTargets);
+                }
+            }
+        }
+    }
     Ok(())
 }
 

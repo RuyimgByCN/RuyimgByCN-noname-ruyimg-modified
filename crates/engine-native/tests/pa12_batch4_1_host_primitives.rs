@@ -412,8 +412,15 @@ fn pa12_batch5_4_dichou_predicates() {
     let engine_native::rvm_bridge::VmFilterPolicy::Handlers(set) = &out.decls[0].filter else { panic!("handler set"); };
     assert_eq!(set.triggers.len(), 2);
 
-    let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect_err("unsupported modifiers must reject the full package");
-    assert!(matches!(full, content_native_loader::BridgeError::InvalidField { field: "modifier_index", .. }));
+    // PA12 批⑬ / UP37-R01：`dcdichou` + `dcdichou_eff` 完整包现已原生准入（2 个 decl），
+    // 非法 modifier target 仍拒绝整包。
+    let full = content_native_loader::bridge_vm_skill_decls(&pkg).expect("UP37-R01 完整 dcdichou 包已准入");
+    assert_eq!(full.decls.len(), 2);
+    let mut bad_mod = pkg.clone();
+    bad_mod.modifier_index[0].target = "unsupported_modifier".to_string();
+    bad_mod.manifest.logic_hash = bad_mod.compute_logic_hash();
+    let bad_err = content_native_loader::bridge_vm_skill_decls(&bad_mod).expect_err("unsupported modifiers must reject the full package");
+    assert!(matches!(bad_err, content_native_loader::BridgeError::InvalidField { field: "modifier_index", .. }));
 
     // 整局（两段包）：1 号持技
     let pack = ExtensionPack {
@@ -442,12 +449,9 @@ fn pa12_batch5_4_dichou_predicates() {
         1,
         "他人对持有者用牌 → 来源挂仇"
     );
-    // ② 1 号对 0 号（带仇）用牌 → 过闸（参数化谓词命中）+ 摸 1。
-    // 登记差异（增量 17 扩展，本批实测）：模块体内的 `event_player` 在
-    // card_targeted→CardUsed 映射下=用牌者（旧线=被指定目标）——
-    // `remove_mark(event_player)` 移除的是用牌者的仇而非目标，仇仍留在
-    // 目标身上。逐目标帧型（per-target frame）随 §2 J 选择链批次评估；
-    // 谓词门（targets 集）两侧等价。
+    // ② 1 号对 0 号（带仇）用牌 → 过闸（参数化谓词命中）+ 摸 1 + 移除 0 号的仇标记。
+    // PA12 批⑬ / UP37-R01 已闭合批⑤-4 增量 17 差异：当来源对带仇目标用牌时，
+    // `event_player` 绑定至带仇目标，从而 `remove_mark(event_player)` 正确移除目标的仇并记录本回合消仇标记。
     submit_to_phase(&mut e, 1, Phase::Play);
     let hand = hand_len(&e, 1);
     let sha1 = e.debug_place(1, "sha");
@@ -455,8 +459,18 @@ fn pa12_batch5_4_dichou_predicates() {
     drain_plain(&mut e);
     assert_eq!(
         e.state_core().vm_aux.marks.get(&(0, MARK)).copied().unwrap_or(0),
+        0,
+        "PA12 批⑬ / UP37-R01：对带仇目标用牌后移除目标的仇标记"
+    );
+    assert_eq!(
+        e.state_core()
+            .vm_aux
+            .flags
+            .get(&(0, "dcdichou_mark_removed_this_turn".to_string()))
+            .copied()
+            .unwrap_or(0),
         1,
-        "登记差异：模块体 event_player=用牌者（增量 17）——目标的仇暂不移除"
+        "PA12 批⑬ / UP37-R01：移除仇标记同步置位 dcdichou_mark_removed_this_turn"
     );
     // 打出杀 -1 + 涤仇摸 1：基线取自 1 号出牌阶段内，断言摸牌落账（不减少）。
     assert!(hand_len(&e, 1) >= hand, "涤仇摸 1 落账（手牌不减少）");

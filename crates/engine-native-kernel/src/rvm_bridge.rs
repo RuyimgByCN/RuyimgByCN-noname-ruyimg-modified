@@ -214,6 +214,11 @@ pub enum VmFilterPolicy {
     DrawPhaseSkipped {
         inner: Box<VmFilterPolicy>,
     },
+    /// 游戏开始门（PA12⑬，UP37 R01/R06）：落于首轮（round==1）TurnBegin 窗，
+    /// 并以 `once` 键 `("game_started:<skill>", 3)` 保证整局每名持有者仅触发一次。
+    GameStarted {
+        inner: Box<VmFilterPolicy>,
+    },
 }
 
 /// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
@@ -504,6 +509,22 @@ impl SkillBehavior for VmSkillBehavior {
         }
         if let VmFilterPolicy::DrawPhaseSkipped { inner } = &self.filter {
             if !trig.draw_phase_skipped {
+                return false;
+            }
+            let gated = VmSkillBehavior {
+                program: self.program.clone(),
+                filter: (**inner).clone(),
+            };
+            return gated.filter(ctx, owner, event);
+        }
+        if let VmFilterPolicy::GameStarted { inner } = &self.filter {
+            if ctx.state.turn.round > 1
+                || ctx.state.vm_aux.once.contains(&(
+                    owner,
+                    format!("game_started:{}", self.program.skill_name),
+                    3,
+                ))
+            {
                 return false;
             }
             let gated = VmSkillBehavior {
@@ -821,6 +842,7 @@ impl SkillBehavior for VmSkillBehavior {
             // 阶段门已在函数头处理（递归评估 inner）；此处不可达，保守返回 false。
             VmFilterPolicy::AtPhase { .. }
             | VmFilterPolicy::DrawPhaseSkipped { .. }
+            | VmFilterPolicy::GameStarted { .. }
             | VmFilterPolicy::Declared { .. } => false,
             VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
                 &prog,
@@ -884,6 +906,12 @@ impl SkillBehavior for VmSkillBehavior {
         }
         if set.limits.once_per_play_phase {
             machine.consume.push((String::new(), 4));
+        }
+        if set.limits.target_other {
+            machine.consume.push((
+                "__target_other".to_string(),
+                set.limits.target_max_hp_gt.unwrap_or(0),
+            ));
         }
         Some(Box::new(machine))
     }
@@ -1025,16 +1053,31 @@ impl VmHost for EngineVmHost<'_> {
             | EffectRequest::DiscardSelectedDrawAllHandBonus { skill, .. }
             | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { skill, .. }
             | EffectRequest::RecoverSelectedTargets { skill, .. }
+            | EffectRequest::ChooseOtherDamage { skill, .. }
+            | EffectRequest::ChooseTargetDraw { skill, .. }
+            | EffectRequest::ChooseOtherAddMark { skill, .. }
+            | EffectRequest::ResolveHfjieying { skill, .. }
+            | EffectRequest::DiscardBasicDrawEqual { skill, .. }
+            | EffectRequest::ChooseOtherDiscardTargetCard { skill, .. }
+            | EffectRequest::ChooseOtherGiveOneHandEquip { skill, .. }
+            | EffectRequest::ResolveDcdichou { skill, .. }
+            | EffectRequest::RecordCurrentShaAllTargets { skill, .. }
+            | EffectRequest::RefreshSkill { skill }
+            | EffectRequest::AddFirstMissingSkill { skill, .. }
                 if !skill.is_some() && self.ctx.skill_id != 0 =>
             {
                 *skill = rule_api::SkillId::new(self.ctx.skill_id);
             }
-            EffectRequest::TakeOneHandCard { from, .. } if !from.is_some() => {
+            EffectRequest::TakeOneHandCard { from, .. }
+            | EffectRequest::TakeOneScopedCard { from, .. }
+                if !from.is_some() =>
+            {
                 let Some(counterpart) = self
                     .targets
                     .first()
                     .copied()
                     .or_else(|| (self.ctx.event_player != 0).then_some(self.ctx.event_player))
+                    .or_else(|| (self.ctx.event_source != 0).then_some(self.ctx.event_source))
                 else {
                     return Err(HostTrap::InvalidRequest {
                         message: "event has no counterpart".into(),
