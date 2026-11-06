@@ -85,7 +85,9 @@ struct VmTriggerCtx {
     moved_from: Option<PlayerId>,
     /// 阶段开始/结束。
     begin: Option<bool>,
-    /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出 9 给牌。
+    /// 获得技能的定义号（SkillToggled enabled=true）。
+    added_skill_def: Option<u16>,
+    /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出 9 给牌 12 武将状态 13 获得技能。
     kind: u8,
 }
 
@@ -255,6 +257,32 @@ fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             kind: 8,
             ..VmTriggerCtx::default()
         },
+        EventData::TurnOvered { player, face_down } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_amount: if *face_down { 2 } else { 1 },
+            kind: 12,
+            ..VmTriggerCtx::default()
+        },
+        EventData::Linked { player, linked } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_amount: if *linked { 3 } else { 4 },
+            kind: 12,
+            ..VmTriggerCtx::default()
+        },
+        EventData::SkillToggled {
+            player,
+            skill,
+            enabled: true,
+            ..
+        } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            added_skill_def: Some(*skill),
+            kind: 13,
+            ..VmTriggerCtx::default()
+        },
         _ => VmTriggerCtx::default(),
     }
 }
@@ -407,6 +435,16 @@ pub enum VmFilterPolicy {
     /// DSL `owner_source_target_mark_positive_{mark}`（批⑤-4 R01 参数化族）：
     /// 来源=持有者 ∧ 事件主玩家的该标记层数 > 0。
     OwnerSourceTargetMarkPositive(u32),
+    /// DSL `owner_skill_added_self_{def}`：获得技能者=持有者 ∧ 刚获得的技能匹配 `def`。
+    OwnerSkillAddedSelf(u32),
+    /// DSL `owner_turned_over`：翻面者=持有者（正/背双向）。
+    OwnerTurnedOver,
+    /// DSL `owner_alive_event_player_became_face_up_or_linked`：持有者与事件角色存活，
+    /// 且事件为翻至正面（1）或进入连环状态（3）。
+    OwnerBecameFaceUpOrLinked,
+    /// DSL `owner_alive_event_player_turn_changed_or_became_linked`：持有者与事件角色存活，
+    /// 且事件为翻面（1/2）或进入连环状态（3）。
+    OwnerTurnChangedOrBecameLinked,
     /// 阶段门（PA12④）：事件携带的阶段须等于 `phase`，再评估 `inner`。
     /// 装载器用它把 DSL 的 `phase_end`/`phase_draw`/… 落到原生
     /// `PhaseBegin`/`PhaseEnd`（原生阶段帧按阶段逐一发出，旧线
@@ -475,10 +513,24 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
         }
         "owner_is_target_not_unique_max_current_hp" => Some(VmFilterPolicy::OwnerNotUniqueMaxHp),
         "owner_targeted_by_other_sha" => Some(VmFilterPolicy::OwnerTargetedByOtherSha),
+        "owner_turned_over" => Some(VmFilterPolicy::OwnerTurnedOver),
+        "owner_alive_event_player_became_face_up_or_linked" => {
+            Some(VmFilterPolicy::OwnerBecameFaceUpOrLinked)
+        }
+        "owner_alive_event_player_turn_changed_or_became_linked" => {
+            Some(VmFilterPolicy::OwnerTurnChangedOrBecameLinked)
+        }
         _ => None,
     };
     if exact.is_some() {
         return exact;
+    }
+    if let Some(raw) = name
+        .strip_prefix("owner_skill_added_self_")
+        .and_then(|v| v.parse::<u32>().ok())
+        .filter(|v| *v > 0)
+    {
+        return Some(VmFilterPolicy::OwnerSkillAddedSelf(raw));
     }
     if let Some(n) = name
         .strip_prefix("owner_is_target_hp_below_")
@@ -552,6 +604,7 @@ impl SkillBehavior for VmSkillBehavior {
         };
         set.triggers.iter().any(|entry| {
             (entry.meta.event == event.kind()
+                || entry.meta.extra_events.contains(&event.kind())
                 // The saved payload is canonical damage; the owning frame validates the exact window.
                 || (matches!(event, EventData::Damage(_)) && matches!(entry.meta.event,
                     EventKind::DamageBefore|EventKind::Damage|EventKind::DamageBegin|
@@ -580,10 +633,10 @@ impl SkillBehavior for VmSkillBehavior {
 
     fn vm_trigger_window_is_authorized(&self, bytes: &[u8], kind: EventKind) -> bool {
         match &self.filter {
-            VmFilterPolicy::Handlers(set) => set
-                .triggers
-                .iter()
-                .any(|entry| entry.meta.event == kind && entry.program.module.to_bytes() == bytes),
+            VmFilterPolicy::Handlers(set) => set.triggers.iter().any(|entry| {
+                (entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
+                    && entry.program.module.to_bytes() == bytes
+            }),
             _ => self.vm_module_is_authorized(bytes),
         }
     }
@@ -652,6 +705,9 @@ impl SkillBehavior for VmSkillBehavior {
                 filter: (**inner).clone(),
             }
             .filter(ctx, owner, event);
+        }
+        if matches!(event, EventData::SkillToggled { enabled: false, .. }) {
+            return false;
         }
         let trig = trigger_ctx_of(event);
         if let VmFilterPolicy::AtPhase { phase, inner } = &self.filter {
@@ -730,6 +786,31 @@ impl SkillBehavior for VmSkillBehavior {
                 trig.event_source == Some(owner)
                     && (trig.event_player.is_some_and(has_mark)
                         || trig.targets.iter().any(|t| has_mark(*t)))
+            }
+            VmFilterPolicy::OwnerSkillAddedSelf(raw) => {
+                is_event_player
+                    && ctx.state.player(owner).alive
+                    && trig.kind == 13
+                    && trig.added_skill_def.is_some_and(|def| {
+                        def as u32 == raw
+                            || ctx.catalog.skills[def as usize].behavior.package_skill_id()
+                                == Some(raw)
+                    })
+            }
+            VmFilterPolicy::OwnerTurnedOver => {
+                is_event_player && trig.kind == 12 && matches!(trig.event_amount, 1 | 2)
+            }
+            VmFilterPolicy::OwnerBecameFaceUpOrLinked => {
+                ctx.state.player(owner).alive
+                    && trig.event_player.is_some_and(|p| ctx.state.player(p).alive)
+                    && trig.kind == 12
+                    && matches!(trig.event_amount, 1 | 3)
+            }
+            VmFilterPolicy::OwnerTurnChangedOrBecameLinked => {
+                ctx.state.player(owner).alive
+                    && trig.event_player.is_some_and(|p| ctx.state.player(p).alive)
+                    && trig.kind == 12
+                    && matches!(trig.event_amount, 1 | 2 | 3)
             }
             VmFilterPolicy::OwnerIsSource => trig.event_source == Some(owner),
             VmFilterPolicy::OwnerAliveGaveCardsToOtherAlive => {

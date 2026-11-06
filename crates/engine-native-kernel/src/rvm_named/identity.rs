@@ -120,6 +120,7 @@ impl NamedProgram {
                     Atom::ElementalOrTrick => { h.update(&108u16.to_le_bytes()); }
                     Atom::RedOrJiu => { h.update(&109u16.to_le_bytes()); }
                     Atom::JuedouOrRedSha => { h.update(&110u16.to_le_bytes()); }
+                    Atom::SourceHasWeapon => { h.update(&111u16.to_le_bytes()); }
                 }
             }
         }

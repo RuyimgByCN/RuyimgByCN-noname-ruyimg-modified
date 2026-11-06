@@ -281,6 +281,16 @@ pub fn intrinsic_machine(
             phase: Phase::Judge,
             begin: true,
         } => {
+            if ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(player, "skip_judge".to_string()))
+                .is_some()
+            {
+                ctx.record_phase_skipped(player);
+                return None;
+            }
             let judge = std::mem::take(&mut ctx.core.player_mut(player).judge);
             if judge.is_empty() {
                 None
@@ -329,6 +339,10 @@ pub fn intrinsic_machine(
             });
             // 猛态（Boss 年兽，规则 v248）：本回合未进入出牌阶段 → 跳过
             // 弃牌阶段（上游 boss_mengtai_discard trigger.cancel 同口径）
+            if ctx.core.player(player).skip_discard_phase {
+                ctx.core.player_mut(player).skip_discard_phase = false;
+                skip_discard = true;
+            }
             if !skip_discard && ctx.core.turn.mengtai_use_pending {
                 if let Some(mtdef) = ctx
                     .catalog

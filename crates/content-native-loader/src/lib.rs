@@ -317,6 +317,7 @@ pub fn bridge_vm_skill_decls(
         // 落为 PhaseBegin/PhaseEnd + `AtPhase` 阶段门（D01/D02/D06 见各臂
         // 注释：回合开始/准备阶段/整回合结束已接 R05 真实窗）。
         let mut phase_gate: Option<engine_native::event::Phase> = None;
+        let mut extra_events: Vec<EventKind> = Vec::new();
         let event = match t.event.as_str() {
             "phase_end" => {
                 phase_gate = Some(engine_native::event::Phase::End);
@@ -405,6 +406,17 @@ pub fn bridge_vm_skill_decls(
             "skill_log_begin" => EventKind::SkillLogBegin,
             "hp_lost" => EventKind::LoseHp,
             "hp_recovered" => EventKind::Recover,
+            // PA12 批⑨：伤害被防止/归零（DamageCancelled + DamageZero 双窗）、
+            // 武将状态改变（TurnOvered + Linked 双窗）、获得技能（SkillToggled）。
+            "damage_prevented" => {
+                extra_events.push(EventKind::DamageZero);
+                EventKind::DamageCancelled
+            }
+            "character_state_changed" => {
+                extra_events.push(EventKind::Linked);
+                EventKind::TurnOvered
+            }
+            "skill_added" => EventKind::SkillToggled,
             other => {
                 return Err(BridgeError::InvalidField {
                     field: "trigger_index.event",
@@ -437,7 +449,7 @@ pub fn bridge_vm_skill_decls(
                 priority: t.priority,
                 order_selectable: t.order_selectable,
                 optional: t.optional,
-                extra_events: Vec::new(),
+                extra_events,
             },
             filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
                 skill_def_id: t.skill_def_id,

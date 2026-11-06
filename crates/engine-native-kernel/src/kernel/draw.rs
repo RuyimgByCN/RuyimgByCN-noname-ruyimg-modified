@@ -64,6 +64,14 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
                 // begin_draw 同口径逐项相加（有符号），执行入口统一 max(0)。
                 pending += host_pending_adjust(ctx, player);
+                if let Some(bonus) = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .remove(&(player, "draw_phase_bonus".to_string()))
+                {
+                    pending += bonus as i32;
+                }
                 // 玉如意（swd b44）：摸牌前把牌堆末 20 张窗口内最大点数牌
                 // 移至摸牌位（pop 位）——与旧 begin_draw 同口径。
                 if ctx

@@ -582,3 +582,123 @@ fn pa12_legacy_batch8_deterministic_effects_skills_match_native() {
         }
     }
 }
+
+/// 批⑨差分对表：10 个真实 `.skill` 模块在旧线 `engine_core::vm_host` 产出的 `EffectRequest` 序列
+/// 与原生 `pa12_batch9_events_and_turn_effects` 完全一致。
+#[test]
+fn pa12_batch9_legacy_vm_effects_match_native_expectation() {
+    for (id, src, trig_idx, want_prefixes) in [
+        (
+            "sixiang-stdfenyin",
+            include_str!("../../../content/original/ported/sixiang/stdfenyin.skill"),
+            0usize,
+            &["IncreaseCurrentDrawCount", "AddSkill"][..],
+        ),
+        (
+            "old-oldzishou",
+            include_str!("../../../content/original/ported/old/oldzishou.skill"),
+            0,
+            &["IncreaseCurrentDrawCount", "SkipNextPlayPhase"][..],
+        ),
+        (
+            "shiji-spyinju2",
+            include_str!("../../../content/original/ported/shiji/spyinju2.skill"),
+            0,
+            &["SkipNextPlayPhase", "SkipNextDiscardPhase"][..],
+        ),
+        (
+            "mobile-zhengjing2",
+            include_str!("../../../content/original/ported/mobile/zhengjing2.skill"),
+            0,
+            &[
+                "GainWholeSkillPile",
+                "SkipNextJudgePhase",
+                "RemoveSkillByDef",
+            ][..],
+        ),
+        (
+            "offline-zj-fuli",
+            include_str!("../../../content/original/ported/offline/zj_fuli.skill"),
+            0,
+            &[
+                "StorageSet",
+                "RecoverHp",
+                "DrawCards",
+                "QueueExtraPhases",
+            ][..],
+        ),
+        (
+            "mobile-xinduodao",
+            include_str!("../../../content/original/ported/mobile/xinduodao.skill"),
+            0,
+            &["GainTargetEquipment"][..],
+        ),
+        (
+            "sp-oldhuxiao",
+            include_str!("../../../content/original/ported/sp/oldhuxiao.skill"),
+            0,
+            &["RefundCurrentShaUse"][..],
+        ),
+        (
+            "xianding-renzheng",
+            include_str!("../../../content/original/ported/xianding/renzheng.skill"),
+            0,
+            &["DrawCards"][..],
+        ),
+        (
+            "sp-pxyanmen",
+            include_str!("../../../content/original/ported/sp/pxyanmen.skill"),
+            0,
+            &["GainCardByKind", "GainCardByKind"][..],
+        ),
+        (
+            "offline-zj-hanci",
+            include_str!("../../../content/original/ported/offline/zj_hanci.skill"),
+            0,
+            &["DrawCards", "DrawCards"][..],
+        ),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 79, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        tx.state_mut().players.get_mut(owner).unwrap().hp = 1;
+
+        let entry = &pkg.trigger_index[trig_idx];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .expect("模块");
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[1],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}
+

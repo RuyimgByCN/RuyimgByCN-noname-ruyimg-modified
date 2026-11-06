@@ -1,10 +1,11 @@
 use super::super::*;
 
 pub(super) fn begin_discard(ctx: &mut Ctx<'_>, player: PlayerId) {
-    // 入梦（swd 闻人绘，批 122，规则 v309）：跳过弃牌阶段位
-    //（上游 `skip('phaseDiscard')` 同口径；一次性，用后清零）
+    // 入梦（swd 闻人绘，批 122，规则 v309）/ PA12 批⑨ skip_next_discard_phase：
+    // 跳过弃牌阶段位（上游 `skip('phaseDiscard')` 同口径；在 begin_discard 记
+    // skipped 并短路入场行为，随后由 intrinsic_machine 消费并清零以抑制
+    // DiscardToLimitMachine）。
     if ctx.core.player(player).skip_discard_phase {
-        ctx.core.player_mut(player).skip_discard_phase = false;
         ctx.record_phase_skipped(player);
         ctx.core.turn.discard_phase_discarded = 0;
         return;

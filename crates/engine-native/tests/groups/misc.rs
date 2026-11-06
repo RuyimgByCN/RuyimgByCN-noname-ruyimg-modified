@@ -55,6 +55,9 @@ mod pa12_batch7_codec_named_and_once;
 #[path = "../pa12_batch8_deterministic_effects.rs"]
 mod pa12_batch8_deterministic_effects;
 
+#[path = "../pa12_batch9_events_and_turn_effects.rs"]
+mod pa12_batch9_events_and_turn_effects;
+
 #[path = "../pa12_dsl_native_prototype.rs"]
 mod pa12_dsl_native_prototype;
 

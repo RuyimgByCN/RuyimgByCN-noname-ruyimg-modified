@@ -148,6 +148,11 @@ pub(super) fn bridge_active_entries(
             {
                 meta.extra_events.push(trigger.meta.event);
             }
+            for extra in &trigger.meta.extra_events {
+                if *extra != meta.event && !meta.extra_events.contains(extra) {
+                    meta.extra_events.push(*extra);
+                }
+            }
         }
         let limits = VmActiveLimits {
             once_per_turn: active.uses_per_turn == Some(1),
@@ -250,6 +255,11 @@ pub(super) fn join_trigger_only_entries(
                 && !decl.trigger.extra_events.contains(&t.meta.event)
             {
                 decl.trigger.extra_events.push(t.meta.event);
+            }
+            for extra in &t.meta.extra_events {
+                if *extra != decl.trigger.event && !decl.trigger.extra_events.contains(extra) {
+                    decl.trigger.extra_events.push(*extra);
+                }
             }
         }
         decl.filter = VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {

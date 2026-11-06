@@ -71,7 +71,7 @@ impl VmHandlerSet {
         self.triggers
             .iter()
             .filter(|entry| {
-                entry.meta.event == kind
+                (entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
                     && VmSkillBehavior {
                         program: entry.program.clone(),
                         filter: entry.filter.clone(),

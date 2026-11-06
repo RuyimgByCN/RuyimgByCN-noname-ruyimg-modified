@@ -363,7 +363,7 @@ impl VmMachine {
                     };
                     ctx.core.vm_aux.once.insert((self.owner, k, *scope));
                 }
-                if self.count_hits && self.trig.kind == 1 {
+                if self.count_hits && matches!(self.trig.kind, 1 | 2) {
                     *ctx.core
                         .vm_aux
                         .hits

@@ -564,7 +564,15 @@ impl<'a> Ctx<'a> {
     ///   本原语只保证**不重复入堆**——不改变既有调用方的区域语义。
     pub fn to_discard(&mut self, card: impl Into<Option<CardId>>) {
         let Some(card) = card.into() else { return };
-        if self.core.discard.contains(&card) {
+        if self.core.discard.contains(&card)
+            || self.core.players.iter().any(|p| {
+                p.hand.contains(&card)
+                    || p.equips.contains(&card)
+                    || p.judge.contains(&card)
+                    || p.off_court.contains(&card)
+            })
+            || self.core.vm_aux.piles.values().any(|v| v.contains(&card))
+        {
             return;
         }
         self.core.discard.push(card);

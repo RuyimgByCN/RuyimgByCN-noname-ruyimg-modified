@@ -150,6 +150,7 @@ pub enum Atom {
     ElementalOrTrick,
     RedOrJiu,
     JuedouOrRedSha,
+    SourceHasWeapon,
 }
 
 /// OR 组，组内 AND。
@@ -526,9 +527,15 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
         "lost_cards" | "lost_hand" | "lost_this_turn" => atom(Atom::Lost),
         "discard_batch" => atom(Atom::Batch),
         "this_turn" | "this_round" | "this_phase" => vec![Seed::Skip],
+        "event_player_alive" => atom(Atom::TargetAlive),
         "event_player" => atom(Atom::EvPlayer),
+        "delayed_trick" => atom(Atom::CardDelayed),
+        "pending_judge_skip" => atom(Atom::FlagSet("skip_judge".to_string())),
+        "source_has_weapon" => atom(Atom::SourceHasWeapon),
+        "sha_dodged" => atom(Atom::Responded),
         "card_used" | "cards_used" => atom(Atom::Used),
-        "first_damage" | "first_sha" => atom(Atom::FirstHit),
+        "first_damage" => atom(Atom::FirstHit),
+        "first_sha" => vec![Seed::Atom(Atom::FirstHit), Seed::Atom(Atom::CardSha)],
         "second_damage" => atom(Atom::SecondHit),
         "after_first" | "after_first_damage" => atom(Atom::AfterFirst),
         "same_sex" => atom(Atom::SexSame),
@@ -614,7 +621,7 @@ fn word(w: &str) -> Option<Vec<Seed>> {
         "mark" | "marked" | "marks" => atom(Atom::MarkPos),
         "pile" | "piles" => atom(Atom::PileNonEmpty),
         "batch" | "moved" | "move" => atom(Atom::Moved),
-        "responded" | "respond" | "response" => atom(Atom::Responded),
+        "responded" | "respond" | "response" | "dodged" => atom(Atom::Responded),
         "used" | "use" => atom(Atom::Used),
         "gained" | "gain" | "gains" | "gainable" => atom(Atom::Gained),
         "lord" => atom(Atom::Lord),
@@ -943,6 +950,18 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
         Atom::MovedFromOwner => v.moved_from == Some(owner),
         Atom::Gained => v.kind == 5 && v.event_player == Some(owner),
         Atom::FactionIs(tag) => faction_of(ctx, owner).is_some_and(|f| faction_tag(f) == *tag),
+        Atom::SourceHasWeapon => v.event_source.is_some_and(|src| {
+            ctx.state
+                .players
+                .get(src as usize)
+                .is_some_and(|pl| {
+                    pl.alive
+                        && pl.equips.iter().any(|c| {
+                            ctx.catalog.card_slot_of(ctx.state, *c)
+                                == Some(crate::catalog::EquipSlot::Weapon)
+                        })
+                })
+        }),
     }
 }
 

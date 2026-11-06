@@ -878,7 +878,9 @@ impl VmAux {
             self.flags.remove(&key);
         }
         self.flags.retain(|(_, key), _| {
-            key != "vm_skipped_phase_count" && !key.starts_with("skill_turn:")
+            key != "vm_skipped_phase_count"
+                && key != "draw_phase_bonus"
+                && !key.starts_with("skill_turn:")
         });
     }
 

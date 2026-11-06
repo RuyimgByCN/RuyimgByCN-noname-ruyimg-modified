@@ -351,6 +351,69 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, player.raw());
                 push_u32(w, card.raw());
             }
+            // PA12 批⑨：9 种回合/摸牌/装备/杀次数确定性效果编码（49..=57）。
+            EffectRequest::IncreaseCurrentDrawCount { player, count } => {
+                w.push(49);
+                push_u32(w, player.raw());
+                push_u32(w, *count);
+            }
+            EffectRequest::SkipNextPlayPhase { player } => {
+                w.push(50);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::SkipNextDiscardPhase { player } => {
+                w.push(51);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::SkipNextJudgePhase { player } => {
+                w.push(52);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::SkipJudgeAndDrawPhases { player, skill } => {
+                w.push(53);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::SkipRemainingPhases {
+                player,
+                phases_mask,
+                skill,
+            } => {
+                w.push(54);
+                push_u32(w, player.raw());
+                push_u32(w, *phases_mask);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::QueueExtraPhases {
+                player,
+                phases_mask,
+                skill,
+            } => {
+                w.push(55);
+                push_u32(w, player.raw());
+                push_u32(w, *phases_mask);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::GainTargetEquipment {
+                player,
+                target,
+                slot,
+            } => {
+                w.push(56);
+                push_u32(w, player.raw());
+                push_u32(w, target.raw());
+                w.push(*slot);
+            }
+            EffectRequest::RefundCurrentShaUse {
+                player,
+                card,
+                skill,
+            } => {
+                w.push(57);
+                push_u32(w, player.raw());
+                push_u32(w, card.raw());
+                push_u32(w, skill.raw());
+            }
             _ => unreachable!("accept_effect 已拒绝未编码变体"),
         }
     }
@@ -615,6 +678,43 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
             48 => EffectRequest::GainCardIfDiscard {
                 player: rule_api::PlayerId::new(rd.u32()?),
                 card: rule_api::CardId::new(rd.u32()?),
+            },
+            49 => EffectRequest::IncreaseCurrentDrawCount {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                count: rd.u32()?,
+            },
+            50 => EffectRequest::SkipNextPlayPhase {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            51 => EffectRequest::SkipNextDiscardPhase {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            52 => EffectRequest::SkipNextJudgePhase {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            53 => EffectRequest::SkipJudgeAndDrawPhases {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            54 => EffectRequest::SkipRemainingPhases {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                phases_mask: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            55 => EffectRequest::QueueExtraPhases {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                phases_mask: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            56 => EffectRequest::GainTargetEquipment {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+                slot: rd.u8()?,
+            },
+            57 => EffectRequest::RefundCurrentShaUse {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
             },
             _ => return None,
         };
