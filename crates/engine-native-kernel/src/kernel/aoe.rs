@@ -100,10 +100,17 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
                 }
             } else {
                 // 放弃 → 1 点伤害（完整结算）
+                let vm_card_bonus = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
+                    .copied()
+                    .unwrap_or(0);
                 ctx.emit(EventData::Damage(damage_data_with(
                     Some(self.source),
                     self.target,
-                    1,
+                    (1 + vm_card_bonus) as i32,
                     self.nature,
                     Some(self.card),
                 )));
@@ -120,10 +127,17 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             .collect();
         if holders.is_empty() {
             // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
+            let vm_card_bonus = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.source, format!("card_damage_bonus:{}", self.card)))
+                .copied()
+                .unwrap_or(0);
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
                 self.target,
-                1,
+                (1 + vm_card_bonus) as i32,
                 self.nature,
                 Some(self.card),
             )));
@@ -274,6 +288,10 @@ impl crate::catalog::SkillMachine for AoeResolveMachine {
             if self.idx >= self.targets.len() {
                 // 收尾：AOE 牌离桌入弃牌堆（唯一弃置点）
                 let card = self.card;
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.source, format!("card_damage_bonus:{card}")));
                 ctx.to_discard(card);
                 ctx.core.table.retain(|c| *c != card);
                 return Flow::Done;

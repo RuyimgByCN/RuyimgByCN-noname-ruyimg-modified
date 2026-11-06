@@ -195,6 +195,13 @@ impl ShaResolveMachine {
         if let Some(next) = self.extra_targets.first().copied() {
             self.extra_targets.remove(0);
             self.target = next;
+            let cid = self.card.unwrap_or(0);
+            self.shoulie_direct = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(self.source, format!("sha_unrespondable:{cid}:{next}")))
+                .is_some();
             self.asked = false;
             self.armor_judged = false;
             self.dodges_used = 0;
@@ -212,6 +219,11 @@ impl ShaResolveMachine {
             return Flow::Yield;
         }
         let card = self.card;
+        let cid = card.unwrap_or(0);
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("card_damage_bonus:{cid}")));
         ctx.to_discard(card);
         ctx.core.table.retain(|c| Some(*c) != card);
         Flow::Done
@@ -258,6 +270,35 @@ impl ShaResolveMachine {
         // `trigger.num += storage.liaoyuan` 同口径；计入后清零
         let liaoyuan = u32::from(ctx.core.turn.liaoyuan_count);
         ctx.core.turn.liaoyuan_count = 0;
+        let cid = self.card.unwrap_or(0);
+        let vm_card_bonus = ctx
+            .core
+            .vm_aux
+            .flags
+            .get(&(self.source, format!("card_damage_bonus:{cid}")))
+            .copied()
+            .unwrap_or(0);
+        let vm_target_bonus = ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(
+                self.source,
+                format!("sha_target_damage_bonus:{cid}:{}", self.target),
+            ))
+            .unwrap_or(0)
+            + if self.target != self.source {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(
+                        self.source,
+                        format!("sha_target_damage_bonus:{cid}:{}", self.source),
+                    ))
+                    .unwrap_or(0)
+            } else {
+                0
+            };
         if ctx.core.player(self.target).alive {
             ctx.emit(EventData::Damage(damage_data_with(
                 Some(self.source),
@@ -266,7 +307,9 @@ impl ShaResolveMachine {
                     + xiongshou_bonus(ctx, self.source, self.target)
                     + self.jiu_damage_bonus()
                     + u32::from(self.xiandan_bonus)
-                    + liaoyuan) as i32,
+                    + liaoyuan
+                    + vm_card_bonus
+                    + vm_target_bonus) as i32,
                 self.nature,
                 self.card,
             )));

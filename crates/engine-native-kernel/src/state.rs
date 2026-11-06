@@ -881,6 +881,9 @@ impl VmAux {
             key != "vm_skipped_phase_count"
                 && key != "draw_phase_bonus"
                 && !key.starts_with("skill_turn:")
+                && !key.starts_with("card_damage_bonus:")
+                && !key.starts_with("sha_target_damage_bonus:")
+                && !key.starts_with("sha_unrespondable:")
         });
     }
 

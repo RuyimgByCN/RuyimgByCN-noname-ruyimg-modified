@@ -121,6 +121,12 @@ impl NamedProgram {
                     Atom::RedOrJiu => { h.update(&109u16.to_le_bytes()); }
                     Atom::JuedouOrRedSha => { h.update(&110u16.to_le_bytes()); }
                     Atom::SourceHasWeapon => { h.update(&111u16.to_le_bytes()); }
+                    Atom::AnyLinked => { h.update(&112u16.to_le_bytes()); }
+                    Atom::DamageCard => { h.update(&113u16.to_le_bytes()); }
+                    Atom::NanmanWanjianOrNormalSpadeSha => { h.update(&114u16.to_le_bytes()); }
+                    Atom::TargetHandGteOwnerHpOrLteAttackRange => { h.update(&115u16.to_le_bytes()); }
+                    Atom::TargetHandLteOwnerOrHpGteOwner => { h.update(&116u16.to_le_bytes()); }
+                    Atom::OwnerOutsideTargetAttackRange => { h.update(&117u16.to_le_bytes()); }
                 }
             }
         }

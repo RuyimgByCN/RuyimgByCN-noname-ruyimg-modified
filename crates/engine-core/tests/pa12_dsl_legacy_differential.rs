@@ -702,3 +702,107 @@ fn pa12_batch9_legacy_vm_effects_match_native_expectation() {
     }
 }
 
+/// PA12 批⑩ 旧线 `vm_host::run_module_with_event_cards` 差分锚点：
+/// 验证 `huilei` / `qibie` / `duanchang` / `oldniepan` / `jysuozhou` / `dangxian` /
+/// `redangxian` / `oljuejue` / `liegong` 等真实 ported `.skill` 在旧线 VM 宿主上
+/// 产出的 `EffectRequest` 序列与原生 `rvm_ops` 批⑩接入的变体完全同构。
+#[test]
+fn pa12_batch10_combat_and_state_effects_legacy_differential() {
+    let cases: &[(&str, &str, &[&str])] = &[
+        (
+            "huilei",
+            include_str!("../../../content/original/ported/yijiang/huilei.skill"),
+            &["DiscardAllHandAndEquip"],
+        ),
+        (
+            "qibie",
+            include_str!("../../../content/original/ported/sp2/qibie.skill"),
+            &["DiscardAllHandAndEquip", "RecoverHp", "DrawCards"],
+        ),
+        (
+            "duanchang",
+            include_str!("../../../content/original/ported/shenhua/duanchang.skill"),
+            &["RemoveAllSkills"],
+        ),
+        (
+            "oldniepan",
+            include_str!("../../../content/original/ported/shenhua/oldniepan.skill"),
+            &[
+                "RemoveSkill",
+                "DiscardAllHandEquipJudge",
+                "RestoreCharacterState",
+                "DrawCards",
+                "RecoverHp",
+            ],
+        ),
+        (
+            "jysuozhou",
+            include_str!("../../../content/original/ported/offline/jysuozhou.skill"),
+            &["DrawLinkedPlayers"],
+        ),
+        (
+            "dangxian",
+            include_str!("../../../content/original/ported/yijiang/dangxian.skill"),
+            &["QueueOpeningExtraPlayPhase"],
+        ),
+        (
+            "redangxian",
+            include_str!("../../../content/original/ported/mobile/redangxian.skill"),
+            &["GainDiscardCardByKind", "QueueOpeningExtraPlayPhase"],
+        ),
+        (
+            "oljuejue",
+            include_str!("../../../content/original/ported/collab/oljuejue.skill"),
+            &["IncreaseCurrentShaBaseDamage"],
+        ),
+        (
+            "liegong",
+            include_str!("../../../content/original/ported/shenhua/liegong.skill"),
+            &["MakeCurrentShaTargetUnrespondable"],
+        ),
+    ];
+    for (id, src, want_prefixes) in cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 80, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        tx.state_mut().players.get_mut(owner).unwrap().hp = 1;
+        let entry = &pkg.trigger_index[0];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .expect("模块");
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[1],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}
+
+

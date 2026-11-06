@@ -20,6 +20,7 @@ mod codec;
 pub use codec::*;
 mod commit;
 pub use commit::*;
+mod commit_combat;
 mod query;
 pub use query::*;
 
@@ -197,6 +198,12 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         EffectRequest::AddSkill { player, .. }
         | EffectRequest::AddSkillUntilTurnEnd { player, .. }
         | EffectRequest::RemoveSkillByDef { player, .. }
+        | EffectRequest::RemoveAllSkills { player }
+        | EffectRequest::DiscardAllHandAndEquip { player }
+        | EffectRequest::DiscardAllHandEquipJudge { player }
+        | EffectRequest::RestoreCharacterState { player }
+        | EffectRequest::EquipWeaponFromDrawPile { player }
+        | EffectRequest::QueueOpeningExtraPlayPhase { player, .. }
         | EffectRequest::RevealHand { player }
         | EffectRequest::GainEquipmentFromDrawPile { player }
         | EffectRequest::GainEventCards { player, .. }
@@ -217,6 +224,45 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         | EffectRequest::GainWholeSkillPile { player, .. }
         | EffectRequest::StoreEventCardInSkillPile { player, .. } => {
             ok_player(*player, "player")?;
+        }
+        EffectRequest::DrawLinkedPlayers { count } => {
+            if *count == 0 {
+                return Err(reject("DrawLinkedPlayers.count"));
+            }
+        }
+        EffectRequest::RecoverIfMinCurrentHp { player, amount } => {
+            ok_player(*player, "RecoverIfMinCurrentHp.player")?;
+            if *amount == 0 {
+                return Err(reject("RecoverIfMinCurrentHp.amount"));
+            }
+        }
+        EffectRequest::RemoveCardsByKind { kind } => {
+            if *kind == 0 {
+                return Err(reject("RemoveCardsByKind.kind"));
+            }
+        }
+        EffectRequest::IncreaseCurrentShaBaseDamage { player, amount, .. }
+        | EffectRequest::IncreaseCurrentCardBaseDamage { player, amount, .. } => {
+            ok_player(*player, "IncreaseCurrentCardDamage.player")?;
+            if *amount == 0 {
+                return Err(reject("IncreaseCurrentCardDamage.amount"));
+            }
+        }
+        EffectRequest::IncreaseCurrentShaTargetDamage {
+            source,
+            target,
+            amount,
+            ..
+        } => {
+            ok_player(*source, "IncreaseCurrentShaTargetDamage.source")?;
+            ok_player(*target, "IncreaseCurrentShaTargetDamage.target")?;
+            if *amount == 0 {
+                return Err(reject("IncreaseCurrentShaTargetDamage.amount"));
+            }
+        }
+        EffectRequest::MakeCurrentShaTargetUnrespondable { source, target, .. } => {
+            ok_player(*source, "MakeCurrentShaTargetUnrespondable.source")?;
+            ok_player(*target, "MakeCurrentShaTargetUnrespondable.target")?;
         }
         EffectRequest::IncreaseCurrentDrawCount { player, count } => {
             ok_player(*player, "IncreaseCurrentDrawCount.player")?;

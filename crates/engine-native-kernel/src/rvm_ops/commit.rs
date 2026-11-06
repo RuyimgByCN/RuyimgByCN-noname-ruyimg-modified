@@ -15,7 +15,7 @@ fn pop_deck(ctx: &mut Ctx<'_>) -> Option<CardId> {
     ctx.core.deck.pop()
 }
 
-fn detach(core: &mut GameStateCore, card: CardId) -> bool {
+pub(super) fn detach(core: &mut GameStateCore, card: CardId) -> bool {
     for p in &mut core.players {
         if let Some(i) = p.hand.iter().position(|c| *c == card) {
             p.hand.remove(i);
@@ -75,7 +75,7 @@ fn give_pile_to_hand(ctx: &mut Ctx<'_>, seat: PlayerId, key: &(PlayerId, String)
     });
 }
 
-fn push_pile(ctx: &mut Ctx<'_>, seat: PlayerId, name: &str, card: CardId) {
+pub(super) fn push_pile(ctx: &mut Ctx<'_>, seat: PlayerId, name: &str, card: CardId) {
     ctx.core
         .vm_aux
         .piles
@@ -917,6 +917,6 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 begin: true,
             });
         }
-        _ => {}
+        other => commit_combat::commit_combat_or_state_effect(ctx, owner, seats, other),
     }
 }

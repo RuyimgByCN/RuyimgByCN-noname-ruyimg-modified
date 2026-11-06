@@ -414,6 +414,91 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, card.raw());
                 push_u32(w, skill.raw());
             }
+            // PA12 批⑩：13 种区域整弃/复原/清技/连环摸/当先/装备/移出/杀修正确定性效果编码（58..=70）。
+            EffectRequest::DiscardAllHandAndEquip { player } => {
+                w.push(58);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::DiscardAllHandEquipJudge { player } => {
+                w.push(59);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::RestoreCharacterState { player } => {
+                w.push(60);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::RemoveAllSkills { player } => {
+                w.push(61);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::DrawLinkedPlayers { count } => {
+                w.push(62);
+                push_u32(w, *count);
+            }
+            EffectRequest::RecoverIfMinCurrentHp { player, amount } => {
+                w.push(63);
+                push_u32(w, player.raw());
+                push_u32(w, *amount);
+            }
+            EffectRequest::EquipWeaponFromDrawPile { player } => {
+                w.push(64);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::RemoveCardsByKind { kind } => {
+                w.push(65);
+                w.push(*kind);
+            }
+            EffectRequest::QueueOpeningExtraPlayPhase { player, skill } => {
+                w.push(66);
+                push_u32(w, player.raw());
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::IncreaseCurrentShaBaseDamage {
+                player,
+                card,
+                amount,
+                skill,
+            } => {
+                w.push(67);
+                push_u32(w, player.raw());
+                push_u32(w, card.raw());
+                push_u32(w, *amount);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::IncreaseCurrentCardBaseDamage {
+                player,
+                card,
+                amount,
+                skill,
+            } => {
+                w.push(68);
+                push_u32(w, player.raw());
+                push_u32(w, card.raw());
+                push_u32(w, *amount);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::IncreaseCurrentShaTargetDamage {
+                source,
+                card,
+                target,
+                amount,
+            } => {
+                w.push(69);
+                push_u32(w, source.raw());
+                push_u32(w, card.raw());
+                push_u32(w, target.raw());
+                push_u32(w, *amount);
+            }
+            EffectRequest::MakeCurrentShaTargetUnrespondable {
+                source,
+                card,
+                target,
+            } => {
+                w.push(70);
+                push_u32(w, source.raw());
+                push_u32(w, card.raw());
+                push_u32(w, target.raw());
+            }
             _ => unreachable!("accept_effect 已拒绝未编码变体"),
         }
     }
@@ -715,6 +800,54 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 player: rule_api::PlayerId::new(rd.u32()?),
                 card: rule_api::CardId::new(rd.u32()?),
                 skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            58 => EffectRequest::DiscardAllHandAndEquip {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            59 => EffectRequest::DiscardAllHandEquipJudge {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            60 => EffectRequest::RestoreCharacterState {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            61 => EffectRequest::RemoveAllSkills {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            62 => EffectRequest::DrawLinkedPlayers { count: rd.u32()? },
+            63 => EffectRequest::RecoverIfMinCurrentHp {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                amount: rd.u32()?,
+            },
+            64 => EffectRequest::EquipWeaponFromDrawPile {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            65 => EffectRequest::RemoveCardsByKind { kind: rd.u8()? },
+            66 => EffectRequest::QueueOpeningExtraPlayPhase {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            67 => EffectRequest::IncreaseCurrentShaBaseDamage {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                amount: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            68 => EffectRequest::IncreaseCurrentCardBaseDamage {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                amount: rd.u32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            69 => EffectRequest::IncreaseCurrentShaTargetDamage {
+                source: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
+                amount: rd.u32()?,
+            },
+            70 => EffectRequest::MakeCurrentShaTargetUnrespondable {
+                source: rule_api::PlayerId::new(rd.u32()?),
+                card: rule_api::CardId::new(rd.u32()?),
+                target: rule_api::PlayerId::new(rd.u32()?),
             },
             _ => return None,
         };

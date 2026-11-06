@@ -40,6 +40,14 @@ pub(super) fn locate(core: &GameStateCore, card: u32) -> i32 {
             return 5;
         }
     }
+    if core
+        .vm_aux
+        .piles
+        .iter()
+        .any(|((_, k), v)| k == "removed" && v.contains(&card))
+    {
+        return 7;
+    }
     if core.vm_aux.piles.values().any(|v| v.contains(&card)) {
         return 8;
     }

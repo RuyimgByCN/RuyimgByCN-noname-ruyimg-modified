@@ -8,6 +8,8 @@ use crate::vocabulary::generals::Gender;
 use crate::event::{DamageNature, Phase};
 use crate::ids::PlayerId;
 use crate::state::Role;
+mod eval;
+pub use eval::eval_program;
 mod identity;
 
 /// 触发帧上 filter 能看见的字段（由桥从 `EventData` 填）。
@@ -151,6 +153,12 @@ pub enum Atom {
     RedOrJiu,
     JuedouOrRedSha,
     SourceHasWeapon,
+    AnyLinked,
+    DamageCard,
+    NanmanWanjianOrNormalSpadeSha,
+    TargetHandGteOwnerHpOrLteAttackRange,
+    TargetHandLteOwnerOrHpGteOwner,
+    OwnerOutsideTargetAttackRange,
 }
 
 /// OR 组，组内 AND。
@@ -208,32 +216,11 @@ fn vocabulary_extra(name: &str) -> bool {
     )
 }
 
-/// 编译具名 filter。`always` 与词表外的非 owner 名返回 None。
-pub fn compile_named(name: &str) -> Option<NamedProgram> {
-    if name == "always" || name.is_empty() {
-        return None;
-    }
-    if !name.starts_with("owner") && !vocabulary_extra(name) {
-        return None;
-    }
-    let (domains, rest) = split_domain(name);
-    let rest_parts = split_top_or(&protect(&rest));
-    let mut groups = Vec::new();
-    for domain in &domains {
-        for part in &rest_parts {
-            let mut clauses = domain.clone();
-            clauses.extend(parse_words(part));
-            if clauses.is_empty() {
-                return None;
-            }
-            groups.push(clauses);
-        }
-    }
+fn compile_named_tail(mut groups: Vec<Vec<Clause>>, is_target_domain: bool) -> Option<NamedProgram> {
     if groups.is_empty() {
         return None;
     }
-    // owner_is_target_*：每个 OR 组都含「事件主玩家=持有者」。
-    if name.starts_with("owner_is_target_") {
+    if is_target_domain {
         for g in &mut groups {
             if !g.iter().any(|c| !c.neg && c.atom == Atom::EvPlayer) {
                 g.insert(0, Clause { neg: false, atom: Atom::EvPlayer });
@@ -264,19 +251,28 @@ pub fn compile_named(name: &str) -> Option<NamedProgram> {
     })
 }
 
-pub fn eval_program(
-    prog: &NamedProgram,
-    ctx: &QueryCtx<'_>,
-    owner: PlayerId,
-    skill: &str,
-    view: &FilterView,
-) -> bool {
-    prog.groups.iter().any(|g| {
-        g.iter().all(|c| {
-            let v = eval_atom(&c.atom, ctx, owner, skill, view);
-            if c.neg { !v } else { v }
-        })
-    })
+/// 编译具名 filter。`always` 与词表外的非 owner 名返回 None。
+pub fn compile_named(name: &str) -> Option<NamedProgram> {
+    if name == "always" || name.is_empty() {
+        return None;
+    }
+    if !name.starts_with("owner") && !vocabulary_extra(name) {
+        return None;
+    }
+    let (domains, rest) = split_domain(name);
+    let rest_parts = split_top_or(&protect(&rest));
+    let mut groups = Vec::new();
+    for domain in &domains {
+        for part in &rest_parts {
+            let mut clauses = domain.clone();
+            clauses.extend(parse_words(part));
+            if clauses.is_empty() {
+                return None;
+            }
+            groups.push(clauses);
+        }
+    }
+    compile_named_tail(groups, name.starts_with("owner_is_target_"))
 }
 
 fn split_domain(name: &str) -> (Vec<Vec<Clause>>, String) {
@@ -296,7 +292,6 @@ fn split_domain(name: &str) -> (Vec<Vec<Clause>>, String) {
         ("owner_tracked_", &[Atom::OwnerAlive]),
         ("owner_initiated_", &[Atom::EvActor]),
         ("owner_sha_", &[Atom::CardSha, Atom::EvActor]),
-        ("owner_", &[Atom::OwnerAlive]),
     ];
     for (pre, atoms) in TABLE {
         if let Some(rest) = name.strip_prefix(pre) {
@@ -337,6 +332,15 @@ fn split_domain(name: &str) -> (Vec<Vec<Clause>>, String) {
                     Clause { neg: false, atom: Atom::InTargets },
                     Clause { neg: false, atom: Atom::UserOther },
                 ],
+            ],
+            rest.to_string(),
+        );
+    }
+    if let Some(rest) = name.strip_prefix("owner_source_or_targeted_") {
+        return (
+            vec![
+                vec![Clause { neg: false, atom: Atom::EvActor }],
+                vec![Clause { neg: false, atom: Atom::InTargets }],
             ],
             rest.to_string(),
         );
@@ -394,6 +398,9 @@ fn protect(rest: &str) -> String {
         "face_up_or_linked",
         "juedou_or_red",
         "became_face_up_or_linked",
+        "wounded_nanman_wanjian_or_normal_spade_sha",
+        "target_hand_gte_hp_or_lte_attack_range",
+        "target_hand_lte_owner_or_hp_gte_owner",
     ];
     let mut s = rest.to_string();
     for c in COMPOUNDS {
@@ -532,6 +539,17 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
         "delayed_trick" => atom(Atom::CardDelayed),
         "pending_judge_skip" => atom(Atom::FlagSet("skip_judge".to_string())),
         "source_has_weapon" => atom(Atom::SourceHasWeapon),
+        "linked_exists" => atom(Atom::AnyLinked),
+        "damage_card" => atom(Atom::DamageCard),
+        "wounded_nanman_wanjianORnormal_spade_sha" => vec![
+            Seed::Atom(Atom::Wounded),
+            Seed::Atom(Atom::NanmanWanjianOrNormalSpadeSha),
+        ],
+        "target_hand_gte_hpORlte_attack_range" => atom(Atom::TargetHandGteOwnerHpOrLteAttackRange),
+        "target_hand_lte_ownerORhp_gte_owner" => atom(Atom::TargetHandLteOwnerOrHpGteOwner),
+        "target_alive_owner_outside_target_attack_range" => {
+            atom(Atom::OwnerOutsideTargetAttackRange)
+        }
         "sha_dodged" => atom(Atom::Responded),
         "card_used" | "cards_used" => atom(Atom::Used),
         "first_damage" => atom(Atom::FirstHit),
@@ -759,234 +777,3 @@ fn push(out: &mut Vec<Clause>, neg: &mut bool, atom: Atom) {
     *neg = false;
 }
 
-fn phase_is(ctx: &QueryCtx<'_>, v: &FilterView, phase: Phase) -> bool {
-    match v.phase {
-        Some(p) => p == phase,
-        None => ctx.state.turn.phase == phase,
-    }
-}
-
-fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &FilterView) -> bool {
-    let me = ctx.state.player(owner);
-    let alive = me.alive;
-    let wounded = me.hp > 0 && (me.hp as u32) < me.max_hp;
-    let card_kind = v.event_card.and_then(|c| ctx.catalog.cards.get(c as usize).map(|d| d.kind));
-    let suit = v.event_card.and_then(|c| ctx.catalog.cards.get(c as usize).map(|d| d.suit));
-    let logical = v.use_as.or(card_kind);
-    let sha = logical.is_some_and(|k| k.is_sha_like());
-    let red = suit.is_some_and(|s| matches!(s, Suit::Heart | Suit::Diamond));
-    let actor = v.event_source.or(v.event_player);
-    match atom {
-        Atom::EvPlayer => v.event_player == Some(owner),
-        Atom::EvActor => actor == Some(owner),
-        Atom::OwnerAlive => alive,
-        Atom::InTargets => v.targets.contains(&owner) || v.event_player == Some(owner),
-        Atom::UserOther => {
-            let user = if v.kind == 1 { v.event_source } else { v.event_player };
-            user.is_some_and(|u| u != owner)
-        }
-        Atom::Wounded => wounded,
-        Atom::Healthy => alive && !wounded && me.hp > 0,
-        Atom::Linked => me.linked,
-        Atom::Unlinked => !me.linked,
-        Atom::FaceDown => me.face_down,
-        Atom::FaceUp => !me.face_down,
-        Atom::HandEmpty => me.hand.is_empty(),
-        Atom::HandNonEmpty => !me.hand.is_empty(),
-        Atom::HandBelowMax => me.hand.len() < me.max_hp as usize,
-        Atom::HandAboveHp => me.hand.len() > me.hp.max(0) as usize,
-        Atom::HandAtLeastHp => me.hand.len() >= me.hp.max(0) as usize,
-        Atom::HandAtLeast(n) => me.hand.len() >= *n as usize,
-        Atom::HpBelow(n) => {
-            if *n == 255 {
-                me.max_hp > 1
-            } else {
-                me.hp > 0 && me.hp < *n as i32
-            }
-        }
-        Atom::HpEq(n) => me.hp == *n as i32,
-        Atom::JudgeNonEmpty => !me.judge.is_empty(),
-        Atom::EquipNonEmpty => !me.equips.is_empty(),
-        Atom::EquipEmpty => me.equips.is_empty(),
-        Atom::HandOrEquip => !me.hand.is_empty() || !me.equips.is_empty(),
-        Atom::HandOrEquipEmpty => me.hand.is_empty() && me.equips.is_empty(),
-        Atom::OtherAlive => (0..ctx.state.players.len()).any(|i| i as u8 != owner && ctx.state.players[i].alive),
-        Atom::OtherHand => (0..ctx.state.players.len()).any(|i| {
-            i as u8 != owner && ctx.state.players[i].alive && !ctx.state.players[i].hand.is_empty()
-        }),
-        Atom::OtherWounded => (0..ctx.state.players.len()).any(|i| {
-            let p = &ctx.state.players[i];
-            p.alive && p.hp > 0 && (p.hp as u32) < p.max_hp
-        }),
-        Atom::CardSha => sha,
-        Atom::CardTrick => logical.is_some_and(kind_is_ordinary_trick),
-        Atom::CardBasic => logical.is_some_and(|k| k.is_basic_kind()),
-        Atom::CardEquipKind => logical.is_some_and(|k| k.equip_slot().is_some()),
-        Atom::CardJuedou => logical.is_some_and(|k| matches!(k, CardKind::Duel)),
-        Atom::CardRed => red,
-        Atom::CardBlack => suit.is_some_and(|s| matches!(s, Suit::Spade | Suit::Club)),
-        Atom::CardSpade => suit.is_some_and(|s| s == Suit::Spade),
-        Atom::CardHeart => suit.is_some_and(|s| s == Suit::Heart),
-        Atom::CardClub => suit.is_some_and(|s| s == Suit::Club),
-        Atom::CardDiamond => suit.is_some_and(|s| s == Suit::Diamond),
-        Atom::CardJiu => logical.is_some_and(|k| matches!(k, CardKind::Jiu)),
-        Atom::CardShan => logical.is_some_and(|k| matches!(k, CardKind::Shan)),
-        Atom::CardNanman => logical.is_some_and(|k| matches!(k, CardKind::SavageAttack)),
-        Atom::CardWanjian => logical.is_some_and(|k| matches!(k, CardKind::ArcheryAttack)),
-        Atom::CardWuzhong => logical.is_some_and(|k| matches!(k, CardKind::Wuzhong)),
-        Atom::CardDelayed => logical.is_some_and(|k| matches!(k, CardKind::Le | CardKind::Bing | CardKind::ShanDian)),
-        Atom::ShaOrTrick => sha || logical.is_some_and(kind_is_ordinary_trick),
-        Atom::ShaOrJuedou => sha || logical.is_some_and(|k| matches!(k, CardKind::Duel)),
-        Atom::BasicOrTrick => logical.is_some_and(|k| k.is_basic_kind() || kind_is_ordinary_trick(k)),
-        Atom::ElementalOrTrick => {
-            matches!(v.nature, Some(DamageNature::Fire | DamageNature::Thunder))
-                || logical.is_some_and(kind_is_ordinary_trick)
-        }
-        Atom::RedOrJiu => red || logical.is_some_and(|k| matches!(k, CardKind::Jiu)),
-        Atom::JuedouOrRedSha => {
-            logical.is_some_and(|k| matches!(k, CardKind::Duel)) || (sha && red)
-        }
-        Atom::Fire => v.nature == Some(DamageNature::Fire),
-        Atom::Thunder => v.nature == Some(DamageNature::Thunder),
-        Atom::Damage => v.kind == 1 || v.nature.is_some() || v.event_amount > 0,
-        // 阶段帧带自己的阶段。其他帧（伤害、用牌）不带阶段，读当前回合阶段。
-        Atom::PhasePlay => phase_is(ctx, v, Phase::Play),
-        Atom::PhaseDraw => phase_is(ctx, v, Phase::Draw),
-        Atom::PhaseDiscard => phase_is(ctx, v, Phase::Discard),
-        Atom::PhaseJudge => phase_is(ctx, v, Phase::Judge),
-        Atom::PhaseEnd => v.kind == 3 && v.begin == Some(false),
-        Atom::PhaseBegin => v.kind == 3 && v.begin == Some(true),
-        Atom::TurnDmg0 => me.turn_damage == 0,
-        Atom::TurnDmg => me.turn_damage > 0,
-        Atom::TurnDmgAtLeast(n) => me.turn_damage >= *n,
-        Atom::BtePos => ctx.state.turn.bte_used_play_phase > 0,
-        Atom::SourceAlive => v.event_source.is_some_and(|s| ctx.state.players.get(s as usize).is_some_and(|p| p.alive)),
-        Atom::DistLe1 => {
-            let other = v.event_player.filter(|p| *p != owner).or(v.event_source);
-            other.is_some_and(|o| ctx.state.computed_distance(ctx.catalog, owner, o) <= 1)
-        }
-        Atom::TiedHand => {
-            let n = me.hand.len();
-            n > 0 && ctx.state.players.iter().all(|p| !p.alive || p.hand.len() <= n)
-        }
-        Atom::TiedHp => {
-            me.hp > 0 && ctx.state.players.iter().all(|p| !p.alive || p.hp <= me.hp)
-        }
-        Atom::TiedEquip => {
-            let n = me.equips.len();
-            n > 0 && ctx.state.players.iter().all(|p| !p.alive || p.equips.len() <= n)
-        }
-        Atom::NotUniqueHp => ctx.state.players.iter().enumerate().any(|(i, p)| {
-            p.alive && i as u8 != owner && p.hp >= me.hp
-        }),
-        Atom::Chain => v.from_chain,
-        Atom::Direct => v.kind == 1 && !v.from_chain,
-        Atom::Dying => v.kind == 6,
-        Atom::Death => v.kind == 7,
-        Atom::DiscardEvt => v.kind == 4 || v.batch_len > 0,
-        Atom::Moved => v.kind == 5,
-        Atom::Responded => v.kind == 8,
-        Atom::Used => v.kind == 2,
-        Atom::OutsideTurn => ctx.state.turn.current != owner,
-        Atom::InTurn => ctx.state.turn.current == owner,
-        Atom::Lost => ctx.state.vm_aux.lost.get(&owner).is_some_and(|c| !c.is_empty()),
-        Atom::LostAtLeast(n) => ctx.state.vm_aux.lost.get(&owner).is_some_and(|c| c.len() >= *n as usize),
-        Atom::Batch => v.batch_len > 0 || v.kind == 4 || v.kind == 5,
-        Atom::PileNonEmpty => ctx.state.vm_aux.piles.iter().any(|((p, _), c)| *p == owner && !c.is_empty()),
-        Atom::PileEmpty => ctx.state.vm_aux.piles.iter().filter(|((p, _), _)| *p == owner).all(|(_, c)| c.is_empty()),
-        Atom::MarkPos => ctx.state.vm_aux.marks.iter().any(|((p, _), n)| *p == owner && *n > 0),
-        Atom::DrawNotFixed => !me.skip_next_draw,
-        Atom::Once { scope } => !ctx.state.vm_aux.once.contains(&(owner, skill.to_string(), *scope)),
-        Atom::FlagSet(k) => ctx.state.vm_aux.flags.get(&(owner, k.clone())).copied().unwrap_or(0) > 0,
-        Atom::FlagUnset(k) => !ctx.state.vm_aux.once.contains(&(owner, k.clone(), 1)),
-        Atom::Tag(k) => {
-            skill.contains(k.as_str())
-                || ctx.state.skills.iter().any(|((o, def), inst)| {
-                    *o == owner && inst.enabled && ctx.catalog.skill_name(*def).contains(k.as_str())
-                })
-                || ctx.state.vm_aux.flags.contains_key(&(owner, k.clone()))
-        }
-        Atom::FirstHit => ctx.state.vm_aux.hits.get(&(owner, skill.to_string())).copied().unwrap_or(0) == 0,
-        Atom::SecondHit => ctx.state.vm_aux.hits.get(&(owner, skill.to_string())).copied().unwrap_or(0) == 1,
-        Atom::AfterFirst => ctx.state.vm_aux.hits.get(&(owner, skill.to_string())).copied().unwrap_or(0) >= 1,
-        Atom::OddHand => me.hand.len() % 2 == 1,
-        Atom::Lord => ctx.state.identity_roles().and_then(|r| r.get(owner as usize)).is_some_and(|r| *r == Role::Lord),
-        Atom::Female => gender_of(ctx, owner) == Some(Gender::Female),
-        Atom::Male => gender_of(ctx, owner) == Some(Gender::Male),
-        Atom::SexSame => {
-            let mine = gender_of(ctx, owner);
-            v.event_player.or(v.event_source).is_some_and(|o| o != owner && gender_of(ctx, o) == mine && mine.is_some())
-        }
-        Atom::GroupSame => {
-            let mine = faction_of(ctx, owner);
-            v.event_player.is_some_and(|o| faction_of(ctx, o) == mine && mine.is_some())
-        }
-        Atom::Transformed => v.use_as.is_some(),
-        Atom::MinHp => {
-            alive && ctx.state.players.iter().all(|p| !p.alive || p.hp >= me.hp)
-        }
-        Atom::TargetAlive => v.event_player.is_some_and(|p| ctx.state.players.get(p as usize).is_some_and(|pl| pl.alive)),
-        Atom::TargetHandNonEmpty => v.event_player.is_some_and(|p| {
-            ctx.state.players.get(p as usize).is_some_and(|pl| !pl.hand.is_empty())
-        }),
-        Atom::TargetHandEmpty => v.event_player.is_some_and(|p| {
-            ctx.state.players.get(p as usize).is_some_and(|pl| pl.hand.is_empty())
-        }),
-        Atom::CanDiscard(0) => v.event_player.is_some_and(|p| {
-            ctx.state
-                .players
-                .get(p as usize)
-                .is_some_and(|pl| !pl.hand.is_empty() || !pl.equips.is_empty())
-        }),
-        Atom::CanDiscard(n) => me.hand.len() + me.equips.len() >= *n as usize,
-        Atom::CountAtLeast(n) => {
-            v.event_amount >= *n as u32
-                || me.hand.len() >= *n as usize
-                || me.turn_damage >= *n
-                || ctx.state.vm_aux.lost.get(&owner).is_some_and(|c| c.len() >= *n as usize)
-        }
-        Atom::SingleTarget => v.targets.len() <= 1,
-        Atom::MultiTarget => v.targets.len() > 1,
-        Atom::MovedFromOwner => v.moved_from == Some(owner),
-        Atom::Gained => v.kind == 5 && v.event_player == Some(owner),
-        Atom::FactionIs(tag) => faction_of(ctx, owner).is_some_and(|f| faction_tag(f) == *tag),
-        Atom::SourceHasWeapon => v.event_source.is_some_and(|src| {
-            ctx.state
-                .players
-                .get(src as usize)
-                .is_some_and(|pl| {
-                    pl.alive
-                        && pl.equips.iter().any(|c| {
-                            ctx.catalog.card_slot_of(ctx.state, *c)
-                                == Some(crate::catalog::EquipSlot::Weapon)
-                        })
-                })
-        }),
-    }
-}
-
-fn gender_of(ctx: &QueryCtx<'_>, p: PlayerId) -> Option<Gender> {
-    let g = ctx.state.player(p).general_slots[0]?;
-    ctx.catalog.general_meta(g).map(|(_, _, _, _, gender)| gender)
-}
-
-fn faction_of(ctx: &QueryCtx<'_>, p: PlayerId) -> Option<Faction> {
-    ctx.state.effective_faction(ctx.catalog, p)
-}
-
-fn faction_tag(f: Faction) -> u8 {
-    match f {
-        Faction::Wei => 0,
-        Faction::Shu => 1,
-        Faction::Wu => 2,
-        Faction::Qun => 3,
-    }
-}
-
-fn kind_is_ordinary_trick(kind: CardKind) -> bool {
-    if kind.is_basic_kind() || kind.equip_slot().is_some() {
-        return false;
-    }
-    !matches!(kind, CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui)
-        && kind.is_basic_trick_or_equip()
-}

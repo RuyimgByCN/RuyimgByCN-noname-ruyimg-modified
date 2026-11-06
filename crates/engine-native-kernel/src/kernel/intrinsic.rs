@@ -539,6 +539,19 @@ fn sha_intrinsic(
     let mut it = u.targets.iter().copied();
     let first = it.next().expect("sha has one target");
     let extra: Vec<PlayerId> = it.collect();
+    let cid = u.card.unwrap_or(0);
+    let shoulie_direct = ctx
+        .core
+        .vm_aux
+        .flags
+        .remove(&(u.player, format!("sha_unrespondable:{cid}:{first}")))
+        .is_some()
+        || ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(u.player, format!("sha_unrespondable:{cid}:{}", u.player)))
+            .is_some();
     Some(Box::new(ShaResolveMachine {
         card: u.card,
         source: u.player,
@@ -571,7 +584,7 @@ fn sha_intrinsic(
         fuchou_card: None,
         asking_sadeng: false,
         asking_sadeng_shan: false,
-        shoulie_direct: false,
+        shoulie_direct,
         extra_targets: extra,
         hujia_queue: None,
         hujia_holder: None,
