@@ -884,6 +884,19 @@ impl VmAux {
                 && key != "draw_phase_bottom"
                 && key != "non_locked_suppression_source"
                 && key != "suppress_non_locked_turn"
+                && key != "ban_active"
+                && key != "card_policy"
+                && key != "unique_cat_target"
+                && key != "unique_cat_mask"
+                && key != "selected_cards_len"
+                && key != "selected_card"
+                && key != "selected_targets_len"
+                && key != "selected_target"
+                && !key.starts_with("selected_card:")
+                && !key.starts_with("selected_target:")
+                && !key.starts_with("card_policy:")
+                && !key.starts_with("unique_cat_target:")
+                && !key.starts_with("unique_cat_mask:")
                 && !key.starts_with("skill_turn:")
                 && !key.starts_with("skill_disabled_turn:")
                 && !key.starts_with("skill_disabled_raw:")
@@ -897,6 +910,90 @@ impl VmAux {
     /// 轮次推进：丢掉轮范围的 once。
     pub fn clear_round(&mut self) {
         self.once.retain(|(_, _, scope)| *scope != 2);
+    }
+
+    /// 登记 `owner` 本次 VM 技能调用的预选牌列表（`CardId` 序列，存于 `flags` 以免污染实体 `piles`）。
+    pub fn set_selected_cards(&mut self, owner: PlayerId, cards: &[CardId]) {
+        self.flags.retain(|(p, k), _| {
+            *p != owner
+                || (k != "selected_cards_len"
+                    && k != "selected_card"
+                    && !k.starts_with("selected_card:"))
+        });
+        if cards.is_empty() {
+            return;
+        }
+        self.flags
+            .insert((owner, "selected_cards_len".to_string()), cards.len() as u32);
+        self.flags
+            .insert((owner, "selected_card".to_string()), cards[0]);
+        for (i, &c) in cards.iter().enumerate() {
+            self.flags
+                .insert((owner, format!("selected_card:{i}")), c);
+        }
+    }
+
+    /// 读取 `owner` 登记的预选牌列表。
+    pub fn selected_cards(&self, owner: PlayerId) -> Vec<u32> {
+        if let Some(&len) = self.flags.get(&(owner, "selected_cards_len".to_string())) {
+            return (0..len)
+                .filter_map(|i| self.flags.get(&(owner, format!("selected_card:{i}"))).copied())
+                .collect();
+        }
+        if let Some(&single) = self.flags.get(&(owner, "selected_card".to_string())) {
+            if single != 0 {
+                return vec![single];
+            }
+        }
+        Vec::new()
+    }
+
+    /// 登记 `owner` 本次 VM 技能调用的预选目标列表（1-based `rule_api::PlayerId` 裸值）。
+    pub fn set_selected_targets(&mut self, owner: PlayerId, targets: &[u32]) {
+        self.flags.retain(|(p, k), _| {
+            *p != owner
+                || (k != "selected_targets_len"
+                    && k != "selected_target"
+                    && !k.starts_with("selected_target:"))
+        });
+        if targets.is_empty() {
+            return;
+        }
+        self.flags.insert(
+            (owner, "selected_targets_len".to_string()),
+            targets.len() as u32,
+        );
+        self.flags
+            .insert((owner, "selected_target".to_string()), targets[0]);
+        for (i, &t) in targets.iter().enumerate() {
+            self.flags
+                .insert((owner, format!("selected_target:{i}")), t);
+        }
+    }
+
+    /// 按 0-based 座位号登记 `owner` 的预选目标列表（内部自动转为 1-based `rule_api::PlayerId` 裸值）。
+    pub fn set_selected_target_seats(&mut self, owner: PlayerId, seats: &[PlayerId]) {
+        let raw: Vec<u32> = seats.iter().map(|&s| u32::from(s) + 1).collect();
+        self.set_selected_targets(owner, &raw);
+    }
+
+    /// 读取 `owner` 登记的预选目标列表（1-based `rule_api::PlayerId` 裸值）。
+    pub fn selected_targets(&self, owner: PlayerId) -> Vec<u32> {
+        if let Some(&len) = self.flags.get(&(owner, "selected_targets_len".to_string())) {
+            return (0..len)
+                .filter_map(|i| {
+                    self.flags
+                        .get(&(owner, format!("selected_target:{i}")))
+                        .copied()
+                })
+                .collect();
+        }
+        if let Some(&single) = self.flags.get(&(owner, "selected_target".to_string())) {
+            if single != 0 {
+                return vec![single];
+            }
+        }
+        Vec::new()
     }
 }
 

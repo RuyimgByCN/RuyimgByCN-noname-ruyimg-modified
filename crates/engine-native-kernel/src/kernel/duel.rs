@@ -164,8 +164,10 @@ impl DuelMachine {
             .vm_aux
             .flags
             .remove(&(self.source, format!("card_damage_bonus:{card}")));
-        ctx.to_discard(card);
-        ctx.core.table.retain(|c| *c != card);
+        if card != 0 {
+            ctx.to_discard(card);
+            ctx.core.table.retain(|c| *c != card);
+        }
         Flow::Done
     }
 }

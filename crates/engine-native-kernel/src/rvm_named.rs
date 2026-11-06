@@ -27,6 +27,7 @@ pub struct FilterView {
     pub batch_len: u32,
     pub moved_from: Option<PlayerId>,
     pub begin: Option<bool>,
+    pub draw_phase_skipped: bool,
     /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出。
     pub kind: u8,
 }
@@ -161,6 +162,8 @@ pub enum Atom {
     OwnerOutsideTargetAttackRange,
     TargetEquipNonEmpty,
     SourceNotTarget,
+    TargetWounded,
+    DrawPhaseSkipped,
 }
 
 /// OR 组，组内 AND。
@@ -509,7 +512,7 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
             Seed::Atom(Atom::TargetAlive),
             Seed::Atom(Atom::CanDiscard(0)),
         ],
-        "target_alive_has_equip" => vec![
+        "target_alive_has_equip" | "target_alive_has_discardable_equip" | "has_discardable_equip" => vec![
             Seed::Atom(Atom::TargetAlive),
             Seed::Atom(Atom::TargetEquipNonEmpty),
         ],
@@ -580,6 +583,15 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
         "outside_turn" => atom(Atom::OutsideTurn),
         "in_range" => atom(Atom::DistLe1),
         "hand_equip" => atom(Atom::HandOrEquip),
+        "hand_or_equip_empty" | "handORequip_empty" => atom(Atom::HandOrEquipEmpty),
+        "target_hand_nonempty" | "target_has_hand" => atom(Atom::TargetHandNonEmpty),
+        "target_hand_empty" => atom(Atom::TargetHandEmpty),
+        "card_equip" | "equip_kind" => atom(Atom::CardEquipKind),
+        "target_wounded" => atom(Atom::TargetWounded),
+        "draw_phase_skipped" | "skipped_draw_phase" => atom(Atom::DrawPhaseSkipped),
+        "min_hp" => atom(Atom::MinHp),
+        "hp_le_one" => atom(Atom::HpBelow(2)),
+        "lifetime_card_action" | "lifetime_action" => atom(Atom::EvActor),
         "full_health" => atom(Atom::Healthy),
         "not_replaced" => atom(Atom::DrawNotFixed),
         _ => return None,

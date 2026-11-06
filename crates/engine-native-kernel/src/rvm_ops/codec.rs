@@ -499,95 +499,7 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, card.raw());
                 push_u32(w, target.raw());
             }
-            // PA12 批⑪：13 种手牌调整/底牌摸/目标排除/取牌/禁用抑制确定性效果编码（71..=83）。
-            EffectRequest::AdjustHandTo { player, count } => {
-                w.push(71);
-                push_u32(w, player.raw());
-                push_u32(w, *count);
-            }
-            EffectRequest::DrawByPlayPhaseCardCategoryCount { player, skill } => {
-                w.push(72);
-                push_u32(w, player.raw());
-                push_u32(w, skill.raw());
-            }
-            EffectRequest::DrawEachBySeat {
-                first,
-                second,
-                count,
-                skill,
-            } => {
-                w.push(73);
-                push_u32(w, first.raw());
-                push_u32(w, second.raw());
-                push_u32(w, *count);
-                push_u32(w, skill.raw());
-            }
-            EffectRequest::SetDrawPhaseFromBottom { player } => {
-                w.push(74);
-                push_u32(w, player.raw());
-            }
-            EffectRequest::DrawCardsFromBottom { player, count } => {
-                w.push(75);
-                push_u32(w, player.raw());
-                push_u32(w, *count);
-            }
-            EffectRequest::CancelIncomingCardUse {
-                player,
-                source,
-                card,
-                skill,
-            } => {
-                w.push(76);
-                push_u32(w, player.raw());
-                push_u32(w, source.raw());
-                push_u32(w, card.raw());
-                push_u32(w, skill.raw());
-            }
-            EffectRequest::ExcludeSavedShaTarget { card, target } => {
-                w.push(77);
-                push_u32(w, card.raw());
-                push_u32(w, target.raw());
-            }
-            EffectRequest::TakeOneCard {
-                from,
-                to,
-                equip_only,
-            } => {
-                w.push(78);
-                push_u32(w, from.raw());
-                push_u32(w, to.raw());
-                w.push(u8::from(*equip_only));
-            }
-            EffectRequest::TakeOneHandCard { from, to } => {
-                w.push(79);
-                push_u32(w, from.raw());
-                push_u32(w, to.raw());
-            }
-            EffectRequest::DisableSkillByDefUntilTurnEnd { player, skill_def } => {
-                w.push(80);
-                push_u32(w, player.raw());
-                push_u32(w, skill_def.raw());
-            }
-            EffectRequest::BanActiveUntilTurnEnd { player, skill } => {
-                w.push(81);
-                push_u32(w, player.raw());
-                push_u32(w, skill.raw());
-            }
-            EffectRequest::SetNonLockedSkillSuppression {
-                player,
-                enabled,
-                skill,
-            } => {
-                w.push(82);
-                push_u32(w, player.raw());
-                w.push(u8::from(*enabled));
-                push_u32(w, skill.raw());
-            }
-            EffectRequest::SuppressNonLockedSkillsUntilTurnEnd { player } => {
-                w.push(83);
-                push_u32(w, player.raw());
-            }
-            _ => unreachable!("accept_effect 已拒绝未编码变体"),
+            other => super::codec_ext::enc_ext_effect(w, other),
         }
     }
 }
@@ -596,7 +508,7 @@ pub(super) struct Rd<'a> {
     r: &'a [u8],
 }
 impl Rd<'_> {
-    fn u32(&mut self) -> Option<u32> {
+    pub(super) fn u32(&mut self) -> Option<u32> {
         if self.r.len() < 4 {
             return None;
         }
@@ -607,7 +519,7 @@ impl Rd<'_> {
     fn i32(&mut self) -> Option<i32> {
         self.u32().map(|v| v as i32)
     }
-    fn u8(&mut self) -> Option<u8> {
+    pub(super) fn u8(&mut self) -> Option<u8> {
         let v = *self.r.first()?;
         self.r = &self.r[1..];
         Some(v)
@@ -937,62 +849,7 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 card: rule_api::CardId::new(rd.u32()?),
                 target: rule_api::PlayerId::new(rd.u32()?),
             },
-            71 => EffectRequest::AdjustHandTo {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                count: rd.u32()?,
-            },
-            72 => EffectRequest::DrawByPlayPhaseCardCategoryCount {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                skill: rule_api::SkillId::new(rd.u32()?),
-            },
-            73 => EffectRequest::DrawEachBySeat {
-                first: rule_api::PlayerId::new(rd.u32()?),
-                second: rule_api::PlayerId::new(rd.u32()?),
-                count: rd.u32()?,
-                skill: rule_api::SkillId::new(rd.u32()?),
-            },
-            74 => EffectRequest::SetDrawPhaseFromBottom {
-                player: rule_api::PlayerId::new(rd.u32()?),
-            },
-            75 => EffectRequest::DrawCardsFromBottom {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                count: rd.u32()?,
-            },
-            76 => EffectRequest::CancelIncomingCardUse {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                source: rule_api::PlayerId::new(rd.u32()?),
-                card: rule_api::CardId::new(rd.u32()?),
-                skill: rule_api::SkillId::new(rd.u32()?),
-            },
-            77 => EffectRequest::ExcludeSavedShaTarget {
-                card: rule_api::CardId::new(rd.u32()?),
-                target: rule_api::PlayerId::new(rd.u32()?),
-            },
-            78 => EffectRequest::TakeOneCard {
-                from: rule_api::PlayerId::new(rd.u32()?),
-                to: rule_api::PlayerId::new(rd.u32()?),
-                equip_only: rd.u8()? != 0,
-            },
-            79 => EffectRequest::TakeOneHandCard {
-                from: rule_api::PlayerId::new(rd.u32()?),
-                to: rule_api::PlayerId::new(rd.u32()?),
-            },
-            80 => EffectRequest::DisableSkillByDefUntilTurnEnd {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                skill_def: rule_api::SkillDefId::new(rd.u32()?),
-            },
-            81 => EffectRequest::BanActiveUntilTurnEnd {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                skill: rule_api::SkillId::new(rd.u32()?),
-            },
-            82 => EffectRequest::SetNonLockedSkillSuppression {
-                player: rule_api::PlayerId::new(rd.u32()?),
-                enabled: rd.u8()? != 0,
-                skill: rule_api::SkillId::new(rd.u32()?),
-            },
-            83 => EffectRequest::SuppressNonLockedSkillsUntilTurnEnd {
-                player: rule_api::PlayerId::new(rd.u32()?),
-            },
+            71..=108 => super::codec_ext::dec_ext_effect(tag, &mut rd)?,
             _ => return None,
         };
         out.push(e);

@@ -322,9 +322,66 @@ impl VmMachine {
                 .iter()
                 .map(|t| to_rule_pid(*t).raw())
                 .collect::<Vec<_>>();
+            let selected_cards = ctx.core.vm_aux.selected_cards(self.owner);
+            let mut selected_targets = ctx.core.vm_aux.selected_targets(self.owner);
+            if selected_targets.is_empty() {
+                if let Some(&at) = ctx
+                    .core
+                    .vm_aux
+                    .flags
+                    .get(&(
+                        self.owner,
+                        format!("active_target:{}", self.program.skill_name),
+                    ))
+                    .or_else(|| {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .get(&(self.owner, "active_target".to_string()))
+                    })
+                {
+                    if at != 0 {
+                        selected_targets.push(at);
+                    }
+                }
+            }
+            let event_source = if let Some(d) = damage.as_ref() {
+                d.source.map(|p| to_rule_pid(p).raw()).unwrap_or(0)
+            } else if matches!(
+                self.event,
+                EventData::Phase {
+                    phase: crate::event::Phase::Play,
+                    begin: true,
+                    ..
+                }
+            ) && !selected_targets.is_empty()
+            {
+                selected_targets[0]
+            } else {
+                self.trig
+                    .event_source
+                    .map(|p| to_rule_pid(p).raw())
+                    .or_else(|| selected_targets.first().copied())
+                    .unwrap_or(0)
+            };
+            let fallback_judge_card = if matches!(self.event, EventData::OrdinaryJudge { .. })
+                && self.trig.event_card.is_none()
+            {
+                ctx.core.discard.last().copied()
+            } else {
+                None
+            };
+            let mut cards = self.trig.event_cards.clone();
+            if cards.is_empty() {
+                if let Some(c) = fallback_judge_card {
+                    cards.push(c);
+                }
+            }
             let mut host = EngineVmHost {
                 targets,
-                cards: self.trig.event_cards.clone(),
+                cards,
+                selected_cards,
+                selected_targets,
                 ctx: HostContext {
                     // T8 增量 8：skill_id 经目录反查回填（查不到保持 0=NONE）。
                     skill_id: ctx
@@ -333,16 +390,23 @@ impl VmMachine {
                         .map(|d| d as u32)
                         .unwrap_or(0),
                     self_id: to_rule_pid(self.owner).raw(),
-                    event_player: damage.as_ref().map(|d|d.target).or(self.trig.event_player)
+                    event_player: damage
+                        .as_ref()
+                        .map(|d| d.target)
+                        .or(self.trig.event_player)
                         .map(to_rule_pid)
                         .map(|p| p.raw())
                         .unwrap_or(0),
-                    event_source: damage.as_ref().map(|d|d.source).unwrap_or(self.trig.event_source)
-                        .map(to_rule_pid)
-                        .map(|p| p.raw())
+                    event_source,
+                    event_card: damage
+                        .as_ref()
+                        .map(|d| d.card)
+                        .unwrap_or(self.trig.event_card.or(fallback_judge_card))
                         .unwrap_or(0),
-                    event_card: damage.as_ref().map(|d|d.card).unwrap_or(self.trig.event_card).unwrap_or(0),
-                    event_amount: damage.as_ref().map(|d|d.amount as u32).unwrap_or(self.trig.event_amount),
+                    event_amount: damage
+                        .as_ref()
+                        .map(|d| d.amount as u32)
+                        .unwrap_or(self.trig.event_amount),
                 },
                 seats,
                 core: ctx.core,

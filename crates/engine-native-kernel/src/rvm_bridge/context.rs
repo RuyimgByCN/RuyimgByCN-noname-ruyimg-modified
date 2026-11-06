@@ -29,6 +29,8 @@ pub(super) struct VmTriggerCtx {
     pub(super) moved_from: Option<PlayerId>,
     /// 阶段开始/结束。
     pub(super) begin: Option<bool>,
+    /// 摸牌阶段是否跳过（DrawOutcome::Skipped）。
+    pub(super) draw_phase_skipped: bool,
     /// 获得技能的定义号（SkillToggled enabled=true）。
     pub(super) added_skill_def: Option<u16>,
     /// 1 伤害 2 用牌 3 阶段 4 弃牌 5 移牌 6 濒死 7 死亡 8 打出 9 给牌 12 武将状态 13 获得技能。
@@ -79,6 +81,29 @@ pub(super) fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             phase: Some(*phase),
             begin: Some(*begin),
             kind: 3,
+            ..VmTriggerCtx::default()
+        },
+        EventData::DrawPhase {
+            player,
+            actual_gain,
+            outcome,
+            ..
+        } => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            phase: Some(crate::event::Phase::Draw),
+            begin: Some(false),
+            event_amount: *actual_gain,
+            draw_phase_skipped: matches!(outcome, crate::event::DrawOutcome::Skipped),
+            kind: 3,
+            ..VmTriggerCtx::default()
+        },
+        EventData::OrdinaryJudge { owner, invocation } => VmTriggerCtx {
+            event_player: Some(*owner),
+            event_source: Some(*owner),
+            event_card: (*invocation != 0).then_some(*invocation),
+            event_cards: (*invocation != 0).then(|| vec![*invocation]).unwrap_or_default(),
+            kind: 8,
             ..VmTriggerCtx::default()
         },
         // 杀被闪避（PA12 批②）：来源=杀的使用者、事件主玩家=闪避的目标。
@@ -132,6 +157,7 @@ pub(super) fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             event_player: Some(*player),
             event_source: Some(*player),
             event_card: *by_card,
+            event_cards: (*by_card).into_iter().collect(),
             event_amount: *amount,
             kind: 10,
             ..VmTriggerCtx::default()
@@ -245,6 +271,7 @@ pub(super) fn filter_view(t: &VmTriggerCtx) -> crate::rvm_named::FilterView {
         batch_len: t.batch_len,
         moved_from: t.moved_from,
         begin: t.begin,
+        draw_phase_skipped: t.draw_phase_skipped,
         kind: t.kind,
     }
 }

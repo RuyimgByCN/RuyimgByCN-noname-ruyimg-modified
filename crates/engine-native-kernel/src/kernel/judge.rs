@@ -641,6 +641,31 @@ impl crate::catalog::SkillMachine for JudgePhaseMachine {
                             }
                         }
                     }
+                    let resolved = EventData::OrdinaryJudge {
+                        owner: self.owner,
+                        invocation: judge_card,
+                    };
+                    let qctx = ctx.query();
+                    let has_vm_listener = ctx.core.skills.iter().any(|((owner, sdef), inst)| {
+                        let def_entry = &ctx.catalog.skills[*sdef as usize];
+                        inst.enabled
+                            && ctx.core.player(*owner).alive
+                            && def_entry.behavior.is_vm_skill()
+                            && def_entry.trigger.as_ref().is_some_and(|m| {
+                                m.event == crate::event::EventKind::OrdinaryJudge
+                                    || m.extra_events
+                                        .contains(&crate::event::EventKind::OrdinaryJudge)
+                            })
+                            && def_entry.behavior.filter_in_window(
+                                &qctx,
+                                *owner,
+                                &resolved,
+                                crate::event::EventKind::OrdinaryJudge,
+                            )
+                    });
+                    if has_vm_listener {
+                        ctx.emit(resolved);
+                    }
                     return Flow::Yield;
                 }
                 // 天妒阶段（效果生效后）：跳过死亡持有者；有人获得后不再询问

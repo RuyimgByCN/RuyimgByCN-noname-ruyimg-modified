@@ -432,8 +432,10 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                 }
             }
             let card = self.card;
-            ctx.to_discard(card);
-            ctx.core.table.retain(|x| *x != card);
+            if card != 0 {
+                ctx.to_discard(card);
+                ctx.core.table.retain(|x| *x != card);
+            }
         }
         Flow::Done
     }
@@ -495,8 +497,10 @@ impl crate::catalog::SkillMachine for SnatchMachine {
                 });
             }
             let card = self.card;
-            ctx.to_discard(card);
-            ctx.core.table.retain(|x| *x != card);
+            if card != 0 {
+                ctx.to_discard(card);
+                ctx.core.table.retain(|x| *x != card);
+            }
         }
         Flow::Done
     }

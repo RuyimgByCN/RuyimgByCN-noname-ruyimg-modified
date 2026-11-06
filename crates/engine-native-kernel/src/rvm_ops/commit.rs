@@ -2,7 +2,7 @@
 
 use super::*;
 
-fn pop_deck(ctx: &mut Ctx<'_>) -> Option<CardId> {
+pub(super) fn pop_deck(ctx: &mut Ctx<'_>) -> Option<CardId> {
     if ctx.core.deck.is_empty() {
         if ctx.core.discard.is_empty() {
             return None;

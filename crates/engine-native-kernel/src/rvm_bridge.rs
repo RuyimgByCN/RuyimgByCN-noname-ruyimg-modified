@@ -210,6 +210,10 @@ pub enum VmFilterPolicy {
         phase: crate::event::Phase,
         inner: Box<VmFilterPolicy>,
     },
+    /// 跳过摸牌阶段门（PA12⑫）：仅当 DrawPhase 终窗 outcome=Skipped 时才评估 `inner`。
+    DrawPhaseSkipped {
+        inner: Box<VmFilterPolicy>,
+    },
 }
 
 /// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
@@ -367,7 +371,11 @@ impl SkillBehavior for VmSkillBehavior {
                     EventKind::DamageBefore|EventKind::Damage|EventKind::DamageBegin|
                     EventKind::DamageBegin1|EventKind::DamageBegin2|EventKind::DamageBegin3|
                     EventKind::DamageBegin4|EventKind::DamageSource|EventKind::DamageEnd|
-                    EventKind::DamageAfter|EventKind::DamageZero|EventKind::DamageCancelled)))
+                    EventKind::DamageAfter|EventKind::DamageZero|EventKind::DamageCancelled))
+                || (matches!(event, EventData::DrawPhase { .. }) && matches!(entry.meta.event,
+                    EventKind::DrawPhaseBefore|EventKind::DrawPhaseBegin|
+                    EventKind::DrawPhaseBegin1|EventKind::DrawPhaseBegin2|
+                    EventKind::DrawPhaseEnd|EventKind::DrawPhaseAfter)))
                 && entry.program.module.to_bytes() == bytes
         })
     }
@@ -477,9 +485,25 @@ impl SkillBehavior for VmSkillBehavior {
         {
             return false;
         }
-        let trig = trigger_ctx_of(event);
+        let mut trig = trigger_ctx_of(event);
+        if matches!(event, EventData::OrdinaryJudge { .. }) && trig.event_card.is_none() {
+            if let Some(c) = ctx.state.discard.last().copied() {
+                trig.event_card = Some(c);
+                trig.event_cards = vec![c];
+            }
+        }
         if let VmFilterPolicy::AtPhase { phase, inner } = &self.filter {
             if trig.phase != Some(*phase) {
+                return false;
+            }
+            let gated = VmSkillBehavior {
+                program: self.program.clone(),
+                filter: (**inner).clone(),
+            };
+            return gated.filter(ctx, owner, event);
+        }
+        if let VmFilterPolicy::DrawPhaseSkipped { inner } = &self.filter {
+            if !trig.draw_phase_skipped {
                 return false;
             }
             let gated = VmSkillBehavior {
@@ -769,7 +793,7 @@ impl SkillBehavior for VmSkillBehavior {
                 };
                 if !ctx.state.players[src as usize].alive || !is_event_player {
                     return false;
-                }
+                };
                 let src_slot: Vec<_> = ctx.state.players[src as usize]
                     .equips
                     .iter()
@@ -795,7 +819,9 @@ impl SkillBehavior for VmSkillBehavior {
                 })
             }
             // 阶段门已在函数头处理（递归评估 inner）；此处不可达，保守返回 false。
-            VmFilterPolicy::AtPhase { .. } | VmFilterPolicy::Declared { .. } => false,
+            VmFilterPolicy::AtPhase { .. }
+            | VmFilterPolicy::DrawPhaseSkipped { .. }
+            | VmFilterPolicy::Declared { .. } => false,
             VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
                 &prog,
                 ctx,
@@ -940,6 +966,10 @@ struct EngineVmHost<'a> {
     /// 切片=0——现从 CardsDrawn/CardsMoved/CardsDiscarded/CardsGiven/CardUsed/
     /// CardResponded 派生）。
     cards: Vec<u32>,
+    /// PA12 批⑫：预选牌集（供 `discard_selected`/`recast_selected`/`zhiheng` 等读取）。
+    selected_cards: Vec<u32>,
+    /// PA12 批⑫：预选目标集（1-based `rule_api::PlayerId` 裸值，供 `draw_selected_targets` 等读取）。
+    selected_targets: Vec<u32>,
     seats: u8,
     core: &'a crate::state::GameStateCore,
     catalog: &'a crate::catalog::Catalog,
@@ -965,6 +995,14 @@ impl VmHost for EngineVmHost<'_> {
         &self.cards
     }
 
+    fn selected_cards(&self) -> &[u32] {
+        &self.selected_cards
+    }
+
+    fn selected_targets(&self) -> &[u32] {
+        &self.selected_targets
+    }
+
     fn emit_effect(&mut self, mut req: EffectRequest) -> Result<(), HostTrap> {
         match &mut req {
             EffectRequest::ChooseGiveOrRecastOneHand { skill, .. }
@@ -973,6 +1011,20 @@ impl VmHost for EngineVmHost<'_> {
             | EffectRequest::DrawByPlayPhaseCardCategoryCount { skill, .. }
             | EffectRequest::SetNonLockedSkillSuppression { skill, .. }
             | EffectRequest::CancelIncomingCardUse { skill, .. }
+            | EffectRequest::StoreSelectedInSkillPile { skill, .. }
+            | EffectRequest::DrawSelectedTargets { skill, .. }
+            | EffectRequest::QueueExtraTurn { skill, .. }
+            | EffectRequest::GainShadowCards { skill, .. }
+            | EffectRequest::GainTargetHandCard { skill, .. }
+            | EffectRequest::GiveSelectedThenRecoverTarget { skill, .. }
+            | EffectRequest::DistributeShadowCards { skill, .. }
+            | EffectRequest::PlaceHandCardToExpansion { skill, .. }
+            | EffectRequest::RecordActiveTarget { skill, .. }
+            | EffectRequest::ClearPhaseGiftTarget { skill, .. }
+            | EffectRequest::DealDamageBanActiveIfDying { skill, .. }
+            | EffectRequest::DiscardSelectedDrawAllHandBonus { skill, .. }
+            | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { skill, .. }
+            | EffectRequest::RecoverSelectedTargets { skill, .. }
                 if !skill.is_some() && self.ctx.skill_id != 0 =>
             {
                 *skill = rule_api::SkillId::new(self.ctx.skill_id);

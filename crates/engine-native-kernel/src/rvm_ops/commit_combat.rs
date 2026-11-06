@@ -510,6 +510,6 @@ pub(super) fn commit_combat_or_state_effect(
                     .insert((p, "suppress_non_locked_turn".to_string()), 1);
             }
         }
-        _ => {}
+        other => super::commit_ext::commit_ext_effect(ctx, executing, owner, seats, other),
     }
 }

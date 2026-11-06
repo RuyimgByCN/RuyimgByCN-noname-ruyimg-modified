@@ -925,3 +925,217 @@ fn pa12_batch11_legacy_vm_effects_match_native_expectation() {
         }
     }
 }
+
+/// PA12 批⑫差分：验证旧线 `engine_core::vm_host` 对批⑫真实 ported `.skill`
+/// （含 `selected_cards` / `selected_targets` 预选主动技与触发技）产出的
+/// `EffectRequest` 序列与原生批⑫新增原语（tags 84..=108）逐项一致。
+#[test]
+fn pa12_batch12_legacy_vm_effects_match_native_expectation() {
+    let active_cases: &[(&str, &str, &[&str])] = &[
+        (
+            "chongxin",
+            include_str!("../../../content/original/ported/yingbian/chongxin.skill"),
+            &["RecastCards"],
+        ),
+        (
+            "rezhiheng",
+            include_str!("../../../content/original/ported/refresh/rezhiheng.skill"),
+            &["DiscardSelectedDrawAllHandBonus"],
+        ),
+        (
+            "olweiyang",
+            include_str!("../../../content/original/ported/collab/olweiyang.skill"),
+            &["DiscardCards", "RecoverSelectedTargets"],
+        ),
+        (
+            "shizhan",
+            include_str!("../../../content/original/ported/refresh/shizhan.skill"),
+            &["UseVirtualCardOn"],
+        ),
+        (
+            "jylianhuan",
+            include_str!("../../../content/original/ported/offline/jylianhuan.skill"),
+            &["DealDamage", "UseVirtualCardOnSelectedTargets"],
+        ),
+        (
+            "songci",
+            include_str!("../../../content/original/ported/sp/songci.skill"),
+            &["DrawSelectedTargets"],
+        ),
+        (
+            "ziyuan",
+            include_str!("../../../content/original/ported/sp/ziyuan.skill"),
+            &["GiveSelectedThenRecoverTarget"],
+        ),
+        (
+            "refenxun",
+            include_str!("../../../content/original/ported/sp/refenxun.skill"),
+            &["AddBoundSkill"],
+        ),
+        (
+            "ol_wuqian",
+            include_str!("../../../content/original/ported/extra/ol_wuqian.skill"),
+            &["RemoveMark", "AddSkillUntilTurnEnd", "RecordActiveTarget"],
+        ),
+        (
+            "eu_xiaoguo",
+            include_str!("../../../content/original/ported/offline/eu_xiaoguo.skill"),
+            &["DiscardCards", "DealDamageBanActiveIfDying"],
+        ),
+    ];
+    for (id, src, want_prefixes) in active_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 82, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let entry = &pkg.active_index[0];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .expect("模块");
+        let out = engine_core::vm_host::run_module_with_selected_inputs(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1, 2],
+            &[other.raw()],
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+
+    let trigger_cases: &[(&str, &str, &[&str])] = &[
+        (
+            "quanji",
+            include_str!("../../../content/original/ported/yijiang/quanji.skill"),
+            &["DrawCards", "StoreSelectedInSkillPile"],
+        ),
+        (
+            "dcxingwu",
+            include_str!("../../../content/original/ported/xianding/dcxingwu.skill"),
+            &["PlaceHandCardToExpansion"],
+        ),
+        (
+            "zuici",
+            include_str!("../../../content/original/ported/shiji/zuici.skill"),
+            &["DisableEquipSlots", "RecoverHp"],
+        ),
+        (
+            "kengo_guidui",
+            include_str!("../../../content/original/ported/key/kengo_guidui.skill"),
+            &[
+                "EnableEquipSlot",
+                "EnableEquipSlot",
+                "EnableEquipSlot",
+                "EnableEquipSlot",
+                "EnableEquipSlot",
+            ],
+        ),
+        (
+            "jsrgjiaohao",
+            include_str!("../../../content/original/ported/jsrg/jsrgjiaohao.skill"),
+            &["GainShadowCards"],
+        ),
+        (
+            "pxsizhou",
+            include_str!("../../../content/original/ported/sp/pxsizhou.skill"),
+            &["GainTargetHandCard"],
+        ),
+        (
+            "qiaomeng",
+            include_str!("../../../content/original/ported/refresh/qiaomeng.skill"),
+            &["DiscardTargetCardGainMount"],
+        ),
+        (
+            "scls_qinzheng",
+            include_str!("../../../content/original/ported/offline/scls_qinzheng.skill"),
+            &["DrawForLifetimeCardActionDivisors"],
+        ),
+        (
+            "pszhonghun",
+            include_str!("../../../content/original/ported/offline/pszhonghun.skill"),
+            &["RevealTopGainIfColor"],
+        ),
+        (
+            "jiezi",
+            include_str!("../../../content/original/ported/shenhua/jiezi.skill"),
+            &["DrawCards"],
+        ),
+        (
+            "tiandu",
+            include_str!("../../../content/standard/tiandu.skill"),
+            &["GainEventCards"],
+        ),
+        (
+            "botu",
+            include_str!("../../../content/original/ported/refresh/botu.skill"),
+            &["QueueExtraTurn"],
+        ),
+    ];
+    for (id, src, want_prefixes) in trigger_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 82, "identity-standard").expect("开局");
+        let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&pkg);
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let pz = tx
+            .state()
+            .zones
+            .find(engine_core::state::ZoneKind::DiscardPile, PlayerId::NONE)
+            .expect("discard zone");
+        tx.state_mut()
+            .cards
+            .get_mut(engine_api::CardId::new(1))
+            .unwrap()
+            .zone = pz;
+        let entry = &pkg.trigger_index[0];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .unwrap_or_else(|| rule_vm::VerifiedModule::verify(pkg.modules[0].clone()).expect("模块"));
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[2],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}
+

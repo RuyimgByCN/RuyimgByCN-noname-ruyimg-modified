@@ -18,9 +18,11 @@ use crate::machine::{Ctx, LogEvent};
 use crate::state::{GameStateCore, SkillInstance};
 mod codec;
 pub use codec::*;
+mod codec_ext;
 mod commit;
 pub use commit::*;
 mod commit_combat;
+mod commit_ext;
 mod query;
 pub use query::*;
 
@@ -37,6 +39,39 @@ pub(crate) fn seat_of(p: rule_api::PlayerId, seats: u8) -> Option<PlayerId> {
     let raw = p.raw() - 1;
     let s = u8::try_from(raw).ok()?;
     (s < seats).then_some(s)
+}
+
+pub(crate) fn card_kind_from_tag(tag: u8) -> Option<CardKind> {
+    match tag {
+        1 => Some(CardKind::Sha),
+        2 => Some(CardKind::Tao),
+        3 => Some(CardKind::Shan),
+        4 => Some(CardKind::Jiu),
+        5 => Some(CardKind::FireSha),
+        6 => Some(CardKind::LeiSha),
+        10 => Some(CardKind::Weapon),
+        11 => Some(CardKind::Armor),
+        12 => Some(CardKind::HorseMinus),
+        13 => Some(CardKind::HorsePlus),
+        14 => Some(CardKind::WuxingPan),
+        20 => Some(CardKind::Wuzhong),
+        21 => Some(CardKind::Dismantle),
+        22 => Some(CardKind::Snatch),
+        23 => Some(CardKind::Duel),
+        24 => Some(CardKind::SavageAttack),
+        25 => Some(CardKind::ArcheryAttack),
+        26 => Some(CardKind::Taoyuan),
+        27 => Some(CardKind::Wugu),
+        30 => Some(CardKind::Le),
+        31 => Some(CardKind::Bing),
+        32 => Some(CardKind::ShanDian),
+        33 => Some(CardKind::Jiedao),
+        34 => Some(CardKind::Chain),
+        36 => Some(CardKind::Nullify),
+        40 => Some(CardKind::Youdishenru),
+        42 => Some(CardKind::WangmeiZhike),
+        _ => None,
+    }
 }
 
 fn kind_tag(kind: CardKind) -> u8 {
@@ -397,6 +432,158 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             ok_player(*current, "SetTurnState")?;
             if *phase > 4 {
                 return Err(reject("SetTurnState phase"));
+            }
+        }
+        // PA12 批⑫：25 种选牌/选目标与确定性效果校验（84..=108）。
+        EffectRequest::DiscardCards { player, cards } => {
+            ok_player(*player, "DiscardCards.player")?;
+            if cards.iter().any(|c| !c.is_some()) {
+                return Err(reject("DiscardCards.card"));
+            }
+        }
+        EffectRequest::StoreSelectedInSkillPile { player, cards, .. } => {
+            ok_player(*player, "StoreSelectedInSkillPile.player")?;
+            if cards.iter().any(|c| !c.is_some()) {
+                return Err(reject("StoreSelectedInSkillPile.card"));
+            }
+        }
+        EffectRequest::UseVirtualCardOn {
+            player,
+            kind,
+            target,
+        } => {
+            ok_player(*player, "UseVirtualCardOn.player")?;
+            ok_player(*target, "UseVirtualCardOn.target")?;
+            if card_kind_from_tag(*kind).is_none() {
+                return Err(reject("UseVirtualCardOn.kind"));
+            }
+        }
+        EffectRequest::RecastCards { player, cards } => {
+            ok_player(*player, "RecastCards.player")?;
+            if cards.iter().any(|c| !c.is_some()) {
+                return Err(reject("RecastCards.card"));
+            }
+        }
+        EffectRequest::AddCardUsePolicySkill { player, .. }
+        | EffectRequest::QueueExtraTurn { player, .. }
+        | EffectRequest::GainTargetHandCard { player, .. }
+        | EffectRequest::PlaceHandCardToExpansion { player, .. }
+        | EffectRequest::ClearPhaseGiftTarget { player, .. } => {
+            ok_player(*player, "Batch12.player")?;
+        }
+        EffectRequest::DrawSelectedTargets { targets, count, .. } => {
+            if *count == 0 {
+                return Err(reject("DrawSelectedTargets.count"));
+            }
+            for t in targets {
+                ok_player(*t, "DrawSelectedTargets.target")?;
+            }
+        }
+        EffectRequest::DisableEquipSlots { player, slots } => {
+            ok_player(*player, "DisableEquipSlots.player")?;
+            if slots.is_empty() || slots.iter().any(|s| !matches!(*s, 1..=5)) {
+                return Err(reject("DisableEquipSlots.slots"));
+            }
+        }
+        EffectRequest::EnableEquipSlot { player, slot, .. } => {
+            ok_player(*player, "EnableEquipSlot.player")?;
+            if !matches!(*slot, 1..=5) {
+                return Err(reject("EnableEquipSlot.slot"));
+            }
+        }
+        EffectRequest::GainShadowCards { player, count, .. }
+        | EffectRequest::DistributeShadowCards { player, count, .. } => {
+            ok_player(*player, "ShadowCards.player")?;
+            if *count == 0 {
+                return Err(reject("ShadowCards.count"));
+            }
+        }
+        EffectRequest::AddBoundSkill {
+            player,
+            skill_def,
+            bound_target,
+        } => {
+            ok_player(*player, "AddBoundSkill.player")?;
+            ok_player(*bound_target, "AddBoundSkill.bound_target")?;
+            if !skill_def.is_some() {
+                return Err(reject("AddBoundSkill.skill_def"));
+            }
+        }
+        EffectRequest::GiveSelectedThenRecoverTarget {
+            player,
+            target,
+            cards,
+            ..
+        } => {
+            ok_player(*player, "GiveSelectedThenRecoverTarget.player")?;
+            ok_player(*target, "GiveSelectedThenRecoverTarget.target")?;
+            if cards.iter().any(|c| !c.is_some()) {
+                return Err(reject("GiveSelectedThenRecoverTarget.card"));
+            }
+        }
+        EffectRequest::RecordActiveTarget { player, target, .. }
+        | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { player, target, .. }
+        | EffectRequest::DiscardTargetCardGainMount { player, target, .. } => {
+            ok_player(*player, "Batch12.player")?;
+            ok_player(*target, "Batch12.target")?;
+        }
+        EffectRequest::DealDamageBanActiveIfDying {
+            source,
+            target,
+            amount,
+            ..
+        } => {
+            ok_player(*source, "DealDamageBanActiveIfDying.source")?;
+            ok_player(*target, "DealDamageBanActiveIfDying.target")?;
+            if *amount == 0 || *amount > i32::MAX as u32 {
+                return Err(reject("DealDamageBanActiveIfDying.amount"));
+            }
+        }
+        EffectRequest::DiscardSelectedDrawAllHandBonus { player, cards, .. } => {
+            ok_player(*player, "DiscardSelectedDrawAllHandBonus.player")?;
+            if cards.iter().any(|c| !c.is_some()) {
+                return Err(reject("DiscardSelectedDrawAllHandBonus.card"));
+            }
+        }
+        EffectRequest::DrawForLifetimeCardActionDivisors { player, divisors } => {
+            ok_player(*player, "DrawForLifetimeCardActionDivisors.player")?;
+            if divisors.is_empty() || divisors.contains(&0) {
+                return Err(reject("DrawForLifetimeCardActionDivisors.divisors"));
+            }
+        }
+        EffectRequest::RecoverSelectedTargets {
+            source,
+            targets,
+            amount,
+            ..
+        } => {
+            if source.is_some() {
+                ok_player(*source, "RecoverSelectedTargets.source")?;
+            }
+            if *amount == 0 {
+                return Err(reject("RecoverSelectedTargets.amount"));
+            }
+            for t in targets {
+                ok_player(*t, "RecoverSelectedTargets.target")?;
+            }
+        }
+        EffectRequest::RevealTopGainIfColor { player, color_mask } => {
+            ok_player(*player, "RevealTopGainIfColor.player")?;
+            if !matches!(*color_mask, 1..=3) {
+                return Err(reject("RevealTopGainIfColor.color_mask"));
+            }
+        }
+        EffectRequest::UseVirtualCardOnSelectedTargets {
+            player,
+            kind,
+            targets,
+        } => {
+            ok_player(*player, "UseVirtualCardOnSelectedTargets.player")?;
+            if card_kind_from_tag(*kind).is_none() {
+                return Err(reject("UseVirtualCardOnSelectedTargets.kind"));
+            }
+            for t in targets {
+                ok_player(*t, "UseVirtualCardOnSelectedTargets.target")?;
             }
         }
         other => {

@@ -41,11 +41,13 @@ impl VmFilterPolicy {
             Declared { .. } => 41, Handlers(_) => 42,
             OwnerSkillAddedSelf(_) => 43, OwnerTurnedOver => 44,
             OwnerBecameFaceUpOrLinked => 45, OwnerTurnChangedOrBecameLinked => 46,
+            DrawPhaseSkipped { .. } => 47,
         };
         h.update(&[tag]);
         match self {
             OwnerHpBelow(n) | OwnerPlayCountEq(n) | OwnerSourceTargetMarkPositive(n) | OwnerSkillAddedSelf(n) => { h.update(&n.to_le_bytes()); }
             AtPhase { phase, inner } => { h.update(&[*phase as u8]); inner.hash_semantics(h); }
+            DrawPhaseSkipped { inner } => inner.hash_semantics(h),
             Declared { skill_def_id, hand_limit_base_max_hp, inner } => {
                 h.update(&skill_def_id.to_le_bytes()); h.update(&[u8::from(*hand_limit_base_max_hp)]); inner.hash_semantics(h);
             }

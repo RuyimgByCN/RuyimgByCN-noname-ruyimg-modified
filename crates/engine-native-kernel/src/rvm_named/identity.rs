@@ -129,6 +129,8 @@ impl NamedProgram {
                     Atom::OwnerOutsideTargetAttackRange => { h.update(&117u16.to_le_bytes()); }
                     Atom::TargetEquipNonEmpty => { h.update(&118u16.to_le_bytes()); }
                     Atom::SourceNotTarget => { h.update(&119u16.to_le_bytes()); }
+                    Atom::TargetWounded => { h.update(&120u16.to_le_bytes()); }
+                    Atom::DrawPhaseSkipped => { h.update(&121u16.to_le_bytes()); }
                 }
             }
         }

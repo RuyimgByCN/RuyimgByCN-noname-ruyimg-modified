@@ -148,14 +148,20 @@ impl DamageSettlement {
 
 /// A window carries only its checked ancestor identity; filters read the live canonical root.
 pub fn damage_event<'a>(frames: &'a [Frame], frame: &'a Frame) -> &'a EventData {
-    if let EventData::DamageWindow { root, .. } = frame.data {
-        &frames
+    match frame.data {
+        EventData::DamageWindow { root, .. } => {
+            &frames
+                .iter()
+                .find(|f| f.id == root)
+                .expect("checked damage ancestor")
+                .data
+        }
+        EventData::DrawWindow { root, .. } => frames
             .iter()
             .find(|f| f.id == root)
-            .expect("checked damage ancestor")
-            .data
-    } else {
-        &frame.data
+            .map(|f| &f.data)
+            .unwrap_or(&frame.data),
+        _ => &frame.data,
     }
 }
 

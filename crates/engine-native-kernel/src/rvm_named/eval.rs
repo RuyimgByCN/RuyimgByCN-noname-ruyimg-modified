@@ -411,6 +411,32 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
                             > ctx.state.attack_range(ctx.catalog, t)
                 })
         }
+        Atom::TargetWounded => v
+            .event_player
+            .or_else(|| v.targets.first().copied())
+            .is_some_and(|p| {
+                ctx.state
+                    .players
+                    .get(p as usize)
+                    .is_some_and(|pl| pl.alive && pl.hp > 0 && (pl.hp as u32) < pl.max_hp)
+            }),
+        Atom::DrawPhaseSkipped => {
+            let subj = v.event_player.unwrap_or(owner);
+            v.draw_phase_skipped
+                || ctx
+                    .state
+                    .players
+                    .get(subj as usize)
+                    .is_some_and(|pl| pl.skip_next_draw)
+                || ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(subj, "draw_phase_skipped".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0
+        }
     }
 }
 

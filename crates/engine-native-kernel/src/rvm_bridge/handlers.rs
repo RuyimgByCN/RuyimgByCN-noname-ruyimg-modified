@@ -99,9 +99,9 @@ pub(super) fn machine(
     fn named_meta(f: &VmFilterPolicy) -> (Vec<(String, u8)>, bool) {
         match f {
             VmFilterPolicy::Named(p) => (p.consume.clone(), p.count_hits),
-            VmFilterPolicy::AtPhase { inner, .. } | VmFilterPolicy::Declared { inner, .. } => {
-                named_meta(inner)
-            }
+            VmFilterPolicy::AtPhase { inner, .. }
+            | VmFilterPolicy::DrawPhaseSkipped { inner }
+            | VmFilterPolicy::Declared { inner, .. } => named_meta(inner),
             _ => (Vec::new(), false),
         }
     }

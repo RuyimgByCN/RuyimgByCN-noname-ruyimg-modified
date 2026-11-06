@@ -405,7 +405,9 @@ pub fn bridge_vm_skill_decls(
             // 窗——maxHp 改写类反例的落点，合同 v3 §5 Finding 4）。
             "skill_log_begin" => EventKind::SkillLogBegin,
             "hp_lost" => EventKind::LoseHp,
-            "hp_recovered" => EventKind::Recover,
+            "hp_recovered" | "recover_before" => EventKind::Recover,
+            "judgment_resolved" => EventKind::OrdinaryJudge,
+            "phase_draw_skipped" => EventKind::DrawPhaseAfter,
             // PA12 批⑨：伤害被防止/归零（DamageCancelled + DamageZero 双窗）、
             // 武将状态改变（TurnOvered + Linked 双窗）、获得技能（SkillToggled）。
             "damage_prevented" => {
@@ -436,6 +438,13 @@ pub fn bridge_vm_skill_decls(
                 inner: Box::new(filter),
             },
             None => filter,
+        };
+        let filter = if t.event == "phase_draw_skipped" {
+            engine_native::rvm_bridge::VmFilterPolicy::DrawPhaseSkipped {
+                inner: Box::new(filter),
+            }
+        } else {
+            filter
         };
         out.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,

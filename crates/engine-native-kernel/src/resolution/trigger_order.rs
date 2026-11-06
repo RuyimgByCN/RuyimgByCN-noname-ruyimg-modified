@@ -778,12 +778,14 @@ fn validate_vm_window(
                 .skill_by_name(skill_name)
                 .ok_or(SnapshotError::UnknownMachine)?;
             let behavior = &catalog.skills[def as usize].behavior;
-            let data_kind = if matches!(frame.data, EventData::DamageWindow { .. }) {
-                EventKind::Damage
+            let kind_matches = if matches!(frame.data, EventData::DamageWindow { .. }) {
+                event.kind() == EventKind::Damage
+            } else if matches!(frame.data, EventData::DrawWindow { .. }) {
+                event.kind() == EventKind::DrawPhase || event.kind() == frame.data.kind()
             } else {
-                frame.data.kind()
+                event.kind() == frame.data.kind()
             };
-            if event.kind() != data_kind
+            if !kind_matches
                 || !behavior.vm_trigger_window_is_authorized(module, event_kind(frame))
             {
                 return Err(SnapshotError::UnknownMachine);

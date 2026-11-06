@@ -8,6 +8,14 @@ pub fn intrinsic_machine(
     let data = ctx.res.frame(frame_id).expect("frame").data.clone();
     match data {
         EventData::OrdinaryJudge { owner, invocation } => {
+            if invocation == 0
+                || !ctx
+                    .res
+                    .frame(invocation)
+                    .is_some_and(|f| matches!(f.data, EventData::SkillInvocation(_)))
+            {
+                return None;
+            }
             let mut m = JudgePhaseMachine::new(owner, Vec::new(), None);
             m.ordinary = Some(invocation);
             Some(Box::new(m))
@@ -74,7 +82,86 @@ pub fn intrinsic_machine(
             if effective_kind.is_sha_like() {
                 return sha_intrinsic(ctx, &u);
             }
-            let card = u.card.expect("validated non-Sha physical use");
+            let Some(card) = u.card else {
+                match effective_kind {
+                    CardKind::Tao => {
+                        for &t in &u.targets {
+                            if ctx.core.player(t).alive {
+                                ctx.recover(t, 1, None);
+                            }
+                        }
+                    }
+                    CardKind::Jiu => {
+                        ctx.core.turn.jiu_active = true;
+                    }
+                    CardKind::Wuzhong => {
+                        return Some(Box::new(WuzhongMachine {
+                            owner: u.player,
+                            card: None,
+                            draw_done: false,
+                        }));
+                    }
+                    CardKind::Taoyuan => {
+                        return Some(Box::new(TaoyuanMachine {
+                            owner: u.player,
+                            card: None,
+                        }));
+                    }
+                    CardKind::Chain => {
+                        for &t in &u.targets {
+                            if ctx.core.player(t).alive {
+                                let next = !ctx.core.player(t).linked;
+                                ctx.emit(EventData::Linked {
+                                    player: t,
+                                    linked: next,
+                                });
+                            }
+                        }
+                    }
+                    CardKind::Dismantle => {
+                        if let Some(&target) = u.targets.first() {
+                            return Some(Box::new(DismantleMachine {
+                                card: 0,
+                                source: u.player,
+                                target,
+                                asked: false,
+                            }));
+                        }
+                    }
+                    CardKind::Snatch => {
+                        if let Some(&target) = u.targets.first() {
+                            return Some(Box::new(SnatchMachine {
+                                card: 0,
+                                source: u.player,
+                                target,
+                                asked: false,
+                            }));
+                        }
+                    }
+                    CardKind::Wugu => {
+                        return Some(Box::new(WuguMachine {
+                            owner: u.player,
+                            cards: Vec::new(),
+                            pickers: Vec::new(),
+                            stage: WuguStage::Init,
+                        }));
+                    }
+                    CardKind::Duel => {
+                        if let Some(&target) = u.targets.first() {
+                            return Some(Box::new(DuelMachine {
+                                card: 0,
+                                source: u.player,
+                                target,
+                                on_target: true,
+                                asked: false,
+                                second_pending: false,
+                            }));
+                        }
+                    }
+                    _ => {}
+                }
+                return None;
+            };
             // 内容卡牌（G1 宿主牌等）的固有结算机器由内容层提供（目录回调）；
             // 内容牌种与下方内核牌种互斥，且均无 aoe_need，先问内容层不改变分派结果。
             if let Some(machine) = (ctx.catalog.hooks.card_intrinsic)(ctx, &u, effective_kind) {
