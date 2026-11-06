@@ -519,7 +519,7 @@ pub(super) fn enc_ext_effect(w: &mut Vec<u8>, e: &EffectRequest) {
             push_u32(w, player.raw());
             w.push(*stage);
         }
-        _ => unreachable!("accept_effect 已拒绝未编码变体"),
+        _ => super::codec_ext2::enc_ext2_effect(w, e),
     }
 }
 
@@ -883,6 +883,6 @@ pub(super) fn dec_ext_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest> 
             player: rule_api::PlayerId::new(rd.u32()?),
             stage: rd.u8()?,
         },
-        _ => return None,
+        _ => return super::codec_ext2::dec_ext2_effect(tag, rd),
     })
 }

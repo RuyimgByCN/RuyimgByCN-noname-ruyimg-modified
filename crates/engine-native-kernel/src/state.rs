@@ -12,6 +12,7 @@ use crate::event::Phase;
 use crate::ids::{CardId, PlayerId, SkillDefId};
 use crate::rng::RuleRng;
 mod core_ops;
+mod core_ops_modifiers;
 
 /// 单个玩家的实例级状态。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -895,6 +896,7 @@ impl VmAux {
                 && key != "selected_target"
                 && key != "dcdichou_mark_removed_this_turn"
                 && key != "dcdichou_eff_sha_used"
+                && key != "vm_sha_extra_used"
                 && key != "phase_aborted"
                 && !key.starts_with("selected_card:")
                 && !key.starts_with("selected_target:")
@@ -917,6 +919,32 @@ impl VmAux {
     /// 轮次推进：丢掉轮范围的 once。
     pub fn clear_round(&mut self) {
         self.once.retain(|(_, _, scope)| *scope != 2);
+    }
+
+    /// 统计 `(player, skill, scope)` 已消费的次数（兼容 `skill` 首条与 `skill#N` 追加条，保持 NGSA 107 零变更）。
+    pub fn once_count(&self, player: PlayerId, scope: u8, skill: &str) -> usize {
+        let prefix = format!("{skill}#");
+        self.once
+            .iter()
+            .filter(|(p, k, sc)| {
+                *p == player
+                    && *sc == scope
+                    && (k == skill
+                        || k.strip_prefix(&prefix)
+                            .is_some_and(|r| !r.is_empty() && r.bytes().all(|b| b.is_ascii_digit())))
+            })
+            .count()
+    }
+
+    /// 递增 `(player, skill, scope)` 的消费次数（首条写 `skill`，后续写 `skill#2`、`skill#3` 等）。
+    pub fn inc_once(&mut self, player: PlayerId, scope: u8, skill: &str) {
+        let cur = self.once_count(player, scope, skill);
+        if cur == 0 {
+            self.once.insert((player, skill.to_string(), scope));
+        } else {
+            self.once
+                .insert((player, format!("{skill}#{}", cur + 1), scope));
+        }
     }
 
     /// 登记 `owner` 本次 VM 技能调用的预选牌列表（`CardId` 序列，存于 `flags` 以免污染实体 `piles`）。

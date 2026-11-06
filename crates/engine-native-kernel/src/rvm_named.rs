@@ -607,7 +607,9 @@ fn word(w: &str) -> Option<Vec<Seed>> {
         | "that" | "which" | "their" | "his" | "her" | "each" | "both" | "only" | "also"
         | "now" | "still" | "already" | "just" | "more" | "most" | "least" | "thanx"
         | "positive" | "exists" | "global" | "living" | "point" | "points" | "amount"
-        | "result" | "state" | "end" | "begin" | "ended" | "using" | "usedx" => vec![Seed::Skip],
+        | "result" | "state" | "end" | "begin" | "ended" | "using" | "usedx"
+        | "finished" | "started" | "resolved" | "slot" | "debate" | "winner" | "loser"
+        | "win" | "lose" | "won" => vec![Seed::Skip],
         "not" | "no" | "without" | "non" => vec![Seed::Not],
         "available" | "unused" | "untriggered" | "ready" => vec![Seed::Avail],
         "pending" | "assigned" | "armed" | "triggered" => vec![Seed::Pending],

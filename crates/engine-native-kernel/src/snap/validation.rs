@@ -344,7 +344,7 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
     }
     for &(seat, _, scope) in &core.vm_aux.once {
         check_pid(seat, b)?;
-        if !(1..=3).contains(&scope) {
+        if !(1..=4).contains(&scope) {
             return Err(oob("vm_aux_once_scope", scope as u64));
         }
     }

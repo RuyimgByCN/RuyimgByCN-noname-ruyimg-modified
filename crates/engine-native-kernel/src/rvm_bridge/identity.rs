@@ -42,14 +42,30 @@ impl VmFilterPolicy {
             OwnerSkillAddedSelf(_) => 43, OwnerTurnedOver => 44,
             OwnerBecameFaceUpOrLinked => 45, OwnerTurnChangedOrBecameLinked => 46,
             DrawPhaseSkipped { .. } => 47, GameStarted { .. } => 48,
+            EventViewAsSkill(_) => 49, PhaseAnySkipped { .. } => 50,
         };
         h.update(&[tag]);
         match self {
-            OwnerHpBelow(n) | OwnerPlayCountEq(n) | OwnerSourceTargetMarkPositive(n) | OwnerSkillAddedSelf(n) => { h.update(&n.to_le_bytes()); }
+            OwnerHpBelow(n)
+            | OwnerPlayCountEq(n)
+            | OwnerSourceTargetMarkPositive(n)
+            | OwnerSkillAddedSelf(n)
+            | EventViewAsSkill(n) => {
+                h.update(&n.to_le_bytes());
+            }
             AtPhase { phase, inner } => { h.update(&[*phase as u8]); inner.hash_semantics(h); }
-            DrawPhaseSkipped { inner } | GameStarted { inner } => inner.hash_semantics(h),
-            Declared { skill_def_id, hand_limit_base_max_hp, inner } => {
-                h.update(&skill_def_id.to_le_bytes()); h.update(&[u8::from(*hand_limit_base_max_hp)]); inner.hash_semantics(h);
+            DrawPhaseSkipped { inner } | GameStarted { inner } | PhaseAnySkipped { inner } => {
+                inner.hash_semantics(h);
+            }
+            Declared { skill_def_id, hand_limit_base_max_hp, modifiers, choice_actor, inner } => {
+                h.update(&skill_def_id.to_le_bytes());
+                h.update(&[u8::from(*hand_limit_base_max_hp), *choice_actor as u8]);
+                h.update(&(modifiers.len() as u64).to_le_bytes());
+                for m in modifiers {
+                    h.update(&[m.target as u8, m.mode as u8, m.selector.map_or(255, |s| s as u8)]);
+                    h.update(&m.value.to_le_bytes());
+                }
+                inner.hash_semantics(h);
             }
             Named(p) => p.hash_semantics(h),
             Handlers(set) => {
@@ -60,6 +76,10 @@ impl VmFilterPolicy {
                 h.update(&[
                     u8::from(l.once_per_turn),
                     u8::from(l.once_per_play_phase),
+                    u8::from(l.once_per_game),
+                    l.uses_per_turn.unwrap_or(0),
+                    l.uses_per_play_phase.unwrap_or(0),
+                    l.uses_per_turn_source.map_or(0, |s| s as u8 + 1),
                     u8::from(l.hand_nonempty),
                     u8::from(l.equip_nonempty),
                     u8::from(l.hand_gt_hp),
@@ -71,8 +91,18 @@ impl VmFilterPolicy {
                 ]);
                 h.update(&[u8::from(l.mark_at_least.is_some())]);
                 if let Some((mark, count)) = l.mark_at_least { h.update(&mark.to_le_bytes()); h.update(&count.to_le_bytes()); }
+                h.update(&(set.modifiers.len() as u64).to_le_bytes());
+                for m in &set.modifiers {
+                    h.update(&[m.target as u8, m.mode as u8, m.selector.map_or(255, |s| s as u8)]);
+                    h.update(&m.value.to_le_bytes());
+                }
                 h.update(&(set.triggers.len() as u64).to_le_bytes());
-                for trigger in &set.triggers { program(h, &trigger.program); hash_trigger_meta(h, &trigger.meta); trigger.filter.hash_semantics(h); }
+                for trigger in &set.triggers {
+                    program(h, &trigger.program);
+                    hash_trigger_meta(h, &trigger.meta);
+                    h.update(&[trigger.choice_actor as u8]);
+                    trigger.filter.hash_semantics(h);
+                }
             }
             _ => {}
         }

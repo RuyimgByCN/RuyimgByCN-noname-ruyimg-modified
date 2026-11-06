@@ -226,6 +226,14 @@ pub(super) fn play_card(
                         && !fentian_red_free
                         && !shenen_boss_free
                         && !shouyi_free
+                        && !crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                            core,
+                            catalog,
+                            from,
+                            card,
+                            CardKind::Snatch,
+                            crate::event::DamageNature::Normal,
+                        )
                         && core.computed_distance(catalog, from, target) > 1
                     {
                         return Err(RejectReason::IllegalTargets);
@@ -642,7 +650,15 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let user = core.turn.current;
-                    if core.computed_distance(catalog, user, t) > 1 {
+                    if !crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                        core,
+                        catalog,
+                        user,
+                        card,
+                        CardKind::Caoyao,
+                        crate::event::DamageNature::Normal,
+                    ) && core.computed_distance(catalog, user, t) > 1
+                    {
                         return Err(RejectReason::IllegalTargets);
                     }
                 }
@@ -660,6 +676,14 @@ pub(super) fn play_card(
                         return Err(RejectReason::IllegalTargets);
                     }
                     let p = core.player(user);
+                    if kind == CardKind::Tao
+                        && p.dying
+                        && crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
+                            core, catalog, user, user, card,
+                        )
+                    {
+                        return Err(RejectReason::IllegalTargets);
+                    }
                     // 护符（U05 swd 首切片，规则 v85）：仅濒死（自己进入
                     // 濒死流程）时可用；非濒死拒绝（上游 savable 守卫）
                     if kind == CardKind::Hufu && !p.dying {

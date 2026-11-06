@@ -19,11 +19,13 @@ use crate::state::{GameStateCore, SkillInstance};
 mod codec;
 pub use codec::*;
 mod codec_ext;
+mod codec_ext2;
 mod commit;
 pub use commit::*;
 mod commit_combat;
 mod commit_ext;
 mod commit_batch13;
+mod commit_batch14;
 mod query;
 pub use query::*;
 
@@ -695,6 +697,193 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             ok_player(*player, "DiscardEquipmentSlot.player")?;
             if !matches!(*slot, 1..=5) {
                 return Err(reject("DiscardEquipmentSlot.slot"));
+            }
+        }
+        // PA12 批⑭：25 种高频交互式效果校验（tags 129..=153）。
+        EffectRequest::ChooseOtherDrawOrRecover {
+            player,
+            draw_count,
+            recover_count,
+            times,
+            ..
+        } => {
+            ok_player(*player, "ChooseOtherDrawOrRecover.player")?;
+            if (*draw_count == 0 && *recover_count == 0) || *times == 0 {
+                return Err(reject("ChooseOtherDrawOrRecover.counts"));
+            }
+        }
+        EffectRequest::ChooseAddOrRemoveCurrentCardTarget { player, .. }
+        | EffectRequest::ChooseAddCurrentShaTarget { player, .. }
+        | EffectRequest::ChooseHandCompare { player, .. }
+        | EffectRequest::ChooseLinkOther { player, .. }
+        | EffectRequest::ChooseOtherDrawOwnerLostHpTurnOver { player, .. }
+        | EffectRequest::ChooseOneFromSkillPileDiscard { player, .. }
+        | EffectRequest::ChooseDiscardEquipmentPreventCurrentDamage { player, .. } => {
+            ok_player(*player, "Batch14.player")?;
+        }
+        EffectRequest::ChooseCompareSelectedHandCard { player, target, .. } => {
+            ok_player(*player, "ChooseCompareSelectedHandCard.player")?;
+            if target.is_some() {
+                ok_player(*target, "ChooseCompareSelectedHandCard.target")?;
+            }
+        }
+        EffectRequest::ChooseTargetsDamage {
+            player,
+            min_count,
+            max_count,
+            amount,
+            ..
+        } => {
+            ok_player(*player, "ChooseTargetsDamage.player")?;
+            if *max_count == 0
+                || *max_count < *min_count
+                || *amount == 0
+                || *amount > i32::MAX as u32
+            {
+                return Err(reject("ChooseTargetsDamage.args"));
+            }
+        }
+        EffectRequest::DrawThenGiveOne {
+            player,
+            target,
+            count,
+            drawn,
+            ..
+        } => {
+            ok_player(*player, "DrawThenGiveOne.player")?;
+            ok_player(*target, "DrawThenGiveOne.target")?;
+            if *count == 0 || drawn.iter().any(|c| !c.is_some()) {
+                return Err(reject("DrawThenGiveOne.args"));
+            }
+        }
+        EffectRequest::ChooseOptionalTargetsDraw {
+            player,
+            count,
+            max_count,
+            ..
+        } => {
+            ok_player(*player, "ChooseOptionalTargetsDraw.player")?;
+            if *count == 0 || *max_count == 0 {
+                return Err(reject("ChooseOptionalTargetsDraw.counts"));
+            }
+        }
+        EffectRequest::ChooseTargetsDraw {
+            player,
+            count,
+            target_count,
+            ..
+        } => {
+            ok_player(*player, "ChooseTargetsDraw.player")?;
+            if *count == 0 || *target_count == 0 {
+                return Err(reject("ChooseTargetsDraw.counts"));
+            }
+        }
+        EffectRequest::GuanxingTop {
+            player,
+            count,
+            round,
+            flipped,
+            top,
+            bottom,
+            ..
+        } => {
+            ok_player(*player, "GuanxingTop.player")?;
+            if *count == 0
+                || *round > 1
+                || flipped.iter().any(|c| !c.is_some())
+                || top.iter().any(|c| !c.is_some())
+                || bottom.iter().any(|c| !c.is_some())
+            {
+                return Err(reject("GuanxingTop.args"));
+            }
+        }
+        EffectRequest::ChooseAddCurrentShaTargetWithinDistance {
+            player,
+            max_distance,
+            ..
+        } => {
+            ok_player(*player, "ChooseAddCurrentShaTargetWithinDistance.player")?;
+            if *max_distance == 0 {
+                return Err(reject(
+                    "ChooseAddCurrentShaTargetWithinDistance.max_distance",
+                ));
+            }
+        }
+        EffectRequest::ChooseRecoverTarget {
+            chooser,
+            target,
+            amount,
+        } => {
+            ok_player(*chooser, "ChooseRecoverTarget.chooser")?;
+            ok_player(*target, "ChooseRecoverTarget.target")?;
+            if *amount == 0 || *amount > i32::MAX as u32 {
+                return Err(reject("ChooseRecoverTarget.amount"));
+            }
+        }
+        EffectRequest::ChooseTargetDrawToMaxHpCap { player, cap, .. } => {
+            ok_player(*player, "ChooseTargetDrawToMaxHpCap.player")?;
+            if *cap == 0 {
+                return Err(reject("ChooseTargetDrawToMaxHpCap.cap"));
+            }
+        }
+        EffectRequest::ChooseDiscardHandRange {
+            player, min, max, ..
+        } => {
+            ok_player(*player, "ChooseDiscardHandRange.player")?;
+            if *max == 0 || *max < *min {
+                return Err(reject("ChooseDiscardHandRange.range"));
+            }
+        }
+        EffectRequest::ChooseDiscardHandEquipThenRemoveSelfSkill { player, count, .. } => {
+            ok_player(*player, "ChooseDiscardHandEquipThenRemoveSelfSkill.player")?;
+            if *count == 0 {
+                return Err(reject("ChooseDiscardHandEquipThenRemoveSelfSkill.count"));
+            }
+        }
+        EffectRequest::ChooseHandCardsToSkillPile {
+            player,
+            min_count,
+            max_count,
+            ..
+        } => {
+            ok_player(*player, "ChooseHandCardsToSkillPile.player")?;
+            if *max_count == 0 || *max_count < *min_count {
+                return Err(reject("ChooseHandCardsToSkillPile.range"));
+            }
+        }
+        EffectRequest::ChooseGainDiscardCardByKind { player, kind, .. } => {
+            ok_player(*player, "ChooseGainDiscardCardByKind.player")?;
+            if *kind == 0 {
+                return Err(reject("ChooseGainDiscardCardByKind.kind"));
+            }
+        }
+        EffectRequest::ChooseAddMissingSkill {
+            player, skill_defs, ..
+        } => {
+            ok_player(*player, "ChooseAddMissingSkill.player")?;
+            if skill_defs.iter().all(|d| !d.is_some()) {
+                return Err(reject("ChooseAddMissingSkill.skill_defs"));
+            }
+        }
+        EffectRequest::ChooseMoveFieldCardTo { player, target, .. } => {
+            ok_player(*player, "ChooseMoveFieldCardTo.player")?;
+            ok_player(*target, "ChooseMoveFieldCardTo.target")?;
+        }
+        EffectRequest::JudgeMakeCurrentShaTargetUnrespondableOnRed { player, target, .. } => {
+            ok_player(*player, "JudgeMakeCurrentShaTargetUnrespondableOnRed.player")?;
+            if target.is_some() {
+                ok_player(*target, "JudgeMakeCurrentShaTargetUnrespondableOnRed.target")?;
+            }
+        }
+        EffectRequest::ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan { player, mark, .. } => {
+            ok_player(
+                *player,
+                "ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan.player",
+            )?;
+            if !mark.is_some() {
+                return Err(reject(
+                    "ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan.mark",
+                ));
             }
         }
         other => {

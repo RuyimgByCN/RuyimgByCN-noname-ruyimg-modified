@@ -259,6 +259,7 @@ pub struct VmBridgeOutcome {
 }
 
 mod vm_active;
+mod vm_modifiers;
 mod mechanisms;
 mod vm_generals;
 pub mod locked_content;
@@ -305,12 +306,7 @@ pub fn bridge_vm_skill_decls(
                 reason: format!("模块 {} 不在 npack modules 内", t.module),
             })?;
         vm_active::validate_entry(module, t.entry_pc, "trigger_index.entry_pc")?;
-        if !t.choice_actor.is_owner() {
-            return Err(invalid(
-                "trigger_index.choice_actor",
-                "non-owner confirmation is unsupported",
-            ));
-        }
+        let choice_actor = vm_active::map_choice_actor(t.choice_actor);
         // 阶段事件（PA12④ 对齐旧线语义）：旧线 `phase_X` = TurnStateChanged
         // 进入 X 阶段（`phase_end` = 进入结束阶段），`phase_X_end` =
         // PhaseEnded 离开 X 阶段；原生阶段帧按阶段逐一发 begin/end，故
@@ -359,7 +355,7 @@ pub fn bridge_vm_skill_decls(
             // Judge-begin 每回合一次近似，准备阶段加入后语义漂移（判定前多一
             // 阶段）；trigger_ctx_of 已补 TurnBegin 臂（0f04ba8f）。首回合缺帧
             // 仍登记（K22b 搁置，随迁移波合并）。
-            "phase_begin" => EventKind::TurnBegin,
+            "phase_begin" | "round_started" => EventKind::TurnBegin,
             // D02（A2，规则 333）：`phase_prepare`＝准备阶段开始——原生已有
             // 真实 Phase{Prepare, begin} 帧，解除拒装（73 包 732 处可用）。
             "phase_prepare" => {
@@ -370,46 +366,31 @@ pub fn bridge_vm_skill_decls(
             "sha_dodged" => EventKind::ShaDodged,
             "damage" => EventKind::Damage,
             "damage_before" => EventKind::DamageBefore,
-            "card_used" => EventKind::CardUsed,
-            // card_targeted：原生无独立 targeted 帧型，以 CardUsed+targets
-            // 表达（增量 17，登记差异）。
-            "card_targeted" => EventKind::CardUsed,
+            "card_used" | "card_targeted" => EventKind::CardUsed,
             "card_responded" => EventKind::CardResponded,
+            "card_resolved" | "sha_resolved" | "duel_resolved" | "debate_resolved"
+            | "debate_started" => EventKind::CardUsed,
             "cards_moved" => EventKind::CardsMoved,
-            // 给牌（NC04）：give_hand_card 共享原语发射的逐张帧。
             "cards_given" => EventKind::CardsGiven,
             "cards_drawn" => EventKind::CardsDrawn,
             "dying" => EventKind::Dying,
             "dying_after" => EventKind::DyingSaved,
             "death" => EventKind::Death,
-            // D06（A2，规则 333）：`turn_ended`＝整回合结束后（phaseAfter）
-            // → 整回合结束窗 phaseAfter 段（交接前派发；现有 TurnEnded 帧触
-            // 发窗晚于下一位回合开始子树，不等价）。
-            "turn_ended" => EventKind::TurnPhaseAfter,
-            // R05-E（裁决 28 合同 v3 §7）：三固定 compound 的包声明触发面
-            // 事件名（npack 数据面；DSL 词汇表随后续批次接入）——
-            // `damage_source`/`damage_end`＝避祸的认证 Source/End 窗；
-            // `draw_phase_after`＝涕泣的 D 终窗（主 draw 张数>0 时 D 机以
-            // R 子帧替代 End 窗发射，After 窗是恒发射的终窗）。
-            // R05-F 真包数据定案（xianding tiqi，对照上游 trigger
-            // global:[phaseDrawEnd,phaseDrawSkipped,phaseDrawCancelled]）：
-            // 上游三面在原生仅 After 一面可承载（End 窗 0 张时才发射、
-            // 与 After 并存会双发；Skipped 路径 D 帧直接 Intrinsic→Done 不
-            // 发窗、Cancelled 无发射点——两面为已登记语义缺口），故真包
-            // 只声明 `draw_phase_after`（packages/extensions/
-            // xianding-upstream-noname，机器内 live 读 D 帧 n）。
+            "turn_ended" | "round_ended" => EventKind::TurnPhaseAfter,
             "damage_source" => EventKind::DamageSource,
             "damage_end" => EventKind::DamageEnd,
-            "draw_phase_after" => EventKind::DrawPhaseAfter,
-            // 既有 SkillLog 通道的 begin 段（宝梳子结算近似面的可声明触发
-            // 窗——maxHp 改写类反例的落点，合同 v3 §5 Finding 4）。
+            "draw_phase_after" | "phase_draw_skipped" => EventKind::DrawPhaseAfter,
             "skill_log_begin" => EventKind::SkillLogBegin,
             "hp_lost" => EventKind::LoseHp,
             "hp_recovered" | "recover_before" => EventKind::Recover,
             "judgment_resolved" => EventKind::OrdinaryJudge,
-            "phase_draw_skipped" => EventKind::DrawPhaseAfter,
-            // PA12 批⑨：伤害被防止/归零（DamageCancelled + DamageZero 双窗）、
-            // 武将状态改变（TurnOvered + Linked 双窗）、获得技能（SkillToggled）。
+            "hand_compare_finished" | "hand_compare_started" => EventKind::CardsLost,
+            "max_hp_changed" => EventKind::LoseHp,
+            "equip_slot_disabled" => EventKind::CardsLost,
+            "phase_any_skipped" => {
+                extra_events.push(EventKind::PhaseEnd);
+                EventKind::DrawPhaseAfter
+            }
             "damage_prevented" => {
                 extra_events.push(EventKind::DamageZero);
                 EventKind::DamageCancelled
@@ -447,6 +428,10 @@ pub fn bridge_vm_skill_decls(
             engine_native::rvm_bridge::VmFilterPolicy::DrawPhaseSkipped {
                 inner: Box::new(filter),
             }
+        } else if t.event == "phase_any_skipped" {
+            engine_native::rvm_bridge::VmFilterPolicy::PhaseAnySkipped {
+                inner: Box::new(filter),
+            }
         } else if t.event == "game_started" {
             engine_native::rvm_bridge::VmFilterPolicy::GameStarted {
                 inner: Box::new(filter),
@@ -454,6 +439,12 @@ pub fn bridge_vm_skill_decls(
         } else {
             filter
         };
+        let modifiers = pkg
+            .modifier_index
+            .iter()
+            .filter(|m| m.skill_def_id == t.skill_def_id)
+            .filter_map(|m| vm_modifiers::compile_modifier_entry(pkg, m))
+            .collect();
         out.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,
             presentation_binding: None,
@@ -473,6 +464,8 @@ pub fn bridge_vm_skill_decls(
                 hand_limit_base_max_hp: pkg.modifier_index.iter().any(|m| {
                     m.skill_def_id == t.skill_def_id && m.target == "hand_limit_base_max_hp"
                 }),
+                choice_actor,
+                modifiers,
                 inner: Box::new(filter),
             },
             r05_identity: None,
@@ -486,7 +479,7 @@ pub fn bridge_vm_skill_decls(
     }
     vm_active::bridge_active_entries(pkg, &mut out)?;
     vm_active::join_trigger_only_entries(pkg, &mut out)?;
-    vm_active::bridge_modifier_only_entries(pkg, &mut out)?;
+    vm_modifiers::bridge_modifier_only_entries(pkg, &mut out)?;
     vm_active::derive_r05_helpers(pkg, &mut out)?;
     if !pkg.view_as_index.is_empty() {
         return Err(invalid(
@@ -497,7 +490,7 @@ pub fn bridge_vm_skill_decls(
     if pkg
         .modifier_index
         .iter()
-        .any(|m| !vm_active::is_supported_vm_modifier(pkg, m))
+        .any(|m| !vm_modifiers::is_supported_vm_modifier(pkg, m))
     {
         return Err(invalid(
             "modifier_index",

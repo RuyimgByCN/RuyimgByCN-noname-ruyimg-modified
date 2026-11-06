@@ -75,6 +75,22 @@ pub(super) fn is_tao_like(
     card: crate::ids::CardId,
     dying: PlayerId,
 ) -> bool {
+    if crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
+        ctx.core,
+        ctx.catalog,
+        responder,
+        dying,
+        card,
+    ) || crate::rvm_bridge::modifiers::eval_card_use_canceled(
+        ctx.core,
+        ctx.catalog,
+        responder,
+        card,
+        ctx.catalog.card_kind(card),
+        crate::event::DamageNature::Normal,
+    ) {
+        return false;
+    }
     if ctx.catalog.card_kind(card) == CardKind::Tao {
         // 覆泰2（规则 v214）：全场禁桃时真桃不可救
         return !tao_futai2_banned(ctx.core, ctx.catalog, responder);

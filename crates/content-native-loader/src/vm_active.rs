@@ -1,9 +1,189 @@
 //! Validate active declarations before joining them to their trigger handlers.
 use super::*;
 use engine_native::rvm_bridge::{
-    VmActiveLimits, VmFilterPolicy, VmHandlerSet, VmSkillProgram, VmTriggerProgram,
+    VmActiveLimits, VmActiveSelection, VmActiveTargets, VmChoiceActor, VmFilterPolicy,
+    VmHandlerSet, VmSelectionCardFilter, VmSelectionZone, VmSkillProgram, VmTargetFilter,
+    VmTriggerProgram, VmTurnUseSource,
 };
 use std::sync::Arc;
+
+fn map_selection_spec(
+    skill_name: &str,
+    active: &content_schema::PackageActiveEntry,
+) -> Result<Option<VmActiveSelection>, BridgeError> {
+    let Some(sel) = &active.selection else {
+        return Ok(None);
+    };
+    if sel.min == 0
+        || sel.max < sel.min
+        || sel.same_suit
+        || sel.same_color
+        || sel.distinct_suits
+        || sel.distinct_categories
+        || sel.unused_category_by_skill_this_play_phase
+        || sel.unused_category_by_owner_history_this_turn
+        || sel.sum_effective_number_exact.is_some()
+    {
+        return Err(invalid(
+            "active_index.selection",
+            format!("unsupported active selection for {skill_name}: {active:?}"),
+        ));
+    }
+    let zone = match sel.zone.as_str() {
+        "hand" => VmSelectionZone::Hand,
+        "hand_equip" => VmSelectionZone::HandEquip,
+        _ => {
+            return Err(invalid(
+                "active_index.selection.zone",
+                format!("unsupported active selection zone for {skill_name}: {}", sel.zone),
+            ));
+        }
+    };
+    let filter = match sel.filter.as_deref() {
+        None => None,
+        Some("card_sha" | "sha") => Some(VmSelectionCardFilter::CardSha),
+        Some("card_basic" | "basic") => Some(VmSelectionCardFilter::CardBasic),
+        Some("card_nonbasic" | "nonbasic" | "non_basic") => {
+            Some(VmSelectionCardFilter::CardNonBasic)
+        }
+        Some("card_equip" | "equip") => Some(VmSelectionCardFilter::CardEquip),
+        Some("card_non_equip" | "non_equip") => Some(VmSelectionCardFilter::CardNonEquip),
+        Some("card_armor" | "armor") => Some(VmSelectionCardFilter::CardArmor),
+        Some("card_red" | "red") => Some(VmSelectionCardFilter::CardRed),
+        Some("card_black" | "black") => Some(VmSelectionCardFilter::CardBlack),
+        Some("card_spade" | "spade") => Some(VmSelectionCardFilter::CardSpade),
+        Some("card_heart" | "heart") => Some(VmSelectionCardFilter::CardHeart),
+        Some("card_club" | "club") => Some(VmSelectionCardFilter::CardClub),
+        Some("card_diamond" | "diamond") => Some(VmSelectionCardFilter::CardDiamond),
+        Some(other) => {
+            return Err(invalid(
+                "active_index.selection.filter",
+                format!("unsupported active selection filter for {skill_name}: {other}"),
+            ));
+        }
+    };
+    Ok(Some(VmActiveSelection {
+        min_cards: sel.min,
+        max_cards: sel.max,
+        zone,
+        filter,
+        unique_category_in_turn: sel.unused_category_by_skill_this_turn,
+    }))
+}
+
+fn map_target_spec(
+    skill_name: &str,
+    active: &content_schema::PackageActiveEntry,
+) -> Result<(bool, Option<u8>, Option<VmActiveTargets>), BridgeError> {
+    let Some(targets) = &active.targets else {
+        return Ok((false, None, None));
+    };
+    if targets.min == 0 && targets.max == 0 {
+        if active.uses_per_turn.is_some_and(|n| n != 1) || active.uses_per_turn_source.is_some() {
+            return Err(invalid(
+                "active_index",
+                format!("unsupported active declaration for {skill_name}: {active:?}"),
+            ));
+        }
+        let mut plain = targets.clone();
+        plain.min = 0;
+        plain.max = 0;
+        plain.allow_self = targets.allow_self;
+        let expected: content_schema::PackageTargetSpec = serde_json::from_value(
+            serde_json::json!({"min":0,"max":0,"allow_self":targets.allow_self}),
+        )
+        .map_err(|e| invalid("active_index.targets", e.to_string()))?;
+        if plain != expected {
+            return Err(invalid(
+                "active_index.targets",
+                "unsupported target predicates",
+            ));
+        }
+        return Ok((false, None, None));
+    }
+    if targets.max == 0
+        || targets.max < targets.min
+        || targets.lowest_hp
+        || targets.highest_hp
+        || targets.max_by_owner_mark.is_some()
+        || targets.max_by_owner_lost_hp
+        || targets.max_by_owner_hp
+        || targets.hp_gt_owner
+        || targets.hp_lte_owner
+        || targets.pair_hand_difference_lte_three
+        || targets.hand_lt.is_some()
+        || targets.can_use_on_owner.is_some()
+        || targets.second_can_use_juedou_on_first
+        || targets.equipment_pair_with_armor
+        || targets.has_discardable_equip
+        || targets.has_gainable_equip
+        || targets.has_gainable_hand_equip
+        || targets.owner_in_target_attack_range
+        || targets.has_discardable_hand_equip
+        || targets.match_selected_card_count
+        || targets.selected_cards_match_target_equip_count
+        || (targets.linked && targets.unlinked)
+        || targets.hp_gt.is_some_and(|n| n != 0)
+    {
+        return Err(invalid(
+            "active_index.targets",
+            format!("unsupported target predicates for {skill_name}: {targets:?}"),
+        ));
+    }
+    let filter = VmTargetFilter {
+        other_only: !targets.allow_self,
+        wounded_only: targets.wounded,
+        hand_nonempty: targets.hand_nonempty || targets.can_compare,
+        equip_nonempty: targets.has_equip,
+        hand_equip_nonempty: targets.hand_equip_nonempty,
+        hand_equip_judge_nonempty: false,
+        within_attack_range: targets.in_attack_range,
+        hand_gt_owner: targets.hand_gt_owner,
+        hand_ge_owner: false,
+        hand_le_owner: targets.hand_lte_owner,
+        hp_ge_owner: targets.hp_at_least_owner,
+        hp_gt_zero: targets.hp_gt == Some(0),
+        max_hp_gt: targets.max_hp_gt,
+        same_group_with_owner: false,
+        different_group_from_owner: false,
+        male_only: targets.male,
+        female_only: false,
+        linked_only: targets.linked,
+        unlinked_only: targets.unlinked,
+        unique_in_turn: targets.unused_by_skill_this_turn,
+        unique_in_play_phase: targets.unused_by_skill_this_play_phase,
+    };
+    let is_legacy_single_other = targets.min == 1
+        && targets.max == 1
+        && !targets.allow_self
+        && !targets.unused_by_skill_this_turn
+        && !targets.unused_by_skill_this_play_phase
+        && filter
+            == VmTargetFilter {
+                other_only: true,
+                max_hp_gt: targets.max_hp_gt,
+                ..VmTargetFilter::default()
+            };
+    let target_max_hp_gt = if is_legacy_single_other {
+        targets.max_hp_gt
+    } else {
+        None
+    };
+    let vm_targets = Some(VmActiveTargets {
+        min_targets: targets.min,
+        max_targets: targets.max,
+        filter,
+    });
+    Ok((is_legacy_single_other, target_max_hp_gt, vm_targets))
+}
+
+pub(super) fn map_choice_actor(actor: content_schema::TriggerChoiceActor) -> VmChoiceActor {
+    match actor {
+        content_schema::TriggerChoiceActor::Owner => VmChoiceActor::Owner,
+        content_schema::TriggerChoiceActor::EventPlayer => VmChoiceActor::EventPlayer,
+        content_schema::TriggerChoiceActor::EventSource => VmChoiceActor::EventSource,
+    }
+}
 
 pub(super) fn bridge_active_entries(
     pkg: &content_schema::ContentPackage,
@@ -29,14 +209,11 @@ pub(super) fn bridge_active_entries(
             ));
         }
         if active.window != "play_phase"
-            || active.selection.is_some()
-            || active.uses_per_turn.is_some_and(|n| n != 1)
-            || active.uses_per_play_phase.is_some_and(|n| n != 1)
-            || active.uses_per_turn_source.is_some()
+            || active.uses_per_turn == Some(0)
+            || active.uses_per_play_phase == Some(0)
             || active.owner_missing_skill.is_some()
             || active.hand_limit_positive
             || active.hand_missing_gaintag.is_some()
-            || active.once_per_game
         {
             return Err(invalid(
                 "active_index",
@@ -46,41 +223,11 @@ pub(super) fn bridge_active_entries(
                 ),
             ));
         }
-        // Validate zero-target or 1-target `other` (with optional `max_hp_gt`) contracts.
-        let (target_other, target_max_hp_gt) = match &active.targets {
-            None => (false, None),
-            Some(targets) if targets.min == 0 && targets.max == 0 => {
-                let mut plain = targets.clone();
-                plain.min = 0;
-                plain.max = 0;
-                plain.allow_self = targets.allow_self;
-                let expected: content_schema::PackageTargetSpec = serde_json::from_value(
-                    serde_json::json!({"min":0,"max":0,"allow_self":targets.allow_self}),
-                )
-                .map_err(|e| invalid("active_index.targets", e.to_string()))?;
-                if plain != expected {
-                    return Err(invalid(
-                        "active_index.targets",
-                        "unsupported target predicates",
-                    ));
-                }
-                (false, None)
-            }
-            Some(targets) if targets.min == 1 && targets.max == 1 && !targets.allow_self => {
-                let mut plain = targets.clone();
-                plain.max_hp_gt = None;
-                let expected: content_schema::PackageTargetSpec = serde_json::from_value(
-                    serde_json::json!({"min":1,"max":1,"allow_self":false}),
-                )
-                .map_err(|e| invalid("active_index.targets", e.to_string()))?;
-                if plain != expected {
-                    return Err(invalid(
-                        "active_index.targets",
-                        "unsupported target predicates",
-                    ));
-                }
-                (true, targets.max_hp_gt)
-            }
+        let uses_per_turn_source = match active.uses_per_turn_source.as_deref() {
+            None => None,
+            Some("owner_hp") => Some(VmTurnUseSource::OwnerHp),
+            Some("owner_lost_hp_min_one") => Some(VmTurnUseSource::OwnerLostHpMinOne),
+            Some("living_rebel_count") => Some(VmTurnUseSource::LivingRebelCount),
             Some(_) => {
                 return Err(invalid(
                     "active_index",
@@ -91,6 +238,8 @@ pub(super) fn bridge_active_entries(
                 ));
             }
         };
+        let selection = map_selection_spec(&skill.name, active)?;
+        let (target_other, target_max_hp_gt, targets) = map_target_spec(&skill.name, active)?;
         let module = pkg
             .modules
             .iter()
@@ -144,6 +293,7 @@ pub(super) fn bridge_active_entries(
                 ),
                 meta: decl.trigger.clone(),
                 filter: decl.filter.clone(),
+                choice_actor: map_choice_actor(trigger.choice_actor),
             });
             remove.push(index);
         }
@@ -172,9 +322,14 @@ pub(super) fn bridge_active_entries(
                 }
             }
         }
+        let modifiers = super::vm_modifiers::compile_skill_modifiers(pkg, active.skill_def_id)?;
         let limits = VmActiveLimits {
             once_per_turn: active.uses_per_turn == Some(1),
             once_per_play_phase: active.uses_per_play_phase == Some(1),
+            once_per_game: active.once_per_game,
+            uses_per_turn: active.uses_per_turn,
+            uses_per_play_phase: active.uses_per_play_phase,
+            uses_per_turn_source,
             hand_nonempty: active.hand_nonempty,
             equip_nonempty: active.equip_nonempty,
             hand_gt_hp: active.hand_gt_hp,
@@ -184,6 +339,8 @@ pub(super) fn bridge_active_entries(
             mark_at_least: active.mark_at_least,
             target_other,
             target_max_hp_gt,
+            selection,
+            targets,
         };
         decls.push(engine_native::content::extension::VmSkillDecl {
             declaration_hash: None,
@@ -196,6 +353,7 @@ pub(super) fn bridge_active_entries(
                 active: Some(program),
                 limits,
                 triggers,
+                modifiers,
             })),
             r05_identity: None,
         });
@@ -275,6 +433,10 @@ pub(super) fn join_trigger_only_entries(
                     ));
                 }
             }
+            let choice_actor = match &decl.filter {
+                VmFilterPolicy::Declared { choice_actor, .. } => *choice_actor,
+                _ => VmChoiceActor::Owner,
+            };
             triggers.push(VmTriggerProgram {
                 program: Arc::new(
                     VmSkillProgram::new(decl.module.clone(), skill.name.clone())
@@ -282,6 +444,7 @@ pub(super) fn join_trigger_only_entries(
                 ),
                 meta: decl.trigger.clone(),
                 filter: decl.filter.clone(),
+                choice_actor,
             });
         }
         let mut decl = decls[indices[0]].clone();
@@ -297,12 +460,17 @@ pub(super) fn join_trigger_only_entries(
                 }
             }
         }
+        let modifiers = super::vm_modifiers::compile_skill_modifiers(pkg, skill.skill_def_id)?;
         decl.filter = VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
             skill_def_id: skill.skill_def_id,
             active: None,
             limits: VmActiveLimits {
                 once_per_turn: false,
                 once_per_play_phase: false,
+                once_per_game: false,
+                uses_per_turn: None,
+                uses_per_play_phase: None,
+                uses_per_turn_source: None,
                 hand_nonempty: false,
                 equip_nonempty: false,
                 hand_gt_hp: false,
@@ -312,133 +480,16 @@ pub(super) fn join_trigger_only_entries(
                 mark_at_least: None,
                 target_other: false,
                 target_max_hp_gt: None,
+                selection: None,
+                targets: None,
             },
             triggers,
+            modifiers,
         }));
         for index in indices.into_iter().rev() {
             decls.remove(index);
         }
         decls.push(decl);
-    }
-    Ok(())
-}
-
-pub(super) fn is_supported_vm_modifier(
-    pkg: &content_schema::ContentPackage,
-    m: &content_schema::PackageModifierEntry,
-) -> bool {
-    let has_active = pkg
-        .active_index
-        .iter()
-        .any(|a| a.skill_def_id == m.skill_def_id);
-    let has_trigger = pkg
-        .trigger_index
-        .iter()
-        .any(|t| t.skill_def_id == m.skill_def_id);
-    if m.target == "hand_limit_base_max_hp" {
-        return m.mode == "override"
-            && m.selector.is_none()
-            && m.value_source.is_none()
-            && m.value == 1
-            && !has_active
-            && has_trigger;
-    }
-    if m.skill_def_id == 2_754_298_115
-        && matches!(m.target.as_str(), "attack_range" | "sha_use_limit")
-    {
-        return m.mode == "add"
-            && m.selector.is_none()
-            && m.value_source.as_deref() == Some("owner_skill_mark")
-            && m.value == 1
-            && !has_active
-            && !has_trigger;
-    }
-    if m.skill_def_id == 3_219_705_664
-        && m.target == "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
-    {
-        return m.mode == "override"
-            && m.selector.is_none()
-            && m.value_source.is_none()
-            && m.value == 1
-            && !has_active
-            && !has_trigger;
-    }
-    false
-}
-
-/// Bridge pure modifier skills (`dcdichou_eff`, `yingba_mark`) into catalog entries.
-pub(super) fn bridge_modifier_only_entries(
-    pkg: &content_schema::ContentPackage,
-    decls: &mut Vec<engine_native::content::extension::VmSkillDecl>,
-) -> Result<(), BridgeError> {
-    for skill in &pkg.skill_index {
-        let has_active = pkg
-            .active_index
-            .iter()
-            .any(|a| a.skill_def_id == skill.skill_def_id);
-        let has_trigger = pkg
-            .trigger_index
-            .iter()
-            .any(|t| t.skill_def_id == skill.skill_def_id);
-        let has_modifier = pkg
-            .modifier_index
-            .iter()
-            .any(|m| m.skill_def_id == skill.skill_def_id);
-        if has_active || has_trigger || !has_modifier {
-            continue;
-        }
-        if skill.lord_only || skill.conversion || skill.non_gainable {
-            return Err(invalid(
-                "skill_index",
-                "modifier-only skill metadata is unsupported",
-            ));
-        }
-        let mod_name = format!("{}#modifier", skill.name);
-        let code = vec![0x01u8];
-        let module = engine_native::rvm_bridge::BytecodeModule {
-            logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
-                &mod_name, &code, 0, 0, 0,
-            ),
-            name: mod_name,
-            code,
-            local_count: 0,
-            max_stack: 1,
-            entry_pc: 0,
-            caps_mask: 0,
-        };
-        decls.push(engine_native::content::extension::VmSkillDecl {
-            declaration_hash: None,
-            presentation_binding: None,
-            name: skill.name.clone(),
-            module,
-            trigger: engine_native::catalog::TriggerMeta {
-                event: engine_native::event::EventKind::SkillToggled,
-                timing: engine_native::event::Timing::Normal,
-                priority: 0,
-                order_selectable: true,
-                optional: false,
-                extra_events: Vec::new(),
-            },
-            filter: VmFilterPolicy::Handlers(Arc::new(VmHandlerSet {
-                skill_def_id: skill.skill_def_id,
-                active: None,
-                limits: VmActiveLimits {
-                    once_per_turn: false,
-                    once_per_play_phase: false,
-                    hand_nonempty: false,
-                    equip_nonempty: false,
-                    hand_gt_hp: false,
-                    hand_gt_max_hp: false,
-                    face_up: false,
-                    owner_unlinked: false,
-                    mark_at_least: None,
-                    target_other: false,
-                    target_max_hp_gt: None,
-                },
-                triggers: Vec::new(),
-            })),
-            r05_identity: None,
-        });
     }
     Ok(())
 }
@@ -548,6 +599,10 @@ pub(super) fn derive_r05_helpers(
                         limits: VmActiveLimits {
                             once_per_turn: false,
                             once_per_play_phase: false,
+                            once_per_game: false,
+                            uses_per_turn: None,
+                            uses_per_play_phase: None,
+                            uses_per_turn_source: None,
                             hand_nonempty: false,
                             equip_nonempty: false,
                             hand_gt_hp: false,
@@ -557,8 +612,11 @@ pub(super) fn derive_r05_helpers(
                             mark_at_least: None,
                             target_other: false,
                             target_max_hp_gt: None,
+                            selection: None,
+                            targets: None,
                         },
                         triggers: Vec::new(),
+                        modifiers: Vec::new(),
                     })),
                     r05_identity: Some(engine_native::catalog::QualifiedSkillRef {
                         namespace: pkg.manifest.namespace.clone(),

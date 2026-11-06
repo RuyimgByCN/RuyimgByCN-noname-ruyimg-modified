@@ -15,7 +15,23 @@ pub(super) fn play_sha(
     let mut mark_huihuo = false;
     let mut mark_lingshi = false;
     let mut mark_dcdichou_eff = false;
+    let mut mark_vm_sha_extra = false;
     let player_id = core.turn.current;
+    let sha_nature = match kind {
+        CardKind::FireSha => crate::event::DamageNature::Fire,
+        CardKind::LeiSha => crate::event::DamageNature::Thunder,
+        _ => crate::event::DamageNature::Normal,
+    };
+    let (vm_sha_limit, vm_sha_unlimited) =
+        crate::rvm_bridge::modifiers::eval_sha_use_limit(
+            core,
+            catalog,
+            player_id,
+            Some(card),
+            kind,
+            sha_nature,
+            1,
+        );
     // 焚天（Boss 朱雀，规则 v236）：锁定——红色牌使用无
     // 次数限制且无距离限制（上游 mod cardUsable Infinity
     // + targetInRange=true 同口径）
@@ -121,9 +137,13 @@ pub(super) fn play_sha(
         && !baolei_sentinel
         && !fentian_red
         && !poyue_red_free
-        && core.turn.sha_used_play_phase
+        && !vm_sha_unlimited
+        && (core.turn.sha_used_play_phase || vm_sha_limit == 0)
         && !land_sha_bonus
     {
+        if vm_sha_limit == 0 {
+            return Err(RejectReason::ShaLimit);
+        }
         // 元宝肉（G1 古剑食物）：出牌阶段额外一张杀
         //（每回合一次；once_used 随回合开始重置）
         let extra = catalog
@@ -202,13 +222,22 @@ pub(super) fn play_sha(
                         .unwrap_or(0) as i32;
                     has_eff && bonus > used
                 };
-                if !lingshi_extra && !sbzhaxiang_extra && !dcdichou_eff_extra {
+                let vm_sha_extra_used = core
+                    .vm_aux
+                    .flags
+                    .get(&(core.turn.current, "vm_sha_extra_used".to_string()))
+                    .copied()
+                    .unwrap_or(0);
+                let vm_sha_extra = vm_sha_limit > 1 + vm_sha_extra_used;
+                if !lingshi_extra && !sbzhaxiang_extra && !dcdichou_eff_extra && !vm_sha_extra {
                     return Err(RejectReason::ShaLimit);
                 }
                 if lingshi_extra {
                     mark_lingshi = true;
                 } else if !sbzhaxiang_extra && dcdichou_eff_extra {
                     mark_dcdichou_eff = true;
+                } else if !sbzhaxiang_extra && vm_sha_extra {
+                    mark_vm_sha_extra = true;
                 }
             } else {
                 mark_huihuo = true;
@@ -311,7 +340,15 @@ pub(super) fn play_sha(
             .skill_by_name(crate::content::host::SWD_JIFENG_KEY)
             .map(|def| core.has_skill(player_id, def))
             .unwrap_or(false);
-    let max_targets = if tianxian_inf || kuangxiao_inf || jifeng_inf {
+    let vm_extra_targets = crate::rvm_bridge::modifiers::eval_sha_extra_targets(
+        core,
+        catalog,
+        player_id,
+        card,
+        kind,
+        sha_nature,
+    );
+    let max_targets = if tianxian_inf || kuangxiao_inf || jifeng_inf || vm_extra_targets >= 99 {
         usize::MAX
     } else {
         (if fangtian { 3 } else { 1 })
@@ -321,6 +358,7 @@ pub(super) fn play_sha(
             + u32::from(lianwu_extra) as usize
             + ljifeng_n as usize
             + u32::from(poxiao_extra) as usize
+            + vm_extra_targets
     };
     if targets.is_empty() || targets.len() > max_targets {
         return Err(RejectReason::IllegalTargets);
@@ -438,7 +476,15 @@ pub(super) fn play_sha(
                         || catalog
                             .skill_by_name(crate::content::standard::BOSS_SHOUYI)
                             .map(|def| core.has_skill(core.turn.current, def))
-                            .unwrap_or(false);
+                            .unwrap_or(false)
+                        || crate::rvm_bridge::modifiers::eval_card_distance_unlimited(
+                            core,
+                            catalog,
+                            player_id,
+                            card,
+                            kind,
+                            sha_nature,
+                        );
     // 诈降（L27 批 4）：已用牌数 < 已损失体力 → 用牌无距离限制
     let sbzhaxiang_free = catalog
         .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
@@ -524,6 +570,11 @@ pub(super) fn play_sha(
     }
     if mark_dcdichou_eff {
         let key = (player_id, "dcdichou_eff_sha_used".to_string());
+        let next = state.core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
+        state.core.vm_aux.flags.insert(key, next);
+    }
+    if mark_vm_sha_extra {
+        let key = (player_id, "vm_sha_extra_used".to_string());
         let next = state.core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
         state.core.vm_aux.flags.insert(key, next);
     }

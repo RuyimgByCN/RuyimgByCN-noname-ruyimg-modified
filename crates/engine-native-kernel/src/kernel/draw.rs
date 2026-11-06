@@ -64,6 +64,12 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 // pending 修正窗（§3）：宿主 phaseDrawBegin num± 表——与旧
                 // begin_draw 同口径逐项相加（有符号），执行入口统一 max(0)。
                 pending += host_pending_adjust(ctx, player);
+                pending = crate::rvm_bridge::modifiers::eval_draw_count(
+                    ctx.core,
+                    ctx.catalog,
+                    player,
+                    pending,
+                );
                 if let Some(bonus) = ctx
                     .core
                     .vm_aux

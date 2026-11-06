@@ -797,6 +797,23 @@ pub trait SkillBehavior: Send + Sync {
         None
     }
 
+    fn vm_modifiers(&self) -> &[crate::rvm_bridge::VmModifierRule] {
+        &[]
+    }
+
+    fn vm_active_limits(&self) -> Option<&crate::rvm_bridge::VmActiveLimits> {
+        None
+    }
+
+    fn confirmation_actor(
+        &self,
+        owner: crate::ids::PlayerId,
+        _event: &crate::event::EventData,
+        _kind: crate::event::EventKind,
+    ) -> crate::ids::PlayerId {
+        owner
+    }
+
     fn vm_module_is_authorized(&self, _bytes: &[u8]) -> bool {
         false
     }

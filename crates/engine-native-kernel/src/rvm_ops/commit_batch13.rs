@@ -418,7 +418,7 @@ pub(super) fn commit_batch13_effect(
         EffectRequest::ResolveDcdichou { .. } => {
             let _ = owner;
         }
-        _ => {}
+        _ => super::commit_batch14::commit_batch14_effect(ctx, executing, owner, seats, e),
     }
 }
 

@@ -631,7 +631,10 @@ pub fn validate_trigger_bindings(
                 def: *def,
                 order: (0, 0, 0, 0, *def),
             };
-            if *event != frame.data || !eligible(core, catalog, &q, &res.stack, frame) {
+            let actual_ev = crate::event::damage_event(&res.stack, frame);
+            if (*event != frame.data && event != actual_ev)
+                || !eligible(core, catalog, &q, &res.stack, frame)
+            {
                 return Err(bad());
             }
         }

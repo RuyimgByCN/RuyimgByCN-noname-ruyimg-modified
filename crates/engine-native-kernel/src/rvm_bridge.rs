@@ -32,8 +32,15 @@ mod handlers;
 mod identity;
 pub use identity::hash_trigger_meta;
 mod machine;
+pub mod modifiers;
 use context::{filter_view, kind_is_ordinary_trick, trigger_ctx_of, VmTriggerCtx};
-pub use handlers::{VmActiveLimits, VmHandlerSet, VmTriggerProgram};
+pub use handlers::{
+    VmActiveLimits, VmActiveSelection, VmActiveTargets, VmChoiceActor, VmHandlerSet,
+    VmSelectionCardFilter, VmSelectionZone, VmTargetFilter, VmTriggerProgram, VmTurnUseSource,
+};
+pub use modifiers::{
+    VmModifierMode, VmModifierRule, VmModifierSelector, VmModifierTarget, VmModifierValueSource,
+};
 
 /// 数据驱动的 VM 技能程序（扩展包声明携带；目录 def 的 behavior 持有）。
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -72,6 +79,8 @@ pub enum VmFilterPolicy {
     Declared {
         skill_def_id: u32,
         hand_limit_base_max_hp: bool,
+        modifiers: Vec<VmModifierRule>,
+        choice_actor: VmChoiceActor,
         inner: Box<VmFilterPolicy>,
     },
     /// DSL `owner_is_target`：事件主玩家=持有者。
@@ -219,6 +228,12 @@ pub enum VmFilterPolicy {
     GameStarted {
         inner: Box<VmFilterPolicy>,
     },
+    /// 转化牌来源技能门（PA12⑭）：`event_view_as_skill_<u32>`。
+    EventViewAsSkill(u32),
+    /// 任意阶段跳过门（PA12⑭）：`phase_any_skipped`。
+    PhaseAnySkipped {
+        inner: Box<VmFilterPolicy>,
+    },
 }
 
 /// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
@@ -290,6 +305,13 @@ pub fn map_vm_filter(name: &str) -> Option<VmFilterPolicy> {
     };
     if exact.is_some() {
         return exact;
+    }
+    if let Some(raw) = name
+        .strip_prefix("event_view_as_skill_")
+        .and_then(|v| v.parse::<u32>().ok())
+        .filter(|v| *v > 0)
+    {
+        return Some(VmFilterPolicy::EventViewAsSkill(raw));
     }
     if let Some(raw) = name
         .strip_prefix("owner_skill_added_self_")
@@ -450,6 +472,39 @@ impl SkillBehavior for VmSkillBehavior {
         }
     }
 
+    fn vm_modifiers(&self) -> &[VmModifierRule] {
+        match &self.filter {
+            VmFilterPolicy::Declared { modifiers, .. } => modifiers,
+            VmFilterPolicy::Handlers(set) => &set.modifiers,
+            _ => &[],
+        }
+    }
+
+    fn vm_active_limits(&self) -> Option<&VmActiveLimits> {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => Some(&set.limits),
+            _ => None,
+        }
+    }
+
+    fn confirmation_actor(
+        &self,
+        owner: PlayerId,
+        event: &EventData,
+        kind: EventKind,
+    ) -> PlayerId {
+        match &self.filter {
+            VmFilterPolicy::Declared { choice_actor, .. } => choice_actor.resolve(owner, event),
+            VmFilterPolicy::Handlers(set) => set
+                .triggers
+                .iter()
+                .find(|entry| entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
+                .or_else(|| set.triggers.first())
+                .map_or(owner, |entry| entry.choice_actor.resolve(owner, event)),
+            _ => owner,
+        }
+    }
+
     fn package_skill_id(&self) -> Option<u32> {
         match &self.filter {
             VmFilterPolicy::Handlers(set) => Some(set.skill_def_id),
@@ -509,6 +564,26 @@ impl SkillBehavior for VmSkillBehavior {
         }
         if let VmFilterPolicy::DrawPhaseSkipped { inner } = &self.filter {
             if !trig.draw_phase_skipped {
+                return false;
+            }
+            let gated = VmSkillBehavior {
+                program: self.program.clone(),
+                filter: (**inner).clone(),
+            };
+            return gated.filter(ctx, owner, event);
+        }
+        if let VmFilterPolicy::PhaseAnySkipped { inner } = &self.filter {
+            let skipped = trig.draw_phase_skipped
+                || trig.event_player.is_some_and(|p| {
+                    ctx.state
+                        .vm_aux
+                        .flags
+                        .get(&(p, "vm_skipped_phase_count".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0
+                });
+            if !skipped {
                 return false;
             }
             let gated = VmSkillBehavior {
@@ -839,9 +914,34 @@ impl SkillBehavior for VmSkillBehavior {
                         })
                 })
             }
+            VmFilterPolicy::EventViewAsSkill(raw) => {
+                let actor = trig.event_player.unwrap_or(owner);
+                let flag_raw = ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(actor, "event_view_as_skill".to_string()))
+                    .or_else(|| {
+                        ctx.state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "event_view_as_skill".to_string()))
+                    })
+                    .copied()
+                    .unwrap_or(0);
+                flag_raw != 0
+                    && (flag_raw == raw
+                        || ctx
+                            .catalog
+                            .skills
+                            .get(flag_raw as usize)
+                            .and_then(|d| d.behavior.package_skill_id())
+                            == Some(raw))
+            }
             // 阶段门已在函数头处理（递归评估 inner）；此处不可达，保守返回 false。
             VmFilterPolicy::AtPhase { .. }
             | VmFilterPolicy::DrawPhaseSkipped { .. }
+            | VmFilterPolicy::PhaseAnySkipped { .. }
             | VmFilterPolicy::GameStarted { .. }
             | VmFilterPolicy::Declared { .. } => false,
             VmFilterPolicy::Named(prog) => crate::rvm_named::eval_program(
@@ -901,10 +1001,16 @@ impl SkillBehavior for VmSkillBehavior {
             begin: true,
         };
         let mut machine = handlers::machine(active.clone(), &VmFilterPolicy::Always, owner, &event);
-        if set.limits.once_per_turn {
+        if set.limits.once_per_game {
+            machine.consume.push((String::new(), 3));
+        }
+        if set.limits.once_per_turn
+            || set.limits.uses_per_turn.is_some()
+            || set.limits.uses_per_turn_source.is_some()
+        {
             machine.consume.push((String::new(), 1));
         }
-        if set.limits.once_per_play_phase {
+        if set.limits.once_per_play_phase || set.limits.uses_per_play_phase.is_some() {
             machine.consume.push((String::new(), 4));
         }
         if set.limits.target_other {
@@ -979,147 +1085,6 @@ pub struct VmMachine {
     committing: bool,
 }
 
-/// 内核座位 ↔ rule-api id（1 基，NONE=0）。
-fn to_rule_pid(p: PlayerId) -> rule_api::PlayerId {
-    rule_api::PlayerId::new(p as u32 + 1)
-}
-
-/// 内核只读查询 + 排队效果的 VmHost 适配器。
-struct EngineVmHost<'a> {
-    ctx: HostContext,
-    /// 事件目标集（CardUsed 载荷；PA12 批③：HOST_EVENT_TARGET_COUNT 此前恒读
-    /// 默认空切片=0——旧线经 run_module_with_event_cards 传入同集）。
-    targets: Vec<u32>,
-    /// 事件关联卡牌集（PA12 批⑥ §2 I：HOST_EVENT_CARD_COUNT 此前恒读默认空
-    /// 切片=0——现从 CardsDrawn/CardsMoved/CardsDiscarded/CardsGiven/CardUsed/
-    /// CardResponded 派生）。
-    cards: Vec<u32>,
-    /// PA12 批⑫：预选牌集（供 `discard_selected`/`recast_selected`/`zhiheng` 等读取）。
-    selected_cards: Vec<u32>,
-    /// PA12 批⑫：预选目标集（1-based `rule_api::PlayerId` 裸值，供 `draw_selected_targets` 等读取）。
-    selected_targets: Vec<u32>,
-    seats: u8,
-    core: &'a crate::state::GameStateCore,
-    catalog: &'a crate::catalog::Catalog,
-    pending: &'a mut Vec<EffectRequest>,
-}
-
-impl VmHost for EngineVmHost<'_> {
-    fn capabilities(&self) -> &CapabilitySet {
-        // 标准技能能力面（emit/查询/选择申请）；选择挂起本增量未接。
-        static CAPS: std::sync::OnceLock<CapabilitySet> = std::sync::OnceLock::new();
-        CAPS.get_or_init(CapabilitySet::standard_skill)
-    }
-
-    fn context(&self) -> HostContext {
-        self.ctx
-    }
-
-    fn event_targets(&self) -> &[u32] {
-        &self.targets
-    }
-
-    fn event_cards(&self) -> &[u32] {
-        &self.cards
-    }
-
-    fn selected_cards(&self) -> &[u32] {
-        &self.selected_cards
-    }
-
-    fn selected_targets(&self) -> &[u32] {
-        &self.selected_targets
-    }
-
-    fn emit_effect(&mut self, mut req: EffectRequest) -> Result<(), HostTrap> {
-        match &mut req {
-            EffectRequest::ChooseGiveOrRecastOneHand { skill, .. }
-            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { skill, .. }
-            | EffectRequest::DrawEachBySeat { skill, .. }
-            | EffectRequest::DrawByPlayPhaseCardCategoryCount { skill, .. }
-            | EffectRequest::SetNonLockedSkillSuppression { skill, .. }
-            | EffectRequest::CancelIncomingCardUse { skill, .. }
-            | EffectRequest::StoreSelectedInSkillPile { skill, .. }
-            | EffectRequest::DrawSelectedTargets { skill, .. }
-            | EffectRequest::QueueExtraTurn { skill, .. }
-            | EffectRequest::GainShadowCards { skill, .. }
-            | EffectRequest::GainTargetHandCard { skill, .. }
-            | EffectRequest::GiveSelectedThenRecoverTarget { skill, .. }
-            | EffectRequest::DistributeShadowCards { skill, .. }
-            | EffectRequest::PlaceHandCardToExpansion { skill, .. }
-            | EffectRequest::RecordActiveTarget { skill, .. }
-            | EffectRequest::ClearPhaseGiftTarget { skill, .. }
-            | EffectRequest::DealDamageBanActiveIfDying { skill, .. }
-            | EffectRequest::DiscardSelectedDrawAllHandBonus { skill, .. }
-            | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { skill, .. }
-            | EffectRequest::RecoverSelectedTargets { skill, .. }
-            | EffectRequest::ChooseOtherDamage { skill, .. }
-            | EffectRequest::ChooseTargetDraw { skill, .. }
-            | EffectRequest::ChooseOtherAddMark { skill, .. }
-            | EffectRequest::ResolveHfjieying { skill, .. }
-            | EffectRequest::DiscardBasicDrawEqual { skill, .. }
-            | EffectRequest::ChooseOtherDiscardTargetCard { skill, .. }
-            | EffectRequest::ChooseOtherGiveOneHandEquip { skill, .. }
-            | EffectRequest::ResolveDcdichou { skill, .. }
-            | EffectRequest::RecordCurrentShaAllTargets { skill, .. }
-            | EffectRequest::RefreshSkill { skill }
-            | EffectRequest::AddFirstMissingSkill { skill, .. }
-                if !skill.is_some() && self.ctx.skill_id != 0 =>
-            {
-                *skill = rule_api::SkillId::new(self.ctx.skill_id);
-            }
-            EffectRequest::TakeOneHandCard { from, .. }
-            | EffectRequest::TakeOneScopedCard { from, .. }
-                if !from.is_some() =>
-            {
-                let Some(counterpart) = self
-                    .targets
-                    .first()
-                    .copied()
-                    .or_else(|| (self.ctx.event_player != 0).then_some(self.ctx.event_player))
-                    .or_else(|| (self.ctx.event_source != 0).then_some(self.ctx.event_source))
-                else {
-                    return Err(HostTrap::InvalidRequest {
-                        message: "event has no counterpart".into(),
-                    });
-                };
-                *from = rule_api::PlayerId::new(counterpart);
-            }
-            _ => {}
-        }
-        match &req {
-            EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
-            | EffectRequest::ResolveOlJieDanshou { player, skill }
-            // R05-E：三 compound 同款 owner/skill 绑定检查。
-            | EffectRequest::ResolveTiqi { player, skill }
-            | EffectRequest::ResolveBaoshu { player, skill }
-            | EffectRequest::ResolveDcbihuo { player, skill }
-            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
-                player,
-                skill,
-                ..
-            } if player.raw() != self.ctx.self_id || skill.raw() != self.ctx.skill_id => {
-                return Err(HostTrap::InvalidRequest {
-                    message: "VM composite effect owner/skill mismatch".to_string(),
-                });
-            }
-            _ => {}
-        }
-        crate::rvm_ops::accept_effect(&req, self.seats)?;
-        self.pending.push(req);
-        Ok(())
-    }
-
-    fn run_query(&mut self, req: QueryRequest) -> Result<QueryResponse, HostTrap> {
-        crate::rvm_ops::run_query(
-            self.core,
-            self.catalog,
-            self.seats,
-            (self.ctx.self_id - 1) as u8,
-            req,
-        )
-    }
-}
-
 #[cfg(test)]
 mod damage_context_tests;
+

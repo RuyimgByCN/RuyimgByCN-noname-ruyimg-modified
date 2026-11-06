@@ -322,7 +322,7 @@ impl VmMachine {
                 .iter()
                 .map(|t| to_rule_pid(*t).raw())
                 .collect::<Vec<_>>();
-            let selected_cards = ctx.core.vm_aux.selected_cards(self.owner);
+            let mut selected_cards = ctx.core.vm_aux.selected_cards(self.owner);
             let mut selected_targets = ctx.core.vm_aux.selected_targets(self.owner);
             if selected_targets.is_empty() {
                 if let Some(&at) = ctx
@@ -353,6 +353,56 @@ impl VmMachine {
                     ..
                 }
             ) {
+                let active_limits = ctx
+                    .catalog
+                    .skill_by_name(&self.program.skill_name)
+                    .and_then(|def| ctx.catalog.skills[def as usize].behavior.vm_active_limits());
+                if let Some(sel) = active_limits.and_then(|l| l.selection) {
+                    let cand = sel.candidate_cards(
+                        ctx.core,
+                        ctx.catalog,
+                        self.owner,
+                        &self.program.skill_name,
+                    );
+                    selected_cards.retain(|c| cand.contains(c));
+                    for c in &cand {
+                        if selected_cards.len() >= sel.min_cards as usize {
+                            break;
+                        }
+                        if !selected_cards.contains(c) {
+                            selected_cards.push(*c);
+                        }
+                    }
+                    selected_cards.truncate(sel.max_cards as usize);
+                }
+                if let Some(tgts) = active_limits.and_then(|l| l.targets) {
+                    let cand = tgts.candidate_targets(
+                        ctx.core,
+                        ctx.catalog,
+                        self.owner,
+                        &self.program.skill_name,
+                    );
+                    let mut valid_raw = Vec::new();
+                    for raw in selected_targets {
+                        if let Some(q) = crate::rvm_ops::seat_of(rule_api::PlayerId::new(raw), seats)
+                        {
+                            if cand.contains(&q) && !valid_raw.contains(&raw) {
+                                valid_raw.push(raw);
+                            }
+                        }
+                    }
+                    for q in cand {
+                        if valid_raw.len() >= tgts.min_targets as usize {
+                            break;
+                        }
+                        let raw = to_rule_pid(q).raw();
+                        if !valid_raw.contains(&raw) {
+                            valid_raw.push(raw);
+                        }
+                    }
+                    valid_raw.truncate(tgts.max_targets as usize);
+                    selected_targets = valid_raw;
+                }
                 let max_hp_gt = self
                     .consume
                     .iter()
@@ -486,8 +536,10 @@ impl VmMachine {
                 pending: &mut self.pending_effects,
             };
             let mut vm = RuleVm::new();
-            f(&mut vm, &mut host)
+            let res = f(&mut vm, &mut host);
+            (res, host.selected_cards, host.selected_targets)
         };
+        let (outcome, final_selected_cards, final_selected_targets) = outcome;
         match outcome {
             Ok(ExecResult::Halted { .. }) => {
                 self.committing = true;
@@ -500,7 +552,32 @@ impl VmMachine {
                     } else {
                         key.clone()
                     };
-                    ctx.core.vm_aux.once.insert((self.owner, k, *scope));
+                    ctx.core.vm_aux.inc_once(self.owner, *scope, &k);
+                }
+                if matches!(
+                    self.event,
+                    EventData::Phase {
+                        phase: crate::event::Phase::Play,
+                        begin: true,
+                        ..
+                    }
+                ) {
+                    if let Some(limits) = ctx
+                        .catalog
+                        .skill_by_name(&self.program.skill_name)
+                        .and_then(|def| ctx.catalog.skills[def as usize].behavior.vm_active_limits())
+                        .cloned()
+                    {
+                        limits.record_active_halt(
+                            ctx.core,
+                            ctx.catalog,
+                            self.owner,
+                            &self.program.skill_name,
+                            &final_selected_cards,
+                            &final_selected_targets,
+                            seats,
+                        );
+                    }
                 }
                 if self.count_hits && matches!(self.trig.kind, 1 | 2) {
                     *ctx.core
@@ -722,3 +799,170 @@ pub(super) fn discard_picked(
     crate::rvm_ops::discard_some(ctx, player, picked);
     true
 }
+
+/// 内核座位 ↔ rule-api id（1 基，NONE=0）。
+pub(super) fn to_rule_pid(p: PlayerId) -> rule_api::PlayerId {
+    rule_api::PlayerId::new(p as u32 + 1)
+}
+
+/// 内核只读查询 + 排队效果的 VmHost 适配器。
+pub(super) struct EngineVmHost<'a> {
+    pub(super) ctx: HostContext,
+    /// 事件目标集（CardUsed 载荷；PA12 批③：HOST_EVENT_TARGET_COUNT 此前恒读
+    /// 默认空切片=0——旧线经 run_module_with_event_cards 传入同集）。
+    pub(super) targets: Vec<u32>,
+    /// 事件关联卡牌集（PA12 批⑥ §2 I：HOST_EVENT_CARD_COUNT 此前恒读默认空
+    /// 切片=0——现从 CardsDrawn/CardsMoved/CardsDiscarded/CardsGiven/CardUsed/
+    /// CardResponded 派生）。
+    pub(super) cards: Vec<u32>,
+    /// PA12 批⑫：预选牌集（供 `discard_selected`/`recast_selected`/`zhiheng` 等读取）。
+    pub(super) selected_cards: Vec<u32>,
+    /// PA12 批⑫：预选目标集（1-based `rule_api::PlayerId` 裸值，供 `draw_selected_targets` 等读取）。
+    pub(super) selected_targets: Vec<u32>,
+    pub(super) seats: u8,
+    pub(super) core: &'a crate::state::GameStateCore,
+    pub(super) catalog: &'a crate::catalog::Catalog,
+    pub(super) pending: &'a mut Vec<EffectRequest>,
+}
+
+impl VmHost for EngineVmHost<'_> {
+    fn capabilities(&self) -> &CapabilitySet {
+        // 标准技能能力面（emit/查询/选择申请）；选择挂起本增量未接。
+        static CAPS: std::sync::OnceLock<CapabilitySet> = std::sync::OnceLock::new();
+        CAPS.get_or_init(CapabilitySet::standard_skill)
+    }
+
+    fn context(&self) -> HostContext {
+        self.ctx
+    }
+
+    fn event_targets(&self) -> &[u32] {
+        &self.targets
+    }
+
+    fn event_cards(&self) -> &[u32] {
+        &self.cards
+    }
+
+    fn selected_cards(&self) -> &[u32] {
+        &self.selected_cards
+    }
+
+    fn selected_targets(&self) -> &[u32] {
+        &self.selected_targets
+    }
+
+    fn emit_effect(&mut self, mut req: EffectRequest) -> Result<(), HostTrap> {
+        match &mut req {
+            EffectRequest::ChooseGiveOrRecastOneHand { skill, .. }
+            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw { skill, .. }
+            | EffectRequest::DrawEachBySeat { skill, .. }
+            | EffectRequest::DrawByPlayPhaseCardCategoryCount { skill, .. }
+            | EffectRequest::SetNonLockedSkillSuppression { skill, .. }
+            | EffectRequest::CancelIncomingCardUse { skill, .. }
+            | EffectRequest::StoreSelectedInSkillPile { skill, .. }
+            | EffectRequest::DrawSelectedTargets { skill, .. }
+            | EffectRequest::QueueExtraTurn { skill, .. }
+            | EffectRequest::GainShadowCards { skill, .. }
+            | EffectRequest::GainTargetHandCard { skill, .. }
+            | EffectRequest::GiveSelectedThenRecoverTarget { skill, .. }
+            | EffectRequest::DistributeShadowCards { skill, .. }
+            | EffectRequest::PlaceHandCardToExpansion { skill, .. }
+            | EffectRequest::RecordActiveTarget { skill, .. }
+            | EffectRequest::ClearPhaseGiftTarget { skill, .. }
+            | EffectRequest::DealDamageBanActiveIfDying { skill, .. }
+            | EffectRequest::DiscardSelectedDrawAllHandBonus { skill, .. }
+            | EffectRequest::DiscardSelectedRecordUniqueCategoryTarget { skill, .. }
+            | EffectRequest::RecoverSelectedTargets { skill, .. }
+            | EffectRequest::ChooseOtherDamage { skill, .. }
+            | EffectRequest::ChooseTargetDraw { skill, .. }
+            | EffectRequest::ChooseOtherAddMark { skill, .. }
+            | EffectRequest::ResolveHfjieying { skill, .. }
+            | EffectRequest::DiscardBasicDrawEqual { skill, .. }
+            | EffectRequest::ChooseOtherDiscardTargetCard { skill, .. }
+            | EffectRequest::ChooseOtherGiveOneHandEquip { skill, .. }
+            | EffectRequest::ResolveDcdichou { skill, .. }
+            | EffectRequest::RecordCurrentShaAllTargets { skill, .. }
+            | EffectRequest::RefreshSkill { skill }
+            | EffectRequest::AddFirstMissingSkill { skill, .. }
+            | EffectRequest::ChooseOtherDrawOrRecover { skill, .. }
+            | EffectRequest::ChooseAddOrRemoveCurrentCardTarget { skill, .. }
+            | EffectRequest::ChooseCompareSelectedHandCard { skill, .. }
+            | EffectRequest::ChooseTargetsDamage { skill, .. }
+            | EffectRequest::ChooseAddCurrentShaTarget { skill, .. }
+            | EffectRequest::DrawThenGiveOne { skill, .. }
+            | EffectRequest::ChooseHandCompare { skill, .. }
+            | EffectRequest::ChooseOptionalTargetsDraw { skill, .. }
+            | EffectRequest::ChooseTargetsDraw { skill, .. }
+            | EffectRequest::GuanxingTop { skill, .. }
+            | EffectRequest::ChooseLinkOther { skill, .. }
+            | EffectRequest::ChooseOtherDrawOwnerLostHpTurnOver { skill, .. }
+            | EffectRequest::ChooseOneFromSkillPileDiscard { skill, .. }
+            | EffectRequest::ChooseAddCurrentShaTargetWithinDistance { skill, .. }
+            | EffectRequest::ChooseTargetDrawToMaxHpCap { skill, .. }
+            | EffectRequest::ChooseDiscardHandRange { skill, .. }
+            | EffectRequest::ChooseDiscardHandEquipThenRemoveSelfSkill { skill, .. }
+            | EffectRequest::ChooseHandCardsToSkillPile { skill, .. }
+            | EffectRequest::ChooseDiscardEquipmentPreventCurrentDamage { skill, .. }
+            | EffectRequest::ChooseGainDiscardCardByKind { skill, .. }
+            | EffectRequest::ChooseAddMissingSkill { skill, .. }
+            | EffectRequest::ChooseMoveFieldCardTo { skill, .. }
+            | EffectRequest::JudgeMakeCurrentShaTargetUnrespondableOnRed { skill, .. }
+            | EffectRequest::ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan { skill, .. }
+                if !skill.is_some() && self.ctx.skill_id != 0 =>
+            {
+                *skill = rule_api::SkillId::new(self.ctx.skill_id);
+            }
+            EffectRequest::TakeOneHandCard { from, .. }
+            | EffectRequest::TakeOneScopedCard { from, .. }
+                if !from.is_some() =>
+            {
+                let Some(counterpart) = self
+                    .targets
+                    .first()
+                    .copied()
+                    .or_else(|| (self.ctx.event_player != 0).then_some(self.ctx.event_player))
+                    .or_else(|| (self.ctx.event_source != 0).then_some(self.ctx.event_source))
+                else {
+                    return Err(HostTrap::InvalidRequest {
+                        message: "event has no counterpart".into(),
+                    });
+                };
+                *from = rule_api::PlayerId::new(counterpart);
+            }
+            _ => {}
+        }
+        match &req {
+            EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
+            | EffectRequest::ResolveOlJieDanshou { player, skill }
+            // R05-E：三 compound 同款 owner/skill 绑定检查。
+            | EffectRequest::ResolveTiqi { player, skill }
+            | EffectRequest::ResolveBaoshu { player, skill }
+            | EffectRequest::ResolveDcbihuo { player, skill }
+            | EffectRequest::ChooseOtherTargetsBySkippedPhaseCountDamageDraw {
+                player,
+                skill,
+                ..
+            } if player.raw() != self.ctx.self_id || skill.raw() != self.ctx.skill_id => {
+                return Err(HostTrap::InvalidRequest {
+                    message: "VM composite effect owner/skill mismatch".to_string(),
+                });
+            }
+            _ => {}
+        }
+        crate::rvm_ops::accept_effect(&req, self.seats)?;
+        self.pending.push(req);
+        Ok(())
+    }
+
+    fn run_query(&mut self, req: QueryRequest) -> Result<QueryResponse, HostTrap> {
+        crate::rvm_ops::run_query(
+            self.core,
+            self.catalog,
+            self.seats,
+            (self.ctx.self_id - 1) as u8,
+            req,
+        )
+    }
+}
+

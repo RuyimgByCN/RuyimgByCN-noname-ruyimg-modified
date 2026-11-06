@@ -370,9 +370,10 @@ pub fn active_ask(
         MachineSnapshot::Death { .. } => None,
         MachineSnapshot::OptionalGate {
             owner,
+            def,
+            event,
             asked,
             inner,
-            ..
         } => {
             if let Some(e) = inner {
                 let mut ask = active_ask(e, core, catalog)?;
@@ -382,7 +383,10 @@ pub fn active_ask(
             if !*asked {
                 return None;
             }
-            let mut ask = confirm_ask(*owner, "trigger_confirm");
+            let mut ask = confirm_ask(
+                catalog.skills[*def as usize].behavior.confirmation_actor(*owner, event, event.kind()),
+                "trigger_confirm",
+            );
             ask.source_skill = optional_source(machine, catalog);
             Some(ask)
         }

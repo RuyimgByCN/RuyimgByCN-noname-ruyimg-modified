@@ -318,11 +318,19 @@ impl SkillMachine for OptionalGate {
             return Flow::Done;
         }
         let kind = trigger_order::event_kind(frame);
-        self.event = frame.data.clone();
+        let actual_ev = crate::event::damage_event(&ctx.res.stack, frame);
+        let observer = ctx.catalog.skills[self.def as usize]
+            .behavior
+            .confirmation_actor(self.owner, actual_ev, kind);
+        self.event = if observer != self.owner {
+            actual_ev.clone()
+        } else {
+            frame.data.clone()
+        };
         if !self.asked {
             self.asked = true;
             return Flow::WaitChoice {
-                observer: self.owner,
+                observer,
                 spec: crate::choice::ChoiceSpec::confirm("trigger_confirm"),
             };
         }
@@ -752,7 +760,6 @@ fn start_queued_trigger(
         return;
     };
     let qt = res.frame_mut(frame_id).expect("frame").queue.remove(index);
-    let event = res.frame(frame_id).expect("frame").data.clone();
     let actual_event =
         crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
     if !trigger_order::eligible(
@@ -772,10 +779,15 @@ fn start_queued_trigger(
         .or(def.trigger.as_ref())
         .expect("eligible meta");
     let machine: Box<dyn SkillMachine> = if meta.optional {
+        let ev = if def.behavior.confirmation_actor(qt.owner, &actual_event, kind) != qt.owner {
+            actual_event
+        } else {
+            res.frame(frame_id).expect("frame").data.clone()
+        };
         Box::new(OptionalGate {
             owner: qt.owner,
             def: qt.def,
-            event,
+            event: ev,
             asked: false,
             inner: None,
         })

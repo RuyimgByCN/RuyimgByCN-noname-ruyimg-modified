@@ -108,10 +108,11 @@ fn shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_n
     let error = content_native_loader::bridge_vm_skill_decls(&new)
         .unwrap_err()
         .to_string();
-    // A2 D02（R05 `phase_prepare` 真实化）与 PA12 批⑬（UP37 R01/R06 `game_started`
-    // 真实化）后，完整包的拒装锚推进至首个仍未映射的 `sha_resolved`。
+    // A2 D02（R05 `phase_prepare` 真实化）、PA12 批⑬（UP37 R01/R06 `game_started`
+    // 真实化）与 PA12 批⑭（`sha_resolved` 等剩余 12 项触发事件名映射）后，
+    // `shiji` 整包 `trigger_index` 全部通过，拒装锚推进至 `active_index.selection`（`shameng`）。
     assert!(
-        error.contains("sha_resolved"),
+        error.contains("shameng"),
         "the complete package remains explicitly unsupported: {error}"
     );
 }

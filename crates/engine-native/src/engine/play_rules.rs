@@ -483,6 +483,28 @@ pub(super) fn check_play_target_restrictions(
             }
         }
     }
+    // PA12 批⑭：通用 VM modifier 卡牌使用禁限与目标免疫校验
+    {
+        let (kind, _) = play_kind(core, catalog, card);
+        let nature = match kind {
+            CardKind::FireSha => crate::event::DamageNature::Fire,
+            CardKind::LeiSha => crate::event::DamageNature::Thunder,
+            _ => crate::event::DamageNature::Normal,
+        };
+        let user = core.turn.current;
+        if crate::rvm_bridge::modifiers::eval_card_use_canceled(
+            core, catalog, user, card, kind, nature,
+        ) {
+            return Err(RejectReason::CardLimit);
+        }
+        for &t in targets {
+            if crate::rvm_bridge::modifiers::eval_card_target_canceled(
+                core, catalog, user, t, card, kind, nature,
+            ) {
+                return Err(RejectReason::IllegalTargets);
+            }
+        }
+    }
     Ok(())
 }
 
