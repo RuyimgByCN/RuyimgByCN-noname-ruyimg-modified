@@ -204,6 +204,11 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         | EffectRequest::RestoreCharacterState { player }
         | EffectRequest::EquipWeaponFromDrawPile { player }
         | EffectRequest::QueueOpeningExtraPlayPhase { player, .. }
+        | EffectRequest::AdjustHandTo { player, .. }
+        | EffectRequest::DrawByPlayPhaseCardCategoryCount { player, .. }
+        | EffectRequest::SetDrawPhaseFromBottom { player }
+        | EffectRequest::SetNonLockedSkillSuppression { player, .. }
+        | EffectRequest::SuppressNonLockedSkillsUntilTurnEnd { player }
         | EffectRequest::RevealHand { player }
         | EffectRequest::GainEquipmentFromDrawPile { player }
         | EffectRequest::GainEventCards { player, .. }
@@ -224,6 +229,59 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
         | EffectRequest::GainWholeSkillPile { player, .. }
         | EffectRequest::StoreEventCardInSkillPile { player, .. } => {
             ok_player(*player, "player")?;
+        }
+        EffectRequest::DrawEachBySeat {
+            first,
+            second,
+            count,
+            ..
+        } => {
+            ok_player(*first, "DrawEachBySeat.first")?;
+            ok_player(*second, "DrawEachBySeat.second")?;
+            if *count == 0 {
+                return Err(reject("DrawEachBySeat.count"));
+            }
+        }
+        EffectRequest::DrawCardsFromBottom { player, count } => {
+            ok_player(*player, "DrawCardsFromBottom.player")?;
+            if *count == 0 {
+                return Err(reject("DrawCardsFromBottom.count"));
+            }
+        }
+        EffectRequest::CancelIncomingCardUse {
+            player,
+            source,
+            card,
+            ..
+        } => {
+            ok_player(*player, "CancelIncomingCardUse.player")?;
+            ok_player(*source, "CancelIncomingCardUse.source")?;
+            if !card.is_some() {
+                return Err(reject("CancelIncomingCardUse.card"));
+            }
+        }
+        EffectRequest::ExcludeSavedShaTarget { card, target } => {
+            ok_player(*target, "ExcludeSavedShaTarget.target")?;
+            if !card.is_some() {
+                return Err(reject("ExcludeSavedShaTarget.card"));
+            }
+        }
+        EffectRequest::TakeOneCard { from, to, .. }
+        | EffectRequest::TakeOneHandCard { from, to } => {
+            ok_player(*from, "TakeOneCard.from")?;
+            ok_player(*to, "TakeOneCard.to")?;
+        }
+        EffectRequest::DisableSkillByDefUntilTurnEnd { player, skill_def } => {
+            ok_player(*player, "DisableSkillByDefUntilTurnEnd.player")?;
+            if !skill_def.is_some() {
+                return Err(reject("DisableSkillByDefUntilTurnEnd.skill_def"));
+            }
+        }
+        EffectRequest::BanActiveUntilTurnEnd { player, skill } => {
+            ok_player(*player, "BanActiveUntilTurnEnd.player")?;
+            if !skill.is_some() {
+                return Err(reject("BanActiveUntilTurnEnd.skill"));
+            }
         }
         EffectRequest::DrawLinkedPlayers { count } => {
             if *count == 0 {

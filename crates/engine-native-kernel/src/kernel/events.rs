@@ -683,6 +683,36 @@ pub(super) fn record_vm_history(ctx: &mut Ctx<'_>, data: &EventData) {
         EventData::CardsDrawn { player, cards } => {
             *ctx.core.vm_aux.drawn.entry(*player).or_default() += cards.len() as u32;
         }
+        EventData::CardUsed(u)
+            if ctx.core.turn.phase == Phase::Play && u.player == ctx.core.turn.current =>
+        {
+            let effective = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+            let bit = if effective.is_basic_kind() {
+                1u32
+            } else if effective.equip_slot().is_some() {
+                4u32
+            } else if effective.is_basic_trick_or_equip() {
+                2u32
+            } else {
+                0u32
+            };
+            if bit != 0 {
+                *ctx.core
+                    .vm_aux
+                    .flags
+                    .entry((u.player, "play_cat_mask".to_string()))
+                    .or_insert(0) |= bit;
+            }
+        }
+        EventData::Equipped { player, .. }
+            if ctx.core.turn.phase == Phase::Play && *player == ctx.core.turn.current =>
+        {
+            *ctx.core
+                .vm_aux
+                .flags
+                .entry((*player, "play_cat_mask".to_string()))
+                .or_insert(0) |= 4;
+        }
         _ => {}
     }
 }

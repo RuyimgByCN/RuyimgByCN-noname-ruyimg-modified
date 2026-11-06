@@ -281,6 +281,22 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
 }
 
 pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
+    let disabled_turn: Vec<(u8, u16)> = ctx
+        .core
+        .vm_aux
+        .flags
+        .keys()
+        .filter_map(|(p, k)| {
+            k.strip_prefix("skill_disabled_turn:")
+                .and_then(|d| d.parse::<u16>().ok())
+                .map(|def| (*p, def))
+        })
+        .collect();
+    for (p, def) in disabled_turn {
+        if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+            inst.enabled = true;
+        }
+    }
     ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
     // R05（K21）：先发整回合结束窗（phaseEnd 段 → phaseAfter 段 → 交接），

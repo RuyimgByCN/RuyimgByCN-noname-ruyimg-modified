@@ -156,6 +156,10 @@ impl crate::catalog::SkillMachine for DrawPhaseMachine {
                 child = Some(win(self.root, W::After));
             }
             DP::After => {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(player, "draw_phase_bottom".to_string()));
                 progress = DP::Done;
                 outcome = O::Ended;
             }
@@ -356,7 +360,20 @@ impl crate::catalog::SkillMachine for DrawMachine {
                     ctx.core.deck = cards;
                     ctx.log(LogEvent::DeckReshuffled);
                 }
-                let card = ctx.core.deck.pop().expect("deck non-empty");
+                let from_bottom = nearest_draw_phase(ctx, self.root).is_some()
+                    && ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(player, "draw_phase_bottom".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        > 0;
+                let card = if from_bottom {
+                    ctx.core.deck.remove(0)
+                } else {
+                    ctx.core.deck.pop().expect("deck non-empty")
+                };
                 held_cards.push(card);
                 ctx.res.frame_mut(self.root).unwrap().data = EventData::Draw {
                     player,

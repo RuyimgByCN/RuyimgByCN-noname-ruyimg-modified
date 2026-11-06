@@ -40,6 +40,14 @@ impl VmHandlerSet {
         p.alive
             && ctx.state.turn.current == owner
             && ctx.state.turn.phase == crate::event::Phase::Play
+            && ctx
+                .state
+                .vm_aux
+                .flags
+                .get(&(owner, format!("skill_banned_turn:{name}")))
+                .copied()
+                .unwrap_or(0)
+                == 0
             && (!self.limits.once_per_turn
                 || !ctx.state.vm_aux.once.contains(&(owner, name.clone(), 1)))
             && (!self.limits.once_per_play_phase

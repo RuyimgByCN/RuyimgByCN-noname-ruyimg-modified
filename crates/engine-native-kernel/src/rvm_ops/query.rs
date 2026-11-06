@@ -40,6 +40,9 @@ pub(super) fn locate(core: &GameStateCore, card: u32) -> i32 {
             return 5;
         }
     }
+    if core.table.contains(&card) {
+        return 6;
+    }
     if core
         .vm_aux
         .piles
@@ -337,14 +340,22 @@ pub fn run_query(
         QueryRequest::HasSkill { player, skill_def } => {
             let p = seat(player, "HasSkill")?;
             let raw = skill_def.raw();
-            let has = resolve_skill_def(catalog, raw).is_some_and(|d| core.has_skill(p, d))
-                || core
-                    .vm_aux
-                    .flags
-                    .get(&(p, format!("skill:{raw}")))
-                    .copied()
-                    .unwrap_or(0)
-                    != 0;
+            let disabled_raw = core
+                .vm_aux
+                .flags
+                .get(&(p, format!("skill_disabled_raw:{raw}")))
+                .copied()
+                .unwrap_or(0)
+                != 0;
+            let has = !disabled_raw
+                && (resolve_skill_def(catalog, raw).is_some_and(|d| core.has_skill(p, d))
+                    || core
+                        .vm_aux
+                        .flags
+                        .get(&(p, format!("skill:{raw}")))
+                        .copied()
+                        .unwrap_or(0)
+                        != 0);
             QueryResponse::Bool(has)
         }
         QueryRequest::CardNameLength { card, .. } => {

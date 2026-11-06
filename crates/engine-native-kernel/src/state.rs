@@ -880,7 +880,14 @@ impl VmAux {
         self.flags.retain(|(_, key), _| {
             key != "vm_skipped_phase_count"
                 && key != "draw_phase_bonus"
+                && key != "play_cat_mask"
+                && key != "draw_phase_bottom"
+                && key != "non_locked_suppression_source"
+                && key != "suppress_non_locked_turn"
                 && !key.starts_with("skill_turn:")
+                && !key.starts_with("skill_disabled_turn:")
+                && !key.starts_with("skill_disabled_raw:")
+                && !key.starts_with("skill_banned_turn:")
                 && !key.starts_with("card_damage_bonus:")
                 && !key.starts_with("sha_target_damage_bonus:")
                 && !key.starts_with("sha_unrespondable:")

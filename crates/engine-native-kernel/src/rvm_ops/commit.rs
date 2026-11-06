@@ -38,6 +38,10 @@ pub(super) fn detach(core: &mut GameStateCore, card: CardId) -> bool {
         core.discard.remove(i);
         return true;
     }
+    if let Some(i) = core.table.iter().position(|c| *c == card) {
+        core.table.remove(i);
+        return true;
+    }
     for pile in core.vm_aux.piles.values_mut() {
         if let Some(i) = pile.iter().position(|c| *c == card) {
             pile.remove(i);
@@ -586,6 +590,10 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                     3 => {
                         let s = owner.unwrap_or(0);
                         ctx.core.player_mut(s).hand.push(id);
+                        ctx.out.push(LogEvent::CardsDrawn {
+                            player: s,
+                            cards: vec![id],
+                        });
                     }
                     4 => {
                         let s = owner.unwrap_or(0);
@@ -917,6 +925,8 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 begin: true,
             });
         }
-        other => commit_combat::commit_combat_or_state_effect(ctx, owner, seats, other),
+        other => {
+            commit_combat::commit_combat_or_state_effect(ctx, executing, owner, seats, other)
+        }
     }
 }

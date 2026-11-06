@@ -6,6 +6,7 @@ use super::*;
 
 pub(super) fn commit_combat_or_state_effect(
     ctx: &mut Ctx<'_>,
+    executing: &str,
     owner: PlayerId,
     seats: u8,
     e: EffectRequest,
@@ -220,6 +221,293 @@ pub(super) fn commit_combat_or_state_effect(
                     .vm_aux
                     .flags
                     .insert((s, format!("sha_unrespondable:{}:{t}", card.raw())), 1);
+            }
+        }
+        EffectRequest::AdjustHandTo { player, count } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if !ctx.core.player(p).alive {
+                return;
+            }
+            let cur = ctx.core.player(p).hand.len();
+            let want = count as usize;
+            if cur < want {
+                ctx.start_draw(p, (want - cur) as u32);
+            } else if cur > want {
+                let drop_n = cur - want;
+                let cards: Vec<CardId> = ctx
+                    .core
+                    .player(p)
+                    .hand
+                    .iter()
+                    .copied()
+                    .take(drop_n)
+                    .collect();
+                for c in &cards {
+                    ctx.take_hand_card(p, *c);
+                }
+                discard_some(ctx, p, cards);
+            }
+        }
+        EffectRequest::DrawByPlayPhaseCardCategoryCount { player, .. } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if !ctx.core.player(p).alive {
+                return;
+            }
+            let mask = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(p, "play_cat_mask".to_string()))
+                .copied()
+                .unwrap_or(0);
+            let count = if mask != 0 {
+                mask.count_ones()
+            } else {
+                ctx.core.turn.bte_used_play_phase.min(3)
+            };
+            if count > 0 {
+                ctx.start_draw(p, count);
+            }
+        }
+        EffectRequest::DrawEachBySeat {
+            first,
+            second,
+            count,
+            ..
+        } => {
+            let (Some(a), Some(b)) = (seat_of(first, seats), seat_of(second, seats)) else {
+                return;
+            };
+            if count == 0 {
+                return;
+            }
+            let order: Vec<PlayerId> = ctx
+                .core
+                .seat_order_from(ctx.core.turn.current)
+                .into_iter()
+                .filter(|s| (*s == a || *s == b) && ctx.core.player(*s).alive)
+                .collect();
+            for p in order.into_iter().rev() {
+                ctx.start_draw(p, count);
+            }
+        }
+        EffectRequest::SetDrawPhaseFromBottom { player } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if ctx.core.player(p).alive {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((p, "draw_phase_bottom".to_string()), 1);
+            }
+        }
+        EffectRequest::DrawCardsFromBottom { player, count } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if !ctx.core.player(p).alive || count == 0 {
+                return;
+            }
+            let mut drawn = Vec::new();
+            for _ in 0..count {
+                if ctx.core.deck.is_empty() {
+                    if ctx.core.discard.is_empty() {
+                        break;
+                    }
+                    let mut cards = std::mem::take(&mut ctx.core.discard);
+                    ctx.core.rng.shuffle(&mut cards);
+                    ctx.core.deck = cards;
+                    ctx.out.push(LogEvent::DeckReshuffled);
+                }
+                let card = ctx.core.deck.remove(0);
+                ctx.core.player_mut(p).hand.push(card);
+                drawn.push(card);
+            }
+            if !drawn.is_empty() {
+                ctx.emit(EventData::CardsDrawn {
+                    player: p,
+                    cards: drawn.clone(),
+                });
+                ctx.out.push(LogEvent::CardsDrawn {
+                    player: p,
+                    cards: drawn,
+                });
+            }
+        }
+        EffectRequest::CancelIncomingCardUse {
+            player,
+            source,
+            card,
+            ..
+        } => {
+            let (Some(p), Some(s)) = (seat_of(player, seats), seat_of(source, seats)) else {
+                return;
+            };
+            if !ctx.core.player(p).alive {
+                return;
+            }
+            let cid = card.raw();
+            let mut excluded = false;
+            for frame in ctx.res.stack.iter_mut().rev() {
+                if let EventData::CardUsed(u) = &mut frame.data {
+                    if u.player == s && u.card == Some(cid) {
+                        if let Some(pos) = u.targets.iter().position(|t| *t == p) {
+                            u.targets.remove(pos);
+                            excluded = true;
+                        }
+                        break;
+                    }
+                }
+            }
+            if excluded && cid != 0 {
+                if let Some(pos) = ctx.core.table.iter().position(|x| *x == cid) {
+                    ctx.core.table.remove(pos);
+                    ctx.core.player_mut(p).hand.push(cid);
+                    ctx.out.push(LogEvent::CardsDrawn {
+                        player: p,
+                        cards: vec![cid],
+                    });
+                } else if let Some(pos) = ctx.core.discard.iter().position(|x| *x == cid) {
+                    ctx.core.discard.remove(pos);
+                    ctx.core.player_mut(p).hand.push(cid);
+                    ctx.out.push(LogEvent::CardsDrawn {
+                        player: p,
+                        cards: vec![cid],
+                    });
+                }
+            }
+        }
+        EffectRequest::ExcludeSavedShaTarget { card, target } => {
+            let Some(t) = seat_of(target, seats) else {
+                return;
+            };
+            let cid = card.raw();
+            let mut empty_after = false;
+            for frame in ctx.res.stack.iter_mut().rev() {
+                if let EventData::CardUsed(u) = &mut frame.data {
+                    if u.card == Some(cid) {
+                        u.targets.retain(|x| *x != t);
+                        empty_after = u.targets.is_empty();
+                        break;
+                    }
+                }
+            }
+            if empty_after && cid != 0 {
+                if let Some(pos) = ctx.core.table.iter().position(|x| *x == cid) {
+                    ctx.core.table.remove(pos);
+                    ctx.core.discard.push(cid);
+                }
+            }
+        }
+        EffectRequest::TakeOneCard {
+            from,
+            to,
+            equip_only,
+        } => {
+            let (Some(a), Some(b)) = (seat_of(from, seats), seat_of(to, seats)) else {
+                return;
+            };
+            if a == b || !ctx.core.player(a).alive || !ctx.core.player(b).alive {
+                return;
+            }
+            if !equip_only {
+                if let Some(c) = ctx.core.player(a).hand.first().copied() {
+                    ctx.give_hand_card(a, b, c);
+                    return;
+                }
+            }
+            if let Some(c) = ctx.core.player(a).equips.first().copied() {
+                ctx.take_owned_card(a, c);
+                ctx.core.player_mut(b).hand.push(c);
+                ctx.emit(EventData::CardsMoved {
+                    cards: vec![c],
+                    from: a,
+                    to: b,
+                });
+            }
+        }
+        EffectRequest::TakeOneHandCard { from, to } => {
+            let (Some(a), Some(b)) = (seat_of(from, seats), seat_of(to, seats)) else {
+                return;
+            };
+            if a == b || !ctx.core.player(a).alive || !ctx.core.player(b).alive {
+                return;
+            }
+            if let Some(c) = ctx.core.player(a).hand.first().copied() {
+                ctx.give_hand_card(a, b, c);
+            }
+        }
+        EffectRequest::DisableSkillByDefUntilTurnEnd { player, skill_def } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let raw = skill_def.raw();
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((p, format!("skill_disabled_raw:{raw}")), 1);
+            if let Some(def) = resolve_skill_def(ctx.catalog, raw) {
+                if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+                    if inst.enabled {
+                        inst.enabled = false;
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((p, format!("skill_disabled_turn:{def}")), 1);
+                    }
+                }
+            }
+        }
+        EffectRequest::BanActiveUntilTurnEnd { player, skill } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            ctx.core
+                .vm_aux
+                .once
+                .insert((p, executing.to_string(), 1));
+            ctx.core
+                .vm_aux
+                .flags
+                .insert((p, format!("skill_banned_turn:{executing}")), 1);
+            if let Some(def) = resolve_skill_def(ctx.catalog, skill.raw()) {
+                let name = ctx.catalog.skill_name(def).to_string();
+                ctx.core.vm_aux.once.insert((p, name.clone(), 1));
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((p, format!("skill_banned_turn:{name}")), 1);
+            }
+        }
+        EffectRequest::SetNonLockedSkillSuppression {
+            player, enabled, ..
+        } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            let key = (p, "non_locked_suppression_source".to_string());
+            if enabled {
+                if ctx.core.player(p).alive {
+                    ctx.core.vm_aux.flags.insert(key, 1);
+                }
+            } else {
+                ctx.core.vm_aux.flags.remove(&key);
+            }
+        }
+        EffectRequest::SuppressNonLockedSkillsUntilTurnEnd { player } => {
+            let Some(p) = seat_of(player, seats) else {
+                return;
+            };
+            if ctx.core.player(p).alive {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .insert((p, "suppress_non_locked_turn".to_string()), 1);
             }
         }
         _ => {}

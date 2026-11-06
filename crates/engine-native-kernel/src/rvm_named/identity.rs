@@ -127,6 +127,8 @@ impl NamedProgram {
                     Atom::TargetHandGteOwnerHpOrLteAttackRange => { h.update(&115u16.to_le_bytes()); }
                     Atom::TargetHandLteOwnerOrHpGteOwner => { h.update(&116u16.to_le_bytes()); }
                     Atom::OwnerOutsideTargetAttackRange => { h.update(&117u16.to_le_bytes()); }
+                    Atom::TargetEquipNonEmpty => { h.update(&118u16.to_le_bytes()); }
+                    Atom::SourceNotTarget => { h.update(&119u16.to_le_bytes()); }
                 }
             }
         }

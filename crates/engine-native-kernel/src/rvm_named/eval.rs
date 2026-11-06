@@ -42,7 +42,13 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
         Atom::EvPlayer => v.event_player == Some(owner),
         Atom::EvActor => actor == Some(owner),
         Atom::OwnerAlive => alive,
-        Atom::InTargets => v.targets.contains(&owner) || v.event_player == Some(owner),
+        Atom::InTargets => {
+            if !v.targets.is_empty() {
+                v.targets.contains(&owner)
+            } else {
+                v.event_player == Some(owner)
+            }
+        }
         Atom::UserOther => {
             let user = if v.kind == 1 {
                 v.event_source
@@ -131,7 +137,17 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
         Atom::TurnDmg0 => me.turn_damage == 0,
         Atom::TurnDmg => me.turn_damage > 0,
         Atom::TurnDmgAtLeast(n) => me.turn_damage >= *n,
-        Atom::BtePos => ctx.state.turn.bte_used_play_phase > 0,
+        Atom::BtePos => {
+            ctx.state.turn.bte_used_play_phase > 0
+                || ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(owner, "play_cat_mask".to_string()))
+                    .copied()
+                    .unwrap_or(0)
+                    > 0
+        }
         Atom::SourceAlive => v
             .event_source
             .is_some_and(|s| ctx.state.players.get(s as usize).is_some_and(|p| p.alive)),
@@ -291,6 +307,15 @@ fn eval_atom(atom: &Atom, ctx: &QueryCtx<'_>, owner: PlayerId, skill: &str, v: &
                 .get(p as usize)
                 .is_some_and(|pl| pl.hand.is_empty())
         }),
+        Atom::TargetEquipNonEmpty => v.event_player.is_some_and(|p| {
+            ctx.state
+                .players
+                .get(p as usize)
+                .is_some_and(|pl| !pl.equips.is_empty())
+        }),
+        Atom::SourceNotTarget => {
+            v.event_source.is_some() && v.event_player.is_some() && v.event_source != v.event_player
+        }
         Atom::CanDiscard(0) => v.event_player.is_some_and(|p| {
             ctx.state
                 .players

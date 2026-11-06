@@ -805,4 +805,123 @@ fn pa12_batch10_combat_and_state_effects_legacy_differential() {
     }
 }
 
-
+/// PA12 批⑪ 旧线 `vm_host::run_module_with_event_cards` 差分锚点：
+/// 验证 `dcjianxiong` / `natulie` / `dcchenyong` / `wangxi` / `nzry_cunmu` / `duchi` /
+/// `danlao` / `zhuzhou` / `nscangjian` / `stdyibing` 等真实 ported `.skill` 在旧线 VM 宿主上
+/// 产出的 `EffectRequest` 序列与原生 `rvm_ops` 批⑪接入的变体完全同构。
+#[test]
+fn pa12_batch11_legacy_vm_effects_match_native_expectation() {
+    let cases: &[(&str, &str, &[&str])] = &[
+        (
+            "dcjianxiong",
+            include_str!("../../../content/original/ported/collab/dcjianxiong.skill"),
+            &["MoveCards", "DrawCards", "AddMark"],
+        ),
+        (
+            "natulie",
+            include_str!("../../../content/original/ported/collab/natulie.skill"),
+            &["AdjustHandTo"],
+        ),
+        (
+            "dcchenyong",
+            include_str!("../../../content/original/ported/xianding/dcchenyong.skill"),
+            &["DrawByPlayPhaseCardCategoryCount"],
+        ),
+        (
+            "wangxi",
+            include_str!("../../../content/original/ported/refresh/wangxi.skill"),
+            &["DrawEachBySeat"],
+        ),
+        (
+            "nzry_cunmu",
+            include_str!("../../../content/original/ported/shenhua/nzry_cunmu.skill"),
+            &["SetDrawPhaseFromBottom"],
+        ),
+        (
+            "duchi",
+            include_str!("../../../content/original/ported/newjiang/duchi.skill"),
+            &["DrawCardsFromBottom", "RevealHand"],
+        ),
+        (
+            "danlao",
+            include_str!("../../../content/original/ported/sp/danlao.skill"),
+            &["DrawCards", "CancelIncomingCardUse"],
+        ),
+        (
+            "zhuzhou",
+            include_str!("../../../content/original/ported/collab/zhuzhou.skill"),
+            &["TakeOneCard"],
+        ),
+        (
+            "nscangjian",
+            include_str!("../../../content/original/ported/diy/nscangjian.skill"),
+            &["TakeOneCard"],
+        ),
+        (
+            "stdyibing",
+            include_str!("../../../content/original/ported/sixiang/stdyibing.skill"),
+            &["TakeOneHandCard"],
+        ),
+        (
+            "wxdlqianqian",
+            include_str!("../../../content/original/ported/offline/wxdlqianqian.skill"),
+            &["DisableSkillByDefUntilTurnEnd"],
+        ),
+        (
+            "rewansha",
+            include_str!("../../../content/original/ported/refresh/rewansha.skill"),
+            &["SetNonLockedSkillSuppression"],
+        ),
+    ];
+    for (id, src, want_prefixes) in cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 81, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let pz = tx
+            .state()
+            .zones
+            .find(engine_core::state::ZoneKind::Processing, PlayerId::NONE)
+            .expect("processing zone");
+        tx.state_mut()
+            .cards
+            .get_mut(engine_api::CardId::new(1))
+            .unwrap()
+            .zone = pz;
+        let entry = &pkg.trigger_index[0];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .expect("模块");
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[2],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}

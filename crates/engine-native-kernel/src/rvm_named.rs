@@ -159,6 +159,8 @@ pub enum Atom {
     TargetHandGteOwnerHpOrLteAttackRange,
     TargetHandLteOwnerOrHpGteOwner,
     OwnerOutsideTargetAttackRange,
+    TargetEquipNonEmpty,
+    SourceNotTarget,
 }
 
 /// OR 组，组内 AND。
@@ -506,6 +508,17 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
         "target_alive_has_discardable_hand_equip" => vec![
             Seed::Atom(Atom::TargetAlive),
             Seed::Atom(Atom::CanDiscard(0)),
+        ],
+        "target_alive_has_equip" => vec![
+            Seed::Atom(Atom::TargetAlive),
+            Seed::Atom(Atom::TargetEquipNonEmpty),
+        ],
+        "other_alive_per_damage_point" => vec![
+            Seed::Atom(Atom::OwnerAlive),
+            Seed::Atom(Atom::TargetAlive),
+            Seed::Atom(Atom::SourceAlive),
+            Seed::Atom(Atom::SourceNotTarget),
+            Seed::Atom(Atom::Damage),
         ],
         "has_discardable_hand_equip" => atom(Atom::CanDiscard(0)),
         "other_target_alive" => vec![
