@@ -9,7 +9,7 @@
 
 ## 反例与证据来源
 
-- 诊断日志：[07-oracle-diagnostic.log](/private/tmp/noname-main36-product-host-20261101T070732Z/seven-legacy-20261101T091200Z/07-oracle-diagnostic.log)（2026-11-01，`park-1` → `restored-continuation` 主错误 `unreachable`；次级 `attempted to take ownership of Rust value while it was borrowed` 是 panic 后句柄借用未归还的清理噪声，**不是根因**）。
+- 诊断日志：`/private/tmp/noname-main36-product-host-20261101T070732Z/seven-legacy-20261101T091200Z/07-oracle-diagnostic.log`（2026-11-01，`park-1` → `restored-continuation` 主错误 `unreachable`；次级 `attempted to take ownership of Rust value while it was borrowed` 是 panic 后句柄借用未归还的清理噪声，**不是根因**；修复后复现见 [05-node-seven-case-park1.log](05-node-seven-case-park1.log)）。
 - 复现夹具：`park-1.ngsa`（同栈深两台机器：`OptionalGate{遗计}` 已确认、内层 `JiJi` 待自己的询问；`JiJie{机捷}` 正等 `jijie_give_target` 应答）。
 - 2026-11-02 亲自复现（三处一致）：
   1. **native Rust**（byte 路径 `archive::decode_archive` + `Engine::restore`）：恢复后 `autoStep` → 存档逐字节等于 `native-park-1.ngsa`，随后 `legal_actions` 的候选探测在 `machine.rs` 的 `answer present on resume` panic（探测捕获后 `actions` 为空、`probe_faults` 增加）。

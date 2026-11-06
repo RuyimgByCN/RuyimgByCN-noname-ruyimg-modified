@@ -49,6 +49,9 @@ mod pa12_batch4_1_host_primitives;
 #[path = "../pa12_batch6_events_and_cards.rs"]
 mod pa12_batch6_events_and_cards;
 
+#[path = "../pa12_batch7_codec_named_and_once.rs"]
+mod pa12_batch7_codec_named_and_once;
+
 #[path = "../pa12_dsl_native_prototype.rs"]
 mod pa12_dsl_native_prototype;
 

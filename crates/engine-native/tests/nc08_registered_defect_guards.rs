@@ -402,9 +402,8 @@ meta_event_guard!(guard_cigu_pre_draw, "GwentCiguState", "DrawBefore", "上游 p
 meta_event_guard!(guard_fuchou2_before, "WudianFuchou2", "PhaseBefore", "上游 phaseUseBefore");
 meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上游 phaseUseBefore");
 
-/// 准备阶段幕（G18）：`HlssFengqi` 与 `Xiuluo` 需要 `Phase::Prepare`。
+/// 准备阶段幕（G18）：`HlssFengqi` 与 `Xiuluo` 需要 `Phase::Prepare`（已于 R05 规则 333 接入）。
 #[test]
-#[ignore = "补 `Phase::Prepare` 后转绿"]
 fn guard_prepare_phase_exists() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),

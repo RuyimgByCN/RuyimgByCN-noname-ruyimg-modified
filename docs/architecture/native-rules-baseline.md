@@ -1,5 +1,9 @@
 # 原生线玩法规则基准（项目声明与版本约定）
 
+**PA12 批⑥（2026-11-05）与批⑦（2026-11-06）零升号桥接补齐（规则 333／NGSA 107／content schema 5／ABI 759／WS8 不变）**：
+- **批⑥（2026-11-05）**：`content-native-loader::bridge_vm_skill_decls` 新增 `"phase_any_end" => EventKind::PhaseEnd`（无阶段门）；`rvm_bridge::trigger_ctx_of` 补齐 `EventData::{CardsDrawn, Recover, LoseHp, DyingSaved}` 四事件上下文臂及 `TurnBegin`/`TurnEndWindow`/`Phase`/`CardResponded` 的 `event_source`；`VmTriggerCtx.event_cards` + `EngineVmHost::event_cards(&self) -> &[u32]` 注入接通（闭合 `HOST_EVENT_CARD_COUNT` 恒 0）。详见[批⑥证据](../operations/evidence/2026-11-05-pa12-batch6-events-and-cards/README.md)。
+- **批⑦（2026-11-06）**：`rvm_ops/codec.rs` 补齐 `accept_effect` 允许面中缺失的 5 项 `EffectRequest` 编码/解码标签（`TurnOver` 27、`PreventDamage` 28、`ModifyCurrentDamage` 29、`SkipCurrentPhase` 36、`StorageSet` 37），消除提交期挂起窗口（如 `sp/mingshi.skill` `rvm_discard_pick` 挂起待执行 `ModifyCurrentDamage`）存档 `unreachable!` panic；`rvm_named.rs` 补齐 `"targeted_by_other"`、`"other_dying"`、`"other_damage_before" | "other_damage"`、`"other_direct_damage_before"` 多词短语；验证 `once` / `once_per_game` 在 `OptionalGate` 取消时不消费限次配额（两线差分一致）。详见[批⑦证据](../operations/evidence/2026-11-06-pa12-batch7-codec-named-once/README.md)。
+
 **规则 331／NGSA 106／WS7 已合入 Main（2026-11-02）**：本批来自私有 C331 phase7（原基底 `5fc0f774`），
 合併提交见 `native-progress.md` 顶部同日期段落；Main 由 330／105／WS6 升为 **331／106／WS7**，
 全局原生 ABI 保持 **758**（不改）。WS6→WS7 已由[裁决31](../operations/evidence/2026-11-02-c331-ws7-boundary/README.md)追认（`ChoiceRequest` 计数 u8→u32）；R05 改为 333／107／759／WS8。

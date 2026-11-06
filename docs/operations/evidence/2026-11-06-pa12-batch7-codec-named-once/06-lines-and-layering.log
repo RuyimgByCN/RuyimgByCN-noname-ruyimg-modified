@@ -1,0 +1,7 @@
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.012s
+
+OK
+Source line limit passed: 9114 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+engine-native layering passed: 0 upward references <= 0

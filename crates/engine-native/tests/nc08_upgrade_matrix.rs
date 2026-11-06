@@ -54,16 +54,29 @@ fn load(pkg: &str) -> Option<ExtensionPack> {
     if let Some(p) = load_pile(&dir) {
         return Some(p);
     }
-    for f in ["cards.json", "character.json"] {
+    for f in ["cards.json", "character.json", "characters.json"] {
         let path = dir.join(f);
         if !path.is_file() {
             continue;
         }
         let json = std::fs::read_to_string(&path).ok()?;
         let mut out = content_native_loader::bridge_pack(&json).ok()?;
-        if let Ok(chars) = std::fs::read_to_string(dir.join("character.json")) {
-            if let Ok(b) = content_native_loader::bridge_generals(&chars) {
-                out.pack.generals = b.generals;
+        for cf in ["character.json", "characters.json"] {
+            if let Ok(chars) = std::fs::read_to_string(dir.join(cf)) {
+                if let Ok(b) = content_native_loader::bridge_generals(&chars) {
+                    out.pack.generals = b.generals;
+                }
+            }
+        }
+        if let Some(parent) = dir.parent() {
+            if let Ok(npack_raw) = std::fs::read_to_string(parent.join("package.npack.json")) {
+                if let Ok(npack) = serde_json::from_str::<content_schema::ContentPackage>(&npack_raw) {
+                    if !npack.modules.is_empty() {
+                        if let Ok(vm) = content_native_loader::bridge_vm_skill_decls(&npack) {
+                            out.pack.vm_skills = vm.decls;
+                        }
+                    }
+                }
             }
         }
         return Some(out.pack);
@@ -122,6 +135,8 @@ fn upgrade_matrix_over_packages() {
         "select-beautify-upstream-liuli",
         "shaai-ow-upstream-noname",
         "shaai-xianjian-upstream-noname",
+        "sp2-upstream-noname",
+        "xianding-upstream-noname",
     ];
     let mut passed = Vec::new();
     for pkg in candidates {
@@ -130,9 +145,10 @@ fn upgrade_matrix_over_packages() {
         }
     }
     eprintln!("DBG 升级矩阵：通过 {}/{} 个包", passed.len(), candidates.len());
-    assert!(
-        passed.len() >= 20,
-        "应至少 20 个包通过升级矩阵，实得 {}：{passed:?}",
+    assert_eq!(
+        passed.len(),
+        24,
+        "应全部 24 个有资产/模块包通过升级矩阵，实得 {}：{passed:?}",
         passed.len()
     );
 }

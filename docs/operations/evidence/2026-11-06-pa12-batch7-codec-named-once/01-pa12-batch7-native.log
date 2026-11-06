@@ -1,0 +1,12 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.30s
+     Running tests/groups/misc.rs (target/debug/deps/misc-0dff29147bd0ba75)
+
+running 5 tests
+test pa12_batch7_codec_named_and_once::pa12_batch7_codec_all_37_accepted_effects_round_trip ... ok
+test pa12_batch7_codec_named_and_once::pa12_batch7_shiroha_guying_other_damage_before_vs_self_damage ... ok
+test pa12_batch7_codec_named_and_once::pa12_batch7_targeted_by_other_xiemu2_and_dczhangji_reject_self_use ... ok
+test pa12_batch7_codec_named_and_once::pa12_batch7_mingshi_discard_pick_save_restore_with_pending_modify_damage ... ok
+test pa12_batch7_codec_named_and_once::pa12_batch7_other_dying_and_once_decline_preserves_turn_and_game_quota ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 312 filtered out; finished in 0.03s
+

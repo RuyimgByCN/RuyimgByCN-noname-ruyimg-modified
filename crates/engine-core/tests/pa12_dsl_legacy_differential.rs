@@ -367,3 +367,101 @@ fn pa12_legacy_batch6_modules_match_native() {
     .expect("出牌阶段带事件牌执行");
     assert!(in_play.effects.is_empty(), "出牌阶段内不摸牌");
 }
+
+/// PA12 批⑦ 旧线差分基线：验证 `sp/mingshi`、`key/shiroha_guying`、`sp/xiemu2`、
+/// `xianding/dczhangji`、`onlyOL/olbuyi`、`offline/liangfan2` 在旧线 VM 宿主上的效果请求序与
+/// 原生线 `pa12_batch7_codec_named_and_once` 一致。
+#[test]
+fn pa12_legacy_batch7_codec_named_and_once_skills_match_native() {
+    for (id, src, trig_idx, target_cnt, want_prefixes) in [
+        (
+            "sp-mingshi",
+            include_str!("../../../content/original/ported/sp/mingshi.skill"),
+            0usize,
+            1u32,
+            &["DiscardHandEquipCount", "ModifyCurrentDamage"][..],
+        ),
+        (
+            "key-shiroha-guying-target",
+            include_str!("../../../content/original/ported/key/shiroha_guying.skill"),
+            0,
+            1,
+            &["ModifyCurrentDamage"][..],
+        ),
+        (
+            "key-shiroha-guying-source",
+            include_str!("../../../content/original/ported/key/shiroha_guying.skill"),
+            1,
+            1,
+            &["ModifyCurrentDamage"][..],
+        ),
+        (
+            "sp-xiemu2",
+            include_str!("../../../content/original/ported/sp/xiemu2.skill"),
+            0,
+            1,
+            &["DrawCards"][..],
+        ),
+        (
+            "xianding-dczhangji",
+            include_str!("../../../content/original/ported/xianding/dczhangji.skill"),
+            0,
+            2,
+            &["DrawCards"][..],
+        ),
+        (
+            "onlyOL-olbuyi",
+            include_str!("../../../content/original/ported/onlyOL/olbuyi.skill"),
+            0,
+            1,
+            &["RecoverHp"][..],
+        ),
+        (
+            "offline-liangfan2",
+            include_str!("../../../content/original/ported/offline/liangfan2.skill"),
+            0,
+            1,
+            &["DrawCards"][..],
+        ),
+    ] {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 77, "identity-standard").expect("开局");
+        std::sync::Arc::make_mut(&mut tx.state_mut().content)
+            .load_package(&pkg)
+            .expect("装载");
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        // mingshi 需要 hp(event_source) > hp(self)
+        tx.state_mut().players.get_mut(owner).unwrap().hp = 2;
+        tx.state_mut().players.get_mut(other).unwrap().hp = 4;
+        let targets: Vec<u32> = (1..=target_cnt).collect();
+
+        let entry = &pkg.trigger_index[trig_idx];
+        let module = tx.state().content.module(&entry.module).cloned().expect("模块");
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &targets,
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert_eq!(out.effects.len(), want_prefixes.len(), "{id} 效果数");
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}

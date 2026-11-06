@@ -263,6 +263,37 @@ pub fn enc_effects(w: &mut Vec<u8>, effects: &[EffectRequest]) {
                 push_u32(w, *count);
                 push_u32(w, skill.raw());
             }
+            // PA12 批⑦：补齐 accept_effect 已放行但编码面遗漏的五种变体
+            //（TurnOver / PreventDamage / ModifyCurrentDamage / SkipCurrentPhase / StorageSet），
+            // 解锁开窗或挂起期间队列含此类效果的真实技能（如 mingshi 等）。
+            EffectRequest::TurnOver { player } => {
+                w.push(27);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::PreventDamage { damage_id } => {
+                w.push(28);
+                push_u32(w, *damage_id);
+            }
+            EffectRequest::ModifyCurrentDamage {
+                player,
+                delta,
+                skill,
+            } => {
+                w.push(29);
+                push_u32(w, player.raw());
+                push_i32(w, *delta);
+                push_u32(w, skill.raw());
+            }
+            EffectRequest::SkipCurrentPhase { player } => {
+                w.push(36);
+                push_u32(w, player.raw());
+            }
+            EffectRequest::StorageSet { skill, key, value } => {
+                w.push(37);
+                push_u32(w, skill.raw());
+                push_u32(w, *key);
+                push_u32(w, *value);
+            }
             _ => unreachable!("accept_effect 已拒绝未编码变体"),
         }
     }
@@ -461,6 +492,25 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 player: rule_api::PlayerId::new(rd.u32()?),
                 count: rd.u32()?,
                 skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            27 => EffectRequest::TurnOver {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            28 => EffectRequest::PreventDamage {
+                damage_id: rd.u32()?,
+            },
+            29 => EffectRequest::ModifyCurrentDamage {
+                player: rule_api::PlayerId::new(rd.u32()?),
+                delta: rd.i32()?,
+                skill: rule_api::SkillId::new(rd.u32()?),
+            },
+            36 => EffectRequest::SkipCurrentPhase {
+                player: rule_api::PlayerId::new(rd.u32()?),
+            },
+            37 => EffectRequest::StorageSet {
+                skill: rule_api::SkillId::new(rd.u32()?),
+                key: rd.u32()?,
+                value: rd.u32()?,
             },
             _ => return None,
         };

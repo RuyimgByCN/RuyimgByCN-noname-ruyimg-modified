@@ -478,6 +478,17 @@ fn phrase(key: &str) -> Option<Vec<Seed>> {
         "other_alive" => atom(Atom::OtherAlive),
         "other_hand" | "other_hand_nonempty" => atom(Atom::OtherHand),
         "other_wounded" => atom(Atom::OtherWounded),
+        "targeted_by_other" => vec![Seed::Atom(Atom::InTargets), Seed::Atom(Atom::UserOther)],
+        "other_dying" => vec![Seed::Not, Seed::Atom(Atom::EvPlayer), Seed::Atom(Atom::Dying)],
+        "other_damage_before" | "other_damage" => {
+            vec![Seed::Not, Seed::Atom(Atom::EvPlayer), Seed::Atom(Atom::Damage)]
+        }
+        "other_direct_damage_before" => vec![
+            Seed::Not,
+            Seed::Atom(Atom::EvPlayer),
+            Seed::Atom(Atom::Direct),
+            Seed::Atom(Atom::Damage),
+        ],
         "source_alive" => atom(Atom::SourceAlive),
         "tied_max_hand" => atom(Atom::TiedHand),
         "tied_max_hp" => atom(Atom::TiedHp),
