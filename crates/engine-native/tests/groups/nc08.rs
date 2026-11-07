@@ -1,6 +1,9 @@
 //! engine-native 集成测试分组 `nc08`：NC08 非上游对照样本（`nc08_*`，`nc08_upstream_*` 除外）。
 //! 登记规则与守卫见 `test_registry.rs`；本文件只登记模块，测试全名为 `<原文件名>::<函数名>`。
 
+#[path = "../nc01_nc08_multi_mode_matrix.rs"]
+mod nc01_nc08_multi_mode_matrix;
+
 #[path = "../nc08_acceptance_sweep_all_packages.rs"]
 mod nc08_acceptance_sweep_all_packages;
 

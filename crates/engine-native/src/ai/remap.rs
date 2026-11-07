@@ -199,7 +199,15 @@ pub(super) fn requires_conservative_redaction(machine: &MachineSnapshot) -> bool
             current: Some(current),
             ..
         } if current.haotian_other.is_some() || current.gaiming_cards.is_some() => true,
-        Host { behavior, .. } => *behavior != crate::content::host::HostBehavior::D3Moyan.tag(),
+        Host {
+            behavior,
+            card,
+            cards,
+            ..
+        } => {
+            *behavior != crate::content::host::HostBehavior::D3Moyan.tag()
+                && (card.is_some() || !cards.is_empty())
+        }
         OptionalGate { inner, .. }
         | NullifyWindow { effect: inner, .. }
         | Aoe { inner, .. }

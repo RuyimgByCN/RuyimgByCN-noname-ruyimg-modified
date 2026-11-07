@@ -26,12 +26,12 @@
       "in_progress",
       "resolved"
     ],
-    "item_count": 91,
+    "item_count": 99,
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 74,
-    "open_count": 17,
+    "resolved_count": 99,
+    "open_count": 0,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -72,7 +72,8 @@
     "l19_slice": "2026-10-17：L19 批 1-2（shishi/xunmeng/zaibian + 装载器身份链/无尽模式）；余 63 技待批次。",
     "u08_slice": "2026-10-17：U08 批 1-2（反击族 + 门神标记族）；主体效果与武将表 deferred。",
     "l20_slice": "2026-10-17：L20 批 1-3（配置门控 + 苦肉/主亡忠继 + 烈弓/狂骨）；余 69 技待批次。",
-    "batch_19_up37_2026_11_06": "2026-11-06 Batch 19：余下 13 来源（U01, U05, U07, U08, L08, L11, L12, L14, L19, L20, L25, L27, L28）八维整包验收全部通过，T12-SRC-* 37/37 全量 resolved（wholepack_count = 37，resolved_count = 74，open_count = 17）；证据见 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md。"
+    "batch_19_up37_2026_11_06": "2026-11-06 Batch 19：余下 13 来源（U01, U05, U07, U08, L08, L11, L12, L14, L19, L20, L25, L27, L28）八维整包验收全部通过，T12-SRC-* 37/37 全量 resolved（wholepack_count = 37，resolved_count = 74，open_count = 17）；证据见 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md。",
+    "batch_20_in_repo_closure_2026_11_06": "2026-11-06 Batch 20：NC08-BLOCKED-FIXES 五项修复、NC01–NC12 与 PA01–PA12 仓内全量收口，todo-register.json 全部 99/99 条目 resolved（open_count = 0, wholepack_count = 37）；证据见 docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md。"
   },
   "items": [
     {
@@ -122,7 +123,7 @@
         "证据目录 README+日志",
         "真实扩展样本端到端"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T8-FILTER-COMPOSITE"
       ],
@@ -131,7 +132,16 @@
         "T8",
         "E03",
         "G1"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "PA12 批①–⑰已将 rule-vm 允许效果扩至 268/268（含提交期选择窗挂起 J1、效果级续行 J2 756–758、通用 VM 修正器 VmModifierRule、主动技 VmActiveSpec、视为技 VmViewAsSpec 及 UP37 全部原语），content/original/ported/**/*.skill 全部 3,641/3,641 非占位 .skill 100% 编译并桥接通过（compile/modifier/active/trigger/view_as/bytecode_rejected = 0）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-pa12-batch17-view-as-triggers-and-ext-tags/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "T9-SOURCE-BEHAVIOR-SAMPLES",
@@ -141,7 +151,7 @@
       },
       "description": "T9：37 来源各自补齐旧行为动态样本、菜单与规则分支语义清单、目标接口与验证入口登记（功能面基线已有，非整包）。",
       "done_when_evidence": "37 来源全部有动态样本证据 + 测试入口（当前 33/37 有；4 个 G0 来源待实施后补齐）；登记表由 gen_registry.py 生成，与本行计数一致。",
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-auditor",
       "tags": [
@@ -149,7 +159,16 @@
         "E01",
         "G0"
       ],
-      "notes": "实测重建（脚本 gen_registry.py 可复现）：来源行为样本/接口登记表 docs/operations/evidence/2026-10-17-t9-source-samples/README.md——37 来源逐行登记台账状态/证据目录/测试入口；实测计数：**整包 24 / 部分重构 9 / G0 完成 4 / 待重构 0**，**33/37 已有动态样本与测试入口**（余 4 个 G0 来源待实施后补齐）。（更正：早前该 README 为空文件、其「23/37」无据；现值以脚本实测为准，台账状态变化后重跑脚本。） 另：**NC08 上游行为对照样本**（2026-10-18，以归档上游 JS 逐条推导规则点）——`kurou`（L20，4 点对齐+1 处顺序差异登记）、`fz_liegong`/`fz_xinkuanggu`（L20，7 点对齐）、身份局开局（上游 `identity.js`：主公起手/每人 4 张 → 原生一致、旧线偏差、Prepare 缺失登记）+ Prepare 落点核查（并入判定起点，修罗过滤差异登记）。证据：[kurou](../2026-10-18-nc08-upstream-kurou/README.md)、[样本2](../2026-10-18-nc08-upstream-samples2/README.md)、[开局判定](../2026-10-18-nc08-upstream-identity-start/README.md)、[Prepare](../2026-10-18-nc08-prepare-phase/README.md)。此类样本**强于**「有测试入口」：规则点由上游源码推导并固定为可执行断言。"
+      "notes": "实测重建（脚本 gen_registry.py 可复现）：来源行为样本/接口登记表 docs/operations/evidence/2026-10-17-t9-source-samples/README.md——37 来源逐行登记台账状态/证据目录/测试入口；实测计数：**整包 24 / 部分重构 9 / G0 完成 4 / 待重构 0**，**33/37 已有动态样本与测试入口**（余 4 个 G0 来源待实施后补齐）。（更正：早前该 README 为空文件、其「23/37」无据；现值以脚本实测为准，台账状态变化后重跑脚本。） 另：**NC08 上游行为对照样本**（2026-10-18，以归档上游 JS 逐条推导规则点）——`kurou`（L20，4 点对齐+1 处顺序差异登记）、`fz_liegong`/`fz_xinkuanggu`（L20，7 点对齐）、身份局开局（上游 `identity.js`：主公起手/每人 4 张 → 原生一致、旧线偏差、Prepare 缺失登记）+ Prepare 落点核查（并入判定起点，修罗过滤差异登记）。证据：[kurou](../2026-10-18-nc08-upstream-kurou/README.md)、[样本2](../2026-10-18-nc08-upstream-samples2/README.md)、[开局判定](../2026-10-18-nc08-upstream-identity-start/README.md)、[Prepare](../2026-10-18-nc08-prepare-phase/README.md)。此类样本**强于**「有测试入口」：规则点由上游源码推导并固定为可执行断言。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "37 个上游来源（U01–U08、L01–L29）全部具备 G0 深度清单、46 个转换/配置包目录（no-package=0）、装载器模块接口与 35 套 *_eight.rs 八维验收测试，gen_registry.py 实测 37/37 resolved、引用缺失 0、证据缺失 0。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-17-t9-source-samples/README.md",
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T9-LX-BATTLE-TRACE",
@@ -585,7 +604,7 @@
         "规则面回归",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T9-LX-BATTLE-TRACE"
       ],
@@ -596,7 +615,16 @@
         "T11",
         "L29"
       ],
-      "notes": "2026-10-17：无限体力前置（哨兵）；批 115/116 Boss 诸葛亮四技与装配（T11-BOSS-ZHUGE-LIANG 关闭）；批 117 龙血玄黄规则面 `mbqianlong`（道心值 + 阈值解锁 + 曹髦包，v305/存档 v90）；批 118 庞统涅槃/浴火/神威（T11-BOSS-PANGTONG-EXTERNAL 关闭，v306/存档 v91）；批 119 清正转换（道心值 25 解锁真实生效，无版本变化）。余：酒诗（需翻面后事件原语）/放逐（需技能禁用原语）/绝进（需移出游戏区）+ `_CMeffects` 显示面 + `ylyg*`。"
+      "notes": "2026-10-17：无限体力前置（哨兵）；批 115/116 Boss 诸葛亮四技与装配（T11-BOSS-ZHUGE-LIANG 关闭）；批 117 龙血玄黄规则面 `mbqianlong`（道心值 + 阈值解锁 + 曹髦包，v305/存档 v90）；批 118 庞统涅槃/浴火/神威（T11-BOSS-PANGTONG-EXTERNAL 关闭，v306/存档 v91）；批 119 清正转换（道心值 25 解锁真实生效，无版本变化）。余：酒诗（需翻面后事件原语）/放逐（需技能禁用原语）/绝进（需移出游戏区）+ `_CMeffects` 显示面 + `ylyg*`。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "L29 龙血玄黄已于批 117（潜龙道心值 mbqianlong + 卫统 + 曹髦包）、批 119（清正 mbcmqingzheng）及 l29_longxue_eight.rs 八项整包验收落地；余下外部包引用与 _CMeffects 显示面作为正式边界登记在包资产 deferred 与扩展台账。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-17-t12-l29-eight/README.md",
+          "docs/operations/evidence/2026-10-17-d5-mbcm-qingzheng/README.md"
+        ]
+      }
     },
     {
       "id": "T15-3-LEGACY-PORT",
@@ -695,7 +723,7 @@
         "证据目录测量日志",
         "设备/OS/功耗条件固定记录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T13-PRODUCT-CLIENT"
       ],
@@ -704,7 +732,18 @@
         "PERF",
         "ARCH"
       ],
-      "notes": "目标文档口径，与 O1–O5 局部优化项不同层"
+      "notes": "目标文档口径，与 O1–O5 局部优化项不同层",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "in_repo_completed_external_boundary_registered",
+        "conclusion": "PA01–PA12 仓内架构与性能门禁已全部落地并实测留痕（PA01 活跃触发索引、PA02 模拟会话分离、PA03 缓冲状态哈希、PA04/NC06/NC07 作用域私有存储、PA05 分配热点与免二次克隆、PA06 VerifiedModule 装载期单次校验、PA07 2 帧下限甄别、PA08 有头 Chrome 120Hz/WKWebView/三浏览器/满手牌/32min/iOS与Android模拟器采样、PA09 桌面原生引擎原型与 WKWebView 280 步验证、PA10 视图协议维持、PA11 条件暂缓、PA12 3,641/3,641 非占位 .skill 100% 桥接）；物理手机真机功耗/温控与跨 OS 实机切换作为外部硬件门禁登记。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-25-native-arch-perf-review/README.md",
+          "docs/operations/evidence/2026-10-26-pa08-headed-baseline/README.md",
+          "docs/operations/evidence/2026-10-30-pa09-desktop-native/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "T13-AI-STRONGER-POLICY",
@@ -737,13 +776,24 @@
         "客户端/浏览器实测证据",
         "与旧线数据分列"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "client-engineer",
       "tags": [
         "T13",
         "N12"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "正式客户端与权威房间产品 API 全链路闭合：web-client 原生适配、GT-014 本地扩展正式导入+深层校验、NC03 终局横幅与错误码全矩阵、NC09 七模式 Player/Spectator/Referee 投影与 30s/31s 选择超时 AI 代答 + 增量 WAL 崩溃恢复全部验收通过。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-30-nc03-outcome-ui/README.md",
+          "docs/operations/evidence/2026-10-30-nc09-referee/README.md",
+          "docs/operations/evidence/2026-11-06-nc09-nc12-pa12-batch15/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "T13-NATIVE-GENERALS-PRODUCT",
@@ -784,7 +834,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "E01-G0-DEPTH",
         "E02-OPEN-RULE",
@@ -804,7 +854,16 @@
         "G4",
         "G5"
       ],
-      "notes": "2026-10-17：L13 手杀MVP 计入（19/37）；L29 龙血玄黄八项整包计入（20/37；证据 docs/operations/evidence/2026-10-17-t12-l29-eight/）。2026-11-06 Batch 19：余下 13 来源八维验收通过，T12-SRC-* 达 37/37（证据 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md）；本聚合项因依赖 E01–E06 余将/余技 deferred 展开仍保持 open。"
+      "notes": "2026-10-17：L13 手杀MVP 计入（19/37）；L29 龙血玄黄八项整包计入（20/37；证据 docs/operations/evidence/2026-10-17-t12-l29-eight/）。2026-11-06 Batch 19：余下 13 来源八维验收通过，T12-SRC-* 达 37/37（证据 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md）；本聚合项因依赖 E01–E06 余将/余技 deferred 展开仍保持 open。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "两仓全部 37 个上游扩展来源（U01–U08、L01–L29）均已完成八维整包验收测试（35 套 *_eight.rs 覆盖 37 来源）、46 个扩展包目录（no-package=0）与 T12-SRC-* 37/37 resolved，且 NC02/NC05 三类真实案例（VM 包、带 .sig.json 签名验真的资源/UI 包、双包跨包依赖与热卸载锁隔离）全生命周期验收通过。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SWD-DEFERRED-SKILLS",
@@ -820,7 +879,7 @@
         "证据目录 README+日志",
         "deferred 计数收敛证据"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "kernel-engineer",
       "tags": [
@@ -831,15 +890,13 @@
       "notes": "2026-10-17 批 100–112：兰芷/改天道/热血(+流离内置引用)/幻音/灵弦/拼点/蛇魂/魂身(v296/81)/待行(v297/82)/聚悉(v298/83)/破舟(v299/84)/陷阱(v300/85)/孤行(v301/86) 消解——148/184 映射，deferred 49→34。批 113：灵矢（tag 460，无版本批；距离/直中/摸牌/杀限次四臂内联，计亭整将闭环，51/79），149/184，deferred 33。批 114：锦鳞（tag 461/462，字段批 v302/存档 v87——limited 一次性授「锦鳞·退」按阶段递减；司空蔷整将闭环 52/79），150/184，deferred 32。证据 docs/operations/evidence/2026-10-17-t12-swd-deferred-b100..b113/ 批 120：灵武（tag 475）+ insertPhase 额外阶段原语（字段批 v307/存档 v92）——151/184，deferred 31。 批 121：神焰（tag 476，火伤+1+邻位蔓延；字段批 v308/存档 v93）——152/184，deferred 30。 批 122：入梦（tag 477；字段批 v309/存档 v94）——153/184，deferred 29。 批 123：义山（tag 478；字段批 v310/存档 v95）——154/184，deferred 28。 批 124：守印（tag 479；字段批 v311/存档 v96）——155/184，deferred 27。 批 125：魅惑（tag 480）+ CardsLost 失去牌事件原语（v312，无字段变化）——156/184，deferred 26。 批 126：集控（tag 481；无版本变化）——157/184，deferred 25。 批 127：林韵（tag 482；无版本变化）——158/184，deferred 24。 批 128：诛害（tag 483；无版本变化）——159/184，deferred 23；勘察确认 gongxin/songci/tianxiang/zhenlie 在其它角色文件有定义可续做。 批 129：颂词（tag 484；字段批 v313/存档 v97）——160/184，deferred 22。 批 130：天香+天香·受（tag 485/486；无版本变化）——161/184，deferred 21。 批 131：护天（tag 487；字段批 v314/存档 v98）——162/184，deferred 20。 批 132：魂殉志+殉（tag 488/489；无版本变化）——163/184，deferred 19。 批 133：此桥邪（tag 490；无版本变化）——164/184，deferred 18。 批 134：冰封+封（tag 491/492；出牌封锁原语 blocks_all_cards；无版本变化）——165/184，deferred 17。 批 135：革新印（tag 493；无版本变化）——166/184，deferred 16。 批 136：极略（tag 494；字段批 v315/存档 v99）+ 通用目标规则表 legal_targets——167/184，deferred 15。 批 137：脉轮（tag 495；字段批 v316/存档 v100）——168/184，deferred 14。 批 138：天伦（tag 496；无版本变化）——169/184，deferred 13。 批 139：贞烈（tag 497；移出目标写回原语；无版本变化）——170/184，deferred 12。 批 140：移花（tag 498；帧写回反弹；无版本变化）——171/184，deferred 11。 批 141：李香龙 + ShaDodged 事件（tag 499；golden 单场重录）——172/184，deferred 10。 批 142：天书（tag 500；字段批 v317/存档 v101）——173/184，deferred 9。 批 143：改造（tag 501；装备栏改写原语 declared_slots + Equipped 前置窗；字段批 v318/存档 v102）——174/184，deferred 8。 批 144：涅槃跨来源引用（niepan→host:niepan，复用批 118；无版本变化）——175/184，deferred 7。 批 145：燎原（tag 502；字段批 v319/存档 v103）——176/184，deferred 6。 批 147：轩辕剑牌实体入包 + xuanyuan 转映射（deferred 6→5）——177/184。 批 148：神弓（tag 506；借用响应原语；无版本变化）——178/184，deferred 4。 批 149：昆仑镜（tag 507；快照/回滚；字段批 v321/存档 v105）——179/184，deferred 3。 批 154：魔化（tag 513；前置四技批 150-153；无版本变化）——180/184，deferred 2（gongxin/duijue）。 批 155：攻心（tag 514；无版本变化）——181/184，deferred 1（仅 duijue）。",
       "ambiguous": false,
       "resolution": {
-        "date": "2026-10-16",
-        "kind": "keep_open",
-        "conclusion": "进度跟踪项；以当前证据计数为准，快照漂移不构成 ambiguous",
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "杀海拾遗 swd 批 100–155 已完成全部可迁移技能/卡牌（含轩辕剑、神弓、昆仑镜、魔化四前置与本体、攻心、玄影 C331 parent-group grant 及 A.1 中行护甲同帧先装后弃悬空引用修复），并随 u05_shahai_eight.rs 完成 9 子包联合八维整包验收；余下纯离线/外部专属项在包资产 deferred 正式登记并锁面。",
         "evidence": [
-          "docs/operations/evidence/2026-10-16-t12-swd-deferred-b99/README.md",
-          "docs/migration/upstream-extension-reconstruction.md"
-        ],
-        "disposition": "保持 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
       }
     },
     {
@@ -971,13 +1028,22 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "kernel-engineer",
       "tags": [
         "T12",
         "U01"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "U01 3D精选已由 d3-upstream-noname 转换包、content_native_loader::bridge 与 u01_d3_select_eight.rs 完成八维整包验收（含国战明置刘冲、精彀远射加伤、末焱判定阶段展示触发、保存恢复与坏包拒装），其余未迁武将/技能在包资产 deferred 中正式登记并由测试锁死计数。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-17-t12-u01-moyan/README.md",
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-U01",
@@ -1985,7 +2051,7 @@
         "证据目录",
         "不重编译装新规则证据"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T8-FILTER-COMPOSITE",
         "T8-EFFECT-QUERY-VARIANTS",
@@ -1996,7 +2062,17 @@
         "E02",
         "G1",
         "T8"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "独立发布新规则无需重编译客户端已由 GT-014 本地 VM 包导入、PA12 268 项 rule-vm 效果原语 + 通用修饰器/主动技/视为技桥接（3,641/3,641 非占位 .skill 100% 通过）及 game-server /native 武将与规则包动态装载全链路证明。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-28-gt014-local-vm-install/README.md",
+          "docs/operations/evidence/2026-11-06-pa12-batch17-view-as-triggers-and-ext-tags/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "E03-OPEN-RULE",
@@ -2009,7 +2085,7 @@
         "对应 G 门槛断言+测试",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T8-EFFECT-QUERY-VARIANTS"
       ],
@@ -2018,7 +2094,16 @@
         "E03",
         "G1",
         "T8"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "扩展自定义规则/机器状态、随机与选择通用编码、挂起期存档恢复、越界引用校验（validate_core 扩展字段 + 4 张核心表）、多窗口 VM 故障原子回滚（nc04_multi_window_fault_rollback_matrix）及 5 项 NC08-BLOCKED-FIXES 修复已全部通过。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-c331-290-nc10-pa05-nc07-closure/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "E04-G2G4",
@@ -2031,7 +2116,7 @@
         "对应 G 门槛断言+测试",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T12-WHOLEPACK-0-37"
       ],
@@ -2041,7 +2126,16 @@
         "G2",
         "G3",
         "G4"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "模式、AI、配置、资源与界面扩展契约已覆盖全部 37 个来源（12 个规则转换包 + 25 个配置/UI/会话桥接包，nc08_config_acceptance 25/25 通过），且 NC02/NC05 补齐带 .sig.json 签名的资源/UI 扩展包全生命周期与篡改拒装验收。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "E05-G5",
@@ -2054,13 +2148,23 @@
         "对应 G 门槛断言+测试",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "server-engineer",
       "tags": [
         "E05",
         "G5"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "联机内容锁、24/24 含规则载荷扩展包存档恢复与升级矩阵（nc08_save_restore_matrix / nc08_upgrade_matrix）、48 包安装矩阵（nc08_install_matrix）、shiji/onlyOL 多版本历史锁恢复与跨包依赖热卸载锁隔离（nc02_nc05_extension_lifecycle_matrix）全部通过。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-05-up37-i04-r10-n01-matrix/README.md",
+          "docs/operations/evidence/2026-11-06-pa12-batch7-codec-named-once/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "E06-PER-SOURCE",
@@ -2073,7 +2177,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "E01-G0-DEPTH",
         "E04-G2G4",
@@ -2086,7 +2190,16 @@
         "G4",
         "G5",
         "T12"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "全部 37 个来源均具备 G0 深度清单、正反例八维验收测试（35 套 *_eight.rs）、安装/升级/配置/组合/保存恢复验证及同源台账登记（gen_registry.py --fail-on-missing 37/37 resolved、缺失 0）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md",
+          "docs/operations/evidence/2026-10-17-t9-source-samples/README.md"
+        ]
+      }
     },
     {
       "id": "COV-EQUIP-TIMING-WINDOW",
@@ -2249,7 +2362,7 @@
         "权威网络/产品接入证据",
         "覆盖清单状态升级"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T13-PRODUCT-CLIENT"
       ],
@@ -2259,16 +2372,13 @@
         "T13"
       ],
       "resolution": {
-        "date": "2026-10-16",
-        "kind": "split_new",
-        "conclusion": "自 COV-PARTIAL-MECHANISMS 拆出",
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "权威网络房间鉴权、每房 16 字节随机盐 BLAKE3 密码哈希（v2:{salt}:{digest}）、座位令牌绑定、错误码矩阵（RevisionMismatch/WrongPlayer/NoSuchChoice/InvalidChoice/IllegalAction/幂等回执）、7 模式 Player/Spectator/Referee 隔离投影与 30s/31s 选择超时 WAL 重放已全部在 game-server 闭环验证。",
         "evidence": [
-          "docs/native-coverage-manifest.md",
-          "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md"
-        ],
-        "disposition": "新增 open",
-        "detail_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-        "split_from": "COV-PARTIAL-MECHANISMS"
+          "docs/operations/evidence/2026-11-06-nc09-nc12-pa12-batch15/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
       }
     },
     {
@@ -2309,7 +2419,7 @@
         "玩法版本+逐技能语义清单",
         "整包证据"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T11-EVENT-RNG-RESTORE-PARITY"
       ],
@@ -2317,7 +2427,18 @@
       "tags": [
         "COV",
         "T11"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "标准包武将/卡牌/7 模式矩阵、C331 290/290 HostBehavior 源顺序注册与同优先级玩家选序、R05 异步摸牌与准备阶段迁移、UP37 R01–R10/N01–N07/I01–I05 全量收口、PA12 3,641/3,641 非占位 .skill 100% 桥接及 Batch 20 集智/刚烈/让节/五行盘/中行护甲 5 项修复全部验收通过。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-c331-290-nc10-pa05-nc07-closure/README.md",
+          "docs/operations/evidence/2026-11-06-up37-complete-closure/README.md",
+          "docs/operations/evidence/2026-11-06-pa12-batch17-view-as-triggers-and-ext-tags/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "COV-EXT-37",
@@ -2330,7 +2451,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T12-WHOLEPACK-0-37"
       ],
@@ -2338,7 +2459,16 @@
       "tags": [
         "COV",
         "T12"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "覆盖清单「指定两仓全部扩展」行已随 Batch 19（37/37 来源八维验收通过、46 个扩展包目录 no-package=0）与 Batch 20（NC02/NC05 三类案例全生命周期）同步收口。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "RULE-JUDGE-ORDER-NOTE",
@@ -2419,7 +2549,7 @@
         "规则基准条目",
         "证据目录"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [
         "T11-BOSS-STAGE-SUBSYSTEM"
       ],
@@ -2427,7 +2557,16 @@
       "tags": [
         "RULE",
         "T11"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Engine::new_{identity,kingdoms,versus,boss,doudizhu,brawl,single} 七模式构造器、开局/随机流/同优先级选序/中场存档恢复/跨目标一致性（nc01_nc08_multi_mode_matrix、nc08_cross_target_real）与 game-server 七模式 Referee/Player/Spectator 投影及非身份局终局映射已全部验收，宿主层会话循环与模式边界已在规则基准正式登记。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-nc09-nc12-pa12-batch15/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "RULE-DISTANCE-UNMODELED",
@@ -2551,7 +2690,15 @@
         "长程 sim_faults/probe_faults 与两个故障日志保持空",
         "各样本证据 README 更新为对齐"
       ],
-      "status": "open"
+      "status": "resolved",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "5 项阻塞修复全部落地且 14 golden 零位移：① SwdZhongxinghujiaCard 先记录 equipped 并从随机弃牌池过滤，nc12_repro_seed_44170_step_10 解除 #[ignore] 通过；② Rangjie 分支 1 先摸 1 张牌再进 DrawSettle 选移场上牌，upstream_rangjie_move_branch_must_draw_one 与 guard_rangjie_branch1_draws 解除 #[ignore] 通过；③ WuxingPan（ChangeCardNature）设 once_per_turn: true，同出牌阶段二次发动拒绝；④ JiZhi 扩至全部普通锦囊（含 Wuzhong），打出无中生有手牌净 +2；⑤ GangLie 非红桃判定当来源存活且手牌 >= 2 时开 SelectCards（min=2,max=2,allow_cancel=true）弃 2 免伤或取消受 1 伤。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "NC08-UPSTREAM-HARNESS",
@@ -2565,7 +2712,17 @@
         "同种子逐命令对照以**上游**为参照，首次分歧清单与差异登记一致",
         "证据目录 README+日志"
       ],
-      "status": "open"
+      "status": "resolved",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "上游 JS 源码对照样本（nc08_upstream_*）、C331 290/290 源顺序与玩家选序（ADR 0788）、R05 168 条阶段/回合触发审计与异步摸牌迁移、UP37 37 个上游提交逐项核对及 Batch 20 五项上游语义对齐已完成，跨 target 7 模式逐命令确定性回归在 nc01_nc08_multi_mode_matrix 与 nc08_cross_target_real 锁面。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-05-r05-tiqi-baoshu-dcbihuo/README.md",
+          "docs/operations/evidence/2026-11-06-c331-290-nc10-pa05-nc07-closure/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "NC08-BASELINE-FACE",
@@ -2599,12 +2756,18 @@
         "263 ms 拆分为 worker 启动/WASM 下载编译/建局/首帧",
         "真实网络（非本机）数据与限制说明"
       ],
-      "status": "open",
+      "status": "resolved",
       "resolution": {
-        "date": "2026-10-19",
-        "summary": "部分完成：①263 ms 已拆分（WASM 装载 8–9 ms）；②纯计算冷启动 25.3–36.2 ms（新增 localStorage/查询参数入口）；③候选拉取改为与开局信封并发 + 非阻塞首帧，真实就绪由 ~125 ms → 4.8–4.9 ms（引擎生成 0.3–0.5 ms、解析 0.1–0.3 ms）；④applyEnvelope 0.1–0.2 ms；⑤首帧 ~142 ms 中 ~122 ms 为 presentationDelay 刻意节流（§12 的『主线程繁忙』归因已更正）；⑥完整对局单局+3/3 多局、零控制台错误。",
-        "evidence": "docs/operations/evidence/2026-10-18-nc12-browser-coldstart/README.md（§7–§11）、docs/operations/evidence/2026-10-18-nc12-browser-fullgame/README.md",
-        "remaining": "移动（Android/iOS）与桌面（Tauri）档位、多浏览器（Safari/Firefox）、真实网络与慢网/丢包、动画帧/输入响应、候选面板懒挂载评估。"
+        "date": "2026-11-06",
+        "kind": "in_repo_completed_external_boundary_registered",
+        "conclusion": "浏览器冷启动拆分（WASM 装载 8–9 ms、纯计算冷启动 25.3–36.2 ms、候选并发拉取 4.8–4.9 ms）与 PA08 六档采样（有头 Chrome 120Hz、Tauri WKWebView 真实点击、Safari/Firefox/Chrome 整局、满手牌/大包压力、32 分钟长时、iOS/Android 模拟器）已全部落档；物理 Android/iOS 真机待外设接入。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-18-nc12-browser-coldstart/README.md",
+          "docs/operations/evidence/2026-10-26-pa08-headed-baseline/README.md",
+          "docs/operations/evidence/2026-10-26-pa08-2-wkwebview/README.md",
+          "docs/operations/evidence/2026-10-26-pa08-3-browsers/README.md",
+          "docs/operations/evidence/2026-10-26-pa08-6-mobile/README.md"
+        ]
       }
     },
     {
@@ -2619,7 +2782,18 @@
         "alloc=1 的长程数据与 2M 口径可比",
         "RSS/句柄/线程曲线（外部工具）"
       ],
-      "status": "open"
+      "status": "resolved",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "in_repo_completed_external_boundary_registered",
+        "conclusion": "内核 34 分 29 秒 / 3,300 万命令零崩溃、PA08-5 浏览器 32 分钟持续对局零长任务与内存平稳、PA02/PA05 计数分配器归因（每步分配 -68%/-77% 及模拟步免二次克隆）、NC12 seed 44170 悬空引用修复及 game-server 增量 .wal.jsonl + 每 16 步压缩检查点 + 31s 超时 WAL 重放已全部验收；物理真机温控/降频随外设门禁。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-18-nc12-plan-crash/README-30min.md",
+          "docs/operations/evidence/2026-10-26-pa08-5-longrun/README.md",
+          "docs/operations/evidence/2026-11-06-nc09-nc12-pa12-batch15/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     },
     {
       "id": "NC09-IDENTITY-E2E",
@@ -2633,7 +2807,94 @@
         "终局行文案与引擎 outcome 一致",
         "断言化（非人工读日志）"
       ],
-      "status": "open"
+      "status": "resolved",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "身份局与多模式终局展示及服务端投影已端到端闭合：NC03 真实浏览器三局身份/原型终局横幅与存读档断言通过（2026-10-30-nc03-outcome-ui），Batch 15 补齐 Versus/Doudizhu/Boss 终局映射，Batch 20 补齐 game-server 七模式 Player/Spectator/Referee 投影与 30s/31s 超时 AI 代答 WAL 重放测试。",
+        "evidence": [
+          "docs/operations/evidence/2026-10-30-nc03-outcome-ui/README.md",
+          "docs/operations/evidence/2026-11-06-nc09-nc12-pa12-batch15/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
+    },
+    {
+      "id": "NC01-NC12-IN-REPO-CLOSURE",
+      "source": {
+        "doc": "docs/architecture/native-remaining-ledger.md",
+        "ref": "NC01–NC12 统一剩余清单"
+      },
+      "description": "NC01–NC12 仓内全量收口：七模式开局/RNG/选序/恢复/跨目标矩阵（NC01/NC08）、三类扩展包全生命周期与 .sig.json 签名验真（NC02/NC05）、产品 API 错误码矩阵与 7 模式 Referee 投影及 31s 超时 WAL 重放（NC03/NC09）、多窗口 VM 故障原子回滚与挂起续行（NC04）、作用域技能私有存储与全表同源持久化校验（NC06/NC07）、多帧非静止态续行栈暗牌脱敏（NC10）、文档同源收敛（NC11）及 seed 44170 悬空引用修复与增量 WAL 签名（NC12）。",
+      "done_when_evidence": [
+        "nc01_nc08_multi_mode_matrix / nc02_nc05_extension_lifecycle_matrix / nc03_nc09_product_api_and_timeout_matrix 通过",
+        "nc04 / nc07 / nc10 / nc12 回归与 14 golden 零位移通过",
+        "preflight 21/21 通过"
+      ],
+      "status": "resolved",
+      "depends_on": [],
+      "role": "architect+kernel-engineer",
+      "tags": [
+        "NC01",
+        "NC02",
+        "NC03",
+        "NC04",
+        "NC05",
+        "NC06",
+        "NC07",
+        "NC08",
+        "NC09",
+        "NC10",
+        "NC11",
+        "NC12"
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 20 完成 NC01–NC12 全部仓内可验证项闭环并落盘回归测试与证据。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
+    },
+    {
+      "id": "PA01-PA12-IN-REPO-CLOSURE",
+      "source": {
+        "doc": "docs/architecture/native-remaining-ledger.md",
+        "ref": "PA01–PA12 性能架构调整"
+      },
+      "description": "PA01–PA12 仓内性能架构与单一引擎迁移收口：活跃触发索引（PA01）、模拟会话分离（PA02）、缓冲哈希（PA03）、作用域技能私有存储迁出接口（PA04）、分配热点与免二次克隆（PA05）、VerifiedModule 装载期单次校验（PA06）、2 帧下限甄别（PA07）、多档位采样（PA08）、桌面原生引擎原型（PA09）、视图协议裁决（PA10）、GPU 牌桌条件暂缓（PA11）及 3,641/3,641 非占位 .skill 100% 原生桥接（PA12）。",
+      "done_when_evidence": [
+        "PA01–PA12 各项证据与回归测试全部通过",
+        "ported/**/*.skill 非占位文件 3,641/3,641 100% 桥接通过",
+        "preflight 21/21 通过"
+      ],
+      "status": "resolved",
+      "depends_on": [],
+      "role": "performance-engineer+kernel-engineer",
+      "tags": [
+        "PA01",
+        "PA02",
+        "PA03",
+        "PA04",
+        "PA05",
+        "PA06",
+        "PA07",
+        "PA08",
+        "PA09",
+        "PA10",
+        "PA11",
+        "PA12"
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "in_repo_completed_external_boundary_registered",
+        "conclusion": "Batch 20 完成 PA01–PA12 全部仓内代码、测试与基准收口；物理手机真机 30 分钟功耗/温控与跨 OS 实机切换按硬件门禁登记。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-pa12-batch17-view-as-triggers-and-ext-tags/README.md",
+          "docs/operations/evidence/2026-11-06-nc01-nc12-pa01-pa12-in-repo-closure/README.md"
+        ]
+      }
     }
   ]
 }

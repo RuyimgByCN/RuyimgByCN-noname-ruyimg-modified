@@ -4,18 +4,42 @@ use super::*;
 #[derive(Clone)]
 pub(in super::super) struct JiZhiBehavior;
 
+fn is_ordinary_trick(kind: crate::catalog::CardKind) -> bool {
+    use crate::catalog::CardKind;
+    if matches!(
+        kind,
+        CardKind::SavageAttack
+            | CardKind::ArcheryAttack
+            | CardKind::Duel
+            | CardKind::Chain
+            | CardKind::Nullify
+            | CardKind::Dismantle
+            | CardKind::Snatch
+            | CardKind::Wuzhong
+            | CardKind::Taoyuan
+            | CardKind::Wugu
+            | CardKind::Jiedao
+    ) {
+        return true;
+    }
+    !kind.is_basic_kind()
+        && !kind.is_equip()
+        && !matches!(
+            kind,
+            CardKind::Le
+                | CardKind::Bing
+                | CardKind::ShanDian
+                | CardKind::HongShui
+                | CardKind::Guiyoujie
+        )
+        && kind.is_basic_trick_or_equip()
+}
+
 impl SkillBehavior for JiZhiBehavior {
     fn filter(&self, ctx: &QueryCtx<'_>, owner: PlayerId, event: &EventData) -> bool {
         matches!(event, EventData::CardUsed(u)
-        if u.player == owner
-            && matches!(
-                u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog)),
-                crate::catalog::CardKind::SavageAttack
-                    | crate::catalog::CardKind::ArcheryAttack
-                    | crate::catalog::CardKind::Duel
-                    | crate::catalog::CardKind::Chain
-                    | crate::catalog::CardKind::Nullify
-            ))
+            if u.player == owner
+                && is_ordinary_trick(u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog))))
     }
 
     fn start(&self, owner: PlayerId, _event: &EventData) -> Box<dyn SkillMachine> {

@@ -476,20 +476,14 @@ fn guard_mopaifanbei_second_draw() {
     );
 }
 
-/// `Rangjie`（`6`）缺少分支 1 的摸牌动作。
+/// `Rangjie`（`6`）分支 1 摸牌动作已补齐。
 #[test]
-#[ignore = "补 `draw_cards` 后转绿（分支 1 应摸牌）"]
 fn guard_rangjie_branch1_draws() {
-    let src = std::fs::read_to_string(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-content/src/content/host/step/skills_cards.rs"
-    ))
-    .expect("读 step/skills_cards.rs");
-    let idx = src.find("Rangjie").expect("找不到 rangjie 的效果步");
-    let body = &src[idx..(idx + 1200).min(src.len())];
+    let src = read("step/skills_cards.rs");
+    let body = arm_until_next(&src, "HostBehavior::Rangjie =>");
     assert!(
-        body.contains("draw") || body.contains("Draw"),
-        "分支 1（移动牌）应同时摸牌",
+        body.contains("start_draw") && body.contains("self.target = Some(1)"),
+        "分支 1（移动牌）应同时摸牌:\n{body}",
     );
 }
 

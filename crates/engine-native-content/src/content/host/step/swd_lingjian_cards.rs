@@ -68,7 +68,8 @@ impl HostMachine {
                             let j = ctx.core.rng.gen_range(i as u32 + 1) as usize;
                             pool.swap(i, j);
                         }
-                        if let Some(x) = pool.first().copied() {
+                        let equipped = pool.first().copied();
+                        if let Some(x) = equipped {
                             if let Some(pos) = ctx.core.deck.iter().position(|y| *y == x) {
                                 ctx.core.deck.remove(pos);
                             } else if let Some(pos) = ctx.core.discard.iter().position(|y| *y == x)
@@ -82,7 +83,14 @@ impl HostMachine {
                                 replaced: None,
                             });
                         }
-                        let hand = ctx.core.player(t).hand.clone();
+                        let hand: Vec<CardId> = ctx
+                            .core
+                            .player(t)
+                            .hand
+                            .iter()
+                            .copied()
+                            .filter(|c| Some(*c) != equipped)
+                            .collect();
                         if !hand.is_empty() {
                             let k = ctx.core.rng.gen_range(hand.len() as u32) as usize;
                             let c = hand[k];

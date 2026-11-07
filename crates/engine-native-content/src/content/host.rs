@@ -319,6 +319,7 @@ pub fn host_skill_def(name: String, behavior: HostBehavior) -> crate::catalog::S
         },
         HostBehavior::MtgLinzhongjiantaStrike
         | HostBehavior::MtgYoulinDiscard
+        | HostBehavior::ChangeCardNature
         | HostBehavior::WudianKangyin
         | HostBehavior::WudianLiangou
         | HostBehavior::WudianQianggu

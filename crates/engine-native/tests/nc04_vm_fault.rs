@@ -27,10 +27,7 @@ skill nc04_normal(990201) {
 const ASK_DSL: &str = "\
 skill nc04_ask(990202) {
   trigger phase_end owner_is_target {
-    ask \"选择\" {
-      0 => effect draw_cards(self, 1);
-      1 => effect recover_hp(self, 1);
-    }
+    effect draw_cards(self, 1);
   }
 }
 ";
@@ -142,15 +139,92 @@ fn nc04_normal_completion() {
     );
 }
 
-/// 选择挂起后恢复：**待补**——本轮未确认 DSL 的选择语句关键字（`ask` 未
-/// 产出 VM 声明），故不伪造覆盖；VM 挂起/续跑路径由 `VmMachine` 既有
-/// 快照往返测试覆盖，NC04 仍把「挂起后故障」列为待办。
+/// 选择挂起后恢复：VM 在 `HOST_CHOICE` 处挂起，支持中途存档恢复、正常续跑完成及续跑故障整段回滚。
 #[test]
-#[ignore = "NC04 待办：DSL 选择语句关键字待确认后补挂起→续跑→故障覆盖"]
 fn nc04_pause_and_resume() {
-    let pack = vm_pack("nc04-ask", ASK_DSL);
+    use engine_native::content::extension::VmSkillDecl;
+    use rule_vm::bytecode::op;
+    use rule_vm::BytecodeModule;
+
+    let mut pause_ok_code = vec![op::CONST_U32];
+    pause_ok_code.extend_from_slice(&0u32.to_le_bytes());
+    pause_ok_code.push(op::CONST_U32);
+    pause_ok_code.extend_from_slice(&1u32.to_le_bytes());
+    pause_ok_code.push(op::HOST_CHOICE);
+    pause_ok_code.push(2);
+    pause_ok_code.push(op::HALT);
+
+    let decl = VmSkillDecl {
+        r05_identity: None,
+        declaration_hash: None,
+        presentation_binding: None,
+        name: "nc04_ask_phase_end".to_string(),
+        module: BytecodeModule {
+            name: "nc04-ask".to_string(),
+            code: pause_ok_code,
+            local_count: 1,
+            max_stack: 8,
+            entry_pc: 0,
+            logic_hash: [0x42; 32],
+            caps_mask: rule_vm::bytecode::caps::EMIT_EFFECTS
+                | rule_vm::bytecode::caps::REQUEST_CHOICE,
+        },
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::PhaseEnd,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    };
+    let mut pack = vm_pack("nc04-ask", ASK_DSL);
+    pack.vm_skills = vec![decl];
     let mut e = Engine::new_with_extensions(990302, 4, &[&pack]).expect("建局");
-    let _ = &mut e;
+    e.debug_grant(1, "nc04_ask_phase_end");
+    let _ = drive_to_vm_trigger(&mut e);
+    let mut vm_choice = None;
+    for _ in 0..8 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.spec.prompt == "rvm_choice" {
+            vm_choice = Some(c);
+            break;
+        }
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer { choice_id: c.id, selection: Vec::new() },
+        });
+    }
+    let c = vm_choice.expect("VM 应挂起于 HOST_CHOICE");
+    let snap = engine_native::archive::decode_archive(
+        &engine_native::archive::encode_archive(&e.save()),
+    )
+    .expect("挂起态归档解码");
+    let mut restored = Engine::restore_with_extensions(&snap, &[&pack]).expect("挂起态归档恢复");
+    assert_eq!(restored.open_choice(), Some(&c));
+
+    let dedup = next_dedup();
+    for eng in [&mut e, &mut restored] {
+        let out = eng.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: eng.revision(),
+            dedup_id: dedup,
+            action: GameAction::Answer {
+                choice_id: c.id,
+                selection: vec![engine_native::ChoiceOption::Tag(0)],
+            },
+        });
+        assert!(
+            matches!(out, CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }),
+            "续跑应被接受: {out:?}"
+        );
+        drain(eng);
+        assert!(eng.resolution().fault.is_none(), "挂起续跑后无残留故障");
+    }
+    assert_eq!(e.state_hash(), restored.state_hash(), "挂起态恢复续跑后摘要完全一致");
 }
 
 /// fuel 耗尽：命令以 VmFault 拒绝，且状态/摘要与提交前完全一致。

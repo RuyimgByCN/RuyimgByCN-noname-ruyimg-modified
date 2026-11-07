@@ -65,7 +65,6 @@ fn dump(e: &Engine, tag: &str) {
 }
 
 #[test]
-#[ignore = "登记缺陷守护：seed 44170 第 10 步复现内核悬空引用；修复后应转为通过"]
 fn nc12_repro_seed_44170_step_10() {
     // 打印故障上下文日志（非打印式记录，测试可读）——用于定位**发出失效用牌的路径**
     engine_native::ai::clear_sim_fault_log();

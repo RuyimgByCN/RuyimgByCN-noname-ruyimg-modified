@@ -36,7 +36,7 @@ fn run(engine: &mut Engine, steps: std::ops::Range<usize>, dedup_base: u64) -> V
                 selection,
             })
         } else {
-            (0, GameAction::NextPhase)
+            (engine.turn().current, GameAction::NextPhase)
         };
         let (actor, action) = action;
         let outcome = engine.submit(GameCommand {
@@ -99,4 +99,54 @@ fn native_standard_one_player_trajectory() {
     file.write_all(serde_json::to_string_pretty(&payload).unwrap().as_bytes())
         .unwrap();
     file.write_all(b"\n").unwrap();
+}
+
+#[test]
+fn native_all_seven_modes_cross_target_and_restore_trajectories() {
+    let seed = 20_261_106u64;
+    let modes: Vec<(&str, Box<dyn Fn() -> Engine>)> = vec![
+        ("identity", Box::new(move || Engine::new_identity(seed, 4))),
+        ("kingdoms", Box::new(move || Engine::new_kingdoms(seed, 4))),
+        (
+            "versus",
+            Box::new(move || Engine::new_versus(seed, [vec![0, 2], vec![1, 3]])),
+        ),
+        ("boss", Box::new(move || Engine::new_boss(seed, 4, 0, 2))),
+        ("doudizhu", Box::new(move || Engine::new_doudizhu(seed, 3, 0))),
+        ("brawl", Box::new(move || Engine::new_brawl(seed, 4))),
+        ("single", Box::new(move || Engine::new_single(seed))),
+    ];
+
+    for (mode_name, make_engine) in modes {
+        let mut direct = make_engine();
+        let direct_steps = run(&mut direct, 0..24, 1);
+
+        let mut split = make_engine();
+        let before = run(&mut split, 0..12, 1);
+        let bytes = engine_native::archive::encode_archive(&split.save());
+        let decoded = engine_native::archive::decode_archive(&bytes).expect("decode archive");
+        let mut restored = Engine::restore(&decoded).expect("restore archive");
+        let after = run(&mut restored, 12..24, 5_000);
+
+        let combined: Vec<serde_json::Value> = before.into_iter().chain(after).collect();
+        assert_eq!(
+            direct_steps.len(),
+            combined.len(),
+            "{mode_name}: step count matches"
+        );
+        for (i, (lhs, rhs)) in direct_steps.iter().zip(combined.iter()).enumerate() {
+            assert_eq!(
+                lhs["revision"], rhs["revision"],
+                "{mode_name} step {i} revision mismatch"
+            );
+            assert_eq!(
+                lhs["hash"], rhs["hash"],
+                "{mode_name} step {i} state_hash mismatch"
+            );
+            assert_eq!(
+                lhs["codes"], rhs["codes"],
+                "{mode_name} step {i} public_event_codes mismatch"
+            );
+        }
+    }
 }

@@ -95,8 +95,63 @@ fn upstream_wuxingpan_equips_and_grants_skill() {
         eq_after > eq_before,
         "五行盘：应进入装备区（{eq_before} → {eq_after}）"
     );
-    eprintln!(
-        "NOTE 五行盘：技能候选命中={hits:?}（若为空，须先按原生常量核对命名再判定是否缺失）；\
-         上游为 equip5 宝物位 + 授予 wuxingpan_skill（出牌阶段限一次，永久改变一张手牌的五行属性）"
+    assert!(
+        e.debug_has_skill(0, "wuxingpan_skill"),
+        "装备五行盘后应获得 wuxingpan_skill"
+    );
+    let skill_id = e
+        .catalog()
+        .skill_by_name("wuxingpan_skill")
+        .expect("wuxingpan_skill in catalog");
+
+    // 放入一张手牌并发动一次 wuxingpan_skill 改五行属性
+    let sha = e.debug_place(0, "sha");
+    let first = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: skill_id },
+    });
+    assert!(
+        matches!(first, CommandOutcome::Pending { .. }),
+        "首次发动 wuxingpan_skill 应打开选牌询问：{first:?}"
+    );
+    let c1 = e.open_choice().cloned().expect("选牌询问");
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c1.id,
+            selection: vec![engine_native::ChoiceOption::Card(sha)],
+        },
+    });
+    let c2 = e.open_choice().cloned().expect("选五行属性询问");
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c2.id,
+            selection: vec![engine_native::ChoiceOption::Tag(2)],
+        },
+    });
+    drain(&mut e);
+    assert_eq!(
+        e.state_core().card_natures.get(&sha).copied(),
+        Some(2),
+        "首次发动后应将手牌五行属性改为所选标签"
+    );
+
+    // 同出牌阶段第二次发动应被拒绝（once_per_turn: true）
+    let second = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::ActivateSkill { skill: skill_id },
+    });
+    assert!(
+        matches!(second, CommandOutcome::Rejected(_)),
+        "同出牌阶段第二次发动 wuxingpan_skill 必须被拒绝（once_per_turn: true）：{second:?}"
     );
 }

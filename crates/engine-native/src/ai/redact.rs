@@ -27,6 +27,26 @@ pub(super) fn can_redact_continuation(e: &Engine, seat: u8) -> bool {
         })
 }
 
+fn scrub_opponent_vm_aux_scalars(core: &mut crate::state::GameStateCore, seat: u8) {
+    let opp_flags: std::collections::BTreeSet<String> = core
+        .vm_aux
+        .flags
+        .keys()
+        .filter(|(owner, k)| {
+            *owner != seat && !core.vm_aux.flags.contains_key(&(seat, k.clone()))
+        })
+        .map(|(_, k)| k.clone())
+        .collect();
+    core.vm_aux.storage.retain(|k, _| {
+        !opp_flags.contains(k)
+            && k.split_once(':')
+                .and_then(|(s, _)| s.parse::<u8>().ok())
+                .is_none_or(|owner| owner == seat)
+    });
+    core.vm_aux.flags.retain(|(owner, _), _| *owner == seat);
+    core.vm_aux.drawn.retain(|owner, _| *owner == seat);
+}
+
 pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
     use crate::ids::CardId;
     // Unknown physical owners and every typed continuation reference share one mapping.
@@ -52,11 +72,13 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         // shortcut: uninspected payloads, VM commit sentinels and other seats' filtered choices
         // retain hidden hands until semantic remapping exists. Public VM choices use a planner leaf.
         let n = e.state_core().deck.len();
+        let rev = e.revision();
+        let core = e.core_mut();
+        scrub_opponent_vm_aux_scalars(core, seat);
         if n >= 2 {
             let mut rng_state: u64 = 0xD1CE_5EED_0000
                 ^ (seat as u64).wrapping_mul(0x9E37_79B9_7F4A_7C15)
-                ^ e.revision().wrapping_mul(0x2545_F491_4F6C_DD1D);
-            let core = e.core_mut();
+                ^ rev.wrapping_mul(0x2545_F491_4F6C_DD1D);
             for k in (1..n).rev() {
                 rng_state = rng_state
                     .wrapping_mul(6364136223846793005)
@@ -250,32 +272,17 @@ pub fn redact_opponent_hands(e: &mut Engine, seat: u8) {
         for card in core.vm_aux.lost.values_mut().flatten() {
             replace(card);
         }
-        if quiescent {
-            let opp_flags: std::collections::BTreeSet<String> = core
-                .vm_aux
-                .flags
-                .keys()
-                .filter(|(owner, k)| {
-                    *owner != seat && !core.vm_aux.flags.contains_key(&(seat, k.clone()))
-                })
-                .map(|(_, k)| k.clone())
-                .collect();
-            core.vm_aux.storage.retain(|k, _| {
-                !opp_flags.contains(k)
-                    && k.split_once(':')
-                        .and_then(|(s, _)| s.parse::<u8>().ok())
-                        .is_none_or(|owner| owner == seat)
-            });
-            core.vm_aux.flags.retain(|(owner, _), _| *owner == seat);
-            core.vm_aux.drawn.retain(|owner, _| *owner == seat);
-        }
+        scrub_opponent_vm_aux_scalars(core, seat);
         for card in core.vm_aux.storage.values_mut() {
             if trap_cards.contains(card) {
                 replace(card);
             }
         }
         for ((_, key), card) in &mut core.vm_aux.flags {
-            if key == "selected_card" || key.starts_with("selected_card:") {
+            if key == "selected_card"
+                || key.starts_with("selected_card:")
+                || crate::state::scoped_storage::is_scoped_card_entry(key)
+            {
                 replace(card);
             }
         }

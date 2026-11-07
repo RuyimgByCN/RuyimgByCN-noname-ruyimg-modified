@@ -59,41 +59,48 @@ impl HostMachine {
                             Flow::Yield
                         }
                         1 => {
-                            // 移动牌：选场上可见区一张牌
-                            let mut options: Vec<ChoiceOption> = Vec::new();
-                            for p in 0..ctx.core.players.len() as PlayerId {
-                                for c in ctx
-                                    .core
-                                    .player(p)
-                                    .equips
-                                    .iter()
-                                    .chain(ctx.core.player(p).judge.iter())
-                                    .copied()
-                                {
-                                    options.push(ChoiceOption::Card(c));
-                                }
-                            }
-                            if options.is_empty() {
-                                return Flow::Done;
-                            }
-                            self.stage = HostStage::TargetChoice;
-                            Flow::WaitChoice {
-                                observer: self.owner,
-                                spec: ChoiceSpec {
-                                    kind: ChoiceKind::SelectCards,
-                                    prompt: "rangjie_move_card",
-                                    options,
-                                    min: 1,
-                                    max: 1,
-                                    allow_cancel: false,
-                                },
-                            }
+                            // 移动牌：先摸 1 → 续行段选场上可见区一张牌
+                            self.target = Some(1);
+                            ctx.start_draw(self.owner, 1);
+                            self.stage = HostStage::DrawSettle;
+                            Flow::Yield
                         }
                         _ => Flow::Done,
                     }
                 }
-                // R05-C2 续行位：让节「获得牌」摸 1 交付后开类型询问。
+                // R05-C2 续行位：让节摸 1 交付后按分支开类型询问或移动牌询问。
                 HostStage::DrawSettle => {
+                    if self.target == Some(1) {
+                        self.target = None;
+                        let mut options: Vec<ChoiceOption> = Vec::new();
+                        for p in 0..ctx.core.players.len() as PlayerId {
+                            for c in ctx
+                                .core
+                                .player(p)
+                                .equips
+                                .iter()
+                                .chain(ctx.core.player(p).judge.iter())
+                                .copied()
+                            {
+                                options.push(ChoiceOption::Card(c));
+                            }
+                        }
+                        if options.is_empty() {
+                            return Flow::Done;
+                        }
+                        self.stage = HostStage::TargetChoice;
+                        return Flow::WaitChoice {
+                            observer: self.owner,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::SelectCards,
+                                prompt: "rangjie_move_card",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
                     self.stage = HostStage::SelectCard;
                     Flow::WaitChoice {
                         observer: self.owner,

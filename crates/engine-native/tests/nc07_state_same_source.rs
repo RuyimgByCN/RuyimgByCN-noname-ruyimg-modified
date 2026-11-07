@@ -438,4 +438,325 @@ fn nc07_restore_rejects_out_of_range_references() {
     let mut t = snapshot.clone();
     t.core.vm_aux.drawn.insert(99, 1);
     assert!(Engine::restore(&t).is_err(), "vm_aux.drawn 座位越界应拒绝");
+
+    // ⑧ GameStateCore 顶层伴随表越界卡牌引用校验
+    let mut t = snapshot.clone();
+    t.core
+        .declared_kinds
+        .insert(u32::MAX, engine_native::CardKind::Le);
+    assert!(Engine::restore(&t).is_err(), "declared_kinds 卡牌越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core
+        .declared_slots
+        .insert(u32::MAX, engine_native::catalog::EquipSlot::Weapon);
+    assert!(Engine::restore(&t).is_err(), "declared_slots 卡牌越界应拒绝");
+
+    let mut t = snapshot.clone();
+    t.core.card_natures.insert(u32::MAX, 1);
+    assert!(Engine::restore(&t).is_err(), "card_natures 卡牌越界应拒绝");
+
+    // ⑨ 作用域化技能存储（scoped_storage）内嵌卡牌与座位越界校验
+    use engine_native::state::{set_scoped_skill_field, SkillStorageScope, SkillStorageValue};
+    let mut t = snapshot.clone();
+    set_scoped_skill_field(
+        &mut t.core,
+        0,
+        "pa04_oob",
+        SkillStorageScope::Turn,
+        "bad_cards",
+        SkillStorageValue::CardList(vec![u32::MAX]),
+    );
+    assert!(
+        Engine::restore(&t).is_err(),
+        "scoped_storage CardList 卡牌越界应被恢复校验拒绝"
+    );
+
+    let mut t = snapshot.clone();
+    set_scoped_skill_field(
+        &mut t.core,
+        0,
+        "pa04_oob",
+        SkillStorageScope::Round,
+        "bad_players",
+        SkillStorageValue::PlayerList(vec![99]),
+    );
+    assert!(
+        Engine::restore(&t).is_err(),
+        "scoped_storage PlayerList 座位越界应被恢复校验拒绝"
+    );
 }
+
+/// `VmAux` 全部 8 张表（`marks` / `piles` / `lost` / `once` / `flags` / `hits` / `storage` / `drawn`）
+/// 以及 `GameStateCore` 伴随映射（`declared_kinds` / `declared_slots` / `card_natures` / `current_land` / `detached_cards`）
+/// 同源参与 `state_hash()` 并随 `encode_archive` / `decode_archive` / `Engine::restore` 完整往返。
+#[test]
+fn nc07_all_vm_aux_tables_and_core_maps_are_same_sourced() {
+    assert_field_is_same_sourced(
+        "vm_aux.marks",
+        |e| {
+            e.state_core_mut().vm_aux.marks.insert((1, 42), 3);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.marks),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.piles",
+        |e| {
+            let c = e.state_core_mut().deck.pop().expect("deck non-empty");
+            e.state_core_mut()
+                .vm_aux
+                .piles
+                .insert((1, "test_pile".into()), vec![c]);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.piles),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.lost",
+        |e| {
+            let c = *e.state_core().deck.first().expect("deck non-empty");
+            e.state_core_mut().vm_aux.lost.insert(1, vec![c]);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.lost),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.once",
+        |e| {
+            e.state_core_mut()
+                .vm_aux
+                .once
+                .insert((1, "once_skill".into(), 2));
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.once),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.flags",
+        |e| {
+            e.state_core_mut()
+                .vm_aux
+                .flags
+                .insert((1, "flag_k".into()), 99);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.flags),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.hits",
+        |e| {
+            e.state_core_mut()
+                .vm_aux
+                .hits
+                .insert((1, "hit_skill".into()), 2);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.hits),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.storage",
+        |e| {
+            e.state_core_mut()
+                .vm_aux
+                .storage
+                .insert("storage_skill#1".into(), 77);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.storage),
+    );
+    assert_field_is_same_sourced(
+        "vm_aux.drawn",
+        |e| {
+            e.state_core_mut().vm_aux.drawn.insert(1, 5);
+        },
+        |e| format!("{:?}", e.state_core().vm_aux.drawn),
+    );
+    assert_field_is_same_sourced(
+        "core.declared_kinds",
+        |e| {
+            let c = *e.state_core().deck.first().unwrap();
+            e.state_core_mut()
+                .declared_kinds
+                .insert(c, engine_native::CardKind::Le);
+        },
+        |e| format!("{:?}", e.state_core().declared_kinds),
+    );
+    assert_field_is_same_sourced(
+        "core.declared_slots",
+        |e| {
+            let c = *e.state_core().deck.first().unwrap();
+            e.state_core_mut()
+                .declared_slots
+                .insert(c, engine_native::catalog::EquipSlot::Armor);
+        },
+        |e| format!("{:?}", e.state_core().declared_slots),
+    );
+    assert_field_is_same_sourced(
+        "core.card_natures",
+        |e| {
+            let c = *e.state_core().deck.first().unwrap();
+            e.state_core_mut().card_natures.insert(c, 3);
+        },
+        |e| format!("{:?}", e.state_core().card_natures),
+    );
+    assert_field_is_same_sourced(
+        "core.current_land",
+        |e| {
+            e.state_core_mut().current_land = Some(engine_native::CardKind::Sha);
+        },
+        |e| format!("{:?}", e.state_core().current_land),
+    );
+    assert_field_is_same_sourced(
+        "core.detached_cards",
+        |e| {
+            let c = e.state_core_mut().deck.pop().unwrap();
+            e.state_core_mut()
+                .detached_cards
+                .push((c, engine_native::event::DetachedKind::Unclaimed));
+        },
+        |e| format!("{:?}", e.state_core().detached_cards),
+    );
+}
+
+/// NC06 / NC07 / PA04：结构化作用域技能存储（`SkillStorageScope::{Turn, Round, Match}` +
+/// `SkillStorageValue::{Int, Flag, CardList, PlayerList}`）与 `GameStateCore` 同源：
+/// 参与 `state_hash()`、随 `encode_archive` / `decode_archive` / `Engine::restore` 无损往返、
+/// 支持 `export_scoped_skill_storage` / `import_scoped_skill_storage` 双向转换，且遵循
+/// `clear_turn` / `clear_round` / `Match` 生命周期清理契约。
+#[test]
+fn nc06_nc07_pa04_scoped_skill_storage_roundtrip_and_lifecycle() {
+    use engine_native::state::{
+        export_scoped_skill_storage, get_scoped_skill_field, import_scoped_skill_storage,
+        set_scoped_skill_field, SkillStorageScope, SkillStorageValue,
+    };
+
+    let mut e = Engine::new(20261099, 4);
+    let base_hash = e.state_hash();
+
+    set_scoped_skill_field(
+        e.state_core_mut(),
+        1,
+        "pa04_skill",
+        SkillStorageScope::Turn,
+        "turn_counter",
+        SkillStorageValue::Int(-42),
+    );
+    set_scoped_skill_field(
+        e.state_core_mut(),
+        1,
+        "pa04_skill",
+        SkillStorageScope::Round,
+        "round_active",
+        SkillStorageValue::Flag(true),
+    );
+    set_scoped_skill_field(
+        e.state_core_mut(),
+        2,
+        "pa04_skill",
+        SkillStorageScope::Match,
+        "saved_cards",
+        SkillStorageValue::CardList(vec![3, 7, 11]),
+    );
+    set_scoped_skill_field(
+        e.state_core_mut(),
+        2,
+        "pa04_skill",
+        SkillStorageScope::Match,
+        "marked_seats",
+        SkillStorageValue::PlayerList(vec![0, 3]),
+    );
+
+    assert_ne!(e.state_hash(), base_hash, "写入作用域存储必须改变 state_hash");
+
+    // 归档往返后逐项一致
+    let restored = roundtrip(&e);
+    assert_eq!(restored.state_hash(), e.state_hash());
+    assert_eq!(
+        get_scoped_skill_field(
+            restored.state_core(),
+            1,
+            "pa04_skill",
+            SkillStorageScope::Turn,
+            "turn_counter"
+        ),
+        Some(SkillStorageValue::Int(-42))
+    );
+    assert_eq!(
+        get_scoped_skill_field(
+            restored.state_core(),
+            1,
+            "pa04_skill",
+            SkillStorageScope::Round,
+            "round_active"
+        ),
+        Some(SkillStorageValue::Flag(true))
+    );
+    assert_eq!(
+        get_scoped_skill_field(
+            restored.state_core(),
+            2,
+            "pa04_skill",
+            SkillStorageScope::Match,
+            "saved_cards"
+        ),
+        Some(SkillStorageValue::CardList(vec![3, 7, 11]))
+    );
+    assert_eq!(
+        get_scoped_skill_field(
+            restored.state_core(),
+            2,
+            "pa04_skill",
+            SkillStorageScope::Match,
+            "marked_seats"
+        ),
+        Some(SkillStorageValue::PlayerList(vec![0, 3]))
+    );
+
+    // 导出 / 导入到新实例后等价
+    let exported = export_scoped_skill_storage(restored.state_core());
+    assert_eq!(exported.len(), 4);
+    let mut fresh = Engine::new(20261099, 4);
+    import_scoped_skill_storage(fresh.state_core_mut(), &exported);
+    assert_eq!(fresh.state_hash(), restored.state_hash());
+
+    // 生命周期：clear_turn 只清 Turn 域，保留 Round 与 Match 域
+    fresh.state_core_mut().vm_aux.clear_turn();
+    assert_eq!(
+        get_scoped_skill_field(
+            fresh.state_core(),
+            1,
+            "pa04_skill",
+            SkillStorageScope::Turn,
+            "turn_counter"
+        ),
+        None
+    );
+    assert_eq!(
+        get_scoped_skill_field(
+            fresh.state_core(),
+            1,
+            "pa04_skill",
+            SkillStorageScope::Round,
+            "round_active"
+        ),
+        Some(SkillStorageValue::Flag(true))
+    );
+
+    // clear_round 清 Round 域，保留 Match 域
+    fresh.state_core_mut().vm_aux.clear_round();
+    assert_eq!(
+        get_scoped_skill_field(
+            fresh.state_core(),
+            1,
+            "pa04_skill",
+            SkillStorageScope::Round,
+            "round_active"
+        ),
+        None
+    );
+    assert_eq!(
+        get_scoped_skill_field(
+            fresh.state_core(),
+            2,
+            "pa04_skill",
+            SkillStorageScope::Match,
+            "saved_cards"
+        ),
+        Some(SkillStorageValue::CardList(vec![3, 7, 11]))
+    );
+}
+

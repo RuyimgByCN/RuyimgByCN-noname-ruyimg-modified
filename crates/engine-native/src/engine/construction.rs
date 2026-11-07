@@ -66,6 +66,21 @@ impl Engine {
             .map_err(|e| format!("{e:?}"))
     }
 
+    /// 国战模式（N11）：4–8 人或通用座位数势力对抗局，初始双将槽暗置。
+    pub fn new_kingdoms(seed: u64, seats: usize) -> Self {
+        Self::new_with_mode(seed, seats, GameMode::Kingdoms, OpeningPlan::Standard)
+    }
+
+    /// 乱斗模式（Brawl）：多座位大乱斗（存活数 ≤ 1 终局），复用原型无阵营生存结算。
+    pub fn new_brawl(seed: u64, seats: usize) -> Self {
+        Self::new_with_mode(seed, seats, GameMode::Prototype, OpeningPlan::Standard)
+    }
+
+    /// 单挑模式（Single / 1v1 KOF）：2 人单挑，默认双方各 2 名候选将池。
+    pub fn new_single(seed: u64) -> Self {
+        Self::new_kof(seed, [vec![0, 1], vec![2, 3]], [0, 0], 0)
+    }
+
     /// KOF 引擎层（P2/N08 模式入口批四）：2 人局，携带会话将池/比分/局数。
     pub fn new_kof(seed: u64, pools: [Vec<u16>; 2], wins: [u32; 2], games: u32) -> Self {
         Self::new_with_mode(

@@ -925,9 +925,11 @@ impl VmAux {
         });
     }
 
-    /// 轮次推进：丢掉轮范围的 once。
+    /// 轮次推进：丢掉轮范围的 once 与 `skill_round:` 作用域旗标。
     pub fn clear_round(&mut self) {
         self.once.retain(|(_, _, scope)| *scope != 2);
+        self.flags
+            .retain(|(_, key), _| !key.starts_with("skill_round:"));
     }
 
     /// 统计 `(player, skill, scope)` 已消费的次数（兼容 `skill` 首条与 `skill#N` 追加条，保持 NGSA 107 零变更）。
@@ -1050,6 +1052,11 @@ pub struct GameState {
 
 mod general_assembly;
 pub use general_assembly::apply_general_assembly;
+pub mod scoped_storage;
+pub use scoped_storage::{
+    export_scoped_skill_storage, get_scoped_skill_field, import_scoped_skill_storage,
+    set_scoped_skill_field, SkillStorageKey, SkillStorageScope, SkillStorageValue,
+};
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum KingdomIdentity {

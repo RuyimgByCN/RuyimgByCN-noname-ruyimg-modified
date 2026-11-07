@@ -348,14 +348,37 @@ pub fn validate_core(core: &GameStateCore, b: &RestoreBounds) -> Result<(), Snap
             return Err(oob("vm_aux_once_scope", scope as u64));
         }
     }
-    for &(seat, _) in core.vm_aux.flags.keys() {
+    for (&(seat, ref key), &val) in &core.vm_aux.flags {
         check_pid(seat, b)?;
+        if crate::state::scoped_storage::is_scoped_card_entry(key) {
+            check_card(val, b)?;
+        } else if crate::state::scoped_storage::is_scoped_player_entry(key) {
+            if val > u8::MAX as u32 {
+                return Err(oob("player", val as u64));
+            }
+            check_pid(val as PlayerId, b)?;
+        }
     }
     for &(seat, _) in core.vm_aux.hits.keys() {
         check_pid(seat, b)?;
     }
     for &seat in core.vm_aux.drawn.keys() {
         check_pid(seat, b)?;
+    }
+    for &c in core.declared_kinds.keys() {
+        check_card(c, b)?;
+    }
+    for &c in core.declared_slots.keys() {
+        check_card(c, b)?;
+    }
+    for (&c, &nature) in &core.card_natures {
+        check_card(c, b)?;
+        if nature > 4 {
+            return Err(oob("card_nature", nature as u64));
+        }
+    }
+    for &(c, _) in &core.detached_cards {
+        check_card(c, b)?;
     }
     // 技能实例：键在界、值 owner 与键一致
     for ((owner, def), inst) in &core.skills {

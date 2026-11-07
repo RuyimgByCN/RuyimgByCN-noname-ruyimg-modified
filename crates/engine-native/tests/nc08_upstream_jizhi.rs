@@ -128,11 +128,9 @@ fn upstream_jizhi_draws_on_covered_trick() {
     );
 }
 
-/// 上游点 2 的**登记差异①（规则损失）**：使用【无中生有】（也是锦囊）时，
-/// 上游 `get.type === "trick"` 成立 → 应触发集智；**原生不触发**（filter 只列 5 种）。
+/// 上游点 2：使用【无中生有】等普通锦囊时，集智同样触发摸 1 张牌（净 +2）。
 #[test]
 fn upstream_jizhi_scope_difference_is_registered() {
-    // 源码事实：原生 filter 只列 5 种锦囊
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
         "/../engine-native-content/src/content/standard/skills/ji_zhi.rs"
@@ -140,12 +138,12 @@ fn upstream_jizhi_scope_difference_is_registered() {
     .expect("读集智源码");
     let seg: String = src.chars().take(1400).collect();
     assert!(
-        seg.contains("SavageAttack") && seg.contains("Nullify"),
-        "源码事实：原生集智只覆盖 5 种锦囊：{seg}"
+        seg.contains("SavageAttack") && seg.contains("Wuzhong"),
+        "源码事实：集智覆盖标准普通锦囊集：{seg}"
     );
-    // 行为面：使用【无中生有】→ 原生**不**触发集智（手牌不因集智增加）
+    // 行为面：使用【无中生有】→ 触发集智（本体 -1 + 集智 +1 + 无中生有 +2 = 净 +2）
     let mut e = Engine::new(20264702, 4);
-    e.debug_grant(0, "集智"); // 目录名为中文技能名
+    e.debug_grant(0, "集智");
     advance_to_play(&mut e, 0);
     for p in 0..4 {
         e.debug_clear_hand(p);
@@ -163,11 +161,10 @@ fn upstream_jizhi_scope_difference_is_registered() {
         CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
     ));
     drain(&mut e);
-    // 【无中生有】自身摸 2：本体离手（-1）+ 摸 2 = 净 +1；若集智也触发则净 +2
     assert_eq!(
         e.debug_hand(0).len(),
-        hand_before + 1,
-        "登记差异①：原生集智**不**覆盖【无中生有】（上游会触发，净应为 +2）"
+        hand_before + 2,
+        "集智覆盖【无中生有】：本体离手(-1) + 集智摸1(+1) + 无中摸2(+2) = 净 +2"
     );
 }
 

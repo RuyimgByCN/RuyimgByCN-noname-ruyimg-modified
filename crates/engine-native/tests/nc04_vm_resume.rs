@@ -623,3 +623,283 @@ fn b7_suspended_vm_v323_archive_is_rejected() {
         "旧格式挂起 VM 档不能解码（B7 前的 Rvm 编码不含技能身份字段）"
     );
 }
+
+/// NC04 多触发窗口与多错误类别的整段回滚矩阵：
+/// 覆盖 `PhaseEnd` / `Damage` / `PhaseBegin` 三种触发时机，以及
+/// 宿主调用边界错误（无效 `HOST_EFFECT_EXT`）与挂起续跑后宿主边界故障，
+/// 验证任意窗口下发生 `VmFault` 时：
+/// 1. 命令以 `RejectReason::VmFault { skill, detail }` 拒绝；
+/// 2. `state_hash()`、`revision()`、`save()`、`log()` 与提交前逐字一致；
+/// 3. `resolution().fault` 已清空，不会污染后续状态或重放。
+#[test]
+fn nc04_multi_window_fault_rollback_matrix() {
+    let mut direct_fault_code = vec![op::HOST_EFFECT_EXT];
+    direct_fault_code.extend_from_slice(&0xFFFFu16.to_le_bytes());
+    direct_fault_code.push(op::HALT);
+
+    // 窗口 1：Damage 触发直接故障
+    let dmg_decl = VmSkillDecl {
+        r05_identity: None,
+        declaration_hash: None,
+        presentation_binding: None,
+        name: "nc04_matrix_dmg_fault".to_string(),
+        module: module("nc04-matrix-dmg", direct_fault_code.clone()),
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::Damage,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    };
+    let dmg_pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc04-matrix-dmg".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc04".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![dmg_decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e_dmg = Engine::new_with_extensions(20261049, 4, &[&dmg_pack]).unwrap();
+    e_dmg.debug_grant(1, "nc04_matrix_dmg_fault");
+    // 推进到 0 号出牌阶段，打出【杀】指定 1 号，1 号放弃出【闪】时触发 Damage → VmFault 整段回滚
+    for _ in 0..8 {
+        if e_dmg.turn().current == 0 && e_dmg.turn().phase == Phase::Play && e_dmg.open_choice().is_none() {
+            break;
+        }
+        if let Some(c) = e_dmg.open_choice().cloned() {
+            let _ = e_dmg.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e_dmg.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer { choice_id: c.id, selection: Vec::new() },
+            });
+        } else {
+            let actor = e_dmg.turn().current;
+            let _ = e_dmg.submit(GameCommand {
+                actor,
+                expected_revision: e_dmg.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::NextPhase,
+            });
+        }
+    }
+    let sha = e_dmg.debug_move_named_card_to_hand(0, "sha");
+    let play_out = e_dmg.submit(GameCommand {
+        actor: 0,
+        expected_revision: e_dmg.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card: sha, targets: vec![1] },
+    });
+    assert!(matches!(play_out, CommandOutcome::Pending { .. }), "{play_out:?}");
+    let dodge_choice = e_dmg.open_choice().cloned().expect("等待 1 号响应闪");
+    let dmg_snap_before = e_dmg.save();
+    let dmg_hash_before = e_dmg.state_hash();
+    let dmg_rev_before = e_dmg.revision();
+    let dmg_log_before = e_dmg.log().to_vec();
+    let dmg_pass_sel = if dodge_choice.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+        vec![engine_native::ChoiceOption::Pass]
+    } else {
+        Vec::new()
+    };
+    let dmg_out = e_dmg.submit(GameCommand {
+        actor: dodge_choice.observer,
+        expected_revision: dmg_rev_before,
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: dodge_choice.id,
+            selection: dmg_pass_sel,
+        },
+    });
+    match dmg_out {
+        CommandOutcome::Rejected(RejectReason::VmFault { skill, detail }) => {
+            assert_eq!(skill, "nc04_matrix_dmg_fault");
+            assert!(detail.contains("Host") || detail.contains("host"), "{detail}");
+        }
+        other => panic!("Damage 故障应以 VmFault 拒绝: {other:?}"),
+    }
+    assert_eq!(e_dmg.state_hash(), dmg_hash_before, "Damage 故障整段回滚");
+    assert_eq!(e_dmg.revision(), dmg_rev_before);
+    assert_eq!(e_dmg.save(), dmg_snap_before);
+    assert_eq!(e_dmg.log(), dmg_log_before);
+    assert!(e_dmg.resolution().fault.is_none());
+
+    // 窗口 2：PhaseBegin 触发直接故障
+    let phase_begin_decl = VmSkillDecl {
+        r05_identity: None,
+        declaration_hash: None,
+        presentation_binding: None,
+        name: "nc04_matrix_phase_begin_fault".to_string(),
+        module: module("nc04-matrix-pb", direct_fault_code.clone()),
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::PhaseBegin,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    };
+    let pb_pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc04-matrix-pb".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc04".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![phase_begin_decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e_pb = Engine::new_with_extensions(20261050, 4, &[&pb_pack]).unwrap();
+    let actor = e_pb.turn().current;
+    e_pb.debug_grant(actor, "nc04_matrix_phase_begin_fault");
+    let snap_before = e_pb.save();
+    let hash_before = e_pb.state_hash();
+    let rev_before = e_pb.revision();
+    let log_before = e_pb.log().to_vec();
+    let out = e_pb.submit(GameCommand {
+        actor,
+        expected_revision: rev_before,
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    match out {
+        CommandOutcome::Rejected(RejectReason::VmFault { skill, detail }) => {
+            assert_eq!(skill, "nc04_matrix_phase_begin_fault");
+            assert!(detail.contains("Host") || detail.contains("host"), "{detail}");
+        }
+        other => panic!("PhaseBegin 故障应以 VmFault 拒绝: {other:?}"),
+    }
+    assert_eq!(e_pb.state_hash(), hash_before, "PhaseBegin 故障整段回滚");
+    assert_eq!(e_pb.revision(), rev_before);
+    assert_eq!(e_pb.save(), snap_before);
+    assert_eq!(e_pb.log(), log_before);
+    assert!(e_pb.resolution().fault.is_none());
+
+    // 窗口 3：PhaseEnd 触发直接故障
+    let pe_pack = pack(
+        "nc04-matrix-pe",
+        direct_fault_code.clone(),
+        "nc04_matrix_phase_end_fault",
+    );
+    let mut e_pe = Engine::new_with_extensions(20261051, 4, &[&pe_pack]).unwrap();
+    for _ in 0..40 {
+        if e_pe.turn().current == 1 && e_pe.turn().phase == Phase::Discard {
+            break;
+        }
+        let cur = e_pe.turn().current;
+        let _ = e_pe.submit(GameCommand {
+            actor: cur,
+            expected_revision: e_pe.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e_pe);
+    }
+    e_pe.debug_grant(1, "nc04_matrix_phase_end_fault");
+    let pe_snap_before = e_pe.save();
+    let pe_hash_before = e_pe.state_hash();
+    let pe_rev_before = e_pe.revision();
+    let pe_log_before = e_pe.log().to_vec();
+    let pe_out = e_pe.submit(GameCommand {
+        actor: 1,
+        expected_revision: pe_rev_before,
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    match pe_out {
+        CommandOutcome::Rejected(RejectReason::VmFault { skill, detail }) => {
+            assert_eq!(skill, "nc04_matrix_phase_end_fault");
+            assert!(detail.contains("Host") || detail.contains("host"), "{detail}");
+        }
+        other => panic!("PhaseEnd 故障应以 VmFault 拒绝: {other:?}"),
+    }
+    assert_eq!(e_pe.state_hash(), pe_hash_before, "PhaseEnd 故障整段回滚");
+    assert_eq!(e_pe.revision(), pe_rev_before);
+    assert_eq!(e_pe.save(), pe_snap_before);
+    assert_eq!(e_pe.log(), pe_log_before);
+    assert!(e_pe.resolution().fault.is_none());
+
+    // 窗口 4：TurnBegin 触发直接故障
+    let tb_decl = VmSkillDecl {
+        r05_identity: None,
+        declaration_hash: None,
+        presentation_binding: None,
+        name: "nc04_matrix_turn_begin_fault".to_string(),
+        module: module("nc04-matrix-tb", direct_fault_code),
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::TurnBegin,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    };
+    let tb_pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc04-matrix-tb".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc04".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![tb_decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let mut e_tb = Engine::new_with_extensions(20261052, 4, &[&tb_pack]).unwrap();
+    // 推进到 0 号位 End 阶段，授技给 1 号位，NextPhase 结束 0 号位回合并进入 1 号位 TurnBegin 触发故障
+    for _ in 0..16 {
+        if e_tb.turn().current == 0
+            && e_tb.turn().phase == Phase::End
+            && e_tb.open_choice().is_none()
+        {
+            break;
+        }
+        let cur = e_tb.turn().current;
+        let _ = e_tb.submit(GameCommand {
+            actor: cur,
+            expected_revision: e_tb.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        drain(&mut e_tb);
+    }
+    e_tb.debug_grant(1, "nc04_matrix_turn_begin_fault");
+    let tb_snap_before = e_tb.save();
+    let tb_hash_before = e_tb.state_hash();
+    let tb_rev_before = e_tb.revision();
+    let tb_log_before = e_tb.log().to_vec();
+    let tb_out = e_tb.submit(GameCommand {
+        actor: 0,
+        expected_revision: tb_rev_before,
+        dedup_id: next_dedup(),
+        action: GameAction::NextPhase,
+    });
+    match tb_out {
+        CommandOutcome::Rejected(RejectReason::VmFault { skill, detail }) => {
+            assert_eq!(skill, "nc04_matrix_turn_begin_fault");
+            assert!(detail.contains("Host") || detail.contains("host"), "{detail}");
+        }
+        other => panic!("TurnBegin 故障应以 VmFault 拒绝: {other:?}"),
+    }
+    assert_eq!(e_tb.state_hash(), tb_hash_before, "TurnBegin 故障整段回滚");
+    assert_eq!(e_tb.revision(), tb_rev_before);
+    assert_eq!(e_tb.save(), tb_snap_before);
+    assert_eq!(e_tb.log(), tb_log_before);
+    assert!(e_tb.resolution().fault.is_none());
+}

@@ -338,6 +338,22 @@ pub fn active_ask(
                 false,
             ))
         }
+        MachineSnapshot::GangLie {
+            source,
+            asked,
+            ..
+        } if *asked => {
+            let options = hand_card_options(&core.player(*source).hand);
+            Some(ask(
+                *source,
+                "discard_to_limit",
+                ChoiceKind::SelectCards,
+                options,
+                2,
+                2,
+                true,
+            ))
+        }
         MachineSnapshot::Death { .. } => None,
         MachineSnapshot::OptionalGate {
             owner,
@@ -524,78 +540,24 @@ pub fn active_ask(
             }
             _ => None,
         },
-        MachineSnapshot::BossXiangde { .. } => {
-            // 相德：无挂起一步机（永不等待应答），恢复无询问
-            None
-        }
-        MachineSnapshot::BossFutai { .. } => {
-            // 覆泰：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossLuanchang { .. } => {
-            // 乱常：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossZhaohuo { .. } => {
-            // 招祸：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossQizuo { .. } => {
-            // 奇佐：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossXiaoxiong { .. } => {
-            // 枭雄：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossLingbo { .. } => {
-            // 凌波：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossTashui { .. } => {
-            // 踏水：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossZjLeiji { .. } => {
-            // 雷击·张角：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossHeisheng { .. } => {
-            // 黑绳：无挂起一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossLeizhu { .. } => {
-            // 雷诛：逐发机器不产生询问（救援询问属濒死机），恢复无询问
-            None
-        }
-        MachineSnapshot::BossRenao { .. } => {
-            // 热恼：同雷诛，恢复无询问
-            None
-        }
-        MachineSnapshot::BossWanghun { .. } => {
-            // 忘魂：直写一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossZhuxin { .. } => {
-            // 诛心：直写一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossPingdeng { .. } => {
-            // 平等：直写两波机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossHuoxing { .. } => {
-            // 火刑：直写逐座机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossBingfeng { .. } => {
-            // 冰封：直写一步机，恢复无询问
-            None
-        }
-        MachineSnapshot::BossWangxiang { .. } => {
-            // 望乡：直写一步机，恢复无询问
-            None
-        }
+        MachineSnapshot::BossXiangde { .. }
+        | MachineSnapshot::BossFutai { .. }
+        | MachineSnapshot::BossLuanchang { .. }
+        | MachineSnapshot::BossZhaohuo { .. }
+        | MachineSnapshot::BossQizuo { .. }
+        | MachineSnapshot::BossXiaoxiong { .. }
+        | MachineSnapshot::BossLingbo { .. }
+        | MachineSnapshot::BossTashui { .. }
+        | MachineSnapshot::BossZjLeiji { .. }
+        | MachineSnapshot::BossHeisheng { .. }
+        | MachineSnapshot::BossLeizhu { .. }
+        | MachineSnapshot::BossRenao { .. }
+        | MachineSnapshot::BossWanghun { .. }
+        | MachineSnapshot::BossZhuxin { .. }
+        | MachineSnapshot::BossPingdeng { .. }
+        | MachineSnapshot::BossHuoxing { .. }
+        | MachineSnapshot::BossBingfeng { .. }
+        | MachineSnapshot::BossWangxiang { .. } => None,
         MachineSnapshot::Rvm {
             commit_pending,
             commit_state,

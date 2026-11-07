@@ -166,26 +166,93 @@ fn upstream_rangjie_gain_branch_draws_then_takes_card() {
     );
 }
 
-/// 上游点 4 的**分支 1（移动牌）**：同样必须先摸 1 张——**原生未实现（登记缺陷）**。
-///
-/// 本用例以 `#[ignore]` 守护，并做**源码事实固定**（不依赖任何布阵助手）：
-/// 原生只在分支 0（获得牌）调用 `draw_cards`，分支 1（移动牌）没有。修复后应改为行为断言并通过。
+/// 上游点 4 的**分支 1（移动牌）**：同样必须先摸 1 张，再移动场上可见区的一张牌。
 #[test]
-#[ignore = "登记缺陷：原生 rangjie 分支 1（移动牌）未摸牌，违反上游 player.draw() 在分支前无条件执行；\
-            修复需改未跟踪的 content/host/step/skills_cards.rs，待 host 拆分落定"]
 fn upstream_rangjie_move_branch_must_draw_one() {
-    let src = std::fs::read_to_string(concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-content/src/content/host/step/skills_cards.rs"
-    ))
-    .expect("读 rangjie 源码");
-    let idx = src.find("HostBehavior::Rangjie =>").expect("rangjie 分支");
-    let seg: String = src[idx..].chars().take(2600).collect();
-    // 分支 0 有 start_draw（R05-C2 异步迁移后字面）；分支 1 之前不应只有
-    // 一次 draw（上游在分支前无条件 draw 一次）
-    let draws = seg.matches("start_draw(self.owner, 1)").count();
+    let mut e = epic_engine(20263003);
+    e.debug_grant(0, "rangjie");
+    e.debug_clear_hand(0);
+    // 在 1 号位装备区放置一把武器以激活移动牌分支
+    let weapon = e
+        .catalog()
+        .cards
+        .iter()
+        .position(|c| c.kind.is_equip())
+        .expect("catalog has equip card") as u32;
+    e.state_core_mut().deck.retain(|c| *c != weapon);
+    for p in 0..4 {
+        e.state_core_mut().player_mut(p).hand.retain(|c| *c != weapon);
+    }
+    e.state_core_mut().player_mut(1).equips.push(weapon);
+
+    let hand_before = e.debug_hand(0).len();
+    e.debug_deal_damage(Some(1), 0, 1, engine_native::event::DamageNature::Normal);
+    let c0 = e.open_choice().cloned().expect("让节触发确认");
+    assert_eq!(c0.spec.prompt, "trigger_confirm");
+    let _ = e.submit(GameCommand {
+        actor: c0.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c0.id,
+            selection: vec![ChoiceOption::Confirm],
+        },
+    });
+    let c = e.open_choice().cloned().expect("场上有牌应提供移动牌分支");
+    assert_eq!(c.spec.prompt, "rangjie_choice");
     assert!(
-        draws >= 2 || seg.contains("0 => {\n                            // 获得牌：摸 1"),
-        "上游在分支前 draw()：非取消路径应恰好一次 draw（原生当前只在分支 0）——draws={draws}"
+        c.spec.options.contains(&ChoiceOption::Tag(1)),
+        "场上有装备时应包含分支 1（移动牌）：{:?}",
+        c.spec.options
+    );
+    let _ = e.submit(GameCommand {
+        actor: c.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c.id,
+            selection: vec![ChoiceOption::Tag(1)],
+        },
+    });
+    let c2 = e.open_choice().cloned().expect("摸 1 张后应打开移动牌选择");
+    assert_eq!(c2.spec.prompt, "rangjie_move_card");
+    assert_eq!(
+        e.debug_hand(0).len(),
+        hand_before + 1,
+        "选择分支 1（移动牌）后必须先摸 1 张牌"
+    );
+    let _ = e.submit(GameCommand {
+        actor: c2.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c2.id,
+            selection: vec![ChoiceOption::Card(weapon)],
+        },
+    });
+    let c3 = e.open_choice().cloned().expect("选牌后应打开目标选择");
+    assert_eq!(c3.spec.prompt, "rangjie_move_target");
+    let _ = e.submit(GameCommand {
+        actor: c3.observer,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c3.id,
+            selection: vec![ChoiceOption::Player(0)],
+        },
+    });
+    drain(&mut e);
+    assert!(
+        !e.state_core().player(1).equips.contains(&weapon),
+        "1 号位装备应被移走"
+    );
+    assert!(
+        e.state_core().player(0).equips.contains(&weapon),
+        "0 号位应获得被移动的装备"
+    );
+    assert_eq!(
+        e.debug_hand(0).len(),
+        hand_before + 1,
+        "分支 1 结算完成后 0 号位手牌数应净 +1"
     );
 }

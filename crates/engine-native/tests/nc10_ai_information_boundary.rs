@@ -349,3 +349,214 @@ fn nc10_quiescent_storage_scrubs_opponent_entries_and_preserves_observer_counter
     assert_eq!(a.state_core(), b.state_core());
 }
 
+/// 多帧非静止态续体（`!quiescent`，含挂起机器栈与开放选择）的信息边界：
+/// 对手手牌、牌库、对手陷阱（`sxianjing_traps`）、对手私有技能堆（`vm_aux.piles`）及
+/// 对手 `vm_aux.storage` / `flags` / `drawn` 置换或注入后，遮蔽快照与规划结果完全一致。
+#[test]
+fn planner_is_invariant_under_multi_frame_non_quiescent_continuations() {
+    for seed in [9800u64, 9801, 9802] {
+        let mut a = Engine::new(seed, 4);
+        a.debug_set_turn(0, engine_native::Phase::Play, 1);
+        a.debug_grant(1, "刚烈");
+        let sha = a.debug_move_named_card_to_hand(0, "sha");
+        let _shan = a.debug_move_named_card_to_hand(1, "shan");
+        // 为对手 2 号与 3 号布置私有陷阱与私有 VM 牌堆
+        let trap_card = a.state_core_mut().deck.pop().unwrap();
+        let pile_card = a.state_core_mut().deck.pop().unwrap();
+        a.state_core_mut().players[2].sxianjing_traps.push(trap_card);
+        a.state_core_mut()
+            .vm_aux
+            .piles
+            .insert((3, "private_pile".into()), vec![pile_card]);
+
+        // 0 号对 1 号出【杀】 → 1 号放弃出【闪】 → 压入 Damage 帧与【刚烈】OptionalGate（Sha + OptionalGate 双帧非静止态）
+        let out = a.submit(GameCommand {
+            actor: 0,
+            expected_revision: a.revision(),
+            dedup_id: 1,
+            action: GameAction::PlayCard {
+                card: sha,
+                targets: vec![1],
+            },
+        });
+        assert!(!matches!(out, engine_native::CommandOutcome::Rejected(_)));
+        let dodge_c = a.open_choice().cloned().expect("应有闪响应窗口");
+        let pass_out = a.submit(GameCommand {
+            actor: dodge_c.observer,
+            expected_revision: a.revision(),
+            dedup_id: 2,
+            action: GameAction::Answer {
+                choice_id: dodge_c.id,
+                selection: vec![engine_native::ChoiceOption::Pass],
+            },
+        });
+        assert!(!matches!(pass_out, engine_native::CommandOutcome::Rejected(_)));
+        let res = a.resolution();
+        assert!(
+            res.parks.len() >= 2 && res.stack.len() >= 2 && res.open_choice.is_some(),
+            "必须处于多帧非静止态续体: parks={} stack={}",
+            res.parks.len(),
+            res.stack.len()
+        );
+        let observer = res.open_choice.as_ref().unwrap().observer;
+        a.state_core_mut()
+            .vm_aux
+            .flags
+            .insert((observer, "obs_flag#1".into()), 5);
+        a.state_core_mut()
+            .vm_aux
+            .storage
+            .insert(format!("{observer}:998102001:1"), 5);
+
+        let mut b = a.clone();
+        permute_hidden(&mut b, observer, 5);
+        {
+            let core = b.state_core_mut();
+            std::mem::swap(&mut core.players[2].sxianjing_traps[0], &mut core.deck[0]);
+            std::mem::swap(
+                &mut core.vm_aux.piles.get_mut(&(3, "private_pile".into())).unwrap()[0],
+                &mut core.deck[1],
+            );
+            let opp = (observer + 1) % 4;
+            core.vm_aux.flags.insert((opp, "opp_secret#2".into()), 42);
+            core.vm_aux.storage.insert("opp_secret#2".into(), 42);
+            core.vm_aux.storage.insert(format!("{opp}:998102001:2"), 99);
+            core.vm_aux.drawn.insert(opp, 4);
+        }
+
+        let plan_a = a.plan_action(observer, &planner());
+        let plan_b = b.plan_action(observer, &planner());
+        assert_eq!(
+            format!("{plan_a:?}"),
+            format!("{plan_b:?}"),
+            "seed={seed}: 多帧非静止态续体规划结果不得依赖隐藏信息"
+        );
+        assert_eq!(plan_a.sim_faults, 0);
+
+        let mut red_a = a.clone();
+        let mut red_b = b.clone();
+        engine_native::ai::redact_opponent_hands(&mut red_a, observer);
+        engine_native::ai::redact_opponent_hands(&mut red_b, observer);
+        assert_eq!(red_a.state_core(), red_b.state_core());
+        assert_eq!(red_a.save().resolution, red_b.save().resolution);
+    }
+
+    // Reviewer Attack Surface #1：挂起栈同时包含非空 `cards` 的 `Host` 机器（【让节】2 点伤害）
+    // 与内层 `Draw` 事件触发的 `Rvm` 选择窗口（`HOST_CHOICE 2`），验证多帧 `Host + Rvm` 嵌套续体下：
+    // 1. `Host(state.cards)` 被固定（不发生悬垂重映射）；
+    // 2. 对手手牌、牌库、陷阱、私有 VM 牌堆与 `vm_aux.{storage, flags, drawn}` 全部遮蔽；
+    // 3. `plan_action` 完全不依赖隐藏信息且 `sim_faults == 0`。
+    use engine_native::content::extension::{ExtensionDef, ExtensionPack, VmSkillDecl};
+    use rule_vm::bytecode::op;
+    use rule_vm::BytecodeModule;
+    let mut choice_code = vec![op::CONST_U32];
+    choice_code.extend_from_slice(&0u32.to_le_bytes());
+    choice_code.push(op::CONST_U32);
+    choice_code.extend_from_slice(&1u32.to_le_bytes());
+    choice_code.push(op::HOST_CHOICE);
+    choice_code.push(2);
+    choice_code.push(op::HALT);
+    let draw_vm_decl = VmSkillDecl {
+        r05_identity: None,
+        declaration_hash: None,
+        presentation_binding: None,
+        name: "nc10_nested_draw_choice".to_string(),
+        module: BytecodeModule {
+            name: "nc10-nested-draw".to_string(),
+            code: choice_code,
+            local_count: 1,
+            max_stack: 8,
+            entry_pc: 0,
+            logic_hash: [0x66; 32],
+            caps_mask: rule_vm::bytecode::caps::EMIT_EFFECTS
+                | rule_vm::bytecode::caps::REQUEST_CHOICE,
+        },
+        trigger: engine_native::catalog::TriggerMeta {
+            event: engine_native::event::EventKind::CardsDrawn,
+            timing: engine_native::event::Timing::Normal,
+            priority: 0,
+            order_selectable: true,
+            optional: false,
+            extra_events: Vec::new(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Always,
+    };
+    let pack = ExtensionPack {
+        def: ExtensionDef {
+            name: engine_native::content::names::intern("nc10-nested-draw".to_string()),
+            version: 1,
+            description: engine_native::content::names::intern("nc10".to_string()),
+        },
+        generals: Vec::new(),
+        cards: Vec::new(),
+        host_skills: Vec::new(),
+        vm_skills: vec![draw_vm_decl],
+        init_hook: engine_native::content::extension::InitHook::None,
+        enabled: true,
+    };
+    let epic_root =
+        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let epic_json =
+        std::fs::read_to_string(epic_root.join("epic-cards-upstream-liuli/assets/cards.json"))
+            .expect("读史诗卡牌包");
+    let epic_pack = content_native_loader::bridge_pack(&epic_json)
+        .expect("桥接史诗卡牌包")
+        .pack;
+    let mut host_vm_a =
+        Engine::new_with_extensions(9805, 4, &[&epic_pack, &pack]).expect("建局");
+    host_vm_a.debug_set_turn(0, engine_native::Phase::Play, 1);
+    host_vm_a.debug_grant(1, "rangjie");
+    host_vm_a.debug_grant(1, "nc10_nested_draw_choice");
+    // 1 号受到 2 点伤害 → 确认【让节】→ 选择分支 0（摸 1 张牌，此时 HostState.cards 仍剩 1 项非空）
+    // → 内层 Draw 帧触发 `nc10_nested_draw_choice` 挂起于 `rvm_choice`
+    host_vm_a.debug_deal_damage(Some(0), 1, 2, engine_native::event::DamageNature::Normal);
+    let c_confirm = host_vm_a.open_choice().cloned().expect("让节确认门");
+    let _ = host_vm_a.submit(GameCommand {
+        actor: c_confirm.observer,
+        expected_revision: host_vm_a.revision(),
+        dedup_id: 10,
+        action: GameAction::Answer {
+            choice_id: c_confirm.id,
+            selection: vec![engine_native::ChoiceOption::Confirm],
+        },
+    });
+    let c_branch = host_vm_a.open_choice().cloned().expect("让节分支选择");
+    assert_eq!(c_branch.spec.prompt, "rangjie_choice");
+    let _ = host_vm_a.submit(GameCommand {
+        actor: c_branch.observer,
+        expected_revision: host_vm_a.revision(),
+        dedup_id: 11,
+        action: GameAction::Answer {
+            choice_id: c_branch.id,
+            selection: vec![engine_native::ChoiceOption::Tag(0)],
+        },
+    });
+    let c_rvm = host_vm_a.open_choice().cloned().expect("内层 Rvm 选择窗口");
+    assert_eq!(c_rvm.spec.prompt, "rvm_choice");
+    assert!(
+        host_vm_a.resolution().parks.len() >= 2 && host_vm_a.resolution().stack.len() >= 2,
+        "parks 应同时包含外层 Host(让节) 与内层 Rvm(nc10_nested_draw_choice)"
+    );
+    let mut host_vm_b = host_vm_a.clone();
+    permute_hidden(&mut host_vm_b, 1, 9);
+    host_vm_b
+        .state_core_mut()
+        .vm_aux
+        .flags
+        .insert((2, "opp_nested_secret".into()), 123);
+    host_vm_b
+        .state_core_mut()
+        .vm_aux
+        .storage
+        .insert("2:998102001:7".into(), 456);
+    host_vm_b.state_core_mut().vm_aux.drawn.insert(2, 5);
+
+    let plan_hv_a = host_vm_a.plan_action(1, &planner());
+    let plan_hv_b = host_vm_b.plan_action(1, &planner());
+    assert_eq!(
+        format!("{plan_hv_a:?}"),
+        format!("{plan_hv_b:?}"),
+        "Host(非空 cards) + 内层 Rvm 挂起续体的规划不得依赖隐藏信息"
+    );
+    assert_eq!(plan_hv_a.sim_faults, 0);
+}
