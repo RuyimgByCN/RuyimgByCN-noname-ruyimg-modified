@@ -59,7 +59,6 @@ fn yunchou_engine(seed: u64) -> Engine {
 /// （`标记牌是否已弃=false`）⇒ **纵火确实没有弃牌**（判据用标记牌，排除「出杀消耗」干扰）。
 /// 详见修复清单第 33/34 项；用例以 `#[ignore]` 守护，**不写成通过**。
 #[test]
-#[ignore = "纵火：确认后未弃牌（标记牌仍在手；两种伤害路径均复现）——根因待查，见第 33/34 项"]
 fn upstream_zonghuo_discards_one_without_asking() {
     let mut e = yunchou_engine(20271101);
     e.debug_grant(0, "ycnzonghuo");
@@ -92,7 +91,9 @@ fn upstream_zonghuo_discards_one_without_asking() {
         if !prompts.iter().any(|p| p == c.spec.prompt) {
             prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
         }
-        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+        let sel: Vec<ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()

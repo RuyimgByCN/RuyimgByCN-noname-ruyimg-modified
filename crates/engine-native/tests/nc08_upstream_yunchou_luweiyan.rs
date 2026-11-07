@@ -190,7 +190,6 @@ fn upstream_luweiyan_zone_difference_is_registered() {
 /// 原生为**自动取座位序首目标**（`yunchou.rs:280` 注释「登记差异：上游玩家选目标+可取消，
 /// 原生自动首目标」）→ 本用例固定该差异（断言**无目标询问**、但**确实产生了【杀】**）。
 #[test]
-#[ignore = "链杀：确认询问已出现（trigger_confirm），但虚拟杀未产生响应询问——嵌套结算待查"]
 fn upstream_luweiyan_chain_kill_fires_on_first_target() {
     let mut e = yunchou_engine(20270903);
     // 厉焰与**链杀子技**在包内是**两名技能**（character.json：`ycnluweiyan` + `ycnluweiyan2`）
@@ -282,7 +281,9 @@ fn upstream_luweiyan_chain_kill_fires_on_first_target() {
             });
             continue;
         }
-        let sel: Vec<engine_native::ChoiceOption> = if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
+        let sel: Vec<engine_native::ChoiceOption> = if c.spec.prompt == "trigger_confirm" {
+            vec![engine_native::ChoiceOption::Confirm]
+        } else if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
             vec![engine_native::ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
             Vec::new()

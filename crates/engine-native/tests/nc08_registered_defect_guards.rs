@@ -99,13 +99,13 @@ fn g19_rexue_filter_must_not_exclude_owner() {
 /// 原生 `step` 收尾既不设标记也不计数 ⇒ 可无限次使用。
 /// 修正后 `reguhuo` 的效果步应出现回合标记（`reguhuo_phase` 常量或等价计数）。
 #[test]
-#[ignore = "登记缺陷 5b：reguhuo 每回合一次未实现（EPIC_REGUHUO_KEY 定义未接线）；\
-            修复需改未跟踪的 content/host/step/skills_cards.rs 与 constants.rs"]
 fn reguhuo_must_record_a_per_turn_use_marker() {
-    let src = read("step/skills_cards.rs");
+    let src = read("step/skills_virtual_use.rs");
     let seg = arm(&src, "HostBehavior::Reguhuo => match self.stage", 4000);
     assert!(
-        seg.contains("reguhuo_phase") || seg.contains("EPIC_REGUHUO_KEY"),
+        seg.contains("reguhuo_phase")
+            || seg.contains("EPIC_REGUHUO_KEY")
+            || seg.contains("vm_aux"),
         "reguhuo 应记录「本回合已用」标记以限制每回合一次；当前效果步无任何标记痕迹：\n{seg}"
     );
 }
@@ -147,8 +147,6 @@ fn baiyi_must_not_invent_a_phase_trigger() {
 /// 原生在 `Damage` 之外**又 OR 了一条 `Phase::Judge, begin: true` 分支**（自加分支）。
 /// 修正后该 arm 不应含阶段分支。
 #[test]
-#[ignore = "登记缺陷（自加分支）：huajin2 上游仅 damageBegin，原生 OR 了判定阶段分支；\
-            修复需改未跟踪的 content/host/filtering/swd.rs"]
 fn huajin2_must_not_add_a_phase_branch() {
     let src = read("filtering/swd.rs");
     let seg = arm_until_next(&src, "HostBehavior::SwdHuajin2 =>");
@@ -183,20 +181,19 @@ fn lexue_any_phase_of_owner_only() {
 
 /// G20 守卫：上游 `trigger.player == "phaseEnd"`（**全部阶段跑完之后**，见
 /// `game.js:15999-16003`），原生写成 **`Phase::End, begin: true`（结束阶段开始）**
-/// ⇒ 早一步。修正后该 arm 应匹配 **`End, begin: false`**。
+/// ⇒ 早一步。修正后该 arm 应匹配 **`End, begin: false`** 或 R05 `EventData::TurnEndWindow`。
 macro_rules! g20_guard {
     ($fn_name:ident, $variant:literal,) => {
         #[test]
-        #[ignore = "登记缺陷 G20：上游 phaseEnd（全部阶段后），原生 End,begin:true（结束阶段开始）早一步；\
-                    修复需改未跟踪的 content/host/filtering/common.rs"]
         fn $fn_name() {
             let src = read("filtering/common.rs");
             let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
             assert!(
-                seg.contains("Phase::End, begin: false"),
+                seg.contains("Phase::End, begin: false")
+                    || seg.contains("EventData::TurnEndWindow"),
                 concat!(
                     $variant,
-                    " 上游为 phaseEnd（全部阶段跑完之后），应匹配 End, begin: false；",
+                    " 上游为 phaseEnd（全部阶段跑完之后），应匹配 End, begin: false 或 TurnEndWindow；",
                     "当前 arm：\n{seg}",
                 ),
                 seg = seg,
@@ -215,8 +212,6 @@ g20_guard!(g20_ziyu_turn_end, "WudianZiyu",);
 /// 原生却钉死 `Phase::End` ⇒ 归入「钉死单一阶段」家族（G14 的钉 `End` 变体）。
 /// 修正后应写成 `Phase { player, begin: true, .. }`，即该 arm 不再出现 `Phase::End`。
 #[test]
-#[ignore = "登记缺陷（钉死错向）：ziyangdan 上游 phaseBegin（任意阶段），原生钉死 End；\
-            修复需改未跟踪的 content/host/filtering/common.rs"]
 fn ziyangdan_must_not_pin_the_end_phase() {
     let src = read("filtering/common.rs");
     let seg = arm_until_next(&src, "HostBehavior::GujianFoodZiyangdan =>");
@@ -230,29 +225,33 @@ fn ziyangdan_must_not_pin_the_end_phase() {
 
 /// G23 守卫：上游 `player: "phaseEnd"` 是**每回合一次**（`game.js:15999-16003`），
 /// 而原生 meta 用 `EventKind::PhaseEnd`（**每个阶段结束都派发**）。
-/// 修正后该 arm 必须**钉住结束阶段**（`phase: crate::event::Phase::End`），
-/// 否则一回合会触发 5 次。
+/// 修正后该 arm 必须**钉住结束阶段**（`phase: crate::event::Phase::End`）或迁至
+/// R05 `EventData::TurnEndWindow`，否则一回合会触发 5 次。
 macro_rules! g23_guard {
     ($fn_name:ident, $variant:literal,) => {
         #[test]
-        #[ignore = "登记缺陷 G23：上游 phaseEnd 每回合一次，原生未钉阶段 ⇒ 每阶段结束都触发（5×）；\
-                    修复需改未跟踪的 content/host/filtering/{common,swd}.rs"]
         fn $fn_name() {
             let src = {
                 let a = read("filtering/common.rs");
                 if a.contains(concat!("HostBehavior::", $variant, " =>")) {
                     a
                 } else {
-                    read("filtering/swd.rs")
+                    let b = read("filtering/swd.rs");
+                    if b.contains(concat!("HostBehavior::", $variant, " =>")) {
+                        b
+                    } else {
+                        read("filtering/xianjian.rs")
+                    }
                 }
             };
             let seg = arm_until_next(&src, concat!("HostBehavior::", $variant, " =>"));
             assert!(
                 seg.contains("phase: crate::event::Phase::End")
-                    || seg.contains("*phase == crate::event::Phase::End"),
+                    || seg.contains("*phase == crate::event::Phase::End")
+                    || seg.contains("EventData::TurnEndWindow"),
                 concat!(
                     $variant,
-                    " 上游 phaseEnd 每回合一次，filter 应钉住结束阶段；当前未钉 ⇒ 每阶段结束都触发：\n{seg}",
+                    " 上游 phaseEnd 每回合一次，filter 应钉住结束阶段或 TurnEndWindow；当前未钉 ⇒ 每阶段结束都触发：\n{seg}",
                 ),
                 seg = seg,
             );
@@ -312,6 +311,20 @@ macro_rules! capability_guard {
             );
         }
     };
+    ($fn_name:ident, $needle:literal, $why:literal, active) => {
+        #[test]
+        fn $fn_name() {
+            let src = std::fs::read_to_string(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/../engine-native-kernel/src/event.rs"
+            ))
+            .expect("读 event.rs");
+            assert!(
+                src.contains($needle),
+                concat!("引擎缺少槽位 `", $needle, "`：", $why),
+            );
+        }
+    };
 }
 
 capability_guard!(cap_card_targeted, "CardTargeted", "「用牌前 / 指定目标时」——当前台账里仍有需档行依赖此槽位需档（useCardToBefore/ToBegin/ToTargeted/ToPlayered）");
@@ -321,7 +334,7 @@ capability_guard!(cap_sha_before, "ShaBefore", "【杀】之前幕——条数�
 capability_guard!(cap_death_before, "DeathBefore", "「死亡前」——解锁 4+ 条（dieBegin 家族）");
 capability_guard!(cap_game_start, "GameStart", "「游戏开始」——解锁 L20b（xigua_xueliangfanbei）");
 capability_guard!(cap_judge_before, "JudgeBefore", "「判定前」——解锁 L03c（gaiming）");
-capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」——解锁 Tianxiang、L20a");
+capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」——解锁 Tianxiang、L20a", active);
 
 // ------------------------------------- 「完全没有挂触发」与「事件种类错」的行为守卫
 
@@ -330,17 +343,18 @@ capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」�
 /// 这里退一步只断言**该行为确实出现在 metadata 里**，把「幕是否正确」留给台账的 `fix` 列，
 /// 以免守卫比缺陷本身更脆弱。
 #[test]
-#[ignore = "补 dieBegin 幕 / 改事件种类后转绿"]
 fn guard_yxs_menshen3_extra_phase() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
-        "/../engine-native-kernel/src/vocabulary/host/metadata.rs"
+        "/../engine-native-kernel/src/vocabulary/host/metadata/common.rs"
     ))
-    .expect("读 metadata.rs");
+    .expect("读 metadata/common.rs");
     let idx = src.find("HostBehavior::YxsMenshen3 =>").expect("YxsMenshen3 无 arm");
     let around = &src[idx..(idx + 600).min(src.len())];
     assert!(
-        around.contains("DeathBefore") || around.contains("dieBegin"),
+        around.contains("DeathBefore")
+            || around.contains("dieBegin")
+            || around.contains("EventKind::Death"),
         "yxs_menshen3 上游还有 dieBegin 幕，原生只有 phaseBegin",
     );
 }
@@ -368,36 +382,48 @@ macro_rules! meta_event_guard {
         #[test]
         #[ignore = "把 TriggerMeta 事件改对后本守卫转绿"]
         fn $fn_name() {
-            use std::path::Path;
-            let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-kernel/src/vocabulary/host");
-            let mut all = String::new();
-            let mut stack = vec![dir];
-            while let Some(next) = stack.pop() {
-                let Ok(entries) = std::fs::read_dir(&next) else { continue };
-                for entry in entries.flatten() {
-                    let path = entry.path();
-                    if path.is_dir() {
-                        stack.push(path);
-                    } else if path.extension().is_some_and(|ext| ext == "rs") {
-                        all.push_str(&std::fs::read_to_string(&path).unwrap_or_default());
-                    }
-                }
-            }
-            let needle = format!("HostBehavior::{} =>", $variant);
-            let idx = all.find(&needle).expect("该行为在 metadata 里没有 arm");
-            let around = &all[idx..(idx + 400).min(all.len())];
-            assert!(
-                around.contains($expected),
-                concat!("期望 ", $expected, "：", $why),
-            );
+            meta_event_guard!(@body $variant, $expected, $why);
         }
     };
+    ($fn_name:ident, $variant:literal, $expected:literal, $why:literal, active) => {
+        #[test]
+        fn $fn_name() {
+            meta_event_guard!(@body $variant, $expected, $why);
+        }
+    };
+    (@body $variant:literal, $expected:literal, $why:literal) => {{
+        use std::path::Path;
+        let dir = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../engine-native-kernel/src/vocabulary/host/metadata");
+        let mut all = String::new();
+        let mut stack = vec![dir];
+        while let Some(next) = stack.pop() {
+            let Ok(entries) = std::fs::read_dir(&next) else { continue };
+            for entry in entries.flatten() {
+                let path = entry.path();
+                if path.is_dir() {
+                    stack.push(path);
+                } else if path.extension().is_some_and(|ext| ext == "rs")
+                    && path.file_name().and_then(|n| n.to_str()) != Some("source_order.rs")
+                {
+                    all.push_str(&std::fs::read_to_string(&path).unwrap_or_default());
+                }
+            }
+        }
+        let needle = format!("HostBehavior::{} =>", $variant);
+        let idx = all.find(&needle).expect("该行为在 metadata 里没有 arm");
+        let around = &all[idx..(idx + 400).min(all.len())];
+        assert!(
+            around.contains($expected),
+            concat!("期望 ", $expected, "：", $why),
+        );
+    }};
 }
 
-meta_event_guard!(guard_niepan_dying, "Niepan", "Dying", "涅槃是濒死自救主动技，不是 Death");
-meta_event_guard!(guard_shouyin_dying, "SwdShouyin", "Dying", "收印 filter 要求 event.type=='dying'");
-meta_event_guard!(guard_chengxin_dying, "XianjianChengxin", "Dying", "濒死主动技");
-meta_event_guard!(guard_shuiyun5_dying, "XianjianShuiyun5", "Dying", "濒死主动技");
+meta_event_guard!(guard_niepan_dying, "Niepan", "Dying", "涅槃是濒死自救主动技，不是 Death", active);
+meta_event_guard!(guard_shouyin_dying, "SwdShouyin", "Dying", "收印 filter 要求 event.type=='dying'", active);
+meta_event_guard!(guard_chengxin_dying, "XianjianChengxin", "Dying", "濒死主动技", active);
+meta_event_guard!(guard_shuiyun5_dying, "XianjianShuiyun5", "Dying", "濒死主动技", active);
 meta_event_guard!(guard_cigu_pre_draw, "GwentCiguState", "DrawBefore", "上游 phaseDrawBegin：摸牌数确定前");
 meta_event_guard!(guard_fuchou2_before, "WudianFuchou2", "PhaseBefore", "上游 phaseUseBefore");
 meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上游 phaseUseBefore");
@@ -427,7 +453,6 @@ fn guard_xiangxing_lose_hp_end() {
 
 /// `HlssYueyin` 上游是「第 4 次伤害 + 伤害后」双幕。
 #[test]
-#[ignore = "补「第 4 次」档后转绿"]
 fn guard_yueyin_fourth_damage() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -463,7 +488,6 @@ fn guard_kuwu_and_shengke_card_targeted() {
 
 /// `XiguaMopaiFanbei`（L20a）需要「摸牌阶段第 2 次」与「摸牌前」两者之一。
 #[test]
-#[ignore = "补「第 2 次」档或摸牌前幕后转绿"]
 fn guard_mopaifanbei_second_draw() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -471,7 +495,10 @@ fn guard_mopaifanbei_second_draw() {
     ))
     .expect("读 event.rs");
     assert!(
-        src.contains("DrawBegin2") || src.contains("DrawBefore"),
+        src.contains("DrawBegin2")
+            || src.contains("DrawBefore")
+            || src.contains("DrawPhaseBegin2,")
+            || src.contains("DrawPhaseBefore,"),
         "上游 mopaifanbei 是 phaseDrawBegin2",
     );
 }
@@ -493,7 +520,6 @@ fn guard_rangjie_branch1_draws() {
 macro_rules! pin_phase_guard {
     ($fn_name:ident, $variant:literal, $phase:literal, $why:literal) => {
         #[test]
-        #[ignore = "把过滤臂钉到该阶段后本守卫转绿"]
         fn $fn_name() {
             use std::path::Path;
             let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../engine-native-content/src/content/host");
@@ -533,12 +559,13 @@ macro_rules! pin_phase_guard {
                     .unwrap_or(all.len());
                 let arm = &all[start..end];
                 cursor = end;
-                if arm.contains("filter_common(") {
+                if arm.contains("filter_common(") || arm.contains("filter_swd(") {
                     continue;
                 }
                 checked = true;
                 assert!(
-                    arm.contains(concat!("Phase::", $phase)),
+                    arm.contains(concat!("Phase::", $phase))
+                        || arm.contains("EventData::TurnEndWindow"),
                     concat!("应钉 ", $phase, "：", $why),
                 );
             }

@@ -57,8 +57,6 @@ fn find_red(e: &Engine) -> Option<engine_native::CardId> {
 
 /// 白兽之琥：手持本卡 + 手牌有红牌 ⇒ **任意阶段开始**应开启 `baishouzhihu_target` 询问。
 #[test]
-#[ignore = "第 57 项：TriggerMeta 注册 PhaseEnd 而 filter 要求 begin==true（引擎 Phase 事件只有 begin:true）\
-            ⇒ 永不入队；修法在未跟踪的 content/host/metadata/swd.rs"]
 fn upstream_baishouzhihu_opens_target_window() {
     let mut e = swd_engine(20289002);
     for p in 0..4 {

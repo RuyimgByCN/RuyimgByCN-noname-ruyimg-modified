@@ -85,10 +85,10 @@ fn package_requiring_newer_host_abi_is_rejected_at_import_time() {
         .join("../../content/original/ported/onlyOL/onlyOL.npack.json");
     let json = std::fs::read_to_string(&path).expect("onlyOL npack present");
     let err = engine_native_wasm::validate_pack_json(&json)
-        .expect_err("full onlyOL still needs unsupported game_started");
+        .expect_err("full onlyOL still contains unported placeholder modifier_index entries");
     eprintln!("GT014_WASM_REJECT abi_window: {err}");
     assert!(
-        err.contains("game_started"),
+        err.contains("modifier_index"),
         "expected unsupported declaration error, got: {err}"
     );
 }

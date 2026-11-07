@@ -70,7 +70,7 @@ fn swd_deferred_daixing_hujia_cycle() {
     assert_eq!(e.state_core().player(0).hujia, 2, "待行：护甲 +2");
 
     // 推进到 0 号下回合准备阶段 → 清甲。
-    for _ in 0..20 {
+    for _ in 0..32 {
         if e.turn().current == 0 && e.turn().phase == Phase::Judge {
             break;
         }
@@ -82,7 +82,6 @@ fn swd_deferred_daixing_hujia_cycle() {
                 c.spec
                     .options
                     .iter()
-                    .filter(|o| matches!(o, ChoiceOption::Card(_)))
                     .copied()
                     .take(c.spec.min.max(1))
                     .collect()

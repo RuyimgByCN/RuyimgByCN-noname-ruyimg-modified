@@ -410,9 +410,6 @@ impl HostSkillBehavior {
                 //（第 935 轮：原臂写成「任意阶段开始 + 手里有红桃/方块」，两处都不对）
                 EventData::Phase { player, phase: crate::event::Phase::Discard, begin: false, .. }
                 if *player == owner
-                    && ctx.state.player(owner).hand.iter().any(|c| {
-                        ctx.catalog.cards[*c as usize].name == "baishouzhihu"
-                    })
                     && hand_has_kind(ctx, owner, CardKind::Baishouzhihu)),
             // 玄武之璜：自己造成伤害结算后且手持且受伤
             HostBehavior::SwdXuanwuzhihuangHeld => matches!(event,

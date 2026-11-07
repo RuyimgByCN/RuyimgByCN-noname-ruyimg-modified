@@ -1,0 +1,10 @@
+=== Gate 1: test_check_source_lines.py ===
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.010s
+
+OK
+=== Gate 2: check-source-lines.py ===
+Source line limit passed: 9187 files <= 2000 lines; Rust non-test files <= 1000 effective lines
+=== Gate 3: check-native-layering.py ===
+engine-native layering passed: 0 upward references <= 0

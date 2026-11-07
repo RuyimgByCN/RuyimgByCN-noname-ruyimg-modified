@@ -384,6 +384,7 @@ fn swd_generals_b64_lianda_suiyan_duanxing_polang_youyin() {
     }
     // p0 手牌留 1（<5）；p1 布手牌：1 trick + 压血强制弃牌阶段弃 trick
     let _keep = e.debug_place(0, "tao");
+    let _p2_dummy = e.debug_place(2, "shan");
     let trick = {
         let id = (0..e.catalog().cards.len() as u32)
             .find(|c| {
@@ -443,7 +444,9 @@ fn swd_generals_b64_lianda_suiyan_duanxing_polang_youyin() {
                 continue;
             }
             let (cid, obs) = (c.id, c.observer);
-            let s = if !c.spec.options.is_empty() {
+            let s = if c.spec.prompt == "baishouzhihu_target" {
+                vec![c.spec.options.last().unwrap().clone()]
+            } else if !c.spec.options.is_empty() {
                 vec![c.spec.options[0].clone()]
             } else {
                 vec![]
