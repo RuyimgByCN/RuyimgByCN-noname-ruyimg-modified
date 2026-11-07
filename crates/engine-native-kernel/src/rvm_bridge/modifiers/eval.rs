@@ -275,6 +275,32 @@ pub fn eval_sha_use_limit(
             }
         });
     }
+    if let Some(def) = catalog.skill_by_name("twrenfang") {
+        if state.has_skill(player, def) {
+            let marks = state
+                .vm_aux
+                .marks
+                .get(&(player, 3_456_624_936))
+                .copied()
+                .unwrap_or(0)
+                .max(0);
+            cur += marks / 5;
+        }
+    }
+    if let Some(def) = catalog.skill_by_name("olfangma") {
+        if state.has_skill(player, def) {
+            let left = state
+                .vm_aux
+                .flags
+                .get(&(player, "olfangma_chitu_index".to_string()))
+                .copied()
+                .unwrap_or(0) as usize;
+            let right = state.player(player).hand.len().saturating_sub(left);
+            if left > right {
+                unlimited = true;
+            }
+        }
+    }
     (cur.max(0) as u32, unlimited)
 }
 
@@ -370,6 +396,26 @@ pub fn eval_card_use_canceled(
     let is_sha = kind.is_sha_like();
     let in_hand = state.player(actor).hand.contains(&card);
     let mut canceled = false;
+    if in_hand {
+        let que_mask = state
+            .vm_aux
+            .flags
+            .get(&(actor, "olsbguqu_restricted_suit".to_string()))
+            .copied()
+            .unwrap_or(0);
+        if que_mask != 0 {
+            let suit_bit = match catalog.cards.get(card as usize).map(|c| c.suit) {
+                Some(crate::catalog::Suit::Spade) => 1u32,
+                Some(crate::catalog::Suit::Heart) => 2u32,
+                Some(crate::catalog::Suit::Club) => 4u32,
+                Some(crate::catalog::Suit::Diamond) => 8u32,
+                None => 0u32,
+            };
+            if (que_mask & suit_bit) != 0 {
+                canceled = true;
+            }
+        }
+    }
     for_each_player_vm_modifier(state, catalog, actor, |def, rule| {
         let sel_ok = rule
             .selector

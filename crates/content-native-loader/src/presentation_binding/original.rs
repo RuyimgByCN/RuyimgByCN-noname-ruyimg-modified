@@ -67,13 +67,13 @@ pub struct OriginalPresentationInput<'a> {
 /// Verified original presentation tables ready to attach to a [`Catalog`].
 #[derive(Debug, Clone)]
 pub struct VerifiedOriginalPresentation {
-    owner: FrozenOwnerKey,
-    packages: BTreeSet<String>,
-    characters: BTreeMap<(String, String), Vec<String>>,
-    skills: BTreeSet<(String, String)>,
-    character_voices: BTreeMap<(String, String), BTreeMap<String, Vec<BoundAudioAsset>>>,
-    skill_voices: BTreeMap<(String, String), BTreeMap<String, Vec<BoundAudioAsset>>>,
-    card_voices: BTreeMap<String, BTreeMap<String, Vec<BoundAudioAsset>>>,
+    pub(crate) owner: FrozenOwnerKey,
+    pub(crate) packages: BTreeSet<String>,
+    pub(crate) characters: BTreeMap<(String, String), Vec<String>>,
+    pub(crate) skills: BTreeSet<(String, String)>,
+    pub(crate) character_voices: BTreeMap<(String, String), BTreeMap<String, Vec<BoundAudioAsset>>>,
+    pub(crate) skill_voices: BTreeMap<(String, String), BTreeMap<String, Vec<BoundAudioAsset>>>,
+    pub(crate) card_voices: BTreeMap<String, BTreeMap<String, Vec<BoundAudioAsset>>>,
 }
 
 impl VerifiedOriginalPresentation {

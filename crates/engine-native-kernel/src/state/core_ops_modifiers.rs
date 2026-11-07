@@ -405,6 +405,30 @@ impl GameStateCore {
                 limit += 1;
             }
         }
+        if let Some(def) = catalog.skill_by_name("twrenfang") {
+            if self.has_skill(p, def) {
+                let marks = self
+                    .vm_aux
+                    .marks
+                    .get(&(p, 3_456_624_936))
+                    .copied()
+                    .unwrap_or(0)
+                    .max(0) as usize;
+                limit += marks;
+            }
+        }
+        if let Some(def) = catalog.skill_by_name("olxuanbai") {
+            if self.has_skill(p, def)
+                && self
+                    .vm_aux
+                    .flags
+                    .get(&(p, "olxuanbai_form".to_string()))
+                    .copied()
+                    == Some(3)
+            {
+                limit += 2;
+            }
+        }
         crate::rvm_bridge::modifiers::eval_hand_limit(self, catalog, p, limit as i32)
     }
 

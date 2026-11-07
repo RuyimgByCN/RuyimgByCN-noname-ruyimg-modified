@@ -913,6 +913,15 @@ impl VmAux {
                 && !key.starts_with("sha_skill_target:")
                 && !key.starts_with("sha_card_target:")
                 && !key.starts_with("sha_all_targets_recorded:")
+                && key != "cards_lost"
+                && key != "judge_cards_lost"
+                && key != "olsbguqu_restricted_suit"
+                && key != "olrehuanshi_suit_mask"
+                && key != "tt_zhiyi_used"
+                && key != "olzhuoming_transferred"
+                && key != "free_use"
+                && key != "starbishi_triggered"
+                && !key.starts_with("zexing_visited:")
         });
     }
 

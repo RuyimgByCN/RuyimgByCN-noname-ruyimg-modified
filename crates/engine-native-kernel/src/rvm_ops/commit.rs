@@ -448,7 +448,10 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
-            let cards = std::mem::take(&mut ctx.core.player_mut(p).judge);
+            let cards = ctx.core.player(p).judge.clone();
+            for c in &cards {
+                ctx.take_owned_card(p, *c);
+            }
             discard_some(ctx, p, cards);
         }
         EffectRequest::StorageSet {
@@ -456,6 +459,9 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             key,
             value,
         } => {
+            if commit_up37::try_commit_up37_storage_set(ctx, executing, owner, key, value) {
+                return;
+            }
             let scoped = (owner, storage_key(executing, key));
             if value == 0 {
                 ctx.core.vm_aux.flags.remove(&scoped);
@@ -564,7 +570,7 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
             ctx.core.player_mut(p).hp = 0;
             ctx.core.player_mut(p).alive = false;
             ctx.core.player_mut(p).dying = false;
-            ctx.out.push(LogEvent::PlayerDied {
+            ctx.log(LogEvent::PlayerDied {
                 player: p,
                 killer: src,
                 presentation: None,
@@ -594,10 +600,29 @@ pub fn commit_effect(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId, e: Eff
                 seat_of(rule_api::PlayerId::new(owner_raw), seats)
             };
             for c in cards {
-                if c.raw() == 0 || !detach(ctx.core, c.raw()) {
+                let id = c.raw();
+                if id == 0 {
                     continue;
                 }
-                let id = c.raw();
+                if kind == 4 {
+                    let s = owner.unwrap_or(0);
+                    if let Some(slot) = ctx.catalog.card_slot_of(ctx.core, id) {
+                        if !has_enabled_equip_slot(ctx.core, s, slot) {
+                            continue;
+                        }
+                    }
+                }
+                let judge_owner = ctx
+                    .core
+                    .players
+                    .iter()
+                    .position(|pl| pl.judge.contains(&id))
+                    .map(|idx| idx as PlayerId);
+                if let Some(jp) = judge_owner {
+                    ctx.take_owned_card(jp, id);
+                } else if !detach(ctx.core, id) {
+                    continue;
+                }
                 match kind {
                     1 => ctx.core.deck.push(id),
                     2 => {

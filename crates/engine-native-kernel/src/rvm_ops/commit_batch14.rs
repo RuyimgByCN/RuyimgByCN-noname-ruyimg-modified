@@ -482,6 +482,11 @@ pub(super) fn commit_batch14_effect(
                     continue;
                 }
                 if let Some(c) = ctx.core.player(from).equips.first().copied() {
+                    if let Some(slot) = ctx.catalog.card_slot_of(ctx.core, c) {
+                        if !has_enabled_equip_slot(ctx.core, t, slot) {
+                            continue;
+                        }
+                    }
                     ctx.take_owned_card(from, c);
                     ctx.core.player_mut(t).equips.push(c);
                     ctx.emit(EventData::CardsMoved {

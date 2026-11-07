@@ -265,6 +265,7 @@ mod mechanisms;
 mod vm_generals;
 pub mod locked_content;
 pub mod presentation_binding;
+pub mod up37_closure;
 pub use locked_content::{
     deferred_cards_for_locked_content, prepare_locked_content, prepare_locked_content_with_bridge,
     restore_locked_engine, restore_locked_engine_with_original_presentation, start_locked_engine,
@@ -280,6 +281,12 @@ pub use presentation_binding::{
     OriginalPresentationInput, VerifiedOriginalPresentation,
     EXPECTED_ORIGINAL_ADOPTED_REVISION, EXPECTED_ORIGINAL_ASSET_MANIFEST_SHA256,
     EXPECTED_ORIGINAL_CATALOG_SHA256, EXPECTED_ORIGINAL_REPOSITORY,
+};
+pub use up37_closure::{
+    build_up37_closure_catalog, resolve_binding_voice_with_skin_override,
+    up37_closure_extension_pack, verify_up37_i02_baseline_counts,
+    verify_up37_i03_step_to_async_catalog_invariants, verify_up37_i05_presentation_bindings,
+    UP37_GENERALS, UP37_STEP_TO_ASYNC_COMMITS,
 };
 pub use vm_generals::bridge_generals_with_vm_package;
 

@@ -408,6 +408,7 @@ impl crate::catalog::SkillMachine for DismantleMachine {
             if let Some(c) = pick {
                 // 从所在区移除
                 let from_hand = t.hand.contains(&c);
+                let from_judge = t.judge.contains(&c);
                 {
                     let was_equip = ctx.catalog.card_kind(c).is_equip();
                     let p = ctx.core.player_mut(self.target);
@@ -428,6 +429,13 @@ impl crate::catalog::SkillMachine for DismantleMachine {
                     ctx.emit(EventData::CardsDiscarded {
                         player: self.target,
                         cards: vec![c],
+                    });
+                } else if from_judge && ctx.catalog.vm_card_history {
+                    ctx.note_cards_lost(self.target, &[c]);
+                    ctx.emit(EventData::CardsLost {
+                        player: self.target,
+                        cards: vec![c],
+                        origins: vec![crate::event::LostOrigin::Judge],
                     });
                 }
             }

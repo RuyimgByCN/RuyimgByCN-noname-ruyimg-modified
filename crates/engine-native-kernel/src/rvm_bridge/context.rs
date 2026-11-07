@@ -213,6 +213,21 @@ pub(super) fn trigger_ctx_of(event: &EventData) -> VmTriggerCtx {
             kind: 4,
             ..VmTriggerCtx::default()
         },
+        EventData::CardsLost {
+            player,
+            cards,
+            origins,
+        } if origins.contains(&crate::event::LostOrigin::Judge) => VmTriggerCtx {
+            event_player: Some(*player),
+            event_source: Some(*player),
+            event_card: cards.first().copied(),
+            event_cards: cards.clone(),
+            event_amount: cards.len() as u32,
+            moved_from: Some(*player),
+            batch_len: cards.len() as u32,
+            kind: 5,
+            ..VmTriggerCtx::default()
+        },
         EventData::Dying { player, source } => VmTriggerCtx {
             event_player: Some(*player),
             event_source: *source,

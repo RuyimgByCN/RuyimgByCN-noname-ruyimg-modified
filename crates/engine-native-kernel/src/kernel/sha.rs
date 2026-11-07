@@ -345,6 +345,14 @@ impl ShaResolveMachine {
             .skill_by_name(crate::vocabulary::names::WU_SHUANG)
             .map(|d| ctx.core.has_skill(self.source, d))
             .unwrap_or(false)
+            || ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.source, "olfangma_sha_double_shan".to_string()))
+                .copied()
+                .unwrap_or(0)
+                != 0
     }
 
     /// 酒伤害加成（派发时已捕获）。

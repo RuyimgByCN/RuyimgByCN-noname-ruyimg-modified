@@ -33,8 +33,37 @@ mod commit_batch15;
 mod commit_batch15_rest;
 mod commit_batch16;
 mod commit_batch17;
+pub mod commit_up37;
 mod query;
 pub use query::*;
+
+pub fn has_enabled_equip_slot(
+    core: &GameStateCore,
+    player: PlayerId,
+    slot: crate::catalog::EquipSlot,
+) -> bool {
+    let idx = match slot {
+        crate::catalog::EquipSlot::Weapon => 1u8,
+        crate::catalog::EquipSlot::Armor => 2u8,
+        crate::catalog::EquipSlot::HorsePlus => 3u8,
+        crate::catalog::EquipSlot::HorseMinus => 4u8,
+        crate::catalog::EquipSlot::Treasure => 5u8,
+    };
+    let mask = core
+        .vm_aux
+        .flags
+        .get(&(player, "disabled_equip_slots".to_string()))
+        .copied()
+        .unwrap_or(0);
+    let flagged = core
+        .vm_aux
+        .flags
+        .get(&(player, format!("equip_slot_disabled:{idx}")))
+        .copied()
+        .unwrap_or(0);
+    let bit_disabled = (mask & (1u32 << idx)) != 0 || (idx == 1 && (mask & 1) != 0);
+    !bit_disabled && flagged == 0
+}
 
 fn reject(name: &str) -> HostTrap {
     HostTrap::InvalidRequest {

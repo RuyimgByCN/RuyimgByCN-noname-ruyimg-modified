@@ -281,23 +281,25 @@ pub(in crate::kernel) fn commit_turn_begin(ctx: &mut Ctx<'_>, player: PlayerId) 
 }
 
 pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) {
-    let disabled_turn: Vec<(u8, u16)> = ctx
-        .core
-        .vm_aux
-        .flags
-        .keys()
-        .filter_map(|(p, k)| {
-            k.strip_prefix("skill_disabled_turn:")
-                .and_then(|d| d.parse::<u16>().ok())
-                .map(|def| (*p, def))
-        })
-        .collect();
-    for (p, def) in disabled_turn {
-        if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
-            inst.enabled = true;
+    if ctx.core.turn.extra_phases.is_empty() {
+        let disabled_turn: Vec<(u8, u16)> = ctx
+            .core
+            .vm_aux
+            .flags
+            .keys()
+            .filter_map(|(p, k)| {
+                k.strip_prefix("skill_disabled_turn:")
+                    .and_then(|d| d.parse::<u16>().ok())
+                    .map(|def| (*p, def))
+            })
+            .collect();
+        for (p, def) in disabled_turn {
+            if let Some(inst) = ctx.core.skills.get_mut(&(p, def)) {
+                inst.enabled = true;
+            }
         }
+        ctx.core.vm_aux.clear_turn();
     }
-    ctx.core.vm_aux.clear_turn();
     ctx.log(LogEvent::TurnEnded { player });
     // R05（K21）：先发整回合结束窗（phaseEnd 段 → phaseAfter 段 → 交接），
     // 期间 turn.current 仍是刚结束回合的角色；换人移至 phaseAfter 段的
@@ -306,7 +308,9 @@ pub(in crate::kernel) fn commit_turn_ended(ctx: &mut Ctx<'_>, player: PlayerId) 
         player,
         after: false,
     });
-    ctx.expire_temporary_skills(player);
+    if ctx.core.turn.extra_phases.is_empty() {
+        ctx.expire_temporary_skills(player);
+    }
     for state in &mut ctx.core.players {
         state.zlfanshi_terra = false;
     }
@@ -409,6 +413,13 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         });
         return;
     }
+    ctx.expire_temporary_skills(prev);
+    if ctx.catalog.vm_card_history {
+        ctx.core
+            .vm_aux
+            .flags
+            .retain(|(_, k), _| k != "sha_played_this_turn" && k != "damaged_this_turn");
+    }
     // R05（K10）：翻面整回合跳过在回合开始窗之前（上游 phaseBefore 检测）
     // ——翻面者不发 TurnBegin／不进任何阶段（含准备阶段）；翻回序列与
     // TurnEnded 同 E03/U05 原口径，TurnEnded 的窗→handoff 链继续交接。
@@ -423,6 +434,62 @@ pub(in crate::kernel) fn turn_handoff(ctx: &mut Ctx<'_>, prev: PlayerId, next: P
         return;
     }
     if next <= prev {
+        if ctx.catalog.vm_card_history {
+            let seats = ctx.core.players.len() as PlayerId;
+            for p in 0..seats {
+                if !ctx.core.player(p).alive {
+                    continue;
+                }
+                if ctx
+                    .catalog
+                    .skill_by_name("oljingxian")
+                    .is_some_and(|def| ctx.core.has_skill(p, def))
+                {
+                    let idx = ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(p, "olfangma_chitu_index".to_string()))
+                        .copied()
+                        .unwrap_or(0) as usize;
+                    if idx >= ctx.core.player(p).hand.len() {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((p, "oljingxian_at_rightmost".to_string()), 1);
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((p, "oljingxian_extra_turn_granted".to_string()), 1);
+                    }
+                }
+                if ctx
+                    .catalog
+                    .skill_by_name("olfangma")
+                    .is_some_and(|def| ctx.core.has_skill(p, def))
+                {
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(p, "olfangma_chitu_index".to_string()));
+                    ctx.core
+                        .vm_aux
+                        .flags
+                        .remove(&(p, "olfangma_sha_unlimited".to_string()));
+                    if !ctx.core.player(p).hand.is_empty() {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((p, "olfangma_sha_double_shan".to_string()), 1);
+                    } else {
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .remove(&(p, "olfangma_sha_double_shan".to_string()));
+                    }
+                }
+            }
+        }
         ctx.core.turn.round += 1;
         ctx.core.vm_aux.clear_round();
     }

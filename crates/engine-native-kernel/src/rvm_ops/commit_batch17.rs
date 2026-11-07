@@ -70,8 +70,8 @@ fn discard_one_scoped(ctx: &mut Ctx<'_>, t: PlayerId, scope: rule_api::TargetCar
     } else if ctx.core.player(t).equips.contains(&c) {
         ctx.take_owned_card(t, c);
         discard_some(ctx, t, vec![c]);
-    } else if let Some(pos) = ctx.core.player(t).judge.iter().position(|&j| j == c) {
-        ctx.core.player_mut(t).judge.remove(pos);
+    } else if ctx.core.player(t).judge.contains(&c) {
+        ctx.take_owned_card(t, c);
         discard_some(ctx, t, vec![c]);
     }
     true

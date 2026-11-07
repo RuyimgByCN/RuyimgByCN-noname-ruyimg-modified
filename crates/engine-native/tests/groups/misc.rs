@@ -181,3 +181,7 @@ mod c331_package_schema;
 
 #[path = "../i02_public_presentation_closure.rs"]
 mod i02_public_presentation_closure;
+
+#[path = "../up37_r02_to_n07_complete_closure.rs"]
+mod up37_r02_to_n07_complete_closure;
+

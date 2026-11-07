@@ -540,7 +540,23 @@ impl<'a> Ctx<'a> {
             });
             return;
         }
-        panic!("card {card} not in hand or equips of {player}");
+        let in_judge = self
+            .core
+            .player(player)
+            .judge
+            .iter()
+            .position(|c| *c == card);
+        if let Some(pos) = in_judge {
+            self.core.player_mut(player).judge.remove(pos);
+            self.note_cards_lost(player, &[card]);
+            self.emit(EventData::CardsLost {
+                player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Judge],
+            });
+            return;
+        }
+        panic!("card {card} not in hand, equips, or judge of {player}");
     }
 
     /// 从手牌移除一张（不存在则 panic：调用方先验证）。

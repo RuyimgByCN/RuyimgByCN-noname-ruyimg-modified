@@ -100,6 +100,10 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
         loop {
             let p = ctx.core.player(self.dying);
             if p.hp > 0 && !p.dying {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, format!("jsrgzonghai_forbid:{}", self.dying)));
                 // 救援成功（dyingAfter 等价，规则 v157）：发射救回事件，
                 // 觉醒技（姜城·焚逝）等触发挂在该事件的 AfterTriggers 窗
                 // 口——时序在固有救援机之后，与上游 dyingAfter 一致。
@@ -135,6 +139,10 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.round_used = false;
             }
             let Some(responder) = self.responders.first().copied() else {
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(self.dying, format!("jsrgzonghai_forbid:{}", self.dying)));
                 ctx.emit(EventData::Death {
                     player: self.dying,
                     killer: self.source,
@@ -203,13 +211,22 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             } else {
                 0
             };
+            let zonghai_ban_save = ctx
+                .core
+                .vm_aux
+                .flags
+                .get(&(self.dying, format!("jsrgzonghai_forbid:{}", self.dying)))
+                .copied()
+                .unwrap_or(0)
+                != 0;
             options.extend(
                 dying_tao_cards(ctx, responder, self.dying)
                     .into_iter()
                     .filter(|c| {
-                        !sipu_ban_save
+                        (!sipu_ban_save
                             || (responder == sipu_holder
-                                && is_tao_like(ctx, responder, *c, self.dying))
+                                && is_tao_like(ctx, responder, *c, self.dying)))
+                            && (!zonghai_ban_save || responder == self.dying)
                     })
                     .map(ChoiceOption::Card),
             );

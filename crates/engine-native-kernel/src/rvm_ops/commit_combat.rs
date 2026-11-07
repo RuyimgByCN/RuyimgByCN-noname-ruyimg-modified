@@ -46,9 +46,10 @@ pub(super) fn commit_combat_or_state_effect(
             for c in &equips {
                 ctx.take_owned_card(p, *c);
             }
-            let judge = std::mem::take(&mut ctx.core.player_mut(p).judge);
+            let judge = ctx.core.player(p).judge.clone();
             for c in &judge {
                 ctx.core.declared_kinds.remove(c);
+                ctx.take_owned_card(p, *c);
             }
             let mut cards = hand;
             cards.extend(equips);
@@ -122,7 +123,9 @@ pub(super) fn commit_combat_or_state_effect(
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
-            if !ctx.core.player(p).alive {
+            if !ctx.core.player(p).alive
+                || !has_enabled_equip_slot(ctx.core, p, crate::catalog::EquipSlot::Weapon)
+            {
                 return;
             }
             let has_weapon = ctx.core.player(p).equips.iter().any(|c| {

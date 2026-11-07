@@ -431,7 +431,8 @@ pub(super) fn commit_batch17_rest(
             let Some(p) = seat_of(player, seats) else {
                 return;
             };
-            if let Some(c) = ctx.core.player_mut(p).judge.pop() {
+            if let Some(&c) = ctx.core.player(p).judge.last() {
+                ctx.take_owned_card(p, c);
                 ctx.core.discard.push(c);
             }
             set_flag(ctx.core, p, "xumou_discarded", 1);

@@ -209,6 +209,11 @@ pub(super) fn commit_batch15_rest(
                     cancel_current_card_use(ctx, card.raw());
                     for c in cards {
                         let cid = c.raw();
+                        if let Some(slot) = ctx.catalog.card_slot_of(ctx.core, cid) {
+                            if !has_enabled_equip_slot(ctx.core, p, slot) {
+                                continue;
+                            }
+                        }
                         if detach(ctx.core, cid) {
                             ctx.core.player_mut(p).equips.push(cid);
                             crate::kernel::grant_equip_skills(ctx, p, cid);

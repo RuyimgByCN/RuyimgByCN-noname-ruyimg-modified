@@ -655,8 +655,8 @@ pub(super) fn commit_ext_effect(
                 || ctx.core.player(t).equips.contains(&card)
             {
                 ctx.take_owned_card(t, card);
-            } else if let Some(pos) = ctx.core.player(t).judge.iter().position(|c| *c == card) {
-                ctx.core.player_mut(t).judge.remove(pos);
+            } else if ctx.core.player(t).judge.contains(&card) {
+                ctx.take_owned_card(t, card);
                 ctx.core.declared_kinds.remove(&card);
             } else {
                 return;

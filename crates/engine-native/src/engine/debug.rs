@@ -845,4 +845,32 @@ impl Engine {
             .map(|c| c.kind)
             .unwrap_or_else(|| panic!("unknown card name {name}"))
     }
+
+    /// 调试/测试：通过完整命令段管线执行一条权威 `EffectRequest`（含后续事件帧与表现层投影）。
+    pub fn debug_commit_effect(
+        &mut self,
+        executing: &str,
+        owner: PlayerId,
+        req: rule_api::EffectRequest,
+    ) -> CommandOutcome {
+        if self.state.core.outcome.is_some() {
+            return CommandOutcome::Rejected(RejectReason::MatchOver);
+        }
+        if self.state.resolution.open_choice.is_some() {
+            return CommandOutcome::Rejected(RejectReason::ChoicePending);
+        }
+        let log_mark = self.log.len();
+        let mut work = self.state.clone();
+        work.resolution.budget = self.debug_budget.unwrap_or(DEFAULT_BUDGET);
+        {
+            let mut ctx = crate::machine::Ctx {
+                core: &mut work.core,
+                res: &mut work.resolution,
+                catalog: &self.catalog,
+                out: &mut self.log,
+            };
+            crate::rvm_ops::commit_effect(&mut ctx, executing, owner, req);
+        }
+        self.finish_segment(work, log_mark)
+    }
 }

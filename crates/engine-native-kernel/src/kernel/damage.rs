@@ -54,6 +54,53 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
             p.turn_damage = p.turn_damage.saturating_add(amount.clamp(0, 255) as u8);
         }
     }
+    if ctx.catalog.vm_card_history {
+        if ctx
+            .catalog
+            .skill_by_name("potcuifeng")
+            .is_some_and(|def| ctx.core.has_skill(d.target, def))
+        {
+            *ctx.core
+                .vm_aux
+                .flags
+                .entry((d.target, "damaged_this_turn".to_string()))
+                .or_insert(0) += submitted;
+        }
+        let lost_len = ctx
+            .core
+            .vm_aux
+            .lost
+            .get(&d.target)
+            .map_or(0, |v| v.len() as i32);
+        if lost_len > 0 {
+            let seats = ctx.core.players.len() as PlayerId;
+            for h in 0..seats {
+                if h != d.target
+                    && ctx
+                        .core
+                        .vm_aux
+                        .flags
+                        .get(&(h, "dcxiangchen_virtual_used".to_string()))
+                        .copied()
+                        .unwrap_or(0)
+                        == 0
+                {
+                    if let Some(&cur) = ctx.core.vm_aux.marks.get(&(h, 2_749_573_634)) {
+                        let next = (cur - lost_len).max(0);
+                        if next == 0 {
+                            ctx.core.vm_aux.marks.remove(&(h, 2_749_573_634));
+                        } else {
+                            ctx.core.vm_aux.marks.insert((h, 2_749_573_634), next);
+                        }
+                        ctx.core
+                            .vm_aux
+                            .flags
+                            .insert((h, "dcxiangchen_deducted".to_string()), lost_len as u32);
+                    }
+                }
+            }
+        }
+    }
     let mut hp_loss = submitted;
     // 护甲（G1 扩展）：1:1 抵扣伤害，先于体力扣减
     let hujia = ctx.core.player(d.target).hujia;

@@ -143,10 +143,33 @@ fn speaker_public_general<'a>(
 fn public_form_for(core: &GameStateCore, player: PlayerId) -> Option<String> {
     let p = core.players.get(player as usize)?;
     match p.baolei_mode {
-        1 => Some("bshaowei".to_string()),
-        2 => Some("zhencha".to_string()),
-        _ => None,
+        1 => return Some("bshaowei".to_string()),
+        2 => return Some("zhencha".to_string()),
+        _ => {}
     }
+    if let Some(form_id) = core
+        .vm_aux
+        .flags
+        .get(&(player, "olxuanbai_form".to_string()))
+        .copied()
+    {
+        match form_id {
+            1 => return Some("dangmo".to_string()),
+            2 => return Some("jihui".to_string()),
+            3 => return Some("xiaju".to_string()),
+            _ => {}
+        }
+    }
+    if let Some(skin_id) = core
+        .vm_aux
+        .flags
+        .get(&(player, "c29_skin_id".to_string()))
+        .copied()
+        .filter(|&v| v > 0)
+    {
+        return Some(format!("skin:{skin_id}"));
+    }
+    None
 }
 
 fn dedup_assets(assets: &[BoundAudioAsset]) -> Vec<BoundAudioAsset> {
@@ -244,7 +267,7 @@ fn resolve_skill_voice(
     };
 
     if let Some(ref f) = form {
-        let role_form_keys = [
+        let mut role_form_keys = vec![
             format!("skill:{raw_skill_key}:form:{f}"),
             format!("form:{f}:skill:{raw_skill_key}"),
             format!("skill:{skill_name}:form:{f}"),
@@ -252,6 +275,11 @@ fn resolve_skill_voice(
             format!("activate:form:{f}"),
             format!("form:{f}:activate"),
         ];
+        if let Some(skin_id) = f.strip_prefix("skin:") {
+            role_form_keys.insert(0, format!("skin:{skin_id}:skill:{raw_skill_key}"));
+            role_form_keys.insert(1, format!("skin:{skin_id}:skill:{skill_name}"));
+            role_form_keys.push(format!("skin:{skin_id}:activate"));
+        }
         if let Some(assets) = lookup_first_nonempty(&role_binding.voice_assets, &role_form_keys) {
             return Some(PublicVoice {
                 role: role_binding.definition.clone(),
@@ -259,11 +287,15 @@ fn resolve_skill_voice(
                 assets,
             });
         }
-        let skill_form_keys = [
+        let mut skill_form_keys = vec![
             format!("role:{f}"),
             format!("activate:form:{f}"),
             format!("form:{f}:activate"),
         ];
+        if let Some(skin_id) = f.strip_prefix("skin:") {
+            skill_form_keys.insert(0, format!("skin:{skin_id}:activate"));
+            skill_form_keys.insert(1, format!("skin:{skin_id}"));
+        }
         if let Some(assets) = lookup_first_nonempty(&skill_binding.voice_assets, &skill_form_keys) {
             return Some(PublicVoice {
                 role: role_binding.definition.clone(),
@@ -319,8 +351,12 @@ fn resolve_die_voice(
     let (_, _, role_binding) = speaker_public_general(core, catalog, player, None)?;
     let form = public_form_for(core, player);
 
-    let mut keys = Vec::with_capacity(4);
+    let mut keys = Vec::with_capacity(6);
     if let Some(ref f) = form {
+        if let Some(skin_id) = f.strip_prefix("skin:") {
+            keys.push(format!("skin:{skin_id}:die"));
+            keys.push(format!("die:skin:{skin_id}"));
+        }
         keys.push(format!("die:form:{f}"));
         keys.push(format!("form:{f}:die"));
     }
