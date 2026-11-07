@@ -119,7 +119,6 @@ fn upstream_qiankunbiao_discards_target_and_neighbor() {
 /// `filterTarget` 的 `target.countCards("he") > 0` ⇒ **原生更宽松**（详见修复清单第 35 项）。
 /// 本用例以 `#[ignore]` 作为**修复后的验收条件**（应 `Rejected`）。
 #[test]
-#[ignore = "乾坤镖目标 he 无牌时应被拒（上游 filterTarget）——原生更宽松，见第 35 项"]
 fn upstream_qiankunbiao_target_needs_he_cards() {
     let mut e = gujian_engine(20271402);
     advance_to_play(&mut e, 0);

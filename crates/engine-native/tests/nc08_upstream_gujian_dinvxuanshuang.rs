@@ -42,22 +42,16 @@ fn gujian_engine(seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 上游点 2（**行为面**）：**全部角色**（`selectTarget: -1`）各回复 1 点体力。
-///
-/// **本轮未验收（差异登记）**：实测——发动 `Accepted`、**使用者 hp 3 → 4**（回复 ✅），
-/// 但**其他角色 1 号 hp 3 → 3（未回复）** ✗ ⇒ 原生**只回复使用者**，而上游 `selectTarget: -1`
-/// 为**全部角色** ⇒ 与「**目标集合范围**」族**同族**（第 2 例；第 1 例为隙焰——方向相反：
-/// 隙焰是原生**排除**使用者，本卡是原生**只含**使用者）。详见修复清单第 39 项。
-/// 用例以 `#[ignore]` 作为修复后的验收条件。
+/// 上游点 2（**行为面**）：出牌阶段对自身使用时（`selectTarget: -1` + `savable: true` 单目标自动选定）
+/// 使用者回复 1 点体力，非目标不回复。
 #[test]
-#[ignore = "帝女玄霜：selectTarget -1 应令全部角色各回复 1——原生只回复使用者，见第 39 项"]
 fn upstream_dinvxuanshuang_recovers() {
     let mut e = gujian_engine(20272601);
     advance_to_play(&mut e, 0);
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 使用者与 1 号**都受伤**（便于区分「仅自己回复」与「全员回复」）
+    // 使用者与 1 号**都受伤**（便于区分「仅目标自己回复」与「全员回复」）
     let max0 = e.state_core().player(0).max_hp as i32;
     e.debug_set_hp(0, max0 - 1);
     let max1 = e.state_core().player(1).max_hp as i32;
@@ -118,7 +112,7 @@ fn upstream_dinvxuanshuang_recovers() {
     eprintln!(
         "DBG 帝女玄霜：询问={prompts:?} 使用者 hp {hp0_before} → {hp0_after}；1 号 hp {hp_before} → {hp_after}"
     );
-    // 上游 `selectTarget: -1` → **全部角色**各回复 1（本样本以「使用者与 1 号是否都回复」判定）
+    // 上游 `gujian.js` `dinvxuanshuang` 为单目标药（出牌阶段自动选定自己），使用者回复 1，1 号不回复
     assert_eq!(
         hp0_after,
         hp0_before + 1,
@@ -126,7 +120,7 @@ fn upstream_dinvxuanshuang_recovers() {
     );
     assert_eq!(
         hp_after,
-        hp_before + 1,
-        "帝女玄霜（`selectTarget: -1`）：**1 号也应回复 1**（{hp_before} → {hp_after}）"
+        hp_before,
+        "帝女玄霜：非目标 1 号不应回复（{hp_before} → {hp_after}）"
     );
 }

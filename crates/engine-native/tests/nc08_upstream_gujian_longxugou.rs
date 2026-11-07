@@ -57,7 +57,6 @@ fn gujian_engine(seed: u64) -> Engine {
 /// `player.equip(event.card)` ⇒ **规则损失**（详见修复清单第 36 项）。
 /// 用例以 `#[ignore]` 作为修复后的验收条件（0 号装备区应 +1）。
 #[test]
-#[ignore = "龙须钩：获得后应自己装备（上游 player.equip）——原生仅入手，见第 36 项"]
 fn upstream_longxugou_steals_and_equips() {
     let mut e = gujian_engine(20271601);
     advance_to_play(&mut e, 0);

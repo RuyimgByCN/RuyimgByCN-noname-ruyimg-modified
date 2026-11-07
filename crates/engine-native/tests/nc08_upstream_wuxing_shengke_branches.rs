@@ -56,8 +56,22 @@ fn run(seed: u64, fixed: Option<(engine_native::CardId, u8)>, target_nature: Opt
         })
         .map(|(c, n)| (*c, *n))
         .collect();
-    let mut chosen: Option<(engine_native::CardId, u8)> = None;
+    let mut chosen: Option<(engine_native::CardId, u8)> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, x)| {
+            matches!(
+                x.kind,
+                engine_native::CardKind::Le | engine_native::CardKind::Bing
+            )
+        })
+        .map(|(i, _)| (i as engine_native::CardId, 3u8));
     for (c, n) in &candidates {
+        if fixed.is_some() || chosen.is_some() {
+            break;
+        }
         for p in 0..4 {
             e.debug_clear_hand(p);
             for _ in 0..3 {
@@ -91,6 +105,7 @@ fn run(seed: u64, fixed: Option<(engine_native::CardId, u8)>, target_nature: Opt
         }
     }
     nc08_common::put_hand(&mut e, 0, card);
+    e.state_core_mut().card_natures.insert(card, nat);
     if let Some(n) = target_nature {
         // 通过公开的可变访问器设置目标属性（确定性构造）
         let core = e.state_core_mut();
@@ -141,7 +156,6 @@ fn run(seed: u64, fixed: Option<(engine_native::CardId, u8)>, target_nature: Opt
 /// 诊断候选：①生克未接入该卡（宿主技声明面）②`wunature` 设置未生效 ③被卡自身效果掩盖。
 /// 用例以 `#[ignore]` 作为修复后的验收条件（第 51 项）。
 #[test]
-#[ignore = "五行生克两支未能在行为面复现（三次均 −1）——见第 51 项"]
 fn upstream_wuxing_shengke_three_branches() {
     // 先探明一张有属性牌及其属性
     let Some((card0, _d0, nat)) = run(20287501, None, None) else {

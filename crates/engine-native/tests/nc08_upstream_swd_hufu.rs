@@ -45,8 +45,10 @@ fn run(seed: u64, dying: bool) -> (String, i32) {
         .find(|(_, c)| c.name.contains("hufu"))
         .map(|(i, _)| i as engine_native::CardId)
         .expect("虎符在目录");
-    nc08_common::put_hand(&mut e, 0, card_id);
     if dying {
+        // 上游 `card/swd.js` 虎符 `savable: function(card, player, dying) { return dying == player; }`
+        // 为濒死角色**自救**专用，故将虎符置于濒死角色（1 号）手牌中
+        nc08_common::put_hand(&mut e, 1, card_id);
         // **候选④：改用正常伤害路径**——真实【杀】结算造成濒死（而非 debug_deal_damage）
         let max1 = e.state_core().player(1).max_hp as i32;
         e.debug_set_hp(1, 1); // **先降到 1 血**（再受 1 点杀伤害 ⇒ 0 ⇒ 濒死）
@@ -62,9 +64,12 @@ fn run(seed: u64, dying: bool) -> (String, i32) {
             action: GameAction::PlayCard { card: sha, targets: vec![1] },
         });
         eprintln!("DBG 虎符：出【杀】={out_sha:?}（1 号 hp={}）", e.debug_hp(1));
-        // 1 号**放弃出【闪】** ⇒ 受伤 ⇒ 濒死
+        // 1 号**放弃出【闪】** ⇒ 受伤 ⇒ 濒死（遇到 dying_save 询问时交给下方救援循环处理）
         for _ in 0..8 {
             let Some(c) = e.open_choice().cloned() else { break };
+            if c.spec.prompt == "dying_save" {
+                break;
+            }
             let sel: Vec<engine_native::ChoiceOption> =
                 if c.spec.options.contains(&engine_native::ChoiceOption::Pass) {
                     vec![engine_native::ChoiceOption::Pass]
@@ -178,15 +183,7 @@ fn run(seed: u64, dying: bool) -> (String, i32) {
 }
 
 /// 上游/原生口径（**两支**）：**濒死 ⇒ 受理并回血**；**未濒死 ⇒ 拒绝**。
-///
-/// **本轮未验收（登记，含诊断）**：①**未濒死支**已验：**`Rejected(IllegalTargets)`** ✅
-/// （与 `play_card.rs:1178` 的 `kind == Hufu && !p.dying` 一致）；
-/// ②**濒死支未复现**：以 `debug_deal_damage` 造成**真实伤害**后 1 号 `hp=0`，但
-/// **`debug_deal_damage` 返回 `Accepted`（非 `Pending`）且 `询问=[]`** ⇒ **救援窗口未打开**，
-/// 虎符**未获提供** ⇒ 需按引擎**濒死流程**构造（可能需先把手牌备好、或经 `NextPhase`/专门救援命令推进）。
-/// 用例以 `#[ignore]` 作为修复/夹具补齐后的验收条件（第 52 项）。
 #[test]
-#[ignore = "虎符濒死支未复现（救援窗口未打开）——未濒死支已验为 Rejected，见第 52 项"]
 fn upstream_swd_hufu_dying_only() {
     let (tag_dying, hp_after) = run(20287601, true);
     let (tag_alive, _) = run(20287602, false);

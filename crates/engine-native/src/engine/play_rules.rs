@@ -378,6 +378,19 @@ pub(super) fn play_kind(
             }
         }
     }
+    if targets.is_empty()
+        && !mark_mutoumianju
+        && matches!(
+            catalog.cards[card as usize].suit,
+            crate::catalog::Suit::Heart
+        )
+        && catalog
+            .skill_by_name(crate::content::host::GJ_FOOD_MIZHLIANOU_KEY)
+            .map(|d| core.has_skill(actor, d))
+            .unwrap_or(false)
+    {
+        kind = CardKind::Tao;
+    }
     if kind == catalog.card_kind(card) && !mark_mutoumianju {
         if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
             if (kind != CardKind::Sha && kind != CardKind::Le)

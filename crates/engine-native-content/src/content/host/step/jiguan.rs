@@ -223,11 +223,30 @@ impl HostMachine {
                     if let Some(c) = pick.filter(|c| ctx.core.player(t).equips.contains(c)) {
                         ctx.core.player_mut(t).equips.retain(|x| *x != c);
                         crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, t, c);
-                        ctx.core.player_mut(self.owner).hand.push(c);
-                        ctx.log(LogEvent::CardsGivenPublic {
-                            from: t,
-                            to: self.owner,
-                            cards: vec![c],
+                        let slot = ctx.catalog.card_slot_of(ctx.core, c);
+                        let replaced = ctx
+                            .core
+                            .player(self.owner)
+                            .equips
+                            .iter()
+                            .copied()
+                            .find(|e| ctx.catalog.card_slot_of(ctx.core, *e) == slot);
+                        if let Some(old) = replaced {
+                            ctx.core.player_mut(self.owner).equips.retain(|x| *x != old);
+                            crate::kernel::revoke_equip_skills(
+                                ctx.core,
+                                ctx.catalog,
+                                self.owner,
+                                old,
+                            );
+                            ctx.to_discard(old);
+                        }
+                        ctx.core.player_mut(self.owner).equips.push(c);
+                        crate::kernel::grant_equip_skills(ctx, self.owner, c);
+                        ctx.log(LogEvent::Equipped {
+                            player: self.owner,
+                            card: c,
+                            replaced,
                         });
                     }
                     if let Some(c) = self.card {

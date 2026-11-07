@@ -1058,11 +1058,14 @@ pub(super) fn play_card(
                     }
                 }
                 CardKind::Qiankunbiao | CardKind::Shenhuofeiya => {
-                    // 乾坤镖/神火飞鸦：恰 1 名其他存活目标（邻座由结算
+                    // 乾坤镖/神火飞鸦：恰 1 名其他存活目标（乾坤镖另要求目标 he 有牌；邻座由结算
                     // 侧按距离展开）
                     if targets.len() != 1
                         || targets[0] == core.turn.current
                         || !core.player(targets[0]).alive
+                        || (kind == CardKind::Qiankunbiao
+                            && core.player(targets[0]).hand.is_empty()
+                            && core.player(targets[0]).equips.is_empty())
                     {
                         return Err(RejectReason::IllegalTargets);
                     }

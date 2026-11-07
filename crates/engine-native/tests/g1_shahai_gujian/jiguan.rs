@@ -167,9 +167,25 @@ fn jiguan_batch_four_kinds() {
             selection: vec![ChoiceOption::Card(armor)],
         },
     );
-    assert!(e.debug_hand(0).contains(&armor), "使用者获得所选装备");
+    assert!(
+        e.save().core.players[0].equips.contains(&armor),
+        "使用者获得并装备所选装备"
+    );
     assert!(e.save().core.players[1].equips.is_empty(), "目标装备被夺");
-    // 乾坤镖：1 号无手牌 → 弃首张装备（若有）；0 号邻座距离全 1
+    // 乾坤镖：1 号 he 无牌时应被拒；给 1 号发一张牌后可正常发动并弃置
+    let out_empty = submit(
+        &mut e,
+        0,
+        GameAction::PlayCard {
+            card: qkb,
+            targets: vec![1],
+        },
+    );
+    assert!(
+        matches!(out_empty, CommandOutcome::Rejected(_)),
+        "目标 he 无牌时乾坤镖应被拒：{out_empty:?}"
+    );
+    let p1_card = e.debug_place(1, "shan");
     let out = submit(
         &mut e,
         0,
@@ -186,6 +202,7 @@ fn jiguan_batch_four_kinds() {
         "{out:?}"
     );
     pass_nullify_window(&mut e);
+    assert!(!e.debug_hand(1).contains(&p1_card), "乾坤镖应弃置目标 1 号的牌");
     assert_zone_conservation(&e);
 
     // —— 神火飞鸦：有闪出闪免伤；无闪 1 火伤；挂起点字节恢复 ——

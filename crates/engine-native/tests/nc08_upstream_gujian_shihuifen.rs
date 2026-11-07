@@ -46,25 +46,20 @@ fn gujian_engine(seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 上游点 2（**行为面**）：当前回合角色未出【闪】→ **不能对其他角色使用牌**。
-///
-/// **本轮未验收（登记，含诊断）**：实测——石灰粉**可发动**（`Accepted`），但
-/// **无任何询问**（`询问=[]`，上游应有 `chooseToRespond({name:"shan"})`），
-/// 且随后 1 号对 2 号出【杀】**仍被受理**（`Accepted`）✗ ⇒ **限制未生效**
-/// （详见修复清单第 38 项）。用例以 `#[ignore]` 作为修复后的验收条件。
+/// 上游点 2（**行为面**）：目标未出【闪】→ **其回合内不能对其他角色使用牌**
+///（Rule 52 登记差异：上游为 `g_shihuifen` 在出牌阶段开始时响应打出，原生为主动使用锦囊对目标施放，
+/// 目标未出【闪】则获 `gj_food_shihuifen_ban`，在其回合内生效并于其回合结束清除）。
 #[test]
-#[ignore = "石灰粉：未出闪后应限制对其他角色用牌——实测无询问且限制未生效，见第 38 项"]
 fn upstream_shihuifen_blocks_cards_on_others() {
     let mut e = gujian_engine(20272001);
+    assert!(
+        advance_to_phase(&mut e, 0, Phase::Play),
+        "应到达 0 号出牌阶段"
+    );
     for p in 0..4 {
         e.debug_clear_hand(p);
     }
-    // 让 1 号成为当前回合角色（其出牌阶段）
-    assert!(
-        advance_to_phase(&mut e, 1, Phase::Play),
-        "应到达 1 号出牌阶段"
-    );
-    // **当前回合角色（1 号）自己使用**石灰粉（`global` 子技，非当前回合方不可主动使用）
+    // 0 号使用【石灰粉】指定 1 号；1 号持有一张【闪】但选择不出（Pass）
     let shi = {
         let id = e
             .catalog()
@@ -74,35 +69,38 @@ fn upstream_shihuifen_blocks_cards_on_others() {
             .find(|(_, c)| c.name.contains("shihuifen"))
             .map(|(i, _)| i as engine_native::CardId)
             .expect("石灰粉在目录");
-        nc08_common::put_hand(&mut e, 1, id);
+        nc08_common::put_hand(&mut e, 0, id);
         id
     };
-    let sha = {
-        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
-        e.debug_place(1, name)
-    };
+    let shan_name = e
+        .catalog()
+        .cards
+        .iter()
+        .find(|c| c.name == "shan")
+        .map(|c| c.name)
+        .unwrap();
+    e.debug_place(1, shan_name);
     let out = e.submit(GameCommand {
-        actor: 1,
+        actor: 0,
         expected_revision: e.revision(),
         dedup_id: next_dedup(),
-        action: GameAction::PlayCard { card: shi, targets: vec![2] },
+        action: GameAction::PlayCard { card: shi, targets: vec![1] },
     });
     eprintln!("DBG 石灰粉：发动={out:?}");
-    if !matches!(
-        out,
-        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
-    ) {
-        eprintln!("NOTE 石灰粉未能发动（{out:?}）——本用例不构成验收");
-        return;
-    }
-    // 1 号（当前回合角色）被要求出【闪】——**选择不出**
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "石灰粉应可发动：{out:?}"
+    );
+    // 1 号被要求出【闪】——选择不出（Pass）
     let mut prompts: Vec<String> = Vec::new();
     for _ in 0..16 {
         let Some(c) = e.open_choice().cloned() else { break };
         if !prompts.iter().any(|p| p == c.spec.prompt) {
             prompts.push(format!("{}@obs{}", c.spec.prompt, c.observer));
         }
-        // 1 号的响应询问 → 放弃（Pass / 空选）
         let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
             vec![ChoiceOption::Pass]
         } else if c.spec.allow_cancel {
@@ -121,7 +119,27 @@ fn upstream_shihuifen_blocks_cards_on_others() {
     }
     drain(&mut e);
     eprintln!("DBG 石灰粉：询问={prompts:?}");
-    // 现在 1 号尝试对 2 号出【杀】→ 应被限制（本回合无法对其他角色使用卡牌）
+    assert!(
+        prompts.iter().any(|p| p == "respond_shan@obs1"),
+        "石灰粉：目标 1 号有【闪】时应出现 respond_shan 询问：{prompts:?}"
+    );
+    assert!(
+        !e.debug_has_skill(0, "gj_food_shihuifen_ban"),
+        "石灰粉：使用者 0 号本人不应被禁牌"
+    );
+    assert!(
+        e.debug_has_skill(1, "gj_food_shihuifen_ban"),
+        "石灰粉：未出【闪】的目标 1 号应获得 gj_food_shihuifen_ban"
+    );
+    // 推进到 1 号的出牌阶段，1 号尝试对 2 号出【杀】→ 应被限制
+    assert!(
+        advance_to_phase(&mut e, 1, Phase::Play),
+        "应到达 1 号出牌阶段"
+    );
+    let sha = {
+        let name = e.catalog().cards.iter().find(|c| c.name == "sha").map(|c| c.name).unwrap();
+        e.debug_place(1, name)
+    };
     let blocked = e.submit(GameCommand {
         actor: 1,
         expected_revision: e.revision(),
@@ -131,6 +149,6 @@ fn upstream_shihuifen_blocks_cards_on_others() {
     eprintln!("DBG 石灰粉：1 号对其他角色出杀 → {blocked:?}");
     assert!(
         matches!(blocked, CommandOutcome::Rejected(_)),
-        "石灰粉：未出【闪】的当前回合角色**本回合不能对其他角色使用牌**（上游 addTempSkill 限制）：{blocked:?}"
+        "石灰粉：未出【闪】的角色**本回合不能对其他角色使用牌**（上游 addTempSkill 限制）：{blocked:?}"
     );
 }

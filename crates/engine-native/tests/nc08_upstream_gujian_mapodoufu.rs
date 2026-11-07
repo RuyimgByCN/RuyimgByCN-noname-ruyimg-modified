@@ -43,14 +43,9 @@ fn gujian_engine(seed: u64) -> Engine {
     Engine::new_with_extensions(seed, 4, &[&pack]).expect("建局")
 }
 
-/// 上游点 2（**行为面**）：目标**获得此牌**（手牌 +1）。
-///
-/// **本轮未验收（登记，含诊断）**：实测发动 `Accepted`，但**目标手牌 0 → 0**、
-/// **该牌进入弃牌堆**（`弃堆含此牌=true`）✗ —— 与样本 89（鲤鱼汤）**完全同一现象**
-/// ⇒ 「用牌效果（`$gain2` + storage + 计数 + 授技）缺失」**至少是食物牌共性（2/2）**
-/// （详见修复清单第 37 项）。用例以 `#[ignore]` 作为修复后的验收条件。
+/// 上游点 2（**行为面**）：上游 `target.$gain2(cards)` 为飞牌动画（非 `gain` 入手牌），
+/// 结算应授予目标 `gj_food_mapodoufu` 食物状态技且实体牌不置入目标手牌（与 `nc08_upstream_gujian_food_survey` 同口径）。
 #[test]
-#[ignore = "麻婆豆腐：目标应获得此牌（上游 $gain2 + storage + addSkill）——与鲤鱼汤同现象，见第 37 项"]
 fn upstream_mapodoufu_target_gains_the_card() {
     let mut e = gujian_engine(20272301);
     advance_to_play(&mut e, 0);
@@ -94,8 +89,11 @@ fn upstream_mapodoufu_target_gains_the_card() {
         e.state_core().discard.contains(&card)
     );
     assert!(
-        hand.contains(&card),
-        "麻婆豆腐：目标应**获得此牌**（上游 `target.$gain2(cards)`；手牌 {h1_before} → {}）",
-        hand.len()
+        e.debug_has_skill(1, "gj_food_mapodoufu"),
+        "麻婆豆腐：目标应获得 gj_food_mapodoufu 状态技"
+    );
+    assert!(
+        !hand.contains(&card),
+        "麻婆豆腐：上游 $gain2 仅飞牌动画，实体牌不应置入目标手牌"
     );
 }

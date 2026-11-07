@@ -65,8 +65,6 @@ fn g19_zhuhai_filter_must_not_exclude_owner() {
 
 /// 上游 `swd_tiebi` 的 `trigger: { global: 'useCardToBegin' }` 覆盖**全场**。
 #[test]
-#[ignore = "登记缺陷 G19：swd_tiebi 上游 global，原生目标筛选含 t != owner；\
-            修复需改未跟踪的 content/host/filtering/swd.rs"]
 fn g19_tiebi_filter_must_not_exclude_owner() {
     let src = read("filtering/swd.rs");
     let seg = arm(&src, "HostBehavior::SwdTiebi => {", 1200);

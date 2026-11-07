@@ -48,7 +48,6 @@ fn gujian_engine(seed: u64) -> Engine {
 /// ⇒ **转化未实现**（上游 `subSkill.use`：`filterCard: { suit: "heart" }` + `viewAs: { name: "tao" }`）。
 /// 详见修复清单第 41 项；用例以 `#[ignore]` 作为修复后的验收条件。
 #[test]
-#[ignore = "蜜汁藕：红桃牌应可当【桃】使用（上游 viewAs tao）——实测 Rejected，见第 41 项"]
 fn upstream_mizhilianou_heart_as_tao() {
     let mut e = gujian_engine(20274201);
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
@@ -116,6 +115,8 @@ fn upstream_mizhilianou_heart_as_tao() {
     drain(&mut e);
     eprintln!("DBG 蜜汁藕（对照）：普通【桃】对自己 → {ctrl:?}");
     let hp_after_ctrl = e.debug_hp(0);
+    // 对照组普通【桃】已将 0 号回满血；测红桃非桃转化前恢复受伤基线
+    e.debug_set_hp(0, hp_before);
     let out2 = e.submit(GameCommand {
         actor: 0,
         expected_revision: e.revision(),
@@ -125,7 +126,7 @@ fn upstream_mizhilianou_heart_as_tao() {
     drain(&mut e);
     let hp_after = e.debug_hp(0);
     eprintln!(
-        "DBG 蜜汁藕：子技={has}；对照后 hp={hp_after_ctrl}；红桃牌（非桃）当桃使用={out2:?}；         hp {hp_after_ctrl} → {hp_after}"
+        "DBG 蜜汁藕：子技={has}；对照后 hp={hp_after_ctrl}；红桃牌（非桃）当桃使用={out2:?}；         hp {hp_before} → {hp_after}"
     );
     assert!(has, "蜜汁藕：应获得子技 gj_food_mizhilianou");
     assert!(

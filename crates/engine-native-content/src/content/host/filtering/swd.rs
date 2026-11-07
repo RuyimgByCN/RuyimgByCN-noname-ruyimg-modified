@@ -234,8 +234,7 @@ impl HostSkillBehavior {
                 EventData::CardUsed(u)
                 if u.effective_kind(ctx.catalog).is_sha_like()
                     && u.targets.iter().any(|&t| {
-                        t != owner
-                            && ctx.state.player(t).alive
+                        ctx.state.player(t).alive
                             && ctx.state.player(t).hujia == 0
                             && ctx.state.seat_distance(t, owner) <= 1
                     })

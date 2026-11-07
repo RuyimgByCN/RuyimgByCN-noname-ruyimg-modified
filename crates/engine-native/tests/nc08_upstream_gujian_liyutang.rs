@@ -54,14 +54,9 @@ fn liyutang_card(e: &mut Engine) -> engine_native::CardId {
     id
 }
 
-/// 上游点 2（**行为面**）：目标**获得此牌**（手牌 +1）。
-///
-/// **本轮未验收（登记，含诊断）**：实测发动 `Accepted`，但**目标手牌 0 → 0**、
-/// **使用者手牌为空**、**该牌进入弃牌堆**（`弃堆含此牌=true`）✗ ⇒ 原生**只完成用牌与弃置**，
-/// **未执行**上游的 `target.$gain2(cards)` + `storage` 计数 + `addSkill` ⇒ **效果为空**
-/// （详见修复清单第 37 项）。用例以 `#[ignore]` 作为修复后的验收条件。
+/// 上游点 2（**行为面**）：上游 `target.$gain2(cards)` 为飞牌动画（非 `gain` 入手牌），
+/// 结算应授予目标 `gj_food_liyutang` 食物状态技且实体牌不置入目标手牌（与 `nc08_upstream_gujian_food_survey` 同口径）。
 #[test]
-#[ignore = "鲤鱼汤：目标应获得此牌（上游 $gain2 + storage + addSkill）——原生效果为空，见第 37 项"]
 fn upstream_liyutang_target_gains_the_card() {
     let mut e = gujian_engine(20271901);
     advance_to_play(&mut e, 0);
@@ -94,9 +89,12 @@ fn upstream_liyutang_target_gains_the_card() {
         e.state_core().discard.contains(&card)
     );
     assert!(
-        hand.contains(&card),
-        "鲤鱼汤：目标应**获得此牌**（手牌 {h1_before} → {}）",
-        hand.len()
+        e.debug_has_skill(1, "gj_food_liyutang"),
+        "鲤鱼汤：目标应获得 gj_food_liyutang 状态技"
+    );
+    assert!(
+        !hand.contains(&card),
+        "鲤鱼汤：上游 $gain2 仅飞牌动画，实体牌不应置入目标手牌"
     );
 }
 
