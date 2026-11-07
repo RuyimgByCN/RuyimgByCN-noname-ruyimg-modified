@@ -88,14 +88,14 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             let answer = ctx.answer().clone();
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                 // 出响应牌免伤
-                ctx.discard_from_hand(self.target, c);
+                discard_response_card(ctx, self.target, c, self.need);
                 ctx.emit(EventData::CardResponded {
                     card: c,
                     player: self.target,
                 });
                 // 雷击（Boss 青龙，规则 v234）：万箭闪响应后判定雷击
                 // （南蛮响应为杀，不触发）
-                if ctx.catalog.card_kind(c) == CardKind::Shan {
+                if self.need == CardKind::Shan || ctx.catalog.card_kind(c) == CardKind::Shan {
                     releiji_on_shan(ctx, self.target);
                 }
             } else {
@@ -117,14 +117,7 @@ impl crate::catalog::SkillMachine for AoeTargetMachine {
             }
             return Flow::Done;
         }
-        let holders: Vec<crate::ids::CardId> = ctx
-            .core
-            .player(self.target)
-            .hand
-            .iter()
-            .copied()
-            .filter(|c| ctx.catalog.card_kind(*c) == self.need)
-            .collect();
+        let holders: Vec<crate::ids::CardId> = response_kind_cards(ctx, self.target, self.need);
         if holders.is_empty() {
             // 无响应牌：不询问，直接受伤（跳过语义挂账见清单）
             let vm_card_bonus = ctx

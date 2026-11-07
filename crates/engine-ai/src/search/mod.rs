@@ -123,6 +123,7 @@ fn terminal_score(st: &engine_core::GameState, actor: PlayerId) -> i32 {
                 -1
             }
         }
+        MatchOutcome::TeamWin { .. } => 0,
         MatchOutcome::InProgress => 0,
     }
 }

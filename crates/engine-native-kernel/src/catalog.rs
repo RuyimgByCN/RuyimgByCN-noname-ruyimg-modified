@@ -805,6 +805,14 @@ pub trait SkillBehavior: Send + Sync {
         None
     }
 
+    fn has_view_as(&self) -> bool {
+        false
+    }
+
+    fn vm_view_as(&self) -> &[crate::rvm_bridge::VmViewAsSpec] {
+        &[]
+    }
+
     fn confirmation_actor(
         &self,
         owner: crate::ids::PlayerId,
@@ -1222,6 +1230,65 @@ impl Catalog {
                 .skills
                 .get(def as usize)
                 .is_some_and(|s| s.name.contains("#r05:"))
+    }
+
+    /// NC09 / PA12 批⑮：判断 `def` 是否携带转化（view-as）分支。
+    pub fn is_view_as_skill(&self, def: SkillDefId) -> bool {
+        use crate::vocabulary::names::{
+            BOSS_FURAN, BOSS_JIUCHI, GUO_SE, JI_JIU, LONG_DAN, QI_XI, QING_GUO, WU_SHENG,
+        };
+        let Some(s) = self.skills.get(def as usize) else {
+            return false;
+        };
+        if s.behavior.has_view_as() {
+            return true;
+        }
+        matches!(
+            s.name,
+            WU_SHENG
+                | LONG_DAN
+                | GUO_SE
+                | QI_XI
+                | QING_GUO
+                | JI_JIU
+                | BOSS_JIUCHI
+                | BOSS_FURAN
+                | "tannang"
+                | "liangce"
+                | "ycnluweiyan"
+                | "huanxia"
+                | "wanjun"
+                | "huopu"
+                | "yeying"
+                | "guiying"
+                | "fengze"
+                | "poxiao"
+                | "shengshou"
+                | "yaotong"
+                | "gj_mutoumianju_skill"
+                | "gj_mizhilianou_state"
+        )
+    }
+
+    /// PA12 批⑮：查找 `player` 当前启用的 VM 技能中首个匹配 `card` 的单牌转化规则。
+    pub fn find_player_vm_view_as(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        card: CardId,
+        in_play: bool,
+        target_kind: Option<CardKind>,
+    ) -> Option<&crate::rvm_bridge::VmViewAsSpec> {
+        core.skills
+            .range((player, u16::MIN)..)
+            .take_while(|((p, _), _)| *p == player)
+            .filter(|((_, _), inst)| inst.enabled)
+            .find_map(|((_, def), _)| {
+                let s = self.skills.get(*def as usize)?;
+                s.behavior.vm_view_as().iter().find(|spec| {
+                    spec.matches_card(core, self, player, card, in_play, target_kind)
+                })
+            })
     }
 
     /// 按名字查技能定义号（构建内容/测试用；O(1) 查表，首个匹配）。

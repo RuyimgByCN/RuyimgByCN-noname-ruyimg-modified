@@ -473,3 +473,240 @@ async fn nc09_failed_lazy_reclaim_keeps_original_seat_and_token() {
         .is_err());
     room_native_actor::set_seat_timeout_secs(600);
 }
+
+#[tokio::test]
+async fn nc09_salted_password_hash_v1_and_v2_verification() {
+    let v1 = native_room_store::password_hash(42, "hunter2");
+    assert!(!v1.starts_with("v2:"));
+    assert!(native_room_store::verify_password_hash(42, "hunter2", &v1));
+    assert!(!native_room_store::verify_password_hash(42, "wrong", &v1));
+    assert!(!native_room_store::verify_password_hash(43, "hunter2", &v1));
+
+    let v2_a = native_room_store::salted_password_hash(42, "hunter2");
+    let v2_b = native_room_store::salted_password_hash(42, "hunter2");
+    assert!(v2_a.starts_with("v2:"));
+    assert!(v2_b.starts_with("v2:"));
+    assert_ne!(v2_a, v2_b, "random per-room salt must differentiate two v2 hashes");
+    assert!(native_room_store::verify_password_hash(42, "hunter2", &v2_a));
+    assert!(native_room_store::verify_password_hash(42, "hunter2", &v2_b));
+    assert!(!native_room_store::verify_password_hash(42, "wrong", &v2_a));
+    assert!(!native_room_store::verify_password_hash(43, "hunter2", &v2_a));
+    assert_eq!(native_room_store::salted_password_hash(42, ""), "");
+    assert!(native_room_store::verify_password_hash(42, "", ""));
+
+    let handle = room_native_actor::spawn_room_native_with_password(
+        42,
+        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
+        16,
+        0,
+        "hunter2".into(),
+    );
+    assert!(join(&handle, 1, None).await.is_err());
+    let (tx, _rx) = tokio::sync::mpsc::channel(128);
+    let (reply, response) = tokio::sync::oneshot::channel();
+    handle
+        .send(RoomMsg::Join {
+            connection_id: 2,
+            display_name: "p2".into(),
+            preferred_seat: None,
+            reconnect_token: None,
+            password: "hunter2".into(),
+            outbound: session::Outbound::new(tx),
+            reply,
+        })
+        .await
+        .unwrap();
+    assert!(response.await.unwrap().is_ok());
+}
+
+#[tokio::test]
+async fn nc12_append_only_wal_segment_compaction_and_crash_replay() {
+    use std::io::Write;
+    let dir = tempfile::tempdir().unwrap();
+    let store = NativeRoomStore::new(dir.path());
+    let handle = room_native_actor::spawn_room_native_persisted(
+        80,
+        NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2),
+        16,
+        0,
+        String::new(),
+        Some(store.clone()),
+    );
+    join(&handle, 1, None).await.unwrap();
+    join(&handle, 2, None).await.unwrap();
+    assert!(store.room_path(80).exists());
+    assert!(!store.wal_segment_path(80).exists());
+
+    // Advance 3 steps (revisions 1, 2, 3 < DEFAULT_WAL_CHECKPOINT_EVERY = 16).
+    for step in 1..=3 {
+        let current = snapshot(&handle, 1).await.current_player.raw();
+        let conn = u64::from(current);
+        assert!(matches!(
+            end_phase(&handle, conn, 100 + step).await.unwrap(),
+            ServerMessage::CommandOutcome {
+                result: CommandResult::Accepted { new_revision, .. },
+                ..
+            } if new_revision == step
+        ));
+    }
+    let seg_path = store.wal_segment_path(80);
+    assert!(seg_path.exists(), "steps 1..=3 must append to 80.wal.jsonl");
+    let seg_text = std::fs::read_to_string(&seg_path).unwrap();
+    assert_eq!(seg_text.lines().count(), 3);
+    let expected_snap = snapshot(&handle, 1).await;
+
+    // Simulate a torn/truncated tail line after crash and verify load_all replays 1..=3 cleanly.
+    {
+        let mut f = std::fs::OpenOptions::new().append(true).open(&seg_path).unwrap();
+        f.write_all(b"{\"revision\":999,\"truncated").unwrap();
+    }
+    let loaded = store
+        .load_all()
+        .unwrap()
+        .into_iter()
+        .find(|r| r.room_id == 80)
+        .expect("room 80 loaded with WAL segment replay");
+    assert_eq!(loaded.state.wal.as_ref().unwrap().entries.len(), 3);
+    assert_eq!(
+        loaded.state.wal.as_ref().unwrap().entries.last().unwrap().revision,
+        3
+    );
+    let restored_session =
+        NativeRoomSession::from_saved(&loaded.state, Vec::new()).expect("restore room 80 session");
+    let restored = room_native_actor::spawn_room_native_persisted(
+        80,
+        restored_session,
+        16,
+        0,
+        loaded.password_hash.clone(),
+        None,
+    );
+    assert_eq!(snapshot(&restored, 1).await, expected_snap);
+
+    // Repair segment file to clean lines and advance to revision 16 (checkpoint compaction).
+    std::fs::write(&seg_path, seg_text).unwrap();
+    for step in 4..=native_room_store::DEFAULT_WAL_CHECKPOINT_EVERY {
+        let mut chosen = None;
+        for c in [1u64, 2u64] {
+            let (reply, response) = tokio::sync::oneshot::channel();
+            handle
+                .send(RoomMsg::Snapshot {
+                    connection_id: c,
+                    header: MessageHeader::new(handle.id, 0, 0),
+                    reply,
+                })
+                .await
+                .unwrap();
+            if let ServerMessage::Snapshot {
+                view,
+                choice: Some(ask),
+                ..
+            } = response.await.unwrap().unwrap()
+            {
+                let selections = (0..ask.min_count).map(u32::from).collect();
+                chosen = Some((
+                    c,
+                    view.revision,
+                    ask.observer,
+                    CommandKind::ResolveChoice {
+                        choice_id: ask.choice_id,
+                        selections,
+                        cancelled: false,
+                    },
+                ));
+                break;
+            }
+        }
+        let (conn, rev, actor, kind) = if let Some(t) = chosen {
+            t
+        } else {
+            let snap = snapshot(&handle, 1).await;
+            let c = u64::from(snap.current_player.raw());
+            (c, snap.revision, snap.current_player, CommandKind::EndPhase {})
+        };
+        let key = 200 + step;
+        let (reply, response) = tokio::sync::oneshot::channel();
+        handle
+            .send(RoomMsg::Submit {
+                connection_id: conn,
+                header: MessageHeader::new(handle.id, key, rev),
+                command: Command {
+                    actor,
+                    expected_revision: ExpectedRevision(rev),
+                    idempotency_key: IdempotencyKey(key),
+                    kind,
+                },
+                idempotency_key: IdempotencyKey(key),
+                replay: false,
+                reply,
+            })
+            .await
+            .unwrap();
+        let res = response.await.unwrap().unwrap();
+        assert!(
+            matches!(
+                res,
+                ServerMessage::CommandOutcome {
+                    result: CommandResult::Accepted { new_revision, .. },
+                    ..
+                } if new_revision == step
+            ),
+            "step {step} failed: {res:?}"
+        );
+    }
+    assert_eq!(
+        snapshot(&handle, 1).await.revision,
+        native_room_store::DEFAULT_WAL_CHECKPOINT_EVERY
+    );
+    assert!(
+        !seg_path.exists(),
+        "checkpoint at revision 16 must compact into 80.json and unlink 80.wal.jsonl"
+    );
+}
+
+#[test]
+fn nc12_native_wal_block_signing_and_chain_verification() {
+    let mut session = NativeRoomSession::new(engine_native::Engine::new(4242, 2), 2);
+    session.join(1, Some(0), None).unwrap();
+    session.join(2, Some(1), None).unwrap();
+    let mut persist = persist::RoomPersist::new();
+    let h0 = persist::native_snapshot_state_hash(&session.snapshot_hex());
+    assert_ne!(h0, [0u8; 32]);
+
+    for step in 1..=4u64 {
+        let (conn, kind) = if let Some(ask) = session.engine().open_choice() {
+            let c = u64::from(ask.observer) + 1;
+            let selections = (0..ask.spec.min).map(|i| i as u32).collect();
+            (
+                c,
+                CommandKind::ResolveChoice {
+                    choice_id: engine_api::ChoiceId::new(ask.id as u32),
+                    selections,
+                    cancelled: false,
+                },
+            )
+        } else {
+            let active = session.engine().state_core().turn.current;
+            (u64::from(active) + 1, CommandKind::EndPhase {})
+        };
+        let res = session.submit(conn, &kind, step - 1).unwrap();
+        assert!(matches!(res, CommandResult::Accepted { .. }));
+        room_native_actor::record_committed_native_step(&mut persist, 99, &session, step, 2);
+    }
+    assert_eq!(persist.blocks().len(), 2);
+    assert_eq!(persist.block_signatures().len(), 2);
+    assert_eq!(
+        persist::RoomPersist::verify_block_chain(persist.blocks()),
+        Ok(())
+    );
+    let (sk, _key_id) = persist::native_wal_signing_key(99);
+    assert_eq!(
+        persist::RoomPersist::verify_block_signatures(
+            persist.blocks(),
+            persist.block_signatures(),
+            &sk
+        ),
+        Ok(())
+    );
+}
+

@@ -61,8 +61,29 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
         return;
     }
     if let Some(card) = u.card {
+        let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
+        if u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card))
+            || ctx.core.player(u.player).equips.contains(&card)
+        {
+            if let Some(spec) = ctx
+                .catalog
+                .find_player_vm_view_as(ctx.core, u.player, card, true, Some(effective_kind))
+                .cloned()
+            {
+                spec.record_use(ctx.core, u.player);
+            }
+        }
         if ctx.core.player(u.player).hand.contains(&card) {
             ctx.take_hand_card(u.player, card);
+        } else if ctx.core.player(u.player).equips.contains(&card) {
+            ctx.core.player_mut(u.player).equips.retain(|c| *c != card);
+            ctx.core.declared_slots.remove(&card);
+            crate::kernel::revoke_equip_skills(ctx.core, ctx.catalog, u.player, card);
+            ctx.emit(EventData::CardsLost {
+                player: u.player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Equip],
+            });
         } else if ctx.core.table.contains(&card) {
             // 神秘果再结算（swd 卡牌面窗口机批）：原体自弃堆直上桌面（处理
             // 区暂存）后重发射——提交段自桌面取，不经手牌（AfterTriggers 窗
@@ -309,11 +330,20 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
                     .skill_by_name("yudun")
                     .map(|def| ctx.core.has_skill(u.player, def))
                     .unwrap_or(false);
+            let vm_va_free = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, "vm_va_sha_no_count".to_string()))
+                .unwrap_or(0)
+                != 0;
             if ctx.core.turn.sha_used_play_phase {
-                if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng) {
+                if ctx.core.current_land == Some(crate::catalog::CardKind::Longlushanfeng)
+                    && !vm_va_free
+                {
                     ctx.core.turn.land_sha_used = true;
                 }
-            } else if !poyue_red_free && !yudun_free {
+            } else if !poyue_red_free && !yudun_free && !vm_va_free {
                 ctx.core.turn.sha_used_play_phase = true;
             }
             // 冰河要塞地图效果（mtg 第八批，规则 v107）：锁定全局——使

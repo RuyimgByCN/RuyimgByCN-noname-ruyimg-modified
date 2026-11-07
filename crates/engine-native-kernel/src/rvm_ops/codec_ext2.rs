@@ -1,20 +1,36 @@
-//! PA12 Batch 14：`EffectRequest` 扩展编解码子表 2（tags 129..=153 + tag 255 u16 扩展头预留）。
+//! PA12 Batch 14：`EffectRequest` 扩展编解码子表 2（tags 129..=153，其余转发 `codec_ext3`）。
 
 use super::codec::{push_u32, Rd};
 use super::*;
 
-fn push_card_vec(w: &mut Vec<u8>, cards: &[rule_api::CardId]) {
+pub(super) fn push_card_vec(w: &mut Vec<u8>, cards: &[rule_api::CardId]) {
     push_u32(w, cards.len() as u32);
     for c in cards {
         push_u32(w, c.raw());
     }
 }
 
-fn rd_card_vec(rd: &mut Rd<'_>) -> Option<Vec<rule_api::CardId>> {
+pub(super) fn rd_card_vec(rd: &mut Rd<'_>) -> Option<Vec<rule_api::CardId>> {
     let n = rd.u32()? as usize;
     let mut out = Vec::with_capacity(n.min(256));
     for _ in 0..n {
         out.push(rule_api::CardId::new(rd.u32()?));
+    }
+    Some(out)
+}
+
+pub(super) fn push_player_vec(w: &mut Vec<u8>, players: &[rule_api::PlayerId]) {
+    push_u32(w, players.len() as u32);
+    for p in players {
+        push_u32(w, p.raw());
+    }
+}
+
+pub(super) fn rd_player_vec(rd: &mut Rd<'_>) -> Option<Vec<rule_api::PlayerId>> {
+    let n = rd.u32()? as usize;
+    let mut out = Vec::with_capacity(n.min(256));
+    for _ in 0..n {
+        out.push(rule_api::PlayerId::new(rd.u32()?));
     }
     Some(out)
 }
@@ -319,7 +335,7 @@ pub(super) fn enc_ext2_effect(w: &mut Vec<u8>, e: &EffectRequest) {
             push_u32(w, mark.raw());
             push_u32(w, skill.raw());
         }
-        _ => unreachable!("accept_effect 已拒绝未编码变体"),
+        other => super::codec_ext3::enc_ext3_effect(w, other),
     }
 }
 
@@ -482,14 +498,6 @@ pub(super) fn dec_ext2_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest>
             mark: rule_api::MarkDefId::new(rd.u32()?),
             skill: rule_api::SkillId::new(rd.u32()?),
         },
-        255 => {
-            let ext_tag = u16::from_le_bytes([rd.u8()?, rd.u8()?]);
-            decode_ext_u16(ext_tag, rd)?
-        }
-        _ => return None,
+        other => super::codec_ext3::dec_ext3_effect(other, rd)?,
     })
-}
-
-fn decode_ext_u16(_ext_tag: u16, _rd: &mut Rd<'_>) -> Option<EffectRequest> {
-    None
 }

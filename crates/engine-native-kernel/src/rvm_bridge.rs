@@ -37,6 +37,7 @@ use context::{filter_view, kind_is_ordinary_trick, trigger_ctx_of, VmTriggerCtx}
 pub use handlers::{
     VmActiveLimits, VmActiveSelection, VmActiveTargets, VmChoiceActor, VmHandlerSet,
     VmSelectionCardFilter, VmSelectionZone, VmTargetFilter, VmTriggerProgram, VmTurnUseSource,
+    VmViewAsFilter, VmViewAsSpec, VmViewAsWindow, VmViewAsZone,
 };
 pub use modifiers::{
     VmModifierMode, VmModifierRule, VmModifierSelector, VmModifierTarget, VmModifierValueSource,
@@ -234,6 +235,32 @@ pub enum VmFilterPolicy {
     PhaseAnySkipped {
         inner: Box<VmFilterPolicy>,
     },
+}
+
+impl VmFilterPolicy {
+    pub fn has_view_as(&self) -> bool {
+        match self {
+            Self::Handlers(set) => !set.view_as.is_empty(),
+            Self::Declared { inner, .. }
+            | Self::AtPhase { inner, .. }
+            | Self::DrawPhaseSkipped { inner }
+            | Self::PhaseAnySkipped { inner }
+            | Self::GameStarted { inner } => inner.has_view_as(),
+            _ => false,
+        }
+    }
+
+    pub fn vm_view_as(&self) -> &[VmViewAsSpec] {
+        match self {
+            Self::Handlers(set) => &set.view_as,
+            Self::Declared { inner, .. }
+            | Self::AtPhase { inner, .. }
+            | Self::DrawPhaseSkipped { inner }
+            | Self::PhaseAnySkipped { inner }
+            | Self::GameStarted { inner } => inner.vm_view_as(),
+            _ => &[],
+        }
+    }
 }
 
 /// 把 DSL filter 名映射到策略。未知名称返回 None（装载器跳过，不恒真）。
@@ -485,6 +512,14 @@ impl SkillBehavior for VmSkillBehavior {
             VmFilterPolicy::Handlers(set) => Some(&set.limits),
             _ => None,
         }
+    }
+
+    fn has_view_as(&self) -> bool {
+        self.filter.has_view_as()
+    }
+
+    fn vm_view_as(&self) -> &[VmViewAsSpec] {
+        self.filter.vm_view_as()
     }
 
     fn confirmation_actor(

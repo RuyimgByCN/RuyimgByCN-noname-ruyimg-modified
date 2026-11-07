@@ -95,7 +95,7 @@ pub struct StoredRoom {
     pub checksum: String,
 }
 
-/// 密码加盐哈希（房间号作盐）。空密码 → 空串（表示无密码）。
+/// 密码加盐哈希（v1：房间号作盐，兼容旧档）。空密码 → 空串（表示无密码）。
 pub fn password_hash(room_id: u64, password: &str) -> String {
     if password.is_empty() {
         return String::new();
@@ -106,6 +106,86 @@ pub fn password_hash(room_id: u64, password: &str) -> String {
     hasher.update(b":");
     hasher.update(password.as_bytes());
     hasher.finalize().to_hex().to_string()
+}
+
+/// 密码加盐哈希（v2：房间号 + 16 字节随机盐）。空密码 → 空串（表示无密码）。
+pub fn password_hash_with_salt(room_id: u64, salt: &[u8; 16], password: &str) -> String {
+    if password.is_empty() {
+        return String::new();
+    }
+    let salt_hex: String = salt.iter().map(|b| format!("{b:02x}")).collect();
+    let mut hasher = blake3::Hasher::new();
+    hasher.update(b"noname-native-room-pw-v2:");
+    hasher.update(&room_id.to_le_bytes());
+    hasher.update(b":");
+    hasher.update(salt);
+    hasher.update(b":");
+    hasher.update(password.as_bytes());
+    let digest_hex = hasher.finalize().to_hex();
+    format!("v2:{salt_hex}:{digest_hex}")
+}
+
+/// 生成每房间 16 字节随机盐并计算 v2 密码哈希（空密码 → 空串）。
+pub fn salted_password_hash(room_id: u64, password: &str) -> String {
+    if password.is_empty() {
+        return String::new();
+    }
+    let salt = *uuid::Uuid::new_v4().as_bytes();
+    password_hash_with_salt(room_id, &salt, password)
+}
+
+/// 校验房间密码（兼容 v1 房间号盐与 `v2:{salt_hex}:{digest_hex}` 随机盐哈希）。
+pub fn verify_password_hash(room_id: u64, password: &str, stored_hash: &str) -> bool {
+    if stored_hash.is_empty() {
+        return true;
+    }
+    if password.is_empty() {
+        return false;
+    }
+    let expected = if let Some(rest) = stored_hash.strip_prefix("v2:") {
+        let Some((salt_hex, _)) = rest.split_once(':') else {
+            return false;
+        };
+        if salt_hex.len() != 32 {
+            return false;
+        }
+        let mut salt = [0u8; 16];
+        for (i, pair) in salt_hex.as_bytes().chunks_exact(2).enumerate() {
+            let Ok(text) = std::str::from_utf8(pair) else {
+                return false;
+            };
+            let Ok(byte) = u8::from_str_radix(text, 16) else {
+                return false;
+            };
+            salt[i] = byte;
+        }
+        password_hash_with_salt(room_id, &salt, password)
+    } else {
+        password_hash(room_id, password)
+    };
+    expected.len() == stored_hash.len()
+        && expected
+            .as_bytes()
+            .iter()
+            .zip(stored_hash.as_bytes())
+            .fold(0u8, |acc, (a, b)| acc | (a ^ b))
+            == 0
+}
+
+/// 默认每 16 步执行一次完整 2PC 状态检查点并截断 `.wal.jsonl`。
+pub const DEFAULT_WAL_CHECKPOINT_EVERY: u64 = 16;
+
+/// 追加式 `{room_id}.wal.jsonl` 单行增量记录（NC12）。
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct WalSegmentLine {
+    pub revision: u64,
+    pub next_dedup: u64,
+    pub snapshot_hex: String,
+    pub entry: Option<crate::room_native::NativeWalEntry>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub command_receipts: Vec<crate::room_native::NativeCommandReceipt>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub timeout: Option<crate::room_native::NativeTimeoutState>,
 }
 
 /// 状态校验和（`blake3(JSON)`）。
@@ -146,6 +226,67 @@ impl NativeRoomStore {
     /// 目录路径。
     pub fn dir(&self) -> &Path {
         &self.dir
+    }
+
+    /// 房间快照文件路径（`{room_id}.json`）。
+    pub fn room_path(&self, room_id: u64) -> PathBuf {
+        self.dir.join(format!("{room_id}.json"))
+    }
+
+    /// 房间追加式 WAL 段路径（`{room_id}.wal.jsonl`）。
+    pub fn wal_segment_path(&self, room_id: u64) -> PathBuf {
+        self.dir.join(format!("{room_id}.wal.jsonl"))
+    }
+
+    /// 是否已挂载测试故障注入计划。
+    pub fn has_armed_fault(&self) -> bool {
+        #[cfg(test)]
+        {
+            return self.fault.lock().unwrap().is_some();
+        }
+        #[cfg(not(test))]
+        {
+            false
+        }
+    }
+
+    /// 追加一行增量 WAL 记录至 `{room_id}.wal.jsonl`（非检查点步单次追加 + sync）。
+    pub fn append_wal_segment(
+        &self,
+        room_id: u64,
+        line: &WalSegmentLine,
+    ) -> Result<(), StoreWriteError> {
+        let result = (|| -> Result<(), String> {
+            if room_id == 0 {
+                return Err("房间号必须非零".into());
+            }
+            create_directory_durable(&self.dir)?;
+            let seg_path = self.wal_segment_path(room_id);
+            let existed = seg_path.exists();
+            let mut payload =
+                serde_json::to_vec(line).map_err(|e| format!("序列化 WAL 段失败: {e}"))?;
+            payload.push(b'\n');
+            let mut file = std::fs::OpenOptions::new()
+                .create(true)
+                .append(true)
+                .open(&seg_path)
+                .map_err(|e| format!("打开 WAL 段失败: {e}"))?;
+            file.write_all(&payload)
+                .map_err(|e| format!("追加 WAL 段失败: {e}"))?;
+            file.sync_data()
+                .map_err(|e| format!("同步 WAL 段失败: {e}"))?;
+            drop(file);
+            #[cfg(not(windows))]
+            if !existed {
+                sync_directory(&self.dir).map_err(|e| format!("同步 WAL 段目录失败: {e}"))?;
+            }
+            Ok(())
+        })();
+        result.map_err(|message| StoreWriteError {
+            replacement_visible: false,
+            decision_uncertain: false,
+            message,
+        })
     }
 
     #[cfg(test)]
@@ -295,6 +436,8 @@ impl NativeRoomStore {
                 }
                 return Err(error);
             }
+            // 完整检查点提交成功后清理旧 WAL 段文件。
+            let _ = std::fs::remove_file(self.wal_segment_path(record.room_id));
             Ok(())
         })();
         result.map_err(|mut message| {
@@ -311,6 +454,45 @@ impl NativeRoomStore {
         })
     }
 
+    fn replay_wal_segment(&self, record: &mut StoredRoom) -> Result<(), String> {
+        let seg_path = self.wal_segment_path(record.room_id);
+        let text = match std::fs::read_to_string(&seg_path) {
+            Ok(text) => text,
+            Err(e) if e.kind() == std::io::ErrorKind::NotFound => return Ok(()),
+            Err(e) => return Err(format!("读取 WAL 段失败: {e}")),
+        };
+        let lines: Vec<&str> = text
+            .split('\n')
+            .map(str::trim)
+            .filter(|l| !l.is_empty())
+            .collect();
+        for (idx, line) in lines.iter().enumerate() {
+            let parsed: WalSegmentLine = match serde_json::from_str(line) {
+                Ok(seg) => seg,
+                Err(_) if idx + 1 == lines.len() => {
+                    // 忽略崩溃留下的尾部半行记录。
+                    break;
+                }
+                Err(e) => return Err(format!("WAL 段第 {} 行解析失败: {e}", idx + 1)),
+            };
+            if parsed.next_dedup >= record.state.next_dedup {
+                record.state.snapshot_hex = parsed.snapshot_hex;
+                record.state.next_dedup = parsed.next_dedup;
+                record.state.command_receipts = parsed.command_receipts;
+                if parsed.timeout.is_some() {
+                    record.state.timeout = parsed.timeout;
+                }
+                if let (Some(wal), Some(entry)) = (&mut record.state.wal, parsed.entry) {
+                    if wal.entries.last().map(|e| e.dedup_id) != Some(entry.dedup_id) {
+                        wal.entries.push(entry);
+                    }
+                }
+            }
+        }
+        record.checksum = state_checksum(&record.state);
+        Ok(())
+    }
+
     /// 问题文件保留并占用 ID；Prepared 只能恢复原确认记录，不能提升候选。
     pub fn scan(&self) -> Result<RoomScan, String> {
         let entries = match std::fs::read_dir(&self.dir) {
@@ -324,6 +506,16 @@ impl NativeRoomStore {
             let entry = entry.map_err(|e| format!("读目录项失败: {e}"))?;
             let path = entry.path();
             let name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
+            if let Some(num) = name.strip_suffix(".wal.jsonl") {
+                if !num.is_empty() && num.bytes().all(|b| b.is_ascii_digit()) {
+                    if let Ok(id) = num.parse::<u64>() {
+                        if id > 0 && num == id.to_string() {
+                            out.reserved_ids.insert(id);
+                            continue;
+                        }
+                    }
+                }
+            }
             let name = name.strip_suffix(".journal").unwrap_or(name);
             let Some((room_id, uncommitted_temp, canonical)) = room_filename(name) else {
                 continue;
@@ -359,7 +551,15 @@ impl NativeRoomStore {
                 Ok((bytes, prepared)) => {
                     if let Some(bytes) = bytes {
                         match journal::decode(&bytes, room_id) {
-                            Ok(record) => out.records.push(record),
+                            Ok(mut record) => match self.replay_wal_segment(&mut record) {
+                                Ok(()) => out.records.push(record),
+                                Err(error) => out.issues.push(RoomScanIssue {
+                                    path: self.wal_segment_path(room_id),
+                                    room_id: Some(room_id),
+                                    error,
+                                    uncommitted_temp: false,
+                                }),
+                            },
                             Err(error) => out.issues.push(RoomScanIssue {
                                 path: self.dir.join(format!("{room_id}.json")),
                                 room_id: Some(room_id),
@@ -403,7 +603,11 @@ impl NativeRoomStore {
     /// 删除一个房间的落盘记录（房间关闭/结束时调用）。
     pub fn remove(&self, room_id: u64) -> Result<(), String> {
         // 先删日志：中断时留下的终局正文不能再从 Prepared 的旧局恢复。
-        for name in [format!("{room_id}.json.journal"), format!("{room_id}.json")] {
+        for name in [
+            format!("{room_id}.json.journal"),
+            format!("{room_id}.wal.jsonl"),
+            format!("{room_id}.json"),
+        ] {
             match std::fs::remove_file(self.dir.join(name)) {
                 Ok(()) => {
                     #[cfg(not(windows))]

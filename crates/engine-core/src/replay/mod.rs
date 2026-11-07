@@ -193,6 +193,7 @@ fn outcome_tag(o: &MatchOutcome) -> u8 {
         MatchOutcome::GroupWin { .. } => 6,
         // M4 单挑（single）: last living player wins.
         MatchOutcome::SingleWin { .. } => 7,
+        MatchOutcome::TeamWin { .. } => 8,
     }
 }
 

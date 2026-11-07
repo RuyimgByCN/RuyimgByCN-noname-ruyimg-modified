@@ -109,8 +109,17 @@ impl Engine {
                 }
             }
 
-            // ③ 出牌：逐手牌 × 目标组合（自目标/无目标 + 单目标 + 双目标）
-            let hand: Vec<crate::ids::CardId> = self.debug_hand(seat);
+            // ③ 出牌：逐手牌（及可 view-as 转化的装备牌）× 目标组合（自目标/无目标 + 单目标 + 双目标）
+            let mut hand: Vec<crate::ids::CardId> = self.debug_hand(seat);
+            for &eq in &self.state_core().player(seat).equips {
+                if self
+                    .catalog()
+                    .find_player_vm_view_as(self.state_core(), seat, eq, true, None)
+                    .is_some()
+                {
+                    hand.push(eq);
+                }
+            }
             let others: Vec<crate::ids::PlayerId> = (0..self.state_core().players.len() as u8)
                 .filter(|p| *p != seat && self.state_core().player(*p).alive)
                 .collect();

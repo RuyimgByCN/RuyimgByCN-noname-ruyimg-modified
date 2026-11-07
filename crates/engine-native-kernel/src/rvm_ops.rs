@@ -20,12 +20,16 @@ mod codec;
 pub use codec::*;
 mod codec_ext;
 mod codec_ext2;
+mod codec_ext3;
 mod commit;
 pub use commit::*;
 mod commit_combat;
 mod commit_ext;
+mod accept_batch15;
 mod commit_batch13;
 mod commit_batch14;
+mod commit_batch15;
+mod commit_batch15_rest;
 mod query;
 pub use query::*;
 
@@ -132,7 +136,7 @@ fn skill_label(catalog: &Catalog, def: u32) -> Option<String> {
     Some(catalog.skill_name(id).to_string())
 }
 
-fn pile_name(catalog: &Catalog, executing: &str, pile_def: u32) -> String {
+pub(super) fn pile_name(catalog: &Catalog, executing: &str, pile_def: u32) -> String {
     skill_label(catalog, pile_def).unwrap_or_else(|| executing.to_string())
 }
 
@@ -887,6 +891,9 @@ pub fn accept_effect(req: &EffectRequest, seats: u8) -> Result<(), HostTrap> {
             }
         }
         other => {
+            if let Some(res) = accept_batch15::accept_batch15_effect(other, seats) {
+                return res;
+            }
             let name = format!("{other:?}");
             return Err(reject(name.split([' ', '(', '{']).next().unwrap_or("?")));
         }

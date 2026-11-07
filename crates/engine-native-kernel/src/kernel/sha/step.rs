@@ -733,6 +733,31 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                     }
                 }
             }
+            if !tieji_blocks && !target_sentinel {
+                for c in ctx
+                    .core
+                    .player(self.target)
+                    .hand
+                    .iter()
+                    .chain(ctx.core.player(self.target).equips.iter())
+                    .copied()
+                {
+                    if ctx
+                        .catalog
+                        .find_player_vm_view_as(
+                            ctx.core,
+                            self.target,
+                            c,
+                            false,
+                            Some(CardKind::Shan),
+                        )
+                        .is_some()
+                        && !shans.contains(&ChoiceOption::Card(c))
+                    {
+                        shans.push(ChoiceOption::Card(c));
+                    }
+                }
+            }
 
             // 神弓（swd 批 148）：借用他人防具也视为「可响应」——须在
             // 「无闪直接命中」判定之前纳入
@@ -876,16 +901,11 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
             }
         }
         if let ChoiceOption::Card(shan) = answer {
-            // 倾国应答可能来自装备区：按实际所在区移除
-            let in_hand = ctx.core.player(self.target).hand.contains(&shan);
-            if in_hand {
-                ctx.discard_from_hand(self.target, shan);
-            } else if ctx.core.player(self.target).equips.contains(&shan) {
-                ctx.core
-                    .player_mut(self.target)
-                    .equips
-                    .retain(|x| *x != shan);
-                ctx.to_discard(shan);
+            // 倾国或 view_as 应答可能来自手牌或装备区：按实际所在区移除
+            if ctx.core.player(self.target).hand.contains(&shan)
+                || ctx.core.player(self.target).equips.contains(&shan)
+            {
+                discard_response_card(ctx, self.target, shan, CardKind::Shan);
             } else if let Some(owner) = (ctx.catalog.hooks.borrowed_owner)(ctx, self.target, shan) {
                 // 神弓借用（swd 批 148）：从所有者装备区取走并撤技
                 ctx.core.player_mut(owner).equips.retain(|x| *x != shan);

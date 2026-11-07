@@ -793,6 +793,10 @@ fn hash_outcome(h: &mut blake3::Hasher, o: &MatchOutcome) {
             put_u8(h, 7);
             put_u32(h, player.raw());
         }
+        MatchOutcome::TeamWin { team } => {
+            put_u8(h, 8);
+            put_u8(h, *team);
+        }
     }
 }
 

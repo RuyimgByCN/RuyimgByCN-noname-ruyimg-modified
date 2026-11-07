@@ -190,7 +190,7 @@ pub fn observer_snapshot_for(
                         enabled,
                         use_count,
                         active,
-                        view_as: false,
+                        view_as: engine.catalog().is_view_as_skill(def),
                         locked,
                     })
                 })
@@ -212,10 +212,6 @@ pub fn observer_snapshot_for(
                 .collect(),
         })
         .collect();
-    // 原生 outcome 只有胜者座位；协议 `MatchOutcome` 为身份局语义枚举。
-    // 未终局 → InProgress；终局 → 按原生胜者映射（非身份局按 Loyalist/Rebel 语义
-    // 无法判定时用 `LoyalistWin` 占位是**不诚实**的，故统一用 `InProgress` 之外
-    // 的可表达项：见下方 TODO 注释与证据 README「未覆盖」。
     let outcome = match engine.outcome() {
         None => MatchOutcome::InProgress,
         Some(o) => match o.winner {
@@ -237,12 +233,19 @@ pub fn observer_snapshot_for(
             engine_native::Winner::Faction(f) => MatchOutcome::GroupWin {
                 group: format!("{f:?}").to_lowercase(),
             },
-            engine_native::Winner::Versus(_)
-            | engine_native::Winner::Doudizhu { .. }
-            | engine_native::Winner::Boss { .. } => {
-                // 协议枚举无对应项：**不猜测**，保持 InProgress 并在证据中登记
-                MatchOutcome::InProgress
-            }
+            engine_native::Winner::Versus(team) => MatchOutcome::TeamWin { team: team as u8 },
+            engine_native::Winner::Doudizhu { lord_won: true } => MatchOutcome::GroupWin {
+                group: "landlord".into(),
+            },
+            engine_native::Winner::Doudizhu { lord_won: false } => MatchOutcome::GroupWin {
+                group: "peasant".into(),
+            },
+            engine_native::Winner::Boss { boss_won: true } => MatchOutcome::GroupWin {
+                group: "boss".into(),
+            },
+            engine_native::Winner::Boss { boss_won: false } => MatchOutcome::GroupWin {
+                group: "challengers".into(),
+            },
         },
     };
     ObserverSnapshot {

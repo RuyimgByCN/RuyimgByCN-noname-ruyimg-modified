@@ -4,6 +4,7 @@ mod batch13_cards;
 mod batch13_targets;
 mod batch14_cards;
 mod batch14_targets;
+mod batch15_resolvers;
 mod danshou;
 mod dcbihuo;
 mod dcdichou;
@@ -35,6 +36,9 @@ pub(crate) fn step(
         return Some(flow);
     }
     if let Some(flow) = batch14_cards::step(ctx, skill, effect, state) {
+        return Some(flow);
+    }
+    if let Some(flow) = batch15_resolvers::step(ctx, skill, effect, state) {
         return Some(flow);
     }
     if let Some(flow) = dcdichou::step(ctx, effect, state) {
@@ -115,6 +119,9 @@ pub(crate) fn active_ask(
         return Some(expected);
     }
     if let Some(expected) = batch14_cards::active_ask(effect, state, core, catalog) {
+        return Some(expected);
+    }
+    if let Some(expected) = batch15_resolvers::active_ask(effect, state, core, catalog) {
         return Some(expected);
     }
     if let Some(expected) = dcdichou::active_ask(effect, state, core) {
@@ -418,6 +425,7 @@ pub(crate) fn validate(
         _ => {
             batch14_targets::validate(effect, state, core)
                 || batch14_cards::validate(effect, state, core, card_count)
+                || batch15_resolvers::validate(effect, state, core)
         }
     }
 }

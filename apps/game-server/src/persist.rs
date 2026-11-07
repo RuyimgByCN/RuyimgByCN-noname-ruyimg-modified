@@ -350,6 +350,22 @@ fn hex32(bytes: &[u8; 32]) -> String {
     bytes.iter().map(|b| format!("{b:02x}")).collect()
 }
 
+/// Compute a canonical 32-byte state hash for a native room snapshot hex payload.
+pub fn native_snapshot_state_hash(snapshot_hex: &str) -> [u8; 32] {
+    let mut h = blake3::Hasher::new();
+    h.update(b"noname-next/native-snapshot/v1");
+    h.update(snapshot_hex.as_bytes());
+    *h.finalize().as_bytes()
+}
+
+/// Deterministic signing key and key_id pair for a native room's WAL block chain.
+pub fn native_wal_signing_key(room_id: u64) -> (String, String) {
+    (
+        format!("noname-native-wal-key-v1:{room_id}"),
+        format!("native-room-{room_id}"),
+    )
+}
+
 /// Rebuild engine from snapshot + WAL tail, preserving the pinned manifest.
 ///
 /// Recovery contract (architecture §24, §31.5):

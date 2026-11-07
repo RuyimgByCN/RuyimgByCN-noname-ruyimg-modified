@@ -198,6 +198,9 @@ pub fn active_ask(
                         }
                     }
                 }
+                if !tieji_blocks {
+                    append_vm_shan_options(core, catalog, *target, &mut options);
+                }
                 return Some(ask(
                     *target,
                     "respond_shan",
@@ -220,15 +223,7 @@ pub fn active_ask(
                 return None;
             }
             let responder = *responders.first()?;
-            let mut options = vec![ChoiceOption::Pass];
-            options.extend(
-                core.player(responder)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| is_tao_like(core, catalog, responder, *c, *dying))
-                    .map(ChoiceOption::Card),
-            );
+            let options = dying_save_options(core, catalog, responder, *dying);
             Some(ask(
                 responder,
                 "dying_save",
@@ -250,15 +245,7 @@ pub fn active_ask(
                 return None;
             }
             let responder = if *on_target { *target } else { *source };
-            let mut options = vec![ChoiceOption::Pass];
-            options.extend(
-                core.player(responder)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| catalog.card_kind(*c) == CardKind::Sha)
-                    .map(ChoiceOption::Card),
-            );
+            let options = response_kind_options(core, catalog, responder, CardKind::Sha);
             Some(ask(
                 responder,
                 "duel_sha",
@@ -281,15 +268,7 @@ pub fn active_ask(
                     return None;
                 }
                 let responder = *queue.first()?;
-                let mut options = vec![ChoiceOption::Pass];
-                options.extend(
-                    core.player(responder)
-                        .hand
-                        .iter()
-                        .copied()
-                        .filter(|c| catalog.card_kind(*c) == CardKind::Nullify)
-                        .map(ChoiceOption::Card),
-                );
+                let options = response_kind_options(core, catalog, responder, CardKind::Nullify);
                 Some(ask(
                     responder,
                     "nullify_window",
@@ -323,15 +302,7 @@ pub fn active_ask(
             if !*asked {
                 return None;
             }
-            let mut options = vec![ChoiceOption::Pass];
-            options.extend(
-                core.player(*target)
-                    .hand
-                    .iter()
-                    .copied()
-                    .filter(|c| catalog.card_kind(*c) == *need)
-                    .map(ChoiceOption::Card),
-            );
+            let options = response_kind_options(core, catalog, *target, *need);
             Some(ask(
                 *target,
                 "aoe_response",

@@ -115,13 +115,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
             loop {
                 while let Some(r) = self.responders.first() {
                     let alive = ctx.core.player(*r).alive;
-                    let has_tao = alive
-                        && ctx
-                            .core
-                            .player(*r)
-                            .hand
-                            .iter()
-                            .any(|c| is_tao_like(ctx, *r, *c, self.dying));
+                    let has_tao = alive && !dying_tao_cards(ctx, *r, self.dying).is_empty();
                     if !has_tao {
                         self.responders.remove(0);
                     } else {
@@ -132,10 +126,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                     break;
                 }
                 let any_tao = ctx.core.players.iter().enumerate().any(|(i, p)| {
-                    p.alive
-                        && p.hand
-                            .iter()
-                            .any(|c| is_tao_like(ctx, i as PlayerId, *c, self.dying))
+                    p.alive && !dying_tao_cards(ctx, i as PlayerId, self.dying).is_empty()
                 });
                 if !any_tao {
                     break;
@@ -155,7 +146,7 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 self.responders.remove(0);
                 let answer = ctx.answer().clone();
                 if let Some(ChoiceOption::Card(tao)) = answer.first().copied() {
-                    ctx.discard_from_hand(responder, tao);
+                    discard_dying_card(ctx, responder, self.dying, tao);
                     // 救援（孙权主公技，锁定；v202 对齐上游 filter）：主公
                     // 资格 + 用桃者为吴势力 + 非濒死者本人——桃回复 +1
                     let jiuyuan = ctx
@@ -207,17 +198,13 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                 0
             };
             options.extend(
-                ctx.core
-                    .player(responder)
-                    .hand
-                    .iter()
-                    .filter(|c| is_tao_like(ctx, responder, **c, self.dying))
+                dying_tao_cards(ctx, responder, self.dying)
+                    .into_iter()
                     .filter(|c| {
                         !sipu_ban_save
                             || (responder == sipu_holder
-                                && is_tao_like(ctx, responder, **c, self.dying))
+                                && is_tao_like(ctx, responder, *c, self.dying))
                     })
-                    .copied()
                     .map(ChoiceOption::Card),
             );
             // 冰封·封（swd 批 134）：封锁者不能求桃/自救

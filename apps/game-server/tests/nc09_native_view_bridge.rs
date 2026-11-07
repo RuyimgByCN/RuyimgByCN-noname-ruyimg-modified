@@ -177,8 +177,7 @@ fn nc09_bridge_maps_character_identity_cards_and_outcome() {
     assert!(matches!(snap.outcome, engine_api::MatchOutcome::InProgress));
 }
 
-/// NC09：`SkillView` 字段取自**内核技能实例**（enabled/use_count/active/locked），
-/// 未建模的 `view_as` 恒 false（不猜测）。
+/// NC09：`SkillView` 字段取自**内核技能实例**（enabled/use_count/active/locked/view_as）。
 #[test]
 fn nc09_bridge_maps_skill_view_from_instances() {
     let mut e = engine_native::Engine::new_identity(20261920, 4);
@@ -208,7 +207,11 @@ fn nc09_bridge_maps_skill_view_from_instances() {
             inst.map(|i| u32::from(i.once_used)).unwrap_or(0),
             "use_count 应取实例 once_used"
         );
-        assert!(!sv.view_as, "view_as 未建模 → 恒 false（不猜测）");
+        assert_eq!(
+            sv.view_as,
+            e.catalog().is_view_as_skill(def),
+            "view_as 应与目录 is_view_as_skill 一致"
+        );
         // active/locked 互斥且与内核权威校验一致
         assert_eq!(
             sv.active,
@@ -217,11 +220,74 @@ fn nc09_bridge_maps_skill_view_from_instances() {
         );
         assert_eq!(sv.locked, !sv.active, "locked = 当前不可主动（保守口径）");
     }
-    // 未持技座位：技能列表为空（不是「目录里有就算」）
-    let seat1 = snap.seats.iter().find(|s| s.seat.0 == 1).expect("座位 1");
+    // 含视为技的武将（如武圣/龙胆等）应投影 view_as == true
+    let view_as_general = e
+        .general_candidates()
+        .into_iter()
+        .filter_map(|d| e.catalog().general_meta(d).map(|m| (d, m.0, m.2)))
+        .find(|(_, _, skills)| {
+            skills.iter().any(|sk| {
+                e.catalog()
+                    .skill_by_name(sk)
+                    .map(|id| e.catalog().is_view_as_skill(id))
+                    .unwrap_or(false)
+            })
+        })
+        .expect("含视为技武将");
+    e.assign_general_named(1, view_as_general.1)
+        .expect("含视为技武将选将");
+    let snap2 = observer_snapshot_for(&e, RoomRole::Player, Some(ApiPlayerId::new(2)));
+    let seat1 = snap2.seats.iter().find(|s| s.seat.0 == 1).expect("座位 1");
     assert!(
-        seat1.skills.is_empty(),
-        "未装配武将的座位不得投影技能：{:?}",
+        seat1.skills.iter().any(|sv| sv.view_as),
+        "含视为技武将应投影 view_as == true: {:?}",
         seat1.skills
     );
+    // 未持技座位：技能列表为空（不是「目录里有就算」）
+    let seat2 = snap2.seats.iter().find(|s| s.seat.0 == 2).expect("座位 2");
+    assert!(
+        seat2.skills.is_empty(),
+        "未装配武将的座位不得投影技能：{:?}",
+        seat2.skills
+    );
 }
+
+#[test]
+fn nc09_bridge_maps_non_identity_match_outcomes() {
+    let mut e = engine_native::Engine::new(20261921, 2);
+    for (winner, expected) in [
+        (
+            engine_native::Winner::Versus(1),
+            engine_api::MatchOutcome::TeamWin { team: 1 },
+        ),
+        (
+            engine_native::Winner::Doudizhu { lord_won: true },
+            engine_api::MatchOutcome::GroupWin {
+                group: "landlord".into(),
+            },
+        ),
+        (
+            engine_native::Winner::Doudizhu { lord_won: false },
+            engine_api::MatchOutcome::GroupWin {
+                group: "peasant".into(),
+            },
+        ),
+        (
+            engine_native::Winner::Boss { boss_won: true },
+            engine_api::MatchOutcome::GroupWin {
+                group: "boss".into(),
+            },
+        ),
+        (
+            engine_native::Winner::Boss { boss_won: false },
+            engine_api::MatchOutcome::GroupWin {
+                group: "challengers".into(),
+            },
+        ),
+    ] {
+        e.state_core_mut().outcome = Some(engine_native::Outcome { winner });
+        let snap = observer_snapshot_for(&e, RoomRole::Spectator, None);
+        assert_eq!(snap.outcome, expected);
+    }
+}
+

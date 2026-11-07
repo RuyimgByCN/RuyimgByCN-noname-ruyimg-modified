@@ -113,7 +113,7 @@ pub fn spawn_room_native_persisted(
     store: Option<NativeRoomStore>,
 ) -> RoomHandle {
     // 运行期只保留**哈希**（明文仅在入座比对时短暂存在）
-    let hash = crate::native_room_store::password_hash(id, &password);
+    let hash = crate::native_room_store::salted_password_hash(id, &password);
     spawn_room_native_persisted_with_hash(id, session, mailbox, snapshot_every, hash, store)
 }
 
@@ -136,6 +136,49 @@ pub fn spawn_room_native_persisted_with_hash(
         store,
     ));
     RoomHandle::new(id, tx)
+}
+
+/// NC12 原生房间 WAL 分块签名：每步提交后把原生步追加到 `RoomPersist` 并按周期或完赛封块签名。
+pub fn record_committed_native_step(
+    persist: &mut RoomPersist,
+    room_id: u64,
+    session: &NativeRoomSession,
+    idempotency_key: u64,
+    block_every: u64,
+) {
+    let revision = session.engine().revision();
+    let state_hash = crate::persist::native_snapshot_state_hash(&session.snapshot_hex());
+    let actor = session
+        .last_wal_entry()
+        .map(|e| engine_api::PlayerId::new(u32::from(e.actor) + 1))
+        .unwrap_or(engine_api::PlayerId::NONE);
+    persist.append(crate::persist::WalEntry {
+        revision,
+        state_hash,
+        command: engine_api::Command {
+            actor,
+            expected_revision: ExpectedRevision(revision.saturating_sub(1)),
+            idempotency_key: IdempotencyKey(idempotency_key),
+            kind: engine_api::CommandKind::EndPhase,
+        },
+        idempotency_key,
+        manifest_hash: engine_api::MatchManifestHash::ZERO,
+    });
+    let block_size = if block_every == 0 {
+        crate::persist::DEFAULT_BLOCK_SIZE
+    } else {
+        (block_every as usize).min(crate::persist::DEFAULT_BLOCK_SIZE)
+    };
+    let finished = session.engine().outcome().is_some();
+    if finished || persist.wal.len() % block_size == 0 {
+        let (key, key_id) = crate::persist::native_wal_signing_key(room_id);
+        let blocks = persist.build_blocks(block_size);
+        persist.seal_blocks(blocks, &key, &key_id);
+        if finished {
+            let view = observer_snapshot_for(session.engine(), RoomRole::Referee, None);
+            persist.finalize_result(view.outcome, revision, &key, &key_id);
+        }
+    }
 }
 
 /// 从落盘记录恢复并启动房间（服务端启动时调用，R05 v4/v5）。
@@ -190,8 +233,7 @@ async fn native_room_loop(
     // （默认 600 秒），由 spawn 侧读取后传入，避免在生产源码里直接读环境变量。
     let seat_timeout_secs = SEAT_TIMEOUT_SECS.load(std::sync::atomic::Ordering::Relaxed);
     let mut durability = RoomDurability::new(id, room_password.clone(), store);
-    // 旧线锦标赛 WAL 面保留占位（原生分块签名未做，登记待办）
-    let _legacy_wal = RoomPersist::new();
+    let mut persist = RoomPersist::new();
     let mut members: HashMap<u64, NativeActorMember> = session
         .members()
         .map(|m| {
@@ -230,6 +272,7 @@ async fn native_room_loop(
                             id,
                             &mut session,
                             &mut durability,
+                            &mut persist,
                             &mut members,
                             snapshot_every,
                             candidate,
@@ -306,7 +349,7 @@ async fn native_room_loop(
                 reply,
             } => {
                 if !room_password.is_empty()
-                    && crate::native_room_store::password_hash(id, &pw) != room_password
+                    && !crate::native_room_store::verify_password_hash(id, &pw, &room_password)
                 {
                     let _ = reply.send(Err("unauthorized".into()));
                     continue;
@@ -550,10 +593,17 @@ async fn native_room_loop(
                         continue;
                     }
                     session.compact_wal(snapshot_every);
-                    if let Err(error) = durability.commit(&mut session, checkpoint) {
+                    if let Err(error) = durability.commit_step(&mut session, checkpoint) {
                         let _ = reply.send(Err(error));
                         continue;
                     }
+                    record_committed_native_step(
+                        &mut persist,
+                        id,
+                        &session,
+                        idempotency_key.0,
+                        snapshot_every,
+                    );
                     paused_revision = None;
                     if *new_revision > before {
                         last_revision = *new_revision;
@@ -868,15 +918,15 @@ pub fn spawn_native_room_if_configured(
     let mut session = NativeRoomSession::new_locked(engine, verified, packs, players);
     session.set_choice_timeout_secs(choice_timeout_secs)?;
     session.sync_deadline()?;
-    let hash = crate::native_room_store::password_hash(id, &password);
-    let mut durability = RoomDurability::new(id, hash, store.clone());
+    let hash = crate::native_room_store::salted_password_hash(id, &password);
+    let mut durability = RoomDurability::new(id, hash.clone(), store.clone());
     durability.commit(&mut session, None)?;
-    Ok(Some(spawn_room_native_persisted(
+    Ok(Some(spawn_room_native_persisted_with_hash(
         id,
         session,
         mailbox,
         snapshot_every,
-        password,
+        hash,
         store,
     )))
 }

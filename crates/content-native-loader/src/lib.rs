@@ -260,6 +260,7 @@ pub struct VmBridgeOutcome {
 
 mod vm_active;
 mod vm_modifiers;
+mod vm_view_as;
 mod mechanisms;
 mod vm_generals;
 pub mod locked_content;
@@ -480,13 +481,8 @@ pub fn bridge_vm_skill_decls(
     vm_active::bridge_active_entries(pkg, &mut out)?;
     vm_active::join_trigger_only_entries(pkg, &mut out)?;
     vm_modifiers::bridge_modifier_only_entries(pkg, &mut out)?;
+    vm_view_as::bridge_view_as_entries(pkg, &mut out)?;
     vm_active::derive_r05_helpers(pkg, &mut out)?;
-    if !pkg.view_as_index.is_empty() {
-        return Err(invalid(
-            "view_as_index",
-            "native VM view-as declarations are unsupported",
-        ));
-    }
     if pkg
         .modifier_index
         .iter()

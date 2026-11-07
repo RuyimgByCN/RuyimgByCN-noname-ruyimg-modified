@@ -849,7 +849,7 @@ pub fn dec_effects(bytes: &[u8]) -> Option<Vec<EffectRequest>> {
                 card: rule_api::CardId::new(rd.u32()?),
                 target: rule_api::PlayerId::new(rd.u32()?),
             },
-            71..=153 | 255 => super::codec_ext::dec_ext_effect(tag, &mut rd)?,
+            71..=178 | 255 => super::codec_ext::dec_ext_effect(tag, &mut rd)?,
             _ => return None,
         };
         out.push(e);

@@ -1634,5 +1634,222 @@ fn pa12_batch14_legacy_vm_effects_match_native_expectation() {
     }
 }
 
+#[test]
+fn pa12_batch15_resolvers_and_view_as_compile_and_execute() {
+    let view_as_cases: &[(&str, &str, &str)] = &[
+        (
+            "kanpo",
+            include_str!("../../../content/original/ported/shenhua/kanpo.skill"),
+            "wuxie",
+        ),
+        (
+            "jiuchi",
+            include_str!("../../../content/original/ported/shenhua/jiuchi.skill"),
+            "jiu",
+        ),
+        (
+            "jxwusheng",
+            include_str!("../../../content/original/ported/offline/jxwusheng.skill"),
+            "sha",
+        ),
+    ];
+    for (id, src, want_as) in view_as_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译 view_as .skill");
+        assert!(
+            !pkg.view_as_index.is_empty(),
+            "{id} 应生成非空 view_as_index"
+        );
+        assert_eq!(pkg.view_as_index[0].as_kind, *want_as);
+    }
 
-
+    let trigger_cases: &[(&str, &str, usize, &[&str])] = &[
+        (
+            "pot_weiyan",
+            include_str!("../../../content/original/ported/bingshi/pot_weiyan.skill"),
+            0,
+            &["ResolvePotweiyan"],
+        ),
+        (
+            "pot_caoshuang",
+            include_str!("../../../content/original/ported/bingshi/pot_caoshuang.skill"),
+            0,
+            &["ResolvePotcaoshuang"],
+        ),
+        (
+            "pot_lvyi",
+            include_str!("../../../content/original/ported/bingshi/pot_lvyi.skill"),
+            0,
+            &["ResolvePotlvyi"],
+        ),
+        (
+            "pot_yuji",
+            include_str!("../../../content/original/ported/bingshi/pot_yuji.skill"),
+            0,
+            &["ResolvePotyuji"],
+        ),
+        (
+            "pot_zhouyu",
+            include_str!("../../../content/original/ported/bingshi/pot_zhouyu.skill"),
+            0,
+            &["ResolvePotzhouyu"],
+        ),
+        (
+            "sp_zhonghui",
+            include_str!("../../../content/original/ported/bingshi/sp_zhonghui.skill"),
+            0,
+            &["ResolveMbzhonghui"],
+        ),
+        (
+            "ddd_liuhong",
+            include_str!("../../../content/original/ported/ddd/liuhong.skill"),
+            0,
+            &["ResolveDddLiuhong"],
+        ),
+        (
+            "twguohuai",
+            include_str!("../../../content/original/ported/tw/twguohuai.skill"),
+            0,
+            &["ResolveTwguohuai"],
+        ),
+        (
+            "ddd_xuelingyun",
+            include_str!("../../../content/original/ported/ddd/xuelingyun.skill"),
+            0,
+            &["ResolveDddXuelingyun"],
+        ),
+        (
+            "pot_taishici",
+            include_str!("../../../content/original/ported/bingshi/pot_taishici.skill"),
+            0,
+            &["ResolvePottaishici"],
+        ),
+        (
+            "ddd_xujing",
+            include_str!("../../../content/original/ported/ddd/xujing.skill"),
+            0,
+            &["ResolveDddXujing"],
+        ),
+        (
+            "ddd_liuba",
+            include_str!("../../../content/original/ported/ddd/liuba.skill"),
+            0,
+            &["ResolveDddLiuba"],
+        ),
+        (
+            "ddd_liuye",
+            include_str!("../../../content/original/ported/ddd/liuye.skill"),
+            0,
+            &["ResolveDddLiuye"],
+        ),
+        (
+            "ddd_zhangkai",
+            include_str!("../../../content/original/ported/ddd/zhangkai.skill"),
+            0,
+            &["ResolveDddZhangkai"],
+        ),
+        (
+            "extra_jilin",
+            include_str!("../../../content/original/ported/extra/jilin.skill"),
+            0,
+            &["ResolveHiddenSkillPile"],
+        ),
+        (
+            "twfuman",
+            include_str!("../../../content/original/ported/tw/twfuman.skill"),
+            0,
+            &["DrawCardsFromSkill", "ResolveTwfuman"],
+        ),
+        (
+            "twkujian",
+            include_str!("../../../content/original/ported/tw/twkujian.skill"),
+            0,
+            &["ResolveTwkujian"],
+        ),
+        (
+            "twxiawei",
+            include_str!("../../../content/original/ported/tw/twxiawei.skill"),
+            0,
+            &["ResolveTwxiawei"],
+        ),
+        (
+            "caoyi",
+            include_str!("../../../content/original/ported/xianding/caoyi.skill"),
+            0,
+            &["ResolveCaoyi"],
+        ),
+        (
+            "dc_sb_lusu",
+            include_str!("../../../content/original/ported/xianding/dc_sb_lusu.skill"),
+            0,
+            &["ResolveDcSbLusu"],
+        ),
+        (
+            "dc_sb_zhouyu",
+            include_str!("../../../content/original/ported/xianding/dc_sb_zhouyu.skill"),
+            0,
+            &["ResolveDcSbZhouyu"],
+        ),
+        (
+            "mb_sunjun",
+            include_str!("../../../content/original/ported/bingshi/mb_sunjun.skill"),
+            0,
+            &["ResolveMbxiongtu"],
+        ),
+        (
+            "ddd_caoshuang",
+            include_str!("../../../content/original/ported/ddd/caoshuang.skill"),
+            0,
+            &["ResolveDddCaoshuang"],
+        ),
+    ];
+    for (id, src, trig_idx, want_prefixes) in trigger_cases {
+        let pkg = content_compiler::compile_source_named(id, src).expect("编译");
+        let mut tx = Transaction::begin(GameState::empty());
+        bootstrap_match(&mut tx, 2, 85, "identity-standard").expect("开局");
+        let _ = std::sync::Arc::make_mut(&mut tx.state_mut().content).load_package(&pkg);
+        let owner = PlayerId::new(1);
+        let other = PlayerId::new(2);
+        let entry = &pkg.trigger_index[*trig_idx];
+        let module = tx
+            .state()
+            .content
+            .module(&entry.module)
+            .cloned()
+            .unwrap_or_else(|| {
+                let m = pkg
+                    .modules
+                    .iter()
+                    .find(|m| m.name == entry.module)
+                    .expect("模块");
+                rule_vm::VerifiedModule::verify(m.clone()).expect("校验")
+            });
+        let out = engine_core::vm_host::run_module_with_event_cards(
+            tx.state(),
+            &module,
+            entry.skill_def_id,
+            [owner.raw(), other.raw(), other.raw(), 1],
+            1,
+            &[1],
+            &[2],
+            0,
+            0,
+            0,
+            other,
+            0,
+            10_000,
+        )
+        .expect("执行");
+        assert!(out.paused.is_none(), "{id} 无挂起");
+        assert!(
+            out.effects.len() >= want_prefixes.len(),
+            "{id} 效果数不足: {:?}",
+            out.effects
+        );
+        for (eff, want) in out.effects.iter().zip(want_prefixes.iter()) {
+            assert!(
+                format!("{eff:?}").starts_with(want),
+                "{id} 期望 {want}，实际 {eff:?}"
+            );
+        }
+    }
+}

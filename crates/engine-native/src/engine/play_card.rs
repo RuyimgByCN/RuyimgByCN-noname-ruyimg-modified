@@ -106,12 +106,14 @@ pub(super) fn play_card(
                     }
                     // 铁索为结算型锦囊：走 CardUsed → 无懈窗口 → ChainMachine
                     // 翻转（旧实现只推 Linked 帧，牌从未离手，ADR 0705 修复）。
+                    let use_as = (kind != catalog.card_kind(card)).then_some(CardKind::Chain);
                     crate::resolution::push_frame(
                         &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
+                        EventData::CardUsed(crate::machine::card_use_as(
                             card,
                             core.turn.current,
                             targets,
+                            use_as,
                         )),
                     );
                     return Ok(());
@@ -133,12 +135,14 @@ pub(super) fn play_card(
                     if kongcheng && core.player(target).hand.is_empty() {
                         return Err(RejectReason::IllegalTargets);
                     }
+                    let use_as = (kind != catalog.card_kind(card)).then_some(CardKind::Duel);
                     crate::resolution::push_frame(
                         &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
+                        EventData::CardUsed(crate::machine::card_use_as(
                             card,
                             core.turn.current,
                             targets,
+                            use_as,
                         )),
                     );
                     return Ok(());
@@ -217,10 +221,13 @@ pub(super) fn play_card(
                     // 牵羊无距离限制（上游 mod targetInRange 同口径；仅
                     // 声明转化命中——实体牌非顺牵即视为路径）
                     let tannang_free = catalog.card_kind(card) != CardKind::Snatch
-                        && catalog
+                        && (catalog
                             .skill_by_name(crate::content::host::XJ_TANNANG_KEY)
                             .map(|def| core.has_skill(from, def))
-                            .unwrap_or(false);
+                            .unwrap_or(false)
+                            || catalog
+                                .find_player_vm_view_as(core, from, card, true, Some(CardKind::Snatch))
+                                .is_some_and(|s| s.ignore_distance));
                     if !qicai
                         && !tannang_free
                         && !fentian_red_free
@@ -485,15 +492,6 @@ pub(super) fn play_card(
                     if !has_weapon || !in_range {
                         return Err(RejectReason::IllegalTargets);
                     }
-                    crate::resolution::push_frame(
-                        &mut state.resolution,
-                        EventData::CardUsed(crate::machine::card_use(
-                            card,
-                            core.turn.current,
-                            targets,
-                        )),
-                    );
-                    return Ok(());
                 }
                 CardKind::SavageAttack
                 | CardKind::ArcheryAttack

@@ -27,7 +27,7 @@ pub use wal::{NativeWalEntry, NativeWalState};
 mod timeout;
 pub use receipts::NativeCommandReceipt;
 pub(crate) use timeout::unix_ms;
-pub use timeout::{validate_timeout_secs, NativeChoiceDeadline, NativeTimeoutState};
+pub use timeout::{validate_timeout_secs, NativeTimeoutState};
 
 /// NC09 落盘状态（JSON 可序列化；**不含** IO 资源）。
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
@@ -440,6 +440,21 @@ impl NativeRoomSession {
             command_receipts: self.command_receipts.entries(),
             timeout: Some(self.timeout.clone()),
             wal: Some(self.wal.clone()),
+        }
+    }
+
+    pub(crate) fn last_wal_entry(&self) -> Option<&NativeWalEntry> {
+        self.wal.entries.last()
+    }
+
+    pub(crate) fn wal_segment_line(&self) -> crate::native_room_store::WalSegmentLine {
+        crate::native_room_store::WalSegmentLine {
+            revision: self.engine.revision(),
+            next_dedup: self.next_dedup,
+            snapshot_hex: self.snapshot_hex(),
+            entry: self.wal.entries.last().cloned(),
+            command_receipts: self.command_receipts.entries(),
+            timeout: Some(self.timeout.clone()),
         }
     }
 

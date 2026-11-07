@@ -575,7 +575,9 @@ pub(super) fn commit_batch14_effect(
                 }
             }
         }
-        _ => {}
+        other => {
+            super::commit_batch15::commit_batch15_effect(ctx, executing, owner, seats, other);
+        }
     }
 }
 

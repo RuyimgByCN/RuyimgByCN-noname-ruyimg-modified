@@ -148,7 +148,174 @@ pub(super) fn is_tao_like(
     if mizhilianou && ctx.catalog.cards[card as usize].suit == crate::catalog::Suit::Heart {
         return true;
     }
+    if ctx
+        .catalog
+        .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Tao))
+        .is_some()
+        && !tao_futai2_banned(ctx.core, ctx.catalog, responder)
+    {
+        return true;
+    }
+    if responder == dying
+        && ctx
+            .catalog
+            .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Jiu))
+            .is_some()
+    {
+        return true;
+    }
     // 帝女玄霜（G1 古剑，濒死可救基本牌）：按桃结算回复 1 体力
     //（弃摸骑乘由 DyingSaveMachine rider 承担）
     ctx.catalog.card_kind(card) == CardKind::Dinvxuanshuang
+}
+
+pub(super) fn dying_tao_cards(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    dying: PlayerId,
+) -> Vec<crate::ids::CardId> {
+    let p = ctx.core.player(responder);
+    let mut out: Vec<crate::ids::CardId> = p
+        .hand
+        .iter()
+        .copied()
+        .filter(|&c| is_tao_like(ctx, responder, c, dying))
+        .collect();
+    for &c in &p.equips {
+        let vm_ok = ctx
+            .catalog
+            .find_player_vm_view_as(ctx.core, responder, c, false, Some(CardKind::Tao))
+            .is_some()
+            || (responder == dying
+                && ctx
+                    .catalog
+                    .find_player_vm_view_as(ctx.core, responder, c, false, Some(CardKind::Jiu))
+                    .is_some());
+        if vm_ok && is_tao_like(ctx, responder, c, dying) && !out.contains(&c) {
+            out.push(c);
+        }
+    }
+    out
+}
+
+pub(super) fn response_kind_cards(
+    ctx: &Ctx<'_>,
+    responder: PlayerId,
+    need: CardKind,
+) -> Vec<crate::ids::CardId> {
+    let p = ctx.core.player(responder);
+    let mut out: Vec<crate::ids::CardId> = p
+        .hand
+        .iter()
+        .copied()
+        .filter(|&c| {
+            ctx.catalog.card_kind(c) == need
+                || ctx
+                    .catalog
+                    .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
+                    .is_some()
+        })
+        .collect();
+    for &c in &p.equips {
+        if ctx
+            .catalog
+            .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
+            .is_some()
+            && !out.contains(&c)
+        {
+            out.push(c);
+        }
+    }
+    out
+}
+
+pub(super) fn discard_response_card(
+    ctx: &mut Ctx<'_>,
+    player: PlayerId,
+    card: crate::ids::CardId,
+    target_kind: CardKind,
+) {
+    if ctx.catalog.card_kind(card) != target_kind
+        || ctx.core.player(player).equips.contains(&card)
+    {
+        if let Some(spec) = ctx
+            .catalog
+            .find_player_vm_view_as(ctx.core, player, card, false, Some(target_kind))
+            .cloned()
+        {
+            spec.record_use(ctx.core, player);
+        }
+    }
+    if ctx.core.player(player).hand.contains(&card) {
+        ctx.discard_from_hand(player, card);
+    } else if ctx.core.player(player).equips.contains(&card) {
+        ctx.core.player_mut(player).equips.retain(|x| *x != card);
+        ctx.core.declared_slots.remove(&card);
+        revoke_equip_skills(ctx.core, ctx.catalog, player, card);
+        ctx.to_discard(card);
+        ctx.log(LogEvent::CardDiscarded {
+            player,
+            cards: vec![card],
+        });
+        ctx.emit(EventData::CardsLost {
+            player,
+            cards: vec![card],
+            origins: vec![crate::event::LostOrigin::Equip],
+        });
+    } else {
+        ctx.to_discard(card);
+    }
+}
+
+pub(super) fn discard_dying_card(
+    ctx: &mut Ctx<'_>,
+    responder: PlayerId,
+    dying: PlayerId,
+    card: crate::ids::CardId,
+) {
+    if !matches!(
+        ctx.catalog.card_kind(card),
+        CardKind::Tao | CardKind::Jiu | CardKind::Hufu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang
+    ) || ctx.core.player(responder).equips.contains(&card)
+    {
+        let spec = ctx
+            .catalog
+            .find_player_vm_view_as(ctx.core, responder, card, false, Some(CardKind::Tao))
+            .or_else(|| {
+                (responder == dying)
+                    .then(|| {
+                        ctx.catalog.find_player_vm_view_as(
+                            ctx.core,
+                            responder,
+                            card,
+                            false,
+                            Some(CardKind::Jiu),
+                        )
+                    })
+                    .flatten()
+            })
+            .cloned();
+        if let Some(s) = spec {
+            s.record_use(ctx.core, responder);
+        }
+    }
+    if ctx.core.player(responder).hand.contains(&card) {
+        ctx.discard_from_hand(responder, card);
+    } else if ctx.core.player(responder).equips.contains(&card) {
+        ctx.core.player_mut(responder).equips.retain(|x| *x != card);
+        ctx.core.declared_slots.remove(&card);
+        revoke_equip_skills(ctx.core, ctx.catalog, responder, card);
+        ctx.to_discard(card);
+        ctx.log(LogEvent::CardDiscarded {
+            player: responder,
+            cards: vec![card],
+        });
+        ctx.emit(EventData::CardsLost {
+            player: responder,
+            cards: vec![card],
+            origins: vec![crate::event::LostOrigin::Equip],
+        });
+    } else {
+        ctx.to_discard(card);
+    }
 }

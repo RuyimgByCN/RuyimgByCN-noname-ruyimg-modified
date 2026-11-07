@@ -400,6 +400,252 @@ impl VmActiveLimits {
     }
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VmViewAsWindow {
+    PlayPhase,
+    Response,
+    Any,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VmViewAsZone {
+    Hand,
+    Equip,
+    HandEquip,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VmViewAsFilter {
+    Any,
+    Red,
+    Black,
+    Spade,
+    Heart,
+    Club,
+    Diamond,
+    OwnerDyingClub,
+    OwnerOutsideTurn,
+    OwnerOutsideTurnRed,
+    OwnerSingleHand,
+    OwnerSingleRedHand,
+    OwnerHandGtHp,
+    OwnerHpLeTwoBlackTrick,
+    Basic,
+    NonBasic,
+    Equip,
+    NonEquip,
+    Trick,
+    DamageTrick,
+    Sha,
+    Shan,
+    Tao,
+    Jiu,
+    Weapon,
+    Armor,
+    Mount,
+    BlackBasicEquip,
+    RedBasic,
+    BlackBasic,
+    RedTrick,
+    BlackTrick,
+    RedNonBasic,
+    BlackNonBasic,
+}
+
+impl VmViewAsFilter {
+    pub fn matches(
+        self,
+        state: &GameStateCore,
+        catalog: &Catalog,
+        owner: PlayerId,
+        card: CardId,
+    ) -> bool {
+        let Some(def) = catalog.cards.get(card as usize) else {
+            return false;
+        };
+        let kind = def.kind;
+        let suit = def.suit;
+        let is_red = matches!(suit, Suit::Heart | Suit::Diamond);
+        let is_black = matches!(suit, Suit::Spade | Suit::Club);
+        let is_trick = !kind.is_basic_kind() && !kind.is_equip();
+        let p = state.player(owner);
+        match self {
+            Self::Any => true,
+            Self::Red => is_red,
+            Self::Black => is_black,
+            Self::Spade => suit == Suit::Spade,
+            Self::Heart => suit == Suit::Heart,
+            Self::Club => suit == Suit::Club,
+            Self::Diamond => suit == Suit::Diamond,
+            Self::OwnerDyingClub => p.hp <= 0 && suit == Suit::Club,
+            Self::OwnerOutsideTurn => state.turn.current != owner,
+            Self::OwnerOutsideTurnRed => state.turn.current != owner && is_red,
+            Self::OwnerSingleHand => p.hand.len() == 1,
+            Self::OwnerSingleRedHand => {
+                is_red
+                    && p.hand
+                        .iter()
+                        .filter(|&&c| {
+                            catalog
+                                .cards
+                                .get(c as usize)
+                                .is_some_and(|d| matches!(d.suit, Suit::Heart | Suit::Diamond))
+                        })
+                        .count()
+                        == 1
+            }
+            Self::OwnerHandGtHp => (p.hand.len() as i32) > p.hp,
+            Self::OwnerHpLeTwoBlackTrick => p.hp <= 2 && is_black && is_trick,
+            Self::Basic => kind.is_basic_kind(),
+            Self::NonBasic => !kind.is_basic_kind(),
+            Self::Equip => kind.is_equip(),
+            Self::NonEquip => !kind.is_equip(),
+            Self::Trick => is_trick,
+            Self::DamageTrick => matches!(
+                kind,
+                crate::catalog::CardKind::SavageAttack
+                    | crate::catalog::CardKind::ArcheryAttack
+                    | crate::catalog::CardKind::Duel
+                    | crate::catalog::CardKind::ShanDian
+                    | crate::catalog::CardKind::HongShui
+                    | crate::catalog::CardKind::Linghunzhihuo
+                    | crate::catalog::CardKind::Shenhuofeiya
+                    | crate::catalog::CardKind::Shatang
+                    | crate::catalog::CardKind::Yuansuhuimie
+                    | crate::catalog::CardKind::Aozuzhilei
+                    | crate::catalog::CardKind::Liuxinghuoyu
+                    | crate::catalog::CardKind::Jingleishan
+                    | crate::catalog::CardKind::Chiyuxi
+            ),
+            Self::Sha => kind.is_sha_like(),
+            Self::Shan => kind == crate::catalog::CardKind::Shan,
+            Self::Tao => kind == crate::catalog::CardKind::Tao,
+            Self::Jiu => kind == crate::catalog::CardKind::Jiu,
+            Self::Weapon => kind.equip_slot() == Some(EquipSlot::Weapon),
+            Self::Armor => kind.equip_slot() == Some(EquipSlot::Armor),
+            Self::Mount => matches!(
+                kind.equip_slot(),
+                Some(EquipSlot::HorsePlus | EquipSlot::HorseMinus)
+            ),
+            Self::BlackBasicEquip => is_black && (kind.is_basic_kind() || kind.is_equip()),
+            Self::RedBasic => is_red && kind.is_basic_kind(),
+            Self::BlackBasic => is_black && kind.is_basic_kind(),
+            Self::RedTrick => is_red && is_trick,
+            Self::BlackTrick => is_black && is_trick,
+            Self::RedNonBasic => is_red && !kind.is_basic_kind(),
+            Self::BlackNonBasic => is_black && !kind.is_basic_kind(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct VmViewAsSpec {
+    pub skill_def_id: u32,
+    pub skill_name: String,
+    pub as_kind: crate::catalog::CardKind,
+    pub window: VmViewAsWindow,
+    pub zone: VmViewAsZone,
+    pub filter: VmViewAsFilter,
+    pub uses_per_turn: Option<u8>,
+    pub ignore_distance: bool,
+    pub red_unrespondable: bool,
+    pub black_no_use_count: bool,
+    pub no_use_count: bool,
+    pub target_lacks_source_suit_unrespondable: bool,
+    pub refund_use_count_if_no_damage: bool,
+    pub post_draw: u8,
+}
+
+impl VmViewAsSpec {
+    pub fn matches_card(
+        &self,
+        state: &GameStateCore,
+        catalog: &Catalog,
+        owner: PlayerId,
+        card: CardId,
+        in_play: bool,
+        target_kind: Option<crate::catalog::CardKind>,
+    ) -> bool {
+        let p = state.player(owner);
+        if !p.alive {
+            return false;
+        }
+        if state
+            .vm_aux
+            .flags
+            .get(&(owner, format!("skill_banned_turn:{}", self.skill_name)))
+            .copied()
+            .unwrap_or(0)
+            != 0
+        {
+            return false;
+        }
+        let window_ok = if in_play {
+            matches!(self.window, VmViewAsWindow::PlayPhase | VmViewAsWindow::Any)
+        } else {
+            matches!(self.window, VmViewAsWindow::Response | VmViewAsWindow::Any)
+        };
+        if !window_ok {
+            return false;
+        }
+        if let Some(tk) = target_kind {
+            let kind_ok = if tk == crate::catalog::CardKind::Sha {
+                self.as_kind.is_sha_like()
+            } else {
+                self.as_kind == tk
+            };
+            if !kind_ok {
+                return false;
+            }
+        } else if in_play {
+            if matches!(
+                self.as_kind,
+                crate::catalog::CardKind::Shan | crate::catalog::CardKind::Nullify
+            ) {
+                return false;
+            }
+            if self.as_kind == crate::catalog::CardKind::Tao && p.hp >= p.max_hp as i32 {
+                return false;
+            }
+            if self.as_kind == crate::catalog::CardKind::Jiu && state.turn.jiu_used {
+                return false;
+            }
+        }
+        if let Some(max) = self.uses_per_turn {
+            let key = format!("view_as:{}", self.skill_name);
+            if state.vm_aux.once_count(owner, 1, &key) >= max as usize {
+                return false;
+            }
+        }
+        let in_hand = p.hand.contains(&card);
+        let in_equip = p.equips.contains(&card);
+        let zone_ok = match self.zone {
+            VmViewAsZone::Hand => in_hand,
+            VmViewAsZone::Equip => in_equip,
+            VmViewAsZone::HandEquip => in_hand || in_equip,
+        };
+        zone_ok && self.filter.matches(state, catalog, owner, card)
+    }
+
+    pub fn record_use(&self, core: &mut GameStateCore, owner: PlayerId) {
+        core.vm_aux
+            .flags
+            .insert((owner, "event_view_as_skill".to_string()), self.skill_def_id);
+        if self.uses_per_turn.is_some() {
+            core.vm_aux
+                .once
+                .insert((owner, format!("view_as:{}", self.skill_name), 1));
+        }
+        if self.post_draw > 0 {
+            for _ in 0..self.post_draw {
+                if let Some(c) = core.deck.pop() {
+                    core.player_mut(owner).hand.push(c);
+                }
+            }
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct VmTriggerProgram {
     pub program: Arc<VmSkillProgram>,
@@ -415,6 +661,7 @@ pub struct VmHandlerSet {
     pub limits: VmActiveLimits,
     pub triggers: Vec<VmTriggerProgram>,
     pub modifiers: Vec<VmModifierRule>,
+    pub view_as: Vec<VmViewAsSpec>,
 }
 
 impl VmHandlerSet {

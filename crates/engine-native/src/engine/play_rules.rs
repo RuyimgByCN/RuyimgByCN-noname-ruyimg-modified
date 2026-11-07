@@ -74,7 +74,14 @@ pub(super) fn common_play_validation(
             return Err(RejectReason::CardLimit);
         }
     }
-    if !core.player(core.turn.current).hand.contains(&card) {
+    let actor_p = core.player(core.turn.current);
+    let in_hand = actor_p.hand.contains(&card);
+    let in_equip_va = !in_hand
+        && actor_p.equips.contains(&card)
+        && catalog
+            .find_player_vm_view_as(core, core.turn.current, card, true, None)
+            .is_some();
+    if !in_hand && !in_equip_va {
         return Err(RejectReason::CardNotInHand);
     }
     // 目标 ID 越界必须显式拒绝（不得进入 player() 索引）。
@@ -116,6 +123,12 @@ pub(super) fn play_kind(
     catalog: &SharedCatalog,
     card: CardId,
 ) -> (CardKind, bool) {
+    let actor = core.turn.current;
+    if !core.player(actor).hand.contains(&card) {
+        if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
+            return (spec.as_kind, false);
+        }
+    }
     let mut kind = catalog.card_kind(card);
     // 良策（造之仁君，玩点论杀批 15）：基本手牌当【五谷丰登】
     //（viewAs 转化，独立于杀转化链——sha 牌可转化；登记差异：
@@ -362,6 +375,16 @@ pub(super) fn play_kind(
                 if mizhilianou && is_heart {
                     kind = CardKind::Tao;
                 }
+            }
+        }
+    }
+    if kind == catalog.card_kind(card) && !mark_mutoumianju {
+        if let Some(spec) = catalog.find_player_vm_view_as(core, actor, card, true, None) {
+            if (kind != CardKind::Sha && kind != CardKind::Le)
+                || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
+                || spec.as_kind.is_sha_like()
+            {
+                kind = spec.as_kind;
             }
         }
     }

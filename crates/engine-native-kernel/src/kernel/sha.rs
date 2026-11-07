@@ -224,6 +224,15 @@ impl ShaResolveMachine {
             .vm_aux
             .flags
             .remove(&(self.source, format!("card_damage_bonus:{cid}")));
+        if ctx
+            .core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("sha_refund_if_no_damage:{cid}")))
+            .is_some()
+        {
+            ctx.core.turn.sha_used_play_phase = false;
+        }
         ctx.to_discard(card);
         ctx.core.table.retain(|c| Some(*c) != card);
         Flow::Done
@@ -271,6 +280,10 @@ impl ShaResolveMachine {
         let liaoyuan = u32::from(ctx.core.turn.liaoyuan_count);
         ctx.core.turn.liaoyuan_count = 0;
         let cid = self.card.unwrap_or(0);
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, format!("sha_refund_if_no_damage:{cid}")));
         let vm_card_bonus = ctx
             .core
             .vm_aux

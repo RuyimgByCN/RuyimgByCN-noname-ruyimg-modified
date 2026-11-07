@@ -132,11 +132,32 @@ pub(super) fn play_sha(
             catalog.cards[card as usize].suit,
             crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
         );
+    let vm_va_sha = if kind != catalog.card_kind(card)
+        || !core.player(player_id).hand.contains(&card)
+    {
+        catalog
+            .find_player_vm_view_as(core, player_id, card, true, Some(CardKind::Sha))
+            .cloned()
+    } else {
+        None
+    };
+    let is_black = matches!(
+        catalog.cards[card as usize].suit,
+        crate::catalog::Suit::Spade | crate::catalog::Suit::Club
+    );
+    let is_red = matches!(
+        catalog.cards[card as usize].suit,
+        crate::catalog::Suit::Heart | crate::catalog::Suit::Diamond
+    );
+    let vm_va_no_count = vm_va_sha
+        .as_ref()
+        .is_some_and(|s| s.no_use_count || (s.black_no_use_count && is_black));
     if !paoxiao
         && !has_zhuge
         && !baolei_sentinel
         && !fentian_red
         && !poyue_red_free
+        && !vm_va_no_count
         && !vm_sha_unlimited
         && (core.turn.sha_used_play_phase || vm_sha_limit == 0)
         && !land_sha_bonus
@@ -484,7 +505,8 @@ pub(super) fn play_sha(
                             card,
                             kind,
                             sha_nature,
-                        );
+                        )
+                        || vm_va_sha.as_ref().is_some_and(|s| s.ignore_distance);
     // 诈降（L27 批 4）：已用牌数 < 已损失体力 → 用牌无距离限制
     let sbzhaxiang_free = catalog
         .skill_by_name(crate::content::host::L27_SBZHAXIANG_KEY)
@@ -577,6 +599,39 @@ pub(super) fn play_sha(
         let key = (player_id, "vm_sha_extra_used".to_string());
         let next = state.core.vm_aux.flags.get(&key).copied().unwrap_or(0) + 1;
         state.core.vm_aux.flags.insert(key, next);
+    }
+    if vm_va_no_count {
+        state
+            .core
+            .vm_aux
+            .flags
+            .insert((player_id, "vm_va_sha_no_count".to_string()), 1);
+    }
+    if let Some(spec) = &vm_va_sha {
+        if spec.refund_use_count_if_no_damage {
+            state
+                .core
+                .vm_aux
+                .flags
+                .insert((player_id, format!("sha_refund_if_no_damage:{card}")), 1);
+        }
+        let src_suit = catalog.cards[card as usize].suit;
+        for &t in &targets {
+            let lacks_suit = spec.target_lacks_source_suit_unrespondable
+                && !state
+                    .core
+                    .player(t)
+                    .hand
+                    .iter()
+                    .any(|hc| catalog.cards[*hc as usize].suit == src_suit);
+            if (spec.red_unrespondable && is_red) || lacks_suit {
+                state
+                    .core
+                    .vm_aux
+                    .flags
+                    .insert((player_id, format!("sha_unrespondable:{card}:{t}")), 1);
+            }
+        }
     }
     // 良策转化（玩点论杀批 15）：基本牌当五谷时按五谷
     // 机器路由（use_as 声明）。

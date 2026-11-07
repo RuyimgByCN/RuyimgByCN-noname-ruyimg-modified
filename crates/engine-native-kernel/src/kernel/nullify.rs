@@ -241,12 +241,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             // 询问队列清理：跳过死亡/无无懈持有者
             while let Some(p) = self.queue.first().copied() {
                 let has_nullify = ctx.core.player(p).alive
-                    && ctx
-                        .core
-                        .player(p)
-                        .hand
-                        .iter()
-                        .any(|c| ctx.catalog.card_kind(*c) == CardKind::Nullify);
+                    && !response_kind_cards(ctx, p, CardKind::Nullify).is_empty();
                 if !has_nullify {
                     self.queue.remove(0);
                 } else {
@@ -281,7 +276,7 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
                 let answer = ctx.answer().clone();
                 if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
                     // 出无懈：弃牌、反转抵消状态、自其下家重新询问
-                    ctx.discard_from_hand(responder, c);
+                    discard_response_card(ctx, responder, c, CardKind::Nullify);
                     ctx.emit(EventData::CardResponded {
                         card: c,
                         player: responder,
@@ -294,12 +289,8 @@ impl crate::catalog::SkillMachine for NullifyWindowMachine {
             self.asked = true;
             let mut options = vec![ChoiceOption::Pass];
             options.extend(
-                ctx.core
-                    .player(responder)
-                    .hand
-                    .iter()
-                    .filter(|c| ctx.catalog.card_kind(**c) == CardKind::Nullify)
-                    .copied()
+                response_kind_cards(ctx, responder, CardKind::Nullify)
+                    .into_iter()
                     .map(ChoiceOption::Card),
             );
             return Flow::WaitChoice {

@@ -5,6 +5,7 @@ pub(super) async fn automatic_step(
     id: u64,
     session: &mut NativeRoomSession,
     durability: &mut RoomDurability,
+    persist: &mut RoomPersist,
     members: &mut HashMap<u64, NativeActorMember>,
     snapshot_every: u64,
     candidate: (u8, engine_native::GameAction, bool),
@@ -16,7 +17,8 @@ pub(super) async fn automatic_step(
     match session.submit_automatic(seat, action, takeover) {
         Ok(result @ CommandResult::Accepted { .. }) => {
             session.compact_wal(snapshot_every);
-            durability.commit(session, before)?;
+            durability.commit_step(session, before)?;
+            record_committed_native_step(persist, id, session, 0, snapshot_every);
             let presentation = session.release_and_take_public_presentation();
             let public_event_codes = session.take_public_event_codes();
             let mut stalled = Vec::new();
@@ -116,6 +118,7 @@ mod tests {
                 let dir = tempfile::tempdir().unwrap();
                 let store = NativeRoomStore::new(dir.path());
                 let mut durability = RoomDurability::new(787, String::new(), Some(store.clone()));
+                let mut persist = RoomPersist::new();
                 durability.commit(&mut session, None).unwrap();
                 let confirmed = crate::native_room_store::state_checksum(
                     &session.export_state(&session.snapshot_hex()),
@@ -136,6 +139,7 @@ mod tests {
                         787,
                         &mut session,
                         &mut durability,
+                        &mut persist,
                         &mut HashMap::new(),
                         1000,
                         candidate

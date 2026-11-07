@@ -59,9 +59,9 @@ fn onlyol_requires_abi758_and_native_rejects_until_supported() {
     let content =
         NativeContent::open(dir.path().to_path_buf(), dir.path().join("store")).expect("open");
     content.import().expect("complete rule module package installs with assets and dependencies isolated");
-    let error = content.load_scoped(Some("official"), "onlyOL").err().expect("full onlyOL still requires unsupported game_started");
+    let error = content.load_scoped(Some("official"), "onlyOL").err().expect("full onlyOL still contains unported placeholder modifier_index entries");
     assert!(
-        error.contains("game_started"),
+        error.contains("modifier_index"),
         "unexpected import error: {error}"
     );
 }

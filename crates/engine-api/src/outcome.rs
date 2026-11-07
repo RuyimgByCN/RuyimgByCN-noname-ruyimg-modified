@@ -37,6 +37,11 @@ pub enum MatchOutcome {
         /// Sole surviving player.
         player: PlayerId,
     },
+    /// Versus mode (对决 2v2 / 3v3 / 4v4): a team wins.
+    TeamWin {
+        /// Winning team id (0 or 1).
+        team: u8,
+    },
 }
 
 impl MatchOutcome {

@@ -63,14 +63,8 @@ impl crate::catalog::SkillMachine for DuelMachine {
             } else {
                 self.target
             };
-            let shas: Vec<crate::ids::CardId> = ctx
-                .core
-                .player(responder)
-                .hand
-                .iter()
-                .copied()
-                .filter(|c| ctx.catalog.card_kind(*c) == CardKind::Sha)
-                .collect();
+            let shas: Vec<crate::ids::CardId> =
+                response_kind_cards(ctx, responder, CardKind::Sha);
             if !self.asked {
                 if shas.is_empty() || !ctx.core.player(responder).alive {
                     // 轮到方无杀：不询问，直接受伤，决斗结束
@@ -113,7 +107,7 @@ impl crate::catalog::SkillMachine for DuelMachine {
             self.asked = false;
             let answer = ctx.answer().clone();
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
-                ctx.discard_from_hand(responder, c);
+                discard_response_card(ctx, responder, c, CardKind::Sha);
                 ctx.emit(EventData::CardResponded {
                     card: c,
                     player: responder,

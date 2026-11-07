@@ -60,6 +60,25 @@ pub fn other_player_options(core: &GameStateCore, owner: PlayerId) -> Vec<Choice
         .collect()
 }
 
+fn tao_save_canceled(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    card: CardId,
+    dying: PlayerId,
+) -> bool {
+    crate::rvm_bridge::modifiers::eval_dying_peach_target_canceled(
+        core, catalog, responder, dying, card,
+    ) || crate::rvm_bridge::modifiers::eval_card_use_canceled(
+        core,
+        catalog,
+        responder,
+        card,
+        catalog.card_kind(card),
+        crate::event::DamageNature::Normal,
+    )
+}
+
 /// 濒死救援的桃判定扩面（与 kernel `is_tao_like` 一致）。
 pub(in crate::snap) fn is_tao_like(
     core: &GameStateCore,
@@ -68,14 +87,17 @@ pub(in crate::snap) fn is_tao_like(
     card: CardId,
     dying: PlayerId,
 ) -> bool {
-    if catalog.card_kind(card) == CardKind::Hufu {
-        return responder == dying;
+    if tao_save_canceled(core, catalog, responder, card, dying) {
+        return false;
     }
     let kind = catalog.card_kind(card);
-    if matches!(
-        kind,
-        CardKind::Tao | CardKind::Jiu | CardKind::Dinvxuanshuang
-    ) {
+    if kind == CardKind::Hufu {
+        return responder == dying;
+    }
+    if kind == CardKind::Tao {
+        return !crate::kernel::tao_futai2_banned(core, catalog, responder);
+    }
+    if matches!(kind, CardKind::Jiu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang) {
         return true;
     }
     let suit = catalog.cards[card as usize].suit;
@@ -98,7 +120,99 @@ pub(in crate::snap) fn is_tao_like(
     if mizhilianou && suit == crate::catalog::Suit::Heart {
         return true;
     }
+    if catalog
+        .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Tao))
+        .is_some()
+        && !crate::kernel::tao_futai2_banned(core, catalog, responder)
+    {
+        return true;
+    }
+    if responder == dying
+        && catalog
+            .find_player_vm_view_as(core, responder, card, false, Some(CardKind::Jiu))
+            .is_some()
+    {
+        return true;
+    }
     false
+}
+
+pub(in crate::snap) fn append_vm_shan_options(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    target: PlayerId,
+    options: &mut Vec<ChoiceOption>,
+) {
+    let p = core.player(target);
+    for &c in p.hand.iter().chain(p.equips.iter()) {
+        if catalog
+            .find_player_vm_view_as(core, target, c, false, Some(CardKind::Shan))
+            .is_some()
+            && !options.contains(&ChoiceOption::Card(c))
+        {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+}
+
+pub(in crate::snap) fn dying_save_options(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    dying: PlayerId,
+) -> Vec<ChoiceOption> {
+    let mut options = vec![ChoiceOption::Pass];
+    let p = core.player(responder);
+    for &c in &p.hand {
+        if is_tao_like(core, catalog, responder, c, dying) {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+    for &c in &p.equips {
+        let vm_ok = catalog
+            .find_player_vm_view_as(core, responder, c, false, Some(CardKind::Tao))
+            .is_some()
+            || (responder == dying
+                && catalog
+                    .find_player_vm_view_as(core, responder, c, false, Some(CardKind::Jiu))
+                    .is_some());
+        if vm_ok
+            && is_tao_like(core, catalog, responder, c, dying)
+            && !options.contains(&ChoiceOption::Card(c))
+        {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+    options
+}
+
+pub(in crate::snap) fn response_kind_options(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    responder: PlayerId,
+    need: CardKind,
+) -> Vec<ChoiceOption> {
+    let mut options = vec![ChoiceOption::Pass];
+    let p = core.player(responder);
+    for &c in &p.hand {
+        if catalog.card_kind(c) == need
+            || catalog
+                .find_player_vm_view_as(core, responder, c, false, Some(need))
+                .is_some()
+        {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+    for &c in &p.equips {
+        if catalog
+            .find_player_vm_view_as(core, responder, c, false, Some(need))
+            .is_some()
+            && !options.contains(&ChoiceOption::Card(c))
+        {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+    options
 }
 
 /// 性别门控（与 standard.rs `seat_is_male` 一致）：双将槽全空 → 不适用。

@@ -459,6 +459,9 @@ fn run_full_demo(players: u8, seed: u64, max_steps: u32) {
         engine_api::MatchOutcome::SingleWin { player } => {
             println!("  P{} 单挑获胜！（单挑模式）", player.raw());
         }
+        engine_api::MatchOutcome::TeamWin { team } => {
+            println!("  队伍 {team} 获胜！（对决模式）");
+        }
     }
     println!();
 
