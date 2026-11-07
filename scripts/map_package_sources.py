@@ -40,8 +40,8 @@ EXPLICIT = {
     "desktop-adapt-upstream-liuli": "L23",
     "omnisearch-upstream-liuli": "L07",
 }
-REQUIRED = 32
-NO_PACKAGE = {"L08", "L11", "L12", "L14", "L25"}
+REQUIRED = 37
+NO_PACKAGE: set[str] = set()
 # UP37 核心武将包（上游 `apps/core/character/*`，不属于两仓扩展台账的 37 个 extension/mode 来源）
 CHARACTER_PACKAGES = {
     "sp2-upstream-noname",

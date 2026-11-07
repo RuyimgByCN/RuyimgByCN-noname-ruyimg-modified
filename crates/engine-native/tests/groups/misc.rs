@@ -118,14 +118,26 @@ mod t9_d5_surface;
 #[path = "../u01_d3_moyan.rs"]
 mod u01_d3_moyan;
 
+#[path = "../u01_d3_select_eight.rs"]
+mod u01_d3_select_eight;
+
 #[path = "../u03_cardpile_eight.rs"]
 mod u03_cardpile_eight;
 
 #[path = "../u04_coin_eight.rs"]
 mod u04_coin_eight;
 
+#[path = "../u05_shahai_eight.rs"]
+mod u05_shahai_eight;
+
+#[path = "../u07_wudian_eight.rs"]
+mod u07_wudian_eight;
+
 #[path = "../u08_hero_kill_batch1.rs"]
 mod u08_hero_kill_batch1;
+
+#[path = "../u08_hero_kill_eight.rs"]
+mod u08_hero_kill_eight;
 
 #[path = "../u08_menshen_batch2.rs"]
 mod u08_menshen_batch2;

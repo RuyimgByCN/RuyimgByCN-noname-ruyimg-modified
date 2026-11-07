@@ -29,8 +29,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-#: Measured at rules v322; update together with the evidence README.
-EXPECTED = {"converted": 12, "installed-empty": 20, "no-package": 5}
+#: Measured at rules v333; update together with the evidence README.
+EXPECTED = {"converted": 12, "installed-empty": 25, "no-package": 0}
 
 
 def _load_mapper():

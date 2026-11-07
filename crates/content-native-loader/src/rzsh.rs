@@ -60,3 +60,287 @@ pub fn tip(roll: usize) -> Option<&'static str> {
     }
     TIPS.get(roll % TIPS.len()).copied()
 }
+
+/// G0 盘点基数：`(skill_count, card_count, character_count, translate_count)`。
+pub const RZSH_COUNTS: (usize, usize, usize, usize) = (0, 92, 8, 8);
+
+/// L12 如真似幻配置。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RzshConfig {
+    pub theme: String,
+    pub bgm: String,
+    pub stage_effect: bool,
+    pub voice_pack: String,
+    pub ui_scale: u32,
+}
+
+impl Default for RzshConfig {
+    fn default() -> Self {
+        Self {
+            theme: "szn".to_string(),
+            bgm: "default".to_string(),
+            stage_effect: true,
+            voice_pack: "standard".to_string(),
+            ui_scale: 100,
+        }
+    }
+}
+
+/// L12 如真似幻配置与指令错误。
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum RzshError {
+    BadJson(String),
+    MissingField(&'static str),
+    InvalidField { field: &'static str, reason: String },
+    InvalidCount { field: &'static str, got: usize, expected: usize },
+    UnknownCommand(String),
+    SnapshotMalformed(String),
+}
+
+impl std::fmt::Display for RzshError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::BadJson(e) => write!(f, "如真似幻 JSON 解析失败: {e}"),
+            Self::MissingField(fld) => write!(f, "如真似幻 缺少字段: {fld}"),
+            Self::InvalidField { field, reason } => {
+                write!(f, "如真似幻 字段 {field} 非法: {reason}")
+            }
+            Self::InvalidCount { field, got, expected } => {
+                write!(f, "如真似幻 计数 {field} 不匹配: 实际 {got}, 期望 {expected}")
+            }
+            Self::UnknownCommand(cmd) => write!(f, "如真似幻 未知指令: {cmd}"),
+            Self::SnapshotMalformed(reason) => write!(f, "如真似幻 快照损坏: {reason}"),
+        }
+    }
+}
+
+impl std::error::Error for RzshError {}
+
+/// 解析 `rzsh-upstream-liuli/assets/config.json` 或直接的 `default_config` 对象。
+pub fn parse_rzsh_config(raw: &str) -> Result<RzshConfig, RzshError> {
+    let root: serde_json::Value =
+        serde_json::from_str(raw).map_err(|e| RzshError::BadJson(e.to_string()))?;
+    let root_obj = root
+        .as_object()
+        .ok_or_else(|| RzshError::BadJson("根值必须为 JSON 对象".into()))?;
+
+    let cfg_obj = if let Some(inner) = root_obj.get("default_config") {
+        for (field, expected) in [
+            ("skill_count", RZSH_COUNTS.0),
+            ("card_count", RZSH_COUNTS.1),
+            ("character_count", RZSH_COUNTS.2),
+            ("translate_count", RZSH_COUNTS.3),
+        ] {
+            if let Some(v) = root_obj.get(field) {
+                let got = v.as_u64().ok_or(RzshError::MissingField(field))? as usize;
+                if got != expected {
+                    return Err(RzshError::InvalidCount {
+                        field,
+                        got,
+                        expected,
+                    });
+                }
+            }
+        }
+        inner
+            .as_object()
+            .ok_or(RzshError::MissingField("default_config"))?
+    } else {
+        root_obj
+    };
+
+    let theme = cfg_obj
+        .get("theme")
+        .ok_or(RzshError::MissingField("theme"))?
+        .as_str()
+        .ok_or(RzshError::InvalidField {
+            field: "theme",
+            reason: "必须为字符串".into(),
+        })?;
+    if !matches!(theme, "szn" | "ol" | "mobile" | "classic") {
+        return Err(RzshError::InvalidField {
+            field: "theme",
+            reason: format!("未知主题 {theme}"),
+        });
+    }
+
+    let bgm = cfg_obj
+        .get("bgm")
+        .ok_or(RzshError::MissingField("bgm"))?
+        .as_str()
+        .ok_or(RzshError::InvalidField {
+            field: "bgm",
+            reason: "必须为字符串".into(),
+        })?;
+    if bgm.trim().is_empty() {
+        return Err(RzshError::InvalidField {
+            field: "bgm",
+            reason: "不能为空".into(),
+        });
+    }
+
+    let stage_effect = cfg_obj
+        .get("stage_effect")
+        .ok_or(RzshError::MissingField("stage_effect"))?
+        .as_bool()
+        .ok_or(RzshError::InvalidField {
+            field: "stage_effect",
+            reason: "必须为布尔值".into(),
+        })?;
+
+    let voice_pack = cfg_obj
+        .get("voice_pack")
+        .ok_or(RzshError::MissingField("voice_pack"))?
+        .as_str()
+        .ok_or(RzshError::InvalidField {
+            field: "voice_pack",
+            reason: "必须为字符串".into(),
+        })?;
+    if voice_pack.trim().is_empty() {
+        return Err(RzshError::InvalidField {
+            field: "voice_pack",
+            reason: "不能为空".into(),
+        });
+    }
+
+    let ui_scale = cfg_obj
+        .get("ui_scale")
+        .ok_or(RzshError::MissingField("ui_scale"))?
+        .as_u64()
+        .ok_or(RzshError::InvalidField {
+            field: "ui_scale",
+            reason: "必须为整数".into(),
+        })? as u32;
+    if !(50..=200).contains(&ui_scale) {
+        return Err(RzshError::InvalidField {
+            field: "ui_scale",
+            reason: "必须在 50..=200 范围内".into(),
+        });
+    }
+
+    Ok(RzshConfig {
+        theme: theme.to_string(),
+        bgm: bgm.to_string(),
+        stage_effect,
+        voice_pack: voice_pack.to_string(),
+        ui_scale,
+    })
+}
+
+/// 序列化为确定性单行快照。
+pub fn snapshot_rzsh(cfg: &RzshConfig) -> String {
+    format!(
+        "theme={} | bgm={} | stage_effect={} | voice_pack={} | ui_scale={}",
+        cfg.theme,
+        cfg.bgm,
+        u8::from(cfg.stage_effect),
+        cfg.voice_pack,
+        cfg.ui_scale,
+    )
+}
+
+/// 从单行快照恢复配置。
+pub fn restore_rzsh(snap: &str) -> Result<RzshConfig, RzshError> {
+    let mut cfg = RzshConfig::default();
+    let mut seen = 0usize;
+    for part in snap.split('|') {
+        let part = part.trim();
+        if part.is_empty() {
+            continue;
+        }
+        let (k, v) = part
+            .split_once('=')
+            .ok_or_else(|| RzshError::SnapshotMalformed(part.to_string()))?;
+        let k = k.trim();
+        let v = v.trim();
+        match k {
+            "theme" => {
+                if !matches!(v, "szn" | "ol" | "mobile" | "classic") {
+                    return Err(RzshError::InvalidField {
+                        field: "theme",
+                        reason: v.to_string(),
+                    });
+                }
+                cfg.theme = v.to_string();
+            }
+            "bgm" => cfg.bgm = v.to_string(),
+            "stage_effect" => {
+                cfg.stage_effect = match v {
+                    "1" | "true" => true,
+                    "0" | "false" => false,
+                    _ => {
+                        return Err(RzshError::InvalidField {
+                            field: "stage_effect",
+                            reason: v.to_string(),
+                        })
+                    }
+                };
+            }
+            "voice_pack" => cfg.voice_pack = v.to_string(),
+            "ui_scale" => {
+                let s = v.parse::<u32>().map_err(|_| RzshError::InvalidField {
+                    field: "ui_scale",
+                    reason: v.to_string(),
+                })?;
+                if !(50..=200).contains(&s) {
+                    return Err(RzshError::InvalidField {
+                        field: "ui_scale",
+                        reason: v.to_string(),
+                    });
+                }
+                cfg.ui_scale = s;
+            }
+            other => return Err(RzshError::SnapshotMalformed(other.to_string())),
+        }
+        seen += 1;
+    }
+    if seen < 5 {
+        return Err(RzshError::SnapshotMalformed("字段不足 5 项".into()));
+    }
+    Ok(cfg)
+}
+
+/// 执行单行诊断命令（`config <json>` / `roman <n>` / `sanguo <roll>` / `tip <roll>` / `snapshot` / `restore <snap>`）。
+pub fn apply_rzsh_line(cfg: &mut RzshConfig, line: &str) -> Result<String, RzshError> {
+    let trimmed = line.trim();
+    if trimmed == "snapshot" {
+        return Ok(snapshot_rzsh(cfg));
+    }
+    let (cmd, rest) = trimmed
+        .split_once(' ')
+        .ok_or_else(|| RzshError::UnknownCommand(trimmed.to_string()))?;
+    let rest = rest.trim();
+    match cmd {
+        "config" => {
+            *cfg = parse_rzsh_config(rest)?;
+            Ok(snapshot_rzsh(cfg))
+        }
+        "roman" => {
+            let n = rest.parse::<u32>().map_err(|_| RzshError::InvalidField {
+                field: "roman",
+                reason: rest.to_string(),
+            })?;
+            Ok(roman(n).unwrap_or("-").to_string())
+        }
+        "sanguo" => {
+            let roll = rest.parse::<usize>().map_err(|_| RzshError::InvalidField {
+                field: "roll",
+                reason: rest.to_string(),
+            })?;
+            Ok(sanguo_text(roll).unwrap_or("-").to_string())
+        }
+        "tip" => {
+            let roll = rest.parse::<usize>().map_err(|_| RzshError::InvalidField {
+                field: "roll",
+                reason: rest.to_string(),
+            })?;
+            Ok(tip(roll).unwrap_or("-").to_string())
+        }
+        "restore" => {
+            *cfg = restore_rzsh(rest)?;
+            Ok(snapshot_rzsh(cfg))
+        }
+        other => Err(RzshError::UnknownCommand(other.to_string())),
+    }
+}
+

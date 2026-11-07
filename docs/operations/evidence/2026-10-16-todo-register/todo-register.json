@@ -30,8 +30,8 @@
     "ambiguous_ids": [],
     "ambiguous_resolved_date": "2026-10-16",
     "ambiguous_resolution_doc": "docs/operations/evidence/2026-10-16-todo-register/ambiguous-resolutions.md",
-    "resolved_count": 61,
-    "open_count": 30,
+    "resolved_count": 74,
+    "open_count": 17,
     "u06_closure_2026_10_17": "T12-SRC-U06 resolved after eight-dimension evidence. The 2026-10-16 snapshot was resolved 6 / open 83.",
     "l06_closure_2026_10_17": "T12-SRC-L06 resolved after eight-dimension evidence. Whole-pack at that close was 2/37.",
     "l07_closure_2026_10_17": "T12-SRC-L07 resolved after eight-dimension evidence. Whole-pack at that close was 3/37.",
@@ -59,7 +59,7 @@
     "d5_longxue_117": "2026-10-17 批 117：潜龙道心值 + 卫统 + 曹髦包（规则 v305/存档 v90）；engine-native 914/0/1，14 golden 重录 + 探针。D5 仍 open（余外部手杀包四技与 ylyg*）。",
     "t11_pangtong_closure": "2026-10-17：T11-BOSS-PANGTONG-EXTERNAL 关闭（涅槃/浴火/神威 + loopType，v306/存档 v91）。看破/朱羽/ylygniepan 外部依赖与 D4 轮次起点登记。",
     "d5_qingzheng_119": "2026-10-17 批 119：清正（mbcmqingzheng）转换，道心值 25 解锁生效；engine-native 920/0/1，14 golden 零位移（无版本变化）。D5 仍 open（余酒诗/放逐/绝进三技与显示面）。",
-    "wholepack_count": 24,
+    "wholepack_count": 37,
     "t9_samples_registry": "2026-10-17：37 来源行为样本/接口登记表（23/37 有样本与接口；G0 37/37）。T9-SOURCE-BEHAVIOR-SAMPLES 仍 open。",
     "l10_slice": "2026-10-17：L10 八项整包通过（21/37）。",
     "l28_slice": "2026-10-17：L28 切片 1（装载器 + 替换表 + 标记补丁）；th_* 武将内容待后续切片。",
@@ -71,7 +71,8 @@
     "g0_remaining_2026_10_17": "余下 7 来源 G0 完成：内容面可批次 5（U08/L19/L20/L25/L14）、框架/渲染面 2（L08/L11）。",
     "l19_slice": "2026-10-17：L19 批 1-2（shishi/xunmeng/zaibian + 装载器身份链/无尽模式）；余 63 技待批次。",
     "u08_slice": "2026-10-17：U08 批 1-2（反击族 + 门神标记族）；主体效果与武将表 deferred。",
-    "l20_slice": "2026-10-17：L20 批 1-3（配置门控 + 苦肉/主亡忠继 + 烈弓/狂骨）；余 69 技待批次。"
+    "l20_slice": "2026-10-17：L20 批 1-3（配置门控 + 苦肉/主亡忠继 + 烈弓/狂骨）；余 69 技待批次。",
+    "batch_19_up37_2026_11_06": "2026-11-06 Batch 19：余下 13 来源（U01, U05, U07, U08, L08, L11, L12, L14, L19, L20, L25, L27, L28）八维整包验收全部通过，T12-SRC-* 37/37 全量 resolved（wholepack_count = 37，resolved_count = 74，open_count = 17）；证据见 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md。"
   },
   "items": [
     {
@@ -803,7 +804,7 @@
         "G4",
         "G5"
       ],
-      "notes": "2026-10-17：L13 手杀MVP 计入（19/37）；L29 龙血玄黄八项整包计入（20/37；证据 docs/operations/evidence/2026-10-17-t12-l29-eight/）。逐个来源八项验收后上调。"
+      "notes": "2026-10-17：L13 手杀MVP 计入（19/37）；L29 龙血玄黄八项整包计入（20/37；证据 docs/operations/evidence/2026-10-17-t12-l29-eight/）。2026-11-06 Batch 19：余下 13 来源八维验收通过，T12-SRC-* 达 37/37（证据 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md）；本聚合项因依赖 E01–E06 余将/余技 deferred 展开仍保持 open。"
     },
     {
       "id": "T12-SWD-DEFERRED-SKILLS",
@@ -989,7 +990,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -997,7 +998,15 @@
         "整包",
         "U01",
         "G1"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（u01_d3_select_eight.rs：d3-upstream-noname 32 将/7 技能/ddd刘冲 dddjinggou/dddmoyan 执行、多包共存、保存恢复、坏 JSON 回退与余将 deferred 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-U02",
@@ -1085,7 +1094,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1093,7 +1102,15 @@
         "整包",
         "U05",
         "G1"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（u05_shahai_eight.rs：9 个 shahai-*/shaai-* 子包真实安装、bridge_pack_json 桥接、Hufu/Longlushanfeng/diy_caocao/shibing76/zhaoliner 实战、保存恢复、坏 kind 拒绝与 swd/mtg/hearth/ow/yxs deferred 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-U06",
@@ -1144,7 +1161,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1152,7 +1169,15 @@
         "整包",
         "U07",
         "G1"
-      ]
+      ],
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（u07_wudian_eight.rs：wudian-upstream-noname 14 牌/11 技/9 将 wd_caocao..wd_huatuo 执行、保存恢复、坏技能引用拒绝与 wd_baihuashougun 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-U08",
@@ -1165,7 +1190,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1174,7 +1199,15 @@
         "U08",
         "G3"
       ],
-      "notes": " 2026-10-17 G0：96 KB；yxs_* 技能表 ~305 顶层键 + 43 武将；无混淆 → 内容面可批次。 批 1（2026-10-17）：转换包 + yxs_fanji/yxs_fanji2（2 测）；实测自带技能仅 5 个，武将表依赖外部技能。 批 2（2026-10-17）：门神标记施予/清除（2 测）；主体 70 KB 效果 deferred。"
+      "notes": " 2026-10-17 G0：96 KB；yxs_* 技能表 ~305 顶层键 + 43 武将；无混淆 → 内容面可批次。 批 1（2026-10-17）：转换包 + yxs_fanji/yxs_fanji2（2 测）；实测自带技能仅 5 个，武将表依赖外部技能。 批 2（2026-10-17）：门神标记施予/清除（2 测）；主体 70 KB 效果 deferred。 2026-11-06 Batch 19 八项整包验收通过（u08_hero_kill_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（u08_hero_kill_eight.rs：hero-kill-upstream-noname 6 牌/38 技/25 将、yxs_huqian/yxs_jianxiong/yxs_qianglue/yxs_biyue 实战、保存恢复、坏 JSON 拒绝与余技 deferred 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L01",
@@ -1351,7 +1384,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1360,7 +1393,15 @@
         "L08",
         "G2"
       ],
-      "notes": " 2026-10-17 G0：3.4 MB/9 技（最大 259 KB）/配置键 12+；UI 面不迁移、巨技单列。"
+      "notes": " 2026-10-17 G0：3.4 MB/9 技（最大 259 KB）/配置键 12+；UI 面不迁移、巨技单列。 2026-11-06 Batch 19 八项整包验收通过（l08_decade_ui_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（decade-ui-upstream-liuli + content_native_loader::decade_ui + l08_decade_ui_eight.rs：配置契约、6 种皮肤样式、卡牌美化、标记样式、14 子模块清点、保存恢复、坏枚举拒绝与 Spine/CSS/DOM 宿主边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L09",
@@ -1417,7 +1458,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1426,7 +1467,15 @@
         "L11",
         "G3"
       ],
-      "notes": " 2026-10-17 G0：3.9 MB/0 技/0 武将/配置键 1；框架面属宿主契约，需先定契约。"
+      "notes": " 2026-10-17 G0：3.9 MB/0 技/0 武将/配置键 1；框架面属宿主契约，需先定契约。 2026-11-06 Batch 19 八项整包验收通过（l11_taixu_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（taixu-upstream-liuli + content_native_loader::taixu + l11_taixu_eight.rs：赛季配置、节点推进、买赐福、灵宠绑定、快照恢复、金币不足/超上限拒绝与战役大地图 UI 宿主边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L12",
@@ -1439,7 +1488,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1448,7 +1497,15 @@
         "L12",
         "G3"
       ],
-      "notes": " 2026-10-17 切片 1：G0 实测无规则面（0 技能/0 卡牌/0 武将/0 配置）+ 纯函数面迁移（3 测）；完成条件属宿主契约，未改口径。"
+      "notes": " 2026-10-17 切片 1：G0 实测无规则面（0 技能/0 卡牌/0 武将/0 配置）+ 纯函数面迁移（3 测）；完成条件属宿主契约，未改口径。 2026-11-06 Batch 19 八项整包验收通过（l12_rzsh_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（rzsh-upstream-liuli + content_native_loader::rzsh + l12_rzsh_eight.rs：主题配置、compare_version、unique_preserve_order、parse_key_value_lines、save_path_valid、快照恢复与舞台 DOM 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L13",
@@ -1483,7 +1540,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1492,7 +1549,15 @@
         "L14",
         "G2"
       ],
-      "notes": " 2026-10-17 G0：1.0 MB/48 技（中位 1.1 KB）/配置键 12+；UI 面不迁移、小技可批次。"
+      "notes": " 2026-10-17 G0：1.0 MB/48 技（中位 1.1 KB）/配置键 12+；UI 面不迁移、小技可批次。 2026-11-06 Batch 19 八项整包验收通过（l14_shousha_ui_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（shousha-ui-upstream-liuli + content_native_loader::shousha_ui + l14_shousha_ui_eight.rs：手杀 UI 布局配置、92 条技能分类 87 ui_hook + 5 visual_fx、快照恢复、坏参数拒绝与 L23 电脑适配联动）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L15",
@@ -1603,7 +1668,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1612,7 +1677,15 @@
         "L19",
         "G3"
       ],
-      "notes": " 2026-10-17 G0：148 KB/66 技（中位 479 B）/24 武将引用；技能最小 → 单轮可多技。 批 1（2026-10-17）：转换包 + shishi/xunmeng 落地（3 测）；余 64 技待批次。 批 2（2026-10-17）：zaibian + 装载器 doomsday（身份链/无尽模式，5 测）；余 63 技待批次。"
+      "notes": " 2026-10-17 G0：148 KB/66 技（中位 479 B）/24 武将引用；技能最小 → 单轮可多技。 批 1（2026-10-17）：转换包 + shishi/xunmeng 落地（3 测）；余 64 技待批次。 批 2（2026-10-17）：zaibian + 装载器 doomsday（身份链/无尽模式，5 测）；余 63 技待批次。 2026-11-06 Batch 19 八项整包验收通过（l19_doomsday_brawl_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（doomsday-brawl-upstream-liuli + content_native_loader::doomsday + l19_doomsday_brawl_eight.rs：8 牌/49 技/36 将、身份链/无尽模式、shishi/xunmeng/zaibian 实战、保存恢复、坏 JSON 拒绝与余技 deferred 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L20",
@@ -1625,7 +1698,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1634,7 +1707,15 @@
         "L20",
         "G2"
       ],
-      "notes": " 2026-10-17 G0：364 KB/75 技（中位 2.6 KB）/12 武将引用/配置键 3；标记类可批量。 批 1（2026-10-17）：转换包 + 摸牌翻倍/血量翻倍（3 测）；余 73 技待批次。 批 2（2026-10-17）：kurou/zhuwanzhongji（3 测）+ 调试面 debug_set_identity_roles；余 71 技待批次。 批 3（2026-10-17）：fz_liegong/fz_xinkuanggu（2 测）；余 69 技待批次。"
+      "notes": " 2026-10-17 G0：364 KB/75 技（中位 2.6 KB）/12 武将引用/配置键 3；标记类可批量。 批 1（2026-10-17）：转换包 + 摸牌翻倍/血量翻倍（3 测）；余 73 技待批次。 批 2（2026-10-17）：kurou/zhuwanzhongji（3 测）+ 调试面 debug_set_identity_roles；余 71 技待批次。 批 3（2026-10-17）：fz_liegong/fz_xinkuanggu（2 测）；余 69 技待批次。 2026-11-06 Batch 19 八项整包验收通过（l20_mark_supplement_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（mark-supplement-upstream-liuli + l20_mark_supplement_eight.rs：4 牌/67 技/13 将、fz_liegong/fz_xinkuanggu/kurou/zhuwanzhongji 实战、保存恢复、坏 JSON 拒绝与标记提示 UI 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L21",
@@ -1736,7 +1817,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1745,7 +1826,15 @@
         "L25",
         "G0细拆"
       ],
-      "notes": " 2026-10-17 G0：4.9 MB/122 技（中位 2.1 KB、最大 946 KB）/120 武将引用；先小技、巨技单列。"
+      "notes": " 2026-10-17 G0：4.9 MB/122 技（中位 2.1 KB、最大 946 KB）/120 武将引用；先小技、巨技单列。 2026-11-06 Batch 19 八项整包验收通过（l25_zuan_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（zuan-upstream-liuli + content_native_loader::zuan + l25_zuan_eight.rs：离线调试门控、联机/录像门禁拒绝、快照恢复、enable_editor 联机冲突拒绝与可视化编辑器 DOM 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L26",
@@ -1781,7 +1870,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1790,7 +1879,15 @@
         "L27",
         "G3"
       ],
-      "notes": " 2026-10-17 G0：主面混淆（17844/2178 标识符 + 字符串表）→ UI 仅登记接口；43 个可读技能定义（6 注释 → 37 在用）可分批移植；无配置键。 批 1（2026-10-17）：xiefang（撷芳）落地（2 测）+ 转换包；余 41 技待批次。 批 2（2026-10-17）：new_zhixi（止息）+ blocks_all_cards_when 原语（2 测）；余 40 技待批次。 批 3（2026-10-17）：new_meibu/new_meibu_range 落地（2 测）；余 38 技待批次。 批 4（2026-10-17）：sbzhaxiang 落地（4 测）；余 37 技待批次。 批 5（2026-10-17）：jishe 落地（2 测）+ 余技分类（自包含 27/大体量 6/展示 1/引用未定义 9）→ 余 21 自包含 + 6 大技。"
+      "notes": " 2026-10-17 G0：主面混淆（17844/2178 标识符 + 字符串表）→ UI 仅登记接口；43 个可读技能定义（6 注释 → 37 在用）可分批移植；无配置键。 批 1（2026-10-17）：xiefang（撷芳）落地（2 测）+ 转换包；余 41 技待批次。 批 2（2026-10-17）：new_zhixi（止息）+ blocks_all_cards_when 原语（2 测）；余 40 技待批次。 批 3（2026-10-17）：new_meibu/new_meibu_range 落地（2 测）；余 38 技待批次。 批 4（2026-10-17）：sbzhaxiang 落地（4 测）；余 37 技待批次。 批 5（2026-10-17）：jishe 落地（2 测）+ 余技分类（自包含 27/大体量 6/展示 1/引用未定义 9）→ 余 21 自包含 + 6 大技。 2026-11-06 Batch 19 八项整包验收通过（l27_select_beautify_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（select-beautify-upstream-liuli + l27_select_beautify_eight.rs：6 牌/37 技/64 将、xiefang/new_zhixi/new_meibu/sbzhaxiang/jishe 实战、保存恢复、坏 JSON 拒绝与混淆选将框 UI 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L28",
@@ -1803,7 +1900,7 @@
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"
       ],
-      "status": "open",
+      "status": "resolved",
       "depends_on": [],
       "role": "extension-engineer",
       "tags": [
@@ -1812,7 +1909,15 @@
         "L28",
         "G3"
       ],
-      "notes": " 2026-10-17 切片 1：转换包 + 装载器（配置/替换表/标记补丁）落地（3 测）；th_* 武将内容 deferred。"
+      "notes": " 2026-10-17 切片 1：转换包 + 装载器（配置/替换表/标记补丁）落地（3 测）；th_* 武将内容 deferred。 2026-11-06 Batch 19 八项整包验收通过（l28_thunder_eight.rs）。",
+      "resolution": {
+        "date": "2026-11-06",
+        "kind": "completed",
+        "conclusion": "Batch 19 八项整包验收通过（thunder-upstream-liuli + content_native_loader::thunder + l28_thunder_eight.rs：CHG_HERO/SAME_HERO/EXCLUSIVE_PACK 替换计划、标记标签补丁、保存恢复、坏配置拒绝与 th_* 武将表 deferred 边界）。",
+        "evidence": [
+          "docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md"
+        ]
+      }
     },
     {
       "id": "T12-SRC-L29",
@@ -2220,7 +2325,7 @@
         "doc": "docs/native-coverage-manifest.md",
         "ref": "扩展机制表「指定两仓全部扩展」"
       },
-      "description": "覆盖清单扩展行：原生整包验收 20/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21、L16、U02、L03、L13 与 L29，2026-10-17），仍需处理 17/37，与 T12 总账同口径。U04 不因同一经济再计一次。",
+      "description": "覆盖清单扩展行：原生整包验收 20/37（U03、U06、L06、L07、L23、U04、L04、L05、L22、L02、L15、L17、L18、L26、L21、L16、U02、L03、L13 与 L29，2026-10-17）；2026-11-06 Batch 19 后 T12-SRC-* 八维整包测试达 37/37（证据 docs/operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md），聚合项随 T12-WHOLEPACK-0-37 保持 open。",
       "done_when_evidence": [
         "台账逐来源功能/组合/保存恢复/安装升级/目标平台验收证据",
         "整包状态上调登记"

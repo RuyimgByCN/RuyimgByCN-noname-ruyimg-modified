@@ -16,14 +16,26 @@ mod l05_coin_eight;
 #[path = "../l07_omnisearch.rs"]
 mod l07_omnisearch;
 
+#[path = "../l08_decade_ui_eight.rs"]
+mod l08_decade_ui_eight;
+
 #[path = "../l09_qhly_eight.rs"]
 mod l09_qhly_eight;
 
 #[path = "../l10_epic_cards_eight.rs"]
 mod l10_epic_cards_eight;
 
+#[path = "../l11_taixu_eight.rs"]
+mod l11_taixu_eight;
+
+#[path = "../l12_rzsh_eight.rs"]
+mod l12_rzsh_eight;
+
 #[path = "../l13_shousha_mvp_eight.rs"]
 mod l13_shousha_mvp_eight;
+
+#[path = "../l14_shousha_ui_eight.rs"]
+mod l14_shousha_ui_eight;
 
 #[path = "../l15_shousha_eight.rs"]
 mod l15_shousha_eight;
@@ -40,6 +52,9 @@ mod l18_update_guard_eight;
 #[path = "../l19_brawl_batch1.rs"]
 mod l19_brawl_batch1;
 
+#[path = "../l19_doomsday_brawl_eight.rs"]
+mod l19_doomsday_brawl_eight;
+
 #[path = "../l19_zaibian_batch2.rs"]
 mod l19_zaibian_batch2;
 
@@ -52,6 +67,9 @@ mod l20_kurou_batch2;
 #[path = "../l20_liegong_batch3.rs"]
 mod l20_liegong_batch3;
 
+#[path = "../l20_mark_supplement_eight.rs"]
+mod l20_mark_supplement_eight;
+
 #[path = "../l21_martial_eight.rs"]
 mod l21_martial_eight;
 
@@ -63,6 +81,9 @@ mod l23_desktop_adapt;
 
 #[path = "../l24_skin_switch_eight.rs"]
 mod l24_skin_switch_eight;
+
+#[path = "../l25_zuan_eight.rs"]
+mod l25_zuan_eight;
 
 #[path = "../l26_fool_eight.rs"]
 mod l26_fool_eight;
@@ -79,8 +100,14 @@ mod l27_new_zhixi_batch2;
 #[path = "../l27_sbzhaxiang_batch4.rs"]
 mod l27_sbzhaxiang_batch4;
 
+#[path = "../l27_select_beautify_eight.rs"]
+mod l27_select_beautify_eight;
+
 #[path = "../l27_xiefang_batch1.rs"]
 mod l27_xiefang_batch1;
+
+#[path = "../l28_thunder_eight.rs"]
+mod l28_thunder_eight;
 
 #[path = "../l29_longxue_eight.rs"]
 mod l29_longxue_eight;

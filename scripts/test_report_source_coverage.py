@@ -32,8 +32,8 @@ class CoverageTests(unittest.TestCase):
 
     def test_class_counts(self):
         self.assertEqual(len(self.by_class["converted"]), 12)
-        self.assertEqual(len(self.by_class["installed-empty"]), 20)
-        self.assertEqual(len(self.by_class["no-package"]), 5)
+        self.assertEqual(len(self.by_class["installed-empty"]), 25)
+        self.assertEqual(len(self.by_class.get("no-package", [])), 0)
 
     def test_converted_sources_all_have_entries(self):
         for row in self.rows:
@@ -60,7 +60,7 @@ class CoverageTests(unittest.TestCase):
             self.assertIn(source, self.by_class["installed-empty"])
 
     def test_no_package_sources(self):
-        self.assertEqual(sorted(self.by_class["no-package"]), ["L08", "L11", "L12", "L14", "L25"])
+        self.assertEqual(sorted(self.by_class.get("no-package", [])), [])
 
 
 if __name__ == "__main__":

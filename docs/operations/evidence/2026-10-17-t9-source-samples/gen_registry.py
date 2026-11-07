@@ -108,8 +108,8 @@ def dirty_summary() -> str:
 def source_version() -> dict:
     """从源码读取规则/存档版本常量（实测，不手写）。"""
     versions = {"ruleset": None, "archive": None, "ruleset_source": "", "archive_source": ""}
-    ruleset = ROOT / "crates/engine-native/src/content/standard.rs"
-    archive = ROOT / "crates/engine-native/src/archive.rs"
+    ruleset = ROOT / "crates/engine-native-content/src/content/standard.rs"
+    archive = ROOT / "crates/engine-native-kernel/src/archive.rs"
     for key, path, pattern in (
         ("ruleset", ruleset, r"pub const STANDARD_RULESET_VERSION: u64 = (\d+);"),
         ("archive", archive, r"pub const ARCHIVE_FORMAT_VERSION: u16 = (\d+);"),

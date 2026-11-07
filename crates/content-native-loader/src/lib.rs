@@ -31,6 +31,7 @@ use serde_json::Value;
 mod ai_tuning;
 mod boss_playpack;
 mod coin;
+pub mod decade_ui;
 mod desktop_adapt;
 mod doomsday;
 mod douzhuan;
@@ -42,13 +43,16 @@ mod longxue;
 mod martial;
 mod omnisearch;
 mod qhly;
-mod rzsh;
+pub mod rzsh;
 mod shousha;
 mod shousha_mvp;
+pub mod shousha_ui;
 mod sj_settings;
 mod skin_switch;
+pub mod taixu;
 mod thunder;
 mod update_guard;
+pub mod zuan;
 pub use ai_tuning::*;
 pub use boss_playpack::{
     apply_boss_play_line, exclude_versus_ladder, filter_allowed, init_outcome, merge_translate,
@@ -62,6 +66,7 @@ pub use coin::{
     CoinGate, CoinMode, CoinSession, IdentityRole, SettleOutcome, SettleRequest, ShopItem,
     SnowSize,
 };
+pub use decade_ui::*;
 pub use desktop_adapt::{
     apply as apply_desktop_adapt, classify_pointer, export_download, invoke_emoji,
     parse_config as parse_desktop_config, pointer_allowed, restore_snapshot, set_layout, snapshot,
@@ -122,6 +127,7 @@ pub use shousha_mvp::{
     apply_mvp_line, parse_mvp_config, parse_mvp_request, MvpConfig, MvpError, MvpFact, MvpPlayer,
     MvpScore, MvpSession, MvpSettlement, MvpStats,
 };
+pub use shousha_ui::*;
 pub use sj_settings::{
     apply_external, apply_sj_commands, boot, catalog_mark, choose_download, classify_fault,
     compare_version, decode_text, decode_uri, encode_text, eval_update_script, filter_downloads,
@@ -132,6 +138,7 @@ pub use sj_settings::{
     SelectInput, SjConfig, SjError, TransferFault, VersionOrder, WindowError,
 };
 pub use skin_switch::*;
+pub use taixu::*;
 pub use thunder::*;
 pub use update_guard::{
     apply_update_guard_line, boot_link, can_update, classify_body, compare_update, dedup_broken,
@@ -142,6 +149,7 @@ pub use update_guard::{
     GuardError, MenuFlags, RetryClass, ScanOut, SelectOutcome, UpdatePrompt, UpdateUrl, CODING_URL,
     FASTGIT_URL, GITHUB_URL, URC_URL,
 };
+pub use zuan::*;
 
 /// 装载错误：坏包、未知键与宿主 API 版本不符给出明确原因。
 #[derive(Debug, Clone, PartialEq, Eq)]

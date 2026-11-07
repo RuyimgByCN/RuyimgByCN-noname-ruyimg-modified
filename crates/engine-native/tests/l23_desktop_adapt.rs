@@ -163,9 +163,12 @@ fn l23_eight_dimension_from_fresh_install() {
         lock_before,
         "组合：应用预设不改内容锁"
     );
-    // 依赖反例：预设应用不要求手杀界面包在场。2026-10-17 起 L13 手杀MVP
-    // 已作为独立转换包存在（`packages/extensions/shousha-mvp-upstream-liuli`），
-    // 故此处只断言手杀 UI 包仍未转换；预设仍走调用方数据。
+    // 依赖反例：预设应用不要求手杀界面包在场。2026-10-17 起 L13 手杀MVP、
+    // 2026-11-06 起 L14 手杀ui 均已作为独立转换包入仓；此处停用 `shousha-ui`
+    // 验证激活集不含手杀 UI 包时预设仍走调用方数据，随后回滚恢复激活集。
+    store
+        .deactivate_slot("upstream-liuli", "shousha-ui")
+        .expect("停用 shousha-ui");
     assert!(
         !store
             .read_active()
@@ -173,8 +176,15 @@ fn l23_eight_dimension_from_fresh_install() {
             .packages
             .iter()
             .any(|(slot, _)| slot.contains("shousha-ui")),
-        "依赖反例：商店里没有手杀 UI 包"
+        "依赖反例：商店激活集里没有手杀 UI 包"
     );
+    assert_eq!(
+        apply_desktop_adapt(&config, HostKind::Desktop, false)
+            .presets
+            .get("shouShaJieSuanInfo"),
+        Some(&true)
+    );
+    store.rollback().expect("回滚恢复 shousha-ui");
 
     let mut requested = apply_desktop_adapt(&config, HostKind::Desktop, true);
     assert_eq!(
