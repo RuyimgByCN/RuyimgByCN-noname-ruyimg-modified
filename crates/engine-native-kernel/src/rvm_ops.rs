@@ -26,11 +26,13 @@ pub use commit::*;
 mod commit_combat;
 mod commit_ext;
 mod accept_batch15;
+pub(crate) use accept_batch15::backfill_batch17_skill;
 mod commit_batch13;
 mod commit_batch14;
 mod commit_batch15;
 mod commit_batch15_rest;
 mod commit_batch16;
+mod commit_batch17;
 mod query;
 pub use query::*;
 

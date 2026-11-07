@@ -297,9 +297,9 @@ fn pa12_batch16_ported_skill_inventory_zero_modifier_and_active_rejections() {
         single_skill_noop_rejected >= 1530,
         "非杀海纯 INTENTIONAL_EMPTY_NOOP 文件必须保持拒绝（实际 {single_skill_noop_rejected}）"
     );
-    assert_eq!(
-        bridged_ok, 3524,
-        "PA12 批⑯应精确桥接 3,524 个 ported .skill 文件"
+    assert!(
+        bridged_ok >= 3524,
+        "PA12 批⑯起应至少桥接 3,524 个 ported .skill 文件（实际 {bridged_ok}）"
     );
 }
 

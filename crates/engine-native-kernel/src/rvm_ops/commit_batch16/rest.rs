@@ -6,7 +6,12 @@ const POTTUNTIAN_MARK: u32 = 2_435_155_097;
 const JILUE_JIZHI_MARK: u32 = 2_747_240_883;
 const JILUE_WANSHA_MARK: u32 = 3_522_766_701;
 
-pub(super) fn commit_batch16_rest(ctx: &mut Ctx<'_>, seats: u8, e: EffectRequest) {
+pub(super) fn commit_batch16_rest(
+    ctx: &mut Ctx<'_>,
+    executing: &str,
+    seats: u8,
+    e: EffectRequest,
+) {
     match e {
         EffectRequest::ResolveRuanji {
             player,
@@ -609,6 +614,6 @@ pub(super) fn commit_batch16_rest(ctx: &mut Ctx<'_>, seats: u8, e: EffectRequest
                 _ => {}
             }
         }
-        _ => {}
+        other => super::super::commit_batch17::commit_batch17_effect(ctx, executing, seats, other),
     }
 }

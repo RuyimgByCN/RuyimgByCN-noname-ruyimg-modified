@@ -79,15 +79,34 @@ fn rewrite_stmts(stmts: &mut Vec<StmtAst>, name_to_def: &std::collections::BTree
     }
 }
 
+fn cross_file_skill_def_id(skill_name: &str) -> u32 {
+    match skill_name {
+        "chixueqingfeng2" => 3_863_274_410,
+        "rebiluan2" => 3_680_299_345,
+        "wangzun3" => 2_630_565_864,
+        "decadexushen2" => 1_919_822_977,
+        _ => {
+            let mut h: u32 = 2_166_136_261;
+            for b in skill_name.as_bytes() {
+                h ^= u32::from(*b);
+                h = h.wrapping_mul(16_777_619);
+            }
+            if h == 0 { 1 } else { h }
+        }
+    }
+}
+
 fn rewrite_stmt(stmt: &mut StmtAst, name_to_def: &std::collections::BTreeMap<String, u32>) {
     match stmt {
         StmtAst::Effect { name, args, .. } if name == "add_skill_by_name" => {
             if args.len() == 2 {
                 if let ExprAst::Ident(skill_name) = &args[1] {
-                    if let Some(def) = name_to_def.get(skill_name) {
-                        *name = "add_skill".into();
-                        args[1] = ExprAst::U32(*def);
-                    }
+                    let def = name_to_def
+                        .get(skill_name)
+                        .copied()
+                        .unwrap_or_else(|| cross_file_skill_def_id(skill_name));
+                    *name = "add_skill".into();
+                    args[1] = ExprAst::U32(def);
                 }
             }
         }

@@ -181,17 +181,11 @@ pub(super) fn dying_tao_cards(
         .copied()
         .filter(|&c| is_tao_like(ctx, responder, c, dying))
         .collect();
-    for &c in &p.equips {
-        let vm_ok = ctx
-            .catalog
-            .find_player_vm_view_as(ctx.core, responder, c, false, Some(CardKind::Tao))
-            .is_some()
-            || (responder == dying
-                && ctx
-                    .catalog
-                    .find_player_vm_view_as(ctx.core, responder, c, false, Some(CardKind::Jiu))
-                    .is_some());
-        if vm_ok && is_tao_like(ctx, responder, c, dying) && !out.contains(&c) {
+    for c in ctx
+        .catalog
+        .player_vm_view_as_extra_cards(ctx.core, responder, false, None)
+    {
+        if is_tao_like(ctx, responder, c, dying) && !out.contains(&c) {
             out.push(c);
         }
     }
@@ -216,13 +210,11 @@ pub(super) fn response_kind_cards(
                     .is_some()
         })
         .collect();
-    for &c in &p.equips {
-        if ctx
-            .catalog
-            .find_player_vm_view_as(ctx.core, responder, c, false, Some(need))
-            .is_some()
-            && !out.contains(&c)
-        {
+    for c in ctx
+        .catalog
+        .player_vm_view_as_extra_cards(ctx.core, responder, false, Some(need))
+    {
+        if !out.contains(&c) {
             out.push(c);
         }
     }
@@ -235,16 +227,25 @@ pub(super) fn discard_response_card(
     card: crate::ids::CardId,
     target_kind: CardKind,
 ) {
-    if ctx.catalog.card_kind(card) != target_kind
-        || ctx.core.player(player).equips.contains(&card)
-    {
+    let in_hand = ctx.core.player(player).hand.contains(&card);
+    let mut from_none = false;
+    if ctx.catalog.card_kind(card) != target_kind || !in_hand {
         if let Some(spec) = ctx
             .catalog
             .find_player_vm_view_as(ctx.core, player, card, false, Some(target_kind))
             .cloned()
         {
-            spec.record_use(ctx.core, player);
+            let extra = spec.consume_and_record(ctx.core, ctx.catalog, player, card);
+            for c2 in extra {
+                ctx.to_discard(c2);
+            }
+            if spec.zone == crate::rvm_bridge::VmViewAsZone::None {
+                from_none = true;
+            }
         }
+    }
+    if from_none {
+        return;
     }
     if ctx.core.player(player).hand.contains(&card) {
         ctx.discard_from_hand(player, card);
@@ -262,6 +263,23 @@ pub(super) fn discard_response_card(
             cards: vec![card],
             origins: vec![crate::event::LostOrigin::Equip],
         });
+    } else if ctx
+        .core
+        .vm_aux
+        .piles
+        .iter_mut()
+        .filter(|((owner, _), _)| *owner == player)
+        .any(|(_, pile)| {
+            let len_before = pile.len();
+            pile.retain(|&x| x != card);
+            pile.len() != len_before
+        })
+    {
+        ctx.to_discard(card);
+        ctx.log(LogEvent::CardDiscarded {
+            player,
+            cards: vec![card],
+        });
     } else {
         ctx.to_discard(card);
     }
@@ -273,10 +291,12 @@ pub(super) fn discard_dying_card(
     dying: PlayerId,
     card: crate::ids::CardId,
 ) {
+    let in_hand = ctx.core.player(responder).hand.contains(&card);
+    let mut from_none = false;
     if !matches!(
         ctx.catalog.card_kind(card),
         CardKind::Tao | CardKind::Jiu | CardKind::Hufu | CardKind::Tianxianjiu | CardKind::Dinvxuanshuang
-    ) || ctx.core.player(responder).equips.contains(&card)
+    ) || !in_hand
     {
         let spec = ctx
             .catalog
@@ -296,8 +316,17 @@ pub(super) fn discard_dying_card(
             })
             .cloned();
         if let Some(s) = spec {
-            s.record_use(ctx.core, responder);
+            let extra = s.consume_and_record(ctx.core, ctx.catalog, responder, card);
+            for c2 in extra {
+                ctx.to_discard(c2);
+            }
+            if s.zone == crate::rvm_bridge::VmViewAsZone::None {
+                from_none = true;
+            }
         }
+    }
+    if from_none {
+        return;
     }
     if ctx.core.player(responder).hand.contains(&card) {
         ctx.discard_from_hand(responder, card);
@@ -314,6 +343,23 @@ pub(super) fn discard_dying_card(
             player: responder,
             cards: vec![card],
             origins: vec![crate::event::LostOrigin::Equip],
+        });
+    } else if ctx
+        .core
+        .vm_aux
+        .piles
+        .iter_mut()
+        .filter(|((owner, _), _)| *owner == responder)
+        .any(|(_, pile)| {
+            let len_before = pile.len();
+            pile.retain(|&x| x != card);
+            pile.len() != len_before
+        })
+    {
+        ctx.to_discard(card);
+        ctx.log(LogEvent::CardDiscarded {
+            player: responder,
+            cards: vec![card],
         });
     } else {
         ctx.to_discard(card);

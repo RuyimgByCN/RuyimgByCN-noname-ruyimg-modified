@@ -3,8 +3,8 @@
 use super::*;
 use engine_native::catalog::CardKind;
 use engine_native::rvm_bridge::{
-    VmActiveLimits, VmFilterPolicy, VmHandlerSet, VmSkillProgram, VmTriggerProgram, VmViewAsFilter,
-    VmViewAsSpec, VmViewAsWindow, VmViewAsZone,
+    VmActiveLimits, VmFilterPolicy, VmHandlerSet, VmSkillProgram, VmTriggerProgram, VmViewAsCost,
+    VmViewAsFilter, VmViewAsMultiCardBonus, VmViewAsSpec, VmViewAsWindow, VmViewAsZone,
 };
 use std::sync::Arc;
 
@@ -22,32 +22,59 @@ fn map_view_as_zone(zone: Option<&str>) -> Option<VmViewAsZone> {
         None | Some("hand") => Some(VmViewAsZone::Hand),
         Some("equip") => Some(VmViewAsZone::Equip),
         Some("hand_equip" | "hand_or_equip") => Some(VmViewAsZone::HandEquip),
+        Some("hand_expansion") => Some(VmViewAsZone::HandExpansion),
+        Some("hand_equip_expansion") => Some(VmViewAsZone::HandEquipExpansion),
+        Some("none") => Some(VmViewAsZone::None),
+        Some(z) if z.starts_with("group_") => Some(VmViewAsZone::GroupWei),
         _ => None,
     }
 }
 
-fn map_view_as_kind(as_kind: &str, nature: Option<&str>) -> Option<CardKind> {
+fn map_view_as_kinds(as_kind: &str, nature: Option<&str>) -> Option<Vec<CardKind>> {
     match (as_kind, nature) {
-        ("sha", None) => Some(CardKind::Sha),
-        ("sha", Some("fire")) | ("fire_sha", None) => Some(CardKind::FireSha),
-        ("sha", Some("thunder")) | ("thunder_sha" | "lei_sha", None) => Some(CardKind::LeiSha),
-        ("shan", None) => Some(CardKind::Shan),
-        ("tao", None) => Some(CardKind::Tao),
-        ("jiu", None) => Some(CardKind::Jiu),
-        ("wuxie" | "nullify", None) => Some(CardKind::Nullify),
-        ("guohe" | "dismantle", None) => Some(CardKind::Dismantle),
-        ("shunshou" | "snatch", None) => Some(CardKind::Snatch),
-        ("juedou" | "duel", None) => Some(CardKind::Duel),
-        ("wuzhong", None) => Some(CardKind::Wuzhong),
-        ("taoyuan", None) => Some(CardKind::Taoyuan),
-        ("wugu", None) => Some(CardKind::Wugu),
-        ("jiedao", None) => Some(CardKind::Jiedao),
-        ("nanman" | "savage_attack", None) => Some(CardKind::SavageAttack),
-        ("wanjian" | "archery_attack", None) => Some(CardKind::ArcheryAttack),
-        ("tiesuo" | "chain", None) => Some(CardKind::Chain),
-        ("le" | "lebu" | "lebusishu", None) => Some(CardKind::Le),
-        ("bing" | "bingliang", None) => Some(CardKind::Bing),
-        ("shandian", None) => Some(CardKind::ShanDian),
+        ("basic", None) => Some(vec![
+            CardKind::Sha,
+            CardKind::FireSha,
+            CardKind::LeiSha,
+            CardKind::Shan,
+            CardKind::Tao,
+            CardKind::Jiu,
+        ]),
+        ("ordinary_trick" | "trick", None) => Some(vec![
+            CardKind::Duel,
+            CardKind::Dismantle,
+            CardKind::Snatch,
+            CardKind::Wuzhong,
+            CardKind::Nullify,
+            CardKind::SavageAttack,
+            CardKind::ArcheryAttack,
+            CardKind::Taoyuan,
+            CardKind::Wugu,
+            CardKind::Chain,
+        ]),
+        ("sha", None) => Some(vec![CardKind::Sha]),
+        ("sha", Some("fire")) | ("fire_sha", None) => Some(vec![CardKind::FireSha]),
+        ("sha", Some("thunder")) | ("thunder_sha" | "lei_sha", None) => {
+            Some(vec![CardKind::LeiSha])
+        }
+        ("shan", None) => Some(vec![CardKind::Shan]),
+        ("tao", None) => Some(vec![CardKind::Tao]),
+        ("jiu", None) => Some(vec![CardKind::Jiu]),
+        ("wuxie" | "nullify", None) => Some(vec![CardKind::Nullify]),
+        ("guohe" | "dismantle" | "chuqibuyi", None) => Some(vec![CardKind::Dismantle]),
+        ("shunshou" | "snatch", None) => Some(vec![CardKind::Snatch]),
+        ("juedou" | "duel", None) => Some(vec![CardKind::Duel]),
+        ("huogong", None) => Some(vec![CardKind::Linghunzhihuo]),
+        ("wuzhong", None) => Some(vec![CardKind::Wuzhong]),
+        ("taoyuan", None) => Some(vec![CardKind::Taoyuan]),
+        ("wugu", None) => Some(vec![CardKind::Wugu]),
+        ("jiedao", None) => Some(vec![CardKind::Jiedao]),
+        ("nanman" | "savage_attack", None) => Some(vec![CardKind::SavageAttack]),
+        ("wanjian" | "archery_attack", None) => Some(vec![CardKind::ArcheryAttack]),
+        ("tiesuo" | "chain", None) => Some(vec![CardKind::Chain]),
+        ("le" | "lebu" | "lebusishu", None) => Some(vec![CardKind::Le]),
+        ("bing" | "bingliang", None) => Some(vec![CardKind::Bing]),
+        ("shandian", None) => Some(vec![CardKind::ShanDian]),
         _ => None,
     }
 }
@@ -78,6 +105,8 @@ fn map_view_as_filter(filter: &str) -> Option<VmViewAsFilter> {
         "card_shan" | "shan" => VmViewAsFilter::Shan,
         "card_tao" | "tao" => VmViewAsFilter::Tao,
         "card_jiu" | "jiu" => VmViewAsFilter::Jiu,
+        "card_ying" => VmViewAsFilter::CardYing,
+        "color_ne_shuangxiong" => VmViewAsFilter::ColorNeShuangxiong,
         "weapon" | "card_weapon" => VmViewAsFilter::Weapon,
         "armor" | "card_armor" => VmViewAsFilter::Armor,
         "mount" | "card_mount" => VmViewAsFilter::Mount,
@@ -92,46 +121,90 @@ fn map_view_as_filter(filter: &str) -> Option<VmViewAsFilter> {
     })
 }
 
+fn map_view_as_cost(cost: Option<&str>) -> Option<Option<VmViewAsCost>> {
+    Some(match cost {
+        None => None,
+        Some("gain_max_hp_1") => Some(VmViewAsCost::GainMaxHp1),
+        Some("disable_equip_slot") => Some(VmViewAsCost::DisableEquipSlot),
+        Some("guhuo") => Some(VmViewAsCost::Guhuo),
+        Some("face_down_hand") => Some(VmViewAsCost::FaceDownHand),
+        Some("swap_lower_hand") => Some(VmViewAsCost::SwapLowerHand),
+        Some("draw_one_outside_turn_empty_hand") => {
+            Some(VmViewAsCost::DrawOneOutsideTurnEmptyHand)
+        }
+        Some("hand_equip_mark") => Some(VmViewAsCost::HandEquipMark),
+        Some("lose_max_hp_1") => Some(VmViewAsCost::LoseMaxHp1),
+        Some("all_hand") => Some(VmViewAsCost::AllHand),
+        Some("potdaozhuan") => Some(VmViewAsCost::Potdaozhuan),
+        Some("dczhaowen") => Some(VmViewAsCost::Dczhaowen),
+        Some("dddshilie") => Some(VmViewAsCost::Dddshilie),
+        Some("dddzhijie") => Some(VmViewAsCost::Dddzhijie),
+        Some("dddfusi") => Some(VmViewAsCost::Dddfusi),
+        Some("dddtongyu") => Some(VmViewAsCost::Dddtongyu),
+        Some("turn_over") => Some(VmViewAsCost::TurnOver),
+        Some("potqingyan") => Some(VmViewAsCost::Potqingyan),
+        _ => return None,
+    })
+}
+
+fn map_view_as_bonus(bonus: Option<&str>) -> Option<Option<VmViewAsMultiCardBonus>> {
+    Some(match bonus {
+        None => None,
+        Some("damage_1") => Some(VmViewAsMultiCardBonus::Damage1),
+        Some("recover_1") => Some(VmViewAsMultiCardBonus::Recover1),
+        Some("discard_current_hand_equip") => {
+            Some(VmViewAsMultiCardBonus::DiscardCurrentHandEquip)
+        }
+        _ => return None,
+    })
+}
+
 pub(super) fn compile_view_as_entry(
     skill_name: &str,
     v: &content_schema::PackageViewAsEntry,
-) -> Option<VmViewAsSpec> {
-    if v.min_cards != 1
-        || v.max_cards != 1
-        || v.owner_hp_min_one_cards
-        || v.owner_basic_uses_plus_one_cards
-        || v.once_per_turn_per_branch
-        || v.same_suit
-        || v.multi_card_bonus.is_some()
-        || v.branch.is_some()
-        || v.once_per_round
-        || v.next_branch.is_some()
-        || v.cost.is_some()
-        || v.mark_cost.is_some()
-        || v.uses_per_turn == Some(0)
-    {
+) -> Option<Vec<VmViewAsSpec>> {
+    if v.uses_per_turn == Some(0) || v.min_cards == 0 || v.min_cards > v.max_cards {
         return None;
     }
     let window = map_view_as_window(v.window.as_str())?;
     let zone = map_view_as_zone(v.source_zone.as_deref())?;
-    let as_kind = map_view_as_kind(v.as_kind.as_str(), v.nature.as_deref())?;
+    let as_kinds = map_view_as_kinds(v.as_kind.as_str(), v.nature.as_deref())?;
     let filter = map_view_as_filter(v.filter.as_str())?;
-    Some(VmViewAsSpec {
-        skill_def_id: v.skill_def_id,
-        skill_name: skill_name.to_string(),
-        as_kind,
-        window,
-        zone,
-        filter,
-        uses_per_turn: v.uses_per_turn,
-        ignore_distance: v.ignore_distance,
-        red_unrespondable: v.red_unrespondable,
-        black_no_use_count: v.black_no_use_count,
-        no_use_count: v.no_use_count,
-        target_lacks_source_suit_unrespondable: v.target_lacks_source_suit_unrespondable,
-        refund_use_count_if_no_damage: v.refund_use_count_if_no_damage,
-        post_draw: v.post_draw,
-    })
+    let cost = map_view_as_cost(v.cost.as_deref())?;
+    let multi_card_bonus = map_view_as_bonus(v.multi_card_bonus.as_deref())?;
+    Some(
+        as_kinds
+            .into_iter()
+            .map(|as_kind| VmViewAsSpec {
+                skill_def_id: v.skill_def_id,
+                skill_name: skill_name.to_string(),
+                as_kind,
+                window,
+                zone,
+                filter,
+                uses_per_turn: v.uses_per_turn,
+                ignore_distance: v.ignore_distance,
+                red_unrespondable: v.red_unrespondable,
+                black_no_use_count: v.black_no_use_count,
+                no_use_count: v.no_use_count,
+                target_lacks_source_suit_unrespondable: v.target_lacks_source_suit_unrespondable,
+                refund_use_count_if_no_damage: v.refund_use_count_if_no_damage,
+                min_cards: v.min_cards,
+                max_cards: v.max_cards,
+                owner_hp_min_one_cards: v.owner_hp_min_one_cards,
+                owner_basic_uses_plus_one_cards: v.owner_basic_uses_plus_one_cards,
+                once_per_turn_per_branch: v.once_per_turn_per_branch,
+                same_suit: v.same_suit,
+                multi_card_bonus,
+                branch: v.branch,
+                once_per_round: v.once_per_round,
+                next_branch: v.next_branch,
+                cost,
+                mark_cost: v.mark_cost,
+                post_draw: v.post_draw,
+            })
+            .collect(),
+    )
 }
 
 pub(super) fn bridge_view_as_entries(
@@ -161,13 +234,13 @@ pub(super) fn bridge_view_as_entries(
         }
         let mut specs = Vec::with_capacity(entries.len());
         for v in entries {
-            let spec = compile_view_as_entry(&skill.name, v).ok_or_else(|| {
+            let entry_specs = compile_view_as_entry(&skill.name, v).ok_or_else(|| {
                 invalid(
                     "view_as_index",
                     "native VM view-as declarations are unsupported",
                 )
             })?;
-            specs.push(spec);
+            specs.extend(entry_specs);
         }
         if let Some(existing) = decls.iter_mut().find(|d| d.name == skill.name) {
             match &existing.filter {

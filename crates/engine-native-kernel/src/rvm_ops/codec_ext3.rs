@@ -1,6 +1,7 @@
-//! PA12 Batch 15 / Batch 16：`EffectRequest` 扩展编解码子表 3（tags 154..=208 + tag 255 u16 扩展头预留）。
+//! PA12 Batch 15 / Batch 16 / Batch 17：`EffectRequest` 扩展编解码子表 3（tags 154..=254 + tag 255 u16 扩展头）。
 
 mod batch16;
+mod batch17;
 
 use super::codec::{push_u32, Rd};
 use super::codec_ext2::{push_card_vec, push_player_vec, rd_card_vec, rd_player_vec};
@@ -627,6 +628,7 @@ pub(super) fn dec_ext3_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest>
             skill: rule_api::SkillId::new(rd.u32()?),
         },
         179..=208 => batch16::dec_batch16_effect(tag, rd)?,
+        209..=254 => batch17::dec_batch17_effect(tag, rd)?,
         255 => {
             let ext_tag = u16::from_le_bytes([rd.u8()?, rd.u8()?]);
             decode_ext_u16(ext_tag, rd)?
@@ -635,6 +637,6 @@ pub(super) fn dec_ext3_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest>
     })
 }
 
-fn decode_ext_u16(_ext_tag: u16, _rd: &mut Rd<'_>) -> Option<EffectRequest> {
-    None
+fn decode_ext_u16(ext_tag: u16, rd: &mut Rd<'_>) -> Option<EffectRequest> {
+    batch17::dec_ext_u16(ext_tag, rd)
 }

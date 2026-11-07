@@ -9,7 +9,7 @@ pub(super) fn play_card(
 ) -> Result<(), RejectReason> {
     common_play_validation(&state.core, catalog, actor, card, &targets)?;
     let core = &state.core;
-    let (kind, mark_mutoumianju) = play_kind(core, catalog, card);
+    let (kind, mark_mutoumianju) = play_kind(core, catalog, card, &targets);
     check_play_target_restrictions(core, catalog, card, &targets)?;
     if kind.is_equip() {
         if !targets.is_empty() {
@@ -106,7 +106,9 @@ pub(super) fn play_card(
                     }
                     // 铁索为结算型锦囊：走 CardUsed → 无懈窗口 → ChainMachine
                     // 翻转（旧实现只推 Linked 帧，牌从未离手，ADR 0705 修复）。
-                    let use_as = (kind != catalog.card_kind(card)).then_some(CardKind::Chain);
+                    let use_as = (kind != catalog.card_kind(card)
+                        || !core.player(core.turn.current).hand.contains(&card))
+                    .then_some(CardKind::Chain);
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use_as(
@@ -135,7 +137,9 @@ pub(super) fn play_card(
                     if kongcheng && core.player(target).hand.is_empty() {
                         return Err(RejectReason::IllegalTargets);
                     }
-                    let use_as = (kind != catalog.card_kind(card)).then_some(CardKind::Duel);
+                    let use_as = (kind != catalog.card_kind(card)
+                        || !core.player(core.turn.current).hand.contains(&card))
+                    .then_some(CardKind::Duel);
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use_as(
@@ -392,8 +396,9 @@ pub(super) fn play_card(
                     }
                     // 良策转化（玩点论杀批 15）：基本牌当五谷——use_as 声明
                     // 必须随帧（否则机器工厂回退目录种）。
-                    let use_as =
-                        (kind != catalog.card_kind(card)).then_some(kind);
+                    let use_as = (kind != catalog.card_kind(card)
+                        || !core.player(player).hand.contains(&card))
+                    .then_some(kind);
                     crate::resolution::push_frame(
                         &mut state.resolution,
                         EventData::CardUsed(crate::machine::card_use_as(
@@ -1089,7 +1094,9 @@ pub(super) fn play_card(
             }
     let player = core.turn.current;
     // view-as 声明（蜜链藕红桃当桃等）：转化后按声明牌种结算
-    let use_as = if kind != catalog.card_kind(card) {
+    let use_as = if kind != catalog.card_kind(card)
+        || !core.player(player).hand.contains(&card)
+    {
         Some(kind)
     } else {
         None

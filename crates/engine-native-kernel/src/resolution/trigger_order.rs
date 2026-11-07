@@ -38,6 +38,25 @@ pub(crate) fn event_kind(frame: &Frame) -> EventKind {
         frame.kind
     }
 }
+fn effective_trigger_meta(
+    core: &GameStateCore,
+    catalog: &Catalog,
+    frames: &[Frame],
+    frame: &Frame,
+    owner: PlayerId,
+    def_id: SkillDefId,
+) -> Option<crate::catalog::TriggerMeta> {
+    let skill = catalog.skills.get(def_id as usize)?;
+    let kind = event_kind(frame);
+    if let Some(effect) = skill.behavior.native_damage_effect(kind) {
+        return Some(effect.meta());
+    }
+    let event = crate::event::damage_event(frames, frame);
+    skill
+        .behavior
+        .window_trigger_meta(&QueryCtx { state: core, catalog }, owner, event, kind)
+        .or_else(|| skill.trigger.clone())
+}
 fn subscribes(catalog: &Catalog, def: SkillDefId, frame: &Frame) -> bool {
     let Some(def) = catalog.skills.get(def as usize) else {
         return false;
@@ -256,12 +275,18 @@ impl SkillMachine for TriggerOrder {
             self.candidates.clear();
             self.owner = 0;
             if let Some(selected) = selected.filter(|_| {
+                let frame = ctx.res.frame(self.frame).expect("frame");
                 current.iter().all(|q| {
-                    ctx.catalog.skills[q.def as usize]
-                        .trigger
-                        .as_ref()
-                        .expect("meta")
-                        .order_selectable
+                    effective_trigger_meta(
+                        ctx.core,
+                        ctx.catalog,
+                        &ctx.res.stack,
+                        frame,
+                        q.owner,
+                        q.def,
+                    )
+                    .expect("meta")
+                    .order_selectable
                 })
             }) {
                 self.start(ctx, &selected);
@@ -303,14 +328,20 @@ impl SkillMachine for TriggerOrder {
         let automatic = if first.order.0 != 1 {
             Some(first.clone())
         } else {
+            let frame = ctx.res.frame(self.frame).expect("frame");
             current
                 .iter()
                 .find(|q| {
-                    !ctx.catalog.skills[q.def as usize]
-                        .trigger
-                        .as_ref()
-                        .expect("meta")
-                        .order_selectable
+                    !effective_trigger_meta(
+                        ctx.core,
+                        ctx.catalog,
+                        &ctx.res.stack,
+                        frame,
+                        q.owner,
+                        q.def,
+                    )
+                    .expect("meta")
+                    .order_selectable
                 })
                 .cloned()
         };
@@ -360,7 +391,7 @@ pub fn register_added(
     def: SkillDefId,
 ) {
     sync_trigger_owners(core, res);
-    let Some(meta) = catalog
+    let Some(base_meta) = catalog
         .skills
         .get(def as usize)
         .and_then(|d| d.trigger.as_ref())
@@ -372,11 +403,9 @@ pub fn register_added(
         .iter()
         .filter_map(|p| p.machine.trigger_order())
         .filter_map(|m| {
-            let native_meta = catalog.skills[def as usize]
-                .behavior
-                .native_damage_effect(event_kind(res.frame(m.frame)?))
-                .map(|e| e.meta());
-            let meta = native_meta.as_ref().unwrap_or(meta);
+            let frame_ref = res.frame(m.frame)?;
+            let eff_meta = effective_trigger_meta(core, catalog, &res.stack, frame_ref, owner, def);
+            let meta = eff_meta.as_ref().unwrap_or(base_meta);
             let seat = m.owners.iter().position(|p| *p == owner)? as u8;
             if meta.timing == Timing::Normal && usize::from(seat) >= m.normal_owners as usize {
                 return None;
@@ -452,10 +481,10 @@ pub fn refresh_order_choice(core: &GameStateCore, res: &mut Resolution, catalog:
         .eq(machine.candidates.iter().copied())
         && current.iter().all(|q| {
             q.owner == machine.owner
-                && catalog.skills[q.def as usize]
-                    .trigger
-                    .as_ref()
-                    .is_some_and(|m| m.order_selectable)
+                && res.frame(machine.frame).is_some_and(|f| {
+                    effective_trigger_meta(core, catalog, &res.stack, f, q.owner, q.def)
+                        .is_some_and(|m| m.order_selectable)
+                })
         })
     {
         return;
@@ -501,15 +530,12 @@ pub fn validate_trigger_bindings(
         }
         let mut seen = std::collections::BTreeSet::new();
         for q in &frame.queue {
-            let skill = catalog.skills.get(q.def as usize).ok_or_else(bad)?;
-            let native_meta = skill
-                .behavior
-                .native_damage_effect(event_kind(frame))
-                .map(|e| e.meta());
-            let meta = native_meta
-                .as_ref()
-                .or(skill.trigger.as_ref())
+            let meta = effective_trigger_meta(core, catalog, &res.stack, frame, q.owner, q.def)
                 .ok_or_else(bad)?;
+            let seat = windows
+                .first()
+                .and_then(|(_, owners)| owners.iter().position(|p| *p == q.owner))
+                .ok_or_else(bad)? as u8;
             let expected = (
                 match meta.timing {
                     Timing::First => 0,
@@ -518,10 +544,7 @@ pub fn validate_trigger_bindings(
                 },
                 meta.priority,
                 0,
-                windows
-                    .first()
-                    .and_then(|(_, owners)| owners.iter().position(|p| *p == q.owner))
-                    .ok_or_else(bad)? as u8,
+                seat,
                 q.def,
             );
             if windows.first().is_some_and(|(park, _)| matches!(&park.machine, MachineSnapshot::TriggerOrder { normal_owners, .. } if q.order.0 == 1 && u16::from(q.order.3) >= *normal_owners))
@@ -699,11 +722,16 @@ pub fn validate_trigger_bindings(
                     || qs.iter().any(|q| {
                         q.owner != *owner
                             || q.order.0 != 1
-                            || !catalog.skills[q.def as usize]
-                                .trigger
-                                .as_ref()
-                                .expect("meta")
-                                .order_selectable
+                            || !effective_trigger_meta(
+                                core,
+                                catalog,
+                                &res.stack,
+                                f,
+                                q.owner,
+                                q.def,
+                            )
+                            .expect("meta")
+                            .order_selectable
                     })
                     || *candidates != qs.iter().map(|q| q.def).collect::<Vec<_>>()
                     || open.observer != *owner

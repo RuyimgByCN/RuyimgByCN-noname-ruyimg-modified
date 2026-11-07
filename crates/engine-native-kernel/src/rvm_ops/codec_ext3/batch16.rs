@@ -514,7 +514,7 @@ pub(super) fn enc_batch16_effect(w: &mut Vec<u8>, e: &EffectRequest) {
             push_player_vec(w, targets);
             push_u32(w, skill.raw());
         }
-        _ => unreachable!("accept_effect 已拒绝未编码变体"),
+        other => super::batch17::enc_batch17_effect(w, other),
     }
 }
 

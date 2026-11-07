@@ -459,10 +459,25 @@ fn plan_triggers(
     }
     providers.sort_unstable();
     providers.dedup();
+    let actual_event =
+        crate::event::damage_event(&res.stack, res.frame(frame_id).expect("frame")).clone();
     for (owner, def_id) in &providers {
         let def = &catalog.skills[*def_id as usize];
         let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
-        let Some(meta) = native_meta.as_ref().or(def.trigger.as_ref()) else {
+        let vm_meta = def.behavior.window_trigger_meta(
+            &QueryCtx {
+                state: core,
+                catalog,
+            },
+            *owner,
+            &actual_event,
+            kind,
+        );
+        let Some(meta) = native_meta
+            .as_ref()
+            .or(vm_meta.as_ref())
+            .or(def.trigger.as_ref())
+        else {
             continue;
         };
         if meta.event != kind && !meta.extra_events.contains(&kind) {
@@ -774,8 +789,18 @@ fn start_queued_trigger(
     let def = &catalog.skills[qt.def as usize];
     let kind = trigger_order::event_kind(res.frame(frame_id).expect("frame"));
     let native_meta = def.behavior.native_damage_effect(kind).map(|e| e.meta());
+    let vm_meta = def.behavior.window_trigger_meta(
+        &QueryCtx {
+            state: core,
+            catalog,
+        },
+        qt.owner,
+        &actual_event,
+        kind,
+    );
     let meta = native_meta
         .as_ref()
+        .or(vm_meta.as_ref())
         .or(def.trigger.as_ref())
         .expect("eligible meta");
     let machine: Box<dyn SkillMachine> = if meta.optional {

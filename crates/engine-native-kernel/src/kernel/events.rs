@@ -50,7 +50,7 @@ pub(super) fn commit_linked(ctx: &mut Ctx<'_>, frame_id: EventId, player: Player
 
 /// 出牌提交：牌离开手牌区。杀置桌面等待结算；桃立即回复。
 /// 猴子偷桃（E03）取消的使用的牌已在确认机器中移走，跳过结算。
-pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) {
+pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, mut u: crate::event::CardUseData) {
     // 奇佐副本载体槽（Boss 郭嘉，规则 v259）：任一非载体卡牌提交即清
     //（副本用牌自身的提交保留槽位，供其 AfterTriggers 过滤拒递归）
     if ctx.core.turn.qizuo_copy != u.card {
@@ -62,17 +62,25 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     }
     if let Some(card) = u.card {
         let effective_kind = u.use_as.unwrap_or_else(|| u.effective_kind(ctx.catalog));
-        if u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card))
-            || ctx.core.player(u.player).equips.contains(&card)
-        {
+        let in_hand = ctx.core.player(u.player).hand.contains(&card);
+        if u.use_as.is_some_and(|k| k != ctx.catalog.card_kind(card)) || !in_hand {
             if let Some(spec) = ctx
                 .catalog
                 .find_player_vm_view_as(ctx.core, u.player, card, true, Some(effective_kind))
                 .cloned()
             {
-                spec.record_use(ctx.core, u.player);
+                let extra = spec.consume_and_record(ctx.core, ctx.catalog, u.player, card);
+                for c2 in extra {
+                    ctx.to_discard(Some(c2));
+                }
+                if spec.zone == crate::rvm_bridge::VmViewAsZone::None {
+                    u.card = None;
+                    u.use_as = Some(effective_kind);
+                }
             }
         }
+    }
+    if let Some(card) = u.card {
         if ctx.core.player(u.player).hand.contains(&card) {
             ctx.take_hand_card(u.player, card);
         } else if ctx.core.player(u.player).equips.contains(&card) {
@@ -83,6 +91,23 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
                 player: u.player,
                 cards: vec![card],
                 origins: vec![crate::event::LostOrigin::Equip],
+            });
+        } else if ctx
+            .core
+            .vm_aux
+            .piles
+            .iter_mut()
+            .filter(|((owner, _), _)| *owner == u.player)
+            .any(|(_, pile)| {
+                let len_before = pile.len();
+                pile.retain(|&c| c != card);
+                pile.len() != len_before
+            })
+        {
+            ctx.emit(EventData::CardsLost {
+                player: u.player,
+                cards: vec![card],
+                origins: vec![crate::event::LostOrigin::Hand],
             });
         } else if ctx.core.table.contains(&card) {
             // 神秘果再结算（swd 卡牌面窗口机批）：原体自弃堆直上桌面（处理
@@ -256,7 +281,13 @@ pub(super) fn commit_card_used(ctx: &mut Ctx<'_>, u: crate::event::CardUseData) 
     match effective {
         CardKind::Tao => {
             ctx.to_discard(u.card);
-            ctx.recover(u.player, 1, u.card);
+            let bonus = ctx
+                .core
+                .vm_aux
+                .flags
+                .remove(&(u.player, "vm_va_recover_bonus".to_string()))
+                .unwrap_or(0);
+            ctx.recover(u.player, 1u32.saturating_add(bonus), u.card);
         }
         CardKind::Zhufangshenshi => {
             // 贴房绅视（U05 swd 第十批，规则 v94）：本回合无视距离指定

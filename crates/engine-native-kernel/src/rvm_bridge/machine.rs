@@ -966,6 +966,12 @@ impl VmHost for EngineVmHost<'_> {
             }
             _ => {}
         }
+        crate::rvm_ops::backfill_batch17_skill(
+            &mut req,
+            self.ctx.skill_id,
+            self.ctx.event_source,
+            &self.cards,
+        );
         match &req {
             EffectRequest::ChooseGiveOrRecastOneHand { player, skill, .. }
             | EffectRequest::ResolveOlJieDanshou { player, skill }

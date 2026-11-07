@@ -128,6 +128,38 @@ pub enum VmViewAsZone {
     Hand,
     Equip,
     HandEquip,
+    HandExpansion,
+    HandEquipExpansion,
+    GroupWei,
+    None,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VmViewAsCost {
+    GainMaxHp1,
+    DisableEquipSlot,
+    Guhuo,
+    FaceDownHand,
+    SwapLowerHand,
+    DrawOneOutsideTurnEmptyHand,
+    HandEquipMark,
+    LoseMaxHp1,
+    AllHand,
+    Potdaozhuan,
+    Dczhaowen,
+    Dddshilie,
+    Dddzhijie,
+    Dddfusi,
+    Dddtongyu,
+    TurnOver,
+    Potqingyan,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum VmViewAsMultiCardBonus {
+    Damage1,
+    Recover1,
+    DiscardCurrentHandEquip,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -156,6 +188,8 @@ pub enum VmViewAsFilter {
     Shan,
     Tao,
     Jiu,
+    CardYing,
+    ColorNeShuangxiong,
     Weapon,
     Armor,
     Mount,
@@ -237,6 +271,28 @@ impl VmViewAsFilter {
             Self::Shan => kind == crate::catalog::CardKind::Shan,
             Self::Tao => kind == crate::catalog::CardKind::Tao,
             Self::Jiu => kind == crate::catalog::CardKind::Jiu,
+            Self::CardYing => def.name == "ying",
+            Self::ColorNeShuangxiong => {
+                let recorded = state
+                    .vm_aux
+                    .marks
+                    .get(&(owner, 600_000_511))
+                    .copied()
+                    .or_else(|| {
+                        state
+                            .vm_aux
+                            .flags
+                            .get(&(owner, "shuangxiong_color".to_string()))
+                            .copied()
+                            .map(|v| v as i32)
+                    })
+                    .unwrap_or(0);
+                match recorded {
+                    1 => is_black,
+                    2 => is_red,
+                    _ => false,
+                }
+            }
             Self::Weapon => kind.equip_slot() == Some(EquipSlot::Weapon),
             Self::Armor => kind.equip_slot() == Some(EquipSlot::Armor),
             Self::Mount => matches!(
@@ -269,10 +325,78 @@ pub struct VmViewAsSpec {
     pub no_use_count: bool,
     pub target_lacks_source_suit_unrespondable: bool,
     pub refund_use_count_if_no_damage: bool,
+    pub min_cards: u8,
+    pub max_cards: u8,
+    pub owner_hp_min_one_cards: bool,
+    pub owner_basic_uses_plus_one_cards: bool,
+    pub once_per_turn_per_branch: bool,
+    pub same_suit: bool,
+    pub multi_card_bonus: Option<VmViewAsMultiCardBonus>,
+    pub branch: Option<u8>,
+    pub once_per_round: bool,
+    pub next_branch: Option<u8>,
+    pub cost: Option<VmViewAsCost>,
+    pub mark_cost: Option<u32>,
     pub post_draw: u8,
 }
 
 impl VmViewAsSpec {
+    pub fn required_cards(&self, state: &GameStateCore, owner: PlayerId) -> usize {
+        if self.zone == VmViewAsZone::None {
+            return 0;
+        }
+        if self.owner_hp_min_one_cards {
+            return state.player(owner).hp.max(1) as usize;
+        }
+        if self.owner_basic_uses_plus_one_cards {
+            return state.player(owner).total_used.saturating_add(1) as usize;
+        }
+        (self.min_cards as usize).max(1)
+    }
+
+    pub fn zone_cards(&self, state: &GameStateCore, owner: PlayerId) -> Vec<CardId> {
+        let p = state.player(owner);
+        let expansion = || {
+            state
+                .vm_aux
+                .piles
+                .iter()
+                .filter(|((po, _), _)| *po == owner)
+                .flat_map(|(_, pile)| pile.iter().copied())
+                .collect::<Vec<_>>()
+        };
+        match self.zone {
+            VmViewAsZone::Hand => p.hand.clone(),
+            VmViewAsZone::Equip => p.equips.clone(),
+            VmViewAsZone::HandEquip => {
+                let mut v = p.hand.clone();
+                v.extend(p.equips.iter().copied());
+                v
+            }
+            VmViewAsZone::HandExpansion => {
+                let mut v = p.hand.clone();
+                v.extend(expansion());
+                v
+            }
+            VmViewAsZone::HandEquipExpansion => {
+                let mut v = p.hand.clone();
+                v.extend(p.equips.iter().copied());
+                v.extend(expansion());
+                v
+            }
+            VmViewAsZone::GroupWei => {
+                let mut v = p.hand.clone();
+                for (idx, other) in state.players.iter().enumerate() {
+                    if idx as PlayerId != owner && other.alive {
+                        v.extend(other.hand.iter().copied());
+                    }
+                }
+                v
+            }
+            VmViewAsZone::None => Vec::new(),
+        }
+    }
+
     pub fn matches_card(
         &self,
         state: &GameStateCore,
@@ -333,14 +457,254 @@ impl VmViewAsSpec {
                 return false;
             }
         }
-        let in_hand = p.hand.contains(&card);
-        let in_equip = p.equips.contains(&card);
-        let zone_ok = match self.zone {
-            VmViewAsZone::Hand => in_hand,
-            VmViewAsZone::Equip => in_equip,
-            VmViewAsZone::HandEquip => in_hand || in_equip,
-        };
-        zone_ok && self.filter.matches(state, catalog, owner, card)
+        if self.once_per_round {
+            let key = if let Some(b) = self.branch {
+                format!("view_as_round:{}:{b}", self.skill_name)
+            } else {
+                format!("view_as_round:{}", self.skill_name)
+            };
+            if state.vm_aux.once_count(owner, 2, &key) > 0 {
+                return false;
+            }
+        }
+        if self.once_per_turn_per_branch {
+            let b = self.branch.unwrap_or(self.as_kind as u8);
+            let key = format!("view_as_branch_turn:{}:{b}", self.skill_name);
+            if state.vm_aux.once_count(owner, 1, &key) > 0 {
+                return false;
+            }
+        }
+        if let Some(b) = self.branch {
+            let cur = state
+                .vm_aux
+                .flags
+                .get(&(owner, format!("view_as_branch:{}", self.skill_name)))
+                .copied()
+                .unwrap_or(0) as u8;
+            if cur != b {
+                return false;
+            }
+        }
+        if let Some(mark) = self.mark_cost {
+            if state.vm_aux.marks.get(&(owner, mark)).copied().unwrap_or(0) == 0 {
+                return false;
+            }
+        }
+        if let Some(cost) = self.cost {
+            let cost_ok = match cost {
+                VmViewAsCost::TurnOver => !p.face_down,
+                VmViewAsCost::LoseMaxHp1 => p.max_hp > 1,
+                VmViewAsCost::DisableEquipSlot => {
+                    let mask = state
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "disabled_equip_slots".to_string()))
+                        .copied()
+                        .unwrap_or(0);
+                    (mask & 0b11_1110) != 0b11_1110
+                }
+                VmViewAsCost::AllHand
+                | VmViewAsCost::FaceDownHand
+                | VmViewAsCost::Guhuo
+                | VmViewAsCost::Dczhaowen
+                | VmViewAsCost::SwapLowerHand => !p.hand.is_empty(),
+                VmViewAsCost::HandEquipMark => !p.hand.is_empty() || !p.equips.is_empty(),
+                VmViewAsCost::DrawOneOutsideTurnEmptyHand => {
+                    state.turn.current != owner && p.hand.is_empty()
+                }
+                _ => true,
+            };
+            if !cost_ok {
+                return false;
+            }
+        }
+        if self.zone == VmViewAsZone::None {
+            return !p.hand.contains(&card)
+                && !p.equips.contains(&card)
+                && (card as usize) < catalog.cards.len();
+        }
+        let zcards = self.zone_cards(state, owner);
+        if !zcards.contains(&card) || !self.filter.matches(state, catalog, owner, card) {
+            return false;
+        }
+        let req = self.required_cards(state, owner);
+        if req > 1 {
+            let primary_suit = catalog.cards.get(card as usize).map(|d| d.suit);
+            let companions = zcards
+                .iter()
+                .filter(|&&c2| {
+                    c2 != card
+                        && self.filter.matches(state, catalog, owner, c2)
+                        && (!self.same_suit
+                            || catalog.cards.get(c2 as usize).map(|d| d.suit) == primary_suit)
+                })
+                .count();
+            if companions < req - 1 {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn consume_and_record(
+        &self,
+        core: &mut GameStateCore,
+        catalog: &Catalog,
+        owner: PlayerId,
+        primary_card: CardId,
+    ) -> Vec<CardId> {
+        let mut extra = Vec::new();
+        if self.zone != VmViewAsZone::None {
+            let req = self.required_cards(core, owner);
+            let want = if self.multi_card_bonus.is_some() && self.max_cards >= 2 {
+                req.max(2)
+            } else {
+                req
+            };
+            if want > 1 {
+                let primary_suit = catalog.cards.get(primary_card as usize).map(|d| d.suit);
+                let zcards = self.zone_cards(core, owner);
+                for c2 in zcards {
+                    if extra.len() >= want - 1 {
+                        break;
+                    }
+                    if c2 != primary_card
+                        && !extra.contains(&c2)
+                        && self.filter.matches(core, catalog, owner, c2)
+                        && (!self.same_suit
+                            || catalog.cards.get(c2 as usize).map(|d| d.suit) == primary_suit)
+                    {
+                        extra.push(c2);
+                    }
+                }
+                for &c2 in &extra {
+                    core.player_mut(owner).hand.retain(|&x| x != c2);
+                    if core.player(owner).equips.contains(&c2) {
+                        core.player_mut(owner).equips.retain(|&x| x != c2);
+                        core.declared_slots.remove(&c2);
+                        crate::kernel::revoke_equip_skills(core, catalog, owner, c2);
+                    }
+                    for ((po, _), pile) in core.vm_aux.piles.iter_mut() {
+                        if *po == owner {
+                            pile.retain(|&x| x != c2);
+                        }
+                    }
+                }
+            }
+            if !extra.is_empty() {
+                if let Some(bonus) = self.multi_card_bonus {
+                    match bonus {
+                        VmViewAsMultiCardBonus::Damage1 => {
+                            core.turn.jiu_active = true;
+                        }
+                        VmViewAsMultiCardBonus::Recover1 => {
+                            core.vm_aux
+                                .flags
+                                .insert((owner, "vm_va_recover_bonus".to_string()), 1);
+                        }
+                        VmViewAsMultiCardBonus::DiscardCurrentHandEquip => {
+                            let cur = core.turn.current;
+                            if (cur as usize) < core.players.len() && core.player(cur).alive {
+                                if let Some(c) = core.player_mut(cur).hand.pop() {
+                                    extra.push(c);
+                                } else if let Some(c) = core.player_mut(cur).equips.pop() {
+                                    core.declared_slots.remove(&c);
+                                    crate::kernel::revoke_equip_skills(core, catalog, cur, c);
+                                    extra.push(c);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if let Some(mark) = self.mark_cost {
+            if let Some(v) = core.vm_aux.marks.get_mut(&(owner, mark)) {
+                *v = v.saturating_sub(1);
+            }
+        }
+        if let Some(cost) = self.cost {
+            match cost {
+                VmViewAsCost::TurnOver => {
+                    let fd = core.player(owner).face_down;
+                    core.player_mut(owner).face_down = !fd;
+                }
+                VmViewAsCost::GainMaxHp1 => {
+                    core.player_mut(owner).max_hp = core.player(owner).max_hp.saturating_add(1);
+                }
+                VmViewAsCost::LoseMaxHp1 => {
+                    if core.player(owner).max_hp > 1 {
+                        core.player_mut(owner).max_hp -= 1;
+                        let max_hp = core.player(owner).max_hp as i32;
+                        if core.player(owner).hp > max_hp {
+                            core.player_mut(owner).hp = max_hp;
+                        }
+                    }
+                }
+                VmViewAsCost::DisableEquipSlot => {
+                    let mut mask = core
+                        .vm_aux
+                        .flags
+                        .get(&(owner, "disabled_equip_slots".to_string()))
+                        .copied()
+                        .unwrap_or(0);
+                    for s in 1..=5u32 {
+                        if (mask & (1u32 << s)) == 0 {
+                            mask |= 1u32 << s;
+                            core.vm_aux
+                                .flags
+                                .insert((owner, "disabled_equip_slots".to_string()), mask);
+                            core.vm_aux
+                                .flags
+                                .insert((owner, format!("equip_slot_disabled:{s}")), 1);
+                            break;
+                        }
+                    }
+                }
+                VmViewAsCost::DrawOneOutsideTurnEmptyHand => {
+                    if let Some(c) = core.deck.pop() {
+                        core.player_mut(owner).hand.push(c);
+                    }
+                }
+                VmViewAsCost::AllHand => {
+                    let rest: Vec<CardId> = core.player_mut(owner).hand.drain(..).collect();
+                    extra.extend(rest);
+                }
+                VmViewAsCost::FaceDownHand
+                | VmViewAsCost::Guhuo
+                | VmViewAsCost::Dczhaowen
+                | VmViewAsCost::SwapLowerHand
+                | VmViewAsCost::HandEquipMark => {
+                    if !core.player(owner).hand.is_empty() {
+                        extra.push(core.player_mut(owner).hand.remove(0));
+                    } else if !core.player(owner).equips.is_empty() {
+                        extra.push(core.player_mut(owner).equips.remove(0));
+                    }
+                }
+                _ => {}
+            }
+        }
+        if self.once_per_round {
+            let key = if let Some(b) = self.branch {
+                format!("view_as_round:{}:{b}", self.skill_name)
+            } else {
+                format!("view_as_round:{}", self.skill_name)
+            };
+            core.vm_aux.once.insert((owner, key, 2));
+        }
+        if self.once_per_turn_per_branch {
+            let b = self.branch.unwrap_or(self.as_kind as u8);
+            let key = format!("view_as_branch_turn:{}:{b}", self.skill_name);
+            core.vm_aux.once.insert((owner, key, 1));
+        }
+        if let Some(nb) = self.next_branch {
+            core.vm_aux.flags.insert(
+                (owner, format!("view_as_branch:{}", self.skill_name)),
+                u32::from(nb),
+            );
+        }
+        self.record_use(core, owner);
+        extra
     }
 
     pub fn record_use(&self, core: &mut GameStateCore, owner: PlayerId) {

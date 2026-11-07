@@ -737,14 +737,7 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 }
             }
             if !tieji_blocks && !target_sentinel {
-                for c in ctx
-                    .core
-                    .player(self.target)
-                    .hand
-                    .iter()
-                    .chain(ctx.core.player(self.target).equips.iter())
-                    .copied()
-                {
+                for &c in &ctx.core.player(self.target).hand {
                     if ctx
                         .catalog
                         .find_player_vm_view_as(
@@ -757,6 +750,16 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                         .is_some()
                         && !shans.contains(&ChoiceOption::Card(c))
                     {
+                        shans.push(ChoiceOption::Card(c));
+                    }
+                }
+                for c in ctx.catalog.player_vm_view_as_extra_cards(
+                    ctx.core,
+                    self.target,
+                    false,
+                    Some(CardKind::Shan),
+                ) {
+                    if !shans.contains(&ChoiceOption::Card(c)) {
                         shans.push(ChoiceOption::Card(c));
                     }
                 }

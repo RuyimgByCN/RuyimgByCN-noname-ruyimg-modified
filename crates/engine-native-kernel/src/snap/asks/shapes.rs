@@ -144,12 +144,17 @@ pub(in crate::snap) fn append_vm_shan_options(
     options: &mut Vec<ChoiceOption>,
 ) {
     let p = core.player(target);
-    for &c in p.hand.iter().chain(p.equips.iter()) {
+    for &c in &p.hand {
         if catalog
             .find_player_vm_view_as(core, target, c, false, Some(CardKind::Shan))
             .is_some()
             && !options.contains(&ChoiceOption::Card(c))
         {
+            options.push(ChoiceOption::Card(c));
+        }
+    }
+    for c in catalog.player_vm_view_as_extra_cards(core, target, false, Some(CardKind::Shan)) {
+        if !options.contains(&ChoiceOption::Card(c)) {
             options.push(ChoiceOption::Card(c));
         }
     }
@@ -168,16 +173,8 @@ pub(in crate::snap) fn dying_save_options(
             options.push(ChoiceOption::Card(c));
         }
     }
-    for &c in &p.equips {
-        let vm_ok = catalog
-            .find_player_vm_view_as(core, responder, c, false, Some(CardKind::Tao))
-            .is_some()
-            || (responder == dying
-                && catalog
-                    .find_player_vm_view_as(core, responder, c, false, Some(CardKind::Jiu))
-                    .is_some());
-        if vm_ok
-            && is_tao_like(core, catalog, responder, c, dying)
+    for c in catalog.player_vm_view_as_extra_cards(core, responder, false, None) {
+        if is_tao_like(core, catalog, responder, c, dying)
             && !options.contains(&ChoiceOption::Card(c))
         {
             options.push(ChoiceOption::Card(c));
@@ -203,12 +200,8 @@ pub(in crate::snap) fn response_kind_options(
             options.push(ChoiceOption::Card(c));
         }
     }
-    for &c in &p.equips {
-        if catalog
-            .find_player_vm_view_as(core, responder, c, false, Some(need))
-            .is_some()
-            && !options.contains(&ChoiceOption::Card(c))
-        {
+    for c in catalog.player_vm_view_as_extra_cards(core, responder, false, Some(need)) {
+        if !options.contains(&ChoiceOption::Card(c)) {
             options.push(ChoiceOption::Card(c));
         }
     }

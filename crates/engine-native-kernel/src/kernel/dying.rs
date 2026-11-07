@@ -160,7 +160,13 @@ impl crate::catalog::SkillMachine for DyingSaveMachine {
                                     == Some(crate::catalog::Faction::Wu)
                         })
                         .unwrap_or(false);
-                    let amount = if jiuyuan { 2 } else { 1 };
+                    let amount = if jiuyuan { 2 } else { 1 }
+                        + ctx
+                            .core
+                            .vm_aux
+                            .flags
+                            .remove(&(responder, "vm_va_recover_bonus".to_string()))
+                            .unwrap_or(0);
                     ctx.recover(self.dying, amount, Some(tao));
                     ctx.emit(EventData::CardResponded {
                         card: tao,

@@ -406,11 +406,11 @@ pub(super) fn commit_batch16_effect(
                 _ => {}
             }
         }
-        other => commit_batch16_rest(ctx, seats, other),
+        other => commit_batch16_rest(ctx, executing, seats, other),
     }
 }
 
-fn commit_batch16_rest(ctx: &mut Ctx<'_>, seats: u8, e: EffectRequest) {
+fn commit_batch16_rest(ctx: &mut Ctx<'_>, executing: &str, seats: u8, e: EffectRequest) {
     match e {
         EffectRequest::ResolveTwchenxun {
             player,
@@ -511,7 +511,7 @@ fn commit_batch16_rest(ctx: &mut Ctx<'_>, seats: u8, e: EffectRequest) {
                 _ => {}
             }
         }
-        other => rest::commit_batch16_rest(ctx, seats, other),
+        other => rest::commit_batch16_rest(ctx, executing, seats, other),
     }
 }
 

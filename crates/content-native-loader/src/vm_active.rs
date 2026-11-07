@@ -279,30 +279,6 @@ pub(super) fn bridge_active_entries(
                 .usize_index_of(&remove, &skill.name, &trigger.module)
                 .ok_or_else(|| invalid("trigger_index", "missing bridged handler"))?;
             let decl = &decls[index];
-            if decl.trigger.event == engine_native::event::EventKind::DamageBefore {
-                return Err(invalid(
-                    "trigger_index.event",
-                    "active skill with damage_before handler is unsupported",
-                ));
-            }
-            if triggers.first().is_some_and(|t: &VmTriggerProgram| {
-                (
-                    t.meta.optional,
-                    t.meta.timing,
-                    t.meta.priority,
-                    t.meta.order_selectable,
-                ) != (
-                    decl.trigger.optional,
-                    decl.trigger.timing,
-                    decl.trigger.priority,
-                    decl.trigger.order_selectable,
-                )
-            }) {
-                return Err(invalid(
-                    "trigger_index.optional",
-                    "mixed trigger ordering/confirmation tuples are unsupported",
-                ));
-            }
             triggers.push(VmTriggerProgram {
                 program: Arc::new(
                     VmSkillProgram::new(decl.module.clone(), skill.name.clone())
@@ -318,6 +294,19 @@ pub(super) fn bridge_active_entries(
         for index in remove.into_iter().rev() {
             decls.remove(index);
         }
+        if triggers
+            .iter()
+            .any(|t| t.meta.event == engine_native::event::EventKind::DamageBefore)
+            && triggers
+                .iter()
+                .any(|t| t.meta.event == engine_native::event::EventKind::Damage)
+        {
+            return Err(invalid(
+                "trigger_index.event",
+                format!("damage_before cannot share a handler set with {}", skill.name),
+            ));
+        }
+        validate_same_event_order_tuples(&skill.name, &triggers)?;
         let mut meta = triggers.first().map(|t| t.meta.clone()).unwrap_or(
             engine_native::catalog::TriggerMeta {
                 event: engine_native::event::EventKind::SkillToggled,
@@ -382,6 +371,26 @@ pub(super) fn bridge_active_entries(
     Ok(())
 }
 
+fn validate_same_event_order_tuples(
+    skill_name: &str,
+    triggers: &[VmTriggerProgram],
+) -> Result<(), BridgeError> {
+    for (idx, a) in triggers.iter().enumerate() {
+        for b in &triggers[idx + 1..] {
+            if a.meta.event == b.meta.event
+                && (a.meta.timing, a.meta.priority, a.meta.order_selectable)
+                    != (b.meta.timing, b.meta.priority, b.meta.order_selectable)
+            {
+                return Err(invalid(
+                    "trigger_index",
+                    format!("mixed trigger ordering/confirmation tuples are unsupported for {skill_name}"),
+                ));
+            }
+        }
+    }
+    Ok(())
+}
+
 trait DeclIndexLookup {
     fn usize_index_of(&self, remove: &[usize], skill_name: &str, module_name: &str) -> Option<usize>;
 }
@@ -435,25 +444,6 @@ pub(super) fn join_trigger_only_entries(
         let mut triggers = Vec::new();
         for index in &indices {
             let decl = &decls[*index];
-            if let Some(first) = triggers.first() {
-                let first: &VmTriggerProgram = first;
-                if (
-                    first.meta.timing,
-                    first.meta.priority,
-                    first.meta.order_selectable,
-                    first.meta.optional,
-                ) != (
-                    decl.trigger.timing,
-                    decl.trigger.priority,
-                    decl.trigger.order_selectable,
-                    decl.trigger.optional,
-                ) {
-                    return Err(invalid(
-                        "trigger_index",
-                        "mixed trigger ordering/confirmation tuples are unsupported",
-                    ));
-                }
-            }
             let choice_actor = match &decl.filter {
                 VmFilterPolicy::Declared { choice_actor, .. } => *choice_actor,
                 _ => VmChoiceActor::Owner,
@@ -468,6 +458,7 @@ pub(super) fn join_trigger_only_entries(
                 choice_actor,
             });
         }
+        validate_same_event_order_tuples(&skill.name, &triggers)?;
         let mut decl = decls[indices[0]].clone();
         for t in &triggers {
             if t.meta.event != decl.trigger.event

@@ -21,7 +21,7 @@ pub use rule_vm::BytecodeModule;
 use rule_vm::{Continuation, ExecResult, HostContext, RuleVm, VmHost, DEFAULT_FUEL};
 
 use crate::catalog::QueryCtx;
-use crate::catalog::{SkillBehavior, SkillMachine};
+use crate::catalog::{SkillBehavior, SkillMachine, TriggerMeta};
 use crate::choice::{ChoiceKind, ChoiceOption, ChoiceSpec};
 use crate::event::{EventData, EventKind};
 use crate::ids::{CardId, PlayerId};
@@ -37,7 +37,8 @@ use context::{filter_view, kind_is_ordinary_trick, trigger_ctx_of, VmTriggerCtx}
 pub use handlers::{
     VmActiveLimits, VmActiveSelection, VmActiveTargets, VmChoiceActor, VmHandlerSet,
     VmSelectionCardFilter, VmSelectionZone, VmTargetFilter, VmTriggerProgram, VmTurnUseSource,
-    VmViewAsFilter, VmViewAsSpec, VmViewAsWindow, VmViewAsZone,
+    VmViewAsCost, VmViewAsFilter, VmViewAsMultiCardBonus, VmViewAsSpec, VmViewAsWindow,
+    VmViewAsZone,
 };
 pub use modifiers::{
     VmModifierMode, VmModifierRule, VmModifierSelector, VmModifierTarget, VmModifierValueSource,
@@ -259,6 +260,20 @@ impl VmFilterPolicy {
             | Self::PhaseAnySkipped { inner }
             | Self::GameStarted { inner } => inner.vm_view_as(),
             _ => &[],
+        }
+    }
+
+    pub fn matches_event_phase(&self, event: &EventData) -> bool {
+        match self {
+            Self::AtPhase { phase, inner } => {
+                matches!(event, EventData::Phase { phase: p, .. } if p == phase)
+                    && inner.matches_event_phase(event)
+            }
+            Self::Declared { inner, .. }
+            | Self::DrawPhaseSkipped { inner }
+            | Self::PhaseAnySkipped { inner }
+            | Self::GameStarted { inner } => inner.matches_event_phase(event),
+            _ => true,
         }
     }
 }
@@ -533,10 +548,46 @@ impl SkillBehavior for VmSkillBehavior {
             VmFilterPolicy::Handlers(set) => set
                 .triggers
                 .iter()
-                .find(|entry| entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
+                .find(|entry| {
+                    (entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
+                        && entry.filter.matches_event_phase(event)
+                })
+                .or_else(|| {
+                    set.triggers.iter().find(|entry| {
+                        entry.meta.event == kind || entry.meta.extra_events.contains(&kind)
+                    })
+                })
                 .or_else(|| set.triggers.first())
                 .map_or(owner, |entry| entry.choice_actor.resolve(owner, event)),
             _ => owner,
+        }
+    }
+
+    fn window_trigger_meta(
+        &self,
+        ctx: &QueryCtx<'_>,
+        owner: PlayerId,
+        event: &EventData,
+        kind: EventKind,
+    ) -> Option<TriggerMeta> {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => set
+                .matching(ctx, owner, event, kind)
+                .first()
+                .map(|entry| entry.meta.clone())
+                .or_else(|| self.kind_trigger_meta(kind)),
+            _ => None,
+        }
+    }
+
+    fn kind_trigger_meta(&self, kind: EventKind) -> Option<TriggerMeta> {
+        match &self.filter {
+            VmFilterPolicy::Handlers(set) => set
+                .triggers
+                .iter()
+                .find(|entry| entry.meta.event == kind || entry.meta.extra_events.contains(&kind))
+                .map(|entry| entry.meta.clone()),
+            _ => None,
         }
     }
 

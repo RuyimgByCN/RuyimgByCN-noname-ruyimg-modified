@@ -77,10 +77,9 @@ pub(super) fn common_play_validation(
     let actor_p = core.player(core.turn.current);
     let in_hand = actor_p.hand.contains(&card);
     let in_equip_va = !in_hand
-        && actor_p.equips.contains(&card)
         && catalog
-            .find_player_vm_view_as(core, core.turn.current, card, true, None)
-            .is_some();
+            .player_vm_view_as_extra_cards(core, core.turn.current, true, None)
+            .contains(&card);
     if !in_hand && !in_equip_va {
         return Err(RejectReason::CardNotInHand);
     }
@@ -122,6 +121,7 @@ pub(super) fn play_kind(
     core: &GameStateCore,
     catalog: &SharedCatalog,
     card: CardId,
+    targets: &[PlayerId],
 ) -> (CardKind, bool) {
     let actor = core.turn.current;
     if !core.player(actor).hand.contains(&card) {
@@ -383,6 +383,8 @@ pub(super) fn play_kind(
             if (kind != CardKind::Sha && kind != CardKind::Le)
                 || spec.filter == crate::rvm_bridge::VmViewAsFilter::Sha
                 || spec.as_kind.is_sha_like()
+                || targets.is_empty()
+                || (kind == CardKind::Sha && core.turn.sha_used_play_phase)
             {
                 kind = spec.as_kind;
             }
@@ -508,7 +510,7 @@ pub(super) fn check_play_target_restrictions(
     }
     // PA12 批⑭：通用 VM modifier 卡牌使用禁限与目标免疫校验
     {
-        let (kind, _) = play_kind(core, catalog, card);
+        let (kind, _) = play_kind(core, catalog, card, targets);
         let nature = match kind {
             CardKind::FireSha => crate::event::DamageNature::Fire,
             CardKind::LeiSha => crate::event::DamageNature::Thunder,

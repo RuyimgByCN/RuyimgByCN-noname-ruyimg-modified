@@ -813,6 +813,9 @@ pub(super) fn accept_batch15_effect(
         | EffectRequest::ResolveDddGuanning { .. }
         | EffectRequest::ResolveDddJianshuo { .. }
         | EffectRequest::ResolveShenSimayi { .. } => Some(res),
-        _ => None,
+        _ => batch17::accept_batch17_effect(req, seats),
     }
 }
+
+mod batch17;
+pub(crate) use batch17::backfill_batch17_skill;

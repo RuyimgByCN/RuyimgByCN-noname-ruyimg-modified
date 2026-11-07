@@ -109,11 +109,12 @@ fn shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_n
         .unwrap_err()
         .to_string();
     // A2 D02（R05 `phase_prepare` 真实化）、PA12 批⑬（UP37 R01/R06 `game_started`
-    // 真实化）、PA12 批⑭（`sha_resolved` 等剩余 12 项触发事件名映射）与 PA12 批⑯
-    // （`active_index` 全部选牌/目标/前置条件清零，`shameng` 通过）后，
-    // `shiji` 整包拒装锚推进至 `trigger_index`（`mixed trigger ordering/confirmation tuples`）。
+    // 真实化）、PA12 批⑭（`sha_resolved` 等剩余 12 项触发事件名映射）、PA12 批⑯
+    // （`active_index` 全部选牌/目标/前置条件清零，`shameng` 通过）与 PA12 批⑰
+    // （逐 `VmTriggerProgram` `optional`/`choice_actor` 与 `view_as_index` 清零）后，
+    // `shiji` 整包拒装锚推进至 `modifier_index`（含未移植角色的整包占位 `INTENTIONAL_EMPTY_NOOP` 严格拒装）。
     assert!(
-        error.contains("mixed trigger ordering/confirmation tuples"),
+        error.contains("native VM modifier declarations are unsupported"),
         "the complete package remains explicitly unsupported: {error}"
     );
 }

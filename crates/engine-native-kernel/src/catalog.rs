@@ -822,6 +822,20 @@ pub trait SkillBehavior: Send + Sync {
         owner
     }
 
+    fn window_trigger_meta(
+        &self,
+        _ctx: &QueryCtx<'_>,
+        _owner: crate::ids::PlayerId,
+        _event: &crate::event::EventData,
+        _kind: crate::event::EventKind,
+    ) -> Option<TriggerMeta> {
+        None
+    }
+
+    fn kind_trigger_meta(&self, _kind: crate::event::EventKind) -> Option<TriggerMeta> {
+        None
+    }
+
     fn vm_module_is_authorized(&self, _bytes: &[u8]) -> bool {
         false
     }
@@ -1289,6 +1303,63 @@ impl Catalog {
                     spec.matches_card(core, self, player, card, in_play, target_kind)
                 })
             })
+    }
+
+    /// PA12 批⑰：返回 `player` 转化技在 `from none` 模式下使用的确定性虚拟令牌卡牌 ID（不在手牌与装备区中）。
+    pub fn vm_view_as_none_token(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+    ) -> CardId {
+        let p = core.player(player);
+        (0..self.cards.len() as CardId)
+            .find(|c| !p.hand.contains(c) && !p.equips.contains(c))
+            .unwrap_or(0)
+    }
+
+    /// PA12 批⑰：枚举 `player` 非手牌区（装备区、扩展牌堆及 `from none` 虚拟令牌）可参与 VM 转化技的卡牌 ID。
+    pub fn player_vm_view_as_extra_cards(
+        &self,
+        core: &crate::state::GameStateCore,
+        player: crate::ids::PlayerId,
+        in_play: bool,
+        target_kind: Option<CardKind>,
+    ) -> Vec<CardId> {
+        let mut out = Vec::new();
+        let p = core.player(player);
+        for &eq in &p.equips {
+            if self
+                .find_player_vm_view_as(core, player, eq, in_play, target_kind)
+                .is_some()
+                && !out.contains(&eq)
+            {
+                out.push(eq);
+            }
+        }
+        for ((po, _), pile) in &core.vm_aux.piles {
+            if *po == player {
+                for &c in pile {
+                    if self
+                        .find_player_vm_view_as(core, player, c, in_play, target_kind)
+                        .is_some()
+                        && !p.hand.contains(&c)
+                        && !out.contains(&c)
+                    {
+                        out.push(c);
+                    }
+                }
+            }
+        }
+        let none_tok = self.vm_view_as_none_token(core, player);
+        if self
+            .find_player_vm_view_as(core, player, none_tok, in_play, target_kind)
+            .is_some()
+            && !p.hand.contains(&none_tok)
+            && !out.contains(&none_tok)
+        {
+            out.push(none_tok);
+        }
+        out
     }
 
     /// 按名字查技能定义号（构建内容/测试用；O(1) 查表，首个匹配）。
