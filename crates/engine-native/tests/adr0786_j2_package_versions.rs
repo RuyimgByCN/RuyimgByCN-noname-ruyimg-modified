@@ -109,10 +109,11 @@ fn shiji_old_lock_retains_published_bytes_and_new_full_package_rejects_missing_n
         .unwrap_err()
         .to_string();
     // A2 D02（R05 `phase_prepare` 真实化）、PA12 批⑬（UP37 R01/R06 `game_started`
-    // 真实化）与 PA12 批⑭（`sha_resolved` 等剩余 12 项触发事件名映射）后，
-    // `shiji` 整包 `trigger_index` 全部通过，拒装锚推进至 `active_index.selection`（`shameng`）。
+    // 真实化）、PA12 批⑭（`sha_resolved` 等剩余 12 项触发事件名映射）与 PA12 批⑯
+    // （`active_index` 全部选牌/目标/前置条件清零，`shameng` 通过）后，
+    // `shiji` 整包拒装锚推进至 `trigger_index`（`mixed trigger ordering/confirmation tuples`）。
     assert!(
-        error.contains("shameng"),
+        error.contains("mixed trigger ordering/confirmation tuples"),
         "the complete package remains explicitly unsupported: {error}"
     );
 }

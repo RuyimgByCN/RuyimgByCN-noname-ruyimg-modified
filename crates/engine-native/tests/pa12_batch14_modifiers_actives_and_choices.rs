@@ -1197,10 +1197,6 @@ fn pa12_batch14_ported_skill_bridge_inventory_and_noop_rejection() {
             non_shahai_total += 1;
         }
         let src = std::fs::read_to_string(file).expect("read skill file");
-        let is_pure_noop = (src.contains("INTENTIONAL_EMPTY_NOOP")
-            || src.contains("modifier hand_limit add 0;"))
-            && !src.contains("trigger ")
-            && !src.contains("active ");
         let pkg = match content_compiler::compile_source_named("probe", &src) {
             Ok(p) => p,
             Err(_) => {
@@ -1208,6 +1204,17 @@ fn pa12_batch14_ported_skill_bridge_inventory_and_noop_rejection() {
                 continue;
             }
         };
+        let is_pure_noop = pkg.trigger_index.is_empty()
+            && pkg.active_index.is_empty()
+            && pkg.view_as_index.is_empty()
+            && !pkg.modifier_index.is_empty()
+            && pkg.modifier_index.iter().all(|m| {
+                m.target == "hand_limit"
+                    && m.mode == "add"
+                    && m.value == 0
+                    && m.value_source.is_none()
+                    && m.selector.is_none()
+            });
         match content_native_loader::bridge_vm_skill_decls(&pkg) {
             Ok(_) => {
                 assert!(

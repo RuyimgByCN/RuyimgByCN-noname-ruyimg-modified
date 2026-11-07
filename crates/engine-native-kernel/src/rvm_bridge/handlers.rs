@@ -2,341 +2,44 @@
 use super::modifiers::VmModifierRule;
 use super::*;
 use crate::catalog::{Catalog, EquipSlot, Suit, TriggerMeta};
-use crate::state::{GameMode, GameStateCore, Role};
-use crate::vocabulary::generals::Gender;
+use crate::state::GameStateCore;
 
-/// 主动技每回合可用次数动态来源（对齐 `content-schema::PackageSkillEntry::uses_per_turn_source`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VmTurnUseSource {
-    OwnerHp,
-    OwnerLostHpMinOne,
-    LivingRebelCount,
-}
+mod active_specs;
+pub use active_specs::*;
 
-impl VmTurnUseSource {
-    pub fn evaluate(self, state: &GameStateCore, owner: PlayerId) -> usize {
-        let p = state.player(owner);
-        match self {
-            Self::OwnerHp => p.hp.max(0) as usize,
-            Self::OwnerLostHpMinOne => (p.max_hp as i32 - p.hp).max(1) as usize,
-            Self::LivingRebelCount => match &state.mode {
-                GameMode::Identity { roles } => roles
-                    .iter()
-                    .enumerate()
-                    .filter(|(idx, r)| **r == Role::Rebel && state.player(*idx as u8).alive)
-                    .count(),
-                _ => state.alive_players().filter(|&q| q != owner).count(),
-            },
-        }
+
+fn fnv1a_32_str(s: &str) -> u32 {
+    let mut hash = 0x811c_9dc5u32;
+    for &b in s.as_bytes() {
+        hash ^= u32::from(b);
+        hash = hash.wrapping_mul(0x0100_0193);
     }
+    hash
 }
 
-/// 主动技选牌区域（对齐 `content-schema::PackageSelectionSpec::zone`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VmSelectionZone {
-    Hand,
-    HandEquip,
-}
-
-/// 主动技选牌过滤器（对齐 `content-schema::PackageSelectionSpec::filter`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VmSelectionCardFilter {
-    CardEquip,
-    CardArmor,
-    CardSha,
-    CardBasic,
-    CardNonBasic,
-    CardNonEquip,
-    CardRed,
-    CardBlack,
-    CardSpade,
-    CardHeart,
-    CardClub,
-    CardDiamond,
-}
-
-impl VmSelectionCardFilter {
-    pub fn matches(self, catalog: &Catalog, card: CardId) -> bool {
-        let Some(def) = catalog.cards.get(card as usize) else {
-            return false;
-        };
-        let kind = def.kind;
-        let suit = def.suit;
-        match self {
-            Self::CardEquip => kind.is_equip(),
-            Self::CardArmor => kind.equip_slot() == Some(EquipSlot::Armor),
-            Self::CardSha => kind.is_sha_like(),
-            Self::CardBasic => kind.is_basic_kind(),
-            Self::CardNonBasic => !kind.is_basic_kind(),
-            Self::CardNonEquip => !kind.is_equip(),
-            Self::CardRed => matches!(suit, Suit::Heart | Suit::Diamond),
-            Self::CardBlack => matches!(suit, Suit::Spade | Suit::Club),
-            Self::CardSpade => suit == Suit::Spade,
-            Self::CardHeart => suit == Suit::Heart,
-            Self::CardClub => suit == Suit::Club,
-            Self::CardDiamond => suit == Suit::Diamond,
-        }
+fn owner_has_skill_hash(state: &GameStateCore, catalog: &Catalog, owner: PlayerId, target_hash: u32) -> bool {
+    if state
+        .vm_aux
+        .flags
+        .get(&(owner, format!("skill:{target_hash}")))
+        .copied()
+        .unwrap_or(0)
+        != 0
+    {
+        return true;
     }
-}
-
-/// 主动技选牌规格（对齐 `content-schema::PackageSelectionSpec`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct VmActiveSelection {
-    pub min_cards: u8,
-    pub max_cards: u8,
-    pub zone: VmSelectionZone,
-    pub filter: Option<VmSelectionCardFilter>,
-    pub unique_category_in_turn: bool,
-}
-
-impl VmActiveSelection {
-    pub fn card_category_bit(catalog: &Catalog, card: CardId) -> u32 {
-        let Some(def) = catalog.cards.get(card as usize) else {
-            return 0;
-        };
-        let k = def.kind;
-        if k.is_equip() {
-            4
-        } else if k.is_basic_kind() {
-            1
-        } else {
-            2
-        }
-    }
-
-    pub fn candidate_cards(
-        &self,
-        state: &GameStateCore,
-        catalog: &Catalog,
-        owner: PlayerId,
-        skill_name: &str,
-    ) -> Vec<CardId> {
-        let p = state.player(owner);
-        let used_mask = if self.unique_category_in_turn {
-            state
-                .vm_aux
-                .flags
-                .get(&(owner, format!("unique_cat_mask:{skill_name}")))
-                .or_else(|| state.vm_aux.flags.get(&(owner, "unique_cat_mask".to_string())))
-                .copied()
-                .unwrap_or(0)
-        } else {
-            0
-        };
-        let mut out = Vec::new();
-        let iter_equips = matches!(self.zone, VmSelectionZone::HandEquip);
-        for &c in p
-            .hand
-            .iter()
-            .chain(if iter_equips { p.equips.as_slice() } else { &[] })
-        {
-            if !self.filter.map_or(true, |f| f.matches(catalog, c)) {
-                continue;
-            }
-            if self.unique_category_in_turn && (Self::card_category_bit(catalog, c) & used_mask) != 0
-            {
-                continue;
-            }
-            out.push(c);
-        }
-        out
-    }
-}
-
-/// 主动技选目标过滤器（对齐 `content-schema::PackageTargetSpec::filter`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub struct VmTargetFilter {
-    pub other_only: bool,
-    pub wounded_only: bool,
-    pub hand_nonempty: bool,
-    pub equip_nonempty: bool,
-    pub hand_equip_nonempty: bool,
-    pub hand_equip_judge_nonempty: bool,
-    pub within_attack_range: bool,
-    pub hand_gt_owner: bool,
-    pub hand_ge_owner: bool,
-    pub hand_le_owner: bool,
-    pub hp_ge_owner: bool,
-    pub hp_gt_zero: bool,
-    pub max_hp_gt: Option<u8>,
-    pub same_group_with_owner: bool,
-    pub different_group_from_owner: bool,
-    pub male_only: bool,
-    pub female_only: bool,
-    pub linked_only: bool,
-    pub unlinked_only: bool,
-    pub unique_in_turn: bool,
-    pub unique_in_play_phase: bool,
-}
-
-impl VmTargetFilter {
-    pub fn matches(
-        &self,
-        state: &GameStateCore,
-        catalog: &Catalog,
-        owner: PlayerId,
-        target: PlayerId,
-        skill_name: &str,
-    ) -> bool {
-        let tp = state.player(target);
-        if !tp.alive {
-            return false;
-        }
-        if self.other_only && target == owner {
-            return false;
-        }
-        let op = state.player(owner);
-        if self.wounded_only && tp.hp >= tp.max_hp as i32 {
-            return false;
-        }
-        if self.hand_nonempty && tp.hand.is_empty() {
-            return false;
-        }
-        if self.equip_nonempty && tp.equips.is_empty() {
-            return false;
-        }
-        if self.hand_equip_nonempty && tp.hand.is_empty() && tp.equips.is_empty() {
-            return false;
-        }
-        if self.hand_equip_judge_nonempty
-            && tp.hand.is_empty()
-            && tp.equips.is_empty()
-            && tp.judge.is_empty()
-        {
-            return false;
-        }
-        if self.within_attack_range
-            && (target == owner
-                || state.computed_distance(catalog, owner, target) > state.attack_range(catalog, owner))
-        {
-            return false;
-        }
-        if self.hand_gt_owner && tp.hand.len() <= op.hand.len() {
-            return false;
-        }
-        if self.hand_ge_owner && tp.hand.len() < op.hand.len() {
-            return false;
-        }
-        if self.hand_le_owner && tp.hand.len() > op.hand.len() {
-            return false;
-        }
-        if self.hp_ge_owner && tp.hp < op.hp {
-            return false;
-        }
-        if self.hp_gt_zero && tp.hp <= 0 {
-            return false;
-        }
-        if let Some(min_ex) = self.max_hp_gt {
-            if tp.max_hp <= u32::from(min_ex) {
-                return false;
-            }
-        }
-        if self.same_group_with_owner
-            && state.effective_faction(catalog, owner) != state.effective_faction(catalog, target)
-        {
-            return false;
-        }
-        if self.different_group_from_owner
-            && state.effective_faction(catalog, owner) == state.effective_faction(catalog, target)
-        {
-            return false;
-        }
-        if self.male_only && state.effective_gender(target) != Gender::Male {
-            return false;
-        }
-        if self.female_only && state.effective_gender(target) != Gender::Female {
-            return false;
-        }
-        if self.linked_only && !tp.linked {
-            return false;
-        }
-        if self.unlinked_only && tp.linked {
-            return false;
-        }
-        let target_raw = u32::from(target) + 1;
-        if self.unique_in_turn {
-            let rec = state
-                .vm_aux
-                .flags
-                .get(&(owner, format!("unique_cat_target:{skill_name}")))
-                .or_else(|| state.vm_aux.flags.get(&(owner, "unique_cat_target".to_string())))
-                .copied()
-                .unwrap_or(0);
-            if rec == target_raw
-                || state
-                    .vm_aux
-                    .once
-                    .contains(&(owner, format!("active_target:{skill_name}:{target}"), 1))
-            {
-                return false;
-            }
-        }
-        if self.unique_in_play_phase {
-            let rec = state
-                .vm_aux
-                .flags
-                .get(&(owner, format!("active_target:{skill_name}")))
-                .or_else(|| state.vm_aux.flags.get(&(owner, "active_target".to_string())))
-                .copied()
-                .unwrap_or(0);
-            if rec == target_raw
-                || state
-                    .vm_aux
-                    .once
-                    .contains(&(owner, format!("active_target:{skill_name}:{target}"), 4))
-            {
-                return false;
-            }
-        }
-        true
-    }
-}
-
-/// 主动技选目标规格（对齐 `content-schema::PackageTargetSpec`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct VmActiveTargets {
-    pub min_targets: u8,
-    pub max_targets: u8,
-    pub filter: VmTargetFilter,
-}
-
-impl VmActiveTargets {
-    pub fn candidate_targets(
-        &self,
-        state: &GameStateCore,
-        catalog: &Catalog,
-        owner: PlayerId,
-        skill_name: &str,
-    ) -> Vec<PlayerId> {
-        let n = state.players.len();
-        let mut out = Vec::new();
-        for step in 0..n {
-            let q = ((owner as usize + step) % n) as PlayerId;
-            if self.filter.matches(state, catalog, owner, q, skill_name) {
-                out.push(q);
-            }
-        }
-        out
-    }
-}
-
-/// 可选触发的确认决策角色（对齐 `content-schema::PackageTriggerEntry::choice_actor`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
-pub enum VmChoiceActor {
-    #[default]
-    Owner,
-    EventPlayer,
-    EventSource,
-}
-
-impl VmChoiceActor {
-    pub fn resolve(self, owner: PlayerId, event: &EventData) -> PlayerId {
-        match self {
-            Self::Owner => owner,
-            Self::EventPlayer => trigger_ctx_of(event).event_player.unwrap_or(owner),
-            Self::EventSource => trigger_ctx_of(event).event_source.unwrap_or(owner),
-        }
-    }
+    state.skills.iter().any(|((p, def), inst)| {
+        *p == owner
+            && inst.enabled
+            && (*def as u32 == target_hash
+                || catalog
+                    .skills
+                    .get(*def as usize)
+                    .is_some_and(|d| {
+                        d.behavior.package_skill_id() == Some(target_hash)
+                            || fnv1a_32_str(d.name) == target_hash
+                    }))
+    })
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -354,6 +57,9 @@ pub struct VmActiveLimits {
     pub face_up: bool,
     pub owner_unlinked: bool,
     pub mark_at_least: Option<(u32, u32)>,
+    pub require_missing_skill: u32,
+    pub require_hand_limit_positive: bool,
+    pub require_hand_missing_gaintag: u32,
     pub target_other: bool,
     pub target_max_hp_gt: Option<u8>,
     pub selection: Option<VmActiveSelection>,
@@ -379,6 +85,16 @@ impl VmActiveLimits {
                     mask |= VmActiveSelection::card_category_bit(catalog, cid);
                 }
                 core.vm_aux.flags.insert(key, mask);
+            }
+            if sel.unused_category_by_skill_this_play_phase {
+                for &cid in selected_cards {
+                    let bit = VmActiveSelection::card_category_bit(catalog, cid);
+                    if bit != 0 {
+                        core.vm_aux
+                            .once
+                            .insert((owner, format!("unique_cat_play:{skill_name}:{bit}"), 4));
+                    }
+                }
             }
         }
         if let Some(tgts) = self.targets {
@@ -671,7 +387,7 @@ impl VmHandlerSet {
             return false;
         };
         let name = &active.skill_name;
-        p.alive
+        let base_ok = p.alive
             && ctx.state.turn.current == owner
             && ctx.state.turn.phase == crate::event::Phase::Play
             && ctx
@@ -704,6 +420,35 @@ impl VmHandlerSet {
             && (!self.limits.hand_gt_max_hp || p.hand.len() > p.max_hp as usize)
             && (!self.limits.face_up || !p.face_down)
             && (!self.limits.owner_unlinked || !p.linked)
+            && (self.limits.require_missing_skill == 0
+                || !owner_has_skill_hash(
+                    ctx.state,
+                    ctx.catalog,
+                    owner,
+                    self.limits.require_missing_skill,
+                ))
+            && (!self.limits.require_hand_limit_positive
+                || ctx.state.hand_limit(ctx.catalog, owner) > 0)
+            && (self.limits.require_hand_missing_gaintag == 0
+                || (ctx
+                    .state
+                    .vm_aux
+                    .flags
+                    .get(&(
+                        owner,
+                        format!("gaintag:{}", self.limits.require_hand_missing_gaintag),
+                    ))
+                    .copied()
+                    .unwrap_or(0)
+                    == 0
+                    && ctx
+                        .state
+                        .vm_aux
+                        .marks
+                        .get(&(owner, self.limits.require_hand_missing_gaintag))
+                        .copied()
+                        .unwrap_or(0)
+                        <= 0))
             && (!self.limits.target_other
                 || ctx.state.players.iter().enumerate().any(|(idx, q)| {
                     idx as u8 != owner
@@ -721,17 +466,46 @@ impl VmHandlerSet {
                     .copied()
                     .unwrap_or(0) as i64
                     >= count as i64
-            })
-            && self.limits.selection.is_none_or(|sel| {
-                sel.candidate_cards(ctx.state, ctx.catalog, owner, name)
-                    .len()
-                    >= sel.min_cards as usize
-            })
-            && self.limits.targets.is_none_or(|tgts| {
-                tgts.candidate_targets(ctx.state, ctx.catalog, owner, name)
-                    .len()
-                    >= tgts.min_targets as usize
-            })
+            });
+        if !base_ok {
+            return false;
+        }
+        let cand_cards = self
+            .limits
+            .selection
+            .map(|sel| sel.candidate_cards(ctx.state, ctx.catalog, owner, name));
+        if let (Some(sel), Some(cards)) = (self.limits.selection, &cand_cards) {
+            if cards.len() < sel.min_cards as usize {
+                return false;
+            }
+        }
+        if let Some(tgts) = self.limits.targets {
+            let cand_targets = tgts.candidate_targets(ctx.state, ctx.catalog, owner, name);
+            if cand_targets.len() < tgts.min_targets as usize {
+                return false;
+            }
+            if let (Some(sel), Some(cards)) = (self.limits.selection, &cand_cards) {
+                let max_cards_avail = cards.len().min(sel.max_cards as usize);
+                if tgts.match_selected_card_count {
+                    let min_req = sel.min_cards.max(tgts.min_targets) as usize;
+                    let max_avail = max_cards_avail
+                        .min(cand_targets.len())
+                        .min(tgts.effective_max_targets(ctx.state, owner));
+                    if max_avail < min_req {
+                        return false;
+                    }
+                }
+                if tgts.selected_cards_match_target_equip_count
+                    && !cand_targets.iter().any(|&q| {
+                        let eq_len = ctx.state.player(q).equips.len();
+                        eq_len >= sel.min_cards as usize && eq_len <= max_cards_avail
+                    })
+                {
+                    return false;
+                }
+            }
+        }
+        true
     }
 
     pub(super) fn matching<'a>(

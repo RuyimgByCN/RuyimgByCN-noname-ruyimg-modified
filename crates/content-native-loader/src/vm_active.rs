@@ -14,16 +14,7 @@ fn map_selection_spec(
     let Some(sel) = &active.selection else {
         return Ok(None);
     };
-    if sel.min == 0
-        || sel.max < sel.min
-        || sel.same_suit
-        || sel.same_color
-        || sel.distinct_suits
-        || sel.distinct_categories
-        || sel.unused_category_by_skill_this_play_phase
-        || sel.unused_category_by_owner_history_this_turn
-        || sel.sum_effective_number_exact.is_some()
-    {
+    if sel.min == 0 || sel.max < sel.min {
         return Err(invalid(
             "active_index.selection",
             format!("unsupported active selection for {skill_name}: {active:?}"),
@@ -68,6 +59,15 @@ fn map_selection_spec(
         zone,
         filter,
         unique_category_in_turn: sel.unused_category_by_skill_this_turn,
+        unused_category_by_skill_this_play_phase: sel.unused_category_by_skill_this_play_phase,
+        unused_category_by_owner_history_this_turn: sel.unused_category_by_owner_history_this_turn,
+        same_suit: sel.same_suit,
+        same_color: sel.same_color,
+        distinct_suits: sel.distinct_suits,
+        distinct_categories: sel.distinct_categories,
+        sum_effective_number_exact: sel
+            .sum_effective_number_exact
+            .map(|n| u8::try_from(n).unwrap_or(u8::MAX)),
     }))
 }
 
@@ -101,30 +101,17 @@ fn map_target_spec(
         }
         return Ok((false, None, None));
     }
-    if targets.max == 0
-        || targets.max < targets.min
-        || targets.lowest_hp
-        || targets.highest_hp
-        || targets.max_by_owner_mark.is_some()
-        || targets.max_by_owner_lost_hp
-        || targets.max_by_owner_hp
-        || targets.hp_gt_owner
-        || targets.hp_lte_owner
-        || targets.pair_hand_difference_lte_three
-        || targets.hand_lt.is_some()
-        || targets.can_use_on_owner.is_some()
-        || targets.second_can_use_juedou_on_first
-        || targets.equipment_pair_with_armor
-        || targets.has_discardable_equip
-        || targets.has_gainable_equip
-        || targets.has_gainable_hand_equip
-        || targets.owner_in_target_attack_range
-        || targets.has_discardable_hand_equip
-        || targets.match_selected_card_count
-        || targets.selected_cards_match_target_equip_count
-        || (targets.linked && targets.unlinked)
-        || targets.hp_gt.is_some_and(|n| n != 0)
-    {
+    let can_use_sha_on_owner = match targets.can_use_on_owner.as_deref() {
+        None => false,
+        Some("sha" | "juedou") => true,
+        Some(_) => {
+            return Err(invalid(
+                "active_index.targets",
+                format!("unsupported target predicates for {skill_name}: {targets:?}"),
+            ));
+        }
+    };
+    if targets.max == 0 || targets.max < targets.min || (targets.linked && targets.unlinked) {
         return Err(invalid(
             "active_index.targets",
             format!("unsupported target predicates for {skill_name}: {targets:?}"),
@@ -142,8 +129,12 @@ fn map_target_spec(
         hand_ge_owner: false,
         hand_le_owner: targets.hand_lte_owner,
         hp_ge_owner: targets.hp_at_least_owner,
+        hp_gt_owner: targets.hp_gt_owner,
+        hp_lte_owner: targets.hp_lte_owner,
         hp_gt_zero: targets.hp_gt == Some(0),
+        hp_gt: targets.hp_gt.filter(|&n| n > 0),
         max_hp_gt: targets.max_hp_gt,
+        hand_lt: targets.hand_lt,
         same_group_with_owner: false,
         different_group_from_owner: false,
         male_only: targets.male,
@@ -152,12 +143,30 @@ fn map_target_spec(
         unlinked_only: targets.unlinked,
         unique_in_turn: targets.unused_by_skill_this_turn,
         unique_in_play_phase: targets.unused_by_skill_this_play_phase,
+        lowest_hp: targets.lowest_hp,
+        highest_hp: targets.highest_hp,
+        owner_in_target_attack_range: targets.owner_in_target_attack_range,
+        can_use_on_owner: can_use_sha_on_owner,
+        can_use_sha_on_owner,
+        selected_cards_match_target_equip_count: targets.selected_cards_match_target_equip_count,
+        has_discardable_equip: targets.has_discardable_equip,
+        has_gainable_equip: targets.has_gainable_equip,
+        has_gainable_hand_equip: targets.has_gainable_hand_equip,
+        has_discardable_hand_equip: targets.has_discardable_hand_equip,
     };
     let is_legacy_single_other = targets.min == 1
         && targets.max == 1
         && !targets.allow_self
         && !targets.unused_by_skill_this_turn
         && !targets.unused_by_skill_this_play_phase
+        && targets.max_by_owner_mark.is_none()
+        && !targets.max_by_owner_lost_hp
+        && !targets.max_by_owner_hp
+        && !targets.match_selected_card_count
+        && !targets.selected_cards_match_target_equip_count
+        && !targets.pair_hand_difference_lte_three
+        && !targets.second_can_use_juedou_on_first
+        && !targets.equipment_pair_with_armor
         && filter
             == VmTargetFilter {
                 other_only: true,
@@ -173,6 +182,14 @@ fn map_target_spec(
         min_targets: targets.min,
         max_targets: targets.max,
         filter,
+        max_by_owner_mark: targets.max_by_owner_mark,
+        max_by_owner_lost_hp: targets.max_by_owner_lost_hp,
+        max_by_owner_hp: targets.max_by_owner_hp,
+        match_selected_card_count: targets.match_selected_card_count,
+        selected_cards_match_target_equip_count: targets.selected_cards_match_target_equip_count,
+        pair_hand_difference_lte_three: targets.pair_hand_difference_lte_three,
+        second_can_use_juedou_on_first: targets.second_can_use_juedou_on_first,
+        equipment_pair_with_armor: targets.equipment_pair_with_armor,
     });
     Ok((is_legacy_single_other, target_max_hp_gt, vm_targets))
 }
@@ -202,23 +219,23 @@ pub(super) fn bridge_active_entries(
             .iter()
             .find(|s| s.skill_def_id == active.skill_def_id)
             .ok_or_else(|| invalid("active_index.skill_def_id", "missing logical skill"))?;
-        if skill.lord_only || skill.conversion || skill.non_gainable {
-            return Err(invalid(
-                "skill_index",
-                "active skill metadata is unsupported",
-            ));
-        }
         if active.window != "play_phase"
             || active.uses_per_turn == Some(0)
             || active.uses_per_play_phase == Some(0)
-            || active.owner_missing_skill.is_some()
-            || active.hand_limit_positive
-            || active.hand_missing_gaintag.is_some()
         {
             return Err(invalid(
                 "active_index",
                 format!(
                     "unsupported active declaration for {}: {active:?}",
+                    skill.name
+                ),
+            ));
+        }
+        if active.owner_missing_skill == Some(active.skill_def_id) {
+            return Err(invalid(
+                "active_index",
+                format!(
+                    "self-referential owner_missing_skill for {}: {active:?}",
                     skill.name
                 ),
             ));
@@ -337,6 +354,9 @@ pub(super) fn bridge_active_entries(
             face_up: active.face_up,
             owner_unlinked: active.owner_unlinked,
             mark_at_least: active.mark_at_least,
+            require_missing_skill: active.owner_missing_skill.unwrap_or(0),
+            require_hand_limit_positive: active.hand_limit_positive,
+            require_hand_missing_gaintag: active.hand_missing_gaintag.unwrap_or(0),
             target_other,
             target_max_hp_gt,
             selection,

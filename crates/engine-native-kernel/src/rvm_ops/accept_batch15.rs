@@ -369,6 +369,390 @@ pub(super) fn accept_batch15_effect(
                     return Err(reject("ResolveDddCaoshuang.action"));
                 }
             }
+            EffectRequest::ResolveStddechong {
+                player,
+                target,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveStddechong.player")?;
+                opt_player(*target, "ResolveStddechong.target")?;
+                ok_cards(cards, "ResolveStddechong.cards")?;
+            }
+            EffectRequest::ResolveDddYujin {
+                player,
+                actor,
+                target,
+                action,
+                candidates,
+                ..
+            } => {
+                ok_player(*player, "ResolveDddYujin.player")?;
+                opt_player(*actor, "ResolveDddYujin.actor")?;
+                opt_player(*target, "ResolveDddYujin.target")?;
+                ok_players(candidates, "ResolveDddYujin.candidates")?;
+                if *action > 10 {
+                    return Err(reject("ResolveDddYujin.action"));
+                }
+            }
+            EffectRequest::ResolveDddZhenji {
+                player,
+                target,
+                action,
+                stage,
+                piles,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveDddZhenji.player")?;
+                opt_player(*target, "ResolveDddZhenji.target")?;
+                ok_cards(cards, "ResolveDddZhenji.cards")?;
+                if *action > 10 || *stage > 10 || piles.len() > u8::MAX as usize {
+                    return Err(reject("ResolveDddZhenji.args"));
+                }
+            }
+            EffectRequest::ResolveZhengjian {
+                player,
+                stage,
+                event_player,
+                ..
+            } => {
+                ok_player(*player, "ResolveZhengjian.player")?;
+                opt_player(*event_player, "ResolveZhengjian.event_player")?;
+                if *stage > 3 {
+                    return Err(reject("ResolveZhengjian.stage"));
+                }
+            }
+            EffectRequest::ResolveQiaobian {
+                player,
+                phase,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveQiaobian.player")?;
+                if *phase > 3 || *stage > 5 {
+                    return Err(reject("ResolveQiaobian.args"));
+                }
+            }
+            EffectRequest::ResolveTwfeiyi {
+                player,
+                action,
+                stage,
+                event_cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwfeiyi.player")?;
+                ok_cards(event_cards, "ResolveTwfeiyi.event_cards")?;
+                if *action > 2 || *stage > 3 {
+                    return Err(reject("ResolveTwfeiyi.args"));
+                }
+            }
+            EffectRequest::ResolveZhengsu {
+                player,
+                mode,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveZhengsu.player")?;
+                if *mode > 2 || *stage > 2 {
+                    return Err(reject("ResolveZhengsu.args"));
+                }
+            }
+            EffectRequest::ResolveTwcaoang {
+                player,
+                target,
+                source,
+                action,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwcaoang.player")?;
+                opt_player(*target, "ResolveTwcaoang.target")?;
+                opt_player(*source, "ResolveTwcaoang.source")?;
+                if *action > 2 || *stage > 3 {
+                    return Err(reject("ResolveTwcaoang.args"));
+                }
+            }
+            EffectRequest::ResolveTwcaozhao {
+                player,
+                target,
+                source,
+                action,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwcaozhao.player")?;
+                opt_player(*target, "ResolveTwcaozhao.target")?;
+                opt_player(*source, "ResolveTwcaozhao.source")?;
+                if *action > 2 || *stage > 3 {
+                    return Err(reject("ResolveTwcaozhao.args"));
+                }
+            }
+            EffectRequest::ResolveTwchengpu {
+                player,
+                target,
+                source,
+                action,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwchengpu.player")?;
+                opt_player(*target, "ResolveTwchengpu.target")?;
+                opt_player(*source, "ResolveTwchengpu.source")?;
+                if *action > 3 || *stage > 3 {
+                    return Err(reject("ResolveTwchengpu.args"));
+                }
+            }
+            EffectRequest::ResolveTwchenxun {
+                player,
+                target,
+                action,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwchenxun.player")?;
+                opt_player(*target, "ResolveTwchenxun.target")?;
+                if *action > 3 {
+                    return Err(reject("ResolveTwchenxun.action"));
+                }
+            }
+            EffectRequest::ResolveTwchenzhen {
+                player,
+                target,
+                action,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwchenzhen.player")?;
+                opt_player(*target, "ResolveTwchenzhen.target")?;
+                if *action > 3 || *stage > 3 {
+                    return Err(reject("ResolveTwchenzhen.args"));
+                }
+            }
+            EffectRequest::ResolveTwyizhu {
+                player,
+                source,
+                action,
+                stage,
+                event_cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveTwyizhu.player")?;
+                opt_player(*source, "ResolveTwyizhu.source")?;
+                ok_cards(event_cards, "ResolveTwyizhu.event_cards")?;
+                if *action > 2 || *stage > 3 {
+                    return Err(reject("ResolveTwyizhu.args"));
+                }
+            }
+            EffectRequest::ResolveRuanji {
+                player,
+                source,
+                action,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveRuanji.player")?;
+                opt_player(*source, "ResolveRuanji.source")?;
+                ok_cards(cards, "ResolveRuanji.cards")?;
+                if !matches!(*action, 0..=4 | 10..=15) {
+                    return Err(reject("ResolveRuanji.action"));
+                }
+            }
+            EffectRequest::ResolveQiaojian {
+                player,
+                target,
+                action,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveQiaojian.player")?;
+                opt_player(*target, "ResolveQiaojian.target")?;
+                ok_cards(cards, "ResolveQiaojian.cards")?;
+                if *action > 12 {
+                    return Err(reject("ResolveQiaojian.action"));
+                }
+            }
+            EffectRequest::ResolveZhupeilan {
+                player,
+                target,
+                action,
+                event_cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveZhupeilan.player")?;
+                opt_player(*target, "ResolveZhupeilan.target")?;
+                ok_cards(event_cards, "ResolveZhupeilan.event_cards")?;
+                if !matches!(*action, 0..=3 | 10..=12) {
+                    return Err(reject("ResolveZhupeilan.action"));
+                }
+            }
+            EffectRequest::ResolveMbduanyang {
+                player,
+                target,
+                mode,
+                stage,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveMbduanyang.player")?;
+                opt_player(*target, "ResolveMbduanyang.target")?;
+                ok_cards(cards, "ResolveMbduanyang.cards")?;
+                if *mode > 2 || *stage > 3 {
+                    return Err(reject("ResolveMbduanyang.args"));
+                }
+            }
+            EffectRequest::ResolveMbrunwei {
+                player,
+                target,
+                stage,
+                cards,
+                ..
+            } => {
+                ok_player(*player, "ResolveMbrunwei.player")?;
+                opt_player(*target, "ResolveMbrunwei.target")?;
+                ok_cards(cards, "ResolveMbrunwei.cards")?;
+                if *stage > 5 {
+                    return Err(reject("ResolveMbrunwei.stage"));
+                }
+            }
+            EffectRequest::ResolveMbkuangxiang {
+                player,
+                target,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolveMbkuangxiang.player")?;
+                opt_player(*target, "ResolveMbkuangxiang.target")?;
+                if *stage > 3 {
+                    return Err(reject("ResolveMbkuangxiang.stage"));
+                }
+            }
+            EffectRequest::ResolvePotsifeng {
+                player,
+                target,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolvePotsifeng.player")?;
+                opt_player(*target, "ResolvePotsifeng.target")?;
+                if *stage > 5 {
+                    return Err(reject("ResolvePotsifeng.stage"));
+                }
+            }
+            EffectRequest::ResolvePotwanglie { player, stage, .. } => {
+                ok_player(*player, "ResolvePotwanglie.player")?;
+                if *stage > 3 {
+                    return Err(reject("ResolvePotwanglie.stage"));
+                }
+            }
+            EffectRequest::ResolvePotchengpu {
+                player,
+                target,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolvePotchengpu.player")?;
+                opt_player(*target, "ResolvePotchengpu.target")?;
+                if *stage > 4 {
+                    return Err(reject("ResolvePotchengpu.stage"));
+                }
+            }
+            EffectRequest::ResolvePottuntian {
+                player,
+                action,
+                targets,
+                ..
+            } => {
+                ok_player(*player, "ResolvePottuntian.player")?;
+                ok_players(targets, "ResolvePottuntian.targets")?;
+                if *action > 3 {
+                    return Err(reject("ResolvePottuntian.action"));
+                }
+            }
+            EffectRequest::ResolvePotjixi {
+                player,
+                target,
+                action,
+                targets,
+                ..
+            } => {
+                ok_player(*player, "ResolvePotjixi.player")?;
+                opt_player(*target, "ResolvePotjixi.target")?;
+                ok_players(targets, "ResolvePotjixi.targets")?;
+                if *action > 4 {
+                    return Err(reject("ResolvePotjixi.action"));
+                }
+            }
+            EffectRequest::ResolvePotjiyu { player, stage, .. } => {
+                ok_player(*player, "ResolvePotjiyu.player")?;
+                if *stage > 2 {
+                    return Err(reject("ResolvePotjiyu.stage"));
+                }
+            }
+            EffectRequest::ResolvePotnigu {
+                player,
+                target,
+                targets,
+                stage,
+                ..
+            } => {
+                ok_player(*player, "ResolvePotnigu.player")?;
+                opt_player(*target, "ResolvePotnigu.target")?;
+                ok_players(targets, "ResolvePotnigu.targets")?;
+                if *stage > 4 {
+                    return Err(reject("ResolvePotnigu.stage"));
+                }
+            }
+            EffectRequest::ResolvePotfuan { player, stage, .. } => {
+                ok_player(*player, "ResolvePotfuan.player")?;
+                if *stage > 3 {
+                    return Err(reject("ResolvePotfuan.stage"));
+                }
+            }
+            EffectRequest::ResolveDddGuanning {
+                player,
+                actor,
+                action,
+                ..
+            } => {
+                ok_player(*player, "ResolveDddGuanning.player")?;
+                opt_player(*actor, "ResolveDddGuanning.actor")?;
+                if *action > 3 {
+                    return Err(reject("ResolveDddGuanning.action"));
+                }
+            }
+            EffectRequest::ResolveDddJianshuo {
+                player,
+                target,
+                action,
+                cards,
+                targets,
+                ..
+            } => {
+                ok_player(*player, "ResolveDddJianshuo.player")?;
+                opt_player(*target, "ResolveDddJianshuo.target")?;
+                ok_cards(cards, "ResolveDddJianshuo.cards")?;
+                ok_players(targets, "ResolveDddJianshuo.targets")?;
+                if *action > 4 {
+                    return Err(reject("ResolveDddJianshuo.action"));
+                }
+            }
+            EffectRequest::ResolveShenSimayi {
+                player,
+                event_player,
+                mark,
+                mode,
+                cards,
+                targets,
+                ..
+            } => {
+                ok_player(*player, "ResolveShenSimayi.player")?;
+                opt_player(*event_player, "ResolveShenSimayi.event_player")?;
+                ok_cards(cards, "ResolveShenSimayi.cards")?;
+                ok_players(targets, "ResolveShenSimayi.targets")?;
+                if !mark.is_some() || *mode > 4 {
+                    return Err(reject("ResolveShenSimayi.args"));
+                }
+            }
             _ => return Ok(()),
         }
         Ok(())
@@ -398,7 +782,37 @@ pub(super) fn accept_batch15_effect(
         | EffectRequest::ResolveMbxiongtu { .. }
         | EffectRequest::ResolvePothongyi { .. }
         | EffectRequest::ResolveSpyingjia { .. }
-        | EffectRequest::ResolveDddCaoshuang { .. } => Some(res),
+        | EffectRequest::ResolveDddCaoshuang { .. }
+        | EffectRequest::ResolveStddechong { .. }
+        | EffectRequest::ResolveDddYujin { .. }
+        | EffectRequest::ResolveDddZhenji { .. }
+        | EffectRequest::ResolveZhengjian { .. }
+        | EffectRequest::ResolveQiaobian { .. }
+        | EffectRequest::ResolveTwfeiyi { .. }
+        | EffectRequest::ResolveZhengsu { .. }
+        | EffectRequest::ResolveTwcaoang { .. }
+        | EffectRequest::ResolveTwcaozhao { .. }
+        | EffectRequest::ResolveTwchengpu { .. }
+        | EffectRequest::ResolveTwchenxun { .. }
+        | EffectRequest::ResolveTwchenzhen { .. }
+        | EffectRequest::ResolveTwyizhu { .. }
+        | EffectRequest::ResolveRuanji { .. }
+        | EffectRequest::ResolveQiaojian { .. }
+        | EffectRequest::ResolveZhupeilan { .. }
+        | EffectRequest::ResolveMbduanyang { .. }
+        | EffectRequest::ResolveMbrunwei { .. }
+        | EffectRequest::ResolveMbkuangxiang { .. }
+        | EffectRequest::ResolvePotsifeng { .. }
+        | EffectRequest::ResolvePotwanglie { .. }
+        | EffectRequest::ResolvePotchengpu { .. }
+        | EffectRequest::ResolvePottuntian { .. }
+        | EffectRequest::ResolvePotjixi { .. }
+        | EffectRequest::ResolvePotjiyu { .. }
+        | EffectRequest::ResolvePotnigu { .. }
+        | EffectRequest::ResolvePotfuan { .. }
+        | EffectRequest::ResolveDddGuanning { .. }
+        | EffectRequest::ResolveDddJianshuo { .. }
+        | EffectRequest::ResolveShenSimayi { .. } => Some(res),
         _ => None,
     }
 }

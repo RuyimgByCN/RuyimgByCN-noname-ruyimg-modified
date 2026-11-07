@@ -201,7 +201,15 @@ impl ShaResolveMachine {
                 .vm_aux
                 .flags
                 .remove(&(self.source, format!("sha_unrespondable:{cid}:{next}")))
-                .is_some();
+                .is_some()
+                || ctx.core.is_card_use_unrespondable(
+                    ctx.catalog,
+                    self.source,
+                    next,
+                    cid,
+                    CardKind::Sha,
+                    self.nature,
+                );
             self.asked = false;
             self.armor_judged = false;
             self.dodges_used = 0;

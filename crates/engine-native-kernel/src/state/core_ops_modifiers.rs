@@ -407,4 +407,79 @@ impl GameStateCore {
         }
         crate::rvm_bridge::modifiers::eval_hand_limit(self, catalog, p, limit as i32)
     }
+
+    /// 手牌中因 `card_ignored_hand_limit` / `sha_ignored_hand_limit` 不计入手牌上限的张数。
+    pub fn ignored_hand_card_count(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        p: PlayerId,
+    ) -> usize {
+        crate::rvm_bridge::modifiers::eval_ignored_hand_card_count(self, catalog, p)
+    }
+
+    /// 计入 `card_ignored_hand_limit` / `sha_ignored_hand_limit` 豁免手牌后的有效手牌上限。
+    pub fn effective_hand_limit(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        p: PlayerId,
+    ) -> usize {
+        self.hand_limit(catalog, p) + self.ignored_hand_card_count(catalog, p)
+    }
+
+    /// 评估 `damage_amount` / `damage_taken_amount` / `damage_taken_cancel` 修正后的伤害值。
+    pub fn effective_damage_amount(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        source: Option<PlayerId>,
+        target: PlayerId,
+        card: Option<crate::ids::CardId>,
+        nature: crate::event::DamageNature,
+        base: u32,
+    ) -> u32 {
+        crate::rvm_bridge::modifiers::eval_damage_amount(
+            self, catalog, source, target, card, nature, base,
+        )
+    }
+
+    /// 评估承受伤害是否被 `damage_taken_cancel` 防止。
+    pub fn is_damage_taken_canceled(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        source: Option<PlayerId>,
+        target: PlayerId,
+        card: Option<crate::ids::CardId>,
+        nature: crate::event::DamageNature,
+        amount: u32,
+    ) -> bool {
+        crate::rvm_bridge::modifiers::eval_damage_taken_canceled(
+            self, catalog, source, target, card, nature, amount,
+        )
+    }
+
+    /// 评估是否无视目标防具（`ignore_armor`）。
+    pub fn ignores_target_armor(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        source: PlayerId,
+        target: PlayerId,
+        card: Option<crate::ids::CardId>,
+        nature: crate::event::DamageNature,
+    ) -> bool {
+        crate::rvm_bridge::modifiers::eval_ignore_armor(self, catalog, source, target, card, nature)
+    }
+
+    /// 评估使用卡牌是否不可被响应（`card_use_unrespondable` / `sha_unrespondable` / `card_unrespondable_*`）。
+    pub fn is_card_use_unrespondable(
+        &self,
+        catalog: &crate::catalog::Catalog,
+        source: PlayerId,
+        target: PlayerId,
+        card: crate::ids::CardId,
+        kind: crate::catalog::CardKind,
+        nature: crate::event::DamageNature,
+    ) -> bool {
+        crate::rvm_bridge::modifiers::eval_card_unrespondable(
+            self, catalog, source, target, card, kind, nature,
+        )
+    }
 }

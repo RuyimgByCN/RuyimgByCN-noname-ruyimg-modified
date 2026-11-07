@@ -598,7 +598,11 @@ pub fn intrinsic_machine(
                             })
                             .count()
                     } else {
-                        ctx.core.player(player).hand.len()
+                        ctx.core
+                            .player(player)
+                            .hand
+                            .len()
+                            .saturating_sub(ctx.core.ignored_hand_card_count(ctx.catalog, player))
                     };
                     if hand > limit {
                         Some(Box::new(DiscardToLimitMachine {
@@ -638,7 +642,15 @@ fn sha_intrinsic(
             .vm_aux
             .flags
             .remove(&(u.player, format!("sha_unrespondable:{cid}:{}", u.player)))
-            .is_some();
+            .is_some()
+        || ctx.core.is_card_use_unrespondable(
+            ctx.catalog,
+            u.player,
+            first,
+            cid,
+            crate::catalog::CardKind::Sha,
+            u.nature,
+        );
     Some(Box::new(ShaResolveMachine {
         card: u.card,
         source: u.player,

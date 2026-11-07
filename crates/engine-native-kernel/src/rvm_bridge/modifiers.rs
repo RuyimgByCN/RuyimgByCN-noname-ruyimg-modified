@@ -1,8 +1,11 @@
-//! PA12 Batch 14：Rule-VM 通用静态修饰器（`VmModifierRule`）定义与求值。
+//! PA12 Batch 14 / Batch 16：Rule-VM 通用静态修饰器（`VmModifierRule`）定义与求值。
 //!
 //! 承载 `content-schema::PackageModifierEntry` 编译产出的声明式修饰规则，
 //! 在 `hand_limit`、`attack_range`、`computed_distance`、`DrawPhaseMachine`、
 //! `play_sha`、`play_rules` 与 `play_card` 中按宿主状态统一求值。
+
+mod selector;
+pub use selector::VmModifierSelector;
 
 use crate::catalog::{CardKind, Catalog, EquipSlot, Suit};
 use crate::event::DamageNature;
@@ -28,6 +31,41 @@ pub enum VmModifierTarget {
     CardUseCancel,
     HandCardUseResponseCancel,
     DyingPeachTargetCancel,
+    GlobalHandLimit,
+    GlobalDrawCount,
+    GlobalShaUseLimit,
+    GlobalAttackRange,
+    GlobalDistanceTo,
+    ShaIgnoredHandLimit,
+    CardIgnoredHandLimit,
+    CardTargetLimit,
+    CardUseLimit,
+    AttackRangeAbsent,
+    AttackRangeFixed,
+    DistanceFromIfHpGteTarget,
+    DamageAmount,
+    DamageTakenAmount,
+    DamageTakenCancel,
+    IgnoreArmor,
+    CardUseUnrespondable,
+    ShaUnrespondable,
+    DyingSavePeachUsable,
+    CardUsableOnSelf,
+    CardSuit,
+    CardName,
+    CardNature,
+    CardNumber,
+    CardUsable,
+    CardTargetEnabled,
+    CardSavable,
+    CardRespondable,
+    CardUnrespondable,
+    JudgmentRewriteHandEquipCostMark,
+    CardDistanceUnlimitedTargetMark,
+    CardDistanceUnlimitedSkillOnOwner,
+    CardUseUnrespondableSkillOnOwner,
+    ShaUseUnlimitedTargetMark,
+    SkillConditionalModifier,
 }
 
 /// 修饰运算模式（对齐 `content-schema::PackageModifierEntry::mode`）。
@@ -39,54 +77,6 @@ pub enum VmModifierMode {
     Min,
     Multiply,
     Veto,
-}
-
-/// 修饰卡牌／角色选择器（对齐 `content-schema::PackageModifierEntry::selector`）。
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum VmModifierSelector {
-    Any,
-    Sha,
-    Tao,
-    Bingliang,
-    Lebu,
-    Basic,
-    NonBasic,
-    Trick,
-    Equip,
-    Spade,
-    Heart,
-    Club,
-    Diamond,
-    Red,
-    Black,
-    Juedou,
-    BlackTrick,
-    DamageTrick,
-    ShaFire,
-    Huogong,
-    Jiu,
-    PhysicalJiu,
-    ShaRed,
-    Nanman,
-    OrdinaryTrick,
-    ShaBlack,
-    ShaElemental,
-    EquipNonMount,
-    ArmorOrTreasure,
-    Wanjian,
-    ShaNormal,
-    ShaHeart,
-    DelayedTrick,
-    Wuxie,
-    Guohe,
-    Shunshou,
-    ShaThunder,
-    HandRankLetter,
-    SoleHandCard,
-    ShaDiamond,
-    SkillTracked,
-    DamageCard,
-    FaceUp,
 }
 
 /// 动态数值来源（对齐 `content-schema::PackageModifierEntry::value_source`）。
@@ -165,6 +155,27 @@ pub enum VmModifierValueSource {
     OwnerRenPileCount,
     TaoSaveCancelBeyondDistance2,
     TaoSaveCancelNonDyingDuringOwnerTurn,
+    AliveWoundedCountAtLeast(u8),
+    QueriedPlayerMarkPositive(u32),
+    AliveWoundedCountZeroOrAtLeastFour,
+    QueriedPlayerLinkedFirstLivingSkillOwner,
+    OwnerShaUsedExactlyOne,
+    OwnerShaUsedExactlyTwo,
+    OwnerQunOtherShu,
+    OwnerUniqueMaxHand,
+    OwnerTurnedOverDiffOther,
+    QueriedPlayerLinkedOtherThanOwner,
+    QueriedPlayerWoundedInOwnerAttackRangeOther,
+    QueriedPlayerOtherThanOwner,
+    QueriedPlayerJudgeNonemptyOtherThanOwner,
+    QueriedSourceEnemyOwnerAllyTargetOtherThanOwner,
+    OwnerHandGtOther,
+    OwnerHandLtOther,
+    OwnerHandEquipGteOther,
+    OwnerShaDamageDealtZeroThisTurn,
+    OwnerMaxHandBeforeSkillFiresThisTurn,
+    OwnerLinkedDiffOther,
+    OwnerTurnDamageDealt,
 }
 
 /// 单条已编译 VM 静态修饰规则。
@@ -177,123 +188,6 @@ pub struct VmModifierRule {
     pub value_source: Option<VmModifierValueSource>,
 }
 
-fn is_delayed_trick_kind(kind: CardKind) -> bool {
-    matches!(
-        kind,
-        CardKind::Le | CardKind::Bing | CardKind::ShanDian | CardKind::HongShui
-    )
-}
-
-fn is_trick_kind(kind: CardKind) -> bool {
-    kind.is_basic_trick_or_equip() && !kind.is_basic_kind() && !kind.is_equip()
-}
-
-fn is_damage_trick_kind(kind: CardKind) -> bool {
-    matches!(
-        kind,
-        CardKind::Duel
-            | CardKind::SavageAttack
-            | CardKind::ArcheryAttack
-            | CardKind::ShanDian
-            | CardKind::HongShui
-            | CardKind::Linghunzhihuo
-            | CardKind::Shenhuofeiya
-            | CardKind::Shatang
-            | CardKind::Yuansuhuimie
-            | CardKind::Aozuzhilei
-            | CardKind::Jingleishan
-            | CardKind::Chiyuxi
-            | CardKind::Liuxinghuoyu
-    )
-}
-
-impl VmModifierSelector {
-    /// 判断卡牌是否匹配该选择器。
-    pub fn matches_card(
-        self,
-        state: &GameStateCore,
-        catalog: &Catalog,
-        owner: PlayerId,
-        card: CardId,
-        kind: CardKind,
-        nature: DamageNature,
-    ) -> bool {
-        let Some(def) = catalog.cards.get(card as usize) else {
-            return matches!(self, Self::Any);
-        };
-        let suit = def.suit;
-        let is_red = matches!(suit, Suit::Heart | Suit::Diamond);
-        let is_black = matches!(suit, Suit::Spade | Suit::Club);
-        let rank = def.rank;
-        let is_sha = kind.is_sha_like();
-        let eff_nature = match kind {
-            CardKind::LeiSha => DamageNature::Thunder,
-            CardKind::FireSha => DamageNature::Fire,
-            _ => nature,
-        };
-        match self {
-            Self::Any => true,
-            Self::Sha => is_sha,
-            Self::Tao => kind == CardKind::Tao,
-            Self::Bingliang => kind == CardKind::Bing,
-            Self::Lebu => kind == CardKind::Le,
-            Self::Basic => kind.is_basic_kind(),
-            Self::NonBasic => !kind.is_basic_kind(),
-            Self::Trick => is_trick_kind(kind),
-            Self::Equip => kind.is_equip(),
-            Self::Spade => suit == Suit::Spade,
-            Self::Heart => suit == Suit::Heart,
-            Self::Club => suit == Suit::Club,
-            Self::Diamond => suit == Suit::Diamond,
-            Self::Red => is_red,
-            Self::Black => is_black,
-            Self::Juedou => kind == CardKind::Duel,
-            Self::BlackTrick => is_trick_kind(kind) && is_black,
-            Self::DamageTrick => is_damage_trick_kind(kind),
-            Self::ShaFire => is_sha && eff_nature == DamageNature::Fire,
-            Self::Huogong => def.name == "huogong",
-            Self::Jiu | Self::PhysicalJiu => kind == CardKind::Jiu,
-            Self::ShaRed => is_sha && is_red,
-            Self::Nanman => kind == CardKind::SavageAttack,
-            Self::OrdinaryTrick => is_trick_kind(kind) && !is_delayed_trick_kind(kind),
-            Self::ShaBlack => is_sha && is_black,
-            Self::ShaElemental => is_sha && eff_nature != DamageNature::Normal,
-            Self::EquipNonMount => matches!(
-                kind.equip_slot(),
-                Some(EquipSlot::Weapon | EquipSlot::Armor | EquipSlot::Treasure)
-            ),
-            Self::ArmorOrTreasure => {
-                matches!(kind.equip_slot(), Some(EquipSlot::Armor | EquipSlot::Treasure))
-            }
-            Self::Wanjian => kind == CardKind::ArcheryAttack,
-            Self::ShaNormal => is_sha && eff_nature == DamageNature::Normal,
-            Self::ShaHeart => is_sha && suit == Suit::Heart,
-            Self::DelayedTrick => is_delayed_trick_kind(kind),
-            Self::Wuxie => kind == CardKind::Nullify,
-            Self::Guohe => kind == CardKind::Dismantle,
-            Self::Shunshou => kind == CardKind::Snatch,
-            Self::ShaThunder => is_sha && eff_nature == DamageNature::Thunder,
-            Self::HandRankLetter => matches!(rank, 1 | 11 | 12 | 13),
-            Self::SoleHandCard => {
-                state.player(owner).hand.len() == 1 && state.player(owner).hand.contains(&card)
-            }
-            Self::ShaDiamond => is_sha && suit == Suit::Diamond,
-            Self::SkillTracked => false,
-            Self::DamageCard => is_sha || is_damage_trick_kind(kind),
-            Self::FaceUp => !state.player(owner).face_down,
-        }
-    }
-
-    /// 面向非卡牌上下文（如摸牌数、手牌上限）判断持有者状态是否匹配。
-    pub fn matches_owner(self, state: &GameStateCore, owner: PlayerId) -> bool {
-        match self {
-            Self::Any => true,
-            Self::FaceUp => !state.player(owner).face_down,
-            _ => true,
-        }
-    }
-}
-
 impl VmModifierValueSource {
     /// 根据当前状态计算动态修正值。
     pub fn evaluate(
@@ -303,6 +197,23 @@ impl VmModifierValueSource {
         owner: PlayerId,
         skill_def: SkillDefId,
     ) -> i32 {
+        self.evaluate_for(state, catalog, owner, None, skill_def)
+    }
+
+    /// 带可选被查询角色（`queried`）的动态修正值求值。
+    pub fn evaluate_for(
+        self,
+        state: &GameStateCore,
+        catalog: &Catalog,
+        owner: PlayerId,
+        queried: Option<PlayerId>,
+        skill_def: SkillDefId,
+    ) -> i32 {
+        if let Some(v) =
+            selector::evaluate_batch16_value_source(self, state, catalog, owner, queried, skill_def)
+        {
+            return v;
+        }
         let p = state.player(owner);
         let lost_hp = (p.max_hp as i32 - p.hp).max(0);
         let disabled_mask = state
@@ -566,7 +477,7 @@ impl VmModifierValueSource {
                 let mut mask = 0u8;
                 for &c in &p.hand {
                     let k = catalog.card_kind(c);
-                    if !k.is_sha_like() && !is_damage_trick_kind(k) {
+                    if !k.is_sha_like() && !selector::is_damage_trick_kind(k) {
                         if k.is_basic_kind() {
                             mask |= 1;
                         } else if k.is_equip() {
@@ -658,6 +569,7 @@ impl VmModifierValueSource {
                 .map(|v| v.len() as i32)
                 .unwrap_or(0),
             Self::TaoSaveCancelBeyondDistance2 | Self::TaoSaveCancelNonDyingDuringOwnerTurn => 1,
+            _ => 0,
         }
     }
 }
@@ -671,9 +583,21 @@ impl VmModifierRule {
         owner: PlayerId,
         skill_def: SkillDefId,
     ) -> i32 {
+        self.effective_value_for(state, catalog, owner, None, skill_def)
+    }
+
+    /// 带可选被查询角色（`queried`）的有效数值求值。
+    pub fn effective_value_for(
+        &self,
+        state: &GameStateCore,
+        catalog: &Catalog,
+        owner: PlayerId,
+        queried: Option<PlayerId>,
+        skill_def: SkillDefId,
+    ) -> i32 {
         match self.value_source {
             Some(src) => {
-                let raw = src.evaluate(state, catalog, owner, skill_def);
+                let raw = src.evaluate_for(state, catalog, owner, queried, skill_def);
                 if self.value < 0
                     && matches!(
                         src,
@@ -704,325 +628,6 @@ impl VmModifierRule {
     }
 }
 
-/// 迭代角色当前拥有的所有已启用技能（含标记临时技能）的 `VmModifierRule`。
-pub fn for_each_player_vm_modifier<F>(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    mut f: F,
-) where
-    F: FnMut(SkillDefId, &VmModifierRule),
-{
-    for ((owner, def), inst) in &state.skills {
-        if *owner == player && inst.enabled {
-            let rules = catalog.skills[*def as usize].behavior.vm_modifiers();
-            for rule in rules {
-                f(*def, rule);
-            }
-        }
-    }
-}
+mod eval;
+pub use eval::*;
 
-/// 评估角色手牌上限修正（`HandLimit`；`HandLimitBaseMaxHp` 已在 `hand_limit_base` 中结算）。
-pub fn eval_hand_limit(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    mut limit: i32,
-) -> usize {
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::HandLimit
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_owner(state, player))
-        {
-            let val = rule.effective_value(state, catalog, player, def);
-            limit = rule.apply_to(limit, val);
-        }
-    });
-    limit.max(0) as usize
-}
-
-/// 评估角色攻击范围修正（`AttackRange`）。
-pub fn eval_attack_range(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    base: u32,
-) -> u32 {
-    let mut cur = base as i32;
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::AttackRange
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_owner(state, player))
-        {
-            let val = rule.effective_value(state, catalog, player, def);
-            cur = rule.apply_to(cur, val);
-        }
-    });
-    cur.max(0) as u32
-}
-
-/// 评估角色 `a -> b` 的距离修正（`DistanceToOthers` 与 `DistanceFromOthers`）。
-pub fn eval_distance_total(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    a: PlayerId,
-    b: PlayerId,
-    base_total: i32,
-) -> u32 {
-    let mut cur = base_total;
-    for_each_player_vm_modifier(state, catalog, a, |def, rule| {
-        if rule.target == VmModifierTarget::DistanceToOthers
-            && rule.selector.map_or(true, |s| s.matches_owner(state, a))
-        {
-            let val = rule.effective_value(state, catalog, a, def);
-            cur = rule.apply_to(cur, val);
-        }
-    });
-    for_each_player_vm_modifier(state, catalog, b, |def, rule| {
-        if rule.target == VmModifierTarget::DistanceFromOthers
-            && rule.selector.map_or(true, |s| s.matches_owner(state, b))
-        {
-            let val = rule.effective_value(state, catalog, b, def);
-            cur = rule.apply_to(cur, val);
-        }
-    });
-    cur.max(1) as u32
-}
-
-/// 评估摸牌阶段摸牌数修正（`DrawCount`）。
-pub fn eval_draw_count(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    base_count: i32,
-) -> i32 {
-    let mut cur = base_count;
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::DrawCount
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_owner(state, player))
-        {
-            let val = rule.effective_value(state, catalog, player, def);
-            cur = rule.apply_to(cur, val);
-        }
-    });
-    cur
-}
-
-/// 评估出牌阶段【杀】使用次数上限修正与是否无次数限制。
-pub fn eval_sha_use_limit(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    card: Option<CardId>,
-    kind: CardKind,
-    nature: DamageNature,
-    base_limit: u32,
-) -> (u32, bool) {
-    let mut cur = base_limit as i32;
-    let mut unlimited = false;
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        let sel_ok = match (rule.selector, card) {
-            (None, _) => true,
-            (Some(s), Some(c)) => s.matches_card(state, catalog, player, c, kind, nature),
-            (Some(s), None) => matches!(
-                s,
-                VmModifierSelector::Any
-                    | VmModifierSelector::Sha
-                    | VmModifierSelector::Basic
-                    | VmModifierSelector::DamageCard
-            ),
-        };
-        if !sel_ok {
-            return;
-        }
-        match rule.target {
-            VmModifierTarget::ShaUseLimit => {
-                let val = rule.effective_value(state, catalog, player, def);
-                if val >= 99 {
-                    unlimited = true;
-                } else {
-                    cur = rule.apply_to(cur, val);
-                }
-            }
-            VmModifierTarget::CardUseUnlimited => {
-                if rule.effective_value(state, catalog, player, def) > 0 {
-                    unlimited = true;
-                }
-            }
-            _ => {}
-        }
-    });
-    (cur.max(0) as u32, unlimited)
-}
-
-/// 评估【杀】额外目标上限加成（`ShaExtraTargets`）。
-pub fn eval_sha_extra_targets(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    card: CardId,
-    kind: CardKind,
-    nature: DamageNature,
-) -> usize {
-    let mut extra = 0i32;
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::ShaExtraTargets
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, player, card, kind, nature))
-        {
-            let val = rule.effective_value(state, catalog, player, def);
-            extra = rule.apply_to(extra, val);
-        }
-    });
-    extra.max(0) as usize
-}
-
-/// 评估使用卡牌是否忽略距离限制（`CardDistanceUnlimited`）。
-pub fn eval_card_distance_unlimited(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    player: PlayerId,
-    card: CardId,
-    kind: CardKind,
-    nature: DamageNature,
-) -> bool {
-    let mut unlimited = false;
-    for_each_player_vm_modifier(state, catalog, player, |def, rule| {
-        if rule.target == VmModifierTarget::CardDistanceUnlimited
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, player, card, kind, nature))
-            && rule.effective_value(state, catalog, player, def) > 0
-        {
-            unlimited = true;
-        }
-    });
-    unlimited
-}
-
-/// 评估目标是否免疫某张牌的指向（`CardTargetCancel`）。
-pub fn eval_card_target_canceled(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    actor: PlayerId,
-    target: PlayerId,
-    card: CardId,
-    kind: CardKind,
-    nature: DamageNature,
-) -> bool {
-    let mut canceled = false;
-    for_each_player_vm_modifier(state, catalog, target, |def, rule| {
-        if rule.target == VmModifierTarget::CardTargetCancel
-            && rule
-                .selector
-                .map_or(true, |s| s.matches_card(state, catalog, actor, card, kind, nature))
-            && rule.effective_value(state, catalog, target, def) > 0
-        {
-            canceled = true;
-        }
-    });
-    canceled
-}
-
-/// 评估角色是否被禁止使用某张牌（`ShaUseCancel` / `CardUseCancel` / `HandCardUseResponseCancel`）。
-pub fn eval_card_use_canceled(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    actor: PlayerId,
-    card: CardId,
-    kind: CardKind,
-    nature: DamageNature,
-) -> bool {
-    let is_sha = kind.is_sha_like();
-    let in_hand = state.player(actor).hand.contains(&card);
-    let mut canceled = false;
-    for_each_player_vm_modifier(state, catalog, actor, |def, rule| {
-        let sel_ok = rule
-            .selector
-            .map_or(true, |s| s.matches_card(state, catalog, actor, card, kind, nature));
-        if !sel_ok || rule.effective_value(state, catalog, actor, def) <= 0 {
-            return;
-        }
-        match rule.target {
-            VmModifierTarget::ShaUseCancel if is_sha => canceled = true,
-            VmModifierTarget::CardUseCancel => canceled = true,
-            VmModifierTarget::HandCardUseResponseCancel if in_hand => canceled = true,
-            _ => {}
-        }
-    });
-    if kind == CardKind::Tao && actor != state.turn.current && state.player(state.turn.current).alive
-    {
-        let cur = state.turn.current;
-        for_each_player_vm_modifier(state, catalog, cur, |def, rule| {
-            if rule.target == VmModifierTarget::DyingPeachTargetCancel
-                && rule.value_source
-                    == Some(VmModifierValueSource::TaoSaveCancelNonDyingDuringOwnerTurn)
-                && rule.effective_value(state, catalog, cur, def) > 0
-            {
-                canceled = true;
-            }
-        });
-    }
-    canceled
-}
-
-/// 评估角色是否被禁止对濒死角色使用【桃】（`DyingPeachTargetCancel`）。
-pub fn eval_dying_peach_target_canceled(
-    state: &GameStateCore,
-    catalog: &Catalog,
-    actor: PlayerId,
-    dying_target: PlayerId,
-    card: CardId,
-) -> bool {
-    let kind = catalog.card_kind(card);
-    let mut canceled = false;
-    for_each_player_vm_modifier(state, catalog, actor, |def, rule| {
-        if rule.target == VmModifierTarget::DyingPeachTargetCancel
-            && rule.selector.map_or(true, |s| {
-                s.matches_card(state, catalog, actor, card, kind, DamageNature::Normal)
-            })
-            && match rule.value_source {
-                Some(VmModifierValueSource::TaoSaveCancelBeyondDistance2) => {
-                    kind == CardKind::Tao
-                        && actor != dying_target
-                        && state.computed_distance(catalog, actor, dying_target) > 2
-                }
-                Some(VmModifierValueSource::TaoSaveCancelNonDyingDuringOwnerTurn) => false,
-                _ => rule.effective_value(state, catalog, actor, def) > 0,
-            }
-        {
-            canceled = true;
-        }
-    });
-    if actor != dying_target && kind == CardKind::Tao {
-        for_each_player_vm_modifier(state, catalog, dying_target, |def, rule| {
-            if rule.target == VmModifierTarget::DyingPeachTargetCancel
-                && rule.value_source
-                    != Some(VmModifierValueSource::TaoSaveCancelNonDyingDuringOwnerTurn)
-                && rule.value_source != Some(VmModifierValueSource::TaoSaveCancelBeyondDistance2)
-                && rule.effective_value(state, catalog, dying_target, def) > 0
-            {
-                canceled = true;
-            }
-        });
-        let cur = state.turn.current;
-        if actor != cur && state.player(cur).alive {
-            for_each_player_vm_modifier(state, catalog, cur, |def, rule| {
-                if rule.target == VmModifierTarget::DyingPeachTargetCancel
-                    && rule.value_source
-                        == Some(VmModifierValueSource::TaoSaveCancelNonDyingDuringOwnerTurn)
-                    && rule.effective_value(state, catalog, cur, def) > 0
-                {
-                    canceled = true;
-                }
-            });
-        }
-    }
-    canceled
-}

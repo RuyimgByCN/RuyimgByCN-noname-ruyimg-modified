@@ -159,12 +159,6 @@ pub(super) fn bridge_view_as_entries(
         if entries.is_empty() {
             continue;
         }
-        if skill.lord_only || skill.non_gainable {
-            return Err(invalid(
-                "skill_index",
-                "view-as skill metadata is unsupported",
-            ));
-        }
         let mut specs = Vec::with_capacity(entries.len());
         for v in entries {
             let spec = compile_view_as_entry(&skill.name, v).ok_or_else(|| {

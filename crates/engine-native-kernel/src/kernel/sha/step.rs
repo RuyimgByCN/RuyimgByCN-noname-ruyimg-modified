@@ -66,7 +66,10 @@ impl crate::catalog::SkillMachine for ShaResolveMachine {
                 .catalog
                 .skill_by_name(crate::vocabulary::names::BOSS_ZHADAO)
                 .map(|def| ctx.core.has_skill(self.source, def))
-                .unwrap_or(false);
+                .unwrap_or(false)
+            || ctx
+                .core
+                .ignores_target_armor(ctx.catalog, self.source, self.target, self.card, self.nature);
         // 八卦阵：受击者装备防具时，出闪询问前先做防具判定（每杀至多一次）
         // ——红桃视为已出闪（伤害免除），否则照常进入出闪询问。
         // 焚天（Boss 朱雀，规则 v236）：红色杀 directHit 无视防具

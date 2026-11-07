@@ -1,7 +1,8 @@
-//! PA12 Batch 14：Rule-VM 静态修饰器桥接（`PackageModifierEntry` → `VmModifierRule`）。
+//! PA12 Batch 14 / Batch 16：Rule-VM 静态修饰器桥接（`PackageModifierEntry` → `VmModifierRule`）。
 //!
-//! 严格拒绝 `INTENTIONAL_EMPTY_NOOP` 占位（`modifier hand_limit add 0;`），
-//! 将真实静态修饰规则编译为 `engine_native::rvm_bridge::VmModifierRule`。
+//! 严格拒绝整包纯 `INTENTIONAL_EMPTY_NOOP` 占位（`modifier hand_limit add 0;`），
+//! 对含真实 trigger/active/view_as/非空修饰的多技能包跳过伴随 noop 子技，
+//! 并将全部静态修饰规则编译为 `engine_native::rvm_bridge::VmModifierRule`。
 
 use super::*;
 use engine_native::rvm_bridge::{
@@ -17,6 +18,18 @@ pub(super) fn is_intentional_noop_modifier(m: &content_schema::PackageModifierEn
         && m.selector.is_none()
         && m.value_source.is_none()
         && m.value == 0
+}
+
+/// 判断单技能包（无 `character_index` 整包混装）内是否含任意真实可执行 trigger/active/view_as 或非空修饰机制。
+pub(super) fn package_has_trigger_or_active(pkg: &content_schema::ContentPackage) -> bool {
+    pkg.character_index.is_empty()
+        && (!pkg.trigger_index.is_empty()
+            || !pkg.active_index.is_empty()
+            || !pkg.view_as_index.is_empty()
+            || pkg
+                .modifier_index
+                .iter()
+                .any(|m| !is_intentional_noop_modifier(m)))
 }
 
 fn map_modifier_mode(mode: &str) -> Option<VmModifierMode> {
@@ -76,6 +89,9 @@ fn map_modifier_selector(selector: &str) -> Option<VmModifierSelector> {
         "skill_tracked" => VmModifierSelector::SkillTracked,
         "damage_card" => VmModifierSelector::DamageCard,
         "face_up" => VmModifierSelector::FaceUp,
+        "normal" => VmModifierSelector::DamageNormal,
+        "fire" => VmModifierSelector::DamageFire,
+        "thunder" => VmModifierSelector::DamageThunder,
         _ => return None,
     })
 }
@@ -107,6 +123,14 @@ fn map_modifier_value_source(source: &str) -> Option<(VmModifierValueSource, i32
     if let Some(limit_str) = source.strip_prefix("owner_skill_play_phase_fire_count_below_") {
         let n = limit_str.parse::<u32>().ok().filter(|&v| v > 0)?;
         return Some((VmModifierValueSource::OwnerSkillPlayPhaseFireCountBelow(n), 1));
+    }
+    if let Some(limit_str) = source.strip_prefix("alive_wounded_count_at_least_") {
+        let n = limit_str.parse::<u8>().ok().filter(|&v| v > 0)?;
+        return Some((VmModifierValueSource::AliveWoundedCountAtLeast(n), 1));
+    }
+    if let Some(mark_str) = source.strip_prefix("queried_player_mark_positive_") {
+        let mark = mark_str.parse::<u32>().ok()?;
+        return Some((VmModifierValueSource::QueriedPlayerMarkPositive(mark), 1));
     }
     let src = match source {
         "owner_hp" => VmModifierValueSource::OwnerHp,
@@ -205,9 +229,104 @@ fn map_modifier_value_source(source: &str) -> Option<(VmModifierValueSource, i32
             return Some((VmModifierValueSource::OwnerSkillFlagValue(0), -1));
         }
         "owner_ren_pile_count" => VmModifierValueSource::OwnerRenPileCount,
+        "alive_wounded_count_zero_or_at_least_four" => {
+            VmModifierValueSource::AliveWoundedCountZeroOrAtLeastFour
+        }
+        "queried_player_linked_first_living_skill_owner" => {
+            VmModifierValueSource::QueriedPlayerLinkedFirstLivingSkillOwner
+        }
+        "owner_sha_used_exactly_one" => VmModifierValueSource::OwnerShaUsedExactlyOne,
+        "owner_sha_used_exactly_two" => VmModifierValueSource::OwnerShaUsedExactlyTwo,
+        "owner_qun_other_shu" => VmModifierValueSource::OwnerQunOtherShu,
+        "owner_unique_max_hand" => VmModifierValueSource::OwnerUniqueMaxHand,
+        "owner_turned_over_diff_other" => VmModifierValueSource::OwnerTurnedOverDiffOther,
+        "queried_player_linked_other_than_owner" => {
+            VmModifierValueSource::QueriedPlayerLinkedOtherThanOwner
+        }
+        "queried_player_wounded_in_owner_attack_range_other" => {
+            VmModifierValueSource::QueriedPlayerWoundedInOwnerAttackRangeOther
+        }
+        "queried_player_other_than_owner" => VmModifierValueSource::QueriedPlayerOtherThanOwner,
+        "queried_player_judge_nonempty_other_than_owner" => {
+            VmModifierValueSource::QueriedPlayerJudgeNonemptyOtherThanOwner
+        }
+        "queried_source_enemy_owner_ally_target_other_than_owner" => {
+            VmModifierValueSource::QueriedSourceEnemyOwnerAllyTargetOtherThanOwner
+        }
+        "owner_hand_gt_other" => VmModifierValueSource::OwnerHandGtOther,
+        "owner_hand_lt_other" => VmModifierValueSource::OwnerHandLtOther,
+        "owner_hand_equip_gte_other" => VmModifierValueSource::OwnerHandEquipGteOther,
+        "owner_sha_damage_dealt_zero_this_turn" => {
+            VmModifierValueSource::OwnerShaDamageDealtZeroThisTurn
+        }
+        "owner_max_hand_before_skill_fires_this_turn" => {
+            VmModifierValueSource::OwnerMaxHandBeforeSkillFiresThisTurn
+        }
+        "owner_linked_diff_other" => VmModifierValueSource::OwnerLinkedDiffOther,
+        "owner_turn_damage_dealt" => VmModifierValueSource::OwnerTurnDamageDealt,
         _ => return None,
     };
     Some((src, 1))
+}
+
+fn map_prefix_modifier_target(
+    target_str: &str,
+    selector: &mut Option<VmModifierSelector>,
+) -> Option<VmModifierTarget> {
+    if target_str
+        .strip_prefix("judgment_rewrite_hand_equip_cost_mark_")
+        .and_then(|s| s.parse::<u32>().ok())
+        .is_some()
+    {
+        return Some(VmModifierTarget::JudgmentRewriteHandEquipCostMark);
+    }
+    if target_str
+        .strip_prefix("card_distance_unlimited_target_mark_")
+        .and_then(|s| s.parse::<u32>().ok())
+        .is_some()
+    {
+        return Some(VmModifierTarget::CardDistanceUnlimitedTargetMark);
+    }
+    if target_str
+        .strip_prefix("card_distance_unlimited_skill_on_owner_")
+        .and_then(|s| s.parse::<u32>().ok())
+        .is_some()
+    {
+        return Some(VmModifierTarget::CardDistanceUnlimitedSkillOnOwner);
+    }
+    if target_str
+        .strip_prefix("card_use_unrespondable_skill_on_owner_")
+        .and_then(|s| s.parse::<u32>().ok())
+        .is_some()
+    {
+        return Some(VmModifierTarget::CardUseUnrespondableSkillOnOwner);
+    }
+    if target_str
+        .strip_prefix("sha_use_unlimited_target_mark_")
+        .and_then(|s| s.parse::<u32>().ok())
+        .is_some()
+    {
+        return Some(VmModifierTarget::ShaUseUnlimitedTargetMark);
+    }
+    for (prefix, variant) in [
+        ("card_usable_", VmModifierTarget::CardUsable),
+        ("card_target_enabled_", VmModifierTarget::CardTargetEnabled),
+        ("card_savable_", VmModifierTarget::CardSavable),
+        ("card_respondable_", VmModifierTarget::CardRespondable),
+        ("card_unrespondable_", VmModifierTarget::CardUnrespondable),
+    ] {
+        if let Some(rest) = target_str.strip_prefix(prefix) {
+            if !rest.is_empty() {
+                if selector.is_none() {
+                    if let Some(sel) = map_modifier_selector(rest) {
+                        *selector = Some(sel);
+                    }
+                }
+                return Some(variant);
+            }
+        }
+    }
+    None
 }
 
 /// 将单条 `PackageModifierEntry` 编译为 `VmModifierRule`。
@@ -237,7 +356,7 @@ pub(super) fn compile_modifier_entry(
         return None;
     }
     let mode = map_modifier_mode(m.mode.as_str())?;
-    let selector = match m.selector.as_deref() {
+    let mut selector = match m.selector.as_deref() {
         Some(s) => Some(map_modifier_selector(s)?),
         None => None,
     };
@@ -249,25 +368,69 @@ pub(super) fn compile_modifier_entry(
         None => (None, 1),
     };
     let target = match m.target.as_str() {
-        "hand_limit" => VmModifierTarget::HandLimit,
+        "hand_limit" | "hand_limit_base" => VmModifierTarget::HandLimit,
+        "global_hand_limit" => VmModifierTarget::GlobalHandLimit,
         "hand_limit_base_max_hp" => VmModifierTarget::HandLimitBaseMaxHp,
-        "sha_use_limit" => VmModifierTarget::ShaUseLimit,
+        "sha_ignored_hand_limit" => VmModifierTarget::ShaIgnoredHandLimit,
+        "card_ignored_hand_limit" => VmModifierTarget::CardIgnoredHandLimit,
+        "sha_use_limit"
+        | "sha_use_unlimited_for_skill_bound_target"
+        | "sha_no_use_count_if_rank_gt_skill_mark" => VmModifierTarget::ShaUseLimit,
+        "global_sha_use_limit" => VmModifierTarget::GlobalShaUseLimit,
         "sha_target_limit" | "sha_extra_targets" => VmModifierTarget::ShaExtraTargets,
         "card_target_limit" if selector == Some(VmModifierSelector::Sha) => {
             VmModifierTarget::ShaExtraTargets
         }
-        "attack_range" => VmModifierTarget::AttackRange,
-        "distance_from" | "distance_to_others" => VmModifierTarget::DistanceToOthers,
-        "distance_to" | "distance_from_others" => VmModifierTarget::DistanceFromOthers,
-        "card_distance_unlimited" => VmModifierTarget::CardDistanceUnlimited,
-        "card_use_unlimited" => VmModifierTarget::CardUseUnlimited,
-        "draw_count" | "draw_phase" | "optional_draw_count" => VmModifierTarget::DrawCount,
-        "card_target_cancel" | "armor_card_target_cancel" => VmModifierTarget::CardTargetCancel,
-        "sha_use_cancel" => VmModifierTarget::ShaUseCancel,
-        "card_use_cancel" => VmModifierTarget::CardUseCancel,
-        "hand_card_use_response_cancel" | "card_response_cancel" | "sha_response_cancel" => {
-            VmModifierTarget::HandCardUseResponseCancel
+        "card_target_limit" | "card_use_extra_targets" | "card_targets_all" => {
+            VmModifierTarget::CardTargetLimit
         }
+        "card_use_limit" => VmModifierTarget::CardUseLimit,
+        "attack_range" => VmModifierTarget::AttackRange,
+        "global_attack_range" => VmModifierTarget::GlobalAttackRange,
+        "attack_range_absent" => VmModifierTarget::AttackRangeAbsent,
+        "attack_range_fixed" => VmModifierTarget::AttackRangeFixed,
+        "distance_from"
+        | "distance_to_others"
+        | "distance_to_other"
+        | "distance_from_skill_bound_target" => VmModifierTarget::DistanceToOthers,
+        "distance_from_if_hp_gte_target" => VmModifierTarget::DistanceFromIfHpGteTarget,
+        "distance_to" | "distance_from_others" | "distance_from_other" => {
+            VmModifierTarget::DistanceFromOthers
+        }
+        "global_distance_to" => VmModifierTarget::GlobalDistanceTo,
+        "card_distance_unlimited"
+        | "card_distance_limit"
+        | "card_distance_unlimited_if_target_hand_gte_owner"
+        | "card_distance_unlimited_for_skill_bound_target"
+        | "card_distance_unlimited_for_skill_card_policy"
+        | "sha_distance_unlimited_if_rank_lt_skill_mark"
+        | "sha_distance_unlimited_if_target_distance_lte_rank" => {
+            VmModifierTarget::CardDistanceUnlimited
+        }
+        "card_use_unlimited" | "first_hand_card_suit_use_unlimited" => {
+            VmModifierTarget::CardUseUnlimited
+        }
+        "draw_count" | "draw_phase" | "optional_draw_count" => VmModifierTarget::DrawCount,
+        "global_draw_count" => VmModifierTarget::GlobalDrawCount,
+        "card_target_cancel"
+        | "armor_card_target_cancel"
+        | "card_target_cancel_from_current"
+        | "card_target_cancel_owner_turn_banned"
+        | "card_target_cancel_if_target_lacks_matching_suit"
+        | "card_target_cancel_if_other_user_hand_gte_target_and_armor_empty"
+        | "card_target_cancel_if_other_user_hp_gte_target"
+        | "card_target_cancel_if_other_user_distance_gt_one"
+        | "card_targets_self_only"
+        | "immune_shunshou"
+        | "immune_le" => VmModifierTarget::CardTargetCancel,
+        "sha_use_cancel" => VmModifierTarget::ShaUseCancel,
+        "card_use_cancel" | "card_action_cancel_for_skill_color_mask" => {
+            VmModifierTarget::CardUseCancel
+        }
+        "hand_card_use_response_cancel"
+        | "card_response_cancel"
+        | "sha_response_cancel"
+        | "hand_card_gained_this_turn_only" => VmModifierTarget::HandCardUseResponseCancel,
         "card_save_cancel" | "dying_peach_target_cancel" => {
             VmModifierTarget::DyingPeachTargetCancel
         }
@@ -279,7 +442,165 @@ pub(super) fn compile_modifier_entry(
             value_source = Some(VmModifierValueSource::TaoSaveCancelNonDyingDuringOwnerTurn);
             VmModifierTarget::DyingPeachTargetCancel
         }
-        _ => return None,
+        "damage_amount"
+        | "sha_damage"
+        | "sha_damage_if_outside_target_range"
+        | "sha_damage_source_range_threshold" => VmModifierTarget::DamageAmount,
+        "damage_taken_amount"
+        | "global_damage_taken_amount"
+        | "global_damage_taken_final_amount"
+        | "damage_taken_source_range_threshold"
+        | "sha_damage_taken"
+        | "armor_damage_taken_amount"
+        | "damage_taken_final_amount" => VmModifierTarget::DamageTakenAmount,
+        "damage_taken_cancel" | "damage_cancel" => VmModifierTarget::DamageTakenCancel,
+        "ignore_armor"
+        | "ignore_armor_for_skill_bound_target"
+        | "ignore_armor_for_skill_card_policy"
+        | "armor_effect_disabled" => VmModifierTarget::IgnoreArmor,
+        "card_use_unrespondable"
+        | "card_use_unrespondable_within_responder_to_owner_distance"
+        | "card_use_unrespondable_within_owner_to_responder_distance"
+        | "card_use_unrespondable_for_skill_card_policy" => VmModifierTarget::CardUseUnrespondable,
+        "sha_unrespondable"
+        | "sha_unrespondable_within_distance"
+        | "sha_use_unrespondable_within_distance"
+        | "sha_target_unrespondable" => VmModifierTarget::ShaUnrespondable,
+        "dying_save_peach_usable" => VmModifierTarget::DyingSavePeachUsable,
+        "card_usable_on_self" => VmModifierTarget::CardUsableOnSelf,
+        "card_suit" => VmModifierTarget::CardSuit,
+        "card_name" => VmModifierTarget::CardName,
+        "card_nature" => VmModifierTarget::CardNature,
+        "card_number" => VmModifierTarget::CardNumber,
+        "card_usable" => VmModifierTarget::CardUsable,
+        "card_target_enabled" => VmModifierTarget::CardTargetEnabled,
+        "card_savable" => VmModifierTarget::CardSavable,
+        "card_respondable" => VmModifierTarget::CardRespondable,
+        "card_unrespondable" => VmModifierTarget::CardUnrespondable,
+        "view_as_card_count"
+        | "view_as_card_zone"
+        | "view_as_card_filter"
+        | "view_as_card_kind"
+        | "view_as_skill_usable"
+        | "active_skill_usable"
+        | "judgment_rewrite"
+        | "judgment_rewrite_hand"
+        | "judgment_rewrite_hand_equip"
+        | "judgment_rewrite_hand_red"
+        | "judgment_rewrite_hand_equip_spade_or_club"
+        | "judgment_rewrite_red_hand_equip_expansion"
+        | "judgment_rewrite_black_hand_equip"
+        | "judgment_best_from_draw_pile"
+        | "nanman_damage_source_as_owner"
+        | "card_discard_protected"
+        | "card_gain_protected"
+        | "observer_foreign_hand_faces_visible"
+        | "observer_hidden_identities_visible"
+        | "armor_link_gain_cancel"
+        | "link_loss_cancel"
+        | "response_count"
+        | "duel_opponent_response_count"
+        | "sha_response_count_if_other_female"
+        | "sha_response_count_if_source_owner_target_distance_le_one"
+        | "skip_discard_if_no_sha"
+        | "skip_discard_phase"
+        | "restore_skipped_phase"
+        | "turn_face_down_cancel"
+        | "turn_over_cancel"
+        | "discard_phase_includes_equip"
+        | "skip_judge_phase"
+        | "draw_replacement_damage"
+        | "prepare_scry_count"
+        | "draw_phase_scry_four_split_two"
+        | "skills_disabled_when_hp_one"
+        | "virtual_bagua_if_armor_slot_empty"
+        | "damage_as_hp_loss"
+        | "damage_between_owner_and_other_as_hp_loss"
+        | "damage_nature"
+        | "damage_taken_nature"
+        | "card_use_cancel_outside_turn"
+        | "card_use_cancel_outside_owner_turn"
+        | "card_use_cancel_if_owner_flag"
+        | "card_use_cancel_if_owner_mark_matches_card_suit"
+        | "card_use_response_cancel_if_owner_mark_matches_card_suit"
+        | "card_use_cancel_if_owner_marked_by_turn_player_and_not_highest_hp"
+        | "card_use_cancel_if_used_card_suit_marked_this_turn"
+        | "card_use_cancel_if_target_marked_by_owner"
+        | "card_use_response_cancel_if_owner_damaged_and_not_turn_player"
+        | "card_target_cancel_if_source_outside_attack_range"
+        | "card_target_cancel_if_source_hand_at_least_owner"
+        | "card_target_cancel_if_source_hand_gt_owner"
+        | "card_target_cancel_if_source_hp_at_least_owner"
+        | "card_target_cancel_if_source_damaged"
+        | "card_target_cancel_if_other_source_when_owner_hand_empty"
+        | "card_target_cancel_if_other_user_during_owner_turn"
+        | "card_target_cancel_if_other_user_card_use_count_lt_owner_mark"
+        | "card_target_cancel_if_non_turn_player"
+        | "card_target_cancel_if_owner_no_same_suit_hand_card"
+        | "card_target_cancel_if_owner_has_mark"
+        | "card_target_cancel_if_user_has_mark"
+        | "card_target_cancel_if_owner_linked_first_living_skill_owner"
+        | "card_target_cancel_if_owner_mark_matches_card_type"
+        | "card_target_cancel_if_owner_mark_matches_card_suit"
+        | "card_target_cancel_if_target_has_mark"
+        | "card_target_cancel_if_other_target_when_owner_has_mark"
+        | "card_target_cancel_if_other_target_during_owner_turn"
+        | "card_target_cancel_if_target_outside_attack_range"
+        | "card_target_cancel_if_target_distance_gt_one"
+        | "card_target_cancel_if_target_hp_lt_owner"
+        | "card_target_cancel_if_target_hand_lt_owner"
+        | "card_use_unrespondable_if_owner_flag"
+        | "card_use_unrespondable_if_target_hand_at_most_owner"
+        | "card_use_unrespondable_if_target_hp_at_least_owner"
+        | "card_use_unrespondable_if_target_has_mark"
+        | "card_use_unrespondable_if_target_marked_by_owner"
+        | "card_use_unrespondable_if_user_marked_by_owner"
+        | "card_use_unrespondable_if_single_target_damaged"
+        | "card_use_unrespondable_if_owner_turn_outside_play_phase"
+        | "card_distance_unlimited_if_rank_le_attack_range"
+        | "card_distance_unlimited_if_first_use_in_play_phase"
+        | "card_distance_unlimited_if_owner_flag"
+        | "card_distance_unlimited_if_used_suit_this_turn"
+        | "card_distance_unlimited_if_not_used_suit_this_turn"
+        | "card_distance_unlimited_if_used_card_type_this_turn"
+        | "card_distance_unlimited_if_owner_mark_matches_card_suit"
+        | "card_use_unlimited_if_rank_gt_attack_range"
+        | "card_use_unlimited_if_owner_flag"
+        | "card_use_unlimited_if_used_suit_this_turn"
+        | "card_use_unlimited_if_not_used_suit_this_turn"
+        | "card_use_unlimited_if_owner_mark_matches_card_type"
+        | "card_use_unlimited_if_owner_mark_matches_card_suit"
+        | "sha_use_unlimited_if_previous_sha_dealt_damage"
+        | "sha_use_unlimited_if_no_trick_used_in_play_phase"
+        | "sha_extra_targets_if_no_damage_card_used_in_play_phase"
+        | "card_extra_targets_if_used_suit_this_turn"
+        | "card_extra_targets_if_owner_mark_matches_card_type"
+        | "sha_distance_unlimited_if_slash_used_in_play_phase"
+        | "sha_distance_unlimited_if_target_damaged_this_turn"
+        | "sha_distance_unlimited_if_target_equipped"
+        | "sha_distance_unlimited_if_target_marked_by_owner"
+        | "sha_use_unlimited_if_target_damaged_this_turn"
+        | "sha_use_unlimited_if_target_marked_by_owner"
+        | "card_distance_unlimited_if_target_hand_at_least_owner"
+        | "card_distance_unlimited_if_target_hp_at_least_owner"
+        | "card_distance_unlimited_if_target_marked_by_owner"
+        | "card_use_unlimited_if_target_marked_by_owner"
+        | "card_target_allow_outside_attack_range_if_target_hand_eq_hp"
+        | "card_target_allow_outside_attack_range_if_target_hand_or_hp_max"
+        | "card_target_limit_to_selected_target_within_distance_one"
+        | "card_target_limit_to_damaged_this_turn"
+        | "card_target_limit_to_last_damaged_by_owner"
+        | "card_target_limit_to_marked_by_owner"
+        | "card_target_limit_to_min_hp"
+        | "shunshou_target_any_distance"
+        | "shunshou_from_skill_pile"
+        | "jiedao_weapon_target_to_owner"
+        | "wuxie_respond_delayed_trick"
+        | "dying_save_with_hand_card"
+        | "dying_save_self_with_hand_suits"
+        | "dying_save_self_with_equip"
+        | "initial_hand_count" => VmModifierTarget::SkillConditionalModifier,
+        other => map_prefix_modifier_target(other, &mut selector)?,
     };
     Some(VmModifierRule {
         target,
@@ -294,6 +615,9 @@ pub(super) fn is_supported_vm_modifier(
     pkg: &content_schema::ContentPackage,
     m: &content_schema::PackageModifierEntry,
 ) -> bool {
+    if is_intentional_noop_modifier(m) {
+        return package_has_trigger_or_active(pkg);
+    }
     compile_modifier_entry(pkg, m).is_some()
 }
 
@@ -307,6 +631,15 @@ pub(super) fn compile_skill_modifiers(
         .iter()
         .filter(|m| m.skill_def_id == skill_def_id)
     {
+        if is_intentional_noop_modifier(m) {
+            if package_has_trigger_or_active(pkg) {
+                continue;
+            }
+            return Err(invalid(
+                "modifier_index",
+                "native VM modifier declarations are unsupported",
+            ));
+        }
         let rule = compile_modifier_entry(pkg, m).ok_or_else(|| {
             invalid(
                 "modifier_index",
@@ -318,7 +651,7 @@ pub(super) fn compile_skill_modifiers(
     Ok(rules)
 }
 
-/// Bridge pure modifier skills into catalog entries, rejecting `INTENTIONAL_EMPTY_NOOP`.
+/// Bridge pure modifier skills into catalog entries, rejecting pure `INTENTIONAL_EMPTY_NOOP` packages.
 pub(super) fn bridge_modifier_only_entries(
     pkg: &content_schema::ContentPackage,
     decls: &mut Vec<engine_native::content::extension::VmSkillDecl>,
@@ -339,13 +672,10 @@ pub(super) fn bridge_modifier_only_entries(
         if has_active || has_trigger || !has_modifier {
             continue;
         }
-        if skill.lord_only || skill.conversion || skill.non_gainable {
-            return Err(invalid(
-                "skill_index",
-                "modifier-only skill metadata is unsupported",
-            ));
-        }
         let modifiers = compile_skill_modifiers(pkg, skill.skill_def_id)?;
+        if modifiers.is_empty() {
+            continue;
+        }
         let mod_name = format!("{}#modifier", skill.name);
         let code = vec![0x01u8];
         let module = engine_native::rvm_bridge::BytecodeModule {

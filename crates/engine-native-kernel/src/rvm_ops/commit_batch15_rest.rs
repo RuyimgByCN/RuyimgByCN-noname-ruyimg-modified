@@ -805,6 +805,6 @@ pub(super) fn commit_batch15_rest(
                 _ => {}
             }
         }
-        _ => {}
+        other => super::commit_batch16::commit_batch16_effect(ctx, executing, seats, other),
     }
 }

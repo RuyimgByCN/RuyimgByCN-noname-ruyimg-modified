@@ -76,6 +76,9 @@ mod pa12_batch14_modifiers_actives_and_choices;
 #[path = "../pa12_batch15_view_as_and_resolvers.rs"]
 mod pa12_batch15_view_as_and_resolvers;
 
+#[path = "../pa12_batch16_modifiers_actives_and_resolvers.rs"]
+mod pa12_batch16_modifiers_actives_and_resolvers;
+
 #[path = "../pa12_dsl_native_prototype.rs"]
 mod pa12_dsl_native_prototype;
 

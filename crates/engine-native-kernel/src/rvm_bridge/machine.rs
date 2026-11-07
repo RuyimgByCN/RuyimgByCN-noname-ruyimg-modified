@@ -400,7 +400,11 @@ impl VmMachine {
                             valid_raw.push(raw);
                         }
                     }
-                    valid_raw.truncate(tgts.max_targets as usize);
+                    let mut max_tgts = tgts.effective_max_targets(ctx.core, self.owner);
+                    if tgts.match_selected_card_count && !selected_cards.is_empty() {
+                        max_tgts = max_tgts.min(selected_cards.len());
+                    }
+                    valid_raw.truncate(max_tgts);
                     selected_targets = valid_raw;
                 }
                 let max_hp_gt = self
@@ -909,6 +913,36 @@ impl VmHost for EngineVmHost<'_> {
             | EffectRequest::ChooseMoveFieldCardTo { skill, .. }
             | EffectRequest::JudgeMakeCurrentShaTargetUnrespondableOnRed { skill, .. }
             | EffectRequest::ChooseMaxMarkOtherJudgeKillUnlessTaoOrTaoyuan { skill, .. }
+            | EffectRequest::ResolveStddechong { skill, .. }
+            | EffectRequest::ResolveDddYujin { skill, .. }
+            | EffectRequest::ResolveDddZhenji { skill, .. }
+            | EffectRequest::ResolveZhengjian { skill, .. }
+            | EffectRequest::ResolveQiaobian { skill, .. }
+            | EffectRequest::ResolveTwfeiyi { skill, .. }
+            | EffectRequest::ResolveZhengsu { skill, .. }
+            | EffectRequest::ResolveTwcaoang { skill, .. }
+            | EffectRequest::ResolveTwcaozhao { skill, .. }
+            | EffectRequest::ResolveTwchengpu { skill, .. }
+            | EffectRequest::ResolveTwchenxun { skill, .. }
+            | EffectRequest::ResolveTwchenzhen { skill, .. }
+            | EffectRequest::ResolveTwyizhu { skill, .. }
+            | EffectRequest::ResolveRuanji { skill, .. }
+            | EffectRequest::ResolveQiaojian { skill, .. }
+            | EffectRequest::ResolveZhupeilan { skill, .. }
+            | EffectRequest::ResolveMbduanyang { skill, .. }
+            | EffectRequest::ResolveMbrunwei { skill, .. }
+            | EffectRequest::ResolveMbkuangxiang { skill, .. }
+            | EffectRequest::ResolvePotsifeng { skill, .. }
+            | EffectRequest::ResolvePotwanglie { skill, .. }
+            | EffectRequest::ResolvePotchengpu { skill, .. }
+            | EffectRequest::ResolvePottuntian { skill, .. }
+            | EffectRequest::ResolvePotjixi { skill, .. }
+            | EffectRequest::ResolvePotjiyu { skill, .. }
+            | EffectRequest::ResolvePotnigu { skill, .. }
+            | EffectRequest::ResolvePotfuan { skill, .. }
+            | EffectRequest::ResolveDddGuanning { skill, .. }
+            | EffectRequest::ResolveDddJianshuo { skill, .. }
+            | EffectRequest::ResolveShenSimayi { skill, .. }
                 if !skill.is_some() && self.ctx.skill_id != 0 =>
             {
                 *skill = rule_api::SkillId::new(self.ctx.skill_id);

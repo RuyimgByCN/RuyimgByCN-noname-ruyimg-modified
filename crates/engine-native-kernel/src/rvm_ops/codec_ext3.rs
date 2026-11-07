@@ -1,4 +1,6 @@
-//! PA12 Batch 15：`EffectRequest` 扩展编解码子表 3（tags 154..=178 + tag 255 u16 扩展头预留）。
+//! PA12 Batch 15 / Batch 16：`EffectRequest` 扩展编解码子表 3（tags 154..=208 + tag 255 u16 扩展头预留）。
+
+mod batch16;
 
 use super::codec::{push_u32, Rd};
 use super::codec_ext2::{push_card_vec, push_player_vec, rd_card_vec, rd_player_vec};
@@ -414,7 +416,7 @@ pub(super) fn enc_ext3_effect(w: &mut Vec<u8>, e: &EffectRequest) {
             w.push(*action);
             push_u32(w, skill.raw());
         }
-        _ => unreachable!("accept_effect 已拒绝未编码变体"),
+        other => batch16::enc_batch16_effect(w, other),
     }
 }
 
@@ -624,6 +626,7 @@ pub(super) fn dec_ext3_effect(tag: u8, rd: &mut Rd<'_>) -> Option<EffectRequest>
             action: rd.u8()?,
             skill: rule_api::SkillId::new(rd.u32()?),
         },
+        179..=208 => batch16::dec_batch16_effect(tag, rd)?,
         255 => {
             let ext_tag = u16::from_le_bytes([rd.u8()?, rd.u8()?]);
             decode_ext_u16(ext_tag, rd)?

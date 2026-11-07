@@ -11,6 +11,34 @@ pub(super) fn commit_damage(ctx: &mut Ctx<'_>, frame_id: EventId, mut d: crate::
         finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
         return;
     }
+    if ctx.core.is_damage_taken_canceled(
+        ctx.catalog,
+        d.source,
+        d.target,
+        d.card,
+        d.nature,
+        d.amount as u32,
+    ) {
+        d.prevented = true;
+        ctx.log(LogEvent::DamagePrevented {
+            target: d.target,
+            presentation: None,
+        });
+        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Cancelled);
+        return;
+    }
+    d.amount = ctx.core.effective_damage_amount(
+        ctx.catalog,
+        d.source,
+        d.target,
+        d.card,
+        d.nature,
+        d.amount as u32,
+    ) as i32;
+    if d.amount <= 0 {
+        finish_damage(ctx, frame_id, d, crate::event::DamageOutcome::Zero);
+        return;
+    }
     let amount = d.amount;
     let submitted = amount as u32;
     d.settlement.committed_damage = Some(submitted);
