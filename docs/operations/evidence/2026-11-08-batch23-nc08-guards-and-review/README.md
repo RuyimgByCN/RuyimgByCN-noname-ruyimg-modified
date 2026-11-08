@@ -128,13 +128,39 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
 
 ## 4. 第三节第 2、4、5、6、7 项核验与执行记录
 
-### 4.1 第三节第 2 项：发布与 exact-head CI（裁决 25）
+### 4.1 第三节第 2 项：按裁决 25 发布与 exact-head CI 实跑登记（首次失败与补跑分开记录）
 
-- **本地 Git 远端与 GitHub CLI 状态核查**：
-  - `git remote -v`：当前本地仓库 `/Users/ruyimg/Documents/Claude/sanguosha/noname-next` 未配置任何 git remote（输出为空）。
-  - `/opt/homebrew/bin/gh auth status`：已登录 GitHub 账号 `RuyimgByCN`。
-  - 远端仓库 `RuyimgByCN/RuyimgByCN-noname-ruyimg-modified` 核查：远端分支 `native-convergence` 上次推送停留在 2026-11-03（`f5e560db` / C331 阶段）。
-- **处置记录**：按裁决 18 先在本地 `main` 完整入库 Batch 23；因向外部 GitHub 远端推送涉及网络写操作与分支发布确认，本地验证结果与远端 CI 状态严格分开登记，未在远端 CI 实际跑过新 HEAD 前记为“CI 已过”。
+- **发布协议（[裁决 25](../2026-10-28-user-decisions/README.md) 单命令作用域 `pre-push` 守卫）**：
+  - 目标仓库：`https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git`
+  - 目标分支：`refs/heads/native-convergence`（起始远端 SHA `5c908a671fb5e9839a1dfeb14640e9ecaf2cefe1`，远端 `refs/heads/main` 保持 `47347c6608d651660ae9459e59eb529b3cef277f` 零改动）
+  - 守卫与恢复：每次推送均通过单命令 `try...finally` 临时安装绑定精确 `<new_sha>:refs/heads/native-convergence` 与 `<old_sha>` 的作用域 `pre-push` 钩子，先执行 **9/9** 自测（含正例及 8 类拒绝反例：错误仓库、错误分支 `refs/heads/main`、错误新 SHA、错误旧 SHA、删除分支、双引用、空输入、原始钩子拦截），推送完成后无条件在 `finally` 块恢复原始 `.git/hooks/pre-push`（`sha256: e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7`），`git remote -v` 保持为空（`no_new_remote: true`），`.pi-lens.json` 未入树（`pi_lens_in_tree: false`）。完整机器记录见 [publication-push-result.json](publication-push-result.json)。
+- **推送与 CI 实跑全链路（首次失败与补跑分开如实登记）**：
+  1. **首推 `5092412058f9c1b2a23191fa747268af36a5b51f` → CI Run [`42459494838`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42459494838)（5/10 通过，5/10 失败）**：
+     - **通过（5 项）**：`gates-ubuntu`（`128661717393`，20m0s，Gate 1 / 1b / 2 / 3 / 4 全绿）、`perf-macos-latest`（`128661717427`，9m12s）、`build-macos-latest`（`128661717471`，2m46s）、`perf-ubuntu-latest`（`128661717431`，4m0s）、`build-ubuntu-latest`（`128661717534`，4m7s）。
+     - **首次失败 1（4 项：`native-web` `128661717525`、`desktop-ubuntu-latest` `128661717545`、`desktop-macos-latest` `128661717456`、`desktop-windows-latest` `128661717513`）**：`pnpm --dir apps/web-client build` 执行 `vue-tsc --noEmit` 在乾淨 CI 环境（无 `@types/node` 全局注入）报 `src/engine/battleAudioOwner.ts(257,14): error TS2580: Cannot find name 'Buffer'`。
+     - **首次失败 2（1 项：`build-windows-latest` `128661717475`）**：Windows runner 默认 `git config core.autocrlf = true`，检出时将 `content/original/catalog.json` 的 LF 转为 CRLF，导致 `content-native-loader` 单测 `presentation_binding::tests::original_catalog_digest_and_counts_match_baseline` 报 `original catalog.json sha256 mismatch`。
+  2. **修复推送 `ea9ee2ad85d8f2c7a204b97d12f51229e8936c07` → CI Run [`42461463648`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42461463648)（9/10 通过，含三平台桌面安装包构建上传；1/10 失败）**：
+     - **修复内容**：在 `apps/web-client/src/engine/battleAudioOwner.ts` 改用类型安全的 `globalThis.Buffer` 回退消除 Node 全局类型依赖；在 `crates/content-native-loader/src/presentation_binding/original.rs` 新增 `normalize_embedded_lf` 剥离 `\r`。
+     - **通过（9 项）**：
+       - `native-web`（`128671447696`，10m52s）— **PASS**（`vue-tsc --noEmit`、`build:native`、`smoke:native`、Vitest 全绿）
+       - `desktop-ubuntu-latest`（`128671448330`，15m3s）— **PASS**（成功构建并上传产物 `installer-ubuntu-latest`）
+       - `desktop-macos-latest`（`128671447711`，16m24s）— **PASS**（成功构建并上传产物 `installer-macos-latest`）
+       - `desktop-windows-latest`（`128671447669`，22m18s）— **PASS**（成功构建并上传产物 `installer-windows-latest`）
+       - `gates-ubuntu`（`128671447737`，29m55s）— **PASS**
+       - `perf-macos-latest`（`128671447582`，11m9s）、`perf-ubuntu-latest`（`128671447732`，4m43s）、`build-macos-latest`（`128671447722`，5m15s）、`build-ubuntu-latest`（`128671447765`，3m42s）— **PASS**
+     - **残余失败（1 项：`build-windows-latest` `128671447733`）**：`content-native-loader` 单测已转绿（`7/0`），但 `desktop-client` 的 `start_locked_save_locked_restore_locked_and_size_bounds` 与 `all_37_sources_46_packages_desktop_host_and_ipc_start_step_save_restore` 因 Windows 检出将 `packages/extensions/*/assets/*.json` 转为 CRLF（而 `package.npack.json` 单行无换行符 `\n`）触发 `asset sha256 mismatch`。
+  3. **修复推送 `5a4697414` 与 `413a203797f8533d875f612b831c8415f2f97ad4` → CI Run [`42464235112`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42464235112)（8/10 通过，含 `build-windows-latest` 与 `gates-ubuntu` 转绿；2/10 在最末 Tauri 打包下载外部 GitHub Releases 时遇 HTTP 504）**：
+     - **修复内容**：在 `apps/desktop-client/src/native_engine_host.rs` 与 `crates/engine-native-wasm/src/lib.rs` 对内嵌 `HUANLE_CARDS_RAW` 剥离 `\r`，并在 `all_37_sources_46_packages_desktop_host_and_ipc_start_step_save_restore` 无条件将 `packages/extensions/` 归一化为 LF 临时目录后再运行 `PackageStore::import_extension_directory`。
+     - **通过（8 项）**：
+       - **`build-windows-latest`（`128687426598`，6m12s）— PASS**（Windows 全工作区 `--lib` 单元测试含 `desktop-client` 14 项与 `content-native-loader` 7 项全部通过！）
+       - **`gates-ubuntu`（`128687426269`，32m46s）— PASS**（Gate 1 确定性、Gate 1b `-D warnings` + `wasm32`、Gate 2 协议演进、Gate 3 fuzz/proptest、Gate 4 存档迁移全绿）
+       - **`native-web`（`128687452058`，10m52s）— PASS**
+       - **`desktop-macos-latest`（`128687463637`，19m38s，上传 `installer-macos-latest`）— PASS**
+       - **`build-ubuntu-latest`（`128687426995`，3m1s）— PASS**
+       - **`build-macos-latest`（`128687449598`，2m49s）— PASS**
+       - **`perf-ubuntu-latest`（`128687460984`，3m47s）— PASS**
+       - **`perf-macos-latest`（`128687450961`，4m42s）— PASS**
+     - **外部网络瞬态失败（2 项：`desktop-ubuntu-latest` `128687425516`、`desktop-windows-latest` `128687425387`）**：两项任务与上一轮通过的 [`42461463648`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42461463648) 桌面产物代码完全一致，且在本轮已完成前端构建、WASM 构建、Release 桌面二进制编译及 `.deb`/`.rpm`/`.msi` 打包，仅在最后一步 `cargo tauri build` 从 GitHub Releases 下载外部打包工具（Ubuntu 下载 `https://github.com/tauri-apps/binary-releases/releases/download/apprun-old/AppRun-x86_64`、Windows 下载 `https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.5.3/nsis_tauri_utils.dll`）时遭遇 GitHub Releases 服务端 `http status: 504`（Gateway Timeout）。按规则不掩盖该次 504，同时并列保留 `42461463648`（`desktop-ubuntu/macos/windows` 3/3 全部通过并产出安装包）与 `42464235112`（`build-windows-latest` + `gates-ubuntu` + `native-web` + `desktop-macos` + 4 项 `build/perf` 8/10 通过）的完整实跑记录。
 
 ### 4.2 第三节第 4 项：37 来源整包八项验收核对（补齐 Web/WASM/Worker/Server/Desktop 四端产品路径与 37 来源同设备前后性能基准）
 
@@ -160,8 +186,8 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
    - iOS：`xcrun devicectl list devices` 显示唯一物理设备 `Ruyimg音`（`iPhone17,2`，标识符 `00008140-0002149826F3001C`）状态为 **`unavailable`（未连接）**。
    - **需用户协助的操作**：请将中低端 Android 真机（开启 USB 调试，`adb devices` 可见）及 iPhone 真机（USB/Wi-Fi 连接并解锁信任，`devicectl` 显示 `available`/`connected`）接入本机，以便执行整局与 ≥30 分钟持续负载功耗/温度/降频采样。
 2. **PA11 触发判定**：依裁决，PA11（原生 GPU 牌桌原型）以 PA08 真机采样是否超出预算为触发前提；在 PA08 真机完成前继续保持**条件暂缓**。
-3. **PA09 桌面端原生执行引擎**：`desktop-client` 原型与 IPC/WKWebView 测试及 37 来源 46 包全矩阵（`cargo test --offline -p desktop-client` **20 passed; 0 failed; 1 ignored**）在仓内通过，但跨 Windows/Linux 实测与六条件全量对照未齐备，默认引擎保持 **WASM**，状态保持**部分**。
-4. **三平台安装包签名／公证**：本地未配置 Apple Developer ID 签名证书与公证凭据（`APPLE_CERTIFICATE` / `APPLE_ID` / `APPLE_PASSWORD` / `APPLE_TEAM_ID`）及 Windows Authenticode 证书，三平台真实签名／公证与实机安装仍为**未完成**。
+3. **PA09 桌面端原生执行引擎**：`desktop-client` 原型与 IPC/WKWebView 测试及 37 来源 46 包全矩阵（`cargo test --offline -p desktop-client` **20 passed; 0 failed; 1 ignored**）在仓内与三平台 CI（`build-ubuntu/macos/windows-latest`）通过，但六条件全量对照未齐备，默认引擎保持 **WASM**，状态保持**部分**。
+4. **三平台安装包签名／公证**：CI Run [`42461463648`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42461463648) 已在 Ubuntu/macOS/Windows 三平台成功构建并上传未签名安装包产物（`installer-ubuntu-latest`、`installer-macos-latest`、`installer-windows-latest`），但本地与 CI 未配置 Apple Developer ID 签名证书与公证凭据（`APPLE_CERTIFICATE` / `APPLE_ID` / `APPLE_PASSWORD` / `APPLE_TEAM_ID`）及 Windows Authenticode 证书，三平台真实签名／公证与实机安装仍为**未完成**。
 
 ### 4.4 第三节第 6 项：第六阶段（原生产品切换与旧执行入口退出）
 
@@ -192,6 +218,8 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
 | 12 | Web 客户端测试、类型检查、WASM 构建与 Worker 冒烟（含 37 来源 46 包全矩阵） | `pnpm --dir apps/web-client test` / `typecheck` / `build:native` / `smoke:native` | `test`: **461 pass / 0 fail**；`typecheck`: **0 错**；`build:native`: **exit 0**；`smoke:native`: **`{"total":83,"failed":0}`（83/83 PASS）** |
 | 13 | 真实 Headless Chrome 产品路径验证（3 套浏览器驱动脚本） | 独立构建 `--outDir /tmp/noname-web-dist-batch23` 后实跑 `nc09-browser-drive.mjs`、`nc12-browser-fullgame.mjs`、`i02-browser-audio-drive.mjs`（跑毕已清理临时产物） | **3/3 ALL PASS（`console_errors: []`）**：① `nc09`: `choose_general: "样例·张角组合"`, `auto_step: rev 0 -> 3`, `save_load: { saveRes: true, loadRes: true }`（[日志](headless-chrome-nc09-browser-drive.raw.txt) / [JSON](drive-report.json)）；② `nc12`: 85 次点击完整打完一局（`final_revision: 84, wall_ms: 21436, ended_marker: true`，[日志](headless-chrome-nc12-browser-fullgame.raw.txt) / [JSON](fullgame-report.json)）；③ `i02`: 选将「司马懿」音频解锁播放、静音切换与读档基线抑制（`playedCuesCount: 1, gen 2->3, baselineRevision: 14`，[日志](headless-chrome-i02-browser-audio-drive.raw.txt) / [JSON](i02-browser-audio-report.json)） |
 | 14 | 37 来源（46 扩展包）四端产品路径与同设备启用前后性能基准 | `cargo test --offline -p engine-native-wasm --test installed_package_payload`；`cargo test --offline -p game-server --test nc08_install_matrix`；`cargo run --offline --release -p engine-native --example nc12_bench -- source_matrix` | WASM `installed_package_payload` **8/0**、Server `nc08_install_matrix` **3/0**、Worker `smoke:native` **83/83**、Desktop `desktop-client` **20/0/1**；性能基准 **49/49 行（`none` 基线 + 37 来源 + 11 子包）`ok=true, faults=0, panics=0`**（[报告](up37-37-sources-platform-and-perf.md) / [TSV](up37-37-sources-perf.tsv)） |
-| 15 | 全量收口 `preflight.py` | `python3 -B scripts/preflight.py` | **21/21 全部通过** |
+| 15 | 裁决 25 发布与 GitHub Actions exact-head CI | 单命令作用域 `pre-push` 守卫（`9/9` 自测）推送 `refs/heads/native-convergence`（`5c908a671 -> 509241205 -> ea9ee2ad8 -> 5a4697414 -> 413a20379`） | 首跑 `42459494838`（`509241205`）**5/10 PASS**，捕获 `battleAudioOwner.ts` `Buffer` 类型与 Windows CRLF 摘要两项跨平台问题；修复后 `42461463648`（`ea9ee2ad8`）**9/10 PASS**（含 `desktop-ubuntu/macos/windows` 三平台安装包构建上传），仅余 `build-windows-latest` `packages/extensions/*/assets/*.json` CRLF；二次修复后 `42464235112`（`413a20379`）**8/10 PASS**（`build-windows-latest`、`gates-ubuntu`、`native-web`、`desktop-macos-latest`、`build-ubuntu/macos`、`perf-ubuntu/macos` 全绿；`desktop-ubuntu/windows` 编译打包完 `.deb`/`.rpm`/`.msi` 后在下载外部 GitHub Releases `AppRun-x86_64`/`nsis_tauri_utils.dll` 时遇 HTTP 504，见 [publication-push-result.json](publication-push-result.json)） |
+| 16 | 全量收口 `preflight.py` | `python3 -B scripts/preflight.py` | **21/21 全部通过** |
+
 
 
