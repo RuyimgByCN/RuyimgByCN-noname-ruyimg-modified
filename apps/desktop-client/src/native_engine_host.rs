@@ -600,4 +600,186 @@ mod tests {
             .unwrap_err();
         assert!(err.contains("lockedContentJson exceeds"));
     }
+
+    #[test]
+    fn all_37_sources_46_packages_desktop_host_and_ipc_start_step_save_restore() {
+        use crate::{DesktopHost, ShellCapabilities};
+        use std::collections::{BTreeMap, BTreeSet};
+        use std::fs;
+        use std::path::PathBuf;
+
+        let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        let map_path = manifest_dir
+            .join("../../docs/operations/evidence/2026-10-19-package-source-map/map.tsv");
+        let map_text = fs::read_to_string(&map_path).expect("read map.tsv");
+        let ext_root = manifest_dir.join("../../packages/extensions");
+
+        let mut by_source: BTreeMap<String, Vec<String>> = BTreeMap::new();
+        let mut all_dirs: BTreeSet<String> = BTreeSet::new();
+        for (idx, line) in map_text.lines().enumerate() {
+            if idx == 0 || line.trim().is_empty() {
+                continue;
+            }
+            let cols: Vec<&str> = line.split('\t').collect();
+            let src_id = cols[0].trim().to_string();
+            let pkgs: Vec<String> = cols[3]
+                .split(',')
+                .map(|s| s.trim().to_string())
+                .filter(|s| !s.is_empty())
+                .collect();
+            for p in &pkgs {
+                all_dirs.insert(p.clone());
+            }
+            by_source.insert(src_id, pkgs);
+        }
+        assert_eq!(by_source.len(), 37, "must cover all 37 upstream sources");
+        assert_eq!(all_dirs.len(), 46, "must cover all 46 extension packages");
+
+        // 1. DesktopHost::import_extension_directory over all extension packages
+        let tmp = tempfile::tempdir().expect("tempdir");
+        let desktop = DesktopHost::open(
+            tmp.path(),
+            ShellCapabilities {
+                manage_content: true,
+                export_diagnostics: true,
+                allow_unsigned_packages: true,
+            },
+        )
+        .expect("open DesktopHost");
+        let report = desktop
+            .import_extension_directory(&ext_root, None)
+            .expect("import_extension_directory");
+        assert!(
+            report.installed.len() >= 46,
+            "DesktopHost must install all 46 extension packages, got {}",
+            report.installed.len()
+        );
+
+        // 2. HostSession IPC over all 37 sources / 46 packages
+        let mut host = HostSession::default();
+        host.dispatch(json!({"id": 1, "type": "init"}))
+            .expect("init");
+        let empty_prepared = host
+            .dispatch(json!({
+                "id": 2,
+                "type": "prepareLockedContent",
+                "frozenPackagesJson": "[]",
+            }))
+            .expect("empty prepareLockedContent");
+        let empty_locked_str = serde_json::to_string(&empty_prepared).unwrap();
+
+        let mut next_id = 10u64;
+        for (src_id, dirs) in &by_source {
+            let mut frozen_items = Vec::new();
+            let mut pack_items = Vec::new();
+            for dir in dirs {
+                let pkg_path = ext_root.join(dir);
+                let npack_raw = fs::read_to_string(pkg_path.join("package.npack.json")).unwrap();
+                let npack_val: Value = serde_json::from_str(&npack_raw).unwrap();
+                let mut pack_item = json!({ "manifest": npack_val["manifest"] });
+                let mut raw_assets: BTreeMap<String, Vec<u8>> = BTreeMap::new();
+                if let Some(paths) = npack_val.get("asset_paths").and_then(Value::as_object) {
+                    for rel in paths.values().filter_map(Value::as_str) {
+                        let bytes = fs::read(pkg_path.join(rel)).unwrap();
+                        raw_assets.insert(rel.to_string(), bytes);
+                    }
+                }
+                for (rel, key) in [
+                    ("assets/cards.json", "cards"),
+                    ("assets/character.json", "characters"),
+                    ("assets/pile.json", "pile"),
+                    ("assets/config.json", "config"),
+                ] {
+                    let p = pkg_path.join(rel);
+                    if p.is_file() {
+                        let bytes = fs::read(&p).unwrap();
+                        let parsed: Value = serde_json::from_slice(&bytes).unwrap();
+                        pack_item[key] = parsed;
+                    }
+                }
+                next_id += 1;
+                host.dispatch(json!({
+                    "id": next_id,
+                    "type": "validatePackage",
+                    "packJson": pack_item.to_string(),
+                }))
+                .unwrap_or_else(|e| panic!("{src_id}/{dir}: validatePackage failed: {e}"));
+                next_id += 1;
+                let frozen = host
+                    .dispatch(json!({
+                        "id": next_id,
+                        "type": "validateFrozenPackage",
+                        "packageJson": npack_raw,
+                        "assetsJson": serde_json::to_string(&raw_assets).unwrap(),
+                    }))
+                    .unwrap_or_else(|e| {
+                        panic!("{src_id}/{dir}: validateFrozenPackage failed: {e}")
+                    });
+                pack_items.push(pack_item);
+                frozen_items.push(frozen);
+            }
+
+            next_id += 1;
+            let prepared = host
+                .dispatch(json!({
+                    "id": next_id,
+                    "type": "prepareLockedContent",
+                    "frozenPackagesJson": serde_json::to_string(&frozen_items).unwrap(),
+                }))
+                .unwrap_or_else(|e| panic!("{src_id}: prepareLockedContent failed: {e}"));
+            let locked_content_json = serde_json::to_string(&prepared).unwrap();
+
+            next_id += 1;
+            let started = host
+                .dispatch(json!({
+                    "id": next_id,
+                    "type": "startLocked",
+                    "players": 4,
+                    "seed": 42007,
+                    "observer": 0,
+                    "lockedContentJson": locked_content_json,
+                }))
+                .unwrap_or_else(|e| panic!("{src_id}: startLocked failed: {e}"));
+            let rev0 = started["revision"].as_u64().unwrap();
+
+            next_id += 1;
+            let stepped = host
+                .dispatch(json!({"id": next_id, "type": "autoStep"}))
+                .unwrap_or_else(|e| panic!("{src_id}: autoStep failed: {e}"));
+            let rev1 = stepped["revision"].as_u64().unwrap();
+            assert!(rev1 > rev0, "{src_id}: desktop autoStep must advance revision");
+            let state_hash = stepped["hash_hex"].as_str().unwrap().to_string();
+
+            next_id += 1;
+            let saved = host
+                .dispatch(json!({"id": next_id, "type": "saveLocked"}))
+                .unwrap_or_else(|e| panic!("{src_id}: saveLocked failed: {e}"));
+            let hex = saved["hex"].as_str().unwrap().to_string();
+
+            next_id += 1;
+            assert!(
+                host.dispatch(json!({
+                    "id": next_id,
+                    "type": "restoreLocked",
+                    "hex": hex,
+                    "lockedContentJson": empty_locked_str,
+                }))
+                .is_err(),
+                "{src_id}: desktop restoreLocked with empty lock must be rejected"
+            );
+
+            next_id += 1;
+            let restored = host
+                .dispatch(json!({
+                    "id": next_id,
+                    "type": "restoreLocked",
+                    "hex": hex,
+                    "lockedContentJson": locked_content_json,
+                }))
+                .unwrap_or_else(|e| panic!("{src_id}: restoreLocked failed: {e}"));
+            assert_eq!(restored["revision"].as_u64().unwrap(), rev1);
+            assert_eq!(restored["hash_hex"].as_str().unwrap(), state_hash);
+        }
+    }
 }
+

@@ -835,9 +835,128 @@ try {
     oob?.ok === false && /座位越界/.test(oob?.error ?? ""),
     `reply=${JSON.stringify(oob).slice(0, 200)}`,
   );
+
+  // ── 37 来源 / 46 包 Web Worker 真实消息往返矩阵（validatePackage + validateFrozenPackage + prepareLockedContent + startLocked + autoStep + saveLocked + restoreLocked） ──
+  const mapTsv = readFileSync(
+    join(root, "../../docs/operations/evidence/2026-10-19-package-source-map/map.tsv"),
+    "utf8",
+  );
+  const bySource = new Map();
+  const seenDirs = new Set();
+  for (const [idx, line] of mapTsv.split(/\r?\n/).entries()) {
+    if (idx === 0 || !line.trim()) continue;
+    const cols = line.split("\t");
+    const srcId = cols[0].trim();
+    const pkgs = cols[3]
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
+    pkgs.forEach((p) => seenDirs.add(p));
+    bySource.set(srcId, pkgs);
+  }
+  let reqId = 30000;
+  let sourcesPassed = 0;
+  let packagesPassed = 0;
+  const sourceErrors = [];
+  for (const [srcId, dirs] of bySource.entries()) {
+    const frozenItems = [];
+    let pkgOk = true;
+    for (const dir of dirs) {
+      const pkgPath = join(extRoot, dir);
+      const npackRaw = readFileSync(join(pkgPath, "package.npack.json"), "utf8");
+      const npackVal = JSON.parse(npackRaw);
+      const packItem = { manifest: npackVal.manifest };
+      const rawAssets = {};
+      for (const rel of Object.values(npackVal.asset_paths ?? {})) {
+        rawAssets[rel] = Array.from(readFileSync(join(pkgPath, rel)));
+      }
+      for (const [rel, key] of [
+        ["assets/cards.json", "cards"],
+        ["assets/character.json", "characters"],
+        ["assets/pile.json", "pile"],
+        ["assets/config.json", "config"],
+      ]) {
+        try {
+          packItem[key] = JSON.parse(readFileSync(join(pkgPath, rel), "utf8"));
+        } catch {
+          // optional asset
+        }
+      }
+      const valReply = await workerSend({
+        id: ++reqId,
+        type: "validatePackage",
+        packJson: JSON.stringify(packItem),
+      });
+      const frozenReply = await workerSend({
+        id: ++reqId,
+        type: "validateFrozenPackage",
+        packageJson: npackRaw,
+        assetsJson: JSON.stringify(rawAssets),
+      });
+      if (!valReply?.ok || !frozenReply?.ok) {
+        pkgOk = false;
+        sourceErrors.push(`${srcId}/${dir}: val=${valReply?.error} frozen=${frozenReply?.error}`);
+        break;
+      }
+      frozenItems.push(frozenReply.data);
+      packagesPassed += 1;
+    }
+    if (!pkgOk) continue;
+    const prepReply = await workerSend({
+      id: ++reqId,
+      type: "prepareLockedContent",
+      frozenPackagesJson: JSON.stringify(frozenItems),
+    });
+    if (!prepReply?.ok) {
+      sourceErrors.push(`${srcId}: prepare=${prepReply?.error}`);
+      continue;
+    }
+    const lockedContentJson = JSON.stringify(prepReply.data);
+    const startReply = await workerSend({
+      id: ++reqId,
+      type: "startLocked",
+      players: 4,
+      seed: 42007,
+      observer: 0,
+      lockedContentJson,
+    });
+    const stepReply = await workerSend({ id: ++reqId, type: "autoStep" });
+    const saveReply = await workerSend({ id: ++reqId, type: "saveLocked" });
+    const restoreReply = await workerSend({
+      id: ++reqId,
+      type: "restoreLocked",
+      hex: saveReply?.data?.hex ?? "",
+      lockedContentJson,
+    });
+    if (
+      startReply?.ok &&
+      stepReply?.ok &&
+      saveReply?.ok &&
+      restoreReply?.ok &&
+      stepReply.data.revision > startReply.data.revision &&
+      restoreReply.data.hash_hex === stepReply.data.hash_hex
+    ) {
+      sourcesPassed += 1;
+    } else {
+      sourceErrors.push(
+        `${srcId}: start=${startReply?.ok} step=${stepReply?.ok} save=${saveReply?.ok} restore=${restoreReply?.ok}`,
+      );
+    }
+  }
+  check(
+    "worker_all_37_sources_46_packages_locked_matrix",
+    bySource.size === 37 &&
+      seenDirs.size === 46 &&
+      sourcesPassed === 37 &&
+      packagesPassed === 46 &&
+      sourceErrors.length === 0,
+    `sources=${sourcesPassed}/${bySource.size} packages=${packagesPassed}/${seenDirs.size}` +
+      (sourceErrors.length ? ` errors=${sourceErrors.join("; ")}` : ""),
+  );
 } catch (e) {
   check("worker_general_select_protocol", false, `throw: ${e}`);
 }
 
 console.log(JSON.stringify({ total: results.length, failed: results.filter((r) => !r.ok).length }));
 process.exit(results.some((r) => !r.ok) ? 1 : 0);
+

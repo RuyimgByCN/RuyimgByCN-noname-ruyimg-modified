@@ -1,0 +1,2 @@
+RESULT scenario=browser_fullgame tier=web {"clicks":85,"final_revision":84,"wall_ms":21436,"ended_marker":true,"console_errors":[]}
+NOTE headless Chrome + 本机静态服务；点击间隔 120ms 为脚本节流，非引擎耗时。

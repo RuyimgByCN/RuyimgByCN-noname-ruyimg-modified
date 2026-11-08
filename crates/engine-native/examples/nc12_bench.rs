@@ -34,6 +34,9 @@ use std::time::Instant;
 #[path = "nc12_bench/scenarios.rs"]
 mod scenarios;
 use scenarios::*;
+#[path = "nc12_bench/source_matrix.rs"]
+mod source_matrix;
+use source_matrix::*;
 
 /// 三档负载定义：目录名（= 安装来源目录）。
 /// `probe` 会逐档实际导入并装载，冲突（重名牌/将/技能）如实报错。
@@ -408,6 +411,11 @@ fn load_pack_dir(
             if let Ok(cj) = std::fs::read_to_string(&chars) {
                 if let Ok(b) = content_native_loader::bridge_generals(&cj) {
                     out.pack.generals = b.generals;
+                    for decl in b.host_skills {
+                        if !out.pack.host_skills.iter().any(|d| d.name == decl.name) {
+                            out.pack.host_skills.push(decl);
+                        }
+                    }
                 }
             }
         }
@@ -421,6 +429,11 @@ fn load_pack_dir(
             .map_err(|e| format!("桥接 character.json 失败 {e}"))?;
         if let Ok(b) = content_native_loader::bridge_generals(&json) {
             out.pack.generals = b.generals;
+            for decl in b.host_skills {
+                if !out.pack.host_skills.iter().any(|d| d.name == decl.name) {
+                    out.pack.host_skills.push(decl);
+                }
+            }
         }
         return Ok(out.pack);
     }
@@ -456,15 +469,44 @@ fn load_pack_dir(
         )
         .map_err(|e| format!("pile 构包失败 {e:?}"));
     }
-    Err("资产目录既无 cards.json / character.json / pile.json".to_string())
+    let config = assets.join("config.json");
+    if config.is_file() {
+        let json = std::fs::read_to_string(&config)
+            .map_err(|e| format!("读 {} 失败 {e}", config.display()))?;
+        let v: serde_json::Value = serde_json::from_str(&json)
+            .map_err(|e| format!("解析 config.json 失败 {e}"))?;
+        if !v.as_object().is_some_and(|obj| !obj.is_empty()) {
+            return Err("config.json 必须为非空对象".to_string());
+        }
+        let dir_name = path
+            .file_name()
+            .map(|s| s.to_string_lossy().into_owned())
+            .unwrap_or_else(|| "bench-config".to_string());
+        let interned =
+            engine_native::content::names::intern(format!("installed:config:{dir_name}"));
+        return Ok(engine_native::content::extension::ExtensionPack {
+            def: engine_native::content::extension::ExtensionDef {
+                name: interned,
+                version: 1,
+                description: interned,
+            },
+            cards: Vec::new(),
+            generals: Vec::new(),
+            host_skills: Vec::new(),
+            vm_skills: Vec::new(),
+            init_hook: engine_native::content::extension::InitHook::None,
+            enabled: true,
+        });
+    }
+    Err("资产目录既无 cards.json / character.json / pile.json / config.json".to_string())
 }
 
 fn load_tier(tier: &str) -> Result<Option<PackHost>, String> {
-    // **逐包档**：`dir:<包目录名>` —— 直接按 drop-in 目录名装载一个包，
-    // 便于用 shell 循环把 `probe` 跑到**每一个**包上（不必往 TIER_TABLE 里逐个登记）。
+    // **逐包/逐来源档**：`dir:<包目录名>` 或 `dir:<包1>+<包2>` —— 直接按 drop-in 目录名装载，
+    // 便于把 `probe`/`build`/`drive`/`archive` 跑到**每一个**来源与包上。
     if let Some(dir) = tier.strip_prefix("dir:") {
-        let one = [dir];
-        return PackHost::load(&one).map(Some);
+        let parts: Vec<&str> = dir.split('+').filter(|s| !s.is_empty()).collect();
+        return PackHost::load(&parts).map(Some);
     }
     let (_, dirs) = TIER_TABLE
         .iter()
@@ -482,6 +524,9 @@ fn tier_names() -> String {
 }
 
 fn tier_dirs_csv(tier: &str) -> String {
+    if let Some(dir) = tier.strip_prefix("dir:") {
+        return dir.to_string();
+    }
     TIER_TABLE
         .iter()
         .find(|(n, _)| *n == tier)
@@ -833,7 +878,7 @@ fn main() {
         .or_else(|| args.positional.clone())
         .unwrap_or_else(|| "help".into());
     if scenario == "help" {
-        println!("scenarios: probe | build | drive | copy | archive | ai | long");
+        println!("scenarios: probe | build | drive | copy | archive | ai | long | source_matrix");
         println!("tiers: {}", tier_names());
         return;
     }
@@ -851,8 +896,9 @@ fn main() {
         "archive" => scenario_archive(&args, &mut csv),
         "ai" => scenario_ai(&args, &mut csv),
         "long" => scenario_long(&args, &mut csv),
+        "source_matrix" => scenario_source_matrix(&args, &mut csv),
         other => {
-            eprintln!("未知场景 {other}（probe|build|drive|copy|archive|ai|long）");
+            eprintln!("未知场景 {other}（probe|build|drive|copy|archive|ai|long|source_matrix）");
             std::process::exit(2);
         }
     }

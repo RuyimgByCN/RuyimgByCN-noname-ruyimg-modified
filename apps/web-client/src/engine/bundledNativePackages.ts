@@ -76,6 +76,7 @@ export interface NativePackagePayload {
   cards?: unknown;
   characters?: unknown;
   pile?: unknown;
+  config?: unknown;
   modules?: unknown;
   skill_index?: unknown;
   trigger_index?: unknown;
@@ -145,9 +146,10 @@ export function validateNativePackage(value: unknown): NativePackagePayload {
     throw new Error("扩展包 VM 模块格式无效");
   }
   if (payload?.modules !== undefined) validateVmModules(payload);
-  const assets = [payload?.cards, payload?.characters, payload?.pile].filter((v) => v !== undefined);
+  const assets = [payload?.cards, payload?.characters, payload?.pile, payload?.config].filter((v) => v !== undefined);
   if ((!assets.length && payload?.modules === undefined)
-    || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))) {
+    || assets.some((v) => v === null || typeof v !== "object" || Array.isArray(v))
+    || (payload?.config !== undefined && Object.keys(payload.config as Record<string, unknown>).length === 0)) {
     throw new Error("扩展包缺少可装载的卡牌、武将、牌堆或 VM 数据");
   }
   return payload!;

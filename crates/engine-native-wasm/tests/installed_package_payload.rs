@@ -350,3 +350,157 @@ fn installed_dependency_lock_is_checked_on_start_and_restore() {
         "invalid dependency locks accepted: {accepted:?}"
     );
 }
+
+#[test]
+fn all_37_sources_46_packages_validate_start_step_save_and_restore_on_wasm_session() {
+    use engine_native_wasm::{
+        prepare_locked_content_json, validate_frozen_package_json, validate_pack_json,
+        NativeSession,
+    };
+    use std::collections::{BTreeMap, BTreeSet};
+
+    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let map_path = manifest_dir
+        .join("../../docs/operations/evidence/2026-10-19-package-source-map/map.tsv");
+    let map_text = fs::read_to_string(&map_path).expect("read map.tsv");
+    let ext_root = manifest_dir.join("../../packages/extensions");
+
+    let mut by_source: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut all_dirs: BTreeSet<String> = BTreeSet::new();
+    for (idx, line) in map_text.lines().enumerate() {
+        if idx == 0 || line.trim().is_empty() {
+            continue;
+        }
+        let cols: Vec<&str> = line.split('\t').collect();
+        let src_id = cols[0].trim().to_string();
+        let pkgs: Vec<String> = cols[3]
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect();
+        for p in &pkgs {
+            all_dirs.insert(p.clone());
+        }
+        by_source.insert(src_id, pkgs);
+    }
+    assert_eq!(by_source.len(), 37, "must cover all 37 upstream sources");
+    assert_eq!(all_dirs.len(), 46, "must cover all 46 extension packages");
+
+    let build_pkg_payloads = |dir: &str| -> (Value, Value) {
+        let pkg_path = ext_root.join(dir);
+        let npack_raw = fs::read_to_string(pkg_path.join("package.npack.json")).unwrap();
+        let npack_val: Value = serde_json::from_str(&npack_raw).unwrap();
+        let mut pack_item = json!({ "manifest": npack_val["manifest"] });
+        let mut raw_assets: BTreeMap<String, Vec<u8>> = BTreeMap::new();
+        if let Some(paths) = npack_val.get("asset_paths").and_then(Value::as_object) {
+            for rel in paths.values().filter_map(Value::as_str) {
+                let bytes = fs::read(pkg_path.join(rel)).unwrap();
+                raw_assets.insert(rel.to_string(), bytes);
+            }
+        }
+        for (rel, key) in [
+            ("assets/cards.json", "cards"),
+            ("assets/character.json", "characters"),
+            ("assets/pile.json", "pile"),
+            ("assets/config.json", "config"),
+        ] {
+            let p = pkg_path.join(rel);
+            if p.is_file() {
+                let bytes = fs::read(&p).unwrap();
+                let parsed: Value = serde_json::from_slice(&bytes).unwrap();
+                pack_item[key] = parsed;
+            }
+        }
+        let item_str = pack_item.to_string();
+        validate_pack_json(&item_str)
+            .unwrap_or_else(|e| panic!("{dir}: validate_pack_json failed: {e}"));
+        let assets_str = serde_json::to_string(&raw_assets).unwrap();
+        let frozen_str = validate_frozen_package_json(&npack_raw, &assets_str)
+            .unwrap_or_else(|e| panic!("{dir}: validate_frozen_package_json failed: {e}"));
+        let frozen_val: Value = serde_json::from_str(&frozen_str).unwrap();
+        (pack_item, frozen_val)
+    };
+
+    let empty_locked = prepare_locked_content_json("[]").expect("empty locked content");
+
+    for (src_id, dirs) in &by_source {
+        let mut pack_items = Vec::new();
+        let mut frozen_items = Vec::new();
+        for dir in dirs {
+            let (pack_item, frozen_val) = build_pkg_payloads(dir);
+            pack_items.push(pack_item);
+            frozen_items.push(frozen_val);
+        }
+        let packs_json = serde_json::to_string(&pack_items).unwrap();
+        let frozen_json = serde_json::to_string(&frozen_items).unwrap();
+        let locked_json = prepare_locked_content_json(&frozen_json)
+            .unwrap_or_else(|e| panic!("{src_id}: prepare_locked_content_json failed: {e}"));
+
+        // 1. packsJson session path: new -> auto_step -> save -> restore -> reject empty
+        let mut sess_packs =
+            NativeSession::new_with_packs_json(4, 42007, &packs_json)
+                .unwrap_or_else(|e| panic!("{src_id}: new_with_packs_json failed: {e}"));
+        let rev0 = sess_packs.revision();
+        let step_out: Value =
+            serde_json::from_str(&sess_packs.auto_step().expect("auto_step")).expect("auto_step json");
+        assert!(
+            matches!(step_out["kind"].as_str(), Some("plan" | "answer")),
+            "{src_id}: auto_step must step, got {step_out}"
+        );
+        assert!(sess_packs.revision() > rev0, "{src_id}: revision must advance");
+        let hash_after = sess_packs.state_hash_hex();
+        let saved_hex = sess_packs.save_hex();
+        let mut restored_packs = NativeSession::new(4, 1).expect("dummy session");
+        restored_packs
+            .restore_hex_with_packs_json(&saved_hex, &packs_json)
+            .unwrap_or_else(|e| panic!("{src_id}: restore_hex_with_packs_json failed: {e}"));
+        assert_eq!(
+            restored_packs.state_hash_hex(),
+            hash_after,
+            "{src_id}: packsJson state_hash_hex roundtrip mismatch"
+        );
+        assert!(
+            restored_packs
+                .restore_hex_with_packs_json(&saved_hex, "[]")
+                .is_err(),
+            "{src_id}: empty packsJson must reject archive restore"
+        );
+
+        // 2. lockedContentJson session path: new -> auto_step -> save_locked -> restore_locked -> reject empty
+        let mut sess_locked =
+            NativeSession::new_with_locked_content_json(4, 42007, &locked_json)
+                .unwrap_or_else(|e| panic!("{src_id}: new_with_locked_content_json failed: {e}"));
+        let step_locked: Value =
+            serde_json::from_str(&sess_locked.auto_step().expect("auto_step locked"))
+                .expect("auto_step locked json");
+        assert!(
+            matches!(step_locked["kind"].as_str(), Some("plan" | "answer")),
+            "{src_id}: locked auto_step must step"
+        );
+        let locked_hash_after = sess_locked.state_hash_hex();
+        let saved_locked_obj: Value = serde_json::from_str(
+            &sess_locked
+                .save_locked_json()
+                .unwrap_or_else(|e| panic!("{src_id}: save_locked_json failed: {e}")),
+        )
+        .expect("save_locked_json parse");
+        assert_eq!(saved_locked_obj["kind"], "saveLocked");
+        let saved_locked_hex = saved_locked_obj["hex"].as_str().unwrap();
+        let mut restored_locked = NativeSession::new(4, 1).expect("dummy session");
+        restored_locked
+            .restore_hex_with_locked_content_json(&saved_locked_hex, &locked_json)
+            .unwrap_or_else(|e| panic!("{src_id}: restore_hex_with_locked_content_json failed: {e}"));
+        assert_eq!(
+            restored_locked.state_hash_hex(),
+            locked_hash_after,
+            "{src_id}: lockedContentJson state_hash_hex roundtrip mismatch"
+        );
+        assert!(
+            restored_locked
+                .restore_hex_with_locked_content_json(&saved_locked_hex, &empty_locked)
+                .is_err(),
+            "{src_id}: empty lockedContentJson must reject archive restore"
+        );
+    }
+}
+

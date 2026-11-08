@@ -146,3 +146,104 @@ fn symlinked_package_dir_is_rejected_explicitly() {
     }
     let _ = std::fs::remove_dir_all(&base);
 }
+
+#[test]
+fn all_37_sources_46_packages_server_load_scoped_drive_and_archive_roundtrip() {
+    use engine_native::ai::BoundedPlanner;
+    use engine_native::archive::{decode_archive, encode_archive};
+    use engine_native::content::extension::ExtensionPack;
+    use engine_native::Engine;
+    use std::collections::{BTreeMap, BTreeSet};
+
+    let manifest_dir = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let map_path = manifest_dir
+        .join("../../docs/operations/evidence/2026-10-19-package-source-map/map.tsv");
+    let map_text = std::fs::read_to_string(&map_path).expect("read map.tsv");
+    let root = pkg_root();
+
+    let mut by_source: BTreeMap<String, Vec<String>> = BTreeMap::new();
+    let mut all_dirs: BTreeSet<String> = BTreeSet::new();
+    for (idx, line) in map_text.lines().enumerate() {
+        if idx == 0 || line.trim().is_empty() {
+            continue;
+        }
+        let cols: Vec<&str> = line.split('\t').collect();
+        let src_id = cols[0].trim().to_string();
+        let pkgs: Vec<String> = cols[3]
+            .split(',')
+            .map(|s| s.trim().to_string())
+            .filter(|s| !s.is_empty())
+            .collect();
+        for p in &pkgs {
+            all_dirs.insert(p.clone());
+        }
+        by_source.insert(src_id, pkgs);
+    }
+    assert_eq!(by_source.len(), 37, "must cover all 37 upstream sources");
+    assert_eq!(all_dirs.len(), 46, "must cover all 46 extension packages");
+
+    let base = std::env::temp_dir().join(format!("nc08-server-37src-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&base);
+    let dropin = base.join("root");
+    let store = base.join("store");
+    std::fs::create_dir_all(&dropin).expect("mkdir dropin");
+    for dir in &all_dirs {
+        copy_dir(&root.join(dir), &dropin.join(dir));
+    }
+
+    let nc = NativeContent::open(dropin, store).expect("open NativeContent");
+    let installed = nc.import().expect("import all 46 extension packages");
+    assert_eq!(
+        installed.len(),
+        46,
+        "all 46 extension packages must install into server PackageStore"
+    );
+
+    let planner = BoundedPlanner::new(64);
+    for (src_id, dirs) in &by_source {
+        let mut loaded_packs = Vec::new();
+        for dir in dirs {
+            let npack_str =
+                std::fs::read_to_string(root.join(dir).join("package.npack.json")).unwrap();
+            let npack_val: serde_json::Value = serde_json::from_str(&npack_str).unwrap();
+            let ns = npack_val["manifest"]["namespace"].as_str().unwrap();
+            let pid = npack_val["manifest"]["package_id"].as_str().unwrap();
+            let loaded = nc
+                .load_scoped(Some(ns), pid)
+                .unwrap_or_else(|e| panic!("{src_id}/{dir}: load_scoped({ns}/{pid}) failed: {e}"));
+            loaded_packs.push(loaded);
+        }
+        let refs: Vec<&ExtensionPack> = loaded_packs.iter().map(|l| &l.pack).collect();
+        let mut engine = Engine::new_with_extensions(42007, 4, &refs)
+            .unwrap_or_else(|e| panic!("{src_id}: Engine::new_with_extensions failed: {e:?}"));
+        let rev0 = engine.revision();
+        for _ in 0..8 {
+            if engine.outcome().is_some() {
+                break;
+            }
+            let seat = match engine.open_choice() {
+                Some(open) => open.observer,
+                None => engine.turn().current,
+            };
+            let plan = engine.plan_action(seat, &planner);
+            engine.apply_plan(&plan).expect("apply_plan");
+        }
+        assert!(engine.revision() > rev0, "{src_id}: revision must advance");
+        let hash_after = engine.state_hash();
+        let bytes = encode_archive(&engine.save());
+        let decoded = decode_archive(&bytes).expect("decode_archive");
+        let restored = Engine::restore_with_extensions(&decoded, &refs)
+            .unwrap_or_else(|e| panic!("{src_id}: restore_with_extensions failed: {e:?}"));
+        assert_eq!(
+            restored.state_hash(),
+            hash_after,
+            "{src_id}: server archive roundtrip state_hash mismatch"
+        );
+        assert!(
+            Engine::restore(&decoded).is_err(),
+            "{src_id}: Engine::restore without extensions must reject locked archive"
+        );
+    }
+    let _ = std::fs::remove_dir_all(&base);
+}
+

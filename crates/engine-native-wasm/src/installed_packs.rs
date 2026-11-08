@@ -129,9 +129,17 @@ fn installed_pack(item: &Value) -> Result<ExtensionPack, String> {
         pack.cards.extend(addition.cards);
     }
     pack.vm_skills.extend(vm_decls);
+    let has_config = item
+        .get("config")
+        .and_then(Value::as_object)
+        .is_some_and(|obj| !obj.is_empty());
+    if item.get("config").is_some() && !has_config {
+        return Err(format!("{namespace}:{package_id} config 载荷必须为非空对象"));
+    }
     if !["cards", "characters", "pile"]
         .iter()
         .any(|key| item.get(*key).is_some())
+        && !has_config
         && item.get("modules").is_none()
     {
         return Err(format!(

@@ -136,22 +136,22 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
   - 远端仓库 `RuyimgByCN/RuyimgByCN-noname-ruyimg-modified` 核查：远端分支 `native-convergence` 上次推送停留在 2026-11-03（`f5e560db` / C331 阶段）。
 - **处置记录**：按裁决 18 先在本地 `main` 完整入库 Batch 23；因向外部 GitHub 远端推送涉及网络写操作与分支发布确认，本地验证结果与远端 CI 状态严格分开登记，未在远端 CI 实际跑过新 HEAD 前记为“CI 已过”。
 
-### 4.2 第三节第 4 项：37 来源整包八项验收核对
+### 4.2 第三节第 4 项：37 来源整包八项验收核对（补齐 Web/WASM/Worker/Server/Desktop 四端产品路径与 37 来源同设备前后性能基准）
 
 按[扩展台账](../../../migration/upstream-extension-reconstruction.md)原始八项（①功能、②配置、③依赖、④组合、⑤保存恢复、⑥目标平台、⑦性能、⑧规则差异）逐项核对当前实际完成面与未达门槛：
 
 | 八项维度 | 当前已验证范围（可重跑证据） | 仍未达成的整包门槛（保持「部分」的原因） |
 |---|---|---|
 | ① 功能 | 46 个 `packages/extensions/*/` + 2 个 `packages/characters/*/`（共 48 包，`no-package = 0`），37 套 `*_eight.rs`（`35/0` 独立二进制 + `l22`/`l23`）验证各包核心卡牌/武将/配置状态机执行 | 大体量来源（如 `U05` 杀海拾遗、`L01` 金庸群侠传、`L04` 英雄联盟、`L06` 仙剑奇侠传、`L16` 守望先锋、`L25` 祖安武将等）仍有部分子技/子将或单机战役脚本（`U02`/`U04`/`U08`/`L11`）及 DOM/CSS/WebGL/Spine 视觉渲染面（`U01`/`L03`/`L07`/`L08`/`L09`/`L12`–`L15`/`L17`–`L18`/`L20`–`L23`/`L26`–`L29`）保留为 `deferred` 数据契约而非完整前端渲染实现 |
-| ② 配置 | 25/25 配置型扩展包在 `nc08_config_acceptance`（`31/0`）完成 schema 校验、默认值合并、持久化与非法配置拒绝 | 视觉/音频类配置项在真实客户端 DOM/WebGL/音频管线上的逐包视觉表现未做逐源人工/真机核验 |
+| ② 配置 | 25/25 配置型扩展包在 `nc08_config_acceptance`（`31/0`）完成 schema 校验、默认值合并、持久化与非法配置拒绝；`engine-native-wasm::installed_packs` 与 `web-client::bundledNativePackages` 已支持带非空 `"config"` 载荷的配置型扩展包在全平台产品路径导入与锁校验 | 视觉/音频类配置项在真实客户端 DOM/WebGL/音频管线上的逐包视觉表现未做逐源人工/真机核验 |
 | ③ 依赖 | `nc02_nc05_extension_lifecycle_matrix`、`l23_desktop_adapt` 等验证跨包依赖锁、缺前置依赖拒装、循环依赖检测与在局锁定防卸载 | —（仓内闭环已覆盖） |
 | ④ 组合 | 37 套 `*_eight.rs`、24/24 规则包 `nc08_save_restore_matrix` 与 `nc08_install_matrix` 验证多包共装与组合开局 | —（仓内闭环已覆盖） |
-| ⑤ 保存恢复 | 24/24 规则包 `nc08_save_restore_matrix`、`nc08_upgrade_matrix` 与 37 套 `*_eight.rs` 验证 `encode_archive`/`decode_archive`/`restore` 及配置快照往返 `state_hash` 守恒 | —（仓内闭环已覆盖） |
-| ⑥ 目标平台 | Web/WASM Worker（`pnpm --dir apps/web-client smoke:native` **82/82 PASS**）、Server（`game-server` **578/0/0**）、Desktop（`desktop-client` **19/0/1**）已跑通 | **移动端（Android + iOS）真机未接入**，且 37 个来源未逐一在 Web/Desktop/Mobile 真机 UI 走完逐包人工交互路径 |
-| ⑦ 性能 | 内核级 `PA01–PA06` 与表现层 `PA08-1..6` 代表大包压测已落档 | **缺少 37 个来源逐包在同设备、同负载下的启用前后性能对比数据** |
+| ⑤ 保存恢复 | 24/24 规则包 `nc08_save_restore_matrix`、`nc08_upgrade_matrix` 与 37 套 `*_eight.rs` 及四端产品路径 37/37 矩阵验证 `encode_archive`/`decode_archive`/`restore` 及 `ContentLock` 锁内容恢复往返 `state_hash` 守恒与空锁拒恢 | —（仓内闭环已覆盖） |
+| ⑥ 目标平台 | **37/37 来源（46/46 扩展包）已在四端实际产品路径 100% 跑通**（详见[四端产品路径与前后性能报告](up37-37-sources-platform-and-perf.md)）：① **Web/WASM**：`crates/engine-native-wasm/tests/installed_package_payload.rs::all_37_sources_46_packages_validate_start_step_save_and_restore_on_wasm_session`（**8/8 PASS**）；② **真实 Web Worker**：`apps/web-client/scripts/native-worker-smoke.mjs`（`worker_all_37_sources_46_packages_locked_matrix`，**83/83 PASS**）；③ **Server**：`apps/game-server/tests/nc08_install_matrix.rs::all_37_sources_46_packages_server_load_scoped_drive_and_archive_roundtrip`（**3/3 PASS**）；④ **Desktop**：`apps/desktop-client/src/native_engine_host.rs::all_37_sources_46_packages_desktop_host_and_ipc_start_step_save_restore`（**20/0/1 PASS**） | **移动端（Android + iOS）真机未接入**，且视觉渲染面未在真机 UI 逐源走完人工视觉交互 |
+| ⑦ 性能 | **已完成 37/37 来源（及 11 个多包子包）同设备、同工具链、同负载启用前后性能对比实测**：新增 `crates/engine-native/examples/nc12_bench/source_matrix.rs` 并运行 `cargo run --offline --release -p engine-native --example nc12_bench -- source_matrix`，在同一台 Apple Silicon macOS 设备上采集 `none` 基线（Before）与 `src:L01..L29`、`src:U01..U08` + `pkg:*`（After，共 **49/49 OK, faults=0, panics=0**）的 9 项指标（`catalog_build_us`、冷启动 `init_us`、`step_p50/p95/p99_us`、`planner_p50/p95_us`、`archive_bytes`/`save_us`/`restore_us`），详见[前后性能报告](up37-37-sources-platform-and-perf.md)与原始数据 [up37-37-sources-perf.tsv](up37-37-sources-perf.tsv) | 各来源 `deferred` DOM/CSS/WebGL/Spine 视觉渲染面若纳入原生前端渲染后需补测浏览器帧率 |
 | ⑧ 规则差异 | `nc08` 490/491 守卫与上游探针已通过（`nc08_registered_defect_guards` **50/0/0**、`nc08_upstream_a_k` **141/0/0**、`nc08_upstream_l_z` **207/0/1**） | `cangchizhibi` 1 项待裁决，且各来源 `deferred` 子技/战役/渲染面尚未与上游逐条等价闭合 |
 
-因此，扩展台账整包八项验收**如实保持未完成（`0/37` 整包八项全满，37/37 仓内八维套件通过）**，待用户对「DOM/CSS/WebGL/Spine 渲染面与单机战役脚本是否纳入原生重构必做范围或批准以数据桥接契约收口」作出明确裁决，并补齐真机与逐包性能数据后再更新整包签署状态。
+因此，37/37 来源现已补齐 **Web/WASM + Web Worker + Server + Desktop 四端实际产品路径全矩阵验证** 与 **同设备启用前后性能对比基准**；扩展台账整包八项签署状态**仍如实保持未完成（`0/37` 整包八项全满）**，待用户对「DOM/CSS/WebGL/Spine 渲染面与单机战役脚本是否纳入原生重构必做范围或批准以数据桥接契约收口」及 `cangchizhibi` 作出明确裁决，并接入移动端真机后再更新整包签署状态。
 
 ### 4.3 第三节第 5 项：PA08–PA11 与三平台安装包
 
@@ -160,7 +160,7 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
    - iOS：`xcrun devicectl list devices` 显示唯一物理设备 `Ruyimg音`（`iPhone17,2`，标识符 `00008140-0002149826F3001C`）状态为 **`unavailable`（未连接）**。
    - **需用户协助的操作**：请将中低端 Android 真机（开启 USB 调试，`adb devices` 可见）及 iPhone 真机（USB/Wi-Fi 连接并解锁信任，`devicectl` 显示 `available`/`connected`）接入本机，以便执行整局与 ≥30 分钟持续负载功耗/温度/降频采样。
 2. **PA11 触发判定**：依裁决，PA11（原生 GPU 牌桌原型）以 PA08 真机采样是否超出预算为触发前提；在 PA08 真机完成前继续保持**条件暂缓**。
-3. **PA09 桌面端原生执行引擎**：`desktop-client` 原型与 IPC/WKWebView 测试（`cargo test --offline -p desktop-client` **19 passed; 0 failed; 1 ignored**）在仓内通过，但跨 Windows/Linux 实测与六条件全量对照未齐备，默认引擎保持 **WASM**，状态保持**部分**。
+3. **PA09 桌面端原生执行引擎**：`desktop-client` 原型与 IPC/WKWebView 测试及 37 来源 46 包全矩阵（`cargo test --offline -p desktop-client` **20 passed; 0 failed; 1 ignored**）在仓内通过，但跨 Windows/Linux 实测与六条件全量对照未齐备，默认引擎保持 **WASM**，状态保持**部分**。
 4. **三平台安装包签名／公证**：本地未配置 Apple Developer ID 签名证书与公证凭据（`APPLE_CERTIFICATE` / `APPLE_ID` / `APPLE_PASSWORD` / `APPLE_TEAM_ID`）及 Windows Authenticode 证书，三平台真实签名／公证与实机安装仍为**未完成**。
 
 ### 4.4 第三节第 6 项：第六阶段（原生产品切换与旧执行入口退出）
@@ -170,7 +170,7 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
 ### 4.5 第三节第 7 项：临时工作树与私有 target 清理（裁决 23 / 裁决 32）
 
 - 执行 `git worktree prune -v` 清理了 1 个已失效的临时工作树登记（`/private/tmp/noname-c331-publication-20261102/baseline-9f4`）；其余 8 个临时工作树按进度主稿「临时工作树处置」及任务要求（「不删别人的工作树」）原样保留。
-- 清理了 `docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/original/probe/target` 未跟踪私有构建目录及本次 Gate 1b 独立验证使用的临时 `/tmp/noname-gate1b-review2` 目录；主工作树共享 `target/` 保留。
+- 清理了 `docs/operations/evidence/2026-10-31-nc10-public-own-plan/main-acceptance/original/probe/target` 未跟踪私有构建目录及本次 Gate 1b 独立验证使用的临时 `/tmp/noname-gate1b-review2`、headless Chrome 构建目录 `/tmp/noname-web-dist-batch23`；主工作树共享 `target/` 保留。
 
 ---
 
@@ -179,16 +179,19 @@ cargo test --offline -p engine-native --test nc08 --test nc08_upstream_a_k --tes
 | 序号 | 门禁项 | 执行命令 | 实跑结果 |
 |---|---|---|---|
 | 1 | 行数门禁单测 | `python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'` | **2/2 OK** |
-| 2 | 源码行数与 Rust 有效行门禁 | `python3 -B scripts/check-source-lines.py` | **通过（9,187 files <= 2000 lines; Rust non-test <= 1000 effective lines）** |
+| 2 | 源码行数与 Rust 有效行门禁 | `python3 -B scripts/check-source-lines.py` | **通过（9,188 files <= 2000 lines; Rust non-test <= 1000 effective lines）** |
 | 3 | 原生分层棘轮门禁 | `python3 -B scripts/check-native-layering.py` | **通过（total: 0，BASELINE: 0）** |
 | 4 | 阶段审计脚本单测 | `PYTHONPATH=scripts python3 -B -m unittest scripts/test_report_g14.py scripts/test_report_phase_arms.py scripts/test_report_phase_filters.py` | **29/29 OK** |
 | 5 | 原生三 crate 全量测试 | `cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native` | **2,204 passed; 0 failed; 7 ignored**（较扫描基线 2,178/0/29 新增激活 **+22 passed**、新增 4 项回归，减少 **-22 ignored**） |
-| 6 | 独立 `CARGO_TARGET_DIR` 严格 `-D warnings` 门禁（Gate 1b） | `CARGO_TARGET_DIR=/tmp/noname-gate1b-review2 RUSTFLAGS="-D warnings" cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets` | **0 warnings, exit 0**（跑毕已清理 `/tmp/noname-gate1b-review2`） |
+| 6 | 独立 `CARGO_TARGET_DIR` 严格 `-D warnings` 门禁（Gate 1b） | `CARGO_TARGET_DIR=/tmp/noname-gate1b-review2 RUSTFLAGS="-D warnings" cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets` | **0 warnings, exit 0**（跑毕已清理临时目录） |
 | 7 | `wasm32-unknown-unknown` 编译门禁 | `cargo check --offline --target wasm32-unknown-unknown -p engine-native-wasm` | **exit 0** |
-| 8 | 全工作区 Rust 测试 | `cargo test --offline --workspace --no-fail-fast` | **177 个测试段：7,593 passed; 0 failed; 9 ignored**（较扫描基线 7,567/0/31 新增激活 **+22 passed**、新增 4 项回归，减少 **-22 ignored**） |
+| 8 | 全工作区 Rust 测试 | `cargo test --offline --workspace --no-fail-fast` | **177 个测试段：7,596 passed; 0 failed; 9 ignored**（较扫描基线 7,567/0/31 新增激活 **+22 passed**、新增 7 项回归/全源矩阵测试，减少 **-22 ignored**） |
 | 9 | 旧线/双线一致性套件 | `cargo run --offline -p conformance` | **passed=19 / 19 ALL PASS** |
-| 10 | 桌面客户端测试 | `cargo test --offline -p desktop-client` | **19 passed; 0 failed; 1 ignored** |
+| 10 | 桌面客户端测试（含 37 来源 46 包全矩阵） | `cargo test --offline -p desktop-client` | **20 passed; 0 failed; 1 ignored**（14 unit + 6 integration） |
 | 11 | Native↔WASM 跨目标一致性 | `python3 -B scripts/check-native-wasm-cross-target.py` & `bash scripts/cross-target-hash.sh` | **ALL CROSS-TARGET CHECKS PASSED**（`6a59d996f801868eef0ddaa2ea08162f706811adcdea88a522780eac19edfcbd`、`5e41ae8eed805cb60f257c7762b44739b68a0958d20174311fe95c89d723362a`） |
-| 12 | Web 客户端测试、类型检查、WASM 构建与 Worker 冒烟 | `pnpm --dir apps/web-client test` / `typecheck` / `build:native` / `smoke:native` | `test`: **461 pass / 0 fail**；`typecheck`: **0 错**；`build:native`: **exit 0**；`smoke:native`: **`{"total":82,"failed":0}`（82/82 PASS）** |
-| 13 | 全量收口 `preflight.py` | `python3 -B scripts/preflight.py` | **21/21 全部通过** |
+| 12 | Web 客户端测试、类型检查、WASM 构建与 Worker 冒烟（含 37 来源 46 包全矩阵） | `pnpm --dir apps/web-client test` / `typecheck` / `build:native` / `smoke:native` | `test`: **461 pass / 0 fail**；`typecheck`: **0 错**；`build:native`: **exit 0**；`smoke:native`: **`{"total":83,"failed":0}`（83/83 PASS）** |
+| 13 | 真实 Headless Chrome 产品路径验证（3 套浏览器驱动脚本） | 独立构建 `--outDir /tmp/noname-web-dist-batch23` 后实跑 `nc09-browser-drive.mjs`、`nc12-browser-fullgame.mjs`、`i02-browser-audio-drive.mjs`（跑毕已清理临时产物） | **3/3 ALL PASS（`console_errors: []`）**：① `nc09`: `choose_general: "样例·张角组合"`, `auto_step: rev 0 -> 3`, `save_load: { saveRes: true, loadRes: true }`（[日志](headless-chrome-nc09-browser-drive.raw.txt) / [JSON](drive-report.json)）；② `nc12`: 85 次点击完整打完一局（`final_revision: 84, wall_ms: 21436, ended_marker: true`，[日志](headless-chrome-nc12-browser-fullgame.raw.txt) / [JSON](fullgame-report.json)）；③ `i02`: 选将「司马懿」音频解锁播放、静音切换与读档基线抑制（`playedCuesCount: 1, gen 2->3, baselineRevision: 14`，[日志](headless-chrome-i02-browser-audio-drive.raw.txt) / [JSON](i02-browser-audio-report.json)） |
+| 14 | 37 来源（46 扩展包）四端产品路径与同设备启用前后性能基准 | `cargo test --offline -p engine-native-wasm --test installed_package_payload`；`cargo test --offline -p game-server --test nc08_install_matrix`；`cargo run --offline --release -p engine-native --example nc12_bench -- source_matrix` | WASM `installed_package_payload` **8/0**、Server `nc08_install_matrix` **3/0**、Worker `smoke:native` **83/83**、Desktop `desktop-client` **20/0/1**；性能基准 **49/49 行（`none` 基线 + 37 来源 + 11 子包）`ok=true, faults=0, panics=0`**（[报告](up37-37-sources-platform-and-perf.md) / [TSV](up37-37-sources-perf.tsv)） |
+| 15 | 全量收口 `preflight.py` | `python3 -B scripts/preflight.py` | **21/21 全部通过** |
+
 
