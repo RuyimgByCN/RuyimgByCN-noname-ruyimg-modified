@@ -2,6 +2,8 @@
 
 <a id="-当前值第-568-轮实测2026-10-19"></a>
 
+> **2026-11-08 核对勘正（Claude Code；HEAD `4b0ba831a`，333／107／759／WS8）**：下条 Batch 19 的「八维」按其[证据](../operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md)第 2 节定义为生命周期、配置与包数据、组合共存、保存恢复、功能执行、平台与客户端边界（只校验纯数据／纯函数边界）、异常拒装、边界登记，与本台账八项（功能、配置、依赖、组合、保存恢复、目标平台、性能、规则差异）不是同一口径：目标平台实机、性能、规则差异三项未测，第⑧维仍把 DOM/CSS/WebGL/Spine 渲染面与单机战役脚本保留为 deferred。因此 37/37 只表示「每个来源都有独立测试套件与包目录」，**整包八项验收仍未达成**，下文签署表的八项状态继续有效。
+
 > **2026-11-06 Batch 19（37/37 来源八项整包测试与配置包收口）**：新增 4 个装载器模块（`decade_ui`、`taixu`、`shousha_ui`、`zuan`）并扩展 `rzsh`，补齐最后 5 个配置型扩展包目录（`{decade-ui,taixu,rzsh,shousha-ui,zuan}-upstream-liuli`），`packages/extensions/*/` 达 **46 个扩展包目录**（含 `sp2`/`xianding` 共 48 个，`no-package = 0`）；补齐余下 13 个来源（`U01, U05, U07, U08, L08, L11, L12, L14, L19, L20, L25, L27, L28`）的专项 `*_eight.rs` 八维验收测试，37/37 来源均具备独立包安装、配置/桥接、核心规则/状态机、多包共存、保存恢复、坏输入拒绝与未迁移宿主/余技边界守卫（`todo-register.json` 中 `T12-SRC-*` **37/37 `resolved`**，`wholepack_count = 37`，`resolved_count = 74 / open_count = 17`；见[Batch 19 证据](../operations/evidence/2026-11-06-up37-37-sources-eight-acceptance/README.md)与[进度主稿](../architecture/native-progress.md)）。各来源登记的 UI 渲染面与庞大子包余将/余技 deferred 仍按边界守卫逐项保留。
 
 > **2026-10-24 客户端接线补记**：正式安装副本→开局/选将→同锁保存恢复与构建/CI 进展见[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)及其交付证据。本轮只补产品链路，不上调任何来源的整包八项验收状态；下面各轮统计保留当时语境。N01 的旧线规则与 onlyOL 包身份更新见[进度主稿](../architecture/native-progress.md#delivery-2026-10-24)，不属于 37 来源整包验收。
