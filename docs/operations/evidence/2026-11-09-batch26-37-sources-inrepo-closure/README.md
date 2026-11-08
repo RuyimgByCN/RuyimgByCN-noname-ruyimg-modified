@@ -1,0 +1,70 @@
+# Batch 26：裁决 34 最后 9 个来源（`U01, U05, L08, L14, L19, L20, L24, L25, L27`）及 `U07` 余技全量原生闭环与 `37/37` 来源仓内 7 维 100% 闭合证据（2026-11-09）
+
+- **核验日期**：2026-11-09
+- **基线 HEAD**：`64c8f53311b291b7f6a25c299550789128253b39`（Batch 25）
+- **版本门禁（零升号，14 场 golden 哈希零变化）**：
+  - `STANDARD_RULESET_VERSION = 333`
+  - `ARCHIVE_FORMAT_VERSION = 107`
+  - `CONTENT_PACKAGE_SCHEMA_VERSION = 5`
+  - `RULE_VM_ABI_VERSION = 759`
+  - `NETWORK_PROTOCOL_VERSION = 8`
+
+## 1. 本批目标与完成摘要
+
+针对 Batch 25 后[两仓扩展台账](../../../migration/upstream-extension-reconstruction.md)与[37 来源八项签署核对表](../2026-10-19-source-signoff-32/README.md)中仍处于「部分」的最后 **9 个来源**（`U01 3D精选, U05 杀海拾遗, L08 十周年UI, L14 手杀ui, L19 末日乱斗, L20 标记补充, L24 皮肤切换, L25 祖安武将, L27 选将美化`）及 `U07 玩点论杀` 的 `jianbi`/`choudu` 余技，按用户[裁决 34](../2026-10-28-user-decisions/README.md)完成内核权威结算器、装载器扩展包构造、前端原生渲染组件（含 `<canvas data-testid="spine-skeletal-canvas">` 骨骼/粒子帧绘制、3D 精选 32 将镜头立绘展台、手杀 92 项钩子 HUD、皮肤切换 520KB 参数变身面板、祖安 122 技单机 DIY 编辑器、选将美化 37 技 `_chooseCharacterTwo` 双将选将台）、存读档恢复与真实无头 Chrome 60.0 FPS 实测，使**全部 `37/37` 来源在仓内 7 个维度（①功能、②配置、③依赖、④组合、⑤保存恢复、⑦性能、⑧规则差异）达到 100% `✅` 闭环**（第⑥维目标平台为 `四端 ✅ / 待移动真机`，整包八项全满签署因物理 Android/iOS 真机未接入如实保持 `0/37`）。
+
+## 2. 逐来源实现落点与规则对照
+
+| 来源 | 新增/更新落点 | 核心规则、负例守卫与保存恢复 |
+| --- | --- | --- |
+| **U01 3D精选** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`DDD_SKILL_DISPATCH_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`U01_GENERALS` 32 将、`U01_SKILLS` 64 技)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`[data-testid="u01-3d-select-gallery"]`) | 全部 32 名 `ddd_*` 武将与 64 项顶层技能注册入 `Catalog`；`dddxiaxing`（侠行距离基数与摸牌）、`dddyeshen`（夜深判定与暗置）、`dddqiaoduan`（巧断用牌联动）、`dddqianlong`（潜龙受伤蓄势与摸牌）、`dddqice`（奇策虚拟锦囊）及全 64 技分派；前端 32 将 3D 镜头角度（`front`/`side`/`closeup`）与深度视差切换；`encode_archive`/`decode_archive` 往返一致 |
+| **U05 杀海拾遗** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`SWD_DUIJUE_ID`、`SWD_TANLIN_ID`、`YUNCHOU_SKILL_ID`、`MTG_LAND_CARD_ID`、`ZHENFA_POZHENJUE_ID`、`OW_SKILL_DISPATCH_ID`、`XIANJIAN_SKILL_DISPATCH_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`U05_EXTRA_SKILLS` 138 项) | ① `shahai-swd`：68 项余技（`duijue` 限定技+体力守卫、`tanlin` 探林摸牌、`funiao`、`ningxian`、`aojian`、`mohua2`、`busi`、`yinguo`、`pozhen` 等）；② `shahai-yunchou`：`diyjianxiong`（获牌+摸 1）、`xinfu_qiaosi`（巧思六面骰确定性结算）、`xinfu_jingxie`（精械重铸防具/宝物回血摸牌）、`guihan`（归汉濒死限定双回血双摸牌）；③ `shahai-mtg`：`cangbaohaiwan`（藏宝海湾海盗船衍生与夺牌）、`duzhao`（毒沼毒性地形失血）及每回合限一地牌守卫；④ `shahai-zhenfa`：`changshezhen`、`tianfuzhen`、`qixingzhen`、`niaoxiangzhen`、`pozhenjue` 五阵法队列/围攻结算；⑤ `shaai-ow`：24 将余技（`lichang`、`zhanlong` 斩龙、`huoyu` 火箭弹幕、`zihui` 机甲自爆、`shanguang` 闪光弹、`qinru` 黑客入侵、`shanhui` 闪回及终极充能 `<100` 早退守卫）；⑥ `shaai-xianjian`：36 将余技（`leiyu` 雷狱、`qixia` 绮霞额外回合、`tianjian` 天剑 AOE、`xshuangren` 双刃离场武器转移、`tianxian` 天仙、`longxi` 龙息） |
+| **U07 玩点论杀** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`WUDIAN_JIANBI_ID`、`WUDIAN_CHOUDU_ID`) | 补齐 `jianbi`（坚壁目标转移与摸牌）、`choudu`（仇渡手牌交换与伤害加成，空手牌 `wudian_choudu_empty_hand_guard = 1` 早退守卫）及 `fuchou`/`fuchou2`/`liangce`/`liduan` 闭环 |
+| **L08 十周年UI** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L08_DECADE_SKILL_ID`)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`<canvas data-testid="spine-skeletal-canvas">`) | 9 项内联规则钩子（`_decade_card_use_hook`..`_decade_equip_fx_hook`）完整剥离入原生结算；前端 `<canvas>` 骨骼/粒子渲染器支持 `slash_burst`/`damage_shake`/`equip_flash`/`heal_bloom`/`victory_banner` 5 种动作重绘与帧计数 |
+| **L14 手杀ui** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L14_SHOUSHA_SKILL_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`L14_SKILLS` 48 项)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`[data-testid="l14-shousha-hud"]`) | 全部 48 项内联 UI 小技（`_shousha_l14_skill_01`..`48`，含 `_ phase_banner`、`_hand_sort`、`_equip_glow`、`_damage_font`、`_streak_toast`、`_card_Counter` 等）注册入 `Catalog` 并与前端手杀 HUD（阶段横幅、连击播报、整理手牌、记牌器）双向同步 |
+| **L19 末日乱斗** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L19_DOOMSDAY_SKILL_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`L19_SKILLS` 49 项) | 补齐余下 46 项乱斗技能（`baozou` 暴走失血摸 2 增伤、`ganran`/`ganran2` 感染传播、`tuihua`、`尸毒`、`尸吼`、`狂噬` 及 `vir_*` 病毒株系共 49 技）与 36 名乱斗武将原生结算 |
+| **L20 标记补充** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L20_SKILL_DISPATCH_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`L20_EXTRA_SKILLS` 75 项) | 补齐余下全部 75 项标记补充技能（含 `zhengsu`/`zhengsu_leijin`/`zhengsu_bianzhen`/`zhengsu_mingzhi` 整肃三分支奖励与违例 `zhengsu_violated_guard = 1` 守卫、`zhenyi_spade` 真仪黑桃判伤、`xinhongyan` 新红颜花色锁定、`diaohulishan` 调虎离山离场等） |
+| **L24 皮肤切换** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L24_SKIN_SKILL_ID`)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`[data-testid="l24-skin-transform-panel"]`) | 补齐 520KB 皮肤切换动效参数（`scale`/`offsetX`/`offsetY`/`action`）解析与 5 类触发（`low_hp`/`damage`/`kill`/`phase`/`group`）变身结算，并与共享 `<canvas data-testid="spine-skeletal-canvas">` 联动重绘 |
+| **L25 祖安武将** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L25_ZUAN_SKILL_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`L25_SKILLS` 122 项)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`[data-testid="l25-zuan-diy-editor"]`) | 全部 122 项祖安娱乐技能（`g_du` 毒牌触发、`_diycharacterskill` 单机 DIY 授技及 `_zuan_skill_003`..`122`）注册入 `Catalog`；联机/录像模式严格置 `zuan_diy_online_rejected = 1` 拒绝 DIY 篡改；前端实装结构化单机 DIY 武将编辑器（拒绝 `eval`/`Function`/`import()`） |
+| **L27 选将美化** | [`decision34_pack9.rs`](../../../../crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs) (`L27_SELECT_SKILL_ID`)、[`decision34_pack9_data.rs`](../../../../crates/content-native-loader/src/decision34_pack9_data.rs) (`L27_SKILLS` 37 项)、[`ExtensionSurfacePanel.vue`](../../../../apps/web-client/src/components/battle/ExtensionSurfacePanel.vue) (`[data-testid="l27-dual-general-picker"]`) | 补齐余下 31 项可读技能（共 37 项：`_chooseCharacterTwo` 双将选将流程与非双选 `choose_two_invalid_guard = 1` 守卫、`qimou` 奇谋限定技失 X 体力摸 X 牌且二次发动 `qimou_already_used_guard = 1` 拒绝、`baonvezhi` 暴虐值、`bahu` 跋扈、`new_yingzi` 等）及前端双将选将台 |
+
+## 3. 验证命令与实跑结果
+
+### 3.1 定向与三 crate 原生测试
+```bash
+cargo test --offline -p engine-native --test misc decision34_pack9_closure::
+cargo test --offline -p engine-native --test misc decision34_rules_and_campaigns::
+cargo test --offline -p engine-native-kernel -p engine-native-content -p engine-native
+```
+- `decision34_pack9_closure`：**5 passed; 0 failed; 0 ignored**
+- `decision34_rules_and_campaigns`：**7 passed; 0 failed; 0 ignored**
+- 三 crate 全量：**2,219 passed; 0 failed; 6 ignored**（规则探针 `0 ignored`）
+
+### 3.2 行数门禁、分层棘轮、独立 `CARGO_TARGET_DIR` `-D warnings` 与 `wasm32` 检查
+```bash
+python3 -B -m unittest discover -s scripts -p 'test_check_source_lines.py'
+python3 -B scripts/check-source-lines.py
+CARGO_TARGET_DIR=/tmp/noname-b26-strict-check RUSTFLAGS="-D warnings" cargo check --offline -p engine-native-kernel -p engine-native-content -p engine-native -p engine-native-wasm -p content-native-loader --all-targets && rm -rf /tmp/noname-b26-strict-check
+cargo check --offline --target wasm32-unknown-unknown -p engine-native-wasm
+```
+- `test_check_source_lines.py`：**Ran 2 tests in 0.011s — OK**
+- `check-source-lines.py`：**Source line limit passed: 9199 files <= 2000 lines; Rust non-test files <= 1000 effective lines**
+- 独立 `CARGO_TARGET_DIR` `-D warnings` 与 `wasm32-unknown-unknown`：**0 warnings, exit 0**（临时目录 `/tmp/noname-b26-strict-check` 已按裁决 23 清理）
+
+### 3.3 前端单测、TypeScript 类型检查、WASM Worker Smoke 与真实无头 Chrome 渲染及帧率实测
+```bash
+pnpm --dir apps/web-client test
+pnpm --dir apps/web-client typecheck
+pnpm --dir apps/web-client run build:native
+pnpm --dir apps/web-client run smoke:native
+node apps/web-client/scripts/decision34-browser-surfaces.mjs docs/operations/evidence/2026-11-09-batch26-37-sources-inrepo-closure
+```
+- `pnpm test`：**469 passed; 0 failed**
+- `pnpm typecheck`：**0 errors**
+- `pnpm smoke:native`：**83/83 PASS (`{"total":83,"failed":0}`)**
+- 真实无头 Chrome (`decision34-browser-surfaces.mjs`)：
+  - 报告文件：[`decision34-browser-surfaces-report.json`](decision34-browser-surfaces-report.json)
+  - 截图文件：[`decision34-browser-surfaces.png`](decision34-browser-surfaces.png)
+  - 面板尺寸：`1160 × 729`（`u01Rect: 343 × 82`、`spineRect: 222 × 54`、`l14Rect: 343 × 80`）
+  - 交互与恢复验证：`u01Camera: "ddd_liuchong:closeup"`、`spineAction: "action:damage_shake"`、`l14Streak: "x2"`、`zuanSaved: "saved:zuan_hero_1"`、`zuanRefused: "error:eval_refused"`、`l27Confirmed: "confirmed:2"`、`restoredCamera: "ddd_liuchong:closeup"`、`restoredStreak: "x2"`、`afterRestartCamera: "ddd_liuchong:front"`、`afterReloadCamera: "ddd_liuchong:closeup"`、`consoleErrors: []`
+  - 60 帧 `requestAnimationFrame` 帧率：**`p50 = 16.66 ms, p95 = 16.67 ms, p99 = 16.67 ms, max = 16.67 ms, approx_fps = 60.0 FPS`**

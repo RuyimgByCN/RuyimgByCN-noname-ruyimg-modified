@@ -14,10 +14,13 @@ import { test } from "node:test";
 
 import {
   L20_HUD_MARK_SPECS,
+  SPINE_CLIP_ORDER,
+  U01_DDD_GALLERY_GENERALS,
   advanceLongxueDaoxin,
   advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
+  applyZuanDiyDraft,
   assignMartialLineup,
   bindTaixuPet,
   buyCoinShopItem,
@@ -39,9 +42,13 @@ import {
   resolveEloDifficulty,
   restoreExtensionSurfacesForLoad,
   rewriteDouzhuanSkillText,
+  rotateU01GalleryStandee,
   runOmnisearchQuery,
+  selectL27DualGenerals,
   serializeExtensionSurfacesSnapshot,
   settleCoinMatch,
+  triggerShoushaHudBanner,
+  triggerSpineSkinClip,
   unlockLongxueSkills,
   validateSafeExportFilename,
 } from "../src/engine/extensionSurfaceRuntime.ts";
@@ -349,5 +356,43 @@ test("Batch 25 补齐：L20 14 项战局标记、L29 潜龙四技解锁、U08 �
     assert.equal(res.results[0].id, q);
   }
 });
+
+test("Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼动作与皮肤偏移、L14手杀HUD、L25离线DIY门禁、L27双将同选", () => {
+  assert.equal(U01_DDD_GALLERY_GENERALS.length, 31);
+  assert.equal(SPINE_CLIP_ORDER.length, 5);
+
+  let theme = createInitialExtensionSurfacesState().theme;
+  theme = rotateU01GalleryStandee(theme);
+  assert.equal(theme.u01SelectedGeneral, "ddd_xinxianying");
+  assert.equal(theme.u01YawDeg, 30);
+  assert.equal(theme.u01ZoomPct, 115);
+  assert.throws(() => rotateU01GalleryStandee(theme, "not_a_ddd_general"), /unknown U01 3D general/);
+
+  theme = triggerSpineSkinClip(theme, "gongji");
+  assert.equal(theme.spineActiveClip, "gongji");
+  assert.equal(theme.skinStandX, 12);
+  assert.equal(theme.skinStandY, -8);
+  assert.equal(theme.skinScalePct, 108);
+
+  theme = triggerShoushaHudBanner(theme, "无双·千军破(zhefu)");
+  assert.equal(theme.shoushaKillBanner, "无双·千军破(zhefu)");
+  assert.equal(theme.shoushaCountdownPct, 70);
+
+  let wb = createInitialExtensionSurfacesState().workbench;
+  wb = applyZuanDiyDraft(wb, { generalId: "zuan_diy02", maxHp: 5, onlineRoom: false });
+  assert.equal(wb.zuanDiyGeneralId, "zuan_diy02");
+  assert.equal(wb.zuanDiyMaxHp, 5);
+  assert.throws(
+    () => applyZuanDiyDraft(wb, { generalId: "zuan_diy_online", maxHp: 5, onlineRoom: true }),
+    /ONLINE_MULTIPLAYER_DIY_FORBIDDEN/,
+  );
+
+  wb = selectL27DualGenerals(wb, "ddd_caomao", "ddd_liuchong");
+  assert.equal(wb.l27DualPrimary, "ddd_caomao");
+  assert.equal(wb.l27DualSecondary, "ddd_liuchong");
+  assert.equal(wb.l27DualLocked, true);
+  assert.throws(() => selectL27DualGenerals(wb, "caocao", "caocao"), /DUAL_PICK_REQUIRES_TWO_DISTINCT_GENERALS/);
+});
+
 
 

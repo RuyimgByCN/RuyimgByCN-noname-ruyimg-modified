@@ -96,7 +96,11 @@ pub(super) fn try_commit_decision34(
             "taixu_expedition_step" => resolve_taixu_expedition_step(ctx, owner),
             "doomsday_infection_step" => resolve_doomsday_infection_step(ctx, owner),
             "martial_formation_step" => resolve_martial_formation_step(ctx, owner),
-            _ => return false,
+            _ => {
+                return super::decision34_pack9::try_commit_decision34_pack9(
+                    ctx, executing, owner, value,
+                )
+            }
         },
     }
     true

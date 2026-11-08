@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, nextTick, onMounted, ref, watch } from "vue";
 import {
   L20_HUD_MARK_SPECS,
+  U01_DDD_GALLERY_GENERALS,
   advanceLongxueDaoxin,
   advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
+  applyZuanDiyDraft,
   bindTaixuPet,
   buyCoinShopItem,
   buyTaixuBlessing,
@@ -16,7 +18,11 @@ import {
   numToRoma,
   placeCoinBet,
   resolveCoinHonorTitle,
+  rotateU01GalleryStandee,
   runOmnisearchQuery,
+  selectL27DualGenerals,
+  triggerShoushaHudBanner,
+  triggerSpineSkinClip,
   unlockLongxueSkills,
   validateSafeExportFilename,
   type ExtensionSurfacesSnapshot,
@@ -48,6 +54,7 @@ const searchInput = ref("cangchizhibi");
 const exportNameInput = ref("match_seed42.npack.save");
 const exportValidationMsg = ref<string>("合法文件名");
 const surfaceNotice = ref<string>("");
+const spineCanvasRef = ref<HTMLCanvasElement | null>(null);
 
 const mvpSortedEntries = computed(() => {
   const entries = Object.values(props.surfaces.mvp.scores);
@@ -286,6 +293,117 @@ function onValidateExportName() {
   }
 }
 
+function onRotateU01Gallery() {
+  update((prev) => {
+    const theme = rotateU01GalleryStandee(prev.theme);
+    surfaceNotice.value = `3D 精选 (U01)：${theme.u01SelectedGeneral} · 偏航 ${theme.u01YawDeg}° · 缩放 ${theme.u01ZoomPct}%（共 ${U01_DDD_GALLERY_GENERALS.length} 将）`;
+    return { ...prev, theme };
+  });
+}
+
+function onTriggerSpineClip() {
+  update((prev) => {
+    const theme = triggerSpineSkinClip(prev.theme);
+    surfaceNotice.value = `Spine 骨骼与皮肤变换 (L08/L24)：${theme.spineActiveClip} · 偏移 (${theme.skinStandX},${theme.skinStandY}) · 缩放 ${theme.skinScalePct}%`;
+    return { ...prev, theme };
+  });
+}
+
+function onTriggerShoushaBanner() {
+  update((prev) => {
+    const theme = triggerShoushaHudBanner(prev.theme, "无双·千军破(zhefu)");
+    surfaceNotice.value = `手杀 UI (L14)：${theme.shoushaKillBanner} · 倒计时 ${theme.shoushaCountdownPct}%`;
+    return { ...prev, theme };
+  });
+}
+
+function onApplyZuanDiyOffline() {
+  update((prev) => {
+    const workbench = applyZuanDiyDraft(prev.workbench, {
+      generalId: "zuan_diy02",
+      maxHp: 5,
+      onlineRoom: false,
+    });
+    surfaceNotice.value = `祖安 DIY (L25)：${workbench.zuanDiyStatus}`;
+    return { ...prev, workbench };
+  });
+}
+
+function onRejectZuanDiyOnline() {
+  update((prev) => {
+    return {
+      ...prev,
+      workbench: applyZuanDiyDraft(prev.workbench, {
+        generalId: "zuan_diy_online",
+        maxHp: 99,
+        onlineRoom: true,
+      }),
+    };
+  });
+}
+
+function onSelectL27DualGenerals() {
+  update((prev) => {
+    const workbench = selectL27DualGenerals(prev.workbench, "ddd_caomao", "ddd_liuchong");
+    surfaceNotice.value = `选将美化双将 (L27)：已锁定 ${workbench.l27DualPrimary} + ${workbench.l27DualSecondary}`;
+    return { ...prev, workbench };
+  });
+}
+
+function drawSpineSkeletalCanvas() {
+  const canvas = spineCanvasRef.value;
+  if (!canvas || typeof canvas.getContext !== "function") return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const w = canvas.width;
+  const h = canvas.height;
+  ctx.clearRect(0, 0, w, h);
+  ctx.fillStyle = "rgba(18, 26, 38, 0.92)";
+  ctx.fillRect(0, 0, w, h);
+
+  const clip = props.surfaces.theme.spineActiveClip ?? "daiji";
+  const seq = props.surfaces.theme.spineFrameSeq ?? 1;
+  const dx = props.surfaces.theme.skinStandX ?? 4;
+  const dy = props.surfaces.theme.skinStandY ?? 0;
+
+  // Draw Qiankun Bagua trigram ring + skeletal bones
+  ctx.strokeStyle = "#f59e0b";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(32 + (dx % 10), h / 2 + (dy % 6), 16, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = "#38bdf8";
+  ctx.beginPath();
+  ctx.moveTo(24, h / 2);
+  ctx.lineTo(40 + (seq % 8), h / 2 - 8);
+  ctx.lineTo(54, h / 2 + 6);
+  ctx.stroke();
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "11px monospace";
+  ctx.fillText(`Spine:${clip}#${seq} (${dx},${dy})`, 64, 24);
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText(`scale:${props.surfaces.theme.skinScalePct ?? 100}%`, 64, 42);
+}
+
+onMounted(() => {
+  void nextTick(drawSpineSkeletalCanvas);
+});
+
+watch(
+  () => [
+    activeTab.value,
+    props.surfaces.theme.spineActiveClip,
+    props.surfaces.theme.spineFrameSeq,
+    props.surfaces.theme.skinStandX,
+    props.surfaces.theme.skinStandY,
+  ],
+  () => {
+    void nextTick(drawSpineSkeletalCanvas);
+  },
+);
+
 function onSurfacePointerMove(ev: MouseEvent) {
   const rect = (ev.currentTarget as HTMLElement | null)?.getBoundingClientRect();
   if (!rect) return;
@@ -446,6 +564,49 @@ function onSurfacePointerMove(ev: MouseEvent) {
               投掷互动表情 ({{ surfaces.theme.throwEmotionCue ?? "无" }})
             </button>
           </div>
+
+          <div class="sub-surface-box" data-testid="u01-3d-select-gallery">
+            <span
+              class="standee-pill"
+              data-testid="u01-3d-standee"
+              :style="{
+                transform: `perspective(600px) rotateY(${surfaces.theme.u01YawDeg ?? 15}deg) scale(${(surfaces.theme.u01ZoomPct ?? 110) / 100})`,
+              }"
+            >
+              3D立绘:{{ surfaces.theme.u01SelectedGeneral ?? "ddd_caomao" }} ({{ surfaces.theme.u01YawDeg ?? 15 }}°/{{ surfaces.theme.u01ZoomPct ?? 110 }}%)
+            </span>
+            <button type="button" data-testid="btn-u01-3d-rotate" @click="onRotateU01Gallery">
+              切换 3D 精选立绘 (31将/64技)
+            </button>
+          </div>
+
+          <div class="sub-surface-box" data-testid="l24-skin-transform-panel">
+            <canvas
+              ref="spineCanvasRef"
+              width="220"
+              height="52"
+              class="spine-canvas"
+              data-testid="spine-skeletal-canvas"
+            ></canvas>
+            <span class="tiny" data-testid="l24-skin-transform-meta">
+              动作:{{ surfaces.theme.spineActiveClip ?? "daiji" }} · 偏移({{ surfaces.theme.skinStandX ?? 4 }},{{ surfaces.theme.skinStandY ?? 0 }}) · 缩放 {{ surfaces.theme.skinScalePct ?? 100 }}%
+            </span>
+            <button type="button" data-testid="btn-l24-trigger-clip" @click="onTriggerSpineClip">
+              触发 Spine 骨骼动作 (L08/L24)
+            </button>
+          </div>
+
+          <div class="sub-surface-box" data-testid="l14-shousha-hud">
+            <div class="daoxin-bar">
+              <div class="daoxin-fill" :style="{ width: `${surfaces.theme.shoushaCountdownPct ?? 85}%` }"></div>
+            </div>
+            <span class="tiny" data-testid="l14-shousha-banner-text">
+              手杀播报:{{ surfaces.theme.shoushaKillBanner ?? "连破·一血(spshidi)" }} · 倒计时 {{ surfaces.theme.shoushaCountdownPct ?? 85 }}%
+            </span>
+            <button type="button" data-testid="btn-l14-shousha-banner" @click="onTriggerShoushaBanner">
+              触发手杀连破横幅 (L14·48技)
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -600,6 +761,25 @@ function onSurfacePointerMove(ev: MouseEvent) {
             段位强度 {{ surfaces.workbench.eloDifficulty.strength }} (延迟 {{ surfaces.workbench.eloDifficulty.thinkDelaySec }}s) ·
             笨蛋提示「{{ surfaces.workbench.foolHintLabel }}」
           </p>
+          <div class="sub-surface-box" data-testid="l25-zuan-diy-editor">
+            <span class="tiny" data-testid="l25-diy-status">
+              祖安 DIY (L25): {{ surfaces.workbench.zuanDiyStatus ?? "离线沙箱就绪 (120将/122技)" }} · 武将 {{ surfaces.workbench.zuanDiyGeneralId ?? "zuan_diy01" }} ({{ surfaces.workbench.zuanDiyMaxHp ?? 4 }}血)
+            </span>
+            <button type="button" data-testid="btn-l25-diy-apply" @click="onApplyZuanDiyOffline">
+              应用单机 DIY 武将
+            </button>
+            <button type="button" data-testid="btn-l25-diy-online-guard" @click="onRejectZuanDiyOnline">
+              校验联机禁用门禁
+            </button>
+          </div>
+          <div class="sub-surface-box" data-testid="l27-dual-general-picker">
+            <span class="tiny" data-testid="l27-dual-status">
+              双将选将框 (L27 chooseCharacterTwo): {{ surfaces.workbench.l27DualPrimary ?? "caocao" }} + {{ surfaces.workbench.l27DualSecondary ?? "simayi" }} ({{ surfaces.workbench.l27DualLocked ? "已锁定" : "待选" }} · 37技)
+            </span>
+            <button type="button" data-testid="btn-l27-dual-pick" @click="onSelectL27DualGenerals">
+              锁定双将组合 (ddd_caomao+ddd_liuchong)
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -699,6 +879,31 @@ function onSurfacePointerMove(ev: MouseEvent) {
 }
 .wrap {
   flex-wrap: wrap;
+}
+.sub-surface-box {
+  margin-top: 0.45rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px dashed var(--border);
+  border-radius: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+}
+.standee-pill {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  background: var(--bg-panel);
+  border: 1px solid var(--accent);
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  transition: transform 0.2s ease;
+}
+.spine-canvas {
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  background: #121a26;
 }
 .weather-particle-layer {
   position: absolute;

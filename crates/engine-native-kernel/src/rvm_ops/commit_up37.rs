@@ -4,6 +4,7 @@
 use super::commit::pop_deck;
 use super::*;
 pub mod decision34;
+pub mod decision34_pack9;
 mod generals;
 use generals::*;
 

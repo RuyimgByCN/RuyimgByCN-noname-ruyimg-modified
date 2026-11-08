@@ -118,6 +118,16 @@ export interface ThemeAndSkinSurfaceState {
   selectBeautifyEnabled: boolean;
   d3ShowcaseEnabled: boolean;
   l20Marks?: Record<string, number>;
+  u01SelectedGeneral?: string;
+  u01YawDeg?: number;
+  u01ZoomPct?: number;
+  spineActiveClip?: "daiji" | "gongji" | "teshu" | "chuchang" | "shan";
+  spineFrameSeq?: number;
+  skinStandX?: number;
+  skinStandY?: number;
+  skinScalePct?: number;
+  shoushaCountdownPct?: number;
+  shoushaKillBanner?: string;
 }
 
 export interface LongxueSurfaceState {
@@ -153,7 +163,7 @@ export interface OmnisearchSurfaceState {
 export interface WorkbenchToolsState {
   aiTuningVariant: number;
   sjBase64Preview: string;
-   sjVersionCompare: string;
+  sjVersionCompare: string;
   shoushaFilteredPacks: string[];
   dragLastKind: string;
   douzhuanRewrittenText: string;
@@ -161,6 +171,13 @@ export interface WorkbenchToolsState {
   eloDifficulty: { strength: number; bias: number; thinkDelaySec: number };
   zuanDebugAllowed: boolean;
   foolHintLabel: string;
+  zuanDiyGeneralId?: string;
+  zuanDiyMaxHp?: number;
+  zuanDiyOnlineRoom?: boolean;
+  zuanDiyStatus?: string;
+  l27DualPrimary?: string;
+  l27DualSecondary?: string;
+  l27DualLocked?: boolean;
 }
 
 export interface ExtensionSurfacesSnapshot {
@@ -370,6 +387,137 @@ export function advanceTafangWave(boss: BossSurfaceState): BossSurfaceState {
     ...boss,
     mode: "tafang",
     tafangWave: nextWave,
+  };
+}
+
+export const U01_DDD_GALLERY_GENERALS: ReadonlyArray<string> = [
+  "ddd_handang", "ddd_wuzhi", "ddd_xujing", "ddd_caomao", "ddd_xinxianying",
+  "ddd_xianglang", "ddd_yujin", "ddd_liuye", "ddd_baosanniang", "ddd_zhenji",
+  "ddd_zhaoang", "ddd_zhouchu", "ddd_liuba", "ddd_jianshuo", "ddd_guanning",
+  "ddd_dingfeng", "ddd_caoshuang", "ddd_xuelingyun", "ddd_liuhong", "ddd_xiahouxuan",
+  "ddd_zhangkai", "ddd_liangxi", "ddd_wangkanglvkai", "ddd_sunliang", "ddd_lie",
+  "ddd_kebineng", "ddd_qianzhao", "ddd_zhangmiao", "ddd_zhangcheng", "ddd_liuchong",
+  "ddd_luoxian",
+];
+
+export const SPINE_CLIP_ORDER: ReadonlyArray<"daiji" | "gongji" | "teshu" | "chuchang" | "shan"> = [
+  "daiji",
+  "gongji",
+  "teshu",
+  "chuchang",
+  "shan",
+];
+
+/** U01: 3D 精选 31 武将透视立绘陈列馆旋转与缩放。 */
+export function rotateU01GalleryStandee(
+  theme: ThemeAndSkinSurfaceState,
+  nextGeneral?: string,
+  deltaYaw = 15,
+): ThemeAndSkinSurfaceState {
+  const curGen = theme.u01SelectedGeneral ?? "ddd_caomao";
+  const curIdx = U01_DDD_GALLERY_GENERALS.indexOf(curGen);
+  const chosen =
+    nextGeneral ??
+    U01_DDD_GALLERY_GENERALS[(curIdx + 1) % U01_DDD_GALLERY_GENERALS.length]!;
+  if (!U01_DDD_GALLERY_GENERALS.includes(chosen)) {
+    throw new Error(`unknown U01 3D general: ${chosen}`);
+  }
+  const rawYaw = (theme.u01YawDeg ?? 0) + deltaYaw;
+  const yaw = rawYaw > 45 ? -30 : Math.max(-45, Math.min(45, rawYaw));
+  const zoom = Math.max(80, Math.min(150, (theme.u01ZoomPct ?? 100) + 5));
+  return {
+    ...theme,
+    u01SelectedGeneral: chosen,
+    u01YawDeg: yaw,
+    u01ZoomPct: zoom,
+  };
+}
+
+/** L08 / L24: Spine 骨骼动画剪辑与皮肤立绘坐标变换（daiji/gongji/teshu/chuchang/shan）。 */
+export function triggerSpineSkinClip(
+  theme: ThemeAndSkinSurfaceState,
+  clip?: "daiji" | "gongji" | "teshu" | "chuchang" | "shan",
+): ThemeAndSkinSurfaceState {
+  const curClip = theme.spineActiveClip ?? "daiji";
+  const nextClip =
+    clip ?? SPINE_CLIP_ORDER[(SPINE_CLIP_ORDER.indexOf(curClip) + 1) % SPINE_CLIP_ORDER.length]!;
+  if (!SPINE_CLIP_ORDER.includes(nextClip)) {
+    throw new Error(`invalid spine clip: ${nextClip}`);
+  }
+  const slot = theme.activeSkinBySeat[0] ?? 1;
+  const [standX, standY, scalePct] =
+    nextClip === "gongji"
+      ? [slot * 12, -8, 108]
+      : nextClip === "teshu"
+        ? [slot * 8, -14, 112]
+        : nextClip === "chuchang"
+          ? [0, -20, 115]
+          : nextClip === "shan"
+            ? [-slot * 10, 4, 96]
+            : [slot * 4, 0, 100];
+  return {
+    ...theme,
+    spineActiveClip: nextClip,
+    spineFrameSeq: (theme.spineFrameSeq ?? 1) + 1,
+    skinStandX: standX,
+    skinStandY: standY,
+    skinScalePct: scalePct,
+    lastSkinTrigger: `spine:${nextClip}@slot${slot}`,
+  };
+}
+
+/** L14: 手杀 UI 倒计时进度条、操作按钮栏与击杀播报横幅更新。 */
+export function triggerShoushaHudBanner(
+  theme: ThemeAndSkinSurfaceState,
+  banner = "无双·千军破(zhefu)",
+): ThemeAndSkinSurfaceState {
+  const nextPct = Math.max(15, ((theme.shoushaCountdownPct ?? 85) - 15 + 100) % 100);
+  return {
+    ...theme,
+    shoushaCountdownPct: nextPct,
+    shoushaKillBanner: banner,
+    lastVoiceCue: "skill/zhefu1.mp3",
+  };
+}
+
+/** L25: 祖安扩展单机离线 DIY 武将/技能编辑器（联机房间强制拦截）。 */
+export function applyZuanDiyDraft(
+  workbench: WorkbenchToolsState,
+  draft: { generalId: string; maxHp: number; onlineRoom: boolean },
+): WorkbenchToolsState {
+  if (draft.onlineRoom) {
+    throw new Error("ONLINE_MULTIPLAYER_DIY_FORBIDDEN");
+  }
+  const trimmed = draft.generalId.trim();
+  if (!trimmed) {
+    throw new Error("EMPTY_DIY_GENERAL_ID");
+  }
+  const hp = Math.max(1, Math.min(15, Math.floor(draft.maxHp)));
+  return {
+    ...workbench,
+    zuanDiyGeneralId: trimmed,
+    zuanDiyMaxHp: hp,
+    zuanDiyOnlineRoom: false,
+    zuanDiyStatus: `已应用离线 DIY: ${trimmed} (${hp}血)`,
+  };
+}
+
+/** L27: 选将美化双将同选面板（chooseCharacterTwo）校验与锁定。 */
+export function selectL27DualGenerals(
+  workbench: WorkbenchToolsState,
+  primary: string,
+  secondary: string,
+): WorkbenchToolsState {
+  const p = primary.trim();
+  const s = secondary.trim();
+  if (!p || !s || p === s) {
+    throw new Error("DUAL_PICK_REQUIRES_TWO_DISTINCT_GENERALS");
+  }
+  return {
+    ...workbench,
+    l27DualPrimary: p,
+    l27DualSecondary: s,
+    l27DualLocked: true,
   };
 }
 
@@ -730,6 +878,16 @@ export function createInitialExtensionSurfacesState(
       throwEmotionCue: null,
       selectBeautifyEnabled: true,
       d3ShowcaseEnabled: true,
+      u01SelectedGeneral: "ddd_caomao",
+      u01YawDeg: 15,
+      u01ZoomPct: 110,
+      spineActiveClip: "daiji",
+      spineFrameSeq: 1,
+      skinStandX: 4,
+      skinStandY: 0,
+      skinScalePct: 100,
+      shoushaCountdownPct: 85,
+      shoushaKillBanner: "连破·一血(spshidi)",
     },
     longxue: {
       shengjian: true,
@@ -763,6 +921,13 @@ export function createInitialExtensionSurfacesState(
       eloDifficulty: resolveEloDifficulty(true, "rank", 1, 0.5),
       zuanDebugAllowed: true,
       foolHintLabel: "强中加伤",
+      zuanDiyGeneralId: "zuan_diy01",
+      zuanDiyMaxHp: 4,
+      zuanDiyOnlineRoom: false,
+      zuanDiyStatus: "离线沙箱就绪 (120将/122技)",
+      l27DualPrimary: "caocao",
+      l27DualSecondary: "simayi",
+      l27DualLocked: true,
     },
   };
 }

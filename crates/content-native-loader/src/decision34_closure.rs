@@ -378,3 +378,8 @@ pub fn verify_u08_standard_skill_bindings(catalog: &Catalog) -> Result<usize, St
     }
     Ok(U08_STANDARD_SKILL_REFS.len())
 }
+
+#[path = "decision34_pack9.rs"]
+pub mod decision34_pack9;
+pub use decision34_pack9::*;
+

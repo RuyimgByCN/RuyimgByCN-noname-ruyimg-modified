@@ -194,8 +194,15 @@ try {
     click('btn-cycle-qhly');
     click('btn-switch-skin');
     click('btn-fool-emotion');
+    click('btn-u01-3d-rotate');
+    click('btn-l24-trigger-clip');
+    click('btn-l14-shousha-banner');
     await new Promise(r => setTimeout(r, 50));
     const text = (tid) => document.querySelector('[data-testid="' + tid + '"]')?.textContent?.trim() ?? '';
+    const rectOf = (tid) => {
+      const r = document.querySelector('[data-testid="' + tid + '"]')?.getBoundingClientRect();
+      return r ? { w: Math.round(r.width), h: Math.round(r.height) } : { w: 0, h: 0 };
+    };
     return {
       daoxin: text('longxue-daoxin'),
       thresholds: text('longxue-thresholds'),
@@ -205,6 +212,12 @@ try {
       badgeShousha: text('badge-shousha'),
       badgeRuzhen: text('badge-ruzhen'),
       badgeQhly: text('badge-qhly'),
+      u01Standee: text('u01-3d-standee'),
+      u01Rect: rectOf('u01-3d-select-gallery'),
+      spineRect: rectOf('spine-skeletal-canvas'),
+      l24Meta: text('l24-skin-transform-meta'),
+      l14Banner: text('l14-shousha-banner-text'),
+      l14Rect: rectOf('l14-shousha-hud'),
       notice: text('surface-notice'),
     };
   })()`);
@@ -290,7 +303,7 @@ try {
     return { hitText, blockedText };
   })()`);
 
-  // 6. 驱动 Tab 5 (工作台与适配：导出文件名安全校验)
+  // 6. 驱动 Tab 5 (工作台与适配：导出文件名安全校验 + L25 单机 DIY 门禁 + L27 双将同选)
   const workbenchResult = await evalJs(`(async () => {
     const click = (tid) => {
       const btn = document.querySelector('[data-testid="' + tid + '"]');
@@ -303,9 +316,17 @@ try {
     input.value = '../passwd';
     input.dispatchEvent(new Event('input', { bubbles: true }));
     click('btn-validate-export');
-    await new Promise(r => setTimeout(r, 50));
-    const rejectedMsg = document.querySelector('[data-testid="export-validation-msg"]')?.textContent?.trim() ?? '';
-    return { rejectedMsg };
+    click('btn-l25-diy-apply');
+    click('btn-l27-dual-pick');
+    await new Promise(r => setTimeout(r, 30));
+    const text = (tid) => document.querySelector('[data-testid="' + tid + '"]')?.textContent?.trim() ?? '';
+    const l25Status = text('l25-diy-status');
+    const l27Status = text('l27-dual-status');
+    click('btn-l25-diy-online-guard');
+    await new Promise(r => setTimeout(r, 30));
+    const l25GuardNotice = text('surface-notice');
+    const rejectedMsg = text('export-validation-msg');
+    return { rejectedMsg, l25Status, l25GuardNotice, l27Status };
   })()`);
 
   // 7. 验证真实浏览器 BattleView 存档与读档（同时恢复原生引擎状态与扩展面板快照）
@@ -437,6 +458,12 @@ try {
       hudResult.daoxin === "50" &&
       hudResult.unlockedSkills === "mbcmqingzheng/mbcmjiushi" &&
       hudResult.l20MarkBadges.includes("龙印 ×1") &&
+      hudResult.u01Standee.includes("ddd_xinxianying") &&
+      hudResult.u01Rect.w > 0 &&
+      hudResult.spineRect.w > 0 &&
+      hudResult.l24Meta.includes("gongji") &&
+      hudResult.l14Banner.includes("无双·千军破(zhefu)") &&
+      hudResult.l14Rect.w > 0 &&
       campaignResult.bossHp === "∞" &&
       campaignResult.tafangWave === "#2/5" &&
       campaignResult.taixuGold === "90" &&
@@ -445,6 +472,9 @@ try {
       omnisearchResult.hitText.includes("苍螭之璧") &&
       omnisearchResult.blockedText.includes("error:eval_refused") &&
       workbenchResult.rejectedMsg.includes("unsafe export filename") &&
+      workbenchResult.l25Status.includes("zuan_diy02") &&
+      workbenchResult.l25GuardNotice.includes("ONLINE_MULTIPLAYER_DIY_FORBIDDEN") &&
+      workbenchResult.l27Status.includes("ddd_caomao + ddd_liuchong") &&
       saveRestoreResult.restoredDaoxin === "50" &&
       saveRestoreResult.restoredDecade === "十周年:shousha" &&
       saveRestoreResult.weatherStillActive === true &&

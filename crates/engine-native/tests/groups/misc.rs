@@ -199,3 +199,7 @@ mod up37_r02_to_n07_complete_closure;
 
 #[path = "../decision34_rules_and_campaigns.rs"]
 mod decision34_rules_and_campaigns;
+
+#[path = "../decision34_pack9_closure.rs"]
+mod decision34_pack9_closure;
+
