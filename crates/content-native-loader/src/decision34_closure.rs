@@ -96,26 +96,146 @@ pub const U08_STANDARD_SKILL_REFS: [(&str, &str); 31] = [
     ("yiji", "遗计"),
 ];
 
-const DECISION34_SKILL_SPECS: [(&str, u32, EventKind, &[EventKind]); 19] = [
-    ("mbcmjiushi", MBCMJIUSHI_ID, EventKind::SkillLogBegin, &[]),
-    ("mbcmfangzhu", MBCMFANGZHU_ID, EventKind::SkillLogBegin, &[]),
-    ("mbjuejin", MBJUEJIN_ID, EventKind::SkillLogBegin, &[]),
-    ("k_danggu", K_DANGGU_ID, EventKind::SkillLogBegin, &[]),
-    ("k_mowang", K_MOWANG_ID, EventKind::SkillLogBegin, &[]),
-    ("huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID, EventKind::SkillLogBegin, &[]),
-    ("diaobingqianjiang", DIAOBINGQIANJIANG_ID, EventKind::SkillLogBegin, &[]),
-    ("duoqi", DUOQI_ID, EventKind::SkillLogBegin, &[]),
-    ("youzhan", YOUZHAN_ID, EventKind::SkillLogBegin, &[]),
-    ("yxs_menshen2_guard", YXS_MENSHEN2_GUARD_ID, EventKind::SkillLogBegin, &[]),
-    ("yxs_tafang_wave", YXS_TAFANG_WAVE_ID, EventKind::SkillLogBegin, &[]),
-    ("l20_mark_dispatch", L20_MARK_DISPATCH_ID, EventKind::SkillLogBegin, &[]),
-    ("th_chongzou", TH_CHONGZOU_ID, EventKind::SkillLogBegin, &[]),
-    ("th_huanyin", TH_HUANYIN_ID, EventKind::SkillLogBegin, &[]),
-    ("th_xuanlv", TH_XUANLV_ID, EventKind::SkillLogBegin, &[]),
-    ("boss_baonu_stage", BOSS_BAONU_STAGE_ID, EventKind::SkillLogBegin, &[]),
-    ("taixu_expedition_step", TAIXU_EXPEDITION_STEP_ID, EventKind::SkillLogBegin, &[]),
-    ("doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID, EventKind::SkillLogBegin, &[]),
-    ("martial_formation_step", MARTIAL_FORMATION_STEP_ID, EventKind::SkillLogBegin, &[]),
+const DECISION34_SKILL_SPECS: [(
+    &str,
+    u32,
+    EventKind,
+    &[EventKind],
+    engine_native::rvm_bridge::VmFilterPolicy,
+); 19] = [
+    (
+        "mbcmjiushi",
+        MBCMJIUSHI_ID,
+        EventKind::PhaseBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "mbcmfangzhu",
+        MBCMFANGZHU_ID,
+        EventKind::Damage,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "mbjuejin",
+        MBJUEJIN_ID,
+        EventKind::PhaseBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "k_danggu",
+        K_DANGGU_ID,
+        EventKind::TurnBegin,
+        &[EventKind::PhaseBegin],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "k_mowang",
+        K_MOWANG_ID,
+        EventKind::Dying,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "huanle_kuwu_interactive",
+        HUANLE_KUWU_INTERACTIVE_ID,
+        EventKind::Damage,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ),
+    (
+        "diaobingqianjiang",
+        DIAOBINGQIANJIANG_ID,
+        EventKind::CardUsed,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ),
+    (
+        "duoqi",
+        DUOQI_ID,
+        EventKind::PhaseBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "youzhan",
+        YOUZHAN_ID,
+        EventKind::Damage,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "yxs_menshen2_guard",
+        YXS_MENSHEN2_GUARD_ID,
+        EventKind::Damage,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "yxs_tafang_wave",
+        YXS_TAFANG_WAVE_ID,
+        EventKind::TurnBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "l20_mark_dispatch",
+        L20_MARK_DISPATCH_ID,
+        EventKind::PhaseBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "th_chongzou",
+        TH_CHONGZOU_ID,
+        EventKind::CardUsed,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ),
+    (
+        "th_huanyin",
+        TH_HUANYIN_ID,
+        EventKind::CardUsed,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ),
+    (
+        "th_xuanlv",
+        TH_XUANLV_ID,
+        EventKind::CardUsed,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ),
+    (
+        "boss_baonu_stage",
+        BOSS_BAONU_STAGE_ID,
+        EventKind::TurnBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "taixu_expedition_step",
+        TAIXU_EXPEDITION_STEP_ID,
+        EventKind::TurnBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "doomsday_infection_step",
+        DOOMSDAY_INFECTION_STEP_ID,
+        EventKind::TurnBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
+    (
+        "martial_formation_step",
+        MARTIAL_FORMATION_STEP_ID,
+        EventKind::TurnBegin,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+    ),
 ];
 
 /// L28 (`thunder-upstream-liuli`) 12 `th_*` variant generals corresponding to `CHG_HERO`.
@@ -137,14 +257,16 @@ pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 12] = [
 /// Build the native `ExtensionPack` for Decision 34 complete closure.
 pub fn decision34_closure_extension_pack() -> ExtensionPack {
     let mut vm_skills: Vec<VmSkillDecl> = Vec::with_capacity(DECISION34_SKILL_SPECS.len());
-    for &(name_str, def_id, event, extra_events) in &DECISION34_SKILL_SPECS {
+    for (idx, (name_str, def_id, event, extra_events, filter_inner)) in
+        DECISION34_SKILL_SPECS.iter().enumerate()
+    {
         let mod_name = format!("{name_str}#d34");
         let mut code = Vec::with_capacity(14);
         code.push(0x57); // HOST_SKILL
         code.push(0x10); // CONST_I32
         code.extend_from_slice(&(DECISION34_STORAGE_DISPATCH_KEY as i32).to_le_bytes());
         code.push(0x10); // CONST_I32
-        code.extend_from_slice(&(def_id as i32).to_le_bytes());
+        code.extend_from_slice(&(*def_id as i32).to_le_bytes());
         code.push(0x5A); // HOST_EFFECT_EXT
         code.extend_from_slice(&649u16.to_le_bytes()); // STORAGE_SET = 649
         code.push(0x01); // HALT
@@ -162,22 +284,22 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
         vm_skills.push(VmSkillDecl {
             declaration_hash: None,
             presentation_binding: None,
-            name: name_str.to_string(),
+            name: (*name_str).to_string(),
             module,
             trigger: engine_native::catalog::TriggerMeta {
-                event,
+                event: *event,
                 timing: engine_native::event::Timing::Normal,
-                priority: 0,
-                order_selectable: true,
+                priority: 20 - (idx as i32),
+                order_selectable: false,
                 optional: false,
                 extra_events: extra_events.to_vec(),
             },
             filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
-                skill_def_id: def_id,
+                skill_def_id: *def_id,
                 hand_limit_base_max_hp: false,
                 choice_actor: engine_native::rvm_bridge::VmChoiceActor::Owner,
                 modifiers: Vec::new(),
-                inner: Box::new(engine_native::rvm_bridge::VmFilterPolicy::Always),
+                inner: Box::new(filter_inner.clone()),
             },
             r05_identity: None,
         });

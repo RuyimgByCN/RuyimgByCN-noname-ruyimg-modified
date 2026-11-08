@@ -116,12 +116,28 @@ fn is_trick_kind(k: CardKind) -> bool {
         )
 }
 
+fn is_daoxin_unlocked(ctx: &Ctx<'_>, owner: PlayerId, skill_name: &str, threshold: u8) -> bool {
+    if ctx.core.player(owner).mbqianlong_marks >= threshold {
+        return true;
+    }
+    if let Some(def) = ctx.catalog.skill_by_name(skill_name) {
+        if ctx.core.has_skill(owner, def) {
+            return true;
+        }
+    }
+    false
+}
+
 /// `L29` (`mbcmjiushi` 酒诗, unlocked at `mbqianlong >= 50`):
 /// - When face-up (`!face_down`): flips face-down (`face_down = true`) to apply virtual
 ///   `jiu` boost (`jiu_active = true`, `mbcmjiushi_jiu_used = 1`).
 /// - When face-down (`face_down`): flips face-up (`face_down = false`) and gains 1 trick
 ///   card from deck/discard (`mbcmjiushi_trick_gained = 1`).
 fn resolve_mbcmjiushi(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if !is_daoxin_unlocked(ctx, owner, "mbcmjiushi", 50) {
+        set_flag(ctx.core, owner, "mbqianlong_locked_guard", 1);
+        return;
+    }
     if !ctx.core.player(owner).face_down {
         ctx.core.player_mut(owner).face_down = true;
         ctx.core.turn.jiu_active = true;
@@ -157,6 +173,10 @@ fn resolve_mbcmjiushi(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// On damage, chooses another alive player (`mbcmfangzhu_target` or `first_other_alive`),
 /// turns that player over (`face_down = !face_down`), and that player draws `lost_hp = (max_hp - hp).max(1)` cards.
 fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if !is_daoxin_unlocked(ctx, owner, "mbcmfangzhu", 75) {
+        set_flag(ctx.core, owner, "mbqianlong_locked_guard", 1);
+        return;
+    }
     let target = {
         let raw = flag(ctx.core, owner, "mbcmfangzhu_target");
         if raw > 0 && (raw as u8) < (ctx.core.players.len() as u8) && (raw as u8) != owner {
@@ -180,6 +200,10 @@ fn resolve_mbcmfangzhu(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// Grants 2 hujia to owner, sets `mbjuejin_active = 1`, moves `shan`/`tao`/`jiu` cards
 /// from hands/deck into the `"xiang"` expansion pile, and grants `+2` sha damage bonus.
 fn resolve_mbjuejin(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if !is_daoxin_unlocked(ctx, owner, "mbjuejin", 99) {
+        set_flag(ctx.core, owner, "mbqianlong_locked_guard", 1);
+        return;
+    }
     if flag(ctx.core, owner, "mbjuejin_used") != 0 {
         return;
     }
@@ -222,6 +246,9 @@ fn resolve_mbjuejin(ctx: &mut Ctx<'_>, owner: PlayerId) {
 fn resolve_k_danggu(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let mut mask = flag(ctx.core, owner, "k_danggu_roster_mask");
     if mask == 0 {
+        if flag(ctx.core, owner, "k_mowang_exhausted") != 0 {
+            return;
+        }
         mask = 0x3FF; // 10 eunuchs bitmask (bits 0..=9)
         set_flag(ctx.core, owner, "k_danggu_roster_mask", mask);
     }
@@ -239,7 +266,10 @@ fn resolve_k_danggu(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// Retires the current active eunuch bit from `k_danggu_roster_mask`; if remaining eunuchs
 /// exist, revives/restores owner to 1 HP, clears dying, rotates to the next eunuch, and draws 1 card.
 fn resolve_k_mowang(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let mask = flag(ctx.core, owner, "k_danggu_roster_mask");
+    let mut mask = flag(ctx.core, owner, "k_danggu_roster_mask");
+    if mask == 0 && flag(ctx.core, owner, "k_mowang_exhausted") == 0 {
+        mask = 0x3FF;
+    }
     let active = flag(ctx.core, owner, "k_danggu_active_eunuch").saturating_sub(1);
     let bit = 1u32 << (active.min(9));
     let next_mask = mask & !bit;
@@ -305,7 +335,7 @@ fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
             ctx.take_owned_card(target, c);
         }
         discard_some(ctx, target, vec![c]);
-        set_flag(ctx.core, target, "kuwu_discarded_he", c);
+        set_flag(ctx.core, target, "kuwu_discarded_he", c.max(1));
     } else {
         set_flag(ctx.core, target, "kuwu_lost_hp", 1);
         ctx.emit(EventData::LoseHp {
@@ -385,12 +415,23 @@ fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
 
 /// `U08` (`yxs_menshen2_guard` 门神承受伤害转移 + `yxs_tafang_wave` 塔防波次推进):
 fn resolve_yxs_menshen2_guard(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let menshen_granter = ctx
+    let Some(menshen_granter) = ctx
         .catalog
         .skill_by_name("yxs_menshen2")
         .and_then(|def| ctx.core.vm_aux.marks.get(&(owner, u32::from(def))).copied())
+        .filter(|&v| v >= 0)
         .map(|v| v as u8)
-        .unwrap_or_else(|| flag(ctx.core, owner, "yxs_menshen2_granter") as u8);
+        .or_else(|| {
+            ctx.core
+                .vm_aux
+                .flags
+                .get(&(owner, "yxs_menshen2_granter".to_string()))
+                .copied()
+                .map(|v| v as u8)
+        })
+    else {
+        return;
+    };
     if (menshen_granter as usize) < ctx.core.players.len()
         && menshen_granter != owner
         && ctx.core.player(menshen_granter).alive

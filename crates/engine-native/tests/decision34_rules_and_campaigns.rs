@@ -159,13 +159,17 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
     assert!(!e.state_core().player(0).face_down);
     assert_eq!(flag(&e, 0, "mbcmjiushi_trick_gained"), 1);
 
-    // 2. Execute mbcmfangzhu: damage -> turns target 2 over & draws lost_hp cards
-    e.debug_set_hp(0, 1); // max_hp = 3, hp = 1 => lost_hp = 2
+    // 2. Execute mbcmfangzhu via REAL RuleVm Damage trigger: dealing 1 damage to seat 0 (marks == 99 >= 75)
+    // automatically triggers mbcmfangzhu#d34 in RuleVm, flipping target 2 and drawing lost_hp cards!
+    e.debug_set_hp(0, 2); // taking 1 damage brings hp to 1 (max_hp = 3 => lost_hp = 2)
     set_flag(&mut e, 0, "mbcmfangzhu_target", 2);
     let hand2_before = e.debug_hand(2).len();
-    invoke_d34_op(&mut e, 0, "mbcmfangzhu", MBCMFANGZHU_ID);
+    let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
     drain(&mut e);
-    assert!(e.state_core().player(2).face_down);
+    assert!(
+        e.state_core().player(2).face_down,
+        "mbcmfangzhu must trigger via RuleVm on Damage to mb_caomao"
+    );
     assert_eq!(flag(&e, 0, "mbcmfangzhu_drawn"), 2);
     assert_eq!(e.debug_hand(2).len(), hand2_before + 2);
 
@@ -176,9 +180,11 @@ fn l29_longxue_mbqianlong_unlocks_and_executes_all_four_skills_with_save_restore
     assert_eq!(e.state_core().player(0).hujia, 2);
     assert!(flag(&e, 0, "mbjuejin_xiang_count") >= 1);
 
-    // Save & restore roundtrip verification
+    // Save & restore + binary archive roundtrip verification
     let snap = e.save();
-    let restored = Engine::restore_with_extensions(&snap, &[&longxue_pack, &d34_pack])
+    let bytes = engine_native::archive::encode_archive(&snap);
+    let decoded = engine_native::archive::decode_archive(&bytes).expect("decode_archive");
+    let restored = Engine::restore_with_extensions(&decoded, &[&longxue_pack, &d34_pack])
         .expect("restore_with_extensions");
     assert_eq!(restored.state_core().player(0).mbqianlong_marks, 99);
     assert_eq!(restored.state_core().player(0).hujia, 2);
@@ -196,17 +202,17 @@ fn l10_shichangshi_k_danggu_and_k_mowang_roster_lifecycle_and_save_restore() {
     e.debug_assemble_general_def(0, scs);
     assert_eq!(e.state_core().player(0).max_hp, 1);
 
-    // k_danggu initializes 10-eunuch bitmask (0x3FF) and activates first eunuch
-    invoke_d34_op(&mut e, 0, "k_danggu", K_DANGGU_ID);
-    drain(&mut e);
+    // Real RuleVm TurnBegin trigger: advancing from GameStart into seat 0's TurnBegin
+    // automatically triggers k_danggu#d34 in RuleVm!
+    next_phase(&mut e);
     assert_eq!(flag(&e, 0, "k_danggu_roster_mask"), 0x3FF);
     assert_eq!(flag(&e, 0, "k_danggu_active_eunuch"), 1);
     assert_eq!(flag(&e, 0, "k_danggu_triggered"), 1);
 
-    // k_mowang retires eunuch #1, revives player 0 to 1 HP, and switches to eunuch #2
-    e.state_core_mut().player_mut(0).hp = 0;
-    e.state_core_mut().player_mut(0).dying = true;
-    invoke_d34_op(&mut e, 0, "k_mowang", K_MOWANG_ID);
+    // Real RuleVm Dying trigger: dealing 1 fatal damage to shichangshi (seat 0, 1 HP -> 0 HP)
+    // emits EventData::Dying, which automatically triggers k_mowang#d34 in RuleVm,
+    // retiring eunuch #1, reviving player 0 to 1 HP, clearing dying, and rotating to eunuch #2!
+    let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
     drain(&mut e);
     assert_eq!(flag(&e, 0, "k_danggu_roster_mask"), 0x3FE);
     assert_eq!(flag(&e, 0, "k_danggu_active_eunuch"), 2);
@@ -215,7 +221,9 @@ fn l10_shichangshi_k_danggu_and_k_mowang_roster_lifecycle_and_save_restore() {
     assert!(!e.state_core().player(0).dying);
 
     let snap = e.save();
-    let restored = Engine::restore_with_extensions(&snap, &[&epic_pack, &d34_pack])
+    let bytes = engine_native::archive::encode_archive(&snap);
+    let decoded = engine_native::archive::decode_archive(&bytes).expect("decode_archive");
+    let restored = Engine::restore_with_extensions(&decoded, &[&epic_pack, &d34_pack])
         .expect("restore_with_extensions");
     assert_eq!(flag(&restored, 0, "k_danggu_roster_mask"), 0x3FE);
     assert_eq!(flag(&restored, 0, "k_danggu_active_eunuch"), 2);
@@ -234,6 +242,13 @@ fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
     invoke_d34_op(&mut e, 0, "huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID);
     assert_eq!(flag(&e, 0, "kuwu_skipped_from_chain"), 1);
     set_flag(&mut e, 0, "kuwu_from_chain", 0);
+
+    // U06 kuwu interactive: discard 1 hand card branch
+    let hand1_before = e.debug_hand(1).len();
+    invoke_d34_op(&mut e, 0, "huanle_kuwu_interactive", HUANLE_KUWU_INTERACTIVE_ID);
+    drain(&mut e);
+    assert_eq!(e.debug_hand(1).len(), hand1_before - 1);
+    assert!(flag(&e, 1, "kuwu_discarded_he") > 0);
 
     // U06 kuwu interactive: choose lose 1 HP branch
     let hp1_before = e.debug_hp(1);
@@ -260,6 +275,16 @@ fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
     drain(&mut e);
     assert_eq!(flag(&e, 0, "youzhan_triggered"), 1);
     assert_eq!(e.debug_hp(1), hp1_pre_youzhan - 1);
+
+    // Save/restore + binary archive card conservation verification
+    let snap = e.save();
+    let bytes = engine_native::archive::encode_archive(&snap);
+    let decoded = engine_native::archive::decode_archive(&bytes).expect("decode_archive");
+    let restored = Engine::restore_with_extensions(&decoded, &[&wudian_pack, &d34_pack])
+        .expect("restore_with_extensions");
+    assert_eq!(flag(&restored, 0, "diaobingqianjiang_resolved"), 1);
+    assert_eq!(flag(&restored, 0, "duoqi_triggered"), 1);
+    assert_eq!(flag(&restored, 0, "youzhan_triggered"), 1);
 }
 
 #[test]
@@ -401,7 +426,26 @@ fn decision34_edge_cases_and_boundary_guards() {
     let mut e = Engine::new_with_extensions(2026110907, 4, &[&d34_pack])
         .expect("new_with_extensions");
 
-    // 1. mbjuejin limited 1/game idempotency: second call does not add extra hujia
+    // 0. Daoxin threshold lock guards: calling mbcmjiushi (< 50), mbcmfangzhu (< 75), or mbjuejin (< 99)
+    // when un-unlocked must early-return with mbqianlong_locked_guard == 1 and zero state mutation!
+    assert_eq!(e.state_core().player(0).mbqianlong_marks, 0);
+    invoke_d34_op(&mut e, 0, "mbcmjiushi", MBCMJIUSHI_ID);
+    assert_eq!(flag(&e, 0, "mbqianlong_locked_guard"), 1);
+    assert!(!e.state_core().player(0).face_down);
+
+    set_flag(&mut e, 0, "mbqianlong_locked_guard", 0);
+    invoke_d34_op(&mut e, 0, "mbcmfangzhu", MBCMFANGZHU_ID);
+    assert_eq!(flag(&e, 0, "mbqianlong_locked_guard"), 1);
+    assert!(!e.state_core().player(1).face_down);
+
+    set_flag(&mut e, 0, "mbqianlong_locked_guard", 0);
+    invoke_d34_op(&mut e, 0, "mbjuejin", MBJUEJIN_ID);
+    assert_eq!(flag(&e, 0, "mbqianlong_locked_guard"), 1);
+    assert_eq!(e.state_core().player(0).hujia, 0);
+
+    // 1. mbjuejin limited 1/game idempotency once unlocked (mbqianlong_marks == 99):
+    // first call grants +2 hujia; second call does not add extra hujia
+    e.state_core_mut().player_mut(0).mbqianlong_marks = 99;
     invoke_d34_op(&mut e, 0, "mbjuejin", MBJUEJIN_ID);
     assert_eq!(e.state_core().player(0).hujia, 2);
     invoke_d34_op(&mut e, 0, "mbjuejin", MBJUEJIN_ID);
@@ -411,14 +455,29 @@ fn decision34_edge_cases_and_boundary_guards() {
         "mbjuejin is limited 1/game and must not grant hujia twice"
     );
 
-    // 2. k_mowang exhaustion when last eunuch bit is retired
+    // 2. k_mowang exhaustion when last eunuch bit is retired, and post-exhaustion guard
     set_flag(&mut e, 0, "k_danggu_roster_mask", 0b0001);
     set_flag(&mut e, 0, "k_danggu_active_eunuch", 1);
     invoke_d34_op(&mut e, 0, "k_mowang", K_MOWANG_ID);
     assert_eq!(flag(&e, 0, "k_danggu_roster_mask"), 0);
     assert_eq!(flag(&e, 0, "k_mowang_exhausted"), 1);
+    invoke_d34_op(&mut e, 0, "k_danggu", K_DANGGU_ID);
+    assert_eq!(
+        flag(&e, 0, "k_danggu_roster_mask"),
+        0,
+        "exhausted shichangshi roster must not re-initialize to 0x3FF"
+    );
 
-    // 3. yxs_menshen2_guard when granter is dead -> does not transfer damage
+    // 3. yxs_menshen2_guard when unprotected (neither mark nor flag) or when granter is dead -> does not transfer damage
+    let hp0_before = e.debug_hp(0);
+    invoke_d34_op(&mut e, 1, "yxs_menshen2_guard", YXS_MENSHEN2_GUARD_ID);
+    assert_eq!(
+        flag(&e, 1, "yxs_menshen2_guarded"),
+        0,
+        "unprotected seat 1 must not default menshen2_granter to seat 0"
+    );
+    assert_eq!(e.debug_hp(0), hp0_before);
+
     set_flag(&mut e, 1, "yxs_menshen2_granter", 2);
     e.state_core_mut().player_mut(2).alive = false;
     invoke_d34_op(&mut e, 1, "yxs_menshen2_guard", YXS_MENSHEN2_GUARD_ID);
