@@ -42,12 +42,18 @@
   "saveRestoreResult": {
     "beforeSaveDaoxin": "50",
     "beforeSaveDecade": "十周年:shousha",
-    "saveStatus": "已存档 · save-1794153484984",
+    "saveStatus": "已存档 · save-1794158627660",
     "mutatedDaoxin": "80",
     "mutatedDecade": "十周年:xinzhan",
     "restoredDaoxin": "50",
     "restoredDecade": "十周年:shousha",
     "weatherStillActive": true
+  },
+  "restartAndReloadResult": {
+    "afterRestartDaoxin": "20",
+    "afterRestartWeather": false,
+    "afterReloadDaoxin": "50",
+    "afterReloadWeather": true
   },
   "frameStats": {
     "n": 60,

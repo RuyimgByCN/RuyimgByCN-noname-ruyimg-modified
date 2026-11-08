@@ -388,6 +388,38 @@ try {
     };
   })()`);
 
+  // 9. 验证点击「重新开局」干净重置扩展表现面（消除上一局残留），再次「读档」仍可完整恢复
+  const restartAndReloadResult = await evalJs(`(async () => {
+    const clickByText = (label) => {
+      const btn = Array.from(document.querySelectorAll('button')).find(b => (b.innerText||'').trim() === label);
+      if (!btn) throw new Error('missing button ' + label);
+      btn.click();
+    };
+    clickByText('重新开局');
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 100));
+      const d = document.querySelector('[data-testid="longxue-daoxin"]')?.textContent?.trim();
+      if (d === '20') break;
+    }
+    const afterRestartDaoxin = document.querySelector('[data-testid="longxue-daoxin"]')?.textContent?.trim();
+    const afterRestartWeather = Boolean(document.querySelector('[data-testid="coin-weather-overlay"]'));
+
+    clickByText('读档');
+    for (let i = 0; i < 30; i++) {
+      await new Promise(r => setTimeout(r, 100));
+      const d = document.querySelector('[data-testid="longxue-daoxin"]')?.textContent?.trim();
+      if (d === '50') break;
+    }
+    const afterReloadDaoxin = document.querySelector('[data-testid="longxue-daoxin"]')?.textContent?.trim();
+    const afterReloadWeather = Boolean(document.querySelector('[data-testid="coin-weather-overlay"]'));
+    return {
+      afterRestartDaoxin,
+      afterRestartWeather,
+      afterReloadDaoxin,
+      afterReloadWeather,
+    };
+  })()`);
+
   const shot = await send(ws, "Page.captureScreenshot", { format: "png" });
   const pngPath = join(outDir, "decision34-browser-surfaces.png");
   writeFileSync(pngPath, Buffer.from(shot.data, "base64"));
@@ -405,7 +437,11 @@ try {
       workbenchResult.rejectedMsg.includes("unsafe export filename") &&
       saveRestoreResult.restoredDaoxin === "50" &&
       saveRestoreResult.restoredDecade === "十周年:shousha" &&
-      saveRestoreResult.weatherStillActive === true,
+      saveRestoreResult.weatherStillActive === true &&
+      restartAndReloadResult.afterRestartDaoxin === "20" &&
+      restartAndReloadResult.afterRestartWeather === false &&
+      restartAndReloadResult.afterReloadDaoxin === "50" &&
+      restartAndReloadResult.afterReloadWeather === true,
     panelRect,
     hudResult,
     campaignResult,
@@ -413,6 +449,7 @@ try {
     omnisearchResult,
     workbenchResult,
     saveRestoreResult,
+    restartAndReloadResult,
     frameStats,
     consoleErrors,
     screenshot: pngPath,

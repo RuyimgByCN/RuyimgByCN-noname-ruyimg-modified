@@ -84,6 +84,42 @@ pub(crate) fn active_ask_host(
             if options.is_empty() { return None; }
             Some(ask(owner, "wangchen_target", ChoiceKind::SelectPlayers, options, 1, 1, true))
         }
+        HostBehavior::SwdQinglongzhiguiHeld => {
+            if stage != HostStage::SelectCard { return None; }
+            let p = core.player(owner);
+            let options: Vec<ChoiceOption> = p.hand.iter().chain(p.equips.iter()).copied().map(ChoiceOption::Card).collect();
+            if options.is_empty() { return None; }
+            Some(ask(owner, "qinglongzhigui_discard", ChoiceKind::SelectCards, options, 1, 1, false))
+        }
+        HostBehavior::SwdLianyaohuShouna => match stage {
+            HostStage::TargetChoice => {
+                let options = hand_card_options(&core.player(owner).hand);
+                if options.is_empty() { return None; }
+                Some(ask(owner, "shouna_cost", ChoiceKind::SelectCards, options, 0, 1, true))
+            }
+            HostStage::Act => {
+                let options: Vec<ChoiceOption> = core
+                    .alive_players()
+                    .filter(|&p| p != owner && !core.player(p).hand.is_empty())
+                    .map(ChoiceOption::Player)
+                    .collect();
+                if options.is_empty() { return None; }
+                Some(ask(owner, "shouna_target", ChoiceKind::SelectPlayers, options, 0, 1, true))
+            }
+            _ => None,
+        },
+        HostBehavior::SwdLianyaohuLianhua => {
+            if stage != HostStage::Act { return None; }
+            let options: Vec<ChoiceOption> = core.player(owner).lianyaohu_store.iter().copied().map(ChoiceOption::Card).collect();
+            if options.len() < 2 { return None; }
+            Some(ask(owner, "lianhua_pick", ChoiceKind::SelectCards, options, 2, 2, true))
+        }
+        HostBehavior::SwdNigongStrike => {
+            if stage != HostStage::Act { return None; }
+            let options: Vec<ChoiceOption> = core.alive_players().filter(|&p| p != owner).map(ChoiceOption::Player).collect();
+            if options.is_empty() { return None; }
+            Some(ask(owner, "nigong_target", ChoiceKind::SelectPlayers, options, 1, 1, true))
+        }
         HostBehavior::Liaoyuan => {
             if stage != HostStage::SelectCard {
                 return None;

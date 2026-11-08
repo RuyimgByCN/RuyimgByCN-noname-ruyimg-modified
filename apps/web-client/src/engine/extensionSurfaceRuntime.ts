@@ -781,11 +781,99 @@ export function serializeExtensionSurfacesSnapshot(state: ExtensionSurfacesSnaps
 }
 
 export function deserializeExtensionSurfacesSnapshot(raw: string): ExtensionSurfacesSnapshot {
-  const parsed = JSON.parse(raw) as Partial<ExtensionSurfacesSnapshot>;
-  if (!parsed || parsed.version !== 1 || !parsed.coin || !parsed.taixu || !parsed.mvp) {
+  let parsed: Partial<ExtensionSurfacesSnapshot>;
+  try {
+    parsed = JSON.parse(raw) as Partial<ExtensionSurfacesSnapshot>;
+  } catch {
+    throw new Error("invalid extension surfaces snapshot");
+  }
+  const valid =
+    Boolean(parsed && typeof parsed === "object") &&
+    parsed.version === 1 &&
+    Array.isArray(parsed.activeSources) &&
+    Boolean(
+      parsed.boss &&
+        typeof parsed.boss === "object" &&
+        Array.isArray(parsed.boss.stages) &&
+        Array.isArray(parsed.boss.forbidAiIds),
+    ) &&
+    Boolean(
+      parsed.coin &&
+        typeof parsed.coin === "object" &&
+        typeof parsed.coin.balance === "number" &&
+        Array.isArray(parsed.coin.activeEffects),
+    ) &&
+    Boolean(
+      parsed.taixu &&
+        typeof parsed.taixu === "object" &&
+        Array.isArray(parsed.taixu.nodes) &&
+        Array.isArray(parsed.taixu.blessings),
+    ) &&
+    Boolean(
+      parsed.martial &&
+        typeof parsed.martial === "object" &&
+        Array.isArray(parsed.martial.friends) &&
+        Array.isArray(parsed.martial.enemies) &&
+        Boolean(parsed.martial.recordBook && typeof parsed.martial.recordBook === "object"),
+    ) &&
+    Boolean(
+      parsed.doomsday &&
+        typeof parsed.doomsday === "object" &&
+        Array.isArray(parsed.doomsday.identities) &&
+        Array.isArray(parsed.doomsday.infectedSeats),
+    ) &&
+    Boolean(
+      parsed.mvp &&
+        typeof parsed.mvp === "object" &&
+        Array.isArray(parsed.mvp.seenSeqs) &&
+        Boolean(parsed.mvp.scores && typeof parsed.mvp.scores === "object"),
+    ) &&
+    Boolean(
+      parsed.theme &&
+        typeof parsed.theme === "object" &&
+        Boolean(parsed.theme.activeSkinBySeat && typeof parsed.theme.activeSkinBySeat === "object"),
+    ) &&
+    Boolean(
+      parsed.longxue &&
+        typeof parsed.longxue === "object" &&
+        typeof parsed.longxue.daoxin === "number" &&
+        Array.isArray(parsed.longxue.unlockedThresholds),
+    ) &&
+    Boolean(
+      parsed.thunder &&
+        typeof parsed.thunder === "object" &&
+        Array.isArray(parsed.thunder.replacedPairs),
+    ) &&
+    Boolean(
+      parsed.omnisearch &&
+        typeof parsed.omnisearch === "object" &&
+        Array.isArray(parsed.omnisearch.results),
+    ) &&
+    Boolean(
+      parsed.workbench &&
+        typeof parsed.workbench === "object" &&
+        Array.isArray(parsed.workbench.shoushaFilteredPacks) &&
+        Boolean(parsed.workbench.eloDifficulty && typeof parsed.workbench.eloDifficulty === "object"),
+    );
+  if (!valid) {
     throw new Error("invalid extension surfaces snapshot");
   }
   return parsed as ExtensionSurfacesSnapshot;
+}
+
+/**
+ * 读档时恢复扩展表现面状态：
+ * - 若存档槽包含 `extensionSurfacesJson`，精确反序列化该快照（不被读档信封二次累加污染）；
+ * - 若为未含 `extensionSurfacesJson` 的历史存档槽，先重置为初始状态再注入读档信封，避免上一局会话状态泄漏。
+ */
+export function restoreExtensionSurfacesForLoad(
+  raw: string | undefined,
+  env: EngineEnvelope,
+): ExtensionSurfacesSnapshot {
+  if (raw) {
+    return deserializeExtensionSurfacesSnapshot(raw);
+  }
+  return ingestBattleEnvelopeIntoSurfaces(createInitialExtensionSurfacesState(), env);
 }
 
 export function hiddenCardIdsFromSnapshot(view: ObserverSnapshot | null, selfId: number): number[] {
@@ -794,3 +882,4 @@ export function hiddenCardIdsFromSnapshot(view: ObserverSnapshot | null, selfId:
     .filter((c) => c.owner !== selfId && c.zone === "Hand")
     .map((c) => c.id);
 }
+

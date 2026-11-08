@@ -4,12 +4,19 @@ use engine_native::{
     CardKind, ChoiceOption, CommandOutcome, Engine, GameAction, GameCommand, MachineSnapshot,
 };
 
-fn pack() -> engine_native::content::extension::ExtensionPack {
+fn full_pack() -> engine_native::content::extension::ExtensionPack {
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json");
-    let mut pack = content_native_loader::bridge_pack(&std::fs::read_to_string(path).unwrap())
-        .unwrap()
-        .pack;
+    let raw = std::fs::read_to_string(path).unwrap().replace("\r\n", "\n");
+    content_native_loader::bridge_pack(&raw).unwrap().pack
+}
+
+/// `fixture()` 下方的 18 步回放使用 seed=9002 在 198 张牌堆（标准 108 + swd 90）
+/// Fisher-Yates 洗牌下的硬编码 `CardId`（`1, 102, 73, 169, 105, 167, 97, 34, 57, 192, 17`）。
+/// 裁决 33 将 `cangchizhibi` 补入 `shahai-swd` 后正式包为 91 张（见下方
+/// `full_91_card_swd_pack_with_cangchizhibi_preserves_duel_privacy` 专项验证）。
+fn pack() -> engine_native::content::extension::ExtensionPack {
+    let mut pack = full_pack();
     pack.cards.truncate(90);
     pack
 }
@@ -263,3 +270,120 @@ fn pending_duel_timing() {
         samples[494]
     );
 }
+
+#[test]
+fn full_91_card_swd_pack_with_cangchizhibi_preserves_duel_privacy() {
+    let pack = full_pack();
+    assert_eq!(pack.cards.len(), 91, "裁决 33 补齐苍螭之璧后 swd 正式包应为 91 张");
+    let mut e = Engine::new_with_extensions(9002, 4, &[&pack]).unwrap();
+    let juedou_id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.kind == CardKind::Duel)
+        .map(|(i, _)| i as u32)
+        .unwrap();
+    let sha_ids: Vec<u32> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.kind == CardKind::Sha)
+        .take(2)
+        .map(|(i, _)| i as u32)
+        .collect();
+    let cangchi_id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.kind == CardKind::Cangchizhibi)
+        .map(|(i, _)| i as u32)
+        .unwrap();
+
+    // 推进 0 号至出牌阶段（若准备阶段弹出选择窗口则取消/过）
+    let mut dedup = 500u64;
+    for _ in 0..10 {
+        while let Some(c) = e.open_choice().cloned() {
+            let sel = if c.spec.allow_cancel {
+                Vec::new()
+            } else if c.spec.options.contains(&ChoiceOption::Pass) {
+                vec![ChoiceOption::Pass]
+            } else {
+                c.spec.options.iter().take(1).copied().collect()
+            };
+            dedup += 1;
+            let _ = e.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: e.revision(),
+                dedup_id: dedup,
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: sel,
+                },
+            });
+        }
+        if e.turn().current == 0 && e.turn().phase == engine_native::Phase::Play {
+            break;
+        }
+        dedup += 1;
+        let actor = e.turn().current;
+        let _ = e.submit(GameCommand {
+            actor,
+            expected_revision: e.revision(),
+            dedup_id: dedup,
+            action: GameAction::NextPhase,
+        });
+    }
+
+    // 保持 199 张全集分区不变量：先把 0/1 号手牌退回牌堆，再精确放置 [juedou_id, cangchi_id]、[sha_ids[0]] 与牌堆顶 sha_ids[1]
+    {
+        let core = e.state_core_mut();
+        for p in 0..4 {
+            let hand = std::mem::take(&mut core.players[p].hand);
+            core.deck.extend(hand);
+        }
+        for id in [juedou_id, cangchi_id, sha_ids[0], sha_ids[1]] {
+            core.deck.retain(|c| *c != id);
+            core.discard.retain(|c| *c != id);
+        }
+        core.players[0].hand = vec![juedou_id, cangchi_id];
+        core.players[1].hand = vec![sha_ids[0]];
+        core.deck.insert(0, sha_ids[1]);
+    }
+
+    dedup += 1;
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: dedup,
+        action: GameAction::PlayCard {
+            card: juedou_id,
+            targets: vec![1],
+        },
+    });
+    assert!(!matches!(out, CommandOutcome::Rejected(_)), "play juedou: {out:?}");
+    assert_eq!(e.open_choice().unwrap().spec.prompt, "duel_sha");
+    assert_eq!(e.open_choice().unwrap().observer, 1);
+
+    // 替换对手（0 号）暗手牌：cangchizhibi <-> sha_ids[1]
+    let mut other = e.clone();
+    assert_eq!(other.state_core().players[0].hand, vec![cangchi_id]);
+    assert_eq!(other.state_core().deck[0], sha_ids[1]);
+    other.state_core_mut().players[0].hand[0] = sha_ids[1];
+    other.state_core_mut().deck[0] = cangchi_id;
+
+    let planner = BoundedPlanner::new(24).with_policy_variant(1).with_lookahead(2);
+    let first = e.plan_action(1, &planner);
+    let second = other.plan_action(1, &planner);
+    assert_eq!(first.action, second.action);
+    assert_eq!(first.sim_faults, 0);
+    assert_eq!(second.sim_faults, 0);
+
+    let mut redacted = e.clone();
+    engine_native::ai::redact_opponent_hands(&mut redacted, 1);
+    Engine::restore_with_extensions(&redacted.save(), &[&pack])
+        .expect("91 张完整 swd 包下脱敏存档恢复须保持全部引用合法");
+}
+

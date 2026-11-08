@@ -49,8 +49,8 @@ import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
 import ExtensionSurfacePanel from "../components/battle/ExtensionSurfacePanel.vue";
 import {
   createInitialExtensionSurfacesState,
-  deserializeExtensionSurfacesSnapshot,
   ingestBattleEnvelopeIntoSurfaces,
+  restoreExtensionSurfacesForLoad,
   serializeExtensionSurfacesSnapshot,
   type ExtensionSurfacesSnapshot,
 } from "../engine/extensionSurfaceRuntime";
@@ -274,6 +274,7 @@ async function chooseGeneralCandidate(name: string) {
 async function connectAndStart() {
   await withBusy(async () => {
     try {
+      extensionSurfaces.value = createInitialExtensionSurfacesState();
       audioOwner.resetGeneration("new-match", 0);
       audioOwner.setFrozenPackages(undefined);
       syncAudioUiState();
@@ -420,9 +421,6 @@ async function loadLatestSave() {
       }),
     );
     matchContent = content;
-    if (slot.extensionSurfacesJson) {
-      extensionSurfaces.value = deserializeExtensionSurfacesSnapshot(slot.extensionSurfacesJson);
-    }
     audioOwner.resetGeneration("restore", env.revision);
     audioOwner.setFrozenPackages(content.frozen_packages);
     syncAudioUiState();
@@ -434,6 +432,7 @@ async function loadLatestSave() {
       generalSelect.value.seat,
     );
     await handleEnvelope(env);
+    extensionSurfaces.value = restoreExtensionSurfacesForLoad(slot.extensionSurfacesJson, env);
     await loadGeneralCandidates();
     pushLog(store, `读档 ${slot.id} · rev ${slot.revision}`);
   });

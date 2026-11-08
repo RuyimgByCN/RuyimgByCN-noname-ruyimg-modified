@@ -33,6 +33,7 @@ import {
   placeCoinBet,
   recordMvpEventFact,
   resolveEloDifficulty,
+  restoreExtensionSurfacesForLoad,
   rewriteDouzhuanSkillText,
   runOmnisearchQuery,
   serializeExtensionSurfacesSnapshot,
@@ -268,4 +269,46 @@ test("裁决 34 完整状态快照序列化与读档恢复往返一致", () => {
   assert.deepEqual(restored.longxue.unlockedThresholds, [25, 50, 75]);
 
   assert.throws(() => deserializeExtensionSurfacesSnapshot("{}"), /invalid extension surfaces snapshot/);
+  assert.throws(
+    () => deserializeExtensionSurfacesSnapshot('{"version":1,"coin":{},"taixu":{},"mvp":{}}'),
+    /invalid extension surfaces snapshot/,
+  );
+  assert.throws(
+    () => deserializeExtensionSurfacesSnapshot("not-valid-json"),
+    /invalid extension surfaces snapshot/,
+  );
+
+  // restoreExtensionSurfacesForLoad：有快照时精确恢复（不因读档信封二次累加），无快照历史槽时先重置再注入信封
+  const loadEnv = {
+    revision: 5,
+    hash_hex: "bb".repeat(32),
+    finished: false,
+    result: null,
+    choice: null,
+    legal_actions: [],
+    events: [{ PublicEvent: { code: 4 } }],
+    view: {
+      revision: 5,
+      state_hash: "bb".repeat(32),
+      observer: 0,
+      round: 3,
+      current_player: 0,
+      phase: "Play",
+      seats: [
+        { player: 0, alive: true, hp: 4, max_hp: 4, hand_count: 4, turned_over: false, chained: false, identity: "Lord", general: 1, skills: [], equips: [], judges: [], marks: [] },
+      ],
+      known_cards: [],
+      outcome: null,
+    },
+  };
+  const fromSaved = restoreExtensionSurfacesForLoad(json, loadEnv);
+  assert.deepEqual(fromSaved, original);
+  assert.equal(fromSaved.longxue.daoxin, 80); // 保持存档时的 80，不被 loadEnv 的伤害事件二次 +15
+
+  const fromLegacySlot = restoreExtensionSurfacesForLoad(undefined, loadEnv);
+  assert.equal(fromLegacySlot.coin.balance, 100); // 重置回初始 100，不残留上一局消费后的 80
+  assert.equal(fromLegacySlot.coin.snowFall, false);
+  assert.equal(fromLegacySlot.longxue.daoxin, 35); // 初始 20 + loadEnv 伤害事件 15
+  assert.equal(fromLegacySlot.theme.rzshTierRoman, "III");
 });
+

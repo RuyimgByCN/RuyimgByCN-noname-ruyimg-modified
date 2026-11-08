@@ -246,3 +246,164 @@ fn upstream_cangchizhibi_cancel_and_not_held_negative_cases() {
     );
 }
 
+/// 边界与 AI 规划验证：
+/// 1) 同一名角色手牌持有两张苍螭之璧时，准备阶段 `g_cangchizhibi`（`countCards('h','cangchizhibi') > 0`）仅触发一次；
+/// 2) 窗口拒绝超上限（4 名目标）与重复目标（`[Player(1), Player(1)]`）；
+/// 3) AI `BoundedPlanner` 在 `cangchizhibi_target` 窗口零故障（`sim_faults == 0`）给出合法决策；
+/// 4) 同属 `swd_equipment.rs` 的手持法器 `qinglongzhigui`（青龙之圭）在 `qinglongzhigui_discard` 窗口支持存档恢复。
+#[test]
+fn upstream_cangchizhibi_multiple_copies_invalid_choices_and_ai_plan() {
+    use engine_native::ai::BoundedPlanner;
+    use engine_native::RejectReason;
+
+    let mut pack = swd_pack();
+    // 额外复制一张苍螭之璧，验证手持多张时全局触发技每回合仅触发一次
+    let mut extra = pack
+        .cards
+        .iter()
+        .find(|c| c.name.contains("cangchizhibi"))
+        .expect("cangchizhibi 存在")
+        .clone();
+    extra.name = "swd_cangchizhibi_91";
+    pack.cards.push(extra);
+
+    let mut e = Engine::new_with_extensions(20288103, 4, &[&pack]).expect("建局");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let cangchi_ids: Vec<engine_native::CardId> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(_, c)| c.name.contains("cangchizhibi"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .collect();
+    assert_eq!(cangchi_ids.len(), 2, "测试牌堆应含 2 张苍螭之璧");
+    for id in &cangchi_ids {
+        place_unique_in_hand(&mut e, 0, *id);
+    }
+
+    assert!(
+        advance_until_cangchizhibi_window(&mut e, 260),
+        "手持两张苍螭之璧应开启窗口"
+    );
+    let choice = e.open_choice().expect("窗口").clone();
+    assert_eq!(choice.spec.prompt, "cangchizhibi_target");
+
+    // 非法选择 1：超过 max=3（选 4 名角色）
+    let out_over = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: choice.id,
+            selection: vec![
+                ChoiceOption::Player(0),
+                ChoiceOption::Player(1),
+                ChoiceOption::Player(2),
+                ChoiceOption::Player(3),
+            ],
+        },
+    });
+    assert!(matches!(
+        out_over,
+        CommandOutcome::Rejected(RejectReason::InvalidChoice)
+    ));
+
+    // 非法选择 2：重复目标
+    let out_dup = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: choice.id,
+            selection: vec![ChoiceOption::Player(1), ChoiceOption::Player(1)],
+        },
+    });
+    assert!(matches!(
+        out_dup,
+        CommandOutcome::Rejected(RejectReason::InvalidChoice)
+    ));
+
+    // AI 规划器在 cangchizhibi_target 窗口下应零故障生成合法动作
+    let planner = BoundedPlanner::new(16).with_lookahead(2);
+    let plan = e.plan_action(0, &planner);
+    assert_eq!(plan.sim_faults, 0);
+    let out_plan = e.apply_plan(&plan).expect("应用 AI 计划");
+    assert!(matches!(
+        out_plan,
+        CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+    ));
+
+    // 本回合内已结算过一次 g_cangchizhibi，不应因手握第 2 张而连续二次弹出 cangchizhibi_target
+    if let Some(after) = e.open_choice() {
+        assert_ne!(
+            after.spec.prompt, "cangchizhibi_target",
+            "手握多张苍螭之璧在同一准备阶段只应触发一次"
+        );
+    }
+
+    // 验证同属 swd_equipment.rs 的手持法器 qinglongzhigui 在 qinglongzhigui_discard 窗口存档恢复
+    let std_pack = swd_pack();
+    let mut eq = Engine::new_with_extensions(20288104, 4, &[&std_pack]).expect("建局");
+    for p in 0..4 {
+        eq.debug_clear_hand(p);
+    }
+    let qinglong_id = eq
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("qinglongzhigui"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("青龙之圭应在 swd 目录中");
+    place_unique_in_hand(&mut eq, 0, qinglong_id);
+    for _ in 0..260 {
+        if eq
+            .open_choice()
+            .is_some_and(|c| c.spec.prompt == "qinglongzhigui_discard")
+        {
+            break;
+        }
+        let actor = eq.turn().current;
+        let _ = eq.submit(GameCommand {
+            actor,
+            expected_revision: eq.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::NextPhase,
+        });
+        while let Some(c) = eq.open_choice().cloned() {
+            if c.spec.prompt == "qinglongzhigui_discard" {
+                break;
+            }
+            let sel = if c.spec.prompt == "trigger_confirm" {
+                vec![ChoiceOption::Confirm]
+            } else if c.spec.allow_cancel {
+                Vec::new()
+            } else {
+                c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+            };
+            let _ = eq.submit(GameCommand {
+                actor: c.observer,
+                expected_revision: eq.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: sel,
+                },
+            });
+        }
+    }
+    let q_choice = eq
+        .open_choice()
+        .expect("应停在 qinglongzhigui_discard 窗口")
+        .clone();
+    assert_eq!(q_choice.spec.prompt, "qinglongzhigui_discard");
+    let q_bytes = encode_archive(&eq.save());
+    let q_decoded = decode_archive(&q_bytes).expect("解码青龙之圭窗口存档");
+    let q_restored =
+        Engine::restore_with_extensions(&q_decoded, &[&std_pack]).expect("恢复青龙之圭窗口");
+    assert_eq!(eq.state_hash(), q_restored.state_hash());
+}
+
