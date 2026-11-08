@@ -127,22 +127,29 @@ impl crate::catalog::SkillMachine for DuelMachine {
             self.asked = false;
             let answer = ctx.answer().clone();
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
+                let jijiang_helper = if shas.is_empty() {
+                    jijiang_shu_helper(ctx.core, ctx.catalog, responder).map(|(h, _)| h)
+                } else {
+                    None
+                };
                 ctx.core
                     .vm_aux
                     .flags
                     .remove(&(responder, "duel_jijiang_skip".to_string()));
-                let actual_holder = if ctx.core.player(responder).hand.contains(&c)
-                    || ctx.core.player(responder).equips.contains(&c)
-                {
-                    responder
-                } else {
-                    (0..ctx.core.players.len() as u8)
-                        .find(|&p| {
-                            ctx.core.player(p).hand.contains(&c)
-                                || ctx.core.player(p).equips.contains(&c)
-                        })
-                        .unwrap_or(responder)
-                };
+                let actual_holder = jijiang_helper.unwrap_or_else(|| {
+                    if ctx.core.player(responder).hand.contains(&c)
+                        || ctx.core.player(responder).equips.contains(&c)
+                    {
+                        responder
+                    } else {
+                        (0..ctx.core.players.len() as u8)
+                            .find(|&p| {
+                                ctx.core.player(p).hand.contains(&c)
+                                    || ctx.core.player(p).equips.contains(&c)
+                            })
+                            .unwrap_or(responder)
+                    }
+                });
                 discard_response_card(ctx, actual_holder, c, CardKind::Sha);
                 ctx.emit(EventData::CardResponded {
                     card: c,
