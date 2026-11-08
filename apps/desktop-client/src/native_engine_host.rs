@@ -498,20 +498,25 @@ mod tests {
 
     #[test]
     fn start_locked_save_locked_restore_locked_and_size_bounds() {
-        const HUANLE_RAW: &str =
-            include_str!("../../../packages/extensions/huanle-upstream-noname/package.npack.json");
-        const HUANLE_CARDS_RAW: &[u8] =
-            include_bytes!("../../../packages/extensions/huanle-upstream-noname/assets/cards.json");
+        let huanle_raw =
+            include_str!("../../../packages/extensions/huanle-upstream-noname/package.npack.json")
+                .replace('\r', "");
+        let huanle_cards_raw: Vec<u8> =
+            include_bytes!("../../../packages/extensions/huanle-upstream-noname/assets/cards.json")
+                .iter()
+                .copied()
+                .filter(|&b| b != b'\r')
+                .collect();
 
         let mut host = HostSession::default();
         host.dispatch(json!({"id": 1, "type": "init"})).unwrap();
 
-        let assets_json = json!({"assets/cards.json": HUANLE_CARDS_RAW}).to_string();
+        let assets_json = json!({"assets/cards.json": huanle_cards_raw}).to_string();
         let frozen = host
             .dispatch(json!({
                 "id": 2,
                 "type": "validateFrozenPackage",
-                "packageJson": HUANLE_RAW,
+                "packageJson": huanle_raw,
                 "assetsJson": assets_json,
             }))
             .expect("validateFrozenPackage");
@@ -637,10 +642,12 @@ mod tests {
 
         // 1. DesktopHost::import_extension_directory over all extension packages
         let tmp = tempfile::tempdir().expect("tempdir");
-        let ext_root = if fs::read(raw_ext_root.join("boss/package.npack.json"))
-            .map(|b| b.contains(&b'\r'))
-            .unwrap_or(false)
-        {
+        let has_crlf = all_dirs.iter().any(|dir| {
+            fs::read(raw_ext_root.join(dir).join("package.npack.json"))
+                .map(|b| b.contains(&b'\r'))
+                .unwrap_or(false)
+        });
+        let ext_root = if has_crlf {
             let staged = tmp.path().join("extensions_lf");
             for dir in &all_dirs {
                 let src_pkg = raw_ext_root.join(dir);

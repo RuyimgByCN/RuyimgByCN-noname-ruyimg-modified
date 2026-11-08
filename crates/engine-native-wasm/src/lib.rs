@@ -1452,12 +1452,18 @@ mod r05_locked_session_tests {
 
     #[test]
     fn session_locked_roundtrip_and_candidate_failure_preserves_live_session() {
+        let huanle_raw = HUANLE_RAW.replace('\r', "");
+        let huanle_cards_raw: Vec<u8> = HUANLE_CARDS_RAW
+            .iter()
+            .copied()
+            .filter(|&b| b != b'\r')
+            .collect();
         let assets_json = serde_json::json!({
-            "assets/cards.json": HUANLE_CARDS_RAW
+            "assets/cards.json": huanle_cards_raw
         })
         .to_string();
         let frozen_json =
-            validate_frozen_package_json(HUANLE_RAW, &assets_json).expect("validate frozen huanle");
+            validate_frozen_package_json(&huanle_raw, &assets_json).expect("validate frozen huanle");
         let frozen_arr = format!("[{frozen_json}]");
         let prepared_json =
             prepare_locked_content_json(&frozen_arr).expect("prepare locked content");
