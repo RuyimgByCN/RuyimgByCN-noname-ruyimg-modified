@@ -34,16 +34,34 @@ const EMBEDDED_CATALOG_JSON: &[u8] =
 const EMBEDDED_ASSET_MANIFEST_JSON: &[u8] =
     include_bytes!("../../../../content/original/asset-manifest.json");
 
+static EMBEDDED_CATALOG_LF: std::sync::OnceLock<Vec<u8>> = std::sync::OnceLock::new();
+static EMBEDDED_MANIFEST_LF: std::sync::OnceLock<Vec<u8>> = std::sync::OnceLock::new();
+
 static EMBEDDED_VERIFIED_ORIGINAL: std::sync::OnceLock<
     Result<VerifiedOriginalPresentation, String>,
 > = std::sync::OnceLock::new();
+
+fn normalize_embedded_lf(
+    raw: &'static [u8],
+    cell: &'static std::sync::OnceLock<Vec<u8>>,
+) -> &'static [u8] {
+    if !raw.contains(&b'\r') {
+        raw
+    } else {
+        cell.get_or_init(|| raw.iter().copied().filter(|&b| b != b'\r').collect())
+            .as_slice()
+    }
+}
 
 /// Canonical frozen original presentation inputs embedded from the repository's verified
 /// `content/original/catalog.json` and `content/original/asset-manifest.json` (`I02 §2`).
 pub fn embedded_original_presentation_input() -> OriginalPresentationInput<'static> {
     OriginalPresentationInput {
-        catalog_json: EMBEDDED_CATALOG_JSON,
-        asset_manifest_json: EMBEDDED_ASSET_MANIFEST_JSON,
+        catalog_json: normalize_embedded_lf(EMBEDDED_CATALOG_JSON, &EMBEDDED_CATALOG_LF),
+        asset_manifest_json: normalize_embedded_lf(
+            EMBEDDED_ASSET_MANIFEST_JSON,
+            &EMBEDDED_MANIFEST_LF,
+        ),
     }
 }
 
@@ -190,13 +208,14 @@ fn is_audio_extension(path: &str) -> bool {
 pub fn verify_original_presentation(
     input: &OriginalPresentationInput<'_>,
 ) -> Result<VerifiedOriginalPresentation, String> {
-    if std::ptr::eq(input.catalog_json.as_ptr(), EMBEDDED_CATALOG_JSON.as_ptr())
-        && input.catalog_json.len() == EMBEDDED_CATALOG_JSON.len()
+    let embedded = embedded_original_presentation_input();
+    if std::ptr::eq(input.catalog_json.as_ptr(), embedded.catalog_json.as_ptr())
+        && input.catalog_json.len() == embedded.catalog_json.len()
         && std::ptr::eq(
             input.asset_manifest_json.as_ptr(),
-            EMBEDDED_ASSET_MANIFEST_JSON.as_ptr(),
+            embedded.asset_manifest_json.as_ptr(),
         )
-        && input.asset_manifest_json.len() == EMBEDDED_ASSET_MANIFEST_JSON.len()
+        && input.asset_manifest_json.len() == embedded.asset_manifest_json.len()
     {
         return EMBEDDED_VERIFIED_ORIGINAL
             .get_or_init(|| {

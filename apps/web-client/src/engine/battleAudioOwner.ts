@@ -254,8 +254,11 @@ function audioMimeType(path: string): string {
 }
 
 function bytesToBase64(bytes: Uint8Array): string {
-  if (typeof Buffer !== "undefined") {
-    return Buffer.from(bytes).toString("base64");
+  const nodeBuffer = (
+    globalThis as { Buffer?: { from(data: Uint8Array): { toString(enc: string): string } } }
+  ).Buffer;
+  if (nodeBuffer !== undefined) {
+    return nodeBuffer.from(bytes).toString("base64");
   }
   let binary = "";
   for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);

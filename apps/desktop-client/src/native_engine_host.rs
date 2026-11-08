@@ -612,7 +612,7 @@ mod tests {
         let map_path = manifest_dir
             .join("../../docs/operations/evidence/2026-10-19-package-source-map/map.tsv");
         let map_text = fs::read_to_string(&map_path).expect("read map.tsv");
-        let ext_root = manifest_dir.join("../../packages/extensions");
+        let raw_ext_root = manifest_dir.join("../../packages/extensions");
 
         let mut by_source: BTreeMap<String, Vec<String>> = BTreeMap::new();
         let mut all_dirs: BTreeSet<String> = BTreeSet::new();
@@ -637,8 +637,44 @@ mod tests {
 
         // 1. DesktopHost::import_extension_directory over all extension packages
         let tmp = tempfile::tempdir().expect("tempdir");
+        let ext_root = if fs::read(raw_ext_root.join("boss/package.npack.json"))
+            .map(|b| b.contains(&b'\r'))
+            .unwrap_or(false)
+        {
+            let staged = tmp.path().join("extensions_lf");
+            for dir in &all_dirs {
+                let src_pkg = raw_ext_root.join(dir);
+                let dst_pkg = staged.join(dir);
+                fs::create_dir_all(dst_pkg.join("assets")).expect("create staged assets dir");
+                let npack_bytes: Vec<u8> = fs::read(src_pkg.join("package.npack.json"))
+                    .expect("read package.npack.json")
+                    .into_iter()
+                    .filter(|&b| b != b'\r')
+                    .collect();
+                fs::write(dst_pkg.join("package.npack.json"), npack_bytes)
+                    .expect("write staged package.npack.json");
+                if let Ok(entries) = fs::read_dir(src_pkg.join("assets")) {
+                    for entry in entries.flatten() {
+                        let path = entry.path();
+                        if path.is_file() {
+                            let mut bytes = fs::read(&path).expect("read asset");
+                            if path.extension().and_then(|e| e.to_str()) == Some("json") {
+                                bytes.retain(|&b| b != b'\r');
+                            }
+                            fs::write(dst_pkg.join("assets").join(entry.file_name()), bytes)
+                                .expect("write staged asset");
+                        }
+                    }
+                }
+            }
+            staged
+        } else {
+            raw_ext_root
+        };
+        let host_root = tmp.path().join("host_store");
+        fs::create_dir_all(&host_root).expect("create host_store");
         let desktop = DesktopHost::open(
-            tmp.path(),
+            &host_root,
             ShellCapabilities {
                 manage_content: true,
                 export_diagnostics: true,
