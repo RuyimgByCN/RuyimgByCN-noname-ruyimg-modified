@@ -138,7 +138,7 @@ try {
   const v1 = load("vm-trigger");
   const v2 = load("vm-trigger-v2");
   const key = "official/vm-fixture";
-  const validate = (packJson) => native.request({ type: "validatePackage", packJson });
+  const validate = async (packJson) => { await native.request({ type: "validatePackage", packJson }); };
   await importExtensionPackageValidated(v1, validate);
   activateExtension(key);
   const frozen = prepareNativeMatchContent();

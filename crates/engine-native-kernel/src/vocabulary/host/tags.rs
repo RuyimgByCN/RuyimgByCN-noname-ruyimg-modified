@@ -542,6 +542,7 @@ impl HostBehavior {
             HostBehavior::SwdNiaoxiangzhenCard => 238,
             HostBehavior::SwdChangshezhenCard => 239,
             HostBehavior::SwdPozhenjueCard => 240,
+            HostBehavior::SwdCangchizhibiHeld => 538,
         }
     }
 

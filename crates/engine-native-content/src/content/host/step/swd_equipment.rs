@@ -546,6 +546,53 @@ impl HostMachine {
                 ctx.change_hujia(self.owner, 1);
                 Flow::Done
             }
+            // 苍螭之璧（裁决 33）：选 1–3 名存活角色横置或重置
+            HostBehavior::SwdCangchizhibiHeld => match self.stage {
+                HostStage::Act => {
+                    let options: Vec<ChoiceOption> = ctx
+                        .core
+                        .alive_players()
+                        .map(ChoiceOption::Player)
+                        .collect();
+                    if options.is_empty() {
+                        return Flow::Done;
+                    }
+                    let max = options.len().min(3);
+                    self.stage = HostStage::TargetChoice;
+                    Flow::WaitChoice {
+                        observer: self.owner,
+                        spec: ChoiceSpec {
+                            kind: ChoiceKind::SelectPlayers,
+                            prompt: "cangchizhibi_target",
+                            options,
+                            min: 1,
+                            max,
+                            allow_cancel: true,
+                        },
+                    }
+                }
+                HostStage::TargetChoice => {
+                    let mut picked = Vec::new();
+                    for o in ctx.answer() {
+                        if let ChoiceOption::Player(t) = *o {
+                            if !picked.contains(&t) {
+                                picked.push(t);
+                            }
+                        }
+                    }
+                    for t in picked.into_iter().rev() {
+                        if ctx.core.player(t).alive {
+                            let next = !ctx.core.player(t).linked;
+                            ctx.emit(EventData::Linked {
+                                player: t,
+                                linked: next,
+                            });
+                        }
+                    }
+                    Flow::Done
+                }
+                _ => Flow::Done,
+            },
             // 神草结：确认门后弃一张神草结——受伤者是自己则伤-1、是自己
             // 造成则伤+1
             HostBehavior::SwdShencaojieGuard => {

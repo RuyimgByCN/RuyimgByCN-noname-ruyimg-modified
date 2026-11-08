@@ -538,6 +538,7 @@ impl HostBehavior {
             310 => HostBehavior::SwdYuchanSwap,
             301 => HostBehavior::GuisheqiCard,
             302 => HostBehavior::XianluhuiCard,
+            538 => HostBehavior::SwdCangchizhibiHeld,
             _ => return None,
         })
     }

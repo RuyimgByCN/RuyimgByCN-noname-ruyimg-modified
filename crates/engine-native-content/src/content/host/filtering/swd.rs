@@ -415,6 +415,11 @@ impl HostSkillBehavior {
                 if d.source == Some(owner) && !d.prevented && d.amount > 0
                     && ctx.state.player(owner).hp < ctx.state.player(owner).max_hp as i32
                     && hand_has_kind(ctx, owner, CardKind::Xuanwuzhihuang)),
+            // 苍螭之璧（裁决 33）：上游 player phaseBegin＝自己回合开始且手持
+            HostBehavior::SwdCangchizhibiHeld => matches!(event,
+                EventData::TurnBegin { player }
+                if *player == owner
+                    && hand_has_kind(ctx, owner, CardKind::Cangchizhibi)),
             // 玉蝉换形：自己用牌（非玉蝉本体）结算后且手牌有玉蝉
             HostBehavior::SwdYuchanSwap => matches!(event,
             EventData::CardUsed(u)

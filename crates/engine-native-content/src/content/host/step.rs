@@ -132,6 +132,8 @@ impl HostMachine {
             HostBehavior::SwdXuanwuzhihuangHeld => self.step_swd_equipment(ctx),
             // 黄麟之琮：+1 护甲（hujia==0 门在 filter）
             HostBehavior::SwdHuanglinzhicongHeld => self.step_swd_equipment(ctx),
+            // 苍螭之璧（裁决 33）：选 1–3 名存活角色横置或重置
+            HostBehavior::SwdCangchizhibiHeld => self.step_swd_equipment(ctx),
             // 神草结：确认门后弃一张神草结——受伤者是自己则伤-1、是自己
             // 造成则伤+1
             HostBehavior::SwdShencaojieGuard => self.step_swd_equipment(ctx),

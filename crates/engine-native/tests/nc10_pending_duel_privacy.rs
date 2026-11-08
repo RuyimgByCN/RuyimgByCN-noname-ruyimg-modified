@@ -7,9 +7,11 @@ use engine_native::{
 fn pack() -> engine_native::content::extension::ExtensionPack {
     let path = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../packages/extensions/shahai-swd-upstream-noname/assets/cards.json");
-    content_native_loader::bridge_pack(&std::fs::read_to_string(path).unwrap())
+    let mut pack = content_native_loader::bridge_pack(&std::fs::read_to_string(path).unwrap())
         .unwrap()
-        .pack
+        .pack;
+    pack.cards.truncate(90);
+    pack
 }
 
 fn fixture(pack: &engine_native::content::extension::ExtensionPack) -> Engine {

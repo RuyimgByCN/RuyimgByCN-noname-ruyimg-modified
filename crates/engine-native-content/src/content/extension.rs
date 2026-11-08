@@ -72,6 +72,7 @@ impl InitHook {
                     | HostBehavior::SwdBaishouzhihuHeld
                     | HostBehavior::SwdXuanwuzhihuangHeld
                     | HostBehavior::SwdHuanglinzhicongHeld
+                    | HostBehavior::SwdCangchizhibiHeld
                     | HostBehavior::SwdShencaojieGuard
                     | HostBehavior::SwdYuchanSwap
                     | HostBehavior::SwdShenmiguoWindow

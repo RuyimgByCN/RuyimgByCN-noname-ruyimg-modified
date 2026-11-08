@@ -539,6 +539,8 @@ export interface NativeSaveSlot {
   canonical_locked_content?: ContentLock;
   /** R05 v4/v5：原始字节冻结包列表。 */
   frozen_packages?: FrozenPackage[];
+  /** 裁决 34：扩展渲染面与单机战役脚本（金币、太虚幻境、手杀 MVP、剑阁闯关、龙血道心等）完整快照 JSON。 */
+  extensionSurfacesJson?: string;
 }
 
 export function listNativeSaves(): NativeSaveSlot[] {

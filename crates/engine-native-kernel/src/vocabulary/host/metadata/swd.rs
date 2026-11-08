@@ -395,6 +395,15 @@ impl HostBehavior {
                 optional: false,
                 extra_events: Vec::new(),
             }),
+            // 苍螭之璧（裁决 33）：自己回合开始 direct（持牌选 1–3 名角色横置）
+            HostBehavior::SwdCangchizhibiHeld => Some(TriggerMeta {
+                event: EventKind::TurnBegin,
+                timing: Timing::Normal,
+                priority: 0,
+                order_selectable: true,
+                optional: false,
+                extra_events: Vec::new(),
+            }),
             // 朱雀之璋：受伤结算后 forced
             HostBehavior::SwdZhuquezhizhangHeld => Some(TriggerMeta {
                 event: EventKind::Damage,

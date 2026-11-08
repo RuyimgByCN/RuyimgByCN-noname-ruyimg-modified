@@ -46,8 +46,8 @@ PACKS = [
     "shahai-mtg-upstream-noname",
 ]
 
-#: 2026-10-19 第 775 轮实测值；口径变化时必须同步更新这里与规则基准的说明。
-EXPECTED = {"cards": 201, "kinds": 128, "registered": 128, "wired": 128}
+#: 2026-11-08 裁决 33 实测值（cangchizhibi 入库后 201→202 张、128→129 kind）；口径变化时必须同步更新这里与规则基准的说明。
+EXPECTED = {"cards": 202, "kinds": 129, "registered": 129, "wired": 129}
 
 
 def pack_cards() -> dict[str, int]:

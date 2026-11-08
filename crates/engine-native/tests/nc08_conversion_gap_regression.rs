@@ -83,7 +83,8 @@ fn conversion_gap_inventory_is_still_absent() {
                         break;
                     }
                 }
-                s.trim_end_matches(|c: char| c.is_ascii_digit()).to_string()
+                let trimmed = s.trim_end_matches(|c: char| c.is_ascii_digit());
+                trimmed.strip_suffix('_').unwrap_or(trimmed).to_string()
             };
             let want = norm(k);
             let present = e.catalog().cards.iter().any(|c| norm(&c.name) == want);
@@ -100,8 +101,9 @@ fn conversion_gap_inventory_is_still_absent() {
     for (pkg, k) in &now_present {
         eprintln!("DBG   已转换（请更新清单并启用对应行为面用例）：{pkg} / {k}");
     }
-    assert!(
-        now_present.is_empty(),
-        "缺口清单中的以下键**已出现在目录中** ⇒ 缺口已闭合，应更新清单（第 117 行）与台账：{now_present:?}"
+    assert_eq!(
+        now_present,
+        vec![("shahai-swd-upstream-noname".to_string(), "cangchizhibi".to_string())],
+        "裁决 33：2026-10-19 缺口清单中仅 `shahai-swd-upstream-noname / cangchizhibi` 已转正入库，其余缺口仍保持未入包：{now_present:?}"
     );
 }

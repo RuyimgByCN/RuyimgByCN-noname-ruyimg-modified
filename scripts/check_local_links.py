@@ -35,11 +35,12 @@ KNOWN_BAD = {
     "../../../../../ABI-COORDINATION.md",
 }
 
-# 2026-10-31 未跟踪历史报告（按「本地排除物全保留」原样留存）引用的 /tmp 路径，
-# 对应产物已归档入 docs/operations/evidence/2026-10-31-*，/tmp 副本由系统定时清理：
+# 2026-10-31 未跟踪历史报告（按「本地排除物全保留」原样留存）引用的 /tmp 与 ~/.pi 会话路径，
+# 对应产物已归档入 docs/operations/evidence/2026-10-31-*，外部临时副本由系统清理：
 KNOWN_BAD_PREFIXES = (
     "/tmp/i02-phase1-ingress-repair-89364384/",
     "/tmp/nc10-own-36992565/",
+    "/Users/ruyimg/.pi/agent/sessions/",
 )
 
 # 默认只查这几份（本会话维护的主稿与证据）；--all 才扫全 docs/

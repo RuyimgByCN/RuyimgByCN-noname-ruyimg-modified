@@ -13,8 +13,8 @@ fn swd_extra_cards_disposition_guard() {
     let pack = bridge(&json);
     assert_eq!(
         pack.cards.len(),
-        90,
-        "对账勘误后包内 90 张（批 147 轩辕剑 +1）"
+        91,
+        "对账勘误后包内 91 张（批 147 轩辕剑 +1；裁决 33 苍螭之璧 +1）"
     );
     assert_eq!(
         pack.cards
@@ -45,8 +45,8 @@ fn swd_hufu_self_dying_only() {
     let mut e = Engine::new_with_extensions(6101, 3, &[&pack]).expect("建局");
     assert_eq!(
         e.catalog().cards.len(),
-        base_cards + 90,
-        "swd 全 90 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1）"
+        base_cards + 91,
+        "swd 全 91 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1；裁决 33 苍螭之璧 +1）"
     );
 
     // 0 号持两张护符，压 1 血；给 0 号挂濒死→自救
@@ -182,8 +182,8 @@ fn swd_real_host_full_lifecycle() {
     let mut e = Engine::new_with_extensions(6103, 3, &[&pack]).expect("建局");
     assert_eq!(
         e.catalog().cards.len(),
-        base_cards + 90,
-        "swd 全 90 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1）"
+        base_cards + 91,
+        "swd 全 91 张（对账勘误+6，批①；窗口机批+2 神秘果；批 147 轩辕剑 +1；裁决 33 苍螭之璧 +1）"
     );
     let _ = submit(&mut e, 0, GameAction::NextPhase);
     let mid = e.save();
@@ -204,8 +204,8 @@ fn swd_real_host_full_lifecycle() {
     .expect("对局中卸载后恢复");
     assert_eq!(
         resumed.catalog().cards.len(),
-        base_cards + 90,
-        "锁定副本仍可用（窗口机批+2；批 147 轩辕剑 +1）"
+        base_cards + 91,
+        "锁定副本仍可用（窗口机批+2；批 147 轩辕剑 +1；裁决 33 苍螭之璧 +1）"
     );
     let out = submit(&mut resumed, 0, GameAction::NextPhase);
     assert!(matches!(

@@ -67,6 +67,7 @@ MANUAL_TRIGGERS = {
     # 装备/机巧卡的效果挂在卡片的 `global: 'g_<name>'` 技能上 —— 第 7 种「查不到」形态。
     "qinglongzhigui": 'player: "phaseBegin"',
     "huanglinzhicong": 'player: "phaseBegin"',
+    "cangchizhibi": 'player: "phaseBegin"',
     # 复合技（`group: ['miedao1','miedao2']`）：父技能无 trigger，真实触发在子技能上
     "miedao": "player:'phaseDrawBegin' | player:'phaseDiscardBegin'",
     # 化金：主触发是 huajin2 的 `source:'damageBegin'`；原生的 `Phase::Judge, begin: true`
@@ -89,6 +90,7 @@ PHASE_STEM = {
 BEHAVIOR_TRIGGERS = {
     "SwdQinglongzhiguiHeld": 'player: "phaseBegin"',      # g_qinglongzhigui（卡片 global 技能）
     "SwdHuanglinzhicongHeld": 'player: "phaseBegin"',     # g_huanglinzhicong
+    "SwdCangchizhibiHeld": 'player: "phaseBegin"',        # g_cangchizhibi
     # 三条 gwent 天气状态技：定义在 杀海拾遗/card/gwent/skill.js（名 gw_*，非 gw_*_state）
     "GwentBirinState": 'player: "phaseUseAfter"',
     "GwentCiguState": 'player: "phaseDrawBegin"',

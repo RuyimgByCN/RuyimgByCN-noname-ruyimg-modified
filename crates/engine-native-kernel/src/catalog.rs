@@ -537,6 +537,8 @@ pub enum CardKind {
     Xuanwuzhihuang,
     /// 黄麟之琮（swd 卡牌面补切批⑩）：器族手持——准备阶段无护甲则+1。
     Huanglinzhicong,
+    /// 苍螭之璧（swd 裁决 33）：器族手持——准备阶段选 1–3 名角色横置/重置。
+    Cangchizhibi,
     /// 天覆阵（U05 zhenfa，规则 v200/T19a）：大国 AOE 弃 1。
     Tianfuzhen,
     /// 七星阵（U05 zhenfa，规则 v200/T19a）：围攻者弃 1+视为对其用杀。

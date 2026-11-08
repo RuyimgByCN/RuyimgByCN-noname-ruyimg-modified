@@ -278,6 +278,7 @@ impl HostBehavior {
             // 青龙之圭/黄麟之琮：准备阶段（Judge 帧入场 forced）
             HostBehavior::SwdQinglongzhiguiHeld => self.trigger_meta_swd(),
             HostBehavior::SwdHuanglinzhicongHeld => self.trigger_meta_swd(),
+            HostBehavior::SwdCangchizhibiHeld => self.trigger_meta_swd(),
             // 朱雀之璋：受伤结算后 forced
             HostBehavior::SwdZhuquezhizhangHeld => self.trigger_meta_swd(),
             // 白兽之琥：弃牌阶段结束 direct（蝶舞口径）

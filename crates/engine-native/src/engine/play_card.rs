@@ -84,7 +84,8 @@ pub(super) fn play_card(
                 | CardKind::Zhuquezhizhang
                 | CardKind::Baishouzhihu
                 | CardKind::Xuanwuzhihuang
-                | CardKind::Huanglinzhicong => {
+                | CardKind::Huanglinzhicong
+                | CardKind::Cangchizhibi => {
                     // 炼妖壶/乾坤袋/女娲石/神农鼎：装备牌走 equip 校验
                     //（同栏替换由 commit_equip 处理；神农鼎/女娲石效果经
                     // 装备技实例）

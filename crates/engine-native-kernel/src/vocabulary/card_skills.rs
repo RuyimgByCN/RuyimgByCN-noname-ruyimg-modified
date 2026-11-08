@@ -319,6 +319,11 @@ pub fn card_kind_host_skills(kind: crate::catalog::CardKind) -> &'static [HostSk
             behavior: HostBehavior::SwdHuanglinzhicongHeld,
             presentation_binding: None,
         }],
+        CardKind::Cangchizhibi => &[HostSkillDecl {
+            name: "cangchizhibi",
+            behavior: HostBehavior::SwdCangchizhibiHeld,
+            presentation_binding: None,
+        }],
         CardKind::Shencaojie => &[HostSkillDecl {
             name: "shencaojie",
             behavior: HostBehavior::SwdShencaojieGuard,

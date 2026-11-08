@@ -45,6 +45,7 @@ pub const DECLS: &[(H, Timing, i32, bool)] = &[
     (H::ShengkeCheck, Timing::Normal, 0, false),
     (H::Shishi, Timing::Normal, 0, true),
     (H::SwdBaishouzhihuHeld, Timing::Normal, 0, true),
+    (H::SwdCangchizhibiHeld, Timing::Normal, 0, true),
     (H::SwdFengyinState, Timing::Normal, 0, true),
     (H::SwdGouhunluoSub, Timing::Normal, 0, true),
     (H::SwdHuanglinzhicongHeld, Timing::Normal, 0, true),

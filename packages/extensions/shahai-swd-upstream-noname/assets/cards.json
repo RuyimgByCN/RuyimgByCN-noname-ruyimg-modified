@@ -586,6 +586,12 @@
    "kind": "xuanyuanjian",
    "suit": "spade",
    "rank": 1
+  },
+  {
+   "name": "swd_cangchizhibi",
+   "kind": "cangchizhibi",
+   "suit": "spade",
+   "rank": 7
   }
  ],
  "host_skills": [],

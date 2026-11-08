@@ -95,6 +95,7 @@ impl HostBehavior {
             HostBehavior::SwdBaishouzhihuHeld => "baishouzhihu",
             HostBehavior::SwdXuanwuzhihuangHeld => "xuanwuzhihuang",
             HostBehavior::SwdHuanglinzhicongHeld => "huanglinzhicong",
+            HostBehavior::SwdCangchizhibiHeld => "cangchizhibi",
             HostBehavior::SwdShencaojieGuard => "shencaojie",
             HostBehavior::SwdJiyingHeld => "host:jiying",
             HostBehavior::SwdMufengHeld => "host:mufeng",

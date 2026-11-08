@@ -35,17 +35,17 @@ class CardCoverageTests(unittest.TestCase):
             self.assertTrue((ROOT / "packages" / "extensions" / pack).is_dir(), pack)
 
     def test_card_total(self):
-        self.assertEqual(sum(self.per_pack.values()), 201)
+        self.assertEqual(sum(self.per_pack.values()), 202)
 
     def test_unique_kinds(self):
-        self.assertEqual(len(self.kinds), 128)
+        self.assertEqual(len(self.kinds), 129)
 
     def test_all_kinds_registered(self):
-        self.assertEqual(len(self.mapping.keys() & self.kinds), 128)
+        self.assertEqual(len(self.mapping.keys() & self.kinds), 129)
 
     def test_all_kinds_wired(self):
         # 口径：`crates/**/*.rs`（排除 catalog.rs），接受变体名或 kind 字面量
-        self.assertEqual(len(self.wired), 128)
+        self.assertEqual(len(self.wired), 129)
         self.assertEqual(self.kinds - self.wired, set())
 
     def test_empty_packs_documented(self):

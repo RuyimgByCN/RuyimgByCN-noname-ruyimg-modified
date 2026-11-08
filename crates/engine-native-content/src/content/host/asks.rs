@@ -54,6 +54,36 @@ pub(crate) fn active_ask_host(
             if spec.options.is_empty() { return None; }
             Some(ask(owner, spec.prompt, spec.kind, spec.options, spec.min, spec.max, spec.allow_cancel))
         }
+        HostBehavior::SwdCangchizhibiHeld => {
+            if stage != HostStage::TargetChoice { return None; }
+            let options: Vec<ChoiceOption> = core.alive_players().map(ChoiceOption::Player).collect();
+            if options.is_empty() { return None; }
+            let max = options.len().min(3);
+            Some(ask(owner, "cangchizhibi_target", ChoiceKind::SelectPlayers, options, 1, max, true))
+        }
+        HostBehavior::SwdBaishouzhihuHeld => {
+            if stage != HostStage::TargetChoice { return None; }
+            let options: Vec<ChoiceOption> = core
+                .alive_players()
+                .filter(|&p| {
+                    p != owner
+                        && (!core.player(p).hand.is_empty() || !core.player(p).equips.is_empty())
+                })
+                .map(ChoiceOption::Player)
+                .collect();
+            if options.is_empty() { return None; }
+            Some(ask(owner, "baishouzhihu_target", ChoiceKind::SelectPlayers, options, 1, 1, false))
+        }
+        HostBehavior::SwdMufengHeld => {
+            if stage != HostStage::SelectCard || cards.is_empty() { return None; }
+            Some(ask(owner, "mufeng_discover", ChoiceKind::SelectCards, cards.iter().copied().map(ChoiceOption::Card).collect(), 1, 1, false))
+        }
+        HostBehavior::SwdWangchenHeld => {
+            if stage != HostStage::TargetChoice { return None; }
+            let options: Vec<ChoiceOption> = core.alive_players().map(ChoiceOption::Player).collect();
+            if options.is_empty() { return None; }
+            Some(ask(owner, "wangchen_target", ChoiceKind::SelectPlayers, options, 1, 1, true))
+        }
         HostBehavior::Liaoyuan => {
             if stage != HostStage::SelectCard {
                 return None;

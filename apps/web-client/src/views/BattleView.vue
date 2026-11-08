@@ -46,6 +46,14 @@ import {
 import BattleBoard from "../components/battle/BattleBoard.vue";
 import TriggerOrderChoice from "../components/battle/TriggerOrderChoice.vue";
 import GeneralSelectPanel from "../components/battle/GeneralSelectPanel.vue";
+import ExtensionSurfacePanel from "../components/battle/ExtensionSurfacePanel.vue";
+import {
+  createInitialExtensionSurfacesState,
+  deserializeExtensionSurfacesSnapshot,
+  ingestBattleEnvelopeIntoSurfaces,
+  serializeExtensionSurfacesSnapshot,
+  type ExtensionSurfacesSnapshot,
+} from "../engine/extensionSurfaceRuntime";
 import type { EngineEnvelope, LegalAction } from "../types/engine";
 import { matchOutcomePresentation, nativeCommandError } from "../engine/outcome";
 import { nextTick } from "vue";
@@ -92,6 +100,10 @@ const generalSelect = ref(initialGeneralSelectState(selfId.value));
 const showGeneralSelect = computed(
   () => !isOnline.value && store.connected && localClient.isNative(),
 );
+const extensionSurfaces = ref<ExtensionSurfacesSnapshot>(createInitialExtensionSurfacesState());
+function onUpdateExtensionSurfaces(next: ExtensionSurfacesSnapshot) {
+  extensionSurfaces.value = next;
+}
 const audioOwner = new BattleAudioOwner({
   allowRemotePackageFallback: () => isOnline.value,
 });
@@ -161,6 +173,9 @@ async function handleEnvelope(env: EngineEnvelope) {
   // NC12 诊断：拆分「同步应用信封（视图状态重建）」与「刻意表现节流」
   const tA = performance.now();
   applyEnvelope(store, env);
+  if (typeof extensionSurfaces !== "undefined") {
+    extensionSurfaces.value = ingestBattleEnvelopeIntoSurfaces(extensionSurfaces.value, env);
+  }
   if (typeof audioOwner !== "undefined") {
     audioOwner.admitEnvelope(env);
     syncAudioUiState();
@@ -380,6 +395,7 @@ async function saveMatch() {
       ...matchContent,
       canonical_locked_content: saved.canonical_locked_content,
       frozen_packages: saved.frozen_packages,
+      extensionSurfacesJson: serializeExtensionSurfacesSnapshot(extensionSurfaces.value),
       savedAt: new Date().toISOString(),
       revision: store.revision,
     });
@@ -404,6 +420,9 @@ async function loadLatestSave() {
       }),
     );
     matchContent = content;
+    if (slot.extensionSurfacesJson) {
+      extensionSurfaces.value = deserializeExtensionSurfacesSnapshot(slot.extensionSurfacesJson);
+    }
     audioOwner.resetGeneration("restore", env.revision);
     audioOwner.setFrozenPackages(content.frozen_packages);
     syncAudioUiState();
@@ -905,6 +924,13 @@ const turnInfo = computed(() => {
       :busy="store.busy"
       @choose="chooseGeneralCandidate"
       @reload="loadGeneralCandidates"
+    />
+
+    <ExtensionSurfacePanel
+      :surfaces="extensionSurfaces"
+      :view="store.view"
+      :self-id="selfId"
+      @update:surfaces="onUpdateExtensionSurfaces"
     />
 
     <section v-if="isOnline && roomRoster" class="panel online-roster" aria-label="联机房间座位">

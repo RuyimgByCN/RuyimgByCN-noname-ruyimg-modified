@@ -150,6 +150,7 @@ fn swd_generals_b64_lianda_suiyan_duanxing_polang_youyin() {
     }
     let sha2 = e.debug_place(0, "sha");
     let disc2 = e.debug_place(0, "tao");
+    e.debug_set_deck_top_by(|d| !matches!(d.suit, engine_native::catalog::Suit::Heart));
     e.debug_set_hp(1, 8);
     submit(
         &mut e,

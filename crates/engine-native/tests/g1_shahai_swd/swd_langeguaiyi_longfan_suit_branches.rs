@@ -1227,6 +1227,7 @@ fn swd_cards_alignment_guard_b29() {
         ("shencaojie", "club", 4),
         ("shencaojie", "diamond", 4),
         ("shencaojie", "spade", 4),
+        ("cangchizhibi", "spade", 7),
     ];
     for (name, suit, rank) in expected {
         // 目录 def_name 为 loader 加前缀序号形式（swd1_swd_hufu_0），
@@ -1242,8 +1243,8 @@ fn swd_cards_alignment_guard_b29() {
     // 总张数冻结（批② 后 54；神秘果 2 张挂窗口机批暂未入包）
     assert_eq!(
         pack.cards.len(),
-        90,
-        "窗口机批后 90 张（批⑬ 神草结 87+神秘果 2；批 147 轩辕剑 +1）"
+        91,
+        "裁决 33 后 91 张（批⑬ 神草结 87+神秘果 2+轩辕剑 1+苍螭之璧 1）"
     );
 }
 

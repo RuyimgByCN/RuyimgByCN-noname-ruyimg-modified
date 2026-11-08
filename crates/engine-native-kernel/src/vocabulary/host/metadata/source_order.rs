@@ -41,6 +41,7 @@ impl HostBehavior {
             | Self::Miedao
             | Self::Shishi
             | Self::SwdBaishouzhihuHeld
+            | Self::SwdCangchizhibiHeld
             | Self::SwdGouhunluoSub
             | Self::SwdHuanglinzhicongHeld
             | Self::SwdJiguanyaoGain

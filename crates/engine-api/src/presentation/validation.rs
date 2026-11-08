@@ -391,4 +391,5 @@ const CARD_KINDS: &[&str] = &[
     "niaoxiangzhen",
     "changshezhen",
     "pozhenjue",
+    "cangchizhibi",
 ];

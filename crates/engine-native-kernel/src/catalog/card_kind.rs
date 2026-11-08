@@ -172,7 +172,7 @@ impl CardKind {
 
 impl CardKind {
     /// 全部牌种（存档编码序；完整性由 `a0_tag_registry` 的穷尽守卫锁定）。
-    pub const ALL: [CardKind; 174] = [
+    pub const ALL: [CardKind; 175] = [
         CardKind::Sha,
         CardKind::Shan,
         CardKind::Tao,
@@ -347,6 +347,7 @@ impl CardKind {
         CardKind::Niaoxiangzhen,
         CardKind::Changshezhen,
         CardKind::Pozhenjue,
+        CardKind::Cangchizhibi,
     ];
 
     /// 扩展包数据的牌种键（宿主 ABI：每个牌种恰好一个键，只增不改）。
@@ -521,6 +522,7 @@ impl CardKind {
             CardKind::Baishouzhihu => "baishouzhihu",
             CardKind::Xuanwuzhihuang => "xuanwuzhihuang",
             CardKind::Huanglinzhicong => "huanglinzhicong",
+            CardKind::Cangchizhibi => "cangchizhibi",
             CardKind::Hslingjian => "hslingjian",
             CardKind::Tianfuzhen => "tianfuzhen",
             CardKind::Qixingzhen => "qixingzhen",

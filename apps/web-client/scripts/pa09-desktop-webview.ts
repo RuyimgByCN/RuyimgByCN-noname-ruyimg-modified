@@ -47,10 +47,41 @@ async function run() {
   check(wasm.getTransportKind() === "wasm-worker", "explicit Wasm fallback did not select Worker");
   history.replaceState(null, "", "/?engineTransport=native");
   equal(env, await wasm.start(4, 42, 0, undefined, "identity"), "initial IPC/Worker envelopes differ");
+  const pct = (arr: number[], p: number) => {
+    const s = [...arr].sort((a, b) => a - b);
+    return s.length ? Math.round(s[Math.min(s.length - 1, Math.ceil((s.length * p) / 100) - 1)] * 100) / 100 : 0;
+  };
+  const stats = (arr: number[]) => ({
+    n: arr.length,
+    p50: pct(arr, 50),
+    p95: pct(arr, 95),
+    p99: pct(arr, 99),
+    max: arr.length ? Math.round(Math.max(...arr) * 100) / 100 : 0,
+  });
+  const ipcRtt: number[] = [];
+  const wasmRtt: number[] = [];
+  const ipcToPaint: number[] = [];
+  const wasmToPaint: number[] = [];
+  const nextFrame = () => new Promise<void>((r) => requestAnimationFrame(() => r()));
   let steps = 0;
   for (; steps < 2000 && !env.finished; steps++) {
+    const t0 = performance.now();
     env = await battle.autoStep();
-    equal(env, await wasm.autoStep(), `IPC/Worker trajectory diverged at ${steps}`);
+    const t1 = performance.now();
+    ipcRtt.push(t1 - t0);
+    if (steps < 30) {
+      await nextFrame();
+      ipcToPaint.push(performance.now() - t0);
+    }
+    const w0 = performance.now();
+    const wEnv = await wasm.autoStep();
+    const w1 = performance.now();
+    wasmRtt.push(w1 - w0);
+    if (steps < 30) {
+      await nextFrame();
+      wasmToPaint.push(performance.now() - w0);
+    }
+    equal(env, wEnv, `IPC/Worker trajectory diverged at ${steps}`);
     if (steps === 30 || steps === 70) {
       const hex = await battle.saveHex();
       equal(hex, await wasm.saveHex(), "native/Wasm archive bytes differ");
@@ -58,7 +89,15 @@ async function run() {
     }
   }
   check(env.finished, "identity workload did not reach its actual terminal outcome");
-  const terminal = { steps, hash: env.hash_hex, outcome: env.view.outcome };
+  const terminal = {
+    steps,
+    hash: env.hash_hex,
+    outcome: env.view.outcome,
+    ipc_roundtrip_ms: stats(ipcRtt),
+    wasm_worker_roundtrip_ms: stats(wasmRtt),
+    ipc_step_to_paint_ms: stats(ipcToPaint),
+    wasm_worker_step_to_paint_ms: stats(wasmToPaint),
+  };
   const deep = (json: string) => validator.validatePackage(json);
   await importExtensionPackageValidated(JSON.stringify({ ...v1, characters: chars1 }), deep);
   const key = "official/vm-fixture";

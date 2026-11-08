@@ -252,6 +252,8 @@ impl HostSkillBehavior {
             HostBehavior::SwdBaishouzhihuHeld => self.filter_swd(ctx, owner, event),
             // 玄武之璜：自己造成伤害结算后且手持且受伤
             HostBehavior::SwdXuanwuzhihuangHeld => self.filter_swd(ctx, owner, event),
+            // 苍螭之璧（裁决 33）：自己准备阶段且手持
+            HostBehavior::SwdCangchizhibiHeld => self.filter_swd(ctx, owner, event),
             // 玉蝉换形：自己用牌（非玉蝉本体）结算后且手牌有玉蝉
             HostBehavior::SwdYuchanSwap => self.filter_swd(ctx, owner, event),
             // 疾影：无触发面

@@ -3,7 +3,7 @@
 //! 覆盖八维：
 //! ① 生命周期：全部 9 个子包（`shahai-gujian`, `shahai-gwent`, `shahai-hearth`, `shahai-mtg`,
 //!   `shahai-swd`, `shahai-yunchou`, `shahai-zhenfa`, `shaai-ow`, `shaai-xianjian`）真实发现、导入、激活与卸载；
-//! ② 包数据桥接：全 9 包共 209 张扩展牌、149 名扩展武将经 `content_native_loader::bridge_pack` 装载通过；
+//! ② 包数据桥接：全 9 包共 210 张扩展牌、149 名扩展武将经 `content_native_loader::bridge_pack` 装载通过；
 //! ③ 组合共存：多子包联合装载（古剑 + 昆特 + 炉石 + 万智 + 轩辕剑 + 运筹 + 阵法 + 守望 + 仙剑）同局不冲突；
 //! ④ 保存恢复：联合装载对局 `save` / `restore_with_extensions` 字节级一致，篡改扩展顺序或缺失扩展拒绝恢复；
 //! ⑤ 功能执行：代表卡牌与武将技能在引擎中真实执行并通过牌区守恒校验；
@@ -25,7 +25,7 @@ const SHAHAI_DIRS: [(&str, &str, usize, usize, usize); 9] = [
     ("shahai-gwent-upstream-noname", "shahai-gwent", 21, 0, 0),
     ("shahai-hearth-upstream-noname", "shahai-hearth", 17, 0, 0),
     ("shahai-mtg-upstream-noname", "shahai-mtg", 10, 0, 2),
-    ("shahai-swd-upstream-noname", "shahai-swd", 90, 79, 0),
+    ("shahai-swd-upstream-noname", "shahai-swd", 91, 79, 0),
     ("shahai-yunchou-upstream-noname", "shahai-yunchou", 23, 0, 0),
     ("shahai-zhenfa-upstream-noname", "shahai-zhenfa", 8, 0, 1),
     ("shaai-ow-upstream-noname", "shaai-ow", 0, 24, 0),
@@ -102,7 +102,7 @@ fn u05_shahai_nine_packages_eight_dimension_acceptance() {
         }
     }
 
-    assert_eq!(total_cards, 209, "杀海 9 子包共 209 张扩展实体牌");
+    assert_eq!(total_cards, 210, "杀海 9 子包共 210 张扩展实体牌");
     assert_eq!(total_generals, 149, "杀海 9 子包共 149 名扩展武将");
     assert_eq!(total_deferred_entries, 3, "万智(2)+阵法(1) 显式登记暂缓条目");
 
@@ -113,7 +113,7 @@ fn u05_shahai_nine_packages_eight_dimension_acceptance() {
     let base_generals = base.catalog().general_count();
 
     let mut e = Engine::new_with_extensions(190501, 4, &pack_refs).expect("杀海全子包联合建局");
-    assert_eq!(e.catalog().cards.len(), base_cards + 209);
+    assert_eq!(e.catalog().cards.len(), base_cards + 210);
     assert_eq!(e.catalog().general_count(), base_generals + 149);
 
     // ⑤ 推进到 0 号出牌阶段并真实执行 5 个代表子包机制：

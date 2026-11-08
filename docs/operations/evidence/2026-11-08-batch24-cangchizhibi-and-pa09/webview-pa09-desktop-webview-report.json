@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "terminal": {
+    "steps": 280,
+    "hash": "95e0064838594b039d17b4621a6e6e9fdc5bda2ea9b5c031bcf8f8f83bedd1a0",
+    "outcome": {
+      "RebelWin": null
+    },
+    "ipc_roundtrip_ms": {
+      "n": 280,
+      "p50": 2,
+      "p95": 4,
+      "p99": 5,
+      "max": 6
+    },
+    "wasm_worker_roundtrip_ms": {
+      "n": 280,
+      "p50": 0,
+      "p95": 1,
+      "p99": 3,
+      "max": 3
+    },
+    "ipc_step_to_paint_ms": {
+      "n": 30,
+      "p50": 16,
+      "p95": 17,
+      "p99": 17,
+      "max": 17
+    },
+    "wasm_worker_step_to_paint_ms": {
+      "n": 30,
+      "p50": 17,
+      "p95": 17,
+      "p99": 17,
+      "max": 17
+    }
+  },
+  "vm_lifecycle": "actual IPC passed",
+  "isolation": "validator init preserves battle",
+  "fallback": "actual Wasm Worker passed",
+  "resources": "close/duplicate-close/closed-request passed",
+  "state": {
+    "ids": [],
+    "checks": []
+  },
+  "pendingSnapshots": []
+}

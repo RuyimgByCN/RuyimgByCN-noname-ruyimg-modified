@@ -35,7 +35,7 @@ CHECKS: list[tuple[str, list[str], bool]] = [
     ("相位枚举（REVIEW=0）", [PY, "-B", "scripts/report_phase_arms.py", "--check"], False),
     ("来源覆盖三分", [PY, "-B", "scripts/report_source_coverage.py", "--check"], False),
     ("host 键普查（U05=314）", [PY, "-B", "scripts/report_host_keys.py", "--check"], False),
-    ("卡面覆盖（201/128）", [PY, "-B", "scripts/report_card_coverage.py", "--check"], False),
+    ("卡面覆盖（202/129）", [PY, "-B", "scripts/report_card_coverage.py", "--check"], False),
     ("台账↔枚举一致", [PY, "-B", "scripts/check_ledger_consistency.py", "--strict"], True),
     ("已登记差异口径（20/54）", [PY, "-B", "scripts/report_registered_deviations.py", "--check"], False),
     ("守卫引用名存在", [PY, "-B", "scripts/check_guard_references.py", "--strict"], False),

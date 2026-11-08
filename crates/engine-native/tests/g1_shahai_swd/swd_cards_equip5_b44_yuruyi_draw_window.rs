@@ -32,44 +32,52 @@ fn swd_cards_equip5_b44_yuruyi_draw_window() {
         .iter()
         .position(|c| c.kind == engine_native::catalog::CardKind::Yuruyi)
         .expect("玉如意在目录") as u32;
+    let low = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.rank == 2 && c.kind == CardKind::Shan)
+        .map(|(i, _)| i as u32)
+        .expect("rank2 实体");
+    let high = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.rank == 13 && c.kind == CardKind::Shan)
+        .map(|(i, _)| i as u32)
+        .expect("rank13 实体");
+    assert_ne!(low, high);
     {
         let mut snap = e.save();
         snap.core.deck.retain(|x| *x != yry);
         snap.core.discard.retain(|x| *x != yry);
         snap.core.players[0].equips.push(yry);
-        // 布阵：低点数牌（rank 2）压在摸牌位（deck 尾），高点数牌（rank
-        // 13）放在窗口内非摸牌位
-        let low = e
-            .catalog()
-            .cards
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.rank == 2 && c.kind == CardKind::Shan)
-            .map(|(i, _)| i as u32)
-            .expect("rank2 实体");
-        let high = e
-            .catalog()
-            .cards
-            .iter()
-            .enumerate()
-            .find(|(_, c)| c.rank == 13 && c.kind == CardKind::Shan)
-            .map(|(i, _)| i as u32)
-            .expect("rank13 实体");
-        assert_ne!(low, high);
-        snap.core.deck.retain(|x| *x != low && *x != high);
-        snap.core.deck.push(low);
-        snap.core.deck.insert(snap.core.deck.len() - 1, high);
         e = Engine::restore_with_extensions(&snap, &[&pack]).expect("布阵");
     }
-    let deck_len = e.state_core().deck.len();
-    assert_eq!(
-        e.state_core().deck[deck_len - 1],
-        e.state_core().deck[deck_len - 1]
-    );
     // 推进完一整轮到 p0 下个摸牌阶段（Draw begin 触发玉如意换牌）：
-    // 逐 NextPhase 驱动至 p0 重新进入 Play（其间 p0 摸牌阶段已带钩结算）
+    // 在 p0 进入 Judge（紧邻 Draw 前）时将 low 压在摸牌位（deck 尾）、high 放在窗口内非摸牌位
     let mut left_p0 = false;
+    let mut staged_window = false;
     for _ in 0..48 {
+        if left_p0
+            && e.turn().current == 0
+            && e.turn().phase == Phase::Judge
+            && e.open_choice().is_none()
+            && !staged_window
+        {
+            let mut snap = e.save();
+            for p in &mut snap.core.players {
+                p.hand.retain(|x| *x != low && *x != high);
+            }
+            snap.core.discard.retain(|x| *x != low && *x != high);
+            snap.core.deck.retain(|x| *x != low && *x != high);
+            snap.core.deck.push(low);
+            snap.core.deck.insert(snap.core.deck.len() - 1, high);
+            e = Engine::restore_with_extensions(&snap, &[&pack]).expect("摸牌窗布阵");
+            staged_window = true;
+        }
         if left_p0
             && e.turn().current == 0
             && e.turn().phase == Phase::Play
@@ -82,7 +90,9 @@ fn swd_cards_equip5_b44_yuruyi_draw_window() {
         }
         if let Some(c) = e.open_choice() {
             let (cid, obs) = (c.id, c.observer);
-            let sel: Vec<ChoiceOption> = if c.spec.min > 0 {
+            let sel: Vec<ChoiceOption> = if c.spec.prompt == "baishouzhihu_target" {
+                vec![*c.spec.options.last().unwrap()]
+            } else if c.spec.min > 0 {
                 c.spec.options.iter().take(c.spec.min).copied().collect()
             } else if !c.spec.options.is_empty() {
                 vec![c.spec.options[0]]

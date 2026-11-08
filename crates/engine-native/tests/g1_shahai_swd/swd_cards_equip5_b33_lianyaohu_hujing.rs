@@ -1297,6 +1297,7 @@ fn swd_cards_jiqi_b40_five_held_treasures() {
         "baishouzhihu",
         "xuanwuzhihuang",
         "huanglinzhicong",
+        "cangchizhibi",
     ] {
         let def = e.catalog().skill_by_name(sk).expect("手持技 def");
         assert!(
@@ -1393,8 +1394,8 @@ fn swd_cards_trick_b42_yuchan_autoviewas() {
     let pack = bridge(&json);
     assert_eq!(
         pack.cards.len(),
-        90,
-        "窗口机批后 90 张（批⑬ 神草结 87+神秘果 2；批 147 轩辕剑 +1）"
+        91,
+        "裁决 33 后 91 张（批⑬ 神草结 87+神秘果 2+轩辕剑 1+苍螭之璧 1）"
     );
     let mut e = Engine::new_with_extensions(62021, 4, &[&pack]).expect("建局");
     advance_to_play(&mut e, 0);

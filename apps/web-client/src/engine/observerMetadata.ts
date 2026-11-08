@@ -74,6 +74,7 @@ const PROMPTS: Record<string, string> = {
   fanjian_target: "反间：选择目标角色", fanjian_suit: "反间：选择花色", fanjian_pick: "反间：选择获得的手牌",
   rvm_tiqi_confirm: "涕泣：是否发动？", rvm_tiqi_sign: "涕泣：选择手牌上限增减",
   rvm_baoshu_cost: "宝梳：选择目标角色", rvm_dcbihuo_target: "避祸：选择目标角色",
+  cangchizhibi_target: "苍螭之璧：选择至多三名角色横置或重置",
 };
 
 export function choiceKindLabel(choice: ChoiceRequest): string {

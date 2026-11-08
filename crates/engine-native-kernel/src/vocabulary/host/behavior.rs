@@ -1583,4 +1583,6 @@ pub enum HostBehavior {
     GuisheqiCard,
     /// 仙露回（tag 298，批⑦ trick 卡牌机）：全体受伤目标各 +1 护甲。
     XianluhuiCard,
+    /// 苍螭之璧（tag 538，swd 裁决 33）：手持法器，回合开始可选 1–3 名角色横置/重置。
+    SwdCangchizhibiHeld,
 }
