@@ -1,6 +1,6 @@
 {
   "started_utc": "2026-11-08T07:36:21.554543+00:00",
-  "finished_utc": "2026-11-08T09:34:31.000000+00:00",
+  "finished_utc": "2026-11-08T11:03:08.000000+00:00",
   "repository": "https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified.git",
   "branch": "refs/heads/native-convergence",
   "initial_remote_before": {
@@ -9,7 +9,7 @@
   },
   "final_remote_after": {
     "refs/heads/main": "47347c6608d651660ae9459e59eb529b3cef277f",
-    "refs/heads/native-convergence": "413a203797f8533d875f612b831c8415f2f97ad4"
+    "refs/heads/native-convergence": "81ff9abd1b5435d3bd8e0c7b4edcd8861cfd176d"
   },
   "original_hook_sha256": "e349af1ec5ccc1742df7e7d91d387ed2ef086f7c864d8cf7372d0ef66dd49ca7",
   "no_new_remote": true,
@@ -55,6 +55,17 @@
       "push_exit": 0,
       "ci_run_id": 42464235112,
       "ci_summary": "8/10 passed (build-windows-latest, gates-ubuntu, native-web, desktop-macos-latest, build-ubuntu-latest, build-macos-latest, perf-ubuntu-latest, perf-macos-latest); 2/10 (desktop-ubuntu-latest, desktop-windows-latest, which passed on identical desktop/web code in 42461463648) hit external GitHub Releases HTTP 504 Gateway Timeout downloading AppRun-x86_64 and nsis_tauri_utils.dll at final Tauri bundle step"
+    },
+    {
+      "step": 5,
+      "old_sha": "413a203797f8533d875f612b831c8415f2f97ad4",
+      "new_sha": "81ff9abd1b5435d3bd8e0c7b4edcd8861cfd176d",
+      "scoped_hook_sha256": "2d7ba562bc08ac594d7f916fe0a7d3050f5d2c3251c2aad4c60f2b8ab8709730",
+      "selftests_passed": "9/9",
+      "push_exit": 0,
+      "ci_run_id": 42470608970,
+      "ci_attempt_1_summary": "9/10 passed (native-web 128700233610, perf-macos-latest 128700233720, build-windows-latest 128700233728, perf-ubuntu-latest 128700233746, build-macos-latest 128700233766, gates-ubuntu 128700233771, build-ubuntu-latest 128700233774, desktop-macos-latest 128700233812, desktop-windows-latest 128700233881); 1/10 (desktop-ubuntu-latest 128700233780) hit external GitHub Releases HTTP 504 Gateway Timeout downloading AppRun-x86_64 at final AppImage bundle step",
+      "ci_attempt_2_summary": "10/10 passed (conclusion: success) after single gh run rerun 42470608970 --failed (desktop-ubuntu-latest 128708290312 succeeded in 12m46s and uploaded installer-ubuntu-latest; all 10 jobs green on exact code head 81ff9abd1)"
     }
   ]
 }
