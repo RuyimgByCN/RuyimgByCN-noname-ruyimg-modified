@@ -1074,3 +1074,5 @@ fn bridge_generals_inner(
 
 mod pile_bridge;
 pub use pile_bridge::{bridge_pile, parse_pile_factors};
+pub mod decision34_closure;
+pub use decision34_closure::*;

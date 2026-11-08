@@ -4,12 +4,31 @@ export type BossHpNormalized =
   | { kind: "finite"; hp: number; maxHp: number; label: string }
   | { kind: "infinity"; label: "∞" };
 
+export const L20_HUD_MARK_SPECS: ReadonlyArray<{ key: string; label: string }> = [
+  { key: "longmark", label: "龙印" },
+  { key: "biaoji", label: "标记" },
+  { key: "danlie", label: "胆裂" },
+  { key: "fengyin", label: "封印" },
+  { key: "fuhun", label: "父魂" },
+  { key: "guimen", label: "鬼门" },
+  { key: "hejie", label: "和解" },
+  { key: "huxiao", label: "虎啸" },
+  { key: "jianying", label: "渐营" },
+  { key: "jinfan", label: "锦帆" },
+  { key: "kuangbao", label: "狂暴" },
+  { key: "lunhui", label: "轮回" },
+  { key: "mohua", label: "魔化" },
+  { key: "niepan", label: "涅槃" },
+];
+
 export interface BossSurfaceState {
   variant: "noname" | "liuli";
   mode: "boss" | "versus_jiange" | "tafang";
   stageIndex: number;
   stages: Array<{ id: string; title: string; hpRaw: number | string; forbidAi: boolean; allowed: boolean }>;
   forbidAiIds: string[];
+  tafangWave?: number;
+  shichangshiAliveCount?: number;
 }
 
 export interface CoinSurfaceState {
@@ -22,6 +41,7 @@ export interface CoinSurfaceState {
   snowSize: "small" | "large";
   activeEffects: string[];
   lastSettlement: { payout: number; netDelta: number; video: boolean; mode: string } | null;
+  honorTitle?: string;
 }
 
 export interface TaixuNode {
@@ -97,6 +117,7 @@ export interface ThemeAndSkinSurfaceState {
   throwEmotionCue: string | null;
   selectBeautifyEnabled: boolean;
   d3ShowcaseEnabled: boolean;
+  l20Marks?: Record<string, number>;
 }
 
 export interface LongxueSurfaceState {
@@ -104,6 +125,7 @@ export interface LongxueSurfaceState {
   daoxin: number;
   unlockedThresholds: number[];
   qingzhengUnlocked: boolean;
+  unlockedSkills?: string[];
 }
 
 export interface ThunderSurfaceState {
@@ -111,6 +133,7 @@ export interface ThunderSurfaceState {
   hideExclusivePack: boolean;
   markPatchState: "off" | "basic" | "full";
   replacedPairs: Array<{ from: string; to: string }>;
+  chordMask?: number;
 }
 
 export interface OmnisearchEntry {
@@ -170,6 +193,13 @@ const DEFAULT_OMNI_CATALOG: OmnisearchEntry[] = [
   { packageId: "shahai-swd", kind: "card", id: "cangchizhibi", displayName: "苍螭之璧" },
   { packageId: "huanle", kind: "card", id: "hnl_kuwu", displayName: "苦无" },
   { packageId: "d3", kind: "general", id: "ddd_liuchong", displayName: "刘冲" },
+  { packageId: "wudian", kind: "card", id: "diaobingqianjiang", displayName: "调兵遣将" },
+  { packageId: "longxue", kind: "skill", id: "mbcmjiushi", displayName: "酒诗" },
+  { packageId: "longxue", kind: "skill", id: "mbcmfangzhu", displayName: "放逐" },
+  { packageId: "longxue", kind: "skill", id: "mbjuejin", displayName: "绝进" },
+  { packageId: "epic-cards", kind: "general", id: "shichangshi", displayName: "十常侍" },
+  { packageId: "thunder", kind: "skill", id: "th_chongzou", displayName: "重奏" },
+  { packageId: "hero-kill", kind: "skill", id: "yxs_menshen2", displayName: "门神·护卫" },
 ];
 
 /** U02 / L03: 上游体力归一化（数字保留、`"3"` -> Infinity、`"3/4"` -> 分数体力）。 */
@@ -280,6 +310,16 @@ export function resolveEloDifficulty(
   return { strength, bias, thinkDelaySec };
 }
 
+/** L29: 根据道心阈值返回已解锁的 4 项技能名列表（25 清正 / 50 酒诗 / 75 放逐 / 99 绝进）。 */
+export function unlockLongxueSkills(daoxin: number): string[] {
+  const skills: string[] = [];
+  if (daoxin >= 25) skills.push("mbcmqingzheng");
+  if (daoxin >= 50) skills.push("mbcmjiushi");
+  if (daoxin >= 75) skills.push("mbcmfangzhu");
+  if (daoxin >= 99) skills.push("mbjuejin");
+  return skills;
+}
+
 /** L29: 龙血玄黄潜龙道心值推进与阈值解锁（上限 99，阈值 25/50/75/99）。 */
 export function advanceLongxueDaoxin(
   state: LongxueSurfaceState,
@@ -300,6 +340,44 @@ export function advanceLongxueDaoxin(
     unlockedThresholds,
     qingzhengUnlocked: daoxin >= 25,
   };
+}
+
+/** L20: 标记补充 14 项战局 HUD 标记增减与归一化。 */
+export function incrementL20HudMark(
+  theme: ThemeAndSkinSurfaceState,
+  markKey: string,
+  delta = 1,
+): ThemeAndSkinSurfaceState {
+  const valid = L20_HUD_MARK_SPECS.some((m) => m.key === markKey);
+  if (!valid) {
+    throw new Error(`unknown L20 HUD mark: ${markKey}`);
+  }
+  const prev = theme.l20Marks ?? {};
+  const nextCount = Math.max(0, (prev[markKey] ?? 0) + delta);
+  return {
+    ...theme,
+    l20Marks: {
+      ...prev,
+      [markKey]: nextCount,
+    },
+  };
+}
+
+/** U08: 英雄杀塔防（tafang）波次推进（1..=5 波次，第 5 波为首领波）。 */
+export function advanceTafangWave(boss: BossSurfaceState): BossSurfaceState {
+  const nextWave = Math.min(5, (boss.tafangWave ?? 1) + 1);
+  return {
+    ...boss,
+    mode: "tafang",
+    tafangWave: nextWave,
+  };
+}
+
+/** U04 / L05: 金币余额对应荣誉称号。 */
+export function resolveCoinHonorTitle(balance: number): string {
+  if (balance >= 200) return "富甲天下";
+  if (balance >= 100) return "挥金如土";
+  return "初入茅庐";
 }
 
 /** U04 / L05: 商店购买与下注、终局金币结算（对齐上游 `extension/coin/extension.js`）。 */

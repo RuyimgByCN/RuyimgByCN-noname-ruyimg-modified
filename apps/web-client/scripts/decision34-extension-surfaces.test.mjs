@@ -13,7 +13,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  L20_HUD_MARK_SPECS,
   advanceLongxueDaoxin,
+  advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
   assignMartialLineup,
@@ -27,17 +29,20 @@ import {
   foolFangtongAllows,
   foolZiyuanAllows,
   hiddenCardIdsFromSnapshot,
+  incrementL20HudMark,
   ingestBattleEnvelopeIntoSurfaces,
   normalizeBossHp,
   numToRoma,
   placeCoinBet,
   recordMvpEventFact,
+  resolveCoinHonorTitle,
   resolveEloDifficulty,
   restoreExtensionSurfacesForLoad,
   rewriteDouzhuanSkillText,
   runOmnisearchQuery,
   serializeExtensionSurfacesSnapshot,
   settleCoinMatch,
+  unlockLongxueSkills,
   validateSafeExportFilename,
 } from "../src/engine/extensionSurfaceRuntime.ts";
 
@@ -311,4 +316,38 @@ test("裁决 34 完整状态快照序列化与读档恢复往返一致", () => {
   assert.equal(fromLegacySlot.longxue.daoxin, 35); // 初始 20 + loadEnv 伤害事件 15
   assert.equal(fromLegacySlot.theme.rzshTierRoman, "III");
 });
+
+test("Batch 25 补齐：L20 14 项战局标记、L29 潜龙四技解锁、U08 塔防波次、金币称号与百科检索", () => {
+  assert.equal(L20_HUD_MARK_SPECS.length, 14);
+  let theme = createInitialExtensionSurfacesState().theme;
+  for (const spec of L20_HUD_MARK_SPECS) {
+    theme = incrementL20HudMark(theme, spec.key, 2);
+    assert.equal(theme.l20Marks?.[spec.key], 2);
+  }
+  assert.throws(() => incrementL20HudMark(theme, "nonexistent_mark", 1), /unknown L20 HUD mark/);
+
+  assert.deepEqual(unlockLongxueSkills(20), []);
+  assert.deepEqual(unlockLongxueSkills(25), ["mbcmqingzheng"]);
+  assert.deepEqual(unlockLongxueSkills(50), ["mbcmqingzheng", "mbcmjiushi"]);
+  assert.deepEqual(unlockLongxueSkills(75), ["mbcmqingzheng", "mbcmjiushi", "mbcmfangzhu"]);
+  assert.deepEqual(unlockLongxueSkills(99), ["mbcmqingzheng", "mbcmjiushi", "mbcmfangzhu", "mbjuejin"]);
+
+  let boss = createInitialExtensionSurfacesState().boss;
+  boss = advanceTafangWave(boss);
+  assert.equal(boss.mode, "tafang");
+  assert.equal(boss.tafangWave, 2);
+
+  assert.equal(resolveCoinHonorTitle(50), "初入茅庐");
+  assert.equal(resolveCoinHonorTitle(120), "挥金如土");
+  assert.equal(resolveCoinHonorTitle(250), "富甲天下");
+
+  const omni = createInitialExtensionSurfacesState().omnisearch;
+  for (const q of ["diaobingqianjiang", "mbcmjiushi", "mbcmfangzhu", "mbjuejin", "shichangshi", "th_chongzou", "yxs_menshen2"]) {
+    const res = runOmnisearchQuery(omni, q, []);
+    assert.equal(res.lastError, null);
+    assert.equal(res.results.length, 1);
+    assert.equal(res.results[0].id, q);
+  }
+});
+
 

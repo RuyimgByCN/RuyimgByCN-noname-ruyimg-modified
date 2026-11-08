@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "panelRect": {
+    "width": 1160,
+    "height": 409,
+    "display": "block",
+    "border": "solid"
+  },
+  "hudResult": {
+    "daoxin": "50",
+    "thresholds": "25, 50",
+    "unlockedSkills": "mbcmqingzheng/mbcmjiushi",
+    "l20MarkBadges": "L20 标记补充 (14项)：龙印 ×1",
+    "badgeDecade": "十周年:shousha",
+    "badgeShousha": "手杀:left",
+    "badgeRuzhen": "如真:reality(II)",
+    "badgeQhly": "千幻:shousha",
+    "notice": "笨蛋插件：P1->P2:egg"
+  },
+  "campaignResult": {
+    "bossName": "剑阁·高达一号",
+    "bossHp": "∞",
+    "bossMode": "tafang",
+    "tafangWave": "#2/5",
+    "taixuNode": "#2 (颍川前哨（战斗）)",
+    "taixuGold": "90",
+    "taixuPet": "苍雷幼麟",
+    "taixuBlessingsCount": "2",
+    "martialReplacement": "sp_zhaoyun",
+    "doomsdayWave": "#2"
+  },
+  "coinResult": {
+    "balance": "80",
+    "honorTitle": "初入茅庐",
+    "snow": "snow",
+    "weatherOverlayRendered": true,
+    "weatherAttr": "snow"
+  },
+  "omnisearchResult": {
+    "hitText": "card苍螭之璧 (cangchizhibi) — shahai-swd",
+    "blockedText": "安全门禁拦截：error:eval_refused"
+  },
+  "workbenchResult": {
+    "rejectedMsg": "拒绝：unsafe export filename"
+  },
+  "saveRestoreResult": {
+    "beforeSaveDaoxin": "50",
+    "beforeSaveDecade": "十周年:shousha",
+    "saveStatus": "已存档 · save-1794164906647",
+    "mutatedDaoxin": "80",
+    "mutatedDecade": "十周年:xinzhan",
+    "restoredDaoxin": "50",
+    "restoredDecade": "十周年:shousha",
+    "weatherStillActive": true
+  },
+  "restartAndReloadResult": {
+    "afterRestartDaoxin": "20",
+    "afterRestartWeather": false,
+    "afterReloadDaoxin": "50",
+    "afterReloadWeather": true
+  },
+  "frameStats": {
+    "n": 60,
+    "p50_ms": 16.66,
+    "p95_ms": 16.67,
+    "p99_ms": 16.67,
+    "max_ms": 16.67,
+    "approx_fps": 60
+  },
+  "consoleErrors": [],
+  "screenshot": "/Users/ruyimg/Documents/Claude/sanguosha/noname-next/docs/operations/evidence/2026-11-09-batch25-decision34-and-signoff/decision34-browser-surfaces.png"
+}

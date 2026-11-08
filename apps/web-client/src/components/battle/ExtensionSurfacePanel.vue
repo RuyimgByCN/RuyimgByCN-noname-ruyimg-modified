@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import {
+  L20_HUD_MARK_SPECS,
   advanceLongxueDaoxin,
+  advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
   bindTaixuPet,
@@ -9,10 +11,13 @@ import {
   buyTaixuBlessing,
   classifyDesktopPointer,
   hiddenCardIdsFromSnapshot,
+  incrementL20HudMark,
   normalizeBossHp,
   numToRoma,
   placeCoinBet,
+  resolveCoinHonorTitle,
   runOmnisearchQuery,
+  unlockLongxueSkills,
   validateSafeExportFilename,
   type ExtensionSurfacesSnapshot,
 } from "../../engine/extensionSurfaceRuntime";
@@ -169,6 +174,23 @@ function onAdvanceLongxue() {
     const longxue = advanceLongxueDaoxin(prev.longxue, "damage_dealt", 2);
     surfaceNotice.value = `龙血玄黄：道心 ${longxue.daoxin}/99（解锁 ${longxue.unlockedThresholds.join("/") || "无"}）`;
     return { ...prev, longxue };
+  });
+}
+
+function onIncrementL20Mark(markKey = "longmark") {
+  update((prev) => {
+    const theme = incrementL20HudMark(prev.theme, markKey, 1);
+    const count = theme.l20Marks?.[markKey] ?? 0;
+    surfaceNotice.value = `标记补充 (L20)：${markKey} ×${count}（共 ${L20_HUD_MARK_SPECS.length} 项）`;
+    return { ...prev, theme };
+  });
+}
+
+function onAdvanceTafangWave() {
+  update((prev) => {
+    const boss = advanceTafangWave(prev.boss);
+    surfaceNotice.value = `英雄杀塔防 (U08)：推进至第 ${boss.tafangWave ?? 1}/5 波`;
+    return { ...prev, boss };
   });
 }
 
@@ -379,16 +401,23 @@ function onSurfacePointerMove(ev: MouseEvent) {
         </div>
 
         <div class="hud-card" data-testid="hud-longxue-card">
-          <h3>龙血玄黄 · 道心进度条 (L29)</h3>
+          <h3>龙血玄黄 · 道心进度条 (L29) &amp; 标记补充 (L20)</h3>
           <div class="daoxin-bar">
             <div class="daoxin-fill" :style="{ width: `${surfaces.longxue.daoxin}%` }"></div>
           </div>
           <p class="tiny">
             当前 <strong data-testid="longxue-daoxin">{{ surfaces.longxue.daoxin }}</strong>/99 · 已解锁阈值：
-            <strong data-testid="longxue-thresholds">{{ surfaces.longxue.unlockedThresholds.join(", ") || "无" }}</strong>
+            <strong data-testid="longxue-thresholds">{{ surfaces.longxue.unlockedThresholds.join(", ") || "无" }}</strong> ·
+            潜龙技能：<strong data-testid="longxue-unlocked-skills">{{ unlockLongxueSkills(surfaces.longxue.daoxin).join("/") || "待解锁" }}</strong>
           </p>
-          <div class="row">
+          <p class="tiny" data-testid="l20-mark-badges">
+            L20 标记补充 ({{ L20_HUD_MARK_SPECS.length }}项)：龙印 ×{{ surfaces.theme.l20Marks?.longmark ?? 0 }}
+          </p>
+          <div class="row wrap">
             <button type="button" data-testid="btn-longxue-plus" @click="onAdvanceLongxue">道心 +30</button>
+            <button type="button" data-testid="btn-l20-mark-plus" @click="onIncrementL20Mark('longmark')">
+              L20 龙印 +1
+            </button>
             <button type="button" data-testid="btn-thunder-toggle" @click="onToggleThunderMarkPatch">
               惊雷标记补丁 (L28): {{ surfaces.thunder.markPatchState }}
             </button>
@@ -425,16 +454,18 @@ function onSurfacePointerMove(ev: MouseEvent) {
     <div v-else-if="activeTab === 'campaign'" class="surface-body" data-testid="panel-campaign">
       <div class="hud-grid">
         <div class="hud-card" data-testid="campaign-boss-card">
-          <h3>挑战 BOSS / 守卫剑阁单机闯关 (U02 / L03)</h3>
+          <h3>挑战 BOSS / 守卫剑阁 / 英雄杀塔防 (U02 / L03 / U08)</h3>
           <p v-if="currentBossStage">
             当前首领：<strong data-testid="boss-name">{{ currentBossStage.title }}</strong> ·
             阶段 {{ surfaces.boss.stageIndex + 1 }}/{{ surfaces.boss.stages.length }} ·
             体力 <code data-testid="boss-hp">{{ currentBossStage.normalizedHp.label }}</code> ·
-            模式 <code data-testid="boss-mode">{{ surfaces.boss.mode }}</code>
+            模式 <code data-testid="boss-mode">{{ surfaces.boss.mode }}</code> ·
+            塔防波次 <strong data-testid="u08-tafang-wave">#{{ surfaces.boss.tafangWave ?? 1 }}/5</strong>
           </p>
-          <div class="row">
+          <div class="row wrap">
             <button type="button" data-testid="btn-boss-advance" @click="onAdvanceBoss">推进剑阁阶段</button>
             <button type="button" data-testid="btn-boss-mode" @click="onCycleBossMode">切换战役模式</button>
+            <button type="button" data-testid="btn-u08-tafang-wave" @click="onAdvanceTafangWave">推进英雄杀塔防</button>
           </div>
         </div>
 
@@ -488,6 +519,7 @@ function onSurfacePointerMove(ev: MouseEvent) {
           <h3>金币商店与天气特效 (U04 / L05)</h3>
           <p>
             当前金币：<strong data-testid="coin-balance">{{ surfaces.coin.balance }}</strong> ·
+            荣誉称号：<strong data-testid="coin-honor-title">{{ resolveCoinHonorTitle(surfaces.coin.balance) }}</strong> ·
             赛前下注：<strong data-testid="coin-active-bet">{{ surfaces.coin.betPlaced }}</strong> ·
             下雪状态：<strong data-testid="coin-snow">{{ surfaces.coin.snowFall ? "snow" : "clear" }}</strong>
           </p>

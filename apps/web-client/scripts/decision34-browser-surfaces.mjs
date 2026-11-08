@@ -186,6 +186,7 @@ try {
       btn.click();
     };
     click('btn-longxue-plus');
+    click('btn-l20-mark-plus');
     click('btn-thunder-toggle');
     click('btn-cycle-decade');
     click('btn-cycle-shousha');
@@ -198,6 +199,8 @@ try {
     return {
       daoxin: text('longxue-daoxin'),
       thresholds: text('longxue-thresholds'),
+      unlockedSkills: text('longxue-unlocked-skills'),
+      l20MarkBadges: text('l20-mark-badges'),
       badgeDecade: text('badge-decade'),
       badgeShousha: text('badge-shousha'),
       badgeRuzhen: text('badge-ruzhen'),
@@ -217,6 +220,7 @@ try {
     await new Promise(r => setTimeout(r, 50));
     click('btn-boss-advance');
     click('btn-boss-mode');
+    click('btn-u08-tafang-wave');
     click('btn-taixu-advance');
     await new Promise(r => setTimeout(r, 30));
     click('btn-taixu-buy-blessing');
@@ -230,6 +234,7 @@ try {
       bossName: text('boss-name'),
       bossHp: text('boss-hp'),
       bossMode: text('boss-mode'),
+      tafangWave: text('u08-tafang-wave'),
       taixuNode: text('taixu-node'),
       taixuGold: text('taixu-gold'),
       taixuPet: text('taixu-pet'),
@@ -254,6 +259,7 @@ try {
     const weatherOverlay = document.querySelector('[data-testid="coin-weather-overlay"]');
     return {
       balance: text('coin-balance'),
+      honorTitle: text('coin-honor-title'),
       snow: text('coin-snow'),
       weatherOverlayRendered: Boolean(weatherOverlay),
       weatherAttr: weatherOverlay?.getAttribute('data-weather') ?? null,
@@ -429,9 +435,13 @@ try {
       consoleErrors.length === 0 &&
       panelRect.width > 0 &&
       hudResult.daoxin === "50" &&
+      hudResult.unlockedSkills === "mbcmqingzheng/mbcmjiushi" &&
+      hudResult.l20MarkBadges.includes("龙印 ×1") &&
       campaignResult.bossHp === "∞" &&
+      campaignResult.tafangWave === "#2/5" &&
       campaignResult.taixuGold === "90" &&
       coinResult.weatherOverlayRendered === true &&
+      coinResult.honorTitle === "初入茅庐" &&
       omnisearchResult.hitText.includes("苍螭之璧") &&
       omnisearchResult.blockedText.includes("error:eval_refused") &&
       workbenchResult.rejectedMsg.includes("unsafe export filename") &&

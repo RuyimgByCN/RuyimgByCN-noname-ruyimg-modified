@@ -3,6 +3,7 @@
 
 use super::commit::pop_deck;
 use super::*;
+pub mod decision34;
 mod generals;
 use generals::*;
 
@@ -169,7 +170,7 @@ pub(super) fn try_commit_up37_storage_set(
             "olrehuanshi" => resolve_olrehuanshi(ctx, owner),
             "olshilun" => resolve_olshilun(ctx, owner),
             "olzhuoming" => resolve_olzhuoming(ctx, owner),
-            _ => return false,
+            _ => return decision34::try_commit_decision34(ctx, executing, owner, value),
         },
     }
     true
