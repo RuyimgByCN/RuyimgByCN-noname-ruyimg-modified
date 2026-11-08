@@ -49,8 +49,6 @@ fn arm<'a>(src: &'a str, anchor: &str, len: usize) -> &'a str {
 /// 上游 `swd_zhuhai` 的 `trigger: { global: 'phaseEnd' }` 覆盖**全场**。
 /// 原生过滤条件里带了 `t != owner`，把技能主排除在外 ⇒ 修正后该条件应消失。
 #[test]
-#[ignore = "登记缺陷 G19：swd_zhuhai 上游 global phaseEnd，原生过滤含 t != owner；\
-            修复需改未跟踪的 content/host/filtering/swd.rs"]
 fn g19_zhuhai_filter_must_not_exclude_owner() {
     let src = read("filtering/swd.rs");
     let seg = arm(&src, "HostBehavior::SwdZhuhai => match event", 1200);
@@ -79,8 +77,6 @@ fn g19_tiebi_filter_must_not_exclude_owner() {
 
 /// 上游 `swd_rexue` 的 `trigger: { global: 'phaseEnd' }` 覆盖**全场**。
 #[test]
-#[ignore = "登记缺陷 G19：swd_rexue 上游 global，原生过滤含 actor != owner；\
-            修复需改未跟踪的 content/host/filtering/swd.rs"]
 fn g19_rexue_filter_must_not_exclude_owner() {
     let src = read("filtering/swd.rs");
     let seg = arm(&src, "HostBehavior::SwdRexue => {", 900);
@@ -130,8 +126,6 @@ fn arm_until_next<'a>(src: &'a str, anchor: &str) -> &'a str {
 /// **没有 trigger**。原生却给它挂了一个「第 5 轮判定阶段开始」的 boss 模式触发。
 /// 修正后该 arm 不应再匹配 `EventData::Phase`。
 #[test]
-#[ignore = "登记缺陷（凭空新增触发）：baiyi 上游为 phaseUse 主动技、无 trigger；\
-            修复需改未跟踪的 content/host/filtering/common.rs"]
 fn baiyi_must_not_invent_a_phase_trigger() {
     let src = read("filtering/common.rs");
     let seg = arm_until_next(&src, "HostBehavior::BossBaiyi =>");
@@ -159,8 +153,6 @@ fn huajin2_must_not_add_a_phase_branch() {
 /// ⇒ 会在**其他角色**的判定阶段也触发。修正后应写成 `Phase { player, begin: true, .. }`
 /// 并带 `*player == owner`。
 #[test]
-#[ignore = "登记缺陷 G14：lexue1 上游 player phaseBegin（任意阶段、自己），\
-            原生钉死 Judge 且缺 owner 校验；修复需改未跟踪的 content/host/filtering/swd.rs"]
 fn lexue_any_phase_of_owner_only() {
     let src = read("filtering/swd.rs");
     let seg = arm_until_next(&src, "HostBehavior::SwdLexue =>");
@@ -273,8 +265,6 @@ g23_guard!(g23_menshen_turn_end, "YxsMenshen",);
 /// 原生却把它挂在 `EventKind::PhaseEnd` 上 ⇒ 永不按伤害触发。
 /// 修正后 meta 应为伤害事件。
 #[test]
-#[ignore = "登记缺陷 G23b：SwdJiguanyuanGain 上游 damageEnd+damageSource，原生挂 PhaseEnd；\
-            修复需改未跟踪的 content/host/metadata/swd.rs 与 filtering/swd.rs"]
 fn jiguanyuan_gain_must_trigger_on_damage() {
     let meta = read("metadata/swd.rs");
     let seg = arm_until_next(&meta, "HostBehavior::SwdJiguanyuanGain =>");
@@ -325,13 +315,13 @@ macro_rules! capability_guard {
     };
 }
 
-capability_guard!(cap_card_targeted, "CardTargeted", "「用牌前 / 指定目标时」——当前台账里仍有需档行依赖此槽位需档（useCardToBefore/ToBegin/ToTargeted/ToPlayered）");
-capability_guard!(cap_sha_begin, "ShaBegin", "【杀】开始幕——条数随台账变动，不在此写死（lianwu/lingshi/shoulie/yueren；lingyue 见 sha 幕合计 6 条）");
-capability_guard!(cap_sha_after, "ShaAfter", "【杀】结束幕——条数随台账变动，不写死（SwdLianda、XianjianXunying）");
-capability_guard!(cap_sha_before, "ShaBefore", "【杀】之前幕——条数随台账变动，不写死（WudianZhuchengGuard、SwdTiebi）");
-capability_guard!(cap_death_before, "DeathBefore", "「死亡前」——解锁 4+ 条（dieBegin 家族）");
-capability_guard!(cap_game_start, "GameStart", "「游戏开始」——解锁 L20b（xigua_xueliangfanbei）");
-capability_guard!(cap_judge_before, "JudgeBefore", "「判定前」——解锁 L03c（gaiming）");
+capability_guard!(cap_card_targeted, "CardTargeted", "「用牌前 / 指定目标时」——当前台账里仍有需档行依赖此槽位需档（useCardToBefore/ToBegin/ToTargeted/ToPlayered）", active);
+capability_guard!(cap_sha_begin, "ShaBegin", "【杀】开始幕——条数随台账变动，不在此写死（lianwu/lingshi/shoulie/yueren；lingyue 见 sha 幕合计 6 条）", active);
+capability_guard!(cap_sha_after, "ShaAfter", "【杀】结束幕——条数随台账变动，不写死（SwdLianda、XianjianXunying）", active);
+capability_guard!(cap_sha_before, "ShaBefore", "【杀】之前幕——条数随台账变动，不写死（WudianZhuchengGuard、SwdTiebi）", active);
+capability_guard!(cap_death_before, "DeathBefore", "「死亡前」——解锁 4+ 条（dieBegin 家族）", active);
+capability_guard!(cap_game_start, "GameStart", "「游戏开始」——解锁 L20b（xigua_xueliangfanbei）", active);
+capability_guard!(cap_judge_before, "JudgeBefore", "「判定前」——解锁 L03c（gaiming）", active);
 capability_guard!(cap_damage_begin_second, "DamageBegin2", "「第 2/3/4 次」——解锁 Tianxiang、L20a", active);
 
 // ------------------------------------- 「完全没有挂触发」与「事件种类错」的行为守卫
@@ -359,7 +349,6 @@ fn guard_yxs_menshen3_extra_phase() {
 
 /// `MbQianlong` / `MbWeitong` 同上：需要 `phaseBefore` 与 `enterGame` 两幕。
 #[test]
-#[ignore = "补 phaseBefore / enterGame 幕或改用 Dedicated 事件后转绿"]
 fn guard_mb_phase_before_enter_game() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -422,9 +411,9 @@ meta_event_guard!(guard_niepan_dying, "Niepan", "Dying", "涅槃是濒死自救�
 meta_event_guard!(guard_shouyin_dying, "SwdShouyin", "Dying", "收印 filter 要求 event.type=='dying'", active);
 meta_event_guard!(guard_chengxin_dying, "XianjianChengxin", "Dying", "濒死主动技", active);
 meta_event_guard!(guard_shuiyun5_dying, "XianjianShuiyun5", "Dying", "濒死主动技", active);
-meta_event_guard!(guard_cigu_pre_draw, "GwentCiguState", "DrawBefore", "上游 phaseDrawBegin：摸牌数确定前");
-meta_event_guard!(guard_fuchou2_before, "WudianFuchou2", "PhaseBefore", "上游 phaseUseBefore");
-meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上游 phaseUseBefore");
+meta_event_guard!(guard_cigu_pre_draw, "GwentCiguState", "DrawBefore", "上游 phaseDrawBegin：摸牌数确定前", active);
+meta_event_guard!(guard_fuchou2_before, "WudianFuchou2", "PhaseBefore", "上游 phaseUseBefore", active);
+meta_event_guard!(guard_fenglue_before, "XianjianFenglue", "PhaseBefore", "上游 phaseUseBefore", active);
 
 /// 准备阶段幕（G18）：`HlssFengqi` 与 `Xiuluo` 需要 `Phase::Prepare`（已于 R05 规则 333 接入）。
 #[test]
@@ -439,7 +428,6 @@ fn guard_prepare_phase_exists() {
 
 /// `HlssXiangxing` 少了「失去体力后」幕。
 #[test]
-#[ignore = "补 LoseHpEnd 幕并挂上后转绿"]
 fn guard_xiangxing_lose_hp_end() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -462,7 +450,6 @@ fn guard_yueyin_fourth_damage() {
 
 /// `HlssGaiming` 上游 `judgeBefore`，原生完全没有 arm。
 #[test]
-#[ignore = "补 `judgeBefore` 幕并挂上后转绿"]
 fn guard_gaiming_judge_before() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),
@@ -474,7 +461,6 @@ fn guard_gaiming_judge_before() {
 
 /// `HuanleKuwu`（5a）与 `ShengkeCheck`（5c）都卡在「用牌前 / 指定目标时」幕。
 #[test]
-#[ignore = "补 `CardTargeted` 后转绿（与 cap_card_targeted 同一能力，按行为分别记录）"]
 fn guard_kuwu_and_shengke_card_targeted() {
     let src = std::fs::read_to_string(concat!(
         env!("CARGO_MANIFEST_DIR"),

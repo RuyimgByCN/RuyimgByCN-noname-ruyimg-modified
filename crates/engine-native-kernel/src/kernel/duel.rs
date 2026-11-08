@@ -66,6 +66,26 @@ impl crate::catalog::SkillMachine for DuelMachine {
             let shas: Vec<crate::ids::CardId> =
                 response_kind_cards(ctx, responder, CardKind::Sha);
             if !self.asked {
+                if shas.is_empty() && ctx.core.player(responder).alive {
+                    if let Some((helper, helper_shas)) =
+                        jijiang_shu_helper(ctx.core, ctx.catalog, responder)
+                    {
+                        self.asked = true;
+                        let mut options = vec![ChoiceOption::Pass];
+                        options.extend(helper_shas.into_iter().map(ChoiceOption::Card));
+                        return Flow::WaitChoice {
+                            observer: helper,
+                            spec: ChoiceSpec {
+                                kind: ChoiceKind::RespondCard,
+                                prompt: "duel_sha",
+                                options,
+                                min: 1,
+                                max: 1,
+                                allow_cancel: false,
+                            },
+                        };
+                    }
+                }
                 if shas.is_empty() || !ctx.core.player(responder).alive {
                     // 轮到方无杀：不询问，直接受伤，决斗结束
                     let vm_card_bonus = ctx
@@ -107,7 +127,23 @@ impl crate::catalog::SkillMachine for DuelMachine {
             self.asked = false;
             let answer = ctx.answer().clone();
             if let Some(ChoiceOption::Card(c)) = answer.first().copied() {
-                discard_response_card(ctx, responder, c, CardKind::Sha);
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "duel_jijiang_skip".to_string()));
+                let actual_holder = if ctx.core.player(responder).hand.contains(&c)
+                    || ctx.core.player(responder).equips.contains(&c)
+                {
+                    responder
+                } else {
+                    (0..ctx.core.players.len() as u8)
+                        .find(|&p| {
+                            ctx.core.player(p).hand.contains(&c)
+                                || ctx.core.player(p).equips.contains(&c)
+                        })
+                        .unwrap_or(responder)
+                };
+                discard_response_card(ctx, actual_holder, c, CardKind::Sha);
                 ctx.emit(EventData::CardResponded {
                     card: c,
                     player: responder,
@@ -131,6 +167,21 @@ impl crate::catalog::SkillMachine for DuelMachine {
                 self.second_pending = false;
                 self.on_target = !self.on_target;
                 continue;
+            }
+            // 激将代打逐人推进：当前蜀势力角色放弃时，继续询问下一位蜀势力角色
+            if shas.is_empty() && ctx.core.player(responder).alive {
+                if let Some((helper, _)) = jijiang_shu_helper(ctx.core, ctx.catalog, responder) {
+                    *ctx.core
+                        .vm_aux
+                        .flags
+                        .entry((responder, "duel_jijiang_skip".to_string()))
+                        .or_insert(0) |= 1u32 << helper;
+                    continue;
+                }
+                ctx.core
+                    .vm_aux
+                    .flags
+                    .remove(&(responder, "duel_jijiang_skip".to_string()));
             }
             // 放弃 → 受伤，决斗结束（重置无双标记）
             self.second_pending = false;
@@ -158,6 +209,14 @@ impl DuelMachine {
             .vm_aux
             .flags
             .remove(&(self.source, format!("card_damage_bonus:{card}")));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.source, "duel_jijiang_skip".to_string()));
+        ctx.core
+            .vm_aux
+            .flags
+            .remove(&(self.target, "duel_jijiang_skip".to_string()));
         if card != 0 {
             ctx.to_discard(card);
             ctx.core.table.retain(|c| *c != card);
@@ -165,3 +224,57 @@ impl DuelMachine {
         Flow::Done
     }
 }
+
+pub(crate) fn jijiang_shu_helper(
+    core: &crate::state::GameStateCore,
+    catalog: &crate::catalog::Catalog,
+    responder: PlayerId,
+) -> Option<(PlayerId, Vec<crate::ids::CardId>)> {
+    let has_jijiang = catalog
+        .skill_by_name(crate::vocabulary::names::JI_JIANG)
+        .map(|d| core.has_skill(responder, d))
+        .unwrap_or(false)
+        && core.is_lord(responder);
+    if !has_jijiang {
+        return None;
+    }
+    let skip = core
+        .vm_aux
+        .flags
+        .get(&(responder, "duel_jijiang_skip".to_string()))
+        .copied()
+        .unwrap_or(0);
+    let n = core.players.len() as u8;
+    for offset in 1..n {
+        let p = (responder + offset) % n;
+        if (skip & (1u32 << p)) != 0
+            || !core.player(p).alive
+            || core.effective_faction(catalog, p) != Some(crate::catalog::Faction::Shu)
+            || catalog.blocks_all_cards(core, p)
+        {
+            continue;
+        }
+        let mut shas: Vec<crate::ids::CardId> = core
+            .player(p)
+            .hand
+            .iter()
+            .copied()
+            .filter(|c| {
+                catalog.card_kind(*c).is_sha_like()
+                    || catalog
+                        .find_player_vm_view_as(core, p, *c, false, Some(CardKind::Sha))
+                        .is_some()
+            })
+            .collect();
+        for c in catalog.player_vm_view_as_extra_cards(core, p, false, Some(CardKind::Sha)) {
+            if !shas.contains(&c) {
+                shas.push(c);
+            }
+        }
+        if !shas.is_empty() {
+            return Some((p, shas));
+        }
+    }
+    None
+}
+

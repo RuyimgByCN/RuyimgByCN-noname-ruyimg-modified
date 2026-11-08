@@ -1126,6 +1126,7 @@ impl HostBehavior {
             // 机关怨待获得（A2 H71）：上游 jiguanyuan player phaseEnd＝
             // 拥有者整回合结束强制获得置牌
             HostBehavior::SwdJiguanyuanGain => Some(TriggerMeta {
+                // 第 933 轮核实：上游 card/swd/skill.js:498 jiguanyuan 为 player: phaseEnd（旧台账 G23b 误归因 EventKind::Damage）
                 event: EventKind::TurnPhaseEnd,
                 timing: Timing::Normal,
                 priority: 0,

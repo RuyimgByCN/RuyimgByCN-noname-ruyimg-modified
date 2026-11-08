@@ -872,7 +872,7 @@ impl HostBehavior {
                 extra_events: Vec::new(),
             }),
             HostBehavior::GwentCiguState => Some(TriggerMeta {
-                // 上游 `gw_ciguhanshuang`: `{player:'phaseDrawBegin'}`（第 938 轮）
+                // 上游 `gw_ciguhanshuang`: `{player:'phaseDrawBegin'}`（第 938 轮：摸牌数扣减由 kernel/draw.rs DrawBefore 前窗承载，PhaseBegin 移除状态）
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,

@@ -91,9 +91,20 @@ pub fn card_id_colored(e: &Engine, name: &str, red: Option<bool>) -> engine_nati
 
 /// 把指定 id 的牌**直接放入手牌**（绕开 `debug_place`）。
 pub fn put_hand(e: &mut Engine, player: u8, id: engine_native::CardId) {
+    let kind = e.catalog().card_kind(id);
+    let actual_id = if e.state_core().player(player).hand.contains(&id) {
+        (0..e.catalog().cards.len() as engine_native::CardId)
+            .find(|&cid| {
+                !e.state_core().player(player).hand.contains(&cid)
+                    && e.catalog().card_kind(cid) == kind
+            })
+            .unwrap_or(id)
+    } else {
+        id
+    };
     let core = e.state_core_mut();
-    core.player_mut(player).hand.retain(|c| *c != id);
-    core.player_mut(player).hand.push(id);
+    core.player_mut(player).hand.retain(|c| *c != actual_id);
+    core.player_mut(player).hand.push(actual_id);
 }
 
 /// 把指定 id 的牌放入**判定区**。

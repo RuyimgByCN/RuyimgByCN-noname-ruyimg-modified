@@ -65,6 +65,7 @@ impl HostSkillBehavior {
             },
             HostBehavior::ChenhuodajieCard => match event {
                 EventData::CardUsed(u) => (u.targets.first().copied(), u.card),
+                EventData::Damage(d) => (Some(d.target), None),
                 _ => (None, None),
             },
             HostBehavior::TouliangSwap => match event {

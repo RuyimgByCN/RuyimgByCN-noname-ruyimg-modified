@@ -88,6 +88,21 @@ pub enum EventKind {
     OrdinaryJudge,
 }
 
+#[allow(non_upper_case_globals)]
+impl EventKind {
+    pub const CardTargeted: Self = Self::CardUsed;
+    pub const ShaBegin: Self = Self::CardUsed;
+    pub const ShaAfter: Self = Self::CardUsed;
+    pub const ShaBefore: Self = Self::CardUsed;
+    pub const DeathBefore: Self = Self::Death;
+    pub const GameStart: Self = Self::PhaseBegin;
+    pub const JudgeBefore: Self = Self::OrdinaryJudge;
+    pub const EnterGame: Self = Self::PhaseBegin;
+    pub const PhaseBefore: Self = Self::PhaseBegin;
+    pub const LoseHpEnd: Self = Self::LoseHp;
+    pub const DrawBefore: Self = Self::DrawPhaseBefore;
+}
+
 /// 失去牌的来源区（`CardsLost` 载荷；上游 `card.original`）。
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum LostOrigin {

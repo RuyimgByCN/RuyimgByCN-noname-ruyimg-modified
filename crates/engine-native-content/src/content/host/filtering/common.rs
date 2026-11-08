@@ -557,7 +557,7 @@ impl HostSkillBehavior {
             HostBehavior::WangmeiZhikeCard => false,
             HostBehavior::ShuigongCard => false,
             HostBehavior::FudichouxinCompare => false,
-            HostBehavior::ChenhuodajieCard => false,
+            HostBehavior::ChenhuodajieCard => chenhuodajie_damage_gate(ctx, owner, event),
             HostBehavior::TouliangSwap => false,
             HostBehavior::LinghunzhihuoCard => false,
             HostBehavior::ZhaomingdanCard => false,
@@ -880,13 +880,8 @@ impl HostSkillBehavior {
                 EventData::Damage(d)
                 if d.target == owner && !d.prevented && d.amount > 0),
             HostBehavior::BossBaiyi => {
-                let armed = ctx.state.boss_stage().map(|s| s.wing_armed).unwrap_or(0);
-                matches!(event,
-                    EventData::Phase { player, phase: crate::event::Phase::Judge, begin: true }
-                    if *player == owner
-                        && ctx.state.turn.round == 5
-                        && armed & WING_BAI_5 == 0
-                        && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false))
+                // phase: crate::event::Phase::Judge, begin: true
+                wing_bai_gate(ctx, owner, event)
             }
             HostBehavior::BossBaiyiThunder => matches!(event,
                 EventData::Damage(d)

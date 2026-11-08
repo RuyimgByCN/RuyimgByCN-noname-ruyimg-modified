@@ -44,7 +44,6 @@ fn yunchou_engine(seed: u64) -> Engine {
 /// ②窗口需**目标选择**，而夹具/流程未提供；③`{ global: … }` 语义差异（窗口可能只对受伤者本人开放）。
 /// 用例以 `#[ignore]` 作为修复/夹具补齐后的验收条件（第 53 项）。
 #[test]
-#[ignore = "趁火打劫 damageEnd 窗口未出现（伤害已确认发生）——见第 53 项"]
 fn upstream_chenhuodajie_window_after_damage() {
     let mut e = yunchou_engine(20288401);
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
@@ -143,10 +142,10 @@ fn upstream_chenhuodajie_window_after_damage() {
         e.debug_hp(1),
         e.state_core().player(1).max_hp
     );
-    if !used {
-        eprintln!("NOTE 趁火打劫窗口：未识别到窗口（询问见上）——本用例不构成验收");
-        return;
-    }
+    assert!(
+        used,
+        "趁火打劫：0 号应获 damageEnd 窗口并使用（实际询问={prompts:?}）"
+    );
     assert_eq!(
         he_before - he_after,
         1,
@@ -247,3 +246,95 @@ fn upstream_chenhuodajie_window_damaged_player_holds_it() {
          若两边都没有 ⇒ 候选①/②（窗口未实现或需其它条件）"
     );
 }
+
+/// 趁火打劫（装备区路径）：受伤者无手牌、仅装备区有牌时，通过 `take_owned_card`
+/// 取走装备牌并置入发动者手牌。
+#[test]
+fn upstream_chenhuodajie_window_steals_equip_via_take_owned_card() {
+    let mut e = yunchou_engine(20288403);
+    assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+        e.state_core_mut().player_mut(p).equips.clear();
+    }
+    let chd = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("chenhuodajie"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("趁火打劫在目录");
+    nc08_common::put_hand(&mut e, 0, chd);
+    let equip_id = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.kind == engine_native::CardKind::Weapon)
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("武器牌在目录");
+    nc08_common::put_equips(&mut e, 1, equip_id);
+    let sha = e.debug_place(0, "sha");
+
+    let _ = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard {
+            card: sha,
+            targets: vec![1],
+        },
+    });
+    for _ in 0..32 {
+        let Some(c) = e.open_choice().cloned() else { break };
+        if c.observer == 0 && c.spec.options.contains(&ChoiceOption::Card(chd)) {
+            let _ = e.submit(GameCommand {
+                actor: 0,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Card(chd)],
+                },
+            });
+            continue;
+        }
+        if c.observer == 0 && c.spec.options.contains(&ChoiceOption::Confirm) {
+            let _ = e.submit(GameCommand {
+                actor: 0,
+                expected_revision: e.revision(),
+                dedup_id: next_dedup(),
+                action: GameAction::Answer {
+                    choice_id: c.id,
+                    selection: vec![ChoiceOption::Confirm],
+                },
+            });
+            continue;
+        }
+        let sel: Vec<ChoiceOption> = if c.spec.options.contains(&ChoiceOption::Pass) {
+            vec![ChoiceOption::Pass]
+        } else if c.spec.allow_cancel {
+            Vec::new()
+        } else {
+            c.spec.options.iter().take(c.spec.min.max(1)).copied().collect()
+        };
+        let _ = e.submit(GameCommand {
+            actor: c.observer,
+            expected_revision: e.revision(),
+            dedup_id: next_dedup(),
+            action: GameAction::Answer {
+                choice_id: c.id,
+                selection: sel,
+            },
+        });
+    }
+    drain(&mut e);
+
+    assert!(e.debug_equips(1).is_empty(), "1 号装备应被趁火打劫取走");
+    assert!(
+        e.debug_hand(0).contains(&equip_id),
+        "0 号手牌应获得 1 号原装备牌"
+    );
+}
+

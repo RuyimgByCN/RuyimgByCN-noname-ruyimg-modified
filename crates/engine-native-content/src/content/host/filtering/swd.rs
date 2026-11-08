@@ -77,7 +77,7 @@ impl HostSkillBehavior {
             HostBehavior::SwdJinlin2 => matches!(event,
                 EventData::TurnBegin { player } if *player == owner),
             HostBehavior::SwdTianshu => false,
-            // 诛害：他人结束阶段开始、其本回合造成过伤害、自己有杀且在射程内
+            // 诛害：结束阶段开始、其本回合造成过伤害、自己有杀且在射程内
             HostBehavior::SwdZhuhai => match event {
                 EventData::Phase {
                     player,
@@ -85,8 +85,7 @@ impl HostSkillBehavior {
                     begin: true,
                 } => {
                     let t = *player;
-                    t != owner
-                        && ctx.state.player(t).alive
+                    ctx.state.player(t).alive
                         && ctx.state.player(t).turn_damage > 0
                         && ctx
                             .state
@@ -94,6 +93,7 @@ impl HostSkillBehavior {
                             .hand
                             .iter()
                             .any(|c| ctx.catalog.cards[*c as usize].kind.is_sha_like())
+                        && ctx.state.seat_distance_alive(owner, t) > 0
                         && ctx.state.computed_distance(ctx.catalog, owner, t)
                             <= ctx.state.attack_range(ctx.catalog, owner)
                 }
@@ -191,18 +191,17 @@ impl HostSkillBehavior {
                     && !d.prevented
                     && ctx.state.turn.guxing_armed),
             HostBehavior::SwdNlianji => false,
-            // 热血：阶段玩家不是自己，且在杀范围内，自己手牌有杀
+            // 热血：在杀范围内，自己手牌有杀
             HostBehavior::SwdRexue => {
-                // A2 H42：上游 global phaseBegin＝他人回合开始（每回合一次）。
+                // A2 H42：上游 global phaseBegin＝回合开始（每回合一次）。
                 if let EventData::TurnBegin { player } = event {
                     let actor = *player;
-                    actor != owner
-                        && ctx
-                            .state
-                            .player(owner)
-                            .hand
-                            .iter()
-                            .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Sha)
+                    ctx.state
+                        .player(owner)
+                        .hand
+                        .iter()
+                        .any(|c| ctx.catalog.card_kind(*c) == crate::catalog::CardKind::Sha)
+                        && ctx.state.seat_distance_alive(owner, actor) > 0
                         && ctx.state.computed_distance(ctx.catalog, owner, actor)
                             <= ctx.state.attack_range(ctx.catalog, owner)
                 } else {
@@ -659,7 +658,7 @@ impl HostSkillBehavior {
             // A2 H38：上游 lexue1 player phaseBegin＝回合开始（原锚判定
             // 开始；lexue2 phaseEnd 双池收敛语义保持，见上注释）。
             HostBehavior::SwdLexue => matches!(event,
-                EventData::TurnBegin { .. } if ctx.state.player(owner).alive),
+                EventData::TurnBegin { player } if *player == owner && ctx.state.player(owner).alive),
             // 枕流触发面（A2 H39）：上游 player phaseBegin＝自己回合开始且
             // off_court 有牌（原锚自己判定阶段开始）
             HostBehavior::SwdZhenjiu2 => matches!(event,

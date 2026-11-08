@@ -470,7 +470,7 @@ impl HostMachine {
             // 热血：对阶段玩家视为使用一张杀，然后摸 1
             // （登记差异：虚拟杀不消耗实体杀；恒发动近似）
             HostBehavior::SwdRexue => {
-                if let Some(actor) = self.target {
+                if let Some(actor) = self.target.filter(|&a| a != self.owner) {
                     ctx.use_virtual_card(self.owner, CardKind::Sha, vec![actor]);
                     ctx.start_draw(self.owner, 1);
                 }

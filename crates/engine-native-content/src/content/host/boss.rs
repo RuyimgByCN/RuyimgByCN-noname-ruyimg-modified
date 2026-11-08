@@ -52,6 +52,48 @@ pub(super) fn wing_round_gate(
     armed & bit == 0
 }
 
+pub(super) fn wing_bai_gate(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    event: &EventData,
+) -> bool {
+    let armed = ctx.state.boss_stage().map(|s| s.wing_armed).unwrap_or(0);
+    matches!(
+        event,
+        EventData::Phase {
+            player,
+            phase: crate::event::Phase::Judge,
+            begin: true
+        } if *player == owner
+            && ctx.state.turn.round == 5
+            && armed & WING_BAI_5 == 0
+            && ctx.state.boss_mode().map(|(b, _)| b == owner).unwrap_or(false)
+    )
+}
+
+pub(super) fn chenhuodajie_damage_gate(
+    ctx: &QueryCtx<'_>,
+    owner: PlayerId,
+    event: &EventData,
+) -> bool {
+    let EventData::Damage(d) = event else {
+        return false;
+    };
+    !d.prevented
+        && d.amount > 0
+        && d.target != owner
+        && ctx.state.player(owner).alive
+        && ctx.state.player(d.target).alive
+        && (!ctx.state.player(d.target).hand.is_empty()
+            || !ctx.state.player(d.target).equips.is_empty())
+        && ctx
+            .state
+            .player(owner)
+            .hand
+            .iter()
+            .any(|c| ctx.catalog.card_kind(*c) == CardKind::Chenhuodajie)
+}
+
 pub(super) fn with_boss_stage(
     ctx: &mut Ctx<'_>,
     f: impl FnOnce(&mut crate::state::BossStageState),

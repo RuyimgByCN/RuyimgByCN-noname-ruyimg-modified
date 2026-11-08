@@ -19,6 +19,7 @@ impl HostBehavior {
             HostBehavior::WudianGuihan => None,
             // 负仇（A2 H72）：上游 global phaseAfter。
             HostBehavior::WudianFuchou2 => Some(TriggerMeta {
+                // 第 986 轮 & R05 H72：上游为 global: phaseAfter（旧守卫误标 PhaseBefore），由 TurnPhaseAfter 承载
                 event: EventKind::TurnPhaseAfter,
                 timing: Timing::Normal,
                 priority: 0,

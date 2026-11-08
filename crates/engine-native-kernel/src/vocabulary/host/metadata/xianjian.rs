@@ -362,6 +362,7 @@ impl HostBehavior {
             HostBehavior::XianjianHuahu => None,
             HostBehavior::XianjianXtanxi => None,
             HostBehavior::XianjianFenglue => Some(TriggerMeta {
+                // 第 919 轮 & R05 H48：上游 phaseUseBefore 与 PhaseBegin(Play, begin: true) 同刻（无需独立 PhaseBefore）
                 event: EventKind::PhaseBegin,
                 timing: Timing::Normal,
                 priority: 0,

@@ -539,6 +539,26 @@ pub fn standard_catalog_with_extensions(
             });
         }
     }
+    if ext_cards
+        .iter()
+        .any(|c| c.kind == crate::catalog::CardKind::Chenhuodajie)
+        && base_names.insert(crate::content::host::WD_CHENHUO_KEY)
+        && host_names.insert(crate::content::host::WD_CHENHUO_KEY.to_string())
+    {
+        let mut def = host_skill_def(
+            crate::content::host::WD_CHENHUO_KEY.to_string(),
+            crate::content::host::HostBehavior::ChenhuodajieCard,
+        );
+        def.trigger = Some(crate::catalog::TriggerMeta {
+            event: crate::event::EventKind::Damage,
+            timing: crate::event::Timing::Normal,
+            priority: 0,
+            order_selectable: false,
+            optional: true,
+            extra_events: Vec::new(),
+        });
+        ext_skills.push(def);
+    }
     let cards = merge_extension_cards(cards, &ext_cards)?;
     let mut skills = skills;
     let ext_skill_start = skills.len();
@@ -559,15 +579,14 @@ pub fn standard_catalog_with_extensions(
         .enumerate()
         .filter_map(|(id, def)| {
             let behavior = def.behavior.as_host_behavior()?;
-            packs
-                .iter()
-                .any(|p| {
+            (behavior == crate::content::host::HostBehavior::ChenhuodajieCard
+                || packs.iter().any(|p| {
                     p.enabled
                         && (p.init_hook.grants_global_skill(behavior)
                             || (behavior == crate::content::host::HostBehavior::JinlianzhuCancel
                                 && p.host_skills.iter().any(|d| d.behavior == behavior)))
-                })
-                .then_some(id as crate::ids::SkillDefId)
+                }))
+            .then_some(id as crate::ids::SkillDefId)
         })
         .collect();
     // R05-H（§8）：装载器随派生 helper 下传的公开逻辑身份并入目录

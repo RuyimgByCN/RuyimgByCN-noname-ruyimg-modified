@@ -750,8 +750,27 @@ impl HostMachine {
                 let Some(t) = self.target else {
                     return Flow::Done;
                 };
-                if let Some(c) = ctx.core.player(t).hand.first().copied() {
-                    ctx.core.player_mut(t).hand.retain(|x| *x != c);
+                if self.card.is_none() {
+                    if let Some(chd) = ctx
+                        .core
+                        .player(self.owner)
+                        .hand
+                        .iter()
+                        .copied()
+                        .find(|c| ctx.catalog.card_kind(*c) == CardKind::Chenhuodajie)
+                    {
+                        ctx.discard_from_hand(self.owner, chd);
+                    }
+                }
+                if let Some(c) = ctx
+                    .core
+                    .player(t)
+                    .hand
+                    .first()
+                    .copied()
+                    .or_else(|| ctx.core.player(t).equips.first().copied())
+                {
+                    ctx.take_owned_card(t, c);
                     ctx.core.player_mut(self.owner).hand.push(c);
                     ctx.log(LogEvent::CardsGiven {
                         from: t,
@@ -786,7 +805,55 @@ impl HostMachine {
                 Flow::Done
             }
             HostBehavior::JihuocardDraw => {
-                ctx.start_draw(self.owner, 1);
+                let is_shenenshu = self
+                    .card
+                    .is_some_and(|c| ctx.catalog.cards[c as usize].name.contains("shenenshu"));
+                if is_shenenshu {
+                    let old_hand: Vec<CardId> = ctx.core.player(self.owner).hand.clone();
+                    let need = 1 + old_hand.len();
+                    for c in old_hand {
+                        ctx.discard_from_hand(self.owner, c);
+                    }
+                    let mut gained: Vec<CardId> = Vec::with_capacity(need);
+                    let is_basic = |catalog: &crate::catalog::Catalog, c: CardId| {
+                        let def = &catalog.cards[c as usize];
+                        !def.name.contains("du")
+                            && matches!(
+                                def.kind,
+                                CardKind::Sha | CardKind::Shan | CardKind::Tao | CardKind::Jiu
+                            )
+                    };
+                    let mut i = 0;
+                    while i < ctx.core.deck.len() && gained.len() < need {
+                        let c = ctx.core.deck[i];
+                        if is_basic(ctx.catalog, c) {
+                            ctx.core.deck.remove(i);
+                            ctx.core.player_mut(self.owner).hand.push(c);
+                            gained.push(c);
+                        } else {
+                            i += 1;
+                        }
+                    }
+                    let mut j = 0;
+                    while j < ctx.core.discard.len() && gained.len() < need {
+                        let c = ctx.core.discard[j];
+                        if is_basic(ctx.catalog, c) {
+                            ctx.core.discard.remove(j);
+                            ctx.core.player_mut(self.owner).hand.push(c);
+                            gained.push(c);
+                        } else {
+                            j += 1;
+                        }
+                    }
+                    if !gained.is_empty() {
+                        ctx.log(LogEvent::CardsDrawn {
+                            player: self.owner,
+                            cards: gained,
+                        });
+                    }
+                } else {
+                    ctx.start_draw(self.owner, 1);
+                }
                 if let Some(c) = self.card {
                     ctx.to_discard(c);
                     ctx.core.table.retain(|x| *x != c);

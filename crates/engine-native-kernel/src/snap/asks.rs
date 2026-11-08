@@ -246,6 +246,23 @@ pub fn active_ask(
             }
             let responder = if *on_target { *target } else { *source };
             let options = response_kind_options(core, catalog, responder, CardKind::Sha);
+            if options.len() == 1 {
+                if let Some((helper, helper_shas)) =
+                    crate::kernel::jijiang_shu_helper(core, catalog, responder)
+                {
+                    let mut opts = vec![ChoiceOption::Pass];
+                    opts.extend(helper_shas.into_iter().map(ChoiceOption::Card));
+                    return Some(ask(
+                        helper,
+                        "duel_sha",
+                        ChoiceKind::RespondCard,
+                        opts,
+                        1,
+                        1,
+                        false,
+                    ));
+                }
+            }
             Some(ask(
                 responder,
                 "duel_sha",

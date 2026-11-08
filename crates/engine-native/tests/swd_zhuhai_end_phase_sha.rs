@@ -229,3 +229,50 @@ fn zhuhai_absent_no_window() {
     );
     drain(&mut e);
 }
+
+/// 回归：持技者（0 号）在自身回合造成伤害后进入自身结束阶段，`zhuhai` 不得对自身弹出空置确认窗；
+/// 持 `rexue`（已受伤）在自身回合开始时亦不得对自身触发虚拟杀。
+#[test]
+fn zhuhai_no_window_on_own_end_phase_and_rexue_no_self_trigger() {
+    let mut e = swd_engine(105005);
+    e.debug_grant(0, "zhuhai");
+    e.debug_grant(0, "rexue");
+    e.debug_clear_hand(0);
+    let sha = e.debug_place(0, "sha");
+    e.debug_give_hand_card(0, 0, sha);
+
+    // 推进到 0 号出牌阶段，0 号对 1 号造成 1 点伤害并对自身造成 1 点伤害（使 0 号已受伤）
+    let mut guard = 0;
+    while !(e.turn().current == 0 && e.turn().phase == Phase::Play) && guard < 12 {
+        next_phase(&mut e);
+        drain(&mut e);
+        guard += 1;
+    }
+    assert_eq!(e.turn().current, 0);
+    assert_eq!(e.turn().phase, Phase::Play);
+    let _ = e.debug_deal_damage(Some(0), 1, 1, DamageNature::Normal);
+    drain(&mut e);
+    let _ = e.debug_deal_damage(Some(1), 0, 1, DamageNature::Normal);
+    drain(&mut e);
+    assert!(e.state_core().player(0).turn_damage > 0);
+    assert!(e.state_core().player(0).hp < e.state_core().player(0).max_hp as i32);
+
+    // 推进到 0 号弃牌阶段，再进入 0 号结束阶段：zhuhai 不得对自身开 trigger_confirm 窗
+    while !(e.turn().current == 0 && e.turn().phase == Phase::Discard) && guard < 24 {
+        next_phase(&mut e);
+        drain(&mut e);
+        guard += 1;
+    }
+    assert_eq!(e.turn().current, 0);
+    assert_eq!(e.turn().phase, Phase::Discard);
+    next_phase(&mut e); // Discard -> End begin on player 0
+    let c = e.open_choice().cloned();
+    assert!(
+        c.as_ref().map(|c| c.spec.prompt != "trigger_confirm").unwrap_or(true),
+        "自身结束阶段 zhuhai 不得对自身弹出确认窗：{:?}",
+        c.map(|c| c.spec.prompt)
+    );
+    drain(&mut e);
+}
+
+

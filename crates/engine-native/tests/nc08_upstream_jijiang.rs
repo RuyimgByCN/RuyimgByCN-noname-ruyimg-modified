@@ -128,7 +128,6 @@ fn upstream_jijiang_lord_gate_is_design_difference() {
 /// `询问=[]`、`蜀势力代打=false`、`0 号 hp 4 → 4`（决斗未产生任何询问与伤害）→ **代打链路未对上**，
 /// 疑与「决斗的杀响应是否走激将入口」有关 → **根因待查**；用例以 `#[ignore]` 守护，**不写成通过**。
 #[test]
-#[ignore = "激将代打行为面：决斗场景下询问为空，代打链路未对上——根因待查，未构成验收"]
 fn upstream_jijiang_shu_ally_plays_sha_for_lord() {
     use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
     use nc08_common::{advance_to_play, drain, next_dedup};
@@ -215,14 +214,94 @@ fn upstream_jijiang_shu_ally_plays_sha_for_lord() {
         e.debug_hp(0),
         e.debug_hand(2)
     );
-    if !ally_played {
-        eprintln!("NOTE 未出现蜀势力代打【杀】的询问——本用例不构成验收（代打链路未对上）");
-        return;
-    }
+    assert!(
+        ally_played,
+        "激将：应出现蜀势力 2 号代打【杀】询问并打出（实际询问={prompts:?}）"
+    );
     // 2 号代打【杀】后，1 号方已出杀 → 轮到 0 号出杀；0 号无杀 → **0 号受伤**
     assert!(
         e.debug_hp(0) < hp0,
         "激将：蜀势力代打【杀】后，0 号无杀应对 → 0 号应受伤（{hp0} → {}）",
         e.debug_hp(0)
     );
+}
+
+/// 激将（决斗多蜀将逐人询问 + 存档恢复）：首位蜀将（2 号）选 Pass 后，
+/// 不应直接结算主公受伤，而应继续询问下一位蜀将（3 号），且挂起态可跨存档恢复。
+#[test]
+fn upstream_jijiang_duel_multi_ally_pass_then_second_ally_plays_sha_and_restores() {
+    use engine_native::{ChoiceOption, CommandOutcome, GameAction, GameCommand};
+    use nc08_common::{advance_to_play, drain, next_dedup};
+
+    let mut e = Engine::new(20269003, 4);
+    e.debug_grant(1, "激将");
+    let shu_names: Vec<String> = e
+        .general_candidates()
+        .into_iter()
+        .filter_map(|d| {
+            e.catalog().general_meta(d).and_then(|(n, f, _, _, _)| {
+                (f == engine_native::catalog::Faction::Shu).then(|| n.to_string())
+            })
+        })
+        .take(2)
+        .collect();
+    assert_eq!(shu_names.len(), 2, "应至少有 2 名蜀势力候选武将");
+    e.debug_assemble_general(2, &shu_names[0]);
+    e.debug_assemble_general(3, &shu_names[1]);
+    advance_to_play(&mut e, 0);
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let duel = e.debug_place(0, "duel");
+    let _sha2 = e.debug_place(2, "sha");
+    let sha3 = e.debug_place(3, "sha");
+    let hp0 = e.debug_hp(0);
+    let hp1 = e.debug_hp(1);
+
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard {
+            card: duel,
+            targets: vec![1],
+        },
+    });
+    assert!(matches!(out, CommandOutcome::Pending { .. }), "{out:?}");
+
+    // 首位蜀将（2 号）被询问，先验证存档恢复等价，再选 Pass
+    let c2 = e.open_choice().cloned().expect("应先询问 2 号蜀将");
+    assert_eq!(c2.observer, 2, "首位被询问者应为 2 号");
+    let snap2 = e.save();
+    let mut e = Engine::restore(&snap2).expect("恢复 2 号挂起态");
+    let _ = e.submit(GameCommand {
+        actor: 2,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c2.id,
+            selection: vec![ChoiceOption::Pass],
+        },
+    });
+
+    // 2 号 Pass 后，1 号不应受伤，应继续询问下一位蜀将（3 号）
+    assert_eq!(e.debug_hp(1), hp1, "2 号放弃后主公尚未受伤，应继续问 3 号");
+    let c3 = e.open_choice().cloned().expect("应继续询问 3 号蜀将");
+    assert_eq!(c3.observer, 3, "第二位被询问者应为 3 号");
+    assert!(c3.spec.options.contains(&ChoiceOption::Card(sha3)));
+    let snap3 = e.save();
+    let mut e = Engine::restore(&snap3).expect("恢复 3 号挂起态");
+    let _ = e.submit(GameCommand {
+        actor: 3,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::Answer {
+            choice_id: c3.id,
+            selection: vec![ChoiceOption::Card(sha3)],
+        },
+    });
+    drain(&mut e);
+
+    assert_eq!(e.debug_hp(1), hp1, "3 号代打【杀】后主公不应受伤");
+    assert_eq!(e.debug_hp(0), hp0 - 1, "0 号无杀应对，应受 1 点伤害");
 }

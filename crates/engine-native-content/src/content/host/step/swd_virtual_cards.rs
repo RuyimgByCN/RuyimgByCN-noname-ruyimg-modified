@@ -213,7 +213,7 @@ impl HostMachine {
                 HostStage::Act => {
                     let target = match ctx.res.frame(ctx.current_event_frame_id()).map(|f| &f.data)
                     {
-                        Some(EventData::Phase { player, .. }) => *player,
+                        Some(EventData::Phase { player, .. }) if *player != self.owner => *player,
                         _ => return Flow::Done,
                     };
                     self.target = Some(target);

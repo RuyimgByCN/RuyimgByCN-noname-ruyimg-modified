@@ -56,7 +56,6 @@ fn hearth_engine(seed: u64) -> Engine {
 /// **`shenenshu` 等复杂牌暂缓**）」⇒ **原生自己登记为「暂缓」**（非未记录的缺口）。
 /// 用例以 `#[ignore]` 作为实现后的验收条件。
 #[test]
-#[ignore = "神恩术：效果未实现（原生注释自述『shenenshu 等复杂牌暂缓』）——见第 44 项"]
 fn upstream_shenenshu_replaces_hand_with_basics() {
     let mut e = hearth_engine(20275201);
     assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
@@ -168,3 +167,70 @@ fn upstream_shenenshu_replaces_hand_with_basics() {
     );
     eprintln!("NOTE 神恩术：询问={prompts:?}（上游为 `list.randomGet()` 随机生成 ⇒ 原生确定性属族内口径）");
 }
+
+/// 回归：传入 2 张本就互异的非基本 CardId（`put_hand` 直接入置手牌而未从牌堆移除）时，
+/// 神恩术仍严格按 `1 + hand.len() = 3` 补满基本牌，不因牌堆残留同号而翻倍为 5 张。
+#[test]
+fn upstream_shenenshu_distinct_hand_cards_draw_exact_one_plus_hand_len() {
+    let mut e = hearth_engine(20275202);
+    assert!(advance_to_phase(&mut e, 0, Phase::Play), "应到达出牌阶段");
+    for p in 0..4 {
+        e.debug_clear_hand(p);
+    }
+    let card = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .find(|(_, c)| c.name.contains("shenenshu"))
+        .map(|(i, _)| i as engine_native::CardId)
+        .expect("神恩术在目录");
+    nc08_common::put_hand(&mut e, 0, card);
+
+    let distinct_non_basics: Vec<engine_native::CardId> = e
+        .catalog()
+        .cards
+        .iter()
+        .enumerate()
+        .filter(|(i, _)| {
+            *i as engine_native::CardId != card
+                && !matches!(
+                    e.catalog().card_kind(*i as engine_native::CardId),
+                    engine_native::CardKind::Sha
+                        | engine_native::CardKind::Shan
+                        | engine_native::CardKind::Tao
+                        | engine_native::CardKind::Jiu
+                )
+        })
+        .take(2)
+        .map(|(i, _)| i as engine_native::CardId)
+        .collect();
+    assert_eq!(distinct_non_basics.len(), 2);
+    for &id in &distinct_non_basics {
+        nc08_common::put_hand(&mut e, 0, id);
+    }
+    assert_eq!(e.debug_hand(0).len(), 3, "神恩术 + 2 张互异非基本手牌");
+
+    let out = e.submit(GameCommand {
+        actor: 0,
+        expected_revision: e.revision(),
+        dedup_id: next_dedup(),
+        action: GameAction::PlayCard { card, targets: vec![] },
+    });
+    assert!(
+        matches!(
+            out,
+            CommandOutcome::Accepted { .. } | CommandOutcome::Pending { .. }
+        ),
+        "神恩术应可发动：{out:?}"
+    );
+    drain(&mut e);
+    let hand = e.debug_hand(0);
+    assert_eq!(
+        hand.len(),
+        3,
+        "2 张互异原手牌发动神恩术应严格获得 1 + 2 = 3 张基本牌（实测 {}）",
+        hand.len()
+    );
+}
+
