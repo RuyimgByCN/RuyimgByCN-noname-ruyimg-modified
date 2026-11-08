@@ -641,43 +641,34 @@ mod tests {
         assert_eq!(all_dirs.len(), 46, "must cover all 46 extension packages");
 
         // 1. DesktopHost::import_extension_directory over all extension packages
+        //    (normalize CRLF in .json files so Windows core.autocrlf checkouts match LF source_hash)
         let tmp = tempfile::tempdir().expect("tempdir");
-        let has_crlf = all_dirs.iter().any(|dir| {
-            fs::read(raw_ext_root.join(dir).join("package.npack.json"))
-                .map(|b| b.contains(&b'\r'))
-                .unwrap_or(false)
-        });
-        let ext_root = if has_crlf {
-            let staged = tmp.path().join("extensions_lf");
-            for dir in &all_dirs {
-                let src_pkg = raw_ext_root.join(dir);
-                let dst_pkg = staged.join(dir);
-                fs::create_dir_all(dst_pkg.join("assets")).expect("create staged assets dir");
-                let npack_bytes: Vec<u8> = fs::read(src_pkg.join("package.npack.json"))
-                    .expect("read package.npack.json")
-                    .into_iter()
-                    .filter(|&b| b != b'\r')
-                    .collect();
-                fs::write(dst_pkg.join("package.npack.json"), npack_bytes)
-                    .expect("write staged package.npack.json");
-                if let Ok(entries) = fs::read_dir(src_pkg.join("assets")) {
-                    for entry in entries.flatten() {
-                        let path = entry.path();
-                        if path.is_file() {
-                            let mut bytes = fs::read(&path).expect("read asset");
-                            if path.extension().and_then(|e| e.to_str()) == Some("json") {
-                                bytes.retain(|&b| b != b'\r');
-                            }
-                            fs::write(dst_pkg.join("assets").join(entry.file_name()), bytes)
-                                .expect("write staged asset");
+        let ext_root = tmp.path().join("extensions_lf");
+        for dir in &all_dirs {
+            let src_pkg = raw_ext_root.join(dir);
+            let dst_pkg = ext_root.join(dir);
+            fs::create_dir_all(dst_pkg.join("assets")).expect("create staged assets dir");
+            let npack_bytes: Vec<u8> = fs::read(src_pkg.join("package.npack.json"))
+                .expect("read package.npack.json")
+                .into_iter()
+                .filter(|&b| b != b'\r')
+                .collect();
+            fs::write(dst_pkg.join("package.npack.json"), npack_bytes)
+                .expect("write staged package.npack.json");
+            if let Ok(entries) = fs::read_dir(src_pkg.join("assets")) {
+                for entry in entries.flatten() {
+                    let path = entry.path();
+                    if path.is_file() {
+                        let mut bytes = fs::read(&path).expect("read asset");
+                        if path.extension().and_then(|e| e.to_str()) == Some("json") {
+                            bytes.retain(|&b| b != b'\r');
                         }
+                        fs::write(dst_pkg.join("assets").join(entry.file_name()), bytes)
+                            .expect("write staged asset");
                     }
                 }
             }
-            staged
-        } else {
-            raw_ext_root
-        };
+        }
         let host_root = tmp.path().join("host_store");
         fs::create_dir_all(&host_root).expect("create host_store");
         let desktop = DesktopHost::open(
