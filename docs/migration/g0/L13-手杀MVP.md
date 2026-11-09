@@ -61,13 +61,11 @@
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
 - **统计汇总**：上游实体合计 **11** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 0 / 配置项 8 / 界面钩子 1 / 渲染面 2）
-- **状态分布**：`忠实实现` **11** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`忠实实现` **8** 项 · `示意或自造` **2** 项 · `缺失` **1** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
-| 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
-|---|---|---|---|---|
-| `shousha_mvp.rs` + `recordMvpEventFact` | `crates/content-native-loader/src/shousha_mvp.rs:1-210`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:740-777` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:1-512` | 原生规则（`shousha_mvp.rs`）+ 原生前端组件 | 忠实实现（已在 `shousha_mvp.rs` 与前端 HUD 计分板实现攻击/治疗/辅助/击杀计分与 `seq` 幂等去重） |
+- 本来源未被 `decision34_closure.rs` / `decision34_pack9.rs` 注入自造武将或默认摸 1 技能。
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -102,12 +100,12 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_qy_chongzhu` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2244` | 触发="_chongzhuBegin",；脚本逻辑 | 原生前端组件 | 忠实实现（已清除非上游规则副作用，并在 `extensionSurfaceRuntime.ts` / `ExtensionSurfacePanel.vue` 实现前端钩子与状态面板） |
+| `_qy_chongzhu` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.js:2244` | 触发="_chongzhuBegin",；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 
 ### 7.8 渲染面（Rendering Surfaces）（2 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.css:1-1310` | CSS 样式表 `extension.css`（1310 行） | 原生前端组件 | 忠实实现（已在 `extensionSurfaceRuntime.ts` 挂接对应 CSS 主题类并在 `ExtensionSurfacePanel.vue` 复刻布局样式） |
-| `extension_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension_new.css:1-227` | CSS 样式表 `extension_new.css`（227 行） | 原生前端组件 | 忠实实现（已在 `extensionSurfaceRuntime.ts` 挂接对应 CSS 主题类并在 `ExtensionSurfacePanel.vue` 复刻布局样式） |
+| `extension.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension.css:1-1310` | CSS 样式表 `extension.css`（1310 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
+| `extension_new.css` | `archive/upstream/noname-liuli/noname/extension/手杀MVP/extension_new.css:1-227` | CSS 样式表 `extension_new.css`（227 行） | 原生前端组件 | 示意或自造（仅抽屉摘要样式，未完整复刻上游 DOM/CSS 布局） |
 

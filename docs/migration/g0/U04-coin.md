@@ -62,13 +62,13 @@
 ## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
 
 - **统计汇总**：上游实体合计 **7** 项（武将 0 / 技能 0 / 卡牌 0 / 模式与战役节点 2 / 配置项 0 / 界面钩子 1 / 渲染面 4）
-- **状态分布**：`忠实实现` **7** 项 · `示意或自造` **0** 项 · `缺失` **0** 项
+- **状态分布**：`忠实实现` **3** 项 · `示意或自造` **4** 项 · `缺失` **0** 项
 
 ### 7.1 现有 `decision34*` / 前端示意代码逐条归类
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `renderCoinCanvasParticles` / `resolveCoinHonorTitle` / `[data-testid="coin-weather-overlay"]` | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:1123-1177`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:431-445` | `archive/upstream/noname/apps/core/extension/coin/extension.js:17-540` | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（已在 `coin.rs` 与前端 `<canvas data-testid="coin-particle-canvas">` 实现烟花/下雪/星云/闪烁粒子渲染与商店购买/下注状态机） |
+| `resolveCoinHonorTitle` / `[data-testid="coin-weather-overlay"]` | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:392-434`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:438-480` | `archive/upstream/noname/apps/core/extension/coin/extension.js:17-540` | 原生前端组件 | 示意或自造（CSS 示意粒子层，未复刻上游 `canvas` 烟花/下雪/星云/闪烁与窗口拖拽买道具交互） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -97,14 +97,14 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `coin_arenaReady` | `archive/upstream/noname/apps/core/extension/coin/extension.js:11` | 创建顶栏富甲天下金币按钮、商店弹窗与本局获胜 20 金下注入口 | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（规则结算已在 `coin.rs` 落地，前端交互已在 `ExtensionSurfacePanel.vue` 落地） |
+| `coin_arenaReady` | `archive/upstream/noname/apps/core/extension/coin/extension.js:11` | 创建顶栏富甲天下金币按钮、商店弹窗与本局获胜 20 金下注入口 | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（规则结算已在 `coin.rs` 落地） |
 
 ### 7.8 渲染面（Rendering Surfaces）（4 项）
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `haveFun.firework` | `archive/upstream/noname/apps/core/extension/coin/extension.js:129` | 富甲天下商店特效 `firework`（烟花 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（商店状态机在 `coin.rs`，2D Canvas 粒子动画已在 `renderCoinCanvasParticles` 落地） |
-| `haveFun.snow` | `archive/upstream/noname/apps/core/extension/coin/extension.js:133` | 富甲天下商店特效 `snow`（下雪 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（商店状态机在 `coin.rs`，2D Canvas 粒子动画已在 `renderCoinCanvasParticles` 落地） |
-| `haveFun.star` | `archive/upstream/noname/apps/core/extension/coin/extension.js:148` | 富甲天下商店特效 `star`（星云 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（商店状态机在 `coin.rs`，2D Canvas 粒子动画已在 `renderCoinCanvasParticles` 落地） |
-| `haveFun.blink` | `archive/upstream/noname/apps/core/extension/coin/extension.js:152` | 富甲天下商店特效 `blink`（闪烁 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 忠实实现（商店状态机在 `coin.rs`，2D Canvas 粒子动画已在 `renderCoinCanvasParticles` 落地） |
+| `haveFun.firework` | `archive/upstream/noname/apps/core/extension/coin/extension.js:129` | 富甲天下商店特效 `firework`（烟花 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意或自造（商店购买状态机已忠实实现，前端 Canvas 粒子为 CSS 示意层） |
+| `haveFun.snow` | `archive/upstream/noname/apps/core/extension/coin/extension.js:133` | 富甲天下商店特效 `snow`（下雪 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意或自造（商店购买状态机已忠实实现，前端 Canvas 粒子为 CSS 示意层） |
+| `haveFun.star` | `archive/upstream/noname/apps/core/extension/coin/extension.js:148` | 富甲天下商店特效 `star`（星云 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意或自造（商店购买状态机已忠实实现，前端 Canvas 粒子为 CSS 示意层） |
+| `haveFun.blink` | `archive/upstream/noname/apps/core/extension/coin/extension.js:152` | 富甲天下商店特效 `blink`（闪烁 Canvas 粒子与启停控制） | 原生规则（`coin.rs`）+ 原生前端组件 | 示意或自造（商店购买状态机已忠实实现，前端 Canvas 粒子为 CSS 示意层） |
 

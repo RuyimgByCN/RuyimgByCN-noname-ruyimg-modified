@@ -573,11 +573,18 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
         "L14 UI hooks must not deal combat damage"
     );
 
+    let hand_before_baozou = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "baozou", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(flag(&e, 0, "l19_baozou_active"), 1);
+    assert_eq!(flag(&e, 0, "l19_baozou_sha_unlimited"), 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_baozou,
+        "L19 baozou (`末日乱斗/extension.js:333-347`) is mod.cardUsable(sha)->Infinity and must not draw cards"
+    );
     invoke_p9_op(&mut e, 0, "ganran", L19_DOOMSDAY_SKILL_ID);
     invoke_p9_op(&mut e, 0, "ganran2", L19_DOOMSDAY_SKILL_ID);
     invoke_p9_op(&mut e, 0, "ganran", L19_DOOMSDAY_SKILL_ID);
-    assert_eq!(flag(&e, 0, "l19_baozou_active"), 1);
     assert_eq!(flag(&e, 0, "doomsday_mutated"), 1);
 
     // L20 `zhengsu` (`标记补充/extension.js:244`) violation negative guard + reward positive path

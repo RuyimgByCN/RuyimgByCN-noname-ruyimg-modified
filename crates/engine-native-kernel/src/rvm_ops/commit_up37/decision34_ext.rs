@@ -50,8 +50,9 @@ pub(super) fn resolve_mbcmxscw(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
 }
 
-/// `U01` (`3D精选` — `archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4-6368`):
-/// Authentic per-skill state transitions for all remaining 56 `ddd*` skills in `U01_DDD_SKILLS`.
+/// `U01` (`3D精选` — `archive/upstream/noname/apps/core/extension/3D精选/character/skill.js`):
+/// Authentic per-skill state transitions for implemented `ddd*` skills without any
+/// grouped or default `ctx.start_draw(owner, 1)` fallback branches.
 pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
     match skill_name {
@@ -66,16 +67,6 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
                 set_flag(ctx.core, owner, "ddd_xianxi_backfire", 1);
             }
         }
-        // dddlingyong 凌勇 & dddxuxiao 虚笑 (`3D精选/character/skill.js:35-58, 1165-1264`):
-        "dddlingyong" | "dddxuxiao" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_judged"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddyuanzhen 远阵 & dddzhishu 治戍 (`3D精选/character/skill.js:4765-4865`):
-        "dddyuanzhen" | "dddzhishu" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_frontier"), 1);
-            ctx.start_draw(owner, 1);
-        }
         // dddjuxian 举贤 (`3D精选/character/skill.js:275-383`):
         "dddjuxian" => {
             if let Some(c) = ctx.core.player(owner).hand.first().copied() {
@@ -85,48 +76,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
             set_flag(ctx.core, owner, "ddd_juxian_virtue", 1);
             ctx.start_draw(other, 1);
         }
-        // dddjinggou 劲弩 & dddmoyan 默言 (`3D精选/character/skill.js:441-510`):
-        "dddjinggou" | "dddmoyan" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_crossbow"), 1);
-            if skill_name == "dddjinggou" && other != owner {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(
-                    Some(owner),
-                    other,
-                    1,
-                )));
-            } else {
-                ctx.start_draw(owner, 1);
-            }
-        }
-        // dddanliu 暗流 & dddguiying 归影 (`3D精选/character/skill.js:4065-4265`):
-        "dddanliu" | "dddguiying" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_sunliang"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddbingjian 并肩 & dddtongyu 统御 (`3D精选/character/skill.js:3855-4064`):
-        "dddbingjian" | "dddtongyu" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_tactic"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddzhilian 致怜 & dddjijian / dddjijian_old 赍剑 (`3D精选/character/skill.js:1456-1589`):
-        "dddzhilian" => {
-            set_flag(ctx.core, owner, "ddd_zhilian_shared", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "dddjijian" | "dddjijian_old" => {
-            set_flag(ctx.core, owner, "ddd_jijian_gifted", 1);
-            ctx.start_draw(other, 1);
-        }
-        // dddzhengjun 整军 (`3D精选/character/skill.js:1066-1164`):
-        "dddzhengjun" => {
-            set_flag(ctx.core, owner, "ddd_zhengjun_adjusted", 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddxuyu / dddxuyu_old 蓄誉 & dddshijian / dddshijian_old 识鉴 (`3D精选/character/skill.js:2352-2509`):
-        "dddxuyu" | "dddxuyu_old" => {
-            set_flag(ctx.core, owner, "ddd_xuyu_praise", 1);
-            ctx.start_draw(owner, 1);
-        }
+        // dddshijian / dddshijian_old 识鉴 (`3D精选/character/skill.js:2352-2509`):
         "dddshijian" | "dddshijian_old" => {
             if let Some(c) = ctx.core.player(owner).hand.first().copied() {
                 ctx.take_hand_card(owner, c);
@@ -134,34 +84,10 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
             }
             set_flag(ctx.core, owner, "ddd_shijian_granted", 1);
         }
-        // dddtaisi 太阿 & dddquche 驱车 (`3D精选/character/skill.js:2710-2818`):
-        "dddtaisi" | "dddquche" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_caomao"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // ddddongcha 洞察 & dddzhijie 智诫 (`3D精选/character/skill.js:864-963`):
+        // ddddongcha 洞察 (`3D精选/character/skill.js:864-963`):
         "ddddongcha" => {
             set_flag(ctx.core, owner, "ddd_dongcha_inspected", 1);
             set_flag(ctx.core, other, "ddd_dongcha_hand_revealed", 1);
-        }
-        "dddzhijie" => {
-            set_flag(ctx.core, owner, "ddd_zhijie_shown", 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddqiahua 洽话, dddxunxun 恂恂, dddfusi / dddfusi_global 腹思, dddtuoji 托寄 (`3D精选/character/skill.js:964-1065`):
-        "dddqiahua" | "dddxunxun" | "dddfusi" | "dddfusi_global" | "dddtuoji" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_scholar"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddchashi 察势 (`3D精选/character/skill.js:3450-3506`):
-        "dddchashi" => {
-            set_flag(ctx.core, owner, "ddd_chashi_predicted", 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddmiaoxing 淼形 & dddfushi 赋诗 (`3D精选/character/skill.js:1590-1764`):
-        "dddmiaoxing" | "dddfushi" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_active"), 1);
-            ctx.start_draw(owner, 1);
         }
         // dddfenji 奋激 (`3D精选/character/skill.js:1765-1829`):
         "dddfenji" => {
@@ -172,59 +98,9 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
             });
             ctx.start_draw(owner, 2);
         }
-        // dddxiaheng 侠横 (`3D精选/character/skill.js:1905-2044`):
-        "dddxiaheng" => {
-            set_flag(ctx.core, owner, "ddd_xiaheng_valor", 1);
-            ctx.start_draw(owner, 2);
-        }
-        // dddfengzheng 丰政, dddyulv / dddyulv_old 玉律 (`3D精选/character/skill.js:2045-2184`):
-        "dddfengzheng" | "dddyulv" | "dddyulv_old" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_governance"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddfenye 分野 & dddshichao 侍朝 (`3D精选/character/skill.js:2185-2351`):
-        "dddfenye" | "dddshichao" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_court"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddyouxue 游学 & dddchengjing 澄静 (`3D精选/character/skill.js:2510-2649`):
-        "dddyouxue" | "dddchengjing" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_hermit"), 1);
-            ctx.start_draw(owner, 1);
-        }
         // dddduanbing 短兵 (`3D精选/character/skill.js:2650-2709`):
         "dddduanbing" => {
             set_flag(ctx.core, owner, "ddd_dddduanbing_range_mod", 1);
-        }
-        // dddxiaoxing 枭行, dddlangzhi 狼志, dddfuyi 附翼 (`3D精选/character/skill.js:4565-4764`):
-        "dddxiaoxing" | "dddlangzhi" | "dddfuyi" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_steppe"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddzhuanshe 专摄 & dddweiqiu 危求 (`3D精选/character/skill.js:2915-3109`):
-        "dddzhuanshe" | "dddweiqiu" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_authority"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddlianer 怜儿 & dddanzhi 安志 (`3D精选/character/skill.js:3110-3284`):
-        "dddlianer" | "dddanzhi" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_palace"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddshixing 嗜幸, ddddanggu 党锢, dddfuzong 复宗 (`3D精选/character/skill.js:3285-3449`):
-        "dddshixing" | "ddddanggu" | "dddfuzong" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_emperor"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddlanghuai 朗怀 & dddxuanlun 玄论 (`3D精选/character/skill.js:3585-3764`):
-        "dddlanghuai" | "dddxuanlun" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_metaphysics"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        // dddjiexing 劫行 & dddbailei 败类 (`3D精选/character/skill.js:3765-3854`):
-        "dddjiexing" | "dddbailei" => {
-            set_flag(ctx.core, owner, &format!("ddd_{skill_name}_raider"), 1);
-            ctx.start_draw(owner, 1);
         }
         _ => {
             set_flag(ctx.core, owner, &format!("ddd_specific:{skill_name}"), 1);
@@ -233,15 +109,12 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
 }
 
 /// `L28` (`雷霆万钧` — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3781-8968`):
-/// Authentic per-skill state transitions for the remaining `th_*` skills.
+/// Authentic per-skill state transitions for implemented `th_*` skills without any
+/// grouped or default `ctx.start_draw(owner, 1)` fallback branches.
 pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, &format!("th_skill:{skill}"), 1);
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
     match skill {
-        "th_bushi" => {
-            set_flag(ctx.core, owner, "th_bushi_charity", 1);
-            ctx.start_draw(owner, 1);
-        }
         "th_zhongzhuang" => {
             set_flag(ctx.core, owner, "th_zhongzhuang_mounted", 1);
         }
@@ -253,10 +126,6 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
             } else {
                 ctx.start_draw(owner, 2);
             }
-        }
-        "th_guili" => {
-            set_flag(ctx.core, owner, "th_guili_reset", 1);
-            ctx.start_draw(owner, 1);
         }
         "th_chongxu" => {
             let marks = flag(ctx.core, owner, "th_chongxu_marks") + 2;
@@ -273,51 +142,17 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
                 )));
             }
         }
-        "shhlianhua" => {
-            set_flag(ctx.core, owner, "th_shhlianhua_lotus", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "th_shengong" | "olqisi" => {
-            set_flag(ctx.core, owner, "th_shengong_forged", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "th_pingcai" => {
-            set_flag(ctx.core, owner, "th_pingcai_relic", 1);
-            ctx.start_draw(owner, 1);
-        }
         "xinfu_pdgyingshi" => {
             set_flag(ctx.core, owner, "th_yingshi_hermit", 1);
-        }
-        "th_zhengjing" | "th_zhengjing2" => {
-            set_flag(ctx.core, owner, "th_zhengjing_classic", 1);
-            ctx.start_draw(owner, 2);
-        }
-        "th_chengye" => {
-            set_flag(ctx.core, owner, "th_chengye_six_classics", 1);
-            ctx.start_draw(owner, 1);
-        }
-        "th_buxu" | "th_yufeng" | "th_tianshu" => {
-            let scrolls = flag(ctx.core, owner, "th_tianshu_scrolls") + 1;
-            set_flag(ctx.core, owner, "th_tianshu_scrolls", scrolls);
-            ctx.start_draw(owner, 1);
         }
         "th_tiansuan" | "th_tiansuan2" => {
             let lot = (flag(ctx.core, owner, "th_tiansuan_lot") % 5) + 1;
             set_flag(ctx.core, owner, "th_tiansuan_lot", lot);
             ctx.start_draw(owner, 1);
         }
-        "th_gushe2" | "rejici" => {
-            let marks = flag(ctx.core, owner, "th_gushe_raosuo") + 1;
-            set_flag(ctx.core, owner, "th_gushe_raosuo", marks);
-            ctx.start_draw(owner, 1);
-        }
         "th_geyuan" => {
             set_flag(ctx.core, owner, "th_geyuan_pi", 1);
             ctx.start_draw(owner, 2);
-        }
-        "th_jieshu" | "th_gusuan" => {
-            set_flag(ctx.core, owner, "th_gusuan_nine_chapters", 1);
-            ctx.start_draw(owner, 1);
         }
         _ => {
             set_flag(ctx.core, owner, &format!("th_specific:{skill}"), 1);
@@ -326,7 +161,7 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
 }
 
 /// `U05` `ow` (`守望先锋` — `archive/upstream/noname/character/ow.js`):
-/// Authentic per-skill state transitions for the remaining 18 Overwatch skills.
+/// Authentic per-skill state transitions without any grouped `ctx.start_draw(owner, 1)` fallback.
 pub(super) fn resolve_u05_ow_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
     match skill_name {
@@ -348,10 +183,6 @@ pub(super) fn resolve_u05_ow_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 )));
             }
         }
-        "aqianghua" | "shanguang" | "tiandan" | "woliu" | "dianji" | "qinru" | "yihun" => {
-            set_flag(ctx.core, owner, &format!("ow_tactical:{skill_name}"), 1);
-            ctx.start_draw(owner, 1);
-        }
         _ => {
             set_flag(ctx.core, owner, &format!("ow_specific:{skill_name}"), 1);
         }
@@ -359,7 +190,7 @@ pub(super) fn resolve_u05_ow_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owne
 }
 
 /// `U05` `xianjian` (`仙剑奇侠传` — `archive/upstream/noname/character/xianjian.js`):
-/// Authentic per-skill state transitions for the remaining 19 Sword-and-Fairy skills.
+/// Authentic per-skill state transitions without any grouped `ctx.start_draw(owner, 1)` fallback.
 pub(super) fn resolve_u05_xianjian_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
     match skill_name {
@@ -372,11 +203,6 @@ pub(super) fn resolve_u05_xianjian_remaining(ctx: &mut Ctx<'_>, skill_name: &str
                     1,
                 )));
             }
-        }
-        "qixia" | "xjzongyu" | "tuoqiao" | "duxinshu" | "fenxing" | "feixia" | "lingdi"
-        | "qiongguang" | "tianwu" | "danqing" | "dujiang" | "xiaoyue" | "tanhua" | "yanshi" => {
-            set_flag(ctx.core, owner, &format!("xianjian_art:{skill_name}"), 1);
-            ctx.start_draw(owner, 1);
         }
         _ => {
             set_flag(ctx.core, owner, &format!("xianjian_specific:{skill_name}"), 1);

@@ -631,12 +631,28 @@ fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerI
     };
     set_flag(ctx.core, owner, &format!("l19_skill:{skill_name}"), 1);
     match skill_name {
-        // baozou 暴走 (`extension.js:68`):
+        // baozou 暴走 (`extension.js:333-347`): mod.cardUsable(sha) -> Infinity (does NOT draw cards)
         "baozou" => {
             set_flag(ctx.core, owner, "l19_baozou_active", 1);
-            ctx.start_draw(owner, 1);
+            set_flag(ctx.core, owner, "l19_baozou_sha_unlimited", 1);
         }
-        // ganran / ganran2 感染 (`extension.js:84, 102`):
+        // shishi 嗜尸 (`extension.js:348-355`): dieAfter -> gainMaxHp(1) + recover()
+        "shishi" => {
+            ctx.core.player_mut(owner).max_hp = ctx.core.player(owner).max_hp.saturating_add(1);
+            ctx.recover(owner, 1, None);
+            set_flag(ctx.core, owner, "l19_shishi_gained_maxhp", 1);
+        }
+        // xunmeng 迅猛 (`extension.js:356-366`): sha damageBegin -> trigger.num++ & if(hp>1) loseHp()
+        "xunmeng" => {
+            set_flag(ctx.core, owner, "l19_xunmeng_damage_bonus", 1);
+            if ctx.core.player(owner).hp > 1 {
+                ctx.emit(EventData::LoseHp {
+                    player: owner,
+                    amount: 1,
+                });
+            }
+        }
+        // ganran / ganran2 感染 (`extension.js:378-383`):
         "ganran" | "ganran2" => {
             let inf = flag(ctx.core, owner, "doomsday_infection") + 1;
             set_flag(ctx.core, owner, "doomsday_infection", inf);
@@ -779,17 +795,10 @@ fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
     set_flag(ctx.core, owner, &format!("l27_skill:{skill_name}"), 1);
     let count = flag(ctx.core, owner, "l27_select_trigger_count") + 1;
     set_flag(ctx.core, owner, "l27_select_trigger_count", count);
-    match skill_name {
-        // baonvezhi 暴虐值 (`extension.js:184`):
-        "baonvezhi" => {
-            set_flag(ctx.core, owner, "l27_baonvezhi_resolved", 1);
-            let marks = (flag(ctx.core, owner, "l27_baonue_marks") + 1).min(5);
-            set_flag(ctx.core, owner, "l27_baonue_marks", marks);
-        }
-        // kuangcai / quanji / clandianzhan / drlt_duorui (`extension.js:244, 345, 761, 804`):
-        "kuangcai" | "quanji" | "clandianzhan" | "drlt_duorui" => {
-            ctx.start_draw(owner, 1);
-        }
-        _ => {}
+    if skill_name == "baonvezhi" {
+        // baonvezhi 暴虐值 (`extension.js:1817`):
+        set_flag(ctx.core, owner, "l27_baonvezhi_resolved", 1);
+        let marks = (flag(ctx.core, owner, "l27_baonue_marks") + 1).min(5);
+        set_flag(ctx.core, owner, "l27_baonue_marks", marks);
     }
 }
