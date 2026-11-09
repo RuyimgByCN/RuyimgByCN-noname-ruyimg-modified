@@ -68,6 +68,17 @@ def slug_name(name: str) -> str:
     return name.replace(" ", "-")
 
 
+def _adjust_links_for_g0_subdir(cell: str) -> str:
+    """将 docs/migration/ 下的相对链接改写为 docs/migration/g0/ 下的相对链接。"""
+    s = re.sub(r"\s+", " ", cell).strip()
+    s = s.replace("(../operations/", "(../../operations/")
+    s = s.replace("(../adr/", "(../../adr/")
+    s = s.replace("(../architecture/", "(../../architecture/")
+    s = s.replace("(./g0/", "(./")
+    s = s.replace("(g0/", "(./")
+    return s
+
+
 def parse_ledger_rows(text: str) -> dict[str, dict]:
     """从台账表行提取 ID -> 核查/待处理摘要。"""
     rows = {}
@@ -76,11 +87,15 @@ def parse_ledger_rows(text: str) -> dict[str, dict]:
         text,
     ):
         sid, name, checked, status, todo = m.group(1), m.group(2), m.group(3), m.group(4), m.group(5)
+        status_clean = _adjust_links_for_g0_subdir(status)
+        if len(status_clean) > 600:
+            # Avoid cutting inside a markdown link
+            status_clean = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", status_clean)[:450] + "…"
         rows[sid] = {
             "name": name.strip(),
-            "checked": re.sub(r"\s+", " ", checked).strip(),
-            "status": re.sub(r"\s+", " ", status).strip()[:400],
-            "todo": re.sub(r"\s+", " ", todo).strip()[:500],
+            "checked": _adjust_links_for_g0_subdir(checked),
+            "status": status_clean,
+            "todo": _adjust_links_for_g0_subdir(todo),
         }
     return rows
 
@@ -155,7 +170,28 @@ def menu_rules_block(feat: dict, ledger: dict | None) -> str:
     return "\n".join(lines)
 
 
-def render(sid: str, name: str, repo: str, path: str, feat: dict, summ: dict, ledger: dict | None) -> str:
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from decision34_inventory_builder import (
+    DECISION34_AUDIT,
+    WORKSPACE,
+    count_statuses,
+    extract_source_inventory,
+    load_formal_packages,
+    render_decision34_section,
+)
+
+
+def render(
+    sid: str,
+    name: str,
+    repo: str,
+    path: str,
+    feat: dict,
+    summ: dict,
+    ledger: dict | None,
+    d34_block: str,
+) -> str:
     ifaces = NAME_INTERFACES.get(name, ["lifecycle", "content"])
     iface_lines = "\n".join(f"- `{k}`：{INTERFACE_MAP[k]}" for k in ifaces if k in INTERFACE_MAP)
     entries = feat.get("entries") or []
@@ -178,8 +214,8 @@ def render(sid: str, name: str, repo: str, path: str, feat: dict, summ: dict, le
     status = (ledger or {}).get("status") or "见台账"
     return f"""# G0 · {sid} {name}
 
-> 核验日期：2026-10-16 · 来源仓：`{repo}` · 入口：`{path}`  
-> 本页为 E01/G0 深度清单（功能 / 菜单与规则分支语义 / 目标接口 / 验证入口 / 旧行为样本引用）。非整包验收证明。
+> 核验日期：2026-11-09 · 来源仓：`{repo}` · 入口：`{path}`  
+> 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
 
@@ -220,14 +256,17 @@ def render(sid: str, name: str, repo: str, path: str, feat: dict, summ: dict, le
 
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
+
+{d34_block}
 """
 
 
 def main() -> None:
     inventory = json.loads(INV.read_text(encoding="utf-8"))
-    features = { (s["repo"], s["name"]): s for s in json.loads(FEAT.read_text(encoding="utf-8"))["sources"] }
-    summaries = { (s["repo"], s["name"]): s for s in json.loads(SUMMARY.read_text(encoding="utf-8")) }
+    features = {(s["repo"], s["name"]): s for s in json.loads(FEAT.read_text(encoding="utf-8"))["sources"]}
+    summaries = {(s["repo"], s["name"]): s for s in json.loads(SUMMARY.read_text(encoding="utf-8"))}
     ledger = parse_ledger_rows(LEDGER.read_text(encoding="utf-8"))
+    formal_pkgs = load_formal_packages()
 
     noname = [e for e in inventory["extensions"] if e["repo"] == "noname"]
     liuli = [e for e in inventory["extensions"] if e["repo"] == "noname-liuli"]
@@ -238,28 +277,64 @@ def main() -> None:
         items.append((f"L{i:02d}", e))
 
     OUT.mkdir(parents=True, exist_ok=True)
-    index_rows = ["| ID | 名称 | 文档 |", "|---|---|---|"]
+    for old_part in OUT.glob("*-part*.md"):
+        old_part.unlink()
+
+    index_rows = [
+        "| ID | 名称 | 主文档 / 分册 | 武将 | 技能 | 卡牌 | 模式/节点 | 配置 | UI钩子 | 渲染面 | 忠实实现 | 示意或自造 | 缺失 |",
+        "|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|",
+    ]
+    totals = {
+        "generals": 0, "skills": 0, "cards": 0, "modes": 0,
+        "configs": 0, "ui_hooks": 0, "surfaces": 0,
+        "忠实实现": 0, "示意或自造": 0, "缺失": 0,
+    }
+    part_count = 0
     for sid, e in items:
         name, repo, path = e["name"], e["repo"], e["path"]
         feat = features.get((repo, name), {"entries": [], "resources": {}, "subplugins": []})
         summ = summaries.get((repo, name), {})
         led = ledger.get(sid)
-        body = render(sid, name, repo, path, feat, summ, led)
+        src_dir = WORKSPACE / path
+        inv = extract_source_inventory(sid, src_dir, formal_pkgs)
+        d34_block, extra_files = render_decision34_section(sid, name, inv)
+        counts = count_statuses(inv, DECISION34_AUDIT.get(sid, []))
+
+        for k in ("generals", "skills", "cards", "modes", "configs", "ui_hooks", "surfaces"):
+            totals[k] += len(inv[k])
+        for k in ("忠实实现", "示意或自造", "缺失"):
+            totals[k] += counts[k]
+
+        body = render(sid, name, repo, path, feat, summ, led, d34_block)
         fname = f"{sid}-{slug_name(name)}.md"
         (OUT / fname).write_text(body, encoding="utf-8")
-        index_rows.append(f"| {sid} | {name} | [{fname}](./{fname}) |")
+        doc_links = [f"[{fname}](./{fname})"]
+        for p_fname, p_body in extra_files:
+            (OUT / p_fname).write_text(p_body, encoding="utf-8")
+            doc_links.append(f"[{p_fname}](./{p_fname})")
+            part_count += 1
+        index_rows.append(
+            f"| {sid} | {name} | {' · '.join(doc_links)} | {len(inv['generals'])} | {len(inv['skills'])} | {len(inv['cards'])} | {len(inv['modes'])} | {len(inv['configs'])} | {len(inv['ui_hooks'])} | {len(inv['surfaces'])} | {counts['忠实实现']} | {counts['示意或自造']} | {counts['缺失']} |"
+        )
 
-    readme = f"""# G0 来源清单（37）
+    index_rows.append(
+        f"| **合计** | **37 来源** | **37 主文档 + {part_count} 分册** | **{totals['generals']}** | **{totals['skills']}** | **{totals['cards']}** | **{totals['modes']}** | **{totals['configs']}** | **{totals['ui_hooks']}** | **{totals['surfaces']}** | **{totals['忠实实现']}** | **{totals['示意或自造']}** | **{totals['缺失']}** |"
+    )
 
-核验日期：2026-10-16。每份文档含功能清单、菜单/规则分支语义、目标接口、验证入口与旧行为样本引用。
+    readme = f"""# G0 来源清单与裁决 34 逐项上游台账（37 来源）
+
+核验日期：2026-11-09。每份文档含：
+1. 功能清单、菜单/规则分支语义、目标接口、验证入口与旧行为样本引用；
+2. **裁决 34 逐项上游清单（第 7 节）**：逐项列出上游每个武将、技能、卡牌、模式/战役节点、配置项、界面钩子与渲染面，标明上游 `file:line`、行为摘要、原生落点（`原生规则` / `rule-vm 包` / `原生前端组件`）和当前状态（`忠实实现` / `示意或自造` / `缺失`），以及现有 `decision34*` 代码逐条归类。
 
 生成：`python3 scripts/legacy-harness/generate-g0-docs.py`  
-基线：`docs/operations/evidence/2026-10-07-e01-feature-inventory/` + 台账摘要。
+基线：`docs/operations/evidence/2026-10-07-e01-feature-inventory/` + `archive/upstream/` 源码静态扫描 + `packages/extensions/` 正式包对照。
 
 {chr(10).join(index_rows)}
 """
     (OUT / "README.md").write_text(readme, encoding="utf-8")
-    print(f"wrote {len(items)} docs + README -> {OUT}")
+    print(f"wrote {len(items)} main docs + {part_count} part docs + README -> {OUT}")
+    print("Totals:", totals)
 
 
 if __name__ == "__main__":

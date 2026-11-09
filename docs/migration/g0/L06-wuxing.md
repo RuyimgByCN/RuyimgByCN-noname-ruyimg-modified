@@ -1,7 +1,7 @@
 # G0 · L06 wuxing
 
-> 核验日期：2026-10-16 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/wuxing`  
-> 本页为 E01/G0 深度清单（功能 / 菜单与规则分支语义 / 目标接口 / 验证入口 / 旧行为样本引用）。非整包验收证明。
+> 核验日期：2026-11-09 · 来源仓：`noname-liuli` · 入口：`archive/upstream/noname-liuli/noname/extension/wuxing`  
+> 本页为 E01/G0 深度清单与**裁决 34 逐项上游清单**（武将 / 技能 / 卡牌 / 模式与战役节点 / 配置项 / 界面钩子 / 渲染面 / 现有 `decision34*` 归类）。非整包验收证明。
 
 ## 1. 功能清单
 
@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**部分重构；纵向样本已验收（第 20 轮）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态（引擎 RNG 可重放，登记差异：上游 Math.random 不逐局等价）、生克宿主行为（被生摸牌/被克弃牌——弃牌为确定性首张，登记差异）、五行盘 Treasure 占栏 + 改属性主动技（PickTag 两段选择字节恢复）。暂缓：联机/视频/帮助表现层；装备技能挂载生命周期（五行盘技能以授予验证）。**真实宿主全生命周期验收完成（2026-10-08，[wuxing 生命周期](../../operations/evidence/2026-10-08-u05-wuxing-lifecycle/README.md)——第六例即本包）**：安装+激活→安装包→原生建局→对局中卸载→锁定副本续玩→重装/import 守卫
+- 台账原生重构状态（摘录）：**部分重构（2026-10-17，[证据](../../operations/evidence/2026-10-17-t12-l06-eight/README.md)）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态、生克宿主行为（被生摸牌/被克弃牌）、五行盘 Treasure 占栏 + `wuxingpan_skill` 改属性主动技。**2026-11-09 裁决 34 清点**：上游 `wuxing` 规则技与 `wuxingpan` 卡牌已忠实实现，但 `wuxingpan_skill` 在 `cards.json` 映射表内仍标 `deferred`（忠实实现 **2** / 示意或自造 **0** / 缺失 **1**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -28,8 +28,8 @@
 - 子插件/子目录：无
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
-- 台账已核查摘要：五行属性、五行盘卡牌/技能、开局随机插牌
-- 台账待处理（含规则分支）：同 U05 内嵌 wuxing 语义比对；装备技能挂载生命周期后补全
+- 台账已核查摘要：五行属性、五行盘卡牌/技能、开局随机插牌；逐项清单见 [G0/L06](./L06-wuxing.md)
+- 台账待处理（含规则分支）：**待将 `wuxingpan_skill` 在包清单的 `deferred` 闭合，待移动端真机**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -56,5 +56,47 @@
 ## 6. 阻塞与后续
 
 - G0 本文档完成不等于 G1–G5；整包状态仍以[台账](../upstream-extension-reconstruction.md)为准。
-- 2026-10-17：五行盘 `equip_skills` 已随装备授予 `wuxingpan_skill`。八项证据见 [2026-10-17-t12-l06-eight](../../operations/evidence/2026-10-17-t12-l06-eight/README.md)。联机提前返回、录像和帮助 HTML 仍未迁入。
 - 若需补跑动态样本：在 `scratch/legacy-harness` 运行副本上使用 `scripts/legacy-harness/`，勿写 `archive/upstream`。
+
+## 7. 裁决 34 逐项上游清单与现有实现归类（2026-11-09）
+
+- **统计汇总**：上游实体合计 **3** 项（武将 0 / 技能 2 / 卡牌 1 / 模式与战役节点 0 / 配置项 0 / 界面钩子 0 / 渲染面 0）
+- **状态分布**：`忠实实现` **2** 项 · `示意或自造` **0** 项 · `缺失` **1** 项
+
+### 7.1 现有 `decision34*` / 前端示意代码逐条归类
+
+- 本来源未被 `decision34_closure.rs` / `decision34_pack9.rs` 注入自造武将或默认摸 1 技能。
+
+### 7.2 武将（Generals）（0 项）
+
+- （上游无此类别实体）
+
+### 7.3 技能（Skills）（2 项）
+
+| 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
+|---|---|---|---|---|
+| `_shengke` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:62` | 触发='useCardToBegin'；弃牌 | 原生规则 / `rule-vm` 包 | 缺失 |
+| `wuxingpan_skill` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:173` | 五行：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现（正式包已映射 `host:change_card_nature`） |
+
+### 7.4 卡牌（Cards）（1 项）
+
+| 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
+|---|---|---|---|---|
+| `wuxingpan` | `archive/upstream/noname-liuli/noname/extension/wuxing/extension.js:196` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 忠实实现 |
+
+### 7.5 模式 / 战役节点（Modes & Campaign Nodes）（0 项）
+
+- （上游无此类别实体）
+
+### 7.6 配置项（Config Items）（0 项）
+
+- （上游无此类别实体）
+
+### 7.7 界面钩子（UI Hooks）（0 项）
+
+- （上游无此类别实体）
+
+### 7.8 渲染面（Rendering Surfaces）（0 项）
+
+- （上游无此类别实体）
+
