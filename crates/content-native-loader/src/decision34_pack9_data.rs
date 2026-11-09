@@ -129,11 +129,6 @@ pub const L08_DECADE_SKILLS: [&str; 9] = [
     "_usecard", "_decadeUI_usecardBegin", "_discard", "_decadeUI_dieKillEffect",
 ];
 
-pub const L08_DECADE_CHARACTERS: [&str; 9] = [
-    "decade_caocao", "decade_liubei", "decade_sunquan", "decade_lvbu", "decade_diaochan",
-    "decade_zhugeliang", "decade_zhouyu", "decade_simayi", "decade_zhaoyun",
-];
-
 pub const L14_SHOUSHA_SKILLS: [&str; 48] = [
     "_dieNoTuoguan", "_menuCheat", "_jindutiaoO", "_jindutiaoA", "_jindutiaoMB",
     "_jindutiaoKS", "_jindutiao_close", "_chupaiA", "_chupaiB", "_chupaiC",
@@ -147,16 +142,9 @@ pub const L14_SHOUSHA_SKILLS: [&str; 48] = [
     "_jindutiaopl", "_wmkzSayChange", "_shuohuaSayWordphase",
 ];
 
-pub const L14_SHOUSHA_CHARACTERS: [&str; 3] = ["sp_zhanghe", "sp_xiahoudun", "sp_ganning"];
-pub const L14_SHOUSHA_CARDS: [&str; 1] = ["shousha_qiankunbagua"];
-
-pub const L19_DOOMSDAY_CHARACTERS: [&str; 24] = [
-    "jiangshifz", "jiangshinj", "vir_zombie", "vir_tyrant", "vir_licker",
-    "vir_hunter", "vir_nemesis", "vir_wesker", "vir_birkin", "vir_spitter",
-    "vir_charger", "vir_boomer", "vir_smoker", "vir_witch", "vir_tank",
-    "vir_jockey", "vir_screamer", "vir_stalker", "vir_bloater", "vir_clicker",
-    "vir_ratking", "vir_shambler", "vir_reaper", "vir_patient0",
-];
+/// Upstream `archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:331-332`
+/// defines exactly 2 zombie generals (`jiangshifz`, `jiangshinj`).
+pub const L19_DOOMSDAY_CHARACTERS: [&str; 2] = ["jiangshifz", "jiangshinj"];
 
 pub const L19_DOOMSDAY_SKILLS: [&str; 66] = [
     "baozou", "shishi", "xunmeng", "zaibian", "ganran",
@@ -175,15 +163,11 @@ pub const L19_DOOMSDAY_SKILLS: [&str; 66] = [
     "_anshaskill",
 ];
 
-pub const L20_MARK_SUPPLEMENT_CHARACTERS: [&str; 12] = [
-    "ms_huangzhong", "ms_weiyan", "ms_xiaoqiao", "ms_zhouyu", "ms_zhugeliang",
-    "ms_pangtong", "ms_luxun", "ms_lvmeng", "ms_simayi", "ms_guojia",
-    "ms_zhangliao", "ms_ganning",
-];
-
+/// Upstream `archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6321`
+/// defines 0 generals and 3 `zhengsu_*` cards.
 pub const L20_MARK_SUPPLEMENT_CARDS: [&str; 3] = ["zhengsu_leijin", "zhengsu_mingzhi", "zhengsu_bianzhen"];
 
-pub const L20_MARK_SUPPLEMENT_SKILLS: [&str; 75] = [
+pub const L20_MARK_SUPPLEMENT_SKILLS: [&str; 74] = [
     "_xigua_feiyanbahu_", "_shiqihujia_", "zhengsu", "zhenyi_spade", "xinhongyan",
     "_guozhanChooseControlCHG", "diaohulishan", "_guozhan_marks", "xianqu_mark", "zhulianbihe_mark",
     "yinyang_mark", "yexinjia_mark", "_zhulianbihe_mark_tao", "_yinyang_mark_add", "_guozhan_diebiaoji_",
@@ -198,7 +182,7 @@ pub const L20_MARK_SUPPLEMENT_SKILLS: [&str; 75] = [
     "fz_new_longdan", "fz_new_tieji", "fz_liegong", "fz_xinkuanggu", "rekuanshi",
     "kuanshi", "kuanshi2", "shouxi", "rechuhai", "xinfu_lingren",
     "sbtieji", "sbduanliang", "shouye", "mbmowang", "wengua",
-    "wengua5", "zuoxing", "kurou", "_chongzhu", "ms_longmark",
+    "wengua5", "zuoxing", "kurou", "_chongzhu",
 ];
 
 pub const L24_SKIN_SWITCH_SKILLS: [&str; 23] = [
@@ -209,7 +193,9 @@ pub const L24_SKIN_SWITCH_SKILLS: [&str; 23] = [
     "_qhly_autoc", "_qhly_addButton", "_skin_switch_hook",
 ];
 
-pub const L25_ZUAN_CHARACTERS: [&str; 120] = [
+/// Upstream `archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397`
+/// defines 60 `ssr_*` generals.
+pub const L25_ZUAN_CHARACTERS: [&str; 60] = [
     "ssr_luxun", "ssr_sunquan", "ssr_zhaoyun", "ssr_zhugeliang", "ssr_zhangliao",
     "ssr_ganning", "ssr_machao", "ssr_zhouyu", "ssr_liubei", "ssr_dianwei",
     "ssr_guojia", "ssr_caocao", "ssr_lvbu", "ssr_huangzhong", "ssr_xiahoudun",
@@ -222,18 +208,6 @@ pub const L25_ZUAN_CHARACTERS: [&str; 120] = [
     "ssr_dongzhuo", "ssr_yuji", "ssr_yuanshao", "ssr_xushu", "ssr_fazheng",
     "ssr_pangtong", "ssr_zhanghe", "ssr_re_lidian", "ssr_xuhuang", "ssr_sunjian",
     "ssr_lusu", "ssr_zhangzhang", "ssr_zhangjiao", "ssr_zhangbao", "ssr_zhangliang",
-    "zuan_caocao", "zuan_liubei", "zuan_sunquan", "zuan_lvbu", "zuan_diaochan",
-    "zuan_zhugeliang", "zuan_zhouyu", "zuan_simayi", "zuan_guojia", "zuan_xunyu",
-    "zuan_zhangliao", "zuan_xiahoudun", "zuan_xiahouyuan", "zuan_xuzhu", "zuan_dianwei",
-    "zuan_zhenji", "zuan_caopi", "zuan_caozhi", "zuan_caorui", "zuan_zhonghui",
-    "zuan_dengai", "zuan_jiangwei", "zuan_zhaoyun", "zuan_guanyu", "zuan_zhangfei",
-    "zuan_machao", "zuan_huangzhong", "zuan_weiyan", "zuan_pangtong", "zuan_huangyueying",
-    "zuan_menghuo", "zuan_zhurong", "zuan_liushan", "zuan_fazheng", "zuan_xushu",
-    "zuan_masu", "zuan_guanping", "zuan_zhoucang", "zuan_liaohua", "zuan_mazhong",
-    "zuan_ganning", "zuan_lvmeng", "zuan_huanggai", "zuan_daqiao", "zuan_xiaoqiao",
-    "zuan_luxun", "zuan_sunshangxiang", "zuan_sunjian", "zuan_sunce", "zuan_taishici",
-    "zuan_diy01", "zuan_diy02", "zuan_diy03", "zuan_diy04", "zuan_diy05",
-    "zuan_diy06", "zuan_diy07", "zuan_diy08", "zuan_diy09", "zuan_diy10",
 ];
 
 pub const L25_ZUAN_SKILLS: [&str; 122] = [

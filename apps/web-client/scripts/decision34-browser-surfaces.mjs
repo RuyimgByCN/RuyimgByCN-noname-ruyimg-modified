@@ -233,7 +233,6 @@ try {
     await new Promise(r => setTimeout(r, 50));
     click('btn-boss-advance');
     click('btn-boss-mode');
-    click('btn-u08-tafang-wave');
     click('btn-taixu-advance');
     await new Promise(r => setTimeout(r, 30));
     click('btn-taixu-buy-blessing');
@@ -247,7 +246,6 @@ try {
       bossName: text('boss-name'),
       bossHp: text('boss-hp'),
       bossMode: text('boss-mode'),
-      tafangWave: text('u08-tafang-wave'),
       taixuNode: text('taixu-node'),
       taixuGold: text('taixu-gold'),
       taixuPet: text('taixu-pet'),
@@ -465,14 +463,13 @@ try {
       hudResult.l14Banner.includes("无双·千军破(zhefu)") &&
       hudResult.l14Rect.w > 0 &&
       campaignResult.bossHp === "∞" &&
-      campaignResult.tafangWave === "#2/5" &&
       campaignResult.taixuGold === "90" &&
       coinResult.weatherOverlayRendered === true &&
       coinResult.honorTitle === "初入茅庐" &&
       omnisearchResult.hitText.includes("苍螭之璧") &&
       omnisearchResult.blockedText.includes("error:eval_refused") &&
       workbenchResult.rejectedMsg.includes("unsafe export filename") &&
-      workbenchResult.l25Status.includes("zuan_diy02") &&
+      workbenchResult.l25Status.includes("ssr_sunquan") &&
       workbenchResult.l25GuardNotice.includes("ONLINE_MULTIPLAYER_DIY_FORBIDDEN") &&
       workbenchResult.l27Status.includes("ddd_caomao + ddd_liuchong") &&
       saveRestoreResult.restoredDaoxin === "50" &&

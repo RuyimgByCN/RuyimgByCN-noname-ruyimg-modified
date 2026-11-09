@@ -20,18 +20,15 @@ pub const DUOQI_ID: u32 = 1_920_004_002;
 pub const YOUZHAN_ID: u32 = 1_920_004_003;
 
 pub const YXS_MENSHEN2_GUARD_ID: u32 = 1_920_005_001;
-pub const YXS_TAFANG_WAVE_ID: u32 = 1_920_005_002;
 
 pub const L20_MARK_DISPATCH_ID: u32 = 1_920_006_001;
 
-pub const TH_CHONGZOU_ID: u32 = 1_920_007_001;
-pub const TH_HUANYIN_ID: u32 = 1_920_007_002;
-pub const TH_XUANLV_ID: u32 = 1_920_007_003;
-
-pub const BOSS_BAONU_STAGE_ID: u32 = 1_920_008_001;
-pub const TAIXU_EXPEDITION_STEP_ID: u32 = 1_920_009_001;
-pub const DOOMSDAY_INFECTION_STEP_ID: u32 = 1_920_010_001;
-pub const MARTIAL_FORMATION_STEP_ID: u32 = 1_920_011_001;
+pub const TH_DUNSHI_ID: u32 = 1_920_007_001;
+pub const TH_JINGXIE_ID: u32 = 1_920_007_002;
+pub const TH_QIAOSI_ID: u32 = 1_920_007_003;
+pub const TH_YEYAN_ID: u32 = 1_920_007_004;
+pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_005;
+pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_006;
 
 pub const L20_MARK_IDS: [(&str, u32); 14] = [
     ("longmark", 1_920_060_001),
@@ -67,15 +64,13 @@ pub(super) fn try_commit_decision34(
         DUOQI_ID => resolve_duoqi(ctx, owner),
         YOUZHAN_ID => resolve_youzhan(ctx, owner),
         YXS_MENSHEN2_GUARD_ID => resolve_yxs_menshen2_guard(ctx, owner),
-        YXS_TAFANG_WAVE_ID => resolve_yxs_tafang_wave(ctx, owner),
         L20_MARK_DISPATCH_ID => resolve_l20_mark_dispatch(ctx, owner),
-        TH_CHONGZOU_ID => resolve_th_chongzou(ctx, owner),
-        TH_HUANYIN_ID => resolve_th_huanyin(ctx, owner),
-        TH_XUANLV_ID => resolve_th_xuanlv(ctx, owner),
-        BOSS_BAONU_STAGE_ID => resolve_boss_baonu_stage(ctx, owner),
-        TAIXU_EXPEDITION_STEP_ID => resolve_taixu_expedition_step(ctx, owner),
-        DOOMSDAY_INFECTION_STEP_ID => resolve_doomsday_infection_step(ctx, owner),
-        MARTIAL_FORMATION_STEP_ID => resolve_martial_formation_step(ctx, owner),
+        TH_DUNSHI_ID => resolve_th_dunshi(ctx, owner),
+        TH_JINGXIE_ID => resolve_th_jingxie(ctx, owner),
+        TH_QIAOSI_ID => resolve_th_qiaosi(ctx, owner),
+        TH_YEYAN_ID => resolve_th_yeyan(ctx, owner),
+        TH_TAIPINGYAOSHU_ID => resolve_th_taipingyaoshu(ctx, owner),
+        TH_SKILL_DISPATCH_ID => resolve_th_extra_skill(ctx, executing, owner),
         _ => match executing {
             "mbcmjiushi" => resolve_mbcmjiushi(ctx, owner),
             "mbcmfangzhu" => resolve_mbcmfangzhu(ctx, owner),
@@ -87,15 +82,13 @@ pub(super) fn try_commit_decision34(
             "duoqi" => resolve_duoqi(ctx, owner),
             "youzhan" => resolve_youzhan(ctx, owner),
             "yxs_menshen2_guard" => resolve_yxs_menshen2_guard(ctx, owner),
-            "yxs_tafang_wave" => resolve_yxs_tafang_wave(ctx, owner),
             "l20_mark_dispatch" => resolve_l20_mark_dispatch(ctx, owner),
-            "th_chongzou" => resolve_th_chongzou(ctx, owner),
-            "th_huanyin" => resolve_th_huanyin(ctx, owner),
-            "th_xuanlv" => resolve_th_xuanlv(ctx, owner),
-            "boss_baonu_stage" => resolve_boss_baonu_stage(ctx, owner),
-            "taixu_expedition_step" => resolve_taixu_expedition_step(ctx, owner),
-            "doomsday_infection_step" => resolve_doomsday_infection_step(ctx, owner),
-            "martial_formation_step" => resolve_martial_formation_step(ctx, owner),
+            "th_dunshi" => resolve_th_dunshi(ctx, owner),
+            "th_jingxie" => resolve_th_jingxie(ctx, owner),
+            "th_qiaosi" => resolve_th_qiaosi(ctx, owner),
+            "th_yeyan" => resolve_th_yeyan(ctx, owner),
+            "th_taipingyaoshu" => resolve_th_taipingyaoshu(ctx, owner),
+            s if s.starts_with("th_") => resolve_th_extra_skill(ctx, s, owner),
             _ => {
                 return super::decision34_pack9::try_commit_decision34_pack9(
                     ctx, executing, owner, value,
@@ -417,7 +410,7 @@ fn resolve_youzhan(ctx: &mut Ctx<'_>, owner: PlayerId) {
     ctx.start_draw(owner, 1);
 }
 
-/// `U08` (`yxs_menshen2_guard` 门神承受伤害转移 + `yxs_tafang_wave` 塔防波次推进):
+/// `U08` (`yxs_menshen2_guard` 门神承受伤害转移):
 fn resolve_yxs_menshen2_guard(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let Some(menshen_granter) = ctx
         .catalog
@@ -455,20 +448,6 @@ fn resolve_yxs_menshen2_guard(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
 }
 
-fn resolve_yxs_tafang_wave(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let wave = (flag(ctx.core, owner, "tafang_wave") + 1).min(5);
-    let fort_hp = flag(ctx.core, owner, "tafang_fort_hp").max(10);
-    set_flag(ctx.core, owner, "tafang_wave", wave);
-    set_flag(ctx.core, owner, "tafang_fort_hp", fort_hp);
-    set_flag(
-        ctx.core,
-        owner,
-        "tafang_Cleared",
-        u32::from(wave >= 5),
-    );
-    ctx.start_draw(owner, 1);
-}
-
 /// `L20` (`l20_mark_dispatch` — 14 HUD marks):
 fn resolve_l20_mark_dispatch(ctx: &mut Ctx<'_>, owner: PlayerId) {
     let idx = (flag(ctx.core, owner, "l20_mark_index") as usize) % L20_MARK_IDS.len();
@@ -489,96 +468,232 @@ fn resolve_l20_mark_dispatch(ctx: &mut Ctx<'_>, owner: PlayerId) {
     }
 }
 
-/// `L28` (`th_chongzou` 重奏, `th_huanyin` 幻音, `th_xuanlv` 旋律):
-fn resolve_th_chongzou(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let mask = flag(ctx.core, owner, "th_melody_mask").max(1);
-    set_flag(ctx.core, owner, "th_chongzou_replayed_mask", mask);
-    set_flag(ctx.core, owner, "th_chongzou_triggered", 1);
-    ctx.start_draw(owner, 1);
-}
-
-fn resolve_th_huanyin(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let mask = flag(ctx.core, owner, "th_melody_mask");
-    set_flag(ctx.core, owner, "th_huanyin_triggered", 1);
-    if mask.count_ones() >= 2 && ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-        ctx.recover(owner, 1, None);
-    } else {
-        ctx.start_draw(owner, 1);
+/// `L28` (`th_dunshi` 遁世 — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3783`):
+/// Once per turn, views as a basic card (`sha`/`shan`/`tao`/`jiu`) from `"仁义礼智信"` list;
+/// when current turn player next deals damage, prevents that damage, loses 1 max_hp,
+/// removes the used basic name, and grants 1 `"仁义礼智信"` virtue skill / draws cards.
+fn resolve_th_dunshi(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let removed_mask = flag(ctx.core, owner, "th_dunshi_removed_mask");
+    let choice_bit = flag(ctx.core, owner, "th_dunshi_basic_bit").max(1) & 0xF;
+    if (removed_mask & choice_bit) != 0 {
+        return;
+    }
+    set_flag(ctx.core, owner, "th_dunshi_used_basic_bit", choice_bit);
+    set_flag(ctx.core, owner, "th_dunshi_triggered", 1);
+    if flag(ctx.core, owner, "th_dunshi_prevent_damage") != 0 {
+        let next_mask = (removed_mask | choice_bit) & 0xF;
+        set_flag(ctx.core, owner, "th_dunshi_removed_mask", next_mask);
+        set_flag(ctx.core, owner, "th_dunshi_damage_prevented", 1);
+        if ctx.core.player(owner).max_hp > 1 {
+            ctx.core.player_mut(owner).max_hp -= 1;
+            let max_hp = ctx.core.player(owner).max_hp as i32;
+            if ctx.core.player(owner).hp > max_hp {
+                ctx.core.player_mut(owner).hp = max_hp;
+            }
+        }
+        let virtue_count = next_mask.count_ones().min(5);
+        set_flag(ctx.core, owner, "th_dunshi_virtue_unlocked", virtue_count);
+        ctx.start_draw(owner, virtue_count.max(1));
     }
 }
 
-fn resolve_th_xuanlv(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let suit_bit = flag(ctx.core, owner, "th_xuanlv_suit_bit").max(1);
-    let next_mask = (flag(ctx.core, owner, "th_melody_mask") | suit_bit) & 0xF;
-    set_flag(ctx.core, owner, "th_melody_mask", next_mask);
-    set_flag(ctx.core, owner, "th_xuanlv_triggered", 1);
-    if next_mask == 0xF {
-        set_flag(ctx.core, owner, "th_xuanlv_chord_complete", 1);
-        set_flag(ctx.core, owner, "th_melody_mask", 0);
-        if let Some(t) = first_other_alive(ctx.core, owner) {
-            ctx.emit(EventData::Damage(crate::machine::damage_data_with(
-                Some(owner),
-                t,
-                1,
-                DamageNature::Thunder,
-                None,
-            )));
+/// `L28` (`th_jingxie` 精械 — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7429`):
+/// In play phase, shows/upgrades an armor or crossbow card (`th_jingxie_upgraded = 1`);
+/// or when a character is dying (`dying` or `th_jingxie_dying_save != 0`), recasts 1 card
+/// and restores that character's HP to 1.
+fn resolve_th_jingxie(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let dying_save = ctx.core.player(owner).dying || flag(ctx.core, owner, "th_jingxie_dying_save") != 0;
+    if let Some(c) = ctx
+        .core
+        .player(owner)
+        .hand
+        .first()
+        .copied()
+        .or_else(|| ctx.core.player(owner).equips.first().copied())
+    {
+        if ctx.core.player(owner).hand.contains(&c) {
+            ctx.take_hand_card(owner, c);
+        } else {
+            ctx.take_owned_card(owner, c);
+        }
+        discard_some(ctx, owner, vec![c]);
+    }
+    if dying_save {
+        ctx.core.player_mut(owner).dying = false;
+        if ctx.core.player(owner).hp < 1 {
+            ctx.core.player_mut(owner).hp = 1;
+        }
+        set_flag(ctx.core, owner, "th_jingxie_saved_to_1hp", 1);
+        ctx.start_draw(owner, 1);
+    } else {
+        let count = flag(ctx.core, owner, "th_jingxie_upgraded") + 1;
+        set_flag(ctx.core, owner, "th_jingxie_upgraded", count);
+    }
+    set_flag(ctx.core, owner, "th_jingxie_triggered", 1);
+}
+
+/// `L28` (`th_qiaosi` 巧思 — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:7030`):
+/// Once per play phase, performs water-wheel trick to gain `1..=3` cards (`th_qiaosi_cards`),
+/// then either discards that many cards or gives that many cards to another character.
+fn resolve_th_qiaosi(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    let won = flag(ctx.core, owner, "th_qiaosi_won_count").clamp(1, 3);
+    ctx.start_draw(owner, won);
+    set_flag(ctx.core, owner, "th_qiaosi_drawn", won);
+    set_flag(ctx.core, owner, "th_qiaosi_triggered", 1);
+    if flag(ctx.core, owner, "th_qiaosi_give_other") != 0 {
+        if let Some(target) = first_other_alive(ctx.core, owner) {
+            let mut given = 0u32;
+            for _ in 0..won {
+                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, c);
+                    ctx.core.player_mut(target).hand.push(c);
+                    given += 1;
+                }
+            }
+            set_flag(ctx.core, owner, "th_qiaosi_given", given);
+        }
+    } else {
+        let mut to_discard = Vec::new();
+        for _ in 0..won {
+            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                ctx.take_hand_card(owner, c);
+                to_discard.push(c);
+            }
+        }
+        if !to_discard.is_empty() {
+            discard_some(ctx, owner, to_discard);
         }
     }
 }
 
-/// `U02 / L03` (`boss_baonu_stage` Boss 暴怒二阶段变身与剑阁攻城器械/守护兽联动):
-fn resolve_boss_baonu_stage(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let rage = flag(ctx.core, owner, "boss_rage") + 2;
-    set_flag(ctx.core, owner, "boss_rage", rage);
-    if rage >= 4 || ctx.core.player(owner).hp <= 4 {
-        set_flag(ctx.core, owner, "boss_stage", 2);
-        set_flag(ctx.core, owner, "jiange_siege_linked", 1);
-        ctx.core.player_mut(owner).max_hp = ctx.core.player(owner).max_hp.max(6);
-        ctx.core.player_mut(owner).hp = ctx.core.player(owner).hp.max(6);
-        ctx.start_draw(owner, 2);
-    }
-}
-
-/// `L11` (`taixu_expedition_step` 太虚幻境奇遇/赐福/灵宠联动):
-fn resolve_taixu_expedition_step(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let floor = flag(ctx.core, owner, "taixu_floor") + 1;
-    let blessing = flag(ctx.core, owner, "taixu_blessing_id").max(1);
-    set_flag(ctx.core, owner, "taixu_floor", floor);
-    set_flag(ctx.core, owner, "taixu_blessing_id", blessing);
-    set_flag(ctx.core, owner, "taixu_spirit_damage", 1);
-    if let Some(t) = first_other_alive(ctx.core, owner) {
-        ctx.emit(EventData::Damage(crate::machine::damage_data(
-            Some(owner),
-            t,
-            1,
-        )));
-    }
-}
-
-/// `L19` (`doomsday_infection_step` 末日乱斗感染/变异/血清结算):
-fn resolve_doomsday_infection_step(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let serum = flag(ctx.core, owner, "doomsday_serum");
-    if serum > 0 {
-        set_flag(ctx.core, owner, "doomsday_serum", serum - 1);
-        set_flag(ctx.core, owner, "doomsday_infection", 0);
-        set_flag(ctx.core, owner, "doomsday_cured", 1);
-        ctx.start_draw(owner, 1);
+/// `L28` (`th_yeyan` 业炎 — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:8636`):
+/// Limited 1/game skill (`th_yeyan_used`). Deals fire damage to 1–3 targets; when great
+/// yeyan (`th_yeyan_great != 0`) is chosen, discards up to 4 cards, loses 3 HP, and deals
+/// up to 3 fire damage (`DamageNature::Fire`).
+fn resolve_th_yeyan(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if flag(ctx.core, owner, "th_yeyan_used") != 0 {
         return;
     }
-    let inf = flag(ctx.core, owner, "doomsday_infection") + 1;
-    set_flag(ctx.core, owner, "doomsday_infection", inf);
-    if inf >= 3 {
-        set_flag(ctx.core, owner, "doomsday_mutated", 1);
-        ctx.core.player_mut(owner).max_hp += 1;
-        ctx.core.player_mut(owner).hp += 1;
+    set_flag(ctx.core, owner, "th_yeyan_used", 1);
+    set_flag(ctx.core, owner, "th_yeyan_triggered", 1);
+    let Some(target) = first_other_alive(ctx.core, owner) else {
+        return;
+    };
+    let great = flag(ctx.core, owner, "th_yeyan_great") != 0;
+    let dmg = if great {
+        let mut discarded = Vec::new();
+        for _ in 0..4 {
+            if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                ctx.take_hand_card(owner, c);
+                discarded.push(c);
+            }
+        }
+        if !discarded.is_empty() {
+            discard_some(ctx, owner, discarded);
+        }
+        ctx.emit(EventData::LoseHp {
+            player: owner,
+            amount: 3,
+        });
+        flag(ctx.core, owner, "th_yeyan_damage").clamp(2, 3) as i32
+    } else {
+        1
+    };
+    set_flag(ctx.core, owner, "th_yeyan_fire_damage", dmg as u32);
+    ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+        Some(owner),
+        target,
+        dmg,
+        DamageNature::Fire,
+        None,
+    )));
+}
+
+/// `L28` (`th_taipingyaoshu` 太平要术 — `archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:6974, 8968`):
+/// Prevents elemental (Fire/Thunder) damage (`th_taipingyaoshu_prevent_elemental = 1`);
+/// when lost from equip area (`th_taipingyaoshu_on_lose != 0`), draws 2 cards and if `hp > 1` loses 1 HP.
+fn resolve_th_taipingyaoshu(ctx: &mut Ctx<'_>, owner: PlayerId) {
+    if flag(ctx.core, owner, "th_taipingyaoshu_on_lose") != 0 {
+        set_flag(ctx.core, owner, "th_taipingyaoshu_lost_effect", 1);
+        ctx.start_draw(owner, 2);
+        if ctx.core.player(owner).hp > 1 {
+            ctx.emit(EventData::LoseHp {
+                player: owner,
+                amount: 1,
+            });
+        }
+    } else {
+        set_flag(ctx.core, owner, "th_taipingyaoshu_prevent_elemental", 1);
     }
 }
 
-/// `L21` (`martial_formation_step` 武皇争霸 5v5 阵型与替补联动):
-fn resolve_martial_formation_step(ctx: &mut Ctx<'_>, owner: PlayerId) {
-    let subs = flag(ctx.core, owner, "martial_bench_sub_count") + 1;
-    set_flag(ctx.core, owner, "martial_bench_sub_count", subs);
-    set_flag(ctx.core, owner, "martial_linked_bonus", 1);
-    ctx.start_draw(owner, 1);
+/// `L28` (`th_*` remaining 55 authentic skills in `雷霆万钧/extension.js`):
+fn resolve_th_extra_skill(ctx: &mut Ctx<'_>, skill: &str, owner: PlayerId) {
+    match skill {
+        // th_tian명 天命 (`extension.js:3689`): discard 2 cards (if any) then draw 2 cards
+        "th_tianming" => {
+            let mut disc = Vec::new();
+            for _ in 0..2 {
+                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, c);
+                    disc.push(c);
+                }
+            }
+            if !disc.is_empty() {
+                discard_some(ctx, owner, disc);
+            }
+            ctx.start_draw(owner, 2);
+            set_flag(ctx.core, owner, "th_skill:th_tianming", 1);
+        }
+        // th_qinyin 琴音 (`extension.js:8608`): all players lose 1 HP or recover 1 HP
+        "th_qinyin" => {
+            let recover_mode = flag(ctx.core, owner, "th_qinyin_recover") != 0;
+            let seats: Vec<PlayerId> = ctx.core.seat_order_from(owner);
+            for p in seats {
+                if !ctx.core.player(p).alive {
+                    continue;
+                }
+                if recover_mode {
+                    ctx.recover(p, 1, None);
+                } else {
+                    ctx.emit(EventData::LoseHp {
+                        player: p,
+                        amount: 1,
+                    });
+                }
+            }
+            set_flag(ctx.core, owner, "th_skill:th_qinyin", 1);
+        }
+        // th_gushe 鼓舌 (`extension.js:8012`): pindian up to 3 targets, accumulate 7 raoSuo marks to die
+        "th_gushe" => {
+            let marks = flag(ctx.core, owner, "th_gushe_raosuo") + 1;
+            set_flag(ctx.core, owner, "th_gushe_raosuo", marks);
+            ctx.start_draw(owner, 1);
+            if marks >= 7 {
+                ctx.emit(EventData::LoseHp {
+                    player: owner,
+                    amount: ctx.core.player(owner).hp.max(1) as u32,
+                });
+            }
+            set_flag(ctx.core, owner, "th_skill:th_gushe", 1);
+        }
+        // th_jici 激词 (`extension.js:8146`): trigger when raoSuo mark increases
+        "th_jici" => {
+            set_flag(ctx.core, owner, "th_skill:th_jici", 1);
+            ctx.start_draw(owner, 1);
+        }
+        // th_duanbi 锻币 (`extension.js:6115`): all players draw 3 and put 2 into 钱 pile
+        "th_duanbi" => {
+            ctx.start_draw(owner, 3);
+            for _ in 0..2 {
+                if let Some(c) = ctx.core.player_mut(owner).hand.pop() {
+                    push_pile(ctx, owner, "th_qian", c);
+                }
+            }
+            set_flag(ctx.core, owner, "th_skill:th_duanbi", 1);
+        }
+        other => {
+            set_flag(ctx.core, owner, &format!("th_skill:{other}"), 1);
+        }
+    }
 }

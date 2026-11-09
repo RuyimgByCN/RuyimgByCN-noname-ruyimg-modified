@@ -17,7 +17,6 @@ import {
   SPINE_CLIP_ORDER,
   U01_DDD_GALLERY_GENERALS,
   advanceLongxueDaoxin,
-  advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
   applyZuanDiyDraft,
@@ -339,17 +338,12 @@ test("Batch 25 补齐：L20 14 项战局标记、L29 潜龙四技解锁、U08 �
   assert.deepEqual(unlockLongxueSkills(75), ["mbcmqingzheng", "mbcmjiushi", "mbcmfangzhu"]);
   assert.deepEqual(unlockLongxueSkills(99), ["mbcmqingzheng", "mbcmjiushi", "mbcmfangzhu", "mbjuejin"]);
 
-  let boss = createInitialExtensionSurfacesState().boss;
-  boss = advanceTafangWave(boss);
-  assert.equal(boss.mode, "tafang");
-  assert.equal(boss.tafangWave, 2);
-
   assert.equal(resolveCoinHonorTitle(50), "初入茅庐");
   assert.equal(resolveCoinHonorTitle(120), "挥金如土");
   assert.equal(resolveCoinHonorTitle(250), "富甲天下");
 
   const omni = createInitialExtensionSurfacesState().omnisearch;
-  for (const q of ["diaobingqianjiang", "mbcmjiushi", "mbcmfangzhu", "mbjuejin", "shichangshi", "th_chongzou", "yxs_menshen2"]) {
+  for (const q of ["diaobingqianjiang", "mbcmjiushi", "mbcmfangzhu", "mbjuejin", "shichangshi", "th_jingxie", "yxs_menshen2"]) {
     const res = runOmnisearchQuery(omni, q, []);
     assert.equal(res.lastError, null);
     assert.equal(res.results.length, 1);
@@ -379,11 +373,11 @@ test("Batch 26 全 37 来源收口：U01 31将3D陈列馆、L08/L24 Spine骨骼�
   assert.equal(theme.shoushaCountdownPct, 70);
 
   let wb = createInitialExtensionSurfacesState().workbench;
-  wb = applyZuanDiyDraft(wb, { generalId: "zuan_diy02", maxHp: 5, onlineRoom: false });
-  assert.equal(wb.zuanDiyGeneralId, "zuan_diy02");
+  wb = applyZuanDiyDraft(wb, { generalId: "ssr_sunquan", maxHp: 5, onlineRoom: false });
+  assert.equal(wb.zuanDiyGeneralId, "ssr_sunquan");
   assert.equal(wb.zuanDiyMaxHp, 5);
   assert.throws(
-    () => applyZuanDiyDraft(wb, { generalId: "zuan_diy_online", maxHp: 5, onlineRoom: true }),
+    () => applyZuanDiyDraft(wb, { generalId: "ssr_sunquan", maxHp: 5, onlineRoom: true }),
     /ONLINE_MULTIPLAYER_DIY_FORBIDDEN/,
   );
 

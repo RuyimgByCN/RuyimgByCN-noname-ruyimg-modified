@@ -67,9 +67,9 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `L08_DECADE_CHARACTERS`（9 名 `decade_*` 武将） | `crates/content-native-loader/src/decision34_pack9_data.rs:132-135` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12687-12692`（上游 `character: {}` 为空） | 无（上游不存在） | 示意或自造（自造 9 名 `decade_*` 武将，上游不存在，待清除） |
-| `L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:455-467` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650` | 原生前端组件 | 示意或自造（将前端装备/出牌/阵亡/铁索特效钩子实现为规则层摸牌/加甲，语义不符，待清除） |
-| `drawSpineSkeletalCanvas` / `stepSpineFrame` | `apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:624-652` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816` | 原生前端组件（净室 Spine 4.0 播放器） | 示意或自造（2D Canvas 圆加两条线示意画法，按裁决 35 删除并重做净室 Spine 4.0 播放器） |
+| `L08_DECADE_CHARACTERS`（9 名伪造 `decade_*` 武将已按第二步清除） | `crates/content-native-loader/src/decision34_pack9_data.rs:127-130` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12687-12692`（上游 `character: {}` 为空） | 无（已清除） | 已清除（9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua` 已从代码删除，见 `docs/operations/evidence/2026-11-09-decision34-cleanup/README.md`） |
+| `L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:555-566` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650` | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现） |
+| `stepSpineFrame`（示意 `drawSpineSkeletalCanvas` 已按第二步清除） | `apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-366`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:624-652` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816` | 原生前端组件（净室 Spine 4.0 播放器） | 示意或自造（已删除 2D Canvas 圆加两条线示意画法 `drawSpineSkeletalCanvas`，待接入净室 Spine 4.0 播放器） |
 
 ### 7.2 武将（Generals）（0 项）
 

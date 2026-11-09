@@ -7,18 +7,17 @@ use content_native_loader::{
     bridge_pack, decision34_closure_extension_pack, decision34_pack9_extension_pack,
     decision34_pack9_for_coexistence, resolve_l24_skin_transform,
     resolve_l27_choose_character_two, resolve_u01_3d_gallery, validate_and_apply_l25_diy,
-    L08_DECADE_CHARACTERS, L08_DECADE_SKILLS, L08_DECADE_SKILL_ID, L14_SHOUSHA_CARDS,
-    L14_SHOUSHA_CHARACTERS, L14_SHOUSHA_SKILLS, L14_SHOUSHA_SKILL_ID, L19_DOOMSDAY_CHARACTERS,
+    DDD_SKILL_DISPATCH_ID, DECISION34_STORAGE_DISPATCH_KEY, L08_DECADE_SKILLS,
+    L08_DECADE_SKILL_ID, L14_SHOUSHA_SKILLS, L14_SHOUSHA_SKILL_ID, L19_DOOMSDAY_CHARACTERS,
     L19_DOOMSDAY_SKILLS, L19_DOOMSDAY_SKILL_ID, L20_MARK_SUPPLEMENT_CARDS,
-    L20_MARK_SUPPLEMENT_CHARACTERS, L20_MARK_SUPPLEMENT_SKILLS, L20_SKILL_DISPATCH_ID,
-    L24_SKIN_SKILL_ID, L24_SKIN_SWITCH_SKILLS, L25DiyEditorDraft, L25_ZUAN_CHARACTERS,
-    L25_ZUAN_SKILLS, L25_ZUAN_SKILL_ID, L27DualGeneralPick, L27_SELECT_BEAUTIFY_SKILLS,
-    L27_SELECT_SKILL_ID, MTG_LAND_CARD_ID, OW_SKILL_DISPATCH_ID, SWD_DUIJUE_ID, SWD_TANLIN_ID,
-    U01_DDD_GENERALS, U01_DDD_SKILLS, U05_MTG_LAND_CARDS, U05_OW_SKILLS,
-    U05_SWD_REMAINING_SKILLS, U05_XIANJIAN_GENERALS, U05_XIANJIAN_SKILLS,
-    U05_YUNCHOU_REMAINING_SKILLS, U05_ZHENFA_CARDS, U07_WUDIAN_REMAINING_SKILLS,
-    WUDIAN_CHOUDU_ID, WUDIAN_JIANBI_ID, XIANJIAN_SKILL_DISPATCH_ID, YUNCHOU_SKILL_ID,
-    ZHENFA_POZHENJUE_ID, DECISION34_STORAGE_DISPATCH_KEY, DDD_SKILL_DISPATCH_ID,
+    L20_MARK_SUPPLEMENT_SKILLS, L20_SKILL_DISPATCH_ID, L24_SKIN_SKILL_ID, L24_SKIN_SWITCH_SKILLS,
+    L25DiyEditorDraft, L25_ZUAN_CHARACTERS, L25_ZUAN_SKILLS, L25_ZUAN_SKILL_ID,
+    L27DualGeneralPick, L27_SELECT_BEAUTIFY_SKILLS, L27_SELECT_SKILL_ID, MTG_LAND_CARD_ID,
+    OW_SKILL_DISPATCH_ID, SWD_DUIJUE_ID, SWD_TANLIN_ID, U01_DDD_GENERALS, U01_DDD_SKILLS,
+    U05_MTG_LAND_CARDS, U05_OW_SKILLS, U05_SWD_REMAINING_SKILLS, U05_XIANJIAN_GENERALS,
+    U05_XIANJIAN_SKILLS, U05_YUNCHOU_REMAINING_SKILLS, U05_ZHENFA_CARDS,
+    U07_WUDIAN_REMAINING_SKILLS, WUDIAN_CHOUDU_ID, WUDIAN_JIANBI_ID, XIANJIAN_SKILL_DISPATCH_ID,
+    YUNCHOU_SKILL_ID, ZHENFA_POZHENJUE_ID,
 };
 use engine_native::event::EventKind;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
@@ -142,44 +141,68 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
         );
     }
 
-    // Bind `ddd_zhangmiao` (`dddxiaxing`) and trigger real RuleVm PhaseBegin execution
+    // 1. `dddxiaxing` 侠行 (`3D精选/character/skill.js:59`):
+    // First use without "侠" mark puts 1 card on deck top, views as tao/jiu, and gains "侠" mark (`dddxiaxing_xia = 1`);
+    // second use removes "侠" mark (`dddxiaxing_xia = 0`), views as basic card, and draws 1 card.
     let zhangmiao = find_general(&e, "ddd_zhangmiao");
     e.assign_general(0, zhangmiao).expect("assign ddd_zhangmiao");
-    set_flag(&mut e, 0, "ddd_chain_target", 1);
     next_phase(&mut e);
-    assert_eq!(flag(&e, 0, "ddd_xiaxing_linked"), 1);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
+    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_taojiu"), 1);
     assert_eq!(flag(&e, 0, "u01_ddd_resolved"), 1);
-    assert!(
-        e.state_core().player(1).linked,
-        "dddxiaxing chains target when ddd_chain_target=1"
-    );
 
-    // Verify `dddqianlong`, `dddqiaoduan`, `dddyeshen`, and `dddqice` (including empty-hand negative guard)
+    let hand_before_second = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
+    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_basic"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_second + 1);
+
+    // 2. `dddqianlong` 潜龙 (`3D精选/character/skill.js:2819`):
+    // Lord skill on `ddd_caomao` — draws 3 cards upon killing a character (`player.draw(3)` at `skill.js:2842`), NO daoxin marks.
+    let hand_before_qianlong = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "dddqianlong", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "ddd_qianlong_daoxin"), 15);
-    assert_eq!(flag(&e, 0, "ddd_qianlong_unlocked"), 1);
+    assert_eq!(flag(&e, 0, "ddd_qianlong_kill_reward"), 1);
+    assert_eq!(flag(&e, 0, "ddd_qianlong_daoxin"), 0, "U01 dddqianlong must not use L29 daoxin marks");
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_qianlong + 3);
 
+    // 3. `dddqiaoduan` 巧断 (`3D精选/character/skill.js:747`):
+    // When linked (`ddd_qiaoduan_from_link = 1`), puts X cards on bottom of deck and recovers 1 HP.
     e.state_core_mut().player_mut(0).hp = 2;
+    set_flag(&mut e, 0, "ddd_qiaoduan_from_link", 1);
     invoke_p9_op(&mut e, 0, "dddqiaoduan", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_qiaoduan_mode"), 2);
     assert_eq!(e.state_core().player(0).hp, 3);
 
+    // 4. `dddyeshen` 夜审 (`3D精选/character/skill.js:656`):
+    // Counts down from 3 (`2 -> 1 -> 0`), and on reaching 0 resets to 3 and deals 1 fire damage to owner.
     invoke_p9_op(&mut e, 0, "dddyeshen", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_yeshen_triggered"), 1);
+    assert_eq!(flag(&e, 0, "dddyeshen_count"), 2);
+    invoke_p9_op(&mut e, 0, "dddyeshen", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddyeshen_count"), 1);
+    let hp_before_backfire = e.state_core().player(0).hp;
+    invoke_p9_op(&mut e, 0, "dddyeshen", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddyeshen_count"), 3);
+    assert_eq!(flag(&e, 0, "dddyeshen_fire_backfire"), 1);
+    assert_eq!(e.state_core().player(0).hp, hp_before_backfire - 1);
 
-    // Negative guard: `dddqice` with empty hand must be blocked and deal 0 damage
-    let saved_hand = e.state_core().player(0).hand.clone();
-    e.state_core_mut().player_mut(0).hand.clear();
-    let p1_hp_before = e.state_core().player(1).hp;
+    // 5. `dddqice` 奇策 (`3D精选/character/skill.js:3507`):
+    // At PhaseZhunbei draws 2 cards (`player.draw(2)`) and disables `dddqice` (`ddd_qice_disabled = 1`)
+    // until the player uses a trick card (`ddd_qice_trick_used = 1`).
+    let hand_before_qice = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "ddd_qice_blocked_empty"), 1);
-    assert_eq!(e.state_core().player(1).hp, p1_hp_before);
+    assert_eq!(flag(&e, 0, "ddd_qice_disabled"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_qice + 2);
 
-    // Positive path: `dddqice` with non-empty hand discards card and deals 1 damage
-    e.state_core_mut().player_mut(0).hand = saved_hand;
+    // Second invocation while disabled is blocked without drawing
     invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
-    assert_eq!(flag(&e, 0, "ddd_qice_virtual_trick"), 1);
-    assert_eq!(e.state_core().player(1).hp, p1_hp_before - 1);
+    assert_eq!(flag(&e, 0, "ddd_qice_blocked_disabled"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_qice + 2);
+
+    // Using a trick card re-enables `dddqice`
+    set_flag(&mut e, 0, "ddd_qice_trick_used", 1);
+    invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_qice_disabled"), 0);
 
     // Validate 3D gallery camera resolver + negative guard
     let gal = resolve_u01_3d_gallery("ddd_caomao", 60, -40, 200).expect("valid ddd_caomao");
@@ -398,21 +421,51 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
     let mut e = Engine::new_with_extensions(260104, 2, &packs).expect("L08/L14/L19/L20 engine");
 
     assert_eq!(L08_DECADE_SKILLS.len(), 9);
-    assert_eq!(L08_DECADE_CHARACTERS.len(), 9);
     assert_eq!(L14_SHOUSHA_SKILLS.len(), 48);
-    assert_eq!(L14_SHOUSHA_CHARACTERS.len(), 3);
-    assert_eq!(L14_SHOUSHA_CARDS.len(), 1);
-    assert_eq!(L19_DOOMSDAY_CHARACTERS.len(), 24);
+    assert_eq!(L19_DOOMSDAY_CHARACTERS.len(), 2);
     assert_eq!(L19_DOOMSDAY_SKILLS.len(), 66);
-    assert_eq!(L20_MARK_SUPPLEMENT_CHARACTERS.len(), 12);
     assert_eq!(L20_MARK_SUPPLEMENT_CARDS.len(), 3);
-    assert_eq!(L20_MARK_SUPPLEMENT_SKILLS.len(), 75);
+    assert_eq!(L20_MARK_SUPPLEMENT_SKILLS.len(), 74);
 
-    // Verify authentic upstream general IDs (`jiangshifz`, `jiangshinj`, `ssr_luxun`, etc.)
+    // Verify authentic upstream general IDs (`jiangshifz`, `jiangshinj` in `末日乱斗/extension.js:65-66`,
+    // `ssr_luxun`, `ssr_sunquan` in `祖安扩展/extension.js:56051`)
     let _ = find_general(&e, "jiangshifz");
     let _ = find_general(&e, "jiangshinj");
     let _ = find_general(&e, "ssr_luxun");
     let _ = find_general(&e, "ssr_sunquan");
+
+    // Verify fabricated generals and skills are absent from Catalog
+    for fabricated_general in [
+        "decade_caocao",
+        "decade_liubei",
+        "vir_zombie",
+        "vir_tyrant",
+        "ms_huangzhong",
+        "ms_weiyan",
+        "zuan_caocao",
+        "zuan_diy01",
+    ] {
+        assert!(
+            (0..e.catalog().general_count() as u16)
+                .all(|idx| e.catalog().general_meta(idx).map(|m| m.0) != Some(fabricated_general)),
+            "fabricated general {fabricated_general} must not exist in Catalog"
+        );
+    }
+    for fabricated_skill in [
+        "_decade_qiankunbagua",
+        "shousha_qiankunbagua",
+        "diaohulishan_card",
+        "huoshaolianying",
+        "lulitongxin",
+        "ms_longmark",
+        "gx_Bozhi",
+        "zuan_jianxiong",
+    ] {
+        assert!(
+            e.catalog().skill_by_name(fabricated_skill).is_none(),
+            "fabricated skill {fabricated_skill} must not exist in Catalog"
+        );
+    }
 
     for &sk in L08_DECADE_SKILLS
         .iter()
@@ -449,13 +502,28 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
         );
     }
 
+    // L08 UI hook (`十周年UI/skill.js:84`) records hook trigger WITHOUT drawing cards
+    let hand_before_l08 = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "_changeEquipExt", L08_DECADE_SKILL_ID);
     assert_eq!(flag(&e, 0, "l08_recast_count"), 1);
-    assert_eq!(flag(&e, 0, "l08_qiankun_trigram"), 2);
+    assert_eq!(flag(&e, 0, "l08_qiankun_trigram"), 0);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_l08,
+        "L08 UI hook _changeEquipExt must not draw cards"
+    );
 
+    // L14 UI hook (`手杀UI/skill/main1.js:34`) records hook trigger WITHOUT drawing cards
+    let hand_before_l14 = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "_dieNoTuoguan", L14_SHOUSHA_SKILL_ID);
-    invoke_p9_op(&mut e, 0, "_jd_wjsw", L14_SHOUSHA_SKILL_ID);
+    invoke_p9_op(&mut e, 0, "spshidi", L14_SHOUSHA_SKILL_ID);
     assert_eq!(flag(&e, 0, "l14_shousha_trigger_count"), 2);
+    assert_eq!(flag(&e, 0, "l14_spshidi_parity"), 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_l14,
+        "L14 UI hook _dieNoTuoguan must not draw cards"
+    );
 
     invoke_p9_op(&mut e, 0, "baozou", L19_DOOMSDAY_SKILL_ID);
     invoke_p9_op(&mut e, 0, "ganran", L19_DOOMSDAY_SKILL_ID);
@@ -464,7 +532,7 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
     assert_eq!(flag(&e, 0, "l19_baozou_active"), 1);
     assert_eq!(flag(&e, 0, "doomsday_mutated"), 1);
 
-    // L20 `zhengsu` violation negative guard + reward positive path
+    // L20 `zhengsu` (`标记补充/extension.js:244`) violation negative guard + reward positive path
     set_flag(&mut e, 0, "l20_zhengsu_violated", 1);
     invoke_p9_op(&mut e, 0, "zhengsu", L20_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "l20_zhengsu_failed"), 1);
@@ -490,7 +558,7 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     let mut e = Engine::new_with_extensions(260105, 2, &packs).expect("L24/L25/L27 engine");
 
     assert_eq!(L24_SKIN_SWITCH_SKILLS.len(), 23);
-    assert_eq!(L25_ZUAN_CHARACTERS.len(), 120);
+    assert_eq!(L25_ZUAN_CHARACTERS.len(), 60);
     assert_eq!(L25_ZUAN_SKILLS.len(), 122);
     assert_eq!(L27_SELECT_BEAUTIFY_SKILLS.len(), 37);
 
@@ -505,10 +573,16 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
         );
     }
 
-    // L24 skin skills + Spine transform resolver
+    // L24 skin skills + Spine transform resolver (`皮肤切换/extension.js:641`) — does NOT draw cards
+    let hand_before_l24 = e.state_core().player(0).hand.len();
     invoke_p9_op(&mut e, 0, "_tsx", L24_SKIN_SKILL_ID);
     assert_eq!(flag(&e, 0, "l24_skin_slot"), 1);
     assert_eq!(flag(&e, 0, "l24_skin_anim_state"), 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_l24,
+        "L24 skin hook _tsx must not draw cards"
+    );
     let tf = resolve_l24_skin_transform("caocao", 2, "gongji").expect("valid skin transform");
     assert_eq!(tf.stand_x, 24);
     assert_eq!(tf.stand_y, -8);
@@ -516,12 +590,13 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     assert!(resolve_l24_skin_transform("caocao", 9, "gongji").is_err());
     assert!(resolve_l24_skin_transform("caocao", 1, "unknown_clip").is_err());
 
-    // L25 `g_du` + `_diycharacterskill` online room rejection guard
+    // L25 `g_du` (`祖安扩展/extension.js:64935`) + `_diycharacterskill` online room rejection guard
     let hp_before = e.state_core().player(0).hp;
     invoke_p9_op(&mut e, 0, "g_du", L25_ZUAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "l25_g_du_triggered"), 1);
     assert_eq!(e.state_core().player(0).hp, hp_before - 1);
 
+    let hand_before_diy = e.state_core().player(0).hand.len();
     set_flag(&mut e, 0, "l25_online_room_active", 1);
     invoke_p9_op(&mut e, 0, "_diycharacterskill", L25_ZUAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "l25_diy_blocked_online"), 1);
@@ -529,25 +604,30 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     set_flag(&mut e, 0, "l25_online_room_active", 0);
     invoke_p9_op(&mut e, 0, "_diycharacterskill", L25_ZUAN_SKILL_ID);
     assert_eq!(flag(&e, 0, "l25_diy_applied"), 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_diy,
+        "L25 _diycharacterskill hook must not draw cards"
+    );
 
     assert!(validate_and_apply_l25_diy(&L25DiyEditorDraft {
-        general_id: "zuan_diy01".to_string(),
-        faction: "qun".to_string(),
-        max_hp: 4,
+        general_id: "ssr_luxun".to_string(),
+        faction: "wu".to_string(),
+        max_hp: 3,
         skills: vec!["_diycharacterskill".to_string()],
         online_room_active: true,
     })
     .is_err());
     assert!(validate_and_apply_l25_diy(&L25DiyEditorDraft {
-        general_id: "zuan_diy01".to_string(),
-        faction: "qun".to_string(),
-        max_hp: 4,
+        general_id: "ssr_luxun".to_string(),
+        faction: "wu".to_string(),
+        max_hp: 3,
         skills: vec!["_diycharacterskill".to_string()],
         online_room_active: false,
     })
     .is_ok());
 
-    // L27 `_chooseCharacterTwo` dual-general pick count guard + `qimou` limited guard
+    // L27 `_chooseCharacterTwo` (`选将美化/extension.js:1165`) dual-general pick count guard + `qimou` (`extension.js:322`) limited guard + `baonvezhi` (`extension.js:184`)
     set_flag(&mut e, 0, "l27_pick_count", 1);
     invoke_p9_op(&mut e, 0, "_chooseCharacterTwo", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_dual_pick_invalid"), 1);
@@ -556,6 +636,16 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     invoke_p9_op(&mut e, 0, "_chooseCharacterTwo", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_dual_pick_locked"), 1);
     assert_eq!(flag(&e, 0, "l27_combined_hp"), 4);
+
+    let hand_before_baonue = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "baonvezhi", L27_SELECT_SKILL_ID);
+    assert_eq!(flag(&e, 0, "l27_baonvezhi_resolved"), 1);
+    assert_eq!(flag(&e, 0, "l27_baonue_marks"), 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_baonue,
+        "baonvezhi gains baonue mark without drawing cards"
+    );
 
     invoke_p9_op(&mut e, 0, "qimou", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_qimou_used"), 1);

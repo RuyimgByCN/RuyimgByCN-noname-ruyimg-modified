@@ -206,48 +206,32 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             }
         };
 
-    // U01: 31 `ddd_*` generals
+    // U01: 31 `ddd_*` generals (`archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5-193`)
     for &(sym, faction, gender, max_hp, sk_list) in &U01_DDD_GENERALS {
         push_general(sym, faction, gender, max_hp, sk_list);
     }
-    // U05 Xianjian: all 36 `pal_*` generals (covering the 13 full + 23 partial generals)
+    // U05 Xianjian: all 36 `pal_*` generals (`archive/upstream/noname/apps/core/character/xianjian.js`)
     for &(sym, faction, gender, max_hp, sk_list) in &U05_XIANJIAN_GENERALS {
         push_general(sym, faction, gender, max_hp, sk_list);
     }
-    // L08: 9 Decade UI characters
-    for &sym in &L08_DECADE_CHARACTERS {
-        push_general(sym, Faction::Qun, Gender::Male, 4, &["_usecard"]);
-    }
-    // L14: 3 Shousha UI characters
-    for &sym in &L14_SHOUSHA_CHARACTERS {
-        push_general(sym, Faction::Wei, Gender::Male, 4, &["_dieNoTuoguan", "_jindutiao"]);
-    }
-    // L19: 24 Doomsday Brawl characters (starting with `jiangshifz`, `jiangshinj`)
+    // L19: 2 authentic Doomsday Brawl zombie generals (`jiangshifz`, `jiangshinj`, `末日乱斗/extension.js:331-332`)
     for &sym in &L19_DOOMSDAY_CHARACTERS {
         push_general(sym, Faction::Qun, Gender::Male, 4, &["baozou", "ganran"]);
     }
-    // L20: 12 Mark Supplement characters
-    for &sym in &L20_MARK_SUPPLEMENT_CHARACTERS {
-        push_general(sym, Faction::Shu, Gender::Male, 4, &["zhengsu", "zhenyi_spade"]);
-    }
-    // L25: 120 Zuan characters (60 `ssr_*` + 60 `zuan_*`)
+    // L25: 60 authentic Zuan `ssr_*` characters (`祖安武将/extension.js:338-397`)
     for &sym in &L25_ZUAN_CHARACTERS {
         push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "_diycharacterskill"]);
     }
 
-    // Cards: U05 MTG (2), U05 Zhenfa (1), L14 (1), L20 (3 `zhengsu_*` + 3 tactical cards)
+    // Cards: U05 MTG (2), U05 Zhenfa (1), L20 (3 `zhengsu_*` cards from `标记补充/extension.js:6319-6321`)
     let mut cards: Vec<CardDef> = Vec::new();
-    let card_specs: [(&str, CardKind, Suit, u8); 10] = [
+    let card_specs: [(&str, CardKind, Suit, u8); 6] = [
         ("mtg_duzhao", CardKind::Wuzhong, Suit::Spade, 1),
         ("mtg_cangbaohaiwan", CardKind::Wuzhong, Suit::Heart, 1),
         ("pozhenjue", CardKind::Wuzhong, Suit::Club, 7),
-        ("shousha_qiankunbagua", CardKind::Wuzhong, Suit::Spade, 2),
         ("zhengsu_leijin", CardKind::Wuzhong, Suit::Spade, 3),
         ("zhengsu_mingzhi", CardKind::Wuzhong, Suit::Heart, 4),
         ("zhengsu_bianzhen", CardKind::Wuzhong, Suit::Club, 5),
-        ("diaohulishan", CardKind::Wuzhong, Suit::Diamond, 10),
-        ("huoshaolianying", CardKind::Wuzhong, Suit::Heart, 12),
-        ("lulitongxin", CardKind::Wuzhong, Suit::Club, 11),
     ];
     for &(cname, kind, suit, rank) in &card_specs {
         if seen_cards.insert(cname.to_string()) {
@@ -298,9 +282,7 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &L08_DECADE_SKILLS {
         push_skill(s, L08_DECADE_SKILL_ID);
     }
-    for &s in &["_chongzhu", "_decade_qiankunbagua"] {
-        push_skill(s, L08_DECADE_SKILL_ID);
-    }
+    push_skill("_chongzhu", L08_DECADE_SKILL_ID);
     for &s in &L14_SHOUSHA_SKILLS {
         push_skill(s, L14_SHOUSHA_SKILL_ID);
     }
@@ -316,11 +298,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &L24_SKIN_SWITCH_SKILLS {
         push_skill(s, L24_SKIN_SKILL_ID);
     }
-    push_skill("gx_Bozhi", L24_SKIN_SKILL_ID);
     for &s in &L25_ZUAN_SKILLS {
         push_skill(s, L25_ZUAN_SKILL_ID);
     }
-    push_skill("zuan_jianxiong", L25_ZUAN_SKILL_ID);
     for &s in &L27_SELECT_BEAUTIFY_SKILLS {
         push_skill(s, L27_SELECT_SKILL_ID);
     }
@@ -331,7 +311,7 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             name: "decision34-pack9-closure",
             version: 1,
             description:
-                "Decision 34 Batch 26 complete closure for U01/U05/U07/L08/L14/L19/L20/L24/L25/L27",
+                "Decision 34 authentic upstream pack for U01/U05/U07/L08/L14/L19/L20/L24/L25/L27",
         },
         generals,
         cards,

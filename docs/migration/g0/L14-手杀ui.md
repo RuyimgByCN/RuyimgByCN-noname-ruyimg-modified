@@ -66,7 +66,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（48 个 UI 钩子） | `crates/content-native-loader/src/decision34_pack9_data.rs:143-152`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:472-492` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360` | 原生前端组件 | 示意或自造（将手杀进度条、菜单、托管、语音气泡等 48 个前端 UI 钩子实现为规则层摸牌/回血，待清除并在前端实现） |
+| `L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌已清除，48 个 UI 钩子已清零摸牌/回血副作用） | `crates/content-native-loader/src/decision34_pack9_data.rs:132-143`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:571-583` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360` | 原生前端组件 | 示意或自造（已删除伪造 `shousha_*` 武将/卡牌及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻） |
 
 ### 7.2 武将（Generals）（0 项）
 

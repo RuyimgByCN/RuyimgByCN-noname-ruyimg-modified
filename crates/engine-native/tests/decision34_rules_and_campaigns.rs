@@ -5,12 +5,11 @@
 
 use content_native_loader::{
     bridge_pack, decision34_closure_extension_pack, longxue_full_unlock_report,
-    verify_u08_standard_skill_bindings, BOSS_BAONU_STAGE_ID, DECISION34_STORAGE_DISPATCH_KEY,
-    DIAOBINGQIANJIANG_ID, DOOMSDAY_INFECTION_STEP_ID, DUOQI_ID, HUANLE_KUWU_INTERACTIVE_ID,
-    K_DANGGU_ID, K_MOWANG_ID, L20_MARK_DISPATCH_ID, L20_MARK_SPECS, L28_THUNDER_GENERALS,
-    MARTIAL_FORMATION_STEP_ID, MBCMFANGZHU_ID, MBCMJIUSHI_ID, MBJUEJIN_ID,
-    TAIXU_EXPEDITION_STEP_ID, TH_CHONGZOU_ID, TH_HUANYIN_ID, TH_XUANLV_ID, YOUZHAN_ID,
-    YXS_MENSHEN2_GUARD_ID, YXS_TAFANG_WAVE_ID,
+    verify_u08_standard_skill_bindings, DECISION34_STORAGE_DISPATCH_KEY, DIAOBINGQIANJIANG_ID,
+    DUOQI_ID, HUANLE_KUWU_INTERACTIVE_ID, K_DANGGU_ID, K_MOWANG_ID, L20_MARK_DISPATCH_ID,
+    L20_MARK_SPECS, L28_THUNDER_EXTRA_SKILLS, L28_THUNDER_GENERALS, MBCMFANGZHU_ID,
+    MBCMJIUSHI_ID, MBJUEJIN_ID, TH_DUNSHI_ID, TH_JINGXIE_ID, TH_QIAOSI_ID, TH_SKILL_DISPATCH_ID,
+    TH_TAIPINGYAOSHU_ID, TH_YEYAN_ID, YOUZHAN_ID, YXS_MENSHEN2_GUARD_ID,
 };
 use engine_native::event::DamageNature;
 use engine_native::{CommandOutcome, Engine, GameAction, GameCommand};
@@ -288,7 +287,7 @@ fn u06_kuwu_interactive_and_u07_wudian_diaobingqianjiang_duoqi_youzhan() {
 }
 
 #[test]
-fn u08_hero_kill_31_standard_skills_menshen2_guard_and_tafang_waves() {
+fn u08_hero_kill_31_standard_skills_and_menshen2_guard() {
     let yxs_json = read_pack_lf("hero-kill-upstream-noname/assets/cards.json");
     let yxs_pack = bridge_pack(&yxs_json).expect("yxs pack").pack;
     let d34_pack = decision34_closure_extension_pack();
@@ -300,7 +299,10 @@ fn u08_hero_kill_31_standard_skills_menshen2_guard_and_tafang_waves() {
         .expect("all 31 U08 standard skills must resolve in Catalog");
     assert_eq!(count, 31);
 
-    // yxs_menshen2 guard transfers 1 damage from protected seat 1 to granter seat 0
+    // Fabricated yxs_tafang_wave must not exist in Catalog
+    assert!(e.catalog().skill_by_name("yxs_tafang_wave").is_none());
+
+    // yxs_menshen2 guard (`英雄杀/extension.js:2307`) transfers 1 damage from protected seat 1 to granter seat 0
     let menshen2_def = e.catalog().skill_by_name("yxs_menshen2").expect("yxs_menshen2");
     e.state_core_mut()
         .vm_aux
@@ -312,23 +314,15 @@ fn u08_hero_kill_31_standard_skills_menshen2_guard_and_tafang_waves() {
     assert_eq!(flag(&e, 1, "yxs_menshen2_guarded"), 1);
     assert_eq!(flag(&e, 1, "yxs_menshen2_transferred_to"), 0);
     assert_eq!(e.debug_hp(0), hp0_before - 1);
-
-    // tafang 5-wave progression
-    for expected_wave in 1..=5 {
-        invoke_d34_op(&mut e, 0, "yxs_tafang_wave", YXS_TAFANG_WAVE_ID);
-        drain(&mut e);
-        assert_eq!(flag(&e, 0, "tafang_wave"), expected_wave);
-    }
-    assert_eq!(flag(&e, 0, "tafang_Cleared"), 1);
 }
 
 #[test]
-fn l20_fourteen_hud_marks_and_l28_thunder_twelve_generals_and_chords() {
+fn l20_fourteen_hud_marks_and_l28_thunder_fourteen_authentic_generals_and_skills() {
     let d34_pack = decision34_closure_extension_pack();
     let mut e = Engine::new_with_extensions(2026110905, 4, &[&d34_pack])
         .expect("new_with_extensions");
 
-    // 1. L20: Dispatch all 14 HUD marks and verify persistence + niepan HP recovery
+    // 1. L20: Dispatch all 14 HUD marks (`标记补充/extension.js:116-129`) and verify persistence + niepan HP recovery
     e.debug_set_hp(0, 1);
     for (idx, &(mark_name, _zh, mark_id)) in L20_MARK_SPECS.iter().enumerate() {
         set_flag(&mut e, 0, "l20_mark_index", idx as u32);
@@ -343,81 +337,131 @@ fn l20_fourteen_hud_marks_and_l28_thunder_twelve_generals_and_chords() {
     }
     assert_eq!(e.debug_hp(0), 3, "niepan mark dispatch recovers HP up to 3");
 
-    // 2. L28: Verify all 12 th_* generals in Catalog and test th_xuanlv / th_chongzou / th_huanyin
-    assert_eq!(L28_THUNDER_GENERALS.len(), 12);
+    // 2. L28: Verify all 14 authentic th_* generals (`雷霆万钧/extension.js:3657-3670`) exist in Catalog,
+    // and all 11 previously fabricated th_* generals + 3 fabricated skills are absent.
+    assert_eq!(L28_THUNDER_GENERALS.len(), 14);
     for &(g_name, ..) in &L28_THUNDER_GENERALS {
         let _ = find_general(&e, g_name);
     }
-    let th_zy = find_general(&e, "th_shen_zhouyu");
-    e.debug_assemble_general_def(0, th_zy);
-
-    let hp1_before = e.debug_hp(1);
-    for bit in [1u32, 2, 4, 8] {
-        set_flag(&mut e, 0, "th_xuanlv_suit_bit", bit);
-        invoke_d34_op(&mut e, 0, "th_xuanlv", TH_XUANLV_ID);
-        drain(&mut e);
+    for fabricated_general in [
+        "th_sunshangxiang",
+        "th_diaochan",
+        "th_zhenji",
+        "th_xiaoqiao",
+        "th_daqiao",
+        "th_caiwenji",
+        "th_zhugeliang",
+        "th_simayi",
+        "th_luxun",
+        "th_lvbu",
+        "th_zhaoyun",
+    ] {
+        assert!(
+            (0..e.catalog().general_count() as u16)
+                .all(|idx| e.catalog().general_meta(idx).map(|m| m.0) != Some(fabricated_general)),
+            "fabricated general {fabricated_general} must not exist in Catalog"
+        );
     }
-    assert_eq!(flag(&e, 0, "th_xuanlv_chord_complete"), 1);
-    assert_eq!(e.debug_hp(1), hp1_before - 1, "4-suit chord deals 1 thunder damage");
+    for fabricated_skill in ["th_chongzou", "th_huanyin", "th_xuanlv"] {
+        assert!(
+            e.catalog().skill_by_name(fabricated_skill).is_none(),
+            "fabricated skill {fabricated_skill} must not exist in Catalog"
+        );
+    }
+    for &sk in &L28_THUNDER_EXTRA_SKILLS {
+        assert!(
+            e.catalog().skill_by_name(sk).is_some(),
+            "authentic L28 skill {sk} (`雷霆万钧/extension.js`) must exist in Catalog"
+        );
+    }
 
-    set_flag(&mut e, 0, "th_melody_mask", 0b0101);
-    e.debug_set_hp(0, 2);
-    invoke_d34_op(&mut e, 0, "th_huanyin", TH_HUANYIN_ID);
+    // 3. Test authentic L28 skills:
+    // - `th_dunshi` (`雷霆万钧/extension.js:3783`): prevents damage, loses 1 max_hp, unlocks virtue & draws
+    let th_gn = find_general(&e, "th_guanning");
+    e.debug_assemble_general_def(0, th_gn);
+    let max_hp0_before = e.state_core().player(0).max_hp;
+    set_flag(&mut e, 0, "th_dunshi_basic_bit", 1);
+    set_flag(&mut e, 0, "th_dunshi_prevent_damage", 1);
+    invoke_d34_op(&mut e, 0, "th_dunshi", TH_DUNSHI_ID);
     drain(&mut e);
-    assert_eq!(e.debug_hp(0), 3, "th_huanyin heals 1 HP when >= 2 melody suits");
+    assert_eq!(flag(&e, 0, "th_dunshi_damage_prevented"), 1);
+    assert_eq!(e.state_core().player(0).max_hp, max_hp0_before - 1);
+    assert_eq!(flag(&e, 0, "th_dunshi_virtue_unlocked"), 1);
 
-    invoke_d34_op(&mut e, 0, "th_chongzou", TH_CHONGZOU_ID);
+    // - `th_jingxie` (`雷霆万钧/extension.js:7429`): dying save restores HP to 1 and draws 1 card
+    e.debug_set_hp(0, 0);
+    e.state_core_mut().player_mut(0).dying = true;
+    invoke_d34_op(&mut e, 0, "th_jingxie", TH_JINGXIE_ID);
     drain(&mut e);
-    assert_eq!(flag(&e, 0, "th_chongzou_triggered"), 1);
+    assert_eq!(flag(&e, 0, "th_jingxie_saved_to_1hp"), 1);
+    assert_eq!(e.debug_hp(0), 1);
+    assert!(!e.state_core().player(0).dying);
+
+    // - `th_qiaosi` (`雷霆万钧/extension.js:7030`): water-wheel wins 1..=3 cards and gives/discards
+    set_flag(&mut e, 0, "th_qiaosi_won_count", 2);
+    set_flag(&mut e, 0, "th_qiaosi_give_other", 1);
+    invoke_d34_op(&mut e, 0, "th_qiaosi", TH_QIAOSI_ID);
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "th_qiaosi_drawn"), 2);
+    assert!(flag(&e, 0, "th_qiaosi_given") >= 1);
+
+    // - `th_yeyan` (`雷霆万钧/extension.js:8636`): limited 1/game fire damage
+    let hp1_before = e.debug_hp(1);
+    invoke_d34_op(&mut e, 0, "th_yeyan", TH_YEYAN_ID);
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "th_yeyan_used"), 1);
+    assert_eq!(e.debug_hp(1), hp1_before - 1);
+
+    // - `th_taipingyaoshu` (`雷霆万钧/extension.js:6974, 8968`): prevents elemental damage; on lose draws 2 & loses 1 HP if hp > 1
+    invoke_d34_op(&mut e, 0, "th_taipingyaoshu", TH_TAIPINGYAOSHU_ID);
+    assert_eq!(flag(&e, 0, "th_taipingyaoshu_prevent_elemental"), 1);
+    e.debug_set_hp(0, 3);
+    let hand0_before = e.debug_hand(0).len();
+    set_flag(&mut e, 0, "th_taipingyaoshu_on_lose", 1);
+    invoke_d34_op(&mut e, 0, "th_taipingyaoshu", TH_TAIPINGYAOSHU_ID);
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "th_taipingyaoshu_lost_effect"), 1);
+    assert_eq!(e.debug_hand(0).len(), hand0_before + 2);
+    assert_eq!(e.debug_hp(0), 2);
 }
 
 #[test]
-fn u02_l03_boss_l11_taixu_l19_doomsday_and_l21_martial_campaign_state_machines() {
+fn fabricated_campaign_step_skills_absent_and_l28_extra_skills_roundtrip() {
     let d34_pack = decision34_closure_extension_pack();
     let mut e = Engine::new_with_extensions(2026110906, 4, &[&d34_pack])
         .expect("new_with_extensions");
 
-    // 1. U02 / L03 Boss baonu stage-2 transition & Jiange siege linkage
-    set_flag(&mut e, 0, "boss_rage", 2);
-    invoke_d34_op(&mut e, 0, "boss_baonu_stage", BOSS_BAONU_STAGE_ID);
-    drain(&mut e);
-    assert_eq!(flag(&e, 0, "boss_stage"), 2);
-    assert_eq!(flag(&e, 0, "jiange_siege_linked"), 1);
-    assert!(e.state_core().player(0).max_hp >= 6);
-
-    // 2. L11 Taixu expedition floor & spirit companion strike
-    let hp1_before = e.debug_hp(1);
-    invoke_d34_op(&mut e, 0, "taixu_expedition_step", TAIXU_EXPEDITION_STEP_ID);
-    drain(&mut e);
-    assert_eq!(flag(&e, 0, "taixu_floor"), 1);
-    assert_eq!(flag(&e, 0, "taixu_spirit_damage"), 1);
-    assert_eq!(e.debug_hp(1), hp1_before - 1);
-
-    // 3. L19 Doomsday infection -> mutation at 3 stacks, then serum cure
-    for _ in 0..3 {
-        invoke_d34_op(&mut e, 0, "doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID);
+    // 1. Verify fabricated campaign step skills were removed per Decision 34 Step 2
+    for removed in [
+        "boss_baonu_stage",
+        "taixu_expedition_step",
+        "doomsday_infection_step",
+        "martial_formation_step",
+        "yxs_tafang_wave",
+    ] {
+        assert!(
+            e.catalog().skill_by_name(removed).is_none(),
+            "fabricated step skill {removed} must be absent from Catalog"
+        );
     }
-    assert_eq!(flag(&e, 0, "doomsday_mutated"), 1);
-    set_flag(&mut e, 0, "doomsday_serum", 1);
-    invoke_d34_op(&mut e, 0, "doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID);
-    drain(&mut e);
-    assert_eq!(flag(&e, 0, "doomsday_infection"), 0);
-    assert_eq!(flag(&e, 0, "doomsday_cured"), 1);
 
-    // 4. L21 Martial 5v5 bench substitution & formation bonus
-    invoke_d34_op(&mut e, 0, "martial_formation_step", MARTIAL_FORMATION_STEP_ID);
+    // 2. Test authentic L28 extra skills (`th_tianming` at `extension.js:3689`, `th_qinyin` at `extension.js:8608`)
+    invoke_d34_op(&mut e, 0, "th_tianming", TH_SKILL_DISPATCH_ID);
     drain(&mut e);
-    assert_eq!(flag(&e, 0, "martial_bench_sub_count"), 1);
-    assert_eq!(flag(&e, 0, "martial_linked_bonus"), 1);
+    assert_eq!(flag(&e, 0, "th_skill:th_tianming"), 1);
+
+    let hp1_before = e.debug_hp(1);
+    invoke_d34_op(&mut e, 0, "th_qinyin", TH_SKILL_DISPATCH_ID);
+    drain(&mut e);
+    assert_eq!(flag(&e, 0, "th_skill:th_qinyin"), 1);
+    assert_eq!(e.debug_hp(1), hp1_before - 1);
 
     // Save & restore roundtrip
     let snap = e.save();
     let restored = Engine::restore_with_extensions(&snap, &[&d34_pack])
         .expect("restore_with_extensions");
-    assert_eq!(flag(&restored, 0, "boss_stage"), 2);
-    assert_eq!(flag(&restored, 0, "taixu_floor"), 1);
-    assert_eq!(flag(&restored, 0, "doomsday_cured"), 1);
-    assert_eq!(flag(&restored, 0, "martial_bench_sub_count"), 1);
+    assert_eq!(flag(&restored, 0, "th_skill:th_tianming"), 1);
+    assert_eq!(flag(&restored, 0, "th_skill:th_qinyin"), 1);
 }
 
 #[test]
@@ -487,12 +531,17 @@ fn decision34_edge_cases_and_boundary_guards() {
         "dead granter cannot absorb menshen2 damage"
     );
 
-    // 4. doomsday_infection_step boundary: 2 stacks -> not mutated; 3rd stack -> mutated
-    invoke_d34_op(&mut e, 3, "doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID);
-    invoke_d34_op(&mut e, 3, "doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID);
-    assert_eq!(flag(&e, 3, "doomsday_infection"), 2);
-    assert_eq!(flag(&e, 3, "doomsday_mutated"), 0);
-    invoke_d34_op(&mut e, 3, "doomsday_infection_step", DOOMSDAY_INFECTION_STEP_ID);
-    assert_eq!(flag(&e, 3, "doomsday_infection"), 3);
-    assert_eq!(flag(&e, 3, "doomsday_mutated"), 1);
+    // 4. th_yeyan limited 1/game guard & th_dunshi removed basic card guard (`雷霆万钧/extension.js:3783, 8636`)
+    let hp3_before = e.debug_hp(3);
+    invoke_d34_op(&mut e, 0, "th_yeyan", TH_YEYAN_ID);
+    drain(&mut e);
+    let hp1_after_first = e.debug_hp(1);
+    invoke_d34_op(&mut e, 0, "th_yeyan", TH_YEYAN_ID);
+    drain(&mut e);
+    assert_eq!(
+        e.debug_hp(1),
+        hp1_after_first,
+        "th_yeyan is limited 1/game and must not deal fire damage a second time"
+    );
+    let _ = hp3_before;
 }

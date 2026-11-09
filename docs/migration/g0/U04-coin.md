@@ -68,7 +68,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `resolveCoinHonorTitle` / `[data-testid="coin-weather-overlay"]` | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:392-434`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:474-516` | `archive/upstream/noname/apps/core/extension/coin/extension.js:17-540` | 原生前端组件 | 示意或自造（CSS 示意粒子层，未复刻上游 `canvas` 烟花/下雪/星云/闪烁与窗口拖拽买道具交互） |
+| `resolveCoinHonorTitle` / `[data-testid="coin-weather-overlay"]` | `apps/web-client/src/engine/extensionSurfaceRuntime.ts:392-434`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:438-480` | `archive/upstream/noname/apps/core/extension/coin/extension.js:17-540` | 原生前端组件 | 示意或自造（CSS 示意粒子层，未复刻上游 `canvas` 烟花/下雪/星云/闪烁与窗口拖拽买道具交互） |
 
 ### 7.2 武将（Generals）（0 项）
 

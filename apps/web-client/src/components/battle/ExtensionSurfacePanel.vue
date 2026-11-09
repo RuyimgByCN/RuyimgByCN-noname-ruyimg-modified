@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import {
   L20_HUD_MARK_SPECS,
   U01_DDD_GALLERY_GENERALS,
   advanceLongxueDaoxin,
-  advanceTafangWave,
   advanceTaixuNode,
   applyMartialReplacement,
   applyZuanDiyDraft,
@@ -115,7 +114,7 @@ function onAdvanceBoss() {
 }
 
 function onCycleBossMode() {
-  const modes: Array<"boss" | "versus_jiange" | "tafang"> = ["boss", "versus_jiange", "tafang"];
+  const modes: Array<"boss" | "versus_jiange"> = ["boss", "versus_jiange"];
   update((prev) => {
     const idx = modes.indexOf(prev.boss.mode);
     const mode = modes[(idx + 1) % modes.length]!;
@@ -190,14 +189,6 @@ function onIncrementL20Mark(markKey = "longmark") {
     const count = theme.l20Marks?.[markKey] ?? 0;
     surfaceNotice.value = `标记补充 (L20)：${markKey} ×${count}（共 ${L20_HUD_MARK_SPECS.length} 项）`;
     return { ...prev, theme };
-  });
-}
-
-function onAdvanceTafangWave() {
-  update((prev) => {
-    const boss = advanceTafangWave(prev.boss);
-    surfaceNotice.value = `英雄杀塔防 (U08)：推进至第 ${boss.tafangWave ?? 1}/5 波`;
-    return { ...prev, boss };
   });
 }
 
@@ -304,7 +295,7 @@ function onRotateU01Gallery() {
 function onTriggerSpineClip() {
   update((prev) => {
     const theme = triggerSpineSkinClip(prev.theme);
-    surfaceNotice.value = `Spine 骨骼与皮肤变换 (L08/L24)：${theme.spineActiveClip} · 偏移 (${theme.skinStandX},${theme.skinStandY}) · 缩放 ${theme.skinScalePct}%`;
+    surfaceNotice.value = `Spine 4.0 变换参数 (L08/L24)：${theme.spineActiveClip} · 偏移 (${theme.skinStandX},${theme.skinStandY}) · 缩放 ${theme.skinScalePct}%`;
     return { ...prev, theme };
   });
 }
@@ -320,7 +311,7 @@ function onTriggerShoushaBanner() {
 function onApplyZuanDiyOffline() {
   update((prev) => {
     const workbench = applyZuanDiyDraft(prev.workbench, {
-      generalId: "zuan_diy02",
+      generalId: "ssr_sunquan",
       maxHp: 5,
       onlineRoom: false,
     });
@@ -334,7 +325,7 @@ function onRejectZuanDiyOnline() {
     return {
       ...prev,
       workbench: applyZuanDiyDraft(prev.workbench, {
-        generalId: "zuan_diy_online",
+        generalId: "ssr_online",
         maxHp: 99,
         onlineRoom: true,
       }),
@@ -349,60 +340,6 @@ function onSelectL27DualGenerals() {
     return { ...prev, workbench };
   });
 }
-
-function drawSpineSkeletalCanvas() {
-  const canvas = spineCanvasRef.value;
-  if (!canvas || typeof canvas.getContext !== "function") return;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return;
-  const w = canvas.width;
-  const h = canvas.height;
-  ctx.clearRect(0, 0, w, h);
-  ctx.fillStyle = "rgba(18, 26, 38, 0.92)";
-  ctx.fillRect(0, 0, w, h);
-
-  const clip = props.surfaces.theme.spineActiveClip ?? "daiji";
-  const seq = props.surfaces.theme.spineFrameSeq ?? 1;
-  const dx = props.surfaces.theme.skinStandX ?? 4;
-  const dy = props.surfaces.theme.skinStandY ?? 0;
-
-  // Draw Qiankun Bagua trigram ring + skeletal bones
-  ctx.strokeStyle = "#f59e0b";
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.arc(32 + (dx % 10), h / 2 + (dy % 6), 16, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.strokeStyle = "#38bdf8";
-  ctx.beginPath();
-  ctx.moveTo(24, h / 2);
-  ctx.lineTo(40 + (seq % 8), h / 2 - 8);
-  ctx.lineTo(54, h / 2 + 6);
-  ctx.stroke();
-
-  ctx.fillStyle = "#e2e8f0";
-  ctx.font = "11px monospace";
-  ctx.fillText(`Spine:${clip}#${seq} (${dx},${dy})`, 64, 24);
-  ctx.fillStyle = "#94a3b8";
-  ctx.fillText(`scale:${props.surfaces.theme.skinScalePct ?? 100}%`, 64, 42);
-}
-
-onMounted(() => {
-  void nextTick(drawSpineSkeletalCanvas);
-});
-
-watch(
-  () => [
-    activeTab.value,
-    props.surfaces.theme.spineActiveClip,
-    props.surfaces.theme.spineFrameSeq,
-    props.surfaces.theme.skinStandX,
-    props.surfaces.theme.skinStandY,
-  ],
-  () => {
-    void nextTick(drawSpineSkeletalCanvas);
-  },
-);
 
 function onSurfacePointerMove(ev: MouseEvent) {
   const rect = (ev.currentTarget as HTMLElement | null)?.getBoundingClientRect();
@@ -615,18 +552,16 @@ function onSurfacePointerMove(ev: MouseEvent) {
     <div v-else-if="activeTab === 'campaign'" class="surface-body" data-testid="panel-campaign">
       <div class="hud-grid">
         <div class="hud-card" data-testid="campaign-boss-card">
-          <h3>挑战 BOSS / 守卫剑阁 / 英雄杀塔防 (U02 / L03 / U08)</h3>
+          <h3>挑战 BOSS / 守卫剑阁 (U02 / L03)</h3>
           <p v-if="currentBossStage">
             当前首领：<strong data-testid="boss-name">{{ currentBossStage.title }}</strong> ·
             阶段 {{ surfaces.boss.stageIndex + 1 }}/{{ surfaces.boss.stages.length }} ·
             体力 <code data-testid="boss-hp">{{ currentBossStage.normalizedHp.label }}</code> ·
-            模式 <code data-testid="boss-mode">{{ surfaces.boss.mode }}</code> ·
-            塔防波次 <strong data-testid="u08-tafang-wave">#{{ surfaces.boss.tafangWave ?? 1 }}/5</strong>
+            模式 <code data-testid="boss-mode">{{ surfaces.boss.mode }}</code>
           </p>
           <div class="row wrap">
             <button type="button" data-testid="btn-boss-advance" @click="onAdvanceBoss">推进剑阁阶段</button>
             <button type="button" data-testid="btn-boss-mode" @click="onCycleBossMode">切换战役模式</button>
-            <button type="button" data-testid="btn-u08-tafang-wave" @click="onAdvanceTafangWave">推进英雄杀塔防</button>
           </div>
         </div>
 
@@ -763,7 +698,7 @@ function onSurfacePointerMove(ev: MouseEvent) {
           </p>
           <div class="sub-surface-box" data-testid="l25-zuan-diy-editor">
             <span class="tiny" data-testid="l25-diy-status">
-              祖安 DIY (L25): {{ surfaces.workbench.zuanDiyStatus ?? "离线沙箱就绪 (120将/122技)" }} · 武将 {{ surfaces.workbench.zuanDiyGeneralId ?? "zuan_diy01" }} ({{ surfaces.workbench.zuanDiyMaxHp ?? 4 }}血)
+              祖安 DIY (L25): {{ surfaces.workbench.zuanDiyStatus ?? "离线沙箱就绪 (60将/122技)" }} · 武将 {{ surfaces.workbench.zuanDiyGeneralId ?? "ssr_luxun" }} ({{ surfaces.workbench.zuanDiyMaxHp ?? 4 }}血)
             </span>
             <button type="button" data-testid="btn-l25-diy-apply" @click="onApplyZuanDiyOffline">
               应用单机 DIY 武将

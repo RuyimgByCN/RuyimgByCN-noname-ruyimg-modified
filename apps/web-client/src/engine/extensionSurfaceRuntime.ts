@@ -23,11 +23,10 @@ export const L20_HUD_MARK_SPECS: ReadonlyArray<{ key: string; label: string }> =
 
 export interface BossSurfaceState {
   variant: "noname" | "liuli";
-  mode: "boss" | "versus_jiange" | "tafang";
+  mode: "boss" | "versus_jiange";
   stageIndex: number;
   stages: Array<{ id: string; title: string; hpRaw: number | string; forbidAi: boolean; allowed: boolean }>;
   forbidAiIds: string[];
-  tafangWave?: number;
   shichangshiAliveCount?: number;
 }
 
@@ -215,7 +214,7 @@ const DEFAULT_OMNI_CATALOG: OmnisearchEntry[] = [
   { packageId: "longxue", kind: "skill", id: "mbcmfangzhu", displayName: "放逐" },
   { packageId: "longxue", kind: "skill", id: "mbjuejin", displayName: "绝进" },
   { packageId: "epic-cards", kind: "general", id: "shichangshi", displayName: "十常侍" },
-  { packageId: "thunder", kind: "skill", id: "th_chongzou", displayName: "重奏" },
+  { packageId: "thunder", kind: "skill", id: "th_jingxie", displayName: "精械" },
   { packageId: "hero-kill", kind: "skill", id: "yxs_menshen2", displayName: "门神·护卫" },
 ];
 
@@ -377,16 +376,6 @@ export function incrementL20HudMark(
       ...prev,
       [markKey]: nextCount,
     },
-  };
-}
-
-/** U08: 英雄杀塔防（tafang）波次推进（1..=5 波次，第 5 波为首领波）。 */
-export function advanceTafangWave(boss: BossSurfaceState): BossSurfaceState {
-  const nextWave = Math.min(5, (boss.tafangWave ?? 1) + 1);
-  return {
-    ...boss,
-    mode: "tafang",
-    tafangWave: nextWave,
   };
 }
 
@@ -900,8 +889,8 @@ export function createInitialExtensionSurfacesState(
       hideExclusivePack: true,
       markPatchState: "full",
       replacedPairs: [
-        { from: "caocao", to: "th_caocao" },
-        { from: "lvbu", to: "th_lvbu" },
+        { from: "guanning", to: "th_guanning" },
+        { from: "majun", to: "th_majun" },
       ],
     },
     omnisearch: {
@@ -921,10 +910,10 @@ export function createInitialExtensionSurfacesState(
       eloDifficulty: resolveEloDifficulty(true, "rank", 1, 0.5),
       zuanDebugAllowed: true,
       foolHintLabel: "强中加伤",
-      zuanDiyGeneralId: "zuan_diy01",
+      zuanDiyGeneralId: "ssr_luxun",
       zuanDiyMaxHp: 4,
       zuanDiyOnlineRoom: false,
-      zuanDiyStatus: "离线沙箱就绪 (120将/122技)",
+      zuanDiyStatus: "离线沙箱就绪 (60将/122技)",
       l27DualPrimary: "caocao",
       l27DualSecondary: "simayi",
       l27DualLocked: true,

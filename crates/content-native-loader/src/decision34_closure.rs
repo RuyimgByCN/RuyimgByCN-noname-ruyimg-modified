@@ -1,11 +1,11 @@
-//! Batch 25 (Decision 34 Complete Closure): native `ExtensionPack` builder, sub-skill
-//! VM declarations, L20 14-mark HUD specifications, L28 12 `th_*` variant generals,
-//! L10 `shichangshi` (`k_danggu`/`k_mowang`), L29 `mbcmjiushi`/`mbcmfangzhu`/`mbjuejin`,
-//! U06 interactive `kuwu`, U07 `diaobingqianjiang`/`duoqi`/`youzhan`, U08 31 cross-package
-//! standard skill bindings & `tafang` wave progression, and U02/L03/L11/L19/L21 campaign
-//! state machines.
+//! Decision 34 per-source authentic upstream sub-skills, generals, and cards for
+//! `L29` (`mbcmjiushi`/`mbcmfangzhu`/`mbjuejin`), `L10` (`shichangshi`: `k_danggu`/`k_mowang`),
+//! `U06` (`huanle_kuwu_interactive`), `U07` (`diaobingqianjiang`/`duoqi`/`youzhan`),
+//! `U08` (`yxs_menshen2_guard` & 31 cross-package standard skill bindings),
+//! `L20` (14 HUD marks), and `L28` (`雷霆万钧/extension.js:3657-3670,3783-8968` 14 `th_*`
+//! generals, skills, and `th_taipingyaoshu` card).
 
-use engine_native::catalog::{Catalog, Faction};
+use engine_native::catalog::{CardDef, CardKind, Catalog, Faction, Suit};
 use engine_native::content::extension::{
     ExtensionDef, ExtensionGeneral, ExtensionPack, InitHook, VmSkillDecl,
 };
@@ -29,18 +29,16 @@ pub const DUOQI_ID: u32 = 1_920_004_002;
 pub const YOUZHAN_ID: u32 = 1_920_004_003;
 
 pub const YXS_MENSHEN2_GUARD_ID: u32 = 1_920_005_001;
-pub const YXS_TAFANG_WAVE_ID: u32 = 1_920_005_002;
 
 pub const L20_MARK_DISPATCH_ID: u32 = 1_920_006_001;
 
-pub const TH_CHONGZOU_ID: u32 = 1_920_007_001;
-pub const TH_HUANYIN_ID: u32 = 1_920_007_002;
-pub const TH_XUANLV_ID: u32 = 1_920_007_003;
-
-pub const BOSS_BAONU_STAGE_ID: u32 = 1_920_008_001;
-pub const TAIXU_EXPEDITION_STEP_ID: u32 = 1_920_009_001;
-pub const DOOMSDAY_INFECTION_STEP_ID: u32 = 1_920_010_001;
-pub const MARTIAL_FORMATION_STEP_ID: u32 = 1_920_011_001;
+/// Authentic upstream `L28` (`雷霆万钧/extension.js:3783-8968`) skill dispatch IDs.
+pub const TH_DUNSHI_ID: u32 = 1_920_007_011;
+pub const TH_JINGXIE_ID: u32 = 1_920_007_012;
+pub const TH_QIAOSI_ID: u32 = 1_920_007_013;
+pub const TH_YEYAN_ID: u32 = 1_920_007_014;
+pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_015;
+pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_016;
 
 /// L20 (`mark-supplement-upstream-liuli`) 14 HUD marks (`(key, zh_label, mark_id)`).
 pub const L20_MARK_SPECS: [(&str, &str, u32); 14] = [
@@ -61,7 +59,7 @@ pub const L20_MARK_SPECS: [(&str, &str, u32); 14] = [
 ];
 
 /// U08 (`hero-kill-upstream-noname`) 31 cross-package standard skills referenced by
-/// upstream `character/character.js` and `mode/tafang.js` (`(upstream_key, native_catalog_name)`).
+/// upstream `character/character.js` (`(upstream_key, native_catalog_name)`).
 pub const U08_STANDARD_SKILL_REFS: [(&str, &str); 31] = [
     ("fanjian", "反间"),
     ("wushuang", "无双"),
@@ -102,7 +100,7 @@ const DECISION34_SKILL_SPECS: [(
     EventKind,
     &[EventKind],
     engine_native::rvm_bridge::VmFilterPolicy,
-); 19] = [
+); 16] = [
     (
         "mbcmjiushi",
         MBCMJIUSHI_ID,
@@ -174,13 +172,6 @@ const DECISION34_SKILL_SPECS: [(
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
     (
-        "yxs_tafang_wave",
-        YXS_TAFANG_WAVE_ID,
-        EventKind::TurnBegin,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-    ),
-    (
         "l20_mark_dispatch",
         L20_MARK_DISPATCH_ID,
         EventKind::PhaseBegin,
@@ -188,121 +179,159 @@ const DECISION34_SKILL_SPECS: [(
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
     (
-        "th_chongzou",
-        TH_CHONGZOU_ID,
+        "th_dunshi",
+        TH_DUNSHI_ID,
         EventKind::CardUsed,
-        &[],
+        &[EventKind::Damage],
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
     ),
     (
-        "th_huanyin",
-        TH_HUANYIN_ID,
-        EventKind::CardUsed,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+        "th_jingxie",
+        TH_JINGXIE_ID,
+        EventKind::PhaseBegin,
+        &[EventKind::Dying],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
     (
-        "th_xuanlv",
-        TH_XUANLV_ID,
-        EventKind::CardUsed,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
-    ),
-    (
-        "boss_baonu_stage",
-        BOSS_BAONU_STAGE_ID,
-        EventKind::TurnBegin,
+        "th_qiaosi",
+        TH_QIAOSI_ID,
+        EventKind::PhaseBegin,
         &[],
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
     (
-        "taixu_expedition_step",
-        TAIXU_EXPEDITION_STEP_ID,
-        EventKind::TurnBegin,
+        "th_yeyan",
+        TH_YEYAN_ID,
+        EventKind::PhaseBegin,
         &[],
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
     (
-        "doomsday_infection_step",
-        DOOMSDAY_INFECTION_STEP_ID,
-        EventKind::TurnBegin,
-        &[],
-        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
-    ),
-    (
-        "martial_formation_step",
-        MARTIAL_FORMATION_STEP_ID,
-        EventKind::TurnBegin,
-        &[],
+        "th_taipingyaoshu",
+        TH_TAIPINGYAOSHU_ID,
+        EventKind::Damage,
+        &[EventKind::CardsLost],
         engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
     ),
 ];
 
-/// L28 (`thunder-upstream-liuli`) 12 `th_*` variant generals corresponding to `CHG_HERO`.
-pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 12] = [
-    ("th_majun", Faction::Wei, Gender::Male, 3, &["th_chongzou", "th_xuanlv"]),
-    ("th_puyuan", Faction::Shu, Gender::Male, 4, &["th_huanyin", "th_xuanlv"]),
-    ("th_sunhanhua", Faction::Wu, Gender::Female, 3, &["th_chongzou", "th_huanyin"]),
-    ("th_pangdegong", Faction::Qun, Gender::Male, 3, &["th_chongzou"]),
-    ("th_zhengxuan", Faction::Qun, Gender::Male, 3, &["th_huanyin"]),
-    ("th_mamidi", Faction::Qun, Gender::Male, 3, &["th_xuanlv"]),
-    ("th_nanhualaoxian", Faction::Qun, Gender::Male, 3, &["th_chongzou", "th_huanyin"]),
-    ("th_zhouqun", Faction::Shu, Gender::Male, 3, &["th_xuanlv"]),
-    ("th_wanglang", Faction::Wei, Gender::Male, 3, &["th_chongzou"]),
-    ("th_liuhui", Faction::Wei, Gender::Male, 3, &["th_huanyin"]),
-    ("th_guanning", Faction::Wei, Gender::Male, 3, &["th_chongzou", "th_xuanlv"]),
-    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_chongzou", "th_huanyin", "th_xuanlv"]),
+/// Authentic `L28` (`雷霆万钧/extension.js:3657-3670`) 14 `th_*` generals.
+pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 14] = [
+    ("th_guanning", Faction::Qun, Gender::Male, 7, &["th_dunshi"]),
+    ("th_lukai", Faction::Wu, Gender::Male, 4, &["th_bushi", "th_zhongzhuang"]),
+    ("th_caohua", Faction::Wei, Gender::Female, 3, &["th_caiyi", "th_guili"]),
+    ("th_sunhanhua", Faction::Wu, Gender::Female, 3, &["th_chongxu"]),
+    ("th_puyuan", Faction::Shu, Gender::Male, 4, &["th_shengong"]),
+    ("th_pangdegong", Faction::Qun, Gender::Male, 3, &["th_pingcai"]),
+    ("th_zhengxuan", Faction::Qun, Gender::Male, 3, &["th_zhengjing"]),
+    ("th_mamidi", Faction::Qun, Gender::Male, 3, &["th_chengye", "th_buxu"]),
+    ("th_nanhualaoxian", Faction::Qun, Gender::Male, 3, &["th_yufeng", "th_tianshu"]),
+    ("th_majun", Faction::Wei, Gender::Male, 3, &["th_jingxie", "th_qiaosi"]),
+    ("th_zhouqun", Faction::Shu, Gender::Male, 3, &["th_tiansuan"]),
+    ("th_wanglang", Faction::Wei, Gender::Male, 3, &["th_gushe"]),
+    ("th_liuhui", Faction::Qun, Gender::Male, 4, &["th_geyuan", "th_jieshu", "th_gusuan"]),
+    ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan"]),
 ];
 
-/// Build the native `ExtensionPack` for Decision 34 complete closure.
+/// Authentic `L28` (`雷霆万钧/extension.js:3783-8960`) additional general skills.
+pub const L28_THUNDER_EXTRA_SKILLS: [&str; 17] = [
+    "th_bushi",
+    "th_zhongzhuang",
+    "th_caiyi",
+    "th_guili",
+    "th_chongxu",
+    "th_shengong",
+    "th_pingcai",
+    "th_zhengjing",
+    "th_chengye",
+    "th_buxu",
+    "th_yufeng",
+    "th_tianshu",
+    "th_tiansuan",
+    "th_gushe",
+    "th_geyuan",
+    "th_jieshu",
+    "th_gusuan",
+];
+
+fn build_d34_vm_decl(
+    idx: usize,
+    name_str: &str,
+    def_id: u32,
+    event: EventKind,
+    extra_events: &[EventKind],
+    filter_inner: engine_native::rvm_bridge::VmFilterPolicy,
+) -> VmSkillDecl {
+    let mod_name = format!("{name_str}#d34");
+    let mut code = Vec::with_capacity(14);
+    code.push(0x57); // HOST_SKILL
+    code.push(0x10); // CONST_I32
+    code.extend_from_slice(&(DECISION34_STORAGE_DISPATCH_KEY as i32).to_le_bytes());
+    code.push(0x10); // CONST_I32
+    code.extend_from_slice(&(def_id as i32).to_le_bytes());
+    code.push(0x5A); // HOST_EFFECT_EXT
+    code.extend_from_slice(&649u16.to_le_bytes()); // STORAGE_SET = 649
+    code.push(0x01); // HALT
+    let module = engine_native::rvm_bridge::BytecodeModule {
+        logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
+            &mod_name, &code, 0, 1, 0,
+        ),
+        name: mod_name,
+        code,
+        local_count: 0,
+        max_stack: 4,
+        entry_pc: 0,
+        caps_mask: 1,
+    };
+    VmSkillDecl {
+        declaration_hash: None,
+        presentation_binding: None,
+        name: name_str.to_string(),
+        module,
+        trigger: engine_native::catalog::TriggerMeta {
+            event,
+            timing: engine_native::event::Timing::Normal,
+            priority: 20 - (idx as i32),
+            order_selectable: false,
+            optional: false,
+            extra_events: extra_events.to_vec(),
+        },
+        filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
+            skill_def_id: def_id,
+            hand_limit_base_max_hp: false,
+            choice_actor: engine_native::rvm_bridge::VmChoiceActor::Owner,
+            modifiers: Vec::new(),
+            inner: Box::new(filter_inner),
+        },
+        r05_identity: None,
+    }
+}
+
+/// Build the native `ExtensionPack` for Decision 34 authentic upstream rules.
 pub fn decision34_closure_extension_pack() -> ExtensionPack {
-    let mut vm_skills: Vec<VmSkillDecl> = Vec::with_capacity(DECISION34_SKILL_SPECS.len());
+    let mut vm_skills: Vec<VmSkillDecl> =
+        Vec::with_capacity(DECISION34_SKILL_SPECS.len() + L28_THUNDER_EXTRA_SKILLS.len());
     for (idx, (name_str, def_id, event, extra_events, filter_inner)) in
         DECISION34_SKILL_SPECS.iter().enumerate()
     {
-        let mod_name = format!("{name_str}#d34");
-        let mut code = Vec::with_capacity(14);
-        code.push(0x57); // HOST_SKILL
-        code.push(0x10); // CONST_I32
-        code.extend_from_slice(&(DECISION34_STORAGE_DISPATCH_KEY as i32).to_le_bytes());
-        code.push(0x10); // CONST_I32
-        code.extend_from_slice(&(*def_id as i32).to_le_bytes());
-        code.push(0x5A); // HOST_EFFECT_EXT
-        code.extend_from_slice(&649u16.to_le_bytes()); // STORAGE_SET = 649
-        code.push(0x01); // HALT
-        let module = engine_native::rvm_bridge::BytecodeModule {
-            logic_hash: engine_native::rvm_bridge::BytecodeModule::compute_logic_hash(
-                &mod_name, &code, 0, 1, 0,
-            ),
-            name: mod_name,
-            code,
-            local_count: 0,
-            max_stack: 4,
-            entry_pc: 0,
-            caps_mask: 1,
-        };
-        vm_skills.push(VmSkillDecl {
-            declaration_hash: None,
-            presentation_binding: None,
-            name: (*name_str).to_string(),
-            module,
-            trigger: engine_native::catalog::TriggerMeta {
-                event: *event,
-                timing: engine_native::event::Timing::Normal,
-                priority: 20 - (idx as i32),
-                order_selectable: false,
-                optional: false,
-                extra_events: extra_events.to_vec(),
-            },
-            filter: engine_native::rvm_bridge::VmFilterPolicy::Declared {
-                skill_def_id: *def_id,
-                hand_limit_base_max_hp: false,
-                choice_actor: engine_native::rvm_bridge::VmChoiceActor::Owner,
-                modifiers: Vec::new(),
-                inner: Box::new(filter_inner.clone()),
-            },
-            r05_identity: None,
-        });
+        vm_skills.push(build_d34_vm_decl(
+            idx,
+            name_str,
+            *def_id,
+            *event,
+            extra_events,
+            filter_inner.clone(),
+        ));
+    }
+    for (offset, &sk_name) in L28_THUNDER_EXTRA_SKILLS.iter().enumerate() {
+        vm_skills.push(build_d34_vm_decl(
+            DECISION34_SKILL_SPECS.len() + offset,
+            sk_name,
+            TH_SKILL_DISPATCH_ID,
+            EventKind::PhaseBegin,
+            &[],
+            engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+        ));
     }
 
     let mut generals = Vec::with_capacity(L28_THUNDER_GENERALS.len() + 1);
@@ -332,14 +361,20 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
         });
     }
 
+    // Authentic `L28` card: `th_taipingyaoshu` (`雷霆万钧/extension.js:8968`)
+    let cards = vec![
+        CardDef::basic(names::intern("th_taipingyaoshu".to_string()), CardKind::Wuzhong)
+            .with_suit_rank(Suit::Heart, 3),
+    ];
+
     ExtensionPack {
         def: ExtensionDef {
             name: "decision34-complete-closure",
             version: 1,
-            description: "Decision 34 per-source sub-skills, generals, HUD marks, and campaigns",
+            description: "Decision 34 authentic upstream sub-skills, generals, and cards",
         },
         generals,
-        cards: Vec::new(),
+        cards,
         host_skills: Vec::new(),
         vm_skills,
         init_hook: InitHook::None,
