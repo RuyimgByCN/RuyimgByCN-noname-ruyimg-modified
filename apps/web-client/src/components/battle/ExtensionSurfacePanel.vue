@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import {
   L20_HUD_MARK_SPECS,
   U01_DDD_GALLERY_GENERALS,
@@ -26,6 +26,17 @@ import {
   validateSafeExportFilename,
   type ExtensionSurfacesSnapshot,
 } from "../../engine/extensionSurfaceRuntime";
+import {
+  CleanRoomAnimationState,
+  HANDCRAFTED_SPINE40_ATLAS_TEXT,
+  HANDCRAFTED_SPINE40_SKELETON_JSON,
+  buildBatchGeometry,
+  createSkeletonInstance,
+  parseSpine40Json,
+  parseTextureAtlas,
+  renderSpineBatchesToCanvas2D,
+  resolveDynamicSkinImport,
+} from "../../engine/spine40/index";
 import type { ObserverSnapshot } from "../../types/engine";
 
 const props = defineProps<{
@@ -54,6 +65,34 @@ const exportNameInput = ref("match_seed42.npack.save");
 const exportValidationMsg = ref<string>("合法文件名");
 const surfaceNotice = ref<string>("");
 const spineCanvasRef = ref<HTMLCanvasElement | null>(null);
+const cleanroomSkeletonData = parseSpine40Json(HANDCRAFTED_SPINE40_SKELETON_JSON);
+const cleanroomAtlas = parseTextureAtlas(HANDCRAFTED_SPINE40_ATLAS_TEXT);
+const defaultSkinFallback = resolveDynamicSkinImport(null);
+
+function renderCleanroomSpine40Pose(clipName: string) {
+  const canvas = spineCanvasRef.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const instance = createSkeletonInstance(cleanroomSkeletonData, "default");
+  const state = new CleanRoomAnimationState();
+  state.setAnimation(0, clipName, true, 1, "replace");
+  state.update(0.3);
+  state.apply(instance);
+  const batches = buildBatchGeometry(instance, cleanroomAtlas, true);
+  renderSpineBatchesToCanvas2D(ctx, instance, batches);
+}
+
+onMounted(() => {
+  renderCleanroomSpine40Pose(props.surfaces.theme.spineActiveClip ?? "daiji");
+});
+
+watch(
+  () => props.surfaces.theme.spineActiveClip,
+  (clip) => {
+    renderCleanroomSpine40Pose(clip ?? "daiji");
+  },
+);
 
 const mvpSortedEntries = computed(() => {
   const entries = Object.values(props.surfaces.mvp.scores);
@@ -526,7 +565,7 @@ function onSurfacePointerMove(ev: MouseEvent) {
               data-testid="spine-skeletal-canvas"
             ></canvas>
             <span class="tiny" data-testid="l24-skin-transform-meta">
-              动作:{{ surfaces.theme.spineActiveClip ?? "daiji" }} · 偏移({{ surfaces.theme.skinStandX ?? 4 }},{{ surfaces.theme.skinStandY ?? 0 }}) · 缩放 {{ surfaces.theme.skinScalePct ?? 100 }}%
+              Spine 4.0 净室 · 动作:{{ surfaces.theme.spineActiveClip ?? "daiji" }} · 偏移({{ surfaces.theme.skinStandX ?? 4 }},{{ surfaces.theme.skinStandY ?? 0 }}) · 缩放 {{ surfaces.theme.skinScalePct ?? 100 }}% · 未导入资产:{{ defaultSkinFallback.status }}
             </span>
             <button type="button" data-testid="btn-l24-trigger-clip" @click="onTriggerSpineClip">
               触发 Spine 骨骼动作 (L08/L24)
