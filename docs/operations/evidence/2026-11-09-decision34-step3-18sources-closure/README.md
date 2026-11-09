@@ -73,3 +73,6 @@
    - `node apps/web-client/scripts/decision34-browser-surfaces.mjs`（真实 Headless Chrome） -> `1160×773` DOM、`spine40Status: "Spine 4.0 净室 WebGL 活跃 · 12 三角形 · 动作 gongji"`、60 帧 **`p50 = 16.66 ms, p95 = 16.67 ms, p99 = 16.67 ms, approx_fps = 60.0 FPS, consoleErrors: []`**（见 [`decision34-browser-surfaces-report.json`](decision34-browser-surfaces-report.json) 与 [`decision34-browser-surfaces.png`](decision34-browser-surfaces.png)）。
 5. **`preflight.py` 21 项全量门禁**：
    - `python3 -B scripts/preflight.py` -> **`21/21 全部通过 ✅`**。
+6. **按裁决 25 发布与 exact-head CI 实跑登记**：
+   - 代码提交 `5824a3d9ebbcffcf5c796f4d4ba0e981d7c177ab`（`5824a3d9e`）通过单命令作用域 `pre-push` 守卫（`.git/hooks/pre-push` `sha256: e349af1e...` 零改动）推送至 `refs/heads/native-convergence`；
+   - Exact-head CI Run [`42641116293`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42641116293)（[`ci-run-42641116293-5824a3d9e.json`](ci-run-42641116293-5824a3d9e.json)）**首次运行（Attempt 1）10/10 全部通过 `conclusion: success`**（`native-web` `129242163368`、`perf-macos-latest` `129242163799`、`gates-ubuntu` `129242163956`、`desktop-macos-latest` `129242163977`、`build-ubuntu-latest` `129242164009`、`desktop-windows-latest` `129242164056`、`perf-ubuntu-latest` `129242164150`、`desktop-ubuntu-latest` `129242164266`、`build-macos-latest` `129242164426`、`build-windows-latest` `129242164622` 全绿）。
