@@ -29,6 +29,7 @@ import {
   parseSpine40Binary,
   parseSpine40Json,
   parseTextureAtlas,
+  renderSpineBatchesToWebGL,
   resolveAttachment,
   resolveDynamicSkinImport,
   resolvePremultipliedBlendFunc,
@@ -144,7 +145,7 @@ test("Decision 35 (5/7): Skins, all 6 attachment types (region, mesh, weighted m
   assert.equal(containsPointInBoundingBox(boundsVerts, 500, 500), false);
 });
 
-test("Decision 35 (6/7): Stepped, linear, cubic Bezier timelines and multi-track mixing (replace + add)", () => {
+test("Decision 35 (6/7): Stepped, linear, cubic Bezier, transform/path/deform timelines, and multi-track mixing (replace + add)", () => {
   // Cubic Bezier midpoint check
   const mid = evaluateCubicBezier(0, 0, 0.25, 0, 0.75, 10, 1, 10, 0.5);
   assert.ok(Math.abs(mid - 5.0) < 0.1, `expected symmetric Bezier midpoint ~5.0, got ${mid}`);
@@ -171,6 +172,17 @@ test("Decision 35 (6/7): Stepped, linear, cubic Bezier timelines and multi-track
   animState.apply(skel);
   const rotMultiTrack = skel.bones[skel.boneIndexByName.torso].rotation;
   assert.ok(rotMultiTrack > rotTrack0Only, "additive track 1 should increase torso rotation");
+
+  // Verify `jineng` transform, path, and mesh deform timelines at t=0.5
+  const skelJineng = createSkeletonInstance(data, "default");
+  const jinengState = new CleanRoomAnimationState();
+  jinengState.setAnimation(0, "jineng", false, 1.0, "replace");
+  jinengState.update(0.5);
+  jinengState.apply(skelJineng);
+  assert.ok(Math.abs(skelJineng.transformConstraints[0].mixRotate - 1.0) < 1e-4);
+  assert.ok(Math.abs(skelJineng.pathConstraints[0].position - 1.0) < 1e-4);
+  const weaponSlot = skelJineng.slots[skelJineng.slotIndexByName.weapon_slot];
+  assert.deepEqual(weaponSlot.deform, [0, 0, 8, 4, 8, -4]);
 });
 
 test("Decision 35 (7/7): Atlas parser, WebGL batch geometry, premultiplied alpha blend modes, and dynamicSkin.js fallback", () => {
@@ -207,6 +219,42 @@ test("Decision 35 (7/7): Atlas parser, WebGL batch geometry, premultiplied alpha
   assert.equal(batches[1].clipped, false);
   assert.equal(batches[1].blend, "additive");
   assert.deepEqual(batches[1].slotNames, ["aura_slot"]);
+
+  // Verify direct WebGL batch execution (`renderSpineBatchesToWebGL`)
+  const blendCalls = [];
+  const drawCalls = [];
+  const mockGl = {
+    ARRAY_BUFFER: 0x8892,
+    ELEMENT_ARRAY_BUFFER: 0x8893,
+    DYNAMIC_DRAW: 0x88e8,
+    FLOAT: 0x1406,
+    TRIANGLES: 0x0004,
+    UNSIGNED_SHORT: 0x1403,
+    BLEND: 0x0be2,
+    COLOR_BUFFER_BIT: 0x4000,
+    VERTEX_SHADER: 0x8b31,
+    FRAGMENT_SHADER: 0x8b30,
+    viewport() {},
+    clearColor() {},
+    clear() {},
+    enable() {},
+    blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha) {
+      blendCalls.push([srcRGB, dstRGB, srcAlpha, dstAlpha]);
+    },
+    createBuffer() {
+      return {};
+    },
+    bindBuffer() {},
+    bufferData() {},
+    drawElements(mode, count) {
+      drawCalls.push({ mode, count });
+    },
+  };
+  const glStats = renderSpineBatchesToWebGL(mockGl, batches, 220, 140);
+  assert.equal(glStats.drawCallCount, 2);
+  assert.equal(glStats.triangleCount, 8);
+  assert.deepEqual(blendCalls[0], [GL_ONE, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ONE_MINUS_SRC_ALPHA]);
+  assert.deepEqual(blendCalls[1], [GL_ONE, GL_ONE, GL_ZERO, GL_ONE]);
 
   // Player import adapter: missing asset falls back to static portrait
   const noAssetRes = resolveDynamicSkinImport({

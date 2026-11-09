@@ -375,14 +375,14 @@ fn l20_fourteen_hud_marks_and_l28_thunder_fourteen_authentic_generals_and_skills
         );
     }
 
-    // 3. Test authentic L28 skills:
+    // 3. Test authentic L28 skills (including direct dispatch by `TH_DUNSHI_ID` when `executing` is empty):
     // - `th_dunshi` (`雷霆万钧/extension.js:3783`): prevents damage, loses 1 max_hp, unlocks virtue & draws
     let th_gn = find_general(&e, "th_guanning");
     e.debug_assemble_general_def(0, th_gn);
     let max_hp0_before = e.state_core().player(0).max_hp;
     set_flag(&mut e, 0, "th_dunshi_basic_bit", 1);
     set_flag(&mut e, 0, "th_dunshi_prevent_damage", 1);
-    invoke_d34_op(&mut e, 0, "th_dunshi", TH_DUNSHI_ID);
+    invoke_d34_op(&mut e, 0, "", TH_DUNSHI_ID);
     drain(&mut e);
     assert_eq!(flag(&e, 0, "th_dunshi_damage_prevented"), 1);
     assert_eq!(e.state_core().player(0).max_hp, max_hp0_before - 1);

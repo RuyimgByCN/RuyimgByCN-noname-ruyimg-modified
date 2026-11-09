@@ -317,6 +317,74 @@ export function renderSpineBatchesToCanvas2D(
   return { drawCallCount: batches.length, triangleCount };
 }
 
+/**
+ * Minimal WebGL context interface (compatible with `WebGLRenderingContext`,
+ * `WebGL2RenderingContext`, and headless test harnesses) for executing Spine 4.0 batches.
+ */
+export interface MinimalWebGLContext {
+  readonly ARRAY_BUFFER: number;
+  readonly ELEMENT_ARRAY_BUFFER: number;
+  readonly DYNAMIC_DRAW: number;
+  readonly FLOAT: number;
+  readonly TRIANGLES: number;
+  readonly UNSIGNED_SHORT: number;
+  readonly BLEND: number;
+  readonly COLOR_BUFFER_BIT: number;
+  readonly VERTEX_SHADER: number;
+  readonly FRAGMENT_SHADER: number;
+  viewport(x: number, y: number, width: number, height: number): void;
+  clearColor(r: number, g: number, b: number, a: number): void;
+  clear(mask: number): void;
+  enable(cap: number): void;
+  blendFuncSeparate(srcRGB: number, dstRGB: number, srcAlpha: number, dstAlpha: number): void;
+  createBuffer(): unknown;
+  bindBuffer(target: number, buffer: unknown): void;
+  bufferData(target: number, data: ArrayBufferView, usage: number): void;
+  drawElements(mode: number, count: number, type: number, offset: number): void;
+}
+
+/**
+ * Executes Spine 4.0 batches on a WebGL context, binding each batch's premultiplied
+ * or straight-alpha blend factors via `gl.blendFuncSeparate`, uploading interleaved
+ * vertex (`[x, y, u, v, r, g, b, a]`) and `Uint16Array` index buffers, and issuing
+ * `gl.drawElements(gl.TRIANGLES, ...)`.
+ */
+export function renderSpineBatchesToWebGL(
+  gl: MinimalWebGLContext,
+  batches: SpineRenderBatch[],
+  viewportWidth = 220,
+  viewportHeight = 140,
+): { drawCallCount: number; triangleCount: number } {
+  gl.viewport(0, 0, viewportWidth, viewportHeight);
+  gl.clearColor(0, 0, 0, 0);
+  gl.clear(gl.COLOR_BUFFER_BIT);
+  gl.enable(gl.BLEND);
+
+  const vbo = gl.createBuffer();
+  const ibo = gl.createBuffer();
+  let drawCallCount = 0;
+  let triangleCount = 0;
+
+  for (const batch of batches) {
+    if (batch.indices.length === 0 || batch.vertices.length === 0) continue;
+    gl.blendFuncSeparate(
+      batch.blendFactors.srcRgb,
+      batch.blendFactors.dstRgb,
+      batch.blendFactors.srcAlpha,
+      batch.blendFactors.dstAlpha,
+    );
+    gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
+    gl.bufferData(gl.ARRAY_BUFFER, batch.vertices, gl.DYNAMIC_DRAW);
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, batch.indices, gl.DYNAMIC_DRAW);
+    gl.drawElements(gl.TRIANGLES, batch.indices.length, gl.UNSIGNED_SHORT, 0);
+    drawCallCount += 1;
+    triangleCount += Math.floor(batch.indices.length / 3);
+  }
+
+  return { drawCallCount, triangleCount };
+}
+
 export interface DynamicSkinResolution {
   status: "ready-spine40" | "static-portrait-fallback";
   reason: string;

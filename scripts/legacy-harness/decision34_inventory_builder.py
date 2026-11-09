@@ -165,7 +165,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`U01_DDD_SKILLS` + `resolve_u01_ddd_skill`（64 项 `ddd*` 技能）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:141-294`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:141-322`",
             "`archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4-6368`",
             "原生规则 / `d3-upstream-noname`",
             "部分忠实（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并按上游忠实实现 `dddxiaxing`、`dddyeshen`、`dddqiaoduan`、`dddqianlong`、`dddqice`、`dddjungui`、`dddshilie`、`ddddiedang` 8 项技能且接入正式包；其余 56 项技能仅记录已触发标志）",
@@ -207,7 +207,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "U05": [
         (
             "`U05_SWD_REMAINING_SKILLS` / `U05_YUNCHOU_REMAINING_SKILLS` / `U05_MTG_LAND_CARDS` / `U05_ZHENFA_CARDS` / `U05_OW_SKILLS` / `U05_XIANJIAN_GENERALS` / `U05_XIANJIAN_SKILLS`",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:60-124`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:299-534`",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:60-124`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:327-552`",
             "`archive/upstream/noname/apps/core/extension/杀海拾遗/` 各子目录",
             "原生规则 / `packages/extensions/sha*`",
             "部分忠实（已清除 `resolve_ow_skill` 与 `resolve_xianjian_skill` 的 `_ => ctx.start_draw(owner, 1)` 兜底并通过 `attach_formal_package_upstream_rules` 接入 `packages/extensions/sha*` 正式包；`character/{gujian,gwent,hearth,mtg}` 武将子目录待迁入）",
@@ -232,7 +232,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`jianbi` / `choudu` (`decision34_pack9.rs`)",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:539-550`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:556-585`",
             "`archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586-615,726-775`",
             "原生规则 / `wudian-upstream-noname`",
             "示意或自造（已接入正式包 `wudian-upstream-noname`，但 `jianbi`/`choudu` 仍为简化分支）",
@@ -280,17 +280,17 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子）",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:555-566`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:590-603`",
             "`archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650`",
             "原生前端组件",
             "示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现）",
         ),
         (
             "净室 Spine 4.0 播放器 (`apps/web-client/src/engine/spine40/*`，已替换示意 `drawSpineSkeletalCanvas`)",
-            "`apps/web-client/src/engine/spine40/webglRenderer.ts:1-406`、`apps/web-client/src/engine/spine40/index.ts:1-5`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388`",
+            "`apps/web-client/src/engine/spine40/webglRenderer.ts:1-474`、`apps/web-client/src/engine/spine40/index.ts:1-5`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388`",
             "`archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`、`dynamicSkin.js:1-162`",
             "原生前端组件（净室 Spine 4.0 播放器）",
-            "忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/二进制解码、骨骼世界变换、IK/变换/路径约束、多轨道混合、图集解析与 WebGL PMA 渲染，无动皮资源或非 4.0 资源时回退静态立绘）",
+            "忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/二进制解码、骨骼世界变换、IK/变换/路径约束、`transform`/`path`/`deform` 时间轴、多轨道混合、图集解析与 WebGL PMA 渲染，无动皮资源或非 4.0 资源时回退静态立绘）",
         ),
     ],
     "L09": [
@@ -332,11 +332,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L13": [],
     "L14": [
         (
-            "`L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌已清除，48 个 UI 钩子已清零摸牌/回血副作用）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:132-143`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:571-583`",
+            "`L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌与 `spshidi`/`spcishi`/`zhefu`/`yidu` 已清除，48 个 UI 钩子已清零摸牌/回血副作用）",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:132-143`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:608-617`",
             "`archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360`",
             "原生前端组件",
-            "示意或自造（已删除伪造 `shousha_*` 武将/卡牌及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻）",
+            "示意或自造（已删除伪造 `shousha_*` 武将/卡牌、`spshidi`/`spcishi`/`zhefu`/`yidu` 及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻）",
         ),
     ],
     "L15": [],
@@ -353,7 +353,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L19_DOOMSDAY_SKILLS` + `resolve_l19_doomsday_skill`",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:588-617`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:620-653`",
             "`archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:333-3370`",
             "原生规则 / `doomsday-brawl-upstream-liuli`",
             "部分忠实（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包；`baozou`、`ganran`、`shishi`、`xunmeng` 已实现，其余部分模式钩子待补完）",
@@ -369,7 +369,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L20_MARK_SUPPLEMENT_SKILLS` + `resolve_l20_skill` + `resolve_l20_hud_mark_sync`",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:101-133,622-667`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:101-133,656-698`",
             "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577-6480`",
             "原生规则 / `mark-supplement-upstream-liuli` + 原生前端组件",
             "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包 `mark-supplement-upstream-liuli`；其余标记特效钩子待在前端完整复刻）",
@@ -389,7 +389,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L24": [
         (
             "`L24_SKIN_SWITCH_SKILLS` + `resolve_l24_skin_skill`（23 项皮肤/语音/出框 UI 钩子，已清零摸牌副作用）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:188-194`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:672-682`",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:188-194`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:702-712`",
             "`archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-5900`",
             "原生前端组件",
             "示意或自造（已清除规则层摸牌副作用，仅递增 `_l24_skin_fx_seq`；Spine 4.0 净室播放器已落地，完整出框/语音/参数编辑界面待补完）",
@@ -405,7 +405,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
         ),
         (
             "`L25_ZUAN_SKILLS` + `resolve_l25_zuan_skill`",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:213-239`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:687-708`",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:213-239`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:715-740`",
             "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:536-51470`",
             "原生规则 / `zuan-upstream-liuli`",
             "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底与 DIY 钩子摸牌；`package.skill.skill` 内 230 项 `ssr_*` 技能待实现）",
@@ -415,7 +415,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L27": [
         (
             "`L27_SELECT_BEAUTIFY_SKILLS` + `resolve_l27_select_skill`",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:241-250`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:713-736`",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:241-250`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:743-789`",
             "`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162-9090`",
             "原生规则 / `select-beautify-upstream-liuli` + 原生前端组件",
             "示意或自造（已清除 `_chooseCharacterTwo` 摸 2 张牌与 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包 `select-beautify-upstream-liuli`；其余技能钩子待补完）",

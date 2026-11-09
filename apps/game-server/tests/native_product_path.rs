@@ -302,8 +302,9 @@ fn native_character_only_installed_package_enters_match() {
     let loaded = content
         .load("d3-select")
         .expect("仅 character.json 的正式包");
-    assert_eq!(loaded.pack.generals.len(), 1);
+    assert_eq!(loaded.pack.generals.len(), 32);
     assert_eq!(loaded.pack.host_skills.len(), 2);
+    assert_eq!(loaded.pack.vm_skills.len(), 62);
     assert!(loaded.pack.cards.is_empty());
     let mut engine = engine_native::Engine::new_with_extensions(4242, 4, &[&loaded.pack]).unwrap();
     let name = loaded.pack.generals[0].name;

@@ -133,33 +133,35 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     set_flag(ctx.core, owner, "u01_ddd_resolved", 1);
 
     match skill_name {
-        // dddxiaxing 侠行 (`3D精选/character/skill.js:59`):
-        // Without "侠" mark (`dddxiaxing_xia == 0`), puts 1 card on deck top to view-as tao/jiu
-        // and gains "侠" mark (`dddxiaxing_xia = 1`); with "侠" mark, removes "侠" mark
-        // (`dddxiaxing_xia = 0`) to view-as basic card and draws 1 card.
+        // dddxiaxing 侠行 (`3D精选/character/skill.js:59-242`):
+        // Without "侠" mark (`dddxiaxing_xia == 0`), requires >= 1 `he` card (`skill.js:72, 129`),
+        // puts 1 card on deck top to view-as tao/jiu and gains "侠" mark (`dddxiaxing_xia = 1`);
+        // with "侠" mark (`dddxiaxing_viewas` at `skill.js:163-208`), removes "侠" mark
+        // (`dddxiaxing_xia = 0`) to view-as `sha`/`shan` (`selectCard: -1`, `cards: []`) WITHOUT drawing cards.
         "dddxiaxing" => {
             if flag(ctx.core, owner, "dddxiaxing_xia") == 0 {
-                if let Some(c) = ctx
+                let Some(c) = ctx
                     .core
                     .player(owner)
                     .hand
                     .first()
                     .copied()
                     .or_else(|| ctx.core.player(owner).equips.first().copied())
-                {
-                    if ctx.core.player(owner).hand.contains(&c) {
-                        ctx.take_hand_card(owner, c);
-                    } else {
-                        ctx.take_owned_card(owner, c);
-                    }
-                    ctx.core.deck.push(c);
+                else {
+                    set_flag(ctx.core, owner, "dddxiaxing_blocked_empty", 1);
+                    return;
+                };
+                if ctx.core.player(owner).hand.contains(&c) {
+                    ctx.take_hand_card(owner, c);
+                } else {
+                    ctx.take_owned_card(owner, c);
                 }
+                ctx.core.deck.push(c);
                 set_flag(ctx.core, owner, "dddxiaxing_xia", 1);
                 set_flag(ctx.core, owner, "dddxiaxing_viewas_taojiu", 1);
             } else {
                 set_flag(ctx.core, owner, "dddxiaxing_xia", 0);
                 set_flag(ctx.core, owner, "dddxiaxing_viewas_basic", 1);
-                ctx.start_draw(owner, 1);
             }
         }
         // dddyeshen 夜审 (`3D精选/character/skill.js:656`):
@@ -241,20 +243,88 @@ fn resolve_u01_ddd_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
             set_flag(ctx.core, owner, "ddd_qice_disabled", 1);
             ctx.start_draw(owner, 2);
         }
-        // dddjungui 军规 (`3D精选/character/skill.js:112`):
+        // dddjungui 隽轨 (`3D精选/character/skill.js:384-441`):
+        // At PhaseJieshu, target draws 2 cards (`target.draw(2)`), shows all handcards, and
+        // discards X cards of different suits (`X = suits - decreased`).
         "dddjungui" => {
+            let t = first_other_alive(ctx.core, owner).unwrap_or(owner);
             set_flag(ctx.core, owner, "ddd_jungui_triggered", 1);
-            ctx.start_draw(owner, 1);
+            set_flag(ctx.core, t, "ddd_jungui_shown_hand", 1);
+            ctx.start_draw(t, 2);
+            let decreased = flag(ctx.core, owner, "dddjungui_decreased") as usize;
+            let discard_n = (2usize).saturating_sub(decreased);
+            let mut to_discard = Vec::new();
+            for _ in 0..discard_n {
+                if let Some(c) = ctx.core.player(t).hand.first().copied() {
+                    ctx.take_hand_card(t, c);
+                    to_discard.push(c);
+                }
+            }
+            let disc_len = to_discard.len() as u32;
+            if !to_discard.is_empty() {
+                discard_some(ctx, t, to_discard);
+            }
+            set_flag(ctx.core, owner, "ddd_jungui_discarded", disc_len);
         }
-        // dddshilie 势裂 (`3D精选/character/skill.js:189`):
+        // dddshilie 示烈 (`3D精选/character/skill.js:511-654`):
+        // Requires `!dddshilie_used` and non-empty hand (`skill.js:613-623`). Shows hand cards
+        // whose rank sum >= `player.hp + current.hp` to view-as `sha`/`shan` (cards stay in hand);
+        // only draws `shown_count` cards if rank sum == `player.hp + current.hp` (`dddshilie_exact_sum != 0`).
         "dddshilie" => {
+            if flag(ctx.core, owner, "dddshilie_used") != 0 {
+                set_flag(ctx.core, owner, "dddshilie_blocked_used", 1);
+                return;
+            }
+            if ctx.core.player(owner).hand.is_empty() {
+                set_flag(ctx.core, owner, "dddshilie_blocked_empty", 1);
+                return;
+            }
+            set_flag(ctx.core, owner, "dddshilie_used", 1);
             set_flag(ctx.core, owner, "ddd_shilie_triggered", 1);
-            ctx.start_draw(owner, 2);
+            set_flag(ctx.core, owner, "ddd_shilie_viewas_shashan", 1);
+            if flag(ctx.core, owner, "dddshilie_exact_sum") != 0 {
+                let n = flag(ctx.core, owner, "dddshilie_shown_count").max(1) as u32;
+                ctx.start_draw(owner, n);
+            }
         }
-        // ddddiedang 跌宕 (`3D精选/character/skill.js:244`):
+        // ddddiedang 跌宕 (`3D精选/character/skill.js:802-860`):
+        // Conversion skill (`ddddiedang_state` 0/1):
+        // - state 0: draws 3 cards then discards 1 `he` card;
+        // - state 1: requires >= 3 `he` cards (`skill.js:805`), discards 3 `he` cards then draws 1 card;
+        // toggles conversion state if owner has max or min handcards.
         "ddddiedang" => {
-            set_flag(ctx.core, owner, "ddd_diedang_triggered", 1);
-            ctx.start_draw(owner, 1);
+            let state = flag(ctx.core, owner, "ddddiedang_state") & 1;
+            if state == 0 {
+                set_flag(ctx.core, owner, "ddd_diedang_triggered", 1);
+                ctx.start_draw(owner, 3);
+                if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                    ctx.take_hand_card(owner, c);
+                    discard_some(ctx, owner, vec![c]);
+                }
+            } else {
+                let he_len =
+                    ctx.core.player(owner).hand.len() + ctx.core.player(owner).equips.len();
+                if he_len < 3 {
+                    set_flag(ctx.core, owner, "ddddiedang_blocked_cards", 1);
+                    return;
+                }
+                set_flag(ctx.core, owner, "ddd_diedang_triggered", 1);
+                let mut disc = Vec::new();
+                for _ in 0..3 {
+                    if let Some(c) = ctx.core.player(owner).hand.first().copied() {
+                        ctx.take_hand_card(owner, c);
+                        disc.push(c);
+                    } else if let Some(c) = ctx.core.player(owner).equips.first().copied() {
+                        ctx.take_owned_card(owner, c);
+                        disc.push(c);
+                    }
+                }
+                if !disc.is_empty() {
+                    discard_some(ctx, owner, disc);
+                }
+                ctx.start_draw(owner, 1);
+            }
+            set_flag(ctx.core, owner, "ddddiedang_state", state ^ 1);
         }
         _ => {}
     }
@@ -532,10 +602,9 @@ fn resolve_l08_decade_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
     }
 }
 
-/// `L14` (`手杀UI` — `archive/upstream/noname-liuli/noname/extension/手杀UI/skill/main1.js`):
-/// UI hooks (`_dieNoTuoguan`, `_menuCheat`, `_jindutiao`, `_usecard`, etc.) record UI hook
-/// triggers without drawing cards; skill overrides (`spshidi`, `zhefu`, `yidu`) apply their
-/// upstream `main1.js` behavior (`spshidi:860`, `zhefu:907`, `yidu:948`).
+/// `L14` (`手杀ui` — `archive/upstream/noname-liuli/noname/extension/手杀ui/skill/main1.js` & `lbtn/main1.js`):
+/// UI hooks (`_dieNoTuoguan`, `_menuCheat`, `_jindutiao`, `_chupaiA`, etc.) record UI hook
+/// triggers without drawing cards or mutating combat state.
 fn resolve_l14_shousha_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId) {
     let skill_name = if executing.is_empty() {
         "_dieNoTuoguan"
@@ -545,22 +614,6 @@ fn resolve_l14_shousha_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId
     set_flag(ctx.core, owner, &format!("l14_skill:{skill_name}"), 1);
     let count = flag(ctx.core, owner, "l14_shousha_trigger_count") + 1;
     set_flag(ctx.core, owner, "l14_shousha_trigger_count", count);
-    match skill_name {
-        "spshidi" => {
-            let parity = (flag(ctx.core, owner, "l14_spshidi_parity") ^ 1) & 1;
-            set_flag(ctx.core, owner, "l14_spshidi_parity", parity);
-        }
-        "zhefu" | "yidu" => {
-            if let Some(t) = first_other_alive(ctx.core, owner) {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(
-                    Some(owner),
-                    t,
-                    1,
-                )));
-            }
-        }
-        _ => {}
-    }
 }
 
 /// `L19` (`末日乱斗` — `archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js`):

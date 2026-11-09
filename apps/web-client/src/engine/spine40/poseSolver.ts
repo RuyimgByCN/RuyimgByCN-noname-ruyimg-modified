@@ -693,6 +693,11 @@ export function getAnimationDuration(skelData: SkeletonData, animationName: stri
     checkArr(grp.spacing);
     checkArr(grp.mix);
   }
+  for (const slotsObj of Object.values(anim.deform)) {
+    for (const attsObj of Object.values(slotsObj)) {
+      for (const kfs of Object.values(attsObj)) checkArr(kfs);
+    }
+  }
   checkArr(anim.drawOrder);
   return maxTime;
 }
@@ -815,6 +820,115 @@ export class CleanRoomAnimationState {
           sampleTime,
         );
         ikState.mix += (mixVal - ikState.mix) * alpha;
+      }
+
+      for (const [trName, kfs] of Object.entries(anim.transform)) {
+        const trState = skeleton.transformConstraints.find((c) => c.data.name === trName);
+        if (!trState || kfs.length === 0) continue;
+        const mixRotate = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixRotate, curve: k.curve })),
+          sampleTime,
+        );
+        const mixX = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixX, curve: k.curve })),
+          sampleTime,
+        );
+        const mixY = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixY, curve: k.curve })),
+          sampleTime,
+        );
+        const mixScaleX = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixScaleX, curve: k.curve })),
+          sampleTime,
+        );
+        const mixScaleY = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixScaleY, curve: k.curve })),
+          sampleTime,
+        );
+        const mixShearY = sampleScalarTimeline(
+          kfs.map((k) => ({ time: k.time, value: k.mixShearY, curve: k.curve })),
+          sampleTime,
+        );
+        trState.mixRotate += (mixRotate - trState.mixRotate) * alpha;
+        trState.mixX += (mixX - trState.mixX) * alpha;
+        trState.mixY += (mixY - trState.mixY) * alpha;
+        trState.mixScaleX += (mixScaleX - trState.mixScaleX) * alpha;
+        trState.mixScaleY += (mixScaleY - trState.mixScaleY) * alpha;
+        trState.mixShearY += (mixShearY - trState.mixShearY) * alpha;
+      }
+
+      for (const [pathName, grp] of Object.entries(anim.path)) {
+        const pcState = skeleton.pathConstraints.find((c) => c.data.name === pathName);
+        if (!pcState) continue;
+        if (grp.position && grp.position.length > 0) {
+          const posVal = sampleScalarTimeline(grp.position, sampleTime);
+          pcState.position += (posVal - pcState.position) * alpha;
+        }
+        if (grp.spacing && grp.spacing.length > 0) {
+          const spVal = sampleScalarTimeline(grp.spacing, sampleTime);
+          pcState.spacing += (spVal - pcState.spacing) * alpha;
+        }
+        if (grp.mix && grp.mix.length > 0) {
+          const mr = sampleScalarTimeline(
+            grp.mix.map((k) => ({ time: k.time, value: k.mixRotate, curve: k.curve })),
+            sampleTime,
+          );
+          const mx = sampleScalarTimeline(
+            grp.mix.map((k) => ({ time: k.time, value: k.mixX, curve: k.curve })),
+            sampleTime,
+          );
+          const my = sampleScalarTimeline(
+            grp.mix.map((k) => ({ time: k.time, value: k.mixY, curve: k.curve })),
+            sampleTime,
+          );
+          pcState.mixRotate += (mr - pcState.mixRotate) * alpha;
+          pcState.mixX += (mx - pcState.mixX) * alpha;
+          pcState.mixY += (my - pcState.mixY) * alpha;
+        }
+      }
+
+      const skinKeys = skeleton.skinName === "default" ? ["default"] : ["default", skeleton.skinName];
+      for (const skinKey of skinKeys) {
+        const slotsDeform = anim.deform[skinKey];
+        if (!slotsDeform) continue;
+        for (const [slotName, attsDeform] of Object.entries(slotsDeform)) {
+          const sIdx = skeleton.slotIndexByName[slotName];
+          if (sIdx === undefined) continue;
+          const slot = skeleton.slots[sIdx];
+          if (!slot.attachmentName) continue;
+          const kfs = attsDeform[slot.attachmentName];
+          if (!kfs || kfs.length === 0) continue;
+          let maxLen = 0;
+          for (const kf of kfs) {
+            maxLen = Math.max(maxLen, kf.offset + kf.vertices.length);
+          }
+          const sampled = new Array<number>(maxLen).fill(0);
+          let kfIdx = 0;
+          for (let i = 0; i < kfs.length; i++) {
+            if (sampleTime >= kfs[i].time) kfIdx = i;
+          }
+          const k0 = kfs[kfIdx];
+          const k1 = kfIdx + 1 < kfs.length && sampleTime > k0.time ? kfs[kfIdx + 1] : null;
+          for (let j = 0; j < maxLen; j++) {
+            const v0 = j >= k0.offset ? (k0.vertices[j - k0.offset] ?? 0) : 0;
+            if (!k1) {
+              sampled[j] = v0;
+            } else {
+              const v1 = j >= k1.offset ? (k1.vertices[j - k1.offset] ?? 0) : 0;
+              sampled[j] = interpolateValue(k0.time, v0, k1.time, v1, sampleTime, k0.curve, 0);
+            }
+          }
+          if (slot.deform.length < maxLen) {
+            slot.deform = [
+              ...slot.deform,
+              ...new Array<number>(maxLen - slot.deform.length).fill(0),
+            ];
+          }
+          for (let j = 0; j < maxLen; j++) {
+            const target = track.mixBlend === "add" ? slot.deform[j] + sampled[j] : sampled[j];
+            slot.deform[j] += (target - slot.deform[j]) * alpha;
+          }
+        }
       }
 
       if (anim.drawOrder.length > 0) {

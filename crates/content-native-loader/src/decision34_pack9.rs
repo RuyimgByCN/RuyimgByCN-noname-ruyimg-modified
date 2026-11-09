@@ -286,9 +286,6 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &s in &L14_SHOUSHA_SKILLS {
         push_skill(s, L14_SHOUSHA_SKILL_ID);
     }
-    for &s in &["spshidi", "spcishi", "zhefu", "yidu"] {
-        push_skill(s, L14_SHOUSHA_SKILL_ID);
-    }
     for &s in &L19_DOOMSDAY_SKILLS {
         push_skill(s, L19_DOOMSDAY_SKILL_ID);
     }

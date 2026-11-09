@@ -141,9 +141,20 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
         );
     }
 
-    // 1. `dddxiaxing` 侠行 (`3D精选/character/skill.js:59`):
-    // First use without "侠" mark puts 1 card on deck top, views as tao/jiu, and gains "侠" mark (`dddxiaxing_xia = 1`);
-    // second use removes "侠" mark (`dddxiaxing_xia = 0`), views as basic card, and draws 1 card.
+    // 1. `dddxiaxing` 侠行 (`3D精选/character/skill.js:59-242`):
+    // Negative guard: when `he` (`hand` and `equips`) is empty and `dddxiaxing_xia == 0`,
+    // `dddxiaxing` is blocked (`dddxiaxing_blocked_empty = 1`) and does NOT gain "侠" mark.
+    let saved_hand = e.state_core().player(0).hand.clone();
+    e.state_core_mut().player_mut(0).hand.clear();
+    e.state_core_mut().player_mut(0).equips.clear();
+    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddxiaxing_blocked_empty"), 1);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
+    e.state_core_mut().player_mut(0).hand = saved_hand;
+
+    // First use with cards puts 1 card on deck top, views as tao/jiu, and gains "侠" mark (`dddxiaxing_xia = 1`);
+    // second use (`dddxiaxing_viewas` at `skill.js:163-208`) removes "侠" mark (`dddxiaxing_xia = 0`)
+    // and views as sha/shan WITHOUT drawing any card (`hand.len() == hand_before_second`).
     let zhangmiao = find_general(&e, "ddd_zhangmiao");
     e.assign_general(0, zhangmiao).expect("assign ddd_zhangmiao");
     next_phase(&mut e);
@@ -155,7 +166,11 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
     invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 0);
     assert_eq!(flag(&e, 0, "dddxiaxing_viewas_basic"), 1);
-    assert_eq!(e.state_core().player(0).hand.len(), hand_before_second + 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_second,
+        "dddxiaxing_viewas removes 侠 mark without drawing cards"
+    );
 
     // 2. `dddqianlong` 潜龙 (`3D精选/character/skill.js:2819`):
     // Lord skill on `ddd_caomao` — draws 3 cards upon killing a character (`player.draw(3)` at `skill.js:2842`), NO daoxin marks.
@@ -203,6 +218,28 @@ fn u01_d3_all_31_generals_and_64_ddd_skills_execute_and_roundtrip() {
     set_flag(&mut e, 0, "ddd_qice_trick_used", 1);
     invoke_p9_op(&mut e, 0, "dddqice", DDD_SKILL_DISPATCH_ID);
     assert_eq!(flag(&e, 0, "ddd_qice_disabled"), 0);
+
+    // 6. `dddjungui` 隽轨 (`3D精选/character/skill.js:384`), `dddshilie` 示烈 (`skill.js:511`),
+    // and `ddddiedang` 跌宕 (`skill.js:802`) authentic behavior:
+    invoke_p9_op(&mut e, 0, "dddjungui", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_jungui_triggered"), 1);
+    assert_eq!(flag(&e, 1, "ddd_jungui_shown_hand"), 1);
+    assert_eq!(flag(&e, 0, "ddd_jungui_discarded"), 2);
+
+    let hand_before_shilie = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "dddshilie", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddd_shilie_viewas_shashan"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_shilie);
+    invoke_p9_op(&mut e, 0, "dddshilie", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddshilie_blocked_used"), 1);
+
+    let hand_before_diedang = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "ddddiedang", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddddiedang_state"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_diedang + 2);
+    invoke_p9_op(&mut e, 0, "ddddiedang", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "ddddiedang_state"), 0);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_diedang);
 
     // Validate 3D gallery camera resolver + negative guard
     let gal = resolve_u01_3d_gallery("ddd_caomao", 60, -40, 200).expect("valid ddd_caomao");
@@ -454,6 +491,10 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
     for fabricated_skill in [
         "_decade_qiankunbagua",
         "shousha_qiankunbagua",
+        "spshidi",
+        "spcishi",
+        "zhefu",
+        "yidu",
         "diaohulishan_card",
         "huoshaolianying",
         "lulitongxin",
@@ -513,16 +554,23 @@ fn l08_l14_l19_l20_complete_skills_triggers_and_save_restore() {
         "L08 UI hook _changeEquipExt must not draw cards"
     );
 
-    // L14 UI hook (`手杀UI/skill/main1.js:34`) records hook trigger WITHOUT drawing cards
+    // L14 UI hooks (`手杀ui/skill/main1.js:34`, `lbtn/main1.js:805`) record hook triggers WITHOUT drawing cards or dealing damage
     let hand_before_l14 = e.state_core().player(0).hand.len();
+    let hp1_before_l14 = e.state_core().player(1).hp;
     invoke_p9_op(&mut e, 0, "_dieNoTuoguan", L14_SHOUSHA_SKILL_ID);
-    invoke_p9_op(&mut e, 0, "spshidi", L14_SHOUSHA_SKILL_ID);
+    invoke_p9_op(&mut e, 0, "_menuCheat", L14_SHOUSHA_SKILL_ID);
     assert_eq!(flag(&e, 0, "l14_shousha_trigger_count"), 2);
-    assert_eq!(flag(&e, 0, "l14_spshidi_parity"), 1);
+    assert_eq!(flag(&e, 0, "l14_skill:_dieNoTuoguan"), 1);
+    assert_eq!(flag(&e, 0, "l14_skill:_menuCheat"), 1);
     assert_eq!(
         e.state_core().player(0).hand.len(),
         hand_before_l14,
         "L14 UI hook _dieNoTuoguan must not draw cards"
+    );
+    assert_eq!(
+        e.state_core().player(1).hp,
+        hp1_before_l14,
+        "L14 UI hooks must not deal combat damage"
     );
 
     invoke_p9_op(&mut e, 0, "baozou", L19_DOOMSDAY_SKILL_ID);

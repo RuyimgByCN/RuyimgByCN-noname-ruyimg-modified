@@ -278,6 +278,33 @@ export const HANDCRAFTED_SPINE40_SKELETON_JSON = {
           ],
         },
       },
+      transform: {
+        cape_follow_torso: [
+          { time: 0, mixRotate: 0.5, mixX: 0.25, mixY: 0.25, mixScaleX: 0, mixScaleY: 0, mixShearY: 0 },
+          { time: 0.5, mixRotate: 1.0, mixX: 0.75, mixY: 0.75, mixScaleX: 0, mixScaleY: 0, mixShearY: 0 },
+          { time: 1.0, mixRotate: 0.5, mixX: 0.25, mixY: 0.25, mixScaleX: 0, mixScaleY: 0, mixShearY: 0 },
+        ],
+      },
+      path: {
+        ribbon_on_path: {
+          position: [
+            { time: 0, value: 0.5 },
+            { time: 0.5, value: 1.0 },
+            { time: 1.0, value: 0.5 },
+          ],
+        },
+      },
+      deform: {
+        default: {
+          weapon_slot: {
+            weapon_blade: [
+              { time: 0, offset: 0, vertices: [0, 0, 0, 0] },
+              { time: 0.5, offset: 2, vertices: [8, 4, 8, -4] },
+              { time: 1.0, offset: 0, vertices: [0, 0, 0, 0] },
+            ],
+          },
+        },
+      },
       drawOrder: [
         { time: 0, offsets: [{ slot: "weapon_slot", offset: 1 }] },
       ],

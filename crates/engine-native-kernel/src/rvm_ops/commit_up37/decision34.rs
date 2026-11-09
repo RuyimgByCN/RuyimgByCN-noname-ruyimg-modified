@@ -23,12 +23,12 @@ pub const YXS_MENSHEN2_GUARD_ID: u32 = 1_920_005_001;
 
 pub const L20_MARK_DISPATCH_ID: u32 = 1_920_006_001;
 
-pub const TH_DUNSHI_ID: u32 = 1_920_007_001;
-pub const TH_JINGXIE_ID: u32 = 1_920_007_002;
-pub const TH_QIAOSI_ID: u32 = 1_920_007_003;
-pub const TH_YEYAN_ID: u32 = 1_920_007_004;
-pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_005;
-pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_006;
+pub const TH_DUNSHI_ID: u32 = 1_920_007_011;
+pub const TH_JINGXIE_ID: u32 = 1_920_007_012;
+pub const TH_QIAOSI_ID: u32 = 1_920_007_013;
+pub const TH_YEYAN_ID: u32 = 1_920_007_014;
+pub const TH_TAIPINGYAOSHU_ID: u32 = 1_920_007_015;
+pub const TH_SKILL_DISPATCH_ID: u32 = 1_920_007_016;
 
 pub const L20_MARK_IDS: [(&str, u32); 14] = [
     ("longmark", 1_920_060_001),

@@ -310,6 +310,12 @@ impl NativeContent {
             &parsed,
             &[(&runtime_frozen, &parsed)],
         )?;
+        content_native_loader::decision34_pack9::attach_formal_package_upstream_rules(
+            &parsed.manifest.namespace,
+            &parsed.manifest.package_id,
+            &mut pack,
+            &[],
+        );
         // 原生目录锁也绑定安装包的命名空间、完整版本与内容指纹。
         pack.def.name = engine_native::content::names::intern(format!(
             "installed:{}",
