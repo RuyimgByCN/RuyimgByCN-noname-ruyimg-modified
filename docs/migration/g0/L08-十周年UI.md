@@ -69,7 +69,7 @@
 |---|---|---|---|---|
 | `L08_DECADE_CHARACTERS`（9 名伪造 `decade_*` 武将已按第二步清除） | `crates/content-native-loader/src/decision34_pack9_data.rs:127-130` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12687-12692`（上游 `character: {}` 为空） | 无（已清除） | 已清除（9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua` 已从代码删除，见 `docs/operations/evidence/2026-11-09-decision34-cleanup/README.md`） |
 | `L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:555-566` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650` | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现） |
-| `stepSpineFrame`（示意 `drawSpineSkeletalCanvas` 已按第二步清除） | `apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-366`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:624-652` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816` | 原生前端组件（净室 Spine 4.0 播放器） | 示意或自造（已删除 2D Canvas 圆加两条线示意画法 `drawSpineSkeletalCanvas`，待接入净室 Spine 4.0 播放器） |
+| 净室 Spine 4.0 播放器 (`apps/web-client/src/engine/spine40/*`，已替换示意 `drawSpineSkeletalCanvas`) | `apps/web-client/src/engine/spine40/webglRenderer.ts:1-406`、`apps/web-client/src/engine/spine40/index.ts:1-5`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`、`dynamicSkin.js:1-162` | 原生前端组件（净室 Spine 4.0 播放器） | 忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/二进制解码、骨骼世界变换、IK/变换/路径约束、多轨道混合、图集解析与 WebGL PMA 渲染，无动皮资源或非 4.0 资源时回退静态立绘） |
 
 ### 7.2 武将（Generals）（0 项）
 
@@ -152,15 +152,15 @@
 | `_HpRecover` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation_new.js:1402` | skeleton | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `_Hplose` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation_new.js:1448` | 触发="damageBegin4",//时机在免伤事件之前，所以无法考虑免…；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `_killFire` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation_new.js:1620` | 触发="dieBegin", player: "die", global:…；十周年UI渲染 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
-| `_changeEquipExt` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54` | 触发="loseBegin", global:["equipAfter",…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_ui_auto_cheat` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:180` | 作弊；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_kill_framebg` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:210` | 触发=["gameStart","showCharacterEnd"],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_rarity` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:321` | 触发=["gameStart", "showCharacterEnd"],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_tiesuo_ying` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:479` | 触发=["gameDrawAfter", "dieBegin"],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_usecard` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7540` | 触发='useCardAfter'；十周年UI渲染 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_decadeUI_usecardBegin` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7556` | 触发='useCardBegin'；十周年UI渲染 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_discard` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7569` | 触发=['discardAfter', 'loseToDiscardpil…；十周年UI渲染 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
-| `_decadeUI_dieKillEffect` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7604` | 触发=['dieBegin']；十周年UI渲染 | 原生前端组件 | 示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲） |
+| `_changeEquipExt` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54` | 触发="loseBegin", global:["equipAfter",…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_ui_auto_cheat` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:180` | 作弊；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_kill_framebg` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:210` | 触发=["gameStart","showCharacterEnd"],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_rarity` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:321` | 触发=["gameStart", "showCharacterEnd"],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_tiesuo_ying` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:479` | 触发=["gameDrawAfter", "dieBegin"],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_usecard` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7540` | 触发='useCardAfter'；十周年UI渲染 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_decadeUI_usecardBegin` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7556` | 触发='useCardBegin'；十周年UI渲染 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_discard` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7569` | 触发=['discardAfter', 'loseToDiscardpil…；十周年UI渲染 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
+| `_decadeUI_dieKillEffect` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:7604` | 触发=['dieBegin']；十周年UI渲染 | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻） |
 | `_removeXieli` | `archive/upstream/noname-liuli/noname/extension/十周年UI/markskill.js:186` | 触发=["dieAfter"],；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `nzry_chenglve` | `archive/upstream/noname-liuli/noname/extension/十周年UI/markskill.js:539` | 摸牌、弃牌 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `nzry_chenglve1` | `archive/upstream/noname-liuli/noname/extension/十周年UI/markskill.js:578` | 移标记 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |

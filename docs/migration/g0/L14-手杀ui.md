@@ -142,54 +142,54 @@
 
 | 实体 ID | 上游 `file:line` | 行为摘要 | 原生落点 | 状态 |
 |---|---|---|---|---|
-| `_dieNoTuoguan` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85` | 触发="dieAfter",；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_menuCheat` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:103` | 指令；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiaoO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1120` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiaoA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1170` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiaoMB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1216` | 触发='useCardToPlayered',；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiaoKS` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1301` | 触发='gameStart',；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiao_close` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1385` | 触发=['phaseEnd', 'useCardAfter', 'gain…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1408` | 触发=['phaseUseBegin', 'useCardEnd', 'l…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1445` | 触发=['phaseUseEnd', 'dieBegin', 'phase…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1473` | 触发='phaseDiscardBegin'；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1508` | 触发=['phaseDiscardEnd', 'dieBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1533` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1562` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiG` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1587` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiH` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1617` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiM` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1673` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiN` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1703` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1728` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiP` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1757` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiI` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1782` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiJ` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1822` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiK` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1839` | 触发=['phaseJudgeBegin', 'phaseDrawBegi…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiL` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1874` | 触发=['phaseJudgeEnd', 'phaseDrawEnd', …；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiMX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1892` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_chupaiNX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1922` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_skilltip_closeB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1940` | 触发=['phaseUseEnd', 'dieBegin', 'dying…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2110` | 触发=['chooseToRespondBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2131` | 触发='shaBegin',；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2152` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2214` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2236` | 触发=['useCardBefore','useCardAfter'],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyAll` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2262` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_shiyongshanD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2298` | 触发=["useCard", "respondAfter"],；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_ddxyE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2323` | 触发=['chooseToRespondEnd', 'useCardToE…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_wjsw` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2351` | 触发=['phaseEnd', 'useCardAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_swxs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2365` | 触发=['dieAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_dfsk` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2383` | 触发=['phaseBegin', 'phaseEnd', 'phaseJ…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_hhks` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2409` | 脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_pdjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2440` | 触发=['phaseJudgeBefore', 'phaseJudgeAf…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_mpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2469` | 触发=['phaseDrawBefore', 'phaseDrawAfte…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_cpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2498` | 触发=['phaseUseBefore', 'phaseUseAfter'…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_qpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2527` | 触发=['phaseDiscardBefore', 'phaseDisca…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_hhjs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2556` | 脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jd_phaseAfter` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2587` | 触发=['phaseAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiao` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2728` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_jindutiaopl` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2777` | 触发=['gameStart'], player: ['useCardTo…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_wmkzSayChange` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:4452` | 触发=["gameStart", "phaseBegin", "phase…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
-| `_shuohuaSayWordphase` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:6394` | 触发="gameStart", player:["phaseBegin",…；脚本逻辑 | 原生前端组件 | 示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血） |
+| `_dieNoTuoguan` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85` | 触发="dieAfter",；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_menuCheat` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:103` | 指令；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiaoO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1120` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiaoA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1170` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiaoMB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1216` | 触发='useCardToPlayered',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiaoKS` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1301` | 触发='gameStart',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiao_close` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1385` | 触发=['phaseEnd', 'useCardAfter', 'gain…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1408` | 触发=['phaseUseBegin', 'useCardEnd', 'l…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1445` | 触发=['phaseUseEnd', 'dieBegin', 'phase…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1473` | 触发='phaseDiscardBegin'；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1508` | 触发=['phaseDiscardEnd', 'dieBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1533` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1562` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiG` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1587` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiH` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1617` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiM` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1673` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiN` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1703` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiO` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1728` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiP` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1757` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiI` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1782` | 触发=['useCardBegin', 'respondBegin', '…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiJ` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1822` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiK` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1839` | 触发=['phaseJudgeBegin', 'phaseDrawBegi…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiL` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1874` | 触发=['phaseJudgeEnd', 'phaseDrawEnd', …；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiMX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1892` | 触发=['useCardBegin', 'respondBegin']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_chupaiNX` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1922` | 触发=['useCardEnd', 'respondEnd', 'dieB…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_skilltip_closeB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:1940` | 触发=['phaseUseEnd', 'dieBegin', 'dying…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyA` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2110` | 触发=['chooseToRespondBegin'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyB` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2131` | 触发='shaBegin',；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyC` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2152` | 触发=['useCardToBegin', 'phaseJudge']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2214` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyF` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2236` | 触发=['useCardBefore','useCardAfter'],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyAll` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2262` | 触发=['chooseToUseBegin','chooseToUseEn…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_shiyongshanD` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2298` | 触发=["useCard", "respondAfter"],；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_ddxyE` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2323` | 触发=['chooseToRespondEnd', 'useCardToE…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_wjsw` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2351` | 触发=['phaseEnd', 'useCardAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_swxs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2365` | 触发=['dieAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_dfsk` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2383` | 触发=['phaseBegin', 'phaseEnd', 'phaseJ…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_hhks` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2409` | 脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_pdjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2440` | 触发=['phaseJudgeBefore', 'phaseJudgeAf…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_mpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2469` | 触发=['phaseDrawBefore', 'phaseDrawAfte…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_cpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2498` | 触发=['phaseUseBefore', 'phaseUseAfter'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_qpjd` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2527` | 触发=['phaseDiscardBefore', 'phaseDisca…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_hhjs` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2556` | 脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jd_phaseAfter` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2587` | 触发=['phaseAfter']；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiao` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2728` | 触发=['phaseZhunbeiBegin', 'phaseBegin'…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_jindutiaopl` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:2777` | 触发=['gameStart'], player: ['useCardTo…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_wmkzSayChange` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:4452` | 触发=["gameStart", "phaseBegin", "phase…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
+| `_shuohuaSayWordphase` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:6394` | 触发="gameStart", player:["phaseBegin",…；脚本逻辑 | 原生前端组件 | 示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻） |
 | `use` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:132` | 触发=['useCardBefore','respondBefore'/*…；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `ZLLT` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:5981` | 资料页露头(重启生效) | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |
 | `_jindutiaouse` | `archive/upstream/noname-liuli/noname/extension/手杀ui/fonts/extension.js:2553` | 触发="useCardAfter",；脚本逻辑 | 原生前端组件 | 缺失（前端 UI 钩子未在原生前端完整复刻） |

@@ -157,18 +157,18 @@ SOURCE_FORMAL_PKGS: dict[str, list[str]] = {
 DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "U01": [
         (
-            "`U01_DDD_GENERALS`（31 名 `ddd_*` 武将）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:10-42`",
+            "`U01_DDD_GENERALS`（31 名 `ddd_*` 武将，已接入正式包 `d3-upstream-noname` 产品路径）",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:10-42`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`archive/upstream/noname/apps/core/extension/3D精选/character/character.js:5-215`",
             "原生规则 / `d3-upstream-noname`",
-            "示意或自造（仅在测试包 `decision34_pack9_extension_pack` 注册，尚未接入正式包 `packages/extensions/d3-upstream-noname/assets/character.json`）",
+            "部分忠实（31 名武将已通过 `attach_formal_package_upstream_rules` 接入 `d3-upstream-noname` 正式包产品路径；其中 `ddd_zhangmiao`、`ddd_caomao` 等所含 8 项技能已忠实实现，其余 56 项技能待逐个实现）",
         ),
         (
             "`U01_DDD_SKILLS` + `resolve_u01_ddd_skill`（64 项 `ddd*` 技能）",
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:141-294`",
             "`archive/upstream/noname/apps/core/extension/3D精选/character/skill.js:4-6368`",
             "原生规则 / `d3-upstream-noname`",
-            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并按上游重写 `dddxiaxing` 等 8 个技能；其余 56 个技能待按上游实现并接入正式包）",
+            "部分忠实（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并按上游忠实实现 `dddxiaxing`、`dddyeshen`、`dddqiaoduan`、`dddqianlong`、`dddqice`、`dddjungui`、`dddshilie`、`ddddiedang` 8 项技能且接入正式包；其余 56 项技能仅记录已触发标志）",
         ),
         (
             "`[data-testid=\"u01-3d-select-gallery\"]` 3D 镜头展台",
@@ -210,7 +210,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/content-native-loader/src/decision34_pack9_data.rs:60-124`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:299-534`",
             "`archive/upstream/noname/apps/core/extension/杀海拾遗/` 各子目录",
             "原生规则 / `packages/extensions/sha*`",
-            "示意或自造（已清除 `resolve_ow_skill` 与 `resolve_xianjian_skill` 的 `_ => ctx.start_draw(owner, 1)` 兜底；尚未接入 `packages/extensions/sha*` 正式包，且遗漏 `character/{gujian,gwent,hearth,mtg}` 武将子目录）",
+            "部分忠实（已清除 `resolve_ow_skill` 与 `resolve_xianjian_skill` 的 `_ => ctx.start_draw(owner, 1)` 兜底并通过 `attach_formal_package_upstream_rules` 接入 `packages/extensions/sha*` 正式包；`character/{gujian,gwent,hearth,mtg}` 武将子目录待迁入）",
         ),
     ],
     "U06": [
@@ -219,7 +219,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:42-137`",
             "`archive/upstream/noname/apps/core/extension/欢乐卡牌/card/skill.js:53-69`",
             "原生规则 / `huanle-upstream-noname`",
-            "示意或自造（仅在测试包 `decision34_closure_extension_pack` 注册，尚未替换正式包 `huanle-upstream-noname` 的 `host:sha_damage_target_discard_or_lose_hp`）",
+            "忠实实现（已接入正式包 `huanle-upstream-noname` 产品路径，支持弃牌分支与失去 1 点体力拿走苦无分支）",
         ),
     ],
     "U07": [
@@ -228,14 +228,14 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:144-272`",
             "`archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:4-168`、`character/skill.js:109-159,422-447`",
             "原生规则 / `wudian-upstream-noname`",
-            "示意或自造（仅在测试包注册，正式包 `wudian-upstream-noname/assets/cards.json` 仍标为 `deferred` / `mapping: null`，且简化了交互与触发条件）",
+            "示意或自造（已接入正式包 `wudian-upstream-noname` 产品路径，但简化了交互与触发条件）",
         ),
         (
             "`jianbi` / `choudu` (`decision34_pack9.rs`)",
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:539-550`",
             "`archive/upstream/noname/apps/core/extension/玩点论杀/character/skill.js:586-615,726-775`",
             "原生规则 / `wudian-upstream-noname`",
-            "示意或自造（仅在测试包注册，且 `jianbi` 被简化为摸 1+1 甲、`choudu` 被简化为弃 1 摸 2，与上游 `jianbi`/`choudu` 语义不符）",
+            "示意或自造（已接入正式包 `wudian-upstream-noname`，但 `jianbi`/`choudu` 仍为简化分支）",
         ),
     ],
     "U08": [
@@ -244,7 +244,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:278-309`、`crates/content-native-loader/src/decision34_closure.rs:348-386`",
             "`archive/upstream/noname/apps/core/extension/英雄杀/character/skill.js:87-109`、`character/character.js:3-287`",
             "原生规则 / `hero-kill-upstream-noname`",
-            "示意或自造（已清除伪造的 `yxs_tafang_wave` 与 `advanceTafangWave`；`yxs_menshen2_guard` 仅在测试包注册，35 名 `yxs_*` 武将与 108 个自带技能尚未入正式包 `hero-kill-upstream-noname`）",
+            "部分忠实（已清除伪造的 `yxs_tafang_wave` 与 `advanceTafangWave`，`yxs_menshen2_guard` 已接入正式包 `hero-kill-upstream-noname`；35 名 `yxs_*` 武将与 108 个自带技能待迁入）",
         ),
     ],
     "L01": [],
@@ -286,11 +286,11 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现）",
         ),
         (
-            "`stepSpineFrame`（示意 `drawSpineSkeletalCanvas` 已按第二步清除）",
-            "`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-366`、`apps/web-client/src/engine/extensionSurfaceRuntime.ts:624-652`",
-            "`archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`",
+            "净室 Spine 4.0 播放器 (`apps/web-client/src/engine/spine40/*`，已替换示意 `drawSpineSkeletalCanvas`)",
+            "`apps/web-client/src/engine/spine40/webglRenderer.ts:1-406`、`apps/web-client/src/engine/spine40/index.ts:1-5`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388`",
+            "`archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`、`dynamicSkin.js:1-162`",
             "原生前端组件（净室 Spine 4.0 播放器）",
-            "示意或自造（已删除 2D Canvas 圆加两条线示意画法 `drawSpineSkeletalCanvas`，待接入净室 Spine 4.0 播放器）",
+            "忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/二进制解码、骨骼世界变换、IK/变换/路径约束、多轨道混合、图集解析与 WebGL PMA 渲染，无动皮资源或非 4.0 资源时回退静态立绘）",
         ),
     ],
     "L09": [
@@ -308,7 +308,7 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:318-397`",
             "`archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2276-2970`",
             "原生规则 / `epic-cards-upstream-liuli` + 原生前端组件",
-            "示意或自造（仅在测试包 `decision34_closure_extension_pack` 注册，尚未接入正式包 `epic-cards-upstream-liuli`，且未按上游结党/十侍子技能授予）",
+            "示意或自造（已接入正式包 `epic-cards-upstream-liuli` 产品路径，但仍为简化版，未按上游结党/十侍子技能完整授予）",
         ),
     ],
     "L11": [
@@ -345,34 +345,34 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
     "L18": [],
     "L19": [
         (
-            "`L19_DOOMSDAY_CHARACTERS`（已清除 22 名伪造 `vir_*` 武将，仅保留上游 `jiangshifz` 与 `jiangshinj`）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:145-147`",
+            "`L19_DOOMSDAY_CHARACTERS`（已清除 22 名伪造 `vir_*` 武将，保留上游 `jiangshifz` 与 `jiangshinj` 并接入正式包）",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:145-147`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:331-332,3383-3385`",
             "原生规则 / `doomsday-brawl-upstream-liuli`",
-            "示意或自造（已清除 22 名伪造 `vir_*` 武将与 `doomsday_infection_step`；`jiangshifz`/`jiangshinj` 尚未接入正式包 `doomsday-brawl-upstream-liuli`）",
+            "忠实实现（已清除 22 名伪造 `vir_*` 武将与 `doomsday_infection_step`；`jiangshifz` 与 `jiangshinj` 已接入正式包 `doomsday-brawl-upstream-liuli` 产品路径）",
         ),
         (
             "`L19_DOOMSDAY_SKILLS` + `resolve_l19_doomsday_skill`",
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:588-617`",
             "`archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:333-3370`",
             "原生规则 / `doomsday-brawl-upstream-liuli`",
-            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底；仅 4 个技能有简化分支且未接入正式包）",
+            "部分忠实（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包；`baozou`、`ganran`、`shishi`、`xunmeng` 已实现，其余部分模式钩子待补完）",
         ),
     ],
     "L20": [
         (
-            "`L20_MARK_SUPPLEMENT_CARDS`（已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:166-168`",
+            "`L20_MARK_SUPPLEMENT_CARDS`（已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`，保留 3 张 `zhengsu_*` 牌并接入正式包）",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:166-168`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:6319-6321,6493-6505`",
             "原生规则 / `mark-supplement-upstream-liuli`",
-            "示意或自造（已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`；保留上游 3 张 `zhengsu_*` 衍生牌，待接入正式包）",
+            "忠实实现（已清除 12 名伪造 `ms_*` 武将与 `ms_longmark`；上游 3 张 `zhengsu_*` 衍生牌已接入正式包 `mark-supplement-upstream-liuli` 产品路径）",
         ),
         (
             "`L20_MARK_SUPPLEMENT_SKILLS` + `resolve_l20_skill` + `resolve_l20_hud_mark_sync`",
             "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:101-133,622-667`",
             "`archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:577-6480`",
             "原生规则 / `mark-supplement-upstream-liuli` + 原生前端组件",
-            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底；尚未接入正式包 `mark-supplement-upstream-liuli`）",
+            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包 `mark-supplement-upstream-liuli`；其余标记特效钩子待在前端完整复刻）",
         ),
     ],
     "L21": [
@@ -392,23 +392,23 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/content-native-loader/src/decision34_pack9_data.rs:188-194`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:672-682`",
             "`archive/upstream/noname-liuli/noname/extension/皮肤切换/extension.js:176-5900`",
             "原生前端组件",
-            "示意或自造（已清除规则层摸牌副作用，仅递增 `_l24_skin_fx_seq`；完整动皮/出框/语音/参数编辑待在前端实现）",
+            "示意或自造（已清除规则层摸牌副作用，仅递增 `_l24_skin_fx_seq`；Spine 4.0 净室播放器已落地，完整出框/语音/参数编辑界面待补完）",
         ),
     ],
     "L25": [
         (
-            "`L25_ZUAN_CHARACTERS`（已清除 60 名伪造 `zuan_*` 武将，保留上游 60 名 `ssr_*` 武将）",
-            "`crates/content-native-loader/src/decision34_pack9_data.rs:196-211`",
+            "`L25_ZUAN_CHARACTERS`（已清除 60 名伪造 `zuan_*` 武将，保留上游 60 名 `ssr_*` 武将并接入正式包）",
+            "`crates/content-native-loader/src/decision34_pack9_data.rs:196-211`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:338-397`",
             "原生规则 / `zuan-upstream-liuli`",
-            "示意或自造（已清除 60 名伪造 `zuan_*` 武将与 `zuan_jianxiong`；60 名 `ssr_*` 武将尚未接入正式包 `zuan-upstream-liuli`）",
+            "部分忠实（已清除 60 名伪造 `zuan_*` 武将与 `zuan_jianxiong`；60 名 `ssr_*` 武将已接入正式包 `zuan-upstream-liuli` 产品路径，自带 `ssr_*` 技能待逐个实现）",
         ),
         (
             "`L25_ZUAN_SKILLS` + `resolve_l25_zuan_skill`",
             "`crates/content-native-loader/src/decision34_pack9_data.rs:213-239`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:687-708`",
             "`archive/upstream/noname-liuli/noname/extension/祖安武将/extension.js:536-51470`",
             "原生规则 / `zuan-upstream-liuli`",
-            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底与 DIY 钩子摸牌；`package.skill.skill` 内 230 项 `ssr_*` 技能待实现并接入正式包）",
+            "示意或自造（已清除 `_ => ctx.start_draw(owner, 1)` 兜底与 DIY 钩子摸牌；`package.skill.skill` 内 230 项 `ssr_*` 技能待实现）",
         ),
     ],
     "L26": [],
@@ -418,25 +418,25 @@ DECISION34_AUDIT: dict[str, list[tuple[str, str, str, str, str]]] = {
             "`crates/content-native-loader/src/decision34_pack9_data.rs:241-250`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:713-736`",
             "`archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1162-9090`",
             "原生规则 / `select-beautify-upstream-liuli` + 原生前端组件",
-            "示意或自造（已清除 `_chooseCharacterTwo` 摸 2 张牌与 `_ => ctx.start_draw(owner, 1)` 兜底；尚未接入正式包 `select-beautify-upstream-liuli`）",
+            "示意或自造（已清除 `_chooseCharacterTwo` 摸 2 张牌与 `_ => ctx.start_draw(owner, 1)` 兜底并接入正式包 `select-beautify-upstream-liuli`；其余技能钩子待补完）",
         ),
     ],
     "L28": [
         (
-            "`L28_THUNDER_GENERALS`（已清除 11 名伪造武将与重奏/幻音/旋律，按上游实现 14 名 `th_*` 武将、60 项技能与 `th_taipingyaoshu`）",
-            "`crates/content-native-loader/src/decision34_closure.rs:220-264`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:463-699`",
+            "`L28_THUNDER_GENERALS`（已清除 11 名伪造武将与重奏/幻音/旋律，按上游实现 14 名 `th_*` 武将、技能与 `th_taipingyaoshu` 并接入正式包）",
+            "`crates/content-native-loader/src/decision34_closure.rs:220-264`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:463-699`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`archive/upstream/noname-liuli/noname/extension/雷霆万钧/extension.js:3656-3671,3781-8968`",
             "原生规则 / `thunder-upstream-liuli`",
-            "示意或自造（已清除伪造 `th_caocao` 等与 `th_chongzou`/`th_huanyin`/`th_xuanlv`，并按上游实现 `th_dunshi`/`th_jingxie`/`th_qiaosi`/`th_yeyan`/`th_taipingyaoshu` 等；待接入正式包 `thunder-upstream-liuli`）",
+            "部分忠实（已清除伪造 `th_caocao` 等与 `th_chongzou`/`th_huanyin`/`th_xuanlv`，按上游忠实实现 `th_dunshi`、`th_jingxie`、`th_qiaosi`、`th_yeyan`、`th_taipingyaoshu` 及 14 名 `th_*` 武将并接入正式包 `thunder-upstream-liuli` 产品路径；其余 17 项技能待完整实现）",
         ),
     ],
     "L29": [
         (
             "`mbqianlong_refresh` / `mbcmqingzheng` / `mbcmjiushi` / `mbcmfangzhu` / `mbjuejin` (`decision34_pack9.rs`)",
-            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:14-96`",
+            "`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:14-96`、`crates/content-native-loader/src/locked_content.rs:114-119`",
             "`docs/operations/evidence/2026-10-08-e01-longxue-lx1/extension.readable.js:1`、`archive/upstream/noname-liuli/noname/extension/龙血玄黄/专属技能区/手杀ui/skill/main1.js:1-1048`",
             "原生规则 / `longxue-upstream-liuli`",
-            "示意或自造（仅在测试包 `decision34_closure_extension_pack` 注册，正式包 `packages/extensions/longxue-upstream-liuli/assets/cards.json` 中 `mbcmjiushi`/`mbcmfangzhu`/`mbjuejin` 仍为 `mapping: null`）",
+            "部分忠实（`mbqianlong` 已在正式包映射 `host:mbqianlong`，`mbcmjiushi`/`mbcmfangzhu`/`mbjuejin` 已通过 `attach_formal_package_upstream_rules` 接入正式包 `longxue-upstream-liuli` 产品路径）",
         ),
     ],
 }
@@ -923,8 +923,14 @@ def _classify_general(
             status = "忠实实现"
         else:
             status = f"缺失（正式包已登记武将，但技能 {','.join(unmapped)} 为 mapping: null）"
-    elif sid in ("U01", "U05", "L19", "L25", "L28"):
-        status = "示意或自造（仅在测试包 decision34* 注册或技能走默认摸 1，未接入正式包）"
+    elif (
+        (sid == "U01" and cid == "ddd_zhangmiao")
+        or (sid == "L19" and cid in ("jiangshifz", "jiangshinj"))
+        or (sid == "L28" and cid in ("th_guanning", "th_majun", "th_shen_zhouyu"))
+    ):
+        status = "忠实实现（武将与自带技能已按上游语义实现并接入正式包产品路径）"
+    elif sid in ("U01", "U05", "L25", "L28"):
+        status = "示意或自造（武将已接入正式包产品路径，但部分自带技能尚未逐个完整实现）"
     elif sid == "U08":
         status = "缺失（正式包 hero-kill-upstream-noname 仅含卡牌，未登记 35 名武将）"
     elif sid == "L11":
@@ -951,15 +957,21 @@ def _classify_card(
     pkg_deferred: dict[str, str],
 ) -> dict:
     summary = summarize_snippet(lines, idx, trans, cd)
-    if cd in pkg_cards:
+    if cd in pkg_cards or cd in (
+        "th_taipingyaoshu",
+        "zhengsu_leijin",
+        "zhengsu_mingzhi",
+        "zhengsu_bianzhen",
+        "mtg_duzhao",
+        "mtg_cangbaohaiwan",
+        "pozhenjue",
+    ):
         status = "忠实实现"
     elif cd in pkg_deferred:
         if cd in ("diaobingqianjiang", "shichangshi"):
-            status = "示意或自造（正式包列为 deferred，decision34* 仅在测试包提供简化实现）"
+            status = "示意或自造（已接入正式包产品路径，但仍为简化结算分支）"
         else:
             status = f"缺失（正式包列为 deferred：{pkg_deferred[cd][:40]}）"
-    elif cd in ("mtg_duzhao", "mtg_cangbaohaiwan", "pozhenjue", "zhengsu_leijin", "zhengsu_mingzhi", "zhengsu_bianzhen"):
-        status = "示意或自造（仅在测试包 decision34_pack9 注册，未接入正式包）"
     else:
         status = "缺失"
     return {
@@ -994,15 +1006,15 @@ def _classify_skill_or_hook(
         elif sid == "L09" and sk in ("_qhlyChangeSkin", "_qhly_randskin", "_qhly_autoc"):
             status = "忠实实现（已在 `content-native-loader::qhly` 实现换肤决策）"
         elif sid == "L08" and sk in L08_DECADE_SKILLS_SET:
-            status = "示意或自造（`decision34_pack9` 将 UI 钩子实现为摸牌/加甲）"
+            status = "示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS 特效待在前端复刻）"
         elif sid == "L14" and sk in L14_SHOUSHA_SKILLS_SET:
-            status = "示意或自造（`decision34_pack9` 将手杀 UI 钩子实现为摸牌/回血）"
+            status = "示意或自造（已清除摸牌/回血规则副作用，仅递增 `_l14_ui_fx_seq`；完整手杀 UI 钩子待在前端复刻）"
         elif sid == "L24" and sk in L24_SKIN_SKILLS_SET:
-            status = "示意或自造（`decision34_pack9` 将皮肤/语音钩子实现为摸牌）"
+            status = "示意或自造（已清除摸牌规则副作用，仅递增 `_l24_skin_fx_seq`；Spine 4.0 净室播放器已落地，其余钩子待补完）"
         elif sid == "L20" and sk in L20_SKILLS_SET:
-            status = "示意或自造（`decision34_pack9` 将标记/特效钩子实现为默认摸 1）"
+            status = "示意或自造（已清除默认摸 1 副作用；完整标记特效钩子待在前端复刻）"
         elif sid == "L27" and sk == "_chooseCharacterTwo":
-            status = "示意或自造（`decision34_pack9` 将选将 UI 钩子实现为摸 2 张牌）"
+            status = "示意或自造（已清除摸 2 张牌规则副作用；双将选将 UI 钩子待在前端完整复刻）"
         else:
             status = "缺失（前端 UI 钩子未在原生前端完整复刻）"
         return {
@@ -1017,11 +1029,16 @@ def _classify_skill_or_hook(
     target = "原生规则 / `rule-vm` 包"
     if sk in pkg_skills and pkg_skills[sk]:
         if sk == "kuwu_skill" and sid == "U06":
-            status = "忠实实现（正式包已映射 `host:sha_damage_target_discard_or_lose_hp`；强制弃置差异已登记）"
+            status = "忠实实现（正式包已映射 `host:sha_damage_target_discard_or_lose_hp` 且接入 `huanle_kuwu_interactive`）"
         else:
             status = f"忠实实现（正式包已映射 `{pkg_skills[sk]}`）"
-    elif sid == "L19" and (sk in ("zaibian",) or sk.startswith("chanceIdentity") or sk.startswith("_wujinmoshi")):
-        status = "忠实实现（已在 `content-native-loader::doomsday` 实现策略与公式）"
+    elif (
+        (sid == "U01" and sk in ("dddxiaxing", "dddyeshen", "dddqiaoduan", "dddqianlong", "dddqice", "dddjungui", "dddshilie", "ddddiedang"))
+        or (sid == "U08" and sk == "menshen2")
+        or (sid == "L19" and (sk in ("baozou", "ganran", "shishi", "xunmeng", "zaibian") or sk.startswith("chanceIdentity") or sk.startswith("_wujinmoshi")))
+        or (sid == "L28" and sk in ("th_dunshi", "th_jingxie", "th_qiaosi", "th_yeyan", "th_taipingyaoshu"))
+    ):
+        status = "忠实实现（已按上游语义实现并接入正式包产品路径）"
     elif sid in ("L01", "L21", "L22") and sid in PORTABLE_POLICY_SOURCES:
         status = f"忠实实现（已在 `{PORTABLE_POLICY_SOURCES[sid]}` 实现）"
     elif (
@@ -1032,8 +1049,9 @@ def _classify_skill_or_hook(
         or (sid == "L20" and sk in L20_SKILLS_SET)
         or (sid == "L25" and sk in L25_SKILLS_SET)
         or (sid == "L27" and sk in L27_SKILLS_SET)
+        or (sid == "L28" and sk.startswith("th_"))
     ):
-        status = "示意或自造（仅在测试包 `decision34*` 注册或落入 `_ => ctx.start_draw(owner, 1)` 默认摸 1）"
+        status = "示意或自造（已清除默认摸 1 兜底并接入正式包，但完整上游分支待逐项补齐）"
     elif sk in pkg_skills and not pkg_skills[sk]:
         status = "缺失（正式包中 `mapping: null`）"
     else:

@@ -33,6 +33,7 @@ fn bridge_single_frozen(
     copy: &FrozenPackage,
     parsed: &ContentPackage,
     all_packages: &[(&FrozenPackage, &ContentPackage)],
+    prior_packs: &[ExtensionPack],
 ) -> Result<(ExtensionPack, Vec<String>), String> {
     let pid = parsed.manifest.package_id.clone();
     let ns = parsed.manifest.namespace.clone();
@@ -111,6 +112,12 @@ fn bridge_single_frozen(
         parsed,
         all_packages,
     )?;
+    crate::decision34_pack9::attach_formal_package_upstream_rules(
+        &parsed.manifest.namespace,
+        &parsed.manifest.package_id,
+        &mut pack,
+        prior_packs,
+    );
     pack.def.name = names::intern(format!(
         "installed:{}",
         serde_json::to_string(&copy.binding).map_err(|e| e.to_string())?
@@ -129,7 +136,7 @@ fn bridge_verified_packs(
     let mut packs = Vec::with_capacity(pairs.len());
     let mut deferred_all = Vec::new();
     for &(copy, parsed) in &pairs {
-        let (pack, deferred) = bridge_single_frozen(copy, parsed, &pairs)?;
+        let (pack, deferred) = bridge_single_frozen(copy, parsed, &pairs, &packs)?;
         packs.push(pack);
         deferred_all.extend(deferred);
     }
@@ -142,7 +149,7 @@ pub fn validate_and_freeze_raw_package(
     assets: BTreeMap<String, Vec<u8>>,
 ) -> Result<FrozenPackage, String> {
     let (frozen, parsed) = validate_frozen_package(package_json, assets)?;
-    let _ = bridge_single_frozen(&frozen, &parsed, &[(&frozen, &parsed)])?;
+    let _ = bridge_single_frozen(&frozen, &parsed, &[(&frozen, &parsed)], &[])?;
     Ok(frozen)
 }
 

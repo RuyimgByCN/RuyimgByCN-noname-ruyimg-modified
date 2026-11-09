@@ -668,3 +668,80 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
 
     assert_archive_roundtrip(&e, &packs);
 }
+
+#[test]
+fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
+    use content_native_loader::{
+        prepare_locked_content_with_bridge, restore_locked_engine, start_locked_engine,
+        validate_and_freeze_raw_package, LockedStartMode,
+    };
+    use std::collections::BTreeMap;
+
+    let ext_root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../packages/extensions");
+    let formal_dirs = [
+        "d3-upstream-noname",
+        "thunder-upstream-liuli",
+        "longxue-upstream-liuli",
+        "epic-cards-upstream-liuli",
+        "doomsday-brawl-upstream-liuli",
+        "mark-supplement-upstream-liuli",
+        "zuan-upstream-liuli",
+        "select-beautify-upstream-liuli",
+        "wudian-upstream-noname",
+    ];
+
+    let mut frozen_list = Vec::new();
+    for dir_name in formal_dirs {
+        let pkg_dir = ext_root.join(dir_name);
+        let raw_json = std::fs::read_to_string(pkg_dir.join("package.npack.json"))
+            .unwrap_or_else(|e| panic!("read {dir_name}/package.npack.json: {e}"));
+        let parsed: serde_json::Value = serde_json::from_str(&raw_json).unwrap();
+        let mut assets = BTreeMap::new();
+        if let Some(paths) = parsed.get("asset_paths").and_then(|v| v.as_object()) {
+            for rel_path in paths.values().filter_map(|v| v.as_str()) {
+                let bytes = std::fs::read(pkg_dir.join(rel_path))
+                    .unwrap_or_else(|e| panic!("read {dir_name}/{rel_path}: {e}"));
+                assets.insert(rel_path.to_string(), bytes);
+            }
+        }
+        let frozen = validate_and_freeze_raw_package(raw_json, assets)
+            .unwrap_or_else(|e| panic!("freeze {dir_name}: {e}"));
+        frozen_list.push(frozen);
+    }
+
+    let verified =
+        prepare_locked_content_with_bridge(frozen_list).expect("prepare formal locked packages");
+    let mut e = start_locked_engine(260199, 2, LockedStartMode::Prototype, &verified)
+        .expect("start locked engine with formal packages");
+
+    // Verify authentic upstream generals from formal packages are in the locked Catalog
+    for expected_general in [
+        "ddd_zhangmiao",
+        "ddd_caomao",
+        "th_guanning",
+        "th_majun",
+        "th_shen_zhouyu",
+        "shichangshi",
+        "jiangshifz",
+        "jiangshinj",
+        "ssr_luxun",
+        "ssr_sunquan",
+    ] {
+        assert!(
+            (0..e.catalog().general_count() as u16)
+                .any(|idx| e.catalog().general_meta(idx).map(|m| m.0) == Some(expected_general)),
+            "formal locked Catalog must include upstream general {expected_general}"
+        );
+    }
+
+    // Verify authentic upstream skills execute on the locked engine and survive restore_locked_engine
+    invoke_p9_op(&mut e, 0, "dddxiaxing", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddxiaxing_xia"), 1);
+    assert_eq!(flag(&e, 0, "dddxiaxing_viewas_taojiu"), 1);
+    assert_eq!(flag(&e, 0, "u01_ddd_resolved"), 1);
+
+    let snap = e.save();
+    let restored = restore_locked_engine(&snap, &verified).expect("restore locked engine");
+    assert_eq!(restored.state_hash(), e.state_hash());
+}
+
