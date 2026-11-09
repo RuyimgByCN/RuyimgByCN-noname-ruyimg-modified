@@ -86,4 +86,6 @@
 5. **`preflight.py` 21 项全量门禁**：
    - `python3 -B scripts/preflight.py` -> **`21/21 全部通过 ✅`**。
 6. **按裁决 25 发布与 exact-head CI 实跑登记**：
-   - 先前提交 `5824a3d9e` 对应 CI Run [`42641116293`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42641116293)（[`ci-run-42641116293-5824a3d9e.json`](ci-run-42641116293-5824a3d9e.json)）首跑 `10/10 PASS`；本轮复审纠错代码提交将在下方追加最新 exact-head CI Run 记录。
+   - 先前提交 `5824a3d9ebbcffcf5c796f4d4ba0e981d7c177ab`（`5824a3d9e`）对应 CI Run [`42641116293`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42641116293)（[`ci-run-42641116293-5824a3d9e.json`](ci-run-42641116293-5824a3d9e.json)）首跑 `10/10 PASS`；
+   - 本轮对抗复审纠错代码提交 `1f0d16d6ca8c9d286488876162c6dea71ac1df59`（`1f0d16d6c`）通过单命令作用域 `pre-push` 守卫（`.git/hooks/pre-push` `sha256: e349af1e...` 零改动，远端 `main` 零改动）推送至 `refs/heads/native-convergence`；
+   - Exact-head CI Run [`42668582089`](https://github.com/RuyimgByCN/RuyimgByCN-noname-ruyimg-modified/actions/runs/42668582089)（[`ci-run-42668582089-1f0d16d6c.json`](ci-run-42668582089-1f0d16d6c.json)）**首次运行（Attempt 1）10/10 全部通过 `conclusion: success`**（`native-web` `129338739506`、`desktop-macos-latest` `129338739981`、`build-macos-latest` `129338739997`、`perf-ubuntu-latest` `129338740011`、`gates-ubuntu` `129338740090`、`perf-macos-latest` `129338740097`、`desktop-ubuntu-latest` `129338740130`、`build-windows-latest` `129338740156`、`desktop-windows-latest` `129338740249`、`build-ubuntu-latest` `129338740310` 全绿）。
