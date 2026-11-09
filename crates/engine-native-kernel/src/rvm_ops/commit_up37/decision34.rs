@@ -12,6 +12,7 @@ pub const MBJUEJIN_ID: u32 = 1_920_001_003;
 
 pub const K_DANGGU_ID: u32 = 1_920_002_001;
 pub const K_MOWANG_ID: u32 = 1_920_002_002;
+pub const L10_SCS_SKILL_ID: u32 = 1_920_002_003;
 
 pub const HUANLE_KUWU_INTERACTIVE_ID: u32 = 1_920_003_001;
 
@@ -66,6 +67,7 @@ pub(super) fn try_commit_decision34(
         MBJUEJIN_ID => resolve_mbjuejin(ctx, owner),
         K_DANGGU_ID => resolve_k_danggu(ctx, owner),
         K_MOWANG_ID => resolve_k_mowang(ctx, owner),
+        L10_SCS_SKILL_ID => super::decision34_ext::resolve_l10_scs_skill(ctx, executing, owner),
         HUANLE_KUWU_INTERACTIVE_ID => resolve_kuwu_interactive(ctx, owner),
         DIAOBINGQIANJIANG_ID => resolve_diaobingqianjiang(ctx, owner),
         DUOQI_ID => resolve_duoqi(ctx, owner),
@@ -101,6 +103,9 @@ pub(super) fn try_commit_decision34(
             }
             "k_danggu" => resolve_k_danggu(ctx, owner),
             "k_mowang" => resolve_k_mowang(ctx, owner),
+            s if s.starts_with("scs") => {
+                super::decision34_ext::resolve_l10_scs_skill(ctx, s, owner)
+            }
             "yiyi" => super::decision34_ext::resolve_l01_yiyi_card(ctx, owner),
             "_shengke" | "wuxing_shengke" | "wuxingpan_skill" => {
                 super::decision34_ext::resolve_l06_wuxing_skill(ctx, executing, owner)
@@ -340,7 +345,7 @@ fn resolve_k_mowang(ctx: &mut Ctx<'_>, owner: PlayerId) {
 /// `U06` (`huanle_kuwu_interactive` 苦无交互式分支):
 /// Guards against chained damage (`kuwu_from_chain == 0`), then lets target either discard 1
 /// `he` card (hand or equip) OR lose 1 HP when target chooses lose-HP or has no `he` cards.
-fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
+pub(super) fn resolve_kuwu_interactive(ctx: &mut Ctx<'_>, owner: PlayerId) {
     if flag(ctx.core, owner, "kuwu_from_chain") != 0 {
         set_flag(ctx.core, owner, "kuwu_skipped_from_chain", 1);
         return;

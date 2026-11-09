@@ -225,10 +225,21 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     for &(sym, faction, gender, max_hp, sk_list) in &U08_YXS_GENERALS {
         push_general(sym, faction, gender, max_hp, sk_list);
     }
-    // L19: 2 authentic Doomsday Brawl zombie generals (`jiangshifz`, `jiangshinj`, `末日乱斗/extension.js:331-332`)
-    for &sym in &L19_DOOMSDAY_CHARACTERS {
-        push_general(sym, Faction::Qun, Gender::Male, 4, &["baozou", "ganran"]);
-    }
+    // L19: 2 authentic Doomsday Brawl zombie generals (`jiangshifz`, `jiangshinj`, `末日乱斗/extension.js:3383-3384`)
+    push_general(
+        "jiangshifz",
+        Faction::Qun,
+        Gender::Male,
+        5,
+        &["xunmeng", "zaibian", "ganran", "wansha", "paoxiao"],
+    );
+    push_general(
+        "jiangshinj",
+        Faction::Qun,
+        Gender::Female,
+        3,
+        &["baozou", "wansha", "xueji", "shishi", "ganran"],
+    );
     // L25: 60 authentic Zuan `ssr_*` characters (`祖安武将/extension.js:338-397`)
     for &sym in &L25_ZUAN_CHARACTERS {
         push_general(sym, Faction::Qun, Gender::Male, 4, &["g_du", "_diycharacterskill"]);
@@ -319,6 +330,7 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
             push_skill(s, XIANJIAN_SKILL_DISPATCH_ID);
         }
     }
+    push_skill("kuwu", super::HUANLE_KUWU_INTERACTIVE_ID);
     for &s in &["monkey", "mianju", "xuelunyang", "jiuwei"] {
         push_skill(s, super::U06_HUANLE_SKILL_ID);
     }
@@ -329,6 +341,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
     }
     for &s in &U08_YXS_SKILLS {
         push_skill(s, super::U08_YXS_SKILL_ID);
+    }
+    for &s in &super::L10_SCS_COMPANION_SKILLS {
+        push_skill(s, super::L10_SCS_SKILL_ID);
     }
     push_skill("yiyi", super::L01_YIYI_ID);
     for &s in &["_shengke", "wuxingpan_skill", "wuxing"] {
@@ -342,6 +357,9 @@ pub fn decision34_pack9_for_coexistence(existing_packs: &[&ExtensionPack]) -> Ex
         push_skill(s, L14_SHOUSHA_SKILL_ID);
     }
     for &s in &L19_DOOMSDAY_SKILLS {
+        push_skill(s, L19_DOOMSDAY_SKILL_ID);
+    }
+    for &s in &["wansha", "paoxiao", "xueji"] {
         push_skill(s, L19_DOOMSDAY_SKILL_ID);
     }
     for &s in &L20_MARK_SUPPLEMENT_SKILLS {
@@ -513,6 +531,7 @@ pub fn attach_formal_package_upstream_rules(
             }
         }
         ("upstream-noname", "huanle-cards") => {
+            push_skill("kuwu", super::HUANLE_KUWU_INTERACTIVE_ID);
             push_skill("huanle_kuwu_interactive", super::HUANLE_KUWU_INTERACTIVE_ID);
             for &s in &["monkey", "mianju", "xuelunyang", "jiuwei"] {
                 push_skill(s, super::U06_HUANLE_SKILL_ID);
@@ -531,6 +550,22 @@ pub fn attach_formal_package_upstream_rules(
             push_skill("choudu", WUDIAN_CHOUDU_ID);
             for &s in &U07_WUDIAN_ALL_SKILLS {
                 push_skill(s, super::U07_WUDIAN_SKILL_ID);
+            }
+            for g in &mut pack.generals {
+                let extra = match g.name {
+                    "刘馥" | "wdb_liufu" => Some("duoqi"),
+                    "田豫" | "wdb_tianyu" => Some("youzhan"),
+                    "造之仁君" | "wdb_zaozhirenjun" => Some("jianbi"),
+                    "杨仪" | "wdb_yangyi" => Some("choudu"),
+                    _ => None,
+                };
+                if let Some(sk) = extra {
+                    if !g.skills.contains(&sk) {
+                        let mut updated: Vec<&'static str> = g.skills.to_vec();
+                        updated.push(names::intern(sk.to_string()));
+                        g.skills = names::intern_list(updated);
+                    }
+                }
             }
         }
         ("upstream-noname", "hero-kill") => {
@@ -564,12 +599,29 @@ pub fn attach_formal_package_upstream_rules(
             );
             push_skill("k_danggu", super::K_DANGGU_ID);
             push_skill("k_mowang", super::K_MOWANG_ID);
+            for &s in &super::L10_SCS_COMPANION_SKILLS {
+                push_skill(s, super::L10_SCS_SKILL_ID);
+            }
         }
         ("upstream-liuli", "doomsday-brawl") => {
-            for &sym in &L19_DOOMSDAY_CHARACTERS {
-                push_general(sym, Faction::Qun, Gender::Male, 4, &["baozou", "ganran"]);
-            }
+            push_general(
+                "jiangshifz",
+                Faction::Qun,
+                Gender::Male,
+                5,
+                &["xunmeng", "zaibian", "ganran", "wansha", "paoxiao"],
+            );
+            push_general(
+                "jiangshinj",
+                Faction::Qun,
+                Gender::Female,
+                3,
+                &["baozou", "wansha", "xueji", "shishi", "ganran"],
+            );
             for &s in &L19_DOOMSDAY_SKILLS {
+                push_skill(s, L19_DOOMSDAY_SKILL_ID);
+            }
+            for &s in &["wansha", "paoxiao", "xueji"] {
                 push_skill(s, L19_DOOMSDAY_SKILL_ID);
             }
         }

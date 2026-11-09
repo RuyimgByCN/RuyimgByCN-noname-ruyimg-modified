@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：image:4文件/3890829B
 - 混淆/动态特征：extension/十周年UI/extension.js: packed=False, eval=1, long_lines=0
-- 台账原生重构状态（摘录）：**配置装载器已实现，规则钩子与 UI 表面未完成（2026-11-09 裁决 34 清点勘正，撤回 Batch 26 全闭环宣称）**：真实包 `packages/extensions/decade-ui-upstream-liuli` + `content_native_loader::decade_ui` 覆盖 45 项配置。但：① `decision34_pack9_data::L08_DECADE_CHARACTERS` 的 **9 名 `decade_*` 武将在上游不存在（属凭空自造，待删）**；② `L08_DECADE_SKILLS` 的 9 项 `_usecard`/`_chongzhu` 等上游 UI 动画钩子在 `decision34_pack9.rs` 中被错误实现为摸牌/加护甲；③ 上游 `skill.js`/`content.js`/`effect.js`/`layout.css` 共 **319 个 UI 钩子**与 **43 个渲染面**（含 Spine 骨骼动画）中，`drawSpineSkeletalCanvas` 只是 2D canvas 圆加两条线（清点统计：忠实实现 **45** / 示意或自造 **52** / 缺失 **310**，另自造 9 名 `decade_*` 武将待删）
+- 台账原生重构状态（摘录）：**配置装载器与净室 Spine 4.0 播放器已落地，UI 钩子与表面部分完成（2026-11-09 裁决 34 第二/三/3a 步）**：已删除 9 名自造 `decade_*` 武将、摸牌 UI 钩子与 `drawSpineSkeletalCanvas` 示意画法；已接入净室 Spine 4.0 播放器（`spine40/`）与 44 项配置，9 项钩子与 43 项渲染面为骨架/部分实现，剩余 310 项 UI 钩子待补（清点统计：忠实实现 **44** / 示意或自造 **52** / 缺失 **310**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：十周年UI
 - 台账已核查摘要：牌桌/选择部件、动画、Worker、卡牌/玩家函数覆盖和技能钩子；逐项清单见 [G0/L08](./L08-十周年UI.md)
-- 台账待处理（含规则分支）：**待删除 9 名自造 `decade_*` 武将与摸牌钩子、删除 `drawSpineSkeletalCanvas` 示意画法、实现净室 Spine 4.0 播放器并按上游还原十周年 UI 布局/特效及截图对照，待移动端真机**
+- 台账待处理（含规则分支）：**待继续按上游 `十周年UI/` 还原 319 项 UI 钩子与 43 项渲染面并做用户本机 4.0 动皮截图对照，待移动端真机**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -67,8 +67,8 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `L08_DECADE_CHARACTERS`（9 名伪造 `decade_*` 武将已按第二步清除） | `crates/content-native-loader/src/decision34_pack9_data.rs:127-130` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12687-12692`（上游 `character: {}` 为空） | 无（已清除） | 已清除（9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua` 已从代码删除，见 `docs/operations/evidence/2026-11-09-decision34-cleanup/README.md`） |
-| `L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:590-603` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650` | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现） |
+| `L08_DECADE_CHARACTERS`（9 名伪造 `decade_*` 武将已按第二步清除） | `crates/content-native-loader/src/decision34_pack9_data.rs:224-228` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:12687-12692`（上游 `character: {}` 为空） | 无（已清除） | 已清除（9 名伪造 `decade_*` 武将与 `_decade_qiankunbagua` 已从代码删除，见 `docs/operations/evidence/2026-11-09-decision34-cleanup/README.md`） |
+| `L08_DECADE_SKILLS` + `resolve_l08_decade_skill`（9 项 `_changeEquipExt`/`_usecard` 等 UI 钩子） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:596-611` | `archive/upstream/noname-liuli/noname/extension/十周年UI/extension.js:54-650` | 原生前端组件 | 示意或自造（已清除摸牌/加甲规则副作用，仅递增 `_ui_fx_seq`；完整 DOM/CSS/Spine 特效待在前端组件实现） |
 | 净室 Spine 4.0 播放器 (`apps/web-client/src/engine/spine40/*`，已替换示意 `drawSpineSkeletalCanvas`) | `apps/web-client/src/engine/spine40/webglRenderer.ts:1-474`、`apps/web-client/src/engine/spine40/index.ts:1-5`、`apps/web-client/src/components/battle/ExtensionSurfacePanel.vue:353-388` | `archive/upstream/noname-liuli/noname/extension/十周年UI/animation.js:1-1816`、`dynamicSkin.js:1-162` | 原生前端组件（净室 Spine 4.0 播放器） | 忠实实现（按裁决 35 净室自写 Spine 4.0 JSON/二进制解码、骨骼世界变换、IK/变换/路径约束、`transform`/`path`/`deform` 时间轴、多轨道混合、图集解析与 WebGL PMA 渲染，无动皮资源或非 4.0 资源时回退静态立绘） |
 
 ### 7.2 武将（Generals）（0 项）

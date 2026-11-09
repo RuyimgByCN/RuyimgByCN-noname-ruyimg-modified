@@ -615,7 +615,7 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     assert_eq!(L24_SKIN_SWITCH_SKILLS.len(), 23);
     assert_eq!(L25_ZUAN_CHARACTERS.len(), 60);
     assert_eq!(L25_ZUAN_SKILLS.len(), 122);
-    assert_eq!(L27_SELECT_BEAUTIFY_SKILLS.len(), 37);
+    assert_eq!(L27_SELECT_BEAUTIFY_SKILLS.len(), 43);
 
     for &sk in L24_SKIN_SWITCH_SKILLS
         .iter()
@@ -682,7 +682,7 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
     })
     .is_ok());
 
-    // L27 `_chooseCharacterTwo` (`选将美化/extension.js:1165`) dual-general pick count guard + `qimou` (`extension.js:322`) limited guard + `baonvezhi` (`extension.js:184`)
+    // L27 `_chooseCharacterTwo` (`选将美化/extension.js:1165`) dual-general pick count guard + `qimou` (`extension.js:5902`) vs `reqimou` (`extension.js:6027`) + `baonvezhi` (`extension.js:184`)
     set_flag(&mut e, 0, "l27_pick_count", 1);
     invoke_p9_op(&mut e, 0, "_chooseCharacterTwo", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_dual_pick_invalid"), 1);
@@ -702,10 +702,27 @@ fn l24_l25_l27_complete_skills_negative_guards_and_save_restore() {
         "baonvezhi gains baonue mark without drawing cards"
     );
 
+    let hand_before_qimou = e.state_core().player(0).hand.len();
+    let hp_before_qimou = e.state_core().player(0).hp;
     invoke_p9_op(&mut e, 0, "qimou", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_qimou_used"), 1);
+    assert_eq!(flag(&e, 0, "l27_qimou_range_bonus"), 1);
+    assert_eq!(e.state_core().player(0).hp, hp_before_qimou - 1);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_qimou,
+        "upstream qimou (`选将美化/extension.js:5902-6026`) loses X HP for distance/sha bonus without drawing cards"
+    );
     invoke_p9_op(&mut e, 0, "qimou", L27_SELECT_SKILL_ID);
     assert_eq!(flag(&e, 0, "l27_qimou_blocked"), 1);
+
+    let hand_before_reqimou = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "reqimou", L27_SELECT_SKILL_ID);
+    assert_eq!(
+        e.state_core().player(0).hand.len(),
+        hand_before_reqimou + 1,
+        "upstream reqimou (`选将美化/extension.js:6027-6090`) draws X cards"
+    );
 
     assert!(resolve_l27_choose_character_two(&L27DualGeneralPick {
         candidates: vec!["caocao".to_string(), "liubei".to_string()],
@@ -913,6 +930,182 @@ fn formal_packages_extensions_load_and_execute_on_locked_product_path() {
     assert_eq!(flag(&e, 0, "yxs_fanji_counter"), 1);
     assert_eq!(flag(&e, 0, "yxs_yixin_resolved"), 1);
     assert_eq!(flag(&e, 0, "yxs_lshengong_copied_equip"), 1);
+
+    // 6. U01 `dddjinggou` (`3D精选/character/skill.js:443-471`) & `dddmoyan` (`skill.js:472-509`, 0 draw on owner)
+    invoke_p9_op(&mut e, 0, "dddjinggou", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddjinggou_weapon_snipe"), 1);
+    let hand_before_moyan = e.state_core().player(0).hand.len();
+    invoke_p9_op(&mut e, 0, "dddmoyan", DDD_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&e, 0, "dddmoyan_recorded_count"), 1);
+    assert_eq!(e.state_core().player(0).hand.len(), hand_before_moyan);
+
+    // 7. U06 `kuwu` (`欢乐卡牌/card/skill.js:41`) & U07 `g_youdishenru` (`玩点论杀/card/skill.js:16`) + deferred general skills on locked Catalog
+    assert!(e.catalog().skill_by_name("kuwu").is_some());
+    invoke_p9_op(&mut e, 0, "kuwu", content_native_loader::HUANLE_KUWU_INTERACTIVE_ID);
+    assert!(flag(&e, 1, "kuwu_discarded_he") > 0 || flag(&e, 1, "kuwu_lost_hp") == 1);
+
+    assert!(e.catalog().skill_by_name("g_youdishenru").is_some());
+    invoke_p9_op(&mut e, 0, "g_youdishenru", content_native_loader::U07_WUDIAN_SKILL_ID);
+    assert_eq!(flag(&e, 0, "youdishenru_nullified_sha"), 1);
+
+    for (gen_name, expected_sk) in [
+        ("刘馥", "duoqi"),
+        ("田豫", "youzhan"),
+        ("造之仁君", "jianbi"),
+        ("杨仪", "choudu"),
+    ] {
+        let g_idx = find_general(&e, gen_name);
+        let sk_id = e.catalog().skill_by_name(expected_sk).expect("U07 skill in Catalog");
+        let mut probe = start_locked_engine(260200, 2, LockedStartMode::Prototype, &verified).unwrap();
+        probe.debug_assemble_general_def(0, g_idx);
+        assert!(
+            probe.state_core().has_skill(0, sk_id),
+            "locked general {gen_name} (`玩点论杀/character/character.js`) must carry executable skill {expected_sk}"
+        );
+    }
+
+    // 8. L10 `k_danggu` (`史诗卡牌/extension.js:249-310`): grants real executable Ten Eunuchs `SkillInstance`s
+    let scs_taoluan_id = e.catalog().skill_by_name("scstaoluan").expect("scstaoluan in Catalog");
+    let scs_zimou_id = e.catalog().skill_by_name("scszimou").expect("scszimou in Catalog");
+    assert!(e.state_core().has_skill(0, scs_taoluan_id));
+    assert!(e.state_core().has_skill(0, scs_zimou_id));
+    let mut l10_probe = start_locked_engine(260204, 2, LockedStartMode::Prototype, &verified).unwrap();
+    let hp1_before_scs = l10_probe.state_core().player(1).hp;
+    invoke_p9_op(&mut l10_probe, 0, "scsniqu", content_native_loader::L10_SCS_SKILL_ID);
+    assert_eq!(flag(&l10_probe, 0, "l10_scs_resolved:scsniqu"), 1);
+    assert_eq!(l10_probe.state_core().player(1).hp, hp1_before_scs - 1);
+
+    // 9. L19 (`末日乱斗/extension.js:367-3384`): authentic zombie max_hp (`jiangshifz`=5, `jiangshinj`=3) + `zaibian`/`_tuizhi`/`_jiangshi`/`_huzhu`/`_guixinmodeskill`
+    let fz_idx = find_general(&e, "jiangshifz");
+    let nj_idx = find_general(&e, "jiangshinj");
+    let mut l19_probe = start_locked_engine(260201, 2, LockedStartMode::Prototype, &verified).unwrap();
+    l19_probe.debug_assemble_general_def(0, fz_idx);
+    l19_probe.debug_assemble_general_def(1, nj_idx);
+    assert_eq!(l19_probe.state_core().player(0).max_hp, 5);
+    assert_eq!(l19_probe.state_core().player(1).max_hp, 3);
+
+    set_flag(&mut l19_probe, 0, "l19_human_count", 3);
+    set_flag(&mut l19_probe, 0, "l19_zombie_count", 1);
+    let hand_before_zaibian = l19_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l19_probe, 0, "zaibian", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(l19_probe.state_core().player(0).hand.len(), hand_before_zaibian + 3);
+
+    set_flag(&mut l19_probe, 0, "l19_tuizhi_turns", 7);
+    invoke_p9_op(&mut l19_probe, 0, "_tuizhi", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(flag(&l19_probe, 0, "l19_tuizhi_victory"), 1);
+
+    l19_probe.state_core_mut().player_mut(1).hp = 1;
+    invoke_p9_op(&mut l19_probe, 0, "_huzhu", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(flag(&l19_probe, 0, "l19_huzhu_healed"), 1);
+    assert_eq!(l19_probe.state_core().player(1).hp, 2);
+
+    invoke_p9_op(&mut l19_probe, 1, "_jiangshi", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(l19_probe.state_core().player(1).max_hp, 5);
+    assert_eq!(l19_probe.state_core().player(1).hp, 5);
+    assert_eq!(l19_probe.state_core().player(1).hand.len(), 4);
+
+    let hujia_before = l19_probe.state_core().player(0).hujia;
+    invoke_p9_op(&mut l19_probe, 0, "_guixinmodeskill", L19_DOOMSDAY_SKILL_ID);
+    assert_eq!(l19_probe.state_core().player(0).hujia, hujia_before + 2);
+
+    // 10. L20 (`标记补充/extension.js:2261-6240`): `kurou` (-1 HP +2 draw), `qingyu` (<2 guard + >=2 discard 2 & prevent damage), `mibei` (+3 draw), and 0-draw passive/deck-swap skills
+    let mut l20_probe = start_locked_engine(260202, 2, LockedStartMode::Prototype, &verified).unwrap();
+    let hp_before_kurou = l20_probe.state_core().player(0).hp;
+    let hand_before_kurou = l20_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l20_probe, 0, "kurou", L20_SKILL_DISPATCH_ID);
+    assert_eq!(l20_probe.state_core().player(0).hp, hp_before_kurou - 1);
+    assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_kurou + 2);
+
+    let hand_before_mibei = l20_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l20_probe, 0, "mibei", L20_SKILL_DISPATCH_ID);
+    assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_mibei + 3);
+    assert_eq!(flag(&l20_probe, 0, "l20_granted_xinmouli"), 1);
+
+    let hand_before_qingyu = l20_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l20_probe, 0, "qingyu", L20_SKILL_DISPATCH_ID);
+    assert_eq!(flag(&l20_probe, 0, "l20_qingyu_prevented"), 1);
+    assert_eq!(l20_probe.state_core().player(0).hand.len(), hand_before_qingyu - 2);
+
+    for zero_draw_sk in ["fz_new_rewusheng", "fz_liegong", "wengua5", "zuoxing", "_chongzhu"] {
+        let h0 = l20_probe.state_core().player(0).hand.len();
+        invoke_p9_op(&mut l20_probe, 0, zero_draw_sk, L20_SKILL_DISPATCH_ID);
+        assert_eq!(
+            l20_probe.state_core().player(0).hand.len(),
+            h0,
+            "L20 skill {zero_draw_sk} (`标记补充/extension.js`) must not increase hand size via draw(1)"
+        );
+    }
+    let max_hp_before_fanbei = l20_probe.state_core().player(0).max_hp;
+    invoke_p9_op(&mut l20_probe, 0, "_xigua_xueliangfanbei_", L20_SKILL_DISPATCH_ID);
+    assert_eq!(l20_probe.state_core().player(0).max_hp, max_hp_before_fanbei * 2);
+
+    // 11. L27 (`选将美化/extension.js:1959-8930`): `twharvestinori` (draw 2*X) vs `twzhouhu` (heal X), `twxiafeng` (0 draw), `bolan` (0 draw), and 6 newly registered skills
+    let mut l27_probe = start_locked_engine(260203, 2, LockedStartMode::Prototype, &verified).unwrap();
+    for new_l27_sk in ["huamu", "jishe2", "mbcmqingzheng", "mbwuling", "potzhuangshi", "sbqingzheng"] {
+        assert!(l27_probe.catalog().skill_by_name(new_l27_sk).is_some());
+    }
+    set_flag(&mut l27_probe, 0, "l27_mahou_x", 2);
+    let h_inori = l27_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l27_probe, 0, "twharvestinori", L27_SELECT_SKILL_ID);
+    assert_eq!(l27_probe.state_core().player(0).hand.len(), h_inori - 1 + 4);
+
+    l27_probe.state_core_mut().player_mut(0).hp = 1;
+    set_flag(&mut l27_probe, 0, "l27_mahou_x", 2);
+    let h_zhouhu = l27_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l27_probe, 0, "twzhouhu", L27_SELECT_SKILL_ID);
+    assert_eq!(l27_probe.state_core().player(0).hand.len(), h_zhouhu - 1);
+    assert_eq!(l27_probe.state_core().player(0).hp, 3);
+
+    set_flag(&mut l27_probe, 0, "l27_baonue_marks", 2);
+    let h_xiafeng = l27_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l27_probe, 0, "twxiafeng", L27_SELECT_SKILL_ID);
+    assert_eq!(l27_probe.state_core().player(0).hand.len(), h_xiafeng);
+    assert_eq!(flag(&l27_probe, 0, "l27_twxiafeng_spent"), 2);
+
+    let h_bolan = l27_probe.state_core().player(0).hand.len();
+    invoke_p9_op(&mut l27_probe, 0, "bolan", L27_SELECT_SKILL_ID);
+    assert_eq!(l27_probe.state_core().player(0).hand.len(), h_bolan);
+    assert_eq!(flag(&l27_probe, 0, "l27_bolan_temp_skill"), 1);
+
+    // 12. L28 (`雷霆万钧/extension.js:6003-8381`): non-skill keys & fabricated names absent; fortune-lot & `th_gushe2` subskills execute without spurious draw(1)
+    for invalid_l28_key in [
+        "th_caiyi_info",
+        "th_qiaosi_map",
+        "th_tiansuan_faq",
+        "th_geyuan_info",
+        "th_taipingyaoshu_info",
+        "th_caiyi_yang",
+        "th_caiyi_yin",
+        "th_pingcai_Wolong",
+        "th_jingxie1",
+    ] {
+        assert!(
+            e.catalog().skill_by_name(invalid_l28_key).is_none(),
+            "non-skill or fabricated key {invalid_l28_key} must not be registered in Catalog"
+        );
+    }
+    for (lot_sk, expected_flag) in [
+        ("th_tiansuan2_0", "th_tiansuan2_0_prevent_damage"),
+        ("th_tiansuan2_1", "th_tiansuan2_1_cap_damage"),
+        ("th_tiansuan2_2", "th_tiansuan2_2_fire"),
+        ("th_tiansuan2_3", "th_tiansuan2_3_extra_damage"),
+        ("th_tiansuan2_4", "th_tiansuan2_4_forbid_tao_jiu"),
+        ("th_gushe2", "th_gushe2_marks"),
+    ] {
+        assert!(e.catalog().skill_by_name(lot_sk).is_some());
+        let h_before = e.state_core().player(0).hand.len();
+        invoke_p9_op(&mut e, 0, lot_sk, content_native_loader::TH_SKILL_DISPATCH_ID);
+        assert_eq!(flag(&e, 0, expected_flag), 1);
+        assert_eq!(
+            e.state_core().player(0).hand.len(),
+            h_before,
+            "L28 subskill {lot_sk} (`雷霆万钧/extension.js:8035-8381`) must not draw cards"
+        );
+    }
+
+    let final_snap = e.save();
+    let final_restored = restore_locked_engine(&final_snap, &verified).expect("final locked restore");
+    assert_eq!(final_restored.state_hash(), e.state_hash());
 }
 
 

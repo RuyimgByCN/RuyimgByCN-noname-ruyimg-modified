@@ -65,7 +65,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `boss_stage_transition` / `resolve_boss_stage_transition`（`boss_baonu_stage` 已按第二步清除） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34.rs:403-416` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146` | 原生规则（`boss_playpack.rs`） | 忠实实现（已清除伪造的 `boss_baonu_stage`；挑战/剑阁武将池缓存与体力归一化已在 `boss_playpack.rs` 忠实实现） |
+| `boss_stage_transition` / `resolve_boss_stage_transition`（`boss_baonu_stage` 已按第二步清除） | `crates/content-native-loader/src/boss_playpack.rs:1-120` | `archive/upstream/noname/apps/core/extension/boss/extension.js:6-146` | 原生规则（`boss_playpack.rs`） | 忠实实现（已清除伪造的 `boss_baonu_stage`；挑战/剑阁武将池缓存与体力归一化已在 `boss_playpack.rs` 忠实实现） |
 
 ### 7.2 武将（Generals）（15 项）
 

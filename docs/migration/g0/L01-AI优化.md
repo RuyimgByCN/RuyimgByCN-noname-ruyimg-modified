@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：extension/AI优化/extension.js: packed=False, eval=6, long_lines=0
-- 台账原生重构状态（摘录）：**主装载与 AI 消费面已实现（2026-10-17，[证据](../../operations/evidence/2026-10-17-l01-ai-tuning-eight/README.md)）**：装载器 `ai_tuning`（威胁度/权重/补充模式/效益/评级映射）+ **AI 消费面**（`ContentTuning` + 策略变体 2）+ 转换包 `packages/extensions/ai-tuning-upstream-liuli`。**2026-11-09 裁决 34 清点**：上游 69 技能/规则钩子、1 卡牌（`ly_piliche`）、64 配置项共 134 项中，忠实实现 **133** / 示意或自造 **0** / 缺失 **1**（`ly_piliche` 霹雳车实体卡尚未接入正式包 `cards.json`）
+- 台账原生重构状态（摘录）：**主装载、AI 消费面与卡牌规则忠实实现（2026-11-09 裁决 34 第三步，[G0/L01](./L01-AI优化.md)）**：真实包 `packages/extensions/ai-tuning-upstream-liuli` + `ai_tuning` 装载器覆盖 63 项配置、69 项技能威胁/权重/规则钩子，并通过 `attach_formal_package_upstream_rules` 与 `ai_tuning` 接入 `yiyi`（以逸待劳摸 2 弃 2 与收益评估，`resolve_l01_yiyi_card`），共 133/133 项全部忠实实现（忠实实现 **133** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：技能威胁/武将权重、禁将、身份策略、规则钩子与设置；逐项清单见 [G0/L01](./L01-AI优化.md)
-- 台账待处理（含规则分支）：**待将 `ly_piliche` 接入正式包并补移动端真机验收**
+- 台账待处理（含规则分支）：**仓内 133/133 项已忠实实现；待移动端真机验收后签署整包**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`） | `crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:11-28` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260` | 原生规则 / `ai-tuning-upstream-liuli` | 忠实实现（已按上游实现 `yiyi` 锦囊摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径） |
+| `lib.card.yiyi`（以逸待劳锦囊，`resolve_l01_yiyi_card` + `evaluate_yiyi_target_benefit`） | `crates/content-native-loader/src/ai_tuning.rs:183-228`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:158-181` | `archive/upstream/noname-liuli/noname/extension/AI优化/extension.js:9205-9260` | 原生规则 / `ai-tuning-upstream-liuli` | 忠实实现（已按上游实现 `yiyi` 锦囊摸 2 弃 2 结算与目标收益评估并接入正式包 `ai-tuning-upstream-liuli` 产品路径） |
 
 ### 7.2 武将（Generals）（0 项）
 

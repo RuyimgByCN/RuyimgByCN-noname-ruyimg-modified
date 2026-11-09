@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**部分重构（2026-10-17，[证据](../../operations/evidence/2026-10-17-t12-l06-eight/README.md)）**：真实包 `packages/extensions/wuxing-upstream-liuli`；五行属性入状态、生克宿主行为（被生摸牌/被克弃牌）、五行盘 Treasure 占栏 + `wuxingpan_skill` 改属性主动技。**2026-11-09 裁决 34 清点**：上游 `wuxing` 规则技与 `wuxingpan` 卡牌已忠实实现，但 `wuxingpan_skill` 在 `cards.json` 映射表内仍标 `deferred`（忠实实现 **2** / 示意或自造 **0** / 缺失 **1**）
+- 台账原生重构状态（摘录）：**仓内五行规则、五行盘与改属性主动技忠实实现（2026-11-09 裁决 34 第三步，[G0/L06](./L06-wuxing.md)）**：真实包 `packages/extensions/wuxing-upstream-liuli` 通过 `attach_formal_package_upstream_rules` 接入 `_wuxing`、`wuxingpan` 与 `wuxingpan_skill`（`resolve_l06_wuxing_skill`），共 3/3 项忠实实现（忠实实现 **3** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：五行属性、五行盘卡牌/技能、开局随机插牌；逐项清单见 [G0/L06](./L06-wuxing.md)
-- 台账待处理（含规则分支）：**待将 `wuxingpan_skill` 在包清单的 `deferred` 闭合，待移动端真机**
+- 台账待处理（含规则分支）：**仓内 3/3 项已忠实实现；待移动端真机验收后签署整包**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -67,7 +67,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:30-43` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 忠实实现（已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径） |
+| `_wuxing` 全局五行生克技能（`resolve_l06_wuxing_skill`） | `crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_ext.rs:184-217` | `archive/upstream/noname-liuli/noname/extension/五行生克/extension.js:9-95` | 原生规则 / `wuxing-upstream-liuli` | 忠实实现（已按上游实现 `_wuxing` 初始五行属性与生克结算并接入正式包 `wuxing-upstream-liuli` 产品路径） |
 
 ### 7.2 武将（Generals）（0 项）
 

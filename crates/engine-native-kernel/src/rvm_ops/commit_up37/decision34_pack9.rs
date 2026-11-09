@@ -661,13 +661,17 @@ fn resolve_l19_doomsday_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerI
                 set_flag(ctx.core, owner, "doomsday_mutated", 1);
             }
         }
-        // _jisuangailv / _tuizhi (`extension.js:629, 641`):
-        "_jisuangailv" | "_tuizhi" => {
-            let exp = flag(ctx.core, owner, "l19_exp_points") + 10;
-            set_flag(ctx.core, owner, "l19_exp_points", exp);
-            if exp >= 20 {
-                let lvl = flag(ctx.core, owner, "l19_level") + 1;
-                set_flag(ctx.core, owner, "l19_level", lvl);
+        // _jisuangailv (`extension.js:483-496`): updates infection probability after each phase.
+        "_jisuangailv" => {
+            let rate = (flag(ctx.core, owner, "l19_infection_prob_pct") + 15).min(100);
+            set_flag(ctx.core, owner, "l19_infection_prob_pct", rate);
+        }
+        // _tuizhi 退治 (`extension.js:497-513`): advances lord retreat counter; reaching 8 achieves human victory.
+        "_tuizhi" => {
+            let turns = flag(ctx.core, owner, "l19_tuizhi_turns") + 1;
+            set_flag(ctx.core, owner, "l19_tuizhi_turns", turns);
+            if turns >= 8 {
+                set_flag(ctx.core, owner, "l19_tuizhi_victory", 1);
             }
         }
         other => {
@@ -783,17 +787,19 @@ fn resolve_l27_select_skill(ctx: &mut Ctx<'_>, executing: &str, owner: PlayerId)
         return;
     }
     if skill_name == "qimou" {
+        // qimou 奇谋 (`选将美化/extension.js:5902-6026`): limited skill, loses X HP for -X distance & +X sha uses (NO card draw; only reqimou at 6059 draws X).
         if flag(ctx.core, owner, "l27_qimou_used") == 1 {
             set_flag(ctx.core, owner, "l27_qimou_blocked", 1);
             return;
         }
+        let x = flag(ctx.core, owner, "l27_qimou_x").clamp(1, 3);
         set_flag(ctx.core, owner, "l27_qimou_used", 1);
         set_flag(ctx.core, owner, "l27_skill:qimou", 1);
+        set_flag(ctx.core, owner, "l27_qimou_range_bonus", x);
         ctx.emit(EventData::LoseHp {
             player: owner,
-            amount: 1,
+            amount: x,
         });
-        ctx.start_draw(owner, 1);
         return;
     }
     set_flag(ctx.core, owner, &format!("l27_skill:{skill_name}"), 1);

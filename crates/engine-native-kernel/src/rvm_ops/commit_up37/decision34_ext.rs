@@ -32,6 +32,30 @@ fn discard_one_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
     }
 }
 
+fn grant_named_skill_if_present(ctx: &mut Ctx<'_>, owner: PlayerId, skill_name: &str) {
+    if let Some(def) = ctx.catalog.skill_by_name(skill_name) {
+        let already = ctx.core.has_skill(owner, def);
+        ctx.ensure_skill(
+            (owner, def),
+            SkillInstance {
+                owner,
+                enabled: true,
+                once_used: false,
+                expires_end_of_turn: false,
+                rounds: 0,
+            },
+        );
+        if !already {
+            ctx.emit(EventData::SkillToggled {
+                player: owner,
+                skill: def,
+                enabled: true,
+                temporary: false,
+            });
+        }
+    }
+}
+
 /// Upstream `conflictMap` (`史诗卡牌/extension.js:250-295`): pairs `(0,1)`, `(2,3)`, `(4,5)`, `(6,7)`, `(8,9)`
 /// conflict with each other when assembling a 2-eunuch clique.
 pub(super) fn apply_l10_danggu_companion(
@@ -43,6 +67,7 @@ pub(super) fn apply_l10_danggu_companion(
     let idx = (chosen_idx as usize) % L10_SCS_COMPANION_SKILLS.len();
     let companion = L10_SCS_COMPANION_SKILLS[idx];
     set_flag(ctx.core, owner, &format!("l10_scs_skill:{companion}"), 1);
+    grant_named_skill_if_present(ctx, owner, companion);
     set_flag(ctx.core, owner, "k_danggu_back_resolved", 1);
     let conflict_idx = (idx ^ 1) as u32;
     if let Some(partner_idx) = (0..10u32)
@@ -56,6 +81,75 @@ pub(super) fn apply_l10_danggu_companion(
             &format!("l10_scs_skill:{partner_skill}"),
             1,
         );
+        grant_named_skill_if_present(ctx, owner, partner_skill);
+    }
+}
+
+/// `L10` (`scstaoluan`..`scsanruo` — `archive/upstream/noname-liuli/noname/extension/史诗卡牌/extension.js:2335-2369`):
+pub(super) fn resolve_l10_scs_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
+    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    set_flag(ctx.core, owner, &format!("l10_scs_resolved:{skill_name}"), 1);
+    match skill_name {
+        "scstaoluan" => {
+            if discard_one_he(ctx, owner).is_some() {
+                set_flag(ctx.core, owner, "l10_scstaoluan_virtual_used", 1);
+            }
+        }
+        "scschiyan" => {
+            set_flag(ctx.core, other, "l10_scschiyan_detained", 1);
+            if ctx.core.player(owner).hand.len() > ctx.core.player(other).hand.len()
+                && other != owner
+            {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(
+                    Some(owner),
+                    other,
+                    1,
+                )));
+            }
+        }
+        "scszimou" => {
+            ctx.start_draw(owner, 1);
+        }
+        "scspicai" => {
+            ctx.start_draw(other, 1);
+        }
+        "scsyaozhuo" => {
+            set_flag(ctx.core, other, "l10_scsyaozhuo_skip_draw", 1);
+        }
+        "scsxiaolu" => {
+            ctx.start_draw(owner, 2);
+            let _ = discard_one_he(ctx, owner);
+            let _ = discard_one_he(ctx, owner);
+        }
+        "scskuiji" => {
+            let _ = discard_one_he(ctx, owner);
+            let _ = discard_one_he(ctx, other);
+        }
+        "scschihe" => {
+            set_flag(ctx.core, owner, "l10_scschihe_sha_boost", 1);
+        }
+        "scsniqu" => {
+            if other != owner {
+                ctx.emit(EventData::Damage(crate::machine::damage_data_with(
+                    Some(owner),
+                    other,
+                    1,
+                    DamageNature::Fire,
+                    None,
+                )));
+            }
+        }
+        "scsanruo" => {
+            if other != owner {
+                if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                    ctx.take_hand_card(other, c);
+                    ctx.core.player_mut(owner).hand.push(c);
+                }
+            }
+        }
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("l10_scs_hook:{other_sk}"), 1);
+        }
     }
 }
 
@@ -137,6 +231,11 @@ pub(super) fn resolve_u06_huanle_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
             ctx.core.player_mut(owner).face_down = false;
             set_flag(ctx.core, owner, "mianju_prevented_turnover", 1);
         }
+        // kuwu 苦无 (`欢乐卡牌/card/skill.js:41-61`):
+        "kuwu" => {
+            set_flag(ctx.core, owner, "kuwu_invoked", 1);
+            super::decision34::resolve_kuwu_interactive(ctx, owner);
+        }
         // xuelunyang 写轮眼 (`欢乐卡牌/card/skill.js:62-97`):
         "xuelunyang" => {
             if discard_one_he(ctx, owner).is_none() {
@@ -159,16 +258,17 @@ pub(super) fn resolve_u06_huanle_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 ctx.start_draw(owner, 2);
             }
         }
-        _ => {
-            set_flag(ctx.core, owner, "kuwu_invoked", 1);
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("u06_hook:{other_sk}"), 1);
         }
     }
 }
 
-/// `U07` (`youdishenru`, `g_youdishenru`, `ciqiu_dying`, `kangyin2` —
-/// `archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169-219`, `card/skill.js:5-36`, `character/skill.js:99-108,391-407`).
+/// `U07` (`youdishenru`, `g_youdishenru`, `ciqiu_dying`, `ciqiu_destroy`, `kangyin2`, etc. —
+/// `archive/upstream/noname/apps/core/extension/玩点论杀/card/card.js:169-219`, `card/skill.js:5-36`, `character/skill.js:5-795`).
 pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
     let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
+    set_flag(ctx.core, owner, &format!("u07_skill:{skill_name}"), 1);
     match skill_name {
         "youdishenru" | "g_youdishenru" => {
             set_flag(ctx.core, owner, "youdishenru_nullified_sha", 1);
@@ -181,7 +281,7 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 )));
             }
         }
-        "ciqiu_dying" => {
+        "ciqiu" | "ciqiu_dying" => {
             set_flag(ctx.core, owner, "ciqiu_dying_instant_kill", 1);
             set_flag(ctx.core, owner, "ciqiu_removed", 1);
             if other != owner {
@@ -189,12 +289,44 @@ pub(super) fn resolve_u07_wudian_skill(ctx: &mut Ctx<'_>, skill_name: &str, owne
                 ctx.core.player_mut(other).dying = true;
             }
         }
-        "kangyin2" => {
+        "ciqiu_destroy" => {
+            let _ = discard_one_he(ctx, owner);
+            set_flag(ctx.core, owner, "ciqiu_weapon_destroyed", 1);
+        }
+        "kangyin" | "kangyin2" => {
             let bonus = flag(ctx.core, owner, "kangyin_marks").max(1);
             set_flag(ctx.core, owner, "kangyin2_bonus_applied", bonus);
             ctx.start_draw(owner, bonus);
         }
-        _ => {}
+        "fuchou" | "fuchou2" | "fuchou3" => {
+            set_flag(ctx.core, owner, "wdb_fuchou_counter", 1);
+            if other != owner {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(
+                    Some(owner),
+                    other,
+                    1,
+                )));
+            }
+        }
+        "diyjuntun" | "diyjuntun2" | "juntun" | "juntun_global" => {
+            if discard_one_he(ctx, owner).is_some() {
+                ctx.start_draw(owner, 1);
+            }
+            set_flag(ctx.core, owner, "wdb_juntun_recast", 1);
+        }
+        "liduan" | "liduan2" => {
+            set_flag(ctx.core, other, "wdb_liduan_suit_locked", 1);
+            ctx.start_draw(owner, 1);
+        }
+        "nsshuaiyan" | "siji" | "liangce" => {
+            ctx.start_draw(owner, 1);
+        }
+        "moshou" | "zhucheng" | "juedao" | "geju" | "chezhen" | "jinyan" => {
+            set_flag(ctx.core, owner, &format!("wdb_active:{skill_name}"), 1);
+        }
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("u07_hook:{other_sk}"), 1);
+        }
     }
 }
 
@@ -276,6 +408,32 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
             }
             set_flag(ctx.core, owner, "ddd_juxian_virtue", 1);
             ctx.start_draw(other, 1);
+        }
+        // dddjinggou 精彀 (`3D精选/character/skill.js:443-471`):
+        // After equipping a weapon (`equip1`) with max attack range on table, deals 1 damage to another character.
+        "dddjinggou" => {
+            set_flag(ctx.core, owner, "dddjinggou_weapon_snipe", 1);
+            if other != owner {
+                ctx.emit(EventData::Damage(crate::machine::damage_data(
+                    Some(owner),
+                    other,
+                    1,
+                )));
+            }
+        }
+        // dddmoyan 末焱 (`3D精选/character/skill.js:472-509`):
+        // At roundStart, reveals 3 cards, chosen target gains 1..=3 of them (`dddmoyan_gain_count`),
+        // and records `[target, gains.length]` so owner takes +1 damage while target's hand <= gains.length.
+        "dddmoyan" => {
+            let gain_n = flag(ctx.core, owner, "dddmoyan_gain_count").clamp(1, 3);
+            let target = if flag(ctx.core, owner, "dddmoyan_target_self") != 0 {
+                owner
+            } else {
+                other
+            };
+            ctx.start_draw(target, gain_n);
+            set_flag(ctx.core, owner, "dddmoyan_target", u32::from(target));
+            set_flag(ctx.core, owner, "dddmoyan_recorded_count", gain_n);
         }
         // dddanliu 暗流 (`3D精选/character/skill.js:861-967`):
         "dddanliu" => {
@@ -615,7 +773,7 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
             }
         }
         // dddbailei 拜泪 (`3D精选/character/skill.js:6302-6368`):
-        _ => {
+        "dddbailei" => {
             set_flag(ctx.core, owner, "dddbailei_resolved", 1);
             if other != owner {
                 ctx.emit(EventData::Damage(crate::machine::damage_data(
@@ -624,6 +782,9 @@ pub(super) fn resolve_u01_ddd_remaining(ctx: &mut Ctx<'_>, skill_name: &str, own
                     1,
                 )));
             }
+        }
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("u01_hook:{other_sk}"), 1);
         }
     }
 }
@@ -666,7 +827,7 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
             set_flag(ctx.core, owner, "th_chongxu_marks", marks);
             ctx.start_draw(owner, 1);
         }
-        // miaojian 妙剑 (`雷霆万钧/extension.js:4701-4820`):
+        // miaojian 妙剑 (`雷霆万钧/extension.js:3660, 4701-4820`):
         "miaojian" => {
             set_flag(ctx.core, owner, "th_miaojian_pierce", 1);
             if other != owner {
@@ -677,28 +838,24 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
                 )));
             }
         }
-        // shhlianhua 莲华 (`雷霆万钧/extension.js:4821-5160`):
+        // shhlianhua 莲华 (`雷霆万钧/extension.js:3660, 4821-5160`):
         "shhlianhua" => {
             set_flag(ctx.core, owner, "th_shhlianhua_ward", 1);
             ctx.start_draw(owner, 1);
         }
-        // th_shengong 神工 (`雷霆万钧/extension.js:5163-5520`):
+        // th_shengong 神工 (`雷霆万钧/extension.js:5163-5504`):
         "th_shengong" => {
             let _ = discard_one_he(ctx, owner);
             set_flag(ctx.core, owner, "th_shengong_forged", 1);
             ctx.start_draw(owner, 1);
         }
-        // olqisi 奇思 (`雷霆万钧/extension.js:5521-5570`):
+        // olqisi 奇思 (`雷霆万钧/extension.js:3661`):
         "olqisi" => {
             set_flag(ctx.core, owner, "th_olqisi_converted", 1);
             ctx.start_draw(owner, 1);
         }
-        // th_pingcai 评才 (`雷霆万钧/extension.js:5571-6015`):
-        "th_pingcai"
-        | "th_pcaudio_wolong_card"
-        | "th_pcaudio_fengchu_card"
-        | "th_pcaudio_shuijing_card"
-        | "th_pcaudio_xuanjian_card" => {
+        // th_pingcai 评才 (`雷霆万钧/extension.js:5505-6002`):
+        "th_pingcai" => {
             set_flag(ctx.core, owner, "th_pingcai_relic_wiped", 1);
             if other != owner {
                 ctx.emit(EventData::Damage(crate::machine::damage_data_with(
@@ -710,19 +867,39 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
                 )));
             }
         }
-        // xinfu_pdgyingshi 隐世 (`雷霆万钧/extension.js:6016`):
+        // th_pcaudio_*_card (`雷霆万钧/extension.js:6003-6014`): pure audio markers for the 4 relics (0 draw)
+        "th_pcaudio_wolong_card"
+        | "th_pcaudio_fengchu_card"
+        | "th_pcaudio_shuijing_card"
+        | "th_pcaudio_xuanjian_card" => {
+            set_flag(ctx.core, owner, &format!("th_pcaudio:{skill}"), 1);
+        }
+        // xinfu_pdgyingshi 隐世 (`雷霆万钧/extension.js:3662`):
         "xinfu_pdgyingshi" => {
             set_flag(ctx.core, owner, "th_yingshi_hermit", 1);
         }
-        // th_zhengjing / th_zhengjing2 整经 (`雷霆万钧/extension.js:6018-6200`):
-        "th_zhengjing" | "th_zhengjing2" => {
+        // th_zhengjing 整经 (`雷霆万钧/extension.js:6018-6161`):
+        "th_zhengjing" => {
             if let Some(c) = pop_deck(ctx) {
                 push_pile(ctx, owner, "th_jing", c);
             }
             set_flag(ctx.core, owner, "th_zhengjing_sorted", 1);
             ctx.start_draw(owner, 1);
         }
-        // th_chengye 承业 (`雷霆万钧/extension.js:6201-6371`):
+        // th_zhengjing2 (`雷霆万钧/extension.js:6162-6179`): `phaseZhunbeiBegin` gains all `"th_jing"` expansion cards and skips Judge/Draw
+        "th_zhengjing2" => {
+            let cards = ctx
+                .core
+                .vm_aux
+                .piles
+                .remove(&(owner, "th_jing".to_string()))
+                .unwrap_or_default();
+            if !cards.is_empty() {
+                ctx.core.player_mut(owner).hand.extend(cards);
+            }
+            set_flag(ctx.core, owner, "th_zhengjing2_claimed_skip_judge_draw", 1);
+        }
+        // th_chengye 承业 (`雷霆万钧/extension.js:6182-6371`):
         "th_chengye" => {
             let cnt = (flag(ctx.core, owner, "th_chengye_liujing_count") + 1).min(6);
             set_flag(ctx.core, owner, "th_chengye_liujing_count", cnt);
@@ -739,29 +916,82 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
             set_flag(ctx.core, owner, "th_yufeng_flight_score", 2);
             ctx.start_draw(owner, 2);
         }
-        // th_tianshu 天书 (`雷霆万钧/extension.js:6914-6973`):
+        // th_tianshu 天书 (`雷霆万钧/extension.js:6914-6959`):
         "th_tianshu" => {
             let _ = discard_one_he(ctx, owner);
             set_flag(ctx.core, owner, "th_tianshu_granted_yaoshu", 1);
             ctx.start_draw(owner, 1);
         }
-        // th_tiansuan 天算 (`雷霆万钧/extension.js:7806-8218`):
-        "th_tiansuan"
-        | "th_tiansuan2"
-        | "th_tiansuan2_0"
-        | "th_tiansuan2_1"
-        | "th_tiansuan2_2"
-        | "th_tiansuan2_3"
-        | "th_tiansuan2_4"
-        | "th_tiansuan2_damage"
-        | "th_tiansuan2_ai"
-        | "th_tiansuan2_fire" => {
+        // th_g_taipingyaoshu_ai (`雷霆万钧/extension.js:6960-6973`): AI `wendao` guard (0 draw)
+        "th_g_taipingyaoshu_ai" => {
+            set_flag(ctx.core, owner, "th_g_taipingyaoshu_ai_checked", 1);
+        }
+        // th_tiansuan 天算 (`雷霆万钧/extension.js:7806-8026`): draws fortune lot 1..=5; if upper lot (`<=2`), gains 1 card from target
+        "th_tiansuan" => {
             let lot = (flag(ctx.core, owner, "th_tiansuan_lot") % 5) + 1;
             set_flag(ctx.core, owner, "th_tiansuan_lot", lot);
-            ctx.start_draw(owner, 1);
+            if lot <= 2 && other != owner {
+                let gained = if let Some(c) = ctx.core.player(other).hand.first().copied() {
+                    ctx.take_hand_card(other, c);
+                    Some(c)
+                } else if let Some(c) = ctx.core.player(other).equips.first().copied() {
+                    ctx.take_owned_card(other, c);
+                    Some(c)
+                } else {
+                    None
+                };
+                if let Some(c) = gained {
+                    ctx.core.player_mut(owner).hand.push(c);
+                }
+            }
         }
-        // th_gushe2 / rejici 激词 (`雷霆万钧/extension.js:8146, 8378`):
-        "th_gushe2" | "rejici" => {
+        // th_tiansuan2 (`雷霆万钧/extension.js:8027-8034`): `onremove` cleanup clearing fortune lot
+        "th_tiansuan2" => {
+            set_flag(ctx.core, owner, "th_tiansuan_lot", 0);
+            set_flag(ctx.core, owner, "th_tiansuan2_cleaned", 1);
+        }
+        // th_tiansuan2_0 上上签 (`雷霆万钧/extension.js:8035-8063`): `damageBegin4` prevents all damage
+        "th_tiansuan2_0" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_0_prevent_damage", 1);
+        }
+        // th_tiansuan2_1 上签 (`雷霆万钧/extension.js:8064-8103`): `damageBegin4` caps incoming damage at 1
+        "th_tiansuan2_1" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_1_cap_damage", 1);
+        }
+        // th_tiansuan2_damage (`雷霆万钧/extension.js:8104-8110`): `damageEnd` draws `trigger.num` cards
+        "th_tiansuan2_damage" => {
+            let n = flag(ctx.core, owner, "th_tiansuan_damage_num").max(1);
+            ctx.start_draw(owner, n);
+        }
+        // th_tiansuan2_2 中签 (`雷霆万钧/extension.js:8111-8135`): `damageBegin4` caps damage at 1 with fire group
+        "th_tiansuan2_2" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_2_cap_damage", 1);
+            set_flag(ctx.core, owner, "th_tiansuan2_2_fire", 1);
+        }
+        // th_tiansuan2_ai (`雷霆万钧/extension.js:8136-8145`): AI `filterDamage` tag (0 draw)
+        "th_tiansuan2_ai" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_ai_tag", 1);
+        }
+        // th_tiansuan2_fire (`雷霆万钧/extension.js:8146-8156`): `damageBefore` converts incoming damage to fire
+        "th_tiansuan2_fire" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_fire_nature", 1);
+        }
+        // th_tiansuan2_3 下签 (`雷霆万钧/extension.js:8157-8182`): `damageBegin3` increases incoming damage by 1
+        "th_tiansuan2_3" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_3_extra_damage", 1);
+        }
+        // th_tiansuan2_4 下下签 (`雷霆万钧/extension.js:8183-8216`): `damageBegin3` +1 damage and forbids `tao`/`jiu`
+        "th_tiansuan2_4" => {
+            set_flag(ctx.core, owner, "th_tiansuan2_4_extra_damage", 1);
+            set_flag(ctx.core, owner, "th_tiansuan2_4_forbid_tao_jiu", 1);
+        }
+        // th_gushe2 (`雷霆万钧/extension.js:8378-8381`): temporary pindian-win counter mark (0 draw)
+        "th_gushe2" => {
+            let m = flag(ctx.core, owner, "th_gushe2_marks") + 1;
+            set_flag(ctx.core, owner, "th_gushe2_marks", m);
+        }
+        // rejici 激词 (`雷霆万钧/extension.js:3668`):
+        "rejici" => {
             set_flag(ctx.core, owner, "th_rejici_triggered", 1);
             ctx.start_draw(owner, 1);
         }
@@ -786,8 +1016,8 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
             }
             set_flag(ctx.core, owner, "th_gusuan_awakened", 1);
         }
-        // qinyin 琴音 (`雷霆万钧/extension.js:8608`):
-        _ => {
+        // qinyin 琴音 (`雷霆万钧/extension.js:3670`):
+        "qinyin" => {
             let seats: Vec<PlayerId> = ctx.core.seat_order_from(owner);
             for p in seats {
                 if ctx.core.player(p).alive {
@@ -795,6 +1025,9 @@ pub(super) fn resolve_l28_thunder_remaining(ctx: &mut Ctx<'_>, skill: &str, owne
                 }
             }
             set_flag(ctx.core, owner, "th_skill:qinyin", 1);
+        }
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("l28_hook:{other_sk}"), 1);
         }
     }
 }

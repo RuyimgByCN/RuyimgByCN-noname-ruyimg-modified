@@ -14,7 +14,7 @@
 - 子插件数：1
 - 资源：audio:4文件/80190B
 - 混淆/动态特征：extension/手杀ui/extension.js: packed=False, eval=4, long_lines=0
-- 台账原生重构状态（摘录）：**配置装载已实现，UI 钩子与界面未完成（2026-11-09 裁决 34 清点勘正，撤回 Batch 26 全闭环宣称）**：`shousha-ui-upstream-liuli` 覆盖 49 项配置。但 `decision34_pack9::resolve_l14_shousha_skill` 把 48 个上游 `lib.skill._*` 进度条/手气卡/托管/语音气泡 UI 钩子错误实现为「摸 1 张牌」或「回 1 血」；40 个 `lbtn`/`skill`/`character` 界面渲染面在 `ExtensionSurfacePanel.vue` 中仅为 1 个左右手切换按钮（清点统计：忠实实现 **49** / 示意或自造 **88** / 缺失 **6**）
+- 台账原生重构状态（摘录）：**配置装载已实现，UI 钩子与 40 项界面渲染面部分完成（2026-11-09 裁决 34 第二/三步）**：已删除伪造 `shousha_*` 武将/卡牌及将手杀 UI 钩子当作摸牌/回血的错误实现；`shousha-ui-upstream-liuli` 忠实覆盖 48 项配置，48 项钩子与 40 项 `lbtn`/`skill`/`character` 渲染面为前端骨架，5 项钩子待补（清点统计：忠实实现 **48** / 示意或自造 **88** / 缺失 **5**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：手杀ui
 - 台账已核查摘要：主题/菜单/聊天、动态加载、选择及规则/调试钩子；逐项清单见 [G0/L14](./L14-手杀ui.md)
-- 台账待处理（含规则分支）：**待删除 `decision34_pack9` 将手杀 UI 钩子当作摸牌/回血的错误实现，按上游 `手杀ui/{lbtn,skill,character}/` 还原手杀界面与 UI 钩子并做截图对照，待移动端真机**
+- 台账待处理（含规则分支）：**待按上游 `手杀ui/{lbtn,skill,character}/` 完整复刻 53 项 UI 钩子与 40 项界面渲染面并做截图对照，待移动端真机**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口
@@ -66,7 +66,7 @@
 
 | 现有实现项 | 原生文件:行号 | 上游对照 (`file:line`) | 原生落点 | 状态与处置结论 |
 |---|---|---|---|---|
-| `L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌与 `spshidi`/`spcishi`/`zhefu`/`yidu` 已清除，48 个 UI 钩子已清零摸牌/回血副作用） | `crates/content-native-loader/src/decision34_pack9_data.rs:132-143`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:608-617` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360` | 原生前端组件 | 示意或自造（已删除伪造 `shousha_*` 武将/卡牌、`spshidi`/`spcishi`/`zhefu`/`yidu` 及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻） |
+| `L14_SHOUSHA_SKILLS` + `resolve_l14_shousha_skill`（伪造武将/卡牌与 `spshidi`/`spcishi`/`zhefu`/`yidu` 已清除，48 个 UI 钩子已清零摸牌/回血副作用） | `crates/content-native-loader/src/decision34_pack9_data.rs:230-243`、`crates/engine-native-kernel/src/rvm_ops/commit_up37/decision34_pack9.rs:614-623` | `archive/upstream/noname-liuli/noname/extension/手杀ui/extension.js:85-7360` | 原生前端组件 | 示意或自造（已删除伪造 `shousha_*` 武将/卡牌、`spshidi`/`spcishi`/`zhefu`/`yidu` 及摸牌/回血副作用；手杀进度条、菜单、托管、语音气泡等前端视觉表现待完整复刻） |
 
 ### 7.2 武将（Generals）（0 项）
 

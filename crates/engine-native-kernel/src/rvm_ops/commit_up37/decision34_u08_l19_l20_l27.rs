@@ -1,7 +1,7 @@
 //! Decision 34 Authentic Upstream Skill Resolvers for `U08` (`英雄杀` — 104 skills),
 //! `L19` (`末日乱斗` — 66 skills), `L20` (`标记补充` — 74 skills), and `L27` (`选将美化` — 37 skills).
 
-use super::commit::{discard_some, pop_deck, push_pile};
+use super::commit::discard_some;
 use super::*;
 
 fn discard_first_he(ctx: &mut Ctx<'_>, p: PlayerId) -> Option<CardId> {
@@ -610,135 +610,16 @@ pub(super) fn resolve_u08_yxs_skill(ctx: &mut Ctx<'_>, executing: &str, owner: P
             }
         }
         // lshengong 神工 (`英雄杀/character/skill.js:3115-3135`):
-        _ => {
+        "lshengong" => {
             set_flag(ctx.core, owner, "yxs_lshengong_copied_equip", 1);
         }
-    }
-}
-
-/// `L19` (`末日乱斗` — `archive/upstream/noname-liuli/noname/extension/末日乱斗/extension.js:333-1550`):
-pub(super) fn resolve_l19_doomsday_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    match skill_name {
-        // zaibian 灾变 (`末日乱斗/extension.js:367-377`):
-        "zaibian" => {
-            set_flag(ctx.core, owner, "l19_zaibian_xunmeng", 1);
-        }
-        // _jiangshi.._huzhu (`末日乱斗/extension.js:655-907`):
-        "_jiangshi" | "_jiangshi2" | "_jiangshi3" | "_jiangshi4" | "_jiangshiTx"
-        | "_jiangshiTx2" | "_jiangshiTx3" | "_huzhu" => {
-            let inf = flag(ctx.core, owner, "doomsday_infection") + 1;
-            set_flag(ctx.core, owner, "doomsday_infection", inf);
-            set_flag(ctx.core, owner, "l19_zombie_mode_hook", 1);
-        }
-        // chanceIdentity* & _gainSkill (`末日乱斗/extension.js:908-1155`):
-        s if s.starts_with("chanceIdentity") || s == "_gainSkill" => {
-            set_flag(ctx.core, owner, "l19_chance_identity_assigned", 1);
-        }
-        // _wujinmoshi* (`末日乱斗/extension.js:1165-1340`):
-        s if s.starts_with("_wujinmoshi") || s.starts_with("wujinmoshi") => {
-            set_flag(ctx.core, owner, "l19_wujin_buff_active", 1);
-            if s.contains("Draw") {
-                ctx.start_draw(owner, 1);
-            } else if s.contains("Recover")
-                && ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32
-            {
-                ctx.recover(owner, 1, None);
-            }
-        }
-        // Mode progression, level/EXP, revive, and boss rules (`末日乱斗/extension.js:1341-1550`):
-        _ => {
-            let exp = flag(ctx.core, owner, "l19_exp_points") + 10;
-            set_flag(ctx.core, owner, "l19_exp_points", exp);
-            set_flag(ctx.core, owner, "l19_progression_hook", 1);
+        other_sk => {
+            set_flag(ctx.core, owner, &format!("yxs_hook:{other_sk}"), 1);
         }
     }
 }
 
-/// `L20` (`标记补充` — `archive/upstream/noname-liuli/noname/extension/标记补充/extension.js:347-6315`):
-pub(super) fn resolve_l20_mark_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
-    match skill_name {
-        "xinfu_langxi" | "tspowei" => {
-            set_flag(ctx.core, owner, &format!("l20_resolved:{skill_name}"), 1);
-            if other != owner {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(
-                    Some(owner),
-                    other,
-                    1,
-                )));
-            }
-        }
-        "qingyu" | "rekuanshi" | "kuanshi" | "kuanshi2" | "shouxi" | "sbduanliang" => {
-            set_flag(ctx.core, owner, &format!("l20_resolved:{skill_name}"), 1);
-            set_flag(ctx.core, owner, "l20_ward_active", 1);
-        }
-        "mibei" | "xinfu_lingren" => {
-            set_flag(ctx.core, owner, &format!("l20_resolved:{skill_name}"), 1);
-            ctx.start_draw(owner, 2);
-        }
-        "fz_new_rewusheng" | "fz_gzpaoxiao" | "fz_new_longdan" | "fz_new_tieji" | "fz_liegong"
-        | "fz_xinkuanggu" | "rechuhai" | "sbtieji" | "shouye" | "wengua" | "wengua5"
-        | "zuoxing" => {
-            set_flag(ctx.core, owner, &format!("l20_resolved:{skill_name}"), 1);
-            ctx.start_draw(owner, 1);
-        }
-        "mbmowang" => {
-            set_flag(ctx.core, owner, "l20_mbmowang_resolved", 1);
-            ctx.core.player_mut(owner).dying = false;
-            if ctx.core.player(owner).hp < 1 {
-                ctx.core.player_mut(owner).hp = 1;
-            }
-        }
-        "kurou" => {
-            let _ = discard_first_he(ctx, owner);
-            ctx.emit(EventData::LoseHp {
-                player: owner,
-                amount: 1,
-            });
-            ctx.start_draw(owner, 3);
-            set_flag(ctx.core, owner, "l20_resolved:kurou", 1);
-        }
-        _ => {
-            set_flag(ctx.core, owner, "l20_mark_ui_hook", 1);
-        }
-    }
-}
+pub use super::decision34_l19_l20_l27::{
+    resolve_l19_doomsday_remaining, resolve_l20_mark_remaining, resolve_l27_select_remaining,
+};
 
-/// `L27` (`选将美化` — `archive/upstream/noname-liuli/noname/extension/选将美化/extension.js:1165-1900`):
-pub(super) fn resolve_l27_select_remaining(ctx: &mut Ctx<'_>, skill_name: &str, owner: PlayerId) {
-    let other = first_other_alive(ctx.core, owner).unwrap_or(owner);
-    set_flag(ctx.core, owner, &format!("l27_resolved:{skill_name}"), 1);
-    match skill_name {
-        "quanji" => {
-            ctx.start_draw(owner, 1);
-            if let Some(c) = pop_deck(ctx) {
-                push_pile(ctx, owner, "quan", c);
-            }
-        }
-        "kuangcai" | "sbzhaxiang" | "taoluan" | "bolan" | "spyanjiao" | "twxiafeng" => {
-            ctx.start_draw(owner, 1);
-        }
-        "reqimou" => {
-            ctx.emit(EventData::LoseHp {
-                player: owner,
-                amount: 1,
-            });
-            ctx.start_draw(owner, 1);
-        }
-        "new_zhixi_recover" | "twharvestinori" => {
-            if ctx.core.player(owner).hp < ctx.core.player(owner).max_hp as i32 {
-                ctx.recover(owner, 1, None);
-            }
-        }
-        "xinfu_xionghuo" | "dcxiaoxi" | "twxingzhui" | "twzhouzu" => {
-            if other != owner {
-                ctx.emit(EventData::Damage(crate::machine::damage_data(
-                    Some(owner),
-                    other,
-                    1,
-                )));
-            }
-        }
-        _ => {}
-    }
-}

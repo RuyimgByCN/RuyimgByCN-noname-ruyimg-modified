@@ -139,12 +139,12 @@ pub const U07_WUDIAN_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 9] = [
 ];
 
 /// `U07` (`wudian-upstream-noname`): all skills from `玩点论杀/character/skill.js` and `card/skill.js`.
-pub const U07_WUDIAN_ALL_SKILLS: [&str; 29] = [
+pub const U07_WUDIAN_ALL_SKILLS: [&str; 30] = [
     "nsshuaiyan", "moshou", "siji", "ciqiu", "ciqiu_dying", "ciqiu_destroy",
     "zhucheng", "duoqi", "juedao", "geju", "kangyin", "kangyin2",
     "chezhen", "youzhan", "fuchou", "fuchou2", "fuchou3", "jinyan",
     "liangce", "jianbi", "diyjuntun", "diyjuntun2", "juntun", "juntun_global",
-    "choudu", "liduan", "liduan2", "youdishenru", "diaobingqianjiang",
+    "choudu", "liduan", "liduan2", "youdishenru", "g_youdishenru", "diaobingqianjiang",
 ];
 
 /// `U08` (`hero-kill-upstream-noname`): all 43 `yxs_*` generals from
@@ -336,13 +336,14 @@ pub const L25_ZUAN_SKILLS: [&str; 122] = [
     "wumou", "new_guixin",
 ];
 
-pub const L27_SELECT_BEAUTIFY_SKILLS: [&str; 37] = [
+pub const L27_SELECT_BEAUTIFY_SKILLS: [&str; 43] = [
     "baonvezhi", "baonvezhi_mark", "bolan", "clandianzhan", "dcxiaoxi",
-    "dinghan", "drlt_duorui", "jinghe", "jishe", "kuangcai",
-    "new_meibu", "new_zhixi", "new_zhixi_recover", "pro_drlt_duorui", "qimou",
+    "dinghan", "drlt_duorui", "huamu", "jinghe", "jishe",
+    "jishe2", "kuangcai", "mbcmqingzheng", "mbwuling", "new_meibu",
+    "new_zhixi", "new_zhixi_recover", "potzhuangshi", "pro_drlt_duorui", "qimou",
     "quanji", "regushe", "rehuashen", "rehuashen_mark", "reqimou",
-    "rexinsheng", "sbjianxiong", "sbtongye", "sbzhaxiang", "shouxi",
-    "spyanjiao", "taoluan", "twfengji", "twharvestinori", "twxiafeng",
-    "twxingzhui", "twzhouhu", "twzhouzu", "twzuhuo", "xiefang",
-    "xinfu_xionghuo", "xingchong",
+    "rexinsheng", "sbjianxiong", "sbqingzheng", "sbtongye", "sbzhaxiang",
+    "shouxi", "spyanjiao", "taoluan", "twfengji", "twharvestinori",
+    "twxiafeng", "twxingzhui", "twzhouhu", "twzhouzu", "twzuhuo",
+    "xiefang", "xinfu_xionghuo", "xingchong",
 ];

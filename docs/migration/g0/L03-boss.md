@@ -14,7 +14,7 @@
 - 子插件数：0
 - 资源：无统计
 - 混淆/动态特征：无
-- 台账原生重构状态（摘录）：**规则与装载面忠实实现（2026-10-17，[证据](../../operations/evidence/2026-10-17-t12-u02-l03-boss-play-eight/README.md)）**：真实包 `packages/extensions/boss-play-upstream-liuli`（与 U02 共享 `boss_playpack` 模块，liuli 变体；另含 `boss-zhugeliang-upstream-liuli` 共 2 包）。包键 `mode_extension_boss`/`mode_extension_jiange`，翻译键与 `mode:boss`/`mode:versus` 标签、`bossallowed` 解析、8 条 intro 别名。**2026-11-09 裁决 34 清点勘正**：`decision34::jiange_siege_step` 在上游 `L03/extension.js` 中不存在（属自造步骤，归入待删清退）；上游 8 项 intro 角色条目均已忠实实现（忠实实现 **8** / 示意或自造 **0** / 缺失 **0**，另 `decision34` 自造 1 项待删）
+- 台账原生重构状态（摘录）：**规则与装载面忠实实现（2026-10-17，[证据](../../operations/evidence/2026-10-17-t12-u02-l03-boss-play-eight/README.md)）**：真实包 `packages/extensions/boss-play-upstream-liuli`（与 U02 共享 `boss_playpack` 模块，liuli 变体；另含 `boss-zhugeliang-upstream-liuli` 共 2 包）。包键 `mode_extension_boss`/`mode_extension_jiange`，翻译键与 `mode:boss`/`mode:versus` 标签、`bossallowed` 解析、8 条 intro 别名。**2026-11-09 裁决 34 第二步**：已删除自造 `decision34::jiange_siege_step`；上游 8 项 intro 角色条目全部忠实实现（忠实实现 **8** / 示意或自造 **0** / 缺失 **0**）
 
 ### 能力面（G0 登记）
 - 生命周期：独立安装/启停/升级/卸载（目标能力，见宿主契约）
@@ -29,7 +29,7 @@
 ### 规则 / 依赖分支
 - 外部扩展引用：无（清点未检出）
 - 台账已核查摘要：mode_extension_boss/jiange 注册、旧数组式角色与缓存；逐项清单见 [G0/L03](./L03-boss.md)
-- 台账待处理（含规则分支）：**待删除 `decision34::jiange_siege_step` 自造代码，并待移动端真机验收后签署整包**
+- 台账待处理（含规则分支）：**仓内 8/8 项已忠实实现；待移动端真机验收后签署整包**
 - 语义说明：上表为 G0 登记面；逐菜单文案与运行时分支以旧线动态样本/可读源为准，迁移时按接口拆分验收。
 
 ## 3. 目标接口

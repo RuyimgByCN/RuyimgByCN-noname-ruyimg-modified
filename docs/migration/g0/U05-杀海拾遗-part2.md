@@ -519,9 +519,9 @@
 | 卡牌 | `tuteng7` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/card.js:1129` | 活力图腾：结束阶段，你令一名其他角色回复1点体力。 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 卡牌 | `tuteng8` | `archive/upstream/noname/apps/core/extension/杀海拾遗/character/hearth/card.js:1136` | 图腾魔像：你的进攻距离+1。 | 原生规则 / `rule-vm` 包 | 缺失 |
 | 卡牌 | `wuxingpan` | `archive/upstream/noname/apps/core/extension/杀海拾遗/play/wuxing/card.js:2` | 五行盘：出牌阶段限一次，你可以永久改变一张手牌的五行属性 | 原生规则 / `rule-vm` 包 | 缺失 |
-| 配置项 | `wuxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:14` | 五行生克（默认=false）：每名角色和部分卡牌在游戏开始时随机获得一个属性 | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `rand` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:19` | 带属性卡牌概率（默认="0.3"）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `mtg` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:29` | 万智牌（默认=true）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `zhenfa` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:34` | 阵法牌（默认=true）：国战模式专属卡牌扩展包 | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `gwent` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:39` | 昆特牌（<span style=（默认=true）：包含32种法术牌和52张武将牌，并引入“天气牌” | 原生规则 / 配置 schema | 忠实实现 |
-| 配置项 | `yunchou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:44` | 运筹帷幄（<span style=（默认=true）：以三国背景设计的若干武将牌和卡牌 | 原生规则 / 配置 schema | 忠实实现 |
+| 配置项 | `wuxing` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:14` | 五行生克（默认=false）：每名角色和部分卡牌在游戏开始时随机获得一个属性 | 原生规则 / 配置 schema | 缺失 |
+| 配置项 | `rand` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:19` | 带属性卡牌概率（默认="0.3"）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 缺失 |
+| 配置项 | `mtg` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:29` | 万智牌（默认=true）：包含12种地图牌和3张武将牌，首次引入“随从”概念 | 原生规则 / 配置 schema | 缺失 |
+| 配置项 | `zhenfa` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:34` | 阵法牌（默认=true）：国战模式专属卡牌扩展包 | 原生规则 / 配置 schema | 缺失 |
+| 配置项 | `gwent` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:39` | 昆特牌（<span style=（默认=true）：包含32种法术牌和52张武将牌，并引入“天气牌” | 原生规则 / 配置 schema | 缺失 |
+| 配置项 | `yunchou` | `archive/upstream/noname/apps/core/extension/杀海拾遗/main/config.js:44` | 运筹帷幄（<span style=（默认=true）：以三国背景设计的若干武将牌和卡牌 | 原生规则 / 配置 schema | 缺失 |

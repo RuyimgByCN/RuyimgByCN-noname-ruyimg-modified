@@ -5,6 +5,7 @@ use super::commit::pop_deck;
 use super::*;
 pub mod decision34;
 pub mod decision34_ext;
+pub mod decision34_l19_l20_l27;
 pub mod decision34_pack9;
 pub mod decision34_u08_l19_l20_l27;
 mod generals;

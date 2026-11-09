@@ -21,6 +21,21 @@ pub const MBJUEJIN_ID: u32 = 1_920_001_003;
 
 pub const K_DANGGU_ID: u32 = 1_920_002_001;
 pub const K_MOWANG_ID: u32 = 1_920_002_002;
+pub const L10_SCS_SKILL_ID: u32 = 1_920_002_003;
+
+/// `L10` (`史诗卡牌/extension.js:249-310`) Ten Eunuchs (`十常侍`) companion skills granted by `k_danggu`.
+pub const L10_SCS_COMPANION_SKILLS: [&str; 10] = [
+    "scstaoluan",
+    "scschiyan",
+    "scszimou",
+    "scspicai",
+    "scsyaozhuo",
+    "scsxiaolu",
+    "scskuiji",
+    "scschihe",
+    "scsniqu",
+    "scsanruo",
+];
 
 pub const HUANLE_KUWU_INTERACTIVE_ID: u32 = 1_920_003_001;
 
@@ -242,14 +257,11 @@ pub const L28_THUNDER_GENERALS: [(&str, Faction, Gender, u32, &[&str]); 14] = [
     ("th_shen_zhouyu", Faction::Wu, Gender::Male, 4, &["th_yeyan", "qinyin"]),
 ];
 
-/// Authentic `L28` (`雷霆万钧/extension.js:3783-8960`) additional general and sub-skills.
-pub const L28_THUNDER_EXTRA_SKILLS: [&str; 35] = [
+/// Authentic `L28` (`雷霆万钧/extension.js:3660-3670, 4203-8614`) additional general and sub-skills.
+pub const L28_THUNDER_EXTRA_SKILLS: [&str; 39] = [
     "th_bushi",
     "th_zhongzhuang",
     "th_caiyi",
-    "th_caiyi_info",
-    "th_caiyi_yang",
-    "th_caiyi_yin",
     "th_guili",
     "th_chongxu",
     "miaojian",
@@ -257,28 +269,35 @@ pub const L28_THUNDER_EXTRA_SKILLS: [&str; 35] = [
     "th_shengong",
     "olqisi",
     "th_pingcai",
-    "th_pingcai_Wolong",
-    "th_pingcai_Fengchu",
-    "th_pingcai_Shuijing",
-    "th_pingcai_Xuanjian",
+    "th_pcaudio_wolong_card",
+    "th_pcaudio_fengchu_card",
+    "th_pcaudio_shuijing_card",
+    "th_pcaudio_xuanjian_card",
     "xinfu_pdgyingshi",
     "th_zhengjing",
+    "th_zhengjing2",
     "th_chengye",
     "th_buxu",
     "th_yufeng",
     "th_tianshu",
-    "th_jingxie1",
-    "th_qiaosi_map",
+    "th_g_taipingyaoshu_ai",
     "th_tiansuan",
-    "th_tiansuan_faq",
+    "th_tiansuan2",
+    "th_tiansuan2_0",
+    "th_tiansuan2_1",
+    "th_tiansuan2_damage",
+    "th_tiansuan2_2",
+    "th_tiansuan2_ai",
+    "th_tiansuan2_fire",
+    "th_tiansuan2_3",
+    "th_tiansuan2_4",
     "th_gushe",
+    "th_gushe2",
     "rejici",
     "th_geyuan",
-    "th_geyuan_info",
     "th_jieshu",
     "th_gusuan",
     "qinyin",
-    "th_taipingyaoshu_info",
 ];
 
 fn build_d34_vm_decl(
@@ -336,8 +355,9 @@ fn build_d34_vm_decl(
 
 /// Build the native `ExtensionPack` for Decision 34 authentic upstream rules.
 pub fn decision34_closure_extension_pack() -> ExtensionPack {
-    let mut vm_skills: Vec<VmSkillDecl> =
-        Vec::with_capacity(DECISION34_SKILL_SPECS.len() + L28_THUNDER_EXTRA_SKILLS.len());
+    let mut vm_skills: Vec<VmSkillDecl> = Vec::with_capacity(
+        DECISION34_SKILL_SPECS.len() + L28_THUNDER_EXTRA_SKILLS.len() + L10_SCS_COMPANION_SKILLS.len() + 1,
+    );
     for (idx, (name_str, def_id, event, extra_events, filter_inner)) in
         DECISION34_SKILL_SPECS.iter().enumerate()
     {
@@ -350,11 +370,29 @@ pub fn decision34_closure_extension_pack() -> ExtensionPack {
             filter_inner.clone(),
         ));
     }
-    for (offset, &sk_name) in L28_THUNDER_EXTRA_SKILLS.iter().enumerate() {
+    for &sk_name in &L28_THUNDER_EXTRA_SKILLS {
         vm_skills.push(build_d34_vm_decl(
-            DECISION34_SKILL_SPECS.len() + offset,
+            vm_skills.len(),
             sk_name,
             TH_SKILL_DISPATCH_ID,
+            EventKind::PhaseBegin,
+            &[],
+            engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
+        ));
+    }
+    vm_skills.push(build_d34_vm_decl(
+        vm_skills.len(),
+        "kuwu",
+        HUANLE_KUWU_INTERACTIVE_ID,
+        EventKind::CardUsed,
+        &[],
+        engine_native::rvm_bridge::VmFilterPolicy::OwnerIsSource,
+    ));
+    for &sk_name in &L10_SCS_COMPANION_SKILLS {
+        vm_skills.push(build_d34_vm_decl(
+            vm_skills.len(),
+            sk_name,
+            L10_SCS_SKILL_ID,
             EventKind::PhaseBegin,
             &[],
             engine_native::rvm_bridge::VmFilterPolicy::OwnerIsTarget,
