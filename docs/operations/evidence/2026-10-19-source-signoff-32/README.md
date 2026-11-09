@@ -1,5 +1,7 @@
 # 32 个已映射来源的**八项签署状态**（第 494 轮基线 + 2026-11-09 Batch 26 全 37 来源仓内 7 维 100% 闭环复核）
 
+> **2026-11-09 核对勘正（Claude Code）**：下文 Batch 25／26 的「仓内 7 维 37/37 ✅」不成立——功能与规则差异两维的测试断言的是原生自造行为（示意 Spine canvas、默认摸 1 的技能分派、上游不存在的武将），相关 pack 未接入正式包。裁决 34 视为未实现，整包八项签署仍为 0/37，各来源第①、⑧维按「部分」计。见[2026-11-09 扫描证据](../2026-11-09-progress-scan/README.md)。
+
 > **2026-11-09 Batch 26 全 37 来源（46 扩展包）八项复核更新（规则 v333 / 存档 NGSA v107 / content schema v5 / ABI 759 / WS8；详见 [Batch 26 证据](../2026-11-09-batch26-37-sources-inrepo-closure/README.md)、[Batch 25 证据](../2026-11-09-batch25-decision34-and-signoff/README.md) 与 [扩展台账](../../../migration/upstream-extension-reconstruction.md)）**：
 > 1. **范围补齐（32 → 37 来源 / 41 → 46 扩展包）**：2026-11-06 Batch 19 补齐 `L08/L11/L12/L14/L25` 五个配置与表现包目录后，`packages/extensions/*/` 共有 **46 个来源扩展包目录**（`U05` 含 9 子包、`L03` 含 `boss-play-upstream-liuli` 与 `boss-zhugeliang-upstream-liuli` 共 2 包、其余 35 来源各 1 包：`9 + 2 + 35 = 46` 包，外加 `sp2`/`xianding` 2 个非 37 来源扩展包共 48 目录）。
 > 2. **裁决 33 与裁决 34 全量落地（Batch 24 + Batch 25 + Batch 26）**：
